@@ -1,0 +1,72 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #c-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #c-title { position: absolute; top: 145px; left: 110px; font: 700 72px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #c-title .g { color: #1f883d; }
+    #c-sub { position: absolute; top: 250px; left: 114px; font: 34px "Noto Sans JP", sans-serif; color: #57606a; }
+    #c-compare { position: absolute; top: 335px; left: 110px; width: 1120px; height: 600px; overflow: hidden; border: 1px solid #d0d7de; border-radius: 10px; background: #fff; box-shadow: 0 12px 32px rgba(31,35,40,.1); }
+    .c-panel { position: absolute; inset: 0; overflow: hidden; }
+    #c-before { background: #eaeef2; }
+    #c-after { clip-path: inset(0 100% 0 0); background: #fff; }
+    .c-browser { position: absolute; inset: 28px; overflow: hidden; border: 1px solid #8c959f; border-radius: 8px; background: #fff; }
+    .c-bar { height: 55px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #d0d7de; background: #f6f8fa; }
+    .c-dot { width: 11px; height: 11px; border-radius: 50%; background: #8c959f; }
+    .c-hero { height: 245px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; padding: 34px; }
+    .c-copy { display: flex; flex-direction: column; justify-content: center; }
+    .c-kicker { font: 700 30px "JetBrains Mono", monospace; color: #1f883d; }
+    .c-headline { margin-top: 12px; font: 700 50px/1.15 "Noto Sans JP", sans-serif; color: #1f2328; }
+    .c-body { margin-top: 14px; font: 30px/1.45 "Noto Sans JP", sans-serif; color: #57606a; }
+    .c-button { align-self: flex-start; margin-top: 20px; padding: 12px 22px; border-radius: 7px; background: #1f883d; font: 700 30px "Noto Sans JP", sans-serif; color: #fff; }
+    .c-art { display: grid; place-items: center; border-radius: 10px; background: #dafbe1; }
+    .c-art-card { width: 190px; height: 150px; border-radius: 12px; background: #fff; box-shadow: 0 12px 28px rgba(31,35,40,.13); }
+    .c-art-line { height: 12px; margin: 20px; border-radius: 99px; background: #d0d7de; }
+    .c-art-line:nth-child(2) { width: 60%; background: #3fb950; }
+    .c-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 24px 34px 34px; }
+    .c-card { height: 170px; padding: 22px; border: 1px solid #d0d7de; border-radius: 9px; background: #fff; }
+    .c-card-icon { width: 38px; height: 38px; border-radius: 10px; background: #dafbe1; }
+    .c-card-title { margin-top: 16px; width: 62%; height: 14px; border-radius: 99px; background: #57606a; }
+    .c-card-text { margin-top: 14px; width: 86%; height: 9px; border-radius: 99px; background: #d0d7de; }
+    #c-before .c-browser { filter: grayscale(1); opacity: .74; transform: rotate(-1.2deg) scale(.98); }
+    #c-before .c-headline { font-family: serif; font-weight: 400; }
+    #c-before .c-button { background: #8c959f; }
+    #c-before .c-art { background: #d0d7de; }
+    #c-divider { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: #1f883d; box-shadow: 0 0 0 1px rgba(255,255,255,.8), 0 0 18px rgba(31,136,61,.35); z-index: 5; }
+    #c-handle { position: absolute; left: -25px; top: 265px; width: 54px; height: 54px; display: grid; place-items: center; border: 4px solid #1f883d; border-radius: 50%; background: #fff; font: 700 28px "JetBrains Mono", monospace; color: #1f883d; z-index: 6; }
+    .c-label { position: absolute; top: 20px; z-index: 6; padding: 8px 14px; border-radius: 99px; font: 700 28px "Noto Sans JP", sans-serif; }
+    #c-before-label { left: 20px; background: #eaeef2; color: #57606a; }
+    #c-after-label { right: 20px; background: #dafbe1; color: #116329; }
+    #c-observe { position: absolute; top: 335px; left: 1285px; width: 525px; }
+    #c-observe-h { font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .c-observe-row { margin-top: 20px; padding: 22px 26px; border: 1px solid #d0d7de; border-radius: 8px; background: #fff; box-shadow: 0 7px 20px rgba(31,35,40,.07); }
+    .c-observe-n { font: 700 28px "Archivo Black", sans-serif; color: #1f883d; }
+    .c-observe-t { margin-left: 16px; font: 700 31px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .c-observe-d { display: block; margin-top: 8px; font: 29px "Noto Sans JP", sans-serif; color: #57606a; }
+    #c-result { margin-top: 24px; padding: 24px 28px; border-left: 9px solid #1f883d; border-radius: 8px; background: #1f2328; font: 700 33px/1.45 "Noto Sans JP", sans-serif; color: #f6f8fa; }
+  </style>
+  <div data-hf-id="hf-t7ek" id="root" data-composition-id="clone" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-0tx9" id="c-tag" class="clip" data-start="0" data-duration="45">FIRST FORMAL PRACTICE</div>
+    <div data-hf-id="hf-31ww" id="c-title" class="clip" data-start=".1" data-duration="45">第一次正式练习：<span data-hf-id="hf-kgpe" class="g">从截图复刻</span></div>
+    <div data-hf-id="hf-kn4f" id="c-sub" class="clip" data-start=".8" data-duration="45">一边对照成品，一边练习把视觉说清楚</div>
+    <div data-hf-id="hf-bl7n" id="c-compare" class="clip" data-start="1.2" data-duration="45">
+      <div data-hf-id="hf-jg15" id="c-before" class="c-panel"><div data-hf-id="hf-b25o" class="c-browser"><div data-hf-id="hf-m80r" class="c-bar"><i data-hf-id="hf-nmx9" class="c-dot"></i><i data-hf-id="hf-yewx" class="c-dot"></i><i data-hf-id="hf-zlu0" class="c-dot"></i></div><div data-hf-id="hf-wx5w" class="c-hero"><div data-hf-id="hf-9opv" class="c-copy"><div data-hf-id="hf-68uu" class="c-kicker" data-layout-allow-occlusion>PRODUCTIVITY APP</div><div data-hf-id="hf-2idc" class="c-headline" data-layout-allow-occlusion>把灵感变成<br data-hf-id="hf-x5px" />清晰计划</div><div data-hf-id="hf-bpxa" class="c-body" data-layout-allow-occlusion>记录、整理并完成每天的重要任务。</div><div data-hf-id="hf-5ln3" class="c-button" data-layout-allow-occlusion>立即开始</div></div><div data-hf-id="hf-o623" class="c-art"><div data-hf-id="hf-a432" class="c-art-card"><div data-hf-id="hf-aami" class="c-art-line"></div><div data-hf-id="hf-d3bi" class="c-art-line"></div><div data-hf-id="hf-dhmj" class="c-art-line"></div></div></div></div><div data-hf-id="hf-6z6p" class="c-cards"><div data-hf-id="hf-0drq" class="c-card"><div data-hf-id="hf-cw60" class="c-card-icon"></div><div data-hf-id="hf-20bv" class="c-card-title"></div><div data-hf-id="hf-fcb6" class="c-card-text"></div></div><div data-hf-id="hf-h8gq" class="c-card"><div data-hf-id="hf-vs4w" class="c-card-icon"></div><div data-hf-id="hf-31mz" class="c-card-title"></div><div data-hf-id="hf-26hi" class="c-card-text"></div></div><div data-hf-id="hf-loqv" class="c-card"><div data-hf-id="hf-ul7t" class="c-card-icon"></div><div data-hf-id="hf-2nby" class="c-card-title"></div><div data-hf-id="hf-2ksj" class="c-card-text"></div></div></div></div></div>
+      <div data-hf-id="hf-bz7m" id="c-after" class="c-panel" data-layout-allow-occlusion><div data-hf-id="hf-v9s4" class="c-browser"><div data-hf-id="hf-yee3" class="c-bar"><i data-hf-id="hf-z7iz" class="c-dot"></i><i data-hf-id="hf-x7zu" class="c-dot"></i><i data-hf-id="hf-wtot" class="c-dot"></i></div><div data-hf-id="hf-kejg" class="c-hero"><div data-hf-id="hf-wm03" class="c-copy"><div data-hf-id="hf-cy5w" class="c-kicker">PRODUCTIVITY APP</div><div data-hf-id="hf-gbmk" class="c-headline">把灵感变成<br data-hf-id="hf-rsrt" />清晰计划</div><div data-hf-id="hf-rw6a" class="c-body">记录、整理并完成每天的重要任务。</div><div data-hf-id="hf-vorn" class="c-button">立即开始</div></div><div data-hf-id="hf-4ya3" class="c-art"><div data-hf-id="hf-iek2" class="c-art-card"><div data-hf-id="hf-dvxk" class="c-art-line"></div><div data-hf-id="hf-b3sd" class="c-art-line"></div><div data-hf-id="hf-bi3e" class="c-art-line"></div></div></div></div><div data-hf-id="hf-jcmt" class="c-cards"><div data-hf-id="hf-m31w" class="c-card"><div data-hf-id="hf-uziu" class="c-card-icon"></div><div data-hf-id="hf-290x" class="c-card-title"></div><div data-hf-id="hf-2z3k" class="c-card-text"></div></div><div data-hf-id="hf-mhcx" class="c-card"><div data-hf-id="hf-tslr" class="c-card-icon"></div><div data-hf-id="hf-1upw" class="c-card-title"></div><div data-hf-id="hf-06yd" class="c-card-text"></div></div><div data-hf-id="hf-mvny" class="c-card"><div data-hf-id="hf-u6ws" class="c-card-icon"></div><div data-hf-id="hf-1gev" class="c-card-title"></div><div data-hf-id="hf-0l9e" class="c-card-text"></div></div></div></div></div>
+      <span data-hf-id="hf-bkqk" id="c-before-label" class="c-label">参考截图</span><span data-hf-id="hf-3v8n" id="c-after-label" class="c-label">AI 重建</span><div data-hf-id="hf-obfs" id="c-divider"></div><span data-hf-id="hf-ticb" id="c-handle" data-layout-allow-overflow>↔</span>
+    </div>
+    <div data-hf-id="hf-8xt7" id="c-observe" class="clip" data-start="3.2" data-duration="42"><div data-hf-id="hf-rlei" id="c-observe-h">看图时，先说清三件事</div><div data-hf-id="hf-5d1t" id="c-o1" class="c-observe-row"><span data-hf-id="hf-g8lp" class="c-observe-n">1</span><span data-hf-id="hf-8wl3" class="c-observe-t">布局</span><span data-hf-id="hf-li3g" class="c-observe-d">哪里是导航、主视觉和功能卡片</span></div><div data-hf-id="hf-birm" id="c-o2" class="c-observe-row"><span data-hf-id="hf-hfis" class="c-observe-n">2</span><span data-hf-id="hf-0ftm" class="c-observe-t">样式</span><span data-hf-id="hf-ccs1" class="c-observe-d">颜色、圆角、阴影与留白</span></div><div data-hf-id="hf-fgvn" id="c-o3" class="c-observe-row"><span data-hf-id="hf-h17r" class="c-observe-n">3</span><span data-hf-id="hf-djw2" class="c-observe-t">验收</span><span data-hf-id="hf-3qcf" class="c-observe-d">怎样才算接近原图并且能用</span></div><div data-hf-id="hf-69lz" id="c-result">对照越具体，需求表达越清楚。</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#c-tag", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#c-title", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .1);
+    tl.fromTo("#c-sub", { opacity: 0 }, { opacity: 1, duration: .4 }, .8);
+    tl.fromTo("#c-compare", { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 1.2);
+    tl.fromTo("#c-after", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 24% 0 0)", duration: 2.2, ease: "power2.inOut" }, 4.0);
+    tl.fromTo("#c-divider", { x: 0 }, { x: 850, duration: 2.2, ease: "power2.inOut" }, 4.0);
+    tl.fromTo("#c-handle", { x: 0 }, { x: 850, duration: 2.2, ease: "power2.inOut" }, 4.0);
+    tl.fromTo("#c-observe", { x: 35, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 3.2);
+    ["#c-o1", "#c-o2", "#c-o3"].forEach((sel, i) => tl.fromTo(sel, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: "power3.out" }, 6.5 + i * 2.2));
+    tl.fromTo("#c-result", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 13.2);
+    window.__timelines["clone"] = tl;
+  </script>
+</template>

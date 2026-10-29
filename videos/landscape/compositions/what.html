@@ -1,0 +1,118 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #w-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #w-title { position: absolute; top: 150px; left: 110px; width: 610px; font-family: "Noto Sans JP", sans-serif; font-weight: 700; font-size: 84px; line-height: 1.28; color: #1f2328; }
+    #w-title .g, .w-green { color: #1f883d; }
+    #w-karpathy { position: absolute; top: 390px; left: 114px; font: 28px "JetBrains Mono", monospace; color: #66707b; }
+    #w-role { position: absolute; top: 520px; left: 110px; width: 610px; padding: 30px 34px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); }
+    #w-role-k { font: 700 30px "Noto Sans JP", sans-serif; color: #57606a; }
+    #w-role-v { margin-top: 10px; font: 700 42px/1.45 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-rule { position: absolute; top: 790px; left: 110px; width: 610px; padding: 28px 34px; background: #1f2328; border-radius: 8px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #w-rule span { color: #3fb950; }
+    #w-panel { position: absolute; top: 80px; left: 800px; width: 1010px; height: 870px; padding: 30px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
+    #w-panel-head { display: flex; align-items: center; justify-content: space-between; font-family: "Noto Sans JP", sans-serif; }
+    #w-panel-title { font-weight: 700; font-size: 34px; color: #1f2328; }
+    #w-panel-badge { padding: 8px 14px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
+    .w-label { margin-bottom: 8px; font: 700 28px "JetBrains Mono", monospace; letter-spacing: 1px; color: #adbac7; }
+    #w-prompt-wrap { margin-top: 26px; padding: 22px 26px; background: #1f2328; border-radius: 8px; }
+    #w-prompt { min-height: 52px; font: 500 34px/1.5 "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #w-caret { display: inline-block; width: 4px; height: 1em; margin-left: 5px; vertical-align: -3px; background: #3fb950; }
+    #w-answer { margin-top: 22px; padding: 20px 24px; background: #f6f8fa; border: 1px solid #d8dee4; border-radius: 8px; font: 500 28px/1.55 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-answer .word { opacity: 0; }
+    #w-app { margin-top: 20px; display: grid; grid-template-columns: 1fr 250px; gap: 18px; padding: 24px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 6px 18px rgba(31,35,40,.07); }
+    #w-app-title { font: 700 34px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-app-count { margin-top: 12px; font: 700 58px "Archivo Black", sans-serif; color: #1f883d; }
+    #w-progress { margin-top: 14px; height: 14px; overflow: hidden; background: #eaeef2; border-radius: 99px; }
+    #w-progress-fill { width: 38%; height: 100%; background: #1f883d; border-radius: inherit; transform-origin: left center; }
+    #w-app-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+    .w-time { padding: 12px 16px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 7px; font: 700 29px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-button { padding: 15px; background: #1f883d; border-radius: 7px; text-align: center; font: 700 28px "Noto Sans JP", sans-serif; color: #fff; }
+    #w-button { position: relative; overflow: visible; transform-origin: center; }
+    #w-button-done { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; }
+    .w-click-ring { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 3px solid #3fb950; border-radius: 50%; opacity: 0; pointer-events: none; }
+    #w-pointer { position: absolute; left: 0; top: 0; width: 54px; height: 54px; z-index: 8; filter: drop-shadow(0 3px 3px rgba(31,35,40,.25)); opacity: 0; }
+    #w-pointer svg { width: 100%; height: 100%; fill: #fff; stroke: #1f2328; stroke-width: 1.4; stroke-linejoin: round; }
+    #w-success { position: absolute; left: 350px; top: 420px; width: 82px; height: 82px; display: grid; place-items: center; border-radius: 50%; background: #dafbe1; color: #1f883d; opacity: 0; z-index: 7; }
+    #w-success svg { width: 62px; height: 62px; fill: none; stroke: currentColor; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    #w-success path { stroke-dasharray: 36; stroke-dashoffset: 36; }
+    .w-drop { position: absolute; width: 18px; height: 24px; border-radius: 55% 55% 60% 60%; background: #54aeff; opacity: 0; z-index: 6; }
+    #w-drop-1 { left: 308px; top: 458px; }
+    #w-drop-2 { left: 390px; top: 448px; width: 14px; height: 19px; }
+    #w-drop-3 { left: 430px; top: 475px; width: 12px; height: 16px; }
+    #w-revision { margin-top: 20px; margin-left: 130px; padding: 18px 22px; background: #dafbe1; border-radius: 8px 8px 2px 8px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; }
+  </style>
+  <div data-hf-id="hf-vv2h" id="root" data-composition-id="what" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-p2yu" id="w-tag" class="clip" data-start="0" data-duration="45">CHAPTER 1 · WHAT</div>
+    <div data-hf-id="hf-jz68" id="w-title" class="clip" data-start="0.1" data-duration="45">大模型编程<br data-hf-id="hf-x5px" /><span data-hf-id="hf-8yol" class="g">是什么</span></div>
+    <div data-hf-id="hf-665r" id="w-karpathy" class="clip" data-start="0.6" data-duration="45">Karpathy · 2025.02</div>
+    <div data-hf-id="hf-h7dg" id="w-role" class="clip" data-start="19.0" data-duration="26">
+      <div data-hf-id="hf-grcr" id="w-role-k">你的角色变了</div>
+      <div data-hf-id="hf-xvkj" id="w-role-v">少写每一行代码<br data-hf-id="hf-rsrt" /><span data-hf-id="hf-7u8q" class="w-green">多提需求 · 多做判断</span></div>
+    </div>
+    <div data-hf-id="hf-8cz2" id="w-rule" class="clip" data-start="24.0" data-duration="21">有问题，<span data-hf-id="hf-nqdz">先问 AI</span></div>
+    <div data-hf-id="hf-2s7g" id="w-panel" class="clip" data-start="1.2" data-duration="45">
+      <div data-hf-id="hf-w0yo" id="w-panel-head"><div data-hf-id="hf-692w" id="w-panel-title">一个需求，跑完整个循环</div><div data-hf-id="hf-kkz7" id="w-panel-badge">VIBE CODING</div></div>
+      <div data-hf-id="hf-f4as" id="w-prompt-wrap">
+        <div data-hf-id="hf-68wj" class="w-label">YOU · 说清想要什么</div>
+        <div data-hf-id="hf-pypz" id="w-prompt"><span data-hf-id="hf-n4tg" id="w-prompt-text"></span><span data-hf-id="hf-hmlv" id="w-caret"></span></div>
+      </div>
+      <div data-hf-id="hf-wqt7" id="w-answer"><span data-hf-id="hf-bu9k" class="word">已理解。</span> <span data-hf-id="hf-zfi1" class="word">先做一个</span> <span data-hf-id="hf-783d" class="word">能记录喝水、</span> <span data-hf-id="hf-x7nz" class="word">显示进度、</span> <span data-hf-id="hf-2evj" class="word">设置提醒的原型。</span></div>
+      <div data-hf-id="hf-vyhq" id="w-app">
+        <div data-hf-id="hf-yeow"><div data-hf-id="hf-b5lf" id="w-app-title">今日喝水</div><div data-hf-id="hf-ah31" id="w-app-count"><span data-hf-id="hf-upl0" id="w-count-old">3 / 8 杯</span><span data-hf-id="hf-z3lk" id="w-count-new" style="display:none">4 / 8 杯</span></div><div data-hf-id="hf-infk" id="w-progress"><div data-hf-id="hf-wf7u" id="w-progress-fill"></div></div></div>
+        <div data-hf-id="hf-8g8y" id="w-app-side"><div data-hf-id="hf-x6kw" class="w-time">提醒 10:00</div><div data-hf-id="hf-2rqx" class="w-time">提醒 15:00</div><div data-hf-id="hf-ifi0" id="w-button"><span data-hf-id="hf-3ceo" id="w-button-idle">＋ 记录一杯</span><span data-hf-id="hf-2ill" id="w-button-done">✓ 已记录</span><i data-hf-id="hf-6hop" class="w-click-ring" id="w-ring-1"></i><i data-hf-id="hf-afsq" class="w-click-ring" id="w-ring-2"></i></div></div>
+      </div>
+      <div data-hf-id="hf-50ze" id="w-revision">按钮改成绿色，再加两个提醒时间。</div>
+      <div data-hf-id="hf-s8me" id="w-success"><svg data-hf-id="hf-l6o9" viewBox="0 0 64 64"><circle data-hf-id="hf-bau7" cx="32" cy="32" r="27" opacity=".28"></circle><path data-hf-id="hf-n9ew" d="M20 33.5l8 8L45 23"></path></svg></div>
+      <span data-hf-id="hf-jxrl" id="w-drop-1" class="w-drop"></span><span data-hf-id="hf-nvvm" id="w-drop-2" class="w-drop"></span><span data-hf-id="hf-rtzn" id="w-drop-3" class="w-drop"></span>
+      <div data-hf-id="hf-jcqk" id="w-pointer"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-fueh" d="M5 3 L5 19 L9 15 L12 22 L15 20.5 L11.5 14 L18 14 Z"></path></svg></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const promptText = "帮我做一个每天提醒喝水的小工具";
+    const promptRows = [{ t: 0, text: "" }];
+    for (let i = 1; i <= promptText.length; i += 1) promptRows.push({ t: i * 0.09, text: promptText.slice(0, i) });
+    const promptDriver = { t: 0 };
+    const promptAt = (time) => {
+      for (let i = promptRows.length - 1; i >= 0; i -= 1) if (time >= promptRows[i].t - 0.001) return promptRows[i].text;
+      return "";
+    };
+    tl.fromTo("#w-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0);
+    tl.fromTo("#w-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.1);
+    tl.fromTo("#w-karpathy", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.6);
+    tl.fromTo("#w-panel", { x: 45, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 1.2);
+    tl.set("#w-answer, #w-app, #w-revision, #w-role, #w-rule", { opacity: 0 }, 0);
+    tl.to(promptDriver, { t: promptRows[promptRows.length - 1].t, duration: promptRows[promptRows.length - 1].t, ease: "none", onUpdate: () => { document.getElementById("w-prompt-text").textContent = promptAt(promptDriver.t); } }, 6.4);
+    tl.to("#w-caret", { opacity: 0.25, duration: 0.18, yoyo: true, repeat: 5, ease: "none" }, 6.4);
+    tl.set("#w-answer", { opacity: 1 }, 10.2);
+    const gaps = [0, 0.28, 0.08, 0.34, 0.12];
+    let tokenTime = 10.2;
+    gsap.utils.toArray("#w-answer .word").forEach((word, i) => { tokenTime += gaps[i]; tl.set(word, { opacity: 1, color: "#768390" }, tokenTime); tl.to(word, { color: "#1f2328", duration: 0.27, ease: "none" }, tokenTime); });
+    tl.fromTo("#w-app", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 12.2);
+    tl.fromTo("#w-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 12.5);
+    tl.fromTo("#w-pointer", { x: 1030, y: 760, opacity: 0 }, { x: 875, y: 482, opacity: 1, duration: 0.55, ease: "power3.out" }, 13.45);
+    tl.to(["#w-pointer", "#w-button"], { scale: 0.92, duration: 0.11, ease: "power1.in" }, 14.02);
+    tl.to(["#w-pointer", "#w-button"], { scale: 1, duration: 0.38, ease: "back.out(1.8)" }, 14.15);
+    ["#w-ring-1", "#w-ring-2"].forEach((ring, i) => {
+      tl.fromTo(ring, { scale: .4, opacity: i ? .55 : .9 }, { scale: 3.4, opacity: 0, duration: .34, ease: "power2.out" }, 14.12 + i * .06);
+    });
+    tl.to("#w-button-idle", { scale: .3, opacity: 0, duration: .24, ease: "power3.out" }, 14.12);
+    tl.fromTo("#w-button-done", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "back.out(1.7)" }, 14.18);
+    tl.set("#w-count-old", { display: "none" }, 14.28);
+    tl.set("#w-count-new", { display: "inline" }, 14.28);
+    tl.fromTo("#w-count-new", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .34, ease: "back.out(1.5)" }, 14.28);
+    tl.to("#w-progress-fill", { scaleX: 1.34, duration: .55, ease: "power2.inOut" }, 14.22);
+    tl.fromTo("#w-success", { scale: .72, rotation: -18, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: .34, ease: "back.out(1.8)" }, 14.3);
+    tl.to("#w-success path", { strokeDashoffset: 0, duration: .42, ease: "power2.out" }, 14.42);
+    ["#w-drop-1", "#w-drop-2", "#w-drop-3"].forEach((drop, i) => {
+      tl.fromTo(drop, { y: 10, scale: .45, opacity: 0 }, { y: -32 - i * 8, x: (i - 1) * 18, scale: 1, opacity: .9, duration: .38, ease: "back.out(1.7)" }, 14.3 + i * .05);
+      tl.to(drop, { opacity: 0, duration: .2, ease: "power1.in" }, 14.68 + i * .05);
+    });
+    tl.to("#w-pointer", { x: 1040, y: 760, opacity: 0, duration: .4, ease: "power2.in" }, 14.55);
+    tl.fromTo("#w-revision", { x: 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 16.0);
+    tl.fromTo("#w-role", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 19.0);
+    tl.fromTo("#w-rule", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 24.0);
+    window.__timelines["what"] = tl;
+  </script>
+</template>

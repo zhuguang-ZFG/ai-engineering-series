@@ -1,0 +1,100 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #1f2328;
+    }
+    #x-tag {
+      position: absolute;
+      top: 96px;
+      left: 120px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #8c959f;
+    }
+    #x-title {
+      position: absolute;
+      top: 150px;
+      left: 120px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 76px;
+      color: #f6f8fa;
+    }
+    #x-title .g {
+      color: #3fb950;
+    }
+    .x-row {
+      position: absolute;
+      left: 120px;
+      width: 1680px;
+      background: #2d333b;
+      border: 1px solid #444c56;
+      border-radius: 8px;
+      padding: 30px 42px;
+      display: flex;
+      align-items: baseline;
+    }
+    .x-mark {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      color: #f85149;
+      margin-right: 30px;
+    }
+    .x-text {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      color: #f6f8fa;
+    }
+    .x-text .fix {
+      font-weight: 400;
+      font-size: 30px;
+      color: #3fb950;
+      margin-left: 20px;
+    }
+    #x-1 { top: 330px; }
+    #x-2 { top: 530px; }
+    #x-3 { top: 730px; }
+    #x-src {
+      position: absolute;
+      top: 960px;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #768390;
+    }
+  </style>
+  <div data-hf-id="hf-f7oh" id="root" data-composition-id="myth" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-37jt" id="x-tag" class="clip" data-start="0" data-duration="45">COMMON MISTAKES · 课程附录总结</div>
+    <div data-hf-id="hf-1um7" id="x-title" class="clip" data-start="0.1" data-duration="45">新手最痛的<span data-hf-id="hf-joym" class="g">三个坑</span></div>
+    <div data-hf-id="hf-ublv" id="x-1" class="x-row clip" data-start="1.2" data-duration="45">
+      <span data-hf-id="hf-ilfo" class="x-mark">✗</span>
+      <span data-hf-id="hf-k78l" class="x-text">卡住不问 AI，死磕两小时<span data-hf-id="hf-q2n4" class="fix">→ AI 是第一求助对象</span></span>
+    </div>
+    <div data-hf-id="hf-cwn1" id="x-2" class="x-row clip" data-start="2.6" data-duration="45">
+      <span data-hf-id="hf-viv0" class="x-mark">✗</span>
+      <span data-hf-id="hf-akou" class="x-text">一句话甩给 AI 就等完美结果<span data-hf-id="hf-94bp" class="fix">→ 当产品经理，不当甲方</span></span>
+    </div>
+    <div data-hf-id="hf-82zw" id="x-3" class="x-row clip" data-start="4.0" data-duration="45">
+      <span data-hf-id="hf-ubxx" class="x-mark">✗</span>
+      <span data-hf-id="hf-vp88" class="x-text">只看教程不动手<span data-hf-id="hf-n15n" class="fix">→ 每章配实操，做完才算学会</span></span>
+    </div>
+    <div data-hf-id="hf-xljh" id="x-src" class="clip" data-start="5.2" data-duration="45" data-layout-ignore>SOURCE · EASY-VIBE APPENDIX · COMMON ERRORS</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#x-tag", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0);
+    tl.fromTo("#x-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.1);
+    ["#x-1", "#x-2", "#x-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 1.2 + i * 1.4);
+    });
+    window.__timelines["myth"] = tl;
+  </script>
+</template>

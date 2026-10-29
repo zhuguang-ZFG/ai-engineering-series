@@ -1,0 +1,61 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #cap-stage {
+      position: absolute;
+      left: 0;
+      top: 896px;
+      width: 1920px;
+      text-align: center;
+      overflow: visible;
+    }
+    .cap-group {
+      position: absolute;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 1.35;
+      color: #ffffff;
+      visibility: hidden;
+    }
+    .cap-group span {
+      background: rgba(31, 35, 40, 0.78);
+      border-radius: 8px;
+      padding: 10px 26px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  </style>
+  <div data-hf-id="hf-jn2k" id="root" data-composition-id="captions" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-fhg2" id="cap-stage"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const GROUPS = [{"text": "不会写代码也能做", "start": 0.1, "end": 1.235}, {"text": "出自己的软件吗能", "start": 1.255, "end": 2.39}, {"text": "大模型把编程的门", "start": 2.41, "end": 3.743}, {"text": "槛打下来了这个系", "start": 3.763, "end": 4.888}, {"text": "列叫\"大模型从入", "start": 4.908, "end": 6.135}, {"text": "门到精通\"内容全", "start": 6.155, "end": 7.261}, {"text": "部基于开源课程的", "start": 7.281, "end": 8.474}, {"text": "完整体系今天是第", "start": 8.494, "end": 9.836}, {"text": "一期零基础入门大", "start": 9.856, "end": 10.844}, {"text": "模型到底能帮你做", "start": 10.864, "end": 12.192}, {"text": "什么你的第一个作", "start": 12.212, "end": 13.331}, {"text": "品从哪里开始", "start": 13.351, "end": 14.46}, {"text": "先建立一个准确的", "start": 17.2, "end": 19.044}, {"text": "概念年   月研", "start": 19.064, "end": 20.749}, {"text": "究者   提出了", "start": 20.769, "end": 22.212}, {"text": "人主要通过自然语", "start": 22.232, "end": 23.924}, {"text": "言告诉   想要", "start": 23.944, "end": 25.636}, {"text": "什么观察运行结果", "start": 25.656, "end": 27.244}, {"text": "再继续对话和修改", "start": 27.264, "end": 28.921}, {"text": "不必从头手写每一", "start": 28.941, "end": 30.792}, {"text": "行代码你的角色从", "start": 30.812, "end": 32.361}, {"text": "\"写代码的人\"变", "start": 32.381, "end": 34.121}, {"text": "成\"提需求做判断", "start": 34.141, "end": 35.757}, {"text": "的人\"课程里最重", "start": 35.777, "end": 37.383}, {"text": "要的学习原则只有", "start": 37.403, "end": 39.18}, {"text": "一条有问题先问把", "start": 39.2, "end": 40.879}, {"text": "它当成第一求助对", "start": 40.899, "end": 42.55}, {"text": "那第一步干什么不", "start": 46.4, "end": 47.757}, {"text": "是装环境不是背语", "start": 47.777, "end": 49.217}, {"text": "法课程安排的第一", "start": 49.237, "end": 50.515}, {"text": "个实战是直接在聊", "start": 50.535, "end": 51.812}, {"text": "天框里输入帮我做", "start": 51.832, "end": 53.11}, {"text": "一个贪吃蛇游戏几", "start": 53.13, "end": 54.473}, {"text": "分钟一个能玩的原", "start": 54.493, "end": 55.825}, {"text": "型就出来了进阶一", "start": 55.845, "end": 57.226}, {"text": "点做   原生版", "start": 57.246, "end": 58.394}, {"text": "让蛇吃掉文字字符", "start": 58.414, "end": 59.729}, {"text": "最后生成一首诗画", "start": 59.749, "end": 61.12}, {"text": "一幅画这个案例要", "start": 61.14, "end": 62.459}, {"text": "练的核心能力只有", "start": 62.479, "end": 63.889}, {"text": "一句用自然语言清", "start": 63.909, "end": 65.097}, {"text": "晰地表达需求", "start": 65.117, "end": 66.39}, {"text": "网页上玩熟了下一", "start": 71.6, "end": 73.078}, {"text": "步走到本地装一个", "start": 73.098, "end": 74.456}, {"text": "课程里用的是从网", "start": 74.476, "end": 75.934}, {"text": "页对话到本地项目", "start": 75.954, "end": 77.332}, {"text": "你的工作方式开始", "start": 77.352, "end": 78.86}, {"text": "像一个真正的开发", "start": 78.88, "end": 80.388}, {"text": "者有文件能运行可", "start": 80.408, "end": 81.736}, {"text": "调试全程陪跑记住", "start": 81.756, "end": 83.13}, {"text": "这个阶段的心法工", "start": 83.15, "end": 84.568}, {"text": "具不重要敢提需求", "start": 84.588, "end": 86.081}, {"text": "才重要", "start": 86.101, "end": 86.82}, {"text": "掌握了工具课程安", "start": 90.2, "end": 91.83}, {"text": "排的第一次正式练", "start": 91.85, "end": 93.432}, {"text": "习很有意思从截图", "start": 93.452, "end": 94.956}, {"text": "复刻找一张你喜欢", "start": 94.976, "end": 96.471}, {"text": "的产品截图让  ", "start": 96.491, "end": 97.957}, {"text": " 照着把它做出来", "start": 97.977, "end": 99.443}, {"text": "为什么要先模仿因", "start": 99.463, "end": 101.014}, {"text": "为需求描述能力是", "start": 101.034, "end": 102.545}, {"text": "在对照成品的过程", "start": 102.565, "end": 104.208}, {"text": "中练出来的你看着", "start": 104.228, "end": 105.714}, {"text": "图说这里那里把它", "start": 105.734, "end": 107.239}, {"text": "变成界面这一章练", "start": 107.259, "end": 108.898}, {"text": "完你已经能独立交", "start": 108.918, "end": 110.353}, {"text": "付一个小页面了", "start": 110.373, "end": 111.92}, {"text": "再往后课程把\"做", "start": 115.4, "end": 117.203}, {"text": "出完整作品\"拆成", "start": 117.223, "end": 119.129}, {"text": "了八步寻找真实问", "start": 119.149, "end": 120.54}, {"text": "题筛选值得做的方", "start": 120.56, "end": 122.4}, {"text": "向看懂真实需求的", "start": 122.42, "end": 123.685}, {"text": "   方法用访谈", "start": 123.705, "end": 125.38}, {"text": "验证用双钻模型收", "start": 125.401, "end": 127.094}, {"text": "敛方案做出可交互", "start": 127.114, "end": 128.763}, {"text": "原型接入真实  ", "start": 128.783, "end": 130.397}, {"text": " 能力打磨并交付", "start": 130.417, "end": 131.893}, {"text": "这就是     ", "start": 131.913, "end": 133.71}, {"text": "的主线而整张学习", "start": 133.73, "end": 135.29}, {"text": "地图分三个阶段入", "start": 135.31, "end": 136.961}, {"text": "门体验并交付第一", "start": 137.074, "end": 138.653}, {"text": "个作品初中级设计", "start": 138.673, "end": 140.13}, {"text": "数据库部署支付外", "start": 140.15, "end": 141.793}, {"text": "加八个实战项目进", "start": 141.813, "end": 143.45}, {"text": "阶直到小程序游戏", "start": 143.679, "end": 145.207}, {"text": "全平台从入门到精", "start": 145.227, "end": 146.962}, {"text": "通路线清清楚楚", "start": 146.982, "end": 148.52}, {"text": "课程附录还总结了", "start": 157.2, "end": 158.835}, {"text": "新手最常见的坑我", "start": 158.855, "end": 160.296}, {"text": "挑三个最痛的讲第", "start": 160.316, "end": 161.94}, {"text": "一卡住不问先自己", "start": 162.026, "end": 163.44}, {"text": "死磕两小时顺序错", "start": 163.46, "end": 165.094}, {"text": "了才是你的第一求", "start": 165.114, "end": 166.595}, {"text": "助对象第二一句话", "start": 166.615, "end": 168.031}, {"text": "甩给   就期待", "start": 168.051, "end": 169.685}, {"text": "完美结果你要当的", "start": 169.705, "end": 171.174}, {"text": "是产品经理说清楚", "start": 171.194, "end": 172.767}, {"text": "背景任务和验收标", "start": 172.787, "end": 174.359}, {"text": "准不是当甲方第三", "start": 174.379, "end": 175.71}, {"text": "只看教程不动手每", "start": 175.73, "end": 177.282}, {"text": "一章都配了实操动", "start": 177.302, "end": 178.826}, {"text": "手做完才算学会", "start": 178.846, "end": 180.47}, {"text": "这一期你只需要记", "start": 185.6, "end": 186.991}, {"text": "住三件事是用自然", "start": 187.011, "end": 188.44}, {"text": "语言驱动的编程方", "start": 188.46, "end": 190.28}, {"text": "式第一步是开口提", "start": 190.3, "end": 191.916}, {"text": "需求不是学语法的", "start": 191.936, "end": 193.248}, {"text": "三阶段地图从入门", "start": 193.268, "end": 194.656}, {"text": "到进阶全都安排好", "start": 194.676, "end": 196.297}, {"text": "了下一期我们进入", "start": 196.317, "end": 197.777}, {"text": "实战跟着课程做一", "start": 197.797, "end": 199.437}, {"text": "个能玩还会写诗的", "start": 199.457, "end": 200.824}, {"text": "贪吃蛇想要课程链", "start": 200.844, "end": 202.188}, {"text": "接和配套学习路线", "start": 202.208, "end": 203.792}, {"text": "图文版评论区扣\"", "start": 203.812, "end": 205.228}, {"text": "入门\"两个字关注", "start": 205.248, "end": 206.826}, {"text": "我大模型从入门到", "start": 206.846, "end": 208.466}, {"text": "精通我们一期一期", "start": 208.486, "end": 209.832}, {"text": "跟着练", "start": 209.852, "end": 210.53}];
+    const stage = document.getElementById("cap-stage");
+    GROUPS.forEach((g, i) => {
+      const div = document.createElement("div");
+      div.className = "cap-group";
+      div.id = "cap-" + i;
+      const inner = document.createElement("span");
+      inner.textContent = g.text;
+      div.appendChild(inner);
+      stage.appendChild(div);
+      gsap.set(div, { opacity: 0, visibility: "hidden" });
+      const start = Math.max(g.start, 0.1);
+      const end = Math.max(g.end, start + 0.3);
+      tl.set(div, { visibility: "visible" }, start);
+      tl.fromTo(div, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, start);
+      tl.to(div, { opacity: 0, duration: 0.12, ease: "power2.in" }, end - 0.12);
+      tl.set(div, { visibility: "hidden" }, end);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

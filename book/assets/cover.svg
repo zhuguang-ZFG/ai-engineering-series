@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Vibe Coding 101：从一句需求到第一个可用作品</title>
+  <desc id="desc">绿色、黑色和米白色构成的零基础实战教程封面。</desc>
+  <rect width="1600" height="1000" fill="#f6f8fa"/>
+  <rect x="96" y="92" width="188" height="10" rx="5" fill="#1f883d"/>
+  <text x="96" y="70" fill="#57606a" font-family="ui-monospace, monospace" font-size="30" letter-spacing="5">VIBE CODING 101 · 零基础实战课</text>
+  <text x="96" y="270" fill="#1f2328" font-family="system-ui, sans-serif" font-size="112" font-weight="800">不会写代码</text>
+  <text x="96" y="410" fill="#1f2328" font-family="system-ui, sans-serif" font-size="112" font-weight="800">也能做<tspan fill="#1f883d">软件</tspan></text>
+  <text x="102" y="500" fill="#57606a" font-family="system-ui, sans-serif" font-size="42">从一句需求，到第一个可用作品</text>
+  <g transform="translate(1010 170)">
+    <rect width="480" height="480" rx="34" fill="#1f2328"/>
+    <text x="48" y="86" fill="#8c959f" font-family="ui-monospace, monospace" font-size="24">PROMPT → PROTOTYPE</text>
+    <rect x="48" y="130" width="384" height="86" rx="16" fill="#30363d"/>
+    <text x="76" y="184" fill="#f0f6fc" font-family="system-ui, sans-serif" font-size="30">做一个会计分的贪吃蛇</text>
+    <path d="M96 310h54v54h54v54h54" fill="none" stroke="#3fb950" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="360" cy="396" r="23" fill="#f85149"/>
+    <text x="48" y="452" fill="#3fb950" font-family="system-ui, sans-serif" font-size="28" font-weight="700">能运行 → 看结果 → 继续改</text>
+  </g>
+  <g transform="translate(96 650)">
+    <rect width="820" height="168" rx="24" fill="#ffffff" stroke="#d0d7de" stroke-width="2"/>
+    <rect width="12" height="168" rx="6" fill="#1f883d"/>
+    <text x="50" y="65" fill="#1f883d" font-family="ui-monospace, monospace" font-size="30" font-weight="700">S1</text>
+    <text x="130" y="65" fill="#1f2328" font-family="system-ui, sans-serif" font-size="34" font-weight="700">先交付第一个作品</text>
+    <text x="130" y="116" fill="#57606a" font-family="system-ui, sans-serif" font-size="28">再学习设计、数据库、部署与 Agent</text>
+  </g>
+  <text x="96" y="920" fill="#8c959f" font-family="ui-monospace, monospace" font-size="24" letter-spacing="3">BASED ON OPEN SOURCE COURSE · EASY-VIBE</text>
+</svg>

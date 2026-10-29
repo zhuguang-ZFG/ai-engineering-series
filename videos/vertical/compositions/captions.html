@@ -1,0 +1,29 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    .cap-group { position: absolute; left: 72px; bottom: 610px; width: 936px; display: flex; justify-content: center; overflow: visible; }
+    .cap-shell { max-width: 900px; padding: 16px 24px; background: rgba(31,35,40,.94); border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.16); text-align: center; font-family: "Noto Sans JP", sans-serif; font-size: 48px; line-height: 1.28; color: #f6f8fa; }
+    .cap-light { font-weight: 400; color: #d8dee4; }
+    .cap-strong { font-weight: 700; color: #fff; }
+    .cap-green { font-weight: 700; color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-3m1l" id="root" data-composition-id="reel-captions" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-kcn4" id="cap-1" class="cap-group clip" data-start="4.4" data-duration="4.0"><div data-hf-id="hf-r0n5" class="cap-shell"><span data-hf-id="hf-wt0p" class="cap-light">用自然语言</span><span data-hf-id="hf-ljoy" class="cap-strong">告诉 AI </span><span data-hf-id="hf-q6pc" class="cap-green">要什么</span></div></div>
+    <div data-hf-id="hf-nb39" id="cap-2" class="cap-group clip" data-start="8.4" data-duration="4.2"><div data-hf-id="hf-i8lx" class="cap-shell"><span data-hf-id="hf-8o3m" class="cap-light">看结果，</span><span data-hf-id="hf-gklg" class="cap-green">继续改</span><span data-hf-id="hf-hccl" class="cap-strong">，不用逐行写代码</span></div></div>
+    <div data-hf-id="hf-mjsw" id="cap-3" class="cap-group clip" data-start="13.0" data-duration="4.2"><div data-hf-id="hf-jfj0" class="cap-shell"><span data-hf-id="hf-sx3c" class="cap-green">第一步</span><span data-hf-id="hf-9yg8" class="cap-strong">：聊天框里说需求</span></div></div>
+    <div data-hf-id="hf-13vh" id="cap-4" class="cap-group clip" data-start="17.5" data-duration="4.1"><div data-hf-id="hf-j17z" class="cap-shell"><span data-hf-id="hf-gmb8" class="cap-green">第二步</span><span data-hf-id="hf-glup" class="cap-strong">：到本地运行和调试</span></div></div>
+    <div data-hf-id="hf-91es" id="cap-5" class="cap-group clip" data-start="22.0" data-duration="4.8"><div data-hf-id="hf-k852" class="cap-shell"><span data-hf-id="hf-rryt" class="cap-green">第三步</span><span data-hf-id="hf-7a6x" class="cap-strong">：看着截图练表达</span></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    [
+      ["#cap-1", 4.4, 8.4], ["#cap-2", 8.4, 12.6], ["#cap-3", 13.0, 17.2],
+      ["#cap-4", 17.5, 21.6], ["#cap-5", 22.0, 26.8]
+    ].forEach(([selector, start, end]) => {
+      const shell = selector + " .cap-shell";
+      tl.fromTo(shell, { y: 18, scale: .96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .18, ease: "power3.out" }, start);
+      tl.to(shell, { opacity: 0, duration: .14, ease: "power2.in" }, end - .14);
+    });
+    window.__timelines["reel-captions"] = tl;
+  </script>
+</template>
