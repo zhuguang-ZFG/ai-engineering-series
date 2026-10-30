@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="t">
+  <title id="t">筛选方向：四层漏斗，只留值得验证的</title>
+  <rect width="1200" height="620" fill="#fbfaf6"/>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">筛选方向：四层漏斗</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">每个方向都过一遍，过不去就放回池子，别急着写代码</text>
+
+  <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round">
+    <path d="M72 156h808l-64 96H136z" fill="#ffffff"/>
+    <path d="M136 252h680l-64 96H200z" fill="#ffffff"/>
+    <path d="M200 348h616l-64 96H264z" fill="#f1f7f2"/>
+    <path d="M264 444h552l-64 96H328z" fill="#f1f7f2"/>
+  </g>
+
+  <g fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" text-anchor="middle">
+    <text x="476" y="212">我脑子里所有的点子</text>
+    <text x="476" y="308">有人真的遇到过</text>
+    <text x="476" y="404">愿意花时间或花钱</text>
+    <text x="476" y="500">免费替代不了</text>
+  </g>
+
+  <g fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="end">
+    <text x="1128" y="212">想到 ≠ 有人需要</text>
+    <text x="1128" y="308">问「上次是什么时候」</text>
+    <text x="1128" y="404">问「现在怎么解决」</text>
+    <text x="1128" y="500">问「为什么不自己做」</text>
+  </g>
+  <g stroke="#e6e1d4" stroke-width="3" stroke-linecap="round">
+    <path d="M916 196h212"/><path d="M916 292h212"/><path d="M916 388h212"/><path d="M916 484h212"/>
+  </g>
+
+  <path d="M476 540v30" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
+  <path d="M476 586l-9-15h18z" fill="#1f2328"/>
+  <rect x="286" y="556" width="380" height="52" rx="26" fill="#1f883d"/>
+  <text x="476" y="591" fill="#ffffff" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700" text-anchor="middle">留下 1–2 个值得验证的方向</text>
+</svg>

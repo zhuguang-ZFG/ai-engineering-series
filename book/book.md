@@ -461,6 +461,11 @@ Vibe Coding 是这门课的起点，但不是终点。我们会先让你快速�
 > **💡 这门课真正想培养什么？**
 这门课不只是教你使用 AI 编程工具，而是希望帮助你成为一名初步的**产品工程师（Product Engineer）**：能够发现问题、验证需求、亲手构建产品、交付真实用户，并根据结果继续迭代的人。
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/learn-path.svg" alt="蛇形路线串起八个阶段：找真实问题、筛选方向、看懂需求、访谈验证、收敛方案、做出原型、接 AI 能力、打磨交付" loading="lazy">
+  <figcaption><strong>八个阶段是串行关系。</strong>前四步把问题想清楚，后四步把东西做出来；每一步结束都该有一个能给别人看的结果。</figcaption>
+</figure>
+
 ##### 为什么现在需要产品工程师？
 
 你可能会问：“产品工程师”到底是什么？这不是 2026 年才突然冒出来的新头衔。
@@ -3438,6 +3443,11 @@ const duration = '约 <strong>3 小时</strong>'
 
 
 
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/funnel.svg" alt="四层漏斗：脑子里所有的点子、有人真的遇到过、愿意花时间或花钱、免费替代不了，最后留下 1–2 个值得验证的方向" loading="lazy">
+  <figcaption><strong>四层判断，留下 1–2 个方向。</strong>每一层都对应一个能当面问出口的问题；问不到证据的方向，先放回池子。</figcaption>
+</figure>
 
 ##### 开篇：独立开发程序员小明的故事
 
@@ -9615,6 +9625,11 @@ const duration = '约 <strong>30 分钟</strong>'
       { title: '迭代解决', description: '直到问题解决' }
     ]" />
 </div>
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/error-flow.svg" alt="四步排查流程：看到报错先截图、把截图和一句话贴给 AI、照它说的改、还不行就打开 F12 补充信息，然后带着新报错回到第二步" loading="lazy">
+  <figcaption><strong>排查是一条循环，不是一条直线。</strong>改完又报错，就把新的报错贴回去——AI 需要看到上一步到底有没有生效。</figcaption>
+</figure>
 
 ##### 1. 核心心法：截图问 AI
 
