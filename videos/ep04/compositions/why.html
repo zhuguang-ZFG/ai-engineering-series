@@ -1,0 +1,56 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #w-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #w-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-title .g { color: #1f883d; }
+    #w-url { position: absolute; left: 110px; top: 312px; width: 860px; height: 116px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); display: flex; align-items: center; padding: 0 30px; box-sizing: border-box; }
+    #w-url-t { font: 700 40px "JetBrains Mono", monospace; color: #1f2328; }
+    #w-url-t .m { color: #57606a; font-weight: 400; }
+    #w-loop { position: absolute; left: 110px; top: 462px; width: 860px; height: 250px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #cf222e; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.07); padding: 26px 34px; box-sizing: border-box; }
+    #w-loop-h { font: 700 30px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    .w-loop-l { margin-top: 18px; font: 700 38px/1.35 "Noto Sans JP", sans-serif; color: #1f2328; }
+    .w-loop-l span { color: #57606a; font-weight: 400; }
+    #w-need { position: absolute; left: 1030px; top: 312px; width: 780px; height: 360px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); padding: 28px 34px; box-sizing: border-box; }
+    #w-need-h { font: 700 30px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
+    .w-need { margin-top: 22px; display: flex; align-items: baseline; gap: 18px; font: 700 42px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .w-need b { font: 700 30px "JetBrains Mono", monospace; color: #1f883d; }
+    #w-host { position: absolute; left: 1030px; top: 706px; width: 780px; height: 150px; padding: 24px 34px; box-sizing: border-box; background: #1f2328; border-radius: 10px; }
+    #w-host-t { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
+    #w-host-b { margin-top: 14px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #w-host-b .g { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-w1aa" id="root" data-composition-id="why" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-w2bb" id="w-tag" class="clip" data-start="0" data-duration="23.98">WHY · 本地地址的天花板</div>
+    <div data-hf-id="hf-w3cc" id="w-title" class="clip" data-start="0.2" data-duration="23.78">localhost，<span data-hf-id="hf-w4dd" class="g">只回答你自己</span></div>
+    <div data-hf-id="hf-w5ee" id="w-url" class="clip" data-start="3.1" data-duration="20.88"><span data-hf-id="hf-w6ff" id="w-url-t"><span data-hf-id="hf-w7gg" class="m">http://</span>localhost:5173</span></div>
+    <div data-hf-id="hf-w8hh" id="w-loop" class="clip" data-start="4.1" data-duration="19.88">
+      <div data-hf-id="hf-w9ii" id="w-loop-h">LOOPBACK · 回环地址</div>
+      <div data-hf-id="hf-waja" id="w-loop-l1" class="w-loop-l clip" data-start="5.5" data-duration="18.48">请求根本<span data-hf-id="hf-wbkb">不出网卡</span></div>
+      <div data-hf-id="hf-wclc" id="w-loop-l2" class="w-loop-l clip" data-start="7.2" data-duration="16.78">只有<span data-hf-id="hf-wdmd">本机自己回答</span></div>
+    </div>
+    <div data-hf-id="hf-wene" id="w-need" class="clip" data-start="10.6" data-duration="13.38">
+      <div data-hf-id="hf-wfof" id="w-need-h">让别人打开，需要三样</div>
+      <div data-hf-id="hf-wgpg" id="w-n1" class="w-need clip" data-start="11.8" data-duration="12.18"><b>01</b>能直接发的文件</div>
+      <div data-hf-id="hf-whph" id="w-n2" class="w-need clip" data-start="13.3" data-duration="10.68"><b>02</b>一台长期在线的服务器</div>
+      <div data-hf-id="hf-wiqi" id="w-n3" class="w-need clip" data-start="15.3" data-duration="8.68"><b>03</b>一个公网地址</div>
+    </div>
+    <div data-hf-id="hf-wjrj" id="w-host" class="clip" data-start="17.0" data-duration="6.98">
+      <div data-hf-id="hf-wksk" id="w-host-t">HOSTING · 托管平台</div>
+      <div data-hf-id="hf-wltl" id="w-host-b">前两样它全包，<span data-hf-id="hf-wmum" class="g">顺手送你 https 域名</span></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#w-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#w-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#w-url", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 3.1);
+    tl.fromTo("#w-loop", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 4.1);
+    tl.fromTo("#w-loop .w-loop-l", { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: .38, ease: "power3.out", stagger: 1.7 }, 5.5);
+    tl.fromTo("#w-need", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 10.6);
+    tl.fromTo("#w-need .w-need", { x: 28, opacity: 0 }, { x: 0, opacity: 1, duration: .36, ease: "power3.out", stagger: 1.5 }, 11.8);
+    tl.fromTo("#w-host", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 17.0);
+    tl.fromTo("#w-host-b .g", { opacity: .45 }, { opacity: 1, duration: .5, ease: "power2.out" }, 21.3);
+    window.__timelines["why"] = tl;
+  </script>
+</template>

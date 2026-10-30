@@ -152,10 +152,13 @@ function validateCleanTree() {
 validateBook();
 validateVideoSource("landscape", { width: 1920, height: 1080, duration: 215.5, minimumCompositions: 8 });
 validateVideoSource("vertical", { width: 1080, height: 1920, duration: 39.5, minimumCompositions: 3 });
+validateVideoSource("ep04", { width: 1920, height: 1080, duration: 187.472, minimumCompositions: 8 });
 validateDelivery("deliverables/vibe-coding-101-landscape.mp4", { width: 1920, height: 1080, duration: 215.5, minimumBytes: 10_000_000 });
 validateDelivery("deliverables/vibe-coding-101-vertical.mp4", { width: 1080, height: 1920, duration: 39.5, minimumBytes: 1_500_000 });
+validateDelivery("deliverables/ep04-landscape.mp4", { width: 1920, height: 1080, duration: 187.5, minimumBytes: 5_000_000 });
 requireFile("deliverables/landscape-cover.webp", 10_000);
 requireFile("deliverables/vertical-cover.webp", 10_000);
+requireFile("deliverables/ep04-cover.webp", 10_000);
 validateCleanTree();
 
 for (const note of notes) console.log(`✓ ${note}`);

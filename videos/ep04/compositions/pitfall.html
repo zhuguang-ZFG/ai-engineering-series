@@ -1,0 +1,55 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #x-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #x-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #x-title .g { color: #1f883d; }
+    .x-card { position: absolute; top: 320px; width: 540px; height: 300px; padding: 28px 32px; background: #fff; border: 1px solid #d0d7de; border-top: 8px solid #cf222e; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); box-sizing: border-box; }
+    #x-c1 { left: 110px; } #x-c2 { left: 690px; } #x-c3 { left: 1270px; }
+    .x-n { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    .x-k { margin-top: 12px; font: 700 42px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    .x-d { margin-top: 16px; font: 28px/1.42 "Noto Sans JP", sans-serif; color: #57606a; }
+    .x-fix { position: absolute; top: 646px; height: 106px; padding: 0 28px; display: flex; align-items: center; gap: 16px; background: #dafbe1; border-radius: 8px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; box-sizing: border-box; }
+    #x-f1 { left: 110px; width: 540px; } #x-f2 { left: 690px; width: 540px; } #x-f3 { left: 1270px; width: 540px; }
+    .x-fix em { font-style: normal; font-size: 34px; }
+    #x-final { position: absolute; left: 110px; top: 792px; width: 1700px; height: 76px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 8px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #x-final .g { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-x1aa" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-x2bb" id="x-tag" class="clip" data-start="0" data-duration="25.732">PITFALL · 上线三个坑</div>
+    <div data-hf-id="hf-x3cc" id="x-title" class="clip" data-start="0.2" data-duration="25.532">三个坑，<span data-hf-id="hf-x4dd" class="g">每个都能让链接打不开</span></div>
+    <div data-hf-id="hf-x5ee" id="x-c1" class="x-card clip" data-start="2.1" data-duration="23.632">
+      <div data-hf-id="hf-x6ff" class="x-n">PITFALL 01</div>
+      <div data-hf-id="hf-x7gg" class="x-k">node_modules<br data-hf-id="hf-x8hh" />一起传上去</div>
+      <div data-hf-id="hf-x9ii" class="x-d">体积爆炸，还把依赖明细全暴露了</div>
+    </div>
+    <div data-hf-id="hf-xaja" id="x-c2" class="x-card clip" data-start="8.9" data-duration="16.832">
+      <div data-hf-id="hf-xbkb" class="x-n">PITFALL 02</div>
+      <div data-hf-id="hf-xclc" class="x-k">密钥写进<br data-hf-id="hf-xdmd" />前端代码</div>
+      <div data-hf-id="hf-xene" class="x-d">前端代码人人可读，密钥等于公开</div>
+    </div>
+    <div data-hf-id="hf-xfof" id="x-c3" class="x-card clip" data-start="15.4" data-duration="10.332">
+      <div data-hf-id="hf-xgpg" class="x-n">PITFALL 03</div>
+      <div data-hf-id="hf-xhph" class="x-k">只在<br data-hf-id="hf-xiqi" />桌面测</div>
+      <div data-hf-id="hf-xjrj" class="x-d">手机一打开，全是溢出和错位</div>
+    </div>
+    <div data-hf-id="hf-xksk" id="x-f1" class="x-fix clip" data-start="5.9" data-duration="19.832"><em>✓</em>只传 dist，依赖不进产物</div>
+    <div data-hf-id="hf-xltl" id="x-f2" class="x-fix clip" data-start="13.6" data-duration="12.132"><em>✓</em>密钥放服务端环境变量</div>
+    <div data-hf-id="hf-xmum" id="x-f3" class="x-fix clip" data-start="17.4" data-duration="8.332"><em>✓</em>移动端先测，再发</div>
+    <div data-hf-id="hf-xnvn" id="x-final" class="clip" data-start="19.9" data-duration="5.832">规矩提前定死，<span data-hf-id="hf-xowo" class="g">上线才不会翻车</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#x-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#x-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#x-c1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 2.1);
+    tl.fromTo("#x-c2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 8.9);
+    tl.fromTo("#x-c3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 15.4);
+    tl.fromTo("#x-f1", { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: .35, ease: "power3.out" }, 5.9);
+    tl.fromTo("#x-f2", { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: .35, ease: "power3.out" }, 13.6);
+    tl.fromTo("#x-f3", { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: .35, ease: "power3.out" }, 17.4);
+    tl.fromTo("#x-final", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 19.9);
+    tl.fromTo("#x-final .g", { opacity: .45 }, { opacity: 1, duration: .45, ease: "power2.out" }, 23.05);
+    window.__timelines["pitfall"] = tl;
+  </script>
+</template>

@@ -1,0 +1,55 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #u-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #u-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #u-title .g { color: #1f883d; }
+    .u-step { position: absolute; top: 320px; width: 470px; height: 178px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); padding: 24px 30px; box-sizing: border-box; }
+    #u-s1 { left: 110px; }
+    #u-s2 { left: 640px; }
+    #u-s3 { left: 1170px; }
+    .u-k { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #1f883d; }
+    .u-b { margin-top: 12px; font: 700 40px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .u-d { margin-top: 8px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
+    .u-ar { position: absolute; top: 392px; width: 50px; height: 34px; }
+    .u-ar div { position: absolute; background: #1f883d; }
+    .u-shaft { left: 0; top: 14px; width: 34px; height: 6px; border-radius: 3px; }
+    .u-head { left: 30px; top: 5px; width: 24px; height: 24px; transform: rotate(45deg); border-radius: 4px; }
+    #u-a1 { left: 592px; } #u-a2 { left: 1122px; }
+    #u-ci { position: absolute; left: 110px; top: 560px; width: 690px; height: 156px; background: #1f2328; border-radius: 10px; padding: 24px 32px; box-sizing: border-box; }
+    #u-ci-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
+    #u-ci-b { margin-top: 12px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #u-ci-b .g { color: #3fb950; }
+    #u-rb { position: absolute; left: 840px; top: 560px; width: 970px; height: 156px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #cf222e; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.07); padding: 24px 32px; box-sizing: border-box; }
+    #u-rb-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    #u-rb-b { margin-top: 12px; font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #u-cmd { position: absolute; left: 840px; top: 748px; width: 970px; height: 112px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; display: flex; align-items: center; padding: 0 32px; box-sizing: border-box; font: 30px "JetBrains Mono", monospace; color: #f6f8fa; }
+    #u-cmd .dim { color: #c9d1d9; }
+    #u-cmd .ok { color: #56d364; }
+  </style>
+  <div data-hf-id="hf-u1aa" id="root" data-composition-id="update" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-u2bb" id="u-tag" class="clip" data-start="0" data-duration="22.468">UPDATE · 提交即上线</div>
+    <div data-hf-id="hf-u3cc" id="u-title" class="clip" data-start="0.2" data-duration="22.268">改一行，<span data-hf-id="hf-u4dd" class="g">手机刷新就是新版</span></div>
+    <div data-hf-id="hf-u5ee" id="u-s1" class="u-step clip" data-start="3.5" data-duration="18.968"><div data-hf-id="hf-u6ff" class="u-k">STEP 01</div><div data-hf-id="hf-u7gg" class="u-b">接上 GitHub</div><div data-hf-id="hf-u8hh" class="u-d">主分支一提交就触发</div></div>
+    <div data-hf-id="hf-u9ii" id="u-s2" class="u-step clip" data-start="7.6" data-duration="14.868"><div data-hf-id="hf-uaja" class="u-k">STEP 02</div><div data-hf-id="hf-ubkb" class="u-b">自动构建</div><div data-hf-id="hf-uclc" class="u-d">平台替你跑 build</div></div>
+    <div data-hf-id="hf-udmd" id="u-s3" class="u-step clip" data-start="9.3" data-duration="13.168"><div data-hf-id="hf-uene" class="u-k">STEP 03</div><div data-hf-id="hf-ufof" class="u-b">自动上线</div><div data-hf-id="hf-ugpg" class="u-d">几分钟后就是新版</div></div>
+    <div data-hf-id="hf-uhph" id="u-a1" class="u-ar clip" data-start="6.6" data-duration="15.868"><div data-hf-id="hf-uiqi" class="u-shaft"></div><div data-hf-id="hf-ujrj" class="u-head"></div></div>
+    <div data-hf-id="hf-uksk" id="u-a2" class="u-ar clip" data-start="9.9" data-duration="12.568"><div data-hf-id="hf-ultl" class="u-shaft"></div><div data-hf-id="hf-umum" class="u-head"></div></div>
+    <div data-hf-id="hf-unvn" id="u-ci" class="clip" data-start="13.7" data-duration="8.768"><div data-hf-id="hf-uowo" id="u-ci-h">CONTINUOUS DEPLOY</div><div data-hf-id="hf-uppp" id="u-ci-b">不用再<span data-hf-id="hf-uqqq" class="g">手动传文件</span></div></div>
+    <div data-hf-id="hf-urrr" id="u-rb" class="clip" data-start="17.4" data-duration="5.068"><div data-hf-id="hf-uss" id="u-rb-h">ROLLBACK</div><div data-hf-id="hf-utt" id="u-rb-b">改坏了，回到上一个版本</div></div>
+    <div data-hf-id="hf-uuu" id="u-cmd" class="clip" data-start="19.4" data-duration="3.068"><span data-hf-id="hf-uvv"><span data-hf-id="hf-uww" class="dim">$</span> wrangler pages deployment rollback</span><span data-hf-id="hf-uxx" class="ok">&nbsp;&nbsp;✓</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#u-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#u-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#u-s1", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 3.5);
+    tl.fromTo("#u-s2, #u-s3", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out", stagger: 1.7 }, 7.6);
+    tl.fromTo("#u-a1 .u-shaft, #u-a2 .u-shaft", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: .3, ease: "power3.out", stagger: 3.3 }, 6.6);
+    tl.fromTo("#u-a1 .u-head, #u-a2 .u-head", { opacity: 0 }, { opacity: 1, duration: .22, ease: "power2.out", stagger: 3.3 }, 6.8);
+    tl.fromTo("#u-ci", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 13.7);
+    tl.fromTo("#u-rb", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 17.4);
+    tl.fromTo("#u-cmd", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: "power3.out" }, 19.4);
+    window.__timelines["update"] = tl;
+  </script>
+</template>
