@@ -22,6 +22,7 @@
 | EP.02 源码 | [`videos/ep02/`](videos/ep02/) |
 | EP.03 源码 | [`videos/ep03/`](videos/ep03/) |
 | EP.04 源码 | [`videos/ep04/`](videos/ep04/) |
+| 手绘风改造方案（封面 + 书籍图解提示词） | [`design/handdraw/`](design/handdraw/) |
 
 系列正片按集数分目录（`videos/ep02`–`ep04`），宣传片沿用 `videos/landscape`、`videos/vertical`；各集 1080p 成片与 16:9 封面在 `deliverables/` 同名对应。
 
