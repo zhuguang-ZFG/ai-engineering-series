@@ -178,6 +178,27 @@ requireFile("deliverables/vertical-cover.webp", 10_000);
 requireFile("deliverables/ep02-cover.webp", 10_000);
 requireFile("deliverables/ep03-cover.webp", 10_000);
 requireFile("deliverables/ep04-cover.webp", 10_000);
+function validateNoMachinePaths() {
+  const scanned = new Set([".md", ".txt", ".json", ".yml", ".yaml", ".mjs"]);
+  const leaks = [];
+  for (const path of walk(root)) {
+    const parts = relative(root, path).split(/[\\/]/);
+    if (parts.includes(".git") || parts[0] === "book") continue;
+    if (!scanned.has(extname(path))) continue;
+    const body = readFileSync(path, "utf8");
+    for (const match of body.matchAll(/(?:[A-Za-z]:[\\/]Users[\\/]|\/home\/|\/Users\/)([^\\/\s`"'）)，。]+)/g)) {
+      const account = match[1];
+      if (!account) continue;
+      if (/^[<\[{$%]/.test(account) || /^[^\x00-\x7F]/.test(account)) continue;
+      const line = body.slice(0, match.index).split("\n").length;
+      leaks.push(`${relative(root, path).replaceAll("\\", "/")}:${line} ${match[0].trim()}`);
+    }
+  }
+  if (leaks.length) fail(`Machine-specific home paths are committed:\n  ${leaks.slice(0, 10).join("\n  ")}`);
+  else notes.push("No machine-specific home paths outside book/ (book/ is the upstream mirror)");
+}
+
+validateNoMachinePaths();
 validateCleanTree();
 
 for (const note of notes) console.log(`✓ ${note}`);

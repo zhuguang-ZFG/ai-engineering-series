@@ -89,7 +89,7 @@ first ran late. `tools/build_captions_v2.py` now takes its word timings from the
 11,047,779 B). Running the builder again reproduces it byte-for-byte as long as the cached word
 timings exist.
 
-There is no git repository anywhere under `D:/Users/dmx` (`llm101-ep02`, `llm101-film`, `llm101-ep03`
+There is no git repository anywhere under the workspace root (`llm101-ep02`, `llm101-film`, `llm101-ep03`
 and the workspace root all report "not a git work tree"), so a superseded `captions.html` can only be
 recovered from a manual copy — keep one before rebuilding. Any future re-render must also re-upload on
 all three platforms, since the captions are burned in.

@@ -20,7 +20,7 @@
 风格激活核查（基线模型 gpt-image-2，用官方解析器实测，非人工猜测）：
 
 ```bash
-cd C:/Users/zhugu/.agents/skills/handraw-style
+cd ~/.agents/skills/handraw-style
 python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-image-2 --style FA-013
 python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-image-2 --style FA-040
 ```
@@ -36,10 +36,10 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 
 ## 本机安装记录
 
-- 安装位置：`C:/Users/zhugu/.agents/skills/handraw-style`（shallow clone，版本 `1.9.8`，101 MB，含 `images/` 参考图与 `skills/` 子技能）。
-- omp 加载：已加入 `C:/Users/zhugu/.omp/agent/config.yml` 的 `skills.includeSkills`（`handraw-style`、`handdraw-style-prompter`），`skill://handdraw-style-prompter` 可直接读取。
+- 安装位置：`~/.agents/skills/handraw-style`（shallow clone，版本 `1.9.8`，101 MB，含 `images/` 参考图与 `skills/` 子技能）。
+- omp 加载：已加入 `~/.omp/agent/config.yml` 的 `skills.includeSkills`（`handraw-style`、`handdraw-style-prompter`），`skill://handdraw-style-prompter` 可直接读取。
 - 自检：`python skills/handdraw-style-prompter/scripts/validate_library.py` 可跑通索引与画廊重建；上游自身有 1 条 FAIL——`skills/release-illustration-planner/SKILL.md:94` 泄漏了作者本地路径 `file:///E:/handraw-style/...`，不影响本方案使用。
-- 更新：`cd C:/Users/zhugu/.agents/skills/handraw-style && git pull --depth 1`。
+- 更新：`cd ~/.agents/skills/handraw-style && git pull --depth 1`。
 
 ## 资产改造清单
 

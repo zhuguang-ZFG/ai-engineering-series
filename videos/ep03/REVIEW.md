@@ -112,7 +112,7 @@ them is a separate delete-and-upload") is obsolete. The remaining reviewable ite
 
 ## covers
 
-New-but-related family in `D:/Users/dmx/.tmp/covers/opus55/ep03-{3x4,4x3,16x9}/`, archived to
+New-but-related family in `.tmp/covers/opus55/ep03-{3x4,4x3,16x9}/` (workspace-relative), archived to
 `assets/covers/`:
 
 - `cover3x4.jpg` 1080×1440 (抖音 竖封面 / 视频号 资料卡)
