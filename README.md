@@ -19,7 +19,7 @@
 | 竖版源码 | [`videos/vertical/`](videos/vertical/) |
 | EP.04 源码 | [`videos/ep04/`](videos/ep04/) |
 
-EP.04《把这条蛇，放到公网上》讲的是打包、托管、真机验收与回滚；源码目录结构与其他成片一致，改完可用 `npm run render` 重出 4K 母版。
+EP.04《把这条蛇，放到公网上》讲的是打包、托管、真机验收与回滚；源码目录结构与其他成片一致，改完可用 `npm run render:4k` 重出 4K 母版。
 
 ## 本地检查
 
@@ -39,7 +39,7 @@ npm run dev
 npm run check
 ```
 
-`videos/ep04` 的渲染脚本：`npm run render` 出 4K 母版，`npm run deliver -- renders/<母版>.mp4` 压出 1080p 交付版。
+`videos/ep04` 的渲染脚本：`npm run render` 出默认分辨率预览，`npm run render:4k` 出 4K 母版，`npm run deliver -- renders/<母版>.mp4` 压出 1080p 交付版。
 
 ## 来源说明
 
