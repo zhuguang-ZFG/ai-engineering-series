@@ -17,16 +17,29 @@
 | 书封面 + 5 集视频封面 | `FA-013` Bold Flat Everyday Satire（Jean Jullien） | `C-11` 祖母绿（主）+ `C-26` 柿子橙（点缀） | 粗黑轮廓 + 平涂色块在手机缩略图上依然一眼可辨；互联网生活讽刺的气质正合「不会写代码也能做软件」的反差幽默；祖母绿沿用课程品牌绿，柿子橙只给 CTA 和苹果用 |
 | 书籍知识图解 | `FA-040` Minimalist 2D Hand-Drawn Doodle | `C-32` 炭黑（线稿）+ `C-11` 祖母绿（标注） | 轻柔线条、低细节、概括造型，图解的主角是结构与标签而不是质感；炭黑线稿配祖母绿标注，打印和夜间模式都不刺眼 |
 
-风格激活核查（基线模型 gpt-image-2，`references/model_capabilities.json`）：
+风格激活核查（基线模型 gpt-image-2，用官方解析器实测，非人工猜测）：
 
-- `FA-013`：`name_activation=strong` → 提示词只写作者与风格名，**不写核心特征、不需要垫图**。
-- `FA-040`：`name_activation=weak` + `traits_activation=strong` → 提示词带核心风格特征，**不需要垫图**。
+```bash
+cd C:/Users/zhugu/.agents/skills/handraw-style
+python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-image-2 --style FA-013
+python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-image-2 --style FA-040
+```
+
+- `FA-013`：`activation_source=name+style`，`use_reference_image=false`，`include_prompt_traits=false` → 提示词只写作者与风格名，**不写核心特征、不需要垫图**。
+- `FA-040`：`activation_source=name+style+traits`，`use_reference_image=false`，`include_prompt_traits=true` → 提示词带核心风格特征，**不需要垫图**。
 
 因此本方案全部提示词均为纯文本直出，无参考图依赖——**前提是你用 gpt-image-2**。
-换未校准模型（即梦、Midjourney、nano banana 等）时，能力表 `default` 为 `use_reference_image: true`，必须另附编号参考图并加隔离指令，否则画风会漂：
+换未校准模型（即梦、Midjourney、nano banana 等）时，解析器返回 `name+style+traits+reference-image`，必须另附编号参考图并加隔离指令，否则画风会漂：
 
-- 参考图：`images/individual/FA/FA-013.webp`（封面）、`images/individual/FA/FA-040.webp`（图解），位于 handraw-style 仓库根目录的 `images/` 下。
+- 参考图（已核实存在）：`images/individual/FA/FA-013.webp`（封面）、`images/individual/FA/FA-040.webp`（图解），位于安装根目录下。
 - 隔离指令（中英任选，放在提示词末尾）：`所附图片仅用于参考画风。只提取参考图的风格特征，例如线条、笔触、媒介、材质、色彩倾向和整体视觉语言；不要使用、复制或延续参考图中的任何主体、人物、动物、服装、道具、动作、姿态、场景、背景、构图、布局、文字或故事。最终画面内容完全以用户提供的主题为准。`
+
+## 本机安装记录
+
+- 安装位置：`C:/Users/zhugu/.agents/skills/handraw-style`（shallow clone，版本 `1.9.8`，101 MB，含 `images/` 参考图与 `skills/` 子技能）。
+- omp 加载：已加入 `C:/Users/zhugu/.omp/agent/config.yml` 的 `skills.includeSkills`（`handraw-style`、`handdraw-style-prompter`），`skill://handdraw-style-prompter` 可直接读取。
+- 自检：`python skills/handdraw-style-prompter/scripts/validate_library.py` 可跑通索引与画廊重建；上游自身有 1 条 FAIL——`skills/release-illustration-planner/SKILL.md:94` 泄漏了作者本地路径 `file:///E:/handraw-style/...`，不影响本方案使用。
+- 更新：`cd C:/Users/zhugu/.agents/skills/handraw-style && git pull --depth 1`。
 
 ## 资产改造清单
 
