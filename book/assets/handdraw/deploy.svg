@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="t">
+  <title id="t">推送即部署：改代码到手机打开链接的五步，改坏了可以回滚</title>
+  <rect width="1200" height="600" fill="#fbfaf6"/>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">推送代码，网站就更新</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">和 GitHub 深度集成，不用买服务器，也不用手动上传</text>
+
+  <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="64" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <rect x="284" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <rect x="504" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <rect x="724" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <rect x="944" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <path d="M252 318h24"/><path d="M472 318h24"/><path d="M692 318h24"/><path d="M912 318h24"/>
+  </g>
+  <g fill="#1f2328">
+    <path d="M284 318l-15-8v16z"/><path d="M504 318l-15-8v16z"/><path d="M724 318l-15-8v16z"/><path d="M944 318l-15-8v16z"/>
+  </g>
+
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M136 306l24-24 14 14-24 24z"/>
+    <path d="M158 320l14 14"/>
+    <rect x="358" y="278" width="36" height="36" rx="6"/>
+    <path d="M366 296l7 8 14-16"/>
+    <path d="M596 314v-32"/><path d="M580 298l16-16 16 16"/>
+    <circle cx="816" cy="292" r="16"/><path d="M816 276v-8m0 48v-8m16-16h8m-48 0h8m11-11l-6-6m0 34l-6-6m34 6l6 6m0-34l6-6"/>
+    <rect x="1024" y="272" width="30" height="50" rx="6"/><path d="M1031 314h16"/>
+  </g>
+
+  <g fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="middle">
+    <text x="156" y="352">改代码</text><text x="376" y="352">commit</text><text x="596" y="352">push</text><text x="816" y="352">自动构建</text><text x="1036" y="352">手机打开</text>
+  </g>
+  <g fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" text-anchor="middle">
+    <text x="156" y="376">本地先跑通</text><text x="376" y="376">记下这次改动</text><text x="596" y="376">推到 GitHub</text><text x="816" y="376">部署到线上</text><text x="1036" y="376">链接能访问</text>
+  </g>
+
+  <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M816 248v-50c0-14-12-26-26-26H410c-14 0-26 12-26 26v42"/>
+  </g>
+  <path d="M384 240l-8 16h16z" fill="#1f883d"/>
+  <text x="800" y="206" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">改坏了就回滚：在后台一键回到上一个版本</text>
+
+  <text x="72" y="470" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">push 之后你不用盯着，构建和发布都由平台完成；打开链接看到新的样子，这一步才算结束。</text>
+  <text x="72" y="502" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">回滚是保底手段：新版本把页面弄坏了，先退回去让用户能用，再慢慢查原因。</text>
+</svg>

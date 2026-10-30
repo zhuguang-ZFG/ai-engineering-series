@@ -4459,6 +4459,11 @@ import StageAssignmentCard from '@theme/components/StageAssignmentCard.vue'
 
 <a id="top-jtbd"></a>
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/jtbd.svg" alt="中央是「用户想完成的任务」，三条连线分别指向具体情境、期望结果、现有做法；卡片下方注明「不是功能清单」" loading="lazy">
+  <figcaption><strong>任务由三样东西定义：具体情境、期望结果、现有做法。</strong>功能清单定义不了它——同样的「自动摘要」，放进不同的情境就是不同的任务。</figcaption>
+</figure>
+
 假设我们准备做一个会议纪要工具。从功能出发，很容易列出转写、摘要、待办提取和文档导出。但这些功能并不能回答一个更基本的问题：用户为什么要在会议结束后使用它？
 
 Jobs to Be Done（JTBD）用“用户想完成的任务”来回答这个问题。它关心具体情境、期望的结果和现有做法，而不是先假定某个功能必然有用。
@@ -5018,6 +5023,11 @@ The Mom Test 来自 Rob Fitzpatrick 的同名书籍。这个名称指出了访�
 其实不只是妈妈，朋友、同事、前同学，甚至很多陌生人，在面对你的产品想法时，也常常会给出类似的“正向反馈”。这不代表需求真的存在，只代表你把问题问成了一个很容易得到好听答案的形式。
 
 因此，The Mom Test 的重点不是访谈谁，而是问题如何组织。访谈应尽量寻找可核对的经历，而不是收集对方对产品想法的评价。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/mom-test.svg" alt="左右两列对比：左列「少问：未来的意愿」列着「你会买吗」「你觉得这个想法好吗」并打叉，右列「多问：过去的事实」列着「上次遇到这问题是什么时候」「你当时是怎么处理的」「为此付出了多少时间或钱」" loading="lazy">
+  <figcaption><strong>少问未来的意愿，多问过去发生过什么、用户怎样处理、为此付出了什么。</strong>左列只会换来「挺好的」，那是礼貌；右列的回答带着时间、步骤和金额，才算证据。</figcaption>
+</figure>
 
 ##### 2. 意见与行为证据
 
@@ -15686,6 +15696,10 @@ prompt:`I finished. Commit and push to the repository AIID-TEST in ./AIID-TEST.`
 | **Render** | 支持运行独立的 Node.js / Python 后端程序 | Express、Flask、FastAPI 等后端 API | 有免费 Web Service，闲置 15 分钟会休眠 |
 | **Dify 官方云** | 注册后直接使用知识库、Agent 和工作流 | 学习与分享 Dify 应用，无需先自部署 | 有 Sandbox 免费方案，模型与知识库等额度有限 |
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/deploy.svg" alt="五步流程：改代码、commit、push 到 GitHub、平台自动构建部署、手机打开链接；上方一条绿色回环箭头从云端指回 commit，标注「改坏了就回滚」" loading="lazy">
+  <figcaption><strong>和 GitHub 深度集成：push 之后自动构建、自动部署。</strong>回滚是保底手段——新版本把页面弄坏了，先退回去让用户能用，再慢慢查原因。</figcaption>
+</figure>
 
 #### 1. 腾讯云 CloudBase
 
