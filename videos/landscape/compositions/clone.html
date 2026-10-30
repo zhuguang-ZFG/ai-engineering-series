@@ -1,16 +1,16 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #c-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #c-title { position: absolute; top: 145px; left: 110px; font: 700 72px "Noto Sans JP", sans-serif; color: #1f2328; }
     #c-title .g { color: #1f883d; }
     #c-sub { position: absolute; top: 250px; left: 114px; font: 34px "Noto Sans JP", sans-serif; color: #57606a; }
-    #c-compare { position: absolute; top: 335px; left: 110px; width: 1120px; height: 600px; overflow: hidden; border: 1px solid #d0d7de; border-radius: 10px; background: #fff; box-shadow: 0 12px 32px rgba(31,35,40,.1); }
+    #c-compare { position: absolute; top: 335px; left: 110px; width: 1120px; height: 600px; overflow: hidden; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; background: #fffdf8; box-shadow: 0 12px 32px rgba(31,35,40,.1); }
     .c-panel { position: absolute; inset: 0; overflow: hidden; }
     #c-before { background: #eaeef2; }
-    #c-after { clip-path: inset(0 100% 0 0); background: #fff; }
-    .c-browser { position: absolute; inset: 28px; overflow: hidden; border: 1px solid #8c959f; border-radius: 8px; background: #fff; }
-    .c-bar { height: 55px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #d0d7de; background: #f6f8fa; }
+    #c-after { clip-path: inset(0 100% 0 0); background: #fffdf8; }
+    .c-browser { position: absolute; inset: 28px; overflow: hidden; border: 1px solid #8c959f; border-radius: 15px 10px 17px 9px; background: #fffdf8; }
+    .c-bar { height: 55px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #d0d7de; background: #fbfaf6; }
     .c-dot { width: 11px; height: 11px; border-radius: 50%; background: #8c959f; }
     .c-hero { height: 245px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; padding: 34px; }
     .c-copy { display: flex; flex-direction: column; justify-content: center; }
@@ -18,13 +18,13 @@
     .c-headline { margin-top: 12px; font: 700 50px/1.15 "Noto Sans JP", sans-serif; color: #1f2328; }
     .c-body { margin-top: 14px; font: 30px/1.45 "Noto Sans JP", sans-serif; color: #57606a; }
     .c-button { align-self: flex-start; margin-top: 20px; padding: 12px 22px; border-radius: 7px; background: #1f883d; font: 700 30px "Noto Sans JP", sans-serif; color: #fff; }
-    .c-art { display: grid; place-items: center; border-radius: 10px; background: #dafbe1; }
-    .c-art-card { width: 190px; height: 150px; border-radius: 12px; background: #fff; box-shadow: 0 12px 28px rgba(31,35,40,.13); }
+    .c-art { display: grid; place-items: center; border-radius: 16px 11px 18px 9px; background: #dafbe1; }
+    .c-art-card { width: 190px; height: 150px; border-radius: 17px 12px 19px 10px; background: #fffdf8; box-shadow: 0 12px 28px rgba(31,35,40,.13); }
     .c-art-line { height: 12px; margin: 20px; border-radius: 99px; background: #d0d7de; }
     .c-art-line:nth-child(2) { width: 60%; background: #3fb950; }
     .c-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 24px 34px 34px; }
-    .c-card { height: 170px; padding: 22px; border: 1px solid #d0d7de; border-radius: 9px; background: #fff; }
-    .c-card-icon { width: 38px; height: 38px; border-radius: 10px; background: #dafbe1; }
+    .c-card { height: 170px; padding: 22px; border: 4px solid #1f2328; border-radius: 9px; background: #fffdf8; }
+    .c-card-icon { width: 38px; height: 38px; border-radius: 16px 11px 18px 9px; background: #dafbe1; }
     .c-card-title { margin-top: 16px; width: 62%; height: 14px; border-radius: 99px; background: #57606a; }
     .c-card-text { margin-top: 14px; width: 86%; height: 9px; border-radius: 99px; background: #d0d7de; }
     #c-before .c-browser { filter: grayscale(1); opacity: .74; transform: rotate(-1.2deg) scale(.98); }
@@ -32,17 +32,38 @@
     #c-before .c-button { background: #8c959f; }
     #c-before .c-art { background: #d0d7de; }
     #c-divider { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: #1f883d; box-shadow: 0 0 0 1px rgba(255,255,255,.8), 0 0 18px rgba(31,136,61,.35); z-index: 5; }
-    #c-handle { position: absolute; left: -25px; top: 265px; width: 54px; height: 54px; display: grid; place-items: center; border: 4px solid #1f883d; border-radius: 50%; background: #fff; font: 700 28px "JetBrains Mono", monospace; color: #1f883d; z-index: 6; }
+    #c-handle { position: absolute; left: -25px; top: 265px; width: 54px; height: 54px; display: grid; place-items: center; border: 4px solid #1f883d; border-radius: 50%; background: #fffdf8; font: 700 28px "JetBrains Mono", monospace; color: #1f883d; z-index: 6; }
     .c-label { position: absolute; top: 20px; z-index: 6; padding: 8px 14px; border-radius: 99px; font: 700 28px "Noto Sans JP", sans-serif; }
     #c-before-label { left: 20px; background: #eaeef2; color: #57606a; }
     #c-after-label { right: 20px; background: #dafbe1; color: #116329; }
     #c-observe { position: absolute; top: 335px; left: 1285px; width: 525px; }
     #c-observe-h { font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
-    .c-observe-row { margin-top: 20px; padding: 22px 26px; border: 1px solid #d0d7de; border-radius: 8px; background: #fff; box-shadow: 0 7px 20px rgba(31,35,40,.07); }
+    .c-observe-row { margin-top: 20px; padding: 22px 26px; border: 4px solid #1f2328; border-radius: 15px 10px 17px 9px; background: #fffdf8; box-shadow: 0 7px 20px rgba(31,35,40,.07); }
     .c-observe-n { font: 700 28px "Archivo Black", sans-serif; color: #1f883d; }
     .c-observe-t { margin-left: 16px; font: 700 31px "Noto Sans JP", sans-serif; color: #1f2328; }
     .c-observe-d { display: block; margin-top: 8px; font: 29px "Noto Sans JP", sans-serif; color: #57606a; }
-    #c-result { margin-top: 24px; padding: 24px 28px; border-left: 9px solid #1f883d; border-radius: 8px; background: #1f2328; font: 700 33px/1.45 "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #c-result { margin-top: 24px; padding: 24px 28px; border-left: 9px solid #1f883d; border-radius: 15px 10px 17px 9px; background: #1f2328; font: 700 33px/1.45 "Noto Sans JP", sans-serif; color: #f6f8fa; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-t7ek" id="root" data-composition-id="clone" data-width="1920" data-height="1080">
     <div data-hf-id="hf-0tx9" id="c-tag" class="clip" data-start="0" data-duration="45">FIRST FORMAL PRACTICE</div>
@@ -56,17 +77,44 @@
     <div data-hf-id="hf-8xt7" id="c-observe" class="clip" data-start="3.2" data-duration="42"><div data-hf-id="hf-rlei" id="c-observe-h">看图时，先说清三件事</div><div data-hf-id="hf-5d1t" id="c-o1" class="c-observe-row"><span data-hf-id="hf-g8lp" class="c-observe-n">1</span><span data-hf-id="hf-8wl3" class="c-observe-t">布局</span><span data-hf-id="hf-li3g" class="c-observe-d">哪里是导航、主视觉和功能卡片</span></div><div data-hf-id="hf-birm" id="c-o2" class="c-observe-row"><span data-hf-id="hf-hfis" class="c-observe-n">2</span><span data-hf-id="hf-0ftm" class="c-observe-t">样式</span><span data-hf-id="hf-ccs1" class="c-observe-d">颜色、圆角、阴影与留白</span></div><div data-hf-id="hf-fgvn" id="c-o3" class="c-observe-row"><span data-hf-id="hf-h17r" class="c-observe-n">3</span><span data-hf-id="hf-djw2" class="c-observe-t">验收</span><span data-hf-id="hf-3qcf" class="c-observe-d">怎样才算接近原图并且能用</span></div><div data-hf-id="hf-69lz" id="c-result">对照越具体，需求表达越清楚。</div></div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#c-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#c-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#c-sub", { opacity: 0 }, { opacity: 1, duration: .4 }, .8);
-    tl.fromTo("#c-compare", { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 1.2);
+    ksplit(document.querySelector("#c-title"));
+    tl.set("#c-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#c-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#c-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#c-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#c-sub", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .4, scale: 1 }, .8);
+    tl.fromTo("#c-compare", { y: 32, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .5, ease: "back.out(1.5)", scale: 1 }, 1.2);
     tl.fromTo("#c-after", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 24% 0 0)", duration: 2.2, ease: "power2.inOut" }, 4.0);
     tl.fromTo("#c-divider", { x: 0 }, { x: 850, duration: 2.2, ease: "power2.inOut" }, 4.0);
     tl.fromTo("#c-handle", { x: 0 }, { x: 850, duration: 2.2, ease: "power2.inOut" }, 4.0);
-    tl.fromTo("#c-observe", { x: 35, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 3.2);
+    tl.fromTo("#c-observe", { x: 35, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 3.2);
     ["#c-o1", "#c-o2", "#c-o3"].forEach((sel, i) => tl.fromTo(sel, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: "power3.out" }, 6.5 + i * 2.2));
-    tl.fromTo("#c-result", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 13.2);
+    tl.fromTo("#c-result", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 13.2);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.6, ease: "none" }, 0);
     window.__timelines["clone"] = tl;

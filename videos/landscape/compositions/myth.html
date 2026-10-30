@@ -32,7 +32,7 @@
       width: 1680px;
       background: #2d333b;
       border: 1px solid #444c56;
-      border-radius: 8px;
+      border-radius: 15px 10px 17px 9px;
       padding: 30px 42px;
       display: flex;
       align-items: baseline;
@@ -70,6 +70,27 @@
       letter-spacing: 3px;
       color: #768390;
     }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-f7oh" id="root" data-composition-id="myth" data-width="1920" data-height="1080">
     <div data-hf-id="hf-37jt" id="x-tag" class="clip" data-start="0" data-duration="45">COMMON MISTAKES · 课程附录总结</div>
@@ -89,9 +110,36 @@
     <div data-hf-id="hf-xljh" id="x-src" class="clip" data-start="5.2" data-duration="45" data-layout-ignore>SOURCE · EASY-VIBE APPENDIX · COMMON ERRORS</div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#x-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#x-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
+    ksplit(document.querySelector("#x-title"));
+    tl.set("#x-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#x-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#x-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#x-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
     ["#x-1", "#x-2", "#x-3"].forEach((sel, i) => {
       tl.fromTo(sel, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 1.2 + i * 1.4);
     });

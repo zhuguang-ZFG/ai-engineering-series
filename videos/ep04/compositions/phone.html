@@ -1,33 +1,54 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #p-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #p-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
     #p-title .g { color: #1f883d; }
     #p-phone { position: absolute; left: 110px; top: 286px; width: 430px; height: 574px; background: #1f2328; border-radius: 38px; padding: 16px; box-sizing: border-box; box-shadow: 0 22px 44px rgba(31,35,40,.22); }
-    #p-screen { position: absolute; left: 16px; top: 16px; width: 398px; height: 542px; background: #f6f8fa; border-radius: 26px; overflow: hidden; }
+    #p-screen { position: absolute; left: 16px; top: 16px; width: 398px; height: 542px; background: #fbfaf6; border-radius: 26px; overflow: hidden; }
     #p-notch { position: absolute; top: 12px; left: 50%; width: 118px; height: 18px; margin-left: -59px; background: #1f2328; border-radius: 9px; }
-    #p-url { position: absolute; top: 52px; left: 16px; width: 366px; height: 52px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; font: 28px "JetBrains Mono", monospace; color: #1f2328; white-space: nowrap; }
+    #p-url { position: absolute; top: 52px; left: 16px; width: 366px; height: 52px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 15px 10px 17px 9px; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; font: 28px "JetBrains Mono", monospace; color: #1f2328; white-space: nowrap; }
     #p-url .g { color: #1f883d; }
-    #p-board { position: absolute; top: 138px; left: 20px; width: 358px; height: 248px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; }
+    #p-board { position: absolute; top: 138px; left: 20px; width: 358px; height: 248px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; }
     .p-cell { position: absolute; width: 38px; height: 38px; border-radius: 6px; background: #dafbe1; }
     #p-snake1 { left: 44px; top: 128px; } #p-snake2 { left: 86px; top: 128px; } #p-snake3 { left: 128px; top: 128px; } #p-snake4 { left: 128px; top: 86px; }
     #p-food { left: 244px; top: 86px; background: #cf222e; }
     #p-score { position: absolute; top: 138px; right: 20px; font: 700 28px "JetBrains Mono", monospace; color: #57606a; }
     #p-keys { position: absolute; top: 410px; left: 20px; width: 358px; height: 120px; }
-    .p-key { position: absolute; width: 76px; height: 76px; background: #fff; border: 2px solid #1f883d; border-radius: 12px; display: flex; align-items: center; justify-content: center; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; box-sizing: border-box; }
+    .p-key { position: absolute; width: 76px; height: 76px; background: #fffdf8; border: 2px solid #1f883d; border-radius: 17px 12px 19px 10px; display: flex; align-items: center; justify-content: center; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; box-sizing: border-box; }
     #p-k1 { left: 0; top: 22px; } #p-k2 { left: 86px; top: 22px; } #p-k3 { left: 172px; top: 22px; } #p-k4 { left: 258px; top: 22px; }
-    #p-check { position: absolute; left: 620px; top: 286px; width: 700px; height: 372px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); padding: 26px 32px; box-sizing: border-box; }
+    #p-check { position: absolute; left: 620px; top: 286px; width: 700px; height: 372px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); padding: 26px 32px; box-sizing: border-box; }
     #p-check-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
     .p-row { margin-top: 18px; display: flex; align-items: baseline; gap: 16px; font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
     .p-row b { font: 700 28px "JetBrains Mono", monospace; color: #1f883d; }
     .p-row i { font-style: normal; color: #1f883d; }
-    #p-note { position: absolute; left: 620px; top: 676px; width: 700px; height: 184px; background: #1f2328; border-radius: 10px; padding: 24px 32px; box-sizing: border-box; }
+    #p-note { position: absolute; left: 620px; top: 676px; width: 700px; height: 184px; background: #1f2328; border-radius: 16px 11px 18px 9px; padding: 24px 32px; box-sizing: border-box; }
     #p-note-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
     #p-note-b { margin-top: 14px; font: 700 36px/1.35 "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #p-note-b .g { color: #3fb950; }
-    #p-seal { position: absolute; left: 1360px; top: 286px; width: 450px; height: 574px; border: 3px dashed #1f883d; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; }
+    #p-seal { position: absolute; left: 1360px; top: 286px; width: 450px; height: 574px; border: 3px dashed #1f883d; border-radius: 17px 12px 19px 10px; display: flex; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; }
     #p-seal-b { font: 700 52px/1.4 "Noto Sans JP", sans-serif; color: #116329; text-align: center; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-p1aa" id="root" data-composition-id="phone" data-width="1920" data-height="1080">
     <div data-hf-id="hf-p2bb" id="p-tag" class="clip" data-start="0" data-duration="22.396">VERIFY · 用手机验收</div>
@@ -66,13 +87,40 @@
     <div data-hf-id="hf-pwww" id="p-seal" class="clip" data-start="20.0" data-duration="2.396"><div data-hf-id="hf-pxxx" id="p-seal-b">四条全过<br data-hf-id="hf-pyyy" />才叫上线</div></div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#p-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#p-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#p-phone", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 2.2);
-    tl.fromTo("#p-check", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 6.5);
-    tl.fromTo("#p-check .p-row", { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: .34, ease: "power3.out", stagger: 1.28 }, 7.9);
-    tl.fromTo("#p-note", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 16.1);
+    ksplit(document.querySelector("#p-title"));
+    tl.set("#p-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#p-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#p-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#p-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#p-phone", { y: 34, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .5, ease: "back.out(1.5)", scale: 1 }, 2.2);
+    tl.fromTo("#p-check", { x: 30, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 6.5);
+    tl.fromTo("#p-check .p-row", { x: 24, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .34, ease: "back.out(1.5)", stagger: 1.28, scale: 1 }, 7.9);
+    tl.fromTo("#p-note", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 16.1);
     tl.fromTo("#p-keys .p-key", { scale: .6, opacity: 0 }, { scale: 1, opacity: 1, duration: .32, ease: "back.out(2)", stagger: .2 }, 17.4);
     tl.fromTo("#p-seal", { scale: .9, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.6)" }, 20.0);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen

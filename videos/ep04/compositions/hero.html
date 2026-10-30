@@ -3,7 +3,7 @@
     #root {
       position: absolute;
       inset: 0;
-      background: #f6f8fa;
+      background: #fbfaf6;
     }
     #e-tag {
       position: absolute;
@@ -49,16 +49,16 @@
       position: absolute;
       top: 620px;
       left: 120px;
-      background: #ffffff;
-      border: 1px solid #d0d7de;
+      background: #fffdf8;
+      border: 4px solid #1f2328;
       border-left: 10px solid #1f883d;
-      border-radius: 8px;
+      border-radius: 15px 10px 17px 9px;
       padding: 34px 44px;
       font-family: "Noto Sans JP", sans-serif;
       font-weight: 700;
       font-size: 44px;
       color: #1f2328;
-      box-shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+      box-shadow: 8px 9px 0 rgba(31,35,40,.12);
     }
     #e-foot {
       position: absolute;
@@ -70,6 +70,27 @@
       font-size: 26px;
       letter-spacing: 4px;
       color: #88919b;
+    }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
     }
   </style>
   <div data-hf-id="hf-250v"
@@ -93,6 +114,29 @@
     <div data-hf-id="hf-s73h" id="e-foot" class="clip" data-start="0" data-duration="45" data-layout-ignore>LLM 101 · FROM ZERO TO HERO</div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     const vars = window.__hyperframes.getVariables();
     document.getElementById("e-tag").textContent = vars.tag;
@@ -102,9 +146,12 @@
     document.getElementById("e-foot").textContent = vars.foot;
     tl.set("#e-tag, #e-big", { opacity: 1 }, 0);
     tl.fromTo("#e-rule", { scaleX: 0.18, transformOrigin: "left center" }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0);
-    tl.fromTo("#e-big .g", { opacity: 0.45 }, { opacity: 1, duration: 0.55, ease: "power3.out" }, 0.05);
-    tl.fromTo("#e-sub", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 1.2);
-    tl.fromTo("#e-card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 2.0);
+    ksplit(document.querySelector("#e-big"));
+    tl.set("#e-big", { "--sq": "0px", "--gk": "0%" }, 0.05);
+    tl.fromTo("#e-big .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0.05);
+    tl.to("#e-big", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.55);
+    tl.fromTo("#e-sub", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 1.2);
+    tl.fromTo("#e-card", { y: 40, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 2.0);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 23.404, ease: "none" }, 0);
     window.__timelines["hero"] = tl;

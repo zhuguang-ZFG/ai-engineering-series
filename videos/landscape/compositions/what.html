@@ -1,32 +1,32 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #w-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #w-title { position: absolute; top: 150px; left: 110px; width: 610px; font-family: "Noto Sans JP", sans-serif; font-weight: 700; font-size: 84px; line-height: 1.28; color: #1f2328; }
     #w-title .g, .w-green { color: #1f883d; }
     #w-karpathy { position: absolute; top: 390px; left: 114px; font: 28px "JetBrains Mono", monospace; color: #66707b; }
-    #w-role { position: absolute; top: 520px; left: 110px; width: 610px; padding: 30px 34px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); }
+    #w-role { position: absolute; top: 520px; left: 110px; width: 610px; padding: 30px 34px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); }
     #w-role-k { font: 700 30px "Noto Sans JP", sans-serif; color: #57606a; }
     #w-role-v { margin-top: 10px; font: 700 42px/1.45 "Noto Sans JP", sans-serif; color: #1f2328; }
-    #w-rule { position: absolute; top: 790px; left: 110px; width: 610px; padding: 28px 34px; background: #1f2328; border-radius: 8px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #w-rule { position: absolute; top: 790px; left: 110px; width: 610px; padding: 28px 34px; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #w-rule span { color: #3fb950; }
-    #w-panel { position: absolute; top: 80px; left: 800px; width: 1010px; height: 870px; padding: 30px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
+    #w-panel { position: absolute; top: 80px; left: 800px; width: 1010px; height: 870px; padding: 30px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
     #w-panel-head { display: flex; align-items: center; justify-content: space-between; font-family: "Noto Sans JP", sans-serif; }
     #w-panel-title { font-weight: 700; font-size: 34px; color: #1f2328; }
     #w-panel-badge { padding: 8px 14px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
     .w-label { margin-bottom: 8px; font: 700 28px "JetBrains Mono", monospace; letter-spacing: 1px; color: #adbac7; }
-    #w-prompt-wrap { margin-top: 26px; padding: 22px 26px; background: #1f2328; border-radius: 8px; }
+    #w-prompt-wrap { margin-top: 26px; padding: 22px 26px; background: #1f2328; border-radius: 15px 10px 17px 9px; }
     #w-prompt { min-height: 52px; font: 500 34px/1.5 "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #w-caret { display: inline-block; width: 4px; height: 1em; margin-left: 5px; vertical-align: -3px; background: #3fb950; }
-    #w-answer { margin-top: 22px; padding: 20px 24px; background: #f6f8fa; border: 1px solid #d8dee4; border-radius: 8px; font: 500 28px/1.55 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-answer { margin-top: 22px; padding: 20px 24px; background: #fbfaf6; border: 1px solid #d8dee4; border-radius: 15px 10px 17px 9px; font: 500 28px/1.55 "Noto Sans JP", sans-serif; color: #1f2328; }
     #w-answer .word { opacity: 0; }
-    #w-app { margin-top: 20px; display: grid; grid-template-columns: 1fr 250px; gap: 18px; padding: 24px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 6px 18px rgba(31,35,40,.07); }
+    #w-app { margin-top: 20px; display: grid; grid-template-columns: 1fr 250px; gap: 18px; padding: 24px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 15px 10px 17px 9px; box-shadow: 0 6px 18px rgba(31,35,40,.07); }
     #w-app-title { font: 700 34px "Noto Sans JP", sans-serif; color: #1f2328; }
     #w-app-count { margin-top: 12px; font: 700 58px "Archivo Black", sans-serif; color: #1f883d; }
     #w-progress { margin-top: 14px; height: 14px; overflow: hidden; background: #eaeef2; border-radius: 99px; }
     #w-progress-fill { width: 38%; height: 100%; background: #1f883d; border-radius: inherit; transform-origin: left center; }
     #w-app-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
-    .w-time { padding: 12px 16px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 7px; font: 700 29px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .w-time { padding: 12px 16px; background: #fbfaf6; border: 4px solid #1f2328; border-radius: 7px; font: 700 29px "Noto Sans JP", sans-serif; color: #1f2328; }
     #w-button { padding: 15px; background: #1f883d; border-radius: 7px; text-align: center; font: 700 28px "Noto Sans JP", sans-serif; color: #fff; }
     #w-button { position: relative; overflow: visible; transform-origin: center; }
     #w-button-done { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; }
@@ -41,6 +41,27 @@
     #w-drop-2 { left: 390px; top: 448px; width: 14px; height: 19px; }
     #w-drop-3 { left: 430px; top: 475px; width: 12px; height: 16px; }
     #w-revision { margin-top: 20px; margin-left: 130px; padding: 18px 22px; background: #dafbe1; border-radius: 8px 8px 2px 8px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-vv2h" id="root" data-composition-id="what" data-width="1920" data-height="1080">
     <div data-hf-id="hf-p2yu" id="w-tag" class="clip" data-start="0" data-duration="45">CHAPTER 1 · WHAT</div>
@@ -69,6 +90,29 @@
     </div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     const promptText = "帮我做一个每天提醒喝水的小工具";
     const promptRows = [{ t: 0, text: "" }];
@@ -79,9 +123,13 @@
       return "";
     };
     tl.fromTo("#w-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#w-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#w-karpathy", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.6);
-    tl.fromTo("#w-panel", { x: 45, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 1.2);
+    ksplit(document.querySelector("#w-title"));
+    tl.set("#w-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#w-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#w-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#w-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#w-karpathy", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: 0.4, ease: "power2.out", scale: 1 }, 0.6);
+    tl.fromTo("#w-panel", { x: 45, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 1.2);
     tl.set("#w-answer, #w-app, #w-revision, #w-role, #w-rule", { opacity: 0 }, 0);
     tl.to(promptDriver, { t: promptRows[promptRows.length - 1].t, duration: promptRows[promptRows.length - 1].t, ease: "none", onUpdate: () => { document.getElementById("w-prompt-text").textContent = promptAt(promptDriver.t); } }, 6.4);
     tl.to("#w-caret", { opacity: 0.25, duration: 0.18, yoyo: true, repeat: 5, ease: "none" }, 6.4);
@@ -89,9 +137,9 @@
     const gaps = [0, 0.28, 0.08, 0.34, 0.12];
     let tokenTime = 10.2;
     gsap.utils.toArray("#w-answer .word").forEach((word, i) => { tokenTime += gaps[i]; tl.set(word, { opacity: 1, color: "#768390" }, tokenTime); tl.to(word, { color: "#1f2328", duration: 0.27, ease: "none" }, tokenTime); });
-    tl.fromTo("#w-app", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 12.2);
+    tl.fromTo("#w-app", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 12.2);
     tl.fromTo("#w-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 12.5);
-    tl.fromTo("#w-pointer", { x: 1030, y: 760, opacity: 0 }, { x: 875, y: 482, opacity: 1, duration: 0.55, ease: "power3.out" }, 13.45);
+    tl.fromTo("#w-pointer", { x: 1030, y: 760, opacity: 0, scale: 0.95 }, { x: 875, y: 482, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 13.45);
     tl.to(["#w-pointer", "#w-button"], { scale: 0.92, duration: 0.11, ease: "power1.in" }, 14.02);
     tl.to(["#w-pointer", "#w-button"], { scale: 1, duration: 0.38, ease: "back.out(1.8)" }, 14.15);
     ["#w-ring-1", "#w-ring-2"].forEach((ring, i) => {
@@ -101,7 +149,7 @@
     tl.fromTo("#w-button-done", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "back.out(1.7)" }, 14.18);
     tl.set("#w-count-old", { display: "none" }, 14.28);
     tl.set("#w-count-new", { display: "inline" }, 14.28);
-    tl.fromTo("#w-count-new", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .34, ease: "back.out(1.5)" }, 14.28);
+    tl.fromTo("#w-count-new", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .34, ease: "back.out(1.5)", scale: 1 }, 14.28);
     tl.to("#w-progress-fill", { scaleX: 1.34, duration: .55, ease: "power2.inOut" }, 14.22);
     tl.fromTo("#w-success", { scale: .72, rotation: -18, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: .34, ease: "back.out(1.8)" }, 14.3);
     tl.to("#w-success path", { strokeDashoffset: 0, duration: .42, ease: "power2.out" }, 14.42);
@@ -110,9 +158,9 @@
       tl.to(drop, { opacity: 0, duration: .2, ease: "power1.in" }, 14.68 + i * .05);
     });
     tl.to("#w-pointer", { x: 1040, y: 760, opacity: 0, duration: .4, ease: "power2.in" }, 14.55);
-    tl.fromTo("#w-revision", { x: 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 16.0);
-    tl.fromTo("#w-role", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 19.0);
-    tl.fromTo("#w-rule", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 24.0);
+    tl.fromTo("#w-revision", { x: 28, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 16.0);
+    tl.fromTo("#w-role", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 19.0);
+    tl.fromTo("#w-rule", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 24.0);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 28.6, ease: "none" }, 0);
     window.__timelines["what"] = tl;

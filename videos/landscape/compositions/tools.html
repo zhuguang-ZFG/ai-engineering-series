@@ -4,23 +4,23 @@
     #t-tag { position: absolute; top: 82px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #8c959f; }
     #t-title { position: absolute; top: 150px; left: 110px; width: 680px; font: 700 76px/1.3 "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #t-title .g { color: #3fb950; }
-    #t-note { position: absolute; top: 475px; left: 110px; width: 620px; padding: 30px 34px; border: 1px solid #444c56; border-left: 9px solid #3fb950; border-radius: 8px; background: #22272e; }
+    #t-note { position: absolute; top: 475px; left: 110px; width: 620px; padding: 30px 34px; border: 1px solid #444c56; border-left: 9px solid #3fb950; border-radius: 15px 10px 17px 9px; background: #22272e; }
     #t-note-k { font: 700 29px "Noto Sans JP", sans-serif; color: #adbac7; }
     #t-note-v { margin-top: 10px; font: 700 42px/1.45 "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #t-note-v .g { color: #3fb950; }
     #t-flow { position: absolute; top: 720px; left: 110px; width: 650px; display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #adbac7; }
     .t-flow-item { padding: 12px 16px; border: 1px solid #444c56; border-radius: 7px; background: #2d333b; }
     .t-arrow { color: #3fb950; }
-    #t-device { position: absolute; top: 100px; left: 820px; width: 990px; height: 850px; overflow: hidden; border: 1px solid #444c56; border-radius: 12px; background: #0d1117; box-shadow: 0 18px 50px rgba(0,0,0,.3); }
+    #t-device { position: absolute; top: 100px; left: 820px; width: 990px; height: 850px; overflow: hidden; border: 1px solid #444c56; border-radius: 17px 12px 19px 10px; background: #0d1117; box-shadow: 0 18px 50px rgba(0,0,0,.3); }
     #t-bar { position: absolute; left: 0; top: 0; right: 0; height: 72px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid #444c56; background: #22272e; }
     .t-dot { width: 13px; height: 13px; border-radius: 50%; background: #57606a; }
     #t-address { margin: 0 auto; width: 430px; padding: 8px 18px; border: 1px solid #444c56; border-radius: 99px; text-align: center; font: 28px "JetBrains Mono", monospace; color: #8c959f; background: #1c2128; }
-    #t-chat { position: absolute; inset: 72px 0 0; padding: 48px 56px; background: #f6f8fa; }
+    #t-chat { position: absolute; inset: 72px 0 0; padding: 48px 56px; background: #fbfaf6; }
     #t-chat-title { font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
-    .t-bubble { max-width: 680px; margin-top: 24px; padding: 22px 28px; border-radius: 10px; font: 500 30px/1.5 "Noto Sans JP", sans-serif; }
+    .t-bubble { max-width: 680px; margin-top: 24px; padding: 22px 28px; border-radius: 16px 11px 18px 9px; font: 500 30px/1.5 "Noto Sans JP", sans-serif; }
     #t-user { margin-left: auto; background: #dafbe1; color: #116329; }
-    #t-ai { background: #fff; border: 1px solid #d0d7de; color: #1f2328; }
-    #t-open { display: inline-flex; margin-top: 28px; padding: 16px 24px; border-radius: 8px; background: #1f883d; font: 700 29px "Noto Sans JP", sans-serif; color: #fff; }
+    #t-ai { background: #fffdf8; border: 4px solid #1f2328; color: #1f2328; }
+    #t-open { display: inline-flex; margin-top: 28px; padding: 16px 24px; border-radius: 15px 10px 17px 9px; background: #1f883d; font: 700 29px "Noto Sans JP", sans-serif; color: #fff; }
     #t-ide { position: absolute; inset: 72px 0 0; display: grid; grid-template-columns: 220px 1fr; opacity: 0; background: #0d1117; }
     #t-files { padding: 24px 18px; border-right: 1px solid #30363d; background: #161b22; color: #adbac7; font: 28px/1.7 "JetBrains Mono", monospace; }
     #t-files-h { margin-bottom: 16px; font-weight: 700; color: #f6f8fa; }
@@ -35,6 +35,27 @@
     #t-command::before { content: "$ "; color: #3fb950; }
     #t-success { position: absolute; right: 28px; top: 92px; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 99px; background: #dafbe1; font: 700 28px "Noto Sans JP", sans-serif; color: #116329; opacity: 0; z-index: 5; }
     #t-check { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-62gu" id="root" data-composition-id="tools" data-width="1920" data-height="1080">
     <div data-hf-id="hf-dxbz" id="t-tag" class="clip" data-start="0" data-duration="45">CHAPTER 2 · TOOLS</div>
@@ -52,12 +73,39 @@
     </div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#t-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#t-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
+    ksplit(document.querySelector("#t-title"));
+    tl.set("#t-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#t-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#t-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#t-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
     tl.fromTo("#t-device", { y: 40, scale: .97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .6, ease: "power3.out" }, 1);
-    tl.fromTo("#t-user", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: .4, ease: "power3.out" }, 2.2);
-    tl.fromTo("#t-ai", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 3.5);
+    tl.fromTo("#t-user", { x: 30, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 2.2);
+    tl.fromTo("#t-ai", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 3.5);
     tl.fromTo("#t-open", { scale: .92, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.6)" }, 5.0);
     tl.to("#t-chat", { opacity: 0, x: -60, duration: .35, ease: "power3.in" }, 6.8);
     tl.set("#t-chat", { visibility: "hidden" }, 7.15);
@@ -67,11 +115,11 @@
     tl.set("#t-address", { textContent: "todo-app · AI IDE" }, 7.0);
     tl.to("#t-address", { opacity: 1, duration: .22 }, 7.0);
     gsap.utils.toArray(".t-line").forEach((line, i) => tl.fromTo(line, { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: .18, ease: "power2.out" }, 7.6 + i * .32));
-    tl.fromTo("#t-command", { opacity: 0 }, { opacity: 1, duration: .16 }, 9.35);
+    tl.fromTo("#t-command", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .16, scale: 1 }, 9.35);
     gsap.utils.toArray(".t-output").forEach((line, i) => tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: .14, ease: "none" }, 9.85 + i * .42));
     tl.fromTo("#t-success", { scale: .75, opacity: 0 }, { scale: 1, opacity: 1, duration: .36, ease: "back.out(1.8)" }, 10.95);
-    tl.fromTo("#t-note", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 10);
-    tl.fromTo("#t-flow", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 12.2);
+    tl.fromTo("#t-note", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 10);
+    tl.fromTo("#t-flow", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 12.2);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 18, ease: "none" }, 0);
     window.__timelines["tools"] = tl;

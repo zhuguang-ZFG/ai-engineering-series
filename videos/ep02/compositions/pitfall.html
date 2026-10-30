@@ -1,10 +1,10 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #f-tag { position: absolute; top: 82px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #f-title { position: absolute; top: 145px; left: 110px; width: 1400px; font: 700 68px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
     #f-title .g { color: #1f883d; }
-    .f-card { position: absolute; left: 110px; width: 1700px; height: 160px; box-sizing: border-box; display: flex; align-items: center; padding: 0 50px; gap: 48px; background: #fff; border: 1px solid #d0d7de; border-radius: 12px; box-shadow: 0 10px 28px rgba(31,35,40,.09); }
+    .f-card { position: absolute; left: 110px; width: 1700px; height: 160px; box-sizing: border-box; display: flex; align-items: center; padding: 0 50px; gap: 48px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 17px 12px 19px 10px; box-shadow: 0 10px 28px rgba(31,35,40,.09); }
     #f-card-1 { top: 300px; }
     #f-card-2 { top: 476px; }
     #f-card-3 { top: 652px; }
@@ -13,8 +13,29 @@
     .f-l1 { font: 700 42px "Noto Sans JP", sans-serif; color: #1f2328; }
     .f-l2 { font: 500 30px "Noto Sans JP", sans-serif; color: #57606a; }
     #f-hint { flex: none; padding: 12px 26px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
-    #f-rule { position: absolute; top: 830px; left: 110px; width: 1700px; box-sizing: border-box; padding: 22px 40px; background: #1f2328; border-radius: 8px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #f-rule { position: absolute; top: 830px; left: 110px; width: 1700px; box-sizing: border-box; padding: 22px 40px; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
     #f-rule span { color: #3fb950; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-5w9x" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
     <div data-hf-id="hf-7y2z" id="f-tag" class="clip" data-start="0" data-duration="22.3">PITFALL · 动手阶段最痛的三个坑</div>
@@ -35,14 +56,41 @@
     <div data-hf-id="hf-3h7j" id="f-rule" class="clip" data-start="18" data-duration="22.3">能跑的状态存一份，<span data-hf-id="hf-5k9m">成本几乎为零</span></div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#f-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#f-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#f-card-1", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 2.0);
-    tl.fromTo("#f-card-2", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 7.5);
-    tl.fromTo("#f-card-3", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 13.0);
-    tl.fromTo("#f-hint", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, ease: "power3.out" }, 16.8);
-    tl.fromTo("#f-rule", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, 18.0);
+    ksplit(document.querySelector("#f-title"));
+    tl.set("#f-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#f-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#f-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#f-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#f-card-1", { opacity: 0, y: 34, scale: 0.95 }, { opacity: 1, y: 0, duration: .5, ease: "back.out(1.5)", scale: 1 }, 2.0);
+    tl.fromTo("#f-card-2", { opacity: 0, y: 34, scale: 0.95 }, { opacity: 1, y: 0, duration: .5, ease: "back.out(1.5)", scale: 1 }, 7.5);
+    tl.fromTo("#f-card-3", { opacity: 0, y: 34, scale: 0.95 }, { opacity: 1, y: 0, duration: .5, ease: "back.out(1.5)", scale: 1 }, 13.0);
+    tl.fromTo("#f-hint", { opacity: 0, y: 12, scale: 0.95 }, { opacity: 1, y: 0, duration: .4, ease: "back.out(1.5)", scale: 1 }, 16.8);
+    tl.fromTo("#f-rule", { opacity: 0, y: 24, scale: 0.95 }, { opacity: 1, y: 0, duration: .45, ease: "back.out(1.5)", scale: 1 }, 18.0);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 22.3, ease: "none" }, 0);
     window.__timelines["pitfall"] = tl;

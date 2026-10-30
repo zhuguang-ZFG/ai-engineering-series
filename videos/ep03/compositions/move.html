@@ -1,10 +1,10 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #m-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #m-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
     #m-title .g { color: #1f883d; }
-    #m-one { position: absolute; left: 110px; top: 316px; width: 470px; height: 430px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); overflow: hidden; }
+    #m-one { position: absolute; left: 110px; top: 316px; width: 470px; height: 430px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); overflow: hidden; }
     #m-one-h { height: 62px; background: #1f2328; color: #f6f8fa; font: 700 28px "JetBrains Mono", monospace; display: flex; align-items: center; padding: 0 24px; }
     .m-strip { margin: 20px 22px 0; height: 86px; border-radius: 6px; border: 1px dashed #d0d7de; display: flex; align-items: center; padding: 0 22px; font: 30px "JetBrains Mono", monospace; color: #1f2328; }
     .m-strip b { font-weight: 700; color: #1f883d; margin-right: 14px; }
@@ -12,14 +12,35 @@
     #m-arrow div { position: absolute; background: #1f883d; }
     #m-arrow-shaft { left: 0; top: 27px; width: 108px; height: 6px; border-radius: 3px; }
     #m-arrow-head { left: 104px; top: 14px; width: 32px; height: 32px; background: #1f883d; transform: rotate(45deg); border-radius: 4px; }
-    .m-out { position: absolute; left: 790px; width: 1020px; height: 126px; padding: 22px 30px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.07); box-sizing: border-box; }
+    .m-out { position: absolute; left: 790px; width: 1020px; height: 126px; padding: 22px 30px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
     #m-o1 { top: 316px; } #m-o2 { top: 466px; } #m-o3 { top: 616px; }
     .m-out-k { font: 700 34px "JetBrains Mono", monospace; color: #1f2328; }
     .m-out-d { margin-top: 8px; font: 28px "Noto Sans JP", sans-serif; color: #57606a; }
-    #m-term { position: absolute; left: 790px; top: 780px; width: 620px; height: 96px; padding: 16px 26px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; box-sizing: border-box; font: 28px/1.5 "JetBrains Mono", monospace; }
+    #m-term { position: absolute; left: 790px; top: 780px; width: 620px; height: 96px; padding: 16px 26px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 15px 10px 17px 9px; box-sizing: border-box; font: 28px/1.5 "JetBrains Mono", monospace; }
     #m-t1 { color: #f6f8fa; }
     #m-t2 { color: #3fb950; }
-    #m-badge { position: absolute; left: 1450px; top: 780px; width: 360px; height: 96px; display: flex; align-items: center; justify-content: center; background: #dafbe1; border: 2px solid #1f883d; border-radius: 8px; font: 700 38px "Noto Sans JP", sans-serif; color: #116329; }
+    #m-badge { position: absolute; left: 1450px; top: 780px; width: 360px; height: 96px; display: flex; align-items: center; justify-content: center; background: #dafbe1; border: 2px solid #1f883d; border-radius: 15px 10px 17px 9px; font: 700 38px "Noto Sans JP", sans-serif; color: #116329; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-m1aa" id="root" data-composition-id="move" data-width="1920" data-height="1080">
     <div data-hf-id="hf-m2bb" id="m-tag" class="clip" data-start="0" data-duration="24.8">REFACTOR · 只搬家，不改行为</div>
@@ -41,17 +62,44 @@
     <div data-hf-id="hf-mppp" id="m-badge" class="clip" data-start="20.0" data-duration="4.8">行为不变</div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#m-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#m-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#m-one", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 2.2);
+    ksplit(document.querySelector("#m-title"));
+    tl.set("#m-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#m-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#m-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#m-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#m-one", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 2.2);
     ["#m-o1", "#m-o2", "#m-o3"].forEach((sel, i) => {
       tl.fromTo(sel, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 8.6 + i * 2.4);
     });
     tl.fromTo("#m-arrow-shaft", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: .4, ease: "power3.out" }, 7.6);
     tl.fromTo("#m-arrow-head", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2)" }, 7.9);
-    tl.fromTo("#m-term", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 17.2);
-    tl.fromTo("#m-t2", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 18.2);
+    tl.fromTo("#m-term", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 17.2);
+    tl.fromTo("#m-t2", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .3, ease: "power2.out", scale: 1 }, 18.2);
     tl.fromTo("#m-badge", { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .4, ease: "back.out(1.8)" }, 20.0);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.8, ease: "none" }, 0);

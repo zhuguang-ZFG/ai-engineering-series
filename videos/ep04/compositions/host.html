@@ -1,18 +1,18 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #h-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #h-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
     #h-title .g { color: #1f883d; }
-    #h-p1, #h-p2 { position: absolute; left: 110px; width: 500px; height: 138px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); padding: 24px 30px; box-sizing: border-box; }
+    #h-p1, #h-p2 { position: absolute; left: 110px; width: 500px; height: 138px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); padding: 24px 30px; box-sizing: border-box; }
     #h-p1 { top: 300px; }
     #h-p2 { top: 462px; }
     .h-p-k { font: 700 40px "Noto Sans JP", sans-serif; color: #1f2328; }
     .h-p-d { margin-top: 8px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
-    #h-free { position: absolute; left: 110px; top: 624px; width: 500px; height: 176px; background: #dafbe1; border: 2px solid #1f883d; border-radius: 10px; padding: 22px 28px; box-sizing: border-box; }
+    #h-free { position: absolute; left: 110px; top: 624px; width: 500px; height: 176px; background: #dafbe1; border: 2px solid #1f883d; border-radius: 16px 11px 18px 9px; padding: 22px 28px; box-sizing: border-box; }
     #h-free-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #116329; }
     #h-free-b { margin-top: 12px; font: 700 36px/1.35 "Noto Sans JP", sans-serif; color: #116329; }
-    #h-term { position: absolute; left: 660px; top: 300px; width: 700px; height: 500px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; box-shadow: 0 18px 40px rgba(31,35,40,.18); padding: 26px 30px; box-sizing: border-box; }
+    #h-term { position: absolute; left: 660px; top: 300px; width: 700px; height: 500px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 16px 11px 18px 9px; box-shadow: 9px 10px 0 rgba(31,35,40,.18); padding: 26px 30px; box-sizing: border-box; }
     #h-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
     .h-dot { width: 13px; height: 13px; border-radius: 50%; background: #30363d; }
     #h-bar-t { margin-left: 12px; font: 28px "JetBrains Mono", monospace; color: #768390; }
@@ -20,10 +20,31 @@
     .h-ln .q { color: #d2a8ff; }
     .h-ln .ok { color: #3fb950; }
     .h-ln .dim { color: #768390; }
-    #h-res { position: absolute; left: 1400px; top: 300px; width: 410px; height: 500px; background: #1f2328; border-radius: 10px; padding: 26px 28px; box-sizing: border-box; }
+    #h-res { position: absolute; left: 1400px; top: 300px; width: 410px; height: 500px; background: #1f2328; border-radius: 16px 11px 18px 9px; padding: 26px 28px; box-sizing: border-box; }
     #h-res-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
     #h-link { margin-top: 20px; font: 700 28px/1.5 "JetBrains Mono", monospace; color: #3fb950; word-break: break-all; }
-    #h-badge { position: absolute; left: 26px; bottom: 30px; width: 358px; height: 96px; display: flex; align-items: center; justify-content: center; background: #3fb950; border-radius: 8px; font: 700 38px "Noto Sans JP", sans-serif; color: #0b0f14; }
+    #h-badge { position: absolute; left: 26px; bottom: 30px; width: 358px; height: 96px; display: flex; align-items: center; justify-content: center; background: #3fb950; border-radius: 15px 10px 17px 9px; font: 700 38px "Noto Sans JP", sans-serif; color: #0b0f14; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-h1aa" id="root" data-composition-id="host" data-width="1920" data-height="1080">
     <div data-hf-id="hf-h2bb" id="h-tag" class="clip" data-start="0" data-duration="24.484">DEPLOY · 一条命令上公网</div>
@@ -47,15 +68,42 @@
     </div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#h-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#h-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
-    tl.fromTo("#h-p1", { x: -26, opacity: 0 }, { x: 0, opacity: 1, duration: .4, ease: "power3.out" }, 2.3);
-    tl.fromTo("#h-p2", { x: -26, opacity: 0 }, { x: 0, opacity: 1, duration: .4, ease: "power3.out" }, 4.0);
-    tl.fromTo("#h-term", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 4.8);
-    tl.fromTo("#h-term .h-ln", { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: .28, ease: "power2.out", stagger: 2.4 }, 6.4);
-    tl.fromTo("#h-free", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 6.3);
-    tl.fromTo("#h-res", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 19.1);
+    ksplit(document.querySelector("#h-title"));
+    tl.set("#h-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#h-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#h-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#h-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#h-p1", { x: -26, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 2.3);
+    tl.fromTo("#h-p2", { x: -26, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 4.0);
+    tl.fromTo("#h-term", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 4.8);
+    tl.fromTo("#h-term .h-ln", { opacity: 0, x: -8, scale: 0.95 }, { opacity: 1, x: 0, duration: .28, ease: "power2.out", stagger: 2.4, scale: 1 }, 6.4);
+    tl.fromTo("#h-free", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 6.3);
+    tl.fromTo("#h-res", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 19.1);
     tl.fromTo("#h-badge", { scale: .82, opacity: 0 }, { scale: 1, opacity: 1, duration: .38, ease: "back.out(1.8)" }, 22.2);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.484, ease: "none" }, 0);

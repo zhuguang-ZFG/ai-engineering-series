@@ -1,31 +1,52 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
     #n-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
     #n-title { position: absolute; top: 138px; left: 110px; width: 760px; font: 700 66px/1.3 "Noto Sans JP", sans-serif; color: #1f2328; }
     #n-title .g { color: #1f883d; }
-    .n-card { position: absolute; width: 362px; height: 176px; padding: 20px 24px; background: #fff; border: 1px solid #d0d7de; border-left: 8px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); }
+    .n-card { position: absolute; width: 362px; height: 176px; padding: 20px 24px; background: #fffdf8; border: 4px solid #1f2328; border-left: 8px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); }
     #n-c1 { left: 110px; top: 396px; } #n-c2 { left: 497px; top: 396px; }
     #n-c3 { left: 110px; top: 586px; } #n-c4 { left: 497px; top: 586px; }
     .n-k { font: 700 30px "JetBrains Mono", monospace; color: #57606a; letter-spacing: 1px; }
     .n-v { margin-top: 12px; font: 700 30px/1.4 "Noto Sans JP", sans-serif; color: #1f2328; }
-    #n-final { position: absolute; left: 110px; top: 786px; width: 749px; height: 96px; display: flex; align-items: center; padding: 0 30px; background: #dafbe1; border-radius: 8px; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; }
-    #n-panel { position: absolute; left: 932px; top: 80px; width: 878px; height: 878px; padding: 30px 32px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
+    #n-final { position: absolute; left: 110px; top: 786px; width: 749px; height: 96px; display: flex; align-items: center; padding: 0 30px; background: #dafbe1; border-radius: 15px 10px 17px 9px; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; }
+    #n-panel { position: absolute; left: 932px; top: 80px; width: 878px; height: 878px; padding: 30px 32px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
     #n-panel-head { display: flex; align-items: center; justify-content: space-between; }
     #n-panel-title { font: 700 34px "Noto Sans JP", sans-serif; color: #1f2328; }
     #n-panel-badge { padding: 8px 16px; background: #eaeef2; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #57606a; }
-    #n-bad { margin-top: 26px; padding: 24px 26px; background: #ffebe9; border: 1px solid #ffcecb; border-radius: 8px; }
+    #n-bad { margin-top: 26px; padding: 24px 26px; background: #ffebe9; border: 1px solid #ffcecb; border-radius: 15px 10px 17px 9px; }
     #n-bad-tag { display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #82071e; }
     #n-bad-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #cf222e; font: 700 28px "JetBrains Mono", monospace; color: #fff; }
     #n-bad-text { margin-top: 14px; font: 500 34px/1.45 "Noto Sans JP", sans-serif; color: #82071e; }
     #n-vs { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 22px 0; font: 700 28px "JetBrains Mono", monospace; color: #8c959f; }
     #n-vs::before, #n-vs::after { content: ""; width: 300px; height: 1px; background: #d0d7de; }
-    #n-good { padding: 24px 26px; background: #dafbe1; border: 1px solid #a7e0b7; border-radius: 8px; }
+    #n-good { padding: 24px 26px; background: #dafbe1; border: 1px solid #a7e0b7; border-radius: 15px 10px 17px 9px; }
     #n-good-tag { display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #116329; }
     #n-good-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #1f883d; font: 700 28px "JetBrains Mono", monospace; color: #fff; }
-    #n-good-code { margin-top: 16px; padding: 18px 22px; background: #1f2328; border-radius: 8px; font: 500 28px/1.75 "JetBrains Mono", monospace; color: #3fb950; }
+    #n-good-code { margin-top: 16px; padding: 18px 22px; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 500 28px/1.75 "JetBrains Mono", monospace; color: #3fb950; }
     #n-good-code span { color: #8c959f; }
     #n-note { margin-top: 20px; font: 700 28px/1.5 "Noto Sans JP", sans-serif; color: #57606a; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+    [id$="-title"]::after { width: var(--sq, 240px); }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
   </style>
   <div data-hf-id="hf-n001" id="root" data-composition-id="need" data-width="1920" data-height="1080">
     <div data-hf-id="hf-n002" id="n-tag" class="clip" data-start="0" data-duration="29.1">NEED · 把一句话变成需求</div>
@@ -68,19 +89,46 @@
     </div>
   </div>
   <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#n-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
-    tl.fromTo("#n-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
+    ksplit(document.querySelector("#n-title"));
+    tl.set("#n-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#n-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#n-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#n-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
     [["#n-c1", 1.2], ["#n-c2", 1.45], ["#n-c3", 1.7], ["#n-c4", 1.95]].forEach(([sel, at]) => {
       tl.fromTo(sel, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, at);
     });
-    tl.fromTo("#n-panel", { x: 44, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: "power3.out" }, 8.6);
-    tl.fromTo("#n-bad", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 9.1);
-    tl.fromTo("#n-vs", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 10.4);
-    tl.fromTo("#n-good", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 11.0);
-    tl.fromTo("#n-good-code", { opacity: 0 }, { opacity: 1, duration: .45, ease: "power2.out" }, 11.6);
-    tl.fromTo("#n-note", { opacity: 0 }, { opacity: 1, duration: .4, ease: "power2.out" }, 13.2);
-    tl.fromTo("#n-final", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 24);
+    tl.fromTo("#n-panel", { x: 44, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .55, ease: "back.out(1.5)", scale: 1 }, 8.6);
+    tl.fromTo("#n-bad", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 9.1);
+    tl.fromTo("#n-vs", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .3, ease: "power2.out", scale: 1 }, 10.4);
+    tl.fromTo("#n-good", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 11.0);
+    tl.fromTo("#n-good-code", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .45, ease: "power2.out", scale: 1 }, 11.6);
+    tl.fromTo("#n-note", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .4, ease: "power2.out", scale: 1 }, 13.2);
+    tl.fromTo("#n-final", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 24);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
     tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 29.1, ease: "none" }, 0);
     window.__timelines["need"] = tl;
