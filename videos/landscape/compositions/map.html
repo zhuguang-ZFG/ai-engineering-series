@@ -131,7 +131,14 @@
       background-position: 0 74%;
       background-size: var(--gk, 100%) 42%;
     }
-    [id$="-title"]::after { width: var(--sq, 240px); }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
     /* hand-drawn layer: paper tone, ink edges, marker underline */
     #root::after {
       content: "";
