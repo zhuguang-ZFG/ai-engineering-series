@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="t">
   <title id="t">JTBD：用户想完成的任务，由具体情境、期望结果、现有做法三样东西定义</title>
   <rect width="1200" height="620" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
 
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">JTBD：用户想完成的任务</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">任务由三样东西定义，功能清单定义不了它</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
     <path d="M404 214l16 56"/>
@@ -11,24 +17,24 @@
     <path d="M796 452l-16 -60"/>
   </g>
 
-  <rect x="420" y="252" width="360" height="152" rx="22" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+  <rect x="420" y="252" width="360" height="152" rx="22" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
   <text x="600" y="308" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="27" font-weight="700" text-anchor="middle">用户想完成的任务</text>
   <text x="600" y="352" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">他要达成的是结果，不是某个功能</text>
   <text x="600" y="438" fill="#8b8f96" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">不是功能清单</text>
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <g>
-      <rect x="72" y="158" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="72" y="158" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <text x="96" y="200" fill="#1f883d" font-size="23" font-weight="700">具体情境</text>
       <text x="96" y="244" fill="#57606a" font-size="21">他在什么情况下需要它</text>
     </g>
     <g>
-      <rect x="796" y="158" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="796" y="158" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <text x="820" y="200" fill="#1f883d" font-size="23" font-weight="700">期望结果</text>
       <text x="820" y="244" fill="#57606a" font-size="21">他想得到什么改变</text>
     </g>
     <g>
-      <rect x="796" y="408" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="796" y="408" width="332" height="112" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <text x="820" y="450" fill="#1f883d" font-size="23" font-weight="700">现有做法</text>
       <text x="820" y="494" fill="#57606a" font-size="21">他现在是怎么凑合解决的</text>
     </g>

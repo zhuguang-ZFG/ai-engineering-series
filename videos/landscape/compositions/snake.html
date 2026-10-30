@@ -28,7 +28,7 @@
   </style>
   <div data-hf-id="hf-1059" id="root" data-composition-id="snake" data-width="1920" data-height="1080">
     <div data-hf-id="hf-ahgz" id="s-tag" class="clip" data-start="0" data-duration="45">FIRST PRACTICE · AI 初体验</div>
-    <div data-hf-id="hf-uonm" id="s-title" class="clip" data-start="0.1" data-duration="45">第一步不是学语法，是<span data-hf-id="hf-nd1d" class="g">开口提需求</span></div>
+    <div data-hf-id="hf-uonm" id="s-title" class="clip" data-start="0" data-duration="45.1">第一步不是学语法，是<span data-hf-id="hf-nd1d" class="g">开口提需求</span></div>
     <div data-hf-id="hf-5dfe" id="s-prompt" class="clip" data-start="1.0" data-duration="45">帮我做一个贪吃蛇游戏</div>
     <div data-hf-id="hf-y7ji" id="s-ability" class="clip" data-start="3.2" data-duration="45">
       <div data-hf-id="hf-5fvb" id="s-ability-k">这次真正要练的能力</div>
@@ -58,8 +58,8 @@
       for (let i = 1; i < positions.length; i += 1) positions[i] = previous[i - 1];
       pieces.forEach((selector, i) => tl.to(selector, { x: positions[i].x, y: positions[i].y, duration, ease: "power2.inOut" }, at + i * .055));
     };
-    tl.fromTo("#s-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#s-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .1);
+    tl.fromTo("#s-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#s-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#s-prompt", { opacity: 0 }, { opacity: 1, duration: .45, ease: "power2.out" }, 1);
     tl.fromTo("#s-ability", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 3.2);
     tl.fromTo("#s-hint", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 5.2);
@@ -81,6 +81,8 @@
     tl.set("#s-score", { textContent: "已收集 3 / 3" }, 13.37);
     tl.to("#s-poem-1", { x: -10, duration: .5, ease: "power3.out" }, 13.5);
     tl.to("#s-poem-3", { x: 10, duration: .5, ease: "power3.out" }, 13.5);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["snake"] = tl;
   </script>
 </template>

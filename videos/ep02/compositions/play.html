@@ -30,7 +30,7 @@
   </style>
   <div data-hf-id="hf-y001" id="root" data-composition-id="play" data-width="1920" data-height="1080">
     <div data-hf-id="hf-y002" id="y-tag" class="clip" data-start="0" data-duration="21.4">FIRST BUILD · 第一轮只求能跑</div>
-    <div data-hf-id="hf-y003" id="y-title" class="clip" data-start="0.2" data-duration="21.4">把需求发出去，<span data-hf-id="hf-y004" class="g">等它吐出能跑的版本</span></div>
+    <div data-hf-id="hf-y003" id="y-title" class="clip" data-start="0" data-duration="21.6">把需求发出去，<span data-hf-id="hf-y004" class="g">等它吐出能跑的版本</span></div>
 
     <div data-hf-id="hf-y005" id="y-chat" class="clip" data-start="0.9" data-duration="21.4">
       <div data-hf-id="hf-y006" id="y-chat-head"><span data-hf-id="hf-y007">CHAT · 网页版对话</span><span data-hf-id="hf-y008" id="y-chat-state">在线</span></div>
@@ -64,8 +64,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#y-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#y-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#y-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#y-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#y-chat", { x: -36, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: "power3.out" }, .9);
     tl.fromTo("#y-bubble", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 1.0);
     tl.fromTo("#y-reply", { opacity: 0 }, { opacity: 1, duration: .5, ease: "power2.out" }, 2.5);
@@ -84,6 +84,8 @@
     tl.to("#y-dot-3", { backgroundColor: "#1f883d", borderColor: "#1f883d", color: "#ffffff", duration: .25, ease: "power2.out" }, 16.5);
     tl.to("#y-head", { x: -190, y: -52, duration: .45, ease: "power2.inOut" }, 17.0);
     tl.fromTo("#y-final", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 18.5);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["play"] = tl;
   </script>
 </template>

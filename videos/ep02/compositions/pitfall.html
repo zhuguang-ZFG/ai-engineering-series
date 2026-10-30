@@ -18,7 +18,7 @@
   </style>
   <div data-hf-id="hf-5w9x" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
     <div data-hf-id="hf-7y2z" id="f-tag" class="clip" data-start="0" data-duration="22.3">PITFALL · 动手阶段最痛的三个坑</div>
-    <div data-hf-id="hf-9a4b" id="f-title" class="clip" data-start="0.2" data-duration="22.3">改不动，多半是<span data-hf-id="hf-2c6d" class="g">这三件事</span></div>
+    <div data-hf-id="hf-9a4b" id="f-title" class="clip" data-start="0" data-duration="22.5">改不动，多半是<span data-hf-id="hf-2c6d" class="g">这三件事</span></div>
     <div data-hf-id="hf-4e8f" id="f-card-1" class="f-card clip" data-start="2" data-duration="22.3">
       <span data-hf-id="hf-6f1g" class="f-num">01</span>
       <div class="f-lines"><span data-hf-id="hf-8h3j" class="f-l1">一次让 AI 改十处</span><span data-hf-id="hf-1k5m" class="f-l2">跑不起来只能回滚重来</span></div>
@@ -36,13 +36,15 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#f-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#f-title", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#f-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#f-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#f-card-1", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 2.0);
     tl.fromTo("#f-card-2", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 7.5);
     tl.fromTo("#f-card-3", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 13.0);
     tl.fromTo("#f-hint", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, ease: "power3.out" }, 16.8);
     tl.fromTo("#f-rule", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, 18.0);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["pitfall"] = tl;
   </script>
 </template>

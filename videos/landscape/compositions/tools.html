@@ -38,7 +38,7 @@
   </style>
   <div data-hf-id="hf-62gu" id="root" data-composition-id="tools" data-width="1920" data-height="1080">
     <div data-hf-id="hf-dxbz" id="t-tag" class="clip" data-start="0" data-duration="45">CHAPTER 2 · TOOLS</div>
-    <div data-hf-id="hf-pajf" id="t-title" class="clip" data-start="0.1" data-duration="45">从网页对话，走到<span data-hf-id="hf-oe2j" class="g">本地项目</span></div>
+    <div data-hf-id="hf-pajf" id="t-title" class="clip" data-start="0" data-duration="45.1">从网页对话，走到<span data-hf-id="hf-oe2j" class="g">本地项目</span></div>
     <div data-hf-id="hf-31xo" id="t-note" class="clip" data-start="10.0" data-duration="35"><div data-hf-id="hf-dqgn" id="t-note-k">工作方式升级</div><div data-hf-id="hf-r59n" id="t-note-v">有文件 · 能运行 · 可调试<br data-hf-id="hf-x5px" /><span data-hf-id="hf-jqje" class="g">AI 全程陪跑</span></div></div>
     <div data-hf-id="hf-qek7" id="t-flow" class="clip" data-start="12.2" data-duration="32"><span data-hf-id="hf-trga" class="t-flow-item">提需求</span><span data-hf-id="hf-ww53" class="t-arrow">→</span><span data-hf-id="hf-3694" class="t-flow-item">运行</span><span data-hf-id="hf-siwn" class="t-arrow">→</span><span data-hf-id="hf-su2i" class="t-flow-item">看结果</span></div>
     <div data-hf-id="hf-422j" id="t-device" class="clip" data-start="1.0" data-duration="45">
@@ -53,8 +53,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#t-tag", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#t-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .1);
+    tl.fromTo("#t-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#t-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#t-device", { y: 40, scale: .97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .6, ease: "power3.out" }, 1);
     tl.fromTo("#t-user", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: .4, ease: "power3.out" }, 2.2);
     tl.fromTo("#t-ai", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 3.5);
@@ -72,6 +72,8 @@
     tl.fromTo("#t-success", { scale: .75, opacity: 0 }, { scale: 1, opacity: 1, duration: .36, ease: "back.out(1.8)" }, 10.95);
     tl.fromTo("#t-note", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 10);
     tl.fromTo("#t-flow", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 12.2);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["tools"] = tl;
   </script>
 </template>

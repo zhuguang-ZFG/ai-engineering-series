@@ -26,7 +26,7 @@
   </style>
   <div data-hf-id="hf-q7f2" id="root" data-composition-id="break" data-width="1920" data-height="1080">
     <div data-hf-id="hf-m3k8" id="b-tag" class="clip" data-start="0" data-duration="24.1">DEBUG · 用现象 + 期望说话</div>
-    <div data-hf-id="hf-z9p4" id="b-title" class="clip" data-start="0.2" data-duration="23.9">能跑之后，<span data-hf-id="hf-t5n1" class="g">问题才会浮出来</span></div>
+    <div data-hf-id="hf-z9p4" id="b-title" class="clip" data-start="0" data-duration="24.1">能跑之后，<span data-hf-id="hf-t5n1" class="g">问题才会浮出来</span></div>
     <div data-hf-id="hf-w8r6" id="b-card-1" class="b-card clip" data-start="2.0" data-duration="22.1">
       <div data-hf-id="hf-h2v9" id="b-card-1-n" class="b-card-n">BUG 01</div>
       <div data-hf-id="hf-c4x7" id="b-card-1-k" class="b-card-k">穿墙</div>
@@ -59,8 +59,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#b-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#b-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#b-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#b-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     ["#b-card-1", "#b-card-2", "#b-card-3"].forEach((sel, i) => {
       tl.fromTo(sel, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 2 + i * .25);
     });
@@ -71,6 +71,8 @@
     tl.fromTo("#b-term", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 14.4);
     tl.fromTo("#b-term-l2", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 14.7);
     tl.fromTo("#b-final", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 18.0);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["break"] = tl;
   </script>
 </template>

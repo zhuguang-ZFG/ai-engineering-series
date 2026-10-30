@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="t">
   <title id="t">Vibe Coding 学习路径：八个阶段</title>
   <rect width="1200" height="640" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
 
   <text x="72" y="86" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">Vibe Coding 学习路径</text>
   <text x="72" y="126" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">按顺序走完八步，每一步都产出可以看见的东西</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M240 250h64"/>
@@ -21,49 +27,49 @@
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <g>
-      <rect x="72" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="72" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="96" cy="226" r="17" fill="#1f883d"/><text x="96" y="233" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">1</text>
       <text x="120" y="233" fill="#1f2328" font-size="22">找真实问题</text>
       <text x="88" y="280" fill="#57606a" font-size="19">从日常里找线索</text>
     </g>
     <g>
-      <rect x="312" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="312" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="336" cy="226" r="17" fill="#1f883d"/><text x="336" y="233" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">2</text>
       <text x="360" y="233" fill="#1f2328" font-size="22">筛选方向</text>
       <text x="328" y="280" fill="#57606a" font-size="19">只看值得做的</text>
     </g>
     <g>
-      <rect x="552" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="552" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="576" cy="226" r="17" fill="#1f883d"/><text x="576" y="233" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">3</text>
       <text x="600" y="233" fill="#1f2328" font-size="22">看懂需求</text>
       <text x="568" y="280" fill="#57606a" font-size="19">JTBD 三要素</text>
     </g>
     <g>
-      <rect x="792" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="792" y="196" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="816" cy="226" r="17" fill="#1f883d"/><text x="816" y="233" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">4</text>
       <text x="840" y="233" fill="#1f2328" font-size="22">访谈验证</text>
       <text x="808" y="280" fill="#57606a" font-size="19">只问发生过的事</text>
     </g>
     <g>
-      <rect x="792" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="792" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="816" cy="376" r="17" fill="#1f883d"/><text x="816" y="383" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">5</text>
       <text x="840" y="383" fill="#1f2328" font-size="22">收敛方案</text>
       <text x="808" y="430" fill="#57606a" font-size="19">双钻模型</text>
     </g>
     <g>
-      <rect x="552" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="552" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="576" cy="376" r="17" fill="#1f883d"/><text x="576" y="383" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">6</text>
       <text x="600" y="383" fill="#1f2328" font-size="22">做出原型</text>
       <text x="568" y="430" fill="#57606a" font-size="19">能点能玩</text>
     </g>
     <g>
-      <rect x="312" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="312" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="336" cy="376" r="17" fill="#1f883d"/><text x="336" y="383" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">7</text>
       <text x="360" y="383" fill="#1f2328" font-size="22">接 AI 能力</text>
       <text x="328" y="430" fill="#57606a" font-size="19">真实接口</text>
     </g>
     <g>
-      <rect x="72" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4"/>
+      <rect x="72" y="346" width="164" height="108" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
       <circle cx="96" cy="376" r="17" fill="#1f883d"/><text x="96" y="383" fill="#ffffff" font-size="19" text-anchor="middle" font-weight="700">8</text>
       <text x="120" y="383" fill="#1f2328" font-size="22">打磨交付</text>
       <text x="88" y="430" fill="#57606a" font-size="19">发到公网</text>

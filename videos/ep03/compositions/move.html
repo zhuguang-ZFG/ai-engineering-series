@@ -23,7 +23,7 @@
   </style>
   <div data-hf-id="hf-m1aa" id="root" data-composition-id="move" data-width="1920" data-height="1080">
     <div data-hf-id="hf-m2bb" id="m-tag" class="clip" data-start="0" data-duration="24.8">REFACTOR · 只搬家，不改行为</div>
-    <div data-hf-id="hf-m3cc" id="m-title" class="clip" data-start="0.2" data-duration="24.6">一个文件，<span data-hf-id="hf-m4dd" class="g">拆成三份</span></div>
+    <div data-hf-id="hf-m3cc" id="m-title" class="clip" data-start="0" data-duration="24.8">一个文件，<span data-hf-id="hf-m4dd" class="g">拆成三份</span></div>
     <div data-hf-id="hf-m5ee" id="m-one" class="clip" data-start="2.2" data-duration="22.6">
       <div data-hf-id="hf-m6ff" id="m-one-h">snake.html</div>
       <div data-hf-id="hf-m7gg" id="m-s1" class="m-strip clip" data-start="3.6" data-duration="21.2"><b>01</b>结构 · &lt;html&gt;</div>
@@ -42,8 +42,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#m-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#m-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#m-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#m-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#m-one", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 2.2);
     ["#m-o1", "#m-o2", "#m-o3"].forEach((sel, i) => {
       tl.fromTo(sel, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 8.6 + i * 2.4);
@@ -53,6 +53,8 @@
     tl.fromTo("#m-term", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 17.2);
     tl.fromTo("#m-t2", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 18.2);
     tl.fromTo("#m-badge", { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .4, ease: "back.out(1.8)" }, 20.0);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["move"] = tl;
   </script>
 </template>

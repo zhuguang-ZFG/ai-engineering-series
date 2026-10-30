@@ -32,7 +32,7 @@
   </style>
   <div data-hf-id="hf-t7w1" id="root" data-composition-id="poem" data-width="1920" data-height="1080">
     <div data-hf-id="hf-q2e9" id="p-tag" class="clip" data-start="0" data-duration="25.5">TWIST · 把方块换成汉字</div>
-    <div data-hf-id="hf-r8u3" id="p-title" class="clip" data-start="0.2" data-duration="25.3">食物换成字，<br data-hf-id="hf-x5px" /><span data-hf-id="hf-o5p6" class="g">吃满三个就是一句诗</span></div>
+    <div data-hf-id="hf-r8u3" id="p-title" class="clip" data-start="0" data-duration="25.5">食物换成字，<br data-hf-id="hf-x5px" /><span data-hf-id="hf-o5p6" class="g">吃满三个就是一句诗</span></div>
     <div data-hf-id="hf-e9r2" id="p-rules" class="clip" data-start="17.0" data-duration="8.5">
       <div data-hf-id="hf-t3y6" id="p-rules-k">提示词要点</div>
       <div data-hf-id="hf-u8i1" id="p-rule-1" class="p-rule"><span data-hf-id="hf-y2a6" class="arrow">→</span> 字的位置随机</div>
@@ -67,8 +67,8 @@
       for (let i = 1; i < positions.length; i += 1) positions[i] = previous[i - 1];
       pieces.forEach((selector, i) => tl.to(selector, { x: positions[i].x, y: positions[i].y, duration, ease: "power2.inOut" }, at + i * .055));
     };
-    tl.fromTo("#p-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#p-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#p-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#p-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#p-game", { x: 42, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: "power3.out" }, 2.0);
     ["#p-ch-1", "#p-ch-2", "#p-ch-3"].forEach((sel, i) => {
       tl.fromTo(sel, { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.7)" }, 2.5 + i * .15);
@@ -102,6 +102,8 @@
       tl.fromTo(sel, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 17.2 + i * .3);
     });
     tl.fromTo("#p-final", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 21.5);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["poem"] = tl;
   </script>
 </template>

@@ -46,7 +46,7 @@
   </style>
   <div data-hf-id="hf-t7ek" id="root" data-composition-id="clone" data-width="1920" data-height="1080">
     <div data-hf-id="hf-0tx9" id="c-tag" class="clip" data-start="0" data-duration="45">FIRST FORMAL PRACTICE</div>
-    <div data-hf-id="hf-31ww" id="c-title" class="clip" data-start=".1" data-duration="45">第一次正式练习：<span data-hf-id="hf-kgpe" class="g">从截图复刻</span></div>
+    <div data-hf-id="hf-31ww" id="c-title" class="clip" data-start="0" data-duration="45.1">第一次正式练习：<span data-hf-id="hf-kgpe" class="g">从截图复刻</span></div>
     <div data-hf-id="hf-kn4f" id="c-sub" class="clip" data-start=".8" data-duration="45">一边对照成品，一边练习把视觉说清楚</div>
     <div data-hf-id="hf-bl7n" id="c-compare" class="clip" data-start="1.2" data-duration="45">
       <div data-hf-id="hf-jg15" id="c-before" class="c-panel"><div data-hf-id="hf-b25o" class="c-browser"><div data-hf-id="hf-m80r" class="c-bar"><i data-hf-id="hf-nmx9" class="c-dot"></i><i data-hf-id="hf-yewx" class="c-dot"></i><i data-hf-id="hf-zlu0" class="c-dot"></i></div><div data-hf-id="hf-wx5w" class="c-hero"><div data-hf-id="hf-9opv" class="c-copy"><div data-hf-id="hf-68uu" class="c-kicker" data-layout-allow-occlusion>PRODUCTIVITY APP</div><div data-hf-id="hf-2idc" class="c-headline" data-layout-allow-occlusion>把灵感变成<br data-hf-id="hf-x5px" />清晰计划</div><div data-hf-id="hf-bpxa" class="c-body" data-layout-allow-occlusion>记录、整理并完成每天的重要任务。</div><div data-hf-id="hf-5ln3" class="c-button" data-layout-allow-occlusion>立即开始</div></div><div data-hf-id="hf-o623" class="c-art"><div data-hf-id="hf-a432" class="c-art-card"><div data-hf-id="hf-aami" class="c-art-line"></div><div data-hf-id="hf-d3bi" class="c-art-line"></div><div data-hf-id="hf-dhmj" class="c-art-line"></div></div></div></div><div data-hf-id="hf-6z6p" class="c-cards"><div data-hf-id="hf-0drq" class="c-card"><div data-hf-id="hf-cw60" class="c-card-icon"></div><div data-hf-id="hf-20bv" class="c-card-title"></div><div data-hf-id="hf-fcb6" class="c-card-text"></div></div><div data-hf-id="hf-h8gq" class="c-card"><div data-hf-id="hf-vs4w" class="c-card-icon"></div><div data-hf-id="hf-31mz" class="c-card-title"></div><div data-hf-id="hf-26hi" class="c-card-text"></div></div><div data-hf-id="hf-loqv" class="c-card"><div data-hf-id="hf-ul7t" class="c-card-icon"></div><div data-hf-id="hf-2nby" class="c-card-title"></div><div data-hf-id="hf-2ksj" class="c-card-text"></div></div></div></div></div>
@@ -57,8 +57,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#c-tag", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
-    tl.fromTo("#c-title", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .1);
+    tl.fromTo("#c-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    tl.fromTo("#c-title", { y: 26, opacity: 1 }, { y: 0, opacity: 1, duration: .34, ease: "power4.out" }, 0);
     tl.fromTo("#c-sub", { opacity: 0 }, { opacity: 1, duration: .4 }, .8);
     tl.fromTo("#c-compare", { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, 1.2);
     tl.fromTo("#c-after", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 24% 0 0)", duration: 2.2, ease: "power2.inOut" }, 4.0);
@@ -67,6 +67,8 @@
     tl.fromTo("#c-observe", { x: 35, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 3.2);
     ["#c-o1", "#c-o2", "#c-o3"].forEach((sel, i) => tl.fromTo(sel, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: "power3.out" }, 6.5 + i * 2.2));
     tl.fromTo("#c-result", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 13.2);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.014, duration: 60, ease: "none" }, 0);
     window.__timelines["clone"] = tl;
   </script>
 </template>
