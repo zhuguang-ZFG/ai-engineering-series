@@ -1,0 +1,76 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #i-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #i-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #i-title .g { color: #1f883d; }
+    #i-win { position: absolute; left: 110px; top: 300px; width: 1030px; height: 570px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; box-shadow: 0 18px 40px rgba(31,35,40,.18); }
+    #i-bar { height: 46px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 18px; gap: 10px; }
+    .i-dot { width: 13px; height: 13px; border-radius: 50%; background: #30363d; }
+    #i-bar-t { margin-left: 16px; font: 28px "JetBrains Mono", monospace; color: #768390; }
+    #i-rail { position: absolute; left: 0; top: 46px; width: 64px; height: 523px; background: #111820; border-right: 1px solid #30363d; }
+    .i-ico { width: 26px; height: 26px; margin: 26px auto 0; border: 2px solid #57606a; border-radius: 4px; }
+    #i-tree { position: absolute; left: 64px; top: 46px; width: 300px; height: 523px; border-right: 1px solid #30363d; padding: 20px 0 0 18px; box-sizing: border-box; }
+    #i-tree-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #6e7681; }
+    .i-file { margin-top: 16px; font: 28px "JetBrains Mono", monospace; color: #8c959f; }
+    .i-file b { color: #3fb950; font-weight: 700; }
+    #i-ed { position: absolute; left: 365px; top: 46px; width: 665px; height: 523px; padding: 24px 28px; box-sizing: border-box; font: 28px/1.55 "JetBrains Mono", monospace; }
+    #i-ed .ln { color: #6e7681; width: 46px; display: inline-block; }
+    #i-ed div { color: #f6f8fa; white-space: nowrap; }
+    #i-ed .kw { color: #d2a8ff; }
+    #i-ed .str { color: #a5d6ff; }
+    #i-bp { position: absolute; left: 396px; width: 18px; height: 18px; margin-top: 6px; background: #cf222e; border-radius: 50%; }
+    #i-steps { position: absolute; left: 1210px; top: 300px; width: 600px; }
+    .i-step { display: flex; align-items: flex-start; gap: 22px; margin-bottom: 34px; }
+    .i-n { flex: 0 0 auto; width: 58px; height: 58px; border-radius: 50%; background: #dafbe1; color: #116329; font: 700 30px "JetBrains Mono", monospace; display: flex; align-items: center; justify-content: center; }
+    .i-k { font: 700 42px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .i-d { margin-top: 6px; font: 28px "Noto Sans JP", sans-serif; color: #57606a; }
+    #i-note { position: absolute; left: 1210px; top: 700px; width: 600px; height: 168px; padding: 24px 30px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); box-sizing: border-box; }
+    #i-note-t { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #116329; }
+    #i-note-b { margin-top: 14px; font: 700 36px/1.4 "Noto Sans JP", sans-serif; color: #1f2328; }
+  </style>
+  <div data-hf-id="hf-i1aa" id="root" data-composition-id="install" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-i2bb" id="i-tag" class="clip" data-start="0" data-duration="22.6">SETUP · 装一个 AI IDE</div>
+    <div data-hf-id="hf-i3cc" id="i-title" class="clip" data-start="0.2" data-duration="22.4">先把工具装上，<span data-hf-id="hf-i4dd" class="g">再谈项目</span></div>
+    <div data-hf-id="hf-i5ee" id="i-win" class="clip" data-start="2.4" data-duration="20.2">
+      <div data-hf-id="hf-i6ff" id="i-bar"><span data-hf-id="hf-i7gg" class="i-dot"></span><span data-hf-id="hf-i8hh" class="i-dot"></span><span data-hf-id="hf-i9ii" class="i-dot"></span><span data-hf-id="hf-iaja" id="i-bar-t">snake-project — Cursor</span></div>
+      <div data-hf-id="hf-ibkb" id="i-rail"><div data-hf-id="hf-iclc" class="i-ico"></div><div data-hf-id="hf-idmd" class="i-ico"></div><div data-hf-id="hf-i2ene" class="i-ico"></div></div>
+      <div data-hf-id="hf-i3fof" id="i-tree">
+        <div data-hf-id="hf-i3gpg" id="i-tree-h">SNAKE-PROJECT</div>
+        <div data-hf-id="hf-i3hph" class="i-file">index.html</div>
+        <div data-hf-id="hf-i3iqi" class="i-file">style.css</div>
+        <div data-hf-id="hf-i3jrj" class="i-file"><b>▸ game.js</b></div>
+        <div data-hf-id="hf-i3ksk" class="i-file">package.json</div>
+      </div>
+      <div data-hf-id="hf-i3ltl" id="i-ed">
+        <div data-hf-id="hf-i3mum"><span data-hf-id="hf-i3nvn" class="ln">1</span><span data-hf-id="hf-i3owo" class="kw">const</span> dir = { x: 1, y: 0 };</div>
+        <div data-hf-id="hf-i3ppp"><span data-hf-id="hf-i3qqq" class="ln">2</span><span data-hf-id="hf-i3rrr" class="kw">function</span> step() {</div>
+        <div data-hf-id="hf-i3sss"><span data-hf-id="hf-i3ttt" class="ln">3</span>  head.x += dir.x;</div>
+        <div data-hf-id="hf-i3uuu"><span data-hf-id="hf-i3vvv" class="ln">4</span>  head.y += dir.y;</div>
+        <div data-hf-id="hf-i3www"><span data-hf-id="hf-i3xxx" class="ln">5</span>}</div>
+      </div>
+      <div data-hf-id="hf-i3yyy" id="i-bp"></div>
+    </div>
+    <div data-hf-id="hf-i4zzz" id="i-steps">
+      <div data-hf-id="hf-i5aab" class="i-step"><div data-hf-id="hf-i6bbc" class="i-n">1</div><div><div data-hf-id="hf-i7ccd" class="i-k">下载</div><div data-hf-id="hf-i8dde" class="i-d">cursor.com，选对应系统</div></div></div>
+      <div data-hf-id="hf-i9eef" class="i-step"><div data-hf-id="hf-iaffg" class="i-n">2</div><div><div data-hf-id="hf-ibggh" class="i-k">双击安装，登录</div><div data-hf-id="hf-ichhi" class="i-d">和装普通软件没有区别</div></div></div>
+      <div data-hf-id="hf-idiij" class="i-step"><div data-hf-id="hf-iejjk" class="i-n">3</div><div><div data-hf-id="hf-ifkkl" class="i-k">打开文件夹</div><div data-hf-id="hf-igllm" class="i-d">把上期的网页放进新文件夹</div></div></div>
+    </div>
+    <div data-hf-id="hf-ihmmn" id="i-note" class="clip" data-start="15.4" data-duration="7.2">
+      <div data-hf-id="hf-iinno" id="i-note-t">FIRST OPEN · 第一次进项目</div>
+      <div data-hf-id="hf-ijoop" id="i-note-b">先让它通读一遍，把结构讲给你听</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#i-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#i-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#i-win", { y: 34, opacity: 0, scale: .985 }, { y: 0, opacity: 1, scale: 1, duration: .55, ease: "power3.out" }, 2.4);
+    tl.fromTo("#i-tree .i-file", { x: -14, opacity: 0 }, { x: 0, opacity: 1, duration: .3, stagger: .12, ease: "power2.out" }, 3.1);
+    tl.fromTo("#i-ed div", { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: .3, stagger: .1, ease: "power2.out" }, 4.0);
+    tl.fromTo("#i-bp", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2)" }, 6.6);
+    tl.fromTo(".i-step", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .55, ease: "power3.out" }, 8.6);
+    tl.fromTo("#i-note", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 15.4);
+    window.__timelines["install"] = tl;
+  </script>
+</template>

@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #cap-stage {
+      position: absolute;
+      left: 0;
+      top: 896px;
+      width: 1920px;
+      text-align: center;
+      overflow: visible;
+    }
+    .cap-group {
+      position: absolute;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 1.35;
+      color: #ffffff;
+      visibility: hidden;
+    }
+    .cap-group span {
+      background: rgba(31, 35, 40, 0.78);
+      border-radius: 8px;
+      padding: 10px 26px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  </style>
+  <div data-hf-id="hf-jn2k" id="root" data-composition-id="captions" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-fhg2" id="cap-stage"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const GROUPS = [{"text": "上期结尾说好了", "start": 0.2, "end": 1.624}, {"text": "这期不再讲概念", "start": 1.817, "end": 3.268}, {"text": "直接动手", "start": 3.361, "end": 4.304}, {"text": "目标很具体", "start": 4.757, "end": 5.877}, {"text": "一条能玩的贪吃蛇", "start": 6.094, "end": 7.592}, {"text": "吃掉三个汉字", "start": 7.668, "end": 8.894}, {"text": "最后给你写出一句诗", "start": 9.11, "end": 10.703}, {"text": "全程你只做三件事", "start": 11.208, "end": 12.866}, {"text": "提需求", "start": 13.083, "end": 13.9}, {"text": "看结果", "start": 14.003, "end": 14.801}, {"text": "改到能用", "start": 14.886, "end": 15.757}, {"text": "先学会把一句话变", "start": 17.124, "end": 18.655}, {"text": "成 AI 能接住的需求", "start": 18.675, "end": 20.649}, {"text": "课程给的结构是四句话", "start": 21.134, "end": 23.005}, {"text": "背景是什么", "start": 23.264, "end": 24.276}, {"text": "要做什么", "start": 24.394, "end": 25.226}, {"text": "怎么算做完", "start": 25.346, "end": 26.395}, {"text": "什么情况别碰", "start": 26.47, "end": 27.656}, {"text": "对比一下", "start": 28.123, "end": 28.976}, {"text": "做个贪吃蛇", "start": 29.099, "end": 30.189}, {"text": "太糊", "start": 30.307, "end": 30.902}, {"text": "用网页做", "start": 31.173, "end": 32.092}, {"text": "方向键控制", "start": 32.278, "end": 33.366}, {"text": "吃到食物变长", "start": 33.505, "end": 34.772}, {"text": "撞墙就结束", "start": 34.893, "end": 36.028}, {"text": "单文件不依赖任何库", "start": 36.173, "end": 37.945}, {"text": "AI 一次就能给", "start": 38.177, "end": 39.572}, {"text": "出能跑的版本", "start": 39.592, "end": 40.755}, {"text": "记住", "start": 41.233, "end": 41.761}, {"text": "需求写得越像验收标准", "start": 41.963, "end": 43.922}, {"text": "返工越少", "start": 44.042, "end": 44.988}, {"text": "第一轮只求能跑", "start": 46.176, "end": 47.612}, {"text": "打开聊天框", "start": 48.097, "end": 49.16}, {"text": "把刚才那段需求发出去", "start": 49.323, "end": 51.267}, {"text": "等它吐出一个网页文件", "start": 51.427, "end": 53.223}, {"text": "存下来", "start": 53.71, "end": 54.458}, {"text": "双击打开", "start": 54.651, "end": 55.576}, {"text": "方向键能动", "start": 55.781, "end": 56.865}, {"text": "吃到方块变长", "start": 56.956, "end": 58.235}, {"text": "撞墙弹出结束", "start": 58.356, "end": 59.717}, {"text": "到这一步", "start": 60.171, "end": 60.981}, {"text": "你已经交付了第一个作品", "start": 61.132, "end": 62.917}, {"text": "丑一点", "start": 63.049, "end": 63.758}, {"text": "慢一点都没关系", "start": 63.861, "end": 65.132}, {"text": "先让它跑起来", "start": 65.279, "end": 66.414}, {"text": "能跑之后一定有问题", "start": 67.582, "end": 69.514}, {"text": "常见的是蛇会穿墙", "start": 69.978, "end": 71.721}, {"text": "吃到自己不停", "start": 71.859, "end": 72.989}, {"text": "按键有延迟", "start": 73.142, "end": 74.323}, {"text": "正确的做法是把现象贴回去", "start": 74.822, "end": 77.301}, {"text": "不是说我做不出来", "start": 77.487, "end": 78.866}, {"text": "而是说", "start": 79.032, "end": 79.757}, {"text": "按上键之后蛇从底", "start": 80.002, "end": 81.668}, {"text": "部钻出来了", "start": 81.688, "end": 82.766}, {"text": "应该是撞墙结束", "start": 82.86, "end": 84.401}, {"text": "有报错就连报错一起贴", "start": 84.852, "end": 86.979}, {"text": "AI 见到现象和期望", "start": 87.484, "end": 89.356}, {"text": "改一次就中", "start": 89.491, "end": 90.471}, {"text": "现在是这期最有意思的一步", "start": 91.697, "end": 93.827}, {"text": "把食物换成汉字", "start": 93.966, "end": 95.528}, {"text": "让 AI 把随机", "start": 96.067, "end": 97.294}, {"text": "方块改成春风来这三个字", "start": 97.314, "end": 99.582}, {"text": "吃掉一个就收进诗栏", "start": 99.823, "end": 101.704}, {"text": "吃满三个", "start": 101.885, "end": 102.828}, {"text": "再让它调用模型生", "start": 102.918, "end": 104.47}, {"text": "成一句收尾的诗", "start": 104.49, "end": 105.808}, {"text": "提示词里要写清楚", "start": 106.299, "end": 107.945}, {"text": "字的位置随机", "start": 108.195, "end": 109.333}, {"text": "不重复", "start": 109.385, "end": 110.142}, {"text": "吃满三个后请求一句七言", "start": 110.298, "end": 112.641}, {"text": "这一步练的", "start": 113.135, "end": 114.102}, {"text": "是把玩法翻译成规则", "start": 114.21, "end": 115.926}, {"text": "到这儿一条完整的", "start": 117.188, "end": 118.409}, {"text": "链路就走通了", "start": 118.429, "end": 119.591}, {"text": "需求", "start": 119.859, "end": 120.442}, {"text": "原型", "start": 120.598, "end": 121.169}, {"text": "报错", "start": 121.308, "end": 121.854}, {"text": "修复", "start": 122.056, "end": 122.609}, {"text": "加玩法", "start": 122.741, "end": 123.462}, {"text": "再打磨", "start": 123.546, "end": 124.303}, {"text": "剩下的打磨", "start": 124.77, "end": 125.834}, {"text": "记住一个原则", "start": 125.903, "end": 127.042}, {"text": "一次只改一件事", "start": 127.213, "end": 128.598}, {"text": "先改视觉", "start": 129.133, "end": 130.107}, {"text": "统一配色和字号", "start": 130.245, "end": 131.755}, {"text": "再改手感", "start": 132.006, "end": 132.949}, {"text": "移动更快", "start": 133.076, "end": 133.959}, {"text": "吃到有音效", "start": 134.055, "end": 135.137}, {"text": "接着加计分和最快纪录", "start": 135.398, "end": 137.339}, {"text": "最后做移动端", "start": 137.427, "end": 138.682}, {"text": "把方向键换成滑动", "start": 138.791, "end": 140.455}, {"text": "每改完一项就运行一次", "start": 140.918, "end": 142.802}, {"text": "别一口气改五处", "start": 143.004, "end": 144.295}, {"text": "否则出问题你也不", "start": 144.539, "end": 145.898}, {"text": "知道是哪一处", "start": 145.918, "end": 147.024}, {"text": "动手阶段有三个坑最常见", "start": 148.185, "end": 150.556}, {"text": "第一", "start": 151.02, "end": 151.518}, {"text": "一次让", "start": 151.681, "end": 152.357}, {"text": "AI 改十处", "start": 152.372, "end": 153.468}, {"text": "改完跑不起来", "start": 153.61, "end": 154.733}, {"text": "只能回滚重来", "start": 154.788, "end": 156.047}, {"text": "第二", "start": 156.497, "end": 156.966}, {"text": "报错只贴一句报错了", "start": 157.165, "end": 158.913}, {"text": "不贴代码和环境", "start": 159.04, "end": 160.419}, {"text": "AI 只能瞎猜", "start": 160.605, "end": 162.044}, {"text": "第三", "start": 162.54, "end": 163.075}, {"text": "不存版本", "start": 163.228, "end": 164.117}, {"text": "改坏了找不回来", "start": 164.241, "end": 165.503}, {"text": "每一轮能跑的状态都存一份", "start": 165.698, "end": 167.807}, {"text": "成本几乎为零", "start": 167.979, "end": 169.244}, {"text": "这一期你带走三件事", "start": 170.488, "end": 172.447}, {"text": "需求要写成验收标准", "start": 172.718, "end": 174.616}, {"text": "能跑就先跑", "start": 174.815, "end": 175.909}, {"text": "再用现象加期望去修", "start": 176.131, "end": 177.904}, {"text": "打磨一次只改一件事", "start": 177.971, "end": 179.975}, {"text": "下一期我们离开浏览器", "start": 180.5, "end": 182.539}, {"text": "装一个", "start": 182.698, "end": 183.158}, {"text": "AI IDE", "start": 183.178, "end": 183.996}, {"text": "把这条蛇搬到本地项目里", "start": 184.176, "end": 186.153}, {"text": "加文件", "start": 186.328, "end": 187.112}, {"text": "加依赖", "start": 187.241, "end": 187.98}, {"text": "加调试", "start": 188.071, "end": 188.924}, {"text": "课程链接和这一期", "start": 189.392, "end": 190.875}, {"text": "的完整代码", "start": 190.895, "end": 191.925}, {"text": "评论区扣入门", "start": 192.058, "end": 193.479}];
+    const stage = document.getElementById("cap-stage");
+    GROUPS.forEach((g, i) => {
+      const div = document.createElement("div");
+      div.className = "cap-group";
+      div.id = "cap-" + i;
+      const inner = document.createElement("span");
+      inner.textContent = g.text;
+      div.appendChild(inner);
+      stage.appendChild(div);
+      // Cues ride on a slide, never an opacity fade: a fade dims the pill too,
+      // so any frame caught mid-fade measures below the WCAG floor.
+      gsap.set(div, { y: 8, visibility: "hidden" });
+      const start = Math.max(g.start, 0.1);
+      const end = Math.max(g.end, start + 0.3);
+      tl.set(div, { visibility: "visible", y: 8 }, start);
+      tl.to(div, { y: 0, duration: 0.12, ease: "power2.out" }, start);
+      tl.set(div, { visibility: "hidden" }, end);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

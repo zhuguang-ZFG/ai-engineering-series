@@ -13,13 +13,30 @@
 | 完整书籍 | [`book/book.md`](book/book.md) |
 | 横版成片（宣传片） | [`deliverables/vibe-coding-101-landscape.mp4`](deliverables/vibe-coding-101-landscape.mp4) |
 | 竖版成片（宣传片） | [`deliverables/vibe-coding-101-vertical.mp4`](deliverables/vibe-coding-101-vertical.mp4) |
+| EP.02 成片（1080p） | [`deliverables/ep02-landscape.mp4`](deliverables/ep02-landscape.mp4) |
+| EP.03 成片（1080p） | [`deliverables/ep03-landscape.mp4`](deliverables/ep03-landscape.mp4) |
 | EP.04 成片（1080p） | [`deliverables/ep04-landscape.mp4`](deliverables/ep04-landscape.mp4) |
-| EP.04 封面 | [`deliverables/ep04-cover.webp`](deliverables/ep04-cover.webp) |
+| EP.02–04 封面 | `deliverables/ep02-cover.webp`、`ep03-cover.webp`、`ep04-cover.webp` |
 | 横版源码 | [`videos/landscape/`](videos/landscape/) |
 | 竖版源码 | [`videos/vertical/`](videos/vertical/) |
+| EP.02 源码 | [`videos/ep02/`](videos/ep02/) |
+| EP.03 源码 | [`videos/ep03/`](videos/ep03/) |
 | EP.04 源码 | [`videos/ep04/`](videos/ep04/) |
 
+系列正片按集数分目录（`videos/ep02`–`ep04`），宣传片沿用 `videos/landscape`、`videos/vertical`；各集 1080p 成片与 16:9 封面在 `deliverables/` 同名对应。
+
 EP.04《把这条蛇，放到公网上》讲的是打包、托管、真机验收与回滚；源码目录结构与其他成片一致，改完可用 `npm run render:4k` 重出 4K 母版。
+
+## 图片与大文件
+
+书籍插图已全部镜像到 `book/assets/images/`（949 个文件，约 196 MB，Git LFS 存储），书本可离线阅读，不再依赖上游仓库的图片链接。克隆后如需在本地查看插图，执行：
+
+```bash
+git lfs install
+git lfs pull
+```
+
+不拉取 LFS 对象时图片显示为指针文件，文字阅读与 `npm test` 校验不受影响。指向其他章节文档的链接仍指向 [easy-vibe](https://github.com/datawhalechina/easy-vibe) 上游仓库。
 
 ## 本地检查
 
@@ -34,7 +51,7 @@ npm test
 如需编辑视频，在对应目录运行：
 
 ```bash
-cd videos/landscape   # 或 videos/vertical、videos/ep04
+cd videos/landscape   # 或 videos/vertical、videos/ep02–ep04
 npm run dev
 npm run check
 ```

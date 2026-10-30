@@ -1,0 +1,107 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #p-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #p-title { position: absolute; top: 126px; left: 110px; width: 660px; font: 700 60px/1.32 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #p-title .g { color: #1f883d; }
+    #p-rules { position: absolute; top: 470px; left: 110px; width: 660px; padding: 28px 34px 32px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); box-sizing: border-box; }
+    #p-rules-k { font: 700 30px "Noto Sans JP", sans-serif; color: #57606a; }
+    .p-rule { margin-top: 20px; font: 500 30px "JetBrains Mono", monospace; color: #1f2328; }
+    .p-rule .arrow { color: #1f883d; font-weight: 700; }
+    #p-final { position: absolute; top: 784px; left: 110px; width: 660px; height: 84px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 8px; font: 700 30px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #p-final .g { color: #3fb950; }
+    #p-game { position: absolute; top: 36px; left: 800px; width: 1010px; height: 852px; overflow: hidden; border: 1px solid #30363d; border-radius: 12px; background: #111820; box-shadow: 0 14px 36px rgba(31,35,40,.16); }
+    #p-game-head { position: absolute; left: 0; top: 0; width: 100%; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid #30363d; background: #1f2328; color: #f6f8fa; font-family: "JetBrains Mono", monospace; box-sizing: border-box; }
+    #p-game-name { font-size: 28px; font-weight: 700; }
+    #p-score { font-size: 28px; color: #3fb950; }
+    #p-board { position: absolute; left: 30px; top: 92px; width: 950px; height: 600px; overflow: hidden; border: 1px solid #30363d; border-radius: 8px; background-color: #0d1117; background-image: linear-gradient(rgba(139,148,158,.11) 1px, transparent 1px), linear-gradient(90deg, rgba(139,148,158,.11) 1px, transparent 1px); background-size: 50px 50px; }
+    .p-tile { position: absolute; display: grid; place-items: center; width: 60px; height: 60px; border: 2px solid #3fb950; border-radius: 10px; background: #dafbe1; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; }
+    #p-ch-1 { left: 180px; top: 430px; } #p-ch-2 { left: 520px; top: 290px; } #p-ch-3 { left: 760px; top: 110px; }
+    .p-piece { position: absolute; left: 0; top: 0; width: 46px; height: 46px; border-radius: 10px; background: #3fb950; box-shadow: 0 0 16px rgba(63,185,80,.28); }
+    #p-head { width: 52px; height: 52px; background: #1f883d; z-index: 4; }
+    .p-eye { position: absolute; top: 11px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+    #p-eye-a { left: 12px; } #p-eye-b { right: 12px; }
+    #p-poembar { position: absolute; left: 30px; top: 704px; width: 950px; height: 140px; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 6px 28px; border: 1px solid #30363d; border-radius: 8px; background: #1f2328; box-sizing: border-box; }
+    #p-poem-label { font: 700 28px "JetBrains Mono", monospace; color: #8c959f; }
+    #p-slots { font: 700 36px "Noto Sans JP", sans-serif; }
+    .p-slot { display: inline-block; margin-right: 22px; opacity: .16; color: #768390; }
+    #p-ai { display: flex; align-items: baseline; gap: 16px; }
+    #p-ai-label { font: 700 28px "JetBrains Mono", monospace; color: #8c959f; }
+    #p-ai-line { font: 700 28px "Noto Sans JP", sans-serif; color: #3fb950; }
+    .p-ai-ch { display: inline-block; opacity: 0; }
+  </style>
+  <div data-hf-id="hf-t7w1" id="root" data-composition-id="poem" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-q2e9" id="p-tag" class="clip" data-start="0" data-duration="25.5">TWIST · 把方块换成汉字</div>
+    <div data-hf-id="hf-r8u3" id="p-title" class="clip" data-start="0.2" data-duration="25.3">食物换成字，<br data-hf-id="hf-x5px" /><span data-hf-id="hf-o5p6" class="g">吃满三个就是一句诗</span></div>
+    <div data-hf-id="hf-e9r2" id="p-rules" class="clip" data-start="17.0" data-duration="8.5">
+      <div data-hf-id="hf-t3y6" id="p-rules-k">提示词要点</div>
+      <div data-hf-id="hf-u8i1" id="p-rule-1" class="p-rule"><span data-hf-id="hf-y2a6" class="arrow">→</span> 字的位置随机</div>
+      <div data-hf-id="hf-o4p7" id="p-rule-2" class="p-rule"><span data-hf-id="hf-c9e3" class="arrow">→</span> 不重复</div>
+      <div data-hf-id="hf-a6s9" id="p-rule-3" class="p-rule"><span data-hf-id="hf-w1q5" class="arrow">→</span> 吃满三个后请求一句七言</div>
+    </div>
+    <div data-hf-id="hf-d8f2" id="p-final" class="clip" data-start="21.5" data-duration="4.0">把玩法<span data-hf-id="hf-g5h8" class="g">翻译成规则</span>，是你最该练的肌肉</div>
+    <div data-hf-id="hf-s4d7" id="p-game" class="clip" data-start="2.0" data-duration="23.5">
+      <div data-hf-id="hf-f9g2" id="p-game-head"><span data-hf-id="hf-h6j5" id="p-game-name">SNAKE · 诗意版</span><span data-hf-id="hf-k1l8" id="p-score">已收集 0 / 3</span></div>
+      <div data-hf-id="hf-z3x4" id="p-board">
+        <span data-hf-id="hf-c7v2" id="p-ch-1" class="p-tile">春</span><span data-hf-id="hf-b5n9" id="p-ch-2" class="p-tile">风</span><span data-hf-id="hf-m8q1" id="p-ch-3" class="p-tile">来</span>
+        <span data-hf-id="hf-w4e6" id="p-body-3" class="p-piece"></span><span data-hf-id="hf-a7s3" id="p-body-2" class="p-piece"></span><span data-hf-id="hf-d2f5" id="p-body-1" class="p-piece"></span>
+        <span data-hf-id="hf-g9h1" id="p-head" class="p-piece"><i data-hf-id="hf-j3k6" id="p-eye-a" class="p-eye"></i><i data-hf-id="hf-l5z8" id="p-eye-b" class="p-eye"></i></span>
+      </div>
+      <div data-hf-id="hf-x1c4" id="p-poembar">
+        <span data-hf-id="hf-v6b7" id="p-poem-label">AI POEM</span>
+        <div data-hf-id="hf-n9m2" id="p-slots"><span data-hf-id="hf-q8w5" id="p-slot-1" class="p-slot">春</span><span data-hf-id="hf-e3r7" id="p-slot-2" class="p-slot">风</span><span data-hf-id="hf-t1y4" id="p-slot-3" class="p-slot">来</span></div>
+        <div data-hf-id="hf-u6i9" id="p-ai"><span data-hf-id="hf-o2p5" id="p-ai-label">AI 续句</span><div data-hf-id="hf-a8s1" id="p-ai-line"><span data-hf-id="hf-d5f7" id="p-ai-1" class="p-ai-ch">春</span><span data-hf-id="hf-g2h4" id="p-ai-2" class="p-ai-ch">风</span><span data-hf-id="hf-j9k3" id="p-ai-3" class="p-ai-ch">来</span><span data-hf-id="hf-l4z6" id="p-ai-4" class="p-ai-ch">，</span><span data-hf-id="hf-x8c1" id="p-ai-5" class="p-ai-ch">一</span><span data-hf-id="hf-v3b6" id="p-ai-6" class="p-ai-ch">夜</span><span data-hf-id="hf-n5m8" id="p-ai-7" class="p-ai-ch">花</span><span data-hf-id="hf-q1w4" id="p-ai-8" class="p-ai-ch">开</span><span data-hf-id="hf-r4t8" id="p-ai-9" class="p-ai-ch">满</span><span data-hf-id="hf-y7u2" id="p-ai-10" class="p-ai-ch">城</span><span data-hf-id="hf-i1o6" id="p-ai-11" class="p-ai-ch">香</span></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const pieces = ["#p-head", "#p-body-1", "#p-body-2", "#p-body-3"];
+    const positions = [
+      { x: 190, y: 540 }, { x: 140, y: 540 }, { x: 90, y: 540 }, { x: 40, y: 540 }
+    ];
+    pieces.forEach((selector, i) => tl.set(selector, positions[i], 0));
+    const moveSnake = (at, nextX, nextY, duration = .55) => {
+      const previous = positions.map((position) => ({ ...position }));
+      positions[0] = { x: nextX, y: nextY };
+      for (let i = 1; i < positions.length; i += 1) positions[i] = previous[i - 1];
+      pieces.forEach((selector, i) => tl.to(selector, { x: positions[i].x, y: positions[i].y, duration, ease: "power2.inOut" }, at + i * .055));
+    };
+    tl.fromTo("#p-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#p-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#p-game", { x: 42, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: "power3.out" }, 2.0);
+    ["#p-ch-1", "#p-ch-2", "#p-ch-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.7)" }, 2.5 + i * .15);
+    });
+    moveSnake(3.2, 187, 500, .55);
+    moveSnake(3.9, 187, 437, .55);
+    tl.to("#p-ch-1", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 4.6);
+    tl.to("#p-slot-1", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .25, ease: "back.out(1.7)" }, 4.8);
+    tl.to("#p-slot-1", { scale: 1, duration: .25, ease: "power2.out" }, 5.06);
+    tl.set("#p-score", { textContent: "已收集 1 / 3" }, 4.8);
+    moveSnake(5.6, 380, 437, .6);
+    moveSnake(6.5, 527, 437, .6);
+    moveSnake(7.4, 527, 297, .65);
+    tl.to("#p-ch-2", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 8.2);
+    tl.to("#p-slot-2", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .25, ease: "back.out(1.7)" }, 8.4);
+    tl.to("#p-slot-2", { scale: 1, duration: .25, ease: "power2.out" }, 8.66);
+    tl.set("#p-score", { textContent: "已收集 2 / 3" }, 8.4);
+    moveSnake(9.2, 680, 297, .55);
+    moveSnake(10.0, 767, 297, .45);
+    moveSnake(10.7, 767, 117, .75);
+    tl.to("#p-ch-3", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 11.8);
+    tl.to("#p-slot-3", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .25, ease: "back.out(1.7)" }, 12.0);
+    tl.to("#p-slot-3", { scale: 1, duration: .25, ease: "power2.out" }, 12.26);
+    tl.set("#p-score", { textContent: "已收集 3 / 3" }, 12.0);
+    tl.fromTo("#p-ai-label", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 13.5);
+    ["#p-ai-1", "#p-ai-2", "#p-ai-3", "#p-ai-4", "#p-ai-5", "#p-ai-6", "#p-ai-7", "#p-ai-8", "#p-ai-9", "#p-ai-10", "#p-ai-11"].forEach((sel, i) => {
+      tl.fromTo(sel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .3, ease: "power3.out" }, 13.55 + i * .07);
+    });
+    tl.fromTo("#p-rules", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 17.0);
+    ["#p-rule-1", "#p-rule-2", "#p-rule-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 17.2 + i * .3);
+    });
+    tl.fromTo("#p-final", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 21.5);
+    window.__timelines["poem"] = tl;
+  </script>
+</template>

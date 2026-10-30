@@ -1,0 +1,58 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #m-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #m-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #m-title .g { color: #1f883d; }
+    #m-one { position: absolute; left: 110px; top: 316px; width: 470px; height: 430px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); overflow: hidden; }
+    #m-one-h { height: 62px; background: #1f2328; color: #f6f8fa; font: 700 28px "JetBrains Mono", monospace; display: flex; align-items: center; padding: 0 24px; }
+    .m-strip { margin: 20px 22px 0; height: 86px; border-radius: 6px; border: 1px dashed #d0d7de; display: flex; align-items: center; padding: 0 22px; font: 30px "JetBrains Mono", monospace; color: #1f2328; }
+    .m-strip b { font-weight: 700; color: #1f883d; margin-right: 14px; }
+    #m-arrow { position: absolute; left: 600px; top: 500px; width: 150px; height: 60px; }
+    #m-arrow div { position: absolute; background: #1f883d; }
+    #m-arrow-shaft { left: 0; top: 27px; width: 108px; height: 6px; border-radius: 3px; }
+    #m-arrow-head { left: 104px; top: 14px; width: 32px; height: 32px; background: #1f883d; transform: rotate(45deg); border-radius: 4px; }
+    .m-out { position: absolute; left: 790px; width: 1020px; height: 126px; padding: 22px 30px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.07); box-sizing: border-box; }
+    #m-o1 { top: 316px; } #m-o2 { top: 466px; } #m-o3 { top: 616px; }
+    .m-out-k { font: 700 34px "JetBrains Mono", monospace; color: #1f2328; }
+    .m-out-d { margin-top: 8px; font: 28px "Noto Sans JP", sans-serif; color: #57606a; }
+    #m-term { position: absolute; left: 790px; top: 780px; width: 620px; height: 96px; padding: 16px 26px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; box-sizing: border-box; font: 28px/1.5 "JetBrains Mono", monospace; }
+    #m-t1 { color: #f6f8fa; }
+    #m-t2 { color: #3fb950; }
+    #m-badge { position: absolute; left: 1450px; top: 780px; width: 360px; height: 96px; display: flex; align-items: center; justify-content: center; background: #dafbe1; border: 2px solid #1f883d; border-radius: 8px; font: 700 38px "Noto Sans JP", sans-serif; color: #116329; }
+  </style>
+  <div data-hf-id="hf-m1aa" id="root" data-composition-id="move" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-m2bb" id="m-tag" class="clip" data-start="0" data-duration="24.8">REFACTOR · 只搬家，不改行为</div>
+    <div data-hf-id="hf-m3cc" id="m-title" class="clip" data-start="0.2" data-duration="24.6">一个文件，<span data-hf-id="hf-m4dd" class="g">拆成三份</span></div>
+    <div data-hf-id="hf-m5ee" id="m-one" class="clip" data-start="2.2" data-duration="22.6">
+      <div data-hf-id="hf-m6ff" id="m-one-h">snake.html</div>
+      <div data-hf-id="hf-m7gg" id="m-s1" class="m-strip clip" data-start="3.6" data-duration="21.2"><b>01</b>结构 · &lt;html&gt;</div>
+      <div data-hf-id="hf-m8hh" id="m-s2" class="m-strip clip" data-start="4.4" data-duration="20.4"><b>02</b>样式 · &lt;style&gt;</div>
+      <div data-hf-id="hf-m9ii" id="m-s3" class="m-strip clip" data-start="5.2" data-duration="19.6"><b>03</b>逻辑 · &lt;script&gt;</div>
+    </div>
+    <div data-hf-id="hf-maja" id="m-arrow" class="clip" data-start="7.6" data-duration="17.2"><div data-hf-id="hf-mbkb" id="m-arrow-shaft"></div><div data-hf-id="hf-mclc" id="m-arrow-head"></div></div>
+    <div data-hf-id="hf-mdmd" id="m-o1" class="m-out clip" data-start="8.6" data-duration="16.2"><div data-hf-id="hf-mene" class="m-out-k">index.html</div><div data-hf-id="hf-mfof" class="m-out-d">只剩结构和内容，样式和逻辑都搬走</div></div>
+    <div data-hf-id="hf-mgpg" id="m-o2" class="m-out clip" data-start="11.0" data-duration="13.8"><div data-hf-id="hf-mhph" class="m-out-k">style.css</div><div data-hf-id="hf-miq" class="m-out-d">所有样式原样搬过来，一行不改</div></div>
+    <div data-hf-id="hf-mjrj" id="m-o3" class="m-out clip" data-start="13.4" data-duration="11.4"><div data-hf-id="hf-mksk" class="m-out-k">game.js</div><div data-hf-id="hf-mltl" class="m-out-d">游戏逻辑独立成文件，以后加依赖就放这儿</div></div>
+    <div data-hf-id="hf-mmum" id="m-term" class="clip" data-start="17.2" data-duration="7.6">
+      <div data-hf-id="hf-mnvn" id="m-t1">$ npm run dev</div>
+      <div data-hf-id="hf-mowo" id="m-t2">✓ 行为和原来一模一样</div>
+    </div>
+    <div data-hf-id="hf-mppp" id="m-badge" class="clip" data-start="20.0" data-duration="4.8">行为不变</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#m-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#m-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#m-one", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 2.2);
+    ["#m-o1", "#m-o2", "#m-o3"].forEach((sel, i) => {
+      tl.fromTo(sel, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "power3.out" }, 8.6 + i * 2.4);
+    });
+    tl.fromTo("#m-arrow-shaft", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: .4, ease: "power3.out" }, 7.6);
+    tl.fromTo("#m-arrow-head", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2)" }, 7.9);
+    tl.fromTo("#m-term", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 17.2);
+    tl.fromTo("#m-t2", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 18.2);
+    tl.fromTo("#m-badge", { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .4, ease: "back.out(1.8)" }, 20.0);
+    window.__timelines["move"] = tl;
+  </script>
+</template>

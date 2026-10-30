@@ -1,0 +1,85 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #p-tag { position: absolute; top: 82px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #p-title { position: absolute; top: 145px; left: 110px; width: 1400px; font: 700 68px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #p-title .g { color: #1f883d; }
+    .p-node { position: absolute; top: 300px; width: 200px; height: 116px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 2px solid #d0d7de; border-radius: 12px; box-shadow: 0 6px 18px rgba(31,35,40,.07); }
+    .p-node-n { font: 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
+    .p-node-t { font: 700 34px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #p-node-1 { left: 135px; }
+    #p-node-2 { left: 425px; }
+    #p-node-3 { left: 715px; }
+    #p-node-4 { left: 1005px; }
+    #p-node-5 { left: 1295px; }
+    #p-node-6 { left: 1585px; }
+    .p-arrow { position: absolute; top: 328px; width: 90px; height: 60px; line-height: 60px; text-align: center; font: 40px "Noto Sans JP", sans-serif; color: #57606a; }
+    #p-arrow-1 { left: 335px; }
+    #p-arrow-2 { left: 625px; }
+    #p-arrow-3 { left: 915px; }
+    #p-arrow-4 { left: 1205px; }
+    #p-arrow-5 { left: 1495px; }
+    .p-card { position: absolute; width: 830px; height: 110px; box-sizing: border-box; display: flex; align-items: center; padding: 0 40px; gap: 36px; background: #fff; border: 1px solid #d0d7de; border-left: 8px solid #1f883d; border-radius: 10px; box-shadow: 0 8px 24px rgba(31,35,40,.08); transform-origin: left center; }
+    #p-card-1 { left: 110px; top: 470px; }
+    #p-card-2 { left: 960px; top: 470px; }
+    #p-card-3 { left: 110px; top: 596px; }
+    #p-card-4 { left: 960px; top: 596px; }
+    .p-card-t { flex: none; width: 200px; font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .p-card-d { flex: 1; font: 500 30px "Noto Sans JP", sans-serif; color: #57606a; }
+    .p-card-b { flex: none; padding: 10px 24px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; transform-origin: center; }
+    #p-rule { position: absolute; top: 736px; left: 110px; width: 1700px; box-sizing: border-box; padding: 20px 40px; background: #1f2328; border-radius: 8px; font: 700 34px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #p-rule span { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-7px2" id="root" data-composition-id="polish" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-9qk4" id="p-tag" class="clip" data-start="0" data-duration="31">SHIP · 一次只改一件事</div>
+    <div data-hf-id="hf-3mz8" id="p-title" class="clip" data-start="0.2" data-duration="31">从需求到能玩，<span data-hf-id="hf-5g1x" class="g">一共六步</span></div>
+    <div data-hf-id="hf-2n6a" id="p-node-1" class="p-node clip" data-start="1.5" data-duration="31"><span data-hf-id="hf-4b8c" class="p-node-n">01</span><span data-hf-id="hf-6d1e" class="p-node-t">需求</span></div>
+    <div data-hf-id="hf-2r8s" id="p-arrow-1" class="p-arrow clip" data-start="1.68" data-duration="31">→</div>
+    <div data-hf-id="hf-8f3g" id="p-node-2" class="p-node clip" data-start="1.85" data-duration="31"><span data-hf-id="hf-1h5j" class="p-node-n">02</span><span data-hf-id="hf-7k9m" class="p-node-t">原型</span></div>
+    <div data-hf-id="hf-4t1u" id="p-arrow-2" class="p-arrow clip" data-start="2.03" data-duration="31">→</div>
+    <div data-hf-id="hf-3p2q" id="p-node-3" class="p-node clip" data-start="2.2" data-duration="31"><span data-hf-id="hf-5r7s" class="p-node-n">03</span><span data-hf-id="hf-9t4u" class="p-node-t">报错</span></div>
+    <div data-hf-id="hf-6v3w" id="p-arrow-3" class="p-arrow clip" data-start="2.38" data-duration="31">→</div>
+    <div data-hf-id="hf-2v8w" id="p-node-4" class="p-node clip" data-start="2.55" data-duration="31"><span data-hf-id="hf-6x1y" class="p-node-n">04</span><span data-hf-id="hf-4z3a" class="p-node-t">修复</span></div>
+    <div data-hf-id="hf-8x5y" id="p-arrow-4" class="p-arrow clip" data-start="2.73" data-duration="31">→</div>
+    <div data-hf-id="hf-8c5b" id="p-node-5" class="p-node clip" data-start="2.9" data-duration="31"><span data-hf-id="hf-1e7d" class="p-node-n">05</span><span data-hf-id="hf-3f9g" class="p-node-t">加玩法</span></div>
+    <div data-hf-id="hf-1z7a" id="p-arrow-5" class="p-arrow clip" data-start="3.08" data-duration="31">→</div>
+    <div data-hf-id="hf-5h2j" id="p-node-6" class="p-node clip" data-start="3.25" data-duration="31"><span data-hf-id="hf-7k4m" class="p-node-n">06</span><span data-hf-id="hf-9p6q" class="p-node-t">打磨</span></div>
+    <div data-hf-id="hf-3b9c" id="p-card-1" class="p-card clip" data-start="9" data-duration="31"><span data-hf-id="hf-5d2e" class="p-card-t">视觉</span><span data-hf-id="hf-7f4g" class="p-card-d">统一配色和字号</span><span data-hf-id="hf-9h6j" id="p-badge-1" class="p-card-b">第 1 项</span></div>
+    <div data-hf-id="hf-2k8m" id="p-card-2" class="p-card clip" data-start="9.6" data-duration="31"><span data-hf-id="hf-4p1q" class="p-card-t">手感</span><span data-hf-id="hf-6r3s" class="p-card-d">移动更快，吃到有音效</span><span data-hf-id="hf-8t5u" id="p-badge-2" class="p-card-b">第 2 项</span></div>
+    <div data-hf-id="hf-1v7w" id="p-card-3" class="p-card clip" data-start="10.2" data-duration="31"><span data-hf-id="hf-3x9y" class="p-card-t">计分</span><span data-hf-id="hf-5z2a" class="p-card-d">分数与最快纪录</span><span data-hf-id="hf-7b4c" id="p-badge-3" class="p-card-b">第 3 项</span></div>
+    <div data-hf-id="hf-9d6e" id="p-card-4" class="p-card clip" data-start="10.8" data-duration="31"><span data-hf-id="hf-2f8g" class="p-card-t">移动端</span><span data-hf-id="hf-4h1j" class="p-card-d">方向键换成滑动</span><span data-hf-id="hf-6k3m" id="p-badge-4" class="p-card-b">第 4 项</span></div>
+    <div data-hf-id="hf-8p5q" id="p-rule" class="clip" data-start="24.5" data-duration="31"><span data-hf-id="hf-1r7s">每改完一项就运行一次</span>；一口气改五处，出问题你不知道是哪一处</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#p-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#p-title", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, .2);
+    const nodes = ["#p-node-1", "#p-node-2", "#p-node-3", "#p-node-4", "#p-node-5", "#p-node-6"];
+    nodes.forEach((sel, i) => {
+      const t = 1.5 + i * .35;
+      tl.fromTo(sel, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .4, ease: "power3.out" }, t);
+      if (i < 5) tl.to(sel, { borderColor: "#1f883d", backgroundColor: "#dafbe1", duration: .25, ease: "power2.out" }, t + .2);
+    });
+    const arrows = ["#p-arrow-1", "#p-arrow-2", "#p-arrow-3", "#p-arrow-4", "#p-arrow-5"];
+    arrows.forEach((sel, i) => {
+      tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: .25, ease: "power2.out" }, 1.68 + i * .35);
+    });
+    tl.to("#p-node-6", { borderColor: "#1f883d", backgroundColor: "#1f883d", duration: .3, ease: "power2.out" }, 3.45);
+    tl.to("#p-node-6 .p-node-t", { color: "#ffffff", duration: .3 }, 3.45);
+    tl.to("#p-node-6 .p-node-n", { color: "#dafbe1", duration: .3 }, 3.45);
+    const cards = ["#p-card-1", "#p-card-2", "#p-card-3", "#p-card-4"];
+    const badges = ["#p-badge-1", "#p-badge-2", "#p-badge-3", "#p-badge-4"];
+    cards.forEach((sel, i) => {
+      tl.fromTo(sel, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, 9.0 + i * .6);
+    });
+    const beats = [12.3, 14.9, 17.7, 20.2];
+    cards.forEach((sel, i) => {
+      tl.to(sel, { scale: 1.02, duration: .22, ease: "power2.out" }, beats[i]);
+      tl.to(sel, { scale: 1, duration: .3, ease: "power2.inOut" }, beats[i] + .48);
+      tl.to(badges[i], { scale: 1.18, duration: .2, ease: "back.out(2)" }, beats[i]);
+      tl.to(badges[i], { scale: 1, duration: .28, ease: "power2.inOut" }, beats[i] + .42);
+    });
+    tl.fromTo("#p-rule", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, 24.5);
+    window.__timelines["polish"] = tl;
+  </script>
+</template>

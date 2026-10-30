@@ -71,6 +71,19 @@ function validateBook() {
   if (chapters < 190) fail(`Expected at least 190 assembled chapters, found ${chapters}`);
   const staleImages = markdown.match(/!\[[^\]]*\]\(\.\.\/easy-vibe\/docs\//g)?.length ?? 0;
   if (staleImages) fail(`Found ${staleImages} unresolved upstream image paths`);
+  const externalImages = markdown.match(/!\[[^\]]*\]\(https?:\/\//g)?.length ?? 0;
+  if (externalImages) fail(`Found ${externalImages} externally hosted images`);
+  if (markdown.includes("../easy-vibe/")) fail("Found stale upstream relative paths");
+  let localImages = 0;
+  for (const match of markdown.matchAll(/!\[[^\]]*\]\((assets\/[^)]+)\)/g)) {
+    requireFile(join("book", match[1]));
+    localImages += 1;
+  }
+  for (const match of markdown.matchAll(/src="(assets\/[^"]+)"/g)) {
+    requireFile(join("book", match[1]));
+    localImages += 1;
+  }
+  notes.push(`Book images: ${localImages} local references resolved`);
   validateFences(markdown);
   notes.push(`Book: ${chapters} chapter headings, fences balanced`);
 }
@@ -152,12 +165,18 @@ function validateCleanTree() {
 validateBook();
 validateVideoSource("landscape", { width: 1920, height: 1080, duration: 215.5, minimumCompositions: 8 });
 validateVideoSource("vertical", { width: 1080, height: 1920, duration: 39.5, minimumCompositions: 3 });
+validateVideoSource("ep02", { width: 1920, height: 1080, duration: 194.5, minimumCompositions: 8 });
+validateVideoSource("ep03", { width: 1920, height: 1080, duration: 191.2, minimumCompositions: 8 });
 validateVideoSource("ep04", { width: 1920, height: 1080, duration: 187.472, minimumCompositions: 8 });
 validateDelivery("deliverables/vibe-coding-101-landscape.mp4", { width: 1920, height: 1080, duration: 215.5, minimumBytes: 10_000_000 });
 validateDelivery("deliverables/vibe-coding-101-vertical.mp4", { width: 1080, height: 1920, duration: 39.5, minimumBytes: 1_500_000 });
+validateDelivery("deliverables/ep02-landscape.mp4", { width: 1920, height: 1080, duration: 194.5, minimumBytes: 5_000_000 });
+validateDelivery("deliverables/ep03-landscape.mp4", { width: 1920, height: 1080, duration: 191.2, minimumBytes: 5_000_000 });
 validateDelivery("deliverables/ep04-landscape.mp4", { width: 1920, height: 1080, duration: 187.5, minimumBytes: 5_000_000 });
 requireFile("deliverables/landscape-cover.webp", 10_000);
 requireFile("deliverables/vertical-cover.webp", 10_000);
+requireFile("deliverables/ep02-cover.webp", 10_000);
+requireFile("deliverables/ep03-cover.webp", 10_000);
 requireFile("deliverables/ep04-cover.webp", 10_000);
 validateCleanTree();
 

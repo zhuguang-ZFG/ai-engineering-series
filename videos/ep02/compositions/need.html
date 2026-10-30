@@ -1,0 +1,86 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #n-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #n-title { position: absolute; top: 138px; left: 110px; width: 760px; font: 700 66px/1.3 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #n-title .g { color: #1f883d; }
+    .n-card { position: absolute; width: 362px; height: 176px; padding: 20px 24px; background: #fff; border: 1px solid #d0d7de; border-left: 8px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); }
+    #n-c1 { left: 110px; top: 396px; } #n-c2 { left: 497px; top: 396px; }
+    #n-c3 { left: 110px; top: 586px; } #n-c4 { left: 497px; top: 586px; }
+    .n-k { font: 700 30px "JetBrains Mono", monospace; color: #57606a; letter-spacing: 1px; }
+    .n-v { margin-top: 12px; font: 700 30px/1.4 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #n-final { position: absolute; left: 110px; top: 786px; width: 749px; height: 96px; display: flex; align-items: center; padding: 0 30px; background: #dafbe1; border-radius: 8px; font: 700 36px "Noto Sans JP", sans-serif; color: #116329; }
+    #n-panel { position: absolute; left: 932px; top: 80px; width: 878px; height: 878px; padding: 30px 32px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; box-shadow: 0 12px 34px rgba(31,35,40,.10); }
+    #n-panel-head { display: flex; align-items: center; justify-content: space-between; }
+    #n-panel-title { font: 700 34px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #n-panel-badge { padding: 8px 16px; background: #eaeef2; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #57606a; }
+    #n-bad { margin-top: 26px; padding: 24px 26px; background: #ffebe9; border: 1px solid #ffcecb; border-radius: 8px; }
+    #n-bad-tag { display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #82071e; }
+    #n-bad-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #cf222e; font: 700 28px "JetBrains Mono", monospace; color: #fff; }
+    #n-bad-text { margin-top: 14px; font: 500 34px/1.45 "Noto Sans JP", sans-serif; color: #82071e; }
+    #n-vs { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 22px 0; font: 700 28px "JetBrains Mono", monospace; color: #8c959f; }
+    #n-vs::before, #n-vs::after { content: ""; width: 300px; height: 1px; background: #d0d7de; }
+    #n-good { padding: 24px 26px; background: #dafbe1; border: 1px solid #a7e0b7; border-radius: 8px; }
+    #n-good-tag { display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #116329; }
+    #n-good-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #1f883d; font: 700 28px "JetBrains Mono", monospace; color: #fff; }
+    #n-good-code { margin-top: 16px; padding: 18px 22px; background: #1f2328; border-radius: 8px; font: 500 28px/1.75 "JetBrains Mono", monospace; color: #3fb950; }
+    #n-good-code span { color: #8c959f; }
+    #n-note { margin-top: 20px; font: 700 28px/1.5 "Noto Sans JP", sans-serif; color: #57606a; }
+  </style>
+  <div data-hf-id="hf-n001" id="root" data-composition-id="need" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-n002" id="n-tag" class="clip" data-start="0" data-duration="29.1">NEED · 把一句话变成需求</div>
+    <div data-hf-id="hf-n003" id="n-title" class="clip" data-start="0.2" data-duration="29.1">一句话，AI 接不住<br />四句话，它<span data-hf-id="hf-n004" class="g">就能做</span></div>
+
+    <div data-hf-id="hf-n005" id="n-c1" class="n-card clip" data-start="1.2" data-duration="29.1">
+      <div data-hf-id="hf-n006" class="n-k">01 背景</div>
+      <div data-hf-id="hf-n007" class="n-v">给谁用、在什么设备上跑</div>
+    </div>
+    <div data-hf-id="hf-n008" id="n-c2" class="n-card clip" data-start="1.45" data-duration="29.1">
+      <div data-hf-id="hf-n009" class="n-k">02 任务</div>
+      <div data-hf-id="hf-n010" class="n-v">做什么、有哪几个功能</div>
+    </div>
+    <div data-hf-id="hf-n011" id="n-c3" class="n-card clip" data-start="1.7" data-duration="29.1">
+      <div data-hf-id="hf-n012" class="n-k">03 验收</div>
+      <div data-hf-id="hf-n013" class="n-v">怎样算做完、边界怎么处理</div>
+    </div>
+    <div data-hf-id="hf-n014" id="n-c4" class="n-card clip" data-start="1.95" data-duration="29.1">
+      <div data-hf-id="hf-n015" class="n-k">04 禁区</div>
+      <div data-hf-id="hf-n016" class="n-v">不要引入什么、不要改动什么</div>
+    </div>
+
+    <div data-hf-id="hf-n017" id="n-final" class="clip" data-start="24" data-duration="29.1">需求写得越像验收标准，返工越少</div>
+
+    <div data-hf-id="hf-n018" id="n-panel" class="clip" data-start="8.6" data-duration="29.1">
+      <div data-hf-id="hf-n019" id="n-panel-head">
+        <span data-hf-id="hf-n020" id="n-panel-title">同一件事，两种说法</span>
+        <span data-hf-id="hf-n021" id="n-panel-badge">SNAKE · 对比</span>
+      </div>
+      <div data-hf-id="hf-n022" id="n-bad">
+        <div data-hf-id="hf-n023" id="n-bad-tag"><span data-hf-id="hf-n024" id="n-bad-mark">✕</span>太糊</div>
+        <div data-hf-id="hf-n025" id="n-bad-text">帮我做个贪吃蛇</div>
+      </div>
+      <div data-hf-id="hf-n026" id="n-vs">VS</div>
+      <div data-hf-id="hf-n027" id="n-good">
+        <div data-hf-id="hf-n028" id="n-good-tag"><span data-hf-id="hf-n029" id="n-good-mark">✓</span>能跑</div>
+        <div data-hf-id="hf-n030" id="n-good-code"><span>// 一段就能验收的需求</span><br />网页版 · 方向键控制<br />吃到食物变长 · 撞墙结束<br />单文件 · 不依赖任何库</div>
+      </div>
+      <div data-hf-id="hf-n031" id="n-note">AI 一次就能给出能跑的版本</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#n-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#n-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    [["#n-c1", 1.2], ["#n-c2", 1.45], ["#n-c3", 1.7], ["#n-c4", 1.95]].forEach(([sel, at]) => {
+      tl.fromTo(sel, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, at);
+    });
+    tl.fromTo("#n-panel", { x: 44, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: "power3.out" }, 8.6);
+    tl.fromTo("#n-bad", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 9.1);
+    tl.fromTo("#n-vs", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 10.4);
+    tl.fromTo("#n-good", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 11.0);
+    tl.fromTo("#n-good-code", { opacity: 0 }, { opacity: 1, duration: .45, ease: "power2.out" }, 11.6);
+    tl.fromTo("#n-note", { opacity: 0 }, { opacity: 1, duration: .4, ease: "power2.out" }, 13.2);
+    tl.fromTo("#n-final", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 24);
+    window.__timelines["need"] = tl;
+  </script>
+</template>

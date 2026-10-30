@@ -1,0 +1,78 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #g-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #g-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #g-title .g { color: #1f883d; }
+    #g-ed { position: absolute; left: 110px; top: 316px; width: 940px; height: 470px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; }
+    #g-ed-h { height: 54px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; font: 28px "JetBrains Mono", monospace; color: #768390; }
+    #g-ed-h b { color: #f6f8fa; font-weight: 500; }
+    #g-lines { position: relative; z-index: 2; padding: 24px 26px 0; font: 28px/1.72 "JetBrains Mono", monospace; }
+    .g-ln { position: relative; white-space: nowrap; color: #f6f8fa; height: 48px; }
+    .g-ln i { display: inline-block; width: 44px; color: #6e7681; font-style: normal; }
+    .g-ln em { font-style: normal; color: #d2a8ff; }
+    .g-ln u { text-decoration: none; color: #a5d6ff; }
+    .g-cur { position: absolute; left: 0; width: 940px; height: 48px; background: rgba(63,185,80,.14); pointer-events: none; z-index: 1; }
+    #g-cur1 { top: 130px; } #g-cur2 { top: 178px; opacity: 0; }
+    #g-bp { position: absolute; left: 22px; top: 146px; width: 18px; height: 18px; border-radius: 50%; background: #cf222e; }
+    #g-pause { position: absolute; right: 26px; top: 78px; padding: 8px 18px; border-radius: 99px; background: rgba(207,34,46,.18); border: 1px solid #cf222e; font: 700 28px "JetBrains Mono", monospace; color: #ff7b72; }
+    #g-insp { position: absolute; left: 1090px; top: 316px; width: 720px; height: 306px; padding: 24px 30px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); box-sizing: border-box; }
+    #g-insp-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
+    .g-var { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; font: 30px "JetBrains Mono", monospace; }
+    .g-var span:first-child { color: #57606a; }
+    .g-var span:last-child { color: #1f2328; font-weight: 700; }
+    #g-stack { position: absolute; left: 1090px; top: 646px; width: 720px; height: 152px; padding: 22px 30px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-sizing: border-box; }
+    #g-stack-k { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #116329; }
+    #g-stack-d { margin-top: 12px; font: 28px "JetBrains Mono", monospace; color: #1f2328; }
+    #g-final { position: absolute; left: 110px; top: 806px; width: 1700px; height: 68px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 8px; font: 700 34px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #g-final .g { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-g1aa" id="root" data-composition-id="debug" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-g2bb" id="g-tag" class="clip" data-start="0" data-duration="27.1">DEBUG · 断点，不是打印</div>
+    <div data-hf-id="hf-g3cc" id="g-title" class="clip" data-start="0.2" data-duration="26.9">让它停在<span data-hf-id="hf-g4dd" class="g">那一行</span></div>
+    <div data-hf-id="hf-g5ee" id="g-ed" class="clip" data-start="2.0" data-duration="25.1">
+      <div data-hf-id="hf-g6ff" id="g-ed-h"><span data-hf-id="hf-g7gg"><b>game.js</b></span><span data-hf-id="hf-g8hh">snake-project</span></div>
+      <div data-hf-id="hf-g9ii" id="g-lines">
+        <div data-hf-id="hf-gaja" class="g-ln"><i>1</i><em>const</em> dir = { x: 0, y: -1 };</div>
+        <div data-hf-id="hf-gbkb" class="g-ln"><i>2</i><em>function</em> step() {</div>
+        <div data-hf-id="hf-gclc" class="g-ln"><i>3</i>  head.x += dir.x;</div>
+        <div data-hf-id="hf-gdmd" class="g-ln"><i>4</i>  <u>head.y += dir.y;</u></div>
+        <div data-hf-id="hf-gene" class="g-ln"><i>5</i>  checkCollision(head);</div>
+        <div data-hf-id="hf-gfof" class="g-ln"><i>6</i>}</div>
+      </div>
+      <div data-hf-id="hf-g5gpg" id="g-cur1" class="g-cur"></div>
+      <div data-hf-id="hf-g5hph" id="g-cur2" class="g-cur"></div>
+      <div data-hf-id="hf-g5iqi" id="g-bp"></div>
+      <div data-hf-id="hf-g5jrj" id="g-pause">● PAUSED</div>
+    </div>
+    <div data-hf-id="hf-gkkk" id="g-insp" class="clip" data-start="9.0" data-duration="18.1">
+      <div data-hf-id="hf-glll" id="g-insp-h">VARIABLES · 停住时全场可见</div>
+      <div data-hf-id="hf-gmmm" class="g-var"><span data-hf-id="hf-gnnn">head.x</span><span data-hf-id="hf-gooo">10</span></div>
+      <div data-hf-id="hf-gppp" class="g-var"><span data-hf-id="hf-gqqq">head.y</span><span data-hf-id="hf-grrr">7</span></div>
+      <div data-hf-id="hf-gsss" class="g-var"><span data-hf-id="hf-gttt">dir</span><span data-hf-id="hf-guuu">↑ {0, -1}</span></div>
+      <div data-hf-id="hf-gvvv" class="g-var"><span data-hf-id="hf-gwww">length</span><span data-hf-id="hf-gxxx">5</span></div>
+    </div>
+    <div data-hf-id="hf-gyyy" id="g-stack" class="clip" data-start="15.0" data-duration="12.1">
+      <div data-hf-id="hf-gzzz" id="g-stack-k">CALL STACK · 报错整段贴给 AI</div>
+      <div data-hf-id="hf-g1ab" id="g-stack-d">step() ← tick() ← requestAnimationFrame</div>
+    </div>
+    <div data-hf-id="hf-g2bc" id="g-final" class="clip" data-start="22.6" data-duration="4.5">先复现，再定位，<span data-hf-id="hf-g3cd" class="g">最后才改</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#g-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#g-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#g-ed", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 2.0);
+    tl.fromTo(".g-ln", { opacity: 0 }, { opacity: 1, duration: .25, stagger: .14, ease: "power2.out" }, 2.5);
+    tl.fromTo("#g-bp", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "back.out(2.4)" }, 6.4);
+    tl.fromTo("#g-pause", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: .3, ease: "power2.out" }, 7.2);
+    tl.fromTo("#g-insp", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 9.0);
+    tl.fromTo(".g-var", { x: 16, opacity: 0 }, { x: 0, opacity: 1, duration: .3, stagger: .16, ease: "power2.out" }, 9.4);
+    tl.fromTo("#g-cur1", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 12.4);
+    tl.fromTo("#g-cur2", { opacity: 0 }, { opacity: 1, duration: .25, ease: "power2.out" }, 14.0);
+    tl.to("#g-cur1", { opacity: 0, duration: .25, ease: "power2.in" }, 14.0);
+    tl.fromTo("#g-stack", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 15.0);
+    tl.fromTo("#g-final", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 22.6);
+    window.__timelines["debug"] = tl;
+  </script>
+</template>

@@ -1,0 +1,48 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #f-tag { position: absolute; top: 82px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #f-title { position: absolute; top: 145px; left: 110px; width: 1400px; font: 700 68px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #f-title .g { color: #1f883d; }
+    .f-card { position: absolute; left: 110px; width: 1700px; height: 160px; box-sizing: border-box; display: flex; align-items: center; padding: 0 50px; gap: 48px; background: #fff; border: 1px solid #d0d7de; border-radius: 12px; box-shadow: 0 10px 28px rgba(31,35,40,.09); }
+    #f-card-1 { top: 300px; }
+    #f-card-2 { top: 476px; }
+    #f-card-3 { top: 652px; }
+    .f-num { flex: none; width: 160px; font: 700 88px "Archivo Black", sans-serif; color: #1f883d; }
+    .f-lines { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+    .f-l1 { font: 700 42px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .f-l2 { font: 500 30px "Noto Sans JP", sans-serif; color: #57606a; }
+    #f-hint { flex: none; padding: 12px 26px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
+    #f-rule { position: absolute; top: 830px; left: 110px; width: 1700px; box-sizing: border-box; padding: 22px 40px; background: #1f2328; border-radius: 8px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #f-rule span { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-5w9x" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-7y2z" id="f-tag" class="clip" data-start="0" data-duration="22.3">PITFALL · 动手阶段最痛的三个坑</div>
+    <div data-hf-id="hf-9a4b" id="f-title" class="clip" data-start="0.2" data-duration="22.3">改不动，多半是<span data-hf-id="hf-2c6d" class="g">这三件事</span></div>
+    <div data-hf-id="hf-4e8f" id="f-card-1" class="f-card clip" data-start="2" data-duration="22.3">
+      <span data-hf-id="hf-6f1g" class="f-num">01</span>
+      <div class="f-lines"><span data-hf-id="hf-8h3j" class="f-l1">一次让 AI 改十处</span><span data-hf-id="hf-1k5m" class="f-l2">跑不起来只能回滚重来</span></div>
+    </div>
+    <div data-hf-id="hf-3p7q" id="f-card-2" class="f-card clip" data-start="7.5" data-duration="22.3">
+      <span data-hf-id="hf-5r9s" class="f-num">02</span>
+      <div class="f-lines"><span data-hf-id="hf-7t2u" class="f-l1">报错只贴「报错了」</span><span data-hf-id="hf-9v4w" class="f-l2">不贴代码和环境，AI 只能瞎猜</span></div>
+    </div>
+    <div data-hf-id="hf-2x6y" id="f-card-3" class="f-card clip" data-start="13" data-duration="22.3">
+      <span data-hf-id="hf-4z8a" class="f-num">03</span>
+      <div class="f-lines"><span data-hf-id="hf-6b1c" class="f-l1">不存版本</span><span data-hf-id="hf-8d3e" class="f-l2">改坏了找不回来</span></div>
+      <span data-hf-id="hf-1f5g" id="f-hint">每轮能跑就存一份</span>
+    </div>
+    <div data-hf-id="hf-3h7j" id="f-rule" class="clip" data-start="18" data-duration="22.3">能跑的状态存一份，<span data-hf-id="hf-5k9m">成本几乎为零</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#f-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#f-title", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#f-card-1", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 2.0);
+    tl.fromTo("#f-card-2", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 7.5);
+    tl.fromTo("#f-card-3", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, 13.0);
+    tl.fromTo("#f-hint", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, ease: "power3.out" }, 16.8);
+    tl.fromTo("#f-rule", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, 18.0);
+    window.__timelines["pitfall"] = tl;
+  </script>
+</template>

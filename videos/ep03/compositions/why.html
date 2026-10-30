@@ -1,0 +1,67 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #w-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #w-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #w-title .g { color: #1f883d; }
+    .w-card { position: absolute; width: 400px; height: 172px; padding: 24px 28px; background: #fff; border: 1px solid #d0d7de; border-left: 8px solid #cf222e; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.07); box-sizing: border-box; }
+    #w-c1 { left: 110px; top: 320px; }
+    #w-c2 { left: 550px; top: 320px; }
+    #w-c3 { left: 110px; top: 516px; }
+    #w-c4 { left: 550px; top: 516px; }
+    .w-k { font: 700 40px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .w-k em { font-style: normal; color: #cf222e; margin-right: 12px; }
+    .w-d { margin-top: 10px; font: 28px "Noto Sans JP", sans-serif; color: #57606a; }
+    #w-panel { position: absolute; left: 1000px; top: 320px; width: 810px; height: 330px; padding: 30px 36px; background: #fff; border: 1px solid #d0d7de; border-left: 10px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.08); box-sizing: border-box; }
+    #w-panel-t { font: 700 30px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
+    #w-rows { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; }
+    .w-row { font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .w-row b { color: #1f883d; margin-right: 10px; }
+    #w-term { position: absolute; left: 1000px; top: 682px; width: 810px; height: 168px; padding: 22px 30px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; box-sizing: border-box; font: 29px/1.55 "JetBrains Mono", monospace; }
+    #w-t1 { color: #f6f8fa; }
+    #w-t2 { color: #3fb950; }
+    #w-t3 { color: #f6f8fa; }
+    #w-t4 { color: #768390; }
+    #w-final { position: absolute; left: 110px; top: 732px; width: 840px; height: 118px; display: flex; align-items: center; padding: 0 34px; background: #1f2328; border-radius: 8px; box-sizing: border-box; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #w-final .g { color: #3fb950; }
+  </style>
+  <div data-hf-id="hf-w1aa" id="root" data-composition-id="why" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-w2bb" id="w-tag" class="clip" data-start="0" data-duration="27.5">WHY · 单文件的天花板</div>
+    <div data-hf-id="hf-w3cc" id="w-title" class="clip" data-start="0.2" data-duration="27.3">一个文件，<span data-hf-id="hf-w4dd" class="g">四件事都做不了</span></div>
+    <div data-hf-id="hf-w5ee" id="w-c1" class="w-card clip" data-start="2.0" data-duration="25.5"><div data-hf-id="hf-w6ff" class="w-k"><em>✕</em>加音效</div><div data-hf-id="hf-w7gg" class="w-d">没有包管理器，只能手动下载</div></div>
+    <div data-hf-id="hf-w8hh" id="w-c2" class="w-card clip" data-start="4.2" data-duration="23.3"><div data-hf-id="hf-w9ii" class="w-k"><em>✕</em>拆模块</div><div data-hf-id="hf-waja" class="w-d">一个文件越写越长，改一处怕三处</div></div>
+    <div data-hf-id="hf-wbkb" id="w-c3" class="w-card clip" data-start="6.6" data-duration="20.9"><div data-hf-id="hf-wclc" class="w-k"><em>✕</em>断点调试</div><div data-hf-id="hf-wdmd" class="w-d">只能在代码里到处打印日志</div></div>
+    <div data-hf-id="hf-wene" id="w-c4" class="w-card clip" data-start="9.0" data-duration="18.5"><div data-hf-id="hf-wfof" class="w-k"><em>✕</em>发布上线</div><div data-hf-id="hf-wgpg" class="w-d">改完还要手动往服务器传文件</div></div>
+    <div data-hf-id="hf-whph" id="w-panel" class="clip" data-start="13.4" data-duration="14.1">
+      <div data-hf-id="hf-wiqi" id="w-panel-t">LOCAL PROJECT · 一次解决四件事</div>
+      <div data-hf-id="hf-wjrj" id="w-rows">
+        <div data-hf-id="hf-wksk" class="w-row"><b>✓</b>依赖</div>
+        <div data-hf-id="hf-wltl" class="w-row"><b>✓</b>模块</div>
+        <div data-hf-id="hf-wmum" class="w-row"><b>✓</b>调试</div>
+        <div data-hf-id="hf-wnvn" class="w-row"><b>✓</b>发布</div>
+      </div>
+    </div>
+    <div data-hf-id="hf-wowo" id="w-term" class="clip" data-start="18.6" data-duration="8.9">
+      <div data-hf-id="hf-wppp" id="w-t1">$ npm i howler</div>
+      <div data-hf-id="hf-wqqq" id="w-t2">+ howler@2.2.4</div>
+      <div data-hf-id="hf-wrrr" id="w-t3">$ npm run dev</div>
+      <div data-hf-id="hf-wsss" id="w-t4">➜ http://localhost:5173/</div>
+    </div>
+    <div data-hf-id="hf-wttt" id="w-final" class="clip" data-start="23.0" data-duration="4.5">听着复杂，<span data-hf-id="hf-wuuu" class="g">其实只差一条命令</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#w-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#w-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    [["#w-c1", 2.0], ["#w-c2", 4.2], ["#w-c3", 6.6], ["#w-c4", 9.0]].forEach(([sel, t]) => {
+      tl.fromTo(sel, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, t);
+    });
+    tl.fromTo("#w-panel", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 13.4);
+    tl.fromTo("#w-rows .w-row", { opacity: 0 }, { opacity: 1, duration: .3, stagger: .18, ease: "power2.out" }, 13.9);
+    tl.fromTo("#w-term", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 18.6);
+    tl.fromTo("#w-t2", { opacity: 0 }, { opacity: 1, duration: .25, ease: "power2.out" }, 19.4);
+    tl.fromTo("#w-t4", { opacity: 0 }, { opacity: 1, duration: .25, ease: "power2.out" }, 20.4);
+    tl.fromTo("#w-final", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 23.0);
+    window.__timelines["why"] = tl;
+  </script>
+</template>

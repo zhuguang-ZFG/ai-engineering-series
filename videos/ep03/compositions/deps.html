@@ -1,0 +1,72 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #f6f8fa; }
+    #d-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #d-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #d-title .g { color: #1f883d; }
+    #d-pkg { position: absolute; left: 110px; top: 312px; width: 940px; height: 408px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; }
+    #d-pkg-h { height: 54px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 26px; font: 28px "JetBrains Mono", monospace; color: #768390; }
+    #d-code { padding: 18px 30px; font: 28px/1.45 "JetBrains Mono", monospace; color: #f6f8fa; }
+    #d-code .k { color: #a5d6ff; }
+    #d-code .n { color: #79c0ff; }
+    #d-new { position: relative; display: block; margin: 6px -14px; padding: 4px 14px; border-radius: 6px; background: rgba(63,185,80,.16); border-left: 4px solid #3fb950; }
+    #d-new span { color: #3fb950; }
+    #d-term { position: absolute; left: 110px; top: 744px; width: 940px; height: 140px; padding: 20px 28px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; box-sizing: border-box; font: 28px/1.55 "JetBrains Mono", monospace; }
+    #d-t1 { color: #f6f8fa; }
+    #d-t2 { color: #3fb950; }
+    .d-check { position: absolute; left: 1090px; width: 720px; height: 158px; padding: 24px 30px; background: #fff; border: 1px solid #d0d7de; border-left: 9px solid #1f883d; border-radius: 8px; box-shadow: 0 8px 24px rgba(31,35,40,.07); box-sizing: border-box; }
+    #d-k1 { top: 316px; } #d-k2 { top: 494px; }
+    .d-check-k { font: 700 36px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .d-check-d { margin-top: 10px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
+    #d-ignore { position: absolute; left: 1090px; top: 672px; width: 720px; height: 198px; padding: 24px 30px; background: #fff; border: 1px solid #cf222e; border-left: 9px solid #cf222e; border-radius: 8px; box-sizing: border-box; }
+    #d-ignore-k { font: 700 32px "JetBrains Mono", monospace; color: #cf222e; }
+    #d-ignore-d { margin-top: 12px; font: 28px/1.4 "Noto Sans JP", sans-serif; color: #57606a; }
+    #d-ignore-d b { color: #1f2328; }
+  </style>
+  <div data-hf-id="hf-d1aa" id="root" data-composition-id="deps" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-d2bb" id="d-tag" class="clip" data-start="0" data-duration="25.5">DEPENDENCIES · 清单说了算</div>
+    <div data-hf-id="hf-d3cc" id="d-title" class="clip" data-start="0.2" data-duration="25.3">装东西，<span data-hf-id="hf-d4dd" class="g">只写清单</span></div>
+    <div data-hf-id="hf-d5ee" id="d-pkg" class="clip" data-start="2.0" data-duration="23.5">
+      <div data-hf-id="hf-d6ff" id="d-pkg-h">package.json</div>
+      <div data-hf-id="hf-d7gg" id="d-code">
+        <div data-hf-id="hf-d8hh">{</div>
+        <div data-hf-id="hf-d9ii">  <span data-hf-id="hf-daja" class="k">"name"</span>: <span data-hf-id="hf-dbkb" class="n">"snake-project"</span>,</div>
+        <div data-hf-id="hf-dclc">  <span data-hf-id="hf-dcmd" class="k">"scripts"</span>: { <span data-hf-id="hf-dene" class="k">"dev"</span>: <span data-hf-id="hf-dfof" class="n">"vite"</span> },</div>
+        <div data-hf-id="hf-dgpg">  <span data-hf-id="hf-dhph" class="k">"dependencies"</span>: {</div>
+        <div data-hf-id="hf-diqh" id="d-new"><span data-hf-id="hf-djrj">    "howler": "^2.2.4"</span></div>
+        <div data-hf-id="hf-dksk">  }</div>
+        <div data-hf-id="hf-dltl">}</div>
+      </div>
+    </div>
+    <div data-hf-id="hf-dmum" id="d-term" class="clip" data-start="5.6" data-duration="19.9">
+      <div data-hf-id="hf-dnvn" id="d-t1">$ npm i howler</div>
+      <div data-hf-id="hf-dowo" id="d-t2">added 1 package, audited 2 in 1s</div>
+    </div>
+    <div data-hf-id="hf-dppp" id="d-k1" class="d-check clip" data-start="17.6" data-duration="7.9">
+      <div data-hf-id="hf-dqqq" class="d-check-k">① 清单变了没有</div>
+      <div data-hf-id="hf-drrr" class="d-check-d">package.json · 版本让命令写，别手抄</div>
+    </div>
+    <div data-hf-id="hf-dsss" id="d-k2" class="d-check clip" data-start="19.8" data-duration="5.7">
+      <div data-hf-id="hf-dttt" class="d-check-k">② 锁文件提交了没有</div>
+      <div data-hf-id="hf-duuu" class="d-check-d">package-lock.json · 保证别人装到同一版</div>
+    </div>
+    <div data-hf-id="hf-dvvv" id="d-ignore" class="clip" data-start="12.4" data-duration="13.1">
+      <div data-hf-id="hf-dwww" id="d-ignore-k">node_modules /</div>
+      <div data-hf-id="hf-dxxx" id="d-ignore-d"><b>装完就多出几万个文件。</b>别读它，也别提交它。</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#d-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 0);
+    tl.fromTo("#d-title", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out" }, .2);
+    tl.fromTo("#d-pkg", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "power3.out" }, 2.0);
+    tl.fromTo("#d-term", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 5.6);
+    tl.fromTo("#d-t2", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, 6.8);
+    tl.fromTo("#d-new", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: .45, ease: "power3.out" }, 8.6);
+    tl.fromTo("#d-new", { backgroundColor: "rgba(63,185,80,.55)" }, { backgroundColor: "rgba(63,185,80,.16)", duration: .9, ease: "power2.out" }, 9.05);
+    tl.fromTo("#d-ignore", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, 12.4);
+    tl.fromTo("#d-k1", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 17.6);
+    tl.fromTo("#d-k2", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 19.8);
+    window.__timelines["deps"] = tl;
+  </script>
+</template>
