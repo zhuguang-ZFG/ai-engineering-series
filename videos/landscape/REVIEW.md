@@ -86,3 +86,18 @@ The definition scene is still the most presentation-like shot. A later pass coul
 - Render/reference comparisons at 0, 28, 58, 83, 103, 136, 171, 190, and 215 s match visually.
 - Measured loudness is −18.7 LUFS with a −1.5 dBTP true peak and zero clipped samples.
 - Moved the pre-v3 MP4 files and legacy PNG cover into `renders/archive/`; the renders root now contains only the v3 delivery, the identical `latest` handoff, and the current WebP cover.
+
+## 发布记录 — 2026-10-31 换片（kinetic 重渲染）
+
+| 平台 | ID | 备注 |
+|---|---|---|
+| B站 | `BV1CoxY6YEhF` | 未变更：上一轮已用「更换视频」把 kinetic 重渲染替换进同一 BV，元数据 / 合集 9443639 未动 |
+| 抖音 | `7702633275944193290` | 2026-10-31 重发：竖 3:4 封面 `e024e0de`，合集「不会写代码也能做软件｜VIBE 101」第 2 集。替代 `7702366884670246195` |
+| 视频号 | `export/UzFfBgAAxLiJSFw1JCyGk8zT4DCa2CZUuyfvKH6oQQjrNsUFnQ` | 2026-10-31 10:05 重发：短标题「不会写代码也能做软件」，desc 84 逐字一致，`coverUrl` 540×720 与旧稿封面差 **0.00**，合集 VIBECODING 第 2 集，声明原创 `isDeclared=1`。替代 `export/UzFfBgAAxIeJfCQjJC-Hk8zT4DCaE8uzMLHtIu11S1lMQJ8oeg` |
+
+抖音换片踩到的坑：发布时 `semi-ui` 的封面 `Upload` 组件不接收 `DOM.setFileInputFiles`（`input.files.length` 恒为 0），
+EP.01 第一次提交因此套用了 EP.04 的封面，需回到「编辑作品」重提；视频号这边同样的 CDP 调用在
+`Runtime.evaluate` 取到元素 `objectId` 后就能正常落盘——差别在于视频号是原生 input，抖音是组件封装。
+
+视频号把 50 MB 主片经 `fetch + DataTransfer` 注入页面会让 Chrome 主进程 100% CPU 卡死（复现两次）；
+改用 `DOM.setFileInputFiles { objectId }`（浏览器进程直接从磁盘读）后单集上传秒级完成。

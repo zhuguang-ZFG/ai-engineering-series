@@ -63,8 +63,8 @@ the big green 上线, a `deploy` card with ✓ 上传 / ✓ 分配域名 / ✓ �
 | 平台 | ID | 时长 | 封面 | 备注 |
 |---|---|---|---|---|
 | B站 | `BV1gKxv67Ejf` (cid `43178594090`) | 188 s | `80690e07eb196883a5df7cd8c2633dfe6ed186e8.jpg` 1920×1080 | 分区 科技数码 (tid 231)，7 标签，desc 226，合集 9443639 第 5 集 |
-| 抖音 | `7702405242045959465` | 187500 ms | 540×721 | 合集「不会写代码也能做软件｜VIBE 101」第 5 集 |
-| 视频号 | `export/UzFfBgAAxISJSCYFPleGk8zT4DCaiwiStB84jXY-SwHcUbwFWQ` | 187.5 s | `coverUrl` 540×720，与 `cover3x4.jpg` 差 3.14 | 短标题「手机也能玩你的蛇」，desc 159，合集 VIBECODING 第 5 条 |
+| 抖音 | `7702635831676194048` | 187500 ms | 540×721 | 合集「不会写代码也能做软件｜VIBE 101」第 5 集；**2026-10-31 换片**，竖 3:4 art `285deb7e`，替代 `7702405242045959465` |
+| 视频号 | `export/UzFfBgAAxKKJRFoJYS2Gk8zT4DCaOFI21Dqt0CUOWELixdEvLw` | 187.5 s | `coverUrl` 540×720，与旧稿封面差 **0.00**、与 `cover3x4.jpg` 差 4.39（转档噪声） | **2026-10-31 10:10 换片**：短标题「手机也能玩你的蛇」，desc 159（含 4 处空行，逐字一致），合集 VIBECODING 第 5 条，声明原创 `isDeclared=1`。替代 `export/UzFfBgAAxISJSCYFPleGk8zT4DCaiwiStB84jXY-SwHcUbwFWQ` |
 
 B站封面校验：把 `pic` 下载后与 `assets/covers/cover16x9.png` 逐像素比，整体差 1.58、
 左 10% 条 2.06、右 10% 条 0.77 —— 均匀 JPEG 噪声，说明存档的是完整 16:9 原图，
