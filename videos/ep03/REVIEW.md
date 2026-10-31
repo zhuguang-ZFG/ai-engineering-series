@@ -119,6 +119,11 @@ New-but-related family in `.tmp/covers/opus55/ep03-{3x4,4x3,16x9}/` (workspace-r
 - `cover4x3.jpg` 1440×1080 (抖音 横封面)
 - `cover16x9.png` 1920×1080 (Bilibili)
 
+> **封面已换（2026-10-31）**：`cover16x9.png` / `cover4x3.jpg` / `cover3x4.jpg` 由深色霓虹海报改成手绘稿，
+> 源文件 `design/handdraw/covers/ep03.html`，渲染 `python design/handdraw/render_covers.py`。
+> 尺寸与路径不变（1920×1080 / 1440×1080 / 1080×1440）。**线上平台仍挂着旧稿**；下面引用的
+> “与 `cover3x4.jpg` 差 x.xx” 是 2026-10-31 发布时的比对结果，比对对象是**换稿前**的文件。
+
 Motif: the same segmented snake ribbon, now ending inside an IDE window — file chips
 `index.html / style.css / game.js / package.json` plus a terminal `$ npm i howler` →
 `$ npm run dev`. Headline 这条蛇，现在住进 / **项目**. Vision review: 9/10 on all three,

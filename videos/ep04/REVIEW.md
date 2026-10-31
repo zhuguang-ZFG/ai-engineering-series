@@ -66,6 +66,10 @@ the big green 上线, a `deploy` card with ✓ 上传 / ✓ 分配域名 / ✓ �
 | 抖音 | `7702635831676194048` | 187500 ms | 540×721 | 合集「不会写代码也能做软件｜VIBE 101」第 5 集；**2026-10-31 换片**，竖 3:4 art `285deb7e`，替代 `7702405242045959465` |
 | 视频号 | `export/UzFfBgAAxKKJRFoJYS2Gk8zT4DCaOFI21Dqt0CUOWELixdEvLw` | 187.5 s | `coverUrl` 540×720，与旧稿封面差 **0.00**、与 `cover3x4.jpg` 差 4.39（转档噪声） | **2026-10-31 10:10 换片**：短标题「手机也能玩你的蛇」，desc 159（含 4 处空行，逐字一致），合集 VIBECODING 第 5 条，声明原创 `isDeclared=1`。替代 `export/UzFfBgAAxISJSCYFPleGk8zT4DCaiwiStB84jXY-SwHcUbwFWQ` |
 
+> **封面已换（2026-10-31）**：`cover16x9.png` / `cover4x3.jpg` / `cover3x4.jpg` 由深色霓虹海报改成手绘稿，
+> 源文件 `design/handdraw/covers/ep04.html`，渲染 `python design/handdraw/render_covers.py`；尺寸不变。
+> **线上平台仍挂着旧稿**；下面「与 `cover3x4.jpg` 差 4.39」「与 `cover16x9.png` 差 1.58」比对的是**换稿前**的文件。
+
 B站封面校验：把 `pic` 下载后与 `assets/covers/cover16x9.png` 逐像素比，整体差 1.58、
 左 10% 条 2.06、右 10% 条 0.77 —— 均匀 JPEG 噪声，说明存档的是完整 16:9 原图，
 不是 4:3 中心裁切再拉伸。

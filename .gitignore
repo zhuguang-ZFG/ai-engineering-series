@@ -5,6 +5,8 @@ node_modules/
 **/.thumbnails/
 **/.waveform-cache/
 **/renders/
+!design/handdraw/renders/
+!design/handdraw/renders/**
 **/archive/
 *.log
 tmp/

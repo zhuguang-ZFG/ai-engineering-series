@@ -52,6 +52,11 @@ Reused the EP.01 snake family, retitled for EP.02 (`EP.02` pill, 上期那条蛇
 - `assets/covers/cover4x3.jpg` 1440×1080 (Douyin 横封面)
 - `assets/covers/cover16x9.png` 1920×1080 (Bilibili)
 
+> **封面已换（2026-10-31）**：`cover16x9.png` / `cover4x3.jpg` / `cover3x4.jpg` 由深色霓虹海报改成手绘稿，
+> 源文件 `design/handdraw/covers/ep02.html`，渲染 `python design/handdraw/render_covers.py`。
+> 尺寸与路径不变（1920×1080 / 1440×1080 / 1080×1440）。**线上平台仍挂着旧稿**；下面引用的
+> “与 `cover3x4.jpg` 差 x.xx” 是 2026-10-31 发布时的比对结果，比对对象是**换稿前**的文件。
+
 Bilibili's 封面制作 editor stores exactly the art you last applied (`完成`) and the public
 `pic` mirrors it: applying the 4:3 art gave a 1440×1080 `pic`, applying the 16:9 art gave
 1920×1080 matching `cover16x9.png` (mean abs diff 1.57). Upload the 16:9 art last.
