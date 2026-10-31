@@ -89,6 +89,12 @@ The definition scene is still the most presentation-like shot. A later pass coul
 
 ## 发布记录 — 2026-10-31 换片（kinetic 重渲染）
 
+> **封面已换（2026-10-31，`c7715ea`）**：`deliverables/landscape-cover.webp` / `vertical-cover.webp`
+> 按 `videos/{landscape,vertical}/compositions/cover.html` 重出，脚本 `design/handdraw/render_ep01_covers.py`。
+> 旧图不仅缺 EP 数字 / 副标题 / `零基础实战` 卡片 / 绿色 CTA，连标题字号都不对（旧图约 76 px/字，composition 写的是 128 px），
+> 即它比 `27933f3` 时的 composition 还老。下表「竖 3:4 封面 `e024e0de`」「`coverUrl` …差 **0.00**」
+> 都是对着**换稿前**的文件量的，属于历史记录；平台侧仍是旧图。
+
 | 平台 | ID | 备注 |
 |---|---|---|
 | B站 | `BV1CoxY6YEhF` | 未变更：上一轮已用「更换视频」把 kinetic 重渲染替换进同一 BV，元数据 / 合集 9443639 未动 |
