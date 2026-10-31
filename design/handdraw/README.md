@@ -46,7 +46,7 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 | 资产 | 现状 | 改造稿 |
 | --- | --- | --- |
 | 书封面 `book/assets/cover.svg` / `cover.webp` | 代码海报风 | `covers.md` 第 0 组（未落地） |
-| EP.01 横版封面 `deliverables/landscape-cover.webp` | 手绘排版稿（`videos/landscape/compositions/cover.html`），但渲染停留在 10-29 | 需重出图 |
+| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ 2026-10-31 按 composition 重出（此前重出停在 10-29，缺 EP 数字、副标题、卡片、CTA） | `render_ep01_covers.py` |
 | EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
 | 书籍正文知识图解 | 截图为主，机制段落靠文字推演 | `book-illustrations.md` 首批 6 个点位 |
 
@@ -72,6 +72,14 @@ python design/handdraw/render_covers.py          # 9 张：ep02–04 × 16:9 / 4
 
 渲染用无头 Chrome（每次独立 `--user-data-dir`，Chrome 单例锁会让并发截图静默失败），尺寸钉死：
 16:9 = 1920×1080（B站 + `deliverables/ep0X-cover.webp`），4:3 = 1440×1080，3:4 = 1080×1440（抖音竖封面 / 视频号资料卡）。
+
+EP.01 的横 / 竖封面不走这套 html：它们本来就是 `videos/{landscape,vertical}/compositions/cover.html`，
+但这两个 template 没挂进任何 project index，`hyperframes snapshot` 够不到。它们的时间线只是一段 t=0 缩放到 1 的
+Ken Burns，静态 markup 就是封面本身，于是抽 `<template>` 出来直接截图：
+
+```bash
+python design/handdraw/render_ep01_covers.py     # 2 张：1920×1080 + 1080×1920
+```
 
 **平台侧还没换**：抖音 / B 站 / 视频号线上仍是 2026-10-30 的旧「绿蛇海报」；仓库里已是新手绘稿，要同步必须重新上传封面。
 
