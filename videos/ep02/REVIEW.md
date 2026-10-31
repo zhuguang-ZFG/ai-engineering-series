@@ -69,7 +69,7 @@ Bilibili's 封面制作 editor stores exactly the art you last applied (`完成`
 |---|---|---|
 | Bilibili | `BV1YWxP6YECS` | state 0, 195 s, tid 231, 7 tags, season 不会写代码也能做软件｜VIBE CODING 101, `pic` 1920×1080 = 16:9 art. **Re-cut 4K master swapped in 2026-10-30 15:5x via 更换视频**: `cid 43174596317`, title 37 / desc 252 / 7 tags / tid 231 / season 9443639 re-verified on `/x/vupre/web/archive/view`, queue row read `llm101-ep02_2026-10-30_14-04-04 4K 上传完成` |
 | Douyin | `7702634670449528073` | **Re-published 2026-10-31** with the kinetic re-render: 194500 ms, 竖 3:4 art (`c7655727`), 合集 VIBE 101 第3集. Superseded `7702367532556111154` (which had superseded `7702278077363014922`) |
-| 视频号 | `export/UzFfBgAAxLOJNGRMMiyGk8zT4DCayGlapOYWB2M2Cj2wLs0nwQ` | **Re-published 2026-10-31 10:07**: 短标题 会写诗的贪吃蛇, 190 字描述 (byte-identical to the superseded post), 合集 VIBECODING 第3集, 声明原创, `coverUrl` 540×720 diff **0.00** vs `cover3x4.jpg`. Superseded `…xICJKDpzbCyH…` |
+| 视频号 | `export/UzFfBgAAxLOJNGRMMiyGk8zT4DCayGlapOYWB2M2Cj2wLs0nwQ` | **Re-published 2026-10-31 10:07**: 短标题 会写诗的贪吃蛇, 190 字描述 (byte-identical to the superseded post), 合集 VIBECODING 第3集, 声明原创, `coverUrl` 540×720 与旧稿封面差 **0.00**、与 `cover3x4.jpg` 差 4.37（转档噪声）. Superseded `…xICJKDpzbCyH…`. **视频标注未复核**：旧稿标注过「含AI生成内容」，本次发布流程只设置了 desc / 短标题 / 合集 / 声明原创 / 封面，`post_list` 不暴露该字段，需人工到「修改描述和封面」确认 |
 
 Douyin submitted with 无需添加自主声明 and 立即发布/公开 defaults; the publish-options dialog did not
 appear on either publish run (the click went straight to 内容管理), so 不同时发布 was not available to set.
