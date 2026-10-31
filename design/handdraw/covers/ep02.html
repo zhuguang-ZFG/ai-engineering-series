@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>EP.02 封面</title>
+<link rel="stylesheet" href="cover.css" />
+</head>
+<body>
+  <div class="head">
+    <div class="kicker">VIBE CODING 101 · EP.02</div>
+    <div class="rule"></div>
+    <h1>会写诗的<br /><span class="g hl">贪吃蛇</span></h1>
+  </div>
+
+  <div class="art">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="一条绿色方块蛇坐在打字机前，纸带吐出三行诗，尾巴卷着一颗苹果">
+      <defs>
+        <filter id="hard" x="-8%" y="-8%" width="116%" height="118%">
+          <feDropShadow dx="0" dy="9" stdDeviation="0" flood-color="#1f2328" flood-opacity="0.12" />
+        </filter>
+      </defs>
+
+      <!-- paper strip: the poem -->
+      <g transform="translate(96 34)" filter="url(#hard)">
+        <path d="M20 12h330a16 16 0 0 1 16 16v300l-42-24-42 24-42-24-42 24-42-24-42 24-48-24V28A16 16 0 0 1 20 12Z"
+              fill="#fffdf8" stroke="#1f2328" stroke-width="8" stroke-linejoin="round" />
+        <g fill="#1f2328" font-size="58" font-weight="700" text-anchor="middle">
+          <text x="193" y="112">春风来</text>
+          <text x="193" y="192">很轻</text>
+          <text x="193" y="272">落进碗里</text>
+        </g>
+      </g>
+
+      <!-- snake: block segments climbing in from the right -->
+      <g fill="#1f883d" stroke="#1f2328" stroke-width="8">
+        <rect x="742" y="628" width="104" height="104" rx="26" />
+        <rect x="770" y="520" width="104" height="104" rx="26" />
+        <rect x="766" y="412" width="104" height="104" rx="26" />
+        <rect x="734" y="308" width="104" height="104" rx="26" />
+      </g>
+      <!-- head, tilted like a poet -->
+      <g transform="translate(628 190) rotate(-8)">
+        <rect x="0" y="0" width="136" height="126" rx="34" fill="#1f883d" stroke="#1f2328" stroke-width="9" />
+        <circle cx="44" cy="50" r="10" fill="#1f2328" />
+        <circle cx="94" cy="50" r="10" fill="#1f2328" />
+        <path d="M58 88q16 12 32 0" fill="none" stroke="#1f2328" stroke-width="8" stroke-linecap="round" />
+        <path d="M132 104q40 8 24 30" fill="none" stroke="#e2601f" stroke-width="8" stroke-linecap="round" />
+      </g>
+
+      <!-- typewriter -->
+      <g filter="url(#hard)">
+        <path d="M318 700h392a28 28 0 0 1 28 28l-16 92a32 32 0 0 1-32 28H338a32 32 0 0 1-32-28l-16-92a28 28 0 0 1 28-28Z"
+              fill="#1f2328" />
+        <rect x="300" y="666" width="428" height="50" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="8" />
+      </g>
+      <g fill="#fbfaf6" stroke="#1f2328" stroke-width="4.5">
+        <circle cx="372" cy="744" r="14" /><circle cx="422" cy="744" r="14" />
+        <circle cx="472" cy="744" r="14" /><circle cx="522" cy="744" r="14" />
+        <circle cx="572" cy="744" r="14" /><circle cx="622" cy="744" r="14" />
+        <path d="M348 790h332" stroke-width="9" stroke-linecap="round" />
+        <path d="M358 828h312" stroke-width="9" stroke-linecap="round" />
+      </g>
+
+      <!-- tail curling to the apple -->
+      <path d="M812 712q86 40 78 122q-8 74-96 66" fill="none" stroke="#1f2328" stroke-width="46" stroke-linecap="round" />
+      <path d="M812 712q86 40 78 122q-8 74-96 66" fill="none" stroke="#1f883d" stroke-width="32" stroke-linecap="round" />
+      <g transform="translate(700 856)">
+        <circle cx="52" cy="52" r="52" fill="#e2601f" stroke="#1f2328" stroke-width="8" />
+        <path d="M52 8v-18" stroke="#1f2328" stroke-width="9" stroke-linecap="round" />
+        <path d="M58 -8q28-15 37 7q-26 13-37-7Z" fill="#3fb950" stroke="#1f2328" stroke-width="6" />
+      </g>
+
+      <!-- hand-drawn ground line, same token as the video layer -->
+      <path d="M60 960q140 10 280 0t280 0t280 0" fill="none" stroke="#1f2328" stroke-width="6"
+            stroke-linecap="round" opacity=".28" />
+    </svg>
+  </div>
+
+  <div class="foot"><span>VIBE CODING 101</span><span class="dot">●</span><span>BEGINNER COURSE</span></div>
+</body>
+</html>

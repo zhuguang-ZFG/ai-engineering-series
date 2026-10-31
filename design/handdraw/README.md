@@ -45,10 +45,9 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 
 | 资产 | 现状 | 改造稿 |
 | --- | --- | --- |
-| 书封面 `book/assets/cover.svg` / `cover.webp` | 代码海报风 | `covers.md` 第 0 组 |
-| EP.01 横版封面 `deliverables/landscape-cover.webp` | 绿蛇海报 | `covers.md` 第 1 组 |
-| EP.01 竖版封面 `deliverables/vertical-cover.webp` | 绿蛇海报 | `covers.md` 第 2 组 |
-| EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | 绿蛇海报 | `covers.md` 第 3–5 组 |
+| 书封面 `book/assets/cover.svg` / `cover.webp` | 代码海报风 | `covers.md` 第 0 组（未落地） |
+| EP.01 横版封面 `deliverables/landscape-cover.webp` | 手绘排版稿（`videos/landscape/compositions/cover.html`），但渲染停留在 10-29 | 需重出图 |
+| EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
 | 书籍正文知识图解 | 截图为主，机制段落靠文字推演 | `book-illustrations.md` 首批 6 个点位 |
 
 ## 知识图解的七条红线（来自 article-illustration-planner + 本书实际图况，执行时必须遵守）
@@ -60,6 +59,21 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 5. **只新增，不替换**：书中已有的 `<figure>`（含 CC BY / CC BY-SA / 公有领域照片与 Design Council 官方双钻图）连同 `figcaption` 和署名原样保留；新图不得顶替它们，否则署名丢失、图说失锚。
 6. 间距按**已有图片**计算，不是从 0 开始：JTBD、访谈、双钻等章已有 8–14 张图，新图解要落在没有图的小节，不与现有 figure 背靠背。
 7. 图解不出现人物角色：主角是结构、箭头与标签（封面才允许人物幽默）。
+
+## 已落地：EP.02–EP.04 封面改造成手绘（2026-10-31）
+
+封面不再依赖生图模型，改成**代码画**：`covers/ep0X.html` + 共用 `covers/cover.css`，视觉 token 与视频手绘层完全一致
+（纸面 `#fbfaf6`、纸纹 24 px 点阵、墨线 `#1f2328`、marker `#d3efd9`、硬阴影、手绘地面线、波形下划线），
+每个 EP 一套独立隐喻：打字机写诗 / 拖行李箱搬进文件夹房子 / 从笔记本跳进云再落到手机。
+
+```bash
+python design/handdraw/render_covers.py          # 9 张：ep02–04 × 16:9 / 4:3 / 3:4
+```
+
+渲染用无头 Chrome（每次独立 `--user-data-dir`，Chrome 单例锁会让并发截图静默失败），尺寸钉死：
+16:9 = 1920×1080（B站 + `deliverables/ep0X-cover.webp`），4:3 = 1440×1080，3:4 = 1080×1440（抖音竖封面 / 视频号资料卡）。
+
+**平台侧还没换**：抖音 / B 站 / 视频号线上仍是 2026-10-30 的旧「绿蛇海报」；仓库里已是新手绘稿，要同步必须重新上传封面。
 
 ## 出图与回填流程
 
