@@ -722,7 +722,7 @@ flowchart TD
 
 钩子来自多个配置源。`getAllHooks` 函数展示了收集流程：首先检查是否限制为仅托管钩子，如果没有限制，则从 userSettings、projectSettings、localSettings 三个来源收集钩子，最后还会获取会话钩子。
 
-`sortMatchersByPriority` 函数定义了优先级排序。优先级基于配置源常量数组，其顺序为 localSettings、projectSettings、userSettings。
+`sortMatchersByPriority` 函数定义了优先级排序。优先级照配置源常量数组排，顺序是 localSettings、projectSettings、userSettings。
 
 完整的优先级顺序为：
 
