@@ -293,6 +293,51 @@ The `bubble` mode is an internal mode (not exposed externally), used for sub-age
 
 The internal permission mode type includes all modes (including auto and bubble), while the external visibility check function ensures that internal modes are not leaked to external interfaces. This type design that differentiates between internal and external is an embodiment of the "information hiding" principle -- external users do not need to know about the bubble mode's existence; it is an internal implementation detail.
 
+### 4.3.6 Cross-Check: Where `ask` Goes When Nobody Answers
+
+After the four stages, `passthrough` and every call no rule matched settle on `ask` -- and `ask` assumes one thing: a person sitting at the terminal. Move this pipeline into a script and stage 4 hangs in the air. Below, the five other agent CLIs installed on this machine are laid on the same table: version numbers come from local runs, flag semantics from each vendor's own documentation page, and the English inside quotes is original wording, untranslated.
+
+```mermaid
+flowchart LR
+    ASK["Pipeline returns ask<br/>nobody at the terminal"]
+
+    D1["Claude Code -p<br/>denied on the spot<br/>a hook or allow rule can answer"]
+    D2["Qoder -p<br/>Auto-deny<br/>written out in the docs"]
+    D3["Cursor agent -p<br/>downgraded to a proposal<br/>nothing lands on disk"]
+    D4["Codex exec<br/>replaced by a wall<br/>three sandbox tiers"]
+    D5["handed to another AI<br/>Claude auto<br/>Cursor --auto-review<br/>Codex --approve-for-me"]
+    D6["moved into the launch mode<br/>Qoder dont_ask<br/>Kimi -y / --auto<br/>omp --approval-mode"]
+
+    ASK --> D1
+    ASK --> D2
+    ASK --> D3
+    ASK --> D4
+    ASK --> D5
+    ASK --> D6
+
+    classDef reject fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef demote fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef wall fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef delegate fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    class D1 reject
+    class D2 reject
+    class D3 demote
+    class D4 wall
+    class D5 delegate
+    class D6 delegate
+```
+
+- **Claude Code 2.1.310 (this book's baseline)**: `claude -p` starts in Manual mode (since v2.1.302, when nothing else sets a mode), and an `ask` the pipeline produces is denied if nobody answers -- unless `--allowedTools`, a `permissions.allow` rule, a `PermissionRequest` hook, or `--permission-prompt-tool` answered for it first. `--permission-prompts none` (since v2.1.259) skips the host as well and tells the model outright that no one can approve, so it should not retry; under `--output-format stream-json` those refusals stay in the output as `permission_denied` events.
+- **Codex CLI 0.166.0**: `codex exec` carries no approval axis at all -- `-a/--ask-for-approval` (values `on-request`, `never`) exists only on the interactive command. It swaps "who nods" for "which wall the command runs inside": `-s/--sandbox` takes `read-only`, `workspace-write`, or `danger-full-access`; `--approve-for-me` routes approval requests through automatic review; `--dangerously-bypass-approvals-and-sandbox` removes prompts and sandbox together, self-labelled EXTREMELY DANGEROUS and meant only for environments already sandboxed from outside.
+- **Cursor agent 2026.10.22**: `agent -p` without `--force` demotes the write step -- the official headless page says "changes are only proposed, not applied"; the same vendor's permissions page writes "Print mode can use write and shell tools", and those two pages do not line up here -- this section follows the first, because it says what actually happens when `--force` is absent. `--force` describes itself as "Force allow commands unless explicitly denied", and `--yolo` is its alias; `--auto-review` hands the call to a server classifier, which runs the safe ones and still asks about the rest. The rule grammar comes from a different lineage too: five token types -- `Shell(git)`, `Read(.env*)`, `Write(**/*.key)`, `WebFetch(*)`, `Mcp(datadog:*)` -- and "Deny rules take precedence over allow rules".
+- **Qoder CLI 1.1.81**: its documentation pins the landing point in a table -- in headless (`-p`) the outcome of `ask` reads "Auto-deny", and the `dont_ask` mode exists for flows that must never prompt: "Never prompts. Any action that would normally ask is denied instead." Getting anything through means naming a scope: `--permission-mode accept_edits`, `--yolo`, or `--allowed-tools 'Read,Bash(git status)'` down to one subcommand. Non-default modes apply only inside trusted directories; elsewhere Qoder falls back to `default`.
+- **Kimi Code 2.4.1**: the startup gear is the approval axis. `-y/--yolo` starts in Ask When Needed ("routine edits and commands run automatically; risky actions, questions, and plans still ask"), `--auto` starts in Never Ask, and `-p` merely skips the TUI -- it adds no axis of its own.
+- **oh-my-pi 18.14.2**: `--approval-mode` overrides `tools.approvalMode` from config with four values, `always-ask|always-ask-cached|write|yolo`, and `--auto-approve` drops every prompt in one go.
+
+Three threads rise out of this list on their own. First, `ask` never disappears; it gets relocated -- into a sandbox (Codex), into a server classifier (Cursor's `--auto-review`, Codex's `--approve-for-me`, this book's auto mode), into the startup gear (Kimi's two modes, Qoder's `dont_ask`), or down to a proposal that never lands (Cursor's default). Second, not one of the six reads "nobody answers" as "approve by default": even the most aggressive setting only narrows what gets refused and replaces the fallback with isolation. Third, Cursor's "unless explicitly denied" and the `deny` that sits first in Qoder's decision order are the same rule as step 1a -- an explicit deny is the one door in this layer nothing walks past, and six independent designs agree on it.
+
+> **Standing as cross-checks:** these five CLIs are registered in `CREDITS.md` as **cross-checks**, the same standing the other open-source harnesses hold in Chapters 1, 14, and 15 -- they support no technical claim in this chapter and exist to show what the same boundary grows into elsewhere.
+
 ## 4.4 BashTool Permission Details
 
 The Bash tool is the most complex tool in the permission system because the composability and expressiveness of shell commands far exceed those of other tools. A simple `git` command can be safe (`git status`) or dangerous (`git push --force origin main`). The permission system needs to understand the semantics of commands, not merely match command names.

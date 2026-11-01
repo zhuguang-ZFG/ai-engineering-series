@@ -2,7 +2,7 @@
 
 > **DRAFT —— 未进 `yuyu-book/manifest.json`，不进 HTML/PDF 产物，不作正文依据。**
 > 生成方式：本机全量 `--help` 抓取 + 安装目录实地查看；Cursor 与 Qoder 的行为语义另读官方文档补齐（2026-11-01，Windows 11 / Git Bash）。每条断言属哪一级证据，见 §五。
-> 读完需要的决定只有一个：文末「三个落点」选哪一个。
+> 落点已定（2026-11-01）：本页继续停在 C（不进 manifest），最值钱的那一格按 B 落进第 4 章 §4.3.6；页内其余用法清单仍是草稿，且 §二 的 Cursor 那格按 headless 页改过一次口径（见该条）。
 
 ## 一、这页想干什么
 
@@ -44,11 +44,11 @@
 - **Oh My Pi → 第 7 章 上下文管理 + 第 14 章 Plan 模式。** `--no-context-files`、`compress`（把文本压成稠密 prompt 语域并报告丢了什么）、`find`（描述行为→返回实现它的文件与行段）、`toks`（多个离线 tokenizer 同时计数）全是对上下文的显式手术；`--prewalk` / `--plan-yolo` 则把「规划用哪个模型、执行用哪个模型」写成了命令行旗标——第 14 章的 Plan 模式在这里变成了定价决策。
 - **Kimi → 第 5 章 设置与配置 + 第 11 章 技能与插件。** 命令面最小（14 个长选项），却把 `config.toml` 的模型 alias 表、`--skills-dir`、`--agent-file` 三个扩展位留得干干净净：一套「小核心 + 外插」的取向。
 - **Qoder → 第 4 章 + 第 8 章，是五家里护栏层写得最厚的一本。** 三件事值得抄进正文：其一，钩子插在判定管线里两个点上，且 `PreToolUse` 返回 `deny` 的优先级**高于一切权限模式**——`bypass_permissions` 也拦得住，这正是第 8 章「扩展点」在安全上的兑现；其二，`auto` 档把授权交给一个两阶段分类器（第一阶段只能放行，只有第二阶段能判拦），连续拦截到上限触发熔断才恢复询问，而分类器不可达时**判拒而不是转人工**；其三，`autoMode` 的自定义规则只从用户全局设置读取，工作区里的同名文件一律忽略，文档给的理由是「仓库随 checkout 一起来，能往分类器里加 allow 项就等于把危险动作往放行上带」——第 5 章讲配置来源优先级时，这是一个把信任边界画在文件来源而不是字段上的实例。另外它把路径形态（UNC 网络位置、备用数据流 `file.txt:stream`、8.3 短名、设备路径、`CON` / `NUL`）当作**独立于规则的第二条轴**单独处理，网络位置的确认还不给「总是允许」。（`--agents <json>` 在命令行上直接定义子智能体、`--output-style` 只能改语气结构而改不动身份与安全约束，这两条仍可回扣第 11 章与第 15 章。）
-- **Cursor → 第 4 章 权限管线，而且是目前最尖锐的那个对照。** 它的 CLI 入口是独立的 `agent`（`curl https://cursor.com/install -fsS | bash` / Windows 用 `irm 'https://cursor.com/install?win32=true' | iex`），**不是** `cursor agent`——后者是 IDE 的 shim，所以本机探针全打空。两处值得落字：其一，文档在两个页面各写了一次「非交互模式拥有 write 与 shell 的全量权限」，无人值守时的权限退化在别家只是推演，在这里是明文承诺，反制手段是 deny 优先的规则表和 `--trust` 这个显式开关；其二，它把「工具 × 路径 / 参数 glob」（`Shell(curl:*)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*.example.com)`、`Mcp(datadog:*)`）而不是「能力档位 × 审批时机」当成护栏的主语——与 Codex 的 3 × 2 矩阵正好是同一层的两种解法。另有 `--mode ask` 提供 Plan 之外的第二个只读档，可回扣第 14 章。
+- **Cursor → 第 4 章 权限管线，而且是目前最尖锐的那个对照。** 它的 CLI 入口是独立的 `agent`（`curl https://cursor.com/install -fsS | bash` / Windows 用 `irm 'https://cursor.com/install?win32=true' | iex`），**不是** `cursor agent`——后者是 IDE 的 shim，所以本机探针全打空。两处值得落字：其一，permissions 页原话是 "Print mode can use write and shell tools"——这句说的是 print 模式的工具集没被裁掉，不等于改动会落盘：headless 页另写 "Without `--force`, changes are only proposed, not applied"，两页在「无人值守的写」这一格上不口径一致，正文取后一句，因为它说得出实际后果。反制手段是 deny 优先的规则表和 `--trust` 这个显式开关；其二，它把「工具 × 路径 / 参数 glob」（`Shell(curl:*)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*.example.com)`、`Mcp(datadog:*)`）而不是「能力档位 × 审批时机」当成护栏的主语——与 Codex 的 3 × 2 矩阵正好是同一层的两种解法。另有 `--mode ask` 提供 Plan 之外的第二个只读档，可回扣第 14 章。
 
-把它和另外两家并排看，这页最值钱的一格就出来了：**「没有人按键时，一个待确认的动作怎么办？」三家给了相反的答案。** Cursor 的 `-p` 直接放行 write 与 shell；Qoder 的 `-p` 把所有 `ask` 判成 deny；Codex 的 `-a never` 既不放开也不一律拒，而是把边界交给同时指定的 `-s` 沙箱档位（它的 help 只说「执行失败立刻回给模型」）。同一个空白，三种填法。
+把它和另外两家并排看，这页最值钱的一格就出来了：**「没有人按键时，一个待确认的动作怎么办？」三家给了相反的答案。** Cursor 的 `-p` 留着 write 与 shell 这两个工具，但改动只出提议、不落盘（permissions 页那句讲的是工具集，不是落盘权限）；Qoder 的 `-p` 把所有 `ask` 判成 deny；Codex 的 `-a never` 既不放开也不一律拒，而是把边界交给同时指定的 `-s` 沙箱档位（它的 help 只说「执行失败立刻回给模型」）。同一个空白，三种填法。
 
-更要紧的是 Cursor 一家就摆了四个开关：`-p` 全放、`--force`（`--yolo`）是「除非命中 deny 否则放」、`--auto-review` 把每次工具调用交给**服务端**分类器判（help 原文：safe tool calls 自动跑，其余照旧问）、`--sandbox enabled` 又换成沙箱划界。把它和 Qoder 的 `auto` 对着看更有意思：两家都把「谁来判」外包给一个分类器，可一个跑在服务侧、一个跑在本地模型侧，连失败行为都相反——Qoder 在分类器不可达时判拒，Cursor 的分类器既然在远端，判不了会怎样文档没说。这一格没有公认答案，而正文第 4 章目前是按「一条管线」写的。
+更要紧的是 Cursor 一家就摆了四个开关：`-p` 只收提议、`--force`（`--yolo`）是「除非命中 deny 否则放」、`--auto-review` 把每次工具调用交给**服务端**分类器判（help 原文：safe tool calls 自动跑，其余照旧问）、`--sandbox enabled` 又换成沙箱划界。把它和 Qoder 的 `auto` 对着看更有意思：两家都把「谁来判」外包给一个分类器，可一个跑在服务侧、一个跑在本地模型侧，连失败行为都相反——Qoder 在分类器不可达时判拒，Cursor 的分类器既然在远端，判不了会怎样文档没说。这一格没有公认答案，而正文第 4 章目前是按「一条管线」写的。
 
 ## 五、证据等级
 
@@ -70,7 +70,7 @@
 | **B 并进 `ch15` 末尾一小节** | unit 数保持 20、`guides` 不动；只在文件末尾追加，不搬动任何已有 `glosses.json` 行锚；仍需中英同步、页数重钉、五道闸 | 中。但 ch15 的收束语气是「拆自己」，插一节横向竞品对照会岔开它 |
 | **C 留在 `docs/notes/`（现状）** | 什么都不动 | 零。代价是它不进 HTML/PDF，读者看不到，只对后续写作当素材 |
 
-**建议：先停在 C，但落点已经能指名了。** 触发条件这一页就凑齐了——第 4 章手上现在有三个现成实例：Codex 把能碰什么与何时喊人拆成两轴，Qoder 让 `PreToolUse` 的 `deny` 压过 `bypass_permissions`，Cursor 干脆在 print 模式里放行 write 与 shell。等下一次动第 4 章时按 B 落进那一章，而不是新开 unit。落的时候有两件事要先定：`sources` 得能指向已登记 ID（`gh-codex` 现成，kimi-code / oh-my-pi 可按 §三 的规矩新增，Qoder 与 Cursor 只能走 §五 提出的「非 Anthropic 官方文档是否进依据链」这一步）；以及一整页说明书式的对照不能整段搬进正文，只搬那一格「没人按键时怎么办」。
+**建议已采纳（2026-11-01）：草稿停在 C，那一格按 B 落进第 4 章。** 触发条件这一页就凑齐了——第 4 章手上现在有三个现成实例：Codex 把能碰什么与何时喊人拆成两轴，Qoder 让 `PreToolUse` 的 `deny` 压过 `bypass_permissions`，Cursor 在 print 模式里把写降成一份不落盘的提议。动第 4 章时按 B 落进那一章，不新开 unit——这一条已经执行，正文里只搬那一格，一整页说明书式的对照留在本页。落的时候有两件事要先定：`sources` 得能指向已登记 ID（`gh-codex` 现成，kimi-code / oh-my-pi 可按 §三 的规矩新增，Qoder 与 Cursor 只能走 §五 提出的「非 Anthropic 官方文档是否进依据链」这一步）；以及一整页说明书式的对照不能整段搬进正文，只搬那一格「没人按键时怎么办」。
 
 ## 七、还缺什么
 

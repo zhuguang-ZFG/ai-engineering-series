@@ -293,6 +293,51 @@ auto 模式的一个重要安全设计是：某些安全检查类型的决策（
 
 内部权限模式类型包含了所有模式（包括 auto 和 bubble），而外部可见性检查函数确保内部模式不会泄露到外部接口。这种内外有别的类型设计是"信息隐藏"原则的体现——外部用户不需要知道 bubble 模式的存在，它是内部实现细节。
 
+### 4.3.6 对照面：没人答话时，`ask` 去了哪里
+
+管线走完四步，`passthrough` 和没被规则命中的调用都收在 `ask` 上，而 `ask` 预设了一件事：终端前坐着人。把这条管线换进脚本，第 4 步就悬在半空。下面把本机装着的另外五套 Agent CLI 摆上同一张台面——版本号是本机实测，旗标语义取自各家官方文档当页，引号内的英文是原文、未译。
+
+```mermaid
+flowchart LR
+    ASK["管线判出 ask<br/>终端前没人"]
+
+    D1["Claude Code -p<br/>就地拒<br/>hook 与 allow 规则可代答"]
+    D2["Qoder -p<br/>Auto-deny<br/>官方文档直写"]
+    D3["Cursor agent -p<br/>降成提议<br/>不落盘"]
+    D4["Codex exec<br/>换成墙<br/>sandbox 三档"]
+    D5["交给另一个 AI<br/>Claude auto<br/>Cursor --auto-review<br/>Codex --approve-for-me"]
+    D6["挪进启动档位<br/>Qoder dont_ask<br/>Kimi -y / --auto<br/>omp --approval-mode"]
+
+    ASK --> D1
+    ASK --> D2
+    ASK --> D3
+    ASK --> D4
+    ASK --> D5
+    ASK --> D6
+
+    classDef reject fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef demote fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef wall fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef delegate fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    class D1 reject
+    class D2 reject
+    class D3 demote
+    class D4 wall
+    class D5 delegate
+    class D6 delegate
+```
+
+- **Claude Code 2.1.310（本书基线）**：`claude -p` 起来就是 Manual 模式（v2.1.302 起，前提是没别的东西设定档位），管线判出的 `ask` 没人应答即被拒——除非 `--allowedTools`、`permissions.allow` 规则、`PermissionRequest` hook 或 `--permission-prompt-tool` 事先替它答了。`--permission-prompts none`（v2.1.259 起）连宿主也不问，并直接告诉模型没人能批、别重试；`--output-format stream-json` 下这些拒绝以 `permission_denied` 事件留在输出里。
+- **Codex CLI 0.166.0**：`codex exec` 这一支干脆不带审批轴，`-a/--ask-for-approval`（取值 `on-request`、`never`）只出现在交互模式里。它把「谁点头」换成「跑在哪面墙里」：`-s/--sandbox` 取 `read-only`、`workspace-write`、`danger-full-access` 三档；`--approve-for-me` 把审批请求转给自动复审；`--dangerously-bypass-approvals-and-sandbox` 连提示带沙箱一起拆掉，自述 EXTREMELY DANGEROUS，只给已被外部沙箱包住的环境。
+- **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步被降格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
+- **Qoder CLI 1.1.81**：官方文档把落点钉在表里——headless（`-p`）下 `ask` 的 outcome 写着 "Auto-deny"，`dont_ask` 一档专为「绝不能弹提示」的流程而生："Never prompts. Any action that would normally ask is denied instead." 想放行得报出范围：`--permission-mode accept_edits`、`--yolo`，或精确到子命令的 `--allowed-tools 'Read,Bash(git status)'`。非默认档位只在受信任目录生效，否则回落 `default`。
+- **Kimi Code 2.4.1**：档位本身就是审批轴。`-y/--yolo` 启动在 Ask When Needed（"routine edits and commands run automatically; risky actions, questions, and plans still ask"），`--auto` 启动在 Never Ask；`-p` 只是不开 TUI，没另设一条审批轴。
+- **oh-my-pi 18.14.2**：`--approval-mode` 以四个值 `always-ask|always-ask-cached|write|yolo` 覆盖配置里的 `tools.approvalMode`，`--auto-approve` 一次放下全部提示。
+
+三条线索从这份清单里自己浮出来。第一，`ask` 不会凭空消失，只会被挪走：挪进沙箱（Codex）、挪进服务端分类器（Cursor 的 `--auto-review`、Codex 的 `--approve-for-me`、本书的 auto 模式）、挪进启动档位（Kimi 的两档、Qoder 的 `dont_ask`），或者降成一份不落盘的提议（Cursor 的默认）。第二，六家里没有一个把「没人应答」读作「默认放行」——最激进的档位也只是把拒绝的条件收窄，把兜底换成隔离。第三，Cursor 的 "unless explicitly denied" 与 Qoder 决策顺序里排在第一位的 `deny`，和步骤 1a 是同一条规矩：显式拒绝是这一层唯一不给绕过去的入口，六套各自的设计在这里不约而同。
+
+> **对照面的身份：** 这五套命令行在 `CREDITS.md` 里登记为**对照面**，与第 1、14、15 章用过的其他开源线束同一身份——不支撑本章任何技术论断，只用来看同一条边界在别人手里长成什么形状。
+
 ## 4.4 BashTool 的权限细节
 
 Bash 工具是权限系统中最复杂的工具，因为 shell 命令的组合性和表达力远超其他工具。一个简单的 `git` 命令可以是安全的（`git status`），也可以是危险的（`git push --force origin main`）。权限系统需要理解命令的语义，而不仅仅是匹配命令名。

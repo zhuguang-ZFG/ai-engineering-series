@@ -1,6 +1,6 @@
 {
   "version": "0.3.5",
-  "date": "2026-10-31",
+  "date": "2026-11-01",
   "author": "LinTsinghua",
   "repository": "https://github.com/lintsinghua/claude-code-book",
   "license": {
@@ -426,7 +426,14 @@
         "docs-env-vars",
         "cc-issues",
         "cc-changelog",
-        "gh-codex"
+        "gh-codex",
+        "docs-headless",
+        "docs-cursor-cli-headless",
+        "docs-cursor-cli-permissions",
+        "docs-qoder-cli-permissions",
+        "docs-kimi-code-command",
+        "gh-kimi-code",
+        "gh-oh-my-pi"
       ],
       "plain": {
         "zh": "工具请求要过四道关：验格式、查规则、工具自审、人点头；显式拒绝压过一切放行",
