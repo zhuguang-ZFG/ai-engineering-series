@@ -3,6 +3,11 @@
   "caps": 26,
   "sents": 10,
   "sfx": 32,
+  "bgm": {
+    "path": "assets/bgm/track.wav",
+    "duration": 50.936,
+    "gain": 0.117
+  },
   "hook": 3.2,
   "out": "D:\\Users\\claude\\claude-code-book-main\\video\\ch05\\out\\ch05-short-v1.mp4",
   "anchors": {

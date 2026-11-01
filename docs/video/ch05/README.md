@@ -32,5 +32,7 @@
 
 - 工具链：`video/ch05/tools` → junction → `video/ch01/tools`
 - 长讲：镜像 `video/ch04/hf-remake/build_dense_v2.py`（densify v2 已修 hold 插值泄漏）
-- 短片：镜像 `video/ch04/hf-remake/build_short.py`
+- 短片：镜像 `video/ch04/hf-remake/build_short.py`，音频这一层已分叉——音效改用 media-use 自带的免版权库、
+  背景音乐加了本地 MusicGen 生成的一条 bed（详见 `STATUS.md`「短片音频」）。ch01–ch04 都没有 bed，本章是第一支；
+  后续章节直接抄 ch05 的 `stage_sfx()` / `bgm_tag()`，别再回到 `struct` 现算 WAV。
 - 钩子沿革：ch03「锤子 vs 双手」→ ch04「万能钥匙 vs 四道闸」→ ch05「一个文件 vs 六层岩」

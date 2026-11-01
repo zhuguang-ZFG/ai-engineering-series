@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ch05 short-v1: 一个文件 vs 六层岩 · hard A/V sync off the TTS phrase times. No publish."""
 from __future__ import annotations
-import asyncio, html, json, math, struct, subprocess, wave
+import asyncio, html, json, shutil, subprocess, wave
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -58,52 +58,70 @@ def ensure() -> None:
         d.mkdir(parents=True, exist_ok=True)
 
 
-def synth_sfx() -> None:
-    out = ASSETS / "sfx"
-    specs = {
-        "whoosh": (0.28, 900, 180),
-        "impact": (0.22, 80, 40),
-        "rein_snap": (0.12, 2200, 600),
-        "gallop": (0.55, 120, 90),
-        "ui_blip": (0.08, 1400, 1100),
-        "punch": (0.18, 60, 30),
-        "glitch": (0.15, 400, 1200),
-        "tick": (0.06, 1800, 1600),
-    }
-    for name, (dur, f0, f1) in specs.items():
-        path = out / f"{name}.wav"
-        if path.exists() and path.stat().st_size > 500:
-            continue
-        sr = 44100
-        n = int(sr * dur)
-        frames = bytearray()
-        for i in range(n):
-            t = i / sr
-            env = math.exp(-t * (8 if name != "whoosh" else 4))
-            if name == "whoosh":
-                freq = f0 + (f1 - f0) * (t / max(dur, 1e-6))
-                sample = env * 0.45 * math.sin(2 * math.pi * freq * t)
-            elif name == "gallop":
-                hit = 0.0
-                for k in (0.0, 0.18, 0.36):
-                    dt = t - k
-                    if 0 <= dt < 0.08:
-                        hit += math.exp(-dt * 40) * math.sin(2 * math.pi * f0 * dt)
-                sample = 0.55 * hit
-            elif name in ("rein_snap", "glitch"):
-                noise = ((i * 1103515245 + 12345) & 0x7FFF) / 32768.0 - 0.5
-                sample = env * (0.35 * math.sin(2 * math.pi * f0 * t) + 0.4 * noise)
-            elif name == "tick":
-                sample = env * 0.5 * math.sin(2 * math.pi * f0 * t)
-            else:
-                sample = env * 0.6 * math.sin(2 * math.pi * f0 * t)
-            sample = max(-1.0, min(1.0, sample))
-            frames += struct.pack("<h", int(sample * 30000))
-        with wave.open(str(path), "w") as w:
-            w.setnchannels(1)
-            w.setsampwidth(2)
-            w.setframerate(sr)
-            w.writeframes(frames)
+# Real library cues (Pixabay Content License, no attribution required), staged
+# from the media-use skill's bundled offline set. durations come from that set's
+# manifest.json, which is the documented offline timing source.
+SFX_LIB = Path.home() / ".qoder" / "skills" / "media-use" / "audio" / "assets" / "sfx"
+
+# Track gain per cue. The narration stem measures -24.9 LUFS integrated
+# (ffmpeg -i assets/short-vo.mp3 -af loudnorm=print_format=summary), so every
+# cue is placed a fixed number of LU under it: gain g lands the cue at
+# (its own LUFS + 20*log10 g). Accents sit 9 LU under, the bass hits and the
+# riser 6 LU under, glitch-3 10 LU under because it is texture, not an event.
+# click and click-soft are shorter than the R128 gating window and report no
+# integrated value, so those two are placed from their -4.8 dBTP peak instead.
+# key-press is the library's quietest cue (-36.4 LUFS): it keeps full gain and
+# still lands 11 LU under the voice.
+SFX_GAIN = {
+    "click": 0.22, "click-soft": 0.22, "pop": 0.23, "key-press": 1.00,
+    "ping": 0.43, "chime": 0.56, "sparkle": 0.13, "whoosh-short": 0.13,
+    "glitch-1": 0.14, "glitch-3": 0.24, "error": 0.66,
+    "impact-bass-1": 0.07, "impact-bass-2": 0.09, "riser": 0.05,
+}
+
+# Music bed generated locally by facebook/musicgen-small (no credential, CPU):
+# node <media-use>/audio/scripts/audio.mjs route, 12 s seed crossfade-looped to
+# 51 s. Measured the same way as the cues, then placed 12 LU under the narration.
+BGM = ASSETS / "bgm" / "track.wav"
+# make_bgm.py --seed 7 measures -18.3 LUFS / -1.0 dBTP; the narration stem
+# measures -24.9 LUFS, so 0.117 (-18.6 dB) parks the bed 12 LU under the voice.
+BGM_GAIN = 0.117
+
+
+def stage_sfx() -> dict[str, float]:
+    """Copy every cue this film can use out of the library and return their
+    durations. A missing library is a build error: the cues have no stand-in."""
+    lib = SFX_LIB / "manifest.json"
+    if not lib.exists():
+        raise SystemExit(f"sfx library not installed: expected {lib}")
+    manifest = json.loads(lib.read_text(encoding="utf-8"))
+    durs: dict[str, float] = {}
+    for name in sorted(SFX_GAIN):
+        meta = manifest.get(name)
+        if meta is None:
+            raise SystemExit(f"sfx cue {name!r} is not in {lib}")
+        src = SFX_LIB / meta["file"]
+        if not src.exists():
+            raise SystemExit(f"sfx library file missing: {src}")
+        dst = ASSETS / "sfx" / meta["file"]
+        if not dst.exists() or dst.stat().st_size != src.stat().st_size:
+            shutil.copyfile(src, dst)
+        durs[name] = float(meta["duration"])
+    (ASSETS / "sfx" / "CREDITS.md").write_text(
+        "# Sound cues\n\n"
+        "Every cue here is copied from the media-use skill's bundled offline set "
+        f"(`{SFX_LIB.as_posix()}`), sourced from Pixabay sound effects and used "
+        "under the Pixabay Content License, which allows commercial and "
+        "non-commercial use, modification and redistribution inside derivative "
+        "works such as this render, with no attribution required.\n\n"
+        "Cues this film uses:\n\n"
+        + "".join(f"- `{name}.mp3`\n" for name in sorted(SFX_GAIN))
+        + "\nNo cue is synthesised and no cue is generated: the film's soundtrack "
+        "uses these files as they are, at the track gains recorded in "
+        "`build_short.py` `SFX_GAIN`.\n",
+        encoding="utf-8",
+    )
+    return durs
 
 
 def split_phrases(text: str) -> list[str]:
@@ -265,56 +283,65 @@ def anchor_map(phrases: list[dict], total: float) -> dict[str, float]:
 
 
 def band_times(phrases: list[dict], t: dict[str, float]) -> list[tuple[str, float]]:
-    """One band per stratum name, keyed off the phrase that says it."""
+    """One band per stratum name, keyed off the phrase that says it, then spaced
+    so no two strata land inside 0.06 s of each other. This is the list the
+    tweens animate and the cues sit on, so the spacing rule lives here."""
     out = []
+    prev = t["$T_ROCK$"]
     for bid, kw in LAYERS:
-        out.append((bid, find_time(phrases, [kw], t["$T_ROCK$"], t["$T_COVER$"], f"band:{bid}", 0)))
+        ts = max(find_time(phrases, [kw], t["$T_ROCK$"], t["$T_COVER$"], f"band:{bid}", 0), prev + 0.06)
+        prev = ts
+        out.append((bid, ts))
     return out
 
 
-def sfx_on_phrases(phrases: list[dict], t: dict[str, float], total: float) -> list[tuple[float, str, float]]:
-    ev: list[tuple[float, str, float]] = [
-        (0.60, "ui_blip", 0.52), (1.10, "tick", 0.46), (1.60, "ui_blip", 0.50),
-        (2.20, "glitch", 0.58), (2.32, "impact", 0.68), (3.50, "punch", 0.60),
+def key_times(t: dict[str, float]) -> list[float]:
+    """One key per stratum hung across the sentence that explains the rule."""
+    k0, k1 = t["$T_RINGBOX$"], t["$T_KEYRULE$"]
+    step = max(0.16, (k1 - k0) / max(len(LAYERS), 1))
+    return [k0 + 0.15 + i * step for i in range(len(LAYERS))]
+
+
+# A cue per visible action, never a cue per spoken clause. Everything after the
+# hook reads an anchor or a band/key landing, so a re-spoken narration moves the
+# soundtrack with the picture; the five opening cues read tween times written in
+# tpl/dense-short-v3.tpl.html (#b-edit 0.60, #mval 1.10, #b-restart 1.60,
+# #xmark 2.30, #ftitle 3.50) and are stated here as those times.
+BAND_CUES = ["pop", "click-soft", "pop", "click-soft", "pop", "ping"]
+
+
+def sfx_events(t: dict[str, float], bands: list[tuple[str, float]],
+               durs: dict[str, float], total: float) -> list[tuple[float, str]]:
+    ev: list[tuple[float, str]] = [
+        (0.60, "click"), (1.10, "key-press"), (1.60, "click"),
+        (2.30, "error"), (3.50, "impact-bass-1"),
+        (t["$T_ROCK$"], "whoosh-short"),
+        *[(ts, cue) for (_, ts), cue in zip(bands, BAND_CUES)],
+        (t["$T_PRIO$"], "sparkle"),
+        (t["$T_COVER$"], "whoosh-short"), (t["$T_COVER$"] + 0.55, "impact-bass-1"),
+        (t["$T_RING$"], "ping"), (t["$T_ANS$"], "impact-bass-1"),
+        (t["$T_RINGBOX$"], "whoosh-short"),
+        *[(kt, "key-press") for kt in key_times(t)],
+        (t["$T_KEYRULE$"], "click"),
+        (t["$T_SIGN$"] - 10.03, "riser"),
+        (t["$T_DENY$"], "error"), (t["$T_CUT$"], "glitch-1"),
+        (t["$T_GREY$"], "glitch-3"), (t["$T_SIGN$"], "impact-bass-2"),
+        (t["$T_CTA$"], "sparkle"), (t["$T_CTA$"] + 0.70, "chime"),
     ]
-    kinds = ["tick", "ui_blip", "whoosh", "impact", "punch", "glitch", "rein_snap"]
-    for i, p in enumerate(phrases):
-        ts = p["start"]
-        if ts >= total - 0.15:
-            continue
-        name = kinds[i % len(kinds)]
-        vol = 0.38 + (i % 3) * 0.05
-        txt = p["text"]
-        if any(k in txt for k in ("插件", "用户", "项目", "本地", "CLI", "企业")):
-            name, vol = "rein_snap", 0.60
-        if "盖住" in txt or "删掉" in txt:
-            name, vol = "whoosh", 0.62
-        if "钥匙圈" in txt or "摘" in txt or "挂" in txt:
-            name, vol = "rein_snap", 0.64
-        if "deny" in txt.lower() or "猜" in txt:
-            name, vol = "punch", 0.58
-        if "不看它" in txt or "仓库" in txt:
-            name, vol = "impact", 0.66
-        if "完整版" in txt or "六层岩" in txt:
-            name, vol = "punch", 0.58
-        ev.append((ts, name, vol))
+    ev = [(ts, name) for ts, name in ev if ts > 0 and ts + durs[name] <= total]
     ev.sort(key=lambda x: x[0])
-    out = []
-    last = -1.0
-    for hit in ev:
-        if hit[0] - last < 0.08:
+    out, last = [], -1.0
+    for ts, name in ev:
+        if ts - last < 0.08:
             continue
-        out.append(hit)
-        last = hit[0]
+        out.append((ts, name))
+        last = ts
     return out
 
 
 def write_dense(total: float, t: dict[str, float], phrases: list[dict], bands: list[tuple[str, float]]) -> None:
     band_tl = []
-    prev = t["$T_ROCK$"]
     for bid, ts in bands:
-        ts = max(ts, prev + 0.06)
-        prev = ts
         band_tl.append(
             f'tl.fromTo("#{bid}", {{opacity:0, x:-70, scale:0.9}}, '
             f'{{opacity:1, x:0, scale:1, duration:0.2, ease:"power2.out"}}, {ts:.3f});'
@@ -322,12 +349,8 @@ def write_dense(total: float, t: dict[str, float], phrases: list[dict], bands: l
         band_tl.append(f'flash({ts:.3f});')
         band_tl.append(f'tl.to("#{bid}", {{scale:1.05, duration:0.12, yoyo:true, repeat:1}}, {ts + 0.20:.3f});')
 
-    # keys hang one per stratum across the sentence that explains the rule
-    k0, k1 = t["$T_RINGBOX$"], t["$T_KEYRULE$"]
-    step = max(0.16, (k1 - k0) / max(len(LAYERS), 1))
     key_tl = []
-    for i in range(len(LAYERS)):
-        kt = k0 + 0.15 + i * step
+    for i, kt in enumerate(key_times(t)):
         key_tl.append(
             f'tl.fromTo("#ky{i+1}", {{opacity:0, y:-46, rotation:-14}}, '
             f'{{opacity:1, y:0, rotation:0, duration:0.2, ease:"bounce.out", transformOrigin:"50% 0%"}}, {kt:.3f});'
@@ -424,16 +447,35 @@ window.__timelines["captions-zh"] = tl;
     (COMP / "captions-zh.html").write_text(doc, encoding="utf-8")
 
 
-def write_index(total: float, sfx: list[tuple[float, str, float]]) -> None:
-    durs = {"whoosh": 0.30, "impact": 0.24, "rein_snap": 0.14, "gallop": 0.58,
-            "ui_blip": 0.10, "punch": 0.20, "glitch": 0.16, "tick": 0.07}
+def bgm_tag(total: float) -> tuple[str, dict | None]:
+    """The music bed, if one was generated.
+
+    It holds one level for the whole film instead of a ducking lane: the
+    narration stem leaves only six silences of 0.6 s or longer, the longest 0.8 s,
+    so a per-sentence lane would move inaudibly. The 12 LU gap under the voice is
+    the duck."""
+    if not BGM.exists():
+        return "", None
+    with wave.open(str(BGM), "rb") as w:
+        bed = w.getnframes() / w.getframerate()
+    dur = min(bed, total)
+    tag = (f'<audio id="bgm" class="clip" src="assets/bgm/track.wav" data-start="0" '
+           f'data-duration="{dur:.3f}" data-track-index="4" data-volume="{BGM_GAIN:.3f}" '
+           f'data-fade-in="0.8" data-fade-out="1.5"></audio>')
+    return tag, {"path": "assets/bgm/track.wav", "duration": round(dur, 3), "gain": BGM_GAIN}
+
+
+def write_index(total: float, t: dict[str, float], sfx: list[tuple[float, str]],
+                durs: dict[str, float]) -> dict | None:
     tags = []
-    for i, (t, name, vol) in enumerate(sfx):
+    for i, (at, name) in enumerate(sfx):
         tags.append(
-            f'<audio id="sfx-{i}" class="clip" src="assets/sfx/{name}.wav" data-start="{t:.3f}" '
-            f'data-duration="{durs.get(name, 0.25):.3f}" data-track-index="{20 + (i % 8)}" '
-            f'data-volume="{vol:.2f}"></audio>'
+            f'<audio id="sfx-{i}" class="clip" src="assets/sfx/{name}.mp3" data-start="{at:.3f}" '
+            f'data-duration="{durs[name]:.3f}" data-track-index="{20 + (i % 8)}" '
+            f'data-volume="{SFX_GAIN[name]:.2f}"></audio>'
         )
+    bed, bed_meta = bgm_tag(total)
+    audio = ([bed] if bed else []) + tags
     index = f'''<!doctype html>
 <html lang="zh-CN" data-resolution="portrait"><head><meta charset="UTF-8"/>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
@@ -443,12 +485,13 @@ def write_index(total: float, sfx: list[tuple[float, str, float]]) -> None:
 <div class="clip" id="scene-dense" data-composition-id="dense-short" data-composition-src="compositions/dense-short.html" data-start="0" data-duration="{total:.3f}" data-track-index="1" style="position:absolute;inset:0"></div>
 <div class="clip" id="scene-caps" data-composition-id="captions-zh" data-composition-src="compositions/captions-zh.html" data-start="0" data-duration="{total:.3f}" data-track-index="10" data-track-kind="captions" style="position:absolute;inset:0;pointer-events:none;z-index:50"></div>
 <audio id="a-roll-audio" src="assets/short-vo.mp3" data-start="0" data-duration="{total:.3f}" data-track-index="2" data-volume="1"></audio>
-{chr(10).join(tags)}
+{chr(10).join(audio)}
 </div>
 <script>window.__timelines=window.__timelines||{{}};window.__timelines["main"]=gsap.timeline({{paused:true}});</script>
 </body></html>
 '''
     (SHORT / "index.html").write_text(index, encoding="utf-8")
+    return bed_meta
 
 
 def write_meta() -> None:
@@ -468,17 +511,18 @@ def write_meta() -> None:
 
 def main() -> None:
     ensure()
-    synth_sfx()
+    durs = stage_sfx()
     total, phrases, sents = asyncio.run(make_vo())
     t = anchor_map(phrases, total)
     bands = band_times(phrases, t)
-    sfx = sfx_on_phrases(phrases, t, total)
+    sfx = sfx_events(t, bands, durs, total)
     write_dense(total, t, phrases, bands)
     write_captions(phrases, total)
-    write_index(total, sfx)
+    bed = write_index(total, t, sfx, durs)
     write_meta()
     (SHORT / "short-meta.json").write_text(json.dumps({
         "total": round(total, 3), "caps": len(phrases), "sents": len(sents), "sfx": len(sfx),
+        "bgm": bed,
         "hook": HOOK, "out": str(OUT), "anchors": {k: round(v, 3) for k, v in t.items()},
         "bands": {b: round(v, 3) for b, v in bands},
         "sent_starts": [s["start"] for s in sents],
@@ -495,8 +539,16 @@ def main() -> None:
         lines.append(f"| {ph['start']:.2f}–{ph['end']:.2f} | {sc} | {ph['text']} |")
     lines += ["", "## 场景锚点", "", "| 锚点 | 秒 |", "|---|---|"]
     lines += [f"| {name} | {ts:.2f} |" for name, ts in order]
+    bed_line = (f"背景音乐：{bed['path']} · {bed['duration']:.2f}s · data-volume {bed['gain']}"
+                if bed else "背景音乐：未生成")
+    lines += ["", "## 音效点位", "", bed_line, "",
+              "| 秒 | 素材 | 轨增益 | 当时在播的口播 |", "|---|---|---|---|"]
+    for ts, name in sfx:
+        said = next((p["text"] for p in phrases if p["start"] - 0.05 <= ts < p["end"]), "（无）")
+        lines.append(f"| {ts:.2f} | {name} | {SFX_GAIN[name]:.2f} | {said} |")
     (SHORT / "SYNC-MAP.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"OK short assembled total={total:.3f}s caps={len(phrases)} sents={len(sents)} sfx={len(sfx)}")
+    print(f"OK short assembled total={total:.3f}s caps={len(phrases)} sents={len(sents)} sfx={len(sfx)} "
+          f"bgm={'yes' if bed else 'no'}")
     print("anchors:", {k: round(v, 2) for k, v in sorted(t.items(), key=lambda kv: kv[1])})
 
 
