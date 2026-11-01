@@ -131,7 +131,7 @@ Permission and security flags control the agent's autonomous execution boundarie
 | Feature Flag | Type | Description | Impact Scope | Dependencies | Related Chapter |
 |---|---|---|---|---|---|
 | `TRANSCRIPT_CLASSIFIER` | Compile-time | Transcript classifier. Automatically determines the permission mode (including auto mode) based on conversation content, replacing purely manual permission switching | Permission mode automatic inference, auto mode decision logic | No prerequisites | Chapter 3 |
-| `BASH_CLASSIFIER` | Compile-time | Bash classifier. Performs security classification on Bash commands; high-confidence safe commands can be automatically approved | Bash command security assessment, read-only command auto-approval | No prerequisites | Chapter 3 |
+| `BASH_CLASSIFIER` | Compile-time | Bash classifier. Classifies Bash commands by safety; high-confidence safe commands can be automatically approved | Bash command security assessment, read-only command auto-approval | No prerequisites | Chapter 3 |
 | `HARD_FAIL` | Compile-time | Hard fail mode. Terminates directly on critical errors rather than degrading gracefully | Error handling strategy, critical fault termination logic | No prerequisites | Chapter 3 |
 | `NATIVE_CLIENT_ATTESTATION` | Compile-time | Native client attestation. Enables platform-native client identity verification mechanisms | Client identity verification, platform security integration | Requires platform security framework support | Chapter 3 |
 | `ANTI_DISTILLATION_CC` | Compile-time | Anti-distillation protection. Prevents model outputs from being used for model distillation attacks | Output watermarking, distillation detection logic | No prerequisites | Chapter 3 |

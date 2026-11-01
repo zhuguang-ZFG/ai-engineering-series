@@ -3,8 +3,8 @@
 This appendix lists all 55 tools registered in the Claude Code architecture, indexed across 12 functional categories. Tools are the fundamental capability units through which the agent interacts with the external world. Each tool is registered in the tool registry via a unified interface protocol and is dispatched by the conversation main loop.
 
 **Permission Model Field Definitions**:
-- **readOnly**: Whether the tool only performs read operations and does not modify the file system or external state. Read-only tools typically have more relaxed permission constraints and can be used in plan mode.
-- **destructive**: Whether the tool performs irreversible operations (deletion, overwriting, sending). Destructive tools undergo stricter scrutiny during permission checks.
+- **readOnly**: Whether the tool only reads and does not modify the file system or external state. Read-only tools typically have more relaxed permission constraints and can be used in plan mode.
+- **destructive**: Whether the tool can irreversibly delete, overwrite, or send things. Destructive tools get stricter scrutiny during permission checks.
 - **concurrencySafe**: Whether the tool can be safely executed in parallel (no dependency on shared mutable state). Concurrency-safe tools can be dispatched simultaneously by the streaming tool executor.
 
 In the tables, `true`/`false` indicates the value is always returned; `dynamic` indicates runtime determination based on input parameters. Methods not explicitly overridden in the source code use the `buildTool` defaults (all `false`).
@@ -125,7 +125,7 @@ Network tools provide the agent with the ability to access internet information,
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
 | WebFetchTool | `true` | `false` | `true` | Fetches URL content and converts it to markdown |
-| WebSearchTool | `true` | `false` | `true` | Performs web search, returning structured search results |
+| WebSearchTool | `true` | `false` | `true` | Searches the web and returns structured results |
 
 **Usage Scenario Details**:
 - **WebFetchTool**: Suitable for obtaining the complete content of a specific web page (e.g., API documentation, technical blogs). Converts HTML to markdown format for easier model comprehension and citation. Commonly used for consulting the latest documentation and verifying technical details.
@@ -145,7 +145,7 @@ Agent tools implement Claude Code's recursive composition capability, allowing a
 | TeamDeleteTool | `false` | `false` | `false` | Deletes a created team |
 
 **Usage Scenario Details**:
-- **AgentTool**: The core sub-agent management tool. Suitable for decomposing complex tasks into subtasks for parallel processing, invoking built-in agents (e.g., ExploreAgent, PlanAgent) to complete specific phases, and performing high-risk operations in an isolated context. See Chapter 9 for sub-agent details.
+- **AgentTool**: The core sub-agent management tool. Suitable for decomposing complex tasks into subtasks for parallel processing, invoking built-in agents (e.g., ExploreAgent, PlanAgent) to complete specific phases, and running risky operations inside an isolated context. See Chapter 9 for sub-agent details.
 - **SendMessageTool**: Used for cross-agent communication in multi-agent scenarios. Supports sending messages to specific agents or channels. See Chapter 10 for the coordinator pattern.
 - **TeamCreateTool / TeamDeleteTool**: Used in Agent Swarms mode to create and manage multi-agent teams. Agents within a team can process their assigned subtasks in parallel.
 
@@ -173,7 +173,7 @@ Plan mode tools provide safe planning capabilities, allowing the agent to formul
 | EnterPlanModeTool | `true` | `false` | `true` | Enters plan mode, restricting to the read-only tool set |
 | ExitPlanModeV2Tool | `true` | `false` | `true` | Exits plan mode, restoring normal tool permissions |
 
-**Usage Scenario Details**: Plan mode is a safety strategy. Once entered, the agent can only use read-only tools (such as FileReadTool, GrepTool) for information gathering and analysis, and cannot perform any modification operations. Suitable for designing plans, assessing risks, and analyzing impact before executing complex changes. See Chapter 14 for structured workflows.
+**Usage Scenario Details**: Plan mode is a safety strategy. Once entered, the agent can only use read-only tools (such as FileReadTool, GrepTool) for information gathering and analysis, and cannot make any modifications. Suitable for designing plans, assessing risks, and analyzing impact before executing complex changes. See Chapter 14 for structured workflows.
 
 ## 8. Worktree
 

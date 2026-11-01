@@ -131,7 +131,7 @@ flowchart LR
 - **WebFetchTool**：适用于获取特定网页的完整内容（如 API 文档、技术博客）。将 HTML 转换为 markdown 格式，便于模型理解和引用。常用于查阅最新文档和验证技术细节
 - **WebSearchTool**：适用于开放式信息查询。返回结构化的搜索结果（标题、摘要、链接），帮助模型快速了解某个主题的最新信息。常用于技术调研和问题排查
 
-**组合使用模式**：先用 WebSearchTool 进行广度搜索，定位相关资源后用 WebFetchTool 深度获取具体页面内容。
+**组合使用模式**：先用 WebSearchTool 广度搜索，定位相关资源后用 WebFetchTool 深度获取具体页面内容。
 
 ## 5. 智能体
 
@@ -173,7 +173,7 @@ flowchart LR
 | EnterPlanModeTool | `true` | `false` | `true` | 进入计划模式，限制为只读工具集 |
 | ExitPlanModeV2Tool | `true` | `false` | `true` | 退出计划模式，恢复正常工具权限 |
 
-**使用场景详解**：计划模式是一种安全策略，在进入后智能体只能使用只读工具（如 FileReadTool、GrepTool）进行信息收集和分析，不能执行任何修改操作。适用于在执行复杂变更前进行方案设计、风险评估和影响分析。参见第 14 章结构化工作流。
+**使用场景详解**：计划模式是一种安全策略，在进入后智能体只能使用只读工具（如 FileReadTool、GrepTool）收集信息、分析内容，不能做任何修改。适用于在执行复杂变更前先设计方案、评估风险、分析影响。参见第 14 章结构化工作流。
 
 ## 8. 工作树
 
@@ -184,7 +184,7 @@ flowchart LR
 | EnterWorktreeTool | `false` | `false` | `false` | 创建 git worktree 并切换工作目录（条件启用） |
 | ExitWorktreeTool | `false` | `false` | `false` | 退出 worktree，保留或移除工作目录 |
 
-**使用场景详解**：工作树工具基于 git worktree 实现工作目录隔离。适用于多个子智能体并行处理不同任务时避免文件冲突、在不影响主工作区的情况下进行实验性修改、在不同分支上同时工作等场景。
+**使用场景详解**：工作树工具基于 git worktree 实现工作目录隔离。适用于多个子智能体并行处理不同任务时避免文件冲突、在不影响主工作区的情况下实验性改代码、在不同分支上同时工作等场景。
 
 ## 9. 调度
 
@@ -338,7 +338,7 @@ flowchart LR
 flowchart LR
     FileReadTool --> FileEditTool --> BashTool["BashTool<br/>(test)"]
 ```
-先读取目标文件，使用 FileEditTool 进行精确修改，然后用 BashTool 运行测试验证。
+先读取目标文件，用 FileEditTool 精确修改，然后用 BashTool 运行测试验证。
 
 ### 模式三：信息调研
 ```mermaid
@@ -364,14 +364,14 @@ flowchart TD
 flowchart LR
     Plan["EnterPlanModeTool"] --> ReadOnly["只读工具集"] --> Exec["ExitPlanModeV2Tool"] --> Execute["执行工具集"]
 ```
-先进入计划模式进行安全分析，完成规划后退出计划模式开始执行。
+先进入计划模式做安全分析，完成规划后退出计划模式开始执行。
 
 ### 模式六：外部集成
 ```mermaid
 flowchart LR
     MCP["MCP 连接初始化"] --> List["ListMcpResourcesTool"] --> Read["ReadMcpResourceTool"] --> Local["本地工具处理"]
 ```
-通过 MCP 工具访问外部资源，结合本地工具进行处理。
+通过 MCP 工具访问外部资源，结合本地工具一起处理。
 
 ---
 

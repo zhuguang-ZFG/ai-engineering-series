@@ -204,7 +204,7 @@ flowchart LR
 
 ### A.2.3 Inter-Module Coupling Analysis
 
-Understanding the degree of coupling between modules helps readers identify the right entry points when reading source code or performing extension development:
+Understanding the degree of coupling between modules helps readers identify the right entry points when reading source code or extending it:
 
 | Coupling Relationship | Coupling Degree | Description |
 |---------|---------|------|

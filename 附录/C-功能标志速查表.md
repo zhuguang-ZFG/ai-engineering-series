@@ -61,7 +61,7 @@ flowchart TD
 | `ULTRAPLAN` | 编译时 | 超级规划模式。提供交互式规划对话框，允许用户审查和修改复杂任务的执行计划 | EnterPlanModeTool/ExitPlanModeV2Tool 的增强规划界面 | 无前置依赖 | 第 5 章 |
 | `VERIFICATION_AGENT` | 编译时 | 包含受门控的验证智能体设计，不保证向用户开放 | 验证智能体注册与行为 | 同时要求运行时开关 `tengu_hive_evidence` 开启（默认 `false`） | 第 9 章 |
 | `BUILTIN_EXPLORE_PLAN_AGENTS` | 编译时 | 内置探索-规划智能体。提供预装的探索和规划类型的子智能体 | ExploreAgent, PlanAgent 等内置智能体定义 | 依赖 FORK_SUBAGENT | 第 8 章 |
-| `AGENT_MEMORY_SNAPSHOT` | 编译时 | 智能体内存快照。支持对智能体状态进行快照和恢复 | 快照创建、序列化存储、恢复加载逻辑 | 无前置依赖 | 第 10 章 |
+| `AGENT_MEMORY_SNAPSHOT` | 编译时 | 智能体内存快照。支持快照与恢复智能体状态 | 快照创建、序列化存储、恢复加载逻辑 | 无前置依赖 | 第 10 章 |
 | `WORKFLOW_SCRIPTS` | 编译时 | 工作流脚本。启用本地工作流任务处理器，支持自动化脚本编排 | WorkflowTool、工作流脚本解析和执行引擎 | 无前置依赖 | 第 9 章 |
 | `TEMPLATES` | 编译时 | 模板系统。启用作业分类器（Job Classifier），用于识别和路由不同类型的用户请求 | Job Classifier、请求类型识别、路由分发 | 无前置依赖 | 第 9 章 |
 
@@ -131,7 +131,7 @@ flowchart LR
 | 功能标志 | 类型 | 作用描述 | 影响范围 | 依赖关系 | 相关章节 |
 |---|---|---|---|---|---|
 | `TRANSCRIPT_CLASSIFIER` | 编译时 | 转录分类器。基于对话内容自动判断权限模式（包括 auto 模式），替代纯手动权限切换 | 权限模式自动推断、auto 模式决策逻辑 | 无前置依赖 | 第 3 章 |
-| `BASH_CLASSIFIER` | 编译时 | Bash 分类器。对 Bash 命令进行安全性分类，高置信度的安全命令可自动放行 | Bash 命令安全性评估、只读命令自动放行 | 无前置依赖 | 第 3 章 |
+| `BASH_CLASSIFIER` | 编译时 | Bash 分类器。把 Bash 命令按安全性分类，高置信度的安全命令可自动放行 | Bash 命令安全性评估、只读命令自动放行 | 无前置依赖 | 第 3 章 |
 | `HARD_FAIL` | 编译时 | 硬失败模式。在关键错误时直接终止而非降级处理 | 错误处理策略、关键故障的终止逻辑 | 无前置依赖 | 第 3 章 |
 | `NATIVE_CLIENT_ATTESTATION` | 编译时 | 原生客户端认证。启用平台原生的客户端身份验证机制 | 客户端身份验证、平台安全集成 | 需要平台安全框架支持 | 第 3 章 |
 | `ANTI_DISTILLATION_CC` | 编译时 | 反蒸馏保护。防止模型输出被用于模型蒸馏攻击 | 输出水印、蒸馏检测逻辑 | 无前置依赖 | 第 3 章 |
@@ -154,7 +154,7 @@ flowchart LR
 | `WEB_BROWSER_TOOL` | 编译时 | 网页浏览器工具。启用内置浏览器面板，支持网页浏览和内容提取 | WebBrowserTool、浏览器面板 UI | 无前置依赖 | 第 7 章 |
 | `MCP_SKILLS` | 编译时 | MCP 技能发现。允许从 MCP 服务器动态发现和加载技能 | MCP 技能发现协议、动态技能注册 | 依赖 MCP 连接 | 第 7 章 |
 | `EXPERIMENTAL_SKILL_SEARCH` | 编译时 | 实验性技能搜索。启用基于语义的技能索引和搜索能力 | 语义技能索引、技能搜索引擎 | 无前置依赖 | 第 7 章 |
-| `SKILL_IMPROVEMENT` | 编译时 | 技能改进。支持对已安装技能进行自动优化和迭代 | 技能自动优化逻辑、迭代改进引擎 | 依赖技能系统 | 第 7 章 |
+| `SKILL_IMPROVEMENT` | 编译时 | 技能改进。支持自动优化、迭代已安装技能 | 技能自动优化逻辑、迭代改进引擎 | 依赖技能系统 | 第 7 章 |
 | `RUN_SKILL_GENERATOR` | 编译时 | 技能生成器运行器。支持动态生成新技能 | 技能生成工具、动态技能创建流程 | 依赖技能系统 | 第 7 章 |
 | `BUILDING_CLAUDE_APPS` | 编译时 | Claude 应用构建模式。加载用于构建 Claude 应用的专用技能集 | Claude Apps 专用技能集、应用模板 | 依赖技能系统 | 第 7 章 |
 | `REVIEW_ARTIFACT` | 编译时 | 审阅工件。加载代码审阅相关技能 | 代码审阅技能集、审阅模板 | 依赖技能系统 | 第 7 章 |
@@ -162,8 +162,8 @@ flowchart LR
 | `CONNECTOR_TEXT` | 编译时 | 连接器文本块。支持在消息流中渲染特殊的连接器文本块类型 | 连接器文本渲染器、特殊文本块类型 | 无前置依赖 | 第 7 章 |
 | `UDS_INBOX` | 编译时 | Unix Domain Socket 收件箱。通过 UDS 接收来自其他进程的消息 | ListPeersTool、UDS 消息监听器 | 需要 UDS 系统支持 | 第 7 章 |
 | `MCP_RICH_OUTPUT` | 编译时 | MCP 富输出。允许 MCP 工具返回结构化的富媒体内容 | MCP 输出格式扩展、富媒体渲染 | 依赖 MCP 连接 | 第 7 章 |
-| `TREE_SITTER_BASH` | 编译时 | Tree-sitter Bash 解析。使用 Tree-sitter 对 Bash 命令进行精确的 AST 解析 | Bash 命令 AST 解析器、精确安全分析 | 无前置依赖 | 第 3 章 |
-| `TREE_SITTER_BASH_SHADOW` | 编译时 + 运行时门控 | Tree-sitter Bash 影子模式。在现有解析器旁并行运行 Tree-sitter 进行结果对比验证 | 并行解析对比、结果一致性验证 | 依赖 TREE_SITTER_BASH | 第 3 章 |
+| `TREE_SITTER_BASH` | 编译时 | Tree-sitter Bash 解析。用 Tree-sitter 精确解析 Bash 命令的 AST | Bash 命令 AST 解析器、精确安全分析 | 无前置依赖 | 第 3 章 |
+| `TREE_SITTER_BASH_SHADOW` | 编译时 + 运行时门控 | Tree-sitter Bash 影子模式。在现有解析器旁并行运行 Tree-sitter 对比验证结果 | 并行解析对比、结果一致性验证 | 依赖 TREE_SITTER_BASH | 第 3 章 |
 
 **技能标志关联图**：
 ```mermaid
@@ -324,7 +324,7 @@ UI 与界面标志控制 Claude Code 终端界面的视觉呈现和交互能力�
 
 ## C.14 常见配置场景推荐
 
-以下列出几种典型的使用场景及其推荐的功能标志组合，帮助读者根据实际需求进行配置：
+以下列出几种典型的使用场景及其推荐的功能标志组合，帮读者按实际需求配置：
 
 ```mermaid
 flowchart TD
