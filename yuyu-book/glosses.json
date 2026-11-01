@@ -276,9 +276,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:208",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:221",
    "附录/D-术语表.md:222",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:208"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:221"
   ],
   "analogy": {
    "zh": "电梯按钮按一次和按十次，都只来一趟",
@@ -289,8 +289,8 @@
    "en": "The edit finds its target by content rather than by line number, so even if the file changed elsewhere it still lands right, as long as that text survives."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:208",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:208"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:221",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:221"
   ]
  },
  "serialization": {
@@ -365,8 +365,8 @@
    "en": "Tools start before the reply finishes, and the fixed stages hold them in line, so the run gains speed without scrambling the results."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:427",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:427"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:455",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:455"
   ]
  },
  "dependency-injection": {
@@ -778,7 +778,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:354",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:382",
    "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:685",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
   ],
@@ -933,8 +933,8 @@
    "en": "Bunching reads and searches into one turn saves real waiting; let a side-effecting tool join the batch and they race, producing behavior nobody can predict."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:425",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:425"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:453",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:453"
   ]
  },
  "circuit-breaker": {
@@ -1247,9 +1247,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:222",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:250",
    "第一部分-基础篇/04-权限管线-Agent的护栏.md:328",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:222"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:250"
   ],
   "analogy": {
    "zh": "门卫只认“两位字母加四位数字”，照格式放车",
@@ -1313,9 +1313,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:216",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:244",
    "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:586",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:216"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:244"
   ],
   "analogy": {
    "zh": "保洁的工牌只开储物间，开不了金库",
@@ -1326,8 +1326,8 @@
    "en": "Grant only the ability a step needs: editing one line is faster and less error-prone than rewriting the whole file, so tightening rights also trims mistakes."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:216",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:216"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:244",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:244"
   ]
  },
  "separation-of-concerns": {
@@ -1869,7 +1869,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:200",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:191",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:204",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:200"
   ],
   "analogy": {
@@ -2765,8 +2765,8 @@
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:107",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:107",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:234",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:234"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:262",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:262"
   ],
   "analogy": {
    "zh": "老板派实习生查资料，实习生只把结论带回会议室",
@@ -2777,8 +2777,8 @@
    "en": "Each dispatched task runs on its own message list, not a shared one, so whatever it tries in there cannot modify the parent agent's state."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:238",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:238"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:266",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:266"
   ]
  },
  "coordinator": {
@@ -3333,8 +3333,8 @@
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:268",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:268",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:210",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:210"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:223",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:223"
   ],
   "analogy": {
    "zh": "碎纸机不是文件柜：纸进去就出不来",

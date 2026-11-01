@@ -186,7 +186,20 @@ flowchart LR
 
 BashTool is the most complex tool in Claude Code. It is not a simple Shell executor -- it integrates multiple layers of security protection. If the tool system is the Agent's hands, BashTool is the strongest of them -- and the one that most needs to be constrained.
 
-BashTool's special status in the tool system is reflected in the following aspects:
+Four things set BashTool apart -- the map first, then each one:
+
+```mermaid
+flowchart LR
+    bt["BashTool"] --> err["Error propagation<br/>one command fails<br/>every parallel Bash call in the batch is canceled"]
+    bt --> cut["Interruption behavior<br/>set by the tool itself<br/>stop at once, or block until the end"]
+    bt --> sem["Semantic analysis<br/>tells whether the command searches or reads<br/>then decides how the UI folds it away"]
+    bt --> box["Sandbox integration<br/>even in bypass permission mode<br/>filesystem access stays restricted"]
+
+    classDef core fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef leaf fill:#fff3cd,stroke:#f39c12,color:#664d03
+    class bt core
+    class err,cut,sem,box leaf
+```
 
 - **Error propagation**: When BashTool execution fails, all parallel Bash tool calls are canceled. This is because Bash commands often have implicit dependency chains (e.g., after `mkdir` fails, subsequent commands are meaningless). The rule here is fail fast -- rather than letting subsequent commands continue executing in a corrupted environment and producing more errors, it is better to immediately stop the entire batch.
 
@@ -212,6 +225,21 @@ FileEditTool's `isDestructive` method determines whether an edit is a destructiv
 **FileWriteTool** is responsible for creating or completely overwriting files. This is the "heaviest" file operation with the strictest permission checks. The difference between FileWriteTool and FileEditTool lies in scope -- Edit only modifies specific fragments within a file, while Write can completely overwrite file contents. Therefore, Write has higher permission check standards.
 
 All three tools support `contextModifier`, which updates the file state cache after execution, so later tool calls and memory attachment injections see the latest state.
+
+```mermaid
+flowchart LR
+    t0["The File Trio<br/>Create / Read / Update<br/>Delete is missing"] --> rd["FileReadTool<br/>tracks which files were read<br/>repeat reads hit the cache"]
+    t0 --> ed["FileEditTool<br/>old_string → new_string<br/>locates by content, so shifted line numbers do not matter"]
+    t0 --> wr["FileWriteTool<br/>overwrites the whole file<br/>strictest permission checks"]
+    t0 -.-> rm["Delete is not in the trio<br/>it goes through BashTool's rm"]
+
+    classDef trio fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef light fill:#f0fdf4,stroke:#22c55e,color:#166534
+    classDef heavy fill:#fef2f2,stroke:#ef4444,color:#991b1b
+    class t0 trio
+    class rd,ed light
+    class wr,rm heavy
+```
 
 > **Best Practice:** When designing your own Agent tools, follow the "least privilege" principle -- prefer Edit over Write, prefer Read over Bash. The rule is about efficiency as well as safety: a precise Edit is faster than writing an entire file and less error-prone.
 

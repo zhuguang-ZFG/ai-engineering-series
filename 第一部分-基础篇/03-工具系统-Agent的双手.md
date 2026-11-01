@@ -186,7 +186,20 @@ flowchart LR
 
 BashTool 是 Claude Code 里最复杂的工具。它不是简单的 Shell 执行器——它集成了多层安全防护。如果工具系统是 Agent 的双手，BashTool 就是其中最有力的那只手——也是最需要被约束的那只。
 
-BashTool 在工具系统中的特殊地位体现在以下方面：
+BashTool 的特别之处有四处。先看这张图，再逐条说：
+
+```mermaid
+flowchart LR
+    bt["BashTool"] --> err["错误传播<br/>一条命令失败<br/>同批并行的 Bash 调用全部取消"]
+    bt --> cut["中断行为<br/>由工具自己定义<br/>立即停止，或阻塞到结束"]
+    bt --> sem["语义分析<br/>先判断命令是搜索还是读取<br/>再决定界面怎么折叠"]
+    bt --> box["沙盒集成<br/>bypass 权限模式下<br/>仍能限制文件系统访问"]
+
+    classDef core fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef leaf fill:#fff3cd,stroke:#f39c12,color:#664d03
+    class bt core
+    class err,cut,sem,box leaf
+```
 
 - **错误传播**：当 BashTool 执行失败时，会取消所有并行的 Bash 工具调用。这是因为 Bash 命令之间往往存在隐式依赖链（如 `mkdir` 失败后后续命令无意义）。这一条按"快速失败"办——与其让后续命令在一个已损坏的环境中继续执行并产生更多错误，不如立即停止整个批次。
 
@@ -212,6 +225,21 @@ FileEditTool 的 `isDestructive` 方法会根据编辑内容判断是否为破�
 **FileWriteTool** 负责创建或完全覆写文件。这是最"重"的文件操作，权限检查最为严格。FileWriteTool 与 FileEditTool 的区别在于作用范围——Edit 只修改文件中的特定片段，Write 可以完全覆盖文件内容。因此，Write 的权限检查标准更高。
 
 三个工具都支持 `contextModifier`，在执行后更新文件状态缓存，后续的工具调用和内存附件注入就能看到最新的文件状态。
+
+```mermaid
+flowchart LR
+    t0["文件三件套<br/>Create / Read / Update<br/>独缺 Delete"] --> rd["FileReadTool<br/>记住哪些文件读过<br/>重复读取直接命中缓存"]
+    t0 --> ed["FileEditTool<br/>old_string → new_string<br/>按内容定位，不怕行号偏移"]
+    t0 --> wr["FileWriteTool<br/>整文件覆写<br/>权限检查最严"]
+    t0 -.-> rm["删除不在三件套里<br/>改走 BashTool 的 rm"]
+
+    classDef trio fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef light fill:#f0fdf4,stroke:#22c55e,color:#166534
+    classDef heavy fill:#fef2f2,stroke:#ef4444,color:#991b1b
+    class t0 trio
+    class rd,ed light
+    class wr,rm heavy
+```
 
 > **最佳实践：** 在设计自己的 Agent 工具时，遵循"最小权限"原则——优先使用 Edit 而非 Write，优先使用 Read 而非 Bash。这一条同时管着安全和效率：精确的 Edit 比 Write 整个文件更快，也更不容易出错。
 
