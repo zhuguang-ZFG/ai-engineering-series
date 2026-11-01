@@ -301,7 +301,7 @@ flowchart TD
 
 ### 14.2.3 计划文件恢复的深度分析
 
-让我们更深入地分析 `recoverPlanFromMessages` 的三种恢复来源，理解每种来源的设计意图和适用场景。
+再往下挖一层：`recoverPlanFromMessages` 的三种恢复来源，各有各的设计意图和适用场景。
 
 **来源一：ExitPlanMode 的 tool_use input。** 当 Agent 退出 Plan 模式时，ExitPlanMode 工具的输入参数中包含了计划内容。这个内容被 `normalizeToolInput` 注入到工具调用的 input 中。恢复时，系统从消息历史中找到 ExitPlanMode 的 tool_use 消息，提取其中的计划内容。这是最可靠的恢复来源，因为 tool_use 消息是 API 协议的一部分，不会被普通的上下文管理操作修改。
 
