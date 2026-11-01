@@ -206,7 +206,7 @@ Claude Code picks its stack by one test -- the right tool for the right problem:
 | **Schema Validation** | Zod v4 | Runtime type safety, tool input validation, JSON Schema generation | Joi doesn't support type inference; io-ts has a steep learning curve |
 | **LLM SDK** | @anthropic-ai/sdk | Anthropic official SDK, streaming response support | Direct fetch lacks type safety and retry logic |
 
-The React + Ink choice deserves a closer look. Ink is a framework that renders terminal UI using the React component model: Claude Code's interface is not pieced together with `console.log` but declaratively described as a React component tree. This choice brings several benefits: UI state management can leverage React's mature solutions (such as `useState`, `useEffect`), components can be independently tested and reused, and complex UIs (such as tool execution progress bars, multi-column layouts) can be assembled from components.
+The React + Ink choice deserves a closer look. Ink is a framework that renders terminal UI using the React component model: Claude Code's interface is not pieced together with `console.log` but declaratively described as a React component tree. This choice brings several benefits: UI state management can reuse React's mature solutions (such as `useState`, `useEffect`), components can be independently tested and reused, and complex UIs (such as tool execution progress bars, multi-column layouts) can be assembled from components.
 
 There is a design philosophy behind this choice: **terminal UI should not be second-class compared to web UI.** Developers are accustomed to componentized thinking and declarative rendering in web development; bringing these mature patterns into terminal UI development can significantly reduce development and maintenance costs. When you see Claude Code's tool execution progress bars, permission confirmation dialogs, and multi-column result displays, they are all React components underneath -- fundamentally no different from the components you write in web applications.
 
@@ -376,7 +376,7 @@ Claude Code's state management draws on the immutable state patterns of Redux/Zu
 - **Reference Equality Check**: Reference comparison ensures notifications are triggered only when actual changes occur, avoiding unnecessary re-renders.
 - **Subscribe/Unsubscribe Pattern**: Listeners are managed through a collection, with cleanup functions returned to prevent memory leaks.
 
-At the dialog loop level, immutability is strictly maintained: cross-iteration state is updated through wholesale replacement, and at the start of each iteration, needed fields are destructured from the state object, ensuring read operations use immutable snapshots.
+At the dialog loop level, immutability is held just as tight: cross-iteration state is replaced wholesale, and at the start of each iteration, needed fields are destructured from the state object, so read operations always see immutable snapshots.
 
 The benefits of immutable state flow are manifold: state changes are predictable, traceable, and debuggable; in sub-agent scenarios, the parent agent can safely pass state snapshots to child agents without worrying about accidental modification; in speculative execution scenarios, state rollback becomes simple and safe.
 

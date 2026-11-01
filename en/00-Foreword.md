@@ -98,7 +98,7 @@ This analogy reveals the essence of Agent Harness: **it is not an SDK, not an AP
 
 ### The Birth of Claude Code and Its Accidental Public Disclosure
 
-In early 2025, Anthropic released Claude Code -- an AI programming agent that runs in the terminal. It does not depend on a specific editor or a graphical interface; instead, it runs directly in the command line in a decidedly hacker-like fashion. This choice is itself a statement: an Agent does not need the constraints of a GUI; it needs a fully-featured runtime environment.
+In early 2025, Anthropic released Claude Code -- an AI programming agent that runs in the terminal. It does not depend on a specific editor or a graphical interface; instead, it runs straight in the command line, decidedly hacker-like. This choice is itself a statement: an Agent does not need the constraints of a GUI; it needs a fully-featured runtime environment.
 
 On March 31, 2026, an unexpected event propelled Claude Code into the spotlight of the tech community: security researcher [Chaofan Shou (@Fried_rice)](https://x.com/Fried_rice) discovered that the `@anthropic-ai/claude-code` package published in the npm registry contained a source map file referencing a complete source code archive in an Anthropic R2 storage bucket, and the bucket had no access controls. The disclosure tweet received over 17 million views, and the tech community engaged in an unprecedented in-depth discussion about Agent architecture. Anthropic subsequently patched the configuration issue.
 

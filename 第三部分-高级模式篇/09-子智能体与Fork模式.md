@@ -146,7 +146,7 @@ Explore Agent 是一个高速只读搜索智能体。它的定义中声明了严
 
 **第二，omitClaudeMd 优化。** Explore 是只读搜索智能体，不需要 commit/PR/lint 规则。CLAUDE.md 通常包含项目的编码规范、commit 消息格式、PR 模板等内容，这些对于一个只做搜索的智能体完全无用。省略 CLAUDE.md 不仅减少了 token 消耗，更重要的是减少了系统提示的噪声，让模型更聚焦于搜索任务本身。这一优化据估计每周可节省 5-15 Gtoken。
 
-> **最佳实践：如何有效利用 Explore Agent**
+> **最佳实践：怎么把 Explore Agent 用好**
 >
 > Explore Agent 最适合以下场景：
 > - **代码考古**：快速定位某个 bug 的根因，追踪调用链路
@@ -225,7 +225,7 @@ flowchart TD
 
 ## 9.3 Fork 模式：缓存安全的并行执行
 
-Fork 模式让主智能体把同一时刻的完整上下文"分叉"给多个并行子任务，同时利用 Anthropic API 的 prompt cache 机制避免重复传输大量 token。
+Fork 模式让主智能体把同一时刻的完整上下文"分叉"给多个并行子任务，同时靠 Anthropic API 的 prompt cache 机制避免重复传输大量 token。
 
 ### Fork 模式的直觉理解
 

@@ -1,6 +1,6 @@
 # Chapter 6: The Memory System -- Agent Long-Term Memory
 
-> **Learning Objectives:** Master the design intent and automatic extraction mechanism of four memory types, understand the cache-aware architecture based on the Fork pattern, and learn how to design a persistent Agent memory system. Through this chapter, you will understand how to leverage the memory system to make the Agent increasingly understand you with use, and how to manage the lifecycle of memories in a multi-project environment.
+> **Learning Objectives:** Master the design intent and automatic extraction mechanism of four memory types, understand the cache-aware architecture based on the Fork pattern, and learn how to design a persistent Agent memory system. Through this chapter, you will understand how to put the memory system to work so the Agent understands you better the more you use it, and how to manage the lifecycle of memories in a multi-project environment.
 
 ---
 
@@ -390,7 +390,7 @@ This design gives the background Agent sufficient read capabilities to understan
 
 **The Principle of Least Privilege in Practice**
 
-The tool permission allowlist follows the Principle of Least Privilege: the background Agent is granted only the minimum set of permissions needed to fulfill its responsibilities. Specifically:
+The tool permission allowlist follows the Principle of Least Privilege: the background Agent only gets the minimum set of permissions its job needs. Specifically:
 
 - **Why is Glob allowed?** The background Agent may need to discover relevant files to verify memory accuracy (e.g., whether a file mentioned in memory still exists)
 - **Why is Bash restricted to read-only?** To prevent the background Agent from executing destructive commands (like `rm -rf`) without the user's knowledge

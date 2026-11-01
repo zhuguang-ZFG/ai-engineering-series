@@ -966,7 +966,7 @@ flowchart TD
 
 Claude Code's dependency injection pattern handles this by putting I/O behind injected interfaces (model calls, message compression, UUID generation), so the core loop never needs to know which environment it is running in.
 
-In a CLI environment, production dependencies provide real file system access and model calls. In tests, mock implementations can be injected. In SDK mode, different UI feedback mechanisms can be substituted. This "core + adapter" architecture allows the same Harness logic to run seamlessly across different platforms.
+In a CLI environment, production dependencies provide real file system access and model calls. In tests, mock implementations can be injected. In SDK mode, different UI feedback mechanisms can be substituted. This "core + adapter" architecture lets the same Harness logic run seamlessly on any platform.
 
 Key environment difference points include:
 

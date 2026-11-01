@@ -396,7 +396,7 @@ For large projects, divide work into multiple phases:
 
 Compression at the end of each phase ensures ample context space for the next phase.
 
-### Strategy 3: Leverage the Memory System to Supplement Context
+### Strategy 3: Use the Memory System to Supplement Context
 
 > **Cross-Reference:** The memory system from Chapter 6 is an important supplement to context management. Compression loses conversation details, but if key information has already been saved as memory files, the Agent can still recover critical context by reading memories after compression.
 

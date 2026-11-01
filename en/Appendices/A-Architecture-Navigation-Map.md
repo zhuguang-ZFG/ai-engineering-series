@@ -502,4 +502,4 @@ Claude Code's architecture contains several classic design patterns; naming them
 | Layered Architecture | Overall system | Clear layering of Presentation -> Orchestration -> Capability -> Infrastructure |
 | Async Generator | Query engine, streaming output | Uses async function* to progressively yield streaming results, naturally supporting backpressure control |
 | Hierarchical Agent | Sub-agent system | Achieves hierarchical composition of agents through fork, forming fractal structures |
-| Feature Flag | System-wide | Boolean switches injected at compile time, enabling dead code elimination and progressive feature rollout |
+| Feature Flag | System-wide | Boolean switches injected at compile time, which strip dead code and let features ship in stages |

@@ -476,7 +476,7 @@ flowchart LR
 
 尝试分别设计 `.claude/settings.json`（团队共享，提交到版本控制）和 `.claude/settings.local.json`（个人偏好，不提交到版本控制）的内容。
 
-**提示：** 利用 deny 规则的优先级高于 allow 规则的特性，先用宽泛的 allow 规则授权基本操作，再用精确的 deny 规则排除危险操作。
+**提示：** 抓住 deny 规则优先级高于 allow 规则这一点，先用宽泛的 allow 规则授权基本操作，再用精确的 deny 规则排除危险操作。
 
 ### 练习 4：权限决策流的情景分析
 

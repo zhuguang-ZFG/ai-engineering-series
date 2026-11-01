@@ -476,7 +476,7 @@ Design a security configuration for a development team using Claude Code. Requir
 
 Try designing the content for both `.claude/settings.json` (team-shared, committed to version control) and `.claude/settings.local.json` (personal preferences, not committed to version control) separately.
 
-**Hint:** Leverage the property that deny rules take higher priority than allow rules. First use broad allow rules to authorize basic operations, then use precise deny rules to exclude dangerous operations.
+**Hint:** Use the fact that deny rules outrank allow rules. First use broad allow rules to authorize basic operations, then use precise deny rules to exclude dangerous operations.
 
 ### Exercise 4: Scenario Analysis of Permission Decision Flow
 

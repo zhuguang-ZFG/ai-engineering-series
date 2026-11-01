@@ -316,7 +316,7 @@ gantt
 > After optimization total: max(65, 30, 32, 33) = **65ms**
 > Benefit: 160ms -> 65ms, saving **95ms (59%)**
 
-95 milliseconds may not sound like much, but in the CLI tool world, users are extremely sensitive to the latency from "typing command to seeing output". This "racing against import chain" strategy essentially utilizes idle CPU time while waiting for I/O.
+95 milliseconds may not sound like much, but in the CLI tool world, users are extremely sensitive to the latency from "typing command to seeing output". This "racing against import chain" strategy essentially uses idle CPU time while waiting for I/O.
 
 > **Best practice:** Conditions for parallel prefetching are: (1) prefetch operations are I/O-intensive not CPU-intensive; (2) results won't be used immediately but needed at some later point; (3) prefetch failure shouldn't block the main flow. If your prefetch operation violates any condition, parallelization adds complexity without benefit.
 
@@ -351,7 +351,7 @@ Three levels of lazy loading and their applicable scenarios:
 
 Zod schema construction costs are often underestimated. A moderately complex schema with nested objects, optional fields, and description text takes about 0.1-0.3ms to construct. If Claude Code's 55 tools all build schemas at startup, total overhead is 5.5-16.5ms -- unacceptable for a CLI tool.
 
-`lazySchema`'s implementation leverages JavaScript's getter semantics: first access triggers the construction function, the constructed result is cached to an instance property, subsequent accesses read directly from cache without going through the getter. This is a "trigger once, permanently replace" pattern.
+`lazySchema`'s implementation runs on JavaScript's getter semantics: first access triggers the construction function, the constructed result is cached to an instance property, subsequent accesses read directly from cache without going through the getter. This is a "trigger once, permanently replace" pattern.
 
 ### 13.3.4 Startup Optimization Checklist
 
@@ -418,7 +418,7 @@ The essence of the `> 0` guard is a **monotonic increase guarantee**: usage fiel
 
 In QueryEngine, this accumulation happens at each `message_stop` event. In forked agents, it happens at each `message_delta` event. The difference between the two strategies is granularity: QueryEngine accumulates by message, forked agent accumulates by event, but the final result is consistent.
 
-**Why do the two scenarios choose different accumulation granularities?** QueryEngine is a long-lifecycle session manager; its usage tracking is oriented toward "how much did this session consume in total" scenarios, so per-message accumulation is precise enough. Forked agent is a short-lifecycle subtask executor; it may be aborted at any time, so more frequent accumulation is needed to ensure usage data isn't lost -- if a fork crashes before `message_stop`, per-message accumulation would lose the entire message's usage.
+**Why do the two scenarios choose different accumulation granularities?** QueryEngine is a long-lifecycle session manager; its usage tracking is oriented toward "how much did this session consume in total" scenarios, so per-message accumulation is precise enough. Forked agent is a short-lifecycle subtask executor; it can be aborted at any time, so it accumulates far more often to make sure usage data isn't lost -- if a fork crashes before `message_stop`, per-message accumulation would lose the entire message's usage.
 
 ### 13.4.3 Best Practices for Token Cost Tracking
 

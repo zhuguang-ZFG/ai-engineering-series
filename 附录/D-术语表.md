@@ -103,7 +103,7 @@ flowchart LR
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
 | Ablation Baseline | 消融基线 | A/B 实验中的对照组标志，用于量化新功能对系统行为的精确影响 | Feature Flag, Enhanced Telemetry | 第 13 章 |
-| Agent | 智能体 | 具备自主规划、工具调用和迭代执行能力的 AI 程序实体，能根据环境反馈动态调整行为。在 Claude Code 的架构中，Agent 由 Agent Harness 包裹，通过 Main Loop 与工具系统协同工作 | Agent Harness, Subagent, Coordinator Mode | 第 1 章 |
+| Agent | 智能体 | 能自主规划、调用工具、迭代执行的 AI 程序实体，会根据环境反馈动态调整行为。在 Claude Code 的架构中，Agent 由 Agent Harness 包裹，通过 Main Loop 与工具系统协同工作 | Agent Harness, Subagent, Coordinator Mode | 第 1 章 |
 | Agent Harness | 智能体线束 / 执行框架 | 包裹大语言模型的运行时基础设施层，负责工具调度、权限管控、上下文管理、流式渲染等核心能力的编排与执行。这是 Claude Code 最核心的架构概念，定义了 LLM 与外部世界交互的标准框架 | Agent, Tool, Permission Mode, Context Window | 第 1 章 |
 | Agent Memory Snapshot | 智能体内存快照 | 把智能体运行时的内部状态序列化保存，支持跨会话恢复执行现场。由 `AGENT_MEMORY_SNAPSHOT` 功能标志控制启用 | Memory, Agent, Feature Flag | 第 10 章 |
 | Agent Trigger | 智能体触发器 | 基于时间（cron）或事件驱动的自动调度机制，允许智能体在无人值守时按计划执行任务。由 `AGENT_TRIGGERS` 功能标志控制启用 | Daemon, Cron Tool | 第 9 章 |
@@ -262,7 +262,7 @@ flowchart LR
 | Team Memory (TEAMMEM) | 团队记忆 | 面向团队的共享记忆文件系统，支持团队成员之间共享项目知识和编码规范。由 `TEAMMEM` 功能标志控制 | Memory, CLAUDE.md, Extract Memories | 第 10 章 |
 | Terminal Panel | 终端面板 | 全屏布局中的独立终端面板组件，允许用户在不离开 Claude Code 的情况下执行终端命令。由 `TERMINAL_PANEL` 功能标志控制，快捷键 Meta+J | Fullscreen Layout, Feature Flag | 第 12 章 |
 | Templates | 模板系统 | 启用作业分类器（Job Classifier）的分类模块，用于识别和路由不同类型的用户请求。由 `TEMPLATES` 功能标志控制 | Job Classifier, Feature Flag | 第 9 章 |
-| Token | 词元 / Token | 模型处理文本的基本单位，也是上下文窗口容量和 API 计费的核心度量。所有上下文管理策略都围绕 Token 的有效利用展开 | Context Window, Token Budget, Compaction | 第 2 章 |
+| Token | 词元 / Token | 模型处理文本的基本单位，也是上下文窗口容量和 API 计费的核心度量。所有上下文管理策略都是围绕怎样用好 Token 展开的 | Context Window, Token Budget, Compaction | 第 2 章 |
 | Token Budget | Token 预算 | 规划和监控单次会话可用 Token 总量的管理机制，提供用量预警和分配策略。由 `TOKEN_BUDGET` 功能标志控制 | Token, Context Window, Compaction | 第 7 章 |
 | Tool | 工具 | 智能体可调用的外部能力单元（如文件读写、Bash 命令、网络搜索等），通过标准化接口注册和执行。所有工具都遵循 Tool Interface 定义的协议 | Tool Registry, Build Tool, Permission Pipeline | 第 3 章 |
 | Tool Interface | 工具接口 | 所有工具必须遵循的标准协议，定义了 isEnabled、isReadOnly、isConcurrencySafe、isDestructive、checkPermissions 等核心方法 | Tool, Build Tool | 第 3 章 |

@@ -4,7 +4,7 @@
 >
 > - Understand the design philosophy, capability boundaries, and applicable scenarios of five hook types
 > - Master the trigger timing, input structure, and exit code semantics of 22 lifecycle events
-> - Design structured hook responses, utilizing `decision`, `updatedInput`, `additionalContext` and other fields for fine-grained control
+> - Design structured hook responses, using `decision`, `updatedInput`, `additionalContext` and other fields for fine-grained control
 > - Understand the multi-layer security model: global disable, managed-hooks-only, workspace trust check three-layer gating
 > - Analyze hook priority ordering rules and conflict resolution strategies
 > - Master best practices for hook configuration, avoiding common anti-patterns

@@ -420,7 +420,7 @@ gantt
     Worker G: Test DB       :c2, 9, 12
 ```
 
-The system prompt also encourages the coordinator to "fan out" -- initiating multiple parallel worker calls in a single message. This leverages Claude's parallel tool invocation capability, allowing multiple workers to start simultaneously.
+The system prompt also encourages the coordinator to "fan out" -- initiating multiple parallel worker calls in a single message. This runs on Claude's parallel tool calls, so multiple workers can start simultaneously.
 
 ### Task Notification Protocol
 
@@ -545,7 +545,7 @@ Coordinator Decision:
 
 ### Handling Strategies for Worker Failures
 
-In multi-agent collaboration, worker failures are the norm rather than the exception. The Coordinator needs to be capable of handling the following failure scenarios:
+In multi-agent collaboration, worker failures are the norm rather than the exception. The Coordinator has to handle these failure scenarios:
 
 | Failure Type | Manifestation | Coordinator's Response Strategy |
 |-------------|---------------|-------------------------------|

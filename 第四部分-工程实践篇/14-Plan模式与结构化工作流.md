@@ -2,7 +2,7 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
-**学习目标：** 理解 Claude Code 的规划模式（Plan Mode）和工作流编排系统，掌握 EnterPlanMode/ExitPlanMode 的模式切换机制，了解计划文件的存储与恢复策略，以及调度系统（Cron、RemoteTrigger）和后台任务管理的实现细节。通过完整的实战案例，你将学会如何利用 Plan 模式来提升 Agent 任务的成功率和可控性。
+**学习目标：** 理解 Claude Code 的规划模式（Plan Mode）和工作流编排系统，掌握 EnterPlanMode/ExitPlanMode 的模式切换机制，了解计划文件的存储与恢复策略，以及调度系统（Cron、RemoteTrigger）和后台任务管理的实现细节。通过完整的实战案例，你将学会怎么用 Plan 模式提高 Agent 任务的成功率和可控性。
 
 ---
 
@@ -411,7 +411,7 @@ flowchart TD
 - **setAppState**：默认为 no-op，除非显式选择共享（`shareSetAppState`）。
 - **UI callbacks**（addNotification、setToolJSX 等）：全部为 undefined，子 Agent 不能控制父 UI。
 
-**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，用户可能会被来自多个子 Agent 的通知淹没，无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能利用子 Agent 的 UI 能力钓鱼 -- 例如弹出一个看似合法的确认对话框。
+**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，用户可能会被来自多个子 Agent 的通知淹没，无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能拿子 Agent 的 UI 能力去钓鱼 -- 例如弹出一个看似合法的确认对话框。
 
 Fork Agent 的状态隔离策略可以用"沙箱"来类比：子 Agent 在沙箱中运行，可以看到外部世界（通过克隆的文件状态），但不能影响外部世界（不能修改父 Agent 状态，不能控制 UI）。唯一与外部世界的通信通道是工具结果 -- 子 Agent 的执行结果通过结构化的 `tool_result` 消息返回给父 Agent。
 
@@ -554,7 +554,7 @@ Session-scoped 任务（`durable: false`）的生命周期与会话绑定。它�
 
 **实战案例：自动部署监控工作流**
 
-以下是一个利用调度系统构建的自动部署监控工作流：
+下面这个自动部署监控工作流就是用调度系统搭起来的：
 
 ```
 1. 用户："帮我部署到 staging 环境并监控部署状态"

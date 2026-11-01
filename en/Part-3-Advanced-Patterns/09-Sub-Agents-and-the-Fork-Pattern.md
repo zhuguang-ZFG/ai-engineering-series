@@ -225,7 +225,7 @@ flowchart TD
 
 ## 9.3 Fork Pattern: Cache-Safe Parallel Execution
 
-The Fork pattern lets the main agent "fork" the complete context at a given moment to multiple parallel sub-tasks while leveraging the Anthropic API's prompt cache mechanism to avoid retransmitting large numbers of tokens.
+The Fork pattern lets the main agent "fork" the complete context at a given moment to multiple parallel sub-tasks while using the Anthropic API's prompt cache mechanism to avoid retransmitting large numbers of tokens.
 
 ### Intuitive Understanding of the Fork Pattern
 
