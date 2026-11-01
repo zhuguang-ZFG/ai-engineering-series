@@ -254,7 +254,7 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 在钩子配置快照模块中，`shouldAllowManagedHooksOnly` 函数决定了是否只允许托管（managed）hooks 运行。它会检查策略设置中是否启用了 `allowManagedHooksOnly`，如果启用了则返回 true。
 
-当此函数返回 `true` 时，hooks 的执行只使用来自 `policySettings` 的 hooks，所有来自 user/project/local 的 hooks 被跳过。这是一个企业安全特性：管理员可以确保只有经过审核的 hooks 在组织内运行。
+当此函数返回 `true` 时，hooks 的执行只使用来自 `policySettings` 的 hooks，user/project/local 三处的 hooks 一律跳过。这是一个企业安全特性：管理员可以确保只有经过审核的 hooks 在组织内运行。
 
 **实战场景：金融机构的合规要求**
 
@@ -272,7 +272,7 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 核心判断函数 `isRestrictedToPluginOnly` 检查策略配置：如果策略为 `true`，则锁定所有面；如果策略是数组，则只锁定指定的面。
 
-被锁定的面中，只有以下来源被信任：
+面一旦锁上，运行器只信任下面这些来源：
 
 - **plugin** -- 通过 `strictKnownMarketplaces` 单独管控
 - **policySettings** -- 由管理员设置，天然可信
@@ -288,7 +288,7 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 ### 5.2.4 projectSettings 的系统性排除
 
-在安全敏感函数中，`projectSettings` 被一致排除。以下函数展示了相同的模式：检查 `skipDangerousModePermissionPrompt` 时，只从 userSettings、localSettings、flagSettings 和 policySettings 中读取，**有意排除 projectSettings**。
+在安全敏感函数中，`projectSettings` 次次排除在外。以下函数展示了相同的模式：检查 `skipDangerousModePermissionPrompt` 时，只从 userSettings、localSettings、flagSettings 和 policySettings 中读取，**有意排除 projectSettings**。
 
 同样的排除模式出现在 `hasAutoModeOptIn()`、`getUseAutoModeDuringPlan()` 和 `getAutoModeConfig()` 中。注释一致指向同一个原因：**projectSettings is intentionally excluded -- a malicious project could otherwise auto-bypass the dialog (RCE risk)**。
 
@@ -455,7 +455,7 @@ setState(prev => ({ ...prev, count: prev.count }))
 
 ### 5.4.2 AppState：全局状态的类型定义
 
-全局状态类型 `AppState` 被标记为深度不可变（DeepImmutable），包含了超过 50 个状态字段，涵盖了：
+全局状态类型 `AppState` 带着一个深度不可变（DeepImmutable）标记，包含超过 50 个状态字段，涵盖：
 
 - **设置层**：`settings`（合并后的 SettingsJson）、`verbose`、`mainLoopModel`
 - **UI 层**：`expandedView`、`footerSelection`、`statusLineText`
