@@ -1,12 +1,12 @@
 # Chapter 4: The Permission Pipeline -- Agent Guardrails
 
-> Learning Objectives: After reading this chapter, you will be able to:
+> Learning Objectives: By the end of this chapter, you can:
 
-> - Understand the design rationale and engineering trade-offs of Claude Code's four-stage permission checking process
-> - Master the design philosophy and immutable data pattern of the permission context
-> - Analyze the behavioral differences and applicable scenarios of the five permission modes
-> - Understand the implementation mechanism of BashTool's fine-grained permission control
-> - Master best practices for enterprise-grade security configuration
+> - Explain why permission checking takes four stages, and what each stage stops on its own
+> - Explain why the permission context is immutable data
+> - Compare the five permission modes and pick the right one for a given situation
+> - Take BashTool's fine-grained permission control apart and see how it reads a command
+> - Set up an enterprise security policy a team can actually live with
 
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
 

@@ -272,12 +272,14 @@ class TextTotalsMatchTheirOwnTables(Data):
         return len({m.group(1) for m in re.finditer(r"\bD(\d)\s*\[", plate)})
 
     def test_the_hook_table_lists_what_the_chapter_claims(self):
+        # Each quote pins a number the prose promises, never the verb in front
+        # of it: the sentences around it get reworded round after round.
         quotes = {
-            "zh": [r"掌握 (\d+) 个生命周期事件的触发时机",
+            "zh": [r"(\d+) 个生命周期事件",
                    r"本章按功能分组介绍其中 (\d+) 个生命周期事件",
                    r"下表总结了上述 (\d+) 个事件的分类",
                    r"\*\*(\d+) 个生命周期事件\*\*"],
-            "en": [r"semantics of (\d+) lifecycle events",
+            "en": [r"(\d+) lifecycle events",
                    r"this chapter introduces (\d+) of its lifecycle events",
                    r"typical uses of these (\d+) events",
                    r"\*\*(\d+) lifecycle events\*\*"],
@@ -346,7 +348,7 @@ class TextTotalsMatchTheirOwnTables(Data):
             return [
                 (self.path("01-智能体编程", lang), [r"(\d+) 个工具 · 编排引擎"]),
                 (self.path("03-工具系统", lang),
-                 [r"掌握 Claude Code (\d+) 个已注册工具",
+                 [r"(\d+) 个已注册工具",
                   r"注册了 (\d+) 个专门化工具"]),
                 (self.path("13-流式架构", lang),
                  [r"如果 Claude Code 的 (\d+) 个工具都在启动时构建 schema"]),
@@ -359,7 +361,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         return [
             (self.path("01-智能体编程", lang), [r"(\d+) Tools · Orchestration"]),
             (self.path("03-工具系统", lang),
-             [r"Claude Code's (\d+) registered tools",
+             [r"(\d+) registered tools",
               r"registers (\d+) specialized tools"]),
             (self.path("13-流式架构", lang),
              [r"Claude Code's (\d+) tools all build schemas at startup"]),

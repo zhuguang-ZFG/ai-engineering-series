@@ -3,7 +3,7 @@
 > "Premature optimization is the root of all evil -- but latency is the root of all user complaints."
 > -- adapted from Donald Knuth
 
-**Learning Objectives:** Master Claude Code's streaming processing architecture and cost control strategies. Understand how QueryEngine enables real-time interaction through streaming APIs, how StreamingToolExecutor balances concurrency with safety, and how the system optimizes startup performance and runtime costs through parallel prefetching, lazy loading, and prompt caching. Through this chapter, you will establish a complete performance optimization mindset, able to identify, measure, and solve performance bottlenecks in Agent systems.
+**Learning Objectives:** How the streaming architecture gets the first token on screen sooner; how QueryEngine owns one query's full lifecycle; how StreamingToolExecutor runs work concurrently without giving up safety; what parallel prefetching, lazy loading and prompt caching each take off the bill. By the end of this chapter you can give an Agent system a performance checkup: find the bottleneck, price it, and fix the right thing.
 
 ---
 

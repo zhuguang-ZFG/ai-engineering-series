@@ -3,7 +3,7 @@
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Claude Code 中的注释
 
-**学习目标：** 综合运用全书知识，设计并实现一个自定义 Agent Harness，掌握从对话循环到生产部署的完整工程链路。
+**学习目标：** 前 14 章拆开的零件，这一章装回去：你自己动手写一套 Agent Harness，从对话循环一路跑到能上线。
 
 ---
 

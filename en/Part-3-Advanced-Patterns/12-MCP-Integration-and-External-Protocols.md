@@ -3,15 +3,15 @@
 > "Protocols are the language systems use to communicate; good protocols turn integration into composition rather than coding."
 > -- Adapted from *Designing Distributed Systems*
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Understand the technical background behind MCP (Model Context Protocol), its design philosophy, and the core problems it solves
-- Master the use cases, performance characteristics, and selection strategies for 8 connection configuration variants
-- Analyze in depth the design logic behind 7 configuration scopes and the three-layer security strategy
-- Understand the Bridge system's bidirectional communication architecture, SSE sequence number continuation, and multi-session security design
-- Master the complete pipeline of MCP tool discovery, mapping, naming, and permission models
-- Design enterprise-grade MCP security strategies, configure allowlists/denylists, and IDE integration
-- Understand how MCP integration collaborates with the tool system (Chapter 3), hook system (Chapter 8)
+- Explain why MCP (Model Context Protocol) appeared and which problem it actually removes
+- Choose among the 8 connection configurations and name what each one costs
+- Unfold how 7 configuration scopes and 3 security layers stack up
+- Follow the Bridge's two-way traffic, its SSE sequence-number handoff, and how sessions stay separated
+- Trace an MCP tool from discovery through mapping, naming and permissions
+- Set an enterprise MCP security policy: allowlists, denylists, IDE integration
+- See how MCP plugs into the tool system (Chapter 3) and the hook system (Chapter 8)
 
 ---
 

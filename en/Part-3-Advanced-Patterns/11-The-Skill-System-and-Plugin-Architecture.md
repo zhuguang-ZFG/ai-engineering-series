@@ -4,11 +4,11 @@
 > -- Adapted from *Clean Architecture*
 
 **Learning Objectives:**
-- Master the complete lifecycle of Claude Code Skill definition, loading, and execution mechanisms
-- Understand the tiered skill strategy from user-level to managed-level and its security implications
-- Learn the full process and best practices for creating custom skills
-- Understand the cache-first loading model and security boundaries of the plugin system
-- Master the patterns and anti-patterns of skill composition
+- Follow a Claude Code Skill through its whole life: defined, loaded, executed
+- Explain how skills tier from user-level to managed-level, and what each tier risks
+- Write a custom skill that works on the first try
+- See why the plugin system loads cache-first, and where its security boundary sits
+- Tell the useful patterns of skill composition from the anti-patterns
 
 ---
 

@@ -3,13 +3,13 @@
 > "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
 > -- Augustine of Hippo
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Deeply understand the async-generator-driven dialog main loop mechanism
-- Master the complete state transition model of Agent-model interaction
-- Understand the design principles of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact)
-- Analyze the trigger conditions and recovery strategies for seven Continue paths
-- Evaluate the impact of the dependency injection pattern on test maintainability
+- Explain why the main loop is an async generator rather than a function that runs to completion
+- Trace the state that moves back and forth between Agent and model, turn after turn
+- Say what each stage of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact) holds back
+- Name the seven Continue paths, what sets each one off, and how the loop picks up again
+- Judge whether dependency injection makes this loop easier to test or harder to read
 
 ---
 

@@ -1,10 +1,10 @@
 # Chapter 9: Sub-Agents and the Fork Pattern
 
 > **Learning Objectives:**
-> - Deeply understand the spawning mechanism and full lifecycle management of sub-agents
-> - Master the Fork pattern's cache sharing strategy and byte-level inheritance principles
-> - Learn how to design and create custom agents for specific scenario requirements
-> - Understand the design philosophy of the adversarial Verification Agent and its engineering significance
+> - Follow a sub-agent from spawn to teardown
+> - Explain the Fork pattern's cache sharing and byte-level inheritance
+> - Build a custom agent shaped around a specific job
+> - Explain why the adversarial Verification Agent is built to argue with the main Agent
 
 Claude Code's capability goes beyond a single-turn conversation. Complex tasks can be split and handed to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
 

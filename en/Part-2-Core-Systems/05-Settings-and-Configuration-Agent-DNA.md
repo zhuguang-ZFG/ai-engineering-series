@@ -1,6 +1,6 @@
 # Chapter 5: Settings and Configuration -- Agent DNA
 
-> **Learning Objectives:** Understand the merge rules and security boundaries of the six-layer configuration sources, master the compile-time optimization mechanism of the feature flag system, and grasp the design philosophy of the Zustand-like immutable state store. Through this chapter, you will be able to design reasonable configuration strategies for teams of different scales and understand how the configuration system serves as the first line of defense in Agent security.
+> **Learning Objectives:** The order the six configuration layers merge in and where their boundaries sit; how the feature flag system prunes branches it will never take, at compile time; why a Zustand-like immutable store suits configuration. By the end of this chapter you can set a configuration policy for a team of any size, and explain how the configuration system became the first line of defense for Agent security.
 
 ---
 

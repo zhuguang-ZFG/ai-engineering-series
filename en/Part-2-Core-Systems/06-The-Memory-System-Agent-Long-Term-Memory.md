@@ -1,6 +1,6 @@
 # Chapter 6: The Memory System -- Agent Long-Term Memory
 
-> **Learning Objectives:** Master the design intent and automatic extraction mechanism of four memory types, understand the cache-aware architecture based on the Fork pattern, and learn how to design a persistent Agent memory system. Through this chapter, you will understand how to put the memory system to work so the Agent understands you better the more you use it, and how to manage the lifecycle of memories in a multi-project environment.
+> **Learning Objectives:** What each of the four memory types holds and who extracts it; how the Fork pattern lets parallel Agents share one cache; how you build a memory system that lives on disk. By the end of this chapter you can make memory earn its keep the more you use it, and keep it tidy across projects.
 
 ---
 

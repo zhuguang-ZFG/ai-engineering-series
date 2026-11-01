@@ -3,13 +3,13 @@
 > "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
 > -- Augustine of Hippo
 
-**学习目标：** 阅读本章后，你将能够：
+**学习目标：** 读完这章，你能：
 
-- 深入理解异步生成器驱动的对话主循环机制
-- 掌握 Agent 与模型交互的完整状态流转模型
-- 理解预处理管线（Snip、Microcompact、Context Collapse、Autocompact）的设计原理
-- 分析七种 Continue 路径的触发条件和恢复策略
-- 评估依赖注入模式对测试可维护性的影响
+- 说清主循环为什么是一个异步生成器，而不是一跑到底的普通函数
+- 一轮一轮画出 Agent 和模型之间来回流转的状态
+- 讲明白 Snip、Microcompact、Context Collapse、Autocompact 这道预处理管线各自在挡什么
+- 数出七条 Continue 路径，各自什么时候被触发、之后怎么接着跑
+- 判断依赖注入让这段循环更好测，还是更难读
 
 ---
 

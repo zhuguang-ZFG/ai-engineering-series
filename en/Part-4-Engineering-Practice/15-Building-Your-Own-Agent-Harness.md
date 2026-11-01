@@ -3,7 +3,7 @@
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Comment in Claude Code
 
-**Learning Objectives:** Synthesize knowledge from the entire book to design and implement a custom Agent Harness, mastering the complete engineering pipeline from dialog loop to production deployment.
+**Learning Objectives:** The parts the previous 14 chapters took apart now go back together: you build your own Agent Harness, from the dialog loop all the way to something you can deploy.
 
 ---
 

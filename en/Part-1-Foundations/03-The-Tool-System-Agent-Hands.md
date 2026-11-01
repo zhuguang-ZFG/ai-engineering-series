@@ -3,13 +3,13 @@
 > "If all you have is a hammer, everything looks like a nail."
 > -- Abraham Maslow
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Master the design patterns of Claude Code's 55 registered tools and understand the design philosophy of the five-element protocol
-- Understand the complete architecture of the tool definition protocol, registration mechanism, and orchestration engine
-- Analyze the scheduling principles and practical effects of concurrency partitioning strategies
-- Understand how the StreamingToolExecutor four-stage state machine works
-- Evaluate the engineering value of the deferred tool discovery mechanism
+- See the design pattern the 55 registered tools share, and why the protocol needs exactly five elements
+- Follow a tool from definition through registration to orchestration
+- Explain how concurrency partitioning orders the queue, and how much waiting it actually saves
+- Name what each of the four StreamingToolExecutor stages holds back
+- Judge whether deferred tool discovery pays for the extra indirection
 
 ---
 

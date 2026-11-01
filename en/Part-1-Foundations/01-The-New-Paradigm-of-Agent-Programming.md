@@ -4,13 +4,13 @@
 
 ## Learning Objectives
 
-After reading this chapter, you will be able to:
+By the end of this chapter, you can:
 
-- Understand the evolution of AI Agents from simple conversation to autonomous tool calling
-- Establish a core mental model of Agent Harness and grasp its positioning within Agent systems
-- Master Claude Code's macro architecture, technology stack choices, and design philosophy
-- Distinguish the fundamental differences between "simple API wrappers" and "Agent Harness"
-- Understand how the five design principles permeate every subsystem of the Agent system
+- Trace how AI Agents grew from one-question-one-answer chat into deciding on their own to call a tool
+- Carry a mental model of the Agent Harness and know which layer of an Agent system it actually supports
+- Sketch Claude Code's macro architecture and explain why the stack looks the way it does
+- Tell a thin API wrapper apart from an actual Agent Harness, and say where the line falls
+- Follow each of the five design principles into the subsystems where they turn up
 
 ---
 

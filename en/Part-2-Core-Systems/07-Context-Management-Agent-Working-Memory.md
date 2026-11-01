@@ -1,11 +1,11 @@
 # Chapter 7: Context Management -- The Agent's Working Memory
 
 > **Learning Objectives:**
-> 1. Understand the hard constraints of the Agent's context window and how effective space is calculated
-> 2. Master the design motivations and working mechanisms of the four-level progressive compression strategy (Snip -> MicroCompact -> Collapse -> AutoCompact)
-> 3. Understand how the circuit breaker pattern protects the system from cascading failures
-> 4. Analyze the dual-phase output structure of compression prompt engineering
-> 5. Be able to select the optimal context management strategy for different usage scenarios
+> 1. Work out the hard ceiling on the context window and the space you can still write in
+> 2. Put the four compression levels (Snip -> MicroCompact -> Collapse -> AutoCompact) in order and say when each one fires
+> 3. Explain how the circuit breaker pulls the plug when compression failures cascade
+> 4. Take the compression prompt two-phase output apart
+> 5. Pick a compression strategy that fits how you actually use the Agent
 
 ---
 

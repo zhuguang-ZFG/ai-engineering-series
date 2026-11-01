@@ -1,10 +1,10 @@
 # Chapter 10: The Coordinator Pattern -- Multi-Agent Enterprise Orchestration
 
 > **Learning Objectives:**
-> - Understand the "coordinator-worker" architecture of the Coordinator pattern and its design motivations
-> - Master the complete workflow of multi-agent collaboration: from requirements analysis to delivery verification
-> - Gain a deep understanding of task allocation, fault recovery, and the Scratchpad collaboration space mechanisms
-> - Be able to compare the Coordinator pattern with the Fork pattern and make the correct choice for given scenarios
+> - See how the Coordinator pattern splits work between coordinator and workers, and why it splits it there
+> - Walk the full multi-agent workflow, from requirements to verified delivery
+> - Work out how tasks get assigned, how failures get picked up, and how the Scratchpad is shared
+> - Choose correctly between the Coordinator pattern and the Fork pattern
 
 When a single agent cannot handle complex engineering tasks, Claude Code provides the Coordinator pattern -- a centralized multi-agent orchestration solution. Unlike the Fork pattern's peer-to-peer parallelism, the Coordinator pattern employs a "coordinator-worker" architecture, where a dedicated coordinator manages the lifecycle and task allocation of multiple parallel workers.
 

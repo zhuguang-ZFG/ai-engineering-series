@@ -2,7 +2,7 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
-**Learning Objectives:** Understand Claude Code's planning mode (Plan Mode) and workflow orchestration system, master the EnterPlanMode/ExitPlanMode pattern switching mechanism, understand plan file storage and recovery strategies, and implementation details of scheduling system (Cron, RemoteTrigger) and background task management. Through complete practical cases, you will learn how to use Plan Mode to improve Agent task success rate and controllability.
+**Learning Objectives:** How Plan Mode splits thinking from doing, when EnterPlanMode/ExitPlanMode flip between the two, where plan files live and how they come back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension. The worked cases at the end show how Plan Mode lifts both the success rate and the predictability of long Agent tasks.
 
 ---
 

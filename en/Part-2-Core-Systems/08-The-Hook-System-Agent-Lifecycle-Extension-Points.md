@@ -1,14 +1,14 @@
 # Chapter 8: The Hook System -- Agent's Lifecycle Extension Points
 
-> **Learning Objectives:** After reading this chapter, you will be able to:
+> **Learning Objectives:** By the end of this chapter, you can:
 >
-> - Understand the design philosophy, capability boundaries, and applicable scenarios of five hook types
-> - Master the trigger timing, input structure, and exit code semantics of 22 lifecycle events
-> - Design structured hook responses, using `decision`, `updatedInput`, `additionalContext` and other fields for fine-grained control
-> - Understand the multi-layer security model: global disable, managed-hooks-only, workspace trust check three-layer gating
-> - Analyze hook priority ordering rules and conflict resolution strategies
-> - Master best practices for hook configuration, avoiding common anti-patterns
-> - Understand the collaboration between the hook system and permission pipeline (Chapter 4), configuration system (Chapter 5)
+> - Tell what each of the five hook types can intercept, and where each one stops
+> - Say when each of the 22 lifecycle events fires, what it receives, and what its exit code means
+> - Write structured hook responses that steer behavior through `decision`, `updatedInput` and `additionalContext`
+> - Recall the three gates: global disable, managed hooks only, workspace trust
+> - Reason out which hook runs first when several match, and how conflicts settle
+> - Configure hooks without stepping into the usual traps
+> - See how hooks hand off to the permission pipeline (Chapter 4) and the configuration system (Chapter 5)
 
 ---
 
