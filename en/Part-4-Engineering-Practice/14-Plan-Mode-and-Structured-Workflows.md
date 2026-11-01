@@ -424,7 +424,7 @@ Fork Agent's state isolation strategy can be compared to a "sandbox": sub-agent 
 
 ### 14.4.1 ScheduleCronTool: Local Scheduled Tasks
 
-Claude Code's scheduling system supports two types of scheduled tasks:
+Claude Code's scheduling system handles two types of scheduled tasks:
 
 - **One-shot** (`recurring: false`): Triggers once then automatically deletes.
 - **Recurring** (`recurring: true`): Repeats according to schedule, rescheduling from current time.

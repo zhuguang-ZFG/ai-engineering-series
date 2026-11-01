@@ -423,7 +423,7 @@ Fork Agent 的状态隔离策略可以用"沙箱"来类比：子 Agent 在沙箱
 
 ### 14.4.1 ScheduleCronTool：本地定时任务
 
-Claude Code 的调度系统支持两类定时任务：
+Claude Code 的调度系统管两类定时任务：
 
 - **One-shot**（`recurring: false`）：触发一次后自动删除。
 - **Recurring**（`recurring: true`）：按计划重复触发，从当前时间重新调度。

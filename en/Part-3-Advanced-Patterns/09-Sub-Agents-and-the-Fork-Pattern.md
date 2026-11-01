@@ -407,7 +407,7 @@ Report format:
 - **Remediation**: Specific code modification proposals
 ```
 
-The `parseAgentFromMarkdown()` function parses this frontmatter, mapping `name` to `agentType` and using the Markdown body as the system prompt. If the `memory` field is enabled, the system also automatically injects file read/write tools to support persistent memory.
+The `parseAgentFromMarkdown()` function parses this frontmatter, mapping `name` to `agentType` and using the Markdown body as the system prompt. If the `memory` field is enabled, the system also automatically injects file read/write tools so the memory persists.
 
 #### More Custom Agent Examples
 

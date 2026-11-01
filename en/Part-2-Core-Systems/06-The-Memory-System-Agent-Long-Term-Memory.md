@@ -75,7 +75,7 @@ Example: When a user says "I've been writing Go for ten years, but this is my fi
 
 **Practical Application Scenarios:**
 
-Scenario 1: Cross-project user preferences. After a user expresses preferences in project A, the Agent can apply the same preferences in project B. Because user-type memories are stored in the user's global directory, they naturally support cross-project sharing.
+Scenario 1: Cross-project user preferences. After a user expresses preferences in project A, the Agent can apply the same preferences in project B. Because user-type memories are stored in the user's global directory, cross-project sharing comes for free.
 
 Scenario 2: Progressive understanding of the user. In the first conversation, the user mentions being a data scientist, and the Agent records this as a user memory. In the fifth conversation, the user demonstrates advanced Python skills, and the Agent updates the memory to add "proficient in Python, familiar with pandas/numpy." This progressive user profile building enhances the Agent's collaboration capabilities over time.
 

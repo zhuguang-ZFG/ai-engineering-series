@@ -91,7 +91,7 @@ Rule matching is the core of the permission pipeline. The `hasPermissionsToUseTo
 
 **Step 1a: Tool-level deny check.** This is the highest priority. If a tool is denied entirely, the call is immediately rejected.
 
-The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic supports exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
+The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic has two paths: exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
 
 The seven rule sources are ordered by proximity: session-level rules (the most recently set) take priority over command-line arguments, command-line arguments take priority over project configuration, and project configuration takes priority over global user configuration. The more specific and recent a rule, the earlier it sits, so it overrides the general and the old.
 
@@ -344,7 +344,7 @@ The Bash tool is the most complex tool in the permission system because the comp
 
 ### 4.4.1 Command Classification and Wildcard Matching
 
-The parsing of permission rule strings is handled by a dedicated function that supports three formats: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
+The parsing of permission rule strings is handled by a dedicated function in two forms: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
 
 For the Bash tool, `ruleContent` can be:
 - Exact command: `Bash(npm test)` -- matches only `npm test`
@@ -370,7 +370,7 @@ flowchart LR
     class exact,prefix,wildcard match
 ```
 
-The wildcard matching engine does pattern matching in full: it handles escape sequences, converts the `*` wildcard to regular expressions, and supports escaped `\*` and `\\`.
+The wildcard matching engine does pattern matching in full: it handles escape sequences, converts the `*` wildcard to regular expressions, and treats `\*` and `\\` as literals.
 
 One detail: when a pattern ends with ` *` (space plus wildcard) and this is the only wildcard, the trailing space and arguments become optional. The rule `git *` therefore matches both `git add .` and the bare `git` command -- maintaining semantic consistency with the `git:*` prefix. This "equivalent syntax" design reduces users' cognitive burden -- you don't need to remember two different syntax rules; `git:*` and `git *` do the same thing.
 
@@ -394,7 +394,7 @@ The 2-second timeout choice is a deliberate trade-off: too short (e.g., 500ms) m
 
 ### 4.5.1 The PermissionUpdate Pattern
 
-Permission updates are expressed through the `PermissionUpdate` union type, supporting six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
+Permission updates are expressed through the `PermissionUpdate` union type, with six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
 
 Each operation specifies the configuration source to which the update should be applied: global user settings, project-level settings, local (not committed to version control) settings, current session only, or command-line arguments.
 
@@ -406,7 +406,7 @@ The combination of six operations and five configuration sources yields 30 possi
 
 `applyPermissionUpdate` handles each update type. In the `addRules` case, it adds the rule string to the rule list corresponding to the behavior type (allow/deny/ask) and the corresponding source, producing a new context object through immutable updates.
 
-Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensuring they remain in effect after restarts. Only local settings, user settings, and project settings targets support persistence. Session-level and command-line argument-level updates are only effective at runtime.
+Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensuring they remain in effect after restarts. Only local settings, user settings, and project settings persist. Session-level and command-line argument-level updates are only effective at runtime.
 
 The separation design of these two functions is very important: memory application is synchronous and immediate, while file persistence may involve I/O operations. In the user approval handling method of the permission context, the two are called in sequence.
 

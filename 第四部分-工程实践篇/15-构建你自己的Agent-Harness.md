@@ -627,7 +627,7 @@ export class MemoryStore {
 
 ### Step 6：钩子系统
 
-钩子系统是 Agent Harness 的扩展层。Claude Code 支持二十多种钩子事件，每个钩子都是独立的 Shell 命令。以下是一个精简实现：
+钩子系统是 Agent Harness 的扩展层。Claude Code 的钩子事件有二十多种，每个钩子都是独立的 Shell 命令。以下是一个精简实现：
 
 ```typescript
 // hooks.ts
@@ -1050,7 +1050,7 @@ flowchart TD
 - **视觉理解工具：** 截图分析、UI 元素定位、图表解读
 - **语音交互：** 语音输入触发工具调用，语音输出播报工具结果
 
-多模态交互一进来，Agent Harness 的架构就得动。当前的 `ContentBlock` 类型体系需要扩展以支持二进制数据，工具的 `inputSchema` 需要支持文件引用而非仅文本参数，流式传输需要支持分块的二进制数据。这些改动落在核心数据模型上。
+多模态交互一进来，Agent Harness 的架构就得动。当前的 `ContentBlock` 类型体系要扩到二进制数据，工具的 `inputSchema` 要能引用文件而不只是文本参数，流式传输要把二进制数据分块传出。这些改动落在核心数据模型上。
 
 **多模态场景下的新挑战：**
 
@@ -1097,7 +1097,7 @@ flowchart TD
 
 ### 标准化协议（MCP 演进方向）
 
-Model Context Protocol (MCP) 正在成为工具调用的事实标准。Claude Code 已经深度集成了 MCP：工具可以来自 MCP 服务器，`mcp_info` 字段追踪工具来源，`handleElicitation` 支持 MCP 服务器的交互式请求。
+Model Context Protocol (MCP) 正在成为工具调用的事实标准。Claude Code 已经深度集成了 MCP：工具可以来自 MCP 服务器，`mcp_info` 字段追踪工具来源，`handleElicitation` 接得住 MCP 服务器发来的交互式请求。
 
 未来的 MCP 演进方向包括：
 
@@ -1156,7 +1156,7 @@ flowchart TD
 
 **4. 从隐式记忆到显式知识图谱**
 
-当前的记忆系统把记忆存成一段段文本，谈不上结构。未来的记忆可能是结构化的知识图谱 -- Agent 不仅记住"用户喜欢 Jest"，还能记住"项目 A 使用 Jest，项目 B 使用 Vitest，因为..."。这种结构化记忆支持更精确的检索和推理。
+当前的记忆系统把记忆存成一段段文本，谈不上结构。未来的记忆可能是结构化的知识图谱 -- Agent 不仅记住"用户喜欢 Jest"，还能记住"项目 A 使用 Jest，项目 B 使用 Vitest，因为..."。这样的记忆能让检索和推理都更精确。
 
 ---
 

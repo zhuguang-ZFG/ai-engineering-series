@@ -201,7 +201,7 @@ flowchart TD
 
 ### 12.1.4 Server Connection States and Lifecycle
 
-MCP server connections have five states, forming a carefully designed finite state machine: Connected, Failed, NeedsAuth, Pending (with retry support), and Disabled.
+MCP server connections have five states, forming a carefully designed finite state machine: Connected, Failed, NeedsAuth, Pending (with retries), and Disabled.
 
 ```mermaid
 stateDiagram-v2
@@ -409,7 +409,7 @@ However, frequent confirmation dialogs severely impact the user experience. To a
 
 **Permission Rule Matching Logic**
 
-Permission rules support both exact matching and wildcard matching:
+Permission rules match in two modes, exact and wildcard:
 
 - `mcp__github__create_issue`: Exact match, only allows the GitHub tool named `create_issue`
 - `mcp__github__*`: Wildcard match, allows all tools provided by the GitHub server
@@ -537,7 +537,7 @@ In enterprise environments, MCP servers can pose serious security risks: a malic
 
 **Denylist: Absolute Priority**
 
-The denylist has absolute priority — servers on the denylist will never be connected, regardless of which scope they appear in. Three matching methods are supported:
+The denylist has absolute priority — servers on the denylist will never be connected, regardless of which scope they appear in. It matches three ways:
 
 1. **Match by server name**: The simplest and most direct method -- compare the name the server registered in the configuration.
 2. **Match by command array**: For stdio servers, compare the complete command-line arguments (`command` + `args`). Users cannot bypass the denylist by swapping in a different name.
@@ -545,11 +545,11 @@ The denylist has absolute priority — servers on the denylist will never be con
 
 **Allowlist: Gate Control Mechanism**
 
-If an allowlist is defined, only servers on the allowlist are permitted. The allowlist also supports name, command, and URL matching. The allowlist is a stricter security policy — deny everything by default, only allow what is explicitly approved. It's suitable for environments with extremely high security requirements (such as financial institutions, government agencies).
+If an allowlist is defined, only servers on the allowlist are permitted. The allowlist also matches by name, command, and URL. The allowlist is a stricter security policy — deny everything by default, only allow what is explicitly approved. It's suitable for environments with extremely high security requirements (such as financial institutions, government agencies).
 
 **URL Wildcard Matching Details**
 
-URL pattern matching supports the `*` wildcard, so one pattern covers a whole group of related servers:
+URL pattern matching takes the `*` wildcard, so one pattern covers a whole group of related servers:
 
 ```
 Exact match:
@@ -752,7 +752,7 @@ flowchart LR
 
 ### 12.4.2 Bidirectional Communication Layer
 
-Bridge's communication architecture is bidirectional, supporting two types of data flow. This bidirectionality is what distinguishes the Bridge system from simple "log pushing" — it doesn't just forward CLI output to the outside; it can also receive external commands and execute them.
+Bridge's communication architecture is bidirectional, and two types of data flow run through it. This bidirectionality is what distinguishes the Bridge system from simple "log pushing" — it doesn't just forward CLI output to the outside; it can also receive external commands and execute them.
 
 **Outbound Flow (CLI -> External)**
 
@@ -812,7 +812,7 @@ Why use a ring buffer instead of a simple Set? Consider a long-running session t
 
 ### 12.4.3 Control Protocol
 
-Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function is itself a lightweight Remote Procedure Call (RPC) protocol supporting the following control subtypes:
+Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function is itself a lightweight Remote Procedure Call (RPC) protocol with the following control subtypes:
 
 | Subtype | Purpose | Request Parameters | Response |
 |--------|------|---------|------|
@@ -1081,7 +1081,7 @@ flowchart TD
 
 **API Authentication and Token Management**
 
-The API client authenticates using OAuth Bearer Tokens and supports automatic Token refresh and retry on 401 responses. This mechanism handles a common distributed systems problem: Token expiration.
+The API client authenticates using OAuth Bearer Tokens; on a 401 it refreshes the Token and retries. This mechanism handles a common distributed systems problem: Token expiration.
 
 ```mermaid
 flowchart TD

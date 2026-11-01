@@ -77,7 +77,7 @@ graph TD
 
 **1. Command Hook** (`BashCommandHookSchema`)
 
-The most common hook type, executes Shell commands. Supports choosing Shell interpreter (bash/powershell), custom timeout, custom status message, and `once` flag (automatically removed after one execution).
+The most common hook type, executes Shell commands. You can choose the Shell interpreter (bash/powershell), a custom timeout, a custom status message, and an `once` flag (automatically removed after one execution).
 
 Applicable scenarios: Executing script checks, filesystem operations, calling external CLI tools, conditional approval or rejection of operations.
 
@@ -101,7 +101,7 @@ Configuration example:
 
 **2. Prompt Hook** (`PromptHookSchema`)
 
-Calls an LLM to evaluate the hook input, outputs a JSON response. Supports specifying the model (defaults to a fast small model) and the `$ARGUMENTS` placeholder to reference the hook input.
+Calls an LLM to evaluate the hook input, outputs a JSON response. You can specify the model (defaults to a fast small model) and use the `$ARGUMENTS` placeholder to reference the hook input.
 
 Applicable scenarios: Approval flows requiring "intelligent judgment" rather than hardcoded rules. For example, determining whether a code modification is safe relies not on regex matching of keywords but on letting an LLM understand code semantics to make judgments.
 
@@ -129,7 +129,7 @@ Applicable scenarios: Complex approval flows requiring multi-step, iterable vali
 
 **4. HTTP Hook** (`HttpHookSchema`)
 
-POSTs the hook input JSON to a specified URL. Supports custom request headers, environment variable interpolation (controlled through the `allowedEnvVars` whitelist), suitable for integration with external systems.
+POSTs the hook input JSON to a specified URL. You can set custom request headers and interpolate environment variables (controlled through the `allowedEnvVars` whitelist), which suits integration with external systems.
 
 Applicable scenarios: Integration with CI/CD systems (like Jenkins, GitHub Actions), sending audit logs to SIEM systems, calling enterprise internal approval services.
 
@@ -166,7 +166,7 @@ Applicable scenarios: Scenarios requiring deep interaction with Claude Code runt
 
 ### Sync vs Async Hooks
 
-Command hooks support three execution modes:
+Command hooks have three execution modes:
 
 - **Synchronous mode** (default): Blocks current operation, waits for hook completion before deciding whether to continue. This is the most common and safest mode, suitable for "approve before execute" scenarios.
 - **Asynchronous mode** (`async: true`): Runs in background, doesn't block current operation. Hook results are not visible to the model. Suitable for "fire-and-forget" logging or notification scenarios.
@@ -309,7 +309,7 @@ Configuration example -- Block all writes to production environment config files
 
 **PostToolUse** (After tool execution)
 
-Input contains tool call parameters and response. Can be used for audit logs, result post-processing. Supports `updatedMCPToolOutput` field to override MCP tool's actual output.
+Input contains tool call parameters and response. Can be used for audit logs, result post-processing. You can also set the `updatedMCPToolOutput` field to override MCP tool's actual output.
 
 Typical use cases:
 
@@ -596,7 +596,7 @@ This field allows hooks to attach extra context information before the user mess
 
 ### additionalContext: Injecting Additional Context
 
-`additionalContext` is a generic field supported by multiple events. It injects hook-generated additional information into model context, attached as system reminder messages. This is particularly useful in the following scenarios:
+`additionalContext` is a generic field shared by multiple events. It injects hook-generated additional information into model context, attached as system reminder messages. This is particularly useful in the following scenarios:
 
 - Injecting project status information in `SessionStart` event
 - Adding extra usage notes in `PostToolUse` event
@@ -664,7 +664,7 @@ Zod Schema strictly validates hook configuration. The hook Schema module defines
 
 > **Cross-reference with Chapter 5:** Hook configuration is an important component of the six-layer configuration system introduced in Chapter 5. Hook configuration is stored in `hooks` field of each layer, following the same merge and override rules as regular settings. Understanding Chapter 5's configuration merge mechanism helps you understand why hooks with the same name defined in different config files exhibit specific priority behaviors.
 
-Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string supporting permission rule syntax pattern matching.
+Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string matched with permission rule syntax.
 
 Complete hook configuration structure example:
 

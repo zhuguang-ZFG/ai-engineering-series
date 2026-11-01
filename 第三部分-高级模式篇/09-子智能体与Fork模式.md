@@ -407,7 +407,7 @@ hooks:
 - **修复建议**：具体的代码修改方案
 ```
 
-`parseAgentFromMarkdown()` 函数解析这个 frontmatter，将 `name` 映射为 `agentType`，将 Markdown 正文作为系统提示。如果 `memory` 字段启用，系统还会自动注入文件读写工具以支持持久化记忆。
+`parseAgentFromMarkdown()` 函数解析这个 frontmatter，将 `name` 映射为 `agentType`，将 Markdown 正文作为系统提示。如果 `memory` 字段启用，系统还会自动注入文件读写工具，让记忆持久化。
 
 #### 更多自定义 Agent 案例
 

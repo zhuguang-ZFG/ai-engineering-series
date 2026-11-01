@@ -228,7 +228,7 @@ Deleting a team runs several safety checks first:
 
 ### SendMessageTool Message Passing
 
-The message sending tool is the core communication channel for team collaboration. It supports four message types: close requests, close responses, and plan approval responses.
+The message sending tool is the core communication channel for team collaboration. Close requests, close responses, and plan approval responses all travel through it.
 
 Addressing modes for message passing:
 
@@ -675,7 +675,7 @@ Suppose in a Coordinator workflow, a worker in the Implementation phase fails wh
 
 Choose a project you're familiar with and design a Coordinator workflow for the following task:
 
-Task: "Add internationalization (i18n) support to the project, supporting both Chinese and English languages."
+Task: "Add internationalization (i18n) to the project; both Chinese and English have to work."
 
 Requirements:
 - List the investigation directions needed for the Research phase

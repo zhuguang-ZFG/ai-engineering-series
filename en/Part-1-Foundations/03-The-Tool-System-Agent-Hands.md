@@ -224,7 +224,7 @@ FileEditTool's `isDestructive` method determines whether an edit is a destructiv
 
 **FileWriteTool** is responsible for creating or completely overwriting files. This is the "heaviest" file operation with the strictest permission checks. The difference between FileWriteTool and FileEditTool lies in scope -- Edit only modifies specific fragments within a file, while Write can completely overwrite file contents. Therefore, Write has higher permission check standards.
 
-All three tools support `contextModifier`, which updates the file state cache after execution, so later tool calls and memory attachment injections see the latest state.
+All three tools carry a `contextModifier`, which updates the file state cache after execution, so later tool calls and memory attachment injections see the latest state.
 
 ```mermaid
 flowchart LR

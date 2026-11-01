@@ -641,7 +641,7 @@ export class MemoryStore {
 
 ### Step 6: Hook System
 
-The hook system is the extension layer of the Agent Harness. Claude Code supports over twenty hook events, each being an independent Shell command. Here is a streamlined implementation:
+The hook system is the extension layer of the Agent Harness. Claude Code has over twenty hook events, each an independent Shell command. Here is a streamlined implementation:
 
 ```typescript
 // hooks.ts
@@ -1066,7 +1066,7 @@ Current tool systems are text-centric, but multimodal interaction is changing th
 - **Visual understanding tools:** Screenshot analysis, UI element location, chart interpretation
 - **Voice interaction:** Voice input triggers tool calls, voice output announces tool results
 
-Multimodal interaction forces Agent Harness architecture to move. The current `ContentBlock` type system needs extending to support binary data, tool `inputSchema` needs to support file references rather than text-only parameters, and streaming needs to support chunked binary data. These changes land in the core data model.
+Multimodal interaction forces Agent Harness architecture to move. The current `ContentBlock` type system has to cover binary data, tool `inputSchema` has to take file references rather than text-only parameters, and streaming has to carry binary data in chunks. These changes land in the core data model.
 
 **New challenges in multimodal scenarios:**
 
@@ -1113,7 +1113,7 @@ flowchart TD
 
 ### Standardized Protocols (MCP Evolution)
 
-Model Context Protocol (MCP) is becoming the de facto standard for tool invocation. Claude Code has deeply integrated MCP: tools can come from MCP servers, the `mcp_info` field tracks tool provenance, and `handleElicitation` supports interactive requests from MCP servers.
+Model Context Protocol (MCP) is becoming the de facto standard for tool invocation. Claude Code has deeply integrated MCP: tools can come from MCP servers, the `mcp_info` field tracks tool provenance, and `handleElicitation` answers interactive requests from MCP servers.
 
 Future MCP evolution directions include:
 
@@ -1172,7 +1172,7 @@ Currently, an Agent typically excels at one type of task. Future Agent Harnesses
 
 **4. From Implicit Memory to Explicit Knowledge Graphs**
 
-The current memory system is implicit, text-fragment-based memory. Future memory may be structured knowledge graphs -- an Agent doesn't just remember "the user likes Jest," but can also remember "Project A uses Jest, Project B uses Vitest, because..." This structured memory supports more precise retrieval and reasoning.
+The current memory system is implicit, text-fragment-based memory. Future memory may be structured knowledge graphs -- an Agent doesn't just remember "the user likes Jest," but can also remember "Project A uses Jest, Project B uses Vitest, because..." Structured memory like that makes retrieval and reasoning sharper.
 
 ---
 

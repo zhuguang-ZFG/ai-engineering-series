@@ -224,7 +224,7 @@ FileEditTool 的 `isDestructive` 方法会根据编辑内容判断是否为破�
 
 **FileWriteTool** 负责创建或完全覆写文件。这是最"重"的文件操作，权限检查最为严格。FileWriteTool 与 FileEditTool 的区别在于作用范围——Edit 只修改文件中的特定片段，Write 可以完全覆盖文件内容。因此，Write 的权限检查标准更高。
 
-三个工具都支持 `contextModifier`，在执行后更新文件状态缓存，后续的工具调用和内存附件注入就能看到最新的文件状态。
+三个工具都带 `contextModifier`，在执行后更新文件状态缓存，后续的工具调用和内存附件注入就能看到最新的文件状态。
 
 ```mermaid
 flowchart LR
