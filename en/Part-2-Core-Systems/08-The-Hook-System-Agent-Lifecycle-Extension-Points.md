@@ -374,7 +374,7 @@ Session lifecycle events constitute the complete narrative of an Agent from "bir
 
 **SessionStart** (Session startup)
 
-Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout is shown to Claude. Blocking errors are ignored -- session start hooks shouldn't block session startup.
+Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout is shown to Claude. The system ignores blocking errors -- session start hooks shouldn't block session startup.
 
 > **Design philosophy:** Why are SessionStart hook blocking errors ignored? Because session startup is the system initialization process; if hooks were allowed to block startup, one misconfigured hook could make the entire system unstartable -- this violates the "graceful degradation" principle. Core system functions should not be hijacked by extension logic.
 
@@ -445,7 +445,7 @@ Configuration example -- Ensure model response includes code examples:
 
 **StopFailure** (When ending due to API error)
 
-Triggered when turn ends due to API error (rate limiting, auth failure, etc.), replacing Stop event. This is a fire-and-forget event -- hook output and exit codes are ignored.
+Triggered when turn ends due to API error (rate limiting, auth failure, etc.), replacing Stop event. This is a fire-and-forget event -- the system ignores hook output and exit codes.
 
 Typical use cases: Automatic reporting and diagnostic logging of API errors.
 
@@ -568,7 +568,7 @@ graph TD
 
 **decision field**: `approve` or `block`
 
-When hook returns `{"decision": "approve"}`, tool call is allowed to continue; when returning `{"decision": "block"}`, tool call is blocked, `reason` field value is shown as block reason.
+When the hook returns `{"decision": "approve"}`, the tool call goes ahead; when it returns `{"decision": "block"}`, the pipeline blocks the tool call and shows the `reason` field as the block reason.
 
 In hook output processing function, when `decision` field is parsed, `approve` corresponds to allowing continued execution, `block` corresponds to denial with block reason.
 
@@ -748,7 +748,7 @@ graph TD
     class p4,p5,p6 low
 ```
 
-Plugin hooks and built-in hooks are assigned lowest priority values in sorting, ensuring they don't override user-configured hooks.
+Sorting hands plugin hooks and built-in hooks the lowest priority values, so they never override user-configured hooks.
 
 > **Design reflection:** Why do the user's global settings rank highest? Because of user sovereignty -- users' personal configuration should be able to override project configuration and plugin defaults. This aligns with Chapter 4's permission pipeline design philosophy of "user decisions take precedence over auto-mode classifier". In a multi-user collaborative project, each developer should be able to customize hook behavior according to their own security preferences.
 
@@ -831,7 +831,7 @@ flowchart TD
 
 **Workspace trust check**: All hooks in interactive mode require the workspace to be trusted. The check function determines whether the current session is non-interactive (SDK mode trust implicitly granted) and whether the user has accepted the trust dialog.
 
-All hooks in interactive mode require workspace to be trusted. This is a defense-in-depth measure -- hook configuration is stored in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
+In interactive mode, every hook needs you to trust the workspace first. This is a defense-in-depth measure -- hook configuration is stored in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
 
 The `executeHooks` function chains these checks together, forming complete security gating: first check global disable switch, then check simple mode flag, finally check workspace trust status; only after all pass does normal hook execution proceed.
 
@@ -1022,7 +1022,7 @@ Design an async-rewake hook for Stop event requiring:
 - When detecting new high-priority task (exit code 2), wake model to continue processing
 - Normal operation (exit code 0) doesn't disturb model
 
-Think: How to avoid "thrashing" -- model just woken immediately stops again, causing repeated loops?
+Think: How to avoid "thrashing" -- the model wakes up and stops again right away, over and over?
 
 **Exercise 5: Security scenario analysis**
 
