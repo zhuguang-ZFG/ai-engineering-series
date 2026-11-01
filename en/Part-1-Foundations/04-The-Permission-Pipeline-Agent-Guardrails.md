@@ -79,7 +79,7 @@ These four stages are: validateInput (input validation), hasPermissionsToUseTool
 
 ### 4.1.1 Stage 1: validateInput -- Zod Schema Validation
 
-The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), the parsing will throw an exception and the tool call is rejected outright. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
+The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), parsing throws an exception and the pipeline turns the tool call down before it runs. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
 
 When parsing fails, `toolPermissionResult` retains its default `passthrough` state, which is subsequently converted to `ask` behavior. So when data validation fails the system degrades to asking the user for confirmation instead of crashing outright.
 
@@ -198,7 +198,7 @@ Permission decisions (PermissionDecision) come from three sources, each with dif
 
 In permission interactions, multiple asynchronous participants may simultaneously attempt to resolve the same permission request -- the user clicks "allow" at the same moment the classifier returns "pass." The `ResolveOnce` pattern is designed precisely to resolve this race condition. It provides three methods: resolve, isResolved, and claim.
 
-Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other will be rejected. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
+Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other gets turned down. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
 
 > **Cross-Reference:** The ResolveOnce pattern and the "immutable state flow" principle from Chapter 2 share a common lineage. Both ensure concurrent safety through atomic state changes -- the state is either old or new; there is no "half-new, half-old" intermediate state.
 

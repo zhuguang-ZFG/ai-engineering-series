@@ -330,7 +330,7 @@ The core tool mapping logic includes several key steps:
 
 3. **Tool Object Construction**: Each MCP tool is mapped to a Claude Code internal `Tool` object. The mapping is a full "protocol adaptation" — MCP semantics are translated into Claude Code tool system semantics.
 
-After each MCP tool is mapped to a Claude Code internal `Tool` object, it contains the following key properties:
+Once an MCP tool becomes a Claude Code internal `Tool` object, it carries these key properties:
 
 | Property | Source | Purpose |
 |------|------|------|
@@ -529,7 +529,7 @@ This design has the following security implications:
 
 ### 12.3.2 Server Approval and Allowlists
 
-Enterprise administrators can control which MCP servers are allowed through `allowedMcpServers` and `deniedMcpServers` policies. This is the core of the three-layer security strategy and the most important security control point when deploying Claude Code in enterprises.
+Enterprise administrators can control which MCP servers may connect, through `allowedMcpServers` and `deniedMcpServers` policies. This is the core of the three-layer security strategy and the most important security control point when deploying Claude Code in enterprises.
 
 **Why an Approval Mechanism?**
 
@@ -642,13 +642,13 @@ flowchart TD
     class Connector low
 ```
 
-The design logic behind this priority is: the user's explicit configuration (manual config) reflects the user's clear intent and should always be respected. If a user manually configures an MCP server with custom parameters, a plugin-injected server with the same identity should not override the user's choice.
+The design logic behind this priority is: the user's explicit configuration (manual config) reflects the user's clear intent, so it always comes first. If a user manually configures an MCP server with custom parameters, a plugin-injected server with the same identity should not override the user's choice.
 
 > **Practical Example:** A common scenario is when a team has a GitHub MCP server configuration automatically injected through a VS Code extension (plugin config), but a developer has already manually configured the same server in `.claude/settings.local.json` with different environment variables (such as a custom GitHub Token). The deduplication mechanism ensures the manual configuration wins — the developer's custom Token is used, not the extension's default configuration.
 
 ### 12.3.4 IDE Tool Allowlist
 
-For IDE-integrated MCP servers, the system enforces an additional security layer — a tool allowlist restriction. Only the following two tools are allowed to be loaded from IDE MCP servers:
+For IDE-integrated MCP servers, the system enforces an additional security layer — a tool allowlist restriction. An IDE MCP server may load only these two tools:
 
 | Tool Name | Function | Security Consideration |
 |--------|------|---------|
@@ -834,7 +834,7 @@ The control protocol's design reflects several important principles:
 
 **Security Considerations for Outbound-only Mode**
 
-In **outbound-only** mode, all mutable requests except `initialize` are rejected, returning an error message indicating that Remote Control must be enabled locally to allow inbound control.
+In **outbound-only** mode, the CLI turns down every mutable request except `initialize`, returning an error message indicating that Remote Control must be enabled locally to allow inbound control.
 
 This is a critical security boundary. Outbound-only mode means the CLI only pushes information outward and does not accept external control commands. This is particularly important for claude.ai integration — users may just want to view conversation history without allowing the web interface to remotely control their CLI session (such as switching models or interrupting execution).
 
