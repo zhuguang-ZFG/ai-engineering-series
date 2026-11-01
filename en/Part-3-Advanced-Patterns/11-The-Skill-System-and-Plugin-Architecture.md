@@ -98,7 +98,7 @@ The implications of these security measures:
 
 > **Why do skills need referenced files?**
 >
-> Certain skills (such as `verify`) need to reference additional documentation or configuration when executing. These files are compiled into the binary (they don't exist as separate disk files), but need to be extracted to disk when the skill is first invoked. This design has two benefits: first, skill distribution doesn't require additional file management; second, files undergo complete security checks during extraction.
+> Certain skills (such as `verify`) need to reference additional documentation or configuration when executing. These files are compiled into the binary (they don't exist as separate disk files), but need to be extracted to disk when the skill is first invoked. This design has two benefits: first, skill distribution doesn't require additional file management; second, extraction runs complete security checks on the files.
 >
 > You can think of it as "the manual that comes with the software" — when not needed, it takes up no space (embedded in the binary), and when needed, it's expanded onto the desktop (extracted to a temporary directory).
 
