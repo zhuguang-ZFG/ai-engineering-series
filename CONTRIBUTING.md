@@ -45,7 +45,7 @@ make clean      # 删除 yuyu-book/dist
 改动前后都建议跑一遍既有内容门：
 
 ```bash
-python scripts/check_book.py                    # 相对链接落点、围栏闭合、Mermaid 里的字面量 \n
+python scripts/check_book.py                    # 相对链接落点、围栏闭合、Mermaid 里的字面量 \n、图版间距
 npm run check:diagrams                          # 用锁定的 mermaid 解析器逐图 parse
 python -m unittest discover -s tests            # 仓库现有单测（star history 等）
 python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源/围栏与图题/交叉引用/审计/版式 WCAG
@@ -105,9 +105,10 @@ python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源
 - 必须闭合，未闭合会报 `unclosed code fence at line N`，并且审计会以"`<pre>`/`<code>` 内嵌块级元素"再抓一次。
 - **声明语言**：` ```json `、` ```typescript `、` ```bash ` 等。围栏 info 串会成为代码板右上角的语言角标（`data-lang`）；不写语言的围栏拿不到角标，且按纯文本高亮。围栏数量与渲染出的代码块数量必须一一对应，否则报"rendered code blocks but N source fences"。
 - Mermaid 围栏固定写 ` ```mermaid `。图题取自动态扫描的**最近上层 H2**，所以每张图前要有一个 H2 标题；没有就回落成"架构示意"。图内换行用 `<br/>`，写字面量 `\n` 会被 `scripts/check_book.py` 拦下。
+- **图与图之间的距离**：`scripts/check_book.py` 按 manifest 的两语正文，量相邻两个视觉断点（图版、表格、代码围栏）之间那段纯文字有多长；超过 `WALL_CEILING`（当前中文 2885、英文 8049 字符）就报错，同时把每种语言最长的三处打在输出末尾，当作下一轮的点位清单。这两个数是**当轮实测的最大墙**，不是许可额度——墙只许变矮：补图之后顺手把上限改低到新实测值，放宽上限得在提交信息里说清为什么。
 - **图的宽度**：Mermaid 按自己的坐标排版，正文栏只有 635px。viewBox 宽超过 1150 单位的图版会被 `floor_wide_svg()` 钉上 `min-width`（最宽 2600px），屏幕上横向拖动阅读、图题带"可横向拖动"提示，打印时归零回到整页可见。所以画超大依赖图前先想清楚：横向铺开 = 读者要拖，宁可拆成两张 H2 下的小图。
-- **图在纸面上的尺寸**：纸面没有滚动条，只有两块可用地——竖版版心 176×245mm（665×926 CSS px）与横版折页 170mm 高（993×642 CSS px）。构建时 `plate_cap()` 给"很高、按 6pt 字号底线缩放后正好还放得进栏宽"的图写一条 `--plate-cap`（150–245mm），让它独占版面而不是被压小——成品里中文版抬了 6 张、英文版 9 张；`plate_landscape()` 把"横过来才读得清"的图（竖着不足 6pt、横着能到 5pt 且好上一成半）挂上 `landscape` 类，独占一张 `@page plate-landscape` 横向 A4——中文版 15 张、英文版 22 张，一张图一张纸。折页**不写** `--plate-cap`：横版纸面只有 170mm 高，图版吃满 165mm 就会把图题挤到下一张纸上。两头都够不着的极端长条仍留在正文流里，纸面上就是小：中文版还剩 1 张（3592×1330 单位，约 2.5pt），英文版 3 张。**HTML 才是全保真产物**，这类图请引导读者在屏幕上横向拖开看。
-- **三个会把整本书的图打崩的写法**：别给 `.diagram-frame` 或图版容器加 `width:fit-content`——mermaid 的 SVG 根节点写的是 `width="100%"`，百分比宽度在 fit-content 父级里塌成 0，157 张图会集体消失（`test_build_contracts` 里有一条负向断言盯着它）；别加 `filter:`——打印引擎会把滤镜子树光栅化，图里的字退化成像素（PDF 里选不中、搜不到），文件体积还能翻倍；也别在 `figure.landscape` 上写 `break-after:page`——命名页面本身就会结束这一张纸，两个都写会在每个折页后面多出一张空白。
+- **图在纸面上的尺寸**：纸面没有滚动条，只有两块可用地——竖版版心 176×245mm（665×926 CSS px）与横版折页 170mm 高（993×642 CSS px）。构建时 `plate_cap()` 给"很高、按 6pt 字号底线缩放后正好还放得进栏宽"的图写一条 `--plate-cap`（150–245mm），让它独占版面而不是被压小——成品里中文版抬了 6 张、英文版 10 张；`plate_landscape()` 把"横过来才读得清"的图（竖着不足 6pt、横着能到 5pt 且好上一成半）挂上 `landscape` 类，独占一张 `@page plate-landscape` 横向 A4——中文版 18 张、英文版 25 张，一张图一张纸。折页**不写** `--plate-cap`：横版纸面只有 170mm 高，图版吃满 165mm 就会把图题挤到下一张纸上。两头都够不着的极端长条仍留在正文流里，纸面上就是小：中文版还剩 1 张（3725×1330 单位，约 2.4pt），英文版 3 张（2.4–3.3pt）。这几个数是量成品得来的，不是契约：`grep -c '<figure[^>]*landscape' yuyu-book/dist/*.html` 数一遍，PDF 里横过来的纸页与它一一相等，改图之后要跟着改这段。**HTML 才是全保真产物**，这类图请引导读者在屏幕上横向拖开看。
+- **三个会把整本书的图打崩的写法**：别给 `.diagram-frame` 或图版容器加 `width:fit-content`——mermaid 的 SVG 根节点写的是 `width="100%"`，百分比宽度在 fit-content 父级里塌成 0，159 张图会集体消失（`test_build_contracts` 里有一条负向断言盯着它）；别加 `filter:`——打印引擎会把滤镜子树光栅化，图里的字退化成像素（PDF 里选不中、搜不到），文件体积还能翻倍；也别在 `figure.landscape` 上写 `break-after:page`——命名页面本身就会结束这一张纸，两个都写会在每个折页后面多出一张空白。
 - **图的颜色**：优先不写颜色，`mermaid.py` 的 `THEME` 会把无主节点排成书色。已经写了 `classDef`/`style` 的图也不必回改正文——构建时 `reink_colors()` 按色相把 fill/stroke/color 重染进 `BOOK_FAMILIES` 七组书色（蓝→sky、绿→jade、橙黄→brass、红→cinnabar、紫→plum、近白→card、其余→neutral），角色区分保留，色板统一。写新图时按语义选色即可，别指望某个具体十六进制出现在成品里。
 
 **引用与链接**
