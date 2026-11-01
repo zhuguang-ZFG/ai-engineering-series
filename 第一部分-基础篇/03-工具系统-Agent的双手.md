@@ -93,7 +93,7 @@ flowchart TD
 
 每个渲染方法都返回 `React.ReactNode`，工具系统就此接进 React 的渲染管线。工具的 UI 表现能像 React 组件一样灵活——进度条、颜色高亮、折叠面板、表格布局，都能写成组件。
 
-这六个渲染方法的覆盖范围值得注意：它涵盖了工具调用的"生老病死"——从开始（renderToolUseMessage）到进行中（renderToolUseProgressMessage），到成功（renderToolResultMessage）、被拒（renderToolUseRejectedMessage）、出错（renderToolUseErrorMessage），以及并行执行的分组展示（renderGroupedToolUse）。这种完整的生命周期覆盖确保了用户在任何状态下都能看到清晰、有意义的 UI 反馈。
+这六个渲染方法的覆盖范围值得注意：它涵盖了工具调用的"生老病死"——从开始（renderToolUseMessage）到进行中（renderToolUseProgressMessage），到成功（renderToolResultMessage）、驳回（renderToolUseRejectedMessage）、出错（renderToolUseErrorMessage），以及并行执行的分组展示（renderGroupedToolUse）。这种完整的生命周期覆盖确保了用户在任何状态下都能看到清晰、有意义的 UI 反馈。
 
 ### buildTool 工厂函数
 
