@@ -13,7 +13,7 @@ This appendix provides a conceptual navigation of the Claude Code system archite
 
 ## A.1 Core Module Index
 
-The table below lists all core modules in the Claude Code architecture. Each module includes a responsibility description, an overview of key data structures, and a cross-reference to the relevant chapters.
+The table below lists all core modules in the Claude Code architecture. Each module includes a responsibility description, an overview of key data structures, and a pointer to the chapters that cover it.
 
 | Module Name | Responsibility Description | Key Data Structures | Chapter Reference |
 |---------|---------|------------|---------|

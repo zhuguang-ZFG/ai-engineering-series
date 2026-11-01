@@ -298,7 +298,7 @@ flowchart TB
 
 ### 11.3.1 Tiered Loading Strategy
 
-The `getSkillsPath` function clearly defines the path mapping for each source, returning the corresponding skill directory path based on source type (policySettings, userSettings, projectSettings, plugin).
+The `getSkillsPath` function clearly defines the path mapping for each source, returning the skill directory path that belongs to each source type (policySettings, userSettings, projectSettings, plugin).
 
 Description of each tier:
 

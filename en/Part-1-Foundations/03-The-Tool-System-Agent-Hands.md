@@ -133,9 +133,9 @@ The type system, through type computation, allows developers to provide only the
 
 ### Dead Code Elimination in Tool Registration
 
-Claude Code's tool registration leans heavily on conditional imports to eliminate dead code at compile time. When specific conditions are not met, the entire module for the corresponding tool is not included in the final build. The same applies to tools controlled by feature flags.
+Claude Code's tool registration leans heavily on conditional imports to eliminate dead code at compile time. When specific conditions are not met, that tool's whole module never reaches the final build. The same applies to tools controlled by feature flags.
 
-Feature flags come from the build toolchain and are evaluated by the bundler at compile time. When a feature flag is off, the corresponding tool implementation code is removed by tree-shaking. External builds (for third-party users) carry no internal tool code.
+Feature flags come from the build toolchain and are evaluated by the bundler at compile time. When a feature flag is off, the tool's implementation code is removed by tree-shaking. External builds (for third-party users) carry no internal tool code.
 
 This design has significant security implications: if internal tools (such as REPL tools, debugging tools) were included in external builds, even if they were unavailable, they could leak internal architecture information. Dead code elimination eliminates this information leakage risk at the source.
 
@@ -145,7 +145,7 @@ In the tool registration function, conditional registration uses the spread oper
 
 When the number of tools exceeds a certain threshold, Claude Code enables deferred tool discovery. The core idea is: instead of sending the complete schema of all tools in the initial system prompt, send only the tool name list and let the model load detailed schemas on demand through ToolSearchTool.
 
-To understand this with an analogy: the traditional approach is like placing the entire encyclopedia in front of the model -- even though most of the content won't be used in the current conversation. Deferred discovery is like giving the model a table of contents index -- the model knows which tools are available and only opens the corresponding page to view detailed parameters when needed.
+To understand this with an analogy: the traditional approach is like placing the entire encyclopedia in front of the model -- even though most of the content won't be used in the current conversation. Deferred discovery is like giving the model a table of contents index -- the model knows which tools are available and opens only the page it needs to see the detailed parameters.
 
 ToolSearchTool's implementation follows the standard factory function pattern. The logic for determining whether a tool should be deferred is: tools explicitly marked as always-loaded are not deferred, MCP tools are always deferred, and the tool search tool itself is not deferred.
 

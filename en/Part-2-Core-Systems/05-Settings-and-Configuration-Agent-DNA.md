@@ -331,7 +331,7 @@ Claude Code's feature flag system is divided into two layers: **compile-time** `
 
 ### 5.3.1 Compile-Time Dead Code Elimination
 
-The `feature()` function is introduced through the bundler. When `feature('FEATURE_NAME')` returns `false`, the bundler completely removes the corresponding code branch. This is a form of compile-time dead code elimination.
+The `feature()` function is introduced through the bundler. When `feature('FEATURE_NAME')` returns `false`, the bundler removes that code branch outright. This is a form of compile-time dead code elimination.
 
 Throughout the codebase, this pattern appears extensively: feature flags determine whether certain functionality code is compiled, and unenabled features are completely absent from the build artifacts.
 

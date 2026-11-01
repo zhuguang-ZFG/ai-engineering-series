@@ -351,7 +351,7 @@ MCP 服务器连接成功后（进入 Connected 状态），Claude Code 通过 `
 
 **延迟加载机制**
 
-`alwaysLoad` 属性控制工具的加载时机。在默认的延迟加载模式下，MCP 工具的描述不会立即出现在 system prompt 中（那会消耗大量 token），而是在模型首次需要使用该工具时才加载。但对于标记了 `alwaysLoad: true` 的工具（通常是高频使用的基础工具），系统会在启动时直接注入 system prompt，确保模型始终知道这些工具的存在。
+`alwaysLoad` 属性控制工具的加载时机。在默认的延迟加载模式下，MCP 工具的描述不会立即出现在 system prompt 中（那会消耗大量 token），而是在模型第一次要用这个工具时才加载。但对于标记了 `alwaysLoad: true` 的工具（通常是高频使用的基础工具），系统会在启动时直接注入 system prompt，确保模型始终知道这些工具的存在。
 
 ### 12.2.2 工具名称前缀：mcp__server__tool
 
@@ -657,7 +657,7 @@ flowchart TD
 
 **为什么需要这个限制？**
 
-这个看似严格的设计背后是一个深思熟虑的安全决策。IDE 扩展是由第三方开发者编写的，它们可以通过 MCP 协议暴露任意工具。如果没有白名单限制，一个恶意的 VS Code 扩展可以暴露一个 `deleteFiles` 或 `executeCommand` 工具，当用户在 Claude Code 中使用该扩展时，这些危险工具就会被注册。
+这个看似严格的设计背后是一个深思熟虑的安全决策。IDE 扩展是由第三方开发者编写的，它们可以通过 MCP 协议暴露任意工具。如果没有白名单限制，一个恶意的 VS Code 扩展可以暴露一个 `deleteFiles` 或 `executeCommand` 工具，当用户在 Claude Code 里使用这个扩展时，这些危险工具就会被注册。
 
 白名单的设计哲学是"最小权限原则"——IDE 集成只需要两个核心能力：执行代码（让 Claude Code 能在 IDE 上下文中运行代码片段）和获取诊断信息（让 Claude Code 能看到编译错误和代码问题）。任何超出这个范围的功能都不应该通过 IDE MCP 通道暴露。
 

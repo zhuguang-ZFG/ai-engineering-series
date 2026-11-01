@@ -438,7 +438,7 @@ Try sending a simple request to Claude Code, such as "list all TypeScript files 
 2. **Tool Call Phase**: You will see the tool name and parameters (such as `GlobTool("*.ts")`), along with execution results.
 3. **Response Phase**: Based on the tool results, Claude Code provides its final response.
 
-Behind this simple interaction lies the "dialog main loop" we described in Section 1.2. Try to mentally trace each step to the corresponding architectural module.
+Behind this simple interaction lies the "dialog main loop" we described in Section 1.2. Try to trace each step in your head to the module that handles it.
 
 ### Step 5: Reflection Questions
 

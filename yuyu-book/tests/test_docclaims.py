@@ -277,7 +277,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         quotes = {
             "zh": [r"(\d+) 个生命周期事件",
                    r"本章按功能分组介绍其中 (\d+) 个生命周期事件",
-                   r"下表总结了上述 (\d+) 个事件的分类",
+                   r"下表把这 (\d+) 个事件的分类",
                    r"\*\*(\d+) 个生命周期事件\*\*"],
             "en": [r"(\d+) lifecycle events",
                    r"this chapter introduces (\d+) of its lifecycle events",
@@ -292,7 +292,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         bad = []
         for lang in ("zh", "en"):
             rel = self.path("08-钩子", lang)
-            rows = len(self.table_after(rel, "下表总结了" if lang == "zh"
+            rows = len(self.table_after(rel, "下表" if lang == "zh"
                                         else "The table below summarizes"))
             self.assertGreater(rows, 0, f"{rel}: no event table found")
             text = read_text(REPO_ROOT / rel)
@@ -306,7 +306,7 @@ class TextTotalsMatchTheirOwnTables(Data):
             m = re.search(rx, read_text(REPO_ROOT / doc))
             self.assertIsNotNone(m, f"{doc}: nothing matches {rx!r}")
             rows = len(self.table_after(self.path("08-钩子", lang),
-                                        "下表总结了" if lang == "zh"
+                                        "下表" if lang == "zh"
                                         else "The table below summarizes"))
             if m.group(1) != str(rows):
                 bad.append(f"{doc}: {rx!r} says {m.group(1)}, the table lists "

@@ -404,7 +404,7 @@ The combination of six operations and five configuration sources yields 30 possi
 
 `applyPermissionUpdates` applies updates to the in-memory permission context and takes effect immediately. It iterates through all updates, applies each to the context object, and returns the updated new context.
 
-`applyPermissionUpdate` handles each update type. In the `addRules` case, it adds the rule string to the rule list corresponding to the behavior type (allow/deny/ask) and the corresponding source, producing a new context object through immutable updates.
+`applyPermissionUpdate` handles each update type. In the `addRules` case, it adds the rule string to the rule list for that behavior type (allow/deny/ask) and that source, producing a new context object through immutable updates.
 
 Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensuring they remain in effect after restarts. Only local settings, user settings, and project settings persist. Session-level and command-line argument-level updates are only effective at runtime.
 

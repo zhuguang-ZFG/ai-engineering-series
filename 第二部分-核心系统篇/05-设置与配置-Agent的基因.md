@@ -69,7 +69,7 @@ flowchart LR
     class example1,example2,example3 example
 ```
 
-合并的核心在自定义合并策略函数 `settingsMergeCustomizer` 中：该函数对数组类型执行拼接并去重操作，其他类型则交给默认的深度合并逻辑处理。
+合并的核心在自定义合并策略函数 `settingsMergeCustomizer` 中：这个函数把数组拼接起来再去重，其他类型则交给默认的深度合并逻辑处理。
 
 这套规则的关键特性是：
 
@@ -238,7 +238,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 | 隐蔽性 | 中等（需要绕过安全检测） | 极高（配置文件看似正常） |
 | 影响范围 | 软件用户 | 开发者的整个工作环境 |
 
-一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，该 hook 在每次工具调用时将用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆该项目并启动 Claude Code 时，恶意 hook 就在没人察觉时跑起来。
+一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，这个 hook 在每次工具调用时把用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆这个项目并启动 Claude Code 时，恶意 hook 就在没人察觉时跑起来。
 
 **为什么 projectSettings 是风险最大的配置源？**
 
