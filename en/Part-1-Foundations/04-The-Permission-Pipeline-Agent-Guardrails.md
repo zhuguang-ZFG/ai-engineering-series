@@ -91,7 +91,7 @@ Rule matching is the core of the permission pipeline. The `hasPermissionsToUseTo
 
 **Step 1a: Tool-level deny check.** This is the highest priority. If a tool is denied entirely, the call is immediately rejected.
 
-The `getDenyRuleForTool` function traverses deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) for matching. The matching logic supports exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
+The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic supports exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
 
 The seven rule sources are ordered by proximity: session-level rules (the most recently set) take priority over command-line arguments, command-line arguments take priority over project configuration, and project configuration takes priority over global user configuration. The more specific and recent a rule, the earlier it sits, so it overrides the general and the old.
 
@@ -122,7 +122,7 @@ The core abstraction of rule matching is the PermissionRule type, which unifies 
 
 ### 4.1.3 Stage 3: checkPermissions -- Context Evaluation
 
-Each tool can implement its own `checkPermissions` method for more fine-grained context evaluation. For example, the Bash tool parses subcommands in the command, checks path safety, matches prefix rules, and so on. This stage's invocation occurs before the rule matching in Stage 2 (Step 1c in the code), but its results may be overridden by subsequent allow rules.
+Each tool can implement its own `checkPermissions` method to evaluate the context more finely. For example, the Bash tool parses subcommands in the command, checks path safety, matches prefix rules, and so on. This stage's invocation occurs before the rule matching in Stage 2 (Step 1c in the code), but its results may be overridden by subsequent allow rules.
 
 The `PermissionResult` returned by `checkPermissions` has four behaviors:
 
@@ -281,7 +281,7 @@ But even bypass mode cannot break through the following defenses:
 
 This layered defense design ensures that even under "full trust" mode, there is a minimum level of safety protection.
 
-**Applicable scenario:** CI/CD pipelines, automated testing, controlled execution environments. In these scenarios, the Agent's operations are already secured through other means (such as container isolation, network isolation), and permission checking only adds unnecessary latency.
+**Applicable scenario:** CI/CD pipelines, automated testing, controlled execution environments. In these scenarios, other means (such as container isolation, network isolation) already secure the Agent's operations, and permission checking only adds unnecessary latency.
 
 > **Enterprise Security Best Practice:** If your team uses bypass mode, it is strongly recommended to: (1) Run Claude Code in a container or virtual machine to ensure file system isolation; (2) Configure explicit deny rules to block dangerous operations (such as `Bash(rm -rf *)`, `Bash(npm publish)`); (3) Use the `--allowedTools` parameter to limit the available tool scope; (4) Enable audit logging to record all tool calls.
 

@@ -515,8 +515,8 @@ Tool enablement is gated by two conditions: feature flag `tengu_surreal_dali` an
 **Remote trigger application scenarios:**
 
 1. **CI/CD integration**: When the CI pipeline fails, automatically trigger an Agent to analyze the failure cause and generate fix suggestions.
-2. **Monitoring alert response**: When monitoring system detects abnormal metrics, trigger Agent for root cause analysis.
-3. **Code repository events**: When PR is created or updated, trigger Agent for automatic code review.
+2. **Monitoring alert response**: When the monitoring system detects abnormal metrics, trigger an Agent to trace the root cause.
+3. **Code repository events**: Once a PR is created or updated, trigger an Agent to review the code automatically.
 4. **Scheduled reports**: Regularly trigger Agent to generate project status reports.
 
 ```mermaid

@@ -990,7 +990,7 @@ Agent Harness 的安全边界比传统应用更复杂，因为 LLM 的输出是�
 
 1. **工具权限分级：** 每个工具声明 `isReadOnly`、`isDestructive`、`isConcurrencySafe`，系统根据这些标记决定审批流程
 2. **工作区信任检查：** `shouldSkipHookDueToTrust()` 确保钩子不会在不受信任的工作区执行
-3. **输入净化：** `backfillObservableInput` 方法在工具输入传递给观察者之前进行清理，但不修改 API 绑定的原始输入（避免破坏 Prompt 缓存）
+3. **输入净化：** `backfillObservableInput` 方法把工具输入先清理干净再交给观察者，但不修改 API 绑定的原始输入（避免破坏 Prompt 缓存）
 4. **预算上限：** `maxBudgetUsd` 参数限制单次查询的 Token 开销
 
 **Agent 系统的安全威胁模型：**

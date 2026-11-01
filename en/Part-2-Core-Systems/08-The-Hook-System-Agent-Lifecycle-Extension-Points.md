@@ -316,7 +316,7 @@ Typical use cases:
 1. **Audit trail**: Record each tool call's parameters and results to external systems
 2. **Result enhancement**: Append additional notes or warnings after tool output
 3. **Automatic notification**: Send Slack/email notifications after specific tool calls
-4. **MCP output override**: Post-process or sanitize MCP tool return values
+4. **MCP output override**: Rewrite or sanitize the values MCP tools return
 
 > **Best practice:** Prefer async mode (`async: true`) when PostToolUse only records audits, metrics, or notifications and nothing downstream must consume its response before the next model turn. Keep it synchronous when the response overrides MCP output, adds context needed immediately, or otherwise affects the next step. The deciding question is whether downstream work must wait, not whether the tool has already finished.
 
@@ -656,7 +656,7 @@ flowchart TD
 
 ### Configuration Validation
 
-Hook configuration is strictly validated through Zod Schema. The hook Schema module defines the complete type system:
+Zod Schema strictly validates hook configuration. The hook Schema module defines the complete type system:
 
 - `HookCommandSchema`: Discriminated union of four persistable hooks -- type discrimination through `type` field (`command`, `prompt`, `agent`, `http`)
 - `HookMatcherSchema`: Matcher configuration, containing `matcher` string pattern and `hooks` array
@@ -664,7 +664,7 @@ Hook configuration is strictly validated through Zod Schema. The hook Schema mod
 
 > **Cross-reference with Chapter 5:** Hook configuration is an important component of the six-layer configuration system introduced in Chapter 5. Hook configuration is stored in `hooks` field of each layer, following the same merge and override rules as regular settings. Understanding Chapter 5's configuration merge mechanism helps you understand why hooks with the same name defined in different config files exhibit specific priority behaviors.
 
-Matchers use permission rule syntax for filtering (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string supporting permission rule syntax pattern matching.
+Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string supporting permission rule syntax pattern matching.
 
 Complete hook configuration structure example:
 

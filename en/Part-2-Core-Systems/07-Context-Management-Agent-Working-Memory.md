@@ -204,7 +204,7 @@ Collapse mode suppresses the triggering of auto-compression because the two woul
 
 ### Level 4: AutoCompact
 
-AutoCompact is the most thorough compression level -- it invokes the LLM to summarize the complete conversation. When the above three levels cannot effectively free space and token usage exceeds the auto-compression threshold, the system initiates AutoCompact.
+AutoCompact is the most thorough compression level -- it invokes the LLM to compress the whole conversation into a summary. When the above three levels cannot effectively free space and token usage exceeds the auto-compression threshold, the system initiates AutoCompact.
 
 This is the final fallback and also the most "expensive" -- it requires an additional API call to generate the summary.
 

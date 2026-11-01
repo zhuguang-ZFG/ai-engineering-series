@@ -1006,7 +1006,7 @@ An Agent Harness's security boundary is more complex than that of traditional ap
 
 1. **Tool permission tiers:** Each tool declares `isReadOnly`, `isDestructive`, and `isConcurrencySafe`; the system determines the approval flow based on these annotations
 2. **Workspace trust check:** `shouldSkipHookDueToTrust()` ensures hooks don't execute in untrusted workspaces
-3. **Input sanitization:** The `backfillObservableInput` method cleans tool input before passing it to observers, without modifying the API-bound original input (to avoid breaking prompt caching)
+3. **Input sanitization:** The `backfillObservableInput` method scrubs tool input clean before handing it to observers, without modifying the API-bound original input (to avoid breaking prompt caching)
 4. **Budget ceiling:** The `maxBudgetUsd` parameter limits token costs per query
 
 **Security threat model for Agent systems:**

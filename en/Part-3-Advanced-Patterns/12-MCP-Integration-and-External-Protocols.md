@@ -539,8 +539,8 @@ In enterprise environments, MCP servers can pose serious security risks: a malic
 
 The denylist has absolute priority — servers on the denylist will never be connected, regardless of which scope they appear in. Three matching methods are supported:
 
-1. **Match by server name**: The simplest and most direct method, matching by the server's registered name in the configuration.
-2. **Match by command array**: For stdio servers, matching by the complete command-line arguments (`command` + `args`). This prevents users from bypassing the denylist by using a different name.
+1. **Match by server name**: The simplest and most direct method -- compare the name the server registered in the configuration.
+2. **Match by command array**: For stdio servers, compare the complete command-line arguments (`command` + `args`). Users cannot bypass the denylist by swapping in a different name.
 3. **Match by URL pattern**: For remote servers (SSE/HTTP/WS), supporting wildcard URL matching.
 
 **Allowlist: Gate Control Mechanism**
@@ -1230,7 +1230,7 @@ Analyze the Bridge communication behavior in the following scenarios:
 
 4. **Defense-in-Depth Security Architecture**: The four-layer permission model — enterprise policy (denylist > allowlist), IDE tool allowlist, user permission configuration, runtime confirmation — ensures that even if one layer's check is bypassed, other layers still provide protection. This is the complete embodiment of the "default distrust" security principle.
 
-5. **Practical Wisdom of Signature-based Deduplication**: Through `stdio:JSON.stringify([cmd,...args])` and `url:originalUrl` signature mechanisms, the system ensures deduplication is based on "actual effect" rather than "surface configuration." The deduplication priority (manual > plugin > connector) guarantees that the user's explicit configuration always takes precedence.
+5. **Practical Wisdom of Signature-based Deduplication**: The `stdio:JSON.stringify([cmd,...args])` and `url:originalUrl` signature forms let the system dedupe by "actual effect" rather than "surface configuration." The deduplication priority (manual > plugin > connector) guarantees that the user's explicit configuration always takes precedence.
 
 6. **Complexity Management in Bridge Bidirectional Communication**: In the 30+ module Bridge system, v1/v2 transport differences sit behind the unified `ReplBridgeTransport` interface, inbound messages pass a triple filter (permission response > control request > user message), and the `BoundedUUIDSet` ring buffer handles deduplication.
 

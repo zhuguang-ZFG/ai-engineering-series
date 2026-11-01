@@ -185,11 +185,11 @@ The key insight of this design is: **there is a clear boundary between "read" an
 
 Before calling the model, the loop executes a series of preprocessing steps. These steps form a carefully designed "compression pipeline" aimed at preserving the most valuable information within a limited context window:
 
-1. **Tool Result Budget**: Truncates or persists overly large tool results to disk, ensuring the context window limit is not exceeded. This is similar to the "paging" mechanism in computer science -- when data is too large to fit entirely in memory (the context window), some data is stored to disk, retaining only a summary or reference.
+1. **Tool Result Budget**: When a tool result is too large, truncate it or persist it to disk, ensuring the context window limit is not exceeded. This is similar to the "paging" mechanism in computer science -- when data is too large to fit entirely in memory (the context window), some data is stored to disk, retaining only a summary or reference.
 
 2. **Snip compression**: When history trimming is enabled, the system trims the message sequence and passes the returned messages and freed-token count downstream. This is distinct from truncating a single oversized tool result or replacing its body during MicroCompact.
 
-3. **Microcompact**: Performs lightweight compression before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact is designed to be "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
+3. **Microcompact**: Lightly compresses the context once before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact is designed to be "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
 
 4. **Context Collapse**: A more fine-grained compression strategy that collapses consecutive messages into a compact view without losing information. You can think of Context Collapse as folding acknowledgments like "hello," "okay," "I understand" in a conversation into a single line -- the information is preserved, but it takes up less space.
 

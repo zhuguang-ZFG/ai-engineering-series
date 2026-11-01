@@ -91,7 +91,7 @@ flowchart TD
 
 **步骤 1a：工具级 deny 检查。** 这是最高的优先级。如果某个工具被整体 deny，调用立即被拒绝。
 
-`getDenyRuleForTool` 函数遍历所有来源（userSettings、projectSettings、localSettings、flagSettings、policySettings、cliArg、command、session）的 deny 规则进行匹配。匹配逻辑支持精确工具名匹配和 MCP 服务器级通配符——例如规则 `mcp__server1__*` 可以匹配该服务器下的所有工具。
+`getDenyRuleForTool` 函数遍历所有来源（userSettings、projectSettings、localSettings、flagSettings、policySettings、cliArg、command、session）的 deny 规则逐条匹配。匹配逻辑支持精确工具名匹配和 MCP 服务器级通配符——例如规则 `mcp__server1__*` 可以匹配该服务器下的所有工具。
 
 七种规则来源按"就近原则"排优先级：会话级规则（最近设置的）优先于命令行参数，命令行参数优先于项目配置，项目配置优先于全局用户配置。越具体、越近期的规则排得越靠前，覆盖掉更一般、更早期的规则。
 
@@ -122,7 +122,7 @@ flowchart BT
 
 ### 4.1.3 阶段三：checkPermissions -- 上下文评估
 
-每个工具可以实现自己的 `checkPermissions` 方法，进行更精细的上下文评估。例如 Bash 工具会解析命令中的子命令、检查路径安全性、匹配前缀规则等。这一阶段的调用发生在阶段二的规则匹配之前（代码中的步骤 1c），但其结果可能被后续的 allow 规则覆盖。
+每个工具可以实现自己的 `checkPermissions` 方法，把上下文评估做得更细。例如 Bash 工具会解析命令中的子命令、检查路径安全性、匹配前缀规则等。这一阶段的调用发生在阶段二的规则匹配之前（代码中的步骤 1c），但其结果可能被后续的 allow 规则覆盖。
 
 `checkPermissions` 返回的 `PermissionResult` 有四种行为：
 
@@ -281,7 +281,7 @@ auto 模式的一个重要安全设计是：某些安全检查类型的决策（
 
 这种分层防御设计确保了"完全信任"模式下仍有最低限度的安全保障。
 
-**适用场景：** CI/CD 管道、自动化测试、受控的执行环境。在这些场景下，Agent 的操作已经通过其他方式（如容器隔离、网络隔离）进行了安全保障，权限检查只会增加不必要的延迟。
+**适用场景：** CI/CD 管道、自动化测试、受控的执行环境。在这些场景下，容器隔离、网络隔离等其他手段已经替 Agent 的操作兜住安全，权限检查只会增加不必要的延迟。
 
 > **企业级安全最佳实践：** 如果你的团队使用 bypass 模式，强烈建议：(1) 在容器或虚拟机中运行 Claude Code，确保文件系统隔离；(2) 配置显式的 deny 规则阻止危险操作（如 `Bash(rm -rf *)`、`Bash(npm publish)`）；(3) 使用 `--allowedTools` 参数限制可用工具范围；(4) 启用审计日志记录所有工具调用。
 
