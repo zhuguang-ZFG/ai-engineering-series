@@ -383,7 +383,7 @@ Key transition paths include:
 
 5. **collapse_drain_retry**: The overflow recovery path for context collapse. Executes with higher priority than reactive compaction because collapse preserves finer-grained context. Recovery methods are ordered by minimum information loss: whichever discards least runs first.
 
-6. **stop_hook_blocking**: When a stop hook returns a blocking error, the error is injected into the message list and the loop continues, giving the model a chance to correct itself. This path demonstrates a key design philosophy of Agent systems: **errors are not necessarily termination conditions; they can also be feedback signals.** After receiving the hook's error message, the model might adjust its strategy and try a different approach.
+6. **stop_hook_blocking**: When a stop hook returns a blocking error, the error is injected into the message list and the loop continues, so the model gets a chance to correct itself. This path demonstrates a key design philosophy of Agent systems: **errors are not necessarily termination conditions; they can also be feedback signals.** After receiving the hook's error message, the model might adjust its strategy and try a different approach.
 
 7. **token_budget_continuation**: Continuation triggered by token budget management, injecting a reminder message to alert the model about the budget. This is like a mobile data plan's "low balance warning" -- not immediately cutting off access, but reminding the user about remaining data.
 

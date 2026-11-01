@@ -131,7 +131,7 @@ The `PermissionResult` returned by `checkPermissions` has four behaviors:
 - `ask`: Requires user confirmation
 - `passthrough`: Defer to subsequent stages (ultimately becomes `ask`)
 
-`passthrough` is a unique design. When a tool has no special permission logic, it can return `passthrough`, allowing the pipeline to continue flowing. In subsequent steps, `passthrough` is automatically converted to `ask`, accompanied by a permission request message.
+`passthrough` is a unique design. When a tool has no special permission logic, it can return `passthrough` so the pipeline keeps flowing. In subsequent steps, `passthrough` is automatically converted to `ask`, accompanied by a permission request message.
 
 > **Design Insight:** Why is `passthrough` needed instead of having tools without special permission logic return `ask` directly? The difference lies in "intent" -- `passthrough` means "I have no opinion, let subsequent stages decide," while `ask` means "I believe this operation requires user confirmation." If a subsequent allow rule matches, `passthrough` will be overridden to `allow`, but `ask` will not be overridden. This subtle difference produces different behaviors in specific scenarios.
 

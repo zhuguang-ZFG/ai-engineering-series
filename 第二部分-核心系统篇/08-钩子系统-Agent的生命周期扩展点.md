@@ -468,7 +468,7 @@ flowchart TD
 
 **PreCompact / PostCompact**
 
-压缩前后触发。PreCompact 的 stdout 会作为自定义压缩指令附加到压缩提示中，允许用户定制摘要行为。退出码 2 可以阻止压缩。PostCompact 接收压缩摘要作为输入。
+压缩前后触发。PreCompact 的 stdout 会作为自定义压缩指令附加到压缩提示中，用户就能定制摘要行为。退出码 2 可以阻止压缩。PostCompact 接收压缩摘要作为输入。
 
 PreCompact 钩子的处理流程包括：构建钩子输入、执行钩子、提取自定义指令、合并用户指令与钩子指令。
 

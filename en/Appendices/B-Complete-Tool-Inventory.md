@@ -135,7 +135,7 @@ Network tools provide the agent with the ability to access internet information,
 
 ## 5. Agent
 
-Agent tools implement Claude Code's recursive composition capability, allowing agents to create and manage sub-agents, communicate among multiple agents, and form collaborative teams.
+Agent tools implement Claude Code's recursive composition: agents create and manage sub-agents, communicate with one another, and form collaborative teams.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
@@ -166,7 +166,7 @@ Task management tools provide lifecycle management capabilities for background t
 
 ## 7. Plan
 
-Plan mode tools provide safe planning capabilities, allowing the agent to formulate a plan before executing.
+Plan mode tools provide safe planning: the agent formulates a plan before executing.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
@@ -188,7 +188,7 @@ Worktree tools provide file-system-level isolation for parallel tasks.
 
 ## 9. Scheduling
 
-Scheduling tools provide time-driven automation capabilities, allowing agents to execute tasks on a schedule.
+Scheduling tools provide time-driven automation: agents execute tasks on a schedule.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|

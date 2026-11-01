@@ -154,7 +154,7 @@ flowchart TD
 
 **The WebSocket protocol** is full-duplex, for scenarios that need data flowing both ways in real time. Unlike SSE's unidirectional push, WebSocket allows the server to proactively send messages to the client and allows the client to send requests at any time without establishing new HTTP connections.
 
-**The SDK protocol** is the most special type — it doesn't start any process or open any network connection. SDK-type MCP servers are embedded directly into the Claude Code process through function calls, with near-zero latency. It's primarily used for SDK integration scenarios, allowing third-party applications embedding Claude Code to register MCP tools directly without additional inter-process communication. For this reason, SDK servers are exempt from enterprise security policy checks — they run in the same process as Claude Code, with security boundaries guaranteed by the host application.
+**The SDK protocol** is the most special type — it doesn't start any process or open any network connection. SDK-type MCP servers are embedded directly into the Claude Code process through function calls, with near-zero latency. It's primarily for SDK integration: an application embedding Claude Code registers MCP tools directly, with no extra inter-process communication. For this reason, SDK servers are exempt from enterprise security policy checks — they run in the same process as Claude Code, with security boundaries guaranteed by the host application.
 
 > **Best Practice:** Prefer the stdio protocol. Only consider SSE/HTTP/WebSocket when the MCP server must run on a remote machine (e.g., accessing an internal company database, using centralized compute resources). The SDK protocol is only for programmatic integration scenarios.
 
@@ -326,7 +326,7 @@ The core tool mapping logic includes several key steps:
 
 1. **Unicode Sanitization**: the returned tool list is scrubbed of control characters and illegal characters. This step may seem simple, but it's a classic example of defensive programming — you should never trust any external input, including characters in tool names.
 
-2. **Prefix Decision**: Based on configuration, the system decides whether to add a server name prefix to tool names. In most modes, the prefix is mandatory (ensuring tool names don't conflict across servers); but in SDK mode, when the environment variable `CLAUDE_AGENT_SDK_MCP_NO_PREFIX` is set, tools are registered with their original names, allowing MCP tools to override built-in tools by name.
+2. **Prefix Decision**: Based on configuration, the system decides whether to add a server name prefix to tool names. In most modes, the prefix is mandatory (ensuring tool names don't conflict across servers); but in SDK mode, when the environment variable `CLAUDE_AGENT_SDK_MCP_NO_PREFIX` is set, tools are registered with their original names, so an MCP tool can override a built-in tool of the same name.
 
 3. **Tool Object Construction**: Each MCP tool is mapped to a Claude Code internal `Tool` object. The mapping is a full "protocol adaptation" — MCP semantics are translated into Claude Code tool system semantics.
 
@@ -549,7 +549,7 @@ If an allowlist is defined, only servers on the allowlist are permitted. The all
 
 **URL Wildcard Matching Details**
 
-URL pattern matching supports the `*` wildcard, enabling flexible matching of a group of related servers:
+URL pattern matching supports the `*` wildcard, so one pattern covers a whole group of related servers:
 
 ```
 Exact match:

@@ -64,7 +64,7 @@ graph LR
 | Constant | Value | Meaning | Design Intent |
 |----------|-------|---------|---------------|
 | `AUTOCOMPACT_BUFFER_TOKENS` | 13,000 | Auto-compression trigger buffer | Reserves a safety margin before space is exhausted, avoiding "edge cases" |
-| `WARNING_THRESHOLD_BUFFER_TOKENS` | 20,000 | Warning threshold buffer | Early warning, giving users time to react |
+| `WARNING_THRESHOLD_BUFFER_TOKENS` | 20,000 | Warning threshold buffer | Early warning that leaves time to react |
 | `ERROR_THRESHOLD_BUFFER_TOKENS` | 20,000 | Error threshold buffer | Marks the danger zone, triggering more aggressive compression strategies |
 | `MANUAL_COMPACT_BUFFER_TOKENS` | 3,000 | Manual compression buffer | Minimum safety margin when users manually trigger compression |
 
@@ -471,7 +471,7 @@ Combining Chapter 2 (Conversation Loop) and Chapter 9 (Fork Pattern), analyze th
 2. **Four-Level Progressive Compression**: Snip -> MicroCompact -> Collapse -> AutoCompact, with costs escalating at each level. Each level is an "upgrade" of the previous one.
 3. **Circuit Breaker Protection**: After 3 consecutive compression failures, further attempts are stopped, preventing avalanche effects from wasted API calls. This design stems from actual data analysis of 1,279 sessions.
 4. **Dual-Phase Prompt Structure**: `<analysis>` thinking scratchpad + `<summary>` formal summary. The former is discarded in the final context to save tokens -- "thinking is the process, the summary is the result."
-5. **CompactBoundaryMessage**: The compression boundary marker carries metadata and maintains logical continuity of the message chain through `logicalParentUuid`, enabling subsequent operations to accurately identify already-compressed content.
+5. **CompactBoundaryMessage**: The compression boundary marker carries metadata and maintains logical continuity of the message chain through `logicalParentUuid`, so later operations can identify exactly which content was compressed.
 6. **Post-Compression Budget Control**: Re-injected content has strict token budget limits (50,000 total budget, 5,000 per file), preventing immediate re-triggering of compression.
 7. **Time-Triggered Micro-Compression**: When server-side cache expires (timeout since last assistant message), old tool results are proactively cleared to reduce rewrite costs.
 8. **Proactive Compression Over Reactive Compression**: Manually triggering compression at key work milestones with annotation of key points preserves more valuable information than waiting for auto-compression.

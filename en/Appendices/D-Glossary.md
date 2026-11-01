@@ -3,7 +3,7 @@
 > This glossary covers the core terminology used throughout *Decoding Agent Harness: Claude Code Architecture Deep Dive*, sorted alphabetically. Each entry includes the original English term, a recommended Chinese translation, a concise definition, cross-references to related terms, and a reference to the chapter where the term is first discussed in depth.
 >
 > **How to use this glossary**:
-> - The "See also" field after each term points to related terms, enabling thematic reading
+> - The "See also" field after each term points to related terms, so the glossary reads thematically
 > - The "Chapter" field after each term indicates where the term is first discussed in depth in the main text
 > - Technical terms are kept in their original English form; Chinese translations are provided for supplementary understanding
 
@@ -180,7 +180,7 @@ flowchart LR
 | GrepTool | Grep 搜索工具 | A regex-based content search tool powered by ripgrep, supporting three output modes: files_with_matches / content / count. Marked as readOnly and concurrencySafe | GlobTool, Tool | Chapter 3 |
 | Hard Fail | 硬失败 | A mode that terminates directly on critical errors rather than degrading gracefully. Controlled by the `HARD_FAIL` feature flag | Feature Flag, Permission Pipeline | Chapter 3 |
 | Hook | 钩子 | User-defined scripts or callback functions triggered at specific lifecycle events (such as before/after tool execution, session start/end). This is the core mechanism for Claude Code lifecycle extension | Hook Prompts, PreToolUse, PostToolUse | Chapter 8 |
-| Hook Prompts | 钩子提示词 | A mechanism that allows hooks to inject custom prompts into the conversation flow, enabling dynamic system-level instruction customization. Controlled by the `HOOK_PROMPTS` feature flag | Hook, System Prompt | Chapter 9 |
+| Hook Prompts | 钩子提示词 | A mechanism that allows hooks to inject custom prompts into the conversation flow: system-level instructions can then be customized mid-session. Controlled by the `HOOK_PROMPTS` feature flag | Hook, System Prompt | Chapter 9 |
 | History Snip | 历史裁剪 / Snip Compact | A compaction strategy that intelligently trims processed conversation history, retaining key information while significantly reducing Token usage. Controlled by the `HISTORY_SNIP` feature flag | Compaction, Auto Compact, Token | Chapter 7 |
 
 ## I-J-K
@@ -218,7 +218,7 @@ flowchart LR
 | Native Client Attestation | 原生客户端认证 | Enables platform-native client identity verification mechanisms. Controlled by the `NATIVE_CLIENT_ATTESTATION` feature flag | Feature Flag, Permission Pipeline | Chapter 3 |
 | Permission Mode | 权限模式 | A setting that controls the agent's level of autonomous execution, including ask (confirm each time), auto-edit (auto-approve edits), full-auto (fully automatic), and more. Combined with Transcript Classifier, it enables automatic inference | Auto Mode, Permission Pipeline, Always Allow | Chapter 4 |
 | Permission Pipeline | 权限管线 | The multi-layered permission check pipeline before tool execution, containing the complete decision chain of classifier evaluation, user confirmation dialogs, and auto-approval rules. See the permission decision path in Appendix A.3 | Permission Mode, Bash Classifier, Transcript Classifier | Chapter 4 |
-| Plan Mode | Plan 模式 | An interactive planning interface provided by the Ultraplan feature, allowing users to review, modify, and approve complex task plans before execution. In Plan Mode, only read-only tools are permitted | EnterPlanModeTool, ExitPlanModeV2Tool, Ultraplan | Chapter 14 |
+| Plan Mode | Plan 模式 | An interactive planning interface provided by the Ultraplan feature, where users review, modify, and approve complex task plans before execution. In Plan Mode, only read-only tools are permitted | EnterPlanModeTool, ExitPlanModeV2Tool, Ultraplan | Chapter 14 |
 | Power Assertion | 幂等断言 | A code design principle ensuring that operations can be safely repeated without side effects. Used in the tool system design to guarantee retry safety | Tool, Unattended Retry | Chapter 3 |
 | PreToolUse / PostToolUse | 工具执行前/后钩子 | Lifecycle hooks triggered before/after tool execution, used respectively for modifying input parameters or blocking execution, and for processing execution results or logging | Hook, Hook Prompts | Chapter 8 |
 | Proactive Mode | 主动模式 | The agent's ability to proactively analyze code, offer suggestions, or run background tasks when the user is idle. Controlled by the `PROACTIVE` feature flag | Feature Flag, SleepTool | Chapter 5 |
@@ -281,7 +281,7 @@ flowchart LR
 |---|---|---|---|---|
 | UDS (Unix Domain Socket) Inbox | Unix 域套接字收件箱 | A communication endpoint that receives messages from other local processes via Unix Domain Socket. Controlled by the `UDS_INBOX` feature flag | Feature Flag, ListPeersTool | Chapter 7 |
 | Ultraplan | 超级规划 | An advanced planning feature that provides an interactive plan review interface, supporting user approval and modification of complex task execution plans before execution. Controlled by the `ULTRAPLAN` feature flag | Plan Mode, EnterPlanModeTool | Chapter 5 |
-| Ultrathink | 深度思考 | A feature flag that enables Extended Thinking capability, letting the model reason more deeply before generating a response | Extended Thinking, Feature Flag, Token | Chapter 5 |
+| Ultrathink | 深度思考 | A feature flag that enables Extended Thinking capability, so the model reasons more deeply before generating a response | Extended Thinking, Feature Flag, Token | Chapter 5 |
 | Unattended Retry | 无人值守重试 | A mechanism that automatically retries on API call failure without user intervention. Controlled by the `UNATTENDED_RETRY` feature flag. Combined with Power Assertion to ensure retry safety | Feature Flag, Power Assertion | Chapter 13 |
 | Verification Agent | 验证智能体 | A gated adversarial verification agent. Registration requires both `VERIFICATION_AGENT` and runtime gate `tengu_hive_evidence` (default `false`); not universally available | Agent, Feature Flag | Chapter 9 |
 | Voice Mode | 语音模式 | An interactive mode that enables Push-to-Talk voice input and speech synthesis output, supporting voice-driven conversation experiences. Controlled by the `VOICE_MODE` feature flag | Feature Flag | Chapter 12 |
@@ -291,7 +291,7 @@ flowchart LR
 | English Term | Chinese Translation | Concise Definition | See Also | Chapter |
 |---|---|---|---|---|
 | Web Browser Tool | 网页浏览器工具 | A browser panel built into Claude Code that supports web content browsing, extraction, and interaction. Controlled by the `WEB_BROWSER_TOOL` feature flag | WebFetchTool, WebSearchTool, Feature Flag | Chapter 7 |
-| Workflow Scripts | 工作流脚本 | A script system that supports automated task orchestration, allowing the definition and execution of multi-step workflows. Controlled by the `WORKFLOW_SCRIPTS` feature flag | Agent Trigger, Feature Flag | Chapter 9 |
+| Workflow Scripts | 工作流脚本 | A script system for automated task orchestration: multi-step workflows are defined and run from scripts. Controlled by the `WORKFLOW_SCRIPTS` feature flag | Agent Trigger, Feature Flag | Chapter 9 |
 | Worktree | 工作树 | A wrapper around Git worktree that creates isolated working directories for subagents or parallel tasks, avoiding file conflicts in the main workspace. Controlled by the Worktree Mode feature flag | Fork Mode, Subagent, EnterWorktreeTool | Chapter 9 |
 | Zod Schema | Zod 验证模式 | A runtime type validation schema defined using the Zod library, used for type checking of tool input parameters and auto-completion hint generation. Each tool's input parameters are validated by a Zod Schema | Tool, Tool Interface, Build Tool | Chapter 3 |
 

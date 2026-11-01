@@ -229,7 +229,7 @@ The downside is limited query capability -- it cannot run complex relational que
 
 ### 6.2.2 MEMORY.md Index File
 
-`MEMORY.md` is the entry point of the memory system -- it is not a memory itself but an index file. At the start of each conversation, it is automatically loaded into the context, allowing the Agent to quickly understand the overview of existing memories.
+`MEMORY.md` is the entry point of the memory system -- it is not a memory itself but an index file. At the start of each conversation, it is automatically loaded into the context, which is how the Agent picks up an overview of existing memories.
 
 The memory directory module's constants define the index capacity limits: the index file is named `MEMORY.md`, with a maximum of 200 lines and 25KB.
 

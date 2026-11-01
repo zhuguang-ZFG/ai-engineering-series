@@ -338,7 +338,7 @@ This implementation embodies key design decisions distilled from Claude Code's s
 
 1. **State object pattern:** Loop state is encapsulated in a single `state` variable, and each `continue` site writes a new `State` object (corresponding to `const next: State = { ... }` in the source code)
 2. **Dependency injection:** The `deps` object encapsulates all I/O operations (model calls, UUID generation), so tests can inject mock implementations
-3. **Generator output:** Events are passed one by one through `yield`, enabling consumers to respond in real time
+3. **Generator output:** Events are passed one by one through `yield`, so consumers respond in real time
 
 **Extension considerations for Step 1:** This minimal implementation lacks several features essential for production environments. Before putting the dialog loop into actual use, you should consider adding:
 

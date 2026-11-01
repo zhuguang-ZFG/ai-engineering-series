@@ -1,6 +1,6 @@
 # Appendix C: Feature Flag Reference
 
-> Feature flags are the core mechanism for implementing compile-time dead code elimination in Claude Code. All flags are injected as boolean values by the compiler during the bundling phase: when a flag is `false`, the code branch it guards is removed entirely, thereby reducing artifact size and protecting unreleased features.
+> Feature flags are the core mechanism for implementing compile-time dead code elimination in Claude Code. All flags are injected as boolean values by the compiler during the bundling phase: when a flag is `false`, the code branch it guards is removed entirely, so the artifact shrinks and unreleased features stay out of it.
 >
 > **Type Definitions**:
 > - **Compile-time**: The flag is evaluated during the Bun bundling phase; code branches that resolve to `false` are completely absent from the output artifact.
@@ -23,7 +23,7 @@ Core interaction mode flags control the primary operating modes of Claude Code. 
 | `PROACTIVE` | Compile-time | Proactive mode. When enabled, the agent can proactively offer suggestions and automatically execute background tasks during user idle periods | Enables SleepTool, proactive suggestion logic, background task triggers | No prerequisites | Chapter 5 |
 | `KAIROS` | Compile-time + Runtime Gating | Assistant mode (formerly Harbor). IDE-oriented channel-based collaboration, including channel messaging, session recovery, and the complete feature set | Enables channel communication, session recovery, SleepTool, SendUserFileTool, PushNotificationTool, and the full feature set | No prerequisites, though some sub-features require their own sub-flags | Chapter 6 |
 | `KAIROS_BRIEF` | Compile-time | KAIROS lightweight subset. Only enables basic capabilities such as session recovery, without the full channel functionality | Session recovery and basic interaction only | Depends on KAIROS context | Chapter 6 |
-| `KAIROS_CHANNELS` | Compile-time + Runtime Gating | Channel functionality toggle independent of the full KAIROS feature set, allowing channel messaging alone to be enabled | Sending, receiving, and routing of channel messages | Can be enabled independently of the full KAIROS feature set | Chapter 6 |
+| `KAIROS_CHANNELS` | Compile-time + Runtime Gating | Channel functionality toggle independent of the full KAIROS feature set; channel messaging alone can be turned on | Sending, receiving, and routing of channel messages | Can be enabled independently of the full KAIROS feature set | Chapter 6 |
 | `KAIROS_DREAM` | Compile-time | KAIROS Dream mode, used for loading additional skill sets | Loading and registration of Dream-specific skill sets | Depends on KAIROS | Chapter 6 |
 | `KAIROS_GITHUB_WEBHOOKS` | Compile-time | GitHub Webhook integration. Receives GitHub event pushes in KAIROS mode | SubscribePRTool, GitHub event listening and routing | Depends on KAIROS | Chapter 6 |
 | `KAIROS_PUSH_NOTIFICATION` | Compile-time | KAIROS push notification capability | Notification logic for PushNotificationTool | Depends on KAIROS | Chapter 6 |
@@ -188,7 +188,7 @@ Session and persistence flags control the lifecycle management and state persist
 
 | Feature Flag | Type | Description | Impact Scope | Dependencies | Related Chapter |
 |---|---|---|---|---|---|
-| `BG_SESSIONS` | Compile-time | Background sessions. Supports maintaining independent session instances in the background, allowing long-running tasks to execute detached from the foreground | Background session manager, session serialization and recovery | No prerequisites | Chapter 11 |
+| `BG_SESSIONS` | Compile-time | Background sessions. Supports independent session instances in the background. Long-running tasks execute detached from the foreground | Background session manager, session serialization and recovery | No prerequisites | Chapter 11 |
 | `AWAY_SUMMARY` | Compile-time | Away summary. Automatically generates a conversation summary covering the period when the user was away, displayed upon their return | Away detection, summary generation, return display | Depends on session persistence | Chapter 11 |
 | `FILE_PERSISTENCE` | Compile-time | File persistence. Enables session-level file persistence tracking | File change tracking, state consistency during session recovery | No prerequisites | Chapter 11 |
 | `NEW_INIT` | Compile-time | New initialization flow. Uses an improved session initialization logic | Session initialization flow, startup optimization | No prerequisites | Chapter 11 |

@@ -66,7 +66,7 @@ graph LR
 
 From this type, three concrete agent definitions are derived:
 
-- **BuiltInAgentDefinition** (built-in agent): Dynamically generates system prompts via `getSystemPrompt()`. Built-in agents have prompts that are fixed at compile time but dynamically constructed at runtime, allowing different prompt content to be generated under different environments (different feature gate states).
+- **BuiltInAgentDefinition** (built-in agent): Dynamically generates system prompts via `getSystemPrompt()`. Built-in agents have prompts that are fixed at compile time but dynamically constructed at runtime, so different prompt content is generated under different environments (different feature gate states).
 - **CustomAgentDefinition** (custom agent): Comes from user/project/policy settings. Users define them declaratively through Markdown files, and the system automatically parses them.
 - **PluginAgentDefinition** (plugin agent): Agents provided by plugins, carrying plugin metadata. Plugin agents can carry additional version information and dependency declarations.
 
@@ -144,7 +144,7 @@ Its core design philosophy is reflected in two key decisions:
 
 **First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and at the tool level, Edit, Write, and similar tools are physically prohibited via disallowedTools. This "dual-lock" design — soft constraints at the prompt level plus hard constraints at the tool level — ensures that even if the model "hallucinates" and wants to modify a file, it will be physically blocked because the tool is unavailable.
 
-**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, allowing the model to focus more on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
+**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, so the model focuses on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
 
 > **Best Practice: How to Effectively Use the Explore Agent**
 >
@@ -219,7 +219,7 @@ flowchart TD
 
 > **Design Philosophy: Why does the Verification Agent run in the background?**
 >
-> The Verification Agent always runs in the background, which is a deliberate design decision. There are three reasons: first, verification is a "waitable" task — users don't need to see the verification process in real time; they only need to see the final result. Second, background execution frees up the main thread, allowing users to continue interacting with the main agent. Third, background mode forces the verification Agent to work independently, preventing the verification flow from being interrupted by waiting for user input.
+> The Verification Agent always runs in the background, which is a deliberate design decision. There are three reasons: first, verification is a "waitable" task — users don't need to see the verification process in real time; they only need to see the final result. Second, background execution frees up the main thread, and users keep interacting with the main agent. Third, background mode forces the verification Agent to work independently, preventing the verification flow from being interrupted by waiting for user input.
 
 ---
 

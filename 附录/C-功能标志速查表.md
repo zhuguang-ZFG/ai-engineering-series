@@ -23,7 +23,7 @@
 | `PROACTIVE` | 编译时 | 主动模式。启用后智能体可在用户空闲时主动发起建议、自动执行后台任务 | 启用 SleepTool、主动建议逻辑、后台任务触发器 | 无前置依赖 | 第 5 章 |
 | `KAIROS` | 编译时 + 运行时门控 | 助手模式（原 Harbor）。面向 IDE 的通道式协作，含频道消息、会话恢复等完整功能集 | 启用频道通信、会话恢复、SleepTool、SendUserFileTool、PushNotificationTool 等完整功能集 | 无前置依赖，但部分子功能需要各自的子标志 | 第 6 章 |
 | `KAIROS_BRIEF` | 编译时 | KAIROS 精简子集，仅启用会话恢复等基础能力，不包含完整通道功能 | 仅会话恢复和基础交互 | 依赖 KAIROS 上下文 | 第 6 章 |
-| `KAIROS_CHANNELS` | 编译时 + 运行时门控 | 独立于完整 KAIROS 的频道功能开关，允许仅启用频道消息通信 | 频道消息的收发和路由 | 可独立于完整 KAIROS 启用 | 第 6 章 |
+| `KAIROS_CHANNELS` | 编译时 + 运行时门控 | 独立于完整 KAIROS 的频道功能开关，可单独启用频道消息通信 | 频道消息的收发和路由 | 可独立于完整 KAIROS 启用 | 第 6 章 |
 | `KAIROS_DREAM` | 编译时 | KAIROS Dream 模式，用于加载额外的技能集 | Dream 专用技能集的加载和注册 | 依赖 KAIROS | 第 6 章 |
 | `KAIROS_GITHUB_WEBHOOKS` | 编译时 | GitHub Webhook 集成，在 KAIROS 模式下接收 GitHub 事件推送 | SubscribePRTool、GitHub 事件监听和路由 | 依赖 KAIROS | 第 6 章 |
 | `KAIROS_PUSH_NOTIFICATION` | 编译时 | KAIROS 推送通知功能 | PushNotificationTool 的通知逻辑 | 依赖 KAIROS | 第 6 章 |
@@ -58,7 +58,7 @@ flowchart TD
 | `FORK_SUBAGENT` | 编译时 | Fork 子智能体。允许在对话中通过 fork 机制创建独立子智能体处理子任务 | AgentTool 的 fork 能力、子智能体上下文隔离 | 无前置依赖 | 第 8 章 |
 | `AGENT_TRIGGERS` | 编译时 | 智能体触发器。启用定时任务调度（cron）、后台周期性执行的智能体行为 | CronCreateTool, CronDeleteTool, CronListTool | 依赖 DAEMON 或长运行环境 | 第 9 章 |
 | `AGENT_TRIGGERS_REMOTE` | 编译时 | 远程智能体触发器。支持远程托管的定时触发器执行 | RemoteTriggerTool、远程触发器通信协议 | 依赖 AGENT_TRIGGERS | 第 9 章 |
-| `ULTRAPLAN` | 编译时 | 超级规划模式。提供交互式规划对话框，允许用户审查和修改复杂任务的执行计划 | EnterPlanModeTool/ExitPlanModeV2Tool 的增强规划界面 | 无前置依赖 | 第 5 章 |
+| `ULTRAPLAN` | 编译时 | 超级规划模式。提供交互式规划对话框，用户可审查和修改复杂任务的执行计划 | EnterPlanModeTool/ExitPlanModeV2Tool 的增强规划界面 | 无前置依赖 | 第 5 章 |
 | `VERIFICATION_AGENT` | 编译时 | 包含受门控的验证智能体设计，不保证向用户开放 | 验证智能体注册与行为 | 同时要求运行时开关 `tengu_hive_evidence` 开启（默认 `false`） | 第 9 章 |
 | `BUILTIN_EXPLORE_PLAN_AGENTS` | 编译时 | 内置探索-规划智能体。提供预装的探索和规划类型的子智能体 | ExploreAgent, PlanAgent 等内置智能体定义 | 依赖 FORK_SUBAGENT | 第 8 章 |
 | `AGENT_MEMORY_SNAPSHOT` | 编译时 | 智能体内存快照。支持快照与恢复智能体状态 | 快照创建、序列化存储、恢复加载逻辑 | 无前置依赖 | 第 10 章 |
@@ -188,7 +188,7 @@ flowchart TD
 
 | 功能标志 | 类型 | 作用描述 | 影响范围 | 依赖关系 | 相关章节 |
 |---|---|---|---|---|---|
-| `BG_SESSIONS` | 编译时 | 后台会话。支持在后台维持独立的会话实例，允许长时间运行的任务脱离前台执行 | 后台会话管理器、会话序列化与恢复 | 无前置依赖 | 第 11 章 |
+| `BG_SESSIONS` | 编译时 | 后台会话。支持在后台维持独立的会话实例，长任务得以脱离前台执行 | 后台会话管理器、会话序列化与恢复 | 无前置依赖 | 第 11 章 |
 | `AWAY_SUMMARY` | 编译时 | 离开摘要。当用户离开后返回时，自动生成离开期间的对话摘要 | 离开检测、摘要生成、返回时展示 | 依赖会话持久化 | 第 11 章 |
 | `FILE_PERSISTENCE` | 编译时 | 文件持久化。启用会话级别的文件级持久化追踪 | 文件变更追踪、会话恢复时的状态一致性 | 无前置依赖 | 第 11 章 |
 | `NEW_INIT` | 编译时 | 新初始化流程。使用改进后的会话初始化逻辑 | 会话初始化流程、启动优化 | 无前置依赖 | 第 11 章 |

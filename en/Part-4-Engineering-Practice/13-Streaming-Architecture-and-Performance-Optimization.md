@@ -283,7 +283,7 @@ The optimizations line up as one startup methodology: **Identify critical path -
 
 ### 13.3.1 Parallel Prefetching: Racing Against Module Evaluation
 
-The top of Claude Code's entry file is the core of the parallel prefetching strategy. The system starts two subprocesses at the earliest stage of module evaluation, letting them execute in parallel with the subsequent ~65ms import chain. The two key prefetch operations are MDM configuration reading and Keychain credential prefetching.
+The top of Claude Code's entry file is the core of the parallel prefetching strategy. The system starts two subprocesses at the earliest stage of module evaluation and lets them run in parallel with the ~65ms import chain that follows. The two key prefetch operations are MDM configuration reading and Keychain credential prefetching.
 
 **startMdmRawRead** spawns multiple `plutil` processes in parallel on macOS to read MDM plist configurations, and spawns `reg query` on Windows to read the registry. It uses `existsSync` to quickly skip non-existent plist files, avoiding unnecessary 5ms spawn overhead.
 

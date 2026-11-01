@@ -106,7 +106,7 @@ flowchart LR
 | Agent | 智能体 | 能自主规划、调用工具、迭代执行的 AI 程序实体，会根据环境反馈动态调整行为。在 Claude Code 的架构中，Agent 由 Agent Harness 包裹，通过 Main Loop 与工具系统协同工作 | Agent Harness, Subagent, Coordinator Mode | 第 1 章 |
 | Agent Harness | 智能体线束 / 执行框架 | 包裹大语言模型的运行时基础设施层，负责工具调度、权限管控、上下文管理、流式渲染等核心能力的编排与执行。这是 Claude Code 最核心的架构概念，定义了 LLM 与外部世界交互的标准框架 | Agent, Tool, Permission Mode, Context Window | 第 1 章 |
 | Agent Memory Snapshot | 智能体内存快照 | 把智能体运行时的内部状态序列化保存，支持跨会话恢复执行现场。由 `AGENT_MEMORY_SNAPSHOT` 功能标志控制启用 | Memory, Agent, Feature Flag | 第 10 章 |
-| Agent Trigger | 智能体触发器 | 基于时间（cron）或事件驱动的自动调度机制，允许智能体在无人值守时按计划执行任务。由 `AGENT_TRIGGERS` 功能标志控制启用 | Daemon, Cron Tool | 第 9 章 |
+| Agent Trigger | 智能体触发器 | 基于时间（cron）或事件驱动的自动调度机制，智能体在无人值守时按计划执行任务。由 `AGENT_TRIGGERS` 功能标志控制启用 | Daemon, Cron Tool | 第 9 章 |
 | Always Allow / Always Deny / Always Ask | 始终允许 / 始终拒绝 / 始终询问 | 权限规则中的三种基本策略，优先级为 Always Deny > Always Allow > Always Ask。这些规则定义在 settings.json 的三级配置中 | Permission Mode, Permission Pipeline | 第 4 章 |
 | API Turn | API 轮次 | 一次完整的"发送请求-接收响应"交互周期，包含用户输入、模型推理和工具调用结果的完整往返。一个用户请求可能触发多个 API Turn（当需要工具调用时） | Main Loop, Token, Tool | 第 2 章 |
 | Async Generator | 异步生成器 | JavaScript/TypeScript 中使用 `async function*` 声明的函数，通过 `yield` 逐步产出异步结果，是 Claude Code 流式输出的核心编程原语。查询引擎和流式工具执行器都使用此模式 | Stream, Query Engine | 第 2 章 |
@@ -202,7 +202,7 @@ flowchart LR
 | LLM (Large Language Model) | 大语言模型 | Claude 等基于 Transformer 架构的大规模预训练语言模型，是智能体的推理核心。在 Claude Code 中，LLM 通过 Agent Harness 与工具系统交互 | Agent, Agent Harness, API Turn | 第 1 章 |
 | Lodestone | 磁石 | 增强型记忆检索与匹配机制，提升从记忆文件系统中查找相关知识的准确率。由 `LODESTONE` 功能标志控制 | Memory, CLAUDE.md | 第 10 章 |
 | Main Loop | 主循环 | Claude Code 的核心执行循环，负责接收用户输入、调用模型 API、处理工具调用、渲染输出的迭代流程。每个迭代称为一个 turn | API Turn, Tool, Query Engine | 第 2 章 |
-| MCP (Model Context Protocol) | 模型上下文协议 | Anthropic 定义的标准化协议，允许外部工具服务器向模型提供上下文信息和可调用工具。Claude Code 实现了完整的 MCP 客户端 | Dynamic Tool Registration, MCP Skills | 第 12 章 |
+| MCP (Model Context Protocol) | 模型上下文协议 | Anthropic 定义的标准化协议，外部工具服务器借此向模型提供上下文信息和可调用工具。Claude Code 实现了完整的 MCP 客户端 | Dynamic Tool Registration, MCP Skills | 第 12 章 |
 | MCP Skills | MCP 技能发现 | 通过 MCP 协议从外部服务器动态发现和加载可扩展技能的能力。由 `MCP_SKILLS` 功能标志控制 | MCP, Skill, Dynamic Tool Registration | 第 7 章 |
 | Memory | 记忆 | 持久化存储的用户偏好、项目知识和历史经验的文件系统，跨会话保留关键信息。核心载体是 CLAUDE.md 文件 | CLAUDE.md, Extract Memories, Team Memory | 第 6 章 |
 | Memory Injection | 记忆注入 | 在每轮对话开始时将 CLAUDE.md 文件中的知识注入到系统提示中的过程，参见附录 A.3 的记忆注入路径 | Memory, CLAUDE.md, System Prompt | 第 6 章 |
@@ -218,7 +218,7 @@ flowchart LR
 | Native Client Attestation | 原生客户端认证 | 启用平台原生的客户端身份验证机制。由 `NATIVE_CLIENT_ATTESTATION` 功能标志控制 | Feature Flag, Permission Pipeline | 第 3 章 |
 | Permission Mode | 权限模式 | 控制智能体自主执行级别的设置，包括 ask（逐次确认）、auto-edit（编辑自动放行）、full-auto（完全自动）等。配合 Transcript Classifier 可实现自动推断 | Auto Mode, Permission Pipeline, Always Allow | 第 4 章 |
 | Permission Pipeline | 权限管线 | 工具执行前的多层权限检查管道，包含分类器评估、用户确认对话框和自动放行规则的完整决策链。参见附录 A.3 的权限判定路径 | Permission Mode, Bash Classifier, Transcript Classifier | 第 4 章 |
-| Plan Mode | Plan 模式 | Ultraplan 功能提供的交互式规划界面，允许用户在执行前审查、修改和确认复杂任务计划。进入 Plan Mode 后仅允许使用只读工具 | EnterPlanModeTool, ExitPlanModeV2Tool, Ultraplan | 第 14 章 |
+| Plan Mode | Plan 模式 | Ultraplan 功能提供的交互式规划界面，用户在执行前审查、修改和确认复杂任务计划。进入 Plan Mode 后仅允许使用只读工具 | EnterPlanModeTool, ExitPlanModeV2Tool, Ultraplan | 第 14 章 |
 | Power Assertion | 幂等断言 | 确保操作可以安全重复执行而不会产生副作用的代码设计原则。在工具系统设计中用于保障重试安全性 | Tool, Unattended Retry | 第 3 章 |
 | PreToolUse / PostToolUse | 工具执行前/后钩子 | 在工具执行前/后触发的生命周期钩子，分别用于修改输入参数或阻止执行、处理执行结果或记录日志 | Hook, Hook Prompts | 第 8 章 |
 | Proactive Mode | 主动模式 | 智能体在用户空闲时主动分析代码、提出建议或执行后台任务的能力。由 `PROACTIVE` 功能标志控制 | Feature Flag, SleepTool | 第 5 章 |
@@ -241,7 +241,7 @@ flowchart LR
 
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
-| Selector Pattern | Selector 模式 | 状态管理中的高效订阅模式，允许组件只订阅它们关心的状态子集，避免不必要的重渲染 | State Management, React | 第 2 章 |
+| Selector Pattern | Selector 模式 | 状态管理中的高效订阅模式，组件只订阅自己关心的状态子集，避免不必要的重渲染 | State Management, React | 第 2 章 |
 | Settings Sync | 设置同步 | 将用户配置（权限规则、环境变量等）在本地与云端之间双向同步的能力。由 `UPLOAD_USER_SETTINGS` 和 `DOWNLOAD_USER_SETTINGS` 功能标志控制 | Multi-tier Settings, Feature Flag | 第 10 章 |
 | Skill | 技能 | 可安装的扩展能力包，通过提示词模板和工具定义扩展智能体在特定领域的专业能力。通过 slash command 触发调用 | Skill Generator, MCP Skills, Slash Command | 第 11 章 |
 | Skill Generator | 技能生成器 | 动态生成新技能定义的工具，支持用户通过自然语言描述创建自定义技能。由 `RUN_SKILL_GENERATOR` 功能标志控制 | Skill, Feature Flag | 第 7 章 |
@@ -260,7 +260,7 @@ flowchart LR
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
 | Team Memory (TEAMMEM) | 团队记忆 | 面向团队的共享记忆文件系统，支持团队成员之间共享项目知识和编码规范。由 `TEAMMEM` 功能标志控制 | Memory, CLAUDE.md, Extract Memories | 第 10 章 |
-| Terminal Panel | 终端面板 | 全屏布局中的独立终端面板组件，允许用户在不离开 Claude Code 的情况下执行终端命令。由 `TERMINAL_PANEL` 功能标志控制，快捷键 Meta+J | Fullscreen Layout, Feature Flag | 第 12 章 |
+| Terminal Panel | 终端面板 | 全屏布局中的独立终端面板组件，用户不离开 Claude Code 就能执行终端命令。由 `TERMINAL_PANEL` 功能标志控制，快捷键 Meta+J | Fullscreen Layout, Feature Flag | 第 12 章 |
 | Templates | 模板系统 | 启用作业分类器（Job Classifier）的分类模块，用于识别和路由不同类型的用户请求。由 `TEMPLATES` 功能标志控制 | Job Classifier, Feature Flag | 第 9 章 |
 | Token | 词元 / Token | 模型处理文本的基本单位，也是上下文窗口容量和 API 计费的核心度量。所有上下文管理策略都是围绕怎样用好 Token 展开的 | Context Window, Token Budget, Compaction | 第 2 章 |
 | Token Budget | Token 预算 | 规划和监控单次会话可用 Token 总量的管理机制，提供用量预警和分配策略。由 `TOKEN_BUDGET` 功能标志控制 | Token, Context Window, Compaction | 第 7 章 |
@@ -281,7 +281,7 @@ flowchart LR
 |---|---|---|---|---|
 | UDS (Unix Domain Socket) Inbox | Unix 域套接字收件箱 | 通过 Unix Domain Socket 接收来自其他本地进程的消息的通信端点。由 `UDS_INBOX` 功能标志控制 | Feature Flag, ListPeersTool | 第 7 章 |
 | Ultraplan | 超级规划 | 提供交互式计划审查界面的高级规划功能，支持用户在执行前审批和修改复杂任务的执行方案。由 `ULTRAPLAN` 功能标志控制 | Plan Mode, EnterPlanModeTool | 第 5 章 |
-| Ultrathink | 深度思考 | 启用扩展思考（Extended Thinking）能力的功能标志，允许模型在生成回复前推理得更深 | Extended Thinking, Feature Flag, Token | 第 5 章 |
+| Ultrathink | 深度思考 | 启用扩展思考（Extended Thinking）能力的功能标志，模型在生成回复前能推理得更深 | Extended Thinking, Feature Flag, Token | 第 5 章 |
 | Unattended Retry | 无人值守重试 | 在 API 调用失败时自动重试的机制，无需用户干预。由 `UNATTENDED_RETRY` 功能标志控制。配合 Power Assertion 确保重试的安全性 | Feature Flag, Power Assertion | 第 13 章 |
 | Verification Agent | 验证智能体 | 受门控的对抗性验证智能体，注册需要 `VERIFICATION_AGENT` 与运行时开关 `tengu_hive_evidence`（默认 `false`）同时开启，并非普遍可用 | Agent, Feature Flag | 第 9 章 |
 | Voice Mode | 语音模式 | 启用 Push-to-Talk 语音输入和语音合成输出的交互模式，支持语音驱动的对话体验。由 `VOICE_MODE` 功能标志控制 | Feature Flag | 第 12 章 |
@@ -291,7 +291,7 @@ flowchart LR
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
 | Web Browser Tool | 网页浏览器工具 | 内置于 Claude Code 的浏览器面板，支持网页内容浏览、提取和交互。由 `WEB_BROWSER_TOOL` 功能标志控制 | WebFetchTool, WebSearchTool, Feature Flag | 第 7 章 |
-| Workflow Scripts | 工作流脚本 | 支持自动化任务编排的脚本系统，允许定义和执行多步骤的工作流程。由 `WORKFLOW_SCRIPTS` 功能标志控制 | Agent Trigger, Feature Flag | 第 9 章 |
+| Workflow Scripts | 工作流脚本 | 支持自动化任务编排的脚本系统：多步骤工作流在其中定义并执行。由 `WORKFLOW_SCRIPTS` 功能标志控制 | Agent Trigger, Feature Flag | 第 9 章 |
 | Worktree | 工作树 | Git worktree 的封装，为子智能体或并行任务创建隔离的工作目录，避免主工作区的文件冲突。由 `Worktree Mode` 功能标志控制 | Fork Mode, Subagent, EnterWorktreeTool | 第 9 章 |
 | Zod Schema | Zod 验证模式 | 使用 Zod 库定义的运行时类型验证模式，用于工具输入参数的类型校验和自动补全提示生成。每个工具的输入参数都由 Zod Schema 把关 | Tool, Tool Interface, Build Tool | 第 3 章 |
 

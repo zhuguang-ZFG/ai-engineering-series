@@ -78,7 +78,7 @@ Each built-in skill is registered through a registration function that receives 
 The most critical fields include:
 
 - Prompt generator: A lazily executed prompt generator that only runs when the skill is invoked
-- `files`: An optional collection of referenced files that are extracted to disk on first invocation, allowing the model to access them via Read/Grep
+- `files`: An optional collection of referenced files that are extracted to disk on first invocation so the model can access them via Read/Grep
 - `isEnabled`: Runtime gating callback; for example, the `/loop` skill checks whether the related feature is enabled on each invocation
 - `context: 'fork'`: Marks the skill to execute in an independent subprocess
 

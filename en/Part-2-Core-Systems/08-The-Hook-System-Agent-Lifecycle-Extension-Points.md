@@ -468,7 +468,7 @@ Typical use cases:
 
 **PreCompact / PostCompact**
 
-Triggered before and after compression. PreCompact's stdout is attached as custom compression instructions to the compression prompt, allowing users to customize summarization behavior. Exit code 2 can block compression. PostCompact receives compression summary as input.
+Triggered before and after compression. PreCompact's stdout is attached as custom compression instructions to the compression prompt, which is how users customize summarization behavior. Exit code 2 can block compression. PostCompact receives compression summary as input.
 
 PreCompact hook processing flow includes: building hook input, executing hook, extracting custom instructions, merging user instructions with hook instructions.
 
@@ -483,7 +483,7 @@ Typical use cases:
 
 ### Permission and Security Events
 
-**PermissionRequest**: Triggered when permission dialog displays. Hook can return `decision` to allow or deny, enabling automated permission approval flows.
+**PermissionRequest**: Triggered when permission dialog displays. Hook can return `decision` to allow or deny, and automated approval flows build on that.
 
 > **Cross-reference with Chapter 4:** This event sits in the fourth stage of the permission pipeline. Chapter 4's four stages are validateInput (input validation), hasPermissionsToUseTool (rule matching), checkPermissions (context evaluation) and the interactive prompt (user confirmation); hooks, the classifier and the user are the three decision-makers sharing that last stage, and a PermissionRequest hook can return a `decision` that settles the request before the user ever sees the dialog.
 
