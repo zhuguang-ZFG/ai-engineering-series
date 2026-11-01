@@ -682,7 +682,7 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 1. **文件状态缓存克隆**（`cloneFileStateCache`）：子 Agent 的文件读取不影响父 Agent 的缓存。这确保了父 Agent 的文件状态视图不会被子 Agent 的中间操作污染。例如，如果子 Agent 读取了一个文件然后该文件被修改，父 Agent 仍然持有修改前的缓存版本，不会因为子 Agent 的读取而刷新。
 
-2. **独立的 AbortController**：子 Agent 可以被独立中止，而不影响父 Agent。父 Agent 因此能一次启动多个子 Agent，需要时只取消其中某个，其他子任务照常运行。
+2. **独立的 AbortController**：子 Agent 能单独中止，不影响父 Agent。父 Agent 因此能一次启动多个子 Agent，需要时只取消其中某个，其他子任务照常运行。
 
 3. **权限提示抑制**：后台 Agent 的 `getAppState` 包装了 `shouldAvoidPermissionPrompts: true`，避免后台操作弹出 UI 提示。这是因为后台 Agent 通常执行预先授权的任务（如 Plan 验证、会话摘要），不需要也不应该打断用户。
 

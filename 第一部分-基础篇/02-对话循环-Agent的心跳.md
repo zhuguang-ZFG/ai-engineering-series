@@ -78,7 +78,7 @@ flowchart TD
 
 - **Message**：结构化的消息对象，包括 `AssistantMessage`（助手回复，可能包含 tool_use 块）、`UserMessage`（用户输入或 tool_result）、`SystemMessage`（系统通知）等。与 StreamEvent 不同，Message 是经过解析和结构化的——相当于直播结束后的回放，画面已被编辑和组织。
 
-- **TombstoneMessage**：当流式回退（streaming fallback）发生时，部分已产出的消息需要被标记为废弃。墓碑消息告诉 UI 移除对应的历史消息。这个名字来自程序员熟知的"墓碑标记"模式——就像墓碑标记了一个生命的终结，TombstoneMessage 标记了一条消息的"失效"。
+- **TombstoneMessage**：当流式回退（streaming fallback）发生时，已经产出的那部分消息要打上废弃标记。墓碑消息告诉 UI 移除对应的历史消息。这个名字来自程序员熟知的"墓碑标记"模式——就像墓碑标记了一个生命的终结，TombstoneMessage 标记了一条消息的"失效"。
 
 - **ToolUseSummaryMessage**：在一批工具执行完成后，异步生成的简要摘要，用于在 UI 中折叠展示工具调用结果。这对于长时间的 Agent 会话尤为重要——如果没有摘要，几十次工具调用的完整输出会淹没整个屏幕。
 
@@ -126,7 +126,7 @@ classDiagram
     TombstoneMessage : 标记消息"失效"
 ```
 
-- **UserMessage**：用户的输入消息，也承载工具执行结果（tool_result）。在 API 的视角里，工具结果总是以 user 角色发送。这个设计可能看起来违反直觉——为什么工具结果是"user"角色？原因是 API 协议层面只有三种角色（system/user/assistant），工具结果需要被模型"看到"，所以必须以 user 角色发送。这是一个工程约束驱动设计决策的典型案例。
+- **UserMessage**：用户的输入消息，也承载工具执行结果（tool_result）。在 API 的视角里，工具结果总是以 user 角色发送。这个设计可能看起来违反直觉——为什么工具结果是"user"角色？原因是 API 协议层面只有三种角色（system/user/assistant），工具结果得让模型"看到"，所以必须以 user 角色发送。这是一个工程约束驱动设计决策的典型案例。
 - **AssistantMessage**：模型返回的消息，可能包含文本块和 tool_use 块。当模型检测到需要调用工具时，响应中会包含 `type: 'tool_use'` 的内容块。AssistantMessage 的关键特性是它可能同时包含文本和工具调用——模型可能先输出一段解释（"我需要查看你的文件"），然后附加一个工具调用。这种"边说边做"的模式让 Agent 的行为更加透明。
 - **SystemMessage**：系统级通知，如权限变更、模型回退提示等。不参与 API 通信，仅在 UI 展示。SystemMessage 是"第四面墙"——它不参与模型对话，但告诉用户系统内部正在发生什么。
 - **AttachmentMessage**：附件消息，承载文件变更通知、内存文件（CLAUDE.md）内容、任务通知等附加信息。
