@@ -472,7 +472,7 @@ Triggered before and after compression. PreCompact's stdout is attached as custo
 
 PreCompact hook processing flow includes: building hook input, executing hook, extracting custom instructions, merging user instructions with hook instructions.
 
-> **Design reflection:** Why allow hooks to customize compression instructions? Because different projects have different definitions of "what information is important". In an API project, interface definitions and parameter types are critical; in a frontend project, component hierarchy and state management are critical. PreCompact hooks let users customize compression strategies for different projects, ensuring important information is preserved during compression.
+> **Design reflection:** Why allow hooks to customize compression instructions? Because different projects have different definitions of "what information is important". In an API project, interface definitions and parameter types are critical; in a frontend project, component hierarchy and state management are critical. PreCompact hooks let users customize compression strategies for different projects, so compression keeps what that project calls important.
 
 Typical use cases:
 

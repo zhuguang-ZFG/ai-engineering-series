@@ -29,7 +29,7 @@ The `Tool` type is a generic interface that accepts three type parameters:
 - `Output`: The tool's output type, freely defined.
 - `P extends ToolProgressData`: The tool's progress data type, used for streaming feedback.
 
-The separation of the three generic parameters is a deliberate design decision. If input and output types were merged into one, the tool's signature would become harder to read; if the progress type were omitted, the tool would be unable to provide real-time feedback during execution. Separating the three gives each concern its own type space, and the compiler can check them independently.
+The separation of the three generic parameters is a deliberate design decision. If input and output types were merged into one, the tool's signature would become harder to read; if the progress type were omitted, the tool could not report progress while it runs. Separating the three gives each concern its own type space, and the compiler can check them independently.
 
 The five elements that every tool must implement are as follows:
 

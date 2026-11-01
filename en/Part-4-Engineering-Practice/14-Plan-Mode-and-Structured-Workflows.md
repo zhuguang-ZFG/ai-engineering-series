@@ -307,7 +307,7 @@ Let's analyze more deeply the three recovery sources of `recoverPlanFromMessages
 
 **Source 2: User message's planContent field.** During clear context flow (i.e., clearing context to restart implementation), system sets plan content to a special `planContent` field. This field's purpose is to preserve plan's "seed" after context clear, so newly started execution phase still knows what to do.
 
-**Source 3: Attachment message's plan_file_reference.** auto-compact is an automatic context compression mechanism (detailed in Chapter 7). During compression, system recognizes plan file's importance, preserves reference to plan file in attachment messages. This ensures even after auto-compression, plan file can still be located and read through reference.
+**Source 3: Attachment message's plan_file_reference.** auto-compact is an automatic context compression mechanism (detailed in Chapter 7). When compression runs, the system knows the plan file matters and keeps a reference to it in the attachment message. This ensures even after auto-compression, plan file can still be located and read through reference.
 
 The three sources are ranked by reliability: tool_use input most reliable (API protocol guarantee), planContent second (internal mechanism guarantee), plan_file_reference weakest (relies on auto-compact's correct recognition). Recovery logic attempts in this priority order, first successful source is final result.
 
@@ -663,7 +663,7 @@ Synchronously wait for scheduled task results in main conversation (via Sleep + 
 
 ### 14.5.1 SleepTool
 
-SleepTool is listed as part of background task management. In Claude Code's tool registration, it's registered together with other scheduling-related tools. SleepTool allows Agent to pause for a period during execution, particularly useful in long-running background task scenarios like polling deploy status or waiting for external system to complete operations.
+SleepTool is listed as part of background task management. In Claude Code's tool registration, it's registered together with other scheduling-related tools. SleepTool lets an Agent stop partway through a run and wait -- polling a deployment or waiting on an external system is exactly where a long-running background task needs it.
 
 SleepTool's design seems simple (just wait a specified time), but it plays an important role in the Agent interaction model. Without SleepTool, an Agent facing "waiting" scenarios has only two choices: either return a result immediately (even if the external operation is not yet complete), or poll frequently in a loop (wasting tokens). SleepTool provides a third choice: the Agent can pause execution, wait a while before continuing, without producing token consumption during the wait.
 

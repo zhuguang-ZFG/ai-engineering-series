@@ -307,7 +307,7 @@ flowchart TD
 
 **来源二：User message 的 planContent 字段。** 在 clear context 流程中（即清除上下文重新开始实施时），系统会将计划内容设置到一个特殊的 `planContent` 字段。这个字段的目的是在上下文清除后保留计划的"种子"，使得新开始的执行阶段仍然知道要做什么。
 
-**来源三：Attachment message 的 plan_file_reference。** auto-compact 是一种自动压缩上下文的机制（详见第 7 章）。在压缩过程中，系统识别到计划文件的重要性，会在 attachment 消息中保留对计划文件的引用。这确保了即使经过自动压缩，计划文件仍然可以通过引用被定位和读取。
+**来源三：Attachment message 的 plan_file_reference。** auto-compact 是一种自动压缩上下文的机制（详见第 7 章）。压缩时，系统认得计划文件重要，会在 attachment 消息里保留对它的引用。这确保了即使经过自动压缩，计划文件仍然可以通过引用被定位和读取。
 
 三种来源按可靠性排优先级：tool_use input 最可靠（API 协议保证），planContent 次之（内部机制保证），plan_file_reference 最弱（依赖 auto-compact 的正确识别）。恢复逻辑按此优先级依次尝试，第一个成功的来源即为最终结果。
 
@@ -662,7 +662,7 @@ flowchart TD
 
 ### 14.5.1 SleepTool
 
-SleepTool 被列为后台任务管理的一部分。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 在执行过程中暂停一段时间，这在长时间运行的后台任务场景中特别有用，例如轮询部署状态或等待外部系统完成操作。
+SleepTool 被列为后台任务管理的一部分。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。
 
 SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 交互模型中扮演着重要角色。没有 SleepTool 的 Agent 在面对"等待"场景时只有两种选择：要么立即返回结果（即使外部操作尚未完成），要么在循环中频繁轮询（浪费 token）。SleepTool 提供了第三种选择：Agent 可以暂停执行，等待一段时间后再继续，期间不产生 token 消耗。
 

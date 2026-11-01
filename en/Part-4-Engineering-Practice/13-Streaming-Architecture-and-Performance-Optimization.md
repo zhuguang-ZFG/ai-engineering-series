@@ -642,7 +642,7 @@ In Claude Code entry, MDM read and Keychain prefetch both start at the earliest 
 
 ### Exercise 4: Token Cost Analysis in Practice
 
-Choose a real project, use Claude Code to complete a medium-complexity task (like "Add an API endpoint and write corresponding tests"). Throughout the process record:
+Choose a real project, use Claude Code to complete a medium-complexity task (like "Add an API endpoint and write corresponding tests"). Record as you go:
 1. Token consumption per turn (input/output/cache read/cache create)
 2. Which turn consumed the most tokens, why?
 3. What proportion of total input tokens did tool call returns account for

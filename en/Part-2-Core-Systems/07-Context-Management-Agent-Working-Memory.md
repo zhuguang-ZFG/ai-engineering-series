@@ -270,7 +270,7 @@ graph TD
 
 Each prompt includes a critical anti-tool-call preamble: it instructs the model to respond only in text form and not to invoke any tools (including Read, Bash, Grep, etc.). This directive ensures the summary generation process does not trigger tool calls, because compression runs in a restricted forked agent environment (maximum 1 turn), and a rejected tool call would directly result in empty output.
 
-> **Design Philosophy:** Why must compression execute in a restricted environment? Because compression is a "rewriting" operation on conversation history -- if new conversation history is generated during the rewriting process, it creates a recursion problem. Restricting it to a single turn with no tool calls ensures compression is a pure "read-summarize-output" process.
+> **Design Philosophy:** Why must compression execute in a restricted environment? Because compression is a "rewriting" operation on conversation history -- if the rewrite itself produces new conversation history, it recurses. Restricting it to a single turn with no tool calls ensures compression is a pure "read-summarize-output" process.
 
 ### Dual-Phase Output Structure
 

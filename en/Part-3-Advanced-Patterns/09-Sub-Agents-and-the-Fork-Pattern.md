@@ -326,7 +326,7 @@ Fork sub-agents retain the Agent tool to maintain cache-consistent tool definiti
 
 1. **querySource check** (primary defense): Set on context options, unaffected by automatic compression. This is a runtime marker set in the Fork sub-agent's context, identifying "I was forked." Since it is not part of the conversation history, it won't be cleared by the context compression mechanism, ensuring reliable recursion prevention even in long conversations.
 
-2. **Message scanning** (fallback): Detects specific tags, handling edge cases where querySource was not passed. This is a defensive programming strategy that handles extreme cases where querySource might be lost during serialization/deserialization.
+2. **Message scanning** (fallback): Detects specific tags, handling edge cases where querySource was not passed. This is a defensive programming strategy that catches the cases where querySource disappears between serialization and deserialization.
 
 The sub-task directive generation function produces directives containing strict behavioral norms. The core content includes: declaring itself as a Fork worker rather than the main agent, prohibiting the generation of sub-agents, and prohibiting asking questions or suggesting next steps.
 

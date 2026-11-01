@@ -772,7 +772,7 @@ The `Tools` type is defined as `readonly Tool[]` rather than a regular array -- 
 This immutable collection design brings several benefits:
 
 1. **Security guarantee**: No code can secretly add or remove tools at runtime; the tool list remains fixed once determined at creation.
-2. **Simplified reasoning**: No need to consider "the tool list changed during execution" scenarios, reducing the complexity of concurrency issues.
+2. **Simplified reasoning**: No need to consider "the tool list changes mid-run", which removes a layer of concurrency complexity.
 3. **Cache-friendly**: The tool list's hash value is fixed and can be used as part of a cache key.
 
 ### Feature Flag-Driven Progressive Releases

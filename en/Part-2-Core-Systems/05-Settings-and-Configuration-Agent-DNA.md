@@ -6,7 +6,7 @@
 
 Claude Code's behavior is not determined by a single configuration file, but by six layers of configuration sources merged in sequence. These configuration sources are like the Agent's "DNA" -- they are written before the Agent starts, determining what the Agent can do, what it cannot do, and how it does things. Understanding this system is the first step toward mastering Claude Code's behavior customization capabilities.
 
-The analogy of the configuration system as "DNA" is fitting: just as an organism's genes are determined at the moment of fertilization and expressed layer by layer during development, Claude Code's configuration is loaded at startup and takes effect layer by layer at runtime. The difference is that the Agent's "DNA" can be precisely edited and overridden -- this is both a capability and a risk.
+The analogy of the configuration system as "DNA" is fitting: just as an organism's genes are determined at the moment of fertilization and expressed layer by layer as the organism develops, Claude Code's configuration is loaded at startup and takes effect layer by layer at runtime. The difference is that the Agent's "DNA" can be precisely edited and overridden -- this is both a capability and a risk.
 
 ## 5.1 The Priority System of Six Configuration Sources
 
@@ -509,7 +509,7 @@ Claude Code chose React 18's `useSyncExternalStore` over a custom subscription i
 2. **Batched Updates**: Multiple `setState` calls trigger only one re-render
 3. **Server Compatibility**: Supports SSR snapshot mode
 
-For an Agent system where state changes may trigger side effects like tool calls and file operations, consistency guarantees are particularly important. Imagine: if permission state were inconsistent during rendering, one component might think permission was granted while another thinks it wasn't, producing contradictory behavior.
+For an Agent system where state changes may trigger side effects like tool calls and file operations, consistency guarantees are particularly important. Imagine: if permission state changed halfway through a render, one component might think permission was granted while another thinks it wasn't, producing contradictory behavior.
 
 **Performance Optimization Pattern Comparison**
 

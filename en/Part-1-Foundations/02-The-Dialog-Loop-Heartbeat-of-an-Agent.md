@@ -179,7 +179,7 @@ flowchart TD
 
 The state object is a mutable state container holding all state passed across iterations: message list, tool context, auto-compaction tracking, recovery counters, turn count, and so on. Each time `continue` returns to the top of the loop, a new state object is written.
 
-The key insight of this design is: **there is a clear boundary between "read" and "write" for state.** At the beginning of each iteration, the function reads all needed state fields at once through destructuring (snapshot semantics); at the end of the iteration, it writes the updated state at once by constructing a new object (atomic update semantics). This avoids inconsistency issues from partial updates during iteration.
+The key insight of this design is: **there is a clear boundary between "read" and "write" for state.** At the beginning of each iteration, the function reads all needed state fields at once through destructuring (snapshot semantics); at the end of the iteration, it writes the updated state at once by constructing a new object (atomic update semantics). So no iteration can end with only some fields written and the rest stale.
 
 ### Phase 2: Context Preprocessing
 
