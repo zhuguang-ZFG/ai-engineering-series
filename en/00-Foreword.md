@@ -19,7 +19,7 @@ Each part carries its own meaning, and together they form a metaphor that reache
 | **Shì** (front crossbar) | The rail a rider grasps in salute | **Hook system** -- ceremonial extension points in the lifecycle |
 | **Yù** (driving) | The charioteer's craft | **Architectural understanding** -- the ability to comprehend and control an agent system |
 
-Confucius compared trust to a chariot: "A large carriage without its nǐ, a small one without its yuè -- how is it to go anywhere?" A chariot that loses its securing pin cannot travel, just as an agent without permission guardrails cannot be trusted. The *Kǎo Gōng Jì* also records that the shaft must curve just so: too deep and it snaps, too shallow and it cannot bear the load -- just as an agent's autonomy has to find the balance point between capability and safety.
+Confucius compared trust to a chariot: "A large carriage without its nǐ, a small one without its yuè -- how is it to go anywhere?" A chariot that loses its securing pin cannot travel, just as an agent without permission guardrails cannot be trusted. The *Kǎo Gōng Jì* also records that the shaft must curve just so: too deep and it snaps, too shallow and it cannot bear the load -- just as an agent's autonomy has to weigh capability against safety.
 
 In the oracle-bone script, Luo Zhenyu read the character for *yú* as "the shape of many hands building a chariot" -- many hands making one vehicle. A production agent system needs the same many hands today: tool system, permission pipeline, context management, state persistence, streaming communication, error recovery. Each subsystem is one craftsman's trade; only together do they put an agent on the road.
 

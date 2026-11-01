@@ -560,7 +560,7 @@ graph TD
     class L2 high
 ```
 
-Claude Code choosing Level 1 is a pragmatic balance. Level 0 is too conservative -- if memories are completely untrusted, the memory system loses its value. Level 2 is too aggressive -- the code repository's state may have changed, and outdated memories can mislead decisions. Level 1 lets memories serve as "indices" and "guides" while maintaining independent verification of the current state.
+Claude Code choosing Level 1 is the pragmatic middle ground. Level 0 is too conservative -- if memories are completely untrusted, the memory system loses its value. Level 2 is too aggressive -- the code repository's state may have changed, and outdated memories can mislead decisions. Level 1 lets memories serve as "indices" and "guides" while maintaining independent verification of the current state.
 
 This principle is particularly important in the following scenarios:
 

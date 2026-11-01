@@ -255,7 +255,7 @@ In plan mode, write tools (Edit, Write) have their permission checks return `den
 
 The `auto` mode hands approval to an AI classifier (referred to as the "YOLO classifier"). When the permission pipeline reaches the `ask` state and the mode is `auto`, the system invokes the classifier to judge, formatting the tool name and input into a classifier-understandable format, and sending the conversation context and tool list for the classifier's reference.
 
-The core challenge of auto mode is finding the balance between "automation efficiency" and "security." Pure automatic approval is too dangerous, and pure per-use confirmation is too slow. The AI classifier is a compromise between the two -- it uses another AI to judge whether the current AI's operation is safe, implementing an "AI supervising AI" architecture.
+Auto mode's core challenge is weighing "automation efficiency" against "security." Pure automatic approval is too dangerous, and pure per-use confirmation is too slow. The AI classifier is a compromise between the two -- it uses another AI to judge whether the current AI's operation is safe, implementing an "AI supervising AI" architecture.
 
 Auto mode implements multiple layers of optimization to reduce the classifier's API call overhead:
 
