@@ -191,7 +191,7 @@ flowchart TD
 
 3. **Microcompact**：赶在自动压缩之前先轻量压一遍，用缓存编辑技术减少 token 消耗。Microcompact 的设计是"缓存友好"的——它尽量复用 API 侧已缓存的 token，避免因压缩导致缓存全面失效。
 
-4. **Context Collapse**：上下文折叠是一种更细粒度的压缩策略，它在不丢失信息的情况下将连续消息折叠为紧凑视图。可以把 Context Collapse 想象为将一段对话中的"你好"、"好的"、"我明白了"这类确认性消息折叠为一行——信息不丢，但占用的空间更少。
+4. **Context Collapse**：上下文折叠是一种更细粒度的压缩策略，它把连续消息折成紧凑视图，信息一条不少。可以把 Context Collapse 想象为将一段对话中的"你好"、"好的"、"我明白了"这类确认性消息折叠为一行——信息不丢，但占用的空间更少。
 
 5. **系统提示组装**：将基础系统提示与动态上下文（如当前工作目录、用户配置等）合并为完整的系统提示。这一步的设计直接影响了缓存命中率——如果组装顺序不稳定，每次调用生成的 Prompt 字节内容可能不同，导致缓存失效。
 
@@ -301,7 +301,7 @@ flowchart TD
 
 > "Passing a deps override into QueryParams lets tests inject fakes directly instead of spyOn-per-module -- the most common mocks (callModel, autocompact) are each spied in 6-8 test files today with module-import-and-spy boilerplate."
 
-这段注释揭示了一个重要的工程洞察：在没有依赖注入的情况下，测试代码需要通过模块级别的 spy/mock 来替换外部依赖。这种 spy-per-module 的模式有几个问题：它耦合了测试代码与模块内部结构，当模块重命名或移动时测试需要同步修改；它在多个测试文件中重复相同的 mock 样板代码；它可能因为模块缓存导致测试之间的状态泄漏。
+这段注释揭示了一个重要的工程洞察：没有依赖注入，测试代码只能靠模块级的 spy/mock 去替换外部依赖。这种 spy-per-module 的模式有几个问题：它耦合了测试代码与模块内部结构，当模块重命名或移动时测试需要同步修改；它在多个测试文件中重复相同的 mock 样板代码；它可能因为模块缓存导致测试之间的状态泄漏。
 
 依赖注入把这三个问题一起解决了：测试只需传入一个自定义的依赖对象，不关心模块内部结构；每个测试用例创建独立的依赖实例，避免了状态泄漏；依赖接口是明确的，当接口变化时编译器会指出需要更新的测试。
 

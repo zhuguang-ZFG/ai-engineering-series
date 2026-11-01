@@ -113,7 +113,7 @@ flowchart LR
 - **PowerShellTool**：在 Windows 环境中自动替代 BashTool，提供等效的命令执行能力。仅在检测到 Windows PowerShell 环境时启用
 
 **执行工具的特殊机制**：
-- **只读检测**：BashTool 内部维护一个只读命令清单，匹配到的命令（如 `ls`、`cat`、`git status`）被标记为 readOnly，可以在权限更宽松的条件下执行
+- **只读检测**：BashTool 内部维护一个只读命令清单，匹配到的命令（如 `ls`、`cat`、`git status`）被标记为 readOnly，能按更宽松的权限执行
 - **并行执行**：当多个 BashTool 调用都被判定为 concurrencySafe 时，流式工具执行器可以并行调度它们，显著提升效率
 - **超时管理**：长时间运行的命令有超时机制，防止无限阻塞
 - **输出截断**：命令输出超过限制时会被截断，剩余部分持久化到磁盘
@@ -184,7 +184,7 @@ flowchart LR
 | EnterWorktreeTool | `false` | `false` | `false` | 创建 git worktree 并切换工作目录（条件启用） |
 | ExitWorktreeTool | `false` | `false` | `false` | 退出 worktree，保留或移除工作目录 |
 
-**使用场景详解**：工作树工具用 git worktree 隔开工作目录。适用于多个子智能体并行处理不同任务时避免文件冲突、在不影响主工作区的情况下实验性改代码、在不同分支上同时工作等场景。
+**使用场景详解**：工作树工具用 git worktree 隔开工作目录。适用于多个子智能体并行处理不同任务时避免文件冲突、不动主工作区就试改代码、在不同分支上同时工作等场景。
 
 ## 9. 调度
 

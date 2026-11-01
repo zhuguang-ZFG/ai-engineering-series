@@ -220,7 +220,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 
 ## 5.2 安全边界设计
 
-配置系统的核心安全挑战是：`projectSettings`（`.claude/settings.json`）会被提交到 Git 仓库，克隆恶意仓库的用户就可能在不知情的情况下加载攻击者的配置。Claude Code 的防护策略是：**在安全敏感的检查中，系统性地排除 `projectSettings`**。
+配置系统的核心安全挑战是：`projectSettings`（`.claude/settings.json`）会被提交到 Git 仓库，谁克隆了恶意仓库，谁就可能不知不觉把攻击者的配置加载进来。Claude Code 的防护策略是：**在安全敏感的检查中，系统性地排除 `projectSettings`**。
 
 这就像一栋大楼的权限系统：项目的门禁卡可以打开会议室和休息区（projectSettings），但绝不能打开机房和安全室（安全敏感操作）。不同级别的权限由不同的信任级别控制。
 
@@ -238,7 +238,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 | 隐蔽性 | 中等（需要绕过安全检测） | 极高（配置文件看似正常） |
 | 影响范围 | 软件用户 | 开发者的整个工作环境 |
 
-一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，该 hook 在每次工具调用时将用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆该项目并启动 Claude Code 时，恶意 hook 就会在不知情的情况下执行。
+一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，该 hook 在每次工具调用时将用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆该项目并启动 Claude Code 时，恶意 hook 就在没人察觉时跑起来。
 
 **为什么 projectSettings 是风险最大的配置源？**
 
@@ -369,7 +369,7 @@ if (feature('KAIROS')) { ... }  // bundler 在 false 时完全移除该分支
 
 对于需要在运行时动态控制的功能，Claude Code 使用 GrowthBook A/B 测试框架。主要的入口函数 `getFeatureValue_CACHED_MAY_BE_STALE` 接受特性名称和默认值，从缓存中同步读取实验配置。
 
-函数名中的 "CACHED_MAY_BE_STALE" 直白地说明了其语义：值来自缓存，可能在跨进程的场景下已过时。这是为了在启动关键路径上避免异步等待——同步读取缓存比阻塞等待远程配置更可取。
+函数名中的 "CACHED_MAY_BE_STALE" 直白地说明了其语义：值来自缓存，跨进程时就可能已经过时。这是为了在启动关键路径上避免异步等待——同步读取缓存比阻塞等待远程配置更可取。
 
 **这个命名方式值得抄走。** 在 API 设计中，将非显而易见的行为约束直接编码到函数名中，可以让调用者在每次使用时都被"提醒"这个约束。相比之下，一个名为 `getFeatureValue` 的函数会给人一种"返回最新值"的错误预期。
 

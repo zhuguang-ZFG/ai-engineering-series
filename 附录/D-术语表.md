@@ -207,7 +207,7 @@ flowchart LR
 | Memory | 记忆 | 持久化存储的用户偏好、项目知识和历史经验的文件系统，跨会话保留关键信息。核心载体是 CLAUDE.md 文件 | CLAUDE.md, Extract Memories, Team Memory | 第 6 章 |
 | Memory Injection | 记忆注入 | 在每轮对话开始时将 CLAUDE.md 文件中的知识注入到系统提示中的过程，参见附录 A.3 的记忆注入路径 | Memory, CLAUDE.md, System Prompt | 第 6 章 |
 | Message Actions | 消息操作 | 在对话消息上提供的上下文操作按钮，如复制内容、重新生成回复等交互功能。由 `MESSAGE_ACTIONS` 功能标志控制 | Feature Flag | 第 12 章 |
-| Micro Compact | 微压缩 | 在不触发完整压缩的情况下轻量缩减上下文的快速压缩策略。与 Cached Micro Compact 配合使用可维护缓存边界 | Compaction, Cached Micro Compact, Auto Compact | 第 7 章 |
+| Micro Compact | 微压缩 | 不触发完整压缩就能轻量缩减上下文的快速压缩策略。与 Cached Micro Compact 配合使用可维护缓存边界 | Compaction, Cached Micro Compact, Auto Compact | 第 7 章 |
 | Monitor Tool | 监控工具 | 在 Bash 工具执行后台命令时提供实时输出监控和状态追踪的能力。由 `MONITOR_TOOL` 功能标志控制 | BashTool, Tool | 第 7 章 |
 | Multi-tier Settings | 三级配置 | 设置系统的层级配置模型，包含全局（~/.claude/settings.json）、项目（.claude/settings.json）和本地（.claude/settings.local.json）三个级别，低优先级到高优先级逐层覆盖 | Permission Mode, Settings Sync | 第 5 章 |
 
