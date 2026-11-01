@@ -761,4 +761,4 @@ Consider: Is there overlap between these skills? How can you avoid conflicts bet
 
 7. **Plugins as Extension Units**: Plugins are higher-level than skills and can contain skills, agents, and hooks. Cache-first loading and fault-tolerant error collection ensure plugin reliability and performance.
 
-8. **Skill Composition Patterns**: Skills can be combined with other skills, agents, and hooks. Keep skills small and focused, and achieve complex workflows through composition.
+8. **Skill Composition Patterns**: Skills can be combined with other skills, agents, and hooks. Keep skills small and focused, and compose them into complex workflows.

@@ -189,7 +189,7 @@ Before calling the model, the loop executes a series of preprocessing steps. The
 
 2. **Snip compression**: When history trimming is enabled, the system trims the message sequence and passes the returned messages and freed-token count downstream. This is distinct from truncating a single oversized tool result or replacing its body during MicroCompact.
 
-3. **Microcompact**: Lightly compresses the context once before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact is designed to be "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
+3. **Microcompact**: Lightly compresses the context once before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact aims to stay "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
 
 4. **Context Collapse**: A more fine-grained compression strategy that collapses consecutive messages into a compact view without losing information. You can think of Context Collapse as folding acknowledgments like "hello," "okay," "I understand" in a conversation into a single line -- the information is preserved, but it takes up less space.
 

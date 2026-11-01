@@ -147,7 +147,7 @@ flowchart TD
 **Capability Layer**
 - Contains all tool implementations, the sub-agent system, and the skill system
 - Each tool is an independent capability unit that interfaces with the Orchestration Layer through a unified tool interface
-- The sub-agent system achieves nested execution by recursively calling the Orchestration Layer's conversation main loop
+- The sub-agent system nests agents by recursively calling the Orchestration Layer's conversation main loop
 - The skill system serves as a higher-level capability extension mechanism, combining multiple tools to form domain-specific capability packages
 - Dependency direction: depends on the Infrastructure Layer below
 
@@ -200,7 +200,7 @@ flowchart LR
 - **Hook System** (hooks) inserts interception logic before and after tool calls, allowing users to extend behavior without modifying core code. See Chapter 8 for detailed discussion
 - **Permission System** determines whether execution is allowed through a unified permission check function, forming safety guardrails that span all tool executions. See Chapter 4 for the permission pipeline details
 - **Compression System** automatically triggers when context approaches the token limit, serving as an engineering response to the fundamental hardware constraint of the context window. See Chapter 7 for context management strategies
-- **Memory System** scans CLAUDE.md at the start of each turn and injects it into the system prompt, achieving cross-session knowledge persistence. See Chapter 6 for the memory architecture
+- **Memory System** scans CLAUDE.md at the start of each turn and injects it into the system prompt, so knowledge persists across sessions. See Chapter 6 for the memory architecture
 
 ### A.2.3 Inter-Module Coupling Analysis
 
@@ -211,7 +211,7 @@ Understanding the degree of coupling between modules helps readers identify the 
 | Conversation Main Loop <-> Query Engine | Tight Coupling | The main loop directly depends on the query engine's streaming output interface; both share the message array data model |
 | Conversation Main Loop <-> Tool Registry | Tight Coupling | Tool dispatch is one of the main loop's core responsibilities; tool routing logic is embedded in the main loop's turn handling |
 | Tool Registry <-> MCP Integration | Loose Coupling | MCP tools are integrated through a dynamic registration mechanism, discovered and loaded on demand at runtime |
-| Sub-Agent <-> Conversation Main Loop | Recursive Coupling | Sub-agents achieve nested execution by recursively calling the conversation main loop, forming a self-similar fractal structure |
+| Sub-Agent <-> Conversation Main Loop | Recursive Coupling | Sub-agents nest by recursively calling the conversation main loop, forming a self-similar fractal structure |
 | Hook System <-> Tool Execution | Event Coupling | Hooks are triggered through lifecycle events without affecting the core path of tool execution |
 | Memory System <-> Query Engine | Loose Coupling | Memory content is injected as part of the system prompt without directly participating in API call logic |
 | Settings System <-> Global | Configuration Coupling | The settings system influences the behavior of nearly all modules through configuration objects, but there are no direct dependencies between modules |
@@ -366,7 +366,7 @@ flowchart TD
 
 ### Memory Injection Path
 
-The memory system injects knowledge from CLAUDE.md files into the conversation context at the start of each conversation turn. This is the key path for achieving cross-session knowledge persistence in the agent.
+The memory system injects knowledge from CLAUDE.md files into the conversation context at the start of each conversation turn. This is how the agent carries knowledge from one session to the next.
 
 ```mermaid
 flowchart TD
@@ -497,9 +497,9 @@ Claude Code's architecture contains several classic design patterns; naming them
 | Factory Method | Tool type system | Creates tool instances through a unified factory function, ensuring all tools follow the same interface |
 | Registry | Tool registry, skill registry | Registers and looks up capability units by name, supporting runtime dynamic extension |
 | Plugin | MCP integration, skill system | Allows external modules to extend system capabilities without modifying core code |
-| Observer | Hook system | Registers observers on lifecycle events, achieving loosely coupled cross-cutting concerns |
+| Observer | Hook system | Registers observers on lifecycle events, so cross-cutting concerns stay loosely coupled |
 | Strategy | Context compression | Multiple compression strategies are interchangeable, selecting the optimal strategy based on context |
 | Layered Architecture | Overall system | Clear layering of Presentation -> Orchestration -> Capability -> Infrastructure |
 | Async Generator | Query engine, streaming output | Uses async function* to progressively yield streaming results, naturally supporting backpressure control |
-| Hierarchical Agent | Sub-agent system | Achieves hierarchical composition of agents through fork, forming fractal structures |
+| Hierarchical Agent | Sub-agent system | Composes agents in a hierarchy through fork, forming fractal structures |
 | Feature Flag | System-wide | Boolean switches injected at compile time, which strip dead code and let features ship in stages |

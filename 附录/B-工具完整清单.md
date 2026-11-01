@@ -184,7 +184,7 @@ flowchart LR
 | EnterWorktreeTool | `false` | `false` | `false` | 创建 git worktree 并切换工作目录（条件启用） |
 | ExitWorktreeTool | `false` | `false` | `false` | 退出 worktree，保留或移除工作目录 |
 
-**使用场景详解**：工作树工具基于 git worktree 实现工作目录隔离。适用于多个子智能体并行处理不同任务时避免文件冲突、在不影响主工作区的情况下实验性改代码、在不同分支上同时工作等场景。
+**使用场景详解**：工作树工具用 git worktree 隔开工作目录。适用于多个子智能体并行处理不同任务时避免文件冲突、在不影响主工作区的情况下实验性改代码、在不同分支上同时工作等场景。
 
 ## 9. 调度
 

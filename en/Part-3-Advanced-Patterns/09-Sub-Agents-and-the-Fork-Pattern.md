@@ -676,7 +676,7 @@ Write out the input and expected output for each step.
 
 2. **Built-in agents each serve their purpose**: Explore focuses on high-speed read-only search, Plan does structured planning, General Purpose is the all-rounder, and Verification adopts an adversarial verification strategy. These roles illustrate the core workflow; availability depends on registration gates.
 
-3. **The core innovation of the Fork pattern** is achieving prompt cache sharing through byte-level inheritance: identical system prompts, tool definitions, message prefixes, plus uniform placeholder results maximize the cache hit area. In large-scale parallel scenarios, it can save 60%+ tokens.
+3. **The core innovation of the Fork pattern** is that byte-level inheritance shares the prompt cache: identical system prompts, tool definitions, message prefixes, plus uniform placeholder results maximize the cache hit area. In large-scale parallel scenarios, it can save 60%+ tokens.
 
 4. **The five dimensions of CacheSafeParams** (system prompt, user context, system context, tool context, messages) are the necessary and sufficient conditions for cache hits. Any deviation in any dimension will cause the cache to miss. This is why the Fork path prioritizes passing rendered raw bytes.
 

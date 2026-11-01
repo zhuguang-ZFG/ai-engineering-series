@@ -259,7 +259,7 @@ When Ant native builds embed dedicated fast search tools, GlobTool and GrepTool 
 
 ### AgentTool: The Sub-Agent Entry Point
 
-AgentTool is the core tool for Claude Code's multi-agent collaboration. It allows the primary agent to spawn sub-agents to handle subtasks. Sub-agents have their own independent context windows and tool sets, and return results to the primary agent upon completion.
+AgentTool is the core tool for Claude Code's multi-agent collaboration. It allows the primary agent to spawn sub-agents to handle subtasks. Sub-agents have their own independent context windows and tool sets, and hand their results back to the primary agent when they finish.
 
 AgentTool has several special properties within the tool system:
 - It may be marked as `alwaysLoad`, ensuring it remains visible in the first round even when ToolSearch is enabled. This is because sub-agents are a critical capability for handling complex tasks and should not be hidden by the deferred discovery mechanism.

@@ -676,7 +676,7 @@ stateDiagram-v2
 
 2. **内置智能体各司其职**：Explore 专注高速只读搜索，Plan 做结构化规划，General Purpose 是万能选手，Verification 采取对抗性验证策略。这些角色展示了核心工作流，可用性仍取决于注册门控。
 
-3. **Fork 模式的核心创新**是通过字节级继承实现 prompt cache 共享：相同的系统提示、工具定义、消息前缀加上统一的占位符结果，最大化缓存命中面积。在大规模并行场景下可节省 60%+ 的 token。
+3. **Fork 模式的核心创新**是字节级继承直接共享 prompt cache：相同的系统提示、工具定义、消息前缀加上统一的占位符结果，最大化缓存命中面积。在大规模并行场景下可节省 60%+ 的 token。
 
 4. **CacheSafeParams 的五个维度**（system prompt、user context、system context、tool context、messages）是缓存命中的充分必要条件，任何维度的偏离都会导致缓存失效。这就是为什么 Fork 路径优先传递已渲染的原始字节。
 

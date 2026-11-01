@@ -443,7 +443,7 @@ If you want rules to apply only locally (not committed to Git), you can use `.cl
 
 ### Exercise 2: More Fine-Grained Wildcard Control
 
-More fine-grained control can be achieved using wildcards:
+Wildcards give you finer control:
 
 ```json
 {

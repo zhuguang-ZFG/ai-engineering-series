@@ -440,7 +440,7 @@ When workers complete, results are delivered to the coordinator in `<task-notifi
 </task-notification>
 ```
 
-This format is designed to be embedded in user-role messages. The coordinator identifies `<task-notification>` tags to distinguish genuine user messages from workers' result reports. This design choice means the coordinator needs explicit instructions to differentiate message types, which is why the system prompt repeatedly emphasizes "Worker results are internal signals, not conversation partners."
+This format goes inside user-role messages. The coordinator identifies `<task-notification>` tags to distinguish genuine user messages from workers' result reports. This design choice means the coordinator needs explicit instructions to differentiate message types, which is why the system prompt repeatedly emphasizes "Worker results are internal signals, not conversation partners."
 
 > **Why XML format instead of JSON?**
 >

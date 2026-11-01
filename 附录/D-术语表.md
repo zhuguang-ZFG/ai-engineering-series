@@ -169,7 +169,7 @@ flowchart LR
 |---|---|---|---|---|
 | Feature Flag | 功能标志 | 编译时通过 Bun define 注入的布尔开关，控制特定功能代码是否包含在最终产物中。当标志为 false 时，其守卫的代码分支通过死代码消除被整段移除 | Build-time Dead Code Elimination, Bun Bundle | 附录 C |
 | File Persistence | 文件持久化 | 跨 API 轮次追踪和记录文件系统变更的能力，支持会话恢复时的状态一致性。由 `FILE_PERSISTENCE` 功能标志控制 | Background Session, Compaction | 第 11 章 |
-| Fork Mode / Fork Subagent | Fork 模式 / Fork 子智能体 | 通过 fork 机制创建独立子进程执行子任务的模式，子智能体拥有独立的上下文和权限范围。由 `FORK_SUBAGENT` 功能标志控制。子智能体通过递归调用 Main Loop 实现嵌套执行 | Subagent, Agent, Main Loop | 第 9 章 |
+| Fork Mode / Fork Subagent | Fork 模式 / Fork 子智能体 | 通过 fork 机制创建独立子进程执行子任务的模式，子智能体拥有独立的上下文和权限范围。由 `FORK_SUBAGENT` 功能标志控制。子智能体递归调用 Main Loop，一层层嵌套执行 | Subagent, Agent, Main Loop | 第 9 章 |
 | Fullscreen Layout | 全屏布局 | Claude Code 在全屏终端环境（如 tmux、iTerm2）中启用的增强布局，支持多面板和浮动元素。是 Terminal Panel 等高级 UI 功能的前提 | Terminal Panel, REPL | 第 12 章 |
 
 ## G-H
@@ -250,9 +250,9 @@ flowchart LR
 | SSH Remote | SSH 远程模式 | 通过 SSH 协议连接到远程机器并在远程环境中运行 Claude Code 的能力。由 `SSH_REMOTE` 功能标志控制 | Feature Flag, DIRECT_CONNECT | 第 11 章 |
 | State Management | 状态管理 | Claude Code 的全局应用状态管理机制，使用中心化的状态 store 配合 selector 模式实现高效的状态订阅和更新 | Selector Pattern, React | 第 2 章 |
 | Stop Reason | 停止原因 | 模型响应中标识本轮推理结束原因的字段，取值为 `end_turn`（正常结束）或 `tool_use`（需要执行工具）。Main Loop 根据 stop reason 决定是否继续循环 | API Turn, Main Loop, Tool | 第 2 章 |
-| Stream | 流 / 流式 | 数据按块逐步传输和处理的方式，Claude Code 使用流式 API 实现逐步输出和工具调用。底层通过 Async Generator 实现 | Async Generator, Query Engine | 第 13 章 |
+| Stream | 流 / 流式 | 数据按块逐步传输和处理的方式，Claude Code 用流式 API 做到逐步输出和工具调用。底层通过 Async Generator 实现 | Async Generator, Query Engine | 第 13 章 |
 | Streaming Tool Executor | 流式工具执行器 | 以流式方式执行工具并在工具执行过程中实时渲染输出的执行模块。支持并发安全工具的并行调度 | Tool, Concurrency Safe, Stream | 第 3 章 |
-| Subagent | 子智能体 | 由主智能体 fork 或派生的独立执行单元，拥有独立的上下文和权限，处理特定的子任务。通过递归调用 Main Loop 实现嵌套执行 | Fork Mode, Agent, Coordinator Mode | 第 9 章 |
+| Subagent | 子智能体 | 由主智能体 fork 或派生的独立执行单元，拥有独立的上下文和权限，处理特定的子任务。递归调用 Main Loop，一层层嵌套执行 | Fork Mode, Agent, Coordinator Mode | 第 9 章 |
 | System Prompt | 系统提示词 | 注入到每次 API 请求开头的指令文本，定义智能体的行为规范、可用工具和使用约束。CLAUDE.md 的记忆内容通过 Memory Injection 合并到系统提示中 | Memory Injection, CLAUDE.md, Prompt Cache | 第 2 章 |
 
 ## T

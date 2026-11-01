@@ -324,7 +324,7 @@ gantt
 
 The `messageSelector` in QueryEngine uses `require()` for true lazy loading because the MessageSelector component pulls in heavy dependencies like React/ink, loaded only when first needed.
 
-Conditional imports are also an important lazy loading strategy. Coordinator mode and snip compaction achieve dead code elimination through feature flag gating functions. When feature flags are off, bundlers can completely eliminate these code paths and their dependency trees, reducing bundle size and module initialization time.
+Conditional imports are also an important lazy loading strategy. Coordinator mode and snip compaction use feature flag gating functions to strip dead code. When feature flags are off, bundlers can completely eliminate these code paths and their dependency trees, reducing bundle size and module initialization time.
 
 The key decision for lazy loading is **drawing a line: what must be loaded at startup, what can wait until needed.** The line follows a simple principle: if a module's load time exceeds 5ms and isn't needed in the first 3 seconds after startup, it should be lazy loaded. 5ms is an empirical threshold -- below this, lazy loading's runtime check overhead might offset its benefit.
 

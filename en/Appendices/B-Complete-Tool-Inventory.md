@@ -215,7 +215,7 @@ Interaction tools manage the agent's interactions with users and other system co
 
 ## 11. MCP
 
-MCP tools provide the ability to interact with MCP servers, enabling the agent to access external resources.
+MCP tools let the agent talk to MCP servers and reach external resources.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|

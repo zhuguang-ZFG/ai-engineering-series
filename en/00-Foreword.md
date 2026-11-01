@@ -179,7 +179,7 @@ flowchart TB
 
 **If you are an experienced engineer (Deep Path):** You can start directly from Part 2, referring back to the corresponding chapters in Part 1 when you encounter conceptual gaps. Focus on the "Design Decision Analysis" subsections in each chapter -- these are the most inspiring parts for your daily engineering practice.
 
-**If you are a beginner (Complete Path):** We recommend reading in order, and completing every hands-on exercise in each chapter. These exercises are designed to build progressively -- the installation diagnostic in Chapter 1 is a prerequisite for tracing tool call flows in Chapter 2, and the custom tool exercise in Chapter 3 lays the foundation for permission configuration in Chapter 4.
+**If you are a beginner (Complete Path):** We recommend reading in order, and completing every hands-on exercise in each chapter. These exercises build on each other -- the installation diagnostic in Chapter 1 is a prerequisite for tracing tool call flows in Chapter 2, and the custom tool exercise in Chapter 3 lays the foundation for permission configuration in Chapter 4.
 
 **If you are an architect (Evaluation Path):** Focus on Chapter 1 (architectural overview), Chapter 2 (core loop design), and Chapter 4 (permission pipeline), then jump directly to Part 4. This path helps you evaluate the design space and engineering complexity of Agent Harness in the shortest possible time.
 

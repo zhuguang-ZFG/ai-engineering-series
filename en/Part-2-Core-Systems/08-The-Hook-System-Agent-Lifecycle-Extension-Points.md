@@ -204,7 +204,7 @@ flowchart TD
     class ar4 alert
 ```
 
-Async hook implementation is completed in background execution functions. Async-rewake mode hooks bypass the regular registry, injecting messages through notification queue upon completion. Async hook execution stays off the Agent's main loop, and the hook can still "sound the alarm" when it needs to.
+Async hooks run inside the background execution functions. Async-rewake mode hooks bypass the regular registry, injecting messages through the notification queue when they finish. Async hook execution stays off the Agent's main loop, and the hook can still "sound the alarm" when it needs to.
 
 ---
 
@@ -487,7 +487,7 @@ Typical use cases:
 
 > **Cross-reference with Chapter 4:** This event sits in the fourth stage of the permission pipeline. Chapter 4's four stages are validateInput (input validation), hasPermissionsToUseTool (rule matching), checkPermissions (context evaluation) and the interactive prompt (user confirmation); hooks, the classifier and the user are the three decision-makers sharing that last stage, and a PermissionRequest hook can return a `decision` that settles the request before the user ever sees the dialog.
 
-**PermissionDenied**: Triggered when auto-mode classifier rejects tool call. Hook can suggest retry or provide alternatives. This is useful for implementing "soft rejection" strategies -- not simply blocking operations but guiding the model to use safer approaches to achieve the same goal.
+**PermissionDenied**: Triggered when auto-mode classifier rejects tool call. Hook can suggest retry or provide alternatives. This is useful for implementing "soft rejection" strategies -- not simply blocking operations but guiding the model to use a safer way to get the same result.
 
 ### Other Events
 

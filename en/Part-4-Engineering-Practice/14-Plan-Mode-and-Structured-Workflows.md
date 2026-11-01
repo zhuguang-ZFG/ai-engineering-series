@@ -807,7 +807,7 @@ For your chosen scenario, answer:
 
 ## Key Takeaways
 
-1. **Plan Mode is separation of read-only exploration and writable execution**, achieved through permission mode switching. EnterPlanMode saves original mode and switches to plan, ExitPlanMode restores original mode and handles circuit breaker defense. This separation ensures Agent produces no side effects during "thinking" phase, greatly reducing directional error risk.
+1. **Plan Mode separates read-only exploration from writable execution** by switching permission modes. EnterPlanMode saves original mode and switches to plan, ExitPlanMode restores original mode and handles circuit breaker defense. This separation ensures Agent produces no side effects during "thinking" phase, greatly reducing directional error risk.
 
 2. **Plan file management uses slug-based naming and lazy generation**, supports three-layer recovery strategy (direct read, file snapshot, message history), ensuring plans aren't lost in various failure scenarios. Recovery strategy is ordered by reliability priority, embodying "don't put all eggs in one basket" defensive design thinking.
 
