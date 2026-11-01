@@ -91,7 +91,7 @@ Tools have a rich set of rendering methods that cover the complete UI lifecycle:
 - `renderToolUseErrorMessage`: Display when execution encounters an error
 - `renderGroupedToolUse`: Grouped display for multiple parallel tools
 
-Every render method returns `React.ReactNode`, so the tool system plugs straight into the React rendering pipeline. A tool's UI can then be as flexible as any React component -- progress bars, color highlighting, collapsible panels, table layouts can all be implemented through React components.
+Every render method returns `React.ReactNode`, so the tool system plugs straight into the React rendering pipeline. A tool's UI can then be as flexible as any React component -- progress bars, color highlighting, collapsible panels, table layouts can all be written as components.
 
 The coverage of these six rendering methods is noteworthy: it spans the entire "life cycle" of a tool call -- from start (renderToolUseMessage), to in-progress (renderToolUseProgressMessage), to success (renderToolResultMessage), rejected (renderToolUseRejectedMessage), error (renderToolUseErrorMessage), and grouped display for parallel execution (renderGroupedToolUse). This complete lifecycle coverage ensures that users always see clear, meaningful UI feedback regardless of the state.
 
@@ -211,7 +211,7 @@ flowchart LR
 
 ### The File Trio: FileReadTool, FileEditTool, FileWriteTool
 
-These three tools constitute Claude Code's complete file operation capability set. Their division of labor reflects the classic CRUD pattern of database operations (Create/Read/Update), except for the absence of Delete -- this is a deliberate safety decision, because "deleting files" is an irreversible operation that is typically accomplished through BashTool's `rm` command, which triggers stricter permission checks.
+These three tools constitute Claude Code's complete file operation capability set. Their division of labor reflects the classic CRUD pattern of database operations (Create/Read/Update), except for the absence of Delete -- this is a deliberate safety decision, because "deleting files" is an irreversible operation that normally goes through BashTool's `rm` command, which triggers stricter permission checks.
 
 **FileReadTool** is responsible for reading file contents. It maintains a file state cache for tracking which files have been read, avoiding duplicate memory attachment injection. This caching mechanism is key to performance optimization -- if the same file is read multiple times (in different tool call rounds), the cache ensures that actual file I/O is only triggered on the first read, and subsequent reads use cached results directly.
 
@@ -448,7 +448,7 @@ Record the input token count difference in both cases, and calculate how many to
 
 1. **The five-element protocol is the DNA of the tool system**: name, schema, permissions, execution, and rendering. Each tool defines itself along these five dimensions, and `buildTool`'s default value mechanism lets simple tools focus only on core logic. The design philosophy of this protocol is "explicit declaration, safe defaults" -- tools must proactively declare themselves safe; otherwise, they default to unsafe.
 
-2. **Dead code elimination ensures build security**: Through conditional imports based on environment variables and feature flags, internal tools are prevented from leaking into external builds. This is an important engineering practice for Agent systems in multi-tenant environments. Combined with the "progressive capability extension" principle from Chapter 1, dead code elimination ensures that different product forms can share the same codebase.
+2. **Dead code elimination ensures build security**: Environment variables and feature flags decide which modules get imported, so internal tools never reach an external build. This is an important engineering practice for Agent systems in multi-tenant environments. Combined with the "progressive capability extension" principle from Chapter 1, dead code elimination is what lets different product forms share the same codebase.
 
 3. **Concurrency partitioning is key to performance**: The `isConcurrencySafe` determination decides whether tools can execute in parallel. Correctly marking read-only tools as concurrency-safe allows the Agent to simultaneously execute multiple search/read operations in a single turn, dramatically reducing response time. But the cost of incorrect marking is data races and unpredictable behavior -- this is a design decision that requires careful consideration.
 

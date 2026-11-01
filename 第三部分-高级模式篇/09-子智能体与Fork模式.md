@@ -290,7 +290,7 @@ graph TD
 
 这五个维度对应 Anthropic API 缓存键的组成：system prompt、tools、model、messages prefix、thinking config。只有这五个维度完全一致时，子请求才能命中父请求的缓存。
 
-Fork 路径通过 `useExactTools` 标志确保工具定义不变——当 Fork 模式激活时，直接使用父工具池而非重新解析智能体工具，从而保持工具定义的字节一致性。
+Fork 路径带上 `useExactTools` 标志，工具定义就不变——当 Fork 模式激活时，直接使用父工具池而非重新解析智能体工具，字节序列也就一致了。
 
 ### buildForkedMessages 的消息构建逻辑
 

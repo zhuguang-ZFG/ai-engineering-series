@@ -386,7 +386,7 @@ Key security design: Skills in directories ignored by `.gitignore` are automatic
 
 Skills with a `paths` frontmatter are not activated immediately, but are stored in the `conditionalSkills` Map. When the file path the model operates on matches the `paths` pattern, the skill is activated.
 
-Matching uses gitignore-style patterns, implemented through the `ignore` library. When a file path matches a conditional skill's paths pattern, the skill is activated and stored in the dynamic skill set. Activated conditional skill names are permanently recorded — even if the cache is subsequently cleared, they will not revert to conditional status.
+Matching uses gitignore-style patterns, run by the `ignore` library. When a file path matches a conditional skill's paths pattern, the skill is activated and stored in the dynamic skill set. Activated conditional skill names are permanently recorded — even if the cache is subsequently cleared, they will not revert to conditional status.
 
 ```mermaid
 flowchart TD

@@ -1232,7 +1232,7 @@ Analyze the Bridge communication behavior in the following scenarios:
 
 5. **Practical Wisdom of Signature-based Deduplication**: Through `stdio:JSON.stringify([cmd,...args])` and `url:originalUrl` signature mechanisms, the system ensures deduplication is based on "actual effect" rather than "surface configuration." The deduplication priority (manual > plugin > connector) guarantees that the user's explicit configuration always takes precedence.
 
-6. **Complexity Management in Bridge Bidirectional Communication**: The 30+ module Bridge system abstracts v1/v2 transport differences through the unified `ReplBridgeTransport` interface, processes inbound messages through triple filtering (permission response > control request > user message), and achieves efficient deduplication through the `BoundedUUIDSet` ring buffer.
+6. **Complexity Management in Bridge Bidirectional Communication**: In the 30+ module Bridge system, v1/v2 transport differences sit behind the unified `ReplBridgeTransport` interface, inbound messages pass a triple filter (permission response > control request > user message), and the `BoundedUUIDSet` ring buffer handles deduplication.
 
 7. **SSE Sequence Number Continuation Is a Key Innovation**: The v2 transport carries the high-water sequence number mark during switching, avoiding full session history replay by the server. This seemingly minor improvement solves the "message storm" problem caused by transport switching in long-running sessions.
 

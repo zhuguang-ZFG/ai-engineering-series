@@ -502,7 +502,7 @@ For each scenario, draw the decision path through the four stages of the permiss
 
 3. **PermissionContext Immutability:** Every permission update produces a new context object, ensuring concurrent safety. This is consistent with the "immutable state flow" principle from Chapter 2 and the tool context management from Chapter 3 -- immutability is a core design pattern that runs throughout the entire system.
 
-4. **ResolveOnce Atomic Race:** The race between user interaction and classifier automatic approval is resolved through the `claim()` atomic operation, guaranteeing only one decision-maker. This lightweight mutex mechanism avoids complex lock management while ensuring decision determinism.
+4. **ResolveOnce Atomic Race:** User interaction and the classifier's automatic approval race for the same `claim()` call, and only one of them wins. This lightweight mutex avoids complex lock management, and the decision stays deterministic.
 
 5. **Five-Mode Spectrum:** From the strictest `default` to the most permissive `bypassPermissions`, with `plan` (read-only), `auto` (AI classifier), and `bubble` (sub-agent bubbling) as three special modes in between, covering the complete range of scenarios from interactive development to automation. Choosing the right mode is key to balancing security and efficiency.
 

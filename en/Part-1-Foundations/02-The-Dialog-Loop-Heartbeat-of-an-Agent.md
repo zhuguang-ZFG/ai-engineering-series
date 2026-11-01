@@ -221,7 +221,7 @@ If the model did request tool calls, the loop executes the tools: depending on w
 
 Tool execution is also an async generator. For each result message produced, the loop yields it to the upper-level consumer (UI) while also collecting it into the tool results array.
 
-Two things come apart here: **"result collection" and "result passing" are decoupled.** Tool results are both collected into an array for the next API call and yielded to the UI for real-time display. These two concerns are handled simultaneously through the same yield operation, avoiding additional state synchronization logic.
+Two things come apart here: **"result collection" and "result passing" are decoupled.** Tool results are both collected into an array for the next API call and yielded to the UI for real-time display. A single yield does both at once, so no extra state-synchronization logic is needed.
 
 ### Phase 5: Tool Result Backfill and Next Round
 
@@ -315,7 +315,7 @@ Claude Code's dialog loop chooses `async function*` over a class, and this choic
 
 3. **Cancellation propagation**: `.return()` requests generator closure and runs applicable `finally` blocks, but cannot interrupt a pending `await` or cancel external I/O on its own. Cancellation requires an `AbortController` and operations that observe its signal; resource cleanup remains the responsibility of explicit cleanup paths.
 
-4. **Composability**: The `yield*` delegation syntax allows sub-generator output to be forwarded directly. The main loop's results are passed to the outer generator through delegation syntax, and tool execution is chained through the same mechanism. This "generator chain" pattern allows code at different levels to compose seamlessly -- the dialog loop produces events, tool execution also produces events, and the upper-level UI only needs a single unified `for await...of` loop to consume events from all levels.
+4. **Composability**: The `yield*` delegation syntax allows sub-generator output to be forwarded directly. Delegation syntax hands the main loop's results to the outer generator, and tool execution joins the same chain. That "generator chain" lets code at different levels compose seamlessly -- the dialog loop produces events, tool execution also produces events, and the upper-level UI only needs a single unified `for await...of` loop to consume events from all levels.
 
 > **Anti-Pattern Warning:** If you are building your own Agent loop, avoid storing dialog state in global variables or class instance properties. Global state rules out concurrent testing; class instance state lets separate dialog instances interfere with one another. Function closures are the safest state container -- they are naturally isolated and naturally unshareable.
 

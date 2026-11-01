@@ -290,7 +290,7 @@ graph TD
 
 These five dimensions correspond to the components of the Anthropic API cache key: system prompt, tools, model, messages prefix, and thinking config. Only when all five dimensions are exactly consistent can a sub-request hit the parent request's cache.
 
-The Fork path ensures tool definitions remain unchanged through the `useExactTools` flag — when Fork mode is activated, it uses the parent's tool pool directly rather than re-resolving agent tools, thereby maintaining byte-level consistency of tool definitions.
+The Fork path sets the `useExactTools` flag, so tool definitions stay unchanged — when Fork mode is activated, it uses the parent's tool pool directly rather than re-resolving agent tools, and the definitions line up byte for byte.
 
 ### How buildForkedMessages Builds Messages
 

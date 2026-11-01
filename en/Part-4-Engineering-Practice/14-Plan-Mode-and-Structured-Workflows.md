@@ -811,9 +811,9 @@ For your chosen scenario, answer:
 
 2. **Plan file management uses slug-based naming and lazy generation**, supports three-layer recovery strategy (direct read, file snapshot, message history), ensuring plans aren't lost in various failure scenarios. Recovery strategy is ordered by reliability priority, embodying "don't put all eggs in one basket" defensive design thinking.
 
-3. **Fork Agent achieves prompt cache sharing through CacheSafeParams**, achieves state isolation through createSubagentContext, ensuring sub-agent doesn't interfere with main Agent's state. Sub-agent's "sandbox" design -- can read outside world but cannot modify parent state -- is Agent security's key boundary.
+3. **Fork Agent uses CacheSafeParams to share the prompt cache and createSubagentContext to keep state apart**, so the sub-agent can't disturb the main Agent's state. Sub-agent's "sandbox" design -- can read outside world but cannot modify parent state -- is Agent security's key boundary.
 
-4. **Scheduling system supports both file-persisted and session-scoped tasks**, prevents multi-session duplicate triggering through file locks, prevents thundering herd through jitter mechanism, prevents infinite recursion through auto-expiration. These mechanisms together form a robust distributed task scheduling framework.
+4. **Scheduling system supports both file-persisted and session-scoped tasks**: a file lock stops several sessions firing the same task twice, jitter spreads the thundering herd, and auto-expiration cuts off infinite recursion. These mechanisms together form a robust distributed task scheduling framework.
 
 5. **Teammate's Plan approval goes through mailbox mechanism**, not local UI popup, which is infrastructure for distributed Agent collaboration. Delegation of approval authority (from local user to team lead) embodies permission delegation pattern in Agent systems.
 

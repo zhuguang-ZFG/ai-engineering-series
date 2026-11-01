@@ -347,7 +347,7 @@ Three levels of lazy loading and their applicable scenarios:
 
 ### 13.3.3 Lazy Schema Evaluation
 
-Tool inputSchema/outputSchema achieves lazy initialization through `lazySchema`, avoiding Zod schema construction during module loading. Combined with getter access patterns, schemas are only constructed when first actually used.
+`lazySchema` wraps tool inputSchema/outputSchema, so module loading skips Zod schema construction. Combined with getter access patterns, schemas are only constructed when first actually used.
 
 Zod schema construction costs are often underestimated. A moderately complex schema with nested objects, optional fields, and description text takes about 0.1-0.3ms to construct. If Claude Code's 55 tools all build schemas at startup, total overhead is 5.5-16.5ms -- unacceptable for a CLI tool.
 

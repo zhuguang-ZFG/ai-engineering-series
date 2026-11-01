@@ -434,7 +434,7 @@ The throttle counter design reflects a cost-benefit analysis: each memory extrac
 
 In LLM APIs, prompt cache is an important cost optimization mechanism -- if two requests share the same prefix, the API can reuse the already-computed KV cache, significantly reducing latency and cost.
 
-Claude Code's forked Agent pattern implements cache sharing through the `CacheSafeParams` type. The parameter extraction function extracts shared parameters from the context, including the system prompt, user context, system context, tool usage context, and message history.
+Claude Code's forked Agent pattern uses the `CacheSafeParams` type to share the cache. The parameter extraction function extracts shared parameters from the context, including the system prompt, user context, system context, tool usage context, and message history.
 
 The background extraction Agent's API request prefix is identical to the main conversation's, so the provider hits the cached prefix instead of recomputing it -- a substantial saving in tokens over a typical session.
 

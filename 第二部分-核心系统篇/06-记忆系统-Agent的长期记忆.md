@@ -434,7 +434,7 @@ sequenceDiagram
 
 在 LLM API 中，提示缓存（prompt cache）是一种重要的成本优化机制——如果两次请求的前缀相同，API 可以复用已计算的 KV cache，显著降低延迟和成本。
 
-Claude Code 的 forked Agent 模式通过 `CacheSafeParams` 类型实现缓存共享。参数提取函数从上下文中提取共享参数，包括系统提示、用户上下文、系统上下文、工具使用上下文和消息历史。
+Claude Code 的 forked Agent 模式用 `CacheSafeParams` 类型共享缓存。参数提取函数从上下文中提取共享参数，包括系统提示、用户上下文、系统上下文、工具使用上下文和消息历史。
 
 后台提取 Agent 的 API 请求前缀与主对话完全相同，API 提供商命中缓存前缀就不必重新计算；一次典型会话省下的就是这段重算的 token。
 
