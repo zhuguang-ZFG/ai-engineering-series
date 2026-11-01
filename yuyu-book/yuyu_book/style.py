@@ -1340,7 +1340,7 @@ article h2{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.6rem}
    Only the running prose steps in to the measure; the chapter furniture above
    the body, and the plates, tables and code inside it, keep the sheet width. An
    inset lead band over full-width compass cards reads as a mistake rather than
-   a hierarchy, and the 157 plates need the room. This block is deliberately
+   a hierarchy, and the 159 plates need the room. This block is deliberately
    last: every component above sets its own `margin` shorthand, which would
    reset the centring. */
 .chapter-body>p,.chapter-body>ul,.chapter-body>ol,.chapter-body>dl,
@@ -1519,7 +1519,7 @@ article h2{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.6rem}
      it, so almost no page can host one and the figure jumps to the next sheet,
      leaving the hole behind it. 150mm still shows a full architecture diagram
      legibly while fitting any page that has half its column left -- which is
-     how most of the 314 plates get to stay where the prose put them. */
+     how most of the 318 plates get to stay where the prose put them. */
   .diagram-frame svg{max-height:var(--plate-cap,150mm);width:auto!important;
     min-width:0!important}
   /* a wide band is bound by the column, not by the cap, so standing taller

@@ -1,4 +1,4 @@
-"""The fence-aware scanner behind all 314 diagram plates (157 per language).
+"""The fence-aware scanner behind all 318 diagram plates (159 per language).
 
 Markdown is the read-only source of truth, so the only thing that may cut a
 document into structure is a real (unfenced) line. extract_mermaid also has to
@@ -268,7 +268,7 @@ class CacheKeyAndFallback(unittest.TestCase):
 
 
 class AuthorColoursReInked(unittest.TestCase):
-    """The ~900 classDef/style hexes the manuscript brings to the 314 plates.
+    """The ~900 classDef/style hexes the manuscript brings to the 318 plates.
 
     Mermaid's ``theme: base`` only reaches nodes the author left alone, so an
     untreated Material-blue box sits in the middle of a bronze-and-parchment
