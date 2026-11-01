@@ -14,7 +14,7 @@ Plan 模式是 Claude Code 中最独特的设计之一。它将 Agent 的行为�
 
 这种设计理念可以用建筑行业来类比：没有建筑师会拿到需求就直接开始砌墙。他们会先画图纸（规划），与甲方确认设计意图，评估结构可行性，然后才动工（执行）。在规划阶段，建筑师可以无成本地修改方案 -- 改一张图纸比拆一面墙便宜得多。同样，在 Plan 模式中，Agent 的探索和思考不产生任何副作用（不修改文件、不执行命令），纠正"方向性错误"的代价几乎为零。
 
-Plan 模式解决的核心问题是 **"过早行动"（Premature Action）**。没有 Plan 模式的 Agent 面临一个困境：面对复杂任务时，要么在第一轮就盲目动手（高风险），要么在每一轮都反复阅读代码但不做决定（低效）。Plan 模式为 Agent 提供了一个"合法的思考空间" -- 在这个空间里，Agent 可以自由探索而不被期望产出实际结果，直到它确信自己理解了问题的全貌。
+Plan 模式解决的核心问题是 **"过早行动"（Premature Action）**。没有 Plan 模式的 Agent 面临一个困境：面对复杂任务时，要么在第一轮就盲目动手（高风险），要么在每一轮都反复阅读代码但不做决定（低效）。Plan 模式为 Agent 提供了一个"合法的思考空间" -- 在这个空间里，Agent 可以自由探索，不必拿出实际结果，直到它确信自己理解了问题的全貌。
 
 EnterPlanModeTool 是进入规划模式的入口。它的 prompt 系统针对不同用户类型（外部用户 vs 内部 ant 用户）提供了不同的指导策略。
 
@@ -125,7 +125,7 @@ flowchart TD
     class LOCAL,MAILBOX endNode
 ```
 
-这个断路器防御揭示了一个微妙的时间窗口问题：进入 Plan 模式时 auto mode 是开启的，但在 Plan 模式持续期间（可能几分钟甚至几十分钟），auto mode 可能因为外部原因（如系统负载、安全策略变更）被关闭。如果 ExitPlanMode 不检查这个条件，Agent 退出 Plan 模式后立即以 auto mode 权限执行操作，可能绕过了新激活的安全限制。
+这个断路器防御揭示了一个微妙的时间窗口问题：进入 Plan 模式时 auto mode 是开启的，但在 Plan 模式持续期间（可能几分钟甚至几十分钟），外部原因（如系统负载、安全策略变更）可能已经把 auto mode 关掉。如果 ExitPlanMode 不检查这个条件，Agent 退出 Plan 模式后立即以 auto mode 权限执行操作，可能绕过了新激活的安全限制。
 
 **Teammate 路径**：当 Agent 作为 teammate 运行且 Plan 模式是强制要求时，ExitPlanMode 不会弹出本地审批 UI，而是通过 mailbox 机制将计划发送给 team lead 审批。审批请求包含发送者、时间戳、计划文件路径、计划内容和请求 ID 等信息。
 
@@ -210,7 +210,7 @@ Agent 通过 ExitPlanMode 呈现以下计划：
 
 ### 14.2.1 验证智能体
 
-`registerPlanVerificationHook` 在 `ExitPlanModeV2Tool` 中被引用，其注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。
+`ExitPlanModeV2Tool` 引用了 `registerPlanVerificationHook`，它旁边的注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。
 
 验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。所以验证智能体是一个独立的后台 Agent，运行在"清除上下文并开始实施"之后的阶段，检验实施结果是否符合计划。
 
@@ -367,7 +367,7 @@ Claude Code 的扩展性设计遵循"阶梯式扩展"原则：从最简单的 pr
 
 ### 14.3.2 Fork Agent 的状态隔离
 
-`createSubagentContext` 创建了一个完全隔离的 ToolUseContext。默认情况下，所有可变状态都被隔离：
+`createSubagentContext` 创建了一个完全隔离的 ToolUseContext。默认情况下，这个函数把可变状态全隔开：
 
 ```mermaid
 flowchart TD
@@ -460,7 +460,7 @@ Claude Code 的调度系统管两类定时任务：
 
 **文件锁**：通过 `tryAcquireSchedulerLock` 确保同一个项目目录下的多个 Claude 会话不会重复触发同一个 on-disk 任务。非 owner 会话每 5 秒探测一次锁，如果 owner 崩溃则接管。
 
-这种文件锁机制解决了一个实际的分布式问题：开发者可能同时打开多个终端窗口，每个窗口运行一个 Claude Code 实例。如果没有文件锁，同一个定时任务会被每个实例各触发一次，导致重复操作（如重复发送通知、重复执行部署检查）。
+这种文件锁机制解决了一个实际的分布式问题：开发者可能同时打开多个终端窗口，每个窗口运行一个 Claude Code 实例。如果没有文件锁，每个实例都会各自触发一次同一个定时任务，导致重复操作（如重复发送通知、重复执行部署检查）。
 
 文件锁靠文件系统的原子操作实现（如 `O_EXCL` 创建），这在所有主流操作系统上都是可靠的。锁的超时和接管机制确保了 owner 崩溃时不会出现死锁 -- 其他实例会在合理时间内检测到并接管。
 
@@ -501,7 +501,7 @@ flowchart LR
 
 **自动过期**：Recurring 任务默认 7 天后自动过期（`recurringMaxAgeMs`），防止无限递归导致内存泄漏。`permanent` 标志的任务（如 assistant mode 的内置任务）豁免于此限制。
 
-7 天的过期策略是一个务实的选择。如果一个 recurring 任务连续运行了 7 天而没有被任何人关注或修改，大概率它已经不再被需要了。没有过期机制的任务会像"僵尸进程"一样持续消耗资源：每次触发都会产生 API 调用、消耗 token、占用调度器内存。
+7 天的过期策略是一个务实的选择。如果一个 recurring 任务连着跑了 7 天，没人看过也没人改过，那多半已经没人需要它了。没有过期机制的任务会像"僵尸进程"一样持续消耗资源：每次触发都会产生 API 调用、消耗 token、占用调度器内存。
 
 ### 14.4.3 RemoteTriggerTool：远程触发
 
@@ -654,7 +654,7 @@ flowchart TD
 
 **反模式四：同步等待轮询结果**
 
-在主对话中同步等待定时任务的结果（通过 Sleep + 轮询）。正确做法是将结果通过通知机制异步推送，主对话不被阻塞。
+在主对话中同步等待定时任务的结果（通过 Sleep + 轮询）。正确做法是把结果交给通知机制异步推送，主对话不用停下来等。
 
 ---
 
@@ -662,7 +662,7 @@ flowchart TD
 
 ### 14.5.1 SleepTool
 
-SleepTool 被列为后台任务管理的一部分。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。
+SleepTool 归在后台任务管理这一类里。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。
 
 SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 交互模型中扮演着重要角色。没有 SleepTool 的 Agent 在面对"等待"场景时只有两种选择：要么立即返回结果（即使外部操作尚未完成），要么在循环中频繁轮询（浪费 token）。SleepTool 提供了第三种选择：Agent 可以暂停执行，等待一段时间后再继续，期间不产生 token 消耗。
 
@@ -692,7 +692,7 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 **lastCacheSafeParams 的设计走的是"隐式上下文传递"这条路。** 显式的做法是在每个需要 cache-safe params 的地方都从主循环传递参数，但这会导致函数签名膨胀 -- 每个新增的调用点都需要修改参数列表。通过全局 slot，调用者只需要在正确的时机读取 slot 值，而不需要知道值从哪里来。这降低了组件之间的耦合度。
 
-当然，全局状态也有其风险：如果读取时机不对（比如在一个异步操作中延迟读取），slot 值可能已经被后续轮次覆盖。Claude Code 通过在 post-turn hook 的同步执行段中立即读取 slot 值来避免这个问题 -- slot 的写入和读取发生在同一个同步执行段中，不存在竞态条件。
+当然，全局状态也有其风险：如果读取时机不对（比如在一个异步操作中延迟读取），后续轮次可能已经改写了 slot 值。Claude Code 通过在 post-turn hook 的同步执行段中立即读取 slot 值来避免这个问题 -- slot 的写入和读取发生在同一个同步执行段中，不存在竞态条件。
 
 ### 14.5.3 后台任务的生命周期管理
 
@@ -776,7 +776,7 @@ flowchart TD
 
 ### 练习 3：分析计划文件恢复
 
-在一个远程会话（CCR）中，进入 Plan 模式并创建一个计划。终止会话后恢复（`--resume`），检查计划文件是否被正确恢复。结合 `recoverPlanFromMessages` 的三种恢复来源，分析你的场景走了哪条路径。
+在一个远程会话（CCR）中，进入 Plan 模式并创建一个计划。终止会话后恢复（`--resume`），看看计划文件恢复得对不对。结合 `recoverPlanFromMessages` 的三种恢复来源，分析你的场景走了哪条路径。
 
 **调试提示：** 使用 `CLAUDE_CODE_DEBUG=1` 环境变量启动 Claude Code，在日志中搜索 `copyPlanForResume` 和 `recoverPlanFromMessages` 关键词，可以观察到恢复过程走了哪条路径。
 

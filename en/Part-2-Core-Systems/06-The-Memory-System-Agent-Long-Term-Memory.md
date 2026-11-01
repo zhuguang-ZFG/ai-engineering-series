@@ -4,7 +4,7 @@
 
 ---
 
-Humans stay coherent across conversations because they have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices have been validated. Claude Code's memory system (memdir) was built for exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
+Humans stay coherent across conversations because they have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices turned out to work. Claude Code's memory system (memdir) was built for exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
 
 Comparing the memory system to "long-term memory" is a biologically precise analogy. Human memory is divided into sensory memory (milliseconds), working memory (seconds, corresponding to the context management in Chapter 7), and long-term memory (minutes to years, corresponding to the memory system in this chapter). Claude Code's design follows this same layering: the context window is "working memory," temporarily holding information within a single session; while memdir is "long-term memory," persistently storing non-derivable critical knowledge across sessions.
 
@@ -12,7 +12,7 @@ Comparing the memory system to "long-term memory" is a biologically precise anal
 
 ### 6.1.1 Closed Type System
 
-Claude Code's memory is constrained to a closed four-type classification system, defined in memory type constants: user, feedback, project, and reference.
+Claude Code keeps its memory inside a closed four-type system, spelled out in the memory type constants: user, feedback, project, and reference.
 
 The design philosophy of these four types is: **only save information that cannot be derived from the current project state.** Code patterns, architecture, file structure, and Git history can all be obtained in real time through tools (grep, git log), and therefore do not fall within the scope of memory.
 
@@ -239,7 +239,7 @@ The format for index entries requires one line per entry, no more than 150 chara
 - [Title](file.md) -- One-line hook description
 ```
 
-The `truncateEntrypointContent` function sets two capacity gates: first truncation by lines (200-line limit), then truncation by bytes (25KB limit). When limits are exceeded, a warning is appended to the end of the file indicating which limit was triggered.
+The `truncateEntrypointContent` function sets two capacity gates: first truncation by lines (200-line limit), then truncation by bytes (25KB limit). When a limit is exceeded, the function appends a warning at the end of the file naming which gate tripped.
 
 **The Design Wisdom of Dual Capacity Protection**
 
@@ -279,7 +279,7 @@ The path validation function's rejection list reveals the various path manipulat
 | Null byte injection | `foo\0.txt` | Reject paths containing null bytes |
 | Outside user directory | `/tmp/mem` | Reject paths not under allowed base directories |
 
-These checks stack on top of each other to form a defense-in-depth system. Even if one check is bypassed, the next check can still block the attack.
+These checks stack on top of each other to form a defense-in-depth system. Even if one check slips through, the next check can still block the attack.
 
 > **Cross-Reference:** The projectSettings exclusion mechanism is consistent with the security boundary design in Chapter 5 (Settings and Configuration). Memory path validation is a specific application scenario of the configuration system's security policy.
 
@@ -422,7 +422,7 @@ sequenceDiagram
     ConvC->>ExtrC: Conversation completes, triggers extraction
 ```
 
-Without the trailing extraction mechanism, Conversation B's context might never be extracted -- because the next extraction uses Conversation C's context, and Conversation B may have contained unique, memory-worthy information that would be missed.
+Without the trailing extraction mechanism, Conversation B might never get an extraction pass -- the next extraction uses Conversation C's context, so the unique, memory-worthy information in B would slip through.
 
 **Design Considerations for the Throttle Counter**
 
@@ -521,7 +521,7 @@ stateDiagram-v2
     Note right of MemoryInvalidatedDeleted: MEMORY.md index entry removed
 ```
 
-Memory never expires on its own. Claude Code does not implement an automatic memory expiration mechanism -- once a memory is saved, it persists indefinitely unless manually deleted or overridden by a subsequent memory. So the quality of the store rests on two habits: the Agent declining to save what is not worth saving, and the user pruning what is there.
+Memory never expires on its own. Claude Code does not implement an automatic memory expiration mechanism -- once a memory is saved, it stays until someone deletes it by hand or a later memory overrides it. So the quality of the store rests on two habits: the Agent declining to save what is not worth saving, and the user pruning what is there.
 
 ### 6.4.4 Memory Reading and Validation
 
