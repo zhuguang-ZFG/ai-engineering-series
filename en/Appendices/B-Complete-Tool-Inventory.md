@@ -72,7 +72,7 @@ File operation tools are the foundational capabilities for the agent to process 
 | NotebookEditTool | `false` | `false` | `false` | Edits Jupyter Notebook cells (replace/insert/delete) |
 
 **Usage Scenario Details**:
-- **FileReadTool**: Suitable for code review (reading large files in segments), document analysis (PDF paginated reading), image understanding (multimodal input), and similar scenarios. Its concurrency safety allows multiple files to be read simultaneously to accelerate information gathering.
+- **FileReadTool**: Suitable for code review (reading large files in segments), document analysis (PDF paginated reading), image understanding (multimodal input), and similar scenarios. It is concurrency-safe, so several files can be read at once to gather information faster.
 - **FileWriteTool**: Suitable for creating new files (e.g., configuration files, scaffolded code) or completely rewriting file content. Since writing is irreversible, it is recommended to use FileReadTool first to confirm the current content of important files.
 - **FileEditTool**: Suitable for precisely modifying specific content within existing files. Its string matching mechanism ensures accurate modification placement, and the `replace_all` mode supports batch renaming and similar operations. This is the most commonly used tool for day-to-day code editing.
 - **NotebookEditTool**: Designed specifically for Jupyter Notebooks, supporting insertion of code or markdown cells at specific positions, modification of existing cell content, and deletion of cells. Suitable for data analysis and scientific computing scenarios.

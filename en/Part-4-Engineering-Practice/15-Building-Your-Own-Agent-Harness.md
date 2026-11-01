@@ -337,7 +337,7 @@ export async function* agentLoop(
 This implementation embodies key design decisions distilled from Claude Code's source code:
 
 1. **State object pattern:** Loop state is encapsulated in a single `state` variable, and each `continue` site writes a new `State` object (corresponding to `const next: State = { ... }` in the source code)
-2. **Dependency injection:** The `deps` object encapsulates all I/O operations (model calls, UUID generation), allowing tests to inject mock implementations
+2. **Dependency injection:** The `deps` object encapsulates all I/O operations (model calls, UUID generation), so tests can inject mock implementations
 3. **Generator output:** Events are passed one by one through `yield`, enabling consumers to respond in real time
 
 **Extension considerations for Step 1:** This minimal implementation lacks several features essential for production environments. Before putting the dialog loop into actual use, you should consider adding:
@@ -895,7 +895,7 @@ Observability in a production-grade Agent Harness is a layered design:
 - **Error rate:** Failure rates categorized by error type (model errors, tool errors, permission denials)
 - **Behavioral metrics:** Average tool calls per turn, average turns to completion, user interruption rate
 
-**Layer 3: Distributed tracing.** In multi-Agent scenarios, a single user request may trigger multiple sub-Agents. Distributed tracing links all related operations through a unique `query_chain_id`, allowing you to trace from a single user request to all sub-Agent behaviors.
+**Layer 3: Distributed tracing.** In multi-Agent scenarios, a single user request may trigger multiple sub-Agents. Distributed tracing links all related operations through a unique `query_chain_id`; from one user request you can follow every sub-Agent it set off.
 
 **Layer 4: Anomaly detection.** Anomaly detection based on historical data, automatically identifying abnormal behavior patterns:
 - Abnormal increase in tool calls per turn -- the Agent may be stuck in a loop
@@ -1242,7 +1242,7 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 
 2. **Factory function + fail-closed defaults:** The `buildTool` pattern keeps tool definitions concise; defaults choose the most conservative strategy (unsafe, has side effects, requires confirmation), and tools explicitly override to declare safety. This fail-closed strategy ensures new tools don't produce dangerous behavior before passing security review.
 
-3. **Dependency injection isolates I/O:** The `QueryDeps` pattern abstracts all external dependencies into injectable interfaces, enabling core logic reuse across different environments (CLI, SDK, test). The core principle is "the core doesn't know where it's running" -- environment differences are encapsulated in adapters, not handled through conditional logic in core code.
+3. **Dependency injection isolates I/O:** The `QueryDeps` pattern abstracts all external dependencies into injectable interfaces, so the core logic runs in any environment (CLI, SDK, test). The core principle is "the core doesn't know where it's running" -- environment differences are encapsulated in adapters, not handled through conditional logic in core code.
 
 4. **Progressive compression:** Multi-tier compression strategies (snipping, micro-compression, summary) trigger progressively based on token usage rate, avoiding blanket information loss. When choosing a compression strategy, consider "what information matters most" -- information loss is relative, and the key is preserving what's most valuable for the current task.
 

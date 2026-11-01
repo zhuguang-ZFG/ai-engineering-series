@@ -305,7 +305,7 @@ flowchart TD
 
 **来源一：ExitPlanMode 的 tool_use input。** 当 Agent 退出 Plan 模式时，ExitPlanMode 工具的输入参数中包含了计划内容。这个内容被 `normalizeToolInput` 注入到工具调用的 input 中。恢复时，系统从消息历史中找到 ExitPlanMode 的 tool_use 消息，提取其中的计划内容。这是最可靠的恢复来源，因为 tool_use 消息是 API 协议的一部分，不会被普通的上下文管理操作修改。
 
-**来源二：User message 的 planContent 字段。** 在 clear context 流程中（即清除上下文重新开始实施时），系统会将计划内容设置到一个特殊的 `planContent` 字段。这个字段的目的是在上下文清除后保留计划的"种子"，使得新开始的执行阶段仍然知道要做什么。
+**来源二：User message 的 planContent 字段。** 在 clear context 流程中（即清除上下文重新开始实施时），系统会将计划内容设置到一个特殊的 `planContent` 字段。这个字段的目的是在上下文清除后保留计划的"种子"，新开始的执行阶段仍然知道要做什么。
 
 **来源三：Attachment message 的 plan_file_reference。** auto-compact 是一种自动压缩上下文的机制（详见第 7 章）。压缩时，系统认得计划文件重要，会在 attachment 消息里保留对它的引用。这确保了即使经过自动压缩，计划文件仍然可以通过引用被定位和读取。
 
@@ -597,7 +597,7 @@ flowchart LR
     class DONE doneNode
 ```
 
-这是最经典的 Agent 工作流模式。Plan 阶段确保方向正确，Execute 阶段高效实施，Verify 阶段保障质量。三者的分离使得每个阶段都可以独立优化和调试。
+这是最经典的 Agent 工作流模式。Plan 阶段确保方向正确，Execute 阶段高效实施，Verify 阶段保障质量。三者分开，每个阶段都能单独优化、单独调试。
 
 **模式二：Event-Triggered Workflow**
 
@@ -686,9 +686,9 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 3. **权限提示抑制**：后台 Agent 的 `getAppState` 包装了 `shouldAvoidPermissionPrompts: true`，避免后台操作弹出 UI 提示。这是因为后台 Agent 通常执行预先授权的任务（如 Plan 验证、会话摘要），不需要也不应该打断用户。
 
-4. **Transcript 记录**：将子 Agent 的消息记录到独立的 sidechain 中，与主会话的消息分离。这使得主会话的消息历史保持清晰，不被子 Agent 的内部操作淹没。
+4. **Transcript 记录**：将子 Agent 的消息记录到独立的 sidechain 中，与主会话的消息分离。主会话的消息历史因此保持清晰，不被子 Agent 的内部操作淹没。
 
-`lastCacheSafeParams` 是一个全局 slot，用于在 post-turn hooks 中保存当前轮次的 cache-safe params。这使得 post-turn fork（如 promptSuggestion、postTurnSummary）可以直接复用主循环的 prompt cache，无需每个调用者手动传递参数。
+`lastCacheSafeParams` 是一个全局 slot，用于在 post-turn hooks 中保存当前轮次的 cache-safe params。post-turn fork（如 promptSuggestion、postTurnSummary）因此能直接复用主循环的 prompt cache，调用者不必再手动传参。
 
 **lastCacheSafeParams 的设计走的是"隐式上下文传递"这条路。** 显式的做法是在每个需要 cache-safe params 的地方都从主循环传递参数，但这会导致函数签名膨胀 -- 每个新增的调用点都需要修改参数列表。通过全局 slot，调用者只需要在正确的时机读取 slot 值，而不需要知道值从哪里来。这降低了组件之间的耦合度。
 

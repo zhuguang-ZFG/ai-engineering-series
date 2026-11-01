@@ -261,7 +261,7 @@ graph TD
     style WC fill:#f39c12,stroke:#d68910,color:#fff
 ```
 
-The message sending tool's intelligent routing mechanism is particularly noteworthy: when the coordinator sends a message to a running worker, the system queues the message for the next round of tool invocation; when sending to a stopped worker, the system automatically resumes that worker and delivers the message as a new prompt. This "stop-resume" pattern allows the coordinator to efficiently manage workers' lifecycles.
+The message sending tool's intelligent routing mechanism is particularly noteworthy: when the coordinator sends a message to a running worker, the system queues the message for the next round of tool invocation; when sending to a stopped worker, the system automatically resumes that worker and delivers the message as a new prompt. This "stop-resume" pattern lets the coordinator manage workers' lifecycles without breaking stride.
 
 > **Design Insight: The Economy of the Stop-Resume Pattern**
 >
@@ -687,7 +687,7 @@ Requirements:
 
 ## Key Takeaways
 
-1. **The Coordinator pattern employs a "coordinator-worker" architecture**, where the coordinator only manages task allocation and result synthesis without implementing anything itself. This layered design enables complex engineering tasks to be systematically decomposed and processed in parallel.
+1. **The Coordinator pattern employs a "coordinator-worker" architecture**, where the coordinator only manages task allocation and result synthesis without implementing anything itself. With that layering, you can break complex engineering tasks down in order and work on the pieces in parallel.
 
 2. **The dual gating mechanism** (feature gate + environment variable) and mutual exclusion with the Fork pattern ensure clarity in mode selection. `matchSessionMode()` guarantees pattern consistency during session recovery.
 

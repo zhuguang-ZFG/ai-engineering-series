@@ -62,7 +62,7 @@ This function signature encapsulates three layers of design decisions:
 
 2. **Terminal return type**: The generator returns a terminal state, but `for await...of` consumes only yielded values and discards the final return value. To obtain it, explicitly call `await iterator.next()` until `done` is true and read that result’s `value`, or capture a delegated generator’s return with `yield*`. Do not assume the loop variable contains the terminal state.
 
-3. **Parameter Object**: All input parameters are encapsulated in a single structured object rather than positional parameters, allowing the caller to provide fields as needed. Key fields include message history, system prompt, permission check function, tool execution context, maximum loop count, and so on.
+3. **Parameter Object**: All input parameters are encapsulated in a single structured object rather than positional parameters, so the caller supplies only the fields it needs. Key fields include message history, system prompt, permission check function, tool execution context, maximum loop count, and so on.
 
 Why choose AsyncGenerator over callbacks or Promises? Because generators naturally fit the "streaming produce - streaming consume" model. Model responses arrive token by token, tool execution results are produced step by step, and the generator's `yield` mechanism allows each layer to "push when data is available, wait when it's not," without callback hell or Promise chains.
 
@@ -387,7 +387,7 @@ Key transition paths include:
 
 7. **token_budget_continuation**: Continuation triggered by token budget management, injecting a reminder message to alert the model about the budget. This is like a mobile data plan's "low balance warning" -- not immediately cutting off access, but reminding the user about remaining data.
 
-Each continue path carefully constructs a new state object, ensuring different recovery strategies don't conflict. The `transition` field enables subsequent iterations to identify "how did I get here," allowing more intelligent decisions.
+Each continue path carefully constructs a new state object, ensuring different recovery strategies don't conflict. The `transition` field lets later iterations see "how did I get here," and decide better.
 
 > **Best Practice:** When designing your own Agent loop, recording the reason (transition reason) for each Continue path is a simple but extremely effective debugging technique. When Agent behavior is abnormal, tracing the transition chain can help you quickly identify which transition introduced the problem.
 
@@ -438,7 +438,7 @@ Send Claude Code a series of requests that require substantial context (such as 
 
 3. **State is immutable, transitions are traceable**: Each continue constructs a new `State`, and combined with the `transition` field, every jump in the loop is traceable. This is a trade-off between functional design and an imperative loop. When debugging in practice, the transition chain is the "breadcrumb trail" for tracing Agent behavior.
 
-4. **Dependency injection makes testing possible**: The four dependencies of `QueryDeps` (callModel, microcompact, autocompact, uuid) cover the loop's core side effects, enabling tests to verify state transition logic without accessing the API. The selection of these four dependencies is also well considered -- they are exactly all the "boundary points of interaction with the external world" in the loop. Abstracting them into interfaces turns the loop internals into pure logic.
+4. **Dependency injection makes testing possible**: The four dependencies of `QueryDeps` (callModel, microcompact, autocompact, uuid) cover the loop's core side effects, so tests can check state transition logic without touching the API. The selection of these four dependencies is also well considered -- they are exactly all the "boundary points of interaction with the external world" in the loop. Abstracting them into interfaces turns the loop internals into pure logic.
 
 5. **Termination is not failure, it is design**: Ten termination reasons each have their trigger conditions and cleanup logic. Understanding these termination paths is key to understanding the entire loop's robustness. In production-grade Agent systems, incorrect termination handling is more dangerous than incorrect normal flow -- because it can lead to resource leaks, state inconsistency, or user data loss.
 

@@ -89,7 +89,7 @@ flowchart TD
 
 1. **Protocol as Contract**: MCP defines strict message formats and capability declaration mechanisms between client and server. Servers declare what tools, resources, and prompt templates they provide; clients retrieve this information through standardized requests. This "declare first, use later" pattern allows both parties to collaborate without understanding each other's internal implementation. This is consistent with the "interface as architecture" philosophy from the tool system in Chapter 3.
 
-2. **Transport Agnostic**: The MCP protocol itself is not bound to any specific network transport method. The same MCP server can provide services through stdio, HTTP, WebSocket, and other methods. This design enables MCP servers to run in local processes (high performance, low latency) or be deployed on remote servers (centralized management, multi-user sharing) without modifying business logic.
+2. **Transport Agnostic**: The MCP protocol itself is not bound to any specific network transport method. The same MCP server can provide services through stdio, HTTP, WebSocket, and other methods. An MCP server can therefore run in a local process (high performance, low latency) or sit on a remote server (centralized management, multi-user sharing) with no change to the business logic.
 
 3. **Security by Design**: MCP integrates security strategies into every layer of the protocol — from capability negotiation during connection establishment, to permission checks during tool invocation, to enterprise-level approval controls. This "default distrust" design ensures that even when untrusted third-party tools are connected, they cannot compromise the overall system's security.
 

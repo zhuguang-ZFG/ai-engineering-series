@@ -56,7 +56,7 @@ Under QueryEngine, session state has one and only one owner -- single ownership.
 
 Inside QueryEngine's query loop, streaming events are processed one by one. The system handles each event type differently: `message_start` events reset the current message's usage counter; `message_delta` events update usage and capture stop_reason; `message_stop` events accumulate the current message's usage into the total.
 
-This phased design enables the system to process tool calls and progress messages in real-time without waiting for complete responses.
+With the work split into phases, the system processes tool calls and progress messages in real time, without waiting for the full response.
 
 **Where is the real value of streaming processing?** Let's understand it with a comparison. Suppose the model generates a response requiring three tool calls, with a total time of 5 seconds:
 

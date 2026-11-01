@@ -598,7 +598,7 @@ flowchart LR
     class DONE doneNode
 ```
 
-This is the most classic Agent workflow pattern. Plan phase ensures correct direction, Execute phase implements efficiently, Verify phase guarantees quality. Separation of the three enables each phase to be independently optimized and debugged.
+This is the most classic Agent workflow pattern. Plan phase ensures correct direction, Execute phase implements efficiently, Verify phase guarantees quality. Separating the three means each phase can be tuned and debugged on its own.
 
 **Pattern 2: Event-Triggered Workflow**
 
@@ -689,7 +689,7 @@ Key isolation designs include:
 
 4. **Transcript logging**: Logs sub-agent's messages to independent sidechain, separated from main session's messages. This keeps main session's message history clear, not flooded by sub-agent's internal operations.
 
-`lastCacheSafeParams` is a global slot, used to save current turn's cache-safe params in post-turn hooks. This enables post-turn forks (like promptSuggestion, postTurnSummary) to directly reuse main loop's prompt cache without each caller manually passing parameters.
+`lastCacheSafeParams` is a global slot, used to save current turn's cache-safe params in post-turn hooks. Post-turn forks (like promptSuggestion, postTurnSummary) can therefore reuse the main loop's prompt cache directly, with no caller passing parameters by hand.
 
 **lastCacheSafeParams takes the "implicit context passing" route.** Explicit approach would pass parameters from main loop wherever cache-safe params are needed, but this causes function signature bloat -- each new call point needs modifying parameter list. Through global slot, callers only need to read slot value at right timing without knowing where value comes from. This reduces coupling between components.
 

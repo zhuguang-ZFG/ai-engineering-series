@@ -362,7 +362,7 @@ Claude Code provides a four-level extension model, from built-in to external, fr
 
 The design philosophy of this four-level extension model is "progressive enhancement": for simple needs, declaring a Skill suffices; for complex integrations, you can connect external services through the MCP protocol. Each level builds on the previous one rather than replacing it.
 
-Particularly noteworthy is the MCP (Model Context Protocol) integration approach. Claude Code is not a closed system -- through the MCP protocol, it can dynamically discover and call tools provided by external tool servers, meaning the Agent's capability boundaries are not preset by developers but can be dynamically extended at runtime.
+Particularly noteworthy is the MCP (Model Context Protocol) integration approach. Claude Code is not a closed system -- through the MCP protocol, it can dynamically discover and call tools provided by external tool servers, so the Agent's capability boundaries are not preset by developers but extend at runtime.
 
 **What if progressive extension were not adopted?** Both extremes are undesirable. If only the "Tool" level of extension were available, third-party developers would have to modify core code to add new capabilities, severely limiting ecosystem growth. If only the MCP level of extension were provided, even simple customization needs would require building a complete tool server, setting the barrier too high. Progressive extension allows every type of contributor to work at the abstraction level most suitable for them.
 

@@ -72,7 +72,7 @@ flowchart LR
 | NotebookEditTool | `false` | `false` | `false` | 编辑 Jupyter Notebook 单元格（替换/插入/删除） |
 
 **使用场景详解**：
-- **FileReadTool**：适用于代码审查（逐段读取大文件）、文档分析（PDF 分页读取）、图片理解（多模态输入）等场景。其并发安全性使得可以同时读取多个文件来加速信息收集
+- **FileReadTool**：适用于代码审查（逐段读取大文件）、文档分析（PDF 分页读取）、图片理解（多模态输入）等场景。它并发安全，多个文件能同时读，信息收集也更快
 - **FileWriteTool**：适用于创建新文件（如配置文件、脚手架代码）或完全重写文件内容。由于写入是不可逆的，建议在重要文件上先使用 FileReadTool 确认当前内容
 - **FileEditTool**：适用于精确修改已有文件中的特定内容。其字符串匹配机制确保修改位置的准确性，`replace_all` 模式支持批量重命名等操作。这是日常代码编辑中最常用的工具
 - **NotebookEditTool**：专门为 Jupyter Notebook 设计，支持在特定位置插入代码或 markdown 单元格、修改已有单元格内容、删除单元格。适用于数据分析和科学计算场景

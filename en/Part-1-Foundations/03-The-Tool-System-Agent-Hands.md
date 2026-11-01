@@ -78,7 +78,7 @@ The design philosophy behind the three-layer separation is "separation of concer
 
 This is the tool's core execution method. It receives parsed input parameters, the tool use context, a permission check function, a parent message reference, and an optional progress callback. The returned result carries output data and an optional context modifier.
 
-The context modifier (contextModifier) allows a tool to modify the context after execution (e.g., updating the file cache), which is the key channel for tools to influence subsequent behavior. For example, FileWriteTool updates the file state cache through contextModifier after writing a file, so that subsequent FileReadTool invocations can see the latest file contents.
+The context modifier (contextModifier) lets a tool change the context after it runs (e.g., updating the file cache), which is the key channel for tools to influence subsequent behavior. For example, FileWriteTool updates the file state cache through contextModifier after writing a file, so that subsequent FileReadTool invocations can see the latest file contents.
 
 **Element 5: UI Rendering**
 
