@@ -12,7 +12,7 @@ DONE
 ## Files created
 - docs/video/ch01/long-outline.md
 - docs/video/ch01/long-script.md
-- Directories also created (empty assets/out, not committed as empty): ideo/ch01/assets/, ideo/ch01/out/
+- Directories also created (empty assets/out, not committed as empty): video/ch01/assets/, video/ch01/out/
 
 ## Self-check
 - Chinese character count of spoken narration in long-script.md (excl. headings / blockquotes / --- / [ANIM|CODE:…] markers): **3366**
@@ -36,7 +36,7 @@ DONE
 
 ## Concerns
 - Spoken han count **3366** is only ~66 above the 3300 floor (~15.3 min). If TTS reads slower than 220 chars/min or pauses at ANIM/CODE beats, runtime may sit near 16–17 min; if faster, could skim under 15. Easy fix in Task 3/4: add 200–400 chars of connective narration if timing runs short.
-- Empty ideo/ch01/assets and ideo/ch01/out dirs were created but not committed (git ignores empty dirs).
+- Empty video/ch01/assets and video/ch01/out dirs were created but not committed (git ignores empty dirs).
 - Helper _write_long_script.py left untracked under .superpowers/sdd/ (not part of Task 1 commit).
 
 ---

@@ -2,8 +2,8 @@
 
 > 状态：试音已出，**用户已确认 2026-10-27**后再批量合成全片配音。  
 > 试音文件（本机，未进 git）：  
-> - ideo/ch01/assets/voice-sample-long.mp3（长讲开场约 80 汉字样段，约 29s）  
-> - ideo/ch01/assets/voice-sample-short.mp3（短片口播连贯稿全文，约 28s）
+> - video/ch01/assets/voice-sample-long.mp3（长讲开场约 80 汉字样段，约 29s）  
+> - video/ch01/assets/voice-sample-short.mp3（短片口播连贯稿全文，约 28s）
 
 ---
 
@@ -39,8 +39,8 @@ zh-CN-YunxiNeural 官方定位为 Novel · Lively, Sunshine，即便降速降调
 
 ## 试音文案来源
 
-- **长讲样段**：docs/video/ch01/long-script.md 开场口播前约 80 个汉字（落在句号处略延长），见 ideo/ch01/assets/sample-long.txt。
-- **短片样段**：docs/video/ch01/short-script.md「口播连贯稿（直接给 TTS）」全文，见 ideo/ch01/assets/sample-short.txt。
+- **长讲样段**：docs/video/ch01/long-script.md 开场口播前约 80 个汉字（落在句号处略延长），见 video/ch01/assets/sample-long.txt。
+- **短片样段**：docs/video/ch01/short-script.md「口播连贯稿（直接给 TTS）」全文，见 video/ch01/assets/sample-short.txt。
 
 ---
 
@@ -48,4 +48,4 @@ zh-CN-YunxiNeural 官方定位为 Novel · Lively, Sunshine，即便降速降调
 
 - 未收到用户对试音的确认前，**不得**合成第 01 章全片口播。
 - 确认后：长讲按 long-script.md 分镜切段合成；短片按连贯稿一次合成；字幕与成片流水线另任务处理。
-- 大体积 mp3 默认不入库（见 .gitignore）；oice.md 与样本文本可入库。
+- 大体积 mp3 默认不入库（见 .gitignore）；voice.md 与样本文本可入库。

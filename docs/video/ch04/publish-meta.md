@@ -7,8 +7,8 @@
 
 | 项 | 值 |
 |----|-----|
-| 文件 | ideo/ch04/out/ch04-short-v1.mp4 |
-| 封面 | 建议「万能钥匙 vs 四道闸」竖版（路径 ideo/ch04/assets/ch04-cover-vertical.png） |
+| 文件 | video/ch04/out/ch04-short-v1.mp4 |
+| 封面 | 建议「万能钥匙 vs 四道闸」竖版（路径 video/ch04/assets/ch04-cover-vertical.png） |
 | 标题草案 | 万能钥匙 vs 四道闸｜驭者开源讲义 04 钩子 |
 | 话题 | #Agent #ClaudeCode #权限 #护栏 #开源 |
 
@@ -16,8 +16,8 @@
 
 | 项 | 值 |
 |----|-----|
-| 文件 | ideo/ch04/out/ch04-long-v1.mp4（渲染完成后补时长/大小） |
-| 封面 | 建议 ideo/ch04/assets/ch04-cover.png（横版，待确认） |
+| 文件 | video/ch04/out/ch04-long-v1.mp4（渲染完成后补时长/大小） |
+| 封面 | 建议 video/ch04/assets/ch04-cover.png（横版，待确认） |
 | 标题草案 | 【驭者·Agent Harness 04】权限管线——Agent 的护栏｜万能钥匙 vs 四道闸 |
 | 合集 | season_id 9436416 · ep4 |
 | 分区 | 知识 / 科学科普（与前几集一致） |

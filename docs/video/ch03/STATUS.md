@@ -7,12 +7,12 @@
 
 | 形态 | 文件 | 状态 |
 |------|------|------|
-| B站长讲 | ideo/ch03/out/ch03-long-v2.mp4 | 已过片（t196u 同意）· densify v2 · ~597s · ~190MB · 1920x1080 |
-| 抖音/小红书短片 | ideo/ch03/out/ch03-short-v1.mp4 | 已过片 · ~46s · ~7.5MB · 1080x1920 |
+| B站长讲 | video/ch03/out/ch03-long-v2.mp4 | 已过片（t196u 同意）· densify v2 · ~597s · ~190MB · 1920x1080 |
+| 抖音/小红书短片 | video/ch03/out/ch03-short-v1.mp4 | 已过片 · ~46s · ~7.5MB · 1080x1920 |
 
 ## 封面
 
-- B站：ideo/ch03/out/ch03-cover.png（亦 staged C:\\Users\\zhugu\\yuzhe-publish\\ch03-cover.png）
+- B站：video/ch03/out/ch03-cover.png（亦 staged C:\\Users\\zhugu\\yuzhe-publish\\ch03-cover.png）
 - 抖音 9:16：ch03-cover-916.png
 - 小红书 3:4：ch03-cover-34.png
 
