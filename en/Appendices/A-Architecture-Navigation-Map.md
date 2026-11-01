@@ -469,10 +469,10 @@ The conversation main loop routes tool_use returned by the model to specific too
 
 All tools (including built-in tools and MCP dynamic tools) must follow the standard protocol defined by the tool type system. Core protocol methods include:
 - **isEnabled()**: determines whether the tool is enabled in the current context
-- **isReadOnly()**: determines whether the tool only performs read operations
+- **isReadOnly()**: determines whether the tool only reads
 - **isConcurrencySafe()**: determines whether the tool can be safely executed in parallel
-- **isDestructive()**: determines whether the tool performs irreversible operations
-- **checkPermissions()**: performs permission check, returns allow/deny/ask
+- **isDestructive()**: determines whether the tool causes irreversible changes
+- **checkPermissions()**: checks permissions, returns allow/deny/ask
 - **toAutoClassifierInput()**: generates feature descriptions for automatic classification
 - **userFacingName()**: returns a user-friendly name
 

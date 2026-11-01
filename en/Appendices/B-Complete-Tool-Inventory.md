@@ -101,7 +101,7 @@ Search tools are the foundational capabilities for the agent to locate informati
 
 ## 3. Execution
 
-Execution tools are the bridge between the agent and the operating system. BashTool is one of the most versatile tools; nearly all command-line operations are performed through it.
+Execution tools are the bridge between the agent and the operating system. BashTool is one of the most versatile tools; nearly all command-line operations run through it.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
