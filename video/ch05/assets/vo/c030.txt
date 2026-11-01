@@ -1,0 +1,1 @@
+所以 projectSettings 是唯一三项全中的。源码里的应对是一致的：排除它。查 skipDangerousModePermissionPrompt 的时候，只读 userSettings、localSettings、flagSettings 和 policySettings——有意跳过 projectSettings。

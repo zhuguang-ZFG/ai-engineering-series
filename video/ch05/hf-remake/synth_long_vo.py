@@ -56,11 +56,13 @@ async def one(i: int, p: str) -> None:
     mp3 = VO / f"c{i:03d}.mp3"
     txt = VO / f"c{i:03d}.txt"
     txt.write_text(p, encoding="utf-8")
-    if mp3.exists() and mp3.stat().st_size > 1000:
+    srt = VO / f"c{i:03d}.srt"
+    if mp3.exists() and mp3.stat().st_size > 1000 and srt.exists() and srt.stat().st_size > 0:
         print(f"skip {mp3.name}")
         return
     words = []
-    communicate = edge_tts.Communicate(p, "zh-CN-YunyangNeural", rate="-10%", pitch="-5Hz")
+    communicate = edge_tts.Communicate(p, "zh-CN-YunyangNeural", rate="-10%", pitch="-5Hz",
+                                   boundary="WordBoundary")
     with open(mp3, "wb") as f:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
@@ -87,7 +89,7 @@ async def one(i: int, p: str) -> None:
     if cur:
         end = cur[-1]["offset"] + cur[-1]["duration"]
         srt_lines.append(f"{idx}\n{fmt(start)} --> {fmt(end)}\n{''.join(x['text'] for x in cur)}\n")
-    (VO / f"c{i:03d}.srt").write_text("\n".join(srt_lines), encoding="utf-8")
+    srt.write_text("\n".join(srt_lines), encoding="utf-8")
     print(f"ok {mp3.name} bytes={mp3.stat().st_size} words={len(words)}", flush=True)
 
 async def main():
@@ -107,5 +109,10 @@ for i, p in enumerate(parts):
     total += dur
     segs.append({"i": i, "text": p, "chars": len(p), "mp3": f"c{i:03d}.mp3", "bytes": f.stat().st_size, "duration_s": round(dur, 3)})
 man = {"voice": "zh-CN-YunyangNeural", "rate": "-10%", "pitch": "-5Hz", "count": len(segs), "total_duration_s": round(total, 2), "segments": segs}
+no_srt = [s["mp3"] for s in segs if not (VO / s["mp3"]).with_suffix(".srt").is_file()
+                or (VO / s["mp3"]).with_suffix(".srt").stat().st_size == 0]
+if no_srt:
+    raise SystemExit("%d 片字幕为空：edge-tts 7.x 要 boundary='WordBoundary' 才回词级时间：%s"
+                   % (len(no_srt), no_srt[:5]))
 (VO / "vo-manifest.json").write_text(json.dumps(man, ensure_ascii=False, indent=2), encoding="utf-8")
 print(f"LONG VO DONE count={len(segs)} total_s={total:.2f} (~{total/60:.1f} min)")

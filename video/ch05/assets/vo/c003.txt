@@ -1,0 +1,1 @@
+翻成人话。最底下 pluginSettings，插件带来的默认值，它是地基，所以我更愿意叫它第零层。往上 userSettings，你自己的全局习惯，放在家目录。再往上 projectSettings，项目的公告牌，这份要进 Git，团队共享。

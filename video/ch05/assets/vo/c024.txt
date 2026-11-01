@@ -1,0 +1,1 @@
+想想 projectSettings 是什么。它是 .claude/settings.json，跟着仓库走。你 clone 一个陌生项目，就等于把别人家的告示牌钉在自己墙上——而且默认照着上面写的做。

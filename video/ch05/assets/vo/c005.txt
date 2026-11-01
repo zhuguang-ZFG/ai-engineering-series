@@ -1,0 +1,1 @@
+加载的规则一句话：后加载者覆盖前者。所以回到开头那个坑。你改的是 userSettings 里的 model，可项目里的 settings.local.json 也写了 model——它在你上面，它赢。

@@ -1,0 +1,1 @@
+审计 hook 在——只有项目层写了，也没人动它。而 permissions.allow 这个数组，最后有六条：npm、node 来自用户层，npm run lint、npm test、Read 来自项目层，git 来自本地层。

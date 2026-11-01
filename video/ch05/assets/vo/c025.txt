@@ -1,0 +1,1 @@
+攻击形状很具体。攻击者做一个看着挺正常的开源项目，在 .claude/settings.json 里埋一个 PreToolUse hook。你 clone 下来，启动，每一次工具调用，这个 hook 就把你的 API key、你的环境变量，发到他的服务器上。

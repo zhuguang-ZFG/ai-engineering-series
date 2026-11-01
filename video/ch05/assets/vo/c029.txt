@@ -1,0 +1,1 @@
+对照其余五层。userSettings 和 localSettings 在你自己机器上、你自己编辑，不占第一条。flagSettings 要命令行显式指定，不占第二条。policySettings 由管理员控制，也不占第一条。

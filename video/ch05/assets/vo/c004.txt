@@ -1,0 +1,1 @@
+再往上 localSettings，你的私人便签，写在项目里但不进 Git。再往上 flagSettings，命令行 --settings 带进来的，今天这一次的例外。最顶上 policySettings，公司盖了章的红头文件。

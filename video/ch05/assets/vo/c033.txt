@@ -1,0 +1,1 @@
+金融机构要求所有代码变更都进审计系统，就用这招——开发者改本地配置也绕不过审计。第二道，strictPluginOnlyCustomization：锁定 skills、agents、hooks、mcp 四个定制面。

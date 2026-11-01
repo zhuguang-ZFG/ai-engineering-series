@@ -39,11 +39,13 @@ async def one(i: int, p: str) -> None:
     mp3 = OUT / f"c{i:03d}.mp3"
     txt = OUT / f"c{i:03d}.txt"
     txt.write_text(p, encoding="utf-8")
-    if mp3.exists() and mp3.stat().st_size > 1000:
+    srt = OUT / f"c{i:03d}.srt"
+    if mp3.exists() and mp3.stat().st_size > 1000 and srt.exists() and srt.stat().st_size > 0:
         print(f"skip {mp3.name}")
         return
     words = []
-    communicate = edge_tts.Communicate(p, "zh-CN-YunyangNeural", rate="-10%", pitch="-5Hz")
+    communicate = edge_tts.Communicate(p, "zh-CN-YunyangNeural", rate="-10%", pitch="-5Hz",
+                                   boundary="WordBoundary")
     with open(mp3, "wb") as f:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
@@ -75,7 +77,7 @@ async def one(i: int, p: str) -> None:
     if cur:
         end = cur[-1]["offset"] + cur[-1]["duration"]
         srt_lines.append(f"{idx}\n{fmt(start)} --> {fmt(end)}\n{''.join(x['text'] for x in cur)}\n")
-    (OUT / f"c{i:03d}.srt").write_text("\n".join(srt_lines), encoding="utf-8")
+    srt.write_text("\n".join(srt_lines), encoding="utf-8")
     print(f"ok {mp3.name} bytes={mp3.stat().st_size}")
 
 async def main():
