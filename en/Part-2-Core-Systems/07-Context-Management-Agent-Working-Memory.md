@@ -153,7 +153,7 @@ graph LR
 
 ### Level 1: Snip
 
-Snip trims history at the **message-sequence level**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is enabled, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
+Snip cuts history out of the **whole message sequence**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is enabled, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
 
 This differs from MicroCompact: the marker `[Old tool result content cleared]` belongs to the time-based MicroCompact path, which replaces eligible tool-result bodies while retaining their message structure. It is not the definition of Snip.
 
@@ -329,7 +329,7 @@ The `calculateTokenWarningState` function calculates the current token usage sta
 | `isAboveAutoCompactThreshold` | Token usage >= auto-compression threshold | Trigger auto-compression |
 | `isAtBlockingLimit` | Token usage >= effective window - 3,000 | Block new requests |
 
-These flags drive warning display at the UI level and trigger compression behavior. The `percentLeft` field shows the user the percentage of remaining space.
+Once these flags flip, the UI shows warnings and compression starts firing. The `percentLeft` field shows the user the percentage of remaining space.
 
 ### Post-Compression Token Budget
 

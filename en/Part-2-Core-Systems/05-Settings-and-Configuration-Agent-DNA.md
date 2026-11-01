@@ -470,7 +470,7 @@ The default state is constructed by `getDefaultAppState()`, which loads the merg
 
 **DeepImmutable's Type-Level Guarantee**
 
-`AppState` uses the `DeepImmutable<T>` type marker, which means the TypeScript compiler prevents any attempt to directly modify state fields at compile time. This is a manifestation of the "make the right thing easy and the wrong thing impossible" design philosophy at the type system level.
+`AppState` uses the `DeepImmutable<T>` type marker, which means the TypeScript compiler prevents any attempt to directly modify state fields at compile time. Here the "make the right thing easy and the wrong thing impossible" design philosophy is enforced by the type system itself.
 
 The categorization of state fields maps to the architectural layers of the Agent system:
 
@@ -597,4 +597,4 @@ Specify what content should be placed in each configuration source and explain w
 4. **Special Merge for the Policy Layer**: policySettings uses "first non-empty source wins" instead of deep merge, ensuring the determinism and auditability of enterprise policies.
 5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs to be dynamically adjusted after release.
 6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code implement all necessary state management capabilities.
-7. **DeepImmutable Types**: Prevents direct state modification at the type system level, making the right thing easy and the wrong thing impossible.
+7. **DeepImmutable Types**: Makes the type system refuse direct state modification, keeping the right thing easy and the wrong thing impossible.

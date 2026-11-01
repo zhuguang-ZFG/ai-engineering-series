@@ -449,7 +449,7 @@ flowchart TD
 
 ## A.4 Module Interface Contract Overview
 
-This section describes the interface contracts between core modules from a conceptual level, helping readers understand how modules collaborate through well-defined interfaces. Note that this describes architectural design patterns, not specific source code references.
+This section describes the interface contracts between core modules in conceptual terms, helping readers understand how modules collaborate through well-defined interfaces. Note that this describes architectural design patterns, not specific source code references.
 
 ### A.4.1 Contract Between Conversation Main Loop and Query Engine
 

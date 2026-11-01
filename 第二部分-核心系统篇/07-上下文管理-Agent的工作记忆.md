@@ -153,7 +153,7 @@ graph LR
 
 ### Level 1: Snip（裁剪）
 
-Snip 在**消息序列层面裁剪历史**，并非仅清空旧工具结果中的文本。启用 `HISTORY_SNIP` 后，对话循环调用 `snipCompactIfNeeded(messagesForQuery)`，以返回的消息序列作为后续请求的上下文，同时接收释放的令牌数及可能产生的边界消息。
+Snip 裁的是**整条消息序列**，不是把旧工具结果里的文本抽空。启用 `HISTORY_SNIP` 后，对话循环调用 `snipCompactIfNeeded(messagesForQuery)`，以返回的消息序列作为后续请求的上下文，同时接收释放的令牌数及可能产生的边界消息。
 
 它与 MicroCompact 的区别在于：`[Old tool result content cleared]` 是时间触发的 MicroCompact 路径使用的替换标记，用于清理符合条件的工具结果正文，同时保留其消息结构。不能用这个标记来定义 Snip 的行为。
 
@@ -173,7 +173,7 @@ MicroCompact 靠时间触发，清掉的是大批旧工具结果。当检测到�
 
 触发后，系统保留最近 N 个可压缩工具结果（`config.keepRecent`，最小值为 1），将其余的工具结果内容全部替换为清除标记文本。可压缩的工具类型包括 Read、Bash、Grep、Glob、WebSearch、WebFetch、Edit 和 Write。
 
-此外，MicroCompact 还有一条走缓存编辑（cache editing）的路径，通过 API 层面的 `cache_edits` 机制删除工具结果而不破坏缓存前缀，这是更高级的无损优化。
+此外，MicroCompact 还有一条走缓存编辑（cache editing）的路径，直接用 API 的 `cache_edits` 机制删掉工具结果而不破坏缓存前缀，这是更高级的无损优化。
 
 **MicroCompact 的核心权衡：**
 
@@ -329,7 +329,7 @@ flowchart TD
 | `isAboveAutoCompactThreshold` | 令牌用量 >= 自动压缩阈值 | 触发自动压缩 |
 | `isAtBlockingLimit` | 令牌用量 >= 有效窗口 - 3,000 | 阻止新请求 |
 
-这些标志驱动 UI 层面的警告展示和压缩行为的触发。`percentLeft` 字段向用户展示剩余空间的百分比。
+这几个标志一置起来，UI 就该亮警告了，压缩也跟着被触发。`percentLeft` 字段向用户展示剩余空间的百分比。
 
 ### 压缩后的令牌预算
 

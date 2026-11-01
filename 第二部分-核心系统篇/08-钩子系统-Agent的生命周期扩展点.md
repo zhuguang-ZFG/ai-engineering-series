@@ -802,7 +802,7 @@ localSettings:   [钩子 C: 本地调试]
 
 ### 紧急禁用开关
 
-Claude Code 提供了多层安全开关来应对钩子相关风险。这就是"纵深防御（Defense in Depth）"——不靠单一的安全措施，而在多个层面设置屏障。
+Claude Code 提供了多层安全开关来应对钩子相关风险。这就是"纵深防御（Defense in Depth）"——不把安危押在单一措施上，而是一道一道关口各设屏障。
 
 ```mermaid
 flowchart TD

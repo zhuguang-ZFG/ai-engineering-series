@@ -194,7 +194,7 @@ flowchart TD
 
 Read-only tools like Read, Grep, Glob can therefore run side by side, while tools with side effects like Bash, Edit, Write need to queue serially.
 
-**Why not do more fine-grained dependency analysis at the tool level?** This is an intentional simplification decision. Theoretically, we could analyze whether there are data dependencies between two Bash commands (e.g., `mkdir foo && echo bar > foo/file.txt` has a dependency, while `echo hello` and `echo world` don't). But this analysis requires understanding shell semantics, which is costly and error-prone. Claude Code chose a conservative but reliable strategy: Bash is inherently unsafe; better to wait an extra second than risk parallel execution of potentially conflicting commands.
+**Why not analyze dependencies more precisely, tool by tool?** This is an intentional simplification decision. Theoretically, we could analyze whether there are data dependencies between two Bash commands (e.g., `mkdir foo && echo bar > foo/file.txt` has a dependency, while `echo hello` and `echo world` don't). But this analysis requires understanding shell semantics, which is costly and error-prone. Claude Code chose a conservative but reliable strategy: Bash is inherently unsafe; better to wait an extra second than risk parallel execution of potentially conflicting commands.
 
 The concurrency safety classification follows a simple matrix:
 

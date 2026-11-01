@@ -470,7 +470,7 @@ setState(prev => ({ ...prev, count: prev.count }))
 
 **DeepImmutable 的类型级保证**
 
-`AppState` 使用 `DeepImmutable<T>` 类型标记意味着 TypeScript 编译器会在编译时阻止任何直接修改状态字段的尝试。这是一种"让正确的事情容易，让错误的事情不可能"的设计哲学在类型系统层面的体现。
+`AppState` 使用 `DeepImmutable<T>` 类型标记意味着 TypeScript 编译器会在编译时阻止任何直接修改状态字段的尝试。"让正确的事情容易，让错误的事情不可能"这句设计哲学，在这里是由类型系统替你执行的。
 
 状态字段的分类映射了 Agent 系统的架构分层：
 
@@ -597,4 +597,4 @@ const setState = useSetAppState();
 4. **策略层的特殊合并**：policySettings 使用"首个非空源胜出"而非深度合并，确保企业策略的确定性和可审计性。
 5. **双重功能开关**：`feature()` 提供编译时死代码消除（零运行时开销），GrowthBook 提供运行时实验控制（灵活但依赖缓存）。两者的选择取决于功能是否需要在发布后动态调整。
 6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码实现了所有必要的状态管理能力。
-7. **DeepImmutable 类型**：在类型系统层面阻止状态被直接修改，让正确的事情容易，让错误的事情不可能。
+7. **DeepImmutable 类型**：让类型系统拦住对状态的直接修改，让正确的事情容易，让错误的事情不可能。

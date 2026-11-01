@@ -29,7 +29,7 @@ The core design principle of this architecture is **separation of concerns**: th
 
 > **Architecture Insight: Why not merge routing logic and execution logic?**
 >
-> In many simple systems, routing and execution are the same module. However, Claude Code's scenarios are far more complex than simple systems — a single tool invocation might go through a synchronous path (main thread waits), an asynchronous path (background execution), or a Fork path (cache-parallel). Separating routing decisions from the execution process means that when a new execution strategy needs to be added (such as a future "streaming sub-agent"), you only need to add a branch at the routing layer without modifying the runner's core logic. This is a classic application of the **Strategy Pattern** at the system architecture level.
+> In many simple systems, routing and execution are the same module. However, Claude Code's scenarios are far more complex than simple systems — a single tool invocation might go through a synchronous path (main thread waits), an asynchronous path (background execution), or a Fork path (cache-parallel). Separating routing decisions from the execution process means that when a new execution strategy needs to be added (such as a future "streaming sub-agent"), you only need to add a branch at the routing layer without modifying the runner's core logic. This is a classic use of the **Strategy Pattern** in system architecture.
 
 ### BaseAgentDefinition Type Definition
 
@@ -142,7 +142,7 @@ The Explore Agent is a high-speed, read-only search agent. Its definition declar
 
 Its core design philosophy is reflected in two key decisions:
 
-**First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and at the tool level, Edit, Write, and similar tools are physically prohibited via disallowedTools. This "dual-lock" design — soft constraints at the prompt level plus hard constraints at the tool level — ensures that even if the model "hallucinates" and wants to modify a file, it will be physically blocked because the tool is unavailable.
+**First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and disallowedTools physically prohibits Edit, Write, and similar tools from being called. This "dual-lock" design — soft constraints written into the prompt plus hard constraints enforced on the tool list — ensures that even if the model "hallucinates" and wants to modify a file, it will be physically blocked because the tool is unavailable.
 
 **Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, so the model focuses on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
 
@@ -178,7 +178,7 @@ The Plan Agent's output typically contains the following structured information:
 
 The General Purpose Agent is the most flexible agent, with full tool permissions (using the wildcard `'*'` to allow all tools). However, the tools actually available are still constrained by the global filtering function. It is the "executor" that does the actual work — Explore handles reconnaissance, Plan creates the plan, and General Purpose handles the modifications.
 
-The design philosophy of the General Purpose Agent is "trust by default, push boundaries to the perimeter." It does not impose preset restrictions at the tool level; instead, it relies on the global security layer (permission system, tool filtering function) to ensure safety. The benefit of this design is maximum flexibility — different tasks can dynamically combine different tool sets without needing to predefine tool whitelists for each type of task.
+The design philosophy of the General Purpose Agent is "trust by default, push boundaries to the perimeter." It does not preset which tools this sub-agent may use; instead, it relies on the global security layer (permission system, tool filtering function) to ensure safety. The benefit of this design is maximum flexibility — different tasks can dynamically combine different tool sets without needing to predefine tool whitelists for each type of task.
 
 > **Anti-Pattern Warning: Don't use the General Purpose Agent for read-only tasks**
 >
@@ -256,7 +256,7 @@ In the Fork path, the system prioritizes using the system prompt bytes already r
 
 > **Why byte-level rather than semantic-level?**
 >
-> Prompt cache is a low-level infrastructure optimization of the Anthropic API that reuses processed tokens through byte prefix matching. So even if two pieces of text are "semantically identical," a single character difference at the byte level (even an extra space or newline) will cause the cache to miss. This is why the Fork pattern needs to pass the rendered raw bytes rather than reconstructing — reconstruction may produce differences in whitespace characters, attribute order, and other subtle areas, and these differences are sufficient to invalidate the entire cache prefix.
+> Prompt cache is a low-level infrastructure optimization of the Anthropic API that reuses processed tokens through byte prefix matching. So even if two pieces of text are "semantically identical," a single differing character in the bytes (even an extra space or newline) will cause the cache to miss. This is why the Fork pattern needs to pass the rendered raw bytes rather than reconstructing — reconstruction may produce differences in whitespace characters, attribute order, and other subtle areas, and these differences are sufficient to invalidate the entire cache prefix.
 >
 > An apt analogy: prompt cache is like the ETag in HTTP caching — it compares exact hash values of content. Even if you reformat the indentation of an HTML document, the browser rendering result is the same, but the ETag has changed and the cache is invalidated.
 

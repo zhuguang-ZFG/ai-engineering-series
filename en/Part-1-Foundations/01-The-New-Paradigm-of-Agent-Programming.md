@@ -47,7 +47,7 @@ In a world without tool calling, the LLM is a closed system. Its knowledge is cu
 
 With tool calling, the LLM becomes an orchestrator of an open system. It can call search engines to obtain real-time information, call code interpreters to calculate, call the file system to read and write code, and call Git for version control. Each tool call is a handshake between the LLM and the real world. The friend trapped in the room now has a telephone, a robotic arm, and a connection to the entire internet.
 
-But tool calling also introduces new engineering challenges. These challenges are no longer at the model level, but at the systems engineering level:
+But tool calling also introduces new engineering challenges. These challenges no longer live in the model itself — they live in systems engineering:
 
 1. **Tool Registration and Discovery**: Who manages the tool registry? How does the model know which tools are available? How can new tools be dynamically added without restarting the system?
 2. **Parameter Validation**: Who validates the parameters of tool calls? The model may pass incorrectly typed parameters, omit required fields, or pass out-of-range values. At which layer should validation logic reside?
@@ -254,7 +254,7 @@ The key benefit of using `AsyncGenerator` instead of a regular function is that 
 
 > **Cross-Reference:** Chapter 2 will provide an in-depth analysis of this async generator's internal implementation, including the preprocessing pipeline, state transition model, and dependency injection design.
 
-In terms of state management, cross-iteration state is encapsulated in an immutable State object, updated through wholesale replacement rather than field-by-field modification in each iteration. Every change stays traceable.
+In state management, cross-iteration state lives in one immutable State object: each iteration replaces the whole object rather than editing fields one by one. Every change stays traceable.
 
 #### Tool Type System Foundation
 
@@ -339,7 +339,7 @@ The design philosophy of this four-stage pipeline is "Defense in Depth" -- no si
 
 ### Principle Three: Cache-Aware Architecture
 
-In the LLM API pricing model, Prompt Caching can significantly reduce costs and latency. Claude Code's architecture considers cache friendliness at multiple levels:
+In the LLM API pricing model, Prompt Caching can significantly reduce costs and latency. Claude Code's architecture thinks about cache friendliness in several separate places:
 
 - **System Prompt Stability**: The construction method of the system prompt is carefully designed to ensure that when the tool list is unchanged, the byte content of the prompt remains consistent and hits the API-side prompt cache.
 - **Sub-Agent Cache Sharing**: Sub-agents in Fork mode inherit the parent agent's `renderedSystemPrompt`, avoiding regeneration of prompts that might differ due to configuration changes, ensuring cache hit rates.
@@ -428,7 +428,7 @@ While `/doctor` is running, observe the following phenomena:
 
 - System checks execute **progressively** -- as each check completes, the result is immediately displayed rather than waiting for all checks to finish before outputting everything at once. This is precisely the "async-streaming-first" principle manifesting in everyday functionality.
 - Some checks (such as API connectivity) may request your confirmation, which is the practice of the "embedded security boundaries" principle -- even diagnostic operations must pass through the permission pipeline.
-- Check results may show cache hit status (if applicable), which is one aspect of "cache-aware design."
+- Check results may show cache hit status (if applicable) — itself a piece of "cache-aware design."
 
 ### Step 4: Observe a Complete Tool Call
 

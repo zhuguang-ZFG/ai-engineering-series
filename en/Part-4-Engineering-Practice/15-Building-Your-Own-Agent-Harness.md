@@ -717,7 +717,7 @@ export class HookRunner {
 }
 ```
 
-**Extension considerations for the hook system:** Production hook systems need attention in the following areas:
+**Extension considerations for the hook system:** Before shipping a hook system to production, you have to handle these:
 
 1. **Timeout management**: Shell command execution time is unpredictable. Claude Code sets a 10-second timeout; timed-out hooks are treated as errors rather than blocking, ensuring that a slow hook doesn't stall the entire dialog loop.
 

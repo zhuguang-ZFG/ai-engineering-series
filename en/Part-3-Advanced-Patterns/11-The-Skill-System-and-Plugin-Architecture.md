@@ -678,7 +678,7 @@ paths:
 
 Perform a comprehensive code review of file $file_path.
 
-Check the following aspects:
+Check each item:
 1. Security vulnerabilities (XSS, injection, sensitive data leakage)
 2. Performance issues (unnecessary loops, memory leak risks)
 3. Maintainability (naming, complexity, duplicate code)

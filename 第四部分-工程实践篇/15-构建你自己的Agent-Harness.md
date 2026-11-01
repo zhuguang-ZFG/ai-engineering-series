@@ -703,7 +703,7 @@ export class HookRunner {
 }
 ```
 
-**钩子系统的扩展考虑：** 生产环境的钩子系统需要关注以下方面：
+**钩子系统的扩展考虑：** 真要上生产，钩子系统还得把下面这几件事管住：
 
 1. **超时管理**：Shell 命令的执行时间不可控。Claude Code 设置了 10 秒超时，超时的钩子被视为错误而非阻塞，这确保了一个慢钩子不会卡住整个对话循环。
 
@@ -986,7 +986,7 @@ flowchart TD
 
 ### 安全审计
 
-Agent Harness 的安全边界比传统应用更复杂，因为 LLM 的输出是不可预测的。Claude Code 在安全方面采取了多层防御：
+Agent Harness 的安全边界比传统应用更复杂，因为 LLM 的输出是不可预测的。Claude Code 的应对是把防御叠了好几层：
 
 1. **工具权限分级：** 每个工具声明 `isReadOnly`、`isDestructive`、`isConcurrencySafe`，系统根据这些标记决定审批流程
 2. **工作区信任检查：** `shouldSkipHookDueToTrust()` 确保钩子不会在不受信任的工作区执行

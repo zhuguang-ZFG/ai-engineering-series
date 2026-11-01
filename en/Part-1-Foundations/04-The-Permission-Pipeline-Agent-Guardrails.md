@@ -398,7 +398,7 @@ Permission updates are expressed through the `PermissionUpdate` union type, supp
 
 Each operation specifies the configuration source to which the update should be applied: global user settings, project-level settings, local (not committed to version control) settings, current session only, or command-line arguments.
 
-The combination of six operations and five configuration sources yields 30 possible update operations. This fine-grained control allows users to manage permissions at different levels -- for example, allowing all `git` commands in global user settings while denying `git push --force` in a specific project's local settings.
+The combination of six operations and five configuration sources yields 30 possible update operations. With control this fine, users can scope permissions source by source -- for example, allowing all `git` commands in global user settings while denying `git push --force` in a specific project's local settings.
 
 ### 4.5.2 applyPermissionUpdates and persistPermissionUpdates
 
