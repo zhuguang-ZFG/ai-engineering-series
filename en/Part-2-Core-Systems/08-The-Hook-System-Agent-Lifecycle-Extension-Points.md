@@ -975,7 +975,7 @@ Below is an enterprise-level security audit configuration comprehensively using 
 }
 ```
 
-This configuration implements a complete security audit flow: recording environment info at session initialization, checking security before deletions, having the LLM review file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
+This one configuration produces a complete security audit flow: recording environment info at session initialization, checking security before deletions, having the LLM review file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
 
 ---
 

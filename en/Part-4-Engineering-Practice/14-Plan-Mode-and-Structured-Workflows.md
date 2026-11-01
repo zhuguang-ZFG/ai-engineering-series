@@ -214,7 +214,7 @@ After user approves plan, ExitPlanMode restores original mode, Agent enters exec
 
 Verification hooks must be registered after context clear because context clear removes all hooks. So the verification agent is an independent background Agent running in the phase after "clear context and start implementation", checking whether implementation results match the plan.
 
-**Design philosophy of verification agent.** Why do we need an independent verification agent instead of letting the execution agent check itself? This involves the cognitive bias of "self-review" -- executioners tend to judge their work using their own understanding rather than strictly comparing against the original plan text. The independent verification agent holds a snapshot of the original plan file, able to review implementation results from a "bystander" perspective.
+**Design philosophy of verification agent.** Why do we need an independent verification agent instead of letting the execution agent check itself? This involves the cognitive bias of "self-review" -- executioners tend to judge their work using their own understanding rather than strictly comparing against the original plan text. The independent verification agent holds a snapshot of the original plan file and can review the result from a "bystander" perspective.
 
 This is like code review in software engineering: having author review their own code is far less effective than having another engineer do it. Verification agent plays the role of this "other engineer".
 
@@ -457,7 +457,7 @@ Therefore, `durable` flag provides a "lightweight task" mechanism: tasks needing
 
 ### 14.4.2 CronScheduler: Scheduler Core
 
-`createCronScheduler` implements a complete scheduler, including following key features:
+`createCronScheduler` builds a full scheduler with these key features:
 
 **File lock**: `tryAcquireSchedulerLock` ensures multiple Claude sessions in the same project directory don't repeatedly trigger the same on-disk task. Non-owner sessions probe the lock every 5 seconds, taking over if the owner crashes.
 

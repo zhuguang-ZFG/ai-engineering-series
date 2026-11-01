@@ -112,7 +112,7 @@ Each of these issues constitutes an independent engineering challenge. The core 
 
 To use a more vivid analogy to summarize the difference between the two: a simple wrapper is like adding a remote control to a car -- you can make it go forward and backward, but there's no power steering, no braking system, no airbags. Agent Harness is designing an entire safe, reliable, and extensible autonomous vehicle -- not just an engine, but also a suspension system, a braking system, safety restraint systems, and a diagnostic system.
 
-Summarized in one sentence: **Agent Harness is a runtime framework built around an LLM that elevates the LLM from a text generator to an autonomous agent capable of interacting with the outside world safely, reliably, and efficiently.**
+Summarized in one sentence: **Agent Harness is a runtime framework built around an LLM that elevates the LLM from a text generator to an autonomous agent that can deal with the outside world safely, reliably, and efficiently.**
 
 > **Anti-Pattern Warning:** If you are building an Agent system and your core loop is just a simple `while (true) { callAPI(); parseResponse(); executeTool(); }` loop, you may be repeating the "simple wrapper" mistake. Stop and think: how does your system handle streaming output? How does it manage context? How does it recover from errors? If the answer to these questions is "haven't figured that out yet," then you need an Agent Harness.
 
@@ -240,7 +240,7 @@ This "one core, multiple entry points" design pattern is very valuable in engine
 
 #### Async Generator Dialog Main Loop
 
-This is one of Claude Code's core modules. The dialog main loop is an `AsyncGenerator` that implements an iterative dialog process, delegating to the internal loop function via `yield*`. In each iteration, the loop runs these steps:
+This is one of Claude Code's core modules. The dialog main loop is an `AsyncGenerator` that runs the dialog as a repeating loop, delegating to the internal loop function via `yield*`. In each iteration, the loop runs these steps:
 
 1. Constructs the API request (system prompt + message history + tool definitions)
 2. Calls the LLM API and receives streaming responses
@@ -318,7 +318,7 @@ Traditional LLM calls typically use a request-response pattern: send a prompt, w
 
 By this design, Claude Code's dialog loop is an "event stream" rather than a "request-response pair." Upper-layer code only needs a `for await...of` loop to consume all events from the entire dialog process.
 
-**What if we didn't design it this way?** If we used a callback pattern, every new event type would require registering a new callback function. As event types increase, the code would become an unmaintainable "callback hell." If we used Promise chains, although callback hell is solved, the ability to cancel mid-stream is lost -- when the user presses Ctrl+C, the ongoing API call does not stop cleanly. If we used EventEmitter, although cancellation is solved, it introduces memory leak risks (forgetting to remove listeners) and type safety issues (event names are strings).
+**What if we didn't design it this way?** If we used a callback pattern, every new event type would require registering a new callback function. As event types increase, the code would become an unmaintainable "callback hell." If we used Promise chains, although callback hell is solved, the option to cancel mid-stream disappears -- when the user presses Ctrl+C, the ongoing API call does not stop cleanly. If we used EventEmitter, although cancellation is solved, it introduces memory leak risks (forgetting to remove listeners) and type safety issues (event names are strings).
 
 AsyncGenerator is the only solution that simultaneously satisfies all three requirements: "streaming output," "cancellable," and "type-safe."
 

@@ -322,7 +322,7 @@ The key point is that the placeholder results are shared across all Fork sub-age
 
 ### Recursive Fork Protection
 
-Fork sub-agents retain the Agent tool to maintain cache-consistent tool definitions, so recursive Forking must be prevented. The system implements a dual detection strategy:
+Fork sub-agents retain the Agent tool to maintain cache-consistent tool definitions, so recursive Forking must be prevented. The system guards against it twice:
 
 1. **querySource check** (primary defense): Set on context options, unaffected by automatic compression. This is a runtime marker set in the Fork sub-agent's context, identifying "I was forked." Since it is not part of the conversation history, it won't be cleared by the context compression mechanism, ensuring reliable recursion prevention even in long conversations.
 

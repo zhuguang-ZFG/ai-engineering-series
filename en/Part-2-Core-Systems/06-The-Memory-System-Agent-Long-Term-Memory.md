@@ -4,7 +4,7 @@
 
 ---
 
-Humans can maintain coherence across multiple conversations because we have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices have been validated. Claude Code's memory system (memdir) was built for exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
+Humans stay coherent across conversations because they have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices have been validated. Claude Code's memory system (memdir) was built for exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
 
 Comparing the memory system to "long-term memory" is a biologically precise analogy. Human memory is divided into sensory memory (milliseconds), working memory (seconds, corresponding to the context management in Chapter 7), and long-term memory (minutes to years, corresponding to the memory system in this chapter). Claude Code's design follows this same layering: the context window is "working memory," temporarily holding information within a single session; while memdir is "long-term memory," persistently storing non-derivable critical knowledge across sessions.
 
@@ -225,7 +225,7 @@ This is an architectural choice worth analyzing. Using a file system instead of 
 4. **Debuggability**: When problems occur, simply `ls` and `cat` to diagnose
 5. **Cost**: No need to maintain database connections, indexes, or backups
 
-The downside is limited query capability -- it cannot run complex relational queries or full-text searches. However, for the Agent's memory scenario, the query pattern is a simple "load all relevant memories" rather than complex relational queries, and the file system's capabilities are sufficient.
+The downside is what you can ask of it -- no complex relational queries, no full-text search. However, for the Agent's memory scenario, the query pattern is a simple "load all relevant memories" rather than complex relational queries, and the file system's capabilities are sufficient.
 
 ### 6.2.2 MEMORY.md Index File
 
@@ -239,7 +239,7 @@ The format for index entries requires one line per entry, no more than 150 chara
 - [Title](file.md) -- One-line hook description
 ```
 
-The `truncateEntrypointContent` function implements dual capacity protection: first truncation by lines (200-line limit), then truncation by bytes (25KB limit). When limits are exceeded, a warning is appended to the end of the file indicating which limit was triggered.
+The `truncateEntrypointContent` function sets two capacity gates: first truncation by lines (200-line limit), then truncation by bytes (25KB limit). When limits are exceeded, a warning is appended to the end of the file indicating which limit was triggered.
 
 **The Design Wisdom of Dual Capacity Protection**
 

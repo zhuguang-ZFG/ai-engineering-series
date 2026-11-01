@@ -146,9 +146,9 @@ flowchart TD
 
 **Capability Layer**
 - Contains all tool implementations, the sub-agent system, and the skill system
-- Each tool is an independent capability unit that interfaces with the Orchestration Layer through a unified tool interface
+- Each tool brings its own capability and meets the Orchestration Layer through a unified tool interface
 - The sub-agent system nests agents by recursively calling the Orchestration Layer's conversation main loop
-- The skill system serves as a higher-level capability extension mechanism, combining multiple tools to form domain-specific capability packages
+- The skill system reaches one level higher, combining multiple tools into domain-specific capability packages
 - Dependency direction: depends on the Infrastructure Layer below
 
 **Infrastructure Layer**

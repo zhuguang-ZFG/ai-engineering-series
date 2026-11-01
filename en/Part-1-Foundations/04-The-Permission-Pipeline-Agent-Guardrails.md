@@ -257,7 +257,7 @@ The `auto` mode hands approval to an AI classifier (referred to as the "YOLO cla
 
 Auto mode's core challenge is weighing "automation efficiency" against "security." Pure automatic approval is too dangerous, and pure per-use confirmation is too slow. The AI classifier is a compromise between the two -- it uses another AI to judge whether the current AI's operation is safe, implementing an "AI supervising AI" architecture.
 
-Auto mode implements multiple layers of optimization to reduce the classifier's API call overhead:
+Auto mode stacks several optimizations to cut the classifier's API call overhead:
 
 1. **acceptEdits fast path:** Before calling the classifier, the system first checks under acceptEdits mode whether the tool would be permitted. If it passes under acceptEdits mode, it is approved directly without needing to call the classifier. This is a "short-circuit optimization" -- if it's known to be safe, there's no need to waste an API call.
 
@@ -370,7 +370,7 @@ flowchart LR
     class exact,prefix,wildcard match
 ```
 
-The wildcard matching engine implements full pattern matching, handles escape sequences, converts the `*` wildcard to regular expressions, and supports escaped `\*` and `\\`.
+The wildcard matching engine does pattern matching in full: it handles escape sequences, converts the `*` wildcard to regular expressions, and supports escaped `\*` and `\\`.
 
 One detail: when a pattern ends with ` *` (space plus wildcard) and this is the only wildcard, the trailing space and arguments become optional. The rule `git *` therefore matches both `git add .` and the bare `git` command -- maintaining semantic consistency with the `git:*` prefix. This "equivalent syntax" design reduces users' cognitive burden -- you don't need to remember two different syntax rules; `git:*` and `git *` do the same thing.
 
@@ -557,4 +557,4 @@ For each scenario, draw the decision path through the four stages of the permiss
 
 8. **Key to Enterprise Security:** In team environments, through the combined configuration of project-level `settings.json` (shared) and local `settings.local.json` (personal), together with the deny-priority rule system, you can build security policies covering everything from individual development to team collaboration.
 
-In Part 2 of this book, we will deeply analyze Claude Code's core subsystems, including the compression strategies of context management, the implementation details of cache-aware design, and the error recovery mechanisms of the streaming architecture. These subsystems together form the engineering infrastructure of the Agent Harness, and understanding their design will help you move from "understanding the architecture" to "being able to build."
+In Part 2 of this book, we will deeply analyze Claude Code's core subsystems, including the compression strategies of context management, the implementation details of cache-aware design, and the error recovery mechanisms of the streaming architecture. These subsystems together form the engineering infrastructure of the Agent Harness, and understanding their design will take you from "I understand the architecture" to "I can build one."

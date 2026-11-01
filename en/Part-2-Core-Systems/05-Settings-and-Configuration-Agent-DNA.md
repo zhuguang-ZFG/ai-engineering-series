@@ -410,7 +410,7 @@ State management is the "nervous system" of an Agent system -- configuration is 
 
 ### 5.4.1 Store: A Minimalist Immutable State Container
 
-The state management module implements a generic Store in just 34 lines, inspired by Zustand. The Store provides three core methods: `getState` retrieves the current state, `setState` updates state through an updater function, and `subscribe` subscribes to state changes.
+The heart of the state management module is a generic Store in just 34 lines, inspired by Zustand. The Store provides three core methods: `getState` retrieves the current state, `setState` updates state through an updater function, and `subscribe` subscribes to state changes.
 
 Three key design decisions:
 
@@ -596,5 +596,5 @@ Specify what content should be placed in each configuration source and explain w
 3. **Security Boundaries**: `projectSettings` is excluded in all security-sensitive checks to prevent supply chain attacks from malicious repositories. This is a direct manifestation of the "decreasing trust radius" principle.
 4. **Special Merge for the Policy Layer**: policySettings uses "first non-empty source wins" instead of deep merge, ensuring the determinism and auditability of enterprise policies.
 5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs to be dynamically adjusted after release.
-6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code implement all necessary state management capabilities.
+6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code cover everything state management needs.
 7. **DeepImmutable Types**: Makes the type system refuse direct state modification, keeping the right thing easy and the wrong thing impossible.

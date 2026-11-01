@@ -25,7 +25,7 @@ Claude Code uses a precise formula to characterize the space truly available for
 Effective Window = Model Window - Reserved Output Tokens
 ```
 
-In the auto-compaction module, the `getEffectiveContextWindowSize` function implements the calculation of the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
+In the auto-compaction module, the `getEffectiveContextWindowSize` function works out the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
 
 > **Why reserve 20,000 tokens?** Because AutoCompact (Level 4 compression) needs to call the LLM to generate a summary, and the summary itself consumes output tokens. If no space is reserved, the compression operation itself may fail due to insufficient output space -- a classic "compression paradox."
 

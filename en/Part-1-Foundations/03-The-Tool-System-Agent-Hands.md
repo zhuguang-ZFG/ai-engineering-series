@@ -385,7 +385,7 @@ Key design decisions of StreamingToolExecutor:
 
 Returning to the dialog main loop, tool execution state is tightly integrated with the dialog loop state:
 
-1. **Streaming execution path**: When the streaming tool execution feature is enabled, a StreamingToolExecutor is created. While receiving tool call blocks in the stream, tools are immediately added to the execution queue, and the system checks whether any completed results can be immediately yielded. This implements a "receive-while-executing" pipeline pattern.
+1. **Streaming execution path**: When the streaming tool execution feature is enabled, a StreamingToolExecutor is created. While receiving tool call blocks in the stream, tools are immediately added to the execution queue, and the system checks whether any completed results can be immediately yielded. This is a "receive-while-executing" pipeline.
 
 2. **Batch execution path**: When streaming execution is unavailable, the traditional batch execution function is used to execute all tools after the model's response has fully completed. This is the fallback for streaming execution, ensuring the system can still work normally when streaming functionality is disabled or encounters errors.
 
@@ -456,4 +456,4 @@ Record the input token count difference in both cases, and calculate how many to
 
 5. **Tool system extensibility comes from the type contract**: The generic design of `Tool<Input, Output, Progress>` gives each tool its own type space, while `ToolUseContext` provides a unified execution environment. Adding new tools requires no modifications to the orchestration engine's code -- the "progressive capability extension" principle from Chapter 1 pays off right here.
 
-In the next chapter, we will dive into the Agent's safety guardrails -- the permission pipeline. The tool system gives the Agent the ability to act; the permission pipeline defines where those actions stop. Understanding the design of the permission pipeline, you will see how Claude Code walks the line between "autonomous execution" and "safety assurance."
+In the next chapter, we will dive into the Agent's safety guardrails -- the permission pipeline. The tool system lets the Agent act; the permission pipeline defines where those actions stop. Understanding the design of the permission pipeline, you will see how Claude Code walks the line between "autonomous execution" and "safety assurance."

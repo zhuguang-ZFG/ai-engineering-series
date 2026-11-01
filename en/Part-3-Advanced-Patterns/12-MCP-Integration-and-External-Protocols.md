@@ -282,7 +282,7 @@ sequenceDiagram
 
 ## 12.2 MCP Tool Integration
 
-MCP tool integration is the process of seamlessly incorporating external server capabilities into Claude Code's internal tool system. This process involves three key stages: Discovery, Mapping, and Registration. Understanding this pipeline is understanding how MCP transforms "external tools" into "internal capabilities."
+MCP tool integration is the process of wiring external servers' tools seamlessly into Claude Code's internal tool system. This process involves three key stages: Discovery, Mapping, and Registration. Understanding this pipeline is understanding how MCP transforms "external tools" into "internal capabilities."
 
 ```mermaid
 flowchart LR
@@ -671,7 +671,7 @@ The allowlist check occurs during the tool discovery stage — after Claude Code
 
 ## 12.4 IDE Integration: The Bridge System
 
-The Bridge system is the core layer for bidirectional communication between Claude Code and the external world. It implements integration with IDEs like VS Code and JetBrains, as well as Claude.ai platform remote control functionality. If the MCP protocol is the "dialect" between Claude Code and tool servers, then the Bridge system is the "lingua franca" between Claude Code and the entire external world.
+The Bridge system is the core layer for bidirectional communication between Claude Code and the external world. It connects to IDEs like VS Code and JetBrains, and to Claude.ai's remote control. If the MCP protocol is the "dialect" between Claude Code and tool servers, then the Bridge system is the "lingua franca" between Claude Code and the entire external world.
 
 > **Analogy:** Think of Bridge as the dispatch system of a multilingual translation center. The translation center (Bridge) simultaneously handles calls from different countries (IDE, claude.ai, remote terminals), needs to select the correct translation protocol for each line (v1/v2 transport), ensures messages don't cross lines (deduplication), and controls who can call in (permission gating).
 
@@ -769,7 +769,7 @@ Outbound messages are relatively simple — they are unidirectional pushes that 
 
 User messages, permission responses, control requests, and other data from IDEs or claude.ai arrive at the CLI through the transport layer. Processing inbound messages is much more complex because they may change CLI state, requiring strict filtering and validation.
 
-The core message routing logic implements triple filtering:
+The core message routing logic filters in three passes:
 
 ```mermaid
 flowchart TD
@@ -812,7 +812,7 @@ Why use a ring buffer instead of a simple Set? Consider a long-running session t
 
 ### 12.4.3 Control Protocol
 
-Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function implements a lightweight Remote Procedure Call (RPC) protocol supporting the following control subtypes:
+Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function is itself a lightweight Remote Procedure Call (RPC) protocol supporting the following control subtypes:
 
 | Subtype | Purpose | Request Parameters | Response |
 |--------|------|---------|------|
@@ -994,7 +994,7 @@ flowchart LR
 
 ### 12.4.5 VS Code and JetBrains Extension Integration
 
-IDE extensions communicate with the Claude CLI through `sse-ide` and `ws-ide` type MCP servers. These are internal-only types that add IDE identification information (such as IDE name, whether running on Windows) on top of the standard SSE/WebSocket protocols. This "protocol variant" design lets the Bridge system provide differentiated services based on client type.
+IDE extensions communicate with the Claude CLI through `sse-ide` and `ws-ide` type MCP servers. These are internal-only types that add IDE identification information (such as IDE name, whether running on Windows) on top of the standard SSE/WebSocket protocols. This "protocol variant" design lets the Bridge system serve each client type differently.
 
 **Integration Flow Details**
 

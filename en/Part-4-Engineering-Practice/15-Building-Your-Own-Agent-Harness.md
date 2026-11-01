@@ -1238,7 +1238,7 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 
 ## Key Takeaways
 
-1. **Loop state pattern:** Using `while(true)` + `State` object + `continue` to manage loop state is easier to debug and maintain than recursive calls. Claude Code's core query function implements this pattern in roughly 1700 lines of code, handling over ten state transition paths. Three reasons loops beat recursion: state recovery is more natural, abort is more controllable, and debugging is more intuitive.
+1. **Loop state pattern:** Using `while(true)` + `State` object + `continue` to manage loop state is easier to debug and maintain than recursive calls. Claude Code's core query function is this pattern written out in roughly 1700 lines of code, handling over ten state transition paths. Three reasons loops beat recursion: state recovery is more natural, abort is more controllable, and debugging is more intuitive.
 
 2. **Factory function + fail-closed defaults:** The `buildTool` pattern keeps tool definitions concise; defaults choose the most conservative strategy (unsafe, has side effects, requires confirmation), and tools explicitly override to declare safety. This fail-closed strategy ensures new tools don't produce dangerous behavior before passing security review.
 
@@ -1264,4 +1264,4 @@ Agent Harness represents a new software paradigm -- not the programmer telling t
 
 Looking back across the entire book, we see a clear design philosophy: **at every decision point, Claude Code chose the safer, more controllable, more observable option.** Loops over recursion (easier to debug), fail-closed defaults (safer), progressive compression (more controllable), circuit breaker protection (more robust). These choices may individually seem conservative, but together they constitute a system that can be trusted in production environments.
 
-Future software developers need to master two abilities simultaneously: traditional deterministic programming, and this new "meta-programming" -- building Harnesses for AI agents. We hope this book provides a solid starting point for your exploration on this path. Remember, the best Harness doesn't limit the agent's capabilities -- it maximizes the agent's potential while ensuring safety.
+Future software developers need two kinds of skill at once: traditional deterministic programming, and this new "meta-programming" -- building Harnesses for AI agents. We hope this book provides a solid starting point for your exploration on this path. Remember, the best Harness doesn't limit the agent's capabilities -- it maximizes the agent's potential while ensuring safety.

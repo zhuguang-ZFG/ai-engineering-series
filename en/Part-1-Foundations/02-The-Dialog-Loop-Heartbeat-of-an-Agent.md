@@ -442,4 +442,4 @@ Send Claude Code a series of requests that require substantial context (such as 
 
 5. **Termination is not failure, it is design**: Ten termination reasons each have their trigger conditions and cleanup logic. Understanding these termination paths is key to understanding the entire loop's robustness. In production-grade Agent systems, incorrect termination handling is more dangerous than incorrect normal flow -- because it can lead to resource leaks, state inconsistency, or user data loss.
 
-In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent evolved from "only being able to talk" to "being able to do things."
+In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent stopped being only a voice and started getting things done.

@@ -282,7 +282,7 @@ sequenceDiagram
 
 ## 12.2 MCP 工具集成
 
-MCP 工具集成是将外部服务器的能力无缝融入 Claude Code 内部工具系统的过程。这一过程涉及三个关键阶段：工具发现（Discovery）、工具映射（Mapping）和工具注册（Registration）。理解这个链路，就理解了 MCP 如何将"外部工具"变成"内部能力"。
+MCP 工具集成，是把外部服务器上的工具无缝接进 Claude Code 内部工具系统的过程。这一过程涉及三个关键阶段：工具发现（Discovery）、工具映射（Mapping）和工具注册（Registration）。理解这个链路，就理解了 MCP 如何将"外部工具"变成"内部能力"。
 
 ```mermaid
 flowchart LR
@@ -671,7 +671,7 @@ flowchart TD
 
 ## 12.4 IDE 集成：Bridge 系统
 
-Bridge 系统是 Claude Code 与外部世界双向通信的核心层。它实现了与 VS Code、JetBrains 等 IDE 的集成，以及 Claude.ai 平台的远程控制功能。如果 MCP 协议是 Claude Code 与工具服务器之间的"方言"，那么 Bridge 系统就是 Claude Code 与整个外部世界之间的"通用语言"。
+Bridge 系统是 Claude Code 与外部世界双向通信的核心层。它对接了 VS Code、JetBrains 等 IDE，也接上了 Claude.ai 平台的远程控制功能。如果 MCP 协议是 Claude Code 与工具服务器之间的"方言"，那么 Bridge 系统就是 Claude Code 与整个外部世界之间的"通用语言"。
 
 > **类比理解：** 把 Bridge 想象成一个多语言翻译中心的调度系统。翻译中心（Bridge）同时处理来自不同国家的电话（IDE、claude.ai、远程终端），需要为每条线路选择正确的翻译协议（v1/v2 传输），确保消息不会串线（去重），并控制谁可以打入电话（权限门控）。
 
@@ -769,7 +769,7 @@ CLI 中的对话消息、工具调用结果、状态更新等通过传输层发�
 
 来自 IDE 或 claude.ai 的用户消息、权限响应、控制请求等通过传输层到达 CLI。入站消息的处理要复杂得多，因为它们可能改变 CLI 的状态，需要严格的过滤和验证。
 
-消息路由的核心逻辑实现了三重过滤：
+消息路由的核心逻辑是三重过滤：
 
 ```mermaid
 flowchart TD
@@ -812,7 +812,7 @@ flowchart TD
 
 ### 12.4.3 控制协议
 
-服务器可以发送控制请求来远程管理 CLI 会话。`handleServerControlRequest` 函数实现了一个轻量级的远程过程调用（RPC）协议，支持以下控制子类型：
+服务器可以发送控制请求来远程管理 CLI 会话。`handleServerControlRequest` 函数本身就是个轻量级的远程过程调用（RPC）协议，支持以下控制子类型：
 
 | 子类型 | 用途 | 请求参数 | 响应 |
 |--------|------|---------|------|
@@ -838,7 +838,7 @@ flowchart TD
 
 这是一个关键的安全边界。outbound-only 模式意味着 CLI 只向外部推送信息，不接受外部的控制命令。这对于 claude.ai 集成特别重要——用户可能只是想查看对话历史，而不希望网页端能够远程控制他们的 CLI 会话（比如切换模型或中断执行）。
 
-为什么 `initialize` 在 outbound-only 模式下仍然被允许？因为 initialize 是一个只读操作——它不改变 CLI 的任何状态，只是返回当前的能力信息。禁止 initialize 会导致外部客户端无法了解 CLI 的能力，从而无法正确显示对话内容。
+为什么 `initialize` 在 outbound-only 模式下仍然被允许？因为 initialize 是一个只读操作——它不改变 CLI 的任何状态，只是报出 CLI 现在都支持些什么。禁止 initialize，外部客户端就摸不着 CLI 的底细，也就无法正确显示对话内容。
 
 ```mermaid
 flowchart TD
@@ -994,7 +994,7 @@ flowchart LR
 
 ### 12.4.5 VS Code 和 JetBrains 扩展集成
 
-IDE 扩展通过 `sse-ide` 和 `ws-ide` 类型的 MCP 服务器与 Claude CLI 通信。这些是内部专用类型，在标准 SSE/WebSocket 协议基础上增加了 IDE 标识信息（如 IDE 名称、是否在 Windows 上运行）。这种"协议变体"的设计让 Bridge 系统能够根据客户端类型提供差异化的服务。
+IDE 扩展通过 `sse-ide` 和 `ws-ide` 类型的 MCP 服务器与 Claude CLI 通信。这些是内部专用类型，在标准 SSE/WebSocket 协议基础上增加了 IDE 标识信息（如 IDE 名称、是否在 Windows 上运行）。这种"协议变体"的设计让 Bridge 系统能对不同客户端给出不同的服务。
 
 **集成流程详解**
 

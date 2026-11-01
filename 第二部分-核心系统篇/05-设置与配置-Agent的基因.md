@@ -410,7 +410,7 @@ flowchart TD
 
 ### 5.4.1 Store：极简不可变状态容器
 
-状态管理模块实现了一个只有 34 行的泛型 Store，其设计灵感来自 Zustand。Store 提供三个核心方法：`getState` 获取当前状态、`setState` 通过 updater 函数更新状态、`subscribe` 订阅状态变化。
+状态管理模块的核心是一个只有 34 行的泛型 Store，其设计灵感来自 Zustand。Store 提供三个核心方法：`getState` 获取当前状态、`setState` 通过 updater 函数更新状态、`subscribe` 订阅状态变化。
 
 三个关键设计决策：
 
@@ -596,5 +596,5 @@ const setState = useSetAppState();
 3. **安全边界**：`projectSettings` 在所有安全敏感检查中被排除，防止恶意仓库的供应链攻击。这是"信任半径递减"原则的直接体现。
 4. **策略层的特殊合并**：policySettings 使用"首个非空源胜出"而非深度合并，确保企业策略的确定性和可审计性。
 5. **双重功能开关**：`feature()` 提供编译时死代码消除（零运行时开销），GrowthBook 提供运行时实验控制（灵活但依赖缓存）。两者的选择取决于功能是否需要在发布后动态调整。
-6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码实现了所有必要的状态管理能力。
+6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码就把状态管理该做的都做完了。
 7. **DeepImmutable 类型**：让类型系统拦住对状态的直接修改，让正确的事情容易，让错误的事情不可能。

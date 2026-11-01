@@ -662,7 +662,7 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 
 1. **QueryEngine is a stateful query lifecycle manager**, implementing streaming message passing through AsyncGenerator, one instance per session, state persisting across turns. The class design encapsulates state as instance properties, avoiding memory leaks and concurrent modification risks from global state.
 
-2. **StreamingToolExecutor implements "execute on arrival"**, concurrency-safe tools can run in parallel, non-safe tools execute serially, results buffered for ordered output. This design puts order ahead of latency -- better to wait for one serial tool than risk parallel execution of potentially conflicting operations.
+2. **StreamingToolExecutor delivers "execute on arrival"**, concurrency-safe tools can run in parallel, non-safe tools execute serially, results buffered for ordered output. This design puts order ahead of latency -- better to wait for one serial tool than risk parallel execution of potentially conflicting operations.
 
 3. **The core idea of startup performance optimization is parallelization**: Let I/O-intensive operations (MDM read, keychain read) execute in parallel with CPU-intensive operations (module evaluation). The illustrative critical-path calculation reduces 160ms to 65ms; actual startup gains require measurements with a specified machine, version, cache state, and endpoint.
 
