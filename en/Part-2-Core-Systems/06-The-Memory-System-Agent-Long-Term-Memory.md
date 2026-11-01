@@ -225,7 +225,7 @@ This is an architectural choice worth analyzing. Using a file system instead of 
 4. **Debuggability**: When problems occur, simply `ls` and `cat` to diagnose
 5. **Cost**: No need to maintain database connections, indexes, or backups
 
-The downside is limited query capability -- complex relational queries or full-text searches are not possible. However, for the Agent's memory scenario, the query pattern is a simple "load all relevant memories" rather than complex relational queries, and the file system's capabilities are sufficient.
+The downside is limited query capability -- it cannot run complex relational queries or full-text searches. However, for the Agent's memory scenario, the query pattern is a simple "load all relevant memories" rather than complex relational queries, and the file system's capabilities are sufficient.
 
 ### 6.2.2 MEMORY.md Index File
 

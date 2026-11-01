@@ -412,7 +412,7 @@ flowchart TD
 - **setAppState**: Default no-op, unless explicitly chosen to share (`shareSetAppState`).
 - **UI callbacks** (addNotification, setToolJSX, etc.): All undefined, sub-agent cannot control parent UI.
 
-**Why can't sub-agents control parent UI?** This is a critical safety design. If sub-agents could pop notifications or modify UI, users might be overwhelmed by notifications from multiple sub-agents, unable to distinguish main Agent from sub-Agent output. More seriously, malicious tool output (via prompt injection) could exploit sub-agent UI capabilities for phishing attacks -- for example, popping a seemingly legitimate confirmation dialog.
+**Why can't sub-agents control parent UI?** This is a critical safety design. If sub-agents could pop notifications or modify UI, users might be overwhelmed by notifications from multiple sub-agents, unable to distinguish main Agent from sub-Agent output. More seriously, malicious tool output (via prompt injection) could exploit sub-agent UI capabilities to phish -- for example, popping a seemingly legitimate confirmation dialog.
 
 Fork Agent's state isolation strategy can be compared to a "sandbox": sub-agent runs in sandbox, can see outside world (through cloned file state), but cannot affect outside world (cannot modify parent Agent state, cannot control UI). The only communication channel with outside world is tool results -- sub-agent's execution results return to parent Agent through structured `tool_result` messages.
 

@@ -588,7 +588,7 @@ export class ContextManager {
 +----------+----------+-----------+---------------------------+
 ```
 
-Key insight: **Information loss is relative.** Message-level Snip discards historical messages; MicroCompact replaces tool-result bodies while retaining their message structure. Summary compression preserves semantic information but loses original phrasing. Which strategy to choose depends on what information matters most in the conversation -- if the user is debugging a complex bug, tool results (such as log output) may be the least expendable; if the user is performing a code refactoring, the overall design decisions matter more than intermediate steps.
+Key insight: **Information loss is relative.** Message-level Snip discards historical messages; MicroCompact replaces tool-result bodies while retaining their message structure. Summary compression preserves semantic information but loses original phrasing. Which strategy to choose depends on what information matters most in the conversation -- if the user is debugging a complex bug, tool results (such as log output) may be the least expendable; if the user is refactoring code, the overall design decisions matter more than intermediate steps.
 
 > **Cross-reference:** Claude Code's four-tier compression strategy is fully analyzed in Chapter 7, "Context Management -- Agent Working Memory." The two-tier strategy in this chapter is a simplified version.
 

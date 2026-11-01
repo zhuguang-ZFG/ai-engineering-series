@@ -330,7 +330,7 @@ The Coordinator system prompt defines four phases of the standard task workflow:
 |-------|----------|---------|---------------|
 | Research | Workers (parallel) | Investigate the codebase, discover files, understand the problem | Scratchpad analysis documents |
 | Synthesis | Coordinator | Read findings, understand the problem, write implementation spec | Implementation specification document |
-| Implementation | Workers | Make precise modifications according to the spec | Code changes |
+| Implementation | Workers | Make precise edits per the spec | Code changes |
 | Verification | Workers | Test whether modifications are correct | Test results and issue list |
 
 ```mermaid
@@ -572,7 +572,7 @@ flowchart TD
 
 When a research-phase worker only completes a partial investigation (e.g., analyzed the API layer but not the database layer), the coordinator faces a choice: proceed with available information, or wait for a complete analysis.
 
-The guiding principle in the system prompt is: **the coordinator should make full use of completed work rather than waiting for perfect information**. If Worker A completed 80% of the code investigation, the coordinator should write the implementation spec based on that 80% of the information, flagging uncertain portions in the spec so the implementation worker can conduct a supplementary investigation when encountering uncovered areas.
+The guiding principle in the system prompt is: **the coordinator should make full use of completed work rather than waiting for perfect information**. If Worker A completed 80% of the code investigation, the coordinator should write the implementation spec based on that 80% of the information, flagging uncertain portions in the spec so the implementation worker can investigate the gaps itself when it encounters uncovered areas.
 
 > **Best Practice: Use "Confidence Annotations" in the Scratchpad**
 >
@@ -637,7 +637,7 @@ Suppose you have a large-scale refactoring task: splitting a monolithic Express.
 3. **Implementation Phase**: How to allocate workers to avoid file conflicts
    - Hint: Allocate by service boundary; files for the same service should be handled by the same worker
 4. **Verification Phase**: What is the verification strategy?
-   - Hint: Each microservice is verified independently, followed by integration testing
+   - Hint: verify each microservice independently, then run integration tests
 
 **Exercise 2: Analyze Scratchpad Security Boundaries**
 

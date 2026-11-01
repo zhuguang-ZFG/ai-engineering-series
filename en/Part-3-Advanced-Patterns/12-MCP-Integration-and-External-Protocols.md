@@ -324,7 +324,7 @@ After an MCP server successfully connects (entering the Connected state), Claude
 
 The core tool mapping logic includes several key steps:
 
-1. **Unicode Sanitization**: The returned tool list undergoes Unicode sanitization, removing control characters and illegal characters. This step may seem simple, but it's a classic example of defensive programming — you should never trust any external input, including characters in tool names.
+1. **Unicode Sanitization**: the returned tool list is scrubbed of control characters and illegal characters. This step may seem simple, but it's a classic example of defensive programming — you should never trust any external input, including characters in tool names.
 
 2. **Prefix Decision**: Based on configuration, the system decides whether to add a server name prefix to tool names. In most modes, the prefix is mandatory (ensuring tool names don't conflict across servers); but in SDK mode, when the environment variable `CLAUDE_AGENT_SDK_MCP_NO_PREFIX` is set, tools are registered with their original names, allowing MCP tools to override built-in tools by name.
 
@@ -345,7 +345,7 @@ After each MCP tool is mapped to a Claude Code internal `Tool` object, it contai
 
 The three "Hint" mappings in the table above deserve special attention. The MCP protocol defines tool behavioral annotations (such as `readOnlyHint`, `destructiveHint`), while Claude Code's tool system has its own semantic model (such as `isConcurrencySafe()`, `isDestructive()`). The mapping between these two semantic systems is not 1:1 — MCP's annotations are "suggestive" (hint), while Claude Code's methods are "decisive" (decision).
 
-The key to this bridging design is that it allows MCP servers to describe their tool behavior in standardized language, while Claude Code can make final decisions based on its own security policies. If an MCP server's annotations are inaccurate (for example, a tool marked `readOnlyHint` that actually modifies data), Claude Code's permission pipeline will still perform a secondary check at runtime.
+The key to this bridging design is that it allows MCP servers to describe their tool behavior in standardized language, while Claude Code can make final decisions based on its own security policies. If an MCP server's annotations are inaccurate (for example, a tool marked `readOnlyHint` that actually modifies data), Claude Code's permission pipeline will still double-check at runtime.
 
 > **Cross-reference:** The concurrency safety (`isConcurrencySafe()`) here directly affects the concurrency partitioning strategy described in Chapter 3. MCP tools marked as concurrency-safe can execute in parallel with other safe tools, while unsafe tools must wait serially.
 
@@ -533,7 +533,7 @@ Enterprise administrators can control which MCP servers are allowed through `all
 
 **Why an Approval Mechanism?**
 
-In enterprise environments, MCP servers can pose serious security risks: a malicious MCP server could execute arbitrary code during tool invocations, steal sensitive data, or even inject malicious instructions through tool input parameters. The approval mechanism lets enterprise administrators intercept servers before connections are established, shifting the security line forward to the "prevention" phase rather than the "detection" phase.
+In enterprise environments, MCP servers can pose serious security risks: a malicious MCP server could execute arbitrary code during tool invocations, steal sensitive data, or even inject malicious instructions through tool input parameters. The approval mechanism lets enterprise administrators intercept a server before it even connects, shifting the security line forward to the "prevention" phase rather than the "detection" phase.
 
 **Denylist: Absolute Priority**
 

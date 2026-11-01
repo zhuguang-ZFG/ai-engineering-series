@@ -355,7 +355,7 @@ Zod schema construction costs are often underestimated. A moderately complex sch
 
 ### 13.3.4 Startup Optimization Checklist
 
-If you're building your own CLI Agent tool, the following checklist can help you systematically perform startup optimization:
+If you're building your own CLI Agent tool, the following checklist can help you optimize startup systematically:
 
 - [ ] **Identify critical path**: Use `console.time` or profiling tools to measure each initialization step's duration
 - [ ] **Parallelize I/O operations**: File reads, network requests, process spawns should all parallelize with module loading

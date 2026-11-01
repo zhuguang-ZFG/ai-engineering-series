@@ -658,7 +658,7 @@ flowchart TD
 
 钩子配置由 Zod Schema 严格把关。钩子 Schema 模块定义了完整的类型系统：
 
-- `HookCommandSchema`：四种可持久化钩子的 discriminated union——通过 `type` 字段（`command`、`prompt`、`agent`、`http`）进行类型判别
+- `HookCommandSchema`：四种可持久化钩子的 discriminated union——靠 `type` 字段（`command`、`prompt`、`agent`、`http`）判别类型
 - `HookMatcherSchema`：匹配器配置，包含 `matcher` 字符串模式和 `hooks` 数组
 - `HooksSchema`：顶层配置，使用 `partialRecord` 映射事件到匹配器数组
 
@@ -975,7 +975,7 @@ Command 钩子有默认超时，但如果不显式设置，可能会因为脚本
 }
 ```
 
-这个配置实现了一个完整的安全审计流程：会话初始化时记录环境信息，删除操作前进行安全验证，文件写入时通过 LLM 审查内容，Bash 操作后异步上报审计日志，响应结束时检查任务完整性，会话结束时生成摘要报告。
+这个配置实现了一个完整的安全审计流程：会话初始化时记录环境信息，删除操作前先过安全关，文件写入时请 LLM 审查内容，Bash 操作后异步上报审计日志，响应结束时检查任务完整性，会话结束时生成摘要报告。
 
 ---
 

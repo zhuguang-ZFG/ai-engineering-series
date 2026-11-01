@@ -295,7 +295,7 @@ flowchart TD
 
 **Fork 恢复**使用完全不同的策略。`copyPlanForFork` 为 fork 的会话生成一个新的 slug，并将原始计划文件复制到新路径。这种设计防止了原始会话和 fork 会话互相覆盖对方的计划文件。
 
-为什么 fork 不能直接共享原始计划文件？因为 fork 之后，两个会话可能走上完全不同的执行路径。如果 fork 对计划进行了修改（如根据实施反馈调整方案），直接修改原始文件会影响父会话。通过复制文件到新路径，fork 拥有了独立的计划副本，互不干扰。
+为什么 fork 不能直接共享原始计划文件？因为 fork 之后，两个会话可能走上完全不同的执行路径。如果 fork 改了计划（如根据实施反馈调整方案），直接修改原始文件会影响父会话。通过复制文件到新路径，fork 拥有了独立的计划副本，互不干扰。
 
 > **交叉引用：** Fork Agent 的创建和状态隔离机制在第 9 章"子智能体与 Fork 模式"中有详细分析。计划文件的 fork 策略是 Agent 状态隔离的一个具体体现。
 
@@ -411,7 +411,7 @@ flowchart TD
 - **setAppState**：默认为 no-op，除非显式选择共享（`shareSetAppState`）。
 - **UI callbacks**（addNotification、setToolJSX 等）：全部为 undefined，子 Agent 不能控制父 UI。
 
-**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，用户可能会被来自多个子 Agent 的通知淹没，无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能利用子 Agent 的 UI 能力进行钓鱼攻击 -- 例如弹出一个看似合法的确认对话框。
+**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，用户可能会被来自多个子 Agent 的通知淹没，无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能利用子 Agent 的 UI 能力钓鱼 -- 例如弹出一个看似合法的确认对话框。
 
 Fork Agent 的状态隔离策略可以用"沙箱"来类比：子 Agent 在沙箱中运行，可以看到外部世界（通过克隆的文件状态），但不能影响外部世界（不能修改父 Agent 状态，不能控制 UI）。唯一与外部世界的通信通道是工具结果 -- 子 Agent 的执行结果通过结构化的 `tool_result` 消息返回给父 Agent。
 

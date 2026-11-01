@@ -237,7 +237,7 @@ flowchart LR
 
 The `default` mode is the most conservative. Aside from tools explicitly permitted by allow rules, every tool call requires user confirmation. This is the default experience when an ordinary user starts Claude Code. In the permission mode configuration, the default mode reflects its conservative tone, with no special UI marker, implying this is the "standard state."
 
-**Applicable scenario:** Daily interactive use. Developers want to confirm before the Agent performs any potentially risky operation, ensuring full control over the Agent's behavior.
+**Applicable scenario:** Daily interactive use. Developers want to confirm before the Agent does anything potentially risky, ensuring full control over the Agent's behavior.
 
 **User experience trade-off:** Safest but most tedious. For a large refactoring task, the Agent may need to perform dozens of file edits and command runs, and each confirmation interrupts the developer's train of thought.
 
@@ -253,7 +253,7 @@ In plan mode, write tools (Edit, Write) have their permission checks return `den
 
 ### 4.3.3 auto Mode: Automatic Approval (with Classifier)
 
-The `auto` mode hands approval to an AI classifier (referred to as the "YOLO classifier"). When the permission pipeline reaches the `ask` state and the mode is `auto`, the system invokes the classifier for AI judgment, formatting the tool name and input into a classifier-understandable format, and sending the conversation context and tool list for the classifier's reference.
+The `auto` mode hands approval to an AI classifier (referred to as the "YOLO classifier"). When the permission pipeline reaches the `ask` state and the mode is `auto`, the system invokes the classifier to judge, formatting the tool name and input into a classifier-understandable format, and sending the conversation context and tool list for the classifier's reference.
 
 The core challenge of auto mode is finding the balance between "automation efficiency" and "security." Pure automatic approval is too dangerous, and pure per-use confirmation is too slow. The AI classifier is a compromise between the two -- it uses another AI to judge whether the current AI's operation is safe, implementing an "AI supervising AI" architecture.
 

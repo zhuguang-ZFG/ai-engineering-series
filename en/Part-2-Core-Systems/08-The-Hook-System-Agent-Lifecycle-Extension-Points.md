@@ -658,7 +658,7 @@ flowchart TD
 
 Zod Schema strictly validates hook configuration. The hook Schema module defines the complete type system:
 
-- `HookCommandSchema`: Discriminated union of four persistable hooks -- type discrimination through `type` field (`command`, `prompt`, `agent`, `http`)
+- `HookCommandSchema`: Discriminated union of four persistable hooks -- the `type` field (`command`, `prompt`, `agent`, `http`) does the discriminating
 - `HookMatcherSchema`: Matcher configuration, containing `matcher` string pattern and `hooks` array
 - `HooksSchema`: Top-level configuration, mapping events to matcher arrays using `partialRecord`
 
@@ -975,7 +975,7 @@ Below is an enterprise-level security audit configuration comprehensively using 
 }
 ```
 
-This configuration implements a complete security audit flow: recording environment info at session initialization, security validation before delete operations, LLM review of file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
+This configuration implements a complete security audit flow: recording environment info at session initialization, checking security before deletions, having the LLM review file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
 
 ---
 
