@@ -56,7 +56,7 @@
 
 [ANIM:ai-tools-timeline]
 
-时间线很清楚。二零二一年六月 Copilot 技术预览，把 LLM 推进编辑器；ChatGPT 证明通用对话能力；GPT-四加上 Function Calling，模型从文本生成器变成指令编排器；Code Interpreter 首次给了代码执行能力；Claude 支持 Tool Use 并拉大上下文窗口。二零二四年前后，Devin、Cursor Agent、Computer Use 一路给模型加行动力。二零二五年 Claude Code 以终端原生 Agent 出场，随后 MCP 推动通信标准化；源码公开后，社区才把 Agent Harness 摊开细看。规律只有一句：演进方向始终是给 LLM 更多行动能力——从看见当前文件到整个项目，从给建议到执行命令，从单步到多步自主规划。Harness 是这方向在架构层面的必然产物。
+时间线很清楚。二零二一年六月 Copilot 技术预览，把 LLM 推进编辑器；ChatGPT 证明通用对话能力；GPT-四把推理和代码抬高一代，同年六月 Function Calling 让模型从文本生成器变成指令编排器，七月 Code Interpreter 给了它一个能跑代码的沙箱；十一月 Claude 支持 Tool Use 并拉大上下文窗口。二零二四年三月 Devin 开早期访问，十月 Computer Use 让模型能操作图形界面，十一月 Cursor 的 Agent 模式和 Anthropic 的 MCP 前后脚落地。二零二五年二月 Claude Code 以终端原生 Agent 出场；源码公开后，社区才把 Agent Harness 摊开细看。规律只有一句：演进方向始终是给 LLM 更多行动能力——从看见当前文件到整个项目，从给建议到执行命令，从单步到多步自主规划。Harness 是这方向在架构层面的必然产物。
 
 [ANIM:scale-1884-512664]
 

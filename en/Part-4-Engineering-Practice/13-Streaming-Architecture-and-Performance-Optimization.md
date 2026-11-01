@@ -461,21 +461,21 @@ Set normal token consumption ranges, trigger alerts when deviating from normal r
 
 **4. Real-world Case: Cost Breakdown of a Typical Session**
 
-Suppose a developer uses Claude Code to implement a new feature, with a session containing 8 turns:
+Suppose a developer uses Claude Code to implement a new feature, with a session containing 8 turns. The cumulative cost adds up turn by turn at Claude 3.5 Sonnet's rates: cache read $0.30, cache creation $3.75, output $15.00 (all per million tokens); every input token that misses the cache is written into it, so "Cache Create" on each row equals "Input − Cache Read".
 
 ```
 Turn    Input    Output    Cache Read    Cache Create    Cumulative Cost($)
- 1       15,000      2,500         0          15,000     $0.12
- 2       20,000      1,800        15,000      5,000     $0.22
- 3       22,000      3,200        18,000      4,000     $0.35
- 4       25,000      1,500        20,000      5,000     $0.44
- 5       85,000      2,000        22,000     63,000     $0.89  <-- Tool returned large file
- 6       90,000      1,200        80,000     10,000     $1.15  <-- Cache break!
- 7       30,000      4,500        25,000      5,000     $1.32  <-- Recovered after compact
- 8       32,000      2,000        28,000      4,000     $1.48
+ 1       15,000      2,500         0          15,000     $0.09
+ 2       20,000      1,800        15,000      5,000     $0.14
+ 3       22,000      3,200        18,000      4,000     $0.21
+ 4       25,000      1,500        20,000      5,000     $0.26
+ 5       85,000      2,000        22,000     63,000     $0.53  <-- Tool returned large file
+ 6       90,000      1,200        80,000     10,000     $0.61  <-- new prefix now stored, reads are 89%
+ 7       30,000      4,500        25,000      5,000     $0.71  <-- Recovered after compact
+ 8       32,000      2,000        28,000      4,000     $0.76
 ```
 
-Note turns 5-6: A tool returned a huge file (63K cache creation tokens), causing subsequent turns' input to surge. Turn 7 recovered to normal levels through context compaction. This case shows: **tool output token costs are often more worth watching than the model's own output.**
+Turn 5 alone costs $0.27, and $0.24 of that comes from its 63K cache creation tokens; the model's own 2,000-token output accounts for $0.03. Reads climb back to 89% on turn 6, which means the surging input has become a reusable prefix; what actually pulls input back down to 30K is the compaction at turn 7. This case shows: **tool output token costs are often more worth watching than the model's own output.**
 
 ---
 
@@ -536,7 +536,7 @@ The economic impact of cache hits is significant. For Claude 3.5 Sonnet:
 +-------------------+----------------+------------------+
 ```
 
-A typical Agent session might send 200K input tokens over 10 turns. Without caching, input cost is $0.60. With 80% cache hit rate, cost drops to $0.60 * 0.2 + $0.60 * 0.8 * 0.1 = $0.168, a 72% savings. In large projects, this savings can reach hundreds of dollars per day.
+A typical Agent session might send 200K input tokens over 10 turns. Without caching, input cost is $0.60. With 80% cache hit rate, cost drops to $0.60 * 0.2 + $0.60 * 0.8 * 0.1 = $0.168, a 72% savings. The misses there are priced at the base input rate of $3.00; on the convention of the table above, where a miss becomes a cache write at $3.75, the cost is $0.60 * 0.2 * 1.25 + $0.048 = $0.198 and the savings narrow to 67%. In large projects, this savings can reach hundreds of dollars per day.
 
 ### 13.5.2 Byte-level Consistency in Fork Mode
 

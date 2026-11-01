@@ -57,7 +57,7 @@
 ## 块 3｜§1.2 全景架构（约 5min）
 
 **口播要点**
-1. AI 编程工具时间线（Copilot → Function Calling → Devin → Claude Code → MCP → 源码公开）
+1. AI 编程工具时间线（Copilot → ChatGPT → GPT-4 / Function Calling → Code Interpreter → Devin → Computer Use → Cursor Agent 与 MCP → Claude Code → 源码公开）
 2. 规模锚点：**1,884** 个 TypeScript 文件 / **512,664** 行
 3. 技术栈：Bun、React+Ink、Commander.js、Zod v4、@anthropic-ai/sdk
 4. 五模块：Entry、QueryEngine、AsyncGenerator 主循环、工具类型、工具注册；55 个工具、权限四阶段

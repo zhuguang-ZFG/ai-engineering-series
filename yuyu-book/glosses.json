@@ -73,8 +73,8 @@
    "en": "The model moves one step at a time; tool results must go back in before it can pick the next action, so the loop turns until it stops asking for tools."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:242",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:242"
+   "第一部分-基础篇/01-智能体编程的新范式.md:243",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:243"
   ]
  },
  "async-generator": {
@@ -99,7 +99,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:18",
-   "第一部分-基础篇/01-智能体编程的新范式.md:240",
+   "第一部分-基础篇/01-智能体编程的新范式.md:241",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:16"
   ],
   "analogy": {
@@ -134,7 +134,7 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:252",
+   "第一部分-基础篇/01-智能体编程的新范式.md:253",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:18",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:18"
   ],
@@ -147,8 +147,8 @@
    "en": "Each step hands out whatever just happened, so the caller needs no extra event listeners or callbacks to keep track of progress."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:252",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:252"
+   "第一部分-基础篇/01-智能体编程的新范式.md:253",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:253"
   ]
  },
  "backpressure": {
@@ -173,7 +173,7 @@
   "priority": "core",
   "evidence": [
    "00-前言.md:129",
-   "第一部分-基础篇/01-智能体编程的新范式.md:316",
+   "第一部分-基础篇/01-智能体编程的新范式.md:317",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:314",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:314"
   ],
@@ -212,7 +212,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:22",
-   "第一部分-基础篇/01-智能体编程的新范式.md:316",
+   "第一部分-基础篇/01-智能体编程的新范式.md:317",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:22"
   ],
   "analogy": {
@@ -240,7 +240,7 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:382",
+   "第一部分-基础篇/01-智能体编程的新范式.md:383",
    "第三部分-高级模式篇/11-技能系统与插件架构.md:87",
    "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:87"
   ],
@@ -253,8 +253,8 @@
    "en": "When tools overwrite shared state, who reads half-written data depends on timing, and the resulting bug is nearly impossible to reproduce."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:382",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:382"
+   "第一部分-基础篇/01-智能体编程的新范式.md:383",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:383"
   ]
  },
  "idempotent": {
@@ -390,7 +390,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:292",
-   "第一部分-基础篇/01-智能体编程的新范式.md:254",
+   "第一部分-基础篇/01-智能体编程的新范式.md:255",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:12"
   ],
   "analogy": {
@@ -715,8 +715,8 @@
    "en": "Event kinds only multiply, and each new one means another helper to register and another loose end, until the handling logic is too scattered to keep up."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:320",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:320"
+   "第一部分-基础篇/01-智能体编程的新范式.md:321",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:321"
   ]
  },
  "cancellation-propagation": {
@@ -816,7 +816,7 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:378",
+   "第一部分-基础篇/01-智能体编程的新范式.md:379",
    "00-前言.md:145",
    "en/00-Foreword.md:145"
   ],
@@ -829,8 +829,8 @@
    "en": "Because state is never edited in place, changes stay predictable, traceable and debuggable, and a parent can hand a snapshot to a child agent safely."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:380",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:380"
+   "第一部分-基础篇/01-智能体编程的新范式.md:381",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:381"
   ]
  },
  "side-effect": {
@@ -853,7 +853,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:228",
+   "第一部分-基础篇/01-智能体编程的新范式.md:229",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:441",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:441"
   ],
@@ -883,7 +883,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:99",
-   "第一部分-基础篇/01-智能体编程的新范式.md:267",
+   "第一部分-基础篇/01-智能体编程的新范式.md:268",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:99"
   ],
   "analogy": {
@@ -1070,7 +1070,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:344",
+   "第一部分-基础篇/01-智能体编程的新范式.md:345",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:196",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:196"
   ],
@@ -1158,7 +1158,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:277",
+   "第一部分-基础篇/01-智能体编程的新范式.md:278",
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:69",
    "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:69"
   ],
@@ -1187,9 +1187,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:277",
+   "第一部分-基础篇/01-智能体编程的新范式.md:278",
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:69",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:277"
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:278"
   ],
   "analogy": {
    "zh": "开箱要钥匙，钥匙又锁在箱子里",
@@ -1216,8 +1216,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:316",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:316"
+   "第一部分-基础篇/01-智能体编程的新范式.md:317",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:317"
   ],
   "analogy": {
    "zh": "购物车越堆越高，最后顶穿了仓库屋顶",
@@ -1277,7 +1277,7 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:331",
+   "第一部分-基础篇/01-智能体编程的新范式.md:332",
    "第一部分-基础篇/04-权限管线-Agent的护栏.md:115",
    "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:115"
   ],
@@ -1377,7 +1377,7 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:318",
+   "第一部分-基础篇/01-智能体编程的新范式.md:319",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:69",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:69"
   ],
@@ -1452,7 +1452,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:99",
-   "第一部分-基础篇/01-智能体编程的新范式.md:252",
+   "第一部分-基础篇/01-智能体编程的新范式.md:253",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:99"
   ],
   "analogy": {
@@ -1464,8 +1464,8 @@
    "en": "Listeners never removed slowly leak memory, and an event name is just a hand-typed string, so a typo slips through."
   },
   "why_evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:320",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:320"
+   "第一部分-基础篇/01-智能体编程的新范式.md:321",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:321"
   ]
  },
  "runtime-validation": {
@@ -1528,7 +1528,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:182",
-   "第一部分-基础篇/01-智能体编程的新范式.md:380",
+   "第一部分-基础篇/01-智能体编程的新范式.md:381",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:182"
   ],
   "analogy": {
@@ -1557,7 +1557,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:57",
-   "第一部分-基础篇/01-智能体编程的新范式.md:224",
+   "第一部分-基础篇/01-智能体编程的新范式.md:225",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:57"
   ],
   "analogy": {
@@ -1584,7 +1584,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:242",
+   "第一部分-基础篇/01-智能体编程的新范式.md:243",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:63",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:63"
   ],
@@ -1699,7 +1699,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:270",
+   "第一部分-基础篇/01-智能体编程的新范式.md:271",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:98",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:98"
   ],
@@ -1727,9 +1727,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:205",
-   "第一部分-基础篇/01-智能体编程的新范式.md:212",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:205"
+   "第一部分-基础篇/01-智能体编程的新范式.md:206",
+   "第一部分-基础篇/01-智能体编程的新范式.md:213",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:206"
   ],
   "analogy": {
    "zh": "报名表印好必填栏目，填错的当场退回",
@@ -1756,7 +1756,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:378",
+   "第一部分-基础篇/01-智能体编程的新范式.md:379",
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:178",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:182"
   ],
@@ -2014,7 +2014,7 @@
   "priority": "extra",
   "evidence": [
    "00-前言.md:135",
-   "第一部分-基础篇/01-智能体编程的新范式.md:202",
+   "第一部分-基础篇/01-智能体编程的新范式.md:203",
    "en/00-Foreword.md:135"
   ],
   "analogy": {
@@ -2131,9 +2131,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:224",
-   "第一部分-基础篇/01-智能体编程的新范式.md:228",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:224"
+   "第一部分-基础篇/01-智能体编程的新范式.md:225",
+   "第一部分-基础篇/01-智能体编程的新范式.md:229",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:225"
   ],
   "analogy": {
    "zh": "高峰前先把米泡上、料切好，客人一到就开炒",
@@ -2302,7 +2302,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:335",
+   "第一部分-基础篇/01-智能体编程的新范式.md:336",
    "00-前言.md:130",
    "en/00-Foreword.md:130"
   ],
@@ -2361,7 +2361,7 @@
   "priority": "extra",
   "evidence": [
    "00-前言.md:130",
-   "第一部分-基础篇/01-智能体编程的新范式.md:333",
+   "第一部分-基础篇/01-智能体编程的新范式.md:334",
    "en/00-Foreword.md:130"
   ],
   "analogy": {
@@ -2519,8 +2519,8 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:247",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:247",
+   "第一部分-基础篇/01-智能体编程的新范式.md:248",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:248",
    "第一部分-基础篇/04-权限管线-Agent的护栏.md:13",
    "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:13"
   ],
@@ -2722,8 +2722,8 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:249",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:249",
+   "第一部分-基础篇/01-智能体编程的新范式.md:250",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:250",
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:16",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:16"
   ],
@@ -2847,8 +2847,8 @@
   "evidence": [
    "第三部分-高级模式篇/11-技能系统与插件架构.md:7",
    "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:7",
-   "第一部分-基础篇/01-智能体编程的新范式.md:358",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:358"
+   "第一部分-基础篇/01-智能体编程的新范式.md:359",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:359"
   ],
   "analogy": {
    "zh": "厨房墙上的菜谱，客人点这道菜才取下照着做",
@@ -3006,8 +3006,8 @@
   "evidence": [
    "第三部分-高级模式篇/09-子智能体与Fork模式.md:228",
    "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:228",
-   "第一部分-基础篇/01-智能体编程的新范式.md:344",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:344"
+   "第一部分-基础篇/01-智能体编程的新范式.md:345",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:345"
   ],
   "analogy": {
    "zh": "同一张底片洗出好几张照片，再各自上色",
@@ -3078,8 +3078,8 @@
   "evidence": [
    "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:19",
    "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:19",
-   "第一部分-基础篇/01-智能体编程的新范式.md:359",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:359"
+   "第一部分-基础篇/01-智能体编程的新范式.md:360",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:360"
   ],
   "analogy": {
    "zh": "给相机换个镜头，机身不必重造",
@@ -3331,8 +3331,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/01-智能体编程的新范式.md:268",
-   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:268",
+   "第一部分-基础篇/01-智能体编程的新范式.md:269",
+   "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:269",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:223",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:223"
   ],

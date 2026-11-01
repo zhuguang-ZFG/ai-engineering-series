@@ -135,8 +135,8 @@
     "accessed": "2026-10-25",
     "license": "规范仓库许可以其仓库声明为准；链接引用，不转载条文",
     "license_en": "Licensing follows the specification repository's own statement; linked, clauses never republished",
-    "scope": "第 12 章协议基线：tools / resources / prompts 三类原语、生命周期与版本协商、传输层（stdio 与 HTTP）、能力协商的术语定义，用来判定 Claude Code 的 MCP 集成「实现了什么、简化了什么」，并以 2025-11-25 旧版做差异对照。",
-    "scope_en": "Chapter 12's protocol baseline: the tools / resources / prompts primitives, lifecycle and version negotiation, transports (stdio and HTTP) and the vocabulary of capability negotiation. It is what lets us judge what Claude Code's MCP integration implements and what it simplifies, with 2025-11-25 as the diff reference."
+    "scope": "第 12 章协议基线：tools / resources / prompts 三类原语、initialize 生命周期与能力协商、传输层（stdio 与 HTTP）的术语，用来判定 Claude Code 的 MCP 集成「实现了什么、简化了什么」，并以 2025-11-25 旧版作差异对照。MCP 的开源发布日为 2024-11-25，第 1 章取后者。",
+    "scope_en": "Chapter 12's protocol baseline: the tools / resources / prompts primitives, the initialize lifecycle and capability negotiation, and the transports (stdio and HTTP). It lets us judge what Claude Code's MCP integration implements and simplifies, with 2025-11-25 as the diff reference. MCP's open-source release is dated 2024-11-25, where Chapter 1's timeline places it."
   },
   "blog-building-effective-agents": {
     "title": "Building Effective Agents（Anthropic 工程博客，2024-12-19）",

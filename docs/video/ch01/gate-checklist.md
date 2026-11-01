@@ -93,3 +93,4 @@
 | 成片 | ch01-long-v4.mp4 205205029 bytes；封面 ch01-cover.png 68489 bytes |
 | 工具 | biliup + cookies.json；log C:\\Users\\zhugu\\biliup\\upload_yuzhe_ch01.log |
 | 抖音/小红书 | 本步未传（parent 处理） |
+| 已发布口播勘误 | 块 3 时间线一句在原片中是「二零二五年 Claude Code 出场，随后 MCP 推动标准化」，与订正后的章节时间线相反（MCP 发布于 2024-11-25，早于 Claude Code 的 2025-02-24）。`long-script.md` / `long-outline.md` 已订正；`video/ch01/hf-remake/transcript.json`、`assets/build/{timeline,chunks}.json`、`assets/vo/full-script.txt`、`assets/vo/c010.txt`、`assets/vo/segments/15.txt` 保留原片念法，因为它们是那段音频的记录。下次重建 ch01 长讲时按订正稿重录该段，成片与 BV1rGx76EEpJ 的念白会有差异。 |

@@ -89,7 +89,7 @@ SDK TypeScript 的版本尾号（`0.3.310`）与 CLI 版本尾号（`2.1.310`）
 | `blog-writing-tools-for-agents` | Writing effective tools for AI agents | 2025-09-11 | 第 3、12 章（工具粒度与选择准确率） |
 | `blog-context-engineering` | Effective context engineering for AI agents | 2025-09-29 | 第 6、7 章（上下文预算、compaction 的定位） |
 
-MCP 规范以规范仓库的 tags 序列（`2026-07-28`、`2026-07-28-RC`、`2025-11-25`、`2025-06-18`、`2025-03-26`）确认它是定版而非草案；上一版 `…/specification/2025-11-25` 也已核实为 200，作为第 12 章版本协商的对照来源。
+MCP 规范以规范仓库的 tags 序列（`2026-07-28`、`2026-07-28-RC`、`2025-11-25`、`2025-06-18`、`2025-03-26`）确认它是定版而非草案；上一版 `…/specification/2025-11-25` 也已核实为 200，作为第 12 章三类原语与 `initialize` 能力协商术语的对照基线（第 12 章不涉及协议版本协商本身）。这些日期是**规范定版日**，不是协议发布日：MCP 由 Anthropic 于 2024-11-25 开源发布，第 1 章时间线按后者取位，两者不可混用。
 
 四条博客在抓取时均发生一次 `/engineering/*` → `/research/*` 的 301，登记时使用**跳转后的规范 URL**。早年的《Claude Code Best Practices》博客现已 301 到 `code.claude.com/docs/en/best-practices`，即内容已并入官方文档；为避免同一内容出现两个条目，只在 docs 族登记一次，重定向关系写进 `snapshot`。
 

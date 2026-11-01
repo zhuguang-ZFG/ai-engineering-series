@@ -129,24 +129,25 @@ Before analyzing Claude Code's architecture, let's widen our perspective and loo
 ```mermaid
 flowchart TD
     A["2021.06 GitHub Copilot Technical Preview<br/>First LLM integration into editor"] -->
-    B["2022.12 ChatGPT Launch<br/>Proves LLM's general conversational ability"] -->
-    C["2023.03 GPT-4 + Function Calling<br/>LLM transforms from text generator to instruction orchestrator"] -->
-    D["2023.06 OpenAI Code Interpreter<br/>LLM gains code execution capability for the first time"] -->
-    E["2023.11 Claude 2.1 + Tool Use<br/>200K context window"] -->
-    F["2024.01 Devin Launch<br/>First AI software engineer"] -->
-    G["2024.08 Cursor Agent Mode<br/>Editor-integrated Agent"] -->
+    B["2022.11 ChatGPT Launch<br/>Proves LLM's general conversational ability"] -->
+    C["2023.03 GPT-4 Launch<br/>A generational jump in reasoning and code"] -->
+    D["2023.06 OpenAI Function Calling<br/>LLM transforms from text generator to instruction orchestrator"] -->
+    E["2023.07 OpenAI Code Interpreter<br/>LLM executes code in a sandbox"] -->
+    F["2023.11 Claude 2.1 + Tool Use<br/>200K context window"] -->
+    G["2024.03 Devin Early Access<br/>First AI software engineer"] -->
     H["2024.10 Anthropic Computer Use<br/>LLM can operate GUI"] -->
-    I["2025.02 Claude Code Launch<br/>Terminal-native Agent"] -->
-    J["2025.11 Anthropic Publishes MCP<br/>Standardized Agent communication protocol"] -->
-    K["2026.03 Source Code Accidentally Exposed<br/>Community deeply examines Agent Harness"] -->
-    L["Now ← You are here"]
+    I["2024.11 Cursor Agent Mode<br/>Editor-integrated Agent"] -->
+    J["2024.11 Anthropic Publishes MCP<br/>Standardized Agent communication protocol"] -->
+    K["2025.02 Claude Code Launch<br/>Terminal-native Agent"] -->
+    L["2026.03 Source Code Accidentally Exposed<br/>Community deeply examines Agent Harness"] -->
+    M["Now ← You are here"]
 
     classDef event fill:#f0f7ff,stroke:#3b82f6,stroke-width:1px,color:#1e3a5f
     classDef milestone fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e40af
     classDef current fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-    class A,B,C,D,E,F,G,H event
-    class I,J,K milestone
-    class L current
+    class A,B,C,D,E,F,G,H,I event
+    class J,K,L milestone
+    class M current
 ```
 
 This timeline reveals an important pattern: the direction of AI programming tool evolution has always been "giving LLMs more agency." From only being able to see the current file, to seeing the entire project; from only being able to generate suggestions, to being able to execute commands; from single-step operations to multi-step autonomous planning. Agent Harness is the inevitable architectural product of this evolutionary direction.
@@ -389,7 +390,7 @@ Before diving into architectural details, let's build an intuitive feel for the 
 
 ### Step 1: Install Claude Code
 
-Make sure your system has Node.js 18+ or Bun installed, then run:
+Make sure your system has Node.js 22 or later installed (that floor is what the package's own `engines.node` field declares, and the version-anchor table in `CREDITS.md` checks the same release), then run:
 
 ```bash
 npm install -g @anthropic-ai/claude-code

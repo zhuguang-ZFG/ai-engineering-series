@@ -444,16 +444,16 @@ The background extraction Agent's API request prefix is identical to the main co
 Assumptions:
 - System prompt + tool definitions ≈ 30,000 tokens
 - Message history ≈ 50,000 tokens (a medium-length conversation)
-- Cached input price = $0.10 / MTok (cache hit)
+- Cached input price = $0.30 / MTok (a hit is billed at 10% of the input price)
 - Standard input price = $3.00 / MTok (no cache)
 
 Without cache sharing:
   Extraction Agent resends 80,000 tokens → $0.24
 
 With cache sharing:
-  Extraction Agent reuses cache → $0.008 (pays only cache read fees)
+  Extraction Agent reuses cache → $0.024 (pays only cache read fees)
 
-Savings: 96.7%
+Savings: 90%
 ```
 
 In scenarios with frequent Agent usage (dozens of conversations per day), the cost savings from cache sharing are substantial.
