@@ -336,7 +336,7 @@ graph TD
 
 In addition to static loading at startup, Claude Code also supports dynamic skill discovery during session runtime. When the model accesses files through tools like Read, Write, Edit, etc., the system searches upward along the file path for `.claude/skills/` directories.
 
-The core function `discoverSkillDirsForPaths` implements the dynamic skill discovery mechanism:
+The core function `discoverSkillDirsForPaths` discovers skills dynamically:
 
 ```mermaid
 flowchart TD

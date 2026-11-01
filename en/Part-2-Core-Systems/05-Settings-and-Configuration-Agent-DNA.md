@@ -327,7 +327,7 @@ graph TD
 
 ## 5.3 Feature Flag System
 
-Claude Code's feature flag system is divided into two layers: **compile-time** `feature()` function and **runtime** GrowthBook experimentation framework. This dual-layer design reflects a classic tradeoff in software release engineering: compile-time flags provide zero-overhead feature control, while runtime flags provide rapid iteration capability without redeployment.
+Claude Code's feature flag system is divided into two layers: **compile-time** `feature()` function and **runtime** GrowthBook experimentation framework. This dual-layer design reflects a classic tradeoff in software release engineering: compile-time flags control features without any runtime cost, while runtime flags let you iterate quickly without redeploying.
 
 ### 5.3.1 Compile-Time Dead Code Elimination
 

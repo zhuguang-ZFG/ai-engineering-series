@@ -672,7 +672,7 @@ Write out the input and expected output for each step.
 
 ## Key Takeaways
 
-1. **AgentTool's three-tier agent system** (built-in, custom, plugin) provides a complete spectrum from out-of-the-box to deep customization, and the priority mechanism allows enterprise-level overrides. Custom agents are defined through Markdown files, lowering the barrier to creation.
+1. **AgentTool's three-tier agent system** (built-in, custom, plugin) goes from out-of-the-box to deep customization, and the priority mechanism allows enterprise-level overrides. Custom agents are defined through Markdown files, lowering the barrier to creation.
 
 2. **Built-in agents each serve their purpose**: Explore focuses on high-speed read-only search, Plan does structured planning, General Purpose is the all-rounder, and Verification adopts an adversarial verification strategy. These roles illustrate the core workflow; availability depends on registration gates.
 

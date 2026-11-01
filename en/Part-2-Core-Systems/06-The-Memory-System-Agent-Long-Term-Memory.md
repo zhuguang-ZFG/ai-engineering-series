@@ -398,7 +398,7 @@ The tool permission allowlist follows the Principle of Least Privilege: the back
 
 ### 6.3.4 Throttling and Coordination
 
-Extraction does not run after every conversation. The system implements a counter-based throttling mechanism: extraction is triggered only every several rounds, with the threshold configured through feature flags.
+Extraction does not run after every conversation. The system throttles by counting rounds: extraction runs only after several more rounds, with the threshold set through feature flags.
 
 Additionally, there is a **trailing extraction** mechanism to handle concurrency issues. When an extraction is in progress and another conversation completes, the new context is staged. After the current extraction completes, a trailing extraction runs using the latest staged context. Trailing extraction bypasses the throttle counter -- it handles already-completed work and should not be delayed by throttling.
 

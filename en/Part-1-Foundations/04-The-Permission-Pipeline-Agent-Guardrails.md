@@ -198,7 +198,7 @@ Permission decisions (PermissionDecision) come from three sources, each with dif
 
 In permission interactions, multiple asynchronous participants may simultaneously attempt to resolve the same permission request -- the user clicks "allow" at the same moment the classifier returns "pass." The `ResolveOnce` pattern is designed precisely to resolve this race condition. It provides three methods: resolve, isResolved, and claim.
 
-Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it provides a "first come, first served" atomic operation. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other will be rejected. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
+Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other will be rejected. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
 
 > **Cross-Reference:** The ResolveOnce pattern and the "immutable state flow" principle from Chapter 2 share a common lineage. Both ensure concurrent safety through atomic state changes -- the state is either old or new; there is no "half-new, half-old" intermediate state.
 

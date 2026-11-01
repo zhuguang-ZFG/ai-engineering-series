@@ -150,9 +150,9 @@ flowchart TD
 
 **The sse-ide and ws-ide protocols** are specialized types for IDE integration, adding IDE identification information (such as the `ideName` field, identifying whether it's VS Code or JetBrains) on top of standard SSE/WebSocket protocols. This "protocol variant" design pattern avoids embedding platform-specific logic into the generic protocol, keeping the core protocol clean.
 
-**The HTTP Streamable protocol** is a newer protocol in the MCP specification that provides more flexible streaming response capabilities compared to SSE. It supports incrementally returning response content over a single HTTP connection, making it suitable for tools that need to return large amounts of data or run for extended periods.
+**The HTTP Streamable protocol** is a newer protocol in the MCP specification that streams responses more flexibly than SSE. It returns response content incrementally over a single HTTP connection, making it suitable for tools that need to return large amounts of data or run for extended periods.
 
-**The WebSocket protocol** provides full-duplex communication capabilities, suited for scenarios requiring real-time bidirectional data exchange. Unlike SSE's unidirectional push, WebSocket allows the server to proactively send messages to the client and allows the client to send requests at any time without establishing new HTTP connections.
+**The WebSocket protocol** is full-duplex, for scenarios that need data flowing both ways in real time. Unlike SSE's unidirectional push, WebSocket allows the server to proactively send messages to the client and allows the client to send requests at any time without establishing new HTTP connections.
 
 **The SDK protocol** is the most special type — it doesn't start any process or open any network connection. SDK-type MCP servers are embedded directly into the Claude Code process through function calls, with near-zero latency. It's primarily used for SDK integration scenarios, allowing third-party applications embedding Claude Code to register MCP tools directly without additional inter-process communication. For this reason, SDK servers are exempt from enterprise security policy checks — they run in the same process as Claude Code, with security boundaries guaranteed by the host application.
 

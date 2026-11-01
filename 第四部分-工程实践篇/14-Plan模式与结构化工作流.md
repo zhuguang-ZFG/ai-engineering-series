@@ -505,7 +505,7 @@ flowchart LR
 
 ### 14.4.3 RemoteTriggerTool：远程触发
 
-RemoteTriggerTool 提供了远程 Agent 的触发管理能力，支持 list、get、create、update、run 五种操作。
+RemoteTriggerTool 管远程 Agent 的触发，有 list、get、create、update、run 五种操作。
 
 它通过 Anthropic API 的 triggers 端点工作，使用 OAuth bearer token 认证，并携带组织标识和 beta 标志等头部信息。
 

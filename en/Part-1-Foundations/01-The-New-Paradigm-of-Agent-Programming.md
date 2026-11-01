@@ -96,7 +96,7 @@ The problem with this approach is that it assumes an idealized world: API calls 
 
 **The Agent Harness approach**, on the other hand, needs to consider the following issues:
 
-1. **Streaming Output**: LLM responses are streamed; users need to see the Agent's thinking process in real time rather than waiting for the entire response to complete. How do you implement incremental rendering without blocking the main thread? If you use callbacks, you end up with "callback hell"; if you use Promise chains, you lose the ability to cancel mid-stream; if you use event emitters, you increase the complexity of memory management.
+1. **Streaming Output**: LLM responses are streamed; users need to see the Agent's thinking process in real time rather than waiting for the entire response to complete. How do you implement incremental rendering without blocking the main thread? If you use callbacks, you end up with "callback hell"; if you use Promise chains, you can't cancel mid-stream; if you use event emitters, you increase the complexity of memory management.
 
 2. **Permission Control**: The LLM might request `rm -rf /`, which obviously should not be allowed. At which layer should the permission system intervene? If you intercept uniformly at the outer layer, you cannot handle tool-specific permission logic (such as risk assessment for Bash commands); if you check inside each tool, you get duplicated code and inconsistent permission policies. How do you balance security and efficiency?
 

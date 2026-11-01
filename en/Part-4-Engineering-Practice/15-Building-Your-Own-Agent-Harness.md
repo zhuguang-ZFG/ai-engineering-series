@@ -1160,7 +1160,7 @@ flowchart TD
 
 **1. From Monolith to Microservices**
 
-Currently, Claude Code's tool system is an in-process module collection. As MCP matures, future Agent Harnesses may adopt a microservice architecture -- each tool or tool group runs in an independent process, communicating through standardized protocols. This provides better isolation, scalability, and independent deployment capability.
+Currently, Claude Code's tool system is an in-process module collection. As MCP matures, future Agent Harnesses may adopt a microservice architecture -- each tool or tool group runs in an independent process, communicating through standardized protocols. Isolation improves, and each tool or tool group can scale and deploy on its own.
 
 **2. From Passive to Active**
 
@@ -1252,7 +1252,7 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 
 7. **Security defense in depth:** From tool-level (`isDestructive`) to system-level (workspace trust, budget ceiling), each layer provides independent security guarantees. The security threat model for Agent systems is fundamentally different from traditional applications -- the LLM's output itself is an attack vector, requiring defenses at every layer.
 
-8. **Observability is the cornerstone of productionization:** From structured logs to aggregated metrics to distributed tracing, the four layers of observability provide the foundation for debugging, optimization, and compliance in Agent systems. An Agent system without observability is a black box -- when problems arise, you can only guess.
+8. **Observability is the cornerstone of productionization:** From structured logs to aggregated metrics to distributed tracing, the four layers of observability carry debugging, optimization, and compliance for Agent systems. An Agent system without observability is a black box -- when problems arise, you can only guess.
 
 ---
 

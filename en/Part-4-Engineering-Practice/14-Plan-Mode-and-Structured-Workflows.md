@@ -506,7 +506,7 @@ flowchart LR
 
 ### 14.4.3 RemoteTriggerTool: Remote Triggering
 
-RemoteTriggerTool provides remote Agent trigger management capabilities, supporting five operations: list, get, create, update, run.
+RemoteTriggerTool manages remote Agent triggers, with five operations: list, get, create, update, run.
 
 It works through Anthropic API's triggers endpoint, using OAuth bearer token authentication, carrying organization identifier and beta flag headers.
 

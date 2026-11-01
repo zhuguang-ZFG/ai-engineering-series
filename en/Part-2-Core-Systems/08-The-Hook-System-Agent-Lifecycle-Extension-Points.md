@@ -798,7 +798,7 @@ Same event can have multiple matchers, each targeting different tools:
 }
 ```
 
-In this configuration, if the model executes `rm -rf /tmp/test`, only the first matcher triggers; if it executes `npm publish`, only the second matcher triggers; if it is a file write operation, only the third matcher triggers. Matchers provide "precise interception" capability.
+In this configuration, if the model executes `rm -rf /tmp/test`, only the first matcher triggers; if it executes `npm publish`, only the second matcher triggers; if it is a file write operation, only the third matcher triggers.
 
 ### Emergency Disable Switches
 
