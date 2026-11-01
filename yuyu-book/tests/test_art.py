@@ -53,7 +53,7 @@ class ShippedDrawings(unittest.TestCase):
 
     @unittest.skipUnless(art.ART_DIR.exists(), "no illustrations yet")
     def test_no_drawing_repeats_a_shape_id(self):
-        """26 files inlined into one page: a shared id would collide, and the
+        """Every drawing is inlined into one page: a shared id would collide, and the
         duplicate-id audit would fire far from the drawing that caused it."""
         ids = set()
         for path in sorted(art.ART_DIR.glob("*.svg")):

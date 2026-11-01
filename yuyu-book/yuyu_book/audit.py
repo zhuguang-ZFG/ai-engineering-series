@@ -92,6 +92,9 @@ def audit(html_text: str, *, n_units: int, expect_svgs: int | None) -> None:
                       "(an unclosed fence is swallowing the text)")
     if "@@MM:" in html_text:
         errors.append(f"{html_text.count('@@MM:')} unresolved mermaid placeholders")
+    if "@@ILL:" in html_text:
+        errors.append(f"{html_text.count('@@ILL:')} unresolved drawing "
+                      "placeholders")
     fence_residue = re.findall(r"^ {0,3}`{3,}", html_text, re.M)
     if fence_residue:
         errors.append(f"{len(fence_residue)} stray markdown fences left in output")

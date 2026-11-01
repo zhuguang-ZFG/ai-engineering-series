@@ -109,6 +109,12 @@ The type system, through type computation, allows developers to provide only the
 
 ### getAllBaseTools() -- The Complete Tool Inventory
 
+Think of the built-in tools as one workbench: every tool on the wall does exactly one job.
+
+```ill
+ch03-tool-bench
+```
+
 `getAllBaseTools()` is the registration center for all built-in tools. It returns a flat array containing all available tools in Claude Code. Through this function, we can enumerate the core tool inventory and categorize them by function:
 
 | Category | Tool | Responsibility | Concurrency Safe |
@@ -287,7 +293,11 @@ It schedules by **concurrency partitioning**:
 
 The core logic of the partitioning algorithm: iterate through all tool calls, checking each tool's concurrency safety property. If the current tool is safe and the previous batch is also safe, merge into the same batch; otherwise, start a new batch.
 
-Picture an assembly line: a factory with several workstations. Some processes are independent (like simultaneously inspecting the quality of multiple parts) and can proceed in parallel; other processes must strictly follow sequence (like assembly before testing) and cannot be skipped. The concurrency partitioning algorithm is the scheduler that automatically identifies which processes can be parallelized and which must be serialized.
+Picture an assembly line: a factory with several workstations. Some processes are independent (like simultaneously inspecting the quality of multiple parts) and can proceed in parallel; other processes must strictly follow sequence (like assembly before testing) and cannot be skipped. The concurrency partitioning algorithm is the scheduler that automatically identifies which processes can be parallelized and which must be serialized. The strip below runs it frame by frame: the calls line up, the line splits by safety, the safe batch works at once, and the results come back in the order they were asked for.
+
+```ill
+ch03-tool-pipeline
+```
 
 For example, if the model requests four tool calls: `[Read(a.ts), Read(b.ts), Bash(ls), Read(c.ts)]`, the partitioning result is:
 

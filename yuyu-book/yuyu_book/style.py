@@ -694,6 +694,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
     .cover-art path[pathLength],.cover-art circle[pathLength],
     .ch-trace path[pathLength],.ch-trace circle[pathLength],
     .pd-route path[pathLength],.pd-route circle[pathLength],
+    .illu-frame path[pathLength],.illu-frame circle[pathLength],
     .itinerary path[pathLength],.itinerary circle[pathLength]{
       stroke-dasharray:100 100;
       animation:ink-draw 1.2s ease-out both;
@@ -701,6 +702,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
       animation-range:cover 0% cover 60%}
     .ch-emblem [stroke-dasharray],.kp-art [stroke-dasharray],
     .pd-art [stroke-dasharray],.cover-art [stroke-dasharray],
+    .illu-frame [stroke-dasharray],
     .itinerary [stroke-dasharray]{
       animation:ink-fade 1s ease-out both;
       animation-timeline:view();
@@ -708,6 +710,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
     .ch-emblem [fill="currentColor"],.kp-art [fill="currentColor"],
     .pd-art [fill="currentColor"],.cover-art [fill="currentColor"],
     .ch-trace [fill="currentColor"],.pd-route [fill="currentColor"],
+    .illu-frame [fill="currentColor"],
     .itinerary [fill="currentColor"]{
       transform-box:fill-box;transform-origin:center;
       animation:ink-pop .7s cubic-bezier(.2,1.4,.4,1) both;
@@ -717,6 +720,29 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
       animation:ink-fade 1s ease-out both;
       animation-timeline:view();
       animation-range:cover 0% cover 55%}
+    /* a sequential plate carries its story in frames. Each group fades in on
+       its own slice of the scroll, so the mechanism visibly moves instead of
+       arriving as one frozen last frame; the strokes inside still ink
+       themselves. Print and reduced-motion lose the stagger and keep every
+       frame drawn — the strip still reads in order, which is the point. */
+    .illu-seq .frame{animation:ink-fade 1s ease-out both;
+      animation-timeline:view()}
+    .illu-seq .frame:nth-child(1){animation-range:cover 0% cover 26%}
+    .illu-seq .frame:nth-child(2){animation-range:cover 10% cover 40%}
+    .illu-seq .frame:nth-child(3){animation-range:cover 22% cover 54%}
+    .illu-seq .frame:nth-child(4){animation-range:cover 34% cover 68%}
+    .illu-seq .frame:nth-child(5){animation-range:cover 46% cover 80%}
+    .illu-seq .frame:nth-child(6){animation-range:cover 58% cover 92%}
+    /* hovering runs the strip: one frame lit at a time, walking left to right.
+       The scroll range is dropped for a plain clock, and the strokes stay
+       inked, so only the light moves. */
+    .illu-seq:hover .frame{animation:ink-cycle 2.8s linear infinite both;
+      animation-timeline:auto;animation-range:normal}
+    .illu-seq:hover .frame:nth-child(2){animation-delay:.7s}
+    .illu-seq:hover .frame:nth-child(3){animation-delay:1.4s}
+    .illu-seq:hover .frame:nth-child(4){animation-delay:2.1s}
+    .illu-seq:hover .frame:nth-child(5){animation-delay:2.8s}
+    .illu-seq:hover .frame:nth-child(6){animation-delay:3.5s}
     /* character: hovering wakes a drawing up. Spring easings, squash and
        stretch — the twelve-principles vocabulary in three-line keyframes.
        Each figure carries its pivot in a class, so one verb per drawing. */
@@ -813,6 +839,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
 }
 @keyframes ink-draw{from{stroke-dashoffset:100}}
 @keyframes ink-fade{from{opacity:0}}
+@keyframes ink-cycle{0%,100%{opacity:.26}12%,30%{opacity:1}}
 @keyframes ink-pop{0%{transform:scale(0)}60%{transform:scale(1.25,.75)}
   80%{transform:scale(.92,1.12)}100%{transform:scale(1)}}
 @keyframes ink-spin{to{transform:rotate(360deg)}}
@@ -1040,6 +1067,23 @@ figure.diagram{margin:1.5rem 0;text-align:center;break-inside:avoid}
 .diagram-frame::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:999px}
 .diagram-frame::-webkit-scrollbar-thumb:hover{background:var(--bronze-2)}
 .diagram-frame .node rect,.diagram-frame .cluster rect{rx:8}
+/* a hand-drawn plate borrows the diagram's caption furniture so the two read
+   as one series, but not its sideways scroll: a drawing is looked at, not
+   panned, and its lines already carry the eye across the sheet */
+figure.illu{margin:1.6rem 0;text-align:center;break-inside:avoid}
+.illu-frame{position:relative;background:
+    linear-gradient(180deg,var(--card),var(--paper-2)),
+    radial-gradient(100% 60% at 50% 0%,rgba(200,164,92,.07),transparent);
+  border:1px solid var(--line-2);border-radius:var(--r-2);padding:1.3rem 1.2rem;
+  box-shadow:0 6px 22px -12px rgba(38,34,27,.30),
+    inset 0 0 0 1px rgba(255,255,255,.55)}
+.illu-frame svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.illu-photo .illu-frame{padding:0;overflow:hidden}
+.illu-photo img{display:block;width:100%;height:auto}
+/* the frame numbers of a sequential plate: small, in the margin, so the
+   drawing stays the thing you look at */
+.illu-seq .frame-no{font-family:var(--sans);font-size:9px;
+  fill:currentColor;opacity:.5;stroke:none}
 figcaption{margin:.7rem auto 0;max-width:var(--measure);font-family:var(--sans);
   font-size:.83rem;color:var(--ink-2);line-height:1.7;
   display:flex;gap:.7rem;justify-content:center;align-items:baseline}

@@ -67,6 +67,19 @@ class MermaidBlock:
 
 
 @dataclass
+class IllusBlock:
+    """A slot in the prose reserved for a drawing in `illustrations/`.
+
+    `uid` is a hash the way a mermaid plate's is, because one drawing can be
+    asked for twice and still need two captions; `name` is the file it points
+    at."""
+    uid: str
+    name: str
+    file: str
+    line: int
+
+
+@dataclass
 class Unit:
     id: str
     kind: str                       # front | chapter | appendix
@@ -75,6 +88,7 @@ class Unit:
     title: str                      # normalized display title
     md: str                         # body without H1, mermaid replaced
     blocks: list = field(default_factory=list)   # MermaidBlock
+    ills: list = field(default_factory=list)     # IllusBlock
     code_langs: list = field(default_factory=list)  # fence info, document order
     path: str = ""                  # repo-relative posix path
     anchor: str = ""                # article id used across the book
@@ -153,6 +167,71 @@ def extract_mermaid(text: str, file: str):
     return body, blocks, langs
 
 
+ILL_NAME_RE = re.compile(r"[a-z0-9][a-z0-9._-]*\Z")
+
+
+def extract_illustrations(text: str, file: str):
+    """Second fence pass: turn ```ill fences into @@ILL:<uid>@@ placeholders.
+
+    Runs after `extract_mermaid`, which leaves these fences in the body
+    untouched. The fence body is one drawing name — a file in
+    `illustrations/` — so the prose says which picture goes here and nowhere
+    decides what is drawn in it.
+    """
+    lines = text.split("\n")
+    out, ills, fence, buf, start = [], [], None, None, 0
+    for n, line in enumerate(lines, 1):
+        m = FENCE_RE.match(line)
+        if m:
+            token, info = m.group(1), m.group(2).strip()
+            if fence is None:
+                start = n
+                if info == "ill":
+                    fence, buf = token, []
+                else:
+                    fence = token
+                    out.append(line)
+                continue
+            if token[0] == fence[0] and len(token) >= len(fence) and not info:
+                if buf is not None:
+                    name = "\n".join(buf).strip()
+                    if not ILL_NAME_RE.match(name):
+                        raise BuildError(
+                            f"{file}:{start}: an ill fence holds one drawing "
+                            f"name, not {name!r}")
+                    uid = hashlib.sha1(
+                        f"{file}|{start}|{name}".encode("utf-8")).hexdigest()[:12]
+                    ills.append(IllusBlock(uid, name, file, start))
+                    if out and out[-1].strip():
+                        out.append("")
+                    out.append(f"@@ILL:{uid}@@")
+                    buf = None
+                else:
+                    out.append(line)
+                fence = None
+                continue
+            if buf is not None:
+                buf.append(line)
+            else:
+                out.append(line)
+            continue
+        if buf is not None:
+            buf.append(line)
+        else:
+            out.append(line)
+    if fence is not None:
+        raise BuildError(f"{file}: unclosed code fence at line {start}")
+    body = "\n".join(out)
+    body = re.sub(r"(@@ILL:[0-9a-f]{12}@@\n)(?=\S)", r"\1\n", body)
+    # the blank line added above moves every later placeholder down, so each
+    # block reports the line the caption lookup will actually find it on
+    at = {m.group(1): body[:m.start()].count("\n") + 1
+          for m in re.finditer(r"@@ILL:([0-9a-f]{12})@@", body)}
+    for b in ills:
+        b.line = at.get(b.uid, b.line)
+    return body, ills
+
+
 def normalize_h1(text: str, lang: str, file: str):
     """Fence-aware: first top-level H1 becomes (no, title); the line is
     blanked out (line numbers stay file-true) and the heading is
@@ -206,9 +285,13 @@ def load_unit(unit_def: dict, kind: str, lang: str, repo_root: Path) -> Unit:
     text = read_text(path)
     no, title, body = normalize_h1(text, lang, rel)
     body, blocks, langs = extract_mermaid(body, rel)
+    body, ills = extract_illustrations(body, rel)
+    # an ill fence is a drawing slot, not a code plate: it never reaches the
+    # renderer as a <pre>, so its info string must not be counted as a language
+    langs = [l for l in langs if l != "ill"]
     anchor = (unit_def["id"] if kind == "front" else unit_def["id"])
     return Unit(id=unit_def["id"], kind=kind, lang=lang, no=no, title=title,
-                md=body, blocks=blocks, code_langs=langs, path=rel,
+                md=body, blocks=blocks, ills=ills, code_langs=langs, path=rel,
                 anchor=f"{unit_def['id']}" if kind == "front" else unit_def["id"])
 
 
