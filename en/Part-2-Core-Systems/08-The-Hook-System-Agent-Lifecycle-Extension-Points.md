@@ -485,7 +485,7 @@ Typical use cases:
 
 **PermissionRequest**: Triggered when permission dialog displays. Hook can return `decision` to allow or deny, enabling automated permission approval flows.
 
-> **Cross-reference with Chapter 4:** This event directly interacts with the permission pipeline's "user interaction stage". Chapter 4 introduced the permission pipeline's four stages (built-in rules -> hook decisions -> admin policies -> user confirmation); PermissionRequest hooks are at the second stage, able to make decisions before users see permission dialogs.
+> **Cross-reference with Chapter 4:** This event sits in the fourth stage of the permission pipeline. Chapter 4's four stages are validateInput (input validation), hasPermissionsToUseTool (rule matching), checkPermissions (context evaluation) and the interactive prompt (user confirmation); hooks, the classifier and the user are the three decision-makers sharing that last stage, and a PermissionRequest hook can return a `decision` that settles the request before the user ever sees the dialog.
 
 **PermissionDenied**: Triggered when auto-mode classifier rejects tool call. Hook can suggest retry or provide alternatives. This is useful for implementing "soft rejection" strategies -- not simply blocking operations but guiding the model to use safer approaches to achieve the same goal.
 
