@@ -104,7 +104,7 @@ If your task meets any of the following conditions, you should consider the Agen
 5. Requires fine-grained cost control and token budget management
 6. Needs observability -- tracking the decision process and resource consumption at every step
 
-> **Decision rule of thumb:** If your system only needs the LLM to perform "input -> output" transformations (such as translation, summarization, classification), use a simple API call. If your system needs the LLM to perform an "observe -> think -> act -> observe again" loop, use an Agent Harness.
+> **Decision rule of thumb:** If your system only needs the LLM to turn input into output (translation, summarization, classification), use a simple API call. If your system needs the LLM to run an "observe -> think -> act -> observe again" loop, use an Agent Harness.
 
 ### Runtime Selection: Bun vs. Node.js vs. Python
 

@@ -687,7 +687,7 @@ Requirements:
 
 ## Key Takeaways
 
-1. **The Coordinator pattern employs a "coordinator-worker" architecture**, where the coordinator only manages task allocation and result synthesis without directly performing implementation work. This layered design enables complex engineering tasks to be systematically decomposed and processed in parallel.
+1. **The Coordinator pattern employs a "coordinator-worker" architecture**, where the coordinator only manages task allocation and result synthesis without implementing anything itself. This layered design enables complex engineering tasks to be systematically decomposed and processed in parallel.
 
 2. **The dual gating mechanism** (feature gate + environment variable) and mutual exclusion with the Fork pattern ensure clarity in mode selection. `matchSessionMode()` guarantees pattern consistency during session recovery.
 

@@ -443,7 +443,7 @@ Plugin discovery sources are listed in priority order:
 
 ### 11.4.2 Cache-First Loading Strategy
 
-Plugin loading employs a cache-first strategy to avoid redundant file system I/O. Cache-first functions prioritize returning already-loaded plugin data from cache, and only perform actual disk reads when the cache is empty.
+Plugin loading employs a cache-first strategy to avoid redundant file system I/O. Cache-first functions prioritize returning already-loaded plugin data from cache, and only read from disk when the cache is empty.
 
 The complete loading flow:
 

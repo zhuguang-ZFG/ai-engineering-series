@@ -54,7 +54,7 @@ Under QueryEngine, session state has one and only one owner -- single ownership.
 
 `submitMessage` is an `AsyncGenerator`, which means callers can consume streaming messages in real-time without waiting for the entire query to complete.
 
-Inside QueryEngine's query loop, streaming events are processed one by one. The system performs different operations based on different event types: `message_start` events reset the current message's usage counter; `message_delta` events update usage and capture stop_reason; `message_stop` events accumulate the current message's usage into the total.
+Inside QueryEngine's query loop, streaming events are processed one by one. The system handles each event type differently: `message_start` events reset the current message's usage counter; `message_delta` events update usage and capture stop_reason; `message_stop` events accumulate the current message's usage into the total.
 
 This phased design enables the system to process tool calls and progress messages in real-time without waiting for complete responses.
 

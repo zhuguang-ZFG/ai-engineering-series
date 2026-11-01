@@ -143,7 +143,7 @@ Agent judges this is a non-trivial task involving multiple file modifications an
 
 **Step 2: Read-only exploration (in Plan Mode)**
 
-The Agent performs the following read-only operations:
+The Agent does the following, all read-only:
 
 ```
 Tool call sequence (all read-only):

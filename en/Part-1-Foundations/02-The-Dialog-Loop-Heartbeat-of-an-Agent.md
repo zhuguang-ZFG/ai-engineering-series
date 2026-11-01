@@ -17,7 +17,7 @@
 
 Claude Code's dialog main loop is an async generator defined with `async function*`. It is not a regular function that executes to completion in one shot, but rather a "living" process that can be paused, resumed, and cancelled. Each `yield` is like a heartbeat pulse, pushing streaming events to the caller.
 
-This design choice deserves more space to fully understand. In traditional programming models, function calls are synchronous: the caller initiates a request, the callee performs a computation, and returns a result. But the Agent's interaction pattern breaks this synchronous assumption -- the model may take tens of seconds to complete a response, and responses arrive token by token; tool execution may take minutes, during which real-time progress feedback is needed; the user may interrupt the operation at any time, demanding an immediate stop.
+This design choice deserves more space to fully understand. In traditional programming models, function calls are synchronous: the caller initiates a request, the callee computes and returns a result. But the Agent's interaction pattern breaks this synchronous assumption -- the model may take tens of seconds to complete a response, and responses arrive token by token; tool execution may take minutes, during which real-time progress feedback is needed; the user may interrupt the operation at any time, demanding an immediate stop.
 
 Faced with these requirements, the traditional function call model falls short. Async generators fill exactly this gap: they act like a "coroutine" that can be paused and resumed at any time, establishing a real-time event pipeline between the "producer" (the dialog loop) and the "consumer" (the UI rendering layer).
 
@@ -195,7 +195,7 @@ Before calling the model, the loop executes a series of preprocessing steps. The
 
 5. **System Prompt Assembly**: Merges the base system prompt with dynamic context (such as current working directory, user configuration, etc.) into the complete system prompt. The design of this step directly impacts cache hit rates -- if the assembly order is unstable, the byte content of the prompt may differ on each call, causing cache invalidation.
 
-6. **Autocompact**: If the context exceeds the threshold, the auto-compaction mechanism is triggered, summarizing the conversation history into a compressed message and then replacing the message list to be sent. Autocompact is the "last line of defense" of the compression pipeline -- when other lightweight compression methods cannot reduce the context below the limit, it performs a full summary.
+6. **Autocompact**: If the context exceeds the threshold, the auto-compaction mechanism is triggered, summarizing the conversation history into a compressed message and then replacing the message list to be sent. Autocompact is the "last line of defense" of the compression pipeline -- when other lightweight compression methods cannot reduce the context below the limit, it summarizes everything.
 
 7. **Token Block Check**: If the token count exceeds a hard limit, an error message is returned directly without making an API call. This is a "fail fast" mechanism -- rather than sending an API request doomed to fail, it's better to block it locally.
 
@@ -225,7 +225,7 @@ Two things come apart here: **"result collection" and "result passing" are decou
 
 ### Phase 5: Tool Result Backfill and Next Round
 
-After tool execution completes, the loop performs attachment injection (memory files, file change notifications, queued commands, etc.), then packages all messages (original messages + assistant messages + tool results) into a new state object and returns to the top of the `while(true)` via `continue`.
+After tool execution completes, the loop injects attachments (memory files, file change notifications, queued commands, etc.), then packages all messages (original messages + assistant messages + tool results) into a new state object and returns to the top of the `while(true)` via `continue`.
 
 The next iteration will use this expanded message list to call the model again. The model will see the previous tool results and then decide whether to continue calling tools or provide a final response.
 
@@ -285,7 +285,7 @@ flowchart TD
 - **User-Initiated Termination**: `aborted_streaming`, `aborted_tools` -- the user decided to stop
 - **Abnormal Termination**: the remaining seven -- the system encountered a situation where it could not continue
 
-For abnormal termination, the system performs cleanup logic before returning the terminal state: cancelling tools in execution, releasing resource references, logging the termination reason. Do that and even an abnormal exit leaves no "dirty" state behind.
+For abnormal termination, the system cleans up before returning the terminal state: cancelling tools in execution, releasing resource references, logging the termination reason. Do that and even an abnormal exit leaves no "dirty" state behind.
 
 ---
 

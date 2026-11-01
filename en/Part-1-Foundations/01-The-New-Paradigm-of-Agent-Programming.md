@@ -45,7 +45,7 @@ The breakthrough significance of tool calling lies in how it redefines the bound
 
 In a world without tool calling, the LLM is a closed system. Its knowledge is cut off at the last day of its training data, its reasoning is limited to the context window, and its output can only be human-readable text. It is as if you have an extremely knowledgeable friend who is trapped in a room with no windows and no telephone -- they know how to diagnose diseases but cannot use a stethoscope; they know how to repair cars but cannot pick up a wrench.
 
-With tool calling, the LLM becomes an orchestrator of an open system. It can call search engines to obtain real-time information, call code interpreters to perform calculations, call the file system to read and write code, and call Git for version control. Each tool call is a handshake between the LLM and the real world. The friend trapped in the room now has a telephone, a robotic arm, and a connection to the entire internet.
+With tool calling, the LLM becomes an orchestrator of an open system. It can call search engines to obtain real-time information, call code interpreters to calculate, call the file system to read and write code, and call Git for version control. Each tool call is a handshake between the LLM and the real world. The friend trapped in the room now has a telephone, a robotic arm, and a connection to the entire internet.
 
 But tool calling also introduces new engineering challenges. These challenges are no longer at the model level, but at the systems engineering level:
 
@@ -240,7 +240,7 @@ This "one core, multiple entry points" design pattern is very valuable in engine
 
 #### Async Generator Dialog Main Loop
 
-This is one of Claude Code's core modules. The dialog main loop is an `AsyncGenerator` that implements an iterative dialog process, delegating to the internal loop function via `yield*`. In each iteration, the loop performs the following steps:
+This is one of Claude Code's core modules. The dialog main loop is an `AsyncGenerator` that implements an iterative dialog process, delegating to the internal loop function via `yield*`. In each iteration, the loop runs these steps:
 
 1. Constructs the API request (system prompt + message history + tool definitions)
 2. Calls the LLM API and receives streaming responses
@@ -266,7 +266,7 @@ This type definition contains rich architectural decisions:
 - Progress callbacks support incremental progress reporting during tool execution, which is the foundation for streaming UI.
 - Concurrency safety declarations mark whether a tool can be executed in parallel, affecting scheduling strategy.
 - Interrupt behavior defines what happens when the user interrupts (cancel or block), a key detail for user experience.
-- Destructive flags identify whether a tool performs irreversible operations, an important input for the permission system.
+- Destructive flags identify whether a tool causes irreversible changes, an important input for the permission system.
 
 > **Cross-Reference:** Chapter 3 will provide a detailed analysis of the tool type system's design, including the `buildTool` factory function, concurrency partitioning strategy, and StreamingToolExecutor.
 

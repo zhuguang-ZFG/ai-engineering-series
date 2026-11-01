@@ -144,7 +144,7 @@ Its core design philosophy is reflected in two key decisions:
 
 **First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and at the tool level, Edit, Write, and similar tools are physically prohibited via disallowedTools. This "dual-lock" design — soft constraints at the prompt level plus hard constraints at the tool level — ensures that even if the model "hallucinates" and wants to modify a file, it will be physically blocked because the tool is unavailable.
 
-**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only performs searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, allowing the model to focus more on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
+**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, allowing the model to focus more on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
 
 > **Best Practice: How to Effectively Use the Explore Agent**
 >
@@ -182,7 +182,7 @@ The design philosophy of the General Purpose Agent is "trust by default, push bo
 
 > **Anti-Pattern Warning: Don't use the General Purpose Agent for read-only tasks**
 >
-> Although the General Purpose Agent can technically perform read-only searches, this introduces unnecessary cost and security risks. Read-only tasks should use the Explore Agent: its haiku model is cheaper, omitting CLAUDE.md saves tokens, and tool restrictions eliminate the risk of accidental modifications. This is a classic application of the **principle of least privilege**.
+> Although the General Purpose Agent can technically search read-only, this introduces unnecessary cost and security risks. Read-only tasks should use the Explore Agent: its haiku model is cheaper, omitting CLAUDE.md saves tokens, and tool restrictions eliminate the risk of accidental modifications. This is a classic application of the **principle of least privilege**.
 
 ### Verification Agent: A Gated Verification Design
 

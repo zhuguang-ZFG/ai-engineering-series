@@ -264,7 +264,7 @@ Path resolution priority:
 2. `autoMemoryDirectory` setting (only policySettings/localSettings/userSettings, **projectSettings is excluded**)
 3. Default `<memoryBase>/projects/<sanitized-git-root>/memory/`
 
-projectSettings is once again excluded for the same reason as in the previous chapter -- preventing a malicious repository from redirecting writes to sensitive directories via `autoMemoryDirectory: "~/.ssh"`. The path validation function performs strict security checks on this: rejecting relative paths, root paths, Windows drive letter roots, UNC paths, and null byte injection.
+projectSettings is once again excluded for the same reason as in the previous chapter -- preventing a malicious repository from redirecting writes to sensitive directories via `autoMemoryDirectory: "~/.ssh"`. The path validation function checks this strictly: rejecting relative paths, root paths, Windows drive letter roots, UNC paths, and null byte injection.
 
 **Complete Defense Lines of Path Security Validation**
 

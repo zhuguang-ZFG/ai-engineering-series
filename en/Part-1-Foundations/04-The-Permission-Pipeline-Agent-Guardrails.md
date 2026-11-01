@@ -239,7 +239,7 @@ The `default` mode is the most conservative. Aside from tools explicitly permitt
 
 **Applicable scenario:** Daily interactive use. Developers want to confirm before the Agent does anything potentially risky, ensuring full control over the Agent's behavior.
 
-**User experience trade-off:** Safest but most tedious. For a large refactoring task, the Agent may need to perform dozens of file edits and command runs, and each confirmation interrupts the developer's train of thought.
+**User experience trade-off:** Safest but most tedious. For a large refactoring task, the Agent may need to edit dozens of files and run dozens of commands, and each confirmation interrupts the developer's train of thought.
 
 ### 4.3.2 plan Mode: Read-Only Focused
 
@@ -404,7 +404,7 @@ The persistence function returns a boolean value indicating whether a persistent
 
 ### Exercise 1: Configuring Project-Level .claude/settings.json
 
-Here is a practical permission configuration scenario. Suppose you are developing a Node.js project and want Claude Code to automatically perform the following operations:
+Here is a practical permission configuration scenario. Suppose you are developing a Node.js project and want Claude Code to automatically do the following:
 
 1. Run `npm test` and `npm run lint` without requiring confirmation each time
 2. Allow execution of all `git` commands

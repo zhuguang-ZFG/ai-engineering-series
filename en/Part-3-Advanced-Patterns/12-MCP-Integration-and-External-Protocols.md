@@ -158,7 +158,7 @@ flowchart TD
 
 > **Best Practice:** Prefer the stdio protocol. Only consider SSE/HTTP/WebSocket when the MCP server must run on a remote machine (e.g., accessing an internal company database, using centralized compute resources). The SDK protocol is only for programmatic integration scenarios.
 
-> **Anti-pattern Warning:** Do not perform long-running initialization operations in stdio servers. Claude Code connects to all configured MCP servers in parallel at startup; if one server's initialization takes too long (e.g., establishing a database connection pool, loading a large model), it will slow down the entire startup process. Consider lazy initialization strategies — establish connections only on the first tool invocation.
+> **Anti-pattern Warning:** Do not put slow work into stdio server initialization. Claude Code connects to all configured MCP servers in parallel at startup; if one server's initialization takes too long (e.g., establishing a database connection pool, loading a large model), it will slow down the entire startup process. Consider lazy initialization strategies — establish connections only on the first tool invocation.
 
 ### 12.1.3 Connection Manager: MCPConnectionManager
 
@@ -363,7 +363,7 @@ Imagine a scenario: you're simultaneously connected to two MCP servers — one f
 
 **Implementation Details of the Naming Convention**
 
-The naming function concatenates the server name and tool name into a fully qualified name, while the parsing function performs the reverse operation, splitting on double underscores to extract the server name and tool name.
+The naming function concatenates the server name and tool name into a fully qualified name, while the parsing function reverses it, splitting on double underscores to extract the server name and tool name.
 
 Key design details:
 

@@ -69,7 +69,7 @@ flowchart LR
     class example1,example2,example3 example
 ```
 
-The core of the merge logic lies in the custom merge strategy function `settingsMergeCustomizer`: this function performs concatenation and deduplication for array types, while other types are handled by the default deep merge logic.
+The core of the merge logic lies in the custom merge strategy function `settingsMergeCustomizer`: this function concatenates and dedupes array types, while other types are handled by the default deep merge logic.
 
 The key characteristics of these rules are:
 
