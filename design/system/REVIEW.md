@@ -169,3 +169,16 @@ Motion）把落地页重排了一遍，并在 Chrome 里 1280 / 600 两档实测
 | R-16 | CLOSED（本轮） | 落地页**四个数字查不到出处**：`197 篇正文`（全书非代码 `###` 实测 195，代码块内还有 20 个假章节，validate 的 ≥190 闸门吃的是含代码的 215）、`Stage 1/2/3 · 16/24/30 篇`（上游 easy-vibe 的篇数，本书章节对不上）、`7 个完整项目`（`## 综合项目` 下实测 9 个）、`附录 103 篇`（**这条成立**：九个专题附录 12+9+15+20+7+4+13+16+7 = 103）。改成能当场复算的：195 个小节 / Stage 1·2·3 用书中「30 秒」表的 入门·初中级·进阶 / 9 个项目 / 附录 103 节。术语表原本写“七个词”只列了 5 个，补齐 `Database`、`JTBD` 两行（照书首原句），并把出处从「30 秒看懂这本书」更正为真正的 `## 新手术语翻译器` |
 | O-13 | WATCH | 其余八遍的落点：间距全部 snap 到 4px 网格（`22/26/30/13/14` 都换掉）、`.btn` 从 `--persimmon`（纸面 3.39:1）换 `--persimmon-block`（4.51:1）、`.kicker` 去掉 `text-transform:uppercase` + `.12em`、chrome 字重压到 ≤500、数字加 `tabular-nums`、`.g4` 五张同模卡改成 `#films` 行清单（时长/体积取自 ffprobe 与文件属性）、hero 右侧改用本书真图 `learn-path.svg` 而非装饰、新增 `--ease-hand` 单一缓动 + `:focus-visible` + `prefers-reduced-motion`。**两处已知未解**：① `.hero-figure img` 原先给自带墨线框的 SVG 又套一层框，已删外层，但 SVG 内部标题与 HTML figcaption 内容重复；② 4px 墨线 + 不齐圆角在 1.25 DPR 截图里被重采样成“双层框”观感，`elementsFromPoint` 与 computed style 都确认只有一个 border，判为采样假象、不再改 |
 
+
+## 幻灯出口第一遍（`exports/deck.html`）· 2026-11-03
+
+14 页手绘 deck 落在歸藏风格 A 的运行时上。内容写完两个校验器都过了（presenter 0 errors、runtime-sync 字节一致），
+**但校验器管不了“看起来对不对”**：浏览器里逐页量下来一共 4 个真缺陷，其中 3 个只有渲染后才现形。
+
+| 编号 | 状态 | 发现 |
+| --- | --- | --- |
+| R-17 | CLOSED（本轮） | 手绘主题块的注释里写了 `--text-*/--line*`——**注释内出现成对的 `*/` 会提前关掉整段注释**，紧跟其后的 `[data-theme="handdraw"]{…}` 被当成垃圾选择器整块丢弃，页面看起来"颜色不对"却读 CSS 看不出问题。改写注释措辞并留一行警示；结论：**注释里不要写通配符，规则是否生效以渲染为准** |
+| R-18 | CLOSED（本轮） | 主题块给 `#deck>.slide` 统一铺 `background:var(--paper)`，而模板 `.slide.dark` 同时把文字反成纸色 → **深底深字与浅底浅字各半**，dark 页文字几乎看不见。拆成 `.slide.light{background:var(--paper)}` / `.slide.dark{background:var(--ink)}` 两条。教训：覆盖模板的 token 时，成对的角色（paper/ink、body/on-dark）必须一起覆盖，不能只改一边 |
+| R-19 | CLOSED（本轮） | `class="frame grid-4"`、`"frame grid-3"` 竖着排：`.frame{display:flex}` 赢了，而模板的例外表 `.frame.grid-2-7-5,.grid-2-6-6,.grid-2-8-4,.grid-3-3,.grid-6{display:grid}` **不含 grid-4/grid-3**。改成不带 `frame` 的裸 `grid-4`/`grid-3`。这类"复合类只在部分组合上生效"的约定，grep 例外表比试错快 |
+| R-20 | CLOSED（本轮） | **把书里的图直接贴进投屏 deck 是量级错误**：`book/assets/stacks/*.png` 按 1300–1700 CSS px 作图、标签 9.5–13px（2× DPR 导出成 2600px），手绘 SVG 最小字号 19 单位 / viewBox 1200。塞进 `grid-2-7-5` 的 5 栏后有效缩放只有 0.145 与 0.38，屏幕字面 **2–7px**——结构能看，文字全废。改法分两类：两张手绘 SVG 改成**整页图**（`flex:1 1 auto;min-height:0`，缩放升到 0.80–0.94，最小字面 15–18px）；工程分层页换成 deck 原生的 `.stack`/`.lay` 行（层名 + 一句"替你省了什么" + 真实工具名 `@RestController` 等，全部取自工程图正文），完整带图标连线的图留在书里并在页脚指路径。顺带删掉 `loading="lazy"`：横向 transform 翻页不会把离屏 slide 带进视口，懒加载永不触发，演讲者视图的缩略图还会是空白 |
+| O-14 | WATCH | 测量本身的坑：用 `scrollIntoView` 遍历横向翻页的 deck，会把入场动效的中间态读成溢出（slide 2 报 +164px、slide 14 报 +62px，实际都是 -83px 安全线内）。必须用 deck 自带的 `go(i)` 翻页并等 cascade 落定（≥1.3s）再量；`resize_page` 给的是窗口外框，1920×1080 实得视口 1920×828，算安全线要用实测高度 |
