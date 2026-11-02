@@ -15,7 +15,7 @@ Claude Code's core interaction model is streaming. `QueryEngine` is the owner of
 
 One session corresponds to one `QueryEngine` instance. Each time a user sends a message, `submitMessage()` starts a new turn, with state (messages, file cache, usage, etc.) persisting across turns. `QueryEngine` internally maintains core state including the message list, abort controller, permission denial records, usage statistics, file state cache, and discovered skill names.
 
-**Why introduce a class instead of using functional APIs directly?** The answer lies in the complexity of state management. If session state is passed as parameters between functions, the call chain becomes extremely fragile -- any new state field requires modifying all function signatures. Classes encapsulate state as instance properties; adding new state only requires initialization in the constructor without breaking existing interfaces. This also binds the state's lifecycle to the instance: unreachable state can be garbage-collected, but timers, listeners, subprocesses, and external references still need explicit cleanup.
+**Why introduce a class instead of using functional APIs directly?** The answer lies in the complexity of state management. If you pass session state as parameters between functions, the call chain becomes extremely fragile -- any new state field requires modifying all function signatures. Classes encapsulate state as instance properties; adding new state only requires initialization in the constructor without breaking existing interfaces. This also binds the state's lifecycle to the instance: unreachable state can be garbage-collected, but timers, listeners, subprocesses, and external references still need explicit cleanup.
 
 ```mermaid
 classDiagram
@@ -48,13 +48,13 @@ classDiagram
 
 Under QueryEngine, session state has one and only one owner -- single ownership. This is particularly important in concurrent scenarios -- if multiple components simultaneously modify the message list, it could lead to disordered messages or duplicate processing. An instance defines an ownership boundary, not a lock: overlapping asynchronous calls still require serialization or explicit concurrency control.
 
-> **Cross-reference:** QueryEngine's core query loop is analyzed in detail in Chapter 2 "The Dialog Loop -- Heartbeat of an Agent". This chapter focuses on its streaming characteristics and performance optimization mechanisms.
+> **Cross-reference:** Chapter 2 "The Dialog Loop -- Heartbeat of an Agent" analyzes QueryEngine's core query loop in detail. This chapter focuses on its streaming characteristics and performance optimization mechanisms.
 
 ### 13.1.2 Real-time Reception of Token Streams
 
 `submitMessage` is an `AsyncGenerator`, which means callers can consume streaming messages in real-time without waiting for the entire query to complete.
 
-Inside QueryEngine's query loop, streaming events are processed one by one. The system handles each event type differently: `message_start` events reset the current message's usage counter; `message_delta` events update usage and capture stop_reason; `message_stop` events accumulate the current message's usage into the total.
+Inside QueryEngine's query loop, the system processes streaming events one by one, handling each event type differently: `message_start` events reset the current message's usage counter; `message_delta` events update usage and capture stop_reason; `message_stop` events accumulate the current message's usage into the total.
 
 With the work split into phases, the system processes tool calls and progress messages in real time, without waiting for the full response.
 
@@ -121,7 +121,7 @@ flowchart TD
     class K,G1a outputNode
 ```
 
-The key insight of this data flow is: **streaming processing is not an optimization, but an architectural choice.** It determines that every component of the system must be designed according to "incremental, interruptible, composable" principles. In this sense, streaming architecture is the cornerstone of the entire Agent Harness.
+The key insight of this data flow is: **streaming processing is not an optimization, but an architectural choice.** It determines that you must design every component of the system according to "incremental, interruptible, composable" principles. In this sense, streaming architecture is the cornerstone of the entire Agent Harness.
 
 ---
 
@@ -131,9 +131,9 @@ The key insight of this data flow is: **streaming processing is not an optimizat
 
 `StreamingToolExecutor` is the core of Claude Code's tool execution layer. Its design goal is to start tool execution immediately when streaming arrives, rather than waiting for all tool call blocks to arrive before unified processing.
 
-This "execute on arrival" philosophy can be understood with a life analogy: imagine a kitchen where the chef (model) verbally gives a series of instructions -- "chop onions", "boil water", "make sauce". The traditional approach is to wait until the chef finishes all instructions before starting; while "execute on arrival" means the sous-chef starts doing each task as the chef says it. Chopping onions and boiling water can happen simultaneously (concurrency-safe), but "pour onions into pot" must wait until "onions are chopped" (serial dependency).
+Think of this "execute on arrival" philosophy through a life analogy: imagine a kitchen where the chef (model) verbally gives a series of instructions -- "chop onions", "boil water", "make sauce". The traditional approach is to wait until the chef finishes all instructions before starting; while "execute on arrival" means the sous-chef starts doing each task as the chef says it. Chopping onions and boiling water can happen simultaneously (concurrency-safe), but "pour onions into pot" must wait until "chop onions" finishes (serial dependency).
 
-Each tracked tool has a state machine with four states: `queued`, `executing`, `completed`, and `yielded`. When a new tool is added to the executor, it enters the `queued` state, immediately triggering queue processing logic.
+Each tracked tool has a state machine with four states: `queued`, `executing`, `completed`, and `yielded`. When a new tool joins the executor, it enters the `queued` state, immediately triggering queue processing logic.
 
 ```mermaid
 stateDiagram-v2
@@ -189,7 +189,7 @@ flowchart TD
 ```
 
 - **When no tools are executing**, any tool can start.
-- **When tools are executing**, parallel execution is only allowed when the new tool and all executing tools are concurrency-safe.
+- **When tools are executing**, the executor allows parallel execution only when the new tool and all executing tools are concurrency-safe.
 - **Non-concurrency-safe tools** must execute exclusively; no other tool can run in parallel with them.
 
 Read-only tools like Read, Grep, Glob can therefore run side by side, while tools with side effects like Bash, Edit, Write need to queue serially.
@@ -228,11 +228,11 @@ ch13-concurrency-gate
 
 ### 13.2.3 Result Buffering and Ordered Output
 
-Although tools can execute in parallel, results must be output in order. The `getCompletedResults()` method guarantees this through the `yielded` state marker: completed tool results are output sequentially in the order they were added; if a non-concurrency-safe tool is still executing, subsequent tool results won't be output even if ready. Progress messages are an exception -- they are immediately yielded without order constraints, ensuring users see real-time progress feedback from tool execution.
+Although tools can execute in parallel, results must be output in order. The `getCompletedResults()` method guarantees this through the `yielded` state marker: completed tool results come out sequentially in insertion order; if a non-concurrency-safe tool is still executing, subsequent tool results won't come out even if ready. Progress messages are an exception -- they yield immediately without order constraints, ensuring users see real-time progress feedback from tool execution.
 
-**Why still submit in insertion order?** A `tool_result` is paired with its call by `tool_use_id`, so identity does not depend on position. Ordered buffering fixes the conversation trace instead. The same set of calls does not produce a different message prefix merely because Grep beat Read on one run; replay, debugging and caching stay steadier, and the next turn's context is not shaped by machine timing. The cost is head-of-line blocking: a later result may wait after finishing. Progress messages therefore bypass this ordering rule, while final results do not.
+**Why still submit in insertion order?** `tool_use_id` pairs a `tool_result` with its call, so identity does not depend on position. Ordered buffering fixes the conversation trace instead. The same set of calls does not produce a different message prefix merely because Grep beat Read on one run; replay, debugging and caching stay steadier, and the next turn's context is not shaped by machine timing. The cost is head-of-line blocking: a later result may wait after finishing. Progress messages therefore bypass this ordering rule, while final results do not.
 
-This design can be compared to an "airport baggage carousel": luggage (tool results) may be processed at different speeds, but passengers (the model) see them in the same order as checked in. Early-arriving luggage waits in the background until all luggage before it has arrived before appearing together on the carousel.
+Think of this design as an "airport baggage carousel": luggage (tool results) arrives at different speeds, but passengers (the model) see it in the same order as checked in. Early-arriving luggage waits in the background until all luggage before it has arrived before appearing together on the carousel.
 
 ```mermaid
 flowchart LR
@@ -275,7 +275,7 @@ Only Bash tool errors trigger cascading because Bash commands often have implici
 
 This "selective cascading" strategy is a pragmatic approach: it doesn't pursue theoretical perfect consistency but makes reasonable assumptions based on actual usage patterns.
 
-> **Cross-reference:** Tool concurrency safety properties are defined in detail in the `buildTool` factory function in Chapter 3 "The Tool System -- Agent's Hands", with default value `isConcurrencySafe: () => false`, following the fail-closed principle.
+> **Cross-reference:** The `buildTool` factory function in Chapter 3 "The Tool System -- Agent's Hands" defines tool concurrency safety properties in detail, with default value `isConcurrencySafe: () => false`, following the fail-closed principle.
 
 ---
 
@@ -293,7 +293,7 @@ The top of Claude Code's entry file is the core of the parallel prefetching stra
 
 **startKeychainPrefetch** changes two keychain reads (OAuth tokens ~32ms, legacy API key ~33ms) from serial to parallel, and executes in parallel with the import chain. The design document comments precisely explain the optimization motivation: serial cost is ~65ms, while starting two subprocesses here lets them execute in parallel with the entry file's ~65ms imports.
 
-Both prefetch results are awaited in subsequent initialization stages, at which point the subprocesses are likely complete with almost zero wait.
+Subsequent initialization stages await both prefetch results, at which point the subprocesses are likely complete with almost zero wait.
 
 The following is an idealized critical-path calculation, not an end-to-end benchmark. Assume independent tasks, simultaneous starts, and negligible process-launch overhead:
 
@@ -330,7 +330,7 @@ The `messageSelector` in QueryEngine uses `require()` for true lazy loading beca
 
 Conditional imports are also an important lazy loading strategy. Coordinator mode and snip compaction use feature flag gating functions to strip dead code. When feature flags are off, bundlers can completely eliminate these code paths and their dependency trees, reducing bundle size and module initialization time.
 
-The key decision for lazy loading is **drawing a line: what must be loaded at startup, what can wait until needed.** The line follows a simple principle: if a module's load time exceeds 5ms and isn't needed in the first 3 seconds after startup, it should be lazy loaded. 5ms is an empirical threshold -- below this, lazy loading's runtime check overhead might offset its benefit.
+The key decision for lazy loading is **drawing a line: what must load at startup, what can wait until needed.** The line follows a simple principle: if a module's load time exceeds 5ms and isn't needed in the first 3 seconds after startup, it should be lazy loaded. 5ms is an empirical threshold -- below this, lazy loading's runtime check overhead might offset its benefit.
 
 Three levels of lazy loading and their applicable scenarios:
 
@@ -351,11 +351,11 @@ Three levels of lazy loading and their applicable scenarios:
 
 ### 13.3.3 Lazy Schema Evaluation
 
-`lazySchema` wraps tool inputSchema/outputSchema, so module loading skips Zod schema construction. Combined with getter access patterns, schemas are only constructed when first actually used.
+`lazySchema` wraps tool inputSchema/outputSchema, so module loading skips Zod schema construction. Combined with getter access patterns, the getter constructs each schema only on first actual use.
 
 Zod schema construction costs are often underestimated. A moderately complex schema with nested objects, optional fields, and description text takes about 0.1-0.3ms to construct. If Claude Code's 55 tools all build schemas at startup, total overhead is 5.5-16.5ms -- unacceptable for a CLI tool.
 
-`lazySchema`'s implementation runs on JavaScript's getter semantics: first access triggers the construction function, the constructed result is cached to an instance property, subsequent accesses read directly from cache without going through the getter. This is a "trigger once, permanently replace" pattern.
+`lazySchema`'s implementation runs on JavaScript's getter semantics: first access triggers the construction function, which caches the constructed result to an instance property; subsequent accesses read directly from cache without going through the getter. This is a "trigger once, permanently replace" pattern.
 
 ### 13.3.4 Startup Optimization Checklist
 
@@ -363,9 +363,9 @@ If you're building your own CLI Agent tool, the following checklist can help you
 
 - [ ] **Identify critical path**: Use `console.time` or profiling tools to measure each initialization step's duration
 - [ ] **Parallelize I/O operations**: File reads, network requests, process spawns should all parallelize with module loading
-- [ ] **Lazy load heavy dependencies**: React, large parsers, database drivers should be deferred to first use
+- [ ] **Lazy load heavy dependencies**: defer React, large parsers, and database drivers to first use
 - [ ] **Eliminate unused code**: Remove unneeded features through feature flags and tree-shaking
-- [ ] **Lazy initialize heavy objects**: Zod schemas, regexes, WASM modules should be deferred construction
+- [ ] **Lazy initialize heavy objects**: defer construction of Zod schemas, regexes, and WASM modules
 - [ ] **Measure and iterate**: Establish CI baselines for startup time, prevent performance regression
 - [ ] **Focus on P95 not average**: Startup experience on slow machines is the real user experience
 
@@ -408,13 +408,13 @@ flowchart LR
     class TOTAL,TOTAL2 resultNode
 ```
 
-**updateUsage** handles usage data from single streaming events. Since Anthropic API's `message_delta` events only return incremental fields, `updateUsage` uses `> 0` guards for each field to distinguish "not returned" from "truly zero". This guard cannot be skipped: if the API returns `input_tokens: 0` (because that request used caching), the system won't incorrectly overwrite the previously recorded true value to zero.
+**updateUsage** handles usage data from single streaming events. Since Anthropic API's `message_delta` events only return incremental fields, `updateUsage` uses `> 0` guards for each field to distinguish "not returned" from "truly zero". You cannot skip this guard: if the API returns `input_tokens: 0` (because that request used caching), the system won't incorrectly overwrite the previously recorded true value to zero.
 
 This seemingly simple guard reveals a profound design issue: **semantic ambiguity of incremental protocols.** When a field is missing or zero, does it mean "this quantity is indeed zero" or "this event doesn't contain information about this quantity"? Without distinction, "100% cache hit rate" leads to the absurd result of "displaying zero input tokens".
 
 The essence of the `> 0` guard is a **monotonic increase guarantee**: usage fields only increase, never decrease or get overwritten with smaller values. Query usage at any moment and the number you get is the largest seen so far.
 
-> **Anti-pattern warning:** Don't use `|| 0` as default value in `updateUsage`. `|| 0` treats `0`, `undefined`, `null`, `""` all as falsy, causing true zero values to be incorrectly replaced. Using `> 0` guard (or more rigorous `!== undefined && val > 0`) correctly distinguishes "not returned" from "truly zero".
+> **Anti-pattern warning:** Don't use `|| 0` as default value in `updateUsage`. `|| 0` treats `0`, `undefined`, `null`, `""` all as falsy, causing it to incorrectly replace true zero values. Using `> 0` guard (or more rigorous `!== undefined && val > 0`) correctly distinguishes "not returned" from "truly zero".
 
 ### 13.4.2 accumulateUsage Accumulation Pattern
 
@@ -422,7 +422,7 @@ The essence of the `> 0` guard is a **monotonic increase guarantee**: usage fiel
 
 In QueryEngine, this accumulation happens at each `message_stop` event. In forked agents, it happens at each `message_delta` event. The difference between the two strategies is granularity: QueryEngine accumulates by message, forked agent accumulates by event, but the final result is consistent.
 
-**Why do the two scenarios choose different accumulation granularities?** QueryEngine is a long-lifecycle session manager; its usage tracking is oriented toward "how much did this session consume in total" scenarios, so per-message accumulation is precise enough. Forked agent is a short-lifecycle subtask executor; it can be aborted at any time, so it accumulates far more often to make sure usage data isn't lost -- if a fork crashes before `message_stop`, per-message accumulation would lose the entire message's usage.
+**Why do the two scenarios choose different accumulation granularities?** QueryEngine is a long-lifecycle session manager; it tracks usage for "how much did this session consume in total" scenarios, so per-message accumulation is precise enough. Forked agent is a short-lifecycle subtask executor; it may abort at any time, so it accumulates far more often to make sure usage data isn't lost -- if a fork crashes before `message_stop`, per-message accumulation would lose the entire message's usage.
 
 ### 13.4.3 Best Practices for Token Cost Tracking
 
@@ -461,11 +461,11 @@ Don't just track totals. Decompose costs by the following dimensions to locate c
 Set normal token consumption ranges, trigger alerts when deviating from normal ranges. For example:
 - Single turn input exceeds 100K tokens -- possibly a tool returned an oversized result
 - Single turn output exceeds 10K tokens -- model might be "verbose output"
-- Cache hit rate suddenly drops from 80% to 20% -- context might have been unexpectedly cleared
+- Cache hit rate suddenly drops from 80% to 20% -- the context might have cleared unexpectedly
 
 **4. Real-world Case: Cost Breakdown of a Typical Session**
 
-Suppose a developer uses Claude Code to implement a new feature, with a session containing 8 turns. The cumulative cost adds up turn by turn at Claude 3.5 Sonnet's rates: cache read $0.30, cache creation $3.75, output $15.00 (all per million tokens); every input token that misses the cache is written into it, so "Cache Create" on each row equals "Input − Cache Read".
+Suppose a developer uses Claude Code to implement a new feature, with a session containing 8 turns. The cumulative cost adds up turn by turn at Claude 3.5 Sonnet's rates: cache read $0.30, cache creation $3.75, output $15.00 (all per million tokens); every input token that misses the cache becomes a cache write, so "Cache Create" on each row equals "Input − Cache Read".
 
 ```
 Turn    Input    Output    Cache Read    Cache Create    Cumulative Cost($)
@@ -540,7 +540,7 @@ The economic impact of cache hits is significant. For Claude 3.5 Sonnet:
 +-------------------+----------------+------------------+
 ```
 
-A typical Agent session might send 200K input tokens over 10 turns. Without caching, input cost is $0.60. With 80% cache hit rate, cost drops to $0.60 * 0.2 + $0.60 * 0.8 * 0.1 = $0.168, a 72% savings. The misses there are priced at the base input rate of $3.00; on the convention of the table above, where a miss becomes a cache write at $3.75, the cost is $0.60 * 0.2 * 1.25 + $0.048 = $0.198 and the savings narrow to 67%. In large projects, this savings can reach hundreds of dollars per day.
+A typical Agent session might send 200K input tokens over 10 turns. Without caching, input cost is $0.60. With 80% cache hit rate, cost drops to $0.60 * 0.2 + $0.60 * 0.8 * 0.1 = $0.168, a 72% savings. The misses there bill at the base input rate of $3.00; on the convention of the table above, where a miss becomes a cache write at $3.75, the cost is $0.60 * 0.2 * 1.25 + $0.048 = $0.198 and the savings narrow to 67%. In large projects, this savings can reach hundreds of dollars per day.
 
 ### 13.5.2 Byte-level Consistency in Fork Mode
 
@@ -586,13 +586,13 @@ System prompt is the beginning of the cache prefix; any change invalidates the e
 
 **Strategy 2: Message Order Stability**
 
-Message addition order directly affects cache prefix. If two turns' message histories are identical except for the last message, the shared prefix can hit cache. But if a "system notification" message is inserted in the middle, the prefix breaks.
+Message addition order directly affects cache prefix. If two turns' message histories are identical except for the last message, the shared prefix can hit cache. But if you insert a "system notification" message in the middle, the prefix breaks.
 
 Claude Code avoids this by placing attachment messages (AttachmentMessage) in specific positions -- system notifications don't interleave between dialog messages.
 
 **Strategy 3: Cache Preheating**
 
-Proactively include content in the first request that might be shared by subsequent requests. For example, if you know the user will next trigger a fork agent (like post-turn summary), you can consider the fork's cache-safe params needs when building the parent request, ensuring the parent's prefix can be reused by the fork.
+Proactively include in the first request content that subsequent requests might share. For example, if you know the user will next trigger a fork agent (like post-turn summary), you can consider the fork's cache-safe params needs when building the parent request, ensuring the fork can reuse the parent's prefix.
 
 **Strategy 4: Monitor Cache Health**
 
@@ -674,6 +674,6 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 
 5. **Cache optimization requires byte-level consistency**: Fork agents must share exactly the same system prompt, tools, model, messages prefix, and thinking config as parent requests; any dimension deviation causes cache break. Continuous monitoring of cache hit rate is the cornerstone of Agent system cost control.
 
-6. **Streaming architecture is not optimization, but architectural choice**: It determines that every component of the system must be designed according to "incremental, interruptible, composable" principles, and is the cornerstone of the entire Agent Harness. From QueryEngine to StreamingToolExecutor to tool execution, streaming thinking runs throughout.
+6. **Streaming architecture is not optimization, but architectural choice**: It determines that you must design every component of the system according to "incremental, interruptible, composable" principles, and is the cornerstone of the entire Agent Harness. From QueryEngine to StreamingToolExecutor to tool execution, streaming thinking runs throughout.
 
 7. **Tool output token costs are often more worth watching than model output**: A large file read might produce 60K+ cache creation tokens, while a model turn output is usually only 1-5K tokens. Optimizing tool return content (like limiting lines, filtering irrelevant info) is more effective than optimizing model output.

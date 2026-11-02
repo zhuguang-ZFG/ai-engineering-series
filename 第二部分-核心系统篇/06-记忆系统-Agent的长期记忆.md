@@ -265,7 +265,7 @@ ch06-memory-funnel
 路径解析的优先级：
 
 1. `CLAUDE_COWORK_MEMORY_PATH_OVERRIDE` 环境变量（Cowork 模式的全路径覆盖）
-2. `autoMemoryDirectory` 设置（仅限 policySettings/localSettings/userSettings，**projectSettings 被排除**）
+2. `autoMemoryDirectory` 设置（仅限 policySettings/localSettings/userSettings，**排除 projectSettings**）
 3. 默认的 `<memoryBase>/projects/<sanitized-git-root>/memory/`
 
 projectSettings 这回还是不在可配之列，原因和上一章相同——防止恶意仓库通过 `autoMemoryDirectory: "~/.ssh"` 将写入重定向到敏感目录。路径校验函数对此做了严格的安全检查：拒绝相对路径、根路径、Windows 盘符根、UNC 路径和 null 字节注入。
@@ -568,7 +568,7 @@ Claude Code 选择 Level 1，是务实的取舍。Level 0 太保守——如果�
 
 这个原则在以下场景中尤为重要：
 
-1. **代码引用**：记忆说"用户认证在 `src/auth/handler.ts` 中"，但文件可能在重构后被移动。Agent 应该先检查文件是否存在，而非直接引用。
+1. **代码引用**：记忆说"用户认证在 `src/auth/handler.ts` 中"，但文件可能在重构后换了位置。Agent 应该先检查文件是否存在，而非直接引用。
 2. **依赖版本**：记忆说"项目使用 React 18"，但团队可能已经升级到 React 19。Agent 应该读取 `package.json` 确认当前版本。
 3. **决策背景**：记忆说"选择 PostgreSQL 是因为需要复杂查询"，这个决策背景不太会过时——它解释的是"为什么"而非"是什么"，可以直接信任。
 

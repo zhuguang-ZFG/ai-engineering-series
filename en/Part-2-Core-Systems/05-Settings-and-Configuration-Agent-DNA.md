@@ -4,7 +4,7 @@
 
 ---
 
-Claude Code's behavior is not determined by a single configuration file, but by six layers of configuration sources merged in sequence. These configuration sources are like the Agent's "DNA" -- they are written before the Agent starts, determining what the Agent can do, what it cannot do, and how it does things. Understanding this system is the first step toward mastering Claude Code's behavior customization capabilities.
+Claude Code's behavior is not determined by a single configuration file, but by six layers of configuration sources merged in sequence. These configuration sources are like the Agent's "DNA" -- you write them before the Agent starts, determining what the Agent can do, what it cannot do, and how it does things. Understanding this system is the first step toward mastering Claude Code's behavior customization capabilities.
 
 Calling the configuration system "DNA" fits: fertilization fixes an organism's genes once and for all, and those genes switch on layer by layer as the organism grows. Claude Code loads its configuration at startup and lets it take effect layer by layer at runtime. The difference is that you can edit and override the Agent's "DNA" precisely -- and that is both a capability and a risk.
 
@@ -170,7 +170,7 @@ flowchart TD
     class empty empty
 ```
 
-Note that policySettings uses "first non-empty source wins" rather than "deep merge." The difference is the point: enterprise management policies are typically a complete, audited configuration scheme, and policies from different sources should not "leak" into each other. For example, a policy delivered via remote API already contains complete security rules and should not be diluted by partial configurations from a local managed-settings.json file.
+Note that policySettings uses "first non-empty source wins" rather than "deep merge." The difference is the point: enterprise management policies are typically a complete, audited configuration scheme, and policies from different sources should not "leak" into each other. For example, a policy delivered via remote API already contains complete security rules, and partial configurations from a local managed-settings.json file should not dilute it.
 
 ### 5.1.4 The Special Status of the Policy Layer
 
@@ -180,7 +180,7 @@ An enterprise administrator therefore writes the policy once: the system takes t
 
 **Design Decision Analysis: Why is the merge logic for policySettings different from other configuration sources?**
 
-This stems from two different trust models. The five configuration layers from userSettings to flagSettings follow an "incremental accumulation" model -- each layer adds its preferences on top of trusting the lower layers. policySettings, on the other hand, follows a "single authority" model -- enterprise policies are completely delivered from a single authoritative source, and merging between different sources would introduce unpredictable behavior.
+This stems from two different trust models. The five configuration layers from userSettings to flagSettings follow an "incremental accumulation" model -- each layer adds its preferences on top of trusting the lower layers. policySettings, on the other hand, follows a "single authority" model -- a single authoritative source delivers enterprise policies in full, and merging between different sources would introduce unpredictable behavior.
 
 Imagine if two MDM systems respectively delivered different model restrictions and permissions rules. After merging, semantic conflicts could arise: one restricts the available model list, another restricts the permission scope, but the merged result might allow users to use a restricted model to bypass permission restrictions. The "first non-empty source wins" strategy ensures the determinism and auditability of the policy source.
 
@@ -258,7 +258,7 @@ When this function returns `true`, hooks execution takes hooks only from `policy
 
 **Real-World Scenario: Financial Institution Compliance Requirements**
 
-Suppose a financial institution requires all code changes to be logged through an internal audit system. An administrator can configure the following in managed-settings.json:
+Suppose a financial institution requires an internal audit system to log all code changes. An administrator can configure the following in managed-settings.json:
 
 - Set `allowManagedHooksOnly: true` to block all non-managed hooks
 - Configure an audit logging hook in policySettings' hooks
@@ -278,9 +278,9 @@ Inside a locked surface, the runner trusts only these sources:
 - **policySettings** -- set by administrators, inherently trusted
 - **built-in / bundled** -- shipped with the CLI, not user-written
 
-User-level (`~/.claude/*`) and project-level (`.claude/*`) customizations are completely blocked.
+This policy completely blocks user-level (`~/.claude/*`) and project-level (`.claude/*`) customizations.
 
-The key here is "selective locking." Enterprise administrators don't need to bluntly prohibit all customization but can finely control which customization surfaces need to be locked. For example:
+The key here is "selective locking." Enterprise administrators don't need to bluntly prohibit all customization but can finely control which customization surfaces to lock. For example:
 
 - Lock `mcp`: Prevent developers from connecting to unapproved MCP servers (preventing data leaks)
 - Lock `hooks`: Prevent developers from executing unaudited custom scripts
@@ -288,7 +288,7 @@ The key here is "selective locking." Enterprise administrators don't need to blu
 
 ### 5.2.4 Systematic Exclusion of projectSettings
 
-In security-sensitive functions, `projectSettings` is consistently excluded. The following functions demonstrate the same pattern: when checking `skipDangerousModePermissionPrompt`, they only read from userSettings, localSettings, flagSettings, and policySettings, **intentionally excluding projectSettings**.
+Security-sensitive functions consistently exclude `projectSettings`. The following functions demonstrate the same pattern: when checking `skipDangerousModePermissionPrompt`, they only read from userSettings, localSettings, flagSettings, and policySettings, **intentionally excluding projectSettings**.
 
 The same exclusion pattern appears in `hasAutoModeOptIn()`, `getUseAutoModeDuringPlan()`, and `getAutoModeConfig()`. The comments consistently point to the same reason: **projectSettings is intentionally excluded -- a malicious project could otherwise auto-bypass the dialog (RCE risk)**.
 
@@ -323,7 +323,7 @@ graph TD
 
 > In security-sensitive checks, the system only reads from configuration sources with a trust level of 4+ stars. This principle runs throughout the security design of the entire configuration system.
 
-> Cross-Reference: The `projectSettings` exclusion mechanism discussed in this chapter is closely related to the security model in Chapter 8 (Hooks System). The loading of hooks similarly follows this trust model -- when `allowManagedHooksOnly` is enabled, hooks from projectSettings are completely blocked.
+> Cross-Reference: The `projectSettings` exclusion mechanism discussed in this chapter is closely related to the security model in Chapter 8 (Hooks System). The loading of hooks similarly follows this trust model -- when `allowManagedHooksOnly` is on, the system completely blocks hooks from projectSettings.
 
 ```ill
 ch05-trust-ladder
@@ -371,7 +371,7 @@ From these feature flags, we can discern the evolutionary direction of Claude Co
 
 ### 5.3.2 GrowthBook Experimentation Framework
 
-For features that need to be dynamically controlled at runtime, Claude Code uses the GrowthBook A/B testing framework. The main entry function `getFeatureValue_CACHED_MAY_BE_STALE` accepts a feature name and default value, and synchronously reads the experiment configuration from cache.
+For features that need dynamic control at runtime, Claude Code uses the GrowthBook A/B testing framework. The main entry function `getFeatureValue_CACHED_MAY_BE_STALE` accepts a feature name and default value, and synchronously reads the experiment configuration from cache.
 
 The "CACHED_MAY_BE_STALE" in the function name plainly states its semantics: the value comes from cache and may be stale in cross-process scenarios. This is to avoid asynchronous waiting on the startup critical path -- synchronously reading from cache is preferable to blocking while waiting for remote configuration.
 
@@ -406,7 +406,7 @@ flowchart TD
     class compile_pro,growthbook_pro,ab_pro detail
 ```
 
-> Cross-Reference: The compile-time feature flag `EXTRACT_MEMORIES` directly controls whether the background memory extraction feature in Chapter 6 (Memory System) is compiled into the final artifact. This is a classic case of the configuration system influencing core functionality.
+> Cross-Reference: The compile-time feature flag `EXTRACT_MEMORIES` directly controls whether the build compiles the background memory extraction feature from Chapter 6 (Memory System) into the final artifact. This is a classic case of the configuration system influencing core functionality.
 
 ## 5.4 State Management System
 
@@ -419,7 +419,7 @@ The heart of the state management module is a generic Store in just 34 lines, in
 Three key design decisions:
 
 1. **Immutable Updates**: `setState` accepts an updater function `(prev: T) => T`, requiring callers to return an entirely new state object. It compares old and new references using `Object.is` -- only when the reference changes are listeners notified.
-2. **Generic `onChange` Callback**: Passed in when the Store is created, it is called with both old and new states on every state change. This is used in `AppStateProvider` to respond to external setting changes.
+2. **Generic `onChange` Callback**: Passed in at Store creation, every state change calls it with both the old and new states. `AppStateProvider` uses it to respond to external setting changes.
 3. **Set-based Listener Management**: Uses `Set` instead of arrays for automatic deduplication; `subscribe` returns an unsubscribe function, following React's cleanup pattern.
 
 **Why Only 34 Lines? -- The "Less Is More" Philosophy of State Management**
@@ -565,7 +565,7 @@ If you are an enterprise administrator and want to ensure: (1) All users can onl
 
 **Reference Answer**: Set `allowManagedHooksOnly: true` and `strictPluginOnlyCustomization: ["mcp"]`.
 
-**Extended Thinking**: If, in addition to the above requirements, you also want to ensure team members cannot override the model setting, how should you configure it? Hint: Consider whether the `model` field can be directly locked in policySettings.
+**Extended Thinking**: If, in addition to the above requirements, you also want to ensure team members cannot override the model setting, how should you configure it? Hint: Consider whether policySettings can directly lock the `model` field.
 
 ### Exercise 3: State Subscription Optimization
 
@@ -596,9 +596,9 @@ Say what content belongs in each configuration source, and explain why.
 ## Key Takeaways
 
 1. **Six-Layer Priority Chain**: pluginSettings -> userSettings -> projectSettings -> localSettings -> flagSettings -> policySettings, where the latter overrides the former. Understanding the role of each layer is the foundation for designing sound configuration strategies.
-2. **Merge Strategy**: Arrays are concatenated and deduplicated, objects are deeply merged, scalars are directly overridden. The array concatenation design ensures that permission rules are only ever added, never accidentally removed.
-3. **Security Boundaries**: `projectSettings` is excluded in all security-sensitive checks to prevent supply chain attacks from malicious repositories. This is a direct manifestation of the "decreasing trust radius" principle.
+2. **Merge Strategy**: Arrays merge by concatenation and deduplication, objects merge deeply, and scalars override directly. The array concatenation design ensures permission rules only ever increase; merging never accidentally removes them.
+3. **Security Boundaries**: All security-sensitive checks exclude `projectSettings` to prevent supply chain attacks from malicious repositories. This is a direct manifestation of the "decreasing trust radius" principle.
 4. **Special Merge for the Policy Layer**: policySettings uses "first non-empty source wins" instead of deep merge, ensuring the determinism and auditability of enterprise policies.
-5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs to be dynamically adjusted after release.
+5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs dynamic adjustment after release.
 6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code cover everything state management needs.
 7. **DeepImmutable Types**: Makes the type system refuse direct state modification, keeping the right thing easy and the wrong thing impossible.

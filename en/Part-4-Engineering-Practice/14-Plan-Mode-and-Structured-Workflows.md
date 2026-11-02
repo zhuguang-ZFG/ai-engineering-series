@@ -12,7 +12,7 @@
 
 Plan Mode is one of Claude Code's most unique designs. It separates Agent behavior into two phases: read-only exploration phase (planning) and writable execution phase (implementation). The core philosophy of this separation is: align intent before acting, avoiding rework from directional errors.
 
-This design philosophy can be compared to the construction industry: no architect would start laying bricks immediately upon receiving requirements. They would first draw blueprints (plan), confirm design intent with the client, evaluate structural feasibility, then begin construction (execution). During the planning phase, architects can modify plans at zero cost -- revising a drawing is much cheaper than demolishing a wall. Similarly, in Plan Mode, Agent's exploration and thinking produce no side effects (no file modifications, no command execution), and the cost of correcting "directional errors" is almost zero.
+This design philosophy mirrors the construction industry: no architect would start laying bricks immediately upon receiving requirements. They would first draw blueprints (plan), confirm design intent with the client, evaluate structural feasibility, then begin construction (execution). During the planning phase, architects can modify plans at zero cost -- revising a drawing is much cheaper than demolishing a wall. Similarly, in Plan Mode, Agent's exploration and thinking produce no side effects (no file modifications, no command execution), and the cost of correcting "directional errors" is almost zero.
 
 The core problem Plan Mode solves is **"Premature Action"**. Without Plan Mode, an Agent faces a dilemma: when facing complex tasks, either blindly act in the first round (high risk), or repeatedly read code without making decisions in every round (inefficient). Plan Mode provides the Agent with a "legitimate thinking space" -- in this space, the Agent can freely explore without the expectation of producing actual results, until it's confident it understands the full picture of the problem.
 
@@ -31,7 +31,7 @@ This differentiated strategy reflects different usage scenarios: external users 
 | Solution choice failure | Implemented poor-performing solution, needs rewrite | Compared multiple solution trade-offs before acting |
 | Missed edge cases | Finished code then discovered omissions, rework | Enumerated edge cases in plan and incorporated into solution |
 
-Plan Mode in this chapter is one gear inside a permission state machine; oh-my-pi 18.15.0 moves the same idea onto the pricing layer: `--smol`, `--slow`, and `--plan` assign models for lightweight tasks, thorough analysis, and architectural planning respectively; `--prewalk` switches to a cheap model at the first file write after the plan's todo list exists; `--plan-yolo` locks the session into read-only planning at start, auto-approves the plan on the model's first resolve call, then switches to the model named by `--plan-yolo-into` to implement it. "Plan before execute" is, on this host, simultaneously a permission decision and a cost decision: the planning phase is pinned read-only, and the execution phase puts on a cheaper model.
+Plan Mode in this chapter is one gear inside a permission state machine; oh-my-pi 18.15.0 moves the same idea onto the pricing layer: `--smol`, `--slow`, and `--plan` assign models for lightweight tasks, thorough analysis, and architectural planning respectively; `--prewalk` switches to a cheap model at the first file write after the plan's todo list exists; `--plan-yolo` locks the session into read-only planning at start, auto-approves the plan on the model's first resolve call, then switches to the model named by `--plan-yolo-into` to implement it. "Plan before execute" is, on this host, simultaneously a permission decision and a cost decision: the planning phase stays read-only, and the execution phase puts on a cheaper model.
 
 Gemini CLI makes the same gear a default-on entrance: `--approval-mode=plan` pins it at launch, `Shift+Tab` cycles through Default, Auto-Edit, and Plan, and the `/plan` command or one sentence of natural language switches it on -- the former switches to Plan and immediately submits the prompt to the model, the latter calls the `enter_plan_mode` tool (YOLO mode does not carry that tool). It writes the read-only planning phase down as an explicit tool whitelist: file reads, directory listings, glob, grep, and search stay on the table while `web_fetch` asks for confirmation every time; the agreed plan lands as a Markdown file in a plans directory, opens in an external editor where steps can be rewritten and inline comments left, the CLI notices the edits, reviews the comments, and presents the refined plan for final approval -- approving it exits Plan Mode and starts the implementation.
 
@@ -79,9 +79,9 @@ flowchart TD
 ```
 
 Key points:
-- **Sub-agent context forbids entering Plan Mode**: Sub-agents should not enter planning mode; this is an architectural constraint. Imagine if a sub-agent entered Plan Mode, it would wait for user plan approval, but user might not even know the sub-agent exists. This would cause the entire parent Agent's execution to be blocked on an approval request users cannot understand.
+- **Sub-agent context forbids entering Plan Mode**: Sub-agents should not enter planning mode; this is an architectural constraint. Imagine if a sub-agent entered Plan Mode, it would wait for user plan approval, but user might not even know the sub-agent exists. This would block the entire parent Agent's execution on an approval request users cannot understand.
 - **prepareContextForPlanMode**: Runs classifier activation side effects, ensuring correct permission configuration in plan mode.
-- **prePlanMode save**: Original mode is saved to `prePlanMode` field for ExitPlanMode recovery use.
+- **prePlanMode save**: The system saves the original mode to the `prePlanMode` field for ExitPlanMode recovery use.
 
 After entering Plan Mode, Agent receives tool_result containing clear behavior instructions:
 
@@ -104,7 +104,7 @@ The design of these six instructions implies a cognitive model: **Understand -> 
 
 ExitPlanModeV2Tool is responsible for exiting Plan Mode and restoring original permission mode. Its design is much more complex than EnterPlanMode because it needs to handle multiple scenarios.
 
-**Mode restoration** is the core logic. System reads saved original mode from `prePlanMode` and restores it. But there's a key "circuit breaker" defense: if `prePlanMode` is `auto`, but auto mode's gate is currently closed (e.g., due to circuit breaker trigger), then fall back to `default` mode.
+**Mode restoration** is the core logic. System reads saved original mode from `prePlanMode` and restores it. But there's a key "circuit breaker" defense: if `prePlanMode` is `auto`, but auto mode's gate has since closed (e.g., due to circuit breaker trigger), then fall back to `default` mode.
 
 ```mermaid
 flowchart TD
@@ -135,11 +135,11 @@ flowchart TD
     class LOCAL,MAILBOX endNode
 ```
 
-This circuit breaker defense reveals a subtle time window issue: when entering Plan Mode, auto mode was enabled, but during Plan Mode duration (possibly minutes or tens of minutes), something external (like system load or a security policy change) might have switched auto mode off. If ExitPlanMode doesn't check this condition, Agent exiting Plan Mode would immediately execute operations with auto mode permissions, potentially bypassing newly activated security limits.
+This circuit breaker defense reveals a subtle time window issue: when entering Plan Mode, auto mode was on, but during Plan Mode duration (possibly minutes or tens of minutes), something external (like system load or a security policy change) might have switched auto mode off. If ExitPlanMode doesn't check this condition, Agent exiting Plan Mode would immediately execute operations with auto mode permissions, potentially bypassing newly activated security limits.
 
 **Teammate path**: When Agent runs as teammate and Plan Mode is mandatory, ExitPlanMode doesn't pop up local approval UI but sends plan to team lead for approval via mailbox mechanism. Approval request contains sender, timestamp, plan file path, plan content, and request ID.
 
-> **Cross-reference:** Teammate's mailbox mechanism is analyzed in detail in Chapter 10 "The Coordinator Pattern -- Multi-Agent Orchestration". Plan Mode's teammate path is a typical case of distributed Agent collaboration -- approval decision authority is delegated to team lead rather than local user.
+> **Cross-reference:** Chapter 10 "The Coordinator Pattern -- Multi-Agent Orchestration" analyzes Teammate's mailbox mechanism in detail. Plan Mode's teammate path is a typical case of distributed Agent collaboration -- approval decision authority goes to the team lead rather than the local user.
 
 ### 14.1.4 Plan Mode Complete Case: From Requirement to Plan to Implementation
 
@@ -220,9 +220,9 @@ After user approves plan, ExitPlanMode restores original mode, Agent enters exec
 
 ### 14.2.1 Verification Agent
 
-`ExitPlanModeV2Tool` references `registerPlanVerificationHook`, and the comment beside it reveals an important design decision: verification hooks must be registered after context clear because context clear removes all hooks.
+`ExitPlanModeV2Tool` references `registerPlanVerificationHook`, and the comment beside it reveals an important design decision: verification hooks must register after context clear because context clear removes all hooks.
 
-Verification hooks must be registered after context clear because context clear removes all hooks. So the verification agent is an independent background Agent running in the phase after "clear context and start implementation", checking whether implementation results match the plan.
+Verification hooks must register after context clear because context clear removes all hooks. So the verification agent is an independent background Agent running in the phase after "clear context and start implementation", checking whether implementation results match the plan.
 
 **Design philosophy of verification agent.** Why do we need an independent verification agent instead of letting the execution agent check itself? This involves the cognitive bias of "self-review" -- executioners tend to judge their work using their own understanding rather than strictly comparing against the original plan text. The independent verification agent holds a snapshot of the original plan file and can review the result from a "bystander" perspective.
 
@@ -253,7 +253,7 @@ sequenceDiagram
 
 ### 14.2.2 Plan File Persistence and Recovery
 
-Plan file management is Plan Mode's infrastructure, provided by dedicated utility function module. The core challenge of this design is: **plans cannot be lost.** Users spent time approving plans, Agents spent tokens generating plans; if plans are lost due to session crash or unexpected interruption, all investment is wasted.
+Plan file management is Plan Mode's infrastructure, provided by dedicated utility function module. The core challenge of this design is: **plans cannot be lost.** Users spent time approving plans, Agents spent tokens generating plans; if plans are lost due to session crash or unexpected interruption, all investment goes to waste.
 
 **File path generation** uses slug-based naming strategy. Main sessions use simple `{slug}.md` format, sub-agents use `{slug}-agent-{agentId}.md` format to avoid file conflicts.
 
@@ -307,19 +307,19 @@ flowchart TD
 
 Why can't fork directly share original plan file? Because after fork, two sessions might go down completely different execution paths. If fork modifies plan (like adjusting approach based on implementation feedback), directly modifying original file would affect parent session. By copying file to new path, fork has independent plan copy, not interfering with each other.
 
-> **Cross-reference:** Fork Agent creation and state isolation mechanisms are analyzed in detail in Chapter 9 "Sub-Agents and the Fork Pattern". Plan file fork strategy is a concrete manifestation of Agent state isolation.
+> **Cross-reference:** Chapter 9 "Sub-Agents and the Fork Pattern" analyzes Fork Agent creation and state isolation mechanisms in detail. Plan file fork strategy is a concrete manifestation of Agent state isolation.
 
 ### 14.2.3 Deep Analysis of Plan File Recovery
 
 Let's analyze more deeply the three recovery sources of `recoverPlanFromMessages`, understanding each source's design intent and applicable scenarios.
 
-**Source 1: ExitPlanMode's tool_use input.** When Agent exits Plan Mode, ExitPlanMode tool's input parameters contain plan content. This content is injected into tool call's input via `normalizeToolInput`. During recovery, system finds ExitPlanMode's tool_use message from message history, extracts plan content. This is the most reliable recovery source because tool_use messages are part of API protocol, not modified by normal context management operations.
+**Source 1: ExitPlanMode's tool_use input.** When Agent exits Plan Mode, ExitPlanMode tool's input parameters contain plan content. `normalizeToolInput` injects this content into the tool call's input. During recovery, system finds ExitPlanMode's tool_use message from message history, extracts plan content. This is the most reliable recovery source because tool_use messages are part of API protocol, not modified by normal context management operations.
 
 **Source 2: User message's planContent field.** During clear context flow (i.e., clearing context to restart implementation), system sets plan content to a special `planContent` field. This field's purpose is to preserve plan's "seed" after context clear, so newly started execution phase still knows what to do.
 
-**Source 3: Attachment message's plan_file_reference.** auto-compact is an automatic context compression mechanism (detailed in Chapter 7). When compression runs, the system knows the plan file matters and keeps a reference to it in the attachment message. This ensures even after auto-compression, plan file can still be located and read through reference.
+**Source 3: Attachment message's plan_file_reference.** auto-compact is an automatic context compression mechanism (detailed in Chapter 7). When compression runs, the system knows the plan file matters and keeps a reference to it in the attachment message. This ensures even after auto-compression, you can still locate and read the plan file through its reference.
 
-The three sources are ranked by reliability: tool_use input most reliable (API protocol guarantee), planContent second (internal mechanism guarantee), plan_file_reference weakest (relies on auto-compact's correct recognition). Recovery logic attempts in this priority order, first successful source is final result.
+The three sources rank by reliability: tool_use input most reliable (API protocol guarantee), planContent second (internal mechanism guarantee), plan_file_reference weakest (relies on auto-compact's correct recognition). Recovery logic attempts in this priority order, first successful source is final result.
 
 ---
 
@@ -327,7 +327,7 @@ The three sources are ranked by reliability: tool_use input most reliable (API p
 
 ### 14.3.1 WorkflowTool and Skill System
 
-Claude Code's workflow capabilities are primarily provided by the Skill system. Skills are essentially predefined prompt templates, triggerable via slash commands. Skill execution's core preparation function handles three things:
+The Skill system provides most of Claude Code's workflow capabilities. Skills are essentially ready-made prompt templates, triggerable via slash commands. Skill execution's core preparation function handles three things:
 
 1. **Prompt replacement**: Replace `$ARGUMENTS` placeholder with user-provided arguments.
 2. **Permission extension**: Add allowed tools list to fork's execution context via `createGetAppStateWithAllowedTools`.
@@ -374,7 +374,7 @@ flowchart LR
 
 Claude Code's extensibility design follows the "ladder-style extension" principle: start with simplest prompt templates, as requirement complexity increases, progressively use more powerful extension mechanisms. Most users only need the Skill system, advanced users use hook commands, enterprise users integrate external tools via MCP.
 
-> **Cross-reference:** Skill system's complete architecture is analyzed in detail in Chapter 11 "The Skill System and Plugin Architecture". Hook system is discussed in Chapter 8 "The Hook System -- Agent's Lifecycle Extension Points". MCP integration is introduced in Chapter 12 "MCP Integration & External Protocols".
+> **Cross-reference:** Chapter 11 "The Skill System and Plugin Architecture" analyzes the Skill system's complete architecture in detail. Chapter 8 "The Hook System -- Agent's Lifecycle Extension Points" discusses the Hook system. Chapter 12 "MCP Integration & External Protocols" introduces MCP integration.
 
 ### 14.3.2 Fork Agent State Isolation
 
@@ -422,9 +422,9 @@ flowchart TD
 - **setAppState**: Default no-op, unless explicitly chosen to share (`shareSetAppState`).
 - **UI callbacks** (addNotification, setToolJSX, etc.): All undefined, sub-agent cannot control parent UI.
 
-**Why can't sub-agents control parent UI?** This is a critical safety design. If sub-agents could pop notifications or modify UI, users might be overwhelmed by notifications from multiple sub-agents, unable to distinguish main Agent from sub-Agent output. More seriously, malicious tool output (via prompt injection) could exploit sub-agent UI capabilities to phish -- for example, popping a seemingly legitimate confirmation dialog.
+**Why can't sub-agents control parent UI?** This is a critical safety design. If sub-agents could pop notifications or modify UI, notifications from multiple sub-agents might overwhelm users, leaving them unable to distinguish main Agent from sub-Agent output. More seriously, malicious tool output (via prompt injection) could exploit sub-agent UI capabilities to phish -- for example, popping a seemingly legitimate confirmation dialog.
 
-Fork Agent's state isolation strategy can be compared to a "sandbox": sub-agent runs in sandbox, can see outside world (through cloned file state), but cannot affect outside world (cannot modify parent Agent state, cannot control UI). The only communication channel with outside world is tool results -- sub-agent's execution results return to parent Agent through structured `tool_result` messages.
+Fork Agent's state isolation strategy resembles a "sandbox": sub-agent runs in sandbox, can see outside world (through cloned file state), but cannot affect outside world (cannot modify parent Agent state, cannot control UI). The only communication channel with outside world is tool results -- sub-agent's execution results return to parent Agent through structured `tool_result` messages.
 
 > **Best practice:** When designing sub-agents, follow "principle of least privilege". Only pass the minimum context the sub-agent needs to complete the task; don't indiscriminately pass the entire parent Agent state. Passing less narrows what the sub-agent can do and cuts token consumption (the sub-agent's input tokens also count toward the cost).
 
@@ -439,7 +439,7 @@ Claude Code's scheduling system handles two types of scheduled tasks:
 - **One-shot** (`recurring: false`): Triggers once then automatically deletes.
 - **Recurring** (`recurring: true`): Repeats according to schedule, rescheduling from current time.
 
-Tasks are stored in `<project>/.claude/scheduled_tasks.json`, file format:
+The system stores tasks in `<project>/.claude/scheduled_tasks.json`, file format:
 
 ```json
 {
@@ -520,13 +520,13 @@ RemoteTriggerTool manages remote Agent triggers, with five operations: list, get
 
 It works through Anthropic API's triggers endpoint, using OAuth bearer token authentication, carrying organization identifier and beta flag headers.
 
-Tool enablement is gated by two conditions: feature flag `tengu_surreal_dali` and policy limit `allow_remote_sessions`. RemoteTriggerTool only appears in tool list when both conditions are satisfied.
+Two conditions gate tool enablement: feature flag `tengu_surreal_dali` and policy limit `allow_remote_sessions`. RemoteTriggerTool only appears in tool list when both conditions hold.
 
 **Remote trigger application scenarios:**
 
 1. **CI/CD integration**: When the CI pipeline fails, automatically trigger an Agent to analyze the failure cause and generate fix suggestions.
 2. **Monitoring alert response**: When the monitoring system detects abnormal metrics, trigger an Agent to trace the root cause.
-3. **Code repository events**: Once a PR is created or updated, trigger an Agent to review the code automatically.
+3. **Code repository events**: Once a PR opens or updates, trigger an Agent to review the code automatically.
 4. **Scheduled reports**: Regularly trigger Agent to generate project status reports.
 
 ```mermaid
@@ -561,7 +561,7 @@ Session-scoped tasks (`durable: false`) have lifecycle bound to session. They're
 
 `listAllCronTasks` merges file tasks and session tasks, returning unified task list.
 
-In scheduler's `check()` method, session tasks and file tasks go through different processing paths. Session tasks are operated directly in memory (synchronous delete), file tasks are written to disk asynchronously via `removeCronTasks`.
+In scheduler's `check()` method, session tasks and file tasks go through different processing paths. The scheduler operates on session tasks directly in memory (synchronous delete), and writes file tasks to disk asynchronously via `removeCronTasks`.
 
 **Practical case: Auto-deploy monitoring workflow**
 
@@ -608,7 +608,7 @@ flowchart LR
     class DONE doneNode
 ```
 
-This is the most classic Agent workflow pattern. Plan phase ensures correct direction, Execute phase implements efficiently, Verify phase guarantees quality. Separating the three means each phase can be tuned and debugged on its own.
+This is the most classic Agent workflow pattern. Plan phase ensures correct direction, Execute phase implements efficiently, Verify phase guarantees quality. Separating the three means you can tune and debug each phase on its own.
 
 **Pattern 2: Event-Triggered Workflow**
 
@@ -629,7 +629,7 @@ flowchart LR
     class REPORT endNode
 ```
 
-This pattern fits operations automation and CI/CD integration: the run is triggered by an event rather than by a user, and Plan Mode is what keeps such an automation safe and controllable.
+This pattern fits operations automation and CI/CD integration: an event rather than a user triggers the run, and Plan Mode is what keeps such an automation safe and controllable.
 
 **Pattern 3: Polling Loop with Escalation**
 
@@ -649,7 +649,7 @@ flowchart TD
     class ESCALATE escalateNode
 ```
 
-This pattern fits continuous monitoring: low-cost polling runs on a timer and only triggers high-cost Agent reasoning when an anomaly is detected.
+This pattern fits continuous monitoring: low-cost polling runs on a timer and only triggers high-cost Agent reasoning when it detects an anomaly.
 
 **Anti-pattern 1: Unplanned complex tasks**
 
@@ -691,9 +691,9 @@ SleepTool's design seems simple (just wait a specified time), but it plays an im
 
 Key isolation designs include:
 
-1. **File state cache cloning** (`cloneFileStateCache`): Sub-agent's file reads don't affect parent Agent's cache. This ensures parent Agent's file state view isn't polluted by sub-agent's intermediate operations. For example, if sub-agent reads a file then file is modified, parent Agent still holds pre-modification cached version, not refreshed due to sub-agent's read.
+1. **File state cache cloning** (`cloneFileStateCache`): Sub-agent's file reads don't affect parent Agent's cache. This ensures sub-agent's intermediate operations don't pollute the parent Agent's file state view. For example, if the sub-agent reads a file and the file then changes, the parent Agent still holds the pre-modification cached version, not refreshed due to sub-agent's read.
 
-2. **Independent AbortController**: Sub-agent can be independently aborted without affecting parent Agent. The parent Agent can therefore run several sub-agents at once and cancel one of them, leaving the others to finish.
+2. **Independent AbortController**: You can abort a sub-agent independently without affecting the parent Agent. The parent Agent can therefore run several sub-agents at once and cancel one of them, leaving the others to finish.
 
 3. **Permission prompt suppression**: Background Agent's `getAppState` wraps `shouldAvoidPermissionPrompts: true`, avoiding background operations popping UI prompts. This is because background Agents usually execute pre-authorized tasks (like Plan verification, session summary), don't need and shouldn't interrupt users.
 
@@ -701,7 +701,7 @@ Key isolation designs include:
 
 `lastCacheSafeParams` is a global slot, used to save current turn's cache-safe params in post-turn hooks. Post-turn forks (like promptSuggestion, postTurnSummary) can therefore reuse the main loop's prompt cache directly, with no caller passing parameters by hand.
 
-**lastCacheSafeParams takes the "implicit context passing" route.** Explicit approach would pass parameters from main loop wherever cache-safe params are needed, but this causes function signature bloat -- each new call point needs modifying parameter list. Through global slot, callers only need to read slot value at right timing without knowing where value comes from. This reduces coupling between components.
+**lastCacheSafeParams takes the "implicit context passing" route.** Explicit approach would pass parameters from main loop wherever a caller needs cache-safe params, but this causes function signature bloat -- each new call point needs modifying parameter list. Through global slot, callers only need to read slot value at right timing without knowing where value comes from. This reduces coupling between components.
 
 Of course, global state has its risks: if read timing is wrong (like delayed read in async operation), slot value might have been overwritten by subsequent turns. Claude Code avoids this by immediately reading slot value in post-turn hook's synchronous execution segment -- slot's write and read happen in same synchronous execution segment, no race condition.
 
@@ -787,7 +787,7 @@ Use `/schedule` skill to create one one-shot and one recurring scheduled task. C
 
 ### Exercise 3: Analyze Plan File Recovery
 
-In a remote session (CCR), enter Plan Mode and create a plan. Terminate session then resume (`--resume`), check if plan file is correctly recovered. Combined with `recoverPlanFromMessages`' three recovery sources, analyze which path your scenario took.
+In a remote session (CCR), enter Plan Mode and create a plan. Terminate session then resume (`--resume`), check if the plan file recovers correctly. Combined with `recoverPlanFromMessages`' three recovery sources, analyze which path your scenario took.
 
 **Debug tip:** Start Claude Code with `CLAUDE_CODE_DEBUG=1` environment variable, search for `copyPlanForResume` and `recoverPlanFromMessages` keywords in logs, can observe which path recovery process took.
 
@@ -819,7 +819,7 @@ For your chosen scenario, answer:
 
 1. **Plan Mode separates read-only exploration from writable execution** by switching permission modes. EnterPlanMode saves original mode and switches to plan, ExitPlanMode restores original mode and handles circuit breaker defense. This separation ensures Agent produces no side effects during "thinking" phase, greatly reducing directional error risk.
 
-2. **Plan file management uses slug-based naming and lazy generation**, supports three-layer recovery strategy (direct read, file snapshot, message history), ensuring plans aren't lost in various failure scenarios. Recovery strategy is ordered by reliability priority, embodying "don't put all eggs in one basket" defensive design thinking.
+2. **Plan file management uses slug-based naming and lazy generation**, supports three-layer recovery strategy (direct read, file snapshot, message history), ensuring plans survive various failure scenarios. The recovery strategy runs in reliability-priority order, embodying "don't put all eggs in one basket" defensive design thinking.
 
 3. **Fork Agent uses CacheSafeParams to share the prompt cache and createSubagentContext to keep state apart**, so the sub-agent can't disturb the main Agent's state. Sub-agent's "sandbox" design -- can read outside world but cannot modify parent state -- is Agent security's key boundary.
 

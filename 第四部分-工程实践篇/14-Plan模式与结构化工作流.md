@@ -79,9 +79,9 @@ flowchart TD
 ```
 
 关键点：
-- **Agent 上下文中禁止进入 Plan 模式**：子 Agent 不应该进入规划模式，这条约束写在架构里。想象一下，如果一个子 Agent 进入 Plan 模式，它会等待用户审批计划，而用户可能根本不知道子 Agent 的存在。这会导致整个父 Agent 的执行被阻塞在一个用户无法理解的审批请求上。
+- **Agent 上下文中禁止进入 Plan 模式**：子 Agent 不应该进入规划模式，这条约束写在架构里。想象一下，如果一个子 Agent 进入 Plan 模式，它会等待用户审批计划，而用户可能根本不知道子 Agent 的存在。这会把整个父 Agent 的执行阻塞在一个用户无法理解的审批请求上。
 - **prepareContextForPlanMode**：运行 classifier activation 的副作用，确保在 plan 模式下权限配置正确。
-- **prePlanMode 保存**：原始模式被保存到 `prePlanMode` 字段，供 ExitPlanMode 恢复使用。
+- **prePlanMode 保存**：系统把原始模式保存到 `prePlanMode` 字段，供 ExitPlanMode 恢复使用。
 
 进入 Plan 模式后，Agent 收到的 tool_result 包含明确的行为指令：
 
@@ -139,7 +139,7 @@ flowchart TD
 
 **Teammate 路径**：当 Agent 作为 teammate 运行且 Plan 模式是强制要求时，ExitPlanMode 不会弹出本地审批 UI，而是通过 mailbox 机制将计划发送给 team lead 审批。审批请求包含发送者、时间戳、计划文件路径、计划内容和请求 ID 等信息。
 
-> **交叉引用：** Teammate 的 mailbox 机制在第 10 章"协调器模式 -- 多智能体编排"中有详细分析。Plan 模式的 teammate 路径是分布式 Agent 协作的一个典型案例 -- 审批决策的权力被委托给 team lead，而非本地用户。
+> **交叉引用：** Teammate 的 mailbox 机制在第 10 章"协调器模式 -- 多智能体编排"中有详细分析。Plan 模式的 teammate 路径是分布式 Agent 协作的一个典型案例 -- 审批决策的权力委托给了 team lead，而非本地用户。
 
 ### 14.1.4 Plan 模式完整案例：从需求到计划到实施
 
@@ -313,11 +313,11 @@ flowchart TD
 
 再往下挖一层：`recoverPlanFromMessages` 的三种恢复来源，各有各的设计意图和适用场景。
 
-**来源一：ExitPlanMode 的 tool_use input。** 当 Agent 退出 Plan 模式时，ExitPlanMode 工具的输入参数中包含了计划内容。这个内容被 `normalizeToolInput` 注入到工具调用的 input 中。恢复时，系统从消息历史中找到 ExitPlanMode 的 tool_use 消息，提取其中的计划内容。这是最可靠的恢复来源，因为 tool_use 消息是 API 协议的一部分，不会被普通的上下文管理操作修改。
+**来源一：ExitPlanMode 的 tool_use input。** 当 Agent 退出 Plan 模式时，ExitPlanMode 工具的输入参数中包含了计划内容。`normalizeToolInput` 把这个内容注入到工具调用的 input 中。恢复时，系统从消息历史中找到 ExitPlanMode 的 tool_use 消息，提取其中的计划内容。这是最可靠的恢复来源，因为 tool_use 消息是 API 协议的一部分，普通的上下文管理操作改不动它。
 
 **来源二：User message 的 planContent 字段。** 在 clear context 流程中（即清除上下文重新开始实施时），系统会将计划内容设置到一个特殊的 `planContent` 字段。这个字段的目的是在上下文清除后保留计划的"种子"，新开始的执行阶段仍然知道要做什么。
 
-**来源三：Attachment message 的 plan_file_reference。** auto-compact 是一种自动压缩上下文的机制（详见第 7 章）。压缩时，系统认得计划文件重要，会在 attachment 消息里保留对它的引用。这确保了即使经过自动压缩，计划文件仍然可以通过引用被定位和读取。
+**来源三：Attachment message 的 plan_file_reference。** auto-compact 是一种自动压缩上下文的机制（详见第 7 章）。压缩时，系统认得计划文件重要，会在 attachment 消息里保留对它的引用。这确保了即使经过自动压缩，仍然可以通过引用定位和读取计划文件。
 
 三种来源按可靠性排优先级：tool_use input 最可靠（API 协议保证），planContent 次之（内部机制保证），plan_file_reference 最弱（依赖 auto-compact 的正确识别）。恢复逻辑按此优先级依次尝试，第一个成功的来源即为最终结果。
 
@@ -421,7 +421,7 @@ flowchart TD
 - **setAppState**：默认为 no-op，除非显式选择共享（`shareSetAppState`）。
 - **UI callbacks**（addNotification、setToolJSX 等）：全部为 undefined，子 Agent 不能控制父 UI。
 
-**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，用户可能会被来自多个子 Agent 的通知淹没，无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能拿子 Agent 的 UI 能力去钓鱼 -- 例如弹出一个看似合法的确认对话框。
+**为什么子 Agent 不能控制父 UI？** 这是一个关键的安全设计。如果子 Agent 可以弹出通知或修改 UI，来自多个子 Agent 的通知可能淹没用户，使其无法区分主 Agent 和子 Agent 的输出。更严重的是，恶意的工具输出（通过 prompt injection）可能拿子 Agent 的 UI 能力去钓鱼 -- 例如弹出一个看似合法的确认对话框。
 
 Fork Agent 的状态隔离策略可以用"沙箱"来类比：子 Agent 在沙箱中运行，可以看到外部世界（通过克隆的文件状态），但不能影响外部世界（不能修改父 Agent 状态，不能控制 UI）。唯一与外部世界的通信通道是工具结果 -- 子 Agent 的执行结果通过结构化的 `tool_result` 消息返回给父 Agent。
 
@@ -690,13 +690,13 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 关键的隔离设计包括：
 
-1. **文件状态缓存克隆**（`cloneFileStateCache`）：子 Agent 的文件读取不影响父 Agent 的缓存。这确保了父 Agent 的文件状态视图不会被子 Agent 的中间操作污染。例如，如果子 Agent 读取了一个文件然后该文件被修改，父 Agent 仍然持有修改前的缓存版本，不会因为子 Agent 的读取而刷新。
+1. **文件状态缓存克隆**（`cloneFileStateCache`）：子 Agent 的文件读取不影响父 Agent 的缓存。这确保了子 Agent 的中间操作不会污染父 Agent 的文件状态视图。例如，如果子 Agent 读取了一个文件，随后该文件发生改动，父 Agent 仍然持有修改前的缓存版本，不会因为子 Agent 的读取而刷新。
 
 2. **独立的 AbortController**：子 Agent 能单独中止，不影响父 Agent。父 Agent 因此能一次启动多个子 Agent，需要时只取消其中某个，其他子任务照常运行。
 
 3. **权限提示抑制**：后台 Agent 的 `getAppState` 包装了 `shouldAvoidPermissionPrompts: true`，避免后台操作弹出 UI 提示。这是因为后台 Agent 通常执行预先授权的任务（如 Plan 验证、会话摘要），不需要也不应该打断用户。
 
-4. **Transcript 记录**：将子 Agent 的消息记录到独立的 sidechain 中，与主会话的消息分离。主会话的消息历史因此保持清晰，不被子 Agent 的内部操作淹没。
+4. **Transcript 记录**：将子 Agent 的消息记录到独立的 sidechain 中，与主会话的消息分离。主会话的消息历史因此保持清晰，不会淹没在子 Agent 的内部操作里。
 
 `lastCacheSafeParams` 是一个全局 slot，用于在 post-turn hooks 中保存当前轮次的 cache-safe params。post-turn fork（如 promptSuggestion、postTurnSummary）因此能直接复用主循环的 prompt cache，调用者不必再手动传参。
 

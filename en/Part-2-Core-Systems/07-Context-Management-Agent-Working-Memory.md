@@ -13,7 +13,7 @@
 
 All of a large language model's reasoning capabilities rest on a single premise: the context window. In every conversation turn, Claude Code must package the complete message history (system prompts, user messages, assistant replies, tool calls and results) and send it to the model. As the conversation progresses, this history inevitably expands until it hits the ceiling of the model's context window.
 
-You can think of the context window as a **whiteboard of limited size**. All of the Agent's working memory -- conversation history, tool results, intermediate reasoning -- must be written on this whiteboard. When the whiteboard runs out of space, you must erase old content before writing new content. The key question is: **what to erase, what to keep, and how to erase it**?
+You can think of the context window as a **whiteboard of limited size**. All of the Agent's working memory -- conversation history, tool results, intermediate reasoning -- goes on this whiteboard. When the whiteboard runs out of space, you must erase old content before writing new content. The key question is: **what to erase, what to keep, and how to erase it**?
 
 This is not Claude Code's problem alone; every long-conversation Agent system has to solve it. Many Agent frameworks solve this problem with "brute-force truncation" -- simply discarding the oldest messages. Claude Code's approach is far more refined.
 
@@ -27,7 +27,7 @@ Effective Window = Model Window - Reserved Output Tokens
 
 In the auto-compaction module, the `getEffectiveContextWindowSize` function works out the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
 
-> **Why reserve 20,000 tokens?** Because AutoCompact (Level 4 compression) needs to call the LLM to generate a summary, and the summary itself consumes output tokens. If no space is reserved, the compression operation itself may fail due to insufficient output space -- a classic "compression paradox."
+> **Why reserve 20,000 tokens?** Because AutoCompact (Level 4 compression) needs to call the LLM to generate a summary, and the summary itself consumes output tokens. If you reserve no space, the compression operation itself may fail due to insufficient output space -- a classic "compression paradox."
 
 Let's use concrete numbers: suppose the model context window is 200,000 tokens and the maximum output tokens are 16,384:
 - Reserved space = min(16,384, 20,000) = 16,384 tokens
@@ -103,9 +103,9 @@ stateDiagram-v2
     end note
 ```
 
-On success, the failure counter resets to zero; on failure, the counter increments and is propagated to the upper-level caller. This is a classic circuit breaker pattern -- once consecutive failures reach the threshold, the circuit breaks, preventing avalanche effects.
+On success, the failure counter resets to zero; on failure, the counter increments and propagates to the upper-level caller. This is a classic circuit breaker pattern -- once consecutive failures reach the threshold, the circuit breaks, preventing avalanche effects.
 
-**Real-world data from the circuit breaker:** According to engineering analysis, before the circuit breaker was introduced, 1,279 sessions were observed with over 50 consecutive compression failures (up to 3,272), wasting approximately 250K API calls per day. After its introduction, such cascading failures were completely eliminated.
+**Real-world data from the circuit breaker:** According to engineering analysis, before the circuit breaker came in, 1,279 sessions showed over 50 consecutive compression failures (up to 3,272), wasting approximately 250K API calls per day. After its introduction, such cascading failures disappeared completely.
 
 > **Anti-Pattern Warning:** If you are building your own Agent system, do not ignore circuit breakers. A system without circuit breakers will fall into a "compression failure -> retry -> fail again" death spiral when the API is unstable, wasting resources and potentially further degrading the user experience due to increased latency.
 
@@ -115,7 +115,7 @@ On success, the failure counter resets to zero; on failure, the counter incremen
 
 ## 7.2 The Four-Level Compression Strategy
 
-Claude Code's context management employs a four-level progressive compression strategy, escalating from low cost to high cost. Each level is activated only when the previous level is insufficient to free up space.
+Claude Code's context management employs a four-level progressive compression strategy, escalating from low cost to high cost. Each level activates only when the previous level fails to free up enough space.
 
 This design philosophy can be understood through an analogy: **compression strategies are like organizing clothing storage**. You don't start by throwing away all your clothes (brute-force truncation); instead, you first put away clothes you no longer wear (Snip), then compress seasonal clothing (MicroCompact), then vacuum-seal bulky items (Collapse), and only finally do a comprehensive sort-and-discard (AutoCompact).
 
@@ -153,13 +153,13 @@ graph LR
 
 ### Level 1: Snip
 
-Snip cuts history out of the **whole message sequence**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is enabled, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
+Snip cuts history out of the **whole message sequence**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is on, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
 
 This differs from MicroCompact: the marker `[Old tool result content cleared]` belongs to the time-based MicroCompact path, which replaces eligible tool-result bodies while retaining their message structure. It is not the definition of Snip.
 
 **The design trade-off:** Removing old messages can reclaim more than tool-output tokens, but requires careful handling of retained context and tool-call/result relationships. A shorter model-facing history also need not mean the UI has discarded its scrollback. Message trimming and tool-result replacement solve related problems at different levels.
 
-Snip's freed-token count is passed to the auto-compaction decision so that it can account for the reduced history. Snip and MicroCompact may both run in the same preprocessing pass; they are not mutually exclusive.
+Snip's freed-token count feeds into the auto-compaction decision so that it can account for the reduced history. Snip and MicroCompact may both run in the same preprocessing pass; they are not mutually exclusive.
 
 **Typical usage scenario:** An earlier investigation produced many messages and tool calls, and the current task has moved beyond that phase. History trimming reduces the old message sequence; clearing the contents of individual file-read results is instead a MicroCompact example. This mechanism does not imply that every installation exposes a user-callable Snip tool.
 
@@ -169,7 +169,7 @@ MicroCompact is a time-triggered, large-scale tool result cleanup. When the syst
 
 > **Why is this related to cache expiry?** Claude's API supports Prompt Caching -- if consecutive requests share the same prefix, cached portions can significantly reduce cost and latency. However, over time, caches expire. When a cache expires, the full content must be resent regardless. At that point, keeping old tool results only adds unnecessary payload.
 
-The core logic for time-based triggering resides in the time evaluation function: it checks whether the feature flag is enabled, whether the message source is the main thread, and then calculates the time interval since the last assistant message. If the interval exceeds the configured threshold, micro-compaction is triggered.
+The core logic for time-based triggering resides in the time evaluation function: it checks whether the feature flag is on, whether the message source is the main thread, and then calculates the time interval since the last assistant message. If the interval exceeds the configured threshold, it triggers micro-compaction.
 
 Once triggered, the system retains the most recent N compressible tool results (`config.keepRecent`, minimum value of 1) and replaces all other tool result content with the clearance marker text. Compressible tool types include Read, Bash, Grep, Glob, WebSearch, WebFetch, Edit, and Write.
 
@@ -187,11 +187,11 @@ Additionally, MicroCompact has a cache editing-based path that uses the `cache_e
 
 ### Level 3: Collapse
 
-Collapse is context restructuring-level compression. When the Context Collapse feature is enabled, the system begins committing (commit) compression operations at 90% context utilization and blocks new spawns at 95%. The design philosophy of this level is to shift context management from "reactive compression" to "proactive restructuring."
+Collapse is context restructuring-level compression. When the Context Collapse feature is on, the system begins committing (commit) compression operations at 90% context utilization and blocks new spawns at 95%. The design philosophy of this level is to shift context management from "reactive compression" to "proactive restructuring."
 
 Collapse mode suppresses the triggering of auto-compression because the two would compete at the 93% critical point. Collapse, as a more refined context management system, has higher priority.
 
-> **Design Philosophy:** Collapse represents a different mindset -- not "compress when space runs out," but "proactively restructure before space pressure appears." This is similar to an operating system's memory prefetching strategy, which starts defragmenting before memory is exhausted.
+> **Design Philosophy:** Collapse represents a different mindset -- not "compress when space runs out," but "proactively restructure before space pressure appears." This is similar to an operating system's memory prefetching strategy, which starts defragmenting before memory runs out.
 
 **Key differences between Collapse and AutoCompact:**
 
@@ -251,7 +251,7 @@ ch07-four-levels
 
 The quality of compression directly depends on prompt design. Claude Code's compression prompt engineering is a carefully designed system with multiple variants and strict output format constraints.
 
-You can think of compression prompts as instructions to a stenographer: you need to clearly tell them "what to record, what not to record, and what format to use." If the instructions are not precise enough, the summary will either lose critical information or be stuffed with unnecessary details.
+You can think of compression prompts as instructions to a stenographer: you need to clearly tell them "what to record, what not to record, and what format to use." If the instructions are not precise enough, the summary will either lose critical information or stuff itself with unnecessary details.
 
 ### Compression-Specific Prompt Templates
 
@@ -282,7 +282,7 @@ Each prompt includes a critical anti-tool-call preamble: it instructs the model 
 
 The compression prompt requires the model to output two XML blocks:
 
-- `<analysis>` block: A thinking scratchpad used to organize thoughts and ensure comprehensive coverage. This block is discarded in the final result.
+- `<analysis>` block: A thinking scratchpad used to organize thoughts and ensure comprehensive coverage. The final result discards this block.
 - `<summary>` block: The formal summary content, containing a structured set of 9 sections.
 
 The `formatCompactSummary` function handles post-processing: it first discards the `<analysis>` block (thinking scratchpad), then extracts the content of the `<summary>` block as the formal summary.
@@ -312,11 +312,11 @@ flowchart TD
 
 ### CompactBoundaryMessage
 
-After each compression is completed, the system inserts a `CompactBoundaryMessage` into the message stream as a dividing line between pre-compression and post-compression. This marker carries compression metadata: trigger type (manual/automatic), pre-compression token count, and number of messages involved in the compression. The `logicalParentUuid` field associates the boundary marker with the last message before compression, constructing logical continuity of the message chain.
+After each compression completes, the system inserts a `CompactBoundaryMessage` into the message stream as a dividing line between pre-compression and post-compression. This marker carries compression metadata: trigger type (manual/automatic), pre-compression token count, and number of messages involved in the compression. The `logicalParentUuid` field associates the boundary marker with the last message before compression, constructing logical continuity of the message chain.
 
-The boundary marker tells later compression runs "which messages have already been compressed," so they do not get compressed twice.
+The boundary marker tells later compression runs "which messages already went through compression," so they do not get compressed twice.
 
-> **Cross-Reference:** `CompactBoundaryMessage` is directly related to the message chain mechanism in the conversation loop from Chapter 2. When building API requests, the conversation loop needs to correctly handle boundary markers -- messages before the boundary marker have been replaced by summaries and should not be sent again.
+> **Cross-Reference:** `CompactBoundaryMessage` is directly related to the message chain mechanism in the conversation loop from Chapter 2. When building API requests, the conversation loop needs to correctly handle boundary markers -- summaries have replaced the messages before the boundary marker, and the loop should not send them again.
 
 ---
 
@@ -357,7 +357,7 @@ These budgets limit the amount of content re-injected into the context after com
 
 `truePostCompactTokenCount` is an estimate of the actual post-compression context size, including the sum of tokens for the boundary marker, summary messages, attachments, and hook results. This value is used to determine whether compression would immediately trigger another compression in the next turn, providing critical diagnostic information for telemetry.
 
-If the post-compression token count still exceeds the auto-compression threshold, the system knows the compression "was done in vain" -- this situation typically occurs when the conversation structure is extremely complex or the summary itself is too long.
+If the post-compression token count still exceeds the auto-compression threshold, the system knows the compression "went to waste" -- this situation typically occurs when the conversation structure is extremely complex or the summary itself is too long.
 
 ---
 
@@ -404,9 +404,9 @@ Compression at the end of each phase ensures ample context space for the next ph
 
 ### Strategy 3: Use the Memory System to Supplement Context
 
-> **Cross-Reference:** The memory system from Chapter 6 is an important supplement to context management. Compression loses conversation details, but if key information has already been saved as memory files, the Agent can still recover critical context by reading memories after compression.
+> **Cross-Reference:** The memory system from Chapter 6 is an important supplement to context management. Compression loses conversation details, but if key information already lives in memory files, the Agent can still recover critical context by reading memories after compression.
 
-Having the Agent save a memory after an important decision is what keeps that decision readable once the conversation is compressed.
+Having the Agent save a memory after an important decision is what keeps that decision readable once the conversation gets compressed.
 
 ### Context Strategies for Multi-File Projects
 
@@ -421,7 +421,7 @@ When working with large projects, context management is especially critical:
 
 ### Cross-check: compression as hand tools
 
-> **Identity of this cross-check:** oh-my-pi is registered in `CREDITS.md` as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same boundary grows into under someone else's hands.
+> **Identity of this cross-check:** `CREDITS.md` registers oh-my-pi as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same boundary grows into under someone else's hands.
 
 Where Claude Code's four-level compression is an automatic defense wired into the conversation loop, oh-my-pi 18.15.0 turns several cuts of that same layer into explicit tools a user can swing directly: `--no-context-files` refuses context files such as AGENTS.md and CLAUDE.md outright, cutting injected context at the source; the `compress` subcommand rewrites text files into the dense prompt register and reports what it drops; the `find` subcommand takes a behavior description and returns the files and line ranges that implement it; the `toks` subcommand counts a file with every embedded offline tokenizer at once. Reporting what gets dropped is the same instinct as the two-phase output structure in §7.3: compression must not be a silent drop -- what got lost goes on the table.
 
@@ -455,9 +455,9 @@ Trace the circuit breaker state changes through the following event sequence:
 2. Compression fails (consecutiveFailures = ?)
 3. Compression fails (consecutiveFailures = ?)
 4. Compression fails (consecutiveFailures = ?)
-5. Will compression be attempted in the next turn?
+5. Will the next turn attempt compression?
 
-> *Advanced Challenge:* If the circuit breaker threshold is changed from 3 to 5, with an API failure rate of 30%, how many additional API calls would be wasted per day? (Hint: refer to the data from 1,279 sessions in the text)
+> *Advanced Challenge:* If you change the circuit breaker threshold from 3 to 5, with an API failure rate of 30%, how many additional API calls go to waste per day? (Hint: refer to the data from 1,279 sessions in the text)
 
 **Exercise 4: Context Compression in Practice**
 
@@ -473,7 +473,7 @@ Start a long conversation session using Claude Code:
 
 Combining Chapter 2 (Conversation Loop) and Chapter 9 (Fork Pattern), analyze the following questions:
 - In the conversation loop's preprocessing pipeline, at which step does context compression execute? Why at that position?
-- When a Fork creates a sub-Agent, if the parent Agent's context has already been compressed, what does the sub-Agent inherit? What impact does this have on the sub-Agent's behavior?
+- When a Fork creates a sub-Agent, if the parent Agent's context already went through compression, what does the sub-Agent inherit? What impact does this have on the sub-Agent's behavior?
 
 ---
 
@@ -481,10 +481,10 @@ Combining Chapter 2 (Conversation Loop) and Chapter 9 (Fork Pattern), analyze th
 
 1. **Effective Window = Model Window - Reserved Output Tokens**: Claude Code reserves up to 20,000 tokens for compression summary output space, ensuring the compression operation itself does not fail due to insufficient space.
 2. **Four-Level Progressive Compression**: Snip -> MicroCompact -> Collapse -> AutoCompact, with costs escalating at each level. Each level is an "upgrade" of the previous one.
-3. **Circuit Breaker Protection**: After 3 consecutive compression failures, further attempts are stopped, preventing avalanche effects from wasted API calls. This design stems from actual data analysis of 1,279 sessions.
-4. **Dual-Phase Prompt Structure**: `<analysis>` thinking scratchpad + `<summary>` formal summary. The former is discarded in the final context to save tokens -- "thinking is the process, the summary is the result."
-5. **CompactBoundaryMessage**: The compression boundary marker carries metadata and maintains logical continuity of the message chain through `logicalParentUuid`, so later operations can identify exactly which content was compressed.
+3. **Circuit Breaker Protection**: After 3 consecutive compression failures, the system stops further attempts, preventing avalanche effects from wasted API calls. This design stems from actual data analysis of 1,279 sessions.
+4. **Dual-Phase Prompt Structure**: `<analysis>` thinking scratchpad + `<summary>` formal summary. The final context discards the former to save tokens -- "thinking is the process, the summary is the result."
+5. **CompactBoundaryMessage**: The compression boundary marker carries metadata and maintains logical continuity of the message chain through `logicalParentUuid`, so later operations can identify exactly which content went through compression.
 6. **Post-Compression Budget Control**: Re-injected content has strict token budget limits (50,000 total budget, 5,000 per file), preventing immediate re-triggering of compression.
-7. **Time-Triggered Micro-Compression**: When server-side cache expires (timeout since last assistant message), old tool results are proactively cleared to reduce rewrite costs.
+7. **Time-Triggered Micro-Compression**: When server-side cache expires (timeout since last assistant message), the system proactively clears old tool results to reduce rewrite costs.
 8. **Proactive Compression Over Reactive Compression**: Manually triggering compression at key work milestones with annotation of key points preserves more valuable information than waiting for auto-compression.
-9. **Memory System as a Context Supplement**: Important decisions should be saved as memory files, so that even if the conversation is compressed, critical information is not lost. See Chapter 6 for details.
+9. **Memory System as a Context Supplement**: You should save important decisions as memory files, so that even if the conversation gets compressed, critical information survives. See Chapter 6 for details.

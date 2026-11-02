@@ -16,16 +16,16 @@
 
 Claude Code's skill system is a multi-layered extension mechanism. It allows users to define reusable prompt templates through Markdown files, and allows developers to register compile-time built-in skills through TypeScript code. The design goal of the entire system is: **zero-configuration usability, configurable power**.
 
-It's like a chef's toolbox: the built-in knives and pots (built-in skills) can handle most cooking needs, but when you need to prepare a specific cuisine, you can add specialized tools (custom skills). Moreover, these tools can be managed in tiers — home kitchen (user-level), restaurant kitchen (project-level), chain restaurant standards (managed-level).
+It's like a chef's toolbox: the built-in knives and pots (built-in skills) can handle most cooking needs, but when you need to prepare a specific cuisine, you can add specialized tools (custom skills). Moreover, you can manage these tools in tiers — home kitchen (user-level), restaurant kitchen (project-level), chain restaurant standards (managed-level).
 
 ### 11.1.1 Built-in Skill Inventory
 
-Built-in Skills are skills compiled into the CLI binary, available out of the box for all users. They are registered uniformly at startup via `initBundledSkills()`.
+Built-in Skills are skills compiled into the CLI binary, available out of the box for all users. `initBundledSkills()` registers them uniformly at startup.
 
-The registration entry function determines which skills to load based on feature flags. Skills are divided into two categories:
+The registration entry function determines which skills to load based on feature flags. Skills fall into two categories:
 
 - **Core Skills**: Always registered, such as `verify`, `debug`, `simplify`, `remember`, `batch`, `stuck`, etc.
-- **Feature-gated Skills**: Gated by feature flags, only registered when the corresponding feature flag is enabled, such as `loop` (AGENT_TRIGGERS), `claude-api` (BUILDING_CLAUDE_APPS), `schedule` (AGENT_TRIGGERS_REMOTE)
+- **Feature-gated Skills**: Gated by feature flags, only registered when the corresponding feature flag is on, such as `loop` (AGENT_TRIGGERS), `claude-api` (BUILDING_CLAUDE_APPS), `schedule` (AGENT_TRIGGERS_REMOTE)
 
 The complete list of core built-in skills is as follows:
 
@@ -73,18 +73,18 @@ graph TD
 
 ### 11.1.2 Built-in Skill Registration Mechanism
 
-Each built-in skill is registered through a registration function that receives a skill definition object containing the following key fields: name, description, aliases, usage scenario hints, argument hints, allowed tools list, model specification, whether to disable model invocation, whether it is user-invocable, runtime gating callback, lifecycle hooks, execution context (inline or fork), associated agents, referenced file collection, and most importantly, the prompt generator function.
+Each built-in skill goes through a registration function that receives a skill definition object containing the following key fields: name, description, aliases, usage scenario hints, argument hints, allowed tools list, model specification, whether to disable model invocation, whether it is user-invocable, runtime gating callback, lifecycle hooks, execution context (inline or fork), associated agents, referenced file collection, and most importantly, the prompt generator function.
 
 The most critical fields include:
 
-- Prompt generator: A lazily executed prompt generator that only runs when the skill is invoked
-- `files`: An optional collection of referenced files that are extracted to disk on first invocation so the model can access them via Read/Grep
-- `isEnabled`: Runtime gating callback; for example, the `/loop` skill checks whether the related feature is enabled on each invocation
+- Prompt generator: A lazily executed prompt generator that only runs on skill invocation
+- `files`: An optional collection of referenced files, extracted to disk on first invocation so the model can access them via Read/Grep
+- `isEnabled`: Runtime gating callback; for example, the `/loop` skill checks whether the related feature is on at each invocation
 - `context: 'fork'`: Marks the skill to execute in an independent subprocess
 
 #### Security Design of File Extraction
 
-File extraction uses a lazy singleton pattern, using the `??=` operator to ensure concurrent calls share the same extraction Promise, avoiding race conditions. File writes use `O_NOFOLLOW | O_EXCL` flags to prevent symlink attacks, directory permissions are set to `0o700`, and file permissions are set to `0o600`.
+File extraction uses a lazy singleton pattern, using the `??=` operator to ensure concurrent calls share the same extraction Promise, avoiding race conditions. File writes use `O_NOFOLLOW | O_EXCL` flags to prevent symlink attacks, directory permissions use `0o700`, and file permissions use `0o600`.
 
 The implications of these security measures:
 
@@ -98,13 +98,13 @@ The implications of these security measures:
 
 > **Why do skills need referenced files?**
 >
-> Certain skills (such as `verify`) need to reference additional documentation or configuration when executing. These files are compiled into the binary (they don't exist as separate disk files), but need to be extracted to disk when the skill is first invoked. This design has two benefits: first, skill distribution doesn't require additional file management; second, extraction runs complete security checks on the files.
+> Certain skills (such as `verify`) need to reference additional documentation or configuration when executing. These files live inside the compiled binary (they don't exist as separate disk files), but the skill must extract them to disk on first invocation. This design has two benefits: first, skill distribution doesn't require additional file management; second, extraction runs complete security checks on the files.
 >
 > You can think of it as "the manual that comes with the software" — when not needed, it takes up no space (embedded in the binary), and when needed, it's expanded onto the desktop (extracted to a temporary directory).
 
 ### 11.1.3 Skill Loading Engine
 
-All file-system-based skills (non-built-in) are loaded by a unified loading engine. This is a session-cached asynchronous function.
+A unified loading engine loads all file-system-based skills (non-built-in). This is a session-cached asynchronous function.
 
 The core flow of the loading engine is as follows:
 
@@ -141,7 +141,7 @@ The deduplication strategy uses `realpath` to resolve symbolic links and obtain 
 > /home/user/projects/my-app/symlink <- Symbolic link pointing to .claude/skills/
 > ```
 >
-> Without `realpath` resolution, the same skill directory could be loaded twice through two paths: once through the original path `.claude/skills/my-skill/`, and once through the symbolic link `symlink/my-skill/`. This would cause the skill to be registered twice, potentially resulting in conflicts or duplicate execution. `realpath` resolution ensures that regardless of the access path, everything ultimately points to the same physical location.
+> Without `realpath` resolution, the same skill directory could load twice through two paths: once through the original path `.claude/skills/my-skill/`, and once through the symbolic link `symlink/my-skill/`. The skill would register twice, potentially resulting in conflicts or duplicate execution. `realpath` resolution ensures that regardless of the access path, everything ultimately points to the same physical location.
 
 ---
 
@@ -149,7 +149,7 @@ The deduplication strategy uses `realpath` to resolve symbolic links and obtain 
 
 ### 11.2.1 Markdown Frontmatter Configuration
 
-File-based skills are organized in directory form, where each skill is a directory named `skill-name/` containing a `SKILL.md` file. This is the only directory structure format.
+File-based skills take directory form: each skill is a directory named `skill-name/` containing a `SKILL.md` file. This is the only directory structure format.
 
 `SKILL.md` carries a YAML frontmatter for configuration. The fields the parser handles include:
 
@@ -221,11 +221,11 @@ A complete skill creation flow example:
 
 Parameter substitution in a skill's prompt is flexible:
 
-**Positional parameters**: `$ARGUMENTS` is replaced with the full argument string; `$ARGUMENTS[0]`, `$ARGUMENTS[1]` are replaced with indexed arguments; `$0`, `$1` are shorthand forms.
+**Positional parameters**: `$ARGUMENTS` takes the full argument string; `$ARGUMENTS[0]`, `$ARGUMENTS[1]` take the indexed arguments; `$0`, `$1` are shorthand forms.
 
-**Named parameters**: When the frontmatter defines `arguments: foo bar`, `$foo` and `$bar` are mapped to the user input values at the corresponding positions.
+**Named parameters**: When the frontmatter defines `arguments: foo bar`, `$foo` and `$bar` map to the user input values at the corresponding positions.
 
-The substitution logic executes in order: named parameters are replaced first, then indexed parameters, then full arguments, and finally if there are no placeholders, the argument text is appended.
+The substitution logic executes in order: named parameters first, then indexed parameters, then full arguments; finally, if there are no placeholders, it appends the argument text.
 
 ```
 Parameter substitution execution order:
@@ -260,13 +260,13 @@ Additionally, the skill body can run Shell commands inline and substitute enviro
 
 > **Security Boundary: Why can't MCP skills execute Shell commands?**
 >
-> MCP skills come from external servers, and Shell commands can execute arbitrary system operations. If Shell command inline expansion were allowed in MCP skills, a malicious MCP server could inject a command like `$(rm -rf /)` into a skill prompt. Therefore, the system skips Shell command expansion when the `LoadedFrom` type is `mcp` — this is a critical security boundary.
+> MCP skills come from external servers, and Shell commands can execute arbitrary system operations. If MCP skills allowed Shell command inline expansion, a malicious MCP server could inject a command like `$(rm -rf /)` into a skill prompt. Therefore, the system skips Shell command expansion when the `LoadedFrom` type is `mcp` — this is a critical security boundary.
 >
 > This is a classic trust-boundary problem, but “local” does not mean “trusted”: project skills may arrive with a third-party repository, and plugins may come from outside authors. A source tag is not a certificate of good content; it lets the loader choose transformations that fit the exposure. Refusing local Shell expansion for a remote MCP skill is one such tighter rule.
 
 ### 11.2.3 LoadedFrom Types
 
-The source of a skill is identified by the `LoadedFrom` type, which includes six sources: legacy command directory (commands_DEPRECATED), new skill directory (skills), plugin-provided (plugin), enterprise managed policy (managed), built-in compiled (bundled), and MCP server-provided (mcp).
+The `LoadedFrom` type identifies a skill's source and covers six of them: legacy command directory (commands_DEPRECATED), new skill directory (skills), plugin-provided (plugin), enterprise managed policy (managed), built-in compiled (bundled), and MCP server-provided (mcp).
 
 This type records provenance and selects the loading policy. For example, MCP skills do not receive Shell command expansion. Read the diagram below as “source to policy branch,” not as an absolute reputation ranking from high to low.
 
@@ -302,15 +302,15 @@ The `getSkillsPath` function clearly defines the path mapping for each source, r
 
 Description of each tier:
 
-**Managed Policy Level**: Distributed by enterprise administrators through centralized configuration. The path is `{managedPath}/.claude/skills/`. Can be disabled via the `CLAUDE_CODE_DISABLE_POLICY_SKILLS` environment variable.
+**Managed Policy Level**: Distributed by enterprise administrators through centralized configuration. The path is `{managedPath}/.claude/skills/`. Set the `CLAUDE_CODE_DISABLE_POLICY_SKILLS` environment variable to turn them off.
 
-**User Level**: Stored in the user's home directory `~/.claude/skills/`. Available across all projects. Requires the `userSettings` source to be enabled and not restricted by the `pluginOnly` policy.
+**User Level**: Stored in the user's home directory `~/.claude/skills/`. Available across all projects. Requires the `userSettings` source switched on and not restricted by the `pluginOnly` policy.
 
 **Project Level**: Stored in the project directory `.claude/skills/`. Only takes effect within that project context. Supports nested directory discovery (see next section).
 
 **Additional Directories**: The `.claude/skills/` subdirectory within extra directories specified via the `--add-dir` CLI parameter.
 
-**Legacy Commands Directory**: The `.claude/commands/` directory, compatible with the old format. Both single-file `.md` and directory-format `SKILL.md` are supported. This source is tagged as `commands_DEPRECATED`.
+**Legacy Commands Directory**: The `.claude/commands/` directory, compatible with the old format. Both single-file `.md` and directory-format `SKILL.md` work here. This source carries the `commands_DEPRECATED` tag.
 
 ```mermaid
 graph TD
@@ -357,11 +357,11 @@ flowchart TD
     style F fill:#2ecc71,stroke:#27ae60,color:#fff
 ```
 
-Key security design: Skills in directories ignored by `.gitignore` are automatically skipped, preventing paths like `node_modules/pkg/.claude/skills/` from being silently loaded.
+Key security design: the loader automatically skips skills in `.gitignore`-ignored directories, preventing paths like `node_modules/pkg/.claude/skills/` from sneaking in.
 
 > **Anti-Pattern Warning: Do not place skills in node_modules**
 >
-> Although `.gitignore` filtering provides a safety net, relying on it as the sole security measure is insufficient. If an npm package places skill files in `.claude/skills/` and that directory happens to not be in `.gitignore`, those skills would be automatically loaded. It's recommended to explicitly add `**/.claude/skills/` to your project's `.gitignore`, keeping only the root-level `.claude/skills/`.
+> Although `.gitignore` filtering provides a safety net, relying on it as the sole security measure is insufficient. If an npm package places skill files in `.claude/skills/` and that directory happens to not be in `.gitignore`, the loader still loads those skills automatically. It's recommended to explicitly add `**/.claude/skills/` to your project's `.gitignore`, keeping only the root-level `.claude/skills/`.
 
 > **Practical Use Case: Project-specific Skills in a Monorepo**
 >
@@ -384,13 +384,13 @@ Key security design: Skills in directories ignored by `.gitignore` are automatic
 > │               └── SKILL.md    <- Shared type generation skill
 > ```
 >
-> When the model operates on files under `packages/frontend/`, the frontend component generation skill is automatically discovered; when operating on files under `packages/backend/`, the API generation skill is automatically discovered. This "activate by location" pattern greatly reduces the cognitive burden of skill selection.
+> When the model operates on files under `packages/frontend/`, it automatically discovers the frontend component generation skill; when operating on files under `packages/backend/`, it discovers the API generation skill. This "activate by location" pattern greatly reduces the cognitive burden of skill selection.
 
 ### 11.3.3 Conditional Skills
 
-Skills with a `paths` frontmatter are not activated immediately, but are stored in the `conditionalSkills` Map. When the file path the model operates on matches the `paths` pattern, the skill is activated.
+Skills with a `paths` frontmatter do not activate immediately; the loader stores them in the `conditionalSkills` Map. When the file path the model operates on matches the `paths` pattern, the skill activates.
 
-Matching uses gitignore-style patterns, run by the `ignore` library. When a file path matches a conditional skill's paths pattern, the skill is activated and stored in the dynamic skill set. Activated conditional skill names are permanently recorded — even if the cache is subsequently cleared, they will not revert to conditional status.
+Matching uses gitignore-style patterns, run by the `ignore` library. When a file path matches a conditional skill's paths pattern, the skill activates and joins the dynamic skill set. The system permanently records activated conditional skill names — even if a later cache clear empties the set, they will not revert to conditional status.
 
 ```mermaid
 flowchart TD
@@ -438,7 +438,7 @@ The plugin manifest `plugin.json` contains the plugin's metadata:
 | agents | Agent directory path | Discover custom agents |
 | hooks | Hook configuration path | Lifecycle hooks |
 
-Plugin discovery sources are listed in priority order:
+Plugin discovery sources, in priority order:
 
 1. **Marketplace Plugins**: Configured in settings via the `plugin@marketplace` format
 2. **Session-only Plugins**: Loaded via the `--plugin-dir` CLI parameter or SDK plugins option
@@ -472,13 +472,13 @@ flowchart TD
 
 > **Design Philosophy: Why "collect errors without aborting"?**
 >
-> Plugin loading adopts a "best-effort" strategy — even if one component of a plugin fails to load (for example, a command's Markdown format is incorrect), other components can still load normally. This avoids the "one bad apple spoils the bunch" problem. Errors are collected into `PluginLoadResult.errors` and can be diagnosed and fixed later.
+> Plugin loading adopts a "best-effort" strategy — even if one component of a plugin fails to load (for example, a command's Markdown format is incorrect), other components can still load normally. This avoids the "one bad apple spoils the bunch" problem. The loader collects errors into `PluginLoadResult.errors`, where you can diagnose and fix them later.
 >
 > This fault-tolerant design is very important in plugin systems. Imagine if a format error in a third-party plugin caused Claude Code to fail to start — the user experience would be disastrous.
 
 ### 11.4.3 Indirect Registration of MCP Skills
 
-MCP servers can also provide skills. To avoid circular dependencies, the build function for MCP skills is obtained indirectly through an intermediate registration module. The skill loading module registers the build function at initialization, and the MCP skill module retrieves it when needed. This is a classic "publish-lookup" pattern that inserts a leaf node into the dependency graph to break the cycle. The reason dynamic imports are not used is that in bundled binaries, non-literal dynamic imports fail due to path resolution errors.
+MCP servers can also provide skills. To avoid circular dependencies, the system obtains the build function for MCP skills indirectly through an intermediate registration module. The skill loading module registers the build function at initialization, and the MCP skill module retrieves it when needed. This is a classic "publish-lookup" pattern that inserts a leaf node into the dependency graph to break the cycle. The reason dynamic imports are not used is that in bundled binaries, non-literal dynamic imports fail due to path resolution errors.
 
 ```
 Dependency relationships and cycle breaking:
@@ -507,7 +507,7 @@ Dependency relationships and cycle breaking:
 
 > **Why not use dynamic import?**
 >
-> Claude Code's binary is built by bundling all TypeScript modules together using a bundler (such as esbuild). When dynamic import uses string variables as paths, the bundler cannot determine at compile time which modules to include, resulting in path resolution failures. The "publish-lookup" pattern avoids runtime dynamic resolution issues by establishing all dependency relationships at compile time.
+> Claude Code's binary bundles all TypeScript modules together through a bundler (such as esbuild). When dynamic import uses string variables as paths, the bundler cannot determine at compile time which modules to include, resulting in path resolution failures. The "publish-lookup" pattern avoids runtime dynamic resolution issues by establishing all dependency relationships at compile time.
 
 ---
 
@@ -592,7 +592,7 @@ Based on the investigation results, generate the following files:
 #### Step 3: Test the Skill
 
 After launching Claude Code, enter `/gen-api GET users` and verify:
-- Whether the skill is correctly recognized and loaded
+- Whether the system recognizes and loads the skill correctly
 - Whether parameter substitution is correct (`$method` = "GET", `$resource` = "users")
 - Whether the generated code conforms to the project's existing patterns
 
@@ -605,7 +605,7 @@ Continuously improve based on usage feedback:
 
 ### Best Practices for Skill Composition
 
-Skills can be combined with other skills, agents, and tools into complete workflows.
+You can combine skills with other skills, agents, and tools into complete workflows.
 
 #### Pattern 1: Skill Chain
 
@@ -721,10 +721,10 @@ Usage: `/generate-api POST user`
 
 ### Exercise 3: Explore Skill Loading Debug Logs
 
-Launch a session with `CLAUDE_CODE_DEBUG=1 claude` and observe the debug output of skill loading to understand which sources of skills are loaded in the current environment.
+Launch a session with `CLAUDE_CODE_DEBUG=1 claude` and observe the debug output of skill loading to understand which sources of skills load in the current environment.
 
 **Checklist:**
-- Confirm that all built-in skills are loaded
+- Confirm that all built-in skills load
 - Check if there is compatibility loading from legacy command directories
 - View the activation status of conditional skills
 - Verify that the deduplication strategy is working correctly
@@ -732,7 +732,7 @@ Launch a session with `CLAUDE_CODE_DEBUG=1 claude` and observe the debug output 
 ### Exercise 4: Create a Skill with Lifecycle Hooks
 
 Create a skill that automatically runs lint checks before execution and automatically runs related tests after execution. Consider:
-- How should pre hook failures be handled?
+- How should the skill handle pre hook failures?
 - How does post hook output affect the skill result?
 - How can you reference skill arguments within hooks?
 
@@ -751,18 +751,18 @@ Consider: Is there overlap between these skills? How can you avoid conflicts bet
 
 ## Key Takeaways
 
-1. **Tiered Architecture**: Skill sources are layered from managed -> user -> project -> plugin -> bundled, with enterprise policies having the highest priority. Each layer has independent paths and security policies.
+1. **Tiered Architecture**: Skill sources stack from managed -> user -> project -> plugin -> bundled, with enterprise policies having the highest priority. Each layer has independent paths and security policies.
 
-2. **Security First**: MCP skills (`loadedFrom === 'mcp'`) do not execute Shell command inlining; built-in skill file extraction uses `O_NOFOLLOW | O_EXCL` to prevent symlink attacks; skills in gitignored directories are automatically skipped. Provenance selects the transformations the loader permits, but does not certify a skill's content.
+2. **Security First**: MCP skills (`loadedFrom === 'mcp'`) do not execute Shell command inlining; built-in skill file extraction uses `O_NOFOLLOW | O_EXCL` to prevent symlink attacks; the loader automatically skips skills in gitignored directories. Provenance selects the transformations the loader permits, but does not certify a skill's content.
 
-3. **Lazy Loading**: Built-in skill referenced files are only extracted to disk on first invocation; conditional skills are only activated when matching file patterns; dynamic skills are only discovered when file operations trigger path scanning. This lazy strategy optimizes startup performance and memory usage.
+3. **Lazy Loading**: Built-in skill referenced files reach disk only on first invocation; conditional skills activate only when file patterns match; dynamic skills surface only when file operations trigger path scanning. This lazy strategy optimizes startup performance and memory usage.
 
 4. **Deduplication Strategy**: Uses `realpath` to resolve symbolic links for canonical paths, keeping the first occurrence, to avoid duplicate loading. This resolves issues caused by symbolic links and overlapping parent directories.
 
-5. **Circular Dependency Resolution**: Through the intermediate registration module's "publish-lookup" pattern, a leaf node is inserted into the dependency graph to break cycles. This pattern is chosen over dynamic imports due to binary bundling limitations.
+5. **Circular Dependency Resolution**: Through the intermediate registration module's "publish-lookup" pattern, the design inserts a leaf node into the dependency graph to break cycles. It prefers this pattern over dynamic imports due to binary bundling limitations.
 
 6. **Parameter System Flexibility**: Supports three levels of substitution — `$ARGUMENTS` (full arguments), `$ARGUMENTS[N]`/`$N` (positional arguments), and named parameters (`$foo`) — plus `${CLAUDE_SKILL_DIR}` and `${CLAUDE_SESSION_ID}` environment variables. The substitution order ensures parameter names don't conflict with positional indices.
 
 7. **Plugins as Extension Units**: Plugins are higher-level than skills and can contain skills, agents, and hooks. Cache-first loading and fault-tolerant error collection ensure plugin reliability and performance.
 
-8. **Skill Composition Patterns**: Skills can be combined with other skills, agents, and hooks. Keep skills small and focused, and compose them into complex workflows.
+8. **Skill Composition Patterns**: You can combine skills with other skills, agents, and hooks. Keep skills small and focused, and compose them into complex workflows.

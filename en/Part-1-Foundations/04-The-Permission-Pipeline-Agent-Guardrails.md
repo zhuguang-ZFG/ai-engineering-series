@@ -10,7 +10,7 @@
 
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
 
-To understand the permission pipeline through a physical-world analogy: a modern office building's access control system doesn't just place a single security guard at the entrance (a single checkpoint). Instead, it sets up different levels of security checks in different areas -- the lobby only requires a card swipe, meeting rooms require reservation confirmation, and the server room requires fingerprint verification plus dual-person authorization. Each layer of security check is independent; even if one layer is bypassed, the next layer can still prevent unauthorized access. Claude Code's permission pipeline is precisely the embodiment of this "defense in depth" philosophy in a software system.
+To understand the permission pipeline through a physical-world analogy: a modern office building's access control system doesn't just place a single security guard at the entrance (a single checkpoint). Instead, it sets up different levels of security checks in different areas -- the lobby only requires a card swipe, meeting rooms require reservation confirmation, and the server room requires fingerprint verification plus dual-person authorization. Each layer of security check is independent; even if an intruder slips past one layer, the next layer can still prevent unauthorized access. Claude Code's permission pipeline is precisely the embodiment of this "defense in depth" philosophy in a software system.
 
 This chapter will start from architectural design, deeply dissect each stage of the permission pipeline, help you understand its design decisions, and let you master configuration methods through hands-on exercises.
 
@@ -18,7 +18,7 @@ This chapter will start from architectural design, deeply dissect each stage of 
 
 Claude Code's permission checking is not a Boolean judgment from a single function, but a pipeline composed of four stages. Each stage has its own responsibilities and short-circuit logic: as long as a preceding stage makes a final decision, subsequent stages will not execute.
 
-These four stages can be visualized with a flowchart:
+This flowchart lays out the four stages:
 
 ```mermaid
 flowchart TD
@@ -81,7 +81,7 @@ These four stages are: validateInput (input validation), hasPermissionsToUseTool
 
 The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), parsing throws an exception and the pipeline turns the tool call down before it runs. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
 
-When parsing fails, `toolPermissionResult` retains its default `passthrough` state, which is subsequently converted to `ask` behavior. So when data validation fails the system degrades to asking the user for confirmation instead of crashing outright.
+When parsing fails, `toolPermissionResult` retains its default `passthrough` state, and the pipeline later converts it to `ask` behavior. So when data validation fails the system degrades to asking the user for confirmation instead of crashing outright.
 
 One principle sits behind this choice: **in security systems, error handling should be "safe" rather than "correct."** Crashing outright does expose the problem, but during Agent runtime it could interrupt the entire session. Gracefully degrading to user confirmation is a safer error handling strategy -- it gives the user the opportunity to decide whether to continue, rather than having the system decide on the user's behalf.
 
@@ -89,11 +89,11 @@ One principle sits behind this choice: **in security systems, error handling sho
 
 Rule matching is the core of the permission pipeline. The `hasPermissionsToUseToolInner` function checks three types of rules in strict priority order: deny rules, ask rules, and allow rules.
 
-**Step 1a: Tool-level deny check.** This is the highest priority. If a tool is denied entirely, the call is immediately rejected.
+**Step 1a: Tool-level deny check.** This is the highest priority. If a deny rule covers the whole tool, the system rejects the call on the spot.
 
 The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic has two paths: exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
 
-The seven rule sources are ordered by proximity: session-level rules (the most recently set) take priority over command-line arguments, command-line arguments take priority over project configuration, and project configuration takes priority over global user configuration. The more specific and recent a rule, the earlier it sits, so it overrides the general and the old.
+The seven rule sources rank by proximity: session-level rules (the most recently set) take priority over command-line arguments, command-line arguments take priority over project configuration, and project configuration takes priority over global user configuration. The more specific and recent a rule, the earlier it sits, so it overrides the general and the old.
 
 ```mermaid
 flowchart BT
@@ -112,7 +112,7 @@ flowchart BT
     class session,command,cli,policy,flag,local,project,user priority
 ```
 
-**Step 1b: Tool-level ask check.** When a tool is configured to "always ask," the system forces a confirmation prompt. There is one exception: when the Bash tool is in sandbox mode and the sandbox auto-approve option is configured, sandboxed commands can skip the ask rule. The design intent of this exception is: if the user already trusts the sandbox environment (commands within the sandbox cannot affect the system outside the sandbox), then the risk of executing commands within the sandbox has been reduced to an acceptable level.
+**Step 1b: Tool-level ask check.** When a tool's configuration says "always ask," the system forces a confirmation prompt. There is one exception: when the Bash tool is in sandbox mode and the sandbox auto-approve option is on, sandboxed commands can skip the ask rule. The design intent of this exception is: if the user already trusts the sandbox environment (commands within the sandbox cannot affect the system outside the sandbox), then the risk of executing commands within the sandbox has dropped to an acceptable level.
 
 **Step 2b: Tool-level allow check.** If no deny or ask rules match, the system checks whether an allow rule exists to directly permit the operation.
 
@@ -131,7 +131,7 @@ The `PermissionResult` returned by `checkPermissions` has four behaviors:
 - `ask`: Requires user confirmation
 - `passthrough`: Defer to subsequent stages (ultimately becomes `ask`)
 
-`passthrough` is a unique design. When a tool has no special permission logic, it can return `passthrough` so the pipeline keeps flowing. In subsequent steps, `passthrough` is automatically converted to `ask`, accompanied by a permission request message.
+`passthrough` is a unique design. When a tool has no special permission logic, it can return `passthrough` so the pipeline keeps flowing. In subsequent steps, the pipeline automatically turns `passthrough` into `ask`, accompanied by a permission request message.
 
 > **Design Insight:** Why is `passthrough` needed instead of having tools without special permission logic return `ask` directly? The difference lies in "intent" -- `passthrough` means "I have no opinion, let subsequent stages decide," while `ask` means "I believe this operation requires user confirmation." If a subsequent allow rule matches, `passthrough` will be overridden to `allow`, but `ask` will not be overridden. This subtle difference produces different behaviors in specific scenarios.
 
@@ -166,7 +166,7 @@ sequenceDiagram
     end
 ```
 
-> **Best Practice:** In enterprise environments, if you want to reduce the disruption of frequent permission prompts seen by users, three strategies can be combined: (1) Pre-configure allow rules in the project configuration to cover common operations; (2) Use auto mode to let the classifier automatically handle common requests; (3) Configure Hook scripts to implement custom auto-approval logic. These three strategies can be stacked, covering all scenarios from simple to complex.
+> **Best Practice:** In enterprise environments, if you want to reduce the disruption of frequent permission prompts seen by users, you can combine three strategies: (1) Pre-configure allow rules in the project configuration to cover common operations; (2) Use auto mode to let the classifier automatically handle common requests; (3) Configure Hook scripts to implement custom auto-approval logic. Stack all three and they cover every scenario from simple to complex.
 
 One tool call passes four gates: shape, rules, context — and only last, a human.
 
@@ -178,13 +178,13 @@ ch04-gate-steps
 
 ### 4.2.1 ToolPermissionContext Type Structure
 
-`ToolPermissionContext` is the core data structure of the entire permission system. It carries all the context information needed for permission checking. It includes fields such as permission mode, extra working directories, rules at all levels (allow/deny/ask), bypass mode availability flag, and whether permission prompts should be avoided.
+`ToolPermissionContext` is the core data structure of the entire permission system. It carries all the context information needed for permission checking. It includes fields such as permission mode, extra working directories, rules at all levels (allow/deny/ask), bypass mode availability flag, and whether to avoid permission prompts.
 
-Immutability is written into the type: all fields are readonly. Every permission update produces a new `ToolPermissionContext` object rather than modifying the existing one. This immutable data pattern ensures consistency in concurrent environments -- when multiple tools check permissions simultaneously, the context each reads will not change unexpectedly due to another tool's permission update.
+The type enforces immutability: all fields are readonly. Every permission update produces a new `ToolPermissionContext` object rather than modifying the existing one. This immutable data pattern ensures consistency in concurrent environments -- when multiple tools check permissions simultaneously, the context each reads will not change unexpectedly due to another tool's permission update.
 
 The necessity of immutability here can be understood through a concrete scenario: suppose Tool A and Tool B simultaneously begin permission checking. Halfway through the check, Tool A's user confirmation triggers a permission rule update (the user selects "always allow"). If PermissionContext were mutable, Tool B would see the rules change under it mid-check, so the same request gets judged against two different states. Immutability ensures that each permission check uses a deterministic snapshot.
 
-Rules are indexed by source. This design allows the system to precisely track the origin of each rule and display information such as "this rule comes from project-level settings" in the rule management interface. Multi-level configuration scenarios lean on this capability -- when a rule is defined by multiple sources, users need to know which rule is in effect, where it comes from, and how to modify it.
+The type indexes rules by source. This design allows the system to precisely track the origin of each rule and display information such as "this rule comes from project-level settings" in the rule management interface. Multi-level configuration scenarios lean on this capability -- when several sources define the same rule, users need to know which rule is in effect, where it comes from, and how to modify it.
 
 ### 4.2.2 PermissionDecision Sources: hook, user, classifier
 
@@ -194,17 +194,17 @@ Permission decisions (PermissionDecision) come from three sources, each with dif
 
 **user source:** The user's manual selection in the terminal interface. The `permanent` flag indicates whether the user chose to persist this decision to the configuration file. User decisions have a medium trust level -- they represent the intent of the current operator, but the operator may not be the system administrator.
 
-**classifier source:** Automatic decisions made by the AI classifier in auto mode, which will be discussed in detail later. Classifier decisions have the lowest trust level -- they are AI judgments that may be incorrect, which is why certain security check types are "classifier-immune."
+**classifier source:** Automatic decisions made by the AI classifier in auto mode, which we will discuss in detail later. Classifier decisions have the lowest trust level -- they are AI judgments that may be incorrect, which is why certain security check types are "classifier-immune."
 
 `PermissionDecision` itself is a union type containing the three behaviors: allow, ask, and deny.
 
-> **Design Insight:** The three decision sources rank by trust matching capability (hook > user > classifier): Hook scripts are written by system administrators and have the highest level of system understanding, hence the highest trust level; the classifier is an AI making automatic judgments, and while its accuracy is very high, it can still make errors, hence the lowest trust level.
+> **Design Insight:** The three decision sources rank by trust matching capability (hook > user > classifier): Hook scripts come from system administrators, who have the deepest system understanding, hence the highest trust level; the classifier is an AI making automatic judgments, and while its accuracy is very high, it can still make errors, hence the lowest trust level.
 
 ### 4.2.3 The ResolveOnce Pattern: Atomic Race Resolution
 
-In permission interactions, multiple asynchronous participants may simultaneously attempt to resolve the same permission request -- the user clicks "allow" at the same moment the classifier returns "pass." The `ResolveOnce` pattern is designed precisely to resolve this race condition. It provides three methods: resolve, isResolved, and claim.
+In permission interactions, multiple asynchronous participants may simultaneously attempt to resolve the same permission request -- the user clicks "allow" at the same moment the classifier returns "pass." The `ResolveOnce` pattern exists precisely to resolve this race condition. It provides three methods: resolve, isResolved, and claim.
 
-Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other gets turned down. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
+Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks fire nearly simultaneously, only one can successfully claim, and the other gets turned down. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
 
 > **Cross-Reference:** The ResolveOnce pattern and the "immutable state flow" principle from Chapter 2 share a common lineage. Both ensure concurrent safety through atomic state changes -- the state is either old or new; there is no "half-new, half-old" intermediate state.
 
@@ -251,7 +251,7 @@ The `default` mode is the most conservative. Aside from tools explicitly permitt
 
 The `plan` mode restricts the Agent to read-only operations. Its UI indicator is a pause icon.
 
-In plan mode, write tools (Edit, Write) have their permission checks return `deny`, but read tools (Read, Grep, Glob) are permitted normally. A noteworthy detail is that when plan mode's bypass availability flag is true, it means the user was originally using bypass mode and then switched to plan mode, and at this point the bypass permission logic still takes effect.
+In plan mode, write tools (Edit, Write) have their permission checks return `deny`, but read tools (Read, Grep, Glob) pass normally. A noteworthy detail is that when plan mode's bypass availability flag is true, it means the user was originally using bypass mode and then switched to plan mode, and at this point the bypass permission logic still takes effect.
 
 **Applicable scenario:** Code review and architecture analysis. Developers want the Agent to first "look at" the code without modifying anything, provide analysis and suggestions, and then decide whether to execute modifications.
 
@@ -265,19 +265,19 @@ Auto mode's core challenge is weighing "automation efficiency" against "security
 
 Auto mode stacks several optimizations to cut the classifier's API call overhead:
 
-1. **acceptEdits fast path:** Before calling the classifier, the system first checks under acceptEdits mode whether the tool would be permitted. If it passes under acceptEdits mode, it is approved directly without needing to call the classifier. This is a "short-circuit optimization" -- if it's known to be safe, there's no need to waste an API call.
+1. **acceptEdits fast path:** Before calling the classifier, the system first checks under acceptEdits mode whether the tool can go through. If it passes under acceptEdits mode, the system approves it directly without calling the classifier. This is a "short-circuit optimization" -- if it's known to be safe, there's no need to waste an API call.
 
 2. **Safe tool allowlist:** Safe tools that do not require classifier checking include Read, Grep, Glob, TodoWrite, and other read-only or low-risk tools. The design philosophy of this allowlist is "explicitly declare safety" -- only tools in the allowlist skip classifier checking; new tools require checking by default.
 
 3. **Rejection tracking:** When the classifier consecutively rejects multiple times, the system automatically falls back to interactive prompting, preventing the Agent from wasting tokens in meaningless loops. This mechanism acts as a "circuit breaker" -- when the accuracy of automatic decisions drops below a certain threshold, it automatically falls back to manual confirmation.
 
-An important security design of auto mode is: decisions for certain security check types (such as operations involving `.git/` and `.claude/` directories) are "classifier-immune" -- even if the classifier attempts to approve them, these security checks cannot be bypassed.
+An important security design of auto mode is: decisions for certain security check types (such as operations involving `.git/` and `.claude/` directories) are "classifier-immune" -- even if the classifier attempts to approve them, it still cannot bypass these security checks.
 
 > **Anti-Pattern Warning:** Auto mode is not suitable for the following scenarios: (1) Operations involving production environment deployments; (2) Operations involving sensitive data (keys, credentials); (3) Irreversible operations (such as deleting databases). In these scenarios, even if users trust the classifier's judgment, they should use default mode or configure explicit deny rules.
 
 ### 4.3.4 bypassPermissions Mode: Full Bypass
 
-The `bypassPermissions` mode is the permission system's "off switch." When activated, all tool calls are automatically approved except those blocked by deny rules and non-bypassable security checks. When determining whether permissions should be bypassed, the system checks whether the current mode is bypassPermissions, or whether the mode is plan but the bypass flag is available.
+The `bypassPermissions` mode is the permission system's "off switch." When activated, the system automatically approves all tool calls except those blocked by deny rules and non-bypassable security checks. When deciding whether to bypass permissions, the system checks whether the current mode is bypassPermissions, or whether the mode is plan but the bypass flag is available.
 
 But even bypass mode cannot break through the following defenses:
 - Step 1a's deny rules (executed before the bypass check)
@@ -289,7 +289,7 @@ This layered defense design ensures that even under "full trust" mode, there is 
 
 **Applicable scenario:** CI/CD pipelines, automated testing, controlled execution environments. In these scenarios, other means (such as container isolation, network isolation) already secure the Agent's operations, and permission checking only adds unnecessary latency.
 
-> **Enterprise Security Best Practice:** If your team uses bypass mode, it is strongly recommended to: (1) Run Claude Code in a container or virtual machine to ensure file system isolation; (2) Configure explicit deny rules to block dangerous operations (such as `Bash(rm -rf *)`, `Bash(npm publish)`); (3) Use the `--allowedTools` parameter to limit the available tool scope; (4) Enable audit logging to record all tool calls.
+> **Enterprise Security Best Practice:** If your team uses bypass mode, we strongly recommend that you: (1) Run Claude Code in a container or virtual machine to ensure file system isolation; (2) Configure explicit deny rules to block dangerous operations (such as `Bash(rm -rf *)`, `Bash(npm publish)`); (3) Use the `--allowedTools` parameter to limit the available tool scope; (4) Enable audit logging to record all tool calls.
 
 ### 4.3.5 bubble Mode: Sub-Agent Permission Bubbling
 
@@ -333,7 +333,7 @@ flowchart LR
     class D6 delegate
 ```
 
-- **Claude Code 2.1.310 (this book's baseline)**: `claude -p` starts in Manual mode (since v2.1.302, when nothing else sets a mode), and an `ask` the pipeline produces is denied if nobody answers -- unless `--allowedTools`, a `permissions.allow` rule, a `PermissionRequest` hook, or `--permission-prompt-tool` answered for it first. `--permission-prompts none` (since v2.1.259) skips the host as well and tells the model outright that no one can approve, so it should not retry; under `--output-format stream-json` those refusals stay in the output as `permission_denied` events.
+- **Claude Code 2.1.310 (this book's baseline)**: `claude -p` starts in Manual mode (since v2.1.302, when nothing else sets a mode), and if nobody answers an `ask` the pipeline produces, the system denies it -- unless `--allowedTools`, a `permissions.allow` rule, a `PermissionRequest` hook, or `--permission-prompt-tool` answered for it first. `--permission-prompts none` (since v2.1.259) skips the host as well and tells the model outright that no one can approve, so it should not retry; under `--output-format stream-json` those refusals stay in the output as `permission_denied` events.
 - **Codex CLI 0.166.0**: `codex exec` carries no approval axis at all -- `-a/--ask-for-approval` (values `on-request`, `never`) exists only on the interactive command. It swaps "who nods" for "which wall the command runs inside": `-s/--sandbox` takes `read-only`, `workspace-write`, or `danger-full-access`; `--approve-for-me` routes approval requests through automatic review; `--dangerously-bypass-approvals-and-sandbox` removes prompts and sandbox together, self-labelled EXTREMELY DANGEROUS and meant only for environments already sandboxed from outside.
 - **Cursor agent 2026.10.22**: `agent -p` without `--force` demotes the write step -- the official headless page says "changes are only proposed, not applied"; the same vendor's permissions page writes "Print mode can use write and shell tools", and those two pages do not line up here -- this section follows the first, because it says what actually happens when `--force` is absent. `--force` describes itself as "Force allow commands unless explicitly denied", and `--yolo` is its alias; `--auto-review` hands the call to a server classifier, which runs the safe ones and still asks about the rest. The rule grammar comes from a different lineage too: five token types -- `Shell(git)`, `Read(.env*)`, `Write(**/*.key)`, `WebFetch(*)`, `Mcp(datadog:*)` -- and "Deny rules take precedence over allow rules".
 - **Qoder CLI 1.1.81**: its documentation pins the landing point in a table -- in headless (`-p`) the outcome of `ask` reads "Auto-deny", and the `dont_ask` mode exists for flows that must never prompt: "Never prompts. Any action that would normally ask is denied instead." Getting anything through means naming a scope: `--permission-mode accept_edits`, `--yolo`, or `--allowed-tools 'Read,Bash(git status)'` down to one subcommand. Non-default modes apply only inside trusted directories; elsewhere Qoder falls back to `default`.
@@ -342,7 +342,7 @@ flowchart LR
 
 Three threads rise out of this list on their own. First, `ask` never disappears; it gets relocated -- into a sandbox (Codex), into a server classifier (Cursor's `--auto-review`, Codex's `--approve-for-me`, this book's auto mode), into the startup gear (Kimi's two modes, Qoder's `dont_ask`), or down to a proposal that never lands (Cursor's default). Second, not one of the six reads "nobody answers" as "approve by default": even the most aggressive setting only narrows what gets refused and replaces the fallback with isolation. Third, Cursor's "unless explicitly denied" and the `deny` that sits first in Qoder's decision order are the same rule as step 1a -- an explicit deny is the one door in this layer nothing walks past, and six independent designs agree on it.
 
-> **Standing as cross-checks:** these five CLIs are registered in `CREDITS.md` as **cross-checks**, the same standing the other open-source harnesses hold in Chapters 1, 14, and 15 -- they support no technical claim in this chapter and exist to show what the same boundary grows into elsewhere.
+> **Standing as cross-checks:** these five CLIs carry **cross-check** standing in `CREDITS.md`, the same standing the other open-source harnesses hold in Chapters 1, 14, and 15 -- they support no technical claim in this chapter and exist to show what the same boundary grows into elsewhere.
 
 ## 4.4 BashTool Permission Details
 
@@ -350,7 +350,7 @@ The Bash tool is the most complex tool in the permission system because the comp
 
 ### 4.4.1 Command Classification and Wildcard Matching
 
-The parsing of permission rule strings is handled by a dedicated function in two forms: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
+A dedicated function parses permission rule strings in two forms: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
 
 For the Bash tool, `ruleContent` can be:
 - Exact command: `Bash(npm test)` -- matches only `npm test`
@@ -392,7 +392,7 @@ When parsing rules, the system first checks for `:*` syntax (prefix matching), t
 
 The Bash tool has its own classifier automatic approval mechanism that runs in parallel with the auto mode's YOLO classifier. When a permission request is in the `ask` state, the system attempts to "speculatively" run the classifier check.
 
-There is a carefully designed timeout mechanism here -- using a Promise race to pit the classifier check against a 2-second timer. If the classifier returns a high-confidence matching result within 2 seconds, the operation is automatically approved; otherwise, the user sees the interactive prompt. This "best effort" strategy ensures the classifier does not become a user experience bottleneck.
+There is a carefully designed timeout mechanism here -- using a Promise race to pit the classifier check against a 2-second timer. If the classifier returns a high-confidence matching result within 2 seconds, the system approves the operation automatically; otherwise, the user sees the interactive prompt. This "best effort" strategy ensures the classifier does not become a user experience bottleneck.
 
 The 2-second timeout choice is a deliberate trade-off: too short (e.g., 500ms) might prevent the classifier from responding in time due to network latency, while too long (e.g., 10 seconds) would make users feel the wait is excessive. 2 seconds is a "sweet spot" -- for simple commands, the classifier usually responds within 1 second; for complex commands, the 2-second timeout ensures users don't wait too long.
 
@@ -400,9 +400,9 @@ The 2-second timeout choice is a deliberate trade-off: too short (e.g., 500ms) m
 
 ### 4.5.1 The PermissionUpdate Pattern
 
-Permission updates are expressed through the `PermissionUpdate` union type, with six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
+The `PermissionUpdate` union type expresses permission updates through six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
 
-Each operation specifies the configuration source to which the update should be applied: global user settings, project-level settings, local (not committed to version control) settings, current session only, or command-line arguments.
+Each operation specifies the configuration source the update should target: global user settings, project-level settings, local (not committed to version control) settings, current session only, or command-line arguments.
 
 The combination of six operations and five configuration sources yields 30 possible update operations. With control this fine, users can scope permissions source by source -- for example, allowing all `git` commands in global user settings while denying `git push --force` in a specific project's local settings.
 
@@ -416,7 +416,7 @@ Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensurin
 
 The separation design of these two functions is very important: memory application is synchronous and immediate, while file persistence may involve I/O operations. In the user approval handling method of the permission context, the two are called in sequence.
 
-This "memory first, persistence asynchronous" design pattern is common in high-performance systems: first ensure the in-memory state is correct (affecting current behavior), then asynchronously write to persistent storage (affecting future behavior). If persistence fails, the current session's behavior is unaffected, but the rules will be lost after a restart.
+This "memory first, persistence asynchronous" design pattern is common in high-performance systems: first ensure the in-memory state is correct (affecting current behavior), then asynchronously write to persistent storage (affecting future behavior). If persistence fails, the current session's behavior stays intact, but the rules will be lost after a restart.
 
 ```mermaid
 flowchart LR
@@ -487,7 +487,7 @@ Create `.claude/settings.json` in the project root:
 
 - `Bash(npm test)` -- Exact match, only allows the specific `npm test` command
 - `Bash(git:*)` -- Prefix match, allows all commands starting with `git` (`git add`, `git commit`, etc.)
-- `Read` -- No `ruleContent`, means all Read tool calls are allowed
+- `Read` -- No `ruleContent`, meaning all Read tool calls go through
 - `Bash(npm publish)` -- Deny rule, specifically rejects the publish operation
 
 If you want rules to apply only locally (not committed to Git), you can use `.claude/settings.local.json` instead. It has the same configuration format, but `.gitignore` excludes it by default.
@@ -533,11 +533,11 @@ Try designing the content for both `.claude/settings.json` (team-shared, committ
 
 Analyze the permission pipeline's decision path in the following scenarios:
 
-**Scenario A:** A user in default mode requests `Bash(npm test)`, and `.claude/settings.json` is configured with `"allow": ["Bash(npm test)"]`.
+**Scenario A:** A user in default mode requests `Bash(npm test)`, and `.claude/settings.json` carries `"allow": ["Bash(npm test)"]`.
 
 **Scenario B:** A user in auto mode requests `Bash(curl https://api.example.com/data)`, with no related rules.
 
-**Scenario C:** A user in bypass mode requests `Bash(rm -rf /tmp/test)`, and `.claude/settings.json` is configured with `"deny": ["Bash(rm -rf *)"]`.
+**Scenario C:** A user in bypass mode requests `Bash(rm -rf /tmp/test)`, and `.claude/settings.json` carries `"deny": ["Bash(rm -rf *)"]`.
 
 **Scenario D:** A sub-agent (bubble mode) requests `FileWriteTool` to write a sensitive configuration file.
 

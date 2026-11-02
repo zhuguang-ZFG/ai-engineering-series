@@ -19,15 +19,15 @@ Why are loops better suited than recursion for Agent scenarios? Three reasons:
 
 1. **State recovery is more natural.** In a loop, state recovery simply requires reassigning the `state` variable. In recursion, state recovery requires unwinding the entire call stack, with complexity increasing dramatically. Claude Code's auto-compact mechanism needs to compress context without terminating the conversation -- in a loop this is a simple "replace message list + continue," while in recursion it requires exceptions or special return values.
 
-2. **Abort is more controllable.** The `AbortController` signal check at the top of the loop is a natural "exit point." In recursion, the abort signal must be passed and checked at every recursive level, making it easy to miss.
+2. **Abort is more controllable.** The `AbortController` signal check at the top of the loop is a natural "exit point." In recursion, you must pass and check the abort signal at every recursive level, making it easy to miss.
 
-3. **Debugging is more intuitive.** State changes in a loop happen at a fixed code location -- a single breakpoint captures all state transitions. In recursion, state changes are scattered across multiple call stack frames, requiring breakpoints at different levels.
+3. **Debugging is more intuitive.** State changes in a loop happen at a fixed code location -- a single breakpoint captures all state transitions. In recursion, state changes scatter across multiple call stack frames, requiring breakpoints at different levels.
 
 **Principle 2: Schema-driven, not hard-coded.** Each tool defines its input parameters through a Zod Schema, and the `buildTool` factory function automatically fills in default behavior from partial definitions. Validation logic, permission checks and description generation all derive from the same Schema, so the three cannot disagree.
 
-The deeper value of Schema-driven design lies in "Single Source of Truth." Consider an alternative without Schema-driven design: input validation is written in one place, permission checks in another, and API documentation is manually authored. When a parameter needs modification, all three locations need synchronized updates, and missing any one leads to inconsistency. Schema-driven design ensures that validation logic, permission logic, and documentation all derive from the same definition -- modify one place and it takes effect globally.
+The deeper value of Schema-driven design lies in "Single Source of Truth." Consider an alternative without Schema-driven design: you write input validation in one place, permission checks in another, and manually author the API documentation. When a parameter needs modification, all three locations need synchronized updates, and missing any one leads to inconsistency. Schema-driven design ensures that validation logic, permission logic, and documentation all derive from the same definition -- modify one place and it takes effect globally.
 
-**Principle 3: Progressive permissions.** The permission system is divided into four stages: `validateInput` (input validation), `checkPermissions` (permission check), PreToolUse hooks (pre-execution interception), and `canUseTool` (user confirmation). Each stage can short-circuit, and requests that don't pass a previous stage never enter the next one.
+**Principle 3: Progressive permissions.** The permission system splits into four stages: `validateInput` (input validation), `checkPermissions` (permission check), PreToolUse hooks (pre-execution interception), and `canUseTool` (user confirmation). Each stage can short-circuit, and requests that don't pass a previous stage never enter the next one.
 
 ```mermaid
 flowchart LR
@@ -114,7 +114,7 @@ Claude Code chose Bun as its runtime, primarily for three reasons:
 - **Native TypeScript:** No pre-compilation step needed, runs `.ts` files directly
 - **Bundle features:** `bun:bundle` provides compile-time feature flags (`feature('X')`), eliminating unnecessary code paths at build time
 
-If your project primarily runs server-side and you already have Node.js infrastructure, Node.js works perfectly well. Python is suitable for data science and ML scenarios, but is weaker than TypeScript in type safety and tooling ecosystem. Code examples in this book are written in TypeScript and can run on both Bun and Node.js.
+If your project primarily runs server-side and you already have Node.js infrastructure, Node.js works perfectly well. Python is suitable for data science and ML scenarios, but is weaker than TypeScript in type safety and tooling ecosystem. This book's code examples use TypeScript and run on both Bun and Node.js.
 
 **Runtime selection trade-off matrix:**
 
@@ -136,7 +136,7 @@ If your project primarily runs server-side and you already have Node.js infrastr
 
 ## 15.2 Core Component Implementation Roadmap
 
-The call relationships and data flow between the six core components of an Agent Harness are shown below:
+The diagram below shows the call relationships and data flow between the six core components of an Agent Harness:
 
 ```mermaid
 flowchart TD
@@ -183,7 +183,7 @@ flowchart TD
     class DONE doneNode
 ```
 
-Don't be misled by the number "six steps" -- this is not a linear waterfall process. In practice, you'll find yourself iterating between steps: implementing the permission pipeline may require going back to modify the tool system's interface, and implementing context management may require adjusting the dialog loop's state structure. The six steps provide an ordered learning path, not a rigid development sequence.
+Don't let the number "six steps" mislead you -- this is not a linear waterfall process. In practice, you'll find yourself iterating between steps: implementing the permission pipeline may require going back to modify the tool system's interface, and implementing context management may require adjusting the dialog loop's state structure. The six steps provide an ordered learning path, not a rigid development sequence.
 
 ```ill
 ch15-harness-wheel
@@ -340,9 +340,9 @@ export async function* agentLoop(
 
 This implementation embodies key design decisions distilled from Claude Code's source code:
 
-1. **State object pattern:** Loop state is encapsulated in a single `state` variable, and each `continue` site writes a new `State` object (corresponding to `const next: State = { ... }` in the source code)
+1. **State object pattern:** The loop keeps its state in a single `state` variable, and each `continue` site writes a new `State` object (corresponding to `const next: State = { ... }` in the source code)
 2. **Dependency injection:** The `deps` object encapsulates all I/O operations (model calls, UUID generation), so tests can inject mock implementations
-3. **Generator output:** Events are passed one by one through `yield`, so consumers respond in real time
+3. **Generator output:** The generator passes events one by one through `yield`, so consumers respond in real time
 
 **Extension considerations for Step 1:** This minimal implementation lacks several features essential for production environments. Before putting the dialog loop into actual use, you should consider adding:
 
@@ -353,7 +353,7 @@ This implementation embodies key design decisions distilled from Claude Code's s
 
 ### Step 2: Tool System
 
-Claude Code's tool system moves default value population into the `buildTool` factory function. Each tool only needs to define its unique parts, while common behavior is provided by the factory. Let's implement a streamlined version:
+Claude Code's tool system moves default value population into the `buildTool` factory function. Each tool only needs to define its unique parts, while the factory provides common behavior. Let's implement a streamlined version:
 
 ```typescript
 // toolSystem.ts
@@ -423,7 +423,7 @@ const readFileTool = buildTool({
 })
 ```
 
-The key to `buildTool` is **fail-closed defaults**: `isConcurrencySafe` defaults to `false`, and `isReadOnly` defaults to `false`. A new tool is assumed to be the most dangerous scenario until it explicitly declares its safety, which is what Claude Code's source code comments emphasize -- "assume not safe" and "assume writes."
+The key to `buildTool` is **fail-closed defaults**: `isConcurrencySafe` defaults to `false`, and `isReadOnly` defaults to `false`. buildTool assumes a new tool is the most dangerous scenario until it explicitly declares its safety, which is what Claude Code's source code comments emphasize -- "assume not safe" and "assume writes."
 
 **Fail-closed vs. Fail-open trade-offs:**
 
@@ -506,7 +506,7 @@ export async function checkToolPermission(
 3. **Permission caching**: Cache permission decisions for frequently called read-only tools (such as Read) to reduce latency.
 4. **Role-based access control**: In multi-user scenarios, different user roles have different permission rule sets.
 
-> **Cross-reference:** The complete design of the permission pipeline is analyzed in depth in Chapter 4, "The Permission Pipeline -- Agent Guardrails." The implementation in this chapter is a minimal version; production environments should refer to the complete design in Chapter 4.
+> **Cross-reference:** Chapter 4, "The Permission Pipeline -- Agent Guardrails," analyzes the complete design of the permission pipeline in depth. The implementation in this chapter is a minimal version; production environments should refer to the complete design in Chapter 4.
 
 ### Step 4: Context Management
 
@@ -594,7 +594,7 @@ export class ContextManager {
 
 Key insight: **Information loss is relative.** Message-level Snip discards historical messages; MicroCompact replaces tool-result bodies while retaining their message structure. Summary compression preserves semantic information but loses original phrasing. Which strategy to choose depends on what information matters most in the conversation -- if the user is debugging a complex bug, tool results (such as log output) may be the least expendable; if the user is refactoring code, the overall design decisions matter more than intermediate steps.
 
-> **Cross-reference:** Claude Code's four-tier compression strategy is fully analyzed in Chapter 7, "Context Management -- Agent Working Memory." The two-tier strategy in this chapter is a simplified version.
+> **Cross-reference:** Chapter 7, "Context Management -- Agent Working Memory," fully analyzes Claude Code's four-tier compression strategy. The two-tier strategy in this chapter is a simplified version.
 
 ### Step 5: Memory System
 
@@ -639,9 +639,9 @@ export class MemoryStore {
 
 2. **How long to store?** Memory has a decay curve. Conversation context from a week ago may no longer be relevant (the code has been rewritten). A good memory system needs to determine retention time based on a memory's "timeliness" and "reference frequency."
 
-3. **When to inject?** Memories should not be injected in full on every request -- that would waste tokens and dilute key information. Memories should be selectively injected based on relevance to the current conversation, choosing only the most relevant fragments.
+3. **When to inject?** Don't inject memories in full on every request -- that would waste tokens and dilute key information. Inject memories selectively based on relevance to the current conversation, choosing only the most relevant fragments.
 
-> **Cross-reference:** The complete design of the memory system is analyzed in detail in Chapter 6, "The Memory System -- Agent Long-Term Memory," including the CLAUDE.md storage format and session memory extraction strategies.
+> **Cross-reference:** Chapter 6, "The Memory System -- Agent Long-Term Memory," analyzes the complete design of the memory system in detail, including the CLAUDE.md storage format and session memory extraction strategies.
 
 ### Step 6: Hook System
 
@@ -723,7 +723,7 @@ export class HookRunner {
 
 **Extension considerations for the hook system:** Before shipping a hook system to production, you have to handle these:
 
-1. **Timeout management**: Shell command execution time is unpredictable. Claude Code sets a 10-second timeout; timed-out hooks are treated as errors rather than blocking, ensuring that a slow hook doesn't stall the entire dialog loop.
+1. **Timeout management**: Shell command execution time is unpredictable. Claude Code sets a 10-second timeout and treats timed-out hooks as errors rather than blocking, ensuring that a slow hook doesn't stall the entire dialog loop.
 
 2. **Error tolerance**: Hook failures should not cause the Agent to stop working. Hooks are "advisors" not "commanders" -- their output influences decisions but doesn't control flow.
 
@@ -731,7 +731,7 @@ export class HookRunner {
 
 4. **Audit trail**: Record each hook's execution time, return code, and output for debugging and compliance auditing.
 
-> **Cross-reference:** The complete design of the hook system is analyzed in detail in Chapter 8, "The Hook System -- Agent Lifecycle Extension Points."
+> **Cross-reference:** Chapter 8, "The Hook System -- Agent Lifecycle Extension Points," analyzes the complete design of the hook system in detail.
 
 ---
 
@@ -741,13 +741,13 @@ export class HookRunner {
 
 In a codebase with 55 tools and hundreds of modules, circular dependencies are the number one architecture killer. Claude Code employs multiple strategies to break cycles:
 
-**Lazy Require pattern.** Conditional modules are loaded at runtime through `require()`, combined with feature flags, so unused modules are never loaded. The pattern is: use a feature flag to determine whether to load, fetch the module via `require()` when enabled, and return null when disabled.
+**Lazy Require pattern.** The harness loads conditional modules at runtime through `require()`, combined with feature flags, so unused modules never load. The pattern is: use a feature flag to determine whether to load, fetch the module via `require()` when enabled, and return null when disabled.
 
 This pattern defers imports from compile time to runtime, and combined with feature flags, ensures that unused modules are never loaded. This is the standard approach for handling optional heavy dependencies in the TypeScript ecosystem.
 
 **Centralized type exports.** Another key strategy is importing types from a centralized location rather than from implementation modules. This decouples type definitions from implementations -- tool files don't need to import the entire permission system to get type signatures; they only need to import types from the centralized export location.
 
-**Diagnosing circular dependencies.** How do you tell if your project is plagued by circular dependencies? Here are some symptoms:
+**Diagnosing circular dependencies.** How do you tell if circular dependencies plague your project? Here are some symptoms:
 
 1. **Startup time grows non-linearly with module count** -- module loading becomes a directed graph requiring depth-first traversal
 2. **`undefined` surprises** -- imported values are `undefined` in certain code paths because the module hasn't finished initializing
@@ -769,15 +769,15 @@ Methodology for breaking circular dependencies:
 
 ### Modular Design for Large Codebases
 
-Claude Code's modularization strategy follows a core principle: **every tool is an independent citizen.** Tools are defined through the `buildTool` factory function, enjoying a uniform interface while maintaining internal autonomy. The `Tool` type defines over twenty methods, but only a few are required (`call`, `description`, `inputSchema`, `name`), with the rest having sensible defaults.
+Claude Code's modularization strategy follows a core principle: **every tool is an independent citizen.** The `buildTool` factory function defines every tool, giving each a uniform interface while maintaining internal autonomy. The `Tool` type defines over twenty methods, but a tool only implements a few (`call`, `description`, `inputSchema`, `name`), with the rest having sensible defaults.
 
-The `Tools` type is defined as `readonly Tool[]` rather than a regular array -- this is intentional design. Once a tool collection is created, it should not be modified; any changes should be made by creating a new collection.
+Claude Code defines the `Tools` type as `readonly Tool[]` rather than a regular array -- this is intentional design. Once you create a tool collection, you should not modify it; make any changes by creating a new collection.
 
 This immutable collection design brings several benefits:
 
 1. **Security guarantee**: No code can secretly add or remove tools at runtime; the tool list remains fixed once determined at creation.
 2. **Simplified reasoning**: No need to consider "the tool list changes mid-run", which removes a layer of concurrency complexity.
-3. **Cache-friendly**: The tool list's hash value is fixed and can be used as part of a cache key.
+3. **Cache-friendly**: The tool list's hash value stays fixed, and you can use it as part of a cache key.
 
 ### Feature Flag-Driven Progressive Releases
 
@@ -832,9 +832,9 @@ flowchart TD
     class L1,L3,L4 decisionNode
 ```
 
-1. **Stream error interception:** Errors returned by the model are wrapped as `AssistantMessage` (with `isApiErrorMessage` flag) rather than thrown as exceptions
-2. **Delayed display:** Recoverable errors (such as prompt-too-long) are temporarily withheld, with a recovery attempt made before deciding whether to display
-3. **Circuit breaker:** Compression failure count is tracked (`consecutiveFailures`), and retries stop after reaching the threshold
+1. **Stream error interception:** The system wraps errors returned by the model as `AssistantMessage` (with `isApiErrorMessage` flag) rather than throwing them as exceptions
+2. **Delayed display:** The system temporarily withholds recoverable errors (such as prompt-too-long), attempts recovery, and then decides whether to display
+3. **Circuit breaker:** The circuit breaker tracks the compression failure count (`consecutiveFailures`), and retries stop after reaching the threshold
 4. **Fallback strategy:** an unavailable model triggers an automatic switch to a fallback model, with state cleaned before retrying
 
 The circuit breaker implementation is straightforward. In the source code, the `autoCompactTracking`'s `consecutiveFailures` field increments after each compression failure and resets on success. When the consecutive failure count exceeds the threshold, the loop exits directly rather than retrying indefinitely.
@@ -862,7 +862,7 @@ stateDiagram-v2
     note right of Open : Failed state<br/>consecutiveFailures >= 3<br/>Likely a systemic issue
 ```
 
-**Design dimensions for the circuit breaker pattern:** When implementing a circuit breaker, the following parameters need to be decided:
+**Design dimensions for the circuit breaker pattern:** When implementing a circuit breaker, you need to decide the following parameters:
 
 | Parameter | Claude Code's Choice | Considerations |
 |-----------|---------------------|----------------|
@@ -970,7 +970,7 @@ flowchart TD
 
 Claude Code's dependency injection pattern handles this by putting I/O behind injected interfaces (model calls, message compression, UUID generation), so the core loop never needs to know which environment it is running in.
 
-In a CLI environment, production dependencies provide real file system access and model calls. In tests, mock implementations can be injected. In SDK mode, different UI feedback mechanisms can be substituted. This "core + adapter" architecture lets the same Harness logic run seamlessly on any platform.
+In a CLI environment, production dependencies provide real file system access and model calls. In tests, you can inject mock implementations. In SDK mode, you can substitute different UI feedback mechanisms. This "core + adapter" architecture lets the same Harness logic run seamlessly on any platform.
 
 Key environment difference points include:
 
@@ -1002,7 +1002,7 @@ flowchart TD
     class CLI,SDK,SERVER adapterNode
 ```
 
-The core principle of this architecture is "the core doesn't know where it's running." If any `if (isCLI) ... else if (isSDK) ...` branch logic appears in the core code, it means dependency injection isn't thorough enough -- environment differences should be encapsulated in adapters, not handled through conditional logic in core code.
+The core principle of this architecture is "the core doesn't know where it's running." If any `if (isCLI) ... else if (isSDK) ...` branch logic appears in the core code, it means dependency injection isn't thorough enough -- adapters should encapsulate environment differences; core code should not handle them through conditional logic.
 
 ### Security Auditing
 
@@ -1052,9 +1052,9 @@ flowchart TD
 
 - [ ] Every tool has correct `isReadOnly`/`isDestructive`/`isConcurrencySafe` annotations
 - [ ] The permission pipeline completes all checks before tool execution (no bypass paths)
-- [ ] Budget ceiling is checked on every loop turn, not just at session end
-- [ ] Sensitive information in tool results is sanitized before passing to the model
-- [ ] Hook commands execute in trusted workspaces; untrusted workspaces are automatically skipped
+- [ ] Check the budget ceiling on every loop turn, not just at session end
+- [ ] Sanitize sensitive information in tool results before passing it to the model
+- [ ] Hook commands execute in trusted workspaces; skip untrusted workspaces automatically
 - [ ] Sub-Agent permissions do not exceed parent Agent's permission scope
 - [ ] All permission decisions have audit logs
 
@@ -1124,11 +1124,11 @@ Future MCP evolution directions include:
 - **Standardized tool discovery:** Agents dynamically discover available tools at runtime
 - **Cross-agent communication protocol:** Agents from different vendors exchange messages and tool calls through MCP
 - **Sandboxed execution:** MCP servers execute tools in isolated environments, providing stronger security guarantees
-- **Streaming result delivery:** Tool execution results are streamed back through the MCP protocol, supporting long-running tools
+- **Streaming result delivery:** The MCP protocol streams tool execution results back, supporting long-running tools
 
 **MCP's impact on Agent Harness design:** MCP standardization means future Agent Harness tool systems will no longer be closed. Tools can come from any MCP-compatible server, and Agents won't need to know all available tools in advance. This poses new challenges for permission systems -- how do you set permission rules for a tool discovered only at runtime? Possible solutions include: automatic permission inference based on tool capability descriptions, trust tiering at the MCP server level, and more granular sandbox isolation.
 
-> **Cross-reference:** The detailed architecture of MCP integration is fully analyzed in Chapter 12, "MCP Integration and External Protocols."
+> **Cross-reference:** Chapter 12, "MCP Integration and External Protocols," fully analyzes the detailed architecture of MCP integration.
 
 ### Forward-Looking Analysis of Future Architectures
 
@@ -1246,13 +1246,13 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 
 2. **Factory function + fail-closed defaults:** The `buildTool` pattern keeps tool definitions concise; defaults choose the most conservative strategy (unsafe, has side effects, requires confirmation), and tools explicitly override to declare safety. This fail-closed strategy ensures new tools don't produce dangerous behavior before passing security review.
 
-3. **Dependency injection isolates I/O:** The `QueryDeps` pattern abstracts all external dependencies into injectable interfaces, so the core logic runs in any environment (CLI, SDK, test). The core principle is "the core doesn't know where it's running" -- environment differences are encapsulated in adapters, not handled through conditional logic in core code.
+3. **Dependency injection isolates I/O:** The `QueryDeps` pattern abstracts all external dependencies into injectable interfaces, so the core logic runs in any environment (CLI, SDK, test). The core principle is "the core doesn't know where it's running" -- adapters encapsulate environment differences instead of conditional logic in core code.
 
 4. **Progressive compression:** Multi-tier compression strategies (snipping, micro-compression, summary) trigger progressively based on token usage rate, avoiding blanket information loss. When choosing a compression strategy, consider "what information matters most" -- information loss is relative, and the key is preserving what's most valuable for the current task.
 
 5. **Circuit breaker protection:** Consecutive failure counting, maximum recovery attempts, and fallback strategies -- these mechanisms ensure the agent degrades gracefully when facing persistent errors, rather than looping infinitely. Claude Code chose 3 consecutive failures as the threshold based on actual observational data: beyond 3 is usually a systemic issue, making retries pointless.
 
-6. **Feature flag-driven progressive releases:** Compile-time feature flags allow new features to be safely released progressively; disabled code is completely absent from the build output. The three-tier flag strategy (compile-time, runtime config, remote feature flags) each suits different release scenarios.
+6. **Feature flag-driven progressive releases:** Compile-time feature flags let teams release new features safely and progressively; disabled code is completely absent from the build output. The three-tier flag strategy (compile-time, runtime config, remote feature flags) each suits different release scenarios.
 
 7. **Security defense in depth:** From tool-level (`isDestructive`) to system-level (workspace trust, budget ceiling), each layer provides independent security guarantees. The security threat model for Agent systems is fundamentally different from traditional applications -- the LLM's output itself is an attack vector, requiring defenses at every layer.
 
@@ -1266,6 +1266,6 @@ From understanding the Agent Harness concept in Chapter 1 to building a custom i
 
 Agent Harness represents a new software paradigm -- not the programmer telling the machine what to do at every step, but the programmer building a framework within which the machine makes autonomous decisions. The quality of this framework determines the upper bound of the agent's capabilities and the lower bound of its safety.
 
-Looking back across the entire book, we see a clear design philosophy: **at every decision point, Claude Code chose the safer, more controllable, more observable option.** Loops over recursion (easier to debug), fail-closed defaults (safer), progressive compression (more controllable), circuit breaker protection (more robust). These choices may individually seem conservative, but together they constitute a system that can be trusted in production environments.
+Looking back across the entire book, we see a clear design philosophy: **at every decision point, Claude Code chose the safer, more controllable, more observable option.** Loops over recursion (easier to debug), fail-closed defaults (safer), progressive compression (more controllable), circuit breaker protection (more robust). These choices may individually seem conservative, but together they constitute a system you can trust in production environments.
 
 Future software developers need two kinds of skill at once: traditional deterministic programming, and this new "meta-programming" -- building Harnesses for AI agents. We hope this book provides a solid starting point for your exploration on this path. Remember, the best Harness doesn't limit the agent's capabilities -- it maximizes the agent's potential while ensuring safety.
