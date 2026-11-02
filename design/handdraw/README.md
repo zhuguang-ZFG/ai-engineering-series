@@ -50,7 +50,7 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 | EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ composition 已手绘皮肤（b21a488）并按 composition 重截（c7715ea）；CTA 改 `#008635` 底 + 纸色字（原白字压 `#1f883d` 实测 4.33:1 不达标） | `render_ep01_covers.py` |
 | FA-013 真出图 key visual `covers/cover-art-fa013.webp` | ✅ 已出图（1376×768、画面无字；`prompt_style.py --style FA-013 --color C-26` 的确定性提示词） | Phase G 落地页/deck hero 可复用；带字封面仍以代码绘制为准（中文排版可控） |
 | EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
-| 书籍正文知识图解 | 已用**手写 SVG** 落地 18 张入正文（第一批 6 张见 `book-illustrations.md` 上文，第二批、第三批各 6 张见对应小节）；点位扫描已跑完：192 节 → 68 个候选（`renders/points-scan.txt`）；出图前由 `render_figures.py` 用 `tokens.css` 白名单拦越界色与 accent 小字 | Phase C 继续：按 gap 从大到小逐批出图；技术栈类小节改走 stack-diagram |
+| 书籍正文知识图解 | 已用**手写 SVG** 落地 18 张入正文，另有 1 张 stack-diagram 工程图（`book/assets/stacks/`）入正文（第一批 6 张见 `book-illustrations.md` 上文，第二批、第三批各 6 张见对应小节）；点位扫描已跑完：192 节 → 68 个候选（`renders/points-scan.txt`）；出图前由 `render_figures.py` 用 `tokens.css` 白名单拦越界色与 accent 小字 | Phase C 继续：按 gap 从大到小逐批出图；技术栈类小节改走 stack-diagram |
 | 视频正片场景 | ✅ 手绘皮肤（纸面/墨线/marker/硬阴影/纸纹 + kinetic 动效）**已铺满 5 工程 31 场景并重渲 5 支成片**（b21a488/3b31a9b）；仅欠“场景内示意图换成手绘图形隐喻” | Phase E：图解层（时序中性、不改时长） |
 
 > **视觉 token 的权威来源已上移到 `design/system/`**（`tokens.css` + `tokens.md` + `contrast.mjs` + `cjk-rules.md` + `deai-rules.md`）：本目录的 `cover.css`/场景内联值与之同源，后续以 `design/system/` 为准。手绘=长相，歸藏=可读性约束（OKLCH+WCAG/APCA 双阈、CJK T 规则）。

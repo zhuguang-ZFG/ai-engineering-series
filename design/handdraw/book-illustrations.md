@@ -225,3 +225,16 @@ python design/handdraw/render_figures.py --all          # 全部 SVG 栅格化�
 验收：六张逐张看 PNG（`renders/hd-*.png`），核对文字越界、箭头落点、标注压字；`cache-layers` 首稿底部同时挂了一条结论横幅和一枚「保命符」小药丸，两个收口元素打架 → 合并为一条三行横幅并重渲。`npm test` 通过（本地资源引用 986 → 992），六张入正文后与相邻图片最小正文间隔实测 2768 字（要求 ≥400–500）。
 
 `git-history` 的点位从 agent 建议的 47026（章首）改到 47536（章末）：那张图一次给满 5 个概念簇（三区域 / 存档点 / 分支与合并 / 回退 / 本地与远端），放在读者还没见过「暂存区」二字的位置会劝退，放名词表之后则正好当合书回忆的地图——同一张图，位置决定它是负担还是收口。
+---
+
+## 第一批 stack-diagram 工程图（2026-11-02）：手绘之外的第二种语域
+
+SPEC §9.1 定的分工在这里第一次落地：**技术栈 / 系统架构 / 服务拓扑**走 `stack-diagram`（网格纸底 + 真品牌 logo + 分组容器 + 直角连线），不与手绘 SVG 混进同一张 figure。
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 前端工程化全貌 | 六列流水线工程图 | 58562（`##### 7. 总结` 表格之后） | `npm run build` 四道工序（代码检查→转译→打包→优化，L57781-57785）；src→dist（L57800 餐厅比喻表）；六列工具全部取自本节原文：TypeScript/Vue/React/npm、ESLint/Prettier/husky/CI-CD、Babel/SWC/esbuild/Sass、Webpack/Rollup/Vite、Tree Shaking/Code Splitting/Terser、资源指纹/SourceMap/CDN/浏览器；**SWC＝Rust 快 20 倍以上**（L57836）、**esbuild＝Go，Vite 开发模式借它**（L57837，画成虚线）、Vite 生产用 Rollup（L58393）、`[hash]` 长期缓存（L57901/58328）、SourceMap 映射回源代码（L58530） |
+
+产物：`book/assets/stacks/frontend-tooling.html`（自包含）+ `frontend-tooling.png`（1300×1100 @2x）。流程 `fetch_icons.py → build.py → render_png.py`，Windows 侧三处坑：`render_png.py` 默认还会产出 `-dark.png`，用 `--single`；`fc-list` 不存在；模板字体栈是 JP 优先，中文需在生成稿里补 CJK face。
+
+点位从 agent 建议的 57785（四道工序列表之后）挪到章末总结表之后：那张图点名 22 个工具，而 Babel/SWC/esbuild/Loader/HMR 都在 57835 之后才第一次出现——和 `git-history` 同一课，**图的信息密度决定它该在章首还是章末**。

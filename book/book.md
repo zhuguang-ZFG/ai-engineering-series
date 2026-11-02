@@ -58556,6 +58556,11 @@ export default defineConfig(({ mode }) => ({
 | **Code Splitting** | 把代码分成多个小块按需加载 | 首屏性能优化 | Webpack、Vite |
 | **HMR** | 热模块替换，不刷新更新 | 开发体验 | Webpack、Vite |
 
+<figure class="stack-figure">
+  <img src="assets/stacks/frontend-tooling.png" alt="前端构建流水线工程图：源代码经代码检查、转译、打包、优化四道工序产出 dist，六列分别列出 TypeScript/Vue/React/npm、ESLint/Prettier/husky/CI-CD、Babel/SWC/esbuild/Sass、Webpack/Rollup/Vite、Tree Shaking/Code Splitting/Terser、资源指纹/SourceMap/CDN/浏览器" loading="lazy">
+  <figcaption><strong>`npm run build` 一跑，四道工序依次开工。</strong>检查（ESLint、Prettier、husky）→ 转译（TypeScript、Babel、SWC、esbuild、Sass）→ 打包（Webpack、Rollup、Vite）→ 优化（Tree Shaking、Code Splitting、Terser），产物带上 `[hash]` 和 SourceMap 经 CDN 进到浏览器；虚线是 Vite 在开发模式下借用 esbuild。</figcaption>
+</figure>
+
 
 > **ℹ️ 写在最后**
 前端工程化是一个持续演进的话题，工具会变，但核心理念不变：**用自动化手段提高效率、保证质量、优化性能**。理解了这些基本原理，无论工具如何更新换代，你都能快速上手、从容应对。
