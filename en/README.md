@@ -101,7 +101,7 @@ Claude Code belongs to Anthropic. This independent book is not an official Anthr
 
 ## The book as one file
 
-`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.7 MB Chinese / 5.8 MB English) and an A4-typeset PDF (503 pages / 34.9 MB in Chinese, 530 pages / 23.7 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 505 pages / 22.9 MB and the English one to 548 pages / 11.7 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
+`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.7 MB Chinese / 5.8 MB English) and an A4-typeset PDF (502 pages / 35.0 MB in Chinese, 530 pages / 23.7 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 505 pages / 22.9 MB and the English one to 548 pages / 11.7 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
 
 | File | Language |
 |------|----------|
