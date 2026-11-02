@@ -538,6 +538,28 @@ class DesignVocabulary(unittest.TestCase):
             body[probe_at:].count("animation-timeline:view()"), 1)
         self.assertNotIn("animation:", CSS[CSS.index("@media print{"):])
 
+    def test_the_filmstrip_only_moves_on_screen(self):
+        """A sequential plate's stagger is the one promise the paper edition
+        has to break: Chromium prints what it can compute, and a half-lit
+        frame reads as a plate that failed to print. So every `.illu-seq` rule
+        lives behind both guards, the hover layer resets the scroll range it
+        inherits, and the hover rule comes last."""
+        guarded_at = CSS.index("@supports (animation-timeline: view())")
+        seq_at = CSS.index(".illu-seq .frame{")
+        self.assertGreater(seq_at, guarded_at,
+                           "the filmstrip staggers outside its guard")
+        self.assertLess(CSS.index(".illu-seq .frame{", seq_at),
+                        CSS.index(".illu-seq:hover .frame{"),
+                        "the hover layer would beat the scroll ranges")
+        hover_at = CSS.index(".illu-seq:hover .frame{")
+        hover = CSS[hover_at:CSS.index("}", hover_at) + 1]
+        self.assertIn("animation-timeline:auto", hover)
+        self.assertIn("animation-range:normal", hover)
+        print_block = CSS[CSS.index("@media print{"):]
+        self.assertNotIn("ink-cycle", print_block,
+                         "a runner survived into the print sheet")
+        self.assertNotIn(".illu-seq", print_block)
+
     def test_smooth_scroll_waits_for_the_readers_consent(self):
         # line-anchored: the guarded rule contains the same declaration
         self.assertNotIn("\nhtml{scroll-behavior:smooth}", CSS)
@@ -550,6 +572,36 @@ class DesignVocabulary(unittest.TestCase):
         # few dozen rules; the ceiling exists so a future verb cannot
         # quietly triple the compositor load on a 5.5 MB single page.
         self.assertLessEqual(CSS.count("animation-timeline:view()"), 40)
+
+
+class FilmstripSource(unittest.TestCase):
+    """A filmstrip's story is its frame order, and the CSS counts positions:
+    `.illu-seq .frame:nth-child(1)` is only frame one if the groups really are
+    the leading children. One nested `<g>` or one decorative group slipped in
+    front, and the strip lights up out of order — invisibly, in print."""
+
+    def test_every_shipped_filmstrip_puts_its_frames_first(self):
+        art_dir = BOOK_DIR / "illustrations"
+        seen = 0
+        for path in sorted(art_dir.glob("*.svg")):
+            svg = path.read_text(encoding="utf-8")
+            root = svg[:svg.index(">")]
+            if "seq" not in root:
+                continue
+            seen += 1
+            groups = re.findall(r"<g\b[^>]*>", svg)
+            frames = [g for g in groups if 'class="frame"' in g]
+            self.assertGreaterEqual(len(frames), 4, f"{path.name}: a strip "
+                                "of fewer than four frames is a line drawing")
+            self.assertLessEqual(len(frames), 6, f"{path.name}: the CSS only "
+                                "staggers six frames")
+            first_other = next((i for i, g in enumerate(groups)
+                                if 'class="frame"' not in g), len(groups))
+            self.assertEqual(len(frames), first_other,
+                             f"{path.name}: a frame sits after a "
+                             "decorative group, so the scroll ranges "
+                             "land on the wrong cells")
+        self.assertGreaterEqual(seen, 1, "no filmstrip on disk to test")
 
 
 class ChapterOpening(unittest.TestCase):

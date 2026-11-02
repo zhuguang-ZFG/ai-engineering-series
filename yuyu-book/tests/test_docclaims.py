@@ -17,8 +17,9 @@ if not __package__:  # direct run: see tests/__init__.py for the real bootstrap
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from yuyu_book import plain
-from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_mermaid, load_json,
-                            read_text, unit_stream)
+from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_illustrations,
+                            extract_mermaid, load_json, read_text,
+                            unit_stream)
 from yuyu_book.plain import prose_lines
 
 SEP_ROW = re.compile(r"^\|(?:\s*:?-+:?\s*\|)+\s*:?\s*$")
@@ -69,6 +70,20 @@ class Data(unittest.TestCase):
     def drawings(self) -> int:
         return len(list((BOOK_DIR / "illustrations").glob("*.svg")))
 
+    def body_plates(self, lang: str) -> int:
+        """Plates the prose names, counted where they are named.
+
+        The shelf holds the 26 fixed slots too (emblems, headpieces, cover,
+        keeper); only a fence decides that a drawing is read inside a chapter,
+        so STRUCTURE's count has to come off the manuscript, not the folder.
+        """
+        n = 0
+        for rel in self.unit_path(lang):
+            text = read_text(REPO_ROOT / rel)
+            _body, ills = extract_illustrations(text, rel)
+            n += len(ills)
+        return n
+
     def index(self) -> list[dict]:
         return load_json(BOOK_DIR / "subject-index.json")
 
@@ -116,6 +131,12 @@ class ShippedCounts(Data):
                              r"(\d+) 个 core 各配一对",
              [str(self.core_terms())]),
             ("README.md", r"(\d+) 个主干术语的原理", [str(self.why_terms())]),
+            # three counts of the same figure went unpinned: an English number
+            # spelled as a word, the style-system row, and the prose-plate row
+            ("en/README.md", r"\b(\d+) hand-drawn line illustrations", [d]),
+            ("CREDITS.md", r"\*\*画风体系\*\*：(\d+) 份插图", [d]),
+            ("STRUCTURE.md", r"\+ (\d+) 幅正文插图",
+             [str(self.body_plates("zh"))]),
             ("en/README.md", r"the (\d+) core terms' reasons",
              [str(self.why_terms())]),
             ("STRUCTURE.md", r"主题索引（生成物，当前 (\d+) 个词条 = "
