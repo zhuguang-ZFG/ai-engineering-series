@@ -382,6 +382,12 @@ The benefits of immutable state flow are manifold: state changes are predictable
 
 **What if we didn't design it this way?** If mutable state were used (directly modifying object fields), the classic race condition would appear in concurrent scenarios: tool A's execution modifies state, but tool B reads partially modified, inconsistent data. In sub-agent scenarios it's even more dangerous -- a child agent might accidentally modify the parent agent's state, causing the main loop's behavior to become unpredictable. These types of bugs are extremely difficult to reproduce and debug because they depend on the specific scheduling order of asynchronous operations.
 
+Five principles hold up the same lintel: stream first, guard the perimeter, design for the cache, grow capability, keep state immutable.
+
+```ill
+ch01-five-pillars
+```
+
 ---
 
 ## Hands-On Exercise: Installation and Initial Diagnosis

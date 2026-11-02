@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "yuyu-book" / "illustrations"
 OUT = ROOT / "docs" / "illustration-gallery.html"
 
-ORDER = ["front", "ch01", "ch02", "ch02-turn-loop",
+ORDER = ["front", "ch01", "ch01-five-pillars", "ch02", "ch02-turn-loop",
          "ch03", "ch03-tool-bench", "ch03-tool-pipeline",
          "ch04", "ch05", "ch06", "ch07",
          "ch08", "ch09", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15",
@@ -30,7 +30,7 @@ ORDER = ["front", "ch01", "ch02", "ch02-turn-loop",
 BIG = {"part-p1", "part-p2", "part-p3", "part-p4", "cover"}
 # the plates drawn for the prose column are wide landscapes, not badges
 WIDE = {"ch03-tool-bench": 300, "ch03-tool-pipeline": 330,
-        "ch02-turn-loop": 330}
+        "ch02-turn-loop": 330, "ch01-five-pillars": 300}
 WIDTH = {n: (420 if n == "cover" else WIDE.get(n) or (300 if n in BIG else 120))
          for n in ORDER}
 
@@ -38,6 +38,7 @@ WIDTH = {n: (420 if n == "cover" else WIDE.get(n) or (300 if n in BIG else 120))
 PLAIN = {
     "front": "一张古地图：整本书就是一条路",
     "ch01": "罗盘：从「陪聊」到「干活」，换一种瞄准方式",
+    "ch01-five-pillars": "一道门廊：五条原则顶着同一根横梁",
     "ch02": "心跳：一句话进、一句话出的对话循环",
     "ch02-turn-loop": "四格胶片：问一句、点工具、跑完、填回去再问",
     "ch03": "螺母：Agent 的双手——工具越多，本事越大",
@@ -71,6 +72,7 @@ PLAIN = {
 PLAIN_EN = {
     "front": "An old map: the whole book is one road",
     "ch01": "Compass: from chatbot to co-worker — a new way to aim",
+    "ch01-five-pillars": "A portico: five principles under one lintel",
     "ch02": "Heartbeat: one message in, one out",
     "ch02-turn-loop": "A filmstrip: ask, pick a tool, run it, put the "
                       "result back and ask again",
