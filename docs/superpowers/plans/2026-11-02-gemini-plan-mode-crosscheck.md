@@ -16,23 +16,23 @@
 
 ## Task 2：正文双语落段 + 锚点平移
 
-1. zh ch14 L34 后插对照段（无锚版内容见设计稿决定 1 的角度，旗标名照抄 v0.66.0 文档：`--approval-mode=plan`、`Shift+Tab`、`/plan`、`enter_plan_mode`）；en 同位同义。
-2. 身份引语框（zh/en L36，插行后 L38）：「oh-my-pi」→「oh-my-pi 与 Gemini CLI」/「oh-my-pi and Gemini CLI」。
-3. `scripts/shift_anchors.py --after 34 --delta 2` 先双版 dry-run 核对 5 条集合，再 `--write`。
-4. 验证：`grep -ci gemini` 双版 ch14 ≥1；`python yuyu-book/build.py --check` OK。
+- [x] 1. zh ch14 L34 后插对照段（无锚版内容见设计稿决定 1 的角度，旗标名照抄 v0.66.0 文档：`--approval-mode=plan`、`Shift+Tab`、`/plan`、`enter_plan_mode`）；en 同位同义。
+- [x] 2. 身份引语框（zh/en L36，插行后 L38）：「oh-my-pi」→「oh-my-pi 与 Gemini CLI」/「oh-my-pi and Gemini CLI」。
+- [x] 3. `scripts/shift_anchors.py --after 34 --delta 2` 先双版 dry-run 核对 5 条集合，再 `--write`。
+- [x] 4. 验证：`grep -ci gemini` 双版 ch14 ≥1；`python yuyu-book/build.py --check` OK。
 
 ## Task 3：登记重钉 + CREDITS
 
-1. `yuyu-book/sources.json` `gh-gemini-cli`：pinned.tag→v0.66.0、commit→`970413207732f5d4d8c50540c7fc359c44fdaaf2`、accessed/snapshot→2026-11-02、scope 重写（zh ≤180 字符、en ≤400）。
-2. `CREDITS.md`：`gh-gemini-cli` 表行 tag/commit/日期/描述同步；§三叙事补 2026-11-02 记一句。
-3. 验证：`python -m json.tool yuyu-book/sources.json`；docclaims 相关测试。
+- [x] 1. `yuyu-book/sources.json` `gh-gemini-cli`：pinned.tag→v0.66.0、commit→`970413207732f5d4d8c50540c7fc359c44fdaaf2`、accessed/snapshot→2026-11-02、scope 重写（zh ≤180 字符、en ≤400）。
+- [x] 2. `CREDITS.md`：`gh-gemini-cli` 表行 tag/commit/日期/描述同步；§三叙事补 2026-11-02 记一句。
+- [x] 3. 验证：`python -m json.tool yuyu-book/sources.json`；docclaims 相关测试。
 
 ## Task 4：五道闸 + 账本 + 提交
 
-1. 五道闸：`build.py --check`（含 `--mermaid=source` 一轮）、unittest 442+35、`check_book.py`（94 files/320/0）、`npm run check:diagrams`（320/0）。
-2. 账本 `revisions.json` entries[0] 中英各加第 53 条，**末句带 `构建器测试 442 项全绿` / `442 builder tests green`**；LF、无孤反引号、无 `@@`。
-3. 提交：`feat(book): gemini-cli 对照面落进第 14 章，登记重钉 v0.66.0`。
-4. 计划勾打满，`docs(book): gemini 对照面计划的勾打上`。
+- [x] 1. 五道闸：`build.py --check`（含 `--mermaid=source` 一轮）、unittest 442+35、`check_book.py`（94 files/320/0）、`npm run check:diagrams`（320/0）。
+- [x] 2. 账本 `revisions.json` entries[0] 中英各加第 53 条，**末句带 `构建器测试 442 项全绿` / `442 builder tests green`**；LF、无孤反引号、无 `@@`。
+- [x] 3. 提交：`feat(book): gemini-cli 对照面落进第 14 章，登记重钉 v0.66.0`。
+- [x] 4. 计划勾打满，`docs(book): gemini 对照面计划的勾打上`。
 
 ## Task 5：发布链
 
