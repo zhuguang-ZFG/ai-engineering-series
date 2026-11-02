@@ -1,8 +1,8 @@
-# Spec：skill 套件改造——stack-diagram / dsh-guizang-design / handraw-style
+# Spec：skill 套件改造——stack-diagram / dsh-guizang-design / handraw-style / unslop
 
-- 日期：2026-11-02
+- 日期：2026-11-02（unslop 于 11-03 按用户追加指令扩入）
 - 状态：草案 → 用户过目后按计划逐轮执行
-- 用户原始指令（逐字）：安装 caru-ini/stack-diagram、op7418/dsh-guizang-design、yang0/handraw-style 三个仓库为 skills；使用这些 skills 彻底改造这个项目，改造前列出 specs；逐级迭代改进优化提升书籍视频质量；到达经典级趣味可读生动形象，简单易懂，过目不忘，由浅入深。
+- 用户原始指令（逐字）：安装 caru-ini/stack-diagram、op7418/dsh-guizang-design、yang0/handraw-style 三个仓库为 skills；使用这些 skills 彻底改造这个项目，改造前列出 specs；逐级迭代改进优化提升书籍视频质量；到达经典级趣味可读生动形象，简单易懂，过目不忘，由浅入深。（11-03 追加：heydamir/unslop 也安装参考）
 
 ## 1. 已完成的安装（G1/G2）
 
@@ -13,6 +13,7 @@
 | caru-ini/stack-diagram | `skills-src/stack-diagram` | `stack-diagram` | 单 skill，脚本+模板在克隆内 |
 | op7418/dsh-guizang-design | `skills-src/dsh-guizang-design` | `humanizer-zh`、`guizang-page-skill`、`guizang-social-card-skill`、`guizang-ppt-skill` | dsh 插件五 skill 中装四；`guizang-voice`（语气档案，学用户 DeepSeek 语料）在本环境无意义，跳过 |
 | yang0/handraw-style | `skills-src/handraw-style` | `handraw-style-suite`（15 子 skill 路由层） | 已装的 `handdraw-style-prompter` 是本书定制精简版（styles/colors/book-contract），继续承担书内插图；suite 负责其范围外请求 |
+| heydamir/unslop | `skills-src/unslop` | `unslop` | 单 skill（用户 11-03 追加指令）。去 AI 味九遍工序：间距→色彩→图标→文案→字体→布局→细节→视觉→动效；产品自带五行方向（产品/性格/世界/时刻/签名）。本书用途：`docs/portal.html` 等生成页面的去模板化审计 + 文案纪律（禁 hype 词、禁不可验证数字）作为 R2 文风轮的旁证参照 |
 
 ## 2. 能力面 × 本书杠杆映射
 
@@ -35,6 +36,10 @@
 ### 2.3 stack-diagram（约束最重）
 
 能力：官方 logo + 白底图块 + 正交箭头的云架构图，HTML/PNG 输出。**品牌 logo 是商标、AWS 图标包再分发受限**——repo-rules 明令不嵌未授权第三方资产。因此：书内一律不用 stack-diagram 产物；它服务于作者侧的架构推演草稿（如部署/CI 拓扑自查）与可自有化的示意图设计参考。书内架构图继续 Mermaid + 本书 SVG。
+
+### 2.4 unslop（11-03 追加）
+
+能力：九遍去 AI 味工序（间距/色彩/图标/文案/字体/布局/细节/视觉/动效），先审计 `references/signs.md` 再定五行方向（产品/性格/世界/时刻/签名），全程先出方向等确认。本书杠杆：① R2 文风轮的文案纪律旁证——禁 hype 词（supercharge/seamless/unlock/magic）、禁不可验证数字（"Loved by 10,000+ teams"）、短标签、句首大写不喊话；② `docs/portal.html`、`docs/illustration-gallery.html`、`docs/beginner-reader.html` 三个生成页的去模板化审计（改生成器脚本，不改 dist 产物）；③ 其"chrome 安静、富彩只给 1-2 个时刻"原则与本书"图内零文字、章章一图"的版面哲学同源，可互为校验。
 
 ## 3. 不做什么
 
