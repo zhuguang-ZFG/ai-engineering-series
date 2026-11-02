@@ -40,17 +40,17 @@
   <!-- MCP 的三大核心能力 -->
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <rect x="72" y="260" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="292" fill="#1f883d" font-size="22" font-weight="700">工具 Tools</text>
+    <text x="96" y="292" fill="#008635" font-size="22" font-weight="700">工具 Tools</text>
     <text x="96" y="324" fill="#57606a" font-size="19">AI 可以调用的功能</text>
     <text x="96" y="352" fill="#57606a" font-size="19">查询天气、发送邮件</text>
 
     <rect x="72" y="392" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="424" fill="#1f883d" font-size="22" font-weight="700">资源 Resources</text>
+    <text x="96" y="424" fill="#008635" font-size="22" font-weight="700">资源 Resources</text>
     <text x="96" y="456" fill="#57606a" font-size="19">AI 可以读取的数据</text>
     <text x="96" y="484" fill="#57606a" font-size="19">文件内容、数据库记录</text>
 
     <rect x="72" y="524" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="556" fill="#1f883d" font-size="22" font-weight="700">提示 Prompts</text>
+    <text x="96" y="556" fill="#008635" font-size="22" font-weight="700">提示 Prompts</text>
     <text x="96" y="588" fill="#57606a" font-size="19">预定义的提示模板</text>
     <text x="96" y="616" fill="#57606a" font-size="19">代码审查模板、写作模板</text>
   </g>

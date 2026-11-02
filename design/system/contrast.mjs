@@ -3,6 +3,8 @@
 // （MIT）：sRGB↔OKLab/OKLCH、WCAG 2、APCA(SAPC 0.0.98G-4g)。纯函数、无外部包。
 // 用法：node design/system/contrast.mjs   任一角色对不达 ROLE_FLOORS 即非零退出（可入 CI）。
 
+import { pathToFileURL } from 'node:url'
+
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 const parseHex = (hex) => {
   const h = hex.replace('#', '')
@@ -113,7 +115,8 @@ export const ROLE_FLOORS = {
 
 export const TOKENS = {
   paper: '#fbfaf6', card: '#fffdf8', ink: '#1f2328', inkSoft: '#57606a',
-  marker: '#d3efd9', accent: '#1f883d', persimmon: '#e2601f',
+  marker: '#d3efd9', markerWash: '#f1f7f2', rule: '#e6e1d4',
+  accent: '#1f883d', persimmon: '#e2601f',
   accentInk: '#008635', persimmonInk: '#c74c00', accentBlock: '#008635',
 }
 
@@ -124,17 +127,22 @@ export const ASSERTS = [
   ['ink / marker', 'ink', 'marker', 'textBody'],
   ['inkSoft / paper', 'inkSoft', 'paper', 'textSecondary'],
   ['inkSoft / card', 'inkSoft', 'card', 'textSecondary'],
+  ['inkSoft / marker', 'inkSoft', 'marker', 'textSecondary'],
+  ['ink / markerWash', 'ink', 'markerWash', 'textBody'],
+  ['inkSoft / markerWash', 'inkSoft', 'markerWash', 'textSecondary'],
   ['accentInk / paper', 'accentInk', 'paper', 'accentInk'],
   ['accentInk / card', 'accentInk', 'card', 'accentInk'],
   ['paper / accentBlock', 'paper', 'accentBlock', 'onText'],
 ]
+// 禁止组合（不是缺陷，是不许用）：绿字压绿底 APCA 仅 58，低于 60 线；marker 底上只允许 ink / inkSoft
+export const FORBIDDEN = [['accentInk / marker', 'accentInk', 'marker', 60]]
 // 原始 accent/persimmon 仅够“大号/展示/非阅读图形”（accentDisplay），记录为已知上限，不是缺陷
 export const DISPLAY_ONLY = [
   ['accent (大字/图形) / paper', 'accent', 'paper'],
   ['persimmon (大字/CTA 填充) / paper', 'persimmon', 'paper'],
 ]
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
   let bad = 0
   const r2 = (x) => Math.round(x * 100) / 100
   console.log('token pair                         wcag   apca(Lc)  floor{apca,wcag}  verdict')
@@ -147,6 +155,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   for (const [name, fg, bg] of DISPLAY_ONLY) {
     const a = apca(TOKENS[fg], TOKENS[bg]), w = wcag(TOKENS[fg], TOKENS[bg])
     console.log(`${name.padEnd(32)} ${String(r2(w)).padEnd(7)} ${String(r2(a)).padEnd(10)} (display only)`)
+  }
+  console.log('\n禁止组合（底色改了也不许把这类文字放上去）：')
+  for (const [name, fg, bg, floor] of FORBIDDEN) {
+    const a = apca(TOKENS[fg], TOKENS[bg])
+    console.log(`${name.padEnd(32)} APCA ${String(r2(a)).padEnd(10)} (需 ≥${floor}，故禁用)`)
+    if (a >= floor) { console.log('  ↑ 该组合现已达标，可从 FORBIDDEN 移除'); }
   }
   console.log('\nOKLCH 参考：')
   for (const [k, hex] of Object.entries(TOKENS)) { const o = hexToOklch(hex); console.log(`  ${k.padEnd(12)} ${hex}  L=${(o.l * 100).toFixed(1)}% C=${o.c.toFixed(4)} H=${o.h.toFixed(1)}`) }

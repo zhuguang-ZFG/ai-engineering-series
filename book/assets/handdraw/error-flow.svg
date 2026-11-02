@@ -13,29 +13,29 @@
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" fill="#1f2328">
     <g>
-      <rect x="72" y="176" width="240" height="128" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-      <circle cx="104" cy="208" r="18" fill="#1f883d"/><text x="104" y="216" fill="#ffffff" font-size="20" text-anchor="middle" font-weight="700">1</text>
+      <rect x="72" y="176" width="240" height="128" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+      <circle cx="104" cy="208" r="18" fill="#008635"/><text x="104" y="216" fill="#fbfaf6" font-size="20" text-anchor="middle" font-weight="700">1</text>
       <text x="134" y="216">看到报错</text>
       <text x="96" y="258" fill="#57606a" font-size="21">先别改代码</text>
       <text x="96" y="288" fill="#57606a" font-size="21">截图，别凭记忆转述</text>
     </g>
     <g>
-      <rect x="356" y="176" width="240" height="128" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-      <circle cx="388" cy="208" r="18" fill="#1f883d"/><text x="388" y="216" fill="#ffffff" font-size="20" text-anchor="middle" font-weight="700">2</text>
+      <rect x="356" y="176" width="240" height="128" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+      <circle cx="388" cy="208" r="18" fill="#008635"/><text x="388" y="216" fill="#fbfaf6" font-size="20" text-anchor="middle" font-weight="700">2</text>
       <text x="418" y="216">贴给 AI</text>
       <text x="380" y="258" fill="#57606a" font-size="21">一句话 + 一张图</text>
-      <text x="380" y="288" fill="#57606a" font-size="21">「我想做 X，它报错了」</text>
+      <text x="380" y="288" fill="#57606a" font-size="21">「我想做 X，报错了」</text>
     </g>
     <g>
-      <rect x="640" y="176" width="240" height="128" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-      <circle cx="672" cy="208" r="18" fill="#1f883d"/><text x="672" y="216" fill="#ffffff" font-size="20" text-anchor="middle" font-weight="700">3</text>
+      <rect x="640" y="176" width="240" height="128" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+      <circle cx="672" cy="208" r="18" fill="#008635"/><text x="672" y="216" fill="#fbfaf6" font-size="20" text-anchor="middle" font-weight="700">3</text>
       <text x="702" y="216">照做</text>
       <text x="664" y="258" fill="#57606a" font-size="21">一次只改它说的地方</text>
       <text x="664" y="288" fill="#57606a" font-size="21">改完立刻重跑</text>
     </g>
     <g>
-      <rect x="924" y="176" width="204" height="128" rx="18" fill="#ffffff" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-      <circle cx="956" cy="208" r="18" fill="#1f883d"/><text x="956" y="216" fill="#ffffff" font-size="20" text-anchor="middle" font-weight="700">4</text>
+      <rect x="924" y="176" width="204" height="128" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+      <circle cx="956" cy="208" r="18" fill="#008635"/><text x="956" y="216" fill="#fbfaf6" font-size="20" text-anchor="middle" font-weight="700">4</text>
       <text x="986" y="216">还不行</text>
       <text x="948" y="258" fill="#57606a" font-size="21">打开 F12</text>
       <text x="948" y="288" fill="#57606a" font-size="21">把红字整段贴过去</text>
@@ -54,5 +54,5 @@
   <text x="600" y="454" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">把「改完之后又报了什么」贴回去，它才知道上一步有没有生效</text>
 
   <rect x="72" y="486" width="1056" height="66" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
-  <text x="600" y="527" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" text-anchor="middle" font-weight="700">这套流程走下来，大部分报错在前三步就能解决</text>
+  <text x="600" y="527" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" text-anchor="middle" font-weight="700">掌握这套流程后，90% 的报错你都能自己解决</text>
 </svg>

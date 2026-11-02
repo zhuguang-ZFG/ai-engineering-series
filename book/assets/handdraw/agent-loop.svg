@@ -26,7 +26,7 @@
       <g stroke="#57606a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
         <rect x="238" y="246" width="38" height="26" rx="5"/><path d="M238 258h38"/><path d="M250 251h6"/>
       </g>
-      <text x="90" y="302" fill="#1f883d" font-size="19" font-weight="700">Memory 三层记忆</text>
+      <text x="90" y="302" fill="#008635" font-size="19" font-weight="700">Memory 三层记忆</text>
       <text x="90" y="332" fill="#57606a" font-size="19">短期记忆 · 工作记忆</text>
       <text x="90" y="358" fill="#57606a" font-size="19">长期记忆（持久化）</text>
       <text x="90" y="384" fill="#57606a" font-size="19">避免重复与跑偏</text>
@@ -40,7 +40,7 @@
         <path d="M514 250h30"/><path d="M514 260h30"/><path d="M514 270h20"/>
         <circle cx="506" cy="250" r="2.5"/><circle cx="506" cy="260" r="2.5"/><circle cx="506" cy="270" r="2.5"/>
       </g>
-      <text x="360" y="302" fill="#1f883d" font-size="19" font-weight="700">Planning 规划</text>
+      <text x="360" y="302" fill="#008635" font-size="19" font-weight="700">Planning 规划</text>
       <text x="360" y="332" fill="#57606a" font-size="19">理解目标 → 任务分解</text>
       <text x="360" y="358" fill="#57606a" font-size="19">步骤执行 → 动态调整</text>
       <text x="360" y="384" fill="#57606a" font-size="19">步骤清单 + 停止条件</text>
@@ -54,7 +54,7 @@
         <circle cx="800" cy="258" r="11"/>
         <path d="M800 247v-5m0 23v-5m11-11h5m-23 0h5m7.5-7.5l3.5-3.5m0 17l3.5 3.5m-17-3.5l-3.5 3.5m0-17l-3.5-3.5"/>
       </g>
-      <text x="630" y="302" fill="#1f883d" font-size="19" font-weight="700">Tool Calling</text>
+      <text x="630" y="302" fill="#008635" font-size="19" font-weight="700">Tool Calling</text>
       <text x="630" y="332" fill="#57606a" font-size="19">不直接执行操作</text>
       <text x="630" y="358" fill="#57606a" font-size="19">生成「调用指令」</text>
       <text x="630" y="384" fill="#57606a" font-size="19">由外部系统执行</text>
@@ -68,7 +68,7 @@
         <path d="M1070 246h34a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6h-22l-10 8v-8h-2a6 6 0 0 1-6-6v-14a6 6 0 0 1 6-6z"/>
         <path d="M1078 258h18"/>
       </g>
-      <text x="900" y="302" fill="#1f883d" font-size="19" font-weight="700">Tools 执行结果</text>
+      <text x="900" y="302" fill="#008635" font-size="19" font-weight="700">Tools 执行结果</text>
       <text x="900" y="332" fill="#57606a" font-size="19">写回记忆</text>
       <text x="900" y="358" fill="#57606a" font-size="19">对照停止条件</text>
       <text x="900" y="384" fill="#57606a" font-size="19">输出最终回答</text>
@@ -86,7 +86,7 @@
     <path d="M1005 430v40c0 22-18 40-40 40H230c-22 0-40-18-40-40v-24"/>
   </g>
   <path d="M190 432l-8 14h16z" fill="#1f883d"/>
-  <text x="600" y="482" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle">循环会持续进行，直到任务完成</text>
+  <text x="600" y="482" fill="#008635" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle">循环会持续进行，直到任务完成</text>
   <text x="600" y="548" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">根据中间结果动态调整：没到停止条件，就再转一圈</text>
 
   <rect x="72" y="576" width="1056" height="68" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>

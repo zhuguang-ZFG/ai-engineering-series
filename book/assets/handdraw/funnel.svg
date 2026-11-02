@@ -12,8 +12,8 @@
   <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" filter="url(#card-shadow)">
-    <path d="M72 156h808l-64 96H136z" fill="#ffffff"/>
-    <path d="M136 252h680l-64 96H200z" fill="#ffffff"/>
+    <path d="M72 156h808l-64 96H136z" fill="#fffdf8"/>
+    <path d="M136 252h680l-64 96H200z" fill="#fffdf8"/>
     <path d="M200 348h616l-64 96H264z" fill="#f1f7f2"/>
     <path d="M264 444h552l-64 96H328z" fill="#f1f7f2"/>
   </g>
@@ -37,6 +37,6 @@
 
   <path d="M476 540v30" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
   <path d="M476 586l-9-15h18z" fill="#1f2328"/>
-  <rect x="286" y="556" width="380" height="52" rx="26" fill="#1f883d"/>
-  <text x="476" y="591" fill="#ffffff" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700" text-anchor="middle">留下 1–2 个值得验证的方向</text>
+  <rect x="286" y="556" width="380" height="52" rx="26" fill="#008635"/>
+  <text x="476" y="591" fill="#fbfaf6" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700" text-anchor="middle">留下 1–2 个值得验证的方向</text>
 </svg>

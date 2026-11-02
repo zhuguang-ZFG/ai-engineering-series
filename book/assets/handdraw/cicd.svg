@@ -64,7 +64,7 @@
   <!-- 失败分支：回到第一步 -->
   <path d="M600 410v52a21 21 0 0 1-21 21H189a21 21 0 0 1-21-21v-44" fill="none" stroke="#e2601f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="12 10"/>
   <path d="M168 410l-8 14h16z" fill="#e2601f"/>
-  <text x="400" y="514" fill="#e2601f" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" font-weight="700" text-anchor="middle">测试失败：CI 发邮件通知，这次部署就停了</text>
+  <text x="400" y="514" fill="#c74c00" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" font-weight="700" text-anchor="middle">测试失败：CI 发邮件通知，这次部署就停了</text>
 
   <!-- 收尾说明 -->
   <text x="72" y="566" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">没有 CI/CD：登录 GitHub、跑测试、手动构建、登录服务器……每次发布都要手动做这 9 步，很容易漏掉。</text>

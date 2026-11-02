@@ -18,7 +18,12 @@
 | 正文 | ink | `#d3efd9` marker | 12.88 | 89.1 | 正文 | PASS |
 | 次要文字 | `#57606a` | paper | 6.12 | 78.7 | 次要 | PASS |
 | 次要文字 | ink-soft | card | 6.29 | 80.6 | 次要 | PASS |
+| 结论横幅底 | ink | `#f1f7f2` marker-wash | 14.54 | 97.0 | 正文 | PASS |
+| 结论横幅底 | ink-soft | marker-wash | 5.88 | 76.0 | 次要 | PASS |
+| 细线/停用卡底 | ink-soft | `#e6e1d4` rule | 4.89 | 64.2 | 次要 | PASS |
 | 绿小字/细线 | `#008635` accent-ink | paper | 4.51 | 69.0 | 小字强调 | PASS |
+| 绿小字/细线 | accent-ink | marker-wash | 4.33 | 66.3 | 小字强调 | 临界（WCAG <4.5），改放 ink-soft |
+| 绿小字/细线 | accent-ink | `#d3efd9` marker | 3.84 | 58.3 | — | **FAIL：绿字不许压绿底** |
 | 绿实块上纸色字 | paper | `#008635` accent-block | 4.51 | 74.1 | 色块文字 | PASS |
 | 绿下划线/图形（大字档） | `#1f883d` accent | paper | 4.33 | 67.9 | 展示线 | 仅大字/图形，**禁作小字** |
 | 橙 CTA 填充/苹果/箭头（大字） | `#e2601f` persimmon | paper | 3.39 | 59.2 | 展示线 | 仅大字/填充，**禁作小字**；小字改 `--persimmon-ink:#c74c00` |
@@ -29,10 +34,13 @@ OKLCH 锚点（供再派生/换品牌色）：paper L98.5 C.0054 H95.1｜card L9
 
 - **正文/标题/墨线/图解线稿** 一律 `--ink`；次要说明、图注 `--ink-soft`。
 - **强调只有一处**：`--accent` 用于波形下划线、图形标记、大号数字（≥展示线尺寸）。需要绿色**小字或细线**时用 `--accent-ink`，不用 `--accent`。
-- **marker 高亮** `--marker` 只做关键词底纹，**其下文字必为 `--ink`**（marker 上放任何彩色都读不动）。
+- **marker 高亮** `--marker` 只做关键词底纹，底上只放 `--ink` / `--ink-soft`；**绿字压绿底不达标**（accent-ink/marker APCA 58.3 < 60），`contrast.mjs` 已把它列为禁止组合。
+- **结论横幅** 用 `--marker-wash`（比 marker 浅一档）+ `--accent` 描边；它和 `--marker` 的分工是“横幅讲整句结论、marker 标单个词”，同图里两者别混用同一语义。
+- **细线与停用态** 用 `--rule`：分隔线、以及“这是错例/已弃用”的灰卡底（如 Mom Test 左列）。灰卡上的文字仍走 `--ink`/`--ink-soft`，不许再引入第四种灰。
 - **柿子橙 `--persimmon` 是稀缺点缀**：只给 CTA 块、苹果、方向箭头，且是大号；橙色小字一律 `--persimmon-ink`。
 - **实色绿块**（如“下一步/成功”填充）用 `--accent-block` + `--paper` 文字，绝不用白 `#fff`（违反“不用纯白”）。
 - 每套版式**最多 1 个 accent 色**；手绘的绿与橙按“一主(绿)一点缀(橙)”分工。
+- **以上规则由机器把关**：`design/handdraw/render_figures.py` 出图前会读 `tokens.css` 做白名单校验，并对 `<text fill="#1f883d|#e2601f">` 直接报错——越界色根本渲不出来，不靠人记住。
 
 ## 4. 手绘质感签名（三件套，任何新资产必须带上以保证同源）
 

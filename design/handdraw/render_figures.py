@@ -14,8 +14,33 @@ CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 ROOT = Path(__file__).resolve().parents[2]
 SVG_DIR = ROOT / "book" / "assets" / "handdraw"
 OUT_DIR = ROOT / "design" / "handdraw" / "renders"
+TOKENS = ROOT / "design" / "system" / "tokens.css"
 
 SIZE_RE = re.compile(r'(?<![-\w])(width|height)\s*=\s*"(\d+(?:\.\d+)?)"')
+HEX_RE = re.compile(r'#[0-9a-fA-F]{6}')
+
+
+def allowed_colors() -> set:
+    """tokens.css is the single source of truth; a figure may not invent a colour."""
+    return {h.lower() for h in HEX_RE.findall(TOKENS.read_text(encoding="utf-8"))}
+
+
+def check_tokens(path: Path) -> None:
+    allowed = allowed_colors()
+    text = path.read_text(encoding="utf-8")
+    stray = {h.lower() for h in HEX_RE.findall(text)} - allowed
+    if stray:
+        raise SystemExit(
+            f"{path.name}: off-token {', '.join(sorted(stray))} — add it to "
+            f"design/system/tokens.css and measure it in contrast.mjs, or use a token"
+        )
+    # role misuse: --accent / --persimmon are display-only, text must use the -ink variants
+    bad = re.findall(r'<text[^>]*fill="(#1f883d|#e2601f)"', text)
+    if bad:
+        raise SystemExit(
+            f"{path.name}: {len(bad)} text run(s) in display-only {sorted(set(bad))} "
+            f"— use #008635 / #c74c00 for text, keep the bright pair for graphics"
+        )
 
 
 def svg_size(path: Path):
@@ -34,6 +59,7 @@ def render(slug: str) -> Path:
     svg = SVG_DIR / f"{slug}.svg"
     if not svg.exists():
         raise SystemExit(f"missing {svg}")
+    check_tokens(svg)
     width, height = svg_size(svg)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     png = OUT_DIR / f"hd-{slug}.png"

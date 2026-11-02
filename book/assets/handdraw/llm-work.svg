@@ -71,7 +71,7 @@
     <path d="M230 484v14c0 10 8 18 18 18h704c10 0 18-8 18-18v-2"/>
   </g>
   <path d="M970 484l-7 13h14z" fill="#1f883d"/>
-  <text x="600" y="548" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">一 token 一 token 往外吐，接回末尾再猜下一个</text>
+  <text x="600" y="548" fill="#008635" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">一 token 一 token 往外吐，接回末尾再猜下一个</text>
 
   <text x="72" y="596" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">模型像一位读过全人类书本的超级厨师：炒的不是菜，而是文字。</text>
 

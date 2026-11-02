@@ -85,7 +85,7 @@
     <path d="M727 326 v42 c0 14 -12 26 26 26 h213 c14 0 26-12 26-26 v-42"/>
   </g>
   <path d="M992 326l-8 14h16z" fill="#1f883d"/>
-  <text x="860" y="422" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">transform / opacity → 直接触发合成</text>
+  <text x="860" y="422" fill="#008635" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">transform / opacity → 直接触发合成</text>
 
   <!-- 性能口诀框 -->
   <rect x="72" y="452" width="1056" height="66" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>

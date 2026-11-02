@@ -12,6 +12,8 @@
   --ink: #1f2328;          /* L25.4%；正文 + 墨线（非纯黑，符合“不用纯黑”） */
   --ink-soft: #57606a;     /* L48.5%；次要文字 · /paper 6.12:1 · APCA 78 ✓ 次要 */
   --marker: #d3efd9;       /* L92.6%；marker 高亮底，其下只放 --ink（ink/marker APCA 89 ✓），绝不放 accent 文字 */
+  --marker-wash: #f1f7f2;  /* 结论横幅底：比 --marker 浅一档，ink APCA 97 / ink-soft 76 ✓；带 --accent 描边 */
+  --rule: #e6e1d4;         /* 暖纸灰细线 / 停用态卡底；ink APCA 85、ink-soft 64 ✓，只与 ink、ink-soft 配对 */
 
   /* —— 强调色：原色仅图形/大字；文字用派生深色（源自 contrast.mjs descend）—— */
   --accent: #1f883d;        /* 手绘波形下划线/图形强调/大字：APCA 68 仅够展示线，禁作小字 */

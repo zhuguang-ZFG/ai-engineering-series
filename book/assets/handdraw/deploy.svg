@@ -12,11 +12,11 @@
   <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="64" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
-    <rect x="284" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
-    <rect x="504" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
-    <rect x="724" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
-    <rect x="944" y="248" width="184" height="140" rx="20" fill="#ffffff"/>
+    <rect x="64" y="248" width="184" height="140" rx="20" fill="#fffdf8"/>
+    <rect x="284" y="248" width="184" height="140" rx="20" fill="#fffdf8"/>
+    <rect x="504" y="248" width="184" height="140" rx="20" fill="#fffdf8"/>
+    <rect x="724" y="248" width="184" height="140" rx="20" fill="#fffdf8"/>
+    <rect x="944" y="248" width="184" height="140" rx="20" fill="#fffdf8"/>
     <path d="M252 318h24"/><path d="M472 318h24"/><path d="M692 318h24"/><path d="M912 318h24"/>
   </g>
   <g fill="#1f2328">
@@ -44,7 +44,7 @@
     <path d="M816 248v-50c0-14-12-26-26-26H410c-14 0-26 12-26 26v42"/>
   </g>
   <path d="M384 240l-8 16h16z" fill="#1f883d"/>
-  <text x="800" y="206" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">改坏了就回滚：在后台一键回到上一个版本</text>
+  <text x="800" y="206" fill="#008635" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">改坏了就回滚：在后台一键回到上一个版本</text>
 
   <text x="72" y="470" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">push 之后你不用盯着，构建和发布都由平台完成；打开链接看到新的样子，这一步才算结束。</text>
   <text x="72" y="502" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">回滚是保底手段：新版本把页面弄坏了，先退回去让用户能用，再慢慢查原因。</text>
