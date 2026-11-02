@@ -780,16 +780,16 @@
     "kind": "github",
     "url": "https://github.com/google-gemini/gemini-cli",
     "pinned": {
-      "tag": "v0.65.0",
-      "commit": "6006c14a4decfe4b891c6263ad6ad5992e404b5b"
+      "tag": "v0.66.0",
+      "commit": "970413207732f5d4d8c50540c7fc359c44fdaaf2"
     },
-    "snapshot": "2026-10-26 读取（GitHub API：latest release v0.65.0，当日仍在推送，约 108.4k star；README 顶部声明免费档与 Google One 用户自 2026-06-18 起改由 Antigravity CLI 承接）",
-    "snapshot_en": "2026-10-26 read (GitHub API: latest release v0.65.0, pushed the same day, ~108.4k stars; the README's opening notice says unpaid-tier and Google One users moved to Antigravity CLI from 2026-06-18)",
-    "accessed": "2026-10-26",
+    "snapshot": "2026-11-02 读取（GitHub API：latest release v0.66.0，当日仍在推送，约 108.7k star；README 仍声明 2026-06-18 起免费档迁往 Antigravity CLI；docs/cli/plan-mode.md 支撑第 14 章对照段）",
+    "snapshot_en": "2026-11-02 read (GitHub API: latest release v0.66.0, still pushing the same day, ~108.7k stars; the README still says unpaid-tier and Google One users moved to Antigravity CLI from 2026-06-18; docs/cli/plan-mode.md backs the Chapter 14 cross-check)",
+    "accessed": "2026-11-02",
     "license": "Apache-2.0（SPDX: Apache-2.0）；链接引用，不转载",
     "license_en": "Apache-2.0 (SPDX: Apache-2.0); linked, never republished",
-    "scope": "第 14 章的对照面：一个把「下一轮做什么」写进明面流程的开源线束；同时它也是产品位置会变例——仓库仍在活跃提交，官方入口却已迁到另一条命令行。",
-    "scope_en": "A cross-check for Chapter 14: an open harness that puts the question of what the next turn is for into its visible flow. It is also a case study in a shifting product position -- the repository still commits daily while the official entry point moved to a different CLI."
+    "scope": "第 14 章的对照面：Plan Mode 把「先规划后执行」做成默认开启的档位——只读工具白名单、Shift+Tab 循环、计划落成可协作编辑的 Markdown 文件；也是产品位置会变例——官方入口已迁 Antigravity CLI，仓库仍每日提交。",
+    "scope_en": "A cross-check for Chapter 14: Plan Mode turns plan-before-execute into a default-on gear -- a read-only tool whitelist, a Shift+Tab cycle, and a plan that lands as a collaboratively editable Markdown file. It is also a case study in a shifting product position -- the official entry point moved to Antigravity CLI while the repository still commits daily."
   },
   "gh-learn-cc": {
     "title": "Learn Claude Code — Harness Engineering",

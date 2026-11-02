@@ -779,7 +779,7 @@
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:392",
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:689",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:691",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ],
   "analogy": {
@@ -1840,8 +1840,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:469",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:470"
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:471",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:472"
   ],
   "analogy": {
    "zh": "两辆车在独木桥两头互不相让，谁都动不了",
@@ -3137,10 +3137,10 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:693",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:694",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:695",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:696",
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:73",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:259"
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:261"
   ],
   "analogy": {
    "zh": "法庭速记稿：散庭后照着它复原当天每句话",
