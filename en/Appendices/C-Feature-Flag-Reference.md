@@ -1,16 +1,16 @@
 # Appendix C: Feature Flag Reference
 
-> Feature flags are the core mechanism for implementing compile-time dead code elimination in Claude Code. All flags are injected as boolean values by the compiler during the bundling phase: when a flag is `false`, the code branch it guards is removed entirely, so the artifact shrinks and unreleased features stay out of it.
+> Feature flags are the core mechanism for implementing compile-time dead code elimination in Claude Code. The compiler injects every flag as a boolean value during the bundling phase: when a flag is `false`, the code branch it guards drops out entirely, so the artifact shrinks and unreleased features stay out of it.
 >
 > **Type Definitions**:
-> - **Compile-time**: The flag is evaluated during the Bun bundling phase; code branches that resolve to `false` are completely absent from the output artifact.
-> - **Compile-time + Runtime Gating**: The flag is `true` at compile time, but additional runtime conditions (such as environment variables or server-side configuration) must also be satisfied to truly activate the feature.
+> - **Compile-time**: The Bun bundling phase evaluates the flag; code branches that resolve to `false` are completely absent from the output artifact.
+> - **Compile-time + Runtime Gating**: The flag is `true` at compile time, but additional runtime conditions (such as environment variables or server-side configuration) must also hold to truly activate the feature.
 >
 > **How to Use This Reference**:
 > - Navigate to the target flag using the C.1 - C.12 category sections
-> - The "Impact Scope" column describes the specific capabilities enabled when the flag is activated
+> - The "Impact Scope" column describes the specific capabilities enabled when the flag turns on
 > - The "Dependencies" column describes prerequisite relationships between flags
-> - The "Tool Enablement Conditions Reference" table in Appendix B lists the specific tools enabled by each flag and can be used for cross-referencing
+> - The "Tool Enablement Conditions Reference" table in Appendix B lists the specific tools enabled by each flag; use it for cross-referencing
 
 ---
 
@@ -193,7 +193,7 @@ Session and persistence flags control the lifecycle management and state persist
 | `FILE_PERSISTENCE` | Compile-time | File persistence. Enables session-level file persistence tracking | File change tracking, state consistency during session recovery | No prerequisites | Chapter 11 |
 | `NEW_INIT` | Compile-time | New initialization flow. Uses an improved session initialization logic | Session initialization flow, startup optimization | No prerequisites | Chapter 11 |
 
-> **Recommended Configuration**: For scenarios requiring long-running tasks, it is recommended to enable `BG_SESSIONS` + `AWAY_SUMMARY` + `FILE_PERSISTENCE` together to ensure tasks can reliably execute in the background and seamlessly resume when the user returns.
+> **Recommended Configuration**: For scenarios requiring long-running tasks, enable `BG_SESSIONS` + `AWAY_SUMMARY` + `FILE_PERSISTENCE` together to ensure tasks can reliably execute in the background and seamlessly resume when the user returns.
 
 ## C.7 Memory and Knowledge Management Flags
 
@@ -206,7 +206,7 @@ Memory and knowledge management flags control Claude Code's cross-session knowle
 | `LODESTONE` | Compile-time | Lodestone. Enables enhanced memory retrieval and matching mechanisms | Memory relevance scoring, enhanced retrieval algorithm | Depends on memory system | Chapter 10 |
 | `MEMORY_SHAPE_TELEMETRY` | Compile-time | Memory shape telemetry. Collects anonymous telemetry data on memory file shape and usage patterns | Memory file statistical analysis, anonymous telemetry reporting | Depends on memory system | Chapter 10 |
 
-**Memory Flag Enhancement Path**: Enabling `LODESTONE` improves the relevance accuracy of memory retrieval; combined with `EXTRACT_MEMORIES`, knowledge can be automatically distilled from conversations. In a team environment, additionally enabling `TEAMMEM` enables team-level knowledge sharing.
+**Memory Flag Enhancement Path**: Enabling `LODESTONE` improves the relevance accuracy of memory retrieval; combined with `EXTRACT_MEMORIES`, the system can automatically distill knowledge from conversations. In a team environment, additionally enabling `TEAMMEM` enables team-level knowledge sharing.
 
 ## C.8 Remote and Connectivity Flags
 
@@ -256,7 +256,7 @@ Settings synchronization flags control the bidirectional synchronization of user
 | `UPLOAD_USER_SETTINGS` | Compile-time | Upload user settings. Syncs local user settings to the cloud | Local-to-cloud configuration upload, conflict detection | Requires cloud service | Chapter 10 |
 | `DOWNLOAD_USER_SETTINGS` | Compile-time + Runtime Gating | Download user settings. Pulls and applies user settings from the cloud to the local environment | Cloud-to-local configuration download, configuration merging | Depends on UPLOAD_USER_SETTINGS | Chapter 10 |
 
-> **Note**: Settings synchronization typically requires both flags to be enabled together for complete bidirectional sync. `UPLOAD_USER_SETTINGS` is responsible for pushing local changes to the cloud, while `DOWNLOAD_USER_SETTINGS` is responsible for pulling existing configurations in a new environment.
+> **Note**: Settings synchronization typically requires both flags on together for complete bidirectional sync. `UPLOAD_USER_SETTINGS` pushes local changes to the cloud, while `DOWNLOAD_USER_SETTINGS` pulls existing configurations in a new environment.
 
 ## C.11 Telemetry and Diagnostic Flags
 
@@ -296,7 +296,7 @@ Infrastructure and build flags control low-level technical behavior and build co
 | `ULTRATHINK` | Compile-time | Deep thinking mode. Enables Extended Thinking capability | Extended Thinking API calls, thinking token processing | No prerequisites | Chapter 5 |
 | `TORCH` | Compile-time | Torch mode. Experimental enhanced reasoning capability | Enhanced reasoning engine, experimental reasoning strategies | No prerequisites | Chapter 5 |
 
-> **Debugging Tip**: When troubleshooting abnormal system behavior, `DUMP_SYSTEM_PROMPT` is one of the most effective diagnostic tools available. It can export the complete system prompt sent to the model, making it easy to inspect whether instructions are assembled correctly.
+> **Debugging Tip**: When troubleshooting abnormal system behavior, `DUMP_SYSTEM_PROMPT` is one of the most effective diagnostic tools available. It can export the complete system prompt sent to the model, making it easy to inspect whether the instructions assemble correctly.
 
 ---
 
@@ -318,7 +318,7 @@ Infrastructure and build flags control low-level technical behavior and build co
 | Infrastructure and Build | 10 |
 | **Total** | **89** |
 
-> **Note**: The flag list above is compiled from system architecture analysis and may change with version iterations. The specific activation method for each feature flag is determined by the build configuration, and some flags also require runtime gating conditions (such as specific activation detection functions) to truly activate the corresponding features.
+> **Note**: The flag list above comes from system architecture analysis and may change with version iterations. The build configuration determines each feature flag's specific activation method, and some flags also require runtime gating conditions (such as specific activation detection functions) to truly activate the corresponding features.
 
 ---
 

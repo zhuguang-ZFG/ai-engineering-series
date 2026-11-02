@@ -12,9 +12,9 @@
 
 ---
 
-If the permission pipeline (Chapter 4) is the Agent's "guardrails", then the hook system is the Agent's "nervous system". The permission pipeline determines whether the Agent **can** execute an operation, while the hook system determines what happens **before and after** execution. It provides fine-grained extension points for the Agent's entire lifecycle -- from session startup to tool invocation, from user input to context compression, every critical node can be observed, intercepted, and enhanced.
+If the permission pipeline (Chapter 4) is the Agent's "guardrails", then the hook system is the Agent's "nervous system". The permission pipeline determines whether the Agent **can** execute an operation, while the hook system determines what happens **before and after** execution. It provides fine-grained extension points for the Agent's entire lifecycle -- from session startup to tool invocation, from user input to context compression, you can observe, intercept, and enhance every critical node.
 
-Using a biological analogy to understand: the human body has not just bones (architecture) and muscles (core logic), but also a nervous system spread throughout. Nerve endings perceive external stimuli (event triggers), conduct signals to the brain (hook logic), and after the brain responds, instructions are sent through motor nerves (decisions and operations). The hook system is precisely this "neural reflex arc" of Claude Code -- it doesn't require modifying core organ functions, yet can insert reflexive behaviors at critical nodes.
+Using a biological analogy to understand: the human body has not just bones (architecture) and muscles (core logic), but also a nervous system spread throughout. Nerve endings perceive external stimuli (event triggers), conduct signals to the brain (hook logic), and after the brain responds, motor nerves send out instructions (decisions and operations). The hook system is precisely this "neural reflex arc" of Claude Code -- it doesn't require modifying core organ functions, yet can insert reflexive behaviors at critical nodes.
 
 From an engineering perspective, the hook system combines the **Observer Pattern** with the **Chain of Responsibility Pattern**. Each lifecycle event publishes a signal, and matching hooks form a priority-ordered processing chain; the event and hook kind determine whether a handler may only observe, may rewrite data, or may block. The core engine depends on the shared response protocol rather than any extension's implementation, keeping user-defined behavior decoupled from the execution core.
 
@@ -158,11 +158,11 @@ Configuration example:
 
 **5. Function Hook**
 
-In-memory hooks that only exist at runtime, executing TypeScript callback functions. Cannot be persisted to configuration files, with a lifecycle bound to the session. Callbacks receive message arrays and an optional abort signal, returning a boolean indicating success.
+In-memory hooks that only exist at runtime, executing TypeScript callback functions. You cannot persist them to configuration files, with a lifecycle bound to the session. Callbacks receive message arrays and an optional abort signal, returning a boolean indicating success.
 
 Applicable scenarios: Scenarios requiring deep interaction with Claude Code runtime state, such as dynamic behavior control in SDK embedding mode.
 
-> **Design reflection:** Why can't Function hooks be persisted? Because TypeScript callback functions are in-memory executable code references that cannot be serialized to JSON configuration. This is the boundary between "code as configuration vs configuration as code" -- persistable hooks (Command/Prompt/Agent/HTTP) are fundamentally **declarative configuration**, while Function hooks are **imperative code**. Mixing both in the same configuration system would lead to unpredictable behavior and security risks.
+> **Design reflection:** Why can't you persist Function hooks? Because TypeScript callback functions are in-memory executable code references that you cannot serialize to JSON configuration. This is the boundary between "code as configuration vs configuration as code" -- persistable hooks (Command/Prompt/Agent/HTTP) are fundamentally **declarative configuration**, while Function hooks are **imperative code**. Mixing both in the same configuration system would lead to unpredictable behavior and security risks.
 
 ### Sync vs Async Hooks
 
@@ -170,7 +170,7 @@ Command hooks have three execution modes:
 
 - **Synchronous mode** (default): Blocks current operation, waits for hook completion before deciding whether to continue. This is the most common and safest mode, suitable for "approve before execute" scenarios.
 - **Asynchronous mode** (`async: true`): Runs in background, doesn't block current operation. Hook results are not visible to the model. Suitable for "fire-and-forget" logging or notification scenarios.
-- **Async-rewake mode** (`asyncRewake: true`): Runs in the background, but when the hook exits with code 2, it injects an error message to wake the model for continued conversation. This implies the `async` attribute. Suitable for long-running monitoring tasks -- normal operation doesn't disturb the Agent, and it only intervenes when an anomaly is detected.
+- **Async-rewake mode** (`asyncRewake: true`): Runs in the background, but when the hook exits with code 2, it injects an error message to wake the model for continued conversation. This implies the `async` attribute. Suitable for long-running monitoring tasks -- normal operation doesn't disturb the Agent, and it only intervenes when it detects an anomaly.
 
 ```mermaid
 flowchart TD
@@ -212,7 +212,7 @@ Async hooks run inside the background execution functions. Async-rewake mode hoo
 
 The SDK core types module defines the complete `HOOK_EVENTS` array; this chapter introduces 22 of its lifecycle events, covering the critical nodes of tool invocation, user interaction, session management, sub-agents, compression, permissions and configuration changes.
 
-The best way to understand these events is to imagine an Agent's complete execution cycle as an "assembly line". Materials (user requests) enter from one end, are processed through multiple stations (lifecycle events), and finally exit from the other end as finished products (Agent responses). Each station has "sensors" (events) installed, and hooks are the "control units" connected to these sensors.
+The best way to understand these events is to imagine an Agent's complete execution cycle as an "assembly line". Materials (user requests) enter from one end, pass through multiple stations (lifecycle events) for processing, and finally exit from the other end as finished products (Agent responses). Each station has "sensors" (events) installed, and hooks are the "control units" connected to these sensors.
 
 ```mermaid
 flowchart TD
@@ -281,7 +281,7 @@ The most important interception point. Input is the tool call's parameter JSON. 
 - Exit code 2: Show stderr to model and block tool call (active block)
 - Other exit codes: Show stderr to user but don't block (warning mode)
 
-> **Cross-reference with Chapter 4:** PreToolUse hooks occur after the permission pipeline. The permission pipeline determines "whether the tool is allowed to execute", while PreToolUse hooks determine "given allowed execution, whether to attach additional conditions or modify parameters". So a PreToolUse hook can still "veto" even after the permission pipeline passes.
+> **Cross-reference with Chapter 4:** PreToolUse hooks occur after the permission pipeline. The permission pipeline determines "whether to allow the tool to execute", while PreToolUse hooks determine "given allowed execution, whether to attach additional conditions or modify parameters". So a PreToolUse hook can still "veto" even after the permission pipeline passes.
 
 Typical use cases:
 
@@ -362,7 +362,7 @@ Configuration example -- Automatically attach current Git branch info to each us
 }
 ```
 
-**Notification** (When notification is sent)
+**Notification** (When the system sends a notification)
 
 Triggered when system sends notification. Notification types include `permission_prompt`, `idle_prompt`, `auth_success`, etc.
 
@@ -374,9 +374,9 @@ Session lifecycle events constitute the complete narrative of an Agent from "bir
 
 **SessionStart** (Session startup)
 
-Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout is shown to Claude. The system ignores blocking errors -- session start hooks shouldn't block session startup.
+Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout goes to Claude. The system ignores blocking errors -- session start hooks shouldn't block session startup.
 
-> **Design philosophy:** Why are SessionStart hook blocking errors ignored? Because session startup is the system initialization process; if hooks were allowed to block startup, one misconfigured hook could make the entire system unstartable -- this violates the "graceful degradation" principle. Core system functions should not be hijacked by extension logic.
+> **Design philosophy:** Why does the system ignore SessionStart hook blocking errors? Because session startup is the system initialization process; if hooks could block startup, one misconfigured hook could make the entire system unstartable -- this violates the "graceful degradation" principle. Core system functions should not let extension logic hijack them.
 
 Typical use cases:
 
@@ -412,7 +412,7 @@ Typical use cases:
 3. **Usage statistics**: Report session duration and operation statistics
 4. **Environment reset**: Restore temporary modifications to hooks or configuration
 
-> **Best practice:** SessionEnd hooks should be as lightweight as possible. 1,500ms timeout means any operation exceeding this will be forcibly terminated. If time-consuming operations are needed (like uploading large files), trigger a background process in SessionEnd rather than waiting for completion.
+> **Best practice:** SessionEnd hooks should be as lightweight as possible. A 1,500ms timeout means the system forcibly terminates any operation that exceeds it. If you need time-consuming operations (like uploading large files), trigger a background process in SessionEnd rather than waiting for completion.
 
 **Stop** (Before assistant response ends)
 
@@ -453,13 +453,13 @@ Typical use cases: Automatic reporting and diagnostic logging of API errors.
 
 **SubagentStart / SubagentStop**
 
-Triggered when sub-agent (Agent tool call) starts and ends. Input contains `agent_id` and `agent_type`. SubagentStart's stdout is shown to sub-agent; SubagentStop's exit code 2 can let sub-agent continue running.
+Triggered when sub-agent (Agent tool call) starts and ends. Input contains `agent_id` and `agent_type`. SubagentStart's stdout goes to the sub-agent; SubagentStop's exit code 2 can let sub-agent continue running.
 
 > **Cross-reference with Chapter 7:** Sub-agents are a key concept in context management. When the main Agent's context space is insufficient for all information in a complex task, it delegates sub-agents to handle subtasks. Sub-agent lifecycle hooks let you monitor and intervene in this delegation process.
 
 Typical use cases:
 
-1. **Sub-agent auditing**: Record which subtasks were delegated to sub-agents
+1. **Sub-agent auditing**: Record which subtasks went to sub-agents
 2. **Resource limits**: Inject resource usage constraints when sub-agent starts
 3. **Result validation**: Validate sub-agent output quality after completion
 4. **Timeout protection**: Monitor long-running sub-agents
@@ -468,7 +468,7 @@ Typical use cases:
 
 **PreCompact / PostCompact**
 
-Triggered before and after compression. PreCompact's stdout is attached as custom compression instructions to the compression prompt, which is how users customize summarization behavior. Exit code 2 can block compression. PostCompact receives compression summary as input.
+Triggered before and after compression. PreCompact's stdout joins the compression prompt as custom compression instructions, which is how users customize summarization behavior. Exit code 2 can block compression. PostCompact receives compression summary as input.
 
 PreCompact hook processing flow includes: building hook input, executing hook, extracting custom instructions, merging user instructions with hook instructions.
 
@@ -476,7 +476,7 @@ PreCompact hook processing flow includes: building hook input, executing hook, e
 
 Typical use cases:
 
-1. **Critical information protection**: Specify which code regions must be preserved during compression
+1. **Critical information protection**: Specify which code regions compression must preserve
 2. **Compression condition control**: Block compression under specific conditions (like ongoing debugging sessions)
 3. **Compression quality monitoring**: Check whether summary lost critical information after compression
 4. **Custom summary template**: Define different summary formats for different project types
@@ -495,7 +495,7 @@ Typical use cases:
 - **ConfigChange**: Triggered when configuration file changes. Hook can block changes from taking effect. This is a security audit critical point -- preventing malicious modification of config files to bypass security policies.
 - **Elicitation / ElicitationResult**: Triggered when MCP server requests user input. Used for MCP server's interactive authentication or parameter collection flows.
 - **CwdChanged / FileChanged**: Triggered when working directory and files change. Suitable for implementing filesystem monitoring and auto-refresh caches.
-- **InstructionsLoaded**: Triggered when instruction files are loaded (observable only, blocking not supported). Suitable for auditing and logging, understanding what instructions the system loaded.
+- **InstructionsLoaded**: Triggered when the system loads instruction files (observable only, blocking not supported). Suitable for auditing and logging, understanding what instructions the system loaded.
 
 The table below summarizes the classification, blockability and typical uses of these 22 events:
 
@@ -524,7 +524,7 @@ The table below summarizes the classification, blockability and typical uses of 
 | FileChanged | Environment | No | File change notification |
 | InstructionsLoaded | Instructions | No | Instruction loading audit |
 
-* SessionStart blocking is ignored (graceful degradation design)
+* The system ignores SessionStart blocking (graceful degradation design)
 
 A hook takes over at four moments: the event rings, a matcher hooks it, the script runs, the next step gets rewritten.
 
@@ -576,7 +576,7 @@ graph TD
 
 When the hook returns `{"decision": "approve"}`, the tool call goes ahead; when it returns `{"decision": "block"}`, the pipeline blocks the tool call and shows the `reason` field as the block reason.
 
-In hook output processing function, when `decision` field is parsed, `approve` corresponds to allowing continued execution, `block` corresponds to denial with block reason.
+When the hook output processing function parses the `decision` field, `approve` corresponds to allowing continued execution, `block` corresponds to denial with block reason.
 
 This field's design follows the "default allow, explicit block" principle. If hook output isn't valid JSON, or JSON doesn't have `decision` field, system default behavior is to continue execution (exit code semantics still apply). This design ensures a malformed hook output doesn't accidentally block normal operations.
 
@@ -609,7 +609,7 @@ This field allows hooks to attach extra context information before the user mess
 - Injecting environment configuration info in `Setup` event
 - Attaching relevant project documentation in `UserPromptSubmit` event
 
-> **Cross-reference with Chapter 5:** `additionalContext` injection mechanism is similar to `customInstructions` in Chapter 5's configuration system, but with a key difference: `customInstructions` are static, determined at config load time, while `additionalContext` is dynamic, generated differently each time hook executes. This is like the difference between "prefabricated panels" and "poured concrete" -- the former is standardized but inflexible, the latter is flexible but requires more on-site work.
+> **Cross-reference with Chapter 5:** `additionalContext` injection mechanism is similar to `customInstructions` in Chapter 5's configuration system, but with a key difference: `customInstructions` are static, determined at config load time, while `additionalContext` is dynamic, generated differently each time hook executes. This is like the difference between "prefabricated panels" and "poured concrete" -- the former is uniform but inflexible, the latter is flexible but requires more on-site work.
 
 ### continue Field
 
@@ -619,7 +619,7 @@ Typical application: In the Stop event, when the hook detects that the model has
 
 ### Collaboration Between Exit Codes and JSON Response
 
-Hook behavior is jointly controlled by two dimensions: **exit code** (process level) and **JSON response** (content level). Understanding their collaboration is key to designing correct hooks:
+Two dimensions jointly control hook behavior: **exit code** (process level) and **JSON response** (content level). Understanding their collaboration is key to designing correct hooks:
 
 ```mermaid
 flowchart TD
@@ -668,7 +668,7 @@ Zod Schema strictly validates hook configuration. The hook Schema module defines
 - `HookMatcherSchema`: Matcher configuration, containing `matcher` string pattern and `hooks` array
 - `HooksSchema`: Top-level configuration, mapping events to matcher arrays using `partialRecord`
 
-> **Cross-reference with Chapter 5:** Hook configuration is an important component of the six-layer configuration system introduced in Chapter 5. Hook configuration is stored in `hooks` field of each layer, following the same merge and override rules as regular settings. Understanding Chapter 5's configuration merge mechanism helps you understand why hooks with the same name defined in different config files exhibit specific priority behaviors.
+> **Cross-reference with Chapter 5:** Hook configuration is an important component of the six-layer configuration system introduced in Chapter 5. Each layer stores hook configuration in its `hooks` field, following the same merge and override rules as regular settings. Understanding Chapter 5's configuration merge mechanism helps you understand why hooks with the same name defined in different config files exhibit specific priority behaviors.
 
 Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string matched with permission rule syntax.
 
@@ -831,13 +831,13 @@ flowchart TD
     class managed managed_node
 ```
 
-**Global disable**: When `policySettings` (enterprise policy configuration) has `disableAllHooks: true`, all hooks (including managed hooks) are disabled. This is the ultimate emergency switch.
+**Global disable**: When `policySettings` (enterprise policy configuration) has `disableAllHooks: true`, the system disables all hooks (including managed hooks). This is the ultimate emergency switch.
 
-**Restrict to managed hooks only**: Check `allowManagedHooksOnly` field in policy settings; when this mode is enabled, hooks in user/project/local configs are all blocked, only allowing hooks deployed by enterprise admins through policy configuration.
+**Restrict to managed hooks only**: Check `allowManagedHooksOnly` field in policy settings; when this mode is on, the system blocks all hooks from user/project/local configs, only allowing hooks deployed by enterprise admins through policy configuration.
 
-**Workspace trust check**: All hooks in interactive mode require the workspace to be trusted. The check function determines whether the current session is non-interactive (SDK mode trust implicitly granted) and whether the user has accepted the trust dialog.
+**Workspace trust check**: All hooks in interactive mode require you to trust the workspace first. The check function determines whether the current session is non-interactive (SDK mode implicitly grants trust) and whether the user has accepted the trust dialog.
 
-In interactive mode, every hook needs you to trust the workspace first. This is a defense-in-depth measure -- hook configuration is stored in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
+In interactive mode, every hook needs you to trust the workspace first. This is a defense-in-depth measure -- hook configuration lives in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
 
 The `executeHooks` function chains these checks together, forming complete security gating: first check global disable switch, then check simple mode flag, finally check workspace trust status; only after all pass does normal hook execution proceed.
 
@@ -861,7 +861,7 @@ Hooks run on Agent's main execution path (in sync mode). A 5-second hook makes u
 
 **2. Handle exceptions gracefully**
 
-Hooks should be responsible for their own errors. Don't let hook exceptions crash the Agent. Use `try-catch` in Command hook scripts (or Shell's `||` fallback), ensuring meaningful exit codes are returned even if script errors.
+Hooks should be responsible for their own errors. Don't let hook exceptions crash the Agent. Use `try-catch` in Command hook scripts (or Shell's `||` fallback), ensuring the script returns meaningful exit codes even when it errors.
 
 **3. Use matcher for precise filtering**
 
@@ -1037,7 +1037,7 @@ Analyze following scenarios and provide hook configuration recommendations:
 A team is developing a web application handling user sensitive data. Team has following security requirements:
 1. Forbid Agent from modifying `src/config/production.ts`
 2. All modifications to database-related files need LLM review
-3. Every session's operation records need to be reported to internal audit system
+3. You need to report every session's operation records to the internal audit system
 4. Agent should automatically run related tests after completing code modifications
 
 Design a complete hook configuration solution meeting above requirements.

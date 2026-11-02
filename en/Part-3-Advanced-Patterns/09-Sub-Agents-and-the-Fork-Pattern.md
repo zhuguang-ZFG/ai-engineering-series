@@ -4,9 +4,9 @@
 > - Follow a sub-agent from spawn to teardown
 > - Explain the Fork pattern's cache sharing and byte-level inheritance
 > - Build a custom agent shaped around a specific job
-> - Explain why the adversarial Verification Agent is built to argue with the main Agent
+> - Explain why Claude Code builds the adversarial Verification Agent to argue with the main Agent
 
-Claude Code's capability goes beyond a single-turn conversation. Complex tasks can be split and handed to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
+Claude Code's capability goes beyond a single-turn conversation. Claude Code can split complex tasks and hand them to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
 
 ---
 
@@ -29,13 +29,13 @@ The core design principle of this architecture is **separation of concerns**: th
 
 > **Architecture Insight: Why not merge routing logic and execution logic?**
 >
-> In many simple systems, routing and execution are the same module. However, Claude Code's scenarios are far more complex than simple systems — a single tool invocation might go through a synchronous path (main thread waits), an asynchronous path (background execution), or a Fork path (cache-parallel). Separating routing decisions from the execution process means that when a new execution strategy needs to be added (such as a future "streaming sub-agent"), you only need to add a branch at the routing layer without modifying the runner's core logic. This is a classic use of the **Strategy Pattern** in system architecture.
+> In many simple systems, routing and execution are the same module. However, Claude Code's scenarios are far more complex than simple systems — a single tool invocation might go through a synchronous path (main thread waits), an asynchronous path (background execution), or a Fork path (cache-parallel). Separating routing decisions from the execution process means that when you need to add a new execution strategy (such as a future "streaming sub-agent"), you only need to add a branch at the routing layer without modifying the runner's core logic. This is a classic use of the **Strategy Pattern** in system architecture.
 
 ### BaseAgentDefinition Type Definition
 
 All agents are based on the `BaseAgentDefinition` type defined in the agent loading module, which includes the following key fields: unique agent identifier (agentType), usage scenario description (whenToUse), allowed/disallowed tool lists, preloaded skill names, agent-specific MCP servers, lifecycle hooks, UI display color, model specification, reasoning effort level, permission mode, maximum turn limit, whether to run in the background, isolation mode, and whether to omit CLAUDE.md context.
 
-These fields are not arbitrarily assembled; they can be categorized into four major groups by functional dimension:
+These fields are not arbitrarily assembled; we can categorize them into four major groups by functional dimension:
 
 ```mermaid
 graph LR
@@ -64,9 +64,9 @@ graph LR
     class A1,A2,A3,B1,B2,B3,C1,C2,C3,D1,D2,D3 category
 ```
 
-From this type, three concrete agent definitions are derived:
+This type gives rise to three concrete agent definitions:
 
-- **BuiltInAgentDefinition** (built-in agent): Dynamically generates system prompts via `getSystemPrompt()`. Built-in agents have prompts that are fixed at compile time but dynamically constructed at runtime, so different prompt content is generated under different environments (different feature gate states).
+- **BuiltInAgentDefinition** (built-in agent): Dynamically generates system prompts via `getSystemPrompt()`. Built-in agents have prompts fixed at compile time but dynamically constructed at runtime, so different environments (different feature gate states) produce different prompt content.
 - **CustomAgentDefinition** (custom agent): Comes from user/project/policy settings. Users define them declaratively through Markdown files, and the system automatically parses them.
 - **PluginAgentDefinition** (plugin agent): Agents provided by plugins, carrying plugin metadata. Plugin agents can carry additional version information and dependency declarations.
 
@@ -74,7 +74,7 @@ From this type, three concrete agent definitions are derived:
 
 ### Three Agent Sources
 
-The loading priority of agents is determined by the load-merge function:
+The load-merge function determines the loading priority of agents:
 
 ```mermaid
 graph TD
@@ -115,7 +115,7 @@ A policy-level custom agent therefore displaces the built-in agent of the same n
 
 `getBuiltInAgents()` assembles the agents available in the current environment; it does not return a fixed list of four agents. Registration depends on the entrypoint, build flags, and runtime gates. The roles below illustrate exploration, planning, execution, and verification rather than a universally available product inventory.
 
-**Availability:** Verification is registered only when both the build flag `VERIFICATION_AGENT` and the runtime gate `tengu_hive_evidence` are enabled. The latter defaults to `false`. A definition can therefore exist without the agent being available to users. Explore and Plan also have their own gates; other built-in roles include status-line setup and a Claude Code guide, depending on the entrypoint.
+**Availability:** Claude Code registers Verification only when both the build flag `VERIFICATION_AGENT` and the runtime gate `tengu_hive_evidence` are on. The latter defaults to `false`. A definition can therefore exist without the agent being available to users. Explore and Plan also have their own gates; other built-in roles include status-line setup and a Claude Code guide, depending on the entrypoint.
 
 ```mermaid
 graph LR
@@ -138,13 +138,13 @@ graph LR
 
 ### Explore Agent: Read-Only Code Exploration Expert
 
-The Explore Agent is a high-speed, read-only search agent. Its definition declares a strict list of disallowed operations: Agent, ExitPlanMode, FileEdit, FileWrite, NotebookEdit and other tools are prohibited. It can optionally use the haiku model to reduce costs and omits CLAUDE.md to save tokens.
+The Explore Agent is a high-speed, read-only search agent. Its definition declares a strict list of disallowed operations: it prohibits Agent, ExitPlanMode, FileEdit, FileWrite, NotebookEdit and other tools. It can optionally use the haiku model to reduce costs and omits CLAUDE.md to save tokens.
 
-Its core design philosophy is reflected in two key decisions:
+Two key decisions reflect its core design philosophy:
 
-**First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and disallowedTools physically prohibits Edit, Write, and similar tools from being called. This "dual-lock" design — soft constraints written into the prompt plus hard constraints enforced on the tool list — ensures that even if the model "hallucinates" and wants to modify a file, it will be physically blocked because the tool is unavailable.
+**First, strict read-only constraints.** The system prompt declares a strict list of disallowed operations (cannot create files, modify files, or run any commands that change system state), and disallowedTools physically blocks Edit, Write, and similar tools, keeping them off the callable list. This "dual-lock" design — soft constraints written into the prompt plus hard constraints enforced on the tool list — ensures that even if the model "hallucinates" and wants to modify a file, it cannot act because the tool is unavailable.
 
-**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, so the model focuses on the search task itself. This optimization is estimated to save 5-15 Gtokens per week.
+**Second, omitClaudeMd optimization.** Explore is a read-only search agent that doesn't need commit/PR/lint rules. CLAUDE.md typically contains the project's coding conventions, commit message format, PR templates, and other content — all completely useless for an agent that only searches. Omitting CLAUDE.md not only reduces token consumption but, more importantly, reduces noise in the system prompt, so the model focuses on the search task itself. This optimization saves an estimated 5-15 Gtokens per week.
 
 > **Best Practice: How to Effectively Use the Explore Agent**
 >
@@ -172,7 +172,7 @@ The Plan Agent's output typically contains the following structured information:
 
 > **Why does the Plan Agent omit CLAUDE.md?**
 >
-> The reason is the same as for the Explore Agent but with a subtle difference. Explore omits it because "it's not needed"; Plan omits it because "it shouldn't." The purpose of the planning phase is to understand the code structure and create a plan, and it should not be constrained by project-specific coding style rules. If the Plan Agent saw a rule like "this project uses camelCase naming," it might start considering naming details during the planning phase, when those details should be handled during the implementation phase. Omitting CLAUDE.md lets the Plan Agent focus more on "what to do" rather than "how to do it."
+> The reason is the same as for the Explore Agent but with a subtle difference. Explore omits it because "it's not needed"; Plan omits it because "it shouldn't." The purpose of the planning phase is to understand the code structure and create a plan, and project-specific coding style rules should not constrain it. If the Plan Agent saw a rule like "this project uses camelCase naming," it might start considering naming details during the planning phase, when the implementation phase should handle those details. Omitting CLAUDE.md lets the Plan Agent focus more on "what to do" rather than "how to do it."
 
 ### General Purpose Agent: General Agent
 
@@ -186,7 +186,7 @@ The design philosophy of the General Purpose Agent is "trust by default, push bo
 
 ### Verification Agent: A Gated Verification Design
 
-When enabled and invoked, the Verification Agent is a unique "adversarial" agent designed to **break the code being verified as thoroughly as possible**, rather than confirming that it works. It uses a red UI indicator to emphasize its adversarial nature, always runs in the background, is prohibited from modifying project files, and uses the inherit model.
+When enabled and invoked, the Verification Agent is a unique "adversarial" agent designed to **break the code under verification as thoroughly as possible**, rather than confirming that it works. It uses a red UI indicator to emphasize its adversarial nature, always runs in the background, cannot modify project files, and uses the inherit model.
 
 #### The Deep Philosophy of Adversarial Design
 
@@ -219,7 +219,7 @@ flowchart TD
 
 > **Design Philosophy: Why does the Verification Agent run in the background?**
 >
-> The Verification Agent always runs in the background, which is a deliberate design decision. There are three reasons: first, verification is a "waitable" task — users don't need to see the verification process in real time; they only need to see the final result. Second, background execution frees up the main thread, and users keep interacting with the main agent. Third, background mode forces the verification Agent to work independently, preventing the verification flow from being interrupted by waiting for user input.
+> The Verification Agent always runs in the background, which is a deliberate design decision. There are three reasons: first, verification is a "waitable" task — users don't need to see the verification process in real time; they only need to see the final result. Second, background execution frees up the main thread, and users keep interacting with the main agent. Third, background mode forces the verification Agent to work independently, so waiting for user input never interrupts the verification flow.
 
 ---
 
@@ -242,9 +242,9 @@ If you are familiar with the `fork()` system call in Unix, Claude Code's Fork pa
 
 ### Core Design of the forkSubagent Module
 
-Activating the Fork pattern requires three conditions: the feature gate enabled, non-Coordinator mode, and non-non-interactive mode. When Coordinator mode is active, Fork mode is automatically disabled because the Coordinator already has its own task delegation model.
+Activating the Fork pattern requires three conditions: the feature gate enabled, non-Coordinator mode, and non-non-interactive mode. When Coordinator mode is active, Fork mode automatically disables because the Coordinator already has its own task delegation model.
 
-> **Cross-Reference:** The mutual exclusivity of Coordinator mode and Fork mode will be discussed in detail in Chapter 10. In short, the Coordinator is a heavier orchestration pattern suited for scenarios requiring fine-grained task management; Fork is a lightweight parallel pattern suited for distributing the same context to multiple independent sub-tasks.
+> **Cross-Reference:** Chapter 10 will discuss the mutual exclusivity of Coordinator mode and Fork mode in detail. In short, the Coordinator is a heavier orchestration pattern suited for scenarios requiring fine-grained task management; Fork is a lightweight parallel pattern suited for distributing the same context to multiple independent sub-tasks.
 
 In the routing logic of the tool's main entry, when the user omits the sub-agent type and Fork mode is enabled, the system triggers the Fork path.
 
@@ -252,13 +252,13 @@ In the routing logic of the tool's main entry, when the user omits the sub-agent
 
 The core principle of the Fork sub-agent is **byte-level inheritance** — the sub-agent must share exactly the same API request prefix as the parent agent to hit the prompt cache.
 
-In the Fork path, the system prioritizes using the system prompt bytes already rendered by the parent agent, avoiding cache invalidation caused by reconstruction. Only when the rendered prompt cannot be retrieved does it fall back to the reconstruction path. Reconstruction may deviate due to differences in the hot/cold states of feature gates, leading to cache invalidation, so passing the rendered raw bytes is the key to ensuring an exact match.
+In the Fork path, the system prioritizes using the system prompt bytes already rendered by the parent agent, avoiding cache invalidation caused by reconstruction. Only when it cannot retrieve the rendered prompt does it fall back to the reconstruction path. Reconstruction may deviate due to differences in the hot/cold states of feature gates, leading to cache invalidation, so passing the rendered raw bytes is the key to ensuring an exact match.
 
 > **Why byte-level rather than semantic-level?**
 >
 > Prompt cache is a low-level infrastructure optimization of the Anthropic API that reuses processed tokens through byte prefix matching. So even if two pieces of text are "semantically identical," a single differing character in the bytes (even an extra space or newline) will cause the cache to miss. This is why the Fork pattern needs to pass the rendered raw bytes rather than reconstructing — reconstruction may produce differences in whitespace characters, attribute order, and other subtle areas, and these differences are sufficient to invalidate the entire cache prefix.
 >
-> An apt analogy: prompt cache is like the ETag in HTTP caching — it compares exact hash values of content. Even if you reformat the indentation of an HTML document, the browser rendering result is the same, but the ETag has changed and the cache is invalidated.
+> An apt analogy: prompt cache is like the ETag in HTTP caching — it compares exact hash values of content. Even if you reformat the indentation of an HTML document, the browser rendering result is the same, but the ETag has changed, invalidating the cache.
 
 ### CacheSafeParams: Five Dimensions
 
@@ -290,13 +290,13 @@ graph TD
 
 These five dimensions correspond to the components of the Anthropic API cache key: system prompt, tools, model, messages prefix, and thinking config. Only when all five dimensions are exactly consistent can a sub-request hit the parent request's cache.
 
-The Fork path sets the `useExactTools` flag, so tool definitions stay unchanged — when Fork mode is activated, it uses the parent's tool pool directly rather than re-resolving agent tools, and the definitions line up byte for byte.
+The Fork path sets the `useExactTools` flag, so tool definitions stay unchanged — when Fork mode activates, it uses the parent's tool pool directly rather than re-resolving agent tools, and the definitions line up byte for byte.
 
 ### How buildForkedMessages Builds Messages
 
 The Fork message construction function is the core of cache sharing. Its processing logic is as follows: first, preserve the complete parent assistant message (including all tool_use blocks, thinking, and text, but with new UUIDs assigned); then collect all tool_use blocks; generate a uniform fixed-string placeholder tool_result for each tool_use; and finally construct a single user message containing the placeholder results and the sub-task directive.
 
-The key point is that the placeholder results are shared across all Fork sub-agents as the fixed string "Fork started -- processing in background." What follows:
+The key point is that all Fork sub-agents share the placeholder results as the fixed string "Fork started -- processing in background." What follows:
 
 - **All Fork sub-agents share the same prefix**: `[...history, assistant(all_tool_uses), user(placeholder_results..., directive)]`
 - **Only the final directive text differs**: Maximizing the cache hit area
@@ -318,7 +318,7 @@ The key point is that the placeholder results are shared across all Fork sub-age
 >
 > **Savings ratio:** (186,000 - 62,600) / 186,000 = approximately 66% token savings
 >
-> These savings become even more significant at scale (e.g., when dozens of Fork calls are generated in a single session).
+> These savings become even more significant at scale (e.g., when a single session generates dozens of Fork calls).
 
 ```ill
 ch09-fork-pipeline
@@ -326,9 +326,9 @@ ch09-fork-pipeline
 
 ### Recursive Fork Protection
 
-Fork sub-agents retain the Agent tool to maintain cache-consistent tool definitions, so recursive Forking must be prevented. The system guards against it twice:
+Fork sub-agents retain the Agent tool to maintain cache-consistent tool definitions, so the system must prevent recursive Forking. It guards against it twice:
 
-1. **querySource check** (primary defense): Set on context options, unaffected by automatic compression. This is a runtime marker set in the Fork sub-agent's context, identifying "I was forked." Since it is not part of the conversation history, it won't be cleared by the context compression mechanism, ensuring reliable recursion prevention even in long conversations.
+1. **querySource check** (primary defense): Set on context options, unaffected by automatic compression. This is a runtime marker set in the Fork sub-agent's context, identifying "I came from a Fork." Since it is not part of the conversation history, the context compression mechanism cannot clear it, ensuring reliable recursion prevention even in long conversations.
 
 2. **Message scanning** (fallback): Detects specific tags, handling edge cases where querySource was not passed. This is a defensive programming strategy that catches the cases where querySource disappears between serialization and deserialization.
 
@@ -348,7 +348,7 @@ The sub-task directive generation function produces directives containing strict
 
 ### Definition Files in the .claude/agents/ Directory
 
-Custom agents are loaded through the load-merge function. The loading process is as follows:
+The load-merge function loads custom agents. The loading process is as follows:
 
 ```mermaid
 flowchart TD
@@ -559,11 +559,11 @@ Async (background) agents have their toolset further restricted to a whitelist s
 
 ### filterToolsForAgent
 
-The tool filtering function is the final arbiter, implementing a three-layer filtering mechanism: MCP tools are always available; globally disallowed tools are always excluded; async agents can only use whitelisted tools, but in-process teammates can be partially exempted.
+The tool filtering function is the final arbiter, implementing a three-layer filtering mechanism: MCP tools are always available; it always excludes globally disallowed tools; async agents can only use whitelisted tools, but in-process teammates can receive partial exemptions.
 
 > **Design Consideration: Why are MCP tools always available?**
 >
-> MCP tools are external services explicitly configured by users, and they have been authorized by the user (through permission configuration). Unlike built-in tools, the behavior of MCP tools is defined by external servers, and Claude Code cannot predict their functional scope. Therefore, the system chooses not to restrict sub-agents from using MCP tools, delegating safety control to MCP's permission system (see Chapter 12).
+> MCP tools are external services explicitly configured by users, and the user has authorized them (through permission configuration). Unlike built-in tools, external servers define the behavior of MCP tools, and Claude Code cannot predict their functional scope. Therefore, the system chooses not to restrict sub-agents from using MCP tools, delegating safety control to MCP's permission system (see Chapter 12).
 
 ---
 
@@ -615,20 +615,20 @@ Before a sub-agent begins execution, the runner constructs a complete execution 
 
 After a sub-agent completes or fails, the runner is responsible for cleaning up resources:
 
-- Closes agent-specific MCP server connections (note: non-specific connections are managed by the parent)
+- Closes agent-specific MCP server connections (note: the parent manages non-specific connections)
 - Releases tool instance references
 - Formats results as task notifications and passes them to the caller
 - If it is a background agent, queues the notification for processing in the main agent's next turn
 
 > **Best Practice: Setting maxTurns Appropriately**
 >
-> maxTurns controls the maximum number of execution turns for a sub-agent. Setting it too low may cause the task to be interrupted before completion; setting it too high may waste tokens in ineffective loops. Recommended empirical values:
+> maxTurns controls the maximum number of execution turns for a sub-agent. Setting it too low may interrupt the task before completion; setting it too high may waste tokens in ineffective loops. Recommended empirical values:
 > - Read-only search tasks: 10-15 turns
 > - Code generation tasks: 20-30 turns
 > - Complex refactoring tasks: 30-50 turns
 > - Exploratory tasks: 15-20 turns
 >
-> For agents running in the background, it is recommended to set a lower maxTurns as a safety valve to prevent runaway agents from continuously consuming resources.
+> For agents running in the background, we recommend setting a lower maxTurns as a safety valve to prevent runaway agents from continuously consuming resources.
 
 ---
 
@@ -676,7 +676,7 @@ Write out the input and expected output for each step.
 
 ## Key Takeaways
 
-1. **AgentTool's three-tier agent system** (built-in, custom, plugin) goes from out-of-the-box to deep customization, and the priority mechanism allows enterprise-level overrides. Custom agents are defined through Markdown files, lowering the barrier to creation.
+1. **AgentTool's three-tier agent system** (built-in, custom, plugin) goes from out-of-the-box to deep customization, and the priority mechanism allows enterprise-level overrides. Users define custom agents through Markdown files, lowering the barrier to creation.
 
 2. **Built-in agents each serve their purpose**: Explore focuses on high-speed read-only search, Plan does structured planning, General Purpose is the all-rounder, and Verification adopts an adversarial verification strategy. These roles illustrate the core workflow; availability depends on registration gates.
 

@@ -323,7 +323,7 @@ graph TD
 
 > 在安全敏感的检查中，系统只读取信任级别 >= 3 星的配置源。这个原则贯穿了整个配置系统的安全设计。
 
-> **交叉引用提示：** 本章讨论的 `projectSettings` 排除机制与第8章（钩子系统）的安全模型紧密相关。hooks 的加载同样遵循这一信任模型——当 `allowManagedHooksOnly` 启用时，来自 projectSettings 的 hooks 被完全屏蔽。
+> **交叉引用提示：** 本章讨论的 `projectSettings` 排除机制与第8章（钩子系统）的安全模型紧密相关。hooks 的加载同样遵循这一信任模型——当 `allowManagedHooksOnly` 启用时，系统会完全屏蔽来自 projectSettings 的 hooks。
 
 ```ill
 ch05-trust-ladder
@@ -406,7 +406,7 @@ flowchart TD
     class compile_pro,growthbook_pro,ab_pro detail
 ```
 
-> **交叉引用提示：** 编译时功能标志 `EXTRACT_MEMORIES` 直接控制了第6章（记忆系统）中的后台记忆提取功能是否被编译到最终产物中。这是一个配置系统影响核心功能的典型案例。
+> **交叉引用提示：** 编译时功能标志 `EXTRACT_MEMORIES` 直接控制了第6章（记忆系统）中的后台记忆提取功能是否编译进最终产物。这是一个配置系统影响核心功能的典型案例。
 
 ## 5.4 状态管理系统
 
@@ -419,7 +419,7 @@ flowchart TD
 三个关键设计决策：
 
 1. **不可变更新**：`setState` 接受一个 updater 函数 `(prev: T) => T`，要求调用者返回全新的状态对象。通过 `Object.is` 比较新旧引用——只有引用发生变化时才通知监听者。
-2. **泛型 `onChange` 回调**：在 Store 创建时传入，每次状态变更都会携带新旧状态被调用。这在 `AppStateProvider` 中被用于响应外部设置变更。
+2. **泛型 `onChange` 回调**：在 Store 创建时传入，每次状态变更都会携带新旧状态调用它。`AppStateProvider` 用它响应外部设置变更。
 3. **Set-based 监听者管理**：使用 `Set` 而非数组，自动去重；`subscribe` 返回取消函数，遵循 React 的 cleanup 模式。
 
 **为什么只有 34 行？——关于状态管理的"少即是多"哲学**
@@ -596,8 +596,8 @@ const setState = useSetAppState();
 ## 关键要点
 
 1. **六层优先级链**：pluginSettings -> userSettings -> projectSettings -> localSettings -> flagSettings -> policySettings，后者覆盖前者。理解每一层的角色是设计合理配置策略的基础。
-2. **合并策略**：数组拼接去重，对象深度合并，标量直接覆盖。数组拼接的设计确保了权限规则只会增加不会被意外删除。
-3. **安全边界**：`projectSettings` 在所有安全敏感检查中被排除，防止恶意仓库的供应链攻击。这是"信任半径递减"原则的直接体现。
+2. **合并策略**：数组拼接去重，对象深度合并，标量直接覆盖。数组拼接的设计确保权限规则只会增加，合并不会意外删除它们。
+3. **安全边界**：所有安全敏感检查都排除 `projectSettings`，防止恶意仓库的供应链攻击。这是"信任半径递减"原则的直接体现。
 4. **策略层的特殊合并**：policySettings 使用"首个非空源胜出"而非深度合并，确保企业策略的确定性和可审计性。
 5. **双重功能开关**：`feature()` 提供编译时死代码消除（零运行时开销），GrowthBook 提供运行时实验控制（灵活但依赖缓存）。两者的选择取决于功能是否需要在发布后动态调整。
 6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码就把状态管理该做的都做完了。

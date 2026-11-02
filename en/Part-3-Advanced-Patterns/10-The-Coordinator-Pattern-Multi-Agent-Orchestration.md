@@ -3,7 +3,7 @@
 > **Learning Objectives:**
 > - See how the Coordinator pattern splits work between coordinator and workers, and why it splits it there
 > - Walk the full multi-agent workflow, from requirements to verified delivery
-> - Work out how tasks get assigned, how failures get picked up, and how the Scratchpad is shared
+> - Work out how tasks get assigned, how failures get picked up, and how workers share the Scratchpad
 > - Choose correctly between the Coordinator pattern and the Fork pattern
 
 When a single agent cannot handle complex engineering tasks, Claude Code provides the Coordinator pattern -- a centralized multi-agent orchestration solution. Unlike the Fork pattern's peer-to-peer parallelism, the Coordinator pattern employs a "coordinator-worker" architecture, where a dedicated coordinator manages the lifecycle and task allocation of multiple parallel workers.
@@ -46,7 +46,7 @@ flowchart TD
 
 > **Design Insight: Why use dual gating instead of a single switch?**
 >
-> The feature gate is a compile-time optimization -- deployments that don't need Coordinator functionality (such as lightweight SDK embedding scenarios) can completely exclude the related code, reducing binary size and attack surface. The environment variable is a runtime control -- even in builds that include the feature, it must be explicitly enabled. This "compile-time exclusion + runtime explicit enable" pattern is common in enterprise software, satisfying both flexibility requirements and the principle of least privilege.
+> The feature gate is a compile-time optimization -- deployments that don't need Coordinator functionality (such as lightweight SDK embedding scenarios) can completely exclude the related code, reducing binary size and attack surface. The environment variable is a runtime control -- even in builds that include the feature, the user must explicitly enable it. This "compile-time exclusion + runtime explicit enable" pattern is common in enterprise software, satisfying both flexibility requirements and the principle of least privilege.
 
 ### Activation Conditions and Mutual Exclusion
 
@@ -64,19 +64,19 @@ flowchart TD
     style E fill:#bdc3c7,stroke:#7f8c8d,color:#333
 ```
 
-> **Cross-Reference:** The Fork pattern's cache sharing mechanism is discussed in detail in Chapter 9. The core difference between the two is: Fork is "centerless parallelism" (all sub-agents are equal and share the same context), while Coordinator is "centered orchestration" (the coordinator controls the global view, and workers only see the tasks assigned to them).
+> **Cross-Reference:** Chapter 9 discusses the Fork pattern's cache sharing mechanism in detail. The core difference between the two is: Fork is "centerless parallelism" (all sub-agents are equal and share the same context), while Coordinator is "centered orchestration" (the coordinator controls the global view, and workers only see the tasks assigned to them).
 
-The Coordinator pattern also affects the agent registry. When Coordinator mode is activated, the built-in agent registration function no longer returns the normal list of built-in agents but instead introduces Coordinator-specific worker agent definitions through lazy loading. This lazy loading approach is intentional, aimed at avoiding circular dependencies between the coordinator module and the tool module.
+The Coordinator pattern also affects the agent registry. When Coordinator mode activates, the built-in agent registration function no longer returns the normal list of built-in agents but instead introduces Coordinator-specific worker agent definitions through lazy loading. This lazy loading approach is intentional, aimed at avoiding circular dependencies between the coordinator module and the tool module.
 
 ### Pattern Matching for Session Recovery
 
 The `matchSessionMode()` function handles pattern consistency during session recovery: when the current mode doesn't match the session's recorded mode, the system automatically flips the environment variable to match the session's mode. So recovering a session created in Coordinator mode switches Coordinator mode on even when the startup configuration never set the variable.
 
-This design solves a practical problem: a user might set the Coordinator environment variable during one launch and create a session, but forget to set it when recovering that session later. Without automatic mode matching, the session would be restored in the wrong mode, leading to inconsistent behavior or even errors.
+This design solves a practical problem: a user might set the Coordinator environment variable during one launch and create a session, but forget to set it when recovering that session later. Without automatic mode matching, the session would resume in the wrong mode, leading to inconsistent behavior or even errors.
 
 ### The Coordinator's System Prompt
 
-The Coordinator's role is defined in the system prompt generation function -- a carefully crafted system prompt that specifies the complete behavioral norms for the coordinator. Key points include:
+The system prompt generation function defines the Coordinator's role -- a carefully crafted system prompt that specifies the complete behavioral norms for the coordinator. Key points include:
 
 **Role Definition**: The coordinator is not an executor but an orchestrator. It directly answers simple questions and delegates complex tasks to workers.
 
@@ -118,7 +118,7 @@ graph LR
 
 ### INTERNAL_WORKER_TOOLS
 
-Under the Coordinator pattern, workers' tool allocation is controlled through two sets. The internal worker tools set defines the tools that workers **should not see** -- these are the coordinator's exclusive tools, including team creation, team deletion, message sending, and structured output.
+Under the Coordinator pattern, two sets control workers' tool allocation. The internal worker tools set defines the tools that workers **should not see** -- these are the coordinator's exclusive tools, including team creation, team deletion, message sending, and structured output.
 
 This forms a clear boundary of authority:
 
@@ -175,9 +175,9 @@ In Full mode, workers can also use MCP tools and Skill tools. The system prompt 
 
 ### Independent Assembly of the Tool Pool
 
-Workers' tool pools are assembled independently from the parent level, ensuring that workers always get the complete tool set, unaffected by parent-level tool restrictions. Workers default to the `acceptEdits` permission mode (automatically accept file edits), unless the agent definition specifies another mode.
+The system assembles workers' tool pools independently from the parent level, ensuring that workers always get the complete tool set, unaffected by parent-level tool restrictions. Workers default to the `acceptEdits` permission mode (automatically accept file edits), unless the agent definition specifies another mode.
 
-This design decision reflects an important principle: **workers are executors and should not be hindered by permission issues**. If a worker needed user confirmation every time it edited a file, the advantages of multi-agent collaboration would be completely negated. Of course, this requires the coordinator to assign tasks correctly -- if given the wrong modification task, a worker will execute it without hesitation.
+This design decision reflects an important principle: **workers are executors, and permission issues should not hinder them**. If a worker needed user confirmation every time it edited a file, that would completely negate the advantages of multi-agent collaboration. Of course, this requires the coordinator to assign tasks correctly -- if given the wrong modification task, a worker will execute it without hesitation.
 
 > **Best Practice: Pre-confirm Task Scope Under Coordinator Mode**
 >
@@ -213,7 +213,7 @@ The team deletion tool handles cleanup: it first checks whether there are still 
 
 Deleting a team runs several safety checks first:
 
-1. **Active member check**: If workers are still running, deletion is refused and the list of still-running members is returned
+1. **Active member check**: If workers are still running, the system refuses deletion and returns the list of still-running members
 2. **Resource cleanup order**: Clean team directory (Scratchpad, etc.) first, then worktree, then team context
 3. **Error tolerance**: Failure to clean up a single resource does not prevent cleanup of other resources
 
@@ -221,8 +221,8 @@ Deleting a team runs several safety checks first:
 >
 > If the coordinator forcefully deletes a team while workers are still running, the workers will lose their association with the team, which may lead to:
 > - Worker task notifications failing to reach the coordinator
-> - Scratchpad files being deleted mid-read, so a running worker gets empty data
-> - Worktrees being cleaned up, causing workers' file modifications to be lost
+> - Scratchpad files deleted mid-read, so a running worker gets empty data
+> - Worktrees cleaned up mid-change, losing workers' file modifications
 >
 > This is why team deletion requires the precondition that "all members have completed."
 
@@ -265,7 +265,7 @@ The message sending tool's intelligent routing mechanism is particularly notewor
 
 > **Design Insight: The Economy of the Stop-Resume Pattern**
 >
-> Workers are not "always online." A research worker stops after completing its investigation, releasing API connections and memory resources. But the coordinator may later need to give this worker an additional task (e.g., "For module X you investigated earlier, look deeper into the dependency relationships"). The stop-resume pattern allows workers to be reactivated when needed without rebuilding context from scratch. This both saves resources and preserves the previous analysis state.
+> Workers are not "always online." A research worker stops after completing its investigation, releasing API connections and memory resources. But the coordinator may later need to give this worker an additional task (e.g., "For module X you investigated earlier, look deeper into the dependency relationships"). The stop-resume pattern lets the coordinator reactivate workers when needed without rebuilding context from scratch. This both saves resources and preserves the previous analysis state.
 
 ---
 
@@ -273,7 +273,7 @@ The message sending tool's intelligent routing mechanism is particularly notewor
 
 ### Scratchpad Collaboration Space Design
 
-The Coordinator pattern introduces the Scratchpad concept -- a shared temporary file space across workers. In the system prompt, when the Scratchpad feature is enabled, descriptive information is appended to the coordinator, informing it that workers can freely read and write to this directory without permission prompts, and suggesting its use for durable cross-worker knowledge storage.
+The Coordinator pattern introduces the Scratchpad concept -- a shared temporary file space across workers. In the system prompt, when the Scratchpad feature is on, the system appends descriptive information for the coordinator, informing it that workers can freely read and write to this directory without permission prompts, and suggesting its use for durable cross-worker knowledge storage.
 
 The Scratchpad's physical location is in a session-specific subdirectory under the project's temporary directory, with the path format `/tmp/claude-{uid}/{sanitized-cwd}/{sessionId}/scratchpad/`. Each session has an independent scratchpad directory.
 
@@ -284,7 +284,7 @@ The Scratchpad's design principles are:
 3. **Session isolation**: Each session's scratchpad is independent, avoiding cross-session contamination
 4. **Structural freedom**: The system does not prescribe a file structure; workers organize it as needed
 
-In the Coordinator's system prompt, the scratchpad is described as "durable cross-worker knowledge," hinting at its core purpose: serving as shared memory between workers.
+In the Coordinator's system prompt, the scratchpad's description reads "durable cross-worker knowledge," hinting at its core purpose: serving as shared memory between workers.
 
 #### Typical Scratchpad Usage Patterns
 
@@ -318,7 +318,7 @@ flowchart TD
 
 > **Why not let workers pass messages to each other directly?**
 >
-> Message passing is ephemeral -- once consumed, it's gone. The Scratchpad, on the other hand, is persistent and can be read repeatedly by any number of workers. During the research phase, Worker A's findings are needed not only by the coordinator but also potentially by subsequent verification workers. With message passing, the coordinator would need to forward the findings to every worker that needs them; with Scratchpad, workers can read on demand.
+> Message passing is ephemeral -- consume it once and it's gone. The Scratchpad, on the other hand, is persistent, and any number of workers can read it repeatedly. During the research phase, not only the coordinator needs Worker A's findings; subsequent verification workers may need them too. With message passing, the coordinator would need to forward the findings to every worker that needs them; with Scratchpad, workers can read on demand.
 >
 > Additionally, the Scratchpad naturally supports "incremental building" -- Worker A writes a foundational analysis, and Worker B can append supplementary information on top of it, without needing to consolidate everything into a single message.
 
@@ -424,7 +424,7 @@ The system prompt also encourages the coordinator to "fan out" -- initiating mul
 
 ### Task Notification Protocol
 
-When workers complete, results are delivered to the coordinator in `<task-notification>` XML format:
+When workers complete, they deliver results to the coordinator in `<task-notification>` XML format:
 
 ```xml
 <task-notification>
@@ -581,7 +581,7 @@ The guiding principle in the system prompt is: **the coordinator should make ful
 > - [MEDIUM] Inferred dependency relationships that need verification during implementation
 > - [LOW] Areas not fully investigated; additional research needed before implementation
 >
-> These annotations let implementation workers know which parts can be executed directly and which need confirmation first.
+> These annotations let implementation workers know which parts they can execute directly and which need confirmation first.
 
 ---
 
@@ -620,7 +620,7 @@ flowchart TD
     style G fill:#f39c12,stroke:#d68910,color:#fff
 ```
 
-> **Cross-Reference:** The detailed mechanism of the Fork pattern is covered in Chapter 9. Pay special attention to the mutual exclusion between the two -- when Coordinator mode is activated, Fork mode is automatically disabled.
+> **Cross-Reference:** Chapter 9 covers the detailed mechanism of the Fork pattern. Pay special attention to the mutual exclusion between the two -- when Coordinator mode activates, the system automatically disables Fork mode.
 
 ```ill
 ch10-coordinator-fork
@@ -639,7 +639,7 @@ Suppose you have a large-scale refactoring task: splitting a monolithic Express.
 2. **Synthesis Phase**: How should the coordinator synthesize findings and write the microservice splitting specification
    - Hint: Consider service boundaries, shared databases, API Gateway, etc.
 3. **Implementation Phase**: How to allocate workers to avoid file conflicts
-   - Hint: Allocate by service boundary; files for the same service should be handled by the same worker
+   - Hint: Allocate by service boundary; the same worker should handle files for the same service
 4. **Verification Phase**: What is the verification strategy?
    - Hint: verify each microservice independently, then run integration tests
 
@@ -651,7 +651,7 @@ Consider the following questions about Scratchpad security design:
 - What happens if two workers write to the same Scratchpad file simultaneously?
 - How should you design Scratchpad file naming conventions to avoid conflicts?
 
-**Extended Thinking:** If you were to implement a "Scratchpad version control" feature (similar to Git), what metadata would need to be recorded? How would this change workers' write behavior?
+**Extended Thinking:** If you were to implement a "Scratchpad version control" feature (similar to Git), what metadata would you need to record? How would this change workers' write behavior?
 
 **Exercise 3: Compare Coordinator Pattern vs. Fork Pattern**
 
@@ -672,8 +672,8 @@ Based on the content of this chapter and Chapter 9, fill in the table below and 
 Suppose in a Coordinator workflow, a worker in the Implementation phase fails while modifying the database schema (migration script execution error). Design:
 1. How the Coordinator detects this failure
 2. How the Coordinator decides whether to retry or adjust the strategy
-3. How already partially completed modifications are handled
-4. How other workers executing in parallel are affected
+3. How to handle already partially completed modifications
+4. How the changes affect other workers executing in parallel
 
 **Exercise 5: Simulate a Complete Coordinator Workflow**
 

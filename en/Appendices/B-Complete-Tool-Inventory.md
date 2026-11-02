@@ -1,15 +1,15 @@
 # Appendix B: Complete Tool Inventory
 
-This appendix lists all 55 tools registered in the Claude Code architecture, indexed across 12 functional categories. Tools are the fundamental capability units through which the agent interacts with the external world. Each tool is registered in the tool registry via a unified interface protocol and is dispatched by the conversation main loop.
+This appendix lists all 55 tools registered in the Claude Code architecture, indexed across 12 functional categories. Tools are the fundamental capability units through which the agent interacts with the external world. Each tool registers in the tool registry through a unified interface protocol, and the conversation main loop dispatches it.
 
 **Permission Model Field Definitions**:
-- **readOnly**: Whether the tool only reads and does not modify the file system or external state. Read-only tools typically have more relaxed permission constraints and can be used in plan mode.
+- **readOnly**: Whether the tool only reads and does not modify the file system or external state. Read-only tools typically have more relaxed permission constraints, and you can use them in plan mode.
 - **destructive**: Whether the tool can irreversibly delete, overwrite, or send things. Destructive tools get stricter scrutiny during permission checks.
-- **concurrencySafe**: Whether the tool can be safely executed in parallel (no dependency on shared mutable state). Concurrency-safe tools can be dispatched simultaneously by the streaming tool executor.
+- **concurrencySafe**: Whether the tool can safely run in parallel (no dependency on shared mutable state). The streaming tool executor can dispatch concurrency-safe tools simultaneously.
 
 In the tables, `true`/`false` indicates the value is always returned; `dynamic` indicates runtime determination based on input parameters. Methods not explicitly overridden in the source code use the `buildTool` defaults (all `false`).
 
-> **Cross-Reference**: The tool definition protocol is detailed in Appendix A.4.3, "Standard Protocol of the Tool Type System"; tool registration and discovery mechanisms are described in Chapter 3; the tool permission check flow is described in Appendix A.3, "Permission Determination Path."
+> **Cross-Reference**: Appendix A.4.3, "Standard Protocol of the Tool Type System," details the tool definition protocol; Chapter 3 covers the tool registration and discovery mechanisms; Appendix A.3, "Permission Determination Path," describes the tool permission check flow.
 
 ```mermaid
 flowchart LR
@@ -72,8 +72,8 @@ File operation tools are the foundational capabilities for the agent to process 
 | NotebookEditTool | `false` | `false` | `false` | Edits Jupyter Notebook cells (replace/insert/delete) |
 
 **Usage Scenario Details**:
-- **FileReadTool**: Suitable for code review (reading large files in segments), document analysis (PDF paginated reading), image understanding (multimodal input), and similar scenarios. It is concurrency-safe, so several files can be read at once to gather information faster.
-- **FileWriteTool**: Suitable for creating new files (e.g., configuration files, scaffolded code) or completely rewriting file content. Since writing is irreversible, it is recommended to use FileReadTool first to confirm the current content of important files.
+- **FileReadTool**: Suitable for code review (reading large files in segments), document analysis (PDF paginated reading), image understanding (multimodal input), and similar scenarios. It is concurrency-safe, so you can read several files at once to gather information faster.
+- **FileWriteTool**: Suitable for creating new files (e.g., configuration files, scaffolded code) or completely rewriting file content. Since writing is irreversible, we recommend using FileReadTool first to confirm the current content of important files.
 - **FileEditTool**: Suitable for precisely modifying specific content within existing files. Its string matching mechanism ensures accurate modification placement, and the `replace_all` mode supports batch renaming and similar operations. This is the most commonly used tool for day-to-day code editing.
 - **NotebookEditTool**: Designed specifically for Jupyter Notebooks, supporting insertion of code or markdown cells at specific positions, modification of existing cell content, and deletion of cells. Suitable for data analysis and scientific computing scenarios.
 
@@ -109,14 +109,14 @@ Execution tools are the bridge between the agent and the operating system. BashT
 | PowerShellTool | `dynamic` | `false` | `dynamic` | Windows PowerShell command execution (conditionally enabled, functionally equivalent to BashTool) |
 
 **Usage Scenario Details**:
-- **BashTool**: This is one of the most frequently used tools in Claude Code. Suitable for: building and testing (`npm test`, `cargo build`), version control (`git` operations), system administration (file operations, process management), script execution, package management, and more. Its `readOnly` and `concurrencySafe` attributes are dynamically determined based on command content.
-- **PowerShellTool**: Automatically replaces BashTool in Windows environments, with execution that matches. Only enabled when a Windows PowerShell environment is detected.
+- **BashTool**: This is one of the most frequently used tools in Claude Code. Suitable for: building and testing (`npm test`, `cargo build`), version control (`git` operations), system administration (file operations, process management), script execution, package management, and more. Claude Code determines its `readOnly` and `concurrencySafe` attributes dynamically based on command content.
+- **PowerShellTool**: Automatically replaces BashTool in Windows environments, with execution that matches. Claude Code enables it only when it detects a Windows PowerShell environment.
 
 **Special Mechanisms of Execution Tools**:
-- **Read-Only Detection**: BashTool internally maintains a list of read-only commands. Matched commands (e.g., `ls`, `cat`, `git status`) are marked as readOnly and can be executed under more relaxed permission conditions.
+- **Read-Only Detection**: BashTool internally maintains a list of read-only commands. It marks matched commands (e.g., `ls`, `cat`, `git status`) as readOnly, letting them run under more relaxed permission conditions.
 - **Parallel Execution**: When multiple BashTool invocations are all determined to be concurrencySafe, the streaming tool executor can dispatch them in parallel, significantly improving efficiency.
 - **Timeout Management**: Long-running commands have a timeout mechanism to prevent indefinite blocking.
-- **Output Truncation**: Command output is truncated when it exceeds the limit, with the remainder persisted to disk.
+- **Output Truncation**: When command output exceeds the limit, the system truncates it and persists the remainder to disk.
 
 ## 4. Network
 
@@ -131,7 +131,7 @@ Network tools let the agent reach information on the internet, by two complement
 - **WebFetchTool**: Suitable for obtaining the complete content of a specific web page (e.g., API documentation, technical blogs). Converts HTML to markdown format for easier model comprehension and citation. Commonly used for consulting the latest documentation and verifying technical details.
 - **WebSearchTool**: Suitable for open-ended information queries. Returns structured search results (titles, summaries, links) to help the model quickly learn the latest information on a topic. Commonly used for technical research and issue investigation.
 
-**Combined Usage Pattern**: First use WebSearchTool for a broad search, then use WebFetchTool to deeply retrieve specific page content once relevant resources are identified.
+**Combined Usage Pattern**: First use WebSearchTool for a broad search, then use WebFetchTool to deeply retrieve specific page content once you identify relevant resources.
 
 ## 5. Agent
 
@@ -222,7 +222,7 @@ MCP tools let the agent talk to MCP servers and reach external resources.
 | ListMcpResourcesTool | `true` | `false` | `true` | Lists resources provided by MCP servers |
 | ReadMcpResourceTool | `true` | `false` | `true` | Reads a specific resource on an MCP server |
 
-**Usage Scenario Details**: MCP tools are the resource access interface for the Model Context Protocol client. ListMcpResourcesTool is used to discover available external resources (e.g., database tables, API endpoints), and ReadMcpResourceTool is used to read the content of a specific resource. Both tools are read-only and can be safely executed in parallel. See Chapter 12 for MCP integration.
+**Usage Scenario Details**: MCP tools are the resource access interface for the Model Context Protocol client. ListMcpResourcesTool is used to discover available external resources (e.g., database tables, API endpoints), and ReadMcpResourceTool is used to read the content of a specific resource. These two tools only read data and can safely run in parallel. See Chapter 12 for MCP integration.
 
 ## 12. Other
 
@@ -254,7 +254,7 @@ MCP tools let the agent talk to MCP servers and reach external resources.
 
 ## Tool Enablement Conditions Quick Reference
 
-Some tools are conditionally enabled through feature flags or environment variables. The table below lists all conditionally enabled tools and their corresponding flags:
+Feature flags or environment variables conditionally enable some tools. The table below lists all conditionally enabled tools and their corresponding flags:
 
 | Condition Identifier | Enabled Tools | Referenced Chapter |
 |---------|----------|---------|
@@ -286,7 +286,7 @@ Some tools are conditionally enabled through feature flags or environment variab
 
 ## Tool Registration Flow
 
-All tools are created through a unified tool factory function, which fills in safe default values for methods not explicitly defined:
+A unified tool factory function creates all tools, filling in safe default values for methods not explicitly defined:
 
 - `isEnabled()` defaults to returning `true`
 - `isReadOnly()` defaults to returning `false`

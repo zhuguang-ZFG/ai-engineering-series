@@ -80,7 +80,7 @@ flowchart TD
 
 ### A.2.1 Layered Architecture Description
 
-The Claude Code architecture can be clearly divided into four layers, each with well-defined responsibility boundaries and dependency directions:
+You can clearly divide the Claude Code architecture into four layers, each with well-defined responsibility boundaries and dependency directions:
 
 ```mermaid
 flowchart TD
@@ -134,7 +134,7 @@ flowchart TD
 - Contains the CLI entry point and REPL rendering module
 - Uses the Ink framework (React-based) to render the component tree as terminal text output
 - Responsible for user input capture, output rendering, keyboard shortcut handling, theme switching, and other UI-related responsibilities
-- Does not contain any business logic; all user actions are delegated to the layer below
+- Does not contain any business logic; it delegates all user actions to the layer below
 - Dependency direction: depends only on the Orchestration Layer below
 
 **Orchestration Layer**
@@ -157,11 +157,11 @@ flowchart TD
 - The query engine encapsulates all communication details with the Anthropic API
 - The settings system provides storage and validation capabilities for three-tier configuration
 - The memory system provides CLAUDE.md file discovery and injection capabilities
-- Dependency direction: does not depend on upper layers; can be called by any upper-layer module
+- Dependency direction: does not depend on upper layers; any upper-layer module can call it
 
 ### A.2.2 Core Loop and Data-Driven Model
 
-**Core Loop**: CLI entry initializes REPL -> user input triggers the conversation main loop's turn cycle -> query engine initiates API call -> model returns tool_use -> tool registry routes to specific tool -> after tool execution, results are backfilled -> API is called again until the model outputs end (stop reason = "end_turn").
+**Core Loop**: CLI entry initializes REPL -> user input triggers the conversation main loop's turn cycle -> query engine initiates API call -> model returns tool_use -> tool registry routes to specific tool -> after tool execution, the loop backfills results and calls the API again until the model outputs end (stop reason = "end_turn").
 
 The core loop embodies Claude Code's fundamental design philosophy: **the data-driven loop model**. The system does not use traditional imperative flow control; instead, it drives execution through continuous appending to the messages array. The input for each turn is an ever-growing messages array, and each model inference makes decisions based on the complete contents of this array.
 
@@ -198,7 +198,7 @@ flowchart LR
 
 **Cross-Cutting Concerns**:
 - **Hook System** (hooks) inserts interception logic before and after tool calls, so users extend behavior without touching core code. See Chapter 8 for detailed discussion
-- **Permission System** determines whether execution is allowed through a unified permission check function, forming safety guardrails that span all tool executions. See Chapter 4 for the permission pipeline details
+- **Permission System** determines whether to allow execution through a unified permission check function, forming safety guardrails that span all tool executions. See Chapter 4 for the permission pipeline details
 - **Compression System** automatically triggers when context approaches the token limit, serving as an engineering response to the fundamental hardware constraint of the context window. See Chapter 7 for context management strategies
 - **Memory System** scans CLAUDE.md at the start of each turn and injects it into the system prompt, so knowledge persists across sessions. See Chapter 6 for the memory architecture
 
@@ -227,7 +227,7 @@ This section presents complete data flows for several key operations in Claude C
 - [Permission Decision Path](#permission-decision-path) -- The core decision chain of the safety guardrails
 - [Context Compression Trigger Path](#context-compression-trigger-path) -- The lifeline for long conversations
 - [Memory Injection Path](#memory-injection-path) -- How cross-session knowledge enters the conversation
-- [MCP Tool Dynamic Registration Path](#mcp-tool-dynamic-registration-path) -- How external capabilities are integrated into the system
+- [MCP Tool Dynamic Registration Path](#mcp-tool-dynamic-registration-path) -- How external capabilities integrate into the system
 - [Sub-Agent Fork Execution Path](#sub-agent-fork-execution-path) -- Recursive decomposition of tasks
 
 ### Standard Tool Call Flow
@@ -266,13 +266,13 @@ flowchart TD
 ```
 
 **Key Decision Point Descriptions**:
-- Step [5] permission check is the system's most important security decision point, determining whether a tool is executed
-- Step [7] large result persistence mechanism prevents the token window from being filled by a single tool result
+- Step [5] permission check is the system's most important security decision point, determining whether a tool executes
+- Step [7] large result persistence mechanism prevents a single tool result from filling the token window
 - Step [8] loop condition (stop_reason) is the only mechanism for the entire system to exit from an "infinite loop"
 
 ### Permission Decision Path
 
-The permission pipeline is the core of Claude Code's security model. Every tool call must pass through this complete decision chain before it can be executed. The permission decision result determines whether the tool is executed, requires user confirmation, or is directly denied.
+The permission pipeline is the core of Claude Code's security model. Every tool call must pass through this complete decision chain before it can execute. The permission decision determines the outcome: execute, ask the user for confirmation, or reject the call outright.
 
 ```mermaid
 flowchart TD
@@ -468,9 +468,9 @@ The conversation main loop routes tool_use returned by the model to specific too
 ### A.4.3 Standard Protocol of the Tool Type System
 
 All tools (including built-in tools and MCP dynamic tools) must follow the standard protocol defined by the tool type system. Core protocol methods include:
-- **isEnabled()**: determines whether the tool is enabled in the current context
+- **isEnabled()**: determines whether the tool is available in the current context
 - **isReadOnly()**: determines whether the tool only reads
-- **isConcurrencySafe()**: determines whether the tool can be safely executed in parallel
+- **isConcurrencySafe()**: determines whether the tool can safely run in parallel
 - **isDestructive()**: determines whether the tool causes irreversible changes
 - **checkPermissions()**: checks permissions, returns allow/deny/ask
 - **toAutoClassifierInput()**: generates feature descriptions for automatic classification

@@ -5,7 +5,7 @@
 > **How to use this glossary**:
 > - The "See also" field after each term points to related terms, so the glossary reads thematically
 > - The "Chapter" field after each term indicates where the term is first discussed in depth in the main text
-> - Technical terms are kept in their original English form; Chinese translations are provided for supplementary understanding
+> - Technical terms keep their original English form; Chinese translations come along for supplementary understanding.
 
 ## Core Concept Relationship Diagram
 

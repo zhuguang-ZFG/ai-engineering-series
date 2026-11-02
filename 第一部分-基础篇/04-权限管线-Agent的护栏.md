@@ -89,7 +89,7 @@ flowchart TD
 
 规则匹配是权限管线的核心。`hasPermissionsToUseToolInner` 函数按照严格的优先级顺序依次检查三类规则：deny 规则、ask 规则和 allow 规则。
 
-**步骤 1a：工具级 deny 检查。** 这是最高的优先级。如果某个工具被整体 deny，调用立即被拒绝。
+**步骤 1a：工具级 deny 检查。** 这是最高的优先级。如果 deny 规则覆盖了整个工具，调用立即遭拒。
 
 `getDenyRuleForTool` 函数遍历所有来源（userSettings、projectSettings、localSettings、flagSettings、policySettings、cliArg、command、session）的 deny 规则逐条匹配。匹配逻辑有两条路：精确工具名匹配，以及 MCP 服务器级通配符——例如规则 `mcp__server1__*` 可以匹配这台服务器下的所有工具。
 
@@ -112,7 +112,7 @@ flowchart BT
     class session,command,cli,policy,flag,local,project,user priority
 ```
 
-**步骤 1b：工具级 ask 检查。** 当工具被配置为"总是询问"时，系统会强制弹出确认提示。但有一个例外：当 Bash 工具在沙箱模式下且配置了沙箱自动放行选项时，沙箱化命令可以跳过 ask 规则。这个例外的设计意图是：如果用户已经信任沙箱环境（沙箱中的命令无法影响沙箱外的系统），那么在沙箱内执行命令的风险已经被降低到可接受的水平。
+**步骤 1b：工具级 ask 检查。** 当工具配置为"总是询问"时，系统会强制弹出确认提示。但有一个例外：当 Bash 工具在沙箱模式下且配置了沙箱自动放行选项时，沙箱化命令可以跳过 ask 规则。这个例外的设计意图是：如果用户已经信任沙箱环境（沙箱中的命令无法影响沙箱外的系统），那么在沙箱内执行命令的风险已经降到可接受的水平。
 
 **步骤 2b：工具级 allow 检查。** 如果没有 deny 和 ask 规则命中，系统检查是否存在 allow 规则直接放行。
 
@@ -133,7 +133,7 @@ flowchart BT
 
 `passthrough` 是一个独特的设计。当一个工具没有特殊的权限逻辑时，它可以返回 `passthrough`，让管线继续流动。在后续步骤中，管线会把 `passthrough` 自动转成 `ask`，附带权限请求消息。
 
-> **设计洞察：** 为什么需要 `passthrough` 而不是让没有特殊权限逻辑的工具直接返回 `ask`？区别在于"意图"——`passthrough` 表示"我没有意见，交给后续阶段决定"，而 `ask` 表示"我认为这个操作需要用户确认"。如果后续的 allow 规则匹配了，`passthrough` 会被覆盖为 `allow`，但 `ask` 不会被覆盖。这个细微的区别在特定场景下会产生不同的行为。
+> **设计洞察：** 为什么需要 `passthrough` 而不是让没有特殊权限逻辑的工具直接返回 `ask`？区别在于"意图"——`passthrough` 表示"我没有意见，交给后续阶段决定"，而 `ask` 表示"我认为这个操作需要用户确认"。如果后续的 allow 规则匹配了，它会把 `passthrough` 覆盖为 `allow`，却动不了 `ask`。这个细微的区别在特定场景下会产生不同的行为。
 
 ### 4.1.4 阶段四：交互式提示 -- 用户确认
 
@@ -265,7 +265,7 @@ auto 模式的核心挑战是顾住"自动化效率"和"安全性"两头。纯�
 
 auto 模式叠了好几层优化，就为省下分类器的 API 调用开销：
 
-1. **acceptEdits 快速路径**：在调用分类器之前，先用 acceptEdits 模式检查工具是否会被放行。如果在 acceptEdits 模式下通过，直接放行，无需调用分类器。这是一个"短路优化"——如果已知是安全的，就不需要浪费 API 调用。
+1. **acceptEdits 快速路径**：在调用分类器之前，先用 acceptEdits 模式检查工具能否放行。如果在 acceptEdits 模式下通过，直接放行，无需调用分类器。这是一个"短路优化"——如果已知是安全的，就不需要浪费 API 调用。
 
 2. **安全工具白名单**：不需要分类器检查的安全工具包括 Read、Grep、Glob、TodoWrite 等只读或低风险工具。这个白名单的设计哲学是"显式声明安全"——只有在白名单中的工具才跳过分类器检查，新工具默认需要检查。
 
@@ -333,9 +333,9 @@ flowchart LR
     class D6 delegate
 ```
 
-- **Claude Code 2.1.310（本书基线）**：`claude -p` 起来就是 Manual 模式（v2.1.302 起，前提是没别的东西设定档位），管线判出的 `ask` 没人应答即被拒——除非 `--allowedTools`、`permissions.allow` 规则、`PermissionRequest` hook 或 `--permission-prompt-tool` 事先替它答了。`--permission-prompts none`（v2.1.259 起）连宿主也不问，并直接告诉模型没人能批、别重试；`--output-format stream-json` 下这些拒绝以 `permission_denied` 事件留在输出里。
-- **Codex CLI 0.166.0**：`codex exec` 这一支干脆不带审批轴，`-a/--ask-for-approval`（取值 `on-request`、`never`）只出现在交互模式里。它把「谁点头」换成「跑在哪面墙里」：`-s/--sandbox` 取 `read-only`、`workspace-write`、`danger-full-access` 三档；`--approve-for-me` 把审批请求转给自动复审；`--dangerously-bypass-approvals-and-sandbox` 连提示带沙箱一起拆掉，自述 EXTREMELY DANGEROUS，只给已被外部沙箱包住的环境。
-- **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步被降格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
+- **Claude Code 2.1.310（本书基线）**：`claude -p` 起来就是 Manual 模式（v2.1.302 起，前提是没别的东西设定档位），管线判出的 `ask` 没人应答即遭拒——除非 `--allowedTools`、`permissions.allow` 规则、`PermissionRequest` hook 或 `--permission-prompt-tool` 事先替它答了。`--permission-prompts none`（v2.1.259 起）连宿主也不问，并直接告诉模型没人能批、别重试；`--output-format stream-json` 下这些拒绝以 `permission_denied` 事件留在输出里。
+- **Codex CLI 0.166.0**：`codex exec` 这一支干脆不带审批轴，`-a/--ask-for-approval`（取值 `on-request`、`never`）只出现在交互模式里。它把「谁点头」换成「跑在哪面墙里」：`-s/--sandbox` 取 `read-only`、`workspace-write`、`danger-full-access` 三档；`--approve-for-me` 把审批请求转给自动复审；`--dangerously-bypass-approvals-and-sandbox` 连提示带沙箱一起拆掉，自述 EXTREMELY DANGEROUS，只给已有外部沙箱包住的环境。
+- **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步降了格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
 - **Qoder CLI 1.1.81**：官方文档把落点钉在表里——headless（`-p`）下 `ask` 的 outcome 写着 "Auto-deny"，`dont_ask` 一档专为「绝不能弹提示」的流程而生："Never prompts. Any action that would normally ask is denied instead." 想放行得报出范围：`--permission-mode accept_edits`、`--yolo`，或精确到子命令的 `--allowed-tools 'Read,Bash(git status)'`。非默认档位只在受信任目录生效，否则回落 `default`。
 - **Kimi Code 2.4.1**：档位本身就是审批轴。`-y/--yolo` 启动在 Ask When Needed（"routine edits and commands run automatically; risky actions, questions, and plans still ask"），`--auto` 启动在 Never Ask；`-p` 只是不开 TUI，没另设一条审批轴。
 - **oh-my-pi 18.15.0**：`--approval-mode` 以四个值 `always-ask|always-ask-cached|write|yolo` 覆盖配置里的 `tools.approvalMode`，`--auto-approve` 一次放下全部提示。
