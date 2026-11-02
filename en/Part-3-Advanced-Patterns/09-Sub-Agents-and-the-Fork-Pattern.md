@@ -320,6 +320,10 @@ The key point is that the placeholder results are shared across all Fork sub-age
 >
 > These savings become even more significant at scale (e.g., when dozens of Fork calls are generated in a single session).
 
+```ill
+ch09-fork-pipeline
+```
+
 ### Recursive Fork Protection
 
 Fork sub-agents retain the Agent tool to maintain cache-consistent tool definitions, so recursive Forking must be prevented. The system guards against it twice:

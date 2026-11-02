@@ -332,6 +332,10 @@ graph TD
     style E fill:#bdc3c7,stroke:#7f8c8d,color:#333
 ```
 
+```ill
+ch11-skill-stairs
+```
+
 ### 11.3.2 Dynamic Skill Discovery
 
 In addition to static loading at startup, Claude Code also discovers skills dynamically while a session runs. When the model accesses files through tools like Read, Write, Edit, etc., the system searches upward along the file path for `.claude/skills/` directories.

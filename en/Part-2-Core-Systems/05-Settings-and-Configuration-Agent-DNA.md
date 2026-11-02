@@ -325,6 +325,10 @@ graph TD
 
 > Cross-Reference: The `projectSettings` exclusion mechanism discussed in this chapter is closely related to the security model in Chapter 8 (Hooks System). The loading of hooks similarly follows this trust model -- when `allowManagedHooksOnly` is enabled, hooks from projectSettings are completely blocked.
 
+```ill
+ch05-trust-ladder
+```
+
 ## 5.3 Feature Flag System
 
 Claude Code splits its feature flag system into two layers: the **compile-time** `feature()` function and the **runtime** GrowthBook experimentation framework. This dual-layer design reflects a classic tradeoff in software release engineering: compile-time flags control features at no runtime cost, while runtime flags let you iterate quickly without redeploying.

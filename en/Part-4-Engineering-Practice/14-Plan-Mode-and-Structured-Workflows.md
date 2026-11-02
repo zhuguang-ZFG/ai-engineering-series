@@ -33,9 +33,13 @@ This differentiated strategy reflects different usage scenarios: external users 
 
 Plan Mode in this chapter is one gear inside a permission state machine; oh-my-pi 18.15.0 moves the same idea onto the pricing layer: `--smol`, `--slow`, and `--plan` assign models for lightweight tasks, thorough analysis, and architectural planning respectively; `--prewalk` switches to a cheap model at the first file write after the plan's todo list exists; `--plan-yolo` locks the session into read-only planning at start, auto-approves the plan on the model's first resolve call, then switches to the model named by `--plan-yolo-into` to implement it. "Plan before execute" is, on this host, simultaneously a permission decision and a cost decision: the planning phase is pinned read-only, and the execution phase puts on a cheaper model.
 
-Gemini CLI makes the same gear a default-on entrance: `--approval-mode=plan` pins it at launch, `Shift+Tab` cycles through Default, Auto-Edit, and Plan, and the `/plan` command or one sentence of natural language calls the `enter_plan_mode` tool to switch in -- YOLO mode does not carry that tool. It writes the read-only planning phase down as an explicit tool whitelist: file reads, directory listings, glob, grep, and search stay on the table while `web_fetch` asks for confirmation every time; the agreed plan lands as a Markdown file in a plans directory, opens in an external editor where steps can be rewritten and inline comments left, the CLI notices the edits, reviews the comments, and presents the refined plan for final approval -- approving it exits Plan Mode and starts the implementation.
+Gemini CLI makes the same gear a default-on entrance: `--approval-mode=plan` pins it at launch, `Shift+Tab` cycles through Default, Auto-Edit, and Plan, and the `/plan` command or one sentence of natural language switches it on -- the former switches to Plan and immediately submits the prompt to the model, the latter calls the `enter_plan_mode` tool (YOLO mode does not carry that tool). It writes the read-only planning phase down as an explicit tool whitelist: file reads, directory listings, glob, grep, and search stay on the table while `web_fetch` asks for confirmation every time; the agreed plan lands as a Markdown file in a plans directory, opens in an external editor where steps can be rewritten and inline comments left, the CLI notices the edits, reviews the comments, and presents the refined plan for final approval -- approving it exits Plan Mode and starts the implementation.
 
 > **Identity of this cross-check:** oh-my-pi and Gemini CLI are both registered in `CREDITS.md` as **cross-checks**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- they support no technical claim in this chapter and exist to show what the same idea grows into under someone else's hands.
+
+```ill
+ch14-plan-gate
+```
 
 ### 14.1.2 Mode Switching Mechanism
 

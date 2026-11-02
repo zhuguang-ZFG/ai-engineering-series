@@ -23,8 +23,12 @@ OUT = ROOT / "docs" / "illustration-gallery.html"
 
 ORDER = ["front", "ch01", "ch01-five-pillars", "ch02", "ch02-turn-loop",
          "ch03", "ch03-tool-bench", "ch03-tool-pipeline",
-         "ch04", "ch04-gate-steps", "ch05", "ch06", "ch07", "ch07-four-levels",
-         "ch08", "ch08-hook-line", "ch09", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15",
+         "ch04", "ch04-gate-steps", "ch05", "ch05-trust-ladder",
+         "ch06", "ch06-memory-funnel", "ch07", "ch07-four-levels",
+         "ch08", "ch08-hook-line", "ch09", "ch09-fork-pipeline",
+         "ch10", "ch10-coordinator-fork", "ch11", "ch11-skill-stairs",
+         "ch12", "ch12-mcp-state-dial", "ch13", "ch13-concurrency-gate",
+         "ch14", "ch14-plan-gate", "ch15", "ch15-harness-wheel",
          "apxa", "apxb", "apxc", "apxd", "keeper",
          "part-p1", "part-p2", "part-p3", "part-p4", "cover"]
 BIG = {"part-p1", "part-p2", "part-p3", "part-p4", "cover"}
@@ -32,7 +36,11 @@ BIG = {"part-p1", "part-p2", "part-p3", "part-p4", "cover"}
 WIDE = {"ch03-tool-bench": 300, "ch03-tool-pipeline": 330,
         "ch02-turn-loop": 330, "ch01-five-pillars": 300,
         "ch04-gate-steps": 330, "ch08-hook-line": 330,
-        "ch07-four-levels": 330}
+        "ch07-four-levels": 330, "ch05-trust-ladder": 330,
+        "ch06-memory-funnel": 330, "ch09-fork-pipeline": 330,
+        "ch10-coordinator-fork": 330, "ch11-skill-stairs": 330,
+        "ch12-mcp-state-dial": 330, "ch13-concurrency-gate": 330,
+        "ch14-plan-gate": 330, "ch15-harness-wheel": 330}
 WIDTH = {n: (420 if n == "cover" else WIDE.get(n) or (300 if n in BIG else 120))
          for n in ORDER}
 
@@ -61,6 +69,15 @@ PLAIN = {
     "ch13": "漏斗：回答像水一样，一边流一边看",
     "ch14": "小红旗：先画路线再出发，插旗为证",
     "ch15": "辘轳：亲手摇一架，你也造一个 Agent",
+    "ch05-trust-ladder": "六级台阶：越外层越不可信，三星闸门划出安全线",
+    "ch06-memory-funnel": "双层漏斗：先按行滤、再按字节滤，只留一张索引卡",
+    "ch09-fork-pipeline": "四格胶片：留消息、收调用、换占位、发分身，省下六成字",
+    "ch10-coordinator-fork": "两种带队法：工地上听指挥，侦察队各带干粮",
+    "ch11-skill-stairs": "五级台阶：官越大说了算，官缺了往下补",
+    "ch12-mcp-state-dial": "一座钟面：五个状态绕环走，卡住就退避重试",
+    "ch13-concurrency-gate": "一扇闸门：只读的齐头并进，动手的排队独占",
+    "ch14-plan-gate": "一间带门的作坊：先在左屋画图，再进右屋动工",
+    "ch15-harness-wheel": "一只车轮：对话循环是毂，五根辐条撑起整车",
     "apxa": "藏宝图：源码去哪儿翻，一图定位",
     "apxb": "工具清单：所有家当，逐项打勾",
     "apxc": "开关排：哪些功能开着，一眼看清",
@@ -103,6 +120,25 @@ PLAIN_EN = {
     "ch13": "Funnel: answers flow like water",
     "ch14": "Flag: draw the route first, plant the flag",
     "ch15": "Windlass: crank one yourself",
+    "ch05-trust-ladder": "Six steps: the outer layers trust less; a "
+                         "three-star gate draws the line",
+    "ch06-memory-funnel": "A two-gate funnel: rows first, then bytes -- "
+                          "one index card survives",
+    "ch09-fork-pipeline": "A filmstrip: keep the messages, gather the "
+                          "calls, swap a placeholder, fork -- two-thirds "
+                          "the tokens",
+    "ch10-coordinator-fork": "Two ways to lead: a foreman's yard, or "
+                             "scouts who carry their own rations",
+    "ch11-skill-stairs": "Five steps: policy outranks all; when it is "
+                         "absent, the next level speaks",
+    "ch12-mcp-state-dial": "A clock face: five states around the ring, "
+                           "back off and retry when stuck",
+    "ch13-concurrency-gate": "One gate: read-only tools run in step; "
+                             "anything that writes queues alone",
+    "ch14-plan-gate": "A workshop with a door: sketch in the read-only "
+                      "room, build in the other",
+    "ch15-harness-wheel": "A wheel: the dialog loop is the hub; five "
+                          "spokes carry the cart",
     "apxa": "Treasure map: where the source lives",
     "apxb": "Tool inventory: tick every box",
     "apxc": "Switch bank: what's on, at a glance",

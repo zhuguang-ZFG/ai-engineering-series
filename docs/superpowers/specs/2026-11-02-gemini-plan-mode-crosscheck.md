@@ -10,7 +10,7 @@
 
 - latest release **v0.66.0**（2026-10-27 发布），轻量 tag 直接指向 commit `970413207732f5d4d8c50540c7fc359c44fdaaf2`；仓库 108,672 star，`pushed_at` 2026-11-02T01:22Z——「仓库仍在活跃提交」仍真。
 - README 顶部 NOTE 仍声明：未付费档与 Google One 用户自 2026-06-18 起由 **Antigravity CLI** 承接；且「Gemini CLI 未针对 Gemini 4 Argon 优化」——「官方入口已迁」仍真。
-- `docs/cli/plan-mode.md` 在登记钉的 v0.65.0 即已存在（raw 探测 200），v0.66.0 仍在：Plan Mode 为只读规划环境、**默认开启**；入口三条——启动旗标 `--approval-mode=plan`、`Shift+Tab` 在 Default→Auto-Edit→Plan 循环、`/plan [goal]` 或自然语言触发 `enter_plan_mode` 工具（YOLO 档无此工具）；规划期**显式工具白名单**（read_file/list_directory/glob/grep_search/google_web_search/get_internal_docs/研究子代理；web_fetch 须单独确认）；计划落成 plans 目录的 Markdown 文件，Ctrl+X 开外部编辑器改步骤、留行内评论，CLI 察觉改动重审后再送批；批准即退出 Plan Mode 开始实施。
+- `docs/cli/plan-mode.md` 在登记钉的 v0.65.0 即已存在（raw 探测 200），v0.66.0 仍在：Plan Mode 为只读规划环境、**默认开启**；入口三条——启动旗标 `--approval-mode=plan`、`Shift+Tab` 在 Default→Auto-Edit→Plan 循环、`/plan [goal]`（切档并立即把提示词提交给模型）或自然语言（由 CLI 调 `enter_plan_mode` 工具，YOLO 档无此工具）；规划期**显式工具白名单**（read_file/list_directory/glob/grep_search/google_web_search/get_internal_docs/研究子代理；web_fetch 须单独确认）；计划落成 plans 目录的 Markdown 文件，Ctrl+X 开外部编辑器改步骤、留行内评论，CLI 察觉改动重审后再送批；批准即退出 Plan Mode 开始实施。
 - 本机未装 gemini：**所有 claims 以 tag 内文档为准**，不引本机行为。
 
 ## 决定

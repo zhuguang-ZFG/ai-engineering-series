@@ -240,7 +240,10 @@ class ShippedCounts(Data):
 CN_NUM = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7,
           "八": 8, "九": 9, "十": 10}
 EN_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
-          "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+          "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11,
+          "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+          "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19,
+          "twenty": 20}
 TOOL_ROW = re.compile(r"^\|\s*([A-Za-z][A-Za-z0-9]*Tool)\s*\|")
 CAT_HEADING = re.compile(r"^## \d+\. \S")
 

@@ -250,6 +250,10 @@ Why are two layers of limits needed? The line limit and byte limit each address 
 
 The order of the two layers also matters -- truncation by lines first, then by bytes. When there are fewer memory entries but longer descriptions, the byte limit triggers first; when there are more memory entries but shorter descriptions, the line limit triggers first. In either case, there is a corresponding protection mechanism.
 
+```ill
+ch06-memory-funnel
+```
+
 ### 6.2.3 Directory Structure of Memory Files
 
 The storage path for memory files is determined by functions in the path resolution module. The default path is:

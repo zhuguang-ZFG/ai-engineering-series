@@ -325,6 +325,10 @@ graph TD
 
 > **交叉引用提示：** 本章讨论的 `projectSettings` 排除机制与第8章（钩子系统）的安全模型紧密相关。hooks 的加载同样遵循这一信任模型——当 `allowManagedHooksOnly` 启用时，来自 projectSettings 的 hooks 被完全屏蔽。
 
+```ill
+ch05-trust-ladder
+```
+
 ## 5.3 功能开关系统
 
 Claude Code 的功能开关系统分为两层：**编译时**的 `feature()` 函数和**运行时**的 GrowthBook 实验框架。这种双层设计反映了软件发布工程中的一个经典权衡：编译时开关控制特性但不增加运行时开销，运行时开关则不用重新部署就能快速迭代。
