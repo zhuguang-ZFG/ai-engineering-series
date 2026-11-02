@@ -43,7 +43,7 @@ npm run check:diagrams
 
 ## Task 1：设计稿与计划入库
 
-- [ ] Step 1：提交 spec + plan 两份文档（本计划与
+- [x] Step 1：提交 spec + plan 两份文档（本计划与
   `docs/superpowers/specs/2026-11-02-omp-crosscheck-expansion.md`）。
 
 ```bash
@@ -53,37 +53,37 @@ git commit -m "docs(book): omp 对照面扩容的设计稿与实施计划"
 
 ## Task 2：正文双语落字 + 锚点平移
 
-- [ ] Step 1：ch07 zh 在 L420（表格行）后插 6 行对照小节；en 同位置插同 6 行。
-- [ ] Step 2：ch14 zh 在 L32 后插 4 行对照段 + 引语框；en 同位置插同 4 行。
-- [ ] Step 3：ch04 zh/en L341 的「oh-my-pi 18.14.2」→「oh-my-pi 18.15.0」（en 同）。
-- [ ] Step 4：锚点平移并复核计划（先 dry-run 再 `--write`）：
+- [x] Step 1：ch07 zh 在 L420（表格行）后插 6 行对照小节；en 同位置插同 6 行。
+- [x] Step 2：ch14 zh 在 L32 后插 4 行对照段 + 引语框；en 同位置插同 4 行。
+- [x] Step 3：ch04 zh/en L341 的「oh-my-pi 18.14.2」→「oh-my-pi 18.15.0」（en 同）。
+- [x] Step 4：锚点平移并复核计划（先 dry-run 再 `--write`）：
 
 ```bash
 python -X utf8 scripts/shift_anchors.py 第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md --after 420 --delta 6
 python -X utf8 scripts/shift_anchors.py 第四部分-工程实践篇/14-Plan模式与结构化工作流.md en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md --after 32 --delta 4
 ```
 
-- [ ] Step 5：核对双语行数增量一致（ch07 两版 484→490，ch14 两版 821/822→825/826）。
+- [x] Step 5：核对双语行数增量一致（ch07 两版 484→490，ch14 两版 821/822→825/826）。
 
 ## Task 3：登记重钉 + 草稿注记
 
-- [ ] Step 1：`sources.json` 的 `gh-oh-my-pi`：tag `v18.15.0`、commit `3fedf8d53267e32a6d7521ce725fdcc4a36fdc67`、`snapshot`／`accessed` 改 2026-11-02、`scope` 扩为三章对照面（zh ≤180 字、en ≤300 字符上限内）。
-- [ ] Step 2：`CREDITS.md` §三 `gh-oh-my-pi` 行同步 tag/commit/描述。
-- [ ] Step 3：field-guide 草稿头部追加执行注记（哪两组能力、哪两章、何时、重验口径）。
+- [x] Step 1：`sources.json` 的 `gh-oh-my-pi`：tag `v18.15.0`、commit `3fedf8d53267e32a6d7521ce725fdcc4a36fdc67`、`snapshot`／`accessed` 改 2026-11-02、`scope` 扩为三章对照面（zh ≤180 字、en ≤300 字符上限内）。
+- [x] Step 2：`CREDITS.md` §三 `gh-oh-my-pi` 行同步 tag/commit/描述。
+- [x] Step 3：field-guide 草稿头部追加执行注记（哪两组能力、哪两章、何时、重验口径）。
 
 ## Task 4：闸门 + 账本 + 提交
 
-- [ ] Step 1：五道闸全绿（预期：build --check 双版 CHECK OK 167 plates；unittest 442+35；check_book 92 files/0 errors；diagrams 320/0）。
-- [ ] Step 2：`revisions.json` entries[0] 双语各补一条账本（无反引号、无 `@@`），跑
+- [x] Step 1：五道闸全绿（预期：build --check 双版 CHECK OK 167 plates；unittest 442+35；check_book 92 files/0 errors；diagrams 320/0）。
+- [x] Step 2：`revisions.json` entries[0] 双语各补一条账本（无反引号、无 `@@`），跑
   `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes` 复核。
-- [ ] Step 3：提交正文与登记：
+- [x] Step 3：提交正文与登记：
 
 ```bash
 git add -A
 git commit -m "feat(book): oh-my-pi 对照面落进第 7、14 章，登记重钉 v18.15.0"
 ```
 
-- [ ] Step 4：勾掉本计划全部勾，单独提交：
+- [x] Step 4：勾掉本计划全部勾，单独提交：
 
 ```bash
 sed -i '3,$s/^- \[ \]/- [x]/' docs/superpowers/plans/2026-11-02-omp-crosscheck-expansion.md
@@ -91,4 +91,4 @@ git add docs/superpowers/plans/2026-11-02-omp-crosscheck-expansion.md
 git commit -m "docs(book): omp 对照面计划的勾打上"
 ```
 
-- [ ] Step 5：提交后窄复核：`check_book.py` 仍 0 errors；`git status` 干净。
+- [x] Step 5：提交后窄复核：`check_book.py` 仍 0 errors；`git status` 干净。
