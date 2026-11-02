@@ -1238,7 +1238,7 @@ Expected（numstat）：两个 md 各 `6 0`。
 前五步的绿是脚本的绿。这一轮的产物第一次让读者在同一页里看到 6 张正文图，所以要在浏览器里把「屏幕、暗色、纸面」三张脸都看过一遍才算完。
 
 **Files:**
-- Regenerate: `docs/illustration-gallery.html`、`docs/beginner-reader.html`、`docs/beginner-reader.en.html`、`docs/index.html`（门户）
+- Regenerate: `docs/illustration-gallery.html`、`docs/beginner-reader.html`、`docs/beginner-reader.en.html`、`docs/portal.html`（门户）
 - Modify: `docs/superpowers/specs/2026-11-01-yuyu-illustration-expansion.md`（§4 表格勾掉已落地行，状态改成「正文手绘与连续动图已铺开 5 张，实物位图待做」）
 
 **Interfaces:**
@@ -1252,7 +1252,7 @@ python -X utf8 scripts/build_illustration_gallery.py   # 33 figures
 python -X utf8 scripts/build_beginner_reader.py
 python -X utf8 scripts/build_site_portal.py
 ```
-Expected: 各自打印一行输出文件与体积，无 SystemExit。（门户的插图数是从磁盘取的，无需手改。）
+Expected: 各自打印一行输出文件与体积，无 SystemExit。（三个产物的插图数都不必手改：`scripts/build_beginner_reader.py:20` 的 `PLATES = len(list(ART.glob("*.svg")))` 当场数磁盘，门户 `docs/portal.html` 与两份入门读本都从这一个常量取值。）
 
 - [ ] **Step 2: 构建两份 HTML**
 
@@ -1291,7 +1291,7 @@ npm run check:diagrams                                   # 320 / 0
 - [ ] **Step 6: 更新设计稿状态并提交**
 
 ```bash
-git add docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/index.html docs/superpowers/specs/2026-11-01-yuyu-illustration-expansion.md yuyu-book/revisions.json
+git add docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html docs/superpowers/specs/2026-11-01-yuyu-illustration-expansion.md yuyu-book/revisions.json
 git commit -m "docs(book): 重生成画廊与门户，插图扩容设计稿记下已落地的五张"
 ```
 
