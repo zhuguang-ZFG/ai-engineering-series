@@ -182,3 +182,17 @@ Motion）把落地页重排了一遍，并在 Chrome 里 1280 / 600 两档实测
 | R-19 | CLOSED（本轮） | `class="frame grid-4"`、`"frame grid-3"` 竖着排：`.frame{display:flex}` 赢了，而模板的例外表 `.frame.grid-2-7-5,.grid-2-6-6,.grid-2-8-4,.grid-3-3,.grid-6{display:grid}` **不含 grid-4/grid-3**。改成不带 `frame` 的裸 `grid-4`/`grid-3`。这类"复合类只在部分组合上生效"的约定，grep 例外表比试错快 |
 | R-20 | CLOSED（本轮） | **把书里的图直接贴进投屏 deck 是量级错误**：`book/assets/stacks/*.png` 按 1300–1700 CSS px 作图、标签 9.5–13px（2× DPR 导出成 2600px），手绘 SVG 最小字号 19 单位 / viewBox 1200。塞进 `grid-2-7-5` 的 5 栏后有效缩放只有 0.145 与 0.38，屏幕字面 **2–7px**——结构能看，文字全废。改法分两类：两张手绘 SVG 改成**整页图**（`flex:1 1 auto;min-height:0`，缩放升到 0.80–0.94，最小字面 15–18px）；工程分层页换成 deck 原生的 `.stack`/`.lay` 行（层名 + 一句"替你省了什么" + 真实工具名 `@RestController` 等，全部取自工程图正文），完整带图标连线的图留在书里并在页脚指路径。顺带删掉 `loading="lazy"`：横向 transform 翻页不会把离屏 slide 带进视口，懒加载永不触发，演讲者视图的缩略图还会是空白 |
 | O-14 | WATCH | 测量本身的坑：用 `scrollIntoView` 遍历横向翻页的 deck，会把入场动效的中间态读成溢出（slide 2 报 +164px、slide 14 报 +62px，实际都是 -83px 安全线内）。必须用 deck 自带的 `go(i)` 翻页并等 cascade 落定（≥1.3s）再量；`resize_page` 给的是窗口外框，1920×1080 实得视口 1920×828，算安全线要用实测高度 |
+
+## 卡片出口第一遍（`exports/cards/` · 9 板）· 2026-11-03
+
+7 张 3:4（1080×1440）+ 1:1 / 21:9 公众号双封面。最终 `validate-social-deck.mjs`：**9 sections · 9 clean · 0 fails · 0 warns**。
+第一遍是 5 个 R8 warn（正文跨度不足），全部靠**放大真实内容**消掉，没有补一个装饰元素——这是本轮最值得记的口径。
+
+| 编号 | 状态 | 发现 |
+| --- | --- | --- |
+| R-21 | CLOSED（本轮） | **R8 不是"排版太松"，是"信息量不够"**：WARN 条件是 `bottomGap > 160 且 activeRatio < 0.78`（3:4 上正文纵向跨度要 ≥1123px）。第一反应是加装饰或拉大 gap，两条都会让卡片变傻。真正的杠杆是把种子的字号档位**按内容重新分配**：`.ledger-row` padding 28→44、`.ledger-title` 42→52、`.step-title` 40→50、`.pipeline-v` gap 28→36，让承载信息的元素自己变大。反例也记一笔：xhs-05 放大后 **overflow +30px**，`.h-xl` 从 88 退到 68 才收进 1289/1344——密度达标后要**回头量上限**，`measure.mjs` 就是为此写的 |
+| R-22 | CLOSED（本轮） | 种子模板的 `--font-serif-zh` 是宋体，与本书手绘身份（书封 / 视频场景 / 落地页都是**粗黑标题栈**）不同源，卡片一眼就是"别家的东西"。改法不是在每个标题上写 `font-family`，而是在**同一元素 `html` 上后声明** `[data-theme="handdraw"]{--font-serif-zh:var(--font-sans)}`——`--ff-display-zh/--ff-body-zh` 全部随之改写，一处生效、不留选择器战争。展示字重统一压到 700 并把 `letter-spacing` 归零（种子给 display 带 +.03~.04em，西文可用，中文是散架的） |
+| R-23 | CLOSED（本轮） | 小字踩了对比度红线：封面新增的路线条 `.hd-route .arw` 第一版用 `var(--accent)`（纸面 APCA 68，按 `tokens.md` 只允许走 display 粗线），已改 `var(--accent-ink)`（69 / WCAG 4.51，小字与细线的唯一合法绿）。同轮另一处是**断句错误**：箭头最初各自是一个 flex item，`→` 会落到行首；改成"条目+箭头"合进一个 `white-space:nowrap` 的 span |
+| R-24 | CLOSED（本轮） | 两字尾行（"任务 / 卡。"、"迭 / 代。"）毁掉整页节奏。**没有改文案**——"这一步交出 X"是本书的口诀锚，为了排版削它属于本末倒置；用 `text-wrap:balance; line-break:strict` 让配平与避头尾由排版引擎承担，三条规则（note / step-desc / lead）一次覆盖 |
+| R-25 | CLOSED（本轮） | deck 的 `four-gates` 页把关卡画成 `⭐ 第 1 关`：既是 unslop 禁的 **chrome 里的 emoji**，又叠在 `.step-nb` 的 `font-style:italic` 上（中文伪斜体，cjk-rules D8）。改为 `01`–`04`，与全 deck 的 `.step-nb` 一致；"1 星代表已经开始…"保留在正文句子里——**星是口诀，不是图标**。随后用位宽扫过 `1F300–1FAFF / 2600–27BF / 2B00–2BFF` 三段，deck、落地页、卡片三份出口 emoji 归零（第一遍漏扫是因为 `⭐` 落在 2B00 段外） |
+| O-15 | WATCH | 环境缺口：`subset-font` 未安装，`render.mjs` 每次都打印"字体内置失败，改用在线字体"并回退到 Google Fonts。渲染结果正确，但**出图需要联网**；不往共享插件目录装依赖，留作环境说明。另：`output/*.png` 是生成物，按仓库约定不入库 |
