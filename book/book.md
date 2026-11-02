@@ -47532,6 +47532,11 @@ GitHub 上有各种语言和框架的 .gitignore 模板：[github.com/github/git
 | **stash** | Stash | 临时保存还没 commit 的改动，切换任务时用 |
 | **PR / MR** | Pull Request / Merge Request | 请求把你的分支合并进主分支，通常需要队友 review |
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/git-history.svg" alt="Git 时光机收口图：文件经工作区、暂存区、仓库三层流转，每个 commit 是一个存档点，分支是副本存档并 merge 回 main，本地与 GitHub 之间 push 与 pull" loading="lazy">
+  <figcaption><strong>日常开发 90% 的操作就是反复执行这三步：status → add → commit。</strong>合上这一章只需记住这张图：文件从工作区经暂存区被 commit 封存进 `.git`，串成一条可以随时回到任意节点的历史时间线；分支是副本存档，改完 merge 回 main；本地与 GitHub 之间靠 push 和 pull 同步——Git 是工具，GitHub 是托管服务。</figcaption>
+</figure>
+
 ---
 
 ### 环境变量与 PATH
@@ -52949,6 +52954,11 @@ transform: translateX(10px) rotate(45deg) scale(1.1);
 4. **最后学动画**：`transition`、`transform`、`animation`
 
 其他属性用到再查，用多了自然就记住了。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/layout-system.svg" alt="CSS 布局的四级台阶：盒模型、Flexbox、定位、动画，以及 300px 卡片被 padding 和 border 撑成 342px 的换算" loading="lazy">
+  <figcaption><strong>CSS 属性几百个，值得先记的只有四级台阶。</strong>盒模型 → Flexbox → 定位 → 动画；卡片写 `width: 300px`，加上 `padding: 20px` 和 `border: 1px` 实际占 342px，三个就是 1026px，容器只有 900px，第三个卡片于是掉到下一行——一句 `box-sizing: border-box` 让 width 把 padding 和 border 包进去。</figcaption>
+</figure>
 
 
 ##### 4. JavaScript：网页的大脑
@@ -61786,6 +61796,11 @@ Cache-Control: max-age=3600
 3. **理解技术背后的权衡**:每一次架构演进都是在**开发效率**、**系统性能**、**运维复杂度**之间做取舍
 4. **预判技术趋势**:历史总是押韵的,理解过去的演进规律有助于把握未来方向
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/web-framework.svg" alt="后端架构四次演进：物理服务器、单体加 MVC、微服务加容器化、Serverless 与云原生" loading="lazy">
+  <figcaption><strong>没有最好的架构，只有最适合的架构。</strong>四代各对应一支团队——1-5 人、5-50 人、50-500 人、1-20 人。微服务买的是隔离，付的是运维成本；Serverless 把运维减到只写函数，代价是冷启动。</figcaption>
+</figure>
+
 
 
 ##### 2. 物理服务器时代 (1990s)
@@ -65582,6 +65597,11 @@ return userFromDB
 - **数据库（图书馆）**：最慢，容量无限，放所有数据
 
 **为什么要分层？** 因为不同层次的性能和成本不同，合理组合才能达到最优效果。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/cache-layers.svg" alt="缓存三层阶梯：L1 本地缓存、L2 Redis、L3 数据库，以及未命中往下走、命中往回填" loading="lazy">
+  <figcaption><strong>70% + 25% = 95%：请求该在缓存层就返回。</strong>未命中才往下走一层，走到数据库只剩 5%，查到后往回填 L2 和 L1。写数据反过来——先更新数据库，再删除缓存。</figcaption>
+</figure>
 
 讲了这么多概念，让我们看一个真实的案例：某电商系统是如何从"没有缓存"一步步进化到"多级缓存架构"的。通过这个案例，你会更直观地理解缓存设计的重要性。
 
@@ -70249,6 +70269,11 @@ WHERE u.name = '张三';
 | **索引查找** | 查索引树，直接跳到目标位置 | 3-4 次比较 | 0.003 秒 |
 
 **速度差距：数千倍！**
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/db-index.svg" alt="全表扫描与索引查找的对比：同一张 users 表，平均看 500 万行与 3-4 次比较的差距" loading="lazy">
+  <figcaption><strong>速度差距：数千倍。</strong>同样查 user_id = 5,555,555，全表扫描平均要看 500 万行、花 5-30 秒；走索引只要 3-4 次比较、0.003 秒。就像有目录的书，翻 3 次就能找到那一页。</figcaption>
+</figure>
 
 > **💡 💡 核心启示**
 索引不是银弹，它有代价：
@@ -82670,6 +82695,11 @@ AI 原生应用设计不是简单地在传统应用上叠加 AI 功能，而是�
 为了解决这些痛点，本文以“AI 能力全景图”为核心的整理思路应运而生。在这本手册里，我们想做的不是堆名词，而是帮你快速搞清楚三件事：**"这件事可以用什么 AI 能力做？大概该选哪一类模型或产品？接下来用哪些关键词去找 API、项目或服务来试？"** 通过从模态（文字、图像、音频、视频、3D、多模态）到架构层（模型、检索、Agent、平台工程）的系统梳理， **我们可以为每一类典型需求和场景找到对应的 AI 能力、代表性模型/产品，以及在真实业务中的常见用途** ，帮助团队以更低试错成本、更高决策效率和更强可复用性来建设 AI 体系。
 
 在本篇手册中，我们将系统介绍当下主流的 AI 能力版图，从单一模态到多模态融合、从单点模型到平台与工程的整体框架，结合常见产品形态与应用场景，给出面向实践的能力选型参考。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/ai-capability-map.svg" alt="AI 能力地图：11 类能力归成 5 个区域，实线连模态层、虚线连架构层" loading="lazy">
+  <figcaption><strong>先拿到地图，再查词条。</strong>11 类能力归成 5 个区域：实线连模态层（文本、图像与 3D、音频视频与时间序列），虚线连架构层（Agent 与检索、安全与平台工程）。中心只回答两件事——这件事能用什么 AI 能力做，该选哪一类模型或产品。</figcaption>
+</figure>
 
 > 由于 **内容较多** ，你可以在实践过程中遇到场景不知道如何选型的问题再查阅手册寻找参考；推荐你**根据具体应用方向，让 AI 参考该手册，给出可参考的模型选型建议、方案 API 调用建议即可。**
 

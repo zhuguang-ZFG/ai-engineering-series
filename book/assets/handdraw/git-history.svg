@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="854" viewBox="0 0 1200 854" role="img" aria-labelledby="t">
+  <title id="t">Git 代码的时光机：文件经过工作区、暂存区、仓库三层，每次 commit 存一个档；分支是副本存档，合并回 main，随时可以回到任意一个历史节点；本地与 GitHub 之间 push、pull</title>
+  <rect width="1200" height="854" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">Git：代码的时光机</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">把每一次"存档"都记录下来，形成一条完整的历史时间线</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="72" y="172" width="268" height="112" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="466" y="172" width="268" height="112" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="860" y="172" width="268" height="112" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="86" y="204">工作区</text><text x="480" y="204">暂存区</text><text x="874" y="204">仓库</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="86" y="234">Working Directory</text><text x="86" y="262">你正在编辑的普通文件夹</text>
+      <text x="480" y="234">Staging Area / Index</text><text x="480" y="262">"预备提交"的中转站</text>
+      <text x="874" y="234">Repository</text><text x="874" y="262">永久存档，藏在 .git 里</text>
+    </g>
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M352 240h100"/><path d="M746 240h100"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M466 240l-14-7v14z"/><path d="M860 240l-14-7v14z"/>
+    </g>
+    <g fill="#57606a" font-size="19" text-anchor="middle">
+      <text x="403" y="222">git add</text><text x="797" y="222">git commit</text>
+    </g>
+
+    <text x="72" y="312" fill="#57606a" font-size="21">日常开发 90% 的操作就是反复执行这三步：status → add → commit</text>
+
+    <text x="72" y="350" fill="#1f2328" font-size="23" font-weight="700">每个 commit 都是一个存档点</text>
+    <text x="460" y="350" fill="#57606a" font-size="19">附有说明和时间戳，main 是"主存档"</text>
+    <text x="820" y="350" fill="#57606a" font-size="19">分支像平行时间线，互不影响</text>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="420" y="378" width="332" height="74" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="800" y="378" width="328" height="74" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="72" y="512" width="280" height="74" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="848" y="512" width="280" height="74" rx="16" fill="#f1f7f2" filter="url(#card-shadow)"/>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="434" y="406">git checkout -b feature-login</text>
+      <text x="814" y="406">这些提交只在 feature-login 上</text>
+      <text x="86" y="540">9f3e1b2</text>
+      <text x="862" y="540">a1b2c3d (HEAD -&gt; main)</text>
+    </g>
+    <g fill="#1f2328" font-size="21" font-weight="700">
+      <text x="434" y="434">feat: 添加登录表单 HTML 结构</text>
+      <text x="814" y="434">feat: 完成登录接口对接</text>
+      <text x="86" y="568">init: 项目初始化</text>
+      <text x="862" y="568">feat: 添加用户登录功能</text>
+    </g>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M300 506c0-58 18-91 104-91"/>
+      <path d="M758 415h22"/>
+      <path d="M1000 454v38"/>
+      <path d="M356 530h472"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M420 415l-14-7v14z"/>
+      <path d="M794 415l-14-7v14z"/>
+      <path d="M1000 506l-7-14h14z"/>
+      <path d="M842 530l-14-7v14z"/>
+    </g>
+
+    <g fill="#57606a" font-size="19">
+      <text x="100" y="486">分支 = 副本存档</text>
+      <text x="460" y="486">冲突：同一行都改了，你来决定</text>
+      <text x="1014" y="486">git merge</text>
+    </g>
+    <circle cx="440" cy="479" r="10" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+
+    <rect x="450" y="543" width="280" height="32" rx="8" fill="#d3efd9"/>
+    <text x="590" y="566" fill="#1f2328" font-size="19" text-anchor="middle">改坏了？回到任意一个历史节点</text>
+
+    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M900 588C820 646 310 644 300 620v-18"/>
+    </g>
+    <path d="M300 588l-7 14h14z" fill="#1f883d"/>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="72" y="658" width="330" height="88" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="798" y="658" width="330" height="88" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+    <g fill="#1f2328" font-size="21" font-weight="700">
+      <text x="86" y="690">本地仓库（你的电脑）</text><text x="812" y="690">GitHub（远程仓库）</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="86" y="718">git clone：第一次完整复制</text><text x="812" y="718">团队共用的"公共存档"</text>
+    </g>
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M418 682h358"/><path d="M782 730H424"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M790 682l-14-7v14z"/><path d="M410 730l14-7v14z"/>
+    </g>
+    <g fill="#57606a" font-size="19" text-anchor="middle">
+      <text x="600" y="668">git push：本地 → 远程</text><text x="600" y="714">git pull：远程 → 本地</text>
+    </g>
+
+    <rect x="72" y="770" width="1056" height="60" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="600" y="808" fill="#1f2328" font-size="24" text-anchor="middle" font-weight="700">Git 是工具，GitHub 是托管服务</text>
+  </g>
+</svg>

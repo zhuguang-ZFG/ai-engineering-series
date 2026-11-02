@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="790" viewBox="0 0 1200 790" role="img" aria-labelledby="t">
+  <title id="t">CSS 布局的四级台阶：先掌握盒模型，再掌握 Flexbox，然后掌握定位，最后学动画；盒模型四层与 box-sizing 的宽度算术</title>
+  <rect width="1200" height="790" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="78" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">CSS 布局的四级台阶</text>
+  <text x="72" y="116" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">先掌握盒模型，再掌握 Flexbox，然后掌握定位，最后学动画</text>
+  <path d="M72 140q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <!-- 盒模型：层层盒子（内容 → padding → border → margin） -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="none">
+      <rect x="80" y="160" width="240" height="196" rx="6" fill="#fffdf8"/>
+      <rect x="105" y="196" width="190" height="142" rx="6" fill="#f1f7f2"/>
+      <rect x="130" y="232" width="140" height="88" rx="6" fill="#fffdf8"/>
+      <rect x="155" y="268" width="90" height="34" rx="4" fill="#d3efd9"/>
+    </g>
+    <g fill="#1f2328" font-size="19" text-anchor="middle">
+      <text x="200" y="183">margin</text>
+      <text x="200" y="219">border</text>
+      <text x="200" y="255">padding</text>
+      <text x="200" y="290">内容</text>
+    </g>
+    <path d="M200 364v16" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
+    <path d="M200 392l-7-12h14z" fill="#1f2328"/>
+
+    <!-- 四级台阶：四级卡片 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="80" y="392" width="244" height="250" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="348" y="320" width="244" height="220" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="616" y="248" width="244" height="190" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="884" y="176" width="244" height="165" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+    <g fill="#1f883d">
+      <circle cx="111" cy="426" r="17"/><circle cx="379" cy="354" r="17"/>
+      <circle cx="647" cy="282" r="17"/><circle cx="915" cy="210" r="17"/>
+    </g>
+    <g fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">
+      <text x="111" y="433">1</text><text x="379" y="361">2</text>
+      <text x="647" y="289">3</text><text x="915" y="217">4</text>
+    </g>
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="138" y="434">盒模型</text><text x="406" y="362">Flexbox</text>
+      <text x="674" y="290">定位</text><text x="942" y="218">动画</text>
+    </g>
+    <rect x="89" y="568" width="204" height="30" rx="4" fill="#d3efd9"/>
+    <g fill="#1f2328" font-size="20">
+      <text x="94" y="468">内容是商品</text>
+      <text x="94" y="498">padding 是气泡膜</text>
+      <text x="94" y="528">border 是纸箱</text>
+      <text x="94" y="558">margin 是箱子间隔</text>
+      <text x="94" y="588">border-box 挤在里面</text>
+    </g>
+    <g fill="#1f2328" font-size="20">
+      <text x="362" y="396">一维布局神器</text>
+      <text x="362" y="426">justify-content</text>
+      <text x="362" y="456">align-items</text>
+      <text x="362" y="486">主轴 / 交叉轴</text>
+      <text x="362" y="516">gap：元素间距</text>
+    </g>
+    <g fill="#1f2328" font-size="20">
+      <text x="630" y="316">static：正常流</text>
+      <text x="630" y="342">relative：偏移</text>
+      <text x="630" y="368">absolute：定位祖先</text>
+      <text x="630" y="394">fixed：滚动也不动</text>
+      <text x="630" y="420">sticky：滚动后固定</text>
+    </g>
+    <g fill="#1f2328" font-size="20">
+      <text x="898" y="244">transition 过渡</text>
+      <text x="898" y="270">transform 变换</text>
+      <text x="898" y="296">animation 动画</text>
+    </g>
+
+    <!-- 绝对定位逃逸：从第 3 级跳出，回到上一个盒子 -->
+    <path d="M816 248v-26" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 4"/>
+    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M816 220v-24H526v112"/>
+    </g>
+    <path d="M526 320l-7-13h14z" fill="#1f883d"/>
+    <text x="560" y="224" fill="#1f2328" font-size="20">回到最近的定位祖先</text>
+
+    <!-- 由浅入深的阶梯脊线 -->
+    <g stroke="#1f883d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M80 650h256v-102h268v-102h268v-97h280v-158"/>
+    </g>
+    <path d="M1152 176l-9 15h18z" fill="#1f883d"/>
+
+    <!-- 宽度对不上：第三个卡片掉到下一行 -->
+    <rect x="636" y="460" width="240" height="104" rx="10" fill="#f1f7f2" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="#fffdf8">
+      <rect x="648" y="472" width="88" height="36" rx="4"/>
+      <rect x="748" y="472" width="88" height="36" rx="4"/>
+      <rect x="648" y="518" width="88" height="36" rx="4"/>
+    </g>
+    <g fill="#1f2328" font-size="19" text-anchor="middle">
+      <text x="692" y="495">342px</text><text x="792" y="495">342px</text><text x="692" y="541">342px</text>
+    </g>
+    <text x="636" y="594" fill="#57606a" font-size="20">第三个卡片掉到下一行</text>
+    <path d="M894 502h-14" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
+    <text x="900" y="509" fill="#1f2328" font-size="20">容器 900px</text>
+
+    <text x="1018" y="400" fill="#1f2328" font-size="21" text-anchor="middle">属性几百个，用到再查</text>
+  </g>
+
+  <rect x="72" y="666" width="1056" height="84" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <circle cx="100" cy="710" r="9" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+  <text x="616" y="702" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle">width: 300px 只是内容宽度 → padding 20px、border 1px 让它变成 342px</text>
+  <text x="616" y="734" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" text-anchor="middle">三个卡片 1026px &gt; 容器 900px：box-sizing: border-box 让 width 包含 padding 和 border</text>
+</svg>
