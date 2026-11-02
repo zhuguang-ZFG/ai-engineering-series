@@ -185,6 +185,10 @@ flowchart TD
 
 Don't be misled by the number "six steps" -- this is not a linear waterfall process. In practice, you'll find yourself iterating between steps: implementing the permission pipeline may require going back to modify the tool system's interface, and implementing context management may require adjusting the dialog loop's state structure. The six steps provide an ordered learning path, not a rigid development sequence.
 
+```ill
+ch15-harness-wheel
+```
+
 ### Step 1: Dialog Loop
 
 The dialog loop is the heart of an Agent Harness. Claude Code's core query function is an `AsyncGenerator`. Following this design, implement a streamlined but complete dialog loop.

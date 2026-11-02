@@ -278,6 +278,10 @@ sequenceDiagram
 
 > **Connection to Chapter 3:** MCP tools only appear in the tool list when the server is in the Connected state. When a server transitions from Connected to any other state, all its tools are immediately removed from the available tool list. This is tightly integrated with the tool registration mechanism described in Chapter 3 — tool availability is dynamic, not static.
 
+```ill
+ch12-mcp-state-dial
+```
+
 ---
 
 ## 12.2 MCP Tool Integration

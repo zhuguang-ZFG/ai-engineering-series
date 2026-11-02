@@ -37,6 +37,10 @@ Gemini CLI makes the same gear a default-on entrance: `--approval-mode=plan` pin
 
 > **Identity of this cross-check:** oh-my-pi and Gemini CLI are both registered in `CREDITS.md` as **cross-checks**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- they support no technical claim in this chapter and exist to show what the same idea grows into under someone else's hands.
 
+```ill
+ch14-plan-gate
+```
+
 ### 14.1.2 Mode Switching Mechanism
 
 After user approves entering Plan Mode, EnterPlanModeTool's `call` method executes mode switching. Core logic includes: checking if it is in an Agent context (if so it throws an error), calling the permission transition handler to switch to plan mode, and through the state update function switching the permission context to plan mode configuration.

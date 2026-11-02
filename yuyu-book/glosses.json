@@ -316,7 +316,7 @@
   "priority": "core",
   "evidence": [
    "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:165",
-   "第三部分-高级模式篇/09-子智能体与Fork模式.md:329",
+   "第三部分-高级模式篇/09-子智能体与Fork模式.md:333",
    "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:165"
   ],
   "analogy": {
@@ -495,7 +495,7 @@
   "priority": "core",
   "evidence": [
    "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:19",
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:689",
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:693",
    "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:19"
   ],
   "analogy": {
@@ -533,7 +533,7 @@
   "priority": "core",
   "evidence": [
    "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:19",
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:687",
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:691",
    "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:19"
   ],
   "analogy": {
@@ -627,7 +627,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:318",
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:956",
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:960",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:318"
   ],
   "analogy": {
@@ -779,7 +779,7 @@
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:392",
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:691",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:695",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ],
   "analogy": {
@@ -1129,7 +1129,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/03-工具系统-Agent的双手.md:144",
-   "第四部分-工程实践篇/13-流式架构与性能优化.md:363",
+   "第四部分-工程实践篇/13-流式架构与性能优化.md:367",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:144"
   ],
   "analogy": {
@@ -1314,7 +1314,7 @@
   "priority": "core",
   "evidence": [
    "第一部分-基础篇/03-工具系统-Agent的双手.md:250",
-   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:586",
+   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:590",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:250"
   ],
   "analogy": {
@@ -1670,7 +1670,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:686",
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:690",
    "第三部分-高级模式篇/12-MCP集成与外部协议.md:64",
    "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:64"
   ],
@@ -1840,8 +1840,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:471",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:472"
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:475",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:476"
   ],
   "analogy": {
    "zh": "两辆车在独木桥两头互不相让，谁都动不了",
@@ -1985,9 +1985,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:1084",
-   "第三部分-高级模式篇/09-子智能体与Fork模式.md:663",
-   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:1084"
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:1088",
+   "第三部分-高级模式篇/09-子智能体与Fork模式.md:667",
+   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:1088"
   ],
   "analogy": {
    "zh": "酒店房卡只开你那间，开不了保险柜和别家门",
@@ -2043,7 +2043,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第三部分-高级模式篇/11-技能系统与插件架构.md:477",
+   "第三部分-高级模式篇/11-技能系统与插件架构.md:481",
    "附录/D-术语表.md:127",
    "en/Appendices/D-Glossary.md:125"
   ],
@@ -2187,8 +2187,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:327",
-   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:327"
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:331",
+   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:331"
   ],
   "analogy": {
    "zh": "各国商品统一条码，扫码机不管货是哪国产的",
@@ -2244,7 +2244,7 @@
   "priority": "extra",
   "evidence": [
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:453",
-   "第四部分-工程实践篇/13-流式架构与性能优化.md:294",
+   "第四部分-工程实践篇/13-流式架构与性能优化.md:298",
    "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:453"
   ],
   "analogy": {
@@ -2272,7 +2272,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:370",
+   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:374",
    "附录/C-功能标志速查表.md:272",
    "en/Appendices/C-Feature-Flag-Reference.md:272"
   ],
@@ -2388,9 +2388,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第三部分-高级模式篇/12-MCP集成与外部协议.md:993",
-   "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:584",
-   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:993"
+   "第三部分-高级模式篇/12-MCP集成与外部协议.md:997",
+   "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:588",
+   "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:997"
   ],
   "analogy": {
    "zh": "偷懒不洗油烟机，三个月后炒什么都带糊味",
@@ -2419,7 +2419,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:330",
+   "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:334",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:144",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:142"
   ],
@@ -2450,7 +2450,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:394",
-   "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:878",
+   "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:882",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:216"
   ],
   "analogy": {
@@ -2859,8 +2859,8 @@
    "en": "Skill manuals are not all spread out in advance; one is pulled only when used, saving the startup time and memory they would waste sitting idle."
   },
   "why_evidence": [
-   "第三部分-高级模式篇/11-技能系统与插件架构.md:753",
-   "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:754"
+   "第三部分-高级模式篇/11-技能系统与插件架构.md:757",
+   "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:758"
   ]
  },
  "mcp-server": {
@@ -3137,10 +3137,10 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:695",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:696",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:699",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:700",
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:73",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:261"
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:265"
   ],
   "analogy": {
    "zh": "法庭速记稿：散庭后照着它复原当天每句话",
@@ -3172,8 +3172,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:296",
-   "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:296",
+   "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:300",
+   "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:300",
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:170"
   ],
   "analogy": {
@@ -3363,8 +3363,8 @@
   "evidence": [
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:358",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:358",
-   "第四部分-工程实践篇/13-流式架构与性能优化.md:562",
-   "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:565"
+   "第四部分-工程实践篇/13-流式架构与性能优化.md:566",
+   "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:569"
   ],
   "analogy": {
    "zh": "航班黑匣子：平日没人看，出事时第一个被打开",

@@ -622,6 +622,10 @@ flowchart TD
 
 > **Cross-Reference:** The detailed mechanism of the Fork pattern is covered in Chapter 9. Pay special attention to the mutual exclusion between the two -- when Coordinator mode is activated, Fork mode is automatically disabled.
 
+```ill
+ch10-coordinator-fork
+```
+
 ---
 
 ## Hands-On Exercises

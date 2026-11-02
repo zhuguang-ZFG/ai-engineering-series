@@ -485,11 +485,11 @@
         "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:23",
         "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:76",
         "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:223",
-        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:413",
+        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:417",
         "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:23",
         "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:76",
         "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:223",
-        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:413"
+        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:417"
       ]
     },
     "ch06": {
@@ -524,11 +524,11 @@
         "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:7",
         "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:17",
         "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:232",
-        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:540",
+        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:544",
         "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:7",
         "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:17",
         "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:232",
-        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:540"
+        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:544"
       ]
     },
     "ch07": {
@@ -645,11 +645,11 @@
         "第三部分-高级模式篇/09-子智能体与Fork模式.md:9",
         "第三部分-高级模式篇/09-子智能体与Fork模式.md:226",
         "第三部分-高级模式篇/09-子智能体与Fork模式.md:253",
-        "第三部分-高级模式篇/09-子智能体与Fork模式.md:343",
+        "第三部分-高级模式篇/09-子智能体与Fork模式.md:347",
         "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:9",
         "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:226",
         "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:253",
-        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:343"
+        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:347"
       ]
     },
     "ch10": {
@@ -724,12 +724,12 @@
       "plain_evidence": [
         "第三部分-高级模式篇/11-技能系统与插件架构.md:17",
         "第三部分-高级模式篇/11-技能系统与插件架构.md:299",
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:410",
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:509",
+        "第三部分-高级模式篇/11-技能系统与插件架构.md:414",
+        "第三部分-高级模式篇/11-技能系统与插件架构.md:513",
         "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:17",
         "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:299",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:410",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:510"
+        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:414",
+        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:514"
       ]
     },
     "ch12": {
@@ -767,12 +767,12 @@
       "plain_evidence": [
         "第三部分-高级模式篇/12-MCP集成与外部协议.md:64",
         "第三部分-高级模式篇/12-MCP集成与外部协议.md:100",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:283",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:672",
+        "第三部分-高级模式篇/12-MCP集成与外部协议.md:287",
+        "第三部分-高级模式篇/12-MCP集成与外部协议.md:676",
         "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:64",
         "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:100",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:283",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:672"
+        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:287",
+        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:676"
       ]
     },
     "ch13": {
@@ -805,13 +805,13 @@
       },
       "plain_evidence": [
         "第四部分-工程实践篇/13-流式架构与性能优化.md:132",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:280",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:294",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:479",
+        "第四部分-工程实践篇/13-流式架构与性能优化.md:284",
+        "第四部分-工程实践篇/13-流式架构与性能优化.md:298",
+        "第四部分-工程实践篇/13-流式架构与性能优化.md:483",
         "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:132",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:280",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:294",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:482"
+        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:284",
+        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:298",
+        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:486"
       ]
     },
     "ch14": {
@@ -845,12 +845,12 @@
       "plain_evidence": [
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:13",
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:17",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:428",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:667",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:432",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:671",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:13",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:17",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:429",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:668"
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:433",
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:672"
       ]
     },
     "ch15": {
@@ -889,11 +889,11 @@
         "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:62",
         "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:167",
         "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:186",
-        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:503",
+        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:507",
         "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:62",
         "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:167",
         "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:186",
-        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:511"
+        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:515"
       ]
     },
     "apxa": {

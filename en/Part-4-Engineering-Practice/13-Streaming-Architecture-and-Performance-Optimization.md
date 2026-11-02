@@ -222,6 +222,10 @@ flowchart LR
 
 > **Best practice:** When designing custom tools, be sure to correctly set the `isConcurrencySafe` flag. A common mistake is marking a database-read-only tool as unsafe, causing unnecessary serial waiting. Conversely, marking a tool that actually modifies state as safe is even more dangerous -- it will lead to data races. The principle is: **when uncertain, choose safe = false (fail-closed).**
 
+```ill
+ch13-concurrency-gate
+```
+
 ### 13.2.3 Result Buffering and Ordered Output
 
 Although tools can execute in parallel, results must be output in order. The `getCompletedResults()` method guarantees this through the `yielded` state marker: completed tool results are output sequentially in the order they were added; if a non-concurrency-safe tool is still executing, subsequent tool results won't be output even if ready. Progress messages are an exception -- they are immediately yielded without order constraints, ensuring users see real-time progress feedback from tool execution.
