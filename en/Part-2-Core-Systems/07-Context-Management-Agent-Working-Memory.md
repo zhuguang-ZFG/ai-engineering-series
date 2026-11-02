@@ -239,6 +239,12 @@ The `buildPostCompactMessages` function ensures consistent output message orderi
 
 > **Cross-Reference:** PreCompact and PostCompact hooks are important application scenarios of the hook system covered in Chapter 8. Users can inject custom compression instructions through PreCompact hooks (e.g., "specifically preserve all discussions related to the database").
 
+The four levels run light to heavy: snip, squeeze, fold, then rewrite the whole span.
+
+```ill
+ch07-four-levels
+```
+
 ---
 
 ## 7.3 Compression Prompt Engineering

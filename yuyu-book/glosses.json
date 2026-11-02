@@ -1897,7 +1897,7 @@
   "priority": "extra",
   "evidence": [
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:106",
-   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:472",
+   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:478",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:106"
   ],
   "analogy": {
@@ -3361,8 +3361,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:352",
-   "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:352",
+   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:358",
+   "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:358",
    "第四部分-工程实践篇/13-流式架构与性能优化.md:562",
    "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:565"
   ],
