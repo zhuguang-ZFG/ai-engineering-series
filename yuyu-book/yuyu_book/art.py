@@ -22,6 +22,11 @@ PHOTO_BYTES = 300_000
 PHOTO_TYPES = {".png": "image/png", ".jpg": "image/jpeg",
                ".jpeg": "image/jpeg", ".webp": "image/webp"}
 
+# the one rule that decides whether a drawing is a filmstrip: `seq` among the
+# classes of its root element. render.py asks it, and the filmstrip frame-order
+# test asks the same object instead of keeping a looser copy of its own
+SEQ_ROOT = re.compile(r'<svg\b[^>]*class="[^"]*\bseq\b')
+
 _BANNED = (
     (re.compile(r"<\s*script", re.I), "<script>"),
     (re.compile(r"<\s*style", re.I), "<style>"),

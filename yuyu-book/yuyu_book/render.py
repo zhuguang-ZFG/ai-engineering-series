@@ -641,8 +641,7 @@ def render_unit(unit: Unit, mapping: dict[str, str], *,
             svg = art.drawing(name)
             # a plate declares itself sequential by carrying the `seq` class on
             # its root, so the prose never has to say how to animate it
-            art_kind = "seq" if re.search(r'<svg\b[^>]*class="[^"]*\bseq\b',
-                                          svg) else "line"
+            art_kind = "seq" if art.SEQ_ROOT.search(svg) else "line"
             return illu_figure(uid, svg, fig_no(), caption, unit.lang,
                                art_kind)
         entry = diagrams.get(uid)

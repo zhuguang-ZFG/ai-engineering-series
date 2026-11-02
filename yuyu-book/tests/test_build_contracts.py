@@ -4,10 +4,12 @@ import re
 import subprocess
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from yuyu_book import art  # noqa: E402
 from yuyu_book.core import BOOK_DIR, REPO_ROOT  # noqa: E402
 from yuyu_book.mermaid import BOOK_FAMILIES  # noqa: E402
 from yuyu_book.style import CSS  # noqa: E402
@@ -41,6 +43,18 @@ def _rule(selector: str) -> str:
     # `.toc-part:hover .tp-no`, or a contract reads the rule it never named
     m = re.search(r"(?m)^" + re.escape(selector) + r"\s*\{([^}]*)\}", CSS)
     return m.group(1) if m else ""
+
+
+def _root_children(svg: str) -> list[tuple[str, str]]:
+    """The root <svg>'s direct element children, in document order, as
+    (tag, class) pairs — the very list CSS's `:nth-child()` counts.
+
+    Element children only: comments and text are skipped, as the browser skips
+    them, and nothing nested inside a child is reached.
+    """
+    root = ET.fromstring(svg)
+    return [(child.tag.rsplit("}", 1)[-1], child.get("class") or "")
+            for child in root]
 
 
 class Palette(unittest.TestCase):
@@ -548,10 +562,9 @@ class DesignVocabulary(unittest.TestCase):
         seq_at = CSS.index(".illu-seq .frame{")
         self.assertGreater(seq_at, guarded_at,
                            "the filmstrip staggers outside its guard")
-        self.assertLess(CSS.index(".illu-seq .frame{", seq_at),
-                        CSS.index(".illu-seq:hover .frame{"),
-                        "the hover layer would beat the scroll ranges")
         hover_at = CSS.index(".illu-seq:hover .frame{")
+        self.assertGreater(hover_at, CSS.rindex(".illu-seq .frame:nth-child("),
+                           "the hover layer would beat the scroll ranges")
         hover = CSS[hover_at:CSS.index("}", hover_at) + 1]
         self.assertIn("animation-timeline:auto", hover)
         self.assertIn("animation-range:normal", hover)
@@ -576,28 +589,38 @@ class DesignVocabulary(unittest.TestCase):
 
 class FilmstripSource(unittest.TestCase):
     """A filmstrip's story is its frame order, and the CSS counts positions:
-    `.illu-seq .frame:nth-child(1)` is only frame one if the groups really are
-    the leading children. One nested `<g>` or one decorative group slipped in
-    front, and the strip lights up out of order — invisibly, in print."""
+    `.illu-seq .frame:nth-child(1)` is only frame one if the frame groups are
+    the leading element children of the root. `:nth-child` counts every child
+    element, not every `<g>`, so a `<title>` or a background `<rect>` slipped
+    in front shifts the whole strip by one cell, while a group nested inside a
+    frame — not a child of the root, not a `.frame` — lights no cell. One cell
+    off, and the strip lights up out of order — invisibly, in print."""
 
     def test_every_shipped_filmstrip_puts_its_frames_first(self):
         art_dir = BOOK_DIR / "illustrations"
         seen = 0
         for path in sorted(art_dir.glob("*.svg")):
             svg = path.read_text(encoding="utf-8")
-            root = svg[:svg.index(">")]
-            if "seq" not in root:
+            # the renderer's own predicate, so a file is policed exactly when
+            # the build wraps it in `.illu-seq`; the letters seq in some other
+            # root attribute name no filmstrip and must not demand frames
+            if not art.SEQ_ROOT.search(svg):
                 continue
             seen += 1
-            groups = re.findall(r"<g\b[^>]*>", svg)
-            frames = [g for g in groups if 'class="frame"' in g]
-            self.assertGreaterEqual(len(frames), 4, f"{path.name}: a strip "
+            try:
+                kids = _root_children(svg)
+            except ET.ParseError as exc:
+                self.fail(f"{path.name}: not well-formed, so there is no "
+                          f"child order to check ({exc})")
+            is_frame = [tag == "g" and cls == "frame" for tag, cls in kids]
+            frames = sum(is_frame)
+            first_other = next((i for i, f in enumerate(is_frame) if not f),
+                               len(is_frame))
+            self.assertGreaterEqual(frames, 4, f"{path.name}: a strip "
                                 "of fewer than four frames is a line drawing")
-            self.assertLessEqual(len(frames), 6, f"{path.name}: the CSS only "
+            self.assertLessEqual(frames, 6, f"{path.name}: the CSS only "
                                 "staggers six frames")
-            first_other = next((i for i, g in enumerate(groups)
-                                if 'class="frame"' not in g), len(groups))
-            self.assertEqual(len(frames), first_other,
+            self.assertEqual(frames, first_other,
                              f"{path.name}: a frame sits after a "
                              "decorative group, so the scroll ranges "
                              "land on the wrong cells")

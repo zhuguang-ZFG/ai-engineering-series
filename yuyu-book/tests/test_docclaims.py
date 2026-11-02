@@ -118,6 +118,7 @@ class ShippedCounts(Data):
         src = str(len(load_json(BOOK_DIR / "sources.json")))
         g = str(len(self.glosses))
         d = str(self.drawings())
+        body_word = {n: w for w, n in EN_NUM.items()}[self.body_plates("en")]
         self.claims = [
             ("README.md", r"\*\*术语表\*\* — (\d+) 条中英对照术语",
              [str(self.glossary_rows("zh"))]),
@@ -137,6 +138,10 @@ class ShippedCounts(Data):
             ("CREDITS.md", r"\*\*画风体系\*\*：(\d+) 份插图", [d]),
             ("STRUCTURE.md", r"\+ (\d+) 幅正文插图",
              [str(self.body_plates("zh"))]),
+            # the same README sentence hides one further count as a word, and a
+            # word is invisible to `\d+` — which is how twenty-six went stale
+            ("en/README.md", r"and ([a-z]+) plates inside the prose",
+             [body_word]),
             ("en/README.md", r"the (\d+) core terms' reasons",
              [str(self.why_terms())]),
             ("STRUCTURE.md", r"主题索引（生成物，当前 (\d+) 个词条 = "
