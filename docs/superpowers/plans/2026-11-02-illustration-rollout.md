@@ -20,6 +20,7 @@
 - 双语同步、一行换一行：中文版与英文版同一单元的行数与行号一一对应（本轮 5 个落点已逐行实测确认），插入块只落在两个文件的同一行号之后。
 - 一张图版落进正文，固定是六行：引子一句、空行、` ```ill `、画名、` ``` `、空行；这六行的最后一行是下一个 `---` 或 H2 的前导空行——少了它，围栏会贴住分隔线被当作 setext 标题读。
 - 凡写进 commit message 与 `revisions.json` 的数字，必须能当场重新测出来；测不出来的当错数处理，不复用。账本注释不许夹原始 `@@` 串（`test_pages.test_revision_notes_are_typeset_not_left_in_markdown`），反引号必须成对。
+- 账本注释与任务题述里的「这一节原本有什么」是事实断言，必须数过才写。本轮五个落点所在的节**全都已经有 Mermaid**（实测：ch01 §1.3 一张、ch02 §2.2 两张、ch04 §4.1 三张含一张 `sequenceDiagram`、ch07 §7.2 两张、ch08 §8.2 一张），图版的正当性来自 spec §4 的分工——Mermaid 管机器怎么转，手绘管你闭上眼能想起的那几下——不来自「这一节没图」。写「原本只有一张表」「那堵白墙」一类缺席断言之前，先跑 `.superpowers/sdd/2026-11-02-illustration-rollout/section_census.py`；数出来的围栏 kinds 就是那句话的证据，写不出证据的当假话删掉。
 - Python：四空格缩进、`snake_case`；测试文件 `test_*.py`、方法 `test_*`。
 - 派生产物跟着画走：磁盘上多一张 `illustrations/*.svg`，`tests/test_beginner_reader.py:68` 与 `tests/test_site_portal.py:23` 当场把 `docs/illustration-gallery.html`、`docs/beginner-reader.html`、`docs/beginner-reader.en.html`、`docs/portal.html` 四页判红——它们都从 `scripts/build_beginner_reader.py:20` 的 `PLATES = len(list(ART.glob("*.svg")))` 现数磁盘。所以每个铺图任务在跑画廊脚本那一步后面都要再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`，四个产物一并进当次提交，不许攒到 Task 8 再补。（2026-11-02 Task 3 落地时就是这么红的：仓库套件先挂两条，重切产物才绿。）
 - 五道闸全绿才算做完（见下）。不推送 `origin`，除非用户当次明确同意；`upstream` 永不推送。
@@ -620,13 +621,13 @@ npm run check:diagrams                                   # 320 Mermaid, 0 errors
 `entries[0]["zh"]` 末尾追加（以 `构建器测试 442 项全绿。` 收尾）：
 
 ```
-"对话循环有了自己的四格胶片。2.2 这一节讲的是一句话进来、一句话出去，正文里原本只有一张终止条件的表，读者看得见状态、看不见节拍；现在四格并排：气泡里一行提问、模型交出的那段工具调用、齿轮在权限闸口前转一下、三条结果回填后再起一行，第四格上方有一条回头指第一格的弧线。图版落进正文是六行，注册表里指向 289 行之后的 28 条锚点因此各加六，这一步由刚写好的平移脚本做，构建时的白话层校验逐条复核——一条跟错就报错停止。中英两个文件行数继续一一对应（各 445 行变 451 行）。手写图 28→29 份，正文插图 2→3 张，每版图版 162→163 张。构建器测试 442 项全绿。"
+"对话循环有了自己的四格胶片。2.2 讲的是一句话进来、一句话出去，节里已经有两张流程图：一张把五个阶段串成一条控制流，连「回到阶段一」那条回头路都画在图上，一张把十种终止情形分成三类。这张胶片填的不是信息真空，是换一种读法——按第四十一轮定下的分工，Mermaid 管机器怎么转，手绘管你闭上眼能想起的那几下。现在四格并排：气泡里一行提问、模型交出的那段工具调用、齿轮在权限闸口前转一下、三条结果回填后再起一行，第四格上方有一条回头指第一格的弧线。图版落进正文是六行，注册表里指向 289 行之后的 28 条锚点因此各加六，这一步由刚写好的平移脚本做，构建时的白话层校验逐条复核——一条跟错就报错停止。中英两个文件行数继续一一对应（各 445 行变 451 行）。手写图 28→29 份，正文插图 2→3 张，每版图版 162→163 张。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"The dialog loop now has its own four-frame strip. Section 2.2 is about one message in and one out, but the prose only carried a table of stop conditions: a reader could see the states and not the beat. Four cells now sit side by side — a question in a bubble, the tool call the model hands back, a gear turning once in front of the permission gate, three results written back before the next line — with an arc over the strip leading the fourth cell home to the first. A plate costs the prose six lines, so the 28 anchors in the two registries that point past line 289 each move by six; the shift script does the arithmetic and the build's plain-language check re-reads every one of them, failing the build if a single pointer lands wrong. The two language files stay line-for-line aligned (445 to 451 lines each). Hand-inked drawings 28 to 29, plates inside the prose 2 to 3, plates per edition 162 to 163. 442 builder tests green."
+"The dialog loop now has its own four-frame strip. Section 2.2 is about one message in and one out, and it already carried two flowcharts: one strings the five phases into a control flow and draws the road back to phase one on the graph itself, the other sorts ten stop conditions into three kinds. The strip fills no information gap — it changes how you read. The division of labour settled in round 41 says Mermaid shows how the machine turns and the hand-inked line leaves you the few gestures you can recall with your eyes shut. Four cells now sit side by side — a question in a bubble, the tool call the model hands back, a gear turning once in front of the permission gate, three results written back before the next line — with an arc over the strip leading the fourth cell home to the first. A plate costs the prose six lines, so the 28 anchors in the two registries that point past line 289 each move by six; the shift script does the arithmetic and the build's plain-language check re-reads every one of them, failing the build if a single pointer lands wrong. The two language files stay line-for-line aligned (445 to 451 lines each). Hand-inked drawings 28 to 29, plates inside the prose 2 to 3, plates per edition 162 to 163. 442 builder tests green."
 ```
 
 （账本注释里的反引号必须成对——`test_pages.test_revision_notes_are_typeset_not_left_in_markdown` 不许任何一个反引号落到页面上，落单的那个就是它抓的。上面两段各自只用了一处 code span。）
@@ -648,7 +649,7 @@ Expected（numstat）：两个 md 各 `6 0`（只加不删）。
 
 ### Task 4: ch01 五大原则的门廊
 
-1.3 那一节是 ch01 最大的一块白墙（zh 2515 字符），五条原则各占一小节，读完只记住「有五条」。把它画成一道门廊：五样东西各自顶着同一根横梁。
+1.3 那一节是 ch01 最大的一面正文墙（zh 2515 字符）：开头一张 Mermaid 把五条原则各画一格、用箭头连成关系图，正文里五条各占一小节，读完只记住「有五条」。把它画成一道门廊：五样东西各自顶着同一根横梁。落点不在那张图上，而在五条小节讲完之后——图管关系，门廊管你闭上眼还剩什么。
 
 **Files:**
 - Create: `yuyu-book/illustrations/ch01-five-pillars.svg`
@@ -768,13 +769,13 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 `entries[0]["zh"]` 末尾追加：
 
 ```
-"1.3 那堵白墙有了形状。五大原则各占一小节，读完只记住「有五条」；现在它们是一道门廊：同一根横梁下五样东西——流水一样的三条波纹、嵌进边框的罗盘、三层带签的抽屉、一路向上的台阶、盖上印的封条。这一张是本批五张里唯一不逐格显影的：根元素没标 seq，所以它只描线、不滚动播放，也正因此能证明 Task 2 那条帧序测试只挑标了 seq 的画、不误伤单幅。落点在 384 行之后，注册表里没有一条锚点指向 ch01 这么靠后（平移脚本报 0），所以账本上这次的锚点数是零——脚本跑过才知道是零还是漏。中英各 463 行变 469 行。手写图 29→30 份，正文插图 3→4 张，每版图版 163→164 张。构建器测试 442 项全绿。"
+"1.3 有了一道门廊。节开头那张 Mermaid 早就把五条原则各画一格、用箭头连成一张关系图，管的是五条之间怎么搭；这一张补的是另一样东西：五条各占一小节，读完只记住「有五条」，现在它们是一道门廊：同一根横梁下五样东西——流水一样的三条波纹、嵌进边框的罗盘、三层带签的抽屉、一路向上的台阶、盖上印的封条。这一张是本批五张里唯一不逐格显影的：根元素没标 seq，所以它只描线、不滚动播放，也正因此能证明 Task 2 那条帧序测试只挑标了 seq 的画、不误伤单幅。落点在 384 行之后，注册表里没有一条锚点指向 ch01 这么靠后（平移脚本报 0），所以账本上这次的锚点数是零——脚本跑过才知道是零还是漏。中英各 463 行变 469 行。手写图 29→30 份，正文插图 3→4 张，每版图版 163→164 张。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"Section 1.3 now has a shape. The five principles each own a subsection and readers came away remembering only "five of them"; they are a portico now, five objects under one lintel — three rippling strokes, a compass set into its own frame, a three-drawer stack with a tag, steps climbing one above the last, a sealed crate under its stamp. This is the only plate in the batch that never staggers: its root carries no seq, so it inks its lines and stops, which is also what proves the frame-order test from the previous round only picks up strips and leaves single drawings alone. The block lands after line 384, and the shift script reported zero anchors back of it — the registries never quote ch01 that far down, so this round's arithmetic is an honest 0, which only shows up as 0 if you run it. Both language files go from 463 to 469 lines. Hand-inked drawings 29 to 30, plates inside the prose 3 to 4, plates per edition 163 to 164. 442 builder tests green."
+"Section 1.3 has a portico. The Mermaid graph at the top of the section already gives each of the five principles a box and links the boxes with arrows, which is a statement about how they fit together; this drawing adds the other thing — the five each own a subsection and readers came away remembering only "five of them", so now they are a portico, five objects under one lintel — three rippling strokes, a compass set into its own frame, a three-drawer stack with a tag, steps climbing one above the last, a sealed crate under its stamp. This is the only plate in the batch that never staggers: its root carries no seq, so it inks its lines and stops, which is also what proves the frame-order test from the previous round only picks up strips and leaves single drawings alone. The block lands after line 384, and the shift script reported zero anchors back of it — the registries never quote ch01 that far down, so this round's arithmetic is an honest 0, which only shows up as 0 if you run it. Both language files go from 463 to 469 lines. Hand-inked drawings 29 to 30, plates inside the prose 3 to 4, plates per edition 163 to 164. 442 builder tests green."
 ```
 
 - [ ] **Step 10: 提交**
@@ -782,7 +783,7 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 ```bash
 git add yuyu-book/illustrations/ch01-five-pillars.svg 第一部分-基础篇/01-智能体编程的新范式.md en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第一部分-基础篇 en/Part-1-Foundations
-git commit -m "feat(book): ch01 五大原则门廊图版，1.3 那堵白墙有了形状"
+git commit -m "feat(book): ch01 五大原则门廊图版，1.3 的原则清单有了一道门廊"
 ```
 Expected（numstat）：两个 md 各 `6 0`。本任务不动两份注册表（Step 4 报 0），所以 `git add` 里没有它们——加上也不报错，但 diff 里出现 `glosses.json` 就说明有别的东西被改了，要查。
 
@@ -915,13 +916,13 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 `entries[0]["zh"]` 末尾追加：
 
 ```
-"权限管线有了自己的四道门。4.1 把一次工具调用拆成 validateInput、hasPermissionsToUseTool、checkPermissions、交互式提示四段，正文是四段散文加一张表，读者读完知道有四步、不知道第四步会一分为二；现在四格并排，第四格里一条路线分出上下两笔——一笔打勾、一笔打叉，放行与拦截同格显影。落点选在 4.1 末尾、4.2 标题之前，图版占六行，原本紧贴落点的 `## 4.2` 顺次推到 177 行，注册表里指向 170 行之后的 9 条锚点各加六。中英各 560 行变 566 行。手写图 30→31 份，正文插图 4→5 张，每版图版 164→165 张。构建器测试 442 项全绿。"
+"权限管线有了自己的四道门。4.1 把一次工具调用拆成 validateInput、hasPermissionsToUseTool、checkPermissions、交互式提示四段，正文是四段散文加三张 Mermaid：一张自上而下的管线图、一张把八个设置来源按优先级排出高低的图、还有一张 sequenceDiagram 用 alt/else 把最后一段那一分为二画得比这张胶片更细——它画的是一场协商，hook、AI 分类器、用户界面三方谁先应答。四格画的是另一件事：四道门站成的次序。现在四格并排，第四格里一条路线分出上下两笔——一笔打勾、一笔打叉，放行与拦截同格显影。落点选在 4.1 末尾、4.2 标题之前，图版占六行，原本紧贴落点的 `## 4.2` 顺次推到 177 行，注册表里指向 170 行之后的 9 条锚点各加六。中英各 560 行变 566 行。手写图 30→31 份，正文插图 4→5 张，每版图版 164→165 张。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"The permission pipeline now shows its four gates. Section 4.1 splits one tool call into validateInput, hasPermissionsToUseTool, checkPermissions and the interactive prompt, but as four paragraphs and a table a reader learns there are four steps without seeing that the last one forks; in the strip's fourth cell a single route splits into two strokes — one check, one cross — so allow and block develop together. The plate sits at the end of 4.1, before the 4.2 heading, costing the prose six lines and pushing that heading to line 177; the 9 anchors in the two registries pointing past line 170 each move by six. Both language files go from 560 to 566 lines. Hand-inked drawings 30 to 31, plates inside the prose 4 to 5, plates per edition 164 to 165. 442 builder tests green."
+"The permission pipeline now shows its four gates. Section 4.1 splits one tool call into validateInput, hasPermissionsToUseTool, checkPermissions and the interactive prompt, but the section is not bare: three Mermaid diagrams already hang on it — a top-down pipeline, a ranking of the eight settings sources by priority, and a sequenceDiagram whose alt/else splits that last stage far more finely than this strip does, because it is drawing a negotiation between the hook, the classifier and the user interface. The four cells draw a different thing: the four gates standing in order. in the strip's fourth cell a single route splits into two strokes — one check, one cross — so allow and block develop together. The plate sits at the end of 4.1, before the 4.2 heading, costing the prose six lines and pushing that heading to line 177; the 9 anchors in the two registries pointing past line 170 each move by six. Both language files go from 560 to 566 lines. Hand-inked drawings 30 to 31, plates inside the prose 4 to 5, plates per edition 164 to 165. 442 builder tests green."
 ```
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
@@ -1065,13 +1066,13 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 `entries[0]["zh"]` 末尾追加：
 
 ```
-"8.2 列了二十来个生命周期事件，名字记不住，节拍记得住。四格这样排：一只钟在两堵弧墙之间响起（事件），一根横梁上垂下钩子把它挂住（matcher 匹配），一格脚本跑三行输出打点（handler 执行），第四格从一个点分出两条路——上面一条实线继续走、下面一条虚线被截住，放行与阻断同时显影。这一格的分叉和 4.1 那张不是一回事：那里分的是一次调用「过」还是「拦」，调用本身没变；这里分的是下一步被换成了哪条路，所以钩子那两弧墙之间的钟，最后动的是路线。落点在 528 行之后、`## 8.3` 之前，图版占六行，`## 8.3` 落到 537 行，注册表里 3 条指向 528 行之后的锚点各加六。中英各 1059 行变 1065 行。手写图 31→32 份，正文插图 5→6 张，每版图版 165→166 张。构建器测试 442 项全绿。"
+"8.2 列了二十来个生命周期事件，节首一张流程图按层把它们分组摆好，另有四段 JSON 样例；名字记不住，节拍记得住。四格这样排：一只钟在两堵弧墙之间响起（事件），一根横梁上垂下钩子把它挂住（matcher 匹配），一格脚本跑三行输出打点（handler 执行），第四格从一个点分出两条路——上面一条实线继续走、下面一条虚线被截住，放行与阻断同时显影。这一格的分叉和 4.1 那张不是一回事：那里分的是一次调用「过」还是「拦」，调用本身没变；这里分的是下一步被换成了哪条路，所以钩子那两弧墙之间的钟，最后动的是路线。落点在 528 行之后、`## 8.3` 之前，图版占六行，`## 8.3` 落到 537 行，注册表里 3 条指向 528 行之后的锚点各加六。中英各 1059 行变 1065 行。手写图 31→32 份，正文插图 5→6 张，每版图版 165→166 张。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"Section 8.2 lists some twenty lifecycle events; a reader forgets the names and keeps the beat. The four cells are: a bell ringing between two curved walls (the event), a hook dropping from a crossbar to catch it (the matcher), a script running three lines and printing dots (the handler), and a fourth cell where one point forks into two — a solid line going on above, a dashed line cut short below. The fork in that last cell is not the one Chapter 4 drew: there a single call splits into allowed or blocked and the call itself stays the same, here the fork chooses which next step happens, so the route is what moves. The block lands after line 528, before `## 8.3`, costing six lines of prose and pushing that heading to 537; 3 anchors pointing past 528 move by six. Both language files go from 1059 to 1065 lines. Hand-inked drawings 31 to 32, plates inside the prose 5 to 6, plates per edition 165 to 166. 442 builder tests green."
+"Section 8.2 lists some twenty lifecycle events; a flowchart at the head of the section has already sorted them into layers, and four JSON samples show what a response looks like. A reader forgets the names and keeps the beat. The four cells are: a bell ringing between two curved walls (the event), a hook dropping from a crossbar to catch it (the matcher), a script running three lines and printing dots (the handler), and a fourth cell where one point forks into two — a solid line going on above, a dashed line cut short below. The fork in that last cell is not the one Chapter 4 drew: there a single call splits into allowed or blocked and the call itself stays the same, here the fork chooses which next step happens, so the route is what moves. The block lands after line 528, before `## 8.3`, costing six lines of prose and pushing that heading to 537; 3 anchors pointing past 528 move by six. Both language files go from 1059 to 1065 lines. Hand-inked drawings 31 to 32, plates inside the prose 5 to 6, plates per edition 165 to 166. 442 builder tests green."
 ```
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
@@ -1214,13 +1215,13 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 `entries[0]["zh"]` 末尾追加：
 
 ```
-"7.2 把压缩排成四级，读起来最难的是「到底差在哪」。四格按代价从轻到重：第一格三行字还在，一把剪刀只剪掉尾巴，剪口用短虚线标出；第二格整段被压紧，两侧各一支箭头往里收，字数没减多少、行距先塌了；第三格折成三层，每层只剩一道檐口和一支向下的箭头，内容收进纸里；第四格最重，左边四行淡掉的旧字、右边两行新写的实线，中间一支粗箭头，右下角一条短虚线标出压缩边界：旧对话断在这里，新会话从它下面重新起步。前三格讲的都还是同一篇对话（剪完还在、压完还在、折起来也还在），第四格已经把内容换成新写的两行——四级之间真正的差不是少写几行，而是换一次记忆。落点在 241 行之后、`## 7.3` 之前，图版占六行，`## 7.3` 落到 250 行，注册表里 5 条指向 241 行之后的锚点各加六。中英各 478 行变 484 行。手写图 32→33 份，正文插图 6→7 张，每版图版 166→167 张。这一批铺完，20 个正文单元里仍只有 6 个带画（01、02、03、04、07、08），剩下的 14 面白墙记进下一轮。构建器测试 442 项全绿。"
+"7.2 把压缩排成四级，节里已经有一张从左到右的四格图，标题就写着成本递增，每格标出用不用 LLM、成本高低；后面还有一张 AutoCompact 的六步流程。次序与成本不必再画一遍——这张胶片把每一格换成一个动作。四格按代价从轻到重：第一格三行字还在，一把剪刀只剪掉尾巴，剪口用短虚线标出；第二格整段被压紧，两侧各一支箭头往里收，字数没减多少、行距先塌了；第三格折成三层，每层只剩一道檐口和一支向下的箭头，内容收进纸里；第四格最重，左边四行淡掉的旧字、右边两行新写的实线，中间一支粗箭头，右下角一条短虚线标出压缩边界：旧对话断在这里，新会话从它下面重新起步。前三格讲的都还是同一篇对话（剪完还在、压完还在、折起来也还在），第四格已经把内容换成新写的两行——四级之间真正的差不是少写几行，而是换一次记忆。落点在 241 行之后、`## 7.3` 之前，图版占六行，`## 7.3` 落到 250 行，注册表里 5 条指向 241 行之后的锚点各加六。中英各 478 行变 484 行。手写图 32→33 份，正文插图 6→7 张，每版图版 166→167 张。这一批铺完，20 个正文单元里仍只有 6 个带画（01、02、03、04、07、08），剩下的 14 面白墙记进下一轮。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"Section 7.2 ranks compaction in four levels; what a reader cannot get from the prose is how the cost differs. The four cells go light to heavy: in the first, three lines still stand and a pair of scissors takes off only the tail, the cut marked by a short dash; in the second the whole span is squeezed, an arrow pushing in from each side, the text barely shorter but its leading collapsed; in the third it folds into three layers, each left with nothing but a eave and a downward arrow, the content tucked inside the paper; the fourth is the heaviest — four faded lines on the left, two freshly inked ones on the right, a thick arrow between them, and a short dashed line under them marking the compaction boundary, where the old conversation snaps and a new session starts below. The first three cells are still the same conversation, cut, squeezed and folded; the fourth has already swapped its content for two new lines, and that is the real difference between the levels: not fewer lines written, but a different memory. The block lands after line 241, before `## 7.3`, costing six lines of prose and pushing that heading to 250; 5 anchors pointing past 241 move by six. Both language files go from 478 to 484 lines. Hand-inked drawings 32 to 33, plates inside the prose 6 to 7, plates per edition 166 to 167. Six of the twenty prose units now carry a drawing; the other fourteen are the next round's debt. 442 builder tests green."
+"Section 7.2 ranks compaction in four levels, and a left-to-right graph in that section already lays the four out in order, each box saying whether it calls a model and what it costs; a second flowchart then walks AutoCompact through its six steps. Order and price did not need redrawing — the strip turns each level into a gesture. The four cells go light to heavy: in the first, three lines still stand and a pair of scissors takes off only the tail, the cut marked by a short dash; in the second the whole span is squeezed, an arrow pushing in from each side, the text barely shorter but its leading collapsed; in the third it folds into three layers, each left with nothing but a eave and a downward arrow, the content tucked inside the paper; the fourth is the heaviest — four faded lines on the left, two freshly inked ones on the right, a thick arrow between them, and a short dashed line under them marking the compaction boundary, where the old conversation snaps and a new session starts below. The first three cells are still the same conversation, cut, squeezed and folded; the fourth has already swapped its content for two new lines, and that is the real difference between the levels: not fewer lines written, but a different memory. The block lands after line 241, before `## 7.3`, costing six lines of prose and pushing that heading to 250; 5 anchors pointing past 241 move by six. Both language files go from 478 to 484 lines. Hand-inked drawings 32 to 33, plates inside the prose 6 to 7, plates per edition 166 to 167. Six of the twenty prose units now carry a drawing; the other fourteen are the next round's debt. 442 builder tests green."
 ```
 
 两则都必须成对用反引号：这一页不允许任何裸反引号落到渲染结果里（`test_pages.test_revision_notes_are_typeset_not_left_in_markdown`）。
@@ -1302,7 +1303,7 @@ git commit -m "docs(book): 重生成画廊与门户，插图扩容设计稿记�
 
 ## 下一轮（不在本计划范围内，先记账）
 
-1. **剩余 14 个单元正文仍无画**（20 个单元里，ch03 已有 2 张，本轮补 ch01/ch02/ch04/ch07/ch08，凑成 6 个带画的单元）。ch12 与 ch13 是最先该补的两块白墙。
+1. **剩余 14 个单元正文仍无画**（20 个单元里，ch03 已有 2 张，本轮补 ch01/ch02/ch04/ch07/ch08，凑成 6 个带画的单元）。ch12 与 ch13 是下一轮最先该补图版的两个单元。
 2. **文字迭代仍按一个脚本口径**：`python scripts/measure_translationese.py`。2026-11-02 实测基线 `zh 132 行 / 162 处 / 术语式样 15`、`en 554 行 / 801 处 / 系词 54`；最集中的是 zh ch12 14 行、ch07 13 行、ch13 11 行，en ch12 51 行、ch02 50 行、ch03 42 行、ch11 40 行。具体目标之一：`en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:289-292` 那条并发编号列表仍是被动语态。
 3. **实物位图（扉页 + 4 幅篇题刻）**要另立设计稿与计划：`render.inline_images` 与 `art.photo()` 通道已存在（`.illu-photo` 样式也已就位），缺的是有来源有许可的图，以及扉页／题刻接受位图的那一个槽位。
 4. README 的 PDF 页数声明（zh 483／en 514 一类）只能引 CI 的 Noto CJK 实测值，不许从本机 Edge 的 `--pdf` 结果回抄。
