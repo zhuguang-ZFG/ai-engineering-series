@@ -1,9 +1,13 @@
 # 第15章：构建你自己的 Agent Harness
 
+> **开门一句话：**自家线束头一遭上路必是冷启动——前 14 章拆下的零件，这一章装成能跑的车。
+
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Claude Code 中的注释
 
 **学习目标：** 前 14 章拆开的零件，这一章装回去：你自己动手写一套 Agent Harness，从对话循环一路跑到能上线。
+
+**难度定位：**进阶。15.1 原则回顾与 15.2 六步路线图是主干，照 Step 1–6 动手即可；15.3 架构教训值得通读，15.4 生产化、15.5 未来展望初读可跳过，上线前再回来。
 
 ---
 
@@ -1241,6 +1245,8 @@ flowchart TD
 7. **安全纵深防御：** 从工具级别（`isDestructive`）到系统级别（工作区信任、预算上限），每一层都提供独立的安全保证。Agent 系统的安全威胁模型与传统应用有本质不同 -- LLM 的输出本身就是攻击向量，需要在每一层都建立防御。
 
 8. **可观测性是生产化的基石：** 从结构化日志到聚合指标到分布式追踪，可观测性的四个层次撑起 Agent 系统的调试、优化和合规。没有可观测性的 Agent 系统是一个黑箱，出了问题只能靠猜测。
+
+> **三句话带走：**①每个决策点上，Claude Code 都选了更安全、更可控、更可观测的方案。②循环状态、fail-closed 默认值、依赖注入、断路器、特性开关，都是这条哲学的落点。③照六步路线图装你的车：先把安全守住，再尽情释放智能体的潜力。
 
 ---
 

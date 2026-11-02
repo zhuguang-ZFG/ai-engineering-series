@@ -1,5 +1,7 @@
 # Chapter 11: The Skill System and Plugin Architecture
 
+> **In one line:** A skill is training the mare already has, ready when called; a plugin is tack you rent — run a thumb along its edge before you mount.
+
 > "Good architecture makes adding features easy; great architecture makes removing features just as easy."
 > -- Adapted from *Clean Architecture*
 
@@ -9,6 +11,8 @@
 - Write a custom skill that works on the first try
 - See why the plugin system loads cache-first, and where its security boundary sits
 - Tell the useful patterns of skill composition from the anti-patterns
+
+**Difficulty:** 11.1 is Start; 11.2, 11.3 and 11.5 are Core; 11.4 plugin system is Advanced — skip it on a first read and come back when you build.
 
 ---
 
@@ -766,3 +770,5 @@ Consider: Is there overlap between these skills? How can you avoid conflicts bet
 7. **Plugins as Extension Units**: Plugins are higher-level than skills and can contain skills, agents, and hooks. Cache-first loading and fault-tolerant error collection ensure plugin reliability and performance.
 
 8. **Skill Composition Patterns**: You can combine skills with other skills, agents, and hooks. Keep skills small and focused, and compose them into complex workflows.
+
+> **Three sentences to keep:** ①A skill is a prompt that gets loaded and executed: provenance selects the transformations the loader permits but never vouches for the skill's content, so you skip none of the layered defenses. ②The gitignore filter and `O_NOFOLLOW` keep out skills slipped quietly into node_modules — miss one gate, and someone else rides your horse on their own errand. ③Keep skills small and focused, one job per skill; compose them into workflows instead of building an all-purpose skill.

@@ -1,5 +1,7 @@
 # Chapter 4: The Permission Pipeline -- Agent Guardrails
 
+> **In one line:** Every tool call clears a checkpoint: papers checked, roster consulted, stamps applied -- and the permission mode decides how many.
+
 > Learning Objectives: By the end of this chapter, you can:
 
 > - Explain why permission checking takes four stages, and what each stage stops on its own
@@ -7,6 +9,8 @@
 > - Compare the five permission modes and pick the right one for a given situation
 > - Take BashTool's fine-grained permission control apart and see how it reads a command
 > - Set up an enterprise security policy a team can actually live with
+
+**Difficulty:** A Core chapter: 4.1 is Start level (the four-stage overview); 4.2, 4.3, and 4.5 carry the trunk. 4.4 takes BashTool's command classification apart -- the finest grain, tagged Advanced; skip it and the exercises on a first read.
 
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
 
@@ -562,5 +566,7 @@ For each scenario, draw the decision path through the four stages of the permiss
 7. **Dual-Layer Update Mechanism:** `applyPermissionUpdates` immediately modifies the in-memory context, while `persistPermissionUpdates` asynchronously writes to the file system. The separation of the two ensures both responsiveness and data persistence. This "memory first, persistence asynchronous" pattern is a universal design pattern in high-performance systems.
 
 8. **Key to Enterprise Security:** In team environments, through the combined configuration of project-level `settings.json` (shared) and local `settings.local.json` (personal), together with the deny-priority rule system, you can build security policies covering everything from individual development to team collaboration.
+
+> **Three sentences to keep:** ①Permission checking is four gates in a row -- validate the input, match the rules, weigh the context, ask the user -- and any one of them can kill a call on the spot. ②Deny rules outrank everything: even in bypassPermissions mode, deny and safetyCheck still hold, because no single checkpoint is a silver bullet and the defense has to run in depth. ③To permission a project, write the deny list first, then pick a mode; for a team, settings.json carries the shared policy and settings.local.json the personal one.
 
 In Part 2 of this book, we will deeply analyze Claude Code's core subsystems, including the compression strategies of context management, the implementation details of cache-aware design, and the error recovery mechanisms of the streaming architecture. These subsystems together form the engineering infrastructure of the Agent Harness, and understanding their design will take you from "I understand the architecture" to "I can build one."

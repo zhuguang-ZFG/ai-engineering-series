@@ -1,6 +1,10 @@
 # Chapter 5: Settings and Configuration -- Agent DNA
 
+> **In one line:** Six configuration layers settle like strata: an upper layer only masks what lies below and never deletes it -- read the order before you rewrite the Agent's DNA.
+
 > **Learning Objectives:** The order the six configuration layers merge in and where their boundaries sit; how the feature flag system prunes branches it will never take, at compile time; why a Zustand-like immutable store suits configuration. By the end of this chapter you can set a configuration policy for a team of any size, and explain how the configuration system became the first line of defense for Agent security.
+
+**Difficulty:** 5.1 is the starting rung -- own the priority chain. 5.2's security boundaries and 5.3's feature flags are the backbone. 5.4's state management runs at the Advanced tier: on a first pass, read the Store in 5.4.1 and leave the type-level details for a second.
 
 ---
 
@@ -602,3 +606,5 @@ Say what content belongs in each configuration source, and explain why.
 5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs dynamic adjustment after release.
 6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code cover everything state management needs.
 7. **DeepImmutable Types**: Makes the type system refuse direct state modification, keeping the right thing easy and the wrong thing impossible.
+
+> **Three sentences to keep:** ①The six layers never delete one another; they merge by type -- arrays only grow, scalars let the later writer win. ②Because the merge rules stay predictable, the security checks can shut projectSettings out wholesale and block repository-level supply-chain attacks. ③When you set policy for a team, hold one line: each layer carries only what belongs to it; change one configuration entry, and the whole station changes its ways.

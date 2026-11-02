@@ -1,9 +1,13 @@
 # Chapter 15: Building Your Own Agent Harness
 
+> **In one line:** Your own harness starts cold on its first run — the parts the previous 14 chapters took apart now bolt together into a cart that actually rolls.
+
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Comment in Claude Code
 
 **Learning Objectives:** The parts the previous 14 chapters took apart now go back together: you build your own Agent Harness, from the dialog loop all the way to something you can deploy.
+
+**Difficulty:** Advanced. 15.1's principles review and 15.2's six-step roadmap are the backbone — build along Steps 1–6. 15.3's architecture lessons deserve a full read; skip 15.4 productionization and 15.5 future outlook on a first pass and return before launch.
 
 ---
 
@@ -1257,6 +1261,8 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 7. **Security defense in depth:** From tool-level (`isDestructive`) to system-level (workspace trust, budget ceiling), each layer provides independent security guarantees. The security threat model for Agent systems is fundamentally different from traditional applications -- the LLM's output itself is an attack vector, requiring defenses at every layer.
 
 8. **Observability is the cornerstone of productionization:** From structured logs to aggregated metrics to distributed tracing, the four layers of observability carry debugging, optimization, and compliance for Agent systems. An Agent system without observability is a black box -- when problems arise, you can only guess.
+
+> **Three sentences to keep:** ① At every decision point, Claude Code picks the safer, more controllable, more observable option. ② Loop state, fail-closed defaults, dependency injection, circuit breakers, and feature flags are all that philosophy at work. ③ Build your own cart on the six-step roadmap: hold the safety line first, then let the agent run.
 
 ---
 

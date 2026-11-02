@@ -1,5 +1,7 @@
 # Chapter 12: MCP Integration and External Protocols
 
+> **In one line:** Beyond our road, speak the market tongue: an MCP server is the foreign yard's scales, and resources are the goods weighed on them.
+
 > "Protocols are the language systems use to communicate; good protocols turn integration into composition rather than coding."
 > -- Adapted from *Designing Distributed Systems*
 
@@ -12,6 +14,8 @@
 - Trace an MCP tool from discovery through mapping, naming and permissions
 - Set an enterprise MCP security policy: allowlists, denylists, IDE integration
 - See how MCP plugs into the tool system (Chapter 3) and the hook system (Chapter 8)
+
+**Difficulty:** 12.1 is Start, 12.2 and 12.3 are Core; 12.4 Bridge system and the hands-on exercises are Advanced — skip them on a first read and come back when you build.
 
 ---
 
@@ -1245,6 +1249,8 @@ Analyze the Bridge communication behavior in the following scenarios:
 9. **IDE Integration's Perception Capabilities**: Through `sse-ide`/`ws-ide` protocols and the `executeCode`/`getDiagnostics` allowlisted tools, Claude Code gains real-time perception of the IDE environment — evolving from passively receiving user input to actively obtaining diagnostic information and executing operations in the IDE context.
 
 10. **Collaboration with Other Systems**: MCP tools fully integrate into Claude Code's internal systems — going through tool system (Chapter 3) registration and scheduling, permission pipeline (Chapter 4) four-stage checks, and hook system (Chapter 8) lifecycle interception. MCP is not an isolated subsystem but a natural extension of Claude Code's tool ecosystem.
+
+> **Three sentences to keep:** ①MCP is the "USB-C port" of the AI world: protocol as contract, transport independence, and built-in security boundaries turn fragmented tool integration into standard composition. ②The four-layer permission model defends in depth on a default-distrust basis — an attacker who bypasses one layer still faces the others, and the `mcp__{server}__{tool}` naming gives permission checks their own namespace. ③MCP is not an isolated subsystem but a natural extension of the tool ecosystem: registration and scheduling run through the tool system, four-stage checks through the permission pipeline, lifecycle interception through the hook system.
 
 ---
 

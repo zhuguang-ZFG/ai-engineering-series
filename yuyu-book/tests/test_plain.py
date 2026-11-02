@@ -42,10 +42,10 @@ def gloss(gid, zh, en, forms_zh, forms_en, priority="core", mark=None,
                      "en": "a run hands out many results, so waiting for one "
                            "return would stall the rest"}, **(why or {})),
         "why_evidence": list(why_evidence if why_evidence is not None
-                             else [f"{ZH_CH02}:18", f"{EN_CH02}:18"]),
+                             else [f"{ZH_CH02}:22", f"{EN_CH02}:22"]),
         "priority": priority,
         "evidence": evidence if evidence is not None
-        else [f"{ZH_CH02}:18", f"{EN_CH02}:18"]}
+        else [f"{ZH_CH02}:22", f"{EN_CH02}:22"]}
     if mark is not None:
         entry["mark"] = mark
     if no_why:
@@ -368,7 +368,7 @@ class RegistryValidation(unittest.TestCase):
 
     def test_core_glosses_need_both_languages(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
-                  ["async generator"], evidence=[f"{ZH_CH02}:18"])
+                  ["async generator"], evidence=[f"{ZH_CH02}:22"])
         with self.assertRaises(BuildError) as ctx:
             plain.validate_plain(g, {}, mini_manifest())
         self.assertIn("both languages", str(ctx.exception))
@@ -376,7 +376,7 @@ class RegistryValidation(unittest.TestCase):
     def test_an_extra_gloss_may_be_single_language(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
                   ["async generator"], priority="extra",
-                  evidence=[f"{ZH_CH02}:18"])
+                  evidence=[f"{ZH_CH02}:22"])
         plain.validate_plain(g, {"ch02": ["start", "core"]}, mini_manifest())
 
     def test_plain_lines_are_size_limited(self):

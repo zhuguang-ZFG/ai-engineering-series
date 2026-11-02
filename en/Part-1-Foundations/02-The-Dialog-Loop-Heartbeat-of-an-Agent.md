@@ -1,5 +1,7 @@
 # Chapter 2: The Dialog Loop -- The Agent's Heartbeat
 
+> **In one line:** The dialog loop is the agent's heartbeat: every yield is one beat, and a horse that takes the rein can run the long road.
+
 > "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
 > -- Augustine of Hippo
 
@@ -10,6 +12,8 @@
 - Say what each stage of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact) holds back
 - Name the seven Continue paths, what sets each one off, and how the loop picks up again
 - Judge whether dependency injection makes this loop easier to test or harder to read
+
+**Difficulty:** A Core chapter: 2.1 is Start level; 2.2 and 2.4 carry the trunk -- how one turn runs and how the state jumps; 2.3 (dependency injection) and the exercises sit at the Advanced tier, and skipping them on a first read costs you nothing of the main line.
 
 ---
 
@@ -447,5 +451,7 @@ Send Claude Code a series of requests that require substantial context (such as 
 4. **Dependency injection makes testing possible**: The four dependencies of `QueryDeps` (callModel, microcompact, autocompact, uuid) cover the loop's core side effects, so tests can check state transition logic without touching the API. The selection of these four dependencies is also well considered -- they are exactly all the "boundary points of interaction with the external world" in the loop. Abstracting them into interfaces turns the loop internals into pure logic.
 
 5. **Termination is not failure, it is design**: Ten termination reasons each have their trigger conditions and cleanup logic. Understanding these termination paths is key to understanding the entire loop's robustness. In production-grade Agent systems, incorrect termination handling is more dangerous than incorrect normal flow -- because it can lead to resource leaks, state inconsistency, or user data loss.
+
+> **Three sentences to keep:** ①The main loop is an async generator: yield pushes events, yield* delegates to sub-generators, return() cancels, and the state stays immutable with a transition recorded at every jump. ②Inject the four side effects -- callModel, microcompact, autocompact, uuid -- as QueryDeps, and the loop's interior turns into pure logic: you design testability in, you never bolt it on. ③To size up an agent loop, ask three things: can it pause, can it cancel, and does it clean up when it ends.
 
 In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent stopped being only a voice and started getting things done.

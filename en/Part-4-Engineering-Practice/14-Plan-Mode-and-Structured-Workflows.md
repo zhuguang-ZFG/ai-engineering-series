@@ -1,8 +1,12 @@
 # Chapter 14: Plan Mode & Structured Workflows
 
+> **In one line:** Walk the route on paper before the packs move: Plan Mode splits thinking from doing, and redrawing a blueprint always beats tearing down a wall.
+
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
 **Learning Objectives:** How Plan Mode splits thinking from doing, when EnterPlanMode/ExitPlanMode flip between the two, where plan files live and how they come back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension. The worked cases at the end show how Plan Mode lifts both the success rate and the predictability of long Agent tasks.
+
+**Difficulty:** Advanced. 14.1 and 14.2 are the backbone: read the mode-switching mechanism and plan-file recovery in full. Skip 14.4 scheduling and 14.5 background tasks on a first pass; return when you need timers or long-running jobs.
 
 ---
 
@@ -830,3 +834,5 @@ For your chosen scenario, answer:
 6. **Workflow design should follow "Plan-Execute-Verify" pattern**, avoiding anti-patterns like "unplanned complex tasks" and "never-cleanup scheduled tasks". Good workflow design balances automation efficiency with human oversight.
 
 7. **lastCacheSafeParams' global slot design** embodies "implicit context passing" pattern, reducing inter-component coupling while avoiding race conditions through synchronous read/write. This pattern is particularly useful when needing to pass context across multiple component layers.
+
+> **Three sentences to keep:** ① Plan Mode separates read-only exploration from writable execution, so a wrong direction costs almost nothing. ② Align intent before you act: rework happens on the blueprint, and the plan file's three-layer recovery survives interruptions. ③ For complex work, run Plan-Execute-Verify: no plan, no ground broken.

@@ -1,5 +1,7 @@
 # 第2章：对话循环 -- Agent 的心跳
 
+> **开门一句话：**对话循环是 Agent 的心跳：每 yield 一次就搏动一下；肯收缰的马，才敢跑远路。
+
 > "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
 > -- Augustine of Hippo
 
@@ -10,6 +12,8 @@
 - 讲明白 Snip、Microcompact、Context Collapse、Autocompact 这道预处理管线各自在挡什么
 - 数出七条 Continue 路径，各自什么时候触发、之后怎么接着跑
 - 判断依赖注入让这段循环更好测，还是更难读
+
+**难度定位：**主干章：2.1 是起步；2.2、2.4 是主干，讲清一轮怎么跑、状态怎么跳；2.3 依赖注入和实战练习标了进阶，初读可跳过，不妨碍跟上主线。
 
 ---
 
@@ -447,5 +451,7 @@ flowchart TD
 4. **依赖注入使测试成为可能**：`QueryDeps` 的四个依赖（callModel、microcompact、autocompact、uuid）覆盖了循环的核心副作用，测试不碰 API 也能验证状态转换逻辑。这四个依赖的选择也很有讲究——它们正好是循环中所有"与外部世界交互"的边界点，把它们抽象成接口，循环内部就成了纯逻辑。
 
 5. **终止不是失败，是设计**：十种终止原因各有其触发条件和清理逻辑。理解这些终止路径是理解整个循环健壮性的关键。在生产级 Agent 系统中，错误的终止处理比错误的正常流程更危险——因为它可能导致资源泄漏、状态不一致或用户数据丢失。
+
+> **三句话带走：**①主循环是一个异步生成器：yield 推事件、yield* 委托子生成器、return() 取消，状态不可变，每一跳都有 transition 可查。②把 callModel、microcompact、autocompact、uuid 四个副作用注入成 QueryDeps，循环内部就成了纯逻辑——可测性是设计出来的，不是事后补的。③掂量一个 Agent 循环就三问：能不能暂停、能不能取消、终止时收不收拾现场。
 
 在下一章中，我们将转向 Agent 的"双手"——工具系统。对话循环是 Agent 的心脏，工具系统则是 Agent 的四肢。理解了工具系统的设计，你将知道 Agent 是如何从"只能说话"进化到"能动手做事"的。

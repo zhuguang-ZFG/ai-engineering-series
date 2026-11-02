@@ -1,9 +1,13 @@
 # Chapter 13: Streaming Architecture & Performance Optimization
 
+> **In one line:** Send each letter the moment you finish it — streaming puts the first token on the road early, and a gatekeeper who knows your face keeps the bill light.
+
 > "Premature optimization is the root of all evil -- but latency is the root of all user complaints."
 > -- adapted from Donald Knuth
 
 **Learning Objectives:** How the streaming architecture gets the first token on screen sooner; how QueryEngine owns one query's full lifecycle; how StreamingToolExecutor runs work concurrently without giving up safety; what parallel prefetching, lazy loading and prompt caching each take off the bill. By the end of this chapter you can give an Agent system a performance checkup: find the bottleneck, price it, and fix the right thing.
+
+**Difficulty:** Advanced. 13.1 and 13.2 are the backbone: read the streaming data flow and the concurrency control in full. Skim 13.3 startup optimization and 13.4 cost tracking for the conclusions on a first pass; come back for the numbers when you run a performance checkup.
 
 ---
 
@@ -677,3 +681,5 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 6. **Streaming architecture is not optimization, but architectural choice**: It determines that you must design every component of the system according to "incremental, interruptible, composable" principles, and is the cornerstone of the entire Agent Harness. From QueryEngine to StreamingToolExecutor to tool execution, streaming thinking runs throughout.
 
 7. **Tool output token costs are often more worth watching than model output**: A large file read might produce 60K+ cache creation tokens, while a model turn output is usually only 1-5K tokens. Optimizing tool return content (like limiting lines, filtering irrelevant info) is more effective than optimizing model output.
+
+> **Three sentences to keep:** ① Streaming is not an optimization but an architectural choice. ② It forces every component, from QueryEngine down to tool execution, to be incremental, interruptible, and composable — performance and cost both follow from that. ③ Keep this: caches demand byte-level consistency, and you measure before you tune — tool output tokens usually cost more than model output.

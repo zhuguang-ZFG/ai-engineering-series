@@ -1,5 +1,7 @@
 # Chapter 1: The New Paradigm of Agent Programming
 
+> **In one line:** The model is the horse -- it only pulls. The harness is the cart: it picks the road and decides the load.
+
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 
 ## Learning Objectives
@@ -11,6 +13,8 @@ By the end of this chapter, you can:
 - Sketch Claude Code's macro architecture and explain why the stack looks the way it does
 - Tell a thin API wrapper apart from an actual Agent Harness, and say where the line falls
 - Follow each of the five design principles into the subsystems where they turn up
+
+**Difficulty:** A Start-level chapter: 1.1 reads with no background; 1.2 and 1.3 are Core and reward a slow pass; the hands-on exercise sits at the Advanced tier -- skip it on a first read and come back for it.
 
 ---
 
@@ -465,5 +469,7 @@ This chapter establishes the conceptual framework for understanding Claude Code.
 3. **Five core modules define the architectural skeleton**: Entry module, query engine, dialog loop, tool types, and tool registry. Understanding the responsibilities and interrelationships of these five modules means grasping Claude Code's macro architecture. Their relationship is a strict layered calling relationship: the entry module creates the query engine, the query engine drives the dialog loop, the dialog loop uses the tool system, and the tool registry manages the tool system.
 
 4. **The five design principles are the thread running through everything**: Async-streaming-first, embedded security boundaries, cache-aware design, progressive capability extension, and immutable state flow -- the five interlock into a network of architectural decisions. In subsequent chapters, we will repeatedly see them embodied in specific subsystems. Whenever you encounter a "why is it designed this way" question, you can almost always trace the answer back to one of these five principles.
+
+> **Three sentences to keep:** ①The real shift is not that models chat better but that models now call tools, and the Agent Harness is the runtime that catches this. ②A thin API wrapper is not a harness -- miss that line and the system falls apart in production; the 510,000 lines of Claude Code fill exactly those holes. ③To size up an agent system, count the harness layers first: streaming, permissions, caching, state; miss any one and it does not count.
 
 In the next chapter, we will dive into the internals of the dialog main loop, progressively analyzing that AsyncGenerator dialog loop to understand how the Agent autonomously advances tasks through the cycle of "call LLM - parse tool calls - execute tools - inject results." This is the most core chapter in the book -- because the dialog main loop is the "heart" of Agent Harness, and understanding it means understanding the Agent's "pulse."
