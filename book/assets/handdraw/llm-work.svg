@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="t">
+  <title id="t">大语言模型的工作原理：把文本切成 Token，拼成矩阵，交给 Transformer 猜下一个词，按温度挑一个，再接回去继续猜</title>
+  <rect width="1200" height="740" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">大语言模型怎么生成一句话</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">从把文本切成 Token，到一次只猜下一个词</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="72" y="176" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="442" y="176" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="812" y="176" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="812" y="352" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="442" y="352" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="72" y="352" width="316" height="132" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+
+    <g fill="#1f883d">
+      <circle cx="106" cy="214" r="18"/><circle cx="476" cy="214" r="18"/><circle cx="846" cy="214" r="18"/>
+      <circle cx="846" cy="390" r="18"/><circle cx="476" cy="390" r="18"/><circle cx="106" cy="390" r="18"/>
+    </g>
+    <g fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">
+      <text x="106" y="221">1</text><text x="476" y="221">2</text><text x="846" y="221">3</text>
+      <text x="846" y="397">4</text><text x="476" y="397">5</text><text x="106" y="397">6</text>
+    </g>
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="136" y="222">分词</text><text x="506" y="222">Embedding</text><text x="876" y="222">堆叠成矩阵</text>
+      <text x="876" y="398">Transformer</text><text x="506" y="398">猜下一个词</text><text x="136" y="398">按温度挑词</text>
+    </g>
+    <g fill="#57606a" font-size="20">
+      <text x="102" y="264">把文本切成词单元 Token</text><text x="102" y="294">Tokenizer：翻译官</text>
+      <text x="472" y="264">ID 换成填满小数的数组</text><text x="472" y="294">比如 512 个数字</text>
+      <text x="842" y="264">一句话，很多行数字堆叠</text><text x="842" y="294">GPU 天生为矩阵运算设计</text>
+      <text x="842" y="440">2017 年：所有词一次坐上桌</text><text x="842" y="470">注意力机制：圆桌会议</text>
+      <text x="472" y="440">输出下一个词的概率</text><text x="472" y="470">Next Token Prediction</text>
+      <text x="102" y="440">温度越高，回答越不可控</text><text x="102" y="470">自回归式地逐词生成</text>
+    </g>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="312" y="204" width="52" height="26" rx="4"/>
+      <path d="M330 208v18" stroke-dasharray="3 4"/><path d="M347 208v18" stroke-dasharray="3 4"/>
+      <path d="M690 230h44"/><path d="M690 230v-32"/>
+      <path d="M1052 198h52"/><path d="M1052 212h52"/><path d="M1052 226h52"/>
+      <ellipse cx="1080" cy="398" rx="17" ry="9"/>
+      <path d="M1061 380l6 10"/><path d="M1080 375v14"/><path d="M1099 380l-6 10"/>
+      <path d="M688 408h10v-8h-10z"/><path d="M704 408h10v-18h-10z"/><path d="M720 408h10v-28h-10z"/>
+      <path d="M340 372v20"/><path d="M350 378h8"/><path d="M350 388h8"/>
+    </g>
+    <g fill="#1f2328">
+      <circle cx="694" cy="200" r="4"/><circle cx="712" cy="222" r="4"/>
+      <circle cx="1058" cy="376" r="4"/><circle cx="1080" cy="370" r="4"/><circle cx="1102" cy="376" r="4"/>
+    </g>
+    <circle cx="340" cy="400" r="9" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M394 242h26"/><path d="M764 242h26"/><path d="M970 308v28"/><path d="M806 418h-32"/><path d="M436 418h-32"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M442 242l-16-8v16z"/><path d="M812 242l-16-8v16z"/><path d="M970 352l-8-16h16z"/>
+      <path d="M758 418l16-8v16z"/><path d="M388 418l16-8v16z"/>
+    </g>
+  </g>
+
+  <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M230 484v14c0 10 8 18 18 18h704c10 0 18-8 18-18v-2"/>
+  </g>
+  <path d="M970 484l-7 13h14z" fill="#1f883d"/>
+  <text x="600" y="548" fill="#1f883d" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">一 token 一 token 往外吐，接回末尾再猜下一个</text>
+
+  <text x="72" y="596" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">模型像一位读过全人类书本的超级厨师：炒的不是菜，而是文字。</text>
+
+  <rect x="72" y="618" width="1056" height="64" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="600" y="658" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" text-anchor="middle" font-weight="700">它的本能只有一个：猜下一个词（Next Token Prediction）</text>
+</svg>

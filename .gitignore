@@ -8,5 +8,6 @@ node_modules/
 !design/handdraw/renders/
 !design/handdraw/renders/**
 **/archive/
+__pycache__/
 *.log
 tmp/

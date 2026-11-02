@@ -183,3 +183,27 @@ Xiaohongshu infographic. Layout: include a main headline and build the body as a
 Headline: "推送代码，网站就更新".
 Theme: a horizontal five-step path — 改代码 (pencil), commit (a box with a check mark), push (an upward arrow), 自动构建部署 (gear and cloud), 手机打开链接 (a lit phone). Below the path, an emerald-green loop arrow runs from the cloud back to commit, labelled "改坏了就回滚".
 ```
+
+---
+
+## 第二批（2026-11-02）：0 图长文段，6 张已入正文
+
+点位不再靠人工翻找，而由 `scan_illustration_points.py` 量化选出：按 `### ` 切节，统计每节正文净字数、图片行、**相邻图片之间最长的纯正文段（gap）**与代码占比，`gap ≥ 5000 且代码占比 < 0.5` 才算候选。全书 192 节 → 68 个候选，完整清单在 `renders/points-scan.txt`。
+
+```bash
+python design/handdraw/scan_illustration_points.py --min-gap 5000 > design/handdraw/renders/points-scan.txt
+python design/handdraw/render_figures.py --all          # 全部 SVG 栅格化到 renders/hd-*.png 供看图验收
+```
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 浏览器渲染管道 | `IG-008` 管道 | 51077（导览表之后、第 1 章之前） | DOM 树 + CSSOM 树 → 渲染树只保留可见元素 → 布局/绘制/合成；**transform / opacity 直接触发合成**；「重排最贵，重绘次之」「布局改变会导致绘制，绘制改变不会导致布局」 |
+| CI / CD 自动化 | `IG-008` 流程 | 73662（「几分钟，全部自动完成」之后） | 手动九步 → push + 喝茶坐等；五步流水线；**测试失败就停下并发邮件**；UptimeRobot 每 5 分钟查一次 |
+| 大语言模型的工作原理 | `IG-008` S 形 | 79577（堆叠成矩阵之后） | 分词 → Embedding → 堆叠成矩阵 → Transformer → **猜下一个词（Next Token Prediction）** → 按温度挑词；回环标注「一 token 一 token 往外吐」 |
+| 上下文工程 | `IG-013` 漏斗 | 80494（信息分级表之后） | VIP +15% / 重要 +10% / 一般（最近 5 轮）基准 / 可弃 −60% 走 RAG；**25% 成本换 90% 关键信息**；「小黑板不是图书馆」 |
+| AI Agent 与工具调用 | `IG-008` 回环 | 81616（感知-决策-行动-观察之后） | 四步各带机制（Memory 三层 / Planning / Tool Calling / Tools 结果写回）；**LLM 只生成结构化文本，不亲自执行**；Guardrails 白名单·预算·二次确认·沙箱 |
+| AI 协议（MCP & A2A） | `IG-002` 中心标注 | 82119（三层协议导语之后） | MCP＝工具/资源/提示（Anthropic 2024.11，类比 USB-C，Client-Server）；A2A＝Agent Card/Task/Message（Google 2025.04，类比企业微信，Peer-to-Peer）；两者互补不竞争 |
+
+验收口径沿用第一批：每张先 `render_figures.py` 出 PNG，再逐张看图核对文字越界、箭头落点、标注压字；`render-pipeline` 首稿在汇合箭头处压了一个「合并」小标签，已删（副标题已说明合并）并重渲复验。六张入正文后 `npm test` 通过（本地资源引用 980 → 986），且与相邻图片的正文间隔实测最小 4502 字，满足 ≥400–500 字红线。
+
+下一批候选（gap 从大到小）：AI 能力词典（164870）、HTML/CSS 布局体系（15086）、前端工程化全貌（11726，改走 stack-diagram）、计算机系统全景（11541，stack-diagram）、Web 框架的本质（11054）、缓存的层次与策略（11015）、对象存储与 CDN（10173，stack-diagram）、数据库原理（9499）、输入网址到渲染页面（9919）、IAM 权限管理（8927）、负载均衡与网关（6749）、Git 时光机（5643）。

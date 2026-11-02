@@ -51073,6 +51073,11 @@ export class AppComponent {
 
 每一章都从"理解原理"开始，不需要你会手写优化代码。遇到性能问题时，随时回来查就行。
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/render-pipeline.svg" alt="HTML 解析成 DOM 树、CSS 解析成 CSSOM 树，两树合并成只含可见元素的渲染树，再依次经过布局、绘制、合成三步" loading="lazy">
+  <figcaption><strong>渲染是一条流水线，重排最贵。</strong>改宽高、位置要重走布局→绘制→合成；改 transform 和 opacity 能直接跳到合成那一步，这就是动画为什么优先用它们。</figcaption>
+</figure>
+
 
 ##### 1. 理解"渲染管线的动机
 
@@ -73653,6 +73658,11 @@ CI 系统会启动一台虚拟电脑。在上面：
 
 整个过程可能只需要几分钟。全部自动完成。
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/cicd.svg" alt="五步流水线：代码提交、CI 触发、测试与构建、CD 部署、监控告警；测试失败时用虚线箭头退回并邮件通知" loading="lazy">
+  <figcaption><strong>九步手动变两步：push，然后喝茶坐等。</strong>机器人把登录、测试、构建、上服务器、重启全包了；测试一失败就停下并发邮件，坏代码到不了线上。</figcaption>
+</figure>
+
 ###### 7.3 配置 GitHub Actions 的实现
 
 GitHub Actions 是 GitHub 自带的 CI/CD 功能。不需要额外付费（免费额度足够个人项目用）。配置起来也非常简单。
@@ -79563,6 +79573,11 @@ index=171,   string='！'
 3.  **Embedding**：把 ID 变成向量（为了语义和压缩）。
 4.  **堆叠**：把向量拼成矩阵（为了 GPU 高效计算）。
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/llm-work.svg" alt="六步 S 形流程：分词、Embedding、堆叠成矩阵、Transformer 计算、猜下一个词、按温度挑选，末尾用绿色回环箭头接回猜词一步" loading="lazy">
+  <figcaption><strong>它的本能只有一个：猜下一个词。</strong>文字先切成 token、变成数字，Transformer 算出每个候选词的概率，再按温度挑一个——然后一 token 一 token 往外吐，把结果当输入接着猜。</figcaption>
+</figure>
+
 
 
 ##### 3.5 模型概述
@@ -80474,6 +80489,11 @@ Manus 的答案是：**建立“信息等级制度”**。
 | **可弃** | 可检索的知识 | **用时再查** | -60% 成本 |
 
 **核心思想**：**用 25% 的成本增加，换取 90% 的关键信息保留**。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/context-engineering.svg" alt="四层漏斗：可弃的检索知识、一般对话历史、重要任务目标、VIP 系统设定，沉淀进上下文窗口这块小黑板；旁边用虚线把可弃层引到图书馆（RAG 按需检索）" loading="lazy">
+  <figcaption><strong>上下文是小黑板，不是图书馆。</strong>能检索的放图书馆用时再查（省 60% 成本），最近 5 轮按基准成本保留，任务目标加 10%，系统设定钉在最上面加 15%——多花 25% 的成本，留住 90% 的关键信息。</figcaption>
+</figure>
 
 ###### 5.2 "钉钉子"策略
 
@@ -81592,6 +81612,11 @@ Agent 通常采用三种记忆类型协同工作：
 
 **感知-决策-行动-观察**的循环会持续进行，直到任务完成。
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/agent-loop.svg" alt="四步循环：感知（Memory 三层记忆）、决策（Planning 规划）、行动（Tool Calling）、观察（Tools 执行结果），观察用绿色回环箭头接回感知" loading="lazy">
+  <figcaption><strong>转一圈才算干了一件事。</strong>模型自己不碰外部世界：它只生成一段结构化文本告诉外部系统该做什么，执行结果写回记忆，再对照停止条件决定要不要再来一圈。</figcaption>
+</figure>
+
 
 ##### 5. Agent 的能力分级
 
@@ -82089,6 +82114,11 @@ AI Agent 要真正"干活"，需要：
 **第3层（A2A）**：Agent-to-Agent Protocol，由 Google 于 2025 年 4 月发布。它让不同的 Agent 能够相互发现、通信和协作，就像企业微信让同事之间可以发任务、聊天。
 
 本章重点介绍第 2、3 层的两个正式协议：MCP 和 A2A。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/mcp-a2a.svg" alt="中心的 AI Agent 用实线连到 MCP 三件套（工具、资源、提示），用虚线连到 A2A 三件套（Agent Card、Task、Message）" loading="lazy">
+  <figcaption><strong>MCP 连工具，A2A 连 Agent。</strong>一个 Agent 要真正干活，需要两类连接：跟工具和数据源之间用 MCP（Anthropic 2024.11，类比 USB-C 接口），跟其他 Agent 之间用 A2A（Google 2025.04，类比企业微信）。两者不是竞争关系，是互补。</figcaption>
+</figure>
 
 
 ##### 2. MCP (Model Context Protocol)

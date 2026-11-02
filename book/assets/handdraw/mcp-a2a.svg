@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="860" viewBox="0 0 1200 860" role="img" aria-labelledby="t">
+  <title id="t">AI 协议 MCP 与 A2A：画面中央是 AI Agent，左边走实线连外部工具和数据源（类比 USB-C 接口），右边走虚线连其他 Agent（类比 企业微信）</title>
+  <rect width="1200" height="860" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">MCP 连工具，A2A 连 Agent</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">就像互联网需要 HTTP，Agent 也要标准化的通信协议</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- 连接线：左侧 MCP 用实线，右侧 A2A 用虚线 -->
+  <g fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round">
+    <path d="M400 319Q444 326 472 404"/>
+    <path d="M400 451H472"/>
+    <path d="M400 583Q444 576 472 498"/>
+  </g>
+  <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 12">
+    <path d="M800 319Q756 336 728 404"/>
+    <path d="M800 451H728"/>
+    <path d="M800 583Q756 576 728 498"/>
+  </g>
+
+  <!-- 两个分组的标题条 -->
+  <rect x="72" y="166" width="330" height="78" rx="18" fill="#d3efd9" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="96" y="200" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700">第 2 层 · MCP</text>
+  <text x="96" y="230" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19">AI 如何连接外部工具和数据源</text>
+  <rect x="798" y="166" width="330" height="78" rx="18" fill="#f1f7f2" stroke="#1f2328" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="822" y="200" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700">第 3 层 · A2A</text>
+  <text x="822" y="230" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19">Agent 之间如何协作通信</text>
+
+  <!-- 画面中央的主图形 -->
+  <rect x="470" y="388" width="260" height="126" rx="24" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+  <text x="600" y="430" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="27" font-weight="700" text-anchor="middle">AI Agent</text>
+  <text x="600" y="466" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">要真正「干活」</text>
+  <text x="600" y="494" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">需要两类连接</text>
+
+  <!-- MCP 的三大核心能力 -->
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <rect x="72" y="260" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="96" y="292" fill="#1f883d" font-size="22" font-weight="700">工具 Tools</text>
+    <text x="96" y="324" fill="#57606a" font-size="19">AI 可以调用的功能</text>
+    <text x="96" y="352" fill="#57606a" font-size="19">查询天气、发送邮件</text>
+
+    <rect x="72" y="392" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="96" y="424" fill="#1f883d" font-size="22" font-weight="700">资源 Resources</text>
+    <text x="96" y="456" fill="#57606a" font-size="19">AI 可以读取的数据</text>
+    <text x="96" y="484" fill="#57606a" font-size="19">文件内容、数据库记录</text>
+
+    <rect x="72" y="524" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="96" y="556" fill="#1f883d" font-size="22" font-weight="700">提示 Prompts</text>
+    <text x="96" y="588" fill="#57606a" font-size="19">预定义的提示模板</text>
+    <text x="96" y="616" fill="#57606a" font-size="19">代码审查模板、写作模板</text>
+  </g>
+
+  <!-- A2A 的三大核心概念 -->
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <rect x="798" y="260" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="822" y="292" fill="#1f2328" font-size="22" font-weight="700">Agent Card</text>
+    <text x="822" y="324" fill="#57606a" font-size="19">Agent 名片，描述 Agent 的能力</text>
+    <text x="822" y="352" fill="#57606a" font-size="19">类比：员工工牌</text>
+
+    <rect x="798" y="392" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="822" y="424" fill="#1f2328" font-size="22" font-weight="700">Task</text>
+    <text x="822" y="456" fill="#57606a" font-size="19">任务，要执行的工作单元</text>
+    <text x="822" y="484" fill="#57606a" font-size="19">类比：工单</text>
+
+    <rect x="798" y="524" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="822" y="556" fill="#1f2328" font-size="22" font-weight="700">Message</text>
+    <text x="822" y="588" fill="#57606a" font-size="19">消息，Agent 之间的通信内容</text>
+    <text x="822" y="616" fill="#57606a" font-size="19">类比：聊天记录</text>
+  </g>
+
+  <!-- 图例：两种线型分别对应哪个协议 -->
+  <rect x="72" y="666" width="1056" height="96" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+  <path d="M104 689H164" fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round"/>
+  <path d="M104 727H164" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 12"/>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" fill="#1f2328">
+    <text x="180" y="696"><tspan font-weight="700">MCP（Anthropic · 2024.11）</tspan>—— AI 与工具之间的通信 · 类比 USB-C 接口 · Client-Server</text>
+    <text x="180" y="734"><tspan font-weight="700">A2A（Google · 2025.04）</tspan>—— Agent 与 Agent 之间的通信 · 类比 企业微信 · Peer-to-Peer</text>
+  </g>
+
+  <text x="72" y="796" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">第 1 层 Function Call 让 AI 调用本地函数，MCP 和 A2A 都建立在它之上。</text>
+  <text x="72" y="828" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">两者不是竞争关系，而是互补关系：MCP 管「AI 获取外部能力」，A2A 管「多个 AI 协作」。</text>
+</svg>
