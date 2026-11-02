@@ -599,7 +599,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:61",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:193",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:199",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:61"
   ],
   "analogy": {
@@ -960,7 +960,7 @@
   "priority": "core",
   "evidence": [
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:106",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:266",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:272",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:6"
   ],
   "analogy": {
@@ -1248,7 +1248,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/03-工具系统-Agent的双手.md:256",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:373",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:379",
    "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:256"
   ],
   "analogy": {
@@ -2483,8 +2483,8 @@
   "evidence": [
    "第一部分-基础篇/04-权限管线-Agent的护栏.md:7",
    "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:7",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:175",
-   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:175"
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:181",
+   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:181"
   ],
   "analogy": {
    "zh": "小区门禁：业主登记过就随便进，访客每次都得刷卡",
@@ -2495,8 +2495,8 @@
    "en": "One setting fits nobody: asking every time wears you down, never asking is too risky, so strictness comes graded across several modes."
   },
   "why_evidence": [
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:209",
-   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:209"
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:215",
+   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:215"
   ]
  },
  "permission-pipeline": {

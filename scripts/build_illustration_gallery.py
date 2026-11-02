@@ -23,14 +23,15 @@ OUT = ROOT / "docs" / "illustration-gallery.html"
 
 ORDER = ["front", "ch01", "ch01-five-pillars", "ch02", "ch02-turn-loop",
          "ch03", "ch03-tool-bench", "ch03-tool-pipeline",
-         "ch04", "ch05", "ch06", "ch07",
+         "ch04", "ch04-gate-steps", "ch05", "ch06", "ch07",
          "ch08", "ch09", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15",
          "apxa", "apxb", "apxc", "apxd", "keeper",
          "part-p1", "part-p2", "part-p3", "part-p4", "cover"]
 BIG = {"part-p1", "part-p2", "part-p3", "part-p4", "cover"}
 # the plates drawn for the prose column are wide landscapes, not badges
 WIDE = {"ch03-tool-bench": 300, "ch03-tool-pipeline": 330,
-        "ch02-turn-loop": 330, "ch01-five-pillars": 300}
+        "ch02-turn-loop": 330, "ch01-five-pillars": 300,
+        "ch04-gate-steps": 330}
 WIDTH = {n: (420 if n == "cover" else WIDE.get(n) or (300 if n in BIG else 120))
          for n in ORDER}
 
@@ -45,6 +46,7 @@ PLAIN = {
     "ch03-tool-bench": "一张工具台：每件家伙什只管一件事",
     "ch03-tool-pipeline": "四格胶片：排队、切批、同时开工、按序交回",
     "ch04": "闸门：危险操作先过一道勾选的护栏",
+    "ch04-gate-steps": "四格胶片：验格式、比规则、看上下文、最后问人",
     "ch05": "千层饼：配置像基因，一层层定性格",
     "ch06": "折角笔记本：Agent 的长期记忆记在这里",
     "ch07": "仪表盘：脑子里工作台还剩多少位置",
@@ -81,6 +83,8 @@ PLAIN_EN = {
     "ch03-tool-pipeline": "A filmstrip: queue up, split, work at once, "
                           "report in order",
     "ch04": "Gate: risky actions pass a checked guardrail",
+    "ch04-gate-steps": "A filmstrip: check the shape, match a rule, "
+                       "weigh the context, then ask",
     "ch05": "Layer cake: settings are genes, layer by layer",
     "ch06": "Folded notebook: where long-term memory lives",
     "ch07": "Gauge: how much working memory is left",

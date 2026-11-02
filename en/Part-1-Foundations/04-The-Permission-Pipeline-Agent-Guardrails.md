@@ -168,6 +168,12 @@ sequenceDiagram
 
 > **Best Practice:** In enterprise environments, if you want to reduce the disruption of frequent permission prompts seen by users, three strategies can be combined: (1) Pre-configure allow rules in the project configuration to cover common operations; (2) Use auto mode to let the classifier automatically handle common requests; (3) Configure Hook scripts to implement custom auto-approval logic. These three strategies can be stacked, covering all scenarios from simple to complex.
 
+One tool call passes four gates: shape, rules, context — and only last, a human.
+
+```ill
+ch04-gate-steps
+```
+
 ## 4.2 PermissionContext Design
 
 ### 4.2.1 ToolPermissionContext Type Structure
