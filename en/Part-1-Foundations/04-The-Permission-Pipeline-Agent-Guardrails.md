@@ -1,12 +1,12 @@
 # Chapter 4: The Permission Pipeline -- Agent Guardrails
 
-> Learning Objectives: After reading this chapter, you will be able to:
+> Learning Objectives: By the end of this chapter, you can:
 
-> - Understand the design rationale and engineering trade-offs of Claude Code's four-stage permission checking process
-> - Master the design philosophy and immutable data pattern of the permission context
-> - Analyze the behavioral differences and applicable scenarios of the five permission modes
-> - Understand the implementation mechanism of BashTool's fine-grained permission control
-> - Master best practices for enterprise-grade security configuration
+> - Explain why permission checking takes four stages, and what each stage stops on its own
+> - Explain why the permission context is immutable data
+> - Compare the five permission modes and pick the right one for a given situation
+> - Take BashTool's fine-grained permission control apart and see how it reads a command
+> - Set up an enterprise security policy a team can actually live with
 
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
 
@@ -79,7 +79,7 @@ These four stages are: validateInput (input validation), hasPermissionsToUseTool
 
 ### 4.1.1 Stage 1: validateInput -- Zod Schema Validation
 
-The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), the parsing will throw an exception and the tool call is rejected outright. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
+The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), parsing throws an exception and the pipeline turns the tool call down before it runs. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
 
 When parsing fails, `toolPermissionResult` retains its default `passthrough` state, which is subsequently converted to `ask` behavior. So when data validation fails the system degrades to asking the user for confirmation instead of crashing outright.
 
@@ -91,7 +91,7 @@ Rule matching is the core of the permission pipeline. The `hasPermissionsToUseTo
 
 **Step 1a: Tool-level deny check.** This is the highest priority. If a tool is denied entirely, the call is immediately rejected.
 
-The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic supports exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
+The `getDenyRuleForTool` function traverses the deny rules from all sources (userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, command, session) and matches them one by one. The matching logic has two paths: exact tool name matching and MCP server-level wildcards -- for example, the rule `mcp__server1__*` can match all tools under that server.
 
 The seven rule sources are ordered by proximity: session-level rules (the most recently set) take priority over command-line arguments, command-line arguments take priority over project configuration, and project configuration takes priority over global user configuration. The more specific and recent a rule, the earlier it sits, so it overrides the general and the old.
 
@@ -168,6 +168,12 @@ sequenceDiagram
 
 > **Best Practice:** In enterprise environments, if you want to reduce the disruption of frequent permission prompts seen by users, three strategies can be combined: (1) Pre-configure allow rules in the project configuration to cover common operations; (2) Use auto mode to let the classifier automatically handle common requests; (3) Configure Hook scripts to implement custom auto-approval logic. These three strategies can be stacked, covering all scenarios from simple to complex.
 
+One tool call passes four gates: shape, rules, context — and only last, a human.
+
+```ill
+ch04-gate-steps
+```
+
 ## 4.2 PermissionContext Design
 
 ### 4.2.1 ToolPermissionContext Type Structure
@@ -198,7 +204,7 @@ Permission decisions (PermissionDecision) come from three sources, each with dif
 
 In permission interactions, multiple asynchronous participants may simultaneously attempt to resolve the same permission request -- the user clicks "allow" at the same moment the classifier returns "pass." The `ResolveOnce` pattern is designed precisely to resolve this race condition. It provides three methods: resolve, isResolved, and claim.
 
-Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other will be rejected. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
+Its implementation uses a `claimed` flag to ensure atomicity. The `claim()` method is key -- it makes the "first come, first served" step atomic. In JavaScript's single-threaded model, `claim()` guarantees that even if two asynchronous callbacks are scheduled nearly simultaneously, only one can successfully claim, and the other gets turned down. This is a lightweight mutex implementation that avoids the overhead of locks commonly seen in distributed systems.
 
 > **Cross-Reference:** The ResolveOnce pattern and the "immutable state flow" principle from Chapter 2 share a common lineage. Both ensure concurrent safety through atomic state changes -- the state is either old or new; there is no "half-new, half-old" intermediate state.
 
@@ -257,7 +263,7 @@ The `auto` mode hands approval to an AI classifier (referred to as the "YOLO cla
 
 Auto mode's core challenge is weighing "automation efficiency" against "security." Pure automatic approval is too dangerous, and pure per-use confirmation is too slow. The AI classifier is a compromise between the two -- it uses another AI to judge whether the current AI's operation is safe, implementing an "AI supervising AI" architecture.
 
-Auto mode implements multiple layers of optimization to reduce the classifier's API call overhead:
+Auto mode stacks several optimizations to cut the classifier's API call overhead:
 
 1. **acceptEdits fast path:** Before calling the classifier, the system first checks under acceptEdits mode whether the tool would be permitted. If it passes under acceptEdits mode, it is approved directly without needing to call the classifier. This is a "short-circuit optimization" -- if it's known to be safe, there's no need to waste an API call.
 
@@ -293,13 +299,58 @@ The `bubble` mode is an internal mode (not exposed externally), used for sub-age
 
 The internal permission mode type includes all modes (including auto and bubble), while the external visibility check function ensures that internal modes are not leaked to external interfaces. This type design that differentiates between internal and external is an embodiment of the "information hiding" principle -- external users do not need to know about the bubble mode's existence; it is an internal implementation detail.
 
+### 4.3.6 Cross-Check: Where `ask` Goes When Nobody Answers
+
+After the four stages, `passthrough` and every call no rule matched settle on `ask` -- and `ask` assumes one thing: a person sitting at the terminal. Move this pipeline into a script and stage 4 hangs in the air. Below, the five other agent CLIs installed on this machine are laid on the same table: version numbers come from local runs, flag semantics from each vendor's own documentation page, and the English inside quotes is original wording, untranslated.
+
+```mermaid
+flowchart LR
+    ASK["Pipeline returns ask<br/>nobody at the terminal"]
+
+    D1["Claude Code -p<br/>denied on the spot<br/>a hook or allow rule can answer"]
+    D2["Qoder -p<br/>Auto-deny<br/>written out in the docs"]
+    D3["Cursor agent -p<br/>downgraded to a proposal<br/>nothing lands on disk"]
+    D4["Codex exec<br/>replaced by a wall<br/>three sandbox tiers"]
+    D5["handed to another AI<br/>Claude auto<br/>Cursor --auto-review<br/>Codex --approve-for-me"]
+    D6["moved into the launch mode<br/>Qoder dont_ask<br/>Kimi -y / --auto<br/>omp --approval-mode"]
+
+    ASK --> D1
+    ASK --> D2
+    ASK --> D3
+    ASK --> D4
+    ASK --> D5
+    ASK --> D6
+
+    classDef reject fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef demote fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef wall fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef delegate fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    class D1 reject
+    class D2 reject
+    class D3 demote
+    class D4 wall
+    class D5 delegate
+    class D6 delegate
+```
+
+- **Claude Code 2.1.310 (this book's baseline)**: `claude -p` starts in Manual mode (since v2.1.302, when nothing else sets a mode), and an `ask` the pipeline produces is denied if nobody answers -- unless `--allowedTools`, a `permissions.allow` rule, a `PermissionRequest` hook, or `--permission-prompt-tool` answered for it first. `--permission-prompts none` (since v2.1.259) skips the host as well and tells the model outright that no one can approve, so it should not retry; under `--output-format stream-json` those refusals stay in the output as `permission_denied` events.
+- **Codex CLI 0.166.0**: `codex exec` carries no approval axis at all -- `-a/--ask-for-approval` (values `on-request`, `never`) exists only on the interactive command. It swaps "who nods" for "which wall the command runs inside": `-s/--sandbox` takes `read-only`, `workspace-write`, or `danger-full-access`; `--approve-for-me` routes approval requests through automatic review; `--dangerously-bypass-approvals-and-sandbox` removes prompts and sandbox together, self-labelled EXTREMELY DANGEROUS and meant only for environments already sandboxed from outside.
+- **Cursor agent 2026.10.22**: `agent -p` without `--force` demotes the write step -- the official headless page says "changes are only proposed, not applied"; the same vendor's permissions page writes "Print mode can use write and shell tools", and those two pages do not line up here -- this section follows the first, because it says what actually happens when `--force` is absent. `--force` describes itself as "Force allow commands unless explicitly denied", and `--yolo` is its alias; `--auto-review` hands the call to a server classifier, which runs the safe ones and still asks about the rest. The rule grammar comes from a different lineage too: five token types -- `Shell(git)`, `Read(.env*)`, `Write(**/*.key)`, `WebFetch(*)`, `Mcp(datadog:*)` -- and "Deny rules take precedence over allow rules".
+- **Qoder CLI 1.1.81**: its documentation pins the landing point in a table -- in headless (`-p`) the outcome of `ask` reads "Auto-deny", and the `dont_ask` mode exists for flows that must never prompt: "Never prompts. Any action that would normally ask is denied instead." Getting anything through means naming a scope: `--permission-mode accept_edits`, `--yolo`, or `--allowed-tools 'Read,Bash(git status)'` down to one subcommand. Non-default modes apply only inside trusted directories; elsewhere Qoder falls back to `default`.
+- **Kimi Code 2.4.1**: the startup gear is the approval axis. `-y/--yolo` starts in Ask When Needed ("routine edits and commands run automatically; risky actions, questions, and plans still ask"), `--auto` starts in Never Ask, and `-p` merely skips the TUI -- it adds no axis of its own.
+- **oh-my-pi 18.15.0**: `--approval-mode` overrides `tools.approvalMode` from config with four values, `always-ask|always-ask-cached|write|yolo`, and `--auto-approve` drops every prompt in one go.
+
+Three threads rise out of this list on their own. First, `ask` never disappears; it gets relocated -- into a sandbox (Codex), into a server classifier (Cursor's `--auto-review`, Codex's `--approve-for-me`, this book's auto mode), into the startup gear (Kimi's two modes, Qoder's `dont_ask`), or down to a proposal that never lands (Cursor's default). Second, not one of the six reads "nobody answers" as "approve by default": even the most aggressive setting only narrows what gets refused and replaces the fallback with isolation. Third, Cursor's "unless explicitly denied" and the `deny` that sits first in Qoder's decision order are the same rule as step 1a -- an explicit deny is the one door in this layer nothing walks past, and six independent designs agree on it.
+
+> **Standing as cross-checks:** these five CLIs are registered in `CREDITS.md` as **cross-checks**, the same standing the other open-source harnesses hold in Chapters 1, 14, and 15 -- they support no technical claim in this chapter and exist to show what the same boundary grows into elsewhere.
+
 ## 4.4 BashTool Permission Details
 
 The Bash tool is the most complex tool in the permission system because the composability and expressiveness of shell commands far exceed those of other tools. A simple `git` command can be safe (`git status`) or dangerous (`git push --force origin main`). The permission system needs to understand the semantics of commands, not merely match command names.
 
 ### 4.4.1 Command Classification and Wildcard Matching
 
-The parsing of permission rule strings is handled by a dedicated function that supports three formats: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
+The parsing of permission rule strings is handled by a dedicated function in two forms: tool name matching without parentheses, and the ToolName(content) format with parentheses (used for specifying tool-level precise command matching).
 
 For the Bash tool, `ruleContent` can be:
 - Exact command: `Bash(npm test)` -- matches only `npm test`
@@ -325,7 +376,7 @@ flowchart LR
     class exact,prefix,wildcard match
 ```
 
-The wildcard matching engine implements full pattern matching, handles escape sequences, converts the `*` wildcard to regular expressions, and supports escaped `\*` and `\\`.
+The wildcard matching engine does pattern matching in full: it handles escape sequences, converts the `*` wildcard to regular expressions, and treats `\*` and `\\` as literals.
 
 One detail: when a pattern ends with ` *` (space plus wildcard) and this is the only wildcard, the trailing space and arguments become optional. The rule `git *` therefore matches both `git add .` and the bare `git` command -- maintaining semantic consistency with the `git:*` prefix. This "equivalent syntax" design reduces users' cognitive burden -- you don't need to remember two different syntax rules; `git:*` and `git *` do the same thing.
 
@@ -349,19 +400,19 @@ The 2-second timeout choice is a deliberate trade-off: too short (e.g., 500ms) m
 
 ### 4.5.1 The PermissionUpdate Pattern
 
-Permission updates are expressed through the `PermissionUpdate` union type, supporting six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
+Permission updates are expressed through the `PermissionUpdate` union type, with six operations: add rule, replace rule, remove rule, set mode, add directory, and remove directory.
 
 Each operation specifies the configuration source to which the update should be applied: global user settings, project-level settings, local (not committed to version control) settings, current session only, or command-line arguments.
 
-The combination of six operations and five configuration sources yields 30 possible update operations. This fine-grained control allows users to manage permissions at different levels -- for example, allowing all `git` commands in global user settings while denying `git push --force` in a specific project's local settings.
+The combination of six operations and five configuration sources yields 30 possible update operations. With control this fine, users can scope permissions source by source -- for example, allowing all `git` commands in global user settings while denying `git push --force` in a specific project's local settings.
 
 ### 4.5.2 applyPermissionUpdates and persistPermissionUpdates
 
 `applyPermissionUpdates` applies updates to the in-memory permission context and takes effect immediately. It iterates through all updates, applies each to the context object, and returns the updated new context.
 
-`applyPermissionUpdate` handles each update type. In the `addRules` case, it adds the rule string to the rule list corresponding to the behavior type (allow/deny/ask) and the corresponding source, producing a new context object through immutable updates.
+`applyPermissionUpdate` handles each update type. In the `addRules` case, it adds the rule string to the rule list for that behavior type (allow/deny/ask) and that source, producing a new context object through immutable updates.
 
-Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensuring they remain in effect after restarts. Only local settings, user settings, and project settings targets support persistence. Session-level and command-line argument-level updates are only effective at runtime.
+Meanwhile, `persistPermissionUpdates` writes updates to the file system, ensuring they remain in effect after restarts. Only local settings, user settings, and project settings persist. Session-level and command-line argument-level updates are only effective at runtime.
 
 The separation design of these two functions is very important: memory application is synchronous and immediate, while file persistence may involve I/O operations. In the user approval handling method of the permission context, the two are called in sequence.
 
@@ -512,4 +563,4 @@ For each scenario, draw the decision path through the four stages of the permiss
 
 8. **Key to Enterprise Security:** In team environments, through the combined configuration of project-level `settings.json` (shared) and local `settings.local.json` (personal), together with the deny-priority rule system, you can build security policies covering everything from individual development to team collaboration.
 
-In Part 2 of this book, we will deeply analyze Claude Code's core subsystems, including the compression strategies of context management, the implementation details of cache-aware design, and the error recovery mechanisms of the streaming architecture. These subsystems together form the engineering infrastructure of the Agent Harness, and understanding their design will help you move from "understanding the architecture" to "being able to build."
+In Part 2 of this book, we will deeply analyze Claude Code's core subsystems, including the compression strategies of context management, the implementation details of cache-aware design, and the error recovery mechanisms of the streaming architecture. These subsystems together form the engineering infrastructure of the Agent Harness, and understanding their design will take you from "I understand the architecture" to "I can build one."

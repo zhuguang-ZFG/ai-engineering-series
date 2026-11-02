@@ -1,22 +1,22 @@
 # Chapter 5: Settings and Configuration -- Agent DNA
 
-> **Learning Objectives:** Understand the merge rules and security boundaries of the six-layer configuration sources, master the compile-time optimization mechanism of the feature flag system, and grasp the design philosophy of the Zustand-like immutable state store. Through this chapter, you will be able to design reasonable configuration strategies for teams of different scales and understand how the configuration system serves as the first line of defense in Agent security.
+> **Learning Objectives:** The order the six configuration layers merge in and where their boundaries sit; how the feature flag system prunes branches it will never take, at compile time; why a Zustand-like immutable store suits configuration. By the end of this chapter you can set a configuration policy for a team of any size, and explain how the configuration system became the first line of defense for Agent security.
 
 ---
 
 Claude Code's behavior is not determined by a single configuration file, but by six layers of configuration sources merged in sequence. These configuration sources are like the Agent's "DNA" -- they are written before the Agent starts, determining what the Agent can do, what it cannot do, and how it does things. Understanding this system is the first step toward mastering Claude Code's behavior customization capabilities.
 
-The analogy of the configuration system as "DNA" is fitting: just as an organism's genes are determined at the moment of fertilization and expressed layer by layer as the organism develops, Claude Code's configuration is loaded at startup and takes effect layer by layer at runtime. The difference is that the Agent's "DNA" can be precisely edited and overridden -- this is both a capability and a risk.
+Calling the configuration system "DNA" fits: fertilization fixes an organism's genes once and for all, and those genes switch on layer by layer as the organism grows. Claude Code loads its configuration at startup and lets it take effect layer by layer at runtime. The difference is that you can edit and override the Agent's "DNA" precisely -- and that is both a capability and a risk.
 
 ## 5.1 The Priority System of Six Configuration Sources
 
 ### 5.1.1 Configuration Source Definition and Order
 
-Claude Code's configuration sources are defined as an ordered array in the configuration constants module, containing five configuration origins: user global settings (userSettings), project shared settings (projectSettings), project local settings (localSettings, gitignored), CLI flag settings (flagSettings), and enterprise policy settings (policySettings).
+The configuration constants module lists Claude Code's configuration sources as one ordered array of five origins: user global settings (userSettings), project shared settings (projectSettings), project local settings (localSettings, gitignored), CLI flag settings (flagSettings), and enterprise policy settings (policySettings).
 
 The configuration loading function `loadSettingsFromDisk()` follows a key principle: **later-loaded sources override earlier ones**. The merge is not a wholesale replacement: it deep-merges by field and layers custom rules on top.
 
-In practice, there is also a hidden lowest-priority layer: **pluginSettings** (plugin settings). In the configuration loading process, plugin settings are loaded first as the base for merging, and subsequent configuration layers are stacked on top of this base.
+In practice a sixth layer hides at the bottom: **pluginSettings** (plugin settings). The loader reads plugin settings first and treats them as the merge base, then stacks every other configuration layer on top.
 
 Therefore, the complete priority chain from low to high is:
 
@@ -69,7 +69,7 @@ flowchart LR
     class example1,example2,example3 example
 ```
 
-The core of the merge logic lies in the custom merge strategy function `settingsMergeCustomizer`: this function concatenates and dedupes array types, while other types are handled by the default deep merge logic.
+The merge logic comes down to one custom strategy function, `settingsMergeCustomizer`: it concatenates and dedupes arrays, and leaves every other type to the default deep merge.
 
 The key characteristics of these rules are:
 
@@ -220,9 +220,9 @@ userSettings      -> Personalized: verbose, theme and other UI preferences
 
 ## 5.2 Security Boundary Design
 
-The core security challenge of the configuration system is: `projectSettings` (`.claude/settings.json`) is committed to Git repositories, which means users who clone a malicious repository may unknowingly load the attacker's configuration. Claude Code's defense strategy is: **systematically exclude `projectSettings` in security-sensitive checks**.
+The configuration system's core security problem is this: `projectSettings` (`.claude/settings.json`) ships inside Git repositories, so anyone who clones a malicious one may load the attacker's configuration without noticing. Claude Code answers it by **leaving `projectSettings` out of every security-sensitive check**.
 
-This is like a building's access control system: project keycards can open meeting rooms and break rooms (projectSettings), but can never open server rooms and secure rooms (security-sensitive operations). Different levels of access are controlled by different trust levels.
+Think of a building's access control: a project keycard opens meeting rooms and break rooms (projectSettings), but never the server room or the vault (security-sensitive operations). Your trust level decides what you may open.
 
 ### 5.2.1 Threat Model of Supply Chain Attacks
 
@@ -248,13 +248,13 @@ Unlike other configuration sources, projectSettings has three unique properties 
 2. **Automatic Loading**: Configuration takes effect automatically upon entering the project directory, without user confirmation
 3. **Executable Code**: Hooks configuration can execute arbitrary shell commands
 
-userSettings and localSettings do not have the first property (they are on the user's own filesystem), flagSettings requires the user to explicitly specify it (does not have the second property), and policySettings is controlled by administrators (does not have the first property). Therefore, projectSettings is the only configuration source that simultaneously possesses all three high-risk properties.
+userSettings and localSettings lack the first property (they sit on the user's own filesystem), flagSettings requires the user to spell it out on the command line (it lacks the second property), and policySettings answers to administrators (it lacks the first property). `projectSettings` is therefore the only configuration source that carries all three high-risk properties at once.
 
 ### 5.2.2 shouldAllowManagedHooksOnly
 
-In the hooks configuration snapshot module, the `shouldAllowManagedHooksOnly` function determines whether only managed hooks are allowed to run. It checks whether `allowManagedHooksOnly` is enabled in the policy settings, returning true if it is.
+In the hooks configuration snapshot module, the `shouldAllowManagedHooksOnly` function decides whether only managed hooks may run. It looks up `allowManagedHooksOnly` in the policy settings and returns true when the flag is on.
 
-When this function returns `true`, hooks execution only uses hooks from `policySettings`; all hooks from user/project/local sources are skipped. This is an enterprise security feature: administrators can ensure that only audited hooks run within the organization.
+When this function returns `true`, hooks execution takes hooks only from `policySettings` and drops every hook from the user, project, and local sources. This is an enterprise security feature: administrators can make sure that only audited hooks run inside the organization.
 
 **Real-World Scenario: Financial Institution Compliance Requirements**
 
@@ -270,9 +270,9 @@ This "managed-only" mode ensures that hooks execution within the organization is
 
 The plugin policy module implements the `strictPluginOnlyCustomization` strategy, which defines four lockable "customization surfaces": skills, agents, hooks, and mcp.
 
-The core judgment function `isRestrictedToPluginOnly` checks the policy configuration: if the policy is `true`, all surfaces are locked; if the policy is an array, only the specified surfaces are locked.
+The core decision function `isRestrictedToPluginOnly` reads the policy configuration: `true` locks every surface, and an array locks only the surfaces it names.
 
-Within locked surfaces, only the following sources are trusted:
+Inside a locked surface, the runner trusts only these sources:
 
 - **plugin** -- separately managed through `strictKnownMarketplaces`
 - **policySettings** -- set by administrators, inherently trusted
@@ -292,7 +292,7 @@ In security-sensitive functions, `projectSettings` is consistently excluded. The
 
 The same exclusion pattern appears in `hasAutoModeOptIn()`, `getUseAutoModeDuringPlan()`, and `getAutoModeConfig()`. The comments consistently point to the same reason: **projectSettings is intentionally excluded -- a malicious project could otherwise auto-bypass the dialog (RCE risk)**.
 
-The assumption behind this defense is: the user's own settings (`userSettings`/`localSettings`) are trusted because they are on the user's filesystem and edited by the user themselves; whereas `projectSettings` may come from cloned third-party repositories, posing a supply chain attack risk.
+This defense rests on an assumption: the user's own settings (`userSettings`/`localSettings`) earn trust because they live on the user's filesystem and only the user edits them, whereas `projectSettings` can arrive from a cloned third-party repository, which is a supply chain attack risk.
 
 **Design Principle Summary: Decreasing Trust Radius**
 
@@ -327,13 +327,13 @@ graph TD
 
 ## 5.3 Feature Flag System
 
-Claude Code's feature flag system is divided into two layers: **compile-time** `feature()` function and **runtime** GrowthBook experimentation framework. This dual-layer design reflects a classic tradeoff in software release engineering: compile-time flags control features without any runtime cost, while runtime flags let you iterate quickly without redeploying.
+Claude Code splits its feature flag system into two layers: the **compile-time** `feature()` function and the **runtime** GrowthBook experimentation framework. This dual-layer design reflects a classic tradeoff in software release engineering: compile-time flags control features at no runtime cost, while runtime flags let you iterate quickly without redeploying.
 
 ### 5.3.1 Compile-Time Dead Code Elimination
 
-The `feature()` function is introduced through the bundler. When `feature('FEATURE_NAME')` returns `false`, the bundler completely removes the corresponding code branch. This is a form of compile-time dead code elimination.
+The bundler injects the `feature()` function. When `feature('FEATURE_NAME')` returns `false`, the bundler drops that code branch outright -- a form of compile-time dead code elimination.
 
-Throughout the codebase, this pattern appears extensively: feature flags determine whether certain functionality code is compiled, and unenabled features are completely absent from the build artifacts.
+The pattern recurs throughout the codebase: feature flags decide whether a piece of functionality gets compiled at all, so a flag you leave off keeps its code out of the build artifacts entirely.
 
 **Why choose compile-time elimination over runtime conditional checks?**
 
@@ -410,7 +410,7 @@ State management is the "nervous system" of an Agent system -- configuration is 
 
 ### 5.4.1 Store: A Minimalist Immutable State Container
 
-The state management module implements a generic Store in just 34 lines, inspired by Zustand. The Store provides three core methods: `getState` retrieves the current state, `setState` updates state through an updater function, and `subscribe` subscribes to state changes.
+The heart of the state management module is a generic Store in just 34 lines, inspired by Zustand. The Store provides three core methods: `getState` retrieves the current state, `setState` updates state through an updater function, and `subscribe` subscribes to state changes.
 
 Three key design decisions:
 
@@ -455,7 +455,7 @@ This design delegates the judgment of "whether a change occurred" to the caller 
 
 ### 5.4.2 AppState: Global State Type Definition
 
-The global state type `AppState` is marked as DeepImmutable, containing over 50 state fields that cover:
+The global state type `AppState` carries a DeepImmutable marker, with more than 50 state fields covering:
 
 - **Settings Layer**: `settings` (merged SettingsJson), `verbose`, `mainLoopModel`
 - **UI Layer**: `expandedView`, `footerSelection`, `statusLineText`
@@ -466,11 +466,11 @@ The global state type `AppState` is marked as DeepImmutable, containing over 50 
 - **Agent Layer**: `agentDefinitions`, `agentNameRegistry`, `teamContext`
 - **Speculative Execution Layer**: `speculation` (idle/active state machine)
 
-The default state is constructed by `getDefaultAppState()`, which loads the merged settings at startup and initializes all subsystems to safe default values.
+`getDefaultAppState()` builds the default state: it loads the merged settings at startup and brings every subsystem up at a safe default value.
 
 **DeepImmutable's Type-Level Guarantee**
 
-`AppState` uses the `DeepImmutable<T>` type marker, which means the TypeScript compiler prevents any attempt to directly modify state fields at compile time. This is a manifestation of the "make the right thing easy and the wrong thing impossible" design philosophy at the type system level.
+`AppState` uses the `DeepImmutable<T>` type marker, which means the TypeScript compiler rejects any attempt to write a state field directly at compile time. Here the type system itself enforces the "make the right thing easy and the wrong thing impossible" design philosophy.
 
 The categorization of state fields maps to the architectural layers of the Agent system:
 
@@ -494,7 +494,7 @@ graph TD
 
 ### 5.4.3 AppStateProvider: React Context Wrapper
 
-`AppStateProvider` wraps the Store as a React Context. The Store is created only once (through `useState` lazy initialization), and the Provider itself does not re-render due to state changes. Consumers access state through two hooks:
+`AppStateProvider` wraps the Store as a React Context. `useState` lazy initialization creates the Store once, and state changes never re-render the Provider itself. Consumers reach state through two hooks:
 
 - **`useAppState(selector)`**: Uses `useSyncExternalStore` to subscribe to a state slice. It only triggers a re-render when the selector's return value changes by `Object.is`. This is a fine-grained subscription mechanism that avoids the problem of "subscribing to the entire state tree causing the entire component tree to re-render."
 - **`useSetAppState()`**: Only retrieves the `setState` function without subscribing to any state. The returned reference never changes, so components using this hook do not re-render due to state changes.
@@ -509,7 +509,7 @@ Claude Code chose React 18's `useSyncExternalStore` over a custom subscription i
 2. **Batched Updates**: Multiple `setState` calls trigger only one re-render
 3. **Server Compatibility**: Supports SSR snapshot mode
 
-For an Agent system where state changes may trigger side effects like tool calls and file operations, consistency guarantees are particularly important. Imagine: if permission state changed halfway through a render, one component might think permission was granted while another thinks it wasn't, producing contradictory behavior.
+An Agent system can turn a state change into side effects such as tool calls and file operations, so consistency guarantees matter more here than in most systems. Picture a permission state that flips halfway through a render: one component reads it as granted while another reads it as denied, and the two then behave in contradiction.
 
 **Performance Optimization Pattern Comparison**
 
@@ -585,7 +585,7 @@ Design a configuration strategy for a 20-person development team with the follow
 - Each developer can customize UI preferences and local permission extensions
 - The CI/CD environment follows the principle of least privilege
 
-Specify what content should be placed in each configuration source and explain why.
+Say what content belongs in each configuration source, and explain why.
 
 ---
 
@@ -596,5 +596,5 @@ Specify what content should be placed in each configuration source and explain w
 3. **Security Boundaries**: `projectSettings` is excluded in all security-sensitive checks to prevent supply chain attacks from malicious repositories. This is a direct manifestation of the "decreasing trust radius" principle.
 4. **Special Merge for the Policy Layer**: policySettings uses "first non-empty source wins" instead of deep merge, ensuring the determinism and auditability of enterprise policies.
 5. **Dual Feature Flags**: `feature()` provides compile-time dead code elimination (zero runtime overhead), while GrowthBook provides runtime experiment control (flexible but cache-dependent). The choice between the two depends on whether the feature needs to be dynamically adjusted after release.
-6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code implement all necessary state management capabilities.
-7. **DeepImmutable Types**: Prevents direct state modification at the type system level, making the right thing easy and the wrong thing impossible.
+6. **Immutable State**: The Store uses `Object.is` reference comparison to enforce immutable update patterns, combined with React's `useSyncExternalStore` for fine-grained subscription rendering. 34 lines of code cover everything state management needs.
+7. **DeepImmutable Types**: Makes the type system refuse direct state modification, keeping the right thing easy and the wrong thing impossible.

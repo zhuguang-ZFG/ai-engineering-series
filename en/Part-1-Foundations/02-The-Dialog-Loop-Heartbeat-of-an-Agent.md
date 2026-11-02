@@ -3,13 +3,13 @@
 > "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
 > -- Augustine of Hippo
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Deeply understand the async-generator-driven dialog main loop mechanism
-- Master the complete state transition model of Agent-model interaction
-- Understand the design principles of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact)
-- Analyze the trigger conditions and recovery strategies for seven Continue paths
-- Evaluate the impact of the dependency injection pattern on test maintainability
+- Explain why the main loop is an async generator rather than a function that runs to completion
+- Trace the state that moves back and forth between Agent and model, turn after turn
+- Say what each stage of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact) holds back
+- Name the seven Continue paths, what sets each one off, and how the loop picks up again
+- Judge whether dependency injection makes this loop easier to test or harder to read
 
 ---
 
@@ -126,7 +126,7 @@ classDiagram
     TombstoneMessage : Marks message as "invalidated"
 ```
 
-- **UserMessage**: The user's input message, which also carries tool execution results (tool_result). From the API's perspective, tool results are always sent with the user role. This design may seem counterintuitive -- why are tool results in the "user" role? The reason is that at the API protocol level there are only three roles (system/user/assistant), and tool results need to be "seen" by the model, so they must be sent in the user role. This is a classic case of an engineering constraint driving a design decision.
+- **UserMessage**: The user's input message, which also carries tool execution results (tool_result). From the API's perspective, tool results are always sent with the user role. This design may seem counterintuitive -- why are tool results in the "user" role? The reason is that the API protocol knows only three roles (system/user/assistant), and tool results need to be "seen" by the model, so they must be sent in the user role. This is a classic case of an engineering constraint driving a design decision.
 - **AssistantMessage**: The message returned by the model, which may contain text blocks and tool_use blocks. When the model detects that a tool needs to be called, the response will include a content block with `type: 'tool_use'`. A key characteristic of AssistantMessage is that it may simultaneously contain text and tool calls -- the model might first output an explanation ("Let me check your package.json file"), then append a tool call. This "talking while doing" pattern makes the Agent's behavior more transparent.
 - **SystemMessage**: System-level notifications, such as permission changes, model fallback prompts, and so on. Does not participate in API communication; only displayed in the UI. SystemMessage is the "fourth wall" -- it doesn't participate in the model conversation but tells the user what's happening inside the system.
 - **AttachmentMessage**: Attachment messages carrying file change notifications, memory file (CLAUDE.md) contents, task notifications, and other supplementary information.
@@ -287,6 +287,12 @@ flowchart TD
 
 For abnormal termination, the system cleans up before returning the terminal state: cancelling tools in execution, releasing resource references, logging the termination reason. Do that and even an abnormal exit leaves no "dirty" state behind.
 
+A turn runs on four beats: ask, the model picks a tool, the tool runs, the result goes back in and the loop asks again.
+
+```ill
+ch02-turn-loop
+```
+
 ---
 
 ## 2.3 Dependency Injection and Testability
@@ -442,4 +448,4 @@ Send Claude Code a series of requests that require substantial context (such as 
 
 5. **Termination is not failure, it is design**: Ten termination reasons each have their trigger conditions and cleanup logic. Understanding these termination paths is key to understanding the entire loop's robustness. In production-grade Agent systems, incorrect termination handling is more dangerous than incorrect normal flow -- because it can lead to resource leaks, state inconsistency, or user data loss.
 
-In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent evolved from "only being able to talk" to "being able to do things."
+In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent stopped being only a voice and started getting things done.

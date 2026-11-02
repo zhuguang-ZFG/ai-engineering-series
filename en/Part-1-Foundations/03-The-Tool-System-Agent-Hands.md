@@ -3,13 +3,13 @@
 > "If all you have is a hammer, everything looks like a nail."
 > -- Abraham Maslow
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Master the design patterns of Claude Code's 55 registered tools and understand the design philosophy of the five-element protocol
-- Understand the complete architecture of the tool definition protocol, registration mechanism, and orchestration engine
-- Analyze the scheduling principles and practical effects of concurrency partitioning strategies
-- Understand how the StreamingToolExecutor four-stage state machine works
-- Evaluate the engineering value of the deferred tool discovery mechanism
+- See the design pattern the 55 registered tools share, and why the protocol needs exactly five elements
+- Follow a tool from definition through registration to orchestration
+- Explain how concurrency partitioning orders the queue, and how much waiting it actually saves
+- Name what each of the four StreamingToolExecutor stages holds back
+- Judge whether deferred tool discovery pays for the extra indirection
 
 ---
 
@@ -17,9 +17,9 @@ Maslow's quote could not be more fitting when applied to Agent tool systems. If 
 
 ## 3.1 The Tool Definition Protocol
 
-Every tool in Claude Code follows a unified type contract -- `Tool<Input, Output, Progress>`. This contract is defined in the tool type core module and serves as the cornerstone of the entire tool system. Understanding it means understanding the anatomical structure of the Agent's "hands."
+Every tool in Claude Code follows a unified type contract -- `Tool<Input, Output, Progress>`. The tool type core module defines this contract as the cornerstone of the entire tool system. Understanding it means understanding the anatomical structure of the Agent's "hands."
 
-The design philosophy of this protocol can be summarized as "interface as architecture": through the definition of strict type interfaces, all architectural constraints of the tool system -- permission checks, concurrency control, progress reporting, UI rendering -- are enforced by the compiler. Developers cannot "forget" to implement a method, because the type checker will immediately raise an error.
+The design philosophy of this protocol can be summarized as "interface as architecture": strict type interfaces let the compiler police every architectural constraint of the tool system -- permission checks, concurrency control, progress reporting, UI rendering. Developers cannot "forget" to implement a method, because the type checker will immediately raise an error.
 
 ### Core Types: Tool, Tools, ToolDef, buildTool
 
@@ -29,7 +29,7 @@ The `Tool` type is a generic interface that accepts three type parameters:
 - `Output`: The tool's output type, freely defined.
 - `P extends ToolProgressData`: The tool's progress data type, used for streaming feedback.
 
-The separation of the three generic parameters is a deliberate design decision. If input and output types were merged into one, the tool's signature would become harder to read; if the progress type were omitted, the tool could not report progress while it runs. Separating the three gives each concern its own type space, and the compiler can check them independently.
+The separation of the three generic parameters is a deliberate design decision. Merge input and output into one type and the tool's signature gets harder to read; drop the progress type and the tool cannot report progress while it runs. Separating the three gives each concern its own type space, and the compiler can check them independently.
 
 The five elements that every tool must implement are as follows:
 
@@ -51,7 +51,7 @@ flowchart TD
 
 **Element 1: Name and Aliases**
 
-Each tool has a unique name identifier, along with optional aliases for backward compatibility. When a tool is renamed, the old name can continue to match through an alias. The tool lookup function checks both the primary name and aliases.
+Each tool has a unique name identifier, along with optional aliases for backward compatibility. Rename a tool and the old name keeps matching through an alias. The tool lookup function checks both the primary name and aliases.
 
 The existence of the alias mechanism reveals an engineering practice principle: **in public APIs, renaming is an "add-only" operation.** Even when a tool's name is no longer accurate (e.g., renaming from `SearchTool` to `GrepTool`), the old name must remain available through an alias, otherwise configurations, scripts, and user habits that depend on the old name would all break.
 
@@ -101,13 +101,19 @@ The coverage of these six rendering methods is noteworthy: it spans the entire "
 
 This design philosophy can be understood through an analogy: in airport security, the default assumption is that all luggage needs to be inspected (fail-closed), and only specially certified passengers (such as diplomats) can use the fast track. If it were the other way around -- defaulting to pass-through and only intercepting when problems are found (fail-open) -- then any missed check could cause a security incident.
 
-The type system, through type computation, allows developers to provide only the necessary fields, while the factory function's return type guarantees a complete tool interface. If a developer provides a particular method in the definition, the type system uses the developer-provided signature; if omitted, the default signature is used. This "optional override, safe default" pattern is highly effective in engineering practice -- simple tools need only a few lines of code, while complex tools can be fully customized.
+The type system, through type computation, allows developers to provide only the necessary fields, while the factory function's return type guarantees a complete tool interface. If a developer provides a particular method in the definition, the type system uses the developer-provided signature; leave one out and it falls back to the default signature. This "optional override, safe default" pattern is highly effective in engineering practice -- simple tools need only a few lines of code, while complex tools can be fully customized.
 
 ---
 
 ## 3.2 Tool Registration and Dynamic Discovery
 
 ### getAllBaseTools() -- The Complete Tool Inventory
+
+Think of the built-in tools as one workbench: every tool on the wall does exactly one job.
+
+```ill
+ch03-tool-bench
+```
 
 `getAllBaseTools()` is the registration center for all built-in tools. It returns a flat array containing all available tools in Claude Code. Through this function, we can enumerate the core tool inventory and categorize them by function:
 
@@ -133,11 +139,11 @@ The type system, through type computation, allows developers to provide only the
 
 ### Dead Code Elimination in Tool Registration
 
-Claude Code's tool registration leans heavily on conditional imports to eliminate dead code at compile time. When specific conditions are not met, the entire module for the corresponding tool is not included in the final build. The same applies to tools controlled by feature flags.
+Claude Code's tool registration leans heavily on conditional imports to eliminate dead code at compile time. When specific conditions are not met, that tool's whole module never reaches the final build. The same applies to tools controlled by feature flags.
 
-Feature flags come from the build toolchain and are evaluated by the bundler at compile time. When a feature flag is off, the corresponding tool implementation code is removed by tree-shaking. External builds (for third-party users) carry no internal tool code.
+The build toolchain hands feature flags to the bundler, which evaluates them at compile time. Turn a flag off and tree-shaking drops the tool's implementation code. External builds (for third-party users) carry no internal tool code.
 
-This design has significant security implications: if internal tools (such as REPL tools, debugging tools) were included in external builds, even if they were unavailable, they could leak internal architecture information. Dead code elimination eliminates this information leakage risk at the source.
+This design has significant security implications: put internal tools (REPL tools, debugging tools) into an external build and they could leak internal architecture information even when nothing can call them. Dead code elimination eliminates this information leakage risk at the source.
 
 In the tool registration function, conditional registration uses the spread operator, deciding whether to include specific tools based on the runtime environment and feature flags.
 
@@ -145,9 +151,9 @@ In the tool registration function, conditional registration uses the spread oper
 
 When the number of tools exceeds a certain threshold, Claude Code enables deferred tool discovery. The core idea is: instead of sending the complete schema of all tools in the initial system prompt, send only the tool name list and let the model load detailed schemas on demand through ToolSearchTool.
 
-To understand this with an analogy: the traditional approach is like placing the entire encyclopedia in front of the model -- even though most of the content won't be used in the current conversation. Deferred discovery is like giving the model a table of contents index -- the model knows which tools are available and only opens the corresponding page to view detailed parameters when needed.
+To understand this with an analogy: the traditional approach is like placing the entire encyclopedia in front of the model -- even though most of the content won't be used in the current conversation. Deferred discovery is like giving the model a table of contents index -- the model knows which tools are available and opens only the page it needs to see the detailed parameters.
 
-ToolSearchTool's implementation follows the standard factory function pattern. The logic for determining whether a tool should be deferred is: tools explicitly marked as always-loaded are not deferred, MCP tools are always deferred, and the tool search tool itself is not deferred.
+ToolSearchTool's implementation follows the standard factory function pattern. The deferral rule reads: mark a tool always-loaded and it never defers; MCP tools always defer; and the tool search tool never defers itself.
 
 The core value of this mechanism is saving prompt space: when MCP servers register dozens of tools, sending all of them to the API consumes a large number of tokens. Deferred discovery allows the model to load complete tool schemas only when needed, significantly reducing the initial prompt size.
 
@@ -155,7 +161,7 @@ The core value of this mechanism is saving prompt space: when MCP servers regist
 
 ### Tool Filtering Pipeline
 
-From `getAllBaseTools()` to the final list of tools sent to the API, multiple layers of filtering are applied:
+From `getAllBaseTools()` to the final list of tools sent to the API, the candidates run through several filters:
 
 ```mermaid
 flowchart LR
@@ -224,7 +230,7 @@ FileEditTool's `isDestructive` method determines whether an edit is a destructiv
 
 **FileWriteTool** is responsible for creating or completely overwriting files. This is the "heaviest" file operation with the strictest permission checks. The difference between FileWriteTool and FileEditTool lies in scope -- Edit only modifies specific fragments within a file, while Write can completely overwrite file contents. Therefore, Write has higher permission check standards.
 
-All three tools support `contextModifier`, which updates the file state cache after execution, so later tool calls and memory attachment injections see the latest state.
+All three tools carry a `contextModifier`, which updates the file state cache after execution, so later tool calls and memory attachment injections see the latest state.
 
 ```mermaid
 flowchart LR
@@ -249,13 +255,13 @@ flowchart LR
 
 **GrepTool** uses regular expressions to search file contents, powered by `ripgrep` under the hood. It supports multiple output modes (filenames, content lines, counts) and rich filtering options (file types, glob patterns, etc.).
 
-Neither search is handed to BashTool. BashTool can get close with `find` and `grep`, but a dedicated search tool has several advantages:
+BashTool gets neither search. BashTool can get close with `find` and `grep`, but a dedicated search tool has several advantages:
 
 1. **Structured output**: Search tools return structured result lists rather than the text output of Shell commands. The model can parse structured data more accurately.
 2. **Permission control**: Search tools are read-only by default, with more lenient permission checks. If every search had to go through BashTool, users would face more permission confirmation prompts.
 3. **Performance optimization**: Dedicated search tools can be optimized for specific scenarios (e.g., limiting result counts, parallel searching), while Shell commands have limited room for optimization.
 
-When Ant native builds embed dedicated fast search tools, GlobTool and GrepTool are disabled because the `find` and `grep` commands in the Shell have been aliased to these fast tools, and BashTool can use them directly.
+When Ant native builds embed dedicated fast search tools, Claude Code switches GlobTool and GrepTool off, because the Shell's `find` and `grep` now alias to those fast tools and BashTool can call them directly.
 
 ### AgentTool: The Sub-Agent Entry Point
 
@@ -272,13 +278,13 @@ AgentTool has several special properties within the tool system:
 
 ## 3.4 The Tool Orchestration Engine
 
-The tool orchestration engine is the "command center" of the tool system -- it determines how multiple tool calls are scheduled, executed, and their results collected. A good orchestration engine must balance three objectives: **parallelism** (execute in parallel as much as possible to improve speed), **safety** (avoid data races caused by concurrent execution), and **ordering** (ensure that results are produced in the same order as requests).
+The tool orchestration engine is the "command center" of the tool system -- it decides how several tool calls line up, run, and hand their results back. A good orchestration engine must balance three objectives: **parallelism** (execute in parallel as much as possible to improve speed), **safety** (avoid data races caused by concurrent execution), and **ordering** (ensure that results are produced in the same order as requests).
 
 ### The runTools() Function and Concurrency Partitioning
 
 The core logic of tool orchestration resides in the tool orchestration module. The `runTools` function is an async generator responsible for scheduling the execution of a batch of tool calls.
 
-Its scheduling strategy is based on **concurrency partitioning**:
+It schedules by **concurrency partitioning**:
 
 1. First, all tool calls are sequentially divided into batches.
 2. Each batch is either a group of consecutive concurrency-safe tools, or a single unsafe tool.
@@ -287,7 +293,11 @@ Its scheduling strategy is based on **concurrency partitioning**:
 
 The core logic of the partitioning algorithm: iterate through all tool calls, checking each tool's concurrency safety property. If the current tool is safe and the previous batch is also safe, merge into the same batch; otherwise, start a new batch.
 
-This algorithm can be compared to an assembly line: imagine a factory with multiple workstations. Some processes are independent (like simultaneously inspecting the quality of multiple parts) and can proceed in parallel; other processes must strictly follow sequence (like assembly before testing) and cannot be skipped. The concurrency partitioning algorithm is the scheduler that automatically identifies which processes can be parallelized and which must be serialized.
+Picture an assembly line: a factory with several workstations. Some processes are independent (like simultaneously inspecting the quality of multiple parts) and can proceed in parallel; other processes must strictly follow sequence (like assembly before testing) and cannot be skipped. The concurrency partitioning algorithm is the scheduler that automatically identifies which processes can be parallelized and which must be serialized. The strip below runs it frame by frame: the calls line up, the line splits by safety, the safe batch works at once, and the results come back in the order they were asked for.
+
+```ill
+ch03-tool-pipeline
+```
 
 For example, if the model requests four tool calls: `[Read(a.ts), Read(b.ts), Bash(ls), Read(c.ts)]`, the partitioning result is:
 
@@ -336,13 +346,13 @@ flowchart LR
     class batch1,batch2,batch3 batch
 ```
 
-The concurrency limit for parallel execution is controlled by an environment variable, defaulting to 10.
+An environment variable sets the concurrency limit, which defaults to 10.
 
 > **Design Insight:** Why can't Read(c.ts) be placed in the same batch as Bash(ls)? Because Bash commands may have side effects -- they might create new files, modify file contents, or change directory structures. If files are read while Bash is executing, Read might get either the old data from before execution or the new data from after execution, leading to unpredictable behavior. Serial execution ensures that Read(c.ts) sees the deterministic state after Bash(ls) has completed.
 
 ### StreamingToolExecutor Streaming Execution
 
-`StreamingToolExecutor` is an enhanced version of `runTools` that does not wait for the model's response to fully complete before starting tool execution -- instead, it immediately initiates execution as tool call blocks are received in the stream.
+`StreamingToolExecutor` is an enhanced version of `runTools` that does not wait for the model's response to fully complete before starting tool execution -- instead, it immediately initiates execution as each tool call block arrives in the stream.
 
 The impact of this design is significant. Suppose the model requests five tool calls in one response, and each tool takes 1 second to execute. In the traditional mode, the model takes 2 seconds to generate the complete response (streaming output time), then batch tool execution takes 5 seconds, for a total of 7 seconds. In streaming execution mode, the first tool starts executing about 0.4 seconds after the model begins outputting (the time to generate the first tool_use block), and subsequent tools start one after another, for a total of about 3 seconds -- a speed improvement of over 50%.
 
@@ -385,7 +395,7 @@ Key design decisions of StreamingToolExecutor:
 
 Returning to the dialog main loop, tool execution state is tightly integrated with the dialog loop state:
 
-1. **Streaming execution path**: When the streaming tool execution feature is enabled, a StreamingToolExecutor is created. While receiving tool call blocks in the stream, tools are immediately added to the execution queue, and the system checks whether any completed results can be immediately yielded. This implements a "receive-while-executing" pipeline pattern.
+1. **Streaming execution path**: When the streaming tool execution feature is enabled, a StreamingToolExecutor is created. While receiving tool call blocks in the stream, tools are immediately added to the execution queue, and the system checks whether any completed results can be immediately yielded. This is a "receive-while-executing" pipeline.
 
 2. **Batch execution path**: When streaming execution is unavailable, the traditional batch execution function is used to execute all tools after the model's response has fully completed. This is the fallback for streaming execution, ensuring the system can still work normally when streaming functionality is disabled or encounters errors.
 
@@ -452,8 +462,8 @@ Record the input token count difference in both cases, and calculate how many to
 
 3. **Concurrency partitioning is key to performance**: The `isConcurrencySafe` determination decides whether tools can execute in parallel. Correctly marking read-only tools as concurrency-safe allows the Agent to simultaneously execute multiple search/read operations in a single turn, dramatically reducing response time. But the cost of incorrect marking is data races and unpredictable behavior -- this is a design decision that requires careful consideration.
 
-4. **StreamingToolExecutor is a zero-wait tool scheduler**: It starts executing tools while the model is still generating tool_use blocks, and a four-stage state machine plus ordering guarantees let it run tools in parallel without losing order. It is where the "async streaming first" design principle lands at the tool system level.
+4. **StreamingToolExecutor is a zero-wait tool scheduler**: It starts executing tools while the model is still generating tool_use blocks, and a four-stage state machine plus ordering guarantees let it run tools in parallel without losing order. It is where the "async streaming first" design principle lands in the tool system.
 
-5. **Tool system extensibility comes from the type contract**: The generic design of `Tool<Input, Output, Progress>` gives each tool its own type space, while `ToolUseContext` provides a unified execution environment. Adding new tools requires no modifications to the orchestration engine's code -- this is exactly the realization of the "progressive capability extension" principle mentioned in Chapter 1 at the tool level.
+5. **Tool system extensibility comes from the type contract**: The generic design of `Tool<Input, Output, Progress>` gives each tool its own type space, while `ToolUseContext` provides a unified execution environment. Adding new tools requires no modifications to the orchestration engine's code -- the "progressive capability extension" principle from Chapter 1 pays off right here.
 
-In the next chapter, we will dive into the Agent's safety guardrails -- the permission pipeline. The tool system gives the Agent the ability to act; the permission pipeline defines where those actions stop. Understanding the design of the permission pipeline, you will see how Claude Code walks the line between "autonomous execution" and "safety assurance."
+In the next chapter, we will dive into the Agent's safety guardrails -- the permission pipeline. The tool system lets the Agent act; the permission pipeline defines where those actions stop. Understanding the design of the permission pipeline, you will see how Claude Code walks the line between "autonomous execution" and "safety assurance."

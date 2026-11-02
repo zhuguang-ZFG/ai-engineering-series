@@ -18,7 +18,7 @@ from markdown.extensions.codehilite import CodeHiliteExtension
 
 from .core import BuildError, Unit
 from .style import ink_mark, knot
-from . import pages, plain
+from . import art, mermaid, pages, plain
 
 # ------------------------------------------------------------ callouts ----
 
@@ -255,7 +255,13 @@ def stamp_code_langs(doc: str, langs: list[str], file: str) -> str:
 
 # -------------------------------------------------------------- mermaid ---
 
-_MM_PH_RE = re.compile(r"<p>@@MM:([0-9a-f]{12})@@</p>|@@MM:([0-9a-f]{12})@@")
+# one pass over both kinds of plate, so a drawing that sits above a diagram
+# cannot inherit the diagram's number
+_PLATE_PH_RE = re.compile(
+    r"<p>@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@</p>"
+    r"|@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@")
+ART_REF = "illustrations/"
+_IMG_TAG_RE = re.compile(r'<img\b([^>]*?)src="([^"]+)"([^>]*?)(/?)>')
 
 # Mermaid lays a plate out in its own units and draws its labels at 13px,
 # so a 1500-unit map inside the 635px reading column drops those labels to
@@ -373,6 +379,54 @@ def mermaid_figure(uid: str, svg: str, fig_no: str, caption: str,
             f'<div class="diagram-frame">{svg}</div>'
             f'<figcaption><span class="fig-no">{cap_word} {fig_no}</span>'
             f'<span class="fig-cap">{caption}</span>{hint}</figcaption></figure>')
+
+
+def drawing_slots(unit: Unit) -> dict[str, tuple[str, str]]:
+    """The drawing each `ill` slot asks for, and the caption it earns.
+
+    A plate borrows its caption from the section above it, the same rule a
+    Mermaid plate follows, so the prose names a picture without describing it.
+    """
+    caps = mermaid.captions_for(unit.md, unit.ills,
+                                fallback=pages.ui("plate_fallback", unit.lang))
+    return {b.uid: (b.name, caps.get(b.uid, "")) for b in unit.ills}
+
+
+def illu_figure(uid: str, svg: str, fig_no: str, caption: str,
+                lang: str, kind: str = "line") -> str:
+    """A hand-drawn plate inside the prose column.
+
+    It borrows the diagram's caption furniture so the two read as one series,
+    but not its scroll: a drawing is meant to be looked at, not scrolled
+    sideways."""
+    cap_word = "图" if lang == "zh" else "Figure"
+    hint = (f'<span class="fig-hint">{pages.ui("plate_motion", lang)}</span>'
+            if kind == "seq" else "")
+    return (f'<figure class="illu illu-{kind}" id="fig-{uid}">'
+            f'<div class="illu-frame">{svg}</div>'
+            f'<figcaption><span class="fig-no">{cap_word} {fig_no}</span>'
+            f'<span class="fig-cap">{caption}</span>{hint}</figcaption></figure>')
+
+
+def inline_images(doc: str, file: str) -> str:
+    """Rewrite a photograph's src to a data URI, or say why it cannot.
+
+    The audit counts any `<img>` whose src is not `data:` as a hole in the
+    offline guarantee, so failing here is the friendly version of a red build
+    on someone's plane.
+    """
+    def repl(m):
+        src = m.group(2)
+        if src.startswith("data:"):
+            return m.group(0)
+        if not src.startswith(ART_REF):
+            raise BuildError(
+                f"{file}: <img src=\"{src}\"> reaches outside the book — a "
+                "photograph belongs in illustrations/ so it can travel inside "
+                "the single file")
+        return (f'<img{m.group(1)}src="{art.photo(src[len(ART_REF):])}"'
+                f'{m.group(3)}>')
+    return _IMG_TAG_RE.sub(repl, doc)
 
 
 # ------------------------------------------------------------ autolink --
@@ -573,14 +627,30 @@ def render_unit(unit: Unit, mapping: dict[str, str], *,
             return f"{fig_seq[0]}"
         return f"{apx_letter}{fig_seq[0]}"
 
-    def mm_repl(m):
-        uid = m.group(1) or m.group(2)
+    slots = drawing_slots(unit)
+
+    def plate_repl(m):
+        kind, uid = (m.group(1) or m.group(2)).split(":", 1)
+        if kind == "ILL":
+            entry = slots.get(uid)
+            if entry is None:
+                raise BuildError(
+                    f"{unit.path}: an @@ILL:{uid}@@ placeholder with no "
+                    "ill fence behind it")
+            name, caption = entry
+            svg = art.drawing(name)
+            # a plate declares itself sequential by carrying the `seq` class on
+            # its root, so the prose never has to say how to animate it
+            art_kind = "seq" if art.SEQ_ROOT.search(svg) else "line"
+            return illu_figure(uid, svg, fig_no(), caption, unit.lang,
+                               art_kind)
         entry = diagrams.get(uid)
         if entry is None:
             return f'<div class="mermaid-missing">缺失图 {uid}</div>'
         caption, svg = entry
         return mermaid_figure(uid, svg, fig_no(), caption, unit.lang)
-    doc = _MM_PH_RE.sub(mm_repl, doc)
+    doc = _PLATE_PH_RE.sub(plate_repl, doc)
+    doc = inline_images(doc, unit.path)
 
     doc = prefix_ids(doc, unit.id)
     if autolink:

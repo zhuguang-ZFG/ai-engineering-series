@@ -174,8 +174,8 @@
   "evidence": [
    "00-前言.md:129",
    "第一部分-基础篇/01-智能体编程的新范式.md:317",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:314",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:314"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:320",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:320"
   ],
   "analogy": {
    "zh": "下水道堵了，得有人去把水龙头拧小",
@@ -186,8 +186,8 @@
    "en": "Nothing more is produced until the consumer takes the last item; otherwise a flood of tool output piles up in memory and the whole program crashes."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:314",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:314"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:320",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:320"
   ]
  },
  "producer-consumer": {
@@ -276,9 +276,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:221",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:227",
    "附录/D-术语表.md:222",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:221"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:227"
   ],
   "analogy": {
    "zh": "电梯按钮按一次和按十次，都只来一趟",
@@ -289,8 +289,8 @@
    "en": "The edit finds its target by content rather than by line number, so even if the file changed elsewhere it still lands right, as long as that text survives."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:221",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:221"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:227",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:227"
   ]
  },
  "serialization": {
@@ -352,8 +352,8 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:328",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:342",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:334",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:348",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:220"
   ],
   "analogy": {
@@ -365,8 +365,8 @@
    "en": "Tools start before the reply finishes, and the fixed stages hold them in line, so the run gains speed without scrambling the results."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:455",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:455"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:465",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:465"
   ]
  },
  "dependency-injection": {
@@ -389,7 +389,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:292",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:298",
    "第一部分-基础篇/01-智能体编程的新范式.md:255",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:12"
   ],
@@ -419,9 +419,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:304",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:418",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:302"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:310",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:424",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:308"
   ],
   "analogy": {
    "zh": "演习时请人扮客户，照台词问答，不是真买家",
@@ -432,8 +432,8 @@
    "en": "Fakes come in through the interface instead of per-module spies: rename or move a module and a pile of tests needn't change, cached state can't leak between them."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:304",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:304"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:310",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:310"
   ]
  },
  "singleton": {
@@ -599,7 +599,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:61",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:193",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:199",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:61"
   ],
   "analogy": {
@@ -626,9 +626,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:312",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:318",
    "第三部分-高级模式篇/12-MCP集成与外部协议.md:956",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:312"
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:318"
   ],
   "analogy": {
    "zh": "店员随身带自己那串仓库钥匙，别的柜台借不到",
@@ -639,8 +639,8 @@
    "en": "Each conversation builds its own private box of state; done with a class instead, concurrent dialogs would tread on one shared set of properties."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:312",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:312"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:318",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:318"
   ]
  },
  "promise": {
@@ -741,7 +741,7 @@
   "priority": "core",
   "evidence": [
    "00-前言.md:129",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
    "en/00-Foreword.md:129"
   ],
   "analogy": {
@@ -753,8 +753,8 @@
    "en": "Closing the loop only stops the reading; pending requests and child processes keep going, so the stop signal must travel down every layer to wrap up."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ]
  },
  "abort-controller": {
@@ -777,10 +777,10 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:382",
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:685",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:392",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:689",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ],
   "analogy": {
    "zh": "车间的急停按钮，每台机器动手前都先看一眼",
@@ -791,8 +791,8 @@
    "en": "A generator cannot interrupt a pending wait or cancel outside I/O; tools, APIs and subprocesses must check a signal themselves for a stop to stick."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ]
  },
  "immutable-state": {
@@ -854,8 +854,8 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:229",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:441",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:441"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:447",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:447"
   ],
   "analogy": {
    "zh": "只是去问个路，顺手把人家的花盆碰倒了",
@@ -933,8 +933,8 @@
    "en": "Bunching reads and searches into one turn saves real waiting; let a side-effecting tool join the batch and they race, producing behavior nobody can predict."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:453",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:453"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:463",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:463"
   ]
  },
  "circuit-breaker": {
@@ -960,7 +960,7 @@
   "priority": "core",
   "evidence": [
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:106",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:266",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:272",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:6"
   ],
   "analogy": {
@@ -1100,9 +1100,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:134",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:136",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:136"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:140",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:142",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:142"
   ],
   "analogy": {
    "zh": "搬家时从没穿过的衣服不进箱，箱子小一半",
@@ -1128,9 +1128,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:138",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:144",
    "第四部分-工程实践篇/13-流式架构与性能优化.md:363",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:138"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:144"
   ],
   "analogy": {
    "zh": "装箱前把没贴标签的配件全抖回货架，箱里只剩要用的",
@@ -1247,9 +1247,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:250",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:328",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:250"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:256",
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:379",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:256"
   ],
   "analogy": {
    "zh": "门卫只认“两位字母加四位数字”，照格式放车",
@@ -1313,9 +1313,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:244",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:250",
    "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:586",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:244"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:250"
   ],
   "analogy": {
    "zh": "保洁的工牌只开储物间，开不了金库",
@@ -1326,8 +1326,8 @@
    "en": "Grant only the ability a step needs: editing one line is faster and less error-prone than rewriting the whole file, so tightening rights also trims mistakes."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:244",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:244"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:250",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:250"
   ]
  },
  "separation-of-concerns": {
@@ -1840,8 +1840,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:465",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:466"
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:469",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:470"
   ],
   "analogy": {
    "zh": "两辆车在独木桥两头互不相让，谁都动不了",
@@ -1869,7 +1869,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:200",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:204",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:210",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:200"
   ],
   "analogy": {
@@ -1897,7 +1897,7 @@
   "priority": "extra",
   "evidence": [
    "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:106",
-   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:472",
+   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:484",
    "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:106"
   ],
   "analogy": {
@@ -1928,7 +1928,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:991",
+   "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:997",
    "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:280",
    "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:280"
   ],
@@ -2074,9 +2074,9 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:136",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:142",
    "附录/C-功能标志速查表.md:272",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:136"
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:142"
   ],
   "analogy": {
    "zh": "书在印刷厂定稿，便签是读者拿到后自己贴",
@@ -2216,7 +2216,7 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/02-对话循环-Agent的心跳.md:196",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:177",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:183",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:192"
   ],
   "analogy": {
@@ -2420,8 +2420,8 @@
   "priority": "extra",
   "evidence": [
    "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:330",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:138",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:136"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:144",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:142"
   ],
   "analogy": {
    "zh": "店里总电闸旁边的分闸，想关凉菜间就扳下那一路",
@@ -2449,7 +2449,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:388",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:394",
    "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:878",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:216"
   ],
@@ -2483,8 +2483,8 @@
   "evidence": [
    "第一部分-基础篇/04-权限管线-Agent的护栏.md:7",
    "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:7",
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:175",
-   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:175"
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:181",
+   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:181"
   ],
   "analogy": {
    "zh": "小区门禁：业主登记过就随便进，访客每次都得刷卡",
@@ -2495,8 +2495,8 @@
    "en": "One setting fits nobody: asking every time wears you down, never asking is too risky, so strictness comes graded across several modes."
   },
   "why_evidence": [
-   "第一部分-基础篇/04-权限管线-Agent的护栏.md:209",
-   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:209"
+   "第一部分-基础篇/04-权限管线-Agent的护栏.md:215",
+   "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:215"
   ]
  },
  "permission-pipeline": {
@@ -2765,8 +2765,8 @@
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:107",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:107",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:262",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:262"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:268",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:268"
   ],
   "analogy": {
    "zh": "老板派实习生查资料，实习生只把结论带回会议室",
@@ -2777,8 +2777,8 @@
    "en": "Each dispatched task runs on its own message list, not a shared one, so whatever it tries in there cannot modify the parent agent's state."
   },
   "why_evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:266",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:266"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:272",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:272"
   ]
  },
  "coordinator": {
@@ -2884,8 +2884,8 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:152",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:152",
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:158",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:158",
    "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:496",
    "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:496"
   ],
@@ -3137,10 +3137,10 @@
   },
   "priority": "extra",
   "evidence": [
-   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:689",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:690",
+   "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:693",
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:694",
    "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:73",
-   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:255"
+   "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:259"
   ],
   "analogy": {
    "zh": "法庭速记稿：散庭后照着它复原当天每句话",
@@ -3232,8 +3232,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:146",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:146"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:152",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:152"
   ],
   "analogy": {
    "zh": "餐厅先递目录页，点了菜厨房才拿出详细菜谱",
@@ -3267,8 +3267,8 @@
   "evidence": [
    "第三部分-高级模式篇/12-MCP集成与外部协议.md:90",
    "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:90",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:127",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:127"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:133",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:133"
   ],
   "analogy": {
    "zh": "冰箱里的食材：可以拿出来看，不能指望它自己变熟",
@@ -3333,8 +3333,8 @@
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:269",
    "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:269",
-   "第一部分-基础篇/03-工具系统-Agent的双手.md:223",
-   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:223"
+   "第一部分-基础篇/03-工具系统-Agent的双手.md:229",
+   "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:229"
   ],
   "analogy": {
    "zh": "碎纸机不是文件柜：纸进去就出不来",
@@ -3361,8 +3361,8 @@
   },
   "priority": "extra",
   "evidence": [
-   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:352",
-   "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:352",
+   "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:358",
+   "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:358",
    "第四部分-工程实践篇/13-流式架构与性能优化.md:562",
    "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:565"
   ],

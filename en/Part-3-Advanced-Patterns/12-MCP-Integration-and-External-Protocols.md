@@ -3,15 +3,15 @@
 > "Protocols are the language systems use to communicate; good protocols turn integration into composition rather than coding."
 > -- Adapted from *Designing Distributed Systems*
 
-**Learning Objectives:** After reading this chapter, you will be able to:
+**Learning Objectives:** By the end of this chapter, you can:
 
-- Understand the technical background behind MCP (Model Context Protocol), its design philosophy, and the core problems it solves
-- Master the use cases, performance characteristics, and selection strategies for 8 connection configuration variants
-- Analyze in depth the design logic behind 7 configuration scopes and the three-layer security strategy
-- Understand the Bridge system's bidirectional communication architecture, SSE sequence number continuation, and multi-session security design
-- Master the complete pipeline of MCP tool discovery, mapping, naming, and permission models
-- Design enterprise-grade MCP security strategies, configure allowlists/denylists, and IDE integration
-- Understand how MCP integration collaborates with the tool system (Chapter 3), hook system (Chapter 8)
+- Explain why MCP (Model Context Protocol) appeared and which problem it actually removes
+- Choose among the 8 connection configurations and name what each one costs
+- Unfold how 7 configuration scopes and 3 security layers stack up
+- Follow the Bridge's two-way traffic, its SSE sequence-number handoff, and how sessions stay separated
+- Trace an MCP tool from discovery through mapping, naming and permissions
+- Set an enterprise MCP security policy: allowlists, denylists, IDE integration
+- See how MCP plugs into the tool system (Chapter 3) and the hook system (Chapter 8)
 
 ---
 
@@ -201,7 +201,7 @@ flowchart TD
 
 ### 12.1.4 Server Connection States and Lifecycle
 
-MCP server connections have five states, forming a carefully designed finite state machine: Connected, Failed, NeedsAuth, Pending (with retry support), and Disabled.
+MCP server connections have five states, forming a carefully designed finite state machine: Connected, Failed, NeedsAuth, Pending (with retries), and Disabled.
 
 ```mermaid
 stateDiagram-v2
@@ -282,7 +282,7 @@ sequenceDiagram
 
 ## 12.2 MCP Tool Integration
 
-MCP tool integration is the process of seamlessly incorporating external server capabilities into Claude Code's internal tool system. This process involves three key stages: Discovery, Mapping, and Registration. Understanding this pipeline is understanding how MCP transforms "external tools" into "internal capabilities."
+MCP tool integration is the process of wiring external servers' tools seamlessly into Claude Code's internal tool system. This process involves three key stages: Discovery, Mapping, and Registration. Understanding this pipeline is understanding how MCP transforms "external tools" into "internal capabilities."
 
 ```mermaid
 flowchart LR
@@ -330,7 +330,7 @@ The core tool mapping logic includes several key steps:
 
 3. **Tool Object Construction**: Each MCP tool is mapped to a Claude Code internal `Tool` object. The mapping is a full "protocol adaptation" — MCP semantics are translated into Claude Code tool system semantics.
 
-After each MCP tool is mapped to a Claude Code internal `Tool` object, it contains the following key properties:
+Once an MCP tool becomes a Claude Code internal `Tool` object, it carries these key properties:
 
 | Property | Source | Purpose |
 |------|------|------|
@@ -409,7 +409,7 @@ However, frequent confirmation dialogs severely impact the user experience. To a
 
 **Permission Rule Matching Logic**
 
-Permission rules support both exact matching and wildcard matching:
+Permission rules match in two modes, exact and wildcard:
 
 - `mcp__github__create_issue`: Exact match, only allows the GitHub tool named `create_issue`
 - `mcp__github__*`: Wildcard match, allows all tools provided by the GitHub server
@@ -529,7 +529,7 @@ This design has the following security implications:
 
 ### 12.3.2 Server Approval and Allowlists
 
-Enterprise administrators can control which MCP servers are allowed through `allowedMcpServers` and `deniedMcpServers` policies. This is the core of the three-layer security strategy and the most important security control point when deploying Claude Code in enterprises.
+Enterprise administrators can control which MCP servers may connect, through `allowedMcpServers` and `deniedMcpServers` policies. This is the core of the three-layer security strategy and the most important security control point when deploying Claude Code in enterprises.
 
 **Why an Approval Mechanism?**
 
@@ -537,7 +537,7 @@ In enterprise environments, MCP servers can pose serious security risks: a malic
 
 **Denylist: Absolute Priority**
 
-The denylist has absolute priority — servers on the denylist will never be connected, regardless of which scope they appear in. Three matching methods are supported:
+The denylist has absolute priority — servers on the denylist will never be connected, regardless of which scope they appear in. It matches three ways:
 
 1. **Match by server name**: The simplest and most direct method -- compare the name the server registered in the configuration.
 2. **Match by command array**: For stdio servers, compare the complete command-line arguments (`command` + `args`). Users cannot bypass the denylist by swapping in a different name.
@@ -545,11 +545,11 @@ The denylist has absolute priority — servers on the denylist will never be con
 
 **Allowlist: Gate Control Mechanism**
 
-If an allowlist is defined, only servers on the allowlist are permitted. The allowlist also supports name, command, and URL matching. The allowlist is a stricter security policy — deny everything by default, only allow what is explicitly approved. It's suitable for environments with extremely high security requirements (such as financial institutions, government agencies).
+If an allowlist is defined, only servers on the allowlist are permitted. The allowlist also matches by name, command, and URL. The allowlist is a stricter security policy — deny everything by default, only allow what is explicitly approved. It's suitable for environments with extremely high security requirements (such as financial institutions, government agencies).
 
 **URL Wildcard Matching Details**
 
-URL pattern matching supports the `*` wildcard, so one pattern covers a whole group of related servers:
+URL pattern matching takes the `*` wildcard, so one pattern covers a whole group of related servers:
 
 ```
 Exact match:
@@ -596,7 +596,7 @@ flowchart TD
     class Input input
 ```
 
-SDK-type servers being exempt from policy checks is an important design decision. The reason is that SDK servers are transport placeholders managed by the SDK — the CLI doesn't start processes or open network connections for them. They run in the same process as Claude Code, with security boundaries guaranteed by the host application (i.e., the application embedding the Claude Code SDK), so CLI-level policy control is unnecessary.
+SDK-type servers being exempt from policy checks is an important design decision. The reason is that SDK servers are transport placeholders managed by the SDK — the CLI doesn't start processes or open network connections for them. They run in the same process as Claude Code, with security boundaries guaranteed by the host application (i.e., the application embedding the Claude Code SDK), so policy control on the CLI side is unnecessary.
 
 > **Security Consideration:** The approval mechanism practices "Shift Left Security". Rather than checking permissions at tool invocation time (when it may already be too late), it's better to intercept untrusted servers before connections are established. This preventive security measure costs very little (just configuration checks) but yields high returns (completely eliminates untrusted server access).
 
@@ -642,13 +642,13 @@ flowchart TD
     class Connector low
 ```
 
-The design logic behind this priority is: the user's explicit configuration (manual config) reflects the user's clear intent and should always be respected. If a user manually configures an MCP server with custom parameters, a plugin-injected server with the same identity should not override the user's choice.
+The design logic behind this priority is: the user's explicit configuration (manual config) reflects the user's clear intent, so it always comes first. If a user manually configures an MCP server with custom parameters, a plugin-injected server with the same identity should not override the user's choice.
 
 > **Practical Example:** A common scenario is when a team has a GitHub MCP server configuration automatically injected through a VS Code extension (plugin config), but a developer has already manually configured the same server in `.claude/settings.local.json` with different environment variables (such as a custom GitHub Token). The deduplication mechanism ensures the manual configuration wins — the developer's custom Token is used, not the extension's default configuration.
 
 ### 12.3.4 IDE Tool Allowlist
 
-For IDE-integrated MCP servers, the system enforces an additional security layer — a tool allowlist restriction. Only the following two tools are allowed to be loaded from IDE MCP servers:
+For IDE-integrated MCP servers, the system enforces an additional security layer — a tool allowlist restriction. An IDE MCP server may load only these two tools:
 
 | Tool Name | Function | Security Consideration |
 |--------|------|---------|
@@ -671,7 +671,7 @@ The allowlist check occurs during the tool discovery stage — after Claude Code
 
 ## 12.4 IDE Integration: The Bridge System
 
-The Bridge system is the core layer for bidirectional communication between Claude Code and the external world. It implements integration with IDEs like VS Code and JetBrains, as well as Claude.ai platform remote control functionality. If the MCP protocol is the "dialect" between Claude Code and tool servers, then the Bridge system is the "lingua franca" between Claude Code and the entire external world.
+The Bridge system is the core layer for bidirectional communication between Claude Code and the external world. It connects to IDEs like VS Code and JetBrains, and to Claude.ai's remote control. If the MCP protocol is the "dialect" between Claude Code and tool servers, then the Bridge system is the "lingua franca" between Claude Code and the entire external world.
 
 > **Analogy:** Think of Bridge as the dispatch system of a multilingual translation center. The translation center (Bridge) simultaneously handles calls from different countries (IDE, claude.ai, remote terminals), needs to select the correct translation protocol for each line (v1/v2 transport), ensures messages don't cross lines (deduplication), and controls who can call in (permission gating).
 
@@ -752,7 +752,7 @@ flowchart LR
 
 ### 12.4.2 Bidirectional Communication Layer
 
-Bridge's communication architecture is bidirectional, supporting two types of data flow. This bidirectionality is what distinguishes the Bridge system from simple "log pushing" — it doesn't just forward CLI output to the outside; it can also receive external commands and execute them.
+Bridge's communication architecture is bidirectional, and two types of data flow run through it. This bidirectionality is what distinguishes the Bridge system from simple "log pushing" — it doesn't just forward CLI output to the outside; it can also receive external commands and execute them.
 
 **Outbound Flow (CLI -> External)**
 
@@ -769,7 +769,7 @@ Outbound messages are relatively simple — they are unidirectional pushes that 
 
 User messages, permission responses, control requests, and other data from IDEs or claude.ai arrive at the CLI through the transport layer. Processing inbound messages is much more complex because they may change CLI state, requiring strict filtering and validation.
 
-The core message routing logic implements triple filtering:
+The core message routing logic filters in three passes:
 
 ```mermaid
 flowchart TD
@@ -812,7 +812,7 @@ Why use a ring buffer instead of a simple Set? Consider a long-running session t
 
 ### 12.4.3 Control Protocol
 
-Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function implements a lightweight Remote Procedure Call (RPC) protocol supporting the following control subtypes:
+Servers can send control requests to remotely manage CLI sessions. The `handleServerControlRequest` function is itself a lightweight Remote Procedure Call (RPC) protocol with the following control subtypes:
 
 | Subtype | Purpose | Request Parameters | Response |
 |--------|------|---------|------|
@@ -834,7 +834,7 @@ The control protocol's design reflects several important principles:
 
 **Security Considerations for Outbound-only Mode**
 
-In **outbound-only** mode, all mutable requests except `initialize` are rejected, returning an error message indicating that Remote Control must be enabled locally to allow inbound control.
+In **outbound-only** mode, the CLI turns down every mutable request except `initialize`, returning an error message indicating that Remote Control must be enabled locally to allow inbound control.
 
 This is a critical security boundary. Outbound-only mode means the CLI only pushes information outward and does not accept external control commands. This is particularly important for claude.ai integration — users may just want to view conversation history without allowing the web interface to remotely control their CLI session (such as switching models or interrupting execution).
 
@@ -994,7 +994,7 @@ flowchart LR
 
 ### 12.4.5 VS Code and JetBrains Extension Integration
 
-IDE extensions communicate with the Claude CLI through `sse-ide` and `ws-ide` type MCP servers. These are internal-only types that add IDE identification information (such as IDE name, whether running on Windows) on top of the standard SSE/WebSocket protocols. This "protocol variant" design lets the Bridge system provide differentiated services based on client type.
+IDE extensions communicate with the Claude CLI through `sse-ide` and `ws-ide` type MCP servers. These are internal-only types that add IDE identification information (such as IDE name, whether running on Windows) on top of the standard SSE/WebSocket protocols. This "protocol variant" design lets the Bridge system serve each client type differently.
 
 **Integration Flow Details**
 
@@ -1081,7 +1081,7 @@ flowchart TD
 
 **API Authentication and Token Management**
 
-The API client authenticates using OAuth Bearer Tokens and supports automatic Token refresh and retry on 401 responses. This mechanism handles a common distributed systems problem: Token expiration.
+The API client authenticates using OAuth Bearer Tokens; on a 401 it refreshes the Token and retries. This mechanism handles a common distributed systems problem: Token expiration.
 
 ```mermaid
 flowchart TD

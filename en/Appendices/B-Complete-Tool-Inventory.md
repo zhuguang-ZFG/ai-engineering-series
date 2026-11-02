@@ -110,7 +110,7 @@ Execution tools are the bridge between the agent and the operating system. BashT
 
 **Usage Scenario Details**:
 - **BashTool**: This is one of the most frequently used tools in Claude Code. Suitable for: building and testing (`npm test`, `cargo build`), version control (`git` operations), system administration (file operations, process management), script execution, package management, and more. Its `readOnly` and `concurrencySafe` attributes are dynamically determined based on command content.
-- **PowerShellTool**: Automatically replaces BashTool in Windows environments, providing equivalent command execution capability. Only enabled when a Windows PowerShell environment is detected.
+- **PowerShellTool**: Automatically replaces BashTool in Windows environments, with execution that matches. Only enabled when a Windows PowerShell environment is detected.
 
 **Special Mechanisms of Execution Tools**:
 - **Read-Only Detection**: BashTool internally maintains a list of read-only commands. Matched commands (e.g., `ls`, `cat`, `git status`) are marked as readOnly and can be executed under more relaxed permission conditions.
@@ -120,7 +120,7 @@ Execution tools are the bridge between the agent and the operating system. BashT
 
 ## 4. Network
 
-Network tools provide the agent with the ability to access internet information, including two complementary approaches: web content fetching and web searching.
+Network tools let the agent reach information on the internet, by two complementary routes: fetching web content and searching the web.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
@@ -135,7 +135,7 @@ Network tools provide the agent with the ability to access internet information,
 
 ## 5. Agent
 
-Agent tools implement Claude Code's recursive composition: agents create and manage sub-agents, communicate with one another, and form collaborative teams.
+Agent tools are what makes Claude Code recursive: agents create and manage sub-agents, communicate with one another, and form collaborative teams.
 
 | Tool Name | readOnly | destructive | concurrencySafe | Description |
 |---------|----------|-------------|-----------------|---------|
@@ -197,7 +197,7 @@ Scheduling tools provide time-driven automation: agents execute tasks on a sched
 | CronListTool | `true` | `false` | `true` | Lists all cron scheduled tasks |
 | RemoteTriggerTool | `dynamic` | `false` | `false` | Remote trigger management (conditionally enabled: AGENT_TRIGGERS_REMOTE) |
 
-**Usage Scenario Details**: The scheduling toolset implements time-driven automation for agents. CronCreateTool supports standard cron expressions for defining execution schedules, suitable for periodic code reviews, automated testing, scheduled report generation, and similar scenarios. RemoteTriggerTool extends triggering capabilities to remote environments.
+**Usage Scenario Details**: The scheduling toolset puts agents on a clock. CronCreateTool supports standard cron expressions for defining execution schedules, suitable for periodic code reviews, automated testing, scheduled report generation, and similar scenarios. RemoteTriggerTool extends triggering capabilities to remote environments.
 
 ## 10. Interaction
 
@@ -211,7 +211,7 @@ Interaction tools manage the agent's interactions with users and other system co
 
 **Usage Scenario Details**:
 - **AskUserQuestionTool**: When the agent encounters ambiguity or needs additional information during execution, it uses this tool to ask the user a question. This is the proactive communication channel between the agent and the user.
-- **SkillTool**: Invokes slash commands registered through the skill system. Skills are extensible capability packages that expand the agent's domain-specific expertise through prompt templates and tool definitions. See Chapter 11 for the skill system.
+- **SkillTool**: Invokes slash commands registered through the skill system. Skills are extensible capability packages: a prompt template plus tool definitions make the agent an expert in one domain. See Chapter 11 for the skill system.
 
 ## 11. MCP
 

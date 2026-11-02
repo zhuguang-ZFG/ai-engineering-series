@@ -2,7 +2,7 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
-**学习目标：** 理解 Claude Code 的规划模式（Plan Mode）和工作流编排系统，掌握 EnterPlanMode/ExitPlanMode 的模式切换机制，了解计划文件的存储与恢复策略，以及调度系统（Cron、RemoteTrigger）和后台任务管理的实现细节。通过完整的实战案例，你将学会怎么用 Plan 模式提高 Agent 任务的成功率和可控性。
+**学习目标：** Plan 模式怎样把"想"和"做"分成两段，EnterPlanMode/ExitPlanMode 在什么时候切换，计划文件落在哪里、中断后怎么恢复，Cron、RemoteTrigger 和后台任务又把时间维度加了进来。跟着最后的实战案例走一遍，你能用 Plan 模式把 Agent 跑长任务的成功率和可控性提上去。
 
 ---
 
@@ -14,7 +14,7 @@ Plan 模式是 Claude Code 中最独特的设计之一。它将 Agent 的行为�
 
 这种设计理念可以用建筑行业来类比：没有建筑师会拿到需求就直接开始砌墙。他们会先画图纸（规划），与甲方确认设计意图，评估结构可行性，然后才动工（执行）。在规划阶段，建筑师可以无成本地修改方案 -- 改一张图纸比拆一面墙便宜得多。同样，在 Plan 模式中，Agent 的探索和思考不产生任何副作用（不修改文件、不执行命令），纠正"方向性错误"的代价几乎为零。
 
-Plan 模式解决的核心问题是 **"过早行动"（Premature Action）**。没有 Plan 模式的 Agent 面临一个困境：面对复杂任务时，要么在第一轮就盲目动手（高风险），要么在每一轮都反复阅读代码但不做决定（低效）。Plan 模式为 Agent 提供了一个"合法的思考空间" -- 在这个空间里，Agent 可以自由探索而不被期望产出实际结果，直到它确信自己理解了问题的全貌。
+Plan 模式解决的核心问题是 **"过早行动"（Premature Action）**。没有 Plan 模式的 Agent 面临一个困境：面对复杂任务时，要么在第一轮就盲目动手（高风险），要么在每一轮都反复阅读代码但不做决定（低效）。Plan 模式为 Agent 提供了一个"合法的思考空间" -- 在这个空间里，Agent 可以自由探索，不必拿出实际结果，直到它确信自己理解了问题的全貌。
 
 EnterPlanModeTool 是进入规划模式的入口。它的 prompt 系统针对不同用户类型（外部用户 vs 内部 ant 用户）提供了不同的指导策略。
 
@@ -30,6 +30,10 @@ EnterPlanModeTool 是进入规划模式的入口。它的 prompt 系统针对不
 | 忽略已有模式 | 写出与项目风格不一致的代码 | 先探索项目发现既有模式，再实施 |
 | 方案选择失误 | 实现了性能差的方案，需要重写 | 对比多个方案的 trade-off 后再动手 |
 | 遗漏边界情况 | 代码写完才发现遗漏，返工 | 在规划中枚举边界情况并纳入方案 |
+
+本章讲的 Plan 模式是权限状态机里的一个档位；oh-my-pi 18.15.0 把同一件事挪到了定价层：`--smol`、`--slow`、`--plan` 三个旗标分别为轻量任务、深度分析、架构规划指定模型，`--prewalk` 在计划的 todo 列表立起来后、第一次写文件时切到便宜模型，`--plan-yolo` 起手锁在只读规划、模型第一次 resolve 时自动批准计划、再切到 `--plan-yolo-into` 指定的模型去实施。「先规划后执行」在这家宿主里同时是一次权限决策和一次成本决策：规划阶段钉死只读，执行阶段换上更便宜的模型。
+
+> **对照面的身份：** oh-my-pi 在 `CREDITS.md` 里登记为**对照面**，与第 4 章 §4.3.6 用过的其他开源线束同一身份——不支撑本章任何技术论断，只用来看同一个理念在别人手里长成什么形状。
 
 ### 14.1.2 模式切换机制
 
@@ -69,7 +73,7 @@ flowchart TD
 ```
 
 关键点：
-- **Agent 上下文中禁止进入 Plan 模式**：子 Agent 不应该进入规划模式，这是架构层面的约束。想象一下，如果一个子 Agent 进入 Plan 模式，它会等待用户审批计划，而用户可能根本不知道子 Agent 的存在。这会导致整个父 Agent 的执行被阻塞在一个用户无法理解的审批请求上。
+- **Agent 上下文中禁止进入 Plan 模式**：子 Agent 不应该进入规划模式，这条约束写在架构里。想象一下，如果一个子 Agent 进入 Plan 模式，它会等待用户审批计划，而用户可能根本不知道子 Agent 的存在。这会导致整个父 Agent 的执行被阻塞在一个用户无法理解的审批请求上。
 - **prepareContextForPlanMode**：运行 classifier activation 的副作用，确保在 plan 模式下权限配置正确。
 - **prePlanMode 保存**：原始模式被保存到 `prePlanMode` 字段，供 ExitPlanMode 恢复使用。
 
@@ -125,7 +129,7 @@ flowchart TD
     class LOCAL,MAILBOX endNode
 ```
 
-这个断路器防御揭示了一个微妙的时间窗口问题：进入 Plan 模式时 auto mode 是开启的，但在 Plan 模式持续期间（可能几分钟甚至几十分钟），auto mode 可能因为外部原因（如系统负载、安全策略变更）被关闭。如果 ExitPlanMode 不检查这个条件，Agent 退出 Plan 模式后立即以 auto mode 权限执行操作，可能绕过了新激活的安全限制。
+这个断路器防御揭示了一个微妙的时间窗口问题：进入 Plan 模式时 auto mode 是开启的，但在 Plan 模式持续期间（可能几分钟甚至几十分钟），外部原因（如系统负载、安全策略变更）可能已经把 auto mode 关掉。如果 ExitPlanMode 不检查这个条件，Agent 退出 Plan 模式后立即以 auto mode 权限执行操作，可能绕过了新激活的安全限制。
 
 **Teammate 路径**：当 Agent 作为 teammate 运行且 Plan 模式是强制要求时，ExitPlanMode 不会弹出本地审批 UI，而是通过 mailbox 机制将计划发送给 team lead 审批。审批请求包含发送者、时间戳、计划文件路径、计划内容和请求 ID 等信息。
 
@@ -210,11 +214,11 @@ Agent 通过 ExitPlanMode 呈现以下计划：
 
 ### 14.2.1 验证智能体
 
-`registerPlanVerificationHook` 在 `ExitPlanModeV2Tool` 中被引用，其注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。
+`ExitPlanModeV2Tool` 引用了 `registerPlanVerificationHook`，它旁边的注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。
 
 验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。所以验证智能体是一个独立的后台 Agent，运行在"清除上下文并开始实施"之后的阶段，检验实施结果是否符合计划。
 
-**验证智能体的设计理念。** 为什么需要一个独立的验证智能体，而不是让执行智能体自己检查？这涉及"自我审查"的认知偏差 -- 执行者倾向于用自己的理解来评判自己的工作，而非严格按照计划原文对照。独立的验证智能体持有原始计划文件的快照，能够以"旁观者"的视角审查实施结果。
+**验证智能体的设计理念。** 为什么需要一个独立的验证智能体，而不是让执行智能体自己检查？这涉及"自我审查"的认知偏差 -- 执行者倾向于用自己的理解来评判自己的工作，而非严格按照计划原文对照。独立的验证智能体持有原始计划文件的快照，能站在"旁观者"的视角审查实施结果。
 
 这就像软件工程中的 code review：让作者自己 review 自己的代码，效果远不如让另一个工程师来做。验证智能体扮演的就是这个"另一个工程师"的角色。
 
@@ -301,7 +305,7 @@ flowchart TD
 
 ### 14.2.3 计划文件恢复的深度分析
 
-让我们更深入地分析 `recoverPlanFromMessages` 的三种恢复来源，理解每种来源的设计意图和适用场景。
+再往下挖一层：`recoverPlanFromMessages` 的三种恢复来源，各有各的设计意图和适用场景。
 
 **来源一：ExitPlanMode 的 tool_use input。** 当 Agent 退出 Plan 模式时，ExitPlanMode 工具的输入参数中包含了计划内容。这个内容被 `normalizeToolInput` 注入到工具调用的 input 中。恢复时，系统从消息历史中找到 ExitPlanMode 的 tool_use 消息，提取其中的计划内容。这是最可靠的恢复来源，因为 tool_use 消息是 API 协议的一部分，不会被普通的上下文管理操作修改。
 
@@ -367,7 +371,7 @@ Claude Code 的扩展性设计遵循"阶梯式扩展"原则：从最简单的 pr
 
 ### 14.3.2 Fork Agent 的状态隔离
 
-`createSubagentContext` 创建了一个完全隔离的 ToolUseContext。默认情况下，所有可变状态都被隔离：
+`createSubagentContext` 创建了一个完全隔离的 ToolUseContext。默认情况下，这个函数把可变状态全隔开：
 
 ```mermaid
 flowchart TD
@@ -423,7 +427,7 @@ Fork Agent 的状态隔离策略可以用"沙箱"来类比：子 Agent 在沙箱
 
 ### 14.4.1 ScheduleCronTool：本地定时任务
 
-Claude Code 的调度系统支持两类定时任务：
+Claude Code 的调度系统管两类定时任务：
 
 - **One-shot**（`recurring: false`）：触发一次后自动删除。
 - **Recurring**（`recurring: true`）：按计划重复触发，从当前时间重新调度。
@@ -456,13 +460,13 @@ Claude Code 的调度系统支持两类定时任务：
 
 ### 14.4.2 CronScheduler：调度器核心
 
-`createCronScheduler` 实现了完整的调度器，包含以下关键特性：
+`createCronScheduler` 造出一个功能齐全的调度器，关键特性有：
 
 **文件锁**：通过 `tryAcquireSchedulerLock` 确保同一个项目目录下的多个 Claude 会话不会重复触发同一个 on-disk 任务。非 owner 会话每 5 秒探测一次锁，如果 owner 崩溃则接管。
 
-这种文件锁机制解决了一个实际的分布式问题：开发者可能同时打开多个终端窗口，每个窗口运行一个 Claude Code 实例。如果没有文件锁，同一个定时任务会被每个实例各触发一次，导致重复操作（如重复发送通知、重复执行部署检查）。
+这种文件锁机制解决了一个实际的分布式问题：开发者可能同时打开多个终端窗口，每个窗口运行一个 Claude Code 实例。如果没有文件锁，每个实例都会各自触发一次同一个定时任务，导致重复操作（如重复发送通知、重复执行部署检查）。
 
-文件锁的实现基于文件系统的原子操作（如 `O_EXCL` 创建），这在所有主流操作系统上都是可靠的。锁的超时和接管机制确保了 owner 崩溃时不会出现死锁 -- 其他实例会在合理时间内检测到并接管。
+文件锁靠文件系统的原子操作实现（如 `O_EXCL` 创建），这在所有主流操作系统上都是可靠的。锁的超时和接管机制确保了 owner 崩溃时不会出现死锁 -- 其他实例会在合理时间内检测到并接管。
 
 **Jitter 机制**：为避免大量会话在同一时刻触发推理请求（惊群效应），recurring 任务添加了确定性的正向延迟。延迟与两次触发之间的间隔成正比，默认不超过 15 分钟。对于每小时执行的任务，实际触发时间会在 `:00` 到 `:06` 之间随机分散。
 
@@ -501,7 +505,7 @@ flowchart LR
 
 **自动过期**：Recurring 任务默认 7 天后自动过期（`recurringMaxAgeMs`），防止无限递归导致内存泄漏。`permanent` 标志的任务（如 assistant mode 的内置任务）豁免于此限制。
 
-7 天的过期策略是一个务实的选择。如果一个 recurring 任务连续运行了 7 天而没有被任何人关注或修改，大概率它已经不再被需要了。没有过期机制的任务会像"僵尸进程"一样持续消耗资源：每次触发都会产生 API 调用、消耗 token、占用调度器内存。
+7 天的过期策略是一个务实的选择。如果一个 recurring 任务连着跑了 7 天，没人看过也没人改过，那多半已经没人需要它了。没有过期机制的任务会像"僵尸进程"一样持续消耗资源：每次触发都会产生 API 调用、消耗 token、占用调度器内存。
 
 ### 14.4.3 RemoteTriggerTool：远程触发
 
@@ -579,7 +583,7 @@ Session-scoped 任务（`durable: false`）的生命周期与会话绑定。它�
 
 ### 14.4.5 工作流设计模式与反模式
 
-基于 Claude Code 的 Plan 模式和调度系统，我们可以总结出以下工作流设计模式和反模式：
+Claude Code 的 Plan 模式和调度系统看完，能收出一批工作流设计模式，也能收出几条反模式：
 
 **模式一：Plan-Execute-Verify 循环**
 
@@ -654,7 +658,7 @@ flowchart TD
 
 **反模式四：同步等待轮询结果**
 
-在主对话中同步等待定时任务的结果（通过 Sleep + 轮询）。正确做法是将结果通过通知机制异步推送，主对话不被阻塞。
+在主对话中同步等待定时任务的结果（通过 Sleep + 轮询）。正确做法是把结果交给通知机制异步推送，主对话不用停下来等。
 
 ---
 
@@ -662,7 +666,7 @@ flowchart TD
 
 ### 14.5.1 SleepTool
 
-SleepTool 被列为后台任务管理的一部分。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。
+SleepTool 归在后台任务管理这一类里。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。
 
 SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 交互模型中扮演着重要角色。没有 SleepTool 的 Agent 在面对"等待"场景时只有两种选择：要么立即返回结果（即使外部操作尚未完成），要么在循环中频繁轮询（浪费 token）。SleepTool 提供了第三种选择：Agent 可以暂停执行，等待一段时间后再继续，期间不产生 token 消耗。
 
@@ -682,7 +686,7 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 1. **文件状态缓存克隆**（`cloneFileStateCache`）：子 Agent 的文件读取不影响父 Agent 的缓存。这确保了父 Agent 的文件状态视图不会被子 Agent 的中间操作污染。例如，如果子 Agent 读取了一个文件然后该文件被修改，父 Agent 仍然持有修改前的缓存版本，不会因为子 Agent 的读取而刷新。
 
-2. **独立的 AbortController**：子 Agent 可以被独立中止，而不影响父 Agent。父 Agent 因此能一次启动多个子 Agent，需要时只取消其中某个，其他子任务照常运行。
+2. **独立的 AbortController**：子 Agent 能单独中止，不影响父 Agent。父 Agent 因此能一次启动多个子 Agent，需要时只取消其中某个，其他子任务照常运行。
 
 3. **权限提示抑制**：后台 Agent 的 `getAppState` 包装了 `shouldAvoidPermissionPrompts: true`，避免后台操作弹出 UI 提示。这是因为后台 Agent 通常执行预先授权的任务（如 Plan 验证、会话摘要），不需要也不应该打断用户。
 
@@ -692,7 +696,7 @@ SleepTool 的设计看似简单（就是等待指定时间），但它在 Agent 
 
 **lastCacheSafeParams 的设计走的是"隐式上下文传递"这条路。** 显式的做法是在每个需要 cache-safe params 的地方都从主循环传递参数，但这会导致函数签名膨胀 -- 每个新增的调用点都需要修改参数列表。通过全局 slot，调用者只需要在正确的时机读取 slot 值，而不需要知道值从哪里来。这降低了组件之间的耦合度。
 
-当然，全局状态也有其风险：如果读取时机不对（比如在一个异步操作中延迟读取），slot 值可能已经被后续轮次覆盖。Claude Code 通过在 post-turn hook 的同步执行段中立即读取 slot 值来避免这个问题 -- slot 的写入和读取发生在同一个同步执行段中，不存在竞态条件。
+当然，全局状态也有其风险：如果读取时机不对（比如在一个异步操作中延迟读取），后续轮次可能已经改写了 slot 值。Claude Code 通过在 post-turn hook 的同步执行段中立即读取 slot 值来避免这个问题 -- slot 的写入和读取发生在同一个同步执行段中，不存在竞态条件。
 
 ### 14.5.3 后台任务的生命周期管理
 
@@ -776,7 +780,7 @@ flowchart TD
 
 ### 练习 3：分析计划文件恢复
 
-在一个远程会话（CCR）中，进入 Plan 模式并创建一个计划。终止会话后恢复（`--resume`），检查计划文件是否被正确恢复。结合 `recoverPlanFromMessages` 的三种恢复来源，分析你的场景走了哪条路径。
+在一个远程会话（CCR）中，进入 Plan 模式并创建一个计划。终止会话后恢复（`--resume`），看看计划文件恢复得对不对。结合 `recoverPlanFromMessages` 的三种恢复来源，分析你的场景走了哪条路径。
 
 **调试提示：** 使用 `CLAUDE_CODE_DEBUG=1` 环境变量启动 Claude Code，在日志中搜索 `copyPlanForResume` 和 `recoverPlanFromMessages` 关键词，可以观察到恢复过程走了哪条路径。
 

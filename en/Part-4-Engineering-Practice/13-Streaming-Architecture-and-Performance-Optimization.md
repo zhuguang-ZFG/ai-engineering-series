@@ -3,7 +3,7 @@
 > "Premature optimization is the root of all evil -- but latency is the root of all user complaints."
 > -- adapted from Donald Knuth
 
-**Learning Objectives:** Master Claude Code's streaming processing architecture and cost control strategies. Understand how QueryEngine enables real-time interaction through streaming APIs, how StreamingToolExecutor balances concurrency with safety, and how the system optimizes startup performance and runtime costs through parallel prefetching, lazy loading, and prompt caching. Through this chapter, you will establish a complete performance optimization mindset, able to identify, measure, and solve performance bottlenecks in Agent systems.
+**Learning Objectives:** How the streaming architecture gets the first token on screen sooner; how QueryEngine owns one query's full lifecycle; how StreamingToolExecutor runs work concurrently without giving up safety; what parallel prefetching, lazy loading and prompt caching each take off the bill. By the end of this chapter you can give an Agent system a performance checkup: find the bottleneck, price it, and fix the right thing.
 
 ---
 
@@ -194,7 +194,7 @@ flowchart TD
 
 Read-only tools like Read, Grep, Glob can therefore run side by side, while tools with side effects like Bash, Edit, Write need to queue serially.
 
-**Why not do more fine-grained dependency analysis at the tool level?** This is an intentional simplification decision. Theoretically, we could analyze whether there are data dependencies between two Bash commands (e.g., `mkdir foo && echo bar > foo/file.txt` has a dependency, while `echo hello` and `echo world` don't). But this analysis requires understanding shell semantics, which is costly and error-prone. Claude Code chose a conservative but reliable strategy: Bash is inherently unsafe; better to wait an extra second than risk parallel execution of potentially conflicting commands.
+**Why not analyze dependencies more precisely, tool by tool?** This is an intentional simplification decision. Theoretically, we could analyze whether there are data dependencies between two Bash commands (e.g., `mkdir foo && echo bar > foo/file.txt` has a dependency, while `echo hello` and `echo world` don't). But this analysis requires understanding shell semantics, which is costly and error-prone. Claude Code chose a conservative but reliable strategy: Bash is inherently unsafe; better to wait an extra second than risk parallel execution of potentially conflicting commands.
 
 The concurrency safety classification follows a simple matrix:
 
@@ -662,7 +662,7 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 
 1. **QueryEngine is a stateful query lifecycle manager**, implementing streaming message passing through AsyncGenerator, one instance per session, state persisting across turns. The class design encapsulates state as instance properties, avoiding memory leaks and concurrent modification risks from global state.
 
-2. **StreamingToolExecutor implements "execute on arrival"**, concurrency-safe tools can run in parallel, non-safe tools execute serially, results buffered for ordered output. This design puts order ahead of latency -- better to wait for one serial tool than risk parallel execution of potentially conflicting operations.
+2. **StreamingToolExecutor delivers "execute on arrival"**, concurrency-safe tools can run in parallel, non-safe tools execute serially, results buffered for ordered output. This design puts order ahead of latency -- better to wait for one serial tool than risk parallel execution of potentially conflicting operations.
 
 3. **The core idea of startup performance optimization is parallelization**: Let I/O-intensive operations (MDM read, keychain read) execute in parallel with CPU-intensive operations (module evaluation). The illustrative critical-path calculation reduces 160ms to 65ms; actual startup gains require measurements with a specified machine, version, cache state, and endpoint.
 

@@ -1,11 +1,11 @@
 # Chapter 7: Context Management -- The Agent's Working Memory
 
 > **Learning Objectives:**
-> 1. Understand the hard constraints of the Agent's context window and how effective space is calculated
-> 2. Master the design motivations and working mechanisms of the four-level progressive compression strategy (Snip -> MicroCompact -> Collapse -> AutoCompact)
-> 3. Understand how the circuit breaker pattern protects the system from cascading failures
-> 4. Analyze the dual-phase output structure of compression prompt engineering
-> 5. Be able to select the optimal context management strategy for different usage scenarios
+> 1. Work out the hard ceiling on the context window and the space you can still write in
+> 2. Put the four compression levels (Snip -> MicroCompact -> Collapse -> AutoCompact) in order and say when each one fires
+> 3. Explain how the circuit breaker pulls the plug when compression failures cascade
+> 4. Take the compression prompt two-phase output apart
+> 5. Pick a compression strategy that fits how you actually use the Agent
 
 ---
 
@@ -25,7 +25,7 @@ Claude Code uses a precise formula to characterize the space truly available for
 Effective Window = Model Window - Reserved Output Tokens
 ```
 
-In the auto-compaction module, the `getEffectiveContextWindowSize` function implements the calculation of the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
+In the auto-compaction module, the `getEffectiveContextWindowSize` function works out the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
 
 > **Why reserve 20,000 tokens?** Because AutoCompact (Level 4 compression) needs to call the LLM to generate a summary, and the summary itself consumes output tokens. If no space is reserved, the compression operation itself may fail due to insufficient output space -- a classic "compression paradox."
 
@@ -153,7 +153,7 @@ graph LR
 
 ### Level 1: Snip
 
-Snip trims history at the **message-sequence level**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is enabled, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
+Snip cuts history out of the **whole message sequence**, rather than merely clearing text inside old tool results. When `HISTORY_SNIP` is enabled, the query loop calls `snipCompactIfNeeded(messagesForQuery)` and uses its returned message sequence for the next request. The result also reports freed tokens and may include a boundary message.
 
 This differs from MicroCompact: the marker `[Old tool result content cleared]` belongs to the time-based MicroCompact path, which replaces eligible tool-result bodies while retaining their message structure. It is not the definition of Snip.
 
@@ -238,6 +238,12 @@ The `buildPostCompactMessages` function ensures consistent output message orderi
 > **Cross-Reference:** AutoCompact's forked agent execution method is closely related to the Fork pattern discussed in Chapter 9. The compression operation executes in a restricted sub-Agent that runs for at most 1 turn (generating only a summary, no tool calls), ensuring compression does not produce side effects.
 
 > **Cross-Reference:** PreCompact and PostCompact hooks are important application scenarios of the hook system covered in Chapter 8. Users can inject custom compression instructions through PreCompact hooks (e.g., "specifically preserve all discussions related to the database").
+
+The four levels run light to heavy: snip, squeeze, fold, then rewrite the whole span.
+
+```ill
+ch07-four-levels
+```
 
 ---
 
@@ -329,7 +335,7 @@ The `calculateTokenWarningState` function calculates the current token usage sta
 | `isAboveAutoCompactThreshold` | Token usage >= auto-compression threshold | Trigger auto-compression |
 | `isAtBlockingLimit` | Token usage >= effective window - 3,000 | Block new requests |
 
-These flags drive warning display at the UI level and trigger compression behavior. The `percentLeft` field shows the user the percentage of remaining space.
+Once these flags flip, the UI shows warnings and compression starts firing. The `percentLeft` field shows the user the percentage of remaining space.
 
 ### Post-Compression Token Budget
 
@@ -412,6 +418,12 @@ When working with large projects, context management is especially critical:
 | Returning after a long pause | MicroCompact automatically clears expired cache |
 | Implementing multiple features consecutively | Manually compress after completing each feature |
 | Refactoring across multiple subsystems | Phased work + memory system support |
+
+### Cross-check: compression as hand tools
+
+> **Identity of this cross-check:** oh-my-pi is registered in `CREDITS.md` as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same boundary grows into under someone else's hands.
+
+Where Claude Code's four-level compression is an automatic defense wired into the conversation loop, oh-my-pi 18.15.0 turns several cuts of that same layer into explicit tools a user can swing directly: `--no-context-files` refuses context files such as AGENTS.md and CLAUDE.md outright, cutting injected context at the source; the `compress` subcommand rewrites text files into the dense prompt register and reports what it drops; the `find` subcommand takes a behavior description and returns the files and line ranges that implement it; the `toks` subcommand counts a file with every embedded offline tokenizer at once. Reporting what gets dropped is the same instinct as the two-phase output structure in §7.3: compression must not be a silent drop -- what got lost goes on the table.
 
 ---
 

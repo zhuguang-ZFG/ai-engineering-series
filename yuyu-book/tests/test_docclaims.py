@@ -17,8 +17,9 @@ if not __package__:  # direct run: see tests/__init__.py for the real bootstrap
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from yuyu_book import plain
-from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_mermaid, load_json,
-                            read_text, unit_stream)
+from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_illustrations,
+                            extract_mermaid, load_json, read_text,
+                            unit_stream)
 from yuyu_book.plain import prose_lines
 
 SEP_ROW = re.compile(r"^\|(?:\s*:?-+:?\s*\|)+\s*:?\s*$")
@@ -69,6 +70,20 @@ class Data(unittest.TestCase):
     def drawings(self) -> int:
         return len(list((BOOK_DIR / "illustrations").glob("*.svg")))
 
+    def body_plates(self, lang: str) -> int:
+        """Plates the prose names, counted where they are named.
+
+        The shelf holds the 26 fixed slots too (emblems, headpieces, cover,
+        keeper); only a fence decides that a drawing is read inside a chapter,
+        so STRUCTURE's count has to come off the manuscript, not the folder.
+        """
+        n = 0
+        for rel in self.unit_path(lang):
+            text = read_text(REPO_ROOT / rel)
+            _body, ills = extract_illustrations(text, rel)
+            n += len(ills)
+        return n
+
     def index(self) -> list[dict]:
         return load_json(BOOK_DIR / "subject-index.json")
 
@@ -103,6 +118,7 @@ class ShippedCounts(Data):
         src = str(len(load_json(BOOK_DIR / "sources.json")))
         g = str(len(self.glosses))
         d = str(self.drawings())
+        body_word = {n: w for w, n in EN_NUM.items()}[self.body_plates("en")]
         self.claims = [
             ("README.md", r"\*\*术语表\*\* — (\d+) 条中英对照术语",
              [str(self.glossary_rows("zh"))]),
@@ -116,6 +132,16 @@ class ShippedCounts(Data):
                              r"(\d+) 个 core 各配一对",
              [str(self.core_terms())]),
             ("README.md", r"(\d+) 个主干术语的原理", [str(self.why_terms())]),
+            # three counts of the same figure went unpinned: an English number
+            # spelled as a word, the style-system row, and the prose-plate row
+            ("en/README.md", r"\b(\d+) hand-drawn line illustrations", [d]),
+            ("CREDITS.md", r"\*\*画风体系\*\*：(\d+) 份插图", [d]),
+            ("STRUCTURE.md", r"\+ (\d+) 幅正文插图",
+             [str(self.body_plates("zh"))]),
+            # the same README sentence hides one further count as a word, and a
+            # word is invisible to `\d+` — which is how twenty-six went stale
+            ("en/README.md", r"and ([a-z]+) plates inside the prose",
+             [body_word]),
             ("en/README.md", r"the (\d+) core terms' reasons",
              [str(self.why_terms())]),
             ("STRUCTURE.md", r"主题索引（生成物，当前 (\d+) 个词条 = "
@@ -272,12 +298,14 @@ class TextTotalsMatchTheirOwnTables(Data):
         return len({m.group(1) for m in re.finditer(r"\bD(\d)\s*\[", plate)})
 
     def test_the_hook_table_lists_what_the_chapter_claims(self):
+        # Each quote pins a number the prose promises, never the verb in front
+        # of it: the sentences around it get reworded round after round.
         quotes = {
-            "zh": [r"掌握 (\d+) 个生命周期事件的触发时机",
+            "zh": [r"(\d+) 个生命周期事件",
                    r"本章按功能分组介绍其中 (\d+) 个生命周期事件",
-                   r"下表总结了上述 (\d+) 个事件的分类",
+                   r"下表把这 (\d+) 个事件的分类",
                    r"\*\*(\d+) 个生命周期事件\*\*"],
-            "en": [r"semantics of (\d+) lifecycle events",
+            "en": [r"(\d+) lifecycle events",
                    r"this chapter introduces (\d+) of its lifecycle events",
                    r"typical uses of these (\d+) events",
                    r"\*\*(\d+) lifecycle events\*\*"],
@@ -290,7 +318,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         bad = []
         for lang in ("zh", "en"):
             rel = self.path("08-钩子", lang)
-            rows = len(self.table_after(rel, "下表总结了" if lang == "zh"
+            rows = len(self.table_after(rel, "下表" if lang == "zh"
                                         else "The table below summarizes"))
             self.assertGreater(rows, 0, f"{rel}: no event table found")
             text = read_text(REPO_ROOT / rel)
@@ -304,7 +332,7 @@ class TextTotalsMatchTheirOwnTables(Data):
             m = re.search(rx, read_text(REPO_ROOT / doc))
             self.assertIsNotNone(m, f"{doc}: nothing matches {rx!r}")
             rows = len(self.table_after(self.path("08-钩子", lang),
-                                        "下表总结了" if lang == "zh"
+                                        "下表" if lang == "zh"
                                         else "The table below summarizes"))
             if m.group(1) != str(rows):
                 bad.append(f"{doc}: {rx!r} says {m.group(1)}, the table lists "
@@ -346,7 +374,7 @@ class TextTotalsMatchTheirOwnTables(Data):
             return [
                 (self.path("01-智能体编程", lang), [r"(\d+) 个工具 · 编排引擎"]),
                 (self.path("03-工具系统", lang),
-                 [r"掌握 Claude Code (\d+) 个已注册工具",
+                 [r"(\d+) 个已注册工具",
                   r"注册了 (\d+) 个专门化工具"]),
                 (self.path("13-流式架构", lang),
                  [r"如果 Claude Code 的 (\d+) 个工具都在启动时构建 schema"]),
@@ -359,7 +387,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         return [
             (self.path("01-智能体编程", lang), [r"(\d+) Tools · Orchestration"]),
             (self.path("03-工具系统", lang),
-             [r"Claude Code's (\d+) registered tools",
+             [r"(\d+) registered tools",
               r"registers (\d+) specialized tools"]),
             (self.path("13-流式架构", lang),
              [r"Claude Code's (\d+) tools all build schemas at startup"]),

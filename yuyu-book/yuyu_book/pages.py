@@ -67,6 +67,7 @@ _LABELS = {
     "diagrams": {"zh": "全书图版", "en": "Plates in this book"},
     "plate_fallback": {"zh": "架构示意", "en": "Architecture sketch"},
     "plate_wide": {"zh": "可横向拖动", "en": "drag sideways"},
+    "plate_motion": {"zh": "悬停播放", "en": "hover to play"},
     "lead_tag": {"zh": "一句话讲明白", "en": "In plain words"},
     "lead_analogy": {"zh": "打个比方：", "en": "Think of it as: "},
     "new_terms": {"zh": "本章新词", "en": "New terms in this chapter"},

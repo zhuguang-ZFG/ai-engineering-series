@@ -7,6 +7,7 @@ re-inks itself in dark mode and on paper without a second asset.
 """
 from __future__ import annotations
 
+import base64
 import re
 from pathlib import Path
 
@@ -15,6 +16,16 @@ from .core import BuildError
 ART_DIR = Path(__file__).resolve().parent.parent / "illustrations"
 MAX_BYTES = 6000
 PLATE_BYTES = 20000
+# one photograph the single-file edition can afford to carry: the offline
+# guarantee means the bytes travel inside the HTML, not beside it
+PHOTO_BYTES = 300_000
+PHOTO_TYPES = {".png": "image/png", ".jpg": "image/jpeg",
+               ".jpeg": "image/jpeg", ".webp": "image/webp"}
+
+# the one rule that decides whether a drawing is a filmstrip: `seq` among the
+# classes of its root element. render.py asks it, and the filmstrip frame-order
+# test asks the same object instead of keeping a looser copy of its own
+SEQ_ROOT = re.compile(r'<svg\b[^>]*class="[^"]*\bseq\b')
 
 _BANNED = (
     (re.compile(r"<\s*script", re.I), "<script>"),
@@ -79,6 +90,40 @@ def cover_plate() -> str:
     if not text:
         return ""
     return f'<div class="cover-art" aria-hidden="true">{text}</div>'
+
+
+def drawing(name: str) -> str:
+    """A body-scale drawing an `ill` slot asked for.
+
+    Same rules as an emblem, one size larger: the plate sits inside the prose
+    column and re-inks itself, so it may run to `PLATE_BYTES` but no further.
+    """
+    text = _read(name, PLATE_BYTES)
+    if not text:
+        raise BuildError(f"illustrations/{name}.svg: an ill slot asks for a "
+                         "drawing that is not there")
+    return text
+
+
+def photo(name: str) -> str:
+    """A photograph as a data URI, for the few plates that need real light.
+
+    Refusing to link out is the whole point: the reader gets one file, so the
+    image has to live inside it, and a budget per picture keeps that file
+    openable on a laptop with the book on a plane.
+    """
+    path = ART_DIR / name
+    if not path.exists():
+        raise BuildError(f"illustrations/{name}: no such photograph")
+    mime = PHOTO_TYPES.get(path.suffix.lower())
+    if mime is None:
+        raise BuildError(f"illustrations/{name}: {path.suffix} is not a bitmap "
+                         "type the book ships")
+    raw = path.read_bytes()
+    if len(raw) > PHOTO_BYTES:
+        raise BuildError(f"illustrations/{name}: {len(raw)} bytes, over the "
+                         f"{PHOTO_BYTES} budget for one photograph")
+    return f"data:{mime};base64,{base64.b64encode(raw).decode('ascii')}"
 
 
 def missing(names: list[str]) -> list[str]:

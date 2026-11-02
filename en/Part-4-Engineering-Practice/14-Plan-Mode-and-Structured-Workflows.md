@@ -2,7 +2,7 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
-**Learning Objectives:** Understand Claude Code's planning mode (Plan Mode) and workflow orchestration system, master the EnterPlanMode/ExitPlanMode pattern switching mechanism, understand plan file storage and recovery strategies, and implementation details of scheduling system (Cron, RemoteTrigger) and background task management. Through complete practical cases, you will learn how to use Plan Mode to improve Agent task success rate and controllability.
+**Learning Objectives:** How Plan Mode splits thinking from doing, when EnterPlanMode/ExitPlanMode flip between the two, where plan files live and how they come back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension. The worked cases at the end show how Plan Mode lifts both the success rate and the predictability of long Agent tasks.
 
 ---
 
@@ -30,6 +30,10 @@ This differentiated strategy reflects different usage scenarios: external users 
 | Ignored existing patterns | Wrote code inconsistent with project style | First explored project to discover existing patterns, then implemented |
 | Solution choice failure | Implemented poor-performing solution, needs rewrite | Compared multiple solution trade-offs before acting |
 | Missed edge cases | Finished code then discovered omissions, rework | Enumerated edge cases in plan and incorporated into solution |
+
+Plan Mode in this chapter is one gear inside a permission state machine; oh-my-pi 18.15.0 moves the same idea onto the pricing layer: `--smol`, `--slow`, and `--plan` assign models for lightweight tasks, thorough analysis, and architectural planning respectively; `--prewalk` switches to a cheap model at the first file write after the plan's todo list exists; `--plan-yolo` locks the session into read-only planning at start, auto-approves the plan on the model's first resolve call, then switches to the model named by `--plan-yolo-into` to implement it. "Plan before execute" is, on this host, simultaneously a permission decision and a cost decision: the planning phase is pinned read-only, and the execution phase puts on a cheaper model.
+
+> **Identity of this cross-check:** oh-my-pi is registered in `CREDITS.md` as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same idea grows into under someone else's hands.
 
 ### 14.1.2 Mode Switching Mechanism
 
@@ -125,7 +129,7 @@ flowchart TD
     class LOCAL,MAILBOX endNode
 ```
 
-This circuit breaker defense reveals a subtle time window issue: when entering Plan Mode, auto mode was enabled, but during Plan Mode duration (possibly minutes or tens of minutes), auto mode might have been closed due to external reasons (like system load, security policy changes). If ExitPlanMode doesn't check this condition, Agent exiting Plan Mode would immediately execute operations with auto mode permissions, potentially bypassing newly activated security limits.
+This circuit breaker defense reveals a subtle time window issue: when entering Plan Mode, auto mode was enabled, but during Plan Mode duration (possibly minutes or tens of minutes), something external (like system load or a security policy change) might have switched auto mode off. If ExitPlanMode doesn't check this condition, Agent exiting Plan Mode would immediately execute operations with auto mode permissions, potentially bypassing newly activated security limits.
 
 **Teammate path**: When Agent runs as teammate and Plan Mode is mandatory, ExitPlanMode doesn't pop up local approval UI but sends plan to team lead for approval via mailbox mechanism. Approval request contains sender, timestamp, plan file path, plan content, and request ID.
 
@@ -210,11 +214,11 @@ After user approves plan, ExitPlanMode restores original mode, Agent enters exec
 
 ### 14.2.1 Verification Agent
 
-`registerPlanVerificationHook` is referenced in `ExitPlanModeV2Tool`, its comment reveals an important design decision: verification hooks must be registered after context clear because context clear removes all hooks.
+`ExitPlanModeV2Tool` references `registerPlanVerificationHook`, and the comment beside it reveals an important design decision: verification hooks must be registered after context clear because context clear removes all hooks.
 
 Verification hooks must be registered after context clear because context clear removes all hooks. So the verification agent is an independent background Agent running in the phase after "clear context and start implementation", checking whether implementation results match the plan.
 
-**Design philosophy of verification agent.** Why do we need an independent verification agent instead of letting the execution agent check itself? This involves the cognitive bias of "self-review" -- executioners tend to judge their work using their own understanding rather than strictly comparing against the original plan text. The independent verification agent holds a snapshot of the original plan file, able to review implementation results from a "bystander" perspective.
+**Design philosophy of verification agent.** Why do we need an independent verification agent instead of letting the execution agent check itself? This involves the cognitive bias of "self-review" -- executioners tend to judge their work using their own understanding rather than strictly comparing against the original plan text. The independent verification agent holds a snapshot of the original plan file and can review the result from a "bystander" perspective.
 
 This is like code review in software engineering: having author review their own code is far less effective than having another engineer do it. Verification agent plays the role of this "other engineer".
 
@@ -368,7 +372,7 @@ Claude Code's extensibility design follows the "ladder-style extension" principl
 
 ### 14.3.2 Fork Agent State Isolation
 
-`createSubagentContext` creates a completely isolated ToolUseContext. By default, all mutable state is isolated:
+`createSubagentContext` creates a completely isolated ToolUseContext. By default it walls off every piece of mutable state:
 
 ```mermaid
 flowchart TD
@@ -424,7 +428,7 @@ Fork Agent's state isolation strategy can be compared to a "sandbox": sub-agent 
 
 ### 14.4.1 ScheduleCronTool: Local Scheduled Tasks
 
-Claude Code's scheduling system supports two types of scheduled tasks:
+Claude Code's scheduling system handles two types of scheduled tasks:
 
 - **One-shot** (`recurring: false`): Triggers once then automatically deletes.
 - **Recurring** (`recurring: true`): Repeats according to schedule, rescheduling from current time.
@@ -457,11 +461,11 @@ Therefore, `durable` flag provides a "lightweight task" mechanism: tasks needing
 
 ### 14.4.2 CronScheduler: Scheduler Core
 
-`createCronScheduler` implements a complete scheduler, including following key features:
+`createCronScheduler` builds a full scheduler with these key features:
 
 **File lock**: `tryAcquireSchedulerLock` ensures multiple Claude sessions in the same project directory don't repeatedly trigger the same on-disk task. Non-owner sessions probe the lock every 5 seconds, taking over if the owner crashes.
 
-This file lock mechanism solves an actual distributed problem: developers might simultaneously open multiple terminal windows, each running a Claude Code instance. Without the file lock, the same scheduled task would be triggered once by each instance, causing duplicate operations (like repeatedly sending notifications, repeatedly executing deploy checks).
+This file lock mechanism solves an actual distributed problem: developers might simultaneously open multiple terminal windows, each running a Claude Code instance. Without the file lock, each instance would fire the same scheduled task once, causing duplicate operations (like repeatedly sending notifications, repeatedly executing deploy checks).
 
 File lock implementation is based on filesystem atomic operations (like `O_EXCL` create), reliable across all mainstream operating systems. Lock timeout and takeover mechanism ensures no deadlock when owner crashes -- other instances will detect and take over within reasonable time.
 
@@ -663,7 +667,7 @@ Synchronously wait for scheduled task results in main conversation (via Sleep + 
 
 ### 14.5.1 SleepTool
 
-SleepTool is listed as part of background task management. In Claude Code's tool registration, it's registered together with other scheduling-related tools. SleepTool lets an Agent stop partway through a run and wait -- polling a deployment or waiting on an external system is exactly where a long-running background task needs it.
+SleepTool sits in the background-task group. In Claude Code's tool registration, it registers alongside the other scheduling-related tools. SleepTool lets an Agent stop partway through a run and wait -- polling a deployment or waiting on an external system is exactly where a long-running background task needs it.
 
 SleepTool's design seems simple (just wait a specified time), but it plays an important role in the Agent interaction model. Without SleepTool, an Agent facing "waiting" scenarios has only two choices: either return a result immediately (even if the external operation is not yet complete), or poll frequently in a loop (wasting tokens). SleepTool provides a third choice: the Agent can pause execution, wait a while before continuing, without producing token consumption during the wait.
 

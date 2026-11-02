@@ -13,7 +13,7 @@ This appendix provides a conceptual navigation of the Claude Code system archite
 
 ## A.1 Core Module Index
 
-The table below lists all core modules in the Claude Code architecture. Each module includes a responsibility description, an overview of key data structures, and a cross-reference to the relevant chapters.
+The table below lists all core modules in the Claude Code architecture. Each module includes a responsibility description, an overview of key data structures, and a pointer to the chapters that cover it.
 
 | Module Name | Responsibility Description | Key Data Structures | Chapter Reference |
 |---------|---------|------------|---------|
@@ -146,9 +146,9 @@ flowchart TD
 
 **Capability Layer**
 - Contains all tool implementations, the sub-agent system, and the skill system
-- Each tool is an independent capability unit that interfaces with the Orchestration Layer through a unified tool interface
+- Each tool brings its own capability and meets the Orchestration Layer through a unified tool interface
 - The sub-agent system nests agents by recursively calling the Orchestration Layer's conversation main loop
-- The skill system serves as a higher-level capability extension mechanism, combining multiple tools to form domain-specific capability packages
+- The skill system reaches one level higher, combining multiple tools into domain-specific capability packages
 - Dependency direction: depends on the Infrastructure Layer below
 
 **Infrastructure Layer**
@@ -449,7 +449,7 @@ flowchart TD
 
 ## A.4 Module Interface Contract Overview
 
-This section describes the interface contracts between core modules from a conceptual level, helping readers understand how modules collaborate through well-defined interfaces. Note that this describes architectural design patterns, not specific source code references.
+This section describes the interface contracts between core modules in conceptual terms, helping readers understand how modules collaborate through well-defined interfaces. Note that this describes architectural design patterns, not specific source code references.
 
 ### A.4.1 Contract Between Conversation Main Loop and Query Engine
 

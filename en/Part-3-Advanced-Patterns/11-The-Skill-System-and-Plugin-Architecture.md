@@ -4,11 +4,11 @@
 > -- Adapted from *Clean Architecture*
 
 **Learning Objectives:**
-- Master the complete lifecycle of Claude Code Skill definition, loading, and execution mechanisms
-- Understand the tiered skill strategy from user-level to managed-level and its security implications
-- Learn the full process and best practices for creating custom skills
-- Understand the cache-first loading model and security boundaries of the plugin system
-- Master the patterns and anti-patterns of skill composition
+- Follow a Claude Code Skill through its whole life: defined, loaded, executed
+- Explain how skills tier from user-level to managed-level, and what each tier risks
+- Write a custom skill that works on the first try
+- See why the plugin system loads cache-first, and where its security boundary sits
+- Tell the useful patterns of skill composition from the anti-patterns
 
 ---
 
@@ -151,7 +151,7 @@ The deduplication strategy uses `realpath` to resolve symbolic links and obtain 
 
 File-based skills are organized in directory form, where each skill is a directory named `skill-name/` containing a `SKILL.md` file. This is the only directory structure format.
 
-`SKILL.md` supports YAML frontmatter configuration. The fields supported by the parsing logic include:
+`SKILL.md` carries a YAML frontmatter for configuration. The fields the parser handles include:
 
 ```yaml
 ---
@@ -219,7 +219,7 @@ A complete skill creation flow example:
 
 ### 11.2.2 Parameter Substitution Mechanism
 
-Skill prompt content supports flexible parameter substitution:
+Parameter substitution in a skill's prompt is flexible:
 
 **Positional parameters**: `$ARGUMENTS` is replaced with the full argument string; `$ARGUMENTS[0]`, `$ARGUMENTS[1]` are replaced with indexed arguments; `$0`, `$1` are shorthand forms.
 
@@ -251,7 +251,7 @@ Parameter substitution execution order:
     -> Append argument text to the end of the prompt
 ```
 
-Additionally, the skill body supports inline Shell command execution and environment variable substitution. In the prompt generator, in addition to parameter substitution, the following also occurs:
+Additionally, the skill body can run Shell commands inline and substitute environment variables. In the prompt generator, in addition to parameter substitution, the following also occurs:
 
 1. Add skill root directory prefix: `Base directory for this skill: ${baseDir}`
 2. Replace `${CLAUDE_SKILL_DIR}` with the absolute path of the skill directory
@@ -298,7 +298,7 @@ flowchart TB
 
 ### 11.3.1 Tiered Loading Strategy
 
-The `getSkillsPath` function clearly defines the path mapping for each source, returning the corresponding skill directory path based on source type (policySettings, userSettings, projectSettings, plugin).
+The `getSkillsPath` function clearly defines the path mapping for each source, returning the skill directory path that belongs to each source type (policySettings, userSettings, projectSettings, plugin).
 
 Description of each tier:
 
@@ -334,7 +334,7 @@ graph TD
 
 ### 11.3.2 Dynamic Skill Discovery
 
-In addition to static loading at startup, Claude Code also supports dynamic skill discovery during session runtime. When the model accesses files through tools like Read, Write, Edit, etc., the system searches upward along the file path for `.claude/skills/` directories.
+In addition to static loading at startup, Claude Code also discovers skills dynamically while a session runs. When the model accesses files through tools like Read, Write, Edit, etc., the system searches upward along the file path for `.claude/skills/` directories.
 
 The core function `discoverSkillDirsForPaths` discovers skills dynamically:
 
@@ -678,7 +678,7 @@ paths:
 
 Perform a comprehensive code review of file $file_path.
 
-Check the following aspects:
+Check each item:
 1. Security vulnerabilities (XSS, injection, sensitive data leakage)
 2. Performance issues (unnecessary loops, memory leak risks)
 3. Maintainability (naming, complexity, duplicate code)

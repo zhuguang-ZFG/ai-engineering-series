@@ -1,12 +1,12 @@
 # 第5章：设置与配置 -- Agent 的基因
 
-> **学习目标：** 理解六层配置源的合并规则和安全边界，掌握功能开关系统的编译时优化机制，以及 Zustand-like 不可变状态存储的设计哲学。通过本章的学习，你将能够为不同规模的团队设计合理的配置策略，并理解配置系统如何成为 Agent 安全防护的第一道防线。
+> **学习目标：** 六层配置源按什么顺序合并、边界划在哪里；功能开关怎么在编译期就把用不上的分支剪掉；Zustand-like 的不可变存储为什么适合装配置。读完这章，你能给大小不同的团队各定一套配置策略，也能说清配置系统怎样成了 Agent 安全的第一道防线。
 
 ---
 
 Claude Code 的行为不是由某个单一配置文件决定的，而是由六层配置源逐层合并而成。这些配置源就像 Agent 的"基因"——它们在 Agent 启动前就已写定，决定了 Agent 能做什么、不能做什么、以及以何种方式去做。理解这套体系，是驾驭 Claude Code 行为定制能力的第一步。
 
-将配置系统比作"基因"是恰当的：正如生物体的基因在受精卵形成时就已确定，发育时一层层表达出来，Claude Code 的配置也在启动时加载，在运行时逐层生效。不同的是，Agent 的"基因"可以被精准地编辑和覆盖——这既是能力，也是风险。
+将配置系统比作"基因"是恰当的：正如生物体的基因在受精卵形成时就已确定，发育时一层层表达出来，Claude Code 的配置也在启动时加载，在运行时逐层生效。不同的是，Agent 的"基因"能精准改写，也能整份覆盖——这既是能力，也是风险。
 
 ## 5.1 六层配置源的优先级体系
 
@@ -16,7 +16,7 @@ Claude Code 的配置源在配置常量模块中定义为一个有序数组，�
 
 配置加载函数 `loadSettingsFromDisk()` 遵循一个关键原则：**后加载者覆盖前者**。合并不是整份替换，而是按字段深度合并，再叠加自定义规则。
 
-实际执行时还有一个隐藏的最低优先级层：**pluginSettings**（插件设置）。在配置加载流程中，插件设置首先被加载为合并的基础，后续各层配置在此基础上依次叠加。
+实际执行时还有一个隐藏的最低优先级层：**pluginSettings**（插件设置）。加载器先读插件设置，把它当作合并的底座，后续各层配置再一层层往上叠。
 
 因此，完整的优先级链从低到高是：
 
@@ -69,7 +69,7 @@ flowchart LR
     class example1,example2,example3 example
 ```
 
-合并的核心在自定义合并策略函数 `settingsMergeCustomizer` 中：该函数对数组类型执行拼接并去重操作，其他类型则交给默认的深度合并逻辑处理。
+合并的核心在自定义合并策略函数 `settingsMergeCustomizer` 中：这个函数把数组拼接起来再去重，其他类型则交给默认的深度合并逻辑处理。
 
 这套规则的关键特性是：
 
@@ -83,7 +83,7 @@ flowchart LR
 
 反模式警告：不要用数组拼接来"撤销"下层的规则。例如，你不能通过在上层设置一个空数组来清除下层的权限——空数组拼接后下层规则依然存在。如果需要撤销，应该使用 `permissions.deny` 字段来显式拒绝。
 
-让我们通过一个完整的例子来演示合并过程：
+合并过程走一遍完整的例子：
 
 ```
 场景：一个前端团队的项目配置
@@ -170,7 +170,7 @@ flowchart TD
     class empty empty
 ```
 
-注意 policySettings 使用的是"首个非空源胜出"而非"深度合并"。差别就在这里：企业管理策略通常是一个完整的、经过审计的配置方案，不同来源的策略之间不应该互相"渗透"。例如，远程 API 下发的策略已经包含了完整的安全规则，不应该被本地的 managed-settings.json 文件中的部分配置所稀释。
+注意 policySettings 使用的是"首个非空源胜出"而非"深度合并"。差别就在这里：企业管理策略通常是一个完整的、经过审计的配置方案，不同来源的策略之间不应该互相"渗透"。例如，远程 API 下发的策略已经包含了完整的安全规则，不该让本地 managed-settings.json 里的几行配置把它冲淡。
 
 ### 5.1.4 策略层的特殊地位
 
@@ -220,7 +220,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 
 ## 5.2 安全边界设计
 
-配置系统的核心安全挑战是：`projectSettings`（`.claude/settings.json`）会被提交到 Git 仓库，克隆恶意仓库的用户就可能在不知情的情况下加载攻击者的配置。Claude Code 的防护策略是：**在安全敏感的检查中，系统性地排除 `projectSettings`**。
+配置系统的核心安全挑战是：`projectSettings`（`.claude/settings.json`）会跟着提交进 Git 仓库，谁克隆了恶意仓库，谁就可能不知不觉把攻击者的配置加载进来。Claude Code 的防护策略是：**在安全敏感的检查中，系统性地排除 `projectSettings`**。
 
 这就像一栋大楼的权限系统：项目的门禁卡可以打开会议室和休息区（projectSettings），但绝不能打开机房和安全室（安全敏感操作）。不同级别的权限由不同的信任级别控制。
 
@@ -238,7 +238,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 | 隐蔽性 | 中等（需要绕过安全检测） | 极高（配置文件看似正常） |
 | 影响范围 | 软件用户 | 开发者的整个工作环境 |
 
-一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，该 hook 在每次工具调用时将用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆该项目并启动 Claude Code 时，恶意 hook 就会在不知情的情况下执行。
+一个具体的攻击场景：攻击者创建一个看似正常的开源项目，在 `.claude/settings.json` 中配置一个 `PreToolUse` hook，这个 hook 在每次工具调用时把用户的敏感信息（API key、环境变量）发送到攻击者的服务器。当开发者克隆这个项目并启动 Claude Code 时，恶意 hook 就在没人察觉时跑起来。
 
 **为什么 projectSettings 是风险最大的配置源？**
 
@@ -254,7 +254,7 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 在钩子配置快照模块中，`shouldAllowManagedHooksOnly` 函数决定了是否只允许托管（managed）hooks 运行。它会检查策略设置中是否启用了 `allowManagedHooksOnly`，如果启用了则返回 true。
 
-当此函数返回 `true` 时，hooks 的执行只使用来自 `policySettings` 的 hooks，所有来自 user/project/local 的 hooks 被跳过。这是一个企业安全特性：管理员可以确保只有经过审核的 hooks 在组织内运行。
+当此函数返回 `true` 时，hooks 的执行只使用来自 `policySettings` 的 hooks，user/project/local 三处的 hooks 一律跳过。这是一个企业安全特性：管理员可以确保只有经过审核的 hooks 在组织内运行。
 
 **实战场景：金融机构的合规要求**
 
@@ -272,13 +272,13 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 核心判断函数 `isRestrictedToPluginOnly` 检查策略配置：如果策略为 `true`，则锁定所有面；如果策略是数组，则只锁定指定的面。
 
-被锁定的面中，只有以下来源被信任：
+面一旦锁上，运行器只信任下面这些来源：
 
 - **plugin** -- 通过 `strictKnownMarketplaces` 单独管控
 - **policySettings** -- 由管理员设置，天然可信
 - **built-in / bundled** -- 随 CLI 发布，非用户编写
 
-而用户级别（`~/.claude/*`）和项目级别（`.claude/*`）的定制全部被阻断。
+而用户级别（`~/.claude/*`）和项目级别（`.claude/*`）的定制全部挡在外面。
 
 这里的关键是"选择性锁定"。企业管理员不需要一刀切地禁止所有定制，而是可以精细地控制哪些定制面需要锁定。例如：
 
@@ -288,7 +288,7 @@ userSettings 和 localSettings 不具备第一个属性（它们在用户自己�
 
 ### 5.2.4 projectSettings 的系统性排除
 
-在安全敏感函数中，`projectSettings` 被一致排除。以下函数展示了相同的模式：检查 `skipDangerousModePermissionPrompt` 时，只从 userSettings、localSettings、flagSettings 和 policySettings 中读取，**有意排除 projectSettings**。
+在安全敏感函数中，`projectSettings` 次次排除在外。以下函数展示了相同的模式：检查 `skipDangerousModePermissionPrompt` 时，只从 userSettings、localSettings、flagSettings 和 policySettings 中读取，**有意排除 projectSettings**。
 
 同样的排除模式出现在 `hasAutoModeOptIn()`、`getUseAutoModeDuringPlan()` 和 `getAutoModeConfig()` 中。注释一致指向同一个原因：**projectSettings is intentionally excluded -- a malicious project could otherwise auto-bypass the dialog (RCE risk)**。
 
@@ -369,7 +369,7 @@ if (feature('KAIROS')) { ... }  // bundler 在 false 时完全移除该分支
 
 对于需要在运行时动态控制的功能，Claude Code 使用 GrowthBook A/B 测试框架。主要的入口函数 `getFeatureValue_CACHED_MAY_BE_STALE` 接受特性名称和默认值，从缓存中同步读取实验配置。
 
-函数名中的 "CACHED_MAY_BE_STALE" 直白地说明了其语义：值来自缓存，可能在跨进程的场景下已过时。这是为了在启动关键路径上避免异步等待——同步读取缓存比阻塞等待远程配置更可取。
+函数名中的 "CACHED_MAY_BE_STALE" 直白地说明了其语义：值来自缓存，跨进程时就可能已经过时。这是为了在启动关键路径上避免异步等待——同步读取缓存比阻塞等待远程配置更可取。
 
 **这个命名方式值得抄走。** 在 API 设计中，将非显而易见的行为约束直接编码到函数名中，可以让调用者在每次使用时都被"提醒"这个约束。相比之下，一个名为 `getFeatureValue` 的函数会给人一种"返回最新值"的错误预期。
 
@@ -410,7 +410,7 @@ flowchart TD
 
 ### 5.4.1 Store：极简不可变状态容器
 
-状态管理模块实现了一个只有 34 行的泛型 Store，其设计灵感来自 Zustand。Store 提供三个核心方法：`getState` 获取当前状态、`setState` 通过 updater 函数更新状态、`subscribe` 订阅状态变化。
+状态管理模块的核心是一个只有 34 行的泛型 Store，其设计灵感来自 Zustand。Store 提供三个核心方法：`getState` 获取当前状态、`setState` 通过 updater 函数更新状态、`subscribe` 订阅状态变化。
 
 三个关键设计决策：
 
@@ -432,7 +432,7 @@ Redux、MobX、Recoil、Jotai、Valtio……前端状态管理库一个接一个
 | 中间件需求 | 高（异步操作、副作用） | 低（同步为主） |
 | 学习曲线容忍度 | 低（团队协作） | 低（但原因不同：保持代码简洁） |
 
-34 行的 Store 意味着：没有 reducer 样板代码、没有 action 类型定义、没有中间件配置、没有 DevTools 集成——只有最核心的 get/set/subscribe。每一个被砍掉的功能都是一个经过深思熟虑的"不"。
+34 行的 Store 意味着：没有 reducer 样板代码、没有 action 类型定义、没有中间件配置、没有 DevTools 集成——只有最核心的 get/set/subscribe。每砍掉一个功能，都是一个想清楚才说出口的"不"。
 
 **不可变更新的深层含义**
 
@@ -455,7 +455,7 @@ setState(prev => ({ ...prev, count: prev.count }))
 
 ### 5.4.2 AppState：全局状态的类型定义
 
-全局状态类型 `AppState` 被标记为深度不可变（DeepImmutable），包含了超过 50 个状态字段，涵盖了：
+全局状态类型 `AppState` 带着一个深度不可变（DeepImmutable）标记，包含超过 50 个状态字段，涵盖：
 
 - **设置层**：`settings`（合并后的 SettingsJson）、`verbose`、`mainLoopModel`
 - **UI 层**：`expandedView`、`footerSelection`、`statusLineText`
@@ -470,7 +470,7 @@ setState(prev => ({ ...prev, count: prev.count }))
 
 **DeepImmutable 的类型级保证**
 
-`AppState` 使用 `DeepImmutable<T>` 类型标记意味着 TypeScript 编译器会在编译时阻止任何直接修改状态字段的尝试。这是一种"让正确的事情容易，让错误的事情不可能"的设计哲学在类型系统层面的体现。
+`AppState` 使用 `DeepImmutable<T>` 类型标记意味着 TypeScript 编译器会在编译时阻止任何直接修改状态字段的尝试。"让正确的事情容易，让错误的事情不可能"这句设计哲学，在这里是由类型系统替你执行的。
 
 状态字段的分类映射了 Agent 系统的架构分层：
 
@@ -596,5 +596,5 @@ const setState = useSetAppState();
 3. **安全边界**：`projectSettings` 在所有安全敏感检查中被排除，防止恶意仓库的供应链攻击。这是"信任半径递减"原则的直接体现。
 4. **策略层的特殊合并**：policySettings 使用"首个非空源胜出"而非深度合并，确保企业策略的确定性和可审计性。
 5. **双重功能开关**：`feature()` 提供编译时死代码消除（零运行时开销），GrowthBook 提供运行时实验控制（灵活但依赖缓存）。两者的选择取决于功能是否需要在发布后动态调整。
-6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码实现了所有必要的状态管理能力。
-7. **DeepImmutable 类型**：在类型系统层面阻止状态被直接修改，让正确的事情容易，让错误的事情不可能。
+6. **不可变状态**：Store 使用 `Object.is` 引用比较，强制不可变更新模式，配合 React 的 `useSyncExternalStore` 实现精细化的订阅渲染。34 行代码就把状态管理该做的都做完了。
+7. **DeepImmutable 类型**：让类型系统拦住对状态的直接修改，让正确的事情容易，让错误的事情不可能。

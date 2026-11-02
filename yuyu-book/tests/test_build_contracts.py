@@ -4,10 +4,12 @@ import re
 import subprocess
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from yuyu_book import art  # noqa: E402
 from yuyu_book.core import BOOK_DIR, REPO_ROOT  # noqa: E402
 from yuyu_book.mermaid import BOOK_FAMILIES  # noqa: E402
 from yuyu_book.style import CSS  # noqa: E402
@@ -41,6 +43,18 @@ def _rule(selector: str) -> str:
     # `.toc-part:hover .tp-no`, or a contract reads the rule it never named
     m = re.search(r"(?m)^" + re.escape(selector) + r"\s*\{([^}]*)\}", CSS)
     return m.group(1) if m else ""
+
+
+def _root_children(svg: str) -> list[tuple[str, str]]:
+    """The root <svg>'s direct element children, in document order, as
+    (tag, class) pairs — the very list CSS's `:nth-child()` counts.
+
+    Element children only: comments and text are skipped, as the browser skips
+    them, and nothing nested inside a child is reached.
+    """
+    root = ET.fromstring(svg)
+    return [(child.tag.rsplit("}", 1)[-1], child.get("class") or "")
+            for child in root]
 
 
 class Palette(unittest.TestCase):
@@ -538,6 +552,27 @@ class DesignVocabulary(unittest.TestCase):
             body[probe_at:].count("animation-timeline:view()"), 1)
         self.assertNotIn("animation:", CSS[CSS.index("@media print{"):])
 
+    def test_the_filmstrip_only_moves_on_screen(self):
+        """A sequential plate's stagger is the one promise the paper edition
+        has to break: Chromium prints what it can compute, and a half-lit
+        frame reads as a plate that failed to print. So every `.illu-seq` rule
+        lives behind both guards, the hover layer resets the scroll range it
+        inherits, and the hover rule comes last."""
+        guarded_at = CSS.index("@supports (animation-timeline: view())")
+        seq_at = CSS.index(".illu-seq .frame{")
+        self.assertGreater(seq_at, guarded_at,
+                           "the filmstrip staggers outside its guard")
+        hover_at = CSS.index(".illu-seq:hover .frame{")
+        self.assertGreater(hover_at, CSS.rindex(".illu-seq .frame:nth-child("),
+                           "the hover layer would beat the scroll ranges")
+        hover = CSS[hover_at:CSS.index("}", hover_at) + 1]
+        self.assertIn("animation-timeline:auto", hover)
+        self.assertIn("animation-range:normal", hover)
+        print_block = CSS[CSS.index("@media print{"):]
+        self.assertNotIn("ink-cycle", print_block,
+                         "a runner survived into the print sheet")
+        self.assertNotIn(".illu-seq", print_block)
+
     def test_smooth_scroll_waits_for_the_readers_consent(self):
         # line-anchored: the guarded rule contains the same declaration
         self.assertNotIn("\nhtml{scroll-behavior:smooth}", CSS)
@@ -550,6 +585,46 @@ class DesignVocabulary(unittest.TestCase):
         # few dozen rules; the ceiling exists so a future verb cannot
         # quietly triple the compositor load on a 5.5 MB single page.
         self.assertLessEqual(CSS.count("animation-timeline:view()"), 40)
+
+
+class FilmstripSource(unittest.TestCase):
+    """A filmstrip's story is its frame order, and the CSS counts positions:
+    `.illu-seq .frame:nth-child(1)` is only frame one if the frame groups are
+    the leading element children of the root. `:nth-child` counts every child
+    element, not every `<g>`, so a `<title>` or a background `<rect>` slipped
+    in front shifts the whole strip by one cell, while a group nested inside a
+    frame — not a child of the root, not a `.frame` — lights no cell. One cell
+    off, and the strip lights up out of order — invisibly, in print."""
+
+    def test_every_shipped_filmstrip_puts_its_frames_first(self):
+        art_dir = BOOK_DIR / "illustrations"
+        seen = 0
+        for path in sorted(art_dir.glob("*.svg")):
+            svg = path.read_text(encoding="utf-8")
+            # the renderer's own predicate, so a file is policed exactly when
+            # the build wraps it in `.illu-seq`; the letters seq in some other
+            # root attribute name no filmstrip and must not demand frames
+            if not art.SEQ_ROOT.search(svg):
+                continue
+            seen += 1
+            try:
+                kids = _root_children(svg)
+            except ET.ParseError as exc:
+                self.fail(f"{path.name}: not well-formed, so there is no "
+                          f"child order to check ({exc})")
+            is_frame = [tag == "g" and cls == "frame" for tag, cls in kids]
+            frames = sum(is_frame)
+            first_other = next((i for i, f in enumerate(is_frame) if not f),
+                               len(is_frame))
+            self.assertGreaterEqual(frames, 4, f"{path.name}: a strip "
+                                "of fewer than four frames is a line drawing")
+            self.assertLessEqual(frames, 6, f"{path.name}: the CSS only "
+                                "staggers six frames")
+            self.assertEqual(frames, first_other,
+                             f"{path.name}: a frame sits after a "
+                             "decorative group, so the scroll ranges "
+                             "land on the wrong cells")
+        self.assertGreaterEqual(seen, 1, "no filmstrip on disk to test")
 
 
 class ChapterOpening(unittest.TestCase):

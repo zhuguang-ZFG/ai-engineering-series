@@ -1,14 +1,14 @@
 # Chapter 8: The Hook System -- Agent's Lifecycle Extension Points
 
-> **Learning Objectives:** After reading this chapter, you will be able to:
+> **Learning Objectives:** By the end of this chapter, you can:
 >
-> - Understand the design philosophy, capability boundaries, and applicable scenarios of five hook types
-> - Master the trigger timing, input structure, and exit code semantics of 22 lifecycle events
-> - Design structured hook responses, using `decision`, `updatedInput`, `additionalContext` and other fields for fine-grained control
-> - Understand the multi-layer security model: global disable, managed-hooks-only, workspace trust check three-layer gating
-> - Analyze hook priority ordering rules and conflict resolution strategies
-> - Master best practices for hook configuration, avoiding common anti-patterns
-> - Understand the collaboration between the hook system and permission pipeline (Chapter 4), configuration system (Chapter 5)
+> - Tell what each of the five hook types can intercept, and where each one stops
+> - Say when each of the 22 lifecycle events fires, what it receives, and what its exit code means
+> - Write structured hook responses that steer behavior through `decision`, `updatedInput` and `additionalContext`
+> - Recall the three gates: global disable, managed hooks only, workspace trust
+> - Reason out which hook runs first when several match, and how conflicts settle
+> - Configure hooks without stepping into the usual traps
+> - See how hooks hand off to the permission pipeline (Chapter 4) and the configuration system (Chapter 5)
 
 ---
 
@@ -77,7 +77,7 @@ graph TD
 
 **1. Command Hook** (`BashCommandHookSchema`)
 
-The most common hook type, executes Shell commands. Supports choosing Shell interpreter (bash/powershell), custom timeout, custom status message, and `once` flag (automatically removed after one execution).
+The most common hook type, executes Shell commands. You can choose the Shell interpreter (bash/powershell), a custom timeout, a custom status message, and an `once` flag (automatically removed after one execution).
 
 Applicable scenarios: Executing script checks, filesystem operations, calling external CLI tools, conditional approval or rejection of operations.
 
@@ -101,7 +101,7 @@ Configuration example:
 
 **2. Prompt Hook** (`PromptHookSchema`)
 
-Calls an LLM to evaluate the hook input, outputs a JSON response. Supports specifying the model (defaults to a fast small model) and the `$ARGUMENTS` placeholder to reference the hook input.
+Calls an LLM to evaluate the hook input, outputs a JSON response. You can specify the model (defaults to a fast small model) and use the `$ARGUMENTS` placeholder to reference the hook input.
 
 Applicable scenarios: Approval flows requiring "intelligent judgment" rather than hardcoded rules. For example, determining whether a code modification is safe relies not on regex matching of keywords but on letting an LLM understand code semantics to make judgments.
 
@@ -129,7 +129,7 @@ Applicable scenarios: Complex approval flows requiring multi-step, iterable vali
 
 **4. HTTP Hook** (`HttpHookSchema`)
 
-POSTs the hook input JSON to a specified URL. Supports custom request headers, environment variable interpolation (controlled through the `allowedEnvVars` whitelist), suitable for integration with external systems.
+POSTs the hook input JSON to a specified URL. You can set custom request headers and interpolate environment variables (controlled through the `allowedEnvVars` whitelist), which suits integration with external systems.
 
 Applicable scenarios: Integration with CI/CD systems (like Jenkins, GitHub Actions), sending audit logs to SIEM systems, calling enterprise internal approval services.
 
@@ -166,7 +166,7 @@ Applicable scenarios: Scenarios requiring deep interaction with Claude Code runt
 
 ### Sync vs Async Hooks
 
-Command hooks support three execution modes:
+Command hooks have three execution modes:
 
 - **Synchronous mode** (default): Blocks current operation, waits for hook completion before deciding whether to continue. This is the most common and safest mode, suitable for "approve before execute" scenarios.
 - **Asynchronous mode** (`async: true`): Runs in background, doesn't block current operation. Hook results are not visible to the model. Suitable for "fire-and-forget" logging or notification scenarios.
@@ -309,7 +309,7 @@ Configuration example -- Block all writes to production environment config files
 
 **PostToolUse** (After tool execution)
 
-Input contains tool call parameters and response. Can be used for audit logs, result post-processing. Supports `updatedMCPToolOutput` field to override MCP tool's actual output.
+Input contains tool call parameters and response. Can be used for audit logs, result post-processing. You can also set the `updatedMCPToolOutput` field to override MCP tool's actual output.
 
 Typical use cases:
 
@@ -374,7 +374,7 @@ Session lifecycle events constitute the complete narrative of an Agent from "bir
 
 **SessionStart** (Session startup)
 
-Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout is shown to Claude. Blocking errors are ignored -- session start hooks shouldn't block session startup.
+Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout is shown to Claude. The system ignores blocking errors -- session start hooks shouldn't block session startup.
 
 > **Design philosophy:** Why are SessionStart hook blocking errors ignored? Because session startup is the system initialization process; if hooks were allowed to block startup, one misconfigured hook could make the entire system unstartable -- this violates the "graceful degradation" principle. Core system functions should not be hijacked by extension logic.
 
@@ -445,7 +445,7 @@ Configuration example -- Ensure model response includes code examples:
 
 **StopFailure** (When ending due to API error)
 
-Triggered when turn ends due to API error (rate limiting, auth failure, etc.), replacing Stop event. This is a fire-and-forget event -- hook output and exit codes are ignored.
+Triggered when turn ends due to API error (rate limiting, auth failure, etc.), replacing Stop event. This is a fire-and-forget event -- the system ignores hook output and exit codes.
 
 Typical use cases: Automatic reporting and diagnostic logging of API errors.
 
@@ -526,6 +526,12 @@ The table below summarizes the classification, blockability and typical uses of 
 
 * SessionStart blocking is ignored (graceful degradation design)
 
+A hook takes over at four moments: the event rings, a matcher hooks it, the script runs, the next step gets rewritten.
+
+```ill
+ch08-hook-line
+```
+
 ---
 
 ## 8.3 Hook Response Protocol
@@ -568,7 +574,7 @@ graph TD
 
 **decision field**: `approve` or `block`
 
-When hook returns `{"decision": "approve"}`, tool call is allowed to continue; when returning `{"decision": "block"}`, tool call is blocked, `reason` field value is shown as block reason.
+When the hook returns `{"decision": "approve"}`, the tool call goes ahead; when it returns `{"decision": "block"}`, the pipeline blocks the tool call and shows the `reason` field as the block reason.
 
 In hook output processing function, when `decision` field is parsed, `approve` corresponds to allowing continued execution, `block` corresponds to denial with block reason.
 
@@ -596,7 +602,7 @@ This field allows hooks to attach extra context information before the user mess
 
 ### additionalContext: Injecting Additional Context
 
-`additionalContext` is a generic field supported by multiple events. It injects hook-generated additional information into model context, attached as system reminder messages. This is particularly useful in the following scenarios:
+`additionalContext` is a generic field shared by multiple events. It injects hook-generated additional information into model context, attached as system reminder messages. This is particularly useful in the following scenarios:
 
 - Injecting project status information in `SessionStart` event
 - Adding extra usage notes in `PostToolUse` event
@@ -664,7 +670,7 @@ Zod Schema strictly validates hook configuration. The hook Schema module defines
 
 > **Cross-reference with Chapter 5:** Hook configuration is an important component of the six-layer configuration system introduced in Chapter 5. Hook configuration is stored in `hooks` field of each layer, following the same merge and override rules as regular settings. Understanding Chapter 5's configuration merge mechanism helps you understand why hooks with the same name defined in different config files exhibit specific priority behaviors.
 
-Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string supporting permission rule syntax pattern matching.
+Matchers filter by permission rule syntax (`if` condition field). For example `"Bash(git *)"` only triggers hook when Bash tool call starts with `git`. This condition field is an optional string matched with permission rule syntax.
 
 Complete hook configuration structure example:
 
@@ -748,7 +754,7 @@ graph TD
     class p4,p5,p6 low
 ```
 
-Plugin hooks and built-in hooks are assigned lowest priority values in sorting, ensuring they don't override user-configured hooks.
+Sorting hands plugin hooks and built-in hooks the lowest priority values, so they never override user-configured hooks.
 
 > **Design reflection:** Why do the user's global settings rank highest? Because of user sovereignty -- users' personal configuration should be able to override project configuration and plugin defaults. This aligns with Chapter 4's permission pipeline design philosophy of "user decisions take precedence over auto-mode classifier". In a multi-user collaborative project, each developer should be able to customize hook behavior according to their own security preferences.
 
@@ -802,7 +808,7 @@ In this configuration, if the model executes `rm -rf /tmp/test`, only the first 
 
 ### Emergency Disable Switches
 
-Claude Code provides multiple security switches to handle hook-related risks. That is "Defense in Depth" -- no single measure carries the load, and barriers sit at several levels.
+Claude Code provides multiple security switches to handle hook-related risks. That is "Defense in Depth" -- no single measure carries the load, and every gate gets its own barrier.
 
 ```mermaid
 flowchart TD
@@ -831,7 +837,7 @@ flowchart TD
 
 **Workspace trust check**: All hooks in interactive mode require the workspace to be trusted. The check function determines whether the current session is non-interactive (SDK mode trust implicitly granted) and whether the user has accepted the trust dialog.
 
-All hooks in interactive mode require workspace to be trusted. This is a defense-in-depth measure -- hook configuration is stored in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
+In interactive mode, every hook needs you to trust the workspace first. This is a defense-in-depth measure -- hook configuration is stored in `.claude/settings.json`; executing these commands in an untrusted workspace is unsafe. Imagine: you cloned an open-source project, the project's `.claude/settings.json` might contain malicious hooks (like PreToolUse hook sending your sensitive data to external servers). Workspace trust check is the key defense against this "supply chain attack".
 
 The `executeHooks` function chains these checks together, forming complete security gating: first check global disable switch, then check simple mode flag, finally check workspace trust status; only after all pass does normal hook execution proceed.
 
@@ -975,7 +981,7 @@ Below is an enterprise-level security audit configuration comprehensively using 
 }
 ```
 
-This configuration implements a complete security audit flow: recording environment info at session initialization, checking security before deletions, having the LLM review file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
+This one configuration produces a complete security audit flow: recording environment info at session initialization, checking security before deletions, having the LLM review file write content, async audit log reporting after Bash operations, task completeness check at response end, and summary report generation at session end.
 
 ---
 
@@ -1022,7 +1028,7 @@ Design an async-rewake hook for Stop event requiring:
 - When detecting new high-priority task (exit code 2), wake model to continue processing
 - Normal operation (exit code 0) doesn't disturb model
 
-Think: How to avoid "thrashing" -- model just woken immediately stops again, causing repeated loops?
+Think: How to avoid "thrashing" -- the model wakes up and stops again right away, over and over?
 
 **Exercise 5: Security scenario analysis**
 

@@ -3,7 +3,7 @@
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Comment in Claude Code
 
-**Learning Objectives:** Synthesize knowledge from the entire book to design and implement a custom Agent Harness, mastering the complete engineering pipeline from dialog loop to production deployment.
+**Learning Objectives:** The parts the previous 14 chapters took apart now go back together: you build your own Agent Harness, from the dialog loop all the way to something you can deploy.
 
 ---
 
@@ -641,7 +641,7 @@ export class MemoryStore {
 
 ### Step 6: Hook System
 
-The hook system is the extension layer of the Agent Harness. Claude Code supports over twenty hook events, each being an independent Shell command. Here is a streamlined implementation:
+The hook system is the extension layer of the Agent Harness. Claude Code has over twenty hook events, each an independent Shell command. Here is a streamlined implementation:
 
 ```typescript
 // hooks.ts
@@ -717,7 +717,7 @@ export class HookRunner {
 }
 ```
 
-**Extension considerations for the hook system:** Production hook systems need attention in the following areas:
+**Extension considerations for the hook system:** Before shipping a hook system to production, you have to handle these:
 
 1. **Timeout management**: Shell command execution time is unpredictable. Claude Code sets a 10-second timeout; timed-out hooks are treated as errors rather than blocking, ensuring that a slow hook doesn't stall the entire dialog loop.
 
@@ -1066,7 +1066,7 @@ Current tool systems are text-centric, but multimodal interaction is changing th
 - **Visual understanding tools:** Screenshot analysis, UI element location, chart interpretation
 - **Voice interaction:** Voice input triggers tool calls, voice output announces tool results
 
-Multimodal interaction forces Agent Harness architecture to move. The current `ContentBlock` type system needs extending to support binary data, tool `inputSchema` needs to support file references rather than text-only parameters, and streaming needs to support chunked binary data. These changes land in the core data model.
+Multimodal interaction forces Agent Harness architecture to move. The current `ContentBlock` type system has to cover binary data, tool `inputSchema` has to take file references rather than text-only parameters, and streaming has to carry binary data in chunks. These changes land in the core data model.
 
 **New challenges in multimodal scenarios:**
 
@@ -1113,7 +1113,7 @@ flowchart TD
 
 ### Standardized Protocols (MCP Evolution)
 
-Model Context Protocol (MCP) is becoming the de facto standard for tool invocation. Claude Code has deeply integrated MCP: tools can come from MCP servers, the `mcp_info` field tracks tool provenance, and `handleElicitation` supports interactive requests from MCP servers.
+Model Context Protocol (MCP) is becoming the de facto standard for tool invocation. Claude Code has deeply integrated MCP: tools can come from MCP servers, the `mcp_info` field tracks tool provenance, and `handleElicitation` answers interactive requests from MCP servers.
 
 Future MCP evolution directions include:
 
@@ -1172,7 +1172,7 @@ Currently, an Agent typically excels at one type of task. Future Agent Harnesses
 
 **4. From Implicit Memory to Explicit Knowledge Graphs**
 
-The current memory system is implicit, text-fragment-based memory. Future memory may be structured knowledge graphs -- an Agent doesn't just remember "the user likes Jest," but can also remember "Project A uses Jest, Project B uses Vitest, because..." This structured memory supports more precise retrieval and reasoning.
+The current memory system is implicit, text-fragment-based memory. Future memory may be structured knowledge graphs -- an Agent doesn't just remember "the user likes Jest," but can also remember "Project A uses Jest, Project B uses Vitest, because..." Structured memory like that makes retrieval and reasoning sharper.
 
 ---
 
@@ -1238,7 +1238,7 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 
 ## Key Takeaways
 
-1. **Loop state pattern:** Using `while(true)` + `State` object + `continue` to manage loop state is easier to debug and maintain than recursive calls. Claude Code's core query function implements this pattern in roughly 1700 lines of code, handling over ten state transition paths. Three reasons loops beat recursion: state recovery is more natural, abort is more controllable, and debugging is more intuitive.
+1. **Loop state pattern:** Using `while(true)` + `State` object + `continue` to manage loop state is easier to debug and maintain than recursive calls. Claude Code's core query function is this pattern written out in roughly 1700 lines of code, handling over ten state transition paths. Three reasons loops beat recursion: state recovery is more natural, abort is more controllable, and debugging is more intuitive.
 
 2. **Factory function + fail-closed defaults:** The `buildTool` pattern keeps tool definitions concise; defaults choose the most conservative strategy (unsafe, has side effects, requires confirmation), and tools explicitly override to declare safety. This fail-closed strategy ensures new tools don't produce dangerous behavior before passing security review.
 
@@ -1264,4 +1264,4 @@ Agent Harness represents a new software paradigm -- not the programmer telling t
 
 Looking back across the entire book, we see a clear design philosophy: **at every decision point, Claude Code chose the safer, more controllable, more observable option.** Loops over recursion (easier to debug), fail-closed defaults (safer), progressive compression (more controllable), circuit breaker protection (more robust). These choices may individually seem conservative, but together they constitute a system that can be trusted in production environments.
 
-Future software developers need to master two abilities simultaneously: traditional deterministic programming, and this new "meta-programming" -- building Harnesses for AI agents. We hope this book provides a solid starting point for your exploration on this path. Remember, the best Harness doesn't limit the agent's capabilities -- it maximizes the agent's potential while ensuring safety.
+Future software developers need two kinds of skill at once: traditional deterministic programming, and this new "meta-programming" -- building Harnesses for AI agents. We hope this book provides a solid starting point for your exploration on this path. Remember, the best Harness doesn't limit the agent's capabilities -- it maximizes the agent's potential while ensuring safety.

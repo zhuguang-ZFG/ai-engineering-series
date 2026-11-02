@@ -1,6 +1,6 @@
 {
   "version": "0.3.5",
-  "date": "2026-10-31",
+  "date": "2026-11-02",
   "author": "LinTsinghua",
   "repository": "https://github.com/lintsinghua/claude-code-book",
   "license": {
@@ -360,11 +360,11 @@
         "第一部分-基础篇/02-对话循环-Agent的心跳.md:18",
         "第一部分-基础篇/02-对话循环-Agent的心跳.md:141",
         "第一部分-基础篇/02-对话循环-Agent的心跳.md:251",
-        "第一部分-基础篇/02-对话循环-Agent的心跳.md:390",
+        "第一部分-基础篇/02-对话循环-Agent的心跳.md:396",
         "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:18",
         "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:141",
         "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:251",
-        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:390"
+        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:396"
       ]
     },
     "ch03": {
@@ -398,13 +398,13 @@
       },
       "plain_evidence": [
         "第一部分-基础篇/03-工具系统-Agent的双手.md:34",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:281",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:345",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:372",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:287",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:355",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:382",
         "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:34",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:281",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:345",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:372"
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:287",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:355",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:382"
       ]
     },
     "ch04": {
@@ -426,7 +426,14 @@
         "docs-env-vars",
         "cc-issues",
         "cc-changelog",
-        "gh-codex"
+        "gh-codex",
+        "docs-headless",
+        "docs-cursor-cli-headless",
+        "docs-cursor-cli-permissions",
+        "docs-qoder-cli-permissions",
+        "docs-kimi-code-command",
+        "gh-kimi-code",
+        "gh-oh-my-pi"
       ],
       "plain": {
         "zh": "工具请求要过四道关：验格式、查规则、工具自审、人点头；显式拒绝压过一切放行",
@@ -440,11 +447,11 @@
         "第一部分-基础篇/04-权限管线-Agent的护栏.md:19",
         "第一部分-基础篇/04-权限管线-Agent的护栏.md:121",
         "第一部分-基础篇/04-权限管线-Agent的护栏.md:138",
-        "第一部分-基础篇/04-权限管线-Agent的护栏.md:209",
+        "第一部分-基础篇/04-权限管线-Agent的护栏.md:215",
         "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:19",
         "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:121",
         "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:138",
-        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:209"
+        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:215"
       ]
     },
     "ch05": {
@@ -558,11 +565,11 @@
         "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:30",
         "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:77",
         "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:120",
-        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:282",
+        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:288",
         "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:30",
         "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:77",
         "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:120",
-        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:282"
+        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:288"
       ]
     },
     "ch08": {
@@ -598,11 +605,11 @@
         "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:15",
         "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:53",
         "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:211",
-        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:655",
+        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:661",
         "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:15",
         "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:53",
         "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:211",
-        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:655"
+        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:661"
       ]
     },
     "ch09": {
@@ -838,12 +845,12 @@
       "plain_evidence": [
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:13",
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:17",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:422",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:661",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:426",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:665",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:13",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:17",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:423",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:662"
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:427",
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:666"
       ]
     },
     "ch15": {

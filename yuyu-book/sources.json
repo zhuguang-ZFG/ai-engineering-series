@@ -500,15 +500,15 @@
     "kind": "docs",
     "url": "https://code.claude.com/docs/en/headless",
     "pinned": {
-      "docs-revision": "2026-10-25 在线版"
+      "docs-revision": "2026-11-01 在线版"
     },
-    "snapshot": "2026-10-25 读取（HTTP 200，标题 Run Claude Code programmatically；llms.txt 描述为经 Agent SDK 从 CLI/Python/TypeScript 运行）",
-    "snapshot_en": "2026-10-25 read (HTTP 200, title Run Claude Code programmatically; llms.txt describes running it from the CLI/Python/TypeScript through the Agent SDK)",
-    "accessed": "2026-10-25",
+    "snapshot": "2026-11-01 复读（HTTP 200，标题 Run Claude Code programmatically；本轮补记 -p 起 Manual 模式（v2.1.302 起）与 --permission-prompts none（v2.1.259 起）两处原话；首读 2026-10-25）",
+    "snapshot_en": "2026-11-01 re-read (HTTP 200, title Run Claude Code programmatically; this pass records that -p runs start in Manual mode since v2.1.302 and that --permission-prompts none exists since v2.1.259; first read 2026-10-25)",
+    "accessed": "2026-11-01",
     "license": "Anthropic 文档版权（专有/条款见站点声明）；链接引用，不转载",
     "license_en": "Anthropic documentation copyright (proprietary; terms per the site's own statement); linked, never republished",
-    "scope": "第 15 章构建 harness 的对外契约：非交互运行、输出格式（含结构化流式输出）、权限在无人值守下的处理。本书把它当作「官方最小 harness」的例子，与内部循环实现做对照。",
-    "scope_en": "The public contract for building a harness in Chapter 15: non-interactive runs, output formats including structured streaming output, and how permissions are handled with nobody watching. Treated as the example of a minimal official harness, contrasted with the internal loop."
+    "scope": "第 15 章构建 harness 的对外契约，也是第 4 章 §4.3.6 里本书自己的那一格：非交互运行、输出格式（含结构化流式输出）、权限在无人值守下的处理。本书把它当作「官方最小 harness」的例子，与内部循环实现做对照。",
+    "scope_en": "The public contract for building a harness in Chapter 15, and this book's own cell in Chapter 4 §4.3.6: non-interactive runs, output formats including structured streaming output, and how permissions are handled with nobody watching. Treated as the example of a minimal official harness, contrasted with the internal loop."
   },
   "docs-agent-sdk-overview": {
     "title": "Agent SDK overview",
@@ -846,5 +846,105 @@
     "license_en": "Apache-2.0 (SPDX: Apache-2.0); linked, never republished",
     "scope": "第 6、7 章的压力测试：把「记住」做成线束外的一层，靠自己摘要或外部后端把旧内容压回上下文——正好与本书的四级压缩路线争同一块预算，是检验那套账算得对不对的活样本。",
     "scope_en": "A stress test for Chapters 6 and 7: it moves remembering outside the harness and presses old content back into context through its own summaries or an external backend, competing with the book's four-level compression route for the very same budget."
+  },
+  "docs-cursor-cli-headless": {
+    "title": "Using Headless CLI",
+    "authority": "Cursor (cursor.com/docs)",
+    "kind": "docs",
+    "url": "https://cursor.com/docs/cli/headless",
+    "pinned": {
+      "docs-revision": "2026-11-01 在线版"
+    },
+    "snapshot": "2026-11-01 读取（HTTP 200，标题 Using Headless CLI；原话 agent -p 不加 --force 时 changes are only proposed, not applied）",
+    "snapshot_en": "2026-11-01 read (HTTP 200, title Using Headless CLI; states that agent -p without --force yields \"changes are only proposed, not applied\")",
+    "accessed": "2026-11-01",
+    "license": "Cursor 文档版权（专有/条款见站点声明）；链接引用，不转载",
+    "license_en": "Cursor documentation copyright (proprietary; terms per the site's own statement); linked, never republished",
+    "scope": "第 4 章 §4.3.6 的对照面：Cursor 把无人应答的写操作降成一份不落盘的提议。只作对照，不支撑本书关于 Claude Code 的任何论断。",
+    "scope_en": "Cross-check for Chapter 4 §4.3.6: Cursor demotes an unattended write into a proposal that never lands. Cross-check only -- it supports no claim about Claude Code."
+  },
+  "docs-cursor-cli-permissions": {
+    "title": "Permissions",
+    "authority": "Cursor (cursor.com/docs)",
+    "kind": "docs",
+    "url": "https://cursor.com/docs/cli/reference/permissions",
+    "pinned": {
+      "docs-revision": "2026-11-01 在线版"
+    },
+    "snapshot": "2026-11-01 读取（HTTP 200，标题 Permissions；列出 Shell/Read/Write/WebFetch/Mcp 五类 token，并写明 Deny rules take precedence over allow rules；Write 段另见 Print mode can use write and shell tools）",
+    "snapshot_en": "2026-11-01 read (HTTP 200, title Permissions; lists the Shell/Read/Write/WebFetch/Mcp token types and states \"Deny rules take precedence over allow rules\"; the Write section adds \"Print mode can use write and shell tools\")",
+    "accessed": "2026-11-01",
+    "license": "Cursor 文档版权（专有/条款见站点声明）；链接引用，不转载",
+    "license_en": "Cursor documentation copyright (proprietary; terms per the site's own statement); linked, never republished",
+    "scope": "第 4 章 §4.3.6 的对照面：另一套规则语法——五类 token、deny 压过 allow，与本书的步骤 1a 同形不同源；本页那句「Print mode can use write and shell tools」与 headless 页的「只出提议、不落盘」不口径一致，正文取后者。只作对照，不作依据。",
+    "scope_en": "Cross-check for Chapter 4 §4.3.6: a different rule grammar -- five token types, deny over allow -- shaped like step 1a in this book but from another lineage; the \"Print mode can use write and shell tools\" line on this page disagrees with the headless page on unattended writes, and the chapter follows the headless page. Cross-check only, never evidence."
+  },
+  "docs-qoder-cli-permissions": {
+    "title": "Permissions",
+    "authority": "Qoder (docs.qoder.com)",
+    "kind": "docs",
+    "url": "https://docs.qoder.com/cli/permissions",
+    "pinned": {
+      "docs-revision": "2026-11-01 在线版"
+    },
+    "snapshot": "2026-11-01 读取（HTTP 200，标题 Permissions - Qoder；五种档位、headless 下 ask 变 Auto-deny 的落点表与 8 层配置优先级）",
+    "snapshot_en": "2026-11-01 read (HTTP 200, title Permissions - Qoder; five modes, the table where ask becomes Auto-deny in headless runs, and an 8-layer config order",
+    "accessed": "2026-11-01",
+    "license": "Qoder 文档版权（专有/条款见站点声明）；链接引用，不转载",
+    "license_en": "Qoder documentation copyright (proprietary; terms per the site's own statement); linked, never republished",
+    "scope": "第 4 章 §4.3.6 的对照面：无人应答即自动拒绝，dont_ask 一档为「绝不弹提示」而生，非默认档位只在受信任目录生效。只作对照，不作依据。",
+    "scope_en": "Cross-check for Chapter 4 §4.3.6: no answer means auto-deny, a dont_ask mode built for flows that must never prompt, and non-default modes that only apply inside trusted directories. Cross-check only, never evidence."
+  },
+  "docs-kimi-code-command": {
+    "title": "kimi Command",
+    "authority": "Moonshot AI (moonshotai.github.io/kimi-code)",
+    "kind": "docs",
+    "url": "https://moonshotai.github.io/kimi-code/en/reference/kimi-command.md",
+    "pinned": {
+      "docs-revision": "2026-11-01 在线版"
+    },
+    "snapshot": "2026-11-01 读取（HTTP 200，页面 H1 为 kimi Command；-y/--yolo 与 --auto 两档描述与本机 kimi 2.4.1 --help 逐字一致）",
+    "snapshot_en": "2026-11-01 read (HTTP 200, page H1 \"kimi Command\"; the -y/--yolo and --auto descriptions match this machine's kimi 2.4.1 --help word for word)",
+    "accessed": "2026-11-01",
+    "license": "Moonshot AI 文档（开源站点，条款见仓库许可）；链接引用，不转载",
+    "license_en": "Moonshot AI documentation (open site; terms per the repository licence); linked, never republished",
+    "scope": "第 4 章 §4.3.6 的对照面：把审批收进启动档位（Ask When Needed / Never Ask），-p 只是不开 TUI，不另设审批轴。只作对照，不作依据。",
+    "scope_en": "Cross-check for Chapter 4 §4.3.6: approval folded into the startup gear (Ask When Needed / Never Ask), while -p only skips the TUI and adds no axis of its own. Cross-check only, never evidence."
+  },
+  "gh-kimi-code": {
+    "title": "Kimi Code CLI",
+    "authority": "Moonshot AI (MoonshotAI/kimi-code)",
+    "kind": "github",
+    "url": "https://github.com/MoonshotAI/kimi-code",
+    "pinned": {
+      "tag": "@moonshot-ai/kimi-code@2.4.1",
+      "commit": "2c73f3f50af4fa7f2540ca0d2e33b07a1408e3a7"
+    },
+    "snapshot": "2026-11-01 读取（GitHub API：latest release 发布于 2026-10-30，约 8.1k star，当日仍在推送；该 tag 是附注标签，解引用到上述 commit）",
+    "snapshot_en": "2026-11-01 read (GitHub API: latest release published 2026-10-30, ~8.1k stars, pushed the same day; the annotated tag dereferences to that commit)",
+    "accessed": "2026-11-01",
+    "license": "MIT（SPDX: MIT）；链接引用，不转载",
+    "license_en": "MIT (SPDX: MIT); linked, never republished",
+    "scope": "第 4 章 §4.3.6 的对照面之一：本机装有 kimi 2.4.1，档位与旗标都取自该 tag 的同一版。只作对照，不支撑本书关于 Claude Code 的任何论断。",
+    "scope_en": "One of the cross-checks in Chapter 4 §4.3.6: kimi 2.4.1 is installed on this machine, and its gears and flags come from that same tag. Cross-check only -- it supports no claim about Claude Code."
+  },
+  "gh-oh-my-pi": {
+    "title": "oh-my-pi",
+    "authority": "社区（can1357/oh-my-pi）",
+    "title_en": "oh-my-pi",
+    "authority_en": "community (can1357/oh-my-pi)",
+    "kind": "github",
+    "url": "https://github.com/can1357/oh-my-pi",
+    "pinned": {
+      "tag": "v18.15.0",
+      "commit": "3fedf8d53267e32a6d7521ce725fdcc4a36fdc67"
+    },
+    "snapshot": "2026-11-02 读取（GitHub API：tag v18.15.0 为轻量标签，直指 commit 3fedf8d5；本机 omp --help 同日重抓，草稿的 omp 断言在新版全部仍在）",
+    "snapshot_en": "2026-11-02 read (GitHub API: tag v18.15.0 is a lightweight tag pointing straight at commit 3fedf8d5; the local omp --help was re-captured the same day and every draft claim about omp still holds)",
+    "accessed": "2026-11-02",
+    "license": "MIT（SPDX: MIT）；链接引用，不转载",
+    "license_en": "MIT (SPDX: MIT); linked, never republished",
+    "scope": "第 4 章 §4.3.6、第 7 章 §7.5 与第 14 章 §14.1.1 的对照面之一：本机装有 omp 18.15.0，--approval-mode 四值与 --auto-approve、三角色模型与 --prewalk、--plan-yolo，以及 compress、find、toks 子命令都取自本机该版本 --help。只作对照，不作依据。",
+    "scope_en": "One of the cross-checks in Chapter 4 §4.3.6, Chapter 7 §7.5, and Chapter 14 §14.1.1: omp 18.15.0 runs on this machine; the four --approval-mode values plus --auto-approve, the three model roles with --prewalk and --plan-yolo, and the compress, find, and toks subcommands all come from that build's --help. Cross-check only, never evidence."
   }
 }
