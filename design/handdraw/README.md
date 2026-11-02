@@ -1,7 +1,7 @@
 # 手绘风改造方案（handraw-style）
 
 > 依据 [yang0/handraw-style](https://github.com/yang0/handraw-style) 的风格库与规则生成。
-> 本目录只交付**提示词与点位方案**，未生成任何图片；把提示词粘进生图模型即可出图。
+> 本目录交付提示词与点位方案，并落地了代码绘制的封面与首批图解；`covers/cover-art-fa013.webp` 为 FA-013 真出图 key visual（无字）。
 > 原始需求逐字存档于 `original-request.txt`。
 
 ## 一句话目标
@@ -45,8 +45,9 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 
 | 资产 | 现状 | 改造稿 |
 | --- | --- | --- |
-| 书封面 `book/assets/cover.svg` / `cover.webp` | 代码海报风 | `covers.md` 第 0 组（未落地） |
-| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | 2026-10-31 按 composition 重截旧海报（**尚未手绘化**，缺 EP 数字/副标题/卡片/CTA 的手绘稿） | Phase B：`covers.md` 第 1–2 组（FA-013 真出图 / SVG 兜底）→ `render_ep01_covers.py` |
+| 书封面 `book/assets/cover.svg` / `cover.webp` | ✅ 手绘 + 已对齐 `design/system` token（卡面 `#fffdf8`、角标 `#008635`+纸色字 4.51:1/APCA 74、柿子橙苹果）；webp 由 `render_book_cover.py` 重出 | `covers.md` 第 0 组（已落地） |
+| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ composition 已手绘皮肤（b21a488）并按 composition 重截（c7715ea）；CTA 改 `#008635` 底 + 纸色字（原白字压 `#1f883d` 实测 4.33:1 不达标） | `render_ep01_covers.py` |
+| FA-013 真出图 key visual `covers/cover-art-fa013.webp` | ✅ 已出图（1376×768、画面无字；`prompt_style.py --style FA-013 --color C-26` 的确定性提示词） | Phase G 落地页/deck hero 可复用；带字封面仍以代码绘制为准（中文排版可控） |
 | EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
 | 书籍正文知识图解 | 已用**手写 SVG** 落地首批 6 张入正文（见 `book-illustrations.md`）；215 节全量点位未扫 | Phase C：`prompt_style.py` 批量出词 + `insert_illustrations.py` 回填 |
 | 视频正片场景 | ✅ 手绘皮肤（纸面/墨线/marker/硬阴影/纸纹 + kinetic 动效）**已铺满 5 工程 31 场景并重渲 5 支成片**（b21a488/3b31a9b）；仅欠“场景内示意图换成手绘图形隐喻” | Phase E：图解层（时序中性、不改时长） |
@@ -95,7 +96,7 @@ python design/handdraw/render_ep01_covers.py     # 2 张：1920×1080 + 1080×19
 
 ## 尚未做、需要时再点名的事
 
-- 真出图：书封面 / EP.01 横竖封面的 FA-013 手绘稿（需指定生图模型/通道；无通道则走 SVG/代码兜底，同 `design/system/tokens`）。
+- 带字封面的真出图版本：FA-013 key visual 已出（`covers/cover-art-fa013.webp`，无字）；若要 AI 版封面，中文标题仍需代码叠加，暂以 SVG/代码封面为交付口径。
 - 场景内示意图的手绘化（Phase E：皮肤已铺满 31 场景，只欠把“截图/示意图”换成图形隐喻；时序中性、不改时长，需重渲）。
 - 全书 215 节的完整插图点位扫描与回填（Phase C：已交 6 张，`prompt_style.py` + `insert_illustrations.py` 可批量）。
 - 全书正文 / 配音稿 / 字幕的去 AI 味（Phase D 正文 refactor、Phase F 口播 recreate + 逐集重剪，口径见 `design/system/deai-rules.md`）。
