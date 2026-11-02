@@ -46,9 +46,12 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 | 资产 | 现状 | 改造稿 |
 | --- | --- | --- |
 | 书封面 `book/assets/cover.svg` / `cover.webp` | 代码海报风 | `covers.md` 第 0 组（未落地） |
-| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ 2026-10-31 按 composition 重出（此前重出停在 10-29，缺 EP 数字、副标题、卡片、CTA） | `render_ep01_covers.py` |
+| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | 2026-10-31 按 composition 重截旧海报（**尚未手绘化**，缺 EP 数字/副标题/卡片/CTA 的手绘稿） | Phase B：`covers.md` 第 1–2 组（FA-013 真出图 / SVG 兜底）→ `render_ep01_covers.py` |
 | EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
-| 书籍正文知识图解 | 截图为主，机制段落靠文字推演 | `book-illustrations.md` 首批 6 个点位 |
+| 书籍正文知识图解 | 已用**手写 SVG** 落地首批 6 张入正文（见 `book-illustrations.md`）；215 节全量点位未扫 | Phase C：`prompt_style.py` 批量出词 + `insert_illustrations.py` 回填 |
+| 视频正片场景 | ✅ 手绘皮肤（纸面/墨线/marker/硬阴影/纸纹 + kinetic 动效）**已铺满 5 工程 31 场景并重渲 5 支成片**（b21a488/3b31a9b）；仅欠“场景内示意图换成手绘图形隐喻” | Phase E：图解层（时序中性、不改时长） |
+
+> **视觉 token 的权威来源已上移到 `design/system/`**（`tokens.css` + `tokens.md` + `contrast.mjs` + `cjk-rules.md` + `deai-rules.md`）：本目录的 `cover.css`/场景内联值与之同源，后续以 `design/system/` 为准。手绘=长相，歸藏=可读性约束（OKLCH+WCAG/APCA 双阈、CJK T 规则）。
 
 ## 知识图解的七条红线（来自 article-illustration-planner + 本书实际图况，执行时必须遵守）
 
@@ -92,6 +95,10 @@ python design/handdraw/render_ep01_covers.py     # 2 张：1920×1080 + 1080×19
 
 ## 尚未做、需要时再点名的事
 
-- 真出图（需要指定生图模型/通道）。
-- 把视频正片场景也改成手绘风（要重渲染 HyperFrames，属另一档工程）。
-- 全书 215 章的完整插图点位扫描（本包先交付学习路径上最关键的 6 张）。
+- 真出图：书封面 / EP.01 横竖封面的 FA-013 手绘稿（需指定生图模型/通道；无通道则走 SVG/代码兜底，同 `design/system/tokens`）。
+- 场景内示意图的手绘化（Phase E：皮肤已铺满 31 场景，只欠把“截图/示意图”换成图形隐喻；时序中性、不改时长，需重渲）。
+- 全书 215 节的完整插图点位扫描与回填（Phase C：已交 6 张，`prompt_style.py` + `insert_illustrations.py` 可批量）。
+- 全书正文 / 配音稿 / 字幕的去 AI 味（Phase D 正文 refactor、Phase F 口播 recreate + 逐集重剪，口径见 `design/system/deai-rules.md`）。
+- 新增网页出口：落地页 / deck / 小红书卡片（Phase G，借歸藏工作循环 + 手绘 token）。
+
+> 完整改造路线见根 SPEC（本改造计划 rapid-lake-darter）；地基与约束见 `design/system/`。
