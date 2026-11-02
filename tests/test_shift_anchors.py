@@ -72,10 +72,16 @@ class PreserveFormatting(unittest.TestCase):
                              f"{name}: an anchor the shift did not route")
             self.assertEqual(text, out, f"{name}: formatting drifted")
 
-    def test_crlf_survives_a_write(self):
-        src = ROOT / "yuyu-book" / shift_anchors.REGISTRY_NAMES[0]
-        text = src.read_text(encoding="utf-8", newline="")
-        self.assertIn("\r\n", text, "the fixture assumed CRLF registries")
+    def test_line_endings_on_disk_are_consistent(self):
+        """These registries are CRLF in a Windows working copy and LF in a
+        Linux checkout (the blobs are LF; autocrlf does the rest). Either way
+        the splice must not mix them, or "only the digits change" is a lie."""
+        for name in shift_anchors.REGISTRY_NAMES:
+            text = (ROOT / "yuyu-book" / name).read_text(
+                encoding="utf-8", newline="")
+            crlf = text.count("\r\n")
+            self.assertTrue(crlf == 0 or crlf == text.count("\n"),
+                            f"{name}: mixed line endings on disk")
 
     def test_the_cli_without_write_leaves_the_bytes_alone(self):
         """The default is a plan, not an edit; Task 3 leans on that before it
