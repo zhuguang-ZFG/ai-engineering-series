@@ -91,7 +91,7 @@ npm run check:diagrams                                   # 320 张 Mermaid
 **Interfaces:**
 - Produces: `REF: re.Pattern`；`shift(text: str, files: frozenset[str], after: int, delta: int) -> tuple[str, list[tuple[str, int, int]]]`；`main(argv: list[str] | None = None) -> int`；`REGISTRY_NAMES: tuple[str, ...] = ("glosses.json", "manifest.json")`
 
-- [ ] **Step 1: 写失败的测试**
+- [x] **Step 1: 写失败的测试**
 
 Create `tests/test_shift_anchors.py`:
 
@@ -169,12 +169,12 @@ class PreserveFormatting(unittest.TestCase):
         self.assertIn("\r\n", text, "the fixture assumed CRLF registries")
 ```
 
-- [ ] **Step 2: 跑到失败**
+- [x] **Step 2: 跑到失败**
 
 Run: `python -X utf8 -m unittest tests.test_shift_anchors -v`（工作目录 `claude-code-book-main`）
 Expected: `ModuleNotFoundError: No module named 'shift_anchors'`
 
-- [ ] **Step 3: 写实现**
+- [x] **Step 3: 写实现**
 
 Create `scripts/shift_anchors.py`:
 
@@ -259,14 +259,14 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 4: 跑到通过**
+- [x] **Step 4: 跑到通过**
 
 Run: `python -X utf8 -m unittest tests.test_shift_anchors -v`
 Expected: `Ran 8 tests ... OK`（仓库测试总数从 27 → 35：`python -X utf8 -m unittest discover -s tests` 报 `Ran 35 tests`）
 
 第 8 条是任务评审补出来的：这 6 条里没有一个真正走 `--write`，而 Task 3 第一次拿它改真注册表时，「漏写 `newline=""`」这种整文件行尾翻车恰好是无人盯的那条路。评审另要求干跑那条断言不许从被统计的行反推总数（过滤器匹配不到任何东西时 `planned: 0 anchors` 也是绿），所以下限和两个注册表前缀都独立断言。
 
-- [ ] **Step 5: 用一次真实干跑确认它对现状可用**
+- [x] **Step 5: 用一次真实干跑确认它对现状可用**
 
 Run:
 ```bash
@@ -276,7 +276,7 @@ python -X utf8 scripts/shift_anchors.py --after 289 --delta 6 \
 ```
 Expected（2026-11-02 实测）：26 行 `glosses.json: …:NNN -> NNN+6` 与 2 行 `manifest.json: …`，末行 `planned: 28 anchors`，且 `git diff --stat -- yuyu-book/` 为空（干跑不许写盘）。这 28 就是 Task 3 Step 4 该复现的数。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add scripts/shift_anchors.py tests/test_shift_anchors.py
@@ -307,7 +307,7 @@ git commit -m "feat(book): 锚点平移脚本，正文插图落地时行号不�
 - Consumes: `CSS`（模块级字符串，测试类里已可用）、`ART.glob("*.svg")`、`yuyu_book.core.extract_illustrations(text, file) -> (body, ills)`
 - Produces: `Data.body_plates(lang: str) -> int`（zh 侧当前返回 2）；构建器测试数 440 → 442（新增三条 claim 只是已有测试方法里的数据行，不新增测试），后续任务的账本注释都要写 442
 
-- [ ] **Step 1: 写胶片动画层的失败测试**
+- [x] **Step 1: 写胶片动画层的失败测试**
 
 在 `MotionGuards` 类内（`test_motion_stays_inside_its_guards` 之后）追加：
 
@@ -347,7 +347,7 @@ PY
 ```
 手工把 `style.py:728` 那两行 `.illu-seq .frame{…}` 剪到 `style.py:689` 的 `@media screen…` 之前，重跑本条测试必须红，然后 `mv yuyu-book/yuyu_book/style.py.bak yuyu-book/yuyu_book/style.py` 复原并确认转绿。变异 2：把 `.illu-seq:hover .frame{` 那段挪到 `nth-child` 之前，必须红于「the hover layer would beat the scroll ranges」。
 
-- [ ] **Step 2: 写 shipped 胶片的帧序失败测试**
+- [x] **Step 2: 写 shipped 胶片的帧序失败测试**
 
 同文件末尾（`MotionGuards` 之外，新开一个 TestCase 类）追加：
 
@@ -387,7 +387,7 @@ class FilmstripSource(unittest.TestCase):
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_build_contracts -k FilmstripSource -v`
 Expected: PASS——`ch03-tool-pipeline.svg` 的组顺序是 `f,f,f,f,other,other`，`first_other` 数出 4，与帧数相等。变异验证：在它第一个帧组之后、第二个之前插一个 `<g opacity=".4">`，重跑必须红（`a frame sits after a decorative group`），撤掉转绿。
 
-- [ ] **Step 3: 把三个没人钉的图数钉住**
+- [x] **Step 3: 把三个没人钉的图数钉住**
 
 **3a — `en/README.md:113` 的单词数改成数字，并说清正文图版。** 把
 
@@ -443,7 +443,7 @@ from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_illustrations,
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v`
 Expected: 只改测试不改 `en/README.md` 时会红——`en/README.md: nothing matches '\\b(\\d+) hand-drawn line illustrations'`（这就是钉住的效力：单词式的数字对正则不可见）。三步都做完后 `OK`。
 
-- [ ] **Step 4: 五道闸 + 计数确认**
+- [x] **Step 4: 五道闸 + 计数确认**
 
 ```bash
 python -X utf8 -m unittest discover -s yuyu-book/tests     # Expected: Ran 442 tests, OK
@@ -453,7 +453,7 @@ python -X utf8 scripts/check_book.py                       # Expected: 0 errors
 npm run check:diagrams                                     # Expected: 320 Mermaid diagrams, 0 errors
 ```
 
-- [ ] **Step 5: 账本记一轮**
+- [x] **Step 5: 账本记一轮**
 
 `yuyu-book/revisions.json` 的 `entries[0]["zh"]` 末尾追加（注意：反引号成对、不许出现 `@@`）：
 
@@ -469,7 +469,7 @@ npm run check:diagrams                                     # Expected: 320 Merma
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -k suite -v` → `OK`
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add yuyu-book/tests/test_build_contracts.py yuyu-book/tests/test_docclaims.py en/README.md yuyu-book/revisions.json
@@ -494,7 +494,7 @@ git commit -m "test(book): 钉住逐格胶片的动画层与帧序，三个散�
 - Consumes: `Task 1` 的 `scripts/shift_anchors.py`
 - Produces: 手写 SVG 29 份、正文图版 3 张、每版 plates 163（zh 与 en 各自）
 
-- [ ] **Step 1: 画胶片本体**
+- [x] **Step 1: 画胶片本体**
 
 Create `yuyu-book/illustrations/ch02-turn-loop.svg`（单行；`348×118`，比另几张高二十来像素，因为回环箭头要在卡片上方跑一条回头路；帧内 y 38～82，帧号基线 y 100）：
 
@@ -502,7 +502,7 @@ Create `yuyu-book/illustrations/ch02-turn-loop.svg`（单行；`348×118`，比�
 <svg class="a-turn seq" viewBox="0 0 348 118" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M16 44q24-2 48 0q2 9 0 18q-24 2-48 0q-2-9 0-18" pathLength="100"/><path d="M28 62l-3 8 10-6" pathLength="100"/><path d="M22 50h34" pathLength="100"/><path d="M22 56h26" pathLength="100"/><path d="M20 76h40" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M20 82h28" opacity=".35" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="100" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M104 44q16-2 32 0q2 12 0 22q-16 2-32 0q-2-12 0-22" pathLength="100"/><path d="M112 52l-4 4 4 4" pathLength="100"/><path d="M126 52l4 4-4 4" pathLength="100"/><path d="M142 50h16" pathLength="100"/><path d="M142 58h12" pathLength="100"/><path d="M104 76h52" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M104 82h36" opacity=".35" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="100" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="206" cy="56" r="10" pathLength="100"/><circle cx="206" cy="56" r="3" fill="currentColor" stroke="none"/><path d="M206 41v5" pathLength="100"/><path d="M206 66v5" pathLength="100"/><path d="M191 56h5" pathLength="100"/><path d="M216 56h5" pathLength="100"/><path d="M232 40v44" opacity=".5" stroke-width="1.2" stroke-dasharray="3 5"/><path d="M236 52l4 4 8-9" pathLength="100"/><path d="M236 68h12" opacity=".55" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="100" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="280" cy="48" r="2" fill="currentColor" stroke="none"/><path d="M288 48h32" pathLength="100"/><circle cx="280" cy="58" r="2" fill="currentColor" stroke="none"/><path d="M288 58h26" pathLength="100"/><circle cx="280" cy="68" r="2" fill="currentColor" stroke="none"/><path d="M288 68h32" pathLength="100"/><path d="M278 80h44" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="100" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 60h12" pathLength="100"/><path d="M89 58l3 2-3 2" pathLength="100"/><path d="M167 60h12" pathLength="100"/><path d="M177 58l3 2-3 2" pathLength="100"/><path d="M255 60h12" pathLength="100"/><path d="M265 58l3 2-3 2" pathLength="100"/></g><g opacity=".7" stroke-width="1.4"><path d="M306 34q2-20-16-21q-128-4-236 0q-18 1-16 21" pathLength="100"/><path d="M33 29l5 6 5-6" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 4h332" stroke-dasharray="6 13"/><path d="M8 108h332" stroke-dasharray="6 13"/></g></svg>
 ```
 
-- [ ] **Step 2: 过 `art._read` 那道闸**
+- [x] **Step 2: 过 `art._read` 那道闸**
 
 Run:
 ```bash
@@ -510,7 +510,7 @@ python -X utf8 -c "import sys;sys.path.insert(0,'yuyu-book');from yuyu_book impo
 ```
 Expected: `3011 bytes inlined`，无异常。（2026-11-02 已把计划里这段 XML 落进临时目录跑过一遍 `art.drawing`：3011 字节 < 20000 上限，`seq` 根元素、4 个帧组、装饰组都排在帧后。`>` 任何一条禁令都会抛 `BuildError`，那就按报错改画，别改闸门。）
 
-- [ ] **Step 3: 双语各插六行**
+- [x] **Step 3: 双语各插六行**
 
 两个文件都在 289 行（空行）之后插入。中文版：
 
@@ -553,7 +553,7 @@ print('both files: 445 -> 451 lines, one block each')
 
 Expected: `both files: 445 -> 451 lines, one block each`。`sum(...)==1` 那条是防「同一围栏粘了两遍」——第一格插歪时，第二格往往还在。
 
-- [ ] **Step 4: 平移锚点**
+- [x] **Step 4: 平移锚点**
 
 ```bash
 python -X utf8 scripts/shift_anchors.py --after 289 --delta 6 \
@@ -565,7 +565,7 @@ Expected（写入后）：同样 28 行，末行 `written: 28 anchors`，`git di
 
 若测出 28 以外的数，先停下：那说明注册表在计划写成之后又被改过，按当下的干跑数走，并把这个数同步进 Step 9 的中英账本注释。
 
-- [ ] **Step 5: 让构建复核每一条锚点**
+- [x] **Step 5: 让构建复核每一条锚点**
 
 Run: `python -X utf8 yuyu-book/build.py --check`
 Expected:
@@ -578,7 +578,7 @@ CHECK OK
 ```
 只要有一条锚点没跟上，这里就会红：`… evidence … is inside a code fence, blank, or past the end of the file`。
 
-- [ ] **Step 6: 挂进画廊**
+- [x] **Step 6: 挂进画廊**
 
 `scripts/build_illustration_gallery.py`：
 - `ORDER` 里把 `"ch02-turn-loop"` 插到 `"ch02"` 之后（第 24～28 行那段列表）；
@@ -593,7 +593,7 @@ CHECK OK
 Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 29 figures)`。（守卫 `on_disk != set(ORDER)` 会红，如果只画了图没登记。）
 
-- [ ] **Step 7: 五处图数声明 +1**
+- [x] **Step 7: 五处图数声明 +1**
 
 Task 2 之后这些数全部被 `test_docclaims` 盯着，漏改一处就直接红——这一步的五个字符串都是 2026-11-02 实测的原文：
 
@@ -605,7 +605,7 @@ Task 2 之后这些数全部被 `test_docclaims` 盯着，漏改一处就直接�
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 
-- [ ] **Step 8: 五道闸全跑**
+- [x] **Step 8: 五道闸全跑**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -616,7 +616,7 @@ python -X utf8 scripts/check_book.py                     # 0 errors
 npm run check:diagrams                                   # 320 Mermaid, 0 errors
 ```
 
-- [ ] **Step 9: 账本记一轮**
+- [x] **Step 9: 账本记一轮**
 
 `entries[0]["zh"]` 末尾追加（以 `构建器测试 442 项全绿。` 收尾）：
 
@@ -634,7 +634,7 @@ npm run check:diagrams                                   # 320 Mermaid, 0 errors
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```bash
 git add yuyu-book/illustrations/ch02-turn-loop.svg 第一部分-基础篇/02-对话循环-Agent的心跳.md en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
@@ -662,7 +662,7 @@ Expected（numstat）：两个 md 各 `6 0`（只加不删）。
 - Consumes: Task 1 的脚本、Task 2 的两项测试（这张是 `line`，正好证明帧序测试只挑 seq、不误伤）
 - Produces: 手写 SVG 30 份、正文图版 4 张
 
-- [ ] **Step 1: 画门廊**
+- [x] **Step 1: 画门廊**
 
 Create `yuyu-book/illustrations/ch01-five-pillars.svg`（`line`，非 seq；中心 x = 40/105/170/235/300，柱顶 y 28，横梁 y 18/25，基线 y 96/102；五样东西从左到右依次是异步流式、边界内嵌、缓存分层、渐进扩展、不可变封存）：
 
@@ -670,14 +670,14 @@ Create `yuyu-book/illustrations/ch01-five-pillars.svg`（`line`，非 seq；中�
 <svg class="a-pillars" viewBox="0 0 340 120" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18q156-4 312 0" pathLength="100"/><path d="M18 25q152-3 304 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M18 96q152-3 304 0" pathLength="100"/><path d="M22 102q148-2 296 0" opacity=".5" stroke-width="1.2" pathLength="100"/><g opacity=".45" stroke-width="1.2"><path d="M40 28v24" pathLength="100"/><path d="M105 28v22" pathLength="100"/><path d="M170 28v22" pathLength="100"/><path d="M235 28v21" pathLength="100"/><path d="M300 28v21" pathLength="100"/></g><g opacity=".92"><path d="M18 56q22-2 44 0" pathLength="100"/><path d="M18 71q11-6 22 0t22 0" pathLength="100"/><path d="M18 88q11-6 22 0t22 0" pathLength="100"/><path d="M64 68l5 4-5 4" pathLength="100"/><circle cx="51" cy="61" r="2" fill="currentColor" stroke="none"/></g><g opacity=".92"><path d="M83 55q22-4 44 0q4 17 0 34q-22 4-44 0q-4-18 0-34" pathLength="100"/><circle cx="105" cy="72" r="10" pathLength="100"/><circle cx="105" cy="72" r="2.4" fill="currentColor" stroke="none"/></g><g opacity=".92"><path d="M150 54q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M150 68q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M150 82q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M160 57l3 3 5-4" pathLength="100"/><path d="M194 68q7 6 0 12" pathLength="100"/></g><g opacity=".92"><path d="M201 91h10v-13h10v-13h10v-13h10" pathLength="100"/><path d="M243 48v-9" pathLength="100"/><path d="M240 43l3-4 3 4" pathLength="100"/></g><g opacity=".92"><path d="M278 54q22-3 44 0q3 18 0 36q-22 3-44 0q-3-18 0-36" pathLength="100"/><circle cx="300" cy="72" r="10" pathLength="100"/><path d="M295 72l4 4 7-8" pathLength="100"/></g><g opacity=".5" stroke-width="1.2"><path d="M69 88q5 3 10 0" pathLength="100"/><path d="M134 88q5 3 10 0" pathLength="100"/><path d="M252 88q5 3 10 0" pathLength="100"/></g><circle cx="24" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="268" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/></svg>
 ```
 
-- [ ] **Step 2: 过闸**
+- [x] **Step 2: 过闸**
 
 ```bash
 python -X utf8 -c "import sys;sys.path.insert(0,'yuyu-book');from yuyu_book import art;print(len(art.drawing('ch01-five-pillars')),'bytes inlined')"
 ```
 Expected: `2152 bytes inlined`，无异常（2026-11-02 实测：这一段跑过 `art.drawing`；根元素没有 `seq`，所以 `FilmstripSource` 会跳过它——这正是它在本批里的用处）。
 
-- [ ] **Step 3: 双语各插六行**
+- [x] **Step 3: 双语各插六行**
 
 中文版 384 行（空行）之后：
 
@@ -720,7 +720,7 @@ print('both files: 463 -> 469 lines, one block each')
 
 Expected: `both files: 463 -> 469 lines, one block each`。英文版那一行是 `## Hands-On Exercise: Installation and Initial Diagnosis`，所以断言只钉 `## ` 前缀，不钉中文标题串。
 
-- [ ] **Step 4: 平移锚点（这一处是零，仍然要跑）**
+- [x] **Step 4: 平移锚点（这一处是零，仍然要跑）**
 
 ```bash
 python -X utf8 scripts/shift_anchors.py --after 384 --delta 6 \
@@ -731,11 +731,11 @@ Expected（2026-11-02 实测）：只有末行 `planned: 0 anchors`，一行明�
 
 留这一步不是仪式：脚本对每个文件都跑一遍，0 与「脚本没找到这个文件」（返回 2 并打印 `no such prose file`）是两种不同的信号，只有跑过才分得开。
 
-- [ ] **Step 5: 构建复核**
+- [x] **Step 5: 构建复核**
 
 `python -X utf8 yuyu-book/build.py --check` → 每版 `164 plates`，`CHECK OK`
 
-- [ ] **Step 6: 画廊**
+- [x] **Step 6: 画廊**
 
 `ORDER` 里把 `"ch01-five-pillars"` 插到 `"ch01"` 之后；`WIDE` 加 `"ch01-five-pillars": 300`；
 `PLAIN` 加 `"ch01-five-pillars": "一道门廊：五条原则顶着同一根横梁",`；
@@ -743,7 +743,7 @@ Expected（2026-11-02 实测）：只有末行 `planned: 0 anchors`，一行明�
 
 Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条） → `30 figures`
 
-- [ ] **Step 7: 五处图数声明 +1**
+- [x] **Step 7: 五处图数声明 +1**
 
 - `README.md:113`：`全书另有 29 份手写线描图` → `全书另有 30 份手写线描图`；括号里 `一条四格胶片与一条心跳循环）` → `一条四格胶片、一条心跳循环与一道五柱门廊）`。
 - `STRUCTURE.md:109`：`| 29 份手写 SVG` → `| 30 份手写 SVG`；`+ 3 幅正文插图` → `+ 4 幅正文插图`。
@@ -753,7 +753,7 @@ Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X 
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 
-- [ ] **Step 8: 五道闸全跑**
+- [x] **Step 8: 五道闸全跑**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -764,7 +764,7 @@ python -X utf8 scripts/check_book.py                     # 0 errors（Markdown �
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
 
-- [ ] **Step 9: 账本记一轮**
+- [x] **Step 9: 账本记一轮**
 
 `entries[0]["zh"]` 末尾追加：
 
@@ -778,7 +778,7 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 "Section 1.3 has a portico. The Mermaid graph at the top of the section already gives each of the five principles a box and links the boxes with arrows, which is a statement about how they fit together; this drawing adds the other thing — the five each own a subsection and readers came away remembering only “five of them”, so now they are a portico, five objects under one lintel — three rippling strokes, a ring set inside its own frame, a three-drawer stack with a tag, steps climbing one above the last, a crate under a stamped check. This plate never staggers: its root carries no seq, so it inks its lines and stops, which is also what proves the frame-order test only picks up strips and leaves single drawings alone. The block lands after line 384, and the shift script reported zero anchors back of it — the registries never quote ch01 that far down, so this round's arithmetic is an honest 0, which only shows up as 0 if you run it. Both language files go from 463 to 469 lines. Hand-inked drawings 29 to 30, plates inside the prose 3 to 4, plates per edition 163 to 164. 442 builder tests green."
 ```
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```bash
 git add yuyu-book/illustrations/ch01-five-pillars.svg 第一部分-基础篇/01-智能体编程的新范式.md en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
@@ -804,7 +804,7 @@ Expected（numstat）：两个 md 各 `6 0`。本任务不动两份注册表（S
 - Consumes: Task 1 的脚本、Task 2 的帧序测试（这张是 seq，必须被它挑中并通过）
 - Produces: 手写 SVG 31 份、正文图版 5 张、每版 plates 165
 
-- [ ] **Step 1: 画四道门**
+- [x] **Step 1: 画四道门**
 
 Create `yuyu-book/illustrations/ch04-gate-steps.svg`（`seq`，`348×106` 标准几何：卡片 y 15～72，帧号基线 y 84，走纸虚线 y 8／96，格间箭头 y 44）：
 
@@ -812,14 +812,14 @@ Create `yuyu-book/illustrations/ch04-gate-steps.svg`（`seq`，`348×106` 标准
 <svg class="a-gates seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M18 26q20-2 40 0q2 15 0 29q-20 2-40 0q-2-14 0-29" pathLength="100"/><path d="M24 34h24" pathLength="100"/><path d="M24 42h20" pathLength="100"/><path d="M24 50h26" pathLength="100"/><path d="M52 60l4 4 8-9" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M100 26q-1 17 1 34" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M104 28h7v7h-7z" pathLength="100"/><path d="M104 40h7v7h-7z" pathLength="100"/><path d="M104 52h7v7h-7z" pathLength="100"/><path d="M116 32h30" pathLength="100"/><path d="M116 44h26" pathLength="100"/><path d="M116 56h32" pathLength="100"/><circle cx="107.5" cy="31.5" r="1.6" fill="currentColor" stroke="none"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M190 26q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><path d="M190 40q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><path d="M190 54q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><circle cx="236" cy="39.5" r="8.5" pathLength="100"/><path d="M242 46l5 5" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M282 22q24-2 48 0q2 6 0 12q-24 2-48 0q-2-6 0-12" pathLength="100"/><path d="M292 28h28" pathLength="100"/><path d="M298 34l-3 8 8-6" pathLength="100"/><path d="M277 52h13" pathLength="100"/><path d="M290 52l10-4" pathLength="100"/><path d="M290 52l10 4" pathLength="100"/><path d="M304 44l4 4 8-9" pathLength="100"/><path d="M304 54l8 8" pathLength="100"/><path d="M312 54l-8 8" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg>
 ```
 
-- [ ] **Step 2: 过闸**
+- [x] **Step 2: 过闸**
 
 ```bash
 python -X utf8 -c "import sys;sys.path.insert(0,'yuyu-book');from yuyu_book import art;print(len(art.drawing('ch04-gate-steps')),'bytes inlined')"
 ```
 Expected: `2633 bytes inlined`，无异常（2026-11-02 实测：4 个帧组、装饰组都在帧组之后）。若报 `contains an id= attribute`，检查有没有误写 `data-id=`：`\bid\s*=` 会连它一起拦。
 
-- [ ] **Step 3: 双语各插六行**
+- [x] **Step 3: 双语各插六行**
 
 中文 170 行之后（这一处后面紧跟 `## 4.2`，所以是「落在 4.1 末尾」，题注取 4.1）：
 
@@ -861,7 +861,7 @@ print('both files: 560 -> 566 lines, 4.2 still opens on its own line')
 
 Expected: `both files: 560 -> 566 lines, 4.2 still opens on its own line`
 
-- [ ] **Step 4: 平移锚点**
+- [x] **Step 4: 平移锚点**
 
 ```bash
 python -X utf8 scripts/shift_anchors.py --after 170 --delta 6 \
@@ -870,12 +870,12 @@ python -X utf8 scripts/shift_anchors.py --after 170 --delta 6 \
 ```
 Expected（2026-11-02 实测）：7 行 `glosses.json:` + 2 行 `manifest.json:`，末行 `planned: 9 anchors`。核对无误后补 `--write`，末行变成 `written: 9 anchors`，`git diff --numstat -- yuyu-book/glosses.json yuyu-book/manifest.json` 报 `7 7` 与 `2 2`。
 
-- [ ] **Step 5: 构建复核**
+- [x] **Step 5: 构建复核**
 
 Run: `python -X utf8 yuyu-book/build.py --check`
 Expected: 两份日志各报 `20 units, 165 plates`，末行 `CHECK OK`。锚点跟错会在这里红：`… evidence … is inside a code fence, blank, or past the end of the file`。
 
-- [ ] **Step 6: 挂进画廊**
+- [x] **Step 6: 挂进画廊**
 
 `scripts/build_illustration_gallery.py`：
 - `ORDER` 里把 `"ch04-gate-steps"` 插到 `"ch04"` 之后；
@@ -890,7 +890,7 @@ Expected: 两份日志各报 `20 units, 165 plates`，末行 `CHECK OK`。锚点
 Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 31 figures)`
 
-- [ ] **Step 7: 五处图数声明 +1**
+- [x] **Step 7: 五处图数声明 +1**
 
 - `README.md:113`：`全书另有 30 份手写线描图` → `全书另有 31 份手写线描图`；括号里 `一条心跳循环与一道五柱门廊）` → `一条心跳循环、一道五柱门廊与四道权限门）`。
 - `STRUCTURE.md:109`：`| 30 份手写 SVG` → `| 31 份手写 SVG`；`+ 4 幅正文插图` → `+ 5 幅正文插图`。
@@ -900,7 +900,7 @@ Expected: `…\illustration-gallery.html (N bytes, 31 figures)`
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 
-- [ ] **Step 8: 五道闸全跑**
+- [x] **Step 8: 五道闸全跑**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -911,7 +911,7 @@ python -X utf8 scripts/check_book.py                     # 0 errors（Markdown �
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
 
-- [ ] **Step 9: 账本记一轮**
+- [x] **Step 9: 账本记一轮**
 
 `entries[0]["zh"]` 末尾追加：
 
@@ -927,7 +927,7 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```bash
 git add yuyu-book/illustrations/ch04-gate-steps.svg 第一部分-基础篇/04-权限管线-Agent的护栏.md en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
