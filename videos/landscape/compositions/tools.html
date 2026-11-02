@@ -10,7 +10,13 @@
     #t-note-v .g { color: #3fb950; }
     #t-flow { position: absolute; top: 720px; left: 110px; width: 650px; display: flex; align-items: center; gap: 12px; font: 700 28px "Noto Sans JP", sans-serif; color: #adbac7; }
     .t-flow-item { padding: 12px 16px; border: 1px solid #444c56; border-radius: 7px; background: #2d333b; }
-    .t-arrow { color: #3fb950; }
+    /* drawn arrow, not a typographic one: the shaft wobbles like a pen stroke */
+    .t-arrow {
+      display: inline-block;
+      width: 44px;
+      height: 28px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='40' viewBox='0 0 64 40'%3E%3Cpath d='M4 24C19 18 36 26 55 20' fill='none' stroke='%233fb950' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M46 9Q53 14 57 20Q51 26 45 31' fill='none' stroke='%233fb950' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+    }
     #t-device { position: absolute; top: 100px; left: 820px; width: 990px; height: 850px; overflow: hidden; border: 1px solid #444c56; border-radius: 17px 12px 19px 10px; background: #0d1117; box-shadow: 0 18px 50px rgba(0,0,0,.3); }
     #t-bar { position: absolute; left: 0; top: 0; right: 0; height: 72px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid #444c56; background: #22272e; }
     .t-dot { width: 13px; height: 13px; border-radius: 50%; background: #57606a; }
@@ -68,7 +74,7 @@
     <div data-hf-id="hf-dxbz" id="t-tag" class="clip" data-start="0" data-duration="45">CHAPTER 2 · TOOLS</div>
     <div data-hf-id="hf-pajf" id="t-title" class="clip" data-start="0" data-duration="45.1">从网页对话，走到<span data-hf-id="hf-oe2j" class="g">本地项目</span></div>
     <div data-hf-id="hf-31xo" id="t-note" class="clip" data-start="10.0" data-duration="35"><div data-hf-id="hf-dqgn" id="t-note-k">工作方式升级</div><div data-hf-id="hf-r59n" id="t-note-v">有文件 · 能运行 · 可调试<br data-hf-id="hf-x5px" /><span data-hf-id="hf-jqje" class="g">AI 全程陪跑</span></div></div>
-    <div data-hf-id="hf-qek7" id="t-flow" class="clip" data-start="12.2" data-duration="32"><span data-hf-id="hf-trga" class="t-flow-item">提需求</span><span data-hf-id="hf-ww53" class="t-arrow">→</span><span data-hf-id="hf-3694" class="t-flow-item">运行</span><span data-hf-id="hf-siwn" class="t-arrow">→</span><span data-hf-id="hf-su2i" class="t-flow-item">看结果</span></div>
+    <div data-hf-id="hf-qek7" id="t-flow" class="clip" data-start="12.2" data-duration="32"><span data-hf-id="hf-trga" class="t-flow-item">提需求</span><span data-hf-id="hf-ww53" class="t-arrow"></span><span data-hf-id="hf-3694" class="t-flow-item">运行</span><span data-hf-id="hf-siwn" class="t-arrow"></span><span data-hf-id="hf-su2i" class="t-flow-item">看结果</span></div>
     <div data-hf-id="hf-422j" id="t-device" class="clip" data-start="1.0" data-duration="45">
       <div data-hf-id="hf-h8sj" id="t-bar"><i data-hf-id="hf-cp3a" class="t-dot"></i><i data-hf-id="hf-s8p6" class="t-dot"></i><i data-hf-id="hf-sn07" class="t-dot"></i><div data-hf-id="hf-xzq1" id="t-address">chat.example.com</div></div>
       <div data-hf-id="hf-1onq" id="t-chat"><div data-hf-id="hf-oipb" id="t-chat-title">网页对话</div><div data-hf-id="hf-9d15" id="t-user" class="t-bubble">帮我做一个能记录待办的小页面</div><div data-hf-id="hf-jru8" id="t-ai" class="t-bubble">可以。先做一个能添加任务的原型。</div><div data-hf-id="hf-ewjv" id="t-open">打开到本地 →</div></div>
