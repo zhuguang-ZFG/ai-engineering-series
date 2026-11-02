@@ -41,7 +41,7 @@ npm run check:diagrams                                   # 320 张 Mermaid
 | 手写 SVG | 28 份（其中正文图版 2 张，均在 ch03） |
 | `ill` 围栏 | 4 个（zh 2 + en 2） |
 | 构建器测试 | 440 项 |
-| 仓库测试 | 27 项 |
+| 仓库测试 | 27 项（Task 1 落定后 35 项，Task 2–8 的闸按 35 读） |
 | Mermaid | 320 张，0 错 |
 | 每版 Mermaid 图版 | 160 张（中英合计 320） |
 | `build.py --check` 报的 plates | 每版 162（160 Mermaid + 2 手绘） |
@@ -260,7 +260,9 @@ if __name__ == "__main__":
 - [ ] **Step 4: 跑到通过**
 
 Run: `python -X utf8 -m unittest tests.test_shift_anchors -v`
-Expected: `Ran 7 tests ... OK`（仓库测试总数从 27 → 34：`python -X utf8 -m unittest discover -s tests` 报 `Ran 34 tests`）
+Expected: `Ran 8 tests ... OK`（仓库测试总数从 27 → 35：`python -X utf8 -m unittest discover -s tests` 报 `Ran 35 tests`）
+
+第 8 条是任务评审补出来的：这 6 条里没有一个真正走 `--write`，而 Task 3 第一次拿它改真注册表时，「漏写 `newline=""`」这种整文件行尾翻车恰好是无人盯的那条路。评审另要求干跑那条断言不许从被统计的行反推总数（过滤器匹配不到任何东西时 `planned: 0 anchors` 也是绿），所以下限和两个注册表前缀都独立断言。
 
 - [ ] **Step 5: 用一次真实干跑确认它对现状可用**
 
@@ -443,7 +445,7 @@ Expected: 只改测试不改 `en/README.md` 时会红——`en/README.md: nothin
 
 ```bash
 python -X utf8 -m unittest discover -s yuyu-book/tests     # Expected: Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests               # Expected: Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests               # Expected: Ran 35 tests, OK
 python -X utf8 yuyu-book/build.py --check                  # Expected: CHECK OK
 python -X utf8 scripts/check_book.py                       # Expected: 0 errors
 npm run check:diagrams                                     # Expected: 320 Mermaid diagrams, 0 errors
@@ -607,7 +609,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 python -X utf8 yuyu-book/build.py --check
 python -X utf8 yuyu-book/build.py --check --mermaid=source
 python -X utf8 -m unittest discover -s yuyu-book/tests   # Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests             # Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests             # Ran 35 tests, OK
 python -X utf8 scripts/check_book.py                     # 0 errors
 npm run check:diagrams                                   # 320 Mermaid, 0 errors
 ```
@@ -753,7 +755,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 python -X utf8 yuyu-book/build.py --check
 python -X utf8 yuyu-book/build.py --check --mermaid=source
 python -X utf8 -m unittest discover -s yuyu-book/tests   # Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests             # Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests             # Ran 35 tests, OK
 python -X utf8 scripts/check_book.py                     # 0 errors（Markdown 文件数随计划文档变动，不作断言）
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
@@ -900,7 +902,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 python -X utf8 yuyu-book/build.py --check
 python -X utf8 yuyu-book/build.py --check --mermaid=source
 python -X utf8 -m unittest discover -s yuyu-book/tests   # Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests             # Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests             # Ran 35 tests, OK
 python -X utf8 scripts/check_book.py                     # 0 errors（Markdown 文件数随计划文档变动，不作断言）
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
@@ -1050,7 +1052,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 python -X utf8 yuyu-book/build.py --check
 python -X utf8 yuyu-book/build.py --check --mermaid=source
 python -X utf8 -m unittest discover -s yuyu-book/tests   # Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests             # Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests             # Ran 35 tests, OK
 python -X utf8 scripts/check_book.py                     # 0 errors（Markdown 文件数随计划文档变动，不作断言）
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
@@ -1199,7 +1201,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 python -X utf8 yuyu-book/build.py --check
 python -X utf8 yuyu-book/build.py --check --mermaid=source
 python -X utf8 -m unittest discover -s yuyu-book/tests   # Ran 442 tests, OK
-python -X utf8 -m unittest discover -s tests             # Ran 34 tests, OK
+python -X utf8 -m unittest discover -s tests             # Ran 35 tests, OK
 python -X utf8 scripts/check_book.py                     # 0 errors（Markdown 文件数随计划文档变动，不作断言）
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
