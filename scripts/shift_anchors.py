@@ -63,13 +63,15 @@ def main(argv: list[str] | None = None) -> int:
     moved = 0
     for name in REGISTRY_NAMES:
         path = ROOT / "yuyu-book" / name
-        text = path.read_text(encoding="utf-8", newline="")
+        # read_bytes()/write_bytes(): no newline translation. The newline=
+        # kwarg of Path.read_text/write_text needs 3.13 and CI runs 3.12.
+        text = path.read_bytes().decode("utf-8")
         out, hits = shift(text, targets, args.after, args.delta)
         for rel, frm, to in hits:
             print(f"{name}: {rel}:{frm} -> {to}")
         moved += len(hits)
         if out != text and args.write:
-            path.write_text(out, encoding="utf-8", newline="")
+            path.write_bytes(out.encode("utf-8"))
     print(f"{'written' if args.write else 'planned'}: {moved} anchors")
     return 0
 

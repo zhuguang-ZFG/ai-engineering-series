@@ -108,8 +108,9 @@ class ShiftSemantics(unittest.TestCase):
 class PreserveFormatting(unittest.TestCase):
     def test_a_zero_delta_rewrite_is_byte_identical(self):
         for name in shift_anchors.REGISTRY_NAMES:
-            text = (ROOT / "yuyu-book" / name).read_text(
-                encoding="utf-8", newline="")
+            # read_bytes().decode(): no newline translation. The newline=
+            # kwarg of Path.read_text needs 3.13 and CI runs 3.12.
+            text = (ROOT / "yuyu-book" / name).read_bytes().decode("utf-8")
             out, hits = shift_anchors.shift(text, frozenset({ZH02}), 0, 0)
             # Delta 0 still routes every anchor past line 0 through the
             # substitution, so this compares real rewritten bytes rather than
@@ -123,8 +124,9 @@ class PreserveFormatting(unittest.TestCase):
         Linux checkout (the blobs are LF; autocrlf does the rest). Either way
         the splice must not mix them, or "only the digits change" is a lie."""
         for name in shift_anchors.REGISTRY_NAMES:
-            text = (ROOT / "yuyu-book" / name).read_text(
-                encoding="utf-8", newline="")
+            # read_bytes().decode(): no newline translation. The newline=
+            # kwarg of Path.read_text needs 3.13 and CI runs 3.12.
+            text = (ROOT / "yuyu-book" / name).read_bytes().decode("utf-8")
             crlf = text.count("\r\n")
             self.assertTrue(crlf == 0 or crlf == text.count("\n"),
                             f"{name}: mixed line endings on disk")
@@ -182,8 +184,7 @@ class PreserveFormatting(unittest.TestCase):
 
             for name, blob in blobs.items():
                 old = blob.decode("utf-8")
-                new = (root / "yuyu-book" / name).read_text(
-                    encoding="utf-8", newline="")
+                new = (root / "yuyu-book" / name).read_bytes().decode("utf-8")
                 self.assertIsNotNone(
                     eol_of(new), f"{name}: --write mixed the line endings")
                 self.assertEqual(
