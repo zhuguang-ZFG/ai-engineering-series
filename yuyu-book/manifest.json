@@ -1,6 +1,6 @@
 {
   "version": "0.3.5",
-  "date": "2026-11-01",
+  "date": "2026-11-02",
   "author": "LinTsinghua",
   "repository": "https://github.com/lintsinghua/claude-code-book",
   "license": {
@@ -845,12 +845,12 @@
       "plain_evidence": [
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:13",
         "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:17",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:422",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:661",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:426",
+        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:665",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:13",
         "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:17",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:423",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:662"
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:427",
+        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:666"
       ]
     },
     "ch15": {

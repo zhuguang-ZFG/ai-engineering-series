@@ -419,6 +419,12 @@ When working with large projects, context management is especially critical:
 | Implementing multiple features consecutively | Manually compress after completing each feature |
 | Refactoring across multiple subsystems | Phased work + memory system support |
 
+### Cross-check: compression as hand tools
+
+> **Identity of this cross-check:** oh-my-pi is registered in `CREDITS.md` as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same boundary grows into under someone else's hands.
+
+Where Claude Code's four-level compression is an automatic defense wired into the conversation loop, oh-my-pi 18.15.0 turns several cuts of that same layer into explicit tools a user can swing directly: `--no-context-files` refuses context files such as AGENTS.md and CLAUDE.md outright, cutting injected context at the source; the `compress` subcommand rewrites text files into the dense prompt register and reports what it drops; the `find` subcommand takes a behavior description and returns the files and line ranges that implement it; the `toks` subcommand counts a file with every embedded offline tokenizer at once. Reporting what gets dropped is the same instinct as the two-phase output structure in §7.3: compression must not be a silent drop -- what got lost goes on the table.
+
 ---
 
 ## Practical Exercises

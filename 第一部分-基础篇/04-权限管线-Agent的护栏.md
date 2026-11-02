@@ -338,7 +338,7 @@ flowchart LR
 - **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步被降格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
 - **Qoder CLI 1.1.81**：官方文档把落点钉在表里——headless（`-p`）下 `ask` 的 outcome 写着 "Auto-deny"，`dont_ask` 一档专为「绝不能弹提示」的流程而生："Never prompts. Any action that would normally ask is denied instead." 想放行得报出范围：`--permission-mode accept_edits`、`--yolo`，或精确到子命令的 `--allowed-tools 'Read,Bash(git status)'`。非默认档位只在受信任目录生效，否则回落 `default`。
 - **Kimi Code 2.4.1**：档位本身就是审批轴。`-y/--yolo` 启动在 Ask When Needed（"routine edits and commands run automatically; risky actions, questions, and plans still ask"），`--auto` 启动在 Never Ask；`-p` 只是不开 TUI，没另设一条审批轴。
-- **oh-my-pi 18.14.2**：`--approval-mode` 以四个值 `always-ask|always-ask-cached|write|yolo` 覆盖配置里的 `tools.approvalMode`，`--auto-approve` 一次放下全部提示。
+- **oh-my-pi 18.15.0**：`--approval-mode` 以四个值 `always-ask|always-ask-cached|write|yolo` 覆盖配置里的 `tools.approvalMode`，`--auto-approve` 一次放下全部提示。
 
 三条线索从这份清单里自己浮出来。第一，`ask` 不会凭空消失，只会挪个地方：挪进沙箱（Codex）、挪进服务端分类器（Cursor 的 `--auto-review`、Codex 的 `--approve-for-me`、本书的 auto 模式）、挪进启动档位（Kimi 的两档、Qoder 的 `dont_ask`），或者降成一份不落盘的提议（Cursor 的默认）。第二，六家里没有一个把「没人应答」读作「默认放行」——最激进的档位也只是把拒绝的条件收窄，把兜底换成隔离。第三，Cursor 的 "unless explicitly denied" 与 Qoder 决策顺序里排在第一位的 `deny`，和步骤 1a 是同一条规矩：显式拒绝是这一层唯一不给绕过去的入口，六套各自的设计在这里不约而同。
 

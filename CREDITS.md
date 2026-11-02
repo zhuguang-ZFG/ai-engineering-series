@@ -2,7 +2,7 @@
 
 本书的每一项外部依据都登记在 [`yuyu-book/sources.json`](yuyu-book/sources.json)（55 条），整书构建时渲染为书内的「来源与许可」页（HTML/PDF 均可从目录跳转）。本书**不转载任何第三方正文或代码**：GitHub 条目钉到 tag 或完整 commit，社区条目一律标注访问日期并降级为非规范来源，`snapshot`/`scope` 字段只记录「何时以何种方式读到什么」。
 
-以下核实动作均于 **2026-10-25** 完成（HTTPS 抓取 + GitHub API 认证查询）；为第 4 章 §4.3.6 的对照面另读的三家非 Anthropic 文档，以及那两个开源仓库的 tag 解析，于 **2026-11-01** 以同一方式完成，各条目的 `accessed` 分别记账。
+以下核实动作均于 **2026-10-25** 完成（HTTPS 抓取 + GitHub API 认证查询）；为第 4 章 §4.3.6 的对照面另读的三家非 Anthropic 文档，以及那两个开源仓库的 tag 解析，于 **2026-11-01** 以同一方式完成；`gh-oh-my-pi` 随第 7、14 章对照面扩容重钉 `v18.15.0`（本机升级后同日重抓 `--help` 复核）记于 **2026-11-02**。各条目的 `accessed` 分别记账。
 
 ## 一、版本锚点
 
@@ -78,7 +78,7 @@ SDK TypeScript 的版本尾号（`0.3.310`）与 CLI 版本尾号（`2.1.310`）
 | `gh-mcp-servers` | `modelcontextprotocol/servers` | tag `v2.1.0` + commit `ef9808f7…`（MIT → Apache-2.0 过渡）：官方参考实现目录 |
 | `gh-codex` | `openai/codex` | tag `rust-v0.164.0` + commit `6aaac694…`（Apache-2.0）：本地沙箱与审批独立成层；第 4 章 §4.3.6 引用的旗标取自本机 `codex-cli 0.166.0` 的 `--help`，比该 tag 新两个 minor，故只引两家都有的写法 |
 | `gh-kimi-code` | `MoonshotAI/kimi-code` | tag `@moonshot-ai/kimi-code@2.4.1` + commit `2c73f3f5…`（MIT）：审批折进启动档位的那一套，tag 是附注标签，经 `/git/tags` 解引用 |
-| `gh-oh-my-pi` | `can1357/oh-my-pi` | tag `v18.14.2` + commit `7efd7721…`（MIT）：`--approval-mode` 四值那一套，本机跑的就是该 tag 的 `omp/18.14.2` |
+| `gh-oh-my-pi` | `can1357/oh-my-pi` | tag `v18.15.0` + commit `3fedf8d5…`（MIT）：`--approval-mode` 四值、上下文显式手术与 Plan 定价那几组旗标和子命令，本机跑的就是 `omp/18.15.0` |
 | `gh-gemini-cli` | `google-gemini/gemini-cli` | tag `v0.65.0` + commit `6006c14a…`（Apache-2.0）：README 已声明官方入口迁往 Antigravity CLI |
 | `gh-superpowers` | `obra/superpowers` | tag `v7.0.1` + commit `2ce8aa15…`（MIT）：方法论装成 skills / 子智能体，多宿主分发 |
 | `gh-claude-mem` | `thedotmack/claude-mem` | tag `v15.2.1` + commit `35e24ba7…`（Apache-2.0）：插件形态的跨会话记忆层 |

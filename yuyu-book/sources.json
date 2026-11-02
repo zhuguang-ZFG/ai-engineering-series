@@ -936,15 +936,15 @@
     "kind": "github",
     "url": "https://github.com/can1357/oh-my-pi",
     "pinned": {
-      "tag": "v18.14.2",
-      "commit": "7efd77219374ca4e8767979809835e4aa90666ba"
+      "tag": "v18.15.0",
+      "commit": "3fedf8d53267e32a6d7521ce725fdcc4a36fdc67"
     },
-    "snapshot": "2026-11-01 读取（GitHub API：latest release v18.14.2 发布于 2026-10-31，约 37.4k star，默认分支 main 当日仍在推送）",
-    "snapshot_en": "2026-11-01 read (GitHub API: latest release v18.14.2 published 2026-10-31, ~37.4k stars, the default branch main still receiving commits that day)",
-    "accessed": "2026-11-01",
+    "snapshot": "2026-11-02 读取（GitHub API：tag v18.15.0 为轻量标签，直指 commit 3fedf8d5；本机 omp --help 同日重抓，草稿的 omp 断言在新版全部仍在）",
+    "snapshot_en": "2026-11-02 read (GitHub API: tag v18.15.0 is a lightweight tag pointing straight at commit 3fedf8d5; the local omp --help was re-captured the same day and every draft claim about omp still holds)",
+    "accessed": "2026-11-02",
     "license": "MIT（SPDX: MIT）；链接引用，不转载",
     "license_en": "MIT (SPDX: MIT); linked, never republished",
-    "scope": "第 4 章 §4.3.6 的对照面之一：本机装有 omp 18.14.2，--approval-mode 四值与 --auto-approve 都取自该 tag 版本。只作对照，不作依据。",
-    "scope_en": "One of the cross-checks in Chapter 4 §4.3.6: omp 18.14.2 runs on this machine, and its four --approval-mode values plus --auto-approve come from that tag. Cross-check only, never evidence."
+    "scope": "第 4 章 §4.3.6、第 7 章 §7.5 与第 14 章 §14.1.1 的对照面之一：本机装有 omp 18.15.0，--approval-mode 四值与 --auto-approve、三角色模型与 --prewalk、--plan-yolo，以及 compress、find、toks 子命令都取自本机该版本 --help。只作对照，不作依据。",
+    "scope_en": "One of the cross-checks in Chapter 4 §4.3.6, Chapter 7 §7.5, and Chapter 14 §14.1.1: omp 18.15.0 runs on this machine; the four --approval-mode values plus --auto-approve, the three model roles with --prewalk and --plan-yolo, and the compress, find, and toks subcommands all come from that build's --help. Cross-check only, never evidence."
   }
 }

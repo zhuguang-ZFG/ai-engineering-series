@@ -31,6 +31,10 @@ This differentiated strategy reflects different usage scenarios: external users 
 | Solution choice failure | Implemented poor-performing solution, needs rewrite | Compared multiple solution trade-offs before acting |
 | Missed edge cases | Finished code then discovered omissions, rework | Enumerated edge cases in plan and incorporated into solution |
 
+Plan Mode in this chapter is one gear inside a permission state machine; oh-my-pi 18.15.0 moves the same idea onto the pricing layer: `--smol`, `--slow`, and `--plan` assign models for lightweight tasks, thorough analysis, and architectural planning respectively; `--prewalk` switches to a cheap model at the first file write after the plan's todo list exists; `--plan-yolo` locks the session into read-only planning at start, auto-approves the plan on the model's first resolve call, then switches to the model named by `--plan-yolo-into` to implement it. "Plan before execute" is, on this host, simultaneously a permission decision and a cost decision: the planning phase is pinned read-only, and the execution phase puts on a cheaper model.
+
+> **Identity of this cross-check:** oh-my-pi is registered in `CREDITS.md` as a **cross-check**, the same standing the other open-source harnesses hold in Chapter 4 §4.3.6 -- it supports no technical claim in this chapter and exists to show what the same idea grows into under someone else's hands.
+
 ### 14.1.2 Mode Switching Mechanism
 
 After user approves entering Plan Mode, EnterPlanModeTool's `call` method executes mode switching. Core logic includes: checking if it is in an Agent context (if so it throws an error), calling the permission transition handler to switch to plan mode, and through the state update function switching the permission context to plan mode configuration.
