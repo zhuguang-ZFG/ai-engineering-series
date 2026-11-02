@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- Vibe Coding 101 · 课程落地页
+     视觉 = design/system/tokens.css 的手绘 token（纸面/墨线/marker/硬投影/24px 纸纹）
+     排版 = design/system/cjk-rules.md（17px 正文、行高 1.85、行长 36 字、不缩进、避头尾）
+     文案 = design/system/deai-rules.md §2–§4（无套话、无客服腔、每个数字都能回书里查到）
+     界面 = design/system/deai-rules.md §6 = unslop 九遍（间距上 4px 档、单一 accent、
+            chrome 字重 ≤500、不做大写宽字距标签、一个缓动、首屏用本书真图解）
+     托管时把 design/system/tokens.css 一并拷到相对路径，或把它的 :root 块粘进下面 <style>。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibe Coding 101 · 从一句话到一个能访问的作品</title>
+<meta name="description" content="195 个小节、5 支成片、31 张图（25 张手绘图解加 6 张工程图）的中文 Vibe Coding 课：把想法交给 AI，再亲手把它变成能打开的链接。">
+<link rel="stylesheet" href="../design/system/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; font-family: var(--font-sans); font-size: var(--text-size);
+    line-height: var(--text-leading); color: var(--ink); background: var(--paper);
+    letter-spacing: 0; text-align: justify; line-break: strict;
+  }
+  p { margin: 0 0 var(--para-gap); max-width: var(--line-max); }
+  h1, h2, h3 { font-family: var(--font-zh-title); text-align: start; letter-spacing: 0; line-height: 1.4; margin: 0; }
+  h1 { font-size: clamp(2rem, 5.4vw, 3.1rem); font-weight: 800; margin-bottom: 16px; }
+  h2 { font-size: clamp(1.4rem, 3vw, 1.85rem); font-weight: 800; }
+  h3 { font-size: 1.12rem; font-weight: 600; }
+  a { color: var(--accent-ink); text-decoration: none; }
+  a:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; border-radius: 4px; }
+  .num, .stat b, .film .len, table { font-variant-numeric: tabular-nums; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0 8px; }
+  section + section { padding-top: 48px; }   /* section 之间靠间距，不画线 */
+
+  /* 手绘签名：波形下划线、marker 扫过、纸纹、硬投影卡 */
+  .wave { display: inline-block; position: relative; }
+  .wave::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -.22em; height: 10px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 7Q32 1 62 6T122 5T182 7T238 4' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center / 240px 10px;
+  }
+  .card {
+    background: var(--card); border: var(--ink-line); border-radius: var(--radius-hand);
+    box-shadow: var(--shadow-hard); padding: 24px; position: relative;
+  }
+  .grain::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background: var(--paper-grain); background-size: var(--paper-grain-size); opacity: .05;
+  }
+  /* unslop pass 5：标签不靠大写加宽字距装样子，靠位置和颜色分级 */
+  .kicker {
+    display: inline-block; font-size: .94rem; font-weight: 500; letter-spacing: 0;
+    color: var(--ink-soft); margin-bottom: 16px;
+  }
+
+  /* 首屏：左文案、右本书真图解（unslop pass 6：给产品本身，不给装饰） */
+  header { padding: 80px 0 32px; display: grid; gap: 32px; align-items: center; }
+  .lede { font-size: 1.16rem; color: var(--ink); max-width: 30em; }
+  .lede b { background: var(--marker); color: var(--ink); padding: 0 .12em; border-radius: 4px 8px 3px 7px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 16px; margin: 32px 0 24px; }
+  .stat { min-width: 160px; }
+  .stat b { display: block; font-family: var(--font-num); font-size: 2.1rem; line-height: 1.1; color: var(--ink); }
+  .stat span { font-size: .94rem; color: var(--ink-soft); }
+  .cta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .btn {
+    display: inline-block; padding: 12px 24px; border: var(--ink-line); border-radius: var(--radius-hand);
+    font-weight: 500; box-shadow: var(--shadow-hard); background: var(--persimmon-block); color: var(--paper);
+    transition: transform .2s var(--ease-hand), box-shadow .2s var(--ease-hand);
+  }
+  .btn.ghost { background: var(--card); color: var(--ink); }
+  .btn:hover { transform: translate(-1px, -2px); box-shadow: var(--shadow-hard-lg); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .hero-figure { margin: 0; }
+  .hero-figure img {
+    display: block; width: 100%; height: auto;
+    /* 图自带墨线框 + 硬投影，这里不再套第二层框 */
+  }
+  .hero-figure figcaption { margin-top: 12px; font-size: .94rem; color: var(--ink-soft); max-width: 36em; }
+  .hero-figure figcaption strong { color: var(--ink); }
+
+  /* 网格 */
+  .grid { display: grid; gap: 20px; margin-top: 24px; }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); }
+  .card h3 + p { margin-top: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  .num { font-family: var(--font-num); color: var(--accent-ink); font-size: 1.5rem; display: block; }
+  .tag { font-size: .94rem; color: var(--ink-soft); }
+
+  /* 复制给 AI 的那段 */
+  .prompt {
+    background: var(--marker-wash); border: var(--ink-line); border-radius: var(--radius-hand);
+    box-shadow: var(--shadow-hard); padding: 24px; margin-top: 24px;
+  }
+  .prompt pre {
+    margin: 8px 0 0; font-family: var(--font-mono); font-size: .98rem; line-height: 1.75;
+    color: var(--ink); white-space: pre-wrap; text-align: start;
+  }
+  .prompt .rule { border: 0; border-top: 2px dashed var(--accent-ink); margin: 16px 0 12px; opacity: .5; }
+  .prompt small { color: var(--ink-soft); }
+
+  /* 术语翻译器 */
+  table { border-collapse: collapse; width: 100%; margin-top: 20px; text-align: start; }
+  caption { text-align: start; font-size: .94rem; color: var(--ink-soft); padding-bottom: 12px; }
+  th, td { padding: 12px 16px; border-bottom: 2px solid var(--rule); vertical-align: top; }
+  th { font-size: .94rem; font-weight: 500; letter-spacing: 0; color: var(--ink-soft); text-align: start; }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  /* 片子清单：一行一支，整行可点，不做五张一模一样的卡 */
+  .films { margin-top: 20px; border-top: 2px solid var(--rule); }
+  .film {
+    display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 16px;
+    align-items: baseline; padding: 16px 0; border-bottom: 2px solid var(--rule); color: var(--ink);
+  }
+  .film .len { font-family: var(--font-num); color: var(--accent-ink); font-size: 1.25rem; }
+  .film .what { font-weight: 600; }
+  .film .what span {
+    display: block; font-weight: 400; font-size: .94rem; color: var(--ink-soft);
+    text-align: start; max-width: var(--line-max);
+  }
+  .film .tag { white-space: nowrap; }
+  .film:hover .what { color: var(--accent-ink); }
+
+  ul.clean { margin: 16px 0 0; padding-left: 1.4em; }
+  ul.clean li { margin-bottom: 8px; }
+  .banner {
+    display: inline-block; margin-top: 20px; padding: 12px 20px; border-radius: 22px 16px 24px 15px;
+    background: var(--accent-block); color: var(--paper); font-weight: 500; box-shadow: var(--shadow-hard);
+  }
+  footer { padding: 64px 0 80px; color: var(--ink-soft); font-size: .94rem; }
+  @media (max-width: 620px) {
+    body { text-align: start; }
+    header, section { padding-top: 48px; }
+    .film { grid-template-columns: 80px minmax(0, 1fr); }
+    .film .tag { grid-column: 2; }
+  }
+  @media (min-width: 900px) {
+    header { grid-template-columns: 1.05fr .95fr; gap: 48px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="grain">
+  <div>
+    <span class="kicker">Vibe Coding 101</span>
+    <h1>把一句话，<span class="wave">做成能打开的链接</span></h1>
+    <p class="lede">不会写代码也能起步。你负责说清楚要什么、看出哪里不对；<b>AI 负责把砖搬上来</b>。全书 195 个小节，几乎每个都能直接动手。</p>
+    <div class="stats">
+      <div class="stat"><b>195</b><span>个小节，三段路走法</span></div>
+      <div class="stat"><b>31</b><span>张图：25 手绘图解 + 6 工程图</span></div>
+      <div class="stat"><b>5</b><span>支成片，最长 3 分 36 秒</span></div>
+      <div class="stat"><b>4</b><span>道关卡，5 分钟起步</span></div>
+    </div>
+    <div class="cta">
+      <a class="btn" href="../book/book.md">翻开这本书</a>
+      <a class="btn ghost" href="#films">看五支片子</a>
+      <span class="tag">从「30 秒看懂这本书」开始读，不必从头顺读</span>
+    </div>
+  </div>
+  <figure class="hero-figure">
+    <img src="../book/assets/handdraw/learn-path.svg" alt="蛇形路线串起八个阶段：找真实问题、筛选方向、看懂需求、访谈验证、收敛方案、做出原型、接 AI 能力、打磨交付" loading="lazy">
+    <figcaption><strong>八个阶段是串行关系。</strong>前四步把问题想清楚，后四步把东西做出来；每一步结束都该有一个能给别人看的结果。这是书里第一章的第一张图。</figcaption>
+  </figure>
+</header>
+
+<section>
+  <h2>先跑通一次，再谈原理</h2>
+  <p>课程把「学会」拆成看得见的四个动作。每完成一关记一颗星，星级只回答一个问题：你能不能推动作品前进一步。</p>
+  <div class="grid g3">
+    <div class="card"><span class="num">1</span><h3>开口</h3><p>请 AI 做一个最小作品，比如倒计时器。画面能打开，或代码能跑起来。</p></div>
+    <div class="card"><span class="num">2</span><h3>修改</h3><p>只提一个改动，比如把按钮变绿。结果按要求变了，你就掌握了迭代。</p></div>
+    <div class="card"><span class="num">3</span><h3>排错</h3><p>把报错和目标一起发给 AI。能用一句话说出原因，这一关才算过。</p></div>
+    <div class="card"><span class="num">4</span><h3>交付</h3><p>截图、录屏，或生成公开链接。另一个人能看见你的作品。</p></div>
+  </div>
+  <span class="banner">1 星已经开始，4 星完成了一次真正的交付</span>
+</section>
+
+<section>
+  <h2>三段路，各管一件事</h2>
+  <div class="grid g3">
+    <div class="card grain">
+      <span class="kicker">Stage 1 · 入门</span>
+      <h3>从问题到作品</h3>
+      <p>找真实问题、筛方向、访谈验证、收敛方案、做原型、接上真实 AI 能力、打磨交付。出去时手上有一个别人愿意用的东西。</p>
+      <p class="tag">配套实战：会写诗的贪吃蛇、截图复刻看图四步法</p>
+    </div>
+    <div class="card grain">
+      <span class="kicker">Stage 2 · 初中级</span>
+      <h3>把作品做扎实</h3>
+      <p>设计规范、组件库、数据库、接口、Git、一键发布与自建 VPS、支付与知识库集成。出去时作品能存数据、能上线。</p>
+      <p class="tag">9 个完整项目：生图 SaaS、类 Dify 智能体平台、智能旅游规划 Agent</p>
+    </div>
+    <div class="card grain">
+      <span class="kicker">Stage 3 · 进阶</span>
+      <h3>让工具替你干活</h3>
+      <p>Coding Agent 的 MCP、Skills、Teams、长任务、手机远程开发，再到 Spec Coding 与 Issues 驱动开发。出去时你只管验收。</p>
+      <p class="tag">附录 103 篇：AI 能力词典、后端与基础设施、计算机原理</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>卡住了，<span class="wave">这段直接复制给 AI</span></h2>
+  <p>书里每个排错章节都回到这六行。填不满的空，就是你自己还没想清楚的地方。</p>
+  <div class="prompt">
+    <h3>报错交付单</h3>
+    <pre>我正在做：___
+我希望看到：___
+现在实际出现：___
+报错或截图信息：___
+我已经尝试：___
+请先解释原因，再一次只给我一个操作步骤。</pre>
+    <hr class="rule">
+    <small>最后一行是关键：一次只给一步，你才看得出它到底改了什么。</small>
+  </div>
+</section>
+
+<section>
+  <h2>新手术语翻译器</h2>
+  <p>七个词先换成人话。书里出现得更细的定义，各自回到对应章节。</p>
+  <table>
+    <caption>摘自书首「新手术语翻译器」，七个词全录</caption>
+    <thead><tr><th>术语</th><th>人话解释</th><th>你实际要做什么</th></tr></thead>
+    <tbody>
+      <tr><td>Prompt</td><td>交给 AI 的任务说明书</td><td>说清背景、目标和验收标准</td></tr>
+      <tr><td>AI IDE</td><td>带 AI 助手的代码工作台</td><td>打开项目、提需求、运行并看结果</td></tr>
+      <tr><td>Prototype</td><td>能点、能演示的作品草稿</td><td>先验证流程，不急着打磨细节</td></tr>
+      <tr><td>Database</td><td>应用长期保存信息的仓库</td><td>定义要保存什么，以及谁能读写</td></tr>
+      <tr><td>Deploy</td><td>把本地作品放到网上</td><td>获得一个别人可以打开的链接</td></tr>
+      <tr><td>Agent</td><td>会自己拆步骤、调用工具的 AI 助手</td><td>给目标、边界和检查标准</td></tr>
+      <tr><td>JTBD</td><td>用户真正想完成的任务</td><td>追问「他为什么需要这个功能」</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>这本书是怎么做的</h2>
+  <div class="grid g3">
+    <div class="card">
+      <h3>图解分两种画法</h3>
+      <p>概念用 FA-040 手绘线稿：纸面 <code>#fbfaf6</code>、墨线 <code>#1f2328</code>、marker 高亮 <code>#d3efd9</code>，四角不齐、硬投影不模糊。技术栈与调用链用工程制图：网格纸底、真实品牌标记、直角连线。</p>
+    </div>
+    <div class="card">
+      <h3>文字先去 AI 味</h3>
+      <p>全书按缺陷清单改了三遍：客服腔 140 处剩 2 处，中文套话 795 处剩 87 处，AI 高频词 116 处剩 13 处。缺陷密度从每千字 3.5 降到 2.0，汉字只少了 0.3%。</p>
+    </div>
+    <div class="card">
+      <h3>颜色不是随便挑的</h3>
+      <p>每个角色都过 WCAG 与 APCA 双阈值：正文墨色对纸面 15.13:1，次要文字 6.12:1，绿小字派生自 <code>#008635</code>。亮绿 <code>#1f883d</code> 只出现在图形和大字上。</p>
+    </div>
+  </div>
+</section>
+
+<section id="films">
+  <h2>五支片子</h2>
+  <p>五支片子都在 <code>deliverables/</code>，时长与体积取自本地实测（ffprobe 与文件属性），点整行直接打开。</p>
+  <div class="films">
+    <a class="film" href="../deliverables/vibe-coding-101-landscape.mp4">
+      <span class="len">3:36</span>
+      <span class="what">课程宣传 · 横版<span>1920×1080。为什么现在该学这门课，以及三段路怎么走。</span></span>
+      <span class="tag">48 MB</span>
+    </a>
+    <a class="film" href="../deliverables/ep02-landscape.mp4">
+      <span class="len">3:15</span>
+      <span class="what">EP.02 · 从原型到作品<span>1920×1080。六步链：想清楚、做出来、给人看，缺一步就卡住。</span></span>
+      <span class="tag">46 MB</span>
+    </a>
+    <a class="film" href="../deliverables/ep03-landscape.mp4">
+      <span class="len">3:11</span>
+      <span class="what">EP.03 · 调试与排错<span>1920×1080。报错怎么读，以及为什么一次只改一处。</span></span>
+      <span class="tag">42 MB</span>
+    </a>
+    <a class="film" href="../deliverables/ep04-landscape.mp4">
+      <span class="len">3:08</span>
+      <span class="what">EP.04 · 上线交付<span>1920×1080。发布、域名与链接怎么到手，别人才能打开。</span></span>
+      <span class="tag">41 MB</span>
+    </a>
+    <a class="film" href="../deliverables/vibe-coding-101-vertical.mp4">
+      <span class="len">0:40</span>
+      <span class="what">竖版切片<span>1080×1920。手机端 40 秒，讲完「一句话到链接」这一件事。</span></span>
+      <span class="tag">3 MB</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>读法建议：别顺读。先做「5 分钟闯关」，卡在哪一节就从那一节往回查。全书 195 个小节都有直达锚点，附录 103 节按关键词找。</p>
+  <p>课程与插图沿用原书许可；本页与图解使用 <code>design/system/tokens.css</code> 的手绘 token。</p>
+</footer>
+</div>
+
+</body>
+</html>

@@ -26,7 +26,8 @@
 | 绿小字/细线 | accent-ink | `#d3efd9` marker | 3.84 | 58.3 | — | **FAIL：绿字不许压绿底** |
 | 绿实块上纸色字 | paper | `#008635` accent-block | 4.51 | 74.1 | 色块文字 | PASS |
 | 绿下划线/图形（大字档） | `#1f883d` accent | paper | 4.33 | 67.9 | 展示线 | 仅大字/图形，**禁作小字** |
-| 橙 CTA 填充/苹果/箭头（大字） | `#e2601f` persimmon | paper | 3.39 | 59.2 | 展示线 | 仅大字/填充，**禁作小字**；小字改 `--persimmon-ink:#c74c00` |
+| 橙图形/箭头/苹果（大字档） | `#e2601f` persimmon | paper | 3.39 | 59.2 | 展示线 | 仅图形/大字；**禁作实底放纸色文字**（paper 在其上仅 3.39，不达 4.5） |
+| 橙实底 CTA 上纸色字 | paper | `#c74c00` persimmon-block | 4.51 | 73.8 | 色块文字 | PASS（与 accent-block 同规则派生） |
 
 OKLCH 锚点（供再派生/换品牌色）：paper L98.5 C.0054 H95.1｜card L99.4 C.0069 H88.6｜ink L25.4 C.0111 H254｜ink-soft L48.5 C.0196 H251｜marker L92.6 C.0417 H152｜accent L55.2 C.1450 H148.2｜persimmon L64.5 C.1774 H42.9。
 
@@ -37,14 +38,15 @@ OKLCH 锚点（供再派生/换品牌色）：paper L98.5 C.0054 H95.1｜card L9
 - **marker 高亮** `--marker` 只做关键词底纹，底上只放 `--ink` / `--ink-soft`；**绿字压绿底不达标**（accent-ink/marker APCA 58.3 < 60），`contrast.mjs` 已把它列为禁止组合。
 - **结论横幅** 用 `--marker-wash`（比 marker 浅一档）+ `--accent` 描边；它和 `--marker` 的分工是“横幅讲整句结论、marker 标单个词”，同图里两者别混用同一语义。
 - **细线与停用态** 用 `--rule`：分隔线、以及“这是错例/已弃用”的灰卡底（如 Mom Test 左列）。灰卡上的文字仍走 `--ink`/`--ink-soft`，不许再引入第四种灰。
-- **柿子橙 `--persimmon` 是稀缺点缀**：只给 CTA 块、苹果、方向箭头，且是大号；橙色小字一律 `--persimmon-ink`。
+- **柿子橙 `--persimmon` 是稀缺点缀**：只给苹果、方向箭头、徽章这类**图形**，且是大号；橙色小字一律 `--persimmon-ink`，橙色**实底上放文字**一律 `--persimmon-block`（同为 `#c74c00`，规则与 `--accent-block` 一致：一个色相，图形用亮色，承载文字用深色）。一页至多一个橙实底按钮。
 - **实色绿块**（如“下一步/成功”填充）用 `--accent-block` + `--paper` 文字，绝不用白 `#fff`（违反“不用纯白”）。
 - 每套版式**最多 1 个 accent 色**；手绘的绿与橙按“一主(绿)一点缀(橙)”分工。
 - **以上规则由机器把关**：`design/handdraw/render_figures.py` 出图前会读 `tokens.css` 做白名单校验，并对 `<text fill="#1f883d|#e2601f">` 直接报错——越界色根本渲不出来，不靠人记住。
 
 ## 4. 手绘质感签名（三件套，任何新资产必须带上以保证同源）
 
-1. 纸纹：`--paper-grain` 24px 点阵，`opacity .05`，容器 `::after`。
+1. 纸纹：`--paper-grain` 24px 点阵，`opacity .05`，容器 `::after`。`background-size` **必须写两值**
+   （`24px 24px`）：径向渐变没有内在比例，单值时另一轴按 `100%` 解，点阵会拉成竖条。
 2. 卡片：`--card` 底 + `--ink-line`(4px 墨) + `--radius-hand`(不齐四角) + `--shadow-hard`(8px 9px 0 硬投影，无模糊)。
 3. 波形下划线：`--accent` 4px 圆头 SVG（`viewBox 0 0 240 10`），压在标题基线。
 

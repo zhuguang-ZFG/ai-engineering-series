@@ -19,18 +19,20 @@
   --accent: #1f883d;        /* 手绘波形下划线/图形强调/大字：APCA 68 仅够展示线，禁作小字 */
   --accent-ink: #008635;    /* 绿小字 + 细线：/paper 4.51:1 · APCA 69 ✓ accentInk；/card ✓ */
   --accent-block: #008635;  /* 绿实块 + --paper 文字：4.51:1 · APCA 74 ✓ onText */
-  --persimmon: #e2601f;     /* 柿子橙：CTA 填充 / 苹果 / 箭头图形，仅大字（APCA 59） */
+  --persimmon: #e2601f;     /* 柿子橙：苹果/箭头/徽章图形，仅大字（APCA 59）；禁作实底放文字（paper 其上 3.39:1 ✗） */
+  --persimmon-block: #c74c00; /* 橙实底 CTA + --paper 文字：4.51:1 · APCA 74 ✓ onText（与 --accent-block 同规则派生） */
   --persimmon-ink: #c74c00; /* 橙须作小字时：/paper 4.51:1 · APCA 69 ✓ */
 
   /* —— 手绘质感三件套（一眼同源的签名）—— */
-  --paper-grain: radial-gradient(var(--ink) 0.6px, transparent 0.7px);
-  --paper-grain-size: 24px;   /* 纸纹点阵，opacity .05 */
+  --paper-grain: radial-gradient(var(--ink) 1px, transparent 1.2px);
+  --paper-grain-size: 24px 24px;   /* 必须两值：单值时另一轴按 100% 解，点阵会拉成竖条 */
   --ink-line: 4px solid var(--ink);       /* 卡片外轮廓（marker 手绘感） */
   --ink-line-dark: 3px solid var(--ink);  /* 深色块细一档 */
   --radius-hand: 16px 11px 18px 9px;      /* 四角不齐 = 手绘，勿用统一圆角 */
   --shadow-hard: 8px 9px 0 rgba(31, 35, 40, .12);   /* 硬投影（无模糊位移） */
   --shadow-hard-lg: 10px 12px 0 rgba(31, 35, 40, .18);
   --wave-box: 240 10;         /* 波形下划线 SVG viewBox：4px 圆头 · --accent */
+  --ease-hand: cubic-bezier(0.22, 1, 0.36, 1);  /* 全站唯一缓动（unslop：一个 easing，禁循环动效） */
 
   /* —— CJK 可读性（歸藏 T 规则，详见 cjk-rules.md）—— */
   --text-size: 1.0625rem;     /* T2 正文 17px */

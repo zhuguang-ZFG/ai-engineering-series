@@ -117,7 +117,7 @@ export const TOKENS = {
   paper: '#fbfaf6', card: '#fffdf8', ink: '#1f2328', inkSoft: '#57606a',
   marker: '#d3efd9', markerWash: '#f1f7f2', rule: '#e6e1d4',
   accent: '#1f883d', persimmon: '#e2601f',
-  accentInk: '#008635', persimmonInk: '#c74c00', accentBlock: '#008635',
+  accentInk: '#008635', persimmonInk: '#c74c00', accentBlock: '#008635', persimmonBlock: '#c74c00',
 }
 
 // 必须达标（PASS）的角色对——设计系统的可读性地基
@@ -133,13 +133,14 @@ export const ASSERTS = [
   ['accentInk / paper', 'accentInk', 'paper', 'accentInk'],
   ['accentInk / card', 'accentInk', 'card', 'accentInk'],
   ['paper / accentBlock', 'paper', 'accentBlock', 'onText'],
+  ['paper / persimmonBlock', 'paper', 'persimmonBlock', 'onText'],
 ]
 // 禁止组合（不是缺陷，是不许用）：绿字压绿底 APCA 仅 58，低于 60 线；marker 底上只允许 ink / inkSoft
 export const FORBIDDEN = [['accentInk / marker', 'accentInk', 'marker', 60]]
 // 原始 accent/persimmon 仅够“大号/展示/非阅读图形”（accentDisplay），记录为已知上限，不是缺陷
 export const DISPLAY_ONLY = [
   ['accent (大字/图形) / paper', 'accent', 'paper'],
-  ['persimmon (大字/CTA 填充) / paper', 'persimmon', 'paper'],
+  ['persimmon (大字/图形，CTA 填充请用 --persimmon-block) / paper', 'persimmon', 'paper'],
 ]
 
 if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
