@@ -15,6 +15,9 @@ Rules, in the order applied:
       right/wrong example.
   R3  a line that is entirely bold and sits directly above a list is a fake
       heading: unwrap it, the list already carries the structure
+  R4  drop decorative emoji sitting in the callout/bullet head slot
+      (`> 💡 **学习指南**`, `- 🚀 先跑起来`); ⚠ℹ stay there because they name
+      the severity of the box
 
 Each rule removes `*` in whole pairs or not at all, so the per-line delta is
 0 or a multiple of 4. An edit that breaks that invariant aborts the run instead
@@ -34,11 +37,17 @@ ROOT = Path(__file__).resolve().parents[2]
 BOOK = ROOT / "book" / "book.md"
 
 BOLD = re.compile(r"\*\*([^*\r\n]{1,24})\*\*")
-# Ornaments only. Meaning-bearing ones (✅❌ right/wrong, 👉 points at a link)
-# are deliberately absent from this set.
-ORN = (r"(?:\U0001F4A1|\U0001F4CA|\U0001F9D0|\U0001F6A8|\U0001F680|\U0001F4CC"
-       r"|\U0001F3AF|\U0001F310|\U0001F4DD|\U0001F519|[\u2139\u26A0\u25B8\u25B6]\uFE0F?)")
+# Two sets, because "is this emoji doing a job?" depends on where it sits.
+# DECOR never carries meaning; SEVERITY (⚠ℹ) names the callout type when it
+# heads a box, but is only ornament when it hides inside a bold title.
+# ✅❌ are absent from both: here they mark the right/wrong example.
+DECOR = (r"(?:\U0001F4A1|\U0001F4CA|\U0001F9D0|\U0001F6A8|\U0001F680|\U0001F4CC"
+         r"|\U0001F3AF|\U0001F310|\U0001F4DD|\U0001F519|[\u25B8\u25B6]\uFE0F?)")
+SEVERITY = r"(?:[\u2139\u26A0]\uFE0F?)"
+ORN = r"(?:" + DECOR + "|" + SEVERITY + ")"
 HEADER_LEAD = re.compile(r"^(\s*>\s*)(\*\*)((?:\s*" + ORN + r")+)\s*(?=\S)")
+# R4: `> 💡 **标题**` / `- 🚀 正文` — decorative emoji in the callout head slot.
+CALL_HEAD = re.compile(r"^(\s*(?:>\s*)?(?:[-*\d.)]\s+)?)(?:" + DECOR + r"\s*)+(?=\S)")
 
 
 def split_fences(lines):
@@ -58,6 +67,15 @@ def strip_header_emoji(line):
     if not m:
         return line, 0
     return m.group(1) + "**" + line[m.end():], 1
+
+
+def strip_callout_emoji(line):
+    """R4: drop decorative emoji sitting in front of a callout / bullet."""
+    m = CALL_HEAD.match(line)
+    if not m:
+        return line, 0
+    head = re.match(r"^(?:\s*>\s*)?(?:[-*\d.)]\s+)?", line).group(0)
+    return head + line[m.end():], 1
 
 
 def keep_first_emphasis(text):
@@ -90,6 +108,8 @@ def rewrite(line, nxt, stats):
 
     new, hit = strip_header_emoji(new)
     stats["R2"] += hit
+    new, hit = strip_callout_emoji(new)
+    stats["R4"] += hit
 
     stripped = new.lstrip()
     if BOLD.fullmatch(stripped) and nxt is not None:
@@ -109,9 +129,11 @@ def selftest():
         ("> **\U0001F4A1 核心问题**", None, "> **核心问题**"),
         ("> **\U0001F4A1 \U0001F3AF 双装饰**", None, "> **双装饰**"),
         ("> **▸ \U0001F4A1 什么是新模式？**", None, "> **什么是新模式？**"),
-        ("> \U0001F4A1 提示", None, "> \U0001F4A1 提示"),        # bare callout keeps it
-        ("> ⚠️ 注意", None, "> ⚠️ 注意"),                        # idem
+        ("> \U0001F4A1 提示", None, "> 提示"),                   # R4: 💡 in the head slot goes
+        ("> ⚠️ 注意", None, "> ⚠️ 注意"),                        # ⚠ℹ stay: they name the box
         ("> ✅ 这样写就对", None, "> ✅ 这样写就对"),
+        ("> 💡 **学习指南**：本章无需编程基础", None, "> **学习指南**：本章无需编程基础"),
+        ("- 🚀 先跑起来看看", None, "- 先跑起来看看"),
         ("可胜任**小工具**、**看板**、**小游戏**", None, "可胜任**小工具**、看板、小游戏"),
         ("**第一步**", "- 子项", "第一步"),
         ("**第一步**", "正文", "**第一步**"),
@@ -119,7 +141,7 @@ def selftest():
         ("# 标题 **粗**与**粗**", None, "# 标题 **粗**与**粗**"),
     ]
     for line, nxt, want in cases:
-        got = rewrite(line, nxt, {"R1": 0, "R2": 0, "R3": 0})
+        got = rewrite(line, nxt, {"R1": 0, "R2": 0, "R3": 0, "R4": 0})
         if got != want:
             print(f"FAIL {line!r} -> {got!r} (want {want!r})")
             return 1
@@ -146,7 +168,7 @@ def main():
     raw = BOOK.read_text(encoding="utf-8")
     lines = raw.split("\n")
     tagged = list(split_fences(lines))
-    stats = {"R1": 0, "R2": 0, "R3": 0}
+    stats = {"R1": 0, "R2": 0, "R3": 0, "R4": 0}
     out = list(lines)
     changed = 0
     shown = 0
@@ -172,6 +194,7 @@ def main():
     print(f"\nR1 一行只留一处强调（拆掉多余粗体）: {stats['R1']}")
     print(f"R2 引言标题去掉装饰 emoji:            {stats['R2']}")
     print(f"R3 整行粗体且下面紧跟列表 → 拆掉:      {stats['R3']}")
+    print(f"R4 引言/列表头部装饰 emoji:              {stats['R4']}")
     print(f"改动 {changed} 行 / 合计 {sum(stats.values())} 处")
     if bad:
         print(f"\n中止：{len(bad)} 处改动破坏粗体配对，未写入")
