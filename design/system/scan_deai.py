@@ -99,9 +99,23 @@ def rhetorical_bold(line):
     return out
 
 
+# An emoji that OPENS a block names the block type — `::: tip 💡 幂等性`,
+# `👇 **动手点点看**：`, `> 🎯 **实用场景**：`. The book uses them as a legend,
+# so they are never counted. An emoji buried INSIDE a bold pseudo-heading
+# (`**🤔 为什么需要缓存**`) or sprinkled mid-sentence is ornament, and is.
+CALLOUT_ICON = re.compile(r"^(?:>\s*)?:::\s*\w+\s+[\U0001F300-\U0001FAFF](?:[\U0001F3FB-\U0001F3FF]|\ufe0f)?\s*")
+LEAD_LABEL = re.compile(r"^(?:>\s*)?(?:[-*\d.)]+\s*)?[\U0001F300-\U0001FAFF](?:[\U0001F3FB-\U0001F3FF]|\ufe0f)?\s*\*\*")
+
+
 def ornament_emoji(line):
     """D1 sites: decorative emoji inside the sentence, not the callout marker."""
     s = line.strip()
+    for marker in (CALLOUT_ICON, LEAD_LABEL):
+        m = marker.match(s)
+        if m:
+            rest = s[m.end():]
+            return [(i + m.end(), c) for i, c in enumerate(rest)
+                    if ORNAMENT.match(c) and not SEMANTIC_EMOJI.match(c)]
     head = re.match(r"^(?:>\s*)?(?:\*\*)?(?:[-*\d.)]*\s*)", s)
     headlen = head.end() if head else 0
     return [(i, c) for i, c in enumerate(s) if i >= headlen
@@ -203,16 +217,22 @@ def main():
 
 def selftest():
     """The gate must fire on a known-bad sample and stay silent on clean prose."""
-    bad = ("💡 **核心启示**：构建工具至关重要。我们不仅要理解它，更要掌握它。"
+    bad = ("**🤔 核心启示**：构建工具至关重要。我们不仅要理解它，更要掌握它。"
            "通过配置实现自动化，从而使得效率得到极大的提升，并且它无缝衔接了开发与部署，"
            "同时提供了闭环能力，此外还能赋能团队。你会发现您可以一起进步。"
-           "我们对这个问题进行了深入的讨论，并加以记录。")
+           "这一步💡省不掉，我们对这个问题进行了深入的讨论，并加以记录。")
     bad_line = "这一步**非常关键**，跳过它你会在后面付出代价。"
     good = "构建工具不是黑魔法。它出错时，日志会指到具体的 loader。"
     good_lines = ["构建工具不是黑魔法。它出错时，日志会指到具体的 loader。",
                   "- **npm**：装包的那一个",
                   "**上下文窗口**：模型一次能记住多少内容",
-                  "我们把这块区域设为 `#fbfaf6`，它代表纸面。"]
+                  "我们把这块区域设为 `#fbfaf6`，它代表纸面。",
+                  # the legend forms: an emoji that NAMES the block stays put,
+                  # so the scanner must never rank a section for carrying them
+                  "> ::: tip 💡 幂等性",
+                  "👇 **动手点点看**：依次点击命令按钮，观察文件在三个区域之间的流转。",
+                  "> 🎯 **实用场景**：当你需要 AI 帮你分析一个网页的布局问题。",
+                  "> ::: warning 🛡️ 三道防线"]
     counts = {k: sum(len(re.findall(p, bad)) for p in pats) for k, pats in PATTERNS.items()}
     counts["D1-装饰表情"] = len(ornament_emoji(bad))
     counts["D2-句中随手强调"] = len(rhetorical_bold(bad_line))
@@ -221,10 +241,14 @@ def selftest():
     clean_regex = sum(len(re.findall(p, l)) for p in all_pats for l in good_lines)
     clean_mark = sum(len(rhetorical_bold(l)) + len(ornament_emoji(l)) for l in good_lines)
     clean = clean_regex + clean_mark
+    ornament_bad = len(ornament_emoji(bad))
     print("selftest bad-sample defects:", counts, "->", hit)
     print("selftest clean-sample defects:", clean_regex, "+", clean_mark)
     if hit < 12:
         sys.exit(f"selftest FAILED: scanner caught only {hit} of a deliberately loaded sample")
+    if ornament_bad != 2:
+        sys.exit(f"selftest FAILED: D1 should fire twice on the bad sample (bold-heading emoji "
+                 f"+ mid-sentence emoji), got {ornament_bad}")
     if clean > 0:
         sys.exit(f"selftest FAILED: scanner flags clean prose ({clean}) — too blunt to rank sections")
     print("selftest OK")
