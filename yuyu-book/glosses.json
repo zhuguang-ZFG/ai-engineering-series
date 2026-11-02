@@ -174,8 +174,8 @@
   "evidence": [
    "00-前言.md:129",
    "第一部分-基础篇/01-智能体编程的新范式.md:317",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:314",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:314"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:320",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:320"
   ],
   "analogy": {
    "zh": "下水道堵了，得有人去把水龙头拧小",
@@ -186,8 +186,8 @@
    "en": "Nothing more is produced until the consumer takes the last item; otherwise a flood of tool output piles up in memory and the whole program crashes."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:314",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:314"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:320",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:320"
   ]
  },
  "producer-consumer": {
@@ -352,8 +352,8 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:328",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:342",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:334",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:348",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:220"
   ],
   "analogy": {
@@ -389,7 +389,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:292",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:298",
    "第一部分-基础篇/01-智能体编程的新范式.md:255",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:12"
   ],
@@ -419,9 +419,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:304",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:418",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:302"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:310",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:424",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:308"
   ],
   "analogy": {
    "zh": "演习时请人扮客户，照台词问答，不是真买家",
@@ -432,8 +432,8 @@
    "en": "Fakes come in through the interface instead of per-module spies: rename or move a module and a pile of tests needn't change, cached state can't leak between them."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:304",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:304"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:310",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:310"
   ]
  },
  "singleton": {
@@ -626,9 +626,9 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:312",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:318",
    "第三部分-高级模式篇/12-MCP集成与外部协议.md:956",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:312"
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:318"
   ],
   "analogy": {
    "zh": "店员随身带自己那串仓库钥匙，别的柜台借不到",
@@ -639,8 +639,8 @@
    "en": "Each conversation builds its own private box of state; done with a class instead, concurrent dialogs would tread on one shared set of properties."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:312",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:312"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:318",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:318"
   ]
  },
  "promise": {
@@ -741,7 +741,7 @@
   "priority": "core",
   "evidence": [
    "00-前言.md:129",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
    "en/00-Foreword.md:129"
   ],
   "analogy": {
@@ -753,8 +753,8 @@
    "en": "Closing the loop only stops the reading; pending requests and child processes keep going, so the stop signal must travel down every layer to wrap up."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ]
  },
  "abort-controller": {
@@ -777,10 +777,10 @@
   },
   "priority": "core",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
    "第一部分-基础篇/03-工具系统-Agent的双手.md:392",
    "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:685",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ],
   "analogy": {
    "zh": "车间的急停按钮，每台机器动手前都先看一眼",
@@ -791,8 +791,8 @@
    "en": "A generator cannot interrupt a pending wait or cancel outside I/O; tools, APIs and subprocesses must check a signal themselves for a stop to stick."
   },
   "why_evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:316",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:316"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:322",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:322"
   ]
  },
  "immutable-state": {
@@ -854,8 +854,8 @@
   "priority": "extra",
   "evidence": [
    "第一部分-基础篇/01-智能体编程的新范式.md:229",
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:441",
-   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:441"
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:447",
+   "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:447"
   ],
   "analogy": {
    "zh": "只是去问个路，顺手把人家的花盆碰倒了",
@@ -2449,7 +2449,7 @@
   },
   "priority": "extra",
   "evidence": [
-   "第一部分-基础篇/02-对话循环-Agent的心跳.md:388",
+   "第一部分-基础篇/02-对话循环-Agent的心跳.md:394",
    "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:878",
    "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:216"
   ],

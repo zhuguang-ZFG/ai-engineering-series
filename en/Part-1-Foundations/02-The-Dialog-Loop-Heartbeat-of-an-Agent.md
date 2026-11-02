@@ -287,6 +287,12 @@ flowchart TD
 
 For abnormal termination, the system cleans up before returning the terminal state: cancelling tools in execution, releasing resource references, logging the termination reason. Do that and even an abnormal exit leaves no "dirty" state behind.
 
+A turn runs on four beats: ask, the model picks a tool, the tool runs, the result goes back in and the loop asks again.
+
+```ill
+ch02-turn-loop
+```
+
 ---
 
 ## 2.3 Dependency Injection and Testability
