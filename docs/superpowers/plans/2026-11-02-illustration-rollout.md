@@ -21,6 +21,7 @@
 - 一张图版落进正文，固定是六行：引子一句、空行、` ```ill `、画名、` ``` `、空行；这六行的最后一行是下一个 `---` 或 H2 的前导空行——少了它，围栏会贴住分隔线被当作 setext 标题读。
 - 凡写进 commit message 与 `revisions.json` 的数字，必须能当场重新测出来；测不出来的当错数处理，不复用。账本注释不许夹原始 `@@` 串（`test_pages.test_revision_notes_are_typeset_not_left_in_markdown`），反引号必须成对。
 - Python：四空格缩进、`snake_case`；测试文件 `test_*.py`、方法 `test_*`。
+- 派生产物跟着画走：磁盘上多一张 `illustrations/*.svg`，`tests/test_beginner_reader.py:68` 与 `tests/test_site_portal.py:23` 当场把 `docs/illustration-gallery.html`、`docs/beginner-reader.html`、`docs/beginner-reader.en.html`、`docs/portal.html` 四页判红——它们都从 `scripts/build_beginner_reader.py:20` 的 `PLATES = len(list(ART.glob("*.svg")))` 现数磁盘。所以每个铺图任务在跑画廊脚本那一步后面都要再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`，四个产物一并进当次提交，不许攒到 Task 8 再补。（2026-11-02 Task 3 落地时就是这么红的：仓库套件先挂两条，重切产物才绿。）
 - 五道闸全绿才算做完（见下）。不推送 `origin`，除非用户当次明确同意；`upstream` 永不推送。
 
 **五道闸（本机无 make，逐条手跑）：**
@@ -588,7 +589,7 @@ CHECK OK
                       "result back and ask again",
 ```
 
-Run: `python -X utf8 scripts/build_illustration_gallery.py`
+Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 29 figures)`。（守卫 `on_disk != set(ORDER)` 会红，如果只画了图没登记。）
 
 - [ ] **Step 7: 五处图数声明 +1**
@@ -635,11 +636,13 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v
 - [ ] **Step 10: 提交**
 
 ```bash
-git add yuyu-book/illustrations/ch02-turn-loop.svg 第一部分-基础篇/02-对话循环-Agent的心跳.md en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html
+git add yuyu-book/illustrations/ch02-turn-loop.svg 第一部分-基础篇/02-对话循环-Agent的心跳.md en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第一部分-基础篇 en/Part-1-Foundations
-git commit -m "feat(book): ch02 对话循环四格胶片，正文图版第二张落在心跳那一节"
+git commit -m "feat(book): ch02 对话循环四格胶片，正文图版 2→3 张落在心跳那一节"
 ```
 Expected（numstat）：两个 md 各 `6 0`（只加不删）。
+
+（这一句原本写「正文图版第二张」——按 2026-11-02 实测的口径，正文图版是 2→3 张，序数说不准，后四步的消息一律改写数，不写第几张。实际那笔提交 `5fb8675` 沿用了计划原文，未 amend：分支未推，改它只能重写历史，而读者看到的账本 `revisions.json` 写的本来就是 2→3。）
 
 ---
 
@@ -737,7 +740,7 @@ Expected（2026-11-02 实测）：只有末行 `planned: 0 anchors`，一行明�
 `PLAIN` 加 `"ch01-five-pillars": "一道门廊：五条原则顶着同一根横梁",`；
 `PLAIN_EN` 加 `"ch01-five-pillars": "A portico: five principles under one lintel",`。
 
-Run: `python -X utf8 scripts/build_illustration_gallery.py` → `30 figures`
+Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条） → `30 figures`
 
 - [ ] **Step 7: 五处图数声明 +1**
 
@@ -777,7 +780,7 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 - [ ] **Step 10: 提交**
 
 ```bash
-git add yuyu-book/illustrations/ch01-five-pillars.svg 第一部分-基础篇/01-智能体编程的新范式.md en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html
+git add yuyu-book/illustrations/ch01-five-pillars.svg 第一部分-基础篇/01-智能体编程的新范式.md en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第一部分-基础篇 en/Part-1-Foundations
 git commit -m "feat(book): ch01 五大原则门廊图版，1.3 那堵白墙有了形状"
 ```
@@ -883,7 +886,7 @@ Expected: 两份日志各报 `20 units, 165 plates`，末行 `CHECK OK`。锚点
                        "weigh the context, then ask",
 ```
 
-Run: `python -X utf8 scripts/build_illustration_gallery.py`
+Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 31 figures)`
 
 - [ ] **Step 7: 五处图数声明 +1**
@@ -926,7 +929,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v
 - [ ] **Step 10: 提交**
 
 ```bash
-git add yuyu-book/illustrations/ch04-gate-steps.svg 第一部分-基础篇/04-权限管线-Agent的护栏.md en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html
+git add yuyu-book/illustrations/ch04-gate-steps.svg 第一部分-基础篇/04-权限管线-Agent的护栏.md en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第一部分-基础篇 en/Part-1-Foundations
 git commit -m "feat(book): ch04 权限四道门胶片，第四格里放行与拦截一分为二"
 ```
@@ -1033,7 +1036,7 @@ Expected: 两份日志各报 `20 units, 166 plates`，末行 `CHECK OK`。
                       "the script runs, the path changes",
 ```
 
-Run: `python -X utf8 scripts/build_illustration_gallery.py`
+Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 32 figures)`
 
 - [ ] **Step 7: 五处图数声明 +1**
@@ -1076,7 +1079,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v
 - [ ] **Step 10: 提交**
 
 ```bash
-git add yuyu-book/illustrations/ch08-hook-line.svg 第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html
+git add yuyu-book/illustrations/ch08-hook-line.svg 第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第二部分-核心系统篇 en/Part-2-Core-Systems
 git commit -m "feat(book): ch08 钩子四拍胶片，第四格把放行与阻断画成分叉"
 ```
@@ -1182,7 +1185,7 @@ Expected: 两份日志各报 `20 units, 167 plates`，末行 `CHECK OK`。
                         "three, rewrite the whole span",
 ```
 
-Run: `python -X utf8 scripts/build_illustration_gallery.py`
+Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 33 figures)`
 
 - [ ] **Step 7: 五处图数声明 +1**
@@ -1227,7 +1230,7 @@ Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v
 - [ ] **Step 10: 提交**
 
 ```bash
-git add yuyu-book/illustrations/ch07-four-levels.svg 第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html
+git add yuyu-book/illustrations/ch07-four-levels.svg 第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
 git diff --numstat -- 第二部分-核心系统篇 en/Part-2-Core-Systems
 git commit -m "feat(book): ch07 四级压缩胶片，把代价的轻重排成一列"
 ```
