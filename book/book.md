@@ -43719,6 +43719,11 @@ CPU 跳到内核入口
 
 下面不用背表格。点一下你看到的现象，看接力棒停在了哪里。
 
+<figure class="stack-figure">
+  <img src="assets/stacks/computer-panorama.png" alt="计算机系统全景工程图：按下电源、引导程序、操作系统、浏览器主进程、网络服务、操作系统网络栈、服务器、渲染进程八段依次接力；八列分别列出硬件与固件启动、操作系统启动、用户程序启动、解析网址、找到服务器、建立连接、取得资源、渲染页面的关键物件" loading="lazy">
+  <figcaption><strong>接力棒有八棒，卡在哪棒，现象就停在哪一列。</strong>供电复位 → BIOS/UEFI 引导 → 内核与系统服务 → 浏览器主进程解析 URL → DNS 逐级查询 → socket 三次握手与 TLS → 请求行/头/体换回响应 → DOM、CSSOM、布局、绘制合成到屏幕像素。</figcaption>
+</figure>
+
 
 > **继续学习**
 想继续拆解某一步，可以阅读：**操作系统原理**、计算机网络、端口与 localhost、HTTP 协议、浏览器渲染管道和调试的艺术。
@@ -68328,6 +68333,11 @@ Robert C. Martin 提出,将系统分为四个同心圆层,依赖只能从外向�
 
 分层架构的核心在于明确的职责划分和依赖方向控制。每一层只关注自己的职责,通过接口与相邻层通信,业务逻辑集中在 Service 和 Domain 层,数据访问逻辑集中在 Repository 层,各层之间用 DTO 隔离数据结构,避免直接暴露内部实现。这样的设计让系统更易于理解、测试和维护,能够应对业务的持续演进。
 
+<figure class="stack-figure">
+  <img src="assets/stacks/backend-layers.png" alt="后端分层架构工程图：前端请求经 Controller、Service、Repository 到 Domain 四段调用，上方定时任务与消息队列消费者以虚线绕过 HTTP 直接调用 Service；五列分别列出 HTTP 请求注解、控制器层校验与 DTO、业务逻辑层编排与事务、数据访问层仓储与查询、领域模型层实体与值对象" loading="lazy">
+  <figcaption><strong>一个请求从门口走到菜谱。</strong>Controller 是接待员，验完参数就交给 Service 这个厨师排菜；要取数据，厨师喊 Repository 仓管员，仓管员按 Domain 这份菜谱标准办事。定时任务和消息队列不走 HTTP，直接叫厨师；层与层之间递的是 DTO，不把自己家底摊给对方看。</figcaption>
+</figure>
+
 
 ##### 参考资料
 
@@ -77818,6 +77828,11 @@ const uaConfig = {
 5. **成本要监控**：命中率、带宽、存储分级，持续优化
 
 这套架构撑起了互联网绝大部分的静态资源访问，理解它，你就理解了现代 Web 性能优化的基石。
+
+<figure class="stack-figure">
+  <img src="assets/stacks/object-storage-cdn.png" alt="对象存储与 CDN 工程图：上排下载链路为用户浏览器到 CDN 边缘节点，MISS 未命中后经中间层节点、源站回源到对象存储与桶；上传链路由后端服务签发 STS 临时凭证、浏览器直传对象存储；下排七列分别列出流量调度、缓存策略配置、回源配置实战、主流云厂商、存储分级、访问控制、文件上传" loading="lazy">
+  <figcaption><strong>下载看命中，上传看直传。</strong>请求先落在 CDN 边缘节点，HIT 直接返回，MISS 才逐层回源到桶；上传别让文件穿过自己的服务器，后端签一张 STS 临时凭证，浏览器直传对象存储。冷数据按 7 天、90 天自动降到低频和归档，单价从 0.12 掉到 0.03 元/GB/月。</figcaption>
+</figure>
 
 ---
 
