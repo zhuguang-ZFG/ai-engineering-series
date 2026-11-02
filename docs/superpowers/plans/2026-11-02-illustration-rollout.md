@@ -1103,7 +1103,7 @@ Expected（numstat）：两个 md 各 `6 0`。
 - Consumes: Task 1 的脚本、Task 2 的帧序测试
 - Produces: 手写 SVG 33 份、正文图版 7 张、每版 plates 167
 
-- [ ] **Step 1: 画四级**
+- [x] **Step 1: 画四级**
 
 Create `yuyu-book/illustrations/ch07-four-levels.svg`（`seq`，标准几何；第四格右下方的虚线是压缩边界标记）：
 
@@ -1111,13 +1111,13 @@ Create `yuyu-book/illustrations/ch07-four-levels.svg`（`seq`，标准几何；�
 <svg class="a-squeeze seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M18 28h40" pathLength="100"/><path d="M18 36h44" pathLength="100"/><path d="M18 44h36" pathLength="100"/><circle cx="44" cy="64" r="3" pathLength="100"/><circle cx="54" cy="64" r="3" pathLength="100"/><path d="M45 60l8-14" pathLength="100"/><path d="M53 60l-8-14" pathLength="100"/><path d="M60 30h10" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M112 24q14-2 28 0q2 14 0 26q-14 2-28 0q-2-14 0-27" pathLength="100"/><path d="M118 32h16" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M118 40h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M102 38h6" pathLength="100"/><path d="M106 36l3 2-3 2" pathLength="100"/><path d="M150 38h-6" pathLength="100"/><path d="M146 36l-3 2 3 2" pathLength="100"/><path d="M112 60h28" pathLength="100"/><path d="M112 66h20" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M192 26q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M192 38q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M192 50q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M224 30l4 3-4 3" pathLength="100"/><path d="M224 42l4 3-4 3" pathLength="100"/><path d="M236 46v10" pathLength="100"/><path d="M233 53l3 4 3-4" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M278 28h18" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 34h16" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 40h18" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 46h14" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M300 37h8" pathLength="100"/><path d="M306 35l3 2-3 2" pathLength="100"/><path d="M312 34h20" pathLength="100"/><path d="M312 44h16" pathLength="100"/><circle cx="320" cy="56" r="7" pathLength="100"/><circle cx="320" cy="56" r="2" fill="currentColor" stroke="none"/><path d="M276 66h44" opacity=".45" stroke-width="1.2" stroke-dasharray="3 5"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg>
 ```
 
-- [ ] **Step 2: 过闸**
+- [x] **Step 2: 过闸**
 
 ```bash
 python -X utf8 -c "import sys;sys.path.insert(0,'yuyu-book');from yuyu_book import art;print(len(art.drawing('ch07-four-levels')),'bytes inlined')"
 ```
 Expected: `3178 bytes inlined`，无异常（2026-11-02 实测：4 帧，装饰组在帧后，第四格那条虚线是压缩边界）。
-- [ ] **Step 3: 双语各插六行**（241 行之后；下一行是 `---`）
+- [x] **Step 3: 双语各插六行**（241 行之后；下一行是 `---`）
 
 中文：
 
@@ -1160,7 +1160,7 @@ print('both files: 478 -> 484 lines, 7.3 opens where it should')
 
 Expected: `both files: 478 -> 484 lines, 7.3 opens where it should`。英文版那一行是 `## 7.3 Compression Prompt Engineering`，断言只钉 `## 7.3` 前缀。
 
-- [ ] **Step 4: 平移锚点**
+- [x] **Step 4: 平移锚点**
 
 ```bash
 python -X utf8 scripts/shift_anchors.py --after 241 --delta 6 \
@@ -1169,12 +1169,12 @@ python -X utf8 scripts/shift_anchors.py --after 241 --delta 6 \
 ```
 Expected（2026-11-02 实测）：3 行 `glosses.json:`（zh `:472→478`、zh `:352→358`、en `:352→358`）+ 2 行 `manifest.json:`（中英各一条 `:282→288`），末行 `planned: 5 anchors`；补 `--write` 后 `written: 5 anchors`，`git diff --numstat -- yuyu-book/glosses.json yuyu-book/manifest.json` 给出 `3 3` 与 `2 2`。
 
-- [ ] **Step 5: 构建复核**
+- [x] **Step 5: 构建复核**
 
 Run: `python -X utf8 yuyu-book/build.py --check`
 Expected: 两份日志各报 `20 units, 167 plates`，末行 `CHECK OK`。
 
-- [ ] **Step 6: 挂进画廊**
+- [x] **Step 6: 挂进画廊**
 
 `scripts/build_illustration_gallery.py`：
 - `ORDER` 里把 `"ch07-four-levels"` 插到 `"ch07"` 之后；
@@ -1189,7 +1189,7 @@ Expected: 两份日志各报 `20 units, 167 plates`，末行 `CHECK OK`。
 Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
 Expected: `…\illustration-gallery.html (N bytes, 33 figures)`
 
-- [ ] **Step 7: 五处图数声明 +1**
+- [x] **Step 7: 五处图数声明 +1**
 
 - `README.md:113`：`全书另有 32 份手写线描图` → `全书另有 33 份手写线描图`；括号里 `四道权限门与一声钩响）` → `四道权限门、一声钩响与四级压缩）`。
 - `STRUCTURE.md:109`：`| 32 份手写 SVG` → `| 33 份手写 SVG`；`+ 6 幅正文插图` → `+ 7 幅正文插图`。
@@ -1199,7 +1199,7 @@ Expected: `…\illustration-gallery.html (N bytes, 33 figures)`
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 
-- [ ] **Step 8: 五道闸全跑**
+- [x] **Step 8: 五道闸全跑**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -1210,7 +1210,7 @@ python -X utf8 scripts/check_book.py                     # 0 errors（Markdown �
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
 
-- [ ] **Step 9: 账本记一轮**
+- [x] **Step 9: 账本记一轮**
 
 `entries[0]["zh"]` 末尾追加：
 
@@ -1228,7 +1228,7 @@ npm run check:diagrams                                   # 320 Mermaid diagrams,
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```bash
 git add yuyu-book/illustrations/ch07-four-levels.svg 第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
@@ -1251,7 +1251,7 @@ Expected（numstat）：两个 md 各 `6 0`。
 - Consumes: Task 3–7 的全部产物
 - Produces: 无代码接口；一份「看过什么」的记录进账本
 
-- [ ] **Step 1: 重生成三个派生产物**
+- [x] **Step 1: 重生成三个派生产物**
 
 ```bash
 python -X utf8 scripts/build_illustration_gallery.py   # 33 figures
@@ -1260,14 +1260,14 @@ python -X utf8 scripts/build_site_portal.py
 ```
 Expected: 各自打印一行输出文件与体积，无 SystemExit。（三个产物的插图数都不必手改：`scripts/build_beginner_reader.py:20` 的 `PLATES = len(list(ART.glob("*.svg")))` 当场数磁盘，门户 `docs/portal.html` 与两份入门读本都从这一个常量取值。）
 
-- [ ] **Step 2: 构建两份 HTML**
+- [x] **Step 2: 构建两份 HTML**
 
 ```bash
 python -X utf8 yuyu-book/build.py            # 不加 --check，真产物
 ```
 Expected: 两份 `dist/*.html`，日志里 `167 plates`。
 
-- [ ] **Step 3: 浏览器逐格看**
+- [x] **Step 3: 浏览器逐格看**
 
 用 chrome-devtools 打开 `yuyu-book/dist/yuyu-agent-harness-zh.html`，对五个新落点各做四件事，并记进账本：
 
@@ -1278,11 +1278,11 @@ Expected: 两份 `dist/*.html`，日志里 `167 plates`。
 
 另外确认 `ch01-five-pillars` 是 `illu-line`：只有描线、没有循环提示（`悬停播放` 那行字只属于 seq）。
 
-- [ ] **Step 4: 画廊对照**
+- [x] **Step 4: 画廊对照**
 
 打开 `docs/illustration-gallery.html`，确认 33 张卡片都在、五张新图的双语题注显示正常、点击能重播。（画廊的守卫保证少登记一张就直接红，所以这一步主要是看题注通不通顺。）
 
-- [ ] **Step 5: 五道闸再跑一遍 + 变异自检**
+- [x] **Step 5: 五道闸再跑一遍 + 变异自检**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -1294,7 +1294,7 @@ npm run check:diagrams                                   # 320 / 0
 ```
 变异自检（证明测试真的在管）：把 `ch04-gate-steps.svg` 第三个帧组之后插入一个 `<g class="frame">`（凑成 5 帧但 CSS 只排到 6），重跑 `FilmstripSource` 应仍绿；再把装饰组挪到帧组之前，必须红。撤掉变异。
 
-- [ ] **Step 6: 更新设计稿状态并提交**
+- [x] **Step 6: 更新设计稿状态并提交**
 
 ```bash
 git add docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html docs/superpowers/specs/2026-11-01-yuyu-illustration-expansion.md yuyu-book/revisions.json
