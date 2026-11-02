@@ -526,6 +526,12 @@ The table below summarizes the classification, blockability and typical uses of 
 
 * SessionStart blocking is ignored (graceful degradation design)
 
+A hook takes over at four moments: the event rings, a matcher hooks it, the script runs, the next step gets rewritten.
+
+```ill
+ch08-hook-line
+```
+
 ---
 
 ## 8.3 Hook Response Protocol

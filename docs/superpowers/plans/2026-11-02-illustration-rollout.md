@@ -953,22 +953,22 @@ Expected（numstat）：两个 md 各 `6 0`。
 - Consumes: Task 1 的脚本、Task 2 的帧序测试
 - Produces: 手写 SVG 32 份、正文图版 6 张、每版 plates 166
 
-- [ ] **Step 1: 画四拍**
+- [x] **Step 1: 画四拍**
 
 Create `yuyu-book/illustrations/ch08-hook-line.svg`（`seq`，标准 `348×106` 几何）：
 
 ```xml
-<svg class="a-hooks seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M28 26q10-3 20 0q3 10 1 18q-11 3-22 0q-2-9 1-18" pathLength="100"/><path d="M26 45h24" pathLength="100"/><circle cx="38" cy="50" r="2" fill="currentColor" stroke="none"/><path d="M16 30q-4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M60 30q4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M20 62h36" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M100 46h56" stroke-width="2" pathLength="100"/><path d="M124 22v12q0 8 8 8h6" pathLength="100"/><path d="M136 38l4 4-6 3" pathLength="100"/><path d="M102 28h14" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M102 34h10" opacity=".55" stroke-width="1.2" pathLength="100"/><circle cx="152" cy="46" r="2.2" fill="currentColor" stroke="none"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M192 24q16-2 32 0q2 14 0 26q-16 2-32 0q-2-14 0-27" pathLength="100"/><path d="M198 32l5 4-5 4" pathLength="100"/><path d="M207 36h12" pathLength="100"/><circle cx="200" cy="48" r="1.8" fill="currentColor" stroke="none"/><circle cx="206" cy="48" r="1.8" fill="currentColor" stroke="none"/><circle cx="212" cy="48" r="1.8" fill="currentColor" stroke="none"/><path d="M196 58h26" opacity=".55" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="284" cy="42" r="3" fill="currentColor" stroke="none"/><path d="M290 40q14-8 30-6" pathLength="100"/><path d="M318 32l6 2-3 6" pathLength="100"/><path d="M300 26h20" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M290 46q12 8 26 8" pathLength="100"/><path d="M318 52l7 7" pathLength="100"/><path d="M325 52l-7 7" pathLength="100"/><path d="M276 60q10 6 24 4" opacity=".5" stroke-width="1.2" stroke-dasharray="2 4"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg>
+<svg class="a-hooks seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M34 27q8-3 16 0q4 10 6 18q-14 2-28 0q2-8 6-18" pathLength="100"/><circle cx="42" cy="51" r="1.6" fill="currentColor" stroke="none"/><path d="M22 30q-4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M62 30q4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M30 58h24" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M34 63h16" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M100 24q28-2 56 0" pathLength="100"/><path d="M128 23v13q0 8 8 8q8 0 8-8" pathLength="100"/><circle cx="136" cy="39" r="2.2" fill="currentColor" stroke="none"/><path d="M104 32h14" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M104 38h9" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M192 24q20-2 40 0q2 15 0 30q-20 2-40 0q-2-15 0-30" pathLength="100"/><path d="M198 32l5 4-5 4" pathLength="100"/><path d="M207 36h16" pathLength="100"/><circle cx="200" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="208" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="216" cy="46" r="1.8" fill="currentColor" stroke="none"/><path d="M198 62h30" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="283" cy="42" r="3" fill="currentColor" stroke="none"/><path d="M285 40q16-9 32-9" pathLength="100"/><path d="M311 27l6 4-6 4" pathLength="100"/><path d="M285 44q13 10 25 10" opacity=".6" stroke-width="1.4" stroke-dasharray="4 6"/><path d="M311 49l10 10" pathLength="100"/><path d="M321 49l-10 10" pathLength="100"/><path d="M290 64h28" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg>
 ```
 
-- [ ] **Step 2: 过闸**
+- [x] **Step 2: 过闸**
 
 ```bash
 python -X utf8 -c "import sys;sys.path.insert(0,'yuyu-book');from yuyu_book import art;print(len(art.drawing('ch08-hook-line')),'bytes inlined')"
 ```
-Expected: `2918 bytes inlined`，无异常（2026-11-02 实测：4 帧，装饰组在帧后）。
+Expected: `2858 bytes inlined`，无异常（2026-11-02 实测：4 帧，装饰组在帧后）。
 
-- [ ] **Step 3: 双语各插六行**（528 行之后；下一行是 `---`）
+- [x] **Step 3: 双语各插六行**（528 行之后；下一行是 `---`）
 
 中文：
 
@@ -1011,7 +1011,7 @@ print('both files: 1059 -> 1065 lines, 8.3 opens where it should')
 
 Expected: `both files: 1059 -> 1065 lines, 8.3 opens where it should`
 
-- [ ] **Step 4: 平移锚点**
+- [x] **Step 4: 平移锚点**
 
 ```bash
 python -X utf8 scripts/shift_anchors.py --after 528 --delta 6 \
@@ -1020,37 +1020,37 @@ python -X utf8 scripts/shift_anchors.py --after 528 --delta 6 \
 ```
 Expected（2026-11-02 实测）：1 行 `glosses.json:` + 2 行 `manifest.json:`，末行 `planned: 3 anchors`；补 `--write` 后 `written: 3 anchors`。
 
-- [ ] **Step 5: 构建复核**
+- [x] **Step 5: 构建复核**
 
 Run: `python -X utf8 yuyu-book/build.py --check`
 Expected: 两份日志各报 `20 units, 166 plates`，末行 `CHECK OK`。
 
-- [ ] **Step 6: 挂进画廊**
+- [x] **Step 6: 挂进画廊**
 
 `scripts/build_illustration_gallery.py`：
 - `ORDER` 里把 `"ch08-hook-line"` 插到 `"ch08"` 之后；
-- `WIDE` 加条目 `"ch08-hook-line": 330`；
-- `PLAIN` 加 `"ch08-hook-line": "四格胶片：铃响、挂住、跑脚本、改写下一步",`；
+- `WIDE` 加条目，改完最后一行是 `"ch04-gate-steps": 330, "ch08-hook-line": 330}`；
+- `PLAIN` 加 `"ch08-hook-line": "四格胶片：铃响、挂住、跑脚本、一路放行一路截住",`；
 - `PLAIN_EN` 加
 ```python
     "ch08-hook-line": "A filmstrip: the event rings, a hook catches it, "
-                      "the script runs, the path changes",
+                      "the script runs, one road goes on and one is cut",
 ```
 
 Run: `python -X utf8 scripts/build_illustration_gallery.py`，再跑 `python -X utf8 scripts/build_beginner_reader.py` 与 `python -X utf8 scripts/build_site_portal.py`（全局约束：四张派生页都现数磁盘上的画，少跑一步仓库套件就红两条）
-Expected: `…\illustration-gallery.html (N bytes, 32 figures)`
+Expected: `…\illustration-gallery.html (134403 bytes, 32 figures)`（2026-11-02 实测）
 
-- [ ] **Step 7: 五处图数声明 +1**
+- [x] **Step 7: 五处图数声明 +1**
 
 - `README.md:113`：`全书另有 31 份手写线描图` → `全书另有 32 份手写线描图`；括号里 `一道五柱门廊与四道权限门）` → `一道五柱门廊、四道权限门与一声钩响）`。
 - `STRUCTURE.md:109`：`| 31 份手写 SVG` → `| 32 份手写 SVG`；`+ 5 幅正文插图` → `+ 6 幅正文插图`。
 - `CREDITS.md:135`：`扉页一幅车图（共 31 份` → `扉页一幅车图（共 32 份`。
 - `CREDITS.md:137`：`**画风体系**：31 份插图` → `**画风体系**：32 份插图`。
-- `en/README.md:113`：`31 hand-drawn line illustrations` → `32 hand-drawn line illustrations`；`five plates inside the prose (… and four permission gates)` → `six plates inside the prose (a tool bench, a scheduling filmstrip, a heartbeat loop, a five-column portico, four permission gates and a hook line)`。
+- `en/README.md:113`：`31 hand-drawn line illustrations` → `32 hand-drawn line illustrations`；`five plates inside the prose (a tool bench, a scheduling filmstrip, a heartbeat loop, a five-column portico and four permission gates)` → `six plates inside the prose (a tool bench, a scheduling filmstrip, a heartbeat loop, a five-column portico, four permission gates and a hook line)`。
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_docclaims -v` → `OK`
 
-- [ ] **Step 8: 五道闸全跑**
+- [x] **Step 8: 五道闸全跑**
 
 ```bash
 python -X utf8 yuyu-book/build.py --check
@@ -1061,23 +1061,23 @@ python -X utf8 scripts/check_book.py                     # 0 errors（Markdown �
 npm run check:diagrams                                   # 320 Mermaid diagrams, 0 errors
 ```
 
-- [ ] **Step 9: 账本记一轮**
+- [x] **Step 9: 账本记一轮**
 
 `entries[0]["zh"]` 末尾追加：
 
 ```
-"8.2 列了二十来个生命周期事件，节首一张流程图按层把它们分组摆好，另有四段 JSON 样例；名字记不住，节拍记得住。四格这样排：一只钟在两堵弧墙之间响起（事件），一根横梁上垂下钩子把它挂住（matcher 匹配），一格脚本跑三行输出打点（handler 执行），第四格从一个点分出两条路——上面一条实线继续走、下面一条虚线被截住，放行与阻断同时显影。这一格的分叉和 4.1 那张不是一回事：那里分的是一次调用「过」还是「拦」，调用本身没变；这里分的是下一步被换成了哪条路，所以钩子那两弧墙之间的钟，最后动的是路线。落点在 528 行之后、`## 8.3` 之前，图版占六行，`## 8.3` 落到 537 行，注册表里 3 条指向 528 行之后的锚点各加六。中英各 1059 行变 1065 行。手写图 31→32 份，正文插图 5→6 张，每版图版 165→166 张。构建器测试 442 项全绿。"
+"8.2 收尾那张表把 22 个生命周期事件的分类、可否阻止与典型用途列在一起，节首一张 flowchart 把它们分进六组，四段配置样例给出 hooks/matcher/command 的形状：表给的是名字，胶片给的是节拍。四格这样排——一只钟在两堵弧墙之间响起（事件响起），一根横梁上垂下一只钩兜把那颗点兜住（matcher 匹配），一格终端里提示符后跟着一行命令、下面打三个点（handler 执行），第四格从一个实心点分出两条路：上面一条实线带着箭头继续走、下面一条虚线被一个叉截住，放行与阻止同格显影。这一格的分叉和 4.1 那张不是一回事：那里分的是一次调用「过」还是「拦」，调用本身没变；这里分的是下一步被换成哪条路，所以钟响之后最后动的是路线。落点在那张 22 行表之后、`## 8.3` 之前，图版占六行，`## 8.3` 落到 537 行，注册表里 3 条指向 528 行之后的锚点各加六。中英各 1059 行变 1065 行。手写图 31→32 份，正文插图 5→6 张，每版图版 165→166 张。构建器测试 442 项全绿。"
 ```
 
 `entries[0]["en"]` 末尾追加：
 
 ```
-"Section 8.2 lists some twenty lifecycle events; a flowchart at the head of the section has already sorted them into layers, and four JSON samples show what a response looks like. A reader forgets the names and keeps the beat. The four cells are: a bell ringing between two curved walls (the event), a hook dropping from a crossbar to catch it (the matcher), a script running three lines and printing dots (the handler), and a fourth cell where one point forks into two — a solid line going on above, a dashed line cut short below. The fork in that last cell is not the one Chapter 4 drew: there a single call splits into allowed or blocked and the call itself stays the same, here the fork chooses which next step happens, so the route is what moves. The block lands after line 528, before `## 8.3`, costing six lines of prose and pushing that heading to 537; 3 anchors pointing past 528 move by six. Both language files go from 1059 to 1065 lines. Hand-inked drawings 31 to 32, plates inside the prose 5 to 6, plates per edition 165 to 166. 442 builder tests green."
+"A table at the foot of 8.2 lines the 22 lifecycle events up by category, whether each one can block, and what it is typically for; a flowchart at the head of the section sorts them into six groups, and four configuration samples show the hooks/matcher/command shape. The table gives names, the filmstrip gives the beat. The four cells run: a bell ringing between two curved walls (the event), a hook dropping from a crossbar to catch that dot (the matcher), a terminal with a command behind the prompt and three dots printing under it (the handler), and a fourth cell where one filled point forks into two roads — a solid line carrying an arrowhead goes on above, a dashed line cut short by a cross below, so going through and being stopped develop in the same cell. The fork there is not the one 4.1 drew: there a single call splits into passed or stopped and the call itself stays the same, here the fork decides which next step happens, so after the bell it is the route that moves. The block sits after that 22-row table and before `## 8.3`, costing six lines of prose and pushing that heading to 537; the 3 anchors in the two registries pointing past line 528 each move by six. Both language files go from 1059 to 1065 lines. Hand-inked drawings 31 to 32, plates inside the prose 5 to 6, plates per edition 165 to 166. 442 builder tests green."
 ```
 
 Run: `python -X utf8 -m unittest yuyu-book.tests.test_pages -k revision_notes -v` → `OK`
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```bash
 git add yuyu-book/illustrations/ch08-hook-line.svg 第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md yuyu-book/glosses.json yuyu-book/manifest.json scripts/build_illustration_gallery.py README.md STRUCTURE.md CREDITS.md en/README.md yuyu-book/revisions.json docs/illustration-gallery.html docs/beginner-reader.html docs/beginner-reader.en.html docs/portal.html
