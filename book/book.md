@@ -23177,7 +23177,7 @@ Claude Code 现在推荐通过插件补回这类能力。例如官方插件市�
 **输出示例：**
 
 ```
-上下文使用情况
+📊 上下文使用情况
 
 Token 使用：45,230 / 200,000 (22.6%)
 文件引用：12 个文件
@@ -24623,6 +24623,11 @@ Claude：[会自动运行诊断，分析配置文件，检查服务器状态]
 ###### 传输方式配置
 
 Claude Code 支持三种传输方式：
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/integration-plug.svg" alt="Claude Code 与 MCP 服务器的三种传输方式对照：STDIO 本地进程、HTTP 远程服务、SSE 服务器推送，各自的关键字段与常见坑" loading="lazy">
+  <figcaption><strong>先问谁主动、要不要出门。</strong>STDIO 把工具装在你自己的机器里，HTTP 每问一次等回一次，SSE 由服务器把消息推回来；三种写法都进同一份 <code>.claude/mcp.json</code>，所以密钥泄漏和版本漂移是三家的共同坑。</figcaption>
+</figure>
 
 ###### STDIO（本地进程）
 
@@ -29069,7 +29074,7 @@ window.addEventListener('DOMContentLoaded', () => {
 🗺️ 2D 地图探索（多场景切换、NPC 交互）
 💾 自动存档（localStorage 保存进度）
 🔊 音效和 BGM（Web Audio API）
-角色成长（经验、升级、属性提升）
+📊 角色成长（经验、升级、属性提升）
 ```
 
 **观察团队工作**：
@@ -44055,6 +44060,11 @@ CPU 跳到内核入口
 | **输入设备** | Input | 信息输入 | 键盘、鼠标、扫描仪 |
 | **输出设备** | Output | 信息输出 | 显示器、打印机 |
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/computer-org.svg" alt="冯诺依曼计算机五大件：输入设备、存储器、CPU（控制器、运算器、寄存器）、输出设备，全部挂在系统总线上，下方是指令周期与存储速度阶梯" loading="lazy">
+  <figcaption><strong>瓶颈常常不在算，而在取数据。</strong>五大件靠一条总线串起来，内存管快、断电就忘，硬盘管长期保存；从桌上拿纸到另一个国家取件，速度差上百万倍。</figcaption>
+</figure>
+
 ###### 1.3 数据通路
 
 **数据通路（Data Path）**是数据在各个功能部件之间流动的路径。在 CPU 内部，数据通路连接了：
@@ -55356,6 +55366,11 @@ function TodoList() {
 
 **记住：从简单开始，按需升级。**
 
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/state-source.svg" alt="状态管理示意图：商品详情页、购物车页面、头部导航三个组件通过意向上送与状态下发读写同一个仓库 Store，右侧反例是各组件自己记账" loading="lazy">
+  <figcaption><strong>一份数据只记一处。</strong>组件只管把意向上送、把状态下收；右边那样各记一本账，同一份数据被抄成三份，改一处就漏两处。</figcaption>
+</figure>
+
 ###### 5.1 状态设计的原则
 
 无论你选择哪种状态管理方案，都应该遵循以下原则：
@@ -56248,6 +56263,11 @@ server {
 | 服务端配置 | 不需要 | **必须配置** |
 | 直接访问 | ✅ 正常工作 | ❌ 需要服务端支持 |
 | SEO | ⚠️ 较差 | ✅ 良好 |
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/route-table.svg" alt="前端路由机制图解：地址栏门牌号经路由表花名册匹配后请对应组件上台，Hash 与 History 模式对照，History 刷新分叉为 404 或 try_files 回退" loading="lazy">
+  <figcaption><strong>刷新 404 不是路由坏了。</strong>地址栏是门牌号，路由表是前台花名册，对上哪行就请哪个组件上台；History 模式把整条路径发给服务器，服务器只认文件，得配 <code>try_files</code> 回退到 <code>/index.html</code>。</figcaption>
+</figure>
 
 ###### 3.5 阶段四：混合渲染——SPA + SSR 的终极方案
 
@@ -57280,6 +57300,11 @@ Lighthouse 会给出：
 | **LCP** | Largest Contentful Paint | 最大内容绘制时间（主要内容加载完成的时间） | <2.5s |
 | **TBT** | Total Blocking Time | 总阻塞时间（主线程被阻塞的总时间） | <200ms |
 | **CLS** | Cumulative Layout Shift | 累积布局偏移（页面元素乱跳的程度） | <0.1 |
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/perf-budget.svg" alt="网页性能三条刻度轴：加载用秒（FCP、LCP）、交互用毫秒（TBT、INP）、版面用分数（CLS），各有一条预算线与实测指针，底部是性能预算的三个抓手" loading="lazy">
+  <figcaption><strong>三条轴各有单位。</strong>画面什么时候出现看秒、点下去多久有反应看毫秒、版面跳不跳看分数；预算线一划，越没越线一眼看见，不用等用户投诉。</figcaption>
+</figure>
 
 
 **这个阶段的特点**：
@@ -59220,6 +59245,11 @@ ARIA 本质上是一组特殊的 HTML 属性，**它们不会改变任何视觉�
 但现代后端开发完全变了样。我们现在面临的选择有 Java、Go、Node.js、Rust、C#、Kotlin、Scala、Swift、Ruby、WebAssembly 等，每种语言都有其特定的适用场景和优势。云计算、微服务、AI/ML 等新技术的出现，让后端开发的边界不断扩展，语言选择也变得越来越多元化。
 
 **这种多元化是技术进步的必然结果。** 不同的场景有不同的需求，就像不同的工作需要不同的工具。你不会用瑞士军刀砍柴，也不会用斧子做精细雕刻。同样，后端语言的选择也必须基于具体场景。
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/backend-langs.svg" alt="Node.js、Go、Java、Rust 四门后端语言对照表：上手速度、并发模型、擅长场景三行横排，底部结论是团队熟悉度优先于技术最优解" loading="lazy">
+  <figcaption><strong>团队熟悉度 &gt; 技术最优解。</strong>四件工具三行对照：谁起步快、谁能扛并发、该派它干啥——没有最好的语言，只有最适合的场景。</figcaption>
+</figure>
 
 <div style="display: flex; gap: 20px; margin: 20px 0;">
 <div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;">
@@ -68674,6 +68704,11 @@ project/
 └── scripts/
 ```
 
+<figure class="stack-figure">
+  <img src="assets/stacks/backend-directories.png" alt="后端目录结构工程图：src/ 容器内 routes、middlewares、controllers、services、repositories、models、utils、config 八个目录横向排成一条调用链，蓝色实线依次标注请求、放行、业务调用、数据访问、领域对象，控制器到仓储之间一条虚线标注禁止跨层直连；下方八个分组按路由层、通用能力、控制器层、业务逻辑层、数据访问层、模型层、工具函数、配置列出 Express、Django、Spring、NestJS、Go 各自的具体文件；最底一个容器列出 src 之外的 tests、docs、scripts、migrations、package.json" loading="lazy">
+  <figcaption><strong>目录结构就是架构图。</strong><code>src/</code> 下八个目录就是这条调用链：路由收请求、中间件放行、控制器喊 service、service 找仓储、仓储按模型取数。虚线标的是禁止项——控制器跳过 service 直连仓储，分层就白分了。</figcaption>
+</figure>
+
 ###### 3.3 Node.js - 企业级分层
 
 **参考开源项目**：
@@ -75237,6 +75272,11 @@ server {
 
 月度成本估算：对象存储 0 到 5 元（按存储量计费），CDN 流量 0 到 10 元（按流量计，有免费额度），域名 5 到 10 元（按年折算）。总计 5 到 25 元每月，小网站可能完全免费。
 
+<figure class="stack-figure">
+  <img src="assets/stacks/cloud-platform.png" alt="云平台实战工程图：上排下载链路为用户浏览器经 HTTPS 请求到域名与 HTTPS 证书，CNAME 解析后落到 CDN 边缘节点，未命中回源到对象存储 Bucket；中排本地开发机以 git 与 scp 虚线部署到 VPC 内的云服务器 ECS，ECS 实线读写 RDS 数据库；下排 SSH 密钥以虚线登录 ECS，云控制台开通服务后由 IAM 与 RAM 创建用户角色签发 AccessKey 调用通义千问 API；公有云地域与 VPC 私有网络、访问控制与凭证三层容器分组" loading="lazy">
+  <figcaption><strong>这条链路上，静态站最便宜。</strong>域名 CNAME 指到 CDN，CDN 回源到公共读的 Bucket 就能上线，一个月 5 到 25 元；只有要跑动态后端，才在 VPC 里加云服务器和 RDS，AccessKey 和 SSH 私钥按最小权限单独发放。</figcaption>
+</figure>
+
 
 ##### 6. 总结与下一步
 
@@ -75351,6 +75391,11 @@ server {
 - **用户组（Group）**：批量管理一批用户的权限
 - **角色（Role）**：定义一组权限，可以被"扮演"
 - **策略（Policy）**：具体的权限规则（允许/拒绝做什么）
+
+<figure class="handdraw-figure">
+  <img src="assets/handdraw/iam-keycard.svg" alt="IAM 四道关图解：身份（用户、用户组、长期凭证）、角色（临时凭证）、策略（Allow 与 Deny 及条件）、资源（能开哪几扇门），下方是 AK/SK 泄漏事故链" loading="lazy">
+  <figcaption><strong>一张卡四道关。</strong>谁刷卡、什么岗位、能开哪几扇门、只到自己那一层；把长期 AK/SK 写进代码提交上去，等于把钥匙挂在门把手上。</figcaption>
+</figure>
 
 
 ##### 2. 用户、组、角色：到底该用哪个

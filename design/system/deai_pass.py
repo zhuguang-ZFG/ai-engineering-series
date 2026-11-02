@@ -33,6 +33,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fences  # noqa: E402  (CommonMark fence state, shared with scan_deai)
+
 ROOT = Path(__file__).resolve().parents[2]
 BOOK = ROOT / "book" / "book.md"
 
@@ -51,14 +54,14 @@ CALL_HEAD = re.compile(r"^(\s*(?:>\s*)?(?:[-*\d.)]\s+)?)(?:" + DECOR + r"\s*)+(?
 
 
 def split_fences(lines):
-    """Yield (index, line, in_code) so code blocks are never rewritten."""
-    fence = False
-    for i, line in enumerate(lines):
-        if line.strip().startswith("```"):
-            yield i, line, True
-            fence = not fence
-            continue
-        yield i, line, fence
+    """Yield (index, line, in_code) so code blocks are never rewritten.
+
+    CommonMark rules, not a ``` XOR toggle: a line that merely starts with a
+    fence inside an indented block, or a ```` fence wrapping ``` examples, used
+    to flip the state and expose real code to the rewriter.
+    """
+    for i, (line, coded) in enumerate(zip(lines, fences.code_state(lines))):
+        yield i, line, coded
 
 
 def strip_header_emoji(line):

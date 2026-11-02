@@ -23,6 +23,9 @@ import statistics
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fences  # noqa: E402  (CommonMark fence state, shared with deai_pass)
+
 ROOT = Path(__file__).resolve().parents[2]
 BOOK = ROOT / "book" / "book.md"
 
@@ -45,12 +48,9 @@ KEYS = list(PATTERNS) + ["D1-装饰表情", "D2-句中随手强调"]
 
 def prose_lines(text):
     """Yield (line_no, text) for lines that are prose the author is responsible for."""
-    fence = False
-    for i, line in enumerate(text.split("\n"), 1):
-        if line.strip().startswith("```"):
-            fence = not fence
-            continue
-        if fence:
+    lines = text.split("\n")
+    for i, (line, coded) in enumerate(zip(lines, fences.code_state(lines)), 1):
+        if coded:
             continue
         s = line.strip()
         if not s or s.startswith("#") or s.startswith("|") or s.startswith("---"):
@@ -63,7 +63,9 @@ def prose_lines(text):
 def section_map(text):
     """Split the book at `### ` headings; return (title, start, end) 1-based lines."""
     lines = text.split("\n")
-    heads = [(i, l[4:].strip()) for i, l in enumerate(lines, 1) if l.startswith("### ")]
+    coded = list(fences.code_state(lines))
+    heads = [(i, l[4:].strip()) for i, l in enumerate(lines, 1)
+             if l.startswith("### ") and not coded[i - 1]]
     out = []
     for k, (line, title) in enumerate(heads):
         end = heads[k + 1][0] - 1 if k + 1 < len(heads) else len(lines)

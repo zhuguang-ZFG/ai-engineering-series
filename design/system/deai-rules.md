@@ -110,7 +110,45 @@
 剩余热点（`def/1k`）：`AI Agent 与工具调用` 13.05、`提示词工程` 9.76、`编程语言概念` 9.11、
 `TypeScript` 7.84，登记为 O-11，等第三遍或 Phase F 顺路处理。
 
-## 6. 来源
+> **尺子修订（同日）**：上表用的仍是 ```` ``` ````异或式围栏判定。`design/system/fences.py` 换成 CommonMark 后
+> 复量：语料 732,826 汉字、缺陷 1,500（+12，全是测量差）、可测章节 186（剔除一个代码块里的伪章节），
+> 排名不变。同时 `audit_edits.py` 复盘历史，查出 2 处改写伸进了 ``` 里被引用的终端输出，已修回。
+> 详见 `REVIEW.md` R-13 / R-14 / O-12。
+
+## 6. 界面层去 AI 味（unslop · 第四源，2026-11-03 并入）
+
+前六节只管**文字**。`~/.agents/skills/unslop`（Damir Sokolovsky，CC BY 4.0，与 upstream `heydamir/unslop` 的 `skills/unslop/` 逐字节一致，已附 `CITATION.cff` + `LICENSE`）管的是**另一层**：屏幕。它的靶子是 "vibecoded UI"——紫蓝渐变、发光、emoji 当图标、间距随手敲、文案在喊。本项目所有 HTML 出口（`exports/landing.html`、deck、卡片、以及视频场景的界面层）按它办。
+
+**两层分工，不许互相越界**：
+
+| 层 | 对象 | 口径来源 | 判定动作 |
+|---|---|---|---|
+| 文字 | 书正文、配音稿、字幕、页面里的文案 | §2 §3 §4（humanizer-zh + sepia） | `scan_deai.py` 出 defect 清单 |
+| 界面 | 间距/颜色/图标/字重/圆角/动效/真实感 | unslop `references/signs.md` + 九遍顺序 | 截图→逐条对 signs→redline |
+
+文案是交界：unslop 的 Copy 遍（喊话词、`!!`、`Trusted by 10,000+ teams`、`Search anything...`）与 §2 的 C/E/F 组是同一件事的两种说法，**按 §0 铁律裁**（保信息、守范围、匹配作者声音，最后才改表达）。
+
+**九遍顺序照抄，不许并行**：Spacing → Color → Icons → Copy → Type → Layout → Details → Visuals → Motion。理由它自己写了：节奏不对时其余全读错；文案长度决定字号与落位；视觉与动效最后加，因为要加在一个"没有它也成立"的页面上。
+
+**与本项目手绘 token 的冲突裁决**（已定，后续按此，不再逐页讨论）：
+
+| unslop 通则 | 本项目裁决 | 依据 |
+|---|---|---|
+| 间距全部落 4px 网格 | **遵守**（Phase G 实测把手、gap、section 间距snap 到 4 的倍数；已存在的 13/14/22/26/30 一律改掉） | 手绘≠随手，`--radius-hand` 是**形状**不齐，不是**数值**随意 |
+| 边框是 6–10% 透明发丝线 | **违反，且有意**：卡片用 4px 墨线 `--ink-line` + 硬投影 | unslop 自己的 Signature 例子写着"教学用手绘下划线"；墨线轮廓是本课程的签名，属"把丰富放进内容的一两个瞬间"，不是 chrome 发光 |
+| 字重 400–600，禁 700–900 标题 | **分级执行**：chrome（kicker/label/tag/表头）≤500；展示大字与 `--font-num` 数字允许 800–900 | 它允许 direction 移动起点值；海报式数字是手绘register 的一部分，但小字绝不加粗挤压 |
+| 禁止 uppercase + 宽字距标签 | **遵守**：`STAGE 1` `VIBE CODING 101` 这类改句子式大小写、`letter-spacing` 归 0；CJK 一律 `letter-spacing: 0`（与 §cjk-rules T 规则同源） | signs.md Type 组第 2 条 |
+| 界面里不留 emoji | **仅管 chrome**。正文的**图例图标**（`::: tip 💡`、`👇 动手点点看`、`> 🎯 实用场景`）是§校准三定名的功能性标记，保留 | 校准三：分功能，不一刀切 |
+| 一个 accent、覆盖几个 % | **遵守并写死**：绿 `--accent*` 是唯一视觉语言；柿子橙 `--persimmon` 只给**一个**主 CTA 与苹果/箭头图形，不得第二处 | 與 cjk-rules「每风格 1 个 accent」一致 |
+| Hero 要真视觉/真产品预览，禁填充装饰 | **遵守**：出口页首屏放**本书真实图解**（同 token 的 SVG），不放生成装饰、不放空框、不放 stock 机器人 | unslop "Real product, real material"；本项目有 949 图 + 手绘 SVG，无需编 |
+| 数字一个格式 + `tabular-nums` | **遵守**：`.stat b`、`.num`、时长、倍数全部等宽数字 | — |
+| 动效：禁循环脉冲/`transition-all`/hover 位移超几像素 | **遵守**，且与 HyperFrames 的确定性动效红线一致：命名过渡属性、单一缓动 `cubic-bezier(.22,1,.36,1)`、入场只一次 | Phase E 红线（禁 timer/随机/无限循环） |
+| Template check：换掉产品名页面仍成立 → 再推 direction | **执行**：落地页每个数字须能回书里查到出处（197/215/六行交付单/术语表出处） | 与 §0 铁律 1 同构 |
+
+**流程**：先 `node ~/.agents/skills/unslop/scripts/snapshot.mjs <url> unslop/original.html` 或直接开本地文件截图 → 对 `signs.md` 逐组列 sign + 位置 → 判 heavy/light/none → 写五-line direction（Product / Character / World / Moments / Signature）→ 九遍 → 末尾 checklist。本项目的 direction 已由 `design/system/tokens.md` 定死，不重新发明：Character=`纸、马克笔、有点幽默的老师傅`；World=`手绘讲义`；Moments=`首屏那张真图解`；Signature=`波形下划线 + 四角不齐的墨线框`。
+
+## 7. 来源
 
 - `dsh-guizang-design/skills/humanizer-zh/SKILL.md`（基于 blader/humanizer v3.0.0 + Humanizer-zh PR 39 + hardikpandya/stop-slop，revision 2026-09-23）。
 - `~/.qoder/skills/sepia/references/languages/zh.md`（HC3-Chinese 实测 + 台港语料 T/M + MOE/EY 规范）、`professional-pass.md`、`style-pass.md §2-3/§5`、`domains/tech-articles.md`、`SKILL.md`（refactor/recreate 契约）。
+- `~/.agents/skills/unslop/`（`SKILL.md`、`references/signs.md`、`references/tokens.md`、`references/visuals.md`、`references/effects.md`、`references/refs.md`）— unslop by Damir Sokolovsky (@heydamir)，CC BY 4.0；改动与本报告引用其规则时保留署名。

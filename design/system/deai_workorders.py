@@ -24,6 +24,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fences  # noqa: E402  (CommonMark fence state, shared with scan_deai)
+
 ROOT = Path(__file__).resolve().parents[2]
 BOOK = ROOT / "book" / "book.md"
 SYS = ROOT / "design" / "system"
@@ -110,6 +113,7 @@ def split(agents):
 
 def apply(dry=True):
     lines = BOOK.read_text(encoding="utf-8").split("\n")
+    coded = list(fences.code_state(lines))
     patches = []
     for f in sorted(SYS.glob("_patches_*.tsv")):
         for raw in Path(f).read_text(encoding="utf-8").split("\n"):
@@ -128,6 +132,8 @@ def apply(dry=True):
             s = cur.strip()
             if s.startswith(("#", "|", "!", "<", "```")) or cur.startswith("```"):
                 patches.append((f.name, ln_s, None, "越权：标题/表格/figure/代码")); continue
+            if coded[ln - 1]:
+                patches.append((f.name, ln_s, None, "越权：代码块内部")); continue
             if "assets/handdraw/" in cur or "assets/stacks/" in cur:
                 patches.append((f.name, ln_s, None, "越权：figure")); continue
             c = cur.count(old)
