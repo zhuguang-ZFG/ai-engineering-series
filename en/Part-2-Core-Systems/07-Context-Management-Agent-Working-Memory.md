@@ -1,11 +1,15 @@
 # Chapter 7: Context Management -- The Agent's Working Memory
 
+> **In one line:** The context window has a ceiling: when history swells, compression escalates through four levels, and after three straight failures the circuit breaker pulls the plug.
+
 > **Learning Objectives:**
 > 1. Work out the hard ceiling on the context window and the space you can still write in
 > 2. Put the four compression levels (Snip -> MicroCompact -> Collapse -> AutoCompact) in order and say when each one fires
 > 3. Explain how the circuit breaker pulls the plug when compression failures cascade
 > 4. Take the compression prompt two-phase output apart
 > 5. Pick a compression strategy that fits how you actually use the Agent
+
+**Difficulty:** 7.1's window constraints are the starting rung; 7.2's four compression levels and 7.3's prompt engineering are the backbone; 7.5's strategies close the backbone and pay off fastest. 7.4's token-budget tracking sits at the Advanced tier -- skip it on a first pass and return when you need exact numbers.
 
 ---
 
@@ -488,3 +492,5 @@ Combining Chapter 2 (Conversation Loop) and Chapter 9 (Fork Pattern), analyze th
 7. **Time-Triggered Micro-Compression**: When server-side cache expires (timeout since last assistant message), the system proactively clears old tool results to reduce rewrite costs.
 8. **Proactive Compression Over Reactive Compression**: Manually triggering compression at key work milestones with annotation of key points preserves more valuable information than waiting for auto-compression.
 9. **Memory System as a Context Supplement**: You should save important decisions as memory files, so that even if the conversation gets compressed, critical information survives. See Chapter 6 for details.
+
+> **Three sentences to keep:** ①Compression is no black box but a four-level escalation -- snip, micro-compact, collapse, auto-compact -- each level costlier than the last. ②Wait until history hits the ceiling and the work costs the most; three straight failures and the circuit breaker pulls the plug. ③Proactive compression beats reactive: trigger it yourself at key milestones with notes on what matters, and you keep more useful context than the automatic pass would.

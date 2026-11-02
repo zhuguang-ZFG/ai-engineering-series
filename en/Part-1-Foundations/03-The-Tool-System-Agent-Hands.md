@@ -1,5 +1,7 @@
 # Chapter 3: The Tool System -- The Agent's Hands
 
+> **In one line:** Fifty-five tallies hang from the agent's hands, and each passes a JSON Schema shape check before it may strike.
+
 > "If all you have is a hammer, everything looks like a nail."
 > -- Abraham Maslow
 
@@ -10,6 +12,8 @@
 - Explain how concurrency partitioning orders the queue, and how much waiting it actually saves
 - Name what each of the four StreamingToolExecutor stages holds back
 - Judge whether deferred tool discovery pays for the extra indirection
+
+**Difficulty:** A Core chapter: 3.1 is Start level (the five-element protocol); 3.2 and 3.4 carry the trunk. 3.3 takes the core tools apart one by one -- the longest stretch, tagged Advanced; on a first read, pick the tools you actually use and leave the rest, together with the exercises, for a second pass.
 
 ---
 
@@ -465,5 +469,7 @@ Record the input token count difference in both cases, and calculate how many to
 4. **StreamingToolExecutor is a zero-wait tool scheduler**: It starts executing tools while the model is still generating tool_use blocks, and a four-stage state machine plus ordering guarantees let it run tools in parallel without losing order. It is where the "async streaming first" design principle lands in the tool system.
 
 5. **Tool system extensibility comes from the type contract**: The generic design of `Tool<Input, Output, Progress>` gives each tool its own type space, while `ToolUseContext` provides a unified execution environment. Adding new tools requires no modifications to the orchestration engine's code -- the "progressive capability extension" principle from Chapter 1 pays off right here.
+
+> **Three sentences to keep:** ①Name, schema, permissions, execution, rendering -- the five-element protocol is the shared DNA of all 55 tools, and the generic contract gives each tool its own type space. ②Once the contract stands, registration, dead-code elimination, concurrency partitioning, and streaming execution all have one thing to hold; mislabel isConcurrencySafe and the price is a data race. ③You add a tool without touching the orchestration engine -- get the five elements right and let the defaults carry the rest.
 
 In the next chapter, we will dive into the Agent's safety guardrails -- the permission pipeline. The tool system lets the Agent act; the permission pipeline defines where those actions stop. Understanding the design of the permission pipeline, you will see how Claude Code walks the line between "autonomous execution" and "safety assurance."

@@ -1,10 +1,14 @@
 # Chapter 10: The Coordinator Pattern -- Multi-Agent Enterprise Orchestration
 
+> **In one line:** Too many carts call for a dispatcher who never cracks the whip: it hauls no load itself, only assigns who takes which road.
+
 > **Learning Objectives:**
 > - See how the Coordinator pattern splits work between coordinator and workers, and why it splits it there
 > - Walk the full multi-agent workflow, from requirements to verified delivery
 > - Work out how tasks get assigned, how failures get picked up, and how workers share the Scratchpad
 > - Choose correctly between the Coordinator pattern and the Fork pattern
+
+**Difficulty:** 10.1 is Start, 10.3–10.5 and 10.7 are Core; 10.2 tool allocation and 10.6 fault recovery are Advanced — skip them on a first read and come back when you build.
 
 When a single agent cannot handle complex engineering tasks, Claude Code provides the Coordinator pattern -- a centralized multi-agent orchestration solution. Unlike the Fork pattern's peer-to-peer parallelism, the Coordinator pattern employs a "coordinator-worker" architecture, where a dedicated coordinator manages the lifecycle and task allocation of multiple parallel workers.
 
@@ -706,3 +710,5 @@ Requirements:
 7. **Fault recovery** is a built-in capability of the Coordinator pattern. Through the status field in task notifications, partial results in the Scratchpad, and the coordinator's reassignment capability, the system can gracefully handle worker failures and partial completion.
 
 8. **Pattern selection**: Coordinator is suitable for coordinated, complex multi-step tasks, while Fork is suitable for independent parallel search tasks. The two are mutually exclusive and cannot be used simultaneously. Understanding the strengths and limitations of each is key to making the right choice.
+
+> **Three sentences to keep:** ①The coordinator holds not a single execution tool, only four orchestration tools — and it may not delegate understanding: it digests every finding and writes the implementation spec itself. ②Forwarded understanding loses context; a coordinator that has absorbed the research writes specs with concrete file paths and line numbers, so implementation workers receive unified, precise instructions. ③Bring coordinated multi-step work to the Coordinator and independent parallel searches to Fork — the dispatcher assigns but never hauls, and the two carts never run at once.

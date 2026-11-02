@@ -1,10 +1,14 @@
 # Chapter 9: Sub-Agents and the Fork Pattern
 
+> **In one line:** Sub-agents are extra hired carts, each paying its own toll; Fork loads one shared set of luggage and hands each cart only its own reins.
+
 > **Learning Objectives:**
 > - Follow a sub-agent from spawn to teardown
 > - Explain the Fork pattern's cache sharing and byte-level inheritance
 > - Build a custom agent shaped around a specific job
 > - Explain why Claude Code builds the adversarial Verification Agent to argue with the main Agent
+
+**Difficulty:** 9.1 is Start, 9.2–9.4 are Core; 9.5 tool isolation and 9.6 lifecycle are Advanced — skip them on a first read and come back when you build.
 
 Claude Code's capability goes beyond a single-turn conversation. Claude Code can split complex tasks and hand them to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
 
@@ -689,3 +693,5 @@ Write out the input and expected output for each step.
 6. **Sub-agent lifecycle management** goes through complete state transitions from creation to cleanup. Setting maxTurns appropriately, choosing the right model, and correctly configuring the tool set are key to using sub-agents efficiently.
 
 7. **The adversarial verification philosophy**: rather than trusting that code "should work," actively try to prove that it doesn't.
+
+> **Three sentences to keep:** ①Fork's cache sharing is a byte-level contract — the system prompt, tool definitions, and message prefix must match character for character, so Fork passes the already-rendered bytes. ②When the cache hits, three parallel sub-agents add only their own instruction text, saving over sixty percent of tokens. ③Send Explore for read-only scouting, Verification for adversarial checks, and Fork when the same context runs in parallel — match each cart to its job, and the road goes faster.

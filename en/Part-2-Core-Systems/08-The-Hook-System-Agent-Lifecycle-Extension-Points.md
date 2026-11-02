@@ -1,5 +1,7 @@
 # Chapter 8: The Hook System -- Agent's Lifecycle Extension Points
 
+> **In one line:** The permission pipeline is the guardrail; hooks are the reflex arc -- at 22 lifecycle points they can watch, rewrite, or flatly refuse.
+
 > **Learning Objectives:** By the end of this chapter, you can:
 >
 > - Tell what each of the five hook types can intercept, and where each one stops
@@ -9,6 +11,8 @@
 > - Reason out which hook runs first when several match, and how conflicts settle
 > - Configure hooks without stepping into the usual traps
 > - See how hooks hand off to the permission pipeline (Chapter 4) and the configuration system (Chapter 5)
+
+**Difficulty:** 8.1's five hook types are the starting rung; 8.2's 22 events are backbone material to read like a manual -- no need to memorize them in one sitting; 8.3's response protocol is backbone material you must read. 8.4's security gates sit at the Advanced tier but repay a close read; 8.5 closes the backbone -- save the anti-patterns for the day you write your first hook.
 
 ---
 
@@ -1063,3 +1067,5 @@ Design a complete hook configuration solution meeting above requirements.
 8. **Collaboration with permission pipeline** (Chapter 4): PreToolUse hooks run after permission pipeline, as second security check. Permission pipeline determines "whether can execute", hooks determine "how to execute". Both together form Claude Code's security protection system.
 
 9. **Collaboration with configuration system** (Chapter 5): Hook configuration follows six-layer configuration system merge rules, supporting different security policies at different levels. Enterprise policy layer can control global behavior through `disableAllHooks` and `allowManagedHooksOnly`.
+
+> **Three sentences to keep:** ①Every hook speaks one language: a JSON response protocol plus exit codes -- the engine trusts the protocol, never the implementation. ②One shared protocol lets five hook types plug into 22 lifecycle points, and any hook's block decision takes effect. ③Keep the division of labor straight: the permission pipeline decides whether an action may run, hooks decide how it runs -- after the guardrail, hooks are the second security check.

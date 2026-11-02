@@ -1,6 +1,10 @@
 # Chapter 6: The Memory System -- Agent Long-Term Memory
 
+> **In one line:** Memory comes in two layers: working memory lives in the context window, long-term memory lives on disk -- store only what the code cannot derive, and verify before you trust it.
+
 > **Learning Objectives:** What each of the four memory types holds and who extracts it; how the Fork pattern lets parallel Agents share one cache; how you build a memory system that lives on disk. By the end of this chapter you can make memory earn its keep the more you use it, and keep it tidy across projects.
+
+**Difficulty:** 6.1's four types are the starting rung; 6.2's file formats and 6.3's automatic extraction are the backbone -- take the Fork mechanism slowly. 6.4's cache awareness sits at the Advanced tier: skip it on a first pass, keep one line -- caches stay shared only while tool lists match -- and come back later.
 
 ---
 
@@ -655,3 +659,5 @@ You maintain 5 projects simultaneously, each with 20-30 memories in its memory d
 6. **Validation First**: Memory is a snapshot, not a fact; verify the current state before making recommendations. "Clue not conclusion" is the correct mindset for using memory.
 7. **Least Privilege**: The background Agent's tool permission allowlist strictly limits write capabilities, embodying the Principle of Least Privilege.
 8. **Trailing Extraction**: The trailing extraction mechanism ensures that during concurrent extraction, no conversation misses its memory extraction opportunity.
+
+> **Three sentences to keep:** ①This memory stores only what the code cannot derive -- user, feedback, project and reference each mind their own stall, and everything else stays out. ②A memory is a snapshot, not a fact: verify the current state before you use it -- treat memory as a clue, not a conclusion. ③To judge whether a memory deserves its place, ask one question: delete it, and does the behavior change?
