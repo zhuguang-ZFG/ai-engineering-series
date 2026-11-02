@@ -18,7 +18,7 @@
 
 ### 2.1 handraw-style（handdraw-style-prompter + suite）
 
-现状：33 份 SVG（章徽 ch01–ch15 + 篇题 p1–p4 + 附录 3 + front/cover/keeper）+ 7 幅章内内容图版（ch01-five-pillars、ch02-turn-loop、ch03-tool-bench/tool-pipeline、ch04-gate-steps、ch07-four-levels、ch08-hook-line），基准配方 FD-001 东亚墨线 + C-32 炭黑 + C-15 朱砂，全部过 `art.py` 硬契约。
+现状：33 份 SVG（章徽 ch01–ch15 + 篇题 p1–p4 + 附录 apxa–apxd 4 枚 + front/cover/keeper）+ 7 幅章内内容图版（ch01-five-pillars、ch02-turn-loop、ch03-tool-bench/tool-pipeline、ch04-gate-steps、ch07-four-levels、ch08-hook-line），基准配方 FD-001 东亚墨线 + C-32 炭黑 + C-15 朱砂，全部过 `art.py` 硬契约。
 
 杠杆：
 - **R1 内容图版铺开**：尚无章内图版的章：ch05、ch06、ch09、ch10、ch11、ch12、ch13、ch14、ch15。用上游 `article-illustration-planner` 的「认知降负 + 高保真图替繁文 + 插入点规划」方法逐章规划 ≥1 幅内容图版（四红线：不摆拍、不拟人、不阉割知识、不做文字搬家；间距 400–1200 字）；隐喻与构图先登记 `references/book-contract.md`，再生图/手绘 SVG。
