@@ -18,11 +18,13 @@
 ├── LICENSE                  CC BY-NC-SA 4.0 法律文本
 ├── STRUCTURE.md             本文件
 ├── CONTRIBUTING.md          环境与协作规范
-├── Makefile                 常用构建入口（help/book/book-pdf/check/index/clean）
+├── Makefile                 bookctl 的薄包装（doctor/check/check-full/book/book-pdf/index/clean）
 ├── package.json             Node 侧依赖与 check:diagrams 脚本（engines: node >=22）
 ├── package-lock.json
-├── scripts/                 书稿检查、封面排版、Star History
-├── tests/                   Python 单测（test_star_history.py）
+├── pyproject.toml           Python 依赖与解释器版本的单一来源
+├── uv.lock                  可复现的 Python 依赖解析
+├── scripts/                 书稿检查、环境诊断、基线、封面排版、Star History
+├── tests/                   Python 单测（test_star_history.py / test_dependencies.py）
 ├── docs/images/              star-history-light.svg / star-history-dark.svg
 ├── yuyu-book/               整书构建器（见下）
 └── .github/workflows/       check-book.yml / book.yml / update-star-history.yml
@@ -130,6 +132,7 @@ yuyu-book/
 
 | 路径 | 作用 |
 |------|------|
+| `scripts/bookctl.py` | 唯一命令入口：`doctor` 环境诊断、`check --fast/--full`、`build`、`clean`、`deps`；`Makefile` 与 CI 都调它 |
 | `scripts/check_book.py` | 零依赖检查：全仓库 `.md` 的相对链接是否有落点、代码围栏是否闭合、Mermaid 图里是否写了字面量 `\n`（应改用 `<br/>`）、按 manifest 的两语正文量出的「纯文字墙」是否超过当轮钉住的上限 |
 | `scripts/check_mermaid.mjs` | 用 `package.json` 锁定的 mermaid 解析器逐图 `parse()`，由 `npm run check:diagrams` 调用（需要 Node 22+ 与 `npm ci`） |
 | `scripts/typeset_cover.py` | 用本机 CJK 字体在 `scripts/assets/cover-art.png` 上排版出根目录 `cover.png`（默认字体路径是 macOS 的） |
@@ -199,6 +202,6 @@ yuyu-book/
 | 改版本说明页 | `yuyu-book/revisions.json` |
 | 改配色、版式、打印样式 | `yuyu-book/yuyu_book/style.py`（图版配色在 `mermaid.py` 的 `THEME` 与 `BOOK_FAMILIES`，后者管正文自带颜色的那 888 个节点） |
 | 重生成书末索引 | `python yuyu-book/build.py --regen-index` |
-| 只想知道有没有写坏 | `python yuyu-book/build.py --check`，或 `make check` |
+| 只想知道有没有写坏 | `python scripts/bookctl.py check --fast`（源码模式），或 `check --full`（渲染 + PDF） |
 
 协作流程、环境搭建与门禁细则见 [CONTRIBUTING.md](CONTRIBUTING.md)。

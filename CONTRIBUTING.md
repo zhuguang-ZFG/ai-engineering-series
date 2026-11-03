@@ -12,6 +12,14 @@ npm ci                                  # 安装 mermaid 11.17.2 + jsdom 26.1.0
 python -m pip install -r yuyu-book/requirements.txt
 ```
 
+`requirements.txt` 是从 `uv.lock` 导出的精确版本，不是手写的范围约束。升级依赖时改 `pyproject.toml`，然后：
+
+```bash
+uv lock
+uv export --format requirements-txt --no-hashes --no-emit-project --no-annotate > yuyu-book/requirements.txt
+python scripts/bookctl.py doctor    # 核对安装版本与 requirements/lock 一致
+```
+
 渲染 Mermaid 图版和打印 PDF 需要一个 Chromium 系浏览器。构建器按 **msedge → chrome → Playwright 自带 chromium** 的顺序自动探测，装了前两者之一就直接可用；都没有时：
 
 ```bash
@@ -22,6 +30,19 @@ python -m playwright install chromium   # 注意是 Python 包提供的 CLI，�
 
 ## 2. 常用命令
 
+日常入口是 `bookctl`：
+
+```bash
+python scripts/bookctl.py doctor       # 一次列全 python/node/浏览器/字体/依赖/写权限
+python scripts/bookctl.py check --fast # 源码模式装配 + 两套单测 + 内容 + 图语法（PR 层）
+python scripts/bookctl.py check --full # fast + 渲染装配 + 双语 PDF
+python scripts/bookctl.py build --product book --lang both --pdf
+python scripts/bookctl.py deps         # requirements.txt 与 uv.lock 对照
+python scripts/bookctl.py clean        # 删除 yuyu-book/dist（不依赖 rm -rf）
+```
+
+调试单个阶段时仍可直接调用底层 `build.py`：
+
 ```bash
 python yuyu-book/build.py --check              # 装配两语版并跑审计，输出进临时目录，不落 dist/、不出 PDF
 python yuyu-book/build.py --lang zh            # 只出中文版 HTML 到 yuyu-book/dist/
@@ -29,13 +50,15 @@ python yuyu-book/build.py --lang en --pdf      # 英文版 HTML + PDF
 python yuyu-book/build.py --regen-index        # 从附录 D 重建 subject-index.json（随后仍会继续完整构建）
 ```
 
-仓库根 `Makefile` 把常用组合包了一层：
+仓库根 `Makefile` 只是上面命令的薄包装；Windows 没有 make 时直接跑 `python scripts/bookctl.py ...`：
 
 ```bash
 make            # 列出可用目标
+make doctor     # 环境报告
 make book       # 双语 HTML
 make book-pdf   # 双语 HTML + PDF
-make check      # build.py --check + 两套单测 + scripts/check_book.py + npm run check:diagrams
+make check      # = check --fast
+make check-full # = check --full
 make index      # --regen-index
 make clean      # 删除 yuyu-book/dist
 ```
@@ -191,7 +214,7 @@ PDF 阶段另有五道：命名目标缺失（`no destination found for ...`）�
 
 ## 8. 提交前检查清单
 
-- [ ] `make check`（或逐条跑第 2 节的两语 `--check`、两套 unittest、`scripts/check_book.py`、`npm run check:diagrams`）通过
+- [ ] `python scripts/bookctl.py check --fast`（或 `make check`）通过；涉及图版/PDF 时用 `check --full`
 - [ ] 中文与英文两份 Markdown 同步修改
 - [ ] 英文书稿无汉字残留（附录 D 的双语译名列除外）
 - [ ] 新单元已在 `manifest.json` 登记，且 `guides` 三字段双语齐备

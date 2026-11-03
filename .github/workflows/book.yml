@@ -82,21 +82,7 @@ jobs:
         timeout-minutes: 15
         run: python -m playwright install --with-deps chromium
 
-      - run: python scripts/check_book.py
-
-      - run: npm run check:diagrams
-
-      - name: Unit tests
-        run: |
-          python -m unittest discover -s tests -v
-          python -m unittest discover -s yuyu-book/tests -v
-
-      # Also warms yuyu-book/.cache/mermaid so the PDF pass reuses the plates.
-      - name: Assemble and audit both editions
-        run: python yuyu-book/build.py --check
-
-      - name: Build both PDF editions
-        run: python yuyu-book/build.py --lang both --pdf
+      - run: python scripts/bookctl.py check --full
 
       # README quotes how long each printed sheet runs and how big each single
       # file is. The page count follows the CJK face on the build machine, so

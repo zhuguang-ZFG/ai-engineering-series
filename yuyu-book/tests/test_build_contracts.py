@@ -695,10 +695,13 @@ class ChapterOpening(unittest.TestCase):
 
 class Deliverables(unittest.TestCase):
     def test_requirements_pin_the_tools_the_build_needs(self):
+        # distribution names are case-insensitive (PEP 503) and the uv export
+        # writes the canonical lowercase spelling; the pin, not the casing,
+        # is what keeps the build reproducible
         text = (BOOK_DIR / "requirements.txt").read_text(encoding="utf-8")
         for pkg in ("Markdown", "Pygments", "playwright", "PyMuPDF",
                     "Pillow", "fonttools"):
-            self.assertIn(pkg, text, pkg)
+            self.assertRegex(text, rf"(?im)^{pkg}==", pkg)
 
     def test_package_json_pins_the_mermaid_version_used(self):
         pkg = (REPO_ROOT / "package.json").read_text(encoding="utf-8")

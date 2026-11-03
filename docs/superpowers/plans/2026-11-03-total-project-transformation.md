@@ -17,7 +17,7 @@
 - [x] P0.3 保存 20 个关键 HTML 片段和 12 张关键页截图，覆盖封面、目录、正文、宽表、横版图、索引和暗色窄屏。
 - [x] P0.4 建立 video 文件身份清单：source、config、review、generated、cache、third_party。
 - [x] P0.5 建立 legacy 标签，记录最后一版旧构建器和视频目录。
-- [ ] Gate：现有 Fast 检查通过；完整依赖环境下 make check 通过；基线文件可重复生成。
+- [x] Gate：现有 Fast 检查通过；完整依赖环境下 make check 通过；基线文件可重复生成（PR #6 → 06bd6fb）。
 
 ## P1：环境、依赖与统一 CLI
 
