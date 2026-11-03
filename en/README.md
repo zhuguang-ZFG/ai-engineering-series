@@ -101,7 +101,7 @@ Claude Code belongs to Anthropic. This independent book is not an official Anthr
 
 ## The book as one file
 
-`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.7 MB Chinese / 5.8 MB English) and an A4-typeset PDF (505 pages / 35.1 MB in Chinese, 536 pages / 23.8 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 507 pages / 23.0 MB and the English one to 558 pages / 11.8 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
+`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.8 MB Chinese / 5.9 MB English) and an A4-typeset PDF (505 pages / 35.0 MB in Chinese, 536 pages / 23.8 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 507 pages / 24.1 MB and the English one to 558 pages / 12.4 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
 
 | File | Language |
 |------|----------|
@@ -115,10 +115,13 @@ For engineers meeting this material for the first time, the build also lays a **
 ```bash
 npm ci                                              # diagrams need Mermaid 11.17.2
 python -m pip install -r yuyu-book/requirements.txt
-python yuyu-book/build.py --check                   # validate only; output to a temp dir
-python yuyu-book/build.py --lang zh                 # HTML only
-python yuyu-book/build.py --pdf                     # bilingual HTML + PDF
+python scripts/bookctl.py doctor                    # list every missing piece and its fix
+python scripts/bookctl.py check --fast              # source-mode assembly + both test suites + content/diagram syntax
+python scripts/bookctl.py build --product book --lang zh
+python scripts/bookctl.py build --product book --lang both --pdf
 ```
+
+`requirements.txt` is exported from `uv.lock` with exact pins. To upgrade, edit `pyproject.toml`, then run `uv lock` and `uv export --format requirements-txt --no-hashes --no-emit-project --no-annotate > yuyu-book/requirements.txt`; do not edit the export by hand.
 
 Rendering diagrams and building PDFs needs a local Chromium or Edge (auto-detected, or pass `--browser <path>`). The Markdown chapters are the single source of truth: the build reads them and never rewrites a file.
 
@@ -126,7 +129,7 @@ Rendering diagrams and building PDFs needs a local Chromium or Edge (auto-detect
 
 Issues and pull requests are welcome. Include the chapter, section, expected correction, and a source link; for rendering problems, include the viewer and reproduction steps. Keep Chinese and English changes aligned. English manuscripts must contain no Han text except the Chinese-translation column in Appendix D; the build tests scan every line.
 
-Before submitting, run `python3 scripts/check_book.py`, `npm run check:diagrams`, `python3 -m unittest discover -s tests -v`, and `python3 -m unittest discover -s yuyu-book/tests -v`. Mermaid validation requires Node.js 22 or later; run `npm ci` first. Finish with `python yuyu-book/build.py --check` to assemble and audit both editions. See [STRUCTURE.md](../STRUCTURE.md) for the repository layout and [CONTRIBUTING.md](../CONTRIBUTING.md) for the full workflow.
+Before submitting, run `python3 scripts/bookctl.py check --fast`; it runs the source-mode assembly, both unittest suites, `scripts/check_book.py` and `npm run check:diagrams`. Use `check --full` when diagrams or PDFs are involved. Mermaid validation requires Node.js 22 or later; run `npm ci` first. See [STRUCTURE.md](../STRUCTURE.md) for the repository layout and [CONTRIBUTING.md](../CONTRIBUTING.md) for the full workflow.
 
 ## License and acknowledgements
 

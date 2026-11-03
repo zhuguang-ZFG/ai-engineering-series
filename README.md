@@ -101,7 +101,7 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.7 MB / 英文版 5.8 MB）与 A4 排版的 PDF（中文版 505 页 / 35.1 MB，英文版 536 页 / 23.8 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 507 页 / 23.0 MB、英文 558 页 / 11.8 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 5.9 MB）与 A4 排版的 PDF（中文版 505 页 / 35.0 MB，英文版 536 页 / 23.8 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 507 页 / 24.1 MB、英文 558 页 / 12.4 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
 
 | 文件 | 语言 |
 |------|------|
@@ -115,10 +115,13 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 ```bash
 npm ci                                              # 图版渲染需要 Mermaid 11.17.2
 python -m pip install -r yuyu-book/requirements.txt
-python yuyu-book/build.py --check                   # 只校验，产物写入临时目录
-python yuyu-book/build.py --lang zh                 # 仅 HTML
-python yuyu-book/build.py --pdf                     # 中英双语 HTML + PDF
+python scripts/bookctl.py doctor                    # 一次列全环境缺失与修复命令
+python scripts/bookctl.py check --fast              # 源码模式装配 + 两套单测 + 内容/图语法
+python scripts/bookctl.py build --product book --lang zh
+python scripts/bookctl.py build --product book --lang both --pdf
 ```
+
+`requirements.txt` 由 `uv.lock` 导出，版本精确固定；升级依赖时改 `pyproject.toml`，依次运行 `uv lock` 与 `uv export --format requirements-txt --no-hashes --no-emit-project --no-annotate > yuyu-book/requirements.txt`，不要手改。
 
 PDF 与图版渲染需要一个本机 Chromium 或 Edge（自动探测 `msedge`/`chrome`，也可用 `--browser <路径>` 指定）。正文 Markdown 是唯一事实来源，构建过程不回写、不改写任何章节文件。
 
@@ -126,7 +129,7 @@ PDF 与图版渲染需要一个本机 Chromium 或 Edge（自动探测 `msedge`/
 
 欢迎通过 Issue 或 PR 修正技术错误、补充案例和改进表达。请提供章节、小节、建议修改和参考来源；显示问题请注明阅读平台和复现步骤。涉及双语内容时，请同步检查英文版；英文书稿不得夹带汉字，附录 D 术语表的中文译名列是唯一例外，构建器会逐行检查。
 
-提交前运行 `python3 scripts/check_book.py`、`npm run check:diagrams`、`python3 -m unittest discover -s tests -v` 与 `python3 -m unittest discover -s yuyu-book/tests -v`；Mermaid 检查需要 Node.js 22 或更高版本，先执行 `npm ci`。最后用 `python yuyu-book/build.py --check` 装配并审计两语版；仓库结构与构建契约见 [STRUCTURE.md](STRUCTURE.md)，贡献流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+提交前运行 `python3 scripts/bookctl.py check --fast`；它依次跑源码模式装配、两套 unittest、`scripts/check_book.py` 与 `npm run check:diagrams`。涉及图版或 PDF 时改用 `check --full`。Mermaid 检查需要 Node.js 22 或更高版本，先执行 `npm ci`。仓库结构与构建契约见 [STRUCTURE.md](STRUCTURE.md)，贡献流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 许可与致谢
 

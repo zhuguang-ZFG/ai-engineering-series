@@ -23,6 +23,5 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci
-      - run: python3 scripts/check_book.py
-      - run: npm run check:diagrams
-      - run: python3 -m unittest discover -s tests
+      - run: python3 -m pip install -r yuyu-book/requirements.txt
+      - run: python3 scripts/bookctl.py check --fast

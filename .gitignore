@@ -2,6 +2,7 @@
 
 node_modules/
 __pycache__/
+.venv/
 
 # derived by yuyu-book/build.py; CI publishes dist as an artifact
 yuyu-book/dist/

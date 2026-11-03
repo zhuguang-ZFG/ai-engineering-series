@@ -46,6 +46,10 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
 def git(*args: str) -> str:
     try:
         return subprocess.run(["git", *args], cwd=ROOT, check=True,
@@ -137,7 +141,6 @@ def edition(dist: Path, lang: str) -> dict:
             pdf = {
                 "file": pdf_path.name,
                 "bytes": pdf_path.stat().st_size,
-                "sha256": sha256(pdf_path),
                 "pages": doc.page_count,
                 "bookmarks": len(doc.get_toc(simple=True)),
             }
@@ -249,10 +252,13 @@ def asset_report() -> dict:
     root = BOOK / "illustrations"
     files = []
     for path in sorted(p for p in root.rglob("*") if p.is_file()):
+        # Identity must survive a Windows checkout's CRLF smudge, so hash the
+        # LF form the repository stores, not the bytes on this disk.
+        raw = path.read_bytes().replace(b"\r\n", b"\n")
         files.append({
             "file": str(path.relative_to(ROOT)).replace("\\", "/"),
-            "bytes": path.stat().st_size,
-            "sha256": sha256(path),
+            "bytes": len(raw),
+            "sha256": sha256_bytes(raw),
         })
     return {"illustrations": files}
 
