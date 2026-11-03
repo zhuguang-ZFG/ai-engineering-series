@@ -110,7 +110,7 @@
 
 | 文件 | 内容 |
 |------|------|
-| `manifest.json` | 书的骨架：`version` / `date` / `author` / `repository` / `license` / `title` / `subtitle` / `epigraph` / `start_reading` + `parts`(4) / `front` / `appendices`(4) / `guides`(20)。单元条目只有 `id`、`zh`、`en` 三个字段；`guides[<id>]` 除罗盘三卡与 `sources` 外，还带通俗层的 `plain`（章首导读带）、`analogy`（打个比方）与 `plain_evidence`（指回书稿的 `file:line`） |
+| `manifest.json` | 书的骨架：`version` / `date` / `author` / `repository` / `license` / `title` / `subtitle` / `epigraph` / `start_reading` + `parts`(4) / `front` / `appendices`(4) / `guides`(20)。单元条目只有 `id`、`zh`、`en` 三个字段；`guides[<id>]` 除罗盘三卡与 `sources` 外，还带通俗层的 `plain`（章首导读带）、`analogy`（打个比方）与 `plain_evidence`（指回书稿的 `file:line` 或稳定块 ID） |
 | `glosses.json` | 术语白话注，当前 102 条（44 个 core 会在正文画虚线）。每条 `term` / `forms`（中英表面词形）/ `plain` / `analogy` / `why` + `why_evidence`（原理句与它的出处，44 个 core 各配一对，长度上限 zh 52 / en 190）/ `priority` / `evidence`。只有 `priority: "core"` 的词会在正文里画虚线并进入章末新词面板（面板与画线的是同一批词，构建时断言）；一个术语在某章只以行内代码现身时，虚线画在那段代码上——但只画读不成普通词的形状（带 `_`、数字或驼峰接缝的标识符），`Streaming` 这类普通词仍等正文，`<pre>` 图版一律不画（图版整块来读，虚线还会打断照抄）；`extra` 不上正文也不上面板，只在附录 D 里可查——一章最多 22 个新词，超了就下调 |
 | `reading-paths.json` | 三层阅读路线（起步 / 主干 / 进阶）。按单元存**位置**列表：数组长度必须等于该单元实际渲染出的 `<h2>` 数，对不上 `plain.stamp_tiers()` 直接报错，宁可不产出也不盖错章 |
 | `notes.json` | 按语层：以单元 id 为键的 20 条一句话旁白（中英各一份），由那位老驿卒在章末车辙上方说出来。门禁是 `plain.validate_notes()`：必须含一个已注册词形、且该词形出现在这一单元自己的正文里（术语锁），中文 ≤36 字、英文 ≤130 字符，英文不夹汉字，一个单元都不能缺。还有一道门在 `test_docclaims`：按语里写的数字必须能被重算——`KEEPER_TOTALS` 钉住附录 B 那行的工具总数与附录 B 真正数出来的行数相等，其余任何数字都要么不写、要么得先在表里登记它从哪算来；写成汉字的「五十五」测试读不到，正是这本书被约数骗过的原因 |
@@ -127,7 +127,7 @@
 <!-- block: ch03.tool-generics -->
 ```
 
-ID 形如 `<单元 id>.<小写 slug>`，同一单元内唯一，中英两版共用同一个 ID；注释在书里不可见，段落重排后仍然贴着它命名的那一块。`blocks.py` 在加载单元时校验格式、归属、重复、悬空（标记后没有块），以及标记落在代码围栏内（那是示例，不是标记）。当前只在 ch01/ch03/ch12 各试标一段；登记表的行号引用尚未迁移到块引用。
+ID 形如 `<单元 id>.<小写 slug>`，同一单元内唯一，中英两版共用同一个 ID；注释在书里不可见，段落重排后仍然贴着它命名的那一块。`blocks.py` 在加载单元时校验格式、归属、重复、悬空（标记后没有块），以及标记落在代码围栏内（那是示例，不是标记）。当前只在 ch01/ch03/ch12 各试标一段；登记表的行号引用尚未迁移。迁移期由 `scripts/migrate_line_refs.py` 把每条 `file:line` 解析到块跨度并逐条比对文本，结果写入 `docs/migrations/line-ref-equivalence.json`；当前 566 条全部一致、0 歧义、0 缺失。
 
 ### 3.4 生成物（不要手改）
 

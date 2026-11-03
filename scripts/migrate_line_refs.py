@@ -26,11 +26,23 @@ def main(argv=None) -> int:
                         help="JSON path, or - for stdout (default)")
     parser.add_argument("--strict", action="store_true",
                         help="exit 2 when any ref is ambiguous or missing")
+    parser.add_argument("--equivalence", metavar="PATH",
+                        help="write a line↔block text-equality summary there")
     args = parser.parse_args(argv)
     manifest = registry.load("manifest.json")
     glosses = registry.load("glosses.json")
     report = migrate.build_report(manifest, glosses)
     text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if args.equivalence:
+        mismatches = [row for row in report["refs"]
+                      if row["status"] == "mapped"
+                      and not row.get("text_equal")]
+        payload = {"schema_version": 1, "summary": report["summary"],
+                   "mismatches": mismatches}
+        Path(args.equivalence).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.equivalence).write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8", newline="\n")
     if args.out == "-":
         sys.stdout.write(text)
     else:

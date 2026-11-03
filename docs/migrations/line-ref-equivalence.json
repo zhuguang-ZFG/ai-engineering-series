@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "summary": {
+    "refs": 566,
+    "unique_refs": 447,
+    "mapped": 566,
+    "ambiguous": 0,
+    "missing": 0,
+    "text_equal": 566,
+    "text_mismatch": 0,
+    "blocks": 6271
+  },
+  "mismatches": []
+}

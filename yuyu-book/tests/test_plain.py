@@ -272,6 +272,50 @@ class CoverageGate(unittest.TestCase):
         plain.Layer(g, "zh").check_coverage()
 
 
+class DualRefs(unittest.TestCase):
+    """The migration period accepts `file:line` and stable block ids."""
+
+    def setUp(self):
+        self.manifest = registry.load("manifest.json")
+        self.paths = registry.load("reading-paths.json")
+
+    def real_gloss(self, evidence):
+        return gloss("harness", "线束", "Agent Harness", ["Agent Harness"],
+                     ["Agent Harness"], priority="extra", no_why=True,
+                     evidence=evidence)
+
+    def test_a_block_id_can_stand_for_both_editions(self):
+        plain.validate_plain(self.real_gloss(["ch01.agent-harness"]),
+                             self.paths, self.manifest)
+
+    def test_unknown_block_id_is_rejected(self):
+        with self.assertRaises(BuildError) as ctx:
+            plain.validate_plain(self.real_gloss(["ch01.nope"]),
+                                 self.paths, self.manifest)
+        self.assertIn("unknown block id", str(ctx.exception))
+
+    def test_block_span_must_contain_the_form(self):
+        g = gloss("harness", "线束", "Agent Harness", ["Agent Harness"],
+                  ["zzz"], priority="extra", no_why=True,
+                  evidence=["ch01.agent-harness"])
+        with self.assertRaises(BuildError) as ctx:
+            plain.validate_plain(g, self.paths, self.manifest)
+        self.assertIn("does not contain any registered form in en",
+                      str(ctx.exception))
+
+    def test_a_band_may_point_at_a_block(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["guides"]["ch01"]["plain_evidence"] = ["ch01.agent-harness"]
+        g = self.real_gloss(["ch01.agent-harness"])
+        plain.validate_plain(g, self.paths, manifest)
+
+    def test_legacy_line_ref_still_works(self):
+        g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
+                  ["async generator"], priority="extra",
+                  evidence=[f"{ZH_CH02}:22"])
+        plain.validate_plain(g, {"ch02": ["start"]}, mini_manifest())
+
+
 class SectionTiers(unittest.TestCase):
     def test_each_h2_gets_its_level_chip_in_order(self):
         doc = '<h2 id="a">甲</h2><h2 id="b">乙</h2><h2 id="c">丙</h2>'

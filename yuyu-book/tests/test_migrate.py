@@ -55,6 +55,8 @@ class Report(unittest.TestCase):
         row = self.row(report, "manifest.guides.front.plain_evidence[0]")
         self.assertEqual((row["status"], row["block_id"]),
                          ("mapped", "front.intro"))
+        self.assertTrue(row["text_equal"])
+        self.assertEqual(report["summary"]["text_mismatch"], 0)
         self.assertTrue(next(b for b in report["files"][ZH]["blocks"]
                              if b["start"] == 5)["has_marker"])
 

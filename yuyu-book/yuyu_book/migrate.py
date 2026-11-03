@@ -68,11 +68,13 @@ def build_report(manifest: dict, glosses: dict,
         return read_text(path) if path.exists() else None
 
     spans: dict[str, list] = {}
+    lines_of: dict[str, list[str]] = {}
     refs = collect_refs(manifest, glosses)
     for _field, ref in refs:
         rel = ref.rsplit(":", 1)[0].replace("\\", "/")
         if rel not in spans and rel in unit_of:
             body = text_for(rel)
+            lines_of[rel] = body.split("\n") if body is not None else []
             spans[rel] = (blocks.parse_blocks(body, unit_of[rel][0],
                                               unit_of[rel][1])
                           if body is not None else [])
@@ -135,15 +137,25 @@ def build_report(manifest: dict, glosses: dict,
             else:
                 row["status"] = "mapped"
                 row["block_id"] = hit.block_id
+            if hit is not None:
+                line_text = lines_of[rel][lineno - 1].strip()
+                row["text_equal"] = line_text in [
+                    part.strip() for part in hit.text.split("\n")]
         counts[row["status"]] += 1
         details.append(row)
 
+    matched = sum(1 for row in details if row.get("text_equal"))
+    mismatched = sum(1 for row in details
+                     if row["status"] == "mapped"
+                     and not row.get("text_equal"))
     return {
         "schema_version": 1,
         "summary": {
             "refs": len(refs),
             "unique_refs": len({ref for _field, ref in refs}),
             **counts,
+            "text_equal": matched,
+            "text_mismatch": mismatched,
             "blocks": sum(len(records) for records in block_reports.values()),
         },
         "files": {rel: {"unit": unit_of[rel][0], "lang": unit_of[rel][1],
