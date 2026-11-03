@@ -13,7 +13,7 @@
 
 ## 重生成
 
-先构建（或复用 `yuyu-book/dist/` 中的同名产物），再从仓库根目录运行：
+先构建（或复用 `yuyu-book/dist/` 中的同名产物），再从仓库根目录运行。基线里的 HTML 与片段取自 `--pdf` 之后的产物（主题索引已写入页码），重生成时要用同一命令 `python yuyu-book/build.py --lang both --pdf`；只跑 HTML 会让 `subject-index` 片段与基线不同。
 
     python scripts/baseline.py
     python scripts/baseline_snapshot.py
@@ -25,7 +25,9 @@
     python scripts/baseline_snapshot.py --check
     python scripts/video_identity.py --check
 
-对照已提交版本。截图不做字节校验：浏览器版本与字体光栅化会带来像素差异，它们只作视觉对照。
+对照已提交版本。`--check` 忽略 `source_commit` 与 `environment`（换分支、换机器不算漂移）。身份口径有两条要注意：插画的 `bytes`/`sha256` 按 LF 归一后计算，Windows 检出把文件换成 CRLF 不会造成漂移；PDF 只比页数、书签数与体积，不存 `sha256`——每次打印都会写入新的文档 ID 与时间戳，字节不可能复现。HTML 的 `sha256` 是可复现的，构建两次应相同。
+
+截图不做字节校验：浏览器版本与字体光栅化会带来像素差异，它们只作视觉对照。
 
 ## 环境
 

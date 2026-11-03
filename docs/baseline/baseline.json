@@ -2,69 +2,69 @@
   "assets": {
     "illustrations": [
       {
-        "bytes": 1074,
+        "bytes": 1073,
         "file": "yuyu-book/illustrations/apxa.svg",
-        "sha256": "d5ed2678575fff9c1c8d618a1eb702b1652351a9fd2d495692ea1492d717f3c9"
+        "sha256": "b6421c52263bef992ce1e9abd27f3a6ba50fdcab37c775c188c9ed49fd6b7f3d"
       },
       {
-        "bytes": 722,
+        "bytes": 721,
         "file": "yuyu-book/illustrations/apxb.svg",
-        "sha256": "de320b13b042285013490849765887cf07e2bfed9ef185832d252bb6a3fbf841"
+        "sha256": "dc41b96e8bc5919555fc3fa99b53c8e0d30be571ebd827d2e82d0981272f933c"
       },
       {
-        "bytes": 498,
+        "bytes": 497,
         "file": "yuyu-book/illustrations/apxc.svg",
-        "sha256": "e9b5fd83f387404cec8f9a4b57cede28b76d8013a6593b2c8e7a95ab3ed07fbb"
+        "sha256": "19236c97e69d241a951f72be1268dca13b819fd3579a2279f46610fe46bab592"
       },
       {
-        "bytes": 861,
+        "bytes": 860,
         "file": "yuyu-book/illustrations/apxd.svg",
-        "sha256": "2e3ff79461c63802089524e31473256427dd911acfa08680177e1824e9d9da5b"
+        "sha256": "2364b545dfcf10ed8c75ce0d44d65089a13f365c7ab4d1c397564c0cd36e70f8"
       },
       {
-        "bytes": 2154,
+        "bytes": 2153,
         "file": "yuyu-book/illustrations/ch01-five-pillars.svg",
-        "sha256": "3a3ee010909b286ec0c2a74e71433ef737de1bd5fe3c6abb13a394d4cd64483e"
+        "sha256": "5e0a056b44e9b047e7bf8f4182710d2e51cda53d9ba158aec37404bfc5db3182"
       },
       {
-        "bytes": 778,
+        "bytes": 777,
         "file": "yuyu-book/illustrations/ch01.svg",
-        "sha256": "eb479dac8c802c93c5aba491c4f3ccc0df392ceba75f7b4b2fdcb265e785958c"
+        "sha256": "f630c935c0ea9b5757635fc3cdfc2067a27bb60726555907e98cbbfb8ccede35"
       },
       {
-        "bytes": 3013,
+        "bytes": 3012,
         "file": "yuyu-book/illustrations/ch02-turn-loop.svg",
-        "sha256": "19df57834618b5524c904ab4243c4c405ec0d48a4217b0f932b955ee3f61d4f2"
+        "sha256": "0864f772d1467ae6d607364634554dfd7c0f2c518082d29d9b402b9a9e5114e6"
       },
       {
-        "bytes": 701,
+        "bytes": 700,
         "file": "yuyu-book/illustrations/ch02.svg",
-        "sha256": "149b34d61e58f906f89d9444f7ae8fd3b092d6c6abb16a8bfe13926064021612"
+        "sha256": "26e6701a8499aacb459962016058004a2f3565fe7705b5ab5f16a1fd3cd7d6c3"
       },
       {
-        "bytes": 2181,
+        "bytes": 2180,
         "file": "yuyu-book/illustrations/ch03-tool-bench.svg",
-        "sha256": "94db05a6d2167ce336b052ed815cab60257e678141803911c2db24305de0285c"
+        "sha256": "ad72c52039828725c448d4575f1ae4e0b1052ea8c5e183f6dbf6e4251a9dc53e"
       },
       {
-        "bytes": 3281,
+        "bytes": 3280,
         "file": "yuyu-book/illustrations/ch03-tool-pipeline.svg",
-        "sha256": "510458987723b4a274b14d7b0fa57d4a0dfae10907a925b94e6e07064cb36a04"
+        "sha256": "e881b349c098eaf0006417926b75d9e9d0d1c16dada5087ac4cd9bcd49932045"
       },
       {
-        "bytes": 571,
+        "bytes": 570,
         "file": "yuyu-book/illustrations/ch03.svg",
-        "sha256": "0000412a01bc4b48dbc2ba295238afa7e122deae549ac62a08ec03549e5536a5"
+        "sha256": "2267a47bd1f2e11ac9bd6d1e34b0078417ea1e70d8cadd46f525124e390e41b7"
       },
       {
-        "bytes": 2635,
+        "bytes": 2634,
         "file": "yuyu-book/illustrations/ch04-gate-steps.svg",
-        "sha256": "7564e1527f888a127a30cba4b783332fb1118808ea8779809c1073009f1f6c54"
+        "sha256": "e273224f10399539e02d25fe354caa212e81cdf8f8a451f093d08a49bd6a3733"
       },
       {
-        "bytes": 714,
+        "bytes": 713,
         "file": "yuyu-book/illustrations/ch04.svg",
-        "sha256": "c057f0e5f834e174e411d8f6ae378d264798462548bcf77414cebdb54b17b405"
+        "sha256": "a29ece9be2493f44102b0eda6c168d7d997ea0d85ea5d9dc3c35a6713f26a68b"
       },
       {
         "bytes": 2845,
@@ -72,9 +72,9 @@
         "sha256": "b3cce4f6925d0439c28ed3e6579f82e5c4666f0713fd8068e8710402a78d8396"
       },
       {
-        "bytes": 704,
+        "bytes": 703,
         "file": "yuyu-book/illustrations/ch05.svg",
-        "sha256": "742b8bd29c55fae9980cc8c5fb653c7f839688a65840aecd996ea5b798128fbc"
+        "sha256": "82b742fa6251f6a3c96e41bc874d039dabf07b3b66d1678a23ec63b92829d6de"
       },
       {
         "bytes": 2640,
@@ -82,29 +82,29 @@
         "sha256": "fa9218266d7a70d8f478ba671d190bc5f7ccdbe1b56be9c0f0d2aa99b135a065"
       },
       {
-        "bytes": 649,
+        "bytes": 648,
         "file": "yuyu-book/illustrations/ch06.svg",
-        "sha256": "ccc7405e9013a55f6df08243402fa55e644055aab36a76c9821f2099751373e2"
+        "sha256": "02a63e8a4784e98aa466ef2d0f5e5a4242f5515eea961c0b0467d61c21d9ba79"
       },
       {
-        "bytes": 3180,
+        "bytes": 3179,
         "file": "yuyu-book/illustrations/ch07-four-levels.svg",
-        "sha256": "e97e65fff2831650daa7929e6381bc225d4c60a8240027f753b95157d4a78df2"
+        "sha256": "1d4947c15421ff244a2e6c8d1663b5bae00fce7060b82b5509ae7c755e3c750e"
       },
       {
-        "bytes": 716,
+        "bytes": 715,
         "file": "yuyu-book/illustrations/ch07.svg",
-        "sha256": "8086e75b53a87605368763d1ecc4fa42a39ee81bce45e31974a59e8a928a055f"
+        "sha256": "9529830ee9a426b68e0e1c374ad1e017c9ae9cfe18e1a0416d432a0a072e3558"
       },
       {
-        "bytes": 2860,
+        "bytes": 2859,
         "file": "yuyu-book/illustrations/ch08-hook-line.svg",
-        "sha256": "fec486332ac93b4d7171a58ae60541d8a1288a50ce330558d3e49061af989ab8"
+        "sha256": "3ee52b010a79cd01cad6cd173c8cbd4d2b48f4e18629632ed35fb06986294dad"
       },
       {
-        "bytes": 793,
+        "bytes": 792,
         "file": "yuyu-book/illustrations/ch08.svg",
-        "sha256": "7be2f5679d38f5ad72aee8b3cab042ce6a46d4bb2730429be7d428cacfd44b25"
+        "sha256": "75675f4b322133da4c9ff84e43d2cd4203e53affb11156a33ef09fa657c9be78"
       },
       {
         "bytes": 3765,
@@ -112,9 +112,9 @@
         "sha256": "65b9b6ebcdb977993fd630b6d01941288cf5945140192ee3d765fda4a632acde"
       },
       {
-        "bytes": 1055,
+        "bytes": 1054,
         "file": "yuyu-book/illustrations/ch09.svg",
-        "sha256": "0e87b35c09a6db40cc25cd821bca6a15d6488b7633abfcd2cfd21c80de17ff1f"
+        "sha256": "b3780877dd5015a02bdbd7a49b09871db8d2af8c0d48fa88973356868f0d2122"
       },
       {
         "bytes": 2368,
@@ -122,9 +122,9 @@
         "sha256": "f9fa0f63ac83186c7476dea31b5bf88cf8978937d984945ee8c4b8b39a2fb365"
       },
       {
-        "bytes": 1696,
+        "bytes": 1695,
         "file": "yuyu-book/illustrations/ch10.svg",
-        "sha256": "991da86b3c1eed9681f97f07ff495e15311f4484a9b08bba977c0dc0b44572d7"
+        "sha256": "b5f3f276920d2708f3422834f30171a153f52a192ed83c5c46ad7c60e1854d06"
       },
       {
         "bytes": 1801,
@@ -132,9 +132,9 @@
         "sha256": "f8730d88f58f60df8aee58d6db719ec17c576bcf1832cfb23cbe602c1c2b48e7"
       },
       {
-        "bytes": 1125,
+        "bytes": 1124,
         "file": "yuyu-book/illustrations/ch11.svg",
-        "sha256": "6851dcf544305b9620c5e234be63c279af987dd2eaa588469f33bb1cbf23e9c5"
+        "sha256": "e66a66439dbd9d59f44e77d5ae87200a6d0543765be76a7943b783746911d7e8"
       },
       {
         "bytes": 1691,
@@ -142,9 +142,9 @@
         "sha256": "706c34c01dd052847504d38ea69c1cb585b8842d964c8e6a573401423ab7a292"
       },
       {
-        "bytes": 1173,
+        "bytes": 1172,
         "file": "yuyu-book/illustrations/ch12.svg",
-        "sha256": "b1b67db9e06e478bbe44862fc3ffa143a7c50aaf658ac7ed4339d3fe5883e120"
+        "sha256": "6fa4dac11733b99f9fd8eb5e4db4eba857a637ba5e72989cb264cb8143f1584a"
       },
       {
         "bytes": 3389,
@@ -152,9 +152,9 @@
         "sha256": "4d6bc9e164f4322431f9b8ce47240cfd31e6ea581be3e840ddeeea4b057060c9"
       },
       {
-        "bytes": 1086,
+        "bytes": 1085,
         "file": "yuyu-book/illustrations/ch13.svg",
-        "sha256": "df15282f07b24fb3272beb1c41ddca4291c6077bda5f0f301e45ed9262e72c37"
+        "sha256": "4f2d6671738b006d136067624618ba4d29eb03dbd5c7059a22fc9aa8ea9483a7"
       },
       {
         "bytes": 2767,
@@ -162,9 +162,9 @@
         "sha256": "234bb4c26706cbaa99eec4d28019c3a2f35fc55972b9a11c9ce627e9a5ab9b55"
       },
       {
-        "bytes": 690,
+        "bytes": 689,
         "file": "yuyu-book/illustrations/ch14.svg",
-        "sha256": "e9e8397e5a44edd312c090d8bb6564ffed69c5a7d03b6aa59c333ff971b4d52a"
+        "sha256": "8eb83cbbc55786234703c16749867f792265179835f7fc900a841133a210d2bd"
       },
       {
         "bytes": 2340,
@@ -172,44 +172,44 @@
         "sha256": "796f1da50750d74693e39ac61c5d008d0fd3506ae0da95f004c01c34adbd3765"
       },
       {
-        "bytes": 846,
+        "bytes": 845,
         "file": "yuyu-book/illustrations/ch15.svg",
-        "sha256": "33e9aab65e154beb69caee7aba34c7b13b929301475b195c9710fa830ab778b9"
+        "sha256": "9b8f82c7be2c160cd0655aca7b13d25933c319358ceec6b3b8e8ba56743873d6"
       },
       {
-        "bytes": 7712,
+        "bytes": 7711,
         "file": "yuyu-book/illustrations/cover.svg",
-        "sha256": "f0174499e1e01ff626dd486fbece0a550a2bf2b754ba910ce20d7c5f568ead8b"
+        "sha256": "60697e40685294b4d920a1d748f82e8d082fda13173edd2392bee60f79f0e03c"
       },
       {
-        "bytes": 796,
+        "bytes": 795,
         "file": "yuyu-book/illustrations/front.svg",
-        "sha256": "9d5036b763d91c55a52134d4ee8987a3e05a52b78722b5c2fdd716afd57d9123"
+        "sha256": "ba1244739391ec13ce9529d31ef328f96c42c3f40225aaa7652291b19d76074d"
       },
       {
-        "bytes": 1028,
+        "bytes": 1027,
         "file": "yuyu-book/illustrations/keeper.svg",
-        "sha256": "41754296e1b7d58c3460fd78608875c3dde0df033c91eefd439947aff48f16c3"
+        "sha256": "af2e9bf879425a3d74e722214338f8f1ca9161d61ddf3213b218054106c7dc16"
       },
       {
-        "bytes": 1232,
+        "bytes": 1231,
         "file": "yuyu-book/illustrations/part-p1.svg",
-        "sha256": "159898877e093e4a85f241e035224821833d7c562557b8dde93a1af4e4ae7f50"
+        "sha256": "fa34fa41778d6f4402ae0dc2c26d4a76a468a872767e2ce8c6f464d9bb7d35d9"
       },
       {
-        "bytes": 1117,
+        "bytes": 1116,
         "file": "yuyu-book/illustrations/part-p2.svg",
-        "sha256": "61d97011660ee9ccb3e44f1bb501d6714063a860074598ca0a8059860b58b989"
+        "sha256": "d5ea599c79e9b40c902511d397f3a80e827c3a250a61a50f4ee294aed6f6992d"
       },
       {
-        "bytes": 1490,
+        "bytes": 1489,
         "file": "yuyu-book/illustrations/part-p3.svg",
-        "sha256": "ea1c3010e4e0c6362a561469de9d9289220c5a474e9b62c21f10e3ca9a474c2d"
+        "sha256": "8cb8ba31cedb2d8760e6c8f2a35aa7fb7cbc84f8aa9c182e9f2f80657ce0268a"
       },
       {
-        "bytes": 798,
+        "bytes": 797,
         "file": "yuyu-book/illustrations/part-p4.svg",
-        "sha256": "2303cc5fadd2b5ce38e573388c55ca23e59ddea35901fe6210360061dff70c79"
+        "sha256": "1acefa983bd5103cc075f431211b5a6f5d589e89cb100f028dd8563afd6df0bc"
       }
     ]
   },
@@ -780,8 +780,7 @@
         "bookmarks": 28,
         "bytes": 12358554,
         "file": "yuyu-agent-harness-en.pdf",
-        "pages": 558,
-        "sha256": "bdcf1899a3a93c5d81c4ee76363e5b5f887568cacda580a43e2a284c0058ca28"
+        "pages": 558
       },
       "totals": {
         "appendices": 4,
@@ -2529,8 +2528,7 @@
         "bookmarks": 28,
         "bytes": 24105733,
         "file": "yuyu-agent-harness-zh.pdf",
-        "pages": 507,
-        "sha256": "1e633b7c5541cfbcd66be97d9face3539cc456fbe35a900bd30de3bcef05bf2f"
+        "pages": 507
       },
       "totals": {
         "appendices": 4,
@@ -4026,5 +4024,5 @@
     }
   },
   "schema_version": 1,
-  "source_commit": "6212391c2eaf5f6f8d4b4f28fb48f19382e9c113"
+  "source_commit": "06bd6fbef73e28023035b9a3c01bb0c9e4c1eb6e"
 }
