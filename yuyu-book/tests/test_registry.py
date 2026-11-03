@@ -54,6 +54,8 @@ class Migration(unittest.TestCase):
                 "manifest.json",
                 {"schema_version": registry.CURRENT + 1, "parts": []})
         self.assertIn("newer", str(raised.exception))
+        self.assertTrue(str(raised.exception).startswith(
+            "error registry-version manifest.json - "), raised.exception)
 
     def test_subject_index_without_entries_is_refused(self):
         with self.assertRaises(BuildError):
