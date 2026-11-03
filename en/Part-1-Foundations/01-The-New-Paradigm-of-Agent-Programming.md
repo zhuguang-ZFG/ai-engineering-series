@@ -60,6 +60,7 @@ But tool calling also introduces new engineering challenges. These challenges no
 5. **State Consistency**: Multiple tool calls may operate on the same resources. How do you maintain state consistency across multiple rounds of calls? How do you avoid the problem of "reading stale data"?
 6. **Concurrency and Scheduling**: Some tool calls can run in parallel (such as reading multiple files simultaneously), while others must run serially (such as creating a directory before writing files). How do you intelligently schedule these calls to maximize efficiency?
 
+<!-- block: ch01.agent-harness -->
 These questions gave birth to a new architectural concept: **Agent Harness**.
 
 ```mermaid

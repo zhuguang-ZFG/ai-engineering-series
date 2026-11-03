@@ -321,13 +321,13 @@
       },
       "plain_evidence": [
         "第一部分-基础篇/01-智能体编程的新范式.md:56",
-        "第一部分-基础篇/01-智能体编程的新范式.md:63",
-        "第一部分-基础篇/01-智能体编程的新范式.md:119",
-        "第一部分-基础篇/01-智能体编程的新范式.md:291",
+        "第一部分-基础篇/01-智能体编程的新范式.md:64",
+        "第一部分-基础篇/01-智能体编程的新范式.md:120",
+        "第一部分-基础篇/01-智能体编程的新范式.md:292",
         "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:56",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:63",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:119",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:291"
+        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:64",
+        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:120",
+        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:292"
       ]
     },
     "ch02": {
@@ -398,14 +398,14 @@
         "en": "a kitchen: chopping runs in parallel, only one cook may touch the flame, dishes get called in order"
       },
       "plain_evidence": [
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:38",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:291",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:359",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:386",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:38",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:291",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:359",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:386"
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:39",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:292",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:360",
+        "第一部分-基础篇/03-工具系统-Agent的双手.md:387",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:39",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:292",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:360",
+        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:387"
       ]
     },
     "ch04": {
@@ -767,13 +767,13 @@
       },
       "plain_evidence": [
         "第三部分-高级模式篇/12-MCP集成与外部协议.md:68",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:104",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:291",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:680",
+        "第三部分-高级模式篇/12-MCP集成与外部协议.md:105",
+        "第三部分-高级模式篇/12-MCP集成与外部协议.md:292",
+        "第三部分-高级模式篇/12-MCP集成与外部协议.md:681",
         "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:68",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:104",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:291",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:680"
+        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:105",
+        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:292",
+        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:681"
       ]
     },
     "ch13": {

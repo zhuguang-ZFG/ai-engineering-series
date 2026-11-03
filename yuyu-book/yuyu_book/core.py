@@ -283,6 +283,8 @@ def load_unit(unit_def: dict, kind: str, lang: str, repo_root: Path) -> Unit:
     if not path.exists():
         raise BuildError(f"unit {unit_def['id']}: missing file {rel}")
     text = read_text(path)
+    from . import blocks as block_markers
+    block_markers.validate_markers(text, rel, unit_def["id"])
     no, title, body = normalize_h1(text, lang, rel)
     body, blocks, langs = extract_mermaid(body, rel)
     body, ills = extract_illustrations(body, rel)

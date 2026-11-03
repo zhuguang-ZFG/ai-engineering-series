@@ -67,6 +67,7 @@ Before diving into technical details, let's first understand the fundamental pro
 
 In the LLM application ecosystem, a core challenge has long persisted: every AI application needs to connect to external data sources and tools, but each application's integration approach is different. Imagine you're a database vendor who wants to make your data accessible to various AI tools. Without a unified standard, you'd need to develop a separate adapter for each AI platform — one for Claude, one for ChatGPT, one for Cursor... This is like the era before USB standards, when every phone had its own unique charging port.
 
+<!-- block: ch12.mcp-usb-c -->
 MCP emerged to become the "USB-C port" of the AI world. It defines an open standard protocol that lets any AI application connect to any data source or tool through one common port. For tool developers, implementing an MCP server once means every MCP-compatible AI application can use it; for AI application developers, implementing an MCP client once grants access to the entire MCP ecosystem.
 
 **Three Core Design Principles**

@@ -310,11 +310,16 @@ def main(argv=None) -> int:
             current.pop(key, None)
             data.pop(key, None)
         # Artifact bytes are provenance, not structure: a one-word edit changes
-        # an HTML hash without moving a heading, and PDF size follows the
-        # build machine's CJK face. `--check` therefore compares the shape the
-        # migration promised to preserve: anchors, ids, plates, unit counts,
-        # registry totals and PDF pagination.
+        # an HTML hash without moving a heading, a marker line changes the
+        # source byte count, and PDF size follows the build machine's CJK face.
+        # `--check` therefore compares the shape the migration promised to
+        # preserve: anchors, ids, plates, unit counts, registry totals and PDF
+        # pagination.
         for record in (current, data):
+            for sources in record["registries"]["markdown"].values():
+                for source in sources.values():
+                    source.pop("bytes", None)
+                    source.pop("lines", None)
             for edition in record["editions"].values():
                 for key in ("bytes", "sha256"):
                     edition["html"].pop(key, None)
