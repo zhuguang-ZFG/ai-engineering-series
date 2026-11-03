@@ -86,7 +86,13 @@
 
 | 模块 | 单一职责 |
 |------|----------|
-| `core.py` | 路径常量（`BOOK_DIR` / `REPO_ROOT` / `CACHE_DIR`）、统一 UTF-8 读写、manifest 与 sources 的加载和校验、`Unit` 数据类、**围栏敏感**的 H1 归一（`normalize_h1`）与 Mermaid 抽取（`extract_mermaid`，把每段图源换成 `@@MM:<12位sha1>@@` 占位符并记下代码围栏语言）。全部失败都抛 `BuildError` |
+| `core.py` | 兼容门面：只重导出下列基础模块的公开名字，既有 `from yuyu_book.core import ...` 调用无需改动 |
+| `paths.py` | 路径常量（`BOOK_DIR` / `REPO_ROOT` / `CACHE_DIR`） |
+| `io.py` | 统一 UTF-8 读写：`read_text`、`load_json`、`dump_json` |
+| `diagnostics.py` | `BuildError`，所有层共用的失败类型 |
+| `text.py` | 扫描常量：`FENCE_RE`、`HAN_RE`、`INDEX_CN_LETTER` |
+| `config.py` | manifest 与 sources 的加载、字段校验、来源钉版检查、`expected_ids` 与书序 `unit_stream` |
+| `units.py` | `Unit` / `MermaidBlock` / `IllusBlock` 数据类，**围栏敏感**的 H1 归一（`normalize_h1`）与 Mermaid 抽取（`extract_mermaid`，把每段图源换成 `@@MM:<12位sha1>@@` 占位符并记下代码围栏语言） |
 | `registry.py` | 七个登记表的唯一读取入口：校验 `schema_version`、内存迁移 v0、剥掉版本键；`subject-index.json` 从信封里取出条目列表。版本高于当前直接报错，不猜结构 |
 | `model.py` | BookModel 骨架（Edition → Part → Unit → Section → Block）与统一诊断格式（`severity code file block_id message hint`）；诊断先由登记表加载使用，后续迁移复用 |
 | `blocks.py` | 正文块标识：校验 `<!-- block: <unit-id>.<slug> -->` 的格式、归属、唯一性与悬空，围栏内的同形文字只当示例。全部登记表证据已迁移到块 ID，正文现有 424 个唯一 ID、429 行标记 |
