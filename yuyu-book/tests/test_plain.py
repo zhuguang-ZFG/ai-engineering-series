@@ -13,8 +13,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book import pages, plain, render  # noqa: E402
-from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError, load_json,
+from yuyu_book import pages, plain, registry, render  # noqa: E402
+from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError,
                             read_text, unit_stream)  # noqa: E402
 
 ZH_CH02 = "第一部分-基础篇/02-对话循环-Agent的心跳.md"
@@ -554,7 +554,7 @@ class RealRegistry(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.manifest = load_json(BOOK_DIR / "manifest.json")
+        cls.manifest = registry.load("manifest.json")
         cls.glosses, cls.paths = plain.load_plain()
 
     def test_the_shipped_registry_and_paths_validate(self):
@@ -609,7 +609,7 @@ class ShippedLayer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.manifest = load_json(BOOK_DIR / "manifest.json")
+        cls.manifest = registry.load("manifest.json")
         _glosses, cls.paths = plain.load_plain()
 
     def test_the_shipped_paths_and_bands_validate(self):

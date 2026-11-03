@@ -167,7 +167,14 @@ def edition(dist: Path, lang: str) -> dict:
 
 def registry_report() -> dict:
     def load(name):
-        return json.loads((BOOK / name).read_text(encoding="utf-8"))
+        data = json.loads((BOOK / name).read_text(encoding="utf-8"))
+        # The probe deliberately reads outputs/registries without importing the
+        # builder. Registries carry a schema_version envelope; strip it here so
+        # the report stays about content.
+        if name == "subject-index.json":
+            return data["entries"]
+        data.pop("schema_version", None)
+        return data
 
     manifest = load("manifest.json")
     glosses = load("glosses.json")
@@ -302,6 +309,17 @@ def main(argv=None) -> int:
         for key in ("source_commit", "environment"):
             current.pop(key, None)
             data.pop(key, None)
+        # Artifact bytes are provenance, not structure: a one-word edit changes
+        # an HTML hash without moving a heading, and PDF size follows the
+        # build machine's CJK face. `--check` therefore compares the shape the
+        # migration promised to preserve: anchors, ids, plates, unit counts,
+        # registry totals and PDF pagination.
+        for record in (current, data):
+            for edition in record["editions"].values():
+                for key in ("bytes", "sha256"):
+                    edition["html"].pop(key, None)
+                if edition["pdf"]:
+                    edition["pdf"].pop("bytes", None)
         if dump(current) != dump(data):
             print(f"baseline drift: {args.out}", file=sys.stderr)
             return 1

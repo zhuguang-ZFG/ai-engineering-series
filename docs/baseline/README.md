@@ -25,7 +25,7 @@
     python scripts/baseline_snapshot.py --check
     python scripts/video_identity.py --check
 
-对照已提交版本。`--check` 忽略 `source_commit` 与 `environment`（换分支、换机器不算漂移）。身份口径有两条要注意：插画的 `bytes`/`sha256` 按 LF 归一后计算，Windows 检出把文件换成 CRLF 不会造成漂移；PDF 只比页数、书签数与体积，不存 `sha256`——每次打印都会写入新的文档 ID 与时间戳，字节不可能复现。HTML 的 `sha256` 是可复现的，构建两次应相同。
+对照已提交版本。`--check` 忽略 `source_commit` 与 `environment`（换分支、换机器不算漂移），也只比结构：单元与标题数、导航锚点 id、元素 id、图版数、登记表计数、PDF 页数与书签数。HTML/PDF 的体积与 sha256 留在文件里作溯源记录，但不参与比较——正文改一个词就会改 HTML 哈希，PDF 体积又跟着构建机的字体走，拿它们当门只会把内容修订误报成结构回归。插画的 `bytes`/`sha256` 按 LF 归一后计算（Windows 检出把文件换成 CRLF 不会造成漂移），它们参与比较；PDF 不存 `sha256`，每次打印都会写入新的文档 ID 与时间戳，字节不可能复现。
 
 截图不做字节校验：浏览器版本与字体光栅化会带来像素差异，它们只作视觉对照。
 

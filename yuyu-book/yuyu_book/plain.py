@@ -9,8 +9,9 @@ from __future__ import annotations
 import html
 import re
 
+from . import registry
 from .core import (BOOK_DIR, FENCE_RE, HAN_RE, REPO_ROOT, SOURCE_ID_RE,
-                   BuildError, load_json, read_text)
+                   BuildError, read_text)
 
 TIER_ORDER = ("start", "core", "deep")
 # the one line in the hover card whose job a reader cannot guess from its
@@ -62,7 +63,7 @@ def load_plain():
     out = []
     for name in ("glosses.json", "reading-paths.json"):
         p = BOOK_DIR / name
-        out.append(load_json(p) if p.exists() else {})
+        out.append(registry.load(name) if p.exists() else {})
     return out[0], out[1]
 
 
@@ -75,7 +76,7 @@ NOTE_LIMITS = {"zh": 36, "en": 130}
 
 def load_notes() -> dict:
     p = BOOK_DIR / "notes.json"
-    return load_json(p) if p.exists() else {}
+    return registry.load("notes.json") if p.exists() else {}
 
 
 def validate_notes(notes: dict, glosses: dict,

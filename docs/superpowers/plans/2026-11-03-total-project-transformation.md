@@ -21,17 +21,17 @@
 
 ## P1：环境、依赖与统一 CLI
 
-- [ ] P1.1 新增 pyproject.toml，登记 Python 3.12、包元数据、测试和工具配置。
-- [ ] P1.2 引入 Python 锁文件；requirements.txt 改为从锁定环境导出或与锁文件一致性校验。
-- [ ] P1.3 实现 bookctl doctor，检查 Python、Node、浏览器、字体、依赖、路径和写权限。
-- [ ] P1.4 实现 bookctl check --fast，统一通用测试、构建器测试、内容检查和 Mermaid 检查。
-- [ ] P1.5 Makefile 改为跨平台薄包装，clean 不再依赖 rm -rf。
-- [ ] P1.6 CI 使用与本地相同的 bookctl 命令。
-- [ ] Gate：全新环境的缺依赖错误在 doctor 中一次列全；Windows/Ubuntu 命令一致。
+- [x] P1.1 新增 pyproject.toml，登记 Python 3.12、包元数据、测试和工具配置。
+- [x] P1.2 引入 Python 锁文件；requirements.txt 改为从锁定环境导出或与锁文件一致性校验。
+- [x] P1.3 实现 bookctl doctor，检查 Python、Node、浏览器、字体、依赖、路径和写权限。
+- [x] P1.4 实现 bookctl check --fast，统一通用测试、构建器测试、内容检查和 Mermaid 检查。
+- [x] P1.5 Makefile 改为跨平台薄包装，clean 不再依赖 rm -rf。
+- [x] P1.6 CI 使用与本地相同的 bookctl 命令。
+- [x] Gate：全新环境的缺依赖错误在 doctor 中一次列全；Windows/Ubuntu 命令一致（PR #7 → 4155de9）。
 
 ## P2：Schema、稳定 ID 与数据迁移
 
-- [ ] P2.1 为 manifest、glosses、sources、notes、reading-paths、revisions、subject-index 定义 schema_version。
+- [x] P2.1 为 manifest、glosses、sources、notes、reading-paths、revisions、subject-index 定义 schema_version。
 - [ ] P2.2 建立 BookModel 基础类型和统一 Diagnostic。
 - [ ] P2.3 设计 block_id 语法与 Markdown 承载方式，先在 ch01、ch03、ch12 三章试点。
 - [ ] P2.4 编写 line-ref → block-ref 迁移器，输出自动映射、歧义、缺失三类报告。

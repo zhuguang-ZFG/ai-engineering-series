@@ -288,6 +288,7 @@ STRIP = re.compile(r"<[^>]+>")
 
 
 GLOSS = json.load(open(ROOT / "yuyu-book" / "glosses.json", encoding="utf-8"))
+GLOSS.pop("schema_version", None)
 
 
 def glossify(text: str, lang: str, limit: int = 3,

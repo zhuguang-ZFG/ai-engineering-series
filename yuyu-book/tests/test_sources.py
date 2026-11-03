@@ -15,8 +15,9 @@ from pathlib import Path
 if not __package__:  # direct run: see tests/__init__.py for the real bootstrap
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from yuyu_book import registry
 from yuyu_book.core import (BOOK_DIR, MIRRORED_FIELDS, SOURCE_REQUIRED,
-                            SOURCE_ID_RE, expected_ids, load_json)
+                            SOURCE_ID_RE, expected_ids)
 from yuyu_book.pages import KIND_GROUP
 
 KINDS = {"github", "docs", "blog", "spec", "npm", "community"}
@@ -38,11 +39,11 @@ HAN = re.compile(r"[一-鿿]")
 
 
 def sources():
-    return load_json(BOOK_DIR / "sources.json")
+    return registry.load("sources.json")
 
 
 def manifest():
-    return load_json(BOOK_DIR / "manifest.json")
+    return registry.load("manifest.json")
 
 
 class SourceEntryShape(unittest.TestCase):

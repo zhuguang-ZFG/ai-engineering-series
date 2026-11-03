@@ -1,4 +1,5 @@
 {
+ "schema_version": 1,
  "front": {
   "zh": "上路前只记一件事：主循环转一圈，路就短一天。",
   "en": "One thing to remember at the gate: every turn of the main loop is a day less of road."

@@ -14,11 +14,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book import art  # noqa: E402
-from yuyu_book.core import (BOOK_DIR, BuildError, load_json,  # noqa: E402
+from yuyu_book import art, registry  # noqa: E402
+from yuyu_book.core import (BOOK_DIR, BuildError,  # noqa: E402
                             unit_stream)
 
-MANIFEST = load_json(BOOK_DIR / "manifest.json")
+MANIFEST = registry.load("manifest.json")
 UNIT_IDS = [u["id"] for u, _kind, _part in unit_stream(MANIFEST)]
 PART_IDS = [p["id"] for p in MANIFEST["parts"]]
 

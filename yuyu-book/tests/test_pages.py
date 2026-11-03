@@ -6,9 +6,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book import pages, plain, render  # noqa: E402
+from yuyu_book import pages, plain, registry, render  # noqa: E402
 from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError, expected_ids,
-                            load_configs, load_json, load_unit,
+                            load_configs, load_unit,
                             unit_stream)  # noqa: E402
 from yuyu_book.style import CSS, ink_mark, page, trace, wheel  # noqa: E402
 
@@ -224,7 +224,7 @@ class FrontMatter(Config):
         self.assertIn("front-page", html)
 
     def test_revision_history_is_rendered_per_language(self):
-        entries = load_json(BOOK_DIR / "revisions.json")["entries"]
+        entries = registry.load("revisions.json")["entries"]
         for lang in ("zh", "en"):
             html = pages.revisions_page(entries, lang)
             self.assertIn('id="revisions"', html)
@@ -234,7 +234,7 @@ class FrontMatter(Config):
     def test_revision_notes_are_typeset_not_left_in_markdown(self):
         """The notes quote the builder's own names; a row of raw backticks
         around one reads as a typo in a book that sets code spans properly."""
-        entries = load_json(BOOK_DIR / "revisions.json")["entries"]
+        entries = registry.load("revisions.json")["entries"]
         for lang in ("zh", "en"):
             html = pages.revisions_page(entries, lang)
             self.assertNotIn("`", html, "a backtick reached the page")
@@ -245,7 +245,7 @@ class FrontMatter(Config):
         """Front matter never runs the unit pipeline, so the break points have
         to be put in over the assembled page: `getFeatureValue_CACHED_MAY_BE_STALE`
         in a revision note pushed the document 37px past a 390px screen."""
-        entries = load_json(BOOK_DIR / "revisions.json")["entries"]
+        entries = registry.load("revisions.json")["entries"]
         for lang in ("zh", "en"):
             out = render.soften_long_names(pages.revisions_page(entries, lang))
             self.assertIn("<wbr>", out, "no break point in a long name")
@@ -389,7 +389,7 @@ class BackMatter(Config):
                         "the Chinese registry lost its own text")
 
     def test_subject_index_links_only_to_units_that_exist(self):
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         ids = set(expected_ids(self.manifest))
         html = pages.subject_index_page(entries, "zh")
         self.assertIn('id="subject-index"', html)
@@ -400,7 +400,7 @@ class BackMatter(Config):
     def test_a_long_flag_name_breaks_on_the_underscore(self):
         """COWORKER_TYPE_TELEMETRY has no space in it; without a break point the
         row eats its dotted leader to fit, or runs over the column rule."""
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         html = pages.subject_index_page(entries, "zh")
         row = re.search(r'<span class="idx-term">([^<]*(?:<wbr>[^<]*)*)</span>',
                         html)
@@ -410,7 +410,7 @@ class BackMatter(Config):
         self.assertNotIn("&lt;wbr&gt;", html, "the break tag got escaped away")
 
     def test_index_entries_are_sorted_and_lettered(self):
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         letters = [e["letter"] for e in entries]
         self.assertEqual(letters, sorted(letters))
         for e in entries[:20]:
@@ -422,7 +422,7 @@ class BackMatter(Config):
         right heading for the English book and the wrong one for this: nobody
         who has just read 自动压缩 in ch 7 thinks to look under A. The
         translation column is a headword too, so it gets its own block."""
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         html_zh = pages.subject_index_page(entries, "zh")
         terms = re.findall(r'<span class="idx-term">([^<]*)</span>', html_zh)
         cn = [t for t in terms if re.search(r"[\u4e00-\u9fff]", t)]
@@ -439,7 +439,7 @@ class BackMatter(Config):
         self.assertIn("部首", note.group(1))
 
     def test_the_english_index_does_not_inherit_chinese_rows(self):
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         html_en = pages.subject_index_page(entries, "en")
         for t in re.findall(r'<span class="idx-term">([^<]*)</span>', html_en):
             self.assertNotRegex(t, r"[\u4e00-\u9fff]",
@@ -452,7 +452,7 @@ class BackMatter(Config):
         placeholder exists in the markup, but the print block inherited the
         screen's `display:none` and the PDF pass had no row list to stamp, so the
         slot was neither reserved nor filled."""
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         printed = [e for e in entries if e["zh"]["refs"]]
         html = pages.subject_index_page(entries, "zh")
         rows = re.findall(r'<li class="idx-row">.*?</li>', html, re.S)
@@ -473,7 +473,7 @@ class BackMatter(Config):
         else's headword."""
         import build
         from html import unescape
-        entries = load_json(BOOK_DIR / "subject-index.json")
+        entries = registry.load("subject-index.json")
         for lang in ("zh", "en"):
             printed = [e for e in entries if e[lang]["refs"]]
             html = pages.subject_index_page(entries, lang)

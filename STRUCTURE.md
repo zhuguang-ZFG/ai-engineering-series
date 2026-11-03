@@ -102,6 +102,8 @@
 
 ### 3.3 数据文件
 
+七个数据文件都以 `schema_version` 标记结构版本：`subject-index.json` 用 `{"schema_version": 1, "entries": [...]}` 信封，其余在顶层加一个 `schema_version` 键。构建器只经 `yuyu_book/registry.py` 读取——缺版本按 0 迁移，版本高于当前直接报错；`load()` 把版本键剥掉，所以下游看到的仍是纯内容。`--regen-index` 写出当前版本。
+
 | 文件 | 内容 |
 |------|------|
 | `manifest.json` | 书的骨架：`version` / `date` / `author` / `repository` / `license` / `title` / `subtitle` / `epigraph` / `start_reading` + `parts`(4) / `front` / `appendices`(4) / `guides`(20)。单元条目只有 `id`、`zh`、`en` 三个字段；`guides[<id>]` 除罗盘三卡与 `sources` 外，还带通俗层的 `plain`（章首导读带）、`analogy`（打个比方）与 `plain_evidence`（指回书稿的 `file:line`） |

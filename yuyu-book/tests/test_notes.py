@@ -17,8 +17,8 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book import art, pages, plain  # noqa: E402
-from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError, load_json,  # noqa
+from yuyu_book import art, pages, plain, registry  # noqa: E402
+from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError,  # noqa
                             read_text, unit_stream)  # noqa: E402
 
 GLOSSARY = {
@@ -127,8 +127,8 @@ class KeeperDrawing(unittest.TestCase):
 class ShippedNotes(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.glosses = load_json(BOOK_DIR / "glosses.json")
-        cls.manifest = load_json(BOOK_DIR / "manifest.json")
+        cls.glosses = registry.load("glosses.json")
+        cls.manifest = registry.load("manifest.json")
         cls.notes = plain.load_notes()
         cls.units = [SimpleNamespace(id=u["id"], path=u["zh"], en=u["en"])
                      for u, _k, _p in unit_stream(cls.manifest)]

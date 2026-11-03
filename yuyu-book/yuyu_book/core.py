@@ -386,7 +386,8 @@ def validate_configs(manifest: dict, sources: dict) -> None:
 
 
 def load_configs():
-    manifest = load_json(BOOK_DIR / "manifest.json")
-    sources = load_json(BOOK_DIR / "sources.json")
+    from . import registry
+    manifest = registry.load("manifest.json")
+    sources = registry.load("sources.json")
     validate_configs(manifest, sources)
     return manifest, sources
