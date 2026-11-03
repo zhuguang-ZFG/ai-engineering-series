@@ -1,4 +1,5 @@
 {
+ "schema_version": 1,
  "agent-harness": {
   "term": {
    "zh": "智能体线束",

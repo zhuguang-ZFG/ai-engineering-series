@@ -1,4 +1,6 @@
-[
+{
+  "schema_version": 1,
+  "entries": [
   {
     "key": "ablation baseline",
     "letter": "A",
@@ -4625,4 +4627,5 @@
       "refs": []
     }
   }
-]
+  ]
+}

@@ -18,10 +18,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from yuyu_book import (art, audit, mermaid as mm, pages, plain,
-                       render)  # noqa: E402
+                       registry, render)  # noqa: E402
 from yuyu_book.core import (BOOK_DIR, HAN_RE, INDEX_CN_LETTER, REPO_ROOT,
                             BuildError, dump_json, expected_ids, load_configs,
-                            load_json, load_unit, read_text,
+                            load_unit, read_text,
                             unit_stream)  # noqa: E402
 from yuyu_book.style import CSS, key_mark, page, rut, trace, wheel  # noqa: E402
 
@@ -143,7 +143,7 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     body: list[str] = []
     body.append(pages.cover(manifest, lang))
     body.append(pages.imprint(manifest, lang))
-    rev = load_json(BOOK_DIR / "revisions.json")["entries"]
+    rev = registry.load("revisions.json")["entries"]
     body.append(pages.revisions_page(rev, lang))
     body.append(pages.how_to_read(manifest, lang, paths))
 
@@ -188,7 +188,7 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     index_path = BOOK_DIR / "subject-index.json"
     idx_entries = None
     if index_path.exists():
-        idx_entries = load_json(index_path)
+        idx_entries = registry.load("subject-index.json")
 
     why_groups = _principle_groups(glosses, units, lang)
     back = ([] if not why_groups
@@ -464,7 +464,8 @@ def main(argv=None):
                 plain.validate_notes(notes, glosses, unit_texts)
         if args.regen_index:
             entries = glossary_to_index(manifest)
-            dump_json(BOOK_DIR / "subject-index.json", entries)
+            dump_json(BOOK_DIR / "subject-index.json",
+                      registry.wrap("subject-index.json", entries))
             zh_n = sum(1 for e in entries if e["zh"]["refs"])
             en_n = sum(1 for e in entries if e["en"]["refs"])
             print(f"subject index: {len(entries)} terms ({zh_n} zh refs, "

@@ -1,4 +1,5 @@
 {
+  "schema_version": 1,
   "cc-changelog": {
     "title": "Claude Code CHANGELOG",
     "authority": "Anthropic (anthropics/claude-code)",

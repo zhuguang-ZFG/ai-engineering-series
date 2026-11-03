@@ -16,9 +16,9 @@ from pathlib import Path
 if not __package__:  # direct run: see tests/__init__.py for the real bootstrap
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book import plain
+from yuyu_book import plain, registry
 from yuyu_book.core import (BOOK_DIR, REPO_ROOT, extract_illustrations,
-                            extract_mermaid, load_json, read_text,
+                            extract_mermaid, read_text,
                             unit_stream)
 from yuyu_book.plain import prose_lines
 
@@ -30,9 +30,9 @@ class Data(unittest.TestCase):
     """Counts taken straight from the manuscript and the registries."""
 
     def setUp(self):
-        self.manifest = load_json(BOOK_DIR / "manifest.json")
+        self.manifest = registry.load("manifest.json")
         self.units = [(u, k) for u, k, _p in unit_stream(self.manifest)]
-        self.glosses = load_json(BOOK_DIR / "glosses.json")
+        self.glosses = registry.load("glosses.json")
 
     def unit_path(self, lang: str) -> list[str]:
         return [u[lang] for u, _k in self.units]
@@ -85,11 +85,11 @@ class Data(unittest.TestCase):
         return n
 
     def index(self) -> list[dict]:
-        return load_json(BOOK_DIR / "subject-index.json")
+        return registry.load("subject-index.json")
 
     def kinds(self) -> dict:
         out = {}
-        for s in load_json(BOOK_DIR / "sources.json").values():
+        for s in registry.load("sources.json").values():
             out[s["kind"]] = out.get(s["kind"], 0) + 1
         return out
 
@@ -115,7 +115,7 @@ class ShippedCounts(Data):
     def setUp(self):
         super().setUp()
         plates_zh, plates_en = self.plates("zh"), self.plates("en")
-        src = str(len(load_json(BOOK_DIR / "sources.json")))
+        src = str(len(registry.load("sources.json")))
         g = str(len(self.glosses))
         d = str(self.drawings())
         body_word = {n: w for w, n in EN_NUM.items()}[self.body_plates("en")]
@@ -213,7 +213,7 @@ class ShippedCounts(Data):
         """The newest note quotes the builder's own test count; the note is
         read as the version's summary, so the figure has to be current."""
         # the ledger is newest-first: the top entry is the version shipping
-        entry = load_json(BOOK_DIR / "revisions.json")["entries"][0]
+        entry = registry.load("revisions.json")["entries"][0]
         want = str(self.suite())
         for lang, rx in (("zh", r"构建器测试 (\d+) 项全绿"),
                          ("en", r"(\d+) builder tests green")):
@@ -465,7 +465,7 @@ class TextTotalsMatchTheirOwnTables(Data):
         a second entry to KEEPER_TOTALS is the way to say where a new number
         comes from.
         """
-        notes = load_json(BOOK_DIR / "notes.json")
+        notes = registry.load("notes.json")
         want = {lang: str(len(self.tools(lang))) for lang in ("zh", "en")}
         bad = []
         for lang in ("zh", "en"):
