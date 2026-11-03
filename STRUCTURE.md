@@ -78,7 +78,7 @@
 | `--no-plain` | 整层关掉通俗层：不标术语、不出导读带与新词面板、不盖 tier 徽、书末不排「原理札记」与「按语集」、章末不坐驿卒（插图不受影响） |
 | `--regen-index` | 从附录 D 的术语表重建 `subject-index.json`；注意它**不会**只生成索引——之后仍会继续走完整个构建流程 |
 
-`build.py` 里还有一个 `glossary_to_index()`：它围栏敏感地读附录 D 的表格，把术语映射到章节 anchor。
+`build.py` 只做参数解析、临时输出目录与进程退出；装配管线在 `yuyu_book/app.py`。`app.glossary_to_index()` 围栏敏感地读附录 D 的表格，把术语映射到章节 anchor。
 
 装配完成后、落盘之前有两道全书级的笔：`render.glue_closer()` 在单元内部把章末车辙缝进它收束的那一段（见上表 `render.py`），`render.soften_long_names()` 则在拼好的整份正文上给长标识符下断点——放在装配之后而不是单元管线里，是因为前后附属页根本不走单元管线，而一条引用 `getFeatureValue_CACHED_MAY_BE_STALE` 的修订说明曾在 390px 屏幕上把整份文档顶出 37px。
 
@@ -86,6 +86,7 @@
 
 | 模块 | 单一职责 |
 |------|----------|
+| `app.py` | 应用服务：`build_edition()` 装配一版书（加载单元、渲染图版、目录/索引/页脚、审计、PDF），`glossary_to_index()` 从附录 D 重建索引，`pdf_meta()` 生成打印清单；CLI 只调用这些函数，测试可直接调用而不经过 argparse |
 | `core.py` | 路径常量（`BOOK_DIR` / `REPO_ROOT` / `CACHE_DIR`）、统一 UTF-8 读写、manifest 与 sources 的加载和校验、`Unit` 数据类、**围栏敏感**的 H1 归一（`normalize_h1`）与 Mermaid 抽取（`extract_mermaid`，把每段图源换成 `@@MM:<12位sha1>@@` 占位符并记下代码围栏语言）。全部失败都抛 `BuildError` |
 | `registry.py` | 七个登记表的唯一读取入口：校验 `schema_version`、内存迁移 v0、剥掉版本键；`subject-index.json` 从信封里取出条目列表。版本高于当前直接报错，不猜结构 |
 | `model.py` | BookModel 骨架（Edition → Part → Unit → Section → Block）与统一诊断格式（`severity code file block_id message hint`）；诊断先由登记表加载使用，后续迁移复用 |
