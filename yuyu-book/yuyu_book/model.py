@@ -55,9 +55,10 @@ class Block:
     unit_id: str
     lang: str
     line: int
-    kind: str                       # paragraph | list | table | quote | fence
+    kind: str          # paragraph | heading | list | table | quote | fence
     text: str
     block_id: str = ""
+    end_line: int = 0               # inclusive; 0 means the single line
 
 
 @dataclass

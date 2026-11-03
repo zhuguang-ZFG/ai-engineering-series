@@ -19,12 +19,16 @@ from __future__ import annotations
 import re
 
 from .core import FENCE_RE, BuildError
-from .model import Diagnostic
+from .model import Block, Diagnostic
 
 MARKER = re.compile(
     r"^\s*<!--\s*block:\s*(?P<id>[a-z0-9][a-z0-9.-]*)\s*-->\s*$")
 LOOSE = re.compile(r"<!--\s*block\b", re.I)
 ID_RE = re.compile(r"^[a-z][a-z0-9]*\.[a-z0-9]+(?:-[a-z0-9]+)*$")
+HEADING_RE = re.compile(r"^(#{1,6})\s+\S")
+LIST_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+TABLE_RE = re.compile(r"^\s*\|")
+QUOTE_RE = re.compile(r"^\s*>")
 
 
 def _fail(code: str, file: str, block_id: str, message: str,
@@ -81,3 +85,90 @@ def validate_markers(text: str, file: str, unit_id: str) -> dict[str, int]:
                   "two block markers point at the same block")
         found[block_id] = number
     return found
+
+
+def parse_blocks(text: str, unit_id: str, lang: str = "") -> list[Block]:
+    """Split prose into citable spans, fence-aware and marker-aware.
+
+    A span covers lines `line..end_line` (1-based, inclusive). Headings are
+    spans because registry evidence sometimes cites a section heading; a list
+    is one span even when items sit on consecutive lines, and a table is one
+    span. Blank lines close a span; a marker line names the span that follows
+    it, allowing blank lines in between. Code-fence contents never split.
+    """
+    lines = text.split("\n")
+    out: list[Block] = []
+    pending = None
+    index = 0
+
+    def add(start: int, end: int, kind: str) -> None:
+        nonlocal pending
+        body = "\n".join(lines[start:end])
+        out.append(Block(unit_id, lang, start + 1, kind, body, pending or "",
+                         end))
+        pending = None
+
+    while index < len(lines):
+        line = lines[index]
+        if not line.strip():
+            index += 1
+            continue
+        if LOOSE.search(line):
+            match = MARKER.match(line)
+            if match:
+                pending = match.group("id")
+            index += 1
+            continue
+        token = _fence_token(line)
+        if token:
+            start, mark = index, token[0]
+            index += 1
+            while index < len(lines):
+                close = _fence_token(lines[index])
+                if (close and close[0][0] == mark[0]
+                        and len(close[0]) >= len(mark) and not close[1]):
+                    index += 1
+                    break
+                index += 1
+            add(start, index, "fence")
+            continue
+        if HEADING_RE.match(line):
+            add(index, index + 1, "heading")
+            index += 1
+            continue
+        if QUOTE_RE.match(line):
+            start = index
+            while index < len(lines) and QUOTE_RE.match(lines[index]):
+                index += 1
+            add(start, index, "quote")
+            continue
+        if TABLE_RE.match(line):
+            start = index
+            while index < len(lines) and TABLE_RE.match(lines[index]):
+                index += 1
+            add(start, index, "table")
+            continue
+        if LIST_RE.match(line):
+            start = index
+            while index < len(lines) and lines[index].strip():
+                current = lines[index]
+                if (LOOSE.search(current) or FENCE_RE.match(current)
+                        or HEADING_RE.match(current)
+                        or QUOTE_RE.match(current)
+                        or TABLE_RE.match(current)):
+                    break
+                index += 1
+            add(start, index, "list")
+            continue
+        start = index
+        while index < len(lines) and lines[index].strip():
+            current = lines[index]
+            if (LOOSE.search(current) or FENCE_RE.match(current)
+                    or HEADING_RE.match(current)
+                    or QUOTE_RE.match(current)
+                    or TABLE_RE.match(current)
+                    or LIST_RE.match(current)):
+                break
+            index += 1
+        add(start, index, "paragraph")
+    return out

@@ -209,7 +209,14 @@ def main(argv=None) -> int:
                                           after_id)
                 fresh = html[start:end]
                 path = OUT / "fragments" / lang / f"{name}.html"
-                if not path.exists() or path.read_text(encoding="utf-8") != fresh:
+                committed = (path.read_text(encoding="utf-8")
+                             if path.exists() else "")
+                # Figure ids are generated hashes; the frozen fragment keeps
+                # the old build's value as provenance, while the slot itself is
+                # what the visual gate protects.
+                fresh = re.sub(r"fig-[0-9a-f]{12}", "fig-*", fresh)
+                committed = re.sub(r"fig-[0-9a-f]{12}", "fig-*", committed)
+                if committed != fresh:
                     print(f"fragment drift: {lang}/{name}", file=sys.stderr)
                     failures += 1
         if failures:

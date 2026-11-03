@@ -108,10 +108,18 @@ class FenceAwareExtraction(unittest.TestCase):
         self.assertEqual(first[0].file, "t.md")
         self.assertEqual([b.line for b in first], [3, 7])
 
-    def test_uid_moves_with_the_diagram_but_the_svg_cache_does_not(self):
+    def test_uid_survives_lines_inserted_above(self):
+        text = "# 第 1 章　标题\n\n```mermaid\nA-->B\n```\n"
+        _body, first, _l = pipeline(text)
+        shifted = text.replace("# 第 1 章　标题\n",
+                               "# 第 1 章　标题\n\n新插入的一段。\n", 1)
+        _body2, second, _l = pipeline(shifted)
+        self.assertEqual(first[0].uid, second[0].uid)
+        self.assertEqual(second[0].line, first[0].line + 2)
+
+    def test_svg_cache_key_ignores_uid_and_line(self):
         same_src = mm.MermaidBlock("x", "graph LR\nA-->B", "ch01.md", 10)
         moved = mm.MermaidBlock("y", "graph LR\nA-->B", "ch02.md", 99)
-        self.assertNotEqual(same_src.uid, moved.uid)
         self.assertEqual(mm._cache_key(same_src.src, "11.17.2", "edge"),
                          mm._cache_key(moved.src, "11.17.2", "edge"))
 

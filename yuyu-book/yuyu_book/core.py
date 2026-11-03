@@ -122,6 +122,7 @@ def extract_mermaid(text: str, file: str):
     structure, and their info strings survive as a language label."""
     lines = text.split("\n")
     out, blocks, langs, fence, buf, start = [], [], [], None, None, 0
+    seen: dict[str, int] = {}
     for n, line in enumerate(lines, 1):
         m = FENCE_RE.match(line)
         if m:
@@ -138,8 +139,11 @@ def extract_mermaid(text: str, file: str):
             if token[0] == fence[0] and len(token) >= len(fence) and not info:
                 if buf is not None:
                     src = "\n".join(buf)
+                    occurrence = seen.get(src, 0)
+                    seen[src] = occurrence + 1
                     uid = hashlib.sha1(
-                        f"{file}|{start}|{src}".encode("utf-8")).hexdigest()[:12]
+                        f"{file}|{src}|{occurrence}".encode("utf-8")
+                    ).hexdigest()[:12]
                     blocks.append(MermaidBlock(uid, src, file, start))
                     if out and out[-1].strip():
                         out.append("")
@@ -180,6 +184,7 @@ def extract_illustrations(text: str, file: str):
     """
     lines = text.split("\n")
     out, ills, fence, buf, start = [], [], None, None, 0
+    seen: dict[str, int] = {}
     for n, line in enumerate(lines, 1):
         m = FENCE_RE.match(line)
         if m:
@@ -199,8 +204,11 @@ def extract_illustrations(text: str, file: str):
                         raise BuildError(
                             f"{file}:{start}: an ill fence holds one drawing "
                             f"name, not {name!r}")
+                    occurrence = seen.get(name, 0)
+                    seen[name] = occurrence + 1
                     uid = hashlib.sha1(
-                        f"{file}|{start}|{name}".encode("utf-8")).hexdigest()[:12]
+                        f"{file}|{name}|{occurrence}".encode("utf-8")
+                    ).hexdigest()[:12]
                     ills.append(IllusBlock(uid, name, file, start))
                     if out and out[-1].strip():
                         out.append("")
