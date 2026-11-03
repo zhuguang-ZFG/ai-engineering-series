@@ -32,7 +32,7 @@
 ## P2：Schema、稳定 ID 与数据迁移
 
 - [x] P2.1 为 manifest、glosses、sources、notes、reading-paths、revisions、subject-index 定义 schema_version。
-- [ ] P2.2 建立 BookModel 基础类型和统一 Diagnostic。
+- [x] P2.2 建立 BookModel 基础类型和统一 Diagnostic。
 - [ ] P2.3 设计 block_id 语法与 Markdown 承载方式，先在 ch01、ch03、ch12 三章试点。
 - [ ] P2.4 编写 line-ref → block-ref 迁移器，输出自动映射、歧义、缺失三类报告。
 - [ ] P2.5 双读所有登记表，比较 line-ref 与 block-ref 指向文本是否一致。

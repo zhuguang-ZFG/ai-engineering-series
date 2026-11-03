@@ -34,11 +34,13 @@ FILES = (
 SUBJECT_INDEX = "subject-index.json"
 
 
-def _fail(message: str) -> None:
+def _fail(message: str, *, code: str = "registry", file: str = "",
+          block_id: str = "") -> None:
     # Imported lazily: core imports this module inside load_configs(), and a
     # module-level import here would close the cycle.
     from .core import BuildError
-    raise BuildError(message)
+    from .model import Diagnostic
+    raise BuildError(str(Diagnostic("error", code, file, block_id, message)))
 
 
 def _migrate_v0(name: str, payload: dict) -> dict:
@@ -54,26 +56,30 @@ def migrate(name: str, data):
     if name == SUBJECT_INDEX and isinstance(data, list):
         data = {"schema_version": 0, "entries": data}
     if not isinstance(data, dict):
-        _fail(f"{name}: registry must be a JSON object")
+        _fail("registry must be a JSON object", code="registry-shape",
+              file=name)
     version = data.get("schema_version", 0)
     if not isinstance(version, int) or isinstance(version, bool) or version < 0:
-        _fail(f"{name}: schema_version must be a non-negative integer")
+        _fail("schema_version must be a non-negative integer",
+              code="registry-version", file=name)
     if version > CURRENT:
-        _fail(f"{name}: schema_version {version} is newer than this builder "
+        _fail(f"schema_version {version} is newer than this builder "
               f"supports ({CURRENT}); update yuyu-book instead of editing "
-              "the registry")
+              "the registry", code="registry-version", file=name)
     payload = {key: value for key, value in data.items()
                if key != "schema_version"}
     while version < CURRENT:
         migration = MIGRATIONS.get(version)
         if migration is None:
-            _fail(f"{name}: no migration from schema_version {version}")
+            _fail(f"no migration from schema_version {version}",
+                  code="registry-version", file=name)
         payload = migration(name, payload)
         version += 1
     if name == SUBJECT_INDEX:
         entries = payload.get("entries")
         if not isinstance(entries, list):
-            _fail(f"{name}: entries must be a JSON array")
+            _fail("entries must be a JSON array", code="registry-shape",
+                  file=name)
         return entries
     return payload
 
@@ -81,14 +87,15 @@ def migrate(name: str, data):
 def load(name: str):
     """Read a registry from `yuyu-book/` and return its migrated payload."""
     if name not in FILES:
-        _fail(f"unknown registry {name!r}")
+        _fail("unknown registry", code="registry-unknown", file=name)
     path = BOOK_DIR / name
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        _fail(f"{name}: registry is missing")
+        _fail("registry is missing", code="registry-missing", file=name)
     except json.JSONDecodeError as exc:
-        _fail(f"{name}: invalid JSON at line {exc.lineno}: {exc.msg}")
+        _fail(f"invalid JSON at line {exc.lineno}: {exc.msg}",
+              code="registry-json", file=name)
     return migrate(name, data)
 
 
@@ -97,5 +104,6 @@ def wrap(name: str, payload):
     if name == SUBJECT_INDEX:
         return {"schema_version": CURRENT, "entries": payload}
     if not isinstance(payload, dict):
-        _fail(f"{name}: payload must be a JSON object")
+        _fail("payload must be a JSON object", code="registry-shape",
+              file=name)
     return {"schema_version": CURRENT, **payload}
