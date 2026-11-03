@@ -26,11 +26,24 @@ def main(argv=None) -> int:
                         help="JSON path, or - for stdout (default)")
     parser.add_argument("--strict", action="store_true",
                         help="exit 2 when any ref is ambiguous or missing")
+    parser.add_argument("--equivalence", metavar="PATH",
+                        help="stage markers, validate both ref forms, write "
+                             "a line↔block consistency summary there")
     args = parser.parse_args(argv)
     manifest = registry.load("manifest.json")
     glosses = registry.load("glosses.json")
     report = migrate.build_report(manifest, glosses)
     text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    dual = None
+    if args.equivalence:
+        dual = migrate.verify_dual(manifest, glosses,
+                                   registry.load("reading-paths.json"), report)
+        payload = {"schema_version": 1, "summary": report["summary"],
+                   "dual": dual}
+        Path(args.equivalence).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.equivalence).write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8", newline="\n")
     if args.out == "-":
         sys.stdout.write(text)
     else:
@@ -42,6 +55,8 @@ def main(argv=None) -> int:
           file=sys.stderr)
     if args.strict and (summary["ambiguous"] or summary["missing"]):
         return 2
+    if dual and dual["mismatches"]:
+        return 1
     return 0
 
 

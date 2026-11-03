@@ -55,6 +55,8 @@ class Report(unittest.TestCase):
         row = self.row(report, "manifest.guides.front.plain_evidence[0]")
         self.assertEqual((row["status"], row["block_id"]),
                          ("mapped", "front.intro"))
+        self.assertTrue(row["text_equal"])
+        self.assertEqual(report["summary"]["text_mismatch"], 0)
         self.assertTrue(next(b for b in report["files"][ZH]["blocks"]
                              if b["start"] == 5)["has_marker"])
 
@@ -107,6 +109,48 @@ class Report(unittest.TestCase):
         self.assertEqual(report["summary"]["refs"], 2)
         self.assertEqual(report["summary"]["unique_refs"], 2)
         self.assertEqual(report["summary"]["mapped"], 2)
+
+
+class DualPaths(unittest.TestCase):
+    """The shipped registries must survive the vocabulary swap unchanged."""
+
+    @classmethod
+    def setUpClass(cls):
+        from yuyu_book import migrate, registry
+        cls.migrate = migrate
+        cls.manifest = registry.load("manifest.json")
+        cls.glosses = registry.load("glosses.json")
+        cls.paths = registry.load("reading-paths.json")
+
+    def test_shipped_refs_reach_the_same_languages_as_their_blocks(self):
+        dual = self.migrate.verify_dual(self.manifest, self.glosses,
+                                        self.paths)
+        self.assertEqual(dual["mismatches"], [])
+        self.assertEqual(dual["consistent"], dual["blocks"])
+        self.assertGreater(dual["blocks"], 400)
+
+    def test_cli_exits_nonzero_when_the_dual_check_disagrees(self):
+        import importlib.util
+        import json
+        import tempfile
+        from unittest import mock
+
+        script = (Path(__file__).resolve().parents[2] / "scripts" /
+                  "migrate_line_refs.py")
+        spec = importlib.util.spec_from_file_location("migrate_cli", script)
+        cli = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cli)
+        broken = {"mismatches": [{"ref": "x", "block_id": "y"}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "report.json"
+            eq = Path(tmp) / "equivalence.json"
+            with mock.patch.object(cli.migrate, "verify_dual",
+                                   return_value=broken):
+                code = cli.main(["--out", str(out),
+                                 "--equivalence", str(eq)])
+            self.assertEqual(code, 1)
+            self.assertEqual(json.loads(eq.read_text(encoding="utf-8"))
+                             ["dual"]["mismatches"], broken["mismatches"])
 
 
 if __name__ == "__main__":

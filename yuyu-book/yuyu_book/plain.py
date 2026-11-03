@@ -10,8 +10,9 @@ import html
 import re
 
 from . import registry
+from .blocks import ID_RE, parse_blocks
 from .core import (BOOK_DIR, FENCE_RE, HAN_RE, REPO_ROOT, SOURCE_ID_RE,
-                   BuildError, read_text)
+                   BuildError, read_text, unit_stream)
 
 TIER_ORDER = ("start", "core", "deep")
 # the one line in the hover card whose job a reader cannot guess from its
@@ -134,52 +135,101 @@ def prose_lines(text: str) -> dict[int, str]:
     return keep
 
 
-def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
+def validate_plain(glosses: dict, paths: dict, manifest: dict,
+                   root: Path = REPO_ROOT,
+                   reached: dict[str, set[str]] | None = None) -> None:
     """Every gloss must be provably present in the prose it claims to explain.
 
-    An evidence pointer is checked against the real file: the line has to sit
-    outside a code fence and contain one of the registered surface forms, so a
-    invented term or a form that never occurs cannot enter the registry.
+    An evidence pointer is checked against the real file: a `file:line` has to
+    sit outside a code fence and contain one of the registered surface forms;
+    a stable block id has to exist and its span has to carry the form. Both
+    forms are accepted during the migration, so an entry can move to block ids
+    without a flag day.
     """
-    from .core import unit_stream
-
     errors: list[str] = []
     guides = manifest.get("guides", {})
     if not glosses and not paths and \
             not any((g.get("plain") for g in guides.values())):
         return          # layer not authored yet: build the book as it stands
     cache: dict[str, dict[int, str]] = {}
+    units = {unit[lang].replace("\\", "/"): (unit["id"], lang)
+             for unit, _k, _p in unit_stream(manifest)
+             for lang in ("zh", "en")}
     unit_ids = {u["id"] for u, _k, _p in unit_stream(manifest)}
+    block_cache: dict[str, list] = {}
+    block_index: dict[str, list] | None = None
+
+    def blocks_in(rel: str) -> list:
+        if rel not in block_cache:
+            path = root / rel
+            unit_id, lang = units[rel]
+            block_cache[rel] = (parse_blocks(read_text(path), unit_id, lang)
+                                if path.exists() else [])
+        return block_cache[rel]
+
+    def block_hits(block_id: str) -> list:
+        nonlocal block_index
+        if block_index is None:
+            block_index = {}
+            for rel in units:
+                for block in blocks_in(rel):
+                    if block.block_id:
+                        block_index.setdefault(block.block_id, []).append(block)
+        return block_index.get(block_id, [])
 
     def prose(ref: str, who: str,
-              forms_by_lang: dict[str, list[str]] | None = None) -> str | None:
-        """The language a verified `file:line` points at, or None if it is not
-        real prose. A pointer into a code fence proves nothing about the book's
-        claims, so every plain-language sentence needs prose behind it."""
-        m = re.match(r"^(.+):(\d+)$", str(ref))
+              forms_by_lang: dict[str, list[str]] | None = None) -> set[str]:
+        """Every language whose prose this pointer really reaches.
+
+        A legacy `file:line` reaches exactly one language; a stable block id
+        can be shared by both editions, so it may reach two. An empty set
+        means the pointer proved nothing; the reason is in `errors`.
+        """
+        ref = str(ref)
+        if ID_RE.match(ref):
+            hits = block_hits(ref)
+            if not hits:
+                errors.append(f"{who}: unknown block id {ref}")
+                return set()
+            got: set[str] = set()
+            for block in hits:
+                if forms_by_lang is not None:
+                    want = forms_by_lang.get(block.lang) or []
+                    if not any(f in block.text for f in want):
+                        errors.append(f"{who}: block {ref} does not contain "
+                                      f"any registered form in {block.lang}")
+                        continue
+                got.add(block.lang)
+            if reached is not None and got:
+                reached.setdefault(ref, set()).update(got)
+            return got
+        m = re.match(r"^(.+):(\d+)$", ref)
         if not m:
-            errors.append(f"{who}: evidence {ref!r} is not file:line")
-            return None
+            errors.append(f"{who}: evidence {ref!r} is not file:line or a "
+                          "block id")
+            return set()
         rel, lineno = m.group(1), int(m.group(2))
         lang = "en" if rel.replace("\\", "/").startswith("en/") else "zh"
         if rel not in cache:
-            path = REPO_ROOT / rel
+            path = root / rel
             if not path.exists():
                 errors.append(f"{who}: evidence file {rel} missing")
-                return None
+                return set()
             cache[rel] = prose_lines(read_text(path))
         line = cache[rel].get(lineno)
         if line is None or not line.strip():
             errors.append(f"{who}: evidence {ref} is inside a code fence, "
                           "blank, or past the end of the file")
-            return None
+            return set()
         if forms_by_lang is not None:
             want = forms_by_lang.get(lang) or []
             if not any(f in line for f in want):
                 errors.append(f"{who}: evidence {ref} does not contain any "
                               f"registered form")
-                return None
-        return lang
+                return set()
+        if reached is not None:
+            reached.setdefault(ref, set()).add(lang)
+        return {lang}
 
     for gid, g in glosses.items():
         if not SOURCE_ID_RE.match(gid):
@@ -213,12 +263,10 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
         forms = g.get("forms") or {}
         ev = g.get("evidence") or []
         if not ev:
-            errors.append(f"gloss {gid}: no evidence (file:line)")
+            errors.append(f"gloss {gid}: no evidence (file:line or block id)")
         langs_seen = set()
         for ref in ev:
-            lang = prose(ref, f"gloss {gid}", forms)
-            if lang:
-                langs_seen.add(lang)
+            langs_seen |= prose(ref, f"gloss {gid}", forms)
         if not langs_seen:
             errors.append(f"gloss {gid}: no usable evidence")
         elif pr == "core" and langs_seen != {"zh", "en"}:
@@ -238,9 +286,9 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
                     errors.append(f"gloss {gid}: why.{lang} is empty")
                 elif lang == "en" and HAN_RE.search(val):
                     errors.append(f"gloss {gid}: why.en still carries Chinese")
-            seen = {p for p in (prose(r, f"gloss {gid} why", forms)
-                                for r in g.get("why_evidence") or [])
-                    if p}
+            seen = set()
+            for r in g.get("why_evidence") or []:
+                seen |= prose(r, f"gloss {gid} why", forms)
             if seen != {"zh", "en"}:
                 errors.append(f"gloss {gid}: why needs one prose line in each "
                               f"language (found {sorted(seen)})")
@@ -283,8 +331,9 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
         if not ev:
             errors.append(f"guide {uid}: plain_evidence is missing")
             continue
-        seen = {lang for lang in (prose(ref, f"guide {uid}") for ref in ev)
-                if lang}
+        seen = set()
+        for ref in ev:
+            seen |= prose(ref, f"guide {uid}")
         if seen != {"zh", "en"}:
             errors.append(f"guide {uid}: plain_evidence must point at prose in "
                           f"both languages (found {sorted(seen)})")
