@@ -98,6 +98,17 @@ class TermMarks(unittest.TestCase):
                       '异步生成器', out)
         self.assertEqual([h["id"] for h in hits], ["async-generator"])
 
+    def test_block_marker_is_not_glossed_or_counted(self):
+        glosses = gloss("streaming", "流式", "streaming", ["流式"],
+                        ["streaming"])
+        glosses |= gloss("blocking", "阻塞", "blocking", ["阻塞"], ["block"])
+        doc = ('<p>intro</p><!-- block: ch01.demo -->'
+               '<p>streaming then block</p>')
+        out, hits, _u = mark(doc, glosses, "en")
+        self.assertIn('<!-- block: ch01.demo -->', out)
+        self.assertNotIn('<!-- <span', out)
+        self.assertEqual([h["id"] for h in hits], ["streaming", "blocking"])
+
     def test_only_the_first_mention_of_a_term_is_marked(self):
         doc = "<p>异步生成器很好。异步生成器确实好。</p>"
         out, hits, _u = mark(doc, gloss("ag", "异步生成器", "async generator",

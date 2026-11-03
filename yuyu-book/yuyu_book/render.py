@@ -435,6 +435,7 @@ _SKIP_TAGS = {"a", "code", "pre", "h1", "svg", "style", "sup", "figure"}
 _CURL_SKIP = {"code", "pre", "svg", "style", "kbd", "samp", "var", "textarea"}
 _VOID_TAGS = ("br", "img", "hr", "meta", "input", "wbr")
 _TAG_RE = re.compile(r"<(/?)([a-zA-Z][a-zA-Z0-9]*)[^>]*?(/)?>")
+_COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 
 
 def iter_doc(doc: str, skip_tags: set[str]):
@@ -448,6 +449,17 @@ def iter_doc(doc: str, skip_tags: set[str]):
     pos = 0
     while True:
         m = _TAG_RE.search(doc, pos)
+        comment = _COMMENT_RE.search(doc, pos)
+        if comment and (m is None or comment.start() < m.start()):
+            if comment.start() > pos:
+                yield "text", doc[pos:comment.start()], \
+                    any(name in skip_tags for name in stack)
+            # A comment is markup, not prose: gloss and autolink must never
+            # rewrite its text (a block marker contains the word `block`).
+            yield "tag", comment.group(0), \
+                any(name in skip_tags for name in stack)
+            pos = comment.end()
+            continue
         seg_end = m.start() if m else len(doc)
         blocked = any(name in skip_tags for name in stack)
         if seg_end > pos:
