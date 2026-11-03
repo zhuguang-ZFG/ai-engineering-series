@@ -8,8 +8,10 @@
 
 ---
 
+<!-- block: ch06.b-65fc86fe -->
 Humans stay coherent across conversations because they have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices turned out to work. Claude Code's memory system (memdir) serves exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
 
+<!-- block: ch06.b-19c8efc9 -->
 Comparing the memory system to "long-term memory" is a biologically precise analogy. Human memory falls into sensory memory (milliseconds), working memory (seconds, corresponding to the context management in Chapter 7), and long-term memory (minutes to years, corresponding to the memory system in this chapter). Claude Code's design follows this same layering: the context window is "working memory," temporarily holding information within a single session; while memdir is "long-term memory," persistently storing non-derivable critical knowledge across sessions.
 
 ## 6.1 Taxonomy of the Four Memory Types
@@ -18,6 +20,7 @@ Comparing the memory system to "long-term memory" is a biologically precise anal
 
 Claude Code keeps its memory inside a closed four-type system, spelled out in the memory type constants: user, feedback, project, and reference.
 
+<!-- block: ch06.b-2770b1c8 -->
 The design philosophy of these four types is: **only save information that you cannot derive from the current project state.** Tools (grep, git log) can fetch code patterns, architecture, file structure, and Git history in real time, so they do not fall within the scope of memory.
 
 **Why must it be a closed system?**
@@ -142,6 +145,7 @@ Scenario 3: Communication channels. The user says "backend team discussions are 
 
 The memory type validation module explicitly lists content you should not save as memory:
 
+<!-- block: ch06.b-297c559c -->
 - Code patterns, conventions, architecture, file paths -- derivable by reading code
 - Git history -- `git log` / `git blame` are authoritative sources
 - Debugging solutions -- the fix is already in the code, the context is in the commit message
@@ -217,6 +221,7 @@ The user says "this feature launches next Tuesday," and the Agent saves "launche
 
 ### 6.2.1 Frontmatter Format
 
+<!-- block: ch06.b-d70dc970 -->
 Each memory is an independent Markdown file that uses YAML Frontmatter to declare metadata. The format requires three fields: name (memory name), description (a one-line description used to determine relevance in future conversations), and type (one of the four types). The `type` field must be one of the four types (strictly validated); legacy files without a type field still work, but you cannot filter them by type.
 
 **Why use Markdown files instead of a database?**
@@ -233,6 +238,7 @@ The downside is what you can ask of it -- no complex relational queries, no full
 
 ### 6.2.2 MEMORY.md Index File
 
+<!-- block: ch06.b-aee9f8ac -->
 `MEMORY.md` is the entry point of the memory system -- it is not a memory itself but an index file. At the start of each conversation, the system automatically loads it into the context, which is how the Agent picks up an overview of existing memories.
 
 The memory directory module's constants define the index capacity limits: the index file is named `MEMORY.md`, with a maximum of 200 lines and 25KB.
@@ -299,6 +305,7 @@ The core of the memory extraction system resides in the memory extraction module
 
 The so-called "perfect fork" means the background Agent shares the exact same system prompt and tool set as the main conversation:
 
+<!-- block: ch06.b-26b8c2bc -->
 - The background Agent has the same context understanding capabilities as the main Agent
 - The background Agent uses the same tool set but with stricter permission restrictions
 - **The main conversation and the background Agent share the prompt cache**
@@ -545,6 +552,7 @@ Specific validation rules:
 - If the memory names a function or flag: grep to find it
 - If the user is about to act on your recommendation (rather than asking about history): validate first
 
+<!-- block: ch06.b-ed8bab46 -->
 The rule behind these checks: **memory is a trusted clue, not a trusted conclusion.** It guides the Agent on where to find information but does not replace the Agent's independent verification of the current state.
 
 **Design Philosophy of Validation Levels**

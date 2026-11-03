@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Move every `file:line` anchor when the prose it points at moves down.
+"""MIGRATION ONLY: move `file:line` anchors when the prose they point at moves.
+
+Since P2.6 the registries carry stable block IDs instead of line numbers, so
+this tool has no anchors left to shift in the shipped book. It is kept only to
+replay historical branches that still use the old registry vocabulary. New
+evidence must use a block ID; `tests/test_migrate.py` fails if a line ref
+reappears.
 
 A plate costs the prose six lines. The two registries that quote prose by line
 number have to follow, or the plain-language layer's evidence pointers land on

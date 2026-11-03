@@ -65,6 +65,7 @@ Before diving into technical details, let's first understand the fundamental pro
 
 **The Fragmented Integration Dilemma**
 
+<!-- block: ch12.b-6f2b66b5 -->
 In the LLM application ecosystem, a core challenge has long persisted: every AI application needs to connect to external data sources and tools, but each application's integration approach is different. Imagine you're a database vendor who wants to make your data accessible to various AI tools. Without a unified standard, you'd need to develop a separate adapter for each AI platform — one for Claude, one for ChatGPT, one for Cursor... This is like the era before USB standards, when every phone had its own unique charging port.
 
 <!-- block: ch12.mcp-usb-c -->
@@ -92,8 +93,10 @@ flowchart TD
     class P1,P2,P3 principle
 ```
 
+<!-- block: ch12.b-c3f66c1c -->
 1. **Protocol as Contract**: MCP defines strict message formats and capability declaration mechanisms between client and server. Servers declare what tools, resources, and prompt templates they provide; clients retrieve this information through standardized requests. This "declare first, use later" pattern allows both parties to collaborate without understanding each other's internal implementation. This is consistent with the "interface as architecture" philosophy from the tool system in Chapter 3.
 
+<!-- block: ch12.b-0a2aed98 -->
 2. **Transport Agnostic**: The MCP protocol itself is not bound to any specific network transport method. The same MCP server can provide services through stdio, HTTP, WebSocket, and other methods. An MCP server can therefore run in a local process (high performance, low latency) or sit on a remote server (centralized management, multi-user sharing) with no change to the business logic.
 
 3. **Security by Design**: MCP integrates security strategies into every layer of the protocol — from capability negotiation during connection establishment, to permission checks during tool invocation, to enterprise-level approval controls. This "default distrust" design ensures that even when you connect untrusted third-party tools, they cannot compromise the overall system's security.
@@ -102,6 +105,7 @@ flowchart TD
 
 > **Cross-reference:** Once MCP tools map to internal Claude Code Tool objects, they fully integrate into the tool system described in Chapter 3. MCP tools therefore run the same route as built-in ones: the four-stage permission checks (Chapter 4), the concurrency scheduling strategy, and interception or enhancement by the hook system (Chapter 8).
 
+<!-- block: ch12.b-969b120f -->
 ### 12.1.2 Connection Configurations and Transports
 
 The `McpServerConfigSchema` discussed in this chapter defines eight configuration variants. These include transports, IDE-specific variants, SDK integration, and a proxy configuration; they are not eight independent MCP-standard transport protocols. Distinguish the transport from the deployment adapter when choosing an integration.
@@ -247,6 +251,7 @@ flowchart LR
 
 Each state maps to its own user-interaction strategy:
 
+<!-- block: ch12.b-75c8067c -->
 - **Connected**: The server has connected and tools are available. `ConnectedMCPServer` contains the complete MCP Client instance, server capability declarations, configuration information, and a cleanup function (for graceful disconnection).
 - **Failed**: The connection attempt failed. The system records the failure reason (network error, authentication failure, server not responding, etc.) and decides whether to enter the retry flow. Not all failures merit a retry — authentication failures require user intervention, while the system can retry network timeouts automatically.
 - **NeedsAuth**: The server requires authentication but valid credentials were not provided. This is a critical aspect of security design — the system does not blindly retry connections that need authentication (which would lock accounts) but instead hands control to the user.
@@ -255,6 +260,7 @@ Each state maps to its own user-interaction strategy:
 
 **Design Considerations for Exponential Backoff Retry**
 
+<!-- block: ch12.b-5d7ee795 -->
 The Pending state's retry uses an exponential backoff algorithm: the 1st retry waits approximately 1 second, the 2nd 2 seconds, the 3rd 4 seconds, and so on, until it reaches the maximum retry count. This design is a standard fault-tolerance pattern in distributed systems. Its core logic is: if the server is temporarily unavailable, rapid consecutive retries only add burden; but if the server recovers in a few seconds, you don't want to wait too long.
 
 ```mermaid
@@ -289,6 +295,7 @@ ch12-mcp-state-dial
 
 ---
 
+<!-- block: ch12.b-c55aaca5 -->
 ## 12.2 MCP Tool Integration
 
 MCP tool integration is the process of wiring external servers' tools seamlessly into Claude Code's internal tool system. This process involves three key stages: Discovery, Mapping, and Registration. Understanding this pipeline is understanding how MCP transforms "external tools" into "internal capabilities."
@@ -333,6 +340,7 @@ After an MCP server successfully connects (entering the Connected state), Claude
 
 The core tool mapping logic includes several key steps:
 
+<!-- block: ch12.b-6c296e7f -->
 1. **Unicode Sanitization**: scrub the returned tool list of control characters and illegal characters. This step may seem simple, but it's a classic example of defensive programming — you should never trust any external input, including characters in tool names.
 
 2. **Prefix Decision**: Based on configuration, the system decides whether to add a server name prefix to tool names. In most modes, the prefix is mandatory (ensuring tool names don't conflict across servers); but in SDK mode, when the environment variable `CLAUDE_AGENT_SDK_MCP_NO_PREFIX` is present, tools register with their original names, so an MCP tool can override a built-in tool of the same name.
@@ -678,6 +686,7 @@ The allowlist check occurs during the tool discovery stage — after Claude Code
 
 ---
 
+<!-- block: ch12.b-28613328 -->
 ## 12.4 IDE Integration: The Bridge System
 
 The Bridge system is the core layer for bidirectional communication between Claude Code and the external world. It connects to IDEs like VS Code and JetBrains, and to Claude.ai's remote control. If the MCP protocol is the "dialect" between Claude Code and tool servers, then the Bridge system is the "lingua franca" between Claude Code and the entire external world.
@@ -999,6 +1008,7 @@ flowchart LR
     class S1a,S2a,S1b token
 ```
 
+<!-- block: ch12.b-8a9bb20a -->
 > **Architectural Reflection:** The evolution from v1 to v2 is a classic "technical debt cleanup" process. v1's hybrid approach (WebSocket + HTTP POST) quickly met early requirements, but as session counts grew and mobile integration entered the picture, its limitations became apparent. v2 fundamentally solved these problems by introducing sequence number continuation and closure-based authentication, while preserving the same interface abstraction so upper-layer code required no modifications.
 
 ### 12.4.5 VS Code and JetBrains Extension Integration
@@ -1090,6 +1100,7 @@ flowchart TD
 
 **API Authentication and Token Management**
 
+<!-- block: ch12.b-f80838a7 -->
 The API client authenticates using OAuth Bearer Tokens; on a 401 it refreshes the Token and retries. This mechanism handles a common distributed systems problem: Token expiration.
 
 ```mermaid

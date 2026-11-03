@@ -10,6 +10,7 @@
 
 **Difficulty:** 9.1 is Start, 9.2–9.4 are Core; 9.5 tool isolation and 9.6 lifecycle are Advanced — skip them on a first read and come back when you build.
 
+<!-- block: ch09.b-556173a5 -->
 Claude Code's capability goes beyond a single-turn conversation. Claude Code can split complex tasks and hand them to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
 
 ---
@@ -31,6 +32,7 @@ The AgentTool code resides in the agent tools directory and consists of the foll
 
 The core design principle of this architecture is **separation of concerns**: the tool main entry is responsible for "deciding what to do," the runner is responsible for "how to do it," and the Fork module handles a specific "how to do it more efficiently" strategy.
 
+<!-- block: ch09.b-0d35473a -->
 > **Architecture Insight: Why not merge routing logic and execution logic?**
 >
 > In many simple systems, routing and execution are the same module. However, Claude Code's scenarios are far more complex than simple systems — a single tool invocation might go through a synchronous path (main thread waits), an asynchronous path (background execution), or a Fork path (cache-parallel). Separating routing decisions from the execution process means that when you need to add a new execution strategy (such as a future "streaming sub-agent"), you only need to add a branch at the routing layer without modifying the runner's core logic. This is a classic use of the **Strategy Pattern** in system architecture.
@@ -227,8 +229,10 @@ flowchart TD
 
 ---
 
+<!-- block: ch09.b-72cde16a -->
 ## 9.3 Fork Pattern: Cache-Safe Parallel Execution
 
+<!-- block: ch09.b-b51d4f81 -->
 The Fork pattern lets the main agent "fork" the complete context at a given moment to multiple parallel sub-tasks while using the Anthropic API's prompt cache mechanism to avoid retransmitting large numbers of tokens.
 
 ### Intuitive Understanding of the Fork Pattern
@@ -254,6 +258,7 @@ In the routing logic of the tool's main entry, when the user omits the sub-agent
 
 ### Inheriting the Full Context and System Prompt from the Parent Conversation
 
+<!-- block: ch09.b-8854a045 -->
 The core principle of the Fork sub-agent is **byte-level inheritance** — the sub-agent must share exactly the same API request prefix as the parent agent to hit the prompt cache.
 
 In the Fork path, the system prioritizes using the system prompt bytes already rendered by the parent agent, avoiding cache invalidation caused by reconstruction. Only when it cannot retrieve the rendered prompt does it fall back to the reconstruction path. Reconstruction may deviate due to differences in the hot/cold states of feature gates, leading to cache invalidation, so passing the rendered raw bytes is the key to ensuring an exact match.
@@ -348,6 +353,7 @@ The sub-task directive generation function produces directives containing strict
 
 ---
 
+<!-- block: ch09.b-c8beb12a -->
 ## 9.4 Custom Agents
 
 ### Definition Files in the .claude/agents/ Directory

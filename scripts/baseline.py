@@ -196,11 +196,14 @@ def registry_report() -> dict:
         for unit in group.get("units") or []:
             unit_files[unit["id"]] = {"zh": unit["zh"], "en": unit["en"]}
     markdown = {}
+    marker_files: dict[str, set[str]] = {}
     for uid, files in unit_files.items():
         markdown[uid] = {}
         for lang, rel in files.items():
             path = ROOT / rel
             text = path.read_text(encoding="utf-8")
+            for block_id in re.findall(r"<!-- block: ([^ >]+) -->", text):
+                marker_files.setdefault(block_id, set()).add(rel)
             markdown[uid][lang] = {
                 "file": rel,
                 "lines": len(text.splitlines()),
@@ -215,6 +218,10 @@ def registry_report() -> dict:
             tiers[tier] = tiers.get(tier, 0) + 1
     refs_zh = sum(len(e.get("zh", {}).get("refs") or []) for e in index)
     refs_en = sum(len(e.get("en", {}).get("refs") or []) for e in index)
+    evidence_paths: set[str] = set()
+    for ref in evidence:
+        evidence_paths |= marker_files.get(
+            str(ref), {str(ref).rsplit(":", 1)[0]})
     return {
         "manifest": {
             "version": manifest["version"],
@@ -227,7 +234,7 @@ def registry_report() -> dict:
             "entries": len(glosses),
             "evidence_refs": len(evidence),
             "why_evidence_refs": len(why_evidence),
-            "evidence_files": len({ref.rsplit(":", 1)[0] for ref in evidence}),
+            "evidence_files": len(evidence_paths),
             "core": sum(1 for g in glosses.values()
                         if g.get("priority") == "core"),
         },

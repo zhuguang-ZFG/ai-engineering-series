@@ -42,10 +42,10 @@ def gloss(gid, zh, en, forms_zh, forms_en, priority="core", mark=None,
                      "en": "a run hands out many results, so waiting for one "
                            "return would stall the rest"}, **(why or {})),
         "why_evidence": list(why_evidence if why_evidence is not None
-                             else [f"{ZH_CH02}:22", f"{EN_CH02}:22"]),
+                             else ["ch02.b-495b008f", "ch02.b-140f0675"]),
         "priority": priority,
         "evidence": evidence if evidence is not None
-        else [f"{ZH_CH02}:22", f"{EN_CH02}:22"]}
+        else ["ch02.b-4fcb835b", "ch02.b-831a1dbe"]}
     if mark is not None:
         entry["mark"] = mark
     if no_why:
@@ -310,9 +310,11 @@ class DualRefs(unittest.TestCase):
         plain.validate_plain(g, self.paths, manifest)
 
     def test_legacy_line_ref_still_works(self):
+        line = next(n for n, text in plain.prose_lines(
+            read_text(REPO_ROOT / ZH_CH02)).items() if "异步生成器" in text)
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
                   ["async generator"], priority="extra",
-                  evidence=[f"{ZH_CH02}:22"])
+                  evidence=[f"{ZH_CH02}:{line}"])
         plain.validate_plain(g, {"ch02": ["start"]}, mini_manifest())
 
 
@@ -394,8 +396,8 @@ class RegistryValidation(unittest.TestCase):
         glosses, paths = plain.load_plain()
         if not glosses:
             self.skipTest("registry not merged yet")
-        plain.validate_plain(glosses, paths, mini_manifest(
-            chapters=tuple(paths), with_plain=True))
+        manifest = registry.load("manifest.json")
+        plain.validate_plain(glosses, paths, manifest)
 
     def test_evidence_must_point_at_prose_not_a_fence(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
@@ -407,8 +409,7 @@ class RegistryValidation(unittest.TestCase):
 
     def test_evidence_line_must_actually_contain_the_form(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
-                  ["async generator"], evidence=[f"{ZH_CH02}:20",
-                                                 f"{EN_CH02}:18"])
+                  ["async generator"], evidence=["ch02.b-d91bdfd7", "ch02.b-831a1dbe"])
         with self.assertRaises(BuildError) as ctx:
             plain.validate_plain(g, {}, mini_manifest())
         self.assertIn("does not contain any registered form",
@@ -423,7 +424,7 @@ class RegistryValidation(unittest.TestCase):
 
     def test_core_glosses_need_both_languages(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
-                  ["async generator"], evidence=[f"{ZH_CH02}:22"])
+                  ["async generator"], evidence=["ch02.b-4fcb835b"])
         with self.assertRaises(BuildError) as ctx:
             plain.validate_plain(g, {}, mini_manifest())
         self.assertIn("both languages", str(ctx.exception))
@@ -431,7 +432,7 @@ class RegistryValidation(unittest.TestCase):
     def test_an_extra_gloss_may_be_single_language(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
                   ["async generator"], priority="extra",
-                  evidence=[f"{ZH_CH02}:22"])
+                  evidence=["ch02.b-4fcb835b"])
         plain.validate_plain(g, {"ch02": ["start", "core"]}, mini_manifest())
 
     def test_plain_lines_are_size_limited(self):

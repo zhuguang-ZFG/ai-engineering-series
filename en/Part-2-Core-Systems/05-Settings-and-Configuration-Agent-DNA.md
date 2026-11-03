@@ -20,10 +20,12 @@ The configuration constants module lists Claude Code's configuration sources as 
 
 The configuration loading function `loadSettingsFromDisk()` follows a key principle: **later-loaded sources override earlier ones**. The merge is not a wholesale replacement: it deep-merges by field and layers custom rules on top.
 
+<!-- block: ch05.b-1f629318 -->
 In practice a sixth layer hides at the bottom: **pluginSettings** (plugin settings). The loader reads plugin settings first and treats them as the merge base, then stacks every other configuration layer on top.
 
 Therefore, the complete priority chain from low to high is:
 
+<!-- block: ch05.b-336ab860 -->
 **pluginSettings -> userSettings -> projectSettings -> localSettings -> flagSettings -> policySettings**
 
 To better understand the relationship between these six configuration sources, we can use a "geological strata" model as an analogy:
@@ -77,6 +79,7 @@ The merge logic comes down to one custom strategy function, `settingsMergeCustom
 
 The key characteristics of these rules are:
 
+<!-- block: ch05.b-2fc6d68a -->
 - **Array type**: Concatenate and deduplicate (rather than replace). For example, the `permissions.allow` field accumulates rules from all sources.
 - **Object type**: Deep merge. Nested properties are overridden layer by layer.
 - **Scalar type**: The latter directly overrides the former.
@@ -143,6 +146,7 @@ Merge Result:
 
 Each configuration source corresponds to a specific file path, determined by the configuration path mapping function:
 
+<!-- block: ch05.b-f146aab9 -->
 | Configuration Source | File Path | Description | In Git? |
 |---------------------|-----------|-------------|---------|
 | userSettings | `~/.claude/settings.json` | Global user settings | N/A (User directory) |
@@ -224,6 +228,7 @@ userSettings      -> Personalized: verbose, theme and other UI preferences
 
 ## 5.2 Security Boundary Design
 
+<!-- block: ch05.b-99fdb01b -->
 The configuration system's core security problem is this: `projectSettings` (`.claude/settings.json`) ships inside Git repositories, so anyone who clones a malicious one may load the attacker's configuration without noticing. Claude Code answers it by **leaving `projectSettings` out of every security-sensitive check**.
 
 Think of a building's access control: a project keycard opens meeting rooms and break rooms (projectSettings), but never the server room or the vault (security-sensitive operations). Your trust level decides what you may open.
@@ -418,6 +423,7 @@ State management is the "nervous system" of an Agent system -- configuration is 
 
 ### 5.4.1 Store: A Minimalist Immutable State Container
 
+<!-- block: ch05.b-765d1606 -->
 The heart of the state management module is a generic Store in just 34 lines, inspired by Zustand. The Store provides three core methods: `getState` retrieves the current state, `setState` updates state through an updater function, and `subscribe` subscribes to state changes.
 
 Three key design decisions:

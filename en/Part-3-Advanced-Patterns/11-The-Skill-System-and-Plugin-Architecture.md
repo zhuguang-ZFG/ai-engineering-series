@@ -6,6 +6,7 @@
 > -- Adapted from *Clean Architecture*
 
 **Learning Objectives:**
+<!-- block: ch11.b-734a2879 -->
 - Follow a Claude Code Skill through its whole life: defined, loaded, executed
 - Explain how skills tier from user-level to managed-level, and what each tier risks
 - Write a custom skill that works on the first try
@@ -18,6 +19,7 @@
 
 ## 11.1 Skill System Architecture
 
+<!-- block: ch11.b-882689de -->
 Claude Code's skill system is a multi-layered extension mechanism. It allows users to define reusable prompt templates through Markdown files, and allows developers to register compile-time built-in skills through TypeScript code. The design goal of the entire system is: **zero-configuration usability, configurable power**.
 
 It's like a chef's toolbox: the built-in knives and pots (built-in skills) can handle most cooking needs, but when you need to prepare a specific cuisine, you can add specialized tools (custom skills). Moreover, you can manage these tools in tiers — home kitchen (user-level), restaurant kitchen (project-level), chain restaurant standards (managed-level).
@@ -88,6 +90,7 @@ The most critical fields include:
 
 #### Security Design of File Extraction
 
+<!-- block: ch11.b-07f45a7c -->
 File extraction uses a lazy singleton pattern, using the `??=` operator to ensure concurrent calls share the same extraction Promise, avoiding race conditions. File writes use `O_NOFOLLOW | O_EXCL` flags to prevent symlink attacks, directory permissions use `0o700`, and file permissions use `0o600`.
 
 The implications of these security measures:
@@ -300,6 +303,7 @@ flowchart TB
 
 ## 11.3 Skill Loading Paths
 
+<!-- block: ch11.b-e45a3ccb -->
 ### 11.3.1 Tiered Loading Strategy
 
 The `getSkillsPath` function clearly defines the path mapping for each source, returning the skill directory path that belongs to each source type (policySettings, userSettings, projectSettings, plugin).
@@ -415,6 +419,7 @@ flowchart TD
 
 ## 11.4 Plugin System
 
+<!-- block: ch11.b-dead6a6a -->
 ### 11.4.1 Plugin Directory Structure
 
 Plugins are a higher-level extension unit than skills. A plugin can contain multiple components such as skills, agents, hooks, etc. Its directory structure typically includes:
@@ -515,6 +520,7 @@ Dependency relationships and cycle breaking:
 
 ---
 
+<!-- block: ch11.b-0acfbcd4 -->
 ## 11.5 Complete Tutorial for Creating Custom Skills
 
 This section walks through a complete example, demonstrating the entire process of creating a practical skill from scratch.
@@ -759,6 +765,7 @@ Consider: Is there overlap between these skills? How can you avoid conflicts bet
 
 2. **Security First**: MCP skills (`loadedFrom === 'mcp'`) do not execute Shell command inlining; built-in skill file extraction uses `O_NOFOLLOW | O_EXCL` to prevent symlink attacks; the loader automatically skips skills in gitignored directories. Provenance selects the transformations the loader permits, but does not certify a skill's content.
 
+<!-- block: ch11.b-d0bf4b30 -->
 3. **Lazy Loading**: Built-in skill referenced files reach disk only on first invocation; conditional skills activate only when file patterns match; dynamic skills surface only when file operations trigger path scanning. This lazy strategy optimizes startup performance and memory usage.
 
 4. **Deduplication Strategy**: Uses `realpath` to resolve symbolic links for canonical paths, keeping the first occurrence, to avoid duplicate loading. This resolves issues caused by symbolic links and overlapping parent directories.

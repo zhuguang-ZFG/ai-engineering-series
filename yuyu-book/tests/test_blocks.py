@@ -10,7 +10,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book.blocks import parse_blocks, validate_markers  # noqa: E402
+from yuyu_book import render  # noqa: E402
+from yuyu_book.blocks import (parse_blocks, strip_markers,  # noqa: E402
+                              validate_markers)
 from yuyu_book.core import BuildError  # noqa: E402
 
 MARK = "<!-- block: {0} -->"
@@ -126,5 +128,19 @@ class Parsing(unittest.TestCase):
                          [("fence", 1, 4), ("paragraph", 5, 5)])
 
 
+class RenderPrep(unittest.TestCase):
+    def test_markers_are_stripped_before_markdown_but_examples_stay(self):
+        text = doc("1. one", MARK.format("ch01.first"), "2. two", "",
+                   "```md", MARK.format("ch01.example"), "```")
+        out = strip_markers(text)
+        self.assertNotIn(MARK.format("ch01.first"), out)
+        self.assertIn(MARK.format("ch01.example"), out)
+        html = render.build_md().convert(out)
+        self.assertEqual(html.count("<ol>"), 1)
+        self.assertIn("<li>one</li>", html)
+        self.assertIn("<li>two</li>", html)
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -203,7 +203,6 @@ class Captions(unittest.TestCase):
         caps = mm.captions_for(read_text(REPO_ROOT / APXB), u.blocks)
         first = min(u.blocks, key=lambda b: b.line)
         self.assertEqual(caps[first.uid], "架构示意")
-        self.assertEqual(first.line, 14)
 
 
 class CacheKeyAndFallback(unittest.TestCase):

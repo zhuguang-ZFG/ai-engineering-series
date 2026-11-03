@@ -47,12 +47,14 @@ After the shift, the LLM's role changed from a passive text generator to an acti
 
 The breakthrough significance of tool calling lies in how it redefines the boundary between LLMs and the outside world:
 
+<!-- block: ch01.b-6cc731b7 -->
 In a world without tool calling, the LLM is a closed system. Its knowledge is cut off at the last day of its training data, its reasoning never leaves the context window, and its output can only be human-readable text. It is as if you have an extremely knowledgeable friend locked in a room with no windows and no telephone -- they know how to diagnose diseases but cannot use a stethoscope; they know how to repair cars but cannot pick up a wrench.
 
 With tool calling, the LLM becomes an orchestrator of an open system. It can call search engines to obtain real-time information, call code interpreters to calculate, call the file system to read and write code, and call Git for version control. Each tool call is a handshake between the LLM and the real world. The friend locked in the room now has a telephone, a robotic arm, and a connection to the entire internet.
 
 But tool calling also introduces new engineering challenges. These challenges no longer live in the model itself — they live in systems engineering:
 
+<!-- block: ch01.b-8194ef56 -->
 1. **Tool Registration and Discovery**: Who manages the tool registry? How does the model know which tools are available? How can you add new tools dynamically without restarting the system?
 2. **Parameter Validation**: Who validates the parameters of tool calls? The model may pass incorrectly typed parameters, omit required fields, or pass out-of-range values. At which layer should validation logic reside?
 3. **Permission Control**: Who decides whether to execute a particular tool call? The model might request `rm -rf /`, which you obviously cannot allow. But some operations are safe in specific contexts -- how do you balance security and efficiency?
@@ -101,6 +103,7 @@ The problem with this approach is that it assumes an idealized world: API calls 
 
 **The Agent Harness approach**, on the other hand, needs to consider the following issues:
 
+<!-- block: ch01.b-2ec9df54 -->
 1. **Streaming Output**: The LLM streams its responses; users need to see the Agent's thinking process in real time rather than waiting for the entire response to complete. How do you implement incremental rendering without blocking the main thread? If you use callbacks, you end up with "callback hell"; if you use Promise chains, you can't cancel mid-stream; if you use event emitters, you increase the complexity of memory management.
 
 2. **Permission Control**: The LLM might request `rm -rf /`, which you obviously cannot allow. At which layer should the permission system intervene? If you intercept uniformly at the outer layer, you cannot handle tool-specific permission logic (such as risk assessment for Bash commands); if you check inside each tool, you get duplicated code and inconsistent permission policies. How do you balance security and efficiency?
@@ -109,14 +112,17 @@ The problem with this approach is that it assumes an idealized world: API calls 
 
 4. **Error Recovery**: Tool execution may fail, API calls may time out, and the LLM's output may not conform to the expected format. Each error scenario needs a corresponding recovery strategy. Without a unified error recovery framework, you must handle each error individually, and the code will quickly bloat to an unmaintainable level.
 
+<!-- block: ch01.b-9e31b7ab -->
 5. **State Persistence**: How do you recover after a user interrupts a session? How do multiple sub-agents share state? How do you ensure immutability of state updates? If state management is chaotic, the Agent may exhibit inconsistent behavior after recovery.
 
 6. **Extensibility**: How can third-party developers safely register new tools? How do you support external protocols like MCP (Model Context Protocol)? Without clear extension interfaces, the Agent's capabilities will forever be limited by the original developers' imagination.
 
+<!-- block: ch01.b-4121f128 -->
 Each of these issues constitutes an independent engineering challenge. The core value of Agent Harness is providing a unified framework to systematically solve all of these problems.
 
 To use a more vivid analogy to summarize the difference between the two: a simple wrapper is like adding a remote control to a car -- you can make it go forward and backward, but there's no power steering, no braking system, no airbags. Agent Harness is designing an entire safe, reliable, and extensible autonomous vehicle -- not just an engine, but also a suspension system, a braking system, safety restraint systems, and a diagnostic system.
 
+<!-- block: ch01.b-c31f0551 -->
 Summarized in one sentence: **Agent Harness is a runtime framework built around an LLM that elevates the LLM from a text generator to an autonomous agent that can deal with the outside world safely, reliably, and efficiently.**
 
 > **Anti-Pattern Warning:** If you are building an Agent system and your core loop is just a simple `while (true) { callAPI(); parseResponse(); executeTool(); }` loop, you may be repeating the "simple wrapper" mistake. Stop and think: how does your system handle streaming output? How does it manage context? How does it recover from errors? If the answer to these questions is "haven't figured that out yet," then you need an Agent Harness.
@@ -203,6 +209,7 @@ This diagram reveals the layered nature of Claude Code's architecture: from the 
 
 Claude Code picks its stack by one test -- the right tool for the right problem:
 
+<!-- block: ch01.b-098c31d1 -->
 | Technology Component | Choice | Design Considerations | Why Not Alternatives |
 |---------------------|--------|----------------------|---------------------|
 | **Runtime** | Bun | Native TypeScript support, faster startup, native `fetch` API | Node.js requires a compilation step; Deno's ecosystem maturity is insufficient |
@@ -227,6 +234,7 @@ We can summarize Claude Code's core architecture with five key modules. Understa
 
 This is the entry point for the entire application, bearing three core responsibilities:
 
+<!-- block: ch01.b-2578e9e5 -->
 1. **Startup Optimization**: Before importing all modules, performance probes record startup performance milestones; the harness launches MDM (Mobile Device Management) configuration reads and macOS Keychain prefetching in parallel, overlapping originally serial I/O operations.
 2. **CLI Parsing**: Uses Commander.js to define the command-line interface, handling model selection, allowed tool lists, permission modes, and other parameters.
 3. **React/Ink Initialization**: Creates a React rendering context, mounts the root component, and starts the interactive REPL (Read-Eval-Print Loop).
@@ -245,8 +253,10 @@ This "one core, multiple entry points" design pattern is very valuable in engine
 
 #### Async Generator Dialog Main Loop
 
+<!-- block: ch01.b-21d3c90d -->
 This is one of Claude Code's core modules. The dialog main loop is an `AsyncGenerator` that runs the dialog as a repeating loop, delegating to the internal loop function via `yield*`. In each iteration, the loop runs these steps:
 
+<!-- block: ch01.b-588a0289 -->
 1. Constructs the API request (system prompt + message history + tool definitions)
 2. Calls the LLM API and receives streaming responses
 3. Parses tool call instructions from the response
@@ -255,6 +265,7 @@ This is one of Claude Code's core modules. The dialog main loop is an `AsyncGene
 6. Injects tool results as new messages into the history
 7. Decides whether to continue the loop (if the LLM returned new tool calls) or terminate (if the LLM returned a pure text response)
 
+<!-- block: ch01.b-bad97d57 -->
 The key benefit of using `AsyncGenerator` instead of a regular function is that the caller can receive intermediate states (such as streaming text, tool execution progress) at each step via `yield`, without needing callbacks or event emitters. Upper-layer code consumes the entire dialog process with a single `for await...of` loop.
 
 > **Cross-Reference:** Chapter 2 will provide an in-depth analysis of this async generator's internal implementation, including the preprocessing pipeline, state transition model, and dependency injection design.
@@ -267,6 +278,7 @@ The tool type module defines the type contract that all tools in Claude Code mus
 
 This type definition contains rich architectural decisions:
 
+<!-- block: ch01.b-17daf46e -->
 - The tool's execution method receives a permission check callback, meaning permission checking is embedded within the tool execution flow rather than intercepted externally.
 - Progress callbacks support incremental progress reporting during tool execution, which is the foundation for streaming UI.
 - Concurrency safety declarations mark whether a tool can run in parallel, affecting scheduling strategy.
@@ -279,6 +291,7 @@ This type definition contains rich architectural decisions:
 
 The core function in the tool registration module returns the complete list of all available tools and is the "Single Source of Truth" for the tool system. A few design details:
 
+<!-- block: ch01.b-ab60508b -->
 1. **Conditional Registration**: Feature Flags control some tools, such as REPL tools only available in internal builds, and scheduled task tools only enabled under specific feature modes. One codebase therefore serves different product forms.
 2. **Lazy Loading**: Some tools use dynamic imports instead of static imports to avoid circular dependencies and reduce startup time.
 3. **Tool Filtering**: The tool filtering function, before sending the tool list to the LLM, filters out forbidden tools based on the permission context, ensuring the model cannot even "see" tools it should not use.
@@ -289,6 +302,7 @@ Conditional registration and lazy loading amount to loading on demand. In Agent 
 
 ## 1.3 Five Principles of Agent Harness Design Philosophy
 
+<!-- block: ch01.b-5f90e811 -->
 By reading Claude Code's architecture, we can distill five design principles that run throughout. They reinforce one another; together they make up a network of architectural decisions. Each principle answers a core "why": why not choose a simpler approach? What would happen if we didn't design it this way?
 
 ```mermaid
@@ -317,12 +331,14 @@ Traditional LLM calls typically use a request-response pattern: send a prompt, w
 
 `AsyncGenerator` meets this need directly:
 
+<!-- block: ch01.b-59b43095 -->
 - **Incremental Output**: Through `yield`, the generator produces streaming events step by step, and upper-layer code can render them in real time.
 - **Interruptibility**: The caller can terminate the generator at any time via `generator.return()` or `generator.throw()`.
 - **Backpressure Control**: If the consumer cannot keep up with the producer, the generator automatically pauses, avoiding memory overflow.
 
 By this design, Claude Code's dialog loop is an "event stream" rather than a "request-response pair." Upper-layer code only needs a `for await...of` loop to consume all events from the entire dialog process.
 
+<!-- block: ch01.b-a490541c -->
 **What if we didn't design it this way?** If we used a callback pattern, every new event type would require registering a new callback function. As event types increase, the code would become an unmaintainable "callback hell." If we used Promise chains, although they solve callback hell, the option to cancel mid-stream disappears -- when the user presses Ctrl+C, the ongoing API call does not stop cleanly. If we used EventEmitter, although it solves the cancellation problem, it introduces memory leak risks (forgetting to remove listeners) and type safety issues (event names are strings).
 
 AsyncGenerator is the only solution that simultaneously satisfies all three requirements: "streaming output," "cancellable," and "type-safe."
@@ -346,6 +362,7 @@ The design philosophy of this four-stage pipeline is "Defense in Depth" -- no si
 
 In the LLM API pricing model, Prompt Caching can significantly reduce costs and latency. Claude Code's architecture thinks about cache friendliness in several separate places:
 
+<!-- block: ch01.b-193b8ac7 -->
 - **System Prompt Stability**: Claude Code carefully designs the construction of the system prompt to ensure that when the tool list stays unchanged, the byte content of the prompt remains consistent and hits the API-side prompt cache.
 - **Sub-Agent Cache Sharing**: Sub-agents in Fork mode inherit the parent agent's `renderedSystemPrompt`, avoiding regeneration of prompts that might differ due to configuration changes, ensuring cache hit rates.
 - **Message History Immutability**: Claude Code never modifies messages already sent to the API; it only appends new messages, ensuring cache key stability.
@@ -358,6 +375,7 @@ Cache-aware design pays off twice: API costs drop, and response speeds rise as r
 
 Claude Code provides a four-level extension model, from built-in to external, from simple to complex:
 
+<!-- block: ch01.b-faa0874e -->
 | Extension Level | Mechanism | Use Cases | Extender Role |
 |----------------|-----------|-----------|--------------|
 | **Tool** | Implement the `Tool` type interface | Add new atomic operation capabilities | Core developers |
@@ -383,8 +401,10 @@ Claude Code's state management draws on the immutable state patterns of Redux/Zu
 
 At the dialog loop level, the loop holds immutability just as tight: each iteration replaces the cross-iteration state wholesale and destructures the fields it needs from the state object, so read operations always see immutable snapshots.
 
+<!-- block: ch01.b-f135d6a2 -->
 The benefits of immutable state flow are manifold: state changes are predictable, traceable, and debuggable; in sub-agent scenarios, the parent agent can safely pass state snapshots to child agents without worrying about accidental modification; in speculative execution scenarios, state rollback becomes simple and safe.
 
+<!-- block: ch01.b-8f9a135a -->
 **What if we didn't design it this way?** If mutable state were used (directly modifying object fields), the classic race condition would appear in concurrent scenarios: tool A's execution modifies state, but tool B reads partially modified, inconsistent data. In sub-agent scenarios it's even more dangerous -- a child agent might accidentally modify the parent agent's state, causing the main loop's behavior to become unpredictable. These types of bugs are extremely difficult to reproduce and debug because they depend on the specific scheduling order of asynchronous operations.
 
 Five principles hold up the same lintel: stream first, guard the perimeter, design for the cache, grow capability, keep state immutable.

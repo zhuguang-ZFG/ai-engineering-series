@@ -87,6 +87,32 @@ def validate_markers(text: str, file: str, unit_id: str) -> dict[str, int]:
     return found
 
 
+def strip_markers(text: str) -> str:
+    """Remove marker lines outside fences before Markdown sees the source.
+
+    The markers are resolution metadata, not content: an HTML comment between
+    two list items makes Python-Markdown close one list and open another. The
+    file on disk keeps them so `parse_blocks` can still name each span.
+    """
+    lines = text.split("\n")
+    out: list[str] = []
+    fence = None
+    for line in lines:
+        token = _fence_token(line)
+        if token:
+            mark, info = token
+            if fence is None:
+                fence = mark
+            elif mark[0] == fence[0] and len(mark) >= len(fence) and not info:
+                fence = None
+            out.append(line)
+            continue
+        if fence is None and MARKER.match(line):
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def parse_blocks(text: str, unit_id: str, lang: str = "") -> list[Block]:
     """Split prose into citable spans, fence-aware and marker-aware.
 

@@ -1,5 +1,6 @@
 # 附录 D：术语表
 
+<!-- block: apxd.b-788aedcf -->
 > 本术语表涵盖《解码 Agent Harness：Claude Code 架构深度剖析》全书涉及的核心术语，按英文字母排序。每条包含英文原名、推荐中文译名、简明定义、相关术语交叉引用以及首次出现的章节引用。
 >
 > **使用说明**：
@@ -7,6 +8,7 @@
 > - 每条术语后的"章节"字段标注了该术语在正文中首次深入讨论的位置
 > - 技术术语保留英文原文，中文译名仅作辅助理解
 
+<!-- block: apxd.b-173b10a3 -->
 ## 核心概念关系图
 
 以下图表展示了本书核心术语之间的关系，帮助读者建立整体概念框架：
@@ -117,6 +119,7 @@ flowchart LR
 
 ## B
 
+<!-- block: apxd.b-bc473d67 -->
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
 | Background Session (BG_SESSIONS) | 后台会话 | 脱离前台终端独立运行的会话实例，支持长时间任务在后台持续执行。由 `BG_SESSIONS` 功能标志控制启用 | Daemon, Agent Trigger | 第 11 章 |
@@ -213,6 +216,7 @@ flowchart LR
 
 ## N-O-P
 
+<!-- block: apxd.b-414cc766 -->
 | 英文原名 | 中文译名 | 简明定义 | 参见 | 章节 |
 |---|---|---|---|---|
 | Native Client Attestation | 原生客户端认证 | 启用平台原生的客户端身份验证机制。由 `NATIVE_CLIENT_ATTESTATION` 功能标志控制 | Feature Flag, Permission Pipeline | 第 3 章 |

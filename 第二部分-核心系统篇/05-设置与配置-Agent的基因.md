@@ -20,10 +20,12 @@ Claude Code 的配置源在配置常量模块中定义为一个有序数组，�
 
 配置加载函数 `loadSettingsFromDisk()` 遵循一个关键原则：**后加载者覆盖前者**。合并不是整份替换，而是按字段深度合并，再叠加自定义规则。
 
+<!-- block: ch05.b-d36c329e -->
 实际执行时还有一个隐藏的最低优先级层：**pluginSettings**（插件设置）。加载器先读插件设置，把它当作合并的底座，后续各层配置再一层层往上叠。
 
 因此，完整的优先级链从低到高是：
 
+<!-- block: ch05.b-336ab860 -->
 **pluginSettings -> userSettings -> projectSettings -> localSettings -> flagSettings -> policySettings**
 
 为了更直观地理解这六层配置源的关系，我们可以用一个类似"地层沉积"的模型来类比：
@@ -77,6 +79,7 @@ flowchart LR
 
 这套规则的关键特性是：
 
+<!-- block: ch05.b-858bd1a8 -->
 - **数组类型**：拼接并去重（而非替换）。例如 `permissions.allow` 字段会累积所有源的规则。
 - **对象类型**：深度合并。嵌套属性逐层覆盖。
 - **标量类型**：后者直接覆盖前者。
@@ -143,6 +146,7 @@ flowchart LR
 
 每个配置源对应一个具体的文件路径，由配置路径映射函数确定：
 
+<!-- block: ch05.b-da9de4c3 -->
 | 配置源 | 文件路径 | 说明 | 是否入 Git |
 |--------|----------|------|-----------|
 | userSettings | `~/.claude/settings.json` | 全局用户设置 | N/A（用户目录） |
@@ -224,6 +228,7 @@ userSettings      → 个性化: verbose、主题等 UI 偏好
 
 ## 5.2 安全边界设计
 
+<!-- block: ch05.b-184ef03a -->
 配置系统的核心安全挑战是：`projectSettings`（`.claude/settings.json`）会跟着提交进 Git 仓库，谁克隆了恶意仓库，谁就可能不知不觉把攻击者的配置加载进来。Claude Code 的防护策略是：**在安全敏感的检查中，系统性地排除 `projectSettings`**。
 
 这就像一栋大楼的权限系统：项目的门禁卡可以打开会议室和休息区（projectSettings），但绝不能打开机房和安全室（安全敏感操作）。不同级别的权限由不同的信任级别控制。
@@ -335,6 +340,7 @@ ch05-trust-ladder
 
 ## 5.3 功能开关系统
 
+<!-- block: ch05.b-ce584664 -->
 Claude Code 的功能开关系统分为两层：**编译时**的 `feature()` 函数和**运行时**的 GrowthBook 实验框架。这种双层设计反映了软件发布工程中的一个经典权衡：编译时开关控制特性但不增加运行时开销，运行时开关则不用重新部署就能快速迭代。
 
 ### 5.3.1 编译时死代码消除
@@ -375,6 +381,7 @@ if (feature('KAIROS')) { ... }  // bundler 在 false 时完全移除该分支
 
 ### 5.3.2 GrowthBook 实验框架
 
+<!-- block: ch05.b-78a412a4 -->
 对于需要在运行时动态控制的功能，Claude Code 使用 GrowthBook A/B 测试框架。主要的入口函数 `getFeatureValue_CACHED_MAY_BE_STALE` 接受特性名称和默认值，从缓存中同步读取实验配置。
 
 函数名中的 "CACHED_MAY_BE_STALE" 直白地说明了其语义：值来自缓存，跨进程时就可能已经过时。这是为了在启动关键路径上避免异步等待——同步读取缓存比阻塞等待远程配置更可取。
@@ -418,6 +425,7 @@ flowchart TD
 
 ### 5.4.1 Store：极简不可变状态容器
 
+<!-- block: ch05.b-439b17b3 -->
 状态管理模块的核心是一个只有 34 行的泛型 Store，其设计灵感来自 Zustand。Store 提供三个核心方法：`getState` 获取当前状态、`setState` 通过 updater 函数更新状态、`subscribe` 订阅状态变化。
 
 三个关键设计决策：
@@ -589,6 +597,7 @@ const setState = useSetAppState();
 
 为一个 20 人的开发团队设计配置策略，要求：
 
+<!-- block: ch05.b-5c3c1463 -->
 - 团队统一使用指定的模型和权限基线
 - 每个开发者可以自定义 UI 偏好和本地权限扩展
 - CI/CD 环境使用最小权限原则

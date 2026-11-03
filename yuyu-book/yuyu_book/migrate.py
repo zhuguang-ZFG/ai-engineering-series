@@ -271,3 +271,67 @@ def verify_dual(manifest: dict, glosses: dict, paths: dict | None = None,
         "consistent": len(claims) - len(mismatches),
         "mismatches": mismatches,
     }
+
+
+def rewrite_registry_text(text: str, mapping: dict[str, str]) -> str:
+    """Swap quoted `file:line` values for block ids without reformatting JSON."""
+    import json
+    for ref, block_id in mapping.items():
+        text = text.replace(json.dumps(ref, ensure_ascii=False),
+                            json.dumps(block_id, ensure_ascii=False))
+    return text
+
+
+def apply_migration(manifest: dict, glosses: dict, report: dict,
+                    root=None, registry_dir=None) -> dict:
+    """Write the staged plan to the real manuscript and registries.
+
+    Refuses an ambiguous or incomplete plan: inserting a marker for a line
+    that maps to two blocks would silently pick one. Registry edits are string
+    replacements, so the files keep their existing formatting and diff.
+    """
+    import json
+    from pathlib import Path
+    from .core import BOOK_DIR
+
+    root = Path(root or REPO_ROOT)
+    registry_dir = Path(registry_dir or BOOK_DIR)
+    summary = report["summary"]
+    if summary["ambiguous"] or summary["missing"]:
+        raise ValueError("refusing to write an incomplete migration plan")
+
+    mapping: dict[str, str] = {}
+    for row in report["refs"]:
+        if row["status"] == "mapped":
+            mapping[row["ref"]] = row["block_id"]
+
+    paths = {"manifest.json": registry_dir / "manifest.json",
+             "glosses.json": registry_dir / "glosses.json"}
+    pending = {}
+    for name, path in paths.items():
+        text = path.read_text(encoding="utf-8", newline="")
+        pending[name] = rewrite_registry_text(text, mapping)
+    for ref in mapping:
+        quoted = json.dumps(ref, ensure_ascii=False)
+        if any(quoted in text for text in pending.values()):
+            raise ValueError(f"ref did not rewrite cleanly: {ref}")
+
+    inserted = 0
+    for rel, info in report["files"].items():
+        wanted = {row["block_id"] for row in report["refs"]
+                  if row["file"] == rel and row["status"] == "mapped"}
+        inserts = [(block["start"], block["block_id"])
+                   for block in info["blocks"]
+                   if block["block_id"] in wanted and not block["has_marker"]]
+        if not inserts:
+            continue
+        target = root / rel
+        original = target.read_text(encoding="utf-8", newline="")
+        target.write_text(insert_markers(original, inserts),
+                          encoding="utf-8", newline="")
+        inserted += len(inserts)
+
+    for name, text in pending.items():
+        paths[name].write_text(text, encoding="utf-8", newline="")
+    return {"refs": len(mapping), "markers": inserted,
+            "registries": sorted(pending)}
