@@ -67,3 +67,6 @@ video/**/huashu/still/
 video/**/compositions/captions-zh.html
 video/**/compositions/dense-short*.html
 video/**/compositions/watermark.html
+
+# PR descriptions are written under the system temp dir, never staged
+.pr-body.md

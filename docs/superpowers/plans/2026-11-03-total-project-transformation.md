@@ -33,7 +33,7 @@
 
 - [x] P2.1 为 manifest、glosses、sources、notes、reading-paths、revisions、subject-index 定义 schema_version。
 - [x] P2.2 建立 BookModel 基础类型和统一 Diagnostic。
-- [ ] P2.3 设计 block_id 语法与 Markdown 承载方式，先在 ch01、ch03、ch12 三章试点。
+- [x] P2.3 设计 block_id 语法与 Markdown 承载方式，先在 ch01、ch03、ch12 三章试点。
 - [ ] P2.4 编写 line-ref → block-ref 迁移器，输出自动映射、歧义、缺失三类报告。
 - [ ] P2.5 双读所有登记表，比较 line-ref 与 block-ref 指向文本是否一致。
 - [ ] P2.6 全量迁移 20 个单元，加入“任意插入 50 行仍通过”的回归测试。
