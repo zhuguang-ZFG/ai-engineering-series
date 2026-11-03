@@ -12,11 +12,11 @@
 
 ## P0：冻结基线与收口在途工作
 
-- [ ] P0.1 完成或独立保存当前 R4 衍生物料改动，保证平台改造从干净提交开始。
-- [ ] P0.2 生成 baseline.json：单元、章节、标题、锚点、术语、来源、图版、插画、HTML 体积、PDF 页数。
-- [ ] P0.3 保存 20 个关键 HTML 片段和 12 张关键页截图，覆盖封面、目录、正文、宽表、横版图、索引和暗色窄屏。
-- [ ] P0.4 建立 video 文件身份清单：source、config、review、generated、cache、third_party。
-- [ ] P0.5 建立 legacy 标签，记录最后一版旧构建器和视频目录。
+- [x] P0.1 完成或独立保存当前 R4 衍生物料改动，保证平台改造从干净提交开始。
+- [x] P0.2 生成 baseline.json：单元、章节、标题、锚点、术语、来源、图版、插画、HTML 体积、PDF 页数。
+- [x] P0.3 保存 20 个关键 HTML 片段和 12 张关键页截图，覆盖封面、目录、正文、宽表、横版图、索引和暗色窄屏。
+- [x] P0.4 建立 video 文件身份清单：source、config、review、generated、cache、third_party。
+- [x] P0.5 建立 legacy 标签，记录最后一版旧构建器和视频目录。
 - [ ] Gate：现有 Fast 检查通过；完整依赖环境下 make check 通过；基线文件可重复生成。
 
 ## P1：环境、依赖与统一 CLI
