@@ -10,5 +10,10 @@
     "text_mismatch": 0,
     "blocks": 6271
   },
-  "mismatches": []
+  "dual": {
+    "schema_version": 1,
+    "blocks": 423,
+    "consistent": 423,
+    "mismatches": []
+  }
 }

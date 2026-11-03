@@ -163,3 +163,111 @@ def build_report(manifest: dict, glosses: dict,
                   for rel, records in sorted(block_reports.items())},
         "refs": details,
     }
+
+
+def marker_line(block_id: str) -> str:
+    return f"<!-- block: {block_id} -->"
+
+
+def insert_markers(text: str, inserts: list[tuple[int, str]]) -> str:
+    """Put marker lines above 1-based block starts, preserving CRLF/LF."""
+    newline = "\r\n" if "\r\n" in text else "\n"
+    lines = text.split(newline)
+    for start, block_id in sorted(inserts, reverse=True):
+        lines.insert(start - 1, marker_line(block_id))
+    return newline.join(lines)
+
+
+def _replace_refs(node, mapping: dict[str, str]):
+    if isinstance(node, dict):
+        return {key: _replace_refs(value, mapping)
+                for key, value in node.items()}
+    if isinstance(node, list):
+        return [_replace_refs(value, mapping) for value in node]
+    if isinstance(node, str):
+        return mapping.get(node, node)
+    return node
+
+
+def stage_migration(root, manifest: dict, glosses: dict,
+                    report: dict) -> tuple[dict, dict]:
+    """Copy the manuscript to `root` and write the fully migrated variant."""
+    from pathlib import Path
+    from .core import read_text
+
+    root = Path(root)
+    for unit, _kind, _part in unit_stream(manifest):
+        for lang in ("zh", "en"):
+            rel = unit[lang].replace("\\", "/")
+            target = root / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(read_text(REPO_ROOT / rel), encoding="utf-8",
+                              newline="")
+
+    mapping: dict[str, str] = {}
+    for row in report["refs"]:
+        if row["status"] == "mapped":
+            mapping[row["ref"]] = row["block_id"]
+    for rel, info in report["files"].items():
+        wanted = {row["block_id"] for row in report["refs"]
+                  if row["file"] == rel and row["status"] == "mapped"}
+        inserts = [(block["start"], block["block_id"])
+                   for block in info["blocks"]
+                   if block["block_id"] in wanted and not block["has_marker"]]
+        if not inserts:
+            continue
+        target = root / rel
+        target.write_text(
+            insert_markers(target.read_text(encoding="utf-8"), inserts),
+            encoding="utf-8", newline="")
+    return (_replace_refs(manifest, mapping),
+            _replace_refs(glosses, mapping))
+
+
+def verify_dual(manifest: dict, glosses: dict, paths: dict | None = None,
+                report: dict | None = None) -> dict:
+    """Validate legacy refs and their staged block ids, then compare reach.
+
+    Both runs go through `plain.validate_plain`; the only difference is the
+    pointer vocabulary and, for blocks, a temporary manuscript carrying the
+    markers. A block is consistent when the markers it resolves to reach
+    every language its line refs reached; a shared marker may also reach the
+    other edition, which is why the check is a projection, not set equality.
+    """
+    import tempfile
+    from pathlib import Path
+    from . import plain
+
+    report = report or build_report(manifest, glosses)
+    mapping = {row["ref"]: row["block_id"] for row in report["refs"]
+               if row["status"] == "mapped"}
+    with tempfile.TemporaryDirectory() as tmp:
+        staged_manifest, staged_glosses = stage_migration(
+            Path(tmp), manifest, glosses, report)
+        line_reached: dict[str, set[str]] = {}
+        plain.validate_plain(glosses, paths or {}, manifest,
+                             reached=line_reached)
+        block_reached: dict[str, set[str]] = {}
+        plain.validate_plain(staged_glosses, paths or {}, staged_manifest,
+                             root=Path(tmp), reached=block_reached)
+
+    mismatches = []
+    claims: dict[str, set[str]] = {}
+    block_of: dict[str, str] = {}
+    for ref, block_id in mapping.items():
+        before = line_reached.get(ref, set())
+        block_of[block_id] = ref
+        claims.setdefault(block_id, set()).update(before)
+    for block_id, claimed in sorted(claims.items()):
+        after = block_reached.get(block_id, set())
+        if not claimed or not claimed <= after:
+            mismatches.append({"ref": block_of[block_id],
+                               "block_id": block_id,
+                               "line_reaches": sorted(claimed),
+                               "block_reaches": sorted(after)})
+    return {
+        "schema_version": 1,
+        "blocks": len(claims),
+        "consistent": len(claims) - len(mismatches),
+        "mismatches": mismatches,
+    }

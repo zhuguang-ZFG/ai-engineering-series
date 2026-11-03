@@ -135,7 +135,9 @@ def prose_lines(text: str) -> dict[int, str]:
     return keep
 
 
-def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
+def validate_plain(glosses: dict, paths: dict, manifest: dict,
+                   root: Path = REPO_ROOT,
+                   reached: dict[str, set[str]] | None = None) -> None:
     """Every gloss must be provably present in the prose it claims to explain.
 
     An evidence pointer is checked against the real file: a `file:line` has to
@@ -159,7 +161,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
 
     def blocks_in(rel: str) -> list:
         if rel not in block_cache:
-            path = REPO_ROOT / rel
+            path = root / rel
             unit_id, lang = units[rel]
             block_cache[rel] = (parse_blocks(read_text(path), unit_id, lang)
                                 if path.exists() else [])
@@ -198,6 +200,8 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
                                       f"any registered form in {block.lang}")
                         continue
                 got.add(block.lang)
+            if reached is not None and got:
+                reached.setdefault(ref, set()).update(got)
             return got
         m = re.match(r"^(.+):(\d+)$", ref)
         if not m:
@@ -207,7 +211,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
         rel, lineno = m.group(1), int(m.group(2))
         lang = "en" if rel.replace("\\", "/").startswith("en/") else "zh"
         if rel not in cache:
-            path = REPO_ROOT / rel
+            path = root / rel
             if not path.exists():
                 errors.append(f"{who}: evidence file {rel} missing")
                 return set()
@@ -223,6 +227,8 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict) -> None:
                 errors.append(f"{who}: evidence {ref} does not contain any "
                               f"registered form")
                 return set()
+        if reached is not None:
+            reached.setdefault(ref, set()).add(lang)
         return {lang}
 
     for gid, g in glosses.items():
