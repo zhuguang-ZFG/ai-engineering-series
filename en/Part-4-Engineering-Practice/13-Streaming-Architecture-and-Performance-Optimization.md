@@ -19,6 +19,7 @@ Claude Code's core interaction model is streaming. `QueryEngine` is the owner of
 
 One session corresponds to one `QueryEngine` instance. Each time a user sends a message, `submitMessage()` starts a new turn, with state (messages, file cache, usage, etc.) persisting across turns. `QueryEngine` internally maintains core state including the message list, abort controller, permission denial records, usage statistics, file state cache, and discovered skill names.
 
+<!-- block: ch13.b-4564af79 -->
 **Why introduce a class instead of using functional APIs directly?** The answer lies in the complexity of state management. If you pass session state as parameters between functions, the call chain becomes extremely fragile -- any new state field requires modifying all function signatures. Classes encapsulate state as instance properties; adding new state only requires initialization in the constructor without breaking existing interfaces. This also binds the state's lifecycle to the instance: unreachable state can be garbage-collected, but timers, listeners, subprocesses, and external references still need explicit cleanup.
 
 ```mermaid
@@ -133,6 +134,7 @@ The key insight of this data flow is: **streaming processing is not an optimizat
 
 ### 13.2.1 Design Philosophy: Execute on Arrival
 
+<!-- block: ch13.b-e4378bdf -->
 `StreamingToolExecutor` is the core of Claude Code's tool execution layer. Its design goal is to start tool execution immediately when streaming arrives, rather than waiting for all tool call blocks to arrive before unified processing.
 
 Think of this "execute on arrival" philosophy through a life analogy: imagine a kitchen where the chef (model) verbally gives a series of instructions -- "chop onions", "boil water", "make sauce". The traditional approach is to wait until the chef finishes all instructions before starting; while "execute on arrival" means the sous-chef starts doing each task as the chef says it. Chopping onions and boiling water can happen simultaneously (concurrency-safe), but "pour onions into pot" must wait until "chop onions" finishes (serial dependency).
@@ -285,6 +287,7 @@ This "selective cascading" strategy is a pragmatic approach: it doesn't pursue t
 
 ## 13.3 Startup Performance Optimization
 
+<!-- block: ch13.b-df08b439 -->
 Claude Code's startup time directly affects user experience. CLI tool psychology research shows that startup delays over 2 seconds make users feel the tool is "clunky", and delays over 5 seconds trigger "is it frozen?" anxiety. The system shortens the latency from command line input to first response through three optimization strategies: parallel prefetching, lazy loading, and lazy module evaluation.
 
 The optimizations line up as one startup methodology: **Identify critical path -> Parallelize non-critical paths -> Defer non-essential modules -> Eliminate dead code**.
@@ -299,6 +302,7 @@ The top of Claude Code's entry file is the core of the parallel prefetching stra
 
 Subsequent initialization stages await both prefetch results, at which point the subprocesses are likely complete with almost zero wait.
 
+<!-- block: ch13.b-d5f4d3a3 -->
 The following is an idealized critical-path calculation, not an end-to-end benchmark. Assume independent tasks, simultaneous starts, and negligible process-launch overhead:
 
 ```mermaid
@@ -487,6 +491,7 @@ Turn 5 alone costs $0.27, and $0.24 of that comes from its 63K cache creation to
 
 ---
 
+<!-- block: ch13.b-f116fc32 -->
 ## 13.5 Caching Optimization Strategies
 
 ### 13.5.1 Five Dimensions of Prompt Cache Sharing
@@ -570,6 +575,7 @@ sequenceDiagram
 
 ### 13.5.3 Cache Break Detection
 
+<!-- block: ch13.b-e013159a -->
 The system records each fork's cache hit rate through telemetry events, calculated as `cache_read_input_tokens / (input_tokens + cache_creation_input_tokens + cache_read_input_tokens)`.
 
 When `cache_read_input_tokens` is much lower than expected, it means the fork didn't hit the parent request's cache, possibly because cache-safe params are inconsistent. Log output shows complete token distribution: high `cacheRead` + low `input` indicates good cache hits; high `cacheCreate` indicates cache break.

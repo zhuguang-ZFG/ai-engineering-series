@@ -29,6 +29,8 @@ def main(argv=None) -> int:
     parser.add_argument("--equivalence", metavar="PATH",
                         help="stage markers, validate both ref forms, write "
                              "a line↔block consistency summary there")
+    parser.add_argument("--write", action="store_true",
+                        help="insert markers and rewrite registries in place")
     args = parser.parse_args(argv)
     manifest = registry.load("manifest.json")
     glosses = registry.load("glosses.json")
@@ -48,6 +50,11 @@ def main(argv=None) -> int:
         sys.stdout.write(text)
     else:
         Path(args.out).write_text(text, encoding="utf-8", newline="\n")
+    if args.write:
+        done = migrate.apply_migration(manifest, glosses, report)
+        print(f"wrote {done['refs']} refs, inserted {done['markers']} "
+              f"markers, rewrote {', '.join(done['registries'])}",
+              file=sys.stderr)
     summary = report["summary"]
     print(f"refs {summary['refs']} ({summary['unique_refs']} unique): "
           f"mapped {summary['mapped']}, ambiguous {summary['ambiguous']}, "

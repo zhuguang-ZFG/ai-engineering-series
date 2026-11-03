@@ -17,8 +17,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from yuyu_book import (art, audit, mermaid as mm, pages, plain,
+from yuyu_book import (art, audit, blocks, mermaid as mm, pages, plain,
                        registry, render)  # noqa: E402
+from yuyu_book.blocks import ID_RE  # noqa: E402
 from yuyu_book.core import (BOOK_DIR, HAN_RE, INDEX_CN_LETTER, REPO_ROOT,
                             BuildError, dump_json, expected_ids, load_configs,
                             load_unit, read_text,
@@ -351,15 +352,26 @@ def _principle_groups(glosses: dict, units, lang: str) -> list[dict]:
     """
     by_path = {u.path: u for u in units}
     order = {u.id: n for n, u in enumerate(units)}
+    block_unit = {}
+    for u in units:
+        for block in blocks.parse_blocks(read_text(REPO_ROOT / u.path),
+                                         u.id, u.lang):
+            if block.block_id:
+                block_unit[block.block_id] = u
     groups: dict[str, dict] = {}
     for gid, g in sorted(glosses.items(), key=lambda kv: kv[1]["term"][lang]):
         why = (g.get("why") or {}).get(lang)
         if not why:
             continue
-        unit = next((by_path[str(r).rsplit(":", 1)[0].replace("\\", "/")]
-                     for r in g.get("why_evidence") or []
-                     if str(r).rsplit(":", 1)[0].replace("\\", "/") in by_path),
-                    None)
+        unit = None
+        for ref in g.get("why_evidence") or []:
+            if ID_RE.match(str(ref)):
+                unit = block_unit.get(str(ref))
+            else:
+                unit = by_path.get(str(ref).rsplit(":", 1)[0]
+                                   .replace("\\", "/"))
+            if unit is not None:
+                break
         if unit is None:
             raise BuildError(f"gloss {gid}: why_evidence points outside the book")
         groups.setdefault(unit.id, {"anchor": unit.anchor,

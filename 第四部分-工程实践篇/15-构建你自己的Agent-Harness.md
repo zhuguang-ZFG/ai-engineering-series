@@ -63,6 +63,7 @@ flowchart LR
 
 **原则五：可插拔扩展。** 钩子系统在二十多个生命周期节点提供扩展点，从 `SessionStart` 到 `PostToolUse`，从 `PreCompact` 到 `Stop`。每个钩子都是独立的 Shell 命令或 HTTP 端点，通过标准化的 JSON 输入输出协议与 Harness 交互。
 
+<!-- block: ch15.b-20a27c05 -->
 ### 何时使用 Agent Harness 模式 vs 简单 LLM API 调用
 
 并非每个场景都需要完整的 Agent Harness。决策的关键在于三个维度：
@@ -114,6 +115,7 @@ flowchart TD
 
 Claude Code 选择 Bun 作为运行时，主要出于三个考量：
 
+<!-- block: ch15.b-3a821d52 -->
 - **启动速度：** Bun 的冷启动时间约为 Node.js 的三分之一，对 CLI 工具来说是硬指标
 - **原生 TypeScript：** 无需预编译步骤，直接运行 `.ts` 文件
 - **Bundle 特性：** `bun:bundle` 提供编译时特性开关（`feature('X')`），可以在构建阶段消除不需要的代码路径
@@ -168,6 +170,7 @@ flowchart TD
     class HOOKS hookNode
 ```
 
+<!-- block: ch15.b-185f0f79 -->
 构建 Agent Harness 是一个渐进过程。本节给出六个步骤，每一步都建立在前一步的基础之上，最终产出一个可运行的最小 Harness。
 
 ```mermaid
@@ -187,6 +190,7 @@ flowchart TD
     class DONE doneNode
 ```
 
+<!-- block: ch15.b-3aaba62f -->
 不要被"六步"这个数字唬住 -- 这不是一个线性的瀑布过程。在实践中，你会发现需要在步骤之间来回迭代：当你实现权限管线时可能需要回头修改工具系统的接口，当你实现上下文管理时可能需要调整对话循环的状态结构。六步的意义是给出一条有序的学习路径，而非僵化的开发顺序。
 
 ```ill
@@ -508,6 +512,7 @@ export async function checkToolPermission(
 
 长对话必然触及 Token 上限。Claude Code 采用了 **渐进式压缩策略**，由多个层级组成：
 
+<!-- block: ch15.b-b41ef773 -->
 > **示例范围：** 下方固定窗口策略用于演示纯文本消息裁剪，不是生产级 Snip 实现。包含工具调用时，裁剪边界还必须保留完整的工具调用／结果分组。
 
 ```typescript
@@ -882,6 +887,7 @@ stateDiagram-v2
 
 **第二层：聚合指标。** 从结构化日志中提取的聚合数据，用于仪表盘展示和告警。
 
+<!-- block: ch15.b-f98760d7 -->
 - **延迟分布：** 每轮循环的模型调用耗时、工具执行耗时
 - **Token 预算：** 输入/输出 Token 消耗趋势，压缩频率
 - **错误率：** 按错误类型分类的失败率（模型错误、工具错误、权限拒绝）

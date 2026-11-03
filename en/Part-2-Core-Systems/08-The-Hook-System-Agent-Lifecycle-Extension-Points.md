@@ -16,14 +16,17 @@
 
 ---
 
+<!-- block: ch08.b-78bc89ed -->
 If the permission pipeline (Chapter 4) is the Agent's "guardrails", then the hook system is the Agent's "nervous system". The permission pipeline determines whether the Agent **can** execute an operation, while the hook system determines what happens **before and after** execution. It provides fine-grained extension points for the Agent's entire lifecycle -- from session startup to tool invocation, from user input to context compression, you can observe, intercept, and enhance every critical node.
 
 Using a biological analogy to understand: the human body has not just bones (architecture) and muscles (core logic), but also a nervous system spread throughout. Nerve endings perceive external stimuli (event triggers), conduct signals to the brain (hook logic), and after the brain responds, motor nerves send out instructions (decisions and operations). The hook system is precisely this "neural reflex arc" of Claude Code -- it doesn't require modifying core organ functions, yet can insert reflexive behaviors at critical nodes.
 
+<!-- block: ch08.b-c8738fc4 -->
 From an engineering perspective, the hook system combines the **Observer Pattern** with the **Chain of Responsibility Pattern**. Each lifecycle event publishes a signal, and matching hooks form a priority-ordered processing chain; the event and hook kind determine whether a handler may only observe, may rewrite data, or may block. The core engine depends on the shared response protocol rather than any extension's implementation, keeping user-defined behavior decoupled from the execution core.
 
 ## 8.1 Hook Types and Execution Model
 
+<!-- block: ch08.b-2c8d52ba -->
 Hooks are user-customizable extension points in Claude Code's lifecycle. Through hooks, users can inject custom logic at critical nodes without modifying Claude Code source code -- from approving tool calls, modifying tool inputs, to intercepting user requests, injecting additional context.
 
 ```mermaid
@@ -54,6 +57,7 @@ flowchart TD
 
 ### Five Hook Types
 
+<!-- block: ch08.b-224a19b7 -->
 The hook Schema definition module defines four persistable hook types, plus FunctionHook which only exists at runtime, making five total. This comparison table helps you quickly understand each hook type's positioning and capability boundaries:
 
 ```mermaid
@@ -166,6 +170,7 @@ In-memory hooks that only exist at runtime, executing TypeScript callback functi
 
 Applicable scenarios: Scenarios requiring deep interaction with Claude Code runtime state, such as dynamic behavior control in SDK embedding mode.
 
+<!-- block: ch08.b-9c89338a -->
 > **Design reflection:** Why can't you persist Function hooks? Because TypeScript callback functions are in-memory executable code references that you cannot serialize to JSON configuration. This is the boundary between "code as configuration vs configuration as code" -- persistable hooks (Command/Prompt/Agent/HTTP) are fundamentally **declarative configuration**, while Function hooks are **imperative code**. Mixing both in the same configuration system would lead to unpredictable behavior and security risks.
 
 ### Sync vs Async Hooks
@@ -212,6 +217,7 @@ Async hooks run inside the background execution functions. Async-rewake mode hoo
 
 ---
 
+<!-- block: ch08.b-239ed648 -->
 ## 8.2 Core Lifecycle Events
 
 The SDK core types module defines the complete `HOOK_EVENTS` array; this chapter introduces 22 of its lifecycle events, covering the critical nodes of tool invocation, user interaction, session management, sub-agents, compression, permissions and configuration changes.
@@ -281,6 +287,7 @@ Tool call lifecycle events are the most frequently used set of events in the hoo
 
 The most important interception point. Input is the tool call's parameter JSON. Hooks can block tool execution by returning `decision: "block"`, or modify the tool's actual input parameters through `updatedInput`. Exit code semantics:
 
+<!-- block: ch08.b-33c3f760 -->
 - Exit code 0: stdout/stderr not shown to model (silent pass)
 - Exit code 2: Show stderr to model and block tool call (active block)
 - Other exit codes: Show stderr to user but don't block (warning mode)
@@ -380,6 +387,7 @@ Session lifecycle events constitute the complete narrative of an Agent from "bir
 
 Triggered when session starts, sources include `startup` (new start), `resume` (resume session), `clear` (clear reset), `compact` (restart after compression). Hook's stdout goes to Claude. The system ignores blocking errors -- session start hooks shouldn't block session startup.
 
+<!-- block: ch08.b-cde0bf05 -->
 > **Design philosophy:** Why does the system ignore SessionStart hook blocking errors? Because session startup is the system initialization process; if hooks could block startup, one misconfigured hook could make the entire system unstartable -- this violates the "graceful degradation" principle. Core system functions should not let extension logic hijack them.
 
 Typical use cases:
@@ -495,6 +503,7 @@ Typical use cases:
 
 ### Other Events
 
+<!-- block: ch08.b-880141d1 -->
 - **Setup**: Triggered during repository initialization and maintenance. Suitable for environment checks or dependency installation when a project is first opened by Claude Code.
 - **ConfigChange**: Triggered when configuration file changes. Hook can block changes from taking effect. This is a security audit critical point -- preventing malicious modification of config files to bypass security policies.
 - **Elicitation / ElicitationResult**: Triggered when MCP server requests user input. Used for MCP server's interactive authentication or parameter collection flows.
@@ -662,6 +671,7 @@ flowchart TD
 
 ---
 
+<!-- block: ch08.b-a4493a50 -->
 ## 8.4 Hook Configuration and Security
 
 ### Configuration Validation

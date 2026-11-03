@@ -280,14 +280,14 @@
         "en": "a hospital: sharp diagnoses still need triage, a signed script and a chart before anyone gets medicine"
       },
       "plain_evidence": [
-        "00-前言.md:93",
-        "00-前言.md:95",
-        "00-前言.md:143",
-        "00-前言.md:197",
-        "en/00-Foreword.md:93",
-        "en/00-Foreword.md:95",
-        "en/00-Foreword.md:143",
-        "en/00-Foreword.md:197"
+        "front.b-35db98a2",
+        "front.b-499dd26b",
+        "front.b-165ad92a",
+        "front.b-2c94930a",
+        "front.b-df75fff3",
+        "front.b-37181626",
+        "front.b-3f47c95e",
+        "front.b-479af2b2"
       ]
     },
     "ch01": {
@@ -320,14 +320,14 @@
         "en": "a renovation: before any appliance you run wiring, fit a leakage breaker and label every circuit"
       },
       "plain_evidence": [
-        "第一部分-基础篇/01-智能体编程的新范式.md:56",
-        "第一部分-基础篇/01-智能体编程的新范式.md:64",
-        "第一部分-基础篇/01-智能体编程的新范式.md:120",
-        "第一部分-基础篇/01-智能体编程的新范式.md:292",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:56",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:64",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:120",
-        "en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:292"
+        "ch01.b-3370ba9f",
+        "ch01.agent-harness",
+        "ch01.b-e24d4734",
+        "ch01.b-73189cb4",
+        "ch01.b-8194ef56",
+        "ch01.agent-harness",
+        "ch01.b-c31f0551",
+        "ch01.b-5f90e811"
       ]
     },
     "ch02": {
@@ -358,14 +358,14 @@
         "en": "a mailroom: log, send, await the receipt, ask again if none comes; every halt names where it stopped"
       },
       "plain_evidence": [
-        "第一部分-基础篇/02-对话循环-Agent的心跳.md:22",
-        "第一部分-基础篇/02-对话循环-Agent的心跳.md:145",
-        "第一部分-基础篇/02-对话循环-Agent的心跳.md:255",
-        "第一部分-基础篇/02-对话循环-Agent的心跳.md:400",
-        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:22",
-        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:145",
-        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:255",
-        "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md:400"
+        "ch02.b-4fcb835b",
+        "ch02.b-e588ade6",
+        "ch02.b-e44b1398",
+        "ch02.b-f232a379",
+        "ch02.b-831a1dbe",
+        "ch02.b-dcb10c57",
+        "ch02.b-0c4f7d92",
+        "ch02.b-a95374b9"
       ]
     },
     "ch03": {
@@ -398,14 +398,14 @@
         "en": "a kitchen: chopping runs in parallel, only one cook may touch the flame, dishes get called in order"
       },
       "plain_evidence": [
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:39",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:292",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:360",
-        "第一部分-基础篇/03-工具系统-Agent的双手.md:387",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:39",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:292",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:360",
-        "en/Part-1-Foundations/03-The-Tool-System-Agent-Hands.md:387"
+        "ch03.b-4f610843",
+        "ch03.b-6ba1c508",
+        "ch03.b-0d31e19e",
+        "ch03.b-4e9dde41",
+        "ch03.b-41046090",
+        "ch03.b-e730c68f",
+        "ch03.b-a24e494e",
+        "ch03.b-68e9855b"
       ]
     },
     "ch04": {
@@ -445,14 +445,14 @@
         "en": "expense approval: receipt check, blocklist lookup, manager review, boss signs - a written denial ends it all"
       },
       "plain_evidence": [
-        "第一部分-基础篇/04-权限管线-Agent的护栏.md:23",
-        "第一部分-基础篇/04-权限管线-Agent的护栏.md:125",
-        "第一部分-基础篇/04-权限管线-Agent的护栏.md:142",
-        "第一部分-基础篇/04-权限管线-Agent的护栏.md:219",
-        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:23",
-        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:125",
-        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:142",
-        "en/Part-1-Foundations/04-The-Permission-Pipeline-Agent-Guardrails.md:219"
+        "ch04.b-2e69875a",
+        "ch04.b-c18c03b5",
+        "ch04.b-6dc2776f",
+        "ch04.b-d6fea818",
+        "ch04.b-63e7a773",
+        "ch04.b-abb9611b",
+        "ch04.b-20fe98c8",
+        "ch04.b-f0965a63"
       ]
     },
     "ch05": {
@@ -483,14 +483,14 @@
         "en": "an office notice board: new memos cover old ones, the access list only grows, fire exits are the landlord's"
       },
       "plain_evidence": [
-        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:27",
-        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:80",
-        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:227",
-        "第二部分-核心系统篇/05-设置与配置-Agent的基因.md:421",
-        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:27",
-        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:80",
-        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:227",
-        "en/Part-2-Core-Systems/05-Settings-and-Configuration-Agent-DNA.md:421"
+        "ch05.b-336ab860",
+        "ch05.b-858bd1a8",
+        "ch05.b-184ef03a",
+        "ch05.b-439b17b3",
+        "ch05.b-336ab860",
+        "ch05.b-2fc6d68a",
+        "ch05.b-99fdb01b",
+        "ch05.b-765d1606"
       ]
     },
     "ch06": {
@@ -522,14 +522,14 @@
         "en": "a card catalog: it notes which shelf, never copies the text, and you still walk over to check the book"
       },
       "plain_evidence": [
-        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:11",
-        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:21",
-        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:236",
-        "第二部分-核心系统篇/06-记忆系统-Agent的长期记忆.md:548",
-        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:11",
-        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:21",
-        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:236",
-        "en/Part-2-Core-Systems/06-The-Memory-System-Agent-Long-Term-Memory.md:548"
+        "ch06.b-9f331890",
+        "ch06.b-613ae882",
+        "ch06.b-19040472",
+        "ch06.b-58fa37d6",
+        "ch06.b-65fc86fe",
+        "ch06.b-2770b1c8",
+        "ch06.b-aee9f8ac",
+        "ch06.b-ed8bab46"
       ]
     },
     "ch07": {
@@ -563,14 +563,14 @@
         "en": "clearing a crowded shelf: consolidate loose boxes, vacuum-pack, and only then write old stock onto one ledger"
       },
       "plain_evidence": [
-        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:34",
-        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:81",
-        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:124",
-        "第二部分-核心系统篇/07-上下文管理-Agent的工作记忆.md:292",
-        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:34",
-        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:81",
-        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:124",
-        "en/Part-2-Core-Systems/07-Context-Management-Agent-Working-Memory.md:292"
+        "ch07.b-65cc01f2",
+        "ch07.b-5a238163",
+        "ch07.b-4316d8c2",
+        "ch07.b-5e27b5da",
+        "ch07.b-0f31563d",
+        "ch07.b-78eb0f40",
+        "ch07.b-7fa64c7d",
+        "ch07.b-2d35fafb"
       ]
     },
     "ch08": {
@@ -603,14 +603,14 @@
         "en": "an estate gatehouse: it builds nothing, yet stops, redirects or notes every comings and goings"
       },
       "plain_evidence": [
-        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:19",
-        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:57",
-        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:215",
-        "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md:665",
-        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:19",
-        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:57",
-        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:215",
-        "en/Part-2-Core-Systems/08-The-Hook-System-Agent-Lifecycle-Extension-Points.md:665"
+        "ch08.b-e9717dfa",
+        "ch08.b-3e54f190",
+        "ch08.b-f0e2b921",
+        "ch08.b-15d633ef",
+        "ch08.b-78bc89ed",
+        "ch08.b-224a19b7",
+        "ch08.b-239ed648",
+        "ch08.b-a4493a50"
       ]
     },
     "ch09": {
@@ -643,14 +643,14 @@
         "en": "one meeting brief photocopied for the table: each person annotates a copy, nobody reprints the original"
       },
       "plain_evidence": [
-        "第三部分-高级模式篇/09-子智能体与Fork模式.md:13",
-        "第三部分-高级模式篇/09-子智能体与Fork模式.md:230",
-        "第三部分-高级模式篇/09-子智能体与Fork模式.md:257",
-        "第三部分-高级模式篇/09-子智能体与Fork模式.md:351",
-        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:13",
-        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:230",
-        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:257",
-        "en/Part-3-Advanced-Patterns/09-Sub-Agents-and-the-Fork-Pattern.md:351"
+        "ch09.b-55683200",
+        "ch09.b-3bc17bc4",
+        "ch09.b-2112e75b",
+        "ch09.b-2e20b42f",
+        "ch09.b-556173a5",
+        "ch09.b-72cde16a",
+        "ch09.b-8854a045",
+        "ch09.b-c8beb12a"
       ]
     },
     "ch10": {
@@ -682,14 +682,14 @@
         "en": "a banquet head chef: no pan himself, tickets out to stations, one prep list, covers whoever drops out"
       },
       "plain_evidence": [
-        "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:13",
-        "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:329",
-        "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:547",
-        "第三部分-高级模式篇/10-协调器模式-多智能体编排.md:591",
-        "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:13",
-        "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:329",
-        "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:548",
-        "en/Part-3-Advanced-Patterns/10-The-Coordinator-Pattern-Multi-Agent-Orchestration.md:592"
+        "ch10.b-b209bb7d",
+        "ch10.b-cc6d4b42",
+        "ch10.b-6e1ca10d",
+        "ch10.b-791d16bc",
+        "ch10.b-da6098f1",
+        "ch10.b-1d9cd4d7",
+        "ch10.b-787e6187",
+        "ch10.b-4dbae2e4"
       ]
     },
     "ch11": {
@@ -723,14 +723,14 @@
         "en": "a wall of recipe cards: HQ, house and home stacks; same name defers upward; call it out and pull one"
       },
       "plain_evidence": [
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:21",
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:303",
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:418",
-        "第三部分-高级模式篇/11-技能系统与插件架构.md:517",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:21",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:303",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:418",
-        "en/Part-3-Advanced-Patterns/11-The-Skill-System-and-Plugin-Architecture.md:518"
+        "ch11.b-daf4130c",
+        "ch11.b-d51b7615",
+        "ch11.b-3494d5c2",
+        "ch11.b-48bacbe2",
+        "ch11.b-882689de",
+        "ch11.b-e45a3ccb",
+        "ch11.b-dead6a6a",
+        "ch11.b-0acfbcd4"
       ]
     },
     "ch12": {
@@ -766,14 +766,14 @@
         "en": "a shared parcel room: any courier drops once, shelves sorted and labelled by building, code scanned first"
       },
       "plain_evidence": [
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:68",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:105",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:292",
-        "第三部分-高级模式篇/12-MCP集成与外部协议.md:681",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:68",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:105",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:292",
-        "en/Part-3-Advanced-Patterns/12-MCP-Integration-and-External-Protocols.md:681"
+        "ch12.b-3c18853a",
+        "ch12.b-fc77f3b4",
+        "ch12.b-5e86ba82",
+        "ch12.b-b21bdbf5",
+        "ch12.b-6f2b66b5",
+        "ch12.b-969b120f",
+        "ch12.b-c55aaca5",
+        "ch12.b-28613328"
       ]
     },
     "ch13": {
@@ -805,14 +805,14 @@
         "en": "a waiter carrying each dish as it's called, serving still in order, halting the whole batch if one spills"
       },
       "plain_evidence": [
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:136",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:288",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:302",
-        "第四部分-工程实践篇/13-流式架构与性能优化.md:487",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:136",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:288",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:302",
-        "en/Part-4-Engineering-Practice/13-Streaming-Architecture-and-Performance-Optimization.md:490"
+        "ch13.b-cea5c236",
+        "ch13.b-568d7381",
+        "ch13.b-cadf79bf",
+        "ch13.b-89126a32",
+        "ch13.b-e4378bdf",
+        "ch13.b-df08b439",
+        "ch13.b-d5f4d3a3",
+        "ch13.b-f116fc32"
       ]
     },
     "ch14": {
@@ -844,14 +844,14 @@
         "en": "moving day: list and price first, the boss signs before a truck is called, the list is filed for reuse"
       },
       "plain_evidence": [
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:17",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:21",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:436",
-        "第四部分-工程实践篇/14-Plan模式与结构化工作流.md:675",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:17",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:21",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:437",
-        "en/Part-4-Engineering-Practice/14-Plan-Mode-and-Structured-Workflows.md:676"
+        "ch14.b-a0e8ce68",
+        "ch14.b-89f97f56",
+        "ch14.b-316a25a1",
+        "ch14.b-a6461e81",
+        "ch14.b-003b59e8",
+        "ch14.b-fadb821c",
+        "ch14.b-44940e1e",
+        "ch14.b-716ec04a"
       ]
     },
     "ch15": {
@@ -887,14 +887,14 @@
         "en": "copying a neighbour's kitchen to build your own: six parts in rough order, fixing earlier ones as you learn"
       },
       "plain_evidence": [
-        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:66",
-        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:171",
-        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:190",
-        "第四部分-工程实践篇/15-构建你自己的Agent-Harness.md:511",
-        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:66",
-        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:171",
-        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:190",
-        "en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:519"
+        "ch15.b-20a27c05",
+        "ch15.b-185f0f79",
+        "ch15.b-3aaba62f",
+        "ch15.b-b41ef773",
+        "ch15.b-42715a45",
+        "ch15.b-399c3d79",
+        "ch15.b-4a9a9b5c",
+        "ch15.b-3c59f09c"
       ]
     },
     "apxa": {
@@ -926,14 +926,14 @@
         "en": "the building's utility plan: before hammering, check whose pipe it is and where water enters and exits"
       },
       "plain_evidence": [
-        "附录/A-源码导航地图.md:3",
-        "附录/A-源码导航地图.md:6",
-        "附录/A-源码导航地图.md:14",
-        "附录/A-源码导航地图.md:221",
-        "en/Appendices/A-Architecture-Navigation-Map.md:3",
-        "en/Appendices/A-Architecture-Navigation-Map.md:6",
-        "en/Appendices/A-Architecture-Navigation-Map.md:14",
-        "en/Appendices/A-Architecture-Navigation-Map.md:221"
+        "apxa.b-0dab8d3c",
+        "apxa.b-7c8bf468",
+        "apxa.b-beed97e5",
+        "apxa.b-50af3730",
+        "apxa.b-2ea398f9",
+        "apxa.b-1614c95c",
+        "apxa.b-82994884",
+        "apxa.b-f44b8676"
       ]
     },
     "apxb": {
@@ -963,14 +963,14 @@
         "en": "a hardware-shop parts cabinet: each bin's tag says grab-and-go, blade sharp, or needs the clerk's key"
       },
       "plain_evidence": [
-        "附录/B-工具完整清单.md:3",
-        "附录/B-工具完整清单.md:5",
-        "附录/B-工具完整清单.md:255",
-        "附录/B-工具完整清单.md:378",
-        "en/Appendices/B-Complete-Tool-Inventory.md:3",
-        "en/Appendices/B-Complete-Tool-Inventory.md:5",
-        "en/Appendices/B-Complete-Tool-Inventory.md:255",
-        "en/Appendices/B-Complete-Tool-Inventory.md:378"
+        "apxb.b-101fd7cf",
+        "apxb.b-1b24a88d",
+        "apxb.b-25c5a501",
+        "apxb.b-cdd3787c",
+        "apxb.b-b53ffcd2",
+        "apxb.b-e104bafd",
+        "apxb.b-bab069ff",
+        "apxb.b-eb2d7e01"
       ]
     },
     "apxc": {
@@ -1001,14 +1001,14 @@
         "en": "the breaker panel's circuit label: which switch feeds which light, and what else goes dark when one trips"
       },
       "plain_evidence": [
-        "附录/C-功能标志速查表.md:3",
-        "附录/C-功能标志速查表.md:9",
-        "附录/C-功能标志速查表.md:321",
-        "附录/C-功能标志速查表.md:325",
-        "en/Appendices/C-Feature-Flag-Reference.md:3",
-        "en/Appendices/C-Feature-Flag-Reference.md:9",
-        "en/Appendices/C-Feature-Flag-Reference.md:321",
-        "en/Appendices/C-Feature-Flag-Reference.md:325"
+        "apxc.b-2ab3b354",
+        "apxc.b-2ab3b354",
+        "apxc.b-2b20d504",
+        "apxc.b-f4ff565e",
+        "apxc.b-fcee4414",
+        "apxc.b-fcee4414",
+        "apxc.b-d99d1d62",
+        "apxc.b-7d87deb0"
       ]
     },
     "apxd": {
@@ -1038,12 +1038,12 @@
         "en": "the bilingual dictionary bound in at the back: the translation and a one-line gloss first, then which chapter goes on"
       },
       "plain_evidence": [
-        "附录/D-术语表.md:3",
-        "附录/D-术语表.md:5",
-        "附录/D-术语表.md:10",
-        "en/Appendices/D-Glossary.md:3",
-        "en/Appendices/D-Glossary.md:5",
-        "en/Appendices/D-Glossary.md:10"
+        "apxd.b-788aedcf",
+        "apxd.b-788aedcf",
+        "apxd.b-173b10a3",
+        "apxd.b-e618e111",
+        "apxd.b-e618e111",
+        "apxd.b-1c1a5dd1"
       ]
     }
   }

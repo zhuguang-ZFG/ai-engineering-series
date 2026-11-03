@@ -65,6 +65,8 @@ def prose_walls(lines):
             continue
         if fence:
             continue
+        if re.match(r'^\s*<!--\s*block:\s*[a-z0-9.-]+\s*-->\s*$', line):
+            continue
         if re.match(r'^\s*\|', line):
             if chars:
                 walls.append((chars, start, number - 1, heading))

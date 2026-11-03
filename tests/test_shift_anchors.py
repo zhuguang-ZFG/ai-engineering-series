@@ -48,10 +48,16 @@ def stage_scratch_repo(root: Path) -> dict[str, bytes]:
     write through this, so being wrong costs a tempfile, never the checkout."""
     book = root / "yuyu-book"
     book.mkdir()
-    blobs = {name: (ROOT / "yuyu-book" / name).read_bytes()
-             for name in shift_anchors.REGISTRY_NAMES}
-    for name, blob in blobs.items():
-        (book / name).write_bytes(blob)
+    blobs = {}
+    for name in shift_anchors.REGISTRY_NAMES:
+        blob = (ROOT / "yuyu-book" / name).read_bytes()
+        eol = b"\r\n" if b"\r\n" in blob else b"\n"
+        # The shipped registries no longer carry line refs (P2.6 moved them to
+        # block ids), so the CLI needs anchors of its own to exercise.
+        seed = (eol.join([f'"seed-zh": "{ZH02}:300",'.encode(),
+                          f'"seed-en": "{EN02}:300",'.encode()]) + eol)
+        blobs[name] = blob.rstrip(b"\r\n") + eol + seed
+        (book / name).write_bytes(blobs[name])
     for rel in (ZH02, EN02):
         prose = root / rel
         prose.parent.mkdir(parents=True, exist_ok=True)
@@ -74,6 +80,12 @@ def run_cli(root: Path, argv: list[str]) -> tuple[int, list[str]]:
 
 
 class ShiftSemantics(unittest.TestCase):
+    def test_shipped_registries_no_longer_carry_line_refs(self):
+        """P2.7: the old vocabulary is read-only; new evidence uses block ids."""
+        for name in shift_anchors.REGISTRY_NAMES:
+            text = (ROOT / "yuyu-book" / name).read_text(encoding="utf-8")
+            self.assertEqual([], shift_anchors.REF.findall(text), name)
+
     def test_only_refs_after_the_insert_move(self):
         text = doc(f"{ZH02}:100", f"{ZH02}:289", f"{ZH02}:290", f"{ZH02}:445")
         out, hits = shift_anchors.shift(text, frozenset({ZH02}), 289, 6)

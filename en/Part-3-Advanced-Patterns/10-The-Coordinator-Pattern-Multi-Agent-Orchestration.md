@@ -10,6 +10,7 @@
 
 **Difficulty:** 10.1 is Start, 10.3–10.5 and 10.7 are Core; 10.2 tool allocation and 10.6 fault recovery are Advanced — skip them on a first read and come back when you build.
 
+<!-- block: ch10.b-da6098f1 -->
 When a single agent cannot handle complex engineering tasks, Claude Code provides the Coordinator pattern -- a centralized multi-agent orchestration solution. Unlike the Fork pattern's peer-to-peer parallelism, the Coordinator pattern employs a "coordinator-worker" architecture, where a dedicated coordinator manages the lifecycle and task allocation of multiple parallel workers.
 
 This is like how a construction site operates: the project manager (Coordinator) doesn't need to lay bricks, run wiring, or install pipes personally, but they need to know which workers (Workers) are good at what, which tasks can run in parallel, which have dependencies, and how to coordinate shared resources (Scratchpad). When a worker encounters a problem, the project manager needs to decide whether to reassign the task or adjust the overall plan.
@@ -22,6 +23,7 @@ This chapter will dive deep into the source code design, revealing the design ph
 
 ### The coordinatorMode Core Module
 
+<!-- block: ch10.b-6d4ec9b2 -->
 The core code of the Coordinator pattern resides in the coordinator module. Although this module is only about 370 lines long, it defines the entire interaction model for multi-agent collaboration. The conciseness of the code is not accidental -- the coordinator's responsibility is "orchestration" rather than "execution," and it needs to stay lean to avoid becoming a performance bottleneck or single point of failure in the system.
 
 The module's entry point is the `isCoordinatorMode()` function, which reveals the Coordinator pattern's dual gating mechanism:
@@ -70,6 +72,7 @@ flowchart TD
 
 > **Cross-Reference:** Chapter 9 discusses the Fork pattern's cache sharing mechanism in detail. The core difference between the two is: Fork is "centerless parallelism" (all sub-agents are equal and share the same context), while Coordinator is "centered orchestration" (the coordinator controls the global view, and workers only see the tasks assigned to them).
 
+<!-- block: ch10.b-7052aa53 -->
 The Coordinator pattern also affects the agent registry. When Coordinator mode activates, the built-in agent registration function no longer returns the normal list of built-in agents but instead introduces Coordinator-specific worker agent definitions through lazy loading. This lazy loading approach is intentional, aimed at avoiding circular dependencies between the coordinator module and the tool module.
 
 ### Pattern Matching for Session Recovery
@@ -326,6 +329,7 @@ flowchart TD
 >
 > Additionally, the Scratchpad naturally supports "incremental building" -- Worker A writes a foundational analysis, and Worker B can append supplementary information on top of it, without needing to consolidate everything into a single message.
 
+<!-- block: ch10.b-1d9cd4d7 -->
 ### The Coordinator's Task Workflow
 
 The Coordinator system prompt defines four phases of the standard task workflow:
@@ -454,6 +458,7 @@ This format goes inside user-role messages. The coordinator identifies `<task-no
 
 ## 10.5 Complete Case Study: From Requirements to Delivery
 
+<!-- block: ch10.b-a893bbfb -->
 Let's understand the Coordinator pattern's end-to-end workflow through a complete case study.
 
 ### Scenario: Adding a User Notification System to a Web Application
@@ -545,6 +550,7 @@ Coordinator Decision:
 
 ---
 
+<!-- block: ch10.b-787e6187 -->
 ## 10.6 Fault Recovery and Partial Completion
 
 ### Handling Strategies for Worker Failures
@@ -589,6 +595,7 @@ The guiding principle in the system prompt is: **the coordinator should make ful
 
 ---
 
+<!-- block: ch10.b-4dbae2e4 -->
 ## 10.7 Coordinator Pattern vs. Fork Pattern Comparison
 
 The two patterns are two parallelism strategies; pick the wrong one and the task stalls.

@@ -2,6 +2,7 @@
 
 > **In one line:** The context window has a ceiling: when history swells, compression escalates through four levels, and after three straight failures the circuit breaker pulls the plug.
 
+<!-- block: ch07.b-7b06443a -->
 > **Learning Objectives:**
 > 1. Work out the hard ceiling on the context window and the space you can still write in
 > 2. Put the four compression levels (Snip -> MicroCompact -> Collapse -> AutoCompact) in order and say when each one fires
@@ -15,8 +16,10 @@
 
 ## 7.1 Context Window Constraints
 
+<!-- block: ch07.b-25a30e96 -->
 All of a large language model's reasoning capabilities rest on a single premise: the context window. In every conversation turn, Claude Code must package the complete message history (system prompts, user messages, assistant replies, tool calls and results) and send it to the model. As the conversation progresses, this history inevitably expands until it hits the ceiling of the model's context window.
 
+<!-- block: ch07.b-b643df6f -->
 You can think of the context window as a **whiteboard of limited size**. All of the Agent's working memory -- conversation history, tool results, intermediate reasoning -- goes on this whiteboard. When the whiteboard runs out of space, you must erase old content before writing new content. The key question is: **what to erase, what to keep, and how to erase it**?
 
 This is not Claude Code's problem alone; every long-conversation Agent system has to solve it. Many Agent frameworks solve this problem with "brute-force truncation" -- simply discarding the oldest messages. Claude Code's approach is far more refined.
@@ -29,8 +32,10 @@ Claude Code uses a precise formula to characterize the space truly available for
 Effective Window = Model Window - Reserved Output Tokens
 ```
 
+<!-- block: ch07.b-5e71da7b -->
 In the auto-compaction module, the `getEffectiveContextWindowSize` function works out the effective window size: it reserves the lesser of the model's maximum output tokens and 20,000 tokens as reserved space for the compression summary. The remainder is the effective carrying capacity of the context.
 
+<!-- block: ch07.b-0f31563d -->
 > **Why reserve 20,000 tokens?** Because AutoCompact (Level 4 compression) needs to call the LLM to generate a summary, and the summary itself consumes output tokens. If you reserve no space, the compression operation itself may fail due to insufficient output space -- a classic "compression paradox."
 
 Let's use concrete numbers: suppose the model context window is 200,000 tokens and the maximum output tokens are 16,384:
@@ -78,6 +83,7 @@ graph LR
 
 Auto-compression does not always succeed. Network fluctuations, API errors, or structural issues in the context itself can all cause compression to fail. If the system retries blindly, it will make doomed API calls on every turn, wasting significant resources.
 
+<!-- block: ch07.b-78eb0f40 -->
 Claude Code introduces a Circuit Breaker mechanism: when the number of consecutive failures reaches 3 (`MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES`), the system directly skips subsequent compression attempts.
 
 ```mermaid
@@ -107,8 +113,10 @@ stateDiagram-v2
     end note
 ```
 
+<!-- block: ch07.b-54f765a2 -->
 On success, the failure counter resets to zero; on failure, the counter increments and propagates to the upper-level caller. This is a classic circuit breaker pattern -- once consecutive failures reach the threshold, the circuit breaks, preventing avalanche effects.
 
+<!-- block: ch07.b-55ef5c51 -->
 **Real-world data from the circuit breaker:** According to engineering analysis, before the circuit breaker came in, 1,279 sessions showed over 50 consecutive compression failures (up to 3,272), wasting approximately 250K API calls per day. After its introduction, such cascading failures disappeared completely.
 
 > **Anti-Pattern Warning:** If you are building your own Agent system, do not ignore circuit breakers. A system without circuit breakers will fall into a "compression failure -> retry -> fail again" death spiral when the API is unstable, wasting resources and potentially further degrading the user experience due to increased latency.
@@ -121,6 +129,7 @@ On success, the failure counter resets to zero; on failure, the counter incremen
 
 Claude Code's context management employs a four-level progressive compression strategy, escalating from low cost to high cost. Each level activates only when the previous level fails to free up enough space.
 
+<!-- block: ch07.b-7fa64c7d -->
 This design philosophy can be understood through an analogy: **compression strategies are like organizing clothing storage**. You don't start by throwing away all your clothes (brute-force truncation); instead, you first put away clothes you no longer wear (Snip), then compress seasonal clothing (MicroCompact), then vacuum-seal bulky items (Collapse), and only finally do a comprehensive sort-and-discard (AutoCompact).
 
 ```mermaid
@@ -208,6 +217,7 @@ Collapse mode suppresses the triggering of auto-compression because the two woul
 
 ### Level 4: AutoCompact
 
+<!-- block: ch07.b-7695033d -->
 AutoCompact is the most thorough compression level -- it invokes the LLM to compress the whole conversation into a summary. When the above three levels cannot effectively free space and token usage exceeds the auto-compression threshold, the system initiates AutoCompact.
 
 This is the final fallback and also the most "expensive" -- it requires an additional API call to generate the summary.
@@ -289,6 +299,7 @@ The compression prompt requires the model to output two XML blocks:
 - `<analysis>` block: A thinking scratchpad used to organize thoughts and ensure comprehensive coverage. The final result discards this block.
 - `<summary>` block: The formal summary content, containing a structured set of 9 sections.
 
+<!-- block: ch07.b-2d35fafb -->
 The `formatCompactSummary` function handles post-processing: it first discards the `<analysis>` block (thinking scratchpad), then extracts the content of the `<summary>` block as the formal summary.
 
 This design pattern is noteworthy: the `<analysis>` block serves as a Chain-of-Thought carrier that improves summary quality, but it does not enter the final context window, avoiding token waste.
@@ -359,6 +370,7 @@ These budgets limit the amount of content re-injected into the context after com
 
 ### True Token Estimation
 
+<!-- block: ch07.b-730d6c00 -->
 `truePostCompactTokenCount` is an estimate of the actual post-compression context size, including the sum of tokens for the boundary marker, summary messages, attachments, and hook results. This value is used to determine whether compression would immediately trigger another compression in the next turn, providing critical diagnostic information for telemetry.
 
 If the post-compression token count still exceeds the auto-compression threshold, the system knows the compression "went to waste" -- this situation typically occurs when the conversation structure is extremely complex or the summary itself is too long.

@@ -1,7 +1,9 @@
 # Appendix B: Complete Tool Inventory
 
+<!-- block: apxb.b-b53ffcd2 -->
 This appendix lists all 55 tools registered in the Claude Code architecture, indexed across 12 functional categories. Tools are the fundamental capability units through which the agent interacts with the external world. Each tool registers in the tool registry through a unified interface protocol, and the conversation main loop dispatches it.
 
+<!-- block: apxb.b-e104bafd -->
 **Permission Model Field Definitions**:
 - **readOnly**: Whether the tool only reads and does not modify the file system or external state. Read-only tools typically have more relaxed permission constraints, and you can use them in plan mode.
 - **destructive**: Whether the tool can irreversibly delete, overwrite, or send things. Destructive tools get stricter scrutiny during permission checks.
@@ -252,6 +254,7 @@ MCP tools let the agent talk to MCP servers and reach external resources.
 
 ---
 
+<!-- block: apxb.b-bab069ff -->
 ## Tool Enablement Conditions Quick Reference
 
 Feature flags or environment variables conditionally enable some tools. The table below lists all conditionally enabled tools and their corresponding flags:
@@ -375,6 +378,7 @@ Access external resources through MCP tools, combined with local tools for proce
 
 ---
 
+<!-- block: apxb.b-eb2d7e01 -->
 ## Tool Performance Characteristics Overview
 
 Understanding the performance characteristics of tools helps in making reasonable choices during use:

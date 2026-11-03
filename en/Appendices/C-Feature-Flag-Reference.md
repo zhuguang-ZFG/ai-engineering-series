@@ -1,5 +1,6 @@
 # Appendix C: Feature Flag Reference
 
+<!-- block: apxc.b-fcee4414 -->
 > Feature flags are the core mechanism for implementing compile-time dead code elimination in Claude Code. The compiler injects every flag as a boolean value during the bundling phase: when a flag is `false`, the code branch it guards drops out entirely, so the artifact shrinks and unreleased features stay out of it.
 >
 > **Type Definitions**:
@@ -262,6 +263,7 @@ Settings synchronization flags control the bidirectional synchronization of user
 
 Telemetry and diagnostic flags control Claude Code's runtime data collection, performance profiling, and debugging capabilities. These flags are primarily used for internal quality assurance and performance optimization.
 
+<!-- block: apxc.b-15777231 -->
 | Feature Flag | Type | Description | Impact Scope | Dependencies | Related Chapter |
 |---|---|---|---|---|---|
 | `COWORKER_TYPE_TELEMETRY` | Compile-time | Coworker type telemetry. Collects and reports type information about coworkers (e.g., IDE, terminal) | Collaboration environment detection, anonymous type reporting | No prerequisites | Chapter 13 |
@@ -318,10 +320,12 @@ Infrastructure and build flags control low-level technical behavior and build co
 | Infrastructure and Build | 10 |
 | **Total** | **89** |
 
+<!-- block: apxc.b-d99d1d62 -->
 > **Note**: The flag list above comes from system architecture analysis and may change with version iterations. The build configuration determines each feature flag's specific activation method, and some flags also require runtime gating conditions (such as specific activation detection functions) to truly activate the corresponding features.
 
 ---
 
+<!-- block: apxc.b-7d87deb0 -->
 ## C.14 Common Configuration Scenario Recommendations
 
 The following lists several typical usage scenarios and their recommended feature flag combinations to help readers configure based on their actual needs:

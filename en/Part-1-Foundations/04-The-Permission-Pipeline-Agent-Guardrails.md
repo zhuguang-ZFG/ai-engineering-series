@@ -4,6 +4,7 @@
 
 > Learning Objectives: By the end of this chapter, you can:
 
+<!-- block: ch04.b-c717f6e2 -->
 > - Explain why permission checking takes four stages, and what each stage stops on its own
 > - Explain why the permission context is immutable data
 > - Compare the five permission modes and pick the right one for a given situation
@@ -12,14 +13,17 @@
 
 **Difficulty:** A Core chapter: 4.1 is Start level (the four-stage overview); 4.2, 4.3, and 4.5 carry the trunk. 4.4 takes BashTool's command classification apart -- the finest grain, tagged Advanced; skip it and the exercises on a first read.
 
+<!-- block: ch04.b-22086614 -->
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
 
+<!-- block: ch04.b-8a06951f -->
 To understand the permission pipeline through a physical-world analogy: a modern office building's access control system doesn't just place a single security guard at the entrance (a single checkpoint). Instead, it sets up different levels of security checks in different areas -- the lobby only requires a card swipe, meeting rooms require reservation confirmation, and the server room requires fingerprint verification plus dual-person authorization. Each layer of security check is independent; even if an intruder slips past one layer, the next layer can still prevent unauthorized access. Claude Code's permission pipeline is precisely the embodiment of this "defense in depth" philosophy in a software system.
 
 This chapter will start from architectural design, deeply dissect each stage of the permission pipeline, help you understand its design decisions, and let you master configuration methods through hands-on exercises.
 
 ## 4.1 The Four Stages of the Permission Pipeline
 
+<!-- block: ch04.b-63e7a773 -->
 Claude Code's permission checking is not a Boolean judgment from a single function, but a pipeline composed of four stages. Each stage has its own responsibilities and short-circuit logic: as long as a preceding stage makes a final decision, subsequent stages will not execute.
 
 This flowchart lays out the four stages:
@@ -85,6 +89,7 @@ These four stages are: validateInput (input validation), hasPermissionsToUseTool
 
 The first checkpoint of the permission pipeline is not about permissions per se, but about input data validity. In the permission checking function, the tool's input is first parsed through a Zod Schema using strict structural validation. If the input does not conform to the Schema definition (e.g., the Bash tool is missing the required `command` field), parsing throws an exception and the pipeline turns the tool call down before it runs. This design separates "invalid data" from "insufficient permissions" -- the former is a programming error, the latter is a policy decision.
 
+<!-- block: ch04.b-2e142f9a -->
 When parsing fails, `toolPermissionResult` retains its default `passthrough` state, and the pipeline later converts it to `ask` behavior. So when data validation fails the system degrades to asking the user for confirmation instead of crashing outright.
 
 One principle sits behind this choice: **in security systems, error handling should be "safe" rather than "correct."** Crashing outright does expose the problem, but during Agent runtime it could interrupt the entire session. Gracefully degrading to user confirmation is a safer error handling strategy -- it gives the user the opportunity to decide whether to continue, rather than having the system decide on the user's behalf.
@@ -116,12 +121,14 @@ flowchart BT
     class session,command,cli,policy,flag,local,project,user priority
 ```
 
+<!-- block: ch04.b-8de5b7c4 -->
 **Step 1b: Tool-level ask check.** When a tool's configuration says "always ask," the system forces a confirmation prompt. There is one exception: when the Bash tool is in sandbox mode and the sandbox auto-approve option is on, sandboxed commands can skip the ask rule. The design intent of this exception is: if the user already trusts the sandbox environment (commands within the sandbox cannot affect the system outside the sandbox), then the risk of executing commands within the sandbox has dropped to an acceptable level.
 
 **Step 2b: Tool-level allow check.** If no deny or ask rules match, the system checks whether an allow rule exists to directly permit the operation.
 
 The core abstraction of rule matching is the PermissionRule type, which unifies source, behavior, and target into a single structured object.
 
+<!-- block: ch04.b-abb9611b -->
 > **Priority Rule:** deny always takes precedence over allow, regardless of their source. This is a fundamental principle of security systems -- the power of "explicit denial" is greater than "explicit permission." Even if a user has allowed a tool in the global configuration, as long as the project-level configuration denies it, the tool remains unavailable.
 
 ### 4.1.3 Stage 3: checkPermissions -- Context Evaluation
@@ -139,12 +146,14 @@ The `PermissionResult` returned by `checkPermissions` has four behaviors:
 
 > **Design Insight:** Why is `passthrough` needed instead of having tools without special permission logic return `ask` directly? The difference lies in "intent" -- `passthrough` means "I have no opinion, let subsequent stages decide," while `ask` means "I believe this operation requires user confirmation." If a subsequent allow rule matches, `passthrough` will be overridden to `allow`, but `ask` will not be overridden. This subtle difference produces different behaviors in specific scenarios.
 
+<!-- block: ch04.b-20fe98c8 -->
 ### 4.1.4 Stage 4: Interactive Prompt -- User Confirmation
 
 When the pipeline flows to the `ask` state, the permission confirmation Hook takes control. This React Hook transforms the permission request into a user interaction interface. The flow triggered by the `ask` state contains multiple branching paths: coordinator permission handling, swarm worker permission handling, speculative classifier checking, and interactive permission prompting.
 
 The most critical branch is the interactive handling branch, which pushes the permission request into a confirmation queue, renders the confirmation interface in the terminal, and waits for the user to make choices such as "allow/deny/allow this time."
 
+<!-- block: ch04.b-55f102c4 -->
 Before the user responds, the system may also run an asynchronous classifier check (`pendingClassifierCheck`). So the classifier may already have approved the operation while the user is still thinking -- a race, and the first decision made takes effect.
 
 ```mermaid
@@ -182,6 +191,7 @@ ch04-gate-steps
 
 ### 4.2.1 ToolPermissionContext Type Structure
 
+<!-- block: ch04.b-14fb457a -->
 `ToolPermissionContext` is the core data structure of the entire permission system. It carries all the context information needed for permission checking. It includes fields such as permission mode, extra working directories, rules at all levels (allow/deny/ask), bypass mode availability flag, and whether to avoid permission prompts.
 
 The type enforces immutability: all fields are readonly. Every permission update produces a new `ToolPermissionContext` object rather than modifying the existing one. This immutable data pattern ensures consistency in concurrent environments -- when multiple tools check permissions simultaneously, the context each reads will not change unexpectedly due to another tool's permission update.
@@ -216,6 +226,7 @@ This design can be understood through a real-world analogy: imagine a "non-trans
 
 ## 4.3 The Permission Mode Spectrum
 
+<!-- block: ch04.b-f0965a63 -->
 Claude Code defines five internal permission modes that form a spectrum from strict to permissive. Read the spectrum first; the permission configuration follows from it.
 
 ```mermaid

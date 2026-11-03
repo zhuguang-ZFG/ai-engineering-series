@@ -295,6 +295,9 @@ def load_unit(unit_def: dict, kind: str, lang: str, repo_root: Path) -> Unit:
     block_markers.validate_markers(text, rel, unit_def["id"])
     no, title, body = normalize_h1(text, lang, rel)
     body, blocks, langs = extract_mermaid(body, rel)
+    # Mermaid blocks keep raw-file line numbers, so their captions are read
+    # from the raw file; everything below is rendered from marker-free source.
+    body = block_markers.strip_markers(body)
     body, ills = extract_illustrations(body, rel)
     # an ill fence is a drawing slot, not a code plate: it never reaches the
     # renderer as a <pre>, so its info string must not be counted as a language

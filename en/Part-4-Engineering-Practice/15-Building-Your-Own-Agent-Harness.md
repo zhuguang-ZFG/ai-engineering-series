@@ -63,6 +63,7 @@ The benefit of this pipeline design is "early rejection" (Fail Fast). If input p
 
 **Principle 5: Pluggable extensions.** The hook system provides extension points at over twenty lifecycle nodes, from `SessionStart` to `PostToolUse`, from `PreCompact` to `Stop`. Each hook is an independent Shell command or HTTP endpoint that interacts with the Harness through a standardized JSON input/output protocol.
 
+<!-- block: ch15.b-42715a45 -->
 ### When to Use Agent Harness Pattern vs. Simple LLM API Calls
 
 Not every scenario requires a full Agent Harness. The decision hinges on three dimensions:
@@ -114,6 +115,7 @@ If your task meets any of the following conditions, you should consider the Agen
 
 Claude Code chose Bun as its runtime, primarily for three reasons:
 
+<!-- block: ch15.b-753120fb -->
 - **Startup speed:** Bun's cold start time is roughly one-third that of Node.js -- a hard number for CLI tools
 - **Native TypeScript:** No pre-compilation step needed, runs `.ts` files directly
 - **Bundle features:** `bun:bundle` provides compile-time feature flags (`feature('X')`), eliminating unnecessary code paths at build time
@@ -168,6 +170,7 @@ flowchart TD
     class HOOKS hookNode
 ```
 
+<!-- block: ch15.b-399c3d79 -->
 Building an Agent Harness is an incremental process. This section provides six steps, each building on the previous one, ultimately producing a minimal runnable Harness.
 
 ```mermaid
@@ -187,6 +190,7 @@ flowchart TD
     class DONE doneNode
 ```
 
+<!-- block: ch15.b-4a9a9b5c -->
 Don't let the number "six steps" mislead you -- this is not a linear waterfall process. In practice, you'll find yourself iterating between steps: implementing the permission pipeline may require going back to modify the tool system's interface, and implementing context management may require adjusting the dialog loop's state structure. The six steps provide an ordered learning path, not a rigid development sequence.
 
 ```ill
@@ -516,6 +520,7 @@ export async function checkToolPermission(
 
 Long conversations inevitably hit token limits. Claude Code employs a **progressive compression strategy** composed of multiple tiers:
 
+<!-- block: ch15.b-3c59f09c -->
 > **Example scope:** The fixed-window strategy below is a teaching example for text-only messages, not a production Snip implementation. Conversations with tools must preserve complete tool-call/result groups at the cut boundary.
 
 ```typescript

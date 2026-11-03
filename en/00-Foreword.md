@@ -90,8 +90,10 @@ flowchart LR
 
 ### Agent Harness: The Birth of a New Architectural Concept
 
+<!-- block: front.b-df75fff3 -->
 During this transition, a key architectural pattern has surfaced: **Agent Harness** -- a runtime framework built around an LLM, responsible for managing tool registration and dispatch, permission control, state persistence, streaming output, error recovery, and other cross-cutting concerns.
 
+<!-- block: front.b-37181626 -->
 The best way to understand Agent Harness is through an analogy. Imagine the LLM as a brilliant scholar who has never left their study. They are immensely knowledgeable and possess extraordinary reasoning abilities, but know nothing of the outside world -- they cannot use tools, operate machines, or even make a phone call. Agent Harness is this scholar's "exoskeletal armor system": it equips the scholar with hands (the tool system), installs safety locks (the permission pipeline), provides a memory manager (context compression), and connects a nervous system (streaming communication). The scholar wearing this armor is no longer just a thinking brain, but an agent capable of executing tasks safely and efficiently in the real world.
 
 This analogy reveals the essence of Agent Harness: **it is not an SDK, not an API wrapper, and certainly not simple prompt engineering -- it is the engineering infrastructure that enables an LLM to truly "do things."** If the LLM is the Agent's brain, then the Agent Harness is the Agent's skeleton, muscles, nerves, and immune system.
@@ -112,6 +114,7 @@ The timing for this book is right, for three reasons:
 
 1. **Architectural patterns are converging.** Although different Agent frameworks vary in implementation details, the core architectural patterns -- dialog-loop-driven execution, tool type systems, layered permission pipelines, and streaming state management -- have converged across multiple mainstream projects. The patterns collected here are therefore not tied to any one framework's implementation.
 
+<!-- block: front.b-1a26c9ed -->
 2. **Engineering challenges have fully surfaced.** After two years of practice, the core engineering challenges facing Agent systems are clearly visible: context window management, security and concurrency of tool calls, state consistency during long-running operations, error recovery and retry strategies, and so on. These problems will not disappear as model capabilities improve -- on the contrary, as Agents execute more complex tasks, these engineering issues will become even more acute.
 
 3. **The developer community is ready.** More and more developers are no longer satisfied with the superficial usage of "calling an API to build a chatbot." They want to understand the internal mechanisms of Agent systems so they can build their own Agent applications. We wrote this book for those developers.
@@ -126,12 +129,14 @@ To use an analogy: studying Claude Code's architecture is like a medical student
 
 **Second, traceability of engineering decisions.** Claude Code's design is full of meaningful traces of engineering decisions. For example:
 
+<!-- block: front.b-d79f0d76 -->
 - Why does the main dialog loop use streaming async generators instead of callbacks or Promise chains? (The answer involves backpressure control, cancellation propagation, and composability -- see Chapter 2 for details)
 - Why does the permission system use a four-stage pipeline instead of a simple allowlist/blocklist? (The answer involves defense in depth and separation of concerns -- see Chapter 4 for details)
 - Why does the tool type design include fine-grained control interfaces for concurrency safety and interrupt behavior? (The answer involves parallel scheduling strategies and user experience -- see Chapter 3 for details)
 
 These decisions come from real production scenarios and are far more useful than abstract architectural discussions. Every "why" ends up turning on a concrete engineering trade-off.
 
+<!-- block: front.b-a68a2ed2 -->
 **Third, modernity of the technology stack.** Claude Code chose Bun as its runtime, React + Ink for terminal UI rendering, Zod v4 for runtime validation, and Commander.js for CLI handling -- these technology choices are themselves a reference blueprint for modern TypeScript engineering. Even if you are not interested in Agent architecture, Claude Code is worth studying purely from an engineering practices perspective.
 
 **Fourth, reference value at scale.** As a project with over 500,000 lines of TypeScript code, Claude Code demonstrates how to maintain modularity, testability, and extensibility in a large codebase. Its tool type system, permission pipeline, and state management solutions apply directly to your own projects.
@@ -140,8 +145,10 @@ These decisions come from real production scenarios and are far more useful than
 
 This book differs from other AI books on the market in three ways:
 
+<!-- block: front.b-3f47c95e -->
 **Based on architectural analysis, not API documentation.** We will not teach you "how to call the Claude API to build a chatbot." Instead, starting from Claude Code's product behavior and public information, we progressively reconstruct its core architecture -- how the dialog loop drives execution, how the pipeline checks permissions in layers, and how the system compresses context. Through systematic architectural deduction, we present the complete design picture of Agent Harness.
 
+<!-- block: front.b-862cc377 -->
 **Starting from design philosophy, not usage tutorials.** We will not list "10 tips to make Claude Code work better for you." Instead, we discuss the five major design principles of Agent Harness -- async-streaming-first, embedded security boundaries, cache-aware design, progressive capability extension, and immutable state flow -- and how these principles map to concrete code structures.
 
 **Emphasizing transferable architectural knowledge.** Each chapter distills universal design patterns that go beyond Claude Code itself. After reading this book, you will not only understand Claude Code's internal mechanisms, but also be able to apply this knowledge to your own Agent projects, whether you use LangChain, AutoGen, or build from scratch.
@@ -194,6 +201,7 @@ The chapters in this book have tight cross-reference relationships. Understandin
 
 ## About This Book
 
+<!-- block: front.b-479af2b2 -->
 This book is based on an in-depth analysis of Claude Code's product architecture, combining public documentation, community discussions, and product behavior to systematically explain its design philosophy and Agent Harness best practices. The analytical method of this book is: starting from Claude Code's observable behavior, combined with Anthropic's official documentation and public community discussions, to deduce and reconstruct its architectural design principles.
 
 ---

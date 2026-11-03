@@ -1,5 +1,6 @@
 # Appendix D: Glossary
 
+<!-- block: apxd.b-e618e111 -->
 > This glossary covers the core terminology used throughout *Decoding Agent Harness: Claude Code Architecture Deep Dive*, sorted alphabetically. Each entry includes the original English term, a recommended Chinese translation, a concise definition, cross-references to related terms, and a reference to the chapter where the term is first discussed in depth.
 >
 > **How to use this glossary**:
@@ -7,6 +8,7 @@
 > - The "Chapter" field after each term indicates where the term is first discussed in depth in the main text
 > - Technical terms keep their original English form; Chinese translations come along for supplementary understanding.
 
+<!-- block: apxd.b-1c1a5dd1 -->
 ## Core Concept Relationship Diagram
 
 The following diagrams illustrate the relationships among the core terms in this book, helping readers establish an overall conceptual framework:
@@ -117,6 +119,7 @@ flowchart LR
 
 ## B
 
+<!-- block: apxd.b-f7035b54 -->
 | English Term | Chinese Translation | Concise Definition | See Also | Chapter |
 |---|---|---|---|---|
 | Background Session (BG_SESSIONS) | 后台会话 | A session instance that runs independently of the foreground terminal, supporting continuous execution of long-running tasks in the background. Enabled by the `BG_SESSIONS` feature flag | Daemon, Agent Trigger | Chapter 11 |
@@ -196,6 +199,7 @@ flowchart LR
 
 ## L-M
 
+<!-- block: apxd.b-c675bb7b -->
 | English Term | Chinese Translation | Concise Definition | See Also | Chapter |
 |---|---|---|---|---|
 | Layered Architecture | 分层架构 | Claude Code's overall architectural style, divided into four layers: Presentation, Orchestration, Capability, and Infrastructure | Agent Harness, CLI, Main Loop | Appendix A |

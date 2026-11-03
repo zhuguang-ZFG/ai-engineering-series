@@ -4,6 +4,7 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
+<!-- block: ch14.b-aedb3b29 -->
 **Learning Objectives:** How Plan Mode splits thinking from doing, when EnterPlanMode/ExitPlanMode flip between the two, where plan files live and how they come back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension. The worked cases at the end show how Plan Mode lifts both the success rate and the predictability of long Agent tasks.
 
 **Difficulty:** Advanced. 14.1 and 14.2 are the backbone: read the mode-switching mechanism and plan-file recovery in full. Skip 14.4 scheduling and 14.5 background tasks on a first pass; return when you need timers or long-running jobs.
@@ -14,10 +15,13 @@
 
 ### 14.1.1 Design Philosophy: Plan Before Execute
 
+<!-- block: ch14.b-003b59e8 -->
 Plan Mode is one of Claude Code's most unique designs. It separates Agent behavior into two phases: read-only exploration phase (planning) and writable execution phase (implementation). The core philosophy of this separation is: align intent before acting, avoiding rework from directional errors.
 
+<!-- block: ch14.b-134950ba -->
 This design philosophy mirrors the construction industry: no architect would start laying bricks immediately upon receiving requirements. They would first draw blueprints (plan), confirm design intent with the client, evaluate structural feasibility, then begin construction (execution). During the planning phase, architects can modify plans at zero cost -- revising a drawing is much cheaper than demolishing a wall. Similarly, in Plan Mode, Agent's exploration and thinking produce no side effects (no file modifications, no command execution), and the cost of correcting "directional errors" is almost zero.
 
+<!-- block: ch14.b-fadb821c -->
 The core problem Plan Mode solves is **"Premature Action"**. Without Plan Mode, an Agent faces a dilemma: when facing complex tasks, either blindly act in the first round (high risk), or repeatedly read code without making decisions in every round (inefficient). Plan Mode provides the Agent with a "legitimate thinking space" -- in this space, the Agent can freely explore without the expectation of producing actual results, until it's confident it understands the full picture of the problem.
 
 EnterPlanModeTool is the entry point to planning mode. Its prompt system provides different guidance strategies for different user types (external users vs internal ant users).
@@ -265,6 +269,7 @@ Plan file management is Plan Mode's infrastructure, provided by dedicated utilit
 
 **Recovery mechanism** is multi-layered. `copyPlanForResume` attempts to recover plan from three sources when resuming session:
 
+<!-- block: ch14.b-847988f6 -->
 1. **Direct read of plan file**: Simplest path, if file exists return directly.
 2. **File snapshot recovery** (`findFileSnapshotEntry`): Recover from `file_snapshot` system messages in transcript, particularly important in remote sessions (CCR) because local files don't persist between sessions.
 3. **Message history recovery** (`recoverPlanFromMessages`): Extract plan content from three message formats:
@@ -434,6 +439,7 @@ Fork Agent's state isolation strategy resembles a "sandbox": sub-agent runs in s
 
 ---
 
+<!-- block: ch14.b-44940e1e -->
 ## 14.4 Scheduling System
 
 ### 14.4.1 ScheduleCronTool: Local Scheduled Tasks
@@ -477,6 +483,7 @@ Therefore, `durable` flag provides a "lightweight task" mechanism: tasks needing
 
 This file lock mechanism solves an actual distributed problem: developers might simultaneously open multiple terminal windows, each running a Claude Code instance. Without the file lock, each instance would fire the same scheduled task once, causing duplicate operations (like repeatedly sending notifications, repeatedly executing deploy checks).
 
+<!-- block: ch14.b-a4230402 -->
 File lock implementation is based on filesystem atomic operations (like `O_EXCL` create), reliable across all mainstream operating systems. Lock timeout and takeover mechanism ensures no deadlock when owner crashes -- other instances will detect and take over within reasonable time.
 
 **Jitter mechanism**: To avoid large numbers of sessions triggering inference requests at the same moment (thundering herd), recurring tasks add a deterministic positive delay. The delay is proportional to the interval between triggers, default max 15 minutes. For hourly tasks, the actual trigger time randomly disperses between `:00` and `:06`.
@@ -673,6 +680,7 @@ Synchronously wait for scheduled task results in main conversation (via Sleep + 
 
 ---
 
+<!-- block: ch14.b-716ec04a -->
 ## 14.5 Background Tasks and Active Mode
 
 ### 14.5.1 SleepTool
@@ -701,6 +709,7 @@ Key isolation designs include:
 
 3. **Permission prompt suppression**: Background Agent's `getAppState` wraps `shouldAvoidPermissionPrompts: true`, avoiding background operations popping UI prompts. This is because background Agents usually execute pre-authorized tasks (like Plan verification, session summary), don't need and shouldn't interrupt users.
 
+<!-- block: ch14.b-552a5748 -->
 4. **Transcript logging**: Logs sub-agent's messages to independent sidechain, separated from main session's messages. This keeps main session's message history clear, not flooded by sub-agent's internal operations.
 
 `lastCacheSafeParams` is a global slot, used to save current turn's cache-safe params in post-turn hooks. Post-turn forks (like promptSuggestion, postTurnSummary) can therefore reuse the main loop's prompt cache directly, with no caller passing parameters by hand.

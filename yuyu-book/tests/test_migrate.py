@@ -6,6 +6,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from yuyu_book import plain  # noqa: E402
+from yuyu_book.core import BuildError  # noqa: E402
 from yuyu_book.migrate import build_report  # noqa: E402
 
 ZH = "zh/00.md"
@@ -122,12 +124,36 @@ class DualPaths(unittest.TestCase):
         cls.glosses = registry.load("glosses.json")
         cls.paths = registry.load("reading-paths.json")
 
-    def test_shipped_refs_reach_the_same_languages_as_their_blocks(self):
-        dual = self.migrate.verify_dual(self.manifest, self.glosses,
-                                        self.paths)
-        self.assertEqual(dual["mismatches"], [])
-        self.assertEqual(dual["consistent"], dual["blocks"])
-        self.assertGreater(dual["blocks"], 400)
+    def test_block_markers_never_reach_the_rendered_book(self):
+        from yuyu_book import render
+        from yuyu_book.core import (REPO_ROOT, load_configs, load_unit,
+                                    unit_stream)
+        unit_def = next(u for u, _k, _p in unit_stream(load_configs()[0])
+                        if u["id"] == "ch02")
+        unit = load_unit(unit_def, "chapter", "zh", REPO_ROOT)
+        out = render.render_unit(unit, {}, diagrams={}, autolink=False)
+        self.assertNotIn("<!-- block", out["html"])
+
+    def test_shipped_registry_has_no_line_refs_left(self):
+        report = self.migrate.build_report(self.manifest, self.glosses)
+        self.assertEqual(report["summary"]["refs"], 0)
+
+    def test_shipped_registry_survives_fifty_inserted_lines(self):
+        import tempfile
+        from yuyu_book import plain
+        from yuyu_book.core import REPO_ROOT, read_text, unit_stream
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for unit, _kind, _part in unit_stream(self.manifest):
+                for lang in ("zh", "en"):
+                    rel = unit[lang].replace("\\", "/")
+                    target = root / rel
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text("\n" * 50 + read_text(REPO_ROOT / rel),
+                                      encoding="utf-8", newline="")
+            plain.validate_plain(self.glosses, self.paths, self.manifest,
+                                 root=root)
 
     def test_cli_exits_nonzero_when_the_dual_check_disagrees(self):
         import importlib.util
@@ -151,6 +177,94 @@ class DualPaths(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertEqual(json.loads(eq.read_text(encoding="utf-8"))
                              ["dual"]["mismatches"], broken["mismatches"])
+
+
+class ResolverScope(unittest.TestCase):
+    """An id proves only the editions whose files carry that marker."""
+
+    def setUp(self):
+        import tempfile
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        files = {
+            "zh/front.md": "# 前言\n\n<!-- block: front.intro -->\n\n"
+                           "前言正文 Agent Harness\n",
+            "en/front.md": "# Front\n\n<!-- block: front.intro -->\n\n"
+                           "front body Agent Harness\n",
+            "zh/ch01.md": "# 标题\n\n<!-- block: ch01.zh-only -->\n\n"
+                          "Agent Harness 中文段落\n\n"
+                          "<!-- block: ch01.shared -->\n\n"
+                          "Agent Harness 共享段落\n",
+            "en/ch01.md": "# Title\n\n<!-- block: ch01.en-only -->\n\n"
+                          "Agent Harness english paragraph\n\n"
+                          "<!-- block: ch01.shared -->\n\n"
+                          "Agent Harness shared paragraph\n",
+        }
+        for rel, text in files.items():
+            path = self.root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        self.manifest = {
+            "front": {"id": "front", "zh": "zh/front.md",
+                      "en": "en/front.md"},
+            "parts": [{"id": "p1", "units": [
+                {"id": "ch01", "zh": "zh/ch01.md", "en": "en/ch01.md"}]}],
+            "appendices": [],
+            "guides": {
+                "front": {"plain": {"zh": "前", "en": "front"},
+                          "plain_evidence": ["front.intro"]},
+                "ch01": {"plain": {"zh": "章", "en": "chapter"},
+                         "plain_evidence": ["ch01.shared"]},
+            },
+        }
+        self.paths = {"ch01": ["start"]}
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def validate(self, evidence):
+        g = {"harness": {
+            "term": {"zh": "线束", "en": "Agent Harness"},
+            "forms": {"zh": ["Agent Harness"], "en": ["Agent Harness"]},
+            "plain": {"zh": "一根线", "en": "one harness"},
+            "why": {"zh": "因为要接线", "en": "because it wires things"},
+            "why_evidence": ["ch01.shared"],
+            "priority": "core",
+            "evidence": evidence,
+        }}
+        plain.validate_plain(g, self.paths, self.manifest, root=self.root)
+
+    def test_zh_only_id_cannot_prove_the_english_edition(self):
+        with self.assertRaises(BuildError) as ctx:
+            self.validate(["ch01.zh-only"])
+        self.assertIn("core glosses need evidence in both languages", str(ctx.exception))
+        self.assertIn("['zh']", str(ctx.exception))
+
+    def test_en_only_id_cannot_prove_the_chinese_edition(self):
+        with self.assertRaises(BuildError) as ctx:
+            self.validate(["ch01.en-only"])
+        self.assertIn("['en']", str(ctx.exception))
+
+    def test_a_shared_id_proves_both_editions(self):
+        self.validate(["ch01.shared"])
+
+    def test_two_scoped_ids_union_into_both_editions(self):
+        self.validate(["ch01.zh-only", "ch01.en-only"])
+
+
+class WritePlan(unittest.TestCase):
+    def test_markers_go_above_blocks_and_keep_crlf(self):
+        from yuyu_book.migrate import insert_markers
+        out = insert_markers("a\r\nb\r\nc\r\n", [(2, "u.one"), (3, "u.two")])
+        self.assertEqual(out, "a\r\n<!-- block: u.one -->\r\nb\r\n"
+                              "<!-- block: u.two -->\r\nc\r\n")
+
+    def test_registry_rewrite_is_quoted_and_leaves_other_text_alone(self):
+        from yuyu_book.migrate import rewrite_registry_text
+        text = '{"a": "x.md:5", "b": ["x.md:5"], "note": "x.md:5?"}'
+        out = rewrite_registry_text(text, {"x.md:5": "u.b-1234"})
+        self.assertEqual(out.count('"u.b-1234"'), 2)
+        self.assertIn('"note": "x.md:5?"', out)
 
 
 if __name__ == "__main__":

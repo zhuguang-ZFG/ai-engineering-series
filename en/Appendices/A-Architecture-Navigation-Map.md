@@ -1,8 +1,10 @@
 # Appendix A: Architecture Navigation Map
 
+<!-- block: apxa.b-2ea398f9 -->
 This appendix provides a conceptual navigation of the Claude Code system architecture, helping readers understand the responsibilities and collaboration relationships of each functional module from a macro perspective. Whether you want to quickly locate the architectural domain of a specific feature or trace a complete data flow path, this map is your go-to reference.
 
 **How to use this map**:
+<!-- block: apxa.b-1614c95c -->
 - If you are reading for the first time, we recommend reading through in order from A.1 -> A.2 -> A.3 to build a holistic understanding
 - If you want to find a specific module, locate it directly in the A.1 index table, then jump to the relevant section
 - If you want to understand the data flow of a specific feature, find the corresponding flowchart in A.3
@@ -11,6 +13,7 @@ This appendix provides a conceptual navigation of the Claude Code system archite
 
 ---
 
+<!-- block: apxa.b-82994884 -->
 ## A.1 Core Module Index
 
 The table below lists all core modules in the Claude Code architecture. Each module includes a responsibility description, an overview of key data structures, and a pointer to the chapters that cover it.
@@ -218,6 +221,7 @@ Understanding the degree of coupling between modules helps readers identify the 
 
 ---
 
+<!-- block: apxa.b-f44b8676 -->
 ## A.3 Data Flow Path Quick Reference
 
 This section presents complete data flows for several key operations in Claude Code in flowchart form. Each flowchart annotates the core modules and key decision points involved, helping readers quickly trace how data flows through the system.
