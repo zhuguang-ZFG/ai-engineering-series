@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from yuyu_book.blocks import validate_markers  # noqa: E402
+from yuyu_book.blocks import parse_blocks, validate_markers  # noqa: E402
 from yuyu_book.core import BuildError  # noqa: E402
 
 MARK = "<!-- block: {0} -->"
@@ -79,6 +79,51 @@ class Markers(unittest.TestCase):
         with self.assertRaises(BuildError) as raised:
             validate_markers(text, "ch01.md", "ch01")
         self.assertIn("same block", str(raised.exception))
+
+
+class Parsing(unittest.TestCase):
+    def spans(self, text):
+        return [(b.kind, b.line, b.end_line, b.block_id, b.text)
+                for b in parse_blocks(text, "ch01", "zh")]
+
+    def test_paragraphs_split_on_blank_lines(self):
+        text = "intro\nstill intro\n\nsecond\n"
+        self.assertEqual([(k, a, b) for k, a, b, _, _ in self.spans(text)],
+                         [("paragraph", 1, 2), ("paragraph", 4, 4)])
+
+    def test_heading_is_a_citable_span(self):
+        text = "## 3.1 Tool loop\ntext\n"
+        kind, start, end, _, body = self.spans(text)[0]
+        self.assertEqual((kind, start, end), ("heading", 1, 1))
+        self.assertEqual(body, "## 3.1 Tool loop")
+
+    def test_marker_attaches_to_the_following_span(self):
+        text = "\n<!-- block: ch01.span -->\n\nbody\n"
+        kind, start, end, block_id, _ = self.spans(text)[0]
+        self.assertEqual((kind, start, end, block_id),
+                         ("paragraph", 4, 4, "ch01.span"))
+
+    def test_list_stays_one_span(self):
+        text = "- one\n- two\n  continuation\n\nnext\n"
+        self.assertEqual([(k, a, b) for k, a, b, _, _ in self.spans(text)],
+                         [("list", 1, 3), ("paragraph", 5, 5)])
+
+    def test_table_and_quote_are_distinct_spans(self):
+        text = "> quote\n> more\n\n| a | b |\n| --- | --- |\n"
+        self.assertEqual([(k, a, b) for k, a, b, _, _ in self.spans(text)],
+                         [("quote", 1, 2), ("table", 4, 5)])
+
+    def test_fence_keeps_its_blank_lines_and_markers_inside(self):
+        text = "```md\n<!-- block: ch01.not-a-marker -->\n\n```\nafter\n"
+        spans = self.spans(text)
+        self.assertEqual([(k, a, b) for k, a, b, _, _ in spans],
+                         [("fence", 1, 4), ("paragraph", 5, 5)])
+        self.assertEqual(spans[0][3], "")
+
+    def test_fence_closes_only_on_a_matching_token(self):
+        text = "~~~\ncode\n```\n~~~\nafter\n"
+        self.assertEqual([(k, a, b) for k, a, b, _, _ in self.spans(text)],
+                         [("fence", 1, 4), ("paragraph", 5, 5)])
 
 
 if __name__ == "__main__":
