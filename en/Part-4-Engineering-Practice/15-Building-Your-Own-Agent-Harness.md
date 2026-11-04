@@ -5,9 +5,18 @@
 > "The rules of thinking are lengthy and fortuitous. They require plenty of thinking of most long duration and deep meditation for a wizard to wrap one's noggin around."
 > -- Comment in Claude Code
 
-**Learning Objectives:** The parts the previous 14 chapters took apart now go back together: you build your own Agent Harness, from the dialog loop all the way to something you can deploy.
-
 **Difficulty:** Advanced. 15.1's principles review and 15.2's six-step roadmap are the backbone — build along Steps 1–6. 15.3's architecture lessons deserve a full read; skip 15.4 productionization and 15.5 future outlook on a first pass and return before launch.
+
+<!-- block: ch15.b-20a27c05 -->
+
+Picture a cold start. You bolt the parts from the previous 14 chapters together: dialog loop, tool registry, permission checks, context compression. The first run works — the model asks, the system answers. But hit Ctrl+C once and the child process keeps running; a tool error throws straight onto the screen; move to another machine and the environment variable isn't read, so it fails before it starts.
+
+None of these are the model's fault. The harness itself hasn't taken shape. This chapter bolts those parts back into a cart that rolls: build along Steps 1–6 from the dialog loop all the way to something you can deploy, then look at which side Claude Code chose at each decision point.
+
+> **What you can do after this chapter:**
+> - Build a minimal Agent Harness along the six-step roadmap: loop, tools, permissions, context, memory, hooks — each in its place
+> - Say which engineering decision each of the five design principles lands on, so you know how to decide when Claude Code doesn't cover your case
+> - Choose rightly between building your own harness and calling the LLM API directly, and say what that choice costs
 
 ---
 
@@ -1268,6 +1277,25 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 8. **Observability is the cornerstone of productionization:** From structured logs to aggregated metrics to distributed tracing, the four layers of observability carry debugging, optimization, and compliance for Agent systems. An Agent system without observability is a black box -- when problems arise, you can only guess.
 
 > **Three sentences to keep:** ① At every decision point, Claude Code picks the safer, more controllable, more observable option. ② Loop state, fail-closed defaults, dependency injection, circuit breakers, and feature flags are all that philosophy at work. ③ Build your own cart on the six-step roadmap: hold the safety line first, then let the agent run.
+
+---
+
+## 15.6 Building an Agent Harness: Common Failures / The Right Move
+
+When you build the cart yourself, failures are usually not wrong tech choices — they're reversed order: get it running first, add safety later. The left column lists the most common moves; the right column gives this chapter's answer:
+
+| Common failure | The right move |
+|---------|---------|
+| Implement the dialog loop as hand-written recursion; state grows and debugging collapses | Loops over recursion: `while(true)` + `continue`, state reassigned at a fixed spot (15.1, principle 1) |
+| Write input validation, permission checks and description text separately; change one, miss two | Schema-driven: one Zod definition derives all three (15.1, principle 2) |
+| Make permissions a single master switch: either everything or nothing | Progressive four stages: if an earlier stage rejects, later ones don't run (15.1, principle 3) |
+| Get it running first and add permissions later; the first real run deletes something it shouldn't | Put the safety line down first: Step 3 permissions sit after the tool system and before context management (15.2) |
+| Load every tool and every memory up front; slow start, huge context | Progressive disclosure: load on demand (15.2, Steps 2/5) |
+| Write hooks as resident processes bound into the main flow | Hooks as extension points only: standalone commands or HTTP endpoints, standard JSON in and out (15.1, principle 5) |
+| Circular dependencies tangle together; change one place and a whole patch breaks | Break the cycles: pull shared state into its own module (15.3) |
+| Copy every Claude Code design regardless of your own constraints | Learn the principles, not the shapes: ask whether the decision still holds under your constraints (15.1) |
+
+> **Cross reference:** How to walk the build-your-own-harness road on another harness — see omp volume, Chapter 33 "Review: From Startup to Tool Registration" and Chapter 28 "Getting Started with the SDK and RPC".
 
 ---
 

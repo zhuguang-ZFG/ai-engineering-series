@@ -1,0 +1,4 @@
+$ omp read skill://hello
+Unknown skill: hello
+Available: code-tour, council, e2e-testing, error-handling, handdraw-style-prompter, production-audit, reverse-engineer-anything, sepia, sepia-hemingway, sepia-recreate, sepia-refactor, sepia-review, sepia-write, skill-scout, skill-stocktake, tdd-workflow, trellis-break-loop, trellis-channel, trellis-continue, trellis-finish-work, trellis-meta, trellis-session-insight, trellis-spec-bootstrap, trellis-start, trellis-update-spec, verification-loop, windows-desktop-e2e
+exit=1

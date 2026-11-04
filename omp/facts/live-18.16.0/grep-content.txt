@@ -1,0 +1,65 @@
+Searching in: D:\Users\claude\claude-code-book-main\omp\ch09.md
+Pattern: hashline
+Mode: content, Limit: 20, Context: 2, Gitignore: true
+
+Total matches: 11
+Files with matches: 1
+Files searched: 1
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-1- # 第9章 改代码
+D:/Users/claude/claude-code-book-main/omp/ch09.md-2- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md:3: 读清楚之后，下一件事几乎总是：**改文件**。omp 在这条路上押了一个很硬的技术选择——默认编辑模式叫 **hashline**：用「快照标签 + 原始行号」锚定，而不是让模型猜一段可能已经漂移的字符串。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-4- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-5- 配套还有：
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-10- 细节以 `docs/tools/edit.md`、`write.md`、`ast-edit.md` 以及 `crates/pi-edit` 相关说明为准。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-11- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md:12: ![图9-1 hashline 锚点](images/fig9-1-hashline-anchor.jpg)
+D:/Users/claude/claude-code-book-main/omp/ch09.md-13- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-14- *图9-1：`[PATH#TAG]` 里的四位十六进制 TAG 来自最近一次锚定的 read/grep/成功 edit。*
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-22- - 并行或上一轮 edit 已经改过文件，旧字符串不存在了，却还在硬替。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-23- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md:24: hashline 的思路是：**编辑针对的是某次读到的快照**。快照有一个短 TAG（文档示例形态像 `1A2B` 这种四位大写十六进制）。模型写出的补丁必须带上这个 TAG；应用时核对「文件是否仍是那份快照」。对不上就拒绝或走恢复路径，而不是静默改错地方。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-25- 
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md:26: ![图9-2 hashline 对比替换](images/fig9-2-hashline-vs-replace.jpg)
+D:/Users/claude/claude-code-book-main/omp/ch09.md-27- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-28- *图9-2：左边是「凭记忆找字符串」；右边是「凭快照标签 + 原始行号下刀」。*
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-35- 2. 环境变量 `PI_EDIT_VARIANT`；
+D:/Users/claude/claude-code-book-main/omp/ch09.md-36- 3. 设置项 `edit.mode`；
+D:/Users/claude/claude-code-book-main/omp/ch09.md:37: 4. 默认 **`hashline`**。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-38- 
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md:39: 文档列出的模式包括：`hashline`、`apply_patch`、`patch`、`replace`、`sloppy`。不同模式会切换 schema、提示词、示例、渲染器，有的还带约束解码语法（Lark）。有的模型族在设置推导为 hashline 时，可能回退到 `replace`；`PI_STRICT_EDIT_MODE` 可以关掉这类回退（文档点名了若干模型族）。日常你记住：**默认按 hashline 读文档就对了**；若团队强制某种模式，去查 `edit.mode` / `PI_EDIT_VARIANT`。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-40- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-41- 工具是 strict、essential，并且使用**排他并发**——同一时刻不要指望两个 edit 抢着写同一工作区而不排队。
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-55- - 每个 section 改**一个已存在的文件**；
+D:/Users/claude/claude-code-book-main/omp/ch09.md-56- - TAG 必须抄自最近锚定的 `read` / `grep` / 成功 `edit`；
+D:/Users/claude/claude-code-book-main/omp/ch09.md:57: - 新建或整文件重写用 **`write`**，别硬用 hashline 造文件；
+D:/Users/claude/claude-code-book-main/omp/ch09.md-58- - 严格自定义工具语法可能包在 `*** Begin Patch` / `*** End Patch` 里；普通解析也接受未包装载荷。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-59- 
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-87- ## 9.5 `write`：新建与整文件覆盖
+D:/Users/claude/claude-code-book-main/omp/ch09.md-88- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md:89: `write` 负责创建新文件或整体重写。当你要「从零生成配置文件」「脚手架一个模块」时走它；对已有大文件的局部手术优先 hashline `edit`，避免模型重写整文件时丢掉你没提的细节。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-90- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-91- 输入/输出与审批档位见 `docs/tools/write.md`。和 edit 一样，成功写入后应让后续 `read` 拿到新的锚，再继续改。
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-102- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-103- - 一次改很多处相同结构；
+D:/Users/claude/claude-code-book-main/omp/ch09.md:104: - 纯行级 hashline 会漏掉或写崩语法平衡的情况。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-105- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-106- 不适合：
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-107- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md:108: - 只改一个明确行号的小补丁（hashline 更直接）；
+D:/Users/claude/claude-code-book-main/omp/ch09.md-109- - 语言/规则不被当前 ast 管线支持时硬上。
+D:/Users/claude/claude-code-book-main/omp/ch09.md-110- 
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md-129- 
+D:/Users/claude/claude-code-book-main/omp/ch09.md-130- ---
+D:/Users/claude/claude-code-book-main/omp/ch09.md:131: **版本核对清单**：hashline 语法与模式解析见 `docs/tools/edit.md`；`write`/`ast_edit` 见对应工具文档；`PI_EDIT_VARIANT`、`PI_STRICT_EDIT_MODE`、`edit.mode` 以 edit 文档 Mode selection 节为准。写作钉 omp v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。
+

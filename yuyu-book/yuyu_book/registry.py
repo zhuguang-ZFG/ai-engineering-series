@@ -23,11 +23,17 @@ CURRENT = 1
 
 FILES = (
     "manifest.json",
+    "manifest-omp.json",
     "glosses.json",
+    "glosses-omp.json",
     "sources.json",
+    "sources-omp.json",
     "notes.json",
+    "notes-omp.json",
     "reading-paths.json",
+    "reading-paths-omp.json",
     "revisions.json",
+    "revisions-omp.json",
     "subject-index.json",
 )
 

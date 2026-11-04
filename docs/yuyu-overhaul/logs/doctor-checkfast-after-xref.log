@@ -1,0 +1,41 @@
+# 2026-11-04 09:15:38
+## bookctl doctor
+[ok] python             3.13.14
+[ok] node               v24.14.0
+[ok] npm                C:\Program Files\nodejs\npm.CMD
+[ok] npm deps           node_modules/mermaid present
+[ok] python deps        all locked versions installed
+[ok] requirements/lock  requirements.txt matches uv.lock
+[ok] browser            msedge 156.0.4314.58
+[ok] cjk font           C:/Windows/Fonts/msyh.ttc
+[ok] writable           D:\Users\claude\claude-code-book-main\yuyu-book\dist
+doctor: 9 ok, 0 failed
+doctor_exit=0
+
+## bookctl check --fast
+.................................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 501 tests in 261.323s
+
+OK
+
+== content ==
++ C:\Users\<用户名>\scoop\apps\python313\current\python.exe scripts/check_book.py
+  longest wall [zh] 2809: 00-前言.md:106-186 阅读路径建议
+  longest wall [zh] 2555: 第一部分-基础篇/01-智能体编程的新范式.md:230-323 1.3 Agent Harness 设计哲学的五大原则
+  longest wall [zh] 2221: 第一部分-基础篇/04-权限管线-Agent的护栏.md:259-323 4.3.6 对照面：没人答话时，`ask` 去了哪里
+  longest wall [en] 7822: en/00-Foreword.md:103-183 Reading Path Recommendations
+  longest wall [en] 7087: en/Part-1-Foundations/01-The-New-Paradigm-of-Agent-Programming.md:230-318 1.3 Five Principles of Agent Harness Design Philosophy
+  longest wall [en] 6332: en/Part-4-Engineering-Practice/15-Building-Your-Own-Agent-Harness.md:1183-1286 15.6 Building an Agent Harness: Common Failures / The Right Move
+169 Markdown files, 321 Mermaid diagrams, 0 errors
+
+== mermaid ==
++ C:\Program Files\nodejs\npm.CMD run check:diagrams
+
+> check:diagrams
+> node scripts/check_mermaid.mjs
+
+321 Mermaid diagrams, 0 errors
+
+check fast: 6 steps passed
+check_exit=0

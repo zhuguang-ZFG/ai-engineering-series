@@ -1,0 +1,16 @@
+Export or import stored provider credentials (API keys and OAuth logins) as JSON
+
+USAGE
+  $ omp auth ACTION [FILE]
+
+ARGUMENTS
+  ACTION   export or import (export|import)
+  FILE     File written by `omp auth export`, or - for stdin (import)
+
+EXAMPLES
+  # Write every stored credential to a file (keep it secret)
+    omp auth export > credentials.json
+  # Merge them into this machine's credential store
+    omp auth import credentials.json
+  # Copy credentials to another machine over SSH
+    omp auth export | ssh host omp auth import -

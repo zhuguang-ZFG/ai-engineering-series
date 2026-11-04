@@ -4,10 +4,18 @@
 
 > "Plans are nothing; planning is everything." -- Dwight D. Eisenhower
 
-<!-- block: ch14.b-aedb3b29 -->
-**Learning Objectives:** How Plan Mode splits thinking from doing, when EnterPlanMode/ExitPlanMode flip between the two, where plan files live and how they come back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension. The worked cases at the end show how Plan Mode lifts both the success rate and the predictability of long Agent tasks.
-
 **Difficulty:** Advanced. 14.1 and 14.2 are the backbone: read the mode-switching mechanism and plan-file recovery in full. Skip 14.4 scheduling and 14.5 background tasks on a first pass; return when you need timers or long-running jobs.
+
+Picture a rework you've paid for. You ask the agent to add a pagination endpoint. It starts writing the moment it hears the requirement, and only when it's done do you notice it put the pagination parameters in the URL and queried the same list twice. Fixing it takes four hours — three times what the coding took.
+
+Look back at its reasoning and the problem isn't a dumb model. It had no place to write the plan down first and let you see it.
+<!-- block: ch14.b-aedb3b29 -->
+This chapter covers that stretch of "think first, act second": how Plan Mode splits read-only exploration from writable execution, how a plan file comes back after an interruption, and how Cron, RemoteTrigger and background tasks bring in a time dimension.
+
+> **What you can do after this chapter:**
+> - Say when EnterPlanMode/ExitPlanMode flip, and why a sub-agent cannot enter Plan Mode
+> - Given a plan file, name the three layers it recovers from: direct read, file snapshot, message history
+> - Break a long task into Plan-Execute-Verify, and give a scheduled task an expiry
 
 ---
 
@@ -845,3 +853,25 @@ For your chosen scenario, answer:
 7. **lastCacheSafeParams' global slot design** embodies "implicit context passing" pattern, reducing inter-component coupling while avoiding race conditions through synchronous read/write. This pattern is particularly useful when needing to pass context across multiple component layers.
 
 > **Three sentences to keep:** ① Plan Mode separates read-only exploration from writable execution, so a wrong direction costs almost nothing. ② Align intent before you act: rework happens on the blueprint, and the plan file's three-layer recovery survives interruptions. ③ For complex work, run Plan-Execute-Verify: no plan, no ground broken.
+
+---
+
+## 14.6 Structured Workflows: Common Failures / The Right Move
+
+Failures at this layer are usually not logic errors — they're mixing "thinking" and "doing" in one stretch. The left column lists the most common moves; the right column gives this chapter's answer:
+
+| Common failure | The right move |
+|---------|---------|
+| Start coding the moment you hear the requirement and notice the wrong direction only at the end | Enter Plan Mode first, write the plan down, get a nod, then implement (14.1) |
+| Call EnterPlanMode inside a sub-agent and get an error thrown | Plan Mode is open to the main conversation only; the coordinator writes the sub-agent's spec (14.1.2) |
+| Lose the plan after one interruption and have to rethink from zero | Three-layer recovery: read the file, read the snapshot, rebuild from message history (14.2.3) |
+| Name plan files arbitrarily and never find them again | slug-based naming + lazy generation: the file lands only when it's first really written (14.2.2) |
+| Write a plan, turn your back, and nobody verifies it | Plan-Execute-Verify: a separate verification step after execution (14.4.5) |
+| Run full planning for a trivial task like changing one config value | Over-planning is also an anti-pattern: do simple tasks directly (14.4.5) |
+| Start a scheduled task and never delete it; zombies burn money forever | Give recurring tasks an expiry so they clean themselves up (14.4.4) |
+| Wait synchronously in the main conversation for a scheduled result (Sleep + polling) | Hand the result to a notification mechanism and let the main conversation run on (14.4.5) |
+| Use SleepTool in Plan Mode to poll an external state | Planning should gather everything in one pass; needing to wait means the exploration strategy needs work (14.5.1) |
+
+> **Cross reference:** How plan-before-execute works on another harness — see omp volume, Chapter 13 "Planning and Collaboration" and Chapter 18 "Magic Keywords and Modes".
+
+---

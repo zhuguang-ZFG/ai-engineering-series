@@ -9,10 +9,17 @@
 ---
 
 <!-- block: ch06.b-65fc86fe -->
-Humans stay coherent across conversations because they have memory. Similarly, a truly useful Agent cannot start from scratch every conversation -- it needs to remember who the user is, what the project is doing, and which practices turned out to work. Claude Code's memory system (memdir) serves exactly this purpose: a file-based, typed, cross-session persistent memory architecture.
+You had the Agent remember a pile of things: file structure, API routes, dependency versions. Three months later the memory directory holds hundreds of entries and almost none of them pull their weight -- ask it the dependency version and it recites a stale `package.json`; ask it the architecture and it describes a version overturned half a year ago.
 
 <!-- block: ch06.b-19c8efc9 -->
-Comparing the memory system to "long-term memory" is a biologically precise analogy. Human memory falls into sensory memory (milliseconds), working memory (seconds, corresponding to the context management in Chapter 7), and long-term memory (minutes to years, corresponding to the memory system in this chapter). Claude Code's design follows this same layering: the context window is "working memory," temporarily holding information within a single session; while memdir is "long-term memory," persistently storing non-derivable critical knowledge across sessions.
+Memory is not a warehouse; it is a notebook of leads. What the code already tells you has no business taking up a memory slot. What the code cannot tell you -- human preference, the reason behind a decision, an external entry point -- is what belongs on the page. Claude Code's memdir draws exactly this line across four types: user, feedback, project, reference.
+
+> **What you can do after this chapter:**
+> - Take any piece of information and judge which memory type it belongs to, or whether the system should keep it out of storage entirely
+> - Write a memory file with frontmatter, body, and index each in their place, without blowing the limit
+> - Keep memory directories tidy across multiple projects: what shares, what stays isolated, what to prune
+
+> **Cross-reference:** How the same long-term memory is laid out on disk in another harness -- see omp volume, Chapter 16, "The Memory System".
 
 ## 6.1 Taxonomy of the Four Memory Types
 
@@ -214,6 +221,15 @@ Some users try to use the memory system as a replacement for project documentati
 The user says "this feature launches next Tuesday," and the Agent saves "launches next Tuesday." But two days later in the next conversation, "next Tuesday" has become "this Tuesday," and a week later it becomes "last Tuesday." This memory is not only useless but potentially misleading.
 
 **Correct approach:** All time-related memories must use absolute dates. The Agent should convert "next Tuesday" to a specific date (e.g., 2026-04-07) before saving.
+
+These are the spots where memory management usually goes wrong, collected in one table:
+
+| Common mistake | Correct approach |
+|:--------------:|-----------------|
+| Have the Agent remember things the code already tells you -- file structure, dependency versions | Store only what the code cannot: human preference, the reason behind a decision, external links (6.1.3) |
+| Let memories pile up until MEMORY.md runs to hundreds of lines | Prune regularly; use "would behavior change if I delete this?" as the filter (6.1.5) |
+| Treat memory as a documentation library and stuff tech specs into it | Put docs in `docs/`; keep only the "why" in memory (6.1.5) |
+| Save "launches next Tuesday" as-is; two days later it is wrong | Always convert to an absolute date before saving (6.1.2) |
 
 > **Cross-Reference:** The exclusion principle for memories shares the same philosophy as the compression strategy in Chapter 7 (Context Management) -- only retain information that cannot be re-acquired. Context compression clears old tool results (which can be re-acquired by re-executing tools), and the memory system excludes code patterns (which can be re-acquired by re-reading code).
 

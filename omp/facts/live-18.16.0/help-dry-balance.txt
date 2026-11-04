@@ -1,0 +1,27 @@
+Dry-run OAuth account balancing across random session ids
+
+USAGE
+  $ omp dry-balance [MODEL] [FLAGS]
+
+ARGUMENTS
+  MODEL   Model selector (provider/model or fuzzy id). Defaults to the configured default model.
+
+FLAGS
+      --model=<value>      Model selector (same syntax as --model on omp)
+      --count=<int>        Number of random session ids to try
+      --concurrency=<int>  Maximum concurrent credential resolutions
+      --json               Output JSON
+      --bench              Send one live benchmark request per OAuth account
+      --config=<value>     Load an extra config.yml-style overlay for this run (repeatable)
+
+EXAMPLES
+  # Dry-run the configured default model with 100 random session ids
+    omp dry-balance
+  # Dry-run a specific model
+    omp dry-balance anthropic/claude-sonnet-4-5
+  # Larger run with bounded concurrency
+    omp dry-balance --model openai-codex/gpt-5-codex --count 1000 --concurrency 64
+  # Benchmark every OAuth account in parallel
+    omp dry-balance --bench
+  # Machine-readable output
+    omp dry-balance --json

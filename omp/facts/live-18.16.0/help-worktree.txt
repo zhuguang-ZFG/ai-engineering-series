@@ -1,0 +1,29 @@
+Add, list, or clear git worktrees (clone-first when enabled)
+
+USAGE
+  $ omp worktree [ACTION] [PATH] [COMMIT] [FLAGS]
+
+ARGUMENTS
+  ACTION   list (default), clear, or add (list|clear|add)
+  PATH     Worktree path (add)
+  COMMIT   Commit-ish to check out (add)
+
+FLAGS
+  -C, --cwd=<value>           Repository/base directory (add)
+  -b, --branch=<value>        Create a new branch (add)
+  -B, --force-branch=<value>  Create or reset a branch (add)
+  -d, --detach                Detach HEAD (add)
+  -q, --quiet                 Suppress add output
+      --all                   Clear every entry, including live PR-checkout worktrees (clear)
+  -n, --dry-run               Print what would be removed without touching the filesystem (clear)
+  -j, --json                  Emit machine-readable JSON
+
+EXAMPLES
+  omp worktree
+  omp worktree list --json
+  omp worktree add ../feature
+  omp worktree add -b feature ../feature origin/main
+  omp worktree add --detach ../review HEAD~2
+  omp worktree clear
+  omp worktree clear --dry-run
+  omp worktree clear --all

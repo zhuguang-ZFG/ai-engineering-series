@@ -1,0 +1,11 @@
+$ omp read skill://sepia-review
+[Skill file: C:\Users\<user>\.omp\plugins\cache\plugins\sepia___sepia___0.12.4\skills\sepia-review\SKILL.md]
+---
+name: sepia-review
+description: Use when a user explicitly requests Sepia review to diagnose prose without editing.
+license: MIT
+---
+
+# Sepia review
+[正文略——仅证明 omp read 能取回 SKILL.md 全文；本机绝对路径中的用户名已脱敏]
+exit=0

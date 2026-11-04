@@ -1,0 +1,15 @@
+Print a shell completion script (bash, zsh, or fish)
+
+USAGE
+  $ omp completions SHELL
+
+ARGUMENTS
+  SHELL   Target shell (bash|zsh|fish)
+
+EXAMPLES
+  # zsh — eval at startup, or write to a file in $fpath
+    eval "$(omp completions zsh)"
+  # bash
+    eval "$(omp completions bash)"
+  # fish
+    omp completions fish > ~/.config/fish/completions/omp.fish

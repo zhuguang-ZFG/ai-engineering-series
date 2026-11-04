@@ -45,7 +45,7 @@
 - [ ] P3.1 将 build.py 的 CLI、应用服务和产品装配拆开。
 - [ ] P3.2 拆 core.py：I/O、路径、配置、模型、诊断。
 - [ ] P3.3 拆 render.py：Markdown、HTML 变换、引用、图版、长名称。
-- [ ] P3.4 拆 pages.py：前置页、正文单元、后置页、导航。
+- [x] P3.4 拆 pages.py：前置页、正文单元、后置页、导航。
 - [ ] P3.5 拆 style.py：令牌、屏幕、打印、组件、装饰 SVG；构建时合并内联。
 - [ ] P3.6 定义 PrintManifest，让 PDF 后处理读取结构化元数据。
 - [ ] P3.7 每完成一个模块，运行 legacy/v2 双构建并比较结构报告。

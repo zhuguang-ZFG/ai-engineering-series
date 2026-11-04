@@ -17,11 +17,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "yuyu-book"))
 
-from yuyu_book import migrate, registry  # noqa: E402
+from yuyu_book import migrate, plain, registry  # noqa: E402
 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--product", default="book",
+                        help="which volume to migrate (book, omp); the bare "
+                             "registry names belong to the book")
     parser.add_argument("--out", default="-",
                         help="JSON path, or - for stdout (default)")
     parser.add_argument("--strict", action="store_true",
@@ -32,14 +35,15 @@ def main(argv=None) -> int:
     parser.add_argument("--write", action="store_true",
                         help="insert markers and rewrite registries in place")
     args = parser.parse_args(argv)
-    manifest = registry.load("manifest.json")
-    glosses = registry.load("glosses.json")
+    names = plain.registry_names({"product": args.product})
+    manifest = registry.load(names["manifest"])
+    glosses = registry.load(names["glosses"])
     report = migrate.build_report(manifest, glosses)
     text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     dual = None
     if args.equivalence:
         dual = migrate.verify_dual(manifest, glosses,
-                                   registry.load("reading-paths.json"), report)
+                                   plain.load_plain(manifest)[1], report)
         payload = {"schema_version": 1, "summary": report["summary"],
                    "dual": dual}
         Path(args.equivalence).parent.mkdir(parents=True, exist_ok=True)

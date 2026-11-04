@@ -1,0 +1,11 @@
+Download tiny local models (session titles, memory, word completion)
+
+USAGE
+  $ omp tiny-models [ACTION] [MODEL] [FLAGS]
+
+ARGUMENTS
+  ACTION   Action to perform (download|list)
+  MODEL    Model key (`smollm` = word completion), or all
+
+FLAGS
+      --json  Output JSON

@@ -1,0 +1,19 @@
+Synthesize text with the local TTS engine and play it through the speakers
+
+USAGE
+  $ omp say [TEXT] [FLAGS]
+
+ARGUMENTS
+  TEXT   Text to speak (or use --file)
+
+FLAGS
+      --voice=<value>  Voice id
+      --speed=<value>  Speaking rate, 0.5–2.5 (1 = normal; default: tts.localSpeed)
+      --model=<value>  Local TTS model key
+  -f, --file=<value>   Read the text to speak from this file
+  -o, --out=<value>    Write WAV to this path instead of playing
+
+EXAMPLES
+  omp say "hello world"
+  omp say --file notes.md --voice bm_fable --speed 1.25
+  omp say "hello world" --out /tmp/hello.wav

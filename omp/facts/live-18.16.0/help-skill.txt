@@ -1,0 +1,32 @@
+Install, search, publish, and manage skills on the Skillshare registry (skills.omp.sh)
+
+USAGE
+  $ omp skill [ACTION] [TARGETS...] [FLAGS]
+
+ARGUMENTS
+  ACTION    Skill action (publish|version|tag|yank|deprecate|owner|token|import|install|update|uninstall|search|info|list)
+  TARGETS   Specs, names, directories, or action arguments
+
+FLAGS
+  -g, --global            Use the user-global skills.json (install/update/uninstall)
+  -y, --yes               Install or update skills that ship scripts without asking
+      --json              Output JSON (search, info, token, list)
+      --sort=<value>      Search order
+      --scope=<value>     Publishing scope (default: your Stencil username)
+      --tag=<value>       Dist-tag for the published version
+      --dry-run           Pack and validate without publishing
+      --allow-secrets     Publish even when credential-shaped strings are found
+      --registry=<value>  Registry base URL (overrides skills.registryUrl)
+      --undo              Reverse a yank or deprecation
+      --package=<value>   Restrict a new token to a package (repeatable)
+      --expires=<int>     Token lifetime in days
+
+EXAMPLES
+  omp skill install @alice/pdf-tools
+  omp skill install -g @alice/pdf-tools@^1.2
+  omp skill search "pdf" --sort downloads
+  omp skill version minor && omp skill publish
+  omp skill publish ./skills/pdf-tools --dry-run
+  omp skill tag @alice/pdf-tools@2.0.0-beta.1 next
+  omp skill deprecate @alice/pdf-tools@"<1.0.0" "use 1.x"
+  omp skill token create ci --package @alice/pdf-tools --expires 90

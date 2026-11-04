@@ -1,0 +1,6 @@
+error: Missing session id. Usage: omp session lease [--json] -- <session-id>...
+
+USAGE
+  $ omp session ACTION [SOURCE] [OUTPUT] [FLAGS]
+
+Run `omp session --help` for details.

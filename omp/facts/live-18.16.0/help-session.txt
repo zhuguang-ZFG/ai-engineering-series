@@ -1,0 +1,24 @@
+Hand a session to another machine (pack, unpack, moved) or check which sessions a running omp owns (lease)
+
+USAGE
+  $ omp session ACTION [SOURCE] [OUTPUT] [FLAGS]
+
+ARGUMENTS
+  ACTION   pack, unpack, moved, or lease (pack|unpack|moved|lease)
+  SOURCE   Session .jsonl path or id (pack, moved); archive path (unpack); session ids (lease)
+  OUTPUT   Archive file to write (pack)
+
+FLAGS
+      --cwd=<value>  Directory the session continues in on this machine (unpack)
+      --to=<value>   Where the session went, e.g. a machine name (moved)
+      --json         Print {held, unknown} session id lists as JSON (lease)
+
+EXAMPLES
+  # Pack a session with its artifacts and image blobs
+    omp session pack ~/.omp/agent/sessions/<project>/<file>.jsonl /tmp/session.tar
+  # Unpack it on another machine; prints the session file path
+    omp session unpack /tmp/session.tar --cwd ~/src/project
+  # Mark the local copy stale; resuming it later forks it
+    omp session moved <file>.jsonl --to cloud
+  # List which of these sessions a running omp owns, without taking ownership (`--` keeps ids starting with `-` from parsing as options)
+    omp session lease --json -- <id> <id>

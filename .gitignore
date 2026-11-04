@@ -70,3 +70,24 @@ video/**/compositions/watermark.html
 
 # PR descriptions are written under the system temp dir, never staged
 .pr-body.md
+
+# omp volume: never commit local secrets or upstream source trees
+omp/**/.env
+omp/**/secrets.yml
+omp/**/models.yml
+**/omp-src/
+omp-book-phase1.tar.gz
+omp-phase1-meta.tar.gz
+# The raw `omp models` capture prints every gateway the local account is
+# configured against, by name, with its private model inventory. `omp/VERIFY.md`
+# already rules it 仅本机留存、禁止入书稿; captures that do enter the book are
+# the redacted siblings (`*-redacted.txt`, e.g. `models-find-flash-redacted.txt`).
+omp/facts/live-*/models-list.txt
+# Raw RPC state includes the local model configuration; publish the shape capture.
+omp/facts/live-*/rpc-get-state-probe.txt
+
+# Scratch for one-off probes, HEAD comparison trees and detached CI logs.
+# `yuyu-book/.scratch/` above only covers builder output; the repo-root one is
+# where ad-hoc runs dump things, and its 89 files (30 top-level entries) once
+# sat untracked *and unignored* — right in front of a `git add -A`.
+/.scratch/

@@ -24,7 +24,10 @@ from .model import Block, Diagnostic
 MARKER = re.compile(
     r"^\s*<!--\s*block:\s*(?P<id>[a-z0-9][a-z0-9.-]*)\s*-->\s*$")
 LOOSE = re.compile(r"<!--\s*block\b", re.I)
-ID_RE = re.compile(r"^[a-z][a-z0-9]*\.[a-z0-9]+(?:-[a-z0-9]+)*$")
+ID_RE = re.compile(
+    # the unit segment may itself be hyphenated: a second volume's unit ids
+    # carry their product prefix (`omp-ch33`), the book's do not (`ch03`)
+    r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*$")
 HEADING_RE = re.compile(r"^(#{1,6})\s+\S")
 LIST_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 TABLE_RE = re.compile(r"^\s*\|")

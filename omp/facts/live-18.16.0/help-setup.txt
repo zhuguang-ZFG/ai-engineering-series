@@ -1,0 +1,11 @@
+Run onboarding setup or install dependencies for optional features
+
+USAGE
+  $ omp setup [COMPONENT] [FLAGS]
+
+ARGUMENTS
+  COMPONENT   Optional component to install (python|speech)
+
+FLAGS
+  -c, --check  Check if dependencies are installed
+      --json   Output status as JSON

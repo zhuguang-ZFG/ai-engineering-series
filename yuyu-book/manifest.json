@@ -325,7 +325,6 @@
         "ch01.b-e24d4734",
         "ch01.b-73189cb4",
         "ch01.b-8194ef56",
-        "ch01.agent-harness",
         "ch01.b-c31f0551",
         "ch01.b-5f90e811"
       ]
@@ -487,7 +486,6 @@
         "ch05.b-858bd1a8",
         "ch05.b-184ef03a",
         "ch05.b-439b17b3",
-        "ch05.b-336ab860",
         "ch05.b-2fc6d68a",
         "ch05.b-99fdb01b",
         "ch05.b-765d1606"
@@ -1002,10 +1000,8 @@
       },
       "plain_evidence": [
         "apxc.b-2ab3b354",
-        "apxc.b-2ab3b354",
         "apxc.b-2b20d504",
         "apxc.b-f4ff565e",
-        "apxc.b-fcee4414",
         "apxc.b-fcee4414",
         "apxc.b-d99d1d62",
         "apxc.b-7d87deb0"
@@ -1039,9 +1035,7 @@
       },
       "plain_evidence": [
         "apxd.b-788aedcf",
-        "apxd.b-788aedcf",
         "apxd.b-173b10a3",
-        "apxd.b-e618e111",
         "apxd.b-e618e111",
         "apxd.b-1c1a5dd1"
       ]
