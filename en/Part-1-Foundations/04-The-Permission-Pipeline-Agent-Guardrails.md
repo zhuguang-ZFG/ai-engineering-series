@@ -5,13 +5,13 @@
 > Learning Objectives: By the end of this chapter, you can:
 
 <!-- block: ch04.b-c717f6e2 -->
-> - Explain why permission checking takes four stages, and what each stage stops on its own
-> - Explain why the permission context is immutable data
-> - Compare the five permission modes and pick the right one for a given situation
-> - Take BashTool's fine-grained permission control apart and see how it reads a command
-> - Set up an enterprise security policy a team can actually live with
+> - Say what each of the four stages stops on its own and why they sit in that order, then redraw the decision flow from memory
+> - Take one concrete command, predict whether it ends in allow, ask or deny, and name the stage and the permission mode that decided it
+> - Write an allow/deny configuration for a project that actually holds, and show what it blocked
 
 **Difficulty:** A Core chapter: 4.1 is Start level (the four-stage overview); 4.2, 4.3, and 4.5 carry the trunk. 4.4 takes BashTool's command classification apart -- the finest grain, tagged Advanced; skip it and the exercises on a first read.
+
+Picture the phone call nobody wants at 2 a.m. You tell the agent to clean the build output and start over. It types `rm -rf`, the path variable never expands, and the directory is gone. When you ask why it just ran, it did prompt once -- the week before, your colleague clicked "allow everything" on that same prompt. The culprit is not a reckless model but a layer with no checkpoint: nobody wrote down who may act, how far, or who approved it. The permission pipeline is that checkpoint.
 
 <!-- block: ch04.b-22086614 -->
 When an Agent executes tasks autonomously, it may invoke dozens of tools in a single session -- writing files, running Bash commands, searching code. Every invocation carries hidden risk: an inappropriate `rm -rf`, an accidental `npm publish`, either could cause irreversible consequences. The Permission Pipeline is the safety guardrail that Claude Code constructs for the Agent. It is not one "allow/deny" switch but a multi-stage checking mechanism, balancing automation efficiency against security control.
@@ -504,6 +504,18 @@ Create `.claude/settings.json` in the project root:
 - `Bash(git:*)` -- Prefix match, allows all commands starting with `git` (`git add`, `git commit`, etc.)
 - `Read` -- No `ruleContent`, meaning all Read tool calls go through
 - `Bash(npm publish)` -- Deny rule, specifically rejects the publish operation
+
+A wrong rule raises no error; it takes effect at the worst possible moment. These five are the usual mistakes:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Pick the loose mode first, then patch allow rules one by one until the list swallows everything | Write the deny list first, then choose the mode to fit (4.3) |
+| `Bash(npm *)` as a catch-all, wildcards plugged in wherever it leaks | Rewrite it as a prefix match, `Bash(npm:*)` -- the intent reads clearer (4.4.2) |
+| Living in `bypassPermissions` because the prompts annoy you | If you really bypass, keep deny rules and the audit log in place (4.3.4) |
+| Team policy and personal taste mixed into one `settings.json` | Team rules in `.claude/settings.json`, personal ones in `.claude/settings.local.json` (4.5) |
+| Configuring once and never testing, then reconstructing from memory when it fails | Walk one concrete command through the four stages and see which stage decides it (4.1) |
+
+> **Cross-Reference:** how this guardrail lands in another harness -- see Chapter 31 of the omp volume, "Security: Trust, No Extensions, and Secret Masking".
 
 If you want rules to apply only locally (not committed to Git), you can use `.claude/settings.local.json` instead. It has the same configuration format, but `.gitignore` excludes it by default.
 

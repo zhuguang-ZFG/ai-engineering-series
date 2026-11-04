@@ -1,0 +1,15 @@
+input  text
+size   11B · 11 chars · 1 line
+
+encoding          models                    tokens  chars/tok  vs o200k
+o200k_base        GPT-4o · o1 · GPT-5+           2       5.50         —
+cl100k_base       GPT-3.5 · GPT-4                2       5.50     +0.0%
+claude-v3         Claude 3 … Opus 4.6            2       5.50     +0.0%
+claude-v47        Opus 4.7–4.9                   3       3.67    +50.0%
+claude-v5         Opus 5+                        3       3.67    +50.0%
+claude-v5-sonnet  Sonnet/Fable 5+ · Haiku 5.5         3       3.67    +50.0%
+qwen3             Qwen 3.5+                      2       5.50     +0.0%
+deepseek-v3       DeepSeek V3–V4                 2       5.50     +0.0%
+kimi-k2           Kimi K2–K3                     2       5.50     +0.0%
+glm5              GLM-5.x                        2       5.50     +0.0%
+jev               TypeSafe Jev 1.13              2       5.50     +0.0%

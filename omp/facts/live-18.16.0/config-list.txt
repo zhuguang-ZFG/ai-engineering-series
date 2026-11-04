@@ -1,0 +1,13 @@
+Manage configuration settings
+
+USAGE
+  $ omp config [ACTION] [KEY] [VALUE...] [FLAGS]
+
+ARGUMENTS
+  ACTION   Config action (list|get|set|reset|path|init-xdg)
+  KEY      Setting key
+  VALUE    Value (for set/reset)
+
+FLAGS
+      --json           Output JSON
+      --scope=<value>  With list: only the keys the "global" (config.yml in the agent dir) or "project" (<cwd>/.omp) layer sets, as written

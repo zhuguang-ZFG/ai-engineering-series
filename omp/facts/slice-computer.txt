@@ -1,0 +1,71 @@
+===== computer =====
+# computer Eval prelude
+
+> Drive the real host desktop from Eval through direct `computer` helpers and window/element handles, or persistent JavaScript via `computer.run`: enumerate windows and displays, capture screenshots, send native input, use OS accessibility (AX), and access the clipboard. This is not the `browser` prelude and exposes no DOM.
+
+User setup, permissions, safety guidance, examples, and platform limitations: [Scriptable computer use](../computer-use.md).
+
+## Source
+
+- Prelude factory and host service: `packages/coding-agent/src/tools/computer.ts`
+- Direct-helper call renderer and approval policy: `packages/coding-agent/src/tools/computer/call.ts`
+- Eval facades: `packages/coding-agent/src/tools/computer/{prelude.js,prelude.py,declarations.d.ts}`
+- Model-facing prelude documentation: `packages/coding-agent/src/prompts/tools/computer.md`
+- Computer-use prompt: `packages/coding-agent/src/prompts/system/computer-use.md`
+- Prelude registration/gate: `packages/coding-agent/src/sdk.ts`
+- Live prelude reconciliation: `packages/coding-agent/src/session/agent-session.ts`
+- `/computer` toggle: `packages/coding-agent/src/slash-commands/builtin-modes.ts`
+- Persistent worker: `packages/coding-agent/src/tools/computer/{supervisor,protocol,worker,worker-entry}.ts`
+- Native implementation: `crates/pi-natives/src/desktop/`
+- Native public types: `packages/natives/native/index.d.ts`
+
+## Availability and declaration
+
+- `computer.enabled` gates the Eval prelude and defaults to `false`. `/computer` toggles it for the current session without persisting settings.
+- The prelude is available only through enabled Eval runtimes; it is not an AgentTool.
+- The worker permits one active run; concurrent direct helpers/runs fail with `Computer worker is busy`. Capability inspection remains available during a run. The active Eval documentation and globals update with the current enabled state.
+- Unlike `browser`, this prelude can operate IDEs, terminals, native applications, browser windows, and system dialogs. It has no browser DOM or web ARIA surface; its accessibility methods use the host OS.
+- When enabled at session start, the computer guide is included in the Eval tool description before the first call. It also remains readable at `xd://eval/computer`. Enabling it mid-session announces that link instead, since the advertised description is frozen.
+
+## Settings
+
+| Setting                       | Type    |    Default | Contract                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------- | ------- | ---------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `computer.enabled`            | boolean |    `false` | Enable the Eval prelude.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `computer.display`            | string  |   `active` | Capture the display with the largest focused-window overlap (primary fallback); use `all` or a native display ID explicitly.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `computer.maxWidth`           | number  |     `3840` | Maximum screenshot width.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `computer.maxHeight`          | number  |     `2400` | Maximum screenshot height.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `computer.backgroundFallback` | enum    | `takeover` | When a window input call's background route is unavailable: `takeover` reruns that call once in takeover, returns focus to the user's app and reports it in the run output; `refuse` throws `BackgroundUnavailable` without taking over, and also refuses, before anything is sent, `takeover: true`, `raise()` and AX `raise`, `apps.open(…, { activate: true })` or `{ reveal: true }`, `control.acquire`, input to the desktop or a display, off macOS `el.focus()`, and on macOS every call that opens a menu (right-click or Control-click, `perform("AXShowMenu")`, `press()`/`perform("AXPress")` or a left click, hold or drag on a popup button or menu button, `setValue` on a popup button) or passes `menu`, since an open menu takes the user's keyboard. |
+
+There is no `computer.backend` setting. The native addon selects the platform backend.
+
+For transports that do not preserve original image detail, and as a Claude-family compatibility fallback, the effective capture caps are `1280×896`. Other models retain the configured limits. The host snapshots cwd, session id, display, effective caps, and `read_only` for every run; the native desktop session itself remains persistent.
+
+## Eval API
+
+The `computer` global exposes the desktop helpers directly. Each helper is one host call (`action: "call"`) carrying an allowlisted method chain of at most two steps — a desktop root method, optionally followed by one method on the window or element handle it resolved — which the host renders into JavaScript and runs in the persistent session:
+
+```js
+const win = await computer.window({ app: "Code" });
+await win.screenshot();
+const tree = await win.ax({ maxDepth: 6 });
+await win.ref("e12").press();
+await computer.capabilities();
+await computer.close();
+```
+
+Python uses the same helper names; keyword arguments become the trailing options object, and `win.raise_()` stands in for the keyword `raise`:
+
+```python
+win = await computer.window(app="Code")
+await win.screenshot(silent=True)
+tree = await win.ax(maxDepth=6)
+await win.ref("e12").press()
+await win.click(120, 48, button="right")
+```
+
+Handles are frozen snapshots plus proxy methods. `computer.window(...)` and `computer.focusedWindow()` resolve to a `ComputerWindow` carrying `id`, `app`, `title`, `pid`, `bounds`, and `focused`; `computer.ref(...)`, `win.ref(...)`, `win.find(...)`, `computer.elementAt(...)`, `computer.focusedElement()`, `el.parent()`, and `el.children()` resolve to `ComputerElement` values carrying `ref`, `role`, `nativeRole`, `title`, `description`, `enabled`, `focused`, and `childCount`. Window methods re-resolve through `desktop.window(id)` and element methods through `desktop.ref(ref)` on every call, so a closed window or expired ref fails at the call. Methods are non-enumerable, so displaying or serializing a handle shows its identity fields only.
+
+`computer.run(fnOrCode, { args?, read_only?, timeout? })` runs a multi-step function or JavaScript string in the same session and returns the real structured value. JavaScript functions receive `{ desktop, wait, assert }` — `desktop` has the desktop helpers plus synchronous `capabilities()`, but not `run()` or `close()` — and cannot capture Eval-cell closures; `{ args: [...] }` passes plain data, functions, and regular expressions after the scope object. `args` that is neither an array nor `null`, or a non-empty `args` with a code string, throws before the run starts; `null` passes no arguments. Python `computer.run(code, read_only=..., timeout=...)` accepts a JavaScript string only. Nonempty text printed inside the run prints in the outer Eval cell; screenshots surface as Eval images. `read_only` defaults to `false`; `timeout` defaults to 120 seconds, is capped by a positive `tools.maxTimeout`, then clamped to 1–300 seconds. The host invocation schema rejects unknown fields; the JavaScript facade forwards only recognized run options. `computer.capabilities()` reports the native backend and permission state (`action: "capabilities"`); `computer.close()` ends the persistent desktop session.
+
+Approval: a direct call is `read` when its terminal method is inspection-only (`displays`, `windows`, `window`, `focusedWindow`, `screenshot`, `zoom`, `elementAt`, `focusedElement`, `ref`, `clipboard.read`, `ax`, `find`, `value`, `bounds`, `attributes`, `actions`, `parent`, `children`) and `exec` for input, `raise`, `setValue`, `selectText`, `perform`, `press`, `click`, `focus`, and `clipboard.write`; read calls also run with the worker's read-only guard. `computer.run` is `read` only when `read_only === true`; malformed input, an omitted flag, or `false` is `exec`.

@@ -82,6 +82,13 @@ jobs:
             exit 1
           }
 
+      # Assemble the site —— 这里是「双入口」的落点，今天只挂御舆那一本：
+      #   book.html / yuyu-agent-harness-{zh,en}.html  = product=book（已上线）
+      #   yuyu-omp-zh.html                             = product=omp（第二分册，尚未部署）
+      # TODO(omp M4)：omp 那一格要上线时，别再往这个 job 里加 cp ——
+      # 它是 deploy-pages 的单产物链，omp 失败会把御舆的部署一起挡住，与 book.yml
+      # 里「omp 独立 job、不写 needs」的口径相反。要么独立 workflow 出 omp 站点，
+      # 要么先以 yuyu-omp-dist 工件形式给人工取用（Book CI 已经在传）。
       - name: Assemble the site
         run: |
           mkdir -p site

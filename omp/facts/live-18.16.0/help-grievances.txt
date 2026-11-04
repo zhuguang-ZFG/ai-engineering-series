@@ -1,0 +1,22 @@
+View, clean, or push reported tool issues (auto-QA grievances)
+
+USAGE
+  $ omp grievances [ACTION] [FLAGS]
+
+ARGUMENTS
+  ACTION   list (default), clean, or push (list|clean|push)
+
+FLAGS
+  -n, --limit=<int>   Number of recent issues to show (list)
+  -t, --tool=<value>  Filter by tool name (list, clean)
+  -j, --json          Output as JSON
+      --id=<int>      Delete a single grievance by id (clean)
+      --all           Delete every grievance (clean)
+
+EXAMPLES
+  omp grievances
+  omp grievances list --tool find
+  omp grievances clean --id 209
+  omp grievances clean --tool find
+  omp grievances clean --all
+  omp grievances push

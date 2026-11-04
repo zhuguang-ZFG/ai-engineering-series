@@ -8,11 +8,9 @@
 **Learning Objectives:** By the end of this chapter, you can:
 
 <!-- block: ch02.b-4c8829c3 -->
-- Explain why the main loop is an async generator rather than a function that runs to completion
-- Trace the state that moves back and forth between Agent and model, turn after turn
-- Say what each stage of the preprocessing pipeline (Snip, Microcompact, Context Collapse, Autocompact) holds back
-- Name the seven Continue paths, what sets each one off, and how the loop picks up again
-- Judge whether dependency injection makes this loop easier to test or harder to read
+- Explain why the main loop is an async generator: each `yield` hands the outside world one chance to intervene -- rendering, cancellation and backpressure all ride on it
+- Draw the five phases of one Turn and the seven Continue paths, marking which state each one lands in
+- Write a minimal loop yourself: it emits intermediate events, honours a cancel signal, and names its own termination reason when it stops — then judge whether dependency injection makes that loop easier to test or harder to read
 
 **Difficulty:** A Core chapter: 2.1 is Start level; 2.2 and 2.4 carry the trunk -- how one turn runs and how the state jumps; 2.3 (dependency injection) and the exercises sit at the Advanced tier, and skipping them on a first read costs you nothing of the main line.
 
@@ -20,6 +18,8 @@
 
 <!-- block: ch02.b-9e126a40 -->
 ## 2.1 Async Generators: The Skeleton of the Dialog Loop
+
+Try how hard it is to stop an agent first. You ask it to run the tests, it wanders off, you press Ctrl+C. The screen does stop -- the model keeps generating tokens, a child process keeps writing files, and a retry timer already sits in the queue. Nothing stopped; only the printing did. The loop in this chapter is an async generator precisely for this moment: every `yield` is a transfer point where you can intervene, so the loop can halt, clean up, and survive a producer that outruns its consumer.
 
 <!-- block: ch02.b-831a1dbe -->
 Claude Code's dialog main loop is an async generator defined with `async function*`. It is not a regular function that executes to completion in one shot, but rather a "living" process that you can pause, resume, and cancel. Each `yield` is like a heartbeat pulse, pushing streaming events to the caller.
@@ -319,6 +319,8 @@ A turn runs on four beats: ask, the model picks a tool, the tool runs, the resul
 ch02-turn-loop
 ```
 
+> **Cross-Reference:** to watch this same circle run once in a real terminal, see Chapter 6 of the omp volume, "The First Conversation".
+
 ---
 
 ## 2.3 Dependency Injection and Testability
@@ -428,6 +430,16 @@ Key transition paths include:
 Each continue path carefully constructs a new state object, ensuring different recovery strategies don't conflict. The `transition` field lets later iterations see "how did I get here," and decide better.
 
 > **Best Practice:** When designing your own Agent loop, recording the reason (transition reason) for each Continue path is a simple but extremely effective debugging technique. When Agent behavior is abnormal, tracing the transition chain can help you quickly identify which transition introduced the problem.
+
+The usual way to break a loop like this is to leave one exit and one reason. The table collects the forks this chapter walked through:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Checking only "did the model ask for a tool", exiting otherwise | Keep all ten termination reasons distinct; `completed` and `model_error` do not leave by the same door |
+| Resending the identical message after output cuts off mid-sentence | Raise the output ceiling first; if it still truncates, inject a recovery message, and retry at most 3 times |
+| Letting Ctrl+C stop the display while tools and timers keep running | Carry the cancel signal down into the tool, and finish cleanup in `finally` before exiting |
+| Dropping the oldest messages once the context fills | Queue compression by cost, lightest first; keep the full summary for last |
+| Storing turn state in a global or an instance field | Hold it in one immutable State object and swap the whole object each turn |
 
 ---
 

@@ -1,0 +1,22 @@
+Inspect, diagnose, probe, and purge image publication backends
+
+USAGE
+  $ omp images [ACTION] [FLAGS]
+
+ARGUMENTS
+  ACTION   status (default), doctor, probe, or purge (status|doctor|probe|purge)
+
+FLAGS
+      --json           Output one JSON document
+      --apply          Apply purge deletions (default is dry-run)
+      --all            Purge all entries instead of expired entries only
+      --dir=<value>    Project directory (default: current directory)
+      --timeout=<int>  External health probe timeout in seconds
+
+EXAMPLES
+  omp images
+  omp images status --json
+  omp images doctor
+  omp images probe --timeout 15
+  omp images purge
+  omp images purge --all --apply

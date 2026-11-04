@@ -59,10 +59,37 @@ _ASCII_FORM = re.compile(r"[A-Za-z]")
 _H2_RE = re.compile(r'<h2 id="([^"]+)">((?:(?!</?h2\b).)*)</h2>', re.S)
 
 
-def load_plain():
+def manifest_langs(manifest: dict | None) -> tuple[str, ...]:
+    """The languages this product actually has an edition for.
+
+    御舆 declares nothing and gets both; the omp volume declares `langs: ["zh"]`
+    and its units carry only a `zh` path key, so asking it for `en` prose is a
+    KeyError, not a missing file.
+    """
+    return tuple((manifest or {}).get("langs") or ("zh", "en"))
+
+
+def registry_names(manifest: dict | None) -> dict[str, str]:
+    """Per-product registry filenames.
+
+    The book product keeps the bare names it has always used; a product that
+    declares itself (`omp`) gets the `-omp` siblings, so authoring a second
+    volume's plain layer cannot silently rewrite the first one's.
+    """
+    product = (manifest or {}).get("product") or ""
+    sfx = f"-{product}" if product and product != "book" else ""
+    return {"manifest": f"manifest{sfx}.json",
+            "glosses": f"glosses{sfx}.json",
+            "notes": f"notes{sfx}.json",
+            "paths": f"reading-paths{sfx}.json"}
+
+
+def load_plain(manifest: dict | None = None):
     """(glosses, reading paths) — {} when the layer has not been authored yet."""
+    names = registry_names(manifest)
     out = []
-    for name in ("glosses.json", "reading-paths.json"):
+    for key in ("glosses", "paths"):
+        name = names[key]
         p = BOOK_DIR / name
         out.append(registry.load(name) if p.exists() else {})
     return out[0], out[1]
@@ -75,13 +102,15 @@ def load_plain():
 NOTE_LIMITS = {"zh": 36, "en": 130}
 
 
-def load_notes() -> dict:
-    p = BOOK_DIR / "notes.json"
-    return registry.load("notes.json") if p.exists() else {}
+def load_notes(manifest: dict | None = None) -> dict:
+    name = registry_names(manifest)["notes"]
+    p = BOOK_DIR / name
+    return registry.load(name) if p.exists() else {}
 
 
 def validate_notes(notes: dict, glosses: dict,
-                   unit_texts: dict[str, dict[str, str]]) -> None:
+                   unit_texts: dict[str, dict[str, str]],
+                   langs: tuple[str, ...] = ("zh", "en")) -> None:
     errors: list[str] = []
     missing = sorted(set(unit_texts) - set(notes))
     extra = sorted(set(notes) - set(unit_texts))
@@ -92,10 +121,10 @@ def validate_notes(notes: dict, glosses: dict,
     forms = {lang: sorted({f for g in glosses.values()
                            for f in (g.get("forms") or {}).get(lang) or []},
                           key=len, reverse=True)
-             for lang in ("zh", "en")}
+             for lang in langs}
     for uid, n in sorted(notes.items()):
         texts = unit_texts.get(uid) or {}
-        for lang in ("zh", "en"):
+        for lang in langs:
             who = f"{uid}.{lang}"
             body = (n.get(lang) or "").strip()
             if not body:
@@ -152,9 +181,10 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             not any((g.get("plain") for g in guides.values())):
         return          # layer not authored yet: build the book as it stands
     cache: dict[str, dict[int, str]] = {}
+    langs = manifest_langs(manifest)
     units = {unit[lang].replace("\\", "/"): (unit["id"], lang)
              for unit, _k, _p in unit_stream(manifest)
-             for lang in ("zh", "en")}
+             for lang in langs}
     unit_ids = {u["id"] for u, _k, _p in unit_stream(manifest)}
     block_cache: dict[str, list] = {}
     block_index: dict[str, list] | None = None
@@ -236,7 +266,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             errors.append(f"gloss {gid!r} id not [a-z0-9-]+")
         for field in ("term", "forms", "plain"):
             entry = g.get(field) or {}
-            for lang in ("zh", "en"):
+            for lang in langs:
                 val = entry.get(lang)
                 if field == "forms":
                     if not val:
@@ -246,12 +276,12 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
         for field, lim in LIMITS.items():
             if field == "plain":
                 continue
-            for lang in ("zh", "en"):
+            for lang in langs:
                 val = (g.get(field) or {}).get(lang)
                 if val and len(val) > lim[lang]:
                     errors.append(f"gloss {gid}: {field}.{lang} is "
                                   f"{len(val)} chars (max {lim[lang]})")
-        for lang in ("zh", "en"):
+        for lang in langs:
             limit = LIMITS["plain"][lang]
             val = (g.get("plain") or {}).get(lang) or ""
             if len(val) > limit:
@@ -269,7 +299,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             langs_seen |= prose(ref, f"gloss {gid}", forms)
         if not langs_seen:
             errors.append(f"gloss {gid}: no usable evidence")
-        elif pr == "core" and langs_seen != {"zh", "en"}:
+        elif pr == "core" and langs_seen != set(langs):
             errors.append(f"gloss {gid}: core glosses need evidence in both "
                           f"languages (found {sorted(langs_seen)})")
         # `why` is the layer's answer to "why is it built this way", so it may
@@ -280,7 +310,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             errors.append(f"gloss {gid}: a core term owes the reader a why "
                           "line, not just a definition")
         if why:
-            for lang in ("zh", "en"):
+            for lang in langs:
                 val = (why.get(lang) or "").strip()
                 if not val:
                     errors.append(f"gloss {gid}: why.{lang} is empty")
@@ -289,10 +319,15 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             seen = set()
             for r in g.get("why_evidence") or []:
                 seen |= prose(r, f"gloss {gid} why", forms)
-            if seen != {"zh", "en"}:
+            if seen != set(langs):
                 errors.append(f"gloss {gid}: why needs one prose line in each "
                               f"language (found {sorted(seen)})")
 
+    # Tiers are a per-product promise, not a per-file one. `plain_optional` is
+    # the manifest's existing "this volume has not authored its plain layer
+    # yet" flag, so it gates the coverage rule; a zh-first product with no
+    # reading-paths registry must not read as 33 chapters missing a tier.
+    # Whatever paths do exist are always validated, opted in or not.
     chapters = {u["id"] for u, k, _p in unit_stream(manifest) if k == "chapter"}
     for uid, tiers in paths.items():
         if uid not in unit_ids:
@@ -303,8 +338,9 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
         bad = [t for t in tiers if t not in TIER_ORDER]
         if bad:
             errors.append(f"reading-paths {uid}: unknown tier(s) {bad}")
-    for uid in chapters - set(paths):
-        errors.append(f"reading-paths: chapter {uid} has no tiers")
+    if not manifest.get("plain_optional"):
+        for uid in chapters - set(paths):
+            errors.append(f"reading-paths: chapter {uid} has no tiers")
 
     # the lead band is the one plain-language device that works identically on
     # screen and on paper, so every unit has to carry it once the layer exists
@@ -317,7 +353,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
                 if field == "plain":
                     errors.append(f"guide {uid}: plain is missing")
                 continue
-            for lang in ("zh", "en"):
+            for lang in langs:
                 val = (entry.get(lang) or "").strip()
                 if not val:
                     errors.append(f"guide {uid}.{field}.{lang} is empty")
@@ -325,8 +361,8 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
                     errors.append(f"guide {uid}.{field}.{lang} is "
                                   f"{len(val)} chars (max {lim[lang]})")
         # a summary sentence is a claim about the chapter, so it needs the same
-        # proof as a gloss: real prose lines, in both languages, since both
-        # editions print the band
+        # proof as a gloss: real prose lines, one in each edition this product
+        # prints
         ev = guide.get("plain_evidence") or []
         if not ev:
             errors.append(f"guide {uid}: plain_evidence is missing")
@@ -334,7 +370,7 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
         seen = set()
         for ref in ev:
             seen |= prose(ref, f"guide {uid}")
-        if seen != {"zh", "en"}:
+        if seen != set(langs):
             errors.append(f"guide {uid}: plain_evidence must point at prose in "
                           f"both languages (found {sorted(seen)})")
     if errors:

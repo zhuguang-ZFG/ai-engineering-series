@@ -1,0 +1,18 @@
+Manage SSH host configurations
+
+USAGE
+  $ omp ssh [ACTION] [TARGETS...] [FLAGS]
+
+ARGUMENTS
+  ACTION    SSH action (add|remove|list)
+  TARGETS   Host name or arguments
+
+FLAGS
+      --json           Output JSON
+      --host=<value>   Host address
+      --user=<value>   Username
+      --port=<value>   Port number
+      --key=<value>    Identity key path
+      --desc=<value>   Host description
+      --compat         Enable compatibility mode
+      --scope=<value>  Config scope (project|user)

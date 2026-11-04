@@ -1,0 +1,19 @@
+# 御舆 M2 之后的全量测试重跑（本文件由两条命令原样生成）
+# 命令：python -m unittest discover -s tests ；python -m unittest discover -s yuyu-book/tests
+
+## tests/
+----------------------------------------------------------------------
+Ran 39 tests in 0.623s
+
+OK
+exit=0
+
+## yuyu-book/tests
+----------------------------------------------------------------------
+Ran 501 tests in 229.559s
+
+OK
+exit=0
+
+# 对比：logs/unittest-after-m1.log 记的是 501 tests / 7 failures / 3 errors（M1 收尾时的状态）
+# 结论：7 处 failure 与 3 处 error 已全部消失；套件计数从 494 回到 501（并发跑会漏收用例，串行跑为准）

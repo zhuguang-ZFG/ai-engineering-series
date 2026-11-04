@@ -1,0 +1,5 @@
+$ omp config list --scope project
+（cwd 里只有 .omp/mcp.json，没有 .omp/config.yml）
+Settings in the project layer:
+
+exit=0

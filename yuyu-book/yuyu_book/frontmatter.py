@@ -24,9 +24,10 @@ def cover(manifest: dict, lang: str) -> str:
                 if epi_src else "")
     seal = (f'<span class="cover-seal" aria-hidden="true">{esc(main.strip()[:2])}</span>'
             if lang == "zh" and main.strip() else "")
+    kicker = (manifest.get("kicker") or {}).get(lang) or ui("cover_kicker", lang)
     return (f'<section class="front-page cover" id="cover">'
             f'<div class="cover-inner">{seal}'
-            f'<p class="cover-kicker">{esc(ui("cover_kicker", lang))}</p>'
+            f'<p class="cover-kicker">{esc(kicker)}</p>'
             f'<h1 class="book-title"><span class="bt-main">{esc(main.strip())}</span>'
             f'<span class="bt-tail">{esc(tail.strip())}</span></h1>'
             f'<div class="cover-rule"><i></i>{mark}<i></i></div>'
@@ -51,11 +52,12 @@ def imprint(manifest: dict, lang: str) -> str:
     ]
     dl = "".join(f'<div class="ip-row"><dt>{k}</dt><dd>{v}</dd></div>'
                  for k, v in rows)
+    notice = (manifest.get("notice") or {}).get(lang) or ui("notice_body", lang)
     return (f'<section class="front-page" id="imprint">'
             f'<h1 class="page-title">{esc(ui("imprint", lang))}</h1>'
             f'<dl class="imprint-list">{dl}</dl>'
             f'<h2 class="ip-notice-t">{esc(ui("notice", lang))}</h2>'
-            f'<p class="ip-notice">{esc(ui("notice_body", lang))}</p></section>')
+            f'<p class="ip-notice">{esc(notice)}</p></section>')
 
 
 def revisions_page(entries: list[dict], lang: str) -> str:

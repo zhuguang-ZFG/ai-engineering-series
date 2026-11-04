@@ -1,0 +1,9 @@
+[omp/ch09.md#2FBB]
+1:# 第9章 改代码
+…
+120:## 9.8 本章小实验
+…
+128:下一章让程序**跑起来**：`bash` 的进程内 coreutils / PTY / 后台，以及 `eval` 的持久 Python/JS 内核。
+129:
+130:---
+131:**版本核对清单**：hashline 语法与模式解析见 `docs/tools/edit.md`；`write`/`ast_edit` 见对应工具文档；`PI_EDIT_VARIANT`、`PI_STRICT_EDIT_MODE`、`edit.mode` 以 edit 文档 Mode selection 节为准。写作钉 omp v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。

@@ -238,7 +238,8 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
     n = doc.page_count
 
     anchors = [a for (_lvl, _t, a) in meta["outline"]]
-    anchors += list(meta["toc_rows"]) + ["front"]
+    front_a = meta.get("front_anchor") or "front"
+    anchors += list(meta["toc_rows"]) + [front_a]
     anchors += sorted({r["anchor"] for r in meta.get("index_rows", ())})
     dest = _destinations(doc, anchors)
     missing = sorted({a for a in anchors if a not in dest})
@@ -280,7 +281,7 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
                 break
         return cur
 
-    first_body = dest["front"]
+    first_body = dest[front_a]
     for pno in range(1, n):                     # the cover stays clean
         page = doc[pno]
         _folio(head, page, pno + 1, n)
@@ -294,7 +295,7 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
     rows = set(meta["toc_rows"])
     # the contents is the last section before the body, so its first page is
     # the last match for the heading title; rows then run to that page's end
-    hits = [pno for pno in range(dest["front"])
+    hits = [pno for pno in range(dest[front_a])
             if doc[pno].search_for(meta["toc_title"])]
     if not hits:
         doc.close()
@@ -303,7 +304,7 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
     # same destination (a compass chip) can never be mistaken for one
     min_row = doc[0].rect.width * 0.5
     best: dict[str, tuple[int, fitz.Rect]] = {}
-    for pno in range(hits[-1], dest["front"]):
+    for pno in range(hits[-1], dest[front_a]):
         for link in doc[pno].get_links():
             anchor = link.get("nameddest")
             if anchor not in rows:

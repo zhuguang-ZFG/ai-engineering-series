@@ -299,6 +299,18 @@ flowchart LR
 | Worktree | 工作树 | Git worktree 的封装，为子智能体或并行任务创建隔离的工作目录，避免主工作区的文件冲突。由 `Worktree Mode` 功能标志控制 | Fork Mode, Subagent, EnterWorktreeTool | 第 9 章 |
 | Zod Schema | Zod 验证模式 | 使用 Zod 库定义的运行时类型验证模式，用于工具输入参数的类型校验和自动补全提示生成。每个工具的输入参数都由 Zod Schema 把关 | Tool, Tool Interface, Build Tool | 第 3 章 |
 
+## 丛书共享词
+
+同丛另有《Omp 从入门到精通：原理与实战》一册（本仓库 `omp/`，仍在施工中），讲同一个终端里的另一套 agent harness。两册共有 **15** 条同名术语，其中 **12** 条两边写法完全一致，剩下 **3** 条各有主张——这不是笔误，而是让每一册在自己的正文里前后一致：
+
+| 英文原名 | 本书 | Omp 分册 | 差在哪 |
+|---|---|---|---|
+| Agent Harness | 智能体线束 | 智能体外壳 | 中文译名不同，英文同名 |
+| Main Loop | 主循环 | 工作循环 | 中英两个字段都换了（Omp 分册英文写作 agent loop） |
+| Subagent | 子智能体（sub-agent） | 子智能体（subagent） | 中文一致，英文只差一个连字符 |
+
+这三处的取舍理由，以及 Omp 分册专有、不进本书释义的那 **21** 条，登记在仓库内 `docs/yuyu-overhaul/SHARED-TERMS.md`；两册逐章的对照关系见 `docs/COMPARE-OMP.md` 与 `omp/overhaul/CROSSREF-MAP.md`。上面 15 / 12 / 3 / 21 这组数跟着两份登记表变，复现命令写在 `SHARED-TERMS.md` 第六节，读者不必记住它们。
+
 ---
 
 > **注**：本术语表共收录核心术语约 100 条，涵盖全书主要概念。术语的中文译名为本书推荐的统一译法，读者在阅读其他资料时可能遇到不同的翻译。如需查找特定功能标志的详细说明，请参见附录 C；如需查找特定工具的属性信息，请参见附录 B。

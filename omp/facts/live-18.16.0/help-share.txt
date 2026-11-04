@@ -1,0 +1,10 @@
+Share a saved session via an encrypted link (same as /share)
+
+USAGE
+  $ omp share SESSION [FLAGS]
+
+ARGUMENTS
+  SESSION   Session id (prefix) or path to a session .jsonl
+
+FLAGS
+      --gist  Upload to a secret GitHub gist instead of the share server

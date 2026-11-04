@@ -1,0 +1,15 @@
+Interactive fullscreen git UI: split diff viewer, staging sidebar, and commit composer
+
+USAGE
+  $ omp git [REVISION] [FLAGS]
+
+ARGUMENTS
+  REVISION   Pin the view to one commit (any revision, e.g. HEAD~2 or a sha)
+
+FLAGS
+  -C, --dir=<value>  Run in another directory instead of the current one
+
+EXAMPLES
+  omp git
+  omp git HEAD~2
+  omp git -C ~/projects/app

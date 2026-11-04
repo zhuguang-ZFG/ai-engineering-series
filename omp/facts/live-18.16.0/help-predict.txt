@@ -1,0 +1,7 @@
+Type a prompt and compare every word-completion engine's ghost text live
+
+USAGE
+  $ omp predict
+
+EXAMPLES
+  omp predict

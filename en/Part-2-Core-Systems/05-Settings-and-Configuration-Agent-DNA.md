@@ -8,9 +8,16 @@
 
 ---
 
-Claude Code's behavior is not determined by a single configuration file, but by six layers of configuration sources merged in sequence. These configuration sources are like the Agent's "DNA" -- you write them before the Agent starts, determining what the Agent can do, what it cannot do, and how it does things. Understanding this system is the first step toward mastering Claude Code's behavior customization capabilities.
+You set the rules for your team: `.claude/settings.json` pins the model and the permission baseline, committed to Git. The next day someone clones the repo, and Claude Code ignores your file -- the model switches to a pricier one and permissions loosen. You wrote it; why didn't it take effect?
 
-Calling the configuration system "DNA" fits: fertilization fixes an organism's genes once and for all, and those genes switch on layer by layer as the organism grows. Claude Code loads its configuration at startup and lets it take effect layer by layer at runtime. The difference is that you can edit and override the Agent's "DNA" precisely -- and that is both a capability and a risk.
+The answer lies in the layer order. Claude Code's behavior is not decided by any single file; it is the result of six configuration sources merged in sequence. Write in the wrong layer and a higher one "shadows" your settings. Read the layer order before you rewrite the Agent's DNA.
+
+> **What you can do after this chapter:**
+> - Set what each of the six layers holds for a 20-person team: which layer locks security, which holds personal preference
+> - Tell whether a setting actually takes effect: which layer shadows it, which merges it, why arrays only grow
+> - Recognize why `projectSettings` is the odd one out on the security boundary, and how a malicious repo gets shut out
+
+> **Cross-reference:** How the same layer order is laid out in another harness -- see omp volume, Chapter 23, "Configuration and Profiles".
 
 ## 5.1 The Priority System of Six Configuration Sources
 
@@ -89,6 +96,15 @@ If `userSettings` sets `model: "claude-sonnet-4"` and `policySettings` sets `mod
 **Why do arrays use concatenation instead of replacement?** This is a deliberate design decision. In the permission system, each rule is a "defense line" -- if a higher-priority source's array replaced a lower-priority source's array, the higher-priority source would have to completely enumerate all needed permission rules, and any omission would become a security vulnerability. The concatenation strategy allows each layer to only care about the rules it wants to "add," and the system automatically merges all layers' security policies.
 
 > Anti-Pattern Warning: Do not use array concatenation to "revoke" rules from lower layers. For example, you cannot clear lower-layer permissions by setting an empty array in an upper layer -- after concatenation, the lower-layer rules still exist. If you need to revoke, you should use the `permissions.deny` field to explicitly deny.
+
+The merge rules look simple, but these are the spots where configurations usually go wrong:
+
+| Common mistake | Correct approach |
+|:--------------:|-----------------|
+| Write an empty array in an upper layer to "clear" lower-layer permissions | Arrays only append, never delete -- to revoke, write `permissions.deny` explicitly (5.1.2) |
+| Stuff personal preference into `.claude/settings.json` and commit it to Git | Put personal preference in `~/.claude/settings.json` or `.claude/settings.local.json` (5.1.5) |
+| Expect `projectSettings` to lock security items | Security-sensitive checks deliberately exclude `projectSettings`; to lock, use `policySettings` (5.2) |
+| Assume `policySettings` deep-merges with other layers | It is "first non-empty source wins" -- no merging; enterprise policy ships whole (5.1.3) |
 
 Let's demonstrate the merge process with a complete example:
 

@@ -1,0 +1,13 @@
+Install or link an extension package (alias of `plugin install`/`plugin link`)
+
+USAGE
+  $ omp install [TARGETS...] [FLAGS]
+
+ARGUMENTS
+  TARGETS   Local path, npm spec, or marketplace ref (e.g. ./my-ext, my-pkg@1.2.3, name@marketplace)
+
+FLAGS
+      --json           Output JSON
+      --force          Force install
+      --dry-run        Show actions without applying changes
+      --scope=<value>  Install scope: "user" (default) or "project" (marketplace installs only)

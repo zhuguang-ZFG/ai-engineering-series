@@ -144,7 +144,8 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     body: list[str] = []
     body.append(pages.cover(manifest, lang))
     body.append(pages.imprint(manifest, lang))
-    rev = registry.load("revisions.json")["entries"]
+    rev_name = manifest.get("revisions_registry", "revisions.json")
+    rev = registry.load(rev_name)["entries"] if rev_name else []
     body.append(pages.revisions_page(rev, lang))
     body.append(pages.how_to_read(manifest, lang, paths))
 
@@ -186,10 +187,12 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
         rail.append(f'<a href="#{apx["id"]}">{pages.esc(u.no)} '
                     f'{pages.esc(u.title)}</a>')
 
-    index_path = BOOK_DIR / "subject-index.json"
+    idx_key = manifest.get("subject_index_registry", "subject-index.json")
     idx_entries = None
-    if index_path.exists():
-        idx_entries = registry.load("subject-index.json")
+    if idx_key:
+        index_path = BOOK_DIR / idx_key
+        if index_path.exists():
+            idx_entries = registry.load(idx_key)
 
     why_groups = _principle_groups(glosses, units, lang)
     back = ([] if not why_groups
@@ -288,7 +291,8 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
                          "has to drop it with everything else")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    out = out_dir / f"yuyu-agent-harness-{lang}.html"
+    prefix = manifest.get("output_prefix") or "yuyu-agent-harness"
+    out = out_dir / f"{prefix}-{lang}.html"
     out.write_text(html_text, encoding="utf-8")
     stats = (f"{out.name}: {out.stat().st_size / 1e6:.1f} MB, "
              f"{len(units)} units, {n_diagrams} plates, "
@@ -334,13 +338,14 @@ def pdf_meta(manifest, outline, toc_entries, lang, idx_entries=()):
             # edition has no chip for prints no row and gets no folio
             "index_rows": [{"term": e[lang]["term"],
                             "anchor": e[lang]["refs"][0]["anchor"]}
-                           for e in idx_entries if e[lang]["refs"]],
+                           for e in (idx_entries or ()) if e[lang]["refs"]],
             "toc_title": pages.ui("toc", lang),
             "title": manifest["title"][lang],
             "subtitle": manifest["subtitle"][lang],
             "author": manifest["author"],
             "keywords": f'v{manifest["version"]} {manifest["date"]}',
-            "lang": lang}
+            "lang": lang,
+            "front_anchor": manifest["front"]["id"]}
 
 
 def _principle_groups(glosses: dict, units, lang: str) -> list[dict]:
@@ -461,19 +466,24 @@ def main(argv=None):
                     help="skip the plain-language layer (marks, panels, lead "
                          "bands, tier chips, principle notes, keeper notes)")
     ap.add_argument("--regen-index", action="store_true")
+    ap.add_argument("--manifest", default="manifest.json",
+                    help="registry filename under yuyu-book/")
+    ap.add_argument("--sources", default="sources.json",
+                    help="sources registry filename under yuyu-book/")
     args = ap.parse_args(argv)
 
     try:
-        manifest, sources = load_configs()
-        glosses, paths = ({}, {}) if args.no_plain else plain.load_plain()
-        notes = {} if args.no_plain else plain.load_notes()
+        manifest, sources = load_configs(args.manifest, args.sources)
+        glosses, paths = ({}, {}) if args.no_plain else plain.load_plain(manifest)
+        notes = {} if args.no_plain else plain.load_notes(manifest)
         if not args.no_plain:
             plain.validate_plain(glosses, paths, manifest)
             if notes:
-                unit_texts = {u["id"]: {"zh": read_text(REPO_ROOT / u["zh"]),
-                                        "en": read_text(REPO_ROOT / u["en"])}
+                langs = plain.manifest_langs(manifest)
+                unit_texts = {u["id"]: {lang: read_text(REPO_ROOT / u[lang])
+                                        for lang in langs if lang in u}
                               for u, _k, _p in unit_stream(manifest)}
-                plain.validate_notes(notes, glosses, unit_texts)
+                plain.validate_notes(notes, glosses, unit_texts, langs)
         if args.regen_index:
             entries = glossary_to_index(manifest)
             dump_json(BOOK_DIR / "subject-index.json",

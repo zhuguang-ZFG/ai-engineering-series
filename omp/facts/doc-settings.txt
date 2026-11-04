@@ -1,0 +1,150 @@
+# Settings
+
+`omp` resolves settings from built-in defaults, a persistent global config file, optional project-local config, one-shot CLI overlays, and in-memory runtime overrides. Reach for project settings when one repository needs a different provider set, model role, tool policy, memory backend, or UI behavior than your global defaults — without touching your machine-wide configuration.
+
+Settings are stored as plain YAML mappings. Every key, its type, default, and enum values come from its setting definition (declared with `register(...)` next to the owning feature, e.g. `packages/coding-agent/src/tools/settings.ts`, and collected by `packages/coding-agent/src/config/all-settings.ts`). `omp config` exposes the complete schema; the interactive `/settings` panel exposes entries with supported UI editors. Some entries are conditional; numbers and arrays without UI choices remain config-file-only unless the setting opts into the panel's JSON editor (such as `contextFiles.extra`).
+
+- For model/provider credentials, `.env` files, and the env-var table that resolves API keys, see [Providers](./providers.md).
+- For custom model definitions in `models.yml`, see [Models](./models.md).
+- For instruction files discovered into the agent context (`AGENTS.md`, `.omp/`, etc.), see [Context files](./context-files.md).
+- For the full catalog of environment variables, see [Environment variables](./environment-variables.md).
+- For prompt words that activate specialized per-turn behavior, see [Magic keywords](./magic-keywords.md).
+
+## Where settings live
+
+| Scope             | Path                                                  | Read behavior                                                                                                                            | Write behavior                                                                                                                                                                   |
+| ----------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Global            | `~/.omp/agent/config.yml` (or existing `config.yaml`) | The main persistent settings file. `config.yml` is the canonical write target; an existing `config.yaml` is loaded and updated in place. | `/settings`, `omp config set`, and `omp config reset` write here.                                                                                                                |
+| Global legacy     | `~/.omp/agent/settings.json`                          | Considered for migration only when neither main YAML filename exists.                                                                    | Not written; renamed to `settings.json.bak` after a non-empty migrated YAML file is successfully saved.                                                                          |
+| Project           | `<cwd>/.omp/config.yml` (plus `.omp/settings.json`)   | Loaded when the process working directory has a non-empty `.omp/`.                                                                       | Settings commands do not write arbitrary project keys. With `modelRoleStorage: project`, model-selector role assignments update only `modelRoles` here; edit other keys by hand. |
+| Project legacy    | `<cwd>/.omp/settings.json`                            | Still read; project `config.yml` is merged on top of it.                                                                                 | Not written by settings commands.                                                                                                                                                |
+| CLI overlay       | Any file passed with `--config <file>`                | Loaded after global and project settings, for that one process. Repeatable.                                                              | Never persisted.                                                                                                                                                                 |
+| Runtime overrides | In-memory only                                        | Set by settings overrides such as `--approval-mode`, role flags, and feature env vars.                                                   | Never persisted.                                                                                                                                                                 |
+
+The global paths above describe the default profile. `omp --profile work` selects `~/.omp/profiles/work/agent` instead, isolating settings, auth, sessions, and caches. `OMP_PROFILE` also selects a profile; `PI_PROFILE` is its compatibility fallback only when `OMP_PROFILE` is absent. An explicit `--profile` wins over both, and `--profile default` selects the default profile.
+
+`PI_CODING_AGENT_DIR` relocates the default profile's agent directory, including `config.yml` and its agent data. Named profiles derive their own agent directory and ignore this override. Use `omp config path` (or `omp --profile work config path`) to print the active settings directory.
+
+On Linux and macOS, configured `XDG_DATA_HOME`, `XDG_STATE_HOME`, and `XDG_CACHE_HOME` can redirect data/state/cache when the corresponding `omp` directories exist. Named profiles require the corresponding `omp/profiles/<name>` directory. This does not move `config.yml`: it stays under the active agent directory, while `agent.db` and other categorized data may live elsewhere. `omp config init-xdg` creates the base directories but does not migrate files or set environment variables.
+
+Native project settings are intentionally scoped to the process working directory's `.omp/` folder — settings discovery does **not** walk ancestor directories looking for the nearest `.omp/`. Other discovery providers (Claude, Codex, Gemini, Cursor, OpenCode) can also contribute project-level settings from their own files; those are read-only from `omp` settings commands and can be turned off by provider id (see [Provider and source disabling](#provider-and-source-disabling)).
+
+## Config file formats
+
+The canonical global file is YAML at `config.yml`; `config.yaml` is accepted as a compatibility filename. The generic config loader used for other files (for example `models.yml`) accepts `.yml`, `.yaml`, `.json`, and `.jsonc`:
+
+- When a `.yml`/`.yaml` path is requested and only a sibling `.json` exists, it is migrated to YAML automatically (idempotent, once per process).
+- `.json` and `.jsonc` configs are read as-is, with no migration.
+- Empty YAML (or YAML `null`) is treated as an empty settings mapping. Other non-mapping top levels are invalid. On writable startup, `omp` moves a syntactically invalid or non-mapping persistent settings file to a uniquely named `.broken-*` backup and exits with the original error and backup path. A `--config` overlay with a bare array/scalar is also a hard error, but is not moved.
+- Invalid values for ordinary schema entries warn and read as their schema defaults. Settings with explicit validators, such as per-agent compaction triggers or provider concurrency limits, can reject the configuration instead. Unknown keys in hand-written files are not a substitute for a registered setting.
+
+## Reading and writing settings
+
+Use the interactive `/settings` panel inside a session, or the `omp config` command from a shell. The CLI reads effective values including setting environment variables. The panel shows and edits merged settings-layer values, not environment-supplied values; descriptions note active env overrides so env credentials are never pre-filled or persisted. Ordinary persistent writes land in the **global** file; model-selector role changes are the exception when `modelRoleStorage: project` (see [Where writes go](#where-writes-go)).
+
+```bash
+omp config list                 # all settings with current effective values
+omp config list --json          # same, machine-readable
+omp config list --scope global --json   # only what config.yml sets, as written
+omp config get theme.dark       # one value
+omp config get theme.dark --json
+omp config set compaction.enabled false
+omp config set defaultThinkingLevel medium
+omp config reset steeringMode   # remove a key from config.yml so its default applies
+omp config path                 # print the active agent directory
+```
+
+For users who want the full first-run animation on normal launches, set `startup.showSplash`:
+
+```bash
+omp config set startup.showSplash true
+```
+
+This only controls the startup splash animation. It does not rerun setup or change setup state, and `startup.quiet: true` still suppresses all startup chrome including the splash.
+
+### Subcommands
+
+| Command                        | Effect                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `omp config list`              | Print every setting grouped by tab, with its current value and type. `--json` emits an object keyed by setting path with `{ value, type, description }`. Configured credential fields are masked as `********` in human output; in JSON their `value` is omitted and `redacted: true` is emitted. With `--scope global` or `--scope project`, it lists only the keys that layer (`config.yml`, or the project's settings files for the current directory) sets, with the values as the layer holds them: path-scoped arrays (`enabledModels`, `enabledProviders`, `disabledProviders`) keep their `{ path, … }` entries instead of resolving them for the current directory, and `--json` emits `{ value, type, description }` per key. Defaults, other layers and environment variables are not consulted. |
+| `omp config get <key>`         | Print the effective value of one key. Unknown keys exit non-zero. `--json` emits `{ key, value, type, description }`. This is an explicit single-key request, so credential values are returned unmasked.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `omp config set <key> <value>` | Parse `<value>` against the key's schema type, write it to the global main YAML file, and print the value written. When another source still supplies the effective value, it says which instead (`--json`: `overriddenBy` is the env var name, or `project`, `overlay`, or `runtime`; `fallbackEnv` names a fallback env var used while the saved value is blank).                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `omp config reset <key>`       | Delete the global key, allowing another configured layer or the schema default to apply. Prints the resulting effective value, masking non-empty credentials as `********`; JSON omits a credential's `value` and emits `{ key, redacted: true }`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `omp config path`              | Print the active agent directory (honors `PI_CODING_AGENT_DIR`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `omp config init-xdg`          | On Linux and macOS, create the `omp` directories under the effective XDG data, state, and cache homes. It does not move existing files or set the XDG environment variables. Other platforms exit non-zero.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+
+`omp config` with no subcommand lists settings. `--help` or `-h` displays command help. The `--json` flag is accepted by `list`, `get`, `set`, and `reset`. `--scope` is accepted by `list` only.
+
+### Value parsing
+
+`omp config set` parses the value string according to the target key's schema type. The string is trimmed first.
+
+| Type    | Accepted input                                       | Notes                                                                                                |
+| ------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| boolean | `true`, `false`, `yes`, `no`, `on`, `off`, `1`, `0`  | Case-insensitive. Anything else is rejected.                                                         |
+| number  | Any finite JavaScript number                         | `Infinity`/`NaN` are rejected.                                                                       |
+| enum    | One of the key's allowed values, bare or JSON-quoted | Must match exactly; the error lists the valid values.                                                |
+| array   | A JSON array                                         | e.g. `'["anthropic","openai"]'`. Must parse and be an array.                                         |
+| record  | A JSON object                                        | e.g. `'{"bash":"prompt"}'`. Must parse and be a non-array object.                                    |
+| string  | Bare text or a JSON-quoted string                    | Bare text is trimmed; JSON string contents are decoded. Multi-word arguments are joined with spaces. |
+
+Keys must match a real schema path exactly. There is no shorthand — set `theme.dark`, not `theme`.
+
+Setting-specific normalization and validation still apply after parsing. For example, provider concurrency limits must be positive numbers and are floored to whole requests.
+
+### Where writes go
+
+`omp config set`, `omp config reset`, `/settings`, and persistent runtime settings changes write the global main YAML file under the active agent directory. Runtime-only overrides are not saved. Settings commands do not write arbitrary keys to `<cwd>/.omp/config.yml`. Model-role assignment or clearing with `modelRoleStorage: project` updates only the affected roles there; missing project roles fall back to global roles. To create another project-local override, edit the project file directly (see [Project-local config](#project-local-config)).
+
+Saves are debounced and re-read the file under a lock. Disjoint external edits are preserved. If an external writer changed the same global setting or model role after a local change was staged, the stale local change is skipped with a warning rather than overwriting the newer file value.
+
+Saves through a symlinked main config preserve the link and update its resolved target. Targets containing `.` or `..` follow the operating system's rules: Windows collapses those segments before following intermediate links, while POSIX traverses each component on disk. A target such as `alias/../config.yml` can therefore name different files on the two platforms.
+
+### Live file changes
+
+Interactive sessions and RPC/RPC-UI hosts watch the main global file, project settings sources, and config overlays. Changes are reloaded after a short debounce, preserving runtime overrides. A layer that fails to parse or validate keeps its last good values and logs a warning; other valid layers can still refresh. Live reload does not move the invalid file to a `.broken-*` backup.
+
+Symlinked configs follow edits to their target and replacement of any intermediate file or directory symlink, including profile links. After a link switches targets, subsequent edits to the new target are watched too.
+
+Reloading changes the settings values available to consumers; startup-only work is not rerun. Provider-source switches take effect on the next discovery pass. Task/eval dispatch also reloads persisted settings before resolving a subagent's policy.
+
+Routing changes to `modelRoles`, `retry.fallbackChains`, and `task.agentModelOverrides` apply to subsequent subagent launches and fallback decisions without restarting the host. `auth.accountPolicies` and `retry.usageReservePct` also update the long-lived account router for subsequent credential selection and quota checks. Reloading does not restart running subagents or switch a healthy active session's model; explicit runtime overrides still take precedence.
+
+## Precedence
+
+From lowest to highest priority, the effective value of a setting is built as:
+
+```text
+built-in defaults  <-  global config  <-  project config  <-  CLI overlays  <-  runtime overrides  <-  setting env var
+```
+
+From highest to lowest:
+
+1. **Setting env var** — an environment variable declared on the setting's definition (for example `PI_PY` for `eval.py`, `OMP_AUTH_BROKER_URL` for `auth.broker.url`). Parsed by the setting's type unless it declares a custom parser; unparseable text (such as `PI_EDIT_VARIANT=auto`) counts as unset. Booleans follow the `parseFlag` convention: empty counts as unset, `1`/`y`/`true`/`yes`/`on` (all-lowercase or all-uppercase) mean true, and any other value means false. A few are declared as fallbacks instead (`SEARXNG_*`, `MNEMOPI_EMBEDDING_MODEL`): they only replace the built-in default, so any configured layer wins over them — except a configured `null`, which counts as unset. `SEARXNG_ENDPOINT`, `SEARXNG_TOKEN`, and `MNEMOPI_EMBEDDING_MODEL` also apply when the setting is a blank string.
+2. **Runtime overrides** — settings applied in memory for the current process, including `--smol`, `--slow`, `--plan`, `--approval-mode`, `--auto-approve`/`--yolo`, `--hide-thinking`, `--advisor`, `--external-thinking`, and protocol-mode defaults. Never persisted. Other one-shot options such as `--model`, `--thinking`, `--service-tier`, `--no-lsp`, `--no-pty`, and `--api-key` affect session/model/transport options rather than all being registry settings. Protocol-mode defaults (RPC/ACP) hold only while nothing else configures the setting: a settings write or reset of it, a `config.yml` or project edit picked up by a reload, or an ACP session's own project config replaces them.
+3. **CLI config overlays** — each `--config <file>`; later overlay files override earlier ones.
+4. **Project settings** — `<cwd>/.omp/settings.json` then `<cwd>/.omp/config.yml` (and contributions from other discovery providers at project level).
+5. **Global settings** — the active agent/profile directory's `config.yml` (or existing `config.yaml`).
+6. **Built-in defaults** — from the setting definition.
+
+A key that is unset at every layer resolves to its default at read time.
+
+### Environment overrides
+
+Environment variables are never written back to `config.yml`. Variables declared on a setting definition form the top layer described above; others are read directly by the feature that owns the value (`PI_NO_PTY`) or applied as runtime overrides (`PI_SMOL_MODEL` sets the `smol` model role for the process). Relevant setting overrides and configuration selectors:
+
+| Env var                                             | Overrides setting                                 | Notes                                                                                             |
+| --------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `PI_SMOL_MODEL`                                     | `modelRoles.smol`                                 | Also exposed as `--smol`.                                                                         |
+| `PI_SLOW_MODEL`                                     | `modelRoles.slow`                                 | Also exposed as `--slow`.                                                                         |
+| `PI_PLAN_MODEL`                                     | `modelRoles.plan`                                 | Also exposed as `--plan`.                                                                         |
+| `PI_NO_PTY=1`                                       | (disables PTY bash)                               | Equivalent to `--no-pty` for the process.                                                         |
+| `PI_PY`                                             | `eval.py`                                         | `PI_PY=0` disables the Python eval backend.                                                       |
+| `PI_JS`                                             | `eval.js`                                         | `PI_JS=0` disables the JavaScript eval backend.                                                   |
+| `PI_TINY_DEVICE`                                    | `providers.tinyModelDevice`                       | ONNX execution provider or `mlx` backend for local tiny models.                                   |
+| `PI_TINY_DTYPE`                                     | `providers.tinyModelDtype`                        | ONNX precision for local tiny models.                                                             |
+| `OMP_AUTH_BROKER_URL`                               | `auth.broker.url`                                 | Env value takes precedence over config.                                                           |
+| `OMP_AUTH_BROKER_TOKEN`                             | `auth.broker.token`                               | Env value takes precedence over config.                                                           |
+| `PI_CODING_AGENT_DIR`                               | (relocates default-profile agent dir)             | Named profiles ignore this override.                                                              |
+| `OMP_PROFILE` / `PI_PROFILE`                        | (selects profile)                                 | `OMP_PROFILE` wins when present; `--profile` wins over env.                                       |
+| `PI_EDIT_VARIANT`                                   | `edit.mode`                                       | `apply_patch`, `hashline`, `patch`, `replace`, or `sloppy`; `auto` is unset.                      |

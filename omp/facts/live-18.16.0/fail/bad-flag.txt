@@ -1,0 +1,4 @@
+$ omp bad-flag --nopt
+Error: unknown flag: --nopt
+Run `omp --help` for available flags.
+exit=2

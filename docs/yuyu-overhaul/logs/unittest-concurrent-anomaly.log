@@ -1,0 +1,33 @@
+### UNITTEST RERUN Wed Nov  4 07:36:21     2026
+.......................................
+----------------------------------------------------------------------
+Ran 39 tests in 0.610s
+
+OK
+### tests/ exit=0
+ERROR: test_no_plain_is_a_two_digit_gutter_label (test_manifest.DerivedUnitLabels.test_no_plain_is_a_two_digit_gutter_label)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_manifest.py", line 222, in test_no_plain_is_a_two_digit_gutter_label
+    self.assertEqual(self.unit("ch15", "zh").no_plain, "15")
+                     ~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_manifest.py", line 207, in unit
+    return load_unit(self.by_id[uid], kind, lang, REPO_ROOT)
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\core.py", line 295, in load_unit
+    block_markers.validate_markers(text, rel, unit_def["id"])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\blocks.py", line 75, in validate_markers
+    _fail("block-id", file, block_id,
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          f"duplicate block id (lines {found[block_id]} and {number})")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\blocks.py", line 36, in _fail
+    raise BuildError(str(Diagnostic("error", code, file, block_id, message,
+                                    hint)))
+yuyu_book.core.BuildError: error block-id 第四部分-工程实践篇/15-构建你自己的Agent-Harness.md ch15.b-20a27c05 duplicate block id (lines 10 and 75)
+
+----------------------------------------------------------------------
+Ran 494 tests in 219.947s
+
+FAILED (errors=3)
+### yuyu-book/tests exit=0

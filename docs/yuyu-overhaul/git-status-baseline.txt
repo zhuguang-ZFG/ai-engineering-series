@@ -1,0 +1,24 @@
+## p3-pages-split...origin/p3-pages-split
+ M .gitignore
+ M Makefile
+ M README.md
+ M scripts/bookctl.py
+ M yuyu-book/build.py
+ M yuyu-book/yuyu_book/art.py
+ M yuyu-book/yuyu_book/core.py
+ M yuyu-book/yuyu_book/frontmatter.py
+ M yuyu-book/yuyu_book/pages.py
+ M yuyu-book/yuyu_book/pdf.py
+ M yuyu-book/yuyu_book/registry.py
+ M yuyu-book/yuyu_book/render.py
+ M yuyu-book/yuyu_book/style.py
+?? OVERHAUL-SPEC.md
+?? docs/YUYU-OVERHAUL-SPEC.md
+?? omp/
+?? yuyu-book/PRODUCTS.md
+?? yuyu-book/manifest-omp.json
+?? yuyu-book/revisions-omp.json
+?? yuyu-book/sources-omp.json
+?? yuyu-book/yuyu_book/deco.py
+?? yuyu-book/yuyu_book/labels.py
+?? yuyu-book/yuyu_book/style_css.py

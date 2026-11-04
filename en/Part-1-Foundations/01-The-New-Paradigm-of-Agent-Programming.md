@@ -8,17 +8,17 @@
 
 By the end of this chapter, you can:
 
-- Trace how AI Agents grew from one-question-one-answer chat into deciding on their own to call a tool
-- Carry a mental model of the Agent Harness and know which layer of an Agent system it actually supports
-- Sketch Claude Code's macro architecture and explain why the stack looks the way it does
-- Tell a thin API wrapper apart from an actual Agent Harness, and say where the line falls
-- Follow each of the five design principles into the subsystems where they turn up
+- Say where the line falls between a chatbot and an agent: the model decides which tool to call and what arguments to pass
+- Draw the five core modules on a blank page, arrows included, and place Bun, React + Ink and Zod on the right layer
+- Run `/doctor` once, match each self-check item back to one of those modules, and name the ones that stop the agent from working at all
 
 **Difficulty:** A Start-level chapter: 1.1 reads with no background; 1.2 and 1.3 are Core and reward a slow pass; the hands-on exercise sits at the Advanced tier -- skip it on a first read and come back for it.
 
 ---
 
 ## 1.1 From Chatbot to Agent: A Paradigm Shift in Software Engineering
+
+Keep one crash in mind first. You write a fifty-line agent and the demo runs fine. Three days later you ask it to read the logs of three services at once, and it feeds the output of one command into the next; you press Ctrl+C, the child process survives and keeps writing to files; the model returns a parameter name you never defined and the program throws. None of that is a dumb model -- it is nobody's job in those fifty lines. This chapter is about who takes the job.
 
 ### LLM as a Reasoning Engine vs. LLM as a Conversational Partner
 
@@ -126,6 +126,15 @@ To use a more vivid analogy to summarize the difference between the two: a simpl
 Summarized in one sentence: **Agent Harness is a runtime framework built around an LLM that elevates the LLM from a text generator to an autonomous agent that can deal with the outside world safely, reliably, and efficiently.**
 
 > **Anti-Pattern Warning:** If you are building an Agent system and your core loop is just a simple `while (true) { callAPI(); parseResponse(); executeTool(); }` loop, you may be repeating the "simple wrapper" mistake. Stop and think: how does your system handle streaming output? How does it manage context? How does it recover from errors? If the answer to these questions is "haven't figured that out yet," then you need an Agent Harness.
+
+Here is how those fifty lines usually fail, in the four shapes we see most often; the right column names the chapter that picks the mess up:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Putting the permission check at the top of each tool function | One pipeline checks for everyone; tools just do the work -- Chapter 4 |
+| Chaining model calls with Promises, then finding nothing to cancel | An async generator drives the loop and carries cancellation all the way down -- Chapter 2 |
+| Dropping the oldest messages when the context fills up | Work through the compression ladder: shrink the cheap content, keep what matters -- Chapter 7 |
+| Feeding a tool's error text straight back into the prompt | Decide a recovery strategy per error class, then whether to retry at all -- Chapter 2 |
 
 ---
 
@@ -297,6 +306,8 @@ The core function in the tool registration module returns the complete list of a
 3. **Tool Filtering**: The tool filtering function, before sending the tool list to the LLM, filters out forbidden tools based on the permission context, ensuring the model cannot even "see" tools it should not use.
 
 Conditional registration and lazy loading amount to loading on demand. In Agent systems, the number of tools can reach dozens or even hundreds (especially after MCP protocol extension). If all tools loaded at startup, it would not only slow down startup but also potentially cause initialization errors due to circular dependencies. Claude Code therefore loads into memory only the tools it actually needs.
+
+> **Cross-Reference:** the same layering assembled a different way -- see Chapter 3 of the omp volume, "The Overall Architecture of omp".
 
 ---
 

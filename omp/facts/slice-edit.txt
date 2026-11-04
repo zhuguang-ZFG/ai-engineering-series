@@ -1,0 +1,71 @@
+===== edit =====
+# edit
+
+> Applies source edits. The default `hashline` mode consumes one line-anchored patch string and edits existing files directly.
+
+## Source
+
+- Entry and mode registration: `packages/coding-agent/src/edit/index.ts`
+- Mode schemas: `packages/coding-agent/src/edit/schemas.ts`
+- Model-facing prompts: `crates/pi-edit/prompts/`; compact hashline variant: `packages/coding-agent/src/edit/hashline-compact.md`
+- Constrained-decoding grammars: `crates/pi-edit/grammars/`
+- Native bridge: `crates/pi-natives/src/edit.rs` — `EditSession`, `EditStore`, inspection, prompt/grammar exports
+- Hashline parser/application: `crates/pi-edit/src/modes/hashline/`
+- Snapshot/register state: `crates/pi-edit/src/store.rs`; staging, streaming previews, and result shaping: `crates/pi-edit/src/session.rs`
+- Host writes, LSP integration, and parse-regression handling: `packages/coding-agent/src/edit/index.ts`
+- Mode selection/settings: `packages/coding-agent/src/utils/edit-mode.ts`, `packages/coding-agent/src/edit/settings.ts`
+
+## Mode selection and availability
+
+`edit` is an essential built-in tool. `resolveEditMode()` selects the active wire contract in this order:
+
+1. model-specific configured variant;
+2. `PI_EDIT_VARIANT`;
+3. `edit.mode`;
+4. default `hashline`.
+
+Supported modes are `hashline`, `apply_patch`, `patch`, `replace`, and `sloppy`. `edit.modelVariants` uses the first case-insensitive substring match against the active model string. `PI_EDIT_VARIANT` pins the mode exactly; for settings-derived `hashline`, `PI_STRICT_EDIT_MODE` disables the model-family fallback to `replace` (Kimi, MiMo, MiniMax, DeepSeek, StepFun, Codex Spark, and GLM 5.3 Flash).
+
+This page primarily documents hashline. The schema, prompt, examples, renderer, and optional Lark format switch with the mode. Models with `editPromptVariant: "compact"` receive the compact hashline prompt. In `apply_patch` custom-tool mode the wire name is `apply_patch`; dispatch still reaches the same internal tool. The tool is strict, essential, and uses exclusive concurrency.
+
+## Input
+
+| Field   | Type     | Required | Description                                                                                                                                                                                                      |
+| ------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `input` | `string` | Yes      | One or more `[PATH#TAG]` sections containing hashline operations. The strict custom-tool grammar wraps the sections in `*** Begin Patch` / `*** End Patch`; the normal parser also accepts an unwrapped payload. |
+
+Each section edits one existing file and MUST copy the four-uppercase-hex snapshot tag from the latest anchored `read`, `grep`, or successful `edit` result:
+
+```text
+[src/example.ts#1A2B]
+PUT 4.=4:
++const value = 2;
+```
+
+Use `write` to create or wholly overwrite a file. Hashline rejects untagged anchored edits at application time.
+
+## Canonical patch language
+
+All line numbers refer to the original tagged snapshot, not to earlier hunks in the same call.
+
+| Form                                             | Effect                                                                                                                                                    |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUT N.=M:`                                      | Replace inclusive original lines `N..M` with the following `+TEXT` rows.                                                                                  |
+| `PUT N*:`                                        | Replace the multi-line syntactic block beginning on line `N`.                                                                                             |
+| `PUT <N:` / `PUT >N:`                            | Insert body rows immediately before / after line `N`. `PUT <1:` is file head.                                                                             |
+| `PUT >$:`                                        | Append body rows at file tail.                                                                                                                            |
+| `PUT >N*:`                                       | Insert after the syntactic block beginning on line `N`.                                                                                                   |
+| `CUT N.=M` / `CUT N*`                            | Delete and capture an inclusive range or resolved block. Add `@name` to write a named register.                                                           |
+| `PUT <N` / `PUT >N` / `PUT >$`                   | Paste the anonymous register into a gap.                                                                                                                  |
+| `PUT <N @name` / `PUT >N @name` / `PUT >$ @name` | Paste a named register into a gap.                                                                                                                        |
+| `PUT N.=M @name` / `PUT N* @name`                | Replace a range or block with a named register. Named registers are required for span/block paste.                                                        |
+| `REM`                                            | Delete the section file.                                                                                                                                  |
+| `MV DEST`                                        | Write the edited file to the destination, then delete the source. Existing destination contents can be overwritten; quote destinations containing spaces. |
+
+Register names contain ASCII letters, digits, `_`, or `-`. The anonymous register is batch-local and starts empty on every call. Named registers persist for the session and are published only after their writes land. Operations run top-to-bottom across sections, so a cut in an earlier section can feed a later paste. Repeating a paste does not consume its register.
+
+Only body-bearing `PUT ...:` headers take body rows. Every body row is `+TEXT`; `+` alone inserts a blank line. The body is final content, never a unified-diff before/after pair. Literal content beginning with `-` or `+` is written as `+-...` or `++...`. `CUT`, register-backed `PUT`, `REM`, and `MV` take no body.
+
+### Block anchors
+
+Block forms resolve from the opening line through the tree-sitter node's end. Anchor the construct opener, never a closing delimiter, last visible line, blank line, or inner statement. A single-line node is rejected with guidance to use the corresponding explicit-line operation. `PUT >N*:` lowers to ordinary `PUT >N:` with a warning when no block resolves; replace/cut block forms fail instead of guessing.

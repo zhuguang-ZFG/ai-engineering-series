@@ -1,0 +1,15 @@
+Write a shareable copy of a session and its subagents: turn contents redacted, metadata kept, paths and literals replaced by consistent mock tokens
+
+USAGE
+  $ omp anonymize [SESSION] [FLAGS]
+
+ARGUMENTS
+  SESSION   Session file path or id prefix (default: most recent for cwd)
+
+FLAGS
+  -o, --out=<value>  Output directory (default: ./<session-file>.anon)
+
+EXAMPLES
+  omp anonymize
+  omp anonymize 01a0285c -o ./bug-report
+  omp anonymize ~/.omp/agent/sessions/--work-pi--/session.jsonl

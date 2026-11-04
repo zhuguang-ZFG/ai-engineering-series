@@ -54,10 +54,13 @@ def proposal_id(unit_id: str, body: str) -> str:
 def build_report(manifest: dict, glosses: dict,
                  files: dict[str, str] | None = None) -> dict:
     """Resolve refs to spans and return the deterministic migration report."""
+    from . import plain as _plain
     unit_of: dict[str, tuple[str, str]] = {}
+    langs = _plain.manifest_langs(manifest)
     for unit, kind, _part in unit_stream(manifest):
-        for lang in ("zh", "en"):
-            unit_of[unit[lang].replace("\\", "/")] = (unit["id"], lang)
+        for lang in langs:
+            if lang in unit:
+                unit_of[unit[lang].replace("\\", "/")] = (unit["id"], lang)
 
     source = files if files is not None else {}
 
@@ -196,8 +199,12 @@ def stage_migration(root, manifest: dict, glosses: dict,
     from .core import read_text
 
     root = Path(root)
+    from . import plain as _plain
+    langs = _plain.manifest_langs(manifest)
     for unit, _kind, _part in unit_stream(manifest):
-        for lang in ("zh", "en"):
+        for lang in langs:
+            if lang not in unit:
+                continue
             rel = unit[lang].replace("\\", "/")
             target = root / rel
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -305,8 +312,10 @@ def apply_migration(manifest: dict, glosses: dict, report: dict,
         if row["status"] == "mapped":
             mapping[row["ref"]] = row["block_id"]
 
-    paths = {"manifest.json": registry_dir / "manifest.json",
-             "glosses.json": registry_dir / "glosses.json"}
+    from . import plain as _plain
+    names = _plain.registry_names(manifest)
+    paths = {names["manifest"]: registry_dir / names["manifest"],
+             names["glosses"]: registry_dir / names["glosses"]}
     pending = {}
     for name, path in paths.items():
         text = path.read_text(encoding="utf-8", newline="")

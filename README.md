@@ -38,6 +38,18 @@
 - **按需查阅：** 使用下方四篇附录定位模块、工具、功能标志和术语。
 - **网站阅读：** [在线阅读入口](https://lintsinghua.github.io/)；也可直接点击本仓库的章节链接。
 
+## 第二分册 · Omp（施工中）
+
+同仓新增开源终端 agent 教程分册《Omp 从入门到精通：原理与实战》（非官方）。书稿在 [omp/](omp/README.md)；产物前缀 `yuyu-omp-*`。写作钉 **omp/18.15.0**，本机核对见 [omp/VERIFY.md](omp/VERIFY.md)（含 18.16.0）。
+
+两条命令各编各的书，不再是「尚未接入」：`make book` / `make book-pdf` 仍只构建御舆（双语），`make book-omp` / `make book-omp-pdf` 构建 omp 中文版（后者多出 A4 PDF），等价命令是 `python scripts/bookctl.py build --product omp --lang zh [--pdf]`。两边产物同名不同前缀，都落在 `yuyu-book/dist/`，编一本不会盖掉另一本。构建口径与本机实测的体积/页数见 [omp/BUILD.md](omp/BUILD.md)，双产品的机制与边界见 [STRUCTURE.md](STRUCTURE.md) 的 §3.6。
+
+有两处边界值得先说，免得按御舆的直觉去按 omp：`make check`（`bookctl check --fast/--full`）目前只验御舆，omp 不在那几步里；GitHub 的 Book CI 已加了一个独立 `omp` job，它不 `needs` 御舆、也挡不住御舆发布，但要真跑得起来得等 omp 书稿先进 main。
+
+概念可以互查，实现与钉版不能混用：两本书的对照入口（先读哪本、10 行同构点、三处译名分叉）见 [docs/COMPARE-OMP.md](docs/COMPARE-OMP.md)，逐词共享表见 [docs/yuyu-overhaul/SHARED-TERMS.md](docs/yuyu-overhaul/SHARED-TERMS.md)。
+
+插画策略：Mermaid 架构图 + 手绘概念图双轨。与御舆概念可对照，实现与钉版勿混用。
+
 ## 阅读说明
 
 阅读时需区分源码可确认的行为、架构推演和教学示例。功能标志与工具可用性取决于构建和运行时配置；数量和耗时示例不代表当前发行版承诺。
@@ -101,7 +113,9 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 5.9 MB）与 A4 排版的 PDF（中文版 505 页 / 35.0 MB，英文版 536 页 / 23.8 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 507 页 / 24.1 MB、英文 558 页 / 12.4 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 5.9 MB）与 A4 排版的 PDF（中文版 505 页 / 35.0 MB，英文版 536 页 / 23.8 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 518 页 / 25.1 MB、英文 569 页 / 12.6 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+
+上面那对 CI 数字钉的是通俗层改造之前的排版；书稿每加厚一轮，Noto 那一套就得跟着复排一次。`scripts/check_artifact_claims.py`（在 `book.yml` 里跑）会把 README 的数字和当次构建的 PDF 逐一对账，不一致就报红——所以推送后第一件事是看 CI 排出的页数，再回来把这两个数改写掉，本机雅黑的数字另记在 `docs/yuyu-overhaul/PDF-PAGES.md`。
 
 | 文件 | 语言 |
 |------|------|

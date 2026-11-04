@@ -277,11 +277,22 @@ def check(full: bool) -> int:
 
 
 def build(args) -> int:
-    if args.product != "book":
+    if args.product not in ("book", "omp"):
         print(f"unknown product: {args.product}", file=sys.stderr)
         return 2
-    cmd = [python(), "yuyu-book/build.py", "--lang", args.lang,
-           "--mermaid", args.mermaid]
+    lang = args.lang
+    cmd = [python(), "yuyu-book/build.py", "--mermaid", args.mermaid]
+    if args.product == "omp":
+        # Chinese-first second volume; "both" quietly means zh until en/omp exists.
+        if lang == "en":
+            print("omp product is zh-only for now", file=sys.stderr)
+            return 2
+        lang = "zh"
+        cmd += ["--lang", lang,
+                "--manifest", "manifest-omp.json",
+                "--sources", "sources-omp.json"]
+    else:
+        cmd += ["--lang", lang]
     if args.pdf:
         cmd.append("--pdf")
     if args.out_dir:
@@ -316,7 +327,8 @@ def main(argv=None) -> int:
                        help="fast plus rendered HTML and both PDF editions")
 
     bl = sub.add_parser("build", help="build a product")
-    bl.add_argument("--product", default="book", choices=["book"])
+    # products: book (御舆) and omp (第二分册, zh-first).
+    bl.add_argument("--product", default="book", choices=["book", "omp"])
     bl.add_argument("--lang", default="both", choices=["zh", "en", "both"])
     bl.add_argument("--pdf", action="store_true")
     bl.add_argument("--out-dir")
