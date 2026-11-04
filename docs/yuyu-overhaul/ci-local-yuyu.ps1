@@ -66,12 +66,12 @@ Step "build book both --pdf" @("python", "scripts/bookctl.py", "build", "--produ
 # check_artifact_claims.py 比的是 CI（Noto CJK）那套页数；本机是微软雅黑，必定报红。
 # 依据：docs/yuyu-overhaul/PDF-PAGES.md「这台机器上 check_artifact_claims.py 必定报红，且不是坏了」
 # 与 docs/yuyu-overhaul/BASELINE.md「改造前的既有红灯」第 2 条。
-# 这里只放行「页数类失败 + README 仍写着 CI 的 505/536」；任何其他失败照常红。
+# 这里只放行「页数类失败 + README 仍写着 CI 的 516/552」；任何其他失败照常红。
 # 反过来，如果 README 被改成本机页数来凑绿，这条脚本要拦住 —— SPEC 明令禁止谎报。
 Log "## check_artifact_claims（只允许字体口径的页数例外）"
 $readme = Get-Content -Raw -Encoding UTF8 README.md
-if ($readme -notmatch '505' -or $readme -notmatch '536') {
-  throw "README 里找不到 CI(Noto) 的 505/536 页数宣称了。不能为了本机变绿改 README —— 见 PDF-PAGES.md。"
+if ($readme -notmatch '516' -or $readme -notmatch '552') {
+  throw "README 里找不到 CI(Noto) 的 516/552 页数宣称了。不能为了本机变绿改 README —— 见 PDF-PAGES.md。"
 }
 $prev = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
@@ -83,14 +83,14 @@ $claims | ForEach-Object { Write-Host $_ }
 Log ("-> exit $code")
 $stale = @($claims | Where-Object { $_ -match '\[STALE\]' })
 foreach ($line in $stale) {
-  if ($line -notmatch 'has \d+ pages, README says (505|536)(\s+\[STALE\])?\s*$') {
+  if ($line -notmatch 'has \d+ pages, README says (516|552)(\s+\[STALE\])?\s*$') {
     throw "check_artifact_claims 报的不是「雅黑 vs Noto 页数」这一类，不能用例外放行：$line"
   }
 }
 if ($stale.Count -lt 1) {
   throw "check_artifact_claims 一条都没报红，说明本机 dist 已经是 CI 口径或 README 被改过 —— 先查清再放行。"
 }
-"EXCEPTION: 放行 $($stale.Count) 条页数差异（README=CI/Noto 505·536，本机=雅黑实际页数），日志 $log" |
+"EXCEPTION: 放行 $($stale.Count) 条页数差异（README=CI/Noto 516·552，本机=雅黑实际页数），日志 $log" |
   ForEach-Object { Log $_; Write-Host $_ }
 
 "ci-local-yuyu OK" | ForEach-Object { Log $_; Write-Host $_ }
