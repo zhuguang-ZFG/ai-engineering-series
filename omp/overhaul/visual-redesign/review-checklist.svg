@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">先勾选，再评论。</title><desc id="desc">评审看风险与意图；一次一件事，方便回滚。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">代码评审</text>
+
+<text x="72" y="171" class="ink" font-size="52">先勾选，再评论。</text>
+<text x="74" y="219" class="muted" font-size="24">你定范围，agent 跑检查与起草，你保留合并权。</text>
+<rect x="120" y="300" width="1200" height="480" rx="14" class="soft"/>
+<g font-size="26">
+<rect x="160" y="350" width="36" height="36" rx="4" class="hi"/><path d="M168 368 l8 8 16-18" class="flow" marker-end="none"/>
+<text x="220" y="378" class="ink">范围清楚：这次只改一件事</text>
+<rect x="160" y="430" width="36" height="36" rx="4" class="hi"/><path d="M168 448 l8 8 16-18" class="flow" marker-end="none"/>
+<text x="220" y="458" class="ink">风险点标出：安全 / 数据 / 兼容</text>
+<rect x="160" y="510" width="36" height="36" rx="4" class="card"/>
+<text x="220" y="538" class="muted">测试与检查：agent 可起草，你验收</text>
+<rect x="160" y="590" width="36" height="36" rx="4" class="card"/>
+<text x="220" y="618" class="muted">提交原子：可回滚、可挑拣</text>
+<rect x="160" y="670" width="36" height="36" rx="4" class="card"/>
+<text x="220" y="698" class="muted">合并权在人：不自动点 Merge</text>
+</g>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文第 27 章 · 评审清单</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 协作</text>
+</svg>
