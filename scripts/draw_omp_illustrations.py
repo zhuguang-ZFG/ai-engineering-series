@@ -3515,6 +3515,86 @@ def incident_pack(picture: Drawing):
     picture.footer("排障的第一产物是证据包，不是结论。")
 
 
+def config_diary(picture: Drawing):
+    picture.header("第 23 章 · 配置变更日记",
+                   "日记一行一条，七个字段。",
+                   "改一层、开新会话、记下 profile 与路径。")
+    fields = (("时间", "什么时候改的", ORANGE),
+              ("profile", "活动配置档名", BLUE),
+              ("文件路径", "动的是哪个文件", GREEN),
+              ("键 / 旧值 / 新值", "三个一起记，别只记新值", ORANGE),
+              ("验证方法", "下次照着验一遍", BLUE))
+    for index, (title, detail, color) in enumerate(fields):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.badge((144, top + 38), index + 1, color)
+        picture.text((186, top + 12), title, 21, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 664, 1108, 722), "两条硬规矩：",
+                 "CI 只读叠加层单独成文件；密钥示例只写环境变量名。", GREEN, SAGE)
+    picture.footer("文档里禁止「请开发者改 ~/.omp」——那是要事故的写法。")
+
+
+def antipatterns(picture: Drawing):
+    picture.header("第 24 章 · 反模式墙",
+                   "接手陌生仓库时，贴在显示器边上。",
+                   "五句话，每句都能让你白干一天。")
+    walls = (("一上来重构整个目录", "地图都没有就先动土", ORANGE),
+             ("用 shell 枚举代替 glob/grep", "窗口塞满噪音", BLUE),
+             ("不跑测试就宣布读懂", "读懂的证据是绿测试", GREEN),
+             ("把临时猜测写进 AGENTS.md", "猜想变规则，后来人照做", ORANGE),
+             ("没地图就并行 task", "子代理各带一份大历史乱撞", BLUE))
+    for index, (title, detail, color) in enumerate(walls):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.badge((144, top + 36), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.footer("反模式不用记全，记住「先画地图再动土」这一条就够挡一半。")
+
+
+def embed_checklist(picture: Drawing):
+    picture.header("第 28 章 · 嵌入前的核对表",
+                   "左边记发现项，右边按序排错。",
+                   "都是外壳，同一套 agent 循环。")
+    picture.box((92, 196, 584, 520), WHITE, ORANGE, radius=12)
+    picture.text((116, 212), "嵌入前记录", 22, ORANGE, True, width=444)
+    picture.text((116, 254), "cwd", 18, MUTED, width=444)
+    picture.text((116, 288), "agentDir", 18, MUTED, width=444)
+    picture.text((116, 322), "是否持久（文件式 / 内存式）", 18, MUTED, width=444)
+    picture.text((116, 356), "模型与 fallback", 18, MUTED, width=444)
+    picture.text((116, 390), "扩展是否加载", 18, MUTED, width=444)
+    picture.box((616, 196, 1108, 520), WHITE, BLUE, radius=12)
+    picture.text((640, 212), "RPC 排错顺序", 22, BLUE, True, width=444)
+    picture.text((640, 254), "① 帧解析", 18, MUTED, width=444)
+    picture.text((640, 288), "② 相关标识怎么对", 18, MUTED, width=444)
+    picture.text((640, 322), "③ 错误是否可恢复", 18, MUTED, width=444)
+    picture.text((640, 356), "④ 事件背压", 18, MUTED, width=444)
+    picture.note((92, 540, 1108, 620), "共同点：",
+                 "命令行、打印模式、SDK、RPC 都是外壳；信卡片在这里变成信事件与响应帧。",
+                 GREEN, SAGE)
+    picture.footer("排错别跳步：帧都解析不对，就别查相关标识。")
+
+
+def three_deceptions(picture: Drawing):
+    picture.header("第 33 章 · 总复习的三处自欺",
+                   "最容易骗自己的三条，逐条对号。",
+                   "六步缺一不可，产物写进笔记才算数。")
+    traps = (("「我懂了」但说不出链", "被问「模型怎么找到 bash」时卡住", ORANGE),
+             ("用日常配置档做实验", "扩展、技能、记忆全在，实验不干净", BLUE),
+             ("只跑第 1、2 步就说串完了", "发现层、工具层、扩展层都没碰", GREEN))
+    for index, (title, detail, color) in enumerate(traps):
+        top = 200 + index * 122
+        picture.box((110, top, 1108, top + 98), WHITE, color, radius=12)
+        picture.badge((144, top + 49), index + 1, color)
+        picture.text((186, top + 12), title, 22, color, True, width=880)
+        picture.text((186, top + 54), detail, 18, MUTED, width=880)
+    picture.note((92, 576, 1108, 656), "纠正办法：",
+                 "用 33.7 的六步把每格走一遍；卡住的格子回对应章补，再开干净档重跑。",
+                 BLUE, SKY)
+    picture.footer("能把整条链复述出来，比「读完了」值钱。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3665,6 +3745,10 @@ FIGURES = {
     "fig31-5-secret-shapes": secret_shapes,
     "fig32-5-cost-review": cost_review,
     "fig30-5-incident-pack": incident_pack,
+    "fig23-6-config-diary": config_diary,
+    "fig24-7-antipatterns": antipatterns,
+    "fig28-5-embed-checklist": embed_checklist,
+    "fig33-5-three-deceptions": three_deceptions,
 }
 
 
