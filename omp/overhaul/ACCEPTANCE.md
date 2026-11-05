@@ -119,8 +119,8 @@ B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正�
 
 | 文件 | 字节 | 页数 / 书签 | SHA-256 |
 |---|---:|---|---|
-| `yuyu-omp-zh.html` | 28,935,632 | 39 单元 | `6a921ba6a4cd0121719bfc0d115472696e928ac06b466b839ff24860b16edfeb` |
-| `yuyu-omp-zh.pdf` | 37,622,598 | 343 页 / 49 书签 | `b7e8dc9e8d1162fae88938c0be56adfd0cda7d417c1f50ff37cae18aaac490b6` |
+| `yuyu-omp-zh.html` | 28,935,624 | 39 单元 | `3a43c826d86912f0ffe767dd282683e17cfa42f9af36b5d93209522df90280a9` |
+| `yuyu-omp-zh.pdf` | 37,622,560 | 343 页 / 49 书签 | `66c46510bfa73edc3c20a37fbec50fba5ae520ec6e511cd8fa3cfb79ad43e8e5` |
 
 体积上升来自位图分辨率统一为 2400×1600；页数由 332 增到 343：B5 补引用的 6 张图、ch07 新增的
 §7.5a 与附录 E.9 各贡献一段版面。
@@ -135,6 +135,5 @@ B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正�
   质量 82，单张 40–49 KB；正文补题注（ch05、ch06、ch11）。来源登记 `sources-omp.json` 的 `omp-readme-assets`。
 - 内容一：ch07 新增 §7.5a「把别人拉进同一个会话：`/collab` 与 `omp join`」——命令语义逐条对照本机
   `omp collab --help` 与 `omp join --help`（v18.16.0）核实，链接形态取该 help 的 EXAMPLE。
-- 内容二：附录 E.9「上游 README 的二十一项能力，在本书哪里」——21 行对照索引；两项（流式规则、
-  `/resolve` 冲突解决）标注「未展开」，避免用宣传语充当规范。来源登记 `omp-readme`（`normative: false`）。
+- 内容二：附录 E.9「上游 README 的二十一项能力，在本书哪里」——21 行对照索引；三处（流式规则、`/resolve` 冲突解决、Slack）标注「未展开」，避免用宣传语充当规范。来源登记 `omp-readme`（`normative: false`）。
 - `yuyu-book/reading-paths-omp.json` 的 `omp-ch07` 增补一格 tier，与新增 H2 对齐（13→14）。
