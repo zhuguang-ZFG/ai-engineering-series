@@ -1295,6 +1295,285 @@ def approval_gate(picture: Drawing):
     picture.footer("先读当前 allow 表，再谈模式；顺序反了会得出错误结论。")
 
 
+def skill_layout(picture: Drawing):
+    picture.header("第 19 章 · Skill 目录", "只扫一层，这是设计不是 bug。",
+                   "常规根只认 <skills>/<name>/SKILL.md；再深一层不会被发现。")
+    picture.box((80, 214, 620, 600), WHITE, INK, radius=10)
+    picture.text((104, 236), "skills/", 21, bold=True)
+    rows = (("  postgres/SKILL.md", "✅ 一层，能扫到", GREEN),
+            ("  pdf/SKILL.md", "✅ 一层，能扫到", GREEN),
+            ("  team/internal/SKILL.md", "❌ 再嵌套，扫不到", ORANGE))
+    for index, (path, verdict, color) in enumerate(rows):
+        top = 292 + index * 96
+        picture.box((104, top, 596, top + 74), SAGE if color is GREEN else PEACH, color,
+                     radius=8)
+        picture.text((124, top + 12), path, 19, INK, True)
+        picture.text((124, top + 44), verdict, 17, color)
+    picture.box((646, 240, 1120, 360), SKY, BLUE, radius=10)
+    picture.text((670, 262), "发现规则", 21, BLUE, True)
+    picture.text((670, 304), "skills.customDirectories 同样非递归", 18)
+    picture.text((670, 336), "想收深层：把扫描根指到那一层", 18, MUTED)
+    picture.box((646, 396, 1120, 540), SAGE, GREEN, radius=10)
+    picture.text((670, 420), "frontmatter 两个硬门槛", 20, GREEN, True)
+    picture.text((670, 462), "name + path 必须给", 18)
+    picture.text((670, 498), "description 空 → 模型不会想起读", 18, ORANGE)
+    picture.note((92, 622, 1108, 692), "把目录抬上来，或改扫描根。",
+                 "别把「埋深一点更整齐」带进 skills/。", ORANGE, PEACH)
+    picture.footer("路径深度先过关，再谈 description 写得好不好。")
+
+
+def skill_vs_ext(picture: Drawing):
+    picture.header("第 19 章 · skill 与 extension", "一个写说明书，一个注册工具。",
+                   "前者教模型怎么做，后者把能力接进注册表。")
+    picture.box((64, 216, 552, 640), SAGE, GREEN)
+    picture.text((308, 248), "Skill", 28, GREEN, True, "mm")
+    picture.paper((100, 300, 516, 470), "SKILL.md", GREEN, WHITE, ruled=False)
+    picture.text((122, 326), "发版检查单：", 19, GREEN, True)
+    picture.text((122, 364), "1. 改 CHANGELOG", 18)
+    picture.text((122, 396), "2. 打 tag", 18)
+    picture.text((122, 428), "3. 推镜像", 18)
+    picture.text((308, 512), "模型按需 read skill://", 19, MUTED, anchor="mm")
+    picture.text((308, 550), "不新增可调用工具", 19, MUTED, anchor="mm")
+    picture.text((308, 596), "改文档就能改行为", 18, GREEN, anchor="mm")
+    picture.box((632, 216, 1120, 640), SKY, BLUE)
+    picture.text((876, 248), "Extension", 28, BLUE, True, "mm")
+    picture.box((668, 300, 1084, 470), INK, INK, radius=10)
+    picture.text((688, 318), "export default (pi) => ({", 17, WHITE)
+    picture.text((704, 350), "registerTool({...})", 17, "#BCD5BD")
+    picture.text((704, 382), "registerCommand(/x)", 17, "#BCD5BD")
+    picture.text((704, 414), "return factory", 17, WHITE)
+    picture.text((876, 512), "模型能直接调用工具", 19, MUTED, anchor="mm")
+    picture.text((876, 550), "要写代码、要加载", 19, MUTED, anchor="mm")
+    picture.text((876, 596), "能力面更大，也更要审", 18, BLUE, anchor="mm")
+    picture.note((92, 660, 1108, 700), "先问：是流程说明，还是要执行？",
+                 "流程 → skill；执行 → extension。", ORANGE, PEACH)
+    picture.footer("skill 不改调用面；需要新工具就别硬塞 SKILL.md。")
+
+
+def mcp_trust(picture: Drawing):
+    picture.header("第 20 章 · MCP 信任边界", "配置连出去，工具走进来。",
+                   "每个 server 都是一条外部能力，边界要显式。")
+    picture.box((80, 240, 420, 420), WHITE, INK)
+    picture.text((104, 262), ".omp/mcp.json", 21, True)
+    picture.text((104, 306), "项目级：随仓库走", 18, MUTED)
+    picture.text((104, 344), "clone 即可能成为攻击面", 18, ORANGE)
+    picture.arrow([(430, 330), (520, 330)], ORANGE, 3)
+    picture.box((532, 232, 700, 560), PEACH, ORANGE, radius=40)
+    picture.text((616, 262), "信任边界", 20, ORANGE, True, "mm")
+    for top in (320, 390, 460):
+        picture.line([(552, top), (680, top)], ORANGE, 2)
+    picture.arrow([(710, 330), (800, 330)], ORANGE, 3)
+    picture.box((812, 232, 1130, 560), SAGE, GREEN, radius=12)
+    picture.text((836, 256), "服务器与工具", 21, GREEN, True)
+    for index, (name, detail) in enumerate((("filesystem", "两个白名单目录"),
+                                             ("github", "仓库读写权限"),
+                                             ("internal-http", "内网端点"))):
+        top = 306 + index * 78
+        picture.box((836, top, 1108, top + 60), WHITE, GREEN, radius=8)
+        picture.text((852, top + 10), name, 19, GREEN, True)
+        picture.text((852, top + 34), detail, 16, MUTED)
+    picture.note((92, 586, 1108, 674), "控制面：先审再开。",
+                 "--no-extensions、mcp.enableProjectConfig、disabledServers、--profile 隔离。", BLUE, SKY)
+    picture.footer("不知名仓库，先读配置，再让 agent 动手。")
+
+
+def mcp_review(picture: Drawing):
+    picture.header("第 20 章 · 打开仓库先看 MCP", "四步审查，再开会话。",
+                   "恶意工具名与描述能诱导模型乱调用。")
+    steps = (("读", "读 mcp.json 的来源", BLUE, SKY),
+             ("比", "和上游对照，找多出的条目", GREEN, SAGE),
+             ("关", "不用的条目点名关掉", ORANGE, PEACH),
+             ("开", "带审批，先只读跑一轮", GREEN, SAGE))
+    for index, (verb, detail, color, fill) in enumerate(steps):
+        left = 56 + index * 276
+        picture.box((left, 250, left + 244, 540), fill, color)
+        picture.circle((left + 122, 306), 34, WHITE, color, 3)
+        picture.text((left + 122, 306), verb, 26, color, True, "mm")
+        picture.text((left + 20, 366), detail, 17, anchor="mm", width=206)
+        if index < 3:
+            picture.arrow([(left + 252, 396), (left + 270, 396)], color, 3)
+    picture.box((92, 570, 1108, 648), WHITE, ORANGE, radius=10)
+    picture.text((114, 592), "没有 --no-mcp 这个旗标", 21, ORANGE, True)
+    picture.text((114, 622), "可用的是 --no-extensions、enableProjectConfig、disabledServers、--profile", 18, MUTED)
+    picture.text((600, 680), "审配置比事后翻调用记录便宜", 19, MUTED, anchor="mm")
+    picture.footer("陌生仓库的第一条命令不是「跑一下」，是「读配置」。")
+
+
+def hooks(picture: Drawing):
+    picture.header("第 21 章 · 钩子点", "调用前后，各挂一道门帘。",
+                   "pre 能改写或拦截；post 记录结果。")
+    picture.box((80, 330, 300, 470), WHITE, INK)
+    picture.text((190, 386), "模型请求", 21, INK, True, "mm")
+    picture.text((190, 424), "tool_call", 18, MUTED, anchor="mm")
+    picture.arrow([(310, 400), (400, 400)], INK, 3)
+    picture.box((412, 280, 700, 520), PEACH, ORANGE, radius=12)
+    picture.text((556, 308), "pre 钩子", 24, ORANGE, True, "mm")
+    picture.text((556, 356), "审计参数", 19, anchor="mm")
+    picture.text((556, 394), "{ input } 改写", 19, anchor="mm")
+    picture.text((556, 432), "{ block, reason } 拦下", 19, anchor="mm")
+    picture.arrow([(710, 400), (800, 400)], ORANGE, 3)
+    picture.box((812, 330, 1000, 470), SAGE, GREEN)
+    picture.text((906, 384), "工具执行", 21, GREEN, True, "mm")
+    picture.text((906, 422), "真实副作用", 17, MUTED, anchor="mm")
+    picture.arrow([(1010, 400), (1080, 400)], GREEN, 3)
+    picture.text((1080, 370), "结果", 18, MUTED, anchor="mm")
+    picture.arrow([(906, 480), (906, 570), (556, 570), (556, 532)], BLUE, 3)
+    picture.box((412, 578, 900, 660), SKY, BLUE, radius=10)
+    picture.text((434, 600), "post 钩子：记录、摘要、报警", 19, BLUE, True)
+    picture.text((434, 632), "拒绝要在 pre 返回 reason，静默失败最糟", 17, MUTED)
+    picture.text((600, 700), "根目录的工厂不会被发现：放进 pre/ 或 post/", 18, MUTED, anchor="mm")
+    picture.footer("两道门帘都只为同一件事：让副作用可见、可拦。")
+
+
+def hook_approve(picture: Drawing):
+    picture.header("第 21 章 · 钩子与审批", "两道门，各自有分工。",
+                   "hook 是策略，审批是人；同一规则别写两遍。")
+    picture.box((80, 240, 330, 420), WHITE, INK)
+    picture.text((205, 300), "工具调用", 21, INK, True, "mm")
+    picture.text((205, 344), "bash rm -rf …", 18, MUTED, anchor="mm")
+    picture.arrow([(340, 330), (430, 330)], INK, 3)
+    picture.box((442, 224, 760, 456), PEACH, ORANGE, radius=12)
+    picture.text((601, 250), "第一道：hook", 22, ORANGE, True, "mm")
+    picture.text((601, 294), "机器可判的规则", 18, MUTED, "mm")
+    picture.text((601, 336), "返回 block + reason", 19, ORANGE, "mm")
+    picture.text((601, 378), "命中就直接失败", 18, MUTED, "mm")
+    picture.text((601, 418), "模型读得到原因", 17, MUTED, "mm")
+    picture.arrow([(770, 330), (860, 330)], ORANGE, 3)
+    picture.box((872, 224, 1120, 456), SKY, BLUE, radius=12)
+    picture.text((996, 250), "第二道：审批", 22, BLUE, True, "mm")
+    picture.text((996, 294), "需要人判断", 18, MUTED, "mm")
+    picture.text((996, 336), "ask / 记住 / 受限目录", 18, BLUE, "mm")
+    picture.text((996, 378), "你点同意或拒绝", 18, MUTED, "mm")
+    picture.text((996, 418), "拒绝理由回给模型", 17, MUTED, "mm")
+    picture.arrow([(996, 466), (996, 520)], GREEN, 3)
+    picture.box((880, 532, 1112, 604), SAGE, GREEN, radius=10)
+    picture.text((996, 554), "执行或终止", 19, GREEN, True, "mm")
+    picture.text((996, 582), "两页日志都要有", 16, MUTED, anchor="mm")
+    picture.note((92, 630, 1108, 700), "想清楚哪道是策略、哪道是人。",
+                 "同一规则写两遍，排障时会互相掩盖。", ORANGE, PEACH)
+    picture.footer("hook 挡确定的事，审批挡需要判断的事。")
+
+
+def extension_factory(picture: Drawing):
+    picture.header("第 22 章 · 扩展工厂", "先注册，再初始化，最后才有动作。",
+                   "注册阶段可以挂东西；sendMessage 要等 initialize。")
+    picture.box((80, 230, 560, 330), INK, INK, radius=10)
+    picture.text((102, 250), "export default (pi) => ({", 19, WHITE)
+    picture.text((102, 282), "  registerTool / registerCommand / on", 19, "#BCD5BD")
+    picture.text((102, 310), "})", 19, WHITE)
+    picture.arrow([(570, 280), (650, 280)], ORANGE, 3)
+    picture.box((662, 222, 1120, 340), SAGE, GREEN, radius=12)
+    picture.text((686, 246), "注册表", 21, GREEN, True)
+    picture.text((686, 286), "工具 · 斜杠命令 · 快捷键 · 事件", 18)
+    picture.text((686, 316), "模块先 import，工厂按路径顺序跑", 17, MUTED)
+    picture.arrow([(891, 350), (891, 400)], GREEN, 3)
+    picture.box((662, 412, 1120, 520), SKY, BLUE, radius=12)
+    picture.text((686, 436), "initialize", 21, BLUE, True)
+    picture.text((686, 476), "接 mode / session / 工具包装", 18)
+    picture.text((686, 504), "这之后 sendMessage 才合法", 17, ORANGE)
+    picture.arrow([(891, 530), (891, 580)], BLUE, 3)
+    picture.box((662, 592, 1120, 664), PEACH, ORANGE, radius=10)
+    picture.text((686, 612), "过早调用", 19, ORANGE, True)
+    picture.text((686, 640), "ExtensionRuntimeNotInitializedError", 17, MUTED)
+    picture.box((80, 400, 560, 600), WHITE, INK, radius=10)
+    picture.text((104, 424), "子会话", 20, bold=True)
+    picture.text((104, 464), "复用已 import 的工厂", 18, MUTED)
+    picture.text((104, 500), "但绑定新的 API 与注册", 18, MUTED)
+    picture.text((104, 552), "顶层变量别当全局单例", 18, ORANGE)
+    picture.footer("生命周期是硬约束：注册 → initialize → 动作。")
+
+
+def reload_plugins(picture: Drawing):
+    picture.header("第 22 章 · 热重载", "换扩展，不重启会话。",
+                   "/reload-plugins 只重跑扩展加载，会话记录还在。")
+    picture.box((80, 240, 500, 560), WHITE, INK)
+    picture.text((104, 264), "会话", 21, bold=True)
+    picture.text((104, 306), "对话、文件、todo 都保留", 18, MUTED)
+    picture.box((110, 356, 470, 430), SAGE, SAGE, radius=8)
+    picture.text((130, 380), "扩展 v1", 19, GREEN, True)
+    picture.text((130, 408), "旧行为", 16, MUTED)
+    picture.arrow([(510, 390), (610, 390)], ORANGE, 3)
+    picture.text((560, 360), "/reload-plugins", 18, ORANGE, True, "mm")
+    picture.box((622, 240, 1120, 560), SAGE, GREEN)
+    picture.text((646, 264), "扩展加载重跑", 21, GREEN, True)
+    picture.text((646, 306), "重新 import、重新注册", 18)
+    picture.text((646, 344), "命令与工具列表按新代码刷新", 18)
+    picture.box((654, 392, 1088, 470), WHITE, GREEN, radius=8)
+    picture.text((674, 414), "扩展 v2", 19, GREEN, True)
+    picture.text((674, 444), "新行为，会话没断", 16, MUTED)
+    picture.box((80, 590, 1120, 664), PEACH, PEACH, radius=10)
+    picture.text((104, 610), "重载不保证清理旧状态", 19, ORANGE, True)
+    picture.text((104, 638), "模块顶层缓存、定时器、子进程要自己收", 18, MUTED)
+    picture.footer("热重载是开发循环工具，不是部署方案。")
+
+
+def theme(picture: Drawing):
+    picture.header("第 23 章 · 主题", "换皮肤，不换引擎。",
+                   "主题只改界面观感；模型、工具、审批都不动。")
+    picture.box((90, 220, 540, 600), WHITE, LINE, radius=12)
+    picture.text((112, 244), "默认", 20, MUTED, True)
+    picture.box((120, 300, 500, 380), "#F5F2EA", LINE, radius=8)
+    picture.text((140, 326), "对话与卡片", 18, MUTED)
+    picture.box((120, 400, 500, 470), INK, INK, radius=8)
+    picture.text((140, 424), "深色状态栏", 17, WHITE)
+    picture.arrow([(550, 400), (630, 400)], ORANGE, 3)
+    picture.box((650, 220, 1110, 600), SAGE, GREEN, radius=12)
+    picture.text((672, 244), "主题 JSON", 20, GREEN, True)
+    for index, (name, color) in enumerate((("accent", ORANGE), ("muted", MUTED),
+                                            ("surface", SAGE))):
+        top = 300 + index * 74
+        picture.box((684, top, 720, top + 44), color, color, radius=6)
+        picture.text((736, top + 8), name, 19, INK, True)
+    picture.box((684, 526, 1070, 586), "#F5F2EA", LINE, radius=6)
+    picture.text((704, 546), "配色映射到界面角色", 17, MUTED)
+    picture.note((92, 632, 1108, 700), "团队共享示例文件，个人覆盖放用户层。",
+                 "把「确认提交」绑到难误触的键，是安全问题，不是审美问题。", BLUE, SKY)
+    picture.footer("主题影响你盯日志的舒适度，不影响结论。")
+
+
+def keys_isolation(picture: Drawing):
+    picture.header("第 23 章 · 密钥与隔离", "profile 管配置，密钥另走一路。",
+                   "profile 隔离 settings / auth / sessions / caches 的目录。")
+    picture.box((76, 226, 544, 590), WHITE, INK, radius=12)
+    picture.text((100, 250), "profile: work", 21, bold=True)
+    picture.text((100, 292), "~/.omp/profiles/work/agent", 17, MUTED)
+    for index, item in enumerate(("settings.yml", "sessions/", "caches/", "mcp.json")):
+        top = 330 + index * 52
+        picture.box((112, top, 508, top + 40), SAGE, SAGE, radius=6)
+        picture.text((130, top + 10), item, 17, GREEN)
+    picture.text((310, 548), "互不污染", 18, MUTED, anchor="mm")
+    picture.box((640, 226, 1120, 590), SAGE, GREEN)
+    picture.text((664, 250), "密钥仍在环境 / secrets", 21, GREEN, True)
+    picture.text((664, 300), "不进可提交的 config", 18)
+    picture.box((676, 344, 1084, 420), INK, INK, radius=8)
+    picture.text((696, 366), "OPENAI_API_KEY=…", 17, WHITE)
+    picture.text((696, 394), "OMP_PROFILE=sandbox", 17, "#BCD5BD")
+    picture.text((664, 460), "secrets 子系统负责注入与遮罩", 18, MUTED)
+    picture.text((664, 502), "分享前仍要自己扫一遍 transcript", 18, ORANGE)
+    picture.note((92, 620, 1108, 694), "沙箱 profile：关扩展、关 MCP、便宜模型。",
+                 "切过去用 --profile，别靠「记得改回 yaml」。", ORANGE, PEACH)
+    picture.footer("隔离的是习惯与目录，不是密钥本身。")
+
+
+def profile_hats(picture: Drawing):
+    picture.header("第 23 章 · 多顶帽子", "一个开关，换一套环境。",
+                   "default / work / sandbox 各自独立；--profile 压过环境变量。")
+    hats = (("default", "日常", "全开", GREEN, SAGE),
+            ("work", "团队", "团队技能与 MCP", BLUE, SKY),
+            ("sandbox", "试验", "关扩展、关 MCP、便宜模型", ORANGE, PEACH))
+    for index, (name, use, detail, color, fill) in enumerate(hats):
+        left = 64 + index * 360
+        picture.box((left, 224, left + 320, 560), fill, color)
+        picture.text((left + 160, 262), name, 28, color, True, "mm")
+        picture.text((left + 160, 318), use, 21, MUTED, anchor="mm")
+        picture.text((left + 28, 372), detail, 18, anchor="mm", width=264)
+        picture.text((left + 160, 500), f"--profile {name}", 18, color, True, "mm")
+    picture.arrow([(600, 580), (600, 618)], INK, 3)
+    picture.text((600, 640), "OMP_PROFILE 次之；PI_PROFILE 仅兜底", 18, MUTED, anchor="mm")
+    picture.text((600, 678), "命名 profile 目录：~/.omp/profiles/<name>/agent", 17, MUTED, anchor="mm")
+    picture.footer("用帽子隔离场景，别用「记得改回去」。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -1340,6 +1619,17 @@ FIGURES = {
     "fig17-2-advisor": advisor,
     "fig18-1-magic-keywords": magic_keywords,
     "fig18-2-approval": approval_gate,
+    "fig19-1-skill-layout": skill_layout,
+    "fig19-3-skill-vs-ext": skill_vs_ext,
+    "fig20-1-mcp-trust": mcp_trust,
+    "fig20-3-mcp-review": mcp_review,
+    "fig21-2-hooks": hooks,
+    "fig21-3-hook-approve": hook_approve,
+    "fig22-1-extension-factory": extension_factory,
+    "fig22-3-reload": reload_plugins,
+    "fig23-2-theme": theme,
+    "fig23-3-keys": keys_isolation,
+    "fig23-3-profile": profile_hats,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
 }
