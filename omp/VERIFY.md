@@ -10,6 +10,22 @@
 - **事实源**：本机二进制 + `omp-src/docs`（cli-reference、secrets、sdk、rpc）
 - **原则**：文档与二进制不一致时，**以二进制行为为准**
 
+## 标准复验矩阵（2026-11-05 本地复验）
+
+本轮时间为 UTC 2026-11-05 03:31，对应 Asia/Shanghai 11:31、America/Adak 2026-11-04 17:31。
+钉版规则见 [PIN-POLICY](overhaul/PIN-POLICY.md)。只将实际运行过的环境更新日期。
+
+| 环境 | 版本 | 安装 | 命令 | 期望与实测 | 最近实跑日期（America/Adak） |
+|---|---|---|---|---|---|
+| Windows | 18.16.0 | Bun 全局包装 | `omp --version` | exit 0；`omp/18.16.0` | 2026-11-04 |
+| Windows | 18.16.0 | Bun 全局包装 | `omp --help` | exit 0；238 行；首行 `omp v18.16.0` | 2026-11-04 |
+| Windows | 18.16.0 | Bun 全局包装 | `omp models` | exit 0；43 行；仅记录形状，未保存私有模型清单 | 2026-11-04 |
+| box | 18.15.0 | curl 固定版本二进制 | `omp --version`、`omp --help` | 历史冒烟通过，本轮未复跑 | 2026-11-02 |
+| box | 18.15.0 | 同上 | `omp models`、`omp -p "ping" --no-session` | 历史无模型/鉴权；联网模型未通过 | 2026-11-02 |
+
+本轮三条只读命令不改变模型或扩展配置，也不代表 SDK 或联网模型实验重新通过。
+采集摘要见 `facts/live-18.16.0/recheck-20261105.txt`。现有 D 组差异保留原验证日期。
+
 ## 1. box 实验室冒烟
 
 | 命令 | 结果 |

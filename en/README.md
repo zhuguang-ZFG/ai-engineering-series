@@ -44,7 +44,9 @@ This repository now carries a second, separate volume: the Chinese-language 《O
 
 Two commands, two books: `make book` / `make book-pdf` still build Yù Yú only (both languages), while `make book-omp` / `make book-omp-pdf` build the Chinese omp edition — the latter also prints an A4 PDF. The equivalent command is `python scripts/bookctl.py build --product omp --lang zh [--pdf]`. Both write into `yuyu-book/dist/` under different prefixes, so building one volume never overwrites the other. Build details, plus the sizes and page counts measured on this machine, are in [../omp/BUILD.md](../omp/BUILD.md); the mechanism and boundaries of the two-product setup are §3.6 of [../STRUCTURE.md](../STRUCTURE.md).
 
-Two boundaries are worth naming before anyone applies Yù Yú's habits to omp: `make check` (`bookctl check --fast/--full`) still verifies Yù Yú only, and Book CI's new `omp` job is deliberately not chained with `needs` — it cannot block the Yù Yú artifacts, and it only starts meaningfully once the omp manuscript lands on `main`.
+`make check` (`bookctl check --fast/--full`) covers Yù Yú assembly, shared tests and repository content checks. Omp has separate structure and delivery gates in `omp/overhaul/audit_structure.py --check` and `audit_delivery.py`. Content CI also assembles the Chinese Omp sources; Book CI has an independent `omp` job for HTML/PDF. On Windows, run `powershell -File omp/overhaul/ci-local.ps1` to build Yù Yú Chinese HTML and Omp Chinese HTML/PDF together.
+
+Reading routes are available from the [Yù Yú side](../docs/COMPARE-OMP.md) and the [Omp side](../omp/COMPARE-YUYU.md), with a [shared terminology table](../docs/yuyu-overhaul/SHARED-TERMS.md). The Omp English edition has only a [reserved directory](omp/README.md); translation and English builds have not started.
 
 Illustration strategy: Mermaid architecture diagrams and hand-drawn concept art on two tracks. Concepts can be read across the two volumes; implementations and pinned versions cannot be mixed.
 

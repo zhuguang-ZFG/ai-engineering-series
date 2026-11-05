@@ -15,9 +15,8 @@ make book-omp-pdf
 python yuyu-book/build.py --lang zh --manifest manifest-omp.json --sources sources-omp.json [--pdf]
 ```
 
-`--no-plain` 已经不在这条命令里：M2 之后 omp 自带通俗层登记表，跳过它就等于把
-317 个术语标注、381 枚档位芯片和 39 条眉批从书上撕掉。要单独看没有通俗层的排版本，
-自己加 `--no-plain` 跑一次即可，它仍是 `build.py` 的正式开关。
+Omp 默认加载自己的通俗层登记表，包括术语标注、档位芯片和 39 条按语。
+需要比较没有通俗层的排版时，可在 `build.py` 命令中加入 `--no-plain`。
 
 产物写到 `yuyu-book/dist/`：
 
@@ -41,8 +40,8 @@ python yuyu-book/build.py --lang zh --manifest manifest-omp.json --sources sourc
   按 manifest 的 `product` 键算出（缺省或 `book` → 裸名，`omp` → `-omp` 兄弟），`revisions` 与主题索引
   两个由 manifest 的 `revisions_registry` / `subject_index_registry` 键给出（后者为 `null`，所以 omp
   不排书末索引），骨架与来源则由命令行 `--manifest` / `--sources` 给出
-- 插画双轨：章节内 `images/*.jpg` 相对路径嵌入；正文 Mermaid 目前只有 `omp/ch03.md` 一处，
-  OVERHAUL-SPEC 的 M3 目标是每篇 ≥1、全书 ≥12，**尚未达成**
+- 插画双轨：章节内 `images/*.jpg` 相对路径嵌入；正文有 13 张 Mermaid，覆盖全部七篇，
+  已达到每篇 ≥1、全书 ≥12 的要求。16 张已知问题图的替换记录见 `overhaul/ILLUST-CHECKLIST.md`。
 - 第三轨：`yuyu-book/illustrations-omp/` 的内联 SVG，46 份 = 39 枚单元章徽（64×64，每单元一枚）
   + 7 幅篇题刻（200×140，每篇一幅），走御舆同一个 `art._read()` 门禁；
   进度与字节账在 `docs/yuyu-overhaul/ILLUST-SYNC.md` 第九、十节
@@ -64,4 +63,27 @@ python yuyu-book/build.py --lang zh --manifest manifest-omp.json --sources sourc
 上一版这里写的是 18.6 MB / 24.7 MB / 238 页 / 47 书签——那是 M1 加厚、M2 通俗层之前的一次
 排版，已经翻不出那一页了；页数的逐项对照在 `docs/yuyu-overhaul/PDF-PAGES.md`。
 
-未 commit / 未 push。
+以上数字保留为 2026-11-04 的历史构建记录；本轮实测与验收结论见 `overhaul/ACCEPTANCE.md`。
+
+## CI 与本地复现
+
+Book CI 的 `book`、`omp` 是独立 job；omp job 先检查结构与交付要求，再生成中文 HTML/PDF，
+artifact 名为 `yuyu-omp-dist`。内容 CI 也检查 omp 门禁，并用 `--check --mermaid source` 装配源稿。
+实际远端状态以具体提交对应的 workflow run 为准，本地成功不能代替远端运行结果。
+
+Windows 可从仓库根执行：
+
+```powershell
+powershell -File omp/overhaul/ci-local.ps1
+```
+
+脚本逐条检查原生命令退出码，失败即停止；默认输出到 `.scratch/spec-finish/build/`，
+分别放置御舆中文 HTML 与 Omp 中文 HTML/PDF。可通过 `-OutDir` 指定另一个输出目录。
+完整共享回归仍使用 `python scripts/bookctl.py check --fast`（等价于 `make check`）。
+
+## 英文开启条件
+
+`en/omp/README.md` 与 `STATUS.md` 只预留翻译入口，当前仍为 `langs=["zh"]`。
+需完成前言、33 章、五附录及通俗层、插画标签的英文内容，补齐全部 `en` 路径，
+通过双语结构、引用与未翻译汉字检查后，才能扩展语言列表、隔离测试和 CI。
+具体顺序见 `yuyu-book/PRODUCTS.md`。
