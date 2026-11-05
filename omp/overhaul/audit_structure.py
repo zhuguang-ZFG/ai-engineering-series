@@ -1,6 +1,6 @@
 """审计 omp 各章是否具备 SPEC 规定的六要素结构（不设字数地板）。
 
-用法：python omp/overhaul/audit_structure.py [--csv]
+用法：python omp/overhaul/audit_structure.py [--csv] [--check]
 """
 from __future__ import annotations
 
@@ -53,13 +53,14 @@ def prose_before_first_h2(text: str) -> list[str]:
             cur = []
     if cur:
         paras.append(" ".join(cur))
+    opening = []
     for p in paras:
         if p.startswith("#") or p.startswith("!") or p.startswith("*图") or p.startswith("<!--"):
             continue
         out = re.sub(r"\*[^*]+\*", "", p).strip()
         if out:
-            prose_before_first_h2_hits.append(out)
-    return prose_before_first_h2_hits
+            opening.append(out)
+    return opening
 
 
 def audit(path: Path) -> dict:
@@ -77,8 +78,6 @@ def audit(path: Path) -> dict:
             pit_table = True
     verified = bool(re.search(r"本机已验|已实跑|实跑于|已验（", text))
     unverified = bool(re.search(r"未验证", text))
-    global prose_before_first_h2_hits
-    prose_before_first_h2_hits = []
     opening = prose_before_first_h2(text)
     return {
         "unit": path.stem,
@@ -104,11 +103,15 @@ def main() -> int:
     rows = [audit(p) for p in files]
     elements = ["e1_opening_scene", "e2_principle_figure", "e3_runnable_experiment",
                 "e4_pit_table", "e5_yuyu_isomorphism", "e6_pin_checklist"]
+    failed = (len(rows) != 33
+              or any(any(row[element] != "Y" for element in elements)
+                     or row["mark_verified"] == "n" for row in rows))
+    exit_code = int("--check" in sys.argv and failed)
     if as_csv:
         print("\t".join(["unit"] + elements + ["e3_cmd_blocks", "mark_verified", "han", "chars"]))
         for r in rows:
             print("\t".join(str(r[k]) for k in ["unit"] + elements + ["e3_cmd_blocks", "mark_verified", "han", "chars"]))
-        return 0
+        return exit_code
     print(f"{'unit':10}" + "".join(f"{e[2:4]:>5}" for e in elements) + f"{'cmds':>6}{'mark':>6}{'han':>7}")
     missing_counts = {e: 0 for e in elements}
     for r in rows:
@@ -125,7 +128,7 @@ def main() -> int:
         print(f"  {labels[e]:12} 缺 {missing_counts[e]:>2} 章")
     full = [r["unit"] for r in rows if all(r[e] == "Y" for e in elements)]
     print(f"\n六要素齐（按判据）: {len(full)} 章 -> {', '.join(full) or '无'}")
-    return 0
+    return exit_code
 
 
 if __name__ == "__main__":

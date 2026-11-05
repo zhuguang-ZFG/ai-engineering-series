@@ -9,6 +9,11 @@ SPEC 里「各章 ≥ 4500」「PDF 320–420 页」降级为**观测指标**，
 判据脚本：`python omp/overhaul/audit_structure.py`（基线快照 `audit-baseline.tsv`，
 当前快照 `audit-current.tsv`，由 `audit_structure.py --csv > audit-current.tsv` 重生成）。
 
+CI 使用 `python omp/overhaul/audit_structure.py --check`：章数不是 33、六要素缺项，
+或未标记验证状态时返回非零。`--csv --check` 同样执行门禁；不带 `--check` 保留报告模式。
+2026-11-05 修正了旧脚本「只打印缺项但仍 exit 0」的问题，并移除开场检查的全局可变列表。
+回归测试在 `tests/test_omp_overhaul.py`，覆盖空目录、缺要素与连续检查不同章节。
+
 | # | 要素 | 合格判据 | 基线缺口 | 当前缺口（2026-11-04 复跑） |
 |---|------|----------|----------|------------------------------|
 | 1 | 开场具体场景或故障（≤2 段） | H1 之后、第一个 `##` 之前有散文段落，写的是**一个人撞上的一件事**，不是术语定义 | 9 章缺 | 0 |
