@@ -3828,6 +3828,61 @@ def permission_matrix(picture: Drawing):
     picture.footer("矩阵是团队公约：默认值可读，升级路径可审。")
 
 
+def install_verify(picture: Drawing):
+    picture.header("第 4 章 · 装完怎么验收",
+                   "扫五条命令，再学会复述三行。",
+                   "判据不是「跑完了」，是能不能说清。")
+    commands = (("omp --version", "打一行版本号", ORANGE),
+                ("omp --help", "退出码 0", BLUE),
+                ("omp config path", "活动 agent 目录的绝对路径", GREEN),
+                ("omp completions zsh", "确认子命令存在（bash/fish 同理）", ORANGE),
+                ("which omp", "PowerShell：Get-Command omp", BLUE))
+    for index, (command, detail, color) in enumerate(commands):
+        top = 196 + index * 84
+        picture.box((110, top, 1108, top + 66), WHITE, color, radius=10)
+        picture.text((136, top + 8), command, 20, color, True, width=520)
+        picture.text((700, top + 12), detail, 17, MUTED, width=392)
+    picture.note((92, 620, 1108, 704), "三行复述：",
+                 "版本号、帮助能出来、配置目录在哪——说不出来等于没验收。",
+                 BLUE, SKY)
+    picture.footer("命令找不到查 PATH；Alpine 报缺库回 4.7。")
+
+
+def citation_discipline(picture: Drawing):
+    picture.header("第 12 章 · 引用与生命周期",
+                   "搜索摘要不是事实源；快照会过期。",
+                   "两只手都要收尾。")
+    cards = (("引用纪律", "web_search 带 citations 时，让 agent read 原始 URL 再下结论", ORANGE),
+             ("快照纪律", "github 的 PR/Actions 状态是快照——关键操作前再查一次", BLUE),
+             ("生命周期", "浏览器进程、驱动、临时 profile 都可能残留，长会话记得回收", GREEN))
+    for index, (title, detail, color) in enumerate(cards):
+        top = 200 + index * 120
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 23, color, True, width=920)
+        picture.text((136, top + 56), detail, 18, MUTED, width=920)
+    picture.note((92, 580, 1108, 656), "一条经验：",
+                 "搜索摘要可以当线索，不能当一级事实；结论落在原始页面或文档上。",
+                 ORANGE, PEACH)
+    picture.footer("computer 同理：原生输入卡在半截快捷键状态，先恢复再继续。")
+
+
+def keyword_failures(picture: Drawing):
+    picture.header("第 18 章 · 词为什么不触发",
+                   "六种原因，按检查顺序排。",
+                   "先看拼写，再看粘连，最后看工具面。")
+    reasons = (("大小写与粘连", "Ultrathink 不触发；orchestrated 与 orchestrate() 也不算", ORANGE),
+               ("围栏与行内代码", "代码块里的同名词整块被忽略", BLUE),
+               ("键名不等于词名", "workflowz 对应的键是 magicKeywords.workflow", GREEN),
+               ("工具面没开", "orchestrate 需 task；workflowz 需 eval+task；jevify 需 eval", ORANGE),
+               ("只影响当回合", "说过一次不等于一直生效", BLUE),
+               ("合成的提示", "agent 转述或模板合成的不触发；你自己写的模板有效", GREEN))
+    for index, (title, detail, color) in enumerate(reasons):
+        top = 196 + index * 84
+        picture.box((110, top, 1108, top + 66), WHITE, color, radius=10)
+        picture.text((136, top + 8), title, 20, color, True, width=420)
+        picture.text((600, top + 12), detail, 17, MUTED, width=492)
+    picture.footer("高亮会当场告诉你有没有认上——比猜快。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3994,6 +4049,9 @@ FIGURES = {
     "fig10-5-truncation-fields": truncation_fields,
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
+    "fig4-5-install-verify": install_verify,
+    "fig12-5-citation-discipline": citation_discipline,
+    "fig18-5-keyword-failures": keyword_failures,
 }
 
 

@@ -218,7 +218,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch10.md:153"
+      "omp/ch10.md:157"
     ],
     "analogy": {
       "zh": "出门前的安检流程"
@@ -227,7 +227,7 @@
       "zh": "拦住一次乱删，比事后恢复便宜得多"
     },
     "why_evidence": [
-      "omp/ch10.md:153"
+      "omp/ch10.md:157"
     ]
   },
   "hook": {
@@ -334,7 +334,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:178"
+      "omp/ch13.md:182"
     ],
     "analogy": {
       "zh": "另雇一辆车，只带回一句结论"
@@ -343,7 +343,7 @@
       "zh": "侦查和施工挤一个脑子，会互相污染"
     },
     "why_evidence": [
-      "omp/ch13.md:178"
+      "omp/ch13.md:182"
     ]
   },
   "plan-mode": {
@@ -363,7 +363,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:178"
+      "omp/ch13.md:182"
     ],
     "analogy": {
       "zh": "先画图纸，再拆墙"
@@ -372,7 +372,7 @@
       "zh": "改图纸总比拆墙便宜"
     },
     "why_evidence": [
-      "omp/ch13.md:178"
+      "omp/ch13.md:182"
     ]
   },
   "memory": {
@@ -533,7 +533,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch13.md:152"
+      "omp/ch13.md:156"
     ],
     "analogy": {
       "zh": "灶上炖着汤，人继续切菜"
@@ -542,7 +542,7 @@
       "zh": "长命令占着窗口，别的事就都干不了了"
     },
     "why_evidence": [
-      "omp/ch13.md:152"
+      "omp/ch13.md:156"
     ]
   },
   "profile": {
