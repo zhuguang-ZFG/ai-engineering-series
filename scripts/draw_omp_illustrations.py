@@ -709,6 +709,351 @@ def first_project(picture: Drawing):
     picture.footer("一轮的终点是「你验收过」，不是「模型说完了」。")
 
 
+def session_git(picture: Drawing):
+    picture.header("第 7 章 · 会话树", "会话像提交图，leaf 是你站的位置。",
+                   "条目有父子关系；leaf 决定下一步接在哪。")
+    picture.line([(150, 400), (1050, 400)], MUTED, 3)
+    for index in range(4):
+        x = 190 + index * 220
+        picture.circle((x, 400), 22, WHITE, INK, 3)
+        picture.text((x, 400), str(index + 1), 19, INK, True, "mm")
+    picture.line([(410, 400), (410, 300), (700, 300)], MUTED, 3)
+    for x in (630, 770):
+        picture.circle((x, 300), 22, WHITE, BLUE, 3)
+        picture.text((x, 300), "b", 19, BLUE, True, "mm")
+    picture.circle((850, 300), 26, ORANGE, ORANGE)
+    picture.text((850, 300), "L", 21, WHITE, True, "mm")
+    picture.text((850, 250), "leaf：下一步接这里", 20, ORANGE, True, "mm")
+    picture.text((410, 216), "分叉出的另一条路", 19, BLUE, anchor="mm")
+    picture.text((600, 470), "节点 = 历史条目，父子关系写在 JSONL 里", 20, MUTED, anchor="mm")
+    picture.note((92, 540, 1108, 626), "/tree、/branch 只移动 leaf。",
+                 "它们在同一个会话文件里导航，不会生成新文件；/fork 才另开一份。", BLUE, SKY)
+    picture.footer("leaf 是「现在从哪继续」，不是「最新的一行」。")
+
+
+def fresh_clear_new(picture: Drawing):
+    picture.header("第 7 章 · 三种重新开始", "都像清空，保住的东西不同。",
+                   "先问你要保住什么：供应商流状态、会话文件，还是一张白纸。")
+    columns = (("/fresh", "换掉供应商流状态", "保住：对话与文件", "丢掉：卡住的缓存句柄", ORANGE, PEACH),
+               ("/clear", "同一文件内划 boundary", "保住：会话 id 与文件", "丢掉：活上下文", BLUE, SKY),
+               ("/new", "开一份新会话", "保住：旧文件原样", "丢掉：当前这一切", GREEN, SAGE))
+    for index, (command, action, keep, drop, color, fill) in enumerate(columns):
+        left = 62 + index * 272
+        picture.box((left, 224, left + 252, 606), fill, color)
+        picture.text((left + 126, 262), command, 28, color, True, "mm")
+        picture.text((left + 126, 316), action, 18, anchor="mm", width=206)
+        picture.text((left + 22, 388), keep, 20, GREEN, True, width=210)
+        picture.text((left + 22, 448), drop, 20, ORANGE, True, width=210)
+        picture.box((left + 22, 512, left + 230, 560), WHITE, color, radius=8)
+        picture.text((left + 126, 536), ("下一步请求重建" if index == 0 else
+                                         "旧内容仍可回看" if index == 1 else
+                                         "从空白开始"), 18, MUTED, anchor="mm")
+    picture.text((600, 632), "streaming 或前台命令还在跑时，前两种会拒绝", 20, MUTED, anchor="mm")
+    picture.footer("选错这三个词，代价不一样：先想保住什么，再敲命令。")
+
+
+def export_share(picture: Drawing):
+    picture.header("第 7 章 · 带走或分享", "导出是行李，分享是明信片。",
+                   "一个整包搬走，一个发出去给人看。")
+    picture.box((90, 250, 560, 620), WHITE, LINE)
+    picture.text((325, 278), "/export", 28, ORANGE, True, "mm")
+    picture.draw.rounded_rectangle(picture.coords((250, 196, 400, 254)), radius=10 * picture.scale,
+                                   outline=ORANGE, width=3 * picture.scale)
+    picture.box((130, 330, 520, 470), PEACH, ORANGE, radius=8)
+    for index, label in enumerate(("session header", "entries / leaf", "systemPrompt",
+                                    "工具描述")):
+        picture.text((150, 346 + index * 28), label, 18)
+    picture.text((325, 502), "备份 · 迁机 · 当教材附件", 20, ORANGE, anchor="mm")
+    picture.text((325, 548), "previousSessionFiles 不进 header", 18, MUTED, anchor="mm")
+    picture.box((640, 250, 1110, 620), SAGE, GREEN)
+    picture.text((875, 278), "/share", 28, GREEN, True, "mm")
+    picture.box((690, 330, 1060, 500), WHITE, GREEN, radius=8)
+    picture.line([(960, 330), (1060, 430)], GREEN, 2)
+    picture.text((712, 352), "构建快照", 20, GREEN, True)
+    picture.text((712, 396), "会话里有什么，就带走什么", 19, MUTED)
+    picture.text((712, 440), "改过的文件不在其中", 19, MUTED)
+    picture.arrow([(875, 512), (875, 552)], ORANGE)
+    picture.text((875, 574), "上传或生成可分发形态", 19, ORANGE, anchor="mm")
+    picture.note((92, 640, 1108, 700), "分享前自己过一遍：",
+                 "密钥、内网 URL、客户代码——默认假设 transcript 里什么都有。", ORANGE, PEACH)
+    picture.footer("行李可以重，明信片会被陌生人看到。")
+
+
+def read_paths(picture: Drawing):
+    picture.header("第 8 章 · read 的一个 path", "同一个字符串，五种落点。",
+                   "解析器只在该切的时候切后缀，再按形态选 reader。")
+    picture.box((392, 210, 808, 288), WHITE, ORANGE, radius=10)
+    picture.text((600, 232), "path = src/app.ts:50-80", 24, ORANGE, True, "mm")
+    picture.text((600, 264), "后缀只在合法形态下被切开", 18, MUTED, anchor="mm")
+    targets = (("文件切片", "行范围 / :raw", BLUE, SKY),
+               ("目录树", "逐项列表", GREEN, SAGE),
+               ("归档内成员", "zip / tar 成员", BLUE, SKY),
+               ("网页 URL", "fetch 管线 + 缓存", ORANGE, PEACH),
+               ("内部资源", "ssh:// / xd://", GREEN, SAGE))
+    for index, (title, detail, color, fill) in enumerate(targets):
+        left = 58 + index * 220
+        picture.arrow([(600, 296), (600, 330), (left + 100, 330), (left + 100, 358)],
+                      color, 3)
+        picture.box((left, 366, left + 200, 470), fill, color)
+        picture.text((left + 100, 396), title, 22, color, True, "mm", width=180)
+        picture.text((left + 100, 434), detail, 18, MUTED, anchor="mm", width=180)
+    picture.note((92, 500, 1108, 610), "选择器是白名单，不是字符串猜测。",
+                 "名字里带冒号的文件优先按字面路径处理；解析失败才报错，不会瞎切。", BLUE, SKY)
+    picture.text((600, 650), "读图、读 PDF 也可能让审批档升到 exec", 19, MUTED, anchor="mm")
+    picture.footer("先确认 path 落在哪种形态，再谈读多少。")
+
+
+def grep_glob(picture: Drawing):
+    picture.header("第 8 章 · 两种找法", "grep 问内容，glob 问名字。",
+                   "一个在文件里搜模式，一个按文件名列候选。")
+    picture.box((70, 216, 545, 596), SAGE, GREEN)
+    picture.text((307, 248), "grep", 30, GREEN, True, "mm")
+    picture.text((307, 292), "内容里有没有这个模式？", 21, GREEN, anchor="mm", width=440)
+    picture.box((108, 336, 508, 430), INK, INK, radius=10)
+    picture.text((126, 356), "abort\\(controller\\)", 19, WHITE)
+    picture.text((126, 390), "命中的行带行号返回", 17, "#BCD5BD")
+    picture.text((307, 468), "正则 / 范围 / 大小写开关", 19, MUTED, anchor="mm")
+    picture.text((307, 520), "输出：内容命中或文件列表", 19, MUTED, anchor="mm")
+    picture.box((655, 216, 1130, 596), SKY - "#000000" if False else SKY, BLUE)
+    picture.text((892, 248), "glob", 30, BLUE, True, "mm")
+    picture.text((892, 292), "名字像不像这个模式？", 21, BLUE, anchor="mm", width=440)
+    picture.box((700, 336, 1084, 430), WHITE, BLUE, radius=10)
+    picture.text((718, 350), "src/**/*.test.ts", 19, BLUE)
+    picture.text((718, 384), "只回文件名单", 17, MUTED)
+    picture.text((892, 468), "候选集合先收窄", 19, MUTED, anchor="mm")
+    picture.text((892, 520), "再交给 grep / read", 19, MUTED, anchor="mm")
+    picture.arrow([(307, 640), (892, 640)], GREEN, 3)
+    picture.text((600, 664), "合起来：glob 收窄 → grep 抠符号 → read 精确切片", 19, INK, anchor="mm")
+    picture.footer("找内容用 grep，找文件用 glob；别拿一个当另一个使。")
+
+
+def ast_grep(picture: Drawing):
+    picture.header("第 8 章 · ast_grep 按结构找", "字符串会误伤，语法不会。",
+                   "注释和字符串里的同名调用，纯文本分不清。")
+    picture.box((70, 210, 600, 500), INK, INK, radius=10)
+    picture.text((92, 230), "src/handler.ts", 18, "#BCD5BD")
+    lines = (("// 旧写法：foo( 已经废弃", "comment"),
+             ("const a = foo(1);", "hit"),
+             ("const b = \"foo( 在字符串里\";", "comment"),
+             ("const c = foo(2);", "hit"))
+    for index, (line, kind) in enumerate(lines):
+        picture.text((92, 272 + index * 48), line, 18,
+                     "#BCD5BD" if kind == "hit" else "#8E9A90")
+    picture.box((560, 232, 1110, 330), PEACH, ORANGE)
+    picture.text((582, 250), "grep \"foo(\" → 4 行全中", 20, ORANGE, True)
+    picture.text((582, 286), "其中 2 行是注释或字符串", 18, MUTED)
+    picture.box((560, 356, 1110, 454), SAGE, GREEN)
+    picture.text((582, 374), "ast_grep 'foo($A)' → 2 个节点", 20, GREEN, True)
+    picture.text((582, 410), "只回真正的调用表达式", 18, MUTED)
+    picture.note((92, 528, 1108, 620), "结构命令要选对语言与规则。",
+                 "规则语言以 ast-grep 文档为准；不确定就先小范围试跑。", BLUE, SKY)
+    picture.text((600, 652), "找到节点后，下一步才是 ast_edit 出补丁", 19, MUTED, anchor="mm")
+    picture.footer("先分清「长得像」和「语法上是」。")
+
+
+def ast_edit_preview(picture: Drawing):
+    picture.header("第 9 章 · ast_edit", "先提案，再 Accept。",
+                   "结构级改动一次很多处，预览是必经之路。")
+    picture.box((80, 216, 470, 330), WHITE, BLUE)
+    picture.text((100, 238), "匹配的结构", 21, BLUE, True)
+    picture.text((100, 276), "foo($A, $B)", 22)
+    picture.text((100, 306), "工作区里 12 处", 18, MUTED)
+    picture.arrow([(480, 273), (566, 273)], ORANGE)
+    picture.box((578, 216, 900, 330), PEACH, ORANGE)
+    picture.text((598, 238), "提案：换成 bar($A)", 21, ORANGE, True)
+    picture.text((598, 276), "只列 diff，不落盘", 19, MUTED)
+    picture.arrow([(910, 273), (996, 273)], ORANGE)
+    picture.box((1008, 216, 1140, 330), SAGE, GREEN)
+    picture.text((1074, 252), "Accept", 22, GREEN, True, "mm")
+    picture.text((1074, 292), "才写磁盘", 18, MUTED, anchor="mm")
+    picture.paper((200, 380, 1000, 590), "预览 3 / 12", ORANGE, PEACH, ruled=False)
+    picture.text((226, 406), "- const x = foo(a, b);", 21, ORANGE)
+    picture.text((226, 444), "+ const x = bar(a);", 21, GREEN)
+    picture.text((226, 492), "上下文 2 行 · 语法平衡由规则保证", 18, MUTED)
+    picture.arrow([(1074, 340), (1074, 640), (600, 640), (600, 596)], MUTED, 3)
+    picture.text((820, 660), "拒绝：改规则，重新提案", 19, MUTED, anchor="mm")
+    picture.footer("批量的前提是能看清：看不清的 diff，先别 Accept。")
+
+
+def bash_inprocess(picture: Drawing):
+    picture.header("第 10 章 · 进程内命令", "能不出门，就不出门。",
+                   "常用 coreutils 在 omp 里直接做；只有真外部程序才 fork。")
+    picture.box((70, 214, 800, 596), SAGE, GREEN, radius=14)
+    picture.text((100, 240), "omp 进程内", 24, GREEN, True)
+    for index, tool in enumerate(("ls", "sed", "jq", "sort", "head", "wc")):
+        left = 112 + (index % 3) * 220
+        top = 300 + (index // 3) * 96
+        picture.box((left, top, left + 180, top + 64), WHITE, GREEN, radius=8)
+        picture.text((left + 90, top + 32), tool, 22, GREEN, True, "mm")
+    picture.text((435, 530), "不启动新进程：快，也少环境差异", 20, MUTED, anchor="mm")
+    picture.box((840, 214, 1130, 596), WHITE, ORANGE, radius=14)
+    picture.text((985, 244), "真外部程序", 23, ORANGE, True, "mm")
+    picture.box((880, 300, 1090, 388), PEACH, ORANGE, radius=8)
+    picture.text((985, 330), "bash 命令", 21, ORANGE, True, "mm")
+    picture.text((985, 362), "PTY / 后台 / 服务", 17, MUTED, anchor="mm")
+    picture.arrow([(800, 340), (872, 340)], ORANGE, 3)
+    picture.text((985, 430), "fork-exec 一次", 19, MUTED, anchor="mm")
+    picture.text((985, 480), "等待、退出码、截断", 19, MUTED, anchor="mm")
+    picture.text((985, 540), "审批与侧效应更重", 19, ORANGE, anchor="mm")
+    picture.footer("写命令前先想：这件事进程内能不能做完？")
+
+
+def pty_background(picture: Drawing):
+    picture.header("第 10 章 · 四种跑法", "字段决定落到哪条分支。",
+                   "不填是前台；pty、async、name 各走一条。")
+    modes = (("普通前台", "不填字段", "同步等结果", ORANGE, PEACH),
+             ("PTY", "pty: true", "真终端语义", BLUE, SKY),
+             ("后台 job", "async: true", "立刻回 job id", GREEN, SAGE),
+             ("受监督服务", "name: …", "ready 日志/端口", GREEN, SAGE))
+    for index, (title, field, detail, color, fill) in enumerate(modes):
+        left = 58 + index * 272
+        picture.box((left, 224, left + 252, 520), fill, color)
+        picture.text((left + 126, 258), title, 25, color, True, "mm", width=220)
+        picture.box((left + 24, 312, left + 228, 368), WHITE, color, radius=8)
+        picture.text((left + 126, 340), field, 19, color, True, "mm")
+        picture.text((left + 126, 412), detail, 20, MUTED, anchor="mm", width=210)
+        picture.text((left + 126, 470), "期限默认 300s", 18, MUTED, anchor="mm")
+    picture.note((92, 548, 1108, 636), "name 与 async / timeout 互斥。",
+                 "给了 name 就是服务：ready 由日志正则与 TCP 端口共同判定。", ORANGE, PEACH)
+    picture.text((600, 668), "长跑不堵下一轮：交给 job 或 broker", 19, MUTED, anchor="mm")
+    picture.footer("先挑跑法，再写命令；前台硬等是最常见的时间浪费。")
+
+
+def eval_kernel(picture: Drawing):
+    picture.header("第 10 章 · 持久内核", "一次调用一格，状态留下。",
+                   "同一运行时里，后面的单元格还能看见前面的绑定。")
+    cells = ("x = 41", "x += 1", "print(x)  # 42")
+    for index, code in enumerate(cells):
+        top = 230 + index * 118
+        picture.box((120, top, 760, top + 92), INK, INK, radius=10)
+        picture.text((146, top + 18), f"[{index + 1}]", 18, "#BCD5BD")
+        picture.text((186, top + 30), code, 22, WHITE)
+    picture.box((830, 268, 1120, 520), SAGE, GREEN, radius=14)
+    picture.text((975, 296), "变量背包", 22, GREEN, True, "mm")
+    picture.text((975, 336), "x = 42", 20, GREEN, "mm")
+    picture.text((975, 386), "跨单元格可见", 19, MUTED, anchor="mm")
+    picture.arrow([(770, 414), (820, 414)], GREEN, 3)
+    picture.text((600, 624), "内核不随单次调用退出；语言运行时缺失会报错", 19, MUTED, anchor="mm")
+    picture.footer("适合反复试：算数据、驱动 browser/computer；系统管道仍走 bash。")
+
+
+def lsp_workbench(picture: Drawing):
+    picture.header("第 11 章 · lsp 工作台", "IDE 菜单，变成工具调用。",
+                   "问语言服务器，而不是靠上次读到的文本猜。")
+    actions = ("diagnostics", "definition / references", "symbols", "rename", "code_actions")
+    for index, action in enumerate(actions):
+        top = 216 + index * 78
+        picture.box((90, top, 520, top + 60), WHITE, BLUE, radius=8)
+        picture.text((112, top + 18), action, 20, BLUE, True)
+        picture.arrow([(530, top + 30), (618, top + 30)], BLUE, 3)
+        picture.circle((650, top + 30), 16, SAGE, GREEN, 2)
+        picture.line([(642, top + 30), (648, top + 37), (660, top + 21)], GREEN, 3)
+    picture.box((700, 216, 1130, 600), SAGE, GREEN, radius=12)
+    picture.text((726, 242), "服务器回答", 21, GREEN, True)
+    picture.text((726, 288), "红线：3 处", 20)
+    picture.text((726, 326), "定义：src/core.py:41", 20)
+    picture.text((726, 364), "引用：12 处", 20)
+    picture.text((726, 426), "rename 默认就应用", 19, ORANGE)
+    picture.text((726, 462), "code_actions 默认只列", 19, ORANGE)
+    picture.text((726, 518), "只读动作走 read 审批", 18, MUTED)
+    picture.text((726, 550), "写入动作一律 write 审批", 18, MUTED)
+    picture.text((600, 640), "服务器没见过你的手改？先让它同步磁盘", 19, MUTED, anchor="mm")
+    picture.footer("让服务器当眼睛：类型与引用由它回答，不靠猜。")
+
+
+def debug_dap(picture: Drawing):
+    picture.header("第 11 章 · debug 会话", "断点 → 停下 → 看现场。",
+                   "一次 DAP 会话有固定顺序，跳步就拿不到变量。")
+    steps = (("launch / attach", "起进程或挂上去", ORANGE),
+             ("set_breakpoint", "下断点，再 continue", BLUE),
+             ("stack_trace / scopes", "停下后取栈与作用域", GREEN),
+             ("variables / evaluate", "看值或在目标里算一句", GREEN),
+             ("step_over / in / out", "单步继续", BLUE),
+             ("terminate", "收尾，别留适配器进程", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        left = 60 + (index % 3) * 360
+        top = 220 + (index // 3) * 190
+        picture.box((left, top, left + 330, top + 150), WHITE, color, radius=10)
+        picture.badge((left + 30, top + 30), index + 1, color)
+        picture.text((left + 24, top + 58), title, 20, color, True, width=290)
+        picture.text((left + 24, top + 96), detail, 18, MUTED, width=290)
+    picture.arrow([(1110, 386), (1130, 386), (1130, 596), (410, 596), (410, 578)], LINE, 3)
+    picture.note((92, 624, 1108, 692), "断点没命中，先看会话对不对。",
+                 "`sessions` 能查还有几个会话；打到旧会话是常见根源。", ORANGE, PEACH)
+    picture.footer("先起会话、再下断点；跳步会让 variables 无现场可取。")
+
+
+def write_then_diagnose(picture: Drawing):
+    picture.header("第 11 章 · 改完就体检", "edit → 红线 → 再修。",
+                   "诊断是下一轮的输入，不是事后补课。")
+    picture.box((90, 230, 500, 380), WHITE, INK)
+    picture.text((112, 252), "edit", 23, INK, True)
+    picture.text((112, 292), "#a1b2 → 3 行替换", 19)
+    picture.text((112, 326), "写入磁盘", 18, MUTED)
+    picture.arrow([(510, 305), (596, 305)], ORANGE)
+    picture.box((608, 230, 1018, 380), WHITE, ORANGE)
+    picture.text((630, 252), "lsp diagnostics", 23, ORANGE, True)
+    picture.text((630, 292), "src/core.ts:41  类型不匹配", 19)
+    picture.line([(630, 330), (700, 336), (770, 330), (850, 336), (940, 330)], ORANGE, 3)
+    picture.arrow([(1018, 305), (1100, 305), (1100, 430), (295, 430), (295, 396)], GREEN, 3)
+    picture.text((960, 408), "带着红线再改一次", 18, GREEN)
+    picture.box((90, 452, 1118, 560), SAGE, GREEN, radius=12)
+    picture.text((112, 476), "把红线当输入", 22, GREEN, True)
+    picture.text((112, 512), "诊断带文件与位置 → 下一手 edit 有的放矢", 19, MUTED)
+    picture.note((92, 590, 1108, 676), "diagnosticsOnEdit 默认关、lazy 默认开。",
+                 "改完不显式拉诊断，就不会有红线；第一次调用还要等服务器冷启。", BLUE, SKY)
+    picture.footer("诊断不是评分，是下一轮要用的证据。")
+
+
+def browser_eval(picture: Drawing):
+    picture.header("第 12 章 · 浏览器当工具面", "窗口变成可调用的 API。",
+                   "Eval 里的 helpers 驱动页面，结果以结构化数据回来。")
+    picture.box((110, 216, 760, 560), WHITE, INK, radius=12, stroke=3)
+    picture.line([(110, 254), (760, 254)], LINE, 2)
+    for offset in (130, 148, 166):
+        picture.circle((offset, 235), 6, MUTED, MUTED)
+    picture.text((200, 226), "https://example.test/pricing", 17, MUTED)
+    picture.paper((160, 290, 700, 500), "页面内容", BLUE, WHITE)
+    picture.text((184, 320), "table.price", 19, BLUE)
+    picture.text((184, 356), "button.buy", 19, BLUE)
+    picture.box((820, 216, 1130, 400), SAGE, GREEN, radius=12)
+    picture.text((975, 244), "Eval 驱动", 21, GREEN, True, "mm")
+    picture.text((975, 294), "open / click / type", 20, anchor="mm")
+    picture.text((975, 336), "waitFor 选择器", 20, anchor="mm")
+    picture.text((975, 372), "读取结构化结果", 19, MUTED, anchor="mm")
+    picture.arrow([(800, 340), (812, 340)], GREEN, 3)
+    picture.box((820, 424, 1130, 548), SKY, BLUE, radius=12)
+    picture.text((975, 452), "截图 / DOM 片段", 20, BLUE, True, "mm")
+    picture.text((975, 492), "回给模型继续判断", 18, MUTED, anchor="mm")
+    picture.text((600, 606), "登录态、验证码、支付页属于高风险区", 19, MUTED, anchor="mm")
+    picture.footer("先稳定选择器再连点；刷新会让裸 xpath 变脆。")
+
+
+def computer_desktop(picture: Drawing):
+    picture.header("第 12 章 · computer 是桌面", "不是网页，不暴露 DOM。",
+                   "左边浏览器树；右边窗口、键鼠、剪贴板。")
+    picture.box((70, 216, 560, 560), WHITE, BLUE)
+    picture.text((94, 240), "浏览器里", 22, BLUE, True)
+    picture.text((94, 280), "dom.html", 19, BLUE)
+    for index, label in enumerate(("html", "  body", "    div#app", "      button")):
+        picture.text((114 + index * 6, 320 + index * 40), label, 19,
+                     INK if index else MUTED)
+    picture.text((94, 506), "元素句柄可直接点", 18, MUTED)
+    picture.box((650, 216, 1130, 560), SAGE, GREEN)
+    picture.text((674, 240), "桌面上", 22, GREEN, True)
+    for index, (label, detail) in enumerate((("windows", "枚举窗口 / 显示器"),
+                                              ("screenshot", "截屏，按 display 选屏"),
+                                              ("click / press", "原生键鼠"),
+                                              ("clipboard", "读写剪贴板"))):
+        top = 292 + index * 62
+        picture.box((674, top, 1106, top + 48), WHITE, GREEN, radius=8)
+        picture.text((690, top + 8), label, 19, GREEN, True)
+        picture.text((690, top + 26), detail, 16, MUTED)
+    picture.note((92, 588, 1108, 676), "一次只允许一个 run。",
+                 "并发会回 Computer worker is busy；computer.run 漏传 read_only 就当 exec 审批。", ORANGE, PEACH)
+    picture.footer("能控桌面 = 权限面更大；先读安全章再开。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -728,7 +1073,22 @@ FIGURES = {
     "fig6-3-preview-accept": preview_accept,
     "fig6-4-ask-picker": ask_picker,
     "fig6-5-first-project": first_project,
+    "fig7-1-session-git": session_git,
     "fig7-2-fork-resume": fork_resume,
+    "fig7-3-fresh-clear-new": fresh_clear_new,
+    "fig7-4-export-share": export_share,
+    "fig8-1-read-paths": read_paths,
+    "fig8-2-grep-glob": grep_glob,
+    "fig8-3-ast-grep": ast_grep,
+    "fig9-3-ast-edit-preview": ast_edit_preview,
+    "fig10-1-bash-inprocess": bash_inprocess,
+    "fig10-2-pty-background": pty_background,
+    "fig10-3-eval-kernel": eval_kernel,
+    "fig11-1-lsp-workbench": lsp_workbench,
+    "fig11-2-debug-dap": debug_dap,
+    "fig11-3-write-then-diagnose": write_then_diagnose,
+    "fig12-1-browser-eval": browser_eval,
+    "fig12-2-computer-desktop": computer_desktop,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
 }
