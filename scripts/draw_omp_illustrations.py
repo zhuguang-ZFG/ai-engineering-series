@@ -3595,6 +3595,160 @@ def three_deceptions(picture: Drawing):
     picture.footer("能把整条链复述出来，比「读完了」值钱。")
 
 
+def four_names(picture: Drawing):
+    picture.header("第 14 章 · 四个容易混的名字",
+                   "混着叫，排障就会找错层。",
+                   "前三个是上下文文件，第四个是推理后端。")
+    names = (("Context files", "普通 Markdown 说明，开会话时注入", ORANGE),
+             ("Sticky rules", "顶层 RULES.md 转成 always-apply 规则", BLUE),
+             ("Discovery providers", "各工具的文件位置适配器", GREEN),
+             ("Model providers", "推理后端（anthropic / openai……）", ORANGE))
+    for index, (name, detail, color) in enumerate(names):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 150
+        picture.box((left, top, left + 492, top + 126), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 17, MUTED, width=448)
+    picture.note((92, 528, 1108, 620), "共享名单的坑：",
+                 "model providers 跟上下文文件无关，却与它们共享 disabledProviders 名单——关错了会连模型一起关。",
+                 ORANGE, PEACH)
+    picture.footer("适配器如 native / claude / cursor；skills 与普通 rule 见第 19 章。")
+
+
+def session_questions(picture: Drawing):
+    picture.header("第 7 章 · 卡住时先问三个问题",
+                   "你要动的是哪一层？",
+                   "答案决定用哪条命令。")
+    pairs = (("屏幕上的字", "/clear", ORANGE),
+             ("磁盘上的本", "/new · /fork", BLUE),
+             ("供应商那边的缓存句柄", "/fresh", GREEN))
+    for index, (question, answer, color) in enumerate(pairs):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), question, 22, color, True, width=620)
+        picture.text((820, top + 16), answer, 22, INK, True, width=260)
+    picture.note((92, 566, 1108, 664), "streaming 中的拒绝：",
+                 "/fresh 拒绝；/clear 拒绝（若在压缩会先中止压缩）；裸 /fork 警告并挡住。",
+                 ORANGE, PEACH)
+    picture.footer("「命令没反应」先看是不是还在生成——中止当前轮再试。")
+
+
+def edit_modes(picture: Drawing):
+    picture.header("第 9 章 · edit 选哪条线协议",
+                   "resolveEditMode() 的顺序，越靠前越优先。",
+                   "日常记住：默认按 hashline 读文档就对了。")
+    steps = (("① 模型相关配置变体", "按模型族推", ORANGE),
+             ("② PI_EDIT_VARIANT", "环境变量压过设置", BLUE),
+             ("③ edit.mode", "设置项", GREEN),
+             ("④ 默认 hashline", "以上都没写就落到这里", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.badge((144, top + 36), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 566, 1108, 664), "两种模式风险：",
+                 "PI_STRICT_EDIT_MODE 可关掉个别模型族的回退；edit 是 strict 且排他并发，别指望两个 edit 抢着写。",
+                 BLUE, SKY)
+    picture.footer("模式列表：hashline / apply_patch / patch / replace / sloppy。")
+
+
+def secret_scan(picture: Drawing):
+    picture.header("第 27 章 · 密钥扫描怎么不吓人",
+                   "把判据写死，只报告不改。",
+                   "每条给文件:行号与前 6 个字符。")
+    shapes = (("sk- 开头的长串", "OpenAI 风格 API key", ORANGE),
+              ("AKIA 开头的 20 位大写字母数字", "AWS access key id", BLUE),
+              ("-----BEGIN 开头的私钥块", "PEM 私钥", GREEN),
+              ("://user:口令@ 形式的 URL", "连接串里的凭据", ORANGE))
+    for index, (shape, meaning, color) in enumerate(shapes):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.text((136, top + 10), shape, 20, color, True, width=620)
+        picture.text((800, top + 12), meaning, 17, MUTED, width=292)
+    picture.box((92, 576, 1108, 640), WHITE, BLUE, radius=10)
+    picture.text((116, 592), 'omp grep "sk-[A-Za-z0-9_-]{20,}" . --no-gitignore -l 100',
+                 18, INK, width=960)
+    picture.text((116, 614), "--no-gitignore 让被忽略的本地配置也进搜索；-l 100 封顶。",
+                 16, MUTED, width=960)
+    picture.footer("命中不等于泄露：fixture 与 .env.example 常误报——按文件判断，别一键替换。")
+
+
+def acp_notifications(picture: Drawing):
+    picture.header("第 15 章 · ACP 里的压缩通知",
+                   "协议模式下，压缩事件要通知对端。",
+                   "两条 JSON-RPC 扩展通知，就这两条。")
+    picture.box((92, 200, 584, 420), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "_omp/compaction/start", 20, ORANGE, True, width=444)
+    picture.text((116, 260), "sessionId", 18, MUTED, width=444)
+    picture.text((116, 292), "reason", 18, MUTED, width=444)
+    picture.text((116, 324), "action", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 420), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "_omp/compaction/end", 20, BLUE, True, width=444)
+    picture.text((640, 260), "sessionId / action / aborted / willRetry", 16, MUTED, width=444)
+    picture.text((640, 292), "可选：skipped / errorMessage", 16, MUTED, width=444)
+    picture.text((640, 324), "可选：tokensBefore", 16, MUTED, width=444)
+    picture.note((92, 444, 1108, 540), "谁该关心：",
+                 "只跑 TUI 与你无关；嵌 ACP 时这是「UI 上为何写刚压缩过」的唯一来源，进度条挂这两条。",
+                 GREEN, SAGE)
+    picture.footer("不实现这两个通知的客户端可以直接忽略，不会报协议错。")
+
+
+def backend_choice(picture: Drawing):
+    picture.header("第 16 章 · 远程后端上线前",
+                   "先答三个问题，再谈选哪个。",
+                   "默认先在 local 或 mnemopi 建立直觉。")
+    questions = (("数据出不出本机", "驻留与合规先定", ORANGE),
+                 ("bank 范围有多大", "谁有权限、谁在写", BLUE),
+                 ("后台合并语义", "什么时候合并、会不会改历史", GREEN))
+    for index, (title, detail, color) in enumerate(questions):
+        top = 200 + index * 108
+        picture.box((110, top, 1108, top + 88), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=620)
+        picture.text((760, top + 16), detail, 18, MUTED, width=320)
+    picture.note((92, 542, 1108, 636), "覆盖与边界：",
+                 "HINDSIGHT_* 环境变量压过所有 hindsight.* 设置；Sharpshooter 适合决策文件，不适合当聊天备份盘。",
+                 BLUE, SKY)
+    picture.footer("人走了怎么撤销权限，也要提前写清。")
+
+
+def model_vs_role(picture: Drawing):
+    picture.header("第 17 章 · /model 与角色不是一回事",
+                   "手动切换 ≠ 自动分流。",
+                   "两者一起看，才不会被「上一层赢了」骗到。")
+    picture.box((92, 200, 584, 400), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "/model", 24, ORANGE, True, width=444)
+    picture.text((116, 262), "改你正在聊的那一路", 19, INK, width=444)
+    picture.text((116, 302), "只影响当前会话的选路", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 400), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "角色映射", 24, BLUE, True, width=444)
+    picture.text((640, 262), "决定自动分流时谁接盘", 19, INK, width=444)
+    picture.text((640, 302), "子代理、advisor、计划各按角色走", 18, MUTED, width=444)
+    picture.note((92, 424, 1108, 520), "别想当然：",
+                 "手动切到旗舰，不等于子代理也升舱——角色值按第 17.2a 的六层生效。",
+                 ORANGE, PEACH)
+    picture.footer("models.yml 的 provider 级字段写死前，先查 docs/models.md 对照。")
+
+
+def preview_failures(picture: Drawing):
+    picture.header("第 26 章 · 预演失败的三种长相",
+                   "匹配数、文件数、测试退出码——三个数对上才算过。",
+                   "第三种最危险，因为「绿」让人放松。")
+    shapes = (("① 匹配数 0", "路径/glob 写错，或目标被 .gitignore 排除", ORANGE),
+              ("② 数对、测试红", "规则把字符串/快照/注释一起改了", BLUE),
+              ("③ 绿、diff 超范围", "格式化钩子或 IDE 顺手改了", GREEN))
+    for index, (title, detail, color) in enumerate(shapes):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=620)
+        picture.text((136, top + 54), detail, 18, MUTED, width=920)
+    picture.note((92, 560, 1108, 664), "退出预演的动作：",
+                 "git checkout -- <超范围文件> 逐个退回；别在超范围 diff 上再叠第二片。",
+                 ORANGE, PEACH)
+    picture.footer("确认命令：omp grep -c <旧名> <路径> --no-gitignore；数数只用 -c。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3749,6 +3903,14 @@ FIGURES = {
     "fig24-7-antipatterns": antipatterns,
     "fig28-5-embed-checklist": embed_checklist,
     "fig33-5-three-deceptions": three_deceptions,
+    "fig14-4-four-names": four_names,
+    "fig7-5-three-questions": session_questions,
+    "fig9-5-edit-modes": edit_modes,
+    "fig27-5-secret-scan": secret_scan,
+    "fig15-5-acp-notifications": acp_notifications,
+    "fig16-5-backend-choice": backend_choice,
+    "fig17-5-model-vs-role": model_vs_role,
+    "fig26-5-preview-failures": preview_failures,
 }
 
 

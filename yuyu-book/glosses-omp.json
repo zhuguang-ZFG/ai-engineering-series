@@ -947,7 +947,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch14.md:57"
+      "omp/ch14.md:61"
     ],
     "analogy": {
       "zh": "贴在工位前的注意事项"
@@ -956,7 +956,7 @@
       "zh": "写在里面的规矩，比每次口头交代更稳"
     },
     "why_evidence": [
-      "omp/ch14.md:57"
+      "omp/ch14.md:61"
     ]
   },
   "agents-md": {
