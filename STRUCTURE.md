@@ -183,6 +183,7 @@ yuyu-book/
 | `scripts/check_book.py` | 零依赖检查：全仓库 `.md` 的相对链接是否有落点、代码围栏是否闭合、Mermaid 图里是否写了字面量 `\n`（应改用 `<br/>`）、按 manifest 的两语正文量出的「纯文字墙」是否超过当轮钉住的上限 |
 | `scripts/check_mermaid.mjs` | 用 `package.json` 锁定的 mermaid 解析器逐图 `parse()`，由 `npm run check:diagrams` 调用（需要 Node 22+ 与 `npm ci`） |
 | `scripts/typeset_cover.py` | 用本机 CJK 字体在 `scripts/assets/cover-art.png` 上排版出根目录 `cover.png`（默认字体路径是 macOS 的） |
+| `scripts/draw_omp_illustrations.py` | 用 Pillow 与本机 CJK 字体重绘 omp 六张入门概念图：默认只写 `.scratch/` 预览，确认后加 `--out-dir omp/images`；单张超过构建器的 300,000 字节内嵌预算会在写盘前失败，语义边界与字体说明见 `omp/overhaul/PYTHON-ILLUSTRATIONS.md` |
 | `scripts/star_history.py` | 生成并增量维护 `docs/images/star-history-{light,dark}.svg` |
 | `tests/test_star_history.py` | 上面那个脚本的单测（`python -m unittest discover -s tests`） |
 | `.github/workflows/check-book.yml` | 既有内容门：`check_book.py` + `check:diagrams` + unittest |
