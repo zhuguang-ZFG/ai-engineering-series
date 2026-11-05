@@ -3128,7 +3128,162 @@ def two_gates(picture: Drawing):
     picture.note((92, 496, 1108, 592), "反例可以保留：",
                  "构建脚本、docker、项目自定义 CLI 本来就该进 shell——别硬改成专用工具。",
                  GREEN, SAGE)
-    picture.footer("被改道不是报错，是让你用上下文更好的那条路。")
+    picture.footer("被改道不是报错，让你用上下文更好的那条路。")
+
+
+def compaction_keys(picture: Drawing):
+    picture.header("第 15 章 · 十个键各管一段",
+                   "本机 [context] 与 [internal] 段的压缩键。",
+                   "改阈值前先读原值，别把默认当「没配」。")
+    groups = (("总开关", "compaction.enabled = true", ORANGE),
+              ("阈值", "thresholdPercent / thresholdTokens 均为 -1，由窗口与 modelThresholds 推", BLUE),
+              ("方法与保留", "methodOrder [remote, soft]；keepRecentTokens 20000", GREEN),
+              ("维护时机", "midTurn / idle 开关；idle 阈值 200000、闲 300 秒", ORANGE))
+    for index, (title, detail, color) in enumerate(groups):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "另一件事：",
+                 "branchSummary.enabled = false——分支摘要默认不生成，别和压缩总开关混为一谈。",
+                 BLUE, SKY)
+    picture.footer("reason 有四种：overflow / incomplete / threshold / idle，别混成一件事。")
+
+
+def learn_timing(picture: Drawing):
+    picture.header("第 16 章 · learn 什么时候生效",
+                   "写进 learned.md，但不改本轮前缀。",
+                   "从下一会话起才注入。")
+    picture.box((92, 200, 584, 430), WHITE, GREEN, radius=12)
+    picture.text((116, 216), "learn（autolearn 开着才有）", 21, GREEN, True, width=444)
+    picture.text((116, 258), "把耐久 lessons 写进 learned.md", 18, MUTED, width=444)
+    picture.text((116, 292), "去重、脱敏、有上限", 18, MUTED, width=444)
+    picture.text((116, 326), "不改当前会话 prompt-cache 前缀", 18, MUTED, width=444)
+    picture.text((116, 360), "从下一会话起注入", 18, INK, True, width=444)
+    picture.box((616, 200, 1108, 430), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "本地管线（启动时跑）", 21, BLUE, True, width=444)
+    picture.text((640, 258), "Phase 1：从变更过的历史会话抽耐久信号", 18, MUTED, width=444)
+    picture.text((640, 292), "Phase 2：合并为 MEMORY.md 等产物", 18, MUTED, width=444)
+    picture.text((640, 326), "/memory enqueue 标记工作，下次启动捡起", 18, MUTED, width=444)
+    picture.note((92, 452, 1108, 552), "会被跳过：",
+                 "子代理、未持久化会话，以及太新 / 太旧 / 活跃中的会话都不进管线。",
+                 ORANGE, PEACH)
+    picture.footer("要它立刻记住：写进仓库文件或规则，别指望聊天窗口当硬盘。")
+
+
+def role_routing(picture: Drawing):
+    picture.header("第 17 章 · 角色怎么配不烧钱",
+                   "按任务选角色，不按心情选。",
+                   "成本细节见第 32 章。")
+    rules = (("子代理默认绑 task 角色", "别让每个探路子任务都上旗舰模型", ORANGE),
+             ("提交信息 / 分类 / 格式转换", "优先 smol / tiny", BLUE),
+             ("架构裁决 / 安全敏感改动", "再上 slow / default", GREEN),
+             ("advisor 打开 = 多付一路", "只在高风险变更开", ORANGE))
+    for index, (title, detail, color) in enumerate(rules):
+        top = 200 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.badge((144, top + 46), index + 1, color)
+        picture.text((186, top + 14), title, 22, color, True, width=880)
+        picture.text((186, top + 54), detail, 18, MUTED, width=880)
+    picture.footer("角色值的六层优先级见 §17.2a——你改的那层未必是生效的那层。")
+
+
+def plan_keys(picture: Drawing):
+    picture.header("第 18 章 · 计划模式与开启方式",
+                   "可用但默认不自动进。",
+                   "本机 18.16.0 实跑键值，证据在 facts/live-18.16.0。")
+    keys = (("plan.enabled", "true——计划模式在这台机器上可用", GREEN),
+            ("plan.defaultOnStartup", "false——启动不自动进入", BLUE),
+            ("--plan-yolo", "只读 plan 开场；第一次 resolve 自动批准，再切 --plan-yolo-into 实现", ORANGE),
+            ("--goal=<value>", "直接从 goal 模式开场", ORANGE))
+    for index, (name, detail, color) in enumerate(keys):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), name, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "和审批模式互补：",
+                 "审批是执行门禁，ask 是产品决策问答——两者都不替你做计划。",
+                 BLUE, SKY)
+    picture.footer("想用计划模式就显式开；别指望它自己跳出来。")
+
+
+def mode_matrix(picture: Drawing):
+    picture.header("附录 A · 打印模式与输出模式",
+                   "-p 走非交互；--mode 控制输出形态。",
+                   "第一次学手感请留在 TUI（第 6 章）。")
+    modes = (("text", "默认；给人读", ORANGE),
+             ("json", "机器解析用", BLUE),
+             ("rpc / rpc-ui", "stdio 上的 JSONL 帧", GREEN),
+             ("acp", "cli-reference 另列；--mode acp 与 omp acp 都可", ORANGE))
+    for index, (name, detail, color) in enumerate(modes):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 140
+        picture.box((left, top, left + 492, top + 116), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 23, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 18, MUTED, width=448)
+    picture.note((92, 492, 1108, 592), "两条提醒：",
+                 "脚本与 CI 用打印模式，别在 TUI 里写脚本；计划类默认启动行为在打印模式可能被忽略。",
+                 BLUE, SKY)
+    picture.footer("选模式前先问：这一跑是给人看，还是给程序读？")
+
+
+def slash_vs_keyword(picture: Drawing):
+    picture.header("附录 B · 斜杠与魔法词",
+                   "一个是命令，一个是行为倾向。",
+                   "弄混就会「怎么按了没反应」。")
+    picture.box((92, 210, 584, 470), WHITE, ORANGE, radius=12)
+    picture.text((116, 226), "斜杠命令", 24, ORANGE, True, width=444)
+    picture.text((116, 270), "你下的命令", 20, INK, True, width=444)
+    picture.text((116, 310), "在会话输入框里敲，回车执行", 18, MUTED, width=444)
+    picture.text((116, 344), "示例：/memory view、/mcp list", 18, MUTED, width=444)
+    picture.text((116, 378), "shell 里敲不会执行", 18, MUTED, width=444)
+    picture.box((616, 210, 1108, 470), WHITE, BLUE, radius=12)
+    picture.text((640, 226), "魔法词", 24, BLUE, True, width=444)
+    picture.text((640, 270), "提示词里触发的行为倾向", 20, INK, True, width=444)
+    picture.text((640, 310), "随你的话一起送进模型（第 18 章）", 18, MUTED, width=444)
+    picture.text((640, 344), "示例：ultrathink、orchestrate", 18, MUTED, width=444)
+    picture.text((640, 378), "只影响含该词的那一回合", 18, MUTED, width=444)
+    picture.footer("按了没反应，先分清你按的是命令，还是在话里埋了暗示。")
+
+
+def embed_diff(picture: Drawing):
+    picture.header("附录 C · 与 SDK 嵌入的关系",
+                   "配置发现也可以嵌进你的程序。",
+                   "用发现还是用覆盖，要明确写死一种。")
+    picture.box((92, 200, 584, 440), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "走 CLI", 23, ORANGE, True, width=444)
+    picture.text((116, 258), "agentDir、settings 默认被发现", 18, MUTED, width=444)
+    picture.text((116, 292), "cwd / 鉴权 / 模型都按环境解析", 18, MUTED, width=444)
+    picture.text((116, 326), "行为随机器与 profile 变化", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 440), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "走嵌入", 23, BLUE, True, width=444)
+    picture.text((640, 258), "createAgentSession 可传可发现", 18, MUTED, width=444)
+    picture.text((640, 292), "宿主决定用哪一层、覆盖什么", 18, MUTED, width=444)
+    picture.text((640, 326), "不写死就会出现幽灵差异", 18, MUTED, width=444)
+    picture.note((92, 464, 1108, 560), "幽灵差异长这样：",
+                 "同一份仓库，CLI 一套行为、嵌入另一套——查半天才发现是发现顺序不同。",
+                 BLUE, SKY)
+    picture.footer("嵌入前先决定：发现还是覆盖，写进你的初始化代码。")
+
+
+def uncovered_gaps(picture: Drawing):
+    picture.header("附录 E · 三处刻意留白",
+                   "上游 README 21 项能力，本书展开 18 项。",
+                   "宁可不写，也不把宣传语当规范。")
+    gaps = (("04 · 流式规则注入", "需要本机二进制或对应 docs 验证", ORANGE),
+            ("18 · 冲突解决 /resolve", "同上——未验证就不写成规范", BLUE),
+            ("20 · Slack（浏览器已展开）", "同上；第 12 章只覆盖浏览器", GREEN))
+    for index, (title, detail, color) in enumerate(gaps):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.badge((144, top + 48), index + 1, color)
+        picture.text((186, top + 14), title, 22, color, True, width=880)
+        picture.text((186, top + 56), detail, 18, MUTED, width=880)
+    picture.note((92, 564, 1108, 664), "怎么补：",
+                 "按页边核对法——对照本机帮助或上游文档核一条，写进页边再决定是否展开。",
+                 BLUE, SKY)
+    picture.footer("章节顺序不必按表走；把 21 项当索引，读完一章回来划掉一行。")
 
 
 
@@ -3262,6 +3417,14 @@ FIGURES = {
     "fig8-4-read-hunt": read_hunt,
     "fig9-4-patch-forms": patch_forms,
     "fig10-4-two-gates": two_gates,
+    "fig15-4-compaction-keys": compaction_keys,
+    "fig16-4-learn-timing": learn_timing,
+    "fig17-4-role-routing": role_routing,
+    "fig18-4-plan-keys": plan_keys,
+    "figA-4-mode-matrix": mode_matrix,
+    "figB-4-slash-vs-keyword": slash_vs_keyword,
+    "figC-4-embed-diff": embed_diff,
+    "figE-4-uncovered": uncovered_gaps,
 }
 
 

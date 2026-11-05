@@ -218,7 +218,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch10.md:149"
+      "omp/ch10.md:153"
     ],
     "analogy": {
       "zh": "出门前的安检流程"
@@ -227,7 +227,7 @@
       "zh": "拦住一次乱删，比事后恢复便宜得多"
     },
     "why_evidence": [
-      "omp/ch10.md:149"
+      "omp/ch10.md:153"
     ]
   },
   "hook": {
@@ -334,7 +334,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:174"
+      "omp/ch13.md:178"
     ],
     "analogy": {
       "zh": "另雇一辆车，只带回一句结论"
@@ -343,7 +343,7 @@
       "zh": "侦查和施工挤一个脑子，会互相污染"
     },
     "why_evidence": [
-      "omp/ch13.md:174"
+      "omp/ch13.md:178"
     ]
   },
   "plan-mode": {
@@ -363,7 +363,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:174"
+      "omp/ch13.md:178"
     ],
     "analogy": {
       "zh": "先画图纸，再拆墙"
@@ -372,7 +372,7 @@
       "zh": "改图纸总比拆墙便宜"
     },
     "why_evidence": [
-      "omp/ch13.md:174"
+      "omp/ch13.md:178"
     ]
   },
   "memory": {
@@ -864,7 +864,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch03.md:220"
+      "omp/ch03.md:224"
     ],
     "analogy": {
       "zh": "总机转分机"
@@ -873,7 +873,7 @@
       "zh": "敲错子命令不报错，会当成一句提示词发出去"
     },
     "why_evidence": [
-      "omp/ch03.md:220"
+      "omp/ch03.md:224"
     ]
   },
   "slash-command": {
