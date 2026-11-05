@@ -3342,6 +3342,179 @@ def pipeline_vs_approval(picture: Drawing):
     picture.footer("第 10 章的「两道闸」讲同一件事：改道在前，权限在后。")
 
 
+def reading_map(picture: Drawing):
+    picture.header("前言 · 这本书怎么走",
+                   "先原理、再实战；七篇加五个附录。",
+                   "插画双轨：Mermaid 管架构关系，handraw 管概念漫画。")
+    parts = (("一 · 原理", "agent = 模型 + 工具 + 循环", ORANGE),
+             ("二 · 上手", "装好、接上模型、第一次改代码", BLUE),
+             ("三 · 工具箱", "读、搜、改、跑、看、协作", GREEN),
+             ("四 · 上下文", "压缩、记忆、角色", ORANGE),
+             ("五 · 扩展", "Skills、MCP、自定义工具、扩展包", BLUE),
+             ("六 · 实战", "六个真实任务", GREEN),
+             ("七 · 排障", "排错、安全、成本、读源码", ORANGE))
+    for index, (name, detail, color) in enumerate(parts[:6]):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 118
+        picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
+        picture.text((left + 20, top + 12), name, 21, color, True, width=452)
+        picture.text((left + 20, top + 50), detail, 17, MUTED, width=452)
+    picture.box((92, 550, 1108, 618), WHITE, ORANGE, radius=10)
+    picture.text((116, 566), "七 · 排障", 21, ORANGE, True, width=420)
+    picture.text((560, 568), "排错、安全、成本、读源码", 17, MUTED, width=520)
+    picture.note((92, 634, 1108, 704), "附录 A–E：", "命令行、斜杠、配置、术语、版本钉——查得到就好，不必通读。",
+                 BLUE, SKY)
+    picture.footer("准备好了，从第 1 章开始。")
+
+
+def skill_lifecycle(picture: Drawing):
+    picture.header("第 19 章 · Skill 的团队生命周期",
+                   "起草到上线，五步；删除比堆积重要。",
+                   "description 当广告写，正文当手册写。")
+    steps = (("① 起草", "description 写触发场景，正文写步骤", ORANGE),
+             ("② 同事手跑", "别人照着做一遍，看会不会卡", BLUE),
+             ("③ 收进规范位置", "skills/<name>/SKILL.md，版本记文首", GREEN),
+             ("④ 试用一周", "记录误触发与漏触发", ORANGE),
+             ("⑤ 再决定 extension", "要注册工具才升级成扩展", BLUE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 88
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((144, top + 34), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 650, 1108, 712), "升级后抽测：",
+                 "omp 升级完抽测触发是否仍准；过期 skill 会污染元数据列表，该删就删。",
+                 ORANGE, PEACH)
+    picture.footer("删除比堆积更重要——元数据列表越长，模型越难挑对。")
+
+
+def hook_audit(picture: Drawing):
+    picture.header("第 21 章 · 钩子失败要吵出来",
+                   "静默失败比没有钩子更糟。",
+                   "模型会以为工具成功了。")
+    rules = (("拒绝时", "返回清楚原因，别只给一个 false", ORANGE),
+             ("改写参数时", "打审计日志——谁改了、改成了什么", BLUE),
+             ("日志一行一条", "时间、工具名、决策、原因码", GREEN),
+             ("上线前自测", "用 -p 做一次「故意缺参」，确认 schema 报错可读", ORANGE))
+    for index, (title, detail, color) in enumerate(rules):
+        top = 200 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 652, 1108, 716), "给模型的 UI：",
+                 "自定义工具的 schema 与描述是给模型看的界面，吝啬文字等于自找误调用。",
+                 BLUE, SKY)
+    picture.footer("模型可见的错误字符串要人话；结构化留给日志。")
+
+
+def ext_acceptance(picture: Drawing):
+    picture.header("第 22 章 · 扩展验收六步",
+                   "全部绿灯才允许进团队默认配置。",
+                   "PR 审扩展像审生产服务。")
+    steps = (("① 干净 profile 加载", "没有历史配置帮忙", ORANGE),
+             ("② 命令列表含新命令", "斜杠看得见", BLUE),
+             ("③ 工具可调用", "模型调得到、结果对", GREEN),
+             ("④ 故意重复名", "看冲突日志是否可读", ORANGE),
+             ("⑤ /reload-plugins", "热重载后行为可解释", BLUE),
+             ("⑥ 卸载后消失", "列表里干净退出", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 132
+        picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), title, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 18, MUTED, width=448)
+    picture.note((92, 600, 1108, 690), "顺带三句：",
+                 "依赖、权限、失败与卸载都要写清；模块顶层状态跨子会话会脏；名字加团队前缀。",
+                 BLUE, SKY)
+    picture.footer("验收脚本落进仓库，别人合并前也跑一遍。")
+
+
+def mcp_ticket(picture: Drawing):
+    picture.header("第 20 章 · 引入 MCP 的变更单",
+                   "每个 server 条目都是供应链。",
+                   "锁定版本、记维护人、写失败手册。")
+    fields = (("server 名称与版本", "钉住具体版本，别用 latest", ORANGE),
+              ("启动命令", "stdio 的 command / args / env / cwd", BLUE),
+              ("所需环境变量", "只写变量名，不写值", GREEN),
+              ("是否出网", "传输选 stdio 还是远程决定攻击面", ORANGE),
+              ("失败时人类步骤", "指向 stderr 与 exit 码", BLUE),
+              ("回滚方式", "删 disabledServers 或 PR 回滚条目", GREEN))
+    for index, (name, detail, color) in enumerate(fields):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 132
+        picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 18, MUTED, width=448)
+    picture.note((92, 600, 1108, 686), "两条回滚路径别混写：",
+                 "disabledServers 删掉即恢复；enabled:false 只有 PR 回滚能改。",
+                 ORANGE, PEACH)
+    picture.footer("合并前在干净 profile 验证：工具列表出现，且最小调用成功。")
+
+
+def secret_shapes(picture: Drawing):
+    picture.header("第 31 章 · 启动时还收集什么",
+                   "除了配置里的秘密，还有三类形状。",
+                   "以文档列表为准；别拿生产密钥做第一次实验。")
+    shapes = (("环境变量", "名称像密钥的变量，值至少 8 字符", ORANGE),
+              ("连接串密码", "URL 里带的凭据", BLUE),
+              ("内置可逆正则", "GitHub / AWS / JWT / Bearer / PEM 等族", GREEN))
+    for index, (title, detail, color) in enumerate(shapes):
+        top = 196 + index * 108
+        picture.box((110, top, 1108, top + 88), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 542, 1108, 636), "占位怎么算：",
+                 "哈希基于安装私有密钥，避免按字典反推；友好名净化成大写字母数字且有长度上限。",
+                 BLUE, SKY)
+    picture.footer("密钥文件本身不要提交进仓库——它救不了被抄走的哈希。")
+
+
+def cost_review(picture: Drawing):
+    picture.header("第 32 章 · 一次成本复盘",
+                   "挑昨天一场会话，只回答四个问题。",
+                   "只改一条习惯，才能坚持。")
+    questions = (("用了哪个模型", "是不是「杀鸡用牛刀」", ORANGE),
+                 ("起了几个子代理", "每个都乘一份上下文", BLUE),
+                 ("最大工具输出多长", "整树列表还是片段", GREEN),
+                 ("有没有无意义重试", "同一命令反复跑", ORANGE))
+    for index, (title, detail, color) in enumerate(questions):
+        top = 196 + index * 104
+        picture.box((110, top, 1108, top + 84), WHITE, color, radius=10)
+        picture.badge((144, top + 42), index + 1, color)
+        picture.text((186, top + 12), title, 22, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 594, 1108, 664), "产出：",
+                 "一条写进 AGENTS 或个人片段的习惯——下个月复盘时对照它。",
+                 GREEN, SAGE)
+    picture.footer("成本不是省出来的，是把大头一个个认出来。")
+
+
+def incident_pack(picture: Drawing):
+    picture.header("第 30 章 · 证据包模板",
+                   "找人帮忙前，把这六样打包。",
+                   "只写环境变量名，不贴密钥正文。")
+    items = (("症状一句话", "别写「它坏了」", ORANGE),
+             ("命令原文", "能直接粘贴重跑", BLUE),
+             ("完整错误", "含 exit 码与 stderr 摘要", GREEN),
+             ("版本首行", "omp --version 那行", ORANGE),
+             ("相关配置路径", "密钥打码", BLUE),
+             ("已尝试的最小动作", "做过什么、结果如何", GREEN))
+    for index, (title, detail, color) in enumerate(items):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 124
+        picture.box((left, top, left + 492, top + 100), WHITE, color, radius=10)
+        picture.text((left + 22, top + 12), title, 21, color, True, width=448)
+        picture.text((left + 22, top + 50), detail, 17, MUTED, width=448)
+    picture.note((92, 576, 1108, 656), "为什么打包：",
+                 "「我觉得卡住了」无法转发；六样齐了，别人才能复现或直接定位。",
+                 BLUE, SKY)
+    picture.footer("排障的第一产物是证据包，不是结论。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3484,6 +3657,14 @@ FIGURES = {
     "fig11-5-lsp-switches": lsp_switches,
     "fig23-5-config-actions": config_actions,
     "figD-4-pipeline-vs-approval": pipeline_vs_approval,
+    "fig0-1-reading-map": reading_map,
+    "fig19-5-skill-lifecycle": skill_lifecycle,
+    "fig21-5-hook-audit": hook_audit,
+    "fig22-5-ext-acceptance": ext_acceptance,
+    "fig20-5-mcp-ticket": mcp_ticket,
+    "fig31-5-secret-shapes": secret_shapes,
+    "fig32-5-cost-review": cost_review,
+    "fig30-5-incident-pack": incident_pack,
 }
 
 
