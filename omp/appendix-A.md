@@ -65,6 +65,10 @@ omp --continue "我们刚谈到哪？"
 
 `-p` 走非交互。`--mode` 控制输出形态。本机 `--help` 摘要写：`text`（默认）、`json`、`rpc`、`rpc-ui`；cli-reference 另列 `acp`，且二进制接受 `--mode acp`（也可用子命令 `omp acp`）。第一次学手感请留在 TUI（第6章）；脚本与 CI 再用打印模式。计划类默认启动行为在打印模式可能被忽略。
 
+![图A-4 输出模式矩阵](images/figA-4-mode-matrix.jpg)
+
+*图A-4：`-p` 走非交互，`--mode` 选输出形态——脚本与 CI 用打印模式。*
+
 ## A.7 跟做：十分钟核对
 
 ```sh

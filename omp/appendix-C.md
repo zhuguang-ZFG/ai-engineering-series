@@ -72,6 +72,10 @@ secrets:
 
 SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28章）。嵌入宿主时要明确：用发现还是用覆盖，避免「CLI 一套、嵌入另一套」的幽灵差异。
 
+![图C-4 嵌入差异](images/figC-4-embed-diff.jpg)
+
+*图C-4：嵌入时明确「发现还是覆盖」，避免 CLI 一套、程序另一套的幽灵差异。*
+
 ## C.7 可勾选
 
 - [ ] 能说出查配置的文档入口

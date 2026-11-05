@@ -3286,6 +3286,62 @@ def uncovered_gaps(picture: Drawing):
     picture.footer("章节顺序不必按表走；把 21 项当索引，读完一章回来划掉一行。")
 
 
+def lsp_switches(picture: Drawing):
+    picture.header("第 11 章 · 七个开关各管一段",
+                   "本机 [files] 段里管 lsp 的行。",
+                   "两行解释大半「为什么没红线」。")
+    groups = (("注册", "lsp.enabled = true；关掉后 lsp 工具根本不注册", ORANGE),
+              ("启动", "lazy 按需冷启；shared 先问 broker，失败才起私有进程", BLUE),
+              ("诊断", "onWrite = true；onEdit = false——改完不拉就没有", GREEN),
+              ("格式化与超时", "formatOnWrite = false；requestTimeout 10 秒（上限 max(20, 它)）", ORANGE))
+    for index, (title, detail, color) in enumerate(groups):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "记住这两条默认值：",
+                 "diagnosticsOnEdit 关、lazy 开——第一个解释「没红线」，第二个解释「第一次慢」。",
+                 BLUE, SKY)
+    picture.footer("想改完立刻看诊断，就显式调一次 lsp；别等自动。")
+
+
+def config_actions(picture: Drawing):
+    picture.header("第 23 章 · omp config 五个动作",
+                   "list / get / set / reset / path。",
+                   "本机 --help 原文见 facts/live-18.16.0/help-config.txt。")
+    rows = (("list", "打印所有设置及生效值；--scope 只看某一层写了什么", ORANGE),
+            ("get <key>", "取一个键的生效值；未知键 exit 非零", BLUE),
+            ("set <key> <value>", "schema 解析后写进全局 config.yml；别的层仍生效时会说是谁", GREEN),
+            ("reset <key>", "从全局删掉这个键，让默认值生效", ORANGE),
+            ("path", "打印活动 agent 目录（认 PI_CODING_AGENT_DIR）", BLUE))
+    for index, (action, detail, color) in enumerate(rows):
+        top = 196 + index * 90
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 10), action, 21, color, True, width=380)
+        picture.text((540, top + 12), detail, 18, MUTED, width=548)
+    picture.note((92, 646, 1108, 712), "旗标边界：", "--json 被 list/get/set/reset 接受；--scope 只有 list 用。",
+                 BLUE, SKY)
+    picture.footer("set 之后照它说的查「谁还在提供值」——改的那层未必是生效的那层。")
+
+
+def pipeline_vs_approval(picture: Drawing):
+    picture.header("附录 D · 过关、点头、问你",
+                   "三个词三件事，别混用。",
+                   "权限管线与审批是一问一答的两端。")
+    cards = (("权限管线", "一条命令从发起到执行要过的几道关；卡在哪就看它停在第几关", ORANGE),
+             ("审批 approval", "工具动手前由谁点头的判据——执行门禁那端", BLUE),
+             ("ask 工具", "产品决策问答，不是执行门禁", GREEN))
+    for index, (title, detail, color) in enumerate(cards):
+        top = 200 + index * 120
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 23, color, True, width=920)
+        picture.text((136, top + 56), detail, 18, MUTED, width=920)
+    picture.note((92, 576, 1108, 656), "yolo 是另一个档：",
+                 "不再逐条问、命令直接跑；演示图省事可以开，跑别人代码前记得关回去。",
+                 ORANGE, PEACH)
+    picture.footer("第 10 章的「两道闸」讲同一件事：改道在前，权限在后。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3425,6 +3481,9 @@ FIGURES = {
     "figB-4-slash-vs-keyword": slash_vs_keyword,
     "figC-4-embed-diff": embed_diff,
     "figE-4-uncovered": uncovered_gaps,
+    "fig11-5-lsp-switches": lsp_switches,
+    "fig23-5-config-actions": config_actions,
+    "figD-4-pipeline-vs-approval": pipeline_vs_approval,
 }
 
 
