@@ -3884,6 +3884,83 @@ def keyword_failures(picture: Drawing):
     picture.footer("高亮会当场告诉你有没有认上——比猜快。")
 
 
+def hands_inventory(picture: Drawing):
+    picture.header("第 1 章 · 先看清那双手",
+                   "十五件工具摊开，五十一扇门排好。",
+                   "别急着对话，先数清楚模型能伸出去几只手。")
+    tools = ("read", "bash", "edit", "write", "grep",
+             "glob", "lsp", "python", "notebook", "browser",
+             "computer", "task", "todo", "web_search", "ask")
+    for index, tool in enumerate(tools):
+        column, row = index % 5, index // 5
+        left = 110 + column * 200
+        top = 196 + row * 74
+        picture.box((left, top, left + 180, top + 56), WHITE, BLUE, radius=12)
+        picture.text((left + 90, top + 29), tool, 20, INK, True, anchor="mm", width=168)
+    picture.note((92, 424, 1108, 500), "两段自证：",
+                 "COMMANDS 段 51 个子命令、FLAGS 段 57 行——本机 18.16.0 的实数。",
+                 ORANGE, PEACH)
+    picture.box((110, 524, 1108, 604), INK, INK, radius=10)
+    picture.text((136, 540), 'omp -p "只回复两个字：在线" --no-session', 20, WHITE, True, width=948)
+    picture.text((136, 570), "stdout 一行「在线」，退出码 0，工具一个没调", 18, "#BCD5BD", width=948)
+    picture.note((92, 624, 1108, 700), "三步走：",
+                 "数一次真实对话的手脚 → 摊开 15 件工具 → 跑一圈 -p 看循环。",
+                 GREEN, SAGE)
+    picture.footer("数得到 15 行 Available Tools 就算成功；证据在 omp/facts/live-18.16.0。")
+
+
+def token_beans(picture: Drawing):
+    picture.header("第 2 章 · 模型在数豆子",
+                   "按 token 切，不按字或词切。",
+                   "同一句话，各家切法不一样。")
+    strips = (("英文常见词", ("the", "quick", "brown", "fox"),
+               "四个词，四颗豆子", GREEN),
+              ("中文串", ("上", "下", "文", "窗", "口"),
+               "五个汉字，可能五颗，也可能六颗", ORANGE))
+    for row, (label, chips, detail, color) in enumerate(strips):
+        top = 196 + row * 154
+        picture.text((110, top + 16), label, 20, MUTED, True, width=200)
+        for index, chip in enumerate(chips):
+            left = 330 + index * 132
+            picture.box((left, top, left + 116, top + 58), WHITE, color, radius=12)
+            picture.text((left + 58, top + 29), chip, 22, INK, True, anchor="mm", width=104)
+        picture.text((110, top + 74), detail, 17, color, width=620)
+    picture.note((92, 512, 1108, 596), "差多少：",
+                 "同一份中文 Markdown，各家 tokenizer 能差 70%（2.7 节用 omp toks 量）。",
+                 BLUE, SKY)
+    picture.note((92, 616, 1108, 700), "所以：",
+                 "别拿「这篇多少字」推「还能塞几轮」——豆子数只能量，不能猜。",
+                 ORANGE, PEACH)
+    picture.footer("上下文窗口、账单、突然忘事，三件事都按豆子结算。")
+
+
+def help_census(picture: Drawing):
+    picture.header("第 3 章 · 用 --help 自证",
+                   "按表格逐项找，两段各数一遍。",
+                   "看到 51 就算成功。")
+    checklist = (("-p, --print", "脚本化入口"),
+                 ("--mode=text/json/rpc/rpc-ui", "四种输出形态"),
+                 ("--no-tools / --no-lsp", "整层能力可关"),
+                 ("acp / completions / models / toks", "COMMANDS 段里翻得到"))
+    for index, (item, hint) in enumerate(checklist):
+        top = 196 + index * 80
+        picture.box((110, top, 1108, top + 62), WHITE, GREEN, radius=10)
+        picture.text((136, top + 10), item, 19, INK, True, width=580)
+        picture.text((726, top + 14), hint, 17, MUTED, width=360)
+    picture.box((110, 516, 604, 608), WHITE, ORANGE, radius=12)
+    picture.text((134, 530), "COMMANDS", 18, MUTED, True, width=200)
+    picture.text((134, 556), "51", 34, ORANGE, True, width=120)
+    picture.text((200, 570), "个子命令", 17, MUTED, width=140)
+    picture.box((628, 516, 1108, 608), WHITE, BLUE, radius=12)
+    picture.text((652, 530), "FLAGS", 18, MUTED, True, width=160)
+    picture.text((652, 556), "57", 34, BLUE, True, width=120)
+    picture.text((716, 570), "行", 17, MUTED, width=80)
+    picture.note((92, 624, 1108, 700), "骨架三件：",
+                 "README 的 Packages 表里圈 pi-coding-agent、pi-agent-core、pi-natives。",
+                 GREEN, SAGE)
+    picture.footer("同一轮：TUI 是卡片，-p 是 stdout 一行——壳换了，发动机没换。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -4050,6 +4127,9 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig1-5-hands-inventory": hands_inventory,
+    "fig2-5-token-beans": token_beans,
+    "fig3-5-help-census": help_census,
     "fig12-5-citation-discipline": citation_discipline,
     "fig18-5-keyword-failures": keyword_failures,
 }
