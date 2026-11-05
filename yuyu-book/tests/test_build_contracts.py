@@ -808,13 +808,5 @@ class PrintManifestContract(unittest.TestCase):
         with self.assertRaisesRegex(BuildError, "front anchor"):
             self.manifest(front_anchor="front")
 
-    def test_as_dict_matches_the_typed_records(self):
-        data = self.manifest().as_dict()
-        self.assertEqual(data["outline"],
-                         [[1, "第一部", "part1"], [2, "第 1 章", "ch01"]])
-        self.assertEqual(data["index_rows"],
-                         [{"term": "Agent", "anchor": "ch01"}])
-
-
 if __name__ == "__main__":
     unittest.main()

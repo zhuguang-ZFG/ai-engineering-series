@@ -111,19 +111,3 @@ class PrintManifest:
     def heads(self) -> tuple[tuple[str, str], ...]:
         """(anchor, label) in bookmark order — the running-head source."""
         return tuple((entry.anchor, entry.label) for entry in self.outline)
-
-    def as_dict(self) -> dict:
-        """Debug/diagnostic view; the build itself reads attributes."""
-        return {
-            "outline": [[e.level, e.label, e.anchor] for e in self.outline],
-            "toc_title": self.toc_title,
-            "title": self.title,
-            "subtitle": self.subtitle,
-            "author": self.author,
-            "keywords": self.keywords,
-            "lang": self.lang,
-            "front_anchor": self.front_anchor,
-            "toc_rows": list(self.toc_rows),
-            "index_rows": [{"term": r.term, "anchor": r.anchor}
-                           for r in self.index_rows],
-        }
