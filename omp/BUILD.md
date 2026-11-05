@@ -87,3 +87,9 @@ powershell -File omp/overhaul/ci-local.ps1
 需完成前言、33 章、五附录及通俗层、插画标签的英文内容，补齐全部 `en` 路径，
 通过双语结构、引用与未翻译汉字检查后，才能扩展语言列表、隔离测试和 CI。
 具体顺序见 `yuyu-book/PRODUCTS.md`。
+
+## 用 Python 重绘入门插图
+
+`python scripts/draw_omp_illustrations.py` 默认先写预览；确认后加 `--out-dir omp/images` 更新六张正文插图。
+脚本用项目已有 Pillow 与本机中文字体绘制；字体选择、单图生成和语义约束见
+`omp/overhaul/PYTHON-ILLUSTRATIONS.md`。重新生成后需构建 Omp 并检查 HTML/PDF 中的字与箭头。
