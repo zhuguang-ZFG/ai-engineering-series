@@ -3,15 +3,18 @@
 > **In one line:** Sub-agents are extra hired carts, each paying its own toll; Fork loads one shared set of luggage and hands each cart only its own reins.
 
 > **Learning Objectives:**
-> - Follow a sub-agent from spawn to teardown
-> - Explain the Fork pattern's cache sharing and byte-level inheritance
-> - Build a custom agent shaped around a specific job
-> - Explain why Claude Code builds the adversarial Verification Agent to argue with the main Agent
+> - Say why one Fork call hits the parent's prompt cache, and name the dimension whose drift loses it
+> - Write a read-only agent under `.claude/agents/` and justify every tool you left out of it
+> - Explain why the Verification Agent argues with the main agent on purpose, and why it has to run in the background
 
 **Difficulty:** 9.1 is Start, 9.2–9.4 are Core; 9.5 tool isolation and 9.6 lifecycle are Advanced — skip them on a first read and come back when you build.
 
+You ask Claude Code to add OAuth2 to the login module. It opens `src/routes/auth.ts`, follows the imports into the middleware, then into the tests, and by the fortieth file the window holds nothing but source it will never use again. When you finally tell it to start writing, it has lost the line you typed three turns ago: "we use Prisma."
+
+The model is not the problem. You have crammed recon and construction into one head. What works is this: the main agent stays put and decides the next step, while "go find out how authentication works today" goes to a brand-new agent carrying a single sentence — it reads the files and comes back with a conclusion. The less it brings back, the cleaner the main conversation stays. And when several independent investigations each need to see the same context, you use the Fork pattern: one fork spawns parallel agents that share the prefix the main conversation has already cached, so nobody pays the tuition twice.
+
 <!-- block: ch09.b-556173a5 -->
-Claude Code's capability goes beyond a single-turn conversation. Claude Code can split complex tasks and hand them to specialized sub-agents (Subagents) for parallel processing. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
+That is what a Subagent is. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
 
 ---
 
@@ -300,6 +303,16 @@ graph TD
 These five dimensions correspond to the components of the Anthropic API cache key: system prompt, tools, model, messages prefix, and thinking config. Only when all five dimensions are exactly consistent can a sub-request hit the parent request's cache.
 
 The Fork path sets the `useExactTools` flag, so tool definitions stay unchanged — when Fork mode activates, it uses the parent's tool pool directly rather than re-resolving agent tools, and the definitions line up byte for byte.
+
+This cache contract breaks most often under the confidence of "I only changed a few words." The five costliest wrong turns:
+
+| Wrong turn | What actually happens | The right move |
+|---|---|---|
+| Reword the system prompt; the meaning is the same, so the cache should still hold | The prompt cache compares a byte prefix — one stray space and it misses | Let Fork reuse the parent's already-rendered system prompt bytes instead of rebuilding them |
+| This sub-task is easy, so a smaller model will be cheaper | Model selection is itself one of the five cache-key dimensions; change it and you change the key | Cut cost in the agent definition — Explore plus haiku — not by swapping models inside a Fork |
+| Fork one more level down and double the parallelism again | Fork sub-agents keep the Agent tool, so recursion is stopped by two checks: querySource and message scanning; even if it went through, each level's context differs slightly from the one above and the hit rate collapses | Fork one level only; for multi-level division of labour use the Coordinator pattern (Chapter 10) |
+| Coordinator mode is on, so Fork comes along for free | Enabling Coordinator mode automatically disables Fork | Pick one of the two, decided by whether the workers need to share knowledge |
+| A Forked sub-agent keeps watching the files you edit afterwards | It inherits the prefix as it stood at the moment of the fork, then runs independently of its parent | Results come back as a task-notification XML message; fork again when fresh information is needed |
 
 ### How buildForkedMessages Builds Messages
 
@@ -639,6 +652,8 @@ After a sub-agent completes or fails, the runner is responsible for cleaning up 
 > - Exploratory tasks: 15-20 turns
 >
 > For agents running in the background, we recommend setting a lower maxTurns as a safety valve to prevent runaway agents from continuously consuming resources.
+
+> **Cross-reference:** A session is a tree, and forking and resuming are the same pair of operations — for how another harness handles them, see omp volume Chapter 7, *Session Management*, and Chapter 13, *Planning and Collaboration*.
 
 ---
 

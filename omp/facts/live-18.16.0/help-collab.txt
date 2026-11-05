@@ -1,0 +1,18 @@
+List active local Collab host metadata without URLs; use collab link <instanceId|pid> to retrieve a control link (--view for view-only)
+
+USAGE
+  $ omp collab [ACTION] [SELECTOR] [FLAGS]
+
+ARGUMENTS
+  ACTION     list (default) or link (list|link)
+  SELECTOR   Host instance ID or PID (link only)
+
+FLAGS
+      --view  Request a view-only link instead of control access (link only)
+  -j, --json  Emit deterministic machine-readable JSON
+
+EXAMPLES
+  omp collab list
+  omp collab list --json
+  omp collab link <instanceId|pid>
+  omp collab link <pid> --view

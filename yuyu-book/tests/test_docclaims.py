@@ -46,16 +46,27 @@ class Data(unittest.TestCase):
         return n
 
     def glossary_rows(self, lang: str) -> int:
-        """Rows of the appendix D tables, headers excluded.
+        """Rows of the appendix D glossary tables, headers excluded.
 
         Fence-aware: appendix D opens with a mermaid concept map whose
         `subgraph 核心架构["核心架构概念"]` lines look table-ish to a plain scan.
+
+        Ends at the cross-volume divergence table: its rows are five-cell
+        and English-headed, so a plain scan would book them as three more
+        term definitions while the READMEs still promise glossary entries
+        with a definition, cross-references and a chapter.
         """
         apxd = next(a for a in self.manifest["appendices"] if a["id"] == "apxd")
         lines = prose_lines(read_text(REPO_ROOT / apxd[lang]))
         order = sorted(lines)
+        cut = next((ln for ln in order
+                    if lines[ln].lstrip().startswith("## ")
+                    and ("shared terms" in lines[ln]
+                         or "共享词" in lines[ln])), None)
         rows = 0
         for i, ln in enumerate(order):
+            if ln == cut:
+                break
             s = lines[ln].strip()
             if not s.startswith("|") or SEP_ROW.match(s):
                 continue
@@ -69,6 +80,10 @@ class Data(unittest.TestCase):
 
     def drawings(self) -> int:
         return len(list((BOOK_DIR / "illustrations").glob("*.svg")))
+
+    def omp_drawings(self) -> int:
+        """What the companion volume's own tray holds."""
+        return len(list((BOOK_DIR / "illustrations-omp").glob("*.svg")))
 
     def body_plates(self, lang: str) -> int:
         """Plates the prose names, counted where they are named.
@@ -154,6 +169,8 @@ class ShippedCounts(Data):
              [d, str(len(self.units)), str(len(self.manifest["parts"]))]),
             ("STRUCTURE.md", r"\| `illustrations/` \| (\d+) 份手写 SVG",
              [d]),
+            ("STRUCTURE.md", r"\| `illustrations-omp/` \| (\d+) 份 omp "
+                             r"分册手写 SVG", [str(self.omp_drawings())]),
             ("CREDITS.md", r"扉页一幅车图（共 (\d+) 份", [d]),
             ("STRUCTURE.md", r"以来源 id 为键的 (\d+) 条登记", [src]),
             ("CREDITS.md", r"sources\.json\)（(\d+) 条）", [src]),

@@ -1,0 +1,3 @@
+$ omp bad-command notasubcommand
+Working...
+exit=124

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">登录像插钥匙：通一种就行。</title><desc id="desc">OAuth 或 API key 两条路；/login 打开选择器。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">认证接入</text>
+
+<text x="72" y="171" class="ink" font-size="48">登录像插钥匙：通一种就行。</text>
+<text x="74" y="219" class="muted" font-size="24">没有凭证时，omp 会提示你去 /login 或设环境变量。</text>
+<rect x="520" y="300" width="400" height="100" rx="12" fill="#DB582C"/>
+<text x="560" y="362" class="white" font-size="32">/login</text>
+<path d="M720 420 V470" class="flow"/>
+<path d="M420 470 H1020" stroke="#DB582C" stroke-width="3" fill="none"/>
+<path d="M420 470 V510" class="flow"/><path d="M1020 470 V510" class="flow"/>
+<rect x="180" y="530" width="480" height="220" rx="14" class="soft"/>
+<text x="220" y="590" class="ink" font-size="28">OAuth 流程</text>
+<text x="220" y="650" class="muted" font-size="22">/login &lt;provider&gt;</text>
+<text x="220" y="700" class="muted" font-size="22">需要时粘贴回调 URL</text>
+<rect x="780" y="530" width="480" height="220" rx="14" class="soft"/>
+<text x="820" y="590" class="ink" font-size="28">API key</text>
+<text x="820" y="650" class="muted" font-size="22">供应商对应环境变量</text>
+<text x="820" y="700" class="muted" font-size="22">或密钥选择器里粘贴</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文 §5 · 登录</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 认证</text>
+</svg>

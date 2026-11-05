@@ -1,0 +1,3 @@
+$ omp config get tools.approval
+{"eval":"allow","task":"allow","bash":"allow","hub":"allow"}
+exit=0

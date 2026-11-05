@@ -38,6 +38,16 @@ Explore how an agent runtime connects the conversation loop, tools, permissions,
 - **Look up a concept:** use the four appendices below.
 - **Website:** [Online reading](https://lintsinghua.github.io/). Repository chapters remain directly readable on GitHub.
 
+## Second volume · Omp (in progress)
+
+This repository now carries a second, separate volume: the Chinese-language 《Omp 从入门到精通：原理与实战》 — an unofficial tutorial for an open-source terminal agent. Its manuscript lives in [../omp/](../omp/README.md) and its artifacts use the `yuyu-omp-*` prefix. It is written against **omp/18.15.0**; [../omp/VERIFY.md](../omp/VERIFY.md) records what was checked against a real install (18.16.0 included).
+
+Two commands, two books: `make book` / `make book-pdf` still build Yù Yú only (both languages), while `make book-omp` / `make book-omp-pdf` build the Chinese omp edition — the latter also prints an A4 PDF. The equivalent command is `python scripts/bookctl.py build --product omp --lang zh [--pdf]`. Both write into `yuyu-book/dist/` under different prefixes, so building one volume never overwrites the other. Build details, plus the sizes and page counts measured on this machine, are in [../omp/BUILD.md](../omp/BUILD.md); the mechanism and boundaries of the two-product setup are §3.6 of [../STRUCTURE.md](../STRUCTURE.md).
+
+Two boundaries are worth naming before anyone applies Yù Yú's habits to omp: `make check` (`bookctl check --fast/--full`) still verifies Yù Yú only, and Book CI's new `omp` job is deliberately not chained with `needs` — it cannot block the Yù Yú artifacts, and it only starts meaningfully once the omp manuscript lands on `main`.
+
+Illustration strategy: Mermaid architecture diagrams and hand-drawn concept art on two tracks. Concepts can be read across the two volumes; implementations and pinned versions cannot be mixed.
+
 ## Reading notes
 
 Readers should distinguish observed implementation, architectural interpretation, and teaching examples. Feature flags and tool availability depend on build and runtime configuration; counts and timing examples are not promises about current releases.
@@ -101,7 +111,9 @@ Claude Code belongs to Anthropic. This independent book is not an official Anthr
 
 ## The book as one file
 
-`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.8 MB Chinese / 5.9 MB English) and an A4-typeset PDF (505 pages / 35.0 MB in Chinese, 536 pages / 23.8 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 507 pages / 24.1 MB and the English one to 558 pages / 12.4 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
+`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.8 MB Chinese / 5.9 MB English) and an A4-typeset PDF (516 pages / 36.1 MB in Chinese, 552 pages / 24.1 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 518 pages / 25.1 MB and the English one to 569 pages / 12.6 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
+
+The CI pair above was pinned before the accessibility pass thickened the manuscript. `scripts/check_artifact_claims.py`, which runs in `book.yml`, reconciles these README numbers against the PDF of the current build and turns red on a mismatch — so after a push, read the page count CI typeset, update the two numbers above, and keep the local YaHei figures in `docs/yuyu-overhaul/PDF-PAGES.md`.
 
 | File | Language |
 |------|----------|

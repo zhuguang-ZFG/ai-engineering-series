@@ -39,19 +39,24 @@ def main(argv=None):
                     help="skip the plain-language layer (marks, panels, lead "
                          "bands, tier chips, principle notes, keeper notes)")
     ap.add_argument("--regen-index", action="store_true")
+    ap.add_argument("--manifest", default="manifest.json",
+                    help="registry filename under yuyu-book/")
+    ap.add_argument("--sources", default="sources.json",
+                    help="sources registry filename under yuyu-book/")
     args = ap.parse_args(argv)
 
     try:
-        manifest, sources = load_configs()
-        glosses, paths = ({}, {}) if args.no_plain else plain.load_plain()
-        notes = {} if args.no_plain else plain.load_notes()
+        manifest, sources = load_configs(args.manifest, args.sources)
+        glosses, paths = ({}, {}) if args.no_plain else plain.load_plain(manifest)
+        notes = {} if args.no_plain else plain.load_notes(manifest)
         if not args.no_plain:
             plain.validate_plain(glosses, paths, manifest)
             if notes:
-                unit_texts = {u["id"]: {"zh": read_text(REPO_ROOT / u["zh"]),
-                                        "en": read_text(REPO_ROOT / u["en"])}
+                langs = plain.manifest_langs(manifest)
+                unit_texts = {u["id"]: {lang: read_text(REPO_ROOT / u[lang])
+                                        for lang in langs if lang in u}
                               for u, _k, _p in unit_stream(manifest)}
-                plain.validate_notes(notes, glosses, unit_texts)
+                plain.validate_notes(notes, glosses, unit_texts, langs)
         if args.regen_index:
             entries = glossary_to_index(manifest)
             dump_json(BOOK_DIR / "subject-index.json",

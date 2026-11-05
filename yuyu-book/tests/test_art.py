@@ -65,11 +65,16 @@ class ShippedDrawings(unittest.TestCase):
 class Loader(unittest.TestCase):
     def setUp(self):
         self._dir = art.ART_DIR
+        self._omp = art.OMP_ART_DIR
         self.tmp = Path(tempfile.mkdtemp())
         art.ART_DIR = self.tmp
+        # the omp tray is searched first, so a sandboxed loader test has to
+        # close it as well or a shipped drawing could answer for a missing one
+        art.OMP_ART_DIR = self.tmp / "no-omp-tray"
 
     def tearDown(self):
         art.ART_DIR = self._dir
+        art.OMP_ART_DIR = self._omp
 
     def test_a_unit_without_a_file_simply_has_no_emblem(self):
         self.assertEqual(art.emblem("ch99"), "")

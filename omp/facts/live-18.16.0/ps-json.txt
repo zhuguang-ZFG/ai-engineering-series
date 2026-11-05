@@ -1,0 +1,8 @@
+[
+  {
+    "kind": "project",
+    "projectDir": "D:\\Users\\claude\\claude-code-book-main",
+    "runtimeDir": "C:\\Users\\<用户名>\\.omp\\run\\daemons\\6e1db8299b4ae09a",
+    "daemons": []
+  }
+]

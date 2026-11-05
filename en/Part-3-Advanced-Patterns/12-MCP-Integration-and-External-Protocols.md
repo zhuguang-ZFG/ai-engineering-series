@@ -7,15 +7,15 @@
 
 **Learning Objectives:** By the end of this chapter, you can:
 
-- Explain why MCP (Model Context Protocol) appeared and which problem it actually removes
-- Choose among the 8 connection configurations and name what each one costs
-- Unfold how 7 configuration scopes and 3 security layers stack up
-- Follow the Bridge's two-way traffic, its SSE sequence-number handoff, and how sessions stay separated
-- Trace an MCP tool from discovery through mapping, naming and permissions
-- Set an enterprise MCP security policy: allowlists, denylists, IDE integration
-- See how MCP plugs into the tool system (Chapter 3) and the hook system (Chapter 8)
+- Pick the right one of the 8 connection configurations and say what each one costs
+- Trace an MCP tool from discovery through mapping, naming and the four permission gates, and write an allowlist-plus-denylist policy for a team
+- Explain why the Bridge's two-way traffic, its SSE sequence-number handoff and its multi-session isolation each need a gate of their own, and how MCP joins up with the tool system (Chapter 3) and the hook system (Chapter 8)
 
 **Difficulty:** 12.1 is Start, 12.2 and 12.3 are Core; 12.4 Bridge system and the hands-on exercises are Advanced — skip them on a first read and come back when you build.
+
+You connect an MCP server that queries your database. The first call prompts you to confirm; so does the second. Fed up, you write `"mcp__*"` in the configuration to allow everything, and the world goes quiet. Two weeks later a colleague pulls the same branch and adds a scraper server with a tool that also goes by `query` -- from then on it does anything on your machine without asking once.
+
+The quieter failures are worse: a server you just configured never appears in the tool list, or a permission rule you wrote plainly covers a tool you never meant to manage, because the server name contains a double underscore and parsing splits at the first `__`. This chapter is about how outside capability crosses a boundary to get in: how to choose among the eight connection configurations, how the name `mcp__server__tool` runs through four permission gates, how seven configuration scopes and three enterprise security layers stack, and finally the two-way channel of the IDE Bridge.
 
 ---
 
@@ -476,6 +476,16 @@ This four-layer permission model follows the "Defense in Depth" principle: even 
 > **Cross-reference to Chapter 4:** This permission hierarchy integrates tightly with the Permission Pipeline described in Chapter 4. MCP tools go through the same four-stage pipeline as built-in tools: the `mcp__server__tool` naming gives them a dedicated namespace in rule matching (the second stage), so rules can allow or deny at server or tool granularity; in context evaluation (the third stage) MCP tools carry no tool-specific permission logic and return `passthrough` by default, handing the request to the interactive prompt (the fourth stage) for the user to confirm — which is exactly how they differ from built-in tools, which may evaluate their own context and auto-allow.
 
 > **Anti-pattern Warning:** Do not use `"mcp__*": "allow"` in global configuration to allow all MCP tools. This "one-click open-all" approach, while convenient, bypasses security checks — any tools provided by newly connected MCP servers automatically receive execution permission, including tools you may not be familiar with. Authorize at the server or tool granularity level.
+
+Most trust-boundary accidents are not attacks; they are shortcuts. Five come up again and again:
+
+| Wrong turn | What actually happens | The right move |
+|---|---|---|
+| `"mcp__*": "allow"` to clear every MCP tool at once | Every server connected afterwards has its tools approved automatically | Authorize per server or per tool: `mcp__github__*`, `mcp__github__create_issue` |
+| Put a double underscore in the server name | Parsing splits at the first `__`, so `mcp__my__special__tool` resolves to server="my" and your rule lands in a namespace you never meant to manage | Separate words in server names with a single underscore or a hyphen |
+| Commit personal credentials in a project-scope configuration | Project scope is the team-shared layer, and it travels with version control | Keep credentials in local scope (`.claude/settings.local.json`); put only team-shared servers in project scope |
+| Assume your own configuration outranks enterprise policy | enterprise and managed are hard constraints that lower scopes cannot override, and a tool enabled at project scope cannot be disabled by personal configuration | Leave enforcement to `allowedMcpServers` / `deniedMcpServers` instead of fighting it locally |
+| Expect an MCP tool to judge write safety the way built-in Write does | MCP tools carry no tool-specific permission logic; they return `passthrough` by default and go to the fourth stage for the user to confirm | Write an allow rule when you want a tool to run without a prompt — do not assume the far end will be conservative for you |
 
 ---
 
@@ -1126,6 +1136,8 @@ flowchart TD
 This "auto-refresh + retry" pattern is standard OAuth 2.0 practice. The benefit is that it's transparent to users — Token expiration won't interrupt an ongoing Bridge session, as the system handles it automatically in the background.
 
 > **Best Practice:** If you need to use Bridge functionality in an enterprise environment, ensure: (1) team members sign in with claude.ai subscription accounts, not API Keys; (2) you configure the organization UUID correctly; (3) the network firewall permits SSE/CCR communication with the claude.ai backend.
+
+> **Cross-reference:** For the same protocol wired into another harness, see omp volume Chapter 20, *MCP*; for another shape of outside capability crossing a boundary, see Chapter 12, *Browser, Desktop and the Web*.
 
 ---
 

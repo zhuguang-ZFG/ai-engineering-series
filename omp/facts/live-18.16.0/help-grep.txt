@@ -1,0 +1,16 @@
+Test grep tool
+
+USAGE
+  $ omp grep [PATTERN] [PATH] [FLAGS]
+
+ARGUMENTS
+  PATTERN   Regex pattern to search for
+  PATH      Directory or file to search
+
+FLAGS
+  -g, --glob=<value>   Filter files by glob pattern
+  -l, --limit=<int>    Max matches
+  -C, --context=<int>  Context lines
+  -f, --files          Output file names only
+  -c, --count          Output match counts per file
+      --no-gitignore   Include files excluded by .gitignore

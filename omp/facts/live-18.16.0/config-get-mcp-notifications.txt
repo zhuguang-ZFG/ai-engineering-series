@@ -1,0 +1,3 @@
+$ omp config get mcp.notifications
+false
+exit=0

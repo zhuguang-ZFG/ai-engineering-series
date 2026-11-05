@@ -1,0 +1,12 @@
+Generate a commit message and update changelogs
+
+USAGE
+  $ omp commit [FLAGS]
+
+FLAGS
+      --push             Push after committing
+      --dry-run          Preview without committing
+      --no-changelog     Skip changelog updates
+      --legacy           Use legacy deterministic pipeline
+  -c, --context=<value>  Additional context for the model
+  -m, --model=<value>    Override model selection

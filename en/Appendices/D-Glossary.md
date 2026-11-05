@@ -299,6 +299,18 @@ flowchart LR
 | Worktree | 工作树 | A wrapper around Git worktree that creates isolated working directories for subagents or parallel tasks, avoiding file conflicts in the main workspace. Controlled by the Worktree Mode feature flag | Fork Mode, Subagent, EnterWorktreeTool | Chapter 9 |
 | Zod Schema | Zod 验证模式 | A runtime type validation schema defined using the Zod library, used for type checking of tool input parameters and auto-completion hint generation. Each tool's input parameters are validated by a Zod Schema | Tool, Tool Interface, Build Tool | Chapter 3 |
 
+## Series-wide shared terms
+
+The same series carries a companion volume, *Omp: From Beginner to Expert* (`omp/` in this repository, still under construction), which covers another agent harness in the same terminal. The two volumes share **15** term ids: **12** are rendered identically in both books, and the remaining **3** deliberately differ, so that each volume stays internally consistent on its own pages.
+
+| English term | Chinese renderings (this book / Omp volume) | Field at stake | This book | Omp volume |
+|---|---|---|---|---|
+| Agent Harness | 智能体线束 / 智能体外壳 | Chinese name | Agent Harness | Agent Harness |
+| Main Loop | 主循环 / 工作循环 | Chinese name and English name | Main Loop | agent loop |
+| Subagent | 子智能体 | English form only | sub-agent | subagent |
+
+The reasoning behind those three choices, and the **21** terms that belong to the Omp volume alone, are recorded in `docs/yuyu-overhaul/SHARED-TERMS.md` inside the repository; the chapter-by-chapter mapping lives in `docs/COMPARE-OMP.md` and `omp/overhaul/CROSSREF-MAP.md`. The 15 / 12 / 3 / 21 counts follow the two registries and move whenever they do — the command that reproduces them is in section 6 of `SHARED-TERMS.md`, so readers need not memorize them.
+
 ---
 
 > **Note**: This glossary contains approximately 100 core terms covering the main concepts discussed throughout the book. The Chinese translations are the recommended standardized translations used in this book; readers may encounter different translations in other materials. For detailed information on specific feature flags, please refer to Appendix C; for attribute information on specific tools, please refer to Appendix B.

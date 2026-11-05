@@ -11,6 +11,9 @@ This appendix provides a conceptual navigation of the Claude Code system archite
 - If you are interested in collaboration contracts between modules, refer to the interface descriptions in A.4
 - The module names in this map correspond closely to the chapters in the main body of this book and can be cross-referenced
 
+<!-- block: apxa.b-first-map -->
+**Which map to look at first**: don't start with the fifteen-row index table in A.1 — it only answers "which module is in which chapter". Turn first to the layered architecture diagram in A.2 and see who calls whom among the five layers: CLI entry, conversation main loop, query engine, tool system, permission pipeline. Then come back to the A.1 table and each row lands on one box of that diagram. To trace a complete data flow (say, one tool call from initiation to result write-back), go straight to A.3 and find that flowchart; for what modules agree on with each other, go to A.4. After a second pass, A.1 is the index you search modules in.
+
 ---
 
 <!-- block: apxa.b-82994884 -->

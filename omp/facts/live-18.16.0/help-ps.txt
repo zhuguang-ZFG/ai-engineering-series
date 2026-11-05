@@ -1,0 +1,28 @@
+List and control daemon-supervised background processes (logs, stop, kill, restart)
+
+USAGE
+  $ omp ps [ACTION] [NAME] [FLAGS]
+
+ARGUMENTS
+  ACTION   list (default), info, logs, stop, kill, or restart (list|info|logs|stop|kill|restart)
+  NAME     Process name (required for every action except list)
+
+FLAGS
+  -a, --all             Also list other projects and exited global services (list)
+  -j, --json            Emit machine-readable JSON
+      --plain           Static listing instead of the interactive monitor (list)
+      --dir=<value>     Target another project directory instead of the current one
+      --global=<value>  Target a machine-global service scope (e.g. browser-relay)
+  -f, --follow          Keep streaming new output (logs)
+      --head            Read from the beginning instead of the tail (logs)
+  -n, --lines=<int>     Number of log lines, max 1000 (logs)
+      --grep=<value>    Regex filter applied to log lines (logs)
+      --timeout=<int>   Grace period in seconds before hard kill (stop)
+
+EXAMPLES
+  omp ps
+  omp ps --all
+  omp ps logs web --follow
+  omp ps stop web
+  omp ps kill web
+  omp ps info relay --global browser-relay

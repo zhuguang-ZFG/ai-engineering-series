@@ -1,0 +1,25 @@
+Benchmark instruction following and working memory: one cached thread of glyph array actions with a moving cat-sound directive
+
+USAGE
+  $ omp if-bench MODELS... [FLAGS]
+
+ARGUMENTS
+  MODELS   Model selectors (provider/model or fuzzy id, e.g. opus)
+
+FLAGS
+      --turns=<int>       Maximum turns per model; turn N issues N actions (default: 24)
+      --length=<int>      Character-array length, even, 8-26 (default: 24)
+      --max-tokens=<int>  Max output tokens per turn (default: 32768)
+      --nya-max=<int>     Longest accepted cat sound in nya{1,N} (default: 8)
+      --par=<int>         Models benchmarked concurrently (default: 4)
+      --json              Output JSON
+
+EXAMPLES
+  # Compare three models on the incremental array machine
+    omp if-bench opus sonnet gpt-5.2
+  # Go deeper, one model at a time
+    omp if-bench opus --turns 40 --par 1
+  # Shorter array, tighter cat sound
+    omp if-bench sonnet --length 12 --nya-max 2
+  # Machine-readable per-turn transcript
+    omp if-bench opus --json
