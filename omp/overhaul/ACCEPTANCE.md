@@ -96,3 +96,44 @@ PDF 抽查第 14、15、22、80、148、156 页（图 1-1、1-2、2-1、7-2、15
 `.scratch/python-illustrations/pdf-pages/`，构建产物在 `.scratch/python-illustrations/build/`。
 
 本轮改动进入独立提交与 PR，远端 CI 以该 PR 的运行记录为准；box 镜像仍未同步。
+
+## 全量手绘替换（B1–B6，2026-11-05）
+
+按 `HANDDRAWN-REWORK-SPEC.md` 把 `omp/images/` 的 92 张旧手绘 JPG 全部改为
+`scripts/draw_omp_illustrations.py` 生成；另有 16 张维持 `visual-redesign/` 的 SVG 导出，
+4 张为上游截图。批次提交：B1 `0e920c2`、B2 `523238a`、B3 `f4e5c74`、B4 `a265c40`、
+B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正文引用的图补了题注与位置，
+并把与 `fig23-3-keys` 撞号的 profile 图改为 `fig23-4-profile`。
+
+验证：
+
+- `python scripts/draw_omp_illustrations.py --out-dir .scratch/allcheck`：92 张全量重生成成功，
+  最大 271,877 字节，0 张超过 300,000 的 `PHOTO_BYTES`。
+- `python omp/overhaul/audit_structure.py --check`：33/33 章六要素齐。
+- `python omp/overhaul/audit_delivery.py`：0 errors。
+- `python -m unittest tests.test_omp_overhaul`：28 项通过（新增 `IllustrationCoverageTests`：
+  每张 JPG 必须属于脚本生成、SVG 导出、上游截图之一，三类互斥，编号与图集一致）。
+- `python -m unittest discover -s tests`：67 项通过；`-s yuyu-book/tests`：515 项通过。
+- `bookctl build --product omp --lang zh --pdf`：39 单元、13 图版、245 术语、382 个分级徽标，0 index folios。
+- `python scripts/bookctl.py check --fast`：6 步通过，333 张 Mermaid 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 28,935,624 | 39 单元 | `3a43c826d86912f0ffe767dd282683e17cfa42f9af36b5d93209522df90280a9` |
+| `yuyu-omp-zh.pdf` | 37,622,560 | 343 页 / 49 书签 | `66c46510bfa73edc3c20a37fbec50fba5ae520ec6e511cd8fa3cfb79ad43e8e5` |
+
+体积上升来自位图分辨率统一为 2400×1600；页数由 332 增到 343：B5 补引用的 6 张图、ch07 新增的
+§7.5a 与附录 E.9 各贡献一段版面。
+
+## 上游素材与内容补充（2026-11-05）
+
+授权来自用户「可以在 GitHub 上找仓库增加项目内容、插图等」。上游 `can1357/oh-my-pi` 钉扎提交
+`88a69582c755bd000e8dc0290981fc787a4f400c`，许可证 MIT。
+
+- 插图：README 演示 `assets/ask.webp`、`slash.webp`、`models.webp`、`lspv.webp` 转成
+  `fig6-6-ask-shot`、`fig6-7-slash-shot`、`fig5-3-model-selector`、`fig11-4-lsp-shot`，宽度压到 1100、
+  质量 82，单张 40–49 KB；正文补题注（ch05、ch06、ch11）。来源登记 `sources-omp.json` 的 `omp-readme-assets`。
+- 内容一：ch07 新增 §7.5a「把别人拉进同一个会话：`/collab` 与 `omp join`」——命令语义逐条对照本机
+  `omp collab --help` 与 `omp join --help`（v18.16.0）核实，链接形态取该 help 的 EXAMPLE。
+- 内容二：附录 E.9「上游 README 的二十一项能力，在本书哪里」——21 行对照索引；三处（流式规则、`/resolve` 冲突解决、Slack）标注「未展开」，避免用宣传语充当规范。来源登记 `omp-readme`（`normative: false`）。
+- `yuyu-book/reading-paths-omp.json` 的 `omp-ch07` 增补一格 tier，与新增 H2 对齐（13→14）。

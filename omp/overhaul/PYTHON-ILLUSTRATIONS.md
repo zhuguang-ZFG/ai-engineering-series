@@ -1,7 +1,11 @@
 # Python 绘制的入门概念图
 
-2026-11-05：使用 Pillow 从几何图形和字体直接绘图，第一批重绘六张入门插图。
-源代码为 `scripts/draw_omp_illustrations.py`；正文仍引用原来的 JPG 路径。
+2026-11-05：使用 Pillow 从几何图形和字体直接绘图，先重绘六张入门插图，随后按
+`HANDDRAWN-REWORK-SPEC.md` 的 B1–B6 批次补齐：`omp/images/` 的 92 张手绘 JPG 全部改由
+`scripts/draw_omp_illustrations.py` 生成。正文仍引用原来的 JPG 路径。
+
+另有 16 张维持 `visual-redesign/` 的 SVG 导出，4 张是上游 README 截图（`sources-omp.json`
+的 `omp-readme-assets` 条目）；`tests/test_omp_overhaul.py` 会断言每张 JPG 都有来源，三类集合互不重叠。
 
 ## 每张图要讲清什么
 
@@ -35,6 +39,20 @@ Windows 自动查找微软雅黑，Linux 查找 Noto Sans CJK，macOS 查找 Pin
 同一字体和 Pillow 版本下可重复生成；换平台字体后字形与文件哈希可能不同，需重新检查排版。
 脚本先绘完全部选中图片，检查标记了宽度的标签并编码到预算内，再写文件；
 字体缺失、标签超宽或图片超预算都会在写盘前返回非零。
+
+## 批次
+
+| 批次 | 章节 | 张数 |
+|---|---|---|
+| B1 | 第 1–6 章 | 15 |
+| B2 | 第 7–12 章 | 15 |
+| B3 | 第 13–18 章 | 10 |
+| B4 | 第 19–23 章 | 11 |
+| B5 | 第 24–28 章（含 6 张原本未被引用的图） | 18 |
+| B6 | 第 29–33 章与附录 E | 17 |
+
+每批的画法约束、验收门禁与逐图要点见 `HANDDRAWN-REWORK-SPEC.md`。
+B5 里 `fig23-4-profile`、`fig24-4..6`、`fig25-4..5` 是补引用后的重新编号，原编号文件已删除。
 
 ## 核对边界
 
