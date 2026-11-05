@@ -27,3 +27,8 @@ jobs:
       - name: Check bilingual chapter structure
         run: python3 docs/yuyu-overhaul/check_bilingual_parity.py
       - run: python3 scripts/bookctl.py check --fast
+      - name: Check omp structure and source assembly
+        run: |
+          python3 omp/overhaul/audit_structure.py --check
+          python3 omp/overhaul/audit_delivery.py
+          python3 yuyu-book/build.py --manifest manifest-omp.json --sources sources-omp.json --lang zh --check --mermaid source

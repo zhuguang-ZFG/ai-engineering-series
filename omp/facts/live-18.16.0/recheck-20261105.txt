@@ -1,0 +1,19 @@
+Captured at UTC 2026-11-05T03:31:27Z
+America/Adak: 2026-11-04 17:31
+Environment: Windows, Bun global executable
+
+omp --version
+exit_code: 0
+stdout: omp/18.16.0
+
+omp --help
+exit_code: 0
+stdout_lines: 238
+first_line: omp v18.16.0
+
+omp models
+exit_code: 0
+stdout_lines: 43
+Raw model/provider inventory was not saved.
+
+The box environment and model-backed commands were not rerun in this capture.
