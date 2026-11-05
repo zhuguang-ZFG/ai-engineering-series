@@ -10,7 +10,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from yuyu_book import art  # noqa: E402
-from yuyu_book.core import BOOK_DIR, REPO_ROOT  # noqa: E402
+from yuyu_book.core import BOOK_DIR, REPO_ROOT, BuildError  # noqa: E402
+from yuyu_book.print_manifest import (IndexRow, OutlineEntry,  # noqa: E402
+                                     PrintManifest)
 from yuyu_book.mermaid import BOOK_FAMILIES  # noqa: E402
 from yuyu_book.style import CSS  # noqa: E402
 
@@ -366,12 +368,13 @@ class RunningHeads(unittest.TestCase):
         manifest, _ = load_configs()
         outline = [(1, p["no"]["zh"] + " · " + p["title"]["zh"], p["id"])
                    for p in manifest["parts"]]
+        outline.append((1, "前言", manifest["front"]["id"]))
         outline.append((2, "第 1 章", "ch01"))
         meta = build.pdf_meta(manifest, outline, [], "zh")
-        self.assertEqual([a for a, _label in meta["heads"]],
+        self.assertEqual([a for a, _label in meta.heads],
                          [a for _lvl, _t, a in outline])
-        self.assertEqual(meta["lang"], "zh")
-        self.assertTrue(meta["title"])
+        self.assertEqual(meta.lang, "zh")
+        self.assertTrue(meta.title)
 
     def test_the_screen_floor_for_wide_plates_is_dropped_on_paper(self):
         # render.py pins a min-width onto plates too wide to read at column
@@ -755,6 +758,62 @@ class EndToEndNoBrowser(unittest.TestCase):
         self.assertEqual(out.count("0 lead bands"), 2, out)
         for needle in ("0 glosses", "0 tier chips", "0 keeper notes"):
             self.assertEqual(out.count(needle), 2, f"{needle}: {out}")
+
+
+class PrintManifestContract(unittest.TestCase):
+    """The hand-off is validated where it is built: the Chromium print is the
+    expensive step, so a typo must not survive until the PDF post-pass."""
+
+    def manifest(self, **overrides):
+        base = dict(
+            outline=(OutlineEntry(1, "第一部", "part1"),
+                     OutlineEntry(2, "第 1 章", "ch01")),
+            toc_title="目录",
+            title="御舆",
+            subtitle="副题",
+            author="LinTsinghua",
+            keywords="v0.3",
+            lang="zh",
+            front_anchor="front",
+            toc_rows=("ch01",),
+            index_rows=(IndexRow("Agent", "ch01"),))
+        base.update(overrides)
+        if "front_anchor" not in overrides:
+            base["front_anchor"] = "ch01"
+        return PrintManifest(**base)
+
+    def test_heads_follow_the_bookmark_order(self):
+        meta = self.manifest()
+        self.assertEqual(meta.heads, (("part1", "第一部"), ("ch01", "第 1 章")))
+        self.assertEqual([e.anchor for e in meta.outline], ["part1", "ch01"])
+
+    def test_duplicate_anchor_is_rejected(self):
+        with self.assertRaisesRegex(BuildError, "duplicate outline anchor"):
+            self.manifest(outline=(OutlineEntry(1, "第一部", "part1"),
+                                   OutlineEntry(2, "第 1 章", "part1")))
+
+    def test_contents_row_must_be_a_bookmarked_section(self):
+        with self.assertRaisesRegex(BuildError, "contents row"):
+            self.manifest(toc_rows=("ch01", "ch99"))
+
+    def test_index_row_must_be_a_bookmarked_section(self):
+        with self.assertRaisesRegex(BuildError, "index row"):
+            self.manifest(index_rows=(IndexRow("Ghost", "ch99"),))
+
+    def test_unknown_language_is_rejected(self):
+        with self.assertRaisesRegex(BuildError, "unknown language"):
+            self.manifest(lang="ja")
+
+    def test_front_anchor_must_be_bookmarked(self):
+        with self.assertRaisesRegex(BuildError, "front anchor"):
+            self.manifest(front_anchor="front")
+
+    def test_as_dict_matches_the_typed_records(self):
+        data = self.manifest().as_dict()
+        self.assertEqual(data["outline"],
+                         [[1, "第一部", "part1"], [2, "第 1 章", "ch01"]])
+        self.assertEqual(data["index_rows"],
+                         [{"term": "Agent", "anchor": "ch01"}])
 
 
 if __name__ == "__main__":

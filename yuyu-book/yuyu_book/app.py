@@ -12,6 +12,7 @@ from . import art, audit, blocks, mermaid as mm, pages, plain, registry, render
 from .blocks import ID_RE
 from .core import (BOOK_DIR, HAN_RE, INDEX_CN_LETTER, REPO_ROOT, BuildError,
                    expected_ids, load_unit, read_text, unit_stream)
+from .print_manifest import IndexRow, OutlineEntry, PrintManifest
 from .style import CSS, key_mark, page, rut, trace, wheel
 
 
@@ -296,9 +297,9 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
         # sheet number, so the index rows get their folios from a measuring
         # print and the book is printed again with the numbers in place
         folios = {}
-        if pmeta["index_rows"]:
+        if pmeta.index_rows:
             dest = pdf.measure(out,
-                               sorted({r["anchor"] for r in pmeta["index_rows"]}),
+                               sorted({r.anchor for r in pmeta.index_rows}),
                                edge or browser)
             folios = {a: dest[a] + 1 for a in dest}
             out.write_text(pages.fill_index_folios(html_text, folios),
@@ -310,30 +311,32 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     return out
 
 
-def pdf_meta(manifest, outline, toc_entries, lang, idx_entries=()):
+def pdf_meta(manifest, outline, toc_entries, lang, idx_entries=()) -> PrintManifest:
     """Everything the PDF pass needs that the HTML cannot say for itself:
-    bookmarks, running heads, the contents rows it must number, and the index
-    rows it must number once the measuring print says where each unit lands."""
-    return {"outline": outline,
-            # every bookmark opens a section, parts included: leaving the part
-            # dividers out made those pages wear the previous chapter's head
-            "heads": [(a, label) for _lvl, label, a in outline],
-            "toc_rows": [e["anchor"] for e in toc_entries
-                         if e["kind"] in ("row", "part")],
-            # a folio is written into the row it belongs to, keyed by the anchor
-            # the row links to — the terms are here so a test can prove this list
-            # is the index in the order the page puts it down: an entry this
-            # edition has no chip for prints no row and gets no folio
-            "index_rows": [{"term": e[lang]["term"],
-                            "anchor": e[lang]["refs"][0]["anchor"]}
-                           for e in (idx_entries or ()) if e[lang]["refs"]],
-            "toc_title": pages.ui("toc", lang),
-            "title": manifest["title"][lang],
-            "subtitle": manifest["subtitle"][lang],
-            "author": manifest["author"],
-            "keywords": f'v{manifest["version"]} {manifest["date"]}',
-            "lang": lang,
-            "front_anchor": manifest["front"]["id"]}
+    bookmarks, the contents rows it must number, and the index rows it must
+    number once the measuring print says where each unit lands. Running heads
+    are derived from the outline, so a part divider cannot be left out of the
+    head map without also disappearing from the bookmark tree."""
+    return PrintManifest(
+        # every bookmark opens a section, parts included: leaving the part
+        # dividers out made those pages wear the previous chapter's head
+        outline=tuple(OutlineEntry(*entry) for entry in outline),
+        toc_rows=tuple(e["anchor"] for e in toc_entries
+                       if e["kind"] in ("row", "part")),
+        # a folio is written into the row it belongs to, keyed by the anchor
+        # the row links to — the terms are here so a test can prove this list
+        # is the index in the order the page puts it down: an entry this
+        # edition has no chip for prints no row and gets no folio
+        index_rows=tuple(IndexRow(e[lang]["term"],
+                                  e[lang]["refs"][0]["anchor"])
+                         for e in (idx_entries or ()) if e[lang]["refs"]),
+        toc_title=pages.ui("toc", lang),
+        title=manifest["title"][lang],
+        subtitle=manifest["subtitle"][lang],
+        author=manifest["author"],
+        keywords=f'v{manifest["version"]} {manifest["date"]}',
+        lang=lang,
+        front_anchor=manifest["front"]["id"])
 
 
 def _principle_groups(glosses: dict, units, lang: str) -> list[dict]:
