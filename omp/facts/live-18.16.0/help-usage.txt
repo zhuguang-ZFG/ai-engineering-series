@@ -1,0 +1,41 @@
+Show provider usage limits for every authenticated account
+
+USAGE
+  $ omp usage [ACTION] [TARGET] [FLAGS]
+
+ARGUMENTS
+  ACTION   Optional subcommand to execute (invalidate|clients|accounts|reset)
+  TARGET   Saved reset to spend with `reset`: <provider>/<credential id> as `omp usage reset` lists it
+
+FLAGS
+  -j, --json               Output usage reports as JSON
+  -p, --provider=<value>   Only show usage for this provider id (e.g. anthropic)
+  -r, --redact             Redact account emails/ids (shortest unique prefix) for sharing screenshots
+      --history            Show recorded usage-limit history (hourly snapshots) instead of a live snapshot
+  -d, --days=<int>         History window in days (with --history or clients)
+  -e, --extension=<value>  Load an extension file before fetching usage (repeatable)
+      --no-extensions      Disable extension discovery (explicit -e paths still work)
+
+EXAMPLES
+  # Detailed per-account usage breakdown across all providers
+    omp usage
+  # Only Anthropic accounts
+    omp usage --provider anthropic
+  # Redact account identifiers for screenshots
+    omp usage --redact
+  # Machine-readable output
+    omp usage --json
+  # Usage-limit trend over the last 30 days
+    omp usage --history --days 30
+  # Per-client token burn (which machine/app spent what) over the last 30 days
+    omp usage clients --days 30
+  # OAuth identity keys for task.agentAccountPools (no tokens)
+    omp usage accounts
+  # Saved Codex and Claude rate-limit resets per account, with each account's credential id
+    omp usage reset
+  # Spend one saved reset on a listed account
+    omp usage reset codex/3
+  # Invalidate cached usage reports for all providers
+    omp usage invalidate
+  # Invalidate cached usage reports for a specific provider
+    omp usage invalidate --provider anthropic

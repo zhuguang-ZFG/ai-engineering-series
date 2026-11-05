@@ -1,0 +1,3 @@
+$ omp config get mcp.startupTimeoutMs
+250
+exit=0

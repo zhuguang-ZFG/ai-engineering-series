@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">Tab 一下，参数表自己跟上来。</title><desc id="desc">omp completions 由当前 CLI 元数据生成，bash/zsh/fish。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">CLI 补全</text>
+
+<text x="72" y="171" class="ink" font-size="48">Tab 一下，参数表自己跟上来。</text>
+<text x="74" y="219" class="muted" font-size="24">补全由当前这份 CLI 元数据生成，不会慢慢漂掉。</text>
+<rect x="96" y="300" width="420" height="420" rx="14" class="soft"/>
+<text x="128" y="360" class="ink" font-size="28">生成脚本</text>
+<rect x="128" y="400" width="356" height="64" rx="8" class="card"/>
+<text x="148" y="442" class="mono" font-size="22">omp completions zsh</text>
+<rect x="128" y="484" width="356" height="64" rx="8" class="card"/>
+<text x="148" y="526" class="mono" font-size="22">omp completions bash</text>
+<rect x="128" y="568" width="356" height="64" rx="8" class="card"/>
+<text x="148" y="610" class="mono" font-size="22">omp completions fish</text>
+<text x="128" y="680" class="muted" font-size="18">写入 rc 后新开 shell</text>
+<path d="M550 510 H640" class="flow"/>
+<rect x="660" y="300" width="700" height="420" rx="14" class="soft"/>
+<text x="700" y="360" class="ink" font-size="28">敲 omp 再按 Tab</text>
+<rect x="700" y="400" width="620" height="240" rx="10" fill="#252923"/>
+<text x="730" y="460" fill="#9BE39B" font-family="Consolas,monospace" font-size="24">omp --</text>
+<text x="730" y="520" fill="#E8E5D9" font-family="Consolas,monospace" font-size="22">--model    --smol    --slow</text>
+<text x="730" y="570" fill="#E8E5D9" font-family="Consolas,monospace" font-size="22">--plan     --resume  --help</text>
+<text x="700" y="690" class="muted" font-size="20">旗标 / 枚举静态；模型与会话动态解析</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文 §4.8 · Shell 补全</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 安装</text>
+</svg>

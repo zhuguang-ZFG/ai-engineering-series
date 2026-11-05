@@ -1,0 +1,29 @@
+$ omp skill list
+code-tour	Create CodeTour `.tour` files — persona-targeted, step-by-step walkthroughs with real file and line anchors. Use for onboarding tours, architecture walkthroughs, PR tours, RCA tours, and structured "explain how this works" requests.
+council	Convene a four-voice council for ambiguous decisions, tradeoffs, and go/no-go calls. Use when multiple valid paths exist and you need structured disagreement before choosing.
+e2e-testing	Playwright E2E testing patterns, Page Object Model, configuration, CI/CD integration, artifact management, and flaky test strategies.
+error-handling	Patterns for robust error handling across TypeScript, Python, and Go. Covers typed errors, error boundaries, retries, circuit breakers, and user-facing error messages.
+handdraw-style-prompter	Turn a 001–367 hand-drawn and realistic style number and image theme into bilingual prompts, using model capability data to decide when core traits and a numbered reference image are required.
+production-audit	Local-evidence production readiness audit for shipped apps, pre-launch reviews, post-merge checks, and "what breaks in prod?" questions without sending repo data to an external audit service.
+reverse-engineer-anything	Reverse engineer native, managed, Electron/JavaScript, packaged, firmware, and browser targets with REA. Use shipped-artifact or requested runtime evidence to explain features, compare versions, decompile code, or guide a reconstruction. Skip REA for ordinary source-repository architecture analysis.
+sepia	Make AI-generated writing read as human-written, in fiction and in professional prose. Repairs the narrative architecture of fiction and stories (based on StoryScope, arXiv:2604.03136); routes professional text through domain rules for release notes, announcements, PR and issue replies, code-review comments, incident postmortems, tickets, work orders, technical articles, blog posts, and long-form journalism. Four operations - write, review (diagnose AI tells without editing), refactor (minimal in-place edits), recreate (full rewrite). Use when asked to humanize, de-AI, unslop, or strip AI flavor from any text; when writing or revising any of these document types; or whenever output must not read as machine-written.
+sepia-hemingway	Use when a user asks to write or revise fiction in the Hemingway manner, or asks for strong de-AI on a story; applies Sepia's built-in Hemingway voice profile.
+sepia-recreate	Use when a user explicitly requests Sepia recreate for a full rewrite.
+sepia-refactor	Use when a user explicitly requests Sepia refactor for minimal in-place prose revision.
+sepia-review	Use when a user explicitly requests Sepia review to diagnose prose without editing.
+sepia-write	Use when a user explicitly requests Sepia write to create new prose.
+skill-scout	Search existing local, marketplace, GitHub, and web skill sources before creating a new skill. Use when the user wants to create, build, fork, or find a skill for a workflow.
+skill-stocktake	Use when auditing Claude skills and commands for quality. Supports Quick Scan (changed skills only) and Full Stocktake modes with sequential subagent batch evaluation.
+tdd-workflow	Use this skill when writing new features, fixing bugs, or refactoring code. Enforces test-driven development with 80%+ coverage including unit, integration, and E2E tests.
+trellis-break-loop	Deep bug analysis to break the fix-forget-repeat cycle. Analyzes root cause category, why fixes failed, prevention mechanisms, and captures knowledge into specs. Use after fixing a bug to prevent the same class of bugs.
+trellis-channel	Use Trellis channel for multi-agent collaboration, workers, review, and debugging.
+trellis-continue	Resume work on the current task. Loads the workflow Phase Index, figures out which phase/step to pick up at, then pulls the step-level detail via get_context.py --mode phase. Use when coming back to an in-progress task and you need to know what to do next.
+trellis-finish-work	Wrap up the current session: verify quality gate passed, remind user to commit, archive completed tasks, and record session progress to the developer journal. Use when done coding and ready to end the session.
+trellis-meta	Understand and customize local Trellis architecture, hooks, settings, skills, and workflows.
+trellis-session-insight	Use for recalling past AI conversations across sessions; not for fresh questions.
+trellis-spec-bootstrap	Bootstrap project Trellis coding specs with a single-agent workflow.
+trellis-start	Initializes an AI development session by reading workflow guides, developer identity, git status, active tasks, and project guidelines from .trellis/. Classifies incoming tasks and routes to brainstorm, direct edit, or task workflow. Use when beginning a new coding session, resuming work, starting a new task, or re-establishing project context.
+trellis-update-spec	Captures executable contracts and coding conventions into .trellis/spec/ documents. Use when learning something valuable from debugging, implementing, or discussion that should be preserved for future sessions.
+verification-loop	A comprehensive verification system for Claude Code sessions.
+windows-desktop-e2e	E2E testing for Windows native desktop apps (WPF, WinForms, Win32/MFC, Qt) using pywinauto and Windows UI Automation.
+exit=0

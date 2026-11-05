@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">能调用的，才算进了集合。</title><desc id="desc">扩展与自定义工具最终也要进入已注册且策略允许的集合。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">工具注册表</text>
+
+<text x="72" y="171" class="ink" font-size="52">能调用的，才算进了集合。</text>
+<text x="74" y="219" class="muted" font-size="24">模型只能调用已注册且策略允许的工具。</text>
+<rect x="96" y="300" width="360" height="400" rx="14" class="soft"/>
+<text x="128" y="360" class="ink" font-size="26">内置 essential</text>
+<text x="128" y="420" class="muted" font-size="20">read / edit / bash …</text>
+<text x="128" y="480" class="muted" font-size="20">默认在册</text>
+<rect x="500" y="300" width="360" height="400" rx="14" class="soft"/>
+<text x="532" y="360" class="ink" font-size="26">Custom tools</text>
+<text x="532" y="420" class="muted" font-size="20">你的 handler</text>
+<text x="532" y="480" class="muted" font-size="20">须注册描述</text>
+<rect x="904" y="300" width="440" height="400" rx="14" class="soft"/>
+<text x="936" y="360" class="ink" font-size="26">Extensions</text>
+<text x="936" y="420" class="muted" font-size="20">扩展注册的工具</text>
+<text x="936" y="480" class="muted" font-size="20">走同一注册表</text>
+<path d="M276 720 V760" class="flow"/><path d="M680 720 V760" class="flow"/><path d="M1124 720 V760" class="flow"/>
+<path d="M276 760 H1124" stroke="#DB582C" stroke-width="3" fill="none"/>
+<rect x="420" y="780" width="600" height="50" rx="8" fill="#DB582C"/>
+<text x="480" y="814" class="white" font-size="22">可调用集合 = 注册 ∩ 策略允许</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文 §33.3 · 工具注册表</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 总览</text>
+</svg>

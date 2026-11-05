@@ -1,0 +1,3 @@
+$ omp config get autolearn.enabled
+false
+exit=0

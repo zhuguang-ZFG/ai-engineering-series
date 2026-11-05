@@ -1,0 +1,18 @@
+Preview tool, composer, and status-line renderers in a deterministic visual gallery
+
+USAGE
+  $ omp gallery [FLAGS]
+
+FLAGS
+      --surface=<value>   Render only tool, composer, or segment surfaces (repeatable; default: all)
+  -t, --tool=<value>      Render a single tool by name
+      --composer=<value>  Render a single composer shape by name
+      --segment=<value>   Render a single status-line segment by name
+  -s, --state=<value>     Render only the given lifecycle state(s)
+  -w, --width=<int>       Render width in columns
+  -e, --expanded          Render the expanded variant of each renderer
+      --plain             Strip ANSI styling from the output
+      --screenshot        Capture the rendered output as PNG screenshot(s) via VHS instead of printing ANSI (requires vhs)
+  -o, --out=<value>       Screenshot output path (with --screenshot); suffixed per image when split across multiple
+      --font=<value>      Screenshot font family (default: JetBrainsMono Nerd Font)
+      --font-size=<int>   Screenshot font size in points (default: 18)

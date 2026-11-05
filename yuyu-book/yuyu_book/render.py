@@ -12,6 +12,8 @@ import html
 import re
 import unicodedata
 
+from pathlib import Path
+
 import markdown
 from markdown.extensions.toc import TocExtension
 from markdown.extensions.codehilite import CodeHiliteExtension
@@ -234,18 +236,29 @@ def inline_images(doc: str, file: str) -> str:
 
     The audit counts any `<img>` whose src is not `data:` as a hole in the
     offline guarantee, so failing here is the friendly version of a red build
-    on someone's plane.
+    on someone's plane. Unit-relative paths (omp hand-drawn `images/…`) resolve
+    against the manuscript file and stay inside the repo root.
     """
+    from .core import REPO_ROOT
+
     def repl(m):
         src = m.group(2)
         if src.startswith("data:"):
             return m.group(0)
-        if not src.startswith(ART_REF):
+        if src.startswith(ART_REF):
+            return (f'<img{m.group(1)}src="{art.photo(src[len(ART_REF):])}"'
+                    f'{m.group(3)}>')
+        rel = (Path(file).parent / src).as_posix()
+        path = (REPO_ROOT / rel).resolve()
+        try:
+            path.relative_to(REPO_ROOT.resolve())
+        except ValueError as exc:
             raise BuildError(
-                f"{file}: <img src=\"{src}\"> reaches outside the book — a "
-                "photograph belongs in illustrations/ so it can travel inside "
-                "the single file")
-        return (f'<img{m.group(1)}src="{art.photo(src[len(ART_REF):])}"'
+                f"{file}: <img src=\"{src}\"> escapes the repository"
+            ) from exc
+        if not path.is_file():
+            raise BuildError(f"{file}: <img src=\"{src}\"> missing at {rel}")
+        return (f'<img{m.group(1)}src="{art.photo_path(path, label=rel)}"'
                 f'{m.group(3)}>')
     return _IMG_TAG_RE.sub(repl, doc)
 

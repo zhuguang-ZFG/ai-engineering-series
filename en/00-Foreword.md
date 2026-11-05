@@ -1,5 +1,17 @@
 # Foreword
 
+> **In one line:** The model only provides the muscle; the cart is what actually travels. Whether you dare hand a task over depends on the structure of the cart, not the speed of the horse.
+
+Start with something you have probably met: you ask an AI coding assistant to fix one bug, it replies "fixed", you run the tests and three fail -- it had edited a second file along the way, and rereading the transcript you cannot find the step where it started deciding for you. The model said the sentence; the ring of code around it chose which files it could read, which it could rewrite, and when it had to ask you first. This book takes that ring apart.
+
+**Learning Objectives:** By the end of this foreword, you can:
+
+- say in your own words which layer the term Agent Harness refers to, and name three things it owns;
+- find yourself among the four reader profiles below, pick a path, and state what it skips and what that costs;
+- use the knowledge map later in this foreword to name the problem each of Chapters 1-4 solves, and why they come in that order.
+
+**Difficulty:** no code here. Having used any AI coding assistant once is enough.
+
 ## Yù Yú: From Chariot-Making to Agent-Building
 
 > *"Of all artifacts that bring many crafts together, the chariot calls upon the most."* -- *Kǎo Gōng Jì* (The Book of Crafts)
@@ -123,9 +135,7 @@ The timing for this book is right, for three reasons:
 
 Choosing Claude Code as the subject of analysis for this book is not based on a preference for any particular company, but on several objective judgments:
 
-**First, architectural representativeness.** Claude Code covers all core subsystems of an Agent Harness: tool type system, permission pipeline, state management, context compression, MCP protocol integration, and sub-agent dispatch. Understanding Claude Code's architecture establishes a mental model you can transfer to any Agent framework.
-
-To use an analogy: studying Claude Code's architecture is like a medical student studying human anatomy -- although every patient is a different individual, the basic structure of bones, muscles, nerves, and blood vessels is the same. Once you master this "standard anatomy chart," you can understand the "body structure" of any Agent system.
+**First, architectural representativeness.** Claude Code covers all core subsystems of an Agent Harness: tool type system, permission pipeline, state management, context compression, MCP protocol integration, and sub-agent dispatch. Understanding Claude Code's architecture establishes a mental model you can transfer to any Agent framework -- every builder wires a different machine, but the bones, muscles, nerves and vessels are the same.
 
 **Second, traceability of engineering decisions.** Claude Code's design is full of meaningful traces of engineering decisions. For example:
 
@@ -190,6 +200,14 @@ flowchart TB
 
 **If you are an architect (Evaluation Path):** Focus on Chapter 1 (architectural overview), Chapter 2 (core loop design), and Chapter 4 (permission pipeline), then jump directly to Part 4. This path helps you evaluate the design space and engineering complexity of Agent Harness in the shortest possible time.
 
+Whatever path you pick, three habits are where readers usually stumble:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Reading straight from Chapter 1 to Chapter 15, quitting at Chapter 7 | Read Chapters 1 and 2 first to get the groundwork, then backtrack on demand |
+| Jumping to Chapter 15 to build a harness, then getting stuck at the four permission stages | Do Chapter 3's tool contract and Chapter 4's pipeline before you write any code |
+| Refusing to turn the page until every source excerpt has been read line by line | Read each chapter's opening one-liner and closing takeaways first; follow one thread of source to the end |
+
 ### Knowledge Map and Chapter Connections
 
 The chapters in this book have tight cross-reference relationships. Understanding these connections helps you build a systematic cognitive framework:
@@ -198,6 +216,8 @@ The chapters in this book have tight cross-reference relationships. Understandin
 - **Chapter 2**'s dialog main loop is the "hub" of the book -- it connects the tool system (Chapter 3), the permission pipeline (Chapter 4), context management (Part 2), and sub-agent dispatch (Part 3).
 - **Chapter 3**'s tool type system defines the interface contract checked by Chapter 4's permission pipeline, while Chapter 3's orchestration engine depends on Chapter 2's async generator pattern.
 - **Chapter 4**'s permission pipeline embeds into Chapter 2's dialog main loop and Chapter 3's tool execution flow, embodying the "embedded security boundaries" design principle.
+
+> **Cross-Reference:** to get the model-side background first, see Chapter 2 of the omp volume, "Minimum Necessary Knowledge About Large Models".
 
 ## About This Book
 

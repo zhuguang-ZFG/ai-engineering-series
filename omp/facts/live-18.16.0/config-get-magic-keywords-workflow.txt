@@ -1,0 +1,3 @@
+$ omp config get magicKeywords.workflow
+true
+exit=0

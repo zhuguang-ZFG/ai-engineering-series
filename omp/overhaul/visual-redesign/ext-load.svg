@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">动作方法别抢跑。</title><desc id="desc">import → factory → initialize → events；initialize 前别调动作 API。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">扩展生命周期</text>
+
+<text x="72" y="171" class="ink" font-size="52">动作方法别抢跑。</text>
+<text x="74" y="219" class="muted" font-size="24">import → factory → initialize → events；pi.exec 在 load 阶段可用。</text>
+<rect x="100" y="360" width="260" height="200" rx="14" class="soft"/>
+<text x="140" y="440" class="ink" font-size="28">01 import</text>
+<text x="140" y="500" class="muted" font-size="20">加载模块</text>
+<path d="M380 460 H450" class="flow"/>
+<rect x="470" y="360" width="260" height="200" rx="14" class="soft"/>
+<text x="510" y="440" class="ink" font-size="28">02 factory</text>
+<text x="510" y="500" class="muted" font-size="20">创建扩展实例</text>
+<path d="M750 460 H820" class="flow"/>
+<rect x="840" y="360" width="260" height="200" rx="14" class="hi"/>
+<text x="870" y="440" class="ink" font-size="28">03 initialize</text>
+<text x="870" y="500" class="muted" font-size="20">动作 API 就绪</text>
+<path d="M1120 460 H1190" class="flow"/>
+<rect x="1200" y="360" width="180" height="200" rx="14" class="soft"/>
+<text x="1230" y="440" class="ink" font-size="26">04 events</text>
+<text x="1225" y="500" class="muted" font-size="18">订阅回调</text>
+<rect x="100" y="620" width="1280" height="120" rx="12" class="warn"/>
+<text x="140" y="690" class="ink" font-size="24">sendMessage / appendEntry 等：等 initialize 之后再调用</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文第 22 章 · 扩展加载</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 扩展</text>
+</svg>

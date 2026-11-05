@@ -1,0 +1,15 @@
+Replay a /record session recording in the terminal (space pauses, q quits)
+
+USAGE
+  $ omp play [FILE] [FLAGS]
+
+ARGUMENTS
+  FILE   Recording to play (default: the newest /record capture)
+
+FLAGS
+  -s, --speed=<value>       Playback speed multiplier (default: 1)
+  -i, --idle-limit=<value>  Cap pauses between frames to this many seconds
+
+EXAMPLES
+  omp play
+  omp play /tmp/omp-recordings/2026-09-22T10-00-00-1a2b3c4d.ompcast -s 2 -i 1

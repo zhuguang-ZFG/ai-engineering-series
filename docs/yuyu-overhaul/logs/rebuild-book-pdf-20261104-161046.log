@@ -1,0 +1,9 @@
++ C:\Users\<用户名>\scoop\apps\python313\current\python.exe yuyu-book/build.py --mermaid render --lang both --pdf
+[zh]
+  yuyu-agent-harness-zh.html: 5.8 MB, 20 units, 176 plates, 3 cited links, 296 glosses, 20 lead bands, 105 tier chips, 20 emblems, 4 headpieces, 20 keeper notes
+  yuyu-agent-harness-zh.pdf: 25.1 MB, 518 pages, 28 bookmarks, 14 index folios
+[en]
+  yuyu-agent-harness-en.html: 5.9 MB, 20 units, 176 plates, 3 cited links, 304 glosses, 20 lead bands, 105 tier chips, 20 emblems, 4 headpieces, 20 keeper notes
+  yuyu-agent-harness-en.pdf: 12.6 MB, 569 pages, 28 bookmarks, 14 index folios
+OK
+BOOK_EXIT=0

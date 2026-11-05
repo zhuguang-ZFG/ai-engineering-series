@@ -1,0 +1,4 @@
+Run omp as an ACP (Agent Client Protocol) server over stdio
+
+USAGE
+  $ omp acp

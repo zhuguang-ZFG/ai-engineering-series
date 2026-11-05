@@ -30,12 +30,12 @@ FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 ZH_PATTERNS = [
     (re.compile(r"^#\s*前言\s*$"), "front", ("", "前言")),
     (re.compile(r"^#\s*第\s*(\d{1,2})\s*章\s*[：:]?\s*(.+)$"), "num", None),
-    (re.compile(r"^#\s*附录\s*([A-D])\s*[：:]?\s*(.+)$"), "apx", None),
+    (re.compile(r"^#\s*附录\s*([A-E])\s*[：:]?\s*(.+)$"), "apx", None),
 ]
 EN_PATTERNS = [
     (re.compile(r"^#\s*Foreword\s*$"), "front", ("", "Foreword")),
     (re.compile(r"^#\s*Chapter\s+(\d{1,2})[：:]?\s*(.+)$"), "num", None),
-    (re.compile(r"^#\s*Appendix\s+([A-D])[：:]?\s*(.+)$"), "apx", None),
+    (re.compile(r"^#\s*Appendix\s+([A-E])[：:]?\s*(.+)$"), "apx", None),
 ]
 
 
@@ -334,30 +334,38 @@ def validate_configs(manifest: dict, sources: dict) -> None:
     if len(ids) != len(set(ids)):
         errors.append("duplicate unit ids in manifest")
 
+    langs = list(manifest.get("langs") or ("zh", "en"))
     for unit_def, kind, _part in unit_stream(manifest):
-        for lang in ("zh", "en"):
+        for lang in langs:
+            if lang not in unit_def:
+                errors.append(f"unit {unit_def['id']}: missing {lang} path key")
+                continue
             p = REPO_ROOT / unit_def[lang]
             if not p.exists():
                 errors.append(f"unit {unit_def['id']}: missing {lang} file "
                               f"{unit_def[lang]}")
 
     guides = manifest.get("guides", {})
-    if set(guides) != set(ids):
-        missing = sorted(set(ids) - set(guides))
-        extra = sorted(set(guides) - set(ids))
-        if missing:
-            errors.append(f"guides missing for: {', '.join(missing)}")
-        if extra:
-            errors.append(f"guides for unknown units: {', '.join(extra)}")
-    for uid, guide in guides.items():
-        for f in GUIDE_FIELDS:
-            entry = guide.get(f) or {}
-            for lang in ("zh", "en"):
-                if not (entry.get(lang) or "").strip():
-                    errors.append(f"guide {uid}.{f}.{lang} is empty")
-        for sid in guide.get("sources", []):
-            if sid not in sources:
-                errors.append(f"guide {uid}: unknown source id {sid!r}")
+    plain_optional = bool(manifest.get("plain_optional"))
+    if plain_optional and not guides:
+        pass
+    else:
+        if set(guides) != set(ids):
+            missing = sorted(set(ids) - set(guides))
+            extra = sorted(set(guides) - set(ids))
+            if missing:
+                errors.append(f"guides missing for: {', '.join(missing)}")
+            if extra:
+                errors.append(f"guides for unknown units: {', '.join(extra)}")
+        for uid, guide in guides.items():
+            for f in GUIDE_FIELDS:
+                entry = guide.get(f) or {}
+                for lang in langs:
+                    if not (entry.get(lang) or "").strip():
+                        errors.append(f"guide {uid}.{f}.{lang} is empty")
+            for sid in guide.get("sources", []):
+                if sid not in sources:
+                    errors.append(f"guide {uid}: unknown source id {sid!r}")
 
     for sid, src in sources.items():
         if not SOURCE_ID_RE.match(sid):
@@ -398,9 +406,10 @@ def validate_configs(manifest: dict, sources: dict) -> None:
         raise BuildError("config invalid:\n  " + "\n  ".join(errors))
 
 
-def load_configs():
+def load_configs(manifest_name: str = "manifest.json",
+                 sources_name: str = "sources.json"):
     from . import registry
-    manifest = registry.load("manifest.json")
-    sources = registry.load("sources.json")
+    manifest = registry.load(manifest_name)
+    sources = registry.load(sources_name)
     validate_configs(manifest, sources)
     return manifest, sources

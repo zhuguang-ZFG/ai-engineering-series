@@ -1,0 +1,19 @@
+# 2026-11-04 09:23:08 M4 Step 2 双入口 smoke
+## build --product book --lang zh -> .scratch/book-smoke
++ C:\Users\<用户名>\scoop\apps\python313\current\python.exe yuyu-book/build.py --mermaid render --lang zh --out-dir yuyu-book/.scratch/book-smoke
+[zh]
+  yuyu-agent-harness-zh.html: 5.8 MB, 20 units, 176 plates, 3 cited links, 296 glosses, 20 lead bands, 105 tier chips, 20 emblems, 4 headpieces, 20 keeper notes
+OK
+book_exit=0
+
+## build --product omp --lang zh -> .scratch/omp-smoke
++ C:\Users\<用户名>\scoop\apps\python313\current\python.exe yuyu-book/build.py --mermaid render --lang zh --manifest manifest-omp.json --sources sources-omp.json --out-dir yuyu-book/.scratch/omp-smoke
+[zh]
+  yuyu-omp-zh.html: 20.0 MB, 39 units, 1 plates, 3 cited links, 242 glosses, 39 lead bands, 381 tier chips, 0 emblems, 0 headpieces, 39 keeper notes
+OK
+omp_exit=0
+## build --lang en (html only) -> .scratch/en-smoke
+[en]
+  yuyu-agent-harness-en.html: 5.9 MB, 20 units, 176 plates, 3 cited links, 303 glosses, 20 lead bands, 105 tier chips, 20 emblems, 4 headpieces, 20 keeper notes
+OK
+en_exit=0

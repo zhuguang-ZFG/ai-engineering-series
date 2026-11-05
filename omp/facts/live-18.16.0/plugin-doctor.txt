@@ -1,0 +1,10 @@
+Plugin Health Check
+
+✔ plugins_directory: Found at C:\Users\<用户名>\.omp\plugins
+✔ package_manifest: Found
+✔ node_modules: Found
+✔ plugin:omp-cache-optimizer: v1.2.3 - Improve OMP prompt/KV cache hit rates with safer prompt churn cleanup, proxy compat warnings, and footer cache stats.
+✔ plugin:omp-model-profile: v0.2.4 - Named model-role profiles for omp — switch your whole Architect/Default/Subtask model set with /model-profile
+✔ plugin:pi-hermes-memory: v0.9.11 - 🧠 Persistent memory + 🔍 session search + 🛡️ secret scanning for Pi. Token-aware policy-only memory by default, SQLite FTS5 search, auto-consolidation, procedural skills. 732 tests. Ported from Hermes agent.
+
+Summary: 6 ok, 0 warnings, 0 errors

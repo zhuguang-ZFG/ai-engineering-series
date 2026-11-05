@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">配置，谁说了算？</title><desc id="desc">六层优先级由高到低排列，上层未设置才回落；profile 选择全局配置目录。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.paper{fill:#FAF7EF}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/><path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/><text x="132" y="88" class="muted" font-size="20">配置与 profile</text><text x="72" y="171" class="ink" font-size="58">配置，谁说了算？</text><text x="74" y="219" class="muted" font-size="24">按优先级查找 · 首个已设置的值生效</text><path d="M110 299 H885 V363 H108 Z" fill="#E9E7DB"/>
+<path d="M104 291 Q492 288 880 292 L878 356 Q492 359 106 356 Z" fill="#DB582C" stroke="#DB582C" stroke-width="1.5"/>
+<text x="126" y="334" class="white" font-size="19">01</text>
+<text x="176" y="334" class="white" font-size="25">设置环境变量</text>
+<text x="625" y="333" class="white" font-size="18">PI_SMOL_MODEL</text><path d="M144 377 H885 V441 H142 Z" fill="#E9E7DB"/>
+<path d="M138 369 Q509 366 880 370 L878 434 Q509 437 140 434 Z" fill="#FFFDF7" stroke="#ABB19F" stroke-width="1.5"/>
+<text x="160" y="412" class="muted" font-size="19">02</text>
+<text x="210" y="412" class="ink" font-size="25">运行时覆盖</text>
+<text x="625" y="411" class="muted" font-size="18">--smol / --slow</text><path d="M178 455 H885 V519 H176 Z" fill="#E9E7DB"/>
+<path d="M172 447 Q526 444 880 448 L878 512 Q526 515 174 512 Z" fill="#FFFDF7" stroke="#ABB19F" stroke-width="1.5"/>
+<text x="194" y="490" class="muted" font-size="19">03</text>
+<text x="244" y="490" class="ink" font-size="25">CLI 配置叠加</text>
+<text x="625" y="489" class="muted" font-size="18">--config</text><path d="M212 533 H885 V597 H210 Z" fill="#E9E7DB"/>
+<path d="M206 525 Q543 522 880 526 L878 590 Q543 593 208 590 Z" fill="#FFFDF7" stroke="#ABB19F" stroke-width="1.5"/>
+<text x="228" y="568" class="muted" font-size="19">04</text>
+<text x="278" y="568" class="ink" font-size="25">项目配置</text>
+<text x="625" y="567" class="muted" font-size="18">.omp/config.yml</text><path d="M246 611 H885 V675 H244 Z" fill="#E9E7DB"/>
+<path d="M240 603 Q560 600 880 604 L878 668 Q560 671 242 668 Z" fill="#FFFDF7" stroke="#ABB19F" stroke-width="1.5"/>
+<text x="262" y="646" class="muted" font-size="19">05</text>
+<text x="312" y="646" class="ink" font-size="25">用户 / profile 配置</text>
+<text x="625" y="645" class="muted" font-size="18">活动 agent 目录</text><path d="M280 689 H885 V753 H278 Z" fill="#E9E7DB"/>
+<path d="M274 681 Q577 678 880 682 L878 746 Q577 749 276 746 Z" fill="#FFFDF7" stroke="#ABB19F" stroke-width="1.5"/>
+<text x="296" y="724" class="muted" font-size="19">06</text>
+<text x="346" y="724" class="ink" font-size="25">内置默认值</text>
+<text x="625" y="723" class="muted" font-size="18">设置定义</text><path d="M924 326V721" class="flow"/><text x="951" y="410" class="ink" font-size="24">这一层没设置？</text><text x="951" y="449" class="muted" font-size="22">继续向下找。</text>
+<path d="M950 543 Q1080 534 1325 542" fill="none" stroke="#DB582C" stroke-width="2"/>
+<text x="951" y="589" class="ink" font-size="27">profile 不是第七层</text><text x="951" y="633" class="muted" font-size="21">它选择用户配置的存放位置，</text><text x="951" y="672" class="muted" font-size="21">不增加一层优先级。</text><path d="M72 858H1368" stroke="#CFD0C4"/><text x="72" y="907" class="muted" font-size="20">对应正文 §23.1 · 六层优先级</text><text x="1100" y="907" class="muted" font-size="18">OMP / 配置</text></svg>

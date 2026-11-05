@@ -3,19 +3,20 @@
 > **In one line:** Too many carts call for a dispatcher who never cracks the whip: it hauls no load itself, only assigns who takes which road.
 
 > **Learning Objectives:**
-> - See how the Coordinator pattern splits work between coordinator and workers, and why it splits it there
-> - Walk the full multi-agent workflow, from requirements to verified delivery
-> - Work out how tasks get assigned, how failures get picked up, and how workers share the Scratchpad
-> - Choose correctly between the Coordinator pattern and the Fork pattern
+> - Say why the coordinator holds only four tools, and why it must do the "understanding" itself
+> - Lay out the Research → Synthesis → Implementation → Verification phases for a multi-step task, and mark which ones may run in parallel and which may not
+> - Choose correctly between the Coordinator pattern and the Fork pattern, and name what that choice costs
 
 **Difficulty:** 10.1 is Start, 10.3–10.5 and 10.7 are Core; 10.2 tool allocation and 10.6 fault recovery are Advanced — skip them on a first read and come back when you build.
+
+You switch on Coordinator mode for a repository of tens of thousands of lines and ask it to finish a whole notification system. It sends out three researchers, collects three sets of notes, then writes the implementer a single line: "implement this based on their findings." Four hours later you barely recognise the delivery. The implementer had re-read all three modules from scratch, edited a file another worker was editing, and the token bill came in higher than the single-agent run would have cost.
+
+Read the coordinator's system prompt again and you can see where the money went: it holds four tools, none of them an execution tool, and the prompt explicitly forbids writing "based on your findings." Whoever assigns the work has to read the findings itself and write a spec that names the files. How many workers to spawn, which step may run in parallel, and who covers for whoever drops out — that is the coordinator's actual job.
 
 <!-- block: ch10.b-da6098f1 -->
 When a single agent cannot handle complex engineering tasks, Claude Code provides the Coordinator pattern -- a centralized multi-agent orchestration solution. Unlike the Fork pattern's peer-to-peer parallelism, the Coordinator pattern employs a "coordinator-worker" architecture, where a dedicated coordinator manages the lifecycle and task allocation of multiple parallel workers.
 
 This is like how a construction site operates: the project manager (Coordinator) doesn't need to lay bricks, run wiring, or install pipes personally, but they need to know which workers (Workers) are good at what, which tasks can run in parallel, which have dependencies, and how to coordinate shared resources (Scratchpad). When a worker encounters a problem, the project manager needs to decide whether to reassign the task or adjust the overall plan.
-
-This chapter will dive deep into the source code design, revealing the design philosophy behind this enterprise-grade orchestration pattern.
 
 ---
 
@@ -430,6 +431,16 @@ gantt
 
 The system prompt also encourages the coordinator to "fan out" -- initiating multiple parallel worker calls in a single message. This runs on Claude's parallel tool calls, so multiple workers can start simultaneously.
 
+Spawning more is not the same as finishing sooner. Five wrong turns account for most of the waste:
+
+| Wrong turn | What actually happens | The right move |
+|---|---|---|
+| Send ten workers into the Research phase, assuming parallelism scales linearly | A worker only sees the task assigned to it, so each one investigates from scratch, and the coordinator still has to read every result before writing a spec — the resource overhead is already higher than Fork | Cut the work by dimension — one worker each for API, database, dependencies — spawn three or four, and let the coordinator write the spec once |
+| Ask worker A to check worker B's output, saving one assignment | Information passes down a chain and loses detail at every hop, and a wrong result has to be traced back layer by layer | The coordinator receives every worker's result directly, reads it, and writes the next instruction itself |
+| Put "implement this based on your findings" in the spec | The system prompt forbids exactly that wording; it delegates understanding along with the work | Name the concrete file paths, line numbers and edits in the spec |
+| Run two write-heavy tasks over the same set of files at once | The concurrency policy gives write-heavy work one worker per file set; two writers on the same files is a write conflict | Assign workers along file boundaries, and parallelise only across different file regions |
+| Delete the team while workers are still running | Task notifications never reach the coordinator, the Scratchpad is cleared mid-read, and half the worktree changes are lost | Wait for every member to finish; clean up directory, then worktree, then team context |
+
 ### Task Notification Protocol
 
 When workers complete, they deliver results to the coordinator in `<task-notification>` XML format:
@@ -636,6 +647,8 @@ flowchart TD
 ```ill
 ch10-coordinator-fork
 ```
+
+> **Cross-reference:** Plan first, then execute, and split lead from hand — another harness solves the same problem in omp volume Chapter 13, *Planning and Collaboration*.
 
 ---
 

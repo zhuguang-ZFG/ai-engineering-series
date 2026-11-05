@@ -1,0 +1,29 @@
+List, search, and refresh available models
+
+USAGE
+  $ omp models [ACTION] [PATTERN] [FLAGS]
+
+ARGUMENTS
+  ACTION    ls (default) | find | refresh | <provider>
+  PATTERN   Filter/search substring, or provider name (required for find)
+
+FLAGS
+      --json               Output JSON
+      --kind=<value>       Catalog kind to list
+  -e, --extension=<value>  Load an extension file before listing (repeatable)
+      --no-extensions      Disable extension discovery (explicit -e paths still work)
+      --config=<value>     Load an extra config.yml-style overlay for this run (repeatable)
+
+EXAMPLES
+  # List available chat models, grouped by provider
+    omp models
+  # List models of every catalog kind
+    omp models --kind all
+  # List one provider's models (any provider name works)
+    omp models openai-codex
+  # Find models by substring
+    omp models find minimax
+  # Force a fresh catalog fetch (replaces rm -rf ~/.omp/models.db)
+    omp models refresh
+  # Machine-readable output
+    omp models --json

@@ -1,0 +1,3 @@
+$ omp config get magicKeywords.ultrathink
+true
+exit=0

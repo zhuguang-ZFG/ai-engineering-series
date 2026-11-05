@@ -1,0 +1,3 @@
+$ omp read memory://root
+File-backed memory artifacts only exist with memory.backend=local (active backend: mnemopi). Use `recall`/`reflect` to search Mnemopi memories, or `read memory://<memory-id>` for a full row.
+exit=1

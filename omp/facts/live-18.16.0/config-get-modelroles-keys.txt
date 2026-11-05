@@ -1,0 +1,17 @@
+$ omp config get modelRoles
+# 模型 id 含本机私有网关名，一律不入库；此处只保留角色键名（脱敏）
+advisor
+chore_worker
+commit
+default
+designer
+memory
+plan
+scout_worker
+slow
+smol
+task
+tiny
+vision
+
+exit=0

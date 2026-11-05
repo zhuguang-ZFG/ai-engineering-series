@@ -1,0 +1,16 @@
+Check for and install updates
+
+USAGE
+  $ omp update [FLAGS]
+
+FLAGS
+  -f, --force    Force update
+  -c, --check    Check for updates without installing
+  -l, --plugins  Update installed plugins
+      --canary   Switch to the canary channel and update
+      --stable   Switch back to the stable channel
+
+EXAMPLES
+  omp update
+  omp update --check
+  omp update --canary

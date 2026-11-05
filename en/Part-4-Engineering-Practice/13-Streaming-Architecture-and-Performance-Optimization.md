@@ -5,7 +5,16 @@
 > "Premature optimization is the root of all evil -- but latency is the root of all user complaints."
 > -- adapted from Donald Knuth
 
-**Learning Objectives:** How the streaming architecture gets the first token on screen sooner; how QueryEngine owns one query's full lifecycle; how StreamingToolExecutor runs work concurrently without giving up safety; what parallel prefetching, lazy loading and prompt caching each take off the bill. By the end of this chapter you can give an Agent system a performance checkup: find the bottleneck, price it, and fix the right thing.
+<!-- block: ch13.b-e7488614 -->
+
+Picture a stall you've lived through. You ask the agent to read three logs and then change one line. The output pane spins for fifteen seconds and prints nothing; you assume it died and hit Ctrl+C, and all three tools stop mid-flight. Another time it's worse: it reads the same file three times, and the extra charge on the bill is cache-creation tokens, not the model's thinking.
+
+Both failures live in the same layer: whether the pipeline waits until a chunk is complete before emitting it, or forwards it the moment it arrives, and whether the tokens you save actually land in the cache. This chapter takes that layer apart.
+
+> **What you can do after this chapter:**
+> - Say why the first character can hit the wire early in a streaming pipeline, and give an Agent system a performance checkup: find the bottleneck, price it
+> - Predict whether a tool call runs in parallel or in series, and say what StreamingToolExecutor bases that on
+> - Run the 13.3.4 startup checklist and the cache-hit-rate formula on your own project, then fix the bottleneck that costs the most
 
 **Difficulty:** Advanced. 13.1 and 13.2 are the backbone: read the streaming data flow and the concurrency control in full. Skim 13.3 startup optimization and 13.4 cost tracking for the conclusions on a first pass; come back for the numbers when you run a performance checkup.
 
@@ -689,3 +698,24 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 7. **Tool output token costs are often more worth watching than model output**: A large file read might produce 60K+ cache creation tokens, while a model turn output is usually only 1-5K tokens. Optimizing tool return content (like limiting lines, filtering irrelevant info) is more effective than optimizing model output.
 
 > **Three sentences to keep:** ① Streaming is not an optimization but an architectural choice. ② It forces every component, from QueryEngine down to tool execution, to be incremental, interruptible, and composable — performance and cost both follow from that. ③ Keep this: caches demand byte-level consistency, and you measure before you tune — tool output tokens usually cost more than model output.
+
+---
+
+## 13.6 Streaming and Performance: Common Failures / The Right Move
+
+Failures at this layer are usually not arithmetic errors — they're optimizing the wrong thing. The left column below lists the most common moves; the right column gives this chapter's answer:
+
+| Common failure | The right move |
+|---------|---------|
+| Build every tool's schema at startup and pay 25 tools × 0.1–0.3ms for nothing | Lazy evaluation: build a schema only when that tool is used (13.3.3) |
+| Queue MDM reads and keychain prefetch behind the import chain, stretching the critical path | Parallel prefetch: start I/O and module evaluation together, don't wait (13.3.1) |
+| Treat streaming as a display concern and still wait for the whole response before acting | Execute as the stream arrives: start a tool call the moment its block appears (13.2.1), buffer results in order |
+| Let Bash run next to Read and get stale content back | Concurrency-safety tiers: run unsafe tools in series (13.2.2) — order before latency |
+| Accumulate usage without the `> 0` guard, so an increment overwrites the real value | `updateUsage` guards with `> 0`; `accumulateUsage` sums across messages (13.4.2) |
+| Change one line of the system prompt and assume the cache still hits | Caching demands byte-level consistency: system prompt, tools, model, messages prefix and thinking config may not differ at all (13.5.2) |
+| Read only the total in `/cost` and never know where the money went | Track tokens per turn: input / output / cache read / cache write, four separate lines (13.4) |
+| Start with "optimize everything" and fix whatever code you know best | Measure first: time first-token latency, cache hit rate, and the startup critical path |
+
+> **Cross reference:** How streaming and cost work on another harness — see omp volume, Chapter 28 "Getting Started with the SDK and RPC" and Chapter 32 "Cost, Roles, and Context Throttling".
+
+---
