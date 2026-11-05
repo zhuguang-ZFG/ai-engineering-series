@@ -1054,6 +1054,247 @@ def computer_desktop(picture: Drawing):
     picture.footer("能控桌面 = 权限面更大；先读安全章再开。")
 
 
+def todo_board(picture: Drawing):
+    picture.header("第 13 章 · todo", "把步骤摊在板子上。",
+                   "板子上永远只有一个任务在跑；完成后立刻勾掉。")
+    columns = (("待办", "pending", MUTED, WHITE),
+               ("进行中", "in_progress", ORANGE, PEACH),
+               ("完成", "completed", GREEN, SAGE))
+    for index, (title, state, color, fill) in enumerate(columns):
+        left = 66 + index * 360
+        picture.box((left, 220, left + 320, 600), fill, color, radius=12)
+        picture.text((left + 24, 244), title, 23, color, True)
+        picture.text((left + 24, 276), state, 16, MUTED)
+    cards = (("列 3–7 条", 0), ("写迁移脚本", 0), ("改 API 返回", 1),
+             ("补测试", 0), ("跑全量测试", 2), ("更新文档", 2))
+    slots = [0, 0, 0]
+    for label, column in cards:
+        left = 90 + column * 360
+        top = 330 + slots[column] * 82
+        slots[column] += 1
+        picture.box((left, top, left + 272, top + 62), WHITE,
+                     ORANGE if column == 1 else LINE, radius=8)
+        picture.text((left + 16, top + 20), label, 19,
+                     INK if column != 2 else GREEN)
+        if column == 2:
+            picture.line([(left + 226, top + 31), (left + 238, top + 43),
+                          (left + 256, top + 17)], GREEN, 3)
+    picture.note((92, 622, 1108, 692), "start 会把其他在跑的降回 pending。",
+                 "task / phase 都是精确匹配；写错一个字就是找不到。", BLUE, SKY)
+    picture.footer("板子是活的：完成就勾，发现新坑就加。")
+
+
+def ask_options(picture: Drawing):
+    picture.header("第 13 章 · ask", "分叉权交回给你。",
+                   "选项、后果、推荐都摆出来，再决定。")
+    picture.box((120, 214, 1080, 590), WHITE, INK, radius=14, stroke=3)
+    picture.text((150, 240), "迁移 API 返回结构，选哪条？", 25, bold=True)
+    rows = (("A", "保留旧字段，只加新字段", "调用方不用改；多一层兼容", GREEN, False),
+            ("B", "直接换成新结构", "调用方同步改；干净但破坏兼容", ORANGE, True),
+            ("C", "先给迁移脚本", "多一步，可回退", BLUE, False))
+    for index, (key, title, effect, color, recommended) in enumerate(rows):
+        top = 300 + index * 92
+        picture.box((150, top, 1050, top + 74), SAGE if recommended else WHITE,
+                     color, radius=10)
+        picture.badge((182, top + 37), key, color)
+        picture.text((214, top + 12), title, 20, bold=True)
+        picture.text((214, top + 42), effect, 18, MUTED)
+        if recommended:
+            picture.text((1032, top + 12), "推荐", 17, GREEN, True, "rt")
+    picture.text((150, 556), "“Other” 可以直接写自己的方案", 18, MUTED)
+    picture.arrow([(1090, 380), (1136, 380)], GREEN, 3)
+    picture.text((1080, 610), "选完才继续", 18, ORANGE, anchor="mm")
+    picture.footer("ask 管产品决策，审批管危险操作；两者不互相替代。")
+
+
+def task_subagent(picture: Drawing):
+    picture.header("第 13 章 · task", "分叉出去干，再汇合。",
+                   "context 只写一遍，渲染进每个子代理的 system prompt。")
+    picture.box((430, 208, 770, 300), SAGE, GREEN)
+    picture.text((600, 232), "父代理", 24, GREEN, True, "mm")
+    picture.text((600, 270), "定隔离边界与合并策略", 17, MUTED, anchor="mm")
+    picture.box((120, 350, 520, 430), SKY, BLUE)
+    picture.text((320, 372), "context：共享背景", 20, BLUE, True, "mm")
+    picture.text((320, 404), "每个子代理都会收到", 17, MUTED, anchor="mm")
+    picture.arrow([(600, 310), (600, 338), (320, 338), (320, 342)], BLUE, 3)
+    for index, (label, color, fill) in enumerate((("子代理 1：调研", ORANGE, PEACH),
+                                                  ("子代理 2：改模块", GREEN, SAGE))):
+        left = 120 + index * 420
+        picture.arrow([(600, 336), (600, 470), (left + 190, 470), (left + 190, 500)],
+                      color, 3)
+        picture.box((left, 508, left + 380, 578), fill, color)
+        picture.text((left + 190, 538), label, 20, color, True, "mm")
+    picture.box((586, 600, 800, 660), WHITE, INK, radius=10)
+    picture.text((693, 622), "wait", 21, ink if False else INK, True, "mm")
+    picture.text((693, 648), "收第一件落地的事", 16, MUTED, anchor="mm")
+    picture.arrow([(320, 586), (320, 630), (578, 630)], MUTED, 2)
+    picture.arrow([(960, 586), (960, 630), (808, 630)], MUTED, 2)
+    picture.text((600, 682), "子代理吃 token、占上下文、可能写文件", 18, MUTED, anchor="mm")
+    picture.footer("派发前先想清楚：谁能写哪、结果怎么合。")
+
+
+def agents_md(picture: Drawing):
+    picture.header("第 14 章 · 上下文文件", "规则会先被读到，再轮到你的话。",
+                   "原生发现只认最近的非空 .omp/；空目录不贡献。")
+    picture.box((90, 214, 560, 600), WHITE, INK, radius=10)
+    picture.text((112, 236), "repo/", 20, bold=True)
+    for index, line in enumerate(("  .omp/            ← 最近非空：独占", "    AGENTS.md",
+                                  "  src/", "    app.ts", "  packages/",
+                                  "    .omp/AGENTS.md  ← 不会继续补", "  AGENTS.md")):
+        picture.text((124, 276 + index * 38), line, 18,
+                     GREEN if "AGENTS" in line or ".omp/" in line else MUTED)
+    picture.arrow([(574, 400), (660, 400)], GREEN)
+    picture.box((676, 240, 1120, 560), SAGE, GREEN, radius=12)
+    picture.text((700, 264), "注入到本轮", 22, GREEN, True)
+    picture.paper((710, 310, 1086, 470), "repo-rules", GREEN, WHITE, ruled=False)
+    picture.text((730, 336), "测试命令：bun test", 19)
+    picture.text((730, 372), "目录约定：src 放实现", 19)
+    picture.text((730, 408), "提交格式：feat(scope):", 19)
+    picture.text((700, 496), "只读最近的非空 .omp/", 19, GREEN)
+    picture.note((92, 618, 1108, 690), "两个零贡献：空目录、空文件。",
+                 "缺文件也不会向上再找另一个 .omp/ 补。", ORANGE, PEACH)
+    picture.footer("要规则生效，放在最近的 .omp/ 里并写实内容。")
+
+
+def foreign_configs(picture: Drawing):
+    picture.header("第 14 章 · 外来配置", "别家目录，也能读成同一套规则。",
+                   "发现适配器知道各工具把文件放哪。")
+    sources = (("~/.claude/CLAUDE.md", "claude"),
+               (".cursor/rules/*.mdc", "cursor"),
+               ("GEMINI.md", "gemini"))
+    for index, (path, provider) in enumerate(sources):
+        top = 236 + index * 122
+        picture.box((80, top, 520, top + 92), SKY, BLUE, radius=10)
+        picture.text((104, top + 18), path, 19, BLUE, True)
+        picture.text((104, top + 54), f"provider: {provider}", 17, MUTED)
+        picture.arrow([(530, top + 46), (620, top + 46)], BLUE, 3)
+    picture.box((636, 236, 1130, 560), SAGE, GREEN, radius=12)
+    picture.text((660, 260), "同一套上下文注入", 22, GREEN, True)
+    picture.text((660, 302), "发现 → 读取 → 归一 → 进提示", 19, MUTED)
+    picture.paper((676, 344, 1092, 500), "合并后的规则", GREEN, WHITE)
+    picture.text((696, 368), "同作用域下 native 优先级最高", 18, ORANGE)
+    picture.text((696, 404), "外来基不按 profile 隔离", 18, MUTED)
+    picture.note((92, 590, 1108, 676), "读得进来，不等于你该全都留着。",
+                 "同一件事写三份，冲突时按优先级裁决；清理比叠加省事。", ORANGE, PEACH)
+    picture.footer("迁移期可以靠它过渡；稳定后收敛到一份 native 规则。")
+
+
+def branch_summary(picture: Drawing):
+    picture.header("第 15 章 · 分支摘要", "分叉口的去向，留一张便签。",
+                   "branchSummary.enabled 默认 false；开了才会生成。")
+    picture.line([(120, 420), (1060, 420)], MUTED, 3)
+    for x in (200, 420, 640):
+        picture.circle((x, 420), 20, WHITE, INK, 3)
+    picture.line([(420, 420), (420, 300), (760, 300)], MUTED, 3)
+    picture.circle((760, 300), 24, WHITE, ORANGE, 3)
+    picture.text((760, 300), "b", 19, ORANGE, True, "mm")
+    picture.arrow([(790, 300), (860, 300)], ORANGE, 3)
+    picture.box((876, 240, 1110, 372), PEACH, ORANGE, radius=10)
+    picture.text((894, 262), "分支摘要", 20, ORANGE, True)
+    picture.text((894, 300), "从哪分出来、", 18)
+    picture.text((894, 328), "为什么分、想试什么", 18)
+    picture.box((876, 400, 1110, 500), SAGE, SAGE, radius=10)
+    picture.text((894, 420), "默认关闭", 19, GREEN, True)
+    picture.text((894, 452), "开了才写这一条", 17, MUTED)
+    picture.text((380, 486), "摘要挂在分叉点，不代替原条目", 19, MUTED, anchor="mm")
+    picture.note((92, 560, 1108, 650), "摘要也有成本。",
+                 "短分叉不值得开；长实验、多人接力再打开。", BLUE, SKY)
+    picture.footer("摘要记的是「为什么走这条」，细节仍回原文查。")
+
+
+def sqlite_store(picture: Drawing):
+    picture.header("第 16 章 · 本地后端", "记在本机，不出门。",
+                   "local 后端的记忆产物有文件根；mnemopi 走检索接口。")
+    picture.box((100, 220, 640, 560), WHITE, INK, radius=12)
+    picture.text((124, 244), "这台机器", 23, bold=True)
+    picture.box((150, 300, 590, 400), SAGE, GREEN, radius=10)
+    picture.text((370, 326), "~/.omp/agent/", 20, GREEN, True, "mm")
+    picture.text((370, 362), "MEMORY.md · learned.md", 18, GREEN, anchor="mm")
+    picture.text((370, 440), "memory:// 前缀读得到", 18, MUTED, anchor="mm")
+    picture.text((370, 478), "进不进远端，取决后端", 18, MUTED, anchor="mm")
+    picture.box((720, 240, 1120, 520), SKY, BLUE, radius=12)
+    picture.text((744, 264), "两种后端，别混", 21, BLUE, True)
+    picture.text((744, 306), "local：文件根 + 摘要", 19)
+    picture.text((744, 344), "mnemopi：retain/recall/reflect", 19)
+    picture.text((744, 404), "local 没有结构化三件套", 18, ORANGE)
+    picture.text((744, 442), "mnemopi 下 memory://root 会失败", 18, ORANGE)
+    picture.arrow([(710, 380), (652, 380)], MUTED, 3)
+    picture.note((92, 592, 1108, 680), "先问「写在哪」。",
+                 "数据驻留位置、权限、撤销方式，接手任何机器都先确认。", GREEN, SAGE)
+    picture.footer("本地不等于自动安全：盘上的东西也会被备份和分享带走。")
+
+
+def advisor(picture: Drawing):
+    picture.header("第 17 章 · advisor", "第二双眼睛，只管挑刺。",
+                   "主模型做事；advisor 按 WATCHDOG 规则做隔离审查。")
+    picture.box((70, 220, 700, 520), WHITE, INK, radius=12)
+    picture.text((94, 244), "主模型", 22, bold=True)
+    picture.robot((385, 360), BLUE)
+    picture.text((385, 452), "改代码、跑测试、写提交", 19, MUTED, anchor="mm")
+    picture.arrow([(390, 500), (390, 546), (300, 546)], ORANGE, 3)
+    picture.box((120, 560, 480, 640), PEACH, ORANGE, radius=10)
+    picture.text((300, 582), "高风险变更", 20, ORANGE, True, "mm")
+    picture.text((300, 612), "架构 / 安全 / 大面积改动", 16, MUTED, anchor="mm")
+    picture.arrow([(490, 600), (640, 600), (640, 430)], ORANGE, 3)
+    picture.box((652, 236, 1120, 520), SAGE, GREEN, radius=12)
+    picture.text((676, 260), "advisor", 23, GREEN, True)
+    picture.text((676, 302), "读 WATCHDOG.md / WATCHDOG.yml", 19)
+    picture.text((676, 340), "只看该看的：提案与 diff", 19)
+    picture.text((676, 378), "工具隔离，不抢主会话的活", 19)
+    picture.box((700, 420, 1076, 484), WHITE, GREEN, radius=8)
+    picture.text((718, 438), "输出：挑刺清单 + 建议", 18, GREEN)
+    picture.text((718, 462), "无异议才合并", 16, MUTED)
+    picture.text((600, 672), "打开 advisor = 多付一路 token；高风险才开", 19, MUTED, anchor="mm")
+    picture.footer("advisor 不是聊天玩伴，是隔离的审查视角。")
+
+
+def magic_keywords(picture: Drawing):
+    picture.header("第 18 章 · magic keywords", "词出现在散文里，才注入说明。",
+                   "全小写、独立成词；代码块与行内代码不算。")
+    picture.box((80, 226, 560, 420), SAGE, GREEN)
+    picture.text((104, 250), "会触发", 21, GREEN, True)
+    picture.text((104, 300), "ultrathink about the failure modes", 18)
+    picture.text((104, 336), "orchestrate the migration", 18)
+    picture.text((104, 380), "句读、引号相邻可以", 17, MUTED)
+    picture.box((620, 226, 1110, 420), PEACH, ORANGE)
+    picture.text((644, 250), "不触发", 21, ORANGE, True)
+    picture.text((644, 300), "Ultrathink（大写开头）", 18)
+    picture.text((644, 336), "ultrathink.ts / ultrathink()", 18)
+    picture.text((644, 380), "围栏代码块、行内代码、注释", 17, MUTED)
+    picture.arrow([(600, 323), (612, 323)], INK, 3)
+    picture.box((80, 452, 1110, 556), INK, INK, radius=10)
+    picture.text((104, 474), "→ 隐藏 notice 注入本轮", 19, "#BCD5BD")
+    picture.text((104, 510), "可见词留在你的消息里；只影响含词的那一回合", 18, WHITE)
+    picture.note((92, 584, 1108, 676), "开关在 /settings → Interaction → Magic Keywords。",
+                 "也可 omp config set magicKeywords.ultrathink false 单独关。", BLUE, SKY)
+    picture.footer("把词写进散文，不是写进代码示例。")
+
+
+def approval_gate(picture: Drawing):
+    picture.header("第 18 章 · 审批门禁", "危险工具先敲门。",
+                   "审批是执行层门禁，和 ask 的产品决策是两回事。")
+    picture.box((90, 230, 420, 330), SKY, BLUE)
+    picture.text((255, 254), "高风险调用", 21, BLUE, True, "mm")
+    picture.text((255, 294), "bash / write / computer", 17, MUTED, anchor="mm")
+    picture.arrow([(430, 280), (530, 280)], ORANGE, 3)
+    picture.box((542, 214, 900, 400), WHITE, ORANGE, radius=12, stroke=3)
+    picture.text((721, 244), "审批", 26, ORANGE, True, "mm")
+    branches = (("ask：当场问", 320), ("always-ask-cached：问过记住", 352),
+                ("受限目录：出界加问", 384))
+    for label, top in branches:
+        picture.text((721, top), label, 18, anchor="mm")
+    picture.arrow([(910, 300), (1000, 300)], GREEN, 3)
+    picture.box((1014, 240, 1140, 360), SAGE, GREEN, radius=10)
+    picture.text((1077, 268), "放行", 22, GREEN, True, "mm")
+    picture.text((1077, 310), "或拒绝", 18, MUTED, anchor="mm")
+    picture.box((542, 430, 1140, 520), PEACH, ORANGE, radius=10)
+    picture.text((564, 452), "tools.approval 的逐工具 allow 在每个模式下都生效", 17, ORANGE)
+    picture.text((564, 486), "光调 mode、不查 allow，可能什么门禁都没加", 17, MUTED)
+    picture.note((92, 560, 1108, 650), "审批和 ask 互补。",
+                 "ask 问「做不做这个产品决定」；审批挡「这一步能不能执行」。", BLUE, SKY)
+    picture.footer("先读当前 allow 表，再谈模式；顺序反了会得出错误结论。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -1089,6 +1330,16 @@ FIGURES = {
     "fig11-3-write-then-diagnose": write_then_diagnose,
     "fig12-1-browser-eval": browser_eval,
     "fig12-2-computer-desktop": computer_desktop,
+    "fig13-1-todo-board": todo_board,
+    "fig13-2-ask-options": ask_options,
+    "fig13-3-task-subagent": task_subagent,
+    "fig14-1-agents-md": agents_md,
+    "fig14-2-foreign-configs": foreign_configs,
+    "fig15-2-branch-summary": branch_summary,
+    "fig16-2-sqlite-store": sqlite_store,
+    "fig17-2-advisor": advisor,
+    "fig18-1-magic-keywords": magic_keywords,
+    "fig18-2-approval": approval_gate,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
 }
