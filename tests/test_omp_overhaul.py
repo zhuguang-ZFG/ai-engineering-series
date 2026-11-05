@@ -1,6 +1,7 @@
 """Regression checks for the Omp acceptance gates."""
 from contextlib import redirect_stderr, redirect_stdout
 import copy
+import importlib.util
 import io
 from pathlib import Path
 import tempfile
@@ -233,6 +234,47 @@ class MarkdownScanTests(unittest.TestCase):
         content = markdown_scan.scan_markdown(text)
         self.assertEqual(content.prose, text.rstrip("\n"))
         self.assertEqual(content.errors, [])
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+# figures whose bitmap comes from a hand-written SVG export, not the Pillow script
+UPSTREAM_SHOTS = frozenset("""
+    fig11-4-lsp-shot fig5-3-model-selector fig6-6-ask-shot fig6-7-slash-shot
+""".split())
+SVG_DERIVED = frozenset("""
+    fig12-3-web-github fig17-1-model-roles fig19-2-skill-invoke fig20-2-mcp-transport
+    fig21-1-custom-tool fig22-2-ext-load fig23-1-config-layers fig27-1-review-checklist
+    fig28-1-sdk-embed fig33-3-tool-registry fig4-3-alpine-pitfall fig4-4-completions
+    fig5-3-login-flow fig5-4-models-yml fig9-1-hashline-anchor fig9-2-hashline-vs-replace
+""".split())
+
+
+def load_illustration_script():
+    path = REPO_ROOT / "scripts" / "draw_omp_illustrations.py"
+    spec = importlib.util.spec_from_file_location("draw_omp_illustrations", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class IllustrationCoverageTests(unittest.TestCase):
+    """Every hand-drawn JPG needs a reproducible source."""
+
+    def test_every_illustration_has_a_generator_or_svg_source(self):
+        images = {path.stem for path in (REPO_ROOT / "omp" / "images").glob("*.jpg")}
+        generators = set(load_illustration_script().FIGURES)
+        self.assertEqual(images - generators - SVG_DERIVED - UPSTREAM_SHOTS, set(),
+                         "hand-drawn images with no redraw source")
+
+    def test_generator_names_all_exist_as_images(self):
+        images = {path.stem for path in (REPO_ROOT / "omp" / "images").glob("*.jpg")}
+        generators = set(load_illustration_script().FIGURES)
+        self.assertEqual(generators - images, set(), "registered figures without a bitmap")
+
+    def test_source_sets_do_not_overlap(self):
+        generators = set(load_illustration_script().FIGURES)
+        self.assertEqual(generators & SVG_DERIVED, set())
+        self.assertEqual(generators & UPSTREAM_SHOTS, set())
 
 
 if __name__ == "__main__":

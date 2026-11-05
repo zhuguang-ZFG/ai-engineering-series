@@ -96,3 +96,29 @@ PDF 抽查第 14、15、22、80、148、156 页（图 1-1、1-2、2-1、7-2、15
 `.scratch/python-illustrations/pdf-pages/`，构建产物在 `.scratch/python-illustrations/build/`。
 
 本轮改动进入独立提交与 PR，远端 CI 以该 PR 的运行记录为准；box 镜像仍未同步。
+
+## 全量手绘替换（B1–B6，2026-11-05）
+
+按 `HANDDRAWN-REWORK-SPEC.md` 把 `omp/images/` 的 92 张旧手绘 JPG 全部改为
+`scripts/draw_omp_illustrations.py` 生成；另有 16 张维持 `visual-redesign/` 的 SVG 导出，
+4 张为上游截图。批次提交：B1 `0e920c2`、B2 `523238a`、B3 `f4e5c74`、B4 `a265c40`、
+B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正文引用的图补了题注与位置，
+并把与 `fig23-3-keys` 撞号的 profile 图改为 `fig23-4-profile`。
+
+验证：
+
+- `python scripts/draw_omp_illustrations.py --out-dir .scratch/allcheck`：92 张全量重生成成功，
+  最大 271,877 字节，0 张超过 300,000 的 `PHOTO_BYTES`。
+- `python omp/overhaul/audit_structure.py --check`：33/33 章六要素齐。
+- `python omp/overhaul/audit_delivery.py`：0 errors。
+- `python -m unittest tests.test_omp_overhaul`：28 项通过（新增 `IllustrationCoverageTests`：
+  每张 JPG 必须属于脚本生成、SVG 导出、上游截图之一，三类互斥，编号与图集一致）。
+- `python -m unittest discover -s tests`：67 项通过；`-s yuyu-book/tests`：515 项通过。
+- `python scripts/bookctl.py check --fast`：6 步通过，333 张 Mermaid 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 28,928,491 | 39 单元 | `92d4890e8e0fc89987a5afa6ef25f7c43c2227147c13a594cce052724b20e158` |
+| `yuyu-omp-zh.pdf` | 37,549,634 | 340 页 / 49 书签 | `847a87462997ee2f2348cc9074b575ba7543ab2793a1e13e83a5b6730c0e1bc1` |
+
+体积上升来自位图分辨率统一为 2400×1600；页数由 332 增到 340，是 B5 补引用的 6 张图带来的版面。
