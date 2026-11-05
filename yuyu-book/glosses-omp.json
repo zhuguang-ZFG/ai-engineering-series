@@ -1,0 +1,997 @@
+{
+  "schema_version": 1,
+  "agent-harness": {
+    "term": {
+      "zh": "智能体外壳",
+      "en": "Agent Harness"
+    },
+    "forms": {
+      "zh": [
+        "Agent Harness",
+        "harness",
+        "外壳"
+      ]
+    },
+    "plain": {
+      "zh": "模型外面那圈程序：递工具、管上下文、跑循环"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch01.md:61"
+    ],
+    "analogy": {
+      "zh": "模型是马，这套外壳是车"
+    },
+    "why": {
+      "zh": "模型只会接话，得有人递工具、记上下文、盯着它停"
+    },
+    "why_evidence": [
+      "omp/ch01.md:61"
+    ]
+  },
+  "main-loop": {
+    "term": {
+      "zh": "工作循环",
+      "en": "agent loop"
+    },
+    "forms": {
+      "zh": [
+        "工作循环"
+      ]
+    },
+    "plain": {
+      "zh": "模型想一步、调工具、看结果、再想下一步，直到停"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch01.md:21"
+    ],
+    "analogy": {
+      "zh": "心跳：一下一下把任务往前推"
+    },
+    "why": {
+      "zh": "没有回路的模型只答一次，不会自己往下走"
+    },
+    "why_evidence": [
+      "omp/ch01.md:21"
+    ]
+  },
+  "context-window": {
+    "term": {
+      "zh": "上下文窗口",
+      "en": "context window"
+    },
+    "forms": {
+      "zh": [
+        "上下文窗口",
+        "上下文"
+      ]
+    },
+    "plain": {
+      "zh": "模型一次能看进多少字的硬顶"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch14.md:1"
+    ],
+    "analogy": {
+      "zh": "书桌桌面，摊满了就得收走一摞"
+    },
+    "why": {
+      "zh": "装不下就得删，删什么决定它还记不记得"
+    },
+    "why_evidence": [
+      "omp/ch14.md:1"
+    ]
+  },
+  "compaction": {
+    "term": {
+      "zh": "压缩",
+      "en": "compaction"
+    },
+    "forms": {
+      "zh": [
+        "compaction",
+        "压缩"
+      ]
+    },
+    "plain": {
+      "zh": "把旧对话压成摘要，腾出窗口空间"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch15.md:1"
+    ],
+    "analogy": {
+      "zh": "把草稿誊成一页提纲"
+    },
+    "why": {
+      "zh": "窗口有硬顶，长任务只能边走边减重"
+    },
+    "why_evidence": [
+      "omp/ch15.md:1"
+    ]
+  },
+  "system-prompt": {
+    "term": {
+      "zh": "系统提示",
+      "en": "system prompt"
+    },
+    "forms": {
+      "zh": [
+        "系统提示"
+      ]
+    },
+    "plain": {
+      "zh": "开工前塞给模型的那份岗位说明"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch14.md:20"
+    ],
+    "analogy": {
+      "zh": "上岗前先背的规矩"
+    },
+    "why": {
+      "zh": "同一句话，规矩不同，结果差很远"
+    },
+    "why_evidence": [
+      "omp/ch14.md:20"
+    ]
+  },
+  "tool-result": {
+    "term": {
+      "zh": "工具结果",
+      "en": "tool result"
+    },
+    "forms": {
+      "zh": [
+        "工具结果",
+        "工具输出"
+      ]
+    },
+    "plain": {
+      "zh": "命令跑完回给模型的那段输出"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch01.md:23"
+    ],
+    "analogy": {
+      "zh": "回执单：办了什么事，写在这张纸上"
+    },
+    "why": {
+      "zh": "模型看不见磁盘，只看得见这张回执"
+    },
+    "why_evidence": [
+      "omp/ch01.md:23"
+    ]
+  },
+  "yolo": {
+    "term": {
+      "zh": "全放开模式",
+      "en": "yolo mode"
+    },
+    "forms": {
+      "zh": [
+        "yolo"
+      ]
+    },
+    "plain": {
+      "zh": "不再逐条问，命令直接跑的那个档"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch10.md:116"
+    ],
+    "analogy": {
+      "zh": "门禁一直开着，谁都能进"
+    },
+    "why": {
+      "zh": "演示图省事可以开，跑别人代码前记得关回去"
+    },
+    "why_evidence": [
+      "omp/ch10.md:116"
+    ],
+    "mark": false
+  },
+  "permission-pipeline": {
+    "term": {
+      "zh": "权限管线",
+      "en": "permission pipeline"
+    },
+    "forms": {
+      "zh": [
+        "权限管线"
+      ]
+    },
+    "plain": {
+      "zh": "一条命令从发起到执行要过的几道关"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch10.md:149"
+    ],
+    "analogy": {
+      "zh": "出门前的安检流程"
+    },
+    "why": {
+      "zh": "拦住一次乱删，比事后恢复便宜得多"
+    },
+    "why_evidence": [
+      "omp/ch10.md:149"
+    ]
+  },
+  "hook": {
+    "term": {
+      "zh": "钩子",
+      "en": "hook"
+    },
+    "forms": {
+      "zh": [
+        "钩子",
+        "hooks"
+      ]
+    },
+    "plain": {
+      "zh": "挂在固定时刻自动跑的一段脚本"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch21.md:85"
+    ],
+    "analogy": {
+      "zh": "门框上的门铃磁铁：门一开就响"
+    },
+    "why": {
+      "zh": "不改内核也能在关键节点插一手"
+    },
+    "why_evidence": [
+      "omp/ch21.md:85"
+    ]
+  },
+  "skill": {
+    "term": {
+      "zh": "技能",
+      "en": "skill"
+    },
+    "forms": {
+      "zh": [
+        "技能",
+        "Skills"
+      ]
+    },
+    "plain": {
+      "zh": "一份事先写好的操作说明书，用到才交给模型"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch19.md:3"
+    ],
+    "analogy": {
+      "zh": "墙上的菜谱，点了这道菜才取下"
+    },
+    "why": {
+      "zh": "用到才取，省掉白放在桌上的启动和内存"
+    },
+    "why_evidence": [
+      "omp/ch19.md:3"
+    ]
+  },
+  "mcp-server": {
+    "term": {
+      "zh": "MCP 服务器",
+      "en": "MCP server"
+    },
+    "forms": {
+      "zh": [
+        "MCP 服务器",
+        "MCP"
+      ]
+    },
+    "plain": {
+      "zh": "按统一协议对外供货的外部工具进程"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch20.md:77"
+    ],
+    "analogy": {
+      "zh": "外市的秤：出了地界先讲通商之语"
+    },
+    "why": {
+      "zh": "工具太杂，得有个通用接口，不必每家单独接"
+    },
+    "why_evidence": [
+      "omp/ch20.md:77"
+    ]
+  },
+  "sub-agent": {
+    "term": {
+      "zh": "子智能体",
+      "en": "subagent"
+    },
+    "forms": {
+      "zh": [
+        "子智能体",
+        "子代理"
+      ]
+    },
+    "plain": {
+      "zh": "另开一个只带一句任务的新脑子"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch13.md:174"
+    ],
+    "analogy": {
+      "zh": "另雇一辆车，只带回一句结论"
+    },
+    "why": {
+      "zh": "侦查和施工挤一个脑子，会互相污染"
+    },
+    "why_evidence": [
+      "omp/ch13.md:174"
+    ]
+  },
+  "plan-mode": {
+    "term": {
+      "zh": "计划模式",
+      "en": "plan mode"
+    },
+    "forms": {
+      "zh": [
+        "计划模式",
+        "Plan 模式"
+      ]
+    },
+    "plain": {
+      "zh": "先只读探路、写出方案，再动手改"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch13.md:174"
+    ],
+    "analogy": {
+      "zh": "先画图纸，再拆墙"
+    },
+    "why": {
+      "zh": "改图纸总比拆墙便宜"
+    },
+    "why_evidence": [
+      "omp/ch13.md:174"
+    ]
+  },
+  "memory": {
+    "term": {
+      "zh": "记忆",
+      "en": "memory"
+    },
+    "forms": {
+      "zh": [
+        "记忆系统",
+        "记忆"
+      ]
+    },
+    "plain": {
+      "zh": "跨会话留下来的线索本"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch16.md:1"
+    ],
+    "analogy": {
+      "zh": "线索本，不是仓库"
+    },
+    "why": {
+      "zh": "代码里读得到的不必记，读不到的才值得记"
+    },
+    "why_evidence": [
+      "omp/ch16.md:1"
+    ]
+  },
+  "extension": {
+    "term": {
+      "zh": "扩展",
+      "en": "extension"
+    },
+    "forms": {
+      "zh": [
+        "扩展",
+        "extension"
+      ]
+    },
+    "plain": {
+      "zh": "一个 TS/JS 模块，加载时注册工具与命令"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch22.md:3"
+    ],
+    "analogy": {
+      "zh": "给车加挂一节车厢"
+    },
+    "why": {
+      "zh": "默认不信任陌生仓库，打开前先确认来源"
+    },
+    "why_evidence": [
+      "omp/ch22.md:3"
+    ]
+  },
+  "session": {
+    "term": {
+      "zh": "会话",
+      "en": "session"
+    },
+    "forms": {
+      "zh": [
+        "会话"
+      ]
+    },
+    "plain": {
+      "zh": "一段对话连同它的历史，可以接着往下聊"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch07.md:1"
+    ],
+    "analogy": {
+      "zh": "一趟车程，中途能靠站再走"
+    },
+    "why": {
+      "zh": "断了要能接上，不然每次都得从头讲"
+    },
+    "why_evidence": [
+      "omp/ch07.md:1"
+    ]
+  },
+  "prompt-cache": {
+    "term": {
+      "zh": "提示缓存",
+      "en": "prompt cache"
+    },
+    "forms": {
+      "zh": [
+        "提示缓存",
+        "缓存"
+      ]
+    },
+    "plain": {
+      "zh": "重复出现的前缀不必重算一遍"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch32.md:31"
+    ],
+    "analogy": {
+      "zh": "背过的开场白不必再背一次"
+    },
+    "why": {
+      "zh": "省时间，也省钱"
+    },
+    "why_evidence": [
+      "omp/ch32.md:31"
+    ]
+  },
+  "snapshot": {
+    "term": {
+      "zh": "快照",
+      "en": "snapshot"
+    },
+    "forms": {
+      "zh": [
+        "快照"
+      ]
+    },
+    "plain": {
+      "zh": "改写前先把文件或会话存一份底"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch09.md:5"
+    ],
+    "analogy": {
+      "zh": "先拍张照，再动剪刀"
+    },
+    "why": {
+      "zh": "改坏了要能退回去，退不回去就得重来"
+    },
+    "why_evidence": [
+      "omp/ch09.md:5"
+    ]
+  },
+  "background-task": {
+    "term": {
+      "zh": "后台任务",
+      "en": "background task"
+    },
+    "forms": {
+      "zh": [
+        "后台任务"
+      ]
+    },
+    "plain": {
+      "zh": "丢到后台去跑、主对话不等它的那类活"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch13.md:152"
+    ],
+    "analogy": {
+      "zh": "灶上炖着汤，人继续切菜"
+    },
+    "why": {
+      "zh": "长命令占着窗口，别的事就都干不了了"
+    },
+    "why_evidence": [
+      "omp/ch13.md:152"
+    ]
+  },
+  "profile": {
+    "term": {
+      "zh": "配置档",
+      "en": "profile"
+    },
+    "forms": {
+      "zh": [
+        "profile",
+        "配置档"
+      ]
+    },
+    "plain": {
+      "zh": "一套可切换的配置集合，互不干扰"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch23.md:1"
+    ],
+    "analogy": {
+      "zh": "同一个抽屉里的几本不同账本"
+    },
+    "why": {
+      "zh": "想隔离实验就换一档，别动全局"
+    },
+    "why_evidence": [
+      "omp/ch23.md:1"
+    ]
+  },
+  "hashline": {
+    "term": {
+      "zh": "哈希行锚",
+      "en": "hashline"
+    },
+    "forms": {
+      "zh": [
+        "hashline"
+      ]
+    },
+    "plain": {
+      "zh": "用快照标签加原始行号钉住要改的地方"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch09.md:5"
+    ],
+    "analogy": {
+      "zh": "按指纹认人，不按当天穿的衣服认"
+    },
+    "why": {
+      "zh": "纯字符串替换容易改错地方，改错了还不报"
+    },
+    "why_evidence": [
+      "omp/ch09.md:5"
+    ]
+  },
+  "mnemopi": {
+    "term": {
+      "zh": "本地记忆库",
+      "en": "mnemopi"
+    },
+    "forms": {
+      "zh": [
+        "mnemopi"
+      ]
+    },
+    "plain": {
+      "zh": "omp 把记忆放在本地 SQLite 里的那个后端"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch16.md:18"
+    ],
+    "analogy": {
+      "zh": "随身带的笔记本，不上交"
+    },
+    "why": {
+      "zh": "默认放本地，免得记忆默认就上传云端"
+    },
+    "why_evidence": [
+      "omp/ch16.md:18"
+    ]
+  },
+  "modelroles": {
+    "term": {
+      "zh": "模型角色",
+      "en": "model roles"
+    },
+    "forms": {
+      "zh": [
+        "modelroles",
+        "模型角色"
+      ]
+    },
+    "plain": {
+      "zh": "给不同的活分别指定用哪个模型"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch17.md:13"
+    ],
+    "analogy": {
+      "zh": "同一支车队，重活派大车、碎活派小车"
+    },
+    "why": {
+      "zh": "全都用最贵的模型，账单和延迟都吃不消"
+    },
+    "why_evidence": [
+      "omp/ch17.md:13"
+    ]
+  },
+  "toks": {
+    "term": {
+      "zh": "token 计数",
+      "en": "toks"
+    },
+    "forms": {
+      "zh": [
+        "toks"
+      ]
+    },
+    "plain": {
+      "zh": "omp 的数 token 子命令，能按文件或按句子数"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch02.md:125"
+    ],
+    "analogy": {
+      "zh": "称重台：下锅前先称一称"
+    },
+    "why": {
+      "zh": "不先量就不知道离窗口上限还有多远"
+    },
+    "why_evidence": [
+      "omp/ch02.md:125"
+    ],
+    "mark": false
+  },
+  "print-mode": {
+    "term": {
+      "zh": "打印模式",
+      "en": "print mode"
+    },
+    "forms": {
+      "zh": [
+        "print mode"
+      ]
+    },
+    "plain": {
+      "zh": "不打开交互界面，跑一句就把结果打出来"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch03.md:61"
+    ],
+    "analogy": {
+      "zh": "点一次外卖，不坐下吃"
+    },
+    "why": {
+      "zh": "脚本和 CI 要的是结果，不是聊天窗口"
+    },
+    "why_evidence": [
+      "omp/appendix-D.md:10"
+    ]
+  },
+  "skill-uri": {
+    "term": {
+      "zh": "技能读取地址",
+      "en": "skill URI"
+    },
+    "forms": {
+      "zh": [
+        "skill://"
+      ]
+    },
+    "plain": {
+      "zh": "用 skill:// 加名字直接把技能原文读出来"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch19.md:10"
+    ],
+    "analogy": {
+      "zh": "按名字去书架上取那一本"
+    },
+    "why": {
+      "zh": "技能调不出来时，先看它到底能不能被读到"
+    },
+    "why_evidence": [
+      "omp/ch19.md:10"
+    ],
+    "mark": false
+  },
+  "trusted-extension": {
+    "term": {
+      "zh": "可信扩展",
+      "en": "trusted extension"
+    },
+    "forms": {
+      "zh": [
+        "trusted-extension",
+        "可信扩展"
+      ]
+    },
+    "plain": {
+      "zh": "白名单里的扩展才允许加载"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch31.md:5"
+    ],
+    "analogy": {
+      "zh": "只让登记过的客人进门"
+    },
+    "why": {
+      "zh": "陌生仓库里的 TS 一加载就等于执行了别人的代码"
+    },
+    "why_evidence": [
+      "omp/ch31.md:5"
+    ],
+    "mark": false
+  },
+  "secrets-mask": {
+    "term": {
+      "zh": "秘密遮罩",
+      "en": "secret masking"
+    },
+    "forms": {
+      "zh": [
+        "遮罩"
+      ]
+    },
+    "plain": {
+      "zh": "送进模型前把密钥一类文本盖掉"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch31.md:1"
+    ],
+    "analogy": {
+      "zh": "文件上的涂黑条"
+    },
+    "why": {
+      "zh": "密钥一旦进了对话，就等于发出去了"
+    },
+    "why_evidence": [
+      "omp/ch31.md:1"
+    ]
+  },
+  "rpc": {
+    "term": {
+      "zh": "帧协议接口",
+      "en": "RPC"
+    },
+    "forms": {
+      "zh": [
+        "RPC"
+      ]
+    },
+    "plain": {
+      "zh": "另一个进程通过帧协议把任务交给 omp"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch28.md:1"
+    ],
+    "analogy": {
+      "zh": "对讲机：说一句，回一句"
+    },
+    "why": {
+      "zh": "自己的程序要用 agent 能力，不必内嵌整个运行时"
+    },
+    "why_evidence": [
+      "omp/ch28.md:1"
+    ]
+  },
+  "acp": {
+    "term": {
+      "zh": "编辑器协议",
+      "en": "ACP"
+    },
+    "forms": {
+      "zh": [
+        "ACP"
+      ]
+    },
+    "plain": {
+      "zh": "编辑器把当前文件交给 agent 的那套协议"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch28.md:5"
+    ],
+    "analogy": {
+      "zh": "编辑器和 agent 之间的传菜口"
+    },
+    "why": {
+      "zh": "编辑器插件不该自己重写一遍 agent"
+    },
+    "why_evidence": [
+      "omp/ch28.md:5"
+    ]
+  },
+  "subcommand": {
+    "term": {
+      "zh": "子命令",
+      "en": "subcommand"
+    },
+    "forms": {
+      "zh": [
+        "子命令"
+      ]
+    },
+    "plain": {
+      "zh": "omp 后面跟的第一段词，决定这次干什么"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch03.md:220"
+    ],
+    "analogy": {
+      "zh": "总机转分机"
+    },
+    "why": {
+      "zh": "敲错子命令不报错，会当成一句提示词发出去"
+    },
+    "why_evidence": [
+      "omp/ch03.md:220"
+    ]
+  },
+  "slash-command": {
+    "term": {
+      "zh": "斜杠命令",
+      "en": "slash command"
+    },
+    "forms": {
+      "zh": [
+        "斜杠命令"
+      ]
+    },
+    "plain": {
+      "zh": "会话里以斜杠开头的快捷指令"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch18.md:37"
+    ],
+    "analogy": {
+      "zh": "点菜单上的现成菜"
+    },
+    "why": {
+      "zh": "常用动作不必每次敲一段自然语言"
+    },
+    "why_evidence": [
+      "omp/ch18.md:37"
+    ]
+  },
+  "approval": {
+    "term": {
+      "zh": "审批",
+      "en": "approval"
+    },
+    "forms": {
+      "zh": [
+        "审批"
+      ]
+    },
+    "plain": {
+      "zh": "工具动手前由谁点头的判据"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch10.md:44"
+    ],
+    "analogy": {
+      "zh": "过闸机的那一下刷卡"
+    },
+    "why": {
+      "zh": "读和写要给不同的默认值，不然天天被问"
+    },
+    "why_evidence": [
+      "omp/ch10.md:44"
+    ]
+  },
+  "context-file": {
+    "term": {
+      "zh": "上下文文件",
+      "en": "context file"
+    },
+    "forms": {
+      "zh": [
+        "contextFiles",
+        "上下文文件"
+      ]
+    },
+    "plain": {
+      "zh": "每次开工自动读进来的项目说明文件"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch14.md:57"
+    ],
+    "analogy": {
+      "zh": "贴在工位前的注意事项"
+    },
+    "why": {
+      "zh": "写在里面的规矩，比每次口头交代更稳"
+    },
+    "why_evidence": [
+      "omp/ch14.md:57"
+    ]
+  },
+  "agents-md": {
+    "term": {
+      "zh": "项目说明文件",
+      "en": "AGENTS.md"
+    },
+    "forms": {
+      "zh": [
+        "AGENTS.md"
+      ]
+    },
+    "plain": {
+      "zh": "放在仓库里、每次开工自动读进来的规矩"
+    },
+    "priority": "core",
+    "evidence": [
+      "omp/ch14.md:5"
+    ],
+    "analogy": {
+      "zh": "贴在工位前的注意事项"
+    },
+    "why": {
+      "zh": "写在文件里的规矩，比每次口头交代更稳"
+    },
+    "why_evidence": [
+      "omp/ch14.md:5"
+    ]
+  },
+  "diagnostics": {
+    "term": {
+      "zh": "诊断",
+      "en": "diagnostics"
+    },
+    "forms": {
+      "zh": [
+        "diagnostics",
+        "诊断"
+      ]
+    },
+    "plain": {
+      "zh": "语言服务器给的那份红线和类型提示"
+    },
+    "priority": "extra",
+    "evidence": [
+      "omp/ch11.md:19"
+    ],
+    "analogy": {
+      "zh": "体检报告：哪里红了写得清清楚楚"
+    },
+    "why": {
+      "zh": "让模型问服务器，比让它猜类型准得多"
+    },
+    "why_evidence": [
+      "omp/ch11.md:19"
+    ]
+  }
+}

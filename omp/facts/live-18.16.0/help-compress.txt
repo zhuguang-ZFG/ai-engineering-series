@@ -1,0 +1,21 @@
+Rewrite a text file into the dense prompt register, reporting what it drops
+
+USAGE
+  $ omp compress FILES... [FLAGS]
+
+ARGUMENTS
+  FILES   Files or glob patterns to compress
+
+FLAGS
+  -o, --out=<value>    Write the approved text here instead of stdout (single file)
+  -i, --inPlace        Overwrite each source file with its approved text
+  -r, --rounds=<int>   Maximum drafts per file before giving up
+  -n, --agents=<int>   Files compressed concurrently
+  -m, --model=<value>  Model selector
+
+EXAMPLES
+  omp compress prompts/tools/read.md
+  omp compress notes.md -o notes.compressed.md
+  omp compress 'src/prompts/**/*.md' -i
+  omp compress a.md b.md c.md -i -n 8
+  omp compress spec.md -r 5 -m opus

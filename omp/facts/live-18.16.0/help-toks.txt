@@ -1,0 +1,15 @@
+Count a file or text with every embedded offline tokenizer (OpenAI, Claude, Qwen, …)
+
+USAGE
+  $ omp toks INPUT... [FLAGS]
+
+ARGUMENTS
+  INPUT   File path, or literal text when it does not name a file
+
+FLAGS
+      --json  Output JSON
+
+EXAMPLES
+  omp toks README.md
+  omp toks "The quick brown fox jumps over the lazy dog"
+  omp toks src/main.ts --json

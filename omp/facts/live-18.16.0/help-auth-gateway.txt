@@ -1,0 +1,42 @@
+Run an auth-gateway: an HTTP forward proxy backed by the configured broker, or JSON lines on stdio with your own credentials
+
+USAGE
+  $ omp auth-gateway [ACTION] [FLAGS]
+
+ARGUMENTS
+  ACTION   Sub-command (serve|stdio|token|status|check)
+
+FLAGS
+      --json                 Output JSON (token/status/check)
+  -b, --bind=<value>         Bind address for `serve` (host:port)
+      --regenerate           Regenerate the gateway bearer token (token)
+      --no-auth              Disable inbound bearer-token auth (serve). Useful when bound to loopback — any caller is allowed.
+      --trust-proxy-headers  Trust forwarded peer IP headers from a reverse proxy (serve); off by default.
+      --clients=<value>      JSON file of scoped client tokens (serve), each limited to its own models and broker accounts; re-read while serving
+      --strict               For `check`: additionally probe each credential against its provider's chat-completion endpoint. Slower; consumes a tiny amount of quota per credential.
+
+EXAMPLES
+  # Boot the gateway against the configured broker
+    omp auth-gateway serve
+  # Serve the same routes as JSON lines on stdin/stdout with your own credentials
+    echo '{"id":1,"path":"/v1/chat/completions","body":{"model":"@smol","messages":[{"role":"user","content":"hi"}]}}' | omp auth-gateway stdio
+  # Boot on a non-default port
+    omp auth-gateway serve --bind=127.0.0.1:4000
+  # Trust client IP headers from a trusted reverse proxy
+    omp auth-gateway serve --trust-proxy-headers
+  # Print the gateway bearer token (creates one on first run)
+    omp auth-gateway token
+  # Rotate the gateway bearer token
+    omp auth-gateway token --regenerate
+  # Run on loopback without any bearer (anyone on this host can call)
+    omp auth-gateway serve --no-auth
+  # Also admit scoped client tokens listed in a file
+    omp auth-gateway serve --clients=/etc/omp/gateway-clients.json
+  # Show local gateway + broker config status
+    omp auth-gateway status
+  # Probe each broker credential to see which one is producing 401s
+    omp auth-gateway check
+  # Same, machine-readable for scripts
+    omp auth-gateway check --json
+  # Strict check — also exercises each credential with a real chat-completion ping
+    omp auth-gateway check --strict

@@ -14,6 +14,10 @@ from pathlib import Path
 from .core import BuildError
 
 ART_DIR = Path(__file__).resolve().parent.parent / "illustrations"
+# the companion volume's own tray: its ids all carry an `omp-` prefix, so the
+# two directories can be searched in one pass without a product flag and a
+# drawing can never cross-ink the wrong book
+OMP_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-omp"
 MAX_BYTES = 6000
 PLATE_BYTES = 20000
 # one photograph the single-file edition can afford to carry: the offline
@@ -38,9 +42,18 @@ _BANNED = (
 )
 
 
+def _search_dirs() -> list[Path]:
+    """Where a drawing may live, in the order `_read` looks.
+
+    Read at call time: the tests point `ART_DIR` at a temporary folder.
+    """
+    return [d for d in (OMP_ART_DIR, ART_DIR) if d.is_dir()]
+
+
 def _read(name: str, budget: int = MAX_BYTES) -> str | None:
-    path = ART_DIR / f"{name}.svg"
-    if not path.exists():
+    path = next((d / f"{name}.svg" for d in _search_dirs()
+                 if (d / f"{name}.svg").exists()), None)
+    if path is None:
         return None
     text = path.read_text(encoding="utf-8").strip()
     if len(text.encode("utf-8")) > budget:
@@ -112,19 +125,26 @@ def photo(name: str) -> str:
     image has to live inside it, and a budget per picture keeps that file
     openable on a laptop with the book on a plane.
     """
-    path = ART_DIR / name
+    return photo_path(ART_DIR / name, label=f"illustrations/{name}")
+
+
+def photo_path(path: Path, *, label: str | None = None) -> str:
+    """Embed any on-disk bitmap under the same offline budget as `photo`."""
+    label = label or path.name
     if not path.exists():
-        raise BuildError(f"illustrations/{name}: no such photograph")
+        raise BuildError(f"{label}: no such photograph")
     mime = PHOTO_TYPES.get(path.suffix.lower())
     if mime is None:
-        raise BuildError(f"illustrations/{name}: {path.suffix} is not a bitmap "
+        raise BuildError(f"{label}: {path.suffix} is not a bitmap "
                          "type the book ships")
     raw = path.read_bytes()
     if len(raw) > PHOTO_BYTES:
-        raise BuildError(f"illustrations/{name}: {len(raw)} bytes, over the "
+        raise BuildError(f"{label}: {len(raw)} bytes, over the "
                          f"{PHOTO_BYTES} budget for one photograph")
     return f"data:{mime};base64,{base64.b64encode(raw).decode('ascii')}"
 
 
 def missing(names: list[str]) -> list[str]:
-    return [n for n in names if not (ART_DIR / f"{n}.svg").exists()]
+    dirs = _search_dirs()
+    return [n for n in names
+            if not any((d / f"{n}.svg").exists() for d in dirs)]

@@ -17,9 +17,16 @@
 ---
 
 <!-- block: ch08.b-78bc89ed -->
-If the permission pipeline (Chapter 4) is the Agent's "guardrails", then the hook system is the Agent's "nervous system". The permission pipeline determines whether the Agent **can** execute an operation, while the hook system determines what happens **before and after** execution. It provides fine-grained extension points for the Agent's entire lifecycle -- from session startup to tool invocation, from user input to context compression, you can observe, intercept, and enhance every critical node.
+You wrote a PreToolUse hook to intercept `rm -rf`. The hook ran, but you gave it exit code 1 -- a line in the warning log, and the command executed anyway. You blamed the hook's configuration; really you had not internalized what the exit codes mean. Across 22 lifecycle points, what each one can and cannot intercept lives in a single unified response protocol.
 
-Using a biological analogy to understand: the human body has not just bones (architecture) and muscles (core logic), but also a nervous system spread throughout. Nerve endings perceive external stimuli (event triggers), conduct signals to the brain (hook logic), and after the brain responds, motor nerves send out instructions (decisions and operations). The hook system is precisely this "neural reflex arc" of Claude Code -- it doesn't require modifying core organ functions, yet can insert reflexive behaviors at critical nodes.
+Hooks are the Agent's reflex arc: the permission pipeline decides whether an operation *can* run, while hooks decide what happens *before and after* it runs. From session startup to tool invocation, from user input to context compression, every critical node can observe, rewrite, or flatly refuse.
+
+> **What you can do after this chapter:**
+> - Say what each of the five hook types can and cannot intercept, and pick the right one for the job
+> - Write structured responses with `decision`, `updatedInput`, and `additionalContext` so exit code and JSON never contradict each other
+> - Reason out which hook runs first when several match, how conflicts settle, and how to avoid the three security gates
+
+> **Cross-reference:** How another harness wires the same hooks -- see omp volume, Chapter 21, "Custom Tools and Hooks".
 
 <!-- block: ch08.b-c8738fc4 -->
 From an engineering perspective, the hook system combines the **Observer Pattern** with the **Chain of Responsibility Pattern**. Each lifecycle event publishes a signal, and matching hooks form a priority-ordered processing chain; the event and hook kind determine whether a handler may only observe, may rewrite data, or may block. The core engine depends on the shared response protocol rather than any extension's implementation, keeping user-defined behavior decoupled from the execution core.
@@ -866,6 +873,16 @@ In parallel workflows, N Agents might register hooks in the same synchronous clo
 ---
 
 ## 8.5 Hook Best Practices and Anti-patterns
+
+The places where hooks go wrong are quite fixed; one table collects them:
+
+| Common mistake | Correct approach |
+|:--------------:|-----------------|
+| Expect exit code 1 to block an operation; it only logs a warning | To block, exit 2 -- that is when stderr reaches the model (8.3) |
+| Run a five-minute code review inside PreToolUse | Keep synchronous hooks under a second; long tasks go async or asyncRewake (8.5) |
+| No matcher, so your hook fires on every tool call | Filter precisely with `"matcher": "Bash"`; skip the wasted runs (8.5) |
+| `updatedInput` silently changes a file path; the user finds the operation landed elsewhere | Rewrites must be predictable, documented, and visible to the user (8.3) |
+| Hooks in a cloned third-party repo run without a second thought | The workspace trust check stands in front; untrusted means refused (8.4) |
 
 ### Best Practices Checklist
 

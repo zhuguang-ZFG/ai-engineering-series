@@ -1,0 +1,47 @@
+# 2026-11-04 ä¸€è‡´æ€§/æŠ¤æ å¤æ‰«ï¼ˆäº§ç‰©å£å¾„ + ç´¢å¼•åˆ†å¸ƒ + ä¸‰é“æŠ¤æ ï¼‰
+
+## 1. dist ä¸ smoke äº§ç‰©ï¼ˆstat + sha256 å‰ 16 + PyMuPDF é¡µ/ä¹¦ç­¾ + ä¸‰æ¡å­—èŠ‚æœºåˆ¶çš„å®æµ‹ä½ï¼‰
+dist zh html    5,781,712 B  sha=10151855e39afac1  mtime=11-04 08:47  spoke=1-9/9Ã¶  Ë÷ÒıÒ³ÂëÌî³ä=238/238 Êı×Ö×Ö·û=638  Õ¼Î»=0
+dist zh pdf    25,112,566 B  sha=8e08f9ba48dfa1b2  mtime=11-04 08:49  pages=518 bookmarks=28  Õ¼Î»=0
+dist en html    5,909,019 B  sha=82f25301b449893f  mtime=11-04 08:57  spoke=10-18/9Ã¶  Ë÷ÒıÒ³ÂëÌî³ä=116/116 Êı×Ö×Ö·û=311  Õ¼Î»=0
+dist en pdf    12,596,335 B  sha=be8f129f58b24801  mtime=11-04 08:59  pages=569 bookmarks=28  Õ¼Î»=0
+dist omp html  19,974,200 B  sha=34bbe379cbddbd3b  mtime=11-04 08:19  spoke=1-15/15Ã¶  Õ¼Î»=0
+dist omp pdf   30,627,229 B  sha=e9603d5d6204b4b1  mtime=11-04 08:20  pages=321 bookmarks=49  Õ¼Î»=0
+smoke zh html   5,781,074 B  sha=c7e427612755c7d5  mtime=11-04 09:29  spoke=1-9/9Ã¶  Ë÷ÒıÒ³ÂëÌî³ä=0/238 Êı×Ö×Ö·û=0  Õ¼Î»=0
+smoke en html   5,908,483 B  sha=4f8d4bc83072033a  mtime=11-04 09:43  spoke=1-9/9Ã¶  Ë÷ÒıÒ³ÂëÌî³ä=0/116 Êı×Ö×Ö·û=0  Õ¼Î»=0
+smoke omp html 19,974,200 B  sha=34bbe379cbddbd3b  mtime=11-04 09:31  spoke=1-15/15Ã¶  Õ¼Î»=0
+
+## 2. ä¸‰ä»½åŒå‘½ä»¤å¤ç°æ€§ï¼ˆdist ä¸ smoke çš„ omp HTML æ˜¯å¦ä¸€å­—ä¸å·®ï¼‰
+34bbe379cbddbd3b30333b654b0b25e205a603f2864bc1cb9860d03d99284f58 *yuyu-book/dist/yuyu-omp-zh.html
+34bbe379cbddbd3b30333b654b0b25e205a603f2864bc1cb9860d03d99284f58 *yuyu-book/.scratch/omp-smoke/yuyu-omp-zh.html
+
+## 3. ç´¢å¼•é‡Œçš„æš‚å­˜åˆ†å¸ƒï¼ˆgit -c core.quotepath=false diff --cached --name-only åˆ†ç»„ï¼‰
+  108  omp/images
+   96  omp/facts/live-18.16.0
+   45  omp ¶¥²ã md
+   40  omp/facts(ÆäÓà)
+   13  omp/overhaul
+   10  docs/yuyu-overhaul »ò docs/*.md
+    6  yuyu-book/¶¥²ã
+    3  yuyu-book/yuyu_book
+    2  docs/yuyu-overhaul/logs
+    1  ²Ö¸ù OVERHAUL-SPEC.md
+total 324
+
+## 4. ä¸¤ä»½ SPEC å‰¯æœ¬çš„åˆ†å‰å£å¾„
+worktree: 31138 B (747 è¡Œ) vs 35233 B (788 è¡Œ)
+index blob åŒä¸€æš? d648401f3e1cb2f5c308050c39a1dda56fe57dfc 
+blob å°ºå¯¸(LF) = 30391 B
+diff å·®å¼‚è¡Œ = 79ï¼ˆå…¶ä¸­å¤é€‰æ¡† 38 è¡Œï¼‰
+OVERHAUL-SPEC.md : æœªå‹¾ 62 / å·²å‹¾ 0
+omp/OVERHAUL-SPEC.md : æœªå‹¾ 43 / å·²å‹¾ 19
+
+## 5. ä¸‰é“æŠ¤æ 
+book -> omp: 23 refs checked, 0 bad
+omp -> book: 49 refs checked, 0 bad
+cross-references resolve to real chapters in both directions
+crossrefs_exit=0
+£¨¹²¼ì²é 40 ¸öÎÄ¼ş£©
+»¤À¸Í¨¹ı£ºÃªµãÆë¡¢Ëø¶¨µÄ´ÊĞÎÔÚ¡¢Î§À¸ÊıÎ´±ä¡£
+blockmarkers_exit=0
+ÓùÓßÕıÎÄ mermaid: zh=160 (20 ÎÄ¼ş) en=160 (21 ÎÄ¼ş£¬º¬ en/README.md)

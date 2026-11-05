@@ -1,0 +1,150 @@
+# Compaction and Branch Summaries
+
+Compaction and branch summaries are the two mechanisms that keep long sessions usable without losing prior work context.
+
+- **Compaction** rewrites old history into a summary on the current branch.
+- **Branch summary** captures abandoned branch context during `/tree` navigation.
+
+Both are persisted as session entries and converted back into user-context messages when rebuilding LLM input.
+
+## Key implementation files
+
+- `packages/agent/src/compaction/compaction.ts` (context-full summarization and handoff generation)
+- `packages/snapcompact/src/snapcompact.ts` (snapcompact strategy: history archived as dense bitmap images)
+- `packages/agent/src/compaction/branch-summarization.ts`
+- `packages/agent/src/compaction/pruning.ts`
+- `packages/agent/src/compaction/compaction-v2-streaming.ts` (provider-native streaming compaction)
+- `packages/agent/src/compaction/shake.ts` (mechanical content elision)
+- `packages/agent/src/compaction/utils.ts`
+- `packages/agent/src/compaction/openai.ts`
+- `packages/agent/src/compaction/messages.ts` (shared LLM conversion and summary wrappers)
+- `packages/coding-agent/src/session/session-context.ts` (context and transcript assembly)
+- `packages/coding-agent/src/session/session-manager.ts`
+- `packages/coding-agent/src/session/agent-session.ts`
+- `packages/coding-agent/src/session/session-maintenance.ts` (automatic maintenance orchestration)
+- `packages/coding-agent/src/session/messages.ts`
+- `packages/coding-agent/src/extensibility/hooks/types.ts`
+- `packages/coding-agent/src/session/context-settings.ts` (`compaction.*`, `snapcompact.*`, `branchSummary.*` definitions)
+
+## Session entry model
+
+Compaction and branch summaries are first-class session entries, not plain assistant/user messages.
+
+- `CompactionEntry`
+   - `type: "compaction"`
+   - `summary`, optional `shortSummary`
+   - `firstKeptEntryId` (compaction boundary)
+   - `tokensBefore`
+   - optional `details`, `preserveData`, `fromExtension`
+   - optional `method`, `tokensAfter`, `warning` (maintenance/display metadata)
+   - optional `providerReplayThroughEntryId` (last entry covered by a native replay snapshot)
+- `BranchSummaryEntry`
+   - `type: "branch_summary"`
+   - `fromId`, `summary`
+   - optional `details`, `fromExtension`
+
+When context is rebuilt (`buildSessionContext`):
+
+1. Latest compaction on the active path is converted to one `compactionSummary` message.
+2. Kept entries from `firstKeptEntryId` to the compaction point are re-included.
+3. Later entries on the path are appended.
+4. `branch_summary` entries are converted to `branchSummary` messages.
+5. `custom_message` entries are converted to `custom` messages.
+
+Those custom roles are then transformed into LLM-facing messages in `convertToLlm()`: `compactionSummary` and `branchSummary` become user messages rendered through the static templates
+
+- `packages/agent/src/compaction/prompts/compaction-summary-context.md`
+- `packages/agent/src/compaction/prompts/branch-summary-context.md`
+- `packages/agent/src/compaction/prompts/handoff-summary-context.md` (when `method === "handoff"`)
+
+Snapcompact summaries with ordered archive blocks bypass these wrappers and send the lead-in plus archive blocks directly. `custom` messages normally pass through as developer messages with their raw content (no summary template).
+
+Native replay also requires a matching provider and a Responses-family API on the active model. A separate native compaction endpoint does not give a Chat Completions or Anthropic encoder the ability to consume its output.
+
+Disabling future native compaction does not disable normal replay of an existing payload. Compaction preparation has a separate, stricter reuse policy: local summarization must re-expand the original messages rather than treat an opaque placeholder as a readable summary.
+
+## Compaction pipeline
+
+### Triggers
+
+Compaction/context maintenance can run in six ways:
+
+1. **Manual context compaction**: `/compact [instructions]` calls `AgentSession.compact(...)`.
+2. **Automatic overflow recovery**: after a same-model assistant error that matches context overflow.
+3. **Automatic incomplete-output recovery**: after a same-model assistant message ends with `stopReason === "length"` (including OpenAI/Codex `response.incomplete` and Anthropic output/context limits), subject to the output-cap checks below.
+4. **Automatic threshold maintenance**: after a successful turn when context exceeds the resolved threshold.
+5. **Mid-turn threshold maintenance**: before the next provider request when a tool-loop turn crosses the threshold and `compaction.midTurnEnabled !== false`. Subagent sessions always run this check: `createSubagentSettings` pins `compaction.midTurnEnabled` on for the child because a whole assignment is one turn, so post-turn maintenance would only fire after the run already ended.
+6. **Idle maintenance**: `runIdleCompaction()` can invoke the same auto-maintenance path with reason `"idle"`.
+
+### ACP notifications
+
+ACP sessions forward automatic maintenance as JSON-RPC extension notifications:
+
+| Method | Params |
+| --- | --- |
+| `_omp/compaction/start` | `sessionId`, `reason`, `action` |
+| `_omp/compaction/end` | `sessionId`, `action`, `aborted`, `willRetry`, optional `skipped`, `errorMessage`, `tokensBefore` |
+
+Clients that do not implement them can ignore them.
+
+### Compaction shape (visual)
+
+```text
+Before compaction:
+
+  entry:  0     1     2     3      4     5     6      7      8     9
+        ┌─────┬─────┬─────┬──────┬─────┬─────┬──────┬──────┬─────┬──────┐
+        │ hdr │ usr │ ass │ tool │ usr │ ass │ tool │ tool │ ass │ tool │
+        └─────┴─────┴─────┴──────┴─────┴─────┴──────┴──────┴─────┴──────┘
+                └────────┬───────┘ └──────────────┬──────────────┘
+               messagesToSummarize            kept messages
+                                   ↑
+                          firstKeptEntryId (entry 4)
+
+After compaction (new entry appended):
+
+  entry:  0     1     2     3      4     5     6      7      8     9      10
+        ┌─────┬─────┬─────┬──────┬─────┬─────┬──────┬──────┬─────┬──────┬─────┐
+        │ hdr │ usr │ ass │ tool │ usr │ ass │ tool │ tool │ ass │ tool │ cmp │
+        └─────┴─────┴─────┴──────┴─────┴─────┴──────┴──────┴─────┴──────┴─────┘
+               └──────────┬──────┘ └──────────────────────┬───────────────────┘
+                 not sent to LLM                    sent to LLM
+                                                         ↑
+                                              starts from firstKeptEntryId
+
+What the LLM sees:
+
+  ┌────────┬─────────┬─────┬─────┬──────┬──────┬─────┬──────┐
+  │ system │ summary │ usr │ ass │ tool │ tool │ ass │ tool │
+  └────────┴─────────┴─────┴─────┴──────┴──────┴─────┴──────┘
+       ↑         ↑      └─────────────────┬────────────────┘
+    prompt   from cmp          messages from firstKeptEntryId
+```
+
+### Overflow/incomplete recovery vs threshold/idle maintenance
+
+The automatic paths are intentionally different:
+
+- **Overflow recovery**
+   - Trigger: current-model assistant error is detected as context overflow and the error is not older than the latest compaction.
+   - The failing assistant error message is removed from active agent state before retry.
+   - Context promotion is tried first; if a configured larger model is available, the agent switches model and retries without compacting.
+   - If promotion is unavailable and compaction is enabled, automatic maintenance walks `compaction.methodOrder` with `reason: "overflow"` and `willRetry: true`; handoff is skipped because its request would reuse the overflowing input.
+   - On success, `agent.continue()` is scheduled to retry the turn.
+
+- **Incomplete-output recovery**
+   - Trigger: same-model assistant message ends with `stopReason === "length"` and the message is not older than the latest compaction.
+   - When the window is below the compaction threshold and the turn delivered text or a tool call, the truncated turn is retained and an output-limit warning is shown; compaction cannot raise the output cap.
+   - Otherwise the incomplete assistant is removed from active state, and context promotion is tried first.
+   - With maintenance enabled, no-output turns below threshold retry without compaction; a reasoning-only output-cap stop also receives a developer reminder to act in smaller steps.
+   - Above threshold (or with an unknown window), auto maintenance walks `compaction.methodOrder` with `reason: "incomplete"` and `willRetry: true`. Unlike overflow, a reachable `handoff` may run because the input remains usable.
+   - Consecutive recoveries without text or a tool call are capped at three; new user input or actionable output resets the counter. The terminal cap blocks automatic continuation and reports an actionable failure.
+   - Successful recovery schedules continuation.
+
+- **Threshold maintenance**
+   - Trigger: successful, non-error assistant message whose adjusted context tokens exceed `resolveThresholdTokens(...)`. The measured count comes from `calculateContextTokens(...)`, which subtracts provider-side orchestration tokens (billable, but never replayed into the conversation prefix) so auto-compaction and context-promotion thresholds are not inflated by them.
+   - Mid-turn maintenance also checks safe tool-loop boundaries before the next provider request when `compaction.midTurnEnabled !== false`.
+   - The initial trigger uses adjusted provider usage floored by the stored-conversation estimate; pruning does not retroactively reduce the just-billed prompt. Reclaimed tokens affect the subsequent maintenance target. Usage predating the latest compaction is ignored in favor of the live stored estimate.
+   - Context promotion is tried before post-turn compaction.
+   - If promotion is unavailable, auto maintenance walks `compaction.methodOrder` with `reason: "threshold"` and `willRetry: false`.
+   - Every method, `handoff` included, runs inline: post-turn maintenance generates the handoff document and commits it as a compaction entry before the run's `agent_end` settles, so the settle's `willContinue`/`yielded` reflects whether a continuation was actually scheduled.

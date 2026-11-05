@@ -1,0 +1,5 @@
+$ omp config get modelRoles.smol
+Unknown setting: modelRoles.smol
+
+Run 'omp config list' to see available keys
+exit=1

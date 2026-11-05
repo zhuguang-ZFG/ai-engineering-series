@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">传输只是管子，语义仍要你审。</title><desc id="desc">stdio 本机子进程；远程 HTTP/SSE 另看认证与泄露面。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">MCP 传输</text>
+
+<text x="72" y="171" class="ink" font-size="48">传输只是管子，语义仍要你审。</text>
+<text x="74" y="219" class="muted" font-size="24">省略 type 时默认 stdio；远程传输要一起设计密钥策略。</text>
+<rect x="200" y="340" width="280" height="280" rx="14" class="soft"/>
+<text x="240" y="420" class="ink" font-size="28">omp</text>
+<text x="240" y="480" class="muted" font-size="20">宿主会话</text>
+<path d="M510 480 H630" class="flow"/>
+<rect x="650" y="300" width="220" height="160" rx="12" class="hi"/>
+<text x="690" y="370" class="ink" font-size="24">stdio</text>
+<text x="680" y="420" class="muted" font-size="18">本机子进程</text>
+<rect x="650" y="500" width="220" height="160" rx="12" class="warn"/>
+<text x="680" y="570" class="ink" font-size="24">HTTP / SSE</text>
+<text x="670" y="620" class="muted" font-size="18">远程端点</text>
+<path d="M900 380 H1020" class="flow"/>
+<path d="M900 580 H1020" class="flow"/>
+<rect x="1040" y="340" width="300" height="280" rx="14" class="soft"/>
+<text x="1080" y="420" class="ink" font-size="28">MCP Server</text>
+<text x="1080" y="480" class="muted" font-size="20">工具 / 资源</text>
+<text x="1080" y="540" class="muted" font-size="18">语义不随管子改变</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文第 20 章 · MCP 传输</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / MCP</text>
+</svg>

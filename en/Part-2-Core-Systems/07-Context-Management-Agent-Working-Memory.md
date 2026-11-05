@@ -17,7 +17,14 @@
 ## 7.1 Context Window Constraints
 
 <!-- block: ch07.b-25a30e96 -->
-All of a large language model's reasoning capabilities rest on a single premise: the context window. In every conversation turn, Claude Code must package the complete message history (system prompts, user messages, assistant replies, tool calls and results) and send it to the model. As the conversation progresses, this history inevitably expands until it hits the ceiling of the model's context window.
+You have been talking to the Agent for two hours -- dozens of files read, a pile of code changed. Right at the critical point, it suddenly "forgets" the interface contract you settled half an hour ago and starts writing to its own understanding. You scroll back and find that stretch of conversation already compressed into a summary, the details gone. This is not a bug; it is the context window hitting its ceiling: system prompts, conversation history, and tool results only grow, and when the model can no longer hold them, the window drops old content. What to erase, what to keep, and how to erase -- that is the four-level compression this chapter takes apart.
+
+> **What you can do after this chapter:**
+> - Work out how much of your effective context window you have left, and at what token percentage to run `/compact` manually
+> - Put the four compression levels (Snip -> MicroCompact -> Collapse -> AutoCompact) in order and say when each fires and what it costs
+> - After three straight failures, tell whether the circuit breaker has tripped -- and what to do once it has
+
+> **Cross-reference:** How the same compression strategy is laid out in another harness -- see omp volume, Chapter 15, "Compaction and Long Tasks".
 
 <!-- block: ch07.b-b643df6f -->
 You can think of the context window as a **whiteboard of limited size**. All of the Agent's working memory -- conversation history, tool results, intermediate reasoning -- goes on this whiteboard. When the whiteboard runs out of space, you must erase old content before writing new content. The key question is: **what to erase, what to keep, and how to erase it**?
@@ -163,6 +170,15 @@ graph LR
     class L4 level4
     class t1,t2,t3,t4 trigger
 ```
+
+The four levels run from light to heavy; used in the wrong place they still go wrong:
+
+| Common mistake | Correct approach |
+|:--------------:|-----------------|
+| Wait until tokens hit 95% and take the passive hit; the summary loses key detail | Run `/compact` manually at 80%, with the highlights you want kept (7.5) |
+| Treat Snip and MicroCompact as the same thing and mix them up | Snip trims whole message sequences; MicroCompact clears old tool-result bodies -- two different things (7.2) |
+| After compressing, immediately reload every file you read before | Reload only what the current task needs, or the compression was wasted (7.4) |
+| After three straight failures the breaker trips and you keep waiting for it to recover | Only a new session or a successful manual compact resets it; stop hammering while it is open (7.1) |
 
 ### Level 1: Snip
 

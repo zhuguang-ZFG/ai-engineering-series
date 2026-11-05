@@ -7,15 +7,15 @@
 
 **Learning Objectives:** By the end of this chapter, you can:
 
-- See the design pattern the 55 registered tools share, and why the protocol needs exactly five elements
-- Follow a tool from definition through registration to orchestration
-- Explain how concurrency partitioning orders the queue, and how much waiting it actually saves
-- Name what each of the four StreamingToolExecutor stages holds back
-- Judge whether deferred tool discovery pays for the extra indirection
+- Open any of the 55 registered tools, point at each of the five elements in the code, and say what breaks when one is missing
+- Add a tool of your own with `buildTool` -- schema, permission, execution and rendering each in its place -- and get one call through
+- Split a batch of tool calls into concurrency partitions, say which run together and which must wait, and name what each of the four StreamingToolExecutor stages holds back
 
 **Difficulty:** A Core chapter: 3.1 is Start level (the five-element protocol); 3.2 and 3.4 carry the trunk. 3.3 takes the core tools apart one by one -- the longest stretch, tagged Advanced; on a first read, pick the tools you actually use and leave the rest, together with the exercises, for a second pass.
 
 ---
+
+One more crash scene before the source. You ask the agent to read three files, then edit one of them. It runs the three reads one after another and you wait three times as long; the edit and a later read land in the same batch, so the read hands back stale content; you hit interrupt, the running tool stops, and the queued ones start anyway. All three faults sit in one layer: how a tool gets defined, how it gets queued, how it gets wound down. That is the layer this chapter opens up.
 
 Maslow's quote could not be more fitting when applied to Agent tool systems. If an Agent only has a Bash tool, every task becomes a Shell command -- reading files with `cat`, searching code with `grep`, editing files with `sed`. This works, but it violates the engineering principle of "using the right tool for the right problem." Claude Code's tool system registers 55 specialized tools (Appendix B lists them all), each optimized for a specific type of operation -- like equipping different professional tools for different tasks, rather than solving every problem with a single hammer.
 
@@ -414,6 +414,18 @@ Key design decisions of StreamingToolExecutor:
 5. **Signal propagation**: Each tool execution uses an independent sub-cancellation controller, forming a hierarchical cancellation signal chain. Errors from sibling tools or the user's Ctrl+C propagate to the correct tools through signal propagation. This hierarchical signal propagation ensures precision of cancellation operations -- canceling one tool won't accidentally affect unrelated other tools.
 
 > **Anti-Pattern Warning:** If you are building your own tool orchestration system, avoid using a single AbortController to manage all tool cancellations. When tool A fails and needs to cancel tool B, it should not simultaneously cancel the completely unrelated tool C. Hierarchical cancellation signals are the correct design.
+
+Tool code fails in a handful of fixed places. The left column holds the usual writing; the right column holds what this chapter recommends, with the section to reread:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Parsing the model's arguments by hand inside the tool function | Let the Zod schema check them before execution (3.1, element two) |
+| One Bash tool does everything: `cat`, `grep`, `sed` | Split by operation type -- Read, Glob, Grep and Edit each own a lane (3.3) |
+| Reaching for Write whenever a file needs a change | Prefer a precise Edit; keep Write for content you truly replace whole (3.3) |
+| Sending every tool in every request, paying the token bill | Register what applies now and defer the rest behind ToolSearchTool (3.2) |
+| One AbortController for the whole tool family | Layer the signals so tool A's failure spares unrelated tool C (3.4) |
+
+> **Cross-Reference:** to see the same hands at work in another harness, see Chapter 8 of the omp volume, "Reading and Finding".
 
 ### Tool State Machine Integration in the Dialog Main Loop
 

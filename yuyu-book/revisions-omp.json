@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "version": "0.1.0-wip",
+      "date": "2026-11-03",
+      "zh": [
+        "同仓第二分册初稿接入 yuyu-book：中文 HTML/PDF 产物前缀 `yuyu-omp-*`。",
+        "插画双轨：`omp/images/` 手绘嵌入单文件；Mermaid 管道可用。",
+        "写作钉 omp/18.15.0；Windows Bun 核对 omp/18.16.0（见 omp/VERIFY.md）。"
+      ]
+    }
+  ]
+}

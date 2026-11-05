@@ -1,0 +1,14 @@
+Broadcast local omp session screens and chat to your public live channel
+
+USAGE
+  $ omp stream [FLAGS]
+
+FLAGS
+      --title=<value>   Stream title (defaults to the current directory name)
+      --server=<value>  Stream server base URL (overrides stream.serverUrl)
+      --no-tui          Use the line-oriented console instead of the interactive TUI
+
+EXAMPLES
+  omp stream
+  omp stream --title "Building a parser"
+  omp stream --server https://live.example.com

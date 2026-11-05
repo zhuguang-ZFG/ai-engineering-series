@@ -1,0 +1,71 @@
+===== web_search =====
+# web_search
+
+> Run one web query through the configured search chain and return the first usable answer/sources, with optional citations.
+
+## Source
+
+- Entry: `packages/coding-agent/src/web/search/index.ts`
+- Model-facing prompt: `packages/coding-agent/src/prompts/tools/web-search.md`
+- Key collaborators:
+   - `packages/coding-agent/src/web/search/provider.ts` — lazy provider registry; availability chain.
+   - `packages/coding-agent/src/web/search/types.ts` — unified `SearchResponse` / `SearchProviderError` types.
+   - `packages/tui/src/tools/web-search.ts` / `web-search-types.ts` — transcript rendering and shared response/provider types.
+   - `packages/coding-agent/src/web/search/providers/base.ts` — provider interface and shared params contract.
+   - `packages/coding-agent/src/web/search/providers/utils.ts` — credential lookup; source normalization.
+   - `packages/coding-agent/src/web/search/providers/browser-headers.ts` — shared Chromium navigation headers for scrape providers.
+   - `packages/coding-agent/src/web/search/query.ts` — Google-style query parsing, provider syntax formatting, and lenient result filtering.
+   - `packages/coding-agent/src/web/search/providers/browser-page.ts` — shared fetch/headless-browser page loader for scrape providers.
+   - `packages/coding-agent/src/web/search/providers/anthropic.ts` — Claude web-search provider.
+   - `packages/coding-agent/src/web/search/providers/brave.ts` — Brave Search API adapter.
+   - `packages/coding-agent/src/web/search/providers/deepseek.ts` — DeepSeek Search API adapter.
+   - `packages/coding-agent/src/web/search/providers/codex.ts` — OpenAI Codex SSE adapter.
+   - `packages/coding-agent/src/web/search/providers/openai.ts` — billed OpenAI API Responses adapter, separate from Codex OAuth.
+   - `packages/coding-agent/src/web/search/providers/openrouter.ts` — chat-completions grounding through OpenRouter's web plugin.
+   - `packages/coding-agent/src/web/search/providers/duckduckgo.ts` — DuckDuckGo HTML frontend scraper.
+   - `packages/coding-agent/src/web/search/providers/ecosia.ts` — Ecosia browser-backed scraper.
+   - `packages/coding-agent/src/web/search/providers/exa.ts` — Exa API or MCP adapter.
+   - `packages/coding-agent/src/web/search/providers/firecrawl.ts` — Firecrawl search adapter.
+   - `packages/coding-agent/src/web/search/providers/gemini.ts` — Gemini grounding SSE adapter.
+   - `packages/coding-agent/src/web/search/providers/google.ts` — Google browser-backed SERP scraper.
+   - `packages/coding-agent/src/web/search/providers/jina.ts` — Jina Reader search adapter.
+   - `packages/coding-agent/src/web/search/providers/kagi.ts` — Kagi provider wrapper.
+   - `packages/coding-agent/src/web/search/providers/kimi.ts` — Kimi search adapter.
+   - `packages/coding-agent/src/web/search/providers/mojeek.ts` — Mojeek browser-backed scraper (independent index).
+   - `packages/coding-agent/src/web/search/providers/parallel.ts` — Parallel provider wrapper.
+   - `packages/coding-agent/src/web/search/providers/perplexity.ts` — Perplexity API / OAuth adapter.
+   - `packages/coding-agent/src/web/search/providers/public.ts` — Public Web aggregate over all credential-free engines.
+   - `packages/coding-agent/src/web/search/providers/searxng.ts` — self-hosted SearXNG adapter.
+   - `packages/coding-agent/src/web/search/providers/startpage.ts` — Startpage (Google-proxied) form-flow scraper.
+   - `packages/coding-agent/src/web/search/providers/synthetic.ts` — Synthetic search adapter.
+   - `packages/coding-agent/src/web/search/providers/ollama.ts` — Ollama web search adapter.
+   - `packages/coding-agent/src/web/search/providers/tavily.ts` — Tavily search adapter.
+   - `packages/coding-agent/src/web/search/providers/tinyfish.ts` — TinyFish search adapter.
+   - `packages/coding-agent/src/web/search/providers/xai.ts` — xAI Responses web and X search adapter.
+   - `packages/coding-agent/src/web/search/providers/zai.ts` — Z.AI remote MCP adapter.
+   - `packages/coding-agent/src/web/parallel.ts` — Parallel search/extract HTTP client.
+   - `packages/coding-agent/src/web/kagi.ts` — Kagi HTTP client.
+   - `packages/coding-agent/src/tools/index.ts` — built-in tool registration and enable flag.
+
+## Inputs
+
+| Field                | Type                                   | Required | Description                                                                                                                                                                                                                                                                                                            |
+| -------------------- | -------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `query`              | `string`                               | Yes      | Raw query. The parser recognizes `site:`/`-site:`, `after:`/`before:`, `inurl:`, `intitle:`, `intext:`, `filetype:`, `lang:`/`language:`, quoted phrases, exclusions, `OR`, and directive aliases. Providers map these to native filters or supported syntax; body/language directives are not central source filters. |
+| `recency`            | `"day" \| "week" \| "month" \| "year"` | No       | Relative time filter. Implemented by Brave, DeepSeek, Perplexity, Parallel, Tavily, SearXNG, Kagi, TinyFish, Firecrawl, DuckDuckGo, Startpage, Google, and Mojeek. Public Web forwards it to its engines; other adapters ignore it.                                                                                    |
+| `limit`              | `number`                               | No       | Max results to return. Usually becomes the provider request's result-count parameter when `num_search_results` is absent. TinyFish uses it for paginated fetches before slicing. xAI uses the collapsed value only as a local cap on parsed sources/citations, defaulting to `10` and max `30`.                        |
+| `max_tokens`         | `number`                               | No       | Token cap passed through by Anthropic, Gemini, OpenAI Responses, xAI, and Perplexity API-key mode. Ignored by the other providers.                                                                                                                                                                                     |
+| `temperature`        | `number`                               | No       | Passed through only by Anthropic models that support sampling parameters, Gemini, xAI, and Perplexity API-key mode. Ignored or omitted by the other provider/model paths.                                                                                                                                              |
+| `num_search_results` | `number`                               | No       | Provider-native search breadth or local result cap, usually taking precedence over `limit`. Perplexity API and OpenRouter use it upstream; Anthropic, Gemini, Codex, OpenAI Responses, and xAI cap parsed sources locally. TinyFish sends a per-page count and paginates. See adapter limits below.                    |
+
+The schema does not impose integer, positivity, or range constraints on numeric fields; provider adapters apply their own caps. The built-in tool is read-approved, strict-schema, and discoverable.
+
+## Outputs
+
+The tool returns a single text content block plus structured `details`.
+
+- `content`: `[{ type: "text", text: string }]`
+- `details`: `SearchResultDetails` from `packages/coding-agent/src/web/search/types.ts`
+   - `response: SearchResponse`
+   - `error?: string`
+

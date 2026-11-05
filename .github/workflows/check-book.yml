@@ -24,4 +24,6 @@ jobs:
           python-version: '3.12'
       - run: npm ci
       - run: python3 -m pip install -r yuyu-book/requirements.txt
+      - name: Check bilingual chapter structure
+        run: python3 docs/yuyu-overhaul/check_bilingual_parity.py
       - run: python3 scripts/bookctl.py check --fast

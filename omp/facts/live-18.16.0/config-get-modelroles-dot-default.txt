@@ -1,0 +1,10 @@
+$ omp config get modelRoles.default
+Unknown setting: modelRoles.default
+
+Run 'omp config list' to see available keys
+exit=1
+
+$ omp config get modelRoles   # 值已脱敏：原输出是一个 JSON 对象，13 个角色键，
+# 每个值形如 <provider>/<model-id>[:<thinking 档位>]，provider 名属本机私有网关，一律不入库
+advisor chore_worker commit default designer memory plan scout_worker slow smol task tiny vision
+exit=0（原始脱敏版另见 config-get-modelroles-keys.txt）

@@ -1,0 +1,3 @@
+$ omp config get mcp.enableProjectConfig
+false
+exit=0

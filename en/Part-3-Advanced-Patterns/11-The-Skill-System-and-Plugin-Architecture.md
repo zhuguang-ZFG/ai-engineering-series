@@ -7,13 +7,15 @@
 
 **Learning Objectives:**
 <!-- block: ch11.b-734a2879 -->
-- Follow a Claude Code Skill through its whole life: defined, loaded, executed
-- Explain how skills tier from user-level to managed-level, and what each tier risks
-- Write a custom skill that works on the first try
-- See why the plugin system loads cache-first, and where its security boundary sits
-- Tell the useful patterns of skill composition from the anti-patterns
+- Write a custom skill that shows up on the first try, and say which layer to inspect when it does not
+- Sort the five sources of a skill by who overrides whom, and say where each layer's risk sits
+- Explain why the plugin system reads its cache before it touches the disk, and where its fault-tolerance boundary sits
 
 **Difficulty:** 11.1 is Start; 11.2, 11.3 and 11.5 are Core; 11.4 plugin system is Advanced — skip it on a first read and come back when you build.
+
+You keep one prompt in the README: "generate the migration by our conventions, and never touch the history table." Over half a year colleagues copy it into three places, two of them drop a line, and the migrations come back one in snake_case and one in camelCase while you go correcting them one private message at a time. At last you write it as `~/.claude/skills/gen-migration/SKILL.md`, restart the session, type `/gen` — and the menu has no such entry.
+
+A skill that never shows up is usually not a syntax problem; it is standing in the wrong place. A file skill has to take the shape `skill-name/SKILL.md`, five sources override one another and deduplicate by whichever source appears first, a skill with `paths` stays hidden until you actually touch a matching file, and something bundled inside a dependency may already have claimed the name. That is the thread this chapter pulls: from "why didn't it appear" to "how it runs."
 
 ---
 
@@ -344,6 +346,16 @@ graph TD
 ch11-skill-stairs
 ```
 
+A skill you wrote but never get is usually one of these five mistakes:
+
+| Wrong turn | What actually happens | The right move |
+|---|---|---|
+| Save the skill as `~/.claude/skills/my-skill.md` | File skills take exactly one shape, `skill-name/SKILL.md`; a bare `.md` file is still recognised only in the legacy `.claude/commands/` directory | Put it in a directory: `my-skill/SKILL.md` |
+| Edit your user-level copy and see no change | Another layer may be serving that name — overrides follow the tier order, and deduplication keeps whichever source appears first after `realpath` resolves | Check which layers carry the same name before deciding which file to edit |
+| Treat `paths` as "this skill may only be used on these files" | `paths` is an activation condition only: once activated, the name is remembered permanently, and clearing the cache does not put the skill back into conditional state | Use it for "appear when needed", not as a runtime switch |
+| Write a `$(…)` inline Shell command inside an MCP-provided skill | When `LoadedFrom` is `mcp`, inline Shell expansion is not performed, so the command in the body is never executed at load time | Make it a local skill when you need local expansion |
+| Write three hundred lines into one skill and call it "full-stack development" | The larger the skill, the more uncertainty at execution time, and the harder it is to debug and reuse | One skill does one thing; chain skills to build the workflow |
+
 ### 11.3.2 Dynamic Skill Discovery
 
 In addition to static loading at startup, Claude Code also discovers skills dynamically while a session runs. When the model accesses files through tools like Read, Write, Edit, etc., the system searches upward along the file path for `.claude/skills/` directories.
@@ -668,6 +680,8 @@ and run related tests after completion (post hook).
 > A skill should do one thing and do it well. If you find a skill's prompt exceeds 200 lines, consider splitting it into multiple skills. For example, instead of creating a "full-stack development" skill, create three independent skills: "API generation", "frontend component generation", and "test generation".
 >
 > Reason: The larger the skill, the greater the uncertainty when the model executes it. Small, focused skills are easier to debug, easier to reuse, and easier to compose with other skills.
+
+> **Cross-reference:** The same unit of packaged capability takes three shapes in the omp volume — see Chapter 19, *Skills*, Chapter 22, *Extensions*, and Chapter 29, *Team Extension Packs*.
 
 ---
 

@@ -1,0 +1,150 @@
+# Hooks
+
+This document describes the **current hook subsystem code** in `packages/coding-agent/src/extensibility/hooks/*`.
+
+## Current status in runtime
+
+The default CLI runtime initializes the **extension runner** path. In current startup flow:
+
+- `--hook` is treated as an alias for `--extension` (CLI paths are merged into `additionalExtensionPaths`)
+- JS/TS hook factories discovered through `hookCapability` (for example `.omp/hooks/pre/*.ts`) are loaded as extension modules so their `pi.on(...)` handlers bind to the runtime event bus
+- tools are wrapped by `ExtensionToolWrapper`, not `HookToolWrapper`
+- context transforms and lifecycle emissions go through `ExtensionRunner`
+
+So this file documents the legacy hook subsystem implementation itself (types/loader/runner/wrapper), plus the factory shape still accepted when a discovered hook path is loaded by the extension runner.
+
+A discovered factory receives `ExtensionAPI`/`ExtensionContext` in normal
+sessions, not an instance of `HookAPI`/`HookContext`. Shared `pi.on(...)`
+handlers work, but legacy-only context names are not shimmed: for example,
+use `ctx.hasPendingMessages()` in extensions rather than the legacy
+`ctx.hasQueuedMessages()`. Prefer [Extensions](./extensions.md) for new runtime
+integrations. The runner/wrapper behavior below is specifically the legacy
+library path unless stated otherwise.
+
+## Key files
+
+- `packages/coding-agent/src/extensibility/hooks/types.ts` — hook context, event types, and result contracts
+- `packages/coding-agent/src/extensibility/hooks/loader.ts` — module loading and hook discovery bridge
+- `packages/coding-agent/src/extensibility/hooks/runner.ts` — event dispatch, command lookup, error signaling
+- `packages/coding-agent/src/extensibility/hooks/tool-wrapper.ts` — pre/post tool interception wrapper
+- `packages/coding-agent/src/extensibility/hooks/index.ts` — exports/re-exports
+- `packages/coding-agent/src/extensibility/shared-events.ts` — shared event/result contracts
+- `packages/coding-agent/src/extensibility/extensions/loader.ts` — current runtime discovery
+- `packages/coding-agent/src/extensibility/extensions/wrapper.ts` — current tool wrapper and approval gate
+
+## What a hook module is
+
+A hook module must default-export a factory:
+
+```ts
+import type { HookAPI } from "@oh-my-pi/pi-coding-agent/extensibility/hooks";
+
+export default function hook(pi: HookAPI): void {
+	pi.on("tool_call", async (event, ctx) => {
+		if (event.toolName === "bash" && String(event.input.command ?? "").includes("rm -rf")) {
+			return { block: true, reason: "blocked by policy" };
+		}
+	});
+}
+```
+
+The factory can:
+
+- register event handlers with `pi.on(...)`
+- send persistent custom messages with `pi.sendMessage(...)`
+- persist non-LLM state with `pi.appendEntry(...)`
+- register slash commands via `pi.registerCommand(...)`
+- register custom message renderers via `pi.registerMessageRenderer(...)`
+- run shell commands via `pi.exec(...)` and log through `pi.logger`
+- use the injected Zod-compatible builder `pi.zod`, native omptype builder `pi.arktype`, legacy `pi.typebox`, and package exports via `pi.pi`
+
+## Discovery and loading
+
+With ambient discovery enabled, sessions load JS/TS hook factories discovered
+by `hookCapability` through the extension runner.
+`discoverExtensionPaths(configuredPaths, cwd, disabledExtensionIds?, options?)`:
+
+1. Loads extension modules from the native provider only
+2. Loads importable `.ts`/`.js` hook factories from the hook capability registry (unless `includeAmbientHooks: false`)
+3. Appends enabled plugin extension entry points
+4. Resolves explicitly configured files/directories
+
+Paths are deduplicated by absolute path. With `ambient: false`, native/installed
+discovery is skipped, but configured package roots can still contribute hook
+factories. Foreign user sources require opt-in via `enabledProviders`; project
+sources are unaffected by that user-level gate.
+
+### Native discovery location
+
+The native provider scans only two subdirectories per config root — a factory placed **directly** in `hooks/` is not discovered:
+
+- Project: `<cwd>/.omp/hooks/pre/*.{ts,js}` and `<cwd>/.omp/hooks/post/*.{ts,js}`
+- User: `<agentDir>/hooks/pre/*.{ts,js}` and `<agentDir>/hooks/post/*.{ts,js}` (default `~/.omp/agent/hooks/...`; profile- and `PI_CODING_AGENT_DIR`-aware)
+
+A factory directly under `<cwd>/.omp/hooks/` is not found by ambient native
+discovery; put it in `pre/` or `post/`, or supply its path explicitly. Dot-prefixed
+entries and non-files are skipped. The directory and basename supply capability
+metadata/deduplication keys, not automatic event registration: the factory must
+still call `pi.on(...)`. This mirrors `.claude/hooks/pre|post/`. Only `.ts`/`.js`
+factories from the hook capability are appended to the extension pipeline.
+Explicit extension paths use the shared module resolver. See
+[Extension Loading](./extension-loading.md) for load order and disable controls.
+
+The legacy `discoverAndLoadHooks(configuredPaths, cwd)` helper still exists and does:
+
+1. Load discovered hooks from capability registry (`loadCapability("hooks")`)
+2. Append explicitly configured paths (deduped by absolute path)
+3. Call `loadHooks(allPaths, cwd)`
+
+`loadHooks` then imports each path and expects a `default` function.
+
+### Path resolution
+
+`loader.ts` resolves hook paths as:
+
+- absolute path: used as-is
+- `~` path: expanded
+- relative path: resolved against `cwd`
+
+## Event surfaces
+
+Hook events are strongly typed in `types.ts`.
+
+### Session events
+
+- `session_start`
+- `session_before_switch` → can return `{ cancel?: boolean }`
+- `session_switch`
+- `session_before_branch` → can return `{ cancel?: boolean; skipConversationRestore?: boolean }`
+- `session_branch`
+- `session_before_compact` → can return `{ cancel?: boolean; compaction?: CompactionResult }`
+- `session.compacting` → can return `{ context?: string[]; prompt?: string; preserveData?: Record<string, unknown> }`
+- `session_compact`
+- `session_before_tree` → can return `{ cancel?: boolean; summary?: { summary: string; details?: unknown } }`
+- `session_tree`
+- `session_shutdown`
+
+`session_before_branch` and `session_branch` carry `reason`, which decides what `session_before_branch.entryId` means. For `"branch"` (`branch(entryId)`, `/branch`) it is the user message being rewound: it and everything after it are dropped. For `"fork"` (`AgentSession.fork(entryId)`, RPC `fork` with an `entryId`) and `"btw"` (`/btw` promotion) it is the last entry kept in the new session.
+
+### Agent/context events
+
+- `context` → can return `{ messages?: Message[] }`
+- `before_agent_start` → can return `{ message?: { customType; content; display; details; attribution } }`
+- `agent_start`
+- `agent_end`
+- `turn_start`
+- `turn_end`
+- `auto_compaction_start`
+- `auto_compaction_end`
+- `auto_retry_start`
+- `auto_retry_end`
+- `ttsr_triggered`
+- `todo_reminder`
+
+### Tool events (pre/post model)
+
+- `tool_call` (pre-execution) → can return `{ block?: boolean; reason?: string; input?: Record<string, unknown>; additionalContext?: string }`. A non-blocking handler that returns `input` replaces the arguments the tool executes with (the raw execution input, not the normalized `event.input` view); ignored when `block` is true. Distinct non-empty `additionalContext` values from all non-blocking handlers carry trusted handler-authored instructions delivered after the tool results and before the next provider request, with developer/system priority where the transport supports it; raw tool output and other untrusted data must stay in the tool result.
+- `tool_result` (post-execution) → can return `{ content?; details?; isError?; additionalContext?: string }`. Context is delivered outside tool output on both success and failure; check `event.isError` when guidance applies to only one outcome. Overrides merge per field across handlers, so a later return that omits a field (including a context-only return) never erases an earlier handler's value for it.
+
+Returned `input` is not applied to provider-native `computer` calls, whose event
+input is a synthetic view rather than the execution parameters. `edit` event

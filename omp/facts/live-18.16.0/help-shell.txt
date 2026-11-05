@@ -1,0 +1,9 @@
+Interactive shell console
+
+USAGE
+  $ omp shell [FLAGS]
+
+FLAGS
+  -C, --cwd=<value>    Set working directory for commands
+  -t, --timeout=<int>  Timeout per command in milliseconds
+      --no-snapshot    Skip sourcing snapshot from user shell
