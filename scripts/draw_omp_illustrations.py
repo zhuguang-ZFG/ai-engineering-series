@@ -3960,6 +3960,124 @@ def help_census(picture: Drawing):
                  GREEN, SAGE)
     picture.footer("同一轮：TUI 是卡片，-p 是 stdout 一行——壳换了，发动机没换。")
 
+def model_flags(picture: Drawing):
+    picture.header("附录 A · 模型与推理旗标",
+                   "三种指法，两层微调。",
+                   "摘要漏列是常态，以 cli-reference 与二进制解析为准。")
+    cards = (("指模型", "--model 接角色（slow / @slow），也吃模糊模型名；带提供方时 id 要精确", ORANGE),
+             ("换推理档", "--smol / --slow / --plan，各有对应的环境变量", BLUE),
+             ("会话微调", "--api-key、--provider-session-id、--prompt-cache-key、--service-tier；--provider 属遗留", GREEN))
+    for index, (title, detail, color) in enumerate(cards):
+        top = 196 + index * 124
+        picture.box((110, top, 1108, top + 100), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 23, color, True, width=930)
+        picture.text((136, top + 56), detail, 18, MUTED, width=930)
+    picture.note((92, 576, 1108, 664), "对不上号时：",
+                 "这几项不进 --help 摘要很正常——先去 cli-reference，再回二进制解析对账。",
+                 ORANGE, PEACH)
+    picture.footer("写了 --model 却还用默认模型：先看角色是不是被 profile 覆盖了。")
+
+
+def category_drawers(picture: Drawing):
+    picture.header("附录 B · 六个抽屉",
+                   "先分类，再翻章。",
+                   "类别是抽屉，不是每版都有的承诺。")
+    rows = (("会话", "恢复、导出、分叉", "第 7 章", ORANGE),
+            ("模型", "换模型或角色", "第 5 章", BLUE),
+            ("设置", "含秘密遮罩开关", "第 31 章", GREEN),
+            ("记忆", "/memory view·stats·queue·sync", "第 16 章", ORANGE),
+            ("MCP", "/mcp list·reload·add", "第 20 章", BLUE),
+            ("状态", "当前模式、谁在跑", "第 6 章", GREEN))
+    for index, (drawer, detail, where, color) in enumerate(rows):
+        top = 196 + index * 70
+        picture.box((110, top, 1108, top + 54), WHITE, color, radius=10)
+        picture.text((136, top + 7), drawer, 21, color, True, width=140)
+        picture.text((300, top + 10), detail, 17, MUTED, width=560)
+        picture.text((900, top + 10), where, 17, MUTED, width=180)
+    picture.note((92, 610, 1108, 694), "别背命令表：",
+                 "版本可能没有同名命令，先在会话里打 /help 看当前这一版。",
+                 BLUE, SKY)
+    picture.footer("抽屉 + 章节指针，比一张会过期的命令清单耐用。")
+
+
+def readonly_probes(picture: Drawing):
+    picture.header("附录 C · 只读四条",
+                   "不烧 API，跑完贴页边。",
+                   "要凭据的命令一条都不要真跑。")
+    probes = (("omp --version", "版本字符串", GREEN),
+              ("omp ps --json", "当前项目与 daemon 目录", GREEN),
+              ("omp config get secrets.enabled", "本机 18.16.0 回 false", GREEN),
+              ("omp plugin doctor", "插件自检，末尾给 Summary", GREEN))
+    for index, (command, detail, color) in enumerate(probes):
+        top = 196 + index * 82
+        picture.box((110, top, 748, top + 64), WHITE, color, radius=10)
+        picture.text((132, top + 8), command, 18, INK, True, width=590)
+        picture.text((132, top + 36), detail, 16, MUTED, width=590)
+    picture.box((770, 196, 1108, 492), WHITE, ORANGE, radius=12)
+    picture.text((792, 212), "禁止真跑", 22, ORANGE, True, width=290)
+    picture.text((792, 252), "omp token", 18, INK, True, width=290)
+    picture.text((792, 280), "omp auth", 18, INK, True, width=290)
+    picture.text((792, 308), "omp usage", 18, INK, True, width=290)
+    picture.text((792, 344), "会打凭据或账号信息；", 16, MUTED, width=290)
+    picture.text((792, 368), "只读它们的 --help。", 16, MUTED, width=290)
+    picture.text((792, 410), "usage 的 --redact", 16, MUTED, width=290)
+    picture.text((792, 434), "本机未真跑。", 16, MUTED, width=290)
+    picture.note((92, 516, 1108, 600), "不在 shell 的：",
+                 "/mcp、/memory、/settings、/model、/login——shell 侧只数 COMMANDS 确认存在。",
+                 BLUE, SKY)
+    picture.note((92, 606, 1108, 694), "版本对账：",
+                 "四条输出连同版本字符串存页边，升级后重跑一次就能看出差异。",
+                 ORANGE, PEACH)
+    picture.footer("四条都不花请求费；存好输出，第 30 章的证据包就有了素材。")
+
+
+def extension_vocabulary(picture: Drawing):
+    picture.header("附录 D · 扩展与安全",
+                   "四组词，一条闸门。",
+                   "能力、分发、遮罩、关卡。")
+    groups = (("能力四件", "skill / MCP / hook / extension", "第五篇各自成章", ORANGE),
+              ("分发与应急", "团队扩展包；--no-extensions", "后者用于无扩展复现", BLUE),
+              ("遮罩两模式", "obfuscate 与 replace", "对送模文本脱敏", GREEN),
+              ("关卡与姿态", "权限管线 → 审批、yolo", "可信扩展、skill://", ORANGE))
+    for index, (title, detail, hint, color) in enumerate(groups):
+        column, row = index % 2, index // 2
+        left = 110 + column * 508
+        top = 200 + row * 152
+        picture.box((left, top, left + 480, top + 128), WHITE, color, radius=12)
+        picture.text((left + 22, top + 12), title, 22, color, True, width=436)
+        picture.text((left + 22, top + 54), detail, 18, INK, width=436)
+        picture.text((left + 22, top + 88), hint, 16, MUTED, width=436)
+    picture.note((92, 528, 1108, 612), "一条闸门：",
+                 "陌生仓库里的 TS 一加载就等于执行别人的代码——白名单是唯一那道门。",
+                 ORANGE, PEACH)
+    picture.note((92, 628, 1108, 706), "读到这就够：",
+                 "第一遍就得懂的词 20 个，其余 16 个登记在 glosses-omp.json。",
+                 BLUE, SKY)
+    picture.footer("权限管线与审批是一问一答的两端：卡在第几关，就停在第几关。")
+
+
+def chapter_checklist(picture: Drawing):
+    picture.header("附录 E · 章末四项",
+                   "四项全勾，才算这一章写完。",
+                   "每章收尾都复述一遍。")
+    items = (("命令在本机帮助里存在", "--version 与 --help 已经打过"),
+             ("笔记中的旗标无臆造", "抄自 cli-reference，不是凭记忆"),
+             ("秘密与路径已打码", "截图与引用都过一遍"),
+             ("版本字符串已记录", "页边写下 omp/18.16.0 这类字符串"))
+    for index, (item, hint) in enumerate(items):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, GREEN, radius=10)
+        picture.box((134, top + 16, 166, top + 48), WHITE, ORANGE, radius=4)
+        picture.text((186, top + 8), item, 20, INK, True, width=520)
+        picture.text((186, top + 36), hint, 16, MUTED, width=520)
+    picture.note((92, 516, 1108, 600), "升级后三件事：",
+                 "重跑附录 A 的十分钟核对、重做第 31 章无扩展 A/B、翻页边看旧差异。",
+                 BLUE, SKY)
+    picture.note((92, 614, 1108, 694), "差异消失了：",
+                 "就划掉那条笔记——页边是版本差的地图。",
+                 ORANGE, PEACH)
+    picture.footer("清单短才好用：四条能在两分钟内过完。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4127,6 +4245,11 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "figA-5-model-flags": model_flags,
+    "figB-5-category-drawers": category_drawers,
+    "figC-5-readonly-probes": readonly_probes,
+    "figD-5-extension-vocabulary": extension_vocabulary,
+    "figE-5-chapter-checklist": chapter_checklist,
     "fig1-5-hands-inventory": hands_inventory,
     "fig2-5-token-beans": token_beans,
     "fig3-5-help-census": help_census,

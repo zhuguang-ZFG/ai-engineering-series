@@ -36,6 +36,10 @@ Windows + Bun 全局时，可执行文件常见在 `%USERPROFILE%\.bun\bin\omp.e
 `omp --version` 返回 `omp/18.16.0`，退出码 0。写作钉仍是 `omp/18.15.0`；两者同时保留。
 完整矩阵见 `VERIFY.md`，维护规则见 `overhaul/PIN-POLICY.md`。升级后重跑的日期只更新到实际运行的环境。
 
+![图E-5 章末四项](images/figE-5-chapter-checklist.jpg)
+
+*图E-5：四项全勾才算写完；升级后三件事按序重做。*
+
 ## E.4 章末核对清单（可复制到每一章）
 
 - [ ] 本章引用的命令在本机帮助中存在

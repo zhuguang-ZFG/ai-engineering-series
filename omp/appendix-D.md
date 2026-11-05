@@ -41,6 +41,10 @@
 - **后台任务 / background task**：丢到后台去跑、主对话不等它的那类活（第13章）。
 - **toks / token 计数**：omp 的数 token 子命令，能按文件数也能按句子数；不先量就不知道离窗口上限还有多远（第2章）。
 
+![图D-5 扩展与安全四组词](images/figD-5-extension-vocabulary.jpg)
+
+*图D-5：能力、分发、遮罩、关卡四组，闸门只有白名单一道。*
+
 ## D.4 扩展与安全
 
 - **skill / MCP / hook / extension**：技能、外部工具协议、钩子、扩展工厂（第五篇）。
