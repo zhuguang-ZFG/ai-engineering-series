@@ -39,6 +39,10 @@ omp --continue "我们刚谈到哪？"
 | `--session-dir <dir>` | 会话存储与查找目录 |
 | `--no-session` | 不保存会话（临时） |
 
+![图A-1 旗标分层](images/figA-1-flag-layers.jpg)
+
+*图A-1：第一位置参数先分类：进 launch、进子命令，还是当提示词——三条路各有一套旗标。*
+
 ## A.4 会话历史旗标
 
 | 旗标 | 含义（摘要） |
@@ -75,6 +79,10 @@ omp --help | grep -E 'profile|continue|no-extensions|mode' || true
 omp --trusted-extension 2>&1 | head -n 3 || true
 omp --fork 2>&1 | head -n 3 || true
 ```
+
+![图A-2 帮助漏列怎么核](images/figA-2-binary-probe.jpg)
+
+*图A-2：帮助没列不等于二进制不认识；用缺值探针和 cli-reference 交叉验证。*
 
 ## A.8 子命令地图（按用途分格，不冒充完整表）
 

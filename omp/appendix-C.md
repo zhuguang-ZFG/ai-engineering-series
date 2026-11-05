@@ -13,6 +13,10 @@
 3. 再看 `--config` 额外覆盖层；
 4. 改完用最小会话验证，不要一次改十二个键。
 
+![图C-1 先定位生效层](images/figC-1-config-stack.jpg)
+
+*图C-1：顺序搞错，改的是没人读的那份配置。*
+
 ## C.2 高频主题入口（带着文档走）
 
 | 主题 | 先读 | 本书相关 |
@@ -44,6 +48,10 @@ secrets:
 | 项目 | `<cwd>/.omp/secrets.yml` | 仅本项目 |
 
 全局路径跟随活动 agent 目录，**命名 profile 与 SDK 显式 agentDir 覆盖都会改它**（文档所述）。
+
+![图C-2 secrets 的两条路径](images/figC-2-secrets-paths.jpg)
+
+*图C-2：全局路径随活动 agent 目录变化；项目级按 content 覆盖全局。*
 
 ## C.4 跟做：只读盘点
 

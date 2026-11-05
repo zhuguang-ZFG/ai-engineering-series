@@ -2342,6 +2342,225 @@ def margin_notes(picture: Drawing):
     picture.footer("页边是给下一次升级的自己留的线索。")
 
 
+
+def flag_layers(picture: Drawing):
+    picture.header("附录 A · 旗标分层", "位置参数先问「是不是子命令」，再问「去哪」。",
+                   "launch 旗标、子命令旗标与裸词提示词，各走各的门。")
+    picture.box((58, 208, 400, 320), PEACH, ORANGE)
+    picture.text((229, 232), "第一位置参数", 24, ORANGE, True, "mm")
+    picture.text((229, 272), 'omp "修一下构建"', 20, MUTED, anchor="mm")
+    picture.text((229, 300), "不是已注册子命令", 18, MUTED, anchor="mm")
+    picture.box((58, 340, 400, 452), SKY, BLUE)
+    picture.text((229, 364), "是子命令名", 24, BLUE, True, "mm")
+    picture.text((229, 404), "omp models / omp commit", 19, MUTED, anchor="mm")
+    picture.text((229, 432), "走该命令自己的旗标集", 18, MUTED, anchor="mm")
+    picture.arrow([(410, 264), (500, 264)], ORANGE)
+    picture.arrow([(410, 396), (500, 396)], BLUE)
+    picture.box((510, 208, 1140, 452), WHITE, LINE)
+    picture.text((540, 232), "两级路由", 24, INK, True)
+    for index, (title, detail, color) in enumerate((
+            ("默认 launch", "进交互或 print；launch 旗标在此有效", ORANGE),
+            ("子命令", "omp <command> --help 是该命令的公开面", BLUE),
+            ("裸词", "omp launch <word> 才把词当提示词", GREEN))):
+        top = 274 + index * 56
+        picture.circle((556, top + 12), 8, color, color)
+        picture.text((578, top), title, 21, color, True)
+        picture.text((578, top + 26), detail, 18, MUTED)
+    picture.note((92, 488, 1108, 588), "只有 launch 的旗标跑到别的子命令前，",
+                 "可能被剥掉而不生效——文档例子：omp --cwd dir update。", BLUE, SKY)
+    picture.footer("先分类，再记旗标；分类错了，背再多旗标也没用。")
+
+
+def binary_probe(picture: Drawing):
+    picture.header("附录 A · 帮助漏列", "帮助是摘要，二进制才是判官。",
+                   "旗标没印在 --help 里，未必不被解析。")
+    picture.paper((58, 206, 566, 452), "omp --help 的正文", BLUE, WHITE, ruled=False)
+    picture.text((80, 252), "常见 launch 旗标与子命令表", 20, MUTED)
+    picture.text((80, 292), "— 没列 --fork", 21, ORANGE, True)
+    picture.text((80, 328), "— 没列 --session", 21, ORANGE, True)
+    picture.text((80, 364), "— 没列 --trusted-extension", 21, ORANGE, True)
+    picture.text((80, 408), "不等于「不认识」", 19, MUTED)
+    picture.arrow([(578, 330), (660, 330)], ORANGE)
+    picture.paper((672, 206, 1140, 452), "缺值探针", GREEN, WHITE, ruled=False)
+    picture.text((694, 252), "给一个不该给的值，读报错", 20, GREEN, True)
+    picture.text((694, 300), "omp --trusted-extension 2>&1", 19, MUTED)
+    picture.text((694, 338), "未知旗标 → unrecognized", 18, MUTED)
+    picture.text((694, 374), "已知旗标 → 要值 / 走下一步", 18, MUTED)
+    picture.note((92, 486, 1108, 620), "三处对齐再下结论：",
+                 "帮助摘要、docs/cli-reference.md、二进制实际解析。"
+                 "三者冲突时，以你本机跑出来的行为为准。", GREEN, SAGE)
+    picture.footer("帮助列不全不是 bug 的证据，也不是「不存在」的证据。")
+
+
+def slash_vs_flag(picture: Drawing):
+    picture.header("附录 B · 分工", "同一件事，两条入口。",
+                   "脚本里写旗标，人手里敲斜杠；不要求同名。")
+    picture.box((58, 214, 578, 620), SKY, BLUE)
+    picture.text((318, 244), "会话内：斜杠命令", 26, BLUE, True, "mm")
+    picture.terminal((86, 296, 550, 430), "续聊上一会话", True, "> /resume")
+    picture.text((318, 460), "住在 TUI 输入框里", 21, MUTED, anchor="mm")
+    picture.text((318, 500), "随版本、主题、扩展变化", 20, MUTED, anchor="mm")
+    picture.text((318, 556), "补全 / 帮助优先", 20, BLUE, True, "mm")
+    picture.box((622, 214, 1142, 620), SAGE, GREEN)
+    picture.text((882, 244), "shell 里：旗标", 26, GREEN, True, "mm")
+    picture.terminal((650, 296, 1114, 430), "同样的续聊，退出码可判", True,
+                     "> omp --continue")
+    picture.text((882, 460), "写在命令行上，可进脚本", 21, MUTED, anchor="mm")
+    picture.text((882, 500), "--continue / --resume / --restore", 19, MUTED,
+                 anchor="mm")
+    picture.text((882, 556), "CI 与自动化更稳", 20, GREEN, True, "mm")
+    picture.note((92, 640, 1108, 706), "不对称是常态：",
+                 "别假设每条斜杠都有同名旗标，也别在脚本里赌 TUI 补全。", BLUE, SKY)
+    picture.footer("一次意图，两条入口——按「谁在按」来选，不按记性来选。")
+
+
+def slash_not_shell(picture: Drawing):
+    picture.header("附录 B · 不报错的错", "敲错位置不报错，只把整句喂给模型。",
+                   "shell 里没有 /memory、/mcp 这类会话内命令。")
+    picture.terminal((58, 210, 1140, 470), "Working...", False,
+                     "> omp /memory view")
+    picture.arrow([(600, 480), (600, 526)], ORANGE)
+    picture.box((58, 536, 560, 660), PEACH, ORANGE)
+    picture.text((309, 560), "以为：命令没找到", 22, ORANGE, True, "mm")
+    picture.text((309, 606), "实际：进了默认 launch", 20, MUTED, anchor="mm")
+    picture.text((309, 634), "整句当提示词", 20, MUTED, anchor="mm")
+    picture.box((640, 536, 1140, 660), SAGE, GREEN)
+    picture.text((890, 560), "正确探法", 22, GREEN, True, "mm")
+    picture.text((890, 606), "omp --help 数 COMMANDS", 20, MUTED, anchor="mm")
+    picture.text((890, 634), "斜杠只在会话内", 20, MUTED, anchor="mm")
+    picture.footer("「没报错」不等于「跑对了」：先确认自己在哪一层。")
+
+
+def config_stack(picture: Drawing):
+    picture.header("附录 C · 哪一层生效", "从上往下找，找到第一顶戴着的帽子。",
+                   "改完只用最小会话验证一个键，别一次改十二个。")
+    layers = (("--profile / OMP_PROFILE", "命名配置档：隔离鉴权、会话、设置、缓存", ORANGE, PEACH),
+              ("--cwd / 项目目录", "决定相对路径与项目级 .omp/ 的落点", BLUE, SKY),
+              ("--config <file>", "额外覆盖层，可重复，用于临时试法", GREEN, SAGE),
+              ("最小会话验证", "只验一个键，确认生效再继续改", MUTED, WHITE))
+    for index, (title, detail, color, fill) in enumerate(layers):
+        top = 210 + index * 106
+        picture.box((200, top, 1000, top + 86), fill, color)
+        picture.text((228, top + 14), title, 24, color, True)
+        picture.text((228, top + 48), detail, 19, MUTED)
+        if index:
+            picture.arrow([(600, top - 14), (600, top - 2)], LINE, 3)
+    picture.text((70, 384), "先问顺序，", 21, MUTED, True)
+    picture.text((70, 412), "再问键名", 21, MUTED)
+    picture.note((92, 646, 1108, 706), "配置分散在：",
+                 "config.yml、项目 .omp/、环境变量、secrets.yml、LSP 配置——完整键名以帮助与文档为准。",
+                 BLUE, SKY)
+    picture.footer("先定位生效层，再谈值对不对；层搞错，改的是没人读的那份。")
+
+
+def secrets_paths(picture: Drawing):
+    picture.header("附录 C · secrets 放哪", "全局一份，项目一份，后者压前者。",
+                   "命名 profile 与 SDK 的 agentDir 都会改写「全局」的位置。")
+    picture.paper((58, 208, 566, 470), "全局", BLUE, WHITE, ruled=False)
+    picture.text((80, 252), "~/.omp/agent/secrets.yml", 20, BLUE, True)
+    picture.text((80, 296), "跨项目共用", 20, MUTED)
+    picture.text((80, 336), "跟随活动 agent 目录", 19, MUTED)
+    picture.text((80, 372), "profile / agentDir 一改，", 19, ORANGE)
+    picture.text((80, 398), "它就换地方", 19, ORANGE)
+    picture.plus = None
+    picture.text((600, 330), "→", 46, MUTED, True, "mm")
+    picture.paper((632, 208, 1140, 470), "项目", GREEN, WHITE, ruled=False)
+    picture.text((654, 252), "<cwd>/.omp/secrets.yml", 20, GREEN, True)
+    picture.text((654, 296), "只服务本仓库", 20, MUTED)
+    picture.text((654, 336), "按 content 覆盖全局", 19, MUTED)
+    picture.text((654, 372), "所以别把明文密钥", 19, ORANGE)
+    picture.text((654, 398), "提交进仓库", 19, ORANGE)
+    picture.note((92, 496, 1108, 600), "开关在 config.yml：",
+                 "secrets.enabled 为 true 才谈遮罩；两种模式见第 31 章（obfuscate 可逆 / replace 不可逆）。",
+                 GREEN, SAGE)
+    picture.footer("路径先看清，再谈遮罩；写错文件，等于没开。")
+
+
+def glossary_rings(picture: Drawing):
+    picture.header("附录 D · 术语分环", "先记环，再记词。",
+                   "一个词属于哪一环，决定它跟谁容易混。")
+    center = (600, 420)
+    rings = ((250, "产品与界面", ORANGE, PEACH),
+             (180, "会话与配置", BLUE, SKY),
+             (110, "代理循环与工具", GREEN, SAGE))
+    for radius, label, color, fill in rings:
+        picture.circle(center, radius, fill, color, 4)
+    picture.circle(center, 44, WHITE, INK, 3)
+    picture.text((600, 420), "omp", 24, INK, True, "mm")
+    picture.text((600, 106), "产品与界面", 21, ORANGE, True, "mm")
+    picture.text((600, 176), "会话与配置", 20, BLUE, True, "mm")
+    picture.text((600, 246), "循环与工具", 20, GREEN, True, "mm")
+    picture.text((600, 710), "扩展与安全、嵌入、魔法词各自成环：先记环名，再记环里的词。",
+                 19, MUTED, anchor="mm")
+    picture.footer("术语表的用法是默写后对答案，不是从头读到尾。")
+
+
+def confusable_pairs(picture: Drawing):
+    picture.header("附录 D · 易混对", "成对记，比单词记牢。",
+                   "默写时专门练这几对。")
+    pairs = (("斜杠命令", "魔法词", "你下的命令 / 提示词里的倾向"),
+             ("profile", "cwd", "一顶帽子 / 一个站位"),
+             ("obfuscate", "replace", "可逆 / 不可逆"),
+             ("SDK", "RPC", "同进程 / 跨进程"),
+             ("RPC", "ACP", "自定义 JSONL / JSON-RPC over stdio"),
+             ("task", "orchestrate", "委派 / 鼓励并行的魔法倾向"))
+    for index, (left, right, why) in enumerate(pairs):
+        column, row = divmod(index, 3)
+        top = 206 + row * 158
+        left_x = 58 + column * 552
+        picture.box((left_x, top, left_x + 520, top + 132), WHITE, LINE)
+        picture.text((left_x + 24, top + 18), left, 24, ORANGE, True)
+        picture.text((left_x + 250, top + 18), right, 24, BLUE, True)
+        picture.line([(left_x + 222, top + 22), (left_x + 222, top + 50)], LINE, 2)
+        picture.line([(left_x + 24, top + 66), (left_x + 496, top + 66)], LINE, 1)
+        picture.text((left_x + 24, top + 84), why, 19, MUTED, width=472)
+    picture.footer("练易混对比背孤立定义省力：错一次，记住的是一对。")
+
+
+def discovery_ladder(picture: Drawing):
+    picture.header("第 14 章 · 发现优先级", "同层只活一个，跨层各活一份。",
+                   "数字是文档给的发现优先级：native 最高，原生文件赢在起点。")
+    rows = (("native", 100, ORANGE), ("omp-plugins", 90, ORANGE),
+            ("claude", 80, BLUE), ("agent-plugins", 75, BLUE),
+            ("agents / codex", 70, BLUE), ("gemini", 60, GREEN),
+            ("opencode", 55, GREEN), ("cursor / windsurf", 50, GREEN),
+            ("cline", 40, GREEN), ("github", 30, MUTED),
+            ("vscode", 20, MUTED), ("agents-md / claude-md", 10, MUTED))
+    for index, (name, score, color) in enumerate(rows):
+        column, row = divmod(index, 6)
+        left = 58 + column * 552
+        top = 212 + row * 66
+        width = int(score * 3.4)
+        picture.box((left, top, left + max(width, 30), top + 48), WHITE, color, radius=8)
+        picture.text((left + 12, top + 12), name, 19, INK)
+        picture.text((left + 470, top + 12), str(score), 19, color, True, "rm")
+    picture.note((92, 620, 1108, 700), "记两条就够：",
+                 "用户级只留一份（native 遮住其他用户级）；项目级按目录深度，每层一份，越靠近 cwd 越显眼。",
+                 BLUE, SKY)
+    picture.footer("调试「怎么还念旧规矩」：先看 cwd 与最近非空 .omp/，再看 enabledProviders。")
+
+
+def role_layers(picture: Drawing):
+    picture.header("第 17 章 · 谁压住谁", "从下往上找，最后说话的那层赢。",
+                   "改的那层不是生效的那层，是角色路由最常见的坑。")
+    layers = (("setting env var", "PI_SMOL_MODEL / PI_SLOW_MODEL / PI_PLAN_MODEL", ORANGE),
+              ("runtime overrides", "--smol / --slow / --plan（不落盘）", ORANGE),
+              ("CLI overlays", "--config <file>", BLUE),
+              ("project config", "<cwd>/.omp/config.yml", GREEN),
+              ("global config", "~/.omp/agent/config.yml", GREEN),
+              ("built-in defaults", "出厂值", MUTED))
+    for index, (title, detail, color) in enumerate(layers):
+        top = 640 - index * 82
+        picture.box((200, top, 1000, top + 64), WHITE, color, radius=8)
+        picture.text((226, top + 8), title, 22, color, True)
+        picture.text((226, top + 36), detail, 18, MUTED)
+    picture.arrow([(150, 690), (150, 200)], MUTED, 4)
+    picture.text((112, 440), "优先级升高", 19, MUTED, anchor="mm")
+    picture.note((92, 470, 1108, 470), "", "")
+    picture.footer("modelRoleStorage 决定 /model 里的指派写到哪一层；本机默认为 global。")
+
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -2435,6 +2654,16 @@ FIGURES = {
     "figE-3-margin-notes": margin_notes,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
+    "figA-1-flag-layers": flag_layers,
+    "figA-2-binary-probe": binary_probe,
+    "figB-1-slash-vs-flag": slash_vs_flag,
+    "figB-2-slash-not-shell": slash_not_shell,
+    "figC-1-config-stack": config_stack,
+    "figC-2-secrets-paths": secrets_paths,
+    "figD-1-glossary-rings": glossary_rings,
+    "figD-2-confusable-pairs": confusable_pairs,
+    "fig14-3-discovery-ladder": discovery_ladder,
+    "fig17-3-role-layers": role_layers,
 }
 
 

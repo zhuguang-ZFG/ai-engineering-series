@@ -2,6 +2,10 @@
 
 只收正文高频词。精确行为以文档为准。闭卷默写十个再对答案，是本附录的跟做方式。
 
+![图D-1 术语按环记](images/figD-1-glossary-rings.jpg)
+
+*图D-1：先记环名，再记环里的词——环决定它跟谁容易混。*
+
 ## D.1 产品与界面
 
 - **omp / oh-my-pi**：本书所说的编码代理产品线；写作钉 v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。
@@ -83,6 +87,10 @@
 | SDK | RPC | 同进程与跨进程 |
 | RPC | ACP | 自定义 JSONL 与 JSON-RPC over stdio |
 | task | orchestrate | 委派与鼓励并行的魔法倾向 |
+
+![图D-2 易混对](images/figD-2-confusable-pairs.jpg)
+
+*图D-2：成对记比背孤立定义省力：错一次，记住的是一对。*
 
 默写时专门练易混对，比练孤立定义更管用。
 
