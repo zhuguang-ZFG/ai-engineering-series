@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "agent-harness": {
+    "shared_with": "agent-harness",
     "term": {
       "zh": "智能体外壳",
       "en": "Agent Harness"
@@ -30,6 +31,7 @@
     ]
   },
   "main-loop": {
+    "shared_with": "main-loop",
     "term": {
       "zh": "工作循环",
       "en": "agent loop"
@@ -57,6 +59,7 @@
     ]
   },
   "context-window": {
+    "shared_with": "context-window",
     "term": {
       "zh": "上下文窗口",
       "en": "context window"
@@ -85,6 +88,7 @@
     ]
   },
   "compaction": {
+    "shared_with": "auto-compact",
     "term": {
       "zh": "压缩",
       "en": "compaction"
@@ -113,6 +117,7 @@
     ]
   },
   "system-prompt": {
+    "shared_with": "system-prompt",
     "term": {
       "zh": "系统提示",
       "en": "system prompt"
@@ -140,6 +145,7 @@
     ]
   },
   "tool-result": {
+    "shared_with": "tool-result",
     "term": {
       "zh": "工具结果",
       "en": "tool result"
@@ -168,6 +174,7 @@
     ]
   },
   "yolo": {
+    "shared_with": "permission-mode",
     "term": {
       "zh": "全放开模式",
       "en": "yolo mode"
@@ -196,6 +203,7 @@
     "mark": false
   },
   "permission-pipeline": {
+    "shared_with": "permission-pipeline",
     "term": {
       "zh": "权限管线",
       "en": "permission pipeline"
@@ -223,6 +231,7 @@
     ]
   },
   "hook": {
+    "shared_with": "hook",
     "term": {
       "zh": "钩子",
       "en": "hook"
@@ -251,6 +260,7 @@
     ]
   },
   "skill": {
+    "shared_with": "skill",
     "term": {
       "zh": "技能",
       "en": "skill"
@@ -279,6 +289,7 @@
     ]
   },
   "mcp-server": {
+    "shared_with": "mcp-server",
     "term": {
       "zh": "MCP 服务器",
       "en": "MCP server"
@@ -307,6 +318,7 @@
     ]
   },
   "sub-agent": {
+    "shared_with": "sub-agent",
     "term": {
       "zh": "子智能体",
       "en": "subagent"
@@ -335,6 +347,7 @@
     ]
   },
   "plan-mode": {
+    "shared_with": "plan-mode",
     "term": {
       "zh": "计划模式",
       "en": "plan mode"
@@ -363,6 +376,7 @@
     ]
   },
   "memory": {
+    "shared_with": "memory",
     "term": {
       "zh": "记忆",
       "en": "memory"
@@ -391,6 +405,7 @@
     ]
   },
   "extension": {
+    "shared_with": "plugin",
     "term": {
       "zh": "扩展",
       "en": "extension"
@@ -419,6 +434,7 @@
     ]
   },
   "session": {
+    "shared_with": "session",
     "term": {
       "zh": "会话",
       "en": "session"
@@ -446,6 +462,7 @@
     ]
   },
   "prompt-cache": {
+    "shared_with": "prompt-cache",
     "term": {
       "zh": "提示缓存",
       "en": "prompt cache"
@@ -474,6 +491,7 @@
     ]
   },
   "snapshot": {
+    "shared_with": "snapshot",
     "term": {
       "zh": "快照",
       "en": "snapshot"
@@ -638,6 +656,7 @@
     ]
   },
   "toks": {
+    "shared_with": "token-budget",
     "term": {
       "zh": "token 计数",
       "en": "toks"
@@ -885,6 +904,7 @@
     ]
   },
   "approval": {
+    "shared_with": "permission-mode",
     "term": {
       "zh": "审批",
       "en": "approval"
@@ -940,6 +960,7 @@
     ]
   },
   "agents-md": {
+    "shared_with": "claude-md",
     "term": {
       "zh": "项目说明文件",
       "en": "AGENTS.md"

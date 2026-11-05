@@ -18,6 +18,25 @@
     },
     "accessed": "2026-11-03"
   },
+  "yuyu-comparison": {
+    "title": "御舆：分册对照与共享术语",
+    "title_en": "Yuyu: volume comparison and shared terminology",
+    "authority": "本仓库作者与贡献者",
+    "authority_en": "Repository authors and contributors",
+    "kind": "github",
+    "url": "https://github.com/zhuguang-ZFG/claude-code-book/tree/1ec7749bdea31b96729eb307f69e12f446284b2e",
+    "snapshot": "对照地图与共享词表；仅供跨册导航，不支撑 omp 行为断言",
+    "snapshot_en": "Chapter map and shared terms; navigation only, not evidence for omp behavior",
+    "license": "CC BY-NC-SA 4.0",
+    "license_en": "CC BY-NC-SA 4.0",
+    "scope": "docs/COMPARE-OMP.md、docs/yuyu-overhaul/SHARED-TERMS.md、omp/overhaul/CROSSREF-MAP.md",
+    "scope_en": "docs/COMPARE-OMP.md, docs/yuyu-overhaul/SHARED-TERMS.md, omp/overhaul/CROSSREF-MAP.md",
+    "normative": false,
+    "pinned": {
+      "commit": "1ec7749bdea31b96729eb307f69e12f446284b2e"
+    },
+    "accessed": "2026-11-05"
+  },
   "omp-site": {
     "title": "omp.sh",
     "title_en": "omp.sh",

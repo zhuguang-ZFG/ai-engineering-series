@@ -107,8 +107,6 @@ jobs:
   # 不把御舆那一格染红，御舆失败也不挡 omp —— Task M4 Step 4 的口径。
   # 上面 paths 里加了 'omp/**'，所以改 omp 也会重跑御舆那一格：这是有意的，
   # 「不伤 book」这条契约只能在 omp 改动上被验证，而不是靠约定。
-  # 前置条件：omp/ 与 omp 的 plain/json 配置得先 commit。commit 之前这个 job
-  # 会在 build 一步失败（检出里没有 omp/，registry 找不到源文件），不是偶发。
   omp:
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -139,10 +137,11 @@ jobs:
         timeout-minutes: 15
         run: python -m playwright install --with-deps chromium
 
-      # 步骤就是「把 omp 排出来」这一件：check --full 属于御舆那一格，
-      # omp 的内容门禁在 omp/overhaul/audit_structure.py（另册执行）。
       - name: Build the omp edition (zh + PDF)
-        run: python scripts/bookctl.py build --product omp --lang zh --pdf
+        run: |
+          python omp/overhaul/audit_structure.py --check
+          python omp/overhaul/audit_delivery.py
+          python scripts/bookctl.py build --product omp --lang zh --pdf
 
       - uses: actions/upload-artifact@v4
         with:

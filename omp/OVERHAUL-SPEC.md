@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development`（推荐）或 `superpowers:executing-plans` 按任务逐项落地。步骤使用 checkbox（`- [ ]`）跟踪。  
 > **版本**：v1.0 · 日期：2026-11-03（America/Adak）  
-> **状态**：仅 SPEC；**提交 / 推送稍后做**（本文件明确禁止在未获另令前 `git commit` / `git push`）。  
+> **状态**：2026-11-05 本地可执行验收完成；box 镜像同步与本轮改动的远端 CI 未验，详见 `overhaul/ACCEPTANCE.md`。
 > **依据**：`omp/FUSION-PLAN.md`（拍板）、`omp/VERIFY.md`、`omp/outline.md`、`omp/BUILD.md`、已出 `yuyu-omp-zh.html`/`.pdf`、用户拍板（同仓分册 · `yuyu-omp` · 先中文 · 双轨插画 · 仓名不变加 `omp/`）。
 
 **Goal:** 把同仓第二分册 `omp/` 从「可出书的初稿」改造成「厚、透、易读、可核对、可 CI 绿、可与御舆对照」的正式中文分册，并预留英文与术语共享，但不在本 SPEC 执行期内强制 commit/push。
@@ -12,6 +12,14 @@
 **Tech Stack:** Markdown 书稿 · `yuyu-book` / `scripts/bookctl.py` · Makefile `book-omp`/`book-omp-pdf` · handraw-style FA-023 + C-25 · Mermaid · GitHub Actions（book/check-book/pages）· 本机 `omp/18.16.0`（Windows Bun）与写作钉 `omp/18.15.0` · Humanizer-zh
 
 ## Global Constraints
+
+### 收尾口径（2026-11-05）
+
+正文已有 13 张 Mermaid，七篇全部覆盖；16 张问题插画在 `1ec7749` 中已替换。
+本轮按实际交付补验收记录，不重复扩写章节。M4 采用已有的独立 `book`/`omp` job，
+不再为矩阵示例重排 workflow。英文只预留；`shared_with` 只作相关概念导航。
+历史「未 commit/push」复选框记录原执行期，本轮不会用它们掩盖已经存在的提交。
+box 镜像仍无访问通道，不能把未同步写成完成；远端 CI 需对应实际提交另行核验。
 
 ### 发布授权更新（2026-11-04）
 
@@ -159,7 +167,7 @@ box 镜像：`/workspace/omp-book/` 同步 SPEC 与关键 md；**不以 box 覆�
 **Interfaces:**
 - Produces: 基线页数、产物大小、git 脏文件列表、钉版字符串
 
-- [ ] **Step 1: 记录产物与钉版**
+- [x] **Step 1: 记录产物与钉版**（既有 `overhaul/BASELINE.md` 已含双版本、238 页与哈希）
 
 在 `omp/overhaul/BASELINE.md` 写入（数值以本机当时为准，示例格式如下）：
 
@@ -178,7 +186,7 @@ box 镜像：`/workspace/omp-book/` 同步 SPEC 与关键 md；**不以 box 覆�
 - Commit/push: DEFERRED
 ```
 
-- [ ] **Step 2: 导出脏文件清单**
+- [x] **Step 2: 导出脏文件清单**（既有两份 baseline txt）
 
 Run（本机 PowerShell，仓根）:
 
@@ -189,10 +197,10 @@ git diff --stat > omp/overhaul/git-diffstat-baseline.txt
 
 Expected: 文件生成；可见 `omp/` 未跟踪与 `Makefile`/`bookctl` 等已改。
 
-- [ ] **Step 3: 验收**
+- [x] **Step 3: 验收**（基线文件齐；历史暂存偏差已在 BASELINE 记录）
 
-- [ ] `BASELINE.md` 存在且含双钉版  
-- [ ] **未**执行 `git add` / `commit` / `push`
+- [x] `BASELINE.md` 存在且含双钉版
+- [x] Git 状态已核对：历史暂存偏差保留，发布授权见 2026-11-04 更新；不再宣称全程零提交
 
 **里程碑验收 M0:** 基线可复述；后续扩写以本机 `omp/` 为真源。
 
@@ -448,11 +456,11 @@ HTML 里可搜到 `class="gloss"`（带 `data-g`）、`gloss-pop`、`sec-tier t-
 
 手绘：保留 FA-023；修图优先「含英文标签的图」与「箭头语义错误」；图下题注一律中文。
 
-- [ ] **Step 1: 建清单**
+- [x] **Step 1: 建清单**（`overhaul/ILLUST-CHECKLIST.md`）
 
 `ILLUST-CHECKLIST.md` 列：文件名 · 问题 · 状态(open/fixed) · 负责人。
 
-- [ ] **Step 2: 插入 MM01–MM12**
+- [x] **Step 2: 插入 MM01–MM12**（既有正文共 13 张，七篇都有图）
 
 示例（ch01）：
 
@@ -466,11 +474,11 @@ flowchart LR
 ```
 ````
 
-- [ ] **Step 3: 修手绘错字**
+- [x] **Step 3: 修手绘错字**（16 张已知问题图已替换，见 checklist 与 visual-redesign 记录）
 
 对 checklist 每条 open → 重生成或手工标注覆盖 → fixed。
 
-- [ ] **Step 4: 构建检查**
+- [x] **Step 4: 构建检查**（13/13 图版含 SVG，102 张位图内嵌；本轮 HTML/PDF 均通过）
 
 ```powershell
 make book-omp
@@ -481,10 +489,10 @@ Expected: 退出 0；`Select-String` 统计 md 内 ````mermaid` ≥ 12。
 
 **里程碑验收 M3:**
 
-- [ ] Mermaid ≥ 12；手绘 checklist 全 fixed  
-- [ ] PDF 抽 5 页图不糊、题注中文  
-- [ ] 御舆 `make book` smoke 仍过（防 art.py 回归）  
-- [ ] **未** commit/push  
+- [x] Mermaid ≥ 12；已知问题图 checklist 全 fixed
+- [x] PDF 抽 5 页图可辨、题注中文（47、101、192、213、260 页，截图见 ACCEPTANCE）
+- [x] 御舆 `make book` smoke 仍过（本轮中文 HTML，20 units）
+- [x] 本轮未 commit/push
 
 ---
 
@@ -512,7 +520,7 @@ Expected: `yuyu-omp-zh.pdf` 生成；页数 ≥ 基线 238（加厚后应更高�
 页数 321 ≥ 238（基线 +83）。书签 49 条，用 PyMuPDF 取 `get_toc()` 核过结构：一级 16 条＝**前言 + 七篇 + 五附录 + 原理札记 / 按语集 / 来源与许可**，
 「含前言 / 含篇 / 含附录」三项实测 True / True / 5。逐次构建的字节数与页数对照在 `docs/yuyu-overhaul/PDF-PAGES.md`。
 
-- [ ] **Step 2: 御舆不回归**
+- [x] **Step 2: 御舆不回归**（本轮中文渲染成功；共享 check 六步通过，46 + 515 项测试）
 
 ```powershell
 python scripts/bookctl.py build --product book --lang zh --out-dir yuyu-book/.scratch/book-smoke
@@ -520,7 +528,7 @@ python scripts/bookctl.py build --product book --lang zh --out-dir yuyu-book/.sc
 
 Expected: 成功；勿覆盖正式 `dist/yuyu-agent-harness-zh.*` 除非有意。
 
-- [ ] **Step 3: 编写 workflow 片段（先改文件，不推送）**
+- [x] **Step 3: 编写 workflow 片段（先改文件，不推送）**（独立 omp job 已存在；本轮补结构、交付门禁及源稿装配）
 
 `book.yml` 思路（实施时按现有 YAML 风格合并，勿发明不存在的 action API）：
 
@@ -539,7 +547,7 @@ python scripts/bookctl.py build --product omp --lang zh --pdf
 
 artifact 名：`yuyu-omp-zh`。
 
-- [ ] **Step 4: 本地模拟 CI 脚本**
+- [x] **Step 4: 本地模拟 CI 脚本**（`ci-local.ps1` 已落盘，显式检查退出码，默认写到 `.scratch/`）
 
 Create `omp/overhaul/ci-local.ps1`:
 
@@ -553,16 +561,16 @@ Write-Host "ci-local OK"
 Run: `powershell -File omp/overhaul/ci-local.ps1`  
 Expected: `ci-local OK`。
 
-- [ ] **Step 5: 文档声明**
+- [x] **Step 5: 文档声明**（`BUILD.md` 写明两个 job、本地脚本与远端运行的区别）
 
 在 `BUILD.md` 增加一节「CI：提交推送稍后；推送后期望 book.yml matrix 含 omp zh」。
 
 **里程碑验收 M4:**
 
-- [ ] 本地 `ci-local.ps1` 绿  
-- [ ] workflow 文件已改且经人工 YAML 目视检查  
-- [ ] **明确：真正 GitHub CI 变绿 = 用户稍后 commit/push 之后的事**  
-- [ ] **本阶段不 push**  
+- [x] 本地 `ci-local.ps1` 绿（332 页、49 书签，末行 `ci-local OK`）
+- [x] workflow 已审阅并通过 YAML 解析
+- [x] 远端范围已明确：既有 `1ec7749` 两项 CI 成功，本轮未提交改动尚无远端结果
+- [x] 本轮未 push
 
 ---
 
@@ -577,7 +585,7 @@ Expected: `ci-local OK`。
 **Interfaces:**
 - Produces: 可复跑核对；双环境表
 
-- [ ] **Step 1: 写 PIN-POLICY**
+- [x] **Step 1: 写 PIN-POLICY**（`overhaul/PIN-POLICY.md`）
 
 ```markdown
 # 钉版策略
@@ -588,11 +596,11 @@ Expected: `ci-local OK`。
 - 发版：不自动追最新 upstream
 ```
 
-- [ ] **Step 2: VERIFY 增加「标准复验矩阵」表**
+- [x] **Step 2: VERIFY 增加「标准复验矩阵」表**（含 Windows 新复验与 box 历史记录，附录 E 同步字段）
 
 列：环境 · 版本 · 安装 · 命令 · 期望 · 最近实跑日期(America/Adak)。
 
-- [ ] **Step 3: 扫描缺清单的章**
+- [x] **Step 3: 扫描缺清单的章**（33/33，结构审计严格模式通过）
 
 ```powershell
 Select-String -Path omp/ch*.md -Pattern "版本核对" -List
@@ -600,7 +608,7 @@ Select-String -Path omp/ch*.md -Pattern "版本核对" -List
 
 Expected: 33 章都有命中；缺则补。
 
-- [ ] **Step 4: 本机复跑**（用户机）
+- [x] **Step 4: 本机复跑**（用户机；UTC 2026-11-05 03:31，三条均 exit 0，摘要 `recheck-20261105.txt`）
 
 ```powershell
 omp --version   # omp/18.16.0
@@ -612,9 +620,9 @@ omp models | Select-Object -First 5
 
 **里程碑验收 M5:**
 
-- [ ] PIN-POLICY + VERIFY 矩阵完整  
-- [ ] 33 章均有版本核对清单  
-- [ ] **未** commit/push  
+- [x] PIN-POLICY + VERIFY 矩阵完整
+- [x] 33 章均有版本核对清单
+- [x] 本轮未 commit/push；既有发布授权与历史提交单独保留
 
 ---
 
@@ -630,22 +638,22 @@ omp models | Select-Object -First 5
 - Consumes: FUSION-PLAN 对照表  
 - Produces: 读者可读对照；词表无 CC 专名泄漏
 
-- [ ] **Step 1: 落盘 COMPARE-YUYU.md**
+- [x] **Step 1: 落盘 COMPARE-YUYU.md**（阅读选择、十行同构点与实现边界）
 
 含：何时先读御舆、何时只读 omp、10 行同构点、明确「不同实现勿混」。
 
-- [ ] **Step 2: 词表审计**
+- [x] **Step 2: 词表审计**（21 个有效 `shared_with`；定义污染 0；独立对照来源固定到完整 SHA）
 
 脚本/人工检查 `glosses-omp.json`：不得出现「55 个工具」「QueryEngine」等御舆专有实现名作为 omp 定义。
 
-- [ ] **Step 3: README 入口**
+- [x] **Step 3: README 入口**（中英文门面均补 Omp 对照与英文预留链接）
 
 在第二分册段落加链接：`omp/COMPARE-YUYU.md`。
 
 **里程碑验收 M6:**
 
-- [ ] 对照文存在；词表审计通过  
-- [ ] **未** commit/push  
+- [x] 对照文存在；词表审计通过
+- [x] 本轮未 commit/push
 
 ---
 
@@ -657,18 +665,18 @@ omp models | Select-Object -First 5
 - Modify: `yuyu-book/PRODUCTS.md`（写明 `langs` 扩展步骤）
 - Modify: `omp/BUILD.md`（英文开启条件清单）
 
-- [ ] **Step 1: 建 stub 目录与说明**
+- [x] **Step 1: 建 stub 目录与说明**（`en/omp/README.md`、`STATUS.md`，无汉字；开启步骤见 PRODUCTS/BUILD）
 
 `en/omp/README.md` 内容要点：权威语言 zh；开启 en 需全量翻译 + 零汉字门禁 + manifest `langs` 含 `en`。
 
-- [ ] **Step 2: 确认 manifest 仍只有 zh**
+- [x] **Step 2: 确认 manifest 仍只有 zh**（交付审计与源码装配均通过）
 
 `manifest-omp.json` → `"langs": ["zh"]` 不变。
 
 **里程碑验收 M7:**
 
-- [ ] stub 存在；中文构建不受影响  
-- [ ] **未** commit/push  
+- [x] stub 存在；中文构建不受影响
+- [x] 本轮未 commit/push
 
 ---
 
@@ -679,18 +687,18 @@ omp models | Select-Object -First 5
 - Modify: `omp/OVERHAUL-SPEC.md`（勾选里程碑）
 - Sync: box `/workspace/omp-book/OVERHAUL-SPEC.md`
 
-- [ ] **Step 1: 关闭缺口表 K1–K12**
+- [x] **Step 1: 核对缺口表 K1–K12**（K1–K11 本地关闭；K12 真源明确，box 镜像未验，逐项写入 ACCEPTANCE）
 
 在 `ACCEPTANCE.md` 逐条：关闭证据路径 / 仍 open 原因。
 
-- [ ] **Step 2: 最终本地构建**
+- [x] **Step 2: 最终本地构建**（ci-local 与共享 check 通过，`chars-final.txt` 与脚本输出一致）
 
 ```powershell
 powershell -File omp/overhaul/ci-local.ps1
 python omp/overhaul/count_chars.py > omp/overhaul/chars-final.txt
 ```
 
-- [ ] **Step 3: 移交清单（给后续「提交推送」用）**
+- [x] **Step 3: 移交清单（给后续「提交推送」用）**（ACCEPTANCE 记录本轮建议分组；历史导入和插画提交不重复）
 
 列出建议 commit 分组（**只建议，不执行**）：
 
@@ -700,7 +708,7 @@ python omp/overhaul/count_chars.py > omp/overhaul/chars-final.txt
 4. `feat(omp): mermaid + illustration fixes`  
 5. `ci: matrix product omp zh`  
 
-- [ ] **Step 4: 再次确认 Git**
+- [x] **Step 4: 再次确认 Git**（本轮只改工作树；既有两份未跟踪日志保留）
 
 ```powershell
 git status -sb
@@ -710,8 +718,9 @@ Expected: 仍有改动；**无**新的「已推送」假设；**不**运行 comm
 
 **里程碑验收 M8:**
 
-- [ ] ACCEPTANCE 签字栏（日期 America/Adak + 执行者）  
-- [ ] 用户已知：提交推送稍后另做；CI 真绿在推送之后  
+- [x] ACCEPTANCE 签字：Codex，2026-11-04 America/Adak（2026-11-05 Asia/Shanghai）
+- [x] 已区分本地通过、既有提交的远端成功与本轮改动的远端未验
+- [ ] box `/workspace/omp-book/` 镜像同步（当前无访问通道；本机真源不受影响）
 
 ---
 
@@ -787,7 +796,7 @@ Plan 落盘位置：
 1. **Subagent-Driven**（推荐）— 每 Task 一个子代理 + 两段审查  
 2. **Inline Execution** — 本会话按 `executing-plans` 批次推进  
 
-**当前用户已定：先写 SPEC；提交推送稍后。故此处停止在文档交付，不启动 M1 扩写，除非另令。**
+**当前交付：本地执行与验收已完成，详见 `overhaul/ACCEPTANCE.md`。旧的「只写 SPEC」状态已被后续执行取代；box 镜像与本轮远端运行仍按实际状态保留。**
 
 ---
 

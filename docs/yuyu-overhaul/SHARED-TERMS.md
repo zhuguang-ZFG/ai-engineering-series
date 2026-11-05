@@ -8,6 +8,10 @@ SPEC M7 Step 2 的产物。回答三个问题：**哪些词两本书都在用**�
 omp `glosses-omp.json`，由 `plain.registry_names()` 按 `manifest.product` 选名），
 词表没有第三份文件参与装配，所以改这里不会动任何产物 —— 也意味着这里的一致性要靠跑下面的审计。
 
+2026-11-05 补充：omp 登记表增加 21 个 `shared_with` 对照 ID，由
+`omp/overhaul/audit_delivery.py` 检查目标存在。它们用于跨册导航，不合并释义或替换词形；
+其中六项跨 ID 关联沿用下表的「相关但不等同」边界。剩余 15 个 omp 词条不设置关联。
+
 ## 一、总数（2026-11-04 实测）
 
 | | 御舆 | omp |

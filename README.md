@@ -44,9 +44,9 @@
 
 两条命令各编各的书，不再是「尚未接入」：`make book` / `make book-pdf` 仍只构建御舆（双语），`make book-omp` / `make book-omp-pdf` 构建 omp 中文版（后者多出 A4 PDF），等价命令是 `python scripts/bookctl.py build --product omp --lang zh [--pdf]`。两边产物同名不同前缀，都落在 `yuyu-book/dist/`，编一本不会盖掉另一本。构建口径与本机实测的体积/页数见 [omp/BUILD.md](omp/BUILD.md)，双产品的机制与边界见 [STRUCTURE.md](STRUCTURE.md) 的 §3.6。
 
-有两处边界值得先说，免得按御舆的直觉去按 omp：`make check`（`bookctl check --fast/--full`）目前只验御舆，omp 不在那几步里；GitHub 的 Book CI 已加了一个独立 `omp` job，它不 `needs` 御舆、也挡不住御舆发布，但要真跑得起来得等 omp 书稿先进 main。
+`make check`（`bookctl check --fast/--full`）负责御舆装配、共享测试与全仓内容检查。Omp 的结构和交付门禁由 `omp/overhaul/audit_structure.py --check`、`audit_delivery.py` 单独检查；内容 CI 还会装配 Omp 中文源稿，Book CI 的独立 `omp` job 则构建中文 HTML/PDF。Windows 本地可运行 `powershell -File omp/overhaul/ci-local.ps1`，同时验证御舆中文 HTML 与 Omp 中文 HTML/PDF。
 
-概念可以互查，实现与钉版不能混用：两本书的对照入口（先读哪本、10 行同构点、三处译名分叉）见 [docs/COMPARE-OMP.md](docs/COMPARE-OMP.md)，逐词共享表见 [docs/yuyu-overhaul/SHARED-TERMS.md](docs/yuyu-overhaul/SHARED-TERMS.md)。
+概念可以互查，实现与钉版不能混用：御舆侧入口见 [docs/COMPARE-OMP.md](docs/COMPARE-OMP.md)，Omp 侧入口见 [omp/COMPARE-YUYU.md](omp/COMPARE-YUYU.md)，逐词共享表见 [docs/yuyu-overhaul/SHARED-TERMS.md](docs/yuyu-overhaul/SHARED-TERMS.md)。Omp 英文版目前只有 [预留说明](en/omp/README.md)，尚未开启构建。
 
 插画策略：Mermaid 架构图 + 手绘概念图双轨。与御舆概念可对照，实现与钉版勿混用。
 

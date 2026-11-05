@@ -146,3 +146,4 @@ omp config list (full key/value dump; private gateway ids redacted-adjacent, not
 omp config get tools.maxTimeout	0	2	2026-11-03T14:26:45Z
 omp config get providers.webSearchTimeoutSeconds	0	3	2026-11-03T14:29:59Z
 omp -p 只回复两个字：在线 --no-session	0	18	2026-11-03T23:58:32Z
+omp --version / --help / models (redacted summary: recheck-20261105.txt)	0	393	2026-11-05T03:31:27Z
