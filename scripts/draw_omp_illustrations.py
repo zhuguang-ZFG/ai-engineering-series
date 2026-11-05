@@ -1574,6 +1574,409 @@ def profile_hats(picture: Drawing):
     picture.footer("用帽子隔离场景，别用「记得改回去」。")
 
 
+def unknown_repo(picture: Drawing):
+    picture.header("第 24 章 · 陌生仓库", "先画圈，再钻细节。",
+                   "入口、边界、主数据流先落纸；细节等地图有了再说。")
+    picture.box((70, 214, 640, 620), WHITE, INK, radius=10)
+    picture.box((100, 250, 380, 330), SAGE, GREEN, radius=8)
+    picture.text((120, 268), "入口", 20, GREEN, True)
+    picture.text((120, 302), "main / cmd / route", 17)
+    picture.box((410, 250, 610, 330), SKY, BLUE, radius=8)
+    picture.text((430, 268), "边界", 20, BLUE, True)
+    picture.text((430, 302), "外部进程 / 网络", 17)
+    picture.box((100, 370, 610, 470), PEACH, ORANGE, radius=8)
+    picture.text((120, 390), "主数据流：请求从哪进、存哪、谁在后台跑", 18, ORANGE, True)
+    picture.box((100, 510, 250, 590), WHITE, MUTED, radius=8)
+    picture.text((175, 540), "vendor/", 18, MUTED, "mm")
+    picture.text((175, 566), "先别读", 15, MUTED, anchor="mm")
+    picture.box((280, 510, 430, 590), WHITE, MUTED, radius=8)
+    picture.text((355, 540), "生成物/", 18, MUTED, "mm")
+    picture.text((355, 566), "先别读", 15, MUTED, anchor="mm")
+    picture.box((460, 510, 610, 590), WHITE, MUTED, radius=8)
+    picture.text((535, 540), "大 fixture", 18, MUTED, "mm")
+    picture.text((535, 566), "先别读", 15, MUTED, anchor="mm")
+    picture.circle((700, 300), 42, WHITE, INK, 5)
+    picture.line([(730, 334), (770, 376)], INK, 8)
+    picture.text((700, 250), "放大镜只对准枢纽", 18, MUTED, anchor="mm")
+    picture.box((790, 400, 1120, 610), SAGE, GREEN, radius=10)
+    picture.text((812, 424), "两小时交付物", 20, GREEN, True)
+    picture.text((812, 466), "1. 四格 todo：地图 / 命令 / 风险 / 文档", 17)
+    picture.text((812, 500), "2. 一张十分钟能讲完的草图", 17)
+    picture.text((812, 534), "3. 跑通过一次的官方命令", 17)
+    picture.text((812, 568), "4. docs/architecture-notes.md", 17)
+    picture.footer("只读开场：先知道东西在哪，再决定碰哪。")
+
+
+def project_flow(picture: Drawing):
+    picture.header("第 24 章 · 接手流程", "四步走完，再谈改。",
+                   "顺序固定；跳步的代价是半夜回滚。")
+    steps = (("摸底", "只读：树与入口", BLUE, SKY),
+             ("画图", "盒子与箭头先糙后细", GREEN, SAGE),
+             ("跑通", "官方命令原样执行", ORANGE, PEACH),
+             ("落盘", "写 notes，列问题", GREEN, SAGE))
+    for index, (title, detail, color, fill) in enumerate(steps):
+        left = 58 + index * 276
+        picture.box((left, 240, left + 250, 500), fill, color)
+        picture.badge((left + 34, 272), index + 1, color)
+        picture.text((left + 125, 330), title, 26, color, True, "mm")
+        picture.text((left + 24, 386), detail, 18, anchor="mm", width=202)
+        if index < 3:
+            picture.arrow([(left + 258, 370), (left + 274, 370)], color, 3)
+    picture.note((92, 530, 1108, 628), "跑不通也是结果。",
+                 "把完整报错贴回对话，别换一条「看起来能过」的命令。", ORANGE, PEACH)
+    picture.text((600, 664), "四步里只有第三步会产生真实副作用", 19, MUTED, anchor="mm")
+    picture.footer("流程的意义：让「我懂了」有可核对的证据。")
+
+
+def arch_sketch(picture: Drawing):
+    picture.header("第 24 章 · 架构草图", "盒子是进程或包，箭头是调用。",
+                   "画给自己看：允许丑，必须有边界。")
+    for bounds, label, color in (((110, 260, 360, 350), "web", BLUE),
+                                  ((460, 240, 740, 340), "api", ORANGE),
+                                  ((840, 260, 1090, 350), "worker", GREEN)):
+        picture.box(bounds, WHITE, color, radius=8)
+        picture.text((bounds[0] + 20, bounds[1] + 20), label, 22, color, True)
+    picture.text((130, 300), "进程：接收请求", 16, MUTED)
+    picture.text((480, 280), "进程：校验 + 写库", 16, MUTED)
+    picture.text((860, 300), "进程：异步任务", 16, MUTED)
+    picture.arrow([(370, 300), (450, 300)], INK, 3)
+    picture.text((410, 272), "HTTP", 16, MUTED, anchor="mm")
+    picture.arrow([(750, 300), (830, 300)], INK, 3)
+    picture.text((790, 272), "队列", 16, MUTED, anchor="mm")
+    picture.box((410, 420, 750, 500), SAGE, GREEN, radius=8)
+    picture.text((430, 440), "db（单独进程）", 19, GREEN, True)
+    picture.text((430, 470), "只有 api 直连", 16, MUTED)
+    picture.arrow([(580, 350), (580, 410)], INK, 3)
+    picture.box((110, 420, 360, 500), SKY, SKY, radius=8)
+    picture.text((130, 440), "第三方", 19, BLUE, True)
+    picture.text((130, 470), "只知道它存在", 16, MUTED)
+    picture.arrow([(480, 330), (360, 430)], MUTED, 2)
+    picture.note((92, 530, 1108, 628), "三问自检：",
+                 "数据存哪？谁能写？失败谁重试？答不上就还没画完。", ORANGE, PEACH)
+    picture.text((600, 664), "箭头方向 = 依赖方向，别画反", 19, MUTED, anchor="mm")
+    picture.footer("草图进 docs/architecture-notes.md，供下一个人接。")
+
+
+def agents_seed(picture: Drawing):
+    picture.header("第 24 章 · 种下规则", "一份 AGENTS.md，省十轮解释。",
+                   "写命令、目录、禁区；别写口号。")
+    picture.box((80, 230, 560, 600), INK, INK, radius=10)
+    picture.text((102, 252), "# AGENTS.md", 21, "#BCD5BD")
+    for index, line in enumerate(("## 命令", "测试：bun test", "类型：bun run typecheck",
+                                   "## 目录", "src/ 实现；tests/ 镜像结构",
+                                   "## 禁区", "别改 migrations/")):
+        picture.text((102, 292 + index * 42), line, 18, WHITE if line.startswith("#") else "#D8E0D8")
+    picture.arrow([(570, 410), (660, 410)], GREEN, 3)
+    picture.box((672, 250, 1120, 380), SAGE, GREEN, radius=10)
+    picture.text((696, 274), "下次会话开始时自动注入", 20, GREEN, True)
+    picture.text((696, 314), "模型先按规则行事，再读你的话", 18, MUTED)
+    picture.box((672, 410, 1120, 580), WHITE, LINE, radius=10)
+    picture.text((696, 434), "好规则的三个特征", 20, bold=True)
+    picture.text((696, 476), "命令可原样粘贴", 18)
+    picture.text((696, 510), "目录指向真实路径", 18)
+    picture.text((696, 544), "禁区写出例外", 18)
+    picture.footer("规则是给下一个会话的自己写的说明书。")
+
+
+def handoff_checklist(picture: Drawing):
+    picture.header("第 24 章 · 交付清单", "交接是勾选，不是抒情。",
+                   "每一项都有证据路径与负责人。")
+    items = (("安装命令跑通", "终端输出已存档"),
+             ("测试命令与基线", "全绿或列出既有失败"),
+             ("架构草图", "docs/architecture-notes.md"),
+             ("风险与开放问题", "每条有下一步谁查"),
+             ("回滚方式", "怎么退回上一版"))
+    for index, (title, evidence) in enumerate(items):
+        top = 232 + index * 82
+        picture.box((100, top, 1080, top + 64), WHITE, LINE, radius=8)
+        picture.circle((138, top + 32), 17, SAGE, GREEN, 2)
+        picture.line([(130, top + 32), (137, top + 40), (150, top + 22)], GREEN, 3)
+        picture.text((172, top + 12), title, 20, bold=True)
+        picture.text((172, top + 38), evidence, 16, MUTED)
+    picture.text((600, 668), "空着的那项，就是下一场事故的入口", 19, MUTED, anchor="mm")
+    picture.footer("清单交给接手人，不是交给文档生成器。")
+
+
+def explore_loop(picture: Drawing):
+    picture.header("第 24 章 · 探索回路", "看一眼，确认一次，再往前。",
+                   "每圈都有产出，不是反复转圈。")
+    nodes = ((600, 268, "探索", BLUE, SKY),
+             (900, 430, "确认", ORANGE, PEACH),
+             (600, 590, "交付", GREEN, SAGE),
+             (300, 430, "记录", BLUE, SKY))
+    for center_x, center_y, label, color, fill in nodes:
+        picture.circle((center_x, center_y), 74, fill, color, 4)
+        picture.text((center_x, center_y), label, 24, color, True, "mm")
+    picture.arrow([(662, 314), (820, 382)], INK, 3)
+    picture.arrow([(846, 494), (672, 566)], INK, 3)
+    picture.arrow([(536, 550), (368, 492)], INK, 3)
+    picture.arrow([(364, 374), (534, 312)], INK, 3)
+    picture.text((760, 330), "问一句", 16, MUTED)
+    picture.text((760, 540), "落一条", 16, MUTED, anchor="mm")
+    picture.text((420, 540), "补进 todo", 16, MUTED)
+    picture.text((420, 330), "只读看", 16, MUTED, anchor="mm")
+    picture.text((600, 690), "每圈结束都要有可指的东西：todo、notes 或命令输出", 18, MUTED, anchor="mm")
+    picture.footer("转圈不可怕，空转才可怕。")
+
+
+def bug_hunt(picture: Drawing):
+    picture.header("第 25 章 · 抓 bug", "症状到根因，是一层层收窄。",
+                   "先列候选，再用证据砍掉，别一上来就改。")
+    picture.box((80, 224, 1120, 292), PEACH, ORANGE, radius=8)
+    picture.text((102, 244), "症状：下单页偶发 500，日志只有一句 TypeError", 19, ORANGE, True)
+    picture.arrow([(600, 300), (600, 340)], ORANGE, 3)
+    picture.box((90, 350, 1110, 480), WHITE, LINE, radius=8)
+    picture.text((112, 368), "候选（先全部写下）", 18, MUTED, True)
+    for index, (label, keep) in enumerate((("空回复没判空", True),
+                                             ("时区解析", False),
+                                             ("缓存击穿", True),
+                                             ("第三方超时", False))):
+        left = 116 + index * 240
+        picture.box((left, 402, left + 210, 456), SAGE if keep else WHITE,
+                     GREEN if keep else LINE, radius=6)
+        picture.text((left + 14, 418), label, 17, GREEN if keep else MUTED)
+        picture.text((left + 196, 412), "留" if keep else "砍", 15,
+                     GREEN if keep else MUTED, True, "rt")
+    picture.arrow([(500, 490), (500, 540)], GREEN, 3)
+    picture.box((180, 550, 1020, 640), SAGE, GREEN, radius=8)
+    picture.text((202, 570), "根因：空回复在解析前就被解引用", 20, GREEN, True)
+    picture.text((202, 606), "证据：栈帧 41 行 + 复现命令 + 最小输入", 17, MUTED)
+    picture.text((600, 672), "砍掉的候选也要记，免得下一轮重新怀疑", 18, MUTED, anchor="mm")
+    picture.footer("先收窄，再动手；一次只改一个原因。")
+
+
+def repro_first(picture: Drawing):
+    picture.header("第 25 章 · 复现优先", "先把失败钉死，再谈优雅。",
+                   "一条能重复跑的命令，胜过十句描述。")
+    picture.box((90, 224, 1110, 420), INK, INK, radius=10)
+    picture.text((116, 246), "$ python -m unittest tests.test_order", 19, WHITE)
+    picture.text((116, 286), "FAIL: test_totals (tests.test_order)", 18, "#FFBB9A")
+    picture.text((116, 320), "AssertionError: 99.5 != 99.0", 18, "#FFBB9A")
+    picture.text((116, 360), "退出码 1 · 3.2s · 必现", 16, "#BCD5BD")
+    picture.box((90, 450, 650, 590), WHITE, GREEN, radius=10)
+    picture.text((114, 472), "要记全的四项", 20, GREEN, True)
+    picture.text((114, 512), "命令原文 / 期望 / 实际输出 / 环境", 18)
+    picture.box((680, 450, 1110, 590), PEACH, ORANGE, radius=10)
+    picture.text((704, 472), "偶发就先问", 20, ORANGE, True)
+    picture.text((704, 512), "种子、并发、时间依赖、数据形状", 18)
+    picture.note((92, 612, 1108, 690), "「尚未稳定复现」也是结论。",
+                 "假装修好，比承认没复现更耽误人。", BLUE, SKY)
+    picture.footer("复现命令是后面每一步的地基，别先改代码。")
+
+
+def debug_session(picture: Drawing):
+    picture.header("第 25 章 · 断点调查", "断点打必经之路，不打地毯。",
+                   "先搜索静态嫌疑；运行态只用来验证假设。")
+    picture.box((80, 230, 760, 420), WHITE, INK, radius=10)
+    picture.text((104, 252), "处理函数", 20, bold=True)
+    for index, line in enumerate(("  42  parse(body)", "  43  total = sum(items)",
+                                   "  44  return total", "  45  except ValueError:")):
+        top = 290 + index * 28
+        if index == 1:
+            picture.circle((124, top + 8), 8, ORANGE, ORANGE)
+            picture.text((104, top), "▶", 16, ORANGE)
+        picture.text((146, top), line, 17, INK if index == 1 else MUTED)
+    picture.text((104, 410), "44 行前停住：total 到底是多少", 17, ORANGE)
+    picture.box((800, 240, 1130, 420), SAGE, GREEN, radius=10)
+    picture.text((824, 264), "停下后能做", 20, GREEN, True)
+    picture.text((824, 306), "stack_trace / scopes", 17)
+    picture.text((824, 340), "variables 读值", 17)
+    picture.text((824, 374), "evaluate 算一句", 17)
+    picture.text((600, 470), "只有搜索不够、假设又很具体时，才值得开 debug", 18, MUTED, anchor="mm")
+    picture.note((92, 520, 1108, 620), "断点没命中，先查会话。",
+                 "sessions 看还有几个；打到旧会话是常见根源。", ORANGE, PEACH)
+    picture.text((600, 660), "调查完 terminate，别留适配器进程", 18, MUTED, anchor="mm")
+    picture.footer("运行态是证据，不是探索工具。")
+
+
+def debug_tools(picture: Drawing):
+    picture.header("第 25 章 · 工具分工", "按问题形状选工具。",
+                   "越往右越贵：能左就左。")
+    columns = (("grep", "错误串、断言消息", GREEN, SAGE),
+               ("read", "命中点前后 40 行", BLUE, SKY),
+               ("ast_grep", "成片的结构形态", ORANGE, PEACH),
+               ("debug", "运行态、变量、栈", MUTED, WHITE))
+    for index, (tool, use, color, fill) in enumerate(columns):
+        left = 56 + index * 276
+        picture.box((left, 250, left + 250, 470), fill, color)
+        picture.text((left + 125, 288), tool, 26, color, True, "mm")
+        picture.text((left + 24, 346), use, 18, anchor="mm", width=202)
+        picture.text((left + 125, 424), f"第 {index + 1} 选", 17, MUTED, anchor="mm")
+        if index < 3:
+            picture.arrow([(left + 258, 360), (left + 274, 360)], MUTED, 3)
+    picture.box((92, 500, 1108, 590), SAGE, SAGE, radius=8)
+    picture.text((114, 520), "组合拳：grep 锁定 → read 看上下文 → ast_grep 看结构 → debug 验假设", 19, GREEN, True)
+    picture.text((114, 556), "反着来（先 debug）只在假设已经很具体时成立", 17, MUTED)
+    picture.text((600, 636), "工具越贵，越要带着问题去用", 18, MUTED, anchor="mm")
+    picture.footer("先便宜后昂贵，是排障的默认顺序。")
+
+
+def red_green(picture: Drawing):
+    picture.header("第 25 章 · 红绿循环", "先红，再绿，最后才重构。",
+                   "重构是奖励，不是入场券。")
+    stages = (("红", "写一条会失败的测试", ORANGE, PEACH),
+              ("绿", "最小改动让它过", GREEN, SAGE),
+              ("重构", "在绿的前提下整理", BLUE, SKY))
+    for index, (title, detail, color, fill) in enumerate(stages):
+        left = 110 + index * 340
+        picture.circle((left + 100, 320), 76, fill, color, 4)
+        picture.text((left + 100, 320), title, 32, color, True, "mm")
+        picture.text((left + 100, 430), detail, 18, anchor="mm", width=220)
+        if index < 2:
+            picture.arrow([(left + 186, 320), (left + 236, 320)], color, 3)
+    picture.arrow([(900, 410), (900, 470), (410, 470), (410, 410)], MUTED, 2)
+    picture.text((655, 494), "重构后又红？回到最小修复", 17, MUTED, anchor="mm")
+    picture.note((92, 536, 1108, 640), "同一条失败命令必须重跑。",
+                 "测试通过不代表修对了；用原始复现命令验收，而不是「看起来合理」。", ORANGE, PEACH)
+    picture.text((600, 672), "红绿之间不要顺手加功能", 18, MUTED, anchor="mm")
+    picture.footer("每一步只有一个变量：测试、修复、整理。")
+
+
+def ast_refactor(picture: Drawing):
+    picture.header("第 26 章 · AST 重构", "按语法树改，不按文本糊。",
+                   "规则先小范围试跑，再看全量 diff。")
+    picture.box((80, 230, 500, 470), INK, INK, radius=10)
+    picture.text((102, 252), "规则", 19, "#BCD5BD")
+    picture.text((102, 292), "foo($A, $B)", 20, WHITE)
+    picture.text((102, 330), "↓", 20, ORANGE)
+    picture.text((102, 366), "bar($A)", 20, WHITE)
+    picture.text((102, 410), "匹配 12 处调用", 17, "#BCD5BD")
+    picture.arrow([(510, 350), (596, 350)], ORANGE, 3)
+    picture.box((608, 230, 1120, 470), SAGE, GREEN, radius=10)
+    picture.text((632, 254), "先小范围试跑", 20, GREEN, True)
+    for index, (line, color) in enumerate((("- foo(a, b);", ORANGE), ("+ bar(a);", GREEN))):
+        picture.text((636, 300 + index * 38), line, 18, color)
+    picture.text((636, 386), "语法平衡由规则保证", 17, MUTED)
+    picture.text((636, 422), "树没被压成线性文本", 17, MUTED)
+    picture.note((92, 500, 1108, 600), "什么不适合 ast_edit：",
+                 "单行小补丁用 hashline；语言不支持就别硬上。", ORANGE, PEACH)
+    picture.text((600, 636), "批量 = 提案 + 预览 + Accept", 18, MUTED, anchor="mm")
+    picture.footer("规则能描述形状，才配改一批。")
+
+
+def task_shards(picture: Drawing):
+    picture.header("第 26 章 · 子代理分片", "只有独立子树才值得并行。",
+                   "共享文件的分片，合并时会互相踩。")
+    picture.box((420, 210, 780, 290), SAGE, GREEN)
+    picture.text((600, 232), "一次重构", 21, GREEN, True, "mm")
+    picture.text((600, 266), "先切分，再派发", 16, MUTED, anchor="mm")
+    lanes = (("src/auth/**", "独立：可并行", GREEN, SAGE),
+             ("src/billing/**", "独立：可并行", GREEN, SAGE),
+             ("src/shared/**", "共享：串行或最后合", ORANGE, PEACH))
+    for index, (path, verdict, color, fill) in enumerate(lanes):
+        left = 66 + index * 372
+        picture.arrow([(600, 300), (600, 340), (left + 160, 340), (left + 160, 370)],
+                      color, 3)
+        picture.box((left, 378, left + 320, 500), fill, color)
+        picture.text((left + 160, 404), path, 19, color, True, "mm")
+        picture.text((left + 160, 444), verdict, 17, MUTED, anchor="mm")
+    picture.box((560, 530, 900, 610), WHITE, INK, radius=8)
+    picture.text((580, 550), "合并前跑全量测试", 18, INK, True)
+    picture.text((580, 582), "冲突由一个人收口", 16, MUTED)
+    picture.text((600, 650), "分片不是越多越好：子代理也吃 token", 18, MUTED, anchor="mm")
+    picture.footer("先看目录是否重叠，再决定派几个。")
+
+
+def batch_rollback(picture: Drawing):
+    picture.header("第 26 章 · 批量与回滚", "改得动，也要退得回。",
+                   "批量前存锚点，批量后先验证再提交。")
+    picture.box((80, 230, 1110, 300), SKY, SKY, radius=8)
+    picture.text((102, 250), "0. 存基线：git switch -c refactor-x；跑一次全量测试并记录", 18, INK)
+    picture.box((80, 320, 1110, 440), PEACH, ORANGE, radius=8)
+    picture.text((102, 340), "1. 批量改：规则 → 预览 → Accept（分片执行）", 18, ORANGE, True)
+    picture.text((102, 376), "2. 立即跑全量测试；红了就看 diff 决定修或退", 18)
+    picture.text((102, 408), "3. 绿了才提交；一次只提交一个意图", 18)
+    picture.arrow([(600, 450), (600, 500)], INK, 3)
+    picture.box((200, 510, 520, 600), WHITE, GREEN, radius=8)
+    picture.text((222, 532), "保留", 20, GREEN, True)
+    picture.text((222, 568), "git commit -m …", 17)
+    picture.box((680, 510, 1000, 600), WHITE, ORANGE, radius=8)
+    picture.text((702, 532), "回滚", 20, ORANGE, True)
+    picture.text((702, 568), "git restore . / git switch -", 17)
+    picture.text((600, 636), "两个方向都要事先想好，别等红了才找退路", 18, MUTED, anchor="mm")
+    picture.footer("批量操作的信心，来自退路而不是预览。")
+
+
+def atomic_commit(picture: Drawing):
+    picture.header("第 27 章 · 原子提交", "一次一件事。",
+                   "修 bug、格式化、改 CI 分开放。")
+    picture.box((80, 230, 560, 430), PEACH, ORANGE, radius=10)
+    picture.text((104, 252), "❌ 一坨", 21, ORANGE, True)
+    for index, line in enumerate(("fix: 修空回复", "顺手 format 全仓",
+                                   "顺手改 CI", "顺手升依赖")):
+        picture.text((104, 296 + index * 34), "• " + line, 18)
+    picture.arrow([(570, 330), (660, 330)], INK, 3)
+    picture.box((672, 230, 1120, 430), SAGE, GREEN, radius=10)
+    picture.text((696, 252), "✅ 三个提交", 21, GREEN, True)
+    for index, line in enumerate(("fix(order): 空回复判空", "style: 全仓格式化",
+                                   "ci: 缓存依赖")):
+        top = 296 + index * 40
+        picture.box((690, top, 1096, top + 32), WHITE, GREEN, radius=6)
+        picture.text((706, top + 7), line, 16, GREEN)
+    picture.box((80, 460, 1120, 560), SKY, SKY, radius=8)
+    picture.text((104, 480), "每个提交都能单独 revert / cherry-pick", 18, BLUE, True)
+    picture.text((104, 514), "提交信息写原因与验证命令，不写流水账", 17, MUTED)
+    picture.note((92, 584, 1108, 664), "拆之前先问：",
+                 "这个提交能独立通过测试吗？不能就还没拆干净。", ORANGE, PEACH)
+    picture.footer("方便回滚，才是原子提交的真实目的。")
+
+
+def pr_body(picture: Drawing):
+    picture.header("第 27 章 · PR 正文", "评审看意图与证据。",
+                   "四节固定；缺一节就先别开。")
+    sections = (("Why", "为什么现在做，关联哪张票"),
+                ("What", "改了什么，边界在哪"),
+                ("Test", "跑过的命令与结果"),
+                ("Risk", "回滚方式、影响面"))
+    for index, (title, detail) in enumerate(sections):
+        top = 224 + index * 104
+        picture.box((100, top, 1080, top + 84), WHITE, LINE, radius=8)
+        picture.text((124, top + 14), f"## {title}", 20, INK, True)
+        picture.text((124, top + 48), detail, 17, MUTED)
+    picture.text((600, 668), "标题写范围与意图；截图贴渲染差异", 18, MUTED, anchor="mm")
+    picture.footer("正文是给半年后的自己看的，不只是给评审。")
+
+
+def sdk_events(picture: Drawing):
+    picture.header("第 28 章 · SDK 事件流", "先订阅，再提问，最后释放。",
+                   "顺序反了，输出会丢；忘了 dispose，进程不退出。")
+    steps = (("createAgentSession", "拿 session 与回退提示", BLUE, SKY),
+             ("session.subscribe", "接 message_update / text_delta", GREEN, SAGE),
+             ("session.prompt", "发问题，边收边写 stdout", ORANGE, PEACH),
+             ("unsubscribe + dispose", "解订阅、释放，再 postmortem.cleanup", BLUE, SKY))
+    for index, (call, detail, color, fill) in enumerate(steps):
+        top = 230 + index * 104
+        picture.box((100, top, 1080, top + 84), fill, color, radius=8)
+        picture.text((124, top + 14), call, 20, color, True)
+        picture.text((124, top + 48), detail, 17, MUTED)
+        if index < 3:
+            picture.arrow([(600, top + 90), (600, top + 100)], color, 3)
+    picture.note((92, 620, 1108, 692), "进程生命周期归宿主。",
+                 "导入 SDK 不装信号处理器；收到 SIGINT 要自己释放。", ORANGE, PEACH)
+    picture.footer("事件流是流式输出，不是一次性返回值。")
+
+
+def rpc_frames(picture: Drawing):
+    picture.header("第 28 章 · RPC 帧", "一行一个 JSON，id 对 id。",
+                   "stdin 请求，stdout 响应与事件；先握手。")
+    picture.box((80, 220, 540, 300), SKY, BLUE, radius=8)
+    picture.text((102, 240), '{"type":"ready",…}', 17, BLUE, True)
+    picture.box((80, 340, 540, 430), WHITE, INK, radius=8)
+    picture.text((102, 358), '{"id":"probe-1","type":"get_state"}', 17)
+    picture.arrow([(550, 385), (650, 385)], INK, 3)
+    picture.text((600, 360), "stdin", 16, MUTED, anchor="mm")
+    picture.box((660, 340, 1120, 430), WHITE, GREEN, radius=8)
+    picture.text((682, 358), '{"id":"probe-1","success":true,…}', 17, GREEN)
+    picture.box((660, 460, 1120, 540), SAGE, SAGE, radius=8)
+    picture.text((682, 478), '{"type":"event",…}', 17, GREEN)
+    picture.text((682, 508), "事件无 id，单向推送", 16, MUTED)
+    picture.arrow([(1120, 490), (1140, 490), (1140, 300), (540, 300)], MUTED, 2)
+    picture.note((92, 566, 1108, 664), "错误分可恢复与不可恢复。",
+                 "先跑最小握手，再看错误模型；别从语音子协议开始。", ORANGE, PEACH)
+    picture.text((600, 692), "maxFrameBytes 在 ready 里，但不过滤会话内容", 17, MUTED, anchor="mm")
+    picture.footer("帧是壳子，语义仍在命令与事件里。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -1629,7 +2032,25 @@ FIGURES = {
     "fig22-3-reload": reload_plugins,
     "fig23-2-theme": theme,
     "fig23-3-keys": keys_isolation,
-    "fig23-3-profile": profile_hats,
+    "fig23-4-profile": profile_hats,
+    "fig24-1-unknown-repo": unknown_repo,
+    "fig24-4-project-flow": project_flow,
+    "fig24-2-arch-sketch": arch_sketch,
+    "fig24-5-agents-seed": agents_seed,
+    "fig24-3-handoff-checklist": handoff_checklist,
+    "fig24-6-loop": explore_loop,
+    "fig25-4-bug-hunt": bug_hunt,
+    "fig25-1-repro-first": repro_first,
+    "fig25-2-debug-session": debug_session,
+    "fig25-5-debug-tools": debug_tools,
+    "fig25-3-red-green": red_green,
+    "fig26-1-ast-refactor": ast_refactor,
+    "fig26-2-task-shards": task_shards,
+    "fig26-3-batch-rollback": batch_rollback,
+    "fig27-2-atomic-commit": atomic_commit,
+    "fig27-3-pr-body": pr_body,
+    "fig28-2-sdk-events": sdk_events,
+    "fig28-3-rpc-frames": rpc_frames,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
 }
