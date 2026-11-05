@@ -1977,6 +1977,371 @@ def rpc_frames(picture: Drawing):
     picture.footer("帧是壳子，语义仍在命令与事件里。")
 
 
+def team_pack(picture: Drawing):
+    picture.header("第 29 章 · 团队扩展包", "把重复劳动捆成可版本化的一包。",
+                   "先写清解决谁的什么问题，再堆文件。")
+    picture.box((90, 230, 1080, 470), WHITE, INK, radius=12)
+    for index, (label, note) in enumerate((("约定", "适用仓库与命令"),
+                                            ("技能", "固定流程"),
+                                            ("工具", "带审批的副作用"),
+                                            ("文档", "安装、试跑、回滚"))):
+        left = 120 + index * 238
+        picture.box((left, 270, left + 200, 400), SAGE, GREEN, radius=10)
+        picture.text((left + 100, 300), label, 23, GREEN, True, "mm")
+        picture.text((left + 16, 346), note, 17, anchor="mm", width=168)
+    picture.box((90, 500, 1080, 560), SKY, SKY, radius=8)
+    picture.text((114, 520), "版本钉扎 + 支持的 omp 范围 + 回滚方式，缺一不可", 18, INK)
+    picture.note((92, 590, 1080, 676), "没有版本的一包，就是一次性赠与。",
+                 "收包的人无法判断兼容性，也无法安全升级。", ORANGE, PEACH)
+    picture.text((585, 700), "先解决重复劳动，再谈打包格式", 17, MUTED, anchor="mm")
+    picture.footer("包是给人交接的，不是给磁盘归档的。")
+
+
+def ext_tool(picture: Drawing):
+    picture.header("第 29 章 · 团队工具", "可审批、可审计，不做黑盒。",
+                   "输入、副作用、失败模式都写在描述里。")
+    picture.box((80, 230, 560, 560), WHITE, INK, radius=10)
+    picture.text((104, 254), "输入结构", 20, bold=True)
+    picture.box((110, 300, 530, 400), INK, INK, radius=8)
+    picture.text((130, 318), "env: staging | prod", 17, WHITE)
+    picture.text((130, 350), "dryRun: boolean", 17, WHITE)
+    picture.text((130, 382), "仅这些字段，不接受自由文本", 16, "#BCD5BD")
+    picture.text((104, 440), "副作用写在描述第一行", 18, ORANGE)
+    picture.text((104, 486), "prod 默认只读；发消息必须预览", 18, ORANGE)
+    picture.box((590, 250, 1120, 400), SAGE, GREEN, radius=10)
+    picture.text((614, 274), "审批与审计", 20, GREEN, True)
+    picture.text((614, 316), "写操作走审批；参数进日志", 18)
+    picture.text((614, 352), "拒绝时给可执行的修复建议", 18)
+    picture.box((590, 430, 1120, 540), PEACH, ORANGE, radius=10)
+    picture.text((614, 452), "失败模式", 20, ORANGE, True)
+    picture.text((614, 492), "超时、部分成功、幂等性——都写清", 18)
+    picture.footer("团队工具的第一用户是半年后的同事。")
+
+
+def distribute_trust(picture: Drawing):
+    picture.header("第 29 章 · 分发与信任", "三问答得出，再装。",
+                   "来源、版本、权限；有一项含糊就先别动。")
+    questions = (("来源", "谁维护？仓库还是私有源？", BLUE, SKY),
+                 ("版本", "钉在哪一版？兼容哪个 omp？", GREEN, SAGE),
+                 ("权限", "要工具、网络、密钥里的哪些？", ORANGE, PEACH))
+    for index, (title, detail, color, fill) in enumerate(questions):
+        top = 230 + index * 118
+        picture.box((80, top, 760, top + 92), fill, color, radius=10)
+        picture.circle((126, top + 46), 24, WHITE, color, 3)
+        picture.text((126, top + 46), "?", 24, color, True, "mm")
+        picture.text((170, top + 16), title, 22, color, True)
+        picture.text((170, top + 54), detail, 18)
+    picture.box((820, 230, 1120, 490), SAGE, GREEN, radius=12)
+    picture.text((844, 254), "答完才允许", 20, GREEN, True)
+    picture.text((844, 298), "装", 24, GREEN, True)
+    picture.text((844, 348), "试跑最小用例", 18)
+    picture.text((844, 386), "看审批提示", 18)
+    picture.text((844, 424), "记录来源与版本", 18)
+    picture.note((92, 520, 1108, 610), "--no-extensions 是应急刹车。",
+                 "怀疑捣乱时先关掉扩展复现，再回头查包。", ORANGE, PEACH)
+    picture.text((600, 650), "答不出的那一项，就是装完之后要炸的点", 18, MUTED, anchor="mm")
+    picture.footer("信任是问出来的，不是装出来的。")
+
+
+def symptom_index(picture: Drawing):
+    picture.header("第 30 章 · 症状索引", "按症状找路，别按猜测找。",
+                   "一句话描述可观察症状，再进对应一节。")
+    doors = (("安装 / 启动", "命令找不到、一开就报错", ORANGE, PEACH),
+             ("鉴权 / 提供方", "未登录、模型列表空", BLUE, SKY),
+             ("限流 / 配额", "频繁 429、突然变慢", GREEN, SAGE),
+             ("语言服务", "诊断不出现、索引卡住", BLUE, SKY),
+             ("会话卡住", "Working 不动、重开又卡", ORANGE, PEACH))
+    for index, (title, detail, color, fill) in enumerate(doors):
+        top = 216 + index * 92
+        picture.box((80, top, 700, top + 74), fill, color, radius=10)
+        picture.text((104, top + 12), title, 21, color, True)
+        picture.text((104, top + 44), detail, 17, MUTED)
+        picture.arrow([(710, top + 37), (790, top + 37)], color, 3)
+        picture.text((812, top + 22), f"§30.{index + 2}", 20, MUTED, True)
+    picture.note((700, 216, 1120, 470), "顺序：",
+                 "先收集，再最小动作，带证据去问。", BLUE, SKY)
+    picture.text((600, 692), "别连砸同一条命令；别一上来猜根因", 18, MUTED, anchor="mm")
+    picture.footer("索引是分诊台，不是原理课。")
+
+
+def auth_provider(picture: Drawing):
+    picture.header("第 30 章 · 鉴权与提供方", "先分清是没登录，还是模型名不对。",
+                   "两条路的修法完全不同。")
+    picture.box((300, 214, 900, 290), WHITE, INK, radius=8)
+    picture.text((600, 234), "报错：鉴权失败 / 模型不可用", 21, INK, True, "mm")
+    picture.arrow([(480, 300), (360, 360)], BLUE, 3)
+    picture.arrow([(720, 300), (840, 360)], ORANGE, 3)
+    picture.box((80, 370, 620, 610), SKY, BLUE)
+    picture.text((104, 394), "A. 没登录 / 密钥无效", 21, BLUE, True)
+    picture.text((104, 438), "查：是否做过 /login", 18)
+    picture.text((104, 474), "查：环境变量名对不对", 18)
+    picture.text((104, 510), "查：--profile 是否指错档", 18)
+    picture.text((104, 560), "修：回第 5 章登录路径", 18, BLUE, True)
+    picture.box((660, 370, 1120, 610), PEACH, ORANGE)
+    picture.text((684, 394), "B. 提供方或模型 id 不对", 21, ORANGE, True)
+    picture.text((684, 438), "查：--model 写法是否 provider/model", 18)
+    picture.text((684, 474), "查：角色表里那个名字存在吗", 18)
+    picture.text((684, 510), "修：omp models find 先确认", 18, ORANGE, True)
+    picture.text((600, 650), "两条都查过，再谈网络与配额", 18, MUTED, anchor="mm")
+    picture.footer("鉴权是「你是谁」，模型名是「找谁」——别混。")
+
+
+def session_stuck(picture: Drawing):
+    picture.header("第 30 章 · 会话卡住", "先看是不是还在生成。",
+                   "streaming 中的命令拒绝，常被误读成「没反应」。")
+    picture.box((100, 230, 1120, 340), INK, INK, radius=10)
+    picture.text((124, 252), "屏幕上只有：Working...", 20, WHITE)
+    picture.text((124, 292), "先敲 Esc 或等本轮结束，不要连敲命令", 18, "#BCD5BD")
+    picture.box((100, 380, 520, 560), PEACH, ORANGE, radius=10)
+    picture.text((124, 402), "还在 streaming", 20, ORANGE, True)
+    picture.text((124, 444), "/fresh 拒绝", 18)
+    picture.text((124, 478), "/clear 拒绝（先中止压缩）", 18)
+    picture.text((124, 512), "裸 /fork 警告并挡住", 18)
+    picture.text((124, 546), "→ 中止本轮再试", 18, ORANGE, True)
+    picture.box((560, 380, 1120, 560), SAGE, GREEN, radius=10)
+    picture.text((584, 402), "真的卡死", 20, GREEN, True)
+    picture.text((584, 444), "重开会话 / 换 profile 复现", 18)
+    picture.text((584, 478), "带 stderr 与时间点去查", 18)
+    picture.text((584, 512), "看是否与某个扩展同时出现", 18)
+    picture.note((92, 590, 1108, 676), "别把「等」当成故障。",
+                 "先分清生成中、压缩中、前台命令跑着——三种都会拒命令。", BLUE, SKY)
+    picture.footer("卡住先看状态，再决定等还是中止。")
+
+
+def trust_load(picture: Drawing):
+    picture.header("第 31 章 · 信任加载", "来路不清，先冻结。",
+                   "能写盘、能跑命令的，全在信任边界内。")
+    picture.box((90, 230, 430, 480), PEACH, ORANGE)
+    picture.text((114, 254), "来路不清的扩展", 21, ORANGE, True)
+    picture.text((114, 298), "拷来的 zip", 18)
+    picture.text((114, 334), "聊天里贴的工厂", 18)
+    picture.text((114, 370), "陌生仓库的 .omp/", 18)
+    picture.text((114, 424), "先别开会话", 19, ORANGE, True)
+    picture.arrow([(440, 355), (540, 355)], ORANGE, 3)
+    picture.box((552, 240, 900, 470), WHITE, INK, radius=10)
+    picture.text((576, 264), "冻结动作", 21, bold=True)
+    picture.text((576, 308), "读源码与文档", 18)
+    picture.text((576, 344), "列工具、网络、密钥需求", 18)
+    picture.text((576, 380), "来源、版本、权限三问", 18)
+    picture.box((920, 260, 1120, 450), SAGE, GREEN, radius=10)
+    picture.text((1020, 288), "确认", 22, GREEN, True, "mm")
+    picture.text((1020, 330), "再开", 18, MUTED, anchor="mm")
+    picture.text((1020, 380), "默认不信", 18, GREEN, anchor="mm")
+    picture.note((92, 510, 1108, 606), "技能、MCP、钩子、扩展工厂——一样。",
+                 "只要它能改磁盘或跑命令，就在边界内。", ORANGE, PEACH)
+    picture.text((600, 646), "来源不明就冻结，是默认姿势", 18, MUTED, anchor="mm")
+    picture.footer("装上之后再后悔，成本比先读十分钟高。")
+
+
+def no_extensions(picture: Drawing):
+    picture.header("第 31 章 · 无扩展复现", "先做减法，定位层。",
+                   "症状消失 → 问题在扩展；仍在 → 往下查。")
+    picture.box((110, 230, 1110, 300), WHITE, INK, radius=8)
+    picture.text((134, 250), "症状：一开就慢 / 一开就挂 / 行为与文档不符", 19)
+    picture.choice = None
+    picture.box((300, 340, 900, 410), INK, INK, radius=8)
+    picture.text((324, 358), "omp --no-extensions", 20, WHITE)
+    picture.arrow([(470, 420), (360, 470)], ORANGE, 3)
+    picture.arrow([(730, 420), (840, 470)], GREEN, 3)
+    picture.box((90, 480, 620, 620), PEACH, ORANGE, radius=10)
+    picture.text((114, 502), "症状消失", 20, ORANGE, True)
+    picture.text((114, 544), "问题在扩展层", 18)
+    picture.text((114, 580), "回第 29 章三问，逐个关", 18)
+    picture.box((660, 480, 1120, 620), SAGE, GREEN, radius=10)
+    picture.text((684, 502), "症状仍在", 20, GREEN, True)
+    picture.text((684, 544), "查模型、鉴权、仓库本身", 18)
+    picture.text((684, 580), "转第 30 章症状索引", 18)
+    picture.text((600, 660), "显式 -e 路径不受 --no-extensions 影响", 18, MUTED, anchor="mm")
+    picture.footer("无扩展复现是分诊，不是长期方案。")
+
+
+def secrets(picture: Drawing):
+    picture.header("第 31 章 · 秘密遮罩", "出模型前遮，进工具前还原。",
+                   "默认关闭；secrets.enabled: true 后才生效。")
+    picture.box((80, 230, 420, 330), SKY, SKY, radius=10)
+    picture.text((104, 260), "原始文本", 20, BLUE, True)
+    picture.text((104, 296), "OPENAI_API_KEY=sk-…", 18)
+    picture.arrow([(430, 280), (520, 280)], BLUE, 3)
+    picture.box((532, 230, 900, 330), SAGE, GREEN, radius=10)
+    picture.text((556, 260), "遮罩后送进模型", 20, GREEN, True)
+    picture.text((556, 296), "OPENAI_API_KEY=[secret:1]", 18)
+    picture.arrow([(910, 280), (990, 280)], GREEN, 3)
+    picture.box((1002, 230, 1120, 330), WHITE, INK, radius=10)
+    picture.text((1061, 262), "模型", 19, INK, True, "mm")
+    picture.arrow([(1061, 340), (1061, 410), (700, 410), (700, 470)], ORANGE, 3)
+    picture.box((520, 480, 1080, 590), PEACH, ORANGE, radius=10)
+    picture.text((544, 502), "工具执行前还原", 20, ORANGE, True)
+    picture.text((544, 544), "可逆模式：模型给占位符，程序换回真值", 18)
+    picture.note((92, 610, 1108, 690), "遮罩不是保险箱。",
+                 "transcript 里仍可能有明文；分享前自己扫一遍。", BLUE, SKY)
+    picture.text((360, 590), "日志与卡片仍要人工过目", 17, MUTED, anchor="mm")
+    picture.footer("遮罩降低泄漏面，不替代密钥管理。")
+
+
+def token_flow(picture: Drawing):
+    picture.header("第 32 章 · 用量流向", "三条管子都在计费。",
+                   "输入、工具结果、输出；子代理是乘数。")
+    sources = (("你的提示 + 历史", ORANGE, PEACH),
+               ("工具结果", BLUE, SKY),
+               ("模型输出", GREEN, SAGE))
+    for index, (label, color, fill) in enumerate(sources):
+        left = 90 + index * 340
+        picture.box((left, 230, left + 300, 340), fill, color, radius=10)
+        picture.text((left + 150, 268), label, 19, color, True, "mm")
+        picture.arrow([(left + 150, 350), (left + 150, 400)], color, 3)
+    picture.box((90, 410, 1000, 500), INK, INK, radius=10)
+    picture.text((114, 432), "上下文窗口：每一轮都要重发", 19, WHITE)
+    picture.text((114, 466), "越长越贵，压缩前先救证据", 17, "#BCD5BD")
+    picture.box((290, 540, 900, 620), PEACH, ORANGE, radius=8)
+    picture.text((314, 558), "子代理：各自带一份上下文", 19, ORANGE, True)
+    picture.text((314, 592), "开 N 个 ≈ 乘 N 份开销", 17, MUTED)
+    picture.text((600, 660), "能 grep 就别整树灌；能摘要就别全文复述", 17, MUTED, anchor="mm")
+    picture.footer("成本不是账单问题，是上下文卫生问题。")
+
+
+def role_cost(picture: Drawing):
+    picture.header("第 32 章 · 角色与成本", "杀鸡别用牛刀。",
+                   "按任务挑档位，不按心情。")
+    rows = (("smol", "改文案、分类、格式转换", "¥", GREEN, SAGE),
+            ("default", "日常实现与调试", "¥¥", BLUE, SKY),
+            ("slow", "架构争议、疑难根因", "¥¥¥", ORANGE, PEACH),
+            ("plan", "跨模块方案", "¥¥¥", ORANGE, PEACH))
+    for index, (role, use, cost, color, fill) in enumerate(rows):
+        top = 230 + index * 96
+        picture.box((100, top, 1080, top + 76), fill, color, radius=8)
+        picture.text((124, top + 12), role, 21, color, True)
+        picture.text((280, top + 24), use, 18)
+        picture.text((1040, top + 20), cost, 20, color, True, "rt")
+    picture.note((92, 630, 1108, 700), "在 todo 里标本任务角色。",
+                 "结束复盘：是不是「用牛刀杀鸡」？", ORANGE, PEACH)
+    picture.footer("省钱的顺序：先换档，再减上下文，最后才并行。")
+
+
+def cache_compact(picture: Drawing):
+    picture.header("第 32 章 · 缓存与压缩", "能缓存别重算，压缩前先救证据。",
+                   "缓存键用错会失效；压缩会折叠历史。")
+    picture.box((80, 230, 540, 420), SAGE, GREEN, radius=10)
+    picture.text((104, 254), "提示缓存", 21, GREEN, True)
+    picture.text((104, 298), "稳定前缀命中就便宜", 18)
+    picture.text((104, 334), "乱插时间戳 / 随机串 → 全失效", 18, ORANGE)
+    picture.text((104, 380), "缓存键旗标先读帮助再改", 18, MUTED)
+    picture.box((570, 230, 1120, 420), PEACH, ORANGE, radius=10)
+    picture.text((594, 254), "会话压缩", 21, ORANGE, True)
+    picture.text((594, 298), "折叠旧历史为摘要", 18)
+    picture.text((594, 334), "失败命令、文件:行、测试输出", 18)
+    picture.text((594, 370), "先写进 todo 或仓库笔记", 18, ORANGE, True)
+    picture.arrow([(600, 430), (600, 490)], INK, 3)
+    picture.box((200, 500, 1000, 590), WHITE, INK, radius=8)
+    picture.text((224, 520), "压缩前后的对照物：早先约定的命令、关键 diff", 18)
+    picture.text((224, 556), "只活在早聊里的东西，压完就可能问不出来", 17, MUTED)
+    picture.text((600, 630), "证据进文件，摘要才安全", 18, MUTED, anchor="mm")
+    picture.footer("压缩是空间管理，不是记忆备份。")
+
+
+def callchain(picture: Drawing):
+    picture.header("第 33 章 · 调用链", "从敲命令到工具注册，一格不能断。",
+                   "自检用：每格能说出入口与验证方式。")
+    links = (("启动", "omp / -p"),
+             ("上下文", "cwd、AGENTS"),
+             ("循环", "请求 → 结果"),
+             ("工具", "注册表 + 审批"),
+             ("扩展", "工厂、钩子"))
+    for index, (title, detail) in enumerate(links):
+        left = 56 + index * 220
+        picture.box((left, 260, left + 190, 420), WHITE, INK if index % 2 == 0 else ORANGE)
+        picture.text((left + 95, 296), title, 20, INK, True, "mm")
+        picture.text((left + 16, 350), detail, 15, anchor="mm", width=170)
+        if index < 4:
+            picture.arrow([(left + 196, 340), (left + 212, 340)], MUTED, 3)
+    picture.note((92, 450, 1108, 540), "断格自检：", 
+                 "说不出入口 → 回第 3 章；说不清上下文 → 第 14 章；说不清工具 → 第 21 章。", BLUE, SKY)
+    picture.text((600, 580), "每格都配一条可复验命令，才算复习完", 18, MUTED, anchor="mm")
+    picture.text((600, 620), "不写新功能，只接线路", 18, MUTED, anchor="mm")
+    picture.footer("整条链能画出来，才敢说自己会了。")
+
+
+def from_launch(picture: Drawing):
+    picture.header("第 33 章 · 从启动出发", "同一引擎，外壳不同。",
+                   "入口决定协议与生命周期，不改变能力。")
+    for index, (entry, color, fill) in enumerate((("omp", ORANGE, PEACH),
+                                                   ("omp -p", BLUE, SKY),
+                                                   ("SDK", GREEN, SAGE),
+                                                   ("omp --mode rpc", MUTED, WHITE))):
+        left = 70 + index * 270
+        picture.box((left, 230, left + 240, 320), fill, color, radius=10)
+        picture.text((left + 120, 275), entry, 21, color, True, "mm")
+        picture.arrow([(left + 120, 330), (left + 120, 390)], color, 3)
+    picture.box((250, 400, 950, 520), SAGE, GREEN, radius=12)
+    picture.text((600, 430), "同一套运行时", 23, GREEN, True, "mm")
+    picture.text((600, 470), "上下文、工具、模型路由、审批", 18, anchor="mm")
+    picture.text((600, 500), "差别只在谁持有进程与输出", 17, MUTED, anchor="mm")
+    picture.note((92, 550, 1108, 640), "选入口看谁持有生命周期。",
+                 "人用 TUI；脚本用 -p；宿主程序自己管进程，才用 SDK/RPC。", ORANGE, PEACH)
+    picture.text((600, 676), "外壳换了，行为契约不换", 18, MUTED, anchor="mm")
+    picture.footer("先定外壳，再谈参数；顺序反了会多写一堆胶水。")
+
+
+def pin_version(picture: Drawing):
+    picture.header("附录 E · 钉住版本", "写作版本与本机版本，都写下来。",
+                   "两者不一致时，以本机二进制为准并记页边。")
+    picture.box((100, 250, 520, 430), WHITE, INK, radius=10)
+    picture.text((124, 274), "写作钉", 21, bold=True)
+    picture.text((124, 320), "omp/18.15.0", 24, ORANGE, True)
+    picture.text((124, 366), "正文技术叙述的依据", 17, MUTED)
+    picture.box((600, 250, 1020, 430), WHITE, INK, radius=10)
+    picture.text((624, 274), "本机验证", 21, bold=True)
+    picture.text((624, 320), "omp --version → omp/18.16.0", 19, GREEN, True)
+    picture.text((624, 366), "实际跑过才算，写日期与形态", 17, MUTED)
+    picture.text((560, 340), "≠", 34, ORANGE, True, "mm")
+    picture.note((92, 470, 1108, 560), "冲突时以现场为准。",
+                 "帮助与行为优先；差异回流页边，不是改掉记录。", BLUE, SKY)
+    picture.text((600, 600), "三者：本书钉、本机字符串、扩展兼容范围", 18, MUTED, anchor="mm")
+    picture.text((600, 640), "都要有出处", 18, MUTED, anchor="mm")
+    picture.footer("版本是时间戳，不是装饰。")
+
+
+def docs_vs_bin(picture: Drawing):
+    picture.header("附录 E · 文档与二进制", "冲突时，现场优先。",
+                   "再看文档理解为什么漂移，最后记页边。")
+    picture.box((80, 240, 500, 420), SKY, BLUE)
+    picture.text((104, 264), "文档", 21, BLUE, True)
+    picture.text((104, 306), "写作钉的出处", 18)
+    picture.text((104, 342), "可能过期", 18, MUTED)
+    picture.box((640, 240, 1120, 420), SAGE, GREEN)
+    picture.text((664, 264), "本机二进制", 21, GREEN, True)
+    picture.text((664, 306), "omp --help / 实际行为", 18)
+    picture.text((664, 342), "冲突时的裁判", 18, GREEN, True)
+    picture.arrow([(510, 300), (630, 300)], ORANGE, 3)
+    picture.arrow([(630, 360), (510, 360)], MUTED, 2)
+    picture.text((570, 330), "对照", 16, MUTED, anchor="mm")
+    picture.box((200, 470, 1000, 560), WHITE, INK, radius=8)
+    picture.text((224, 490), "差异写法：本机有/无某某；日期；版本字符串", 18)
+    picture.text((224, 526), "挑附录 A 任一旗标即可练", 17, MUTED)
+    picture.text((600, 620), "不把猜测写成已验证", 18, MUTED, anchor="mm")
+    picture.footer("文档给方向，二进制给事实。")
+
+
+def margin_notes(picture: Drawing):
+    picture.header("附录 E · 页边核对", "记差异与命令，不记课外作业。",
+                   "字段固定，证据落到路径。")
+    fields = ("日期与时区", "写作版本 / 本机版本", "安装形态",
+              "差异摘要", "复验命令 + 退出码", "证据位置 / 是否反馈上游")
+    for index, label in enumerate(fields):
+        top = 230 + index * 66
+        picture.box((100, top, 760, top + 50), WHITE, LINE, radius=6)
+        picture.text((124, top + 12), f"{index + 1}. {label}", 18)
+    picture.box((800, 230, 1120, 560), SAGE, GREEN, radius=10)
+    picture.text((824, 254), "示例", 20, GREEN, True)
+    picture.text((824, 296), "2026-11-05 UTC", 17)
+    picture.text((824, 330), "v18.15.0 / v18.16.0", 17)
+    picture.text((824, 364), "Windows · Bun 全局", 17)
+    picture.text((824, 398), "flag 存在差异", 17)
+    picture.text((824, 432), "omp --help → exit 0", 17)
+    picture.text((824, 466), "facts/live-…", 17)
+    picture.text((600, 600), "观察写实，推测标推测", 18, MUTED, anchor="mm")
+    picture.footer("页边是给下一次升级的自己留的线索。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -2051,6 +2416,23 @@ FIGURES = {
     "fig27-3-pr-body": pr_body,
     "fig28-2-sdk-events": sdk_events,
     "fig28-3-rpc-frames": rpc_frames,
+    "fig29-1-team-pack": team_pack,
+    "fig29-2-ext-tool": ext_tool,
+    "fig29-3-distribute-trust": distribute_trust,
+    "fig30-1-symptom-index": symptom_index,
+    "fig30-2-auth-provider": auth_provider,
+    "fig30-3-session-stuck": session_stuck,
+    "fig31-1-trust-load": trust_load,
+    "fig31-2-no-extensions": no_extensions,
+    "fig31-3-secrets": secrets,
+    "fig32-1-token-flow": token_flow,
+    "fig32-2-role-cost": role_cost,
+    "fig32-3-cache-compact": cache_compact,
+    "fig33-1-callchain": callchain,
+    "fig33-2-from-launch": from_launch,
+    "figE-1-pin-version": pin_version,
+    "figE-2-docs-vs-bin": docs_vs_bin,
+    "figE-3-margin-notes": margin_notes,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
 }
