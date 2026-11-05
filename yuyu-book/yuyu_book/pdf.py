@@ -3,9 +3,10 @@
 Chromium turns every in-document link into a named destination, so the
 printed PDF already knows that #ch09 lives on page 81. The post-pass reads
 those destinations instead of injecting marker text: it builds the bookmark
-tree (meta["outline"]), the running heads (meta["heads"]), the footer folios
-and the printed contents numbers (meta["toc_rows"] inside the contents
-pages). Number glyphs use built-in Helvetica; CJK heads need a local system
+tree (meta.outline), the running heads (meta.heads), the footer folios
+and the printed contents numbers (meta.toc_rows inside the contents pages).
+The manifest is a validated `PrintManifest`, so a missing anchor fails before
+the browser is launched rather than after the print. Number glyphs use built-in Helvetica; CJK heads need a local system
 font, subsetted before save, and degrade to a plain rule if none is there.
 
 The subject index is the one thing that cannot be drawn on after the fact —
@@ -21,6 +22,7 @@ from pathlib import Path
 import fitz  # PyMuPDF
 
 from .core import BuildError
+from .print_manifest import PrintManifest
 
 CJK_FONTS = ["C:/Windows/Fonts/msyh.ttc", "C:/Windows/Fonts/simsun.ttc",
              "C:/Windows/Fonts/simhei.ttf",
@@ -229,7 +231,7 @@ def _running_head(head: _Head, page, text: str, side: str) -> None:
     shape.commit()
 
 
-def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
+def build_pdf(html_path: Path, meta: PrintManifest, browser: str | None = None,
               folios: dict[str, int] | None = None) -> Path:
     raw = html_path.with_name(html_path.stem + ".raw.pdf")
     out = html_path.with_suffix(".pdf")
@@ -237,10 +239,10 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
     doc = fitz.open(raw)
     n = doc.page_count
 
-    anchors = [a for (_lvl, _t, a) in meta["outline"]]
-    front_a = meta.get("front_anchor") or "front"
-    anchors += list(meta["toc_rows"]) + [front_a]
-    anchors += sorted({r["anchor"] for r in meta.get("index_rows", ())})
+    anchors = [entry.anchor for entry in meta.outline]
+    front_a = meta.front_anchor
+    anchors += list(meta.toc_rows) + [front_a]
+    anchors += sorted({row.anchor for row in meta.index_rows})
     dest = _destinations(doc, anchors)
     missing = sorted({a for a in anchors if a not in dest})
     if missing:
@@ -259,18 +261,18 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
                 f"print and this one ({list(moved.items())[:4]}) — a row must "
                 "reserve the width its number needs")
 
-    doc.set_toc([[lvl, label, dest[a] + 1]
-                 for lvl, label, a in meta["outline"]])
+    doc.set_toc([[entry.level, entry.label, dest[entry.anchor] + 1]
+                 for entry in meta.outline])
 
     fontfile = next((f for f in CJK_FONTS if Path(f).exists()), None)
-    if fontfile is None and meta.get("lang") == "zh":
+    if fontfile is None and meta.lang == "zh":
         doc.close()
         raise BuildError(
             "pdf: no CJK face available, so the running heads and folios "
             f"would lose every Chinese glyph (searched: {', '.join(CJK_FONTS)})")
     head = _Head(fontfile)
-    book = meta["title"]
-    starts = sorted((dest[a], label) for a, label in meta["heads"])
+    book = meta.title
+    starts = sorted((dest[a], label) for a, label in meta.heads)
 
     def head_for(pno: int) -> str:
         cur = ""
@@ -292,11 +294,11 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
         else:                                   # verso: book title
             _running_head(head, page, book, "left")
 
-    rows = set(meta["toc_rows"])
+    rows = set(meta.toc_rows)
     # the contents is the last section before the body, so its first page is
     # the last match for the heading title; rows then run to that page's end
     hits = [pno for pno in range(dest[front_a])
-            if doc[pno].search_for(meta["toc_title"])]
+            if doc[pno].search_for(meta.toc_title)]
     if not hits:
         doc.close()
         raise BuildError("pdf: contents pages not found")
@@ -336,9 +338,9 @@ def build_pdf(html_path: Path, meta: dict, browser: str | None = None,
             "must close on the page it ends on")
 
     doc.set_metadata({
-        "title": meta["title"], "author": meta["author"],
-        "subject": meta.get("subtitle", ""),
-        "keywords": meta.get("keywords", ""),
+        "title": meta.title, "author": meta.author,
+        "subject": meta.subtitle,
+        "keywords": meta.keywords,
         "creator": "yuyu-book", "producer": "yuyu-book"})
     doc.subset_fonts()                    # the running-head face ships once
     try:

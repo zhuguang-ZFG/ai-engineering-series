@@ -479,9 +479,12 @@ class BackMatter(Config):
             html = pages.subject_index_page(entries, lang)
             rendered = [unescape(t).replace("_<wbr>", "_") for t in
                         re.findall(r'<span class="idx-term">(.*?)</span>', html, re.S)]
-            rows = build.pdf_meta(self.manifest, [], [], lang, entries)["index_rows"]
-            self.assertEqual([r["term"] for r in rows], rendered, lang)
-            self.assertEqual([r["anchor"] for r in rows],
+            outline = [(1, d["id"], d["id"])
+                       for d, _k, _p in unit_stream(self.manifest)]
+            rows = build.pdf_meta(self.manifest, outline, [], lang,
+                                  entries).index_rows
+            self.assertEqual([r.term for r in rows], rendered, lang)
+            self.assertEqual([r.anchor for r in rows],
                              [e[lang]["refs"][0]["anchor"] for e in printed], lang)
 
     def test_folios_land_in_the_slot_of_their_own_row(self):
