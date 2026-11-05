@@ -52,5 +52,24 @@
     "scope_en": "Discovery and install entry",
     "normative": false,
     "accessed": "2026-11-03"
+  },
+  "omp-readme-assets": {
+    "title": "oh-my-pi README 演示图",
+    "title_en": "oh-my-pi README demo assets",
+    "authority": "can1357 / Stencil Labs（上游仓库 assets/）",
+    "authority_en": "can1357 / Stencil Labs (upstream assets/)",
+    "kind": "github",
+    "url": "https://github.com/can1357/oh-my-pi/tree/88a69582c755bd000e8dc0290981fc787a4f400c/assets",
+    "snapshot": "取 ask / slash / models / lspv 四张 webp，按内嵌预算转 JPG 后进入正文",
+    "snapshot_en": "Four webp demos (ask, slash, models, lspv) converted to in-budget JPG",
+    "license": "MIT（上游 LICENSE）",
+    "license_en": "MIT (upstream LICENSE)",
+    "scope": "omp/images/fig6-6-ask-shot.jpg、fig6-7-slash-shot.jpg、fig5-3-model-selector.jpg、fig11-4-lsp-shot.jpg",
+    "scope_en": "omp/images fig6-6, fig6-7, fig5-3, fig11-4 JPGs",
+    "normative": false,
+    "pinned": {
+      "commit": "88a69582c755bd000e8dc0290981fc787a4f400c"
+    },
+    "accessed": "2026-11-05"
   }
 }
