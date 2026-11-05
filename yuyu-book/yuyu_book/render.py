@@ -20,7 +20,11 @@ from markdown.extensions.codehilite import CodeHiliteExtension
 
 from .core import BuildError, Unit
 from .style import ink_mark, knot
-from . import art, mermaid, pages, plain
+from . import art, pages, plain
+from .plates import (_PLATE_PH_RE, drawing_slots, floor_wide_svg, illu_figure,
+                     mermaid_figure, plate_cap, plate_landscape)  # noqa: F401
+from .refs import (RefLinker, _TAG_RE, _VOID_TAGS, footnotes_html, iter_doc,
+                   process_links)
 
 # ------------------------------------------------------------ callouts ----
 
@@ -76,40 +80,7 @@ def ink_rules(doc: str) -> str:
 
 # --------------------------------------------------------------- links ----
 
-_EXT_LINK_RE = re.compile(r'<a href="(https?://[^"]+)"(\s[^>]*)?>(.*?)</a>', re.S)
-
-
-def process_links(doc: str, external: list[str]) -> str:
-    """External links get a superscript footnote marker; every chapter ends
-    with the full URL list so the printed book keeps all references."""
-    counter: dict[str, int] = {}
-
-    def repl(m):
-        url, attrs, label = m.group(1), m.group(2) or "", m.group(3)
-        if "class=" in attrs or 'rel="' in attrs or "<a " in label:
-            return m.group(0)
-        if url not in counter:
-            external.append(url)
-            counter[url] = len(external)
-        num = counter[url]
-        return (f'<a class="ext" href="{url}" rel="noopener"{attrs}>{label}</a>'
-                f'<sup class="fnum"><a href="#fn-{num}" id="fnref-{num}">[{num}]</a></sup>')
-    return _EXT_LINK_RE.sub(repl, doc)
-
-
-def footnotes_html(external: list[str], lang: str) -> str:
-    if not external:
-        return ""
-    # the list closes whichever unit it sits under — the foreword and the
-    # appendices cite too, and are not chapters
-    title = "引用链接" if lang == "zh" else "Cited links"
-    items = "".join(
-        f'<li id="fn-{i}"><a class="fn-url" href="{html.escape(u, True)}" '
-        f'rel="noopener">{html.escape(u)}</a> '
-        f'<a class="backref" href="#fnref-{i}" aria-label="back">↩</a></li>'
-        for i, u in enumerate(external, 1))
-    return (f'<aside class="chapter-notes"><h4 class="notes-title">{title}</h4>'
-            f'<ol class="notes-list">{items}</ol></aside>')
+_CURL_SKIP = {"code", "pre", "svg", "style", "kbd", "samp", "var", "textarea"}
 
 
 # --------------------------------------------------------------- tables ---
@@ -257,158 +228,8 @@ def stamp_code_langs(doc: str, langs: list[str], file: str) -> str:
 
 # -------------------------------------------------------------- mermaid ---
 
-# one pass over both kinds of plate, so a drawing that sits above a diagram
-# cannot inherit the diagram's number
-_PLATE_PH_RE = re.compile(
-    r"<p>@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@</p>"
-    r"|@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@")
 ART_REF = "illustrations/"
 _IMG_TAG_RE = re.compile(r'<img\b([^>]*?)src="([^"]+)"([^>]*?)(/?)>')
-
-# Mermaid lays a plate out in its own units and draws its labels at 13px,
-# so a 1500-unit map inside the 635px reading column drops those labels to
-# 5px — a texture, not a diagram. Hold the genuinely oversized plates above
-# a readable scale and let .diagram-frame scroll sideways (2600px caps the
-# drag at ~4 screens for the biggest dependency maps). @media print drops
-# the floor again so the PDF keeps the whole plate on one A4 page.
-_FLOOR_FROM = 1150.0
-_FLOOR_RATIO = 0.85
-_FLOOR_CAP = 2600.0
-_VIEWBOX_RE = re.compile(r'viewBox="0 0 ([0-9.]+) ([0-9.]+)"')
-_SVG_ROOT_RE = re.compile(r"<svg\b[^>]*>")
-
-
-def floor_wide_svg(svg: str) -> tuple[str, str | None]:
-    """Return (svg with a min-width floor, that floor in px or None).
-
-    Only rendered plates are floored: --mermaid=source hands over a <pre>,
-    which already wraps.
-    """
-    tag = _SVG_ROOT_RE.match(svg)
-    if not tag:
-        return svg, None
-    head = tag.group(0)
-    vb = _VIEWBOX_RE.search(head)
-    if not vb:
-        return svg, None
-    vw = float(vb.group(1))
-    if vw < _FLOOR_FROM:
-        return svg, None
-    floor = f"{round(min(vw * _FLOOR_RATIO, _FLOOR_CAP))}px"
-    if " style=" in head:
-        new = head.replace('style="', f'style="min-width:{floor};', 1)
-    else:
-        new = head[:4] + f' style="min-width:{floor};"' + head[4:]
-    return svg[:tag.start()] + new + svg[tag.end():], floor
-
-
-# A plate's own labels are what has to survive the page. An A4 text block here
-# is 665x926 CSS px, and the 150mm default cap is a compromise for wide plates;
-# a tall one — a stacked layer map, a long decision chain — is shrunk by it into
-# a 4pt texture even though the column has room below it. So a plate that could
-# reach a legible scale by standing taller is given the room it needs, up to a
-# full column less its caption.
-_PRINT_COL_PX = 665.0
-_PRINT_CAP_PX = 567.0        # 150mm, style.py's default
-_PRINT_MAX_PX = 926.0        # 245mm
-_LAND_COL_PX = 993.0         # A4 landscape text block: 297mm - 2x17mm
-_LAND_MAX_PX = 567.0         # 150mm — the sheet's own cap, see mermaid_figure:
-                             # 170mm of landscape block minus the caption row
-_MIN_PLATE_PT = 6.0          # what a plate must reach to stay portrait
-_LAND_MIN_PLATE_PT = 5.0     # a turned sheet is held to a slightly lower bar:
-                             # it costs a whole sheet, but reads at arm's length
-_PX_PER_MM = 96 / 25.4
-
-
-def _plate_metrics(svg: str) -> tuple[float, float, float] | None:
-    tag = _SVG_ROOT_RE.match(svg)
-    if not tag:
-        return None
-    vb = _VIEWBOX_RE.search(tag.group(0))
-    if not vb:
-        return None
-    fonts = [float(x) for x in re.findall(r"font-size:\s*([0-9.]+)px", svg)]
-    return (float(vb.group(1)), float(vb.group(2)),
-            max(fonts) if fonts else 16.0)
-
-
-def plate_cap(svg: str) -> str | None:
-    """Print height cap in mm for this plate, or None for the default."""
-    m = _plate_metrics(svg)
-    if not m:
-        return None
-    w, h, base = m
-    need = _MIN_PLATE_PT / (base * 0.75)      # 1px = 0.75pt
-    if w * need <= _PRINT_COL_PX and _PRINT_CAP_PX < h * need <= _PRINT_MAX_PX:
-        return f"{h * need / _PX_PER_MM:.0f}mm"
-    return None
-
-
-def plate_landscape(svg: str) -> bool:
-    """True when turning the sheet is what makes the plate readable.
-
-    A wide band is bound by the column, not by the cap, so standing taller
-    cannot save it; a landscape sheet buys 50% more width. That buys a whole
-    mostly-empty sheet, though, so it is spent only where it lands the plate
-    above a readable size rather than merely moving the unreadability around."""
-    m = _plate_metrics(svg)
-    if not m:
-        return False
-    w, h, base = m
-    here = base * min(_PRINT_COL_PX / w, _PRINT_CAP_PX / h) * 0.75
-    turned = base * min(_LAND_COL_PX / w, _LAND_MAX_PX / h) * 0.75
-    return here < _MIN_PLATE_PT and turned >= _LAND_MIN_PLATE_PT \
-        and turned > here * 1.25
-
-
-def mermaid_figure(uid: str, svg: str, fig_no: str, caption: str,
-                   lang: str) -> str:
-    cap_word = "图" if lang == "zh" else "Figure"
-    svg, floor = floor_wide_svg(svg)
-    classes = ["diagram"]
-    if floor:
-        classes.append("wide")
-    land = plate_landscape(svg)
-    if land:
-        classes.append("landscape")
-    hint = (f'<span class="fig-hint">{pages.ui("plate_wide", lang)}</span>'
-            if floor else "")
-    # A turned plate takes the sheet's default cap: the landscape block is
-    # 170mm tall, so a cap of its own would push the caption onto a second sheet.
-    cap = None if land else plate_cap(svg)
-    style = f' style="--plate-cap:{cap}"' if cap else ""
-    return (f'<figure class="{" ".join(classes)}" id="fig-{uid}"{style}>'
-            f'<div class="diagram-frame">{svg}</div>'
-            f'<figcaption><span class="fig-no">{cap_word} {fig_no}</span>'
-            f'<span class="fig-cap">{caption}</span>{hint}</figcaption></figure>')
-
-
-def drawing_slots(unit: Unit) -> dict[str, tuple[str, str]]:
-    """The drawing each `ill` slot asks for, and the caption it earns.
-
-    A plate borrows its caption from the section above it, the same rule a
-    Mermaid plate follows, so the prose names a picture without describing it.
-    """
-    caps = mermaid.captions_for(unit.md, unit.ills,
-                                fallback=pages.ui("plate_fallback", unit.lang))
-    return {b.uid: (b.name, caps.get(b.uid, "")) for b in unit.ills}
-
-
-def illu_figure(uid: str, svg: str, fig_no: str, caption: str,
-                lang: str, kind: str = "line") -> str:
-    """A hand-drawn plate inside the prose column.
-
-    It borrows the diagram's caption furniture so the two read as one series,
-    but not its scroll: a drawing is meant to be looked at, not scrolled
-    sideways."""
-    cap_word = "图" if lang == "zh" else "Figure"
-    hint = (f'<span class="fig-hint">{pages.ui("plate_motion", lang)}</span>'
-            if kind == "seq" else "")
-    return (f'<figure class="illu illu-{kind}" id="fig-{uid}">'
-            f'<div class="illu-frame">{svg}</div>'
-            f'<figcaption><span class="fig-no">{cap_word} {fig_no}</span>'
-            f'<span class="fig-cap">{caption}</span>{hint}</figcaption></figure>')
-
 
 def inline_images(doc: str, file: str) -> str:
     """Rewrite a photograph's src to a data URI, or say why it cannot.
@@ -440,94 +261,6 @@ def inline_images(doc: str, file: str) -> str:
         return (f'<img{m.group(1)}src="{art.photo_path(path, label=rel)}"'
                 f'{m.group(3)}>')
     return _IMG_TAG_RE.sub(repl, doc)
-
-
-# ------------------------------------------------------------ autolink --
-
-_SKIP_TAGS = {"a", "code", "pre", "h1", "svg", "style", "sup", "figure"}
-_CURL_SKIP = {"code", "pre", "svg", "style", "kbd", "samp", "var", "textarea"}
-_VOID_TAGS = ("br", "img", "hr", "meta", "input", "wbr")
-_TAG_RE = re.compile(r"<(/?)([a-zA-Z][a-zA-Z0-9]*)[^>]*?(/)?>")
-_COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
-
-
-def iter_doc(doc: str, skip_tags: set[str]):
-    """Walk rendered HTML and yield (kind, text, blocked) chunks, 'tag' being
-    markup copied through verbatim. `blocked` says an element in skip_tags
-    still owns this run, so prose annotators never reach into code, links,
-    plates or headings. Closing tags whose partner never opened (the mermaid
-    SVGs are full of them) pop back to the matching level instead of
-    corrupting the stack."""
-    stack: list[str] = []
-    pos = 0
-    while True:
-        m = _TAG_RE.search(doc, pos)
-        comment = _COMMENT_RE.search(doc, pos)
-        if comment and (m is None or comment.start() < m.start()):
-            if comment.start() > pos:
-                yield "text", doc[pos:comment.start()], \
-                    any(name in skip_tags for name in stack)
-            # A comment is markup, not prose: gloss and autolink must never
-            # rewrite its text (a block marker contains the word `block`).
-            yield "tag", comment.group(0), \
-                any(name in skip_tags for name in stack)
-            pos = comment.end()
-            continue
-        seg_end = m.start() if m else len(doc)
-        blocked = any(name in skip_tags for name in stack)
-        if seg_end > pos:
-            yield "text", doc[pos:seg_end], blocked
-        if not m:
-            return
-        closing, name, selfclose = m.group(1), m.group(2).lower(), m.group(3)
-        if name in _VOID_TAGS or selfclose:
-            pass
-        elif closing:
-            if name in stack:
-                while stack and stack[-1] != name:
-                    stack.pop()
-                stack.pop()
-        else:
-            stack.append(name)
-        yield "tag", m.group(0), blocked
-        pos = m.end()
-
-
-class RefLinker:
-    """Wrap bare 第N章/Chapter N/附录X/Appendix X mentions in <a class=xref>.
-    Skips subtrees of block/inline anchors; one link per target per text run."""
-
-    def __init__(self, mapping: dict[str, str], current: str, lang: str):
-        if lang == "zh":
-            self.rx = re.compile(r"第\s*([1-9]|1[0-5])\s*章|附录\s*([A-D])")
-        else:
-            self.rx = re.compile(
-                r"\bChapter\s+(\d{1,2})\b|\bAppendix\s+([A-D])\b")
-        self.map = mapping
-        self.current = current
-
-    def transform(self, doc: str) -> str:
-        out = []
-        for kind, text, blocked in iter_doc(doc, _SKIP_TAGS):
-            out.append(text if kind == "tag" or blocked
-                       else self._link_text(text))
-        return "".join(out)
-
-    def _link_text(self, text: str) -> str:
-        used: set[str] = set()
-        out, last = [], 0
-        for m in self.rx.finditer(text):
-            g1, g2 = m.group(1), m.group(2)
-            aid = f"ch{int(g1):02d}" if g1 else f"apx{g2.lower()}"
-            anchor = self.map.get(aid)
-            if not anchor or aid == self.current or aid in used:
-                continue
-            used.add(aid)
-            out.append(text[last:m.start()])
-            out.append(f'<a class="xref" href="#{anchor}">{m.group(0)}</a>')
-            last = m.end()
-        out.append(text[last:])
-        return "".join(out)
 
 
 # ---------------------------------------------------------------- ids -----
