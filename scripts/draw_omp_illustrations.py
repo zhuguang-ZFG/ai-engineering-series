@@ -2560,6 +2560,80 @@ def role_layers(picture: Drawing):
     picture.footer("modelRoleStorage 决定 /model 里的指派写到哪一层；本机默认为 global。")
 
 
+def rebuild_order(picture: Drawing):
+    picture.header("第 15 章 · 上下文怎么重新拼出来", "buildSessionContext 按固定顺序拼五段。",
+                   "模型看到的不是你屏幕上的全文，而是这五段按序拼起来的结果。")
+    steps = (("最新那条 compaction", "活动路径上只取最新的一条，转成一条摘要消息", ORANGE),
+             ("firstKeptEntryId 之后的保留条目", "从边界到压缩点的原文重新放回", ORANGE),
+             ("压缩点之后的条目", "路径上更晚的条目按原样追加", BLUE),
+             ("branch_summary", "转成分支摘要消息；本机默认 false，不生成", GREEN),
+             ("custom_message", "转成自定义消息", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 198 + index * 84
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((142, top + 34), index + 1, color)
+        picture.text((182, top + 12), title, 23, color, True, width=900)
+        picture.text((182, top + 42), detail, 19, MUTED, width=900)
+    picture.note((92, 622, 1108, 702), "最后一步容易看漏：",
+                 "convertToLlm() 把两类摘要都变成 user 消息、套静态模板——读起来像你口述的背景。",
+                 BLUE, SKY)
+    picture.footer("关键约定别只活在会被压掉的闲聊里：写进 RULES.md、记忆或仓库文件。")
+
+
+def memory_urls(picture: Drawing):
+    picture.header("第 16 章 · memory:// 读得到什么", "URL 形态固定，能不能解析看 backend。",
+                   "根 URL 主要在 local backend 下成立；别在别的 backend 下假想它可读。")
+    rows = (("memory://root", "启动注入的紧凑摘要"),
+            ("memory://root/MEMORY.md", "长期记忆全文"),
+            ("memory://root/learned.md", "learn 捕获的 lessons"),
+            ("memory://root/skills/<name>/SKILL.md", "生成的 skill 剧本"),
+            ("memory://<memory-id>", "Mnemopi 整行（仅 mnemopi）"))
+    picture.text((60, 196), "read 能吃的 URL", 23, INK, True, width=380)
+    for index, (url, meaning) in enumerate(rows):
+        top = 230 + index * 76
+        picture.box((60, top, 690, top + 62), WHITE, BLUE, radius=8)
+        picture.text((78, top + 10), url, 19, INK, width=594)
+        picture.text((78, top + 36), meaning, 18, MUTED, width=594)
+    picture.text((726, 196), "根 URL 解析得了吗", 23, INK, True, width=400)
+    cards = (("local", "根 URL 成立", "合并管线把文件写到 memory://root/...", GREEN),
+             ("hindsight / mnemopi", "根 URL 可能不解析", "改用 recall / reflect；mnemopi 还能按 id 读", ORANGE),
+             ("off", "没有记忆工具面", "连注入都不发生", MUTED))
+    for index, (name, verdict, detail, color) in enumerate(cards):
+        top = 230 + index * 128
+        picture.box((726, top, 1140, top + 110), WHITE, color, radius=10)
+        picture.text((748, top + 12), name, 21, color, True, width=370)
+        picture.text((748, top + 42), verdict, 19, INK, width=370)
+        picture.text((748, top + 72), detail, 17, MUTED, width=370)
+    picture.footer("本机 mnemopi 下 omp read memory://root 退出码 1，并直说当前 backend——比让模型猜快。")
+
+
+def keyword_switches(picture: Drawing):
+    picture.header("第 18 章 · 四个词各自要什么", "词认出来了，不等于它能干活。",
+                   "三个词依赖工具开关；关着的时候注入照发，契约却落不了地。")
+    cards = (("ultrathink", "多步谨慎推理说明", "不需要额外工具",
+              "自动 thinking 开着时，该回合拉到模型最高推理强度", ORANGE),
+             ("orchestrate", "多代理编排契约", "需要 task 启用",
+              "划界、并行委派、分阶段验证，直到完成", BLUE),
+             ("workflowz", "确定性多子代理工作流", "需要 eval 与 task",
+              "围绕持久 eval 内核的 agent() / completion() / wait()", GREEN),
+             ("jevify", "批量判定契约", "需要 eval 启用",
+              "先冻结问题与量规，再 judge() 一批，只精读打标项", GREEN))
+    for index, (word, effect, need, detail, color) in enumerate(cards):
+        column, row = divmod(index, 2)
+        left = 64 + column * 548
+        top = 200 + row * 212
+        picture.box((left, top, left + 524, top + 184), WHITE, color, radius=12)
+        picture.text((left + 24, top + 16), word, 27, color, True, width=476)
+        picture.text((left + 24, top + 56), effect, 20, INK, width=476)
+        picture.box((left + 24, top + 88, left + 290, top + 124), WHITE, color, radius=8)
+        picture.text((left + 38, top + 97), need, 18, color, True, width=238)
+        picture.text((left + 24, top + 136), detail, 17, MUTED, width=476)
+    picture.note((92, 630, 1108, 700), "匹配只认全小写独立散文词：",
+                 "orchestrated、orchestrate.ts、orchestrate() 都不触发；"
+                 "围栏与行内代码里的同名字符串也不算。", BLUE, SKY)
+    picture.footer("只影响含该词的那一回合；合成的、agent 发起的提示不触发。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -2664,6 +2738,9 @@ FIGURES = {
     "figD-2-confusable-pairs": confusable_pairs,
     "fig14-3-discovery-ladder": discovery_ladder,
     "fig17-3-role-layers": role_layers,
+    "fig15-3-rebuild-order": rebuild_order,
+    "fig16-3-memory-urls": memory_urls,
+    "fig18-3-keyword-switches": keyword_switches,
 }
 
 
@@ -2682,6 +2759,13 @@ def contact_sheet(paths: list[Path], destination: Path, regular: Path):
         draw.text((left + 8, top + 477), path.name, font=font, fill=INK)
     destination.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(destination, quality=94, subsampling=0)
+
+
+def encode_jpeg(image, subsampling: int) -> bytes:
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG", quality=80, subsampling=subsampling,
+               optimize=True, dpi=(300, 300))
+    return buffer.getvalue()
 
 
 def main(argv=None) -> int:
@@ -2704,10 +2788,10 @@ def main(argv=None) -> int:
         args.out_dir.mkdir(parents=True, exist_ok=True)
         encoded = []
         for name, image in pictures:
-            buffer = io.BytesIO()
-            image.save(buffer, format="JPEG", quality=80, subsampling=0,
-                       optimize=True, dpi=(300, 300))
-            raw = buffer.getvalue()
+            raw = encode_jpeg(image, subsampling=0)
+            if len(raw) > MAX_JPEG_BYTES:
+                # Flat-colour plates tolerate 4:2:0; step down before failing.
+                raw = encode_jpeg(image, subsampling=2)
             if len(raw) > MAX_JPEG_BYTES:
                 raise ValueError(
                     f"{name}: {len(raw)} bytes, over the {MAX_JPEG_BYTES} "
