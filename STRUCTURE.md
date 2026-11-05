@@ -89,11 +89,12 @@
 
 | 模块 | 单一职责 |
 |------|----------|
-| `app.py` | 应用服务：`build_edition()` 装配一版书（加载单元、渲染图版、目录/索引/页脚、审计、PDF），`glossary_to_index()` 从附录 D 重建索引，`pdf_meta()` 生成打印清单；CLI 只调用这些函数，测试可直接调用而不经过 argparse |
+| `app.py` | 应用服务：`build_edition()` 装配一版书（加载单元、渲染图版、目录/索引/页脚、审计、PDF），`glossary_to_index()` 从附录 D 重建索引，`pdf_meta()` 生成 `PrintManifest`；CLI 只调用这些函数，测试可直接调用而不经过 argparse |
 | `core.py` | 兼容门面：只重导出下列基础模块的公开名字，既有 `from yuyu_book.core import ...` 调用无需改动 |
 | `paths.py` | 路径常量（`BOOK_DIR` / `REPO_ROOT` / `CACHE_DIR`） |
 | `io.py` | 统一 UTF-8 读写：`read_text`、`load_json`、`dump_json` |
 | `diagnostics.py` | `BuildError`，所有层共用的失败类型 |
+| `print_manifest.py` | 打印清单：`OutlineEntry` / `IndexRow` / `PrintManifest` 三种冻结记录，在构造期校验锚点唯一、目录行与索引行都指向已书签的小节、前言锚点存在。PDF 后处理只读属性，不再猜 dict 键；坏锚点在启动 Chromium 之前就报 `BuildError` |
 | `text.py` | 扫描常量：`FENCE_RE`、`HAN_RE`、`INDEX_CN_LETTER` |
 | `config.py` | manifest 与 sources 的加载、字段校验、来源钉版检查、`expected_ids` 与书序 `unit_stream` |
 | `units.py` | `Unit` / `MermaidBlock` / `IllusBlock` 数据类，**围栏敏感**的 H1 归一（`normalize_h1`）与 Mermaid 抽取（`extract_mermaid`，把每段图源换成 `@@MM:<12位sha1>@@` 占位符并记下代码围栏语言） |
@@ -112,7 +113,7 @@
 | `mermaid.py` | 图版预渲染与缓存：`.cache/mermaid/` 下的 SVG 以 `sha1(配色指纹 + mermaid 版本 + 浏览器版本 + 图源)` 为键（指纹由 `_style_fingerprint()` 现算，改一个色值旧图就会失效，不会拿旧配色继续服务）；`THEME` 是全书统一的图板配色，但主题只及于作者没管过的节点——正文另有 696 条 `classDef`、192 条 `style` 自带 Material/Tailwind 色，`reink_colors()` 在渲染前按色相把它们并入 `BOOK_FAMILIES` 的七组书色（fill 决定角色，`color:` 一律换成该角色的墨色，因为映射后的底色都是浅色，作者原来写的白字会看不见），图源文件本身不改；`captions_for()` 取该图之上最近的 H2 作图题（`block.line` 就是文件行号，所以紧贴围栏的标题也算），其上什么都没有才回落为"架构示意"/"Architecture sketch"；`source_fallback()` 供 `--mermaid source` 使用。图版刻意保持 crisp 直线：mermaid 11 的顶层 `look:'handDrawn'` 实测把单张图从 16.8 KB 抬到 111 KB、最大那幅从 78 KB 抬到 1.26 MB（rough.js 每个形状多道抖动描边），320 张全换会让单文件整书涨到几十 MB，手绘气质因此由 `style.py` 的走线、车辙、道路与墨记承担 |
 | `audit.py` | 落盘前的 HTML 契约检查，见第 6 节 |
 | `style.py` | 整书样式表与页面外壳：`CSS`、`page()`，以及一整套内联矢量装饰——车轮纹样 `wheel()`、章眉下按单元 id 定种的手绘走线 `trace()`、章末渐次散开的车辙 `rut()`、分部过渡页的手绘道路 `route_map()`（后四者都按 id/部 id/种子定种，道路上的站圈数即该部的章数）、全书线路图 `itinerary()`（一条蛇形路走完四个部：路头一枚辐轮代表前言、一章一圈、附录走虚线岔线并以同心圆收车）、这张图的图例与侧栏入口共用的三枚小标记 `key_mark()`、提示块的手写墨记 `ink_mark()` 与小节分隔的耦合线 `knot()`。约定是"无 web 字体、无 JS，必须在 `file://` 离线可读并能 A4 打印"。屏幕与纸面是两套契约：屏幕让宽图版和宽表横向滚动、图题里的"可横向拖动"提示随窄屏换行、中文版正文在 ≤30rem 退回左对齐（一行放不下 `CompactionResult` 时，两端对齐会把剩下的汉字摊成一条条字距沟——英文有连字可退，中文没有），`@media print` 则把它们收回版心（图版 `min-width:0`、退掉卡片底与投影、隐藏拖动提示；表头 `white-space:normal` + `word-break:keep-all`，中文头不打断，单元格只在整词放不下时才 `break-word`，长标识符的断点由 `render.py` 的 `<wbr>` 负责；封面框线撑满整个版心、主题索引恢复双栏；`@page plate-landscape` 声明横版折页的纸张，`figure.landscape` 前后强制翻页并垂直居中；章块的 2.2rem 下边距在纸上归零——那是章与章之间的空气，画不进版心时 Chromium 会为一截够不着的内边距单独留一张纸，而下一单元的强制换页使它永久化）。纸面没有滚动条，宁可换行、宁可翻页，也不能丢内容或丢字号。纸上还锁着一套**视觉词汇**，由 `test_build_contracts.py` 的 `DesignVocabulary` 逐条钉住：圆角只有两枚加一个圆——`--r-1` 转一张标签、`--r-2` 转一个盒子，`999px` 留给真是胶囊的东西（3px 标题条、滚动条滑块），第五种圆角就是同一张纸上多出来的一本书；`dashed` 只表示"这个词有白话注"（`.gloss`）与构建自己报错的那块图版（`.mermaid-missing`），别处的分隔线一律实线；朱红在纸上重调成 `#9C4630`（屏幕上的亮度印在纸上会发灰）；章首的新词面板改到章末收束一章，正文第一句因此回到开篇那一页——`ChapterOpening` 拿一次真实装配断言面板必须排在正文之后 |
-| `pdf.py` | PDF 后置工序：Chromium 打印 → PyMuPDF 依据打印留下的命名目标写书签树、奇偶页眉标、页脚页码、目录页码盖章，最后写元数据并 `subset_fonts()`。成品里混着两种纸张（竖版正文 + 横版折页图版），所以眉标、页码与装饰细线一律按 `page.rect` 逐页量，不假设 A4 竖版尺寸。主题索引是盖不出来的那一样：`search_for` 做子串匹配（`Session` 会把 `SessionStart` 那行也认成自己），一个锚点又常被几十行共用、行面几乎相同，落点无从唯一确定，所以索引走两趟——`measure()` 用第一趟量出每个单元落在哪张纸，页码由 `pages.fill_index_folios()` 写进行里本就预留的空位（按 `data-ref` 认领，不按字面），第二趟才是成品；`folio_drift()` 在第二趟重读目的地，任何页码与量到的不符即构建失败。落盘前 `empty_sheets()` 逐页扫一遍正文带（顶栏 60pt 与脚注 45pt 之间，文字、矢量、位图都算内容）：只要有一张纸剩下页眉与页码这种"纯家具"，构建直接失败——章必须收在它结束的那张纸上 |
+| `pdf.py` | PDF 后置工序（消费 `print_manifest.PrintManifest`）：Chromium 打印 → PyMuPDF 依据打印留下的命名目标写书签树、奇偶页眉标、页脚页码、目录页码盖章，最后写元数据并 `subset_fonts()`。成品里混着两种纸张（竖版正文 + 横版折页图版），所以眉标、页码与装饰细线一律按 `page.rect` 逐页量，不假设 A4 竖版尺寸。主题索引是盖不出来的那一样：`search_for` 做子串匹配（`Session` 会把 `SessionStart` 那行也认成自己），一个锚点又常被几十行共用、行面几乎相同，落点无从唯一确定，所以索引走两趟——`measure()` 用第一趟量出每个单元落在哪张纸，页码由 `pages.fill_index_folios()` 写进行里本就预留的空位（按 `data-ref` 认领，不按字面），第二趟才是成品；`folio_drift()` 在第二趟重读目的地，任何页码与量到的不符即构建失败。落盘前 `empty_sheets()` 逐页扫一遍正文带（顶栏 60pt 与脚注 45pt 之间，文字、矢量、位图都算内容）：只要有一张纸剩下页眉与页码这种"纯家具"，构建直接失败——章必须收在它结束的那张纸上 |
 
 ### 3.2.1 `tests/`：构建契约
 
