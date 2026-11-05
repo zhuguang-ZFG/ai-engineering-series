@@ -3749,6 +3749,85 @@ def preview_failures(picture: Drawing):
     picture.footer("确认命令：omp grep -c <旧名> <路径> --no-gitignore；数数只用 -c。")
 
 
+def read_selectors(picture: Drawing):
+    picture.header("第 8 章 · read 的选择器",
+                   "只有尾巴长得合法才切开。",
+                   "行号从 1 起；字面路径优先。")
+    suffixes = ((":raw", "原样输出，关摘要与行前缀", ORANGE),
+                (":img", "把 .svg/.svgz 栅格化喂视觉输入", BLUE),
+                (":conflicts", "扫 Git 冲突区，给紧凑索引", GREEN),
+                (":N / :A-B / :A+C / :-N", "行范围四形态", ORANGE),
+                (":R1,R2,...", "多段范围，先排序合并", BLUE))
+    for index, (suffix, meaning, color) in enumerate(suffixes):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 10), suffix, 20, color, True, width=520)
+        picture.text((700, top + 16), meaning, 17, MUTED, width=392)
+    picture.note((92, 566, 1108, 660), "两个易错点：",
+                 ":0 会报错；主机带端口时先写尾斜杠，如 https://example.com/:80。",
+                 ORANGE, PEACH)
+    picture.footer("归档与 SQLite 吃自己的冒号语法，别拿普通行选择器硬套。")
+
+
+def truncation_fields(picture: Drawing):
+    picture.header("第 10 章 · 截断是可读的字段",
+                   "不是感觉，是 details 里的证据。",
+                   "看到就让 agent 改命令，别假定它看见了全量。")
+    fields = (("details.meta.truncation", "在内存里被截断", ORANGE),
+              ("artifactId", "溢出到 artifact 时附带", BLUE),
+              ("details.timedOut", "超时标记为 true", GREEN),
+              ("Command exited with code <n>", "非零退出，结果标 isError", ORANGE))
+    for index, (field, meaning, color) in enumerate(fields):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.text((136, top + 10), field, 19, color, True, width=580)
+        picture.text((740, top + 14), meaning, 17, MUTED, width=352)
+    picture.note((92, 580, 1108, 664), "副作用清单（允许高风险命令前过一遍）：",
+                 "改文件 / 装包 / 移数据库；监听端口 / 拉容器 / 写 systemd；对远程主机的 ssh。",
+                 ORANGE, PEACH)
+    picture.footer("正确处理：加过滤、降日志级别、写到文件再 read——别催模型复述。")
+
+
+def task_ticket(picture: Drawing):
+    picture.header("第 13 章 · 任务说明像委派工单",
+                   "写得像另一个人明天才读到的工单。",
+                   "四条齐全，子代理才少跑偏。")
+    parts = (("目标一句话", "要什么结果，不要过程", ORANGE),
+             ("允许 / 禁止", "工具与路径的边界", BLUE),
+             ("交付格式", "例如只返回文件列表与结论", GREEN),
+             ("完成标准", "怎样算做完，可验收", ORANGE))
+    for index, (title, detail, color) in enumerate(parts):
+        top = 200 + index * 104
+        picture.box((110, top, 1108, top + 84), WHITE, color, radius=10)
+        picture.badge((144, top + 42), index + 1, color)
+        picture.text((186, top + 12), title, 21, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 630, 1108, 712), "两个实现细节：",
+                 "批量调用有必填 context；要机器可读就传 outputSchema——strict 失败，permissive 带警告收下。",
+                 BLUE, SKY)
+    picture.footer("拿子代理结论驱动下一步时，用 strict。")
+
+
+def permission_matrix(picture: Drawing):
+    picture.header("第 29 章 · 团队权限矩阵",
+                   "四类能力，默认与升级条件分开写。",
+                   "写进团队表格，别口头约定。")
+    rows = (("只读巡检技能", "全员", "无", ORANGE),
+            ("写生产工具", "关闭", "双人审批与审计", BLUE),
+            ("发外消息钩子", "预览必过", "频道白名单", GREEN),
+            ("自动更新扩展", "关闭", "变更窗口与钉版本", ORANGE))
+    picture.text((136, 196), "能力", 19, MUTED, True, width=400)
+    picture.text((560, 196), "默认", 19, MUTED, True, width=200)
+    picture.text((760, 196), "升级条件", 19, MUTED, True, width=330)
+    for index, (ability, default, upgrade, color) in enumerate(rows):
+        top = 228 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 20), ability, 20, color, True, width=400)
+        picture.text((560, top + 22), default, 18, INK, width=200)
+        picture.text((760, top + 22), upgrade, 18, MUTED, width=330)
+    picture.footer("矩阵是团队公约：默认值可读，升级路径可审。")
+
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -3911,6 +3990,10 @@ FIGURES = {
     "fig16-5-backend-choice": backend_choice,
     "fig17-5-model-vs-role": model_vs_role,
     "fig26-5-preview-failures": preview_failures,
+    "fig8-5-read-selectors": read_selectors,
+    "fig10-5-truncation-fields": truncation_fields,
+    "fig13-5-task-ticket": task_ticket,
+    "fig29-5-permission-matrix": permission_matrix,
 }
 
 
