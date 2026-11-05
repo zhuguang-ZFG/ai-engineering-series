@@ -12,7 +12,7 @@
 | K3 guides | 关闭 | `GUIDES-QA.md` 39/39；中文装配通过 |
 | K4 通俗层 | 关闭 | 36 词、39 条按语、`plain_optional=false`；242 个正文术语标记 |
 | K5 Mermaid | 关闭 | 13 张，12 章、七篇覆盖；`audit_delivery.py` 检查总量与逐篇覆盖 |
-| K6 已知问题插画 | 关闭 | 16 张替换图复核；`ILLUST-CHECKLIST.md` 全 fixed；成品抽查见下 |
+| K6 已知问题插画 | 关闭 | 16 张替换图复核；另有 6 张入门概念图改用 Pillow 重绘，清掉 `invoking tools`、`KEY FACTS` 等英文错字；`ILLUST-CHECKLIST.md` 全 fixed；成品抽查见下 |
 | K7 CI / 构建 | 本地关闭；新改动远端未验 | `ci-local OK`；御舆中文 HTML、Omp HTML/PDF 均成功；内容 CI 增加严格门禁与源稿装配 |
 | K8 版本策略 | 关闭 | `PIN-POLICY.md`、`VERIFY.md` 标准矩阵、附录 E；本机三条复验均 exit 0 |
 | K9 共享术语 / 对照 | 关闭 | `COMPARE-YUYU.md` 十行对照；21 个有效 `shared_with`；独立、固定 SHA 的对照来源 |
@@ -65,3 +65,34 @@ HTML 的 13 个 `figure.diagram` 全部含 SVG，无残留 Mermaid 源码块；1
 
 提交时应把门禁脚本、测试和 workflow 一起纳入；仅提交 workflow 会引用缺失脚本。
 box 同步需要在具备该环境访问通道时执行，不能用本地构建结果代替。
+
+## 补记（2026-11-05）：Python 重绘六张入门图
+
+图 1-1、1-2、2-1、7-2、15-1、16-1 改由 `scripts/draw_omp_illustrations.py` 用 Pillow 与本机
+中文字体绘制，替换仍带英文错字的手绘版；正文沿用原 JPG 路径，四处图注随画面改写。
+绘制命令、语义边界与字体查找见 `PYTHON-ILLUSTRATIONS.md`，`ILLUST-CHECKLIST.md` 记了本轮清单。
+
+首轮发布用质量 94、无色度抽样，单张 330,000–420,000 字节，撞上 `yuyu-book/yuyu_book/art.py`
+的 `PHOTO_BYTES`（单图 300,000 字节内嵌预算），`--product omp` 构建直接失败。编码降到质量 80
+（小字边缘与 94 无可辨差异）后最坏 271,877 字节；脚本另加护栏，任一图超预算就在写盘前返回非零。
+
+验证：
+
+- `python omp/overhaul/audit_structure.py --check`：33/33 章六要素齐。
+- `python omp/overhaul/audit_delivery.py`：0 errors。
+- `python -m unittest tests.test_omp_overhaul`：25 项通过；`unittest discover -s tests`：64 项通过。
+- `python scripts/bookctl.py check --fast`：64 项通用测试、515 项构建器测试，185 份 Markdown
+  与 333 张 Mermaid 均 0 errors。
+- `powershell -File omp/overhaul/ci-local.ps1`：`ci-local OK`，御舆中文 HTML 与 Omp HTML/PDF 均成功。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 19,683,873 | 39 单元 | `18026664d8f43bfbd0d14003ce8ca80edca7b4086198bc7a970edc66e09b3ffe` |
+| `yuyu-omp-zh.pdf` | 30,481,068 | 332 页 / 49 书签 | `b0660f637e0c39feb188cbc3a277b02c6f25e5a8957dc55424e5a54bd689a231` |
+
+页数与书签数与上一轮一致（332 页 / 49 书签），HTML 因六张位图变大增加约 0.9 MB。
+PDF 抽查第 14、15、22、80、148、156 页（图 1-1、1-2、2-1、7-2、15-1、16-1）：
+版面缩放下标签仍可辨，箭头方向与中文题注未被裁切。逐页截图在
+`.scratch/python-illustrations/pdf-pages/`，构建产物在 `.scratch/python-illustrations/build/`。
+
+本轮改动进入独立提交与 PR，远端 CI 以该 PR 的运行记录为准；box 镜像仍未同步。
