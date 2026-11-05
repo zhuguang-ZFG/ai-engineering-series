@@ -2342,6 +2342,1548 @@ def margin_notes(picture: Drawing):
     picture.footer("页边是给下一次升级的自己留的线索。")
 
 
+
+def flag_layers(picture: Drawing):
+    picture.header("附录 A · 旗标分层", "位置参数先问「是不是子命令」，再问「去哪」。",
+                   "launch 旗标、子命令旗标与裸词提示词，各走各的门。")
+    picture.box((58, 208, 400, 320), PEACH, ORANGE)
+    picture.text((229, 232), "第一位置参数", 24, ORANGE, True, "mm")
+    picture.text((229, 272), 'omp "修一下构建"', 20, MUTED, anchor="mm")
+    picture.text((229, 300), "不是已注册子命令", 18, MUTED, anchor="mm")
+    picture.box((58, 340, 400, 452), SKY, BLUE)
+    picture.text((229, 364), "是子命令名", 24, BLUE, True, "mm")
+    picture.text((229, 404), "omp models / omp commit", 19, MUTED, anchor="mm")
+    picture.text((229, 432), "走该命令自己的旗标集", 18, MUTED, anchor="mm")
+    picture.arrow([(410, 264), (500, 264)], ORANGE)
+    picture.arrow([(410, 396), (500, 396)], BLUE)
+    picture.box((510, 208, 1140, 452), WHITE, LINE)
+    picture.text((540, 232), "两级路由", 24, INK, True)
+    for index, (title, detail, color) in enumerate((
+            ("默认 launch", "进交互或 print；launch 旗标在此有效", ORANGE),
+            ("子命令", "omp <command> --help 是该命令的公开面", BLUE),
+            ("裸词", "omp launch <word> 才把词当提示词", GREEN))):
+        top = 274 + index * 56
+        picture.circle((556, top + 12), 8, color, color)
+        picture.text((578, top), title, 21, color, True)
+        picture.text((578, top + 26), detail, 18, MUTED)
+    picture.note((92, 488, 1108, 588), "只有 launch 的旗标跑到别的子命令前，",
+                 "可能被剥掉而不生效——文档例子：omp --cwd dir update。", BLUE, SKY)
+    picture.footer("先分类，再记旗标；分类错了，背再多旗标也没用。")
+
+
+def binary_probe(picture: Drawing):
+    picture.header("附录 A · 帮助漏列", "帮助是摘要，二进制才是判官。",
+                   "旗标没印在 --help 里，未必不被解析。")
+    picture.paper((58, 206, 566, 452), "omp --help 的正文", BLUE, WHITE, ruled=False)
+    picture.text((80, 252), "常见 launch 旗标与子命令表", 20, MUTED)
+    picture.text((80, 292), "— 没列 --fork", 21, ORANGE, True)
+    picture.text((80, 328), "— 没列 --session", 21, ORANGE, True)
+    picture.text((80, 364), "— 没列 --trusted-extension", 21, ORANGE, True)
+    picture.text((80, 408), "不等于「不认识」", 19, MUTED)
+    picture.arrow([(578, 330), (660, 330)], ORANGE)
+    picture.paper((672, 206, 1140, 452), "缺值探针", GREEN, WHITE, ruled=False)
+    picture.text((694, 252), "给一个不该给的值，读报错", 20, GREEN, True)
+    picture.text((694, 300), "omp --trusted-extension 2>&1", 19, MUTED)
+    picture.text((694, 338), "未知旗标 → unrecognized", 18, MUTED)
+    picture.text((694, 374), "已知旗标 → 要值 / 走下一步", 18, MUTED)
+    picture.note((92, 486, 1108, 620), "三处对齐再下结论：",
+                 "帮助摘要、docs/cli-reference.md、二进制实际解析。"
+                 "三者冲突时，以你本机跑出来的行为为准。", GREEN, SAGE)
+    picture.footer("帮助列不全不是 bug 的证据，也不是「不存在」的证据。")
+
+
+def slash_vs_flag(picture: Drawing):
+    picture.header("附录 B · 分工", "同一件事，两条入口。",
+                   "脚本里写旗标，人手里敲斜杠；不要求同名。")
+    picture.box((58, 214, 578, 620), SKY, BLUE)
+    picture.text((318, 244), "会话内：斜杠命令", 26, BLUE, True, "mm")
+    picture.terminal((86, 296, 550, 430), "续聊上一会话", True, "> /resume")
+    picture.text((318, 460), "住在 TUI 输入框里", 21, MUTED, anchor="mm")
+    picture.text((318, 500), "随版本、主题、扩展变化", 20, MUTED, anchor="mm")
+    picture.text((318, 556), "补全 / 帮助优先", 20, BLUE, True, "mm")
+    picture.box((622, 214, 1142, 620), SAGE, GREEN)
+    picture.text((882, 244), "shell 里：旗标", 26, GREEN, True, "mm")
+    picture.terminal((650, 296, 1114, 430), "同样的续聊，退出码可判", True,
+                     "> omp --continue")
+    picture.text((882, 460), "写在命令行上，可进脚本", 21, MUTED, anchor="mm")
+    picture.text((882, 500), "--continue / --resume / --restore", 19, MUTED,
+                 anchor="mm")
+    picture.text((882, 556), "CI 与自动化更稳", 20, GREEN, True, "mm")
+    picture.note((92, 640, 1108, 706), "不对称是常态：",
+                 "别假设每条斜杠都有同名旗标，也别在脚本里赌 TUI 补全。", BLUE, SKY)
+    picture.footer("一次意图，两条入口——按「谁在按」来选，不按记性来选。")
+
+
+def slash_not_shell(picture: Drawing):
+    picture.header("附录 B · 不报错的错", "敲错位置不报错，只把整句喂给模型。",
+                   "shell 里没有 /memory、/mcp 这类会话内命令。")
+    picture.terminal((58, 210, 1140, 470), "Working...", False,
+                     "> omp /memory view")
+    picture.arrow([(600, 480), (600, 526)], ORANGE)
+    picture.box((58, 536, 560, 660), PEACH, ORANGE)
+    picture.text((309, 560), "以为：命令没找到", 22, ORANGE, True, "mm")
+    picture.text((309, 606), "实际：进了默认 launch", 20, MUTED, anchor="mm")
+    picture.text((309, 634), "整句当提示词", 20, MUTED, anchor="mm")
+    picture.box((640, 536, 1140, 660), SAGE, GREEN)
+    picture.text((890, 560), "正确探法", 22, GREEN, True, "mm")
+    picture.text((890, 606), "omp --help 数 COMMANDS", 20, MUTED, anchor="mm")
+    picture.text((890, 634), "斜杠只在会话内", 20, MUTED, anchor="mm")
+    picture.footer("「没报错」不等于「跑对了」：先确认自己在哪一层。")
+
+
+def config_stack(picture: Drawing):
+    picture.header("附录 C · 哪一层生效", "从上往下找，找到第一顶戴着的帽子。",
+                   "改完只用最小会话验证一个键，别一次改十二个。")
+    layers = (("--profile / OMP_PROFILE", "命名配置档：隔离鉴权、会话、设置、缓存", ORANGE, PEACH),
+              ("--cwd / 项目目录", "决定相对路径与项目级 .omp/ 的落点", BLUE, SKY),
+              ("--config <file>", "额外覆盖层，可重复，用于临时试法", GREEN, SAGE),
+              ("最小会话验证", "只验一个键，确认生效再继续改", MUTED, WHITE))
+    for index, (title, detail, color, fill) in enumerate(layers):
+        top = 210 + index * 106
+        picture.box((200, top, 1000, top + 86), fill, color)
+        picture.text((228, top + 14), title, 24, color, True)
+        picture.text((228, top + 48), detail, 19, MUTED)
+        if index:
+            picture.arrow([(600, top - 14), (600, top - 2)], LINE, 3)
+    picture.text((70, 384), "先问顺序，", 21, MUTED, True)
+    picture.text((70, 412), "再问键名", 21, MUTED)
+    picture.note((92, 646, 1108, 706), "配置分散在：",
+                 "config.yml、项目 .omp/、环境变量、secrets.yml、LSP 配置——完整键名以帮助与文档为准。",
+                 BLUE, SKY)
+    picture.footer("先定位生效层，再谈值对不对；层搞错，改的是没人读的那份。")
+
+
+def secrets_paths(picture: Drawing):
+    picture.header("附录 C · secrets 放哪", "全局一份，项目一份，后者压前者。",
+                   "命名 profile 与 SDK 的 agentDir 都会改写「全局」的位置。")
+    picture.paper((58, 208, 566, 470), "全局", BLUE, WHITE, ruled=False)
+    picture.text((80, 252), "~/.omp/agent/secrets.yml", 20, BLUE, True)
+    picture.text((80, 296), "跨项目共用", 20, MUTED)
+    picture.text((80, 336), "跟随活动 agent 目录", 19, MUTED)
+    picture.text((80, 372), "profile / agentDir 一改，", 19, ORANGE)
+    picture.text((80, 398), "它就换地方", 19, ORANGE)
+    picture.plus = None
+    picture.text((600, 330), "→", 46, MUTED, True, "mm")
+    picture.paper((632, 208, 1140, 470), "项目", GREEN, WHITE, ruled=False)
+    picture.text((654, 252), "<cwd>/.omp/secrets.yml", 20, GREEN, True)
+    picture.text((654, 296), "只服务本仓库", 20, MUTED)
+    picture.text((654, 336), "按 content 覆盖全局", 19, MUTED)
+    picture.text((654, 372), "所以别把明文密钥", 19, ORANGE)
+    picture.text((654, 398), "提交进仓库", 19, ORANGE)
+    picture.note((92, 496, 1108, 600), "开关在 config.yml：",
+                 "secrets.enabled 为 true 才谈遮罩；两种模式见第 31 章（obfuscate 可逆 / replace 不可逆）。",
+                 GREEN, SAGE)
+    picture.footer("路径先看清，再谈遮罩；写错文件，等于没开。")
+
+
+def glossary_rings(picture: Drawing):
+    picture.header("附录 D · 术语分环", "先记环，再记词。",
+                   "一个词属于哪一环，决定它跟谁容易混。")
+    center = (600, 420)
+    rings = ((250, "产品与界面", ORANGE, PEACH),
+             (180, "会话与配置", BLUE, SKY),
+             (110, "代理循环与工具", GREEN, SAGE))
+    for radius, label, color, fill in rings:
+        picture.circle(center, radius, fill, color, 4)
+    picture.circle(center, 44, WHITE, INK, 3)
+    picture.text((600, 420), "omp", 24, INK, True, "mm")
+    picture.text((600, 106), "产品与界面", 21, ORANGE, True, "mm")
+    picture.text((600, 176), "会话与配置", 20, BLUE, True, "mm")
+    picture.text((600, 246), "循环与工具", 20, GREEN, True, "mm")
+    picture.text((600, 710), "扩展与安全、嵌入、魔法词各自成环：先记环名，再记环里的词。",
+                 19, MUTED, anchor="mm")
+    picture.footer("术语表的用法是默写后对答案，不是从头读到尾。")
+
+
+def confusable_pairs(picture: Drawing):
+    picture.header("附录 D · 易混对", "成对记，比单词记牢。",
+                   "默写时专门练这几对。")
+    pairs = (("斜杠命令", "魔法词", "你下的命令 / 提示词里的倾向"),
+             ("profile", "cwd", "一顶帽子 / 一个站位"),
+             ("obfuscate", "replace", "可逆 / 不可逆"),
+             ("SDK", "RPC", "同进程 / 跨进程"),
+             ("RPC", "ACP", "自定义 JSONL / JSON-RPC over stdio"),
+             ("task", "orchestrate", "委派 / 鼓励并行的魔法倾向"))
+    for index, (left, right, why) in enumerate(pairs):
+        column, row = divmod(index, 3)
+        top = 206 + row * 158
+        left_x = 58 + column * 552
+        picture.box((left_x, top, left_x + 520, top + 132), WHITE, LINE)
+        picture.text((left_x + 24, top + 18), left, 24, ORANGE, True)
+        picture.text((left_x + 250, top + 18), right, 24, BLUE, True)
+        picture.line([(left_x + 222, top + 22), (left_x + 222, top + 50)], LINE, 2)
+        picture.line([(left_x + 24, top + 66), (left_x + 496, top + 66)], LINE, 1)
+        picture.text((left_x + 24, top + 84), why, 19, MUTED, width=472)
+    picture.footer("练易混对比背孤立定义省力：错一次，记住的是一对。")
+
+
+def discovery_ladder(picture: Drawing):
+    picture.header("第 14 章 · 发现优先级", "同层只活一个，跨层各活一份。",
+                   "数字是文档给的发现优先级：native 最高，原生文件赢在起点。")
+    rows = (("native", 100, ORANGE), ("omp-plugins", 90, ORANGE),
+            ("claude", 80, BLUE), ("agent-plugins", 75, BLUE),
+            ("agents / codex", 70, BLUE), ("gemini", 60, GREEN),
+            ("opencode", 55, GREEN), ("cursor / windsurf", 50, GREEN),
+            ("cline", 40, GREEN), ("github", 30, MUTED),
+            ("vscode", 20, MUTED), ("agents-md / claude-md", 10, MUTED))
+    for index, (name, score, color) in enumerate(rows):
+        column, row = divmod(index, 6)
+        left = 58 + column * 552
+        top = 212 + row * 66
+        width = int(score * 3.4)
+        picture.box((left, top, left + max(width, 30), top + 48), WHITE, color, radius=8)
+        picture.text((left + 12, top + 12), name, 19, INK)
+        picture.text((left + 470, top + 12), str(score), 19, color, True, "rm")
+    picture.note((92, 620, 1108, 700), "记两条就够：",
+                 "用户级只留一份（native 遮住其他用户级）；项目级按目录深度，每层一份，越靠近 cwd 越显眼。",
+                 BLUE, SKY)
+    picture.footer("调试「怎么还念旧规矩」：先看 cwd 与最近非空 .omp/，再看 enabledProviders。")
+
+
+def role_layers(picture: Drawing):
+    picture.header("第 17 章 · 谁压住谁", "从下往上找，最后说话的那层赢。",
+                   "改的那层不是生效的那层，是角色路由最常见的坑。")
+    layers = (("setting env var", "PI_SMOL_MODEL / PI_SLOW_MODEL / PI_PLAN_MODEL", ORANGE),
+              ("runtime overrides", "--smol / --slow / --plan（不落盘）", ORANGE),
+              ("CLI overlays", "--config <file>", BLUE),
+              ("project config", "<cwd>/.omp/config.yml", GREEN),
+              ("global config", "~/.omp/agent/config.yml", GREEN),
+              ("built-in defaults", "出厂值", MUTED))
+    for index, (title, detail, color) in enumerate(layers):
+        top = 640 - index * 82
+        picture.box((200, top, 1000, top + 64), WHITE, color, radius=8)
+        picture.text((226, top + 8), title, 22, color, True)
+        picture.text((226, top + 36), detail, 18, MUTED)
+    picture.arrow([(150, 690), (150, 200)], MUTED, 4)
+    picture.text((112, 440), "优先级升高", 19, MUTED, anchor="mm")
+    picture.note((92, 470, 1108, 470), "", "")
+    picture.footer("modelRoleStorage 决定 /model 里的指派写到哪一层；本机默认为 global。")
+
+
+def rebuild_order(picture: Drawing):
+    picture.header("第 15 章 · 上下文怎么重新拼出来", "buildSessionContext 按固定顺序拼五段。",
+                   "模型看到的不是你屏幕上的全文，而是这五段按序拼起来的结果。")
+    steps = (("最新那条 compaction", "活动路径上只取最新的一条，转成一条摘要消息", ORANGE),
+             ("firstKeptEntryId 之后的保留条目", "从边界到压缩点的原文重新放回", ORANGE),
+             ("压缩点之后的条目", "路径上更晚的条目按原样追加", BLUE),
+             ("branch_summary", "转成分支摘要消息；本机默认 false，不生成", GREEN),
+             ("custom_message", "转成自定义消息", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 198 + index * 84
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((142, top + 34), index + 1, color)
+        picture.text((182, top + 12), title, 23, color, True, width=900)
+        picture.text((182, top + 42), detail, 19, MUTED, width=900)
+    picture.note((92, 622, 1108, 702), "最后一步容易看漏：",
+                 "convertToLlm() 把两类摘要都变成 user 消息、套静态模板——读起来像你口述的背景。",
+                 BLUE, SKY)
+    picture.footer("关键约定别只活在会被压掉的闲聊里：写进 RULES.md、记忆或仓库文件。")
+
+
+def memory_urls(picture: Drawing):
+    picture.header("第 16 章 · memory:// 读得到什么", "URL 形态固定，能不能解析看 backend。",
+                   "根 URL 主要在 local backend 下成立；别在别的 backend 下假想它可读。")
+    rows = (("memory://root", "启动注入的紧凑摘要"),
+            ("memory://root/MEMORY.md", "长期记忆全文"),
+            ("memory://root/learned.md", "learn 捕获的 lessons"),
+            ("memory://root/skills/<name>/SKILL.md", "生成的 skill 剧本"),
+            ("memory://<memory-id>", "Mnemopi 整行（仅 mnemopi）"))
+    picture.text((60, 196), "read 能吃的 URL", 23, INK, True, width=380)
+    for index, (url, meaning) in enumerate(rows):
+        top = 230 + index * 76
+        picture.box((60, top, 690, top + 62), WHITE, BLUE, radius=8)
+        picture.text((78, top + 10), url, 19, INK, width=594)
+        picture.text((78, top + 36), meaning, 18, MUTED, width=594)
+    picture.text((726, 196), "根 URL 解析得了吗", 23, INK, True, width=400)
+    cards = (("local", "根 URL 成立", "合并管线把文件写到 memory://root/...", GREEN),
+             ("hindsight / mnemopi", "根 URL 可能不解析", "改用 recall / reflect；mnemopi 还能按 id 读", ORANGE),
+             ("off", "没有记忆工具面", "连注入都不发生", MUTED))
+    for index, (name, verdict, detail, color) in enumerate(cards):
+        top = 230 + index * 128
+        picture.box((726, top, 1140, top + 110), WHITE, color, radius=10)
+        picture.text((748, top + 12), name, 21, color, True, width=370)
+        picture.text((748, top + 42), verdict, 19, INK, width=370)
+        picture.text((748, top + 72), detail, 17, MUTED, width=370)
+    picture.footer("本机 mnemopi 下 omp read memory://root 退出码 1，并直说当前 backend——比让模型猜快。")
+
+
+def keyword_switches(picture: Drawing):
+    picture.header("第 18 章 · 四个词各自要什么", "词认出来了，不等于它能干活。",
+                   "三个词依赖工具开关；关着的时候注入照发，契约却落不了地。")
+    cards = (("ultrathink", "多步谨慎推理说明", "不需要额外工具",
+              "自动 thinking 开着时，该回合拉到模型最高推理强度", ORANGE),
+             ("orchestrate", "多代理编排契约", "需要 task 启用",
+              "划界、并行委派、分阶段验证，直到完成", BLUE),
+             ("workflowz", "确定性多子代理工作流", "需要 eval 与 task",
+              "围绕持久 eval 内核的 agent() / completion() / wait()", GREEN),
+             ("jevify", "批量判定契约", "需要 eval 启用",
+              "先冻结问题与量规，再 judge() 一批，只精读打标项", GREEN))
+    for index, (word, effect, need, detail, color) in enumerate(cards):
+        column, row = divmod(index, 2)
+        left = 64 + column * 548
+        top = 200 + row * 212
+        picture.box((left, top, left + 524, top + 184), WHITE, color, radius=12)
+        picture.text((left + 24, top + 16), word, 27, color, True, width=476)
+        picture.text((left + 24, top + 56), effect, 20, INK, width=476)
+        picture.box((left + 24, top + 88, left + 290, top + 124), WHITE, color, radius=8)
+        picture.text((left + 38, top + 97), need, 18, color, True, width=238)
+        picture.text((left + 24, top + 136), detail, 17, MUTED, width=476)
+    picture.note((92, 630, 1108, 700), "匹配只认全小写独立散文词：",
+                 "orchestrated、orchestrate.ts、orchestrate() 都不触发；"
+                 "围栏与行内代码里的同名字符串也不算。", BLUE, SKY)
+    picture.footer("只影响含该词的那一回合；合成的、agent 发起的提示不触发。")
+
+
+def skill_triage(picture: Drawing):
+    picture.header("第 19 章 · 技能不露面，五步排查",
+                   "从路径到生效时机，按序查，别跳。",
+                   "路径不对，后面全白查。")
+    steps = (("① 路径深度", "常规根只认 skills/<name>/SKILL.md 一层，嵌套不递归", ORANGE),
+             ("② frontmatter", "name 齐；description 为空等于没写", BLUE),
+             ("③ 开关", "skills.enabled、--no-skills、ignoredSkills、includeSkills", GREEN),
+             ("④ 遮蔽", "用户级与项目级重名：capability 去重按 provider 优先级", ORANGE),
+             ("⑤ 生效时机", "改完要重开会话；会话内不会热加载", BLUE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 84
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((142, top + 34), index + 1, color)
+        picture.text((182, top + 12), title, 23, color, True, width=880)
+        picture.text((182, top + 42), detail, 18, MUTED, width=880)
+    picture.footer("每一步都能自己复现；别用 omp read skill:// 判断项目技能。")
+
+
+def mcp_precedence(picture: Drawing):
+    picture.header("第 20 章 · 谁覆盖谁",
+                   "MCP 配置的失败多是「键被更强的键吃掉」。",
+                   "按这张梯子从上往下查，第一个命中的就是答案。")
+    layers = (("disabledServers", "黑名单；连 enabledServers 强开也赢不了它", ORANGE),
+              ("enabledServers", "白名单，强行打开同名条目", BLUE),
+              ("条目 enabled: false", "整个 server 被跳过，工具一并消失", GREEN))
+    for index, (name, detail, color) in enumerate(layers):
+        top = 216 + index * 128
+        picture.box((150, top, 1108, top + 100), WHITE, color, radius=10)
+        picture.text((178, top + 14), name, 22, color, True, width=900)
+        picture.text((178, top + 52), detail, 18, MUTED, width=900)
+        if index < 2:
+            picture.arrow([(104, top + 100), (104, top + 128)])
+    picture.text((96, 206), "覆盖 ↓", 20, MUTED, True)
+    picture.note((92, 626, 1108, 704), "另一条独立的轴（文档所述，本机未验证）：",
+                 "OMP_MCP_TIMEOUT_MS 只压 per-server timeout 优先权，与可见性无关。",
+                 BLUE, SKY)
+    picture.footer("排障顺序：先黑名单，再白名单，最后才轮到条目自己。")
+
+
+def hook_returns(picture: Drawing):
+    picture.header("第 21 章 · tool_call 处理器的两种返回",
+                   "拦下来，还是改了再放行。",
+                   "同一个处理器按条件二选一，返回值就是契约。")
+    picture.text((92, 190), "pi.on(\"tool_call\", ...) 之前/之后各挂一道", 22, INK, True, width=976)
+    picture.box((92, 240, 584, 480), WHITE, ORANGE, radius=12)
+    picture.text((116, 264), "{ block: true,", 24, ORANGE, True, width=444)
+    picture.text((116, 296), "  reason: \"...\" }", 24, ORANGE, True, width=444)
+    picture.text((116, 340), "调用被拦", 22, INK, True, width=444)
+    picture.text((116, 376), "模型只会看到 reason，", 18, MUTED, width=444)
+    picture.text((116, 404), "拿不到工具结果。", 18, MUTED, width=444)
+    picture.box((616, 240, 1108, 480), WHITE, BLUE, radius=12)
+    picture.text((640, 264), "{ input: {...} }", 24, BLUE, True, width=444)
+    picture.text((640, 340), "参数被改写", 22, INK, True, width=444)
+    picture.text((640, 376), "真正执行的是新参数，", 18, MUTED, width=444)
+    picture.text((640, 404), "原调用悄悄被替换。", 18, MUTED, width=444)
+    picture.note((92, 508, 1108, 588), "用在刀刃上：",
+                 "审计、改写参数、阻止危险调用；审批门禁是另一道，两者叠加时都要过。",
+                 GREEN, SAGE)
+    picture.footer("钩子失败要吵出来：静默的 block 比报错难查十倍。")
+
+
+def registerables(picture: Drawing):
+    picture.header("第 22 章 · 扩展能注册什么",
+                   "六类能力，名称以当前 ExtensionAPI 为准。",
+                   "升级后先对照类型定义，别背旧清单。")
+    cards = (("pi.on(...)", "事件：session / agent / tool 生命周期", ORANGE),
+             ("pi.registerTool", "工具：模型可调用", BLUE),
+             ("pi.registerCommand", "斜杠命令", GREEN),
+             ("快捷键与旗标", "交互入口也归扩展管", BLUE),
+             ("自定义渲染", "界面表现层", GREEN),
+             ("sendMessage 注入", "initialize 后向会话投递消息", ORANGE))
+    for index, (name, detail, color) in enumerate(cards):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 148
+        picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 22, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 18, MUTED, width=448)
+    picture.note((92, 626, 1108, 704), "时机差异：",
+                 "pi.exec() 在 load 阶段就可用；provider 注册可能排队到 session setup。",
+                 BLUE, SKY)
+    picture.footer("模型调不到 = registerTool 没生效；斜杠没有 = registerCommand 没生效。")
+
+
+def count_ledger(picture: Drawing):
+    picture.header("第 26 章 · 旧名对账",
+                   "before 与 after 的计数相减，要等于迁移条数。",
+                   "对不上不合并——数字比肉眼扫 diff 靠谱。")
+    picture.box((92, 200, 584, 356), WHITE, ORANGE, radius=10)
+    picture.text((116, 216), "before.txt", 21, ORANGE, True, width=444)
+    picture.text((116, 256), "$ omp grep -c calcFee omp/", 18, INK, width=444)
+    picture.text((116, 288), "Total matches: 200", 18, INK, width=444)
+    picture.text((116, 320), "Files searched: 1", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 356), WHITE, BLUE, radius=10)
+    picture.text((640, 216), "after.txt", 21, BLUE, True, width=444)
+    picture.text((640, 256), "$ omp grep -c calcFee omp/", 18, INK, width=444)
+    picture.text((640, 288), "Total matches: 0", 18, INK, width=444)
+    picture.text((640, 320), "Files searched: 1", 18, MUTED, width=444)
+    picture.box((92, 396, 1108, 500), WHITE, GREEN, radius=10)
+    picture.text((116, 412), "对账规则", 21, GREEN, True, width=968)
+    picture.text((116, 448), "200 − 0 = 200 = 计划迁移条数；对不上先查 Files searched 与 Gitignore。",
+                 19, INK, width=968)
+    picture.note((92, 528, 1108, 608), "数数只用 -c：",
+                 "-f 报的是被上限截断的行数，还带 Limit reached: true——不是匹配次数。",
+                 ORANGE, PEACH)
+    picture.footer("Files searched 是 0 或 1？路径或 glob 写错，不是「仓库里没有旧名」。")
+
+
+def review_replies(picture: Drawing):
+    picture.header("第 27 章 · 被退回后的三种回法",
+                   "不要先解释——先归类，再动手。",
+                   "共同点：每条回复都带一个可执行命令或文件路径。")
+    replies = (("范围太大", "拆提交，或把无关文件移出暂存；回复只写一句：已拆成 N 个提交", ORANGE),
+               ("证据不足", "补三样：测试命令原文与末 20 行、复现步骤、改动前后对比", BLUE),
+               ("方案被质疑", "回 ask，把两个方案的成本写成两行（改动面、回滚代价），让人选", GREEN))
+    for index, (title, detail, color) in enumerate(replies):
+        top = 200 + index * 128
+        picture.box((110, top, 1108, top + 104), WHITE, color, radius=12)
+        picture.badge((144, top + 52), index + 1, color)
+        picture.text((186, top + 16), title, 24, color, True, width=880)
+        picture.text((186, top + 58), detail, 19, MUTED, width=880)
+    picture.note((92, 600, 1108, 680), "反面清单：",
+                 "「我本地试过了」不算证据；评论区打三轮字，比约十分钟会议更贵。",
+                 ORANGE, PEACH)
+    picture.footer("没有命令或路径的回复，等于没回。")
+
+
+def sdk_lifecycle(picture: Drawing):
+    picture.header("第 28 章 · 进程生命周期归宿主",
+                   "导入 SDK 不会替你装信号与致命错误处理器。",
+                   "把下面四件事写进宿主，再谈提问。")
+    duties = (("信号处理器", "SIGINT / SIGTERM 由宿主接，SDK 不代劳", ORANGE),
+              ("致命错误处理器", "未捕获异常不让进程半死", BLUE),
+              ("释放会话", "关机前先关会话，别留悬挂句柄", GREEN),
+              ("postmortem.cleanup()", "释放会话后再调，清理才完整", ORANGE))
+    for index, (title, detail, color) in enumerate(duties):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 210 + row * 176
+        picture.box((left, top, left + 492, top + 152), WHITE, color, radius=12)
+        picture.text((left + 22, top + 16), title, 23, color, True, width=448)
+        picture.text((left + 22, top + 60), detail, 19, MUTED, width=448)
+    picture.note((92, 574, 1108, 668), "为什么要单列：",
+                 "这两样缺失时，进程会在「看起来正常」的状态下挂住或半死——比报错更难查。",
+                 BLUE, SKY)
+    picture.footer("SDK 最小闭环之后立刻补生命周期，再往业务里接。")
+
+
+def pack_three_layers(picture: Drawing):
+    picture.header("第 29 章 · 装完不生效，三层分开看",
+                   "从下往上查：装没装上 → 坏没坏 → 配置读没读。",
+                   "第三层最容易冤枉插件。")
+    layers = (("① 装没装上", "omp plugin list：npm / Marketplace 两段，名字不在就是没装", ORANGE),
+              ("② 装上了但坏了", "omp plugin doctor：逐项打勾，指出哪一项坏，不替你修", BLUE),
+              ("③ 配置没生效", "mcp.enableProjectConfig 默认 false——.omp/mcp.json 不被读", GREEN))
+    for index, (title, detail, color) in enumerate(layers):
+        top = 200 + index * 132
+        picture.box((110, top, 1108, top + 108), WHITE, color, radius=12)
+        picture.text((136, top + 14), title, 24, color, True, width=920)
+        picture.text((136, top + 58), detail, 19, MUTED, width=920)
+        if index < 2:
+            picture.arrow([(104, top + 108), (104, top + 132)], MUTED, 3)
+    picture.note((92, 610, 1108, 690), "证据都是只读的：",
+                 "plugin-list / plugin-doctor / config-get 三份输出贴进变更单，比口述可靠。",
+                 GREEN, SAGE)
+    picture.footer("团队包 README 必须写清第三层默认值，否则每个同事各踩一遍。")
+
+
+def evidence_pack(picture: Drawing):
+    picture.header("第 30 章 · 四行证据包",
+                   "排障的第一产物不是结论，是可转发的四行。",
+                   "四条都只读、不耗 API；跑完存页边。")
+    commands = (("omp --version", "版本字符串", ORANGE),
+                ("omp ps --json", "当前项目与 daemon 目录", BLUE),
+                ("omp config get secrets.enabled", "遮罩开关（本机回 false）", GREEN),
+                ("omp plugin doctor", "末尾 Summary：ok / warnings / errors", ORANGE))
+    for index, (command, detail, color) in enumerate(commands):
+        top = 196 + index * 96
+        picture.box((92, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.text((116, top + 10), command, 21, color, True, width=560)
+        picture.text((700, top + 12), detail, 18, MUTED, width=392)
+    picture.note((92, 590, 1108, 684), "再补一条（第 28 章）：",
+                 "RPC get_state 只读返回 isSettled——「卡在 Working」时用它判断还有没有未完成轮次。",
+                 BLUE, SKY)
+    picture.footer("读得出具体数字，才算把「好像没事」变成证据。")
+
+
+def secret_modes(picture: Drawing):
+    picture.header("第 31 章 · 秘密遮罩的两种模式",
+                   "默认关闭；开启后有两种换法。",
+                   "先把 secrets.enabled 打开，再选模式。")
+    picture.box((92, 196, 584, 420), WHITE, GREEN, radius=12)
+    picture.text((116, 212), "obfuscate（默认）", 23, GREEN, True, width=444)
+    picture.text((116, 256), "换成确定性 $$HASH(:hint)$$ 或友好占位", 18, MUTED, width=444)
+    picture.text((116, 292), "可逆：工具参数执行前还原", 18, MUTED, width=444)
+    picture.text((116, 328), "短于 8 字符的普通值与正则匹配忽略", 18, MUTED, width=444)
+    picture.box((616, 196, 1108, 420), WHITE, ORANGE, radius=12)
+    picture.text((640, 212), "replace", 23, ORANGE, True, width=444)
+    picture.text((640, 256), "换成配置的 replacement", 18, MUTED, width=444)
+    picture.text((640, 292), "不可逆：适合红线值", 18, MUTED, width=444)
+    picture.text((640, 328), "可处理短值", 18, MUTED, width=444)
+    picture.note((92, 460, 1108, 556), "覆盖范围要点：",
+                 "送模型的对话文本等字段会被替换；静态系统提示、静态工具定义、二进制载荷不在范围内。",
+                 BLUE, SKY)
+    picture.footer("本机默认 secrets.enabled=false——不开就没有遮罩，别把默认当保护。")
+
+
+def cost_leaks(picture: Drawing):
+    picture.header("第 32 章 · 钱从哪流走",
+                   "五个常见黑洞，先堵最容易的。",
+                   "省钱先省上下文，再谈换模型。")
+    leaks = (("超长重试", ORANGE), ("整树列表灌进上下文", BLUE),
+             ("并行子代理各带大历史", GREEN), ("慢角色做简单活", ORANGE),
+             ("反复全仓测试不缓存", BLUE))
+    for index, (label, color) in enumerate(leaks):
+        top = 196 + index * 76
+        picture.box((92, top, 620, top + 60), WHITE, color, radius=10)
+        picture.badge((124, top + 30), index + 1, color)
+        picture.text((166, top + 14), label, 21, color, True, width=430)
+    picture.box((652, 196, 1108, 528), WHITE, BLUE, radius=12)
+    picture.text((676, 212), "工具结果节流", 22, BLUE, True, width=408)
+    picture.text((676, 256), "能 grep / glob 就别 bash find", 18, MUTED, width=408)
+    picture.text((676, 292), "read 大文件用行范围", 18, MUTED, width=408)
+    picture.text((676, 328), "扫过的卡片别让模型全文复述", 18, MUTED, width=408)
+    picture.text((676, 364), "失败输出存仓库笔记，压缩前救证据", 18, MUTED, width=408)
+    picture.footer("省钱的顺序：先砍上下文，再砍并行度，最后才换更便宜的模型。")
+
+
+def six_step_chain(picture: Drawing):
+    picture.header("第 33 章 · 六十分钟串链",
+                   "每步留产物，六步齐了才算总复习及格。",
+                   "第 1、2 步命令形状本机已验；3–6 步产物以你仓库为准。")
+    steps = (("① 确认二进制", "5 分钟 · omp --version 读出版本", ORANGE),
+             ("② 新配置档", "15 分钟 · --profile review 回「在线」", BLUE),
+             ("③ 小仓走一圈", "20 分钟 · git diff 即产物", GREEN),
+             ("④ 制造失败", "10 分钟 · 看它先复现再改", ORANGE),
+             ("⑤ 遮罩实验", "5 分钟 · 假密钥走一遍再删", BLUE),
+             ("⑥ 架构笔记", "5 分钟 · 导出会话得 HTML", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 150
+        picture.box((left, top, left + 492, top + 126), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), title, 22, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 18, MUTED, width=448)
+    picture.note((92, 656, 1108, 720), "及格线：", "六步都有产物。", GREEN, SAGE)
+    picture.footer("这一步走完，前面 32 章的碎片才串成一条链。")
+
+
+def subcommand_grid(picture: Drawing):
+    picture.header("附录 A · 子命令地图",
+                   "按你日常问的问题分格，不冒充完整表。",
+                   "以 omp --help 的 COMMANDS 表为准；未知旗标才会报错 exit 2。")
+    cells = (("接模型", "login / models / models find", ORANGE),
+             ("会话迁移", "session pack / unpack / moved", BLUE),
+             ("后台进程", "ps --json / --plain", GREEN),
+             ("改配置", "config list / get / set / reset", ORANGE),
+             ("技能与包", "skill（单数）/ plugin / install", BLUE),
+             ("当服务跑", "--mode rpc / acp", GREEN),
+             ("升级本体", "update --check / --plugins", ORANGE),
+             ("离线计数", "toks <文件或文本>", BLUE))
+    for index, (name, commands, color) in enumerate(cells):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 118
+        picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
+        picture.text((left + 20, top + 12), name, 21, color, True, width=452)
+        picture.text((left + 20, top + 50), commands, 17, MUTED, width=452)
+    picture.footer("拿不准就跑 omp <猜的名字>？不行——整句会被当提示词送进模型。")
+
+
+def lookup_order(picture: Drawing):
+    picture.header("附录 B · 怎么查，而不是怎么背",
+                   "斜杠命令随版本、主题与扩展变化。",
+                   "按这张顺序查，比背表可靠。")
+    steps = (("① TUI 内帮助与补全", "先进 omp 会话，敲 / 看补全；/help 看全量", ORANGE),
+             ("② 官方文档", "docs 里的 slash-commands 与版本说明", BLUE),
+             ("③ 本机实验", "怀疑扩展覆盖：--no-extensions 开新会话对比", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 200 + index * 120
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.badge((144, top + 48), index + 1, color)
+        picture.text((186, top + 14), title, 23, color, True, width=880)
+        picture.text((186, top + 56), detail, 19, MUTED, width=880)
+    picture.note((92, 574, 1108, 668), "最容易踩的坑：",
+                 "在 shell 敲 omp /memory view 不报错——整句被当提示词吞掉。斜杠命令只在会话内。",
+                 ORANGE, PEACH)
+    picture.footer("查不到时带上版本字符串再查文档；别用猜的命令形状。")
+
+
+def verify_script(picture: Drawing):
+    picture.header("附录 C · 配置变更的最小验证剧本",
+                   "每改一个键，走一遍五步。",
+                   "拒绝「改完再说」的堆叠式配置。")
+    steps = (("① 只改一个键", "一次一个，别批量", ORANGE),
+             ("② 开临时会话", "或 --no-session 若适用", BLUE),
+             ("③ 最小提示触发", "只问与该键相关的一件事", GREEN),
+             ("④ 看卡片或日志", "确认行为符合预期", ORANGE),
+             ("⑤ 失败先回滚", "回滚该键，不在废墟上叠加", BLUE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.badge((144, top + 36), index + 1, color)
+        picture.text((186, top + 10), title, 22, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 664, 1108, 718), "Profile 弄乱时：",
+                 "新建命名配置档对比，比在废墟上修补快。", GREEN, SAGE)
+    picture.footer("验证命令写进页边——下次改同一个键，直接抄。")
+
+
+def recall_drill(picture: Drawing):
+    picture.header("附录 D · 默写流程",
+                   "从最近一章抄十个词，闭卷默写，再对本文。",
+                   "错词记页边；升级二进制后重默写四个词。")
+    steps = (("① 抄十个词", "从最近一章挑高频术语", ORANGE),
+             ("② 闭卷默写", "合上书，写解释不写名词", BLUE),
+             ("③ 对本文", "逐条核对定义与边界", GREEN),
+             ("④ 错词记页边", "标记回哪一章补", ORANGE),
+             ("⑤ 每月重默写", "profile / launch / secrets / task", BLUE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 88
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((144, top + 34), index + 1, color)
+        picture.text((186, top + 10), title, 22, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 650, 1108, 704), "易混对专练：",
+                 "默写时把易混对拆开写，各写一句「它不是什么」。", GREEN, SAGE)
+    picture.footer("能指回章节、能说清边界，才算记住。")
+
+
+def three_outcomes(picture: Drawing):
+    picture.header("第 1 章 · 三种命令，三种结局",
+                   "旗标拼错会报错；子命令猜错不会。",
+                   "带横杠的是旗标，不带的是你要说的话。")
+    rows = (("omp notasubcommand", "停在 Working...——整句被当提示词送进模型", ORANGE),
+            ("omp --model（缺值）", "同样 Working...；缺的值被吞进提示词", ORANGE),
+            ("omp --nopt（旗标拼错）", "Error: unknown flag: --nopt，exit 2", GREEN))
+    for index, (command, outcome, color) in enumerate(rows):
+        top = 200 + index * 122
+        picture.box((110, top, 1108, top + 98), WHITE, color, radius=12)
+        picture.text((136, top + 12), command, 22, color, True, width=940)
+        picture.text((136, top + 54), outcome, 19, MUTED, width=940)
+    picture.note((92, 574, 1108, 656), "卡片比总结硬：",
+                 "「我已经改好了」不算数——往上翻工具卡片，确认 edit / write 真跑过。",
+                 BLUE, SKY)
+    picture.footer("先 omp --help 数 COMMANDS，再决定有没有那个子命令。")
+
+
+def desk_pile(picture: Drawing):
+    picture.header("第 2 章 · 书桌上堆了什么",
+                   "agent 的书桌比聊天热闹得多。",
+                   "同一个 128k，agent 三五个工具回合就紧张。")
+    piles = (("系统侧", "人格与安全约束、工具清单、项目规则", ORANGE),
+             ("你刚说的话", "可能还带 ultrathink 触发的隐藏说明", BLUE),
+             ("read 的结果", "摘要与挑片段，不是整文件倾倒", GREEN),
+             ("搜索命中", "grep / glob / ast_grep 的列表", ORANGE),
+             ("编辑预览与测试输出", "edit 的 diff、bash 的 stdout/stderr", BLUE),
+             ("子代理回传", "task 的结构化结果，不是一大段散文", GREEN))
+    for index, (name, detail, color) in enumerate(piles):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 152
+        picture.box((left, top, left + 492, top + 128), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 17, MUTED, width=448)
+    picture.footer("定位再精读，比「把整个仓库读一遍」省一张书桌。")
+
+
+def tool_baskets(picture: Drawing):
+    picture.header("第 3 章 · 能力分筐，入口统一",
+                   "内置工具大致六筐，同一命名空间。",
+                   "有的默认关闭，要在设置里打开。")
+    baskets = (("文件与搜索", "read / write / edit / ast_edit / ast_grep / grep / glob", ORANGE),
+               ("运行时", "bash / eval（持久 Python / JS）", BLUE),
+               ("代码智能", "lsp / debug / 门控的 security_scan", GREEN),
+               ("协作", "task / wait / todo / ask", ORANGE),
+               ("桌面与网络", "browser / computer / web_search / 门控 github", BLUE),
+               ("记忆与技能", "retain / recall / reflect / learn / manage_skill", GREEN))
+    for index, (name, detail, color) in enumerate(baskets):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 148
+        picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 17, MUTED, width=448)
+    picture.note((92, 640, 1108, 704), "可以躲进设备：",
+                 "read xd:// 列出；tools.xdev 打开后用 write xd://<tool> 运行。", BLUE, SKY)
+    picture.footer("模型只学一套命名空间——不用记八套插件 API。")
+
+
+def pick_four(picture: Drawing):
+    picture.header("第 12 章 · 四只手怎么选",
+                   "目标决定工具，别凭手感点。",
+                   "点错工具比不会用更费时间。")
+    choices = (("网页 DOM / 页面流程", "browser", ORANGE),
+               ("本机 App、AX、剪贴板", "computer", BLUE),
+               ("查公开资料", "web_search，再 read URL", GREEN),
+               ("仓库 / PR / Actions", "github", ORANGE))
+    for index, (goal, tool, color) in enumerate(choices):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 164
+        picture.box((left, top, left + 492, top + 140), WHITE, color, radius=12)
+        picture.text((left + 22, top + 16), goal, 21, color, True, width=448)
+        picture.text((left + 22, top + 62), tool, 20, INK, True, width=448)
+    picture.note((92, 544, 1108, 656), "两条纪律：",
+                 "搜索摘要不是一级事实源——read 原始 URL；PR 状态是快照，关键操作前再查。",
+                 BLUE, SKY)
+    picture.footer("浏览器进程、驱动、临时 profile 会残留——长会话记得回收。")
+
+
+def collab_trio(picture: Drawing):
+    picture.header("第 13 章 · 三兄弟别混着排障",
+                   "/fork、task、wait 不在同一层。",
+                   "会话章管历史；本章管单次任务内的协作。")
+    trio = (("/fork", "复制的是会话笔记本", ORANGE),
+            ("task", "一次工具调用拉起的子 agent 运行", BLUE),
+            ("wait", "同步原语：等第一件落地的事", GREEN))
+    for index, (name, detail, color) in enumerate(trio):
+        top = 196 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), name, 24, color, True, width=920)
+        picture.text((136, top + 54), detail, 19, MUTED, width=920)
+    picture.note((92, 560, 1108, 668), "wait 的硬规则：",
+                 "不收参数、每条 30 分钟硬顶；结果被消费掉不会再来，?progress 不算答复。",
+                 BLUE, SKY)
+    picture.footer("要掐掉别等：write proc://<id>/kill。")
+
+
+def read_hunt(picture: Drawing):
+    picture.header("第 8 章 · 摸清模块的四步",
+                   "找到入口，再精读——别整库倾倒。",
+                   "中间任何一步空结果，先怀疑模式/路径，再怀疑「真的没有」。")
+    steps = (("① glob 找入口", "**/index.ts、**/mod.rs、**/__init__.py，按语言选", ORANGE),
+             ("② grep 关键词", "export / pub use / __all__，限制在上一步命中的目录", BLUE),
+             ("③ read 核心文件", "2–3 个文件读 :1-80，需要时再补范围", GREEN),
+             ("④ ast_grep 批量", "找「所有 createX( 调用」用结构匹配，别用脆弱正则", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.badge((144, top + 46), index + 1, color)
+        picture.text((186, top + 14), title, 23, color, True, width=880)
+        picture.text((186, top + 54), detail, 18, MUTED, width=880)
+    picture.note((92, 572, 1108, 664), "空结果先别下结论：",
+                 "换模式、放宽路径、加 --no-gitignore 再试；被 ignore 的目录根本没进搜索。",
+                 BLUE, SKY)
+    picture.footer("四步走完，你手里是入口清单与关键片段，不是一堆噪音。")
+
+
+def patch_forms(picture: Drawing):
+    picture.header("第 9 章 · 补丁长什么样",
+                   "一段输入字符串，多个 section。",
+                   "带 body 的 PUT 每行都是 +TEXT——正文是最终内容，不是前后对。")
+    picture.box((92, 196, 1108, 300), WHITE, ORANGE, radius=10)
+    picture.text((116, 210), "[src/example.ts#1A2B]", 20, ORANGE, True, width=960)
+    picture.text((116, 244), "PUT 4.=4:", 20, INK, width=960)
+    picture.text((116, 274), "  +const value = 2;", 20, INK, width=960)
+    forms = (("PUT N.=M", "替换闭区间；PUT <N / >N 插入", BLUE),
+             ("PUT N*", "从 N 行的语法块整块替换", GREEN),
+             ("CUT N.=M", "删除并捕获，可 @name 进寄存器", ORANGE),
+             ("MV DEST / REM", "改完写到目标并删源 / 删整个文件", BLUE))
+    for index, (form, detail, color) in enumerate(forms):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 320 + row * 132
+        picture.box((left, top, left + 492, top + 112), WHITE, color, radius=10)
+        picture.text((left + 20, top + 12), form, 22, color, True, width=452)
+        picture.text((left + 20, top + 54), detail, 18, MUTED, width=452)
+    picture.note((92, 596, 1108, 668), "行号基准：",
+                 "全部相对原始快照——多段补丁都按改前行号，别按执行后重数。", BLUE, SKY)
+    picture.footer("TAG 必须抄自最近锚定的 read / grep / 成功 edit；新建用 write。")
+
+
+def two_gates(picture: Drawing):
+    picture.header("第 10 章 · bash 前面的两道闸",
+                   "改道让模型换工具；权限按序第一条命中就赢。",
+                   "位置不同，结果也不同。")
+    picture.box((92, 196, 584, 468), WHITE, ORANGE, radius=12)
+    picture.text((116, 212), "第一道：改道", 23, ORANGE, True, width=444)
+    picture.text((116, 254), "cat / head → read", 18, MUTED, width=444)
+    picture.text((116, 288), "grep / rg → grep", 18, MUTED, width=444)
+    picture.text((116, 322), "find -name → glob", 18, MUTED, width=444)
+    picture.text((116, 356), "sed -i → edit", 18, MUTED, width=444)
+    picture.text((116, 390), "npm run dev / 裸 & → 命名服务", 18, MUTED, width=444)
+    picture.box((616, 196, 1108, 468), WHITE, BLUE, radius=12)
+    picture.text((640, 212), "第二道：权限", 23, BLUE, True, width=444)
+    picture.text((640, 254), "allow / prompt / deny 三选一", 18, MUTED, width=444)
+    picture.text((640, 288), "按序比，第一条命中就赢", 18, MUTED, width=444)
+    picture.text((640, 322), "deny 在 execute 之前拦，yolo 也拦", 18, MUTED, width=444)
+    picture.text((640, 356), "allow 默认只降简单命令", 18, MUTED, width=444)
+    picture.text((640, 390), "复合命令要开 allowCompoundCommands", 18, MUTED, width=444)
+    picture.note((92, 496, 1108, 592), "反例可以保留：",
+                 "构建脚本、docker、项目自定义 CLI 本来就该进 shell——别硬改成专用工具。",
+                 GREEN, SAGE)
+    picture.footer("被改道不是报错，让你用上下文更好的那条路。")
+
+
+def compaction_keys(picture: Drawing):
+    picture.header("第 15 章 · 十个键各管一段",
+                   "本机 [context] 与 [internal] 段的压缩键。",
+                   "改阈值前先读原值，别把默认当「没配」。")
+    groups = (("总开关", "compaction.enabled = true", ORANGE),
+              ("阈值", "thresholdPercent / thresholdTokens 均为 -1，由窗口与 modelThresholds 推", BLUE),
+              ("方法与保留", "methodOrder [remote, soft]；keepRecentTokens 20000", GREEN),
+              ("维护时机", "midTurn / idle 开关；idle 阈值 200000、闲 300 秒", ORANGE))
+    for index, (title, detail, color) in enumerate(groups):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "另一件事：",
+                 "branchSummary.enabled = false——分支摘要默认不生成，别和压缩总开关混为一谈。",
+                 BLUE, SKY)
+    picture.footer("reason 有四种：overflow / incomplete / threshold / idle，别混成一件事。")
+
+
+def learn_timing(picture: Drawing):
+    picture.header("第 16 章 · learn 什么时候生效",
+                   "写进 learned.md，但不改本轮前缀。",
+                   "从下一会话起才注入。")
+    picture.box((92, 200, 584, 430), WHITE, GREEN, radius=12)
+    picture.text((116, 216), "learn（autolearn 开着才有）", 21, GREEN, True, width=444)
+    picture.text((116, 258), "把耐久 lessons 写进 learned.md", 18, MUTED, width=444)
+    picture.text((116, 292), "去重、脱敏、有上限", 18, MUTED, width=444)
+    picture.text((116, 326), "不改当前会话 prompt-cache 前缀", 18, MUTED, width=444)
+    picture.text((116, 360), "从下一会话起注入", 18, INK, True, width=444)
+    picture.box((616, 200, 1108, 430), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "本地管线（启动时跑）", 21, BLUE, True, width=444)
+    picture.text((640, 258), "Phase 1：从变更过的历史会话抽耐久信号", 18, MUTED, width=444)
+    picture.text((640, 292), "Phase 2：合并为 MEMORY.md 等产物", 18, MUTED, width=444)
+    picture.text((640, 326), "/memory enqueue 标记工作，下次启动捡起", 18, MUTED, width=444)
+    picture.note((92, 452, 1108, 552), "会被跳过：",
+                 "子代理、未持久化会话，以及太新 / 太旧 / 活跃中的会话都不进管线。",
+                 ORANGE, PEACH)
+    picture.footer("要它立刻记住：写进仓库文件或规则，别指望聊天窗口当硬盘。")
+
+
+def role_routing(picture: Drawing):
+    picture.header("第 17 章 · 角色怎么配不烧钱",
+                   "按任务选角色，不按心情选。",
+                   "成本细节见第 32 章。")
+    rules = (("子代理默认绑 task 角色", "别让每个探路子任务都上旗舰模型", ORANGE),
+             ("提交信息 / 分类 / 格式转换", "优先 smol / tiny", BLUE),
+             ("架构裁决 / 安全敏感改动", "再上 slow / default", GREEN),
+             ("advisor 打开 = 多付一路", "只在高风险变更开", ORANGE))
+    for index, (title, detail, color) in enumerate(rules):
+        top = 200 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.badge((144, top + 46), index + 1, color)
+        picture.text((186, top + 14), title, 22, color, True, width=880)
+        picture.text((186, top + 54), detail, 18, MUTED, width=880)
+    picture.footer("角色值的六层优先级见 §17.2a——你改的那层未必是生效的那层。")
+
+
+def plan_keys(picture: Drawing):
+    picture.header("第 18 章 · 计划模式与开启方式",
+                   "可用但默认不自动进。",
+                   "本机 18.16.0 实跑键值，证据在 facts/live-18.16.0。")
+    keys = (("plan.enabled", "true——计划模式在这台机器上可用", GREEN),
+            ("plan.defaultOnStartup", "false——启动不自动进入", BLUE),
+            ("--plan-yolo", "只读 plan 开场；第一次 resolve 自动批准，再切 --plan-yolo-into 实现", ORANGE),
+            ("--goal=<value>", "直接从 goal 模式开场", ORANGE))
+    for index, (name, detail, color) in enumerate(keys):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), name, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "和审批模式互补：",
+                 "审批是执行门禁，ask 是产品决策问答——两者都不替你做计划。",
+                 BLUE, SKY)
+    picture.footer("想用计划模式就显式开；别指望它自己跳出来。")
+
+
+def mode_matrix(picture: Drawing):
+    picture.header("附录 A · 打印模式与输出模式",
+                   "-p 走非交互；--mode 控制输出形态。",
+                   "第一次学手感请留在 TUI（第 6 章）。")
+    modes = (("text", "默认；给人读", ORANGE),
+             ("json", "机器解析用", BLUE),
+             ("rpc / rpc-ui", "stdio 上的 JSONL 帧", GREEN),
+             ("acp", "cli-reference 另列；--mode acp 与 omp acp 都可", ORANGE))
+    for index, (name, detail, color) in enumerate(modes):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 140
+        picture.box((left, top, left + 492, top + 116), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 23, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 18, MUTED, width=448)
+    picture.note((92, 492, 1108, 592), "两条提醒：",
+                 "脚本与 CI 用打印模式，别在 TUI 里写脚本；计划类默认启动行为在打印模式可能被忽略。",
+                 BLUE, SKY)
+    picture.footer("选模式前先问：这一跑是给人看，还是给程序读？")
+
+
+def slash_vs_keyword(picture: Drawing):
+    picture.header("附录 B · 斜杠与魔法词",
+                   "一个是命令，一个是行为倾向。",
+                   "弄混就会「怎么按了没反应」。")
+    picture.box((92, 210, 584, 470), WHITE, ORANGE, radius=12)
+    picture.text((116, 226), "斜杠命令", 24, ORANGE, True, width=444)
+    picture.text((116, 270), "你下的命令", 20, INK, True, width=444)
+    picture.text((116, 310), "在会话输入框里敲，回车执行", 18, MUTED, width=444)
+    picture.text((116, 344), "示例：/memory view、/mcp list", 18, MUTED, width=444)
+    picture.text((116, 378), "shell 里敲不会执行", 18, MUTED, width=444)
+    picture.box((616, 210, 1108, 470), WHITE, BLUE, radius=12)
+    picture.text((640, 226), "魔法词", 24, BLUE, True, width=444)
+    picture.text((640, 270), "提示词里触发的行为倾向", 20, INK, True, width=444)
+    picture.text((640, 310), "随你的话一起送进模型（第 18 章）", 18, MUTED, width=444)
+    picture.text((640, 344), "示例：ultrathink、orchestrate", 18, MUTED, width=444)
+    picture.text((640, 378), "只影响含该词的那一回合", 18, MUTED, width=444)
+    picture.footer("按了没反应，先分清你按的是命令，还是在话里埋了暗示。")
+
+
+def embed_diff(picture: Drawing):
+    picture.header("附录 C · 与 SDK 嵌入的关系",
+                   "配置发现也可以嵌进你的程序。",
+                   "用发现还是用覆盖，要明确写死一种。")
+    picture.box((92, 200, 584, 440), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "走 CLI", 23, ORANGE, True, width=444)
+    picture.text((116, 258), "agentDir、settings 默认被发现", 18, MUTED, width=444)
+    picture.text((116, 292), "cwd / 鉴权 / 模型都按环境解析", 18, MUTED, width=444)
+    picture.text((116, 326), "行为随机器与 profile 变化", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 440), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "走嵌入", 23, BLUE, True, width=444)
+    picture.text((640, 258), "createAgentSession 可传可发现", 18, MUTED, width=444)
+    picture.text((640, 292), "宿主决定用哪一层、覆盖什么", 18, MUTED, width=444)
+    picture.text((640, 326), "不写死就会出现幽灵差异", 18, MUTED, width=444)
+    picture.note((92, 464, 1108, 560), "幽灵差异长这样：",
+                 "同一份仓库，CLI 一套行为、嵌入另一套——查半天才发现是发现顺序不同。",
+                 BLUE, SKY)
+    picture.footer("嵌入前先决定：发现还是覆盖，写进你的初始化代码。")
+
+
+def uncovered_gaps(picture: Drawing):
+    picture.header("附录 E · 三处刻意留白",
+                   "上游 README 21 项能力，本书展开 18 项。",
+                   "宁可不写，也不把宣传语当规范。")
+    gaps = (("04 · 流式规则注入", "需要本机二进制或对应 docs 验证", ORANGE),
+            ("18 · 冲突解决 /resolve", "同上——未验证就不写成规范", BLUE),
+            ("20 · Slack（浏览器已展开）", "同上；第 12 章只覆盖浏览器", GREEN))
+    for index, (title, detail, color) in enumerate(gaps):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.badge((144, top + 48), index + 1, color)
+        picture.text((186, top + 14), title, 22, color, True, width=880)
+        picture.text((186, top + 56), detail, 18, MUTED, width=880)
+    picture.note((92, 564, 1108, 664), "怎么补：",
+                 "按页边核对法——对照本机帮助或上游文档核一条，写进页边再决定是否展开。",
+                 BLUE, SKY)
+    picture.footer("章节顺序不必按表走；把 21 项当索引，读完一章回来划掉一行。")
+
+
+def lsp_switches(picture: Drawing):
+    picture.header("第 11 章 · 七个开关各管一段",
+                   "本机 [files] 段里管 lsp 的行。",
+                   "两行解释大半「为什么没红线」。")
+    groups = (("注册", "lsp.enabled = true；关掉后 lsp 工具根本不注册", ORANGE),
+              ("启动", "lazy 按需冷启；shared 先问 broker，失败才起私有进程", BLUE),
+              ("诊断", "onWrite = true；onEdit = false——改完不拉就没有", GREEN),
+              ("格式化与超时", "formatOnWrite = false；requestTimeout 10 秒（上限 max(20, 它)）", ORANGE))
+    for index, (title, detail, color) in enumerate(groups):
+        top = 196 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 592, 1108, 664), "记住这两条默认值：",
+                 "diagnosticsOnEdit 关、lazy 开——第一个解释「没红线」，第二个解释「第一次慢」。",
+                 BLUE, SKY)
+    picture.footer("想改完立刻看诊断，就显式调一次 lsp；别等自动。")
+
+
+def config_actions(picture: Drawing):
+    picture.header("第 23 章 · omp config 五个动作",
+                   "list / get / set / reset / path。",
+                   "本机 --help 原文见 facts/live-18.16.0/help-config.txt。")
+    rows = (("list", "打印所有设置及生效值；--scope 只看某一层写了什么", ORANGE),
+            ("get <key>", "取一个键的生效值；未知键 exit 非零", BLUE),
+            ("set <key> <value>", "schema 解析后写进全局 config.yml；别的层仍生效时会说是谁", GREEN),
+            ("reset <key>", "从全局删掉这个键，让默认值生效", ORANGE),
+            ("path", "打印活动 agent 目录（认 PI_CODING_AGENT_DIR）", BLUE))
+    for index, (action, detail, color) in enumerate(rows):
+        top = 196 + index * 90
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 10), action, 21, color, True, width=380)
+        picture.text((540, top + 12), detail, 18, MUTED, width=548)
+    picture.note((92, 646, 1108, 712), "旗标边界：", "--json 被 list/get/set/reset 接受；--scope 只有 list 用。",
+                 BLUE, SKY)
+    picture.footer("set 之后照它说的查「谁还在提供值」——改的那层未必是生效的那层。")
+
+
+def pipeline_vs_approval(picture: Drawing):
+    picture.header("附录 D · 过关、点头、问你",
+                   "三个词三件事，别混用。",
+                   "权限管线与审批是一问一答的两端。")
+    cards = (("权限管线", "一条命令从发起到执行要过的几道关；卡在哪就看它停在第几关", ORANGE),
+             ("审批 approval", "工具动手前由谁点头的判据——执行门禁那端", BLUE),
+             ("ask 工具", "产品决策问答，不是执行门禁", GREEN))
+    for index, (title, detail, color) in enumerate(cards):
+        top = 200 + index * 120
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 23, color, True, width=920)
+        picture.text((136, top + 56), detail, 18, MUTED, width=920)
+    picture.note((92, 576, 1108, 656), "yolo 是另一个档：",
+                 "不再逐条问、命令直接跑；演示图省事可以开，跑别人代码前记得关回去。",
+                 ORANGE, PEACH)
+    picture.footer("第 10 章的「两道闸」讲同一件事：改道在前，权限在后。")
+
+
+def reading_map(picture: Drawing):
+    picture.header("前言 · 这本书怎么走",
+                   "先原理、再实战；七篇加五个附录。",
+                   "插画双轨：Mermaid 管架构关系，handraw 管概念漫画。")
+    parts = (("一 · 原理", "agent = 模型 + 工具 + 循环", ORANGE),
+             ("二 · 上手", "装好、接上模型、第一次改代码", BLUE),
+             ("三 · 工具箱", "读、搜、改、跑、看、协作", GREEN),
+             ("四 · 上下文", "压缩、记忆、角色", ORANGE),
+             ("五 · 扩展", "Skills、MCP、自定义工具、扩展包", BLUE),
+             ("六 · 实战", "六个真实任务", GREEN),
+             ("七 · 排障", "排错、安全、成本、读源码", ORANGE))
+    for index, (name, detail, color) in enumerate(parts[:6]):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 118
+        picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
+        picture.text((left + 20, top + 12), name, 21, color, True, width=452)
+        picture.text((left + 20, top + 50), detail, 17, MUTED, width=452)
+    picture.box((92, 550, 1108, 618), WHITE, ORANGE, radius=10)
+    picture.text((116, 566), "七 · 排障", 21, ORANGE, True, width=420)
+    picture.text((560, 568), "排错、安全、成本、读源码", 17, MUTED, width=520)
+    picture.note((92, 634, 1108, 704), "附录 A–E：", "命令行、斜杠、配置、术语、版本钉——查得到就好，不必通读。",
+                 BLUE, SKY)
+    picture.footer("准备好了，从第 1 章开始。")
+
+
+def skill_lifecycle(picture: Drawing):
+    picture.header("第 19 章 · Skill 的团队生命周期",
+                   "起草到上线，五步；删除比堆积重要。",
+                   "description 当广告写，正文当手册写。")
+    steps = (("① 起草", "description 写触发场景，正文写步骤", ORANGE),
+             ("② 同事手跑", "别人照着做一遍，看会不会卡", BLUE),
+             ("③ 收进规范位置", "skills/<name>/SKILL.md，版本记文首", GREEN),
+             ("④ 试用一周", "记录误触发与漏触发", ORANGE),
+             ("⑤ 再决定 extension", "要注册工具才升级成扩展", BLUE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 88
+        picture.box((110, top, 1108, top + 68), WHITE, color, radius=10)
+        picture.badge((144, top + 34), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 650, 1108, 712), "升级后抽测：",
+                 "omp 升级完抽测触发是否仍准；过期 skill 会污染元数据列表，该删就删。",
+                 ORANGE, PEACH)
+    picture.footer("删除比堆积更重要——元数据列表越长，模型越难挑对。")
+
+
+def hook_audit(picture: Drawing):
+    picture.header("第 21 章 · 钩子失败要吵出来",
+                   "静默失败比没有钩子更糟。",
+                   "模型会以为工具成功了。")
+    rules = (("拒绝时", "返回清楚原因，别只给一个 false", ORANGE),
+             ("改写参数时", "打审计日志——谁改了、改成了什么", BLUE),
+             ("日志一行一条", "时间、工具名、决策、原因码", GREEN),
+             ("上线前自测", "用 -p 做一次「故意缺参」，确认 schema 报错可读", ORANGE))
+    for index, (title, detail, color) in enumerate(rules):
+        top = 200 + index * 112
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 652, 1108, 716), "给模型的 UI：",
+                 "自定义工具的 schema 与描述是给模型看的界面，吝啬文字等于自找误调用。",
+                 BLUE, SKY)
+    picture.footer("模型可见的错误字符串要人话；结构化留给日志。")
+
+
+def ext_acceptance(picture: Drawing):
+    picture.header("第 22 章 · 扩展验收六步",
+                   "全部绿灯才允许进团队默认配置。",
+                   "PR 审扩展像审生产服务。")
+    steps = (("① 干净 profile 加载", "没有历史配置帮忙", ORANGE),
+             ("② 命令列表含新命令", "斜杠看得见", BLUE),
+             ("③ 工具可调用", "模型调得到、结果对", GREEN),
+             ("④ 故意重复名", "看冲突日志是否可读", ORANGE),
+             ("⑤ /reload-plugins", "热重载后行为可解释", BLUE),
+             ("⑥ 卸载后消失", "列表里干净退出", GREEN))
+    for index, (title, detail, color) in enumerate(steps):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 132
+        picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), title, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 18, MUTED, width=448)
+    picture.note((92, 600, 1108, 690), "顺带三句：",
+                 "依赖、权限、失败与卸载都要写清；模块顶层状态跨子会话会脏；名字加团队前缀。",
+                 BLUE, SKY)
+    picture.footer("验收脚本落进仓库，别人合并前也跑一遍。")
+
+
+def mcp_ticket(picture: Drawing):
+    picture.header("第 20 章 · 引入 MCP 的变更单",
+                   "每个 server 条目都是供应链。",
+                   "锁定版本、记维护人、写失败手册。")
+    fields = (("server 名称与版本", "钉住具体版本，别用 latest", ORANGE),
+              ("启动命令", "stdio 的 command / args / env / cwd", BLUE),
+              ("所需环境变量", "只写变量名，不写值", GREEN),
+              ("是否出网", "传输选 stdio 还是远程决定攻击面", ORANGE),
+              ("失败时人类步骤", "指向 stderr 与 exit 码", BLUE),
+              ("回滚方式", "删 disabledServers 或 PR 回滚条目", GREEN))
+    for index, (name, detail, color) in enumerate(fields):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 132
+        picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 54), detail, 18, MUTED, width=448)
+    picture.note((92, 600, 1108, 686), "两条回滚路径别混写：",
+                 "disabledServers 删掉即恢复；enabled:false 只有 PR 回滚能改。",
+                 ORANGE, PEACH)
+    picture.footer("合并前在干净 profile 验证：工具列表出现，且最小调用成功。")
+
+
+def secret_shapes(picture: Drawing):
+    picture.header("第 31 章 · 启动时还收集什么",
+                   "除了配置里的秘密，还有三类形状。",
+                   "以文档列表为准；别拿生产密钥做第一次实验。")
+    shapes = (("环境变量", "名称像密钥的变量，值至少 8 字符", ORANGE),
+              ("连接串密码", "URL 里带的凭据", BLUE),
+              ("内置可逆正则", "GitHub / AWS / JWT / Bearer / PEM 等族", GREEN))
+    for index, (title, detail, color) in enumerate(shapes):
+        top = 196 + index * 108
+        picture.box((110, top, 1108, top + 88), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=930)
+        picture.text((136, top + 52), detail, 18, MUTED, width=930)
+    picture.note((92, 542, 1108, 636), "占位怎么算：",
+                 "哈希基于安装私有密钥，避免按字典反推；友好名净化成大写字母数字且有长度上限。",
+                 BLUE, SKY)
+    picture.footer("密钥文件本身不要提交进仓库——它救不了被抄走的哈希。")
+
+
+def cost_review(picture: Drawing):
+    picture.header("第 32 章 · 一次成本复盘",
+                   "挑昨天一场会话，只回答四个问题。",
+                   "只改一条习惯，才能坚持。")
+    questions = (("用了哪个模型", "是不是「杀鸡用牛刀」", ORANGE),
+                 ("起了几个子代理", "每个都乘一份上下文", BLUE),
+                 ("最大工具输出多长", "整树列表还是片段", GREEN),
+                 ("有没有无意义重试", "同一命令反复跑", ORANGE))
+    for index, (title, detail, color) in enumerate(questions):
+        top = 196 + index * 104
+        picture.box((110, top, 1108, top + 84), WHITE, color, radius=10)
+        picture.badge((144, top + 42), index + 1, color)
+        picture.text((186, top + 12), title, 22, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 594, 1108, 664), "产出：",
+                 "一条写进 AGENTS 或个人片段的习惯——下个月复盘时对照它。",
+                 GREEN, SAGE)
+    picture.footer("成本不是省出来的，是把大头一个个认出来。")
+
+
+def incident_pack(picture: Drawing):
+    picture.header("第 30 章 · 证据包模板",
+                   "找人帮忙前，把这六样打包。",
+                   "只写环境变量名，不贴密钥正文。")
+    items = (("症状一句话", "别写「它坏了」", ORANGE),
+             ("命令原文", "能直接粘贴重跑", BLUE),
+             ("完整错误", "含 exit 码与 stderr 摘要", GREEN),
+             ("版本首行", "omp --version 那行", ORANGE),
+             ("相关配置路径", "密钥打码", BLUE),
+             ("已尝试的最小动作", "做过什么、结果如何", GREEN))
+    for index, (title, detail, color) in enumerate(items):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 196 + row * 124
+        picture.box((left, top, left + 492, top + 100), WHITE, color, radius=10)
+        picture.text((left + 22, top + 12), title, 21, color, True, width=448)
+        picture.text((left + 22, top + 50), detail, 17, MUTED, width=448)
+    picture.note((92, 576, 1108, 656), "为什么打包：",
+                 "「我觉得卡住了」无法转发；六样齐了，别人才能复现或直接定位。",
+                 BLUE, SKY)
+    picture.footer("排障的第一产物是证据包，不是结论。")
+
+
+def config_diary(picture: Drawing):
+    picture.header("第 23 章 · 配置变更日记",
+                   "日记一行一条，七个字段。",
+                   "改一层、开新会话、记下 profile 与路径。")
+    fields = (("时间", "什么时候改的", ORANGE),
+              ("profile", "活动配置档名", BLUE),
+              ("文件路径", "动的是哪个文件", GREEN),
+              ("键 / 旧值 / 新值", "三个一起记，别只记新值", ORANGE),
+              ("验证方法", "下次照着验一遍", BLUE))
+    for index, (title, detail, color) in enumerate(fields):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.badge((144, top + 38), index + 1, color)
+        picture.text((186, top + 12), title, 21, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 664, 1108, 722), "两条硬规矩：",
+                 "CI 只读叠加层单独成文件；密钥示例只写环境变量名。", GREEN, SAGE)
+    picture.footer("文档里禁止「请开发者改 ~/.omp」——那是要事故的写法。")
+
+
+def antipatterns(picture: Drawing):
+    picture.header("第 24 章 · 反模式墙",
+                   "接手陌生仓库时，贴在显示器边上。",
+                   "五句话，每句都能让你白干一天。")
+    walls = (("一上来重构整个目录", "地图都没有就先动土", ORANGE),
+             ("用 shell 枚举代替 glob/grep", "窗口塞满噪音", BLUE),
+             ("不跑测试就宣布读懂", "读懂的证据是绿测试", GREEN),
+             ("把临时猜测写进 AGENTS.md", "猜想变规则，后来人照做", ORANGE),
+             ("没地图就并行 task", "子代理各带一份大历史乱撞", BLUE))
+    for index, (title, detail, color) in enumerate(walls):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.badge((144, top + 36), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.footer("反模式不用记全，记住「先画地图再动土」这一条就够挡一半。")
+
+
+def embed_checklist(picture: Drawing):
+    picture.header("第 28 章 · 嵌入前的核对表",
+                   "左边记发现项，右边按序排错。",
+                   "都是外壳，同一套 agent 循环。")
+    picture.box((92, 196, 584, 520), WHITE, ORANGE, radius=12)
+    picture.text((116, 212), "嵌入前记录", 22, ORANGE, True, width=444)
+    picture.text((116, 254), "cwd", 18, MUTED, width=444)
+    picture.text((116, 288), "agentDir", 18, MUTED, width=444)
+    picture.text((116, 322), "是否持久（文件式 / 内存式）", 18, MUTED, width=444)
+    picture.text((116, 356), "模型与 fallback", 18, MUTED, width=444)
+    picture.text((116, 390), "扩展是否加载", 18, MUTED, width=444)
+    picture.box((616, 196, 1108, 520), WHITE, BLUE, radius=12)
+    picture.text((640, 212), "RPC 排错顺序", 22, BLUE, True, width=444)
+    picture.text((640, 254), "① 帧解析", 18, MUTED, width=444)
+    picture.text((640, 288), "② 相关标识怎么对", 18, MUTED, width=444)
+    picture.text((640, 322), "③ 错误是否可恢复", 18, MUTED, width=444)
+    picture.text((640, 356), "④ 事件背压", 18, MUTED, width=444)
+    picture.note((92, 540, 1108, 620), "共同点：",
+                 "命令行、打印模式、SDK、RPC 都是外壳；信卡片在这里变成信事件与响应帧。",
+                 GREEN, SAGE)
+    picture.footer("排错别跳步：帧都解析不对，就别查相关标识。")
+
+
+def three_deceptions(picture: Drawing):
+    picture.header("第 33 章 · 总复习的三处自欺",
+                   "最容易骗自己的三条，逐条对号。",
+                   "六步缺一不可，产物写进笔记才算数。")
+    traps = (("「我懂了」但说不出链", "被问「模型怎么找到 bash」时卡住", ORANGE),
+             ("用日常配置档做实验", "扩展、技能、记忆全在，实验不干净", BLUE),
+             ("只跑第 1、2 步就说串完了", "发现层、工具层、扩展层都没碰", GREEN))
+    for index, (title, detail, color) in enumerate(traps):
+        top = 200 + index * 122
+        picture.box((110, top, 1108, top + 98), WHITE, color, radius=12)
+        picture.badge((144, top + 49), index + 1, color)
+        picture.text((186, top + 12), title, 22, color, True, width=880)
+        picture.text((186, top + 54), detail, 18, MUTED, width=880)
+    picture.note((92, 576, 1108, 656), "纠正办法：",
+                 "用 33.7 的六步把每格走一遍；卡住的格子回对应章补，再开干净档重跑。",
+                 BLUE, SKY)
+    picture.footer("能把整条链复述出来，比「读完了」值钱。")
+
+
+def four_names(picture: Drawing):
+    picture.header("第 14 章 · 四个容易混的名字",
+                   "混着叫，排障就会找错层。",
+                   "前三个是上下文文件，第四个是推理后端。")
+    names = (("Context files", "普通 Markdown 说明，开会话时注入", ORANGE),
+             ("Sticky rules", "顶层 RULES.md 转成 always-apply 规则", BLUE),
+             ("Discovery providers", "各工具的文件位置适配器", GREEN),
+             ("Model providers", "推理后端（anthropic / openai……）", ORANGE))
+    for index, (name, detail, color) in enumerate(names):
+        column, row = divmod(index, 2)
+        left = 92 + column * 516
+        top = 200 + row * 150
+        picture.box((left, top, left + 492, top + 126), WHITE, color, radius=12)
+        picture.text((left + 22, top + 14), name, 21, color, True, width=448)
+        picture.text((left + 22, top + 56), detail, 17, MUTED, width=448)
+    picture.note((92, 528, 1108, 620), "共享名单的坑：",
+                 "model providers 跟上下文文件无关，却与它们共享 disabledProviders 名单——关错了会连模型一起关。",
+                 ORANGE, PEACH)
+    picture.footer("适配器如 native / claude / cursor；skills 与普通 rule 见第 19 章。")
+
+
+def session_questions(picture: Drawing):
+    picture.header("第 7 章 · 卡住时先问三个问题",
+                   "你要动的是哪一层？",
+                   "答案决定用哪条命令。")
+    pairs = (("屏幕上的字", "/clear", ORANGE),
+             ("磁盘上的本", "/new · /fork", BLUE),
+             ("供应商那边的缓存句柄", "/fresh", GREEN))
+    for index, (question, answer, color) in enumerate(pairs):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), question, 22, color, True, width=620)
+        picture.text((820, top + 16), answer, 22, INK, True, width=260)
+    picture.note((92, 566, 1108, 664), "streaming 中的拒绝：",
+                 "/fresh 拒绝；/clear 拒绝（若在压缩会先中止压缩）；裸 /fork 警告并挡住。",
+                 ORANGE, PEACH)
+    picture.footer("「命令没反应」先看是不是还在生成——中止当前轮再试。")
+
+
+def edit_modes(picture: Drawing):
+    picture.header("第 9 章 · edit 选哪条线协议",
+                   "resolveEditMode() 的顺序，越靠前越优先。",
+                   "日常记住：默认按 hashline 读文档就对了。")
+    steps = (("① 模型相关配置变体", "按模型族推", ORANGE),
+             ("② PI_EDIT_VARIANT", "环境变量压过设置", BLUE),
+             ("③ edit.mode", "设置项", GREEN),
+             ("④ 默认 hashline", "以上都没写就落到这里", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.badge((144, top + 36), index + 1, color)
+        picture.text((186, top + 10), title, 21, color, True, width=560)
+        picture.text((700, top + 16), detail, 18, MUTED, width=392)
+    picture.note((92, 566, 1108, 664), "两种模式风险：",
+                 "PI_STRICT_EDIT_MODE 可关掉个别模型族的回退；edit 是 strict 且排他并发，别指望两个 edit 抢着写。",
+                 BLUE, SKY)
+    picture.footer("模式列表：hashline / apply_patch / patch / replace / sloppy。")
+
+
+def secret_scan(picture: Drawing):
+    picture.header("第 27 章 · 密钥扫描怎么不吓人",
+                   "把判据写死，只报告不改。",
+                   "每条给文件:行号与前 6 个字符。")
+    shapes = (("sk- 开头的长串", "OpenAI 风格 API key", ORANGE),
+              ("AKIA 开头的 20 位大写字母数字", "AWS access key id", BLUE),
+              ("-----BEGIN 开头的私钥块", "PEM 私钥", GREEN),
+              ("://user:口令@ 形式的 URL", "连接串里的凭据", ORANGE))
+    for index, (shape, meaning, color) in enumerate(shapes):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.text((136, top + 10), shape, 20, color, True, width=620)
+        picture.text((800, top + 12), meaning, 17, MUTED, width=292)
+    picture.box((92, 576, 1108, 640), WHITE, BLUE, radius=10)
+    picture.text((116, 592), 'omp grep "sk-[A-Za-z0-9_-]{20,}" . --no-gitignore -l 100',
+                 18, INK, width=960)
+    picture.text((116, 614), "--no-gitignore 让被忽略的本地配置也进搜索；-l 100 封顶。",
+                 16, MUTED, width=960)
+    picture.footer("命中不等于泄露：fixture 与 .env.example 常误报——按文件判断，别一键替换。")
+
+
+def acp_notifications(picture: Drawing):
+    picture.header("第 15 章 · ACP 里的压缩通知",
+                   "协议模式下，压缩事件要通知对端。",
+                   "两条 JSON-RPC 扩展通知，就这两条。")
+    picture.box((92, 200, 584, 420), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "_omp/compaction/start", 20, ORANGE, True, width=444)
+    picture.text((116, 260), "sessionId", 18, MUTED, width=444)
+    picture.text((116, 292), "reason", 18, MUTED, width=444)
+    picture.text((116, 324), "action", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 420), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "_omp/compaction/end", 20, BLUE, True, width=444)
+    picture.text((640, 260), "sessionId / action / aborted / willRetry", 16, MUTED, width=444)
+    picture.text((640, 292), "可选：skipped / errorMessage", 16, MUTED, width=444)
+    picture.text((640, 324), "可选：tokensBefore", 16, MUTED, width=444)
+    picture.note((92, 444, 1108, 540), "谁该关心：",
+                 "只跑 TUI 与你无关；嵌 ACP 时这是「UI 上为何写刚压缩过」的唯一来源，进度条挂这两条。",
+                 GREEN, SAGE)
+    picture.footer("不实现这两个通知的客户端可以直接忽略，不会报协议错。")
+
+
+def backend_choice(picture: Drawing):
+    picture.header("第 16 章 · 远程后端上线前",
+                   "先答三个问题，再谈选哪个。",
+                   "默认先在 local 或 mnemopi 建立直觉。")
+    questions = (("数据出不出本机", "驻留与合规先定", ORANGE),
+                 ("bank 范围有多大", "谁有权限、谁在写", BLUE),
+                 ("后台合并语义", "什么时候合并、会不会改历史", GREEN))
+    for index, (title, detail, color) in enumerate(questions):
+        top = 200 + index * 108
+        picture.box((110, top, 1108, top + 88), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=620)
+        picture.text((760, top + 16), detail, 18, MUTED, width=320)
+    picture.note((92, 542, 1108, 636), "覆盖与边界：",
+                 "HINDSIGHT_* 环境变量压过所有 hindsight.* 设置；Sharpshooter 适合决策文件，不适合当聊天备份盘。",
+                 BLUE, SKY)
+    picture.footer("人走了怎么撤销权限，也要提前写清。")
+
+
+def model_vs_role(picture: Drawing):
+    picture.header("第 17 章 · /model 与角色不是一回事",
+                   "手动切换 ≠ 自动分流。",
+                   "两者一起看，才不会被「上一层赢了」骗到。")
+    picture.box((92, 200, 584, 400), WHITE, ORANGE, radius=12)
+    picture.text((116, 216), "/model", 24, ORANGE, True, width=444)
+    picture.text((116, 262), "改你正在聊的那一路", 19, INK, width=444)
+    picture.text((116, 302), "只影响当前会话的选路", 18, MUTED, width=444)
+    picture.box((616, 200, 1108, 400), WHITE, BLUE, radius=12)
+    picture.text((640, 216), "角色映射", 24, BLUE, True, width=444)
+    picture.text((640, 262), "决定自动分流时谁接盘", 19, INK, width=444)
+    picture.text((640, 302), "子代理、advisor、计划各按角色走", 18, MUTED, width=444)
+    picture.note((92, 424, 1108, 520), "别想当然：",
+                 "手动切到旗舰，不等于子代理也升舱——角色值按第 17.2a 的六层生效。",
+                 ORANGE, PEACH)
+    picture.footer("models.yml 的 provider 级字段写死前，先查 docs/models.md 对照。")
+
+
+def preview_failures(picture: Drawing):
+    picture.header("第 26 章 · 预演失败的三种长相",
+                   "匹配数、文件数、测试退出码——三个数对上才算过。",
+                   "第三种最危险，因为「绿」让人放松。")
+    shapes = (("① 匹配数 0", "路径/glob 写错，或目标被 .gitignore 排除", ORANGE),
+              ("② 数对、测试红", "规则把字符串/快照/注释一起改了", BLUE),
+              ("③ 绿、diff 超范围", "格式化钩子或 IDE 顺手改了", GREEN))
+    for index, (title, detail, color) in enumerate(shapes):
+        top = 200 + index * 116
+        picture.box((110, top, 1108, top + 92), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 22, color, True, width=620)
+        picture.text((136, top + 54), detail, 18, MUTED, width=920)
+    picture.note((92, 560, 1108, 664), "退出预演的动作：",
+                 "git checkout -- <超范围文件> 逐个退回；别在超范围 diff 上再叠第二片。",
+                 ORANGE, PEACH)
+    picture.footer("确认命令：omp grep -c <旧名> <路径> --no-gitignore；数数只用 -c。")
+
+
+def read_selectors(picture: Drawing):
+    picture.header("第 8 章 · read 的选择器",
+                   "只有尾巴长得合法才切开。",
+                   "行号从 1 起；字面路径优先。")
+    suffixes = ((":raw", "原样输出，关摘要与行前缀", ORANGE),
+                (":img", "把 .svg/.svgz 栅格化喂视觉输入", BLUE),
+                (":conflicts", "扫 Git 冲突区，给紧凑索引", GREEN),
+                (":N / :A-B / :A+C / :-N", "行范围四形态", ORANGE),
+                (":R1,R2,...", "多段范围，先排序合并", BLUE))
+    for index, (suffix, meaning, color) in enumerate(suffixes):
+        top = 196 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 10), suffix, 20, color, True, width=520)
+        picture.text((700, top + 16), meaning, 17, MUTED, width=392)
+    picture.note((92, 566, 1108, 660), "两个易错点：",
+                 ":0 会报错；主机带端口时先写尾斜杠，如 https://example.com/:80。",
+                 ORANGE, PEACH)
+    picture.footer("归档与 SQLite 吃自己的冒号语法，别拿普通行选择器硬套。")
+
+
+def truncation_fields(picture: Drawing):
+    picture.header("第 10 章 · 截断是可读的字段",
+                   "不是感觉，是 details 里的证据。",
+                   "看到就让 agent 改命令，别假定它看见了全量。")
+    fields = (("details.meta.truncation", "在内存里被截断", ORANGE),
+              ("artifactId", "溢出到 artifact 时附带", BLUE),
+              ("details.timedOut", "超时标记为 true", GREEN),
+              ("Command exited with code <n>", "非零退出，结果标 isError", ORANGE))
+    for index, (field, meaning, color) in enumerate(fields):
+        top = 196 + index * 96
+        picture.box((110, top, 1108, top + 76), WHITE, color, radius=10)
+        picture.text((136, top + 10), field, 19, color, True, width=580)
+        picture.text((740, top + 14), meaning, 17, MUTED, width=352)
+    picture.note((92, 580, 1108, 664), "副作用清单（允许高风险命令前过一遍）：",
+                 "改文件 / 装包 / 移数据库；监听端口 / 拉容器 / 写 systemd；对远程主机的 ssh。",
+                 ORANGE, PEACH)
+    picture.footer("正确处理：加过滤、降日志级别、写到文件再 read——别催模型复述。")
+
+
+def task_ticket(picture: Drawing):
+    picture.header("第 13 章 · 任务说明像委派工单",
+                   "写得像另一个人明天才读到的工单。",
+                   "四条齐全，子代理才少跑偏。")
+    parts = (("目标一句话", "要什么结果，不要过程", ORANGE),
+             ("允许 / 禁止", "工具与路径的边界", BLUE),
+             ("交付格式", "例如只返回文件列表与结论", GREEN),
+             ("完成标准", "怎样算做完，可验收", ORANGE))
+    for index, (title, detail, color) in enumerate(parts):
+        top = 200 + index * 104
+        picture.box((110, top, 1108, top + 84), WHITE, color, radius=10)
+        picture.badge((144, top + 42), index + 1, color)
+        picture.text((186, top + 12), title, 21, color, True, width=560)
+        picture.text((700, top + 18), detail, 18, MUTED, width=392)
+    picture.note((92, 630, 1108, 712), "两个实现细节：",
+                 "批量调用有必填 context；要机器可读就传 outputSchema——strict 失败，permissive 带警告收下。",
+                 BLUE, SKY)
+    picture.footer("拿子代理结论驱动下一步时，用 strict。")
+
+
+def permission_matrix(picture: Drawing):
+    picture.header("第 29 章 · 团队权限矩阵",
+                   "四类能力，默认与升级条件分开写。",
+                   "写进团队表格，别口头约定。")
+    rows = (("只读巡检技能", "全员", "无", ORANGE),
+            ("写生产工具", "关闭", "双人审批与审计", BLUE),
+            ("发外消息钩子", "预览必过", "频道白名单", GREEN),
+            ("自动更新扩展", "关闭", "变更窗口与钉版本", ORANGE))
+    picture.text((136, 196), "能力", 19, MUTED, True, width=400)
+    picture.text((560, 196), "默认", 19, MUTED, True, width=200)
+    picture.text((760, 196), "升级条件", 19, MUTED, True, width=330)
+    for index, (ability, default, upgrade, color) in enumerate(rows):
+        top = 228 + index * 92
+        picture.box((110, top, 1108, top + 72), WHITE, color, radius=10)
+        picture.text((136, top + 20), ability, 20, color, True, width=400)
+        picture.text((560, top + 22), default, 18, INK, width=200)
+        picture.text((760, top + 22), upgrade, 18, MUTED, width=330)
+    picture.footer("矩阵是团队公约：默认值可读，升级路径可审。")
+
+
+def install_verify(picture: Drawing):
+    picture.header("第 4 章 · 装完怎么验收",
+                   "扫五条命令，再学会复述三行。",
+                   "判据不是「跑完了」，是能不能说清。")
+    commands = (("omp --version", "打一行版本号", ORANGE),
+                ("omp --help", "退出码 0", BLUE),
+                ("omp config path", "活动 agent 目录的绝对路径", GREEN),
+                ("omp completions zsh", "确认子命令存在（bash/fish 同理）", ORANGE),
+                ("which omp", "PowerShell：Get-Command omp", BLUE))
+    for index, (command, detail, color) in enumerate(commands):
+        top = 196 + index * 84
+        picture.box((110, top, 1108, top + 66), WHITE, color, radius=10)
+        picture.text((136, top + 8), command, 20, color, True, width=520)
+        picture.text((700, top + 12), detail, 17, MUTED, width=392)
+    picture.note((92, 620, 1108, 704), "三行复述：",
+                 "版本号、帮助能出来、配置目录在哪——说不出来等于没验收。",
+                 BLUE, SKY)
+    picture.footer("命令找不到查 PATH；Alpine 报缺库回 4.7。")
+
+
+def citation_discipline(picture: Drawing):
+    picture.header("第 12 章 · 引用与生命周期",
+                   "搜索摘要不是事实源；快照会过期。",
+                   "两只手都要收尾。")
+    cards = (("引用纪律", "web_search 带 citations 时，让 agent read 原始 URL 再下结论", ORANGE),
+             ("快照纪律", "github 的 PR/Actions 状态是快照——关键操作前再查一次", BLUE),
+             ("生命周期", "浏览器进程、驱动、临时 profile 都可能残留，长会话记得回收", GREEN))
+    for index, (title, detail, color) in enumerate(cards):
+        top = 200 + index * 120
+        picture.box((110, top, 1108, top + 96), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 23, color, True, width=920)
+        picture.text((136, top + 56), detail, 18, MUTED, width=920)
+    picture.note((92, 580, 1108, 656), "一条经验：",
+                 "搜索摘要可以当线索，不能当一级事实；结论落在原始页面或文档上。",
+                 ORANGE, PEACH)
+    picture.footer("computer 同理：原生输入卡在半截快捷键状态，先恢复再继续。")
+
+
+def keyword_failures(picture: Drawing):
+    picture.header("第 18 章 · 词为什么不触发",
+                   "六种原因，按检查顺序排。",
+                   "先看拼写，再看粘连，最后看工具面。")
+    reasons = (("大小写与粘连", "Ultrathink 不触发；orchestrated 与 orchestrate() 也不算", ORANGE),
+               ("围栏与行内代码", "代码块里的同名词整块被忽略", BLUE),
+               ("键名不等于词名", "workflowz 对应的键是 magicKeywords.workflow", GREEN),
+               ("工具面没开", "orchestrate 需 task；workflowz 需 eval+task；jevify 需 eval", ORANGE),
+               ("只影响当回合", "说过一次不等于一直生效", BLUE),
+               ("合成的提示", "agent 转述或模板合成的不触发；你自己写的模板有效", GREEN))
+    for index, (title, detail, color) in enumerate(reasons):
+        top = 196 + index * 84
+        picture.box((110, top, 1108, top + 66), WHITE, color, radius=10)
+        picture.text((136, top + 8), title, 20, color, True, width=420)
+        picture.text((600, top + 12), detail, 17, MUTED, width=492)
+    picture.footer("高亮会当场告诉你有没有认上——比猜快。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -2435,6 +3977,81 @@ FIGURES = {
     "figE-3-margin-notes": margin_notes,
     "fig15-1-compaction": compaction,
     "fig16-1-memory-loop": memory_loop,
+    "figA-1-flag-layers": flag_layers,
+    "figA-2-binary-probe": binary_probe,
+    "figB-1-slash-vs-flag": slash_vs_flag,
+    "figB-2-slash-not-shell": slash_not_shell,
+    "figC-1-config-stack": config_stack,
+    "figC-2-secrets-paths": secrets_paths,
+    "figD-1-glossary-rings": glossary_rings,
+    "figD-2-confusable-pairs": confusable_pairs,
+    "fig14-3-discovery-ladder": discovery_ladder,
+    "fig17-3-role-layers": role_layers,
+    "fig15-3-rebuild-order": rebuild_order,
+    "fig16-3-memory-urls": memory_urls,
+    "fig18-3-keyword-switches": keyword_switches,
+    "fig19-4-skill-triage": skill_triage,
+    "fig20-4-mcp-precedence": mcp_precedence,
+    "fig21-4-hook-returns": hook_returns,
+    "fig22-4-registerables": registerables,
+    "fig26-4-count-ledger": count_ledger,
+    "fig27-4-review-replies": review_replies,
+    "fig28-4-sdk-lifecycle": sdk_lifecycle,
+    "fig29-4-pack-layers": pack_three_layers,
+    "fig30-4-evidence-pack": evidence_pack,
+    "fig31-4-secret-modes": secret_modes,
+    "fig32-4-cost-leaks": cost_leaks,
+    "fig33-4-six-step-chain": six_step_chain,
+    "figA-3-subcommand-grid": subcommand_grid,
+    "figB-3-lookup-order": lookup_order,
+    "figC-3-verify-script": verify_script,
+    "figD-3-recall-drill": recall_drill,
+    "fig1-4-three-outcomes": three_outcomes,
+    "fig2-4-desk-pile": desk_pile,
+    "fig3-4-tool-baskets": tool_baskets,
+    "fig12-4-pick-four": pick_four,
+    "fig13-4-collab-trio": collab_trio,
+    "fig8-4-read-hunt": read_hunt,
+    "fig9-4-patch-forms": patch_forms,
+    "fig10-4-two-gates": two_gates,
+    "fig15-4-compaction-keys": compaction_keys,
+    "fig16-4-learn-timing": learn_timing,
+    "fig17-4-role-routing": role_routing,
+    "fig18-4-plan-keys": plan_keys,
+    "figA-4-mode-matrix": mode_matrix,
+    "figB-4-slash-vs-keyword": slash_vs_keyword,
+    "figC-4-embed-diff": embed_diff,
+    "figE-4-uncovered": uncovered_gaps,
+    "fig11-5-lsp-switches": lsp_switches,
+    "fig23-5-config-actions": config_actions,
+    "figD-4-pipeline-vs-approval": pipeline_vs_approval,
+    "fig0-1-reading-map": reading_map,
+    "fig19-5-skill-lifecycle": skill_lifecycle,
+    "fig21-5-hook-audit": hook_audit,
+    "fig22-5-ext-acceptance": ext_acceptance,
+    "fig20-5-mcp-ticket": mcp_ticket,
+    "fig31-5-secret-shapes": secret_shapes,
+    "fig32-5-cost-review": cost_review,
+    "fig30-5-incident-pack": incident_pack,
+    "fig23-6-config-diary": config_diary,
+    "fig24-7-antipatterns": antipatterns,
+    "fig28-5-embed-checklist": embed_checklist,
+    "fig33-5-three-deceptions": three_deceptions,
+    "fig14-4-four-names": four_names,
+    "fig7-5-three-questions": session_questions,
+    "fig9-5-edit-modes": edit_modes,
+    "fig27-5-secret-scan": secret_scan,
+    "fig15-5-acp-notifications": acp_notifications,
+    "fig16-5-backend-choice": backend_choice,
+    "fig17-5-model-vs-role": model_vs_role,
+    "fig26-5-preview-failures": preview_failures,
+    "fig8-5-read-selectors": read_selectors,
+    "fig10-5-truncation-fields": truncation_fields,
+    "fig13-5-task-ticket": task_ticket,
+    "fig29-5-permission-matrix": permission_matrix,
+    "fig4-5-install-verify": install_verify,
+    "fig12-5-citation-discipline": citation_discipline,
+    "fig18-5-keyword-failures": keyword_failures,
 }
 
 
@@ -2453,6 +4070,13 @@ def contact_sheet(paths: list[Path], destination: Path, regular: Path):
         draw.text((left + 8, top + 477), path.name, font=font, fill=INK)
     destination.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(destination, quality=94, subsampling=0)
+
+
+def encode_jpeg(image, subsampling: int) -> bytes:
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG", quality=80, subsampling=subsampling,
+               optimize=True, dpi=(300, 300))
+    return buffer.getvalue()
 
 
 def main(argv=None) -> int:
@@ -2475,10 +4099,10 @@ def main(argv=None) -> int:
         args.out_dir.mkdir(parents=True, exist_ok=True)
         encoded = []
         for name, image in pictures:
-            buffer = io.BytesIO()
-            image.save(buffer, format="JPEG", quality=80, subsampling=0,
-                       optimize=True, dpi=(300, 300))
-            raw = buffer.getvalue()
+            raw = encode_jpeg(image, subsampling=0)
+            if len(raw) > MAX_JPEG_BYTES:
+                # Flat-colour plates tolerate 4:2:0; step down before failing.
+                raw = encode_jpeg(image, subsampling=2)
             if len(raw) > MAX_JPEG_BYTES:
                 raise ValueError(
                     f"{name}: {len(raw)} bytes, over the {MAX_JPEG_BYTES} "

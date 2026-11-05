@@ -13,6 +13,10 @@
 3. 再看 `--config` 额外覆盖层；
 4. 改完用最小会话验证，不要一次改十二个键。
 
+![图C-1 先定位生效层](images/figC-1-config-stack.jpg)
+
+*图C-1：顺序搞错，改的是没人读的那份配置。*
+
 ## C.2 高频主题入口（带着文档走）
 
 | 主题 | 先读 | 本书相关 |
@@ -45,6 +49,10 @@ secrets:
 
 全局路径跟随活动 agent 目录，**命名 profile 与 SDK 显式 agentDir 覆盖都会改它**（文档所述）。
 
+![图C-2 secrets 的两条路径](images/figC-2-secrets-paths.jpg)
+
+*图C-2：全局路径随活动 agent 目录变化；项目级按 content 覆盖全局。*
+
 ## C.4 跟做：只读盘点
 
 口令：
@@ -64,6 +72,10 @@ secrets:
 
 SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28章）。嵌入宿主时要明确：用发现还是用覆盖，避免「CLI 一套、嵌入另一套」的幽灵差异。
 
+![图C-4 嵌入差异](images/figC-4-embed-diff.jpg)
+
+*图C-4：嵌入时明确「发现还是覆盖」，避免 CLI 一套、程序另一套的幽灵差异。*
+
 ## C.7 可勾选
 
 - [ ] 能说出查配置的文档入口
@@ -76,6 +88,10 @@ SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28�
 每改一个键：开临时会话（或 `--no-session` 若适用）→ 用最小提示触发该键相关行为 → 看卡片或日志是否符合预期 → 再改下一个键。把验证命令写进页边。拒绝「改完再说」的堆叠式配置。
 
 若验证失败：先回滚该键，而不是继续叠加。profile 弄乱时，新建命名配置档对比，比在废墟上修补更快。
+
+![图C-3 最小验证剧本](images/figC-3-verify-script.jpg)
+
+*图C-3：每改一个键走五步；失败先回滚该键，别堆叠。*
 
 ## C.9 排障卡：shell 侧能跑的只读命令
 

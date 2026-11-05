@@ -2,6 +2,10 @@
 
 只收正文高频词。精确行为以文档为准。闭卷默写十个再对答案，是本附录的跟做方式。
 
+![图D-1 术语按环记](images/figD-1-glossary-rings.jpg)
+
+*图D-1：先记环名，再记环里的词——环决定它跟谁容易混。*
+
 ## D.1 产品与界面
 
 - **omp / oh-my-pi**：本书所说的编码代理产品线；写作钉 v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。
@@ -57,6 +61,10 @@
 - **correlation**：请求与响应的对应关系；命令可选带 `id`，响应回显同一个 `id`。
 - **ACP**：`omp acp`，Agent Client Protocol，JSON-RPC over stdio；给编辑器驱动 agent 用，不是 RPC。
 
+![图D-4 过关、点头、问你](images/figD-4-pipeline-vs-approval.jpg)
+
+*图D-4：权限管线管过关、审批管点头、`ask` 管问你——三个词三件事。*
+
 ## D.6 魔法词
 
 - **magic keyword**：提示词中的触发词，改变编排倾向（`docs/magic-keywords.md`）；不是斜杠命令。
@@ -84,10 +92,18 @@
 | RPC | ACP | 自定义 JSONL 与 JSON-RPC over stdio |
 | task | orchestrate | 委派与鼓励并行的魔法倾向 |
 
+![图D-2 易混对](images/figD-2-confusable-pairs.jpg)
+
+*图D-2：成对记比背孤立定义省力：错一次，记住的是一对。*
+
 默写时专门练易混对，比练孤立定义更管用。
 
 ---
 **版本核对清单**：术语随版本可能改名——以文档为准。写作钉 omp v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。
+
+![图D-3 默写流程](images/figD-3-recall-drill.jpg)
+
+*图D-3：抄十词、闭卷默写、对本文、错词记页边、每月重默写。*
 
 ## 补充跟做：把附录用起来
 

@@ -12,7 +12,9 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # The omp assembly check grows with the plate set (187 JPGs, 52 MB HTML);
+    # it now needs ~8 minutes on its own on top of npm/pip setup and --fast.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

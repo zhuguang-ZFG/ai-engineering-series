@@ -39,6 +39,10 @@ omp --continue "我们刚谈到哪？"
 | `--session-dir <dir>` | 会话存储与查找目录 |
 | `--no-session` | 不保存会话（临时） |
 
+![图A-1 旗标分层](images/figA-1-flag-layers.jpg)
+
+*图A-1：第一位置参数先分类：进 launch、进子命令，还是当提示词——三条路各有一套旗标。*
+
 ## A.4 会话历史旗标
 
 | 旗标 | 含义（摘要） |
@@ -61,6 +65,10 @@ omp --continue "我们刚谈到哪？"
 
 `-p` 走非交互。`--mode` 控制输出形态。本机 `--help` 摘要写：`text`（默认）、`json`、`rpc`、`rpc-ui`；cli-reference 另列 `acp`，且二进制接受 `--mode acp`（也可用子命令 `omp acp`）。第一次学手感请留在 TUI（第6章）；脚本与 CI 再用打印模式。计划类默认启动行为在打印模式可能被忽略。
 
+![图A-4 输出模式矩阵](images/figA-4-mode-matrix.jpg)
+
+*图A-4：`-p` 走非交互，`--mode` 选输出形态——脚本与 CI 用打印模式。*
+
 ## A.7 跟做：十分钟核对
 
 ```sh
@@ -75,6 +83,10 @@ omp --help | grep -E 'profile|continue|no-extensions|mode' || true
 omp --trusted-extension 2>&1 | head -n 3 || true
 omp --fork 2>&1 | head -n 3 || true
 ```
+
+![图A-2 帮助漏列怎么核](images/figA-2-binary-probe.jpg)
+
+*图A-2：帮助没列不等于二进制不认识；用缺值探针和 cli-reference 交叉验证。*
 
 ## A.8 子命令地图（按用途分格，不冒充完整表）
 
@@ -96,6 +108,10 @@ omp --fork 2>&1 | head -n 3 || true
 | 出网搜索自测 | `omp search` | 第12章 |
 
 拿不准某条命令存不存在时别猜：`omp <猜的名字>` 不会报「未知命令」，整句会被当提示词送进模型（本机 18.16.0 实测 `omp notasubcommand` 停在 `Working...`，`fail/bad-command.txt`）。**未知旗标**才会明确报错、exit 2。
+
+![图A-3 子命令格子](images/figA-3-subcommand-grid.jpg)
+
+*图A-3：按问题分的子命令地图——接模型、会话迁移、配置、技能包、服务模式。*
 
 ## A.9 排障三问与可勾选
 
