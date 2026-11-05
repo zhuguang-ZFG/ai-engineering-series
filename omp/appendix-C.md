@@ -85,6 +85,10 @@ SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28�
 
 若验证失败：先回滚该键，而不是继续叠加。profile 弄乱时，新建命名配置档对比，比在废墟上修补更快。
 
+![图C-3 最小验证剧本](images/figC-3-verify-script.jpg)
+
+*图C-3：每改一个键走五步；失败先回滚该键，别堆叠。*
+
 ## C.9 排障卡：shell 侧能跑的只读命令
 
 第30章的证据包四条都在这。它们**不需要模型**，不产生 API 消耗，跑完把输出存页边：

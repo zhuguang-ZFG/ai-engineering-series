@@ -105,6 +105,10 @@ omp --fork 2>&1 | head -n 3 || true
 
 拿不准某条命令存不存在时别猜：`omp <猜的名字>` 不会报「未知命令」，整句会被当提示词送进模型（本机 18.16.0 实测 `omp notasubcommand` 停在 `Working...`，`fail/bad-command.txt`）。**未知旗标**才会明确报错、exit 2。
 
+![图A-3 子命令格子](images/figA-3-subcommand-grid.jpg)
+
+*图A-3：按问题分的子命令地图——接模型、会话迁移、配置、技能包、服务模式。*
+
 ## A.9 排障三问与可勾选
 
 1. 我在 launch 还是子命令？
