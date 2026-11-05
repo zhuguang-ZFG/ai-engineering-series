@@ -61,6 +61,10 @@
 - **correlation**：请求与响应的对应关系；命令可选带 `id`，响应回显同一个 `id`。
 - **ACP**：`omp acp`，Agent Client Protocol，JSON-RPC over stdio；给编辑器驱动 agent 用，不是 RPC。
 
+![图D-4 过关、点头、问你](images/figD-4-pipeline-vs-approval.jpg)
+
+*图D-4：权限管线管过关、审批管点头、`ask` 管问你——三个词三件事。*
+
 ## D.6 魔法词
 
 - **magic keyword**：提示词中的触发词，改变编排倾向（`docs/magic-keywords.md`）；不是斜杠命令。
