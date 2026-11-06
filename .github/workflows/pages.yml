@@ -33,7 +33,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -53,25 +53,39 @@ jobs:
       - name: Cache the CJK font package
         uses: actions/cache@v4
         with:
-          path: /var/cache/apt/archives/fonts-noto-cjk*.deb
+          path: ~/.cache/cjk-deb
           key: fonts-noto-cjk-${{ runner.os }}-20230817
 
       - name: Install CJK fonts
         timeout-minutes: 25
         run: |
+          set -eu
           sudo apt-get -o Acquire::Retries=3 update
-          # apt restarts a stalled package from zero on every retry, so a slow
+          mkdir -p "$HOME/.cache/cjk-deb"
+          # apt restarts a stalled download from zero on every retry, so a slow
           # mirror never converges: three runs in a row spent the whole step
-          # re-fetching the same 61 MB and got nowhere. Ask apt for the URL,
-          # fetch it with resume, then let apt install from its own cache.
-          if ! ls /var/cache/apt/archives/fonts-noto-cjk*.deb >/dev/null 2>&1; then
-            url=$(apt-get install --print-uris -y fonts-noto-cjk \
-                  | sed -n "s/^'\([^']*\)'.*/\1/p" | head -1)
-            curl -fL -C - --retry 10 --retry-delay 3 --retry-all-errors \
-                 --connect-timeout 20 --max-time 1200 \
-                 -o "/tmp/$(basename "$url")" "$url"
-            sudo mv "/tmp/$(basename "$url")" /var/cache/apt/archives/
+          # re-fetching the same 61 MB and got nowhere. Take the pool path from
+          # apt's own index -- `--print-uris` here yields a mirror+file:
+          # pseudo-URI that curl cannot fetch -- and download with -C - so a
+          # stall costs only the stalled bytes.
+          if ! ls "$HOME"/.cache/cjk-deb/fonts-noto-cjk*.deb >/dev/null 2>&1; then
+            rel=$(apt-cache show fonts-noto-cjk | sed -n 's/^Filename: //p' | head -1)
+            base=$(sed -n 's#^\s*\(https\?://[^ ]*\)$#\1#p' /etc/apt/apt-mirrors.txt 2>/dev/null | head -1 || true)
+            for root in "${base:-}" https://archive.ubuntu.com/ubuntu http://azure.archive.ubuntu.com/ubuntu; do
+              [ -n "$root" ] || continue
+              curl -fsSL -C - --retry 6 --retry-delay 2 --retry-all-errors \
+                   --connect-timeout 20 --max-time 900 \
+                   -o "$HOME/.cache/cjk-deb/${rel##*/}" "${root%/}/$rel" && break
+            done
           fi
+          deb=$(ls "$HOME"/.cache/cjk-deb/fonts-noto-cjk*.deb 2>/dev/null | head -1 || true)
+          [ -n "$deb" ] || { echo "::error::could not fetch fonts-noto-cjk"; exit 1; }
+          plain=$(printf '%b' "$(basename "$deb" | sed 's/%/\\x/g')")
+          # apt looks for the archive under the index's decoded filename, while
+          # Debian drops the epoch from pool filenames, so seed both spellings;
+          # a name apt does not want is simply ignored.
+          sudo install -m 644 "$deb" "/var/cache/apt/archives/$plain"
+          sudo install -m 644 "$deb" "/var/cache/apt/archives/$(printf '%s' "$plain" | sed 's/_[0-9][0-9]*:/_/')"
           sudo apt-get -o Acquire::Retries=3 install -y fonts-noto-cjk
           fc-cache -f
 
