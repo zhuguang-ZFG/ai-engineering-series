@@ -4117,6 +4117,90 @@ def version_pin(picture: Drawing):
                  ORANGE, PEACH)
     picture.footer("对不上时，以附录 E 与 omp/VERIFY.md 为准。")
 
+def three_silences(picture: Drawing):
+    picture.header("第 25 章 · 三种「安静」",
+                   "exit 2、exit 1，还有一种是假的。",
+                   "先看退出码，再决定改哪一层。")
+    cards = (("立刻报错 · exit 2", "旗标层：unknown flag: --nopt", "改旗标，别改代码", ORANGE),
+             ("立刻报错 · exit 1", "参数值层：Model not found / 行选择器 :0 非法", "照提示跑 models find，行号从 1 起", BLUE),
+             ("打 Working… 一直挂", "形状错：整句被当提示词送进模型", "exit 124 是包装器超时给的，不是 omp 的", GREEN))
+    for index, (title, detail, hint, color) in enumerate(cards):
+        top = 196 + index * 104
+        picture.box((110, top, 1108, top + 86), WHITE, color, radius=12)
+        picture.text((136, top + 8), title, 22, color, True, width=930)
+        picture.text((136, top + 40), detail, 18, INK, width=930)
+        picture.text((136, top + 62), hint, 16, MUTED, width=930)
+    picture.note((92, 508, 1108, 592), "退出来四步：",
+                 "Ctrl+C 一次 → 看退出码 → omp ps --all 找残留 → omp --restore 续上会话。",
+                 BLUE, SKY)
+    picture.note((92, 608, 1108, 694), "半途退出的隐蔽形态：",
+                 "改到一半的文件已落盘——先 git diff --stat，别叠第二层修改。",
+                 ORANGE, PEACH)
+    picture.footer("防守只有一条：粘命令前先看形状，COMMANDS 表里有没有它。")
+
+def config_pyramid(picture: Drawing):
+    picture.header("第 4 章 · 谁写赢：六层优先级",
+                   "越靠右越硬，越靠右越不落盘。",
+                   "顺序出自 docs/settings.md。")
+    layers = ("内置默认", "全局 config.yml", "项目 .omp/", "--config 覆盖层", "运行时旗标", "设置声明的环境变量")
+    for index, name in enumerate(layers):
+        left = 96 + index * 168
+        top = 470 - index * 52
+        picture.box((left, top, left + 156, top + 96), WHITE, ORANGE if index > 3 else BLUE, radius=10)
+        picture.text((left + 78, top + 34), name, 15, INK, True, anchor="mm", width=148)
+        picture.text((left + 78, top + 62), str(index + 1), 22, ORANGE if index > 3 else BLUE,
+                     True, anchor="mm", width=60)
+    picture.line([(96, 586), (1108, 586)], LINE, 2)
+    picture.text((96, 594), "低", 16, MUTED, width=60)
+    picture.text((1048, 594), "高", 16, MUTED, width=60)
+    picture.note((92, 626, 1108, 706), "两条容易被忽略：",
+                 "--config 可重复给、后者覆盖前者；运行时旗标不落盘。",
+                 BLUE, SKY)
+    picture.footer("项目层先 .omp/settings.json 后 .omp/config.yml；活动目录用 omp config path 查。")
+
+
+def parallel_and_finish(picture: Drawing):
+    picture.header("第 26 章 · 并行与收尾",
+                   "什么时候别并行，什么时候才算完。",
+                   "四条判据，缺一条就还在进行中。")
+    picture.box((110, 196, 590, 468), WHITE, ORANGE, radius=14)
+    picture.text((136, 210), "不要并行", 23, ORANGE, True, width=430)
+    for index, item in enumerate(("逻辑依赖链：B 等 A 的 API", "全局锁文件与单例生成器", "「先看看再说」的探索期")):
+        picture.text((136, 254 + index * 62), item, 17, INK, width=430)
+    picture.box((618, 196, 1108, 468), WHITE, GREEN, radius=14)
+    picture.text((644, 210), "才算结束", 23, GREEN, True, width=440)
+    for index, item in enumerate(("主路径冒烟通过", "旧名在约定目录已清",
+                                  "每片提交能独立 revert", "生成物与厂商 SDK diff 为空")):
+        picture.text((644, 254 + index * 50), item, 17, INK, width=440)
+    picture.note((92, 494, 1108, 578), "并行的成本：",
+                 "每个子代理都在乘上下文与工具开销；先写最坏 N、测试次数、是否共用锁。",
+                 BLUE, SKY)
+    picture.note((92, 594, 1108, 678), "旧名葬礼：",
+                 "一条只读 grep 扫文档与配置，人决定哪些是历史、哪些是毒。",
+                 ORANGE, PEACH)
+    picture.footer("测试套件独占数据库时，并行是假省时间、真抢锁。")
+
+
+def scope_creep(picture: Drawing):
+    picture.header("第 27 章 · 范围蔓延报警",
+                   "文件数超过票面两倍，就停手。",
+                   "范围是评审质量的第一杀手。")
+    picture.box((110, 200, 1108, 276), WHITE, ORANGE, radius=12)
+    picture.text((136, 214), "触发条件", 19, ORANGE, True, width=200)
+    picture.text((136, 244), "diff 文件数 > 票面描述的两倍 → 停，别继续加料", 18, INK, width=930)
+    steps = (("按目录聚类", "让 agent 说清这些文件分别服务哪个意图", BLUE),
+             ("拆提交", "一个意图一条提交，回滚才干净", GREEN),
+             ("拆票", "意图本来就两件事，票写错了", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 300 + index * 96
+        picture.box((110, top, 1108, top + 78), WHITE, color, radius=10)
+        picture.text((136, top + 8), title, 21, color, True, width=300)
+        picture.text((136, top + 44), detail, 17, MUTED, width=930)
+    picture.note((92, 596, 1108, 680), "好评论的形状：",
+                 "路径 + 期望行为 + 验收方式；少谈「感觉不太对」。",
+                 BLUE, SKY)
+    picture.footer("蔓延不是勤奋：多出来的文件，评审时没人能逐行看懂。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4284,6 +4368,10 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig4-6-config-pyramid": config_pyramid,
+    "fig26-6-parallel-and-finish": parallel_and_finish,
+    "fig27-6-scope-creep": scope_creep,
+    "fig25-6-three-silences": three_silences,
     "fig0-2-two-track-figures": two_track_figures,
     "fig0-3-version-pin": version_pin,
     "figA-5-model-flags": model_flags,
