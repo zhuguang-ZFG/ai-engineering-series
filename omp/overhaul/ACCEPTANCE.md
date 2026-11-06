@@ -262,3 +262,27 @@ yuyu-book tests 521 通过、`build.py --check` CHECK OK、
 | `yuyu-omp-zh.pdf` | 59,589,652 | 425 页 / 49 书签 | `43381b2cf693a38c6b802c442ed67d402f37c19833c0c277c6ae56ed4d144c7b` |
 
 构建产物位于 `.scratch/dist-b35/`。
+
+**前言补两张（图数补齐到五张）**。前言此前只有三张图，是全书最少的一个单元，
+而且三张都挤在末尾「怎么读」下面，开头与「这本书不做什么」两节无图可看。补
+`fig0-4-out-of-scope`（三条边界的左「不给」右「去哪拿」对照）与
+`fig0-5-what-you-gain`（排错 → 扩展 → 读源码三段递进），前言达到五张。
+
+同时修掉正文一处自相矛盾：`00-前言.md` 写「这四件事本书不做」，下面却只有三条。
+改为「三件事」。
+
+补充核对：两张新图 2400×1600、`fig0-4` 280,643 B / `fig0-5` 230,714 B，均在
+300,000 B 预算内；四边零墨（无越界）；PDF 中版心内完整、题注在图下；
+`图0-1`–`图0-5` 五个编号齐全无重复。另对全部 188 个注册图元做了「箭头端点被
+后画的框盖住」扫描，0 处——该缺陷仅原 fig0-5 草稿有，已改。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、
+yuyu-book tests 521 通过、`check_omp_plain.py --strict` 0 findings、
+`bookctl.py check --fast` 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 59,210,578 | 39 单元 / 208 图 | `9c21b36f0feff91f8d05db9f95cdfa5118dab33e217fcaf59e064125e5cda22c` |
+| `yuyu-omp-zh.pdf` | 60,101,731 | 427 页 / 49 书签 | `9ba7e90bd6b9cdff9765d1c34c7bc0d7de91543e6feea9b4337e0d5c5382129c` |
+
+构建产物位于 `.scratch/dist-b37/`。

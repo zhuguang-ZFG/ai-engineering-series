@@ -4127,6 +4127,65 @@ def version_pin(picture: Drawing):
                  ORANGE, PEACH)
     picture.footer("对不上时，以附录 E 与 omp/VERIFY.md 为准。")
 
+
+def out_of_scope(picture: Drawing):
+    picture.header("前言 · 这本书不做的三件事",
+                   "左边是本书不给的，右边是去哪儿拿。",
+                   "边界划清了，期待就不会落空。")
+    rows = (("不是官方文档的翻译",
+             "与 oh-my-pi / Stencil Labs / can1357 无隶属关系",
+             "当权威引用会引错",
+             "读官网 omp.sh 与仓库 README", ORANGE),
+            ("不把御舆的数字当 omp 行为",
+             "工具数、路径、审批模型都不一样",
+             "照抄实现细节会对不上",
+             "只借「车 / 舆 / 循环」那层心智", BLUE),
+            ("不保证跟你的 nightly 一字不差",
+             "正文钉 omp/18.15.0，nightly 会漂",
+             "把页边差异当正文会踩空",
+             "跑 omp --version，以附录 E 为准", GREEN))
+    for index, (title, detail, risk, where, color) in enumerate(rows):
+        top = 200 + index * 132
+        picture.box((92, top, 648, top + 112), WHITE, color, radius=12)
+        picture.text((118, top + 12), title, 22, color, True, width=500)
+        picture.text((118, top + 48), detail, 17, INK, width=500)
+        picture.text((118, top + 78), "当成本书会给 → " + risk, 15, MUTED, width=500)
+        picture.arrow(((664, top + 56), (716, top + 56)), color)
+        picture.box((732, top, 1108, top + 112), PAPER, LINE, radius=12)
+        picture.text((756, top + 14), "去这儿拿", 15, MUTED, width=330)
+        picture.text((756, top + 46), where, 17, INK, width=330)
+    picture.note((92, 606, 1108, 690), "划边界不是推卸：",
+                 "说清不做什么，你才知道哪一页该信本书、哪一页该去翻官网。",
+                 BLUE, SKY)
+    picture.footer("对不上时，官网与 omp --version 永远比书大。")
+
+
+def what_you_gain(picture: Drawing):
+    picture.header("前言 · 读完你能自己做的三件事",
+                   "排错、扩展、读源码。",
+                   "从「它在干什么」走到「我能改它」。")
+    stages = (("自己排错", "看退出码、认错误形状", "不再把报错整段丢给模型", ORANGE),
+              ("自己扩展", "写 Skills、接 MCP、加工具", "让它长出你这摊活儿要的手", BLUE),
+              ("自己读源码", "顺着调用链读下去", "官网没写的，从代码里读出来", GREEN))
+    for index, (title, doing, outcome, color) in enumerate(stages):
+        left = 92 + index * 358
+        picture.box((left, 212, left + 300, 452), WHITE, color, radius=14)
+        picture.badge((left + 42, 256), str(index + 1), color)
+        picture.text((left + 76, 238), title, 25, color, True, width=200)
+        picture.text((left + 26, 300), doing, 18, INK, width=248)
+        picture.text((left + 26, 372), outcome, 16, MUTED, width=248)
+    for index in range(len(stages) - 1):
+        left = 92 + index * 358
+        picture.arrow(((left + 312, 332), (left + 346, 332)), MUTED)
+    picture.note((92, 486, 1108, 570), "顺序有讲究：",
+                 "先原理再实战——跳过第一篇，后面的命令都会像咒语。",
+                 GREEN, SAGE)
+    picture.note((92, 590, 1108, 674), "读不动就回头：",
+                 "卡住多半是上一层没落地，不是你笨。附录 A–E 是速查，随时翻。",
+                 ORANGE, PEACH)
+    picture.footer("目标不是记住命令，是看懂它为什么这么动。")
+
+
 def three_silences(picture: Drawing):
     picture.header("第 25 章 · 三种「安静」",
                    "exit 2、exit 1，还有一种是假的。",
@@ -4496,6 +4555,8 @@ FIGURES = {
     "fig25-6-three-silences": three_silences,
     "fig0-2-two-track-figures": two_track_figures,
     "fig0-3-version-pin": version_pin,
+    "fig0-4-out-of-scope": out_of_scope,
+    "fig0-5-what-you-gain": what_you_gain,
     "figA-5-model-flags": model_flags,
     "figB-5-category-drawers": category_drawers,
     "figC-5-readonly-probes": readonly_probes,
