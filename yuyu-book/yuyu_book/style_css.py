@@ -386,6 +386,16 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
        arriving as one frozen last frame; the strokes inside still ink
        themselves. Print and reduced-motion lose the stagger and keep every
        frame drawn — the strip still reads in order, which is the point. */
+    /* a photographed plate unfurls as the reader reaches it: the frame
+       arrives a hair low and small, then settles. The range is `entry`, not
+       `cover`, so an in-page anchor that lands with the plate already on
+       screen shows it open instead of half-drawn. Captions ride the shared
+       text-rise rule above. */
+    .illu-photo .illu-frame{
+      animation:ink-plate .9s cubic-bezier(.22,.9,.3,1) both;
+      animation-timeline:view();animation-range:entry 0% entry 70%}
+    figure.illu-photo:hover .illu-frame::after{
+      animation:ink-sheen 1.1s ease-out}
     .illu-seq .frame{animation:ink-fade 1s ease-out both;
       animation-timeline:view()}
     .illu-seq .frame:nth-child(1){animation-range:cover 0% cover 26%}
@@ -470,7 +480,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
     .chapter-body h2,.chapter-body h3,
     .callout,.lead-band,.compass-card,.route-card,.keeper-note,.new-terms,
     .pd-title,.pd-motto,.pd-goal,.rm-head,.pd-list li,
-    .diagram-frame,.fig-cap{
+    .diagram-frame,.fig-cap,figure.illu figcaption{
       animation:ink-rise .9s cubic-bezier(.22,.9,.3,1) both;
       animation-timeline:view();
       animation-range:cover 0% cover 42%}
@@ -530,6 +540,9 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
 @keyframes ink-blink{0%,45%{opacity:1}50%,95%{opacity:.12}100%{opacity:1}}
 @keyframes ink-flutter{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
 @keyframes ink-rise{from{opacity:0;transform:translateY(12px)}}
+@keyframes ink-plate{from{opacity:.001;transform:translateY(14px) scale(.988)}}
+@keyframes ink-sheen{0%{transform:translateX(-60%);opacity:0}
+  14%{opacity:1}100%{transform:translateX(60%);opacity:0}}
 @keyframes ink-gloss{from{opacity:0;transform:translate(-50%,.5rem) scale(.9)}
   to{opacity:1;transform:translate(-50%,0) scale(1)}}
 @keyframes ink-ghost{to{transform:rotate(26deg)}}
@@ -739,8 +752,37 @@ figure.illu{margin:1.6rem 0;text-align:center;break-inside:avoid}
   box-shadow:0 6px 22px -12px rgba(38,34,27,.30),
     inset 0 0 0 1px rgba(255,255,255,.55)}
 .illu-frame svg{display:block;margin:0 auto;max-width:100%;height:auto}
-.illu-photo .illu-frame{padding:0;overflow:hidden}
+/* a photographed plate is set on the sheet, not pasted onto it: a hairline
+   ring keeps the drawing's cream edge from dissolving into the cream page, and
+   a soft drop shadow lifts it. The lift and the sheen are screen-only, and the
+   resting shadow is dropped by the print block, so paper stays flat. */
+.illu-photo .illu-frame{padding:0;overflow:hidden;
+  box-shadow:0 10px 26px -16px rgba(38,34,27,.34),
+    inset 0 0 0 1px rgba(38,34,27,.07),
+    inset 0 1px 0 rgba(255,255,255,.7)}
 .illu-photo img{display:block;width:100%;height:auto}
+@media screen{
+  /* the plate answers the pointer by rising a little. The reveal above animates
+     the same element, but its keyframes name only a `from`, so the resting
+     transform here is the implicit end state and the two never fight. */
+  figure.illu-photo .illu-frame{
+    transition:box-shadow .3s ease,transform .3s ease}
+  figure.illu-photo:hover .illu-frame{transform:translateY(-2px);
+    box-shadow:0 18px 38px -18px rgba(38,34,27,.45),
+      inset 0 0 0 1px rgba(38,34,27,.11),
+      inset 0 1px 0 rgba(255,255,255,.85)}
+}
+/* the sheen: one pass of light across the plate when the pointer rests on it,
+   never a loop — a 204-plate page must not keep the compositor awake */
+.illu-photo .illu-frame::after{content:"";position:absolute;inset:-20% -40%;
+  background:linear-gradient(112deg,transparent 42%,
+    rgba(255,255,255,.42) 50%,transparent 58%);
+  transform:translateX(-60%);opacity:0;pointer-events:none}
+@media (prefers-color-scheme:dark){
+  body:not(.force-light) .illu-photo .illu-frame{
+    box-shadow:0 14px 34px -18px rgba(0,0,0,.8),
+      inset 0 0 0 1px rgba(236,226,204,.14)}
+}
 /* the frame numbers of a sequential plate: small, in the margin, so the
    drawing stays the thing you look at */
 .illu-seq .frame-no{font-family:var(--sans);font-size:9px;
@@ -765,6 +807,10 @@ figcaption::after{background:linear-gradient(90deg,var(--line-2),transparent)}
   padding:1rem;text-align:center;border-radius:var(--r-2);font-family:var(--sans)}
 .mermaid-source{text-align:start}
 img{max-width:100%;height:auto}
+@media (min-width:64rem){
+  .chapter-body figure.illu{max-width:calc(var(--measure) * 1.16);
+    margin-inline:auto}
+}
 
 /* ------- chapter notes ------- */
 .chapter-notes{margin:1.9rem 0 0;padding:.85rem 1.05rem .9rem;border:1px solid var(--line);
@@ -1082,7 +1128,8 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
   .front-page.cover{min-height:250mm;display:flex;align-items:stretch}
   .cover-inner{margin:0;width:100%;border:none;box-shadow:inset 0 0 0 1px var(--line-2),inset 0 0 0 5px var(--card),inset 0 0 0 5.5px var(--bronze-2),inset 0 0 0 6px var(--card);
     display:flex;flex-direction:column;justify-content:space-between}
-  .diagram-frame,.codehilite,.table-scroll,.compass-card,.route-card{
+  .diagram-frame,.codehilite,.table-scroll,.compass-card,.route-card,
+  .illu-frame{
     box-shadow:none}
   /* the reading-paths page carries the routes, the offline note, the parts list
      and the tier legend; the legend is the one block that must not be split.
@@ -1197,6 +1244,15 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
      caption's flanking hairlines stay — with the box gone they are what holds
      each figure to the page. */
   .diagram-frame::before,.diagram-frame::after{display:none}
+  /* the plate sheen is a screen gesture; on paper it would print as a
+     diagonal band of grey across the drawing */
+  .illu-photo .illu-frame::after{display:none}
+  /* a photographed plate carries its own cream ground and its own edge, so on
+     paper the frame has nothing left to do — and leaving its two gradients in
+     made Chromium rasterise a backdrop behind all 206 plates, which cost 7 MB
+     of PDF for a tint nobody can see behind an opaque drawing. */
+  .illu-photo .illu-frame{background:none;border:0;border-radius:0;
+    padding:0;overflow:visible}
   .part-divider{background:none}
   .pd-ghost{opacity:.12}
   .cover-seal{print-color-adjust:exact;-webkit-print-color-adjust:exact}

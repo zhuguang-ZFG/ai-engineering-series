@@ -202,3 +202,47 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 | `yuyu-omp-zh.pdf` | 59.7 MB | 408 页 / 49 书签 | `37060eeffc075a249a1ec4fd66a587a68d5910c51ddaf0a931c691701fbd60bd` |
 
 构建产物位于 `.scratch/dist-b27/`；`python scripts/check_omp_plain.py` 为通俗化度量基线。
+
+## 图版装帧与滚动动效（2026-11-06）
+
+授权来自用户「继续改进优化，提升视觉观感，插画动画」。本批两件事。
+
+**标记层：手绘图成为真正的 figure**。此前 206 张手绘图在 HTML 里是裸
+`<p><img></p>`，题注是紧跟其后的另一个 `<em>` 段落——于是全书的图注装帧
+（铜色编号、两侧细线、`break-inside:avoid`）对它们一律无效，CSS 里的
+`.illu-photo` 规则命中零个元素。新增 `render.photo_figures()`：把
+`![图13-1 …](images/…)` 与其斜体题注合并为
+`<figure class="illu illu-photo"><div class="illu-frame"><img></div><figcaption>…`。
+只认 `图N-N`／`图A-N` 这种编号（附录用字母），README 截图等其它图片不受影响；
+题注里的 `<code>` 原样保留。构建产物核对：206 张图全部包裹、0 张漏网。
+
+**样式层：衬纸、滚动揭示、悬停微光**（`yuyu-book/yuyu_book/style_css.py`）：
+
+- 照片版画框去内衬（`padding:0;overflow:hidden`），改用一圈发丝内描边加柔和投影，
+  让图的米色边缘不至于融进米色纸面；暗色主题只换边框与投影，不用 `filter`
+  （打印引擎会光栅化带 filter 的子树）。
+- 滚动揭示 `ink-plate`：`animation-timeline:view()`、`animation-range:entry 0% entry 70%`，
+  锚点跳转落地时图已是展开状态。题注并入既有 `ink-rise` 选择器，不占新预算；
+  全书 `animation-timeline:view()` 用量 10 → 11（上限 40）。
+- 悬停：画框抬起 2px 加一道斜向微光 `ink-sheen`，只跑一次、不循环。
+- 动效全部位于 `@media screen` + `prefers-reduced-motion:no-preference` +
+  `@supports (animation-timeline: view())` 三重守卫内；打印块经核对无 `animation:`、
+  无 `animation-timeline`，并新增三条消装帧规则（投影、微光、画框底色）。
+
+**PDF 瘦身（顺带修掉的既有问题）**：图版入框后 PDF 一度从 59.7 MB 涨到 67.1 MB。
+逐层查证：画框的两道渐变被 Chromium 光栅化成 147 张图（打印块消掉底色，-1.6 MB）；
+余下 6.2 MB 是 Chromium 为每张图多留了一份无人引用的副本——PyMuPDF
+`garbage=3` 只整理 xref，唯有 `garbage=4` 合并重复流（xref 10471 → 7919）。
+`pdf.py` 改用 `garbage=4`，并核对书签 49、链接 221、图 206、字体 11 与抽样正文
+逐项一致。最终 PDF 比改造前更小。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、
+yuyu-book tests 521 通过、`build.py --check` CHECK OK、
+`check_omp_plain.py --strict` 0 findings。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 58,208,493 | 39 单元 / 206 图 | `93e0e0686f79a71b87a34a9bd1f891c5101f977155b99bed1fa051a36e3c49ea` |
+| `yuyu-omp-zh.pdf` | 59,349,907 | 425 页 / 49 书签 | `a00abb6de934da30173c96fda5ae0dc966e3225736800ae21d9970064ccb3080` |
+
+构建产物位于 `.scratch/dist-b33/`。

@@ -263,6 +263,37 @@ def inline_images(doc: str, file: str) -> str:
     return _IMG_TAG_RE.sub(repl, doc)
 
 
+# a hand-drawn plate is written as a captioned pair:
+#   ![图13-1 任务板](images/fig13-1-todo-board.jpg)
+#   *图13-1：任务板在第二轮的样子。*
+# Left as two paragraphs that pair reads as a screenshot dropped into prose and
+# the figure furniture (frame, hairline caption, bronze number, scroll reveal)
+# never applies. This is the one place that sees both lines, so the wrap lives
+# here. Figures already carrying a caption of their own (`figure.illu-line`)
+# are untouched: they never come through as a bare `<img>` paragraph.
+_PHOTO_PARA_RE = re.compile(
+    r'<p>(<img\b[^>]*alt="图(?:[A-Za-z]|\d+)-\d+[^"]*"[^>]*>)</p>'
+    r"(?:\s*<p><em>(.*?)</em></p>)?", re.S)
+
+
+def photo_figures(doc: str) -> str:
+    """Promote a captioned plate `<img>` pair into a real `<figure>`."""
+    def repl(m):
+        img, caption = m.group(1), (m.group(2) or "").strip()
+        alt = re.search(r'alt="([^"]*)"', img)
+        alt = alt.group(1) if alt else ""
+        number = re.match(r"(图(?:[A-Za-z]|\d+)-\d+)", alt)
+        number = number.group(1) if number else ""
+        label = caption or alt
+        label = re.sub(r"^图(?:[A-Za-z]|\d+)-\d+\s*[：:]\s*", "", label)
+        head = f'<span class="fig-no">{number}</span>' if number else ""
+        tail = (f'<figcaption>{head}<span class="fig-cap">{label}</span>'
+                f"</figcaption>") if label else ""
+        return (f'<figure class="illu illu-photo">'
+                f'<div class="illu-frame">{img}</div>{tail}</figure>')
+    return _PHOTO_PARA_RE.sub(repl, doc)
+
+
 # ---------------------------------------------------------------- ids -----
 
 _STRAY_ANGLE = re.compile(r"<[A-Za-z][A-Za-z0-9_]*"
@@ -409,6 +440,7 @@ def render_unit(unit: Unit, mapping: dict[str, str], *,
         return mermaid_figure(uid, svg, fig_no(), caption, unit.lang)
     doc = _PLATE_PH_RE.sub(plate_repl, doc)
     doc = inline_images(doc, unit.path)
+    doc = photo_figures(doc)
 
     doc = prefix_ids(doc, unit.id)
     if autolink:
