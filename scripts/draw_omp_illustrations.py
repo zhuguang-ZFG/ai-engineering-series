@@ -60,6 +60,16 @@ class Drawing:
         self.regular, self.bold = regular, bold
 
     def coords(self, points):
+        # Anything drawn past the edge is simply cut off in the printed book,
+        # and nothing downstream notices: the JPEG is still 1200x800, still
+        # under budget, still passes every audit. Nine plates shipped with a
+        # whole third column missing before this guard existed.
+        for index, value in enumerate(points):
+            limit = 1200 if index % 2 == 0 else 800
+            if value < -2 or value > limit + 2:
+                raise ValueError(
+                    f"Shape leaves the 1200x800 canvas: {tuple(points)} — "
+                    "the part past the edge would be cut off, not shrunk")
         return tuple(round(value * self.scale) for value in points)
 
     @lru_cache(maxsize=24)
@@ -68,8 +78,24 @@ class Drawing:
 
     def text(self, position, value, size=22, color=INK, bold=False, anchor="lt", width=None):
         font = self.font(size, bold)
-        if width is not None and self.draw.textlength(value, font=font) > width * self.scale:
+        measured = self.draw.textlength(value, font=font)
+        if width is not None and measured > width * self.scale:
             raise ValueError(f"Label exceeds its {width}px space: {value}")
+        # The anchor is one point; the painted run is not. Centred and
+        # right-anchored labels reach well past their anchor, so guard the
+        # extent too — otherwise a mis-anchored label slides off the canvas
+        # while every check still passes.
+        run = measured / self.scale
+        x = position[0]
+        if anchor[0] == "m":
+            left_edge, right_edge = x - run / 2, x + run / 2
+        elif anchor[0] == "r":
+            left_edge, right_edge = x - run, x
+        else:
+            left_edge, right_edge = x, x + run
+        if left_edge < -2 or right_edge > 1202:
+            raise ValueError(
+                f"Label leaves the canvas: {value!r} paints {left_edge:.0f}..{right_edge:.0f}")
         self.draw.text(self.coords(position), value, font=font, fill=color, anchor=anchor)
 
     def box(self, bounds, fill=WHITE, outline=LINE, radius=18, stroke=2):
@@ -1389,7 +1415,7 @@ def mcp_review(picture: Drawing):
         picture.box((left, 250, left + 244, 540), fill, color)
         picture.circle((left + 122, 306), 34, WHITE, color, 3)
         picture.text((left + 122, 306), verb, 26, color, True, "mm")
-        picture.text((left + 20, 366), detail, 17, anchor="mm", width=206)
+        picture.text((left + 122, 366), detail, 17, anchor="mm", width=206)
         if index < 3:
             picture.arrow([(left + 252, 396), (left + 270, 396)], color, 3)
     picture.box((92, 570, 1108, 648), WHITE, ORANGE, radius=10)
@@ -2706,7 +2732,7 @@ def registerables(picture: Drawing):
              ("自定义渲染", "界面表现层", GREEN),
              ("sendMessage 注入", "initialize 后向会话投递消息", ORANGE))
     for index, (name, detail, color) in enumerate(cards):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 148
         picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
@@ -2873,7 +2899,7 @@ def six_step_chain(picture: Drawing):
              ("⑤ 遮罩实验", "5 分钟 · 假密钥走一遍再删", BLUE),
              ("⑥ 架构笔记", "5 分钟 · 导出会话得 HTML", GREEN))
     for index, (title, detail, color) in enumerate(steps):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 200 + row * 150
         picture.box((left, top, left + 492, top + 126), WHITE, color, radius=12)
@@ -2896,7 +2922,7 @@ def subcommand_grid(picture: Drawing):
              ("升级本体", "update --check / --plugins", ORANGE),
              ("离线计数", "toks <文件或文本>", BLUE))
     for index, (name, commands, color) in enumerate(cells):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 4)
         left = 92 + column * 516
         top = 196 + row * 118
         picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
@@ -2993,7 +3019,7 @@ def desk_pile(picture: Drawing):
              ("编辑预览与测试输出", "edit 的 diff、bash 的 stdout/stderr", BLUE),
              ("子代理回传", "task 的结构化结果，不是一大段散文", GREEN))
     for index, (name, detail, color) in enumerate(piles):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 152
         picture.box((left, top, left + 492, top + 128), WHITE, color, radius=12)
@@ -3013,7 +3039,7 @@ def tool_baskets(picture: Drawing):
                ("桌面与网络", "browser / computer / web_search / 门控 github", BLUE),
                ("记忆与技能", "retain / recall / reflect / learn / manage_skill", GREEN))
     for index, (name, detail, color) in enumerate(baskets):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 148
         picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
@@ -3354,7 +3380,7 @@ def reading_map(picture: Drawing):
              ("六 · 实战", "六个真实任务", GREEN),
              ("七 · 排障", "排错、安全、成本、读源码", ORANGE))
     for index, (name, detail, color) in enumerate(parts[:6]):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 118
         picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
@@ -3419,7 +3445,7 @@ def ext_acceptance(picture: Drawing):
              ("⑤ /reload-plugins", "热重载后行为可解释", BLUE),
              ("⑥ 卸载后消失", "列表里干净退出", GREEN))
     for index, (title, detail, color) in enumerate(steps):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 200 + row * 132
         picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
@@ -3442,7 +3468,7 @@ def mcp_ticket(picture: Drawing):
               ("失败时人类步骤", "指向 stderr 与 exit 码", BLUE),
               ("回滚方式", "删 disabledServers 或 PR 回滚条目", GREEN))
     for index, (name, detail, color) in enumerate(fields):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 132
         picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
@@ -3503,7 +3529,7 @@ def incident_pack(picture: Drawing):
              ("相关配置路径", "密钥打码", BLUE),
              ("已尝试的最小动作", "做过什么、结果如何", GREEN))
     for index, (title, detail, color) in enumerate(items):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 124
         picture.box((left, top, left + 492, top + 100), WHITE, color, radius=10)
@@ -4117,6 +4143,65 @@ def version_pin(picture: Drawing):
                  ORANGE, PEACH)
     picture.footer("对不上时，以附录 E 与 omp/VERIFY.md 为准。")
 
+
+def out_of_scope(picture: Drawing):
+    picture.header("前言 · 这本书不做的三件事",
+                   "左边是本书不给的，右边是去哪儿拿。",
+                   "边界划清了，期待就不会落空。")
+    rows = (("不是官方文档的翻译",
+             "与 oh-my-pi / Stencil Labs / can1357 无隶属关系",
+             "当权威引用会引错",
+             "读官网 omp.sh 与仓库 README", ORANGE),
+            ("不把御舆的数字当 omp 行为",
+             "工具数、路径、审批模型都不一样",
+             "照抄实现细节会对不上",
+             "只借「车 / 舆 / 循环」那层心智", BLUE),
+            ("不保证跟你的 nightly 一字不差",
+             "正文钉 omp/18.15.0，nightly 会漂",
+             "把页边差异当正文会踩空",
+             "跑 omp --version，以附录 E 为准", GREEN))
+    for index, (title, detail, risk, where, color) in enumerate(rows):
+        top = 200 + index * 132
+        picture.box((92, top, 648, top + 112), WHITE, color, radius=12)
+        picture.text((118, top + 12), title, 22, color, True, width=500)
+        picture.text((118, top + 48), detail, 17, INK, width=500)
+        picture.text((118, top + 78), "当成本书会给 → " + risk, 15, MUTED, width=500)
+        picture.arrow(((664, top + 56), (716, top + 56)), color)
+        picture.box((732, top, 1108, top + 112), PAPER, LINE, radius=12)
+        picture.text((756, top + 14), "去这儿拿", 15, MUTED, width=330)
+        picture.text((756, top + 46), where, 17, INK, width=330)
+    picture.note((92, 606, 1108, 690), "划边界不是推卸：",
+                 "说清不做什么，你才知道哪一页该信本书、哪一页该去翻官网。",
+                 BLUE, SKY)
+    picture.footer("对不上时，官网与 omp --version 永远比书大。")
+
+
+def what_you_gain(picture: Drawing):
+    picture.header("前言 · 读完你能自己做的三件事",
+                   "排错、扩展、读源码。",
+                   "从「它在干什么」走到「我能改它」。")
+    stages = (("自己排错", "看退出码、认错误形状", "不再把报错整段丢给模型", ORANGE),
+              ("自己扩展", "写 Skills、接 MCP、加工具", "让它长出你这摊活儿要的手", BLUE),
+              ("自己读源码", "顺着调用链读下去", "官网没写的，从代码里读出来", GREEN))
+    for index, (title, doing, outcome, color) in enumerate(stages):
+        left = 92 + index * 358
+        picture.box((left, 212, left + 300, 452), WHITE, color, radius=14)
+        picture.badge((left + 42, 256), str(index + 1), color)
+        picture.text((left + 76, 238), title, 25, color, True, width=200)
+        picture.text((left + 26, 300), doing, 18, INK, width=248)
+        picture.text((left + 26, 372), outcome, 16, MUTED, width=248)
+    for index in range(len(stages) - 1):
+        left = 92 + index * 358
+        picture.arrow(((left + 312, 332), (left + 346, 332)), MUTED)
+    picture.note((92, 486, 1108, 570), "顺序有讲究：",
+                 "先原理再实战——跳过第一篇，后面的命令都会像咒语。",
+                 GREEN, SAGE)
+    picture.note((92, 590, 1108, 674), "读不动就回头：",
+                 "卡住多半是上一层没落地，不是你笨。附录 A–E 是速查，随时翻。",
+                 ORANGE, PEACH)
+    picture.footer("目标不是记住命令，是看懂它为什么这么动。")
+
+
 def three_silences(picture: Drawing):
     picture.header("第 25 章 · 三种「安静」",
                    "exit 2、exit 1，还有一种是假的。",
@@ -4266,6 +4351,47 @@ def cost_mistakes(picture: Drawing):
                  "不是「这次花了多少」，而是「同样的结论能不能只买一次」。",
                  BLUE, SKY)
     picture.footer("遮罩不是可省项：它是安全底线，省下的 token 换不回来。")
+
+def native_walk(picture: Drawing):
+    picture.header("第 14 章 · 最近非空 .omp/ 就停",
+                   "向上走，找到第一个非空的 .omp/ 就停。",
+                   "缺文件不补找，空目录跳过。")
+    stops = (("~/.omp/agent/", "用户级：AGENTS.md 与 sticky 的 RULES.md", BLUE),
+             ("home/", "空 .omp/ → 跳过，不贡献", MUTED),
+             ("monorepo/", "非空 .omp/ → 命中：只读这里的 AGENTS.md", GREEN),
+             ("packages/web/", "cwd 深度 0；父目录已在上面", ORANGE))
+    for index, (name, detail, color) in enumerate(stops):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), name, 20, color, True, width=320)
+        picture.text((480, top + 14), detail, 17, INK if color != MUTED else MUTED, width=608)
+    picture.note((92, 512, 1108, 596), "命中之后：",
+                 "别的 .omp/ 不再补找；同深度冲突由发现优先级裁决（native 100 最高）。",
+                 GREEN, SAGE)
+    picture.note((92, 612, 1108, 676), "两条硬规矩：",
+                 "空目录/空文件贡献为零；最近非空 .omp/ 独占原生项目发现。",
+                 BLUE, SKY)
+    picture.footer("把新约定写进 .omp/，别在多工具之间复制五份。")
+
+
+def context_layers(picture: Drawing):
+    picture.header("第 14 章 · 四个名字，四个地盘",
+                   "都叫「自动带进来的上下文」，各有各的地盘。",
+                   "混名是第一天最大的坑。")
+    cards = (("Context files", "普通 Markdown 说明，开会话时注入", BLUE),
+             ("Sticky rules", "顶层 RULES.md 转成的 always-apply 规则", ORANGE),
+             ("Discovery providers", "知道各工具把文件放哪的适配器", GREEN),
+             ("Model providers", "推理后端；只共享 disabledProviders 名单", MUTED))
+    for index, (name, detail, color) in enumerate(cards):
+        left = 110 + (index % 2) * 504
+        top = 196 + (index // 2) * 148
+        picture.box((left, top, left + 488, top + 132), WHITE, color, radius=14)
+        picture.text((left + 26, top + 14), name, 22, color, True, width=436)
+        picture.text((left + 26, top + 56), detail, 17, INK, width=436)
+    picture.note((92, 512, 1108, 596), "一句口诀：",
+                 "说明进 context files，铁律进 RULES.md；模型跟文件无关。",
+                 ORANGE, PEACH)
+    picture.footer("skills 与普通 rule 文件归第 19 章；SYSTEM.md 归系统提示文档。")
 
 
 FIGURES = {
@@ -4434,6 +4560,8 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig14-6-native-walk": native_walk,
+    "fig14-7-context-layers": context_layers,
     "fig16-6-five-backends": five_backends,
     "fig31-6-secret-scopes": secret_scopes,
     "fig32-6-cost-mistakes": cost_mistakes,
@@ -4443,6 +4571,8 @@ FIGURES = {
     "fig25-6-three-silences": three_silences,
     "fig0-2-two-track-figures": two_track_figures,
     "fig0-3-version-pin": version_pin,
+    "fig0-4-out-of-scope": out_of_scope,
+    "fig0-5-what-you-gain": what_you_gain,
     "figA-5-model-flags": model_flags,
     "figB-5-category-drawers": category_drawers,
     "figC-5-readonly-probes": readonly_probes,

@@ -202,3 +202,113 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 | `yuyu-omp-zh.pdf` | 59.7 MB | 408 页 / 49 书签 | `37060eeffc075a249a1ec4fd66a587a68d5910c51ddaf0a931c691701fbd60bd` |
 
 构建产物位于 `.scratch/dist-b27/`；`python scripts/check_omp_plain.py` 为通俗化度量基线。
+
+## 图版装帧与滚动动效（2026-11-06）
+
+授权来自用户「继续改进优化，提升视觉观感，插画动画」。本批两件事。
+
+**标记层：手绘图成为真正的 figure**。此前 206 张手绘图在 HTML 里是裸
+`<p><img></p>`，题注是紧跟其后的另一个 `<em>` 段落——于是全书的图注装帧
+（铜色编号、两侧细线、`break-inside:avoid`）对它们一律无效，CSS 里的
+`.illu-photo` 规则命中零个元素。新增 `render.photo_figures()`：把
+图片行（`images/` 下的 `fig13-1-….jpg` 那种）与其斜体题注合并为
+`<figure class="illu illu-photo"><div class="illu-frame"><img></div><figcaption>…`。
+只认 `图N-N`／`图A-N` 这种编号（附录用字母），README 截图等其它图片不受影响；
+题注里的 `<code>` 原样保留。构建产物核对：206 张图全部包裹、0 张漏网。
+
+**样式层：衬纸、滚动揭示、悬停微光**（`yuyu-book/yuyu_book/style_css.py`）：
+
+- 照片版画框去内衬（`padding:0;overflow:hidden`），改用一圈发丝内描边加柔和投影，
+  让图的米色边缘不至于融进米色纸面；暗色主题只换边框与投影，不用 `filter`
+  （打印引擎会光栅化带 filter 的子树）。
+- 滚动揭示 `ink-plate`：`animation-timeline:view()`、`animation-range:entry 0% entry 70%`，
+  锚点跳转落地时图已是展开状态。题注并入既有 `ink-rise` 选择器，不占新预算；
+  全书 `animation-timeline:view()` 用量 10 → 11（上限 40）。
+- 悬停：画框抬起 2px 加一道斜向微光 `ink-sheen`，只跑一次、不循环。
+- 动效全部位于 `@media screen` + `prefers-reduced-motion:no-preference` +
+  `@supports (animation-timeline: view())` 三重守卫内；打印块经核对无 `animation:`、
+  无 `animation-timeline`，并新增三条消装帧规则（投影、微光、画框底色）。
+
+**PDF 瘦身（顺带修掉的既有问题）**：图版入框后 PDF 一度从 59.7 MB 涨到 67.1 MB。
+逐层查证：画框的两道渐变被 Chromium 光栅化成 147 张图（打印块消掉底色，-1.6 MB）；
+余下 6.2 MB 是 Chromium 为每张图多留了一份无人引用的副本——PyMuPDF
+`garbage=3` 只整理 xref，唯有 `garbage=4` 合并重复流（xref 10471 → 7919）。
+`pdf.py` 改用 `garbage=4`，并核对书签 49、链接 221、图 206、字体 11 与抽样正文
+逐项一致。最终 PDF 比改造前更小。
+
+**九张图的内容被切在画布外（装帧抽检时暴露的既有缺陷）**。按页抽检 PDF 时发现
+前言第一张图 fig0-1 右侧整列「五 · 扩展」「六 · 实战」只剩一半。根因不在样式而在
+生成脚本：`left = 92 + column * 516` 两列正好填满 1200px 画布，第三列的左缘就已经
+在 1124、右缘 1616——画布外的部分不是缩小，是直接切掉，而下游一切检查都不会察觉
+（JPEG 仍是 1200×800、仍在字节预算内、仍过全部审计）。
+
+- `Drawing.coords()` 加画布守卫：任何图元坐标越出 1200×800（容差 2px）即报错。
+  所有图元都经过 `coords()`，所以这一处覆盖全部绘制路径。
+- 受影响九张改为两列：`fig0-1-reading-map`、`fig2-4-desk-pile`、`fig3-4-tool-baskets`、
+  `fig20-5-mcp-ticket`、`fig22-4-registerables`、`fig22-5-ext-acceptance`、
+  `fig30-5-incident-pack`、`fig33-4-six-step-chain` 用三行，`figA-3-subcommand-grid`
+  八格用四行。逐张目检确认内容完整、无截断。
+- 另修一处漂移：`fig10-4-two-gates` 的页脚在早先通俗化批次里改过字、图却没重生成，
+  现已对齐脚本。
+- 回归核对：全量重生成 186 张，与书中逐位一致（186/186），守卫下 0 张报错。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、
+yuyu-book tests 521 通过、`build.py --check` CHECK OK、
+`check_omp_plain.py --strict` 0 findings、`bookctl.py check --fast` 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 58,528,149 | 39 单元 / 206 图 | `357f1f9dba446afcb4f19723002485f70b0a44bd0e2d93dcfe34dd312f8130da` |
+| `yuyu-omp-zh.pdf` | 59,589,652 | 425 页 / 49 书签 | `43381b2cf693a38c6b802c442ed67d402f37c19833c0c277c6ae56ed4d144c7b` |
+
+构建产物位于 `.scratch/dist-b35/`。
+
+**前言补两张（图数补齐到五张）**。前言此前只有三张图，是全书最少的一个单元，
+而且三张都挤在末尾「怎么读」下面，开头与「这本书不做什么」两节无图可看。补
+`fig0-4-out-of-scope`（三条边界的左「不给」右「去哪拿」对照）与
+`fig0-5-what-you-gain`（排错 → 扩展 → 读源码三段递进），前言达到五张。
+
+同时修掉正文一处自相矛盾：`00-前言.md` 写「这四件事本书不做」，下面却只有三条。
+改为「三件事」。
+
+补充核对：两张新图 2400×1600、`fig0-4` 280,643 B / `fig0-5` 230,714 B，均在
+300,000 B 预算内；四边零墨（无越界）；PDF 中版心内完整、题注在图下；
+`图0-1`–`图0-5` 五个编号齐全无重复。另对全部 188 个注册图元做了「箭头端点被
+后画的框盖住」扫描，0 处——该缺陷仅原 fig0-5 草稿有，已改。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、
+yuyu-book tests 521 通过、`check_omp_plain.py --strict` 0 findings、
+`bookctl.py check --fast` 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 59,210,578 | 39 单元 / 208 图 | `9c21b36f0feff91f8d05db9f95cdfa5118dab33e217fcaf59e064125e5cda22c` |
+| `yuyu-omp-zh.pdf` | 60,101,731 | 427 页 / 49 书签 | `9ba7e90bd6b9cdff9765d1c34c7bc0d7de91543e6feea9b4337e0d5c5382129c` |
+
+构建产物位于 `.scratch/dist-b37/`。
+
+**又一类越界：文字画到卡片外，贴到画布边**。画布守卫只看图元的锚点，而文字
+的锚点不等于它实际占的宽度——`anchor="mm"` 的标签会以锚点为中心向两侧铺开。
+`ch20` 的 `fig20-3-mcp-review` 把四张卡片的说明文字居中在 `left + 20`（卡片左缘
+附近），其中「读 mcp.json 的来源」正好从 x=0 起画，另外两条干脆跑到 x=-26、x=-9：
+文字挂在卡片外面，还压到画布边。修法是把居中点改到卡片中心 `left + 122`，与上方
+的圆形徽标、动词标题对齐。
+
+守卫补强：`Drawing.text()` 现在按锚点方向算出这一行真实占据的左右边界，越界即
+报错；这样「锚点在画内、笔画在画外」不会再漏过去。
+
+回归门禁：`tests/test_omp_overhaul.py` 新增
+`test_no_generated_plate_paints_against_its_canvas_edge`，直接检查成品 JPEG 的
+四条边框是否只有纸色（留白）。这条与字体无关，所以在任何机器上都稳定；对修复前
+的 `fig20-3` 会报错，对修复后的通过。全库 188 张成品图扫描 0 处越界，四张上游
+截图（整幅窗口，天然出血）按尺寸排除。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 68 通过、
+`bookctl.py check --fast` 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 59,210,414 | 39 单元 / 208 图 | `fc574f4ef8a0badbf5ae9d0d6bed6991903f42150bf2692cc0e8b99faf4bbffa` |
+| `yuyu-omp-zh.pdf` | 60,101,609 | 427 页 / 49 书签 | `fe20e6cae90303b42a6cf7464c3c78489e8901d55053282ae7401fa2f3d2330f` |
+
+构建产物位于 `.scratch/dist-b39/`。
