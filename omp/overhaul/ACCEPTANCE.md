@@ -211,7 +211,7 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 `<p><img></p>`，题注是紧跟其后的另一个 `<em>` 段落——于是全书的图注装帧
 （铜色编号、两侧细线、`break-inside:avoid`）对它们一律无效，CSS 里的
 `.illu-photo` 规则命中零个元素。新增 `render.photo_figures()`：把
-`![图13-1 …](images/…)` 与其斜体题注合并为
+图片行（`images/` 下的 `fig13-1-….jpg` 那种）与其斜体题注合并为
 `<figure class="illu illu-photo"><div class="illu-frame"><img></div><figcaption>…`。
 只认 `图N-N`／`图A-N` 这种编号（附录用字母），README 截图等其它图片不受影响；
 题注里的 `<code>` 原样保留。构建产物核对：206 张图全部包裹、0 张漏网。
@@ -236,13 +236,29 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 `pdf.py` 改用 `garbage=4`，并核对书签 49、链接 221、图 206、字体 11 与抽样正文
 逐项一致。最终 PDF 比改造前更小。
 
+**九张图的内容被切在画布外（装帧抽检时暴露的既有缺陷）**。按页抽检 PDF 时发现
+前言第一张图 fig0-1 右侧整列「五 · 扩展」「六 · 实战」只剩一半。根因不在样式而在
+生成脚本：`left = 92 + column * 516` 两列正好填满 1200px 画布，第三列的左缘就已经
+在 1124、右缘 1616——画布外的部分不是缩小，是直接切掉，而下游一切检查都不会察觉
+（JPEG 仍是 1200×800、仍在字节预算内、仍过全部审计）。
+
+- `Drawing.coords()` 加画布守卫：任何图元坐标越出 1200×800（容差 2px）即报错。
+  所有图元都经过 `coords()`，所以这一处覆盖全部绘制路径。
+- 受影响九张改为两列：`fig0-1-reading-map`、`fig2-4-desk-pile`、`fig3-4-tool-baskets`、
+  `fig20-5-mcp-ticket`、`fig22-4-registerables`、`fig22-5-ext-acceptance`、
+  `fig30-5-incident-pack`、`fig33-4-six-step-chain` 用三行，`figA-3-subcommand-grid`
+  八格用四行。逐张目检确认内容完整、无截断。
+- 另修一处漂移：`fig10-4-two-gates` 的页脚在早先通俗化批次里改过字、图却没重生成，
+  现已对齐脚本。
+- 回归核对：全量重生成 186 张，与书中逐位一致（186/186），守卫下 0 张报错。
+
 验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、
 yuyu-book tests 521 通过、`build.py --check` CHECK OK、
-`check_omp_plain.py --strict` 0 findings。
+`check_omp_plain.py --strict` 0 findings、`bookctl.py check --fast` 0 errors。
 
 | 文件 | 字节 | 页数 / 书签 | SHA-256 |
 |---|---:|---|---|
-| `yuyu-omp-zh.html` | 58,208,493 | 39 单元 / 206 图 | `93e0e0686f79a71b87a34a9bd1f891c5101f977155b99bed1fa051a36e3c49ea` |
-| `yuyu-omp-zh.pdf` | 59,349,907 | 425 页 / 49 书签 | `a00abb6de934da30173c96fda5ae0dc966e3225736800ae21d9970064ccb3080` |
+| `yuyu-omp-zh.html` | 58,528,149 | 39 单元 / 206 图 | `357f1f9dba446afcb4f19723002485f70b0a44bd0e2d93dcfe34dd312f8130da` |
+| `yuyu-omp-zh.pdf` | 59,589,652 | 425 页 / 49 书签 | `43381b2cf693a38c6b802c442ed67d402f37c19833c0c277c6ae56ed4d144c7b` |
 
-构建产物位于 `.scratch/dist-b33/`。
+构建产物位于 `.scratch/dist-b35/`。

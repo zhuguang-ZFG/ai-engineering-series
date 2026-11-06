@@ -60,6 +60,16 @@ class Drawing:
         self.regular, self.bold = regular, bold
 
     def coords(self, points):
+        # Anything drawn past the edge is simply cut off in the printed book,
+        # and nothing downstream notices: the JPEG is still 1200x800, still
+        # under budget, still passes every audit. Nine plates shipped with a
+        # whole third column missing before this guard existed.
+        for index, value in enumerate(points):
+            limit = 1200 if index % 2 == 0 else 800
+            if value < -2 or value > limit + 2:
+                raise ValueError(
+                    f"Shape leaves the 1200x800 canvas: {tuple(points)} — "
+                    "the part past the edge would be cut off, not shrunk")
         return tuple(round(value * self.scale) for value in points)
 
     @lru_cache(maxsize=24)
@@ -2706,7 +2716,7 @@ def registerables(picture: Drawing):
              ("自定义渲染", "界面表现层", GREEN),
              ("sendMessage 注入", "initialize 后向会话投递消息", ORANGE))
     for index, (name, detail, color) in enumerate(cards):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 148
         picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
@@ -2873,7 +2883,7 @@ def six_step_chain(picture: Drawing):
              ("⑤ 遮罩实验", "5 分钟 · 假密钥走一遍再删", BLUE),
              ("⑥ 架构笔记", "5 分钟 · 导出会话得 HTML", GREEN))
     for index, (title, detail, color) in enumerate(steps):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 200 + row * 150
         picture.box((left, top, left + 492, top + 126), WHITE, color, radius=12)
@@ -2896,7 +2906,7 @@ def subcommand_grid(picture: Drawing):
              ("升级本体", "update --check / --plugins", ORANGE),
              ("离线计数", "toks <文件或文本>", BLUE))
     for index, (name, commands, color) in enumerate(cells):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 4)
         left = 92 + column * 516
         top = 196 + row * 118
         picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
@@ -2993,7 +3003,7 @@ def desk_pile(picture: Drawing):
              ("编辑预览与测试输出", "edit 的 diff、bash 的 stdout/stderr", BLUE),
              ("子代理回传", "task 的结构化结果，不是一大段散文", GREEN))
     for index, (name, detail, color) in enumerate(piles):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 152
         picture.box((left, top, left + 492, top + 128), WHITE, color, radius=12)
@@ -3013,7 +3023,7 @@ def tool_baskets(picture: Drawing):
                ("桌面与网络", "browser / computer / web_search / 门控 github", BLUE),
                ("记忆与技能", "retain / recall / reflect / learn / manage_skill", GREEN))
     for index, (name, detail, color) in enumerate(baskets):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 148
         picture.box((left, top, left + 492, top + 124), WHITE, color, radius=12)
@@ -3354,7 +3364,7 @@ def reading_map(picture: Drawing):
              ("六 · 实战", "六个真实任务", GREEN),
              ("七 · 排障", "排错、安全、成本、读源码", ORANGE))
     for index, (name, detail, color) in enumerate(parts[:6]):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 118
         picture.box((left, top, left + 492, top + 96), WHITE, color, radius=10)
@@ -3419,7 +3429,7 @@ def ext_acceptance(picture: Drawing):
              ("⑤ /reload-plugins", "热重载后行为可解释", BLUE),
              ("⑥ 卸载后消失", "列表里干净退出", GREEN))
     for index, (title, detail, color) in enumerate(steps):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 200 + row * 132
         picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
@@ -3442,7 +3452,7 @@ def mcp_ticket(picture: Drawing):
               ("失败时人类步骤", "指向 stderr 与 exit 码", BLUE),
               ("回滚方式", "删 disabledServers 或 PR 回滚条目", GREEN))
     for index, (name, detail, color) in enumerate(fields):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 132
         picture.box((left, top, left + 492, top + 108), WHITE, color, radius=12)
@@ -3503,7 +3513,7 @@ def incident_pack(picture: Drawing):
              ("相关配置路径", "密钥打码", BLUE),
              ("已尝试的最小动作", "做过什么、结果如何", GREEN))
     for index, (title, detail, color) in enumerate(items):
-        column, row = divmod(index, 2)
+        column, row = divmod(index, 3)
         left = 92 + column * 516
         top = 196 + row * 124
         picture.box((left, top, left + 492, top + 100), WHITE, color, radius=10)
