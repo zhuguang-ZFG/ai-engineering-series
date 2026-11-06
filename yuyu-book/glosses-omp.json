@@ -305,7 +305,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch20.md:79"
+      "omp/ch20.md:83"
     ],
     "analogy": {
       "zh": "外市的秤：出了地界先讲通商之语"
@@ -314,7 +314,7 @@
       "zh": "工具太杂，得有个通用接口，不必每家单独接"
     },
     "why_evidence": [
-      "omp/ch20.md:79"
+      "omp/ch20.md:83"
     ]
   },
   "sub-agent": {
@@ -671,7 +671,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch02.md:132"
+      "omp/ch02.md:136"
     ],
     "analogy": {
       "zh": "称重台：下锅前先称一称"
@@ -680,7 +680,7 @@
       "zh": "不先量就不知道离窗口上限还有多远"
     },
     "why_evidence": [
-      "omp/ch02.md:132"
+      "omp/ch02.md:136"
     ],
     "mark": false
   },

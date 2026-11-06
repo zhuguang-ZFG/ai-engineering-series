@@ -4447,6 +4447,54 @@ def intent_quadrants(picture: Drawing):
     picture.footer("名字先对上，命令再挑：想不清就问自己「我想留下的到底是什么」。")
 
 
+def one_turn_timeline(picture: Drawing):
+    picture.header("第 2 章 · 2.6 一轮对话的时间线",
+                   "模型在这一轮里，其实走了五步。",
+                   "把第 1 章的循环和第 2 章的书桌拼起来，就是这条线。")
+    steps = (("铺开书桌", "你的话、规则文件、历史摘要一起摊上去，受上下文窗口限制。", ORANGE),
+             ("模型决定动作", "直接答，还是先寄一封工具信——这个判断发生在它内部。", BLUE),
+             ("工具回信", "omp 执行完，结果占书桌新的一角，回合还没结束。", GREEN),
+             ("多转几圈", "开了思考就多走几步推理再开口，不加工具也不减书桌。", ORANGE),
+             ("快满就腾地方", "压缩或丢掉旧纸，然后接着往下走。", BLUE))
+    picture.line([(140, 214), (140, 620)], LINE, 3)
+    for index, (title, detail, color) in enumerate(steps):
+        top = 196 + index * 92
+        picture.badge((140, top + 36), str(index + 1), color)
+        picture.box((186, top, 1090, top + 72), WHITE, color, radius=12)
+        picture.text((210, top + 10), title, 21, color, True, width=300)
+        picture.text((210, top + 42), detail, 17, MUTED, width=850)
+    picture.footer("书桌是唯一的不变量：每一步都在花它的地方，没有一步是免费的。")
+
+
+def mcp_lifecycle(picture: Drawing):
+    picture.header("第 20 章 · 20.4 生命周期",
+                   "工具不会凭空消失。",
+                   "先看进程，再看日志，最后看缓存——模型排在最后一个。")
+    stages = (("① 启动", "按配置起子进程"),
+              ("② 握手", "版本与能力协商"),
+              ("③ 露面", "工具进同一套可见性通道"),
+              ("④ 调用", "超时按 startupTimeoutMs"))
+    picture.box((92, 196, 1108, 320), WHITE, LINE, radius=12)
+    for index, (name, detail) in enumerate(stages):
+        left = 92 + index * 254
+        if index:
+            picture.line([(left, 214), (left, 302)], LINE, 2)
+        picture.text((left + 20, 214), name, 20, ORANGE if index % 2 == 0 else BLUE, True, width=214)
+        picture.text((left + 20, 252), detail, 15, MUTED, width=214)
+    picture.box((92, 344, 1108, 640), WHITE, GREEN, radius=12)
+    picture.text((116, 362), "工具突然消失，按这个顺序查", 22, GREEN, True, width=600)
+    checks = (("服务器进程还在吗", "进程没了就是崩了，重启比猜快。"),
+              ("启动日志说了什么", "握手失败、超时、名字冲突，都记在这里。"),
+              ("omp 侧发现缓存", "进程活着但工具没露面，才轮到查这一层。"),
+              ("最后才怀疑模型", "它看不见工具时的表现，和「不会用」很像。"))
+    for index, (title, detail) in enumerate(checks):
+        top = 402 + index * 58
+        picture.badge((134, top + 16), index + 1, GREEN)
+        picture.text((172, top), title, 19, INK, True, width=300)
+        picture.text((470, top + 2), detail, 17, MUTED, width=610)
+    picture.footer("顺序别倒：先证伪服务器，再证伪 omp，最后才谈模型。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -4638,6 +4686,8 @@ FIGURES = {
     "fig18-5-keyword-failures": keyword_failures,
     "fig5-6-failure-bands": failure_bands,
     "fig7-6-intent-quadrants": intent_quadrants,
+    "fig2-6-one-turn-timeline": one_turn_timeline,
+    "fig20-6-mcp-lifecycle": mcp_lifecycle,
 }
 
 
