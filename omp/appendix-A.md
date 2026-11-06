@@ -63,9 +63,9 @@ omp --continue "我们刚谈到哪？"
 
 注意：continue/resume/restore/fork 与外来导入需要持久化，不能搭配 `--no-session`；两个 from-* 互斥，且不能与 continue/resume/fork 组合——细节以原文为准。
 
-![图A-5 模型与推理旗标](images/figA-5-model-flags.jpg)
+![图A-2 模型与推理旗标](images/figA-2-model-flags.jpg)
 
-*图A-5：指模型有三种写法，推理档与会话微调各一层；摘要漏列要回 cli-reference。*
+*图A-2：指模型有三种写法，推理档与会话微调各一层；摘要漏列要回 cli-reference。*
 
 ## A.5 模型与推理相关
 
@@ -75,9 +75,9 @@ omp --continue "我们刚谈到哪？"
 
 `-p` 走非交互。`--mode` 控制输出形态。本机 `--help` 摘要写：`text`（默认）、`json`、`rpc`、`rpc-ui`；cli-reference 另列 `acp`，且二进制接受 `--mode acp`（也可用子命令 `omp acp`）。第一次学手感请留在 TUI（第6章）；脚本与 CI 再用打印模式。计划类默认启动行为在打印模式可能被忽略。
 
-![图A-4 输出模式矩阵](images/figA-4-mode-matrix.jpg)
+![图A-3 输出模式矩阵](images/figA-3-mode-matrix.jpg)
 
-*图A-4：`-p` 走非交互，`--mode` 选输出形态——脚本与 CI 用打印模式。*
+*图A-3：`-p` 走非交互，`--mode` 选输出形态——脚本与 CI 用打印模式。*
 
 ## A.7 跟做：十分钟核对
 
@@ -94,9 +94,9 @@ omp --trusted-extension 2>&1 | head -n 3 || true
 omp --fork 2>&1 | head -n 3 || true
 ```
 
-![图A-2 帮助漏列怎么核](images/figA-2-binary-probe.jpg)
+![图A-4 帮助漏列怎么核](images/figA-4-binary-probe.jpg)
 
-*图A-2：帮助没列不等于二进制不认识；用缺值探针和 cli-reference 交叉验证。*
+*图A-4：帮助没列不等于二进制不认识；用缺值探针和 cli-reference 交叉验证。*
 
 ## A.8 子命令地图（按用途分格，不冒充完整表）
 
@@ -119,9 +119,9 @@ omp --fork 2>&1 | head -n 3 || true
 
 拿不准某条命令存不存在时别猜：`omp <猜的名字>` 不会报「未知命令」，整句会被当提示词送进模型（本机 18.16.0 实测 `omp notasubcommand` 停在 `Working...`，`fail/bad-command.txt`）。**未知旗标**才会明确报错、exit 2。
 
-![图A-3 子命令格子](images/figA-3-subcommand-grid.jpg)
+![图A-5 子命令格子](images/figA-5-subcommand-grid.jpg)
 
-*图A-3：按问题分的子命令地图——接模型、会话迁移、配置、技能包、服务模式。*
+*图A-5：按问题分的子命令地图——接模型、会话迁移、配置、技能包、服务模式。*
 
 ## A.9 排障三问与可勾选
 

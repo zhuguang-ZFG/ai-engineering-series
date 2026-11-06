@@ -103,7 +103,7 @@ PDF 抽查第 14、15、22、80、148、156 页（图 1-1、1-2、2-1、7-2、15
 `scripts/draw_omp_illustrations.py` 生成；另有 16 张维持 `visual-redesign/` 的 SVG 导出，
 4 张为上游截图。批次提交：B1 `0e920c2`、B2 `523238a`、B3 `f4e5c74`、B4 `a265c40`、
 B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正文引用的图补了题注与位置，
-并把与 `fig23-3-keys` 撞号的 profile 图改为 `fig23-4-profile`。
+并把与 `fig23-5-keys` 撞号的 profile 图改为 `fig23-4-profile`。
 
 验证：
 
@@ -131,7 +131,7 @@ B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正�
 `88a69582c755bd000e8dc0290981fc787a4f400c`，许可证 MIT。
 
 - 插图：README 演示 `assets/ask.webp`、`slash.webp`、`models.webp`、`lspv.webp` 转成
-  `fig6-6-ask-shot`、`fig6-7-slash-shot`、`fig5-3-model-selector`、`fig11-4-lsp-shot`，宽度压到 1100、
+  `fig6-6-ask-shot`、`fig6-7-slash-shot`、`fig5-5-model-selector`、`fig11-3-lsp-shot`，宽度压到 1100、
   质量 82，单张 40–49 KB；正文补题注（ch05、ch06、ch11）。来源登记 `sources-omp.json` 的 `omp-readme-assets`。
 - 内容一：ch07 新增 §7.5a「把别人拉进同一个会话：`/collab` 与 `omp join`」——命令语义逐条对照本机
   `omp collab --help` 与 `omp join --help`（v18.16.0）核实，链接形态取该 help 的 EXAMPLE。
@@ -178,8 +178,8 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 授权来自用户「增加更多手绘，重新考虑书籍语言，使其通俗易懂，多轮迭代优化使其成为
 经典中的经典，可以参考 github 项目以及各种社区论坛官网」。本批三件事：
 
-**图（B27）**：新增 3 张——`fig16-6-five-backends`（五种记忆后端）、
-`fig31-6-secret-scopes`（secrets.yml 两级与跟做纪律）、`fig32-6-cost-mistakes`（省钱误操作），
+**图（B27）**：新增 3 张——`fig16-2-five-backends`（五种记忆后端）、
+`fig31-5-secret-scopes`（secrets.yml 两级与跟做纪律）、`fig32-5-cost-mistakes`（省钱误操作），
 `omp/images` 增至 204 张。批次提交见本节末。
 
 **语言（通俗化第一轮）**：
@@ -244,9 +244,9 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 
 - `Drawing.coords()` 加画布守卫：任何图元坐标越出 1200×800（容差 2px）即报错。
   所有图元都经过 `coords()`，所以这一处覆盖全部绘制路径。
-- 受影响九张改为两列：`fig0-1-reading-map`、`fig2-4-desk-pile`、`fig3-4-tool-baskets`、
-  `fig20-5-mcp-ticket`、`fig22-4-registerables`、`fig22-5-ext-acceptance`、
-  `fig30-5-incident-pack`、`fig33-4-six-step-chain` 用三行，`figA-3-subcommand-grid`
+- 受影响九张改为两列：`fig0-2-reading-map`、`fig2-6-desk-pile`、`fig3-4-tool-baskets`、
+  `fig20-6-mcp-ticket`、`fig22-4-registerables`、`fig22-5-ext-acceptance`、
+  `fig30-5-incident-pack`、`fig33-4-six-step-chain` 用三行，`figA-5-subcommand-grid`
   八格用四行。逐张目检确认内容完整、无截断。
 - 另修一处漂移：`fig10-4-two-gates` 的页脚在早先通俗化批次里改过字、图却没重生成，
   现已对齐脚本。
@@ -265,7 +265,7 @@ yuyu-book tests 521 通过、`build.py --check` CHECK OK、
 
 **前言补两张（图数补齐到五张）**。前言此前只有三张图，是全书最少的一个单元，
 而且三张都挤在末尾「怎么读」下面，开头与「这本书不做什么」两节无图可看。补
-`fig0-4-out-of-scope`（三条边界的左「不给」右「去哪拿」对照）与
+`fig0-1-out-of-scope`（三条边界的左「不给」右「去哪拿」对照）与
 `fig0-5-what-you-gain`（排错 → 扩展 → 读源码三段递进），前言达到五张。
 
 同时修掉正文一处自相矛盾：`00-前言.md` 写「这四件事本书不做」，下面却只有三条。

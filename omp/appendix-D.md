@@ -49,9 +49,9 @@
 - **后台任务 / background task**：丢到后台去跑、主对话不等它的那类活（第13章）。
 - **toks / token 计数**：omp 的数 token 子命令，能按文件数也能按句子数；不先量就不知道离窗口上限还有多远（第2章）。
 
-![图D-5 扩展与安全四组词](images/figD-5-extension-vocabulary.jpg)
+![图D-2 扩展与安全四组词](images/figD-2-extension-vocabulary.jpg)
 
-*图D-5：能力、分发、遮罩、关卡四组，闸门只有白名单一道。*
+*图D-2：能力、分发、遮罩、关卡四组，闸门只有白名单一道。*
 
 ## D.4 扩展与安全
 
@@ -79,9 +79,9 @@
 - **correlation**：请求与响应的对应关系；命令可选带 `id`，响应回显同一个 `id`。
 - **ACP**：`omp acp`，Agent Client Protocol，JSON-RPC over stdio；给编辑器驱动 agent 用，不是 RPC。
 
-![图D-4 过关、点头、问你](images/figD-4-pipeline-vs-approval.jpg)
+![图D-3 过关、点头、问你](images/figD-3-pipeline-vs-approval.jpg)
 
-*图D-4：权限管线管过关、审批管点头、`ask` 管问你——三个词三件事。*
+*图D-3：权限管线管过关、审批管点头、`ask` 管问你——三个词三件事。*
 
 ## D.6 魔法词
 
@@ -116,18 +116,18 @@
 | RPC | ACP | 自定义 JSONL 与 JSON-RPC over stdio |
 | task | orchestrate | 委派与鼓励并行的魔法倾向 |
 
-![图D-2 易混对](images/figD-2-confusable-pairs.jpg)
+![图D-4 易混对](images/figD-4-confusable-pairs.jpg)
 
-*图D-2：成对记比背孤立定义省力：错一次，记住的是一对。*
+*图D-4：成对记比背孤立定义省力：错一次，记住的是一对。*
 
 默写时专门练易混对，比练孤立定义更管用。
 
 ---
 **版本核对清单**：术语随版本可能改名——以文档为准。写作钉 omp v18.15.0；用户本机验证 v18.16.0（见 VERIFY.md）。
 
-![图D-3 默写流程](images/figD-3-recall-drill.jpg)
+![图D-5 默写流程](images/figD-5-recall-drill.jpg)
 
-*图D-3：抄十词、闭卷默写、对本文、错词记页边、每月重默写。*
+*图D-5：抄十词、闭卷默写、对本文、错词记页边、每月重默写。*
 
 ## 补充跟做：把附录用起来
 
