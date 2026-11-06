@@ -312,3 +312,37 @@ yuyu-book tests 521 通过、`check_omp_plain.py --strict` 0 findings、
 | `yuyu-omp-zh.pdf` | 60,101,609 | 427 页 / 49 书签 | `fe20e6cae90303b42a6cf7464c3c78489e8901d55053282ae7401fa2f3d2330f` |
 
 构建产物位于 `.scratch/dist-b39/`。
+
+## 图号按文档顺序（2026-11-06）
+
+图号一直是「下一个空号」累积出来的，于是三件事同时发生，且都没有检查会报：
+28 / 39 个单元的图号在正文里乱序（ch02 开篇是图2-5、前言开篇是图0-4）；ch14 跳过
+了 5；ch05 有两张不同的图都叫图5-3（登录流程与模型选择器），同一个号指两张图。
+
+改法是按文档顺序让第 i 张图为 图<单元>-i，改名贯穿图片行、题注行与 `FIGURES`
+注册键。题注用独立的有序遍历改写而不是按数字匹配——题注永远跟着自己那张图，这正
+是把 ch05 两个 图5-3 区分开的依据。共重命名 91 张（`git mv`，保留历史）。
+
+可证伪的验证：全量重生成 192 张注册图，与改名后的文件**逐字节一致**，说明只动了名
+字没动画面。`ACCEPTANCE.md` 里 11 处旧文件名引用已改指新名；两张上游截图也随编号
+移动（`fig5-3-model-selector → fig5-5-model-selector`、
+`fig11-4-lsp-shot → fig11-3-lsp-shot`），`UPSTREAM_SHOTS` 清单同步更新——清单的
+用途就是声明「这些图来自别处」，改名后不同步才是错。
+
+`sources-omp.json` 的 `scope` / `scope_en` 会把文件名印在书的来源页上，原先仍写着
+两个已不存在的名字，已改正。
+
+两条门禁（`tests/test_omp_overhaul.py`）：
+
+- `test_plate_numbers_run_in_document_order_without_gaps`：第 i 张图必须是
+  图<单元>-i。对改名前的工作树报 16 处违规，改后 0。
+- `test_source_scope_names_resolve_to_real_images`：`sources-omp.json` 里每个
+  `figX-N` 记号都要能落到 `omp/images` 下的真实文件。对改动前报 2 处，改后 0。
+
+验证：tests 69 通过、yuyu-book tests 521 通过、audit_structure 33/33、
+audit_delivery 0 errors、check_omp_plain --strict 0 findings、
+repoint_omp_refs 71 ok / 0 moved、`bookctl.py check --fast` 6 steps passed。
+
+产物哈希本轮未刷新：改的是文件名与题注文字，HTML / PDF 的字节数与页数会在下一轮
+完整构建后重测（上一版仍见 B39 一节）。
+

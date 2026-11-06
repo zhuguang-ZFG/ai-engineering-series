@@ -290,6 +290,23 @@ class IllustrationCoverageTests(unittest.TestCase):
         generators = set(load_illustration_script().FIGURES)
         self.assertEqual(generators - images, set(), "registered figures without a bitmap")
 
+    def test_source_scope_names_resolve_to_real_images(self):
+        """Those scope strings are printed, not inert.
+
+        backmatter renders every scope field as reg-scope text on the book's
+        own sources page, so a renamed plate leaves a filename that does not
+        exist in the shipped volume. Nothing else reads those fields, and the
+        renumber pass rewrote only markdown, so this is the cheapest place to
+        catch it.
+        """
+        stems = {path.stem for path in (REPO_ROOT / "omp" / "images").glob("*.jpg")}
+        document = (REPO_ROOT / "yuyu-book" / "sources-omp.json").read_text(encoding="utf-8")
+        tokens = re.findall(r"fig[0-9A-Z]+-\d+(?:[-a-z0-9]*)?", document)
+        unresolved = sorted({token for token in tokens
+                             if token not in stems
+                             and not any(stem.startswith(token + "-") for stem in stems)})
+        self.assertEqual(unresolved, [], "scope citations naming plates that do not exist")
+
     def test_source_sets_do_not_overlap(self):
         generators = set(load_illustration_script().FIGURES)
         self.assertEqual(generators & SVG_DERIVED, set())
