@@ -2,6 +2,8 @@
 
 配置分散在 `config.yml`、项目 `.omp`、环境变量、`secrets.yml`、LSP 配置等处。本页给**索引心智与跟做核对**，完整键名以 `omp-src/docs` 与帮助为准，避免本书变成过期键位表。
 
+> **开门一句话：**配置键按段归类；找不到就按段名去搜，别背路径。
+
 **排障命令形状也归本页管**：正文出现的排障命令（`omp ps`、`omp usage --redact`、`omp plugin doctor` 等）都在 `omp --help` 的 COMMANDS 表里。**`omp mcp` / `omp memory` 不在表里**——那是会话内斜杠命令 `/mcp …` / `/memory …`，不能在 shell 里当子命令敲（本机 18.16.0 实测：`omp notasubcommand` 不报错而停在 `Working...`，见 `fail/bad-command.txt`）。
 
 ## C.1 先问哪一层生效

@@ -4117,6 +4117,156 @@ def version_pin(picture: Drawing):
                  ORANGE, PEACH)
     picture.footer("对不上时，以附录 E 与 omp/VERIFY.md 为准。")
 
+def three_silences(picture: Drawing):
+    picture.header("第 25 章 · 三种「安静」",
+                   "exit 2、exit 1，还有一种是假的。",
+                   "先看退出码，再决定改哪一层。")
+    cards = (("立刻报错 · exit 2", "旗标层：unknown flag: --nopt", "改旗标，别改代码", ORANGE),
+             ("立刻报错 · exit 1", "参数值层：Model not found / 行选择器 :0 非法", "照提示跑 models find，行号从 1 起", BLUE),
+             ("打 Working… 一直挂", "形状错：整句被当提示词送进模型", "exit 124 是包装器超时给的，不是 omp 的", GREEN))
+    for index, (title, detail, hint, color) in enumerate(cards):
+        top = 196 + index * 104
+        picture.box((110, top, 1108, top + 86), WHITE, color, radius=12)
+        picture.text((136, top + 8), title, 22, color, True, width=930)
+        picture.text((136, top + 40), detail, 18, INK, width=930)
+        picture.text((136, top + 62), hint, 16, MUTED, width=930)
+    picture.note((92, 508, 1108, 592), "退出来四步：",
+                 "Ctrl+C 一次 → 看退出码 → omp ps --all 找残留 → omp --restore 续上会话。",
+                 BLUE, SKY)
+    picture.note((92, 608, 1108, 694), "半途退出的隐蔽形态：",
+                 "改到一半的文件已落盘——先 git diff --stat，别叠第二层修改。",
+                 ORANGE, PEACH)
+    picture.footer("防守只有一条：粘命令前先看形状，COMMANDS 表里有没有它。")
+
+def config_pyramid(picture: Drawing):
+    picture.header("第 4 章 · 谁写赢：六层优先级",
+                   "越靠右越硬，越靠右越不落盘。",
+                   "顺序出自 docs/settings.md。")
+    layers = ("内置默认", "全局 config.yml", "项目 .omp/", "--config 覆盖层", "运行时旗标", "设置声明的环境变量")
+    for index, name in enumerate(layers):
+        left = 96 + index * 168
+        top = 470 - index * 52
+        picture.box((left, top, left + 156, top + 96), WHITE, ORANGE if index > 3 else BLUE, radius=10)
+        picture.text((left + 78, top + 34), name, 15, INK, True, anchor="mm", width=148)
+        picture.text((left + 78, top + 62), str(index + 1), 22, ORANGE if index > 3 else BLUE,
+                     True, anchor="mm", width=60)
+    picture.line([(96, 586), (1108, 586)], LINE, 2)
+    picture.text((96, 594), "低", 16, MUTED, width=60)
+    picture.text((1048, 594), "高", 16, MUTED, width=60)
+    picture.note((92, 626, 1108, 706), "两条容易被忽略：",
+                 "--config 可重复给、后者覆盖前者；运行时旗标不落盘。",
+                 BLUE, SKY)
+    picture.footer("项目层先 .omp/settings.json 后 .omp/config.yml；活动目录用 omp config path 查。")
+
+
+def parallel_and_finish(picture: Drawing):
+    picture.header("第 26 章 · 并行与收尾",
+                   "什么时候别并行，什么时候才算完。",
+                   "四条判据，缺一条就还在进行中。")
+    picture.box((110, 196, 590, 468), WHITE, ORANGE, radius=14)
+    picture.text((136, 210), "不要并行", 23, ORANGE, True, width=430)
+    for index, item in enumerate(("逻辑依赖链：B 等 A 的 API", "全局锁文件与单例生成器", "「先看看再说」的探索期")):
+        picture.text((136, 254 + index * 62), item, 17, INK, width=430)
+    picture.box((618, 196, 1108, 468), WHITE, GREEN, radius=14)
+    picture.text((644, 210), "才算结束", 23, GREEN, True, width=440)
+    for index, item in enumerate(("主路径冒烟通过", "旧名在约定目录已清",
+                                  "每片提交能独立 revert", "生成物与厂商 SDK diff 为空")):
+        picture.text((644, 254 + index * 50), item, 17, INK, width=440)
+    picture.note((92, 494, 1108, 578), "并行的成本：",
+                 "每个子代理都在乘上下文与工具开销；先写最坏 N、测试次数、是否共用锁。",
+                 BLUE, SKY)
+    picture.note((92, 594, 1108, 678), "旧名葬礼：",
+                 "一条只读 grep 扫文档与配置，人决定哪些是历史、哪些是毒。",
+                 ORANGE, PEACH)
+    picture.footer("测试套件独占数据库时，并行是假省时间、真抢锁。")
+
+
+def scope_creep(picture: Drawing):
+    picture.header("第 27 章 · 范围蔓延报警",
+                   "文件数超过票面两倍，就停手。",
+                   "范围是评审质量的第一杀手。")
+    picture.box((110, 200, 1108, 276), WHITE, ORANGE, radius=12)
+    picture.text((136, 214), "触发条件", 19, ORANGE, True, width=200)
+    picture.text((136, 244), "diff 文件数 > 票面描述的两倍 → 停，别继续加料", 18, INK, width=930)
+    steps = (("按目录聚类", "让 agent 说清这些文件分别服务哪个意图", BLUE),
+             ("拆提交", "一个意图一条提交，回滚才干净", GREEN),
+             ("拆票", "意图本来就两件事，票写错了", ORANGE))
+    for index, (title, detail, color) in enumerate(steps):
+        top = 300 + index * 96
+        picture.box((110, top, 1108, top + 78), WHITE, color, radius=10)
+        picture.text((136, top + 8), title, 21, color, True, width=300)
+        picture.text((136, top + 44), detail, 17, MUTED, width=930)
+    picture.note((92, 596, 1108, 680), "好评论的形状：",
+                 "路径 + 期望行为 + 验收方式；少谈「感觉不太对」。",
+                 BLUE, SKY)
+    picture.footer("蔓延不是勤奋：多出来的文件，评审时没人能逐行看懂。")
+
+def five_backends(picture: Drawing):
+    picture.header("第 16 章 · 五种记忆后端",
+                   "一个开关，五种放法。",
+                   "memory.backend 决定记忆落在哪。")
+    rows = (("off", "什么都不记", MUTED),
+            ("local", "项目范围摘要与 lessons，从持久会话生成", BLUE),
+            ("hindsight", "远程 bank 范围的 Hindsight", ORANGE),
+            ("mnemopi", "本地 Mnemopi SQLite 记忆", GREEN),
+            ("sharpshooter", "摩擦门控的项目决策文件，后台合并", ORANGE))
+    for index, (name, detail, color) in enumerate(rows):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), name, 21, color, True, width=210)
+        picture.text((380, top + 14), detail, 18, INK, width=700)
+    picture.note((92, 592, 1108, 676), "先记住一条：",
+                 "只有 hindsight 是远程的；其余四种都留在本机或仓库里。",
+                 GREEN, SAGE)
+    picture.footer("切后端前先想清楚：这份记忆要不要跟着仓库一起走。")
+
+
+def secret_scopes(picture: Drawing):
+    picture.header("第 31 章 · secrets.yml 放哪",
+                   "全局一份，项目一份；项目盖住全局。",
+                   "第一次实验用假密钥。")
+    picture.box((110, 196, 588, 356), WHITE, BLUE, radius=14)
+    picture.text((136, 210), "全局", 24, BLUE, True, width=420)
+    picture.text((136, 252), "活动 agent 目录下", 18, INK, width=420)
+    picture.text((136, 278), "secrets.yml", 18, INK, True, width=420)
+    picture.text((136, 308), "常为 ~/.omp/agent/", 16, MUTED, width=420)
+    picture.text((136, 330), "作用：跨项目", 16, MUTED, width=420)
+    picture.box((618, 196, 1108, 356), WHITE, ORANGE, radius=14)
+    picture.text((644, 210), "项目", 24, ORANGE, True, width=440)
+    picture.text((644, 252), "<cwd>/.omp/secrets.yml", 18, INK, True, width=440)
+    picture.text((644, 292), "作用：仅本项目，条目按 content", 16, MUTED, width=440)
+    picture.text((644, 314), "覆盖全局", 16, MUTED, width=440)
+    picture.note((92, 378, 1108, 462), "条目字段：",
+                 "type（plain / regex）、content、mode、replacement、flags——以 schema 为准。",
+                 BLUE, SKY)
+    picture.note((92, 478, 1108, 562), "跟做纪律：",
+                 "先开 enabled，用一条假密钥写 plain 条目，看会话里变占位；再删掉它。",
+                 ORANGE, PEACH)
+    picture.note((92, 578, 1108, 662), "启动时还会自动收：",
+                 "名称像密钥的环境变量（值 ≥ 8 字符）、连接串里的密码、内置可逆正则。",
+                 GREEN, SAGE)
+    picture.footer("不要用真实生产密钥做第一次实验；密钥文件本身别提交进仓库。")
+
+
+def cost_mistakes(picture: Drawing):
+    picture.header("第 32 章 · 省钱的误操作",
+                   "五种看起来省、其实更贵。",
+                   "按任务选角色，别按心情。")
+    rows = (("用 --slow 改一行文案", "烧推理档 token，产出和 --smol 差不多", ORANGE),
+            ("反复 omp -p 重问同一件事", "每次都重算前缀；缓存键对了才省", BLUE),
+            ("无脑并行开五个 task", "每个子代理各带一份大历史", ORANGE),
+            ("压缩前不救证据", "失败命令与文件:行被折叠，下一轮重跑", GREEN),
+            ("为省钱关掉秘密遮罩", "密钥进上下文，泄露代价远超 token", ORANGE))
+    for index, (wrong, why, color) in enumerate(rows):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), wrong, 19, INK, True, width=430)
+        picture.text((600, top + 14), why, 17, MUTED, width=488)
+    picture.note((92, 592, 1108, 676), "判断标准换一下：",
+                 "不是「这次花了多少」，而是「同样的结论能不能只买一次」。",
+                 BLUE, SKY)
+    picture.footer("遮罩不是可省项：它是安全底线，省下的 token 换不回来。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4284,6 +4434,13 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig16-6-five-backends": five_backends,
+    "fig31-6-secret-scopes": secret_scopes,
+    "fig32-6-cost-mistakes": cost_mistakes,
+    "fig4-6-config-pyramid": config_pyramid,
+    "fig26-6-parallel-and-finish": parallel_and_finish,
+    "fig27-6-scope-creep": scope_creep,
+    "fig25-6-three-silences": three_silences,
     "fig0-2-two-track-figures": two_track_figures,
     "fig0-3-version-pin": version_pin,
     "figA-5-model-flags": model_flags,
