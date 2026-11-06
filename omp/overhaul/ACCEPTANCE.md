@@ -138,18 +138,18 @@ B5 `fda8d02`、B6 `b9ec3d1`，截图 `12d0b0b`。B5 顺带为 6 张从未被正�
 - 内容二：附录 E.9「上游 README 的二十一项能力，在本书哪里」——21 行对照索引；三处（流式规则、`/resolve` 冲突解决、Slack）标注「未展开」，避免用宣传语充当规范。来源登记 `omp-readme`（`normative: false`）。
 - `yuyu-book/reading-paths-omp.json` 的 `omp-ch07` 增补一格 tier，与新增 H2 对齐（13→14）。
 
-## 手绘扩容 B7–B23（2026-11-05/06）
+## 手绘扩容 B7–B24（2026-11-05/06）
 
-授权来自用户「可以多增加插图和手绘」「要多轮迭代优化」。`omp/images` 由 112 张增至 195 张，
-新增 83 张全部由 `scripts/draw_omp_illustrations.py` 生成并登记在 `FIGURES`；正文按
+授权来自用户「可以多增加插图和手绘」「要多轮迭代优化」。`omp/images` 由 112 张增至 197 张，
+新增 85 张全部由 `scripts/draw_omp_illustrations.py` 生成并登记在 `FIGURES`；正文按
 「先图后节」插题注。批次提交：B7 `16ed8bf`、B8 `23d57cb`、B9 `957a9c5`、B10+B11 `25358ac`、
 B12+B13 `da2f8c5`、B14 `6531405`、B15 `a3567ad`、B16 `01c865b`、B17 `8d5ec2b`、B18 `e888673`、
 B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
-第二批：B22 `036ae74`（ch1–3）、B23 `21129a4`（附录 A–E）；
+第二批：B22 `036ae74`（ch1–3）、B23 `21129a4`（附录 A–E）、B24 `1cf861f`（前言双图）；
 另有附录 D 证据重指 `85567d8`，以及并入 main（PR #23，P3.6）的合并提交 `7df3c88`。
 
 编码策略：`encode_jpeg()` 先 4:4:4，超 300,000 字节预算才降 4:2:0；旧图重生成逐位一致
-（抽查 `fig13-1`、`fig15-1`、`figD-1`，`cmp` 无差异），历史验收哈希不受影响。83 张新图
+（抽查 `fig13-1`、`fig15-1`、`figD-1`，`cmp` 无差异），历史验收哈希不受影响。85 张新图
 单张 186–288 KB。
 
 证据对位：插点统一放在该章已有证据行之后；八处被迫位移逐条按内容核对后重指——
@@ -164,11 +164,11 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 - `python -m unittest discover -s tests`：67 项通过。
 - `python -m unittest discover -s yuyu-book/tests`：并入 main 后通过。
 - `python scripts/bookctl.py build --product omp --lang zh --pdf`：39 单元、13 图版、245 术语，
-  PDF 396 页 / 49 书签，0 index folios。
+  PDF 397 页 / 49 书签，0 index folios。
 
 | 文件 | 字节 | 页数 / 书签 | SHA-256 |
 |---|---:|---|---|
-| `yuyu-omp-zh.html` | 54,760,587 | 39 单元 | `728d8150b2a2c9e2a542e751501741b49e2ab4ba9d4526f02e9cc55b1447203f` |
-| `yuyu-omp-zh.pdf` | 57,778,498 | 396 页 / 49 书签 | `5ea5ad0b6dd266b993bc75a244f960be44d6213d6108394924c987b426181b62` |
+| `yuyu-omp-zh.html` | 55,361,531 | 39 单元 | `8f83fe5089545cfc091c846271f9ff3dbf42b5a35fdea68c5fa9cae1cb2fbce5` |
+| `yuyu-omp-zh.pdf` | 58,232,085 | 397 页 / 49 书签 | `4caacb2abcdc522b6f4edae752749350c8cea78c36acdffa4cb327174a1b3fa8` |
 
-体积与页数上升来自新增 83 张位图与对应版面（343→396 页）；构建产物位于 `.scratch/final-build3/`。
+体积与页数上升来自新增 85 张位图与对应版面（343→397 页）；构建产物位于 `.scratch/final-build4/`。
