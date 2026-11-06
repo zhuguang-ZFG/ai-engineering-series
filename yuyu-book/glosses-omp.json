@@ -671,7 +671,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch02.md:125"
+      "omp/ch02.md:129"
     ],
     "analogy": {
       "zh": "称重台：下锅前先称一称"
@@ -680,7 +680,7 @@
       "zh": "不先量就不知道离窗口上限还有多远"
     },
     "why_evidence": [
-      "omp/ch02.md:125"
+      "omp/ch02.md:129"
     ],
     "mark": false
   },
@@ -864,7 +864,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch03.md:224"
+      "omp/ch03.md:228"
     ],
     "analogy": {
       "zh": "总机转分机"
@@ -873,7 +873,7 @@
       "zh": "敲错子命令不报错，会当成一句提示词发出去"
     },
     "why_evidence": [
-      "omp/ch03.md:224"
+      "omp/ch03.md:228"
     ]
   },
   "slash-command": {

@@ -93,6 +93,10 @@ SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28�
 
 *图C-3：每改一个键走五步；失败先回滚该键，别堆叠。*
 
+![图C-5 只读四条](images/figC-5-readonly-probes.jpg)
+
+*图C-5：四条可跑、三条禁止真跑，会话内的斜杠命令 shell 侧只数 COMMANDS。*
+
 ## C.9 排障卡：shell 侧能跑的只读命令
 
 第30章的证据包四条都在这。它们**不需要模型**，不产生 API 消耗，跑完把输出存页边：

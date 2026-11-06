@@ -57,6 +57,10 @@ omp --continue "我们刚谈到哪？"
 
 注意：continue/resume/restore/fork 与外来导入需要持久化，不能搭配 `--no-session`；两个 from-* 互斥，且不能与 continue/resume/fork 组合——细节以原文为准。
 
+![图A-5 模型与推理旗标](images/figA-5-model-flags.jpg)
+
+*图A-5：指模型有三种写法，推理档与会话微调各一层；摘要漏列要回 cli-reference。*
+
 ## A.5 模型与推理相关
 
 `--model` 可接角色（如 `slow` / `@slow`）或模糊模型名；带提供方时 id 须精确。另有 `--smol`、`--slow`、`--plan` 及对应环境变量，`--provider`（遗留）、`--api-key`、`--provider-session-id`、`--prompt-cache-key`、`--service-tier` 等。thinking/reasoning 另有专节旗标。后几项可能不在 `--help` 摘要里——以 cli-reference 与二进制解析为准。
