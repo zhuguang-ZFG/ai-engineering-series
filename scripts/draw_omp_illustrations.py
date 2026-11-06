@@ -78,8 +78,24 @@ class Drawing:
 
     def text(self, position, value, size=22, color=INK, bold=False, anchor="lt", width=None):
         font = self.font(size, bold)
-        if width is not None and self.draw.textlength(value, font=font) > width * self.scale:
+        measured = self.draw.textlength(value, font=font)
+        if width is not None and measured > width * self.scale:
             raise ValueError(f"Label exceeds its {width}px space: {value}")
+        # The anchor is one point; the painted run is not. Centred and
+        # right-anchored labels reach well past their anchor, so guard the
+        # extent too — otherwise a mis-anchored label slides off the canvas
+        # while every check still passes.
+        run = measured / self.scale
+        x = position[0]
+        if anchor[0] == "m":
+            left_edge, right_edge = x - run / 2, x + run / 2
+        elif anchor[0] == "r":
+            left_edge, right_edge = x - run, x
+        else:
+            left_edge, right_edge = x, x + run
+        if left_edge < -2 or right_edge > 1202:
+            raise ValueError(
+                f"Label leaves the canvas: {value!r} paints {left_edge:.0f}..{right_edge:.0f}")
         self.draw.text(self.coords(position), value, font=font, fill=color, anchor=anchor)
 
     def box(self, bounds, fill=WHITE, outline=LINE, radius=18, stroke=2):
@@ -1399,7 +1415,7 @@ def mcp_review(picture: Drawing):
         picture.box((left, 250, left + 244, 540), fill, color)
         picture.circle((left + 122, 306), 34, WHITE, color, 3)
         picture.text((left + 122, 306), verb, 26, color, True, "mm")
-        picture.text((left + 20, 366), detail, 17, anchor="mm", width=206)
+        picture.text((left + 122, 366), detail, 17, anchor="mm", width=206)
         if index < 3:
             picture.arrow([(left + 252, 396), (left + 270, 396)], color, 3)
     picture.box((92, 570, 1108, 648), WHITE, ORANGE, radius=10)

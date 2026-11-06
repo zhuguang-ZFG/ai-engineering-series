@@ -286,3 +286,29 @@ yuyu-book tests 521 通过、`check_omp_plain.py --strict` 0 findings、
 | `yuyu-omp-zh.pdf` | 60,101,731 | 427 页 / 49 书签 | `9ba7e90bd6b9cdff9765d1c34c7bc0d7de91543e6feea9b4337e0d5c5382129c` |
 
 构建产物位于 `.scratch/dist-b37/`。
+
+**又一类越界：文字画到卡片外，贴到画布边**。画布守卫只看图元的锚点，而文字
+的锚点不等于它实际占的宽度——`anchor="mm"` 的标签会以锚点为中心向两侧铺开。
+`ch20` 的 `fig20-3-mcp-review` 把四张卡片的说明文字居中在 `left + 20`（卡片左缘
+附近），其中「读 mcp.json 的来源」正好从 x=0 起画，另外两条干脆跑到 x=-26、x=-9：
+文字挂在卡片外面，还压到画布边。修法是把居中点改到卡片中心 `left + 122`，与上方
+的圆形徽标、动词标题对齐。
+
+守卫补强：`Drawing.text()` 现在按锚点方向算出这一行真实占据的左右边界，越界即
+报错；这样「锚点在画内、笔画在画外」不会再漏过去。
+
+回归门禁：`tests/test_omp_overhaul.py` 新增
+`test_no_generated_plate_paints_against_its_canvas_edge`，直接检查成品 JPEG 的
+四条边框是否只有纸色（留白）。这条与字体无关，所以在任何机器上都稳定；对修复前
+的 `fig20-3` 会报错，对修复后的通过。全库 188 张成品图扫描 0 处越界，四张上游
+截图（整幅窗口，天然出血）按尺寸排除。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 68 通过、
+`bookctl.py check --fast` 0 errors。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 59,210,414 | 39 单元 / 208 图 | `fc574f4ef8a0badbf5ae9d0d6bed6991903f42150bf2692cc0e8b99faf4bbffa` |
+| `yuyu-omp-zh.pdf` | 60,101,609 | 427 页 / 49 书签 | `fe20e6cae90303b42a6cf7464c3c78489e8901d55053282ae7401fa2f3d2330f` |
+
+构建产物位于 `.scratch/dist-b39/`。
