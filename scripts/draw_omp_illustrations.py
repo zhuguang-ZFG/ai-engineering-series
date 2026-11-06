@@ -4394,6 +4394,59 @@ def context_layers(picture: Drawing):
     picture.footer("skills 与普通 rule 文件归第 19 章；SYSTEM.md 归系统提示文档。")
 
 
+def failure_bands(picture: Drawing):
+    picture.header("第 5 章 · 5.9 八种死法",
+                   "同样是没接上，有的喊，有的不吭声。",
+                   "退出码只对前面两种有效；后面几种只能自己读输出。")
+    bands = (("会响", "退出码非 0", ORANGE,
+              ("Model \"…\" not found → 退出码 1", 
+               "Unknown setting: modelRoles.default → 退出码 1")),
+             ("不响", "要自己看输出", BLUE,
+              ("--model 忘值 → 停在 Working...，没有退出码",
+               "models find 没匹配 → 打一行字，退出码仍是 0",
+               "shell 里旧的 key 抢先 → 不报错，用的还是旧凭证",
+               "modelRoles 写进 models.yml → 不报错，也不生效",
+               "凭记忆写死上下文上限 → 数值就是错的，没人提醒")),
+             ("别跑", "只会泄密", GREEN,
+              ("omp token / omp usage 会把敏感内容打进终端、历史和截图",)))
+    tops = (196, 316, 574)
+    heights = (104, 242, 94)
+    for (title, rule, color, items), top, height in zip(bands, tops, heights):
+        picture.box((92, top, 1108, top + height), WHITE, color, radius=12)
+        picture.text((118, top + 18), title, 22, color, True, width=250)
+        picture.text((118, top + 56), rule, 16, MUTED, width=250)
+        picture.line([(402, top + 18), (402, top + height - 18)], color, 2)
+        stride = 40 if len(items) > 2 else 38
+        start = top + (height - (len(items) - 1) * stride - 24) // 2
+        for index, item in enumerate(items):
+            picture.text((428, start + index * stride), item, 18, INK, width=650)
+    picture.footer("能响的看退出码；不响的只能看输出文本——这条差别就是本节的重点。")
+
+
+def intent_quadrants(picture: Drawing):
+    picture.header("第 7 章 · 7.8 「我想…」决策表",
+                   "先问自己丢了什么，再挑命令。",
+                   "丢的是话题、是文件、还是别人看不见——三组命令。")
+    cards = (("重来", "留在同一个会话文件里", ORANGE,
+              ("/fresh 供应商卡死，对话还要", "/clear 清空话题，文件不动", "/new 换一张白纸")),
+             ("分叉", "从当前点长出去", BLUE,
+              ("/fork 平行宇宙；/fork pane 另开", "/tree 跳历史节点；/branch 就地分", "/resume 回来打开旧本")),
+             ("带走", "让别人也看得到", GREEN,
+              ("导出 / --export 打包备份", "/share 发出去（先脱敏）", "/collab 围观；omp join 进来")),
+             ("接着干", "接着昨天那摊活儿", ORANGE,
+              ("先 cd 回昨天的目录", "--continue 接最近一次", "拿不准就开 resume 选择器")))
+    for index, (title, rule, color, items) in enumerate(cards):
+        left = 92 + (index % 2) * 524
+        top = 196 + (index // 2) * 250
+        picture.box((left, top, left + 492, top + 234), WHITE, color, radius=14)
+        picture.text((left + 24, top + 16), title, 23, color, True, width=200)
+        picture.text((left + 24, top + 54), rule, 16, MUTED, width=440)
+        picture.line([(left + 24, top + 84), (left + 468, top + 84)], LINE, 1)
+        for row, item in enumerate(items):
+            picture.text((left + 24, top + 98 + row * 40), item, 17, INK, width=444)
+    picture.footer("名字先对上，命令再挑：想不清就问自己「我想留下的到底是什么」。")
+
+
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
     "fig1-2-chat-vs-agent": chat_vs_agent,
@@ -4583,6 +4636,8 @@ FIGURES = {
     "fig3-5-help-census": help_census,
     "fig12-5-citation-discipline": citation_discipline,
     "fig18-5-keyword-failures": keyword_failures,
+    "fig5-6-failure-bands": failure_bands,
+    "fig7-6-intent-quadrants": intent_quadrants,
 }
 
 
