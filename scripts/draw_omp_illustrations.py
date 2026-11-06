@@ -4078,6 +4078,45 @@ def chapter_checklist(picture: Drawing):
                  ORANGE, PEACH)
     picture.footer("清单短才好用：四条能在两分钟内过完。")
 
+def two_track_figures(picture: Drawing):
+    picture.header("前言 · 两种图各管一段",
+                   "关系用 Mermaid，心智用手绘。",
+                   "可检索的和好记的，分开画。")
+    picture.box((110, 196, 590, 452), WHITE, BLUE, radius=14)
+    picture.text((136, 212), "Mermaid", 26, BLUE, True, width=430)
+    for index, item in enumerate(("调用链、状态机、目录树", "可检索、可改、差异进 git", "改一次就与正文同步")):
+        picture.text((136, 258 + index * 56), item, 18, INK, width=430)
+    picture.box((618, 196, 1108, 452), WHITE, ORANGE, radius=14)
+    picture.text((644, 212), "手绘 JPG", 26, ORANGE, True, width=440)
+    for index, item in enumerate(("书桌、信封、旋钮这类类比", "一眼记住，讲的是直觉", "改版要重画，脚本在 scripts/")):
+        picture.text((644, 258 + index * 56), item, 18, INK, width=440)
+    picture.note((92, 486, 1108, 570), "产物不打架：",
+                 "本分册前缀 yuyu-omp-*，御舆是 yuyu-agent-harness-*，各出各的目录。",
+                 BLUE, SKY)
+    picture.note((92, 590, 1108, 674), "找图的路：",
+                 "关系看不清先 grep Mermaid；类比记不住再翻 omp/images。",
+                 ORANGE, PEACH)
+    picture.footer("图不是装饰：改不动的关系图才该画成手绘，改得动的留在 Mermaid。")
+
+
+def version_pin(picture: Drawing):
+    picture.header("前言 · 三个版本号别混",
+                   "书钉一个，作者核对一个，你机器一个。",
+                   "先跑 --version，再对号入座。")
+    cards = (("书里钉住", "omp/18.15.0", "全书正文的写作基准", BLUE),
+             ("作者本机核对", "Windows · Bun 全局 18.16.0", "记录在 omp/VERIFY.md", ORANGE),
+             ("你机器上", "先跑 omp --version", "结果与页边差异写进附录 E", GREEN))
+    for index, (title, value, hint, color) in enumerate(cards):
+        top = 196 + index * 124
+        picture.box((110, top, 1108, top + 100), WHITE, color, radius=12)
+        picture.text((136, top + 12), title, 21, color, True, width=930)
+        picture.text((136, top + 46), value, 24, INK, True, width=930)
+        picture.text((136, top + 76), hint, 16, MUTED, width=930)
+    picture.note((92, 576, 1108, 660), "不保证一字不差：",
+                 "nightly 会漂。差异写页边，别当成正文事实。",
+                 ORANGE, PEACH)
+    picture.footer("对不上时，以附录 E 与 omp/VERIFY.md 为准。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4245,6 +4284,8 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig0-2-two-track-figures": two_track_figures,
+    "fig0-3-version-pin": version_pin,
     "figA-5-model-flags": model_flags,
     "figB-5-category-drawers": category_drawers,
     "figC-5-readonly-probes": readonly_probes,
