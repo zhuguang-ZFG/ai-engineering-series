@@ -172,3 +172,33 @@ B19 `ce8fbda`、B20 `1a3f9b8`、B21 `5051589`；
 | `yuyu-omp-zh.pdf` | 58,232,085 | 397 页 / 49 书签 | `4caacb2abcdc522b6f4edae752749350c8cea78c36acdffa4cb327174a1b3fa8` |
 
 体积与页数上升来自新增 85 张位图与对应版面（343→397 页）；构建产物位于 `.scratch/final-build4/`。
+
+## B27 图与通俗语言改造（2026-11-06）
+
+授权来自用户「增加更多手绘，重新考虑书籍语言，使其通俗易懂，多轮迭代优化使其成为
+经典中的经典，可以参考 github 项目以及各种社区论坛官网」。本批三件事：
+
+**图（B27）**：新增 3 张——`fig16-6-five-backends`（五种记忆后端）、
+`fig31-6-secret-scopes`（secrets.yml 两级与跟做纪律）、`fig32-6-cost-mistakes`（省钱误操作），
+`omp/images` 增至 204 张。批次提交见本节末。
+
+**语言（通俗化第一轮）**：
+
+- 全部 39 个单元在开场场景段之后插入「> **开门一句话：**…」单句导读（39 条）。
+- 全书 24 条 >60 汉字超长句全部改写为短句，等行数替换、零行位移。
+- 新增 `scripts/check_omp_plain.py` 度量门禁：`sent`（>60 字句）、`open`（缺开门一句话）、
+  `lead`（节首直上表格/列表）三类检查；当前 `sent`=0、`open`=0，`lead` 87 处记为
+  后续迭代目标（不阻塞）。
+- 证据指针重指：`scripts/repoint_omp_refs.py` 修为以 `--base` 的 JSON 快照为写源（避免
+  混合两套行号），从 `origin/main` 一次性重指 25 条 + ch28 两处手工重指
+  （`ch28.md:3`、`ch28.md:7`）；`ok 45 / moved 25 / missing 2（均预期）`。
+
+验证：audit_structure 33/33、audit_delivery 0 errors、tests 67 通过、yuyu-book tests 通过、
+`build.py --check` CHECK OK（39 单元、245 术语）。
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 57,547,460 | 39 单元 | `a31acef94b7da8990cd2fb9d62f24948c5d3c1c7f4481825427c1cd923f50d4c` |
+| `yuyu-omp-zh.pdf` | 59.7 MB | 408 页 / 49 书签 | `37060eeffc075a249a1ec4fd66a587a68d5910c51ddaf0a931c691701fbd60bd` |
+
+构建产物位于 `.scratch/dist-b27/`；`python scripts/check_omp_plain.py` 为通俗化度量基线。

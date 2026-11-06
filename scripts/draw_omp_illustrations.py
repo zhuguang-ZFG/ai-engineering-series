@@ -4201,6 +4201,72 @@ def scope_creep(picture: Drawing):
                  BLUE, SKY)
     picture.footer("蔓延不是勤奋：多出来的文件，评审时没人能逐行看懂。")
 
+def five_backends(picture: Drawing):
+    picture.header("第 16 章 · 五种记忆后端",
+                   "一个开关，五种放法。",
+                   "memory.backend 决定记忆落在哪。")
+    rows = (("off", "什么都不记", MUTED),
+            ("local", "项目范围摘要与 lessons，从持久会话生成", BLUE),
+            ("hindsight", "远程 bank 范围的 Hindsight", ORANGE),
+            ("mnemopi", "本地 Mnemopi SQLite 记忆", GREEN),
+            ("sharpshooter", "摩擦门控的项目决策文件，后台合并", ORANGE))
+    for index, (name, detail, color) in enumerate(rows):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), name, 21, color, True, width=210)
+        picture.text((380, top + 14), detail, 18, INK, width=700)
+    picture.note((92, 592, 1108, 676), "先记住一条：",
+                 "只有 hindsight 是远程的；其余四种都留在本机或仓库里。",
+                 GREEN, SAGE)
+    picture.footer("切后端前先想清楚：这份记忆要不要跟着仓库一起走。")
+
+
+def secret_scopes(picture: Drawing):
+    picture.header("第 31 章 · secrets.yml 放哪",
+                   "全局一份，项目一份；项目盖住全局。",
+                   "第一次实验用假密钥。")
+    picture.box((110, 196, 588, 356), WHITE, BLUE, radius=14)
+    picture.text((136, 210), "全局", 24, BLUE, True, width=420)
+    picture.text((136, 252), "活动 agent 目录下", 18, INK, width=420)
+    picture.text((136, 278), "secrets.yml", 18, INK, True, width=420)
+    picture.text((136, 308), "常为 ~/.omp/agent/", 16, MUTED, width=420)
+    picture.text((136, 330), "作用：跨项目", 16, MUTED, width=420)
+    picture.box((618, 196, 1108, 356), WHITE, ORANGE, radius=14)
+    picture.text((644, 210), "项目", 24, ORANGE, True, width=440)
+    picture.text((644, 252), "<cwd>/.omp/secrets.yml", 18, INK, True, width=440)
+    picture.text((644, 292), "作用：仅本项目，条目按 content", 16, MUTED, width=440)
+    picture.text((644, 314), "覆盖全局", 16, MUTED, width=440)
+    picture.note((92, 378, 1108, 462), "条目字段：",
+                 "type（plain / regex）、content、mode、replacement、flags——以 schema 为准。",
+                 BLUE, SKY)
+    picture.note((92, 478, 1108, 562), "跟做纪律：",
+                 "先开 enabled，用一条假密钥写 plain 条目，看会话里变占位；再删掉它。",
+                 ORANGE, PEACH)
+    picture.note((92, 578, 1108, 662), "启动时还会自动收：",
+                 "名称像密钥的环境变量（值 ≥ 8 字符）、连接串里的密码、内置可逆正则。",
+                 GREEN, SAGE)
+    picture.footer("不要用真实生产密钥做第一次实验；密钥文件本身别提交进仓库。")
+
+
+def cost_mistakes(picture: Drawing):
+    picture.header("第 32 章 · 省钱的误操作",
+                   "五种看起来省、其实更贵。",
+                   "按任务选角色，别按心情。")
+    rows = (("用 --slow 改一行文案", "烧推理档 token，产出和 --smol 差不多", ORANGE),
+            ("反复 omp -p 重问同一件事", "每次都重算前缀；缓存键对了才省", BLUE),
+            ("无脑并行开五个 task", "每个子代理各带一份大历史", ORANGE),
+            ("压缩前不救证据", "失败命令与文件:行被折叠，下一轮重跑", GREEN),
+            ("为省钱关掉秘密遮罩", "密钥进上下文，泄露代价远超 token", ORANGE))
+    for index, (wrong, why, color) in enumerate(rows):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), wrong, 19, INK, True, width=430)
+        picture.text((600, top + 14), why, 17, MUTED, width=488)
+    picture.note((92, 592, 1108, 676), "判断标准换一下：",
+                 "不是「这次花了多少」，而是「同样的结论能不能只买一次」。",
+                 BLUE, SKY)
+    picture.footer("遮罩不是可省项：它是安全底线，省下的 token 换不回来。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4368,6 +4434,9 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig16-6-five-backends": five_backends,
+    "fig31-6-secret-scopes": secret_scopes,
+    "fig32-6-cost-mistakes": cost_mistakes,
     "fig4-6-config-pyramid": config_pyramid,
     "fig26-6-parallel-and-finish": parallel_and_finish,
     "fig27-6-scope-creep": scope_creep,

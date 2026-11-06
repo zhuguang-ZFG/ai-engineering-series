@@ -41,11 +41,33 @@ SOURCES = (
 REF = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+)$")
 
 
-def collect_refs() -> dict[tuple[str, int], list[Path]]:
-    """Map every (chapter, line) pointer to the files that mention it."""
+def base_text(ref: str, path: str) -> str:
+    out = subprocess.run(
+        ["git", "show", f"{ref}:{path}"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    if out.returncode != 0:
+        raise SystemExit(f"cannot read {path} at {ref}: {out.stderr.strip()}")
+    return out.stdout
+
+
+def collect_refs(ref: str) -> dict[tuple[str, int], list[Path]]:
+    """Map every (chapter, line) pointer recorded at ``ref`` to its sources.
+
+    The pointers are read from the JSON *at that revision* so the numbers and
+    the chapter text they describe come from the same snapshot; mixing a
+    working-tree JSON with a base chapter pairs the wrong lines.
+    """
     refs: dict[tuple[str, int], list[Path]] = {}
     for source in SOURCES:
-        text = source.read_text(encoding="utf-8")
+        rel = source.relative_to(ROOT).as_posix()
+        try:
+            text = base_text(ref, rel)
+        except SystemExit:
+            text = source.read_text(encoding="utf-8")
         for raw in re.findall(r'"((?:omp/)?[^"\n]+\.md:\d+)"', text):
             match = REF.match(raw)
             if not match:
@@ -85,7 +107,7 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="rewrite moved pointers in place")
     args = parser.parse_args()
 
-    refs = collect_refs()
+    refs = collect_refs(args.base)
     if not refs:
         print("no file:line pointers found")
         return 1
@@ -121,7 +143,10 @@ def main() -> int:
 
     if args.write and replacements:
         for source in SOURCES:
-            text = source.read_text(encoding="utf-8")
+            # The mapping was derived from the JSON *at* --base, so the output
+            # must start from that same snapshot; starting from a JSON that was
+            # already half-rewritten would mix two numbering systems.
+            text = base_text(args.base, source.relative_to(ROOT).as_posix())
             changed = 0
             for (target, path, old_line), new_line in replacements.items():
                 if target != source:
