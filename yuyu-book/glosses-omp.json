@@ -132,7 +132,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch14.md:22"
+      "omp/ch14.md:24"
     ],
     "analogy": {
       "zh": "上岗前先背的规矩"
@@ -141,7 +141,7 @@
       "zh": "同一句话，规矩不同，结果差很远"
     },
     "why_evidence": [
-      "omp/ch14.md:22"
+      "omp/ch14.md:24"
     ]
   },
   "tool-result": {
@@ -189,7 +189,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch10.md:118"
+      "omp/ch10.md:120"
     ],
     "analogy": {
       "zh": "门禁一直开着，谁都能进"
@@ -198,7 +198,7 @@
       "zh": "演示图省事可以开，跑别人代码前记得关回去"
     },
     "why_evidence": [
-      "omp/ch10.md:118"
+      "omp/ch10.md:120"
     ],
     "mark": false
   },
@@ -218,7 +218,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch10.md:159"
+      "omp/ch10.md:163"
     ],
     "analogy": {
       "zh": "出门前的安检流程"
@@ -227,7 +227,7 @@
       "zh": "拦住一次乱删，比事后恢复便宜得多"
     },
     "why_evidence": [
-      "omp/ch10.md:159"
+      "omp/ch10.md:163"
     ]
   },
   "hook": {
@@ -334,7 +334,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:184"
+      "omp/ch13.md:186"
     ],
     "analogy": {
       "zh": "另雇一辆车，只带回一句结论"
@@ -343,7 +343,7 @@
       "zh": "侦查和施工挤一个脑子，会互相污染"
     },
     "why_evidence": [
-      "omp/ch13.md:184"
+      "omp/ch13.md:186"
     ]
   },
   "plan-mode": {
@@ -363,7 +363,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch13.md:184"
+      "omp/ch13.md:186"
     ],
     "analogy": {
       "zh": "先画图纸，再拆墙"
@@ -372,7 +372,7 @@
       "zh": "改图纸总比拆墙便宜"
     },
     "why_evidence": [
-      "omp/ch13.md:184"
+      "omp/ch13.md:186"
     ]
   },
   "memory": {
@@ -615,7 +615,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch16.md:24"
+      "omp/ch16.md:26"
     ],
     "analogy": {
       "zh": "随身带的笔记本，不上交"
@@ -624,7 +624,7 @@
       "zh": "默认放本地，免得记忆默认就上传云端"
     },
     "why_evidence": [
-      "omp/ch16.md:24"
+      "omp/ch16.md:26"
     ]
   },
   "modelroles": {
@@ -671,7 +671,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch02.md:131"
+      "omp/ch02.md:132"
     ],
     "analogy": {
       "zh": "称重台：下锅前先称一称"
@@ -680,7 +680,7 @@
       "zh": "不先量就不知道离窗口上限还有多远"
     },
     "why_evidence": [
-      "omp/ch02.md:131"
+      "omp/ch02.md:132"
     ],
     "mark": false
   },
@@ -708,7 +708,7 @@
       "zh": "脚本和 CI 要的是结果，不是聊天窗口"
     },
     "why_evidence": [
-      "omp/appendix-D.md:16"
+      "omp/appendix-D.md:18"
     ]
   },
   "skill-uri": {
@@ -864,7 +864,7 @@
     },
     "priority": "extra",
     "evidence": [
-      "omp/ch03.md:230"
+      "omp/ch03.md:232"
     ],
     "analogy": {
       "zh": "总机转分机"
@@ -873,7 +873,7 @@
       "zh": "敲错子命令不报错，会当成一句提示词发出去"
     },
     "why_evidence": [
-      "omp/ch03.md:230"
+      "omp/ch03.md:232"
     ]
   },
   "slash-command": {
@@ -891,7 +891,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch18.md:39"
+      "omp/ch18.md:41"
     ],
     "analogy": {
       "zh": "点菜单上的现成菜"
@@ -900,7 +900,7 @@
       "zh": "常用动作不必每次敲一段自然语言"
     },
     "why_evidence": [
-      "omp/ch18.md:39"
+      "omp/ch18.md:41"
     ]
   },
   "approval": {
@@ -947,7 +947,7 @@
     },
     "priority": "core",
     "evidence": [
-      "omp/ch14.md:63"
+      "omp/ch14.md:69"
     ],
     "analogy": {
       "zh": "贴在工位前的注意事项"
@@ -956,7 +956,7 @@
       "zh": "写在里面的规矩，比每次口头交代更稳"
     },
     "why_evidence": [
-      "omp/ch14.md:63"
+      "omp/ch14.md:69"
     ]
   },
   "agents-md": {

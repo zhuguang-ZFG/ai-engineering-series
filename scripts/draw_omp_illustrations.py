@@ -4267,6 +4267,47 @@ def cost_mistakes(picture: Drawing):
                  BLUE, SKY)
     picture.footer("遮罩不是可省项：它是安全底线，省下的 token 换不回来。")
 
+def native_walk(picture: Drawing):
+    picture.header("第 14 章 · 最近非空 .omp/ 就停",
+                   "向上走，找到第一个非空的 .omp/ 就停。",
+                   "缺文件不补找，空目录跳过。")
+    stops = (("~/.omp/agent/", "用户级：AGENTS.md 与 sticky 的 RULES.md", BLUE),
+             ("home/", "空 .omp/ → 跳过，不贡献", MUTED),
+             ("monorepo/", "非空 .omp/ → 命中：只读这里的 AGENTS.md", GREEN),
+             ("packages/web/", "cwd 深度 0；父目录已在上面", ORANGE))
+    for index, (name, detail, color) in enumerate(stops):
+        top = 196 + index * 78
+        picture.box((110, top, 1108, top + 62), WHITE, color, radius=10)
+        picture.text((136, top + 10), name, 20, color, True, width=320)
+        picture.text((480, top + 14), detail, 17, INK if color != MUTED else MUTED, width=608)
+    picture.note((92, 512, 1108, 596), "命中之后：",
+                 "别的 .omp/ 不再补找；同深度冲突由发现优先级裁决（native 100 最高）。",
+                 GREEN, SAGE)
+    picture.note((92, 612, 1108, 676), "两条硬规矩：",
+                 "空目录/空文件贡献为零；最近非空 .omp/ 独占原生项目发现。",
+                 BLUE, SKY)
+    picture.footer("把新约定写进 .omp/，别在多工具之间复制五份。")
+
+
+def context_layers(picture: Drawing):
+    picture.header("第 14 章 · 四个名字，四个地盘",
+                   "都叫「自动带进来的上下文」，各有各的地盘。",
+                   "混名是第一天最大的坑。")
+    cards = (("Context files", "普通 Markdown 说明，开会话时注入", BLUE),
+             ("Sticky rules", "顶层 RULES.md 转成的 always-apply 规则", ORANGE),
+             ("Discovery providers", "知道各工具把文件放哪的适配器", GREEN),
+             ("Model providers", "推理后端；只共享 disabledProviders 名单", MUTED))
+    for index, (name, detail, color) in enumerate(cards):
+        left = 110 + (index % 2) * 504
+        top = 196 + (index // 2) * 148
+        picture.box((left, top, left + 488, top + 132), WHITE, color, radius=14)
+        picture.text((left + 26, top + 14), name, 22, color, True, width=436)
+        picture.text((left + 26, top + 56), detail, 17, INK, width=436)
+    picture.note((92, 512, 1108, 596), "一句口诀：",
+                 "说明进 context files，铁律进 RULES.md；模型跟文件无关。",
+                 ORANGE, PEACH)
+    picture.footer("skills 与普通 rule 文件归第 19 章；SYSTEM.md 归系统提示文档。")
+
 
 FIGURES = {
     "fig1-1-agent-loop": agent_loop,
@@ -4434,6 +4475,8 @@ FIGURES = {
     "fig13-5-task-ticket": task_ticket,
     "fig29-5-permission-matrix": permission_matrix,
     "fig4-5-install-verify": install_verify,
+    "fig14-6-native-walk": native_walk,
+    "fig14-7-context-layers": context_layers,
     "fig16-6-five-backends": five_backends,
     "fig31-6-secret-scopes": secret_scopes,
     "fig32-6-cost-mistakes": cost_mistakes,
