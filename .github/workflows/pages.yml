@@ -50,12 +50,30 @@ jobs:
 
       - run: python -m pip install -r yuyu-book/requirements.txt
 
+      - name: Cache the CJK font package
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives/fonts-noto-cjk*.deb
+          key: fonts-noto-cjk-${{ runner.os }}-20230817
+
       - name: Install CJK fonts
-        timeout-minutes: 12
+        timeout-minutes: 25
         run: |
           sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 \
-               install -y fonts-noto-cjk
+          # apt restarts a stalled package from zero on every retry, so a slow
+          # mirror never converges: three runs in a row spent the whole step
+          # re-fetching the same 61 MB and got nowhere. Ask apt for the URL,
+          # fetch it with resume, then let apt install from its own cache.
+          if ! ls /var/cache/apt/archives/fonts-noto-cjk*.deb >/dev/null 2>&1; then
+            url=$(apt-get install --print-uris -y fonts-noto-cjk \
+                  | sed -n "s/^'\([^']*\)'.*/\1/p" | head -1)
+            curl -fL -C - --retry 10 --retry-delay 3 --retry-all-errors \
+                 --connect-timeout 20 --max-time 1200 \
+                 -o "/tmp/$(basename "$url")" "$url"
+            sudo mv "/tmp/$(basename "$url")" /var/cache/apt/archives/
+          fi
+          sudo apt-get -o Acquire::Retries=3 install -y fonts-noto-cjk
+          fc-cache -f
 
       - name: Install Chromium
         timeout-minutes: 15
