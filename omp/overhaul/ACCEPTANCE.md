@@ -339,10 +339,24 @@ yuyu-book tests 521 通过、`check_omp_plain.py --strict` 0 findings、
 - `test_source_scope_names_resolve_to_real_images`：`sources-omp.json` 里每个
   `figX-N` 记号都要能落到 `omp/images` 下的真实文件。对改动前报 2 处，改后 0。
 
-验证：tests 69 通过、yuyu-book tests 521 通过、audit_structure 33/33、
+验证：tests 70 通过、yuyu-book tests 521 通过、audit_structure 33/33、
 audit_delivery 0 errors、check_omp_plain --strict 0 findings、
 repoint_omp_refs 71 ok / 0 moved、`bookctl.py check --fast` 6 steps passed。
 
-产物哈希本轮未刷新：改的是文件名与题注文字，HTML / PDF 的字节数与页数会在下一轮
-完整构建后重测（上一版仍见 B39 一节）。
+B42 已基于 `df6c0b0` 重建，命令如下（后续只补验收文档）：
+
+```bash
+python yuyu-book/build.py --lang zh --pdf --manifest manifest-omp.json --sources sources-omp.json --out-dir .scratch/dist-b42
+```
+
+| 文件 | 字节 | 页数 / 书签 | SHA-256 |
+|---|---:|---|---|
+| `yuyu-omp-zh.html` | 60,584,392 | 39 单元 / 212 图 | `66101f5406dfcd452b408de924048c88e199b39f0b613c44b03a379ee7afb8ee` |
+| `yuyu-omp-zh.pdf` | 61,074,462 | 430 页 / 49 书签 | `a3be9afb71cb3c023406ecb9eaa92fab1b16d2653304f710573fb5a5343ab1a2` |
+
+浏览器实物核对：HTML 中有 212 个 `figure.illu-photo`；来源页显示
+`fig5-5-model-selector.jpg` 与 `fig11-3-lsp-shot.jpg`。PDF 第 429 页也显示
+这两个新文件名，未出现对应旧名；抽取文本时 LSP 文件名会被换行拆开。
+
+构建产物位于 `.scratch/dist-b42/`，未提交生成产物。
 
