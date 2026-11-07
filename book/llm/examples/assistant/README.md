@@ -120,6 +120,8 @@ python book/llm/examples/assistant/assistant.py run \
 - `--question-file` 与 `--question` 二选一。
 - `--repair-attempts 0`（默认）表示严格解析：输出带 Markdown 围栏就是 `invalid-response`，报告保留首次原始输出。设为 `1` 时会显式发起一次“只输出 JSON”的修复调用，并在 `usage.calls` 与原始响应列表中记录，仍不做静默剥壳。
 - `--max-new-tokens`、`--max-prompt-tokens`、`--top-k`、`--min-score`、`--max-steps`、`--max-tool-calls` 都是硬预算。prompt 超预算时按分数从低到高丢弃检索块并记录；仍放不下则 `prompt-budget-exceeded`。
+- `--claim-mode copy`（默认）：claim 必须逐字等于 quote，answer 只能由已核验 claim 组成。
+- `--claim-mode extract`（仅 fixed）：模型只给 `status`、`claims[{chunk_id,quote}]` 和可选 `reason`，主张文本由程序直接取 quote，answer 由已核验 quote 拼接。它不移除围栏、错选片段、漏检冲突这些失败；实测对比与限制见 [BASELINE.md](BASELINE.md)。agent 不支持该模式，会返回 `invalid-request`。
 
 ### 3. evaluate：先冻结，再调用
 

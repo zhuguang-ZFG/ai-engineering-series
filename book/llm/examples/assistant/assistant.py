@@ -977,12 +977,25 @@ def context_block(hits: Sequence[tuple[Chunk, float]]) -> str:
     return "\n\n".join(parts)
 
 
-def build_fixed_messages(hits: Sequence[tuple[Chunk, float]], question: str) -> list[dict[str, str]]:
+EXTRACT_CONTRACT = """只输出一个 JSON 对象，不要 Markdown 围栏，不要解释。
+键必须正好是：
+{"status":"answered|insufficient|conflict","claims":[{"chunk_id":"...","quote":"..."}],"reason":"仅 insufficient 时填写"}
+- quote 必须逐字出现在所引资料中；主张文本由程序直接取 quote，你不要改写。
+- answered：至少一条 claim。
+- insufficient：claims=[]，reason 说明缺什么。
+- conflict：至少两条 claim，引用两个不同文档。
+第一个字符必须是 {。"""
+
+
+def build_fixed_messages(
+    hits: Sequence[tuple[Chunk, float]], question: str, claim_mode: str = "copy"
+) -> list[dict[str, str]]:
+    contract = EXTRACT_CONTRACT if claim_mode == "extract" else "只输出 JSON。"
     return [
         {"role": "system", "content": FIXED_SYSTEM},
         {
             "role": "user",
-            "content": f"资料：\n{context_block(hits)}\n\n问题：{question}\n\n只输出 JSON。",
+            "content": f"资料：\n{context_block(hits)}\n\n问题：{question}\n\n{contract}",
         },
     ]
 
@@ -1192,6 +1205,93 @@ def _validate_answer(
     return report_status, answer.strip(), enriched_claims
 
 
+def validate_extract_payload(
+    payload: Mapping[str, Any], chunks_by_id: Mapping[str, Chunk]
+) -> tuple[str, str, list[dict[str, Any]]]:
+    """纯抽取模式：模型只选 quote，主张文本由程序取原文，不做语义裁判。"""
+    errors: list[str] = []
+    citation_errors: list[str] = []
+    allowed = {"status", "claims", "reason"}
+    extra = set(payload) - allowed
+    if extra:
+        errors.append(f"unexpected keys: {sorted(extra)}")
+    status = payload.get("status")
+    if not isinstance(status, str) or status not in {"answered", "insufficient", "conflict"}:
+        errors.append("status must be answered, insufficient or conflict")
+    claims = payload.get("claims")
+    if not isinstance(claims, list) or len(claims) > 8:
+        errors.append("claims must be a list of at most 8 items")
+        claims = []
+    reason = payload.get("reason")
+    if reason is not None and (not isinstance(reason, str) or not reason.strip() or len(reason) > 500):
+        errors.append("reason must be a non-empty string of at most 500 chars")
+
+    enriched: list[dict[str, Any]] = []
+    for index, claim in enumerate(claims):
+        prefix = f"claims[{index}]"
+        if not isinstance(claim, dict) or set(claim) != {"chunk_id", "quote"}:
+            errors.append(f"{prefix} must have exactly chunk_id and quote")
+            continue
+        chunk_id = claim.get("chunk_id")
+        quote = claim.get("quote")
+        if not isinstance(chunk_id, str) or not isinstance(quote, str):
+            errors.append(f"{prefix} chunk_id/quote must be strings")
+            continue
+        chunk = chunks_by_id.get(chunk_id)
+        if chunk is None:
+            citation_errors.append(f"{prefix}: unknown chunk_id {chunk_id!r}")
+            continue
+        normalized_quote = normalize_text(quote)
+        if not (2 <= len(normalized_quote) <= 300):
+            citation_errors.append(f"{prefix}: quote length must be 2-300 chars")
+            continue
+        if normalized_quote not in normalize_text(chunk.text):
+            citation_errors.append(f"{prefix}: quote is not a verbatim span of {chunk_id!r}")
+            continue
+        display = re.sub(r"^#{1,6}\s+", "", normalized_quote).strip() or normalized_quote
+        enriched.append(
+            {
+                "text": display,
+                "citations": [
+                    {
+                        "kind": "source",
+                        "chunk_id": chunk.chunk_id,
+                        "doc_id": chunk.doc_id,
+                        "title": chunk.title,
+                        "version": chunk.version,
+                        "sha256": chunk.sha256,
+                        "start": chunk.start,
+                        "end": chunk.end,
+                        "quote": quote,
+                    }
+                ],
+            }
+        )
+
+    if not errors and not citation_errors and status == "answered" and not enriched:
+        errors.append("answered requires at least one verified quote")
+    if not errors and not citation_errors and status == "insufficient" and claims:
+        errors.append("insufficient requires an empty claims array")
+    if not errors and not citation_errors and status == "conflict":
+        docs = {claim["citations"][0]["doc_id"] for claim in enriched}
+        if len(enriched) < 2 or len(docs) < 2:
+            errors.append("conflict requires at least two quotes from two different documents")
+
+    if errors:
+        raise AssistantFailure("invalid-response", "validate", {"errors": errors, "status": status})
+    if citation_errors:
+        raise AssistantFailure("citation-failed", "validate", {"errors": citation_errors})
+
+    report_status = {
+        "answered": "answered",
+        "insufficient": "insufficient-evidence",
+        "conflict": "conflict",
+    }[status]
+    texts = list(dict.fromkeys(claim["text"] for claim in enriched))
+    answer = "；".join(texts) if texts else (reason.strip() if isinstance(reason, str) else "资料不足，无法回答。")
+    return report_status, answer, enriched
+
+
 # ---------------------------------------------------------------------------
 # 工具
 # ---------------------------------------------------------------------------
@@ -1370,6 +1470,7 @@ class RunSettings:
     max_tool_calls: int = DEFAULT_MAX_TOOL_CALLS
     repair_attempts: int = 0
     allowed_tools: tuple[str, ...] = ("calculator",)
+    claim_mode: str = "copy"
 
     def threshold(self) -> float:
         if self.min_score is not None:
@@ -1630,6 +1731,7 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
             "max_steps": settings.max_steps,
             "max_tool_calls": settings.max_tool_calls,
             "repair_attempts": settings.repair_attempts,
+            "claim_mode": settings.claim_mode,
             "allowed_tools": list(settings.allowed_tools),
             "local_files_only": engine.provider == "local",
         },
@@ -1688,12 +1790,20 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
             return finish()
 
         repair_state = {"used": 0}
+        if settings.claim_mode not in {"copy", "extract"}:
+            raise AssistantFailure("invalid-request", "config", {"reason": "claim_mode must be copy or extract"})
+        if settings.claim_mode == "extract" and settings.mode != "fixed":
+            raise AssistantFailure(
+                "invalid-request",
+                "config",
+                {"reason": "claim_mode=extract currently supports fixed mode only"},
+            )
         if settings.mode == "fixed":
             messages, used_hits, dropped, prompt_size, prompt_unit = trim_hits(
                 engine,
                 settings,
                 hits,
-                lambda current: build_fixed_messages(current, settings.question),
+                lambda current: build_fixed_messages(current, settings.question, settings.claim_mode),
             )
             report["retrieval"]["hits"] = _hit_report(hits, {chunk.chunk_id for chunk, _ in used_hits})
             report["diagnostics"]["warnings"].extend(
@@ -1706,9 +1816,14 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
                 "used_chunk_ids": [chunk.chunk_id for chunk, _ in used_hits],
             }
             payload, _raw = chat_and_parse(engine, messages, settings, meter, 1, repair_state)
-            status, answer, claims = validate_fixed_payload(
-                payload, {chunk.chunk_id: chunk for chunk, _ in used_hits}, []
-            )
+            if settings.claim_mode == "extract":
+                status, answer, claims = validate_extract_payload(
+                    payload, {chunk.chunk_id: chunk for chunk, _ in used_hits}
+                )
+            else:
+                status, answer, claims = validate_fixed_payload(
+                    payload, {chunk.chunk_id: chunk for chunk, _ in used_hits}, []
+                )
             report["status"] = status
             report["answer"] = answer
             report["claims"] = claims
@@ -1926,6 +2041,7 @@ def evaluate_manifest(
     only_cases: Sequence[str],
     price_input: float | None,
     price_output: float | None,
+    claim_mode: str = "copy",
 ) -> dict[str, Any]:
     data, freeze = read_json_file(manifest_path, "invalid-manifest", "eval-manifest")
     if not isinstance(data, dict) or data.get("schema") != "assistant-eval/1":
@@ -2061,6 +2177,7 @@ def evaluate_manifest(
             max_tool_calls=budgets["max_tool_calls"],
             repair_attempts=budgets["repair_attempts"],
             allowed_tools=tuple(allowed_tools),
+            claim_mode=claim_mode,
         )
         report = run_pipeline(engine, settings)
         actual_status = report["status"]
@@ -2330,6 +2447,7 @@ def serve(args: argparse.Namespace) -> int:
         max_tool_calls=args.max_tool_calls,
         repair_attempts=args.repair_attempts,
         allowed_tools=tuple(args.allowed_tools),
+        claim_mode=args.claim_mode,
     )
 
     class Handler(BaseHTTPRequestHandler):
@@ -2420,6 +2538,7 @@ def serve(args: argparse.Namespace) -> int:
                 max_tool_calls=base_settings.max_tool_calls,
                 repair_attempts=base_settings.repair_attempts,
                 allowed_tools=base_settings.allowed_tools,
+                claim_mode=base_settings.claim_mode,
             )
             report = run_pipeline(engine, settings)
             status = report["status"]
@@ -2546,6 +2665,7 @@ def build_parser() -> argparse.ArgumentParser:
     question_group.add_argument("--question-file", type=Path)
     add_model_arguments(run_parser, require_local_model=True)
     run_parser.add_argument("--mode", choices=("fixed", "agent"), default="fixed")
+    run_parser.add_argument("--claim-mode", choices=("copy", "extract"), default="copy", help="extract：模型只选原文，主张由程序生成（仅 fixed）")
     add_json_outputs(run_parser)
 
     evaluate_parser = commands.add_parser("evaluate", help="冻结评测清单后逐例运行并比较")
@@ -2556,11 +2676,13 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate_parser.add_argument("--case", action="append", default=[], help="只运行指定 case id，可重复")
     evaluate_parser.add_argument("--price-input-per-1k", type=float, default=None)
     evaluate_parser.add_argument("--price-output-per-1k", type=float, default=None)
+    evaluate_parser.add_argument("--claim-mode", choices=("copy", "extract"), default="copy", help="对全部用例覆盖 claim 模式")
     add_json_outputs(evaluate_parser)
 
     serve_parser = commands.add_parser("serve", help="本地 JSON/HTTP 教学服务（仅回环地址）")
     add_docs_arguments(serve_parser)
     add_model_arguments(serve_parser, require_local_model=True)
+    serve_parser.add_argument("--claim-mode", choices=("copy", "extract"), default="copy")
     serve_parser.add_argument("--host", choices=("127.0.0.1", "localhost", "::1"), default="127.0.0.1")
     serve_parser.add_argument("--port", type=int, default=8765)
 
@@ -2663,6 +2785,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 max_tool_calls=args.max_tool_calls,
                 repair_attempts=args.repair_attempts,
                 allowed_tools=tuple(args.allowed_tools),
+                claim_mode=args.claim_mode,
             )
             report = run_pipeline(engine, settings)
             emit_payload(report, args.json_path, args.markdown_path, render_report_markdown)
@@ -2677,6 +2800,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 only_cases=args.case,
                 price_input=args.price_input_per_1k,
                 price_output=args.price_output_per_1k,
+                claim_mode=args.claim_mode,
             )
             summary = {
                 "schema": result["schema"],
