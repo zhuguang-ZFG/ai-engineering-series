@@ -39,6 +39,26 @@ class DiffWalk(unittest.TestCase):
         self.assertEqual(cl.diff_reports({"a": [1, {"b": "c"}]},
                                          {"a": [1, {"b": "c"}]}), [])
 
+    def test_allowed_list_growth_cannot_hide_replaced_or_reordered_anchors(self):
+        rule = dict(path="/anchors", kind="len", delta=1)
+        for fresh in (["renamed", "second", "new"],
+                      ["second", "first", "new"]):
+            with self.subTest(fresh=fresh):
+                diffs = cl.diff_reports({"anchors": ["first", "second"]},
+                                        {"anchors": fresh})
+                _matched, unmatched = cl.classify(diffs, [rule])
+                self.assertTrue(unmatched,
+                                "a length rule must not hide changed targets")
+
+    def test_allowed_insertion_preserves_existing_anchor_order(self):
+        diffs = cl.diff_reports({"anchors": ["first", "second"]},
+                                {"anchors": ["first", "new", "second"]})
+        matched, unmatched = cl.classify(
+            diffs, [dict(path="/anchors", kind="len", delta=1)])
+        self.assertEqual([(d.path, d.legacy, d.fresh) for d, _ in matched],
+                         [("/anchors", 2, 3)])
+        self.assertEqual(unmatched, [])
+
 
 class AllowlistMatching(unittest.TestCase):
     def rule(self, **overrides):
@@ -168,6 +188,33 @@ class RuleLoading(unittest.TestCase):
         self.assertIn("commit", result.stderr)
         self.assertNotIn("missing build artifacts", result.stderr)
         self.assertNotIn("GREEN", result.stdout)
+
+
+class CLIInputBoundaries(unittest.TestCase):
+    def test_relative_and_external_policy_paths_can_render_a_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            policies = (Path("docs/baseline/legacy-v2-deltas.json"),
+                        Path(directory) / "external.json")
+            for policy in policies:
+                with self.subTest(policy=policy):
+                    report = cl.render_report({}, [], [], policy)
+                    self.assertIn(str(policy).replace("\\", "/"), report)
+                    self.assertIn("## Verdict", report)
+
+    def test_missing_english_artifact_is_an_input_error_not_drift(self):
+        with tempfile.TemporaryDirectory() as directory:
+            dist = Path(directory)
+            (dist / "yuyu-agent-harness-zh.html").write_text(
+                "<!doctype html><html lang='zh'><title>Book</title></html>",
+                encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/compare_legacy.py"),
+                 "--dist", str(dist)], cwd=ROOT, capture_output=True,
+                text=True, encoding="utf-8")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("missing build artifacts", result.stderr)
+        self.assertIn("yuyu-agent-harness-en.html", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
 
 
 class ShippedRules(unittest.TestCase):
