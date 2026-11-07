@@ -23,8 +23,9 @@ else:
 BUILD = model.VIDEO / ".build"
 
 
-def _report(chapter_id: str, audio: bool = False) -> dict:
-    episode, scenes = model.load_episode(chapter_id)
+def _report(chapter_id: str, audio: bool = False, *,
+            config_only: bool = False) -> dict:
+    episode, scenes = model.load_episode(chapter_id, check_assets=not config_only)
     chapter_dir = model.CHAPTERS / chapter_id
     errors: list[str] = []
     warnings: list[str] = []
@@ -47,7 +48,7 @@ def _report(chapter_id: str, audio: bool = False) -> dict:
         manifests[fmt] = manifest
         spec = episode["formats"][fmt]
         tolerance = max(0.5, spec["duration_s"] * 0.001)
-        if spec["status"] == "built" and \
+        if not config_only and spec["status"] == "built" and \
                 abs(manifest["total_duration_s"] - spec["duration_s"]) > tolerance:
             errors.append(
                 f"{chapter_id}: {fmt} narration is "
@@ -137,7 +138,8 @@ def check(args) -> int:
     ids = [args.chapter] if args.chapter else list(model.CHAPTER_IDS)
     failures = 0
     for chapter_id in ids:
-        report = _report(chapter_id, audio=args.audio)
+        report = _report(chapter_id, audio=args.audio,
+                         config_only=args.config_only)
         status = "ok" if not report["errors"] else "FAIL"
         print(f"{chapter_id}: {status}")
         for error in report["errors"]:
@@ -150,7 +152,7 @@ def check(args) -> int:
 def build(args) -> int:
     ids = [args.chapter] if args.chapter else list(model.CHAPTER_IDS)
     for chapter_id in ids:
-        report = _report(chapter_id)
+        report = _report(chapter_id, config_only=not args.assets)
         if report["errors"]:
             for error in report["errors"]:
                 print(f"error: {error}", file=sys.stderr)
@@ -277,10 +279,19 @@ def main(argv=None) -> int:
         cmd.add_argument("--chapter", choices=model.CHAPTER_IDS)
         if name == "check":
             cmd.add_argument("--audio", action="store_true")
+            cmd.add_argument("--config-only", action="store_true",
+                             help="validate configuration; media stays unverified")
+        if name == "build":
+            cmd.add_argument("--assets", action="store_true",
+                             help="require all declared renderer/media assets")
         cmd.set_defaults(handler=handler)
     sub.add_parser("migrate").set_defaults(handler=migrate_cmd)
     args = parser.parse_args(argv)
-    return args.handler(args)
+    try:
+        return args.handler(args)
+    except (model.VideoError, OSError, ValueError) as exc:
+        print(f"VIDEO FAILED: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

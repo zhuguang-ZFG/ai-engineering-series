@@ -247,7 +247,8 @@ def format_base(chapter_dir: Path, legacy: dict | None,
     return base
 
 
-def validate_scenes(scenes: dict, episode: dict, chapter_dir: Path) -> list[str]:
+def validate_scenes(scenes: dict, episode: dict, chapter_dir: Path, *,
+                    check_assets: bool = True) -> list[str]:
     errors: list[str] = []
     where = f"{chapter_dir.name}.scenes"
     if scenes.get("schema_version") != SCHEMA_VERSION:
@@ -269,7 +270,7 @@ def validate_scenes(scenes: dict, episode: dict, chapter_dir: Path) -> list[str]
         if not isinstance(items, list) or not items:
             errors.append(f"{where}.formats.{name}: a built format needs scenes")
             continue
-        base = format_base(chapter_dir, legacy, name)
+        base = format_base(chapter_dir, legacy, name) if check_assets else None
         _validate_scene_list(errors, f"{where}.{name}", items, spec, base)
         audio = (scenes.get("audio") or {}).get(name)
         if audio is not None:
@@ -338,12 +339,14 @@ def _validate_audio(errors: list, where: str, audio: dict, spec: dict,
             errors.append(f"{where}: audio {path} is missing")
 
 
-def load_episode(chapter_id: str) -> tuple[dict, dict]:
+def load_episode(chapter_id: str, *, check_assets: bool = True
+                 ) -> tuple[dict, dict]:
     chapter_dir = CHAPTERS / chapter_id
     episode = read_yaml(chapter_dir / "episode.yaml")
     scenes = read_yaml(chapter_dir / "scenes.yaml")
     errors = validate_episode(episode, chapter_dir)
-    errors += validate_scenes(scenes, episode, chapter_dir)
+    errors += validate_scenes(scenes, episode, chapter_dir,
+                              check_assets=check_assets)
     if errors:
         raise VideoError("\n".join(errors))
     return episode, scenes

@@ -125,9 +125,6 @@ def compat(episode: dict, chapter_dir: Path, scenes: dict) -> dict:
 def build(episode: dict, scenes: dict, cues: dict) -> dict:
     formats = {}
     for fmt, spec in episode["formats"].items():
-        if spec.get("status") != "built":
-            formats[fmt] = {"status": spec.get("status"), "scenes": []}
-            continue
         items = (scenes.get("formats") or {}).get(fmt) or []
         track = cues.get(fmt) or []
         formats[fmt] = {
