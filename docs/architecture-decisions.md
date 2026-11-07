@@ -34,6 +34,8 @@
 
 **边界：** `audit.py` 负责整书输出契约；站点由产品适配器、`tests/test_site_accessibility.py` 与真实浏览器检查覆盖。静态搜索与语言映射的 JSON 存在不等于浏览器已经验证搜索或跳转行为。
 
+样章图版使用 `yuyu-book/sample-diagrams/` 中已审阅 SVG；manifest 同时锁定 Mermaid 源摘要与 SVG 摘要。普通生成先校验两者，源变化必须显式运行 `python scripts/build_sample_chapter.py --refresh-diagrams` 并审阅图版。这样正文仍从 BookModel 实时生成，样章跨平台不再依赖宿主字体测量或随机布局；并未放宽整页 freshness 比较。
+
 ## ADR-005：视频源、派生物与媒体验证分开
 
 **决定：** `video/chapters/chNN/` 保存 episode、scene、脚本、内容包和兼容审阅清单；`video/pipeline/` 负责内容装配与检查，HyperFrames 版本集中在 `video/package.json`。可重建中间物写入 `video/.build/`，不加入 Git。

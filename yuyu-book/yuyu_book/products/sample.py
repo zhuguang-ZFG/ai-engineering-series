@@ -23,6 +23,7 @@ from ..core import load_configs, load_unit, read_text, unit_stream
 from ..labels import esc
 from ..paths import BOOK_DIR, REPO_ROOT
 from . import tokens
+from . import sample_diagrams
 from .chapter_copy import hook, recap
 from .loader import load_repo_model
 
@@ -163,7 +164,7 @@ def chapter_article(lang: str, unit_id: str = CHAPTER) -> str:
         if unit.id == unit_id:
             captions = mermaid.captions_for(
                 read_text(REPO_ROOT / unit.path), unit.blocks)
-            diagrams = mermaid.render_all(unit.blocks, captions, None)
+            diagrams = sample_diagrams.load(unit.blocks, captions)
         else:
             diagrams = mermaid.source_fallback(unit.blocks, {})
         payload = render.render_unit(

@@ -58,6 +58,14 @@ jobs:
           browser: 'true'
       - run: python scripts/bookctl.py check --full
       - run: python scripts/check_artifact_claims.py
+      - run: python scripts/check_visual_layout.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: product-visual-layout
+          path: .scratch/visual-check/*
+          include-hidden-files: true
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: yuyu-book-dist
