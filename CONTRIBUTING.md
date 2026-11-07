@@ -238,6 +238,26 @@ python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源
 
 英文侧用同一套标签（`Inference:` / `For teaching purposes` / `Recommendation:`），与中文段落一一对应；不要只在中文里标。
 
+### 5.5 结构差异规则与提交来源
+
+`scripts/compare_legacy.py` 在读取构建产物前校验 `docs/baseline/legacy-v2-deltas.json`。
+每条规则必须有路径、非空原因和真实的 7–40 位提交 SHA；该提交必须已存在于本地 Git 历史。
+浅克隆缺少来源提交时先 fetch 对应历史，不用 `working tree`、版本标签或无关 SHA 代替。
+提交存在只证明可定位；审阅者仍须核对该提交是否确实解释了这条内容差异。
+
+匹配条件只能二选一：
+
+- 数量变化：有限数值 `delta`，逐项核对增量；`kind: "len"` 表示列表长度变化。
+- 版本、日期等精确变化：同时提供 `legacy` 与 `fresh`，任一端不同都不匹配。
+
+不得混用两种条件，也不得只写一端或删掉条件让规则变成通配放行。
+来源和结构错误以退出码 2 报出；合法规则仍未覆盖的产物差异保持退出码 1。
+新增或修改规则、回归测试、runner 或 CI 策略仍须独立审阅；本地测试通过不等于受管验证已通过。
+
+P5 内容的本地来源提交为 `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`。
+该提交包含双语练习、断言账本与构建前校验；不包含 P3 样式拆分、P4 产品适配或视频迁移。
+
+
 ## 6. 审计会拒绝什么
 
 `yuyu-book/yuyu_book/audit.py` 在写出文件之前扫描整份 HTML，任一项不过即构建失败：

@@ -154,6 +154,37 @@ class RuleLoading(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, "invalid.json"):
                         cl.load_rules(path)
 
+    def test_invalid_provenance_stops_the_cli_before_artifact_comparison(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "invalid.json"
+            path.write_text(json.dumps({"schema_version": 1, "deltas": [
+                self.rule(commit="working tree (P5.5)")]}), encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/compare_legacy.py"),
+                 "--allow", str(path), "--dist", directory], cwd=ROOT,
+                capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("invalid comparison rules:", result.stderr)
+        self.assertIn("commit", result.stderr)
+        self.assertNotIn("missing build artifacts", result.stderr)
+        self.assertNotIn("GREEN", result.stdout)
+
+
+class ShippedRules(unittest.TestCase):
+    def test_version_release_is_accounted_for_without_hiding_a_different_release(self):
+        rules = cl.load_rules(ALLOW)
+        baseline = json.loads((ROOT / "docs/baseline/baseline.json").read_text(
+            encoding="utf-8"))
+        current = json.loads((ROOT / "yuyu-book/manifest.json").read_text(
+            encoding="utf-8"))
+        release = cl.Diff("/book/version", "value", baseline["book"]["version"],
+                          current["version"])
+        unknown = cl.Diff("/book/version", "value", baseline["book"]["version"],
+                          "99.0.0")
+        matched, unmatched = cl.classify([release, unknown], rules)
+        self.assertEqual([diff for diff, _ in matched], [release])
+        self.assertEqual([diff for diff, _ in unmatched], [unknown])
+
 
 if __name__ == "__main__":
     unittest.main()
