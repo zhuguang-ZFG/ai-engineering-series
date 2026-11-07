@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23B4472F' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23B4472F'/%3E%3C/svg%3E">
+<title>御舆 · 知识卡</title>
+<meta property="og:title" content="御舆 · 知识卡">
+<meta property="og:description" content="十五章，每章三张 3:4 卡：一句话钩子、核心机制、三句带走。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="cover.png">
+<style>
+body{margin:0;font:15px/1.75 "Noto Serif SC","Source Han Serif SC","思源宋体","Songti SC","SimSun",Georgia,serif;background:#F5F0E6;color:#26221B}
+header{padding:34px 30px 8px;max-width:1040px;margin:0 auto;text-align:center}
+h1{font-size:26px;margin:0 0 4px;font-weight:650}
+.brush{width:200px;height:9px;color:#B4472F;display:block;margin:2px auto 8px}
+.sub{color:#5C5448;font-size:13.5px;margin:0}
+.hint{color:#6E6353;font-size:12.5px;margin:8px 0 0}
+main{max-width:1040px;margin:0 auto;padding:10px 30px 50px}
+.ch{margin:26px 0 0}
+.ch-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px dashed rgba(38,34,27,.25);
+  padding:0 0 8px;margin:0 0 14px}
+.ch-no{margin:0;font-size:12px;letter-spacing:.14em;color:#9C3A26;white-space:nowrap}
+.ch-head h2{font-size:19px;margin:0;font-weight:650}
+.deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.kcard{position:relative;aspect-ratio:3/4;border:1.5px solid rgba(38,34,27,.3);
+  border-radius:10px 6px 12px 6px/6px 12px 6px 10px;padding:22px 20px 16px;
+  display:flex;flex-direction:column;gap:9px;overflow:hidden;
+  box-shadow:2px 3px 0 rgba(38,34,27,.08)}
+.kcard::after{content:"";position:absolute;inset:7px;pointer-events:none;
+  border:1px dashed rgba(38,34,27,.18);
+  border-radius:6px 3px 7px 4px/4px 7px 3px 6px}
+.k-hook{background:#FBF6EC}
+.k-core{background:#F3EAD8}
+.k-recap{background:#EADFC7}
+.k-kicker{margin:0;font-size:11.5px;letter-spacing:.18em;color:#B4472F}
+.k-mark{width:58px;height:58px;color:#9C3A26;flex:0 0 auto}
+.k-mark svg{width:100%;height:100%}
+.k-quote{margin:0;font-size:16.5px;line-height:1.62;color:#26221B}
+.k-quote::before{content:"“";color:#B4472F}
+.k-quote::after{content:"”";color:#B4472F}
+.k-plain{margin:0;font-size:13.5px;line-height:1.65}
+.k-ana{margin:0;font-size:12.5px;line-height:1.6;color:#5C5448}
+.k-plate{width:100%;height:auto;color:#5A5040;margin:auto 0}
+.k-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.k-list li{font-size:12.5px;line-height:1.55;padding-left:20px;position:relative}
+.k-list li::before{counter-increment:kcard;content:counter(kcard);position:absolute;
+  left:0;top:1px;width:15px;height:15px;line-height:15px;text-align:center;
+  font-size:10px;color:#FBF6EC;background:#B4472F;border-radius:50%}
+.k-list{counter-reset:kcard}
+.k-foot{margin:auto 0 0;font-size:11px;letter-spacing:.12em;color:#675F4F}
+footer{max-width:1040px;margin:34px auto 0;padding:16px 30px 40px;
+  border-top:1px dashed rgba(38,34,27,.25);font-size:12.5px;color:#5C5448;text-align:center}
+footer a{color:#3A5A78;text-decoration:none;border-bottom:1px dashed rgba(76,112,147,.5)}
+footer a:hover{color:#B4472F}
+a:focus-visible{outline:2px solid #B4472F;outline-offset:3px}
+@media (max-width:820px){.deck{grid-template-columns:1fr}
+  .kcard{aspect-ratio:auto;min-height:360px}}
+@media print{body{background:#FFFDF8}
+  header .hint,footer{display:none}
+  .ch{break-before:page}
+  .kcard{box-shadow:none;break-inside:avoid}
+  .deck{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media screen and (prefers-reduced-motion: reduce){
+  footer a{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>御舆 · 知识卡</h1>
+  <svg class="brush" viewBox="0 0 190 10" aria-hidden="true"><path d="M4 6q30-4.5 62-2.5t72-1q24 .2 46 1.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".85"/><path d="M152 5.6q10-.6 20-.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".45"/><circle cx="178" cy="5.8" r="1.5" fill="currentColor" stroke="none"/></svg>
+  <p class="sub">十五章，每章三张 3:4 卡：一句话钩子、核心机制、三句带走。</p>
+  <p class="hint">全部素材取自本书自有插图；手机可读，打印时每张卡独立成页。没有脚本，离线打开也是这个样子。</p>
+</header>
+<main>
+<section class="ch" id="ch01" aria-labelledby="ch01-h">
+  <div class="ch-head">
+    <p class="ch-no">第一部分 · 基础篇</p>
+    <h2 id="ch01-h">第 1 章　智能体编程的新范式</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-compass" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M31 15q15-1 18 13.5t-9.5 19.5q-15 3-20-9t11.5-24" pathLength="100"/><circle class="spin" cx="32" cy="32" r="25" stroke-dasharray="2 6" opacity=".28"/><path d="M32 20q1 12 0 24" opacity=".6" pathLength="100"/><path d="M20 32q12-1 24 0" opacity=".6" pathLength="100"/><path d="M22 22q10 1.5 20 20" opacity=".55" pathLength="100"/><path d="M42 22q-10 1.5-20 20" opacity=".55" pathLength="100"/><path d="M30 15.5q2 0 4.5.3" opacity=".35" stroke-width="1.3" pathLength="100"/><circle cx="32" cy="32" r="3" fill="currentColor" stroke="none"/><circle cx="32" cy="32" r="5.8" stroke-width="1.5" opacity=".7" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">模型是马，只出力气；这套 Harness 是车——装什么货、走哪条路，车说了算。</blockquote>
+      <p class="k-foot">第 1 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-pillars" viewBox="0 0 340 120" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18q156-4 312 0" pathLength="100"/><path d="M18 25q152-3 304 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M18 96q152-3 304 0" pathLength="100"/><path d="M22 102q148-2 296 0" opacity=".5" stroke-width="1.2" pathLength="100"/><g opacity=".45" stroke-width="1.2"><path d="M40 28v24" pathLength="100"/><path d="M105 28v22" pathLength="100"/><path d="M170 28v22" pathLength="100"/><path d="M235 28v21" pathLength="100"/><path d="M300 28v21" pathLength="100"/></g><g opacity=".92"><path d="M18 56q22-2 44 0" pathLength="100"/><path d="M18 71q11-6 22 0t22 0" pathLength="100"/><path d="M18 88q11-6 22 0t22 0" pathLength="100"/><path d="M64 68l5 4-5 4" pathLength="100"/><circle cx="51" cy="61" r="2" fill="currentColor" stroke="none"/></g><g opacity=".92"><path d="M83 55q22-4 44 0q4 17 0 34q-22 4-44 0q-4-18 0-34" pathLength="100"/><circle cx="105" cy="72" r="10" pathLength="100"/><circle cx="105" cy="72" r="2.4" fill="currentColor" stroke="none"/></g><g opacity=".92"><path d="M150 54q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M150 68q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M150 82q20-2 40 0q2 4 0 8q-20 2-40 0q-2-5 0-8" pathLength="100"/><path d="M160 57l3 3 5-4" pathLength="100"/><path d="M194 68q7 6 0 12" pathLength="100"/></g><g opacity=".92"><path d="M201 91h10v-13h10v-13h10v-13h10" pathLength="100"/><path d="M243 48v-9" pathLength="100"/><path d="M240 43l3-4 3 4" pathLength="100"/></g><g opacity=".92"><path d="M278 54q22-3 44 0q3 18 0 36q-22 3-44 0q-3-18 0-36" pathLength="100"/><circle cx="300" cy="72" r="10" pathLength="100"/><path d="M295 72l4 4 7-8" pathLength="100"/></g><g opacity=".5" stroke-width="1.2"><path d="M69 88q5 3 10 0" pathLength="100"/><path d="M134 88q5 3 10 0" pathLength="100"/><path d="M252 88q5 3 10 0" pathLength="100"/></g><circle cx="24" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="268" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/></svg></div>
+      <p class="k-plain">模型动手后的门槛在工程侧：权限、状态、恢复谁来管？答案是一层运行时加五条原则</p>
+      <p class="k-ana">✦ 像装修：电器再好也得先布线、装漏电保护、列回路清单，不能把插头直接拧进插座</p>
+      <p class="k-foot">第 1 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>真正的转移不是模型更会聊，而是模型开始调工具，Agent Harness 是接住这件事的运行时。</li><li>包一层 API 不等于做一套 Harness——分不清这条线，系统一上生产就散架；那 51 万行代码，填的就是这些坑。</li><li>打量一个 Agent 系统，先数 Harness 那几层在不在：流式、权限、缓存、状态，缺了就不算。</li></ol>
+      <p class="k-foot">第 1 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch02" aria-labelledby="ch02-h">
+  <div class="ch-head">
+    <p class="ch-no">第一部分 · 基础篇</p>
+    <h2 id="ch02-h">第 2 章　对话循环 — Agent 的心跳</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-chase" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="spin"><path d="M33 12a19 20 0 0 1 14 33" pathLength="100"/><path d="M47.5 44.5l.4-8.6-8.9 1.2" pathLength="100"/><path d="M31 52a19 20 0 0 1-14-33" pathLength="100"/><path d="M16.5 19.5l-.4 8.6 8.9-1.2" pathLength="100"/></g><path d="M36 16a15 16 0 0 1 10 26" opacity=".28" stroke-width="1.3" pathLength="100"/><path d="M28 48a15 16 0 0 1-10-26" opacity=".28" stroke-width="1.3" pathLength="100"/><circle cx="32" cy="32" r="4" fill="currentColor" stroke="none"/><circle cx="39" cy="24" r="1.1" fill="currentColor" stroke="none" opacity=".5"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">对话循环是 Agent 的心跳：每 yield 一次就搏动一下；肯收缰的马，才敢跑远路。</blockquote>
+      <p class="k-foot">第 2 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-turn seq" viewBox="0 0 348 118" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M16 44q24-2 48 0q2 9 0 18q-24 2-48 0q-2-9 0-18" pathLength="100"/><path d="M28 62l-3 8 10-6" pathLength="100"/><path d="M22 50h34" pathLength="100"/><path d="M22 56h26" pathLength="100"/><path d="M20 76h40" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M20 82h28" opacity=".35" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="100" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M104 44q16-2 32 0q2 12 0 22q-16 2-32 0q-2-12 0-22" pathLength="100"/><path d="M112 52l-4 4 4 4" pathLength="100"/><path d="M126 52l4 4-4 4" pathLength="100"/><path d="M142 50h16" pathLength="100"/><path d="M142 58h12" pathLength="100"/><path d="M104 76h52" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M104 82h36" opacity=".35" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="100" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="206" cy="56" r="10" pathLength="100"/><circle cx="206" cy="56" r="3" fill="currentColor" stroke="none"/><path d="M206 41v5" pathLength="100"/><path d="M206 66v5" pathLength="100"/><path d="M191 56h5" pathLength="100"/><path d="M216 56h5" pathLength="100"/><path d="M232 40v44" opacity=".5" stroke-width="1.2" stroke-dasharray="3 5"/><path d="M236 52l4 4 8-9" pathLength="100"/><path d="M236 68h12" opacity=".55" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="100" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 34q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="280" cy="48" r="2" fill="currentColor" stroke="none"/><path d="M288 48h32" pathLength="100"/><circle cx="280" cy="58" r="2" fill="currentColor" stroke="none"/><path d="M288 58h26" pathLength="100"/><circle cx="280" cy="68" r="2" fill="currentColor" stroke="none"/><path d="M288 68h32" pathLength="100"/><path d="M278 80h44" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="100" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 60h12" pathLength="100"/><path d="M89 58l3 2-3 2" pathLength="100"/><path d="M167 60h12" pathLength="100"/><path d="M177 58l3 2-3 2" pathLength="100"/><path d="M255 60h12" pathLength="100"/><path d="M265 58l3 2-3 2" pathLength="100"/></g><g opacity=".7" stroke-width="1.4"><path d="M306 34q2-20-16-21q-128-4-236 0q-18 1-16 21" pathLength="100"/><path d="M33 29l5 6 5-6" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 4h332" stroke-dasharray="6 13"/><path d="M8 108h332" stroke-dasharray="6 13"/></g></svg></div>
+      <p class="k-plain">一轮问模型、跑工具、回填的循环：能暂停能取消，续跑七条路，退出十种因</p>
+      <p class="k-ana">✦ 像收发室：登记、寄出、等回执，没回来就再问一次；叫停时必写明停在哪一步</p>
+      <p class="k-foot">第 2 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>主循环是一个异步生成器：yield 推事件、yield* 委托子生成器、return() 取消，状态不可变，每一跳都有 transition 可查。</li><li>把 callModel、microcompact、autocompact、uuid 四个副作用注入成 QueryDeps，循环内部就成了纯逻辑——可测性是设计出来的，不是事后补的。</li><li>掂量一个 Agent 循环就三问：能不能暂停、能不能取消、终止时收不收拾现场。</li></ol>
+      <p class="k-foot">第 2 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch03" aria-labelledby="ch03-h">
+  <div class="ch-head">
+    <p class="ch-no">第一部分 · 基础篇</p>
+    <h2 id="ch03-h">第 3 章　工具系统 — Agent 的双手</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-nut" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="wiggle"><path d="M32 8q11 5 20 11.5l-1.2 23.5q-9 6.5-19 12.5L13 43.5l.6-23.5 18-12z" pathLength="100"/><path d="M31 23q10-1 10.5 9t-10.5 9q-9.5-.5-10-9T31 23" pathLength="100"/></g><path d="M38 13.5l5.5 3M40.5 12l5.5 3" opacity=".35" stroke-width="1.4" pathLength="100"/><path d="M51.5 22l.6 18" opacity=".25" stroke-width="1.3" pathLength="100"/><circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">55 枚腰牌挂在 Agent 手上：每枚先过 JSON Schema 验形制，才许出手干活。</blockquote>
+      <p class="k-foot">第 3 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-bench" viewBox="0 0 340 156" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 96q152-5 304 .6" pathLength="100"/><path d="M20 101q152-4 300 .4" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M40 97q-2 26 1 50" pathLength="100"/><path d="M300 97q2 26-1 50" pathLength="100"/><path d="M40 147q130-3 260 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M96 108q52-3 104 .5q2 14 0 26q-53-3-104-.4q-2-13 0-26" pathLength="100"/><path d="M138 120q10 2 20 0" opacity=".7" stroke-width="1.5" pathLength="100"/><path d="M10 22q160-6 320 1" opacity=".45" stroke-width="1.2" stroke-dasharray="2 7" pathLength="100"/><g opacity=".9"><path d="M46 30q6 14 3 30q-3 8-9 6q-6-3-3-14q3-14 9-22" pathLength="100"/><path d="M47 66q1 14-2 24" pathLength="100"/><circle cx="45" cy="93" r="3.4" fill="currentColor" stroke="none"/></g><g opacity=".9"><path d="M96 28q10 8 8 20q-2 10-12 8q-8-2-6-12q2-10 10-16" pathLength="100"/><path d="M97 56q2 20-1 36" pathLength="100"/><path d="M92 96q6 6 12 0" opacity=".7" stroke-width="1.3" pathLength="100"/></g><g opacity=".9"><path d="M150 30q-12 10-10 22t16 10q12-3 8-16" pathLength="100"/><path d="M152 64q3 14 0 28" pathLength="100"/><path d="M146 92q8 6 16-2" opacity=".7" stroke-width="1.3" pathLength="100"/></g><g opacity=".9"><path d="M206 28q4 10 0 18q-3 7 3 12q7 5 12-2" pathLength="100"/><path d="M212 60q4 18 1 32" pathLength="100"/><path d="M200 94q10 8 24-2" opacity=".7" stroke-width="1.3" pathLength="100"/></g><g opacity=".9"><path d="M262 30q14-4 22 6q6 9-4 14q-9 4-16-4" pathLength="100"/><path d="M266 52q-2 22 2 40" pathLength="100"/><circle cx="270" cy="96" r="2.8" fill="currentColor" stroke="none"/></g><g opacity=".55" stroke-width="1.2"><path d="M312 34q4 8 0 16" pathLength="100"/><path d="M322 30q3 12-1 22" pathLength="100"/></g><g opacity=".5" stroke-width="1.2"><path d="M60 112q8 4 4 14" pathLength="100"/><path d="M232 116q10-2 14 6" pathLength="100"/></g><circle cx="24" cy="90" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="316" cy="88" r="1.6" fill="currentColor" stroke="none" opacity=".6"/></svg></div>
+      <p class="k-plain">几十个工具共用一份五要素契约：只读的成批跑，改东西的单独排队，边听指令边开工</p>
+      <p class="k-ana">✦ 像后厨出单：洗切可以一起上，动火的只能一个人来，做好也得按下单顺序报号</p>
+      <p class="k-foot">第 3 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>名称、Schema、权限、执行、渲染——五要素协议是 55 个工具共用的 DNA，泛型契约给每个工具独立的类型空间。</li><li>契约立住了，注册、死代码消除、并发分区、流式执行才有统一的抓手；isConcurrencySafe 标错一个，代价就是数据竞争。</li><li>往系统里加工具不用碰编排引擎——把五要素写对，剩下的交给默认值。</li></ol>
+      <p class="k-foot">第 3 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch04" aria-labelledby="ch04-h">
+  <div class="ch-head">
+    <p class="ch-no">第一部分 · 基础篇</p>
+    <h2 id="ch04-h">第 4 章　权限管线 — Agent 的护栏</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-gate" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 32.3q5.5-1 10.5-.3" pathLength="100"/><path d="M47.5 31.7q5.5-.7 10.5.3" pathLength="100"/><path d="M22 12q-1 20 .5 40" opacity=".5" pathLength="100"/><path d="M42 12q1 20-.5 40" opacity=".5" pathLength="100"/><path class="redraw" d="M26.5 33.5q2 2.5 4 4.5 5-8 10.5-13.5" stroke-width="2.6" pathLength="100"/><path d="M28 34.5q2.5 2.5 3.5 4" opacity=".3" stroke-width="1.2" pathLength="100"/><circle cx="22" cy="17" r="1.2" fill="currentColor" stroke="none" opacity=".55"/><circle cx="42" cy="47" r="1.2" fill="currentColor" stroke="none" opacity=".55"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">工具每次出手都要过关卡：验输入、查名册、盖印章——盖几道，权限模式说了算。</blockquote>
+      <p class="k-foot">第 4 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-gates seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M18 26q20-2 40 0q2 15 0 29q-20 2-40 0q-2-14 0-29" pathLength="100"/><path d="M24 34h24" pathLength="100"/><path d="M24 42h20" pathLength="100"/><path d="M24 50h26" pathLength="100"/><path d="M52 60l4 4 8-9" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M100 26q-1 17 1 34" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M104 28h7v7h-7z" pathLength="100"/><path d="M104 40h7v7h-7z" pathLength="100"/><path d="M104 52h7v7h-7z" pathLength="100"/><path d="M116 32h30" pathLength="100"/><path d="M116 44h26" pathLength="100"/><path d="M116 56h32" pathLength="100"/><circle cx="107.5" cy="31.5" r="1.6" fill="currentColor" stroke="none"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M190 26q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><path d="M190 40q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><path d="M190 54q15-2 30 0q2 4 0 7q-15 2-30 0q-2-4 0-7" pathLength="100"/><circle cx="236" cy="39.5" r="8.5" pathLength="100"/><path d="M242 46l5 5" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M282 22q24-2 48 0q2 6 0 12q-24 2-48 0q-2-6 0-12" pathLength="100"/><path d="M292 28h28" pathLength="100"/><path d="M298 34l-3 8 8-6" pathLength="100"/><path d="M277 52h13" pathLength="100"/><path d="M290 52l10-4" pathLength="100"/><path d="M290 52l10 4" pathLength="100"/><path d="M304 44l4 4 8-9" pathLength="100"/><path d="M304 54l8 8" pathLength="100"/><path d="M312 54l-8 8" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg></div>
+      <p class="k-plain">工具请求要过四道关：验格式、查规则、工具自审、人点头；显式拒绝压过一切放行</p>
+      <p class="k-ana">✦ 像报销审批：验票、查黑名单、主管复核、老板签字；写明不予报销的，谁签都没用</p>
+      <p class="k-foot">第 4 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>权限检查是四道关卡：验输入、对规则、评估上下文、问用户，任何一层都能当场拒掉一次调用。</li><li>deny 规则优先级最高——就算开到 bypassPermissions 模式，deny 和 safetyCheck 照样生效；单一检查点靠不住，防御必须纵深。</li><li>给项目配权限，先写 deny 清单，再挑模式；团队落地靠 settings.json 管共享、settings.local.json 管个人。</li></ol>
+      <p class="k-foot">第 4 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch05" aria-labelledby="ch05-h">
+  <div class="ch-head">
+    <p class="ch-no">第二部分 · 核心系统篇</p>
+    <h2 id="ch05-h">第 5 章　设置与配置 — Agent 的基因</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-stack" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 9Q45 13.5 54 20 43 26 32 31 20 26 10 20 21 13.5 32 9z" pathLength="100"/><path d="M32 9q2 5 1.5 11" opacity=".3" stroke-width="1.2" pathLength="100"/><path class="ripple d1" d="M12 30.2Q22 35 32 40 42 35 52 30" opacity=".5" stroke-width="1.8" pathLength="100"/><path class="ripple d2" d="M15 39.5Q24 44 32 48.5 40 44 49 39.5" opacity=".25" stroke-width="1.6" pathLength="100"/><path d="M26 16l4 2M30 14.5l4 2" opacity=".35" stroke-width="1.3" pathLength="100"/><circle cx="43" cy="22" r="1.3" fill="currentColor" stroke="none" opacity=".55"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">六层配置像地层沉积：上层只遮盖、从不删除——看懂层序，再动笔改写 Agent 的基因。</blockquote>
+      <p class="k-foot">第 5 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-trust-ladder" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 30q23-2 46 0q1 6 0 13q23-2 46 0q1 7 0 13q23-2 46 0q1 6 0 13q23-2 46 0q1 7 0 13q23-2 46 0q1 6 0 13q23-2 46 0" pathLength="100"/><path d="M14 30q-1 41 0 82" pathLength="100"/><path d="M290 95q1 9 0 17" pathLength="100"/><path d="M14 112q92-3 184 0" pathLength="100"/><path d="M198 112q66 2 128 0" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><g opacity=".92"><path d="M19 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M28 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M37 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M46 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M55 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M68 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M78 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M88 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M98 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M114 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M124 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M134 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M144 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M158 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M168 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M178 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M188 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M216 68l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M226 68l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M267 81l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/></g><g><path d="M198 50q2 31 0 62" pathLength="100"/><path d="M195 60h10" pathLength="100"/><path d="M195 98h10" pathLength="100"/></g><g opacity=".55" stroke-width="1.2"><path d="M178 118v7" pathLength="100"/><path d="M174 122l4 4 4-4" pathLength="100"/><path d="M172 131h13" pathLength="100"/><path d="M222 117l-5 8h4l-3 8" pathLength="100"/><path d="M266 118q-3 0-3 3v2q0 3-3 3q3 0 3 3v2q0 3 3 3" pathLength="100"/><path d="M270 118q3 0 3 3v2q0 3 3 3q-3 0-3 3v2q0 3-3 3" pathLength="100"/><path d="M210 107l3-3-4-1" pathLength="100"/><path d="M218 108l3-3 3 3" pathLength="100"/><path d="M233 103l-4 1 3 3" pathLength="100"/></g><g opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"><path d="M180 115q18-6 33-11" pathLength="100"/><path d="M221 115q0-5 0-10" pathLength="100"/><path d="M262 115q-16-6-33-11" pathLength="100"/></g></svg></div>
+      <p class="k-plain">六层配置层层覆盖决定它怎么行动；外来仓库改不动安全项，运行时状态只换不改</p>
+      <p class="k-ana">✦ 像办公室公告栏：新通知压在旧通知上面，但权限清单只增不减，消防通道归物业管</p>
+      <p class="k-foot">第 5 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>六层配置从不互相删除，只按类型分派合并——数组只增不减，标量后写赢。</li><li>正因为合并规则可预期，安全检查才敢把 projectSettings 整体关在门外，挡住仓库级的供应链攻击。</li><li>给团队定策略时守住一条：每层只装该层的事；配置改一笔，全站换一副做派。</li></ol>
+      <p class="k-foot">第 5 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch06" aria-labelledby="ch06-h">
+  <div class="ch-head">
+    <p class="ch-no">第二部分 · 核心系统篇</p>
+    <h2 id="ch06-h">第 6 章　记忆系统 — Agent 的长期记忆</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-memo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 9.3q11-1 22-.2l10.8 11q-.2 17.5.2 34.7H15.4z" pathLength="100"/><path d="M37 9.2q-.5 5.5.2 11l10.6.3" opacity=".5" pathLength="100"/><path d="M21 28q8.5-1 16.5-.3" opacity=".6" pathLength="100"/><path class="write" d="M21 36q10-.8 20-.2" opacity=".6" pathLength="100"/><path d="M21 44q6-.8 12-.2" opacity=".6" pathLength="100"/><path d="M44 49.5l4-2.5" opacity=".35" stroke-width="1.3" pathLength="100"/><circle cx="45.5" cy="52.5" r="1.2" fill="currentColor" stroke="none" opacity=".5"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">记忆分两层：上下文是工作记忆，memdir 是长期记忆——只存代码里推导不出的事，用前先验证。</blockquote>
+      <p class="k-foot">第 6 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-mem-funnel" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><g opacity=".9"><path d="M92 8h26" pathLength="100"/><path d="M130 6h20" pathLength="100"/><path d="M166 10h28" pathLength="100"/><path d="M206 7h22" pathLength="100"/><path d="M242 11h18" pathLength="100"/><path d="M112 15h24" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M158 14h18" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M190 16h22" opacity=".6" stroke-width="1.2" pathLength="100"/></g><path d="M70 26q88-4 176 0" pathLength="100"/><path d="M78 30q84-3 168 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M70 28q40 34 88 60" pathLength="100"/><path d="M246 28q-22 36-62 60" pathLength="100"/><path d="M158 88q1 8 0 15" pathLength="100"/><path d="M184 88q-1 8 0 15" pathLength="100"/><g opacity=".92"><path d="M104 40h20" pathLength="100"/><path d="M134 43h24" pathLength="100"/><path d="M170 40h22" pathLength="100"/><path d="M204 43h18" pathLength="100"/></g><g opacity=".95"><path d="M112 46q0 5 0 10" pathLength="100"/><path d="M126 46q0 5 0 10" pathLength="100"/><path d="M140 46q0 5 0 10" pathLength="100"/><path d="M154 46q0 5 0 10" pathLength="100"/><path d="M168 46q0 5 0 10" pathLength="100"/><path d="M182 46q0 5 0 10" pathLength="100"/><path d="M196 46q0 5 0 10" pathLength="100"/><path d="M210 46q0 5 0 10" pathLength="100"/></g><g opacity=".85"><path d="M138 62h16" pathLength="100"/><path d="M160 65h18" pathLength="100"/><path d="M146 69h14" opacity=".6" stroke-width="1.2" pathLength="100"/></g><path d="M138 74q30 2 60 0" pathLength="100"/><path d="M143 78q25 2 50 0" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><path d="M171 92q0 4 0 7" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M152 110q19-2 38 0q2 10 0 20q-19 2-38 0q-2-10 0-20" pathLength="100"/><path d="M159 116h20" pathLength="100"/><path d="M159 122h13" pathLength="100"/><circle cx="183" cy="122" r="1.6" fill="currentColor" stroke="none"/><path d="M226 50q12-2 21 2" opacity=".5" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><g opacity=".95"><path d="M258 42q6 10 11 20q-11 3-22 0q5-10 11-20" pathLength="100"/><path d="M258 50q0 3 0 5" pathLength="100"/><circle cx="258" cy="59" r="1.3" fill="currentColor" stroke="none"/></g><path d="M14 136q156-3 312 0" opacity=".45" stroke-width="1.2" stroke-dasharray="2 7" pathLength="100"/><circle cx="28" cy="128" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="314" cy="124" r="1.6" fill="currentColor" stroke="none" opacity=".6"/></svg></div>
+      <p class="k-plain">跨会话只记代码里读不出的四件事：你是谁、你纠正过什么、为何这么定、链接在哪</p>
+      <p class="k-ana">✦ 像图书馆目录柜：只登记书在哪层架，正文不抄进卡片；真要引用还得走回架子核对</p>
+      <p class="k-foot">第 6 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>这套记忆只存代码里推导不出的东西——user、feedback、project、reference 四类各管一摊，其余一律关在门外。</li><li>记忆是快照不是事实，用之前必须验证当前状态——把记忆当线索，别当结论。</li><li>判断一条记忆该不该留，只问一句：删掉它，行为会变吗？</li></ol>
+      <p class="k-foot">第 6 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch07" aria-labelledby="ch07-h">
+  <div class="ch-head">
+    <p class="ch-no">第二部分 · 核心系统篇</p>
+    <h2 id="ch07-h">第 7 章　上下文管理 — Agent 的工作记忆</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-gauge" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 44Q13 22.5 32 21.5T54.5 43.5" pathLength="100"/><path class="sweep" d="M32 44q6-8 12-15.5" stroke-width="2.5" pathLength="100"/><circle cx="32" cy="44" r="3" fill="currentColor" stroke="none"/><path d="M13.5 31.5q2.2 1.6 4 3.2" opacity=".55" pathLength="100"/><path d="M32 21.2q-.4 2.6.2 5.2" opacity=".55" pathLength="100"/><path d="M50.5 31.5q-2.2 1.6-4 3.2" opacity=".55" pathLength="100"/><path d="M12 47.5q3 2 6 2.8" opacity=".25" stroke-width="1.3" pathLength="100"/><circle cx="40" cy="33" r="1.1" fill="currentColor" stroke="none" opacity=".5"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">上下文窗口有天花板：历史一膨胀就连升四级压缩，连败三次，断路器直接拉闸。</blockquote>
+      <p class="k-foot">第 7 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-squeeze seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M18 28h40" pathLength="100"/><path d="M18 36h44" pathLength="100"/><path d="M18 44h36" pathLength="100"/><circle cx="44" cy="64" r="3" pathLength="100"/><circle cx="54" cy="64" r="3" pathLength="100"/><path d="M45 60l8-14" pathLength="100"/><path d="M53 60l-8-14" pathLength="100"/><path d="M60 30h10" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M112 24q14-2 28 0q2 14 0 26q-14 2-28 0q-2-14 0-27" pathLength="100"/><path d="M118 32h16" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M118 40h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M102 38h6" pathLength="100"/><path d="M106 36l3 2-3 2" pathLength="100"/><path d="M150 38h-6" pathLength="100"/><path d="M146 36l-3 2 3 2" pathLength="100"/><path d="M112 60h28" pathLength="100"/><path d="M112 66h20" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M192 26q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M192 38q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M192 50q14-2 28 0q2 4 0 8q-14 2-28 0q-2-5 0-9" pathLength="100"/><path d="M224 30l4 3-4 3" pathLength="100"/><path d="M224 42l4 3-4 3" pathLength="100"/><path d="M236 46v10" pathLength="100"/><path d="M233 53l3 4 3-4" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M278 28h18" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 34h16" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 40h18" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 46h14" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M300 37h8" pathLength="100"/><path d="M306 35l3 2-3 2" pathLength="100"/><path d="M312 34h20" pathLength="100"/><path d="M312 44h16" pathLength="100"/><circle cx="320" cy="56" r="7" pathLength="100"/><circle cx="320" cy="56" r="2" fill="currentColor" stroke="none"/><path d="M276 66h44" opacity=".45" stroke-width="1.2" stroke-dasharray="3 5"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg></div>
+      <p class="k-plain">白板写满就得擦：腾地方从轻到重分四级，压缩前先留好下笔的余量，连败三次就收手</p>
+      <p class="k-ana">✦ 像库房腾货架：先并零箱，再压缩打包，实在装不下才把旧货誊成一页台账贴门口</p>
+      <p class="k-foot">第 7 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>压缩不是黑箱，而是四级渐进——裁剪、微压缩、折叠、自动压缩，成本一级高过一级。</li><li>等撞上窗口天花板才动手，代价最高；连败三次，断路器还会拉闸。</li><li>主动压缩优于被动压缩：在关键节点手动触发并附注重点，比等系统自动出手留下更多有用的上下文。</li></ol>
+      <p class="k-foot">第 7 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch08" aria-labelledby="ch08-h">
+  <div class="ch-head">
+    <p class="ch-no">第二部分 · 核心系统篇</p>
+    <h2 id="ch08-h">第 8 章　钩子系统 — Agent 的生命周期扩展点</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-hook" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 32.2q25-1.5 50-.3" opacity=".45" pathLength="100"/><path class="nudge" d="M53.5 27.5l3.8 4.5-3.8 4.5" pathLength="100"/><circle cx="17" cy="32" r="2.4" fill="currentColor" stroke="none"/><circle cx="34" cy="32" r="2.4" fill="currentColor" stroke="none"/><circle cx="49" cy="32" r="2.4" fill="currentColor" stroke="none"/><circle cx="34" cy="32" r="4.4" opacity=".3" stroke-width="1.2" pathLength="100"/><path d="M17 29.2q-.6-7.4 0-14.9 4.5-.4 9 .1v6.5c0 7 10 7 10 .2v-6.6q4.5-.5 9 .2" pathLength="100"/><path d="M34 35.2q-.5 7.5 0 14.8 4-.4 8 .1v-5.5c0-7 10-7 10-.2v5.7q2.3.1 4.6.2" opacity=".6" stroke-width="1.7" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">权限管线是护栏，钩子是神经反射弧：二十二个节点上，能观察、能改写、能一口回绝。</blockquote>
+      <p class="k-foot">第 8 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-hooks seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M34 27q8-3 16 0q4 10 6 18q-14 2-28 0q2-8 6-18" pathLength="100"/><circle cx="42" cy="51" r="1.6" fill="currentColor" stroke="none"/><path d="M22 30q-4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M62 30q4 8 0 16" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M30 58h24" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M34 63h16" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M100 24q28-2 56 0" pathLength="100"/><path d="M128 23v13q0 8 8 8q8 0 8-8" pathLength="100"/><circle cx="136" cy="39" r="2.2" fill="currentColor" stroke="none"/><path d="M104 32h14" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M104 38h9" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M192 24q20-2 40 0q2 15 0 30q-20 2-40 0q-2-15 0-30" pathLength="100"/><path d="M198 32l5 4-5 4" pathLength="100"/><path d="M207 36h16" pathLength="100"/><circle cx="200" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="208" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="216" cy="46" r="1.8" fill="currentColor" stroke="none"/><path d="M198 62h30" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><circle cx="283" cy="42" r="3" fill="currentColor" stroke="none"/><path d="M285 40q16-9 32-9" pathLength="100"/><path d="M311 27l6 4-6 4" pathLength="100"/><path d="M285 44q13 10 25 10" opacity=".6" stroke-width="1.4" stroke-dasharray="4 6"/><path d="M311 49l10 10" pathLength="100"/><path d="M321 49l-10 10" pathLength="100"/><path d="M290 64h28" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg></div>
+      <p class="k-plain">不改源码就能插手关键节点：五种钩子挂在工具、会话、压缩、权限等生命周期事件上，能拦、能改输入、能补上下文</p>
+      <p class="k-ana">✦ 像小区门禁：保安不盖楼，但每次进出都能拦下、改道或在登记本上补一句</p>
+      <p class="k-foot">第 8 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>所有钩子说同一种语言：JSON 响应协议加退出码，引擎只认协议，不认实现。</li><li>协议统一，五种钩子才插得上 22 个生命周期节点，任何一个钩子的阻止决策都会生效。</li><li>记住分工：权限管线决定"能否执行"，钩子决定"如何执行"——护栏之后，钩子是第二道安全检查。</li></ol>
+      <p class="k-foot">第 8 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch09" aria-labelledby="ch09-h">
+  <div class="ch-head">
+    <p class="ch-no">第三部分 · 高级模式篇</p>
+    <h2 id="ch09-h">第 9 章　子智能体与 Fork 模式</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-fork" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path class="pulse" d="M9.8 30q3.8-2.3 7-.2t1.4 6.2q-4 2-7-.4t-1.4-5.6" pathLength="100"/><path class="pulse" d="M44.8 15q3.8-2.3 7-.2t1.4 6.2q-4 2-7-.4t-1.4-5.6" pathLength="100"/><path class="pulse" d="M44.8 45q3.8-2.3 7-.2t1.4 6.2q-4 2-7-.4t-1.4-5.6" pathLength="100"/><path d="M19 32.3q4-.4 8-.2 4-.3 7.3-4.3t8.7-10.7" pathLength="100"/><path d="M27 32.2q4.2.3 7.3 4.3t8.7 10.5" pathLength="100"/><path d="M20 29.4q4.5 0 8.5 1.6" opacity=".25" stroke-width="1.2" pathLength="100"/><circle cx="30.5" cy="26.5" r="1.1" fill="currentColor" stroke="none" opacity=".5"/><circle cx="49" cy="17" r="1.1" fill="currentColor" stroke="none" opacity=".8"/><circle cx="49" cy="47" r="1.1" fill="currentColor" stroke="none" opacity=".8"/><path d="M33.5 25.2l4.5 3.2M33.5 39l4.5-3.2" opacity=".4" stroke-width="1.3" pathLength="100"/><circle cx="14" cy="32" r="7.6" opacity=".28" stroke-width="1.2" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">子智能体是另雇的车，各付各的过路费；Fork 共用一套行李，只差缰绳。</blockquote>
+      <p class="k-foot">第 9 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-squeeze seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g class="frame"><path d="M8 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M28 34q13-2 26 0q2 13 0 26q-13 2-26 0q-2-13 0-26" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M24 30q13-2 26 0q2 13 0 26q-13 2-26 0q-2-13 0-26" opacity=".75" stroke-width="1.4" pathLength="100"/><path d="M20 26q13-2 26 0q2 13 0 26q-13 2-26 0q-2-13 0-26" pathLength="100"/><path d="M25 33h15" pathLength="100"/><path d="M25 39h13" pathLength="100"/><path d="M25 45h11" pathLength="100"/><circle cx="52" cy="21" r="2.2" fill="currentColor" stroke="none"/><path d="M50 23q-2 2-3 4" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M18 64h40" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text></g><g class="frame"><path d="M96 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M106 24q13-2 26 0q2 15 0 30q-13 2-26 0q-2-15 0-30" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 31h14" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 37h12" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 41q5-1 9 0q1 2 0 4q-5 1-9 0q-1-2 0-4" pathLength="100"/><path d="M111 47q5-1 9 0q1 2 0 4q-5 1-9 0q-1-2 0-4" pathLength="100"/><path d="M108 39q8-1 16 0q1 7 0 14q-8 1-16 0q-1-7 0-14" stroke-dasharray="2 4" pathLength="100"/><path d="M128 46h10" pathLength="100"/><path d="M136 44l3 2-3 2" pathLength="100"/><path d="M142 36q9-1 18 0q1 10 0 20q-9 1-18 0q-1-10 0-20" pathLength="100"/><path d="M146 43h10" pathLength="100"/><path d="M146 49h10" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text></g><g class="frame"><path d="M184 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M194 24q13-2 26 0q2 15 0 30q-13 2-26 0q-2-15 0-30" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M199 31h14" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M199 37h12" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M198 42q10-1 20 0q1 5 0 10q-10 1-20 0q-1-5 0-10" stroke-dasharray="2 4" pathLength="100"/><path d="M224 44q5-3 10 1" pathLength="100"/><path d="M230 42l4 3-4 3" pathLength="100"/><path d="M236 52q-5 3-10-1" pathLength="100"/><path d="M230 48l-4 3 4 3" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text></g><g class="frame"><path d="M272 18q34-3 68 0q3 26 0 52q-34 3-68 0q-3-26 0-52" pathLength="100"/><path d="M278 24q13-2 26 0q2 11 0 22q-13 2-26 0q-2-11 0-22" pathLength="100"/><path d="M283 31h14" pathLength="100"/><path d="M283 37h11" pathLength="100"/><path d="M291 47q0 5 1 9" pathLength="100"/><path d="M291 55q-6 5-11 8" pathLength="100"/><path d="M286 60l-6 3 1-6" pathLength="100"/><path d="M292 55q7 4 13 7" pathLength="100"/><path d="M299 59l6 3-1-6" pathLength="100"/><path d="M314 28q4-1 8 0q1 19 0 38q-4 1-8 0q-1-19 0-38" pathLength="100"/><path d="M328 53q3-1 7 0q1 7 0 13q-3 1-7 0q-1-6 0-13" pathLength="100"/><path d="M310 66h28" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text></g><g opacity=".45" stroke-width="1.3"><path d="M79 44h12" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44h12" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44h12" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g></svg></div>
+      <p class="k-plain">把活交给专职子智能体：内置与自定义智能体怎么定义，Fork 靠字节级继承父上下文并行且不浪费 token</p>
+      <p class="k-ana">✦ 像复印同一份会议底稿：每人拿一份完全一样的原件各写各结论，不必重新打印</p>
+      <p class="k-foot">第 9 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>Fork 的缓存共享是字节级契约：系统提示、工具定义、消息前缀逐字一致才命中，所以 Fork 直接传递渲染好的字节。</li><li>缓存一命中，三个并行子智能体只新增各自的指令文本，token 省六成以上。</li><li>只读探索找 Explore、唱反调的验证找 Verification、同一上下文并行就用 Fork——车各配各的，路才走得快。</li></ol>
+      <p class="k-foot">第 9 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch10" aria-labelledby="ch10-h">
+  <div class="ch-head">
+    <p class="ch-no">第三部分 · 高级模式篇</p>
+    <h2 id="ch10-h">第 10 章　协调器模式 — 多智能体企业级编排</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-hub" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M28.5 24.6q4.6-1.8 8.8.6t3.2 7.6q-2.4 5.2-8.4 5.2t-8.6-4.4q-1.6-5.4 5-9" pathLength="100"/><circle class="pulse" cx="12" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="52" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="12" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="52" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2"/><path d="M25.8 25.8q-6.5-6.5-9.8-9.2" pathLength="100"/><path d="M38.2 25.8q6.5-6.5 9.8-9.2" pathLength="100"/><path d="M25.8 38.2q-6.5 6.5-9.8 9.2" pathLength="100"/><path d="M38.2 38.2q6.5 6.5 9.8 9.2" pathLength="100"/><path d="M31.5 23.5q1-5.5.6-11" opacity=".25" stroke-width="1.2" pathLength="100"/><circle cx="32" cy="32" r="2" fill="currentColor" stroke="none"/><circle cx="20.6" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="43.2" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="20.6" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="43.2" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/><path d="M27.5 29.8q4.5-2 8.2.4t2.8 6.8" opacity=".5" stroke-width="1.3" pathLength="100"/><circle cx="12" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="52" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="12" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="52" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">车一多就得有个不挥鞭的总调度：它不拉货，只分派谁走哪条道。</blockquote>
+      <p class="k-foot">第 10 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-coord-fork" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M170 12q2 30 0 58q-2 32 0 60" opacity=".5" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><circle cx="84" cy="50" r="12" pathLength="100"/><circle cx="84" cy="50" r="2" fill="currentColor" stroke="none" pathLength="100"/><path d="M74 44q-16-9-31-19" pathLength="100"/><path d="M94 44q16-9 31-19" pathLength="100"/><path d="M74 56q-16 9-31 19" pathLength="100"/><path d="M94 56q16 9 31 19" pathLength="100"/><circle cx="38" cy="22" r="6" pathLength="100"/><circle cx="130" cy="22" r="6" pathLength="100"/><circle cx="38" cy="78" r="6" pathLength="100"/><circle cx="130" cy="78" r="6" pathLength="100"/><path d="M108 44q5-1 9 0q1 5 0 9q-5 1-9 0q-1-5 0-9" pathLength="100"/><path d="M16 118q60-2 128 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M52 116q1-11 0-22" pathLength="100"/><path d="M40 94q26-2 48 0" pathLength="100"/><path d="M80 94q0 5 0 10" stroke-width="1.2" pathLength="100"/><path d="M78 104q2 3 4 0" stroke-width="1.2" pathLength="100"/><path d="M96 100q11-1 22 0q1 8 0 16q-11 1-22 0q-1-8 0-16" pathLength="100"/><path d="M102 106h5" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M111 106h5" opacity=".6" stroke-width="1.2" pathLength="100"/><circle cx="196" cy="54" r="6" pathLength="100"/><circle cx="228" cy="54" r="6" pathLength="100"/><circle cx="260" cy="54" r="6" pathLength="100"/><circle cx="292" cy="54" r="6" pathLength="100"/><path d="M196 60q-1 16 0 32" pathLength="100"/><path d="M228 60q1 16 0 32" pathLength="100"/><path d="M260 60q-1 16 0 32" pathLength="100"/><path d="M292 60q1 16 0 32" pathLength="100"/><path d="M184 92q62-3 124 0" pathLength="100"/><path d="M186 97q60-2 120 0" opacity=".5" stroke-width="1.2" pathLength="100"/><circle cx="232" cy="116" r="7" pathLength="100"/><circle cx="250" cy="116" r="7" pathLength="100"/><circle cx="234" cy="102" r="4" pathLength="100"/><circle cx="248" cy="102" r="4" pathLength="100"/><path d="M231 106q-1 3-1 4" stroke-width="1.2" pathLength="100"/><path d="M251 106q1 3 1 4" stroke-width="1.2" pathLength="100"/><path d="M238 108q2-1 4 0q1 3 0 6q-2 1-4 0q-1-3 0-6" stroke-width="1.2" pathLength="100"/><path d="M188 128q60-2 120 0" opacity=".5" stroke-width="1.2" pathLength="100"/></svg></div>
+      <p class="k-plain">一个脑子忙不过来时：协调者只派活不干活，发消息、共用草稿区，还兜住worker失败和半成品</p>
+      <p class="k-ana">✦ 像酒席总厨：自己从不颠勺，各灶领单，一张备料单大家看，谁倒下了马上补位</p>
+      <p class="k-foot">第 10 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>协调者手里没有一把执行工具，只有四个编排工具；"理解"不许委派，实施规格必须由它消化所有发现后亲笔写下。</li><li>转发理解会弄丢上下文，协调者吃透发现、写出带文件路径和行号的规格，实施工作者拿到的才是统一、精确的指令。</li><li>多步骤要协调的活找 Coordinator，独立的并行搜索找 Fork——调度只分派不拉货，两辆车不同时上路。</li></ol>
+      <p class="k-foot">第 10 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch11" aria-labelledby="ch11-h">
+  <div class="ch-head">
+    <p class="ch-no">第三部分 · 高级模式篇</p>
+    <h2 id="ch11-h">第 11 章　技能系统与插件架构</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-plug" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.3 8.2q13.4-.6 26.6 0l9 9.2q-.4 19 .2 38.6H7.4z" pathLength="100"/><path d="M34 8.1q-.4 5.6.2 11l8.6.3" opacity=".5" pathLength="100"/><path d="M14 28q9-.8 19-.2" opacity=".55" pathLength="100"/><path d="M14 36q7.5-.8 15-.2" opacity=".55" pathLength="100"/><path d="M14 44q5.5-.8 11-.2" opacity=".55" pathLength="100"/><path d="M43.2 25.4h7.4q.3 11.5.2 22.5H43.4" pathLength="100"/><path d="M51.4 31.2q3-.2 5.6.2" pathLength="100"/><path d="M51.4 42.2q3-.2 5.6.2" pathLength="100"/><circle class="blink b1" cx="59.5" cy="31.4" r="1.7" fill="currentColor" stroke="none"/><circle class="blink b2" cx="59.5" cy="42.4" r="1.7" fill="currentColor" stroke="none"/><path d="M45 43l3.5-3M47.5 44l3.5-3" opacity=".3" stroke-width="1.2" pathLength="100"/><circle cx="59.5" cy="31.4" r="3.2" stroke-width="1.3" pathLength="100"/><circle cx="59.5" cy="42.4" r="3.2" stroke-width="1.3" pathLength="100"/><path d="M46.5 46l3.5-3" opacity=".3" stroke-width="1.2" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">技能像马本就有的规矩，随叫随到；插件是租来的鞍具，上马前先摸刃口。</blockquote>
+      <p class="k-foot">第 11 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-skill-stairs" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M60 100q22-2 44 0q1-7 0-14q22-2 44 0q1-7 0-14q22-2 44 0q1-7 0-14q22-2 44 0q1-7 0-14q22-2 44 0" pathLength="100"/><path d="M60 100q-1 7 0 14" pathLength="100"/><path d="M280 44q2 35 0 70" pathLength="100"/><path d="M46 114q124-3 248 0" pathLength="100"/><path d="M50 119q120-2 240 0" opacity=".5" stroke-width="1.2" pathLength="100"/><g opacity=".85"><path d="M284 16q-110 26-226 68" pathLength="100"/><path d="M62 79l-4 5 6 1" pathLength="100"/></g><g opacity=".92"><path d="M72 89q0-3 3-3h4l2 3h8q3 0 3 3v6q0 3-3 3h-14q-3 0-3-3z" pathLength="100"/><path d="M72 92q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M116 75q0-3 3-3h4l2 3h8q3 0 3 3v6q0 3-3 3h-14q-3 0-3-3z" pathLength="100"/><path d="M116 78q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 61q0-3 3-3h4l2 3h8q3 0 3 3v6q0 3-3 3h-14q-3 0-3-3z" pathLength="100"/><path d="M160 64q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M204 47q0-3 3-3h4l2 3h8q3 0 3 3v6q0 3-3 3h-14q-3 0-3-3z" pathLength="100"/><path d="M204 50q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M248 33q0-3 3-3h4l2 3h8q3 0 3 3v6q0 3-3 3h-14q-3 0-3-3z" pathLength="100"/><path d="M248 36q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/></g><g><path d="M290 35q0-5 5-5h8q5 0 5 5t-5 5h-8q-5 0-5-5z" pathLength="100"/><circle cx="295" cy="35" r="2.2" fill="currentColor" stroke="none" pathLength="100"/><path d="M289 29l20 13" pathLength="100"/><path d="M309 29l-20 13" pathLength="100"/></g><path d="M288 39q-10 2-18 3" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/></svg></div>
+      <p class="k-plain">把反复要交代的话写成 Markdown 技能：五个来源分层覆盖、按路径动态发现，插件再整包带进来</p>
+      <p class="k-ana">✦ 像墙上的菜谱卡：总部、本店、自家各一叠，同名听级别高的，要用时念名字抽一张</p>
+      <p class="k-foot">第 11 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>技能是加载即执行的 prompt：来源决定加载器允许的转换，却不替技能内容作信誉背书，所以分层的安全措施一道都不能省。</li><li>gitignore 过滤与 `O_NOFOLLOW` 拦的是 node_modules 里悄悄塞进来的技能——漏一道，别人就能借你的马跑自己的路。</li><li>技能要小而专注，一个技能做一件事；组合成工作流，别造万能技能。</li></ol>
+      <p class="k-foot">第 11 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch12" aria-labelledby="ch12-h">
+  <div class="ch-head">
+    <p class="ch-no">第三部分 · 高级模式篇</p>
+    <h2 id="ch12-h">第 12 章　MCP 集成与外部协议</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-wire" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 32.3q28-1.4 56-.2" opacity=".4" pathLength="100"/><path d="M18 44.2q-.6-16 .2-32" pathLength="100"/><path d="M46 44.2q.6-16-.2-32" pathLength="100"/><path class="sway" d="M18 14.3q14 12.6 28 .2" pathLength="100"/><path d="M18 16.8q14 11.6 28-.2" opacity=".25" stroke-width="1.3" pathLength="100"/><path d="M17.8 14.5Q11 21 5.6 31.5" opacity=".45" pathLength="100"/><path d="M46.2 14.5Q53 21 58.4 31.5" opacity=".45" pathLength="100"/><circle cx="18" cy="11.6" r="1.4" fill="currentColor" stroke="none"/><circle cx="46" cy="11.6" r="1.4" fill="currentColor" stroke="none"/><path d="M8 52.2q5.4-.6 10.8-.2" opacity=".3" pathLength="100"/><path d="M27 52.4q5.4-.6 10.8-.2" opacity=".3" pathLength="100"/><path d="M45.5 52.2q5.4-.6 10.8-.2" opacity=".3" pathLength="100"/><circle cx="25" cy="18.1" r="1.2" fill="currentColor" stroke="none" opacity=".75"/><circle cx="39" cy="18.4" r="1.2" fill="currentColor" stroke="none" opacity=".75"/><path d="M13.5 51.4l2.2-1.6" opacity=".3" stroke-width="1.2" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">出了本驿地界就要讲通商之语：MCP 服务器是外市的秤，资源是秤上的货。</blockquote>
+      <p class="k-foot">第 12 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-mcp-dial" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="170" cy="70" r="31" opacity=".25" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><g opacity=".9"><path d="M179 27q19 5 29 21" pathLength="100"/><path d="M203 45l5 3 0-6" pathLength="100"/><path d="M214 65q1 20-11 34" pathLength="100"/><path d="M204 94l-1 5 5-2" pathLength="100"/><path d="M188 110q-18 7-36 0" pathLength="100"/><path d="M157 109l-5 1 3 5" pathLength="100"/><path d="M137 99q-9-10-11-23" pathLength="100"/><path d="M129 80l-3-4-2 5" pathLength="100"/><path d="M131 49q10-18 30-22" pathLength="100"/><path d="M157 30l4-3-5-1" pathLength="100"/></g><g><circle cx="170" cy="26" r="7" pathLength="100"/><circle cx="170" cy="26" r="3.5" fill="currentColor" stroke="none" pathLength="100"/></g><g><circle cx="209" cy="56" r="4.5" pathLength="100"/><circle cx="216" cy="56" r="4.5" pathLength="100"/><path d="M212 50l-2 4 3 3-2 4" pathLength="100"/></g><g><circle cx="196" cy="102" r="3.2" pathLength="100"/><path d="M194 104l-2 8h8l-2-8" pathLength="100"/></g><g><path d="M137 102h8l-4 6 4 6h-8l4-6z" pathLength="100"/><path d="M136 119h4" pathLength="100"/><path d="M143 121h5" pathLength="100"/><path d="M152 123h6" pathLength="100"/></g><g><path d="M116 47v13" pathLength="100"/><path d="M126 46v13" pathLength="100"/><path d="M116 47l10-6" pathLength="100"/></g><circle cx="170" cy="70" r="1.6" fill="currentColor" stroke="none" pathLength="100"/><g opacity=".55" stroke-width="1.2" stroke-dasharray="2 4"><path d="M170 15q7-2 10-9" pathLength="100"/><path d="M178 11l2-5-6 1" pathLength="100"/></g></svg></div>
+      <p class="k-plain">接外部工具不再一家一个适配：连接配置怎么分八类、工具改名映射、逐层审批，外加 IDE 双向桥</p>
+      <p class="k-ana">✦ 像小区快递驿站：任何商家只送一次就能被取，货架按楼栋分格贴名，取件先验码</p>
+      <p class="k-foot">第 12 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>MCP 是 AI 世界的"USB-C 接口"：协议即契约、传输无关、安全边界内嵌，把碎片化的工具集成变成标准组合。</li><li>四层权限模型按"默认不信任"层层设防——攻击者绕过一层，其余各层仍在保护；`mcp__{server}__{tool}` 命名让权限检查有了独立命名空间。</li><li>MCP 不是独立子系统，而是工具生态的自然延伸：注册调度走工具系统、四阶段检查走权限管线、生命周期拦截走钩子系统。</li></ol>
+      <p class="k-foot">第 12 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch13" aria-labelledby="ch13-h">
+  <div class="ch-head">
+    <p class="ch-no">第四部分 · 工程实践篇</p>
+    <h2 id="ch13-h">第 13 章　流式架构与性能优化</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-funnel" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="13" r="1.6" fill="currentColor" stroke="none"/><circle cx="7" cy="32" r="1.6" fill="currentColor" stroke="none"/><circle cx="7" cy="51" r="1.6" fill="currentColor" stroke="none"/><path d="M9 13.3q6-.4 12-.2 3.2.4 5 3.4" pathLength="100"/><path d="M9 32.3q8.5-.6 17-.2" pathLength="100"/><path d="M9 51.3q6-.4 12-.2 3.2-.4 5-3.4" pathLength="100"/><path d="M26 16.6q7.2 6.8 13.2 13.8" pathLength="100"/><path d="M26 47.4q7.2-6.8 13.2-13.8" pathLength="100"/><path d="M39.4 30.2q3.8-.2 7.4-.2" pathLength="100"/><path d="M39.4 33.8q3.8.2 7.4.2" pathLength="100"/><path d="M46.8 22.4h11.3q.3 10.7.1 21.4H46.9z" pathLength="100"/><path d="M49.5 34.2q4.8-.5 9.4-.2" opacity=".5" stroke-width="1.7" pathLength="100"/><circle class="drip" cx="43.2" cy="32" r="1.2" fill="currentColor" stroke="none" opacity=".55"/><path d="M58.7 26.4l3.6 3.6-3.6 3.6" pathLength="100"/><path d="M58.7 36.6l3.6 3.6-3.6 3.6" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">信写一封发一封，不等整队上车——流式让第一个字先上路，认脸的缓存让账单变轻。</blockquote>
+      <p class="k-foot">第 13 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-conc-gate" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M167 13q-8-5-15-8" pathLength="100"/><path d="M156 4l-4 1 3 3" pathLength="100"/><path d="M170 13q0-4 0-9" pathLength="100"/><path d="M167 6l3-3 3 3" pathLength="100"/><path d="M173 13q8-5 15-8" pathLength="100"/><path d="M184 4l4 1-3 3" pathLength="100"/><circle cx="170" cy="20" r="6" pathLength="100"/><path d="M164 20h12" pathLength="100"/><path d="M170 14q0 6 0 12" pathLength="100"/><path d="M170 26q0 3 0 5" pathLength="100"/><path d="M158 31q-1 39 0 76" pathLength="100"/><path d="M182 31q1 39 0 76" pathLength="100"/><path d="M160 48q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 68q10 1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 88q10-1 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M28 60q10-1 20 0q1 12 0 24q-10 1-20 0q-1-12 0-24" pathLength="100"/><path d="M33 67h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M33 74h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M38 54q0-8 0-16" pathLength="100"/><path d="M35 41l3-3 3 3" pathLength="100"/><path d="M58 60q10-1 20 0q1 12 0 24q-10 1-20 0q-1-12 0-24" pathLength="100"/><path d="M63 67h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M63 74h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M68 54q0-8 0-16" pathLength="100"/><path d="M65 41l3-3 3 3" pathLength="100"/><path d="M88 60q10-1 20 0q1 12 0 24q-10 1-20 0q-1-12 0-24" pathLength="100"/><path d="M93 67h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M93 74h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M98 54q0-8 0-16" pathLength="100"/><path d="M95 41l3-3 3 3" pathLength="100"/><path d="M118 60q10-1 20 0q1 12 0 24q-10 1-20 0q-1-12 0-24" pathLength="100"/><path d="M123 67h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M123 74h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M128 54q0-8 0-16" pathLength="100"/><path d="M125 41l3-3 3 3" pathLength="100"/><path d="M20 94q58-2 126 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M250 8q0 4 0 8" pathLength="100"/><path d="M247 13l3 3 3-3" pathLength="100"/><path d="M240 22q10-1 20 0q1 8 0 16q-10 1-20 0q-1-8 0-16" pathLength="100"/><path d="M244 27h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 32h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 42q10-1 20 0q1 8 0 16q-10 1-20 0q-1-8 0-16" pathLength="100"/><path d="M244 47h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 52h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 62q10-1 20 0q1 8 0 16q-10 1-20 0q-1-8 0-16" pathLength="100"/><path d="M244 67h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 72h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 82q10-1 20 0q1 8 0 16q-10 1-20 0q-1-8 0-16" pathLength="100"/><path d="M244 87h12" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 92h9" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M247 105q0-6 6-6q6 0 6 6" pathLength="100"/><path d="M245 105q7-1 14 0q1 6 0 12q-7 1-14 0q-1-6 0-12" pathLength="100"/><circle cx="252" cy="110" r="1.5" fill="currentColor" stroke="none" pathLength="100"/></svg></div>
+      <p class="k-plain">别干等：token 还在流就开工，工具该并行的并行、启动活儿同时跑，成本和缓存一路盯（数字多为示意）</p>
+      <p class="k-ana">✦ 像跑堂接菜：厨房喊一道先端一道，上桌仍按点单顺序；一道洒了，同批的先停</p>
+      <p class="k-foot">第 13 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>流式不是优化，而是架构选择。</li><li>它决定了从 QueryEngine 到工具执行，每个组件都按增量、可中断、可组合来设计，性能与成本都由此派生。</li><li>带走这句：缓存求字节级一致，优化先量瓶颈——工具输出的 token 往往比模型输出更值钱。</li></ol>
+      <p class="k-foot">第 13 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch14" aria-labelledby="ch14-h">
+  <div class="ch-head">
+    <p class="ch-no">第四部分 · 工程实践篇</p>
+    <h2 id="ch14-h">第 14 章　Plan 模式与结构化工作流</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-flag" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 51.2c12 .2 10.2-21.8 22-24.8 8.2-2 12-8 13.8-14.8" stroke-dasharray="4 5.2"/><circle cx="11" cy="51" r="3.2" fill="currentColor" stroke="none"/><circle cx="11" cy="51" r="5.8" opacity=".4" stroke-width="1.3" pathLength="100"/><path d="M47 11.4q-.4 8.5.2 16.8" pathLength="100"/><path class="wave" d="M47.2 12.2q5.5-.4 10.8-.2l-3.3 4.4 3.3 4.3q-5.4.2-10.6.2" pathLength="100"/><path d="M8 55l4-1.6" opacity=".3" stroke-width="1.3" pathLength="100"/><circle cx="44" cy="7.5" r="1.1" fill="currentColor" stroke="none" opacity=".5"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">动身前先在纸上走一遍路：Plan 模式把"想"和"做"分两段，改图纸总比拆墙便宜。</blockquote>
+      <p class="k-foot">第 14 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-plan-gate" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 118q70-3 138 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M192 118q66-2 134 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M152 14q-1 52 0 104" pathLength="100"/><path d="M188 14q1 52 0 104" pathLength="100"/><path d="M156 24h12" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M172 24h12" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 36h16" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M154 48h10" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M178 48h8" opacity=".55" stroke-width="1.2" pathLength="100"/><circle cx="170" cy="52" r="3.5" pathLength="100"/><path d="M162 118q0-28 0-56" pathLength="100"/><path d="M178 118q0-28 0-56" pathLength="100"/><path d="M162 62q8-2 16 0" pathLength="100"/><path d="M164 116q0-25 1-50q6 2 11 6q0 22-1 44q-5 1-11 0" pathLength="100"/><circle cx="173" cy="92" r="1.3" fill="currentColor" stroke="none" pathLength="100"/><circle cx="56" cy="44" r="9" pathLength="100"/><path d="M63 51q5 5 9 9" pathLength="100"/><path d="M24 68q8-1 16 0q1 10 0 20q-8 1-16 0q-1-10 0-20" pathLength="100"/><path d="M34 68q3 3 6 6" stroke-width="1.2" pathLength="100"/><path d="M27 76l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M52 88q8-1 16 0q1 10 0 20q-8 1-16 0q-1-10 0-20" pathLength="100"/><path d="M62 88q3 3 6 6" stroke-width="1.2" pathLength="100"/><path d="M55 96l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M84 64q8-1 16 0q1 10 0 20q-8 1-16 0q-1-10 0-20" pathLength="100"/><path d="M94 64q3 3 6 6" stroke-width="1.2" pathLength="100"/><path d="M87 72l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M112 88q8-1 16 0q1 10 0 20q-8 1-16 0q-1-10 0-20" pathLength="100"/><path d="M122 88q3 3 6 6" stroke-width="1.2" pathLength="100"/><path d="M115 96l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M226 34q13-1 26 0q1 16 0 32q-13 1-26 0q-1-16 0-32" pathLength="100"/><path d="M231 42h16" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M231 50h16" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M231 58h11" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M272 96q7-9 13-15" pathLength="100"/><path d="M281 78q7-2 12 2q1 4-1 6q-7 1-12-2q-1-4 0-6" pathLength="100"/><path d="M222 100q38-1 76 0q1 4 0 8q-38 1-76 0q-1-4 0-8" pathLength="100"/><path d="M252 101q0 3 0 6" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M268 101q0 3 0 6" opacity=".6" stroke-width="1.2" pathLength="100"/><circle cx="260" cy="104" r="2.5" pathLength="100"/></svg></div>
+      <p class="k-plain">先只读想清楚、批准了再动手改：计划能校验能续存，还能接上定时触发和后台长跑</p>
+      <p class="k-ana">✦ 像搬家：先列清单估价，老板签字才叫车；清单收进抽屉，下次接着用</p>
+      <p class="k-foot">第 14 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>Plan 模式把只读探索和可写执行分开，方向性错误的代价几乎为零。</li><li>先对齐意图再动手，返工只发生在图纸上；计划文件的三层恢复还能兜住中断。</li><li>复杂任务走 Plan-Execute-Verify：无计划，不动工。</li></ol>
+      <p class="k-foot">第 14 章</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch15" aria-labelledby="ch15-h">
+  <div class="ch-head">
+    <p class="ch-no">第四部分 · 工程实践篇</p>
+    <h2 id="ch15-h">第 15 章　构建你自己的 Agent Harness</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 52Q26 32 30 16.3" pathLength="100"/><path d="M38 52Q34.5 32 30.5 16.3" pathLength="100"/><path d="M18 30.3q12-.5 24-.2" pathLength="100"/><path d="M30 23.4q7.5-1 8.2 6.6T30.4 37q-7.3-.8-7.8-7T30 23.4" pathLength="100"/><path d="M27 27.5q3-1.5 6-.2M27 33q3 1.4 6 .2" opacity=".45" stroke-width="1.4" pathLength="100"/><path d="M30 37.3q.3 7-.2 13.8" stroke-width="1.7" pathLength="100"/><path d="M26 51.5q4-1.5 8 0l-.8 6.5q-3.2 1.2-6.4 0z" stroke-width="1.8" pathLength="100"/><path d="M38.2 30.4l5.8 2.4-1 5" opacity=".85" stroke-width="1.9" pathLength="100"/><path d="M44 32.8l3.5-2" opacity=".8" stroke-width="1.9" pathLength="100"/><path d="M14 58.3q18-.8 36-.2" opacity=".35" pathLength="100"/></svg></div>
+      <p class="k-kicker">章钩子</p>
+      <blockquote class="k-quote">自家线束头一遭上路必是冷启动——前 14 章拆下的零件，这一章装成能跑的车。</blockquote>
+      <p class="k-foot">第 15 章</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">核心机制</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-harness-wheel" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10q156-5 316 0" opacity=".45" stroke-width="1.2" stroke-dasharray="2 7" pathLength="100"/><g opacity=".8" stroke-width="1.3" stroke-dasharray="2 4"><path d="M107 22q63-14 127 0" pathLength="100"/><path d="M246 42q6 20-12 30q-14 8-40 1" pathLength="100"/></g><path d="M228 18l6 4-6 4" opacity=".8" stroke-width="1.3" pathLength="100"/><path d="M201 69l-7 4 4 6" opacity=".8" stroke-width="1.3" pathLength="100"/><g opacity=".75" stroke-width="1.4"><path d="M151 59q-22-10-45-25" pathLength="100"/><path d="M189 59q22-11 45-25" pathLength="100"/><path d="M152 82q-17 11-33 23" pathLength="100"/><path d="M188 82q17 11 33 23" pathLength="100"/></g><circle cx="170" cy="70" r="22" pathLength="100"/><path d="M159 64q-3 12 7 16q11 4 19-3q7-8 2-17" pathLength="100"/><path d="M153 60l6 5-1-8" pathLength="100"/><circle cx="170" cy="70" r="2" fill="currentColor" stroke="none"/><path d="M192 70h13" pathLength="100"/><path d="M205 70l4-6 5 12 5-12 5 12 4-6" pathLength="100"/><path d="M228 70h27" pathLength="100"/><circle cx="95" cy="28" r="13" pathLength="100"/><path d="M89 20q-4 5-1 9q2 3 6 1" pathLength="100"/><path d="M94 30q4 4 7 7" pathLength="100"/><circle cx="245" cy="28" r="13" pathLength="100"/><path d="M245 19q4 2 9 1q0 8-4 12q-2 2-5 3q-3-1-5-3q-4-4-4-12q5 1 9-1" pathLength="100"/><path d="M242 26l2 3 4-5" pathLength="100"/><circle cx="268" cy="70" r="13" pathLength="100"/><path d="M268 62q5 2 9 4q-4 3-9 4q-5-1-9-4q4-2 9-4" pathLength="100"/><path d="M259 71q4 3 9 4q5-1 9-4" pathLength="100"/><path d="M259 77q4 3 9 4q5-1 9-4" pathLength="100"/><circle cx="108" cy="112" r="13" pathLength="100"/><path d="M99 106q9-1 18 0q1 6 0 12q-9 1-18 0q-1-6 0-12" pathLength="100"/><path d="M104 112q4 1 8 0" pathLength="100"/><circle cx="232" cy="112" r="13" pathLength="100"/><path d="M232 104q0 8 0 11q1 5 6 4q4-1 4-5q0-3-3-4" pathLength="100"/><path d="M24 128q8-4 14 2" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M302 126q10-2 14 6" opacity=".5" stroke-width="1.2" pathLength="100"/><circle cx="26" cy="120" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="314" cy="118" r="1.6" fill="currentColor" stroke="none" opacity=".6"/></svg></div>
+      <p class="k-plain">全书收口成一张施工图：按六步搭出最小可跑 Harness（代码是教学示例），再谈架构教训与生产化</p>
+      <p class="k-ana">✦ 像照邻居厨房自己搭灶：六样大致按顺序来，中间反复回去改，最后能自己开火</p>
+      <p class="k-foot">第 15 章</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">三句带走</p>
+      <ol class="k-list"><li>每个决策点上，Claude Code 都选了更安全、更可控、更可观测的方案。</li><li>循环状态、fail-closed 默认值、依赖注入、断路器、特性开关，都是这条哲学的落点。</li><li>照六步路线图装你的车：先把安全守住，再尽情释放智能体的潜力。</li></ol>
+      <p class="k-foot">第 15 章</p>
+    </article>
+  </div>
+</section>
+</main>
+<footer>回到 <a href="portal.html">站点导航</a> · <a href="beginner-reader.html">入门分册</a> · <a href="illustration-gallery.html">插画画廊</a> · 对应大书 v0.3.6</footer>
+</body>
+</html>

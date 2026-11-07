@@ -8,6 +8,7 @@ import re
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -91,6 +92,84 @@ class EditionBaseline(unittest.TestCase):
             self.assertIsNotNone(m, f"{path}: no book edition quoted in the footer")
             self.assertEqual(m.group(1), want,
                              f"{path}: says v{m.group(1)}, the book is v{want}")
+
+
+class ModelOnly(unittest.TestCase):
+    def test_the_readers_never_read_the_rendered_book(self):
+        """The reader is a product of the BookModel, not of dist HTML. A read
+        under yuyu-book/dist means the old reverse extraction crept back."""
+        original = Path.read_text
+        seen: list[Path] = []
+
+        def audited(path, *args, **kwargs):
+            seen.append(path)
+            if "dist" in path.parts:
+                raise AssertionError(f"reader read rendered book: {path}")
+            return original(path, *args, **kwargs)
+
+        with mock.patch.object(Path, "read_text", audited):
+            pages = {lang: reader.page_for(lang)[0] for lang in EDITIONS}
+
+        self.assertTrue(seen, "the audit saw no reads at all")
+        for lang, (path, _og, _label) in EDITIONS.items():
+            committed = (ROOT / path).read_text(encoding="utf-8")
+            self.assertEqual(pages[lang], committed,
+                             f"{path}: the committed page is not what the "
+                             "model generates")
+
+
+class StationNavigation(unittest.TestCase):
+    """The prev/next rows are part of the page, not a script's afterthought.
+
+    They used to be stamped by a script that did not parse, so nobody could
+    step between stations — and with scripting off there was no station-to-
+    station navigation at all. These tests pin the static links.
+    """
+
+    ARTICLES = re.compile(r"<article\b[^>]*>")
+    NAVS = re.compile(r'<p class="st-navrow">(.*?)</p>', re.S)
+    ID = re.compile(r'\bid="([^"]+)"')
+    HREF = re.compile(r'href="#([^"]+)"')
+
+    def test_every_station_carries_prev_and_next_links(self):
+        for lang, (path, _og, _label) in EDITIONS.items():
+            page = (ROOT / path).read_text(encoding="utf-8")
+            ids = []
+            for opening in self.ARTICLES.findall(page):
+                match = self.ID.search(opening)
+                ids.append(match.group(1) if match else None)
+            navs = self.NAVS.findall(page)
+            self.assertEqual(len(navs), len(ids), path)
+            self.assertNotIn(None, ids, f"{path}: a station has no id")
+            self.assertEqual(len(ids), len(set(ids)), f"{path}: duplicate ids")
+            for index, nav in enumerate(navs):
+                want = {ids[other] for other in (index - 1, index + 1)
+                        if 0 <= other < len(ids)}
+                self.assertEqual(set(self.HREF.findall(nav)), want,
+                                 f"{path}: station {index + 1}")
+
+    def test_the_rows_are_not_written_by_a_script(self):
+        for lang, (path, _og, _label) in EDITIONS.items():
+            page = (ROOT / path).read_text(encoding="utf-8")
+            self.assertNotIn("nav.innerHTML", page, path)
+            self.assertNotIn('createElement("p")', page, path)
+            self.assertIn('class="st-navrow"', page, path)
+
+    def test_both_editions_style_the_nav_rows_and_progress_bar(self):
+        # the English sheet once shipped the markup without these rules: the
+        # counter collided with the link and the link fell back to UA blue.
+        for lang, (path, _og, _label) in EDITIONS.items():
+            page = (ROOT / path).read_text(encoding="utf-8")
+            self.assertIn(".st-navrow{display:flex;justify-content:space-between",
+                          page, path)
+            self.assertIn(".prog{position:fixed;top:0;left:0;height:3px",
+                          page, path)
+
+    def test_the_english_resume_banner_speaks_english(self):
+        page = (ROOT / EDITIONS["en"][0]).read_text(encoding="utf-8")
+        banner = page[page.index('class="resume"'):]
+        banner = banner[:banner.index("</div>")]
+        self.assertNotRegex(banner, r"[\u4e00-\u9fff]")
 
 
 if __name__ == "__main__":
