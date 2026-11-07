@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t">
+  <title id="t">第三方集成：MCP 的三种传输方式 STDIO 本地进程、HTTP 远程服务、SSE 服务器推送，以及密钥泄露与版本漂移两个必炸点</title>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="#fbfaf6"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <!-- 标题区 -->
+    <text x="72" y="80" fill="#1f2328" font-size="34" font-weight="700">第三方集成：三种传输方式</text>
+    <text x="72" y="120" fill="#57606a" font-size="22">谁主动出手、要不要出门、钥匙放在哪</text>
+    <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+    <text x="1128" y="120" fill="#57606a" font-size="21" text-anchor="end">三种都写进同一份 .claude/mcp.json</text>
+
+    <!-- 三张卡片 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round">
+      <rect x="72" y="176" width="336" height="340" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="432" y="176" width="336" height="340" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="792" y="176" width="336" height="340" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+
+    <!-- 卡片抬头 -->
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="92" y="214">STDIO · 本地进程</text>
+      <text x="452" y="214">HTTP · 远程服务</text>
+      <text x="812" y="214">SSE · 服务器推送</text>
+    </g>
+    <g fill="#008635" font-size="20" font-weight="700">
+      <text x="92" y="246">我请它进屋</text>
+      <text x="452" y="246">我带钥匙上门</text>
+      <text x="812" y="246">它往回推给我</text>
+    </g>
+
+    <!-- 卡 1：一个容器里，Claude 与 npx 进程用插脚相连 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="none">
+      <rect x="104" y="262" width="272" height="96" rx="14" fill="#f1f7f2"/>
+      <rect x="118" y="288" width="116" height="44" rx="8" fill="#fffdf8"/>
+      <rect x="250" y="288" width="110" height="44" rx="8" fill="#fffdf8"/>
+      <path d="M234 300h16M234 320h16" stroke-linecap="round"/>
+    </g>
+    <g fill="#1f2328" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="15" text-anchor="middle">
+      <text x="176" y="315">Claude Code</text>
+      <text x="305" y="315" font-family="'Microsoft YaHei', system-ui, sans-serif">npx 进程</text>
+    </g>
+
+    <!-- 卡 2：我 → 钥匙 → 云 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="none">
+      <rect x="456" y="288" width="120" height="44" rx="8" fill="#fffdf8"/>
+      <path d="M580 318h56" stroke-linecap="round"/>
+      <circle cx="592" cy="292" r="9"/>
+      <path d="M601 292h16M611 292v7M617 292v7" stroke-width="3" stroke-linecap="round"/>
+      <path d="M656 320a16 16 0 0 1-3-31a22 22 0 0 1 42-12a18 18 0 0 1 30 15a14 14 0 0 1-6 28z"/>
+    </g>
+    <path d="M636 310l16 8-16 8z" fill="#1f2328"/>
+    <text x="600" y="272" fill="#008635" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="15" text-anchor="middle">token</text>
+    <text x="690" y="350" fill="#57606a" font-size="17" text-anchor="middle">远程服务器</text>
+
+    <!-- 卡 3：远程服务把消息推回来 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="none">
+      <rect x="816" y="288" width="120" height="44" rx="8" fill="#fffdf8"/>
+      <path d="M1030 320a16 16 0 0 1-3-31a22 22 0 0 1 42-12a18 18 0 0 1 30 15a14 14 0 0 1-6 28z"/>
+      <path d="M1022 312h-46" stroke-linecap="round" stroke-dasharray="9 7"/>
+    </g>
+    <path d="M976 304l-16 8 16 8z" fill="#1f2328"/>
+    <text x="992" y="290" fill="#57606a" font-size="17" text-anchor="middle">长连接</text>
+    <text x="1063" y="350" fill="#57606a" font-size="17" text-anchor="middle">远程服务器</text>
+
+    <g fill="#1f2328" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="15" text-anchor="middle">
+      <text x="516" y="315">Claude Code</text>
+      <text x="876" y="315">Claude Code</text>
+    </g>
+
+    <!-- 三张卡的说明行 -->
+    <g font-size="18" fill="#57606a">
+      <text x="240" y="378" text-anchor="middle">工具装在你自己的机器里</text>
+      <text x="600" y="378" text-anchor="middle">每问一次，等它回一次</text>
+      <text x="960" y="378" text-anchor="middle">消息它自己送上门</text>
+    </g>
+    <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="19" fill="#1f2328">
+      <text x="92" y="406">"command": "npx"</text>
+      <text x="92" y="432">"args": ["-y", …]</text>
+      <text x="452" y="406">"url": "https://…/mcp"</text>
+      <text x="452" y="432">"transport": "http"</text>
+      <text x="812" y="406">"url": "https://…/sse"</text>
+      <text x="812" y="432">"transport": "sse"</text>
+    </g>
+    <g font-size="19" fill="#57606a">
+      <text x="92" y="462">例：sqlite · filesystem</text>
+      <text x="452" y="462">例：GitHub · Notion</text>
+      <text x="812" y="462">例：streaming 服务器</text>
+    </g>
+    <g font-size="19" fill="#c74c00">
+      <text x="92" y="492">坑：路径写错、进程崩溃</text>
+      <text x="452" y="492">坑：token 失效 · 少 /v1</text>
+      <text x="812" y="492">坑：断了先跑 /doctor</text>
+    </g>
+
+    <!-- 必炸的两处 -->
+    <rect x="72" y="540" width="1056" height="146" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <path d="M600 556v114" stroke="#e6e1d4" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 8"/>
+
+    <g font-size="21" font-weight="700" fill="#1f2328">
+      <text x="100" y="578">会炸点 1：密钥泄露</text>
+      <text x="628" y="578">会炸点 2：版本漂移</text>
+    </g>
+    <g font-size="19" fill="#57606a">
+      <text x="100" y="608">配置文件被提交进 Git，密钥跟着泄露</text>
+      <text x="628" y="608">npx -y 默认永远拉最新版</text>
+    </g>
+
+    <g stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M100 632l14 14M114 632l-14 14" stroke="#c74c00"/>
+      <path d="M100 668l9 9 17-19" stroke="#008635"/>
+      <path d="M628 632l14 14M642 632l-14 14" stroke="#c74c00"/>
+      <path d="M628 668l9 9 17-19" stroke="#008635"/>
+    </g>
+    <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="19">
+      <text x="130" y="648" fill="#c74c00">"GITHUB_TOKEN": "ghp_abc123"</text>
+      <text x="130" y="678" fill="#008635">"GITHUB_TOKEN": "$GITHUB_TOKEN"</text>
+    </g>
+    <g font-size="19">
+      <text x="658" y="648" fill="#c74c00">新版本不兼容 · 服务器被下架</text>
+      <text x="658" y="678" fill="#008635" font-family="ui-monospace, 'JetBrains Mono', monospace">…/server-github@1.2.3</text>
+      <text x="912" y="678" fill="#57606a">固定版本</text>
+    </g>
+
+    <!-- 结论 -->
+    <rect x="72" y="706" width="1056" height="62" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="600" y="745" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">先问谁主动、要不要出门，再问密钥写在哪、版本锁没锁</text>
+  </g>
+</svg>

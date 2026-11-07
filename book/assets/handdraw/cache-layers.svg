@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="762" viewBox="0 0 1200 762" role="img" aria-labelledby="t">
+  <title id="t">缓存的层次与策略：L1 本地缓存（约 0.1 毫秒，命中 70%，TTL 30 秒）→ L2 Redis（约 1 毫秒，命中 25%，TTL 30 分钟）→ L3 MySQL 数据库（约 10 毫秒，只剩 5%）；未命中才往下走，查到后往回填；写数据时先更新数据库，再删除缓存</title>
+  <rect width="1200" height="762" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">缓存的三层阶梯</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">未命中才往下走：L1 本地缓存 → L2 Redis → L3 数据库</text>
+  <text x="1128" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">本质：用空间换时间，用副本保护主数据</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="172" y="186" width="528" height="100" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="122" y="338" width="628" height="100" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="72" y="490" width="728" height="100" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="840" y="186" width="288" height="284" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+
+    <g fill="#1f883d">
+      <circle cx="206" cy="222" r="18"/><circle cx="156" cy="374" r="18"/><circle cx="106" cy="526" r="18"/>
+    </g>
+    <g fill="#fbfaf6" font-size="19" font-weight="700" text-anchor="middle">
+      <text x="206" y="229">L1</text><text x="156" y="381">L2</text><text x="106" y="533">L3</text>
+    </g>
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="236" y="214">本地缓存（Caffeine）</text>
+      <text x="186" y="366">Redis 分布式缓存</text>
+      <text x="136" y="518">MySQL 数据库（全量数据）</text>
+    </g>
+    <g fill="#57606a" font-size="20">
+      <text x="236" y="243">~0.1 毫秒 · 命中率 70%（超级热点）</text>
+      <text x="186" y="395">~1 毫秒 · 命中率 25%（一般热点）</text>
+      <text x="136" y="547">~10 毫秒 · 只剩 5%（冷数据）</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="236" y="271">TTL 30 秒 · 像书桌上的便利贴</text>
+      <text x="186" y="423">TTL 30 分钟 · 像公共储物柜</text>
+      <text x="136" y="575">数据的最终来源 · 像图书馆</text>
+    </g>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M250 286v39"/><path d="M250 438v39"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M250 338l-7-13h14z"/><path d="M250 490l-7-13h14z"/>
+    </g>
+    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M600 338v-39"/><path d="M600 490v-39"/>
+    </g>
+    <g fill="#1f883d">
+      <path d="M600 286l-7 13h14z"/><path d="M600 438l-7 13h14z"/>
+    </g>
+    <g fill="#57606a" font-size="20">
+      <text x="270" y="319">未命中：查 L2</text>
+      <text x="270" y="471">还是未命中：查数据库</text>
+    </g>
+    <g fill="#1f2328" font-size="20">
+      <text x="620" y="319">L2 命中：回填 L1</text>
+      <text x="620" y="471">回填 L2 和 L1</text>
+    </g>
+
+    <circle cx="872" cy="213" r="13" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+    <text x="872" y="220" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">!</text>
+    <text x="896" y="221" fill="#1f2328" font-size="23" font-weight="700">三大经典问题</text>
+    <g fill="#1f2328" font-size="21">
+      <text x="856" y="262">穿透：查不存在的数据</text>
+      <text x="856" y="330">击穿：热点数据过期</text>
+      <text x="856" y="398">雪崩：同时大量过期</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="868" y="292">布隆过滤器 + 缓存空对象</text>
+      <text x="868" y="360">互斥锁 + 逻辑过期</text>
+      <text x="868" y="428">随机 TTL + 缓存预热</text>
+    </g>
+
+    <rect x="840" y="494" width="288" height="96" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="984" y="530" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">命中率目标 &gt; 95%</text>
+    <text x="984" y="566" fill="#57606a" font-size="19" text-anchor="middle">不到 5% 才查数据库</text>
+
+    <rect x="72" y="616" width="1056" height="112" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="600" y="650" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">缓存不是锦上添花，而是高并发系统的保命符</text>
+    <text x="600" y="684" fill="#57606a" font-size="19" text-anchor="middle">写数据：先更新数据库，再删除缓存（不是更新缓存）</text>
+    <text x="600" y="712" fill="#57606a" font-size="19" text-anchor="middle">极端并发：延迟双删（删缓存 → 更新数据库 → 等 500ms → 再删一次）</text>
+  </g>
+</svg>

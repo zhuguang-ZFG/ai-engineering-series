@@ -86,3 +86,38 @@ The definition scene is still the most presentation-like shot. A later pass coul
 - Render/reference comparisons at 0, 28, 58, 83, 103, 136, 171, 190, and 215 s match visually.
 - Measured loudness is −18.7 LUFS with a −1.5 dBTP true peak and zero clipped samples.
 - Moved the pre-v3 MP4 files and legacy PNG cover into `renders/archive/`; the renders root now contains only the v3 delivery, the identical `latest` handoff, and the current WebP cover.
+
+## 发布记录 — 2026-10-31 换片（kinetic 重渲染）
+
+> **封面已换（2026-10-31，`c7715ea`）**：`deliverables/landscape-cover.webp` / `vertical-cover.webp`
+> 按 `videos/{landscape,vertical}/compositions/cover.html` 重出，脚本 `design/handdraw/render_ep01_covers.py`。
+> 旧图不仅缺 EP 数字 / 副标题 / `零基础实战` 卡片 / 绿色 CTA，连标题字号都不对（旧图约 76 px/字，composition 写的是 128 px），
+> 即它比 `27933f3` 时的 composition 还老。下表「竖 3:4 封面 `e024e0de`」「`coverUrl` …差 **0.00**」
+> 都是对着**换稿前**的文件量的，属于历史记录；平台侧仍是旧图。
+
+| 平台 | ID | 备注 |
+|---|---|---|
+| B站 | `BV1CoxY6YEhF` | 未变更：上一轮已用「更换视频」把 kinetic 重渲染替换进同一 BV，元数据 / 合集 9443639 未动 |
+| 抖音 | `7702633275944193290` | 2026-10-31 重发：竖 3:4 封面 `e024e0de`，合集「不会写代码也能做软件｜VIBE 101」第 2 集。替代 `7702366884670246195` |
+| 视频号 | `export/UzFfBgAAxLiJSFw1JCyGk8zT4DCa2CZUuyfvKH6oQQjrNsUFnQ` | 2026-10-31 10:05 重发：短标题「不会写代码也能做软件」，desc 84 逐字一致，`coverUrl` 540×720 与旧稿封面差 **0.00**，合集 VIBECODING 第 2 集，声明原创 `isDeclared=1`。替代 `export/UzFfBgAAxIeJfCQjJC-Hk8zT4DCaE8uzMLHtIu11S1lMQJ8oeg` |
+
+抖音换片踩到的坑：发布时 `semi-ui` 的封面 `Upload` 组件不接收 `DOM.setFileInputFiles`（`input.files.length` 恒为 0），
+EP.01 第一次提交因此套用了 EP.04 的封面，需回到「编辑作品」重提；视频号这边同样的 CDP 调用在
+`Runtime.evaluate` 取到元素 `objectId` 后就能正常落盘——差别在于视频号是原生 input，抖音是组件封装。
+
+视频号把 50 MB 主片经 `fetch + DataTransfer` 注入页面会让 Chrome 主进程 100% CPU 卡死（复现两次）；
+改用 `DOM.setFileInputFiles { objectId }`（浏览器进程直接从磁盘读）后单集上传秒级完成。
+
+## 配音与交付同步复核 — 2026-11-07
+
+沿用现有配音、词级时间和手绘画面，没有重新调用语音服务。本次 npm run check 的报告 ok=true，错误为零；警告：无。
+
+横版六处镜头间短暂停顿由上一场继续显示，不再出现空白背景。竖版根据已有词级时间重排视觉步骤、路线图和结尾，标题改为整体阅读，移除逐字弹跳，避免入口文字碰撞。复核了修改后的开头、场景中段、六个横版间隙、竖版各步骤及 47 秒结尾截图。
+
+竖版剩余字幕对比度警告位于短淡入过渡；稳定显示的字幕为白字与深色底，终态可读。没有将旧报告的“零警告”沿用为本轮结果。配音目前只核对文件、词级时间与字幕，未试听。下面的交付记录须以实际渲染后测量为准。
+
+## 本次实际交付测量 · 2026-11-07
+
+已渲染并复制到 `deliverables/vibe-coding-101-landscape.mp4`：250.4 秒，1920×1080，30 fps，H.264，48 kHz 双声道 AAC，47,845,543 字节。实际解码检查 0/40/56.8/71/85.7/108.5/122/136.3/160/184.4/200/216.1/233/250 秒：镜头间停顿保留上一场画面，字幕及结尾可读。
+
+SHA-256：`e39179fa57cd3409c86f8c6aac4c611e713d7cab3b723d5921a77d8eedbc781b`。首轮音轨合成临时文件失败，重试成片已通过完整解码与元数据核对；没有将失败输出作为交付。配音未人工试听，不能据文件检查声称听感验收。

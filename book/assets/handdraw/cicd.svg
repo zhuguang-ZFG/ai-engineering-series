@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="t">
+  <title id="t">CI / CD 自动化：代码提交、CI 触发、测试与构建、CD 部署、监控告警五步管道，测试失败这次部署就停了</title>
+  <rect width="1200" height="740" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <!-- 标题区 -->
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">CI / CD：代码推上去，剩下的自动完成</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">持续集成（CI）管检查，持续部署（CD）管上线</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <rect x="742" y="91" width="386" height="46" rx="16" fill="#d3efd9" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="935" y="122" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" text-anchor="middle">配置：.github/workflows/deploy.yml</text>
+
+  <!-- 五个阶段卡片 -->
+  <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linejoin="round">
+    <rect x="72" y="190" width="192" height="220" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="288" y="190" width="192" height="220" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="504" y="190" width="192" height="220" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="720" y="190" width="192" height="220" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="936" y="190" width="192" height="220" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
+  </g>
+
+  <!-- 阶段编号 -->
+  <g fill="#1f883d">
+    <circle cx="168" cy="216" r="15"/><circle cx="384" cy="216" r="15"/><circle cx="600" cy="216" r="15"/><circle cx="816" cy="216" r="15"/><circle cx="1032" cy="216" r="15"/>
+  </g>
+  <g fill="#fffdf8" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" font-weight="700" text-anchor="middle">
+    <text x="168" y="223">1</text><text x="384" y="223">2</text><text x="600" y="223">3</text><text x="816" y="223">4</text><text x="1032" y="223">5</text>
+  </g>
+
+  <!-- 阶段图标 -->
+  <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M148 270v10h40v-10"/><path d="M168 272v-26"/><path d="M158 256l10-10 10 10"/>
+    <circle cx="384" cy="264" r="16"/><path d="M384 248v-8m0 48v-8m16-16h8m-48 0h8m11-11l-6-6m0 34l-6-6m34 6l6 6m0-34l6-6"/>
+    <circle cx="592" cy="256" r="16"/><path d="M604 268l12 12"/><path d="M584 256l6 6 10-12"/>
+    <rect x="788" y="244" width="56" height="18" rx="5"/><rect x="788" y="268" width="56" height="18" rx="5"/><path d="M796 253h8m-8 24h8"/>
+    <rect x="1004" y="242" width="56" height="44" rx="8"/><path d="M1012 264h8l6-12 9 22 6-10h15"/>
+  </g>
+
+  <!-- 卡片文字 -->
+  <g fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="middle">
+    <text x="168" y="320">代码提交</text><text x="384" y="320">CI 触发</text><text x="600" y="320">测试与构建</text><text x="816" y="320">CD 部署</text><text x="1032" y="320">监控告警</text>
+  </g>
+  <g fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" text-anchor="middle">
+    <text x="168" y="350">push 到 GitHub</text><text x="168" y="378">main 分支有更新</text>
+    <text x="384" y="350">GitHub Actions</text><text x="384" y="378">GitLab CI 等</text>
+    <text x="600" y="350">装依赖 · 跑测试</text><text x="600" y="378">构建产物 dist</text>
+    <text x="816" y="350">SSH 连服务器</text><text x="816" y="378">拉代码 · 重启</text>
+    <text x="1032" y="350">每 5 分钟查一次</text><text x="1032" y="378">网站的守夜人</text>
+  </g>
+
+  <!-- 主路径箭头 -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M268 300h12"/><path d="M484 300h12"/><path d="M700 300h12"/><path d="M916 300h12"/>
+  </g>
+  <g fill="#1f2328">
+    <path d="M286 300l-15-8v16z"/><path d="M502 300l-15-8v16z"/><path d="M718 300l-15-8v16z"/><path d="M934 300l-15-8v16z"/>
+  </g>
+
+  <!-- 失败分支：回到第一步 -->
+  <path d="M600 410v52a21 21 0 0 1-21 21H189a21 21 0 0 1-21-21v-44" fill="none" stroke="#e2601f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="12 10"/>
+  <path d="M168 410l-8 14h16z" fill="#e2601f"/>
+  <text x="400" y="514" fill="#c74c00" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" font-weight="700" text-anchor="middle">测试失败：CI 发邮件通知，这次部署就停了</text>
+
+  <!-- 收尾说明 -->
+  <text x="72" y="566" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">没有 CI/CD：登录 GitHub、跑测试、手动构建、登录服务器……每次发布都要手动做这 9 步，很容易漏掉。</text>
+  <text x="72" y="600" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">有了 CI/CD：把代码 push 到 GitHub，然后喝茶坐等，机器人自动跑完，全程只要几分钟。</text>
+
+  <rect x="72" y="644" width="1056" height="66" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="600" y="685" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" text-anchor="middle" font-weight="700">只需要把代码推上去，剩下的全部自动完成</text>
+</svg>

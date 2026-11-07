@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="820" viewBox="0 0 480 820" role="img" aria-labelledby="title desc">
+  <title id="title">蒸馏怎样改变学生？</title>
+  <desc id="desc">相同输入进入冻结教师和可训练学生；教师提供分布或筛选文本，损失经梯度更新学生参数；部署时学生可独立生成，错误也可能被学习。</desc>
+  <rect width="480" height="820" fill="#fbfaf6"/>
+  <g font-family="Microsoft YaHei,sans-serif" fill="#1f2328" font-size="26">
+    <text x="28" y="48" font-size="30" font-weight="700">蒸馏：更新的是学生</text>
+    <path d="M27 73 Q238 67 451 75 L449 140 Q238 146 27 138Z" fill="#fffdf8" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="85" y="114">同一份题目 / 上下文</text>
+    <g fill="none" stroke="#1f2328" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M147 143 Q146 165 146 187 M136 176 L146 187 L156 176 M335 143 Q336 165 336 187 M326 176 L336 187 L346 176"/></g>
+    <path d="M27 198 L223 195 L221 292 L28 290Z M257 197 L451 198 L449 292 L257 289Z" fill="#fffdf8" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="66" y="236" font-weight="700">教师：冻结</text><text x="73" y="274">提供信号</text>
+    <text x="294" y="236" font-weight="700">学生：训练</text><text x="301" y="274">算出预测</text>
+    <g fill="none" stroke="#1f883d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M126 296 Q124 322 127 346 M117 335 L127 346 L137 335 M351 296 L351 431 M341 420 L351 431"/></g>
+    <path d="M27 355 L263 352 L261 415 L27 417Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="43" y="393">软分布 / 筛选文本</text>
+    <g fill="none" stroke="#1f883d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M145 420 Q143 442 145 461 M135 450 L145 461 L155 450"/></g>
+    <path d="M28 473 Q239 467 451 474 L449 544 L27 543Z" fill="#fffdf8" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="57" y="516">算损失：预测与目标差多少</text>
+    <g fill="none" stroke="#1f883d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M239 549 L240 581 M230 570 L240 581 L250 570"/></g>
+    <path d="M28 593 L450 589 L449 659 L27 662Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="80" y="634" font-weight="700">梯度 → 更新学生参数</text>
+    <g fill="none" stroke="#1f2328" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M239 665 L240 694 M230 683 L240 694 L250 683"/></g>
+    <text x="43" y="727">部署时，学生可以独立生成</text>
+    <text x="43" y="775" fill="#57606a">教师错误，也可能被学生学到</text>
+  </g>
+</svg>

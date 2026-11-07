@@ -1,0 +1,69 @@
+sections=192 candidates=68 min_gap=5000
+八、人工智能                   | AI 能力词典                        | line  84270 | imgs  0 | gap 164870 | code 0.00
+项目特定信息                   | 第三方集成                          | line  27337 | imgs  0 | gap 51395 | code 0.05
+四、服务器与后端                 | 后端语言对比（Node.js / Go / Java / R | line  60061 | imgs  0 | gap 38945 | code 0.01
+后端开发                     | CLI Coding Agent 编程助手          | line  20735 | imgs 25 | gap 30338 | code 0.08
+散页索引与补充单篇                | stage-1/appendix-consumer-scen | line  92106 | imgs  0 | gap 19947 | code 0.00
+三、浏览器与前端                 | HTML / CSS 布局体系                | line  52801 | imgs  0 | gap 15086 | code 0.03
+AI 能力强化                  | 什么是 RAG 以及它如何工作                | line  40667 | imgs 15 | gap 15041 | code 0.00
+附录                       | 从真实工作流里找 AI 场景                 | line   9394 | imgs 30 | gap 14880 | code 0.00
+第二章 开发环境与工具              | AI 编程工具介绍与使用                   | line   2581 | imgs 31 | gap 13727 | code 0.00
+规范驱动开发                   | GitHub Issues 驱动开发实战           | line  34138 | imgs  7 | gap 13148 | code 0.00
+三、浏览器与前端                 | 浏览器渲染管道                        | line  51538 | imgs  0 | gap 12072 | code 0.03
+三、浏览器与前端                 | 前端工程化全貌                        | line  58126 | imgs  0 | gap 11726 | code 0.03
+一、计算机是怎么回事               | 计算机系统全景：从开机到访问网站               | line  43302 | imgs  0 | gap 11541 | code 0.01
+四、服务器与后端                 | Web 框架的本质                      | line  62029 | imgs  0 | gap 11054 | code 0.00
+四、服务器与后端                 | 缓存的层次与策略                       | line  65963 | imgs  0 | gap 11015 | code 0.04
+七、基础设施与运维                | CI / CD 自动化                    | line  73524 | imgs  0 | gap 10973 | code 0.01
+附录                       | 产品思维基础                         | line   8797 | imgs 21 | gap 10962 | code 0.00
+后端开发                     | 数据库与 Supabase 入门               | line  15155 | imgs 64 | gap 10779 | code 0.01
+四、服务器与后端                 | 领域特定语言（DSL）                    | line  69547 | imgs  0 | gap 10603 | code 0.01
+三、浏览器与前端                 | 网页性能的度量与优化                     | line  57299 | imgs  0 | gap 10539 | code 0.02
+七、基础设施与运维                | 对象存储与 CDN                      | line  76880 | imgs  0 | gap 10173 | code 0.09
+一、计算机是怎么回事               | 计算机网络：从输入网址到渲染页面               | line  45023 | imgs  0 | gap  9919 | code 0.01
+三、浏览器与前端                 | 路由与导航                          | line  56218 | imgs  0 | gap  9787 | code 0.04
+五、数据                     | 数据库原理（索引 / 事务 / 查询优化）          | line  70172 | imgs  0 | gap  9499 | code 0.01
+八、人工智能                   | 大语言模型的工作原理                     | line  79656 | imgs  0 | gap  9152 | code 0.00
+三、浏览器与前端                 | 前端框架的本质                        | line  54386 | imgs  0 | gap  9004 | code 0.01
+解决方案                     | Claude Code 手机远程开发             | line  31235 | imgs  0 | gap  8928 | code 0.03
+七、基础设施与运维                | IAM 权限管理                       | line  75607 | imgs  0 | gap  8927 | code 0.03
+三、浏览器与前端                 | 状态管理哲学                         | line  55185 | imgs  0 | gap  8787 | code 0.06
+一、计算机是怎么回事               | 计算机组成原理                        | line  44206 | imgs  0 | gap  8429 | code 0.00
+Stage 2 实战项目 PRD         | PRD：现代 AI 生图 SaaS 平台           | line  89006 | imgs  0 | gap  8287 | code 0.02
+多平台开发                    | 如何把开发好的程序发布上架                  | line  39915 | imgs  0 | gap  8214 | code 0.00
+三、浏览器与前端                 | 前端框架对比（React / Vue / Svelte /  | line  50720 | imgs  0 | gap  8127 | code 0.01
+前端开发                     | UI 设计规范与多产品界面                  | line  11929 | imgs  0 | gap  7934 | code 0.00
+三、浏览器与前端                 | JavaScript 语言深入                | line  49176 | imgs  0 | gap  7894 | code 0.03
+第三章 从问题到方案               | 2. 筛选值得做的方向                    | line   4175 | imgs 14 | gap  7791 | code 0.00
+四、服务器与后端                 | 后端分层架构                         | line  67923 | imgs  0 | gap  7748 | code 0.04
+八、人工智能                   | 上下文工程                          | line  80496 | imgs  0 | gap  7340 | code 0.01
+第一章 编程入门                 | 如何学习本课程                        | line    850 | imgs 22 | gap  7259 | code 0.00
+四、服务器与后端                 | API 设计哲学（REST / GraphQL / gRPC | line  62877 | imgs  0 | gap  7120 | code 0.02
+一、计算机是怎么回事               | 数字电路基础：从晶体管到 CPU               | line  43854 | imgs  0 | gap  6918 | code 0.00
+第四章 从方案到作品               | 6. 做出可交互原型                     | line   6402 | imgs 12 | gap  6914 | code 0.01
+七、基础设施与运维                | 云平台实战                          | line  75109 | imgs  0 | gap  6890 | code 0.00
+八、人工智能                   | AI 简史与核心概念                     | line  78805 | imgs  0 | gap  6861 | code 0.00
+规范驱动开发                   | Claude Code Superpowers 工程级开发  | line  32706 | imgs  0 | gap  6846 | code 0.02
+七、基础设施与运维                | 负载均衡与网关                        | line  74214 | imgs  0 | gap  6749 | code 0.01
+规范驱动开发                   | 从 Vibe Coding 到 Spec Coding    | line  33263 | imgs  3 | gap  6580 | code 0.02
+后端开发                     | 把网站发到网上（进阶方式）：自己买台 VPS 服务器搭建发布 | line  17497 | imgs 26 | gap  6483 | code 0.01
+八、人工智能                   | AI 协议（MCP & A2A）               | line  82171 | imgs  0 | gap  6100 | code 0.00
+Vibe 故事                  | 七款 AI 编程工具对比                   | line  41884 | imgs 24 | gap  6081 | code 0.00
+二、开发环境与工具                | 命令行与 Shell 脚本                  | line  46849 | imgs  0 | gap  6075 | code 0.00
+八、人工智能                   | 多模态模型（视觉 / 音频 / 视频）            | line  80824 | imgs  0 | gap  6031 | code 0.00
+七、基础设施与运维                | 监控、日志与告警                       | line  78257 | imgs  0 | gap  5938 | code 0.03
+七、基础设施与运维                | 网关与反向代理                        | line  74692 | imgs  0 | gap  5886 | code 0.04
+散页索引与补充单篇                | 调试原理与艺术                        | line  91176 | imgs  0 | gap  5841 | code 0.01
+一、计算机是怎么回事               | 数据结构导论                         | line  45413 | imgs  0 | gap  5813 | code 0.00
+解决方案                     | Claude Agent SDK 完全指南          | line  32043 | imgs  0 | gap  5763 | code 0.06
+二、开发环境与工具                | Git：代码的时光机                     | line  47261 | imgs  0 | gap  5643 | code 0.03
+四、服务器与后端                 | 后端项目文件目录设计                     | line  68789 | imgs  0 | gap  5438 | code 0.10
+八、人工智能                   | AI Agent 与工具调用                 | line  81728 | imgs  0 | gap  5352 | code 0.03
+二、开发环境与工具                | 包管理器（npm / pip / cargo）        | line  48267 | imgs  0 | gap  5338 | code 0.02
+前端开发                     | 结合 Agent Skills 美化界面           | line  12402 | imgs  0 | gap  5297 | code 0.04
+常见问题                     | 类型错误？                          | line  23806 | imgs  0 | gap  5292 | code 0.05
+一、计算机是怎么回事               | 数据表示原理：编码、存储与传输                | line  44648 | imgs  0 | gap  5292 | code 0.00
+四、服务器与后端                 | 认证与授权体系                        | line  64081 | imgs  0 | gap  5197 | code 0.09
+八、人工智能                   | 神经网络与深度学习                      | line  79043 | imgs  0 | gap  5035 | code 0.01
+一、计算机是怎么回事               | 编译原理                           | line  46098 | imgs  0 | gap  5031 | code 0.00
+四、服务器与后端                 | 并发、异步与多线程                      | line  64970 | imgs  0 | gap  5022 | code 0.10

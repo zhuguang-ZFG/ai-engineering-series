@@ -1,0 +1,53 @@
+/* Print and EPUB reading edition. No remote fonts or interface chrome. */
+:root { color-scheme: light; }
+body { margin: 0 auto; color: #1f2328; background: #fbfaf6; font-family: 'SimSun', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif; font-size: 1em; line-height: 1.85; overflow-wrap: anywhere; }
+h1, h2, h3, .chapter-id, nav, .objective, figcaption, .caption { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; }
+h1 { font-size: 1.9em; line-height: 1.45; margin: 0 0 1em; font-weight: 600; }
+h2 { font-size: 1.3em; line-height: 1.5; margin: 1.8em 0 .7em; font-weight: 600; }
+h3 { font-size: 1.1em; line-height: 1.5; margin: 1.2em 0 .6em; }
+p { margin: 0 0 1em; orphans: 3; widows: 3; font-weight: 400; }
+a { color: #008635; text-underline-offset: .2em; }
+ul, ol { padding-left: 1.5em; }
+li { margin-bottom: .6em; }
+code, pre { font-family: 'Consolas', 'DejaVu Sans Mono', monospace; font-size: .88em; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 1em; background: #f1f7f2; border-left: 3px solid #1f883d; }
+figure { margin: 1.6em auto; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; width: 26em; height: auto; }
+figcaption { font-size: .85em; color: #57606a; line-height: 1.65; text-align: left; margin-top: .8em; }
+.chapter-id { margin: 0 0 .8em; color: #57606a; font-size: .9em; }
+.objective { border-left: 3px solid #1f883d; padding-left: 1em; font-size: .9em; color: #57606a; }
+.lab { border: 1px solid #e6e1d4; border-left: 3px solid #1f883d; padding: 1em; margin: 1.5em 0; background: #fffdf8; }
+.lab h2 { margin-top: 0; }
+.caption { font-size: .85em; color: #57606a; }
+.quiz { border-top: 2px solid #1f2328; margin-top: 2em; padding-top: .6em; }
+.answer { background: #f1f7f2; padding: 1em; margin: 1em 0; }
+.sources { border-top: 1px solid #e6e1d4; font-size: .85em; margin-top: 1.8em; padding-top: .6em; }
+.cover { margin: 0; padding: 0; text-align: center; }
+.cover img { max-width: 100%; max-height: 90vh; width: auto; height: auto; }
+.reading-part { margin-bottom: 2em; }
+.review-document { margin: 1em 0; padding-left: 1em; border-left: 3px solid #1f883d; }
+.review-document h3 { font-size: 1em; margin: .6em 0; }
+.review-task { margin-top: 2em; }
+table { border-collapse: collapse; width: 100%; font-size: .9em; }
+th, td { border-bottom: 1px solid #e6e1d4; padding: .5em; text-align: left; }
+@page { size: A5; margin: 15mm 14mm 18mm; }
+@media print {
+  body { max-width: none; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .reading-part, .chapter { break-before: page; }
+  .cover { break-before: auto; }
+  .cover img { height: 172mm; width: auto; max-height: none; }
+  h1, h2, h3 { break-after: avoid; }
+  figure img { max-height: 108mm; max-width: 108mm; width: auto; }
+  .chapter-figure { margin: 1em auto; }
+  .chapter-figure img { max-height: 108mm; max-width: 104mm; }
+  .reading-part figure img { max-height: 108mm; max-width: 104mm; }
+  #toc li { margin-bottom: .35em; line-height: 1.5; break-inside: avoid; }
+  tr { break-inside: avoid; }
+  pre, #L05 table, #execution table, #architecture table { break-inside: avoid; }
+  .review-appendix > .review-task { break-before: page; margin-top: 0; }
+  .lab, .quiz, .sources { break-inside: auto; }
+  a { color: #1f2328; }
+}
+@media screen {
+  body { max-width: 38em; padding: 1.2em; }
+}

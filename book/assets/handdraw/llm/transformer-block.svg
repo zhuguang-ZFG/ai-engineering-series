@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="798" viewBox="0 0 480 798" role="img" aria-labelledby="title desc">
+  <title id="title">一个 pre-norm 简化块</title>
+  <desc id="desc">表示和位置信息进入块，归一化后经因果注意力，与原路径相加，再归一化经前馈层，第二次残差相加。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect width="480" height="798" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="38" font-size="28">一种 pre-norm 简化约定</text>
+    <text x="24" y="80" font-size="26">输入表示 + 位置信息</text>
+    <path d="M264 92 Q262 104 264 116" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 127 L449 126 Q455 128 454 136 L453 177 Q452 183 444 182 L110 181 Q105 180 106 172 L107 132 Q108 126 115 127 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="164" font-size="26">归一化</text>
+    <path d="M264 188 Q262 198 264 208" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 221 L449 220 Q455 222 454 230 L453 271 Q452 277 444 276 L110 275 Q105 274 106 266 L107 226 Q108 220 115 221 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="258" font-size="26">因果注意力</text>
+    <path d="M264 282 Q262 295 264 308" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 321 L449 320 Q455 322 454 330 L453 371 Q452 377 444 376 L110 375 Q105 374 106 366 L107 326 Q108 320 115 321 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="358" font-size="26">+ 原路径（残差）</text>
+    <path d="M264 104 L54 104 L54 348 L100 348" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M264 384 Q262 395 264 406" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 419 L449 418 Q455 420 454 428 L453 469 Q452 475 444 474 L110 473 Q105 472 106 464 L107 424 Q108 418 115 419 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="456" font-size="26">归一化</text>
+    <path d="M264 480 Q262 490 264 500" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 513 L449 512 Q455 514 454 522 L453 563 Q452 569 444 568 L110 567 Q105 566 106 558 L107 518 Q108 512 115 513 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="550" font-size="26">前馈网络</text>
+    <path d="M264 574 Q262 584 264 594" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M115 607 L449 606 Q455 608 454 616 L453 657 Q452 663 444 662 L110 661 Q105 660 106 652 L107 612 Q108 606 115 607 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="126" y="644" font-size="26">+ 原路径（残差）</text>
+    <path d="M264 396 L54 396 L54 634 L100 634" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M264 670 Q262 684 264 698" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="208" y="738" font-size="26">块输出</text>
+    <text x="24" y="784" font-size="26">不是所举实际模型的架构图</text>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+@import url("book.css");
+@page { size: A4; margin: 16mm 18mm 18mm; }
+@media print {
+  body, article { margin: 0; padding: 0; font-size: 11.5pt; line-height: 1.8; background: #fff; }
+  h1 { font-size: 24pt; }
+  h2 { font-size: 17pt; margin-top: 0; }
+  h3 { font-size: 12pt; }
+  .review-task { break-before: page; border-top: 2px solid #1f2328; padding-top: 6mm; }
+  .review-task .eyebrow { font-size: 10pt; color: #57606a; margin-bottom: 2mm; }
+  .review-document { margin: 4mm 0; padding: 2mm 4mm; }
+  .review-document h3 { margin: 0 0 1mm; }
+  .review-document p { margin: 0; }
+  .answer-space { border: 1px solid #e6e1d4; border-radius: 4mm 2mm 5mm 3mm; padding: 3mm 4mm; margin-top: 5mm; }
+  .answer-space p { color: #57606a; font-size: 10pt; margin-bottom: 1mm; }
+  .answer-line { display: block; height: 6mm; border-bottom: .2mm solid #e6e1d4; }
+  .review-rubric { break-before: page; }
+  .review-record { break-before: page; }
+  .record-task { break-inside: avoid; margin-bottom: 8mm; padding-bottom: 3mm; border-bottom: 1px solid #e6e1d4; }
+  .record-task p { margin-bottom: 2mm; }
+  figure img { max-height: 95mm; max-width: 104mm; }
+  .reader-code { margin-top: 12mm; }
+}

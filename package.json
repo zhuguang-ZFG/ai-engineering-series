@@ -4,10 +4,21 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "node scripts/validate.mjs",
-    "validate": "node scripts/validate.mjs"
+    "test": "npm run test:llm && npm run check:fixtures:llm && npm run check:llm && npm run check:books:llm && npm run validate",
+    "validate": "node scripts/llm/media-manifest.mjs && node scripts/validate.mjs",
+    "build:llm": "node scripts/llm/build-learning-figures.mjs && node scripts/build-llm.mjs && node scripts/llm/build-media.mjs",
+    "check:llm": "node scripts/llm/build-learning-figures.mjs --check && node scripts/llm/build-application-figures.mjs --check && node scripts/build-llm.mjs --check && node scripts/llm/build-media.mjs --check && node scripts/validate-llm.mjs",
+    "export:books:llm": "npm run build:llm && python scripts/llm/export_books.py",
+    "check:books:llm": "python scripts/llm/check_books.py",
+    "test:llm": "node --test scripts/llm/*.test.js",
+    "fixtures:llm": "node scripts/llm/export-token-fixtures.mjs",
+    "check:fixtures:llm": "node scripts/llm/export-token-fixtures.mjs --check"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "js-tiktoken": "1.0.21",
+    "marked": "18.1.3"
   }
 }

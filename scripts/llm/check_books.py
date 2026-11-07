@@ -1,0 +1,155 @@
+"""Validate the actual local PDF/EPUB and optionally inspect reflow in Chrome."""
+
+import hashlib
+import json
+import posixpath
+import re
+import sys
+import zipfile
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+
+import fitz
+from lxml import etree
+
+from export_books import ROOT, OUT, STEM, REVIEW, XHTML, source_hash
+
+
+def check():
+    metadata = json.loads((OUT / (STEM + ".json")).read_text(encoding="utf-8"))
+    course = json.loads((ROOT / "book/llm/course.json").read_text(encoding="utf-8"))
+    assert metadata["sourceHash"] == source_hash(), "Books are stale; run npm run export:books:llm"
+    assert metadata["version"] == course["version"]
+    epubcheck = json.loads((OUT / "llm-epubcheck.json").read_text(encoding="utf-8"))
+    assert epubcheck["epubSha256"] == hashlib.sha256((OUT / (STEM + ".epub")).read_bytes()).hexdigest(), "EPUBCheck result is stale"
+    assert epubcheck["status"] == "passed" and epubcheck["version"] == "5.3.0"
+    assert all(epubcheck[key] == 0 for key in ["fatals", "errors", "warnings"])
+    assert metadata["lessons"] == 12
+    assert metadata["figures"] == len({file for lesson in course["lessons"] for file in [lesson["figure"], *lesson.get("extraFigures", [])]})
+    for name, expected in metadata["files"].items():
+        data = (OUT / name).read_bytes()
+        assert hashlib.sha256(data).hexdigest() == expected["sha256"], "Modified artifact " + name
+        assert len(data) == expected["bytes"]
+    pdf = fitz.open(OUT / (STEM + ".pdf"))
+    assert len(pdf) == metadata["pdfPages"] and len(pdf) >= 15
+    assert len(pdf.get_toc()) >= 12, "PDF outline missing"
+    all_text = "\n".join(page.get_text() for page in pdf)
+    for lesson in course["lessons"]:
+        assert lesson["title"] in all_text, "PDF missing chapter " + lesson["id"]
+        assert lesson["question"] in all_text.replace("\n", ""), "PDF missing self-test " + lesson["id"]
+    assert "DeepSeek" in all_text and "Kimi" in all_text
+    assert "纸上实验" in all_text and "MIT" in all_text
+    for phrase in ["教师的输出，怎样变成学生的参数", "KL(p(T)", "推理蒸馏", "硬标签", "学生第一步给水"]:
+        assert phrase in all_text.replace("\n", ""), "PDF missing distillation explanation " + phrase
+    assert "缓存、专家与计算成本" in all_text.replace("\n", "")
+    assert "应用回查：提示、检索与核验" in all_text.replace("\n", "")
+    assert "相似度分数不是事实置信度" in all_text.replace("\n", "")
+    assert "系统回查：上下文与工具执行" in all_text.replace("\n", "")
+    assert "结构回查：注意力怎样拼成一层" in all_text.replace("\n", "")
+    assert "1.231059" in all_text and "-0.231059" in all_text
+    assert "输入预算就是3584token" in all_text.replace("\n", "").replace(" ", "")
+    review = json.loads((ROOT / "book/llm/review/tasks.json").read_text(encoding="utf-8"))
+    for task in review["tasks"]:
+        assert task["title"] in all_text.replace("\n", ""), "PDF missing transfer task " + task["id"]
+    assert "一种答法" not in all_text, "Facilitator answers leaked into the reader book"
+    sparse = []
+    for i, page in enumerate(pdf):
+        assert abs(page.rect.width - 419.53) < 2 and abs(page.rect.height - 595.28) < 2, "Wrong A5 size"
+        text = page.get_text()
+        assert "\ufffd" not in text, f"Replacement glyph on PDF page {i+1}"
+        if len(text.strip()) < 25:
+            sparse.append(i + 1)
+        for block in page.get_text("dict")["blocks"]:
+            if "lines" not in block:
+                continue
+            for line in block["lines"]:
+                for span in line["spans"]:
+                    assert not any(weight in span["font"].lower() for weight in ["heavy", "black"]), "Unexpected heavy body font"
+                    x0, y0, x1, y1 = span["bbox"]
+                    assert x0 >= -1 and x1 <= page.rect.width + 1 and y0 >= -1 and y1 <= page.rect.height + 1, (i+1, span)
+    # A figure-only page can have little text; retain sparse-page evidence for visual review.
+    links = 0
+    with zipfile.ZipFile(OUT / (STEM + ".epub")) as archive:
+        info = archive.infolist()
+        assert info[0].filename == "mimetype" and info[0].compress_type == zipfile.ZIP_STORED
+        assert archive.read("mimetype") == b"application/epub+zip"
+        names = set(archive.namelist())
+        assert len(names) == len(info), "Duplicate ZIP entries"
+        assert not any(name.startswith("/") or ".." in name.split("/") for name in names)
+        trees = {name: etree.fromstring(archive.read(name)) for name in names if name.endswith((".xhtml", ".xml", ".opf", ".ncx"))}
+        opf = trees["OEBPS/content.opf"]
+        ns = {"o": "http://www.idpf.org/2007/opf", "h": XHTML, "e": "http://www.idpf.org/2007/ops"}
+        manifest = {item.get("id"): item for item in opf.xpath("//o:manifest/o:item", namespaces=ns)}
+        for item in manifest.values():
+            assert "OEBPS/" + item.get("href") in names
+        for ref in opf.xpath("//o:spine/o:itemref", namespaces=ns):
+            assert ref.get("idref") in manifest
+        assert len(opf.xpath("//o:spine/o:itemref", namespaces=ns)) == len(course["lessons"]) + 9
+        assert len(opf.xpath('//o:item[@properties="cover-image"]', namespaces=ns)) == 1
+        nav = trees["OEBPS/nav.xhtml"]
+        assert len(nav.xpath('//h:nav[@e:type="toc"]/h:ol/h:li', namespaces=ns)) == len(course["lessons"]) + 6
+        distillation_text = "".join(trees["OEBPS/training.xhtml"].itertext())
+        assert "推理蒸馏" in distillation_text and "混合梯度" in distillation_text
+        assert "distill-step" not in distillation_text
+        architecture_text = "".join(trees["OEBPS/architecture.xhtml"].itertext())
+        assert "1.231059" in architecture_text and "-0.231059" in architecture_text
+        assert "post-norm" in architecture_text and "pre-norm" in architecture_text
+        assert "OEBPS/advanced.xhtml" in names
+        application_text = "".join(trees["OEBPS/applications.xhtml"].itertext())
+        assert "索引需要维护" in application_text and "通常不更新参数" in application_text
+        execution_text = "".join(trees["OEBPS/execution.xhtml"].itertext())
+        assert "lookup-1: lookup_price → succeeded, 12.5" in execution_text
+        assert "multiply-1: multiply → succeeded, 100" in execution_text
+        assert "输入预算就是 3584 token" in execution_text
+        assert "OEBPS/review.xhtml" in names
+        assert "一种答法" not in "".join(trees["OEBPS/review.xhtml"].itertext())
+        for name, tree in trees.items():
+            if not name.endswith(".xhtml"):
+                continue
+            assert tree.tag == "{%s}html" % XHTML
+            assert len(tree.findall("{%s}body" % XHTML)) == 1, "Invalid XHTML body " + name
+            assert not tree.xpath("//*[local-name()='script' or local-name()='form' or local-name()='button' or local-name()='noscript']"), "Interactive leftovers " + name
+            ids = tree.xpath("//@id")
+            assert len(ids) == len(set(ids)), "Duplicate XHTML IDs " + name
+            for node in tree.xpath("//*[@href or @src]"):
+                target = node.get("href") or node.get("src")
+                parsed = urlsplit(target)
+                if parsed.scheme or target.startswith("//"):
+                    assert parsed.scheme in ["https", "http"], target
+                    continue
+                dest = posixpath.normpath(posixpath.join(posixpath.dirname(name), unquote(parsed.path))) if parsed.path else name
+                assert dest in names, (name, target)
+                if parsed.fragment:
+                    assert dest in trees and trees[dest].xpath("//*[@id=$value]", value=unquote(parsed.fragment)), (name, target)
+                links += 1
+            if name.rsplit("/", 1)[-1] in {lesson["slug"] + ".xhtml" for lesson in course["lessons"]}:
+                assert "纸上实验" in "".join(tree.itertext())
+        for name in names:
+            if name.endswith(".png"):
+                assert archive.read(name).startswith(b"\x89PNG\r\n\x1a\n")
+    for name, count in metadata["reviewPdfPages"].items():
+        with fitz.open(OUT / name) as supplement:
+            assert len(supplement) == count
+            text = "".join(page.get_text() for page in supplement).replace("\n", "")
+            for task in review["tasks"]:
+                assert task["title"] in text, (name, task["id"])
+            assert ("一种答法" in text) == (name == "llm-reading-guide.pdf"), "Answers mixed with student tasks"
+            for page in supplement:
+                assert abs(page.rect.width - 595.28) < 2 and abs(page.rect.height - 841.89) < 2, "Wrong A4 size"
+                assert len(page.get_text().strip()) > 25, "Sparse review PDF page"
+                for block in page.get_text("blocks"):
+                    assert block[0] >= -1 and block[2] <= page.rect.width + 1 and block[1] >= -1 and block[3] <= page.rect.height + 1, (name, block)
+    record = json.loads((ROOT / "exports/llm/review-record.json").read_text(encoding="utf-8"))
+    assert record["courseVersion"] == course["version"] and record["taskVersion"] == review["version"]
+    assert not record["participantCode"] and not record["sessionDate"] and record["stage"] is None
+    assert record["coreIndependent"] is None and record["endedEarly"] is None
+    assert len(record["tasks"]) == len(review["tasks"])
+    for task in record["tasks"]:
+        assert task["status"] is None and task["hints"] == [] and not task["firstAnswer"] and not task["readerWords"]
+    assert all(value is None for value in record["objectives"].values()), "Invented test result in template"
+    print(json.dumps({"status": "passed", "pdfPages": len(pdf), "pdfOutlineEntries": len(pdf.get_toc()), "epubLocalLinks": links, "sparsePdfPagesForReview": sparse, "epubcheck": "5.3.0: zero errors and warnings; result bound to this EPUB hash"}, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
+    check()

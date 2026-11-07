@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>注意力怎样拼成一层 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
+<main class="shell review-page" id="main"><article id="architecture-content"><h1>结构回查：注意力怎样拼成一层</h1>
+<p>先追踪几个向量怎样汇总，再看这一步怎样放进网络。以下来自同源 Transformer 修订章；数值是可复算的人工例子，不是实际模型内部读数。</p>
+<h2>注意力之外，还有什么？</h2>
+<p>原始编码器每层包含多头自注意力和逐位置前馈网络，外加残差连接与层归一化。现代实现可能采用 pre-norm、不同激活函数、位置表示或其他层结构；“6 层、512 维”是原论文配置，不能当成当前模型的通用规格。</p>
+<p>前馈层在各位置使用相同参数，做非线性变换；原论文写作 <code>FFN(x)=max(0,xW₁+b₁)W₂+b₂</code>。残差把子层输入与输出相加，归一化调整单个位置的特征尺度，帮助训练深层网络，但不保证训练一定稳定。原论文是 <code>LayerNorm(x+Sublayer(x))</code> 的 post-norm；课程深入图采用 <code>x+Sublayer(Norm(x))</code> 的 pre-norm 示意，两种顺序不能混写。</p>
+<figure><img src="../../book/assets/handdraw/llm/transformer-block.svg" width="480" height="798" alt="pre-norm 示意块：归一化、因果注意力与残差，再经过归一化、前馈层与残差"><figcaption>课程原创 G05：一个 pre-norm 解码器块示意。原始论文使用 post-norm；本图不表示用户指定模型的实际层结构。</figcaption></figure><h2>先分清可见位置与目标</h2>
+<p>对某个位置，先算 <code>QKᵀ / √d_k</code>，再对可见位置做 softmax，最后用权重汇总 V：</p>
+<pre><code class="language-text">Attention(Q, K, V) = softmax(QKᵀ / √d_k + M)V
+</code></pre>
+<p><code>M</code> 在可见处加 0，在屏蔽处加负无穷。decoder-only 教学例里，输入位置 i 可以看自己及更早位置，用来预测 i 后的 token；不能看未来目标。训练时输入与预测目标错开一位，这才避免把答案提前给模型。注意力输出只是网络中的一个子层，注意力权重不能单独当作完整解释。</p>
+<h2>各头汇总后，还要怎样混合？</h2>
+<pre><code class="language-text">head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+MultiHead(Q,K,V) = Concat(head_1, …, head_h)W^O
+</code></pre>
+<p>在本地的双头练习中，输入是三个二维向量，两个头各投影成一维，位置 2 只能看前两个位置。程序实际算出两头的权重和输出，再拼接、乘以 <code>W^O</code>。这能展示矩阵关系，但没有训练、位置编码、残差、归一化或完整 Transformer 层。</p>
+<figure><img src="../../book/assets/handdraw/llm/multihead-flow.svg" width="480" height="660" alt="同一输入投影到两个头，各自汇总可见 V，再拼接并经过输出矩阵"><figcaption>课程原创 G15：两个一维头的计算路线。数值来自本地人工矩阵，图中各头没有预设语言学职责。</figcaption></figure><!-- llm:multihead-result -->
+<p>人工输入 <code>X=[[1,0],[0,1],[1,1]]</code>，当前为第 2 个位置。各头投影矩阵见同源 fixture；本例两头 <code>d_k=1</code>，缩放因子为 1。</p>
+<table>
+<thead>
+<tr>
+<th>本地计算</th>
+<th>第 1 头</th>
+<th>第 2 头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>掩码后权重</td>
+<td>[0.500000, 0.500000, 0.000000]</td>
+<td>[0.268941, 0.731059, 0.000000]</td>
+</tr>
+<tr>
+<td>加权 V 输出</td>
+<td>[0.500000]</td>
+<td>[0.731059]</td>
+</tr>
+</tbody></table>
+<p>拼接结果为 <code>[0.500000, 0.731059]</code>，经过人工输出矩阵后得到 <code>[1.231059, -0.231059]</code>。表中数值由源码计算后保留六位小数。</p>
+<!-- /llm:multihead-result --><p>在行向量约定下，拼接 <code>[a,b]</code> 乘 <code>W^O=[[1,1],[1,-1]]</code> 得 <code>[a+b,a-b]</code>。改掉输出投影矩阵，最终结果也应变化；把未来第三行改得很大，第二位置的输出仍应不变。记录按第 1、2、3 位置称呼，源码索引从 0 开始。</p>
+<p>在仓库根目录运行 <code>node book/llm/examples/multihead.mjs</code> 查看完整 Q/K/V、权重与输出；改变未来输入、当前可见输入或输出矩阵，再检查哪一步变化。</p>
+<h2>三条架构路线</h2>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>常见用途</th>
+<th>关键边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>仅编码器</td>
+<td>表示、分类、抽取</td>
+<td>不是天然的逐 token 自回归生成器</td>
+</tr>
+<tr>
+<td>仅解码器</td>
+<td>续写、对话、代码生成</td>
+<td>因果掩码限制当前位置读取未来</td>
+</tr>
+<tr>
+<td>编码器—解码器</td>
+<td>翻译、摘要、序列转换</td>
+<td>解码器可通过交叉注意力读取输入表示</td>
+</tr>
+</tbody></table>
+<p>名称只是架构路线，不能仅凭名字推断某个具体产品的训练数据、工具能力或性能。课程的生成主线使用 decoder-only 作为常见示例。</p>
+<h2>位置怎样进入计算？</h2>
+<p>可学习位置嵌入给位置配置可训练向量；相对位置方法用位置差参与计算；RoPE 通过旋转 Q/K 使注意力分数带有相对位置关系；ALiBi 在注意力分数上加入与距离有关的偏置。这些方案不都把位置向量直接加到输入。长上下文表现仍取决于训练长度、扩展方法和实现；采用 RoPE 不自动支持任意长度。</p>
+<h2>精确计算与计算成本</h2>
+<p>标准全注意力在序列长度为 <code>N</code> 时，注意力分数矩阵的长度项通常呈 <code>N²</code>；实际内存和时间还受头数、维度、批量、硬件和实现影响。FlashAttention 通过分块和 IO-aware 实现减少 GPU 内存读写，仍计算精确注意力，不能把它说成把算法复杂度普遍变成线性。稀疏注意力、线性注意力和滑动窗口是不同取舍，也不能互相当作同义词。</p>
+<p>可解释性也有边界：注意力权重只描述一个子层的加权关系，不能单独证明模型的完整因果理由。长上下文、位置外推、多模态对齐和能耗都需要针对版本与任务测试。</p>
+<h2>自己检查一次</h2>
+<ol>
+<li>第二位置可见的输入能否包含未来第三位置？它在预测哪个位置？</li>
+<li>把 W^O 换为单位矩阵，输出还会是两头的和与差吗？</li>
+<li>encoder-decoder 的交叉注意力，在 decoder-only 中也必然存在吗？</li>
+<li>采用 FlashAttention 或 RoPE，能否推出任意长文本均能处理？</li>
+</ol>
+<p>核对依据：本例第二输入位置只看前两项，用来预测下一项；单位矩阵保留拼接值；decoder-only 省略编码器交叉注意力；内存优化与位置关系均不保证无限窗口或可靠外推。</p>
+<h2>来源与范围</h2>
+<p>原始结构、公式与 post-norm 见 <a href="https://arxiv.org/html/1706.03762v7">Transformer 论文</a>；<a href="https://arxiv.org/abs/2104.09864">RoFormer</a>和 <a href="https://arxiv.org/abs/2205.14135">FlashAttention</a>按其论文范围解释。实际模型练习继续用 DeepSeek V4.1 Flash 与 Kimi K3，未采集内部状态、输出或性能。</p>
+</article><nav class="lesson-nav"><a href="transformer-reference.html">完整 Transformer 回查</a><a href="attention.html">单头注意力实验</a></nav></main><footer>已开放 12 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
+</body></html>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="688" viewBox="0 0 480 688" role="img" aria-labelledby="title desc">
+  <title id="title">检索到的片段才进入输入</title>
+  <desc id="desc">资料先切块，查询决定取回哪些片段，命中片段连同问题进入上下文；无命中时停止，检索不改参数。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
+  <rect width="480" height="688" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">从一叠文件，取回几段依据</text>
+    <path d="M50 70 L420 71 Q424 72 424 78 L423 122 Q422 126 416 126 L46 125 Q42 124 42 118 L43 76 Q44 70 50 70 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M42 78 L412 79 Q416 80 416 86 L415 130 Q414 134 408 134 L38 133 Q34 132 34 126 L35 84 Q36 78 42 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M34 86 L404 87 Q408 88 408 94 L407 138 Q406 142 400 142 L30 141 Q26 140 26 134 L27 92 Q28 86 34 86 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="46" y="124" font-size="26">文件 + 文档编号 + 版本</text>
+    <path d="M240 152 Q238 166 240 180" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M34 192 L448 193 Q452 194 452 200 L451 252 Q450 256 444 256 L30 255 Q26 254 26 248 L27 198 Q28 192 34 192 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="46" y="234" font-size="26">切成片段，保留原文位置</text>
+    <path d="M240 266 Q238 280 240 294" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M34 306 L448 307 Q452 308 452 314 L451 398 Q450 402 444 402 L30 401 Q26 400 26 394 L27 312 Q28 306 34 306 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="46" y="344" font-size="26">查询 → 检索 → 取回</text>
+    <text x="46" y="382" font-size="26">无命中：停止，不补零分项</text>
+    <path d="M240 412 Q238 426 240 440" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M34 452 L448 453 Q452 454 452 460 L451 534 Q450 538 444 538 L30 537 Q26 536 26 530 L27 458 Q28 452 34 452 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="46" y="489" font-size="26">本次输入：问题 + 命中片段</text>
+    <text x="46" y="524" font-size="26">没有取回的文件不在这里</text>
+    <path d="M240 548 Q238 562 240 576" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="26" y="616" font-size="26">带出处回答；版本仍需核对</text>
+    <text x="26" y="662" font-size="26">检索没有把文件训练进参数</text>
+  </g>
+</svg>

@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="t">
+  <title id="t">数据库的索引就像书的目录：同一张 1000 万行的 users 表，全表扫描平均查 500 万行、耗时 5-30 秒，走索引只需 3-4 次比较、0.003 秒</title>
+  <rect width="1200" height="840" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">数据库的索引就像书的目录</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">同一张 users 表，两条查找路径</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <!-- 要找的那一条 -->
+    <rect x="430" y="164" width="340" height="76" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="600" y="197" fill="#1f2328" font-size="22" font-weight="700" text-anchor="middle">user_id = 5,555,555</text>
+    <text x="600" y="225" fill="#57606a" font-size="19" text-anchor="middle">users 表：1000 万条记录</text>
+
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M600 240v18"/>
+      <path d="M314 258h572"/>
+      <path d="M314 258v22"/>
+      <path d="M886 258v22"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M306 280l8 14 8-14z"/>
+      <path d="M878 280l8 14 8-14z"/>
+    </g>
+
+    <!-- 两条路 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="72" y="294" width="484" height="346" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="644" y="294" width="484" height="346" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+    <text x="96" y="330" fill="#1f2328" font-size="23" font-weight="700">全表扫描</text>
+    <circle cx="230" cy="322" r="15" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+    <text x="230" y="330" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">!</text>
+    <text x="96" y="362" fill="#57606a" font-size="20">从第 1 行开始，一行一行看</text>
+    <text x="668" y="330" fill="#1f2328" font-size="23" font-weight="700">索引查找（B+ 树）</text>
+    <text x="668" y="362" fill="#57606a" font-size="20">查索引树，直接跳到目标位置</text>
+
+    <!-- 左：一行一行往下翻，翻到第 4 行才命中 -->
+    <rect x="140" y="444" width="340" height="24" fill="#d3efd9"/>
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="140" y="372" width="340" height="144" rx="8"/>
+      <path d="M210 372v144"/>
+      <path d="M140 396h340"/>
+      <path d="M140 420h340"/>
+      <path d="M140 444h340"/>
+      <path d="M140 468h340"/>
+      <path d="M140 492h340"/>
+    </g>
+    <g stroke="#1f2328" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5">
+      <path d="M230 384h180"/>
+      <path d="M230 408h180"/>
+      <path d="M230 432h180"/>
+      <path d="M230 456h120"/>
+      <path d="M230 480h180"/>
+      <path d="M230 504h180"/>
+    </g>
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M116 378v126"/>
+    </g>
+    <path d="M109 504l7 13 7-13z" fill="#1f2328"/>
+
+    <!-- 右：矮胖的三层树，绿色那条路走 3 次 -->
+    <rect x="929" y="492" width="62" height="24" fill="#d3efd9"/>
+    <g stroke="#1f2328" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M880 396l-70 36"/>
+      <path d="M796 456l-64 36"/>
+      <path d="M808 456l-2 36"/>
+      <path d="M976 456l64 36"/>
+    </g>
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="850" y="372" width="72" height="24" rx="6"/>
+      <rect x="766" y="432" width="72" height="24" rx="6"/>
+      <rect x="934" y="432" width="72" height="24" rx="6"/>
+      <rect x="695" y="492" width="62" height="24" rx="6"/>
+      <rect x="781" y="492" width="62" height="24" rx="6"/>
+      <rect x="929" y="492" width="62" height="24" rx="6"/>
+      <rect x="1015" y="492" width="62" height="24" rx="6"/>
+    </g>
+    <g stroke="#1f2328" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5">
+      <path d="M886 378v12"/>
+      <path d="M802 438v12"/>
+      <path d="M970 438v12"/>
+      <path d="M726 498v12"/>
+      <path d="M812 498v12"/>
+      <path d="M960 498v12"/>
+      <path d="M1046 498v12"/>
+    </g>
+    <g stroke="#1f883d" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M886 396l72 36"/>
+      <path d="M968 456l-8 36"/>
+    </g>
+
+    <text x="96" y="546" fill="#1f2328" font-size="19">数据越多，速度越慢</text>
+    <text x="668" y="546" fill="#1f2328" font-size="19">矮胖的 B+ 树：3 层装 10 亿条</text>
+
+    <g fill="#57606a" font-size="19">
+      <text x="96" y="580">需要检查的行数</text>
+      <text x="330" y="580">耗时估算</text>
+      <text x="668" y="580">需要检查的行数</text>
+      <text x="900" y="580">耗时估算</text>
+    </g>
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="96" y="618">平均 500 万行</text>
+      <text x="330" y="618">5-30 秒</text>
+      <text x="668" y="618">3-4 次比较</text>
+      <text x="900" y="618">0.003 秒</text>
+    </g>
+
+    <!-- 目录的比喻 -->
+    <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <rect x="72" y="666" width="484" height="58" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+      <rect x="644" y="666" width="484" height="58" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
+    </g>
+    <text x="314" y="703" fill="#1f2328" font-size="20" text-anchor="middle">没有目录：一页一页翻，平均翻 500 页</text>
+    <text x="886" y="703" fill="#1f2328" font-size="20" text-anchor="middle">有目录：只翻 3 次就能找到</text>
+
+    <rect x="72" y="746" width="1056" height="64" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="600" y="786" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">速度差距：数千倍（10 亿行 = 3 次磁盘 I/O = 几毫秒）</text>
+  </g>
+</svg>

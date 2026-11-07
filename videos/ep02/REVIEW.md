@@ -52,6 +52,11 @@ Reused the EP.01 snake family, retitled for EP.02 (`EP.02` pill, 上期那条蛇
 - `assets/covers/cover4x3.jpg` 1440×1080 (Douyin 横封面)
 - `assets/covers/cover16x9.png` 1920×1080 (Bilibili)
 
+> **封面已换（2026-10-31）**：`cover16x9.png` / `cover4x3.jpg` / `cover3x4.jpg` 由深色霓虹海报改成手绘稿，
+> 源文件 `design/handdraw/covers/ep02.html`，渲染 `python design/handdraw/render_covers.py`。
+> 尺寸与路径不变（1920×1080 / 1440×1080 / 1080×1440）。**线上平台仍挂着旧稿**；下面引用的
+> “与 `cover3x4.jpg` 差 x.xx” 是 2026-10-31 发布时的比对结果，比对对象是**换稿前**的文件。
+
 Bilibili's 封面制作 editor stores exactly the art you last applied (`完成`) and the public
 `pic` mirrors it: applying the 4:3 art gave a 1440×1080 `pic`, applying the 16:9 art gave
 1920×1080 matching `cover16x9.png` (mean abs diff 1.57). Upload the 16:9 art last.
@@ -68,8 +73,8 @@ Bilibili's 封面制作 editor stores exactly the art you last applied (`完成`
 | platform | id | evidence |
 |---|---|---|
 | Bilibili | `BV1YWxP6YECS` | state 0, 195 s, tid 231, 7 tags, season 不会写代码也能做软件｜VIBE CODING 101, `pic` 1920×1080 = 16:9 art. **Re-cut 4K master swapped in 2026-10-30 15:5x via 更换视频**: `cid 43174596317`, title 37 / desc 252 / 7 tags / tid 231 / season 9443639 re-verified on `/x/vupre/web/archive/view`, queue row read `llm101-ep02_2026-10-30_14-04-04 4K 上传完成` |
-| Douyin | `7702367532556111154` | **Re-published 2026-10-30** after deleting the desynced cut: 194500 ms, title 14 / desc 130 chars, 横 4:3 + 竖 3:4 art applied, 合集 VIBE 101 第3集, 自主声明 无需添加自主声明. Superseded `7702278077363014922` |
-| 视频号 | `export/UzFfBgAAxICJKDpzbCyHk8zT4DCavAP2L3D81dEyD0uEcp17fg` | 1920×1080, 11,047,779 B (= the re-cut delivery), 短标题 会写诗的贪吃蛇, 190 字描述, 合集 VIBECODING 第3集, 视频标注 含AI生成内容, 3:4 封面. Superseded `…xKCJfC5kdgW…` |
+| Douyin | `7702634670449528073` | **Re-published 2026-10-31** with the kinetic re-render: 194500 ms, 竖 3:4 art (`c7655727`), 合集 VIBE 101 第3集. Superseded `7702367532556111154` (which had superseded `7702278077363014922`) |
+| 视频号 | `export/UzFfBgAAxLOJNGRMMiyGk8zT4DCayGlapOYWB2M2Cj2wLs0nwQ` | **Re-published 2026-10-31 10:07**: 短标题 会写诗的贪吃蛇, 190 字描述 (byte-identical to the superseded post), 合集 VIBECODING 第3集, 声明原创, `coverUrl` 540×720 与旧稿封面差 **0.00**、与 `cover3x4.jpg` 差 4.37（转档噪声）. Superseded `…xICJKDpzbCyH…`. **视频标注未复核（已穷举，需人工）**：旧稿标注过「含AI生成内容」。本次发布流程只设置 desc / 短标题 / 合集 / 声明原创 / 封面。核查路径与结论：(1) `post_list` 对 60 条稿件**没有任何** markTag / tagType / tagName / declare / aigc 字段，数据层无法判断新稿或旧稿的标注状态；(2) 列表页卡片的 Vue 方法 `enterEditPost()` 是「修改描述和封面」的真实入口——它写 `draftPost`/`draftObjectId` 后 push `/micro/content/post/create`，程序化调用可打开编辑页（desc 190 字、短标题、合集 VIBECODING 均正常回填），但**视频与封面不会回填**（`video:null`、`.vertical-cover-wrap` 不存在），此时点「发表」等于用不完整表单覆盖线上稿件，已放弃；(3) 编辑页的 `mark-tag` 组件（`selectedTag`/`tagSecKey`）也不由 handoff 预填。(4) 该编辑表单的视频与封面均不回填，`getPostPayload()` 直接返回 false（`validPost()` 不通过），即这份表单**提交不出任何 payload**，自动化路径既改不了也毁不掉线上稿件。视频标注下拉的真实选项（`markTagOptions`，`tagType` 值）：无需标注 0 / **含AI生成内容 1** / 内容为虚构剧情仅供娱乐 3 / 个人观点仅供参考 8 / 内容包含营销广告 2 / 内容为自行拍摄 5（需填拍摄时间地点）/ 内容为转载 7（需填转载来源，选填）。结论：标注只能在人工 UI 里改（视频/封面能正常加载的那条路径），自动化不可达且不可验证 |
 
 Douyin submitted with 无需添加自主声明 and 立即发布/公开 defaults; the publish-options dialog did not
 appear on either publish run (the click went straight to 内容管理), so 不同时发布 was not available to set.

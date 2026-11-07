@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="878" viewBox="0 0 1200 878" role="img" aria-labelledby="t">
+  <title id="t">路由与导航：地址栏的门牌号交给路由表这本前台花名册，匹配到哪一行就请对应组件上台；History 模式刷新时服务器把 URL 当文件路径去找，查无此房就是 404，配了 try_files 回退到 index.html 才由前端路由接管</title>
+  <rect width="1200" height="878" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">路由与导航：门牌号、花名册与 404</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">地址栏写的是门牌号，路由表是前台的花名册，对上哪一行就请哪个组件上台</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+
+    <!-- 门牌 → 花名册 → 上台 -->
+    <rect x="72" y="168" width="224" height="156" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <rect x="92" y="188" width="184" height="46" rx="12" fill="#d3efd9" stroke="#1f2328" stroke-width="3"/>
+    <circle cx="108" cy="211" r="3.5" fill="#1f2328"/>
+    <circle cx="268" cy="211" r="3.5" fill="#1f2328"/>
+    <text x="184" y="217" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">/user/123</text>
+    <text x="184" y="262" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">地址栏 = 门牌号</text>
+    <text x="184" y="290" fill="#57606a" font-size="19" text-anchor="middle">这次想去哪一间</text>
+
+    <rect x="372" y="168" width="404" height="156" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <rect x="380" y="244" width="388" height="26" fill="#d3efd9"/>
+    <g stroke="#e6e1d4" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M386 204h376"/>
+      <path d="M568 214v88"/>
+    </g>
+    <text x="386" y="194" fill="#1f2328" font-size="21" font-weight="700">路由表 = 前台花名册</text>
+    <g fill="#1f2328" font-size="19">
+      <text x="386" y="236">/</text>
+      <text x="580" y="236">Home</text>
+      <text x="386" y="262" font-weight="700">/user/:id</text>
+      <text x="580" y="262" font-weight="700">UserDetail</text>
+      <text x="386" y="288">/user/:id/profile</text>
+      <text x="580" y="288">UserProfile</text>
+    </g>
+    <text x="372" y="346" fill="#008635" font-size="19">嵌套路由：父路由的 children 里再配子路由</text>
+
+    <rect x="852" y="168" width="276" height="156" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="990" y="194" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">请对应组件上台</text>
+    <rect x="894" y="206" width="192" height="52" rx="10" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+    <text x="990" y="239" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">UserDetail</text>
+    <path d="M868 284l24-26h196l24 26z" fill="#fffdf8" stroke="#1f2328" stroke-width="3" stroke-linejoin="round"/>
+    <text x="990" y="310" fill="#57606a" font-size="19" text-anchor="middle">只换组件，不刷新整页</text>
+
+    <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round">
+      <path d="M296 232h62"/>
+      <path d="M776 232h62"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M372 232l-14-7v14z"/>
+      <path d="M852 232l-14-7v14z"/>
+    </g>
+    <g fill="#57606a" font-size="19" text-anchor="middle">
+      <text x="334" y="214">问前台</text>
+      <text x="814" y="214">匹配上</text>
+    </g>
+
+    <!-- 对照：后端路由 -->
+    <rect x="72" y="372" width="1056" height="52" rx="14" fill="#e6e1d4" stroke="#1f2328" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="86" y="404" fill="#1f2328" font-size="19" font-weight="700">服务端路由｜</text>
+    <text x="186" y="404" fill="#57606a" font-size="19">服务器决定谁接待：每个页面对应一个真的 HTML 文件，换一次门牌就整页刷新</text>
+
+    <!-- Hash vs History -->
+    <rect x="72" y="452" width="504" height="104" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="86" y="488" fill="#1f2328" font-size="21" font-weight="700">Hash 模式　#/user/123</text>
+    <text x="560" y="488" fill="#57606a" font-size="19" text-anchor="end">门口贴张便利贴</text>
+    <text x="86" y="518" fill="#57606a" font-size="19">监听 hashchange，# 后面的内容不发给服务器</text>
+    <text x="86" y="546" fill="#57606a" font-size="19">不用配服务器、开箱即用，但 SEO 较差</text>
+
+    <rect x="624" y="452" width="504" height="104" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="638" y="488" fill="#1f2328" font-size="21" font-weight="700">History 模式　/user/123</text>
+    <text x="1112" y="488" fill="#57606a" font-size="19" text-anchor="end">重新给房间编号</text>
+    <text x="638" y="518" fill="#57606a" font-size="19">用 pushState，整条路径都会发给服务器</text>
+    <text x="638" y="546" fill="#57606a" font-size="19">URL 美观、SEO 良好，但必须配 fallback</text>
+    <circle cx="600" cy="502" r="15" fill="#d3efd9" stroke="#1f2328" stroke-width="3"/>
+    <text x="600" y="509" fill="#1f2328" font-size="19" font-weight="700" text-anchor="middle">vs</text>
+
+    <!-- 为什么刷新会 404 -->
+    <text x="72" y="590" fill="#1f2328" font-size="23" font-weight="700">History 模式：为什么一刷新就 404？</text>
+    <text x="1128" y="590" fill="#57606a" font-size="19" text-anchor="end">刷新＝浏览器真的向服务器发请求</text>
+
+    <rect x="72" y="618" width="280" height="132" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <text x="86" y="648" fill="#1f2328" font-size="21" font-weight="700">刷新 / 直接访问</text>
+    <text x="86" y="676" fill="#57606a" font-size="19">/user/123 发给服务器</text>
+    <text x="86" y="702" fill="#57606a" font-size="19">服务器把它当文件路径找</text>
+    <text x="86" y="728" fill="#57606a" font-size="19">SPA 只有一个 index.html</text>
+
+    <rect x="420" y="618" width="708" height="58" rx="16" fill="#fffdf8" stroke="#e2601f" stroke-width="4" filter="url(#card-shadow)"/>
+    <g fill="none" stroke="#e2601f" stroke-width="4" stroke-linecap="round">
+      <path d="M426 641l12 12"/>
+      <path d="M438 641l-12 12"/>
+    </g>
+    <text x="456" y="655" fill="#1f2328" font-size="21">查无此房 → 404：磁盘上没有 /user/123 这个文件</text>
+    <text x="1112" y="655" fill="#57606a" font-size="19" text-anchor="end">服务器只认文件</text>
+
+    <rect x="420" y="692" width="708" height="58" rx="16" fill="#f1f7f2" stroke="#1f883d" stroke-width="4" filter="url(#card-shadow)"/>
+    <path d="M425 721l5 7 11-14" fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="456" y="729" fill="#1f2328" font-size="21">配了 try_files：回退 /index.html，前端路由接管</text>
+    <text x="1112" y="729" fill="#008635" font-size="19" text-anchor="end">页面正常显示</text>
+
+    <g fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M352 684h20v-37h48"/>
+      <path d="M352 684h20v37h48"/>
+    </g>
+    <g fill="#1f2328">
+      <path d="M420 647l-14-7v14z"/>
+      <path d="M420 721l-14-7v14z"/>
+    </g>
+
+    <!-- 结论 -->
+    <rect x="72" y="784" width="1056" height="64" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <text x="600" y="824" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">刷新 404 不是路由坏了：所有路由都指向同一个 index.html</text>
+  </g>
+</svg>

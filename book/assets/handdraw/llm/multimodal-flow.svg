@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="740" viewBox="0 0 480 740" role="img" aria-labelledby="title desc">
+  <title id="title">图片怎样进入回答</title><desc id="desc">图片编码为连续表示，经连接模块与文字共同输入。回答字段仍需回到原图核对，模糊信息保留未知。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
+  <rect width="480" height="740" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#1f2328" font-size="26">
+    <text x="28" y="46" font-size="30" font-weight="700">图像表示 ≠ 文字译文</text>
+    <path d="M30 70 Q240 66 448 72" stroke="#1f883d" fill="none" stroke-width="3"/>
+    <path d="M35 98 L447 100 L450 198 L30 200 Z" fill="none" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="136">通知照片：日期可辨认</text><text x="48" y="176">地点模糊 → 原图仍要保留</text>
+    <path d="M240 208 Q237 228 240 248" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M32 264 L449 261 L448 352 L30 354 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="301">视觉编码：像素 → 连续表示</text><text x="48" y="338">位置、细节取决于处理方式</text>
+    <path d="M240 364 Q243 383 240 402" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M32 418 L449 416 L448 508 L30 509 Z" fill="none" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="454">连接模块 → 与文字共同输入</text><text x="48" y="491">图像向量未必对应任何词</text>
+    <path d="M240 519 Q237 538 240 557" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M32 573 L449 571 L448 660 L30 662 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="607">回答：日期引用原图</text><text x="48" y="644">地点未知，不能靠常识补齐</text>
+    <text x="28" y="710">一种公开路线，不是所有模型</text>
+  </g>
+</svg>

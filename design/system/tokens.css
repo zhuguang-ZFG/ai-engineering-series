@@ -1,0 +1,60 @@
+/* 手绘设计系统 token · design/system/tokens.css
+ * 主视觉 = 手绘（FA-013 封面人物幽默 / FA-040 图解线稿）；
+ * 数值可读性 = 歸藏约束底座（OKLCH 收纳 + WCAG/APCA 双阈 + CJK T 规则）。
+ * 对比度均为实测：node design/system/contrast.mjs 复算，任一角色对不达标即非零退出。
+ * 与视频场景内联 token、design/handdraw/covers/cover.css 完全同源（#fbfaf6/#1f2328/#d3efd9/#1f883d/#e2601f）。 */
+
+:root,
+:lang(zh) {
+  /* —— 纸面与墨：全场景 / 封面 / 网页共用 —— */
+  --paper: #fbfaf6;        /* L98.5% C.0054 H95；ink/paper 15.13:1 · APCA 99 ✓ 正文 */
+  --card: #fffdf8;         /* L99.4%；ink/card 15.54:1 · APCA 101 ✓ 正文 */
+  --ink: #1f2328;          /* L25.4%；正文 + 墨线（非纯黑，符合“不用纯黑”） */
+  --ink-soft: #57606a;     /* L48.5%；次要文字 · /paper 6.12:1 · APCA 78 ✓ 次要 */
+  --marker: #d3efd9;       /* L92.6%；marker 高亮底，其下只放 --ink（ink/marker APCA 89 ✓），绝不放 accent 文字 */
+  --marker-wash: #f1f7f2;  /* 结论横幅底：比 --marker 浅一档，ink APCA 97 / ink-soft 76 ✓；带 --accent 描边 */
+  --rule: #e6e1d4;         /* 暖纸灰细线 / 停用态卡底；ink APCA 85、ink-soft 64 ✓，只与 ink、ink-soft 配对 */
+
+  /* —— 强调色：原色仅图形/大字；文字用派生深色（源自 contrast.mjs descend）—— */
+  --accent: #1f883d;        /* 手绘波形下划线/图形强调/大字：APCA 68 仅够展示线，禁作小字 */
+  --accent-ink: #008635;    /* 绿小字 + 细线：/paper 4.51:1 · APCA 69 ✓ accentInk；/card ✓ */
+  --accent-block: #008635;  /* 绿实块 + --paper 文字：4.51:1 · APCA 74 ✓ onText */
+  --persimmon: #e2601f;     /* 柿子橙：苹果/箭头/徽章图形，仅大字（APCA 59）；禁作实底放文字（paper 其上 3.39:1 ✗） */
+  --persimmon-block: #c74c00; /* 橙实底 CTA + --paper 文字：4.51:1 · APCA 74 ✓ onText（与 --accent-block 同规则派生） */
+  --persimmon-ink: #c74c00; /* 橙须作小字时：/paper 4.51:1 · APCA 69 ✓ */
+
+  /* —— 手绘质感三件套（一眼同源的签名）—— */
+  --paper-grain: radial-gradient(var(--ink) 1px, transparent 1.2px);
+  --paper-grain-size: 24px 24px;   /* 必须两值：单值时另一轴按 100% 解，点阵会拉成竖条 */
+  --ink-line: 4px solid var(--ink);       /* 卡片外轮廓（marker 手绘感） */
+  --ink-line-dark: 3px solid var(--ink);  /* 深色块细一档 */
+  --radius-hand: 16px 11px 18px 9px;      /* 四角不齐 = 手绘，勿用统一圆角 */
+  --shadow-hard: 8px 9px 0 rgba(31, 35, 40, .12);   /* 硬投影（无模糊位移） */
+  --shadow-hard-lg: 10px 12px 0 rgba(31, 35, 40, .18);
+  --wave-box: 240 10;         /* 波形下划线 SVG viewBox：4px 圆头 · --accent */
+  --ease-hand: cubic-bezier(0.22, 1, 0.36, 1);  /* 全站唯一缓动（unslop：一个 easing，禁循环动效） */
+
+  /* —— CJK 可读性（歸藏 T 规则，详见 cjk-rules.md）—— */
+  --text-size: 1.0625rem;     /* T2 正文 17px */
+  --text-leading: 1.85;       /* T3 行高（杂志档；瑞士档 1.8） */
+  --line-max: 36em;           /* T4 行长 ≈ 36 汉字 */
+  --para-gap: 1em;            /* T6 段距，不首行缩进 */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC', sans-serif; /* T13 西文在前 */
+  --font-zh-title: 'Noto Sans JP', var(--font-sans);  /* 课程既有标题栈（Chrome CJK fallback） */
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-num: 'Archivo Black', var(--font-mono);
+  color-scheme: light;
+}
+
+body { background: var(--paper); color: var(--ink); }
+
+/* 纸纹底层：挂在容器 ::after，opacity .05，勿盖住内容 */
+.handdraw-grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--paper-grain); background-size: var(--paper-grain-size);
+  opacity: .05;
+}
+/* marker 高亮：浅绿扫过关键词，下方文字固定 --ink */
+.handdraw-marker { background: var(--marker); color: var(--ink); padding: 0 .12em; border-radius: 4px 8px 3px 7px; }
+/* 手绘卡片：不齐圆角 + 墨线 + 硬投影 */
+.handdraw-card { background: var(--card); border: var(--ink-line); border-radius: var(--radius-hand); box-shadow: var(--shadow-hard); }

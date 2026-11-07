@@ -183,3 +183,58 @@ Xiaohongshu infographic. Layout: include a main headline and build the body as a
 Headline: "推送代码，网站就更新".
 Theme: a horizontal five-step path — 改代码 (pencil), commit (a box with a check mark), push (an upward arrow), 自动构建部署 (gear and cloud), 手机打开链接 (a lit phone). Below the path, an emerald-green loop arrow runs from the cloud back to commit, labelled "改坏了就回滚".
 ```
+
+---
+
+## 第二批（2026-11-02）：0 图长文段，6 张已入正文
+
+点位不再靠人工翻找，而由 `scan_illustration_points.py` 量化选出：按 `### ` 切节，统计每节正文净字数、图片行、**相邻图片之间最长的纯正文段（gap）**与代码占比，`gap ≥ 5000 且代码占比 < 0.5` 才算候选。全书 192 节 → 68 个候选，完整清单在 `renders/points-scan.txt`。
+
+```bash
+python design/handdraw/scan_illustration_points.py --min-gap 5000 > design/handdraw/renders/points-scan.txt
+python design/handdraw/render_figures.py --all          # 全部 SVG 栅格化到 renders/hd-*.png 供看图验收
+```
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 浏览器渲染管道 | `IG-008` 管道 | 51077（导览表之后、第 1 章之前） | DOM 树 + CSSOM 树 → 渲染树只保留可见元素 → 布局/绘制/合成；**transform / opacity 直接触发合成**；「重排最贵，重绘次之」「布局改变会导致绘制，绘制改变不会导致布局」 |
+| CI / CD 自动化 | `IG-008` 流程 | 73662（「几分钟，全部自动完成」之后） | 手动九步 → push + 喝茶坐等；五步流水线；**测试失败就停下并发邮件**；UptimeRobot 每 5 分钟查一次 |
+| 大语言模型的工作原理 | `IG-008` S 形 | 79577（堆叠成矩阵之后） | 分词 → Embedding → 堆叠成矩阵 → Transformer → **猜下一个词（Next Token Prediction）** → 按温度挑词；回环标注「一 token 一 token 往外吐」 |
+| 上下文工程 | `IG-013` 漏斗 | 80494（信息分级表之后） | VIP +15% / 重要 +10% / 一般（最近 5 轮）基准 / 可弃 −60% 走 RAG；**25% 成本换 90% 关键信息**；「小黑板不是图书馆」 |
+| AI Agent 与工具调用 | `IG-008` 回环 | 81616（感知-决策-行动-观察之后） | 四步各带机制（Memory 三层 / Planning / Tool Calling / Tools 结果写回）；**LLM 只生成结构化文本，不亲自执行**；Guardrails 白名单·预算·二次确认·沙箱 |
+| AI 协议（MCP & A2A） | `IG-002` 中心标注 | 82119（三层协议导语之后） | MCP＝工具/资源/提示（Anthropic 2024.11，类比 USB-C，Client-Server）；A2A＝Agent Card/Task/Message（Google 2025.04，类比企业微信，Peer-to-Peer）；两者互补不竞争 |
+
+验收口径沿用第一批：每张先 `render_figures.py` 出 PNG，再逐张看图核对文字越界、箭头落点、标注压字；`render-pipeline` 首稿在汇合箭头处压了一个「合并」小标签，已删（副标题已说明合并）并重渲复验。六张入正文后 `npm test` 通过（本地资源引用 980 → 986），且与相邻图片的正文间隔实测最小 4502 字，满足 ≥400–500 字红线。
+
+下一批候选（gap 从大到小）：AI 能力词典（164870）、HTML/CSS 布局体系（15086）、前端工程化全貌（11726，改走 stack-diagram）、计算机系统全景（11541，stack-diagram）、Web 框架的本质（11054）、缓存的层次与策略（11015）、对象存储与 CDN（10173，stack-diagram）、数据库原理（9499）、输入网址到渲染页面（9919）、IAM 权限管理（8927）、负载均衡与网关（6749）、Git 时光机（5643）。
+---
+
+## 第三批（2026-11-02）：6 张入正文，含一张章末收口图
+
+出图环节本轮起由 `render_figures.py` 把关：渲之前先读 `design/system/tokens.css` 生成十六进制白名单，越界色与 `<text fill="#1f883d|#e2601f">` 直接非零退出。六张全部一次通过，无手工改色。
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| Git：代码的时光机 | `IG-010` 阶梯 + 时间线（**章末收口图**） | 47536（名词速查表之后、`---` 之前） | 工作区→暂存区→仓库（`.git`）；status → add → commit 三步占日常 90%；`9f3e1b2 init` / `a1b2c3d (HEAD -> main)`；`git checkout -b feature-login` 两笔提交只在分支上；冲突＝同一行都改了；绿弧「回到任意一个历史节点」；push / pull / clone；「Git 是工具，GitHub 是托管服务」 |
+| HTML/CSS 布局体系 | `IG-010` 四级台阶 | 52959（推荐学习路径之后） | 盒模型 → Flexbox → 定位 → 动画；`width: 300px` + `padding: 20px` + `border: 1px` = **342px**，三张 1026px > 容器 900px 故第三张掉行；`box-sizing: border-box`；absolute 沿虚线「回到最近的定位祖先」 |
+| Web 框架的本质 | `IG-011` 四代对比（S 形） | 61800（演进表之后） | 四代×（年代·核心问题·团队规模 1-5 / 5-50 / 50-500 / 1-20 人·痛点）；**陷阱：拆 10 个服务却紧密耦合＝分布式单体**；开发者与运维两条演进线；「没有最好的架构，只有最适合的架构」 |
+| 缓存的层次与策略 | `IG-010` 三层阶梯 + 回填 | 65602（三层导语之后） | L1 ~0.1ms/70%/TTL 30 秒＝书桌便利贴，L2 ~1ms/25%/30 分钟＝公共储物柜，L3 ~10ms/5%＝图书馆；未命中往下走、命中往回填；命中率 > 95%；穿透/击穿/雪崩三问三解（布隆过滤器、互斥锁、随机 TTL）；写＝先更新库再删缓存，极端并发延迟双删；「保命符」不是锦上添花 |
+| 数据库原理（索引） | `IG-004` 左右对比 | 70274（索引导语之后） | `user_id = 5,555,555` / users 表 1000 万条；全表扫描平均 500 万行、5-30 秒 vs B+ 树 3-4 次比较、0.003 秒；矮胖 B+ 树 3 层装 10 亿条；「一页一页翻 vs 只翻 3 次」；10 亿行＝3 次磁盘 I/O＝几毫秒 |
+| AI 能力词典 | `IG-002` 中心标注（章首地图） | 82700（手册导语三问之后） | 11 类能力归 5 区，实线连模态层、虚线连架构层；中心只答「能用什么 AI 能力做 / 该选哪一类模型或产品」；找 API 的关键词 Embedding、OCR、ASR、TTS、VLM、RAG |
+
+验收：六张逐张看 PNG（`renders/hd-*.png`），核对文字越界、箭头落点、标注压字；`cache-layers` 首稿底部同时挂了一条结论横幅和一枚「保命符」小药丸，两个收口元素打架 → 合并为一条三行横幅并重渲。`npm test` 通过（本地资源引用 986 → 992），六张入正文后与相邻图片最小正文间隔实测 2768 字（要求 ≥400–500）。
+
+`git-history` 的点位从 agent 建议的 47026（章首）改到 47536（章末）：那张图一次给满 5 个概念簇（三区域 / 存档点 / 分支与合并 / 回退 / 本地与远端），放在读者还没见过「暂存区」二字的位置会劝退，放名词表之后则正好当合书回忆的地图——同一张图，位置决定它是负担还是收口。
+---
+
+## 第一批 stack-diagram 工程图（2026-11-02）：手绘之外的第二种语域
+
+SPEC §9.1 定的分工在这里第一次落地：**技术栈 / 系统架构 / 服务拓扑**走 `stack-diagram`（网格纸底 + 真品牌 logo + 分组容器 + 直角连线），不与手绘 SVG 混进同一张 figure。
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 前端工程化全貌 | 六列流水线工程图 | 58562（`##### 7. 总结` 表格之后） | `npm run build` 四道工序（代码检查→转译→打包→优化，L57781-57785）；src→dist（L57800 餐厅比喻表）；六列工具全部取自本节原文：TypeScript/Vue/React/npm、ESLint/Prettier/husky/CI-CD、Babel/SWC/esbuild/Sass、Webpack/Rollup/Vite、Tree Shaking/Code Splitting/Terser、资源指纹/SourceMap/CDN/浏览器；**SWC＝Rust 快 20 倍以上**（L57836）、**esbuild＝Go，Vite 开发模式借它**（L57837，画成虚线）、Vite 生产用 Rollup（L58393）、`[hash]` 长期缓存（L57901/58328）、SourceMap 映射回源代码（L58530） |
+
+产物：`book/assets/stacks/frontend-tooling.html`（自包含）+ `frontend-tooling.png`（1300×1100 @2x）。流程 `fetch_icons.py → build.py → render_png.py`，Windows 侧三处坑：`render_png.py` 默认还会产出 `-dark.png`，用 `--single`；`fc-list` 不存在；模板字体栈是 JP 优先，中文需在生成稿里补 CJK face。
+
+点位从 agent 建议的 57785（四道工序列表之后）挪到章末总结表之后：那张图点名 22 个工具，而 Babel/SWC/esbuild/Loader/HMR 都在 57835 之后才第一次出现——和 `git-history` 同一课，**图的信息密度决定它该在章首还是章末**。

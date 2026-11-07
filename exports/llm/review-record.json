@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "courseVersion": "0.10.0",
+  "taskVersion": "1.0.0",
+  "participantCode": "",
+  "sessionDate": "",
+  "stage": null,
+  "stageOptions": [
+    "起步试读",
+    "完整课程"
+  ],
+  "readingFormat": "",
+  "initialFamiliarity": "",
+  "statusOptions": [
+    "独立完成",
+    "看提示完成",
+    "未完成"
+  ],
+  "note": "空白模板，非试读结果。未做题保持 status 为 null；首次答案与修改后答案分开保存。",
+  "tasks": [
+    {
+      "id": "R01",
+      "objective": "O1",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    },
+    {
+      "id": "R02",
+      "objective": "O1",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    },
+    {
+      "id": "R03",
+      "objective": "O2",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    },
+    {
+      "id": "R04",
+      "objective": "O3",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    },
+    {
+      "id": "R05",
+      "objective": "O4",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    },
+    {
+      "id": "R06",
+      "objective": "O5",
+      "status": null,
+      "firstAnswer": "",
+      "readerWords": "",
+      "stuckAt": "",
+      "hints": [],
+      "rationale": "",
+      "revisedAnswer": ""
+    }
+  ],
+  "objectives": {
+    "O1": null,
+    "O2": null,
+    "O3": null,
+    "O4": null,
+    "O5": null
+  },
+  "coreIndependent": null,
+  "endedEarly": null,
+  "followUp": ""
+}

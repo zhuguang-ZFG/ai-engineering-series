@@ -5,6 +5,11 @@ node_modules/
 **/.thumbnails/
 **/.waveform-cache/
 **/renders/
+!design/handdraw/renders/
+!design/handdraw/renders/**
+exports/cards/output/
 **/archive/
+__pycache__/
 *.log
 tmp/
+local-feedback/

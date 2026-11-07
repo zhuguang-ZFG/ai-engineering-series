@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="660" viewBox="0 0 480 660" role="img" aria-labelledby="title desc">
+  <title id="title">两个头先汇总，再拼接混合</title>
+  <desc id="desc">同一输入分到两组 Q/K/V 投影，每头使用因果掩码独立汇总；两头输出拼接后经过输出投影。没有预设语法头或情感头。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
+  <rect width="480" height="660" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">同一输入，两组投影</text>
+    <path d="M36 70 L448 71 Q452 72 452 78 L451 130 Q450 134 444 134 L32 133 Q28 132 28 126 L29 76 Q30 70 36 70 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="112" font-size="26">输入 X：三个二维向量</text>
+    <path d="M240 144 L240 163 L128 163 M240 163 L352 163" fill="none" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M128 163 Q126 175 128 187" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M352 163 Q350 175 352 187" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 200 L224 201 Q228 202 228 208 L227 324 Q226 328 220 328 L32 327 Q28 326 28 320 L29 206 Q30 200 36 200 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M260 200 L448 201 Q452 202 452 208 L451 324 Q450 328 444 328 L256 327 Q252 326 252 320 L253 206 Q254 200 260 200 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="239" font-size="26">第 1 头</text>
+    <text x="48" y="278" font-size="26">投影 Q/K/V</text>
+    <text x="48" y="316" font-size="26">取第一维</text>
+    <text x="272" y="239" font-size="26">第 2 头</text>
+    <text x="272" y="278" font-size="26">投影 Q/K/V</text>
+    <text x="272" y="316" font-size="26">取第二维</text>
+    <path d="M128 338 Q126 349 128 360" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M352 338 Q350 349 352 360" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 372 L224 373 Q228 374 228 380 L227 430 Q226 434 220 434 L32 433 Q28 432 28 426 L29 378 Q30 372 36 372 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M260 372 L448 373 Q452 374 452 380 L451 430 Q450 434 444 434 L256 433 Q252 432 252 426 L253 378 Q254 372 260 372 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="412" font-size="26">掩码后汇总</text>
+    <text x="272" y="412" font-size="26">掩码后汇总</text>
+    <path d="M128 444 L128 465 L352 465 L352 444" fill="none" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M240 465 Q238 475.5 240 486" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 498 L448 499 Q452 500 452 506 L451 560 Q450 564 444 564 L32 563 Q28 562 28 556 L29 504 Q30 498 36 498 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="540" font-size="26">拼接 → 输出投影 Wᵒ</text>
+    <text x="28" y="606" font-size="26">各头不预设语言学职责</text>
+    <text x="28" y="647" font-size="26">人工小矩阵，不是完整模型</text>
+  </g>
+</svg>
