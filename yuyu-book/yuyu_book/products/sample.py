@@ -1,17 +1,15 @@
 """docs/sample-chapter.html (+ .en.html) — chapter 2, the whole chapter.
 
 The sample's promise is that a reader sees the real book, not a paraphrase:
-the body is the chapter article as the book's own pipeline rendered it,
-lifted from the built edition and rehosted in a standalone sheet. The hook
-band and the recap card frame it; the book's stylesheet is embedded whole, so
-the sheet keeps the ink system (including dark mode and print).
+the body is rendered from the shared source model and edition pipeline,
+then hosted in a standalone sheet. The hook band and recap card frame it;
+the book stylesheet is embedded whole, including dark mode and print.
 
 Chapter 2 is the chosen excerpt: the dialog loop is the book's heart, and it
 is the chapter the reading paths put first.
 
-Regenerate after a chapter edit (the book must be built first):
+Regenerate directly from source; no built edition is needed:
 
-    python yuyu-book/build.py --lang both
     python scripts/build_sample_chapter.py
 """
 from __future__ import annotations
@@ -19,8 +17,9 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from .. import style_css
-from ..io import load_json
+from .. import mermaid, plain, render, style_css
+from ..app import _article
+from ..core import load_configs, load_unit, read_text, unit_stream
 from ..labels import esc
 from ..paths import BOOK_DIR, REPO_ROOT
 from . import tokens
@@ -148,31 +147,32 @@ body.sample{--measure:44rem}
 _INTERNAL = re.compile(r'href="#((?:ch|apx|source)[\w-]*)"')
 
 
-def _dist(lang: str) -> Path:
-    prefix = (load_json(BOOK_DIR / "manifest.json").get("output_prefix")
-              or "yuyu-agent-harness")
-    return REPO_ROOT / "yuyu-book" / "dist" / f"{prefix}-{lang}.html"
-
-
 def chapter_article(lang: str, unit_id: str = CHAPTER) -> str:
-    """The rendered chapter, rehosted with its internal jumps retargeted."""
-    dist = _dist(lang)
-    if not dist.exists():
-        raise SystemExit(f"sample chapter: {dist} is missing — build the book "
-                         "first (python yuyu-book/build.py --lang both)")
-    text = dist.read_text(encoding="utf-8")
-    start = text.find(f'<article class="chapter" id="{unit_id}">')
-    if start < 0:
-        raise SystemExit(f"sample chapter: no <article id=\"{unit_id}\"> in "
-                         f"{dist.name} — rebuild the book after the chapter "
-                         "edit")
-    end = text.find("<article class=", start + 10)
-    if end < 0:
-        end = text.find("</main>", start)
-    if end < 0:
-        end = len(text)
-    chunk = text[start:end].rstrip()
-    return _INTERNAL.sub(rf'href="{BOOK[lang]}#\1"', chunk)
+    """Render through the book pipeline, including preceding glossary state."""
+    model = load_repo_model([lang])
+    if model.unit(lang, unit_id) is None:
+        raise ValueError(f"sample chapter: unknown unit {unit_id}")
+    manifest, sources = load_configs()
+    glosses, paths = plain.load_plain(manifest)
+    notes = plain.load_notes(manifest)
+    layer = plain.Layer(glosses, lang)
+    mapping = {u["id"]: u["id"] for u, _k, _p in unit_stream(manifest)}
+    for unit_def, kind, part in unit_stream(manifest):
+        unit = load_unit(unit_def, kind, lang, REPO_ROOT)
+        unit.part = part
+        if unit.id == unit_id:
+            captions = mermaid.captions_for(
+                read_text(REPO_ROOT / unit.path), unit.blocks)
+            diagrams = mermaid.render_all(unit.blocks, captions, None)
+        else:
+            diagrams = mermaid.source_fallback(unit.blocks, {})
+        payload = render.render_unit(
+            unit, mapping, diagrams=diagrams, gloss=layer,
+            tiers=paths.get(unit.id))
+        if unit.id == unit_id:
+            article = _article(payload, manifest, sources, lang, notes=notes)
+            return _INTERNAL.sub(rf'href="{BOOK[lang]}#\1"', article)
+    raise ValueError(f"sample chapter: missing source for {unit_id}")
 
 
 def page_for(model, lang: str, body: str | None = None) -> str:

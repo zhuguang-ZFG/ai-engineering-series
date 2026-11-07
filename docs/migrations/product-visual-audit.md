@@ -123,3 +123,13 @@ written once in the tokens module and injected into every page.
 Verdict: GREEN. The three pages share one ink language, every measured
 deviation was either fixed or is a pinned, declared choice, and the
 generators reproduce their outputs byte for byte.
+
+## 2026-11-07：重播遵守减少动效偏好
+
+本轮画廊有 43 张源图、纸面与夜读共 86 个图版实例；前述 42 / 84 是先前审计时的清单，不是当前数量。
+
+实际浏览器复现：系统减少动效开启后点击「重播全部」，仍有 1,923 个运行中动画。CSS 的 `animation:none` 不能阻止 JavaScript 创建的 Web Animations。现在重播入口检查同一媒体偏好；减少动效时禁用播放与速度按钮，图版标记 `aria-disabled`，保留完整静态图。运行中切换偏好会取消动画、清理墨点与延迟提示；恢复普通偏好后可以主动重播。
+
+独立 Edge / Playwright 上下文实测：Enter 重播产生 1,936 个运行中动画，切换减少动效后为 0，恢复偏好后按钮重播有效；320 px 视口无横向溢出。禁用脚本后仍有 86 个完整图版与 4 个页脚链接。旧版复现与修复后检查构成本次运行时回归证据，未新增或修改永久测试与门禁策略。
+
+本轮 Fast 八步通过：192 项通用测试、542 项构建器测试、333 张 Mermaid、15 章配置以及 11 个产物字节幂等。以上为手工命令证据；`task_verify` 基线不可用，不据此宣称受管验证通过。

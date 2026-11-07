@@ -182,8 +182,10 @@ def git_head() -> str:
 def render_report(legacy_meta: dict, matched: list, unmatched: list,
                   allow_path: Path) -> str:
     resolved_allow = allow_path.resolve()
+    # resolve() canonicalises case on Windows; the report should echo the path
+    # the operator actually passed, and only relativise repo-local policies
     display_allow = (resolved_allow.relative_to(ROOT)
-                     if resolved_allow.is_relative_to(ROOT) else resolved_allow)
+                     if resolved_allow.is_relative_to(ROOT) else allow_path)
     lines = [
         "# Legacy / v2 structural comparison (P3.7)",
         "",

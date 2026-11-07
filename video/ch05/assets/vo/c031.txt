@@ -1,1 +1,0 @@
-hasAutoModeOptIn、getUseAutoModeDuringPlan、getAutoModeConfig，同一个模式。注释都指向同一句话：projectSettings 是故意排除的——否则一个恶意项目可以自动绕过确认弹窗，那就是远程代码执行。

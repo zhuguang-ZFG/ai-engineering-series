@@ -1,1 +1,0 @@
-二，手动画分区。三，对 StreamingToolExecutor 打四阶段断点，再 Ctrl+C 看取消链。四，有 MCP 时对比延迟发现开关下的 input token。收五句。

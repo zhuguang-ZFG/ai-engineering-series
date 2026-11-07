@@ -1,1 +1,0 @@
-文件三件套像 CRUD，却故意缺 Delete。删是不可逆，通常丢给 Bash 的 rm，触发更严权限。Read 带文件状态缓存，少做重复 I/O。Edit 用 old_string 换 new_string，不用行号——行号一偏移就改错地；

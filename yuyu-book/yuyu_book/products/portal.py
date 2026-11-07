@@ -86,7 +86,7 @@ a:focus-visible{outline:2px solid #B4472F;outline-offset:3px}
       <p>全书 15 章 + 4 附录：对话循环、工具、权限、记忆、上下文、钩子、子智能体、
       编排、技能、MCP、流式、Plan、亲手造一个 Harness。滚动阅读时，@@PLATES@@ 幅手绘插图
       与按书的配色预渲染的图版会随你前进。</p>
-      <a class="go" href="book.html">开始阅读 →</a>
+      <a class="go" href="yuyu-agent-harness-zh.html">开始阅读 →</a>
       <span class="alt">English edition: <a href="yuyu-agent-harness-en.html">Yù Yú (English)</a></span>
     </div>
     <div class="card">

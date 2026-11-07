@@ -1,1 +1,0 @@
-从低到高，六层是：pluginSettings、userSettings、projectSettings、localSettings、flagSettings、policySettings。

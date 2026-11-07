@@ -74,7 +74,7 @@ omp 分册自己的入口在 [`omp/README.md`](../omp/README.md)（书稿清单�
 | 产物 | `yuyu-agent-harness-{zh,en}.html/.pdf` | `yuyu-omp-zh.html/.pdf` |
 | 通俗层 | 102 词条（core 44 / extra 58）、20 条按语、15 章档位表 | 36 词条（core 24 / extra 12）、39 条按语、33 章档位表 |
 | 书末主题索引 | 有（`subject-index.json`） | **无**，`subject_index_registry` 显式写 `null` |
-| 章徽 / 题刻 | 20 枚 / 4 枚（`yuyu-book/illustrations/` 42 张手写 SVG 可装配） | 0 / 0 —— 设计如此，且 `omp/illustrations/` 这个目录还不存在 |
+| 章徽 / 题刻 | 20 枚 / 4 枚（`yuyu-book/illustrations/` 43 张手写 SVG 可装配） | 0 / 0 —— 设计如此，且 `omp/illustrations/` 这个目录还不存在 |
 | 门禁覆盖 | `make check`（`check --fast/--full`）验的就是它 | 不在 `check` 里；CI 走独立 `omp` job，不 `needs` 御舆 |
 
 机制与边界见 [`STRUCTURE.md`](../STRUCTURE.md) §3.6；omp 侧构建口径与本机实测体积见

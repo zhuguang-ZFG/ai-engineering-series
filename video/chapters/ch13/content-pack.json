@@ -1,36 +1,16 @@
 {
   "schema_version": 1,
   "id": "ch13",
-  "title": "第13章：流式架构与性能优化",
+  "title": "第 13 章　流式架构与性能优化",
   "source": "第四部分-工程实践篇/13-流式架构与性能优化.md",
   "sections": [
     {
       "index": 1,
-      "title": "13.1 流式 API 交互",
-      "summary": "Claude Code 的核心交互模型是流式的。QueryEngine 是查询生命周期和会话状态的拥有者，它将原本散布在查询函数中的核心逻辑抽取为独立类，本章讨论其 headless/SDK 路径的实现；REPL 复用属于后续阶段。"
-    },
-    {
-      "index": 2,
-      "title": "13.2 StreamingToolExecutor 的并发控制",
-      "summary": "StreamingToolExecutor 是 Claude Code 工具执行层的核心。它的设计目标是让工具在流式到达时立即启动执行，而不是等待所有工具调用块全部到达后再统一处理。"
-    },
-    {
-      "index": 3,
       "title": "13.3 启动性能优化",
       "summary": "Claude Code 的启动时间直接影响用户体验。命令行工具的心理学研究表明，超过 2 秒的启动延迟会让用户觉得工具\"笨重\"，超过 5 秒则会触发\"是不是卡了\"的焦虑。系统通过三类优化策略来缩短从命令行输入到首次响应的延迟：并行预取、延迟加载和惰性模块评估。"
     },
     {
-      "index": 4,
-      "title": "13.4 令牌成本追踪",
-      "summary": "Claude Code 的成本追踪建立在两个核心函数之上：updateUsage 和 accumulateUsage。"
-    },
-    {
-      "index": 5,
-      "title": "13.5 缓存优化策略",
-      "summary": "Anthropic API 的提示缓存（Prompt Caching）是降低成本和延迟的关键机制。缓存键由五个维度构成：system prompt、tools、model、messages prefix 和 thinking config。"
-    },
-    {
-      "index": 6,
+      "index": 2,
       "title": "13.6 流式与性能：常见翻车 / 正确做法",
       "summary": "性能优化这一层的翻车，多半不是算错，而是优化错了对象。下表左列是最常见的写法，右列是本章给出的做法："
     }

@@ -22,6 +22,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from omp.overhaul.markdown_scan import scan_markdown
 
 BOOK_FILES = ["00-前言.md"] + sorted(
     p for d in ROOT.glob("第*篇*") for p in d.glob("*.md")
@@ -42,13 +44,14 @@ PLACEHOLDER = re.compile(r"第\s*M\s*章|chapter\s+M\b", re.IGNORECASE)
 def titles(files: list[Path]) -> dict:
     out: dict = {}
     for path in files:
-        first = path.read_text(encoding="utf-8").splitlines()[0].strip()
-        for pattern, key in ((H1_CHAPTER, "ch"), (H1_APPENDIX, "app")):
-            m = pattern.match(first)
-            if m:
-                out[(key, m.group(1).zfill(2) if key == "ch" else m.group(1))] = (
-                    m.group(2).strip()
-            )
+        prose = scan_markdown(path.read_text(encoding="utf-8")).prose
+        for line in prose.splitlines():
+            for pattern, key in ((H1_CHAPTER, "ch"), (H1_APPENDIX, "app")):
+                m = pattern.match(line.strip())
+                if m:
+                    out[(key, m.group(1).zfill(2) if key == "ch" else m.group(1))] = (
+                        m.group(2).strip()
+                    )
     return out
 
 

@@ -1,1 +1,0 @@
-MCP 一挂几十个工具，全量 schema 能吃掉几千 token；延迟发现省的是初始 prompt 的腰围。显式 alwaysLoad 的不延迟；MCP 默认延迟；搜索工具自己不延迟。

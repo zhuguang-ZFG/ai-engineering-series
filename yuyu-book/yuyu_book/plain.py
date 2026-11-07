@@ -169,18 +169,15 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
                    reached: dict[str, set[str]] | None = None) -> None:
     """Every gloss must be provably present in the prose it claims to explain.
 
-    An evidence pointer is checked against the real file: a `file:line` has to
-    sit outside a code fence and contain one of the registered surface forms;
-    a stable block id has to exist and its span has to carry the form. Both
-    forms are accepted during the migration, so an entry can move to block ids
-    without a flag day.
+    Evidence must name an existing stable block whose prose carries a
+    registered surface form. Historical file:line pointers are rejected;
+    migrate.py remains the offline converter for historical registries.
     """
     errors: list[str] = []
     guides = manifest.get("guides", {})
     if not glosses and not paths and \
             not any((g.get("plain") for g in guides.values())):
         return          # layer not authored yet: build the book as it stands
-    cache: dict[str, dict[int, str]] = {}
     langs = manifest_langs(manifest)
     units = {unit[lang].replace("\\", "/"): (unit["id"], lang)
              for unit, _k, _p in unit_stream(manifest)
@@ -211,9 +208,8 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
               forms_by_lang: dict[str, list[str]] | None = None) -> set[str]:
         """Every language whose prose this pointer really reaches.
 
-        A legacy `file:line` reaches exactly one language; a stable block id
-        can be shared by both editions, so it may reach two. An empty set
-        means the pointer proved nothing; the reason is in `errors`.
+        A stable block id may reach both editions. An empty set means the
+        pointer proved nothing; the reason is in `errors`.
         """
         ref = str(ref)
         if ID_RE.match(ref):
@@ -223,6 +219,9 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
                 return set()
             got: set[str] = set()
             for block in hits:
+                if block.kind == "fence":
+                    errors.append(f"{who}: block {ref} is inside a code fence")
+                    continue
                 if forms_by_lang is not None:
                     want = forms_by_lang.get(block.lang) or []
                     if not any(f in block.text for f in want):
@@ -233,33 +232,9 @@ def validate_plain(glosses: dict, paths: dict, manifest: dict,
             if reached is not None and got:
                 reached.setdefault(ref, set()).update(got)
             return got
-        m = re.match(r"^(.+):(\d+)$", ref)
-        if not m:
-            errors.append(f"{who}: evidence {ref!r} is not file:line or a "
-                          "block id")
-            return set()
-        rel, lineno = m.group(1), int(m.group(2))
-        lang = "en" if rel.replace("\\", "/").startswith("en/") else "zh"
-        if rel not in cache:
-            path = root / rel
-            if not path.exists():
-                errors.append(f"{who}: evidence file {rel} missing")
-                return set()
-            cache[rel] = prose_lines(read_text(path))
-        line = cache[rel].get(lineno)
-        if line is None or not line.strip():
-            errors.append(f"{who}: evidence {ref} is inside a code fence, "
-                          "blank, or past the end of the file")
-            return set()
-        if forms_by_lang is not None:
-            want = forms_by_lang.get(lang) or []
-            if not any(f in line for f in want):
-                errors.append(f"{who}: evidence {ref} does not contain any "
-                              f"registered form")
-                return set()
-        if reached is not None:
-            reached.setdefault(ref, set()).add(lang)
-        return {lang}
+        errors.append(f"{who}: evidence {ref!r} must be a stable block id; "
+                      "migrate historical file:line references before building")
+        return set()
 
     for gid, g in glosses.items():
         if not SOURCE_ID_RE.match(gid):

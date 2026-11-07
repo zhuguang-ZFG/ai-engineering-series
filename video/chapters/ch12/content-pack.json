@@ -1,26 +1,21 @@
 {
   "schema_version": 1,
   "id": "ch12",
-  "title": "第12章 MCP 集成与外部协议",
+  "title": "第 12 章　MCP 集成与外部协议",
   "source": "第三部分-高级模式篇/12-MCP集成与外部协议.md",
   "sections": [
     {
       "index": 1,
-      "title": "12.1 MCP 架构概览",
-      "summary": "技术细节之前，先弄明白 MCP 到底想解决什么问题。"
-    },
-    {
-      "index": 2,
       "title": "12.2 MCP 工具集成",
       "summary": "MCP 工具集成，是把外部服务器上的工具无缝接进 Claude Code 内部工具系统的过程。这一过程涉及三个关键阶段：工具发现（Discovery）、工具映射（Mapping）和工具注册（Registration）。理解这个链路，就理解了 MCP 如何将\"外部工具\"变成\"内部能力\"。"
     },
     {
-      "index": 3,
+      "index": 2,
       "title": "12.3 MCP 权限与安全",
       "summary": "安全性是 MCP 集成中最关键的话题。与内置工具不同，MCP 工具来自外部第三方，其行为不可预测、不可控制。因此，Claude Code 为 MCP 构建了多层防御体系，从配置作用域到服务器审批，从工具白名单到插件去重，每一层都针对特定的安全威胁。"
     },
     {
-      "index": 4,
+      "index": 3,
       "title": "12.4 IDE 集成：Bridge 系统",
       "summary": "Bridge 系统是 Claude Code 与外部世界双向通信的核心层。它对接了 VS Code、JetBrains 等 IDE，也接上了 Claude.ai 平台的远程控制功能。如果 MCP 协议是 Claude Code 与工具服务器之间的\"方言\"，那么 Bridge 系统就是 Claude Code 与整个外部世界之间的\"通用语言\"。"
     }

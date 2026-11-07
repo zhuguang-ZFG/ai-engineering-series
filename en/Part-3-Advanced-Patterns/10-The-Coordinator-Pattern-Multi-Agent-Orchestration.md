@@ -120,6 +120,8 @@ graph LR
 >
 > The correct pattern is: the coordinator directly receives each worker's results, understands them itself, and then writes the next set of instructions.
 
+Understanding requires accessible input. The four-tool list above contains no Read tool, so returning only a Scratchpad path does not give the coordinator the findings. A worker's report should also include the key conclusions, source locations, and unresolved questions; the file can hold the detailed record for repeated reference. The coordinator uses the content it has actually received to decide interfaces, ordering, and file ownership. It cannot present unseen file contents as its own findings.
+
 ---
 
 ## 10.2 Worker Tool Allocation
@@ -185,7 +187,7 @@ In Full mode, workers can also use MCP tools and Skill tools. The system prompt 
 
 The system assembles workers' tool pools independently from the parent level, ensuring that workers always get the complete tool set, unaffected by parent-level tool restrictions. Workers default to the `acceptEdits` permission mode (automatically accept file edits), unless the agent definition specifies another mode.
 
-This design decision reflects an important principle: **workers are executors, and permission issues should not hinder them**. If a worker needed user confirmation every time it edited a file, that would completely negate the advantages of multi-agent collaboration. Of course, this requires the coordinator to assign tasks correctly -- if given the wrong modification task, a worker will execute it without hesitation.
+Independent assembly solves a different problem: the coordinator's lack of Edit should not also deprive an implementation worker of Edit. It does not exempt workers from policy. `acceptEdits` describes how edits are confirmed here; it does not establish authorization for Bash, external MCP operations, or writes to arbitrary directories. Assignments still need file boundaries and actions that require separate authorization. Missing permission is a boundary to report, not a reason to switch tools and work around it.
 
 > **Best Practice: Pre-confirm Task Scope Under Coordinator Mode**
 >
@@ -271,6 +273,8 @@ graph TD
 
 The message sending tool's intelligent routing mechanism is particularly noteworthy: when the coordinator sends a message to a running worker, the system queues the message for the next round of tool invocation; when sending to a stopped worker, the system automatically resumes that worker and delivers the message as a new prompt. This "stop-resume" pattern lets the coordinator manage workers' lifecycles without breaking stride.
 
+Successful delivery and task completion are different events. After sending an update to a running worker, the coordinator cannot assume the worker has already adopted it; the message still awaits processing. If A needs B's result to continue while B waits for A to deliver a file, neither task will finish just by waiting longer. The coordinator has to break the cycle: settle the common interface, have one side deliver an independent result first, or assign the dependent edits in sequence.
+
 > **Design Insight: The Economy of the Stop-Resume Pattern**
 >
 > Workers are not "always online." A research worker stops after completing its investigation, releasing API connections and memory resources. But the coordinator may later need to give this worker an additional task (e.g., "For module X you investigated earlier, look deeper into the dependency relationships"). The stop-resume pattern lets the coordinator reactivate workers when needed without rebuilding context from scratch. This both saves resources and preserves the previous analysis state.
@@ -293,6 +297,8 @@ The Scratchpad's design principles are:
 4. **Structural freedom**: The system does not prescribe a file structure; workers organize it as needed
 
 In the Coordinator's system prompt, the scratchpad's description reads "durable cross-worker knowledge," hinting at its core purpose: serving as shared memory between workers.
+
+Durable here is relative to a round of messaging. A file can be read repeatedly during the collaboration; that does not make the directory a permanent project knowledge base. A shared directory has no automatic merge mechanism either. Let researchers own separate reports and let the coordinator reference them. Two writers editing the same implementation spec can still overwrite each other. These temporary records also remain subject to team cleanup.
 
 #### Typical Scratchpad Usage Patterns
 
@@ -403,6 +409,8 @@ The Coordinator system prompt defines a clear concurrency strategy:
 | Read-only tasks (Research) | Free parallelism | No conflicts will arise |
 | Write-heavy tasks (Implementation) | One at a time per file set | Prevent file write conflicts |
 | Verification | Sometimes parallel with implementation | Safe when operating on different file regions |
+
+Decide parallelism from a task's inputs and write targets, not just its role. API and database investigations can read concurrently. A schema change and service implementation may touch different files, but they still need agreed fields and interfaces before each side writes its own interpretation. Verification against a changing worktree may see only half an implementation, so its failure does not establish the state of the final version. Before dispatch, the coordinator should specify who writes each file, what each delivery depends on, and which state verification will inspect.
 
 ```mermaid
 ---
@@ -594,6 +602,8 @@ flowchart TD
 When a research-phase worker only completes a partial investigation (e.g., analyzed the API layer but not the database layer), the coordinator faces a choice: proceed with available information, or wait for a complete analysis.
 
 The guiding principle in the system prompt is: **the coordinator should make full use of completed work rather than waiting for perfect information**. If Worker A completed 80% of the code investigation, the coordinator should write the implementation spec based on that 80% of the information, flagging uncertain portions in the spec so the implementation worker can investigate the gaps itself when it encounters uncovered areas.
+
+For example, an API investigation may have confirmed route locations without establishing transaction boundaries. The coordinator can prepare the route portion of the spec, but cannot fill the gap by saying the database should work the same way. The gap needs a concrete prerequisite investigation. An implementation failure does not automatically restore files already written, either. Before reassignment, the coordinator must identify existing edits and unfinished work, and ensure the old worker is no longer writing that file set.
 
 > **Best Practice: Use "Confidence Annotations" in the Scratchpad**
 >

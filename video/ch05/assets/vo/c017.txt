@@ -1,1 +1,0 @@
-最后是策略层的例外。policySettings 不走合并，它走「首个非空源胜出」。四个来源排队：远程 API、MDM、managed-settings.json 文件、HKCU 注册表。

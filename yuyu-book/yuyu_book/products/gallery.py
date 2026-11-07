@@ -22,6 +22,7 @@ ART = BOOK_DIR / "illustrations"
 OUT = REPO_ROOT / "docs" / "illustration-gallery.html"
 
 ORDER = ["front", "ch01", "ch01-five-pillars", "ch02", "ch02-turn-loop",
+         "ch02-cancel-chain",
          "ch03", "ch03-tool-bench", "ch03-tool-pipeline",
          "ch04", "ch04-gate-steps", "ch05", "ch05-trust-ladder",
          "ch06", "ch06-memory-funnel", "ch07", "ch07-four-levels",
@@ -41,6 +42,7 @@ WIDE = {"ch03-tool-bench": 300, "ch03-tool-pipeline": 330,
         "ch10-coordinator-fork": 330, "ch11-skill-stairs": 330,
         "ch12-mcp-state-dial": 330, "ch13-concurrency-gate": 330,
         "ch14-plan-gate": 330, "ch15-harness-wheel": 330}
+WIDE["ch02-cancel-chain"] = 360
 WIDTH = {n: (420 if n == "cover" else WIDE.get(n) or (300 if n in BIG else 120))
          for n in ORDER}
 
@@ -51,6 +53,7 @@ PLAIN = {
     "ch01-five-pillars": "一道门廊：五条原则顶着同一根横梁",
     "ch02": "心跳：一句话进、一句话出的对话循环",
     "ch02-turn-loop": "四格胶片：问一句、点工具、跑完、填回去再问",
+    "ch02-cancel-chain": "停看不等于停工：左边只暂停取事件，右边把取消送到 API 与工具，再释放资源",
     "ch03": "螺母：Agent 的双手——工具越多，本事越大",
     "ch03-tool-bench": "一张工具台：每件家伙什只管一件事",
     "ch03-tool-pipeline": "四格胶片：排队、切批、同时开工、按序交回",
@@ -98,6 +101,7 @@ PLAIN_EN = {
     "ch02": "Heartbeat: one message in, one out",
     "ch02-turn-loop": "A filmstrip: ask, pick a tool, run it, put the "
                       "result back and ask again",
+    "ch02-cancel-chain": "Pausing the display is not cancelling work: deliver cancellation to the API and tools, then release resources",
     "ch03": "Nut: the agent's hands — more tools, more skill",
     "ch03-tool-bench": "A tool bench: every tool on the wall does one job",
     "ch03-tool-pipeline": "A filmstrip: queue up, split, work at once, "
@@ -346,7 +350,7 @@ PAGE_TAIL = """</div>
 </main>
 <footer>
   <a href="portal.html">返回站点导航</a> ·
-  <a href="book.html">打开大书</a> ·
+  <a href="yuyu-agent-harness-zh.html">打开大书</a>
   <a href="knowledge-cards.html">知识卡</a> ·
   画风体系来自 <a href="https://github.com/yang0/handraw-style">yang0/handraw-style</a>
   （MIT with Attribution）
@@ -355,6 +359,7 @@ PAGE_TAIL = """</div>
 <script>
 const SPEEDS = [1, 1.6, 2.6];
 let speedIdx = 0;
+const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
 /* spring curve precompiled to linear() — zero runtime, hardware accelerated
    (technique: joshwcomeau.com/animation/linear-timing-function) */
 const SPRING = "linear(0,0.09,0.24,0.42,0.55,0.66,0.74,0.81,0.87,0.91,0.95,0.97,0.99,1,1.008,1.012,1.012,1.01,1.006,1.003,1)";
@@ -386,6 +391,7 @@ function prep(svg, baseDelay, factor) {
 }
 
 function playFigure(figure, baseDelay, factor) {
+  if (motionPreference.matches) return 0;
   const svg = figure.querySelector("svg");
   const {jobs} = prep(svg, 0, 1);
   const cap = 4200, est = jobs.length ? jobs[jobs.length-1].at + 400 : 0;
@@ -443,6 +449,7 @@ function playAll(factor, ambient) {
 
 /* the ink bursts where you click — a dozen droplets ride one spring curve */
 function burst(x, y) {
+  if (motionPreference.matches) return;
   const colors = ["#26221B", "#26221B", "#43392B", "#B4472F"];
   for (let i = 0; i < 12; i++) {
     const s = document.createElement("i");
@@ -468,6 +475,7 @@ document.getElementById("speed").addEventListener("click", e => {
   e.target.textContent = "速度 ×" + SPEEDS[speedIdx];
 });
 function replayFigure(fig, cx, cy) {
+  if (motionPreference.matches) return;
   burst(cx, cy);
   fig.querySelector("svg").classList.add("alive");
   playFigure(fig, 0, SPEEDS[speedIdx] * 0.8);
@@ -504,13 +512,29 @@ document.querySelectorAll("figure.c").forEach(fig => {
   });
 })();
 
-if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  document.getElementById("motion-hint").textContent =
-    "检测到系统减少动效：已静置为成品图；点「重播全部」或任意一张图，即观看运笔与角色循环。";
-  document.getElementById("badge").textContent = "墨迹已干 · 点图重播";
-} else {
-  playAll(1, true);
+function syncMotionPreference() {
+  const reduce = motionPreference.matches;
+  document.getElementById("replay").disabled = reduce;
+  document.getElementById("speed").disabled = reduce;
+  document.querySelectorAll("figure.c").forEach(fig => {
+    fig.setAttribute("aria-disabled", String(reduce));
+  });
+  if (reduce) {
+    clearTimeout(document.getElementById("badge")._t);
+    document.getAnimations().forEach(animation => animation.cancel());
+    document.querySelectorAll(".grid svg").forEach(svg => svg.classList.remove("alive"));
+    document.querySelectorAll(".spark").forEach(spark => spark.remove());
+    document.getElementById("motion-hint").textContent =
+      "检测到系统减少动效：保留完整成品图，暂停运笔与角色循环。";
+    document.getElementById("badge").textContent = "静态阅读 · 减少动效";
+  } else {
+    document.getElementById("motion-hint").textContent = "点击图版或按 Enter / 空格重播。";
+    document.getElementById("badge").textContent = "墨迹已干 · 点图重播";
+  }
 }
+motionPreference.addEventListener("change", syncMotionPreference);
+syncMotionPreference();
+if (!motionPreference.matches) playAll(1, true);
 </script>
 </body>
 </html>

@@ -1,1 +1,0 @@
-第二，在测试里注入「半截就截断」的假模型，观察 escalate 与 recovery 怎么切换。第三，估算没有 DI 时，七条 Continue 加十种终止要写多少模块级 mock。

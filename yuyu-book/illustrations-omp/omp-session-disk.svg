@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img" aria-label="Moving the conversation leaf back to A does not undo the file changes made at B" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M22 29Q19 18 34 19L320 21Q333 20 332 34L330 248Q331 261 316 259L34 261Q20 258 22 245ZM406 29Q403 19 418 20L686 18Q700 19 698 33L700 247Q700 261 686 260L420 262Q405 260 407 246Z" opacity=".35"/>
+  <g font-family="serif" font-size="20" text-anchor="middle" fill="currentColor" stroke="none">
+    <text x="177" y="54">session.jsonl</text><text x="553" y="54">file.ts</text>
+    <text x="116" y="121">A</text><text x="261" y="121">B</text><text x="112" y="238">leaf</text>
+    <text x="554" y="226">B</text><text x="369" y="151" font-size="42">≠</text>
+  </g>
+  <path d="M54 168Q70 141 89 121M54 168Q85 168 111 177M141 113Q184 112 230 114M221 108L231 114L222 121M145 177Q196 165 240 144"/>
+  <path d="M97 96Q120 88 136 104Q147 120 130 137Q106 148 92 128Q83 107 97 96ZM245 96Q267 88 281 106Q292 127 269 138Q249 146 235 126Q229 107 245 96ZM99 161Q116 151 130 164Q144 183 127 194Q108 204 96 188Q85 174 99 161Z"/>
+  <path d="M116 205L116 146M108 154L116 143L124 154" stroke-width="4"/>
+  <path d="M459 77Q455 75 456 88L454 192Q454 202 466 203L643 201Q652 202 651 190L652 91L630 76L459 77ZM630 78L628 98L651 97M475 112Q522 107 562 112M474 137Q543 133 627 138M475 161Q523 157 572 161M474 183Q532 178 621 182"/>
+  <path d="M586 106L609 123M606 105L584 124M583 150L591 158L609 143"/>
+  <path d="M360 69Q364 81 359 95M360 183Q364 203 360 224" stroke-dasharray="3 7" opacity=".35"/>
+</svg>

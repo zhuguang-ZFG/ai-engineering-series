@@ -1,10 +1,7 @@
-"""The sample chapter is the real chapter, rehosted without drift.
+"""The source-rendered sample stays complete, offline and current.
 
-The body is lifted from the built edition (the book's own pipeline), so the
-suite compares the shipped page with a fresh lift whenever `dist/` exists.
-Structure checks stay runnable without a build: the sample must keep one
-chapter, retarget cross-chapter jumps at the full edition, and carry the
-shared marks.
+Freshness is checked on every run; no dist directory or skipped build check
+can conceal stale sample prose.
 """
 from __future__ import annotations
 
@@ -56,17 +53,13 @@ class Sampler(unittest.TestCase):
             self.assertNotIn("<img", page, out)
             self.assertIn("@media print", page, out)
 
-    def test_the_book_is_built_before_the_sample_can_drift(self):
-        """A missing edition must be a loud failure, not a stale answer."""
-        missing = [lang for lang in OUT if not sample._dist(lang).exists()]
-        if missing:
-            self.skipTest(f"book not built for {missing}; the Pages job "
-                          "builds it first and diffs the regenerated sample")
+    def test_the_sample_is_current_without_a_built_edition(self):
+        """The shared source pipeline, not dist HTML, supplies the excerpt."""
         for lang, out in OUT.items():
             model = load_repo_model([lang])
             fresh = sample.page_for(model, lang)
             self.assertEqual(fresh, out.read_text(encoding="utf-8"),
-                             f"{out}: rebuild the book, then the sample")
+                             f"{out}: regenerate the source-rendered sample")
 
 
 if __name__ == "__main__":

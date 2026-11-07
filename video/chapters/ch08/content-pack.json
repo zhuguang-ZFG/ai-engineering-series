@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "ch08",
-  "title": "第8章：钩子系统 -- Agent 的生命周期扩展点",
+  "title": "第 8 章　钩子系统 — Agent 的生命周期扩展点",
   "source": "第二部分-核心系统篇/08-钩子系统-Agent的生命周期扩展点.md",
   "sections": [
     {
@@ -21,11 +21,6 @@
     },
     {
       "index": 4,
-      "title": "8.4 钩子配置与安全",
-      "summary": "钩子配置由 Zod Schema 严格把关。钩子 Schema 模块定义了完整的类型系统："
-    },
-    {
-      "index": 5,
       "title": "8.5 钩子最佳实践与反模式",
       "summary": "写钩子翻车的位置相当固定，一张表收齐："
     }

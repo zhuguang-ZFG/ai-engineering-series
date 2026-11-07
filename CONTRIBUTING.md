@@ -34,20 +34,20 @@ python -m playwright install chromium   # 注意是 Python 包提供的 CLI，�
 
 ```bash
 python scripts/bookctl.py doctor       # 一次列全 python/node/浏览器/字体/依赖/写权限
-python scripts/bookctl.py check --fast # 源码模式装配 + 两套单测 + 内容 + 图语法（PR 层）
+python scripts/bookctl.py check --fast # 依赖 + 源码装配 + 两套单测 + 内容/图语法 + 视频 + 产品幂等（PR 层）
 python scripts/bookctl.py check --full # fast + 渲染装配 + 双语 PDF
 python scripts/bookctl.py build --product book --lang both --pdf
 python scripts/bookctl.py deps         # requirements.txt 与 uv.lock 对照
 python scripts/bookctl.py clean        # 删除 yuyu-book/dist（不依赖 rm -rf）
 ```
 
-调试单个阶段时仍可直接调用底层 `build.py`：
+调试单个阶段也通过同一入口，不再调用已删除的 `yuyu-book/build.py`：
 
 ```bash
-python yuyu-book/build.py --check              # 装配两语版并跑审计，输出进临时目录，不落 dist/、不出 PDF
-python yuyu-book/build.py --lang zh            # 只出中文版 HTML 到 yuyu-book/dist/
-python yuyu-book/build.py --lang en --pdf      # 英文版 HTML + PDF
-python yuyu-book/build.py --regen-index        # 从附录 D 重建 subject-index.json（随后仍会继续完整构建）
+python scripts/bookctl.py build --check               # 临时装配两语版，不写 dist、不出 PDF
+python scripts/bookctl.py build --lang zh             # 只出中文版 HTML
+python scripts/bookctl.py build --lang en --pdf       # 英文版 HTML + PDF
+python scripts/bookctl.py build --regen-index         # 重建索引后继续完整构建
 ```
 
 仓库根 `Makefile` 只是上面命令的薄包装；Windows 没有 make 时直接跑 `python scripts/bookctl.py ...`：
@@ -89,7 +89,7 @@ python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源
 3. **在 `yuyu-book/manifest.json` 登记**：`parts[].units[]`（或 `appendices[]`）里加 `{id, zh, en}`；`id` 同时就是成品里的锚点（`#ch09`、`#apxd`），改 `id` 等于改全书链接目标。两个语言路径都必须存在，否则 `validate_configs()` 报错。
 4. **补罗盘条目** `guides[<id>]`：`question` / `deliverable` / `boundary` 三个字段，每个都要 **zh 与 en 双语非空**。校验要求 guides 恰好覆盖所有单元（多一个少一个都不行），`audit` 还要求成品里的罗盘卡数量不少于单元数。
 5. **挂来源** `guides[<id>].sources`：填 `sources.json` 里已有的 id，写错 id 会被 `unknown source id` 拒绝。这些 id 在书里渲染成"来源锚点"chip，指向 `#source-<id>`。
-6. **补通俗层**（可选但强烈建议）：`guides[<id>].plain` 是一句章首导读带，`guides[<id>].analogy` 是紧跟其后的"打个比方"。两者都要 zh / en 双语，且必须同时给 `guides[<id>].plain_evidence` —— 一组 `文件:行号` 指针，指回书稿里真正支撑这句话的行。指针落点不能在代码围栏内，那一行还必须含书里真实出现过的词形；导读带要求中英两侧都有证据。写不出证据的白话，就是还没读懂正文，先别写。
+6. **补通俗层**（可选但强烈建议）：`guides[<id>].plain` 是一句章首导读带，`guides[<id>].analogy` 是紧跟其后的“打个比方”。两者都要 zh / en 双语，且必须同时给 `guides[<id>].plain_evidence` —— 一组稳定块 ID，例如 `ch03.tool-generics`，指回书稿里真正支撑这句话的块。块不能是代码围栏，且必须含登记过的词形；导读带要求中英两侧都有证据。两语不共用标记时分别登记两个 ID，不要把中文证据当作英文证据。旧 `文件:行号` 只供历史迁移读取，不再新增。
 7. **画一枚章徽**：`yuyu-book/illustrations/<id>.svg`（新篇再加 `part-<篇id>.svg`）。不画不会失败——构建器只统计"磁盘上有的图是否都上了页面"——但每个单元的标题行就空着一格。规格见第 5.2 节。
 8. 顺手更新 `yuyu-book/revisions.json` 的版本说明（zh/en 各一份）。
 
@@ -187,7 +187,7 @@ python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源
 - 章徽是 64×64 的单线小图、描边 2.1；题刻是 200×140 的小版画、描边 1.5；车图铺满整个版面、按层次分档描线（轮与辕 6.5/6，马身 4，辐与细部 1.2–2）。屏幕上题刻约 216px 宽、章徽 74px，三者不该用同一档笔画粗细。
 - 硬约束（`art.py` 的装载器逐条把关，违反即构建失败）：只用 `currentColor` 上色——一张图同时管屏幕、暗色模式与纸面，不需要第二份文件；不得出现 `id=`（同一份图会被内联进单文件几十次，一个 id 就是一次重复 id，审计会在离图很远的地方炸）、`href=`、`url(`、`<style>`、`<script>`；必须有 `viewBox`；章徽与题刻单文件 ≤ 6 KB，车图另设 `PLATE_BYTES` 上限（它只出现一次，不必跟着章徽的预算走）。
 - 语义优先于好看：图要能指着正文解释。第 12 章是桥（MCP 桥接外部协议），附录 C 是配电箱上的回路表（功能标志），第 1 章是辐辏之轮，第一部分是一整只三十辐的轮。看不出对应关系的图，等于给读者添噪声。
-- 章徽落在章名右侧的标题行末尾（纸面上缩到 2.4rem），题刻落在篇分隔页起头、压在出血的车轮影子上。少一枚图不会失败，但那一格的标题行就空着——`build.py` 会按"磁盘上能装配的图"逐个对账。
+- 章徽落在章名右侧的标题行末尾（纸面上缩到 2.4rem），题刻落在篇分隔页起头、压在出血的车轮影子上。少一枚图不会失败，但那一格的标题行就空着——`app.build_edition()` 会按“磁盘上能装配的图”逐个对账。
 
 ### 5.3 断言账本：会随版本腐坏的句子
 
@@ -273,7 +273,7 @@ P5 内容的本地来源提交为 `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`。
 - `article` 数量或 `compass` 卡数量少于单元数
 - 指向 `.md` 的残余链接
 
-`audit()` 之后 `build.py` 还有五道对账：正文术语标记数必须等于章末面板行数；章末按语数必须等于「按语集」的行数、且等于该语言真有按语的单元数；导读带、罗盘、新词面板、tier 徽、章徽、题刻的数量要写进统计行并与预期相等；磁盘上每一枚能装配的图都必须真的上了页面；主题索引每一行必须恰有一枚页码空位、`pdf_meta` 交给打印趟的行表必须与页面真正落下的行同名同序（行表错开一位，每个页码都会落到别人的头词上）。通俗层自身的证据与长度规则由 `plain.validate_plain()` 与 `plain.validate_notes()` 在装配之前把关，见第 5.1 节。
+`audit()` 之后 `app.build_edition()` 还有五道对账：正文术语标记数必须等于章末面板行数；章末按语数必须等于“按语集”的行数、且等于该语言真有按语的单元数；导读带、罗盘、新词面板、tier 徽、章徽、题刻的数量要写进统计行并与预期相等；磁盘上每一枚能装配的图都必须真的上了页面；主题索引每一行必须恰有一枚页码空位，交给 PDF 阶段的 `PrintManifest.index_rows` 必须与页面行同名同序。通俗层自身的证据与长度规则由 `plain.validate_plain()` 与 `plain.validate_notes()` 在装配之前把关，见第 5.1 节。
 
 PDF 阶段另有五道：命名目标缺失（`no destination found for ...`）、量页码那一趟没有目的地（`measuring print has no destination for ...`）、页码落进空位后翻页位置变了（`index folio(s) moved between the measuring print and this one`）、目录页码盖不全（`stamped only N of M contents rows`），以及目标文件被占用（`cannot replace yuyu-agent-harness-*.pdf`）——最后一道在 Windows 上尤其常见：阅读器、资源管理器的预览、或一个还开着 `dist/` 里 PDF 的校验脚本都会锁住文件；关掉它重跑即可，未盖章的 `*.raw.pdf` 会留在原地。索引页码要打印两趟，所以 `--pdf` 每种语言多花一趟打印的时间。打印出来的行内页码写回 `dist/` 里那份 HTML（屏幕上这一格本就隐藏，读屏也不会念出一个只有纸才知道的数）。
 
@@ -295,7 +295,7 @@ PDF 阶段另有五道：命名目标缺失（`no destination found for ...`）�
 - [ ] 章节增删导致 PDF 页数或单文件体积变化时，两份 README「离线整书」那一行的数字跟着改（Book CI 的 `scripts/check_artifact_claims.py` 会替你核对）
 - [ ] 涉及显示问题，注明阅读平台、文件与复现步骤
 
-CI 侧有两个工作流：`.github/workflows/check-book.yml`（内容门）与 `.github/workflows/book.yml`（内容门 + 构建审计 + 双语 PDF 产物）。PR 上两者都必须绿。
+CI 的书籍门禁统一在 `.github/workflows/book.yml`：`Fast` 运行源码装配、两套单测、内容、图语法、视频配置和产品幂等检查；`Full` 在 Fast 后运行渲染与双语 PDF；`Omp` 独立检查第二分册；`Bootstrap` 矩阵检查 Windows 与 Ubuntu 环境。`.github/workflows/release.yml` 负责版本一致性、最终装配、校验和与标签发布；`pages.yml` 负责站点部署。旧 `check-book.yml` 已退出。工作流存在不等于已执行通过，合并时必须核对同一候选提交的远端状态。架构边界见 [架构决策记录](docs/architecture-decisions.md)。
 
 ## 9. 反馈渠道
 

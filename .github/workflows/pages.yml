@@ -36,40 +36,16 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: npm
-
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
         with:
-          python-version: '3.12'
-
-      - run: npm ci
-
-      - run: python -m pip install -r yuyu-book/requirements.txt
-
-      - name: Install CJK fonts
-        timeout-minutes: 12
-        run: |
-          sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 \
-               install -y fonts-noto-cjk
-
-      - name: Install Chromium
-        timeout-minutes: 15
-        run: python -m playwright install --with-deps chromium
-
-      # the same plates Book CI warms; the reader/gallery generators read
-      # the dist HTML (both languages) for their plain-language extracts
+          browser: 'true'
       - name: Build the book (both editions)
-        run: python yuyu-book/build.py --lang both
+        run: python scripts/bookctl.py build --lang both
 
-      - name: Build the beginner readers
-        run: |
-          python scripts/build_beginner_reader.py
-          python scripts/build_illustration_gallery.py
+      - name: Rebuild every source product twice
+        run: python scripts/check_products.py
 
       # The committed docs/ is what the repository itself shows and what the
       # site contracts quote. A rewrite here means the shipped copy was stale —
@@ -95,12 +71,14 @@ jobs:
           cp yuyu-book/dist/yuyu-agent-harness-zh.html site/book.html
           cp yuyu-book/dist/yuyu-agent-harness-zh.html site/yuyu-agent-harness-zh.html
           cp yuyu-book/dist/yuyu-agent-harness-en.html site/yuyu-agent-harness-en.html
-          cp docs/beginner-reader.html site/beginner-reader.html
-          cp docs/beginner-reader.en.html site/beginner-reader.en.html
-          cp docs/illustration-gallery.html site/illustration-gallery.html
+          cp docs/*.html docs/*-index.json docs/*-map.json site/
           cp docs/illustration-prompts.md site/illustration-prompts.md
           cp cover.png site/cover.png
+          cp -R docs/images site/images
           python scripts/build_site_portal.py site/index.html
+
+      - name: Entry points and local links
+        run: python scripts/check_site_redirects.py site
 
       - uses: actions/configure-pages@v5
 

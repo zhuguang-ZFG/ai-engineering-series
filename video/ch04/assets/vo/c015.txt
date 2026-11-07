@@ -1,1 +1,0 @@
-bubble：子智能体权限冒泡回主智能体，权限边界不扩张。跟第 03 章 AgentTool 的 createSubagentContext 绑在一起——再生一双手，缰绳还在御者手里。

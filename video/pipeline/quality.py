@@ -1,6 +1,6 @@
-"""Static and audio gates. Static checks always run; loudness, peak and silence
-run when the narration file is on disk, so a clean clone still checks the
-configuration.
+"""Static gates always run; explicit audio verification requires a recording
+for every declared format and measures loudness, peak and silence. Configuration
+checks do not claim media quality when narration is absent.
 """
 from __future__ import annotations
 
@@ -31,9 +31,10 @@ def _luminance(color: str) -> float:
 
 
 def contrast(foreground: str, background: str) -> float:
+    """Exact WCAG ratio; callers must not round before the 4.5:1 check."""
     one, two = sorted((_luminance(foreground), _luminance(background)),
                       reverse=True)
-    return round((one + 0.05) / (two + 0.05), 2)
+    return (one + 0.05) / (two + 0.05)
 
 
 def _duration(path: Path) -> float:
@@ -89,7 +90,7 @@ def check(episode: dict, scenes: dict, manifests: dict, cues: dict,
     ratio = contrast(style["foreground"], style["background"])
     if ratio < 4.5:
         errors.append(
-            f"{episode['id']}: caption contrast {ratio}:1 is below 4.5:1")
+            f"{episode['id']}: caption contrast {ratio:.3f}:1 is below 4.5:1")
     for fmt, spec in episode["formats"].items():
         width, height = spec["width"], spec["height"]
         safe = style["safe_pct"] / 100
@@ -115,10 +116,11 @@ def check(episode: dict, scenes: dict, manifests: dict, cues: dict,
             segment["text"]
             for segment in (manifests.get(fmt) or {}).get("segments", [])))
         shown = normalized("".join(cue["text"] for cue in track))
-        if track and wanted != shown:
+        if wanted != shown:
             errors.append(
                 f"{episode['id']}: {fmt} captions do not match the narration")
-        if track and track[-1]["end"] > spec["duration_s"] + 0.1:
+        if track and max(cue["end"] for cue in track) > \
+                spec["duration_s"] + 0.1:
             errors.append(
                 f"{episode['id']}: {fmt} captions run past the format duration")
         for flash in (scenes.get("flashes") or {}).get(fmt, []):
@@ -143,9 +145,19 @@ def check(episode: dict, scenes: dict, manifests: dict, cues: dict,
 
     if check_audio:
         legacy = episode.get("legacy") or {}
-        for fmt, audio in (scenes.get("audio") or {}).items():
+        declared = scenes.get("audio") or {}
+        for fmt in episode["formats"]:
+            audio = declared.get(fmt)
+            if not audio or not audio.get("path"):
+                errors.append(
+                    f"{episode['id']}: {fmt} narration is not declared; "
+                    "audio verification requires a real recording")
+                continue
             base = format_base(chapter_dir, legacy, fmt)
-            if not audio or base is None:
+            if base is None:
+                errors.append(
+                    f"{episode['id']}: {fmt} narration base cannot be resolved "
+                    f"for {audio['path']}")
                 continue
             path = base / audio["path"]
             if not path.is_file():

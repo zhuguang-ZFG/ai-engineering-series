@@ -1,36 +1,11 @@
 {
   "schema_version": 1,
   "id": "ch14",
-  "title": "第14章：Plan 模式与结构化工作流",
+  "title": "第 14 章　Plan 模式与结构化工作流",
   "source": "第四部分-工程实践篇/14-Plan模式与结构化工作流.md",
   "sections": [
     {
       "index": 1,
-      "title": "14.1 Plan 模式的架构",
-      "summary": "Plan 模式是 Claude Code 中最独特的设计之一。它将 Agent 的行为分为两个阶段：只读探索阶段（规划）和可写执行阶段（实施）。这种分离的核心理念是：在动手之前先对齐意图，避免方向性错误导致的返工。"
-    },
-    {
-      "index": 2,
-      "title": "14.2 计划验证机制",
-      "summary": "ExitPlanModeV2Tool 引用了 registerPlanVerificationHook，它旁边的注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。"
-    },
-    {
-      "index": 3,
-      "title": "14.3 工作流系统",
-      "summary": "Claude Code 的工作流能力主要由 Skill 系统提供。Skill 本质上是预定义的 prompt 模板，可以通过 slash command 触发。Skill 执行的核心准备函数处理三件事："
-    },
-    {
-      "index": 4,
-      "title": "14.4 调度系统",
-      "summary": "Claude Code 的调度系统管两类定时任务："
-    },
-    {
-      "index": 5,
-      "title": "14.5 后台任务与主动模式",
-      "summary": "SleepTool 归在后台任务管理这一类里。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。"
-    },
-    {
-      "index": 6,
       "title": "14.6 结构化工作流：常见翻车 / 正确做法",
       "summary": "工作流这一层的翻车，多半不是逻辑写错，而是把「想」和「做」混在一段里。下表左列是最常见的写法，右列是本章给出的做法："
     }

@@ -1,3 +1,0 @@
-细分终止，是为了调试时第一眼就知道「心跳停在哪」。
-主循环能测，是因为副作用被收进 QueryDeps。
-四个依赖特别关键：callModel、microcompact、autocompact、uuid。

@@ -1,26 +1,21 @@
 {
   "schema_version": 1,
   "id": "ch05",
-  "title": "第5章：设置与配置 -- Agent 的基因",
+  "title": "第 5 章　设置与配置 — Agent 的基因",
   "source": "第二部分-核心系统篇/05-设置与配置-Agent的基因.md",
   "sections": [
     {
       "index": 1,
-      "title": "5.1 六层配置源的优先级体系",
-      "summary": "Claude Code 的配置源在配置常量模块中定义为一个有序数组，包含五种配置来源：用户全局设置（userSettings）、项目共享设置（projectSettings）、项目本地设置（localSettings，gitignored）、CLI 标志设置（flagSettings）和企业策略设置（policySettings）。"
-    },
-    {
-      "index": 2,
       "title": "5.2 安全边界设计",
       "summary": "配置系统的核心安全挑战是：projectSettings（.claude/settings.json）会跟着提交进 Git 仓库，谁克隆了恶意仓库，谁就可能不知不觉把攻击者的配置加载进来。Claude Code 的防护策略是：在安全敏感的检查中，系统性地排除 projectSettings。"
     },
     {
-      "index": 3,
+      "index": 2,
       "title": "5.3 功能开关系统",
       "summary": "Claude Code 的功能开关系统分为两层：编译时的 feature() 函数和运行时的 GrowthBook 实验框架。这种双层设计反映了软件发布工程中的一个经典权衡：编译时开关控制特性但不增加运行时开销，运行时开关则不用重新部署就能快速迭代。"
     },
     {
-      "index": 4,
+      "index": 3,
       "title": "5.4 状态管理系统",
       "summary": "状态管理是 Agent 系统的\"神经系统\"——配置是基因，决定了 Agent 的潜力；状态是神经系统，实时传递和协调 Agent 的运行时行为。Claude Code 的状态管理方案极简，其设计哲学值得深入分析。"
     }

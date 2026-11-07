@@ -9,14 +9,15 @@ make book-omp
 make book-omp-pdf
 ```
 
-等价于：
+等价于底层构建器的调用（在 `yuyu-book/` 下运行，或设 `PYTHONPATH=yuyu-book`）：
 
 ```text
-python yuyu-book/build.py --lang zh --manifest manifest-omp.json --sources sources-omp.json [--pdf]
+python -m yuyu_book --lang zh --manifest manifest-omp.json --sources sources-omp.json [--pdf]
 ```
 
+`bookctl build --product omp` 已经替你选好 manifest 与 sources，一般不必直接调用底层入口。
 Omp 默认加载自己的通俗层登记表，包括术语标注、档位芯片和 39 条按语。
-需要比较没有通俗层的排版时，可在 `build.py` 命令中加入 `--no-plain`。
+需要比较没有通俗层的排版时，在 `bookctl build --product omp ...` 后加 `--no-plain`。
 
 产物写到 `yuyu-book/dist/`：
 
@@ -35,15 +36,15 @@ Omp 默认加载自己的通俗层登记表，包括术语标注、档位芯片�
 - `yuyu-book/notes-omp.json`：39 条眉批（前言 + 33 章 + 5 附录各一条，≤36 字）
 - `yuyu-book/reading-paths-omp.json`：33 章 / 381 节档位芯片（起步 33、主干 297、进阶 51）
 - `yuyu-book/sources-omp.json` / `revisions-omp.json`
-- 这些文件名不是 `build.py` 里的分支判断，也不是 `registry.py` 给的（它只把 13 个登记表名列进 `FILES`
+- 这些文件名不是 `bookctl` 里的分支判断，也不是 `registry.py` 给的（它只把 13 个登记表名列进 `FILES`
   白名单，不在表里的直接 `unknown registry`）：通俗层三个由 `yuyu_book/plain.py:70 registry_names()`
   按 manifest 的 `product` 键算出（缺省或 `book` → 裸名，`omp` → `-omp` 兄弟），`revisions` 与主题索引
   两个由 manifest 的 `revisions_registry` / `subject_index_registry` 键给出（后者为 `null`，所以 omp
   不排书末索引），骨架与来源则由命令行 `--manifest` / `--sources` 给出
 - 插画双轨：章节内 `images/*.jpg` 相对路径嵌入；正文有 13 张 Mermaid，覆盖全部七篇，
   已达到每篇 ≥1、全书 ≥12 的要求。16 张已知问题图的替换记录见 `overhaul/ILLUST-CHECKLIST.md`。
-- 第三轨：`yuyu-book/illustrations-omp/` 的内联 SVG，46 份 = 39 枚单元章徽（64×64，每单元一枚）
-  + 7 幅篇题刻（200×140，每篇一幅），走御舆同一个 `art._read()` 门禁；
+- 第三轨：`yuyu-book/illustrations-omp/` 的内联 SVG，47 份 = 39 枚单元章徽（64×64，每单元一枚）
+  + 7 幅篇题刻（200×140，每篇一幅）+ 1 幅正文插图（`omp-session-disk.svg`，第 7 章），走御舆同一个 `art._read()` 门禁；
   进度与字节账在 `docs/yuyu-overhaul/ILLUST-SYNC.md` 第九、十节
 
 ## 本机已验证（America/Adak 对应机器本地时间 2026-11-04）

@@ -1,1 +1,0 @@
-练习可以很具体。第一，追一次工具调用：在 stream_request_start、首个 tool_use 到达、runTools 启动、continue 前打四个点，看事件如何从 API 流进执行再回到下一轮。

@@ -1,1 +1,0 @@
-MCP 还能用服务器级通配，一把管住一整组工具。阶段三，checkPermissions——工具自己的上下文评估。Bash 会拆子命令、看路径、配前缀规则。返回四种行为：allow、deny、ask、passthrough。

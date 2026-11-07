@@ -1,5 +1,6 @@
 # 附录 E 版本钉扎与页边核对
 
+<!-- block: omp-apxe.b-ff2ceb2f -->
 本书**写作钉** **omp v18.15.0**（`omp-src/docs`）。用户本机已验证 **v18.16.0**（见 `VERIFY.md`）。二进制与文档可能漂移。本附录教你怎么钉、怎么对、怎么记页边。
 
 ![图E-1 钉住版本](images/figE-1-pin-version.jpg)

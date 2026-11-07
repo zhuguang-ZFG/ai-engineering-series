@@ -1,1 +1,0 @@
-生产部署、密钥、不可逆操作，别靠 auto。bypassPermissions：除 deny 和不可绕过的安全检查外全放行。CI、容器隔离场景常用。即便全信任，deny、requiresUserInteraction、内容级 ask、safetyCheck 仍守底线。

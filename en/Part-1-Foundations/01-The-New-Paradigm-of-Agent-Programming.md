@@ -41,7 +41,7 @@ This mode only goes so far: the LLM can only "speak," not "act." It cannot read 
 
 In 2024, a fundamental cognitive shift began to spread: **the true value of LLMs lies not in generating text, but in serving as a reasoning engine to orchestrate tool calls.** When the LLM is no longer merely "the one answering questions" but becomes "the decision hub that determines what tools to call, what parameters to pass, and how to process the returned results," its capability boundaries swung wide open.
 
-After the shift, the LLM's role changed from a passive text generator to an active task orchestrator. The old LLM was a staff officer who could only dictate instructions; tool calling made it a commander who coordinates units in combat directly. The staff officer's instructions need messengers to relay them level by level, while the commander's orders can reach every combat unit in milliseconds.
+Walk through “read `package.json` and tell me how to run the tests” and the division becomes clear. The model first produces a read request naming a tool and a file path; no file has been read yet. The harness validates the arguments, checks permission, invokes the local reader, and includes the file contents as a tool result in the next model request. Only then can the model explain the test script. If permission is denied, the result contains no file contents, and a guess must not become a claim that the file was read. The model proposes the next step; the runtime performs the permitted operation and returns what actually happened.
 
 ### The Breakthrough Significance of Tool Use
 
@@ -352,7 +352,7 @@ By this design, Claude Code's dialog loop is an "event stream" rather than a "re
 <!-- block: ch01.b-a490541c -->
 **What if we didn't design it this way?** If we used a callback pattern, every new event type would require registering a new callback function. As event types increase, the code would become an unmaintainable "callback hell." If we used Promise chains, although they solve callback hell, the option to cancel mid-stream disappears -- when the user presses Ctrl+C, the ongoing API call does not stop cleanly. If we used EventEmitter, although it solves the cancellation problem, it introduces memory leak risks (forgetting to remove listeners) and type safety issues (event names are strings).
 
-AsyncGenerator is the only solution that simultaneously satisfies all three requirements: "streaming output," "cancellable," and "type-safe."
+AsyncGenerator keeps event delivery and suspension points in one control flow; it does not automatically stop the outside world. If the consumer stops requesting values, the generator waits at `yield`, but a network stream or child process slows down only if the layer underneath also waits for its consumer. Calling `.return()` asks the generator to finish; it does not interrupt pending I/O by itself. Chapter 2 separates the two responsibilities: carrying events outward, and carrying cancellation down to the API, tools, and child processes.
 
 ### Principle Two: Security at the Perimeter
 
@@ -406,8 +406,8 @@ Particularly noteworthy is the MCP (Model Context Protocol) integration approach
 
 Claude Code's state management draws on the immutable state patterns of Redux/Zustand. A minimal store implementation implements the core state store. This implementation, while concise, contains important design decisions:
 
-- **Updater Function Pattern**: State updates receive a `(prev: T) => T` function rather than the new state value itself. This ensures that every state update is based on the previous state, avoiding race conditions.
-- **Reference Equality Check**: Reference comparison ensures notifications fire only when actual changes occur, avoiding unnecessary re-renders.
+- **Updater Function Pattern**: Updates receive a `(prev: T) => T` function. If two callbacks each increment a counter, each update computes from the current `prev` rather than from a previously captured count. This avoids that kind of stale-value overwrite; it does not synchronize file operations or network requests.
+- **Reference Equality Check**: The store compares object references, not every field. Return the original object when nothing changed and a new object when a field changed. Mutating a field and returning the old reference can hide an update from subscribers; allocating a new object with unchanged values sends an unnecessary notification.
 - **Subscribe/Unsubscribe Pattern**: A collection manages listeners, with cleanup functions returned to prevent memory leaks.
 
 At the dialog loop level, the loop holds immutability just as tight: each iteration replaces the cross-iteration state wholesale and destructures the fields it needs from the state object, so read operations always see immutable snapshots.

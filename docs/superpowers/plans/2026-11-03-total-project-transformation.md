@@ -46,71 +46,93 @@
 - [x] P3.2 拆 core.py：I/O、路径、配置、模型、诊断。
 - [x] P3.3 拆 render.py：Markdown、HTML 变换、引用、图版、长名称。
 - [x] P3.4 拆 pages.py：前置页、正文单元、后置页、导航。
-- [ ] P3.5 拆 style.py：令牌、屏幕、打印、组件、装饰 SVG；构建时合并内联。
+- [x] P3.5 拆 style.py：令牌、屏幕、打印、组件、装饰 SVG；构建时合并内联。
 - [x] P3.6 定义 PrintManifest，让 PDF 后处理读取结构化元数据。
-- [ ] P3.7 每完成一个模块，运行 legacy/v2 双构建并比较结构报告。
+- [x] P3.7 每完成一个模块，运行 legacy/v2 双构建并比较结构报告。
 - [ ] P3.8 新内核成为默认后，保留旧入口一个阶段并输出弃用提示。
+      旧入口 `yuyu-book/build.py` 已直接删除，没有保留弃用阶段；残留兼容层见 P8.1。
 - [ ] Gate：结构等价报告全绿；HTML 离线、无脚本、PDF 契约全部保持。
       2026-11-07 来源收口候选在本地分支 `feat/p5-provenance-gate`：P5 内容已形成
       `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`；规则的匹配范围不变，来源改为真实提交，
       数字增量与精确值规则改在 CLI 读取边界校验。回归测试与政策改动待审，P3 Gate 不勾选。
-      同内容双内核实测与候选的范围区别见 `docs/migrations/legacy-v2-structure.md`。
+      同内容双内核实测与候选的范围区别见 `docs/migrations/legacy-v2-structure.md`；
+      当前结构对照为零结构差异，离线、无脚本与 PDF 契约由构建器测试覆盖。
 
 ## P4：产品生成器统一
 
-- [ ] P4.1 建立共享设计令牌和组件语义，覆盖大书、portal、reader、gallery、cards、sample。
-- [ ] P4.2 beginner reader 从读取 dist HTML 改为读取 BookModel。
-- [ ] P4.3 illustration gallery、site portal、知识卡和样章改为产品适配器。
-- [ ] P4.4 生成静态双语搜索索引、同段语言跳转表和概念关联表。
-- [ ] P4.5 增加站点键盘、读屏、窄屏、暗色和 reduced-motion 测试。
-- [ ] P4.6 对三个现有生成页执行统一视觉审计，保留御舆墨线体系。
-- [ ] Gate：所有产品重跑无 diff；关闭脚本仍可完整阅读和导航。
+- [x] P4.1 建立共享设计令牌和组件语义，覆盖大书、portal、reader、gallery、cards、sample。
+- [x] P4.2 beginner reader 从读取 dist HTML 改为读取 BookModel。
+- [x] P4.3 illustration gallery、site portal、知识卡和样章改为产品适配器。
+- [x] P4.4 生成静态双语搜索索引、同段语言跳转表和概念关联表。
+- [x] P4.5 增加站点键盘、读屏、窄屏、暗色和 reduced-motion 测试。
+- [x] P4.6 对三个现有生成页执行统一视觉审计，保留御舆墨线体系。
+- [x] Gate：所有产品重跑无 diff；关闭脚本仍可完整阅读和导航。
+      2026-11-07 实测：`scripts/check_products.py` 11 个产物字节一致、本地锚点通过；
+      站点无障碍与无脚本导航测试全绿。视觉审计见 `docs/migrations/product-visual-audit.md`。
 
 ## P5：事实与双语治理
 
-- [ ] P5.1 建立 Claim Ledger schema 和 claim_id 规则。
-- [ ] P5.2 导入版本、价格、数量、默认行为、性能数据和功能标志等高风险断言。
-- [ ] P5.3 中英文段落共享 claim_id，增加单边更新失败测试。
-- [ ] P5.4 增加复查周期、过期告警和发布阻断级别。
-- [ ] P5.5 为 15 章补齐最小可运行案例、练习、预期结果和版本锁。
-- [ ] P5.6 把事实、推断、教学简化和作者建议的标记规则写入 CONTRIBUTING.md。
+- [x] P5.1 建立 Claim Ledger schema 和 claim_id 规则。
+- [x] P5.2 导入版本、价格、数量、默认行为、性能数据和功能标志等高风险断言。
+- [x] P5.3 中英文段落共享 claim_id，增加单边更新失败测试。
+- [x] P5.4 增加复查周期、过期告警和发布阻断级别。
+- [x] P5.5 为 15 章补齐最小可运行案例、练习、预期结果和版本锁。
+- [x] P5.6 把事实、推断、教学简化和作者建议的标记规则写入 CONTRIBUTING.md。
 - [ ] Gate：正式发布模拟中，过期高风险 claim 为 0；双语事实差异为 0。
       P5.1–P5.6 已隔离提交为 `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`，但本地
       测试/政策变更仍待审，不把实现提交当作 Gate 通过。已执行 15 段案例、4 项练习测试、
-      17 项账本边界测试、538 项构建器测试和双语源稿装配；不包含 P3/P4/P6 混合改动。
+      17 项账本边界测试、542 项构建器测试和双语源稿装配；不包含 P3/P4/P6 混合改动。
+      2026-11-07 复验：release=True 校验 0 条告警，账本测试逐条验证中英同 claim_id；
+      独立审阅仍未完成，Gate 不勾选。
 
 ## P6：视频工厂重建
 
-- [ ] P6.1 根级固定唯一 HyperFrames 版本，建立 video/pipeline/。
-- [ ] P6.2 定义 episode schema、scene schema、voice/caption manifest。
-- [ ] P6.3 抽出长版、短版、字幕、封面和音频检查的共享步骤。
+- [x] P6.1 根级固定唯一 HyperFrames 版本，建立 video/pipeline/。
+- [x] P6.2 定义 episode schema、scene schema、voice/caption manifest。
+- [x] P6.3 抽出长版、短版、字幕、封面和音频检查的共享步骤。
 - [ ] P6.4 迁移 ch01，完成旧新时间线、字幕、时长和关键帧比较。
-- [ ] P6.5 迁移 ch02–ch05，删除章节级重复构建脚本和 package.json。
-- [ ] P6.6 证明 transcript、chunks、vo-manifest、字幕 HTML、音频切片可重建后停止跟踪。
-- [ ] P6.7 用统一内容包扩展 ch06–ch15。
-- [ ] P6.8 增加字幕一致性、安全区、字号、停留时间、闪烁、响度和版权门禁。
+      ch01 时间线、尺寸、fps、时长与音频时长已匹配 `compat-report.json`；旧版 SRT
+      不在 legacy 基目录，视频也未入库，字幕与关键帧比较保持 unverified，故不勾选。
+- [x] P6.5 迁移 ch02–ch05，删除章节级重复构建脚本和 package.json。
+      原有重复脚本和派生音频文字已从候选索引删除；保留旧场景源与必要配置。
+- [x] P6.6 证明 transcript、chunks、vo-manifest、字幕 HTML、音频切片可重建后停止跟踪。
+      独立进程重建证明见 `docs/migrations/video-rebuild-proof.md`；候选索引清单测试通过。
+- [x] P6.7 用统一内容包扩展 ch06–ch15。
+- [x] P6.8 增加字幕一致性、安全区、字号、停留时间、闪烁、响度和版权门禁。
 - [ ] Gate：15 章配置可检查；ch01–ch05 完成兼容审阅；中间物不进入 Git。
+      15 章配置检查已覆盖，ch01 兼容对照匹配但字幕/关键帧未验证；中间物仍在 Git，
+      Gate 不勾选。
 
 ## P7：CI 与发布系统
 
-- [ ] P7.1 抽取公共环境准备 workflow/composite action。
-- [ ] P7.2 建立 Fast、Full、Release 三层任务和路径过滤。
-- [ ] P7.3 缓存 Python、npm、Playwright、Mermaid 和字体资源。
-- [ ] P7.4 每次构建输出 build-report.json 与 artifact-manifest.json。
-- [ ] P7.5 Release 生成双语 HTML/PDF、站点包、视频清单、SHA-256 和版本说明。
+- [x] P7.1 抽取公共环境准备 workflow/composite action。
+- [x] P7.2 建立 Fast、Full、Release 三层任务和路径过滤。
+- [x] P7.3 缓存 Python、npm、Playwright、Mermaid 和字体资源。
+- [x] P7.4 每次构建输出 build-report.json 与 artifact-manifest.json。
+- [x] P7.5 Release 生成双语 HTML/PDF、站点包、视频清单、SHA-256 和版本说明。
 - [ ] P7.6 增加生成器幂等、关键页视觉回归、链接和重定向检查。
-- [ ] P7.7 合并或删除重复 workflow，README 徽章与真实门禁一致。
+      生成器幂等与本地链接已接入 `scripts/check_products.py`；关键页视觉回归与
+      重定向检查尚未接入 CI。
+- [x] P7.7 合并或删除重复 workflow，README 徽章与真实门禁一致。
 - [ ] Gate：PR 只跑必要层；主分支与发布层稳定；产物能追溯到 commit 和依赖。
+      本地契约测试与配置检查通过；`release.yml` 尚未在 GitHub Actions 实际运行，
+      没有远端运行记录，Gate 不勾选。
 
 ## P8：清理、文档与正式切换
 
-- [ ] P8.1 删除旧 line-ref 写入、旧构建入口和失效兼容层。
-- [ ] P8.2 清理 video/ 中已证明可重建的中间物和重复配置。
-- [ ] P8.3 更新 STRUCTURE.md、CONTRIBUTING.md、README.md、en/README.md。
-- [ ] P8.4 增加架构决策记录：稳定 ID、BookModel、PDF 边界、站点脚本边界、视频资产策略。
+- [x] P8.1 删除旧 line-ref 写入、旧构建入口和失效兼容层。
+      `plain.py` 只接收稳定块且拒绝围栏证据；旧 writer 与专属测试删除。
+      line-ref 拒绝、术语围栏、导读带围栏分别先红后绿；plain 70 / migration 19 项通过，测试变更待新基线复核。
+- [x] P8.2 清理 video/ 中已证明可重建的中间物和重复配置。
+      已完成候选索引停止跟踪，独立重建与清单检查有实际证据；不把本机媒体入库。
+- [x] P8.3 更新 STRUCTURE.md、CONTRIBUTING.md、README.md、en/README.md。
+- [x] P8.4 增加架构决策记录：稳定 ID、BookModel、PDF 边界、站点脚本边界、视频资产策略。
 - [ ] P8.5 从干净 clone 完成 Windows 与 Ubuntu 双平台演练。
 - [ ] P8.6 发布首个新架构版本并保留 legacy 标签与迁移说明。
+      迁移说明已写 `docs/migrations/release-migration.md`；`v*` 标签、GitHub Release
+      与干净克隆演练仍未执行。
 - [ ] Gate：规格第 7 节全部验收；旧路径无调用者；正式发布产物可下载、可校验。
+      P8.5/P8.6 与同候选远端门禁尚未完成，Gate 不勾选。
 
 ## 建议 PR 切片
 

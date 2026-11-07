@@ -1,1 +1,0 @@
-机器上有 Node 十八加或 Bun，全局安装 Anthropic 的 claude-code 包，再跑 claude 的 version 确认。项目里也可用 npx 或本地安装钉版本，避免互相抢版本。

@@ -1,1 +1,0 @@
-流式事件可以分成五类脉搏。stream_request_start：每次 API 将发未发，UI 可以亮「正在思考」。StreamEvent：Anthropic 原始流，文本增量、thinking、tool_use，像视频的每一帧。

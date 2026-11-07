@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-label="Pausing event consumption differs from cancelling work and cleaning up" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 30Q15 20 29 19L327 21Q341 20 340 34L338 274Q340 282 326 282L28 280Q17 281 18 268ZM380 30Q378 20 392 20L692 18Q705 19 702 33L704 267Q704 282 690 281L392 283Q379 282 380 268Z" opacity=".35"/>
+  <g fill="currentColor" stroke="none" font-family="serif" text-anchor="middle">
+    <text x="178" y="53" font-size="20">A · PAUSE</text><text x="541" y="53" font-size="20">B · CANCEL</text>
+    <text x="75" y="113" font-size="18">UI</text><text x="270" y="113" font-size="18">yield</text>
+    <text x="75" y="215" font-size="18">API</text><text x="270" y="215" font-size="18">tool</text>
+    <text x="432" y="113" font-size="18">UI</text><text x="630" y="113" font-size="18">yield</text>
+    <text x="432" y="215" font-size="18">API</text><text x="630" y="215" font-size="18">tool</text>
+  </g>
+  <path d="M43 81Q72 77 103 82L102 131Q73 135 43 130ZM237 81Q268 78 302 82L302 132Q269 135 238 131ZM111 107Q150 104 184 107M206 107L228 107M220 101L229 107L220 113"/>
+  <path d="M187 92L188 122M199 91L198 123" stroke-width="5"/>
+  <path d="M75 141L75 173M270 141L270 173" stroke-dasharray="3 7" opacity=".45"/>
+  <path d="M41 184Q73 180 107 184L105 231Q73 235 42 230ZM236 183Q268 179 303 184L301 231Q269 235 238 231ZM114 208Q166 191 224 208M214 197L225 208L211 213M221 241Q170 257 116 239M124 233L114 238L121 247"/>
+  <path d="M403 81Q432 77 461 82L461 132Q433 135 403 130ZM599 81Q630 78 662 82L661 132Q632 135 600 131ZM470 106L588 106M580 100L589 106L580 112"/>
+  <path d="M432 142L431 173M424 164L431 175L438 163M629 143L631 174M624 165L631 176L638 164" stroke-width="3.5"/>
+  <path d="M401 183Q433 179 467 184L466 231Q434 234 402 230ZM598 183Q630 180 664 183L663 231Q630 234 599 230ZM420 198L442 220M443 198L420 219M620 198L642 220M642 198L620 220"/>
+  <path d="M472 250Q492 269 516 249M479 249L485 256L499 242M582 251Q560 270 539 250M554 248L561 256L574 242"/>
+  <path d="M358 39Q355 154 358 264" opacity=".25" stroke-dasharray="2 8"/>
+</svg>

@@ -1,1 +1,0 @@
-一，写项目级 allow/deny。二，用前缀管住 npm 工具链，单独 deny publish。三，企业模板：容器加 deny 加 allowedTools 加审计。四，情景推演：deny 与 allow 冲突谁赢——铁律，deny 赢。

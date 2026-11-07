@@ -1,2 +1,0 @@
-SystemMessage 不进 API，只做第四面墙。Attachment 与 Progress 分别承载附件通知和工具进度。记住：事件是脉搏，消息是可归档的病历。
-什么叫一轮 Turn？

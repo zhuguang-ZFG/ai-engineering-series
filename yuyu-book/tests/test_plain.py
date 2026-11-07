@@ -8,6 +8,7 @@ import copy
 import re
 import sys
 import unittest
+import tempfile
 from collections import Counter
 from pathlib import Path
 
@@ -16,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from yuyu_book import pages, plain, registry, render  # noqa: E402
 from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError,
                             read_text, unit_stream)  # noqa: E402
+from yuyu_book.blocks import parse_blocks
 
 ZH_CH02 = "第一部分-基础篇/02-对话循环-Agent的心跳.md"
 EN_CH02 = "en/Part-1-Foundations/02-The-Dialog-Loop-Heartbeat-of-an-Agent.md"
@@ -55,12 +57,11 @@ def gloss(gid, zh, en, forms_zh, forms_en, priority="core", mark=None,
 
 
 def _band_evidence(zh: str, en: str) -> list[str]:
-    """The first prose line of each language's file — enough to prove the
-    fixture points at real text rather than at a sample block."""
+    """Use actual stable blocks from both language files."""
     out = []
-    for rel in (zh, en):
-        lines = plain.prose_lines(read_text(REPO_ROOT / rel))
-        out.append(f"{rel}:{min(lines)}")
+    for lang, rel in (("zh", zh), ("en", en)):
+        blocks = parse_blocks(read_text(REPO_ROOT / rel), "fixture", lang)
+        out.append(next(block.block_id for block in blocks if block.block_id))
     return out
 
 
@@ -273,7 +274,7 @@ class CoverageGate(unittest.TestCase):
 
 
 class DualRefs(unittest.TestCase):
-    """The migration period accepts `file:line` and stable block ids."""
+    """Only stable block ids are admitted after the migration cutover."""
 
     def setUp(self):
         self.manifest = registry.load("manifest.json")
@@ -309,13 +310,15 @@ class DualRefs(unittest.TestCase):
         g = self.real_gloss(["ch01.agent-harness"])
         plain.validate_plain(g, self.paths, manifest)
 
-    def test_legacy_line_ref_still_works(self):
+    def test_legacy_line_ref_is_rejected_after_cutover(self):
         line = next(n for n, text in plain.prose_lines(
             read_text(REPO_ROOT / ZH_CH02)).items() if "异步生成器" in text)
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
                   ["async generator"], priority="extra",
                   evidence=[f"{ZH_CH02}:{line}"])
-        plain.validate_plain(g, {"ch02": ["start"]}, mini_manifest())
+        manifest = copy.deepcopy(self.manifest)
+        with self.assertRaisesRegex(BuildError, "stable block id"):
+            plain.validate_plain(g, self.paths, manifest)
 
 
 class SectionTiers(unittest.TestCase):
@@ -400,12 +403,19 @@ class RegistryValidation(unittest.TestCase):
         plain.validate_plain(glosses, paths, manifest)
 
     def test_evidence_must_point_at_prose_not_a_fence(self):
-        g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
-                  ["async generator"], evidence=[f"{ZH_CH02}:28",
-                                                 f"{EN_CH02}:18"])
-        with self.assertRaises(BuildError) as ctx:
-            plain.validate_plain(g, {}, mini_manifest())
-        self.assertIn("inside a code fence", str(ctx.exception))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = mini_manifest()
+            for unit, _kind, _part in unit_stream(manifest):
+                manifest["guides"][unit["id"]]["plain_evidence"] = ["example.prose"]
+                for lang in ("zh", "en"):
+                    path = root / unit[lang]
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("<!-- block: example.prose -->\nActual explanation.\n\n<!-- block: example.fenced -->\n```text\n异步生成器 async generator\n```\n", encoding="utf-8")
+            g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
+                      ["async generator"], evidence=["example.fenced"], no_why=True, priority="extra")
+            with self.assertRaisesRegex(BuildError, "code fence"):
+                plain.validate_plain(g, {"ch02": ["start", "core"]}, manifest, root=root)
 
     def test_evidence_line_must_actually_contain_the_form(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
@@ -420,7 +430,7 @@ class RegistryValidation(unittest.TestCase):
                   ["async generator"], evidence=["nope/missing.md:1"])
         with self.assertRaises(BuildError) as ctx:
             plain.validate_plain(g, {}, mini_manifest())
-        self.assertIn("evidence file", str(ctx.exception))
+        self.assertIn("stable block id", str(ctx.exception))
 
     def test_core_glosses_need_both_languages(self):
         g = gloss("ag", "异步生成器", "async generator", ["异步生成器"],
@@ -535,18 +545,23 @@ class RegistryValidation(unittest.TestCase):
 
     def test_a_lead_band_needs_prose_on_both_sides_of_the_manuscript(self):
         m = mini_manifest()
-        m["guides"]["ch02"]["plain_evidence"] = [f"{ZH_CH02}:18"]
+        m["guides"]["ch02"]["plain_evidence"] = ["ch02.b-4fcb835b"]
         with self.assertRaises(BuildError) as ctx:
             plain.validate_plain({}, {"ch02": ["start", "core"]}, m)
         self.assertIn("both languages", str(ctx.exception))
 
     def test_band_evidence_pointing_into_a_sample_block_is_rejected(self):
-        m = mini_manifest()
-        m["guides"]["ch02"]["plain_evidence"] = [f"{ZH_CH02}:28",
-                                                 f"{EN_CH02}:18"]
-        with self.assertRaises(BuildError) as ctx:
-            plain.validate_plain({}, {"ch02": ["start", "core"]}, m)
-        self.assertIn("inside a code fence", str(ctx.exception))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = mini_manifest()
+            for unit, _kind, _part in unit_stream(manifest):
+                manifest["guides"][unit["id"]]["plain_evidence"] = ["example.fenced"]
+                for lang in ("zh", "en"):
+                    path = root / unit[lang]
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("<!-- block: example.fenced -->\n```text\nteaching sample\n```\n", encoding="utf-8")
+            with self.assertRaisesRegex(BuildError, "code fence"):
+                plain.validate_plain({}, {"ch02": ["start", "core"]}, manifest, root=root)
 
 
 class RenderIntegration(unittest.TestCase):
