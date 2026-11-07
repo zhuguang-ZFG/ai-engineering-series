@@ -160,13 +160,19 @@ L05 新增 `book/llm/distillation.md`、X09 fixture 与可操作网页实验。�
 
 | 项目 | 结果 |
 | --- | --- |
-| `npm test` | 本轮全量通过；包括数值/状态测试、编码快照、生成一致性、书籍、媒体指纹和仓库校验。随后只调整打印图高与 L05 短表分页，已重新导出并通过书籍专项检查 |
-| `npm run test:llm` | 29 组通过；含 X09 混合梯度/有限差分、学生拟合固定教师、错误教师及非法输入 |
+| `npm test` | 打印分页和 CI 媒体指纹问题修复后，最终全量通过；包括数值/状态测试、编码快照、生成一致性、书籍、媒体指纹和仓库校验 |
+| `npm run test:llm` | 30 组通过；含 X09 混合梯度/有限差分、学生拟合固定教师、错误教师及非法输入，另增媒体指纹 CLI 回归 |
 | `npm run check:llm` | 30 个 HTML、24 张 SVG、632 个本地链接，构建一致性通过 |
 | `python scripts/llm/check_browser.py` | 90 个布局、22 组行为；离线、无脚本、键盘、200% 缩放与 G18–G24 字形边界通过 |
 | `python scripts/llm/check_book_layout.py` | EPUB XHTML 63 个视口/字号组合通过，无网络请求 |
-| EPUBCheck 5.3.0 | 最终重导出版 0 fatal / 0 error / 0 warning；成品 SHA-256 `ceeb6c0119e8b009ff4904716eb36c92ea86ff2beb68e9ce8db28487da3b54d0` |
-| 书籍成品 | PDF 142 页、200 条书签；EPUB 71 个本地链接；练习 PDF 7 页；陪读 PDF 10 页；source hash `58f975c25b2df75dd7edceb63279cbe27e01544e6e15687127564096bf8cd064` |
+| EPUBCheck 5.3.0 | 最终重导出版 0 fatal / 0 error / 0 warning；成品 SHA-256 `c4104235588ee779be7bb41f0c5a179dea107b80cf5436764847f4786ea2012e` |
+| 书籍成品 | PDF 142 页、200 条书签；EPUB 71 个本地链接；练习 PDF 7 页；陪读 PDF 10 页；source hash `d801d1d250f1754647071a4aa3705735e3bdbc9f7b90bd10739d0cf11aae5fa5` |
 | 静音专题片 | 原理与应用各 1920×1080、30fps、32.4 秒；实际 MP4 抽帧已复核，交付哈希由 `media-status.json` 绑定 |
 
 PDF 实际抽看 L03/L05 的图、公式、蒸馏表和来源页，并复核最终第 41–49 页及后续拼图。打印图高调整为 108mm，L05 短表保持整张；初次导出的较大空白已消除，最终第 48 页的方法对照表完整，公式没有裁切，中文与手绘线条清晰。最终成品重新通过书籍检查、官方 EPUBCheck 和 Chrome 63 个离线重排组合；独立阅读器、屏幕阅读器和真实初学者仍未验收。
+
+## CI 媒体指纹差异修复
+
+首次 PR CI 暴露了本地校验没有覆盖的缓存差异：`media-manifest.mjs` 计算源码指纹时漏排被 Git 忽略的 `.thumbnails`，把本机原理片的预览缩略图计为源码，而 Linux 干净检出没有这些文件。实际交付 MP4 没有变化，差异来自源码指纹的文件集合。
+
+修复把 `.thumbnails` 排除在媒体源码收集之外。新增 `media-manifest.test.js` 在隔离临时项目中实际调用 CLI，检查添加缩略图不改变已审查指纹、CRLF/LF 不改变指纹、真实 composition 内容改变仍被拒绝；回归不通过单纯重新写 manifest 来掩盖漂移。由于书籍源指纹包含该维护脚本，修复后重新导出 PDF/EPUB 并按新成品哈希核验。

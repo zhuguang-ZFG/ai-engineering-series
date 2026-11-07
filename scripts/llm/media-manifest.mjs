@@ -14,7 +14,7 @@ const projects = [
 function sourceHash(name) {
   const folder = join(root, "videos", name);
   const collect = dir => readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : 1).flatMap(entry => {
-    if ([".hyperframes", "renders", "node_modules", "tools"].includes(entry.name)) return [];
+    if ([".hyperframes", ".thumbnails", "renders", "node_modules", "tools"].includes(entry.name)) return [];
     const path = join(dir, entry.name);
     if (entry.isDirectory()) return collect(path);
     return [".html", ".json", ".js", ".wav", ".mp3", ".png", ".jpg", ".svg", ".txt"].includes(extname(path)) ? [path] : [];

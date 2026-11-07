@@ -22,7 +22,7 @@
       "project": "llm-principles",
       "delivery": "deliverables/llm-principles.mp4",
       "status": "rendered-and-reviewed",
-      "sourceHash": "4a168db6ecb5b526971abfde1935b8c38e72a34fe7fecda1049d04a4aadbadd5",
+      "sourceHash": "bdf5c03d6fd6f3e8fe5ceb441c345b805d7a970df89e33a9e99d76b0aab978dd",
       "deliverySha256": "2f5ad9f29955e435aca05f4a9b7a5a042b27886991f206f64949d4acd6e71a1c",
       "review": "videos/llm-principles/REVIEW.md"
     },
