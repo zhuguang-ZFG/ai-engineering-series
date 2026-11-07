@@ -348,6 +348,7 @@ flowchart LR
     class D6 delegate
 ```
 
+<!-- block: ch04.release-notes -->
 - **Claude Code 2.1.310 (this book's baseline)**: `claude -p` starts in Manual mode (since v2.1.302, when nothing else sets a mode), and if nobody answers an `ask` the pipeline produces, the system denies it -- unless `--allowedTools`, a `permissions.allow` rule, a `PermissionRequest` hook, or `--permission-prompt-tool` answered for it first. `--permission-prompts none` (since v2.1.259) skips the host as well and tells the model outright that no one can approve, so it should not retry; under `--output-format stream-json` those refusals stay in the output as `permission_denied` events.
 - **Codex CLI 0.166.0**: `codex exec` carries no approval axis at all -- `-a/--ask-for-approval` (values `on-request`, `never`) exists only on the interactive command. It swaps "who nods" for "which wall the command runs inside": `-s/--sandbox` takes `read-only`, `workspace-write`, or `danger-full-access`; `--approve-for-me` routes approval requests through automatic review; `--dangerously-bypass-approvals-and-sandbox` removes prompts and sandbox together, self-labelled EXTREMELY DANGEROUS and meant only for environments already sandboxed from outside.
 - **Cursor agent 2026.10.22**: `agent -p` without `--force` demotes the write step -- the official headless page says "changes are only proposed, not applied"; the same vendor's permissions page writes "Print mode can use write and shell tools", and those two pages do not line up here -- this section follows the first, because it says what actually happens when `--force` is absent. `--force` describes itself as "Force allow commands unless explicitly denied", and `--yolo` is its alias; `--auto-review` hands the call to a server classifier, which runs the safe ones and still asks about the rest. The rule grammar comes from a different lineage too: five token types -- `Shell(git)`, `Read(.env*)`, `Write(**/*.key)`, `WebFetch(*)`, `Mcp(datadog:*)` -- and "Deny rules take precedence over allow rules".
@@ -569,6 +570,29 @@ Analyze the permission pipeline's decision path in the following scenarios:
 **Scenario D:** A sub-agent (bubble mode) requests `FileWriteTool` to write a sensitive configuration file.
 
 For each scenario, draw the decision path through the four stages of the permission pipeline, explaining the final result and reasoning.
+
+**Minimal runnable case:** Replay allow / deny / ask with two prefix rules (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** three lines ending in `allow`, `deny` and `ask`
+**Prerequisite:** Chapter 3's tool calls; **Backlink:** Chapter 2's `ask` branch (the loop denies when nobody answers)
+
+```python
+# exercise: ch04
+# expected:
+# Bash(git status) -> allow
+# Bash(rm -rf /) -> deny
+# Bash(npm test) -> ask
+RULES = {"git ": "allow", "rm ": "deny"}
+def decide(call):
+    inner = call[5:-1]
+    for prefix, verdict in RULES.items():
+        if inner.startswith(prefix):
+            return verdict
+    return "ask"
+for call in ("Bash(git status)", "Bash(rm -rf /)", "Bash(npm test)"):
+    print(f"{call} -> {decide(call)}")
+```
 
 ---
 

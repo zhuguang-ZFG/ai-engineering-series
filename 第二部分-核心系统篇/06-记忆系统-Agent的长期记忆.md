@@ -14,6 +14,8 @@
 <!-- block: ch06.b-b0502b07 -->
 记忆不是仓库，是线索本。代码里读得到的，不该占记忆的位子；读不到的——人的偏好、决策的来由、外部的入口——才值得写进去。Claude Code 的 memdir 就是按这条线划的四类：user、feedback、project、reference。
 
+把这条规则落到一次读取上：记忆若说「这个服务部署在某处」，先核对当前部署入口；若说「当时为了兼容旧客户端没有改接口」，把它当作决策背景，再检查旧客户端是否还在。当前文件、实际运行结果与用户这次的要求优先；验证不符时修正或删除旧条目，不让旧记忆替当前证据作主。
+
 > **读完你能干什么：**
 > - 拿到一条信息就判出它该进哪类记忆，或者判出它根本不该存
 > - 写一份 memory 文件，frontmatter、body、索引各就各位，不超限
@@ -266,6 +268,8 @@ Agent:
 ```
 
 `truncateEntrypointContent` 函数设了两道容量闸：先按行截断（200 行上限），再按字节截断（25KB 上限）。超限时，函数在文件末尾追加一条警告，写明先撞了哪道闸。
+
+索引被截短，不等于对应的记忆文件被删除。假设一条索引放在第 201 行，文件仍在磁盘上，但这次自动加载看不到它，模型也就少了一条“该去读哪份记忆”的线索。反过来，索引里有链接也不代表正文已进上下文：先看到摘要，判断相关，再读取文件。排查“明明记过却没用上”时，应分别检查文件是否存在、索引是否被加载、正文是否真的读过。
 
 **双重容量保护的设计智慧**
 
@@ -671,6 +675,30 @@ type: feedback
 - 记忆天然按项目隔离（路径跟着 Git 根目录走），跨项目共享的只有 user 类型记忆
 - 定期审查记忆目录，删除经不起"删除后行为是否会改变"测试的低价值记忆
 - 控制每条记忆的 description 长度，定期合并主题相近的记忆条目
+
+**最小可运行案例：** 从一段记忆文件的 frontmatter 里取出元数据（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `{'name': 'build-command', 'type': 'project'}`
+**前置：** 第 5 章的配置优先级；**回链：** 第 5 章 5.1 节的六层配置源
+
+```python
+# exercise: ch06
+# expected: {'name': 'build-command', 'type': 'project'}
+text = """---
+name: build-command
+type: project
+---
+Run make check before every commit.
+"""
+meta = {}
+for line in text.splitlines()[1:]:
+    if line == "---":
+        break
+    key, _, value = line.partition(":")
+    meta[key.strip()] = value.strip()
+print(meta)
+```
 
 ---
 

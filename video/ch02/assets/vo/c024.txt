@@ -1,1 +1,0 @@
-max_output_tokens_recovery：仍截断就注入恢复消息，最多再试三次。reactive_compact_retry：预防性压缩挡不住溢出时的紧急刹车。collapse_drain_retry：更细粒度的折叠排水恢复。

@@ -617,6 +617,23 @@ Design a configuration strategy for a 20-person development team with the follow
 
 Say what content belongs in each configuration source, and explain why.
 
+**Minimal runnable case:** Replay the merge order of user and project settings (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `{"model": "sonnet", "permissions": {"allow": ["Read", "Bash(ls)"]}}`
+**Prerequisite:** Chapter 4's permission rules; **Backlink:** Chapter 4's source of permission rules
+
+```python
+# exercise: ch05
+# expected: {"model": "sonnet", "permissions": {"allow": ["Read", "Bash(ls)"]}}
+import json
+user = {"model": "opus", "permissions": {"allow": ["Read"]}}
+project = {"model": "sonnet", "permissions": {"allow": ["Bash(ls)"]}}
+merged = {"model": project["model"],
+          "permissions": {"allow": user["permissions"]["allow"] + project["permissions"]["allow"]}}
+print(json.dumps(merged, sort_keys=True))
+```
+
 ---
 
 ## Key Takeaways

@@ -1,1 +1,0 @@
-先 validateInput，管数据合不合法；再 hasPermissions 加 checkPermissions，管该不该用；最后运行时属性，比如 isConcurrencySafe，影响后面能不能并行。

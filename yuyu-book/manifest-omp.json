@@ -358,7 +358,7 @@
         "zh": "先说清 omp 是什么、怎么装、命令以哪个版本为准，再决定怎么读这本书。"
       },
       "plain_evidence": [
-        "omp/00-前言.md:3"
+        "omp-front.b-33699144"
       ]
     },
     "omp-ch01": {
@@ -379,7 +379,7 @@
         "zh": "agent 是模型加一圈外壳：它转的是一圈循环，不是你写的那句需求。"
       },
       "plain_evidence": [
-        "omp/ch01.md:3"
+        "omp-ch01.b-12d126c7"
       ]
     },
     "omp-ch02": {
@@ -399,7 +399,7 @@
         "zh": "模型只认 token，不认字节；知道窗口多大、怎么数，才谈得上省。"
       },
       "plain_evidence": [
-        "omp/ch02.md:3"
+        "omp-ch02.b-5cc967f9"
       ]
     },
     "omp-ch03": {
@@ -419,7 +419,7 @@
         "zh": "omp 从启动到调工具是一条链；看懂模块边界，排障才有处下手。"
       },
       "plain_evidence": [
-        "omp/ch03.md:3"
+        "omp-ch03.b-73bc2b6f"
       ]
     },
     "omp-ch04": {
@@ -440,7 +440,7 @@
         "zh": "装在哪、用哪个版本、配置和模型放哪，一次弄对省掉后面所有怪事。"
       },
       "plain_evidence": [
-        "omp/ch04.md:3"
+        "omp-ch04.b-c024e021"
       ]
     },
     "omp-ch05": {
@@ -460,7 +460,7 @@
         "zh": "接上模型要填的不是一条密钥：角色、网关、超时都得对上。"
       },
       "plain_evidence": [
-        "omp/ch05.md:3"
+        "omp-ch05.b-6614f125"
       ]
     },
     "omp-ch06": {
@@ -480,7 +480,7 @@
         "zh": "第一次对话只要能跑通一条命令，就知道整条链路是活的。"
       },
       "plain_evidence": [
-        "omp/ch06.md:3"
+        "omp-ch06.b-0d7b9865"
       ]
     },
     "omp-ch07": {
@@ -500,7 +500,7 @@
         "zh": "会话能续、能存、能回滚；断了不必把需求重讲一遍。"
       },
       "plain_evidence": [
-        "omp/ch07.md:3"
+        "omp-ch07.b-211f11f9"
       ]
     },
     "omp-ch08": {
@@ -520,7 +520,7 @@
         "zh": "读文件先读结构再读内容；找东西用 grep，别让模型瞎翻。"
       },
       "plain_evidence": [
-        "omp/ch08.md:3"
+        "omp-ch08.b-1849eefa"
       ]
     },
     "omp-ch09": {
@@ -540,7 +540,7 @@
         "zh": "改代码靠快照加行号锚定；改前不读那一行，改完必出鬼。"
       },
       "plain_evidence": [
-        "omp/ch09.md:3"
+        "omp-ch09.b-8f0245f5"
       ]
     },
     "omp-ch10": {
@@ -560,7 +560,7 @@
         "zh": "跑命令要分清审批与沙箱；敢不敢放开，取决于代码是谁的。"
       },
       "plain_evidence": [
-        "omp/ch10.md:3"
+        "omp-ch10.b-e111b178"
       ]
     },
     "omp-ch11": {
@@ -580,7 +580,7 @@
         "zh": "语言服务器让 agent 少猜类型：诊断、跳转、重命名都能问。"
       },
       "plain_evidence": [
-        "omp/ch11.md:3"
+        "omp-ch11.b-24b84f70"
       ]
     },
     "omp-ch12": {
@@ -600,7 +600,7 @@
         "zh": "浏览器与桌面动作也算工具；它们各有权限和失败长相。"
       },
       "plain_evidence": [
-        "omp/ch12.md:3"
+        "omp-ch12.b-b869a9e8"
       ]
     },
     "omp-ch13": {
@@ -620,7 +620,7 @@
         "zh": "计划先写、活后干；长活丢后台，子智能体只带回结论。"
       },
       "plain_evidence": [
-        "omp/ch13.md:3"
+        "omp-ch13.b-7e7d010a"
       ]
     },
     "omp-ch14": {
@@ -640,7 +640,7 @@
         "zh": "上下文文件是每次开工自动读的规矩；写短才有人读。"
       },
       "plain_evidence": [
-        "omp/ch14.md:3"
+        "omp-ch14.b-a0e63a48"
       ]
     },
     "omp-ch15": {
@@ -660,7 +660,7 @@
         "zh": "窗口会满，压缩要留证据；长任务靠节流和断点接力。"
       },
       "plain_evidence": [
-        "omp/ch15.md:3"
+        "omp-ch15.b-42ce823b"
       ]
     },
     "omp-ch16": {
@@ -680,7 +680,7 @@
         "zh": "记忆存的是代码里读不到的线索；存多了比不存更坏。"
       },
       "plain_evidence": [
-        "omp/ch16.md:3"
+        "omp-ch16.b-71f74a25"
       ]
     },
     "omp-ch17": {
@@ -700,7 +700,7 @@
         "zh": "不同活派不同模型；角色路由配错，账单和延迟一起涨。"
       },
       "plain_evidence": [
-        "omp/ch17.md:3"
+        "omp-ch17.b-07ab9663"
       ]
     },
     "omp-ch18": {
@@ -720,7 +720,7 @@
         "zh": "几个关键词一敲就换模式；知道它们等于知道隐藏开关。"
       },
       "plain_evidence": [
-        "omp/ch18.md:3"
+        "omp-ch18.b-6320622a"
       ]
     },
     "omp-ch19": {
@@ -740,7 +740,7 @@
         "zh": "技能是现成说明书；调不出来先查它站的位置对不对。"
       },
       "plain_evidence": [
-        "omp/ch19.md:3"
+        "omp-ch19.b-3faf98a8"
       ]
     },
     "omp-ch20": {
@@ -760,7 +760,7 @@
         "zh": "MCP 是外部工具进程；接上前先问它挂了会不会拖死会话。"
       },
       "plain_evidence": [
-        "omp/ch20.md:3"
+        "omp-ch20.b-05fa4e20"
       ]
     },
     "omp-ch21": {
@@ -780,7 +780,7 @@
         "zh": "钩子与自定义工具让你在固定时刻插一手，不必改内核。"
       },
       "plain_evidence": [
-        "omp/ch21.md:3"
+        "omp-ch21.b-4028e404"
       ]
     },
     "omp-ch22": {
@@ -800,7 +800,7 @@
         "zh": "扩展是能执行代码的第三方模块；默认不信任才是对的。"
       },
       "plain_evidence": [
-        "omp/ch22.md:3"
+        "omp-ch22.b-9805de9c"
       ]
     },
     "omp-ch23": {
@@ -820,7 +820,7 @@
         "zh": "配置是多层压出来的结果；改错层，改了也像没改。"
       },
       "plain_evidence": [
-        "omp/ch23.md:3"
+        "omp-ch23.b-cfab5b45"
       ]
     },
     "omp-ch24": {
@@ -840,7 +840,7 @@
         "zh": "接手陌生库先画结构，再动手；顺序错了就要返工。"
       },
       "plain_evidence": [
-        "omp/ch24.md:3"
+        "omp-ch24.b-da20a30e"
       ]
     },
     "omp-ch25": {
@@ -860,7 +860,7 @@
         "zh": "修 bug 从复现开始；没有红灯的修法都是猜。"
       },
       "plain_evidence": [
-        "omp/ch25.md:3"
+        "omp-ch25.b-19683a0e"
       ]
     },
     "omp-ch26": {
@@ -880,7 +880,7 @@
         "zh": "大改拆成可回退的小步；一次改到底，出事就全赔。"
       },
       "plain_evidence": [
-        "omp/ch26.md:3"
+        "omp-ch26.b-6aff19fe"
       ]
     },
     "omp-ch27": {
@@ -900,7 +900,7 @@
         "zh": "评审看证据链，提交要原子；密钥进过对话就算泄露。"
       },
       "plain_evidence": [
-        "omp/ch27.md:3"
+        "omp-ch27.b-6fb9b3b4"
       ]
     },
     "omp-ch28": {
@@ -920,7 +920,7 @@
         "zh": "自己的程序要 agent 能力，走 RPC 或 SDK 两条路。"
       },
       "plain_evidence": [
-        "omp/ch28.md:3"
+        "omp-ch28.b-12742fb3"
       ]
     },
     "omp-ch29": {
@@ -940,7 +940,7 @@
         "zh": "团队包把技能、命令、配置打成一份，装完要验它真生效。"
       },
       "plain_evidence": [
-        "omp/ch29.md:3"
+        "omp-ch29.b-dca94ee2"
       ]
     },
     "omp-ch30": {
@@ -960,7 +960,7 @@
         "zh": "排障先分类：是没装上、被拦下了，还是模型看不懂。"
       },
       "plain_evidence": [
-        "omp/ch30.md:3"
+        "omp-ch30.b-af6cd2b0"
       ]
     },
     "omp-ch31": {
@@ -980,7 +980,7 @@
         "zh": "陌生仓库等于陌生代码；信任、扩展、遮罩三件事先定。"
       },
       "plain_evidence": [
-        "omp/ch31.md:3"
+        "omp-ch31.b-ab1ba050"
       ]
     },
     "omp-ch32": {
@@ -1000,7 +1000,7 @@
         "zh": "成本能算：token 数、角色档、上下文节流三处一起管。"
       },
       "plain_evidence": [
-        "omp/ch32.md:3"
+        "omp-ch32.b-24665c6f"
       ]
     },
     "omp-ch33": {
@@ -1020,7 +1020,7 @@
         "zh": "从启动到工具注册走一遍，整本书的链条就接上了。"
       },
       "plain_evidence": [
-        "omp/ch33.md:3"
+        "omp-ch33.b-33dd23a0"
       ]
     },
     "omp-apxa": {
@@ -1041,7 +1041,7 @@
         "zh": "查命令行参数按子命令找；旗标以本机 --help 原文为准。"
       },
       "plain_evidence": [
-        "omp/appendix-A.md:3"
+        "omp-apxa.b-7c5cbd9c"
       ]
     },
     "omp-apxb": {
@@ -1062,7 +1062,7 @@
         "zh": "斜杠命令只在会话里有效，和 shell 子命令是两套东西。"
       },
       "plain_evidence": [
-        "omp/appendix-B.md:3"
+        "omp-apxb.b-7931ee54"
       ]
     },
     "omp-apxc": {
@@ -1082,7 +1082,7 @@
         "zh": "配置键按段归类；找不到就按段名去搜，别背路径。"
       },
       "plain_evidence": [
-        "omp/appendix-C.md:3"
+        "omp-apxc.b-8a38d617"
       ]
     },
     "omp-apxd": {
@@ -1102,7 +1102,7 @@
         "zh": "术语表是查的，不是背的；每个词后面都能跳回正文。"
       },
       "plain_evidence": [
-        "omp/appendix-D.md:3"
+        "omp-apxd.b-ed507ff0"
       ]
     },
     "omp-apxe": {
@@ -1122,7 +1122,7 @@
         "zh": "版本一变行为就可能变；这本书钉在哪个版本，这里写清楚。"
       },
       "plain_evidence": [
-        "omp/appendix-E.md:3"
+        "omp-apxe.b-ff2ceb2f"
       ]
     }
   }

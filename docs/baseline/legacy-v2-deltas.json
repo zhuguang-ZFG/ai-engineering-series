@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "baseline": "docs/baseline/baseline.json",
+  "v2": "a fresh build from the current tree (yuyu-book/dist)",
+  "note": "Structural differences introduced by content work after the P0 capture (commit 06bd6fb) are declared here by path pattern and delta. Anything not declared fails scripts/compare_legacy.py. Add a rule only when a content commit explains the number; never to silence a kernel change.",
+  "deltas": [
+    {
+      "path": "/editions/zh/units[11]/glosses",
+      "delta": 1,
+      "reason": "P5.5 的 ch11 练习段写明「前置：第 10 章的协调器」，这是本章首次出现 coordinator 术语",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/zh/units[11]/new_terms",
+      "delta": 1,
+      "reason": "同一处 coordinator 进入 ch11 的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/zh/units[12]/glosses",
+      "delta": 1,
+      "reason": "P5.5 的 ch12 练习段写明「前置：第 11 章的技能加载」，这是本章首次出现 skill 术语",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/zh/units[12]/new_terms",
+      "delta": 1,
+      "reason": "同一处 skill 进入 ch12 的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/units[11]/glosses",
+      "delta": 1,
+      "reason": "英文 ch11 练习段的 \"Chapter 10's coordinator\" 同样是本章首次标记 coordinator",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/units[11]/new_terms",
+      "delta": 1,
+      "reason": "同一处 coordinator 进入英文 ch11 的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/units[12]/glosses",
+      "delta": 1,
+      "reason": "英文 ch12 练习段的 skill 前置句同样是本章首次标记 skill",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/units[12]/new_terms",
+      "delta": 1,
+      "reason": "同一处 skill 进入英文 ch12 的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/zh/totals/glosses",
+      "delta": 2,
+      "reason": "ch11 的 coordinator 与 ch12 的 skill 两处首次标记之和",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/zh/totals/new_terms",
+      "delta": 2,
+      "reason": "同两处术语进入各自章节的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/totals/glosses",
+      "delta": 3,
+      "reason": "附录 D 的新术语（已提交）加上 ch11 coordinator、ch12 skill 两处练习段首次标记",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/totals/new_terms",
+      "delta": 3,
+      "reason": "同三处术语进入各自单元的新术语卡",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/*/document/headings/h2",
+      "delta": 5,
+      "reason": "ch13/ch14/ch15 各加一节、附录 D 加一节（4 处，c61c965），再加 revisions.json 新增的 v0.3.6 条目渲染出的一个 h2；两语一致",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/*/html/ids_total",
+      "delta": 4,
+      "reason": "the four new h2 sections carry anchors",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/html/nav_anchors",
+      "delta": 4,
+      "reason": "the four new h2 sections enter the rail navigation",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/html/nav_anchor_ids",
+      "kind": "len",
+      "delta": 4,
+      "reason": "same four sections, counted as anchor ids",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/zh/pdf/pages",
+      "delta": 18,
+      "reason": "已提交的新增小节与表格占 11 页（c61c965），P5.5 的 15 段最小可运行案例再占 7 页；实测自同一机器同一 CJK 字体的三方构建（507 -> 518 -> 525），分页仍随环境变化",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/en/pdf/pages",
+      "delta": 19,
+      "reason": "同样的 11 页已提交增量，加上英文版 15 段案例的 8 页（558 -> 569 -> 577）",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/editions/*/totals/headings/h2",
+      "delta": 4,
+      "reason": "chapter-level count of the four new sections",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/totals/tables",
+      "delta": 17,
+      "reason": "sixteen units plus appendix D each gained one table",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/totals/tier_chips",
+      "delta": 3,
+      "reason": "ch13/ch14/ch15 each gained one section-tier chip",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/units[*]/tables",
+      "delta": 1,
+      "reason": "the front matter and ch01-ch15 each gained one table; appendix D gained one in both editions",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/units[*]/headings/h2",
+      "delta": 1,
+      "reason": "ch13/ch14/ch15 and appendix D gained one h2 each",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/units[*]/heading_anchors",
+      "kind": "len",
+      "delta": 1,
+      "reason": "the new h2 carries an anchor",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/*/units[*]/tier_chips",
+      "delta": 1,
+      "reason": "the new section in ch13/ch14/ch15 carries a tier chip",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/en/units[*]/glosses",
+      "delta": 1,
+      "reason": "appendix D's new term is marked in the English edition (ch11/ch12 are claimed by the literal-path rules above, which are matched first)",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/editions/en/units[*]/new_terms",
+      "delta": 1,
+      "reason": "appendix D's new term in the English new-terms card (ch11/ch12 claimed above)",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/registries/reading_paths/tiers/core",
+      "delta": 3,
+      "reason": "three chapters joined the core reading path",
+      "commit": "c61c965"
+    },
+    {
+      "path": "/book/version",
+      "legacy": "0.3.5",
+      "fresh": "0.3.6",
+      "reason": "P5 作为 0.3.6 发版，manifest.json 的版本号随之推进",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/book/date",
+      "legacy": "2026-11-02",
+      "fresh": "2026-11-06",
+      "reason": "同一次版本推进带上的发版日期",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/registries/manifest/version",
+      "legacy": "0.3.5",
+      "fresh": "0.3.6",
+      "reason": "与 /book/version 同源，都读 manifest.json",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/registries/manifest/date",
+      "legacy": "2026-11-02",
+      "fresh": "2026-11-06",
+      "reason": "与 /book/date 同源",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/registries/revisions/entries",
+      "delta": 1,
+      "reason": "revisions.json 新增 v0.3.6 一条修订记录（断言账本与 15 段练习）",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    },
+    {
+      "path": "/registries/revisions/versions",
+      "kind": "len",
+      "delta": 1,
+      "reason": "同一条 v0.3.6 进入版本号列表",
+      "commit": "6d4e3c0475d28d2ebb7630518a2f6721c9a01620"
+    }
+  ]
+}

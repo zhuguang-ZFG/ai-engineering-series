@@ -1073,6 +1073,20 @@ A team is developing a web application handling user sensitive data. Team has fo
 
 Design a complete hook configuration solution meeting above requirements.
 
+**Minimal runnable case:** Replay the PreToolUse-before-PostToolUse order (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `PreToolUse:Read -> PostToolUse:Read`
+**Prerequisite:** Chapter 7's context budget; **Backlink:** Chapter 2's lifecycle events
+
+```python
+# exercise: ch08
+# expected: PreToolUse:Read -> PostToolUse:Read
+hooks = [("PostToolUse", "Read"), ("PreToolUse", "Read")]
+order = sorted(hooks, key=lambda hook: hook[0] != "PreToolUse")
+print(" -> ".join(f"{event}:{tool}" for event, tool in order))
+```
+
 ---
 
 ## Key Takeaways

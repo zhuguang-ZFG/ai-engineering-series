@@ -834,6 +834,24 @@ For your chosen scenario, answer:
 3. What is Plan Mode's exit condition?
 4. How to handle task execution failure cases?
 
+**Minimal runnable case:** Replay the read-only gate of Plan mode (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `Read -> allow` and `Write -> deny`
+**Prerequisite:** Chapter 13's cost awareness; **Backlink:** Chapter 4's permission gate
+
+```python
+# exercise: ch14
+# expected:
+# Read -> allow
+# Write -> deny
+READ_ONLY = {"Read", "Grep"}
+def decide(tool, planning):
+    return "allow" if tool in READ_ONLY else ("deny" if planning else "ask")
+for tool in ("Read", "Write"):
+    print(f"{tool} -> {decide(tool, planning=True)}")
+```
+
 ---
 
 ## Key Takeaways

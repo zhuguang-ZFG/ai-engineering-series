@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23B4472F' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23B4472F'/%3E%3C/svg%3E">
 <title>御舆 · 站点导航 — 解码 Agent Harness</title>
 <meta property="og:title" content="御舆 · 站点导航 — 解码 Agent Harness">
-<meta property="og:description" content="一本书、一册入门、一廊插画、一份手册——大书、双语入门分册、插画画廊与再生提示词手册，全部离线自包含。本站只发布御舆；同仓第二分册《Omp 从入门到精通：原理与实战》仍在施工中。">
+<meta property="og:description" content="一本书、一册入门、一廊插画、一套知识卡、一页样章、一份手册——大书、双语入门分册、插画画廊、知识卡、样章与再生提示词手册，全部离线自包含。本站只发布御舆；同仓第二分册《Omp 从入门到精通：原理与实战》仍在施工中。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="cover.png">
 <style>
@@ -31,6 +32,8 @@ main{max-width:860px;margin:0 auto;padding:14px 30px 56px}
 .card:nth-child(3){animation-delay:.34s}
 .card:nth-child(4){animation-delay:.46s}
 .card:nth-child(5){animation-delay:.58s}
+.card:nth-child(6){animation-delay:.7s}
+.card:nth-child(7){animation-delay:.82s}
 @keyframes card-in{from{opacity:0;transform:translateY(18px) rotate(-.8deg)}}
 @media screen and (prefers-reduced-motion: reduce){
   a.card{animation:none;transition:box-shadow .18s ease,border-color .18s ease}
@@ -49,13 +52,14 @@ a.card:hover{transform:translateY(-3px) rotate(-.4deg);border-color:#B4472F;
 .card .alt a{color:#4C7093;text-decoration:none;border-bottom:1px dashed rgba(76,112,147,.5)}
 footer{max-width:860px;margin:0 auto;padding:0 30px 46px;color:#675F4F;font-size:12px;text-align:center}
 footer a{color:inherit}
+a:focus-visible{outline:2px solid #B4472F;outline-offset:3px}
 </style>
 </head>
 <body>
 <header>
   <h1>御舆 · 站点导航</h1>
   <svg class="brush" viewBox="0 0 190 10" aria-hidden="true"><path d="M4 6q30-4.5 62-2.5t72-1q24 .2 46 1.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".85"/><path d="M152 5.6q10-.6 20-.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".45"/><circle cx="178" cy="5.8" r="1.5" fill="currentColor" stroke="none"/></svg>
-  <p class="sub">解码 Agent Harness —— 一本书、一册入门、一廊插画、一份手册｜第二分册《Omp 从入门到精通》在仓库施工中</p>
+  <p class="sub">解码 Agent Harness —— 一本书、一册入门、一廊插画、一套知识卡、一页样章、一份手册｜第二分册《Omp 从入门到精通》在仓库施工中</p>
   <p class="hint">全部页面离线自包含、无脚本依赖（入门分册与画廊内建的动效除外）；
   由 GitHub Actions 每次推送自动构建发布。</p>
   <img class="cover" src="cover.png" alt="御舆：解码 Agent Harness 封面">
@@ -65,9 +69,9 @@ footer a{color:inherit}
     <div class="card">
       <h2><span class="ico">📖</span>大书 · 御舆：解码 Agent Harness<span lang="en"></span></h2>
       <p>全书 15 章 + 4 附录：对话循环、工具、权限、记忆、上下文、钩子、子智能体、
-      编排、技能、MCP、流式、Plan、亲手造一个 Harness。滚动阅读时，42 幅手绘插图
+      编排、技能、MCP、流式、Plan、亲手造一个 Harness。滚动阅读时，43 幅手绘插图
       与按书的配色预渲染的图版会随你前进。</p>
-      <a class="go" href="book.html">开始阅读 →</a>
+      <a class="go" href="yuyu-agent-harness-zh.html">开始阅读 →</a>
       <span class="alt">English edition: <a href="yuyu-agent-harness-en.html">Yù Yú (English)</a></span>
     </div>
     <div class="card">
@@ -93,10 +97,24 @@ footer a{color:inherit}
     </a>
     <a class="card" href="illustration-gallery.html">
       <h2><span class="ico">🎨</span>插画画廊 · 看图说话<span lang="en"></span></h2>
-      <p>42 幅手绘插图的中英双语题注画廊：点击任意一幅，看墨线逐笔重演、
+      <p>43 幅手绘插图的中英双语题注画廊：点击任意一幅，看墨线逐笔重演、
       悬停读白话、点击迸发墨点。</p>
       <span class="go">逛画廊 →</span>
     </a>
+    <div class="card">
+      <h2><span class="ico">🗂️</span>知识卡 · 一章三张<span lang="en"></span></h2>
+      <p>十五章各三张 3:4 手绘卡：一句话钩子、核心机制、三句带走。
+      手机一屏一张，打印时每张卡独立成页。</p>
+      <a class="go" href="knowledge-cards.html">抽卡复习 →</a>
+      <span class="alt">English: <a href="knowledge-cards.en.html">knowledge cards</a></span>
+    </div>
+    <div class="card">
+      <h2><span class="ico">📜</span>样章 · 试读第 2 章<span lang="en"></span></h2>
+      <p>从全书的心脏「对话循环」读起：完整一章正文、图版、表格与引文，
+      由同一构建管线生成，单文件离线可开。</p>
+      <a class="go" href="sample-chapter.html">免费试读 →</a>
+      <span class="alt">English: <a href="sample-chapter.en.html">sample chapter</a></span>
+    </div>
   </div>
 </main>
 <footer>

@@ -1,0 +1,50 @@
+schema_version: 1
+id: ch12
+title: 第12章 MCP 集成与外部协议
+status: draft
+content_pack: content-pack.json
+scripts:
+  long:
+    path: script-long.md
+    mode: markdown
+  short:
+    path: script-short.md
+    mode: markdown
+formats:
+  long:
+    width: 1920
+    height: 1080
+    fps: 30
+    duration_s: 382.028
+    status: scripted
+  short:
+    width: 1080
+    height: 1920
+    fps: 30
+    duration_s: 52.472
+    status: scripted
+voice:
+  engine: edge-tts
+  voice_id: zh-CN-YunyangNeural
+  rate: -10%
+  pitch: -5Hz
+captions:
+  max_chars: 16
+  max_lines: 2
+  min_dwell_s: 1.2
+  min_font_px: 32
+  safe_pct: 5
+  foreground: '#ffffff'
+  background: '#101010'
+quality:
+  normalize: true
+  max_flash_hz: 3
+  peak_dbfs: -1.0
+  loudness_lufs: -16.0
+  loudness_tolerance: 2.0
+  end_margin_s: 0.5
+rights:
+  owner: 小电讲电路 (original)
+  music: none
+  footage: none
+sources: []

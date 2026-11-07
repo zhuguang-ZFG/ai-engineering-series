@@ -1,1 +1,0 @@
-决策有三个来源：hook、user、classifier。hook 像管理员剧本，CI 里先判；user 是当面点允许或拒绝，还可选永久写入；classifier 是 AI 监督 AI，信任最低，有些检查对它免疫。

@@ -11,7 +11,6 @@
 
 PYTHON     ?= python
 BOOK_LANG  ?= both
-BUILD      := yuyu-book/build.py
 BOOKCTL    := $(PYTHON) scripts/bookctl.py
 
 .PHONY: help doctor check check-fast check-full book book-pdf book-omp book-omp-pdf index clean
@@ -52,9 +51,9 @@ book-omp-pdf:
 	$(BOOKCTL) build --product omp --lang zh --pdf
 
 # --regen-index rebuilds subject-index.json and then continues into a full
-# assembly; build.py has no index-only invocation.
+# assembly; the canonical package CLI has no index-only invocation.
 index:
-	$(PYTHON) $(BUILD) --regen-index --lang $(BOOK_LANG)
+	$(BOOKCTL) build --regen-index --lang $(BOOK_LANG)
 
 clean:
 	$(BOOKCTL) clean

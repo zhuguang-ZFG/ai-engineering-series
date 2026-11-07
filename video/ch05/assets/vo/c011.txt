@@ -1,1 +1,0 @@
-第三种，企业统一管控。管理员通过 MDM 或远程 API 下发 policySettings，只锁安全相关的几项——模型、permissions.deny、allowManagedHooksOnly。

@@ -36,72 +36,16 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: npm
-
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
         with:
-          python-version: '3.12'
-
-      - run: npm ci
-
-      - run: python -m pip install -r yuyu-book/requirements.txt
-
-      - name: Cache the CJK font package
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/cjk-deb
-          key: fonts-noto-cjk-${{ runner.os }}-20230817
-
-      - name: Install CJK fonts
-        timeout-minutes: 25
-        run: |
-          set -eu
-          sudo apt-get -o Acquire::Retries=3 update
-          mkdir -p "$HOME/.cache/cjk-deb"
-          # apt restarts a stalled download from zero on every retry, so a slow
-          # mirror never converges: three runs in a row spent the whole step
-          # re-fetching the same 61 MB and got nowhere. Take the pool path from
-          # apt's own index -- `--print-uris` here yields a mirror+file:
-          # pseudo-URI that curl cannot fetch -- and download with -C - so a
-          # stall costs only the stalled bytes.
-          if ! ls "$HOME"/.cache/cjk-deb/fonts-noto-cjk*.deb >/dev/null 2>&1; then
-            rel=$(apt-cache show fonts-noto-cjk | sed -n 's/^Filename: //p' | head -1)
-            base=$(sed -n 's#^\s*\(https\?://[^ ]*\)$#\1#p' /etc/apt/apt-mirrors.txt 2>/dev/null | head -1 || true)
-            for root in "${base:-}" https://archive.ubuntu.com/ubuntu http://azure.archive.ubuntu.com/ubuntu; do
-              [ -n "$root" ] || continue
-              curl -fsSL -C - --retry 6 --retry-delay 2 --retry-all-errors \
-                   --connect-timeout 20 --max-time 900 \
-                   -o "$HOME/.cache/cjk-deb/${rel##*/}" "${root%/}/$rel" && break
-            done
-          fi
-          deb=$(ls "$HOME"/.cache/cjk-deb/fonts-noto-cjk*.deb 2>/dev/null | head -1 || true)
-          [ -n "$deb" ] || { echo "::error::could not fetch fonts-noto-cjk"; exit 1; }
-          plain=$(printf '%b' "$(basename "$deb" | sed 's/%/\\x/g')")
-          # apt looks for the archive under the index's decoded filename, while
-          # Debian drops the epoch from pool filenames, so seed both spellings;
-          # a name apt does not want is simply ignored.
-          sudo install -m 644 "$deb" "/var/cache/apt/archives/$plain"
-          sudo install -m 644 "$deb" "/var/cache/apt/archives/$(printf '%s' "$plain" | sed 's/_[0-9][0-9]*:/_/')"
-          sudo apt-get -o Acquire::Retries=3 install -y fonts-noto-cjk
-          fc-cache -f
-
-      - name: Install Chromium
-        timeout-minutes: 15
-        run: python -m playwright install --with-deps chromium
-
-      # the same plates Book CI warms; the reader/gallery generators read
-      # the dist HTML (both languages) for their plain-language extracts
+          browser: 'true'
       - name: Build the book (both editions)
-        run: python yuyu-book/build.py --lang both
+        run: python scripts/bookctl.py build --lang both
 
-      - name: Build the beginner readers
-        run: |
-          python scripts/build_beginner_reader.py
-          python scripts/build_illustration_gallery.py
+      - name: Rebuild every source product twice
+        run: python scripts/check_products.py
 
       # The committed docs/ is what the repository itself shows and what the
       # site contracts quote. A rewrite here means the shipped copy was stale —
@@ -127,12 +71,14 @@ jobs:
           cp yuyu-book/dist/yuyu-agent-harness-zh.html site/book.html
           cp yuyu-book/dist/yuyu-agent-harness-zh.html site/yuyu-agent-harness-zh.html
           cp yuyu-book/dist/yuyu-agent-harness-en.html site/yuyu-agent-harness-en.html
-          cp docs/beginner-reader.html site/beginner-reader.html
-          cp docs/beginner-reader.en.html site/beginner-reader.en.html
-          cp docs/illustration-gallery.html site/illustration-gallery.html
+          cp docs/*.html docs/*-index.json docs/*-map.json site/
           cp docs/illustration-prompts.md site/illustration-prompts.md
           cp cover.png site/cover.png
+          cp -R docs/images site/images
           python scripts/build_site_portal.py site/index.html
+
+      - name: Entry points and local links
+        run: python scripts/check_site_redirects.py site
 
       - uses: actions/configure-pages@v5
 

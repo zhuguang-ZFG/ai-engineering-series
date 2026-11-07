@@ -1,1 +1,0 @@
-订阅这一侧，Claude Code 用的是 React 18 官方的 useSyncExternalStore，而不是自己拿 useEffect 加 useState 拼一个。这个选择对 Agent 来说特别要紧。

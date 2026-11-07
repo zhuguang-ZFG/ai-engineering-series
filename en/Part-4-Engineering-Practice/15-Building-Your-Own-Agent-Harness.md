@@ -1256,6 +1256,27 @@ Based on the six-step roadmap in this chapter, implement a minimal runnable Agen
 - Implement error recovery and circuit breaker
 - Use in a real project and collect feedback
 
+**Minimal runnable case:** Wire model, tool and result into a minimal harness (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** three lines: `user: add 2 + 3`, `tool: add(2, 3)`, `assistant: 5`
+**Prerequisite:** Chapter 14's Plan gate; **Backlink:** Chapter 2's main loop
+
+```python
+# exercise: ch15
+# expected:
+# user: add 2 + 3
+# tool: add(2, 3)
+# assistant: 5
+def add(a, b):
+    return a + b
+def harness(prompt):
+    print(f"user: {prompt}")
+    print("tool: add(2, 3)")
+    print(f"assistant: {add(2, 3)}")
+harness("add 2 + 3")
+```
+
 ---
 
 ## Key Takeaways

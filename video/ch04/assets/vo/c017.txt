@@ -1,1 +1,0 @@
-规则不能只看工具名，要懂命令语义。三种匹配：精确 Bash(npm test)；前缀 Bash(npm:*)；通配 Bash(git commit *)。表达能力递增，误放行风险也递增。

@@ -1,1 +1,0 @@
-猜一猜：先分析后改代码，该开哪一档？答案是 plan；要省确认又不想裸奔，再考虑 auto 加白名单。Bash 最难管：git status 安全，git push --force 危险。

@@ -471,7 +471,7 @@ class BackMatter(Config):
         the slots the rows already reserve, and page two prints the book. If
         `pdf_meta` and the rendered page disagree, every number lands on somebody
         else's headword."""
-        import build
+        from yuyu_book import app as build
         from html import unescape
         entries = registry.load("subject-index.json")
         for lang in ("zh", "en"):
@@ -525,7 +525,7 @@ class Principles(Config):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        import build
+        from yuyu_book import app as build
         cls.build = build
         cls.glosses, _paths = plain.load_plain()
 

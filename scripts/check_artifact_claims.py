@@ -51,7 +51,7 @@ def main(dist: Path) -> int:
                 pdf = dist / f"yuyu-agent-harness-{lang}.pdf"
                 if not pdf.exists():
                     missing.append(f"{pdf.name}: no PDF here — run "
-                                   "`python yuyu-book/build.py --lang both --pdf` "
+                                   "`python scripts/bookctl.py build --lang both --pdf` "
                                    "or point this script at the CI artifact dir")
                     continue
                 got = pages(pdf)

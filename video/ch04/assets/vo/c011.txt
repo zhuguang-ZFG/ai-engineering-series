@@ -1,1 +1,0 @@
-五种模式从严格到宽松：default、plan、auto、bypassPermissions，外加内部的 bubble。default：逐次确认。除明确 allow 外，每次工具都问你。

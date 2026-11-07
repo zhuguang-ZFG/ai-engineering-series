@@ -1,1 +1,0 @@
-例子：Read a、Read b、Bash ls、Read c。前两个并行；Bash 独自；Read c 必须等 Bash 完——Bash 可能改目录改文件，并行读会读到不确定世界。

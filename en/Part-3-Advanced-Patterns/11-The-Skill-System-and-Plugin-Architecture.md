@@ -771,6 +771,28 @@ Design the following conditional skills for a React + TypeScript project:
 
 Consider: Is there overlap between these skills? How can you avoid conflicts between skills?
 
+**Minimal runnable case:** Read skill names out of two skill directories (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `['deploy', 'review']`
+**Prerequisite:** Chapter 10's coordinator; **Backlink:** Chapter 3's tool contract
+
+```python
+# exercise: ch11
+# expected: ['deploy', 'review']
+SKILLS = {
+    "review": "---\nname: review\ndescription: check a diff\n---\n",
+    "deploy": "---\nname: deploy\ndescription: ship it\n---\n",
+}
+def names(registry):
+    out = []
+    for text in registry.values():
+        front = text.split("---")[1]
+        out.append(dict(line.split(": ", 1) for line in front.strip().splitlines())["name"])
+    return sorted(out)
+print(names(SKILLS))
+```
+
 ---
 
 ## Key Takeaways

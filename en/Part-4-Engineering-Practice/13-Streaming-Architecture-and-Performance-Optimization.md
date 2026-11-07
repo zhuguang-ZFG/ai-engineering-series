@@ -558,6 +558,7 @@ The economic impact of cache hits is significant. For Claude 3.5 Sonnet:
 +-------------------+----------------+------------------+
 ```
 
+<!-- block: ch13.cache-economics -->
 A typical Agent session might send 200K input tokens over 10 turns. Without caching, input cost is $0.60. With 80% cache hit rate, cost drops to $0.60 * 0.2 + $0.60 * 0.8 * 0.1 = $0.168, a 72% savings. The misses there bill at the base input rate of $3.00; on the convention of the table above, where a miss becomes a cache write at $3.75, the cost is $0.60 * 0.2 * 1.25 + $0.048 = $0.198 and the savings narrow to 67%. In large projects, this savings can reach hundreds of dollars per day.
 
 ### 13.5.2 Byte-level Consistency in Fork Mode
@@ -678,6 +679,21 @@ Run this chapter's "Startup Optimization Checklist" (Section 13.3.4) on the Agen
 - Which are low-hanging fruit (simple changes with significant improvement)?
 - Which require larger architectural changes?
 - Develop a prioritized optimization plan.
+
+**Minimal runnable case:** Replay the cost and savings after a cache hit (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `cost=0.198 savings=67%`
+**Prerequisite:** Chapter 12's MCP calls; **Backlink:** Chapter 7's token budget
+
+```python
+# exercise: ch13
+# expected: cost=0.198 savings=67%
+input_tokens = 200_000
+base = input_tokens / 1_000_000 * 3.00
+cached = base * 0.2 * 1.25 + base * 0.8 * 0.1
+print(f"cost={cached:.3f} savings={round((1 - cached / base) * 100)}%")
+```
 
 ---
 

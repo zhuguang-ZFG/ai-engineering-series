@@ -1,1 +1,0 @@
-互动一下：Glob、Grep、Bash npm test、Read a、Edit a、Glob json——你会划几批？书稿答案是五批：前两个并行；Bash 串；Read 因前面非安全不能并回；

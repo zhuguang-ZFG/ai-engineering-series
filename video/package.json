@@ -1,0 +1,14 @@
+{
+  "name": "yuzhe-video",
+  "private": true,
+  "type": "module",
+  "description": "One HyperFrames pin for every chapter; the pipeline lives in pipeline/.",
+  "devDependencies": {
+    "hyperframes": "0.8.210"
+  },
+  "scripts": {
+    "check": "hyperframes check",
+    "render": "hyperframes render",
+    "preview": "hyperframes preview"
+  }
+}

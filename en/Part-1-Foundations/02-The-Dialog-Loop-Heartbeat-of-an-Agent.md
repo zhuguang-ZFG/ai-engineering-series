@@ -29,6 +29,12 @@ This design choice deserves more space to fully understand. In traditional progr
 <!-- block: ch02.b-46cf49cd -->
 Faced with these requirements, the traditional function call model falls short. Async generators fill exactly this gap: they act like a "coroutine" that you can pause and resume at any time, establishing a real-time event pipeline between the "producer" (the dialog loop) and the "consumer" (the UI rendering layer).
 
+Follow the consumer's steps: the UI calls `next()`, the loop runs to a `yield`, hands out an event, and pauses. Only after the UI handles that event and calls `next()` again does the loop continue. That is backpressure here: upstream waits for downstream instead of filling an unbounded display queue. It governs this pull chain, not every buffer underneath it. A child process still writing logs into a separate buffer needs its own capacity and cancellation controls. Ctrl+C has the same distinction: no longer consuming events stops the display; stopping the work requires a cancellation signal to reach the pending operation, followed by cleanup.
+
+```ill
+ch02-cancel-chain
+```
+
 ```mermaid
 flowchart TD
     subgraph layer1["Layer 1: Streaming Output"]
@@ -39,20 +45,22 @@ flowchart TD
     note1["UI renders each event immediately; user does not need to wait for completion"]
 
     subgraph layer2["Layer 2: Cancellability"]
-        cancel["AbortSignal requests cancellation; return() requests closure"]
-        clean["Triggers finally block for resource cleanup"]
+        cancel["AbortSignal notifies pending work; return() requests generator closure"]
+        clean["Once work responds to cancellation, finally releases resources"]
         scene2["Corresponding scenario: user presses Ctrl+C to interrupt"]
         cancel --> clean --> scene2
     end
 
     subgraph layer3["Layer 3: Backpressure Control"]
-        bp["When consumer processing speed < producer speed, generator auto-pauses"]
-        mem["Prevents event accumulation leading to memory overflow"]
+        bp["The generator waits at yield until the consumer calls next() again"]
+        mem["Bounds this pull chain; independent buffers still need limits"]
         scene3["Corresponding scenario: tool execution produces large amounts of output"]
         bp --> mem --> scene3
     end
 
     layer1 --- note1
+    layer1 ~~~ layer2
+    layer2 ~~~ layer3
 
     classDef layer fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
     classDef note fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
@@ -80,7 +88,7 @@ This function signature encapsulates three layers of design decisions:
 Why choose AsyncGenerator over callbacks or Promises? Because generators naturally fit the "streaming produce - streaming consume" model. Model responses arrive token by token, tool execution results come out step by step, and the generator's `yield` mechanism allows each layer to "push when data is available, wait when it's not," without callback hell or Promise chains.
 
 <!-- block: ch02.b-83093f34 -->
-> **Design Philosophy Comparison:** If you use a callback pattern, you need to register independent callback functions for each event type, and the code becomes scattered callback handling logic. If you use Promise chains, although you avoid callback hell, Promises are "one-shot" -- they can only resolve once and cannot express a continuous event stream. If you use RxJS Observables, while powerful, they introduce a heavy dependency and a steep learning curve. AsyncGenerator is the "just right" solution -- native language support, zero extra dependencies, type-safe, and naturally supports streaming and cancellation.
+> **Design Philosophy Comparison:** Callbacks need explicit coordination of event order and consumption speed. A single Promise represents one completion, not a continuous event stream on its own. RxJS Observables can express streams but add a dependency and subscription management. AsyncGenerator provides native syntax for yielding events one at a time here; cancellation still depends on the caller, pending operations, and cleanup logic working together, not on `async function*` alone.
 
 ### Streaming Event Types
 
@@ -157,7 +165,7 @@ classDiagram
 <!-- block: ch02.b-dcb10c57 -->
 Now let's follow a complete Turn -- from the user pressing the Enter key to the model completing its response or deciding to call a tool -- to understand the complete flow inside the `queryLoop` function.
 
-Using a medical analogy, a Turn is like a complete diagnostic process: the doctor (model) first reviews the medical record (context preprocessing), then communicates with the patient (API call), may need to order tests (tool calls), and after receiving the test results (tool execution), makes a diagnosis (final response). If the test results are insufficient for a diagnosis, the doctor orders more tests (next loop iteration).
+Trace a small task: “read `package.json` and explain the test command.” The first API request carries the message history and tool definitions, and the model returns a Read `tool_use`. The runtime checks and executes it, obtains the file contents, and appends the matching `tool_result` to the message list. Only the next API request carries that result back to the model for explanation. One user task can therefore involve several model requests. Receiving a tool request does not mean the tool succeeded, and tool success does not mean the model has seen the result. The five phases handle these handoffs.
 
 ```mermaid
 flowchart TD
@@ -210,7 +218,7 @@ Before calling the model, the loop executes a series of preprocessing steps. The
 <!-- block: ch02.b-7b4593eb -->
 3. **Microcompact**: Lightly compresses the context once before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact aims to stay "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
 
-4. **Context Collapse**: A more fine-grained compression strategy that collapses consecutive messages into a compact view without losing information. You can think of Context Collapse as folding acknowledgments like "hello," "okay," "I understand" in a conversation into a single line -- the information stays intact but takes up less space.
+4. **Context Collapse**: Selectively restructures groups of messages rather than immediately replacing the entire conversation with one summary. Its scope and trigger path distinguish it from AutoCompact; it is not a promise to fold only acknowledgments or lose no information. Chapter 7 also explains that enabling Collapse suppresses ordinary auto-compaction. Listing these preprocessing positions does not mean all four mechanisms run on every iteration.
 
 <!-- block: ch02.b-1778fcfa -->
 5. **System Prompt Assembly**: Merges the base system prompt with dynamic context (such as current working directory, user configuration, etc.) into the complete system prompt. The design of this step directly impacts cache hit rates -- if the assembly order is unstable, the byte content of the prompt may differ on each call, causing cache invalidation.
@@ -478,11 +486,27 @@ Send Claude Code a series of requests that require substantial context (such as 
 
 > **Cross-Reference:** Part 2's core chapters analyze the context compression pipeline's detailed implementation in depth, including cache-aware compression strategies and context collapse granularity control.
 
+**Minimal runnable case:** Replay one tool round-trip with a generator (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**Prerequisite:** Chapter 1's four-state chain; **Backlink:** the async generator dialog loop in Chapter 1 §1.2
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
 ---
 
 ## Key Takeaways
 
-1. **AsyncGenerator suits the Agent loop as a vehicle**: `yield` provides natural streaming output, `yield*` provides sub-generator delegation, and `.return()` provides deterministic cancellation. These characteristics line up exactly with the Agent's core loop of "call model -> execute tools -> backfill results -> call again." This is not a compromise where "other approaches could also work," but the choice that remains once you rule out the other approaches.
+1. **AsyncGenerator suits the Agent loop as a vehicle**: `yield` hands out events incrementally, `yield*` delegates to sub-generators, and `.return()` requests generator closure. Prompt cancellation still requires underlying I/O to observe the cancellation signal and cleanup paths to release resources. Keeping these responsibilities separate prevents “the display stopped” from becoming “the tool stopped.”
 
 2. **The preprocessing pipeline is the core of context management**: The four-layer compression strategy of Snip, Microcompact, Context Collapse, and Autocompact progresses step by step, from lightweight trimming to full summarization, ensuring the Agent always stays within the token budget during infinite conversations. Understanding the design principles of this four-layer pipeline (arranged from lightweight to heavyweight) helps you design context management strategies in your own Agent systems.
 

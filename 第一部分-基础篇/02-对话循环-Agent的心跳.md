@@ -27,6 +27,12 @@ Claude Code 的对话主循环是一个以 `async function*` 定义的异步生�
 <!-- block: ch02.b-495b008f -->
 面对这些需求，传统的函数调用模型力不从心。异步生成器正好补上这个缺口：它像一个可以随时暂停和恢复的"协程"，在"生产者"（对话循环）和"消费者"（UI 渲染层）之间建立了一条实时的事件管道。
 
+具体看消费者怎样取值：UI 调用一次 `next()`，循环运行到一个 `yield`，交出事件后暂停；UI 处理完，再调用 `next()`，循环才继续。这就是这里的背压——让上游等下游，而不是另开一个无限增长的待显示队列。它只约束这条拉取链；如果子进程仍在往独立缓冲区写日志，那个缓冲区仍需自己的容量和取消控制。按 Ctrl+C 也一样：停止取事件只会停住显示，真正停止工作还得把取消信号传到正在等待的操作，再走清理路径。
+
+```ill
+ch02-cancel-chain
+```
+
 ```mermaid
 flowchart TD
     subgraph layer1["第一层：流式输出"]
@@ -37,20 +43,22 @@ flowchart TD
     note1["UI 即时渲染每个事件，用户无需等待全部完成"]
 
     subgraph layer2["第二层：可取消性"]
-        cancel["AbortSignal 请求取消；return() 请求关闭"]
-        clean["触发 finally 块执行资源清理"]
+        cancel["AbortSignal 通知底层操作；return() 请求关闭生成器"]
+        clean["操作响应取消后，沿 finally 清理资源"]
         scene2["对应场景：用户按 Ctrl+C 中断操作"]
         cancel --> clean --> scene2
     end
 
     subgraph layer3["第三层：背压控制"]
-        bp["消费者处理速度 < 生产速度时，生成器自动暂停"]
-        mem["避免事件堆积导致内存溢出"]
+        bp["消费者再次 next() 前，生成器停在 yield"]
+        mem["限制这条拉取链；独立缓冲区仍须限容"]
         scene3["对应场景：工具执行产生大量输出时"]
         bp --> mem --> scene3
     end
 
     layer1 --- note1
+    layer1 ~~~ layer2
+    layer2 ~~~ layer3
 
     classDef layer fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
     classDef note fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
@@ -77,7 +85,7 @@ flowchart TD
 为什么选择 AsyncGenerator 而非回调或 Promise？因为生成器天然适配"流式生产-流式消费"的模型。模型的响应是逐 token 到达的，工具的执行结果是逐步产出的，生成器的 `yield` 机制让每一层都可以做到"有数据就推送，没数据就等待"，而不需要回调地狱或 Promise 链。
 
 <!-- block: ch02.b-350df6e6 -->
-> **设计哲学对比：** 如果使用回调模式，你需要为每种事件类型注册独立的回调函数，代码会变成分散在各处的回调处理逻辑。如果使用 Promise 链，虽然避免了回调地狱，但 Promise 是"一次性的"——它只能 resolve 一次，无法表达持续的事件流。如果使用 RxJS Observable，虽然功能强大，但引入了沉重的依赖和陡峭的学习曲线。AsyncGenerator 是"刚刚好"的方案——原生语言支持、零额外依赖、类型安全、天然支持流式和取消。
+> **设计哲学对比：** 回调模式需要额外组织事件顺序和消费速度；单个 Promise 只表示一次完成，不能单独承载连续事件。RxJS Observable 能表达事件流，但需要额外依赖与相应的订阅管理。这里用 AsyncGenerator，是为了以原生语法逐个交出事件；取消仍要由调用方、底层操作和清理逻辑共同实现，不是 `async function*` 自动提供的能力。
 
 ### 流式事件类型
 
@@ -154,7 +162,7 @@ classDiagram
 <!-- block: ch02.b-e588ade6 -->
 现在跟着一个完整的 Turn 走一遍——从用户按下回车键，到模型答完或者决定调用工具——`queryLoop` 函数内部就是这么转的。
 
-用医学来类比，一个 Turn 就像一次完整的诊断过程：医生（模型）先查看病历（上下文预处理），然后与病人交流（API 调用），可能需要安排检查（工具调用），拿到检查结果后（工具执行）做出诊断（最终回复）。如果检查结果不足以确诊，医生会安排更多检查（下一轮循环）。
+先追踪一个小任务：“读取 `package.json`，解释测试命令”。第一次 API 请求发出历史消息和工具定义，模型返回 Read 的 `tool_use`；运行时检查并执行它，得到文件内容，再把对应的 `tool_result` 加入消息列表。下一次 API 请求才带着这份结果让模型解释脚本。因此，一个用户任务可以经历多次模型请求；收到工具请求不等于工具已成功，工具成功也不等于模型已经看见结果。五个阶段就是在接这几次交接。
 
 ```mermaid
 flowchart TD
@@ -207,7 +215,7 @@ flowchart TD
 
 3. **Microcompact**：赶在自动压缩之前先轻量压一遍，用缓存编辑技术减少 token 消耗。Microcompact 的设计是"缓存友好"的——它尽量复用 API 侧已缓存的 token，避免因压缩导致缓存全面失效。
 
-4. **Context Collapse**：上下文折叠是一种更细粒度的压缩策略，它把连续消息折成紧凑视图，信息一条不少。可以把 Context Collapse 想象为将一段对话中的"你好"、"好的"、"我明白了"这类确认性消息折叠为一行——信息不丢，但占用的空间更少。
+4. **Context Collapse**：选择性重构消息组，而不是立即把整段对话换成一份摘要。它与 AutoCompact 的区别在于处理范围和触发路径，不是“只折叠寒暄且绝不丢信息”。第 7 章还会说明，启用 Collapse 后会抑制普通自动压缩；这里列出预处理位置，不代表四种机制每轮都会执行。
 
 <!-- block: ch02.b-7b170c19 -->
 5. **系统提示组装**：将基础系统提示与动态上下文（如当前工作目录、用户配置等）合并为完整的系统提示。这一步的设计直接影响了缓存命中率——如果组装顺序不稳定，每次调用生成的 Prompt 字节内容可能不同，导致缓存失效。
@@ -478,11 +486,27 @@ flowchart TD
 
 > **交叉引用：** 上下文压缩管线的详细实现将在第二部分的核心篇中深入分析，包括缓存感知的压缩策略和上下文折叠的粒度控制。
 
+**最小可运行案例：** 用生成器复刻一次「工具调用—结果回填」（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**前置：** 第 1 章的四步状态链；**回链：** 第 1 章 1.2 节的异步生成器对话主循环
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
 ---
 
 ## 关键要点
 
-1. **AsyncGenerator 适合做 Agent 循环的载体**：`yield` 提供了自然的流式输出，`yield*` 提供了子生成器委托，`.return()` 提供了确定性取消。这些特性与 Agent "调用模型 -> 执行工具 -> 回填结果 -> 再调用"的核心循环正好对得上。这不是"也可以用其他方案"的折中，而是把其他方案逐一排除之后的选择。
+1. **AsyncGenerator 适合做 Agent 循环的载体**：`yield` 逐步交出事件，`yield*` 委托子生成器，`.return()` 请求关闭生成器。真正的及时取消还需要底层 I/O 响应取消信号，并由清理路径释放资源。把这几件事分开，才不会把“界面停了”误认为“工具停了”。
 
 2. **预处理管线是上下文管理的核心**：Snip、Microcompact、Context Collapse、Autocompact 四层压缩策略层层递进，从轻量裁剪到全量摘要，确保 Agent 在无限对话中始终保持在 token 预算内。理解这四层管线的设计原则（从轻量到重量排列），有助于你在自己的 Agent 系统中设计上下文管理策略。
 

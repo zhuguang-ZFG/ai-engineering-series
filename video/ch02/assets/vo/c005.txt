@@ -1,1 +1,0 @@
-为什么不选 Promise 链？Promise 只能 resolve 一次，装不下一路涌出的增量事件。Observable 很强，但学习与类型成本更高。AsyncGenerator 刚刚好：原生语法、类型友好、取消路径清晰。

@@ -2,7 +2,7 @@
 
 本书 26 份插图（章徽、篇题刻、老驿卒、扉页车图）以开源项目
 [yang0/handraw-style](https://github.com/yang0/handraw-style) 的画风体系绘制：
-另有 16 张章内插图不走「提示词 → 手写 SVG」这条管线，边界与名单见文末一节。
+另有 17 张章内插图不走「提示词 → 手写 SVG」这条管线，边界与名单见文末一节。
 基准配方为 `FD-001 · Yuko Shimizu | Dynamic East-Asian Ink Editorial` 画风，
 `C-32 炭黑（Charcoal Black）` 统领、`C-15 朱砂红（Cinnabar Red）` 点缀
 （朱砂仅用于章印与书级点缀，不在画面内）。本手册按该项目的输出规范给出
@@ -752,21 +752,21 @@ Core style traits: flowing ink linework with an East-Asian brush spirit; visible
 
 </details>
 
-## 手册不覆盖的另一类：16 张章内插图
+## 手册不覆盖的另一类：17 张章内插图
 
 本手册的 26 条提示词只覆盖**章徽、篇题刻、老驿卒、扉页车图**这一类——它们是靠生图提示词
-起稿、再转成手写 SVG 的。盘上另有 **16 张章内插图**（正文里跟着小节走的那种）不属于这条管线，
-它们没有中英双语提示词，也不必强行编一份，故在此登记边界，别让「42 张图 vs 26 条提示词」
+起稿、再转成手写 SVG 的。盘上另有 **17 张章内插图**（正文里跟着小节走的那种）不属于这条管线，
+它们没有中英双语提示词，也不必强行编一份，故在此登记边界，别让「43 张图 vs 26 条提示词」
 这个差额看起来像漏项：
 
-`ch01-five-pillars`、`ch02-turn-loop`、`ch03-tool-bench`、`ch03-tool-pipeline`、
+`ch01-five-pillars`、`ch02-turn-loop`、`ch02-cancel-chain`、`ch03-tool-bench`、`ch03-tool-pipeline`、
 `ch04-gate-steps`、`ch05-trust-ladder`、`ch06-memory-funnel`、`ch07-four-levels`、
 `ch08-hook-line`、`ch09-fork-pipeline`、`ch10-coordinator-fork`、`ch11-skill-stairs`、
 `ch12-mcp-state-dial`、`ch13-concurrency-gate`、`ch14-plan-gate`、`ch15-harness-wheel`
 
-（26 + 16 = 42，正好是 `yuyu-book/illustrations/*.svg` 的盘上计数。）
+（26 + 17 = 43，正好是 `yuyu-book/illustrations/*.svg` 的盘上计数。）
 
-- 这 16 张的取舍与逐轮修订记录在 `.superpowers/sdd/2026-11-02-illustration-rollout/`
+- 这 17 张的取舍与逐轮修订记录在 `.superpowers/sdd/2026-11-02-illustration-rollout/`
   里（`progress.md` 与 `fix-round-1-section.md`），不在本手册；要改画先读那两份。
 - 两类图共用同一套硬契约，即上一节第 4 条：`yuyu-book/yuyu_book/art.py` 要求单 svg + viewBox、
   至少一处 `currentColor`、禁 id/href/url/script/style，质感只能来自几何笔触。
@@ -800,9 +800,9 @@ Core style traits: flowing ink linework with an East-Asian brush spirit; visible
 
 这一批走的是**独立目录** `yuyu-book/illustrations-omp/`，装载顺序先查它、查不到再回落共享目录
 （`yuyu-book/yuyu_book/art.py`），所以它**没有**打穿御舆侧被测试盯住的张数：`test_docclaims.py` 数
-`illustrations/*.svg` 仍是 **42**，`README.md` / `en/README.md` / `CREDITS.md` / `STRUCTURE.md` 那几句不用改；
-另有一条 `omp_drawings()` 数 `illustrations-omp/*.svg`，钉住 `STRUCTURE.md` 那一行的 **46** =
-7 幅题刻 + 39 枚章徽（章徽那一层同日 19:3x 落地，配方与字节账就在本节末尾）。
+`illustrations/*.svg` 的当前值是 **43**，`README.md` / `en/README.md` / `CREDITS.md` / `STRUCTURE.md` 那几句必须同轮改；
+另有一条 `omp_drawings()` 数 `illustrations-omp/*.svg`，钉住 `STRUCTURE.md` 那一行的 **47** =
+7 幅题刻 + 39 枚章徽 + 1 幅正文插图（`omp-session-disk.svg`）。
 omp 的图也**不进** `docs/illustration-gallery.html`——那是御舆读者侧的成品。过程与本轮全部读数在
 `docs/yuyu-overhaul/ILLUST-SYNC.md` 第九、十节。
 
@@ -1085,3 +1085,14 @@ stroke-linejoin="round">`；每个描线 `path` / `circle` 带 `pathLength="100"
 本节引用的 `FA-010` 画风与 `C-32` / `C-35` / `C-15` 主题色编号，逐条核过该项目
 `skills/handdraw-style-prompter/references/styles.json`（367 条）与 `colors.json`（36 条），
 编号-名称-作者三列都对上；上游 `images/` 参考图库不复制进本仓。
+
+## 新增解释性手绘：暂停、取消与磁盘状态
+
+这两幅由本项目直接绘制 SVG 几何，不使用第三方图像或生成模型。沿用东方墨线与 `currentColor`，与既有手册的画风索引、署名边界相同；不增加外部字体、纹理或脚本。
+
+| 文件 | 正文位置 | 读图任务 |
+|---|---|---|
+| `ch02-cancel-chain.svg` | 御舆第 2 章中英版 §2.1 | 左栏 PAUSE 只挡住 UI 的下一次取值，底部 API/tool 仍可能工作；右栏 CANCEL 把信号送到实际操作，再清理资源。不能把“屏幕不动了”当作“工作停止了”。 |
+| `omp-session-disk.svg` | Omp 第 7 章 §7.2 | 左边 leaf 回到 A，右边 `file.ts` 仍保留 B 的内容；会话导航不是磁盘回滚。 |
+
+English reading guide: PAUSE suspends event consumption, while CANCEL must reach the operation and cleanup. Moving a conversation leaf does not undo filesystem changes. Both drawings are static and retain the same meaning in dark mode, reduced motion and print.

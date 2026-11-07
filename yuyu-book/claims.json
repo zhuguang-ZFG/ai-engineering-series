@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "claims": [
+    {
+      "id": "claude-code-baseline-version",
+      "kind": "version",
+      "risk": "high",
+      "value": "2.1.310",
+      "applies_to": "0.3.x",
+      "source": "cc-release-v2-1-310",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "ch04",
+        "block": "ch04.release-notes",
+        "quote": "Claude Code 2.1.310（本书基线）"
+      },
+      "en": {
+        "unit": "ch04",
+        "block": "ch04.release-notes",
+        "quote": "Claude Code 2.1.310 (this book's baseline)"
+      }
+    },
+    {
+      "id": "headless-default-permission-mode",
+      "kind": "default",
+      "risk": "high",
+      "value": "Manual",
+      "applies_to": "0.3.x",
+      "source": "cc-release-v2-1-310",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "ch04",
+        "block": "ch04.release-notes",
+        "quote": "`claude -p` 起来就是 Manual 模式"
+      },
+      "en": {
+        "unit": "ch04",
+        "block": "ch04.release-notes",
+        "quote": "`claude -p` starts in Manual mode"
+      }
+    },
+    {
+      "id": "registered-tool-count",
+      "kind": "count",
+      "risk": "high",
+      "value": "55",
+      "applies_to": "0.3.x",
+      "source": "docs-tools-reference",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "apxb",
+        "block": "apxb.b-101fd7cf",
+        "quote": "全部 55 个工具"
+      },
+      "en": {
+        "unit": "apxb",
+        "block": "apxb.b-b53ffcd2",
+        "quote": "all 55 tools"
+      }
+    },
+    {
+      "id": "sonnet-input-token-price",
+      "kind": "price",
+      "risk": "high",
+      "value": "$3.00",
+      "applies_to": "0.3.x",
+      "source": "docs-prompt-caching",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "ch13",
+        "block": "ch13.cache-economics",
+        "quote": "这里的未命中部分按基础输入价 $3.00 计"
+      },
+      "en": {
+        "unit": "ch13",
+        "block": "ch13.cache-economics",
+        "quote": "The misses there bill at the base input rate of $3.00"
+      }
+    },
+    {
+      "id": "cache-hit-savings",
+      "kind": "performance",
+      "risk": "normal",
+      "value": "72%",
+      "applies_to": "0.3.x",
+      "source": "docs-prompt-caching",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "ch13",
+        "block": "ch13.cache-economics",
+        "quote": "节省 72%"
+      },
+      "en": {
+        "unit": "ch13",
+        "block": "ch13.cache-economics",
+        "quote": "a 72% savings"
+      }
+    },
+    {
+      "id": "proactive-feature-flag",
+      "kind": "flag",
+      "risk": "high",
+      "value": "PROACTIVE",
+      "applies_to": "0.3.x",
+      "source": "cc-release-v2-1-310",
+      "verified": "2026-11-02",
+      "review_days": 90,
+      "status": "active",
+      "zh": {
+        "unit": "apxc",
+        "block": "apxc.core-modes",
+        "quote": "`PROACTIVE` | 编译时"
+      },
+      "en": {
+        "unit": "apxc",
+        "block": "apxc.core-modes",
+        "quote": "`PROACTIVE` | Compile-time"
+      }
+    }
+  ]
+}

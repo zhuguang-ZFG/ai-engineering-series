@@ -1,1 +1,0 @@
-Edit 串；最后 Glob 再开安全批。Edit 和后面的 Glob 不能同批，副作用边界要干净。StreamingToolExecutor 更狠：不等模型整段说完，流式接到 tool_use 块就开工。
