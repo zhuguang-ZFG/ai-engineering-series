@@ -1,0 +1,38 @@
+{
+  "reviewedOn": "2026-11-07",
+  "drafts": [],
+  "deliveries": [
+    {
+      "project": "landscape",
+      "delivery": "deliverables/vibe-coding-101-landscape.mp4",
+      "status": "rendered-and-reviewed",
+      "sourceHash": "97a4ac2fdf7ac489ed358781fc226cd5f6e6c0642d9c1e99580ebe68192a2c77",
+      "deliverySha256": "e39179fa57cd3409c86f8c6aac4c611e713d7cab3b723d5921a77d8eedbc781b",
+      "review": "videos/landscape/REVIEW.md"
+    },
+    {
+      "project": "vertical",
+      "delivery": "deliverables/vibe-coding-101-vertical.mp4",
+      "status": "rendered-and-reviewed",
+      "sourceHash": "611810d2712ee2efecb4830c1d8fded260dc7b924778fa0ef6d86c5dd16c1767",
+      "deliverySha256": "8f35536a98dceb08e463a01aa697597b16647cff02a3d05cf75a3e74353a1d96",
+      "review": "videos/vertical/REVIEW.md"
+    },
+    {
+      "project": "llm-principles",
+      "delivery": "deliverables/llm-principles.mp4",
+      "status": "rendered-and-reviewed",
+      "sourceHash": "d40a265c914f4b10123f6132828ae42c8ac9892850170a57f7891db6973cd9b4",
+      "deliverySha256": "7bed0fc213b09b8a1a395ecc5a5683abbad8f604ad9a4c0631bf924adb6c59cb",
+      "review": "videos/llm-principles/REVIEW.md"
+    },
+    {
+      "project": "llm-applications",
+      "delivery": "deliverables/llm-applications.mp4",
+      "status": "rendered-and-reviewed",
+      "sourceHash": "634fe6cdc5056dc88c642595d3393e84d971e0c08dc211e75538db50335f0ea4",
+      "deliverySha256": "50991b9499792e8db9d34aac66398a758bd8cd1c0f20558641df99110c482eed",
+      "review": "videos/llm-applications/REVIEW.md"
+    }
+  ]
+}

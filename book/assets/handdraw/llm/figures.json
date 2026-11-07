@@ -1,0 +1,175 @@
+{
+  "style": "FA-040 · existing paper/ink/marker tokens",
+  "figures": [
+    {
+      "id": "G01",
+      "lesson": "L01",
+      "file": "token-pieces.svg",
+      "purpose": "观察文字片段与编号，保留空格和标点。",
+      "source": "cl100k_base example from X01; cropped to exclude trailing newline for this diagram.",
+      "limitations": "只画 Hello, world!，不是任意文本分词器。",
+      "alt": "原文对齐到 Hello、逗号、带空格的 world、感叹号四个片段与对应 ID。",
+      "mobile": "480 宽 SVG 按内容宽度缩放；正文另有可读解释与字节列表。"
+    },
+    {
+      "id": "G02",
+      "lesson": "L02",
+      "file": "generation-loop.svg",
+      "purpose": "看见选择、追加和回到新上下文的循环。",
+      "source": "Course-authored illustrative diagram; X02 supplies the actual state changes.",
+      "limitations": "图中概率条仅示意结构，准确概率由实验计算。",
+      "alt": "当前输入产生候选，选中水后接回末尾，更新输入再计算。",
+      "mobile": "纵向流程；最小 25px 标签在 327px 显示宽度下约 17px。"
+    },
+    {
+      "id": "G08",
+      "lesson": "L07",
+      "file": "context-workbench.svg",
+      "purpose": "把输出逐项接回任务和材料，地点缺失则留作未知。",
+      "source": "Course-authored fictional notification exercise X06.",
+      "limitations": "示意本次输入及核验，不说明长期记忆或训练参数。",
+      "alt": "任务和通知一同进入本次输入；时间有原文支持，地点未知。",
+      "mobile": "纵向结构与正文解释并用，不需要横向拖动。"
+    },
+    {
+      "id": "G03",
+      "lesson": "L03",
+      "file": "embedding-view.svg",
+      "purpose": "查表到向量再到二维观察，避免把轴当固定词义。",
+      "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
+      "limitations": "token ID 及向量均为示意。",
+      "alt": "编号查表得到数字，二维图省略了其他维度。",
+      "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
+    },
+    {
+      "id": "G04",
+      "lesson": "L04",
+      "file": "attention-mask.svg",
+      "purpose": "下三角可见范围与第二行汇总。",
+      "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
+      "limitations": "教学矩阵，绿色表示可见而非权重大小。",
+      "alt": "四个位置构成下三角因果掩码；第二行只汇总前两个位置。",
+      "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
+    },
+    {
+      "id": "G05",
+      "lesson": "L04",
+      "file": "transformer-block.svg",
+      "purpose": "展示注意力之外的前馈层、残差与归一化。",
+      "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
+      "limitations": "一种 pre-norm 简化约定，不是所举实际模型的架构。",
+      "alt": "输入经过两次先归一化的子层，各自沿残差路径相加。",
+      "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
+    },
+    {
+      "id": "G06",
+      "lesson": "L05",
+      "file": "training-versus-inference.svg",
+      "purpose": "训练损失导致参数更新，预测只读当前参数。",
+      "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
+      "limitations": "bigram 教学流程不代表完整训练工程。",
+      "alt": "训练比较预测和目标后更新参数；推理仅使用参数输出。",
+      "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
+    },
+    {
+      "id": "G07",
+      "lesson": "L06",
+      "file": "assistant-training.svg",
+      "purpose": "三类训练信号与消息格式分开说明。",
+      "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
+      "limitations": "常见拆分，实际配方不同；无模型实测。",
+      "alt": "预训练、示范微调和偏好优化分别使用不同信号；角色模板组织输入。",
+      "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
+    },
+    {
+      "id": "G09",
+      "lesson": "L08",
+      "file": "claim-evidence.svg",
+      "purpose": "引用存在还不够：核对主张、原句、日期与冲突材料。",
+      "source": "课程原创 SVG；S11 与对应人工 fixture，共享步骤与语义。",
+      "limitations": "是本地教学流程，不是具名模型的真实内部状态或性能记录。",
+      "alt": "引用存在还不够：核对主张、原句、日期与冲突材料。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另附正文和静态读法。"
+    },
+    {
+      "id": "G10",
+      "lesson": "L09",
+      "file": "retrieve-then-answer.svg",
+      "purpose": "改变查询、切块和条数，看真正进入输入的材料与无结果分支。",
+      "source": "课程原创 SVG；S11 与对应人工 fixture，共享步骤与语义。",
+      "limitations": "是本地教学流程，不是具名模型的真实内部状态或性能记录。",
+      "alt": "改变查询、切块和条数，看真正进入输入的材料与无结果分支。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另附正文和静态读法。"
+    },
+    {
+      "id": "G11",
+      "lesson": "L10",
+      "file": "tool-execution-loop.svg",
+      "purpose": "从 JSON 请求走到真实本地计算，检查校验、回执与失败终态。",
+      "source": "课程原创 SVG；S11 与对应人工 fixture，共享步骤与语义。",
+      "limitations": "是本地教学流程，不是具名模型的真实内部状态或性能记录。",
+      "alt": "从 JSON 请求走到真实本地计算，检查校验、回执与失败终态。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另附正文和静态读法。"
+    },
+    {
+      "id": "G12",
+      "lesson": "L11",
+      "file": "choose-an-approach.svg",
+      "purpose": "按资料、执行和行为上的缺口，选择提示、检索、工具或微调。",
+      "source": "课程原创 SVG；S11 与对应人工 fixture，共享步骤与语义。",
+      "limitations": "是本地教学流程，不是具名模型的真实内部状态或性能记录。",
+      "alt": "按资料、执行和行为上的缺口，选择提示、检索、工具或微调。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另附正文和静态读法。"
+    },
+    {
+      "id": "G13",
+      "lesson": "L12",
+      "file": "materials-to-result.svg",
+      "purpose": "换一份修理课材料，保留未知与冲突，导出可回查的报告。",
+      "source": "课程原创 SVG；S11 与对应人工 fixture，共享步骤与语义。",
+      "limitations": "是本地教学流程，不是具名模型的真实内部状态或性能记录。",
+      "alt": "换一份修理课材料，保留未知与冲突，导出可回查的报告。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另附正文和静态读法。"
+    },
+    {
+      "id": "G14",
+      "lesson": "L07",
+      "file": "context-selection.svg",
+      "purpose": "分开外部保存、按条件选择和本次输入，明确输出预留。",
+      "source": "课程原创 SVG；S11/S15/S17，人工预算说明。",
+      "limitations": "4096/3584/512 是共享上限的人工例子，不是指定实际模型的规格；缓存策略依具体实现。",
+      "alt": "外部原文、任务和历史经过权限、版本和相关性选取，进入保留输出空间的本次输入；缓存不扩大窗口。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px。另有正文解释和纸上预算。"
+    },
+    {
+      "id": "G15",
+      "lesson": "L04",
+      "file": "multihead-flow.svg",
+      "purpose": "追踪同一输入的两组 Q/K/V 投影，各自汇总后拼接并经过输出投影。",
+      "source": "课程原创 SVG；S05 的多头公式与 S34 本地双头矩阵计算。",
+      "limitations": "人工矩阵、两个一维头；无训练/位置/残差/归一化/前馈层，不表示具名模型内部结构或语言学分工。",
+      "alt": "同一输入分到两组 Q/K/V 投影，因果掩码限制各头可见范围；汇总结果拼接后乘输出矩阵。",
+      "mobile": "480 宽纵向图，最小 26px 标签；327px 显示时约 17.7px，正文与数值表可回查。"
+    },
+    {
+      "id": "G16",
+      "lesson": "L01",
+      "file": "multimodal-flow.svg",
+      "purpose": "深入图：图片怎样进入回答？",
+      "alt": "通知图片编码成连续视觉表示，经连接模块与文字共同输入；日期回查原图，模糊地点保留未知。",
+      "source": "课程原创 SVG；S38/S39",
+      "limitations": "一种公开视觉语言路线，不代表所有多模态模型；音频与视频另有时间或声学处理。",
+      "mobile": "480 宽纵向图；最小 26px 标签在 327px 宽下约 17.7px。正文另有解释。"
+    },
+    {
+      "id": "G17",
+      "lesson": "L10",
+      "file": "protocol-boundaries.svg",
+      "purpose": "深入图：协议接通之后还缺什么？",
+      "alt": "MCP 连接客户端与工具服务，A2A 连接客户端与远端 Agent；两路均需核对授权、状态与结果。",
+      "source": "课程原创 SVG；S41/S42",
+      "limitations": "MCP 2025-06-18 与 A2A 0.3.0 概念示意，未做模型接入实测。",
+      "mobile": "480 宽纵向图；最小 26px 标签在 327px 宽下约 17.7px。正文另有解释。"
+    }
+  ]
+}

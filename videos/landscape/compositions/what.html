@@ -73,13 +73,13 @@
   <div data-hf-id="hf-vv2h" id="root" data-composition-id="what" data-width="1920" data-height="1080">
     <div data-hf-id="hf-p2yu" id="w-tag" class="clip" data-start="0" data-duration="45">CHAPTER 1 · WHAT</div>
     <div data-hf-id="hf-jz68" id="w-title" class="clip" data-start="0" data-duration="45.1">大模型编程<br data-hf-id="hf-x5px" /><span data-hf-id="hf-8yol" class="g">是什么</span></div>
-    <div data-hf-id="hf-665r" id="w-karpathy" class="clip" data-start="0.6" data-duration="45">Karpathy · 2025.02</div>
+    <div data-hf-id="hf-665r" id="w-karpathy" class="clip" data-start="2.5" data-duration="45">Karpathy · 2025.02</div>
     <div data-hf-id="hf-h7dg" id="w-role" class="clip" data-start="19.0" data-duration="26">
       <div data-hf-id="hf-grcr" id="w-role-k">你的角色变了</div>
       <div data-hf-id="hf-xvkj" id="w-role-v">少写每一行代码<br data-hf-id="hf-rsrt" /><span data-hf-id="hf-7u8q" class="w-green">多提需求 · 多做判断</span></div>
     </div>
-    <div data-hf-id="hf-8cz2" id="w-rule" class="clip" data-start="24.0" data-duration="21">有问题，<span data-hf-id="hf-nqdz">先问 AI</span></div>
-    <div data-hf-id="hf-2s7g" id="w-panel" class="clip" data-start="1.2" data-duration="45">
+    <div data-hf-id="hf-8cz2" id="w-rule" class="clip" data-start="25.3" data-duration="21">有问题，<span data-hf-id="hf-nqdz">先问 AI</span></div>
+    <div data-hf-id="hf-2s7g" id="w-panel" class="clip" data-start="6.6" data-duration="45">
       <div data-hf-id="hf-w0yo" id="w-panel-head"><div data-hf-id="hf-692w" id="w-panel-title">一个需求，跑完整个循环</div><div data-hf-id="hf-kkz7" id="w-panel-badge">VIBE CODING</div></div>
       <div data-hf-id="hf-f4as" id="w-prompt-wrap">
         <div data-hf-id="hf-68wj" class="w-label">YOU · 说清想要什么</div>
@@ -135,17 +135,17 @@
     tl.fromTo("#w-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
     tl.to("#w-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
     tl.to("#w-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
-    tl.fromTo("#w-karpathy", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: 0.4, ease: "power2.out", scale: 1 }, 0.6);
-    tl.fromTo("#w-panel", { x: 45, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 1.2);
+    tl.fromTo("#w-karpathy", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: 0.4, ease: "power2.out", scale: 1 }, 2.5);
+    tl.fromTo("#w-panel", { x: 45, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 6.6);
     tl.set("#w-answer, #w-app, #w-revision, #w-role, #w-rule", { opacity: 0 }, 0);
-    tl.to(promptDriver, { t: promptRows[promptRows.length - 1].t, duration: promptRows[promptRows.length - 1].t, ease: "none", onUpdate: () => { document.getElementById("w-prompt-text").textContent = promptAt(promptDriver.t); } }, 6.4);
-    tl.to("#w-caret", { opacity: 0.25, duration: 0.18, yoyo: true, repeat: 5, ease: "none" }, 6.4);
-    tl.set("#w-answer", { opacity: 1 }, 10.2);
+    tl.to(promptDriver, { t: promptRows[promptRows.length - 1].t, duration: promptRows[promptRows.length - 1].t, ease: "none", onUpdate: () => { document.getElementById("w-prompt-text").textContent = promptAt(promptDriver.t); } }, 7.6);
+    tl.to("#w-caret", { opacity: 0.25, duration: 0.18, yoyo: true, repeat: 5, ease: "none" }, 7.6);
+    tl.set("#w-answer", { opacity: 1 }, 10.6);
     const gaps = [0, 0.28, 0.08, 0.34, 0.12];
-    let tokenTime = 10.2;
+    let tokenTime = 10.6;
     gsap.utils.toArray("#w-answer .word").forEach((word, i) => { tokenTime += gaps[i]; tl.set(word, { opacity: 1, color: "#768390" }, tokenTime); tl.to(word, { color: "#1f2328", duration: 0.27, ease: "none" }, tokenTime); });
-    tl.fromTo("#w-app", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 12.2);
-    tl.fromTo("#w-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 12.5);
+    tl.fromTo("#w-app", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 11.9);
+    tl.fromTo("#w-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 12.2);
     tl.fromTo("#w-pointer", { x: 1030, y: 760, opacity: 0, scale: 0.95 }, { x: 875, y: 482, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 13.45);
     tl.to(["#w-pointer", "#w-button"], { scale: 0.92, duration: 0.11, ease: "power1.in" }, 14.02);
     tl.to(["#w-pointer", "#w-button"], { scale: 1, duration: 0.38, ease: "back.out(1.8)" }, 14.15);
@@ -165,11 +165,11 @@
       tl.to(drop, { opacity: 0, duration: .2, ease: "power1.in" }, 14.68 + i * .05);
     });
     tl.to("#w-pointer", { x: 1040, y: 760, opacity: 0, duration: .4, ease: "power2.in" }, 14.55);
-    tl.fromTo("#w-revision", { x: 28, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 16.0);
+    tl.fromTo("#w-revision", { x: 28, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 15.6);
     tl.fromTo("#w-role", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 19.0);
-    tl.fromTo("#w-rule", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 24.0);
+    tl.fromTo("#w-rule", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)", scale: 1 }, 25.3);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
-    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 28.6, ease: "none" }, 0);
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 31.7, ease: "none" }, 0);
     window.__timelines["what"] = tl;
   </script>
 </template>

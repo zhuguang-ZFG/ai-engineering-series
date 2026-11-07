@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="700" viewBox="0 0 480 700" role="img" aria-labelledby="title desc">
+  <title id="title">外部保存不等于本次可见</title>
+  <desc id="desc">外部原文、任务与历史经过权限、版本和相关性选择后进入本次输入；人工共享预算 4096 中输入至多 3584，输出预留 512。缓存复用计算，不增加窗口或参数。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
+  <rect width="480" height="700" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">保存了，还要选进本次输入</text>
+    <path d="M36 76 L448 77 Q452 78 452 84 L451 168 Q450 172 444 172 L32 171 Q28 170 28 164 L29 82 Q30 76 36 76 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="113" font-size="26">外部保存：原文 / 任务 / 历史</text>
+    <text x="48" y="153" font-size="26">有来源，可更正，可重新读取</text>
+    <path d="M240 182 Q238 195 240 208" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 220 L448 221 Q452 222 452 228 L451 312 Q450 316 444 316 L32 315 Q28 314 28 308 L29 226 Q30 220 36 220 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="257" font-size="26">选取：权限 → 版本 → 相关性</text>
+    <text x="48" y="297" font-size="26">没有选入，不代表本次已读</text>
+    <path d="M240 326 Q238 339 240 352" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 364 L448 365 Q452 366 452 372 L451 456 Q450 460 444 460 L32 459 Q28 458 28 452 L29 370 Q30 364 36 364 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="401" font-size="26">本次输入：规则 / 目标 / 依据</text>
+    <text x="48" y="441" font-size="26">历史 / 回执 / 当前问题</text>
+    <path d="M240 470 Q238 483 240 496" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 508 L448 509 Q452 510 452 516 L451 600 Q450 604 444 604 L32 603 Q28 602 28 596 L29 514 Q30 508 36 508 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="545" font-size="26">人工预算：窗口 4096 token</text>
+    <text x="48" y="585" font-size="26">输入 3584 + 输出预留 512</text>
+    <text x="28" y="650" font-size="26">缓存复用计算，不扩大窗口</text>
+    <text x="28" y="687" font-size="26">示意数字，不是实际模型规格</text>
+  </g>
+</svg>

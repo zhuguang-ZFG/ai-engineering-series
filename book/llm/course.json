@@ -1,0 +1,354 @@
+{
+  "version": "0.9.0",
+  "title": "把大模型拆开看",
+  "description": "十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。",
+  "status": "pilot",
+  "lessons": [
+    {
+      "id": "L01",
+      "slug": "tokens",
+      "title": "文字怎样变成模型的输入？",
+      "summary": "拆开一段真实编码，看看字、token 和字节有什么不同。",
+      "status": "ready",
+      "file": "tokens.md",
+      "experiment": "X01",
+      "figure": "token-pieces.svg",
+      "sources": [
+        "S01"
+      ],
+      "prerequisites": [],
+      "objective": "区分 token、Unicode 码点和字节，并说明切法为什么依编码而变。",
+      "question": "一个汉字一定对应一个 token 吗？",
+      "options": [
+        "一定，模型按汉字逐个读取",
+        "不一定，要看具体编码；一个字也可能跨多个 token",
+        "不一定，但一个 token 必须是完整的字"
+      ],
+      "correct": 1,
+      "feedback": "看生僻字与 emoji 示例：某些 token 只含一个字符的部分 UTF-8 字节。把所有 token 的字节拼起来，才还原为原文。",
+      "shortTitle": "拆开文字",
+      "extraFigures": [
+        "multimodal-flow.svg"
+      ]
+    },
+    {
+      "id": "L02",
+      "slug": "generation",
+      "title": "为什么同一句话能接出不同结果？",
+      "summary": "看候选概率，选一个片段，接回句子，再算下一步。",
+      "status": "ready",
+      "file": "generation.md",
+      "experiment": "X02",
+      "figure": "generation-loop.svg",
+      "sources": [
+        "S02",
+        "S03"
+      ],
+      "prerequisites": [],
+      "objective": "解释候选分布、温度、选择、追加和停止；区分生成概率与事实依据。",
+      "question": "“水”的生成概率最高，就能确定杯子里是水吗？",
+      "options": [
+        "能，因为最高概率就是最可靠的事实",
+        "不能，这个数只表示当前教学模型更可能接出什么",
+        "温度调到零之后就能确定"
+      ],
+      "correct": 1,
+      "feedback": "原句没有交代杯子里的内容。概率描述续写选择，不能替代观察或材料证据。温度也不能补上缺失事实。",
+      "shortTitle": "生成一句话"
+    },
+    {
+      "id": "L03",
+      "title": "一串数字怎么表示语言？",
+      "status": "ready",
+      "slug": "vectors",
+      "shortTitle": "向量与语境",
+      "summary": "比较查表向量、语境表示和投影，亲手核对余弦相似度。",
+      "experiment": "X03",
+      "figure": "embedding-view.svg",
+      "sources": [
+        "S05",
+        "S08"
+      ],
+      "prerequisites": [
+        "L01"
+      ],
+      "objective": "区分 ID、初始向量与上下文表示；解释投影和余弦分数的局限。",
+      "question": "两个点在二维图上重合，完整向量就一定相同吗？",
+      "options": [
+        "一定，图上重合就是完全相同",
+        "不一定，没画出的维度可能不同",
+        "相同的 token ID 在不同句子里一定得到相同的最终表示"
+      ],
+      "correct": 1,
+      "feedback": "示例中两个参考向量前两维一样，第三维不同。完整三维余弦由全部三维计算；初始查表与上下文后的表示也要分开。",
+      "file": "vectors.md"
+    },
+    {
+      "id": "L04",
+      "title": "模型怎样利用前文？",
+      "status": "ready",
+      "slug": "attention",
+      "shortTitle": "因果注意力",
+      "summary": "选择当前位置，计算权重；只改未来内容，检查较早输出。",
+      "experiment": "X04",
+      "figure": "attention-mask.svg",
+      "extraFigures": [
+        "transformer-block.svg",
+        "multihead-flow.svg"
+      ],
+      "sources": [
+        "S05",
+        "S08",
+        "S33",
+        "S34"
+      ],
+      "prerequisites": [
+        "L03"
+      ],
+      "objective": "说明 Q/K/V、因果掩码和加权汇总，复算输出并认识其他网络层。",
+      "question": "在第二个位置，只修改第三、四个位置的 V，当前单头输出会怎样？",
+      "options": [
+        "保持不变，未来位置在 softmax 前已被屏蔽",
+        "增大，因为未来 V 变大了",
+        "只能把所有权重平均才能知道"
+      ],
+      "correct": 0,
+      "feedback": "未来权重为零，所以它们的 V 不参与当前汇总。这里实际计算并比较了修改前后输出；这项结论限于当前因果注意力实验。",
+      "file": "attention.md"
+    },
+    {
+      "id": "L05",
+      "title": "模型是怎样学会的？",
+      "status": "ready",
+      "slug": "training",
+      "shortTitle": "训练与推理",
+      "summary": "训练一个小模型，看概率、损失、梯度和参数怎样一起变化。",
+      "experiment": "X05",
+      "figure": "training-versus-inference.svg",
+      "sources": [
+        "S08",
+        "S09",
+        "S10"
+      ],
+      "prerequisites": [
+        "L02"
+      ],
+      "objective": "解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。",
+      "question": "在暂停状态下，只用现有参数预测一次，会更新参数吗？",
+      "options": [
+        "会，回答一次就训练一次",
+        "不会，这页的预测只读取参数",
+        "会，只要概率足够高就自动更新"
+      ],
+      "correct": 1,
+      "feedback": "本实验只有训练操作更新参数；预测按钮用现有参数算分布。在线对话因新上下文改变回答，也不能据此推断模型刚刚重新训练。",
+      "file": "training.md"
+    },
+    {
+      "id": "L06",
+      "title": "会续写为什么还要学听指令？",
+      "status": "ready",
+      "slug": "assistant",
+      "shortTitle": "学会听指令",
+      "summary": "分清预训练、示范、偏好和聊天模板，再辨认礼貌却无依据的回答。",
+      "experiment": "D06",
+      "figure": "assistant-training.svg",
+      "sources": [
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10"
+      ],
+      "prerequisites": [
+        "L05"
+      ],
+      "objective": "区分训练信号与消息格式；知道偏好优化不能保证每条事实正确。",
+      "question": "一句礼貌又自信的回答，经过偏好训练就一定可信吗？",
+      "options": [
+        "一定，偏好训练会验证所有事实",
+        "不一定，仍要看证据是否支持具体结论",
+        "只要套上 assistant 模板就可信"
+      ],
+      "correct": 1,
+      "feedback": "礼貌、自信与事实依据要分别检查。训练改变行为倾向；模板组织消息；具体地点、时间等结论仍需核对材料。",
+      "file": "assistant.md"
+    },
+    {
+      "id": "L07",
+      "slug": "context",
+      "title": "怎样把一件事交代清楚？",
+      "summary": "给材料，检查出处，让缺失和冲突留在结果里。",
+      "status": "ready",
+      "file": "context.md",
+      "experiment": "X06",
+      "figure": "context-workbench.svg",
+      "sources": [
+        "S04"
+      ],
+      "prerequisites": [
+        "L02"
+      ],
+      "objective": "写清任务、材料和验收条件；找出无证据地点与冲突时间。",
+      "question": "两份通知的时间不同，你该怎么办？",
+      "options": [
+        "让模型选更常见的时间",
+        "把温度调低，得到唯一时间",
+        "指出两份来源的冲突，核对哪一版有效再确认"
+      ],
+      "correct": 2,
+      "feedback": "先看版本、发布者与更新说明。本实验会标出冲突供你核对，不会把程序选出的时间冒充已经核实的现行安排。",
+      "shortTitle": "核对材料",
+      "extraFigures": [
+        "context-selection.svg"
+      ]
+    },
+    {
+      "id": "L08",
+      "title": "怎样发现一个看似合理的错误？",
+      "status": "ready",
+      "slug": "evidence",
+      "shortTitle": "核对证据",
+      "summary": "引用存在还不够：核对主张、原句、日期与冲突材料。",
+      "experiment": "X06B",
+      "figure": "claim-evidence.svg",
+      "sources": [
+        "S04",
+        "S11"
+      ],
+      "prerequisites": [
+        "L07"
+      ],
+      "objective": "分开检查引用存在和引用支持，识别擅补日期、错引与来源冲突。",
+      "question": "回答附上了真实存在的通知编号，就可以采用了吗？",
+      "options": [
+        "可以，有编号就说明已经核实",
+        "还要检查原句是否存在、是否支持这项结论及其他材料是否冲突",
+        "可以，只需再让模型检查一次"
+      ],
+      "correct": 1,
+      "feedback": "来源编号、引用原句、主张内容要分别核对；引用真实也可能与结论相反。",
+      "file": "evidence.md"
+    },
+    {
+      "id": "L09",
+      "title": "怎样让它用上自己的资料？",
+      "status": "ready",
+      "slug": "retrieval",
+      "shortTitle": "检索自己的资料",
+      "summary": "改变查询、切块和条数，看真正进入输入的材料与无结果分支。",
+      "experiment": "X07",
+      "figure": "retrieve-then-answer.svg",
+      "sources": [
+        "S11"
+      ],
+      "prerequisites": [
+        "L03",
+        "L07"
+      ],
+      "objective": "解释切块、检索、取回和构造输入；保留无结果与版本冲突。",
+      "question": "一次检索没有命中相关片段，该怎么办？",
+      "options": [
+        "把零分片段当证据填进去",
+        "停止整理，说明未找到；调整查询或取得资料后再试",
+        "把全部回答写得更肯定"
+      ],
+      "correct": 1,
+      "feedback": "未找到与事实不存在不同；本次没有取得证据，不能把猜测当依据。检索不更新参数。",
+      "file": "retrieval.md"
+    },
+    {
+      "id": "L10",
+      "title": "怎样让模型调用工具？",
+      "status": "ready",
+      "slug": "tools",
+      "shortTitle": "受控工具调用",
+      "summary": "从 JSON 请求走到真实本地计算，检查校验、回执与失败终态。",
+      "experiment": "X08",
+      "figure": "tool-execution-loop.svg",
+      "sources": [
+        "S11"
+      ],
+      "prerequisites": [
+        "L02"
+      ],
+      "objective": "区分提出调用和执行完成；正确处理非法输入、除零、超时与取消。",
+      "question": "模型写“已经计算”，足以证明工具运行过吗？",
+      "options": [
+        "足以，因为模型会遵循工具格式",
+        "不足，需要程序实际执行并返回可检查的回执",
+        "只要语气自信就足够"
+      ],
+      "correct": 1,
+      "feedback": "请求只是意图，程序负责校验和执行。失败或取消不能显示成功；数值正确也仍需核对输入依据。",
+      "file": "tools.md",
+      "extraFigures": [
+        "protocol-boundaries.svg"
+      ]
+    },
+    {
+      "id": "L11",
+      "title": "什么时候需要搭系统？",
+      "status": "ready",
+      "slug": "approaches",
+      "shortTitle": "选合适的方案",
+      "summary": "按资料、执行和行为上的缺口，选择提示、检索、工具或微调。",
+      "experiment": "D11",
+      "figure": "choose-an-approach.svg",
+      "sources": [
+        "S11",
+        "S09",
+        "S10"
+      ],
+      "prerequisites": [
+        "L06",
+        "L09",
+        "L10"
+      ],
+      "objective": "依据任务条件选择方案，并用样本比较效果、成本与失败类型。",
+      "question": "要查最新费率并按公式计算，先试什么组合？",
+      "options": [
+        "只用微调记住费率",
+        "取回有效费率、核对范围，再把明确数值交给受控计算工具",
+        "让模型选一个看起来常见的费率"
+      ],
+      "correct": 1,
+      "feedback": "资料更新与确定计算是两个问题；缺费率、版本冲突或参数不足时应停在对应步骤。",
+      "file": "approaches.md"
+    },
+    {
+      "id": "L12",
+      "title": "做一个能交付的资料助手",
+      "status": "ready",
+      "slug": "project",
+      "shortTitle": "交付资料助手",
+      "summary": "换一份修理课材料，保留未知与冲突，导出可回查的报告。",
+      "experiment": "D12",
+      "figure": "materials-to-result.svg",
+      "sources": [
+        "S11"
+      ],
+      "prerequisites": [
+        "L08",
+        "L09",
+        "L10",
+        "L11"
+      ],
+      "objective": "交付输入、结果、原句与失败说明；用陌生材料检查能否迁移。",
+      "question": "地点缺失，但读者需要安排表，应该交付什么？",
+      "options": [
+        "补一个常见地点，直接标已确认",
+        "保留地点未知，交付待补充报告并说明需要确认什么",
+        "删除地点栏，避免别人发现缺失"
+      ],
+      "correct": 1,
+      "feedback": "可交付的内容包括未确认事项。缺失、冲突与范围外都应明示；勾选核对项不能代替逐条证据。",
+      "file": "project.md"
+    }
+  ],
+  "quickRoute": [
+    "L01",
+    "L02",
+    "L07"
+  ]
+}

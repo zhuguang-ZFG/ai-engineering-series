@@ -1,0 +1,16 @@
+{
+  "id": "X08",
+  "kind": "toy",
+  "version": "1.0.0",
+  "source": "本地四则运算白名单执行器与人工请求",
+  "limitations": "请求是课程预置或你编辑的 JSON，不是模型刚生成的。没有联网、发送消息或执行任意代码。采用 JavaScript 浮点数，不是财务精度引擎。超时为教学模拟。",
+  "expectedObservations": ["请求文字不是执行回执", "校验后才执行", "失败或取消不显示成功", "到终态后不再执行"],
+  "flowSteps": ["提出请求", "校验参数", "本地执行", "结果返回", "结束"],
+  "scenarios": [
+    {"id": "success", "name": "算 8 件商品的总价", "request": {"tool": "calculator", "arguments": {"operation": "multiply", "a": 12.5, "b": 8}}},
+    {"id": "division-zero", "name": "除数为零", "request": {"tool": "calculator", "arguments": {"operation": "divide", "a": 10, "b": 0}}},
+    {"id": "invalid", "name": "把代码塞进参数", "request": {"tool": "calculator", "arguments": {"operation": "add", "a": "2+2", "b": 3}}},
+    {"id": "unknown", "name": "请求不存在的工具", "request": {"tool": "send_message", "arguments": {"operation": "add", "a": 1, "b": 2}}},
+    {"id": "timeout", "name": "模拟执行超时", "simulation": "timeout", "request": {"tool": "calculator", "arguments": {"operation": "add", "a": 12, "b": 8}}}
+  ]
+}

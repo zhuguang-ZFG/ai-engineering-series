@@ -12,3 +12,4 @@ exports/cards/output/
 __pycache__/
 *.log
 tmp/
+local-feedback/

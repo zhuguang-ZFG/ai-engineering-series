@@ -1,81 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="t">
-  <title id="t">上下文工程：海量信息按等级逐层筛选，只有配得上窗口的信息才留在小黑板上</title>
-  <rect width="1200" height="840" fill="#fbfaf6"/>
-  <defs>
-    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
-    </filter>
-  </defs>
-
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
-    <text x="72" y="80" fill="#1f2328" font-size="34" font-weight="700">上下文工程：海量信息筛进小黑板</text>
-    <text x="72" y="120" fill="#57606a" font-size="22">整理信息、控制窗口、管理成本：让模型在合适的时刻看到合适的信息</text>
-  </g>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
-
-  <rect x="70" y="158" width="660" height="54" rx="18" fill="#f1f7f2" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-  <text x="400" y="193" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="middle">海量信息：几十甚至上百轮交互、几百页技术文档</text>
-  <text x="770" y="193" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">70% 的钱花在重复看旧内容</text>
-
-  <path d="M400 212v16" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
-  <path d="M400 234l-8-13h16z" fill="#1f2328"/>
-
-  <g stroke-width="4" stroke-linejoin="round" filter="url(#card-shadow)">
-    <path d="M70 236h660l-62 86H132z" fill="#fbfaf6" stroke="#57606a" stroke-width="3" stroke-dasharray="14 10" opacity="0.9"/>
-    <path d="M132 322h536l-54 86H186z" fill="#fffdf8" stroke="#1f2328"/>
-    <path d="M186 408h428l-40 86H226z" fill="#fffdf8" stroke="#1f2328"/>
-    <path d="M226 494h348l-14 86H240z" fill="#f1f7f2" stroke="#1f2328"/>
-  </g>
-
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif" text-anchor="middle">
-    <g fill="#57606a">
-      <text x="400" y="275" font-size="23">可弃</text>
-      <text x="400" y="301" font-size="19">可检索的知识</text>
-    </g>
-    <g fill="#1f2328">
-      <text x="400" y="361" font-size="23">一般</text>
-      <text x="400" y="387" fill="#57606a" font-size="19">普通对话历史</text>
-      <text x="400" y="447" font-size="23">重要</text>
-      <text x="400" y="473" fill="#57606a" font-size="19">当前任务目标</text>
-      <text x="400" y="533" font-size="23">VIP</text>
-      <text x="400" y="559" fill="#57606a" font-size="19">系统设定、用户身份</text>
-    </g>
-  </g>
-
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
-    <text x="770" y="275" fill="#57606a" font-size="21">用时再查（RAG 按需检索）</text>
-    <text x="770" y="301" fill="#57606a" font-size="19">-60% 成本，不进窗口</text>
-
-    <text x="770" y="361" fill="#1f2328" font-size="21">最近 5 轮保留</text>
-    <text x="770" y="387" fill="#57606a" font-size="19">基准成本</text>
-
-    <text x="770" y="447" fill="#1f2328" font-size="21">任务期内保留</text>
-    <text x="770" y="473" fill="#57606a" font-size="19">+10% 成本</text>
-
-    <text x="770" y="533" fill="#1f2328" font-size="21">永远保留，钉在黑板最上面</text>
-    <text x="770" y="559" fill="#57606a" font-size="19">+15% 成本</text>
-  </g>
-
-  <path d="M683 301h53v287h144v16" fill="none" stroke="#57606a" stroke-width="3" stroke-linecap="round" stroke-dasharray="12 9" opacity="0.75"/>
-  <path d="M880 618l-8-13h16z" fill="#57606a" opacity="0.85"/>
-
-  <path d="M400 584v26" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round"/>
-  <path d="M400 620l-9-15h18z" fill="#1f2328"/>
-
-  <rect x="190" y="624" width="420" height="88" rx="24" fill="#1f883d" filter="url(#card-shadow)"/>
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif" text-anchor="middle">
-    <text x="400" y="660" fill="#fffdf8" font-size="23" font-weight="700">沉淀进上下文窗口（小黑板）</text>
-    <text x="400" y="690" fill="#d3efd9" font-size="19">模型一次性能够处理的文本最大长度</text>
-  </g>
-
-  <rect x="700" y="624" width="428" height="88" rx="24" fill="#fffdf8" stroke="#57606a" stroke-width="3" stroke-dasharray="12 9" filter="url(#card-shadow)"/>
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif" text-anchor="middle">
-    <text x="914" y="660" fill="#1f2328" font-size="22">图书馆（RAG 按需检索）</text>
-    <text x="914" y="690" fill="#57606a" font-size="19">只抄相关的几段，用完即走，不占黑板</text>
-  </g>
-
-  <g font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21">
-    <text x="72" y="776" fill="#008635">不是记得越多越好，而是记得越巧越好：小黑板要用得省，用得巧，别用来存百科全书。</text>
-    <text x="72" y="810" fill="#57606a">超出窗口的内容会被截断或遗忘；用 25% 的成本增加，换取 90% 的关键信息保留。</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="700" viewBox="0 0 480 700" role="img" aria-labelledby="title desc">
+  <title id="title">外部保存不等于本次可见</title>
+  <desc id="desc">外部原文、任务与历史经过权限、版本和相关性选择后进入本次输入；人工共享预算 4096 中输入至多 3584，输出预留 512。缓存复用计算，不增加窗口或参数。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
+  <rect width="480" height="700" fill="#fbfaf6"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">保存了，还要选进本次输入</text>
+    <path d="M36 76 L448 77 Q452 78 452 84 L451 168 Q450 172 444 172 L32 171 Q28 170 28 164 L29 82 Q30 76 36 76 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="113" font-size="26">外部保存：原文 / 任务 / 历史</text>
+    <text x="48" y="153" font-size="26">有来源，可更正，可重新读取</text>
+    <path d="M240 182 Q238 195 240 208" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 220 L448 221 Q452 222 452 228 L451 312 Q450 316 444 316 L32 315 Q28 314 28 308 L29 226 Q30 220 36 220 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="257" font-size="26">选取：权限 → 版本 → 相关性</text>
+    <text x="48" y="297" font-size="26">没有选入，不代表本次已读</text>
+    <path d="M240 326 Q238 339 240 352" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 364 L448 365 Q452 366 452 372 L451 456 Q450 460 444 460 L32 459 Q28 458 28 452 L29 370 Q30 364 36 364 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="401" font-size="26">本次输入：规则 / 目标 / 依据</text>
+    <text x="48" y="441" font-size="26">历史 / 回执 / 当前问题</text>
+    <path d="M240 470 Q238 483 240 496" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M36 508 L448 509 Q452 510 452 516 L451 600 Q450 604 444 604 L32 603 Q28 602 28 596 L29 514 Q30 508 36 508 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="48" y="545" font-size="26">人工预算：窗口 4096 token</text>
+    <text x="48" y="585" font-size="26">输入 3584 + 输出预留 512</text>
+    <text x="28" y="650" font-size="26">缓存复用计算，不扩大窗口</text>
+    <text x="28" y="687" font-size="26">示意数字，不是实际模型规格</text>
   </g>
 </svg>

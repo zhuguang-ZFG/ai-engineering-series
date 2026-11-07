@@ -117,24 +117,24 @@
     tl.to("#t-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
     tl.to("#t-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
     tl.fromTo("#t-device", { y: 40, scale: .97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .6, ease: "power3.out" }, 1);
-    tl.fromTo("#t-user", { x: 30, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 2.2);
-    tl.fromTo("#t-ai", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 3.5);
-    tl.fromTo("#t-open", { scale: .92, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.6)" }, 5.0);
-    tl.to("#t-chat", { opacity: 0, x: -60, duration: .35, ease: "power3.in" }, 6.8);
-    tl.set("#t-chat", { visibility: "hidden" }, 7.15);
-    tl.set("#t-ide", { opacity: 1 }, 6.95);
-    tl.fromTo("#t-ide", { x: 60 }, { x: 0, duration: .5, ease: "power3.out" }, 6.95);
-    tl.to("#t-address", { opacity: 0, duration: .18 }, 6.8);
-    tl.set("#t-address", { textContent: "todo-app · AI IDE" }, 7.0);
-    tl.to("#t-address", { opacity: 1, duration: .22 }, 7.0);
-    gsap.utils.toArray(".t-line").forEach((line, i) => tl.fromTo(line, { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: .18, ease: "power2.out" }, 7.6 + i * .32));
-    tl.fromTo("#t-command", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .16, scale: 1 }, 9.35);
-    gsap.utils.toArray(".t-output").forEach((line, i) => tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: .14, ease: "none" }, 9.85 + i * .42));
-    tl.fromTo("#t-success", { scale: .75, opacity: 0 }, { scale: 1, opacity: 1, duration: .36, ease: "back.out(1.8)" }, 10.95);
-    tl.fromTo("#t-note", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 10);
-    tl.fromTo("#t-flow", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 12.2);
+    tl.fromTo("#t-user", { x: 30, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 1.4);
+    tl.fromTo("#t-ai", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 2.4);
+    tl.fromTo("#t-open", { scale: .92, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.6)" }, 6.6);
+    tl.to("#t-chat", { opacity: 0, x: -60, duration: .35, ease: "power3.in" }, 7.7);
+    tl.set("#t-chat", { visibility: "hidden" }, 8.05);
+    tl.set("#t-ide", { opacity: 1 }, 8.1);
+    tl.fromTo("#t-ide", { x: 60 }, { x: 0, duration: .5, ease: "power3.out" }, 8.1);
+    tl.to("#t-address", { opacity: 0, duration: .18 }, 7.7);
+    tl.set("#t-address", { textContent: "todo-app · AI IDE" }, 8.1);
+    tl.to("#t-address", { opacity: 1, duration: .22 }, 8.1);
+    gsap.utils.toArray(".t-line").forEach((line, i) => tl.fromTo(line, { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: .18, ease: "power2.out" }, 8.6 + i * .32));
+    tl.fromTo("#t-command", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .16, scale: 1 }, 10.6);
+    gsap.utils.toArray(".t-output").forEach((line, i) => tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: .14, ease: "none" }, 11.0 + i * .42));
+    tl.fromTo("#t-success", { scale: .75, opacity: 0 }, { scale: 1, opacity: 1, duration: .36, ease: "back.out(1.8)" }, 14.9);
+    tl.fromTo("#t-note", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 12.2);
+    tl.fromTo("#t-flow", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 16.95);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
-    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 18, ease: "none" }, 0);
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 22.3, ease: "none" }, 0);
     window.__timelines["tools"] = tl;
   </script>
 </template>

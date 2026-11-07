@@ -88,3 +88,17 @@ The key ideas are readable without sound, but the full narration is not word-for
 - Render/reference comparisons at 0, 9, 27.65, and 39 s match visually.
 - Measured loudness is −13.6 LUFS with a −1.5 dBTP true peak and zero clipped samples.
 - Moved the pre-v3 MP4 files and legacy PNG cover into `renders/archive/`; the renders root now contains only the v3 delivery, the identical `latest` handoff, and the current WebP cover.
+
+## 配音与交付同步复核 — 2026-11-07
+
+沿用现有配音、词级时间和手绘画面，没有重新调用语音服务。本次 npm run check 的报告 ok=true，错误为零；警告：contrast_aa_failure。
+
+横版六处镜头间短暂停顿由上一场继续显示，不再出现空白背景。竖版根据已有词级时间重排视觉步骤、路线图和结尾，标题改为整体阅读，移除逐字弹跳，避免入口文字碰撞。复核了修改后的开头、场景中段、六个横版间隙、竖版各步骤及 47 秒结尾截图。
+
+竖版剩余字幕对比度警告位于短淡入过渡；稳定显示的字幕为白字与深色底，终态可读。没有将旧报告的“零警告”沿用为本轮结果。配音目前只核对文件、词级时间与字幕，未试听。下面的交付记录须以实际渲染后测量为准。
+
+## 实际成片复核 — 2026-11-07
+
+交付 vibe-coding-101-vertical.mp4：1080×1920，30/1 fps，47.500000 秒，h264；AAC、48 kHz 双声道。
+
+已解码抽帧并对照浏览器画面，取样秒数：[0, 14.5, 19.8, 25.7, 35.2, 39.3, 42.8, 47]。本地原始截图位于 tmp/final-media-frames；不把只看源文件称为看过成片。SHA-256：8f35536a98dceb08e463a01aa697597b16647cff02a3d05cf75a3e74353a1d96。

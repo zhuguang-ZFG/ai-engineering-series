@@ -149,28 +149,28 @@
 <header class="grain">
   <div>
     <span class="kicker">Vibe Coding 101</span>
-    <h1>把一句话，<span class="wave">做成能打开的链接</span></h1>
-    <p class="lede">不会写代码也能起步。你负责说清楚要什么、看出哪里不对；<b>AI 负责把砖搬上来</b>。全书 195 个小节，几乎每个都能直接动手。</p>
+    <h1>大模型怎样回答你，<span class="wave">又该怎样用它</span></h1>
+    <p class="lede">从一句话的生成过程开始，试着给它资料、检查答案，再做出一个能用的小工具。<b>先观察，再动手，最后解释结果</b>。</p>
     <div class="stats">
-      <div class="stat"><b>195</b><span>个小节，三段路走法</span></div>
-      <div class="stat"><b>31</b><span>张图：25 手绘图解 + 6 工程图</span></div>
+      <div class="stat"><b><!-- llm:lessons -->12<!-- /llm:lessons --></b><span>节试读课，连起原理与应用</span></div>
+      <div class="stat"><b><!-- llm:experiments -->9<!-- /llm:experiments --></b><span>个本地实验，观察实际变化</span></div>
       <div class="stat"><b>5</b><span>支成片，最长 3 分 36 秒</span></div>
       <div class="stat"><b>4</b><span>道关卡，5 分钟起步</span></div>
     </div>
     <div class="cta">
-      <a class="btn" href="../book/book.md">翻开这本书</a>
-      <a class="btn ghost" href="#films">看五支片子</a>
-      <span class="tag">从「30 秒看懂这本书」开始读，不必从头顺读</span>
+      <a class="btn" href="llm/generation.html">看一句话怎样生成</a>
+      <a class="btn ghost" href="llm/context.html">用材料核对答案</a>
+      <span class="tag"><a href="llm/index.html">查看学习路线</a> · <a href="../book/book.md">继续编程实战</a></span>
     </div>
   </div>
   <figure class="hero-figure">
-    <img src="../book/assets/handdraw/learn-path.svg" alt="蛇形路线串起八个阶段：找真实问题、筛选方向、看懂需求、访谈验证、收敛方案、做出原型、接 AI 能力、打磨交付" loading="lazy">
-    <figcaption><strong>八个阶段是串行关系。</strong>前四步把问题想清楚，后四步把东西做出来；每一步结束都该有一个能给别人看的结果。这是书里第一章的第一张图。</figcaption>
+    <img src="../book/assets/handdraw/llm/generation-loop.svg" width="480" height="484" alt="教学模型从候选中选一个片段，接回句子末尾，再计算下一步候选">
+    <figcaption><strong>选中、追加、再计算。</strong>新片段接上去，下一步的输入也变了。图为教学示意，进入实验可调整温度，观察概率与抽样。</figcaption>
   </figure>
 </header>
 
 <section>
-  <h2>先跑通一次，再谈原理</h2>
+  <h2>把方法做成作品</h2>
   <p>课程把「学会」拆成看得见的四个动作。每完成一关记一颗星，星级只回答一个问题：你能不能推动作品前进一步。</p>
   <div class="grid g3">
     <div class="card"><span class="num">1</span><h3>开口</h3><p>请 AI 做一个最小作品，比如倒计时器。画面能打开，或代码能跑起来。</p></div>
@@ -199,7 +199,7 @@
     <div class="card grain">
       <span class="kicker">Stage 3 · 进阶</span>
       <h3>让工具替你干活</h3>
-      <p>Coding Agent 的 MCP、Skills、Teams、长任务、手机远程开发，再到 Spec Coding 与 Issues 驱动开发。出去时你只管验收。</p>
+      <p>学习 Coding Agent 的 MCP、Skills、Teams、长任务与规范驱动开发。让工具承担更多步骤，同时检查代码变更、运行结果和执行边界。</p>
       <p class="tag">附录 103 篇：AI 能力词典、后端与基础设施、计算机原理</p>
     </div>
   </div>
@@ -240,19 +240,19 @@
 </section>
 
 <section>
-  <h2>这本书是怎么做的</h2>
+  <h2>每一步都留得下证据</h2>
   <div class="grid g3">
     <div class="card">
-      <h3>图解分两种画法</h3>
-      <p>概念用 FA-040 手绘线稿：纸面 <code>#fbfaf6</code>、墨线 <code>#1f2328</code>、marker 高亮 <code>#d3efd9</code>，四角不齐、硬投影不模糊。技术栈与调用链用工程制图：网格纸底、真实品牌标记、直角连线。</p>
+      <h3>看到一次变化</h3>
+      <p>文字怎样变成片段，候选怎样变成下一句，选错的日期怎样回到原文核对。图解跟着动作走，帮助你解释每一步。</p>
     </div>
     <div class="card">
-      <h3>文字先去 AI 味</h3>
-      <p>全书按缺陷清单改了三遍：客服腔 140 处剩 2 处，中文套话 795 处剩 87 处，AI 高频词 116 处剩 13 处。缺陷密度从每千字 3.5 降到 2.0，汉字只少了 0.3%。</p>
+      <h3>说清数据从哪来</h3>
+      <p>分词页使用可复算的真实编码快照；生成页用小型教学模型；通知页使用虚构练习材料。每种演示都标明范围。</p>
     </div>
     <div class="card">
-      <h3>颜色不是随便挑的</h3>
-      <p>每个角色都过 WCAG 与 APCA 双阈值：正文墨色对纸面 15.13:1，次要文字 6.12:1，绿小字派生自 <code>#008635</code>。亮绿 <code>#1f883d</code> 只出现在图形和大字上。</p>
+      <h3>用结果检查理解</h3>
+      <p>能否说明概率为什么不等于事实？能否找出通知里没写的地点？做完实验，再用一关自测解释自己的判断。</p>
     </div>
   </div>
 </section>
@@ -290,8 +290,8 @@
 </section>
 
 <footer>
-  <p>读法建议：别顺读。先做「5 分钟闯关」，卡在哪一节就从那一节往回查。全书 195 个小节都有直达锚点，附录 103 节按关键词找。</p>
-  <p>课程与插图沿用原书许可；本页与图解使用 <code>design/system/tokens.css</code> 的手绘 token。</p>
+  <p>想理解原理，从十二课手绘学习路线开始；想做出作品，接着做「5 分钟闯关」，再按任务回查书籍。可下载 <a href="../deliverables/llm-explained-handdraw.pdf">PDF</a> 和 <a href="../deliverables/llm-explained-handdraw.epub">EPUB</a>，读完做<a href="llm/check-understanding.html">六道换材料练习</a>。实际模型练习采用 DeepSeek V4.1 Flash 与 Kimi K3；真实初学者验证仍待完成。</p>
+  <p>书籍来源与素材说明见<a href="../README.md">项目说明</a>；各课演示的来源与适用范围在对应页面列出。</p>
 </footer>
 </div>
 

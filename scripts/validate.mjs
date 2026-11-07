@@ -5,6 +5,8 @@ import { extname, join, relative, resolve } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const failures = [];
 const notes = [];
+const draftStatus = JSON.parse(readFileSync(join(root, "media-status.json"), "utf8")).drafts;
+const generatedDirectories = new Set([".git", "node_modules", ".hyperframes", ".thumbnails", ".waveform-cache", "archive", "renders", "tmp", "local-feedback"]);
 
 function fail(message) {
   failures.push(message);
@@ -30,8 +32,9 @@ function walk(directory) {
   const out = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const absolute = join(directory, entry.name);
-    if (entry.isDirectory()) out.push(...walk(absolute));
-    else out.push(absolute);
+    if (entry.isDirectory()) {
+      if (!generatedDirectories.has(entry.name)) out.push(...walk(absolute));
+    } else out.push(absolute);
   }
   return out;
 }
@@ -98,8 +101,11 @@ function validateVideoSource(directory, expected) {
   const assetsDir = join(root, prefix, "assets");
   if (!existsSync(compositionsDir)) fail(`Missing ${prefix}/compositions`);
   if (!existsSync(assetsDir)) fail(`Missing ${prefix}/assets`);
-  if (!index.includes(`data-duration="${expected.duration}"`)) fail(`${prefix} root duration mismatch`);
-  if (!index.includes(`data-width="${expected.width}"`) || !index.includes(`data-height="${expected.height}"`)) {
+  const rootTag = index.match(/<div\b[^>]*\sid="root"[^>]*>/)?.[0] ?? "";
+  const draft = draftStatus.find((item) => item.project === directory);
+  const expectedDuration = draft?.sourceDuration ?? expected.duration;
+  if (Number(rootTag.match(/\sdata-duration="([^"]+)"/)?.[1]) !== expectedDuration) fail(`${prefix} root duration mismatch`);
+  if (!rootTag.includes(`data-width="${expected.width}"`) || !rootTag.includes(`data-height="${expected.height}"`)) {
     fail(`${prefix} root dimensions mismatch`);
   }
   if (!index.includes('window.__timelines["main"]')) fail(`${prefix} does not register its main timeline`);
@@ -115,6 +121,10 @@ function validateVideoSource(directory, expected) {
     if (!body.includes("window.__timelines")) fail(`${relative(root, file)} is missing timeline registration`);
   }
   notes.push(`${directory}: ${htmlFiles.length} editable compositions`);
+  if (draft) {
+    if (draft.status !== "awaiting-render-and-review" || !draft.reason || !Number.isFinite(draft.sourceDuration)) fail(`${prefix}: invalid draft status`);
+    notes.push(`DRAFT ${directory}: source ${draft.sourceDuration}s, existing delivery ${draft.deliveryDuration}s; NOT synchronized or re-rendered (media-status.json)`);
+  }
 }
 
 function ffprobe(path) {
@@ -137,6 +147,8 @@ function ffprobe(path) {
 }
 
 function validateDelivery(path, expected) {
+  const draft = draftStatus.find((item) => item.delivery === path);
+  if (draft && draft.deliveryDuration !== expected.duration) fail(`${path}: draft manifest delivery duration differs from validation`);
   const absolute = requireFile(path, expected.minimumBytes);
   if (!absolute) return;
   const data = ffprobe(absolute);
@@ -147,29 +159,38 @@ function validateDelivery(path, expected) {
   if (video?.codec_name !== "h264") fail(`${path} must use H.264 video`);
   if (video?.width !== expected.width || video?.height !== expected.height) fail(`${path} dimensions are incorrect`);
   if (video?.r_frame_rate !== "30/1") fail(`${path} must be 30 fps`);
-  if (audio?.codec_name !== "aac" || audio?.sample_rate !== "48000" || audio?.channels !== 2) {
+  if (expected.audio === false && audio) fail(`${path} is declared as a silent illustrated lesson`);
+  if (expected.audio !== false && (audio?.codec_name !== "aac" || audio?.sample_rate !== "48000" || audio?.channels !== 2)) {
     fail(`${path} must contain 48 kHz stereo AAC audio`);
   }
   if (Math.abs(duration - expected.duration) > 0.05) fail(`${path} duration ${duration}s does not match ${expected.duration}s`);
-  notes.push(`${path}: ${video.width}x${video.height}, ${duration.toFixed(1)}s, H.264 + AAC`);
+  notes.push(`${path}: ${video.width}x${video.height}, ${duration.toFixed(1)}s, H.264${audio ? " + AAC" : " (silent illustrated lesson)"}`);
 }
 
 function validateCleanTree() {
   const forbidden = [".hyperframes", ".thumbnails", ".waveform-cache", "archive", "node_modules"];
-  for (const path of walk(root)) {
-    const normalized = relative(root, path).replaceAll("\\", "/");
+  const tracked = spawnSync("git", ["ls-files", "-z"], { cwd: root, encoding: "utf8" });
+  if (tracked.error || tracked.status !== 0) {
+    fail(`Cannot inspect tracked paths: ${tracked.error?.message || tracked.stderr}`);
+    return;
+  }
+  for (const normalized of tracked.stdout.split("\0").filter(Boolean)) {
     if (forbidden.some((part) => normalized.split("/").includes(part))) fail(`Forbidden generated path committed: ${normalized}`);
   }
 }
 
 validateBook();
-validateVideoSource("landscape", { width: 1920, height: 1080, duration: 215.5, minimumCompositions: 8 });
-validateVideoSource("vertical", { width: 1080, height: 1920, duration: 39.5, minimumCompositions: 3 });
+validateVideoSource("landscape", { width: 1920, height: 1080, duration: 250.4, minimumCompositions: 8 });
+validateVideoSource("vertical", { width: 1080, height: 1920, duration: 47.5, minimumCompositions: 3 });
+validateVideoSource("llm-principles", { width: 1920, height: 1080, duration: 32.4, minimumCompositions: 3 });
+validateVideoSource("llm-applications", { width: 1920, height: 1080, duration: 32.4, minimumCompositions: 3 });
 validateVideoSource("ep02", { width: 1920, height: 1080, duration: 194.5, minimumCompositions: 8 });
 validateVideoSource("ep03", { width: 1920, height: 1080, duration: 191.2, minimumCompositions: 8 });
 validateVideoSource("ep04", { width: 1920, height: 1080, duration: 187.472, minimumCompositions: 8 });
-validateDelivery("deliverables/vibe-coding-101-landscape.mp4", { width: 1920, height: 1080, duration: 215.5, minimumBytes: 10_000_000 });
-validateDelivery("deliverables/vibe-coding-101-vertical.mp4", { width: 1080, height: 1920, duration: 39.5, minimumBytes: 1_500_000 });
+validateDelivery("deliverables/vibe-coding-101-landscape.mp4", { width: 1920, height: 1080, duration: 250.4, minimumBytes: 10_000_000 });
+validateDelivery("deliverables/vibe-coding-101-vertical.mp4", { width: 1080, height: 1920, duration: 47.5, minimumBytes: 1_500_000 });
+validateDelivery("deliverables/llm-principles.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000, audio: false });
+validateDelivery("deliverables/llm-applications.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000, audio: false });
 validateDelivery("deliverables/ep02-landscape.mp4", { width: 1920, height: 1080, duration: 194.5, minimumBytes: 5_000_000 });
 validateDelivery("deliverables/ep03-landscape.mp4", { width: 1920, height: 1080, duration: 191.2, minimumBytes: 5_000_000 });
 validateDelivery("deliverables/ep04-landscape.mp4", { width: 1920, height: 1080, duration: 187.5, minimumBytes: 5_000_000 });

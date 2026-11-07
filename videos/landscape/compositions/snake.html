@@ -57,13 +57,13 @@
   <div data-hf-id="hf-1059" id="root" data-composition-id="snake" data-width="1920" data-height="1080">
     <div data-hf-id="hf-ahgz" id="s-tag" class="clip" data-start="0" data-duration="45">FIRST PRACTICE · AI 初体验</div>
     <div data-hf-id="hf-uonm" id="s-title" class="clip" data-start="0" data-duration="45.1">第一步不是学语法，是<span data-hf-id="hf-nd1d" class="g">开口提需求</span></div>
-    <div data-hf-id="hf-5dfe" id="s-prompt" class="clip" data-start="1.0" data-duration="45">帮我做一个贪吃蛇游戏</div>
-    <div data-hf-id="hf-y7ji" id="s-ability" class="clip" data-start="3.2" data-duration="45">
+    <div data-hf-id="hf-5dfe" id="s-prompt" class="clip" data-start="8.4" data-duration="45">帮我做一个贪吃蛇游戏</div>
+    <div data-hf-id="hf-y7ji" id="s-ability" class="clip" data-start="23.1" data-duration="45">
       <div data-hf-id="hf-5fvb" id="s-ability-k">这次真正要练的能力</div>
       <div data-hf-id="hf-tvdg" id="s-ability-v">不是背代码<br data-hf-id="hf-x5px" /><span data-hf-id="hf-g1hw" class="s-green">是把需求说清楚</span></div>
     </div>
-    <div data-hf-id="hf-izuq" id="s-hint" class="clip" data-start="5.2" data-duration="45">进阶：让蛇吃字符，最后生成一首诗</div>
-    <div data-hf-id="hf-zbab" id="s-game" class="clip" data-start="4.8" data-duration="45">
+    <div data-hf-id="hf-izuq" id="s-hint" class="clip" data-start="15.1" data-duration="45">进阶：让蛇吃字符，最后生成一首诗</div>
+    <div data-hf-id="hf-zbab" id="s-game" class="clip" data-start="16.8" data-duration="45">
       <div data-hf-id="hf-ughm" id="s-game-head"><span data-hf-id="hf-b0in" id="s-game-name">SNAKE · AI 原生版</span><span data-hf-id="hf-hrti" id="s-score">已收集 0 / 3</span></div>
       <div data-hf-id="hf-sat7" id="s-board">
         <span data-hf-id="hf-zydo" id="s-letter-1" class="s-letter">春</span><span data-hf-id="hf-i89g" id="s-letter-2" class="s-letter">风</span><span data-hf-id="hf-z21e" id="s-letter-3" class="s-letter">来</span>
@@ -115,29 +115,29 @@
     tl.fromTo("#s-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
     tl.to("#s-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
     tl.to("#s-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
-    tl.fromTo("#s-prompt", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .45, ease: "power2.out", scale: 1 }, 1);
-    tl.fromTo("#s-ability", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 3.2);
-    tl.fromTo("#s-hint", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 5.2);
-    tl.fromTo("#s-game", { x: 42, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .55, ease: "back.out(1.5)", scale: 1 }, 4.8);
+    tl.fromTo("#s-prompt", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .45, ease: "power2.out", scale: 1 }, 8.4);
+    tl.fromTo("#s-ability", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 23.1);
+    tl.fromTo("#s-hint", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 15.1);
+    tl.fromTo("#s-game", { x: 42, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .55, ease: "back.out(1.5)", scale: 1 }, 16.8);
     moveSnake(6.4, 275, 425, .65);
     moveSnake(7.2, 330, 400, .4);
-    tl.to("#s-letter-1", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 7.34);
-    tl.to("#s-poem-1", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 7.5);
-    tl.set("#s-score", { textContent: "已收集 1 / 3" }, 7.5);
+    tl.to("#s-letter-1", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 18.6);
+    tl.to("#s-poem-1", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 18.76);
+    tl.set("#s-score", { textContent: "已收集 1 / 3" }, 18.76);
     moveSnake(9.0, 480, 400, .65);
     moveSnake(9.8, 560, 250, .65);
-    tl.to("#s-letter-2", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 10.16);
-    tl.to("#s-poem-2", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 10.32);
-    tl.set("#s-score", { textContent: "已收集 2 / 3" }, 10.32);
+    tl.to("#s-letter-2", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 20.2);
+    tl.to("#s-poem-2", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 20.36);
+    tl.set("#s-score", { textContent: "已收集 2 / 3" }, 20.36);
     moveSnake(12.0, 690, 250, .65);
     moveSnake(12.85, 690, 100, .65);
-    tl.to("#s-letter-3", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 13.2);
-    tl.to("#s-poem-3", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 13.37);
-    tl.set("#s-score", { textContent: "已收集 3 / 3" }, 13.37);
-    tl.to("#s-poem-1", { x: -10, duration: .5, ease: "power3.out" }, 13.5);
-    tl.to("#s-poem-3", { x: 10, duration: .5, ease: "power3.out" }, 13.5);
+    tl.to("#s-letter-3", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 21.8);
+    tl.to("#s-poem-3", { opacity: 1, color: "#3fb950", scale: 1.12, duration: .28, ease: "back.out(1.7)" }, 21.96);
+    tl.set("#s-score", { textContent: "已收集 3 / 3" }, 21.96);
+    tl.to("#s-poem-1", { x: -10, duration: .5, ease: "power3.out" }, 22.1);
+    tl.to("#s-poem-3", { x: 10, duration: .5, ease: "power3.out" }, 22.1);
     // ambient-drift: barely-there Ken Burns so held frames never look frozen
-    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.6, ease: "none" }, 0);
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 28.1, ease: "none" }, 0);
     window.__timelines["snake"] = tl;
   </script>
 </template>
