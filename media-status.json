@@ -22,16 +22,16 @@
       "project": "llm-principles",
       "delivery": "deliverables/llm-principles.mp4",
       "status": "rendered-and-reviewed",
-      "sourceHash": "d40a265c914f4b10123f6132828ae42c8ac9892850170a57f7891db6973cd9b4",
-      "deliverySha256": "7bed0fc213b09b8a1a395ecc5a5683abbad8f604ad9a4c0631bf924adb6c59cb",
+      "sourceHash": "4a168db6ecb5b526971abfde1935b8c38e72a34fe7fecda1049d04a4aadbadd5",
+      "deliverySha256": "2f5ad9f29955e435aca05f4a9b7a5a042b27886991f206f64949d4acd6e71a1c",
       "review": "videos/llm-principles/REVIEW.md"
     },
     {
       "project": "llm-applications",
       "delivery": "deliverables/llm-applications.mp4",
       "status": "rendered-and-reviewed",
-      "sourceHash": "634fe6cdc5056dc88c642595d3393e84d971e0c08dc211e75538db50335f0ea4",
-      "deliverySha256": "50991b9499792e8db9d34aac66398a758bd8cd1c0f20558641df99110c482eed",
+      "sourceHash": "b6dd267cee0347ee6a0a04adc8e46e2fe2f8aead417a4490ef5e11c1d303be03",
+      "deliverySha256": "e942ae78793c6c64b2fe6f5b9b1d8fbed7421491044867e1c3a00c10abc41352",
       "review": "videos/llm-applications/REVIEW.md"
     }
   ]

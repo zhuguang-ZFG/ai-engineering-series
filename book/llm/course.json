@@ -1,5 +1,5 @@
 {
-  "version": "0.9.0",
+  "version": "0.10.0",
   "title": "把大模型拆开看",
   "description": "十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。",
   "status": "pilot",
@@ -81,7 +81,11 @@
       ],
       "correct": 1,
       "feedback": "示例中两个参考向量前两维一样，第三维不同。完整三维余弦由全部三维计算；初始查表与上下文后的表示也要分开。",
-      "file": "vectors.md"
+      "file": "vectors.md",
+      "extraFigures": [
+        "contextual-word.svg"
+      ],
+      "depthFigure": "contextual-word.svg"
     },
     {
       "id": "L04",
@@ -122,18 +126,21 @@
       "status": "ready",
       "slug": "training",
       "shortTitle": "训练与推理",
-      "summary": "训练一个小模型，看概率、损失、梯度和参数怎样一起变化。",
+      "summary": "从损失、梯度和参数更新，继续追到教师/学生蒸馏及错误迁移。",
       "experiment": "X05",
       "figure": "training-versus-inference.svg",
       "sources": [
         "S08",
         "S09",
-        "S10"
+        "S10",
+        "S43",
+        "S44",
+        "S45"
       ],
       "prerequisites": [
         "L02"
       ],
-      "objective": "解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。",
+      "objective": "解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。解释蒸馏的教师信号、学生更新和错误迁移。",
       "question": "在暂停状态下，只用现有参数预测一次，会更新参数吗？",
       "options": [
         "会，回答一次就训练一次",
@@ -142,7 +149,15 @@
       ],
       "correct": 1,
       "feedback": "本实验只有训练操作更新参数；预测按钮用现有参数算分布。在线对话因新上下文改变回答，也不能据此推断模型刚刚重新训练。",
-      "file": "training.md"
+      "file": "training.md",
+      "extraFigures": [
+        "distillation-flow.svg",
+        "gradient-step.svg"
+      ],
+      "extraExperiments": [
+        "X09"
+      ],
+      "depthFigure": "gradient-step.svg"
     },
     {
       "id": "L06",
@@ -172,7 +187,11 @@
       ],
       "correct": 1,
       "feedback": "礼貌、自信与事实依据要分别检查。训练改变行为倾向；模板组织消息；具体地点、时间等结论仍需核对材料。",
-      "file": "assistant.md"
+      "file": "assistant.md",
+      "extraFigures": [
+        "training-signals.svg"
+      ],
+      "depthFigure": "training-signals.svg"
     },
     {
       "id": "L07",
@@ -255,7 +274,11 @@
       ],
       "correct": 1,
       "feedback": "未找到与事实不存在不同；本次没有取得证据，不能把猜测当依据。检索不更新参数。",
-      "file": "retrieval.md"
+      "file": "retrieval.md",
+      "extraFigures": [
+        "retrieval-failures.svg"
+      ],
+      "depthFigure": "retrieval-failures.svg"
     },
     {
       "id": "L10",
@@ -283,8 +306,10 @@
       "feedback": "请求只是意图，程序负责校验和执行。失败或取消不能显示成功；数值正确也仍需核对输入依据。",
       "file": "tools.md",
       "extraFigures": [
-        "protocol-boundaries.svg"
-      ]
+        "protocol-boundaries.svg",
+        "timeout-receipt.svg"
+      ],
+      "depthFigure": "timeout-receipt.svg"
     },
     {
       "id": "L11",
@@ -298,7 +323,8 @@
       "sources": [
         "S11",
         "S09",
-        "S10"
+        "S10",
+        "S43"
       ],
       "prerequisites": [
         "L06",
@@ -343,7 +369,11 @@
       ],
       "correct": 1,
       "feedback": "可交付的内容包括未确认事项。缺失、冲突与范围外都应明示；勾选核对项不能代替逐条证据。",
-      "file": "project.md"
+      "file": "project.md",
+      "extraFigures": [
+        "evaluation-split.svg"
+      ],
+      "depthFigure": "evaluation-split.svg"
     }
   ],
   "quickRoute": [

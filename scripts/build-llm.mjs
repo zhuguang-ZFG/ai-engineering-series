@@ -9,6 +9,7 @@ import { legacyPrinciples } from "./llm/legacy-principles.mjs";
 import { legacyApplications } from "./llm/legacy-applications.mjs";
 import { legacyTransformer } from "./llm/legacy-transformer.mjs";
 import { legacyReferences } from "./llm/legacy-references.mjs";
+import { distillationExperiment } from "./llm/distillation-templates.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const checking = process.argv.includes("--check");
@@ -24,6 +25,7 @@ const sources = json("sources.json").sources;
 const ready = course.lessons.filter((lesson) => lesson.status === "ready");
 const fixtures = Object.fromEntries(["tokens", "generation", "vectors", "attention", "training", "assistant", "materials", "evidence", "retrieval", "tools", "approaches", "project"].map(name => { const data = json(`fixtures/${name}.json`); return [data.id, data]; }));
 const models = json("models.json");
+const distillation = json("fixtures/distillation.json");
 const review = json("review/tasks.json");
 const rubric = json("review/rubric.json");
 const figures = JSON.parse(readFileSync(join(root, "book/assets/handdraw/llm/figures.json"), "utf8")).figures;
@@ -34,7 +36,7 @@ const referenceChapters = legacyReferences(root, checking);
 const landingPath = join(root, "exports/landing.html");
 const landingSource = readFileSync(landingPath, "utf8");
 let landingOutput = landingSource;
-for (const [name, count] of [["lessons", ready.length], ["experiments", ready.filter(lesson => /^X/.test(lesson.experiment)).length]]) {
+for (const [name, count] of [["lessons", ready.length], ["experiments", ready.reduce((total, lesson) => total + Number(/^X/.test(lesson.experiment)) + (lesson.extraExperiments?.length ?? 0), 0)]]) {
   const marker = new RegExp(`(<!-- llm:${name} -->)\\d+(<!-- /llm:${name} -->)`, "g");
   if ([...landingSource.matchAll(marker)].length !== 1) throw new Error(`Landing page requires one ${name} count marker`);
   landingOutput = landingOutput.replace(marker, (_, before, after) => `${before}${count}${after}`);
@@ -54,7 +56,7 @@ function page(title, body, data = null) {
 <meta name="description" content="${h(course.description)}"><title>${h(title)} · ${h(course.title)}</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">${h(course.title)}</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
 ${body}<footer>已开放 ${ready.length} 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
-${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>` : ""}</body></html>\n`;
+${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>${data.lesson.id === "L05" ? '<script src="distillation.js"></script><script src="distillation-client.js"></script>' : ""}` : ""}</body></html>\n`;
 }
 
 function staticExperiment(lesson, fixture) {
@@ -108,6 +110,8 @@ if (!checking) mkdirSync(out, { recursive: true });
 write("lab.css", readFileSync(join(root, "scripts/llm/styles.css"), "utf8"));
 write("core.js", readFileSync(join(root, "scripts/llm/core.cjs"), "utf8"));
 write("client.js", readFileSync(join(root, "scripts/llm/client.js"), "utf8"));
+write("distillation.js", readFileSync(join(root, "scripts/llm/distillation.cjs"), "utf8"));
+write("distillation-client.js", readFileSync(join(root, "scripts/llm/distillation-client.js"), "utf8"));
 write("principles.js", readFileSync(join(root, "scripts/llm/principles.js"), "utf8"));
 write("applications.js", readFileSync(join(root, "scripts/llm/applications.cjs"), "utf8"));
 write("application-client.js", readFileSync(join(root, "scripts/llm/application-client.js"), "utf8"));
@@ -158,20 +162,24 @@ write("index.html", page("学习路线", `<main class="shell" id="main"><section
 <section aria-labelledby="route-title"><h2 id="route-title">第一次来，先走通这三步</h2>${route(course.quickRoute.map(id => ready.find(lesson => lesson.id === id)))}</section>
 <section><h2>继续追问：它里面发生了什么？</h2><p>按课号从头读，或从你关心的问题开始。每课都有操作、解释和自测。</p>${route(ready)}</section>
 <section class="downloads"><h2>下载到本地阅读</h2><p>十二课、${figures.length} 张手绘图、纸上实验和自测答案，离线可读。书末附六道换材料练习。PDF 按 A5 排版；EPUB 可在阅读器中调整字号。</p><div class="actions"><a class="button primary" href="../../deliverables/llm-explained-handdraw.pdf" download>下载 PDF</a><a class="button" href="../../deliverables/llm-explained-handdraw.epub" download>下载 EPUB</a></div></section>
-<section class="upcoming"><h2>合上书，换一份材料试试</h2><p>画一次生成循环，再整理一份没在课上出现过的通知。先留下自己的判断，做完再看核对依据；有人陪读时，可以记录卡点和提示。</p><div class="actions"><a class="button" href="check-understanding.html">做六道练习</a><a href="review-guide.html">核对依据与陪读记录</a></div><p><a href="../../deliverables/llm-reading-tasks.pdf" download>A4 练习 PDF</a> · <a href="../../deliverables/llm-reading-guide.pdf" download>陪读与空白记录 PDF</a></p><p>读完再追问：<a href="advanced.html">缓存、专家与计算成本</a> · <a href="principles-reference.html">完整原理回查与分词复算</a> · <a href="architecture-guide.html">注意力怎样拼成一层</a> · <a href="transformer-reference.html">完整 Transformer 回查</a></p><p>应用时回查：<a href="applications-guide.html">提示、检索与核验</a> · <a href="prompt-reference.html">完整提示词工程</a> · <a href="rag-reference.html">完整 RAG 架构</a></p><p>搭系统时回查：<a href="execution-guide.html">上下文与工具执行</a> · <a href="context-reference.html">完整上下文工程</a> · <a href="agent-reference.html">完整 Agent 与工具调用</a></p></section>
+<section class="upcoming"><h2>合上书，换一份材料试试</h2><p>画一次生成循环，再整理一份没在课上出现过的通知。先留下自己的判断，做完再看核对依据；有人陪读时，可以记录卡点和提示。</p><div class="actions"><a class="button" href="check-understanding.html">做六道练习</a><a href="review-guide.html">核对依据与陪读记录</a></div><p><a href="../../deliverables/llm-reading-tasks.pdf" download>A4 练习 PDF</a> · <a href="../../deliverables/llm-reading-guide.pdf" download>陪读与空白记录 PDF</a></p><p><a href="training.html#distillation">蒸馏：教师的输出怎样变成学生的参数？</a></p><p>读完再追问：<a href="advanced.html">缓存、专家与计算成本</a> · <a href="principles-reference.html">完整原理回查与分词复算</a> · <a href="architecture-guide.html">注意力怎样拼成一层</a> · <a href="transformer-reference.html">完整 Transformer 回查</a></p><p>应用时回查：<a href="applications-guide.html">提示、检索与核验</a> · <a href="prompt-reference.html">完整提示词工程</a> · <a href="rag-reference.html">完整 RAG 架构</a></p><p>搭系统时回查：<a href="execution-guide.html">上下文与工具执行</a> · <a href="context-reference.html">完整上下文工程</a> · <a href="agent-reference.html">完整 Agent 与工具调用</a></p></section>
 <section class="reading-index"><h2>换一种方式复习</h2><p><a href="deck.html">十二张讲义</a> · <a href="cards.html">手绘图卡</a> · <a href="multimodal-reference.html">多模态输入</a> · <a href="embedding-reference.html">向量检索</a> · <a href="protocols-reference.html">MCP 与 A2A</a></p></section>${modelPractice()}<section class="upcoming"><p class="eyebrow">十二课已开放 · 学习效果待真实试读</p><h2>把方法用到自己的资料</h2><p>读完原理，再到检索、工具与综合交付里检查结果。最后换一份未见通知，独立完成带证据的安排表。</p><p><a href="project.html">完成资料助手练习</a> · <a href="../../book/book.md">回到完整书籍与编程实战</a></p></section></main>`));
 
 for (const [index, lesson] of ready.entries()) {
   const fixture = lesson.id === "L08" ? { ...fixtures[lesson.experiment], documents: fixtures.X06.documents } : fixtures[lesson.experiment];
-  const markdown = read(`lessons/${lesson.file}`);
+  let markdown = read(`lessons/${lesson.file}`);
+  const depth = read(`deepening/${lesson.file}`);
+  if (lesson.id === "L05") markdown = markdown.replace("<!-- distillation -->", depth + "\n\n" + read("distillation.md"));
+  else if (markdown.includes("## 再深一层")) markdown = markdown.replace("## 再深一层", depth + "\n\n## 再深一层");
+  else markdown += "\n\n" + depth;
   if ((markdown.match(/<!-- experiment -->/g) || []).length !== 1) throw new Error(`${lesson.id}: expected exactly one experiment anchor`);
-  const body = marked.parse(markdown).replace("<!-- experiment -->", image(lesson) + experiment(lesson, fixture));
+  const body = marked.parse(markdown).replace("<!-- experiment -->", image(lesson) + experiment(lesson, fixture)).replace("<!-- distillation-figure -->", lesson.id === "L05" ? image(lesson, "distillation-flow.svg") : "").replace("<!-- distillation -->", lesson.id === "L05" ? distillationExperiment(distillation, h) : "").replace("<!-- depth-figure -->", lesson.depthFigure ? image(lesson, lesson.depthFigure) : "").replace("<h2>蒸馏：", '<h2 id="distillation">蒸馏：');
   const references = lesson.sources.map((id) => {
     const entry = sources.find((item) => item.id === id);
     if (!entry) throw new Error(`Unknown source ${id}`);
     return `<li>${entry.url ? `<a href="${h(entry.url)}">${h(entry.title)}</a>` : h(entry.title)}<p>${h(entry.scope)} ${h(entry.method)}</p></li>`;
   }).join("");
   write(`${lesson.slug}.html`, page(lesson.title, `<main class="shell lesson-layout" id="main"><nav class="sidebar" aria-label="试读课程"><p class="eyebrow">已开放 ${ready.length} 课</p><ol>${ready.map((entry) => `<li><a href="${entry.slug}.html" ${entry.id === lesson.id ? 'aria-current="page"' : ""}>${h(entry.id)} · ${h(entry.shortTitle)}</a></li>`).join("")}</ol><p class="caption">每课都可以单独阅读。先观察，再动手，最后用自测检查理解。</p><a href="index.html">查看学习路线</a></nav>
-<article class="lesson"><p class="eyebrow">${h(lesson.id)} · ${h(lesson.id === "L07" ? "把方法用到材料里" : "从观察追到计算")}</p><p class="objective">本课目标：${h(lesson.objective)}</p><div class="article-body">${body}</div>${(lesson.extraFigures ?? []).map(file => `<details class="deeper-figure"><summary>${h(file === "transformer-block.svg" ? "深入图：注意力之外还有什么？" : file === "multihead-flow.svg" ? "深入图：两个头怎样汇合？" : file === "context-selection.svg" ? "深入图：外部保存与本次输入" : figures.find(entry => entry.file === file).purpose)}</summary>${image(lesson, file)}</details>`).join("")}${quiz(lesson)}${modelPractice()}<details class="sources"><summary>来源与演示边界</summary><ul>${references}</ul><p>实际模型案例：<a href="${h(models.models[0].url)}">DeepSeek 官方资料</a> · <a href="${h(models.models[1].url)}">Kimi K3 官方资料</a>（${h(models.checkedOn)} 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航"><a href="index.html">返回学习路线</a>${ready[index + 1] ? `<a href="${ready[index + 1].slug}.html">下一步：${h(ready[index + 1].title)}</a>` : '<a href="../../book/book.md">继续看编程实战</a>'}</nav></article></main>`, { lesson, fixture }));
+<article class="lesson"><p class="eyebrow">${h(lesson.id)} · ${h(lesson.id === "L07" ? "把方法用到材料里" : "从观察追到计算")}</p><p class="objective">本课目标：${h(lesson.objective)}</p><div class="article-body">${body}</div>${(lesson.extraFigures ?? []).filter(file => file !== "distillation-flow.svg" && file !== lesson.depthFigure).map(file => `<details class="deeper-figure"><summary>${h(file === "transformer-block.svg" ? "深入图：注意力之外还有什么？" : file === "multihead-flow.svg" ? "深入图：两个头怎样汇合？" : file === "context-selection.svg" ? "深入图：外部保存与本次输入" : figures.find(entry => entry.file === file).purpose)}</summary>${image(lesson, file)}</details>`).join("")}${quiz(lesson)}${modelPractice()}<details class="sources"><summary>来源与演示边界</summary><ul>${references}</ul><p>实际模型案例：<a href="${h(models.models[0].url)}">DeepSeek 官方资料</a> · <a href="${h(models.models[1].url)}">Kimi K3 官方资料</a>（${h(models.checkedOn)} 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航"><a href="index.html">返回学习路线</a>${ready[index + 1] ? `<a href="${ready[index + 1].slug}.html">下一步：${h(ready[index + 1].title)}</a>` : '<a href="../../book/book.md">继续看编程实战</a>'}</nav></article></main>`, { lesson, fixture, ...(lesson.id === "L05" ? { distillation } : {}) }));
 }
 console.log(`${checking ? "Verified" : "Built"} ${ready.length} lessons and learning route (offline scripts + pinned fixtures)`);

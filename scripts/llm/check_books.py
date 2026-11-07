@@ -39,6 +39,8 @@ def check():
         assert lesson["question"] in all_text.replace("\n", ""), "PDF missing self-test " + lesson["id"]
     assert "DeepSeek" in all_text and "Kimi" in all_text
     assert "纸上实验" in all_text and "MIT" in all_text
+    for phrase in ["教师的输出，怎样变成学生的参数", "KL(p(T)", "推理蒸馏", "硬标签", "学生第一步给水"]:
+        assert phrase in all_text.replace("\n", ""), "PDF missing distillation explanation " + phrase
     assert "缓存、专家与计算成本" in all_text.replace("\n", "")
     assert "应用回查：提示、检索与核验" in all_text.replace("\n", "")
     assert "相似度分数不是事实置信度" in all_text.replace("\n", "")
@@ -86,6 +88,9 @@ def check():
         assert len(opf.xpath('//o:item[@properties="cover-image"]', namespaces=ns)) == 1
         nav = trees["OEBPS/nav.xhtml"]
         assert len(nav.xpath('//h:nav[@e:type="toc"]/h:ol/h:li', namespaces=ns)) == len(course["lessons"]) + 6
+        distillation_text = "".join(trees["OEBPS/training.xhtml"].itertext())
+        assert "推理蒸馏" in distillation_text and "混合梯度" in distillation_text
+        assert "distill-step" not in distillation_text
         architecture_text = "".join(trees["OEBPS/architecture.xhtml"].itertext())
         assert "1.231059" in architecture_text and "-0.231059" in architecture_text
         assert "post-norm" in architecture_text and "pre-norm" in architecture_text

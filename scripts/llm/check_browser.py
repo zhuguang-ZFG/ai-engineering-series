@@ -67,7 +67,7 @@ def run():
                 assert page.locator("h1").count() == 1
                 assert_layout(page, width)
                 if name != "index":
-                    assert page.locator(".lab[data-experiment]").is_visible()
+                    assert all(lab.is_visible() for lab in page.locator(".lab[data-experiment]").all())
                     assert page.locator("#quiz-form").is_visible()
                     page.locator("input[name=answer]").first.check()
                     page.locator("#quiz-form button").click()
@@ -258,7 +258,7 @@ def run():
         page.wait_for_timeout(180)
         assert page.locator("#training-metrics").inner_text() == paused
         assert page.locator("#train-run").is_enabled()
-        page.locator(".lab").screenshot(path=str(OUTPUT / "training-paused-mobile.png"))
+        page.locator('.lab[data-experiment="X05"]').screenshot(path=str(OUTPUT / "training-paused-mobile.png"))
         page.locator("#train-run").click()
         page.evaluate("window.dispatchEvent(new PageTransitionEvent('pagehide'))")
         page.evaluate("window.dispatchEvent(new PageTransitionEvent('pageshow'))")
@@ -274,6 +274,36 @@ def run():
         assert page.locator("#train-run").is_disabled()
         assert page.locator("#train-pause").is_disabled()
         report["behaviors"].append("training actual loss/probability change, gradient display, predict-only immutability, pause, pagehide, reset and 500-step cap")
+
+        page.locator("#distill-reset").click()
+        teacher_before = page.locator("#distill-distributions tr").first.locator("td").first.inner_text()
+        initial_water = float(page.locator("#distill-distributions tr").first.locator("td").nth(2).inner_text().strip("%"))
+        page.locator("#distill-step").click()
+        assert "第 1 步" in page.locator("#distill-loss").inner_text()
+        assert float(page.locator("#distill-distributions tr").first.locator("td").nth(2).inner_text().strip("%")) > initial_water
+        assert teacher_before == page.locator("#distill-distributions tr").first.locator("td").first.inner_text()
+        assert "新值 = 旧值" in page.locator("#distill-update").inner_text()
+        page.locator("#distill-teacher").select_option("wrongTeacher")
+        assert "第 0 步" in page.locator("#distill-loss").inner_text()
+        page.locator("#distill-step").click()
+        assert float(page.locator("#distill-distributions tr").first.locator("td").nth(2).inner_text().strip("%")) < initial_water
+        page.locator("#distillation-lab").screenshot(path=str(OUTPUT / "distillation-wrong-teacher-mobile.png"))
+        page.locator("#distill-alpha").fill("0")
+        page.locator("#distill-step").click()
+        assert float(page.locator("#distill-distributions tr").first.locator("td").nth(2).inner_text().strip("%")) > initial_water
+        page.locator("#distill-temperature").focus()
+        page.keyboard.press("ArrowRight")
+        assert page.locator("#distill-temperature").input_value() == "2.5"
+        assert "第 0 步" in page.locator("#distill-loss").inner_text()
+        for _ in range(4):
+            page.locator("#distill-many").click()
+        assert "第 100 步" in page.locator("#distill-loss").inner_text()
+        assert page.locator("#distill-many").is_disabled() and page.locator("#distill-step").is_disabled()
+        page.locator("#distill-reset").click()
+        assert page.locator("#distill-step").is_enabled()
+        assert "第 0 步" in page.locator("#distill-loss").inner_text()
+        assert_layout(page, 375)
+        report["behaviors"].append("distillation: actual student update, fixed teacher, wrong signal, hard-only contrast, keyboard temperature, resets and cap")
 
         page.goto(page_url("assistant"))
         page.locator("#check-assistant").click()
@@ -397,7 +427,7 @@ def run():
         assert not page.locator("#project-report").inner_text()
         report["behaviors"].append("seven project cases, evidence, out-of-scope, check gating and actual JSON/Markdown downloads")
 
-        new_figures = ["embedding-view", "attention-mask", "transformer-block", "training-versus-inference", "assistant-training", "claim-evidence", "retrieve-then-answer", "tool-execution-loop", "choose-an-approach", "materials-to-result", "context-selection", "multihead-flow"]
+        new_figures = ["contextual-word", "gradient-step", "training-signals", "retrieval-failures", "timeout-receipt", "evaluation-split", "distillation-flow", "embedding-view", "attention-mask", "transformer-block", "training-versus-inference", "assistant-training", "claim-evidence", "retrieve-then-answer", "tool-execution-loop", "choose-an-approach", "materials-to-result", "context-selection", "multihead-flow"]
         for name in new_figures:
             svg_source = (ROOT / "book" / "assets" / "handdraw" / "llm" / f"{name}.svg").read_text(encoding="utf-8")
             # An HTML wrapper avoids Chrome's native XML image-viewer capture
@@ -415,7 +445,7 @@ def run():
             }""")
             assert all(text["fits"] and text["mobileSize"] >= 16 for text in result), (name, result)
             page.locator("svg").screenshot(path=str(OUTPUT / f"figure-{name}-mobile.png"))
-        report["behaviors"].append("twelve SVGs: actual text bounds and mobile-size labels")
+        report["behaviors"].append("all deeper teaching SVGs: actual text bounds and mobile-size labels")
 
         page.set_viewport_size({"width": 1440, "height": 1000})
         for name in PAGES:
@@ -455,7 +485,7 @@ def run():
             page.goto(page_url(name))
             assert_layout(page, 375)
             if name != "index":
-                assert not page.locator(".lab[data-experiment]").is_visible()
+                assert not any(lab.is_visible() for lab in page.locator(".lab[data-experiment]").all())
                 assert "静态实验读法" in page.locator("noscript").first.inner_text()
                 page.locator(".quiz details summary").click()
                 assert page.locator(".quiz details p").last.is_visible()

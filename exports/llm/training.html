@@ -3,8 +3,9 @@
 <meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>模型是怎样学会的？ · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
 <main class="shell lesson-layout" id="main"><nav class="sidebar" aria-label="试读课程"><p class="eyebrow">已开放 12 课</p><ol><li><a href="tokens.html" >L01 · 拆开文字</a></li><li><a href="generation.html" >L02 · 生成一句话</a></li><li><a href="vectors.html" >L03 · 向量与语境</a></li><li><a href="attention.html" >L04 · 因果注意力</a></li><li><a href="training.html" aria-current="page">L05 · 训练与推理</a></li><li><a href="assistant.html" >L06 · 学会听指令</a></li><li><a href="context.html" >L07 · 核对材料</a></li><li><a href="evidence.html" >L08 · 核对证据</a></li><li><a href="retrieval.html" >L09 · 检索自己的资料</a></li><li><a href="tools.html" >L10 · 受控工具调用</a></li><li><a href="approaches.html" >L11 · 选合适的方案</a></li><li><a href="project.html" >L12 · 交付资料助手</a></li></ol><p class="caption">每课都可以单独阅读。先观察，再动手，最后用自测检查理解。</p><a href="index.html">查看学习路线</a></nav>
-<article class="lesson"><p class="eyebrow">L05 · 从观察追到计算</p><p class="objective">本课目标：解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。</p><div class="article-body"><h1>模型是怎样学会的？</h1>
+<article class="lesson"><p class="eyebrow">L05 · 从观察追到计算</p><p class="objective">本课目标：解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。解释蒸馏的教师信号、学生更新和错误迁移。</p><div class="article-body"><h1>模型是怎样学会的？</h1>
 <p>给一个刚初始化的小模型看“我喝”两个片段，它还不知道下一步该偏向什么。让它多次比较自己的预测与训练文本中的目标，再看“水”“茶”“咖啡”的概率怎样变化。</p>
+<p>想直接追问模型蒸馏，可以先读基础更新，再跳到<a href="#distillation">蒸馏：教师的输出怎样变成学生的参数</a>。</p>
 <h2>这次真的更新一张参数表</h2>
 <p>这个模型只看前一个 token，叫 bigram 模型。它为每一对“前一个→下一个”保存一个分数。七个 token 共用一张 7×7 的参数表，经 softmax 得到下一步概率。</p>
 <p>它没有注意力，也不理解长句。用它来学习“预测—比较—更新”已经足够，不能用它的效果推断大模型的能力。</p>
@@ -27,10 +28,120 @@
 <p>点击连续训练，随时可以暂停或重置。实线是训练损失，虚线是未见组合的损失。这里未见的是句子组合，token 和部分相邻 token 对仍可能与训练集重合；它不是完全陌生领域的测试。</p>
 <p>比较两条曲线，观察它们有没有同步变化。本页的数据很小，有的规律两边都适用，有的频率不同。即使两条损失都下降，也只能说明这组指标变好了，不能证明模型能完成实际任务。</p>
 <p>真实项目还要保留独立评测材料，检查证据、错误类型和任务完成情况。不要因为训练损失变小，就省掉这些检查。</p>
-<h2>再深一层</h2>
+<h2>“知道错了”还不够，参数怎样真的动起来？</h2>
+<p>交叉熵把“目标被分到多少概率”变成一个可计算的数。目标概率为 0.5 时，<code>−ln(0.5)≈0.693</code>；若提高到 0.8，损失约为 0.223。这里比较训练目标，不是在给答案的事实可靠性打分。错误目标也能被学得越来越好。</p>
+<figure class="concept-figure"><img src="../../book/assets/handdraw/llm/gradient-step.svg" width="480" height="820" alt="两候选分数均零，按目标水的梯度更新为 0.2 与 −0.2，概率与损失随之变化。"><figcaption>一步训练，两个分数怎样动？ 两候选单训练对，不是七词 bigram 或实际模型测量。</figcaption></figure><p>看一个独立的两候选例子。水、茶的分数均为 0，概率都是 0.5，目标是水。两个分数的梯度分别为 <code>0.5−1=−0.5</code>、<code>0.5−0=0.5</code>。学习率取 0.4，新分数变为 <code>[0.2,−0.2]</code>，水的概率约为 0.599，损失约为 0.513。这和页面七词 bigram 是同一个更新原则，但候选数与数据不同。</p>
+<p>大模型不会只改最后两个分数。若某个分数是 <code>s=w×h</code>，链式法则给出 <code>∂L/∂w=(∂L/∂s)×h</code>。反向传播沿前向计算的依赖关系，把这种“影响怎样传下去”的计算扩展到各层；优化器再据梯度更新参数。它没有逐句把错误事实存进一个可查的更正表。</p>
+<p>学习率过大可能跨过较低损失区域甚至让训练发散，过小则更新慢；真实训练还涉及批次、优化器状态、数据顺序与正则化。训练集改善但独立材料恶化时，要检查过拟合、数据差异及评测泄漏。不能因为一条曲线向下，就断言通用能力提高。</p>
+<p>接下来的蒸馏保留这条“目标→损失→梯度→参数”的链，只改变了部分目标信号从哪里来：它可以由另一个模型提供。</p>
+<h2 id="distillation">蒸馏：教师的输出，怎样变成学生的参数？</h2>
+<p>前面的训练把文本中的下一个 token 当作目标。现在多一条获得目标的路：让一个已有模型先处理输入，再拿它给出的概率或回答训练另一个模型。前者叫教师，后者叫学生。教师提供训练信号，优化器更新学生参数，这就是这里讨论的知识蒸馏。[S43]</p>
+<p>学生往往较小，也可以与教师大小相同、结构不同，甚至由多个教师共同提供信号。它通常已有预训练参数，不一定从零开始。蒸馏传递的是特定输入上的行为信号，不是把教师的一部分权重剪下来，也不是把所有知识完整装进更小的文件。</p>
+<figure class="concept-figure"><img src="../../book/assets/handdraw/llm/distillation-flow.svg" width="480" height="820" alt="同一输入进入冻结教师和可训练学生；教师分布或筛选文本与学生预测比较损失，经梯度更新学生；部署时学生可独立生成。"><figcaption>蒸馏：冻结教师、训练信号与学生更新。 展示输出信号蒸馏，不表示权重拷贝或已复现具名模型；教师错误也可能被学习。</figcaption></figure><h3>先分清两种训练材料</h3>
+<p>给定同一段前文，教师可能给出整个词表的下一 token 分布；也可能只给出一段已经生成的回答。两者都能用于蒸馏，但学生得到的信息不同。</p>
+<table>
+<thead>
+<tr>
+<th>能拿到什么</th>
+<th>学生怎样学</th>
+<th>没拿到什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对齐候选的教师 logits 或概率</td>
+<td>让学生分布靠近教师分布，常用交叉熵或 KL</td>
+<td>不因此得到教师内部权重或所有能力</td>
+</tr>
+<tr>
+<td>教师生成的答案、解释或推理文本</td>
+<td>将筛选后的文本当示范，用自回归交叉熵训练</td>
+<td>生成时没选中的完整候选分布</td>
+</tr>
+</tbody></table>
+<p>第一种常叫软标签蒸馏；第二种常见于序列级或响应蒸馏。只会返回文本的接口，也能提供第二类材料，但不能假装从文字恢复出第一类完整分布。接口即使给出少数 token 的 logprob，也不等于整个词表的概率。[S43/S44]</p>
+<h3>为什么不只告诉学生“答案是水”？</h3>
+<p>本题额外给定一条已核实材料：“杯中是水”。把下一步候选限定为“水、茶、咖啡”，只是为了能手算。硬标签写成 <code>[1,0,0]</code>：水是目标，另外两项都不是。它没有表达茶与咖啡之间的区别。</p>
+<p>教师的人工分数为 <code>[3,2,0]</code>。温度为 1 时，概率约为 <code>[70.54%,25.95%,3.51%]</code>。教师除了偏向水，还给茶分配了更高的相对概率。软目标让学生同时看到这些相对关系；这些关系可能有用，也可能包含教师的偏差。不能把“25.95% 的生成概率”解释成“杯中有 25.95% 的可能是茶”。</p>
+<p>真实语言模型在每个位置通常要比较整个词表。做逐 token 的分布匹配时，教师和学生需要对应同一上下文、同一目标位置，并对齐候选含义；词表、分词器不同，不能把两个数组按下标直接相减。文本蒸馏则可以由学生自己的分词器重新编码示范。</p>
+<h3>温度把分布展开，但没有增加事实</h3>
+<p>对分数 z，温度 T 下的概率为：</p>
+<p><code>pᵢ(T) = exp(zᵢ/T) / Σⱼ exp(zⱼ/T)</code></p>
+<p>本例 T 从 1 改到 2，教师的分布约变为 <code>[54.65%,33.15%,12.20%]</code>。低概率项更容易参与训练。教师和学生都用同一个 T 计算蒸馏分布，避免把两个不同温度的目标混在一起。[S43]</p>
+<p>温度过高时，分布会接近均匀，区别也可能变弱；温度没有越高越好的通用结论。用于训练分布的温度，与部署时抽样生成的温度是两个设置。本实验同时显示学生的 <code>q(T)</code> 和 <code>q(1)</code>：它们来自同一组学生分数，不是两个模型。只改 T 是重新计算概率；按训练按钮才更新参数。</p>
+<h3>学生到底在最小化什么？</h3>
+<p>用 p 表示固定教师，用 q 表示学生。先看一种常见目标：</p>
+<p><code>KL(p(T) ‖ q(T)) = Σᵢ pᵢ(T) × ln[pᵢ(T) / qᵢ(T)]</code></p>
+<p>这衡量学生与教师分布的差异，方向也有含义：这里由教师 p 加权。教师固定时，它与软目标交叉熵只差一个不依赖学生参数的教师熵，因此对学生有相同梯度。KL 不对称；换成 <code>KL(q‖p)</code> 不能当成相同算法。</p>
+<p>若还有经过核实的硬标签 y，可以混合两种信号：</p>
+<p><code>L = α × T² × KL(p(T) ‖ q(T))</code></p>
+<p><code>    + (1−α) × CE(y, q(1))</code></p>
+<p>这里 α 是软目标权重；α=0 只学硬标签，α=1 只匹配教师。硬标签部分在 T=1 下计算。本课用单一已核实目标，所以 <code>CE = −ln q目标(1)</code>；其他配方可以不同。</p>
+<p>为什么乘 T²？未经补偿的软目标梯度为 <code>(qᵢ(T)−pᵢ(T))/T</code>。在较高温度、固定分数差等近似条件下，概率差还会大致再缩小 1/T，因而整体尺度约按 1/T² 缩小。T² 用于补偿训练信号的尺度变化，便于和硬目标共同使用；不是准确率倍增器，也不保证不同温度下梯度完全相同。[S43]</p>
+<p>乘过 T² 后，混合损失对学生分数 sᵢ 的梯度是：</p>
+<p><code>∂L/∂sᵢ = αT(qᵢ(T)−pᵢ(T))</code></p>
+<p><code>          + (1−α)(qᵢ(1)−yᵢ)</code></p>
+<p>学生再按 <code>新分数 = 旧分数 − 学习率 × 梯度</code> 更新。深层网络还需把梯度反传到学生各层；教师在这份配方中冻结。这里把三个分数本身当作学生参数，让你直接看到变化。</p>
+<section class="lab" id="distillation-lab" data-experiment="X09" aria-labelledby="distill-title" hidden><span class="data-label">人工分数 · 本地真实更新 · 非模型实测</span><h2 id="distill-title">把教师分布变成学生的一步更新</h2><p>本题已核实杯中是水；比较三种候选的训练信号</p><div class="control-grid"><label for="distill-teacher">教师信号<select id="distill-teacher"><option value="teacher">偏向正确标签：水</option><option value="wrongTeacher">故意错误：偏向茶</option></select></label><label for="distill-temperature">蒸馏温度 T <output id="distill-temperature-value">2.0</output><input id="distill-temperature" type="range" min="1" max="5" step="0.5" value="2"></label><label for="distill-alpha">软目标权重 α <output id="distill-alpha-value">0.7</output><input id="distill-alpha" type="range" min="0" max="1" step="0.1" value="0.7"></label></div><div class="actions"><button class="primary" id="distill-step" type="button">更新学生一步</button><button id="distill-many" type="button">更新学生 25 步</button><button id="distill-reset" type="button">重置学生</button></div><p class="status" id="distill-status" role="status"></p><div class="table-scroll"><table><caption>同温度的教师/学生分布，及学生推理时 T=1 的分布</caption><thead><tr><th>候选</th><th>教师 p(T)</th><th>学生 q(T)</th><th>学生 q(1)</th></tr></thead><tbody id="distill-distributions"></tbody></table></div><p id="distill-loss"></p><pre id="distill-update" aria-label="最近一次实际参数更新"></pre><p class="caption">只优化同一个上下文的三项学生 logits；没有语言网络、反向传播穿层或泛化测试，不是实际模型输出。硬标签“水”由本题材料指定，教师的概率不是真实情况的证据。 改温度、权重或教师会重置学生，便于从同一初始状态比较；最多 100 步。</p></section><noscript><section class="lab"><h2>静态实验读法：蒸馏的一步更新</h2><p>教师分数 [3,2,0]，学生分数 [0,0,0]，T=2，α=0.7，硬标签为水，学习率 0.4。</p><div class="table-scroll"><table><thead><tr><th>候选</th><th>教师 p(T)</th><th>学生 q(T)</th><th>混合梯度</th><th>更新后学生分数</th></tr></thead><tbody><tr><th scope="row">水</th><td>54.65%</td><td>33.33%</td><td>-0.498502</td><td>0.199401</td></tr><tr><th scope="row">茶</th><td>33.15%</td><td>33.33%</td><td>0.102568</td><td>-0.041027</td></tr><tr><th scope="row">咖啡</th><td>12.20%</td><td>33.33%</td><td>0.395934</td><td>-0.158374</td></tr></tbody></table></div><p>总损失由 0.737837 变为 0.582734。教师分数仍是 [3,2,0]；这里只改变学生。网页的可操作版本还可以换成故意错误的教师并比较。</p></section></noscript><h3>损失下降，也可能把错误学进去</h3>
+<p>先用默认条件更新一步，核对旧值、梯度、新值与损失。再保持 α=0.7、T=2，把教师换成故意偏向茶的 <code>[0,3,2]</code>。虽然本题已经核实是水，学生第一步给水的推理概率仍会下降：错误软信号压过了这一权重下的硬标签信号。</p>
+<p>把 α 调到 0，再更新一步，学生只根据硬标签训练。这个对比说明教师数据和损失权重为什么需要检查，不代表 α=0 对所有任务都最好。更不能因为学生的 KL 很小，就宣布回答真实可靠。KL 只检查它在这些输入上多像教师。</p>
+<h3>只有教师回答文本时，训练怎样进行？</h3>
+<p>设教师针对题目 x 生成示范序列 <code>ŷ₁,…,ŷₘ</code>。学生的一个常见目标为：</p>
+<p><code>L文本 = −Σₜ ln q学生(ŷₜ | x, ŷ_&lt;t)</code></p>
+<p>这里 t 之前的符号指示范文本前缀。训练时把前缀作为条件，让学生预测下一个示范 token；这是 teacher forcing。词元层面仍是交叉熵，监督目标来自教师生成的整段序列。经典序列蒸馏用教师解码序列近似序列分布，不要求保存所有候选序列的概率。[S44]</p>
+<p>生成一份材料常要经过“设计题目→教师生成→核对和筛选→用学生分词器编码→训练学生→独立评测”。去重、排除评测题及其近似改写、保留来源和错误类型，都影响这份材料能否说明泛化。筛选不是装饰步骤：错误答案、缺失条件和互相矛盾的解释，也会成为训练目标。</p>
+<p>最简单的响应蒸馏是离线流程：学生训练在固定教师示范上。其他方法也可能采样学生自己的回答，再让教师提供反馈，以减轻训练前缀和学生实际生成前缀的差异。本课没有实现这些方法；不能把一次三候选更新当作完整语言模型蒸馏。</p>
+<h3>推理蒸馏：学到的“推理”是哪一层？</h3>
+<p>只训练最终答案，与训练“题目、解释步骤、最终答案”两种数据，给学生的可见监督不同。包含有效中间步骤的示范，可以给它更多问题分解与作答模式的训练信号；这仍是通过数据改变学生参数，不是读取或复制教师不可见的内部思维。</p>
+<p>会复述步骤不等于每一步正确。冗长、前后不一致或答案对但过程错的轨迹，都可能被模仿。要在未进入训练的数据上检查答案、条件与中间步骤；能执行的数学或代码任务可加独立验证，开放任务仍需明确评测依据。文本长度、训练损失或与教师措辞相似，都不能替代这些证据。</p>
+<p>一个可核查的历史例子是 2025 年 DeepSeek-R1 首版报告第 2.4 节：它描述用整理的教师数据微调 Qwen/Llama 系列学生，报告该组蒸馏模型没有再加 RL 阶段。这是该版本的具体配方，不能推广成“蒸馏从不用 RL”，也不能移给 DeepSeek V4.1 Flash 或 Kimi K3；后两者的实际蒸馏路线需要各自公开依据。[S45]</p>
+<h3>和微调、量化、剪枝、RAG 分别是什么关系？</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>主要改什么</th>
+<th>蒸馏与它的关系</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>监督微调 SFT</td>
+<td>用示范数据更新参数</td>
+<td>教师响应可以成为 SFT 数据；数据来源与训练目标是两个维度</td>
+</tr>
+<tr>
+<td>强化学习 RL</td>
+<td>根据奖励优化行为策略</td>
+<td>可以与蒸馏前后结合；蒸馏不自动等于 RL</td>
+</tr>
+<tr>
+<td>量化</td>
+<td>权重或计算的数值精度</td>
+<td>不等于跟教师学习；可对蒸馏后的学生再量化</td>
+</tr>
+<tr>
+<td>剪枝</td>
+<td>删除或稀疏化部分连接/结构</td>
+<td>改结构的机制不同，也可与蒸馏组合</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>取回材料，提供给本次输入</td>
+<td>通常不更新模型参数；资料常变时不应靠蒸馏替代更新与引用</td>
+</tr>
+</tbody></table>
+<p>教师可以昂贵、学生可以更适合部署，但节省多少要看学生结构、硬件、序列长度和实际任务。生成训练材料和训练学生也有成本。蒸馏不保证按固定倍数变小、必然更快，或覆盖教师所有任务；在有限任务上也不能排除学生因数据、目标和评测条件不同而超过教师。</p>
+<h3>真要用时，先做一个可比较的验证</h3>
+<p>先明确要改善的是哪类任务、哪些错误和哪项部署限制。保留未参与采样、筛选及训练的评测集，在相同输入、解码设置和可比硬件上，对照未蒸馏学生、蒸馏学生、教师；分别记录任务正确性、证据/步骤错误、时延和内存。条件不同时保留差异，不能把演示数字写成通用压缩比例。</p>
+<p>训练数据还需具备可用于相应用途的授权，涉及个人信息的材料要按实际约束处理。知识更新快、需要逐条引用或只做少量任务时，先比较检索、提示和工具是否已能满足条件，再决定是否值得建立蒸馏流程。</p>
+<h3>合上这一节，再判断两件事</h3>
+<ol>
+<li>教师概率 <code>[0.6,0.3,0.1]</code> 与硬标签 <code>[1,0,0]</code> 各提供了什么？如果教师错了，学生会怎样？</li>
+<li>只有教师生成的长篇解释，能否宣称自己匹配了教师全部词表概率，或复制了教师内部思维？</li>
+</ol>
+<details><summary>对照自己的解释</summary><p>软目标给出各候选的相对概率，硬标签只指定目标；教师错误也可变成学生的训练信号，需要核对数据与独立评测。文本示范没有给出完整未选候选分布，也没有暴露教师内部状态；响应/推理文本蒸馏必须按实际提供的信息说明范围。</p></details><h2>再深一层</h2>
 <p>对于某个训练对，softmax 分数的梯度是 <code>预测概率 − 目标指示值</code>：目标位置的指示值为 1，其余为 0。本页把 12 对梯度相加后除以 12，再更新所有参数。</p>
 <p>bigram 的梯度可以直接写出来。深层网络需要反向传播，把损失对各层参数的影响逐层求出，再由优化器更新。优化器、训练批次和正则化等细节会影响结果；本页只实现全批量梯度下降，最多 500 步。</p>
 </div><section class="quiz"><h2>用自己的判断过一关</h2><form id="quiz-form" hidden><fieldset><legend>在暂停状态下，只用现有参数预测一次，会更新参数吗？</legend><label><input type="radio" name="answer" value="0" required>会，回答一次就训练一次</label><label><input type="radio" name="answer" value="1" required>不会，这页的预测只读取参数</label><label><input type="radio" name="answer" value="2" required>会，只要概率足够高就自动更新</label></fieldset><button class="primary" type="submit">检查答案</button><p class="explanation" id="quiz-feedback" role="status"></p></form>
 <noscript><p>在暂停状态下，只用现有参数预测一次，会更新参数吗？</p><details><summary>看答案与解释</summary><p>不会，这页的预测只读取参数</p><p>本实验只有训练操作更新参数；预测按钮用现有参数算分布。在线对话因新上下文改变回答，也不能据此推断模型刚刚重新训练。</p></details></noscript></section><section class="model-practice"><h2>在实际模型里复做</h2><p>使用同一份通知，分别试 DeepSeek V4.1 Flash 和 Kimi K3，检查是否保留缺失项、每句依据是否正确。</p><pre>仅根据下面的通知，提取活动、时间、地点、报名要求，每项附依据原句。没有写的标“材料未提供”，不要补具体日期。
-通知A：读书会周六14:00开始，参与者需提前报名。</pre><details><summary>模型入口、版本与记录方法</summary><p><a href="https://api-docs.deepseek.com/">DeepSeek V4.1 Flash 官方资料</a><br>核验时官方首页将 API 名 deepseek-flash 对应到 DeepSeek-V4.1-Flash-1017。别名可能更新，复做时记录实际版本。</p><p><a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方资料</a><br>采用用户指定的 K3。当前平台也列有 K3.1 Pro，复做时核对选择项；这里没有将其他版本的规格写给 K3。</p><p>每次记录：日期、产品与所选模型版本、思考/联网/工具模式、完整输入、首次回答原文、每项证据与缺失项、追问后修正。一次回答不用于排名或准确率比较。</p><p class="caption">官方资料核验日期：2026-11-07。本课程未调用这两个付费 API，也没有采集可比较的模型输出；不据本地示意推断其内部架构、参数或训练配方。</p></details></section><details class="sources"><summary>来源与演示边界</summary><ul><li>X03–X05 与 D06 的课程数学及人工示例<p>人工向量、Q/K/V、短语料与预置回答，不是实际商用模型的内部读数或训练记录。 三维余弦、单头因果注意力与全批量 bigram 交叉熵由本地代码实算；梯度以有限差分交叉检查。</p></li><li><a href="https://api-docs.deepseek.com/">DeepSeek 官方 API 首页</a><p>deepseek-flash 在核验时对应 DeepSeek-V4.1-Flash-1017；别名日后可能更新。不据此推断内部架构或训练配方。 核对当日官方首页的模型名称和路由说明；未调用模型 API、未采集输出。</p></li><li><a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方发布及平台文档入口</a><p>用户指定 Kimi K3；K3.1 Pro 为另一版本。不在未核验具体接口时填写 K3 API ID。 已核对官方博客目录中的 K3 条目和平台概览中的 K3 指南入口；未运行 K3，也未据后续版本推断 K3 规格。</p></li></ul><p>实际模型案例：<a href="https://api-docs.deepseek.com/">DeepSeek 官方资料</a> · <a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方资料</a>（2026-11-07 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航"><a href="index.html">返回学习路线</a><a href="assistant.html">下一步：会续写为什么还要学听指令？</a></nav></article></main><footer>已开放 12 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
-<script id="lab-data" type="application/json">{"lesson":{"id":"L05","title":"模型是怎样学会的？","status":"ready","slug":"training","shortTitle":"训练与推理","summary":"训练一个小模型，看概率、损失、梯度和参数怎样一起变化。","experiment":"X05","figure":"training-versus-inference.svg","sources":["S08","S09","S10"],"prerequisites":["L02"],"objective":"解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。","question":"在暂停状态下，只用现有参数预测一次，会更新参数吗？","options":["会，回答一次就训练一次","不会，这页的预测只读取参数","会，只要概率足够高就自动更新"],"correct":1,"feedback":"本实验只有训练操作更新参数；预测按钮用现有参数算分布。在线对话因新上下文改变回答，也不能据此推断模型刚刚重新训练。","file":"training.md"},"fixture":{"id":"X05","kind":"toy","source":"课程本地 bigram softmax 模型与人工短语料","version":"1.0.0","limitations":"模型只按前一个 token 预测下一个 token；它不是 Transformer，不具有长上下文能力，不能从本实验推断大模型规模效应。","expectedObservations":["梯度更新改变参数","训练损失由当前参数实算","仅做推理不改变参数","训练集变好不表示未见组合也变好"],"vocabulary":["我","她","喝","水","茶","咖啡","。"],"sequences":[["我","喝","水","。"],["我","喝","水","。"],["我","喝","茶","。"],["她","喝","咖啡","。"]],"heldOut":[["我","喝","咖啡","。"],["她","喝","茶","。"]],"seed":42,"learningRate":0.8,"maxSteps":500}}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script></body></html>
+通知A：读书会周六14:00开始，参与者需提前报名。</pre><details><summary>模型入口、版本与记录方法</summary><p><a href="https://api-docs.deepseek.com/">DeepSeek V4.1 Flash 官方资料</a><br>核验时官方首页将 API 名 deepseek-flash 对应到 DeepSeek-V4.1-Flash-1017。别名可能更新，复做时记录实际版本。</p><p><a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方资料</a><br>采用用户指定的 K3。当前平台也列有 K3.1 Pro，复做时核对选择项；这里没有将其他版本的规格写给 K3。</p><p>每次记录：日期、产品与所选模型版本、思考/联网/工具模式、完整输入、首次回答原文、每项证据与缺失项、追问后修正。一次回答不用于排名或准确率比较。</p><p class="caption">官方资料核验日期：2026-11-07。本课程未调用这两个付费 API，也没有采集可比较的模型输出；不据本地示意推断其内部架构、参数或训练配方。</p></details></section><details class="sources"><summary>来源与演示边界</summary><ul><li>X03–X05 与 D06 的课程数学及人工示例<p>人工向量、Q/K/V、短语料与预置回答，不是实际商用模型的内部读数或训练记录。 三维余弦、单头因果注意力与全批量 bigram 交叉熵由本地代码实算；梯度以有限差分交叉检查。</p></li><li><a href="https://api-docs.deepseek.com/">DeepSeek 官方 API 首页</a><p>deepseek-flash 在核验时对应 DeepSeek-V4.1-Flash-1017；别名日后可能更新。不据此推断内部架构或训练配方。 核对当日官方首页的模型名称和路由说明；未调用模型 API、未采集输出。</p></li><li><a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方发布及平台文档入口</a><p>用户指定 Kimi K3；K3.1 Pro 为另一版本。不在未核验具体接口时填写 K3 API ID。 已核对官方博客目录中的 K3 条目和平台概览中的 K3 指南入口；未运行 K3，也未据后续版本推断 K3 规格。</p></li><li><a href="https://arxiv.org/abs/1503.02531">Hinton / Vinyals / Dean：Distilling the Knowledge in a Neural Network</a><p>经典分布蒸馏，不将特定实验效果泛化。 下载并读取 v1 第 1–2 节及式 1–4；核对同温度、硬软目标及 T² 的高温梯度尺度解释。</p></li><li><a href="https://arxiv.org/abs/1606.07947">Kim / Rush：Sequence-Level Knowledge Distillation</a><p>2016 年机器翻译配方；不宣称语言模型通用提速倍数。 下载并读取论文引言、word-level 与 sequence-level 定义和目标；区分分布匹配与教师解码序列近似。</p></li><li><a href="https://arxiv.org/abs/2501.12948v1">DeepSeek-R1 首版报告：Distillation 2.4</a><p>2025 年 R1 历史配方；不移用于 DeepSeek V4.1 Flash 或 Kimi K3。 下载并读取 v1 第 2.4 节，对照教师整理数据微调 Qwen/Llama 学生、该组学生未添加 RL 的原文。</p></li></ul><p>实际模型案例：<a href="https://api-docs.deepseek.com/">DeepSeek 官方资料</a> · <a href="https://www.kimi.com/en/blog/kimi-k3">Kimi K3 官方资料</a>（2026-11-07 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航"><a href="index.html">返回学习路线</a><a href="assistant.html">下一步：会续写为什么还要学听指令？</a></nav></article></main><footer>已开放 12 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
+<script id="lab-data" type="application/json">{"lesson":{"id":"L05","title":"模型是怎样学会的？","status":"ready","slug":"training","shortTitle":"训练与推理","summary":"从损失、梯度和参数更新，继续追到教师/学生蒸馏及错误迁移。","experiment":"X05","figure":"training-versus-inference.svg","sources":["S08","S09","S10","S43","S44","S45"],"prerequisites":["L02"],"objective":"解释损失比较的对象与梯度更新；区分训练、推理和上下文变化。解释蒸馏的教师信号、学生更新和错误迁移。","question":"在暂停状态下，只用现有参数预测一次，会更新参数吗？","options":["会，回答一次就训练一次","不会，这页的预测只读取参数","会，只要概率足够高就自动更新"],"correct":1,"feedback":"本实验只有训练操作更新参数；预测按钮用现有参数算分布。在线对话因新上下文改变回答，也不能据此推断模型刚刚重新训练。","file":"training.md","extraFigures":["distillation-flow.svg","gradient-step.svg"],"extraExperiments":["X09"],"depthFigure":"gradient-step.svg"},"fixture":{"id":"X05","kind":"toy","source":"课程本地 bigram softmax 模型与人工短语料","version":"1.0.0","limitations":"模型只按前一个 token 预测下一个 token；它不是 Transformer，不具有长上下文能力，不能从本实验推断大模型规模效应。","expectedObservations":["梯度更新改变参数","训练损失由当前参数实算","仅做推理不改变参数","训练集变好不表示未见组合也变好"],"vocabulary":["我","她","喝","水","茶","咖啡","。"],"sequences":[["我","喝","水","。"],["我","喝","水","。"],["我","喝","茶","。"],["她","喝","咖啡","。"]],"heldOut":[["我","喝","咖啡","。"],["她","喝","茶","。"]],"seed":42,"learningRate":0.8,"maxSteps":500},"distillation":{"id":"X09","kind":"toy","version":"1.0.0","source":"课程人工三候选分数；公式依据 Hinton et al. 2015，本地实际计算。","limitations":"只优化同一个上下文的三项学生 logits；没有语言网络、反向传播穿层或泛化测试，不是实际模型输出。硬标签“水”由本题材料指定，教师的概率不是真实情况的证据。","expectedObservations":["同一温度下比较两个分布","更新学生参数时教师不变","软标签区分非首选项","教师错误可以传给学生"],"context":"本题已核实杯中是水；比较三种候选的训练信号","labels":["水","茶","咖啡"],"teacher":[3,2,0],"wrongTeacher":[0,3,2],"student":[0,0,0],"target":0,"temperature":2,"alpha":0.7,"learningRate":0.4,"maxSteps":100}}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script><script src="distillation.js"></script><script src="distillation-client.js"></script></body></html>

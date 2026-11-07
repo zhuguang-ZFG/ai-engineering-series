@@ -1,5 +1,5 @@
 {
-  "version": "0.9.0",
+  "version": "0.10.0",
   "sources": [
     {
       "id": "S01",
@@ -498,6 +498,43 @@
       "checkedOn": "2026-11-07",
       "claims": [
         "Agent Card、客户端/服务端、消息/任务/产物、状态与协议绑定。固定历史版本。"
+      ]
+    },
+    {
+      "id": "S43",
+      "title": "Hinton / Vinyals / Dean：Distilling the Knowledge in a Neural Network",
+      "url": "https://arxiv.org/abs/1503.02531",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取 v1 第 1–2 节及式 1–4；核对同温度、硬软目标及 T² 的高温梯度尺度解释。",
+      "scope": "经典分布蒸馏，不将特定实验效果泛化。",
+      "claims": [
+        "软标签与硬标签的信息差异",
+        "同温度分布匹配",
+        "混合目标及 T² 的条件性补偿"
+      ]
+    },
+    {
+      "id": "S44",
+      "title": "Kim / Rush：Sequence-Level Knowledge Distillation",
+      "url": "https://arxiv.org/abs/1606.07947",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取论文引言、word-level 与 sequence-level 定义和目标；区分分布匹配与教师解码序列近似。",
+      "scope": "2016 年机器翻译配方；不宣称语言模型通用提速倍数。",
+      "claims": [
+        "序列级与逐 token 分布蒸馏的区别",
+        "教师生成序列作为训练目标"
+      ]
+    },
+    {
+      "id": "S45",
+      "title": "DeepSeek-R1 首版报告：Distillation 2.4",
+      "url": "https://arxiv.org/abs/2501.12948v1",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取 v1 第 2.4 节，对照教师整理数据微调 Qwen/Llama 学生、该组学生未添加 RL 的原文。",
+      "scope": "2025 年 R1 历史配方；不移用于 DeepSeek V4.1 Flash 或 Kimi K3。",
+      "claims": [
+        "推理数据蒸馏不等于读取内部思维",
+        "具体配方的 SFT 与 RL 阶段须分别说明"
       ]
     }
   ],

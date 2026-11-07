@@ -2,7 +2,7 @@
 
 先看一句话怎样生成，再追到向量、注意力和参数更新，最后用检索、工具与证据核验完成一份资料报告。十二课已经可以离线阅读和操作，无需账号、API 密钥或 GPU。
 
-下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录十七张手绘图、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。当前 0.9.0 增加多模态、向量检索与 MCP/A2A 回查，以及同源的十二张讲义和图卡。书内保留结构、缓存/专家/成本、应用和系统四个精选附录。
+下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录二十四张手绘图、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。当前 0.10.0 为十二课补充逐步算例与反例，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。
 
 书末新增六道[换材料练习](../../exports/llm/check-understanding.html)。需要写画时下载 [A4 练习 PDF](../../deliverables/llm-reading-tasks.pdf)，做完再看[核对依据与陪读记录](../../exports/llm/review-guide.html)或[陪读 PDF](../../deliverables/llm-reading-guide.pdf)。题目与参考答案分开；通知、概率和回执均为人工练习材料，真实试读尚未进行。
 
@@ -55,3 +55,7 @@
 新增 [Transformer 完整回查](../../exports/llm/transformer-reference.html)与[结构精选](../../exports/llm/architecture-guide.html)，保留原章 28 个标题；修订源为 `legacy-transformer.md`，标题契约单独记录。G15 画出多头的独立投影、汇总、拼接与输出投影，L04 深入图也可查看。原始 encoder-decoder 与 decoder-only、post/pre-norm、位置外推和 IO 优化分别说明，未公开模型规模保持未知。
 
 运行 `node book/llm/examples/multihead.mjs` 查看两个一维头的 Q/K/V、掩码、权重和输出；输入和投影来自 `fixtures/multihead.json`。章内与电子书中的数值表由这份代码实际生成；更改未来/可见输入及输出矩阵有相应测试。例子没有训练、位置编码、残差、归一化或 FFN，不当作完整 Transformer。
+
+蒸馏专题已接入 [L05 训练与推理](../../exports/llm/training.html)：教师/学生、软标签、温度、KL 与 T²、响应/推理文本蒸馏和错误迁移，附可更新学生参数的本地实验与纸上计算。
+
+十二课均补充具体算例、失败原因或工作情境；[知识点核对表](../../specs/llm-learning-redesign/KNOWLEDGE-MAP.md)记录主线、深入解释和旧章回查的范围。图解保持可编辑 SVG，按实际手机字号和电子书成品检查。

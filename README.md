@@ -6,7 +6,7 @@
 
 本仓库汇集一套面向零基础学习者的 Vibe Coding 课程交付物：完整中文书籍、横版课程视频、竖版短视频，以及可继续编辑的 HyperFrames 源码。
 
-大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含十七张手绘图、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
+大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含二十四张手绘图、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
 
 ## 内容
 
@@ -92,10 +92,14 @@ npm run check
 
 系统回查：[上下文工程](exports/llm/context-reference.html) · [Agent 与工具调用](exports/llm/agent-reference.html) · [上下文与工具执行精选](exports/llm/execution-guide.html)。本地工作流用 `node book/llm/examples/tool-workflow.mjs` 运行，包含成功与查无商品的真实本地回执。
 
-结构回查：[Transformer 与注意力机制](exports/llm/transformer-reference.html) · [注意力怎样拼成一层](exports/llm/architecture-guide.html)。可运行 `node book/llm/examples/multihead.mjs` 追踪双头矩阵；最新本地书籍包含十七张手绘及同源数值表。
+结构回查：[Transformer 与注意力机制](exports/llm/transformer-reference.html) · [注意力怎样拼成一层](exports/llm/architecture-guide.html)。可运行 `node book/llm/examples/multihead.mjs` 追踪双头矩阵；最新本地书籍包含二十四张手绘及同源数值表。
 
 多模态与协议回查：[视觉/音频/视频](exports/llm/multimodal-reference.html) · [Embedding 与向量检索](exports/llm/embedding-reference.html) · [MCP 与 A2A](exports/llm/protocols-reference.html)。九个目标旧章均保留原有标题；这不代表合订书所有章节已逐一技术审校。
 
 EPUB 使用官方 EPUBCheck 5.3.0 检查；更新 EPUB 后运行 `python scripts/llm/check_epub.py --jar <epubcheck.jar>` 更新与文件哈希绑定的报告。CI 从固定发行版下载工具并校验 SHA-256。
 
 媒体修改后在对应项目运行 `npm run check`、截图复核、渲染并检查成片，再运行 `node scripts/llm/media-manifest.mjs --update` 记录源码与成片哈希。`npm test` 会拒绝过期的电子书或视频。新专题的可编辑源码在 `videos/llm-principles/` 和 `videos/llm-applications/`，由 `scripts/llm/build-media.mjs` 从课程材料生成。
+
+蒸馏专题已接入 [L05 训练与推理](exports/llm/training.html)：教师/学生、软标签、温度、KL 与 T²、响应/推理文本蒸馏和错误迁移，附可更新学生参数的本地实验与纸上计算。
+
+十二课均补充具体算例、失败原因或工作情境；[知识点核对表](specs/llm-learning-redesign/KNOWLEDGE-MAP.md)记录主线、深入解释和旧章回查的范围。图解保持可编辑 SVG，按实际手机字号和电子书成品检查。

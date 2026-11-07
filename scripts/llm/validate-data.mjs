@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import assert from "node:assert/strict";
 import api from "./core.cjs";
+import distill from "./distillation.cjs";
 
 export function validateData(root = resolve(import.meta.dirname, "../.."), { allowPendingOutputs = false } = {}) {
   const folder = join(root, "book/llm");
@@ -30,19 +31,23 @@ export function validateData(root = resolve(import.meta.dirname, "../.."), { all
     assert.match(lesson.file, /^[a-z-]+\.md$/);
     assert.match(lesson.figure, /^[a-z-]+\.svg$/);
     assert.ok(existsSync(join(folder, "lessons", lesson.file)));
+    assert.ok(existsSync(join(folder, "deepening", lesson.file)), `${lesson.id}: missing worked explanation`);
     assert.ok(existsSync(join(root, "book/assets/handdraw/llm", lesson.figure)));
     for (const id of lesson.prerequisites) assert.ok(ready.some((item) => item.id === id), `Unavailable prerequisite ${id}`);
   }
   assert.equal(ids.size, 12, "Expected 12 planned lessons");
   const experiments = new Set();
-  for (const [file, id, kind] of [["tokens", "X01", "recorded"], ["generation", "X02", "toy"], ["materials", "X06", "illustrative"], ["vectors", "X03", "illustrative"], ["attention", "X04", "toy"], ["training", "X05", "toy"], ["assistant", "D06", "illustrative"], ["evidence", "X06B", "illustrative"], ["retrieval", "X07", "toy"], ["tools", "X08", "toy"], ["approaches", "D11", "illustrative"], ["project", "D12", "illustrative"]]) {
+  for (const [file, id, kind] of [["tokens", "X01", "recorded"], ["generation", "X02", "toy"], ["materials", "X06", "illustrative"], ["vectors", "X03", "illustrative"], ["attention", "X04", "toy"], ["training", "X05", "toy"], ["assistant", "D06", "illustrative"], ["evidence", "X06B", "illustrative"], ["retrieval", "X07", "toy"], ["tools", "X08", "toy"], ["approaches", "D11", "illustrative"], ["project", "D12", "illustrative"], ["distillation", "X09", "toy"]]) {
     const data = json(`fixtures/${file}.json`);
     assert.equal(data.id, id);
     assert.equal(data.kind, kind);
     experiments.add(id);
     for (const key of ["source", "version", "limitations", "expectedObservations"]) assert.ok(data[key]?.length, `${id}: missing ${key}`);
   }
-  for (const lesson of ready) assert.ok(experiments.has(lesson.experiment), `Unavailable experiment ${lesson.id}`);
+  for (const lesson of ready) for (const experiment of [lesson.experiment, ...(lesson.extraExperiments ?? [])]) assert.ok(experiments.has(experiment), `Unavailable experiment ${lesson.id}`);
+  const kd = json("fixtures/distillation.json");
+  assert.equal(kd.labels.length, kd.teacher.length);
+  assert.doesNotThrow(() => distill.step(kd.teacher, kd.student, kd.temperature, kd.alpha, kd.target, kd.learningRate));
   assert.ok(course.quickRoute.every(id => ready.some(lesson => lesson.id === id)), "Unavailable quick route");
   const vectors = json("fixtures/vectors.json");
   for (const item of [...vectors.contexts.map(c => c.representation), ...vectors.references.map(r => r.vector)]) assert.doesNotThrow(() => api.cosine(vectors.token.initial, item));

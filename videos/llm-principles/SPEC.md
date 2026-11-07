@@ -5,7 +5,7 @@ OUTPUT: 1920×1080, 30fps, 32.4 秒（972 帧）。
 LOOK: #fbfaf6 纸色，#1f2328 墨色，#1f883d 仅标变化；标题 84px，正文 58–72px，边线 3–5px，无阴影和装饰颗粒。
 MOTION: power2.out；箭头绘制 21 帧，数值条增长 24–27 帧；阅读停留 data-hold。
 SOUND: 静音图解版，无配音、无新增第三方媒体。
-SOURCE: 课程 0.9.0；L02/L05；fixture 及本地公式，不代表实际模型输出。
+SOURCE: 课程 0.10.0；L02/L05；fixture 及本地公式，不代表实际模型输出。
 REGISTRY: 搜索 bar chart draw path，参考 animated-bar-chart 的 scaleX 确定性增长；按课程实际概率重建，未复制第三方资产。
 BANNED: 整页列表、装饰机器人、每字弹跳、霓虹渐变、凭空数字、把计划画成执行成功。
 QA: 各场景 0.3s/5.4s/9.5s、切点前后 0.2s、末帧；必须无空白、证据可读。

@@ -29,6 +29,12 @@
 <p>只数汉字不能精确预估 token 用量。真实接口还可能加入对话格式、工具定义或其他输入内容；本页只计算所选的原始字符串，不包含这些额外结构。</p>
 <h2>用到工作里</h2>
 <p>如果你要让模型读一份长文，先查看所用模型和接口的输入限制，给回答留出空间。材料超长时，按实际任务挑相关段落或分步处理。不要为了少几个 token，就把决定答案的条件和日期删掉。</p>
+<h2>从字节到编号，中间到底发生了什么？</h2>
+<p>先把三个动作分开：文字存为字节，分词器按自己的规则找到片段，再把片段换成词表里的编号。例如 UTF-8 中，<code>A</code> 是一个字节 <code>41</code>，<code>中</code> 是三个字节 <code>E4 B8 AD</code>，这里的数字用十六进制表示。它们都不是 token ID。分词器可能把多个字节合成一片，也可能把一个字的字节分到不同片里。</p>
+<p>BPE 一类方法会从训练材料的统计出发，学到哪些相邻片段值得合并；实际编码还受预切分、词表和特殊标记规则影响。可以先把它理解为“用这套词表能找到哪些片段”，而不是“按词典识别所有完整词”。不同编码学到的片段不同，所以同一句话会得到不同长度的编号序列。</p>
+<p>接着模型用 ID 查参数表。词表中的第 42 项和第 43 项只是相邻的存储位置，不意味着它们意思相近。一个模型也不能直接接受另一套词表的 ID；同样的数字可能指向完全不同的片段。</p>
+<p>换到工作里，粘贴的材料并不等于最终全部输入。应用还可能加系统要求、聊天格式、历史、工具定义和图片表示。上下文与费用要按实际接口的计量规则核对；本页的原始字符串快照没有计算这些额外部分。</p>
+<p>试着解释：为什么把文本的字符数除以一个固定常数，只能粗估 token，不能作为所有模型都准确的换算式？因为语言、空格、罕见字符、编码规则与附加结构都会改变结果。需要精确值时，用匹配的编码器或实际接口计量。</p>
 <h2>再深一层</h2>
 <p>这些快照由锁定版本的本地编码器生成；每种编码附有 rank 数据的哈希。执行 <code>npm run check:fixtures:llm</code> 会重新编码、比较 ID，并把片段字节拼回原文。这里观察的是编码结果，不是语言模型在“理解”这句话时的内部活动。</p>
 </div><details class="deeper-figure"><summary>深入图：图片怎样进入回答？</summary><figure class="concept-figure"><img src="../../book/assets/handdraw/llm/multimodal-flow.svg" width="480" height="740" alt="通知图片编码成连续视觉表示，经连接模块与文字共同输入；日期回查原图，模糊地点保留未知。"><figcaption>深入图：图片怎样进入回答？ 一种公开视觉语言路线，不代表所有多模态模型；音频与视频另有时间或声学处理。</figcaption></figure></details><section class="quiz"><h2>用自己的判断过一关</h2><form id="quiz-form" hidden><fieldset><legend>一个汉字一定对应一个 token 吗？</legend><label><input type="radio" name="answer" value="0" required>一定，模型按汉字逐个读取</label><label><input type="radio" name="answer" value="1" required>不一定，要看具体编码；一个字也可能跨多个 token</label><label><input type="radio" name="answer" value="2" required>不一定，但一个 token 必须是完整的字</label></fieldset><button class="primary" type="submit">检查答案</button><p class="explanation" id="quiz-feedback" role="status"></p></form>
