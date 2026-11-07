@@ -134,6 +134,10 @@ def clean_chapter(lesson):
     article = page.xpath('//article[contains(concat(" ",normalize-space(@class)," ")," lesson ")]')[0]
     for node in article.xpath('.//*[contains(concat(" ",normalize-space(@class)," ")," model-practice-fold ")]'):
         node.drop_tree()
+    # The complete static storyboard shares its numbers with the web frames.
+    # Keep only that version in books, without playback controls or duplicate SVGs.
+    for node in article.xpath('.//*[contains(concat(" ",normalize-space(@class)," ")," mechanism-controls ") or contains(concat(" ",normalize-space(@class)," ")," mechanism-stage ") or contains(concat(" ",normalize-space(@class)," ")," mechanism-status ")]'):
+        node.drop_tree()
     for node in article.xpath('.//section[@data-experiment] | .//form | .//section[@class="model-practice"] | .//nav | .//dialog | .//*[contains(concat(" ",normalize-space(@class)," ")," reader-tools ")] | .//a[contains(concat(" ",normalize-space(@class)," ")," figure-open ")]'):
         node.drop_tree()
     # lxml parses noscript contents as elements; retain the shared static result.

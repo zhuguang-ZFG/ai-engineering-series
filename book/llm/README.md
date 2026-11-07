@@ -2,11 +2,13 @@
 
 先看一句话怎样生成，再追到向量、注意力和参数更新，最后用检索、工具与证据核验完成一份资料报告。十二课已经可以离线阅读和操作，无需账号、API 密钥或 GPU。
 
-下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录四十八张手绘图、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。当前 0.13.0 用杯中饮料、通知冲突和执行回执带出问题，每课穿插两张新手绘，再用逐步算例与反例解释原因，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。
+下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录手绘图解、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。课程用杯中饮料、通知冲突和执行回执带出问题，穿插手绘，再用逐步算例与反例解释原因，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。
 
 在项目根目录双击 [开始阅读.html](../../开始阅读.html)，即可找到网页、PDF 和 EPUB。两份电子书位于 `deliverables/`。
 
 网页支持三档正文字号、课内目录、本机续读和手绘放大。手机目录默认收起，桌面可沿小节回查；不启用脚本也能读全文、展开目录和打开原图。手机读到正文中段后，可用“本课目录”直接回查；目录标出当前小节，大图保留原图注。PDF 目录标明本轮排版的实际页码，独立公式与解释保持相邻；EPUB 在章首和各节提供返回本课目录的链接。
+
+L02 的生成循环、L04 的注意力汇总和 L05 的蒸馏更新各拆成四步手绘。先用固定条件看清变化，再到下方实验自己改参数。网页可前后步进、播放一次、暂停和重置，也能展开完整步骤；减少动态效果时仍可手动阅读。书籍保留完整静态分镜和解释，不需要播放动画才能读出结果。分镜数字来自课程教学模型，不是 DeepSeek 或 Kimi 的内部数据。
 
 书末新增六道[换材料练习](../../exports/llm/check-understanding.html)。需要写画时下载 [A4 练习 PDF](../../deliverables/llm-reading-tasks.pdf)，做完再看[核对依据与陪读记录](../../exports/llm/review-guide.html)或[陪读 PDF](../../deliverables/llm-reading-guide.pdf)。题目与参考答案分开；通知、概率和回执均为人工练习材料，真实试读尚未进行。
 
@@ -41,6 +43,8 @@
 正文使用 Markdown，构建解析器为 `marked@18.1.3`。两项依赖的许可证均为 MIT；分词快照附完整许可与 [来源说明](fixtures/NOTICE.md)。`package-lock.json` 锁定构建依赖，已生成页面无需安装这些包即可使用。
 
 `npm run check:reading:llm` 另行检查字号记忆、手动续读、目录焦点、大图关闭、存储拒绝和最大字号的窄屏布局。位置仅保存在本机，表示读到的小节，不代表掌握程度。
+
+三套分镜由 `scripts/llm/mechanism-frames.cjs` 调用既有数值函数计算，模板和静态 SVG 复用这些结果；`python scripts/llm/check_mechanisms.py` 检查播放、暂停、重置、键盘、减少动态效果、离线及禁脚本阅读。图位、数据边界和本轮证据见 [T16 分镜契约](../../specs/llm-learning-redesign/MECHANISM-STORIES.md)。
 
 浏览器检查使用 `python scripts/llm/check_browser.py`，需要 Python Playwright 和本机 Chrome。它会离线检查 375、768、1440 三档布局、实验操作、键盘、200% CSS 缩放、减少动态效果与禁脚本阅读；截图和报告存到忽略的 `tmp/llm-review/`。这不能代替真实屏幕阅读器和初学者测试。
 

@@ -53,6 +53,11 @@ jobs:
         env:
           COURSE_BROWSER_CHANNEL: chromium
 
+      - name: Check mechanism playback and static storyboards
+        run: npm run check:mechanisms:llm
+        env:
+          COURSE_BROWSER_CHANNEL: chromium
+
       - name: Set up Java for EPUBCheck
         uses: actions/setup-java@v4
         with:
