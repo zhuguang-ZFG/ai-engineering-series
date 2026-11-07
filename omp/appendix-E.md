@@ -38,9 +38,9 @@ Windows + Bun 全局时，可执行文件常见在 `%USERPROFILE%\.bun\bin\omp.e
 `omp --version` 返回 `omp/18.16.0`，退出码 0。写作钉仍是 `omp/18.15.0`；两者同时保留。
 完整矩阵见 `VERIFY.md`，维护规则见 `overhaul/PIN-POLICY.md`。升级后重跑的日期只更新到实际运行的环境。
 
-![图E-5 章末四项](images/figE-5-chapter-checklist.jpg)
+![图E-4 章末四项](images/figE-4-chapter-checklist.jpg)
 
-*图E-5：四项全勾才算写完；升级后三件事按序重做。*
+*图E-4：四项全勾才算写完；升级后三件事按序重做。*
 
 ## E.4 章末核对清单（可复制到每一章）
 
@@ -106,9 +106,9 @@ Windows + Bun 全局时，可执行文件常见在 `%USERPROFILE%\.bun\bin\omp.e
 
 用法：章节顺序不必按表走；把表当索引，读完一章回来划掉一行。表里三处「未展开」是刻意留白——它们的可靠细节需要本机二进制或对应 docs 验证，宁可不写，也不把 README 的宣传语当规范。
 
-![图E-4 三处留白](images/figE-4-uncovered.jpg)
+![图E-5 三处留白](images/figE-5-uncovered.jpg)
 
-*图E-4：21 项能力展开 18 项，三处刻意留白——按页边核对法处理。*
+*图E-5：21 项能力展开 18 项，三处刻意留白——按页边核对法处理。*
 
 ## 补充跟做：把附录用起来
 

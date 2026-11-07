@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import io
 from pathlib import Path
+import re
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -244,7 +245,7 @@ PLATE_PIXELS = (2400, 1600)
 PAPER_RGB = (251, 247, 239)
 # figures whose bitmap comes from a hand-written SVG export, not the Pillow script
 UPSTREAM_SHOTS = frozenset("""
-    fig11-4-lsp-shot fig5-3-model-selector fig6-6-ask-shot fig6-7-slash-shot
+    fig11-3-lsp-shot fig5-5-model-selector fig6-6-ask-shot fig6-7-slash-shot
 """.split())
 SVG_DERIVED = frozenset("""
     fig12-3-web-github fig17-1-model-roles fig19-2-skill-invoke fig20-2-mcp-transport
@@ -289,10 +290,46 @@ class IllustrationCoverageTests(unittest.TestCase):
         generators = set(load_illustration_script().FIGURES)
         self.assertEqual(generators - images, set(), "registered figures without a bitmap")
 
+    def test_source_scope_names_resolve_to_real_images(self):
+        """Those scope strings are printed, not inert.
+
+        backmatter renders every scope field as reg-scope text on the book's
+        own sources page, so a renamed plate leaves a filename that does not
+        exist in the shipped volume. Nothing else reads those fields, and the
+        renumber pass rewrote only markdown, so this is the cheapest place to
+        catch it.
+        """
+        stems = {path.stem for path in (REPO_ROOT / "omp" / "images").glob("*.jpg")}
+        document = (REPO_ROOT / "yuyu-book" / "sources-omp.json").read_text(encoding="utf-8")
+        tokens = re.findall(r"fig[0-9A-Z]+-\d+(?:[-a-z0-9]*)?", document)
+        unresolved = sorted({token for token in tokens
+                             if token not in stems
+                             and not any(stem.startswith(token + "-") for stem in stems)})
+        self.assertEqual(unresolved, [], "scope citations naming plates that do not exist")
+
     def test_source_sets_do_not_overlap(self):
         generators = set(load_illustration_script().FIGURES)
         self.assertEqual(generators & SVG_DERIVED, set())
         self.assertEqual(generators & UPSTREAM_SHOTS, set())
+
+    def test_plate_numbers_run_in_document_order_without_gaps(self):
+        """The i-th plate in a unit must be 图<unit>-i.
+
+        Numbers were handed out as "the next free one" while units grew, so
+        ch05 ended up with two different plates both labelled 图5-3 and 28 of
+        39 units ran out of order. Nothing failed: the JPEGs were fine, the
+        links resolved, the audits were green. A reader cannot tell a plate
+        that moved from one that was mislabelled, so pin the rule here.
+        """
+        plates = re.compile(r"!\[图(\d+|[A-Z])-(\d+) [^\]]*\]\(images/[^)]+\)")
+        offenders = []
+        for chapter in sorted((REPO_ROOT / "omp").glob("*.md")):
+            text = chapter.read_text(encoding="utf-8")
+            for index, match in enumerate(plates.finditer(text), start=1):
+                if match.group(2) != str(index):
+                    offenders.append(
+                        f"{chapter.name}: 图{match.group(1)}-{match.group(2)} is plate #{index}")
+        self.assertEqual(offenders, [], "plates numbered out of document order")
 
     def test_no_generated_plate_paints_against_its_canvas_edge(self):
         """A plate whose layout runs off the canvas is cut, not shrunk.

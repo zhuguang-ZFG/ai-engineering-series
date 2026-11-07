@@ -17,17 +17,17 @@
 
 把「本书提过但帮助没有 / 帮助有但本书未提」记进附录 E 页边，写上日期与版本字符串。
 
-![图B-2 不报错的错](images/figB-2-slash-not-shell.jpg)
+![图B-1 不报错的错](images/figB-1-slash-not-shell.jpg)
 
-*图B-2：斜杠命令在 shell 里不会报错，只会把整句当提示词送进模型。*
+*图B-1：斜杠命令在 shell 里不会报错，只会把整句当提示词送进模型。*
 
-![图B-3 查法顺序](images/figB-3-lookup-order.jpg)
+![图B-2 查法顺序](images/figB-2-lookup-order.jpg)
 
-*图B-3：先 TUI 帮助与补全，再文档，最后本机实验对比。*
+*图B-2：先 TUI 帮助与补全，再文档，最后本机实验对比。*
 
-![图B-5 六个抽屉](images/figB-5-category-drawers.jpg)
+![图B-3 六个抽屉](images/figB-3-category-drawers.jpg)
 
-*图B-5：六个抽屉各配一个章节指针，比命令清单耐用。*
+*图B-3：六个抽屉各配一个章节指针，比命令清单耐用。*
 
 ## B.2 常见类别（心智抽屉）
 
@@ -50,17 +50,17 @@
 
 一对具体对照：会话里想续聊，可敲 `/resume`；在 shell 里则写 `--continue` / `--resume`（第7章）。前者敲在输入框里，后者写在命令行上——两边不要求同名。
 
-![图B-1 同一件事两条入口](images/figB-1-slash-vs-flag.jpg)
+![图B-4 同一件事两条入口](images/figB-4-slash-vs-flag.jpg)
 
-*图B-1：会话内敲斜杠，脚本里写旗标——两边不要求同名。*
+*图B-4：会话内敲斜杠，脚本里写旗标——两边不要求同名。*
 
 ## B.4 与魔法词的区别
 
 斜杠是你下的**命令**；魔法词是提示词里触发的**行为倾向**（第18章、`docs/magic-keywords.md`）。把魔法词写成斜杠，或反过来，都会导致「怎么按了没反应」。
 
-![图B-4 斜杠与魔法词](images/figB-4-slash-vs-keyword.jpg)
+![图B-5 斜杠与魔法词](images/figB-5-slash-vs-keyword.jpg)
 
-*图B-4：斜杠是你下的命令，魔法词是提示词里的行为倾向——弄混就会「没反应」。*
+*图B-5：斜杠是你下的命令，魔法词是提示词里的行为倾向——弄混就会「没反应」。*
 
 ## B.5 跟做：建立你的一页速查
 
