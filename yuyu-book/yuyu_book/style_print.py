@@ -27,7 +27,7 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
   .front-page.cover{min-height:250mm;display:flex;align-items:stretch}
   .cover-inner{margin:0;width:100%;border:none;box-shadow:inset 0 0 0 1px var(--line-2),inset 0 0 0 5px var(--card),inset 0 0 0 5.5px var(--bronze-2),inset 0 0 0 6px var(--card);
     display:flex;flex-direction:column;justify-content:space-between}
-  .diagram-frame,.codehilite,.table-scroll,.compass-card,.route-card{
+  .diagram-frame,.codehilite,.table-scroll,.compass-card,.route-card,.illu-frame{
     box-shadow:none}
   /* the reading-paths page carries the routes, the offline note, the parts list
      and the tier legend; the legend is the one block that must not be split.
@@ -142,6 +142,9 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
      caption's flanking hairlines stay — with the box gone they are what holds
      each figure to the page. */
   .diagram-frame::before,.diagram-frame::after{display:none}
+  .illu-photo .illu-frame::after{display:none}
+  .illu-photo .illu-frame{background:none;border:0;border-radius:0;
+    padding:0;overflow:visible}
   .part-divider{background:none}
   .pd-ghost{opacity:.12}
   .cover-seal{print-color-adjust:exact;-webkit-print-color-adjust:exact}

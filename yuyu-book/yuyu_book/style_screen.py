@@ -339,6 +339,11 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
        arriving as one frozen last frame; the strokes inside still ink
        themselves. Print and reduced-motion lose the stagger and keep every
        frame drawn — the strip still reads in order, which is the point. */
+    .illu-photo .illu-frame{
+      animation:ink-plate .9s cubic-bezier(.22,.9,.3,1) both;
+      animation-timeline:view();animation-range:entry 0% entry 70%}
+    figure.illu-photo:hover .illu-frame::after{
+      animation:ink-sheen 1.1s ease-out}
     .illu-seq .frame{animation:ink-fade 1s ease-out both;
       animation-timeline:view()}
     .illu-seq .frame:nth-child(1){animation-range:cover 0% cover 26%}
@@ -423,7 +428,7 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
     .chapter-body h2,.chapter-body h3,
     .callout,.lead-band,.compass-card,.route-card,.keeper-note,.new-terms,
     .pd-title,.pd-motto,.pd-goal,.rm-head,.pd-list li,
-    .diagram-frame,.fig-cap{
+    .diagram-frame,.fig-cap,figure.illu figcaption{
       animation:ink-rise .9s cubic-bezier(.22,.9,.3,1) both;
       animation-timeline:view();
       animation-range:cover 0% cover 42%}
@@ -483,6 +488,9 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
 @keyframes ink-blink{0%,45%{opacity:1}50%,95%{opacity:.12}100%{opacity:1}}
 @keyframes ink-flutter{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
 @keyframes ink-rise{from{opacity:0;transform:translateY(12px)}}
+@keyframes ink-plate{from{opacity:.001;transform:translateY(14px) scale(.988)}}
+@keyframes ink-sheen{0%{transform:translateX(-60%);opacity:0}
+  14%{opacity:1}100%{transform:translateX(60%);opacity:0}}
 @keyframes ink-gloss{from{opacity:0;transform:translate(-50%,.5rem) scale(.9)}
   to{opacity:1;transform:translate(-50%,0) scale(1)}}
 @keyframes ink-ghost{to{transform:rotate(26deg)}}

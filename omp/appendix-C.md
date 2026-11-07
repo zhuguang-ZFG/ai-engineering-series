@@ -3,6 +3,8 @@
 <!-- block: omp-apxc.b-8a38d617 -->
 配置分散在 `config.yml`、项目 `.omp`、环境变量、`secrets.yml`、LSP 配置等处。本页给**索引心智与跟做核对**，完整键名以 `omp-src/docs` 与帮助为准，避免本书变成过期键位表。
 
+> **开门一句话：**配置键按段归类；找不到就按段名去搜，别背路径。
+
 **排障命令形状也归本页管**：正文出现的排障命令（`omp ps`、`omp usage --redact`、`omp plugin doctor` 等）都在 `omp --help` 的 COMMANDS 表里。**`omp mcp` / `omp memory` 不在表里**——那是会话内斜杠命令 `/mcp …` / `/memory …`，不能在 shell 里当子命令敲（本机 18.16.0 实测：`omp notasubcommand` 不报错而停在 `Working...`，见 `fail/bad-command.txt`）。
 
 ## C.1 先问哪一层生效
@@ -14,7 +16,13 @@
 3. 再看 `--config` 额外覆盖层；
 4. 改完用最小会话验证，不要一次改十二个键。
 
+![图C-1 先定位生效层](images/figC-1-config-stack.jpg)
+
+*图C-1：顺序搞错，改的是没人读的那份配置。*
+
 ## C.2 高频主题入口（带着文档走）
+
+查问题时先到这里拿入口，再进官方文档翻细节。
 
 | 主题 | 先读 | 本书相关 |
 |------|------|----------|
@@ -46,6 +54,10 @@ secrets:
 
 全局路径跟随活动 agent 目录，**命名 profile 与 SDK 显式 agentDir 覆盖都会改它**（文档所述）。
 
+![图C-2 secrets 的两条路径](images/figC-2-secrets-paths.jpg)
+
+*图C-2：全局路径随活动 agent 目录变化；项目级按 content 覆盖全局。*
+
 ## C.4 跟做：只读盘点
 
 口令：
@@ -56,6 +68,8 @@ secrets:
 
 ## C.5 坏习惯清单
 
+配置出错十有八九是这几条；对号入座比逐行排查快。
+
 - 把密钥写进可提交配置；
 - 在错误 profile 里改了一下午；
 - 整份复制他人配置覆盖而不看版本；
@@ -65,7 +79,13 @@ secrets:
 
 SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28章）。嵌入宿主时要明确：用发现还是用覆盖，避免「CLI 一套、嵌入另一套」的幽灵差异。
 
+![图C-3 嵌入差异](images/figC-3-embed-diff.jpg)
+
+*图C-3：嵌入时明确「发现还是覆盖」，避免 CLI 一套、程序另一套的幽灵差异。*
+
 ## C.7 可勾选
+
+过关与否自己说了不算：逐条演示一遍。
 
 - [ ] 能说出查配置的文档入口
 - [ ] 改配置有最小验证
@@ -77,6 +97,14 @@ SDK `createAgentSession` 也可传入或发现 agentDir、settings 等（第28�
 每改一个键：开临时会话（或 `--no-session` 若适用）→ 用最小提示触发该键相关行为 → 看卡片或日志是否符合预期 → 再改下一个键。把验证命令写进页边。拒绝「改完再说」的堆叠式配置。
 
 若验证失败：先回滚该键，而不是继续叠加。profile 弄乱时，新建命名配置档对比，比在废墟上修补更快。
+
+![图C-4 最小验证剧本](images/figC-4-verify-script.jpg)
+
+*图C-4：每改一个键走五步；失败先回滚该键，别堆叠。*
+
+![图C-5 只读四条](images/figC-5-readonly-probes.jpg)
+
+*图C-5：四条可跑、三条禁止真跑，会话内的斜杠命令 shell 侧只数 COMMANDS。*
 
 ## C.9 排障卡：shell 侧能跑的只读命令
 

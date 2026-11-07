@@ -171,8 +171,28 @@ figure.illu{margin:1.6rem 0;text-align:center;break-inside:avoid}
   box-shadow:0 6px 22px -12px rgba(38,34,27,.30),
     inset 0 0 0 1px rgba(255,255,255,.55)}
 .illu-frame svg{display:block;margin:0 auto;max-width:100%;height:auto}
-.illu-photo .illu-frame{padding:0;overflow:hidden}
+.illu-photo .illu-frame{padding:0;overflow:hidden;
+  box-shadow:0 10px 26px -16px rgba(38,34,27,.34),
+    inset 0 0 0 1px rgba(38,34,27,.07),
+    inset 0 1px 0 rgba(255,255,255,.7)}
 .illu-photo img{display:block;width:100%;height:auto}
+@media screen{
+  figure.illu-photo .illu-frame{
+    transition:box-shadow .3s ease,transform .3s ease}
+  figure.illu-photo:hover .illu-frame{transform:translateY(-2px);
+    box-shadow:0 18px 38px -18px rgba(38,34,27,.45),
+      inset 0 0 0 1px rgba(38,34,27,.11),
+      inset 0 1px 0 rgba(255,255,255,.85)}
+}
+.illu-photo .illu-frame::after{content:"";position:absolute;inset:-20% -40%;
+  background:linear-gradient(112deg,transparent 42%,
+    rgba(255,255,255,.42) 50%,transparent 58%);
+  transform:translateX(-60%);opacity:0;pointer-events:none}
+@media (prefers-color-scheme:dark){
+  body:not(.force-light) .illu-photo .illu-frame{
+    box-shadow:0 14px 34px -18px rgba(0,0,0,.8),
+      inset 0 0 0 1px rgba(236,226,204,.14)}
+}
 /* the frame numbers of a sequential plate: small, in the margin, so the
    drawing stays the thing you look at */
 .illu-seq .frame-no{font-family:var(--sans);font-size:9px;
@@ -197,6 +217,10 @@ figcaption::after{background:linear-gradient(90deg,var(--line-2),transparent)}
   padding:1rem;text-align:center;border-radius:var(--r-2);font-family:var(--sans)}
 .mermaid-source{text-align:start}
 img{max-width:100%;height:auto}
+@media (min-width:64rem){
+  .chapter-body figure.illu{max-width:calc(var(--measure) * 1.16);
+    margin-inline:auto}
+}
 
 /* ------- chapter notes ------- */
 .chapter-notes{margin:1.9rem 0 0;padding:.85rem 1.05rem .9rem;border:1px solid var(--line);

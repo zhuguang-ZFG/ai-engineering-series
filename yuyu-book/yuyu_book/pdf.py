@@ -344,7 +344,11 @@ def build_pdf(html_path: Path, meta: PrintManifest, browser: str | None = None,
         "creator": "yuyu-book", "producer": "yuyu-book"})
     doc.subset_fonts()                    # the running-head face ships once
     try:
-        doc.save(out, garbage=3, deflate=True)
+        # garbage=4, not 3: Chromium hands us one unreferenced copy of every
+        # plate it had to clip during layout, and only level 4 merges duplicate
+        # streams. On the 206-plate omp volume that is 6.2 MB of PDF nobody can
+        # open — bookmarks, links, fonts and text are identical either way.
+        doc.save(out, garbage=4, deflate=True)
     except Exception as exc:
         # Windows refuses to replace a PDF that is open in a viewer or held by
         # another process; the raw print file stays behind for a re-run.
