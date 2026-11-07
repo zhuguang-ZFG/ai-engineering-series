@@ -212,7 +212,13 @@ def validate(ledger: dict, texts: dict, sources: dict, *,
 
         if (verified is not None and review_days is not None
                 and status == "active"):
-            due = verified + timedelta(days=review_days)
+            try:
+                due = verified + timedelta(days=review_days)
+            except OverflowError:
+                errors.append(_diag(
+                    "error", "claim-review", cid,
+                    "verified + review_days is outside the supported date range"))
+                continue
             if today > due:
                 message = (f"review was due on {due.isoformat()} "
                            f"({(today - due).days} days ago)")
