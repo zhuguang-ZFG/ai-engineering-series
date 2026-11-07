@@ -26,7 +26,7 @@ Qwen 与 MiniLM 的公开模型元数据声明 Apache-2.0，未 gated，下载�
 
 - 微型 decoder：69,760 参数，原创新语料 192 条、按模板组隔离 train/val/test。实际 CPU 训练 80 步，train loss 2.095383、val 3.338374、test 3.598553；未来位置修改不影响前缀、重载 logits 均逐位相等。生成 `the the.` 等低质量文本如实保留，不宣称通用能力。
 - 实际全量 SFT 40 步和 LoRA 40 步均运行。LoRA 首次失败在 checkpoint 重载：已保存全限定模块名，装载只接受相对名；修正目标计划解析与 canonical 保存后，同一 adapt 命令退出 0。LoRA 6,600 可训练参数、69,760 冻结底座；没有把 bigram 或双头当作完整 decoder。
-- 助手实际推理：Qwen 0.5B 两次严格结构/引用任务失败；换成固定 revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306` 的 Qwen2.5-1.5B-Instruct 后，一般问答仍引用/结构失败，但模型确实选择 calculator 并执行 `4.2*86400=362880`，最终缺 claims 因而不通过。明确摘录任务返回了合法受引原文，但检索到的是校准条款而非指定风速，属于相关性失败；不得把 `answered` 当整题正确。真实 embedding 的中文查询在默认阈值下无命中，不能把英文探测结果泛化。
+- 助手实际推理：Qwen 0.5B 两次严格结构/引用任务失败；换成固定 revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306` 的 Qwen2.5-1.5B-Instruct 后，一般问答仍引用/结构失败，但模型确实选择 calculator 并执行 `4.2*86400=362880`，最终缺 claims 因而不通过。明确摘录任务返回了合法受引原文，但检索到的是校准条款而非指定风速，属于相关性失败；不得把 `answered` 当整题正确。真实 embedding 的中文查询在默认阈值下无命中，不能把英文探测结果泛化。冻结清单实测 4/8 通过，单变量显式契约对照未提升通过数且成本上升，按证据拒绝；数据与复现见 [assistant/BASELINE.md](../../book/llm/examples/assistant/BASELINE.md)。
 - 代码缺陷修正：反向主张引用真实原句曾误通过；现限定来源/读文工具为原文摘录、answer 只含已核验主张，正反例回归通过。calculator 曾允许 42 匹配 142，现要求精确数值，错误拒绝/正确接受均观察。语义理解、版本适用和冲突识别仍需独立评测/人工核验。
 - 本地服务：请求体曾可自报 teacher 读取 teacher-only 文档，现绑定启动 `--reader`；实际 HTTP 回归 teacher→403、student 零命中→200/insufficient-evidence、缺模型→502，坏 JSON→400。`/health` 是存活检查不是模型就绪；不提供公网身份认证。
 - 失败用量：本地 HTTP 503 复现旧 usage.calls=0/费用0；修正后相同场景 calls=1、latency>0、tokens/cost=null。修复 JSON 的扩大提示词超预算实走为 prompt-budget-exceeded，仅首次调用发生。评测汇总保持未知 token 为 null，不将其累加成0或崩溃。
