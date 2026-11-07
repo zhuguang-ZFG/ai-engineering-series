@@ -11,6 +11,7 @@
     "export:books:llm": "npm run build:llm && python scripts/llm/export_books.py",
     "check:books:llm": "python scripts/llm/check_books.py",
     "check:accessibility:llm": "python scripts/llm/check_accessibility.py",
+    "check:reading:llm": "python scripts/llm/check_reading.py",
     "test:llm": "node --test scripts/llm/*.test.js",
     "fixtures:llm": "node scripts/llm/export-token-fixtures.mjs",
     "check:fixtures:llm": "node scripts/llm/export-token-fixtures.mjs --check"

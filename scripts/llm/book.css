@@ -1,6 +1,6 @@
 /* Print and EPUB reading edition. No remote fonts or interface chrome. */
 :root { color-scheme: light; }
-body { margin: 0 auto; color: #1f2328; background: #fbfaf6; font-family: 'SimSun', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif; font-size: 1em; line-height: 1.85; overflow-wrap: anywhere; }
+body { margin: 0 auto; color: #1f2328; background: #fbfaf6; font-family: 'SimSun', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif; font-size: 1em; line-height: 1.85; overflow-wrap: anywhere; line-break: strict; }
 h1, h2, h3, .chapter-id, nav, .objective, figcaption, .caption { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; }
 h1 { font-size: 1.9em; line-height: 1.45; margin: 0 0 1em; font-weight: 600; }
 h2 { font-size: 1.3em; line-height: 1.5; margin: 1.8em 0 .7em; font-weight: 600; }
@@ -28,15 +28,26 @@ figcaption { font-size: .85em; color: #57606a; line-height: 1.65; text-align: le
 .review-document { margin: 1em 0; padding-left: 1em; border-left: 3px solid #1f883d; }
 .review-document h3 { font-size: 1em; margin: .6em 0; }
 .review-task { margin-top: 2em; }
+.book-navigation { border-top: 1px solid #e6e1d4; padding-top: 1em; margin-top: 2em; font-size: .9em; }
+#toc > ol { list-style: none; padding-left: 0; }
+#toc > ol > li { margin: 1em 0; }
+#toc ol ol { border-left: 1px solid #e6e1d4; list-style: none; padding-left: 1em; margin: .6em 0 1.2em; font-size: .9em; }
+#toc ol ol li { margin: .5em 0; }
+.toc-link { display: flex; gap: 1em; align-items: baseline; text-decoration: none; }
+.toc-label { flex: 1; }
+.toc-page { min-width: 2.5em; text-align: right; font-variant-numeric: tabular-nums; }
 table { border-collapse: collapse; width: 100%; font-size: .9em; }
-th, td { border-bottom: 1px solid #e6e1d4; padding: .5em; text-align: left; }
+th, td { border-bottom: 1px solid #e6e1d4; padding: .5em; text-align: left; vertical-align: top; }
+thead { display: table-header-group; }
 @page { size: A5; margin: 15mm 14mm 18mm; }
 @media print {
+  html, body { background: #ffffff; }
   body { max-width: none; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .article-body > p { text-align: justify; text-justify: inter-ideograph; }
   .reading-part, .chapter { break-before: page; }
   .cover { break-before: auto; }
   .cover img { height: 172mm; width: auto; max-height: none; }
-  h1, h2, h3 { break-after: avoid; }
+  h1, h2, h3, .chapter-id { break-after: avoid; }
   figure img { max-height: 108mm; max-width: 108mm; width: auto; }
   .chapter-figure { margin: 1em auto; }
   .chapter-figure img { max-height: 108mm; max-width: 104mm; }
@@ -45,10 +56,12 @@ th, td { border-bottom: 1px solid #e6e1d4; padding: .5em; text-align: left; }
   .story-figure img { max-height: 96mm; max-width: 96mm; }
   .story-opener img { max-height: 88mm; }
   #toc li { margin-bottom: .35em; line-height: 1.5; break-inside: avoid; }
+  #toc > ol > li { margin: 0 0 .35em; padding-bottom: .35em; border-bottom: 1px dotted #e6e1d4; }
   tr { break-inside: avoid; }
   pre, #L05 table, #execution table, #architecture table { break-inside: avoid; }
   .review-appendix > .review-task { break-before: page; margin-top: 0; }
   .lab, .quiz, .sources { break-inside: auto; }
+  .book-navigation { display: none; }
   a { color: #1f2328; }
 }
 @media screen {

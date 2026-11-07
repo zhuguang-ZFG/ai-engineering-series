@@ -1,8 +1,8 @@
 # 逐项验收与剩余条件
 
-核对日期：2026-11-07。基线：课程 0.10.0；[PR #1](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/1) 已合并，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42354114924) 对应提交 `cc85872052e31e6387eec6396f2f70745eca1ecb` 为绿色。本轮 [PR #2](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/2) 的 [Linux/Chromium 检查](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42366834288) 已在提交 `8885358ea5e092844e0870750af7d11453d6a5e2` 上通过。以下按 [SPEC](SPEC.md) 的要求核对交付，不把计划文字、空表或自动检查当作真实人员结果。
+核对日期：2026-11-07。当前技术交付：课程 0.12.0 / T14 阅读体验改进，本地制作与检查完成，发布与 CI 证据见 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3)。已发布基线 0.11.0 经 [PR #2](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/2) 合并为 `8d61f2c5a3cc6d1f25601d4b9bd9fdfaf5685c0b`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42371539269) 通过。以下按 [SPEC](SPEC.md) 核对交付，历史 CI 不作为新提交的结果。
 
-当前版本：0.11.0 图文改版，本地制作与技术检查完成；本轮发布结果以 [PR #2](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/2) 对应最终提交为准。十二课以具体问题带出原理，新增二十四张随文手绘，累计四十八张。完整教学验收尚未完成。用户已说明暂时没有真实读者，T05/T10 的人数与独立完成条件继续保留。独立阅读器和屏幕阅读器已进行基线运行尝试，均未取得足够的正文/朗读证据，继续待验收；具名模型实测按 SPEC 第 8 节属于可选扩展。
+0.12.0 增加课内导航、三档字号、本机续读与手绘放大，修订七处公式读法、阅读顺序或图文指向；PDF 增加实际目录页码，EPUB 增加小节导航。四十八张手绘保留。用户已说明暂时没有真实读者，T05/T10 的人数与独立完成条件继续保留。独立阅读器和屏幕阅读器的旧基线尝试未取得充分正文或朗读证据，继续待验收；具名模型实测按 SPEC 第 8 节属于可选扩展。
 
 ## 内容准确性 F1–F10
 
@@ -34,12 +34,12 @@
 | 第 8 节：离线、无账号、静态降级和操作状态 | 本地 HTML/JS/SVG、noscript、浏览器离线/键盘/200%/减少动态效果检查；逐页压缩资源低于 500 KB；本轮增加 [可访问性树与键盘检查](../../scripts/llm/check_accessibility.py) | 本轮 Chrome 实测 30 页可访问性树、4 组键盘流程通过，90 布局/22 行为回归通过，离线请求为 0；没有将可访问性树检查写成 NVDA 语音验证 |
 | 第 9 节第 1–5 项：内容、任务、布局、行为和完整检查 | 基线 `npm test`、30 组计算/状态测试、30 HTML/48 SVG/656 本地链接；视频项目检查与实际 MP4 抽帧；本轮浏览器与可访问性专项通过 | 本轮完整 npm test、30 页可访问性树/4 组键盘、90 布局/22 行为、全部48图手机字形检查通过；CI按最终提交另行核对 |
 | 第 9 节第 6 项：真实初学者完成核心任务 | 至少 6 名未参与制作的初学者；至少 5 人各自独立完成 O1–O4，另报告 O5 与未完成/退出 | **未完成**；暂时没有真实读者，不能用 agent、自测或空白表代替 |
-| 第 9.1 节：PDF/EPUB 同源、完整、可读 | [成品清单](../../deliverables/llm-explained-handdraw.json)、[EPUBCheck 报告](../../deliverables/llm-epubcheck.json)；0.11.0 为169页/200书签、EPUB 95本地链接；官方校验零错误零警告、63 个离线重排组合 | 本地书籍交付完成；独立阅读器与屏幕阅读器实机结果见下表 |
+| 第 9.1 节：PDF/EPUB 同源、完整、可读 | [成品清单](../../deliverables/llm-explained-handdraw.json)、[EPUBCheck 报告](../../deliverables/llm-epubcheck.json)；0.12.0 为171页/200书签、18项目录页码、EPUB 89小节/210本地链接；官方校验零错误零警告、84 个离线重排组合 | 本地书籍交付完成；独立阅读器与屏幕阅读器实机结果见下表 |
 | 第 9.2 节：陌生材料与空白记录 | `review/tasks.json`、`rubric.json`、reader/facilitator；六题网页、7 页练习与 10 页陪读 PDF、空白 `review-record.json` | 试读材料完成；实际记录为零，没有填造参与者或完成率 |
 | 第 11–13 节：旧章组装和数值代码同源 | 九个 `legacy-*.md`、标题契约、旧章边界/CRLF/幂等测试；双头和两步工作流的正文/表格由实际代码生成 | 已实现并核对；历史版本图数不作为当前硬编码 |
-| 发布、推送、合并与 main CI | PR #1 及本页所列 merge SHA/main CI；本轮 CI 新增 Chromium 安装及 `npm run check:accessibility:llm` | 0.10.0 pilot 已发布；本轮首个修复提交 CI 通过，0.11.0 最终提交与合并结果按 PR #2 追踪 |
+| 发布、推送、合并与 main CI | PR #1 及本页所列 merge SHA/main CI；本轮 CI 增加 `npm run check:reading:llm`，继续执行语义/键盘和官方 EPUBCheck | 0.11.0 已合并且 main CI 通过；0.12.0 本地通过，发布记录见 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3) |
 
-## T00–T13 当前结论
+## T00–T14 当前结论
 
 | 任务 | 状态 | 剩余条件 |
 | --- | --- | --- |
@@ -57,6 +57,7 @@
 | T11 本地书籍 | 本地制作与自动校验完成 | 独立阅读器/辅助阅读实机证据不由 EPUBCheck 或浏览器重排替代 |
 | T12 逐课深化与蒸馏 | 技术完成 | 简单易懂的教学效果依真实试读；不能靠自称“讲透”关闭 T05/T10 |
 | T13 图文阅读改版 | 本地技术完成 | 十二课改写、24张新图随文插入、48图与书籍检查通过；[图文验收记录](VISUAL-READING.md)，教学效果仍需真实读者 |
+| T14 阅读体验 | 本地技术完成 | 手机首屏、课内导航、字号/续读/大图及书籍导航通过实际检查；发布记录见 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3)；[详细证据](READING-EXPERIENCE.md) |
 
 ## 本轮浏览器辅助阅读检查
 
@@ -70,13 +71,13 @@
 | 工具 JSON 错误 | 无效 JSON 暴露 aria-invalid、关联错误说明，并将焦点移回输入；编辑或重置后清除旧错误状态 |
 | 检索证据链接 | 键盘激活后展开原文所在 details，并把焦点移至所引用材料，避免只移动视觉位置 |
 
-CI 已实际安装 Playwright Chromium 并通过该命令，使用 `COURSE_BROWSER_CHANNEL=chromium`；本地实测使用 Chrome。本轮最后导出后完整 `npm test`、30 页语义/4 组键盘流程及 EPUBCheck 均通过。当前成品为169页PDF、48图与流式EPUB，当前哈希见交付清单。本检查验证浏览器向辅助技术提供的语义及键盘行为，不验证实际语音输出，不构成完整 WCAG 审计，也不替代真实初学者试读。
+CI 已实际安装 Playwright Chromium 并通过该命令，使用 `COURSE_BROWSER_CHANNEL=chromium`；本地实测使用 Chrome。本轮最后导出后完整 `npm test`、30 页语义/4 组键盘流程及 EPUBCheck 均通过。当前成品为171页PDF、48图与流式EPUB，当前哈希见交付清单。本检查验证浏览器向辅助技术提供的语义及键盘行为，不验证实际语音输出，不构成完整 WCAG 审计，也不替代真实初学者试读。
 
 ## 实机兼容与可选扩展
 
 | 项目 | 当前证据范围 | 后续记录必须包含 |
 | --- | --- | --- |
-| 独立 EPUB 阅读器 | NeatReader隔离导入、SumatraPDF便携版启动已尝试，但未取得正文检查证据；[记录](READER-REVIEW.md)绑定0.10.0旧EPUB，不能沿用于0.11.0 | 阅读器名称/版本、成品 SHA、目录跳转、中文、手绘、长公式/表格、放大字号后的截图与问题；只描述实测平台 |
+| 独立 EPUB 阅读器 | NeatReader隔离导入、SumatraPDF便携版启动已尝试，但未取得正文检查证据；[记录](READER-REVIEW.md)绑定0.10.0旧EPUB，不能沿用于0.12.0 | 阅读器名称/版本、成品 SHA、目录跳转、中文、手绘、长公式/表格、放大字号后的截图与问题；只描述实测平台 |
 | 屏幕阅读器 | 已实际启动 NVDA 2026.3 便携版；隔离桌面中未取得课程朗读文本，**未通过**。具体观察和后续步骤见 [运行记录](SCREEN-READER-REVIEW.md) | 在可交互桌面保存课程限定的实际读出文本，核对名称、值、状态和焦点；Chrome 语义/键盘检查不能替代此证据 |
 | DeepSeek V4.1 Flash / Kimi K3 真实复做 | 未采集输出，SPEC 第 8 节列为可选扩展，离线主线无账号/API 前置 | 实际可选模型及版本、日期、模式、完整输入、首次输出、证据核验和追问；无可用访问时保留空白，不编造答案或内部路线 |
 
@@ -97,3 +98,14 @@ CI 已实际安装 Playwright Chromium 并通过该命令，使用 `COURSE_BROWS
 已审看[原理手绘](evidence/principles-illustrations.jpg)、[应用手绘](evidence/application-illustrations.jpg)和[实际PDF书页](evidence/reading-pages.jpg)。首轮PDF开场图被推到下一页，调整为首段问题后即接图，并缩小印刷开场图高度，最终从176页收为169页，200条书签。全量检查还验证每课登记的图片在网页与EPUB各出现一次。
 
 0.11.0源指纹：`9f7f906faca3c689a2875c8bbf06c0714eb888cbc80eb8c01e4c7fde58b453f4`。EPUB SHA-256：`31dd14d54e7a738c6a0a5957411fcb808f3af5dcee8008059a17586224c394aa`。EPUBCheck5.3.0零fatal/error/warning，95个本地链接，Chrome63个离线字号/布局组合通过。具体成品信息由[清单](../../deliverables/llm-explained-handdraw.json)维护。
+
+
+## 0.12.0 连续阅读与回查实测
+
+手机 375×900 对照中，L02/L05 的标题距页顶由 573px 变为 252px；开场首段分别由 681/639px 变为 360/318px。正文默认 18px，开场首段 19.08px，可选 20/22px。导航原生折叠，桌面保留小节目录；字号在目录前，手动继续阅读不会抢先滚动。[手机对照](evidence/reading-mobile-comparison.jpg)与[桌面实看](evidence/reading-desktop.jpg)来自最终构建。
+
+完整 `npm test` 通过：32 个计算/状态/锚点测试，30 HTML、48 SVG、728 个本地链接，书籍和四支媒体指纹一致。浏览器回归通过 90 个布局、22 组行为；阅读帮助通过 10 组实际操作和 48 种最大字号布局（十二课 × 320/375/768/1440），涵盖换字保位、跨页记忆、桌面与手机目录、续读、坏记录、拒绝存储、大图关闭与无脚本降级。30 页可访问性树与 4 组键盘流程通过；离线检查网络请求为 0。
+
+PDF 为 171 页、200 条书签；18 项主目录在一页排完，页码由实际 PDF 经两轮排版收敛并逐项核对。已实看[目录](evidence/reading-book-contents.jpg)、开场和[蒸馏/应用书页](evidence/reading-book-pages.jpg)，包括 57–59 页的数值表、KL、混合损失及梯度；短表完整，无越界文本。EPUB 包含 89 个分节入口、210 条本地链接，84 种重排组合（含 320px / 24px 字号）和 4 条实际跳转通过；EPUBCheck 5.3.0 零 fatal/error/warning。
+
+源指纹：`345ff8859fa46c89225ee92f131b2398b678cde96358feeb81397048d0a13bb0`。EPUB SHA-256：`b50a59310de96df843c34cf4e66613b233ae12139c15ac94e51543878fde55a4`。正式成品与官方检查报告均绑定此版本；技术结果不替代真实读者、独立阅读器或实际读屏验收。

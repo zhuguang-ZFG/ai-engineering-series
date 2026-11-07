@@ -48,6 +48,11 @@ jobs:
           COURSE_BROWSER_CHANNEL: chromium
         run: npm run check:accessibility:llm
 
+      - name: Check reading controls and navigation
+        run: npm run check:reading:llm
+        env:
+          COURSE_BROWSER_CHANNEL: chromium
+
       - name: Set up Java for EPUBCheck
         uses: actions/setup-java@v4
         with:

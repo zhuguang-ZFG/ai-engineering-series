@@ -10,6 +10,7 @@ import shutil
 import sys
 import zipfile
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import fitz
 from lxml import etree, html
@@ -63,10 +64,59 @@ def xhtml_document(title, body, stylesheet="book.css"):
     return etree.tostring(doc, encoding="utf-8", xml_declaration=True, pretty_print=True, doctype="<!DOCTYPE html>")
 
 
+def local_book_link(target, lessons):
+    """Keep reading links inside the book instead of silently stripping them."""
+    parsed = urlsplit(target)
+    if parsed.scheme or target.startswith(("//", "#")):
+        return target
+    targets = {lesson["slug"] + ".html": (lesson["slug"] + ".xhtml", lesson["id"]) for lesson in lessons}
+    targets.update({
+        "advanced.html": ("advanced.xhtml", "advanced"),
+        "architecture-guide.html": ("architecture.xhtml", "architecture"),
+        "applications-guide.html": ("applications.xhtml", "applications"),
+        "execution-guide.html": ("execution.xhtml", "execution"),
+        "check-understanding.html": ("review.xhtml", "review"),
+        "index.html": ("nav.xhtml", "toc"),
+    })
+    name = Path(parsed.path).name
+    if name not in targets:
+        return None
+    document, anchor = targets[name]
+    return document + "#" + (parsed.fragment or anchor)
+
+
+def chapter_sections(chapter, filename):
+    """The same authored headings drive the EPUB nav and NCX hierarchy."""
+    headings = chapter.xpath('.//*[contains(concat(" ",normalize-space(@class)," ")," article-body ")]//*[local-name()="h2" or local-name()="h3"][@id]')
+    result = []
+    current = None
+    for heading in headings:
+        if any(set(ancestor.get("class", "").split()) & {"lab", "sources", "quiz", "lesson-toc"} for ancestor in heading.iterancestors()):
+            continue
+        entry = {"title": "".join(heading.itertext()).strip(), "href": filename + "#" + heading.get("id"), "children": []}
+        if etree.QName(heading).localname == "h3" and current is not None:
+            current["children"].append(entry)
+        else:
+            result.append(entry)
+            current = entry
+    return result
+
+
+def append_navigation(parent, entries):
+    listing = append(parent, "ol")
+    for entry in entries:
+        item = append(listing, "li")
+        append(item, "a", entry["title"], href=entry["href"])
+        if entry["children"]:
+            append_navigation(item, entry["children"])
+
+
 def clean_chapter(lesson):
     page = html.fromstring((WEB / (lesson["slug"] + ".html")).read_bytes())
     article = page.xpath('//article[contains(concat(" ",normalize-space(@class)," ")," lesson ")]')[0]
-    for node in article.xpath('.//section[@data-experiment] | .//form | .//section[@class="model-practice"] | .//nav'):
+    for node in article.xpath('.//*[contains(concat(" ",normalize-space(@class)," ")," model-practice-fold ")]'):
+        node.drop_tree()
+    for node in article.xpath('.//section[@data-experiment] | .//form | .//section[@class="model-practice"] | .//nav | .//dialog | .//*[contains(concat(" ",normalize-space(@class)," ")," reader-tools ")] | .//a[contains(concat(" ",normalize-space(@class)," ")," figure-open ")]'):
         node.drop_tree()
     # lxml parses noscript contents as elements; retain the shared static result.
     for node in article.xpath('.//noscript'):
@@ -77,7 +127,7 @@ def clean_chapter(lesson):
             summary.tag = "h2" if "sources" in node.get("class", "") else "h3"
     for node in article.iter():
         for key in list(node.attrib):
-            if key == "hidden" or key.startswith("aria-") or key.startswith("data-"):
+            if key in ["hidden", "tabindex"] or key.startswith("aria-") or key.startswith("data-"):
                 del node.attrib[key]
     # The web quiz's static version has the question and correct answer.
     for quiz in article.xpath('.//section[@class="quiz"]'):
@@ -96,9 +146,13 @@ def clean_chapter(lesson):
     for para in article.xpath('.//section[contains(@class,"lab")]/p'):
         if "当前浏览器没有执行" in para.text_content():
             para.text = "先按这些步骤比较结果；网页版本提供对应的可操作实验。"
+    lessons = json_file(ROOT / "book/llm/course.json")["lessons"]
     for anchor in article.xpath('.//a[@href]'):
         target = anchor.get("href")
-        if not target.startswith(("https://", "http://", "#")):
+        converted = local_book_link(target, lessons)
+        if converted is not None:
+            anchor.set("href", converted)
+        else:
             if anchor.getparent() is not None and "sources" in anchor.getparent().get("class", ""):
                 anchor.drop_tree()
             else:
@@ -108,6 +162,13 @@ def clean_chapter(lesson):
     article.set("id", lesson["id"])
     article.set("class", "chapter")
     article.xpath('./p[@class="eyebrow"]')[0].set("class", "chapter-id")
+    navigation = append(article, "p", **{"class": "book-navigation"})
+    append(navigation, "a", "回到目录", href="nav.xhtml#toc")
+    index = next(i for i, entry in enumerate(lessons) if entry["id"] == lesson["id"])
+    if index + 1 < len(lessons):
+        following = lessons[index + 1]
+        append(navigation, "span", " · ")
+        append(navigation, "a", "下一课：" + following["shortTitle"], href=following["slug"] + ".xhtml#" + following["id"])
     return article
 
 
@@ -150,13 +211,19 @@ def clean_review(guide=False, workbook=False):
     return article
 
 
-def frontmatter(course, models, cover):
+def frontmatter(course, models, cover, chapters=None):
     cover_body = element("body", **{"class": "cover"})
     append(cover_body, "img", src="images/" + cover, alt="把大模型拆开看：十二课手绘图解")
     intro = element("body", **{"class": "reading-part"})
     append(intro, "h1", "怎么读这本小书")
     append(intro, "p", "“他端起杯子，喝了一口……”你会接什么？能把句子接顺，跟知道杯里是什么，是两回事。这本书从这样的具体问题出发：先猜一猜，沿手绘看发生了什么，再用一个小实验核对。")
-    append(intro, "p", "想先走通一次，可以读 L02、L01、L07；想认真理解，从 L01 按课号读；要交付作品，最后完成 L12，并换一份没见过的通知独立核验。")
+    route = append(intro, "p", "想先走通一次，可以按这个顺序读：")
+    for index, slug in enumerate(["generation", "tokens", "context"]):
+        lesson = next(item for item in course["lessons"] if item["slug"] == slug)
+        if index:
+            append(route, "span", " → ")
+        append(route, "a", lesson["id"] + " " + lesson["shortTitle"], href=slug + ".xhtml#" + lesson["id"])
+    append(intro, "p", "想认真理解，从 L01 按课号读；要交付作品，最后完成 L12，并换一份没见过的通知独立核验。电子书目录可以展开到每一节，纸书目录列出实际页码，遇到公式或图解时可以直接回查。")
     figure_count = len({file for lesson in course["lessons"] for file in [lesson["figure"], *lesson.get("extraFigures", [])]})
     append(intro, "p", f"这份电子书收录十二课、{figure_count} 张手绘图、纸上实验步骤、静态结果、自测与来源。网页里的按钮不会在 PDF 或 EPUB 中执行；纸上实验已保留必要输入和结果，可离线对照。")
     append(intro, "p", "人工向量、教学矩阵和预置回答都注明范围；本课程没有采集 DeepSeek V4.1 Flash 或 Kimi K3 的实测输出，也不以教学数字推断它们的内部状态。真实初学者试读与学习效果验收仍待进行。")
@@ -174,6 +241,11 @@ def frontmatter(course, models, cover):
     for lesson in course["lessons"]:
         li = append(listing, "li")
         append(li, "a", lesson["id"] + " · " + lesson["title"], href=lesson["slug"] + ".xhtml#" + lesson["id"])
+        if chapters:
+            filename = lesson["slug"] + ".xhtml"
+            sections = chapter_sections(chapters[filename][1], filename)
+            if sections:
+                append_navigation(li, sections)
     li = append(listing, "li")
     append(li, "a", "进阶回查：缓存、专家与计算成本", href="advanced.xhtml#advanced")
     li = append(listing, "li")
@@ -245,11 +317,18 @@ def epub_package(course, docs, images, css, cover_name):
     title = etree.SubElement(ncx, "{%s}docTitle" % ncx_ns)
     etree.SubElement(title, "{%s}text" % ncx_ns).text = course["title"]
     navmap = etree.SubElement(ncx, "{%s}navMap" % ncx_ns)
-    for index, (name, (title, _)) in enumerate(docs.items()):
-        point = etree.SubElement(navmap, "{%s}navPoint" % ncx_ns, id="point-" + str(index), playOrder=str(index + 1))
+    order = 0
+    def ncx_point(parent, title, target, children=()):
+        nonlocal order
+        order += 1
+        point = etree.SubElement(parent, "{%s}navPoint" % ncx_ns, id="point-" + str(order), playOrder=str(order))
         label = etree.SubElement(point, "{%s}navLabel" % ncx_ns)
         etree.SubElement(label, "{%s}text" % ncx_ns).text = title
-        etree.SubElement(point, "{%s}content" % ncx_ns, src=name)
+        etree.SubElement(point, "{%s}content" % ncx_ns, src=target)
+        for child in children:
+            ncx_point(point, child["title"], child["href"], child["children"])
+    for name, (title, body) in docs.items():
+        ncx_point(navmap, title, name, chapter_sections(body, name))
     container = b'<?xml version="1.0" encoding="utf-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>'
     target = OUT / (STEM + ".epub")
     with zipfile.ZipFile(target, "w") as archive:
@@ -279,6 +358,43 @@ def source_hash():
             digest.update(path.relative_to(ROOT).as_posix().encode())
             digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
     return digest.hexdigest()
+
+
+def print_with_page_numbers(page, title, body, path, target):
+    """Resolve the printed contents against the actual PDF, with bounded passes."""
+    entries = []
+    for link in body.xpath('.//nav[@id="toc"]/ol/li/a'):
+        destination = link.get("href").removeprefix("#")
+        section = body.xpath('//*[@id=$destination]', destination=destination)
+        assert len(section) == 1, ("Missing or duplicate contents target", destination)
+        heading = section[0].xpath('.//h1')[0]
+        entries.append({"id": destination, "label": "".join(link.itertext()), "heading": "".join(heading.itertext()).strip(), "link": link})
+        label = link.text
+        link.text = None
+        link.set("class", "toc-link")
+        append(link, "span", label, **{"class": "toc-label"})
+        append(link, "span", "000", **{"class": "toc-page"})
+    previous = None
+    for attempt in range(1, 5):
+        path.write_bytes(xhtml_document(title, etree.fromstring(etree.tostring(body))))
+        page.goto(path.as_uri())
+        page.evaluate("document.fonts.ready")
+        assert page.evaluate("[...document.images].every(i => i.complete && i.naturalWidth > 0)")
+        page.pdf(path=str(target), prefer_css_page_size=True, print_background=True, tagged=True, outline=True,
+                 display_header_footer=True, header_template="<div></div>", footer_template='<div style="width:100%;text-align:center;font-size:9px;color:#57606a;font-family:sans-serif"><span class="pageNumber"></span> / <span class="totalPages"></span></div>')
+        with fitz.open(target) as document:
+            outline = document.get_toc()
+            current = {}
+            for entry in entries:
+                matches = [number for level, text, number in outline if "".join(text.split()) == "".join(entry["heading"].split())]
+                assert len(matches) == 1, ("Ambiguous PDF heading", entry["heading"], matches)
+                current[entry["id"]] = matches[0]
+        if current == previous:
+            return current, attempt, {entry["id"]: entry["label"] for entry in entries}
+        for entry in entries:
+            entry["link"].find('span[@class="toc-page"]').text = str(current[entry["id"]])
+        previous = current
+    raise AssertionError("Printed contents page numbers did not stabilize in four passes")
 
 
 def run():
@@ -381,12 +497,7 @@ def run():
                 section.set("id", "practice")
             print_body.append(section)
         print_path = REVIEW / "reading.html"
-        print_path.write_bytes(xhtml_document(course["title"], print_body))
-        page.goto(print_path.as_uri())
-        page.evaluate("document.fonts.ready")
-        assert page.evaluate("[...document.images].every(i => i.complete && i.naturalWidth > 0)")
-        page.pdf(path=str(OUT / (STEM + ".pdf")), prefer_css_page_size=True, print_background=True, tagged=True, outline=True,
-                 display_header_footer=True, header_template="<div></div>", footer_template='<div style="width:100%;text-align:center;font-size:9px;color:#57606a;font-family:sans-serif"><span class="pageNumber"></span> / <span class="totalPages"></span></div>')
+        contents_pages, contents_passes, contents_labels = print_with_page_numbers(page, course["title"], print_body, print_path, OUT / (STEM + ".pdf"))
         (REVIEW / "review-print.css").write_bytes((ROOT / "scripts/llm/review-print.css").read_bytes())
         for guide in [False, True]:
             stem = "llm-reading-guide" if guide else "llm-reading-tasks"
@@ -408,7 +519,7 @@ def run():
                      display_header_footer=True, header_template="<div></div>", footer_template='<div style="width:100%;text-align:center;font-size:9px;color:#57606a;font-family:sans-serif"><span class="pageNumber"></span> / <span class="totalPages"></span></div>')
         assert not errors, errors
         browser.close()
-    epub_front = frontmatter(course, models, "cover.png")
+    epub_front = frontmatter(course, models, "cover.png", chapters)
     docs = {name: epub_front[name] for name in ["cover.xhtml", "intro.xhtml", "nav.xhtml"]}
     for name, (title, body) in chapters.items():
         body = etree.fromstring(etree.tostring(body))
@@ -436,11 +547,7 @@ def run():
     with zipfile.ZipFile(epub) as archive:
         archive.extractall(REVIEW / "epub")
     pdf = fitz.open(OUT / (STEM + ".pdf"))
-    chapter_pages = {}
-    for lesson in lessons:
-        hits = [i + 1 for i, p in enumerate(pdf) if lesson["id"] in p.get_text() and lesson["title"] in p.get_text()]
-        assert hits, "Missing chapter " + lesson["id"]
-        chapter_pages[lesson["id"]] = hits[-1] if len(hits) > 1 else hits[0]
+    chapter_pages = {lesson["id"]: contents_pages[lesson["id"]] for lesson in lessons}
     for number in sorted({0, 1, 2, *[value - 1 for value in chapter_pages.values()]}):
         pdf[number].get_pixmap(matrix=fitz.Matrix(1.3, 1.3)).save(REVIEW / f"pdf-page-{number + 1}.png")
     review_pdfs = {}
@@ -450,7 +557,7 @@ def run():
             for number, sheet in enumerate(supplement):
                 sheet.get_pixmap(matrix=fitz.Matrix(0.9, 0.9)).save(REVIEW / (name.replace(".pdf", f"-page-{number+1}.png")))
     assert source_hash() == source_fingerprint, "Source changed during export; rebuild the pages and books"
-    result = {"title": course["title"], "version": course["version"], "lessons": len(lessons), "figures": len(figures), "pdfPages": len(pdf), "chapterPages": chapter_pages, "reviewPdfPages": review_pdfs,
+    result = {"title": course["title"], "version": course["version"], "lessons": len(lessons), "figures": len(figures), "pdfPages": len(pdf), "chapterPages": chapter_pages, "contentsPages": contents_pages, "contentsLabels": contents_labels, "contentsPasses": contents_passes, "reviewPdfPages": review_pdfs,
               "sourceHash": source_fingerprint, "files": {name: {"bytes": (OUT / name).stat().st_size, "sha256": hashlib.sha256((OUT / name).read_bytes()).hexdigest()} for name in [STEM + ".pdf", STEM + ".epub", *review_pdfs]},
               "limitations": ["真实初学者试读待进行", "实际模型输出未采集", "EPUB 使用阅读器字体，交互改为静态步骤"]}
     (OUT / (STEM + ".json")).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

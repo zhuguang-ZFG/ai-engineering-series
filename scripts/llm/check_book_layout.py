@@ -21,12 +21,12 @@ def run():
     results = []
     network = []
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(channel="chrome", headless=True)
+        browser = playwright.chromium.launch(channel=os.environ.get("COURSE_BROWSER_CHANNEL", "chrome"), headless=True)
         context = browser.new_context(viewport={"width": 375, "height": 900}, java_script_enabled=True)
         context.set_offline(True)
         page = context.new_page()
         page.on("request", lambda request: network.append(request.url) if request.url.startswith(("http://", "https://")) else None)
-        for width, size in [(375, 16), (375, 24), (768, 16)]:
+        for width, size in [(375, 16), (375, 24), (320, 24), (768, 16)]:
             page.set_viewport_size({"width": width, "height": 900})
             for name in ["cover", "intro", "nav", *chapters, "advanced", "architecture", "applications", "execution", "practice", "review"]:
                 page.goto((REVIEW / "epub/OEBPS" / (name + ".xhtml")).as_uri())
@@ -41,11 +41,26 @@ def run():
                 results.append(f"{name}:{width}:{size}")
                 if width == 375 and size == 16 and name in ["cover", "retrieval", "tools", "project", "architecture", "applications", "execution", "review"]:
                     page.screenshot(path=str(REVIEW / f"epub-{name}-375.png"), full_page=True)
+        page.set_viewport_size({"width": 375, "height": 900})
+        page.goto((REVIEW / "epub/OEBPS/nav.xhtml").as_uri())
+        distillation = page.locator('a[href="training.xhtml#distillation"]')
+        assert distillation.count() == 1, "EPUB section index must include distillation"
+        distillation.click()
+        assert page.url.endswith("training.xhtml#distillation")
+        assert page.locator("#distillation").is_visible()
+        assert page.locator("#distillation").bounding_box()["y"] < 100, "EPUB link did not land at its section"
+        page.locator('.book-navigation a[href="nav.xhtml#toc"]').click()
+        assert page.url.endswith("nav.xhtml#toc")
+        page.goto((REVIEW / "epub/OEBPS/intro.xhtml").as_uri())
+        page.locator('a[href="generation.xhtml#L02"]').click()
+        assert page.url.endswith("generation.xhtml#L02")
+        page.locator('.book-navigation a[href="vectors.xhtml#L03"]').click()
+        assert page.url.endswith("vectors.xhtml#L03")
         assert not network, network
         browser.close()
-    report = {"status": "passed", "layouts": len(results), "checks": results, "limitation": "Extracted EPUB XHTML checked in Chrome, including 150% root font size; dedicated e-reader compatibility remains untested."}
+    report = {"status": "passed", "layouts": len(results), "checks": results, "navigation": ["section index to distillation", "chapter to contents", "quick route to generation", "next chapter"], "limitation": "Extracted EPUB XHTML checked in Chrome, including 150% root font size at 320px; dedicated e-reader compatibility remains untested."}
     (REVIEW / "epub-layout-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"status": "passed", "epubXhtmlLayouts": len(results), "offlineRequests": len(network)}))
+    print(json.dumps({"status": "passed", "epubXhtmlLayouts": len(results), "navigationFlows": 4, "offlineRequests": len(network)}))
 
 
 if __name__ == "__main__":

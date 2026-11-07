@@ -1,11 +1,11 @@
 # 实现与验收记录
 
-日期：2026-11-07。范围：L01–L12、本地 PDF/EPUB、六道陌生材料练习与九个旧章修订。当前版本 0.10.0 补十二课深入解释、蒸馏实验与七张机制图；0.9.0 补多模态/嵌入/协议、手绘讲义/卡片和视频同步；0.8.0 补 Transformer 完整回查、结构附录与可运行的投影双头计算；更早批次补上下文/Agent、提示词/RAG、原理回查及独立 A4 试读材料。最新技术检查见末节，历史结果保留版本范围；真实初学者试读待进行。
+日期：2026-11-07。范围：L01–L12、本地 PDF/EPUB、六道陌生材料练习与九个旧章修订。当前版本 0.12.0 优化连续阅读与书籍导航，0.11.0 增加二十四张随文手绘；0.10.0 补十二课深入解释、蒸馏实验与七张机制图；0.9.0 补多模态/嵌入/协议、手绘讲义/卡片和视频同步；0.8.0 补 Transformer 完整回查、结构附录与可运行的投影双头计算；更早批次补上下文/Agent、提示词/RAG、原理回查及独立 A4 试读材料。最新技术检查见末节，历史结果保留版本范围；真实初学者试读待进行。
 
 ## 可以打开什么
 
 - [十二课学习路线](../../exports/llm/index.html)，保留 L01/L02/L07 的三步起步路径。
-- [本地 PDF](../../deliverables/llm-explained-handdraw.pdf) · [EPUB](../../deliverables/llm-explained-handdraw.epub)：十二课、二十四张手绘图、纸上实验、自测答案和来源。
+- [本地 PDF](../../deliverables/llm-explained-handdraw.pdf) · [EPUB](../../deliverables/llm-explained-handdraw.epub)：十二课、四十八张手绘图、纸上实验、自测答案和来源。
 - [蒸馏讲解与实验](../../exports/llm/training.html#distillation) · [逐课知识点核对](KNOWLEDGE-MAP.md)：从数值更新追到文本示范、独立评测和实际应用。
 - [上下文回查](../../exports/llm/context-reference.html) · [Agent 回查](../../exports/llm/agent-reference.html) · [系统精选](../../exports/llm/execution-guide.html)：保存与提供、请求与执行、缓存与预算、停止与回执。
 - [Transformer 回查](../../exports/llm/transformer-reference.html) · [结构精选](../../exports/llm/architecture-guide.html)：掩码与目标、各头投影/汇总/拼接、输出矩阵、归一化顺序与架构路线。
@@ -198,3 +198,14 @@ PDF 实际抽看 L03/L05 的图、公式、蒸馏表和来源页，并复核最�
 课程mediaVersion保留0.10.0：本轮修改课文与图解，没有改变两支已审查专题片使用的教学数据和画面。生成器按独立媒体版本复现，四支影片的源码/成品哈希检查通过；不是把未渲染的新源码重新登记为旧成片。
 
 独立阅读器与NVDA基线尝试没有取得完整正文/朗读证据，保持待验收。真实读者暂缺，T05/T10继续保留原标准。图更多、技术检查通过，不作为学习效果证明。图文证据和剩余条件见VISUAL-READING.md与ACCEPTANCE.md。
+
+
+## 连续阅读与回查 · 0.12.0 / T14
+
+阅读导航改为紧凑目录：手机收起、桌面展开本课小节。正文宽度上限 688px、默认 18px / 1.9 行高，另有 20/22px 字号；本机记住字号与读到的小节，恢复由读者主动点击。字号调整保留当前段落位置；存储不可用仍可阅读。正文标题生成稳定锚点，原 `#distillation` 保留；大图能滚动查看、适合窗口及 Escape 关闭并回到入口。无脚本时仍有目录、原图链接、静态实验和答案。
+
+七处局部编辑补齐 exp、ln、余弦、转置/维度、KL 和偏导的读法，基础梯度先于蒸馏；L07 原通知与问题相邻，纠正两处上下文图位指向。保留原公式、数值、来源和 48 图。PDF 使用白纸底、实际目录页码；EPUB 加入小节层级导航、回目录/下一课及跨课链接。
+
+最终全量检查通过：32 测试，30 HTML、48 SVG、728 本地链接，90 浏览器布局/22 行为，30 页语义/4 键盘流程，阅读 10 行为/48 最大字号布局。PDF 171 页/200 书签，18 项目录页码两轮收敛；EPUB 89 小节/210 本地链接、84 重排组合/4 跳转流程，官方 EPUBCheck 零错误零警告。四支媒体源码/成片哈希检查继续通过，mediaVersion 保持 0.10.0。
+
+375px 实际截图中课名由页顶 573px 提前到 252px；L02 首段由 681px 提前到 360px。已审看最终手机/桌面、目录、章节开场、蒸馏 57–59 页及应用图文。证据见 [READING-EXPERIENCE](READING-EXPERIENCE.md) 与 [ACCEPTANCE](ACCEPTANCE.md)。源指纹 `345ff8859fa46c89225ee92f131b2398b678cde96358feeb81397048d0a13bb0`；EPUB SHA `b50a59310de96df843c34cf4e66613b233ae12139c15ac94e51543878fde55a4`。发布与 CI 证据见 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3)；真实试读条件不变。

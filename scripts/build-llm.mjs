@@ -10,6 +10,7 @@ import { legacyApplications } from "./llm/legacy-applications.mjs";
 import { legacyTransformer } from "./llm/legacy-transformer.mjs";
 import { legacyReferences } from "./llm/legacy-references.mjs";
 import { distillationExperiment } from "./llm/distillation-templates.mjs";
+import { renderReading, readingContents } from "./llm/reading-outline.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const checking = process.argv.includes("--check");
@@ -54,10 +55,10 @@ function page(title, body, data = null) {
   const encoded = data ? JSON.stringify(data).replaceAll("<", "\\u003c").replaceAll("\u2028", "\\u2028").replaceAll("\u2029", "\\u2029") : null;
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="${h(course.description)}"><title>${h(title)} · ${h(course.title)}</title><link rel="stylesheet" href="lab.css"></head>
-<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">${h(course.title)}</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
-${body}<footer>已开放 ${ready.length} 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
-${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>${data.lesson.id === "L05" ? '<script src="distillation.js"></script><script src="distillation-client.js"></script>' : ""}` : ""}</body></html>\n`;
+<meta name="description" content="${h(course.description)}"><title>${h(title)} · ${h(course.title)}</title><link rel="stylesheet" href="lab.css">${data?.lesson ? '<link rel="stylesheet" href="reader.css">' : ""}</head>
+<body${data?.lesson ? ` data-reading-lesson="${h(data.lesson.id)}" data-reading-title="${h(data.lesson.title)}" data-reading-version="${h(course.version)}"` : ""}><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">${h(course.title)}</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
+${body}<footer>十二课 · 可离线阅读与操作 · 试读版<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">验收记录</a></footer>
+${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>${data.lesson.id === "L05" ? '<script src="distillation.js"></script><script src="distillation-client.js"></script>' : ""}<script src="reader.js"></script>` : ""}</body></html>\n`;
 }
 
 function staticExperiment(lesson, fixture) {
@@ -103,12 +104,14 @@ function experiment(lesson, fixture) {
 }
 
 function quiz(lesson) {
-  return `<section class="quiz"><h2>用自己的判断过一关</h2><form id="quiz-form" hidden><fieldset><legend>${h(lesson.question)}</legend>${lesson.options.map((option, i) => `<label><input type="radio" name="answer" value="${i}" required>${h(option)}</label>`).join("")}</fieldset><button class="primary" type="submit">检查答案</button><p class="explanation" id="quiz-feedback" role="status"></p></form>
+  return `<section class="quiz"><h2 id="self-check" tabindex="-1">用自己的判断过一关</h2><form id="quiz-form" hidden><fieldset><legend>${h(lesson.question)}</legend>${lesson.options.map((option, i) => `<label><input type="radio" name="answer" value="${i}" required>${h(option)}</label>`).join("")}</fieldset><button class="primary" type="submit">检查答案</button><p class="explanation" id="quiz-feedback" role="status"></p></form>
 <noscript><p>${h(lesson.question)}</p><details><summary>看答案与解释</summary><p>${h(lesson.options[lesson.correct])}</p><p>${h(lesson.feedback)}</p></details></noscript></section>`;
 }
 
 if (!checking) mkdirSync(out, { recursive: true });
 write("lab.css", readFileSync(join(root, "scripts/llm/styles.css"), "utf8"));
+write("reader.css", readFileSync(join(root, "scripts/llm/reader.css"), "utf8"));
+write("reader.js", readFileSync(join(root, "scripts/llm/reader.js"), "utf8"));
 write("core.js", readFileSync(join(root, "scripts/llm/core.cjs"), "utf8"));
 write("client.js", readFileSync(join(root, "scripts/llm/client.js"), "utf8"));
 write("distillation.js", readFileSync(join(root, "scripts/llm/distillation.cjs"), "utf8"));
@@ -154,7 +157,7 @@ const image = (lesson, file = lesson.figure) => {
   if (!figure) throw new Error(`Missing figure metadata: ${file}`);
   const svg = readFileSync(join(root, "book/assets/handdraw/llm", file), "utf8");
   const [, width, height] = svg.match(/viewBox="0 0 (\d+) (\d+)"/);
-  return `<figure class="concept-figure${figure.layout ? " story-figure" : ""}${file === lesson.openerFigure ? " story-opener" : ""}" id="figure-${h(figure.id)}"><img src="../../book/assets/handdraw/llm/${file}" width="${width}" height="${height}" alt="${h(figure.alt)}"><figcaption><span class="figure-number">${h(figure.id)}</span> ${h(figure.purpose)} ${h(figure.limitations)}</figcaption></figure>`;
+  return `<figure class="concept-figure${figure.layout ? " story-figure" : ""}${file === lesson.openerFigure ? " story-opener" : ""}" id="figure-${h(figure.id)}"><img src="../../book/assets/handdraw/llm/${file}" width="${width}" height="${height}" alt="${h(figure.alt)}"><figcaption><span class="figure-number">${h(figure.id)}</span> ${h(figure.purpose)} ${h(figure.limitations)} <a class="figure-open" href="../../book/assets/handdraw/llm/${file}" aria-label="放大：${h(figure.purpose)}">看大图</a></figcaption></figure>`;
 };
 const modelPractice = () => `<section class="model-practice"><h2>在实际模型里复做</h2><p>使用同一份通知，分别试 ${models.models.map(model => h(model.name)).join(" 和 ")}，检查是否保留缺失项、每句依据是否正确。</p><pre>${h(models.task)}</pre><details><summary>模型入口、版本与记录方法</summary>${models.models.map(model => `<p><a href="${h(model.url)}">${h(model.name)} 官方资料</a><br>${h(model.note)}</p>`).join("")}<p>每次记录：${models.recordFields.map(h).join("、")}。一次回答不用于排名或准确率比较。</p><p class="caption">官方资料核验日期：${h(models.checkedOn)}。${h(models.limitations)}</p></details></section>`;
 const route = (lessons) => `<div class="route">${lessons.map(lesson => `<a class="route-item" href="${lesson.slug}.html"><span class="route-id">${h(lesson.id)}</span><div><h3>${h(lesson.title)}</h3><p>${h(lesson.summary)}</p></div><span class="arrow" aria-hidden="true">↗</span></a>`).join("")}</div>`;
@@ -184,13 +187,15 @@ for (const [index, lesson] of ready.entries()) {
   });
   if (/<!--\s*figure:/.test(illustratedMarkdown)) throw new Error(`${lesson.id}: invalid figure anchor`);
   if (lesson.openerFigure && !placedFigures.has(lesson.openerFigure)) throw new Error(`${lesson.id}: missing opening illustration`);
-  const body = marked.parse(illustratedMarkdown).replace("<!-- experiment -->", image(lesson) + experiment(lesson, fixture)).replace("<!-- distillation-figure -->", lesson.id === "L05" ? image(lesson, "distillation-flow.svg") : "").replace("<!-- distillation -->", lesson.id === "L05" ? distillationExperiment(distillation, h) : "").replace("<!-- depth-figure -->", lesson.depthFigure ? image(lesson, lesson.depthFigure) : "").replace("<h2>蒸馏：", '<h2 id="distillation">蒸馏：');
+  const reading = renderReading(illustratedMarkdown, lesson.id);
+  const body = reading.html.replace("<!-- experiment -->", image(lesson) + experiment(lesson, fixture)).replace("<!-- distillation-figure -->", lesson.id === "L05" ? image(lesson, "distillation-flow.svg") : "").replace("<!-- distillation -->", lesson.id === "L05" ? distillationExperiment(distillation, h) : "").replace("<!-- depth-figure -->", lesson.depthFigure ? image(lesson, lesson.depthFigure) : "").replace('id="experiment-title"', 'id="experiment-title" tabindex="-1"');
+  const contents = readingContents(reading.outline);
   const references = lesson.sources.map((id) => {
     const entry = sources.find((item) => item.id === id);
     if (!entry) throw new Error(`Unknown source ${id}`);
     return `<li>${entry.url ? `<a href="${h(entry.url)}">${h(entry.title)}</a>` : h(entry.title)}<p>${h(entry.scope)} ${h(entry.method)}</p></li>`;
   }).join("");
-  write(`${lesson.slug}.html`, page(lesson.title, `<main class="shell lesson-layout" id="main"><nav class="sidebar" aria-label="试读课程"><p class="eyebrow">已开放 ${ready.length} 课</p><ol>${ready.map((entry) => `<li><a href="${entry.slug}.html" ${entry.id === lesson.id ? 'aria-current="page"' : ""}>${h(entry.id)} · ${h(entry.shortTitle)}</a></li>`).join("")}</ol><p class="caption">每课都可以单独阅读。先观察，再动手，最后用自测检查理解。</p><a href="index.html">查看学习路线</a></nav>
-<article class="lesson"><p class="eyebrow">${h(lesson.id)} · ${h(lesson.shortTitle)}</p><div class="article-body">${body}</div>${(lesson.extraFigures ?? []).filter(file => file !== "distillation-flow.svg" && file !== lesson.depthFigure && !placedFigures.has(file)).map(file => `<details class="deeper-figure"><summary>${h(file === "transformer-block.svg" ? "深入图：注意力之外还有什么？" : file === "multihead-flow.svg" ? "深入图：两个头怎样汇合？" : file === "context-selection.svg" ? "深入图：外部保存与本次输入" : figures.find(entry => entry.file === file).purpose)}</summary>${image(lesson, file)}</details>`).join("")}${quiz(lesson)}${modelPractice()}<details class="sources"><summary>学习目标、来源与演示边界</summary><p>${h(lesson.objective)}</p><ul>${references}</ul><p>实际模型案例：<a href="${h(models.models[0].url)}">DeepSeek 官方资料</a> · <a href="${h(models.models[1].url)}">Kimi K3 官方资料</a>（${h(models.checkedOn)} 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航"><a href="index.html">返回学习路线</a>${ready[index + 1] ? `<a href="${ready[index + 1].slug}.html">下一步：${h(ready[index + 1].title)}</a>` : '<a href="../../book/book.md">继续看编程实战</a>'}</nav></article></main>`, { lesson, fixture, ...(lesson.id === "L05" ? { distillation } : {}) }));
+  write(`${lesson.slug}.html`, page(lesson.title, `<main class="shell lesson-layout" id="main"><aside class="sidebar" aria-label="阅读导航"><div class="reader-tools" hidden><label for="reader-size">正文字号<select id="reader-size"><option value="18">标准</option><option value="20">较大</option><option value="22">最大</option></select></label><a id="reader-resume" hidden>继续上次阅读</a></div><details class="course-menu"><summary>全部十二课</summary><nav aria-label="课程目录"><ol>${ready.map((entry) => `<li><a href="${entry.slug}.html" ${entry.id === lesson.id ? 'aria-current="page"' : ""}>${h(entry.id)} · ${h(entry.shortTitle)}</a></li>`).join("")}</ol><a href="index.html">查看学习路线</a></nav></details><details class="section-menu"><summary>本课目录</summary>${contents}</details></aside>
+<article class="lesson"><p class="eyebrow">${h(lesson.id)} / ${ready.length} · ${h(lesson.shortTitle)}</p><div class="article-body">${body}</div>${(lesson.extraFigures ?? []).filter(file => file !== "distillation-flow.svg" && file !== lesson.depthFigure && !placedFigures.has(file)).map(file => `<details class="deeper-figure"><summary>${h(file === "transformer-block.svg" ? "深入图：注意力之外还有什么？" : file === "multihead-flow.svg" ? "深入图：两个头怎样汇合？" : file === "context-selection.svg" ? "深入图：外部保存与本次输入" : figures.find(entry => entry.file === file).purpose)}</summary>${image(lesson, file)}</details>`).join("")}${quiz(lesson)}<details class="model-practice-fold"><summary>换到实际模型再试一次</summary>${modelPractice()}</details><details class="sources"><summary>学习目标、来源与演示边界</summary><p>${h(lesson.objective)}</p><ul>${references}</ul><p>实际模型案例：<a href="${h(models.models[0].url)}">DeepSeek 官方资料</a> · <a href="${h(models.models[1].url)}">Kimi K3 官方资料</a>（${h(models.checkedOn)} 核验）。</p><a href="../../book/llm/sources.json">查看来源和纠错台账</a></details><nav class="lesson-nav" aria-label="课后导航">${ready[index - 1] ? `<a rel="prev" href="${ready[index - 1].slug}.html">上一课：${h(ready[index - 1].shortTitle)}</a>` : '<a href="index.html">返回学习路线</a>'}${ready[index + 1] ? `<a rel="next" href="${ready[index + 1].slug}.html">下一课：${h(ready[index + 1].shortTitle)}</a>` : '<a href="check-understanding.html">换一份材料，独立试试</a>'}</nav></article></main>`, { lesson, fixture, ...(lesson.id === "L05" ? { distillation } : {}) }));
 }
 console.log(`${checking ? "Verified" : "Built"} ${ready.length} lessons and learning route (offline scripts + pinned fixtures)`);

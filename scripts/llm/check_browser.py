@@ -321,6 +321,7 @@ def run():
         page.locator(".lab").screenshot(path=str(OUTPUT / "assistant-mobile.png"))
         page.locator("#reset-assistant").click()
         assert page.locator('[name="assistant-answer"]:checked').count() == 0
+        page.locator(".model-practice-fold > summary").click()
         page.locator(".model-practice summary").click()
         assert "DeepSeek-V4.1-Flash-1017" in page.locator(".model-practice").inner_text()
         assert "Kimi K3" in page.locator(".model-practice").inner_text()

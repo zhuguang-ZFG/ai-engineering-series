@@ -8,6 +8,8 @@
 
 大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含四十八张手绘图、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
 
+新版网页提供课内目录、三档字号、本机续读和手绘放大；手机打开即可接着读。PDF 目录有实际页码，EPUB 可以直接跳进小节。
+
 ## 内容
 
 | 内容 | 文件 |
@@ -65,6 +67,8 @@ npm test
 ```
 
 `npm run check:accessibility:llm` 在本机 Chrome 中逐页核对可访问性树和键盘操作，检查跳到正文、训练暂停、蒸馏滑块、工具错误与证据回查的焦点。CI 使用 Playwright Chromium 运行同一检查。语义与键盘检查的范围不等同于屏幕阅读器听感或真实读者测试，逐项验收证据见 [ACCEPTANCE.md](specs/llm-learning-redesign/ACCEPTANCE.md)。
+
+`npm run check:reading:llm` 检查字号、续读、课内导航、大图操作和窄屏布局；包括离线、存储拒绝和禁脚本情况下的阅读。
 
 修改课程内容后运行 `npm run build:llm` 重新生成网页。`npm test` 同时检查本地实验、真实编码快照、网页是否与源文件一致，以及原有书籍和视频交付物。
 

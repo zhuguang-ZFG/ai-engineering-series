@@ -68,13 +68,23 @@ button:hover:not(:disabled), .button:hover { background: var(--marker); color: v
 .upcoming { margin-top: 48px; border-top: 1px solid var(--rule); padding-top: 24px; }
 .upcoming ul { columns: 2; padding-left: 24px; color: var(--ink-soft); }
 .upcoming li { break-inside: avoid; padding-bottom: 8px; }
-.lesson-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 64px; align-items: start; }
-.sidebar { position: sticky; top: 24px; }
-.sidebar ol { padding: 0; list-style: none; margin: 12px 0 24px; }
-.sidebar a { display: block; padding: 12px 12px; text-decoration: none; color: var(--ink-soft); border-left: 3px solid transparent; }
+.lesson-layout { display: grid; grid-template-columns: 232px minmax(0, 688px); gap: 64px; align-items: start; max-width: 1120px; }
+.sidebar { position: sticky; top: 24px; max-height: calc(100dvh - 48px); overflow-y: auto; padding: 0 12px 12px 0; scrollbar-width: thin; }
+.sidebar details { border-bottom: 1px solid var(--rule); padding: 8px 0; }
+.sidebar summary { cursor: pointer; min-height: 44px; padding: 8px 4px; font-size: 16px; }
+.sidebar ol { padding: 0; list-style: none; margin: 8px 0 16px; }
+.sidebar a { display: block; padding: 8px 12px; text-decoration: none; color: var(--ink-soft); border-left: 3px solid transparent; font-size: 15px; line-height: 1.6; }
 .sidebar a[aria-current] { border-color: var(--accent); background: var(--marker-wash); color: var(--ink); }
-.lesson { min-width: 0; max-width: 832px; }
+.sidebar .toc-level-3 a { padding-left: 24px; }
+.lesson { min-width: 0; max-width: 688px; font-size: var(--reading-size, 18px); line-height: 1.9; }
 .lesson h1 { font-size: clamp(30px, 3.2vw, 44px); max-width: 19em; }
+.lesson h2 { margin-top: 48px; }
+.lesson h2, .lesson h3 { scroll-margin-top: 24px; }
+.lesson .article-body > p { margin-bottom: 24px; }
+.lesson .article-body > h1 + p { font-size: 1.06em; line-height: 1.9; }
+.lesson .article-body > table { border-collapse: collapse; width: 100%; font-size: .92em; margin: 24px 0 32px; }
+.lesson .article-body > table th, .lesson .article-body > table td { border-bottom: 1px solid var(--rule); padding: 12px 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.lesson .article-body > table th { font-weight: 500; background: var(--marker-wash); }
 .objective { border-left: 4px solid var(--accent); padding-left: 20px; color: var(--ink-soft); margin: 0 0 32px; }
 .article-body > p, .article-body > ul, .article-body > ol { max-width: 39em; }
 .article-body ul { padding-left: 24px; }
@@ -123,7 +133,7 @@ input[type=checkbox], input[type=radio] { width: 18px; height: 18px; margin: 0 8
 .claim .missing, .claim .conflict, .claim .unsupported { color: var(--persimmon-ink); }
 .evidence { font-size: 15px; color: var(--ink-soft); }
 .evidence a { margin-right: 8px; }
-.concept-figure { margin: 36px 0; max-width: 480px; }
+.concept-figure { margin: 36px auto; max-width: 480px; }
 .concept-figure img { width: 100%; height: auto; display: block; }
 .concept-figure figcaption { margin-top: 12px; font-size: 15px; color: var(--ink-soft); }
 .story-figure { margin: 32px auto 44px; }
@@ -162,6 +172,9 @@ footer { max-width: 1256px; margin: auto; padding: 24px 32px 40px; font-size: 14
 .model-practice pre { font-size: 16px; }
 .model-practice details { font-size: 16px; }
 .model-practice details p { margin-top: 16px; }
+.model-practice-fold { border-top: 1px solid var(--rule); padding: 20px 0; margin-top: 24px; }
+.model-practice-fold > summary { cursor: pointer; min-height: 44px; padding: 8px 0; }
+.model-practice-fold .model-practice { margin: 12px 0; border: 0; }
 .deeper-figure { padding-top: 20px; border-top: 1px solid var(--rule); }
 .lab input[type=text], .lab textarea { width: 100%; max-width: 100%; padding: 12px; border: 1px solid var(--ink-soft); border-radius: 6px; background: var(--paper); color: var(--ink); font: inherit; }
 .lab textarea { font-family: var(--font-mono); font-size: 16px; line-height: 1.7; margin: 8px 0; resize: vertical; }
@@ -171,16 +184,19 @@ footer { max-width: 1256px; margin: auto; padding: 24px 32px 40px; font-size: 14
 .downloads { border-top: 2px solid var(--ink); margin: 40px 0; padding: 8px 0 24px; }
 @media (max-width: 960px) {
   .lesson-layout { grid-template-columns: 1fr; gap: 24px; }
-  .sidebar { position: static; border-bottom: 1px solid var(--rule); }
-  .sidebar ol { display: flex; flex-wrap: wrap; gap: 8px; }
-  .sidebar a { border-left: 0; border-bottom: 3px solid transparent; padding: 8px; }
-  .sidebar a[aria-current] { border-color: var(--accent); }
+  .lesson-layout { max-width: 752px; }
+  .sidebar { position: static; max-height: none; overflow: visible; padding: 0; display: flex; flex-wrap: wrap; align-items: start; gap: 8px 24px; border-bottom: 1px solid var(--rule); }
+  .sidebar details { border: 0; padding: 0; }
+  .sidebar details[open] { flex-basis: 100%; }
+  .sidebar ol { display: block; }
+  .sidebar a { padding: 8px 12px; }
   .sidebar .caption { display: none; }
 }
 @media (max-width: 640px) {
   .topbar { padding: 16px 24px; font-size: 15px; gap: 12px; }
   .topbar span { display: none; }
   .shell { padding: 28px 24px 48px; }
+  .lesson-layout { padding-top: 16px; gap: 24px; }
   .hero { display: block; padding: 8px 0 32px; }
   .hero h1 { font-size: 40px; }
   .hero .intro { font-size: 18px; }
@@ -195,7 +211,6 @@ footer { max-width: 1256px; margin: auto; padding: 24px 32px 40px; font-size: 14
   .sentence { font-size: 21px; padding: 16px 8px; }
   .actions { gap: 12px; }
   .actions button { flex: 1 1 auto; }
-  .sidebar ol { gap: 4px; }
   .sidebar a { font-size: 15px; }
   .readings > div { grid-template-columns: 1fr; gap: 4px; }
   footer { padding: 24px; }

@@ -118,5 +118,5 @@ PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
 <p>Transformer 提供了一个由注意力、前馈层、残差、归一化和位置处理组成的可堆叠架构。原始论文是编码器—解码器；现代语言模型常取 decoder-only 路线。读者先分清架构、训练和推理，再用 Q/K/V、掩码和多头小矩阵追踪一次计算，最后按具体模型资料判断窗口、模态、工具和性能。</p>
 <p>想看单头因果注意力，先做 <a href="attention.html">L04 实验</a>；想看多头投影、拼接和输出投影，运行仓库根目录的 <code>node book/llm/examples/multihead.mjs</code>。这两个练习都使用人工矩阵，不读取 DeepSeek V4.1 Flash 或 Kimi K3 的内部状态。</p>
 <p>来源与范围：<a href="https://arxiv.org/html/1706.03762v7">原始 Transformer 论文 3.1–3.5</a>、<a href="https://arxiv.org/abs/2104.09864">RoFormer 摘要</a>、<a href="https://arxiv.org/abs/2205.14135">FlashAttention 摘要</a>、<a href="https://arxiv.org/abs/2303.08774">GPT-4 技术报告第 2 节</a>。窗口、架构和工具支持以具体版本的公开资料为准；本章不提供这两款实际模型的内部结构结论或跑分。</p>
-</article><nav class="lesson-nav"><a href="index.html">返回十二课</a><a href="architecture-guide.html">结构回查精选</a></nav></main><footer>已开放 12 课 · 本地可操作 · 十二课已开放。真实初学者试读尚待进行。<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/SPEC.md">课程规格</a></footer>
+</article><nav class="lesson-nav"><a href="index.html">返回十二课</a><a href="architecture-guide.html">结构回查精选</a></nav></main><footer>十二课 · 可离线阅读与操作 · 试读版<br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">验收记录</a></footer>
 </body></html>

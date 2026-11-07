@@ -33,6 +33,22 @@ def check():
     pdf = fitz.open(OUT / (STEM + ".pdf"))
     assert len(pdf) == metadata["pdfPages"] and len(pdf) >= 15
     assert len(pdf.get_toc()) >= 12, "PDF outline missing"
+    assert 2 <= metadata["contentsPasses"] <= 4, "PDF contents were not verified after filling page numbers"
+    assert len(metadata["contentsPages"]) == len(course["lessons"]) + 6
+    toc_pages = [page for page in pdf if "十二课目录" in page.get_text()]
+    assert len(toc_pages) == 1, "Printed contents missing or ambiguous"
+    toc_index = toc_pages[0].number
+    first_chapter = min(metadata["chapterPages"].values()) - 1
+    assert first_chapter == toc_index + 1, "Printed contents must fit on one A5 page"
+    toc_text = "".join(pdf[i].get_text() for i in range(toc_index, first_chapter))
+    compact_contents = "".join(toc_text.split())
+    for target, number in metadata["contentsPages"].items():
+        label = "".join(metadata["contentsLabels"][target].split())
+        assert label + str(number) in compact_contents, ("Wrong printed contents page", target, number)
+    for lesson in course["lessons"]:
+        number = metadata["chapterPages"][lesson["id"]]
+        assert metadata["contentsPages"][lesson["id"]] == number
+        assert any(text == lesson["title"] and page_number == number for _, text, page_number in pdf.get_toc()), lesson["id"]
     all_text = "\n".join(page.get_text() for page in pdf)
     for lesson in course["lessons"]:
         assert lesson["title"] in all_text, "PDF missing chapter " + lesson["id"]
@@ -88,8 +104,23 @@ def check():
         assert len(opf.xpath('//o:item[@properties="cover-image"]', namespaces=ns)) == 1
         nav = trees["OEBPS/nav.xhtml"]
         assert len(nav.xpath('//h:nav[@e:type="toc"]/h:ol/h:li', namespaces=ns)) == len(course["lessons"]) + 6
+        ncx_namespace = {"n": "http://www.daisy.org/z3986/2005/ncx/"}
+        ncx = trees["OEBPS/toc.ncx"]
+        points = ncx.xpath("//n:navPoint", namespaces=ncx_namespace)
+        assert [int(point.get("playOrder")) for point in points] == list(range(1, len(points) + 1)), "NCX reading order differs from document order"
+        ncx_targets = ncx.xpath("//n:content/@src", namespaces=ncx_namespace)
+        subheadings = 0
         for lesson in course["lessons"]:
             chapter = trees["OEBPS/" + lesson["slug"] + ".xhtml"]
+            headings = chapter.xpath('//h:div[@class="article-body"]//h:h2[@id] | //h:div[@class="article-body"]//h:h3[@id]', namespaces=ns)
+            headings = [heading for heading in headings if not any(set(parent.get("class", "").split()) & {"lab", "sources", "quiz", "lesson-toc"} for parent in heading.iterancestors())]
+            assert headings, (lesson["id"], "Missing authored subheadings")
+            expected_sections = [lesson["slug"] + ".xhtml#" + heading.get("id") for heading in headings]
+            link = nav.xpath('//h:nav/h:ol/h:li/h:a[@href=$href]', namespaces=ns, href=lesson["slug"] + ".xhtml#" + lesson["id"])[0]
+            sections = link.getparent().xpath('./h:ol//h:a/@href', namespaces=ns)
+            assert sections == expected_sections, (lesson["id"], "EPUB section navigation missing or reordered")
+            assert all(target in ncx_targets for target in expected_sections), (lesson["id"], "NCX omits sections")
+            subheadings += len(sections)
             image_sources = chapter.xpath("//h:img/@src", namespaces=ns)
             for figure in [lesson["figure"], *lesson.get("extraFigures", [])]:
                 expected = "images/" + Path(figure).with_suffix(".png").name
@@ -115,6 +146,7 @@ def check():
             assert tree.tag == "{%s}html" % XHTML
             assert len(tree.findall("{%s}body" % XHTML)) == 1, "Invalid XHTML body " + name
             assert not tree.xpath("//*[local-name()='script' or local-name()='form' or local-name()='button' or local-name()='noscript']"), "Interactive leftovers " + name
+            assert not tree.xpath("//*[local-name()='dialog' or local-name()='select'] | //*[contains(concat(' ', normalize-space(@class), ' '), ' reader-tools ') or contains(concat(' ', normalize-space(@class), ' '), ' figure-open ') or contains(concat(' ', normalize-space(@class), ' '), ' model-practice-fold ')]"), "Reading interface leaked into book " + name
             ids = tree.xpath("//@id")
             assert len(ids) == len(set(ids)), "Duplicate XHTML IDs " + name
             for node in tree.xpath("//*[@href or @src]"):
@@ -153,7 +185,7 @@ def check():
     for task in record["tasks"]:
         assert task["status"] is None and task["hints"] == [] and not task["firstAnswer"] and not task["readerWords"]
     assert all(value is None for value in record["objectives"].values()), "Invented test result in template"
-    print(json.dumps({"status": "passed", "pdfPages": len(pdf), "pdfOutlineEntries": len(pdf.get_toc()), "epubLocalLinks": links, "sparsePdfPagesForReview": sparse, "epubcheck": "5.3.0: zero errors and warnings; result bound to this EPUB hash"}, ensure_ascii=False))
+    print(json.dumps({"status": "passed", "pdfPages": len(pdf), "pdfOutlineEntries": len(pdf.get_toc()), "pdfContentsPages": len(metadata["contentsPages"]), "epubSectionLinks": subheadings, "epubLocalLinks": links, "sparsePdfPagesForReview": sparse, "epubcheck": "5.3.0: zero errors and warnings; result bound to this EPUB hash"}, ensure_ascii=False))
 
 
 if __name__ == "__main__":
