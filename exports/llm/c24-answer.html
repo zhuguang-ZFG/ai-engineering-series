@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C24 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C24-answer-section-48a0e56c12" tabindex="-1">C24 答案与核算：从零组装最小 decoder</h1>
+<h2 id="C24-answer-section-b95382c0cb" tabindex="-1">1. 因果掩码</h2>
+<p><code>T=3</code> 时允许的位置是“自己及左边”，禁止右侧：</p>
+<pre><code class="language-text">M = [[ 0, -inf, -inf],
+     [ 0,   0, -inf],
+     [ 0,   0,   0]]
+</code></pre>
+<p>第 0 行只能看位置 0；第 1 行能看 0、1；第 2 行能看 0、1、2。代码里 <code>torch.triu(..., diagonal=1)</code> 只取严格上三角，所以对角线保留。对每一行做 softmax 时，<code>-inf</code> 的位置 <code>exp(-inf)=0</code>，权重和为 1；未来位置不会进入分母。</p>
+<p>若先 softmax 再乘掩码，分母已经包含了未来项，归一化后的权重不再是“只在允许位置上的分布”。这是常见错误，<code>future_invisibility</code> 会暴露它。</p>
+<h2 id="C24-answer-section-08e4d28806" tabindex="-1">2. 单头手算</h2>
+<p><code>dh=2</code>，<code>q=[1,0]</code>，<code>k1=[1,0]</code>，<code>k2=[0,1]</code>，缩放 <code>1/sqrt(2)≈0.7071</code>：</p>
+<pre><code class="language-text">score1 = 0.7071 × (1×1 + 0×0) = 0.7071
+score2 = 0.7071 × (1×0 + 0×1) = 0
+</code></pre>
+<p>softmax：</p>
+<pre><code class="language-text">exp(0.7071) ≈ 2.0281
+exp(0)      = 1
+sum         ≈ 3.0281
+w1 ≈ 0.6698
+w2 ≈ 0.3302
+</code></pre>
+<p><code>v1=[10,0]</code>、<code>v2=[0,20]</code>，输出：</p>
+<pre><code class="language-text">out = 0.6698 × [10,0] + 0.3302 × [0,20]
+    ≈ [6.698, 6.604]
+</code></pre>
+<p>这个例子只核对公式；真实模型有 4 个头，每个头 16 维，权重由训练得到。</p>
+<h2 id="C24-answer-section-4fe1d8f697" tabindex="-1">3. 目标错位</h2>
+<pre><code class="language-text">full:   [BOS, the, small, kite, shines, ., EOS]
+inputs: [BOS, the, small, kite, shines, .]
+target: [the, small, kite, shines, ., EOS]
+</code></pre>
+<p><code>inputs[1:]</code> 是 <code>[the, small, kite, shines, .]</code>，<code>target[:-1]</code> 也是同一串，所以 <code>aligned=true</code>。第 0 个位置输入 <code>BOS</code> 预测 <code>the</code>；最后一个输入位置 <code>.</code> 预测 <code>EOS</code>。</p>
+<p>如果把 <code>target</code> 写成 <code>inputs</code>，模型会被训练成“看到当前 token 就复制它”，训练损失可能下降，但生成时容易重复，且 <code>target_shift.aligned</code> 会失败。</p>
+<h2 id="C24-answer-section-f91990d776" tabindex="-1">4. 参数量</h2>
+<p>默认 <code>C=64</code>、<code>V=50</code>、2 层、<code>d_ff=128</code>，tied head：</p>
+<pre><code class="language-text">token embedding: 50×64 = 3,200
+每层 LN×2:       2×2×64 = 256
+每层 qkv:        64×192 = 12,288
+每层 proj:       64×64 = 4,096
+每层 FFN:        (64×128+128) + (128×64+64) = 8,320 + 8,256 = 16,576
+每层合计:        256 + 12,288 + 4,096 + 16,576 = 33,216
+2 层:            66,432
+最终 LN:         128
+输出头:          与 token embedding 共享，0 额外
+总计:            3,200 + 66,432 + 128 = 69,760
+</code></pre>
+<p>变体：</p>
+<ul>
+<li>3 层：<code>69,760 + 33,216 = 102,976</code>。</li>
+<li>输出头解绑：多 <code>64×50=3,200</code>，即 <code>72,960</code>。</li>
+<li><code>V=60</code>：token embedding 变成 <code>60×64=3,840</code>，总计 <code>70,400</code>（tied head 不额外加）。</li>
+<li><code>n_heads=8</code>：QKV 的总宽度仍是 <code>3C</code>，参数总量不变（仍是 <code>69,760</code>），只是每个头 <code>dh=8</code>、分数形状仍 <code>[B,H,T,T]</code>。前提是 <code>C</code> 能被 8 整除。</li>
+<li>把 <code>d_ff</code> 改成 256：每层 FFN 变为 <code>(64×256+256)+(256×64+64)=16,640+16,448=33,088</code>，每层多 16,512，两层多 33,024，总计 <code>102,784</code>。</li>
+</ul>
+<p><code>inspect</code> 打印的是实际模型计数；手算应和它一致，不一致就先查 bias、tied head、层数或 <code>d_ff</code>。</p>
+<h2 id="C24-answer-section-18292d44b0" tabindex="-1">5. 去掉掩码会怎样</h2>
+<p>把 <code>scores.masked_fill(...)</code> 注释掉后，<code>future_invisibility_check</code> 会看到：只改后缀时，前 <code>prefix_len=4</code> 个位置的 logits 也变了，<code>bitwise_equal=false</code>，<code>max_abs_diff</code> 非零。原因不是训练不好，而是前缀位置的注意力读到了未来 token。</p>
+<p>修复顺序：先恢复掩码，再重跑检查；不要用调学习率、增加层数或换数据来“压”这个失败。因果性是结构契约。</p>
+<p>如果检查仍然显示 <code>suffix_changed=false</code>，说明你改的后缀没有影响最后一个位置（例如改动落在被完全 mask 的位置，或模型输出饱和）；换一条更长、更靠右的改动再试，避免检查本身没有区分力。</p>
+<h2 id="C24-answer-section-4451ca94ce" tabindex="-1">6. 生成与重载</h2>
+<ul>
+<li><code>temperature=0</code>：每步 argmax，结果由当前权重唯一决定；同一个 checkpoint、同一个 prompt 应得到同一串 token。</li>
+<li><code>temperature&gt;0</code>：按概率采样；同 seed 可重放，不同 seed 结果可能不同。<code>top-k</code> 只保留前 <code>k</code> 个候选，仍不是事实校验。</li>
+<li><code>positions_used</code> 记录实际用了多少位置；到 <code>max_len=48</code> 会停止。<code>hit_eos=true</code> 表示自然结束，不代表内容正确。</li>
+<li>重载：<code>torch.save</code> 保存 <code>state_dict</code> + 配置 + 词表；<code>torch.load(weights_only=True)</code> 后 <code>load_state_dict(strict=True)</code>。对同一输入比较 logits，<code>bitwise_equal=true</code> 才说明保存/载入路径一致。若不一致，先查词表顺序和配置，再查 LoRA 包装。</li>
+</ul>
+<h2 id="C24-answer-section-fc2386463d" tabindex="-1">7. 失败诊断</h2>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>先做</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>训练损失降，生成重复</td>
+<td>目标错位成复制</td>
+<td>看 <code>target_shift.aligned</code></td>
+</tr>
+<tr>
+<td>前缀输出随未来变化</td>
+<td>掩码缺失/先 softmax 后掩码</td>
+<td><code>future_invisibility</code></td>
+</tr>
+<tr>
+<td>留出损失异常低</td>
+<td>group 跨 split 泄漏</td>
+<td><code>corpus.splits</code> 与 group 检查</td>
+</tr>
+<tr>
+<td><code>F.cross_entropy</code> 目标数不对</td>
+<td>补位没设 <code>-100</code></td>
+<td>打印 <code>(targets != -100).sum()</code></td>
+</tr>
+<tr>
+<td>载入键不匹配</td>
+<td>配置/结构/词表不一致</td>
+<td>对比 <code>config</code> 与 <code>state_dict</code> 键</td>
+</tr>
+<tr>
+<td>序列超长报错</td>
+<td>超过 <code>max_len</code></td>
+<td>缩短序列或增大 <code>max_len</code> 并重训</td>
+</tr>
+</tbody></table>
+<h2 id="C24-answer-section-d3eee858a5" tabindex="-1">8. 项目检查</h2>
+<p>运行 <code>train.py inspect</code> 时应能看到：</p>
+<ul>
+<li><code>architecture.positions</code> 说明固定正弦、<code>max_len=48</code>；</li>
+<li><code>parameters.total</code> 与手算一致；</li>
+<li><code>checks.future_invisibility.bitwise_equal</code> 为真；</li>
+<li>带 checkpoint 时 <code>sample</code> 有实际生成字段。</li>
+</ul>
+<p>运行 <code>train.py train</code> 后，<code>checks.reload</code> 应给出保存/重载比较；<code>losses.val</code> 与 <code>losses.test</code> 是留出组测量，不是通用能力。与 X05 的 bigram 对照时，记住 bigram 没有注意力、位置和 FFN，不能用同一损失数字直接排名。</p>
+</article><nav class="lesson-nav"><a href="c24.html">返回 C24 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C19 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C19-answer-section-f6514b2c2b" tabindex="-1">C19 答案与核对依据</h1>
+<p>本文件给诊断顺序、算术和对照记录方式，不提供“你的检索器得分”。所有实际数值必须来自你的 <code>inspect retrieve</code> / <code>run</code> 报告。</p>
+<h2 id="C19-answer-section-1061bbeb11" tabindex="-1">1. 第一失败边界怎么判</h2>
+<p>最短路径：</p>
+<pre><code class="language-text">先看 status
+→ 再看 usage.calls
+→ 再看 retrieval.hits / used
+→ 再看 diagnostics.prompt.used_chunk_ids
+→ 再看 first_raw_response
+→ 再看 first_failure.stage / errors
+→ 最后才看 answer
+</code></pre>
+<p>对应关系：</p>
+<table>
+<thead>
+<tr>
+<th>观察</th>
+<th>更早的边界</th>
+<th>不应直接归因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>usage.calls=0</code> 且 <code>hits=[]</code></td>
+<td>检索零命中/阈值</td>
+<td>模型不会答</td>
+</tr>
+<tr>
+<td><code>usage.calls=0</code> 且 <code>status=unauthorized</code></td>
+<td>权限</td>
+<td>检索排序</td>
+</tr>
+<tr>
+<td><code>hits</code> 有正确片段但 <code>used=false</code>，并有 <code>prompt budget dropped</code></td>
+<td>提示预算/选择</td>
+<td>检索没找到</td>
+</tr>
+<tr>
+<td><code>hits</code> 有正确片段、<code>used=true</code>，claim 选了另一个数字</td>
+<td>生成/选择</td>
+<td>切块</td>
+</tr>
+<tr>
+<td><code>first_failure.stage=validate</code>，错误是 “claim must be an exact extract”</td>
+<td>提取式契约</td>
+<td>检索或模型不可用</td>
+</tr>
+<tr>
+<td><code>first_failure.stage=parse</code>，raw 是 Markdown 围栏</td>
+<td>输出格式/解析</td>
+<td>事实错误</td>
+</tr>
+<tr>
+<td><code>tool_receipts[].status=failed</code></td>
+<td>工具执行/权限</td>
+<td>模型事实错误</td>
+</tr>
+<tr>
+<td><code>answered</code> 且 quote 有效，但条件被截断</td>
+<td>最终语义复核</td>
+<td>机械校验已经通过</td>
+</tr>
+</tbody></table>
+<p><strong>关键原则</strong>：只要更早的边界已经偏离，后面的现象就是后果。不要把最终的“答错”当成第一原因。</p>
+<h2 id="C19-answer-section-682f9d9db0" tabindex="-1">2. 三个最小例的答案</h2>
+<h3 id="C19-answer-section-912a6af699" tabindex="-1">例 A：检索成功，生成选错</h3>
+<p>证据组合：</p>
+<ul>
+<li><code>retrieval.hits[].used=true</code>；</li>
+<li><code>diagnostics.prompt.used_chunk_ids</code> 包含该 chunk；</li>
+<li>该 chunk 的 <code>text</code> 同时包含“风速 4.2”和“阵风 6.8”；</li>
+<li>最终 claim 引用同一 chunk，但 <code>quote</code> 是“风速 4.2”。</li>
+</ul>
+<p>结论：检索和提示选择都成功，第一边界在模型选择/生成。修复顺序：</p>
+<ol>
+<li>先改问题或提示，明确要求“阵风，不是平均风速”；</li>
+<li>仍失败时换模型或调整解码设置，但保持其他条件不变；</li>
+<li>不要盲目增大 <code>top_k</code>，因为相关段落已经在上下文里。</li>
+</ol>
+<h3 id="C19-answer-section-37481c110f" tabindex="-1">例 B：命中被提示预算丢掉</h3>
+<p>证据组合：</p>
+<ul>
+<li><code>retrieval.hits</code> 中有正确 chunk，但 <code>used=false</code>；</li>
+<li><code>diagnostics.warnings</code> 有 <code>prompt budget dropped &lt;chunk_id&gt;</code>；</li>
+<li><code>diagnostics.prompt.used_chunk_ids</code> 不含该 chunk；</li>
+<li>最终 claim 引用了另一个 chunk，或出现 <code>unknown chunk_id</code> 的 <code>citation-failed</code>。</li>
+</ul>
+<p>结论：第一边界是提示组装。修复顺序：</p>
+<ol>
+<li>提高 <code>max_prompt_tokens</code>，确认模型窗口允许；</li>
+<li>降低 <code>top_k</code> 或减小 chunk 大小，减少无关片段挤占；</li>
+<li>若仍放不下，报告 <code>prompt-budget-exceeded</code>，不要静默丢掉证据后假装回答完整。</li>
+</ol>
+<h3 id="C19-answer-section-8d5dff2af0" tabindex="-1">例 C：提取失败</h3>
+<p>证据组合：</p>
+<ul>
+<li><code>first_failure.stage=validate</code>；</li>
+<li><code>errors</code> 含 <code>source claim must be an exact extract of its supporting quote</code>；</li>
+<li>检索、调用都可能有正常记录。</li>
+</ul>
+<p>结论：第一边界是输出契约，不是检索。当前实现要求 claim 逐字来自 quote，answer 只能由已核验 claim 组成；改写和额外推断会被拒绝。修复方式：</p>
+<ul>
+<li>让模型只输出材料中的原文片段；</li>
+<li>或把生成的候选 claim 交给人工确认，再决定是否进入最终答案；</li>
+<li>不要通过放宽校验、删掉 quote 或改成“只要引用存在就算支持”来绕过。</li>
+</ul>
+<h2 id="C19-answer-section-8c81731d14" tabindex="-1">3. 精确率/召回率的标准答案</h2>
+<p>题目表：</p>
+<table>
+<thead>
+<tr>
+<th>查询</th>
+<th>相关</th>
+<th>取回</th>
+<th>TP</th>
+<th>FP</th>
+<th>FN</th>
+<th>P</th>
+<th>R</th>
+<th>hit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Q1</td>
+<td>A,B,C</td>
+<td>A,D,E</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>1/3</td>
+<td>1/3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>D,E</td>
+<td>D,E</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>F</td>
+<td>无</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>n/a</td>
+<td>0/1=0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>计算：</p>
+<ul>
+<li>Q1：(P=1/3\approx0.333)，(R=1/3\approx0.333)。</li>
+<li>Q2：(P=2/2=1)，(R=2/2=1)。</li>
+<li>Q3：precision 分母为 0，写 <code>n/a</code>；recall (=0/1=0)；hit=0。</li>
+<li>微平均：把 Q1–Q3 的 TP/FP/FN 全部相加，(P=3/5=0.6)，(R=3/6=0.5)。</li>
+<li>宏平均有三种写法，必须写明：<ul>
+<li>完全排除空检索 Q3，只对 Q1/Q2 平均：(P=(1/3+1)/2=2/3)，(R=(1/3+1)/2=2/3)；</li>
+<li>保留 Q3 的 recall=0，但 precision 记 <code>n/a</code>，precision 只对 Q1/Q2 平均：(P=2/3)，(R=(1/3+1+0)/3=4/9\approx0.444)；</li>
+<li>把 Q3 的 precision 也记为 0：(P=(1/3+1+0)/3=4/9\approx0.444)，(R) 同样 (4/9)。</li>
+</ul>
+</li>
+<li>这说明：空检索的 precision 处理会改变宏平均。报告应同时给出逐查询明细和所用口径；不能只写一个“0.444”或“0.667”而不说 Q3 怎么处理。</li>
+</ul>
+<p>若只取 Q1/Q2 两个查询，微平均是 (3/5=0.6)，宏平均是 (2/3\approx0.667)，hit=1.0。</p>
+<h2 id="C19-answer-section-2f82c3f8cc" tabindex="-1">4. 单因素切块对照的答案</h2>
+<p>合格记录：</p>
+<pre><code class="language-text">条件 A：chunk_chars=480, chunk_overlap=80, keyword, threshold=0.08, top_k=3
+条件 B：chunk_chars=240, chunk_overlap=80, keyword, threshold=0.08, top_k=3
+其余：同一文档版本、同一查询集、同一模型（本轮不调用模型）
+</code></pre>
+<p>必须做：</p>
+<ol>
+<li>用 <code>inspect chunk</code> 保存两套 <code>start/end</code>；</li>
+<li>用 <code>inspect retrieve</code> 保存两套 <code>hits</code>；</li>
+<li>对每套条件重新标注相关 chunk；</li>
+<li>逐查询计算 P/R；</li>
+<li>填微/宏/hit；</li>
+<li>写结论：采用、不采用或证据不足。</li>
+</ol>
+<p>不合格：</p>
+<ul>
+<li>拿条件 A 的相关 ID 评价条件 B；</li>
+<li>同时把 <code>top_k</code> 从 3 改成 5；</li>
+<li>删掉低分查询；</li>
+<li>只看 hit 上升就说召回变好；</li>
+<li>把切块变小后“命中更多短片段”误当成答案更完整。</li>
+</ul>
+<p>切块变小的常见代价：同一事实被拆到多个 chunk，单块可能缺少完整条件；<code>top_k</code> 不变时，可能取回更多碎片但缺少上下文。切块变大的常见代价：无关内容进入提示，挤占预算。两种都要在记录里说明。</p>
+<h2 id="C19-answer-section-5882e2727e" tabindex="-1">5. 三种失败各一例</h2>
+<p>合格答案应能写出类似下面的对照（具体字段来自你的报告）：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>状态</th>
+<th>关键证据</th>
+<th>第一边界</th>
+<th>下一步</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>零命中</td>
+<td><code>insufficient-evidence</code></td>
+<td><code>hits=[]</code>, <code>usage.calls=0</code></td>
+<td>查询/阈值/切块</td>
+<td>改查询表达，仍单因素对照</td>
+</tr>
+<tr>
+<td>取回没用对</td>
+<td><code>answered</code> 但数字错</td>
+<td>正确 chunk <code>used=true</code>，claim quote 选了另一句</td>
+<td>生成/选择</td>
+<td>改提示或模型，不加 <code>top_k</code></td>
+</tr>
+<tr>
+<td>提取失败</td>
+<td><code>citation-failed</code></td>
+<td><code>first_failure.stage=validate</code>，claim 不是 quote 子串</td>
+<td>输出契约</td>
+<td>输出原文片段，人工确认语义</td>
+</tr>
+</tbody></table>
+<p>“answered 但语义不完整”的例子：材料写“12 月 1 日至 20 日调整为 18:00”，claim 只写“闭站时间 18:00”。quote 可能存在，机械校验通过；但 claim 丢掉了适用日期，属于语义不完整。第一边界在最终人工复核，修复应补充日期条件，而不是把它算成检索命中。</p>
+<h2 id="C19-answer-section-4a71e58469" tabindex="-1">6. 评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>合格</th>
+<th>不合格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>诊断顺序</td>
+<td>从权限/调用前到生成/引用逐层排除</td>
+<td>一上来就换模型</td>
+</tr>
+<tr>
+<td>调用前/后</td>
+<td>用 <code>usage.calls</code> 分开</td>
+<td>把零命中说成模型错</td>
+</tr>
+<tr>
+<td>检索证据</td>
+<td>看 <code>hits</code>、<code>used</code>、<code>prompt.used_chunk_ids</code></td>
+<td>只看最终 answer</td>
+</tr>
+<tr>
+<td>指标</td>
+<td>分母、微/宏、空结果口径清楚</td>
+<td>百分比无分母、hit 当召回</td>
+</tr>
+<tr>
+<td>单因素</td>
+<td>同集合同模型只改一个条件</td>
+<td>多因素混改、沿用旧标签</td>
+</tr>
+<tr>
+<td>提取契约</td>
+<td>区分机械通过与语义支持</td>
+<td>声称逐字 quote 能证明改写</td>
+</tr>
+<tr>
+<td>失败保留</td>
+<td>保存原始输出和 <code>first_failure</code></td>
+<td>删失败、放宽门槛、手工补答案</td>
+</tr>
+</tbody></table>
+<p>没有实际报告时，以上只能作为核对表，不能写成“已通过”。</p>
+</article><nav class="lesson-nav"><a href="c19.html">返回 C19 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

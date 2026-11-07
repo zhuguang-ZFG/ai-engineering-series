@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "sourceHash": "1f355e509fdefb6df2caddb0d16f16867760541dfa22f8e803bdcdf0c63bf7b9",
+  "editions": {
+    "llm-course": {
+      "pdfPages": 438,
+      "outlineEntries": 435,
+      "chapters": 30,
+      "images": 37
+    },
+    "llm-course-answers": {
+      "pdfPages": 204,
+      "outlineEntries": 281,
+      "chapters": 30,
+      "images": 0
+    }
+  },
+  "files": {
+    "llm-course.pdf": {
+      "bytes": 7980624,
+      "sha256": "baf2f53991b250fb6e17d8de3c75108adecce574380509c8e9b47524361d1a52"
+    },
+    "llm-course.epub": {
+      "bytes": 4529140,
+      "sha256": "af2c8f395253787ed845dcd9e3530fcd200e627b9cb607d988541ef844b12d9b"
+    },
+    "llm-course-answers.pdf": {
+      "bytes": 2718059,
+      "sha256": "2601a91cb7ec843c830a20bbec57a378f9c57c410db1b7f5197cc1c96a40940c"
+    },
+    "llm-course-answers.epub": {
+      "bytes": 115906,
+      "sha256": "8c6605ff2c1e8d5154f6011f239d19f9359438e94bcea204cd99a70bee986a70"
+    }
+  },
+  "limitations": [
+    "真实初学者验收未完成",
+    "运行证据与独立复做分开",
+    "EPUB和PDF不执行代码"
+  ]
+}

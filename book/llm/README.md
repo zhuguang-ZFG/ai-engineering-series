@@ -1,5 +1,21 @@
 # 把大模型拆开看
 
+## 五阶段三十章（实施试读版）
+
+新版入口为 [五阶段路线](../../exports/llm/course.html)，从 [C01 资料报告](lessons/c01.md) 开始。C01–C04 无需账号；C05–C10 就地补数学；C11 起补 Python/HTTP/JSON，之后真实模型/检索/工具；C18 起先评测再改进，C23–C26 训练并适配微型 decoder；C27–C30 处理图片和陌生领域交付。原十二课实验与回查 URL 保留，不作新版工程能力的替身。
+
+- 正文 [新版 PDF](../../deliverables/llm-course.pdf) / [新版 EPUB](../../deliverables/llm-course.epub)；[独立答案 PDF](../../deliverables/llm-course-answers.pdf) / [答案 EPUB](../../deliverables/llm-course-answers.epub)。先作答，后核对；题答都来自同源 Markdown。
+- 程序：[真实资料助手](examples/assistant/README.md)、[微型 decoder/SFT/LoRA](examples/tiny_decoder/README.md)、[本地图像提取](examples/ocr/README.md)。运行条件、授权及明确失败以各自 README 为准；没有可用资源就报告错误，不返回预置答案。
+- 本地教学执行、预训练模型请求、真实数据授权、独立复做、真人效果各记证据。新版尚未通过真实初学者全程验收；不能从章节齐全或 CI 通过推出学习效果。
+
+### 新版维护与构建
+
+`course.json.curriculum` 登记 S1–S5/K1–K5 与 C01–C30、先修、正文/分离答案路径；原 `lessons` 字段继续维护 L01–L12 的固定实验，不重编号、不冒充新增三十章。新正文在 `lessons/cNN.md`，答案在 `deepening/cNN-answer.md`。`scripts/llm/course-site.mjs` 复用既有标题锚点解析器生成章节和目录，`scripts/llm/export_course.py` 从同一生成页导出正文/答案两套书。
+
+仍用 `npm run build:llm` 构建网页，`npm run export:books:llm` 顺序导出旧实验书与新版；不要手改生成页或成品。`npm run check:llm` 的现有本地链接和资源预算检查覆盖新增 HTML；完整 `npm test` 保留原检查不降标。新版运行示例的样例评测不是操作员 CI 基线；配置验证工具若返回 unverified 必须分别报告，不将手动烟测改名为该工具通过。
+
+## 原十二课实验版（保留入口）
+
 先看一句话怎样生成，再追到向量、注意力和参数更新，最后用检索、工具与证据核验完成一份资料报告。十二课已经可以离线阅读和操作，无需账号、API 密钥或 GPU。
 
 下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录手绘图解、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。课程用杯中饮料、通知冲突和执行回执带出问题，穿插手绘，再用逐步算例与反例解释原因，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。

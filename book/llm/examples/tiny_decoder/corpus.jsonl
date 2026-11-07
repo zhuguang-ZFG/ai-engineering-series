@@ -1,0 +1,192 @@
+{"id": "corpus-g1-00", "group": "template-g1", "split": "train", "text": "the small kite shines ."}
+{"id": "corpus-g1-01", "group": "template-g1", "split": "train", "text": "the red rope leans ."}
+{"id": "corpus-g1-02", "group": "template-g1", "split": "train", "text": "the quiet leaf rolls ."}
+{"id": "corpus-g1-03", "group": "template-g1", "split": "train", "text": "the bright fork floats ."}
+{"id": "corpus-g1-04", "group": "template-g1", "split": "train", "text": "the old cup grows ."}
+{"id": "corpus-g1-05", "group": "template-g1", "split": "train", "text": "the warm brush rests ."}
+{"id": "corpus-g1-06", "group": "template-g1", "split": "train", "text": "the small jar hums ."}
+{"id": "corpus-g1-07", "group": "template-g1", "split": "train", "text": "the red boat sings ."}
+{"id": "corpus-g1-08", "group": "template-g1", "split": "train", "text": "the quiet bell says ."}
+{"id": "corpus-g1-09", "group": "template-g1", "split": "train", "text": "the bright stone waits ."}
+{"id": "corpus-g1-10", "group": "template-g1", "split": "train", "text": "the old book spins ."}
+{"id": "corpus-g1-11", "group": "template-g1", "split": "train", "text": "the warm lamp sits ."}
+{"id": "corpus-g1-12", "group": "template-g1", "split": "train", "text": "the small plate shines ."}
+{"id": "corpus-g1-13", "group": "template-g1", "split": "train", "text": "the red spoon leans ."}
+{"id": "corpus-g1-14", "group": "template-g1", "split": "train", "text": "the quiet scarf rolls ."}
+{"id": "corpus-g1-15", "group": "template-g1", "split": "train", "text": "the bright seed floats ."}
+{"id": "corpus-g1-16", "group": "template-g1", "split": "train", "text": "the old basket grows ."}
+{"id": "corpus-g1-17", "group": "template-g1", "split": "train", "text": "the warm hat rests ."}
+{"id": "corpus-g1-18", "group": "template-g1", "split": "train", "text": "the small kite hums ."}
+{"id": "corpus-g1-19", "group": "template-g1", "split": "train", "text": "the red rope sings ."}
+{"id": "corpus-g1-20", "group": "template-g1", "split": "train", "text": "the quiet leaf says ."}
+{"id": "corpus-g1-21", "group": "template-g1", "split": "train", "text": "the bright fork waits ."}
+{"id": "corpus-g1-22", "group": "template-g1", "split": "train", "text": "the old cup spins ."}
+{"id": "corpus-g1-23", "group": "template-g1", "split": "train", "text": "the warm brush sits ."}
+{"id": "corpus-g1-24", "group": "template-g1", "split": "train", "text": "the small jar shines ."}
+{"id": "corpus-g1-25", "group": "template-g1", "split": "train", "text": "the red boat leans ."}
+{"id": "corpus-g1-26", "group": "template-g1", "split": "train", "text": "the quiet bell rolls ."}
+{"id": "corpus-g1-27", "group": "template-g1", "split": "train", "text": "the bright stone floats ."}
+{"id": "corpus-g1-28", "group": "template-g1", "split": "train", "text": "the old book grows ."}
+{"id": "corpus-g1-29", "group": "template-g1", "split": "train", "text": "the warm lamp rests ."}
+{"id": "corpus-g2-00", "group": "template-g2", "split": "train", "text": "the small lamp waits beside the hat ."}
+{"id": "corpus-g2-01", "group": "template-g2", "split": "train", "text": "the red plate spins behind the plate ."}
+{"id": "corpus-g2-02", "group": "template-g2", "split": "train", "text": "the quiet spoon sits under the boat ."}
+{"id": "corpus-g2-03", "group": "template-g2", "split": "train", "text": "the bright scarf shines above the leaf ."}
+{"id": "corpus-g2-04", "group": "template-g2", "split": "train", "text": "the old seed leans near the seed ."}
+{"id": "corpus-g2-05", "group": "template-g2", "split": "train", "text": "the warm basket rolls beside the book ."}
+{"id": "corpus-g2-06", "group": "template-g2", "split": "train", "text": "the small hat floats behind the brush ."}
+{"id": "corpus-g2-07", "group": "template-g2", "split": "train", "text": "the red kite grows under the kite ."}
+{"id": "corpus-g2-08", "group": "template-g2", "split": "train", "text": "the quiet rope rests above the spoon ."}
+{"id": "corpus-g2-09", "group": "template-g2", "split": "train", "text": "the bright leaf hums near the bell ."}
+{"id": "corpus-g2-10", "group": "template-g2", "split": "train", "text": "the old fork sings beside the fork ."}
+{"id": "corpus-g2-11", "group": "template-g2", "split": "train", "text": "the warm cup says behind the basket ."}
+{"id": "corpus-g2-12", "group": "template-g2", "split": "train", "text": "the small brush waits under the lamp ."}
+{"id": "corpus-g2-13", "group": "template-g2", "split": "train", "text": "the red jar spins above the jar ."}
+{"id": "corpus-g2-14", "group": "template-g2", "split": "train", "text": "the quiet boat sits near the rope ."}
+{"id": "corpus-g2-15", "group": "template-g2", "split": "train", "text": "the bright bell shines beside the scarf ."}
+{"id": "corpus-g2-16", "group": "template-g2", "split": "train", "text": "the old stone leans behind the stone ."}
+{"id": "corpus-g2-17", "group": "template-g2", "split": "train", "text": "the warm book rolls under the cup ."}
+{"id": "corpus-g2-18", "group": "template-g2", "split": "train", "text": "the small lamp floats above the hat ."}
+{"id": "corpus-g2-19", "group": "template-g2", "split": "train", "text": "the red plate grows near the plate ."}
+{"id": "corpus-g2-20", "group": "template-g2", "split": "train", "text": "the quiet spoon rests beside the boat ."}
+{"id": "corpus-g2-21", "group": "template-g2", "split": "train", "text": "the bright scarf hums behind the leaf ."}
+{"id": "corpus-g2-22", "group": "template-g2", "split": "train", "text": "the old seed sings under the seed ."}
+{"id": "corpus-g2-23", "group": "template-g2", "split": "train", "text": "the warm basket says above the book ."}
+{"id": "corpus-g2-24", "group": "template-g2", "split": "train", "text": "the small hat waits near the brush ."}
+{"id": "corpus-g2-25", "group": "template-g2", "split": "train", "text": "the red kite spins beside the kite ."}
+{"id": "corpus-g2-26", "group": "template-g2", "split": "train", "text": "the quiet rope sits behind the spoon ."}
+{"id": "corpus-g2-27", "group": "template-g2", "split": "train", "text": "the bright leaf shines under the bell ."}
+{"id": "corpus-g2-28", "group": "template-g2", "split": "train", "text": "the old fork leans above the fork ."}
+{"id": "corpus-g2-29", "group": "template-g2", "split": "train", "text": "the warm cup rolls near the basket ."}
+{"id": "corpus-g3-00", "group": "template-g3", "split": "train", "text": "the cup and the cup hums ."}
+{"id": "corpus-g3-01", "group": "template-g3", "split": "train", "text": "the brush and the hat sings ."}
+{"id": "corpus-g3-02", "group": "template-g3", "split": "train", "text": "the jar and the plate says ."}
+{"id": "corpus-g3-03", "group": "template-g3", "split": "train", "text": "the boat and the boat waits ."}
+{"id": "corpus-g3-04", "group": "template-g3", "split": "train", "text": "the bell and the leaf spins ."}
+{"id": "corpus-g3-05", "group": "template-g3", "split": "train", "text": "the stone and the seed sits ."}
+{"id": "corpus-g3-06", "group": "template-g3", "split": "train", "text": "the book and the book shines ."}
+{"id": "corpus-g3-07", "group": "template-g3", "split": "train", "text": "the lamp and the brush leans ."}
+{"id": "corpus-g3-08", "group": "template-g3", "split": "train", "text": "the plate and the kite rolls ."}
+{"id": "corpus-g3-09", "group": "template-g3", "split": "train", "text": "the spoon and the spoon floats ."}
+{"id": "corpus-g3-10", "group": "template-g3", "split": "train", "text": "the scarf and the bell grows ."}
+{"id": "corpus-g3-11", "group": "template-g3", "split": "train", "text": "the seed and the fork rests ."}
+{"id": "corpus-g3-12", "group": "template-g3", "split": "train", "text": "the basket and the basket hums ."}
+{"id": "corpus-g3-13", "group": "template-g3", "split": "train", "text": "the hat and the lamp sings ."}
+{"id": "corpus-g3-14", "group": "template-g3", "split": "train", "text": "the kite and the jar says ."}
+{"id": "corpus-g3-15", "group": "template-g3", "split": "train", "text": "the rope and the rope waits ."}
+{"id": "corpus-g3-16", "group": "template-g3", "split": "train", "text": "the leaf and the scarf spins ."}
+{"id": "corpus-g3-17", "group": "template-g3", "split": "train", "text": "the fork and the stone sits ."}
+{"id": "corpus-g3-18", "group": "template-g3", "split": "train", "text": "the cup and the cup shines ."}
+{"id": "corpus-g3-19", "group": "template-g3", "split": "train", "text": "the brush and the hat leans ."}
+{"id": "corpus-g3-20", "group": "template-g3", "split": "train", "text": "the jar and the plate rolls ."}
+{"id": "corpus-g3-21", "group": "template-g3", "split": "train", "text": "the boat and the boat floats ."}
+{"id": "corpus-g3-22", "group": "template-g3", "split": "train", "text": "the bell and the leaf grows ."}
+{"id": "corpus-g3-23", "group": "template-g3", "split": "train", "text": "the stone and the seed rests ."}
+{"id": "corpus-g3-24", "group": "template-g3", "split": "train", "text": "the book and the book hums ."}
+{"id": "corpus-g3-25", "group": "template-g3", "split": "train", "text": "the lamp and the brush sings ."}
+{"id": "corpus-g3-26", "group": "template-g3", "split": "train", "text": "the plate and the kite says ."}
+{"id": "corpus-g3-27", "group": "template-g3", "split": "train", "text": "the spoon and the spoon waits ."}
+{"id": "corpus-g3-28", "group": "template-g3", "split": "train", "text": "the scarf and the bell spins ."}
+{"id": "corpus-g3-29", "group": "template-g3", "split": "train", "text": "the seed and the fork sits ."}
+{"id": "corpus-g4-00", "group": "template-g4", "split": "train", "text": "a small seed floats ."}
+{"id": "corpus-g4-01", "group": "template-g4", "split": "train", "text": "a red basket grows ."}
+{"id": "corpus-g4-02", "group": "template-g4", "split": "train", "text": "a quiet hat rests ."}
+{"id": "corpus-g4-03", "group": "template-g4", "split": "train", "text": "a bright kite hums ."}
+{"id": "corpus-g4-04", "group": "template-g4", "split": "train", "text": "a old rope sings ."}
+{"id": "corpus-g4-05", "group": "template-g4", "split": "train", "text": "a warm leaf says ."}
+{"id": "corpus-g4-06", "group": "template-g4", "split": "train", "text": "a small fork waits ."}
+{"id": "corpus-g4-07", "group": "template-g4", "split": "train", "text": "a red cup spins ."}
+{"id": "corpus-g4-08", "group": "template-g4", "split": "train", "text": "a quiet brush sits ."}
+{"id": "corpus-g4-09", "group": "template-g4", "split": "train", "text": "a bright jar shines ."}
+{"id": "corpus-g4-10", "group": "template-g4", "split": "train", "text": "a old boat leans ."}
+{"id": "corpus-g4-11", "group": "template-g4", "split": "train", "text": "a warm bell rolls ."}
+{"id": "corpus-g4-12", "group": "template-g4", "split": "train", "text": "a small stone floats ."}
+{"id": "corpus-g4-13", "group": "template-g4", "split": "train", "text": "a red book grows ."}
+{"id": "corpus-g4-14", "group": "template-g4", "split": "train", "text": "a quiet lamp rests ."}
+{"id": "corpus-g4-15", "group": "template-g4", "split": "train", "text": "a bright plate hums ."}
+{"id": "corpus-g4-16", "group": "template-g4", "split": "train", "text": "a old spoon sings ."}
+{"id": "corpus-g4-17", "group": "template-g4", "split": "train", "text": "a warm scarf says ."}
+{"id": "corpus-g4-18", "group": "template-g4", "split": "train", "text": "a small seed waits ."}
+{"id": "corpus-g4-19", "group": "template-g4", "split": "train", "text": "a red basket spins ."}
+{"id": "corpus-g4-20", "group": "template-g4", "split": "train", "text": "a quiet hat sits ."}
+{"id": "corpus-g4-21", "group": "template-g4", "split": "train", "text": "a bright kite shines ."}
+{"id": "corpus-g4-22", "group": "template-g4", "split": "train", "text": "a old rope leans ."}
+{"id": "corpus-g4-23", "group": "template-g4", "split": "train", "text": "a warm leaf rolls ."}
+{"id": "corpus-g4-24", "group": "template-g4", "split": "train", "text": "a small fork floats ."}
+{"id": "corpus-g4-25", "group": "template-g4", "split": "train", "text": "a red cup grows ."}
+{"id": "corpus-g4-26", "group": "template-g4", "split": "train", "text": "a quiet brush rests ."}
+{"id": "corpus-g4-27", "group": "template-g4", "split": "train", "text": "a bright jar hums ."}
+{"id": "corpus-g4-28", "group": "template-g4", "split": "train", "text": "a old boat sings ."}
+{"id": "corpus-g4-29", "group": "template-g4", "split": "train", "text": "a warm bell says ."}
+{"id": "corpus-g5-00", "group": "template-g5", "split": "val", "text": "the bell shines near the small scarf ."}
+{"id": "corpus-g5-01", "group": "template-g5", "split": "val", "text": "the stone leans beside the red stone ."}
+{"id": "corpus-g5-02", "group": "template-g5", "split": "val", "text": "the book rolls behind the quiet cup ."}
+{"id": "corpus-g5-03", "group": "template-g5", "split": "val", "text": "the lamp floats under the bright hat ."}
+{"id": "corpus-g5-04", "group": "template-g5", "split": "val", "text": "the plate grows above the old plate ."}
+{"id": "corpus-g5-05", "group": "template-g5", "split": "val", "text": "the spoon rests near the warm boat ."}
+{"id": "corpus-g5-06", "group": "template-g5", "split": "val", "text": "the scarf hums beside the small leaf ."}
+{"id": "corpus-g5-07", "group": "template-g5", "split": "val", "text": "the seed sings behind the red seed ."}
+{"id": "corpus-g5-08", "group": "template-g5", "split": "val", "text": "the basket says under the quiet book ."}
+{"id": "corpus-g5-09", "group": "template-g5", "split": "val", "text": "the hat waits above the bright brush ."}
+{"id": "corpus-g5-10", "group": "template-g5", "split": "val", "text": "the kite spins near the old kite ."}
+{"id": "corpus-g5-11", "group": "template-g5", "split": "val", "text": "the rope sits beside the warm spoon ."}
+{"id": "corpus-g5-12", "group": "template-g5", "split": "val", "text": "the leaf shines behind the small bell ."}
+{"id": "corpus-g5-13", "group": "template-g5", "split": "val", "text": "the fork leans under the red fork ."}
+{"id": "corpus-g5-14", "group": "template-g5", "split": "val", "text": "the cup rolls above the quiet basket ."}
+{"id": "corpus-g5-15", "group": "template-g5", "split": "val", "text": "the brush floats near the bright lamp ."}
+{"id": "corpus-g5-16", "group": "template-g5", "split": "val", "text": "the jar grows beside the old jar ."}
+{"id": "corpus-g5-17", "group": "template-g5", "split": "val", "text": "the boat rests behind the warm rope ."}
+{"id": "corpus-g5-18", "group": "template-g5", "split": "val", "text": "the bell hums under the small scarf ."}
+{"id": "corpus-g5-19", "group": "template-g5", "split": "val", "text": "the stone sings above the red stone ."}
+{"id": "corpus-g5-20", "group": "template-g5", "split": "val", "text": "the book says near the quiet cup ."}
+{"id": "corpus-g5-21", "group": "template-g5", "split": "val", "text": "the lamp waits beside the bright hat ."}
+{"id": "corpus-g5-22", "group": "template-g5", "split": "val", "text": "the plate spins behind the old plate ."}
+{"id": "corpus-g5-23", "group": "template-g5", "split": "val", "text": "the spoon sits under the warm boat ."}
+{"id": "corpus-g5-24", "group": "template-g5", "split": "val", "text": "the scarf shines above the small leaf ."}
+{"id": "corpus-g5-25", "group": "template-g5", "split": "val", "text": "the seed leans near the red seed ."}
+{"id": "corpus-g5-26", "group": "template-g5", "split": "val", "text": "the basket rolls beside the quiet book ."}
+{"id": "corpus-g5-27", "group": "template-g5", "split": "val", "text": "the hat floats behind the bright brush ."}
+{"id": "corpus-g5-28", "group": "template-g5", "split": "val", "text": "the kite grows under the old kite ."}
+{"id": "corpus-g5-29", "group": "template-g5", "split": "val", "text": "the rope rests above the warm spoon ."}
+{"id": "corpus-g6-00", "group": "template-g6", "split": "test", "text": "the rope waits and the small rope floats ."}
+{"id": "corpus-g6-01", "group": "template-g6", "split": "test", "text": "the leaf spins and the red scarf grows ."}
+{"id": "corpus-g6-02", "group": "template-g6", "split": "test", "text": "the fork sits and the quiet stone rests ."}
+{"id": "corpus-g6-03", "group": "template-g6", "split": "test", "text": "the cup shines and the bright cup hums ."}
+{"id": "corpus-g6-04", "group": "template-g6", "split": "test", "text": "the brush leans and the old hat sings ."}
+{"id": "corpus-g6-05", "group": "template-g6", "split": "test", "text": "the jar rolls and the warm plate says ."}
+{"id": "corpus-g6-06", "group": "template-g6", "split": "test", "text": "the boat floats and the small boat waits ."}
+{"id": "corpus-g6-07", "group": "template-g6", "split": "test", "text": "the bell grows and the red leaf spins ."}
+{"id": "corpus-g6-08", "group": "template-g6", "split": "test", "text": "the stone rests and the quiet seed sits ."}
+{"id": "corpus-g6-09", "group": "template-g6", "split": "test", "text": "the book hums and the bright book shines ."}
+{"id": "corpus-g6-10", "group": "template-g6", "split": "test", "text": "the lamp sings and the old brush leans ."}
+{"id": "corpus-g6-11", "group": "template-g6", "split": "test", "text": "the plate says and the warm kite rolls ."}
+{"id": "corpus-g6-12", "group": "template-g6", "split": "test", "text": "the spoon waits and the small spoon floats ."}
+{"id": "corpus-g6-13", "group": "template-g6", "split": "test", "text": "the scarf spins and the red bell grows ."}
+{"id": "corpus-g6-14", "group": "template-g6", "split": "test", "text": "the seed sits and the quiet fork rests ."}
+{"id": "corpus-g6-15", "group": "template-g6", "split": "test", "text": "the basket shines and the bright basket hums ."}
+{"id": "corpus-g6-16", "group": "template-g6", "split": "test", "text": "the hat leans and the old lamp sings ."}
+{"id": "corpus-g6-17", "group": "template-g6", "split": "test", "text": "the kite rolls and the warm jar says ."}
+{"id": "corpus-g6-18", "group": "template-g6", "split": "test", "text": "the rope floats and the small rope waits ."}
+{"id": "corpus-g6-19", "group": "template-g6", "split": "test", "text": "the leaf grows and the red scarf spins ."}
+{"id": "corpus-g6-20", "group": "template-g6", "split": "test", "text": "the fork rests and the quiet stone sits ."}
+{"id": "corpus-g6-21", "group": "template-g6", "split": "test", "text": "the cup hums and the bright cup shines ."}
+{"id": "corpus-g6-22", "group": "template-g6", "split": "test", "text": "the brush sings and the old hat leans ."}
+{"id": "corpus-g6-23", "group": "template-g6", "split": "test", "text": "the jar says and the warm plate rolls ."}
+{"id": "corpus-g6-24", "group": "template-g6", "split": "test", "text": "the boat waits and the small boat floats ."}
+{"id": "corpus-g6-25", "group": "template-g6", "split": "test", "text": "the bell spins and the red leaf grows ."}
+{"id": "corpus-g6-26", "group": "template-g6", "split": "test", "text": "the stone sits and the quiet seed rests ."}
+{"id": "corpus-g6-27", "group": "template-g6", "split": "test", "text": "the book shines and the bright book hums ."}
+{"id": "corpus-g6-28", "group": "template-g6", "split": "test", "text": "the lamp leans and the old brush sings ."}
+{"id": "corpus-g6-29", "group": "template-g6", "split": "test", "text": "the plate rolls and the warm kite says ."}
+{"id": "corpus-command-0-0", "group": "command", "split": "train", "text": "say the small boat ."}
+{"id": "corpus-command-0-1", "group": "command", "split": "train", "text": "say the small plate ."}
+{"id": "corpus-command-1-0", "group": "command", "split": "train", "text": "say the red bell ."}
+{"id": "corpus-command-1-1", "group": "command", "split": "train", "text": "say the red spoon ."}
+{"id": "corpus-command-2-0", "group": "command", "split": "train", "text": "say the quiet stone ."}
+{"id": "corpus-command-2-1", "group": "command", "split": "train", "text": "say the quiet scarf ."}
+{"id": "corpus-command-3-0", "group": "command", "split": "train", "text": "say the bright book ."}
+{"id": "corpus-command-3-1", "group": "command", "split": "train", "text": "say the bright seed ."}
+{"id": "corpus-command-4-0", "group": "command", "split": "train", "text": "say the old lamp ."}
+{"id": "corpus-command-4-1", "group": "command", "split": "train", "text": "say the old basket ."}
+{"id": "corpus-command-5-0", "group": "command", "split": "train", "text": "say the warm plate ."}
+{"id": "corpus-command-5-1", "group": "command", "split": "train", "text": "say the warm hat ."}

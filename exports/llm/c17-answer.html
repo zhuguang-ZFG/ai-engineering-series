@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C17 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C17-answer-section-addeab88b6" tabindex="-1">C17 答案与 K3 评分依据</h1>
+<p>本文件不提供可抄的“标准报告”。K3 看的是你的实际文件、命令和解释是否一致。</p>
+<h2 id="C17-answer-section-75360ba01a" tabindex="-1">任务 A：正常链路</h2>
+<p>合格证据至少包含：</p>
+<ul>
+<li>原始问题、<code>reader</code>、文档清单版本；</li>
+<li>模型/提供方、版本、设备；API 只写变量名，不写密钥；</li>
+<li><code>run</code> 生成的 JSON 与 Markdown；</li>
+<li>至少两条 <code>claim</code> 的 <code>quote</code> 在对应文档版本中的回查；</li>
+<li><code>diagnostics.first_raw_response</code> 与 <code>usage</code>；</li>
+<li>若使用工具，<code>tool_receipt_id</code> 与参数/结果。</li>
+</ul>
+<p>常见不合格：只交 Markdown；<code>claims</code> 没有 <code>citations</code> 或 citation 没有 <code>quote</code>；<code>quote</code> 不在原文；<code>claim.text</code> 不是 <code>quote</code> 的逐字连续子串；<code>answer</code> 含 claim 之外的文字；<code>usage</code> 为 0；报告来自旧运行目录。</p>
+<h2 id="C17-answer-section-15a033217d" tabindex="-1">任务 B：缺失与冲突</h2>
+<p>缺失：报告中应出现“材料未覆盖/证据不足/该字段缺失”，而不是补一个常识值。</p>
+<p>冲突：报告应并列两个版本及各自 <code>quote</code>，或返回 <code>conflict</code>；不能只引用其中一版并声称已确认。若清单已把旧版标为不可见，则旧版不应进入检索，报告应说明现行版本依据。</p>
+<h2 id="C17-answer-section-b3147a0825" tabindex="-1">任务 C：无命中与越权</h2>
+<p>无命中：<code>status</code> 为 <code>insufficient-evidence</code>/未找到，<code>claims</code> 为空或明确“无材料支持”。把最低分片段当证据不合格。</p>
+<p>越权：无权限文档的正文没有进入上下文/报告；<code>status</code> 为 <code>unauthorized</code> 或候选集不含该文档。通过修改 <code>readers</code> 绕过不合格。</p>
+<h2 id="C17-answer-section-a03ca2ca7b" tabindex="-1">任务 D：服务失败与恢复</h2>
+<p>失败时应有 <code>model-unavailable</code>（或 API 连接/认证错误）和 <code>first_failure</code>；不能出现 <code>answered</code>。恢复后重跑，<code>usage.calls</code>/延迟/token 与失败前不同，证明是新调用。若两次输出完全一致且时间戳不变，检查是否读旧文件。</p>
+<h2 id="C17-answer-section-78bd75ba6b" tabindex="-1">任务 E：干净环境</h2>
+<p>合格：</p>
+<ul>
+<li>从空输出目录开始；</li>
+<li>按 <code>runbook.md</code> 安装依赖并启动；</li>
+<li>正常路径与至少一个失败场景都能复现；</li>
+<li>记录实际错误和解决方式；</li>
+<li>不依赖未写明的全局环境变量或手工改文件。</li>
+</ul>
+<p>不合格：只在自己机器上能跑；依赖散落在对话里；模型路径写死且未说明；把缓存当新结果。</p>
+<h2 id="C17-answer-section-e567a3e5a0" tabindex="-1">任务 F：解释</h2>
+<p>应能说明：</p>
+<ol>
+<li><strong>权限在检索前</strong>：否则模型已读正文，删输出不能撤销泄露；</li>
+<li><strong>引用存在不等于支持</strong>：要看原文条件、否定词、版本和上下文；</li>
+<li><strong>超时不能推出未执行</strong>：可能已执行但回执丢失，需按请求 ID 查询；</li>
+<li><strong>首个失败边界</strong>：先判断是读入/权限、检索、模型、解析、引用还是工具，而不是笼统说“模型不行”。</li>
+</ol>
+<h2 id="C17-answer-section-a9575033fe" tabindex="-1">K3 评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>通过</th>
+<th>不通过</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>真实推理</td>
+<td>输入变化改变输出，有 usage/诊断</td>
+<td>固定答案、示例输出、无调用</td>
+</tr>
+<tr>
+<td>材料与版本</td>
+<td>清单、哈希、版本可回查</td>
+<td>引用不存在/旧版冒充现行</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>读取前过滤，无越权正文</td>
+<td>先读后删、改 readers 绕过</td>
+</tr>
+<tr>
+<td>检索</td>
+<td>命中/无命中/旧版/冲突有路径</td>
+<td>最低分当证据、排名当事实</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>校验、回执、预算、失败终态</td>
+<td>说调用即成功、无回执、超时当未执行</td>
+</tr>
+<tr>
+<td>失败</td>
+<td>缺失/冲突/无权限/服务失败各有结果</td>
+<td>失败回退手工答案或静默成功</td>
+</tr>
+<tr>
+<td>复做</td>
+<td>干净环境按说明可运行</td>
+<td>依赖口头补充/旧产物</td>
+</tr>
+<tr>
+<td>解释</td>
+<td>能定位首个失败并说明边界</td>
+<td>只展示成功截图</td>
+</tr>
+</tbody></table>
+<p>八项中任何一项“不通过”，K3 不通过；资源缺失可以标“待验”，但不能用示例补齐。真实读者/独立复做由人完成，作者自评不能替代。</p>
+</article><nav class="lesson-nav"><a href="c17.html">返回 C17 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

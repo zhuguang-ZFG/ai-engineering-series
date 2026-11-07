@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C14 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C14-answer-section-93c9224987" tabindex="-1">C14 答案与核对依据</h1>
+<h2 id="C14-answer-section-4ed660d141" tabindex="-1">1. 清单与哈希</h2>
+<p>计算哈希的独立方法（与程序一致）：</p>
+<pre><code class="language-bash">python -c &quot;import hashlib,pathlib; print(hashlib.sha256(pathlib.Path(&#39;docs/guide.md&#39;).read_bytes()).hexdigest())&quot;
+</code></pre>
+<p>把结果与清单的 <code>sha256</code> 比较。改一个字节后再次计算，确认摘要变化。注意：</p>
+<ul>
+<li>用文本编辑器保存可能改变换行符（CRLF/LF）或编码，摘要随之变化；</li>
+<li>哈希匹配只说明字节一致，不说明内容正确或有权使用；</li>
+<li>清单里的路径基准必须与读取程序一致。若程序以仓库根为基准，<code>path</code> 就写相对仓库根的路径；若以清单目录为基准，就写相对清单的路径。不要在不同程序里混用两种解释。</li>
+</ul>
+<h2 id="C14-answer-section-37cb2b6263" tabindex="-1">2. 切块设计</h2>
+<p>一个按标题/段落切块的示例规则：</p>
+<pre><code class="language-text">1. 以 Markdown 二级/三级标题分段；
+2. 每段若超过 400 字符，按句子边界再切，最多 600 字符；
+3. 相邻片段重叠 1 句，避免条件句被切断；
+4. chunk_id = doc_id@sha256[:12]#NNN（例如 station-log@4f2c9a1b7e03#000；版本单独记录）；
+5. 记录 start/end 字符位置与 heading。
+</code></pre>
+<p>可能被切断的边界：</p>
+<pre><code class="language-text">若当晚有维护施工，保留主电源，
+由值班人员签字确认。
+</code></pre>
+<p>如果切在“保留主电源”之后，下一段只剩“由值班人员签字确认”，单独看第一段会像无条件保留主电源。修复方式是句子边界切块、增加重叠，或把整条例外放在同一片段。不能只靠增大 top-k 解决。</p>
+<h2 id="C14-answer-section-fc5f8b9400" tabindex="-1">3. <code>--reader</code> 校验</h2>
+<p>在清单校验程序中加入：</p>
+<pre><code class="language-python">parser.add_argument(&quot;--reader&quot;, help=&quot;只输出该读者可见的文档&quot;)
+...
+visible = [doc for doc in checked if args.reader in doc[&quot;readers&quot;]]
+report[&quot;visible_to&quot;] = args.reader
+report[&quot;visible&quot;] = visible
+</code></pre>
+<p>注意：这只是在已校验的文档上过滤；真正的助手必须在读取正文前过滤。不要把无权限文档的 <code>text</code> 放进 <code>checked</code> 再让输出层删除。正确报告可以列出无权限文档的 ID/状态，但不能包含正文。</p>
+<h2 id="C14-answer-section-7729d65a4d" tabindex="-1">4. 更新版本</h2>
+<p>更新一份文档时需要同步：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>旧值</th>
+<th>新值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件内容</td>
+<td>v2.1</td>
+<td>v2.2</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>2.1</code></td>
+<td><code>2.2</code></td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>旧摘要</td>
+<td>重新计算</td>
+</tr>
+<tr>
+<td><code>chunk_id</code></td>
+<td><code>doc@&lt;旧 sha12&gt;#...</code></td>
+<td><code>doc@&lt;新 sha12&gt;#...</code></td>
+</tr>
+<tr>
+<td>引用/报告</td>
+<td>指向 2.1</td>
+<td>标记过期或重跑</td>
+</tr>
+<tr>
+<td>索引</td>
+<td>含旧片段</td>
+<td>只保留现行版或明确审计副本</td>
+</tr>
+</tbody></table>
+<p>旧 <code>chunk_id</code> 不应在检索结果中继续指向新内容；<code>chunk_id</code> 变化是因为内容哈希进入 ID，不是因为版本字符串拼进了 ID。如果为了审计保留旧片段，需要在元数据中标记 <code>retired</code>，并确认检索器不会返回它。</p>
+<h2 id="C14-answer-section-4969f2ac5c" tabindex="-1">5. 为什么不能先检索全部再删结果</h2>
+<p>因为模型在生成阶段已经看到了无权限正文。删除最终答案中的引用不能撤销模型读取、日志记录、缓存或上下文泄露。正确顺序是：按读者过滤 → 只读取可见文档 → 只切可见片段 → 只检索可见集合 → 生成。权限是数据访问边界，不是输出装饰。</p>
+<h2 id="C14-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>□ 清单字段齐全，ID 唯一；</li>
+<li>□ 路径限制在允许根目录内；</li>
+<li>□ 哈希与文件一致，版本变更时同步更新；</li>
+<li>□ 切块保留原文、位置、标题和版本；</li>
+<li>□ 读者过滤发生在读取前；</li>
+<li>□ 更新/删除后旧片段不会冒充现行规则；</li>
+<li>□ 没有把“哈希一致”写成“内容已核实”。</li>
+</ul>
+<p>本章的哈希与切块程序只处理本地 UTF-8 文本/Markdown；PDF 页码、图片区域和 OCR 置信度在 C27 处理。</p>
+</article><nav class="lesson-nav"><a href="c14.html">返回 C14 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

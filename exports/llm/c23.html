@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C23 从数组走到自动微分 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details open><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html" aria-current="page">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C23-section-b2880e68c2">先修桥：你已经见过向量和梯度，但还没让它们动起来</a></li><li class="toc-level-2"><a href="#C23-section-55a4cb94b5">从列表到张量：形状是契约，不是注释</a></li><li class="toc-level-2"><a href="#C23-section-ed5959cebd">从 Python 类到 <code>nn.Module</code>：参数要注册，计算要写在前向里</a></li><li class="toc-level-2"><a href="#C23-section-6993f92562">手算一个梯度，再让 autograd 复核</a></li><li class="toc-level-2"><a href="#C23-section-37c065f22a">保存不是“把模型对象泡进文件”</a></li><li class="toc-level-2"><a href="#C23-section-402d11771f">改一个条件，看看哪里会坏</a></li><li class="toc-level-2"><a href="#C23-section-e2e9724e68">独立练习与项目增量</a></li><li class="toc-level-2"><a href="#C23-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C23"><p class="eyebrow">S4 / C23 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c22.html">C22</a></p><div class="article-body"><h1 id="C23-section-806317b8b7" tabindex="-1">C23 从数组走到自动微分</h1>
+<p>先看一个很具体的失败：你已经把一句话拆成 token，又把四条句子放进 Python 列表，信心满满地送进模型，却得到 <code>mat2 must be a matrix, not a 0-dim tensor</code>，或者更隐蔽的 <code>The size of tensor a (4) must match the size of tensor b (3)</code>。这不是“模型不聪明”，而是你还没把列表、形状、批次和参数说清楚。C23 要把这层地基补上：数组怎样变成张量，参数怎样挂进模块，梯度怎样由自动微分算出来，以及训练完的参数怎样保存和重新载入。</p>
+<h2 id="C23-section-b2880e68c2" tabindex="-1">先修桥：你已经见过向量和梯度，但还没让它们动起来</h2>
+<p>C08 让你沿一个位置追踪多头注意力的形状，C09 用负对数、斜率和链式法则解释“目标错了，参数往哪边动”，C11 又让你写过函数、文件和错误定位。那时梯度多是纸面公式，类也还不是你熟悉的工具。现在要换成可运行的对象：</p>
+<ul>
+<li>Python 的 <code>list</code> 只是容器，没有形状、广播和设备概念；</li>
+<li><code>torch.Tensor</code> 有 <code>shape</code>、<code>dtype</code>、<code>device</code>，运算按维度对齐；</li>
+<li><code>nn.Module</code> 把一组参数和 <code>forward</code> 计算绑在一起；</li>
+<li><code>loss.backward()</code> 沿计算图求梯度，<code>optimizer.step()</code> 才真正改参数。</li>
+</ul>
+<p>这四个东西分开看都不难，合起来才是“训练”。本章的代码都在 <a href="../../book/llm/examples/tiny_decoder"><code>examples/tiny_decoder/</code></a> 里；先把 <code>model.py</code> 当教材读，不要一上来背整份实现。</p>
+<h2 id="C23-section-55a4cb94b5" tabindex="-1">从列表到张量：形状是契约，不是注释</h2>
+<p>一个标量是 0 维张量，一个词向量是 1 维，一句话的 token 序列是 1 维，一个批次是 2 维，加上模型维度就是 3 维。微型 decoder 的输入写作：</p>
+<pre><code class="language-text">idx: [B, T]            B 条序列，每条 T 个 token id
+embedding: [B, T, C]   C 是模型宽度，本课默认 64
+</code></pre>
+<p><code>B</code>、<code>T</code>、<code>C</code> 不是随意命名，它们决定后面每个矩阵乘法的左右形状。比如注意力分数是 <code>[B, H, T, T]</code>：每个批次、每个头，都要给“当前位置能看哪些位置”打分。若把 <code>T</code> 和 <code>C</code> 弄反，代码可能仍然跑完，却在算完全错误的东西。</p>
+<p>广播（broadcasting）是另一个容易“看起来对”的地方。规则可以先记成一句话：从最右维开始比较，两维相等，或其中一维是 1，就能对齐；否则报错。于是：</p>
+<pre><code class="language-text">A: [3, 1]       B: [1, 4]       A + B: [3, 4]
+</code></pre>
+<p>结果第 <code>i</code> 行第 <code>j</code> 列是 <code>A[i,0] + B[0,j]</code>。这不是把 3 条数据复制成 12 条存储，而是计算时按索引取值。模型的 <code>[T, C]</code> 位置编码加上 <code>[B, T, C]</code> 的 token 表示时，就是靠最左维的 1 自动扩展到整个批次。</p>
+<pre><code class="language-python">import torch
+
+a = torch.tensor([[1.0], [2.0], [3.0]])       # [3, 1]
+b = torch.tensor([[10.0, 20.0, 30.0, 40.0]])  # [1, 4]
+print((a + b).shape)                          # torch.Size([3, 4])
+</code></pre>
+<p>如果两个形状是 <code>[3, 2]</code> 和 <code>[3, 4]</code>，最右维 2 与 4 不相等，也没有 1，就会报错。这个报错应当让你停下来检查“我到底想对齐哪一维”，而不是随手 <code>view</code> 成某个能跑的尺寸。</p>
+<h2 id="C23-section-ed5959cebd" tabindex="-1">从 Python 类到 <code>nn.Module</code>：参数要注册，计算要写在前向里</h2>
+<p>普通 Python 类也能存 <code>self.w</code>，但 PyTorch 不会知道它是可训练参数。<code>nn.Module</code> 的约定是：</p>
+<ol>
+<li>在 <code>__init__</code> 里创建子模块或 <code>nn.Parameter</code>；</li>
+<li>在 <code>forward</code> 里写输入到输出的计算；</li>
+<li>调用 <code>model(x)</code> 时由框架转去执行 <code>forward</code>。</li>
+</ol>
+<p>微型 decoder 的 token 嵌入就是一个查表：</p>
+<pre><code class="language-python">self.token_embedding = nn.Embedding(config.vocab_size, config.d_model)
+x = self.token_embedding(idx)          # [B, T] -&gt; [B, T, C]
+</code></pre>
+<p><code>nn.Embedding</code> 的权重形状是 <code>[vocab_size, C]</code>，每一行是一个 token 的初始向量。它和 <code>nn.Linear</code> 不同：输入是整数编号，输出是浮点向量。编号本身没有大小含义；训练改变的是这些行向量，不是“把 7 号词改成 8 号词”。</p>
+<p>本课的位置不是学习出来的参数，而是固定的正弦编码：</p>
+<pre><code class="language-text">PE(pos, 2i)   = sin(pos / 10000^(2i/C))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/C))
+</code></pre>
+<p><code>pos</code> 是位置，<code>i</code> 是维度编号。它没有可训练参数，所以保存时不需要存一张位置表，载入时按 <code>max_len</code> 和 <code>C</code> 重算。这样做的代价是位置模式固定；好处是“位置 40”不依赖训练时是否见过那么长的句子。C24 会把它和 token 表示相加，再送进注意力。</p>
+<p>一个 decoder block 可以压缩成两行：</p>
+<pre><code class="language-python">x = x + self.attn(self.ln_1(x))
+x = x + self.ff(self.ln_2(x))
+</code></pre>
+<p>先归一化，再做注意力或前馈，最后把结果加回原输入，这叫残差连接。<code>x</code> 的形状始终是 <code>[B, T, C]</code>，所以加得回去。若某个子层偷偷把 <code>T</code> 或 <code>C</code> 改了，残差那一步会立刻报形状错误；这其实是好事。</p>
+<p>输出头把 <code>[B, T, C]</code> 映射到 <code>[B, T, V]</code>，<code>V</code> 是词表大小。本课让输出头与 token 嵌入共享同一份权重（weight tying）：<code>head.weight = token_embedding.weight</code>。<code>model.parameters()</code> 会去重，所以参数计数时这份矩阵只算一次；但 <code>state_dict()</code> 里仍可能出现两个键，载入时要注意它们指向同一份存储。</p>
+<h2 id="C23-section-6993f92562" tabindex="-1">手算一个梯度，再让 autograd 复核</h2>
+<p>先取最小的可微关系：</p>
+<pre><code class="language-text">pred = w * x + b
+L = (pred - y)^2
+</code></pre>
+<p>设 <code>w=2</code>、<code>x=3</code>、<code>b=1</code>、<code>y=10</code>，则 <code>pred=7</code>，<code>L=(7-10)^2=9</code>。对 <code>w</code> 求偏导，链式法则给出：</p>
+<pre><code class="language-text">∂L/∂w = 2 * (pred - y) * x = 2 * (-3) * 3 = -18
+∂L/∂b = 2 * (pred - y)     = -6
+</code></pre>
+<p>梯度是负的，意味着“把 <code>w</code>、<code>b</code> 稍微增大，损失会下降”。若学习率是 <code>0.05</code>，一次更新：</p>
+<pre><code class="language-text">w_new = 2 - 0.05 * (-18) = 2.9
+b_new = 1 - 0.05 * (-6)  = 1.3
+pred_new = 2.9 * 3 + 1.3 = 10.0
+L_new = 0
+</code></pre>
+<p>对这份二次函数和这组数，一步恰好落到目标；换一组数或换更大的学习率，就不一定了。下面让 PyTorch 算同一件事：</p>
+<pre><code class="language-python">import torch
+
+w = torch.tensor(2.0, requires_grad=True)
+b = torch.tensor(1.0, requires_grad=True)
+x = torch.tensor(3.0)
+y = torch.tensor(10.0)
+
+pred = w * x + b
+loss = (pred - y) ** 2
+loss.backward()
+
+print(w.grad, b.grad)   # tensor(-18.) tensor(-6.)
+</code></pre>
+<p><code>requires_grad=True</code> 只对叶子张量有意义。反向传播时，只有需要梯度的叶子会累积 <code>.grad</code>；中间结果的梯度是计算过程中的临时量。<code>loss.backward()</code> 默认把梯度<strong>累加</strong>到 <code>.grad</code>，所以训练循环每步都要先 <code>optimizer.zero_grad(set_to_none=True)</code>，否则上一步的梯度会混进来。这个细节在 C09 只是文字，现在你可以亲手制造一次“忘记清零”的对比。</p>
+<p>把标量换成向量，交叉熵的梯度有一个很好用的形式。若 <code>p = softmax(logits)</code>，目标 one-hot 是 <code>y</code>，那么：</p>
+<pre><code class="language-text">∂CE/∂logit_i = p_i - y_i
+</code></pre>
+<p>模型给目标的机会太少时 <code>p_target &lt; 1</code>，梯度为负，更新会把对应分数往上推；给错候选太多时梯度为正，把它往下压。这个式子假设你在比较同一个位置的整个词表；C24 的“目标错位”就是保证每个位置比较的确实是下一个 token。</p>
+<h2 id="C23-section-37c065f22a" tabindex="-1">保存不是“把模型对象泡进文件”</h2>
+<p>一种省事的写法是 <code>torch.save(model, path)</code>，但它把 Python 类路径和对象结构一起序列化，换代码、换环境、载入来路不明的文件都更危险。本课只保存可重建的材料：</p>
+<pre><code class="language-python">payload = {
+    &quot;format&quot;: &quot;tiny-decoder-v1&quot;,
+    &quot;config&quot;: asdict(config),      # 层数、宽度、头数、d_ff、max_len
+    &quot;vocab&quot;: tokenizer.token_list(),
+    &quot;state_dict&quot;: model.state_dict(),
+    &quot;adaptation&quot;: {},              # LoRA 元数据，C25 用
+    &quot;meta&quot;: {...},                 # 步数、种子等，仅作记录
+}
+torch.save(payload, path)
+</code></pre>
+<p>载入时先按 <code>config</code> 重建空白模型和词表，再 <code>load_state_dict(..., strict=True)</code>。这样结构对不对得上会被明确检查，不会“看起来加载成功但少了一层”。<code>torch.load(..., weights_only=True)</code> 限制反序列化能引用的全局对象；本课的 payload 只含字典、列表、数字、字符串和 tensor，所以可以用它。不要为了打开一个陌生 checkpoint 就改成 <code>weights_only=False</code>。</p>
+<p>保存后做一次“重载等价”检查：对同一批输入，保存前模型和重载后模型的 logits 应逐位相等（或至少差值在明确阈值内）。<code>train.py</code> 把这件事打印成 <code>checks.reload.bitwise_equal</code> 和 <code>max_abs_diff</code>。如果不等，先查词表顺序、配置、是否漏了 LoRA 包装，再查浮点设备差异；不要用一句“差不多”带过。</p>
+<h2 id="C23-section-402d11771f" tabindex="-1">改一个条件，看看哪里会坏</h2>
+<ul>
+<li><strong>忘记 <code>zero_grad</code></strong>：连续两步的梯度相加，参数走的方向不再对应当前批次。把 <code>zero_grad</code> 注释掉跑两步，对比 <code>.grad</code>。</li>
+<li><strong><code>requires_grad=False</code></strong>：参数被冻结，<code>backward()</code> 后 <code>.grad</code> 仍是 <code>None</code>。这不是“梯度为零”，而是根本没有进入反向图。C25 的 LoRA 冻结检查会用到这个区别。</li>
+<li><strong>在 <code>torch.no_grad()</code> 里训练</strong>：前向能算，反向会报“没有 requires_grad 的输入”；推理时用它省内存是对的，训练时用错就学不动。</li>
+<li><strong>形状碰巧能广播</strong>：例如把本应 <code>[T, T]</code> 的掩码写成 <code>[T, 1]</code>，它可能广播成每一列都相同，代码不报错但语义全错。看到注意力权重每一行都一样，先查掩码形状。</li>
+<li><strong>保存了模块而不是 <code>state_dict</code></strong>，又在载入时换了类名或目录：路径能读到文件，但反序列化失败。统一用 <code>state_dict</code> + 配置 + 词表。</li>
+<li><strong>序列超过 <code>max_len</code></strong>：本课直接报错，不静默截断。静默截断会让“模型没学会长句”和“你根本没把长句喂进去”混在一起。</li>
+</ul>
+<h2 id="C23-section-e2e9724e68" tabindex="-1">独立练习与项目增量</h2>
+<ol>
+<li>对 <code>w=1.5</code>、<code>x=-2</code>、<code>b=0.5</code>、<code>y=1</code> 手算 <code>∂L/∂w</code>、<code>∂L/∂b</code>；取学习率 <code>0.1</code> 更新一次，算出新的预测和损失。然后用 autograd 复核。再把 <code>w</code> 冻结，重做一次前向和反向，说明为什么 <code>w.grad</code> 是 <code>None</code> 而 <code>b.grad</code> 仍有值。</li>
+<li>构造 <code>[3,1]</code> 与 <code>[1,4]</code> 的广播，写出结果形状和任意一个元素的计算；再构造一个不能广播的 <code>[3,2]</code> 与 <code>[3,4]</code>，记录报错信息。回答：报错发生在哪一维？</li>
+<li>运行 <code>python book/llm/examples/tiny_decoder/train.py inspect</code>，找到 <code>parameters.total</code>、<code>architecture</code>、<code>checks.future_invisibility</code>。再用 <code>train</code> 生成 checkpoint，运行 <code>inspect --checkpoint ...</code>，核对 <code>checks.base_checksum</code> 与 <code>sample</code> 字段。不要只看“跑通了”，要能指出每个字段对应哪段计算。</li>
+<li>把 <code>model.py</code> 中某个 <code>nn.Linear</code> 的 <code>bias</code> 去掉，重新 <code>inspect</code> 参数量，解释差了多少、为什么。改结构后必须重新训练；旧 checkpoint 不能直接塞进新结构。</li>
+</ol>
+<p>项目增量：你已经能把“数组—模块—梯度—保存”四件事说清，并且能用 <code>inspect</code> 的字段核对模型结构。下一章会把这些零件真正装成一个 causal decoder，用位移目标训练，再用自回归循环生成。</p>
+<p>答案与逐项核算见 <a href="c23-answer.html"><code>../deepening/c23-answer.md</code></a>。下一章：<a href="c24.html">C24 从零组装最小 decoder</a>。</p>
+<h2 id="C23-section-82826587a3" tabindex="-1">来源与边界</h2>
+<ul>
+<li>PyTorch 2.14.1 官方文档：autograd 的 <code>requires_grad</code>/反向图说明，<code>optimizer.zero_grad</code> 与 <code>loss.backward</code> 的训练循环，<code>state_dict</code> 与 <code>weights_only</code> 的保存/载入建议（本课通过 Context7 核对版本）。</li>
+<li>本课 <code>model.py</code> 的实际实现与手算数值；手算部分不依赖运行结果。</li>
+<li>边界：本章的标量梯度、广播和保存检查都是教学规模。真实训练还要处理混合精度、设备、分布式、数据加载和更复杂的优化器状态；本课不声称这些都被覆盖。固定正弦位置是本实现的选择，不是“所有 Transformer 都如此”。</li>
+</ul>
+<p><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="G20 两候选分数按梯度更新"></p>
+<p><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="G33 训练才拧旋钮，推理只读参数"></p>
+<p>本地对照实验：<a href="training.html">X05 训练与推理</a>。它用的是 bigram 分数表，不是本章的 decoder；对照的是“预测—比较—更新”的动作，不是模型能力。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c22.html">上一章 C22</a><a href="c23-answer.html">独立作答后核对</a><a href="c24.html">下一章 C24</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C29 交给别人怎样才算交付 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details open><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html" aria-current="page">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C29-section-9e4e9c12ed">先修检查：从 C28 与基础工程走进来</a></li><li class="toc-level-2"><a href="#C29-section-23067e11f1">交付包长什么样</a></li><li class="toc-level-2"><a href="#C29-section-26202cfae4">干净环境：从零启动</a></li><li class="toc-level-2"><a href="#C29-section-7198426e51">配置与权限</a></li><li class="toc-level-2"><a href="#C29-section-e25a58c31c">故障注入：至少四种，记录实际结果</a></li><li class="toc-level-3"><a href="#C29-section-4fd2a05f86">1. 服务停止</a></li><li class="toc-level-3"><a href="#C29-section-48e3764143">2. 模型不可用</a></li><li class="toc-level-3"><a href="#C29-section-619bfb852d">3. 坏 JSON</a></li><li class="toc-level-3"><a href="#C29-section-7d35be5c31">4. 源文件缺失/版本不符</a></li><li class="toc-level-3"><a href="#C29-section-3afc49c8df">5. 越权（如你的系统有读者字段）</a></li><li class="toc-level-3"><a href="#C29-section-e881ee6b49">6. 超时/未知（可选，条件允许）</a></li><li class="toc-level-2"><a href="#C29-section-13394dd8a7">回退：实际演练一次</a></li><li class="toc-level-2"><a href="#C29-section-e59a91329e">监测、隐私与费用</a></li><li class="toc-level-2"><a href="#C29-section-88663c2b47">用户说明：让别人知道边界</a></li><li class="toc-level-3"><a href="#C29-section-8164a617b7">范围声明模板</a></li><li class="toc-level-2"><a href="#C29-section-8af21bdf37">另一个人从干净环境运行</a></li><li class="toc-level-2"><a href="#C29-section-83a78ab2a2">失败反例</a></li><li class="toc-level-2"><a href="#C29-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C29-section-35858443b2">项目增量：可交付发布包</a></li><li class="toc-level-2"><a href="#C29-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C29"><p class="eyebrow">S5 / C29 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c28.html">C28</a></p><div class="article-body"><h1 id="C29-section-29f205dd80" tabindex="-1">C29 交给别人怎样才算交付</h1>
+<p>你在自己的笔记本上跑通了产品手册助手：模型能加载、检索能命中、答案带页码。第二天，同事按你写的“运行 <code>python app.py</code>”操作，得到的是 <code>ModuleNotFoundError</code>；另一位同事启动了服务，健康检查返回 200，但一问问题就 502；还有人把旧版手册的答案发给了现场。你的程序没有坏，坏的是<strong>交付边界</strong>：环境、配置、权限、健康检查、故障处理和回退没有写成别人能执行的东西。</p>
+<p>上一章 <a href="c28.html">C28 为新任务选择最小系统</a> 给出了架构决定；本章把它变成别人能启动、能检查、能回退的交付包。下一章 <a href="c30.html">C30 不照抄案例的毕业项目</a> 会换一个陌生题材，让你独立走完同样的链路。</p>
+<p>本章把 C28 的架构决定变成可交付的一包东西：环境锁定、配置、启动、健康检查、故障注入、回退、隐私与用户说明。下面以产品手册系统为目标，用仓库资料助手演示可复现的服务契约；两者命令要替换，边界不能省。</p>
+<h2 id="C29-section-9e4e9c12ed" tabindex="-1">先修检查：从 C28 与基础工程走进来</h2>
+<p>你应该已经：</p>
+<ul>
+<li>有 C28 的架构决定、验收集和范围说明；</li>
+<li>能运行一个本地 Python 程序，理解虚拟环境、依赖、路径和退出码；</li>
+<li>见过 HTTP 请求/响应，知道状态码、JSON 和端口；</li>
+<li>知道哪些文件不能进仓库（模型权重、密钥、真实客户数据）。</li>
+</ul>
+<p>本章就地补四个小桥：</p>
+<ol>
+<li><strong>进程与服务</strong>：<code>serve</code> 启动后是一个长期运行的进程，监听 <code>127.0.0.1:8765</code>；关闭进程，端口就不再响应。</li>
+<li><strong>健康检查</strong>：<code>GET /health</code> 返回 200 只说明进程和路由在，不一定说明模型能推理、文档能读取。健康检查要分“存活”与“可用”。</li>
+<li><strong>配置</strong>：模型路径、手册路径、端口、读者身份、日志级别都应显式记录；密钥只写环境变量名，不写值。</li>
+<li><strong>回退</strong>：保留上一个可运行版本，知道怎么切回去、怎么验证切回成功。回退不是“重新装一遍试试”。</li>
+</ol>
+<p><img src="../../book/assets/handdraw/llm/materials-to-result.svg" alt="材料、步骤、核验与交付放在一条线上；每一段都要有可回查的文件"></p>
+<p>旧的 <a href="project.html">L12 项目交付实验</a> 提供四字段报告与缺失/冲突材料，可用来检查核验习惯；它使用网页预置数据，不是本章发布包的实测。</p>
+<h2 id="C29-section-23067e11f1" tabindex="-1">交付包长什么样</h2>
+<p>不要交一个散落的目录。用版本化发布目录：</p>
+<pre><code class="language-text">manual-assistant/
+  releases/
+    2026-11-08-a/
+      app/                  # 你的程序（或指向仓库的固定提交）
+      docs/manual-v2.0.md
+      documents.json
+      requirements.lock     # 实际测试通过的完整依赖
+      release.json          # 版本、哈希、启动命令、已知限制
+      runbook.md
+      user-guide.md
+      smoke/
+        normal.json
+        model-failure.json
+        bad-json.json
+        rollback.md
+    2026-11-07-a/           # 上一个可用版本，用于回退
+  current-release.json      # 指向当前发布目录；不是唯一真相，启动脚本仍显式校验
+  README.md                 # 快速开始、范围、支持/不支持
+</code></pre>
+<p><code>release.json</code> 示例（字段可增减，但不要省略证据）：</p>
+<pre><code class="language-json">{
+  &quot;schema&quot;: &quot;manual-release/1&quot;,
+  &quot;release&quot;: &quot;2026-11-08-a&quot;,
+  &quot;created&quot;: &quot;2026-11-08&quot;,
+  &quot;program_commit&quot;: &quot;&lt;git commit 或源码包 SHA-256&gt;&quot;,
+  &quot;python&quot;: &quot;3.13.x&quot;,
+  &quot;platform&quot;: &quot;Windows 11 x64 / CPU&quot;,
+  &quot;model&quot;: {
+    &quot;path&quot;: &quot;&lt;本地模型目录&gt;&quot;,
+    &quot;config_sha256&quot;: &quot;&lt;config.json 哈希&gt;&quot;,
+    &quot;license_note&quot;: &quot;权重不再分发；使用前确认许可&quot;
+  },
+  &quot;manual&quot;: {
+    &quot;path&quot;: &quot;docs/manual-v2.0.md&quot;,
+    &quot;version&quot;: &quot;2.0&quot;,
+    &quot;sha256&quot;: &quot;&lt;手册文本哈希&gt;&quot;
+  },
+  &quot;start&quot;: &quot;python app/assistant.py serve --reader student --docs documents.json --model &lt;MODEL_DIR&gt; --host 127.0.0.1 --port 8765&quot;,
+  &quot;health&quot;: &quot;GET http://127.0.0.1:8765/health&quot;,
+  &quot;scope&quot;: &quot;只回答 v2.0 手册覆盖的内容；逐字引用；自由改写需人工复核&quot;,
+  &quot;known_limits&quot;: [&quot;扫描页需 OCR&quot;, &quot;不执行设备动作&quot;, &quot;CPU 延迟依机器而异&quot;]
+}
+</code></pre>
+<p>关键点：</p>
+<ul>
+<li><code>requirements.lock</code> 是<strong>实际测试通过</strong>的完整依赖，不是“&gt;=”范围。仓库示例的 <code>requirements.txt</code> 可能只是下限；交付时用你环境里的 <code>python -m pip freeze</code> 生成锁文件，再在干净环境验证。</li>
+<li><code>release.json</code> 是证据索引，不要让程序偷偷从它读取并覆盖显式参数；启动参数仍要看得见。</li>
+<li>模型权重、真实日志、密钥、客户数据不进发布包。模型只写路径、来源、哈希和许可说明。</li>
+</ul>
+<h2 id="C29-section-26202cfae4" tabindex="-1">干净环境：从零启动</h2>
+<p>在一个新目录（不复制 <code>.venv</code>、<code>out/</code>、缓存和旧日志）按 runbook 执行：</p>
+<pre><code class="language-bash">python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -r releases/2026-11-08-a/requirements.lock
+python --version
+python -c &quot;import torch, transformers; print(torch.__version__, transformers.__version__)&quot;
+</code></pre>
+<p>然后启动服务。以仓库资料助手为同构示例：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py serve \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --model /path/to/local-model \
+  --host 127.0.0.1 --port 8765
+</code></pre>
+<p>健康检查：</p>
+<pre><code class="language-bash">curl -s http://127.0.0.1:8765/health
+</code></pre>
+<p>实际返回应包含 <code>status: &quot;ok&quot;</code>、<code>provider</code>、<code>model</code>、<code>docs</code>、<code>local_files_only</code>。但<strong>200 不等于可用</strong>：该服务的模型是首次查询时才加载，健康检查不会证明模型文件完整。再做一次已知问题的就绪查询：</p>
+<pre><code class="language-bash">curl -s -o out/ready.json -w &quot;%{http_code}\n&quot; \
+  -X POST http://127.0.0.1:8765/query \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;question&quot;:&quot;2026-10-03 的风速是多少？&quot;,&quot;reader&quot;:&quot;student&quot;,&quot;mode&quot;:&quot;fixed&quot;,&quot;top_k&quot;:3}&#39;
+</code></pre>
+<p>若返回 200 且报告带引用，才说明“进程 + 文档 + 模型 + 引用校验”这条链在当前环境可用。若返回 502，保留响应体里的 <code>status</code>、<code>diagnostics.first_failure</code> 和 <code>usage</code>，不要反复重启掩盖。</p>
+<p>对产品手册系统，把上面的命令换成你的 <code>serve</code> 入口；健康检查至少要报告：进程、版本、手册版本、模型标签、当前读者/权限模式。没有 HTTP 入口的 CLI 也要提供等价的 <code>healthcheck</code> 子命令或启动自检。</p>
+<h2 id="C29-section-7198426e51" tabindex="-1">配置与权限</h2>
+<p>配置分三层：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>内容</th>
+<th>不应包含</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码/发布包</td>
+<td>路由、默认预算、输出 schema</td>
+<td>密钥、真实客户数据、模型权重</td>
+</tr>
+<tr>
+<td>发布配置</td>
+<td>手册路径/版本/哈希、模型路径、端口、日志目录</td>
+<td>个人令牌、未授权文档</td>
+</tr>
+<tr>
+<td>运行时环境</td>
+<td>API 变量名、临时路径、读者身份</td>
+<td>密钥值打印到日志</td>
+</tr>
+</tbody></table>
+<p>规则：</p>
+<ul>
+<li>绝对路径可以出现在本机 <code>release.json</code>，但用户说明要写“替换为你的路径”，不要把作者机器的路径当成通用路径；</li>
+<li>只允许回环地址 <code>127.0.0.1</code>，除非另有网络与认证设计；不要默认 <code>0.0.0.0</code>；</li>
+<li>读者/权限必须在检索前检查；服务端不能信任客户端自报的“我是管理员”；</li>
+<li>环境变量只记录名称，例如 <code>ASSISTANT_API_BASE</code>、<code>ASSISTANT_API_MODEL</code>、<code>ASSISTANT_API_KEY</code>，不记录值；</li>
+<li>日志默认不写完整问题/答案/文档正文；若必须写，先脱敏并设保留期限。</li>
+</ul>
+<h2 id="C29-section-e25a58c31c" tabindex="-1">故障注入：至少四种，记录实际结果</h2>
+<p>不要只测试“服务正常”。按下面的顺序做，每次都保存请求、HTTP 码、响应体和时间：</p>
+<h3 id="C29-section-4fd2a05f86" tabindex="-1">1. 服务停止</h3>
+<p>启动服务后，另开终端请求一次，然后停止服务（<code>Ctrl+C</code> 或关闭进程），再请求：</p>
+<ul>
+<li>预期：连接被拒绝/超时，不是 200；</li>
+<li>记录：客户端错误、时间、是否有请求到达服务端；</li>
+<li>不能推出：服务一定没有执行任何操作。若请求有副作用，需要请求 ID/幂等键查询。</li>
+</ul>
+<h3 id="C29-section-48e3764143" tabindex="-1">2. 模型不可用</h3>
+<p>用错误的 <code>--model</code> 路径启动（或把模型目录改名后启动）。健康检查可能仍返回 200，因为模型未加载；发一次查询：</p>
+<ul>
+<li>预期：HTTP 502，报告 <code>model-unavailable</code>，<code>diagnostics.first_failure</code> 指出模型加载失败；</li>
+<li>记录：健康检查的“假阳性”——这正是为什么需要就绪查询；</li>
+<li>不能做：回退到示例答案、旧缓存答案或手写答案。</li>
+</ul>
+<h3 id="C29-section-619bfb852d" tabindex="-1">3. 坏 JSON</h3>
+<p>POST 一个非法 JSON，或缺少 <code>question</code>/<code>reader</code>：</p>
+<ul>
+<li>预期：400/413，报告 <code>invalid-request</code>，不进入模型；</li>
+<li>记录：请求体大小、错误字段；</li>
+<li>检查：错误信息不回显密钥或完整文档。</li>
+</ul>
+<h3 id="C29-section-7d35be5c31" tabindex="-1">4. 源文件缺失/版本不符</h3>
+<p>把 <code>documents.json</code> 指向一个不存在的文件，或改动手册文本但保留旧 <code>sha256</code>：</p>
+<ul>
+<li>预期：<code>missing-source</code> 或 <code>source-version-mismatch</code>（HTTP 409 或按你的映射）；</li>
+<li>记录：报告中的文档 ID、期望/实际哈希；</li>
+<li>不能做：忽略哈希、继续用缓存。</li>
+</ul>
+<h3 id="C29-section-3afc49c8df" tabindex="-1">5. 越权（如你的系统有读者字段）</h3>
+<p>用一个无权读取目标手册的读者提问：</p>
+<ul>
+<li>若权限过滤后没有候选：返回 <code>insufficient-evidence</code>，而不是硬凑一段；</li>
+<li>若管线明确返回 <code>unauthorized</code>：HTTP 403；</li>
+<li>检查：无权限正文没有进入提示/日志/报告。</li>
+</ul>
+<p>以实际报告为准，不要为了演示“403”改权限或改代码。</p>
+<h3 id="C29-section-e881ee6b49" tabindex="-1">6. 超时/未知（可选，条件允许）</h3>
+<p>若你的客户端有超时，构造一次慢请求或短暂断网：</p>
+<ul>
+<li>客户端超时只能说明“没等到响应”，不能说明服务没执行；</li>
+<li>记录请求 ID、客户端取消时间、服务端是否完成；</li>
+<li>对只读问答没有副作用，但仍要保留未知状态，不能把超时当“没有答案”。</li>
+</ul>
+<h2 id="C29-section-13394dd8a7" tabindex="-1">回退：实际演练一次</h2>
+<p>回退不是“把代码改回去再试”。用版本目录和显式切换：</p>
+<ol>
+<li>确认当前版本：<code>current-release.json</code> 指向 <code>2026-11-08-a</code>，记录其手册/模型/程序哈希；</li>
+<li>触发条件：健康检查连续失败，或就绪查询返回 502/引用校验失败率超阈值，或手册版本错误；</li>
+<li>停止当前服务；</li>
+<li>把 <code>current-release.json</code> 或启动脚本的 <code>RELEASE_DIR</code> 指向上一个版本 <code>2026-11-07-a</code>；不要依赖符号链接（Windows 权限/路径容易出问题）；</li>
+<li>用上一版的 <code>requirements.lock</code>（如依赖也变了）启动；</li>
+<li>跑同一组健康检查 + 就绪查询 + 至少一个失败用例；</li>
+<li>记录：切换时间、旧/新版本哈希、启动日志、查询报告、仍存在的问题；</li>
+<li>只有验证通过，才把当前版本标记为“已回退”；失败则继续回退或停止服务。</li>
+</ol>
+<p>回退演练的证据应包含：</p>
+<pre><code class="language-text">rollback/
+  before-health.json
+  before-query.json
+  trigger.md
+  after-health.json
+  after-query.json
+  release-old.json
+  release-new.json
+  result.md
+</code></pre>
+<p><code>result.md</code> 写清“为什么回退、切到哪个版本、验证了什么、哪些数据/模型版本不同、是否恢复到可服务状态”。不要只写“已回退”。</p>
+<h2 id="C29-section-e59a91329e" tabindex="-1">监测、隐私与费用</h2>
+<p>最小监测（本地即可）：</p>
+<ul>
+<li>每个请求一行 JSON：时间、请求 ID、读者、状态、HTTP 码、耗时、检索命中数、模型调用次数、文档版本；</li>
+<li>不记录完整问题/答案/正文，除非有明确授权和脱敏；</li>
+<li>健康检查与就绪查询分开；就绪失败要告警到本地日志/终端；</li>
+<li>磁盘、模型加载时间、内存峰值按需记录；CPU 本地费用记 <code>null</code>，不要编一个金额；</li>
+<li>若使用授权 API，记录 token 用量和单价依据；没有单价就写“未计价”，不要假装免费。</li>
+</ul>
+<p>隐私：</p>
+<ul>
+<li>手册和问题可能含内部信息；默认本地、最小化、限期保留；</li>
+<li>日志、备份、截图、失败报告同样受权限约束；</li>
+<li>删除请求要能删到日志/缓存/导出，而不只是主数据库；</li>
+<li>不把真实客户数据放进教学仓库或公开 issue。</li>
+</ul>
+<h2 id="C29-section-88663c2b47" tabindex="-1">用户说明：让别人知道边界</h2>
+<p><code>user-guide.md</code> 至少写：</p>
+<ul>
+<li>这个系统做什么、不做什么；</li>
+<li>支持的手册版本和文件类型；</li>
+<li>如何提问、如何看引用、如何识别“未知/不可读/冲突”；</li>
+<li>引用契约：答案只使用逐字引用或人工复核的改写；自由改写不算材料原文；</li>
+<li>权限：哪些读者能看哪些文档；越权会怎样；</li>
+<li>失败时怎么办：重启、看健康检查、回退、联系谁；</li>
+<li>隐私与保留：问题/日志保存多久、是否上传；</li>
+<li>已知限制：CPU 延迟、扫描页、语言、模型可能出错。</li>
+</ul>
+<p><code>runbook.md</code> 至少写：</p>
+<ul>
+<li>依赖安装命令与锁文件；</li>
+<li>模型/手册路径与哈希；</li>
+<li>启动、停止、健康检查、就绪查询；</li>
+<li>常见故障与对应状态；</li>
+<li>回退步骤与验证；</li>
+<li>变更记录（谁、何时、改了什么）。</li>
+</ul>
+<h3 id="C29-section-8164a617b7" tabindex="-1">范围声明模板</h3>
+<pre><code class="language-text">本交付只处理 &lt;手册名称/版本&gt; 中已授权、可抽取的文字与标注图像。
+答案仅由逐字引用或经人工复核的改写组成；未命中、不可读、冲突或越权时返回明确状态，不猜测。
+不支持 &lt;PDF 版面/手写/多语言/设备控制/实时数据&gt;。
+模型与数据的许可边界见 release.json；权重不再分发。
+本说明不构成安全、法律或医疗建议；高风险操作须按组织规程人工确认。
+</code></pre>
+<h2 id="C29-section-8af21bdf37" tabindex="-1">另一个人从干净环境运行</h2>
+<p>K5 要求“另一人独立启动与操作”，这不是作者再跑一遍。你需要找一位没有参与实现的人，给他发布包和文档，不口头补步骤，记录：</p>
+<ul>
+<li>首次执行的命令与输出；</li>
+<li>卡在哪一步、缺什么依赖/权限；</li>
+<li>是否能在无作者提示下完成正常查询和一次失败查询；</li>
+<li>回退是否由他实际执行；</li>
+<li>他遇到的问题和你的修订。</li>
+</ul>
+<p>作者/agent 的烟测只是技术证据，不能记作独立复做通过。没有真人时，保留空白记录并标“待独立复做”，不要填造姓名或完成率。</p>
+<h2 id="C29-section-83a78ab2a2" tabindex="-1">失败反例</h2>
+<ol>
+<li><strong>健康检查 200 就宣布可用</strong>：模型未加载、文档损坏，第一次查询才 502。要加就绪查询。</li>
+<li><strong>requirements 写 <code>&gt;=</code></strong>：干净环境装到新版本，API 变了。交付用实际锁文件。</li>
+<li><strong>模型路径写死作者机器</strong>：别人无法启动。路径进配置并写替换说明。</li>
+<li><strong>回退只改代码</strong>：模型/手册版本没切，旧答案继续出现。回退要连数据/配置/依赖一起验证。</li>
+<li><strong>日志记录完整问题</strong>：内部型号、客户信息泄露。默认脱敏/不记录正文。</li>
+<li><strong>把作者自测当独立复做</strong>：K5 不通过。需要另一位真人按文档操作。</li>
+</ol>
+<h2 id="C29-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>为你的产品手册系统建立 <code>releases/</code>、<code>release.json</code>、<code>requirements.lock</code>、<code>runbook.md</code>、<code>user-guide.md</code>。</li>
+<li>在干净虚拟环境按 runbook 启动，保存健康检查、就绪查询和至少一次失败查询的实际输出。</li>
+<li>做四种故障注入：停服务、错模型、坏 JSON、缺失/版本不符（有权限字段再加越权）。保存请求、HTTP 码、响应体。</li>
+<li>实际执行一次回退：从上个版本切回，跑健康检查和就绪查询，写 <code>result.md</code>。</li>
+<li>请另一位同学只按文档操作；记录他卡住的地方，不口头补充。没有真人就保留待办。</li>
+<li>写一页范围声明，明确支持/不支持、引用契约、隐私和回退。</li>
+<li>对照答案的交付检查表自评，标出未验证项。</li>
+</ol>
+<p>答案与检查表见 <a href="c29-answer.html">C29 答案</a>。答案不提供可直接抄的发布包；它给验收点和常见缺步。</p>
+<h2 id="C29-section-35858443b2" tabindex="-1">项目增量：可交付发布包</h2>
+<p>C30 的毕业项目会直接复用本章结构：</p>
+<pre><code class="language-text">capstone/
+  releases/&lt;version&gt;/
+    app/
+    docs/
+    requirements.lock
+    release.json
+    runbook.md
+    user-guide.md
+  evidence/
+    normal/
+    missing/
+    conflict/
+    unauthorized/
+    model-failure/
+    bad-json/
+    rollback/
+  independent-review.md   # 另一位真人的记录；没有就写待办
+</code></pre>
+<p>只有发布包、证据和独立复做都齐，才谈 K5；本章本身不授予 K5。</p>
+<h2 id="C29-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<ul>
+<li>服务接口、健康检查、状态码与报告字段以 <code>book/llm/examples/assistant/README.md</code> 和实际 <code>--help</code> 为准；产品手册系统由你实现，命令需替换。</li>
+<li>本章用资料助手做同构演练，不声称它是产品手册系统，也不声称其模型/文档已在你机器上通过。</li>
+<li>干净环境、故障注入、回退和独立复做必须实际执行；本章文字不能替代证据。</li>
+<li>不要求公网、付费托管或云服务；本地回环服务即可。若使用 API，费用与数据驻留由你记录，不编造金额。</li>
+<li>独立复做需要真人；没有真人时 K5 保持待验，不能用作者自测或 agent 记录补齐。</li>
+</ul>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c28.html">上一章 C28</a><a href="c29-answer.html">独立作答后核对</a><a href="c30.html">下一章 C30</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

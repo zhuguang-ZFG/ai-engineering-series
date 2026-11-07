@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C10 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C10-answer-section-aa0d155b8d" tabindex="-1">C10 核对：从续写到助手（K2）</h1>
+<p>题目在 <a href="c10.html">C10 正文</a>。先独立完成四问，再对照本页。所有容差 ±0.002；只写结果不通过，必须能指出公式或中间值。</p>
+<p>K2 不取平均：A、B、C 的每个数值都在容差内，D 四项分类全对，才算通过。</p>
+<h2 id="C10-answer-section-2e4215285a" tabindex="-1">A. softmax 与温度</h2>
+<p><code>T=1</code>，分数 <code>[2,1,0]</code>：</p>
+<ul>
+<li><code>exp(2)=7.38906</code>，<code>exp(1)=2.71828</code>，<code>exp(0)=1</code></li>
+<li>总和 <code>11.10734</code></li>
+<li>概率 <code>[0.66524, 0.24473, 0.09003]</code></li>
+</ul>
+<p><code>T=0.5</code>，分数除以 0.5 得 <code>[4,2,0]</code>：</p>
+<ul>
+<li><code>exp(4)=54.59815</code>，<code>exp(2)=7.38906</code>，<code>exp(0)=1</code></li>
+<li>总和 <code>62.98721</code></li>
+<li>概率 <code>[0.86681, 0.11731, 0.01588]</code></li>
+</ul>
+<p>温度降低，分布更尖；最高分候选从约 0.665 升到约 0.867。概率仍相加为 1，且不表示事实正确。</p>
+<h2 id="C10-answer-section-6cd4527f6c" tabindex="-1">B. 一行注意力</h2>
+<p>缩放后分数：</p>
+<ul>
+<li><code>q·k1 = 0×2 + 1×0 = 0</code></li>
+<li><code>q·k2 = 0×0 + 1×2 = 2</code></li>
+<li>除以 <code>√2≈1.4142</code>：<code>[0, 1.4142]</code></li>
+</ul>
+<p>softmax：</p>
+<ul>
+<li><code>exp(0)=1</code></li>
+<li><code>exp(1.4142)≈4.11325</code></li>
+<li>总和 <code>5.11325</code></li>
+<li>权重 <code>[0.19557, 0.80443]</code></li>
+</ul>
+<p>加权输出：</p>
+<p><code>0.19557×[1,1] + 0.80443×[2,0] = [0.19557+1.60886, 0.19557] ≈ [1.80443, 0.19557]</code></p>
+<p>未来位置被遮住，权重为 0；若把未来的 V 改得很大，输出不变。</p>
+<h2 id="C10-answer-section-f6e8e3868c" tabindex="-1">C. 一步更新</h2>
+<p>更新前：</p>
+<ul>
+<li><code>softmax([0,0]) = [0.5,0.5]</code></li>
+<li>目标第一个，损失 <code>−ln(0.5)≈0.6931</code></li>
+</ul>
+<p>梯度（预测 − 目标）：</p>
+<ul>
+<li>第一个：<code>0.5−1=−0.5</code></li>
+<li>第二个：<code>0.5−0=0.5</code></li>
+</ul>
+<p>学习率 0.8：</p>
+<ul>
+<li>新分数：<code>0−0.8×(−0.5)=0.4</code>；<code>0−0.8×0.5=−0.4</code></li>
+</ul>
+<p>更新后：</p>
+<ul>
+<li><code>exp(0.4)=1.49182</code>，<code>exp(−0.4)=0.67032</code></li>
+<li>总和 <code>2.16214</code></li>
+<li>概率 <code>[0.68997, 0.31003]</code></li>
+<li>损失 <code>−ln(0.68997)≈0.3711</code></li>
+</ul>
+<p>损失从约 0.693 降到约 0.371；目标候选概率上升，另一个下降。方向正确，但这是一次更新、一个训练对，不等于模型学会任务。</p>
+<h2 id="C10-answer-section-78e6b6ea29" tabindex="-1">D. 四种变化的分类</h2>
+<ol>
+<li><strong>加入 system 提示</strong>：输入变化（上下文）。改的是本次请求内容；参数不变；通常只影响本次或使用同一提示的请求。</li>
+<li><strong>200 条示范做监督微调</strong>：参数变化。改的是权重；保存检查点后持续；需要独立评测确认是否改善。</li>
+<li><strong>温度 0.2→0.9</strong>：解码设置。改的是采样分布；参数与输入内容都不变；只影响生成方式。</li>
+<li><strong>编辑保存的偏好备注</strong>：外部状态。改的是应用保存的数据；下一次请求可能把它作为输入带上；参数不变；权限与适用范围仍要检查。</li>
+</ol>
+<p>四个答案都要说明“改了什么/是否持久”，只写类别不够。</p>
+<h2 id="C10-answer-section-cb87bdc4be" tabindex="-1">E. 常见错误</h2>
+<ul>
+<li>把 softmax 的 exp 值当概率（未归一化）。</li>
+<li>注意力计算忘记除以 <code>√d_k</code>，或先 softmax 再 mask。</li>
+<li>梯度符号写反，导致目标概率下降还说“损失降低”。</li>
+<li>把温度当“事实可靠性旋钮”。</li>
+<li>把“加 system 提示”说成参数更新，或把“微调”说成只改本次输入。</li>
+<li>从产品行为反推训练配方。</li>
+</ul>
+<h2 id="C10-answer-section-427a9ebb42" tabindex="-1">F. 评分与验证状态</h2>
+<ul>
+<li>A：两组 exp、总和、概率齐全且全部在容差内。</li>
+<li>B：分数、权重、输出齐全，并说明 mask 使未来权重为 0。</li>
+<li>C：梯度、新分数、新概率、新损失齐全，且说明损失下降方向。</li>
+<li>D：四项分类与“是否持久”全对。</li>
+<li>方法：公式可见，未跳步。</li>
+</ul>
+<p>任一项不满足即 K2 不通过；不设“平均通过”。课程没有真人复核记录，数值答案可由本页自检，解释与分类需一位评审者按上述条件确认；复核前 K2 保持<strong>未验证</strong>。</p>
+</article><nav class="lesson-nav"><a href="c10.html">返回 C10 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

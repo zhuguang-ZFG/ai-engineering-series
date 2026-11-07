@@ -600,6 +600,9 @@ def run():
               "limitations": ["真实初学者试读待进行", "实际模型输出未采集", "EPUB 使用阅读器字体，交互改为静态步骤"]}
     (OUT / (STEM + ".json")).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": "built", "pages": len(pdf), "chapters": len(lessons), "figures": len(figures), "files": list(result["files"])}, ensure_ascii=False))
+    if course.get("curriculum"):
+        from export_course import run as export_curriculum
+        export_curriculum()
 
 
 if __name__ == "__main__":

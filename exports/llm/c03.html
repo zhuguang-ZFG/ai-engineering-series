@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C03 看似合理为什么仍可能错 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details open><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html" aria-current="page">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C03-section-25586f6f06">先修桥：来源、日期、版本</a></li><li class="toc-level-2"><a href="#C03-section-88b21078eb">三道检查，缺一不可</a></li><li class="toc-level-2"><a href="#C03-section-654069dcea">完整核对：一句话拆成四项</a></li><li class="toc-level-2"><a href="#C03-section-fc01c5b932">四种问题，四种处理</a></li><li class="toc-level-2"><a href="#C03-section-e8aa968599">为什么“再检查一下”不算检查</a></li><li class="toc-level-2"><a href="#C03-section-78388d96d3">改一个条件：把“检查”换成“找反证”</a></li><li class="toc-level-2"><a href="#C03-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C03-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C03-section-766a557ac0">项目增量：错误与未知清单 v1</a></li><li class="toc-level-2"><a href="#C03-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C03"><p class="eyebrow">S1 / C03 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c02.html">C02</a></p><div class="article-body"><h1 id="C03-section-112e6df7dc" tabindex="-1">C03 看似合理为什么仍可能错</h1>
+<p>朋友收到一份整齐的活动安排：</p>
+<blockquote>
+<p>读书会周日14:00在城市图书馆举行，免费参加，报名已于11月7日截止。来源：通知 A。</p>
+</blockquote>
+<p>句子通顺，还带了来源。你点开通知 A，却看到“读书会周六14:00开始，参与者需提前报名”，既没有地点，也没有“免费”，更没有截止日期。来源是真的，答案仍然错了。</p>
+<p>本章练一件事：把“看起来合理”拆成可以逐项检查的主张，并给每个问题归到正确类别。C02 教会你要求“每项附原句”；本章要追问：<strong>附了原句，原句真的支持它吗？</strong></p>
+<h2 id="C03-section-25586f6f06" tabindex="-1">先修桥：来源、日期、版本</h2>
+<p>检查之前，先把材料的三样身份信息写下来：</p>
+<ul>
+<li><strong>来源</strong>：哪份文件、谁发布、文件路径或链接是什么。</li>
+<li><strong>日期</strong>：发布于哪天，适用于哪个时间段。</li>
+<li><strong>版本</strong>：是不是修订版、补充通知，是否声明替代旧版。</li>
+</ul>
+<p>没有这三样，“通知 A”只是一个名字。C02 的约定里已经要求材料标注版本与日期；现在把它们变成检查动作：先看文件在不在，再看日期新旧，最后看适用范围。</p>
+<h2 id="C03-section-88b21078eb" tabindex="-1">三道检查，缺一不可</h2>
+<p>沿一条引用走回去，要过三道关：</p>
+<ol>
+<li><strong>来源存在吗</strong>：文件能否打开，编号是否对得上，链接是否指向同一份内容。</li>
+<li><strong>这句话真在里面吗</strong>：逐字或按语义找到原句，注意有没有被截断、拼接、改写。</li>
+<li><strong>这句话支持结论吗</strong>：原句的主语、时间、条件、否定词是否与结论一致。</li>
+</ol>
+<p>第三关最容易漏。原文“地点尚未确定”和结论“已在图书馆确定举行”都出现了“地点”，意思却相反；原文“参与者需提前报名”与结论“报名已截止”都谈报名，却不是一回事。</p>
+<p><img src="../../book/assets/handdraw/llm/claim-evidence-threads.svg" alt="一句答案拆成多项主张，每项各自找原句"></p>
+<p><em>图：一句完整回答要拆成时间、地点、费用、报名等小主张，再分别找落点。一条真实引用不能给整段话自动作保。</em></p>
+<h2 id="C03-section-654069dcea" tabindex="-1">完整核对：一句话拆成四项</h2>
+<p>把开头那句拆开，逐项检查：</p>
+<table>
+<thead>
+<tr>
+<th>主张</th>
+<th>引用的原句</th>
+<th>来源检查</th>
+<th>支持检查</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>周日14:00</td>
+<td>通知 A“周六14:00开始”</td>
+<td>文件存在</td>
+<td>原句说周六，不说周日</td>
+<td><strong>冲突</strong>（需查通知 C）</td>
+</tr>
+<tr>
+<td>城市图书馆</td>
+<td>未给出，或引用了 B</td>
+<td>通知 A 无此句</td>
+<td>原句不支持</td>
+<td><strong>无依据/缺失</strong></td>
+</tr>
+<tr>
+<td>免费参加</td>
+<td>无</td>
+<td>—</td>
+<td>—</td>
+<td><strong>无依据</strong></td>
+</tr>
+<tr>
+<td>报名11月7日截止</td>
+<td>通知 A 只写“需提前报名”</td>
+<td>文件存在</td>
+<td>原句没有截止日期</td>
+<td><strong>无依据</strong>；另有版本问题</td>
+</tr>
+</tbody></table>
+<p>再看通知 C：“活动改到周日14:00。”如果 C 是发布方后来发出的补充通知，时间一项就从“无依据”变成“有冲突但可追版本”：A 说周六，C 说改到周日，需要确认 C 的发布者与生效范围。这里不要急着写“以 C 为准”；先确认它是不是同一场活动、是否已被再次修订。</p>
+<p>再加一份通知 D（11月5日发布）：“报名截止延长至11月10日。”开头那句“已于11月7日截止”就有了第四个问题：<strong>过期</strong>。它可能曾经正确，但不是现行信息。</p>
+<h2 id="C03-section-fc01c5b932" tabindex="-1">四种问题，四种处理</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>例子</th>
+<th>报告里怎么写</th>
+<th>下一步</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>缺失</td>
+<td>材料没写地点</td>
+<td>材料未提供</td>
+<td>问发布方或查补充材料</td>
+</tr>
+<tr>
+<td>冲突</td>
+<td>A 周六，C 周日</td>
+<td>并列两条原句，标待确认</td>
+<td>查发布者、日期、适用范围</td>
+</tr>
+<tr>
+<td>过期</td>
+<td>旧截止日 11月7日</td>
+<td>标“旧版”，写新日期与来源</td>
+<td>采用现行版本并记录替换关系</td>
+</tr>
+<tr>
+<td>无依据</td>
+<td>回答写了“免费”</td>
+<td>删除或标“无材料支持”</td>
+<td>找不到就保持未知</td>
+</tr>
+</tbody></table>
+<p>四类的处理不同。把冲突写成“未知”，会丢掉已有的两条线索；把缺失写成“冲突”，会让人以为有两份材料打架；把过期写成“现行”，会让同事按旧日期行动。</p>
+<p><img src="../../book/assets/handdraw/llm/notice-conflict.svg" alt="两张通知不能硬拼"></p>
+<p><em>图：A 与 C 各写一个时间。正确动作是并列原句、追版本，而不是把两个时间揉成一个更“完整”的答案。</em></p>
+<h2 id="C03-section-e8aa968599" tabindex="-1">为什么“再检查一下”不算检查</h2>
+<p>对模型说“你再检查一下”，有时能发现遗漏，有时只得到更肯定的一遍原答案。原因是这句话没有引入新证据：模型看到的材料没变，能做的只是重新生成。要真正提高可核对性，检查动作要跟着主张走：</p>
+<ul>
+<li>数字：重算一遍，或换一种算法核对。</li>
+<li>引用：打开原文，定位原句。</li>
+<li>日期：查发布日、适用范围、是否有修订。</li>
+<li>代码/表格：运行或逐格复算。</li>
+</ul>
+<p>换句话说，<strong>检查方法要能产生上一次没有的信息</strong>。只让同一个来源再说一遍，不增加证据。</p>
+<h2 id="C03-section-78388d96d3" tabindex="-1">改一个条件：把“检查”换成“找反证”</h2>
+<p>假设你不问“这句话对吗”，而问“什么材料会推翻它”。对“地点是城市图书馆”，反证是：通知里没有地点，或另一份通知写了别处。对“报名11月7日截止”，反证是：存在更晚发布的延期通知。这个换法会逼你去找具体文件，而不是给答案再投一次信任票。</p>
+<p>课程的反例实验（<a href="evidence.html">X06B 证据核对</a>）预置了“时间说错、引用却是真的”等情形。它用人工标注陪你练拆句与核对，不理解任意新文件；页面上通过或失败，只说明这组固定材料的检查做对了没有。</p>
+<p><img src="../../book/assets/handdraw/llm/claim-evidence.svg" alt="引用存在还不够：主张、原句、日期与冲突材料要分别核对"></p>
+<p><em>图：检查顺序从“来源存在”走到“支持结论”，再走到“版本现行”。任一关不过，都不能把该项标成已确认。</em></p>
+<h2 id="C03-section-4540eaf9d0" tabindex="-1">失败对照</h2>
+<ol>
+<li><strong>真引用，错结论</strong>：引用“参与者需提前报名”，却得出“报名已截止”。引用存在，不支持。</li>
+<li><strong>真文件，旧版本</strong>：拿 11月1日的通知回答 11月8日的问题，忽略 11月5日的延期公告。</li>
+<li><strong>把否定读成肯定</strong>：原文“地点尚未确定”，回答“地点已确定”。</li>
+<li><strong>用自检代替证据</strong>：回答末尾写“我已仔细核对”，但四项里两项没有原句。</li>
+<li><strong>补日历</strong>：把“周六”写成“2026年11月14日”。即使日历对得上，材料也没给年份，仍属无依据。</li>
+</ol>
+<h2 id="C03-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<p>下面是一段待检查的回答，材料为通知 A、C、D（内容见上）：</p>
+<blockquote>
+<p>读书会周六14:00在城市图书馆举行，免费参加，报名截止11月10日。来源：A、C、D。</p>
+</blockquote>
+<p>要求：</p>
+<ol>
+<li>拆成至少四项主张，逐项填“原句、三道检查、判定（有依据/缺失/冲突/过期/无依据）”。</li>
+<li>指出哪一项的引用<strong>存在但不支持</strong>，并说明理由。</li>
+<li>哪一项需要补充材料才能下结论？写出你要找的具体文件或问题。</li>
+<li>把“周六14:00”和“周日14:00”处理成报告里的两行，而不是选一个。</li>
+<li>给出一份“可交付但仍待确认”的报告状态说明。</li>
+</ol>
+<p>核对要点在 <a href="c03-answer.html">C03 答案</a>，题目不附答案。</p>
+<h2 id="C03-section-766a557ac0" tabindex="-1">项目增量：错误与未知清单 v1</h2>
+<p>在 S1 项目里新增 <code>evidence-log.md</code>，每条一行，列：</p>
+<p><code>主张 | 引用原文 | 来源/日期/版本 | 检查结果 | 缺口 | 下一步</code></p>
+<p>要求：</p>
+<ul>
+<li>“检查结果”只能填有依据、缺失、冲突、过期、无依据之一；</li>
+<li>“下一步”要写成可执行动作（问谁、查哪份文件、重算哪一项），不能写“再确认”；</li>
+<li>保留被推翻的旧判断，旁边记下哪份材料推翻了它。</li>
+</ul>
+<p>这份清单会在 C04 的独立交付里直接用到：交付报告不只写“是什么”，还要写“哪些还不确定、为什么”。</p>
+<h2 id="C03-section-82826587a3" tabindex="-1">来源与边界</h2>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/evidence.md">L08 怎样发现一个看似合理的错误</a> 的引用检查与冲突材料，并复用 C02 的约定结构。通知 A/B/C/D、示例回答与核对表均为课程虚构或人工编写；<strong>没有调用真实模型做错误率测试</strong>，因此不能把表中判定读成某模型的表现。C01 提到的“城市图书馆”预置回答同样是课程编写，不是 DeepSeek 或 Kimi 的实测输出。旧实验只覆盖固定材料；真实系统还要处理文件权限、链接失效和版本库更新，这些都要在实际接入时另测。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c02.html">上一章 C02</a><a href="c03-answer.html">独立作答后核对</a><a href="c04.html">下一章 C04</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

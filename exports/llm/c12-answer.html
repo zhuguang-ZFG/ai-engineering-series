@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C12 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C12-answer-section-8a174f4b2e" tabindex="-1">C12 答案与核对依据</h1>
+<h2 id="C12-answer-section-abcf029621" tabindex="-1">1. <code>/health</code>、<code>/echo</code>、<code>/admin</code></h2>
+<p>启动服务端后：</p>
+<pre><code class="language-bash">curl -i http://127.0.0.1:8765/health
+</code></pre>
+<p>预期状态行 <code>HTTP/1.1 200 OK</code>，正文含 <code>&quot;service&quot;: &quot;teaching-lab&quot;</code>。</p>
+<pre><code class="language-bash">curl -i -X POST http://127.0.0.1:8765/echo \
+  -H &quot;Content-Type: application/json; charset=utf-8&quot; \
+  -H &quot;Authorization: Bearer local-teaching-only&quot; \
+  -d &#39;{&quot;message&quot;:&quot;地点缺失&quot;}&#39;
+</code></pre>
+<p>预期 <code>200</code>，正文把 <code>message</code> 原样回显，并给出实际字节数。<code>-i</code> 会显示响应头；只看正文会漏掉 <code>Content-Type</code>、<code>Content-Length</code> 和状态行，排错时这些信息很关键。</p>
+<pre><code class="language-bash">curl -i http://127.0.0.1:8765/admin
+</code></pre>
+<p>没有 <code>Authorization</code> 时预期 <code>403</code>（该分支先检查授权，而不是 <code>401</code>）；带错误 token 也是 <code>403</code>。<code>/echo</code> 缺少 token 则是 <code>401</code>。两者的区别由本教学服务的实现决定；真实服务可能采用不同策略，必须以服务文档为准。</p>
+<h2 id="C12-answer-section-1629241b33" tabindex="-1">2. <code>request_id</code> 校验</h2>
+<p>在 <code>do_POST</code> 中解析 JSON 后加入：</p>
+<pre><code class="language-python">request_id = data.get(&quot;request_id&quot;)
+if not isinstance(request_id, str) or not (1 &lt;= len(request_id) &lt;= 40):
+    self._send(422, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;invalid-request-id&quot;})
+    return
+</code></pre>
+<p>三个请求：</p>
+<pre><code class="language-json">{&quot;message&quot;: &quot;x&quot;}
+</code></pre>
+<p>→ <code>422 invalid-request-id</code>。</p>
+<pre><code class="language-json">{&quot;message&quot;: &quot;x&quot;, &quot;request_id&quot;: 123}
+</code></pre>
+<p>→ <code>422 invalid-request-id</code>（类型不对，不是“自动转字符串”）。</p>
+<pre><code class="language-json">{&quot;message&quot;: &quot;x&quot;, &quot;request_id&quot;: &quot;notice-001&quot;}
+</code></pre>
+<p>→ <code>200</code>，并回显 <code>request_id</code>。</p>
+<p>“缺失”和“格式错误”都用 <code>422</code> 也可以，但错误字段必须能区分原因；若服务契约要求坏语法为 <code>400</code>、语义错误为 <code>422</code>，就按契约拆开。</p>
+<h2 id="C12-answer-section-a0038999d0" tabindex="-1">3. 超时与服务端执行</h2>
+<p>把客户端超时改为 <code>3.0</code> 后，<code>/slow</code> 在约 2 秒返回 <code>200</code>。服务端确实执行了 <code>time.sleep(2.0)</code> 并发送响应；客户端在 0.2 秒时放弃等待，并不撤销服务端已经发生的动作。因此：</p>
+<ul>
+<li>客户端超时只证明“等待窗口内没收到完整响应”；</li>
+<li>不能推出“服务端没执行”；</li>
+<li>对写入操作，客户端应带请求 ID，服务端提供查询或幂等机制。</li>
+</ul>
+<h2 id="C12-answer-section-744207a4e6" tabindex="-1">4. 幂等键</h2>
+<p>服务端维护一个 <code>seen: dict[str, dict]</code>（真实服务应使用持久存储并加锁）。同一 <code>request_id</code> 第二次到达时，直接返回第一次的结果，不再执行副作用：</p>
+<pre><code class="language-python">if request_id in seen:
+    self._send(200, {&quot;status&quot;: &quot;ok&quot;, &quot;reused&quot;: True, &quot;result&quot;: seen[request_id]})
+    return
+</code></pre>
+<p>仅在客户端重试而不带幂等键，服务端无法区分“用户重复提交”和“网络重试”，可能重复扣款、重复发送或重复写入。幂等键必须由客户端生成、在重试时保持不变，并有足够熵避免碰撞。</p>
+<h2 id="C12-answer-section-330de8d7ba" tabindex="-1">5. 两处“失败被当成成功”的风险</h2>
+<p>第一处：<code>json.loads</code> 失败被 <code>except Exception</code> 吞掉，然后返回 <code>{&quot;status&quot;:&quot;ok&quot;}</code>。应只捕获 <code>UnicodeDecodeError</code>/<code>json.JSONDecodeError</code>，返回 <code>400</code>。</p>
+<p>第二处：只检查 <code>response.status == 200</code>，不检查响应体的 <code>status</code> 字段和字段类型。服务可能返回 <code>200</code> 加 <code>{&quot;status&quot;:&quot;error&quot;}</code>；应同时校验状态码和业务字段。</p>
+<p>另外，<code>urllib.error.URLError</code> 之外的连接中断、读取超时也可能发生；捕获后应保留 <code>status: null</code> 和错误原因，不能改写成 200。</p>
+<h2 id="C12-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>能区分 <code>401</code>、<code>403</code>、<code>404</code>、<code>422</code>、<code>5xx</code> 与连接超时。</li>
+<li>坏 JSON 用原始字节测试，而不是用 <code>json.dumps()</code> 构造。</li>
+<li>凭据来自环境变量，日志不打印请求头。</li>
+<li>超时结果标记为“未知”，不写成成功或“未执行”。</li>
+<li>幂等键在重试时保持不变，服务端有去重逻辑。</li>
+</ul>
+<p>本章只验证本地回环服务；真实模型 API 的鉴权、状态码和计费字段仍需按服务方当前文档核对。</p>
+</article><nav class="lesson-nav"><a href="c12.html">返回 C12 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

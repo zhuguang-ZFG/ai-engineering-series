@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C14 把自己的文档变成可追溯片段 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details open><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html" aria-current="page">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C14-section-fd38837410">先修检查：文件、哈希与片段</a></li><li class="toc-level-2"><a href="#C14-section-e4f8890bb7">清单字段：少一个都会出问题</a></li><li class="toc-level-2"><a href="#C14-section-712a41aa29">完整程序：校验清单与文件是否一致</a></li><li class="toc-level-2"><a href="#C14-section-84c205f691">切块：边界比“固定 500 字”重要</a></li><li class="toc-level-2"><a href="#C14-section-9c9732c41a">更新与删除：不能让旧片段“自然残留”</a></li><li class="toc-level-2"><a href="#C14-section-4349e26b34">权限：先检查，再读取</a></li><li class="toc-level-2"><a href="#C14-section-78887b63d3">改一个条件：文件改了，清单没改</a></li><li class="toc-level-2"><a href="#C14-section-8d37ccfa57">图与实验</a></li><li class="toc-level-2"><a href="#C14-section-934920737b">项目增量</a></li><li class="toc-level-2"><a href="#C14-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C14-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C14"><p class="eyebrow">S3 / C14 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c13.html">C13</a></p><div class="article-body"><h1 id="C14-section-0220944e02" tabindex="-1">C14 把自己的文档变成可追溯片段</h1>
+<p>假设设备手册更新了：旧版写“闭馆前检查门窗”，新版增加“关闭饮水机电源”。如果助手只保存一段截断的文本，它可能永远引用旧版，或者把两版拼成一句。你需要一条能回到<strong>具体文档、具体版本、具体片段</strong>的链路，而不是一个“知识库”黑箱。</p>
+<p>本章把本地 Markdown/文本变成带稳定 ID、版本、哈希、权限和字符位置的片段，并实际执行更新、删除和权限检查。检索算法留到 C15；本章先保证“资料本身可追溯”。</p>
+<h2 id="C14-section-fd38837410" tabindex="-1">先修检查：文件、哈希与片段</h2>
+<p>C11 已经能读写 UTF-8 文件；C13 已经能看到文档清单中的 <code>id</code>、<code>version</code>、<code>readers</code>。本章再加三个概念：</p>
+<ul>
+<li><strong>哈希</strong>：对文件字节做 SHA-256，得到固定长度摘要。文件改一个字节，摘要就变；它用来判断“当前文件还是不是清单里那一版”。</li>
+<li><strong>字符位置</strong>：片段记录在原文中的起止位置，便于回查。字符位置不是字节位置；中文一个字符通常占多个 UTF-8 字节。</li>
+<li><strong>稳定 ID</strong>：文档 ID 不随标题变化；片段 ID 由文档 ID、当前文件 SHA-256 的前 12 位和片段序号构成（示意：<code>station-log@4f2c9a1b7e03#000</code>），版本号单独记录在元数据里。文件内容一变，哈希和片段 ID 都会变，旧 ID 不应指向新内容。</li>
+</ul>
+<p>如果“哈希”只是听说过，先做一个小实验：</p>
+<pre><code class="language-python">import hashlib
+print(hashlib.sha256(&quot;设备手册&quot;.encode(&quot;utf-8&quot;)).hexdigest())
+</code></pre>
+<p>改一个字再算，摘要完全不同。哈希不能告诉你“哪一句改了”，只能告诉你“字节是否相同”；所以还要保留版本和原文片段。</p>
+<h2 id="C14-section-e4f8890bb7" tabindex="-1">清单字段：少一个都会出问题</h2>
+<p>一份最小文档清单如下（字段名以助手示例 <code>documents.json</code> 为准；下面是结构示意）：</p>
+<pre><code class="language-json">{
+  &quot;documents&quot;: [
+    {
+      &quot;id&quot;: &quot;equipment-guide&quot;,
+      &quot;path&quot;: &quot;book/llm/examples/assistant/sample_docs/equipment-guide.md&quot;,
+      &quot;version&quot;: &quot;2.1&quot;,
+      &quot;readers&quot;: [&quot;student&quot;, &quot;staff&quot;],
+      &quot;sha256&quot;: &quot;…64 位十六进制…&quot;
+    },
+    {
+      &quot;id&quot;: &quot;station-log&quot;,
+      &quot;path&quot;: &quot;book/llm/examples/assistant/sample_docs/station-log.md&quot;,
+      &quot;version&quot;: &quot;2026-10-30&quot;,
+      &quot;readers&quot;: [&quot;staff&quot;],
+      &quot;sha256&quot;: &quot;…&quot;
+    }
+  ]
+}
+</code></pre>
+<ul>
+<li><code>id</code>：稳定、唯一、可读；不要用标题当 ID，标题会改。</li>
+<li><code>path</code>：相对于仓库或清单的明确路径；必须限制在允许目录内，不能 <code>../../etc/passwd</code>。</li>
+<li><code>version</code>：人能读的版本；更新时递增或换日期，不能只改文件内容。</li>
+<li><code>readers</code>：谁可以读；权限检查要在读取正文之前。</li>
+<li><code>sha256</code>：锁定当前文件字节；清单与文件不一致时拒绝使用，而不是“自动更新哈希”把变化吞掉。</li>
+</ul>
+<p>本课程示例目录由助手 owner 提供 <code>station-log</code>、<code>equipment-guide</code>、<code>visitor-policy</code>、<code>closing-notice</code>，另有教师材料 <code>review-budget</code>。不要假设它们的内容；先 <code>inspect read</code>。</p>
+<h2 id="C14-section-712a41aa29" tabindex="-1">完整程序：校验清单与文件是否一致</h2>
+<p>下面程序只使用标准库。它读取清单，检查必填字段、路径越界、文件缺失、哈希不一致和重复 ID，并输出 JSON 报告。把它存成 <code>verify_manifest.py</code>，放在你的练习目录。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;校验文档清单与本地文件是否一致；不读取模型、不做检索。&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+REQUIRED = (&quot;id&quot;, &quot;path&quot;, &quot;version&quot;, &quot;readers&quot;, &quot;sha256&quot;)
+
+
+def sha256_file(path: Path) -&gt; str:
+    digest = hashlib.sha256()
+    with path.open(&quot;rb&quot;) as handle:
+        for block in iter(lambda: handle.read(1 &lt;&lt; 20), b&quot;&quot;):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def load_manifest(path: Path) -&gt; list[dict]:
+    data = json.loads(path.read_text(encoding=&quot;utf-8&quot;))
+    documents = data.get(&quot;documents&quot;) if isinstance(data, dict) else None
+    if not isinstance(documents, list):
+        raise ValueError(&quot;manifest 必须是包含 documents 数组的 JSON 对象&quot;)
+    return documents
+
+
+def main(argv: list[str] | None = None) -&gt; int:
+    parser = argparse.ArgumentParser(description=&quot;校验本地文档清单&quot;)
+    parser.add_argument(&quot;manifest&quot;, help=&quot;documents.json 路径&quot;)
+    parser.add_argument(&quot;--root&quot;, default=&quot;.&quot;, help=&quot;允许读取的根目录；默认当前目录&quot;)
+    args = parser.parse_args(argv)
+
+    manifest_path = Path(args.manifest).resolve()
+    root = Path(args.root).resolve()
+    try:
+        documents = load_manifest(manifest_path)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(json.dumps({&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;manifest-invalid&quot;, &quot;detail&quot;: str(exc)}, ensure_ascii=False))
+        return 2
+
+    errors: list[dict] = []
+    seen: set[str] = set()
+    checked: list[dict] = []
+
+    for index, doc in enumerate(documents):
+        if not isinstance(doc, dict):
+            errors.append({&quot;index&quot;: index, &quot;error&quot;: &quot;not-an-object&quot;})
+            continue
+        missing = [key for key in REQUIRED if key not in doc]
+        if missing:
+            errors.append({&quot;index&quot;: index, &quot;error&quot;: &quot;missing-fields&quot;, &quot;fields&quot;: missing})
+            continue
+        doc_id = doc[&quot;id&quot;]
+        if not isinstance(doc_id, str) or not doc_id.strip():
+            errors.append({&quot;index&quot;: index, &quot;error&quot;: &quot;invalid-id&quot;})
+            continue
+        if doc_id in seen:
+            errors.append({&quot;id&quot;: doc_id, &quot;error&quot;: &quot;duplicate-id&quot;})
+        seen.add(doc_id)
+        if not isinstance(doc[&quot;readers&quot;], list) or not all(isinstance(x, str) for x in doc[&quot;readers&quot;]):
+            errors.append({&quot;id&quot;: doc_id, &quot;error&quot;: &quot;invalid-readers&quot;})
+            continue
+
+        path = (manifest_path.parent / doc[&quot;path&quot;]).resolve()
+        try:
+            path.relative_to(root)
+        except ValueError:
+            errors.append({&quot;id&quot;: doc_id, &quot;error&quot;: &quot;path-outside-root&quot;, &quot;path&quot;: str(path)})
+            continue
+        if not path.is_file():
+            errors.append({&quot;id&quot;: doc_id, &quot;error&quot;: &quot;missing-file&quot;, &quot;path&quot;: str(path)})
+            continue
+        actual = sha256_file(path)
+        if actual.lower() != str(doc[&quot;sha256&quot;]).lower():
+            errors.append({
+                &quot;id&quot;: doc_id,
+                &quot;error&quot;: &quot;sha256-mismatch&quot;,
+                &quot;expected&quot;: doc[&quot;sha256&quot;],
+                &quot;actual&quot;: actual,
+                &quot;hint&quot;: &quot;确认文件是否更新；更新时同时改 version 和 sha256，不要静默改写清单&quot;,
+            })
+            continue
+        checked.append({&quot;id&quot;: doc_id, &quot;version&quot;: doc[&quot;version&quot;], &quot;sha256&quot;: actual, &quot;readers&quot;: doc[&quot;readers&quot;]})
+
+    report = {
+        &quot;status&quot;: &quot;ok&quot; if not errors else &quot;error&quot;,
+        &quot;checked&quot;: checked,
+        &quot;errors&quot;: errors,
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if not errors else 3
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">python verify_manifest.py book/llm/examples/assistant/documents.json --root .
+</code></pre>
+<p>预期是每个文档一行 <code>checked</code>，哈希匹配。若示例清单的 <code>path</code> 字段是相对仓库根而不是清单目录，你需要按实际约定调整 <code>manifest_path.parent / doc[&quot;path&quot;]</code>；先读清单和助手 README，不要猜两次就改代码。路径基准属于接口契约，必须与 <code>inspect</code> 的行为一致。</p>
+<h2 id="C14-section-84c205f691" tabindex="-1">切块：边界比“固定 500 字”重要</h2>
+<p>假设手册有两节：</p>
+<pre><code class="language-markdown">## 闭馆检查
+关闭门窗，确认访客离场。关闭饮水机电源。
+
+## 例外
+若当晚有维护施工，保留主电源，由值班人员签字确认。
+</code></pre>
+<p>如果按固定 40 字硬切，第一块可能包含“关闭饮水机电源”，第二块只剩“若当晚有维护施工，保留主电源”，读者会把两条规则看成互相矛盾。切块应尽量沿标题和段落边界，并在片段元数据中保留：</p>
+<ul>
+<li><code>chunk_id</code>：例如 <code>equipment-guide@4f2c9a1b7e03#000</code>（示意；实际是 <code>doc_id@sha256 前 12 位#三位序号</code>）；版本 <code>1.0.0</code> 单独记录，不写进 ID；</li>
+<li><code>doc_id</code>、<code>version</code>、<code>sha256</code>；</li>
+<li><code>start</code>、<code>end</code>（在原文中的字符位置）；</li>
+<li><code>heading</code>（所在小节）；</li>
+<li><code>text</code>（片段原文）；</li>
+<li><code>readers</code>（继承文档权限，或在文档内进一步收窄）。</li>
+</ul>
+<p>固定长度切块不是错，但必须记录切割造成的语义断裂风险。C19 会专门诊断“检索没找对”是否由切块造成。</p>
+<p>使用助手查看实际切块：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect chunk \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --chunk-chars 480 \
+  --chunk-overlap 80
+</code></pre>
+<p>命令按 README 的公开接口输出当前 <code>--reader</code> 可见文档的片段：<code>--chunk-chars 480</code>、<code>--chunk-overlap 80</code>。<code>review-budget</code> 这类无权限文档不会出现——权限过滤发生在读取和切块之前，未授权正文不会进入内存，也不会进入片段列表。每个片段给出 <code>chunk_id</code>（形如 <code>station-log@&lt;sha256 前 12 位&gt;#000</code>，序号补三位）、原文、<code>start</code>/<code>end</code>、<code>version</code> 与 <code>sha256</code>。不要用版本号拼 <code>chunk_id</code>；重点是看到可回查的原文与位置，而不是只看到一段摘要。</p>
+<h2 id="C14-section-9c9732c41a" tabindex="-1">更新与删除：不能让旧片段“自然残留”</h2>
+<p>更新流程应显式：</p>
+<ol>
+<li>修改文件内容；</li>
+<li>改 <code>version</code>（例如 <code>2.1</code> → <code>2.2</code>）；</li>
+<li>重新计算 <code>sha256</code>；</li>
+<li>重新切块，生成新的 <code>chunk_id</code>；</li>
+<li>让检索只使用当前版本的索引；旧版本片段可以留作审计，但不能被当作现行规则返回。</li>
+</ol>
+<p>删除同理：从清单移除文档，或把 <code>readers</code> 清空并标记删除；不要让旧索引继续命中已撤回的材料。C15 的检索如果返回了清单中不存在的 <code>doc_id</code>，应视为错误，而不是“历史遗留”。</p>
+<h2 id="C14-section-4349e26b34" tabindex="-1">权限：先检查，再读取</h2>
+<p><code>--reader</code> 必须在读取正文之前检查。一个常见错误是先检索全部文档，再把无权限片段从最终答案里删掉；此时模型已经看到了机密内容，删除输出不能撤销泄露。正确顺序是：</p>
+<ol>
+<li>按 <code>reader</code> 过滤清单；</li>
+<li>只对可见文档读取/切块；</li>
+<li>检索只在可见集合内进行；</li>
+<li>报告记录 <code>reader</code> 和可见文档 ID。</li>
+</ol>
+<p>如果你需要让读者看到“有这份材料但无权访问”，可以返回 <code>unauthorized</code> 和文档 ID，但不要返回正文。权限失败要通过授权或提供公开替代材料解决，不能修改 <code>readers</code> 来绕过。</p>
+<h2 id="C14-section-78887b63d3" tabindex="-1">改一个条件：文件改了，清单没改</h2>
+<p>把某份文档末尾加一个字，不改 <code>version</code>/<code>sha256</code>，再运行校验程序。预期 <code>sha256-mismatch</code>，并且不进入 <code>checked</code>。这时不要直接“帮它更新哈希”；先确认改动是否有意、是否需要新版本、哪些引用会受影响。若这是正式交付，旧版本报告必须标记过期。</p>
+<p>再改一个条件：把 <code>path</code> 改成 <code>../../outside.txt</code>。校验程序应报 <code>path-outside-root</code>，即使文件真实存在。路径越界是权限/安全问题，不是“路径写错”那么简单。</p>
+<h2 id="C14-section-8d37ccfa57" tabindex="-1">图与实验</h2>
+<p>下图把整座书架筛成少量片段：检索只应拿到当前读者可见、当前版本、可回查的片段，而不是把整个资料库塞进上下文。</p>
+<p><img src="../../book/assets/handdraw/llm/retrieval-sieve.svg" alt="从资料库筛出片段"></p>
+<p>旧的 <a href="retrieval.html">X07 检索与生成的分工</a> 实验可以改查询、切块大小和取回数量，观察实际进入上下文的片段。它使用预置教学资料，不是你的文档；用它练“切块如何改变命中”，再回到本章的真实清单。</p>
+<h2 id="C14-section-934920737b" tabindex="-1">项目增量</h2>
+<p>在你的项目中新增：</p>
+<pre><code class="language-text">docs/                     # 你拥有版权的 Markdown/文本
+documents.json            # id,path,version,readers,sha256
+verify_manifest.py
+out/manifest-check.json
+</code></pre>
+<p>至少准备两版同一文档（旧版/新版）和一份无权限文档。保存一次校验输出，记录你如何更新版本、如何让旧片段失效。</p>
+<h2 id="C14-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>为三份文档写清单，计算正确哈希；运行校验程序并保存输出。故意改一个字节，确认报告 <code>sha256-mismatch</code>。</li>
+<li>设计切块规则（按标题/段落/固定长度+重叠），从实际输出抄写至少三个 <code>chunk_id</code>（<code>doc@&lt;sha12&gt;#NNN</code>，不要用版本号编造），并解释一个可能被切断的语义边界。</li>
+<li>增加 <code>--reader</code> 参数到校验程序，输出该读者可见的文档；无权限文档不得出现在可见列表的正文中。</li>
+<li>更新一份文档到新版本，列出需要同步修改的字段和会失效的旧 <code>chunk_id</code>；不要只改文件内容。</li>
+<li>解释为什么“先检索全部、再删无权限结果”不安全；用一句话说明正确顺序。</li>
+</ol>
+<p>答案与核对依据见 <a href="c14-answer.html">C14 答案</a>。</p>
+<h2 id="C14-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>清单字段和助手命令来自 <code>book/llm/examples/assistant/README.md</code> 与 <code>--help</code> 的实际接口；示例文档由课程提供，内容与大小以实际文件为准。SHA-256 只能校验字节一致性，不证明内容真实、合法或最新；版本语义由维护者定义。切块程序与哈希校验程序为课程自建，不依赖外部服务；真实向量索引、并发更新和跨文档权限继承仍需在你的项目中实测。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c13.html">上一章 C13</a><a href="c14-answer.html">独立作答后核对</a><a href="c15.html">下一章 C15</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,3 @@
+# CPU-only dependency for the C23-C26 tiny decoder example.
+# The reference environment used by the course is torch 2.14.1+cpu.
+torch==2.14.1

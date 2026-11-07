@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C24 从零组装最小 decoder · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details open><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html" aria-current="page">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C24-section-7e10e282c4">先修桥：C23 的张量动作要能落到一条句子上</a></li><li class="toc-level-2"><a href="#C24-section-0ce84a94e7">语料与词表：先承认这是玩具</a></li><li class="toc-level-2"><a href="#C24-section-f4093dcc77">目标错位：每个位置到底在预测谁</a></li><li class="toc-level-2"><a href="#C24-section-66b6b72f33">零件一：token 嵌入与固定位置</a></li><li class="toc-level-2"><a href="#C24-section-e15a8b5ed4">零件二：多头因果注意力</a></li><li class="toc-level-2"><a href="#C24-section-c42dcc27ec">零件三：FFN、残差、归一化</a></li><li class="toc-level-2"><a href="#C24-section-5a1d3b1eb9">零件四：输出头与参数账本</a></li><li class="toc-level-2"><a href="#C24-section-398cf8d3b0">训练：目标、损失、优化器和留出</a></li><li class="toc-level-2"><a href="#C24-section-7d3ef5751b">生成：把输出接回输入</a></li><li class="toc-level-2"><a href="#C24-section-590acccb63">三个检查：未来不可见、目标错位、重载一致</a></li><li class="toc-level-2"><a href="#C24-section-a7c8aa4e08">改一个条件，找到第一个失败边界</a></li><li class="toc-level-2"><a href="#C24-section-e2e9724e68">独立练习与项目增量</a></li><li class="toc-level-2"><a href="#C24-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C24"><p class="eyebrow">S4 / C24 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c23.html">C23</a></p><div class="article-body"><h1 id="C24-section-4123cbdc3f" tabindex="-1">C24 从零组装最小 decoder</h1>
+<p>上一章的 bigram 只看前一个 token：它有一张“前一个词→下一个词”的分数表，却没有位置、没有注意力，也没有办法让第三个词影响第一个词的判断。你现在要装的是一个<strong>真正的 causal decoder</strong>：它按顺序读入 token，允许每个位置看自己和左边，不允许看右边；训练时用错开一位的目标，推理时把刚生成的 token 接回输入，一步一步往下写。规模很小，但因果掩码、残差、归一化、FFN、多头和自回归循环都是真的。</p>
+<h2 id="C24-section-7e10e282c4" tabindex="-1">先修桥：C23 的张量动作要能落到一条句子上</h2>
+<p>C23 已经让你会看 <code>[B, T, C]</code>、会手算 <code>(wx+b-y)^2</code> 的梯度、会保存 <code>state_dict</code>。C24 不再换一套抽象，而是反复用同几个动作：</p>
+<ul>
+<li><code>view</code> / <code>transpose</code>：把 <code>[B, T, 3C]</code> 拆成三个 <code>[B, T, C]</code>，再拆成 <code>[B, H, T, dh]</code>；</li>
+<li>广播：把 <code>[T, C]</code> 的位置编码加到 <code>[B, T, C]</code>；</li>
+<li>掩码：把 <code>[T, T]</code> 的布尔矩阵盖到 <code>[B, H, T, T]</code> 的分数上；</li>
+<li>交叉熵：把 <code>[B, T, V]</code> 的 logits 与 <code>[B, T]</code> 的目标逐位置比较；</li>
+<li>反向传播：从损失回到 embedding、注意力投影、FFN 和输出头。</li>
+</ul>
+<p>如果某一步形状对不上，先回到 C23 的广播规则，不要用 <code>reshape(-1)</code> 把问题藏起来。</p>
+<h2 id="C24-section-0ce84a94e7" tabindex="-1">语料与词表：先承认这是玩具</h2>
+<p>本目录的 <code>corpus.jsonl</code> 是作者编写的 192 条短句，按 <code>group</code> 分开：</p>
+<pre><code class="language-text">template-g1 ... template-g4   train
+command                       train
+template-g5                   val
+template-g6                   test
+</code></pre>
+<p><code>template-g6</code> 的句式在训练组里没出现，但它使用的词都在训练组出现过。词表只从<strong>训练 split</strong> 的文本构建，共 50 个 token：4 个特殊符号 <code>&lt;pad&gt;</code>、<code>&lt;bos&gt;</code>、<code>&lt;eos&gt;</code>、<code>&lt;unk&gt;</code>，加上 46 个普通词/标点。验证和留出文本若出现训练没见过的词，会被编码成 <code>&lt;unk&gt;</code>；<code>train.py</code> 会打印 <code>corpus.oov_tokens</code>，不会悄悄把新词加进词表。</p>
+<p>一条记录长这样：</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;corpus-g1-00&quot;, &quot;group&quot;: &quot;template-g1&quot;, &quot;split&quot;: &quot;train&quot;, &quot;text&quot;: &quot;the small kite shines .&quot;}
+</code></pre>
+<p>分词器把文本切成小写单词和标点：</p>
+<pre><code class="language-text">&quot;the small kite shines .&quot;
+-&gt; [&quot;the&quot;, &quot;small&quot;, &quot;kite&quot;, &quot;shines&quot;, &quot;.&quot;]
+-&gt; [&lt;bos&gt;, the, small, kite, shines, ., &lt;eos&gt;]
+</code></pre>
+<p>编号本身没有语义；<code>nn.Embedding</code> 的可训练行向量才有。训练时不能把验证/留出组的文本拿去建词表，否则“留出”就泄漏了。<code>train.py</code> 的 <code>validate_corpus</code> 还会拒绝任何横跨多个 split 的 group：同一个 group 不能一半训练、一半验证。</p>
+<h2 id="C24-section-f4093dcc77" tabindex="-1">目标错位：每个位置到底在预测谁</h2>
+<p>一条训练序列是：</p>
+<pre><code class="language-text">full:   [BOS, the, small, kite, shines, ., EOS]
+inputs: [BOS, the, small, kite, shines, .]        # full[:-1]
+target: [the, small, kite, shines, ., EOS]        # full[1:]
+</code></pre>
+<p>第 0 个位置看到 <code>BOS</code>，要预测 <code>the</code>；第 1 个位置看到 <code>BOS the</code>，要预测 <code>small</code>；最后一个位置看到整句（不含 EOS），要预测 <code>EOS</code>。<code>train.py</code> 的 <code>checks.target_shift</code> 会把 <code>inputs[1:]</code> 与 <code>target[:-1]</code> 逐项比较；<code>aligned=true</code> 才说明错位没有写反。</p>
+<p><code>make_lm_batch</code> 把同一批序列右侧补 <code>&lt;pad&gt;</code>，但把目标里对应的补位写成 <code>-100</code>；<code>F.cross_entropy(..., ignore_index=-100)</code> 不把这些位置算进损失。输入里的补位仍会被模型看到，不过它们都在句子右侧，因果掩码保证真实位置不会回头看到它们。若把补位目标也当成正常 token 训练，模型会花容量去学“补位之后还是补位”，损失数字会好看得没有意义。</p>
+<h2 id="C24-section-66b6b72f33" tabindex="-1">零件一：token 嵌入与固定位置</h2>
+<pre><code class="language-python">self.token_embedding = nn.Embedding(V, C)
+x = self.token_embedding(idx)                 # [B, T, C]
+x = x + self.position_encoding[:T]            # [T, C] 广播到 [B, T, C]
+</code></pre>
+<p>位置编码使用正弦/余弦：</p>
+<pre><code class="language-text">PE(pos, 2i)   = sin(pos / 10000^(2i/C))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/C))
+</code></pre>
+<p>本课把 <code>C=64</code> 分成 32 对，<code>pos</code> 从 0 到 <code>max_len-1=47</code>。它不是训练参数，因此 checkpoint 里没有位置矩阵；载入时按 <code>max_len</code> 和 <code>C</code> 重算。固定位置的边界是：模型不会因为训练时只见过较短句子，就对较长位置“没有参数”；但位置模式本身也不能从数据里学出新的相对关系。</p>
+<h2 id="C24-section-e15a8b5ed4" tabindex="-1">零件二：多头因果注意力</h2>
+<p>先看单头。输入 <code>x</code> 是 <code>[B, T, C]</code>。用三个线性层得到 query、key、value：</p>
+<pre><code class="language-text">Q = x W_Q,  K = x W_K,  V = x W_V      每个 [B, T, C]
+</code></pre>
+<p>本实现用一个 <code>qkv</code> 线性层一次算出 <code>3C</code>，再切成三份。分成 <code>H=4</code> 个头后，每个头 <code>dh=C/H=16</code>：</p>
+<pre><code class="language-text">Q,K,V: [B, T, C] -&gt; [B, H, T, dh]
+scores = Q @ K^T / sqrt(dh): [B, H, T, T]
+</code></pre>
+<p><code>scores[b,h,i,j]</code> 是第 <code>i</code> 个位置对第 <code>j</code> 个位置的原始匹配分。除以 <code>sqrt(dh)</code> 是为了让点积随维度增长时不要把 softmax 推到过饱和。接着是因果掩码：</p>
+<pre><code class="language-python">mask = torch.triu(torch.ones(T, T, dtype=torch.bool), diagonal=1)
+scores = scores.masked_fill(mask, float(&quot;-inf&quot;))
+weights = torch.softmax(scores, dim=-1)
+</code></pre>
+<p><code>diagonal=1</code> 表示只盖住严格上三角；对角线（自己看自己）和左下（看左边）保留。<code>-inf</code> 必须在 softmax <strong>之前</strong>加上：<code>exp(-inf)=0</code>，未来位置的权重严格为零；如果先 softmax 再乘掩码，归一化分母已经被未来项污染，结果不对。</p>
+<p>每个头用权重对 <code>V</code> 加权：</p>
+<pre><code class="language-text">head_out = weights @ V                  # [B, H, T, dh]
+</code></pre>
+<p>把四个头拼回 <code>[B, T, C]</code>，再过输出投影 <code>W_O</code>，得到注意力子层输出。多头不是“四个不同的句子”，而是把同一个 <code>C</code> 维空间分成四段，让不同头学习不同的匹配模式；最后仍由 <code>W_O</code> 混合。</p>
+<p>完整的注意力公式可以写成：</p>
+<pre><code class="language-text">Attention(Q, K, V) = softmax(Q K^T / sqrt(dh) + M) V
+</code></pre>
+<p><code>M</code> 在允许的位置是 0，在禁止的位置是 <code>-inf</code>。C07 的单头实验和 C08 的双头追踪都在讲同一件事，只是这里的 <code>T</code>、<code>H</code>、<code>dh</code> 是代码里真实的形状。</p>
+<h2 id="C24-section-c42dcc27ec" tabindex="-1">零件三：FFN、残差、归一化</h2>
+<p>注意力负责“从别的位置取信息”，前馈网络负责“对每个位置单独做非线性变换”：</p>
+<pre><code class="language-text">ff1: C -&gt; d_ff=128
+GELU
+ff2: 128 -&gt; C
+</code></pre>
+<p>它的权重在序列维度上共享：同一个 <code>fc1</code> 作用于所有 <code>T</code> 个位置，但不同位置之间没有直接相加。若把 FFN 写成跨位置的矩阵乘法，那就变成了另一种混合层，不再是本课的结构。</p>
+<p>每个 block 采用 pre-norm：</p>
+<pre><code class="language-python">x = x + self.attn(self.ln_1(x))
+x = x + self.ff(self.ln_2(x))
+</code></pre>
+<p>LayerNorm 在最后一个维度（<code>C</code>）上对每个位置单独计算均值和方差，再乘可学习的缩放、加偏置；它不是 BatchNorm，不跨批次统计。残差要求子层输出与 <code>x</code> 形状相同；这也是为什么前面每一步都要盯住 <code>[B, T, C]</code>。</p>
+<h2 id="C24-section-5a1d3b1eb9" tabindex="-1">零件四：输出头与参数账本</h2>
+<p>最后 <code>ln_f</code> 后再过一个线性头：</p>
+<pre><code class="language-text">logits = x @ W_head^T        # [B, T, V]
+</code></pre>
+<p>本课让 <code>W_head</code> 与 token embedding 共享（tied）。对默认配置 <code>C=64</code>、<code>V=50</code>、2 层、<code>d_ff=128</code>，参数量可以手算：</p>
+<table>
+<thead>
+<tr>
+<th>部件</th>
+<th>计算</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>token embedding</td>
+<td><code>50 × 64</code></td>
+<td>3,200</td>
+</tr>
+<tr>
+<td>每层 LayerNorm ×2</td>
+<td><code>2 × 2 × 64</code></td>
+<td>256</td>
+</tr>
+<tr>
+<td>每层 QKV</td>
+<td><code>64 × 192</code></td>
+<td>12,288</td>
+</tr>
+<tr>
+<td>每层输出投影</td>
+<td><code>64 × 64</code></td>
+<td>4,096</td>
+</tr>
+<tr>
+<td>每层 FFN</td>
+<td><code>64×128+128</code> 与 <code>128×64+64</code></td>
+<td>16,576</td>
+</tr>
+<tr>
+<td>每层合计</td>
+<td></td>
+<td>33,216</td>
+</tr>
+<tr>
+<td>2 层</td>
+<td><code>2 × 33,216</code></td>
+<td>66,432</td>
+</tr>
+<tr>
+<td>最终 LayerNorm</td>
+<td><code>2 × 64</code></td>
+<td>128</td>
+</tr>
+<tr>
+<td>输出头</td>
+<td>与 token embedding 共享</td>
+<td>0 额外</td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td></td>
+<td><strong>69,760</strong></td>
+</tr>
+</tbody></table>
+<p>位置编码是固定正弦，不占参数。若把输出头解绑，会多出 <code>64×50=3,200</code>；若把层数改成 3，会多出 33,216；头数从 4 改成 8 不改变 QKV 的总参数量，只改变每个头的 <code>dh</code> 和分数形状。<code>inspect</code> 会把实际 <code>parameters.total</code> 打出来，训练后再用同一配置重建；结构改了就必须重训。</p>
+<h2 id="C24-section-398cf8d3b0" tabindex="-1">训练：目标、损失、优化器和留出</h2>
+<p><code>train.py</code> 的预训练循环做四件事：</p>
+<pre><code class="language-python">optimizer.zero_grad(set_to_none=True)
+logits, _ = model(inputs)
+loss = F.cross_entropy(logits.reshape(-1, V), targets.reshape(-1), ignore_index=-100)
+loss.backward()
+torch.nn.utils.clip_grad_norm_(parameters, 1.0)
+optimizer.step()
+</code></pre>
+<p>默认是 400 步、批大小 24、AdamW 学习率 <code>3e-3</code>、权重衰减 0.01、梯度范数裁剪 1.0、种子 7。每一步从训练序列里有放回地抽 24 条，拼成一批；这不是“全批量梯度下降”，而是小批量随机梯度下降。损失是逐目标 token 的交叉熵，perplexity 是 <code>exp(loss)</code>（本课在打印时对指数做了上限保护，避免数值爆掉）。</p>
+<p>训练结束会在 train/val/test 三个 split 上重新计算损失。留出组 <code>template-g6</code> 的句式没有参加训练，所以它的损失<strong>可能</strong>更高；这只说明这组数据的分布差异，不能直接外推成“模型不会泛化”。反过来，如果训练损失下降而留出损失上升，要先查过拟合、数据泄漏和评测材料，而不是宣布模型变强。与 X05 的 bigram 对照时也要诚实：bigram 只有一张 7×7 分数表，没有注意力、位置和 FFN；本课 decoder 的参数更多、结构不同，不能用一个训练损失数字宣布“谁更聪明”。</p>
+<h2 id="C24-section-7d3ef5751b" tabindex="-1">生成：把输出接回输入</h2>
+<p>训练时一次看整句；推理时没有未来 token，只能自己造。<code>model.generate</code> 的循环是：</p>
+<pre><code class="language-text">tokens = [BOS] + prompt
+重复直到 EOS 或 max_len：
+    logits = model(tokens)[0, -1]      # 只取最后一个位置
+    按 temperature / top-k 选一个 token
+    tokens.append(token)
+</code></pre>
+<p><code>temperature &lt;= 0</code> 时取 argmax（贪心）；<code>temperature &gt; 0</code> 时先除以温度再 softmax；<code>top-k</code> 只保留分数最高的 <code>k</code> 个候选再采样。生成到 <code>max_len=48</code> 会停止，不会偷偷把左边截掉再继续；<code>sample.positions_used</code> 告诉你实际用了多少位置，<code>hit_eos</code> 告诉你是否自然结束。生成结果没有查表拼接，也没有预写答案；但“真的生成了 token”不等于“生成的内容正确或有意义”。</p>
+<p><img src="../../book/assets/handdraw/llm/training-versus-inference.svg" alt="G06 训练比较目标，推理只读取参数"></p>
+<p><img src="../../book/assets/handdraw/llm/attention-mask.svg" alt="注意力掩码：当前位置只能看自己和左边"></p>
+<p>本地实验：<a href="attention.html">X04 因果注意力</a> 可以逐位置看 Q/K/V、掩码、权重和“修改未来 V 后较早输出不变”；<a href="training.html">X05 训练与推理</a> 用 bigram 展示更新，不能代替本章的 decoder。</p>
+<h2 id="C24-section-590acccb63" tabindex="-1">三个检查：未来不可见、目标错位、重载一致</h2>
+<ol>
+<li><strong>未来不可见</strong>：<code>future_invisibility_check</code> 取一条序列，把 <code>prefix_len=4</code> 之后的位置换成别的合法 token，再比较两个模型在前 4 个位置的 logits。因为因果掩码让未来权重为零，这两组 logits 应逐位相等；<code>bitwise_equal=true</code>、<code>max_abs_diff=0</code> 是实现的证据。<code>suffix_changed</code> 则确认改动确实影响了最后一个位置，否则这个检查可能只是“两次输入根本没差别”。</li>
+<li><strong>目标错位</strong>：<code>checks.target_shift.aligned</code> 比较 <code>inputs[1:]</code> 与 <code>targets[:-1]</code>。如果错位写成 <code>targets = inputs</code>，模型会学“复制当前 token”，损失可能降得很快，但生成时只会重复。</li>
+<li><strong>重载一致</strong>：保存 <code>state_dict</code>、配置、词表后重新载入，对固定输入比较 logits。<code>checks.reload.bitwise_equal</code> 应给出明确结果；如果不一致，先查词表顺序、配置、LoRA 包装和保存时机。</li>
+</ol>
+<h2 id="C24-section-a7c8aa4e08" tabindex="-1">改一个条件，找到第一个失败边界</h2>
+<ul>
+<li><strong>去掉掩码</strong>：把 <code>masked_fill</code> 注释掉，重新训练或直接 <code>inspect</code>，<code>future_invisibility.bitwise_equal</code> 应变为 <code>false</code>。这时不要先调学习率，先修因果性。</li>
+<li><strong>目标错位</strong>：把 <code>targets</code> 改成 <code>inputs</code>，观察 <code>target_shift.aligned</code> 与生成结果；这是数据管线错误，不是模型容量问题。</li>
+<li><strong>补位目标没设 <code>-100</code></strong>：训练损失会把补位算进去，留出损失的解释也被污染。先打印 <code>(targets != -100).sum()</code> 核对目标 token 数。</li>
+<li><strong>位置超限</strong>：把 <code>max_len</code> 调小到短于某条训练序列，<code>encode_corpus</code> 应直接拒绝，而不是截断。</li>
+<li><strong>词表/检查点不一致</strong>：<code>load_checkpoint</code> 会检查词表长度与 <code>vocab_size</code>，不匹配就拒绝；不要用“先加载再说”掩盖。</li>
+<li><strong>训练/推理模式</strong>：本课 <code>dropout=0</code>，所以模式差异不明显；若改大 dropout，忘记 <code>model.eval()</code> 会让生成带随机性，重载对比也会不稳定。</li>
+</ul>
+<h2 id="C24-section-e2e9724e68" tabindex="-1">独立练习与项目增量</h2>
+<ol>
+<li>写出 <code>T=3</code> 的因果掩码矩阵（允许为 0，禁止为 <code>-inf</code>），标出第 2 行允许的位置。再把 <code>T=3</code> 的分数矩阵手算一次 softmax 的行和，说明为什么未来项是 0。</li>
+<li>单头手算：<code>dh=2</code>，<code>q=[1,0]</code>，<code>k1=[1,0]</code>，<code>k2=[0,1]</code>，<code>v1=[10,0]</code>，<code>v2=[0,20]</code>。先算缩放后的分数，再算 softmax 权重和输出。这个例子只用于检查公式，不代表训练后的真实头。</li>
+<li>参数量：默认配置总计 69,760。把 <code>n_layers</code> 改为 3、把输出头解绑、把 <code>V</code> 改为 60，各会变成多少？头数改为 8 时参数量为什么基本不变？</li>
+<li>运行 <code>train.py train</code>，记录 <code>losses.train/val/test</code>、<code>checks.target_shift</code>、<code>checks.future_invisibility</code>、<code>checks.reload</code>、<code>sample.generated_text</code>。然后 <code>sample</code> 同一 checkpoint 两次（相同 seed 与不同 seed），比较 <code>generated_text</code>，说明哪些字段受随机采样影响。</li>
+<li>故意删掉因果掩码，重新跑 <code>inspect</code> 或训练，记录 <code>future_invisibility</code> 的变化；恢复掩码后确认检查重新通过。这个对照只改一个因素。</li>
+</ol>
+<p>项目增量：你已经有一个能训练、保存、重载、自回归生成的真实微型 decoder，并且能指出每个检查证明了什么、不能证明什么。下一章会在这个底座上比较全量 SFT 与 LoRA，讨论“什么时候该改参数，什么时候该用提示或检索”。</p>
+<p>答案与手算见 <a href="c24-answer.html"><code>../deepening/c24-answer.md</code></a>。上一章：<a href="c23.html">C23 从数组走到自动微分</a>；下一章：<a href="c25.html">C25 何时适配参数，何时不该训练</a>。</p>
+<h2 id="C24-section-82826587a3" tabindex="-1">来源与边界</h2>
+<ul>
+<li>Vaswani 等，<em>Attention Is All You Need</em>（2017）：多头注意力、缩放点积、位置编码、前馈层与残差/归一化的原始结构；本课采用 pre-norm 与固定正弦位置，并在正文标明。</li>
+<li>PyTorch 2.14.1 官方文档：<code>nn.Embedding</code>、<code>nn.Linear</code>、<code>nn.LayerNorm</code>、<code>F.cross_entropy</code>、<code>optim.AdamW</code>、<code>state_dict</code> 与 <code>torch.load(weights_only=True)</code>。</li>
+<li>本课 <code>model.py</code> / <code>train.py</code> 的实际实现；所有形状、参数公式和掩码行为都可以在源码中逐行核对。</li>
+<li>边界：<code>corpus.jsonl</code> 只有几百条短句，词表 50 个 token；这不是预训练语言模型，不能完成真实问答、翻译或推理任务。留出损失与生成样例只描述这组玩具数据，不构成通用能力或规模规律的证据。固定正弦位置和 pre-norm 是本实现的选择，不是对某个商用模型内部结构的断言。</li>
+</ul>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c23.html">上一章 C23</a><a href="c24-answer.html">独立作答后核对</a><a href="c25.html">下一章 C25</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
