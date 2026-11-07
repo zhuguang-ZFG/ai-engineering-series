@@ -1,6 +1,6 @@
 # 发布迁移说明：从旧构建链到 bookctl
 
-> 状态（2026-11）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P3/P5 门禁尚未批准；Release CI 尚未运行，仓库没有 `v*` 发布标签或 GitHub Release，干净克隆演练与 P6 清理也未完成。本文把“已验证”和“待补证”分开写，不把本地绿灯当成远端发布。
+> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准；`release.yml` 已在候选提交上真实运行（run 42397600190），但 `v*` 发布标签与 GitHub Release 仍未创建。本文把“已验证”和“待补证”分开写，不把本地绿灯当成远端发布。
 
 ## 1. 范围
 
@@ -91,10 +91,8 @@ python yuyu-book/build.py --lang both --pdf
 
 ### 仍待补证
 
-- `release.yml` 在候选提交上的真实 CI 运行；目前没有运行记录。
 - `v*` 发布标签与 GitHub Release；目前都不存在。
-- 干净克隆演练：在全新 Windows 与 Ubuntu 环境按 README 完成 `npm ci`、依赖安装、`doctor`、`check --fast` 与一次发布装配。
-- P6 清理，以及 P3/P5 门禁的正式批准；`task_verify` 仍为 unverified。
+- P3/P5 门禁的正式批准；`task_verify` 仍为 unverified。
 - 若书稿或版式变化，README 的 PDF 页数与 HTML 体积要按发布 CI 的 Noto 产物重钉，不能用本机字体数字替代。
 
 ## 7. 发布检查清单
@@ -138,3 +136,21 @@ PDF 抽查还发现第 2 章三层 Mermaid 在纸面并排压成细带；双语�
 最终本地成品已生成：御舆中文 PDF 524 页 / 28 书签（25,385,887 B）、英文 PDF 581 页 / 28 书签（12,937,002 B）、Omp PDF 347 页 / 49 书签（37,770,646 B）。对应 EPUB 分别为 12,729,514 / 9,565,148 / 14,781,667 B；三份 EPUBCheck 均报告 0 fatals / 0 errors / 0 warnings / 0 infos。ZIP 完整性、首项未压缩 mimetype、图片内嵌和无脚本检查通过；中文 EPUB 在 480 px 浏览器中实际打开第 2 章，缺图 0，正文可重排。PDF 首／中／末页文本与书签检查通过，中文第 66 页图版目视确认纵排。
 
 首轮 EPUB 转换在整本长页直接截图 SVG 时超时；`build_epub.py` 现在把每张 SVG 连同计算后的墨色、字体及 viewBox 比例移到独立栅格页再截图，避免书籍滚动／布局干扰，不增大超时也不跳过失败图。真实三册转换与 EPUBCheck 是修复后的端到端证据；未新增永久 EPUB 回归，隔离绘图仍缺专门的失败路径回归。此实现和最终成品为本地未提交候选，不能冒称由 HEAD 单独重建。
+
+## 2026-11-08 合并后收口
+
+平台候选经 PR #32 以 merge commit `ca807e647b10dff9dccc89ebf92a8bba06ae9c24` 合入 `main`。该提交的 Book CI（run 42400549985）Fast / Full / Omp / Bootstrap（windows-latest、ubuntu-latest）全部成功，Pages（run 42400550064）成功。`release.yml` 在 `30ca46a` 上手动运行成功（run 42397600190）；该提交与合并提交的树同为 `b65e1970e9765326e44c9796919420d74846c1b3`。
+
+最终本地成品在确认绿色之后从全新 Windows clone（detach 合并提交，未复用旧 `dist/`）重建到 `ebook-final-ca807e6-green/`，`build-report.json` 记录的提交为 `ca807e6`。此前 `.scratch/delivery-layout-20261107/` 与 `ebook-final-ca807e6/` 的构建早于 Full 结案，只作中间验证，不作为最终交付。
+
+| 分册 | PDF 页数 / 书签 | PDF 字节 | EPUB 字节 |
+|---|---|---:|---:|
+| `yuyu-agent-harness-zh` | 524 / 28 | 23,528,265 | 12,729,807 |
+| `yuyu-agent-harness-en` | 581 / 28 | 12,016,293 | 9,565,176 |
+| `yuyu-omp-zh` | 432 / 49 | 61,253,411 | 30,065,292 |
+
+Omp 分册由 347 页增至 432 页、体积由 37.8 MB 增至 61.3 MB，来自合并 `main` 后的照片与版式内容，不是本轮动画切片引入的回归。三份 EPUB 的 EPUBCheck 均为 0 fatals / 0 errors / 0 warnings / 0 infos；ZIP 首项为未压缩 `mimetype`、无脚本、正文图片全部内嵌。PDF 首／中／末页文本与书签检查通过，中文第 66 页三层图版目视确认纵排。
+
+`SHA256SUMS` 覆盖 3 份 HTML、3 份 PDF、3 份 EPUB，共 9 项，用 Python `hashlib` 逐项复核一致。本机 Git Bash 的 `sha256sum -c` 因 MSYS 文本模式误报全部失败；同一清单格式在 Linux CI 的 `Verify checksums` 步骤已通过，产物本身无差异。两次重建的 EPUB 摘要不同（`source_sha256` 相同），转换会写入运行时间元数据，故跨运行复核以结构和 EPUBCheck 为准，不要求字节相等。
+
+未完成项保持不变：P8.6 的 `v*` 标签与 GitHub Release 尚未创建；P3/P5 门禁仍待独立审阅；P6.4 的字幕与关键帧比较仍缺旧版 SRT 证据；`task_verify` 仍返回 `project-or-git-baseline-unavailable`、`checks=[]`。README 的 PDF 页数与 HTML 体积继续采用 CI Noto 口径，不用本机字体数字替代。
