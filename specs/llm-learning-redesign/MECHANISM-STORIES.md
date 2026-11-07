@@ -1,6 +1,6 @@
 # T16：让机制能一步步看清
 
-状态：2026-11-07，0.14.0 本地技术完成。三套分镜、正文、书籍及以下检查已完成；发布证据随后记录。已发布基线为 T15 / 0.13.0，见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。总计划和完成边界分别见 [PLAN.md](PLAN.md)、[ACCEPTANCE.md](ACCEPTANCE.md)。
+状态：2026-11-07，0.14.0 本地技术完成。三套分镜、正文、书籍及以下检查已完成；发布与对应 CI 记录见 [PR #5](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/5)。已发布基线为 T15 / 0.13.0，见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。总计划和完成边界分别见 [PLAN.md](PLAN.md)、[ACCEPTANCE.md](ACCEPTANCE.md)。
 
 ## 1. 这次解决什么问题
 
@@ -75,7 +75,7 @@ PDF 与 EPUB 使用静态图和完整步骤文字，删除播放控件及重复�
 | 布局与静态降级 | 320/375/768/1440、最大字号、禁脚本、离线请求、关键分镜截图 | 已完成，结果见下列记录 |
 | PDF / EPUB | 三套完整静态图和解释、无重复动态画面/播放控件、公式与目录保留、代表书页实看、EPUBCheck | 179 页 PDF / 203 书签 / 18 项目录；92 个 EPUB 小节入口 / 332 内部链接；三套静态图及 12 步解释完整，动态控件没有进入书籍；EPUBCheck 5.3.0 零致命错误、错误、警告 |
 | 完整回归 | `npm test`、已有阅读与无障碍检查、图形重建一致性 | 已完成，结果见下列记录 |
-| 发布 | 本轮 PR、合并提交及对应 main CI | 待提交发布 |
+| 发布 | 本轮 PR、合并提交及对应 main CI | 发布与合并状态、对应 CI 见 [PR #5](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/5) |
 
 T16 的技术通过不改变 T05/T10 的真实初学者验收要求。用户暂时没有真实读者，至少三人的起步试读、至少六人的完整任务及迁移记录仍待采集；不让 agent 扮演读者，不预填理解程度。独立 EPUB 阅读器与实际屏幕阅读器也仍按已有验收表追踪，本轮自动检查不能替代实机结果。
 

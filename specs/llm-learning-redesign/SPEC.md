@@ -1,6 +1,6 @@
 # 大模型原理与应用课程改造规格
 
-状态：0.14.0 / T16 本地技术完成，新增生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，并同步相邻讲解。契约及本轮证据见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并至 main，提交为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的本地书籍入口、手机长文中途回查、公式连读及四十八图的历史证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；该版成品与绿色 CI 不作为 T16 已通过的证据。完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。本轮不新增具名模型实测；真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。
+状态：0.14.0 / T16 本地技术完成，新增生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，并同步相邻讲解。契约及本轮证据见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)，发布与 CI 记录见 [PR #5](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/5)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并至 main，提交为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的本地书籍入口、手机长文中途回查、公式连读及四十八图的历史证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；该版成品与绿色 CI 不作为 T16 已通过的证据。完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。本轮不新增具名模型实测；真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。
 
 目标：让没有编程背景的读者，能解释模型怎样生成回答、判断回答何时不可信，并独立完成一个有验收标准的实际任务。沿用项目已有的纸面、墨线和手绘图解，把主要投入放在知识准确性、学习顺序与可操作的实验上。
 
