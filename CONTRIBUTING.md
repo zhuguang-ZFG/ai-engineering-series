@@ -189,6 +189,55 @@ python -m unittest discover -s yuyu-book/tests  # 构建契约：manifest/来源
 - 语义优先于好看：图要能指着正文解释。第 12 章是桥（MCP 桥接外部协议），附录 C 是配电箱上的回路表（功能标志），第 1 章是辐辏之轮，第一部分是一整只三十辐的轮。看不出对应关系的图，等于给读者添噪声。
 - 章徽落在章名右侧的标题行末尾（纸面上缩到 2.4rem），题刻落在篇分隔页起头、压在出血的车轮影子上。少一枚图不会失败，但那一格的标题行就空着——`build.py` 会按"磁盘上能装配的图"逐个对账。
 
+### 5.3 断言账本：会随版本腐坏的句子
+
+`yuyu-book/claims.json` 登记的是**会随上游版本变化**的断言：版本号、价格、数量、默认行为、性能数字与功能标志。这些句子写得再准，也只是在 `verified` 那一天准；账本让它们在过期时自己喊出来，而不是等读者发现。
+
+一条 claim 的形状：
+
+```json
+{
+  "id": "claude-code-baseline-version",
+  "kind": "version",
+  "risk": "high",
+  "value": "2.1.310",
+  "applies_to": "0.3.x",
+  "source": "cc-release-v2-1-310",
+  "verified": "2026-11-02",
+  "review_days": 90,
+  "status": "active",
+  "zh": {"unit": "ch04", "block": "ch04.release-notes", "quote": "Claude Code 2.1.310（本书基线）"},
+  "en": {"unit": "ch04", "block": "ch04.release-notes", "quote": "Claude Code 2.1.310 (this book's baseline)"}
+}
+```
+
+规则：
+
+- `id` 是小写连字符 slug，全书唯一；中英两侧共用这一个 id，不许各起一个。
+- `kind` 取 `version` / `price` / `count` / `default` / `performance` / `flag`；`risk` 取 `high` / `normal`；`status` 取 `active` / `retired`。
+- `value` 是这条断言的最小可核对 token（`2.1.310`、`$3.00`、`55`、`72%`、`PROACTIVE`）。它必须**同时**出现在 `zh.quote` 与 `en.quote` 里：只改一侧的译文，另一侧的门禁立刻失败。`quote` 必须是所在 block 的原文子串，不是改写。
+- 引用块要先在 Markdown 里落一个稳定标记（`<!-- block: ch04.release-notes -->`），再把 `unit` / `block` 写进账本。自动生成的 `b-xxxxxxxx` 在两语版本里通常不同，所以两侧的 `block` 各写各的，`id` 必须相同。
+- `source` 必须是 `sources.json` 已有的 id；`verified` 是复核日期（`YYYY-MM-DD`），`review_days` 是复查周期。
+- `status: "retired"` 表示断言已不适用：账本不再追它的正文位置，但条目保留作历史。
+- 过期语义：`risk: "high"` 的 claim 过期后，CI 记一条 warning，发布构建（`bookctl build`）直接失败；`risk: "normal"` 只记 warning。复核后改 `verified`，或把 `status` 改成 `retired`。
+
+新增或修改一条断言时，先跑 `python -m unittest yuyu-book.tests.test_claims -v`；它会把「块不存在」「引文漂移」「一侧已改另一侧没改」「来源不存在」「过期」分条报出来。
+
+### 5.4 事实、推断、教学简化与作者建议
+
+同一页里混着四种语气，读者有权知道哪一句是上游说的、哪一句是本书的判断。四种句子用固定的开头或标签，不许含混：
+
+| 类型 | 触发方式 | 写法 | 例子 |
+|---|---|---|---|
+| 事实 | 能在 `sources.json` 的固定链接或仓库代码快照里直接指到 | 陈述句 + 来源链接；会腐坏的数进 `claims.json` | 「Claude Code 2.1.310（本书基线）……」 |
+| 推断 | 上游没有明说，是本书从代码形状、日志或行为反推出来的 | 句首写「推断：」/ `Inference:`，并给出证据链；结论用「更可能」「按当前实现」收住 | 「推断：这里先做 batch 再裁剪，是为了把两趟遍历压成一趟；证据是……」 |
+| 教学简化 | 为了让读者先建立模型而故意省略的细节 | 段落或 callout 里写明「为讲解起见」/ `For teaching purposes`，并在后文指出简化掉的真实分支 | 「为讲解起见，这里把调度器当成 FIFO；真实实现里还有……」 |
+| 作者建议 | 本书的工程意见，不是对 Claude Code 的描述 | 句首写「建议：」/ `Recommendation:`；不得用「Claude Code 会……」的口气 | 「建议：给写工具加白名单，而不是把所有 `Bash` 都放行。」 |
+
+判定顺序：先问「上游文档/代码能不能直接指到」。能，是事实；不能但有条证据链，是推断；为了教学压掉了真实分支，是教学简化；与上游无关、只是本书希望你怎么做，是作者建议。
+
+英文侧用同一套标签（`Inference:` / `For teaching purposes` / `Recommendation:`），与中文段落一一对应；不要只在中文里标。
+
 ## 6. 审计会拒绝什么
 
 `yuyu-book/yuyu_book/audit.py` 在写出文件之前扫描整份 HTML，任一项不过即构建失败：
@@ -221,6 +270,8 @@ PDF 阶段另有五道：命名目标缺失（`no destination found for ...`）�
 - [ ] 新来源已过第 4 节的门禁，`snapshot`/`accessed`/`scope` 写实
 - [ ] 动到通俗层时，每条新写的白话都带指得回书稿的 `plain_evidence` / `evidence`，中英两侧齐备；新单元有 `illustrations/<id>.svg`，并在 `notes.json` 里留一条按语（术语锁会替你核对那句里有没有本单元真正用过的词形）
 - [ ] 若动到版本号，`revisions.json` 与 `manifest.json` 的 `version`/`date` 一致
+- [ ] 版本、价格、数量、默认行为、性能数字或功能标志的增改，已在 `claims.json` 登记，且中英 `quote` 都含同一个 `value`（第 5.3 节）
+- [ ] 事实、推断、教学简化与作者建议按第 5.4 节的标签分开，英文侧同标
 - [ ] 章节增删导致 PDF 页数或单文件体积变化时，两份 README「离线整书」那一行的数字跟着改（Book CI 的 `scripts/check_artifact_claims.py` 会替你核对）
 - [ ] 涉及显示问题，注明阅读平台、文件与复现步骤
 

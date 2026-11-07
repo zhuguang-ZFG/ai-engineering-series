@@ -1250,6 +1250,23 @@ Analyze the Bridge communication behavior in the following scenarios:
 2. If the CLI is currently executing a long-running tool call, how does the `interrupt` command stop it?
 3. If the user doesn't have a claude.ai subscription, which gating layer rejects them?
 
+**Minimal runnable case:** Replay one MCP initialize handshake (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** one JSON line containing `"protocolVersion": "2026-07-28"` and `"serverInfo": {"name": "demo"}`
+**Prerequisite:** Chapter 11's skill loading; **Backlink:** Chapter 3's registration protocol
+
+```python
+# exercise: ch12
+# expected: {"id": 1, "jsonrpc": "2.0", "result": {"protocolVersion": "2026-07-28", "serverInfo": {"name": "demo"}}}
+import json
+request = {"jsonrpc": "2.0", "id": 1, "method": "initialize"}
+reply = {"jsonrpc": "2.0", "id": request["id"],
+         "result": {"protocolVersion": "2026-07-28",
+                    "serverInfo": {"name": "demo"}}}
+print(json.dumps(reply, sort_keys=True))
+```
+
 ---
 
 ## Key Takeaways

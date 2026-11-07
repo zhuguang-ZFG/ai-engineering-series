@@ -34,6 +34,7 @@ FILES = (
     "reading-paths-omp.json",
     "revisions.json",
     "revisions-omp.json",
+    "claims.json",
     "subject-index.json",
 )
 

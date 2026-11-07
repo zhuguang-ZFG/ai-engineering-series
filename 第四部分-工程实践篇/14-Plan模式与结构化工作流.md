@@ -833,6 +833,24 @@ flowchart TD
 3. Plan 模式的退出条件是什么？
 4. 如何处理任务执行失败的情况？
 
+**最小可运行案例：** 复刻 Plan 模式的只读门（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `Read -> allow` 与 `Write -> deny`
+**前置：** 第 13 章的成本意识；**回链：** 第 4 章的权限门
+
+```python
+# exercise: ch14
+# expected:
+# Read -> allow
+# Write -> deny
+READ_ONLY = {"Read", "Grep"}
+def decide(tool, planning):
+    return "allow" if tool in READ_ONLY else ("deny" if planning else "ask")
+for tool in ("Read", "Write"):
+    print(f"{tool} -> {decide(tool, planning=True)}")
+```
+
 ---
 
 ## 关键要点

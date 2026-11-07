@@ -711,6 +711,25 @@ Requirements:
 - Design the worker allocation for the Implementation phase
 - Plan the verification checklist for the Verification phase
 
+**Minimal runnable case:** Replay coordinator task assignment with round-robin (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `worker-1: research, review` and `worker-2: draft`
+**Prerequisite:** Chapter 9's fork; **Backlink:** Chapter 9's fork prefix
+
+```python
+# exercise: ch10
+# expected:
+# worker-1: research, review
+# worker-2: draft
+tasks = ["research", "draft", "review"]
+workers = {"worker-1": [], "worker-2": []}
+for index, task in enumerate(tasks):
+    workers[f"worker-{index % 2 + 1}"].append(task)
+for worker, assigned in workers.items():
+    print(f"{worker}: {', '.join(assigned)}")
+```
+
 ---
 
 ## Key Takeaways

@@ -488,6 +488,25 @@ If your environment has an MCP server connected, observe the difference in API c
 
 Record the input token count difference in both cases, and calculate how many tokens deferred discovery saves you.
 
+**Minimal runnable case:** Replay registration and dispatch with a required-argument table (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** two lines: `ok: Read` and `reject: Write missing content`
+**Prerequisite:** Chapter 2's loop; **Backlink:** Chapter 2's `tool_use` event
+
+```python
+# exercise: ch03
+# expected:
+# ok: Read
+# reject: Write missing content
+TOOLS = {"Read": ["path"], "Write": ["path", "content"]}
+def dispatch(name, args):
+    missing = [key for key in TOOLS[name] if key not in args]
+    return f"reject: {name} missing {','.join(missing)}" if missing else f"ok: {name}"
+print(dispatch("Read", {"path": "a.txt"}))
+print(dispatch("Write", {"path": "a.txt"}))
+```
+
 ---
 
 ## Key Takeaways

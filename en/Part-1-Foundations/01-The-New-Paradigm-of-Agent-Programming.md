@@ -488,6 +488,22 @@ Behind this simple interaction lies the "dialog main loop" we described in Secti
 2. If you press Ctrl+C to interrupt an operation, how does the system respond? Which design principle does this embody?
 3. If you send 50 messages in a row, what happens to the context window? How should the system handle this? Which design principle does this mechanism correspond to?
 
+**Minimal runnable case:** Compress goal-action-observation-answer into a four-step cycle (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `plan -> act -> observe -> answer`
+**Prerequisite:** the foreword's definition of an agent; **Backlink:** Principle Five, "Immutable State Flow," in §1.3 of this chapter
+
+```python
+# exercise: ch01
+# expected: plan -> act -> observe -> answer
+state = "plan"
+while state != "answer":
+    print(state, end=" -> ")
+    state = {"plan": "act", "act": "observe", "observe": "answer"}[state]
+print(state)
+```
+
 ---
 
 ## Key Takeaways

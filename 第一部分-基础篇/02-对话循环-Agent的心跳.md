@@ -478,6 +478,22 @@ flowchart TD
 
 > **交叉引用：** 上下文压缩管线的详细实现将在第二部分的核心篇中深入分析，包括缓存感知的压缩策略和上下文折叠的粒度控制。
 
+**最小可运行案例：** 用生成器复刻一次「工具调用—结果回填」（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**前置：** 第 1 章的四步状态链；**回链：** 第 1 章 1.2 节的异步生成器对话主循环
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
 ---
 
 ## 关键要点

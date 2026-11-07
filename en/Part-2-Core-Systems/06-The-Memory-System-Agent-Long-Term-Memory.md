@@ -671,6 +671,30 @@ You maintain 5 projects simultaneously, each with 20-30 memories in its memory d
 - Regularly review the memory directory and delete low-value memories that fail the "would behavior change if deleted" test
 - Control the description length of each memory entry, and periodically merge memory entries on related topics
 
+**Minimal runnable case:** Read memory metadata out of a frontmatter block (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `{'name': 'build-command', 'type': 'project'}`
+**Prerequisite:** Chapter 5's configuration precedence; **Backlink:** the six configuration sources in Chapter 5 §5.1
+
+```python
+# exercise: ch06
+# expected: {'name': 'build-command', 'type': 'project'}
+text = """---
+name: build-command
+type: project
+---
+Run make check before every commit.
+"""
+meta = {}
+for line in text.splitlines()[1:]:
+    if line == "---":
+        break
+    key, _, value = line.partition(":")
+    meta[key.strip()] = value.strip()
+print(meta)
+```
+
 ---
 
 ## Key Takeaways

@@ -620,6 +620,23 @@ const setState = useSetAppState();
 
 请说明每个配置源中应该放什么内容，并解释为什么。
 
+**最小可运行案例：** 复刻用户设置与项目设置的合并顺序（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `{"model": "sonnet", "permissions": {"allow": ["Read", "Bash(ls)"]}}`
+**前置：** 第 4 章的权限规则；**回链：** 第 4 章的权限规则来源
+
+```python
+# exercise: ch05
+# expected: {"model": "sonnet", "permissions": {"allow": ["Read", "Bash(ls)"]}}
+import json
+user = {"model": "opus", "permissions": {"allow": ["Read"]}}
+project = {"model": "sonnet", "permissions": {"allow": ["Bash(ls)"]}}
+merged = {"model": project["model"],
+          "permissions": {"allow": user["permissions"]["allow"] + project["permissions"]["allow"]}}
+print(json.dumps(merged, sort_keys=True))
+```
+
 ---
 
 ## 关键要点

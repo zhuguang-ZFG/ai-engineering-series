@@ -19,6 +19,7 @@
 
 Core interaction mode flags control the primary operating modes of Claude Code. These flags define how the system interacts with users, IDEs, or other systems.
 
+<!-- block: apxc.core-modes -->
 | Feature Flag | Type | Description | Impact Scope | Dependencies | Related Chapter |
 |---|---|---|---|---|---|
 | `PROACTIVE` | Compile-time | Proactive mode. When enabled, the agent can proactively offer suggestions and automatically execute background tasks during user idle periods | Enables SleepTool, proactive suggestion logic, background task triggers | No prerequisites | Chapter 5 |

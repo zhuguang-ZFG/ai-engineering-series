@@ -478,6 +478,22 @@ Send Claude Code a series of requests that require substantial context (such as 
 
 > **Cross-Reference:** Part 2's core chapters analyze the context compression pipeline's detailed implementation in depth, including cache-aware compression strategies and context collapse granularity control.
 
+**Minimal runnable case:** Replay one tool round-trip with a generator (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**Prerequisite:** Chapter 1's four-state chain; **Backlink:** the async generator dialog loop in Chapter 1 §1.2
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
 ---
 
 ## Key Takeaways

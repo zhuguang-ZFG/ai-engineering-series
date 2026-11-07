@@ -697,6 +697,25 @@ Design a complete software development workflow using the following combination 
 
 Write out the input and expected output for each step.
 
+**Minimal runnable case:** Compare the byte prefix of a parent request and its fork (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** two lines: `prefix: [{"content": "fix", "role": "user"}]` and `shared: True`
+**Prerequisite:** Chapter 8's hook ordering; **Backlink:** Chapter 2's context rebuild
+
+```python
+# exercise: ch09
+# expected:
+# prefix: [{"content": "fix", "role": "user"}]
+# shared: True
+import json
+parent = [{"role": "user", "content": "fix"}]
+fork = parent + [{"role": "tool", "content": "ok"}]
+prefix = json.dumps(parent, sort_keys=True)
+print("prefix:", prefix)
+print("shared:", json.dumps(fork[:len(parent)], sort_keys=True) == prefix)
+```
+
 ---
 
 ## Key Takeaways

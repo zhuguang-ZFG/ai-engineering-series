@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from yuyu_book import plain, registry  # noqa: E402
+from yuyu_book import claims, plain, registry  # noqa: E402
 from yuyu_book.app import (_article, _principle_groups, build_edition,  # noqa: E402,F401
                            glossary_to_index, pdf_meta)
 from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError,  # noqa: E402
@@ -47,6 +47,11 @@ def main(argv=None):
 
     try:
         manifest, sources = load_configs(args.manifest, args.sources)
+        if (manifest.get("product") or "book") == "book":
+            for warning in claims.validate(
+                    claims.load(), claims.manuscript_texts(manifest), sources,
+                    release=not args.check):
+                print(f"warning: {warning}", file=sys.stderr)
         glosses, paths = ({}, {}) if args.no_plain else plain.load_plain(manifest)
         notes = {} if args.no_plain else plain.load_notes(manifest)
         if not args.no_plain:

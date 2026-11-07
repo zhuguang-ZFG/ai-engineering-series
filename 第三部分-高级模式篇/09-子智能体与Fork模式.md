@@ -699,6 +699,25 @@ stateDiagram-v2
 
 写出每一步的输入和预期输出。
 
+**最小可运行案例：** 比较父请求与 fork 的字节前缀（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 两行：`prefix: [{"content": "fix", "role": "user"}]` 与 `shared: True`
+**前置：** 第 8 章的 hook 时序；**回链：** 第 2 章的上下文重建
+
+```python
+# exercise: ch09
+# expected:
+# prefix: [{"content": "fix", "role": "user"}]
+# shared: True
+import json
+parent = [{"role": "user", "content": "fix"}]
+fork = parent + [{"role": "tool", "content": "ok"}]
+prefix = json.dumps(parent, sort_keys=True)
+print("prefix:", prefix)
+print("shared:", json.dumps(fork[:len(parent)], sort_keys=True) == prefix)
+```
+
 ---
 
 ## 关键要点

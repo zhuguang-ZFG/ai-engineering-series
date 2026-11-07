@@ -351,6 +351,7 @@ flowchart LR
     class D6 delegate
 ```
 
+<!-- block: ch04.release-notes -->
 - **Claude Code 2.1.310（本书基线）**：`claude -p` 起来就是 Manual 模式（v2.1.302 起，前提是没别的东西设定档位），管线判出的 `ask` 没人应答即遭拒——除非 `--allowedTools`、`permissions.allow` 规则、`PermissionRequest` hook 或 `--permission-prompt-tool` 事先替它答了。`--permission-prompts none`（v2.1.259 起）连宿主也不问，并直接告诉模型没人能批、别重试；`--output-format stream-json` 下这些拒绝以 `permission_denied` 事件留在输出里。
 - **Codex CLI 0.166.0**：`codex exec` 这一支干脆不带审批轴，`-a/--ask-for-approval`（取值 `on-request`、`never`）只出现在交互模式里。它把「谁点头」换成「跑在哪面墙里」：`-s/--sandbox` 取 `read-only`、`workspace-write`、`danger-full-access` 三档；`--approve-for-me` 把审批请求转给自动复审；`--dangerously-bypass-approvals-and-sandbox` 连提示带沙箱一起拆掉，自述 EXTREMELY DANGEROUS，只给已有外部沙箱包住的环境。
 - **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步降了格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
@@ -573,6 +574,29 @@ flowchart LR
 **场景 D：** 子智能体（bubble 模式）请求 `FileWriteTool` 写入敏感配置文件。
 
 对每个场景，画出权限管线四阶段的决策路径，说明最终结果和原因。
+
+**最小可运行案例：** 用两条前缀规则复刻 allow / deny / ask（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 三行，分别以 `allow`、`deny`、`ask` 收尾
+**前置：** 第 3 章的工具调用；**回链：** 第 2 章的 `ask` 分支（无人应答即拒绝）
+
+```python
+# exercise: ch04
+# expected:
+# Bash(git status) -> allow
+# Bash(rm -rf /) -> deny
+# Bash(npm test) -> ask
+RULES = {"git ": "allow", "rm ": "deny"}
+def decide(call):
+    inner = call[5:-1]
+    for prefix, verdict in RULES.items():
+        if inner.startswith(prefix):
+            return verdict
+    return "ask"
+for call in ("Bash(git status)", "Bash(rm -rf /)", "Bash(npm test)"):
+    print(f"{call} -> {decide(call)}")
+```
 
 ---
 

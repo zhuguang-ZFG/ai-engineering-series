@@ -1253,6 +1253,23 @@ flowchart TD
 2. 如果 CLI 当前正在执行一个长时间的工具调用，`interrupt` 命令如何中断它？
 3. 如果用户没有 claude.ai 订阅，哪一层门控会拒绝？
 
+**最小可运行案例：** 复刻一次 MCP initialize 握手（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 一行 JSON，含 `"protocolVersion": "2026-07-28"` 与 `"serverInfo": {"name": "demo"}`
+**前置：** 第 11 章的技能加载；**回链：** 第 3 章的注册协议
+
+```python
+# exercise: ch12
+# expected: {"id": 1, "jsonrpc": "2.0", "result": {"protocolVersion": "2026-07-28", "serverInfo": {"name": "demo"}}}
+import json
+request = {"jsonrpc": "2.0", "id": 1, "method": "initialize"}
+reply = {"jsonrpc": "2.0", "id": request["id"],
+         "result": {"protocolVersion": "2026-07-28",
+                    "serverInfo": {"name": "demo"}}}
+print(json.dumps(reply, sort_keys=True))
+```
+
 ---
 
 ## 关键要点

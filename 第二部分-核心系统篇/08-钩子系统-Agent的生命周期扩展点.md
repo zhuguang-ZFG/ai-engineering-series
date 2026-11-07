@@ -1074,6 +1074,20 @@ Command 钩子有默认超时，但如果不显式设置，可能会因为脚本
 
 请设计一个完整的钩子配置方案来满足上面这些要求。
 
+**最小可运行案例：** 复刻 PreToolUse 与 PostToolUse 的先后（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `PreToolUse:Read -> PostToolUse:Read`
+**前置：** 第 7 章的上下文预算；**回链：** 第 2 章的生命周期事件
+
+```python
+# exercise: ch08
+# expected: PreToolUse:Read -> PostToolUse:Read
+hooks = [("PostToolUse", "Read"), ("PreToolUse", "Read")]
+order = sorted(hooks, key=lambda hook: hook[0] != "PreToolUse")
+print(" -> ".join(f"{event}:{tool}" for event, tool in order))
+```
+
 ---
 
 ## 关键要点

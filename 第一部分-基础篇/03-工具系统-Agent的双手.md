@@ -492,6 +492,25 @@ Batch 5 (并发安全): [GlobTool(*.json)]                      -- 可并行（�
 
 记录两种情况下的 input token 数量差异，计算延迟发现为你节省了多少 token。
 
+**最小可运行案例：** 用一张必需参数表复刻工具注册与分派（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 两行：`ok: Read` 与 `reject: Write missing content`
+**前置：** 第 2 章的循环；**回链：** 第 2 章的 `tool_use` 事件
+
+```python
+# exercise: ch03
+# expected:
+# ok: Read
+# reject: Write missing content
+TOOLS = {"Read": ["path"], "Write": ["path", "content"]}
+def dispatch(name, args):
+    missing = [key for key in TOOLS[name] if key not in args]
+    return f"reject: {name} missing {','.join(missing)}" if missing else f"ok: {name}"
+print(dispatch("Read", {"path": "a.txt"}))
+print(dispatch("Write", {"path": "a.txt"}))
+```
+
 ---
 
 ## 关键要点

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "version": "0.3.5",
-  "date": "2026-11-02",
+  "version": "0.3.6",
+  "date": "2026-11-06",
   "author": "LinTsinghua",
   "repository": "https://github.com/lintsinghua/claude-code-book",
   "license": {

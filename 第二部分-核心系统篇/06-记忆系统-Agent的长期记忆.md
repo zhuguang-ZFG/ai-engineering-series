@@ -672,6 +672,30 @@ type: feedback
 - 定期审查记忆目录，删除经不起"删除后行为是否会改变"测试的低价值记忆
 - 控制每条记忆的 description 长度，定期合并主题相近的记忆条目
 
+**最小可运行案例：** 从一段记忆文件的 frontmatter 里取出元数据（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `{'name': 'build-command', 'type': 'project'}`
+**前置：** 第 5 章的配置优先级；**回链：** 第 5 章 5.1 节的六层配置源
+
+```python
+# exercise: ch06
+# expected: {'name': 'build-command', 'type': 'project'}
+text = """---
+name: build-command
+type: project
+---
+Run make check before every commit.
+"""
+meta = {}
+for line in text.splitlines()[1:]:
+    if line == "---":
+        break
+    key, _, value = line.partition(":")
+    meta[key.strip()] = value.strip()
+print(meta)
+```
+
 ---
 
 ## 关键要点
