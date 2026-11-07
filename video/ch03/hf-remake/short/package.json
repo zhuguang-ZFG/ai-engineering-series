@@ -1,9 +1,0 @@
-{
-  "name": "ch03-short",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "render": "npx --yes hyperframes@0.8.210 render",
-    "check": "npx --yes hyperframes@0.8.210 check"
-  }
-}

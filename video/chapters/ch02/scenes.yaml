@@ -1,0 +1,48 @@
+schema_version: 1
+episode: ch02
+formats:
+  long:
+  - id: b01_hook
+    start_s: 0.0
+    duration_s: 56.112
+    source: compositions/b01_hook.html
+    intent: hook
+  - id: b02_async
+    start_s: 56.112
+    duration_s: 165.168
+    source: compositions/b02_async.html
+    intent: section
+  - id: b03_turn
+    start_s: 221.28
+    duration_s: 160.608
+    source: compositions/b03_turn.html
+    intent: section
+  - id: b04_deps
+    start_s: 381.888
+    duration_s: 151.92
+    source: compositions/b04_deps.html
+    intent: section
+  - id: b05_practice
+    start_s: 533.808
+    duration_s: 54.912
+    source: compositions/b05_practice.html
+    intent: demo
+  - id: b06_outro
+    start_s: 588.72
+    duration_s: 38.904
+    source: compositions/b06_outro.html
+    intent: outro
+  short:
+  - id: dense-short
+    start_s: 0.0
+    duration_s: 34.352
+    source: compositions/dense-short.html
+    intent: hook
+audio:
+  long:
+    path: full.mp3
+    duration_s: 627.624
+  short:
+    path: assets/short-vo.mp3
+    duration_s: 34.352
+flashes: {}

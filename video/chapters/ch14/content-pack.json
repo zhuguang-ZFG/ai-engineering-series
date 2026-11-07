@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "ch14",
+  "title": "第14章：Plan 模式与结构化工作流",
+  "source": "第四部分-工程实践篇/14-Plan模式与结构化工作流.md",
+  "sections": [
+    {
+      "index": 1,
+      "title": "14.1 Plan 模式的架构",
+      "summary": "Plan 模式是 Claude Code 中最独特的设计之一。它将 Agent 的行为分为两个阶段：只读探索阶段（规划）和可写执行阶段（实施）。这种分离的核心理念是：在动手之前先对齐意图，避免方向性错误导致的返工。"
+    },
+    {
+      "index": 2,
+      "title": "14.2 计划验证机制",
+      "summary": "ExitPlanModeV2Tool 引用了 registerPlanVerificationHook，它旁边的注释揭示了一个重要设计决策：验证钩子必须在 context clear 之后注册，因为 context clear 会清除所有 hooks。"
+    },
+    {
+      "index": 3,
+      "title": "14.3 工作流系统",
+      "summary": "Claude Code 的工作流能力主要由 Skill 系统提供。Skill 本质上是预定义的 prompt 模板，可以通过 slash command 触发。Skill 执行的核心准备函数处理三件事："
+    },
+    {
+      "index": 4,
+      "title": "14.4 调度系统",
+      "summary": "Claude Code 的调度系统管两类定时任务："
+    },
+    {
+      "index": 5,
+      "title": "14.5 后台任务与主动模式",
+      "summary": "SleepTool 归在后台任务管理这一类里。在 Claude Code 的工具注册中，它与其他调度相关工具一起注册。SleepTool 允许 Agent 执行到一半先停一会儿。轮询部署状态、等外部系统完成操作这类长时间运行的后台任务，正用得上它。"
+    },
+    {
+      "index": 6,
+      "title": "14.6 结构化工作流：常见翻车 / 正确做法",
+      "summary": "工作流这一层的翻车，多半不是逻辑写错，而是把「想」和「做」混在一段里。下表左列是最常见的写法，右列是本章给出的做法："
+    }
+  ],
+  "takeaways": [
+    "Plan 模式把只读探索和可写执行分开，靠切换权限模式做到。EnterPlanMode 保存原始模式并切换到 plan，ExitPlanMode 恢复原始模式并处理断路器防御。这种分离确保了 Agent 在\"思考\"阶段不产生任何副作用，极大降低了方向性错误的风险。",
+    "计划文件管理采用 slug-based 命名和惰性生成，支持三层恢复策略（直接读取、文件快照、消息历史），确保计划在各种故障场景下不丢失。恢复策略按可靠性优先级排序，体现了\"鸡蛋不放一个篮子\"的防御性设计思想。",
+    "Fork Agent 靠 CacheSafeParams 共享提示缓存，状态隔离交给 createSubagentContext，子 Agent 干扰不到主 Agent 的状态。子 Agent 的\"沙箱\"设计 -- 可读外部世界但不可修改父状态 -- 是 Agent 安全的关键边界。",
+    "调度系统支持文件持久化和会话级两种任务：文件锁挡住多会话重复触发，jitter 打散惊群效应，自动过期兜住无限递归。这些机制共同构成了一个健壮的分布式任务调度框架。",
+    "Teammate 的 Plan 审批走 mailbox 机制，而非本地 UI 弹窗，这是分布式 Agent 协作的基础设施。审批权力的委托（从本地用户到 team lead）体现了 Agent 系统中的权限代理模式。",
+    "工作流设计应遵循\"Plan-Execute-Verify\"模式，避免\"无计划的复杂任务\"和\"永不清理的定时任务\"等反模式。好的工作流设计，自动化够了，人也没有缺席。",
+    "lastCacheSafeParams 的全局 slot 设计体现了\"隐式上下文传递\"模式，降低了组件间的耦合度，同时通过同步读写避免了竞态条件。这种模式在需要跨多层组件传递上下文时特别有用。"
+  ],
+  "core_terms": [
+    {
+      "zh": "主循环",
+      "en": "Main Loop"
+    },
+    {
+      "zh": "竞态条件",
+      "en": "race condition"
+    },
+    {
+      "zh": "状态机",
+      "en": "state machine"
+    },
+    {
+      "zh": "AbortController",
+      "en": "AbortController"
+    },
+    {
+      "zh": "阻塞",
+      "en": "blocking"
+    },
+    {
+      "zh": "并发",
+      "en": "concurrency"
+    },
+    {
+      "zh": "断路器",
+      "en": "circuit breaker"
+    },
+    {
+      "zh": "优雅降级",
+      "en": "graceful degradation"
+    }
+  ]
+}

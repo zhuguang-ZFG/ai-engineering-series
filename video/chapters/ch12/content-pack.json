@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "ch12",
+  "title": "第12章 MCP 集成与外部协议",
+  "source": "第三部分-高级模式篇/12-MCP集成与外部协议.md",
+  "sections": [
+    {
+      "index": 1,
+      "title": "12.1 MCP 架构概览",
+      "summary": "技术细节之前，先弄明白 MCP 到底想解决什么问题。"
+    },
+    {
+      "index": 2,
+      "title": "12.2 MCP 工具集成",
+      "summary": "MCP 工具集成，是把外部服务器上的工具无缝接进 Claude Code 内部工具系统的过程。这一过程涉及三个关键阶段：工具发现（Discovery）、工具映射（Mapping）和工具注册（Registration）。理解这个链路，就理解了 MCP 如何将\"外部工具\"变成\"内部能力\"。"
+    },
+    {
+      "index": 3,
+      "title": "12.3 MCP 权限与安全",
+      "summary": "安全性是 MCP 集成中最关键的话题。与内置工具不同，MCP 工具来自外部第三方，其行为不可预测、不可控制。因此，Claude Code 为 MCP 构建了多层防御体系，从配置作用域到服务器审批，从工具白名单到插件去重，每一层都针对特定的安全威胁。"
+    },
+    {
+      "index": 4,
+      "title": "12.4 IDE 集成：Bridge 系统",
+      "summary": "Bridge 系统是 Claude Code 与外部世界双向通信的核心层。它对接了 VS Code、JetBrains 等 IDE，也接上了 Claude.ai 平台的远程控制功能。如果 MCP 协议是 Claude Code 与工具服务器之间的\"方言\"，那么 Bridge 系统就是 Claude Code 与整个外部世界之间的\"通用语言\"。"
+    }
+  ],
+  "takeaways": [
+    "MCP 的设计使命：MCP 是 AI 世界的\"USB-C 接口\"，通过标准化协议解决工具集成的碎片化问题。其三大设计原则——协议即契约、传输无关性、安全边界内嵌——贯穿了 Claude Code 的整个 MCP 实现。",
+    "八类连接配置的分层设计：这些配置包含本地进程管道、HTTP 连接、WebSocket 适配、SDK 调用和代理集成。选型应匹配两端实际支持的配置，并区分传输耗时与服务器执行耗时。",
+    "三段式命名的安全价值：mcp{server}{tool} 命名规则先把工具重名这件事解决掉，权限检查也因此有了独立的命名空间，MCP 工具不会和内置工具混在一起。SDK 模式下的前缀跳过是一种高级用法，MCP 工具借此可以覆盖内置工具。",
+    "深度防御的安全架构：四层权限模型——企业策略（denylist > allowlist）、IDE 工具白名单、用户权限配置、运行时确认——确保即使攻击者绕过某一层的检查，其他层仍然提供保护。这是\"默认不信任\"安全原则的完整体现。",
+    "签名去重的实用智慧：stdio:JSON.stringify([cmd,...args]) 与 url:originalUrl 两种签名形态，让系统按\"实际效果\"而非\"表面配置\"去重。去重优先级（手动 > 插件 > 连接器）保证用户的显式配置始终优先。",
+    "Bridge 双向通信的复杂性管理：30+ 个模块构成的 Bridge 系统把 v1/v2 的传输差异收进统一的 ReplBridgeTransport 接口，入站消息过三重过滤（权限响应 > 控制请求 > 用户消息），去重由 BoundedUUIDSet 环形缓冲区承担。",
+    "SSE 序列号延续是关键创新：v2 传输在切换时携带序列号高位标记，避免服务器重放完整会话历史。这个看似微小的改进，解决了长时间运行会话中传输切换导致的\"消息风暴\"问题。",
+    "四层权限门控确保远程控制安全：订阅类型 > Profile 完整性 > 组织信息 > 功能标志的四层检查，配合 OAuth Token 自动刷新机制，在保证安全的同时尽量减少对用户体验的影响。",
+    "IDE 集成的感知能力：通过 sse-ide/ws-ide 协议和 executeCode/getDiagnostics 两个白名单工具，Claude Code 获得了对 IDE 环境的实时感知能力——从被动接收用户输入，变为主动获取诊断信息和在 IDE 上下文中执行操作。",
+    "与其他系统的协作关系：MCP 工具完全融入了 Claude Code 的内部系统——经过工具系统（第3章）的注册和调度、权限管线（第4章）的四阶段检查、钩子系统（第8章）的生命周期拦截。MCP 不是独立的子系统，而是 Claude Code 工具生态的自然延伸。"
+  ],
+  "core_terms": [
+    {
+      "zh": "状态机",
+      "en": "state machine"
+    },
+    {
+      "zh": "观察者模式",
+      "en": "observer pattern"
+    },
+    {
+      "zh": "责任链模式",
+      "en": "chain of responsibility"
+    },
+    {
+      "zh": "闭包",
+      "en": "closure"
+    },
+    {
+      "zh": "不可变",
+      "en": "immutability"
+    },
+    {
+      "zh": "并发",
+      "en": "concurrency"
+    },
+    {
+      "zh": "指数退避",
+      "en": "exponential backoff"
+    },
+    {
+      "zh": "沙箱",
+      "en": "sandbox"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+schema_version: 1
+episode: ch04
+formats:
+  long:
+  - id: b01_hook
+    start_s: 0.0
+    duration_s: 39.696
+    source: compositions/b01_hook.html
+    intent: hook
+  - id: b02_phases
+    start_s: 39.696
+    duration_s: 115.368
+    source: compositions/b02_phases.html
+    intent: section
+  - id: b03_context
+    start_s: 155.064
+    duration_s: 56.496
+    source: compositions/b03_context.html
+    intent: section
+  - id: b04_modes
+    start_s: 211.56
+    duration_s: 105.312
+    source: compositions/b04_modes.html
+    intent: section
+  - id: b05_bash
+    start_s: 316.872
+    duration_s: 40.68
+    source: compositions/b05_bash.html
+    intent: section
+  - id: b06_outro
+    start_s: 357.552
+    duration_s: 95.496
+    source: compositions/b06_outro.html
+    intent: outro
+  short:
+  - id: dense-short
+    start_s: 0.0
+    duration_s: 38.792
+    source: compositions/dense-short.html
+    intent: hook
+audio:
+  long:
+    path: full.mp3
+    duration_s: 453.048
+  short:
+    path: assets/short-vo.mp3
+    duration_s: 38.792
+flashes: {}
