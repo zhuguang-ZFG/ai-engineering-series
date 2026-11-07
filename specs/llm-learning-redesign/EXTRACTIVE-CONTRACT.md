@@ -1,6 +1,6 @@
 # 纯抽取契约评审提案（K3 下一步）
 
-状态：**提案，未实施**。不改变现有公开契约；当前默认仍是“claim 必须逐字等于引用原文”。
+状态：**已实现为可选模式，默认关闭**（2026-11-08）。`--claim-mode extract` 仅在 fixed 模式生效；默认仍是“claim 必须逐字等于引用原文”，旧报告契约不变。实测结果见 [BASELINE.md](../../book/llm/examples/assistant/BASELINE.md)。
 
 ## 证据
 

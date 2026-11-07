@@ -53,3 +53,20 @@ python book/llm/examples/assistant/assistant.py evaluate \
 方案 2 不削弱证据边界，但会改变公开的报告/主张契约、章节中的字段说明和模型提示，属于需要单独评审的设计变更，不能在评测调参中顺手改掉。因此本轮保留严格契约与真实失败，把方案 2 列为下一步候选；在评审前不宣称 K3 通过。
 
 在更强模型或人工复核转述之前，K3 的结论是：**检索与权限可用，严格引用边界正确，模型格式与转述能力不足**。
+
+## 可选纯抽取模式（默认关闭）
+
+`--claim-mode extract`（仅 fixed）：模型只返回 `status`、`claims[{chunk_id,quote}]`，可选 `reason`；主张文本由程序直接取 quote，answer 由已核验 quote 组成。默认仍是 `copy`，旧契约与旧报告不变。
+
+同一冻结清单的 7 个 fixed 用例对比（Qwen2.5-1.5B，同一模型与预算）：
+
+| 指标 | copy（默认） | extract |
+| --- | --- | --- |
+| 通过 | 4/7 | 5/7 |
+| 模型调用 | 3 | 3 |
+| 输入 token | 约 4.4k | 4562 |
+| normal-wind | citation-failed（claim 转述） | invalid-response（Markdown 围栏 + 判为 insufficient） |
+| no-hit-coffee | invalid-response（围栏） | insufficient-evidence（通过） |
+| conflict-closing | answered（未识别冲突） | insufficient-evidence（仍非 conflict） |
+
+结论：抽取模式移除了“转述被拒”这一失败模式，但没有解决 JSON 围栏、检索后仍判资料不足、冲突漏检；通过数只 +1，且部分差异来自模型输出不稳定。因此保留为可选教学对照，不设为默认，也不据此宣称 K3 通过。agent 模式暂不支持 extract，会明确返回 `invalid-request`。
