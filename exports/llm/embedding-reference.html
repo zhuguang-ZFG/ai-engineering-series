@@ -2,7 +2,7 @@
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>向量与检索回查 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
-<main class="shell review-page" id="main"><article><h1>Embedding 与向量检索原理</h1>
+<main class="shell review-page" id="main" tabindex="-1"><article><h1>Embedding 与向量检索原理</h1>
 <p>把问题和资料编码成向量，能够计算它们在某种表示下的接近程度。接近不等于事实相同，更不等于资料有权使用。先在 <a href="vectors.html">L03</a>算一次余弦，再到 <a href="retrieval.html">L09</a>检查真正取回了哪段原文。</p>
 <h2>0. 全景图：从文字到数字的桥梁</h2>
 <p>One-hot 用不同坐标区分词项，任意两个不同的 one-hot 向量距离相同。学习得到的稠密表示可以反映训练任务中的关系；词、句子、整段文档都可能被编码，维度依模型配置，不固定为 768–1536。</p>

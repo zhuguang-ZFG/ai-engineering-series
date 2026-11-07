@@ -2,7 +2,7 @@
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>多模态输入回查 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
-<main class="shell review-page" id="main"><article><h1>多模态模型原理：视觉/音频/视频</h1>
+<main class="shell review-page" id="main" tabindex="-1"><article><h1>多模态模型原理：视觉/音频/视频</h1>
 <p>把一张通知照片交给模型，先问两件事：图片里哪些信息保留下来了？回答中的每个字段能否回指原图？本章用公开的 ViT、LLaVA 与 BLIP-2 说明几种设计，不推断 DeepSeek V4.1 Flash 或 Kimi K3 的内部架构，也不预先保证它们支持哪些输入。</p>
 <h2>0. 引言：给大脑装上眼睛</h2>
 <p>纯文本语言模型接收文本 token 的表示；视觉语言系统还要处理像素。常见做法是先编码图片，再将连续视觉特征接入语言模型。视觉特征通常没有对应的可读单词，也不必先识别成文字。</p>

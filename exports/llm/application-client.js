@@ -6,8 +6,12 @@
   const h = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
   const labels = { supported: "有原句支持", missing: "材料未提供", conflict: "冲突待确认", complete: "可整理草稿", incomplete: "待补充报告", "no-evidence": "材料不足，停止整理", "out-of-scope": "超出材料范围" };
   document.addEventListener("click", event => {
-    const anchor = event.target.closest('a[href^="#source-"]');
-    if (anchor) document.getElementById(anchor.hash.slice(1))?.closest("details")?.setAttribute("open", "");
+    const anchor = event.target.closest('a[href^="#source-"], a[href^="#evidence-"], a[href^="#project-"], a[href^="#hit-"]');
+    const target = anchor && document.getElementById(anchor.hash.slice(1));
+    if (!target) return;
+    target.closest("details")?.setAttribute("open", "");
+    target.tabIndex = -1;
+    target.focus({ preventScroll: true });
   });
   const material = (doc, prefix) => `<div class="document" id="${prefix}-${h(doc.id)}"><b>${h(doc.id)} · ${h(doc.title)}</b><p>${h(doc.text)}</p></div>`;
   const resultFields = (report, prefix) => `<div class="report-fields">${report.fields.map(item => `<section class="report-field"><h3>${h(item.field)} · ${labels[item.status]}</h3><p>${h(item.values.join(" / ") || "材料未提供")}</p>${item.evidence.map(e => `<p class="evidence"><a href="#${prefix}-${h(e.documentId)}">${h(e.documentId)}</a>“${h(e.quote)}”</p>`).join("")}</section>`).join("")}</div>`;
@@ -67,21 +71,24 @@
     function load() {
       try {
         const request = JSON.parse($("tool-request").value);
+        $("tool-request").removeAttribute("aria-invalid");
         session = api.createToolSession(request, scenario().simulation);
         render();
       } catch {
         session = null;
+        $("tool-request").setAttribute("aria-invalid", "true");
         $("tool-status").textContent = "JSON 格式无效，没有装入或执行请求。";
         $("tool-history").replaceChildren();
         $("tool-result").textContent = "没有可交付的成功回执。";
         render();
+        $("tool-request").focus();
       }
     }
     function reset() { $("tool-request").value = JSON.stringify(scenario().request, null, 2); load(); }
     $("tool-scenario").addEventListener("change", reset);
     $("reset-tool").addEventListener("click", reset);
     $("load-tool").addEventListener("click", load);
-    $("tool-request").addEventListener("input", () => { session = null; $("tool-history").replaceChildren(); $("tool-result").textContent = "没有可交付的成功回执。"; $("tool-status").textContent = "请求已编辑，装入后才能推进。"; render(); });
+    $("tool-request").addEventListener("input", () => { session = null; $("tool-request").removeAttribute("aria-invalid"); $("tool-history").replaceChildren(); $("tool-result").textContent = "没有可交付的成功回执。"; $("tool-status").textContent = "请求已编辑，装入后才能推进。"; render(); });
     $("tool-step").addEventListener("click", () => { session.step(); render(); });
     $("cancel-tool").addEventListener("click", () => { session.cancel(); render(); });
     reset();

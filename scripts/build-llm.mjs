@@ -50,6 +50,7 @@ const write = (name, body) => {
 };
 
 function page(title, body, data = null) {
+  body = body.replace(/<main\b([^>]*\bid="main"[^>]*)>/, '<main$1 tabindex="-1">');
   const encoded = data ? JSON.stringify(data).replaceAll("<", "\\u003c").replaceAll("\u2028", "\\u2028").replaceAll("\u2029", "\\u2029") : null;
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

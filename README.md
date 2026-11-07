@@ -64,6 +64,8 @@ python -m pip install -r scripts/llm/requirements-books.txt
 npm test
 ```
 
+`npm run check:accessibility:llm` 在本机 Chrome 中逐页核对可访问性树和键盘操作，检查跳到正文、训练暂停、蒸馏滑块、工具错误与证据回查的焦点。CI 使用 Playwright Chromium 运行同一检查。语义与键盘检查的范围不等同于屏幕阅读器听感或真实读者测试，逐项验收证据见 [ACCEPTANCE.md](specs/llm-learning-redesign/ACCEPTANCE.md)。
+
 修改课程内容后运行 `npm run build:llm` 重新生成网页。`npm test` 同时检查本地实验、真实编码快照、网页是否与源文件一致，以及原有书籍和视频交付物。
 
 修改课文或图解后，运行 `npm run export:books:llm` 重建 PDF 与 EPUB。导出依赖本机 Chrome 和 `scripts/llm/requirements-books.txt` 中的 Python 包；电子书本身不依赖这些工具。`npm run check:books:llm` 核对源文件指纹、成品哈希、PDF 中文章节/页边界/书签及 EPUB 目录/资源/内部链接，防止教材变了、电子书却未更新。纸上实验与网页静态读法来自同一来源；电子书不会执行交互按钮。

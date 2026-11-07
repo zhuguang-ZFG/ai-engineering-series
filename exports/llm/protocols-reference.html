@@ -2,7 +2,7 @@
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>MCP 与 A2A 回查 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
-<main class="shell review-page" id="main"><article><h1>AI Agent 协议原理：MCP 与 A2A</h1>
+<main class="shell review-page" id="main" tabindex="-1"><article><h1>AI Agent 协议原理：MCP 与 A2A</h1>
 <p>模型提出“查单价”，应用如何找到工具并拿到结果？应用把任务交给另一个服务，又如何知道它完成还是失败？MCP 与 A2A 约定其中的消息和生命周期，不自动提供正确答案或执行权限。本章用 MCP 2025-06-18 与 A2A 0.3.0 作固定版本示例，接入新版本时应重新核对字段。</p>
 <h2>0. 协议定义</h2>
 <p>协议约定参与者如何交换消息、解释字段和处理状态。接口通了，只说明可以按约定通信，后续还要检查权限、业务结果与内容。</p>
