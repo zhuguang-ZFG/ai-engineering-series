@@ -113,9 +113,9 @@ Claude Code belongs to Anthropic. This independent book is not an official Anthr
 
 ## The book as one file
 
-`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.8 MB Chinese / 5.9 MB English) and an A4-typeset PDF (516 pages / 36.1 MB in Chinese, 552 pages / 24.1 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 518 pages / 25.1 MB and the English one to 569 pages / 12.6 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
+`yuyu-book/` assembles the 20 units into **a single book you can read offline**: one self-contained HTML file (5.8 MB Chinese / 5.9 MB English) and an A4-typeset PDF (521 pages / 36.3 MB in Chinese, 557 pages / 24.2 MB in English). Artifacts land in `yuyu-book/dist/`. The page count follows the CJK face installed on the build machine: the numbers above are what CI typesets with Noto CJK, and a Windows box carrying Microsoft YaHei runs the Chinese edition to 518 pages / 25.1 MB and the English one to 569 pages / 12.6 MB. Each build log prints the size and page count of the PDF it just made, so anyone can compare them on their own machine.
 
-The CI pair above was pinned before the accessibility pass thickened the manuscript. `scripts/check_artifact_claims.py`, which runs in `book.yml`, reconciles these README numbers against the PDF of the current build and turns red on a mismatch — so after a push, read the page count CI typeset, update the two numbers above, and keep the local YaHei figures in `docs/yuyu-overhaul/PDF-PAGES.md`.
+The CI pair above comes from [Book CI after the P5 provenance changes](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42350509018). `scripts/check_artifact_claims.py`, which runs in `book.yml`, reconciles these README numbers against the PDF of the current build and turns red on a mismatch — so after a push, read the page count CI typeset, update the two numbers above, and keep the local YaHei figures in `docs/yuyu-overhaul/PDF-PAGES.md`.
 
 | File | Language |
 |------|----------|
