@@ -19,6 +19,7 @@ uv.lock, which is what keeps the exported pins from going stale.
 from __future__ import annotations
 
 import argparse
+import os
 import platform
 import re
 import shutil
@@ -128,7 +129,8 @@ def dependency_problems() -> list[str]:
 
 def run(cmd: list[str]) -> None:
     print("+ " + " ".join(cmd), flush=True)
-    subprocess.run(cmd, cwd=ROOT, check=True)
+    env = {**os.environ, "YUYU_BOOKCTL": "1"}
+    subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
 def version_tuple(text: str) -> tuple[int, ...]:

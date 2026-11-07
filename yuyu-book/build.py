@@ -10,6 +10,7 @@ Usage (from the repo root):
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -21,6 +22,15 @@ from yuyu_book.app import (_article, _principle_groups, build_edition,  # noqa: 
                            glossary_to_index, pdf_meta)
 from yuyu_book.core import (BOOK_DIR, REPO_ROOT, BuildError,  # noqa: E402
                             dump_json, load_configs, read_text, unit_stream)
+
+
+def warn_transitional_entry() -> None:
+    """P3.8: the assembler is reached through bookctl during the transition."""
+    if os.environ.get("YUYU_BOOKCTL") == "1":
+        return
+    print("note: yuyu-book/build.py is the transitional entry and will be "
+          "removed after P8; use `python scripts/bookctl.py build` instead.",
+          file=sys.stderr)
 
 
 def main(argv=None):
@@ -44,6 +54,7 @@ def main(argv=None):
     ap.add_argument("--sources", default="sources.json",
                     help="sources registry filename under yuyu-book/")
     args = ap.parse_args(argv)
+    warn_transitional_entry()
 
     try:
         manifest, sources = load_configs(args.manifest, args.sources)

@@ -59,6 +59,38 @@ def _root_children(svg: str) -> list[tuple[str, str]]:
             for child in root]
 
 
+class StyleSources(unittest.TestCase):
+    """The stylesheet is four sources, not one file: tokens, screen rules,
+    component rules and the print overlay. The build inlines them in that
+    order, and the reading-column block stays the last screen word."""
+
+    def test_the_stylesheet_is_assembled_in_cascade_order(self):
+        from yuyu_book import style_components, style_print, style_screen, style_tokens
+        self.assertEqual(
+            CSS,
+            style_tokens.TOKENS_CSS + style_screen.SCREEN_CSS
+            + style_components.COMPONENTS_CSS + style_print.PRINT_CSS)
+        self.assertLess(CSS.index("--paper:#FBF7EF"), CSS.index(".sheet{"))
+        self.assertLess(CSS.index(".sheet{"), CSS.index(".callout{"))
+        self.assertLess(CSS.index(".callout{"), CSS.index("@media print{"))
+
+    def test_tokens_hold_the_palette_and_no_screen_source_redefines_it(self):
+        from yuyu_book import style_components, style_screen, style_tokens
+        for token in ("--paper:", "--ink:", "--cinnabar:", "--measure:"):
+            self.assertIn(token, style_tokens.TOKENS_CSS)
+        for source in (style_screen.SCREEN_CSS, style_components.COMPONENTS_CSS):
+            self.assertNotIn(":root{", source)
+
+    def test_the_reading_column_stays_the_last_screen_block(self):
+        from yuyu_book import style_components, style_print
+        column = style_components.COMPONENTS_CSS.index("the reading column")
+        self.assertGreater(column, style_components.COMPONENTS_CSS.index(".kp-art"))
+        self.assertTrue(
+            style_components.COMPONENTS_CSS.rstrip().endswith("margin-inline:auto}"))
+        self.assertTrue(style_print.PRINT_CSS.startswith(
+            "/* ------- print / PDF ------- */"))
+
+
 class Palette(unittest.TestCase):
     def test_the_book_defines_its_own_token_set(self):
         for key in ("paper", "paper-2", "paper-3", "card", "ink", "ink-2",
