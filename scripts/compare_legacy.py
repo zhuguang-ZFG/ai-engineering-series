@@ -132,7 +132,14 @@ def diff_reports(legacy: dict, fresh: dict, path: str = "") -> list[Diff]:
         return diffs
     if isinstance(legacy, list):
         if len(legacy) != len(fresh):
-            return [Diff(path, "len", len(legacy), len(fresh))]
+            diffs = [Diff(path, "len", len(legacy), len(fresh))]
+            smaller, larger = ((legacy, fresh) if len(legacy) < len(fresh)
+                               else (fresh, legacy))
+            cursor = iter(larger)
+            if not all(any(type(item) is type(candidate) and item == candidate
+                           for candidate in cursor) for item in smaller):
+                diffs.append(Diff(path, "value", legacy, fresh))
+            return diffs
         diffs = []
         for index, (old, new) in enumerate(zip(legacy, fresh)):
             diffs.extend(diff_reports(old, new, f"{path}[{index}]"))
@@ -174,13 +181,16 @@ def git_head() -> str:
 
 def render_report(legacy_meta: dict, matched: list, unmatched: list,
                   allow_path: Path) -> str:
+    resolved_allow = allow_path.resolve()
+    display_allow = (resolved_allow.relative_to(ROOT)
+                     if resolved_allow.is_relative_to(ROOT) else resolved_allow)
     lines = [
         "# Legacy / v2 structural comparison (P3.7)",
         "",
         f"- Legacy report: `docs/baseline/baseline.json` "
         f"(source commit `{legacy_meta.get('source_commit')}`)",
         f"- v2 report: fresh from `yuyu-book/dist` at `{git_head()}`",
-        f"- Allowlist: `{allow_path.relative_to(ROOT).as_posix()}`",
+        f"- Allowlist: `{display_allow.as_posix()}`",
         "",
         "Only structural leaves are compared: bytes, hashes, source line "
         "counts and figure hash values are provenance, not shape.",
@@ -240,10 +250,11 @@ def main(argv=None) -> int:
     except (OSError, ValueError) as exc:
         print(f"invalid comparison rules: {exc}", file=sys.stderr)
         return 2
-    html = args.dist / "yuyu-agent-harness-zh.html"
-    if not html.exists():
-        print(f"missing build artifacts under {args.dist}; build first",
-              file=sys.stderr)
+    missing = [f"yuyu-agent-harness-{lang}.html" for lang in ("zh", "en")
+               if not (args.dist / f"yuyu-agent-harness-{lang}.html").is_file()]
+    if missing:
+        print(f"missing build artifacts under {args.dist}: "
+              f"{', '.join(missing)}; build first", file=sys.stderr)
         return 2
 
     legacy_raw = json.loads(args.baseline.read_text(encoding="utf-8"))
