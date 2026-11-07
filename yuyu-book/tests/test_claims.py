@@ -153,6 +153,15 @@ class Expiry(unittest.TestCase):
         self.assertEqual(run(make(verified="2020-01-01", review_days=30,
                                   status="retired"), release=True), [])
 
+    def test_review_deadline_outside_date_range_is_a_named_input_error(self):
+        for verified, days in (("9999-12-31", 1), ("2026-11-02", 10**30)):
+            with self.subTest(verified=verified, review_days=days):
+                with self.assertRaises(BuildError) as raised:
+                    run(make(verified=verified, review_days=days), release=True)
+                self.assertIn("claim-review", str(raised.exception))
+                self.assertIn("tool-count", str(raised.exception))
+                self.assertIn("date range", str(raised.exception))
+
 
 class ShippedLedger(unittest.TestCase):
     @classmethod
