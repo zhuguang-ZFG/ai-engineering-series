@@ -113,9 +113,9 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 5.9 MB）与 A4 排版的 PDF（中文版 521 页 / 36.3 MB，英文版 557 页 / 24.2 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 518 页 / 25.1 MB、英文 569 页 / 12.6 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 6.0 MB）与 A4 排版的 PDF（中文版 520 页 / 36.4 MB，英文版 559 页 / 24.3 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的；本轮 Windows 本机排中文为 524 页 / 25.4 MB、英文 581 页 / 12.9 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
 
-上面那对 CI 数字来自 P5 来源收口后的 [Book CI 实测](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42350509018)；书稿每加厚一轮，Noto 那一套就得跟着复排一次。`scripts/check_artifact_claims.py`（在 `book.yml` 里跑）会把 README 的数字和当次构建的 PDF 逐一对账，不一致就报红——所以推送后第一件事是看 CI 排出的页数，再回来把这两个数改写掉，本机雅黑的数字另记在 `docs/yuyu-overhaul/PDF-PAGES.md`。
+上面那对 CI 数字来自本轮 [Release 实测](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42394241613) 的已完成 Full 构建；该次运行因旧 README 数字不符而失败，不能冒称发布成功。`scripts/check_artifact_claims.py` 会把 README 与当次构建逐一对账；此处只回填产物实测，不改变检查规则。本机字体数字另记，不代替 CI 口径。
 
 | 文件 | 语言 |
 |------|------|
