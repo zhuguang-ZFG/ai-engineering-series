@@ -1,7 +1,7 @@
 {
-  "version": "0.13.0",
+  "version": "0.14.0",
   "title": "把大模型拆开看",
-  "description": "从一只杯子、一份通知开始，沿四十八张手绘拆开生成、注意力、训练和蒸馏，再动手查资料、用工具、核对答案。",
+  "description": "从一只杯子、一份通知开始，沿五十一张手绘拆开生成、注意力、训练和蒸馏，再动手查资料、用工具、核对答案。",
   "status": "pilot",
   "lessons": [
     {
@@ -60,7 +60,8 @@
       "shortTitle": "生成一句话",
       "extraFigures": [
         "generation-fork.svg",
-        "sequence-paths.svg"
+        "sequence-paths.svg",
+        "generation-steps.svg"
       ],
       "openerFigure": "generation-fork.svg"
     },
@@ -111,7 +112,8 @@
         "transformer-block.svg",
         "multihead-flow.svg",
         "causal-spotlight.svg",
-        "attention-mixing.svg"
+        "attention-mixing.svg",
+        "attention-steps.svg"
       ],
       "sources": [
         "S05",
@@ -168,7 +170,8 @@
         "distillation-flow.svg",
         "gradient-step.svg",
         "parameter-dials.svg",
-        "distillation-distributions.svg"
+        "distillation-distributions.svg",
+        "distillation-steps.svg"
       ],
       "extraExperiments": [
         "X09"

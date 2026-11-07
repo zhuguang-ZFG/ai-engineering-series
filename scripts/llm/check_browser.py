@@ -437,12 +437,14 @@ def run():
             page.set_content('<!doctype html><html lang="zh-CN"><body style="margin:0;width:327px">' + svg_source + '</body></html>')
             page.locator("svg").evaluate("svg => { svg.style.width = '327px'; svg.style.height = 'auto'; }")
             result = page.evaluate("""() => {
-              const svg = document.querySelector('svg'), view = svg.viewBox.baseVal;
+              const svg = document.querySelector('svg'), view = svg.viewBox.baseVal, root = svg.getBoundingClientRect();
               return [...svg.querySelectorAll('text')].map(el => {
-                const b = el.getBBox();
-                return {text: el.textContent, x: b.x, y: b.y, right: b.x+b.width, bottom: b.y+b.height,
+                // A text node's getBBox() is local to its translated group.
+                // Compare rendered rectangles in the same coordinate system.
+                const b = el.getBoundingClientRect();
+                return {text: el.textContent, x: b.left-root.left, y: b.top-root.top, right: b.right-root.left, bottom: b.bottom-root.top,
                   mobileSize: parseFloat(getComputedStyle(el).fontSize)*327/view.width,
-                  fits: b.x >= 0 && b.y >= 0 && b.x+b.width <= view.width && b.y+b.height <= view.height};
+                  fits: b.left >= root.left-.1 && b.top >= root.top-.1 && b.right <= root.right+.1 && b.bottom <= root.bottom+.1};
               });
             }""")
             assert all(text["fits"] and text["mobileSize"] >= 16 for text in result), (name, result)

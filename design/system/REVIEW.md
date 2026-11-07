@@ -371,3 +371,10 @@ CI 首轮发现媒体指纹误收本地 `.thumbnails` 预览缓存：原理片�
 手机长文新增章中目录，当前小节静默标记。取消后恢复原位置；打开时切换桌面宽度后把焦点还给正文；键盘已聚焦的快捷按钮不会突然隐藏或移动。大图保留原编号和说明，目录/大图同时只开一个。实际320/375×568弹层审看无裁切关闭按钮，15行为/50布局通过。
 
 旧PDF57页末KL与58页解释分开，新版整体移到58页；5组公式与解释同页检查通过，保留字号和内容。EPUB在章首和每节返回目录中本课的位置，84个禁脚本重排组合和7条跳转通过。最终171页/200书签/48图及EPUBCheck零错误警告通过；真实读者和独立阅读器/读屏继续待验收。证据见 [入口](../../specs/llm-learning-redesign/evidence/reading-entry.jpg)、[目录](../../specs/llm-learning-redesign/evidence/reading-section-dialog.jpg)、[大图](../../specs/llm-learning-redesign/evidence/reading-figure-caption.jpg)、[公式连读](../../specs/llm-learning-redesign/evidence/reading-formula-together.jpg)。
+
+
+## 让每一步的变化看得见 · 0.14.0
+
+L02候选、选择、追加和重算原先需要读者自行连接；新分镜把它们依次画出。L04把遮挡、Q/K比较、权重和V汇总分开；L05蒸馏先比较同温度分布，再给梯度与更新，最后并列显示固定教师和变化后的学生。纸色、墨线及绿色继续承担标记用途，箭头短动画只在手动切步或主动播放时出现。
+
+实际审看375px末帧与PDF16/38/63页；静态图最大150mm，避免被普通图的108mm规则缩小。三套计算与图文同源，独立核对后补齐蒸馏末帧概率列；固定示例修改会要求复核算式与说明。60组机制布局与原有阅读、键盘、重排均通过，真实读者与实际读屏仍待验收。证据：[手机](../../specs/llm-learning-redesign/evidence/mechanism-mobile-steps.jpg)、[书页](../../specs/llm-learning-redesign/evidence/mechanism-book-pages.jpg)。

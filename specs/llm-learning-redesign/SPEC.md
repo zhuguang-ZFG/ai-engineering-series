@@ -1,6 +1,6 @@
 # 大模型原理与应用课程改造规格
 
-状态：0.13.0 / T15 已完成正式导出与本地技术检查，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。本轮完成本地书籍入口、手机长文中途回查和公式连读，完整 `npm test` 通过。已发布基线 0.12.0 经 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3) 合并至 main，提交为 `7c10468ae5375cd0d8321ed7cfbaf5dd9d6bab68`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42375651413) 通过；该 CI 仅对应旧版。T15 保留四十八图、原有公式和内容，以及九个目标旧章的修订范围，不新增具名模型实测。阅读证据与成品哈希见 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)，完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。
+状态：0.14.0 / T16 本地技术完成，新增生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，并同步相邻讲解。契约及本轮证据见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并至 main，提交为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的本地书籍入口、手机长文中途回查、公式连读及四十八图的历史证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；该版成品与绿色 CI 不作为 T16 已通过的证据。完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。本轮不新增具名模型实测；真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。
 
 目标：让没有编程背景的读者，能解释模型怎样生成回答、判断回答何时不可信，并独立完成一个有验收标准的实际任务。沿用项目已有的纸面、墨线和手绘图解，把主要投入放在知识准确性、学习顺序与可操作的实验上。
 
@@ -50,6 +50,16 @@ G18–G24 用纸条、墨线、曲线箭头与局部标记展示变化；每图�
 5. EPUB 在章首及课内小节提供返回目录中本课位置的入口。目标存在、导航与正文可往返，避免每次跳到目录顶端重新寻找；原有目录层级与四十八图保留。
 6. 新网页和书籍重新生成，链接、行为、排版、成品哈希与发布检查按本轮实际结果记录。0.12.0 的页数、测试数量和绿色 CI 是历史基线，不能当作 0.13.0 已通过的证据。
 
+## 0.4 机制分镜与文字契约 · 0.14.0 / T16
+
+三套各四步分镜对应“候选分布→选择→追加→再算候选”“可见范围→比较→权重→汇总”“教师/学生分布→训练信号→更新学生→重算概率”。具体图位、数值条件、播放行为和验收表见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)。
+
+1. G49–G51 的数据调用既有 fixture 和数值函数，网页逐步画面、完整静态图及文字解释同源；显示时才四舍五入，不能为画得好看编概率或训练轨迹。
+2. 默认不播放，读者可以前后步进、播放一次、暂停、重置或展开完整步骤。系统要求减少动态效果时关闭动画和自动推进；键盘、焦点、后台暂停和离线行为须实际检查。
+3. 正文交代每一步看哪里、什么发生变化及其原因。保留原标题、公式、来源和既有图号；固定分镜与可调实验的关系讲清楚，L04 的独立手算例不混用分镜矩阵。
+4. 无脚本时保留完整静态图和步骤。PDF、EPUB 收录全部五十一图及静态解释，移除播放控件和重复动态画面；正式成品重新导出，检查图文分页、目录、公式及绑定哈希。
+5. T16 按实际结果更新技术与发布状态。T05/T10 真人条件及独立阅读器、实际读屏条件继续保留，不以图数、动画数或自动测试宣布学习效果。
+
 ## 1. 文档入口
 
 | 文档 | 用途 |
@@ -61,6 +71,7 @@ G18–G24 用纸条、墨线、曲线箭头与局部标记展示变化；每图�
 | [KNOWLEDGE-MAP.md](KNOWLEDGE-MAP.md) | 十二课知识点、算例、反例、图解与复做方式 |
 | [VISUAL-READING.md](VISUAL-READING.md) | 0.11.0 阅读节奏、二十四张新增图的语义位置与验收契约 |
 | [READING-EXPERIENCE.md](READING-EXPERIENCE.md) | T14/T15 阅读契约：公式读法、书籍入口、中途回查与导航，含分版本证据 |
+| [MECHANISM-STORIES.md](MECHANISM-STORIES.md) | T16 三套手绘分镜、数据边界、播放与静态书籍契约及本轮证据 |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | F1–F10、完成定义、实施任务的证据与剩余条件 |
 
 本规格是已有 `design/system/` 与 `design/handdraw/` 的教学层增量。已有配色、来源署名和可用工具继续复用。历史记录中的“根 SPEC rapid-lake-darter”本轮未在仓库内找到，不能据此认定旧任务已经全部完成。

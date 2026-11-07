@@ -1,42 +1,42 @@
 {
   "title": "把大模型拆开看",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "lessons": 12,
-  "figures": 48,
-  "pdfPages": 171,
+  "figures": 51,
+  "pdfPages": 179,
   "chapterPages": {
     "L01": 5,
     "L02": 14,
-    "L03": 24,
-    "L04": 34,
-    "L05": 45,
-    "L06": 66,
-    "L07": 77,
-    "L08": 87,
-    "L09": 96,
-    "L10": 106,
-    "L11": 116,
-    "L12": 125
+    "L03": 26,
+    "L04": 36,
+    "L05": 50,
+    "L06": 74,
+    "L07": 85,
+    "L08": 95,
+    "L09": 104,
+    "L10": 114,
+    "L11": 124,
+    "L12": 133
   },
   "contentsPages": {
     "L01": 5,
     "L02": 14,
-    "L03": 24,
-    "L04": 34,
-    "L05": 45,
-    "L06": 66,
-    "L07": 77,
-    "L08": 87,
-    "L09": 96,
-    "L10": 106,
-    "L11": 116,
-    "L12": 125,
-    "advanced": 135,
-    "architecture": 140,
-    "applications": 147,
-    "execution": 154,
-    "practice": 161,
-    "review": 165
+    "L03": 26,
+    "L04": 36,
+    "L05": 50,
+    "L06": 74,
+    "L07": 85,
+    "L08": 95,
+    "L09": 104,
+    "L10": 114,
+    "L11": 124,
+    "L12": 133,
+    "advanced": 143,
+    "architecture": 148,
+    "applications": 155,
+    "execution": 162,
+    "practice": 169,
+    "review": 173
   },
   "contentsLabels": {
     "L01": "L01 · 文字怎样变成模型的输入？",
@@ -63,23 +63,23 @@
     "llm-reading-tasks.pdf": 7,
     "llm-reading-guide.pdf": 10
   },
-  "sourceHash": "fc9d52befd572014eccde3e02c26f9ff0b44f7c31fe2f9e05a33e43fd9a719fb",
+  "sourceHash": "d9c74f09d5ed1274f22b6a8ef452fa76f333e80ad09628471ed5c7d87033d509",
   "files": {
     "llm-explained-handdraw.pdf": {
-      "bytes": 1992390,
-      "sha256": "2d115e1c24ba1765dd98876288489482910b8c943a8a87fe03817fbd97621d4f"
+      "bytes": 2063628,
+      "sha256": "e014ae3a8e832a0070c72c5f65a2f65e2d42445b5dfad6800bdf11f18a95520b"
     },
     "llm-explained-handdraw.epub": {
-      "bytes": 5677270,
-      "sha256": "2613528357ab22872ef3aef0e41b82b37b52589ab10cb51fcb87cebb3fd32a56"
+      "bytes": 6233119,
+      "sha256": "05e5c99022e50519b611b8df9d125e38631bd997edeb18657121bab4ff97a28c"
     },
     "llm-reading-tasks.pdf": {
       "bytes": 180920,
-      "sha256": "6e7a8817b04e8117052120d2e287d76502ca26a0d8aec0e1e0f2bb5769d315f1"
+      "sha256": "d608e3c22ddca949dcbc16f905543269a8f367996bf63def617bd124441fafb9"
     },
     "llm-reading-guide.pdf": {
       "bytes": 283580,
-      "sha256": "d6ffa443903cf276e2ecf5ab03c904505647e34251b2106e25feaa235feb2dc1"
+      "sha256": "59e00821fcec73fa669bc7863c551dbdf76e04d207e0cfd04c0d91a80dba5483"
     }
   },
   "limitations": [

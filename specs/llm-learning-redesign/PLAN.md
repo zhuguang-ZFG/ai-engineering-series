@@ -1,6 +1,6 @@
 # 分阶段实施计划
 
-状态：2026-11-07，0.13.0 / T15 已完成正式导出与本地技术检查，分支 `feat/reading-continuity`，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。本轮完成根目录本地书籍入口、手机长文中途回查、大图图注和书籍连读，完整 `npm test` 通过。已发布基线 0.12.0 经 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3) 合并为 `7c10468ae5375cd0d8321ed7cfbaf5dd9d6bab68`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42375651413) 通过；该 CI 仅对应旧版。本轮保留四十八图、公式和内容，不新增具名模型实测。逐项证据见 [ACCEPTANCE.md](ACCEPTANCE.md)、[IMPLEMENTATION.md](IMPLEMENTATION.md)；T15 契约与实测见 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)。用户暂时没有真实读者，T05/T10 继续待验收。
+状态：2026-11-07，0.14.0 / T16 本地技术完成，分支 `feat/mechanism-storyboards`。本轮增加生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，改进相邻文字并同步静态书籍；验收契约见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的书籍入口、手机中途回查、大图图注和公式连读证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)，不能作为 T16 本轮结果。逐项进度见 [ACCEPTANCE.md](ACCEPTANCE.md)、[IMPLEMENTATION.md](IMPLEMENTATION.md)。本轮不新增具名模型实测；用户暂时没有真实读者，T05/T10 继续待验收。
 
 优先级：先把一个学习单元做通，再扩展原理与应用路线，最后同步视频。预计工作量用于拆分批次，不能当作固定交期；试读排期、配音和渲染另计。
 
@@ -25,6 +25,10 @@
 | `scripts/llm/build-story-figures.mjs` | T13 新增 G25–G48 的可重复 SVG 绘制 | 各机制独立构图，图元数据与正文图位同源检查 |
 | `scripts/llm/reader.js`、`reader.css` | T14 字号、看大图、继续位置；T15 中途课内目录、当前小节和大图图注 | 离线可用；存储失效和无脚本不阻断正文；焦点流程完整 |
 | `scripts/llm/check_reading.py` | T14/T15 浏览器阅读路径检查 | 检查实际焦点、字号、导航、图放大、恢复位置及新增书籍入口 |
+| `scripts/llm/mechanism-frames.cjs`、`mechanism-templates.mjs` | T16 三套机制的计算分步数据与网页/静态模板 | 调用既有数值函数，固定条件可重放，图中数值与解释同源 |
+| `scripts/llm/build-mechanism-figures.mjs`、`book/assets/handdraw/llm/*-steps.svg` | T16 G49–G51 静态手绘分镜 | 可重复生成与 `--check`；登记图号、alt、来源和简化边界 |
+| `scripts/llm/mechanism-player.js`、`mechanism.css` | T16 逐步观看、有限播放和完整静态视图 | 默认不播；暂停、重置、减少动态效果、键盘及离线可用 |
+| `scripts/llm/check_mechanisms.py`、`mechanism-frames.test.js` | T16 数值与实际浏览器行为检查 | 数据一致、教师固定、因果掩码；实测播放、焦点、窄屏及无脚本 |
 | `scripts/llm/export_books.py`、`book.css` | PDF 目录页码、公式连读，EPUB 分节与返回本课目录 | 页码由实际布局生成；网页阅读控件不进入书籍；原公式与图注保留 |
 | `scripts/llm/export-token-fixtures.*` | 生成可复算的分词快照 | 新增；实现语言按所选 tokenizer 决定，锁版本 |
 | `exports/landing.html` | 新路线入口、可读图与任务示例 | 增量改造 |
@@ -58,6 +62,8 @@ T00 基线整理 → T01 课程结构与构建约定 → T02 事实来源与纠�
 
 0.13.0 的 T15 接在已发布 T14 之后：定位入口、回查与分页问题 → 并行完成根目录入口、手机导航和书籍连读 → 统一构建与正式导出 → 实际点击、键盘和书页核验 → 本轮发布。保留 T05/T10 和独立阅读器、读屏的外部验收条件，不把基线检查当作新版本结果。
 
+0.14.0 的 T16 接在已发布 T15 之后：找出结果之间缺少的解释 → 并行完成计算分镜、播放器和正文 → 统一构建网页与静态书籍 → 检查数值、有限播放、减少动态效果、图文排版和既有阅读路径 → 提交发布并核对对应 main CI。三套各四步，先用固定条件看因果，再进入既有可调实验；不把技术检查当作真人学习效果。
+
 ## 3. 任务清单
 
 | 任务 | 工作与责任范围 | 完成标准 | 预计有效工作量 |
@@ -77,7 +83,8 @@ T00 基线整理 → T01 课程结构与构建约定 → T02 事实来源与纠�
 | T12 / 逐课深化 | 按知识点核对表补因果步骤、数字算例、失败反例和 G18–G24；L05 增加 X09 蒸馏 | 教师/学生、软硬标签、温度、KL、文本蒸馏与错误继承可复做；公式数值独立核验；网页与书籍同源 | 0.10.0 已实现，证据见实现记录 |
 | T13 / 图文阅读 | 重写十二课与深入段、蒸馏叙述；每课新增两张 G25–G48 手绘；按问题与推演穿插图文，重建网页与书籍 | 具体问题开场、先猜后验证、不同构图解释因果；公式数值不丢；实际手机字形、PDF/EPUB 图文顺序和排版经检查；学习效果另据真人验收 | 0.11.0 技术发布完成，真人验收仍待进行 |
 | T14 / 连续阅读与回查 | 补公式读法、调整阅读顺序；实现课内导航、字号、看大图和可选继续位置；补 PDF 目录页码及 EPUB 分节导航 | 具体契约见 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；浏览器实际操作与书籍导航通过检查，新成品绑定本轮源码；不预填读者成效 | 0.12.0 技术发布完成，PR #3 已合并、main CI 通过 |
-| T15 / 书籍入口与中途回查 | 根目录直达 PDF/EPUB/网页，页脚提供书籍入口；手机本课目录对话框、静默小节标记、大图原图注；PDF 公式与解释连读、EPUB 返回本课目录 | 本地入口实际可达；中途导航、焦点和图注正确；公式分页与双向目录经成品检查；重新导出并绑定本轮哈希 | 0.13.0 本地技术完成，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) |
+| T15 / 书籍入口与中途回查 | 根目录直达 PDF/EPUB/网页，页脚提供书籍入口；手机本课目录对话框、静默小节标记、大图原图注；PDF 公式与解释连读、EPUB 返回本课目录 | 本地入口实际可达；中途导航、焦点和图注正确；公式分页与双向目录经成品检查；重新导出并绑定本轮哈希 | 0.13.0 技术发布完成，[PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 已合并，对应 main CI 通过 |
+| T16 / 机制分镜与文字 | 生成、注意力、蒸馏三套各四步手绘；G49–G51；改写相邻解释，网页有限播放与静态书籍同源 | 具体契约见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)；固定数据可复算，暂停/重置/键盘/减少动态/离线/无脚本通过实测；书籍保留完整步骤并绑定本轮哈希 | 0.14.0 本地技术完成；正式导出与完整回归通过，发布待记录 |
 
 P0 建议范围为 6–11 个有效工作日，核心阅读与实验路线完成约 14–25 个有效工作日。估算未包含未预见的存量修复、招募等待与新视频制作；优先以 T05 的证据调整后续范围。核心课程先验收，视频随后补充，不让视频渲染阻塞可阅读版本的验证。
 
@@ -104,6 +111,7 @@ P0 建议范围为 6–11 个有效工作日，核心阅读与实验路线完成
 | T13 阅读与图位 | 对照 [VISUAL-READING.md](VISUAL-READING.md)，逐课检查正文、图片与生成页；新增 SVG 用实际 327px 图宽审看 | 每课两张新增图位、开场问题及先猜后核对点；无未替换占位；图文事实一致，公式与必要边界保留；不把图数当教学效果 |
 | T14 连续阅读与回查 | 对照 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)，检查手机首屏、课内链接与焦点、三档字号、看大图和可选继续位置；逐项比对 PDF 目录页码与 EPUB 分节目标 | 实际浏览器操作、无脚本与存储失效结果；新书籍导航、重排和代表页；公式、来源、图号及实验占位保真对照 |
 | T15 书籍入口与中途回查 | 从根目录入口和课程页脚实际打开书籍；手机长文中途开关目录并跳转，检查静默小节标记、大图原图注；实看 PDF 公式/解释分页，检查 EPUB 返回目录中本课的往返 | 本地相对链接、键盘焦点、最大字号和无脚本结果；已知 KL 分页问题的前后证据；新书籍目录、重排、哈希与正式校验；未运行项目不填通过 |
+| T16 机制分镜与文字 | 对照 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)，检查三套数值和图文对应、手动/有限播放/暂停/重置、减少动态效果、键盘、离线与禁脚本；实看书籍完整静态分镜 | 数据与既有计算一致；手机及大字号不溢出；图中文字可读、焦点稳定；PDF/EPUB 没有重复动态画面或播放按钮；本轮正式成品与发布证据独立记录 |
 | X02–X05、X07–X09 | `node --test scripts/llm/*.test.js`；边界行为测试 | 归一化、因果性、损失变化、蒸馏梯度、无结果、失败和停止的断言 |
 | 课程构建与目录 | `npm run build:llm`、`npm run check:llm` | 原文/输出 ID 一致；每课有目标、来源、图与自测反馈；不存在断链 |
 | HTML 页面 | 375 / 768 / 1440 CSS 像素截图，键盘、200% 缩放、离线和禁 JS 检查 | 每种布局的关键状态、字体与溢出结果 |
@@ -118,10 +126,11 @@ P0 建议范围为 6–11 个有效工作日，核心阅读与实验路线完成
 | 用户目标 | 落点 | 通过依据 |
 | --- | --- | --- |
 | 去除 AI 味 | A03/A10/A13；中文契约；T02/T03/T08 | 具体任务、自然解释、无虚构证据；制作参数不挤占学习入口 |
-| 增加手绘 | G01–G48；T04/T06/T07/T08/T12/T13 | 图形表达输入、变化和输出，穿插到相关解释；最终显示尺寸可读 |
+| 增加手绘 | G01–G51；T04/T06/T07/T08/T12/T13/T16 | 图形表达输入、变化和输出，穿插到相关解释；最终显示尺寸可读 |
 | 改善枯燥的阅读过程 | 十二课主文/深入段、蒸馏；T13 | 具体问题、先猜后看、可操作的观察、不同构图与自然段衔接；真实理解仍据试读判断 |
 | 连续阅读与方便回查 | 公式读法、阅读顺序、网页控件及书籍导航；T14 | 手机首屏可开始，能调字、看图、回查和继续读；PDF 页码与 EPUB 分节指向实际内容；真人体验另验 |
 | 找到本地书籍、在长文中回查 | 根目录与页脚书籍入口、手机本课目录、大图图注、公式连读、EPUB 本课目录回链；T15 | 无需开发服务即可打开本地书籍；中途跳转焦点正确、图注相符；公式与解释合理分页，EPUB 可返回本课目录位置 |
+| 看懂结果之间怎样变化 | 生成、注意力和蒸馏的逐步手绘及相邻解释；T16 | 每一步标出输入、变化和结果；可停下比较、回看和重放，书籍可静态读完；数值由真实教学计算产生 |
 | 深刻理解运行原理 | L01–L06；X01–X05 | 读者可解释生成、训练与上下文；能做简单数值验证 |
 | 理解怎么应用 | L07–L12；X06–X08 | 带证据任务结果、方案选择、失败处理和独立迁移 |
 | 面向零基础 | 分层路线、静态降级、低门槛本地实验 | 初学者任务测试；主线无代码、无账号与付费 API 前置 |
@@ -144,7 +153,7 @@ P0 建议范围为 6–11 个有效工作日，核心阅读与实验路线完成
 
 ## 8. 基线与当前实际进度（2026-11-07）
 
-下表保留各批次完成边界：T13 对应已发布 0.11.0，T14 对应已发布 0.12.0。当前 T15 / 0.13.0 的正式导出与完整 `npm test` 已通过；PDF 为 171 页、200 个书签、18 项目录，EPUB 为 89 个小节导航、323 条内部链接。本轮结果独立记录于 T11/T15，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。
+下表保留各批次完成边界：T13 对应已发布 0.11.0，T14 对应已发布 0.12.0，T15 对应已发布 0.13.0。T15 正式导出与完整 `npm test` 通过；该版 PDF 为 171 页、200 个书签、18 项目录，EPUB 为 89 个小节导航、323 条内部链接。该版结果记录于 T11/T15，[PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 已合并且对应 main CI 通过。当前 T16 / 0.14.0 已完成三套分镜、五十一图、179 页 PDF 和 EPUB 的独立检查，证据见机制分镜记录。
 
 | 任务 | 当前状态 | 完成边界与剩余项 |
 | --- | --- | --- |
@@ -161,8 +170,9 @@ P0 建议范围为 6–11 个有效工作日，核心阅读与实验路线完成
 | T12 | 本地制作与技术校验完成 | 十二份深入解释；X09 真实计算软硬混合损失和梯度，含错误教师对照；G18–G24 补蒸馏、语境表示、梯度、训练信号、检索失败、超时与评测。0.10.0 当批书籍/视频同步、30 组计算/状态测试及网页检查通过；学习效果仍待真实试读 |
 | T13 | 0.11.0 技术发布完成 | 十二课均有开场情境与两张新增图位，G25–G48 为 480×640 SVG；累计四十八图。保留原理、公式和九个旧章范围；48 图手机字形、90 布局/22 行为、30 页语义/4 组键盘、完整 npm test 及重导出的书籍通过；实际图文/PDF 已审看；PR #2 已合并，main CI 通过 |
 | T14 | 0.12.0 技术发布完成 | 七个正文文件通过原标题、公式、来源、图号和实验占位保真对照；该批正式导出与 npm test 通过，含 32 项测试、30 个 HTML/48 个 SVG/728 条本地链接。阅读检查 10 项行为/48 组最大字号布局、浏览器 90 组布局/22 项行为、30 页语义/4 组键盘流程通过，检查期间远程网络请求为零。375×900 手机首屏标题由 y=573 移至 252px；PR #3 已合并、main CI 通过，详细历史证据见阅读体验记录 |
-| T15 | 0.13.0 本地技术完成，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) | 正式导出与完整 npm test 通过：32 项测试、31 个 HTML（含根目录入口）/48 个 SVG/796 条本地链接。阅读检查 15 项行为/50 组布局（48 组最大字号、2 组小屏弹层）、31 页语义/4 组键盘、浏览器 90 组布局/22 项行为通过；离线检查远程请求为零。入口在 320/375/1440 宽度禁 JS 布局及到 L02 的实际链接通过，书籍与截图证据见阅读体验记录。发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)，真实读者条件不变 |
+| T15 | 0.13.0 技术发布完成，[PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 已合并、对应 main CI 通过 | 正式导出与完整 npm test 通过：32 项测试、31 个 HTML（含根目录入口）/48 个 SVG/796 条本地链接。阅读检查 15 项行为/50 组布局（48 组最大字号、2 组小屏弹层）、31 页语义/4 组键盘、浏览器 90 组布局/22 项行为通过；离线检查远程请求为零。入口在 320/375/1440 宽度禁 JS 布局及到 L02 的实际链接通过，书籍与截图证据见阅读体验记录。合并提交 `5d6a40cc010430f94eb9207eebad6e00ef1008c3` 的 [main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过，真实读者条件不变 |
+| T16 | 0.14.0 本地技术完成 | 三套各四步与 G49–G51；36 项测试、51 图/805 链接、机制 6 组/60 布局及原有阅读回归通过。PDF 179 页/203 书签；EPUB 92 小节入口/332 内部链接与官方校验通过。成品哈希、截图及发布按 [MECHANISM-STORIES.md](MECHANISM-STORIES.md) 记录 |
 
-0.10.0 的本地制作和 pilot 发布已完成：[PR #1](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/1) 合并为 `cc85872052e31e6387eec6396f2f70745eca1ecb`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42354114924) 通过。0.11.0 经 [PR #2](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/2) 合并为 `8d61f2c5a3cc6d1f25601d4b9bd9fdfaf5685c0b`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42371539269) 通过。0.12.0 经 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3) 合并为 `7c10468ae5375cd0d8321ed7cfbaf5dd9d6bab68`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42375651413) 通过。0.13.0 本地技术检查已通过，发布与 CI 证据见 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4)。教学验收保留 T05/T10 的真实人员条件，不以自动测试替代；课文状态保留 pilot，未声明已经验证“人人都能深刻理解”。
+0.10.0 的本地制作和 pilot 发布已完成：[PR #1](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/1) 合并为 `cc85872052e31e6387eec6396f2f70745eca1ecb`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42354114924) 通过。0.11.0 经 [PR #2](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/2) 合并为 `8d61f2c5a3cc6d1f25601d4b9bd9fdfaf5685c0b`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42371539269) 通过。0.12.0 经 [PR #3](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/3) 合并为 `7c10468ae5375cd0d8321ed7cfbaf5dd9d6bab68`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42375651413) 通过。0.13.0 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。0.14.0 / T16 正式导出与本地技术检查通过，本轮结果见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)，发布结果随后记录。教学验收保留 T05/T10 的真实人员条件，不以自动测试替代；课文状态保留 pilot，未声明已经验证“人人都能深刻理解”。
 
 余下条件按 [ACCEPTANCE.md](ACCEPTANCE.md) 跟踪：T05/T10 等待真实读者；独立阅读器和屏幕阅读器实机检查继续推进，实际通过后再改状态。具名模型调用在 SPEC 中是可选扩展，未采样不构成离线主线欠交，但不得填造输出或性能结论。真人暂缺时继续完成技术工作，不能把真人标准删掉来关闭全部计划。

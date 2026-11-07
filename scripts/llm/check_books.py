@@ -110,6 +110,17 @@ def check():
             assert "OEBPS/" + item.get("href") in names
         for ref in opf.xpath("//o:spine/o:itemref", namespaces=ns):
             assert ref.get("idref") in manifest
+        for slug, kind in [("generation", "generation"), ("attention", "attention"), ("training", "distillation")]:
+            chapter = trees["OEBPS/" + slug + ".xhtml"]
+            story = chapter.xpath('//h:section[@class="mechanism"]', namespaces=ns)
+            assert len(story) == 1, (slug, "Static mechanism missing or duplicated")
+            assert not story[0].xpath('.//h:button | .//h:svg | .//*[@class="mechanism-stage"] | .//*[@class="mechanism-controls"] | .//*[@class="mechanism-status"]', namespaces=ns), (slug, "Playback interface leaked into book")
+            images = story[0].xpath('.//h:img/@src', namespaces=ns)
+            assert images == ["images/" + kind + "-steps.png"], (slug, images)
+            steps = story[0].xpath('.//h:ol/h:li', namespaces=ns)
+            assert len(steps) == 4, (slug, "Incomplete mechanism sequence")
+            for step in steps:
+                assert "".join("".join(step.itertext()).split()) in "".join(all_text.split()), (slug, "PDF lost a static step")
         assert len(opf.xpath("//o:spine/o:itemref", namespaces=ns)) == len(course["lessons"]) + 9
         assert len(opf.xpath('//o:item[@properties="cover-image"]', namespaces=ns)) == 1
         nav = trees["OEBPS/nav.xhtml"]

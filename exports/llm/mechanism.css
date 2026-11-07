@@ -1,0 +1,36 @@
+/* Drawings carry the mechanism; controls only change which step is in view. */
+.mechanism { margin: 36px 0; padding: 24px 0; border-block: 2px solid var(--ink, #1f2328); }
+.mechanism > h3 { margin-top: 0; }
+.mechanism-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 12px; }
+.mechanism-controls button { min-height: 44px; padding: 8px 14px; font-size: 16px; border-width: 1px; }
+.mechanism-controls button[aria-disabled="true"] { color: var(--ink-soft, #57606a); border-color: var(--rule, #d0d7de); cursor: default; background: var(--paper, #f6f4ed); }
+.mechanism-controls button[data-action="play"][aria-pressed="true"] { background: var(--marker, #f6df8e); }
+.mechanism-status { font-size: 16px; line-height: 1.7; color: var(--ink-soft, #57606a); min-height: 3.4em; margin-bottom: 16px; }
+.mechanism-status:empty { display: none; }
+.mechanism-stage { padding: 12px 0 0; }
+.mechanism-frame { overflow-wrap: anywhere; }
+.mechanism-frame svg { display: block; width: 100%; max-width: 480px; height: auto; margin: 0 auto 20px; }
+.mechanism-frame > p { margin-bottom: 0; }
+.mechanism-static > img, .mechanism-static figure img { display: block; width: 480px; max-width: 100%; height: auto; margin: 24px auto; }
+.mechanism-static ol { padding-left: 1.5em; }
+.mechanism-static li { margin-block: 12px; }
+.mechanism-static li p { margin-bottom: 8px; }
+.mechanism [hidden] { display: none !important; }
+@media (prefers-reduced-motion: no-preference) {
+  .mechanism-frame:not([hidden]) .mechanism-flow { stroke-dasharray: 900; animation: mechanism-ink .32s ease-out both; }
+  .mechanism-frame:not([hidden]) .mechanism-change { animation: mechanism-reveal .2s ease-out both; }
+}
+@keyframes mechanism-ink { from { stroke-dashoffset: 900; } to { stroke-dashoffset: 0; } }
+@keyframes mechanism-reveal { from { opacity: .3; } to { opacity: 1; } }
+@media (max-width: 400px) {
+  .mechanism-controls { gap: 8px; }
+  .mechanism-controls button { padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mechanism *, .mechanism *::before, .mechanism *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .mechanism-controls, .mechanism-stage, .mechanism-status { display: none !important; }
+  .mechanism .mechanism-static[hidden] { display: block !important; }
+  .mechanism { border: 0; padding: 0; }
+}

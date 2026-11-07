@@ -11,6 +11,7 @@ import { legacyTransformer } from "./llm/legacy-transformer.mjs";
 import { legacyReferences } from "./llm/legacy-references.mjs";
 import { distillationExperiment } from "./llm/distillation-templates.mjs";
 import { renderReading, readingContents } from "./llm/reading-outline.mjs";
+import { mechanismLesson, mechanismFigures } from "./llm/mechanism-templates.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const checking = process.argv.includes("--check");
@@ -30,6 +31,11 @@ const distillation = json("fixtures/distillation.json");
 const review = json("review/tasks.json");
 const rubric = json("review/rubric.json");
 const figures = JSON.parse(readFileSync(join(root, "book/assets/handdraw/llm/figures.json"), "utf8")).figures;
+for (const expected of mechanismFigures) {
+  const actual = figures.find(figure => figure.id === expected.id);
+  if (!actual || Object.entries(expected).some(([key, value]) => actual[key] !== value)) throw new Error(`${expected.id}: storyboard metadata must match its computed explanation`);
+  if (!course.lessons.find(lesson => lesson.id === expected.lesson)?.extraFigures?.includes(expected.file)) throw new Error(`${expected.id}: storyboard missing from course figures`);
+}
 const transformer = legacyTransformer(root, checking);
 const legacy = legacyPrinciples(root, checking);
 const applications = legacyApplications(root, checking);
@@ -51,14 +57,15 @@ const write = (name, body) => {
 };
 
 function page(title, body, data = null) {
+  const hasMechanism = mechanismFigures.some(figure => figure.lesson === data?.lesson?.id);
   body = body.replace(/<main\b([^>]*\bid="main"[^>]*)>/, '<main$1 tabindex="-1">');
   const encoded = data ? JSON.stringify(data).replaceAll("<", "\\u003c").replaceAll("\u2028", "\\u2028").replaceAll("\u2029", "\\u2029") : null;
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="${h(course.description)}"><title>${h(title)} · ${h(course.title)}</title><link rel="stylesheet" href="lab.css">${data?.lesson ? '<link rel="stylesheet" href="reader.css">' : ""}</head>
+<meta name="description" content="${h(course.description)}"><title>${h(title)} · ${h(course.title)}</title><link rel="stylesheet" href="lab.css">${data?.lesson ? '<link rel="stylesheet" href="reader.css">' : ""}${hasMechanism ? '<link rel="stylesheet" href="mechanism.css">' : ""}</head>
 <body${data?.lesson ? ` data-reading-lesson="${h(data.lesson.id)}" data-reading-title="${h(data.lesson.title)}" data-reading-version="${h(course.version)}"` : ""}><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">${h(course.title)}</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
 ${body}<footer>十二课 · 可离线阅读与操作 · 试读版<br><a href="../../deliverables/llm-explained-handdraw.pdf">阅读 PDF</a> · <a href="../../deliverables/llm-explained-handdraw.epub" download>下载 EPUB</a><br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">验收记录</a></footer>
-${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>${data.lesson.id === "L05" ? '<script src="distillation.js"></script><script src="distillation-client.js"></script>' : ""}<script src="reader.js"></script>` : ""}</body></html>\n`;
+${encoded ? `<script id="lab-data" type="application/json">${encoded}</script><script src="core.js"></script><script src="principles.js"></script><script src="applications.js"></script><script src="client.js"></script><script src="application-client.js"></script>${data.lesson.id === "L05" ? '<script src="distillation.js"></script><script src="distillation-client.js"></script>' : ""}<script src="reader.js"></script>${hasMechanism ? '<script src="mechanism-player.js"></script>' : ""}` : ""}</body></html>\n`;
 }
 
 function staticExperiment(lesson, fixture) {
@@ -112,6 +119,8 @@ if (!checking) mkdirSync(out, { recursive: true });
 write("lab.css", readFileSync(join(root, "scripts/llm/styles.css"), "utf8"));
 write("reader.css", readFileSync(join(root, "scripts/llm/reader.css"), "utf8"));
 write("reader.js", readFileSync(join(root, "scripts/llm/reader.js"), "utf8"));
+write("mechanism.css", readFileSync(join(root, "scripts/llm/mechanism.css"), "utf8"));
+write("mechanism-player.js", readFileSync(join(root, "scripts/llm/mechanism-player.js"), "utf8"));
 write("core.js", readFileSync(join(root, "scripts/llm/core.cjs"), "utf8"));
 write("client.js", readFileSync(join(root, "scripts/llm/client.js"), "utf8"));
 write("distillation.js", readFileSync(join(root, "scripts/llm/distillation.cjs"), "utf8"));
@@ -187,7 +196,16 @@ for (const [index, lesson] of ready.entries()) {
   });
   if (/<!--\s*figure:/.test(illustratedMarkdown)) throw new Error(`${lesson.id}: invalid figure anchor`);
   if (lesson.openerFigure && !placedFigures.has(lesson.openerFigure)) throw new Error(`${lesson.id}: missing opening illustration`);
-  const reading = renderReading(illustratedMarkdown, lesson.id);
+  const mechanismFigure = mechanismFigures.find(figure => figure.lesson === lesson.id);
+  const mechanismMarkers = [...illustratedMarkdown.matchAll(/<!-- mechanism: ([a-z]+) -->/g)];
+  if (mechanismMarkers.length !== Number(Boolean(mechanismFigure))) throw new Error(`${lesson.id}: incorrect mechanism anchor count`);
+  const mechanismMarkdown = illustratedMarkdown.replace(/<!-- mechanism: ([a-z]+) -->/g, (_, id) => {
+    if (!mechanismFigure || mechanismFigure.file !== `${id}-steps.svg`) throw new Error(`${lesson.id}: unexpected mechanism ${id}`);
+    placedFigures.add(mechanismFigure.file);
+    return mechanismLesson(id, h);
+  });
+  if (/<!--\s*mechanism:/.test(mechanismMarkdown)) throw new Error(`${lesson.id}: invalid mechanism anchor`);
+  const reading = renderReading(mechanismMarkdown, lesson.id);
   const body = reading.html.replace("<!-- experiment -->", image(lesson) + experiment(lesson, fixture)).replace("<!-- distillation-figure -->", lesson.id === "L05" ? image(lesson, "distillation-flow.svg") : "").replace("<!-- distillation -->", lesson.id === "L05" ? distillationExperiment(distillation, h) : "").replace("<!-- depth-figure -->", lesson.depthFigure ? image(lesson, lesson.depthFigure) : "").replace('id="experiment-title"', 'id="experiment-title" tabindex="-1"');
   const contents = readingContents(reading.outline);
   const references = lesson.sources.map((id) => {

@@ -22,6 +22,9 @@ figcaption { font-size: .85em; color: #57606a; line-height: 1.65; text-align: le
 .quiz { border-top: 2px solid #1f2328; margin-top: 2em; padding-top: .6em; }
 .answer { background: #f1f7f2; padding: 1em; margin: 1em 0; }
 .sources { border-top: 1px solid #e6e1d4; font-size: .85em; margin-top: 1.8em; padding-top: .6em; }
+.mechanism { margin: 1.6em 0; }
+.mechanism-static img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.mechanism-static li { break-inside: avoid; }
 .cover { margin: 0; padding: 0; text-align: center; }
 .cover img { max-width: 100%; max-height: 90vh; width: auto; height: auto; }
 .reading-part { margin-bottom: 2em; }
@@ -59,6 +62,8 @@ thead { display: table-header-group; }
   .story-figure { margin: 1em auto; }
   .story-figure img { max-height: 96mm; max-width: 96mm; }
   .story-opener img { max-height: 88mm; }
+  .mechanism-static figure { margin: .8em auto; }
+  .mechanism-static img { max-height: 150mm; max-width: 108mm; width: auto; }
   #toc li { margin-bottom: .35em; line-height: 1.5; break-inside: avoid; }
   #toc > ol > li { margin: 0 0 .35em; padding-bottom: .35em; border-bottom: 1px dotted #e6e1d4; }
   tr { break-inside: avoid; }
