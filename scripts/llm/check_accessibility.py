@@ -48,7 +48,7 @@ def run():
         def tree():
             return [node for node in cdp.send("Accessibility.getFullAXTree")["nodes"] if not node.get("ignored")]
 
-        for path in sorted((ROOT / "exports/llm").glob("*.html")):
+        for path in [*sorted((ROOT / "exports/llm").glob("*.html")), ROOT / "开始阅读.html"]:
             page.goto(path.as_uri())
             nodes = tree()
             named = [node for node in nodes if node.get("role", {}).get("value") in NAMED_ROLES]

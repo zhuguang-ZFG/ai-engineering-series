@@ -29,6 +29,9 @@ figcaption { font-size: .85em; color: #57606a; line-height: 1.65; text-align: le
 .review-document h3 { font-size: 1em; margin: .6em 0; }
 .review-task { margin-top: 2em; }
 .book-navigation { border-top: 1px solid #e6e1d4; padding-top: 1em; margin-top: 2em; font-size: .9em; }
+.book-navigation-start { border-top: 0; padding-top: 0; margin: 0 0 1.5em; }
+.book-section-navigation { margin: -.3em 0 1em; font-size: .85em; }
+.book-section-navigation a { color: #57606a; }
 #toc > ol { list-style: none; padding-left: 0; }
 #toc > ol > li { margin: 1em 0; }
 #toc ol ol { border-left: 1px solid #e6e1d4; list-style: none; padding-left: 1em; margin: .6em 0 1.2em; font-size: .9em; }
@@ -48,6 +51,7 @@ thead { display: table-header-group; }
   .cover { break-before: auto; }
   .cover img { height: 172mm; width: auto; max-height: none; }
   h1, h2, h3, .chapter-id { break-after: avoid; }
+  .book-equation-intro, .book-equation { break-after: avoid; break-inside: avoid; }
   figure img { max-height: 108mm; max-width: 108mm; width: auto; }
   .chapter-figure { margin: 1em auto; }
   .chapter-figure img { max-height: 108mm; max-width: 104mm; }
@@ -61,7 +65,7 @@ thead { display: table-header-group; }
   pre, #L05 table, #execution table, #architecture table { break-inside: avoid; }
   .review-appendix > .review-task { break-before: page; margin-top: 0; }
   .lab, .quiz, .sources { break-inside: auto; }
-  .book-navigation { display: none; }
+  .book-navigation, .book-section-navigation { display: none; }
   a { color: #1f2328; }
 }
 @media screen {

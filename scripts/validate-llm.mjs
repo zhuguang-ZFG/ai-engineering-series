@@ -1,5 +1,5 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
-import { resolve, dirname, join, extname } from "node:path";
+import { resolve, dirname, basename, join, extname } from "node:path";
 import { gzipSync } from "node:zlib";
 import assert from "node:assert/strict";
 import { validateData } from "./llm/validate-data.mjs";
@@ -25,8 +25,9 @@ for (const lesson of ready) for (const file of [lesson.figure, ...(lesson.extraF
 }
 
 let links = 0;
-for (const name of readdirSync(output).filter((file) => extname(file) === ".html")) {
-  const path = join(output, name);
+const pages = [...readdirSync(output).filter((file) => extname(file) === ".html").map(name => join(output, name)), join(root, "开始阅读.html")];
+for (const path of pages) {
+  const name = basename(path);
   const html = readFileSync(path, "utf8");
   assert.equal((html.match(/<h1[\s>]/g) ?? []).length, 1, `${name}: expected one h1`);
   const assets = new Set([path]);

@@ -68,6 +68,16 @@ def check():
     for task in review["tasks"]:
         assert task["title"] in all_text.replace("\n", ""), "PDF missing transfer task " + task["id"]
     assert "一种答法" not in all_text, "Facilitator answers leaked into the reader book"
+    compact_pages = ["".join(page.get_text().split()) for page in pdf]
+    equation_pairs = [
+        ("pᵢ(T)=exp(zᵢ/T)/Σⱼexp(zⱼ/T)", "先只看“水”这一项"),
+        ("KL(p(T)‖q(T))=Σᵢpᵢ(T)×ln[pᵢ(T)/qᵢ(T)]", "ln是自然对数。读这条式子时"),
+        ("L=α×T²×KL(p(T)‖q(T))", "+(1−α)×CE(y,q(1))", "α是调节两种信号份量的旋钮"),
+        ("∂L/∂sᵢ=αT(qᵢ(T)−pᵢ(T))", "+(1−α)(qᵢ(1)−yᵢ)", "接着用前面学过的动作"),
+        ("L文本=−Σₜlnq学生(ŷₜ|x,ŷ_<t)", "公式中的ŷ_<t就是示范里已经写在前面的部分"),
+    ]
+    for pieces in equation_pairs:
+        assert any(all(piece in text for piece in pieces) for text in compact_pages), ("Formula separated from its explanation", pieces)
     sparse = []
     for i, page in enumerate(pdf):
         assert abs(page.rect.width - 419.53) < 2 and abs(page.rect.height - 595.28) < 2, "Wrong A5 size"
@@ -120,6 +130,15 @@ def check():
             sections = link.getparent().xpath('./h:ol//h:a/@href', namespaces=ns)
             assert sections == expected_sections, (lesson["id"], "EPUB section navigation missing or reordered")
             assert all(target in ncx_targets for target in expected_sections), (lesson["id"], "NCX omits sections")
+            index_id = "contents-" + lesson["id"]
+            assert link.getparent().get("id") == index_id, "Chapter index has no direct landing point"
+            index_target = "nav.xhtml#" + index_id
+            opening = chapter.xpath('//h:p[contains(concat(" ", @class, " "), " book-navigation-start ")]', namespaces=ns)
+            assert len(opening) == 1 and opening[0].xpath('./h:a/@href', namespaces=ns) == [index_target, "nav.xhtml#toc"]
+            for heading in headings:
+                back = heading.getnext()
+                assert back is not None and back.get("class") == "book-section-navigation", (lesson["id"], "Section has no nearby directory link")
+                assert back.xpath('./h:a/@href', namespaces=ns) == [index_target]
             subheadings += len(sections)
             image_sources = chapter.xpath("//h:img/@src", namespaces=ns)
             for figure in [lesson["figure"], *lesson.get("extraFigures", [])]:
@@ -185,7 +204,7 @@ def check():
     for task in record["tasks"]:
         assert task["status"] is None and task["hints"] == [] and not task["firstAnswer"] and not task["readerWords"]
     assert all(value is None for value in record["objectives"].values()), "Invented test result in template"
-    print(json.dumps({"status": "passed", "pdfPages": len(pdf), "pdfOutlineEntries": len(pdf.get_toc()), "pdfContentsPages": len(metadata["contentsPages"]), "epubSectionLinks": subheadings, "epubLocalLinks": links, "sparsePdfPagesForReview": sparse, "epubcheck": "5.3.0: zero errors and warnings; result bound to this EPUB hash"}, ensure_ascii=False))
+    print(json.dumps({"status": "passed", "pdfPages": len(pdf), "pdfOutlineEntries": len(pdf.get_toc()), "pdfContentsPages": len(metadata["contentsPages"]), "pdfFormulaGroups": len(equation_pairs), "epubSectionLinks": subheadings, "epubLocalLinks": links, "sparsePdfPagesForReview": sparse, "epubcheck": "5.3.0: zero errors and warnings; result bound to this EPUB hash"}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

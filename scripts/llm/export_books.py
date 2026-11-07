@@ -111,6 +111,24 @@ def append_navigation(parent, entries):
             append_navigation(item, entry["children"])
 
 
+def keep_equations_with_explanation(article):
+    """A displayed equation must not leave its first explanation on the next page."""
+    for paragraph in article.xpath('.//p'):
+        children = list(paragraph)
+        if len(children) != 1 or children[0].tag != "code":
+            continue
+        code = children[0]
+        if (paragraph.text or "").strip() or (code.tail or "").strip():
+            continue
+        text = "".join(code.itertext()).strip()
+        if "=" not in text and not text.startswith("+"):
+            continue
+        paragraph.set("class", (paragraph.get("class", "") + " book-equation").strip())
+        previous = paragraph.getprevious()
+        if previous is not None and previous.tag == "p" and "".join(previous.itertext()).strip().endswith((":", "：")):
+            previous.set("class", (previous.get("class", "") + " book-equation-intro").strip())
+
+
 def clean_chapter(lesson):
     page = html.fromstring((WEB / (lesson["slug"] + ".html")).read_bytes())
     article = page.xpath('//article[contains(concat(" ",normalize-space(@class)," ")," lesson ")]')[0]
@@ -162,7 +180,23 @@ def clean_chapter(lesson):
     article.set("id", lesson["id"])
     article.set("class", "chapter")
     article.xpath('./p[@class="eyebrow"]')[0].set("class", "chapter-id")
-    navigation = append(article, "p", **{"class": "book-navigation"})
+    keep_equations_with_explanation(article)
+    chapter_index = "nav.xhtml#contents-" + lesson["id"]
+    opening = element("p", **{"class": "book-navigation book-navigation-start"})
+    append(opening, "a", "本课目录", href=chapter_index)
+    append(opening, "span", " · ")
+    append(opening, "a", "全书目录", href="nav.xhtml#toc")
+    article.insert(1, opening)
+    sections = chapter_sections(article, lesson["slug"] + ".xhtml")
+    def add_section_returns(entries):
+        for entry in entries:
+            heading = article.xpath('.//*[@id=$target]', target=entry["href"].split("#", 1)[1])[0]
+            back = element("p", **{"class": "book-section-navigation"})
+            append(back, "a", "本课目录", href=chapter_index)
+            heading.addnext(back)
+            add_section_returns(entry["children"])
+    add_section_returns(sections)
+    navigation = append(article, "p", **{"class": "book-navigation book-navigation-end"})
     append(navigation, "a", "回到目录", href="nav.xhtml#toc")
     index = next(i for i, entry in enumerate(lessons) if entry["id"] == lesson["id"])
     if index + 1 < len(lessons):
@@ -239,7 +273,7 @@ def frontmatter(course, models, cover, chapters=None):
     nav.set("{%s}type" % EPUB, "toc")
     listing = append(nav, "ol")
     for lesson in course["lessons"]:
-        li = append(listing, "li")
+        li = append(listing, "li", id="contents-" + lesson["id"])
         append(li, "a", lesson["id"] + " · " + lesson["title"], href=lesson["slug"] + ".xhtml#" + lesson["id"])
         if chapters:
             filename = lesson["slug"] + ".xhtml"

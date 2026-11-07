@@ -2,6 +2,8 @@
 
 > 不会写代码，也能从一句需求出发，做出第一个可用作品。
 
+大模型手绘课：双击项目根目录的 [开始阅读.html](开始阅读.html)。书籍在 [deliverables](deliverables/) 文件夹：[PDF](deliverables/llm-explained-handdraw.pdf) · [EPUB](deliverables/llm-explained-handdraw.epub)。
+
 ![课程封面](book/assets/cover.webp)
 
 本仓库汇集一套面向零基础学习者的 Vibe Coding 课程交付物：完整中文书籍、横版课程视频、竖版短视频，以及可继续编辑的 HyperFrames 源码。
