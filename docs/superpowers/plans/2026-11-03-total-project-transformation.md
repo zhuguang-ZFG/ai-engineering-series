@@ -100,8 +100,9 @@
 - [x] P6.7 用统一内容包扩展 ch06–ch15。
 - [x] P6.8 增加字幕一致性、安全区、字号、停留时间、闪烁、响度和版权门禁。
 - [ ] Gate：15 章配置可检查；ch01–ch05 完成兼容审阅；中间物不进入 Git。
-      15 章配置检查已覆盖，ch01 兼容对照匹配但字幕/关键帧未验证；中间物仍在 Git，
-      Gate 不勾选。
+      15 章配置检查已覆盖；ch01 时间线/尺寸/fps/时长与 `compat-report.json` 一致，
+      但字幕与关键帧仍缺证；派生中间物（transcript、chunks、vo-manifest、SRT、音频）
+      在 `git ls-tree` 中为 0 条。P6.4 未完成，Gate 不勾选。
 
 ## P7：CI 与发布系统
 
@@ -110,13 +111,19 @@
 - [x] P7.3 缓存 Python、npm、Playwright、Mermaid 和字体资源。
 - [x] P7.4 每次构建输出 build-report.json 与 artifact-manifest.json。
 - [x] P7.5 Release 生成双语 HTML/PDF、站点包、视频清单、SHA-256 和版本说明。
-- [ ] P7.6 增加生成器幂等、关键页视觉回归、链接和重定向检查。
-      生成器幂等与本地链接已接入 `scripts/check_products.py`；关键页视觉回归与
-      重定向检查尚未接入 CI。
+- [x] P7.6 增加生成器幂等、关键页视觉回归、链接和重定向检查。
+      2026-11-08 复核：生成器幂等与本地链接由 `scripts/check_products.py` 覆盖（Fast
+      与发布装配均运行）；关键页视觉回归由 `scripts/check_visual_layout.py` 覆盖
+      4 页 × 320/1280 × 明暗 × 禁脚本/reduce 共 16 场景，接入 Full 并上传
+      `product-visual-layout`；重定向由 `scripts/check_site_redirects.py` 与
+      `tests/test_site_redirects.py` 覆盖，接入 `pages.yml` 和 `release.py` 的站点校验。
 - [x] P7.7 合并或删除重复 workflow，README 徽章与真实门禁一致。
-- [ ] Gate：PR 只跑必要层；主分支与发布层稳定；产物能追溯到 commit 和依赖。
-      本地契约测试与配置检查通过；`release.yml` 尚未在 GitHub Actions 实际运行，
-      没有远端运行记录，Gate 不勾选。
+- [x] Gate：PR 只跑必要层；主分支与发布层稳定；产物能追溯到 commit 和依赖。
+      2026-11-07 `release.yml` 在 `30ca46a`（树 `b65e1970e9765326e44c9796919420d74846c1b3`，
+      与合并提交 `ca807e6` 相同）实际运行成功（run 42397600190），装配出
+      330,036,272 B 工件并通过 `sha256sum --check SHA256SUMS`；`build-report.json` 与
+      `artifact-manifest.json` 记录提交、工作树状态和依赖。PR 只跑 Fast；
+      Full/Omp/Bootstrap 仅在主分支与手动触发运行。
 
 ## P8：清理、文档与正式切换
 
@@ -127,12 +134,17 @@
       已完成候选索引停止跟踪，独立重建与清单检查有实际证据；不把本机媒体入库。
 - [x] P8.3 更新 STRUCTURE.md、CONTRIBUTING.md、README.md、en/README.md。
 - [x] P8.4 增加架构决策记录：稳定 ID、BookModel、PDF 边界、站点脚本边界、视频资产策略。
-- [ ] P8.5 从干净 clone 完成 Windows 与 Ubuntu 双平台演练。
+- [x] P8.5 从干净 clone 完成 Windows 与 Ubuntu 双平台演练。
+      2026-11-08：全新 Windows clone（detach `ca807e6`、未复用旧 `dist/`）按 `bookctl`
+      重建三册 HTML/PDF 与 EPUB，`build-report.json` 记录的提交为该合并提交；Ubuntu
+      由同树候选的 Bootstrap（ubuntu-latest）与 `release.yml` 全量装配/校验完成，
+      Bootstrap（windows-latest）同时通过。
 - [ ] P8.6 发布首个新架构版本并保留 legacy 标签与迁移说明。
-      迁移说明已写 `docs/migrations/release-migration.md`；`v*` 标签、GitHub Release
-      与干净克隆演练仍未执行。
+      迁移说明已写 `docs/migrations/release-migration.md`；`legacy/pre-platform-2026-11-03`
+      标签保留。2026-11-08 复核：`v*` 标签与 GitHub Release 仍未创建，故不勾选。
 - [ ] Gate：规格第 7 节全部验收；旧路径无调用者；正式发布产物可下载、可校验。
-      P8.5/P8.6 与同候选远端门禁尚未完成，Gate 不勾选。
+      P8.5 已完成；P8.6（`v*` 标签与 GitHub Release）及 P3/P5 门禁仍未完成，
+      Gate 不勾选。
 
 ## 建议 PR 切片
 
