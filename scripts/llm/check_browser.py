@@ -427,7 +427,8 @@ def run():
         assert not page.locator("#project-report").inner_text()
         report["behaviors"].append("seven project cases, evidence, out-of-scope, check gating and actual JSON/Markdown downloads")
 
-        new_figures = ["contextual-word", "gradient-step", "training-signals", "retrieval-failures", "timeout-receipt", "evaluation-split", "distillation-flow", "embedding-view", "attention-mask", "transformer-block", "training-versus-inference", "assistant-training", "claim-evidence", "retrieve-then-answer", "tool-execution-loop", "choose-an-approach", "materials-to-result", "context-selection", "multihead-flow"]
+        metadata = json.loads((ROOT / "book/assets/handdraw/llm/figures.json").read_text(encoding="utf-8"))
+        new_figures = [Path(figure["file"]).stem for figure in metadata["figures"]]
         for name in new_figures:
             svg_source = (ROOT / "book" / "assets" / "handdraw" / "llm" / f"{name}.svg").read_text(encoding="utf-8")
             # An HTML wrapper avoids Chrome's native XML image-viewer capture
@@ -445,7 +446,7 @@ def run():
             }""")
             assert all(text["fits"] and text["mobileSize"] >= 16 for text in result), (name, result)
             page.locator("svg").screenshot(path=str(OUTPUT / f"figure-{name}-mobile.png"))
-        report["behaviors"].append("all deeper teaching SVGs: actual text bounds and mobile-size labels")
+        report["behaviors"].append(f"all {len(new_figures)} teaching SVGs: actual text bounds and mobile-size labels")
 
         page.set_viewport_size({"width": 1440, "height": 1000})
         for name in PAGES:

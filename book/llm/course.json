@@ -1,7 +1,7 @@
 {
-  "version": "0.10.0",
+  "version": "0.11.0",
   "title": "把大模型拆开看",
-  "description": "十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。",
+  "description": "从一只杯子、一份通知开始，沿四十八张手绘拆开生成、注意力、训练和蒸馏，再动手查资料、用工具、核对答案。",
   "status": "pilot",
   "lessons": [
     {
@@ -28,8 +28,11 @@
       "feedback": "看生僻字与 emoji 示例：某些 token 只含一个字符的部分 UTF-8 字节。把所有 token 的字节拼起来，才还原为原文。",
       "shortTitle": "拆开文字",
       "extraFigures": [
-        "multimodal-flow.svg"
-      ]
+        "multimodal-flow.svg",
+        "token-strip.svg",
+        "byte-reassembly.svg"
+      ],
+      "openerFigure": "token-strip.svg"
     },
     {
       "id": "L02",
@@ -54,7 +57,12 @@
       ],
       "correct": 1,
       "feedback": "原句没有交代杯子里的内容。概率描述续写选择，不能替代观察或材料证据。温度也不能补上缺失事实。",
-      "shortTitle": "生成一句话"
+      "shortTitle": "生成一句话",
+      "extraFigures": [
+        "generation-fork.svg",
+        "sequence-paths.svg"
+      ],
+      "openerFigure": "generation-fork.svg"
     },
     {
       "id": "L03",
@@ -83,9 +91,12 @@
       "feedback": "示例中两个参考向量前两维一样，第三维不同。完整三维余弦由全部三维计算；初始查表与上下文后的表示也要分开。",
       "file": "vectors.md",
       "extraFigures": [
-        "contextual-word.svg"
+        "contextual-word.svg",
+        "apple-contexts.svg",
+        "projection-shadow.svg"
       ],
-      "depthFigure": "contextual-word.svg"
+      "depthFigure": "contextual-word.svg",
+      "openerFigure": "apple-contexts.svg"
     },
     {
       "id": "L04",
@@ -98,7 +109,9 @@
       "figure": "attention-mask.svg",
       "extraFigures": [
         "transformer-block.svg",
-        "multihead-flow.svg"
+        "multihead-flow.svg",
+        "causal-spotlight.svg",
+        "attention-mixing.svg"
       ],
       "sources": [
         "S05",
@@ -118,7 +131,8 @@
       ],
       "correct": 0,
       "feedback": "未来权重为零，所以它们的 V 不参与当前汇总。这里实际计算并比较了修改前后输出；这项结论限于当前因果注意力实验。",
-      "file": "attention.md"
+      "file": "attention.md",
+      "openerFigure": "causal-spotlight.svg"
     },
     {
       "id": "L05",
@@ -152,12 +166,15 @@
       "file": "training.md",
       "extraFigures": [
         "distillation-flow.svg",
-        "gradient-step.svg"
+        "gradient-step.svg",
+        "parameter-dials.svg",
+        "distillation-distributions.svg"
       ],
       "extraExperiments": [
         "X09"
       ],
-      "depthFigure": "gradient-step.svg"
+      "depthFigure": "gradient-step.svg",
+      "openerFigure": "parameter-dials.svg"
     },
     {
       "id": "L06",
@@ -189,9 +206,12 @@
       "feedback": "礼貌、自信与事实依据要分别检查。训练改变行为倾向；模板组织消息；具体地点、时间等结论仍需核对材料。",
       "file": "assistant.md",
       "extraFigures": [
-        "training-signals.svg"
+        "training-signals.svg",
+        "learning-signals-desk.svg",
+        "polite-without-evidence.svg"
       ],
-      "depthFigure": "training-signals.svg"
+      "depthFigure": "training-signals.svg",
+      "openerFigure": "learning-signals-desk.svg"
     },
     {
       "id": "L07",
@@ -219,8 +239,11 @@
       "feedback": "先看版本、发布者与更新说明。本实验会标出冲突供你核对，不会把程序选出的时间冒充已经核实的现行安排。",
       "shortTitle": "核对材料",
       "extraFigures": [
-        "context-selection.svg"
-      ]
+        "context-selection.svg",
+        "context-capacity.svg",
+        "memory-selection.svg"
+      ],
+      "openerFigure": "context-capacity.svg"
     },
     {
       "id": "L08",
@@ -247,7 +270,12 @@
       ],
       "correct": 1,
       "feedback": "来源编号、引用原句、主张内容要分别核对；引用真实也可能与结论相反。",
-      "file": "evidence.md"
+      "file": "evidence.md",
+      "extraFigures": [
+        "claim-evidence-threads.svg",
+        "notice-conflict.svg"
+      ],
+      "openerFigure": "claim-evidence-threads.svg"
     },
     {
       "id": "L09",
@@ -276,9 +304,12 @@
       "feedback": "未找到与事实不存在不同；本次没有取得证据，不能把猜测当依据。检索不更新参数。",
       "file": "retrieval.md",
       "extraFigures": [
-        "retrieval-failures.svg"
+        "retrieval-failures.svg",
+        "retrieval-sieve.svg",
+        "instruction-quarantine.svg"
       ],
-      "depthFigure": "retrieval-failures.svg"
+      "depthFigure": "retrieval-failures.svg",
+      "openerFigure": "retrieval-sieve.svg"
     },
     {
       "id": "L10",
@@ -307,9 +338,12 @@
       "file": "tools.md",
       "extraFigures": [
         "protocol-boundaries.svg",
-        "timeout-receipt.svg"
+        "timeout-receipt.svg",
+        "tool-request-receipt.svg",
+        "missing-receipt.svg"
       ],
-      "depthFigure": "timeout-receipt.svg"
+      "depthFigure": "timeout-receipt.svg",
+      "openerFigure": "tool-request-receipt.svg"
     },
     {
       "id": "L11",
@@ -340,7 +374,12 @@
       ],
       "correct": 1,
       "feedback": "资料更新与确定计算是两个问题；缺费率、版本冲突或参数不足时应停在对应步骤。",
-      "file": "approaches.md"
+      "file": "approaches.md",
+      "extraFigures": [
+        "method-crossroads.svg",
+        "method-assembly.svg"
+      ],
+      "openerFigure": "method-crossroads.svg"
     },
     {
       "id": "L12",
@@ -371,14 +410,18 @@
       "feedback": "可交付的内容包括未确认事项。缺失、冲突与范围外都应明示；勾选核对项不能代替逐条证据。",
       "file": "project.md",
       "extraFigures": [
-        "evaluation-split.svg"
+        "evaluation-split.svg",
+        "evidence-workshop.svg",
+        "unseen-envelope.svg"
       ],
-      "depthFigure": "evaluation-split.svg"
+      "depthFigure": "evaluation-split.svg",
+      "openerFigure": "evidence-workshop.svg"
     }
   ],
   "quickRoute": [
     "L01",
     "L02",
     "L07"
-  ]
+  ],
+  "mediaVersion": "0.10.0"
 }

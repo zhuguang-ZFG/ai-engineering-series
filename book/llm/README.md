@@ -2,7 +2,7 @@
 
 先看一句话怎样生成，再追到向量、注意力和参数更新，最后用检索、工具与证据核验完成一份资料报告。十二课已经可以离线阅读和操作，无需账号、API 密钥或 GPU。
 
-下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录二十四张手绘图、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。当前 0.10.0 为十二课补充逐步算例与反例，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。
+下载 [手绘 PDF](../../deliverables/llm-explained-handdraw.pdf) 或 [EPUB](../../deliverables/llm-explained-handdraw.epub)：收录四十八张手绘图、纸上实验、结果与自测答案。PDF 适合打印，EPUB 适合在阅读器里调整字号。当前 0.11.0 用杯中饮料、通知冲突和执行回执带出问题，每课穿插两张新手绘，再用逐步算例与反例解释原因，展开教师/学生蒸馏、软硬标签、温度和错误继承，并提供可操作的蒸馏实验。书内保留结构、缓存/专家/成本、应用和系统四个精选附录；另有多模态、向量检索、MCP/A2A 回查及十二张讲义和图卡。
 
 书末新增六道[换材料练习](../../exports/llm/check-understanding.html)。需要写画时下载 [A4 练习 PDF](../../deliverables/llm-reading-tasks.pdf)，做完再看[核对依据与陪读记录](../../exports/llm/review-guide.html)或[陪读 PDF](../../deliverables/llm-reading-guide.pdf)。题目与参考答案分开；通知、概率和回执均为人工练习材料，真实试读尚未进行。
 

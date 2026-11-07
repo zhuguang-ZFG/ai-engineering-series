@@ -88,6 +88,12 @@ def check():
         assert len(opf.xpath('//o:item[@properties="cover-image"]', namespaces=ns)) == 1
         nav = trees["OEBPS/nav.xhtml"]
         assert len(nav.xpath('//h:nav[@e:type="toc"]/h:ol/h:li', namespaces=ns)) == len(course["lessons"]) + 6
+        for lesson in course["lessons"]:
+            chapter = trees["OEBPS/" + lesson["slug"] + ".xhtml"]
+            image_sources = chapter.xpath("//h:img/@src", namespaces=ns)
+            for figure in [lesson["figure"], *lesson.get("extraFigures", [])]:
+                expected = "images/" + Path(figure).with_suffix(".png").name
+                assert image_sources.count(expected) == 1, (lesson["id"], "missing or repeated figure", expected)
         distillation_text = "".join(trees["OEBPS/training.xhtml"].itertext())
         assert "推理蒸馏" in distillation_text and "混合梯度" in distillation_text
         assert "distill-step" not in distillation_text

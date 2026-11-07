@@ -6,7 +6,7 @@
 
 本仓库汇集一套面向零基础学习者的 Vibe Coding 课程交付物：完整中文书籍、横版课程视频、竖版短视频，以及可继续编辑的 HyperFrames 源码。
 
-大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含二十四张手绘图、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
+大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含四十八张手绘图、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
 
 ## 内容
 
@@ -94,7 +94,7 @@ npm run check
 
 系统回查：[上下文工程](exports/llm/context-reference.html) · [Agent 与工具调用](exports/llm/agent-reference.html) · [上下文与工具执行精选](exports/llm/execution-guide.html)。本地工作流用 `node book/llm/examples/tool-workflow.mjs` 运行，包含成功与查无商品的真实本地回执。
 
-结构回查：[Transformer 与注意力机制](exports/llm/transformer-reference.html) · [注意力怎样拼成一层](exports/llm/architecture-guide.html)。可运行 `node book/llm/examples/multihead.mjs` 追踪双头矩阵；最新本地书籍包含二十四张手绘及同源数值表。
+结构回查：[Transformer 与注意力机制](exports/llm/transformer-reference.html) · [注意力怎样拼成一层](exports/llm/architecture-guide.html)。可运行 `node book/llm/examples/multihead.mjs` 追踪双头矩阵；最新本地书籍包含四十八张手绘及同源数值表。
 
 多模态与协议回查：[视觉/音频/视频](exports/llm/multimodal-reference.html) · [Embedding 与向量检索](exports/llm/embedding-reference.html) · [MCP 与 A2A](exports/llm/protocols-reference.html)。九个目标旧章均保留原有标题；这不代表合订书所有章节已逐一技术审校。
 

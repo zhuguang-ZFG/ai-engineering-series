@@ -41,6 +41,9 @@ th, td { border-bottom: 1px solid #e6e1d4; padding: .5em; text-align: left; }
   .chapter-figure { margin: 1em auto; }
   .chapter-figure img { max-height: 108mm; max-width: 104mm; }
   .reading-part figure img { max-height: 108mm; max-width: 104mm; }
+  .story-figure { margin: 1em auto; }
+  .story-figure img { max-height: 96mm; max-width: 96mm; }
+  .story-opener img { max-height: 88mm; }
   #toc li { margin-bottom: .35em; line-height: 1.5; break-inside: avoid; }
   tr { break-inside: avoid; }
   pre, #L05 table, #execution table, #architecture table { break-inside: avoid; }

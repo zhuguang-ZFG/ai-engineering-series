@@ -33,6 +33,7 @@ export function validateData(root = resolve(import.meta.dirname, "../.."), { all
     assert.ok(existsSync(join(folder, "lessons", lesson.file)));
     assert.ok(existsSync(join(folder, "deepening", lesson.file)), `${lesson.id}: missing worked explanation`);
     assert.ok(existsSync(join(root, "book/assets/handdraw/llm", lesson.figure)));
+    if (lesson.openerFigure) assert.ok(lesson.extraFigures?.includes(lesson.openerFigure), `${lesson.id}: opening figure must be registered`);
     for (const id of lesson.prerequisites) assert.ok(ready.some((item) => item.id === id), `Unavailable prerequisite ${id}`);
   }
   assert.equal(ids.size, 12, "Expected 12 planned lessons");

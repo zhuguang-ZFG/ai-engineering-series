@@ -18,6 +18,9 @@ for (const lesson of ready) for (const file of [lesson.figure, ...(lesson.extraF
   for (const color of svg.match(/#[0-9a-fA-F]{6}/g) ?? []) assert.ok(colors.has(color.toLowerCase()), `${lesson.figure}: unknown color ${color}`);
   assert.ok(!/<text[^>]*fill="(#1f883d|#e2601f)"/.test(svg), `${lesson.figure}: display color used for small text`);
   assert.ok(svg.includes("<title") && svg.includes("<desc"), `${lesson.figure}: accessible description missing`);
+  const page = readFileSync(join(output, `${lesson.slug}.html`), "utf8");
+  assert.equal(page.split(`src="../../book/assets/handdraw/llm/${file}"`).length - 1, 1, `${lesson.id}: figure must appear exactly once: ${file}`);
+  assert.ok(!/<!--\s*figure:/.test(page), `${lesson.id}: unexpanded inline illustration`);
   figureCount++;
 }
 
