@@ -155,7 +155,7 @@ def frontmatter(course, models, cover):
     append(cover_body, "img", src="images/" + cover, alt="把大模型拆开看：十二课手绘图解")
     intro = element("body", **{"class": "reading-part"})
     append(intro, "h1", "怎么读这本小书")
-    append(intro, "p", "从一段文字怎样被处理开始，亲手观察生成、注意力和参数更新，再把这些认识用到检索资料、调用工具和核对答案。正文保留公式，第一次读可以先看例子，之后再回到“再深一层”。")
+    append(intro, "p", "“他端起杯子，喝了一口……”你会接什么？能把句子接顺，跟知道杯里是什么，是两回事。这本书从这样的具体问题出发：先猜一猜，沿手绘看发生了什么，再用一个小实验核对。")
     append(intro, "p", "想先走通一次，可以读 L02、L01、L07；想认真理解，从 L01 按课号读；要交付作品，最后完成 L12，并换一份没见过的通知独立核验。")
     figure_count = len({file for lesson in course["lessons"] for file in [lesson["figure"], *lesson.get("extraFigures", [])]})
     append(intro, "p", f"这份电子书收录十二课、{figure_count} 张手绘图、纸上实验步骤、静态结果、自测与来源。网页里的按钮不会在 PDF 或 EPUB 中执行；纸上实验已保留必要输入和结果，可离线对照。")
@@ -353,16 +353,15 @@ def run():
         for title, body in ordered:
             section = etree.fromstring(etree.tostring(body))
             section.tag = "section"
-            # On paper, pair each chapter question with its main diagram.
-            # Keeping a tall figure after the opening paragraphs leaves large
-            # empty page tails when print layout moves it to the next page.
+            # Retain inline story scenes next to their question/observation.
+            # Older reference diagrams may still move up to pair with a title.
             article_body = section.find('.//div[@class="article-body"]')
             if article_body is None and section.get("id") in ["execution", "architecture"]:
                 article_body = section
             if article_body is not None:
                 primary = article_body.find('./figure')
                 heading = article_body.find('./h1')
-                if primary is not None and heading is not None:
+                if primary is not None and heading is not None and "story-figure" not in primary.get("class", ""):
                     article_body.remove(primary)
                     article_body.insert(list(article_body).index(heading) + 1, primary)
                     primary.set("class", "concept-figure chapter-figure")

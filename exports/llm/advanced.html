@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="十二课手绘图与本地实验：从文字、注意力和训练，到检索、工具与有证据的资料助手。"><title>缓存、专家与计算成本 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
+<meta name="description" content="从一只杯子、一份通知开始，沿四十八张手绘拆开生成、注意力、训练和蒸馏，再动手查资料、用工具、核对答案。"><title>缓存、专家与计算成本 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
 <body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
-<main class="shell review-page" id="main"><article id="advanced-content"><h1>进阶回查：缓存、专家与计算成本</h1>
+<main class="shell review-page" id="main" tabindex="-1"><article id="advanced-content"><h1>进阶回查：缓存、专家与计算成本</h1>
 <p>读完十二课后，遇到长上下文、专家路由或显存问题，可以回到这里。以下说明来自同一份旧章修订稿，固定网络规模和维度后再讨论长度项，不用于给实际模型排速度名次。</p>
 <h2>KV 缓存存了什么？</h2>
 <p>在常见的自回归注意力推理中，程序可缓存前面位置在各层产生的 K、V。处理新 token 时复用这些缓存，避免每一步重算全部旧位置的 K、V；新查询仍需与可用的缓存进行注意力计算。</p>

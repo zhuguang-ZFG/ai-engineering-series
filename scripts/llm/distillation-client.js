@@ -13,8 +13,8 @@
   const alpha = () => Number($("distill-alpha").value);
   function render() {
     const result = api.evaluate(teacher(), logits, temperature(), alpha(), fixture.target);
-    $("distill-temperature-value").textContent = temperature().toFixed(1);
-    $("distill-alpha-value").textContent = alpha().toFixed(1);
+    if ($("distill-temperature-value").textContent !== temperature().toFixed(1)) $("distill-temperature-value").textContent = temperature().toFixed(1);
+    if ($("distill-alpha-value").textContent !== alpha().toFixed(1)) $("distill-alpha-value").textContent = alpha().toFixed(1);
     $("distill-distributions").replaceChildren(...fixture.labels.map((label, index) => {
       const row = document.createElement("tr");
       for (const [column, text] of [label, ...[result.teacher[index], result.student[index], result.inference[index]].map(value => (value * 100).toFixed(2) + "%")].entries()) {

@@ -1,44 +1,44 @@
 {
   "title": "把大模型拆开看",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "lessons": 12,
-  "figures": 24,
-  "pdfPages": 142,
+  "figures": 48,
+  "pdfPages": 169,
   "chapterPages": {
     "L01": 5,
-    "L02": 12,
-    "L03": 19,
-    "L04": 26,
-    "L05": 35,
-    "L06": 53,
-    "L07": 61,
-    "L08": 68,
-    "L09": 75,
-    "L10": 82,
-    "L11": 90,
-    "L12": 98
+    "L02": 14,
+    "L03": 23,
+    "L04": 32,
+    "L05": 43,
+    "L06": 64,
+    "L07": 75,
+    "L08": 85,
+    "L09": 94,
+    "L10": 104,
+    "L11": 114,
+    "L12": 123
   },
   "reviewPdfPages": {
     "llm-reading-tasks.pdf": 7,
     "llm-reading-guide.pdf": 10
   },
-  "sourceHash": "d801d1d250f1754647071a4aa3705735e3bdbc9f7b90bd10739d0cf11aae5fa5",
+  "sourceHash": "9f7f906faca3c689a2875c8bbf06c0714eb888cbc80eb8c01e4c7fde58b453f4",
   "files": {
     "llm-explained-handdraw.pdf": {
-      "bytes": 1521965,
-      "sha256": "5b2b41045f356da5a16c44afb66391422beab11e45f2c379847d773f86109bfd"
+      "bytes": 1947391,
+      "sha256": "bbc42d143974a967876c269f27dae4288d6dc5b0da760531ba194e97df4a4a9d"
     },
     "llm-explained-handdraw.epub": {
-      "bytes": 3221035,
-      "sha256": "c4104235588ee779be7bb41f0c5a179dea107b80cf5436764847f4786ea2012e"
+      "bytes": 5666006,
+      "sha256": "31dd14d54e7a738c6a0a5957411fcb808f3af5dcee8008059a17586224c394aa"
     },
     "llm-reading-tasks.pdf": {
       "bytes": 180921,
-      "sha256": "ca53385b27516edc12eebe84b1d415f7751eac7902dc8d22d265dc5d828f29b0"
+      "sha256": "f4d0dd72c65be2c61e8fdf914fb591876a3b31850db4a36dd336b8e0f7359560"
     },
     "llm-reading-guide.pdf": {
       "bytes": 283578,
-      "sha256": "85ac070970962d54638f8e1fd2462f3518a607b216bde6f14824d6d2af4b3b2e"
+      "sha256": "f41d0b6c0fa875f0c482aada7a8e310421698bd2413b2498ab046c4af655515f"
     }
   },
   "limitations": [

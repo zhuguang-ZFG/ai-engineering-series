@@ -40,6 +40,14 @@ jobs:
       - name: Validate repository
         run: npm test
 
+      - name: Install browser for accessibility checks
+        run: python -m playwright install --with-deps chromium
+
+      - name: Check accessibility trees and keyboard flows
+        env:
+          COURSE_BROWSER_CHANNEL: chromium
+        run: npm run check:accessibility:llm
+
       - name: Set up Java for EPUBCheck
         uses: actions/setup-java@v4
         with:

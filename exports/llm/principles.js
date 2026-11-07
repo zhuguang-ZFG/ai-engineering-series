@@ -19,7 +19,7 @@
       const x = v => 40 + v[0] * 290;
       const y = v => 210 - v[1] * 150;
       $("vector-plot").innerHTML = `<svg viewBox="0 0 360 260" role="img" aria-label="前两维平面，水果与第三个参考向量重合；完整数值见下方列表"><path d="M40 30 L40 210 L338 210" class="plot-axis"/><text x="20" y="28">维2</text><text x="291" y="245">维1</text>${fixture.references.map((ref, i) => `<circle cx="${x(ref.vector)}" cy="${y(ref.vector)}" r="${i === 2 ? 12 : 7}" fill="none" class="plot-reference"/><text x="${x(ref.vector) - 8}" y="${y(ref.vector) - (i === 2 ? 42 : 19)}">${i + 1}</text>`).join("")}<circle cx="${x(context.representation)}" cy="${y(context.representation)}" r="4" class="plot-current"/></svg>`;
-      $("vector-status").textContent = "初始查表向量固定；相似度按当前语境的三维示意表示实算。";
+      $("vector-status").textContent = `当前语境：${context.text} 上下文后示意表示 ${vector(context.representation)}；初始查表向量固定。相似度按完整三维表示实算。`;
     }
     $("vector-context").addEventListener("change", render);
     $("reset-vectors").addEventListener("click", () => { $("vector-context").selectedIndex = 0; render(); });
@@ -55,17 +55,20 @@
     function stop() { running = false; if (frame !== null) cancelAnimationFrame(frame); frame = null; }
     function render() {
       const state = trainer.snapshot();
+      const pauseFocused = document.activeElement === $("train-pause");
       const prev = $("previous-token").value;
       const target = $("target-token").value;
       const from = fixture.vocabulary.indexOf(prev);
       const to = fixture.vocabulary.indexOf(target);
-      $("learning-rate-value").textContent = rate().toFixed(2);
+      if ($("learning-rate-value").textContent !== rate().toFixed(2)) $("learning-rate-value").textContent = rate().toFixed(2);
       $("training-metrics").innerHTML = row("训练步数", `${state.steps} / ${fixture.maxSteps}`) + row("训练损失", state.loss.toFixed(4)) + row("未见组合损失", state.heldOut.toFixed(4));
-      $("training-status").textContent = state.steps >= fixture.maxSteps ? "达到 500 步上限，已停止。可重置后再比较。" : running ? "正在逐步更新，可随时暂停。" : "已暂停。可以单步更新、只预测，或重置同一种子。";
+      const status = state.steps >= fixture.maxSteps ? "达到 500 步上限，已停止。可重置后再比较。" : running ? "正在逐步更新，可随时暂停。" : `已暂停在第 ${state.steps} 步；训练损失 ${state.loss.toFixed(4)}，未见组合损失 ${state.heldOut.toFixed(4)}。可以单步更新、只预测，或重置同一种子。`;
+      if ($("training-status").textContent !== status) $("training-status").textContent = status;
       $("train-step").disabled = running || state.steps >= fixture.maxSteps;
       $("train-run").disabled = running || state.steps >= fixture.maxSteps;
       $("train-pause").disabled = !running;
       $("predict-only").disabled = running;
+      if (state.steps >= fixture.maxSteps && pauseFocused) $("train-reset").focus();
       $("training-prediction").innerHTML = bars(fixture.vocabulary, trainer.predict(prev));
       const update = state.lastUpdate;
       if (update) {
@@ -90,8 +93,8 @@
       if (running) frame = requestAnimationFrame(advance);
     }
     $("train-step").addEventListener("click", () => { trainer.step(rate()); $("prediction-status").textContent = ""; render(); });
-    $("train-run").addEventListener("click", () => { running = true; $("prediction-status").textContent = ""; render(); frame = requestAnimationFrame(advance); });
-    $("train-pause").addEventListener("click", () => { stop(); render(); });
+    $("train-run").addEventListener("click", () => { running = true; $("prediction-status").textContent = ""; render(); $("train-pause").focus(); frame = requestAnimationFrame(advance); });
+    $("train-pause").addEventListener("click", () => { stop(); render(); $("train-run").focus(); });
     $("train-reset").addEventListener("click", () => { stop(); trainer = api.createTrainer(fixture); $("learning-rate").value = fixture.learningRate; $("previous-token").value = "喝"; $("target-token").value = "水"; $("prediction-status").textContent = ""; render(); });
     for (const id of ["previous-token", "target-token", "learning-rate"]) $(id).addEventListener("input", () => { $("prediction-status").textContent = ""; render(); });
     $("predict-only").addEventListener("click", () => {
