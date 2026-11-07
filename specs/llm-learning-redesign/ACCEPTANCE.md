@@ -27,7 +27,7 @@
 
 状态只使用“待实施 / 技术通过 / 真实运行通过 / 独立复做通过 / 教学通过 / 资源阻碍 / 失败”，并注明对应版本。资源或真人缺失时继续完成可达部分，但不得把该门记通过；不以教辅空表或他人开源仓库的绿色 CI 作为证据。
 
-2026-11-08 本地技术检查：完整 `npm test` 36 项无跳过通过，51 SVG/2456 本地链接通过；可访问性92页/4键盘流、阅读15行为/50布局、分镜6流/60布局通过；三套 EPUBCheck 5.3.0 均零错误/警告。新版正文438页、答案204页，题答各30章。`task_verify` 返回 `project-or-git-baseline-unavailable` 且无执行检查，保持未验证。未推送/合并、未取得远端CI证据；用户要求“完成后合并”的前提未满足。没有修改既有测试、runner、工作流或弱化断言。
+2026-11-08 本地技术检查：完整 `npm test` 36 项无跳过通过，51 SVG/2456 本地链接通过；可访问性92页/4键盘流、阅读15行为/50布局、分镜6流/60布局通过；三套 EPUBCheck 5.3.0 均零错误/警告。新版正文438页、答案204页，题答各30章。`task_verify` 返回 `project-or-git-baseline-unavailable` 且无执行检查，保持未验证。经用户明确授权，已按技术试读版发布：[PR #6](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/6) 的 `validate` 通过（[42420977039](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42420977039)），合并 `2adfaf7cad55f575f52fd2a11b9609575259e384` 的 main CI 通过（[42421320200](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42421320200)）。该发布不关闭任何 K1–K5 或真人条件。没有修改既有测试、runner、工作流或弱化断言。
 
 ### C. 本轮规划的完成检查
 
