@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C16 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C16-answer-section-bf1907686a" tabindex="-1">C16 答案与核对依据</h1>
+<h2 id="C16-answer-section-a00980a4bf" tabindex="-1">1. 固定流程 vs Agent</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>固定流程</th>
+<th>有限 Agent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>下一步谁决定</td>
+<td>程序写死</td>
+<td>模型在预算内选择</td>
+</tr>
+<tr>
+<td>工具数量</td>
+<td>固定</td>
+<td>白名单内可选</td>
+</tr>
+<tr>
+<td>失败路径</td>
+<td>程序分支</td>
+<td>模型选择 + 程序校验</td>
+</tr>
+<tr>
+<td>可预测性</td>
+<td>高</td>
+<td>较低，需要步数/调用上限</td>
+</tr>
+<tr>
+<td>证据</td>
+<td>回执仍必须保留</td>
+<td>回执仍必须保留</td>
+</tr>
+</tbody></table>
+<p>固定流程也可以真实执行；Agent 不等于“更高级”。如果任务步骤固定、输入简单，固定流程更易测试和审计。Agent 适合需要根据中间结果选择下一步的任务，但必须有终止条件。</p>
+<h2 id="C16-answer-section-25a6902c58" tabindex="-1">2. 四种失败</h2>
+<table>
+<thead>
+<tr>
+<th>失败</th>
+<th>请求</th>
+<th>期望</th>
+<th>不应出现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>坏参数/坏表达式</td>
+<td><code>{&quot;expression&quot;: 3}</code> 或多余字段；<code>{&quot;expression&quot;:&quot;3+&quot;}</code></td>
+<td>前者 <code>invalid-response</code>、未执行；后者 <code>tool-failed</code>，回执错误 <code>invalid-expression</code></td>
+<td>把非字符串自动转成表达式，或把语法错误当成功</td>
+</tr>
+<tr>
+<td>代码/调用/字符串字面量</td>
+<td><code>{&quot;expression&quot;:&quot;__import__(&#39;os&#39;)&quot;}</code>；<code>{&quot;expression&quot;:&quot;&#39;a&#39;+&#39;b&#39;&quot;}</code></td>
+<td>回执失败 <code>unsupported-expression</code> / <code>unsupported-literal</code>，最终 <code>tool-failed</code></td>
+<td>执行 Python 代码或拼接字符串</td>
+</tr>
+<tr>
+<td>除零</td>
+<td><code>{&quot;expression&quot;:&quot;1/0&quot;}</code></td>
+<td>回执失败 <code>division-by-zero</code></td>
+<td><code>Infinity</code>、<code>NaN</code>、成功摘要</td>
+</tr>
+<tr>
+<td>未知工具</td>
+<td><code>send_email</code></td>
+<td>未列入白名单：<code>permission-denied</code>；显式加入白名单：<code>tool-failed</code>/<code>unknown-tool</code></td>
+<td>猜测并执行</td>
+</tr>
+<tr>
+<td>无权限读取</td>
+<td>无权限 <code>doc_id</code></td>
+<td><code>permission-denied</code>，无正文</td>
+<td>先读后删引用</td>
+</tr>
+</tbody></table>
+<p>注意：<code>&quot;3+4&quot;</code> 是合法表达式，会返回 <code>7</code>，不是坏参数。失败发生在 <code>validate_tool_request</code>/<code>calculate</code> 时，回执或 <code>first_failure</code> 必须保留具体错误码；不能把“校验拒绝”和“执行失败”混成同一状态。</p>
+<h2 id="C16-answer-section-9c6ae3292d" tabindex="-1">3. 预算耗尽</h2>
+<p><code>--max-tool-calls 1</code> 而任务需要两次调用时，实际报告的状态是 <code>budget-exhausted</code>，<code>diagnostics.first_failure.stage</code> 为 <code>tool</code>，已成功的第一次回执保留，<code>answer</code> 为 <code>null</code>、<code>claims</code> 为空（下面为字段示意，<code>step</code> 等数值以实际报告为准）：</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;budget-exhausted&quot;,
+  &quot;answer&quot;: null,
+  &quot;claims&quot;: [],
+  &quot;tool_receipts&quot;: [
+    {
+      &quot;receipt_id&quot;: &quot;tool-1&quot;,
+      &quot;tool&quot;: &quot;calculator&quot;,
+      &quot;status&quot;: &quot;succeeded&quot;,
+      &quot;arguments&quot;: {&quot;expression&quot;: &quot;3*14&quot;},
+      &quot;result&quot;: 42
+    }
+  ],
+  &quot;diagnostics&quot;: {
+    &quot;first_failure&quot;: {
+      &quot;status&quot;: &quot;budget-exhausted&quot;,
+      &quot;stage&quot;: &quot;tool&quot;,
+      &quot;detail&quot;: {&quot;max_tool_calls&quot;: 1}
+    }
+  }
+}
+</code></pre>
+<p>关键是：报告说明“未完成”，不把第一次调用的结果拼成最终答案。预算上限是安全边界，不是建议值。</p>
+<h2 id="C16-answer-section-94cf4e218b" tabindex="-1">4. 参数 schema</h2>
+<p><code>calculator</code> 的实际参数只有一个字段：</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;calculator&quot;,
+  &quot;description&quot;: &quot;对单个数值算术表达式字符串求值；只允许数字、括号、一元 +/- 和 + - * / // % **&quot;,
+  &quot;parameters&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;required&quot;: [&quot;expression&quot;],
+    &quot;additionalProperties&quot;: false,
+    &quot;properties&quot;: {
+      &quot;expression&quot;: {
+        &quot;type&quot;: &quot;string&quot;,
+        &quot;minLength&quot;: 1,
+        &quot;maxLength&quot;: 200,
+        &quot;description&quot;: &quot;单行；数字字面量绝对值 &lt;= 1e12；指数绝对值 &lt;= 64；结果绝对值 &lt;= 1e12；禁止名字、函数调用、属性访问、字符串/容器字面量和其他运算符&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p>错误码按阶段区分：请求形状不对（非字符串、多余字段、工具不在白名单）在 <code>validate_tool_request</code> 阶段返回 <code>invalid-response</code> / <code>permission-denied</code>，不执行；表达式进入 <code>calculate()</code> 后可能返回 <code>invalid-expression</code>（语法错误）、<code>unsupported-expression</code>（调用/名字/属性等）、<code>unsupported-literal</code>（字符串、布尔等非数值常量）、<code>unsupported-operation</code>（位运算、比较等非白名单运算符）、<code>division-by-zero</code>、<code>exponent-limit</code>、<code>overflow</code>。执行失败会写入失败回执并让最终状态为 <code>tool-failed</code>。</p>
+<p>这里接受的是<strong>受限数值算术表达式字符串</strong>，不是任意代码：程序先 <code>ast.parse(..., mode=&quot;eval&quot;)</code>，再递归只解释数值常量、一元正负号和白名单二元运算，绝不调用 <code>eval</code>、不解析名字或调用。这样既保留了“<code>3*14</code>”这类自然输入，又把可执行面限制在数值运算；字符串字面量、函数调用和任意语句在 AST 白名单阶段就被拒绝。长度、指数和结果上限用于避免一次调用消耗过多资源。</p>
+<h2 id="C16-answer-section-ff20b7bf84" tabindex="-1">5. 写入工具设计</h2>
+<p>只设计，不执行。示例 <code>create_note</code>：</p>
+<ul>
+<li><strong>确认</strong>：应用向用户显示“将写入哪个文件、内容摘要、覆盖/新建”，用户明确确认后才执行；</li>
+<li><strong>权限</strong>：调用者必须有写权限，路径限制在工作区；</li>
+<li><strong>幂等键</strong>：客户端生成 <code>request_id</code>，重复请求返回同一结果；</li>
+<li><strong>回执</strong>：记录文件路径、哈希、时间、执行状态；</li>
+<li><strong>回滚</strong>：保留旧文件备份，失败/取消时恢复；</li>
+<li><strong>未知</strong>：超时后按 <code>request_id</code> 查询，不能重试到重复写入。</li>
+</ul>
+<h2 id="C16-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>□ 工具名和参数先校验后执行；</li>
+<li>□ 失败/超时/未知不产生成功结果；</li>
+<li>□ 调用次数和步数有上限；</li>
+<li>□ 工具回执与主张绑定；<code>answer</code> 只列已验证 claims，来源 claim 的 <code>text</code> 是其 <code>quote</code> 的逐字连续子串；</li>
+<li>□ 没有 <code>eval</code>/任意代码执行；</li>
+<li>□ 写操作有人工确认、权限、幂等和回滚设计；</li>
+<li>□ 没有把固定流程称为 Agent，也没有把模型“说要调用”当成已执行。</li>
+</ul>
+</article><nav class="lesson-nav"><a href="c16.html">返回 C16 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

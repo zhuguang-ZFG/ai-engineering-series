@@ -1,0 +1,40 @@
+{
+  "schema": "assistant-documents/1",
+  "documents": [
+    {
+      "id": "station-log",
+      "title": "观测站值班记录",
+      "path": "docs/station-log.md",
+      "version": "1.0.0",
+      "readers": ["student", "teacher"]
+    },
+    {
+      "id": "equipment-guide",
+      "title": "海岬观测站设备手册（节选）",
+      "path": "docs/equipment-guide.md",
+      "version": "1.0.0",
+      "readers": ["student", "teacher"]
+    },
+    {
+      "id": "visitor-policy",
+      "title": "访客与开放时间政策",
+      "path": "docs/visitor-policy.md",
+      "version": "1.0.0",
+      "readers": ["student", "teacher"]
+    },
+    {
+      "id": "closing-notice",
+      "title": "关于冬季闭站时间的临时通知",
+      "path": "docs/closing-notice.md",
+      "version": "1.0.0",
+      "readers": ["student", "teacher"]
+    },
+    {
+      "id": "review-budget",
+      "title": "内部评审预算（教师专用）",
+      "path": "docs/review-budget.md",
+      "version": "1.0.0",
+      "readers": ["teacher"]
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C29 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C29-answer-section-5339aaf94f" tabindex="-1">C29 答案与交付检查表</h1>
+<p>本文件不给可直接抄的发布包。C29 看的是：别人能否按文档启动、失败是否暴露、回退是否实际演练、范围与引用契约是否写清。</p>
+<h2 id="C29-answer-section-7f36d4c9f6" tabindex="-1">作业 1：发布包</h2>
+<p>合格的最小结构：</p>
+<pre><code class="language-text">releases/&lt;version&gt;/
+  app/ 或固定提交
+  docs/
+  requirements.lock
+  release.json
+  runbook.md
+  user-guide.md
+</code></pre>
+<p>检查点：</p>
+<ul>
+<li><code>release.json</code> 有版本、日期、程序来源/哈希、Python/平台、模型路径与许可说明、手册路径/版本/哈希、启动命令、健康检查、范围、已知限制；</li>
+<li><code>requirements.lock</code> 是实际 <code>pip freeze</code> 结果，不是 <code>&gt;=</code>；</li>
+<li>模型权重、密钥、真实客户数据没有进包；</li>
+<li>启动路径不是作者机器专有的隐式路径，或有明确替换说明。</li>
+</ul>
+<p>不合格：只有源码；依赖散落在对话里；模型路径写死；没有手册版本/哈希。</p>
+<h2 id="C29-answer-section-71289f0377" tabindex="-1">作业 2：干净环境</h2>
+<p>合格证据：</p>
+<ul>
+<li>新目录、新虚拟环境、干净 <code>pip install</code>；</li>
+<li>记录 Python 版本、平台、依赖版本；</li>
+<li>启动成功，健康检查返回实际 JSON；</li>
+<li>就绪查询返回 200 且带引用；</li>
+<li>至少一次失败查询返回预期状态；</li>
+<li>记录遇到的问题和解决方式，不把“我看作者跑过”当复做。</li>
+</ul>
+<p>示例记录格式（用实际值替换）：</p>
+<pre><code class="language-text">环境：Windows 11 x64，Python 3.13.x，CPU
+安装：python -m venv .venv; pip install -r requirements.lock
+启动：&lt;实际命令&gt;
+健康：GET /health → 200 {&quot;status&quot;:&quot;ok&quot;,...}
+就绪：POST /query → 200，status=answered，claims=2
+失败：--model 指向不存在目录 → GET /health 200，POST /query 502 model-unavailable
+问题：首次缺 sentencepiece/依赖；解决：按锁文件安装
+</code></pre>
+<p>不合格：只在作者机器上成功；用旧 <code>out/</code> 报告冒充新运行；把健康检查 200 当成模型可用。</p>
+<h2 id="C29-answer-section-ca7d7ca60a" tabindex="-1">作业 3：四种故障注入</h2>
+<h3 id="C29-answer-section-760e3c1c97" tabindex="-1">停服务</h3>
+<ul>
+<li>客户端应得到连接拒绝/超时，不是 200；</li>
+<li>保存失败请求与时间；</li>
+<li>若请求可能有副作用，不能由超时推出“未执行”；只读问答也要保留未知。</li>
+</ul>
+<h3 id="C29-answer-section-8f032f456e" tabindex="-1">错模型</h3>
+<ul>
+<li>健康检查可能 200（进程在），查询应 502 + <code>model-unavailable</code>；</li>
+<li><code>diagnostics.first_failure</code> 应指出模型加载失败；</li>
+<li>不得回退到示例/旧缓存答案。</li>
+</ul>
+<p>解释：健康检查是存活/路由检查，不加载模型；就绪查询才验证完整链路。若你的实现让健康检查也加载模型，要写清代价和超时。</p>
+<h3 id="C29-answer-section-d6284bbaf0" tabindex="-1">坏 JSON</h3>
+<ul>
+<li>400/413，<code>invalid-request</code>，不进入模型；</li>
+<li>错误信息不回显密钥/完整文档；</li>
+<li>记录缺字段/超长请求。</li>
+</ul>
+<h3 id="C29-answer-section-0237e415af" tabindex="-1">缺失/版本不符</h3>
+<ul>
+<li><code>missing-source</code> 或 <code>source-version-mismatch</code>，HTTP 409 或你的映射；</li>
+<li>报告给出文档 ID、期望/实际哈希；</li>
+<li>不得忽略哈希继续用缓存。</li>
+</ul>
+<h3 id="C29-answer-section-c2019c9060" tabindex="-1">越权（可选）</h3>
+<ul>
+<li>权限过滤后无候选 → <code>insufficient-evidence</code>；</li>
+<li>明确 <code>unauthorized</code> → 403；</li>
+<li>正文未进入提示/日志/报告。</li>
+</ul>
+<p>不要把“越权”做成“先读后删引用”；泄露已经发生。</p>
+<h2 id="C29-answer-section-dbb99d008d" tabindex="-1">作业 4：回退</h2>
+<p>合格证据：</p>
+<ul>
+<li>触发条件写清（健康失败、查询 502、引用失败率、手册版本错误）；</li>
+<li>切换前后版本哈希、启动命令、依赖锁；</li>
+<li>停止→切换→启动→健康→就绪→失败用例；</li>
+<li><code>result.md</code> 说明是否恢复可服务、哪些版本不同、仍有什么问题。</li>
+</ul>
+<p>不合格：只改代码文件；只重启不换版本；回退后不验证；把“回退命令执行了”当成“回退成功”。</p>
+<p>注意：回退要连<strong>数据/手册/模型</strong>一起切。只换程序、不换手册，旧答案仍会出现。</p>
+<h2 id="C29-answer-section-09143b6df4" tabindex="-1">作业 5：另一位真人</h2>
+<p>合格记录：</p>
+<ul>
+<li>参与者与实现无关；</li>
+<li>只给发布包和文档，不口头补步骤；</li>
+<li>记录首次命令、卡点、缺步、实际输出；</li>
+<li>正常查询与失败查询各至少一次；</li>
+<li>回退由他实际执行；</li>
+<li>作者据此修订文档，并记录修订前后差异。</li>
+</ul>
+<p>不合格：</p>
+<ul>
+<li>作者自己再跑一遍；</li>
+<li>给了文档还当面指导每一步；</li>
+<li>记录里只有“成功”，没有卡点；</li>
+<li>用 agent/模拟用户冒充真人。</li>
+</ul>
+<p>没有真人时，写“待独立复做”，保留空白；不要填造。</p>
+<h2 id="C29-answer-section-d3be5148c7" tabindex="-1">作业 6：范围声明</h2>
+<p>合格声明至少包含：</p>
+<ul>
+<li>支持的手册/版本/文件类型；</li>
+<li>不支持的能力（版面、手写、多语言、设备控制、实时数据）；</li>
+<li>引用契约（逐字引用/人工复核改写）；</li>
+<li>权限与隐私；</li>
+<li>失败状态与回退；</li>
+<li>模型/数据许可边界；</li>
+<li>高风险操作需人工确认。</li>
+</ul>
+<p>不合格：“本系统准确率很高”“支持所有文档”“AI 自动回答”这类没有边界的宣传。</p>
+<h2 id="C29-answer-section-75c4343ba4" tabindex="-1">评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>通过</th>
+<th>不通过</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发布包</td>
+<td>版本、锁、清单、文档、哈希齐全</td>
+<td>源码散落、无版本</td>
+</tr>
+<tr>
+<td>干净环境</td>
+<td>新人按文档可启动并查询</td>
+<td>依赖口头补充</td>
+</tr>
+<tr>
+<td>健康/就绪</td>
+<td>区分存活与完整链路</td>
+<td>200 即宣布可用</td>
+</tr>
+<tr>
+<td>故障</td>
+<td>停服务/错模型/坏 JSON/缺失各有实际结果</td>
+<td>只测成功；失败回退手写答案</td>
+</tr>
+<tr>
+<td>回退</td>
+<td>实际切换并验证</td>
+<td>只重启/只改代码</td>
+</tr>
+<tr>
+<td>隐私</td>
+<td>本地、最小化、日志脱敏</td>
+<td>记录完整问题/密钥</td>
+</tr>
+<tr>
+<td>范围</td>
+<td>支持/不支持/引用契约写清</td>
+<td>夸大能力</td>
+</tr>
+<tr>
+<td>独立复做</td>
+<td>另一位真人记录卡点</td>
+<td>作者自测冒充</td>
+</tr>
+</tbody></table>
+<p>前七项可在本机自评；第八项必须真人。任何安全/权限/伪造证据问题为硬失败，不能用平均分抵消。</p>
+</article><nav class="lesson-nav"><a href="c29.html">返回 C29 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,26 @@
+.curriculum-home { max-width: 850px; }
+.curriculum-home > section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.curriculum-home h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.45; }
+.curriculum-layout { display: grid; grid-template-columns: minmax(190px, 240px) minmax(0, 1fr); gap: 2rem; align-items: start; }
+.curriculum-nav { position: sticky; top: 1rem; max-height: 90vh; overflow-y: auto; overflow-wrap: anywhere; padding-right: .5rem; }
+.curriculum-nav summary { cursor: pointer; padding: .6rem 0; }
+.curriculum-nav ol { padding-left: 1.3rem; }
+.curriculum-nav li { margin: .45rem 0; }
+.curriculum-nav [aria-current="page"] { font-weight: 600; text-decoration-thickness: 2px; }
+.curriculum-chapter, .curriculum-answer { min-width: 0; max-width: 48rem; }
+.curriculum-chapter h1, .curriculum-answer h1 { font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.5; }
+.curriculum-chapter h2, .curriculum-answer h2 { margin-top: 2rem; scroll-margin-top: 1rem; }
+.curriculum-chapter p, .curriculum-chapter li, .curriculum-answer p, .curriculum-answer li { line-height: 1.9; overflow-wrap: anywhere; }
+.curriculum-chapter pre, .curriculum-answer pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; padding: 1rem; background: var(--paper); border: 1px solid var(--rule); }
+.curriculum-chapter img, .curriculum-answer img { display: block; width: auto; max-width: 100%; max-height: 760px; margin: 1.5rem auto; }
+.curriculum-chapter table, .curriculum-answer table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.curriculum-chapter th, .curriculum-chapter td, .curriculum-answer th, .curriculum-answer td { padding: .5rem; vertical-align: top; border-bottom: 1px solid var(--rule); overflow-wrap: anywhere; }
+.curriculum-chapter .lesson-nav, .curriculum-answer .lesson-nav { flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 760px) {
+  .curriculum-layout { display: block; }
+  .curriculum-nav { position: static; max-height: none; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .curriculum-nav > details:not([open]) { display: block; }
+  .curriculum-chapter table, .curriculum-answer table { font-size: .88rem; }
+  .curriculum-chapter th, .curriculum-chapter td, .curriculum-answer th, .curriculum-answer td { padding: .35rem; }
+}
+@media print { .curriculum-nav, .topbar, footer, .skip, .lesson-nav { display: none; } .curriculum-layout { display: block; } }

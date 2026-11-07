@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C30 不照抄案例的毕业项目 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details open><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html" aria-current="page">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C30-section-142b0915a6">先修检查：K1–K4 与 C29 的交付包</a></li><li class="toc-level-2"><a href="#C30-section-ad0295cc29">选题规则：陌生、授权、可核对</a></li><li class="toc-level-3"><a href="#C30-section-04bf9ab511">必须满足</a></li><li class="toc-level-3"><a href="#C30-section-ac35b63165">可选题材示例（只是方向，不提供材料）</a></li><li class="toc-level-2"><a href="#C30-section-70291fe90e">项目目标与硬边界</a></li><li class="toc-level-2"><a href="#C30-section-f3e5831346">题包：七项任务</a></li><li class="toc-level-3"><a href="#C30-section-2fe228b860">任务 A：材料档案与授权（10 分）</a></li><li class="toc-level-3"><a href="#C30-section-02e572baee">任务 B：需求与范围（10 分）</a></li><li class="toc-level-3"><a href="#C30-section-f8e450e138">任务 C：架构决定（15 分）</a></li><li class="toc-level-3"><a href="#C30-section-d1154ea44c">任务 D：实现（20 分）</a></li><li class="toc-level-3"><a href="#C30-section-e4084ccbeb">任务 E：评测（20 分）</a></li><li class="toc-level-3"><a href="#C30-section-51d017edca">任务 F：交付（15 分）</a></li><li class="toc-level-3"><a href="#C30-section-562de83699">任务 G：答辩（10 分）</a></li><li class="toc-level-2"><a href="#C30-section-253ed556bd">评分与通过</a></li><li class="toc-level-2"><a href="#C30-section-fe1d57b537">改一个条件：同一个题包换约束</a></li><li class="toc-level-2"><a href="#C30-section-83a78ab2a2">失败反例</a></li><li class="toc-level-2"><a href="#C30-section-93c6c6c4af">项目增量：毕业项目</a></li><li class="toc-level-2"><a href="#C30-section-9b8245cc16">可运行的自检程序</a></li><li class="toc-level-2"><a href="#C30-section-0b28496da4">示例：把一条需求变成可核对证据</a></li><li class="toc-level-2"><a href="#C30-section-d29d10f9b8">独立作业与提交清单</a></li><li class="toc-level-2"><a href="#C30-section-334c9f73e9">K5 阶段门</a></li><li class="toc-level-2"><a href="#C30-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C30"><p class="eyebrow">S5 / C30 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c29.html">C29</a></p><div class="article-body"><h1 id="C30-section-17fe85579c" tabindex="-1">C30 不照抄案例的毕业项目</h1>
+<p>前面二十九章都在同一条示范线上走：通知、观测站资料、产品手册、OCR 样张。现在把示范撤掉。你要在一个<strong>没有演示过的题材</strong>上，从需求、架构、实现、评测、排错到交付独立走一遍，并在答辩中解释为什么这样做、哪里会坏、你如何知道它没坏。上一章 <a href="c29.html">C29 交给别人怎样才算交付</a> 给了发布包与回退的格式；本章不再给题材，只给题包、硬边界和评分依据。</p>
+<p>毕业项目不是把活动通知改个标题，也不是把 C28 的产品手册换成另一个产品名。它要求材料陌生、任务真实、证据可回查、失败被保留。C30 同时是 S5 的阶段门 K5；但本章只提供题包和评分依据，<strong>不能由 agent 自测或作者自评记为 K5 通过</strong>，独立复做与答辩需要真人。</p>
+<p><img src="../../book/assets/handdraw/llm/method-crossroads.svg" alt="先找缺口，再选办法；毕业项目也要能解释为什么不用更复杂的方案"></p>
+<h2 id="C30-section-142b0915a6" tabindex="-1">先修检查：K1–K4 与 C29 的交付包</h2>
+<p>进入 C30 前，你应该已经留下：</p>
+<ul>
+<li>K1：对陌生通知/材料做过可回查报告，缺失不补造；</li>
+<li>K2：能解释生成、注意力、训练更新，并完成小模型实验；</li>
+<li>K3：从干净环境跑通过资料助手，有真实推理、引用、工具回执和失败路径；</li>
+<li>K4：冻结评测、定位失败边界、小 decoder 训练/重载/留出、SFT/LoRA 对照、蒸馏错误教师记录；</li>
+<li>C27：一次有授权的图像/扫描件提取，或明确资源阻碍；</li>
+<li>C28：一份产品手册的最小架构决定；</li>
+<li>C29：一个可启动、可健康检查、可故障注入、可回退的发布包。</li>
+</ul>
+<p>如果缺 K1–K4 中的实质成果，先补。毕业项目不能用“我上过课”代替前置证据。</p>
+<h2 id="C30-section-ad0295cc29" tabindex="-1">选题规则：陌生、授权、可核对</h2>
+<h3 id="C30-section-04bf9ab511" tabindex="-1">必须满足</h3>
+<ol>
+<li><strong>陌生</strong>：你在开始前没有系统读过这份材料，也不是课程示例；</li>
+<li><strong>授权</strong>：你有权处理、引用和保存；公开发布还要有再分发许可；</li>
+<li><strong>足够复杂</strong>：至少约 20 页/8,000 字（或等量材料），含版本、结构、至少一处缺失或冲突，以及至少一个需要专门处理的边界（视觉页/扫描页、表格、跨页步骤或权限差异）；若没有视觉内容，另交 C27 的图像证据并说明材料本身不含图；</li>
+<li><strong>可核对</strong>：有原文、页码/章节、可复现的输入；不能只靠口头传说；</li>
+<li><strong>非纯通知</strong>：不能是 C01–C04 的活动通知换名，也不能是 C28 产品手册的改名；</li>
+<li><strong>风险可控</strong>：不把医疗、法律、财务、飞行、电力等高风险决策交给系统自动给结论；若材料涉及安全操作，系统只做引用与检索，最终判断由人按规程完成；</li>
+<li><strong>可评测</strong>：你能在实现前写出问题、期望和失败类型，而不是事后挑好答的题。</li>
+</ol>
+<h3 id="C30-section-ac35b63165" tabindex="-1">可选题材示例（只是方向，不提供材料）</h3>
+<ul>
+<li>社区剧院的灯光控制台操作手册；</li>
+<li>水族馆/鱼缸设备维护指南；</li>
+<li>自行车共享站维修手册；</li>
+<li>校园广播设备操作说明；</li>
+<li>档案馆数字化流程手册；</li>
+<li>开源硬件的组装与校准文档；</li>
+<li>某门你未学过的实验课安全与设备手册。</li>
+</ul>
+<p>不要用“网上随便找的 PDF”除非许可清楚。不要用含个人信息的扫描件、未公开合同、客户资料或受限标准。选题前写一页材料档案：来源、许可、版本、页数、语言、文本层/扫描比例、缺失/冲突、谁需要它。</p>
+<h2 id="C30-section-70291fe90e" tabindex="-1">项目目标与硬边界</h2>
+<p>你的系统至少要做到：</p>
+<ul>
+<li>读取授权材料，保留页码/章节/版本；</li>
+<li>回答用户问题，答案由<strong>逐字引用</strong>或<strong>人工复核的改写</strong>组成；</li>
+<li>引用能回到具体版本与位置；程序做逐字校验；</li>
+<li>材料没有、版本冲突、图像不可读、权限不足、模型/工具失败时返回明确状态；</li>
+<li>不执行文档或图片中的指令；不把私密内容上传到未授权服务；</li>
+<li>提供可启动的服务或 CLI、健康检查、故障处理和回退；</li>
+<li>在冻结评测集上报告真实结果，包括失败；</li>
+<li>交付包可被另一人从干净环境启动。</li>
+</ul>
+<p>硬边界（任一违反即不通过）：</p>
+<ul>
+<li>伪造模型输出、引用、工具回执、评测结果或独立复做记录；</li>
+<li>无权限读取/外传材料；</li>
+<li>密钥、个人信息、受限文档进入仓库或日志；</li>
+<li>失败后回退为手写答案或旧缓存答案；</li>
+<li>用平均分抵消安全/权限/证据问题；</li>
+<li>只改通知/产品名，没有新题材的独立工作。</li>
+</ul>
+<h2 id="C30-section-f3e5831346" tabindex="-1">题包：七项任务</h2>
+<p>题包是独立作业，答案在 <a href="c30-answer.html">C30 答案</a>。先完成再对照，不要先看评分表再倒推。</p>
+<h3 id="C30-section-2fe228b860" tabindex="-1">任务 A：材料档案与授权（10 分）</h3>
+<p>提交一页材料档案：</p>
+<ul>
+<li>来源、作者/机构、获取方式、许可/授权范围；</li>
+<li>版本、日期、页数、语言、文件类型；</li>
+<li>文本层比例、扫描页、表格/图、可能的 OCR 需求；</li>
+<li>至少一处缺失或冲突，以及你如何发现；</li>
+<li>保存期限、是否含个人信息、是否允许公开引用。</li>
+</ul>
+<p>要求：不能只写“公开资料”；要能解释你为什么有权处理，以及哪些内容不能发布。</p>
+<h3 id="C30-section-02e572baee" tabindex="-1">任务 B：需求与范围（10 分）</h3>
+<p>写一页需求：</p>
+<ul>
+<li>用户是谁、在什么场景使用；</li>
+<li>输入、输出、引用格式；</li>
+<li>支持/不支持的文件类型与问题类型；</li>
+<li>权限模型与读者身份；</li>
+<li>失败状态（缺失、冲突、无命中、不可读、越权、模型失败）；</li>
+<li>验收判据（事实支持、完整性、版本、拒绝、延迟/成本、交付）；</li>
+<li>明确的“不做什么”。</li>
+</ul>
+<p>要求：每条验收判据都要能观察；不能写“准确率高”。</p>
+<h3 id="C30-section-f8e450e138" tabindex="-1">任务 C：架构决定（15 分）</h3>
+<p>写一份 ADR：</p>
+<ul>
+<li>材料规模/token 估算；</li>
+<li>至少比较两条路线（例如整本提示 vs 页级检索；关键词 vs embedding）；</li>
+<li>选择最小可行方案，说明为什么不是更复杂的方案；</li>
+<li>不采用项：微调、Agent、外部 API、向量库等，逐项写条件与重新评估触发；</li>
+<li>风险与对应验收；</li>
+<li>引用契约：逐字引用/人工复核改写，自由改写为什么不行。</li>
+</ul>
+<p>要求：方案选择必须由你的材料数据支持，不能只列技术名词。</p>
+<h3 id="C30-section-d1154ea44c" tabindex="-1">任务 D：实现（20 分）</h3>
+<p>提交可运行的程序/服务：</p>
+<ul>
+<li>真实本地模型或获授权 API；不能 mock 模型、固定答案、示例输出；</li>
+<li>文档读取、版本/权限、切块/检索、模型调用、引用校验、失败状态；</li>
+<li>至少一个只读工具或等价的确定性校验（如计算器/单位换算/哈希校验），并展示权限与停止；</li>
+<li>CLI 或 HTTP 服务；健康检查；</li>
+<li>不自动下载权重、不读未声明凭据、不联网（除非显式授权）；</li>
+<li>代码/运行说明可让他人复做。</li>
+</ul>
+<p>要求：正常运行、缺失、冲突、无命中、越权、模型失败至少六类路径中，至少四类有实际结果；其余记录阻塞。</p>
+<h3 id="C30-section-e4084ccbeb" tabindex="-1">任务 E：评测（20 分）</h3>
+<p>在实现前冻结评测：</p>
+<ul>
+<li>至少 20 个问题，覆盖正常、跨页/步骤、缺失、冲突、无命中、越权、不可读、恶意文字；</li>
+<li>每题写期望状态、关键引用/页码、可接受输出；</li>
+<li>先跑基线并保存首次结果，不修改题目；</li>
+<li>至少定位两个“首个失败边界”（读入/权限、检索、切块、模型、解析、引用、工具）；</li>
+<li>至少做一次单变量对照（只改切块、检索、提示或模型之一），报告质量/延迟/成本与样本数；</li>
+<li>留出集不参与调参；报告失败，不删用例、不放宽断言。</li>
+</ul>
+<p>要求：不能只看成功截图；不能看完答案再改题；不能用平均分掩盖硬失败。</p>
+<h3 id="C30-section-51d017edca" tabindex="-1">任务 F：交付（15 分）</h3>
+<p>按 C29 提交：</p>
+<ul>
+<li><code>releases/&lt;version&gt;/</code>、<code>release.json</code>、<code>requirements.lock</code>、<code>runbook.md</code>、<code>user-guide.md</code>；</li>
+<li>干净环境启动、健康检查、就绪查询；</li>
+<li>至少四种故障注入（停服务、错模型、坏 JSON、缺失/版本不符；有权限字段再加越权）；</li>
+<li>实际回退并验证；</li>
+<li>范围声明、隐私/保留、费用依据；</li>
+<li>另一位真人按文档启动与操作，记录卡点；没有真人写“待独立复做”。</li>
+</ul>
+<p>要求：发布包可复建，引用可追溯，回退实际执行；作者自测不算独立复做。</p>
+<h3 id="C30-section-562de83699" tabindex="-1">任务 G：答辩（10 分）</h3>
+<p>提交一页答辩提纲，并做一次 10–15 分钟演示/问答：</p>
+<ul>
+<li>正常查询：展示问题、检索、引用原文、报告；</li>
+<li>失败演示：至少一个真实失败/拒绝，解释首个失败边界；</li>
+<li>架构辩护：为什么不用更复杂方案；什么条件会改变选择；</li>
+<li>引用契约：逐字/人工复核改写如何执行；</li>
+<li>权限与隐私：谁能看什么，日志/上传/保留；</li>
+<li>评测：基线、失败、单变量对照、留出结果；</li>
+<li>回退：触发条件与验证；</li>
+<li>限制与下一步：哪些没做到，不能假装完成。</li>
+</ul>
+<p>要求：能解释“为什么”，不只是念步骤；演示失败要真实，不能预先剪掉。</p>
+<h2 id="C30-section-253ed556bd" tabindex="-1">评分与通过</h2>
+<p>总分 100：A 10、B 10、C 15、D 20、E 20、F 15、G 10。另有硬门槛：</p>
+<ul>
+<li>材料授权与隐私成立；</li>
+<li>无伪造输出/引用/回执/评测/复做；</li>
+<li>权限在读取前生效；</li>
+<li>引用可回原文，失败不被静默成功；</li>
+<li>交付包可复建，回退实际执行；</li>
+<li>独立复做由未参与实现的人完成，或明确标“待验”（此时 K5 不通过）。</li>
+</ul>
+<p>总分 ≥ 70 且所有硬门槛通过，才可记“技术通过”；独立复做与真人答辩完成，才谈 K5 通过。没有真人时，最高只能记“技术通过/待独立复做”，不能写“全规格完成”。</p>
+<h2 id="C30-section-fe1d57b537" tabindex="-1">改一个条件：同一个题包换约束</h2>
+<ul>
+<li><strong>材料只有 10 页</strong>：整本提示可能就够；C 的架构比较仍要写，但可以选择更小的方案 A，并说明为什么不上检索。不要为了“像毕业项目”硬加向量库。</li>
+<li><strong>材料 300 页且同义表述多</strong>：关键词基线可能漏检；先定位漏检，再做 embedding 单变量对照，保留失败样本。不要一次改检索、切块和模型。</li>
+<li><strong>扫描页没有文本层</strong>：用 C27 的 OCR 或外部工具，标 <code>uncertain</code>/<code>unreadable</code>；不可读页返回未知，不从相邻页补。</li>
+<li><strong>多人权限不同</strong>：权限在读取/检索前生效；同一问题对不同读者可能返回不同候选集，报告要写读者身份。</li>
+<li><strong>不能联网/没有合法模型</strong>：记录资源阻碍；架构、评测设计、失败路径仍可完成，但不能用示例输出冒充真实推理。</li>
+</ul>
+<p>结论应随条件变化。若无论材料大小、权限和模型条件都写同一套 RAG+Agent+微调，说明你还没有真正做选择。</p>
+<h2 id="C30-section-83a78ab2a2" tabindex="-1">失败反例</h2>
+<ol>
+<li><strong>只改名字</strong>：把活动通知或 C28 产品手册换个标题，材料、任务、评测都没变。硬失败。</li>
+<li><strong>只演示成功</strong>：答辩时剪掉失败；或失败后重跑直到成功，删除首次输出。保留失败是评分点。</li>
+<li><strong>引用造假</strong>：引用句原文不存在，或来自旧版/未授权文档。硬失败。</li>
+<li><strong>权限后置</strong>：先生成再删引用；泄露已经发生。</li>
+<li><strong>回退没做</strong>：只写“可以回退”，没有实际切换和验证。</li>
+<li><strong>作者自测冒充独立复做</strong>：没有另一位真人，却填“已独立通过”。K5 不通过。</li>
+<li><strong>验收被平均分掩盖</strong>：权限/伪造/隐私问题用高分抵消。硬门槛优先。</li>
+</ol>
+<h2 id="C30-section-93c6c6c4af" tabindex="-1">项目增量：毕业项目</h2>
+<p>C30 的增量就是完整的毕业项目本身：</p>
+<pre><code class="language-text">capstone/
+  README.md
+  scope.md
+  adr/0001-architecture.md
+  releases/&lt;version&gt;/
+  eval/cases.json
+  eval/baseline.md
+  eval/results/
+  evidence/normal/
+  evidence/failures/
+  evidence/rollback/
+  independent-review.md
+  defense.md
+</code></pre>
+<p>它不是 C28/C29 的复制粘贴：题材、材料、评测题、引用和失败都必须是你自己的。C27 的图像证据、C28 的 ADR 格式、C29 的发布包结构可以复用为方法，不能复用为内容。</p>
+<h2 id="C30-section-9b8245cc16" tabindex="-1">可运行的自检程序</h2>
+<p>下面这个脚本只依赖标准库，用来检查交付包是否缺文件、清单哈希是否对得上。它不能判断答案质量，也不能替代评测与真人复做；它只是防止“文件看起来在，实际哈希/路径不对”。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;Check a capstone package manifest: required files, hashes, basic shape.&quot;&quot;&quot;
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+REQUIRED = [
+    &quot;release.json&quot;,
+    &quot;requirements.lock&quot;,
+    &quot;runbook.md&quot;,
+    &quot;user-guide.md&quot;,
+]
+
+
+def sha256(path: Path) -&gt; str:
+    digest = hashlib.sha256()
+    with path.open(&quot;rb&quot;) as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b&quot;&quot;):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def main() -&gt; int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(&quot;package&quot;, help=&quot;release directory&quot;)
+    parser.add_argument(&quot;--manifest&quot;, default=&quot;release.json&quot;)
+    args = parser.parse_args()
+    root = Path(args.package)
+    manifest_path = root / args.manifest
+    if not manifest_path.is_file():
+        print(f&quot;missing manifest: {manifest_path}&quot;)
+        return 2
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding=&quot;utf-8&quot;))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f&quot;cannot read manifest: {type(exc).__name__}: {exc}&quot;)
+        return 2
+
+    problems = []
+    for name in REQUIRED:
+        if not (root / name).is_file():
+            problems.append(f&quot;missing required file: {name}&quot;)
+    files = manifest.get(&quot;files&quot;)
+    if isinstance(files, dict):
+        for relative, expected in files.items():
+            target = root / relative
+            if not target.is_file():
+                problems.append(f&quot;missing manifest file: {relative}&quot;)
+                continue
+            actual = sha256(target)
+            if actual != expected:
+                problems.append(f&quot;hash mismatch: {relative} expected {expected} actual {actual}&quot;)
+    for key in (&quot;release&quot;, &quot;created&quot;, &quot;scope&quot;, &quot;start&quot;, &quot;health&quot;):
+        if not manifest.get(key):
+            problems.append(f&quot;manifest missing field: {key}&quot;)
+
+    if problems:
+        print(json.dumps({&quot;status&quot;: &quot;failed&quot;, &quot;problems&quot;: problems}, ensure_ascii=False, indent=2))
+        return 1
+    print(json.dumps({&quot;status&quot;: &quot;ok&quot;, &quot;package&quot;: str(root), &quot;files_checked&quot;: len(files or {})}, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+<p>用法：</p>
+<pre><code class="language-bash">python check_package.py releases/2026-11-08-a
+</code></pre>
+<p>在 <code>release.json</code> 里增加 <code>&quot;files&quot;: {&quot;docs/manual.md&quot;: &quot;&lt;sha256&gt;&quot;, &quot;requirements.lock&quot;: &quot;&lt;sha256&gt;&quot;}</code>。脚本只检查你声明的文件；没有声明的大文件/权重不会被检查，也应该本来就不在包里。</p>
+<h2 id="C30-section-0b28496da4" tabindex="-1">示例：把一条需求变成可核对证据</h2>
+<p>假设主题是“社区剧院灯光控制台操作手册”，用户是志愿者。一条需求不是“回答调光问题”，而是：</p>
+<pre><code class="language-text">需求：志愿者问“场景 3 如何保存”时，答案必须给出控制台手册中“保存场景”的步骤，
+      保留前置条件（是否先按 REC）、按键顺序和安全警告；
+      引用带页码/章节；手册没有说明时返回未知。
+证据：评测题 07；期望引用第 4.2 节两句；实际报告 claims[0].quote 与原文逐字一致；
+      失败条件：只给结论、省略“先按 REC”、引用旧版 v1.1；
+      对照：检索 top-3 是否包含 4.2 节；不含时记录为首个失败边界。
+</code></pre>
+<p>这个例子不是要你照抄戏剧题材；它示范“需求—评测—引用—失败边界”如何一一对应。你的题材必须不同。</p>
+<h2 id="C30-section-d29d10f9b8" tabindex="-1">独立作业与提交清单</h2>
+<ol>
+<li>选题并写材料档案；确认授权与隐私。</li>
+<li>写需求与验收；冻结至少 20 题。</li>
+<li>写 ADR；比较至少两条路线。</li>
+<li>实现；保存正常与失败路径。</li>
+<li>跑基线、定位失败、做单变量对照、保留留出结果。</li>
+<li>按 C29 交付；做故障与回退；请另一位真人复做。</li>
+<li>准备答辩；演示一次真实失败。</li>
+<li>用 <code>check_package.py</code> 自检；对照答案评分表自评，标出待验项。</li>
+</ol>
+<p>提交目录建议：</p>
+<pre><code class="language-text">capstone/
+  README.md
+  scope.md
+  adr/0001-architecture.md
+  releases/&lt;version&gt;/
+  eval/cases.json
+  eval/baseline.md
+  eval/results/
+  evidence/normal/
+  evidence/failures/
+  evidence/rollback/
+  independent-review.md
+  defense.md
+</code></pre>
+<h2 id="C30-section-334c9f73e9" tabindex="-1">K5 阶段门</h2>
+<p>K5 的通过条件：</p>
+<ul>
+<li>材料陌生且有授权，不是通知/产品手册改名；</li>
+<li>需求、架构、实现、评测、交付、答辩六项齐备；</li>
+<li>引用逐字可回查，失败状态真实，权限与隐私硬门槛通过；</li>
+<li>另一位未参与实现的人从干净环境启动、操作并完成一次回退；</li>
+<li>作者能解释不采用 RAG/Agent/微调等方案的理由，以及何时会改变；</li>
+<li>失败没有被删除、放宽或用手写答案覆盖。</li>
+</ul>
+<p>本章不授予 K5。没有独立真人与答辩时，只能记录“技术通过/待独立复做”，不能写“全部完成”或“教学通过”。</p>
+<h2 id="C30-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<ul>
+<li>评分维度对应 SPEC/ACCEPTANCE 的 K5：陌生材料、需求/方案/源码/环境/配置/权限/成本/留出评测/故障回退/独立启动；</li>
+<li>C27 的 OCR、C28 的 ADR、C29 的发布包是素材，不是毕业项目本身；不能直接复用同一题材交差；</li>
+<li>本章不提供第三方手册、标准或真实用户数据；材料由你选择并承担授权责任；</li>
+<li>没有真人复做/答辩时，K5 保持待验；作者/agent 自测只算技术证据。</li>
+</ul>
+<p>答案、评分表与答辩要点见 <a href="c30-answer.html">C30 答案</a>。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c29.html">上一章 C29</a><a href="c30-answer.html">独立作答后核对</a><a href="course.html">返回全书目录</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

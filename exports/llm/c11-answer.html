@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C11 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C11-answer-section-0908b0817c" tabindex="-1">C11 答案与核对依据</h1>
+<p>先完成作业再读。下面的代码不是唯一写法；核对重点是行为：缺失不被补齐、错误有退出码、路径与编码有明确约定。</p>
+<h2 id="C11-answer-section-ec45aa2220" tabindex="-1">1. 通知2与 <code>line_count</code></h2>
+<p>一份示例材料：</p>
+<pre><code class="language-text">课程通知
+
+活动: 社区读书会
+时间：周六 14:00
+地点：邻里工坊
+说明：请自带水杯
+</code></pre>
+<p><code>line_count</code> 统计原文行数，包括空行；<code>fields</code> 只保留四个约定字段。材料有 6 行，字段仍是 4 个，所以两个数字不必相等。<code>说明</code> 行不会进入字段表，也不会被当成错误；它是未纳入约定的材料。若你希望“未知行”也进入报告的 <code>ignored_lines</code>，那是扩展功能，不是本章默认行为。</p>
+<h2 id="C11-answer-section-a61137685b" tabindex="-1">2. 显式格式参数</h2>
+<p>一种改法：</p>
+<pre><code class="language-python">parser.add_argument(&quot;--format&quot;, choices=(&quot;json&quot;, &quot;markdown&quot;), default=&quot;json&quot;)
+...
+if args.format == &quot;markdown&quot;:
+    payload = to_markdown(fields)
+else:
+    payload = json.dumps(report, ensure_ascii=False, indent=2)
+</code></pre>
+<p><code>choices</code> 让非法值由 <code>argparse</code> 以退出码 2 拒绝，并打印可用值。不要在 <code>else</code> 里悄悄转成 JSON；调用方显式要求 Markdown 却收到 JSON，属于契约违背。</p>
+<p>Markdown 版本示例：</p>
+<pre><code class="language-markdown">| 字段 | 状态 | 原文值 |
+| --- | --- | --- |
+| 活动 | found | 社区读书会 |
+| 时间 | found | 周六 14:00 |
+| 地点 | found | 邻里工坊 |
+| 报名要求 | missing | （缺失） |
+</code></pre>
+<p>缺失值写“（缺失）”，但底层 JSON 仍保留 <code>null</code>。不要把 Markdown 的占位文字反写回数据结构。</p>
+<h2 id="C11-answer-section-80b2ee7c85" tabindex="-1">3. 三类失败的记录</h2>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>典型输出</th>
+<th>退出码</th>
+<th>第一处定位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件不存在</td>
+<td><code>{&quot;status&quot;:&quot;error&quot;,&quot;error&quot;:&quot;file-not-found&quot;,...}</code></td>
+<td>2</td>
+<td><code>path.is_file()</code> 为假</td>
+</tr>
+<tr>
+<td>GBK 编码</td>
+<td><code>decode-failed</code>，含 <code>UnicodeDecodeError</code> 位置</td>
+<td>3</td>
+<td><code>read_text(encoding=&quot;utf-8&quot;)</code></td>
+</tr>
+<tr>
+<td>权限不足</td>
+<td>打开文件时 <code>PermissionError</code></td>
+<td>建议 4</td>
+<td><code>read_text()</code> 的 <code>open</code> 调用</td>
+</tr>
+</tbody></table>
+<p>权限不足时，正确做法是取得读取授权、复制到自己有权访问的目录，或让文件所有者调整权限。不要用 <code>except PermissionError: text = &quot;&quot;</code> 返回一份“空通知”并当作成功；那会把“没有读到”伪装成“材料为空”。如果程序要捕获它，应输出独立错误并保留非零退出码：</p>
+<pre><code class="language-python">except PermissionError as exc:
+    print(json.dumps({&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;permission-denied&quot;, &quot;detail&quot;: str(exc)}, ensure_ascii=False))
+    return 4
+</code></pre>
+<h2 id="C11-answer-section-e12452994f" tabindex="-1">4. 只对四个字段生效的分隔符</h2>
+<pre><code class="language-python">def extract_fields(text: str) -&gt; dict[str, dict[str, str | None]]:
+    result = {}
+    for field in FIELDS:
+        value = None
+        for line in text.splitlines():
+            stripped = line.strip()
+            for sep in (&quot;：&quot;, &quot;:&quot;):
+                prefix = field + sep
+                if stripped.startswith(prefix):
+                    candidate = stripped[len(prefix):].strip()
+                    if candidate:
+                        value = candidate
+                    break
+            if value is not None:
+                break
+        result[field] = {&quot;value&quot;: value, &quot;status&quot;: &quot;found&quot; if value else &quot;missing&quot;}
+    return result
+</code></pre>
+<p>测试输入：</p>
+<pre><code class="language-text">活动：读书会
+备注：地点：不要把这行当地点
+</code></pre>
+<p><code>备注</code> 行不以 <code>地点</code> 开头，所以不会被误收。若有一行 <code>地点: 邻里工坊</code>，半角冒号路径会取到值。注意 <code>地点：</code> 后面为空时，当前实现仍记 <code>missing</code>；这是有意的，因为“字段存在但空值”不能被当成已确认地点。</p>
+<h2 id="C11-answer-section-3068d22e7c" tabindex="-1">5. 为什么用脚本所在目录</h2>
+<p><code>Path(__file__).resolve().parent</code> 让程序找到自己旁边的 <code>notices/</code>，与启动时的工作目录无关。用户可以从任意目录运行：</p>
+<pre><code class="language-bash">python C:\work\llm-practice\notice_report.py
+</code></pre>
+<p>仍然读到 <code>C:\work\llm-practice\notices\通知.txt</code>。直接写相对路径时，<code>notices/通知.txt</code> 会相对于终端当前目录解析；换一个目录启动就找不到文件。交付给别人的程序不能假设对方总在某个目录启动。</p>
+<h2 id="C11-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>程序运行成功时退出码为 0，失败时不伪装成功。</li>
+<li>缺失字段在 JSON 中是 <code>null</code>，且进入 <code>missing</code> 列表。</li>
+<li>文件路径与编码在输出中可回查。</li>
+<li>只有四个约定字段会被提取；无关行不进入结果。</li>
+<li>你能从 <code>Traceback</code> 最后一行说出错误类型和出错行。</li>
+</ul>
+<p>本章没有调用模型、OCR 或网络，因此不需要模型输出证据；它验证的是本地程序、文件与错误处理。</p>
+</article><nav class="lesson-nav"><a href="c11.html">返回 C11 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

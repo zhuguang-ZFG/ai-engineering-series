@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C15 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C15-answer-section-c50e32be45" tabindex="-1">C15 答案与核对依据</h1>
+<p>检索结果必须来自你的实际运行；下面给记录方法和判定标准，不填虚构分数。</p>
+<h2 id="C15-answer-section-3f16dc1782" tabindex="-1">1. 词项与 embedding 对照</h2>
+<p>建议表格：</p>
+<pre><code class="language-markdown">| 查询 | 检索器 | 前 3 chunk_id | 正确片段排名 | 无命中 | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| 闭馆前要关什么 | keyword | ... | 1 | 否 | 命中标题词 |
+| 晚上结束后处理哪些设备 | keyword | （空） | 未命中 | 是 | 同义改写漏检 |
+| 晚上结束后处理哪些设备 | embedding | ... | ? | 否 | 需人工核对是否支持 |
+</code></pre>
+<p><code>chunk_id</code> 形如 <code>doc@&lt;sha256 前 12 位&gt;#000</code>；文档版本在单独的 <code>version</code> 字段，不要用版本号拼 chunk_id。</p>
+<p>判定：</p>
+<ul>
+<li><strong>命中</strong>：正确片段出现在前 k，且包含回答问题所需的完整条件；</li>
+<li><strong>漏检</strong>：正确片段存在，但没有进入前 k；</li>
+<li><strong>误排</strong>：无关/旧版片段排名高于正确片段；</li>
+<li><strong>无命中</strong>：没有任何片段达到阈值，不能把最低分当证据。</li>
+</ul>
+<p>embedding 分数不是概率，不能解释为“92% 正确”。它只用于同一查询内的相对排序；不同查询、不同模型的分数不可直接比较。</p>
+<h2 id="C15-answer-section-7fbf9f4a9e" tabindex="-1">2. 两类查询</h2>
+<p>字面不重合但语义相近：</p>
+<pre><code class="language-text">查询：晚上结束营业后要处理哪些设备？
+原文：闭馆前关闭饮水机电源。
+</code></pre>
+<p>词项可能漏掉“闭馆/结束营业”的对应；embedding 可能命中。但即使命中，也要检查原文是否真的说“饮水机”，不能因为语义相近就补一个设备。</p>
+<p>字面重合但语义无关：</p>
+<pre><code class="language-text">查询：设备采购流程
+原文：设备检查流程
+</code></pre>
+<p>两者都含“设备”和“流程”，词项可能误排；embedding 可能区分，也可能不区分。结论只对当前模型和语料成立。</p>
+<h2 id="C15-answer-section-2ffbc2fd3a" tabindex="-1">3. 引用支持分类</h2>
+<p>对每条 <code>quote</code>：</p>
+<ul>
+<li><strong>完全支持</strong>：原文直接陈述主张，条件和否定词一致；</li>
+<li><strong>部分支持</strong>：原文支持一部分，另一部分是推断；</li>
+<li><strong>不支持</strong>：原文没有该信息，或关键词相同但关系不同；</li>
+<li><strong>条件被省略</strong>：原文有“若/除非/仅在”，答案写成无条件规则。</li>
+</ul>
+<p>示例：</p>
+<pre><code class="language-text">原文：若当晚有维护施工，保留主电源，由值班人员签字确认。
+答案：闭馆时必须保留主电源。
+</code></pre>
+<p>这是“条件被省略”。引用片段包含“保留主电源”，但答案删掉了“若……施工”和“签字确认”，结论强度被改变。注意这是人工复核的改写例；助手的自动校验要求 <code>claim.text</code> 是 <code>quote</code> 的逐字连续子串、<code>answer</code> 只列已核验 claims，上面这句改写会被判 <code>citation-failed</code>，不能算自动通过。</p>
+<h2 id="C15-answer-section-e631e06369" tabindex="-1">4. top-k 增大后的风险</h2>
+<p>取回 3 → 8 后可能出现：</p>
+<ul>
+<li>正确片段仍在，但被更多无关片段包围，模型忽略关键条件；</li>
+<li>旧版本片段进入上下文，与新版冲突；</li>
+<li>上下文超预算，前面的材料被截断；</li>
+<li>延迟和 token 成本上升。</li>
+</ul>
+<p>记录答案是否变化、引用是否仍指向正确片段、是否出现冲突。不能只记录“取回更多，效果更好”。</p>
+<h2 id="C15-answer-section-18132ecf64" tabindex="-1">5. 为什么分数高不等于事实可信</h2>
+<ul>
+<li>相似度衡量的是表示空间中的接近，不是真值；</li>
+<li>旧版规则可能与查询高度相似，但已失效；</li>
+<li>无权限片段可能相似，但不能使用；</li>
+<li>片段可能只包含结论的一半，缺条件；</li>
+<li>模型可能误读高分片段，或把两个片段拼成新关系。</li>
+</ul>
+<p>因此需要三层检查：检索集合（有没有找对）→ 引用支持（原文是否支持）→ 答案一致性（主张之间是否冲突）。C19 会把这三层用于失败定位。</p>
+<h2 id="C15-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>□ 同一查询、同一读者、同一模型下只改检索器；</li>
+<li>□ 记录 chunk_id、版本、分数与原文；</li>
+<li>□ 无命中没有被最低分片段替代；</li>
+<li>□ 引用逐条回查，条件/否定词没有被省略；</li>
+<li>□ 没有把示例数字写成你的实测结果；</li>
+<li>□ 旧版/无权限片段没有进入答案依据。</li>
+</ul>
+</article><nav class="lesson-nav"><a href="c15.html">返回 C15 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

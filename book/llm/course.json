@@ -421,6 +421,342 @@
       "openerFigure": "evidence-workshop.svg"
     }
   ],
+  "curriculum": {
+    "version": "1.0.0",
+    "status": "实施试读版 · 教学效果待验收",
+    "stages": [
+      {
+        "id": "S1",
+        "title": "会使用",
+        "gate": "K1",
+        "outcome": "面对陌生材料，交付每条事实都能回查、未知与冲突如实保留的报告。"
+      },
+      {
+        "id": "S2",
+        "title": "懂原理",
+        "gate": "K2",
+        "outcome": "解释并复算生成、向量、注意力与参数更新，分清输入变化和训练。"
+      },
+      {
+        "id": "S3",
+        "title": "能实现",
+        "gate": "K3",
+        "outcome": "从空环境运行真实文档助手，记录检索、模型请求、工具回执与失败。"
+      },
+      {
+        "id": "S4",
+        "title": "会改进",
+        "gate": "K4",
+        "outcome": "先冻结评测再诊断改进，并真实训练、保存和适配微型因果模型。"
+      },
+      {
+        "id": "S5",
+        "title": "独立交付",
+        "gate": "K5",
+        "outcome": "在授权陌生材料上设计、实现、评测和交付，可由另一人独立复做。"
+      }
+    ],
+    "chapters": [
+      {
+        "id": "C01",
+        "title": "先做一份资料报告",
+        "stage": "S1",
+        "file": "lessons/c01.md",
+        "answer": "deepening/c01-answer.md",
+        "prerequisites": []
+      },
+      {
+        "id": "C02",
+        "title": "把任务交代清楚",
+        "stage": "S1",
+        "file": "lessons/c02.md",
+        "answer": "deepening/c02-answer.md",
+        "prerequisites": [
+          "C01"
+        ]
+      },
+      {
+        "id": "C03",
+        "title": "看似合理为什么仍可能错",
+        "stage": "S1",
+        "file": "lessons/c03.md",
+        "answer": "deepening/c03-answer.md",
+        "prerequisites": [
+          "C02"
+        ]
+      },
+      {
+        "id": "C04",
+        "title": "第一次独立交付",
+        "stage": "S1",
+        "file": "lessons/c04.md",
+        "answer": "deepening/c04-answer.md",
+        "prerequisites": [
+          "C03"
+        ]
+      },
+      {
+        "id": "C05",
+        "title": "一句话怎样逐步生成",
+        "stage": "S2",
+        "file": "lessons/c05.md",
+        "answer": "deepening/c05-answer.md",
+        "prerequisites": [
+          "C04"
+        ]
+      },
+      {
+        "id": "C06",
+        "title": "一串数字怎样表示文字",
+        "stage": "S2",
+        "file": "lessons/c06.md",
+        "answer": "deepening/c06-answer.md",
+        "prerequisites": [
+          "C05"
+        ]
+      },
+      {
+        "id": "C07",
+        "title": "注意力到底计算了什么",
+        "stage": "S2",
+        "file": "lessons/c07.md",
+        "answer": "deepening/c07-answer.md",
+        "prerequisites": [
+          "C06"
+        ]
+      },
+      {
+        "id": "C08",
+        "title": "怎样拼成一个 Transformer",
+        "stage": "S2",
+        "file": "lessons/c08.md",
+        "answer": "deepening/c08-answer.md",
+        "prerequisites": [
+          "C07"
+        ]
+      },
+      {
+        "id": "C09",
+        "title": "训练为什么能改变预测",
+        "stage": "S2",
+        "file": "lessons/c09.md",
+        "answer": "deepening/c09-answer.md",
+        "prerequisites": [
+          "C08"
+        ]
+      },
+      {
+        "id": "C10",
+        "title": "从续写到助手",
+        "stage": "S2",
+        "file": "lessons/c10.md",
+        "answer": "deepening/c10-answer.md",
+        "prerequisites": [
+          "C09"
+        ]
+      },
+      {
+        "id": "C11",
+        "title": "从空目录运行第一段程序",
+        "stage": "S3",
+        "file": "lessons/c11.md",
+        "answer": "deepening/c11-answer.md",
+        "prerequisites": [
+          "C10"
+        ]
+      },
+      {
+        "id": "C12",
+        "title": "请求、响应和数据约定",
+        "stage": "S3",
+        "file": "lessons/c12.md",
+        "answer": "deepening/c12-answer.md",
+        "prerequisites": [
+          "C11"
+        ]
+      },
+      {
+        "id": "C13",
+        "title": "接上真实模型",
+        "stage": "S3",
+        "file": "lessons/c13.md",
+        "answer": "deepening/c13-answer.md",
+        "prerequisites": [
+          "C12"
+        ]
+      },
+      {
+        "id": "C14",
+        "title": "把自己的文档变成可追溯片段",
+        "stage": "S3",
+        "file": "lessons/c14.md",
+        "answer": "deepening/c14-answer.md",
+        "prerequisites": [
+          "C13"
+        ]
+      },
+      {
+        "id": "C15",
+        "title": "先找到资料，再组织答案",
+        "stage": "S3",
+        "file": "lessons/c15.md",
+        "answer": "deepening/c15-answer.md",
+        "prerequisites": [
+          "C14"
+        ]
+      },
+      {
+        "id": "C16",
+        "title": "让工具真的执行，并知道何时停",
+        "stage": "S3",
+        "file": "lessons/c16.md",
+        "answer": "deepening/c16-answer.md",
+        "prerequisites": [
+          "C15"
+        ]
+      },
+      {
+        "id": "C17",
+        "title": "组装资料助手第一版",
+        "stage": "S3",
+        "file": "lessons/c17.md",
+        "answer": "deepening/c17-answer.md",
+        "prerequisites": [
+          "C16"
+        ]
+      },
+      {
+        "id": "C18",
+        "title": "先定怎样评，再动手优化",
+        "stage": "S4",
+        "file": "lessons/c18.md",
+        "answer": "deepening/c18-answer.md",
+        "prerequisites": [
+          "C17"
+        ]
+      },
+      {
+        "id": "C19",
+        "title": "检索没找对，还是回答没用对",
+        "stage": "S4",
+        "file": "lessons/c19.md",
+        "answer": "deepening/c19-answer.md",
+        "prerequisites": [
+          "C18"
+        ]
+      },
+      {
+        "id": "C20",
+        "title": "长上下文与记忆不是无限仓库",
+        "stage": "S4",
+        "file": "lessons/c20.md",
+        "answer": "deepening/c20-answer.md",
+        "prerequisites": [
+          "C19"
+        ]
+      },
+      {
+        "id": "C21",
+        "title": "什么时候需要 Agent",
+        "stage": "S4",
+        "file": "lessons/c21.md",
+        "answer": "deepening/c21-answer.md",
+        "prerequisites": [
+          "C20"
+        ]
+      },
+      {
+        "id": "C22",
+        "title": "质量、延迟和费用怎么取舍",
+        "stage": "S4",
+        "file": "lessons/c22.md",
+        "answer": "deepening/c22-answer.md",
+        "prerequisites": [
+          "C21"
+        ]
+      },
+      {
+        "id": "C23",
+        "title": "从数组走到自动微分",
+        "stage": "S4",
+        "file": "lessons/c23.md",
+        "answer": "deepening/c23-answer.md",
+        "prerequisites": [
+          "C22"
+        ]
+      },
+      {
+        "id": "C24",
+        "title": "从零组装最小 decoder",
+        "stage": "S4",
+        "file": "lessons/c24.md",
+        "answer": "deepening/c24-answer.md",
+        "prerequisites": [
+          "C23"
+        ]
+      },
+      {
+        "id": "C25",
+        "title": "何时适配参数，何时不该训练",
+        "stage": "S4",
+        "file": "lessons/c25.md",
+        "answer": "deepening/c25-answer.md",
+        "prerequisites": [
+          "C24"
+        ]
+      },
+      {
+        "id": "C26",
+        "title": "蒸馏学到的是什么",
+        "stage": "S4",
+        "file": "lessons/c26.md",
+        "answer": "deepening/c26-answer.md",
+        "prerequisites": [
+          "C25"
+        ]
+      },
+      {
+        "id": "C27",
+        "title": "图片、扫描件与多模态边界",
+        "stage": "S5",
+        "file": "lessons/c27.md",
+        "answer": "deepening/c27-answer.md",
+        "prerequisites": [
+          "C26"
+        ]
+      },
+      {
+        "id": "C28",
+        "title": "为新任务选择最小系统",
+        "stage": "S5",
+        "file": "lessons/c28.md",
+        "answer": "deepening/c28-answer.md",
+        "prerequisites": [
+          "C27"
+        ]
+      },
+      {
+        "id": "C29",
+        "title": "交给别人怎样才算交付",
+        "stage": "S5",
+        "file": "lessons/c29.md",
+        "answer": "deepening/c29-answer.md",
+        "prerequisites": [
+          "C28"
+        ]
+      },
+      {
+        "id": "C30",
+        "title": "不照抄案例的毕业项目",
+        "stage": "S5",
+        "file": "lessons/c30.md",
+        "answer": "deepening/c30-answer.md",
+        "prerequisites": [
+          "C29"
+        ]
+      }
+    ]
+  },
   "quickRoute": [
     "L01",
     "L02",

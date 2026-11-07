@@ -2,7 +2,7 @@
 
 > 不会写代码，也能从一句需求出发，做出第一个可用作品。
 
-大模型手绘课：双击项目根目录的 [开始阅读.html](开始阅读.html)。书籍在 [deliverables](deliverables/) 文件夹：[PDF](deliverables/llm-explained-handdraw.pdf) · [EPUB](deliverables/llm-explained-handdraw.epub)。
+大模型新版：双击项目根目录的 [开始阅读.html](开始阅读.html)，进入 [五阶段三十章](exports/llm/course.html)。[新版 PDF](deliverables/llm-course.pdf) · [EPUB](deliverables/llm-course.epub) · [作答后核对答案](deliverables/llm-course-answers.pdf)。当前为实施试读版，真实助手质量、独立复做与真人学习效果尚未全部验收；不以成品存在或 CI 代替能力证明。原十二课 [PDF](deliverables/llm-explained-handdraw.pdf) / [EPUB](deliverables/llm-explained-handdraw.epub) 保留。
 
 ![课程封面](book/assets/cover.webp)
 
@@ -18,6 +18,9 @@
 
 | 内容 | 文件 |
 | --- | --- |
+| 新版五阶段三十章 · 实施试读 | [学习路线](exports/llm/course.html) · [正文 PDF](deliverables/llm-course.pdf) · [正文 EPUB](deliverables/llm-course.epub) |
+| 分离作业核对依据 | [答案 PDF](deliverables/llm-course-answers.pdf) · [答案 EPUB](deliverables/llm-course-answers.epub) |
+| 可运行 Python 实例 | [资料助手](book/llm/examples/assistant/README.md) · [微型 decoder/SFT/LoRA](book/llm/examples/tiny_decoder/README.md) · [OCR](book/llm/examples/ocr/README.md) |
 | 大模型原理与应用 · 十二课试读 | [`exports/llm/index.html`](exports/llm/index.html) |
 | 手绘课程 PDF · A5 排版 | [`llm-explained-handdraw.pdf`](deliverables/llm-explained-handdraw.pdf) |
 | 手绘课程 EPUB · 可调字号 | [`llm-explained-handdraw.epub`](deliverables/llm-explained-handdraw.epub) |

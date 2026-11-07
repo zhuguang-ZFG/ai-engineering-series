@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C08 怎样拼成一个 Transformer · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html" aria-current="page">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C08-section-93e0a10041">先修桥：层、维度与沿路径追踪</a></li><li class="toc-level-2"><a href="#C08-section-8c77d15b08">双头例子：输入与参数</a></li><li class="toc-level-2"><a href="#C08-section-44617d941f">头 1：只取第一维</a></li><li class="toc-level-2"><a href="#C08-section-05848a4c81">头 2：只取第二维</a></li><li class="toc-level-2"><a href="#C08-section-4ad3093988">拼接与输出投影</a></li><li class="toc-level-2"><a href="#C08-section-1bb1089c80">为什么拼接后还要乘 WO</a></li><li class="toc-level-2"><a href="#C08-section-82ea8ef958">位置、前馈、残差、归一化、输出头</a></li><li class="toc-level-2"><a href="#C08-section-5a79dcf200">改一个条件：换位置，或动未来</a></li><li class="toc-level-2"><a href="#C08-section-56cc6dc250">这个玩具例子省略了什么</a></li><li class="toc-level-2"><a href="#C08-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C08-section-1c2c3b00ff">独立作业（容差 ±0.001）</a></li><li class="toc-level-2"><a href="#C08-section-2b4fd3fa08">项目增量：双头轨迹 v1</a></li><li class="toc-level-2"><a href="#C08-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C08"><p class="eyebrow">S2 / C08 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c07.html">C07</a></p><div class="article-body"><h1 id="C08-section-73c69c557b" tabindex="-1">C08 怎样拼成一个 Transformer</h1>
+<p>C07 只算了一行注意力。可真实模型不会只有一个头，也不会只有注意力。把同一段输入送进两组不同的投影，会发生什么？拼接之后为什么还要乘一个输出矩阵？这一章沿一个位置走完双头计算，再指出这个玩具例子<strong>没有</strong>包含哪些部件——知道边界，才不会把一张小矩阵当成整个模型。</p>
+<h2 id="C08-section-93e0a10041" tabindex="-1">先修桥：层、维度与沿路径追踪</h2>
+<p>先把三个词落到具体数字上：</p>
+<ul>
+<li><strong>维度</strong>：一个位置用几个数表示。本例如每个位置 2 维。</li>
+<li><strong>层</strong>：一组按顺序执行的计算。输入经过注意力、前馈、归一化等，可以堆叠多层。</li>
+<li><strong>沿路径追踪</strong>：选定一个位置，跟着它的向量从输入走到输出，每步记下形状与数值，不跳步。</li>
+</ul>
+<p>C07 的 <code>QKᵀ</code> 是“所有位置对所有位置”的分数矩阵；本章只需要其中一行。双头则是把同样的输入分别送进两组 <code>WQ/WK/WV</code>，各算一份，再把结果拼起来。</p>
+<h2 id="C08-section-8c77d15b08" tabindex="-1">双头例子：输入与参数</h2>
+<p>课程的人工 fixture（<code>book/llm/fixtures/multihead.json</code>）给出：</p>
+<pre><code>X = [1 0]       位置 0
+    [0 1]       位置 1
+    [1 1]       位置 2
+
+头1：WQ=[[1],[0]]，WK=[[1],[0]]，WV=[[1],[0]]
+头2：WQ=[[0],[1]]，WK=[[0],[1]]，WV=[[0],[1]]
+输出矩阵 WO = [[1, 1],
+               [1, -1]]
+当前位置 position = 1
+</code></pre>
+<p>每个头把 2 维投影成 1 维，所以单头输出是 1 个数；两个头拼接成 2 维，再乘 2×2 的 WO。这个例子能实际运行（<code>node book/llm/examples/multihead.mjs</code>），下面是它计算出的真实结果，不是手写近似。</p>
+<h2 id="C08-section-44617d941f" tabindex="-1">头 1：只取第一维</h2>
+<p>投影：</p>
+<ul>
+<li><code>Q = X·WQ</code>，每一行取第一维：<code>[1, 0, 1]</code></li>
+<li>K、V 相同：<code>[1, 0, 1]</code></li>
+</ul>
+<p>站在位置 1，q=0，只能看见位置 0 和 1：</p>
+<ul>
+<li>与 k0=1 的点积：<code>0×1=0</code></li>
+<li>与 k1=0 的点积：<code>0×0=0</code></li>
+<li><code>d_k=1</code>，缩放后仍是 <code>[0, 0]</code></li>
+<li>softmax：<code>[0.5, 0.5]</code></li>
+<li>汇总 V：<code>0.5×1 + 0.5×0 = 0.5</code></li>
+</ul>
+<p>头 1 输出 <code>[0.5]</code>。</p>
+<h2 id="C08-section-05848a4c81" tabindex="-1">头 2：只取第二维</h2>
+<p>投影：</p>
+<ul>
+<li><code>Q = [0, 1, 1]</code></li>
+<li>K、V 相同：<code>[0, 1, 1]</code></li>
+</ul>
+<p>站在位置 1，q=1，可见 k 为 0 和 1：</p>
+<ul>
+<li>点积：<code>[0, 1]</code></li>
+<li><code>d_k=1</code>，缩放后仍 <code>[0, 1]</code></li>
+<li>softmax：<code>exp(0)=1</code>，<code>exp(1)=2.71828</code>，总和 <code>3.71828</code></li>
+<li>权重：<code>[0.2689414, 0.7310586]</code></li>
+<li>汇总 V：<code>0.2689414×0 + 0.7310586×1 = 0.7310586</code></li>
+</ul>
+<p>头 2 输出 <code>[0.7310586]</code>。</p>
+<h2 id="C08-section-4ad3093988" tabindex="-1">拼接与输出投影</h2>
+<p>两个头的结果拼成 <code>[0.5, 0.7310586]</code>。乘 WO：</p>
+<ul>
+<li>第一维：<code>0.5×1 + 0.7310586×1 = 1.2310586</code></li>
+<li>第二维：<code>0.5×1 + 0.7310586×(-1) = -0.2310586</code></li>
+</ul>
+<p>实际程序输出为 <code>[1.2310585786300048, -0.2310585786300049]</code>。显示时的末位差异来自浮点表示，不是两种算法。</p>
+<p><img src="../../book/assets/handdraw/llm/multihead-flow.svg" alt="同一输入的两组 Q/K/V 投影，各自汇总后拼接并经过输出投影"></p>
+<p><em>图：两个头各自做因果注意力，结果拼接后乘输出矩阵。图只画两个一维头，不含位置、残差、归一化、前馈层或训练。</em></p>
+<h2 id="C08-section-1bb1089c80" tabindex="-1">为什么拼接后还要乘 WO</h2>
+<p>每个头输出的维度、含义由各自的投影决定。直接拼起来只是把两段数放在一起；WO 让模型学习怎样混合这些头的信息，并把拼接维度映射回需要的宽度。它不是“投票”，也没有固定的“头 1 管语法、头 2 管语义”的分工。头的作用要通过对具体输入和权重的分析来判断，不能凭编号分配。</p>
+<p>我也可以把两个头的结果相加而不是拼接，但那是另一种设计；本例按“拼接再投影”实现。改 WO 会改变最终向量，改某个头的 V 只会通过该头的输出影响结果。</p>
+<h2 id="C08-section-82ea8ef958" tabindex="-1">位置、前馈、残差、归一化、输出头</h2>
+<p>把这一层放回完整块，还需要：</p>
+<ul>
+<li><strong>位置信息</strong>：注意力本身对顺序不敏感。同一组词打乱，若没有任何位置信号，模型很难区分“甲帮助乙”和“乙帮助甲”。位置编码或 RoPE 等方法补进顺序或相对位置。</li>
+<li><strong>前馈网络（FFN）</strong>：对每个位置独立做一次“扩维—非线性—降维”的变换，增加表达能力；它不跨位置混合。</li>
+<li><strong>残差连接</strong>：把子层输入加到子层输出上，给信息和梯度一条直通路径。</li>
+<li><strong>归一化</strong>：调节数值尺度，帮助训练稳定。归一化放在子层前还是后，是不同架构的选择，不能把两种流程叠成一个固定图。</li>
+<li><strong>输出头</strong>：最后一层表示乘一个矩阵，得到词表大小的分数，再经 softmax 变成下一个 token 的概率。</li>
+</ul>
+<p><img src="../../book/assets/handdraw/llm/transformer-block.svg" alt="注意力之外的前馈层、残差与归一化"></p>
+<p><em>图：一种 pre-norm 简化块：先归一化，再进子层，结果与原路径相加；前馈子层重复这一结构。不同架构的实现并不全长这样。</em></p>
+<h2 id="C08-section-5a79dcf200" tabindex="-1">改一个条件：换位置，或动未来</h2>
+<p><strong>换位置</strong>：把 position 改成 0，只能看见位置 0。头 1 的输出变成 1（唯一的 V 是 1），头 2 的输出变成 0（唯一的 V 是 0），拼接 <code>[1,0]</code>，乘 WO 得 <code>[1,1]</code>。可见集合变了，权重与输出都变。</p>
+<p><strong>动未来</strong>：在 position=1 时把位置 2 的 V 改成 <code>[99]</code>（两个头都改）。位置 2 的权重为 0，输出不变。这验证了因果掩码仍在起作用，不是双头就绕过了未来。</p>
+<h2 id="C08-section-56cc6dc250" tabindex="-1">这个玩具例子省略了什么</h2>
+<p>fixture 的 <code>limitations</code> 写得很清楚：两个一维头、人工给定投影；<strong>没有位置编码、残差、归一化、前馈层或训练</strong>；不是完整 Transformer，也不是商用模型内部读数。它验证的是“双头投影—各自汇总—拼接—输出投影”这条数据流，不能用来声称模型能力或某头功能。</p>
+<h2 id="C08-section-4540eaf9d0" tabindex="-1">失败对照</h2>
+<ol>
+<li><strong>把双头当完整模型</strong>：缺 FFN、残差、归一化、位置、训练和输出头，不能据此解释真实模型行为。</li>
+<li><strong>拼接当相加</strong>：拼接保留两个头的信息，相加会混合；本例没有做相加。</li>
+<li><strong>忘记 mask</strong>：位置 1 看见位置 2，训练时等于偷看目标。</li>
+<li><strong>给头贴固定分工</strong>：没有检查具体权重与输入，不能断言“头 1 一定管某类关系”。</li>
+<li><strong>忽略浮点显示</strong>：末位差异不等于程序算错，比较时用容差。</li>
+</ol>
+<h2 id="C08-section-1c2c3b00ff" tabindex="-1">独立作业（容差 ±0.001）</h2>
+<ol>
+<li>用同一 fixture，把 position 改成 0，算两个头的输出、拼接向量与最终输出。</li>
+<li>position=1 时，把位置 2 的 V 改成 <code>[99]</code>，最终输出是否变化？写出理由与计算。</li>
+<li>写出 <code>X</code>、单头 Q、<code>QKᵀ</code>、拼接向量、WO 输出的形状（本例数字）。</li>
+<li>列出这个玩具例子缺少的至少四个部件，并各用一句话说明它们的作用。</li>
+<li>如果把两个头的结果相加而不是拼接，输出维度会怎样变？WO 还能直接用吗？</li>
+</ol>
+<p>核对过程在 <a href="c08-answer.html">C08 答案</a>。</p>
+<h2 id="C08-section-2b4fd3fa08" tabindex="-1">项目增量：双头轨迹 v1</h2>
+<p>在 S2 项目里新增 <code>multihead-trace.md</code>，记录：</p>
+<p><code>位置 | 头 | Q/K/V | 可见位置 | 分数 | 权重 | 单头输出</code></p>
+<p>再记 <code>拼接向量 | WO | 最终输出 | 与程序输出是否在容差内</code>。至少做一次换位置和一次“动未来”的对照；标明人工矩阵，不写成模型内部读数。</p>
+<h2 id="C08-section-82826587a3" tabindex="-1">来源与边界</h2>
+<p>本章使用课程 fixture D14 与 <code>examples/multihead.mjs</code> 的实际计算，沿用旧课 <a href="../../book/llm/lessons/attention.md">L04</a> 的注意力与因果掩码、旧深入页 <a href="../../book/llm/deepening/attention.md">attention.md</a> 的拼接和输出投影说明，复用图 G15/G05 的原始出处。矩阵是人工给定，<strong>不是 DeepSeek、Kimi 或任何模型的内部 Q/K/V</strong>；fixture 明确省略位置、残差、归一化、前馈与训练。真实模型的架构细节要按对应论文、配置和代码核对。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c07.html">上一章 C07</a><a href="c08-answer.html">独立作答后核对</a><a href="c09.html">下一章 C09</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

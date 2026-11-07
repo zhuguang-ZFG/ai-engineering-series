@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C22 质量、延迟和费用怎么取舍 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details open><summary>S4 · 会改进 / K4</summary><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html" aria-current="page">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C22-section-2f9be5bb88">先修检查：没有质量底线，不要比价格</a></li><li class="toc-level-2"><a href="#C22-section-ef0e6ecef6">三个指标，各自量什么</a></li><li class="toc-level-3"><a href="#C22-section-55847d2e5b">质量</a></li><li class="toc-level-3"><a href="#C22-section-18045b8c40">延迟</a></li><li class="toc-level-3"><a href="#C22-section-7fe8603c08">费用</a></li><li class="toc-level-2"><a href="#C22-section-19c9e9b353">同一验证集，只改一个设置</a></li><li class="toc-level-2"><a href="#C22-section-74aa2d1a81">分位数：小样本不要把 p95 当神</a></li><li class="toc-level-2"><a href="#C22-section-b1bcb0df33">用脚本读报告</a></li><li class="toc-level-2"><a href="#C22-section-687091c0d6">结果表：把质量放第一列</a></li><li class="toc-level-2"><a href="#C22-section-367f938b09">冷/热、缓存、批处理、模型选择</a></li><li class="toc-level-3"><a href="#C22-section-0b58bfe0ba">冷启动与热启动</a></li><li class="toc-level-3"><a href="#C22-section-8d1f10ee7b">前缀缓存</a></li><li class="toc-level-3"><a href="#C22-section-c9f7c41baa">批处理</a></li><li class="toc-level-3"><a href="#C22-section-6bdfb23aa4">模型选择</a></li><li class="toc-level-3"><a href="#C22-section-11b39c9377">Agent</a></li><li class="toc-level-2"><a href="#C22-section-997100fa2d">失败反例：四种“看起来更便宜”</a></li><li class="toc-level-2"><a href="#C22-section-a741bc2feb">图与已有实验</a></li><li class="toc-level-2"><a href="#C22-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C22-section-a9e47c89ca">项目增量：取舍目录</a></li><li class="toc-level-2"><a href="#C22-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C22"><p class="eyebrow">S4 / C22 · 实施试读版 · 教学效果待验收</p><p class="caption">先修：<a href="c21.html">C21</a></p><div class="article-body"><h1 id="C22-section-862afba7de" tabindex="-1">C22 质量、延迟和费用怎么取舍</h1>
+<p>假设你把 <code>top_k</code> 从 3 改成 1，验证集上的平均耗时下降，回答也“看起来没变差”。这时最容易犯的错，是直接宣布“更快更便宜，改进成功”。但平均耗时下降可能只是因为更多用例在检索阶段就失败、根本没调用模型；质量没变差也可能只是验证集太小，没覆盖需要多段证据的问题。</p>
+<p>C18 冻结了题和判据，C19 定位失败边界，C20 处理输入选择，C21 约束 Agent。C22 把三件事放在同一张表上：<strong>质量、延迟、费用</strong>。目标不是找到一个通用最优设置，而是对<strong>同一验证集、同一条件、只改一个因素</strong>的对照，给出有样本数、有分位数、有失败解释的采用或拒绝结论。</p>
+<h2 id="C22-section-2f9be5bb88" tabindex="-1">先修检查：没有质量底线，不要比价格</h2>
+<p>先写下三条底线，再看任何延迟或费用数字：</p>
+<ol>
+<li><strong>质量底线</strong>：哪些用例必须通过？严格通过率最低是多少？越权/引用失败是否一票否决？</li>
+<li><strong>延迟底线</strong>：在什么硬件、冷启动还是热启动、哪个分位数下比较？用户能接受的上限是多少？</li>
+<li><strong>费用底线</strong>：本地费用是否计价？API 价格单位是什么？是否包含重试、工具调用、人工复核？</li>
+</ol>
+<p>如果质量底线没定，便宜的系统可以通过“更早失败”获得更低的平均延迟，看起来很有吸引力。这不是优化，而是把失败藏进了统计。</p>
+<h2 id="C22-section-ef0e6ecef6" tabindex="-1">三个指标，各自量什么</h2>
+<h3 id="C22-section-55847d2e5b" tabindex="-1">质量</h3>
+<p>至少报告四层：</p>
+<pre><code class="language-text">summary.passed / summary.total          机械检查通过率
+strict pass / total                     人工逐例严格通过率
+supported claims / all claims           主张级证据支持率
+status_counts + first_failure.stage     失败分布，不是被平均掉
+</code></pre>
+<p><code>evaluate</code> 的 <code>passed</code> 只检查状态、引用文档和工具回执，不等于语义正确；C18 已经说明。严格通过还要人工核对 quote 是否支持 claim、answer 是否只含已核验文本。这里的“通过”是 C18 的提取式契约加人工语义复核：<strong>逐字 quote 不自动证明改写、推断或“因此”成立</strong>，也不能把机械校验通过当成事实正确。</p>
+<h3 id="C22-section-18045b8c40" tabindex="-1">延迟</h3>
+<p>报告里有两个不同的时间：</p>
+<ul>
+<li><code>usage.latency_ms</code>：模型调用的累计耗时；本地模型第一次调用还包含加载时间；</li>
+<li><code>elapsed_ms</code>：整条流水线从开始到结束的墙钟时间，包含检索、提示组装、模型、解析和校验。</li>
+</ul>
+<p>本地 <code>usage.model_load_ms</code> 是加载权重的耗时，已经包含在第一次 <code>latency_ms</code> 里；后续调用通常为 0。API 的 <code>load_ms</code> 为 0，但 <code>latency_ms</code> 包含网络请求时间。不要拿本地的冷启动和 API 的热请求直接比较，也不要把 <code>usage.latency_ms</code> 当成用户感知的全部时间。</p>
+<h3 id="C22-section-7fe8603c08" tabindex="-1">费用</h3>
+<p>本地报告固定：</p>
+<pre><code class="language-json">{&quot;cost&quot;: null, &quot;cost_basis&quot;: &quot;local-compute-not-priced&quot;}
+</code></pre>
+<p>这不是“免费”，而是“本工具没有把电费、硬件折旧、运维和人工时间计价”。不要自己编一个单价填进去。</p>
+<p>API 只有同时提供输入/输出价格时才计算：</p>
+<p>[
+\text{cost}=\frac{\text{prompt_tokens}}{1000}\times \text{price_input_per_1k}
++\frac{\text{completion_tokens}}{1000}\times \text{price_output_per_1k}
+]</p>
+<p>例如 1000 个输入 token、200 个输出 token，输入价 0.5、输出价 1.5（单位以你的价格表为准）：(1000/1000\times0.5+200/1000\times1.5=0.5+0.3=0.8)。这是算术示例，不是任何供应商的真实价格。</p>
+<p><code>evaluate</code> 的聚合 <code>usage.cost</code> 被固定为 <code>null</code>，<code>cost_basis</code> 为 <code>per-case reports</code>；若要总费用，需要从每个 <code>cases[].report.usage.cost</code> 汇总，并且只汇总非 <code>null</code> 的 API 用例。本地用例的 <code>null</code> 不能被当成 0 后再求平均，否则会制造“本地免费”的假象。</p>
+<h2 id="C22-section-19c9e9b353" tabindex="-1">同一验证集，只改一个设置</h2>
+<p>下面用样例清单演示流程。样例是<strong>待评审的教学样例，不是 CI 基线</strong>；换成你自己的 <code>eval-val.json</code> 才有意义。</p>
+<p>先复制出两个只差 <code>top_k</code> 的清单：</p>
+<pre><code class="language-bash">mkdir -p out/c22
+
+python - &lt;&lt;&#39;PY&#39;
+import json
+import pathlib
+
+src = pathlib.Path(&quot;book/llm/examples/assistant/eval-manifest.json&quot;)
+data = json.loads(src.read_text(encoding=&quot;utf-8&quot;))
+for name, top_k in ((&quot;eval-val-topk3.json&quot;, 3), (&quot;eval-val-topk1.json&quot;, 1)):
+    item = json.loads(json.dumps(data))
+    item[&quot;budgets&quot;][&quot;top_k&quot;] = top_k
+    out = pathlib.Path(&quot;out/c22&quot;) / name
+    out.write_text(json.dumps(item, ensure_ascii=False, indent=2) + &quot;\n&quot;, encoding=&quot;utf-8&quot;)
+    print(out)
+PY
+</code></pre>
+<p>两个文件只有 <code>budgets.top_k</code> 不同；它们各自的 SHA-256 不同，因此是两个条件，不是“同一个冻结清单”。运行：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py evaluate \
+  --manifest out/c22/eval-val-topk3.json \
+  --model path/to/local-model \
+  --json out/c22/val-topk3.json \
+  --markdown out/c22/val-topk3.md
+
+python book/llm/examples/assistant/assistant.py evaluate \
+  --manifest out/c22/eval-val-topk1.json \
+  --model path/to/local-model \
+  --json out/c22/val-topk1.json \
+  --markdown out/c22/val-topk1.md
+</code></pre>
+<p>比较顺序：</p>
+<ol>
+<li>质量底线是否仍满足（严格通过、引用支持、越权为零）；</li>
+<li>若质量下降，直接拒绝，不看延迟/费用；</li>
+<li>若质量不降，比较样本数、中位数、p95 和调用次数；</li>
+<li>检查失败分布是否变化（例如更多零命中导致“更快”）；</li>
+<li>给出采用/不采用结论，并写清适用条件。</li>
+</ol>
+<p>只改 <code>top_k</code> 是一个例子。也可以只改 <code>max_new_tokens</code>、只改检索器、只换模型；但每次只改一个，且保持题、文档、读者、阈值、提示模板不变。不要同时改 <code>top_k</code> 和 <code>max_new_tokens</code>，否则无法归因。</p>
+<h2 id="C22-section-74aa2d1a81" tabindex="-1">分位数：小样本不要把 p95 当神</h2>
+<p>先定义算法。常用 nearest-rank：</p>
+<p>[
+\text{p95}=\text{排序后第}\ \lceil 0.95\times n\rceil\ \text{个值（1 开始计数）}
+]</p>
+<p>中位数（p50）：</p>
+<ul>
+<li>奇数个：正中间那个；</li>
+<li>偶数个：中间两个的平均。</li>
+</ul>
+<p>例：8 次端到端耗时（毫秒）：</p>
+<pre><code class="language-text">1200, 1300, 1400, 1500, 1600, 1700, 1800, 9000
+</code></pre>
+<ul>
+<li>中位数：((1500+1600)/2=1550) ms；</li>
+<li>nearest-rank p95：(\lceil0.95\times8\rceil=\lceil7.6\rceil=8)，第 8 个是 <strong>9000 ms</strong>；</li>
+<li>平均值：((1200+1300+1400+1500+1600+1700+1800+9000)/8=2437.5) ms。</li>
+</ul>
+<p>这组数说明：</p>
+<ul>
+<li>一个离群点会把平均值拉高，中位数仍接近常见值；</li>
+<li>(n=8) 时 p95 就是最大值，不能据此估计“95% 用户”的体验；</li>
+<li>必须报告 <code>n</code> 和所有点（或至少 min/median/max），不能只写“p95=9000”而不说样本只有 8 个；</li>
+<li>若用线性插值，p95 会得到不同数值；必须写明算法，不能和别人的 p95 直接比。</li>
+</ul>
+<p>(n=20) 时，nearest-rank p95 是第 (\lceil19\rceil=19) 个值；(n=100) 时是第 95 个。样本越少，分位数越不稳定。不要编造置信区间；可以说“样本不足，暂不下结论”。</p>
+<h2 id="C22-section-b1bcb0df33" tabindex="-1">用脚本读报告</h2>
+<p>以下脚本从 <code>evaluate</code> JSON 中取每例的实际状态、模型调用耗时和端到端耗时，输出 <code>n</code>、中位数、nearest-rank p95。它不判断质量，只做算术：</p>
+<pre><code class="language-bash">python - &lt;&lt;&#39;PY&#39;
+import json
+import math
+import pathlib
+import statistics
+
+path = pathlib.Path(&quot;out/c22/val-topk3.json&quot;)
+data = json.loads(path.read_text(encoding=&quot;utf-8&quot;))
+rows = []
+for case in data[&quot;cases&quot;]:
+    usage = case[&quot;report&quot;].get(&quot;usage&quot;, {})
+    rows.append({
+        &quot;id&quot;: case[&quot;id&quot;],
+        &quot;status&quot;: case[&quot;actual_status&quot;],
+        &quot;calls&quot;: usage.get(&quot;calls&quot;, 0),
+        &quot;model_ms&quot;: usage.get(&quot;latency_ms&quot;, 0.0),
+        &quot;load_ms&quot;: usage.get(&quot;model_load_ms&quot;, 0.0),
+        &quot;elapsed_ms&quot;: case[&quot;report&quot;].get(&quot;elapsed_ms&quot;, 0.0),
+    })
+
+def nearest_rank(values, p):
+    if not values:
+        return None
+    ordered = sorted(values)
+    index = max(1, math.ceil(p / 100.0 * len(ordered)))
+    return ordered[index - 1]
+
+model_called = [row for row in rows if row[&quot;calls&quot;] &gt; 0]
+print(&quot;n_total&quot;, len(rows))
+print(&quot;n_model_called&quot;, len(model_called))
+for label, subset in ((&quot;all&quot;, rows), (&quot;model_called&quot;, model_called)):
+    elapsed = [row[&quot;elapsed_ms&quot;] for row in subset]
+    model = [row[&quot;model_ms&quot;] for row in subset]
+    print(label, {
+        &quot;n&quot;: len(subset),
+        &quot;elapsed_p50&quot;: statistics.median(elapsed) if elapsed else None,
+        &quot;elapsed_p95&quot;: nearest_rank(elapsed, 95),
+        &quot;model_p50&quot;: statistics.median(model) if model else None,
+        &quot;model_p95&quot;: nearest_rank(model, 95),
+    })
+for row in rows:
+    print(row)
+PY
+</code></pre>
+<p>解释：</p>
+<ul>
+<li><code>all</code> 包含在检索/权限阶段就失败的用例，它们的 <code>elapsed_ms</code> 可能很小；如果失败变多，<code>all</code> 的平均/中位数会“变快”。这正是要先看质量的原因。</li>
+<li><code>model_called</code> 只包含真正调用过模型的用例，更适合比较模型工作量；但它仍可能因失败模式不同而产生选择偏差，必须同时看状态分布。</li>
+<li><code>elapsed_ms</code> 和 <code>model_ms</code> 不要混用；<code>load_ms</code> 在本地第一次调用中已经包含在 <code>model_ms</code> 内，不能重复加。</li>
+</ul>
+<h2 id="C22-section-687091c0d6" tabindex="-1">结果表：把质量放第一列</h2>
+<p>运行后填写实际值：</p>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>n</th>
+<th>机械通过</th>
+<th>严格通过</th>
+<th>支持率</th>
+<th>失败状态</th>
+<th>调用次数</th>
+<th>中位耗时</th>
+<th>p95 耗时</th>
+<th>费用/计价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>top_k=3</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>本地 null / API 填写</td>
+</tr>
+<tr>
+<td>top_k=1</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>填写</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p>合格结论示例：</p>
+<blockquote>
+<p>在 12 个验证用例上，top_k=1 的严格通过从（原值）降到（新值），其中两个需要多段证据的用例变为 insufficient-evidence；虽然中位耗时下降，但质量底线未满足，因此不采用。该结论只适用于这批文档、模型和预算。</p>
+</blockquote>
+<p>不合格结论：</p>
+<ul>
+<li>“平均快 30%，所以更好”（没有质量、样本数、失败分布）；</li>
+<li>“p95 降低”（n=3，p95 就是最大值，没有比较意义）；</li>
+<li>“本地费用为 0”（本地是 <code>null</code>，不是免费）；</li>
+<li>“API 费用更低”（只比较了 token 单价，没有算重试、工具调用、人工复核）；</li>
+<li>“所有任务都适用”（没有限定文档、模型、预算）。</li>
+</ul>
+<h2 id="C22-section-367f938b09" tabindex="-1">冷/热、缓存、批处理、模型选择</h2>
+<h3 id="C22-section-0b58bfe0ba" tabindex="-1">冷启动与热启动</h3>
+<p>本地第一次调用包含模型加载，<code>usage.model_load_ms</code> 会明显大于后续；API 也可能有冷启动和网络波动。合格的比较：</p>
+<ul>
+<li>明确是冷启动还是热启动；</li>
+<li>两种条件各自测，或先做一次不计入统计的预热；</li>
+<li>不把本地冷启动与 API 热请求放在同一列；</li>
+<li>报告 <code>model_load_ms</code>，不要把它藏进平均值。</li>
+</ul>
+<h3 id="C22-section-8d1f10ee7b" tabindex="-1">前缀缓存</h3>
+<p>前缀缓存只对相同前缀有帮助。两个请求问题不同、检索片段不同，不能假定命中；缓存命中也可能因为版本/权限变化而引入旧内容。需要验证：</p>
+<ul>
+<li>相同前缀的重复请求是否真的减少了耗时；</li>
+<li>不同问题是否仍保持正确；</li>
+<li>缓存是否按读者/版本来隔离；不能把教师答案缓存给学生。</li>
+</ul>
+<h3 id="C22-section-c9f7c41baa" tabindex="-1">批处理</h3>
+<p>批处理提高吞吐量，但不保证降低单请求延迟；排队可能让 p95 变差。若使用批处理，报告批大小、队列等待和单请求延迟，不能只报总吞吐。</p>
+<h3 id="C22-section-6bdfb23aa4" tabindex="-1">模型选择</h3>
+<p>更小/更便宜的模型可能降低费用，但必须用同一验证集重测质量；不能把“参数少”当成“质量相同”。模型切换也改变 tokenizer、聊天模板和输出格式，引用校验可能失败；这些都要计入质量，而不是当成“偶发”。</p>
+<h3 id="C22-section-11b39c9377" tabindex="-1">Agent</h3>
+<p>Agent 每一步都是一次模型调用；工具调用还会增加上下文和回执。C21 的对照应纳入质量/延迟/费用表，不能只看最终答案。若 Agent 没有质量收益，固定流程更可预测。</p>
+<h2 id="C22-section-997100fa2d" tabindex="-1">失败反例：四种“看起来更便宜”</h2>
+<ol>
+<li><strong>更早失败</strong>：权限/零命中让用例在模型调用前结束，平均延迟下降；质量同时下降。先看质量底线。</li>
+<li><strong>样本太少</strong>：3 个用例的 p95 没有意义；报告所有点，不宣称分位数。</li>
+<li><strong>只算 token 单价</strong>：忽略重试、工具、缓存未命中、人工复核和基础设施；费用不完整。</li>
+<li><strong>把本地 null 当 0</strong>：本地没有计价，不等于零成本；也不等于 API 价格。</li>
+</ol>
+<p>还有一个隐蔽失败：API 价格只提供输入价、没提供输出价，报告 <code>cost=null</code>；不要用输入价乘以全部 token。必须两个价格都有且 usage 完整才计算。</p>
+<h2 id="C22-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
+<p>下图强调开发、验证、留出的分工；C22 的比较只在验证集上进行，留出集留到最终决定。</p>
+<p><img src="../../book/assets/handdraw/llm/evaluation-split.svg" alt="同一验证集上比较，不用留出集调参"></p>
+<p>旧实验 <a href="approaches.html">L11 方法选择</a> 用网页材料讨论提示、检索、工具和微调的适用条件；它不提供真实延迟/费用数据，也不能替代本章的实测表。</p>
+<h2 id="C22-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li><strong>单因素对照</strong>：在同一验证集上只改 <code>top_k</code>（3→1）或只改 <code>max_new_tokens</code>，生成两个清单和两份报告。填质量/延迟/费用表，给出采用或不采用结论。</li>
+<li><strong>算一次分位数</strong>：从报告取 8 个端到端耗时，手算中位数和 nearest-rank p95；再用脚本核对。说明 n 小为什么不能宣称“95% 用户”。</li>
+<li><strong>算一次 API 费用</strong>：假设 1000 输入 token、200 输出 token，价格自定（写清单位），按公式算；再说明本地为何是 <code>null</code> 而不是 0。</li>
+<li><strong>制造一次“更快但更差”</strong>：把 <code>top_k</code> 降到 1，找出至少一个因缺证据失败的用例；证明平均延迟下降不能抵消质量底线。</li>
+<li><strong>写决策备忘录</strong>：列出质量底线、样本数、冷/热条件、分位数算法、费用口径和适用限制；至少写一条“不采用”的理由。</li>
+</ol>
+<p>答案与核对依据见 <a href="c22-answer.html">C22 答案</a>。</p>
+<h2 id="C22-section-a9e47c89ca" tabindex="-1">项目增量：取舍目录</h2>
+<pre><code class="language-text">tradeoff/
+  eval-val-topk3.json
+  eval-val-topk1.json
+  out/
+    val-topk3.json
+    val-topk1.json
+  notes/
+    metrics.md
+    percentile.md
+    decision.md
+</code></pre>
+<p><code>metrics.md</code> 记录质量/延迟/费用的定义和样本数；<code>percentile.md</code> 写排序后的原始值、中位数和 p95 算法；<code>decision.md</code> 写采用/拒绝理由、适用条件和未验证项。</p>
+<h2 id="C22-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>本章使用 <code>assistant.py</code> 的 <code>usage.latency_ms</code>、<code>usage.model_load_ms</code>、<code>elapsed_ms</code>、<code>cost</code>、<code>cost_basis</code>、<code>evaluate</code> 的 <code>summary</code> 与逐例报告；字段以 <code>book/llm/examples/assistant/README.md</code> 与源码为准。价格公式是通用算术，示例价格不是任何供应商的报价；本地费用固定为 <code>null</code>，不声称免费。分位数例子是教师手写数据，不是模型测量；<code>n=8</code> 的 p95 只用于说明小样本问题。样例 <code>eval-manifest.json</code> 是待评审样例，不是 CI 基线；本章不声称任何设置带来普遍提升，也不提供实际延迟、费用或通过率。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c21.html">上一章 C21</a><a href="c22-answer.html">独立作答后核对</a><a href="c23.html">下一章 C23</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

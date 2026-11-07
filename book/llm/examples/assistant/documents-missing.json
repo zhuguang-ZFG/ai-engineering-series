@@ -1,0 +1,19 @@
+{
+  "schema": "assistant-documents/1",
+  "documents": [
+    {
+      "id": "station-log",
+      "title": "观测站值班记录",
+      "path": "docs/station-log.md",
+      "version": "1.0.0",
+      "readers": ["student"]
+    },
+    {
+      "id": "field-handbook-v2",
+      "title": "外场手册第二版（尚缺文件）",
+      "path": "docs/field-handbook-v2.md",
+      "version": "2.0.0",
+      "readers": ["student"]
+    }
+  ]
+}
