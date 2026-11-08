@@ -113,9 +113,9 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 6.0 MB）与 A4 排版的 PDF（中文版 520 页 / 36.4 MB，英文版 559 页 / 24.3 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的；本轮 Windows 本机排中文为 524 页 / 25.4 MB、英文 581 页 / 12.9 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 6.0 MB）与 A4 排版的 PDF（中文版 520 页 / 34.5 MB，英文版 559 页 / 23.5 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的；本轮 Windows 本机排中文为 524 页 / 23.5 MB、英文 581 页 / 12.0 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
 
-上面那对 CI 数字来自本轮 [Release 实测](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42394241613) 的已完成 Full 构建；该次运行因旧 README 数字不符而失败，不能冒称发布成功。`scripts/check_artifact_claims.py` 会把 README 与当次构建逐一对账；此处只回填产物实测，不改变检查规则。本机字体数字另记，不代替 CI 口径。
+上面那对 CI 数字来自 [v0.3.6 发布运行](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42423483244) 的已完成 Full 构建与装配产物，体积按发布资产逐一读取。`scripts/check_artifact_claims.py` 会把 README 的页数与 HTML 体积和当次构建逐一对账；此处只回填产物实测，不改变检查规则。本机字体数字另记，不代替 CI 口径。
 
 | 文件 | 语言 |
 |------|------|
@@ -151,7 +151,7 @@ python scripts/bookctl.py release --version 0.3.6 --out-dir ../book-release --ep
 
 目录里有中英双语 HTML/PDF、Omp 中文 HTML/PDF、可选 EPUB、`site.zip`、15 章视频清单、`release-notes.json`、`SHA256SUMS` 以及记录命令、提交、浏览器/字体与产物哈希的 `build-report.json` / `artifact-manifest.json`。任一步失败都不会留下半成品发布目录。
 
-**状态（2026-11）：** 发布装配脚本和 `release.yml` 已就位，但还没有在 CI 运行过，P3/P5 门禁也尚未正式批准；仓库还没有 `v*` 发布标签或 GitHub Release，干净克隆演练与 P6 清理同样未完成。本地绿不等于远端发布通过。改造边界与证据见 [架构决策记录](docs/architecture-decisions.md)、[P3 结构对照](docs/migrations/legacy-v2-structure.md)、[产品页视觉审计](docs/migrations/product-visual-audit.md) 与 [发布迁移说明](docs/migrations/release-migration.md)。
+**状态（2026-11-08）：** `v0.3.6` 已由 `release.yml` 在标签推送运行（[run 42423483244](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42423483244)）中装配并发布到 [GitHub Release](https://github.com/zhuguang-ZFG/claude-code-book/releases/tag/v0.3.6)：三册 HTML/PDF/EPUB、`site.zip`、15 章视频清单、`SHA256SUMS` 与两份构建报告共 15 个资产；已发布的 14 个文件逐一与 `SHA256SUMS` 对上。P3/P5 门禁仍待独立审阅，`task_verify` 仍为 unverified。改造边界与证据见 [架构决策记录](docs/architecture-decisions.md)、[P3 结构对照](docs/migrations/legacy-v2-structure.md)、[产品页视觉审计](docs/migrations/product-visual-audit.md) 与 [发布迁移说明](docs/migrations/release-migration.md)。
 
 ## 参与修订
 

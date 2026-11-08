@@ -139,12 +139,13 @@
       重建三册 HTML/PDF 与 EPUB，`build-report.json` 记录的提交为该合并提交；Ubuntu
       由同树候选的 Bootstrap（ubuntu-latest）与 `release.yml` 全量装配/校验完成，
       Bootstrap（windows-latest）同时通过。
-- [ ] P8.6 发布首个新架构版本并保留 legacy 标签与迁移说明。
-      迁移说明已写 `docs/migrations/release-migration.md`；`legacy/pre-platform-2026-11-03`
-      标签保留。2026-11-08 复核：`v*` 标签与 GitHub Release 仍未创建，故不勾选。
+- [x] P8.6 发布首个新架构版本并保留 legacy 标签与迁移说明。
+      `v0.3.6`（标签对象 `cbdbe0f`，提交 `4050c7c`）由 `release.yml` 的标签运行
+      42423483244 装配并发布为 GitHub Release，15 个资产；发布后 14 个可下载文件与
+      `SHA256SUMS` 逐一一致。`legacy/pre-platform-2026-11-03` 保留，迁移说明见
+      `docs/migrations/release-migration.md`。
 - [ ] Gate：规格第 7 节全部验收；旧路径无调用者；正式发布产物可下载、可校验。
-      P8.5 已完成；P8.6（`v*` 标签与 GitHub Release）及 P3/P5 门禁仍未完成，
-      Gate 不勾选。
+      P8.5/P8.6 已完成；P3/P5 门禁仍未完成，Gate 不勾选。
 
 ## 建议 PR 切片
 
