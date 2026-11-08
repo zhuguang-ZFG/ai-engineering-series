@@ -12,6 +12,7 @@ on:
       - '附录/**'
       - 'en/**'
       - 'omp/**'
+      - 'pi/**'
       - 'yuyu-book/**'
       - 'scripts/**'
       - 'tests/**'
@@ -29,6 +30,7 @@ on:
       - '附录/**'
       - 'en/**'
       - 'omp/**'
+      - 'pi/**'
       - 'yuyu-book/**'
       - 'scripts/**'
       - 'tests/**'
@@ -147,4 +149,34 @@ jobs:
         with:
           name: yuyu-omp-dist
           path: yuyu-book/dist/yuyu-omp-*
+          if-no-files-found: error
+
+  pi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: python -m pip install -r yuyu-book/requirements.txt
+      - name: Install CJK fonts
+        timeout-minutes: 12
+        run: |
+          sudo apt-get -o Acquire::Retries=3 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30                install -y fonts-noto-cjk
+      - name: Install Chromium
+        timeout-minutes: 15
+        run: python -m playwright install --with-deps chromium
+      - name: Build the Pi edition (zh + PDF + EPUB)
+        run: python scripts/bookctl.py build --product pi --lang zh --pdf --epub
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yuyu-pi-dist
+          path: yuyu-book/dist/yuyu-pi-*
           if-no-files-found: error

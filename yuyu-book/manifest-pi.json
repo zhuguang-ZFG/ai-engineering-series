@@ -1,0 +1,823 @@
+{
+  "schema_version": 1,
+  "product": "pi",
+  "version": "0.1.0-wip",
+  "date": "2026-11-08",
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "title": {
+    "zh": "Pi Agent：从原理到实战"
+  },
+  "subtitle": {
+    "zh": "极简终端编程 agent（pi）的机制、改造与边界 · 非官方"
+  },
+  "kicker": {
+    "zh": "Minimal Harness · Make It Yours"
+  },
+  "notice": {
+    "zh": "Pi 为 Earendil Inc. 与贡献者的开源项目；本书是独立的技术分析与教程，不是官方出版物，与其无隶属关系。命令、旗标与默认值以你本机 pi --version 及附录 E 为准。"
+  },
+  "epigraph": {
+    "zh": "模型是马，工具是手，循环是缰绳；壳越小，越要看清边界在哪。——本书"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-pi",
+  "revisions_registry": "revisions-pi.json",
+  "subject_index_registry": null,
+  "plain_optional": false,
+  "pin": {
+    "writing": "pi/1.5.0",
+    "verified_windows": "pi/1.5.0"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "零基础先跑通"
+      },
+      "body": {
+        "zh": "第 1–2 章 → 第 4–5 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "想改造 Pi"
+      },
+      "body": {
+        "zh": "第 11 章 → 第 14–19 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "CI 或不可信仓库"
+      },
+      "body": {
+        "zh": "第 8 章 → 第 21–22 章。"
+      }
+    }
+  ],
+  "front": {
+    "id": "pi-front",
+    "zh": "pi/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "pi-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "认识这台机器"
+      },
+      "motto": {
+        "zh": "先看它砍掉了什么"
+      },
+      "goal": {
+        "zh": "先看它砍掉了什么"
+      },
+      "units": [
+        {
+          "id": "pi-ch01",
+          "zh": "pi/ch01.md"
+        },
+        {
+          "id": "pi-ch02",
+          "zh": "pi/ch02.md"
+        },
+        {
+          "id": "pi-ch03",
+          "zh": "pi/ch03.md"
+        }
+      ]
+    },
+    {
+      "id": "pi-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "每天怎么用"
+      },
+      "motto": {
+        "zh": "输入、会话、上下文、压缩、带走结果"
+      },
+      "goal": {
+        "zh": "把 Pi 用进日常"
+      },
+      "units": [
+        {
+          "id": "pi-ch04",
+          "zh": "pi/ch04.md"
+        },
+        {
+          "id": "pi-ch05",
+          "zh": "pi/ch05.md"
+        },
+        {
+          "id": "pi-ch06",
+          "zh": "pi/ch06.md"
+        },
+        {
+          "id": "pi-ch07",
+          "zh": "pi/ch07.md"
+        },
+        {
+          "id": "pi-ch08",
+          "zh": "pi/ch08.md"
+        }
+      ]
+    },
+    {
+      "id": "pi-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "内部原理"
+      },
+      "motto": {
+        "zh": "一次 turn、模型层、工具层、会话格式、TUI"
+      },
+      "goal": {
+        "zh": "读懂事件与生命周期"
+      },
+      "units": [
+        {
+          "id": "pi-ch09",
+          "zh": "pi/ch09.md"
+        },
+        {
+          "id": "pi-ch10",
+          "zh": "pi/ch10.md"
+        },
+        {
+          "id": "pi-ch11",
+          "zh": "pi/ch11.md"
+        },
+        {
+          "id": "pi-ch12",
+          "zh": "pi/ch12.md"
+        },
+        {
+          "id": "pi-ch13",
+          "zh": "pi/ch13.md"
+        }
+      ]
+    },
+    {
+      "id": "pi-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "扩展与集成"
+      },
+      "motto": {
+        "zh": "扩展、技能、模板、主题、包、SDK/RPC"
+      },
+      "goal": {
+        "zh": "按需要改造 Pi"
+      },
+      "units": [
+        {
+          "id": "pi-ch14",
+          "zh": "pi/ch14.md"
+        },
+        {
+          "id": "pi-ch15",
+          "zh": "pi/ch15.md"
+        },
+        {
+          "id": "pi-ch16",
+          "zh": "pi/ch16.md"
+        },
+        {
+          "id": "pi-ch17",
+          "zh": "pi/ch17.md"
+        },
+        {
+          "id": "pi-ch18",
+          "zh": "pi/ch18.md"
+        },
+        {
+          "id": "pi-ch19",
+          "zh": "pi/ch19.md"
+        }
+      ]
+    },
+    {
+      "id": "pi-p5",
+      "no": {
+        "zh": "第五篇"
+      },
+      "title": {
+        "zh": "实战"
+      },
+      "motto": {
+        "zh": "真实交付、无头自动化、不可信仓库、排错"
+      },
+      "goal": {
+        "zh": "在项目与 CI 里用"
+      },
+      "units": [
+        {
+          "id": "pi-ch20",
+          "zh": "pi/ch20.md"
+        },
+        {
+          "id": "pi-ch21",
+          "zh": "pi/ch21.md"
+        },
+        {
+          "id": "pi-ch22",
+          "zh": "pi/ch22.md"
+        },
+        {
+          "id": "pi-ch23",
+          "zh": "pi/ch23.md"
+        }
+      ]
+    },
+    {
+      "id": "pi-p6",
+      "no": {
+        "zh": "第六篇"
+      },
+      "title": {
+        "zh": "精通与收束"
+      },
+      "motto": {
+        "zh": "源码地图、三册对照"
+      },
+      "goal": {
+        "zh": "知道下一步读什么"
+      },
+      "units": [
+        {
+          "id": "pi-ch24",
+          "zh": "pi/ch24.md"
+        },
+        {
+          "id": "pi-ch25",
+          "zh": "pi/ch25.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "pi-apxa",
+      "zh": "pi/appendix-A.md"
+    },
+    {
+      "id": "pi-apxb",
+      "zh": "pi/appendix-B.md"
+    },
+    {
+      "id": "pi-apxc",
+      "zh": "pi/appendix-C.md"
+    },
+    {
+      "id": "pi-apxd",
+      "zh": "pi/appendix-D.md"
+    },
+    {
+      "id": "pi-apxe",
+      "zh": "pi/appendix-E.md"
+    }
+  ],
+  "guides": {
+    "pi-front": {
+      "question": {
+        "zh": "为什么再写一本 Pi 的书？"
+      },
+      "deliverable": {
+        "zh": "知道三册的分工与本册的试章范围。"
+      },
+      "boundary": {
+        "zh": "不把未验证写成已验证。"
+      },
+      "plain": {
+        "zh": "为什么再写一本：Pi 的取舍与本书范围。"
+      },
+      "plain_evidence": [
+        "pi/00-前言.md:3"
+      ]
+    },
+    "pi-ch01": {
+      "question": {
+        "zh": "Pi 砍掉了什么，为什么这是卖点？"
+      },
+      "deliverable": {
+        "zh": "能用 4 个默认工具与无内置权限系统解释它的边界。"
+      },
+      "boundary": {
+        "zh": "不把极简误解成有隐形护栏。"
+      },
+      "plain": {
+        "zh": "Pi 的卖点是可做小，不是功能多。"
+      },
+      "plain_evidence": [
+        "pi/ch01.md:3"
+      ]
+    },
+    "pi-ch02": {
+      "question": {
+        "zh": "怎么装、装完怎么确认、第一圈在哪跑？"
+      },
+      "deliverable": {
+        "zh": "能从版本、Node、目录三处确认环境。"
+      },
+      "boundary": {
+        "zh": "先 cd 再启动，别在家目录跑。"
+      },
+      "plain": {
+        "zh": "装好、确认版本、在正确目录跑第一圈。"
+      },
+      "plain_evidence": [
+        "pi/ch02.md:3"
+      ]
+    },
+    "pi-ch03": {
+      "question": {
+        "zh": "模型、provider、凭据怎么串起来？"
+      },
+      "deliverable": {
+        "zh": "能按凭据优先级排查‘模型找不到’。"
+      },
+      "boundary": {
+        "zh": "不要把模型目录当成可用性证明。"
+      },
+      "plain": {
+        "zh": "模型、provider、凭据三层，缺一层就找不到。"
+      },
+      "plain_evidence": [
+        "pi/ch03.md:1"
+      ]
+    },
+    "pi-ch04": {
+      "question": {
+        "zh": "运行中插话，消息什么时候生效？"
+      },
+      "deliverable": {
+        "zh": "能区分 steering、follow-up 与 abort。"
+      },
+      "boundary": {
+        "zh": "Windows Terminal 会截走部分 Alt 键。"
+      },
+      "plain": {
+        "zh": "输入分发送与排队，选错只会让补充晚到。"
+      },
+      "plain_evidence": [
+        "pi/ch04.md:3"
+      ]
+    },
+    "pi-ch05": {
+      "question": {
+        "zh": "会话为什么是树，回退回退的是什么？"
+      },
+      "deliverable": {
+        "zh": "能解释 --continue 与 --resume 的目录差异。"
+      },
+      "boundary": {
+        "zh": "不要手改 parentId 合并分支。"
+      },
+      "plain": {
+        "zh": "回退不是覆盖，旧分支仍在树里。"
+      },
+      "plain_evidence": [
+        "pi/ch05.md:1"
+      ]
+    },
+    "pi-ch06": {
+      "question": {
+        "zh": "模型每次看到什么？"
+      },
+      "deliverable": {
+        "zh": "能证明 AGENTS.md 进了 project_context。"
+      },
+      "boundary": {
+        "zh": "上下文文件不受项目信任门禁。"
+      },
+      "plain": {
+        "zh": "位置决定作用域，信任不保护上下文文件。"
+      },
+      "plain_evidence": [
+        "pi/ch06.md:1"
+      ]
+    },
+    "pi-ch07": {
+      "question": {
+        "zh": "压缩和分支摘要各解决什么问题？"
+      },
+      "deliverable": {
+        "zh": "能说出阈值公式与 firstKeptEntryId 的作用。"
+      },
+      "boundary": {
+        "zh": "压缩不删原始条目。"
+      },
+      "plain": {
+        "zh": "摘要换窗口，原始条目不会被删。"
+      },
+      "plain_evidence": [
+        "pi/ch07.md:1"
+      ]
+    },
+    "pi-ch08": {
+      "question": {
+        "zh": "文本、JSON、RPC 各自适合什么？"
+      },
+      "deliverable": {
+        "zh": "能按 agent_settled 判断一次 run 真的结束。"
+      },
+      "boundary": {
+        "zh": "不要把 print 输出当 JSON。"
+      },
+      "plain": {
+        "zh": "文本、事件流、双向控制，三种出口别混用。"
+      },
+      "plain_evidence": [
+        "pi/ch08.md:10"
+      ]
+    },
+    "pi-ch09": {
+      "question": {
+        "zh": "一次 turn 里发生了什么？"
+      },
+      "deliverable": {
+        "zh": "能列出 turn 的五段工具生命周期。"
+      },
+      "boundary": {
+        "zh": "agent_end 不是最终结束。"
+      },
+      "plain": {
+        "zh": "一个 turn 是一次回复加它的工具结果。"
+      },
+      "plain_evidence": [
+        "pi/ch09.md:3"
+      ]
+    },
+    "pi-ch10": {
+      "question": {
+        "zh": "模型层统一了什么？"
+      },
+      "deliverable": {
+        "zh": "能看懂目录六列与 thinking 夹取。"
+      },
+      "boundary": {
+        "zh": "不要把目录能力当 provider 承诺。"
+      },
+      "plain": {
+        "zh": "统一消息与事件，不统一 provider 的私有字段。"
+      },
+      "plain_evidence": [
+        "pi/ch10.md:1"
+      ]
+    },
+    "pi-ch11": {
+      "question": {
+        "zh": "工具怎么声明、执行、回喂？"
+      },
+      "deliverable": {
+        "zh": "能用 --tools 的两种语法并避免混用。"
+      },
+      "boundary": {
+        "zh": "默认只有四个工具。"
+      },
+      "plain": {
+        "zh": "默认四个工具，其余按需声明。"
+      },
+      "plain_evidence": [
+        "pi/ch11.md:1"
+      ]
+    },
+    "pi-ch12": {
+      "question": {
+        "zh": "会话文件里存了什么，怎么恢复？"
+      },
+      "deliverable": {
+        "zh": "能按 version 与 entry type 读 JSONL。"
+      },
+      "boundary": {
+        "zh": "context_edit 只改未来请求。"
+      },
+      "plain": {
+        "zh": "会话是公开的 JSONL 契约，按版本读。"
+      },
+      "plain_evidence": [
+        "pi/ch12.md:1"
+      ]
+    },
+    "pi-ch13": {
+      "question": {
+        "zh": "事件怎么变成终端画面？"
+      },
+      "deliverable": {
+        "zh": "能解释差分渲染、主题与 TUI 模式。"
+      },
+      "boundary": {
+        "zh": "扩展 UI 不要直接 console.log。"
+      },
+      "plain": {
+        "zh": "事件到组件到差分渲染，主题跟着终端。"
+      },
+      "plain_evidence": [
+        "pi/ch13.md:3"
+      ]
+    },
+    "pi-ch14": {
+      "question": {
+        "zh": "扩展从哪加载、生命周期怎么走？"
+      },
+      "deliverable": {
+        "zh": "能用 -e 加载并验证 session_start。"
+      },
+      "boundary": {
+        "zh": "扩展与 Pi 同权限。"
+      },
+      "plain": {
+        "zh": "扩展在进程内，信任只管加载。"
+      },
+      "plain_evidence": [
+        "pi/ch14.md:1"
+      ]
+    },
+    "pi-ch15": {
+      "question": {
+        "zh": "怎么给 Pi 加工具、命令与 UI？"
+      },
+      "deliverable": {
+        "zh": "能写一个 registerTool 并让模型调用。"
+      },
+      "boundary": {
+        "zh": "扩展工具要被 --tools 选中才声明。"
+      },
+      "plain": {
+        "zh": "注册工具、命令与 UI，让 Pi 长出你要的手。"
+      },
+      "plain_evidence": [
+        "pi/ch15.md:1"
+      ]
+    },
+    "pi-ch16": {
+      "question": {
+        "zh": "技能怎么省上下文？"
+      },
+      "deliverable": {
+        "zh": "能解释描述常驻、全文按需读。"
+      },
+      "boundary": {
+        "zh": "没有 read 工具时技能不会被广告。"
+      },
+      "plain": {
+        "zh": "技能只广告描述，全文按需读。"
+      },
+      "plain_evidence": [
+        "pi/ch16.md:1"
+      ]
+    },
+    "pi-ch17": {
+      "question": {
+        "zh": "模板与主题各解决什么重复劳动？"
+      },
+      "deliverable": {
+        "zh": "能写参数化模板并切换主题。"
+      },
+      "boundary": {
+        "zh": "模板展开入口与 CLI 位置参数不同。"
+      },
+      "plain": {
+        "zh": "模板扩展命令，主题扩展外观。"
+      },
+      "plain_evidence": [
+        "pi/ch17.md:1"
+      ]
+    },
+    "pi-ch18": {
+      "question": {
+        "zh": "一套资源怎么打包分发？"
+      },
+      "deliverable": {
+        "zh": "能读懂 pi 字段与安装/钉版本语义。"
+      },
+      "boundary": {
+        "zh": "包不是沙箱。"
+      },
+      "plain": {
+        "zh": "一个包带走扩展、技能、模板与主题。"
+      },
+      "plain_evidence": [
+        "pi/ch18.md:1"
+      ]
+    },
+    "pi-ch19": {
+      "question": {
+        "zh": "SDK 与 RPC 的边界在哪？"
+      },
+      "deliverable": {
+        "zh": "能选进程内嵌还是子进程控制。"
+      },
+      "boundary": {
+        "zh": "prompt 成功不代表完成。"
+      },
+      "plain": {
+        "zh": "SDK 进程内嵌，RPC 子进程控制。"
+      },
+      "plain_evidence": [
+        "pi/ch19.md:5"
+      ]
+    },
+    "pi-ch20": {
+      "question": {
+        "zh": "怎么让 Pi 真正交付一次改动？"
+      },
+      "deliverable": {
+        "zh": "能用验收标准 + diff + 测试复核。"
+      },
+      "boundary": {
+        "zh": "测试通过不等于边界正确。"
+      },
+      "plain": {
+        "zh": "验收标准、diff、测试，一个都不能省。"
+      },
+      "plain_evidence": [
+        "pi/ch20.md:49"
+      ]
+    },
+    "pi-ch21": {
+      "question": {
+        "zh": "CI 里怎么判断 Pi 成功？"
+      },
+      "deliverable": {
+        "zh": "能写退出码 + stderr + agent_settled 的检查。"
+      },
+      "boundary": {
+        "zh": "别吞 stderr。"
+      },
+      "plain": {
+        "zh": "退出码、stderr、agent_settled，三者一起看。"
+      },
+      "plain_evidence": [
+        "pi/ch21.md:12"
+      ]
+    },
+    "pi-ch22": {
+      "question": {
+        "zh": "不可信仓库的边界画在哪？"
+      },
+      "deliverable": {
+        "zh": "能解释信任只管加载、隔离靠容器。"
+      },
+      "boundary": {
+        "zh": "信任不是沙箱。"
+      },
+      "plain": {
+        "zh": "信任不等于隔离，隔离靠容器与操作系统。"
+      },
+      "plain_evidence": [
+        "pi/ch22.md:5"
+      ]
+    },
+    "pi-ch23": {
+      "question": {
+        "zh": "出问题先看哪一层？"
+      },
+      "deliverable": {
+        "zh": "能按症状找到 stderr、事件、会话或 /debug。"
+      },
+      "boundary": {
+        "zh": "分享日志前先脱敏。"
+      },
+      "plain": {
+        "zh": "先分层，再看 stderr、事件与会话。"
+      },
+      "plain_evidence": [
+        "pi/ch23.md:5"
+      ]
+    },
+    "pi-ch24": {
+      "question": {
+        "zh": "12 个包各自负责什么？"
+      },
+      "deliverable": {
+        "zh": "能按三层地图找到源码入口。"
+      },
+      "boundary": {
+        "zh": "按 tag 读，不读 main 猜行为。"
+      },
+      "plain": {
+        "zh": "12 个包按入口层到基础层读。"
+      },
+      "plain_evidence": [
+        "pi/ch24.md:11"
+      ]
+    },
+    "pi-ch25": {
+      "question": {
+        "zh": "三册哪些能借、哪些不能？"
+      },
+      "deliverable": {
+        "zh": "能先钉版本再比较，并列出不能借的数字。"
+      },
+      "boundary": {
+        "zh": "名称相近不等于行为相同。"
+      },
+      "plain": {
+        "zh": "先钉版本，再比较，不借别家的数字。"
+      },
+      "plain_evidence": [
+        "pi/ch25.md:5"
+      ]
+    },
+    "pi-apxa": {
+      "question": {
+        "zh": "怎么快速查一个旗标？"
+      },
+      "deliverable": {
+        "zh": "能按分组找到参数与已验证的退出码。"
+      },
+      "boundary": {
+        "zh": "以本机 pi --help 为准，扩展旗标不在表内。"
+      },
+      "plain": {
+        "zh": "旗标按组查，错误行为有实测表。"
+      },
+      "plain_evidence": [
+        "pi/appendix-A.md:3"
+      ]
+    },
+    "pi-apxb": {
+      "question": {
+        "zh": "交互时该敲什么、按什么？"
+      },
+      "deliverable": {
+        "zh": "能查命令与常用键位，并能改 keybindings.json。"
+      },
+      "boundary": {
+        "zh": "菜单以当前会话为准；super 需要终端支持。"
+      },
+      "plain": {
+        "zh": "命令与键位以当前会话的菜单为准。"
+      },
+      "plain_evidence": [
+        "pi/appendix-B.md:3"
+      ]
+    },
+    "pi-apxc": {
+      "question": {
+        "zh": "设置放哪、优先级是什么？"
+      },
+      "deliverable": {
+        "zh": "能定位 settings.json 与常见环境变量。"
+      },
+      "boundary": {
+        "zh": "完整字段以钉版 docs/settings.md 为准。"
+      },
+      "plain": {
+        "zh": "设置与环境变量按优先级查。"
+      },
+      "plain_evidence": [
+        "pi/appendix-C.md:10"
+      ]
+    },
+    "pi-apxd": {
+      "question": {
+        "zh": "书里的词到底指什么？"
+      },
+      "deliverable": {
+        "zh": "能用一个词回查定义。"
+      },
+      "boundary": {
+        "zh": "与上游冲突时以上游钉版为准。"
+      },
+      "plain": {
+        "zh": "一个词一句话，冲突时看上游。"
+      },
+      "plain_evidence": [
+        "pi/appendix-D.md:7"
+      ]
+    },
+    "pi-apxe": {
+      "question": {
+        "zh": "升级后哪些结论会失效？"
+      },
+      "deliverable": {
+        "zh": "能按清单复验并改钉。"
+      },
+      "boundary": {
+        "zh": "只改一处等于制造第二份真相。"
+      },
+      "plain": {
+        "zh": "改钉要改三处，并留下复验记录。"
+      },
+      "plain_evidence": [
+        "pi/appendix-E.md:9"
+      ]
+    }
+  }
+}

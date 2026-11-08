@@ -277,20 +277,22 @@ def check(full: bool) -> int:
 
 
 def build(args) -> int:
-    if args.product not in ("book", "omp"):
+    if args.product not in ("book", "omp", "pi"):
         print(f"unknown product: {args.product}", file=sys.stderr)
         return 2
     lang = args.lang
     cmd = [python(), "yuyu-book/build.py", "--mermaid", args.mermaid]
-    if args.product == "omp":
+    if args.product in ("omp", "pi"):
+        manifest = f"manifest-{args.product}.json"
+        sources = f"sources-{args.product}.json"
         # Chinese-first second volume; "both" quietly means zh until en/omp exists.
         if lang == "en":
-            print("omp product is zh-only for now", file=sys.stderr)
+            print(f"{args.product} product is zh-only for now", file=sys.stderr)
             return 2
         lang = "zh"
         cmd += ["--lang", lang,
-                "--manifest", "manifest-omp.json",
-                "--sources", "sources-omp.json"]
+                "--manifest", manifest,
+                "--sources", sources]
     else:
         cmd += ["--lang", lang]
     if args.pdf:
@@ -301,6 +303,29 @@ def build(args) -> int:
         run(cmd)
     except subprocess.CalledProcessError as exc:
         return exc.returncode or 1
+    if args.epub:
+        return epub(args)
+    return 0
+
+
+def epub(args) -> int:
+    """Post-pass each built HTML edition into a reflowable EPUB."""
+    prefixes = {"book": "yuyu-agent-harness", "omp": "yuyu-omp",
+                "pi": "yuyu-pi"}
+    prefix = prefixes[args.product]
+    langs = ["zh", "en"] if args.lang == "both" else [args.lang]
+    out_dir = Path(args.out_dir) if args.out_dir else DIST
+    for lang in langs:
+        html = out_dir / f"{prefix}-{lang}.html"
+        if not html.exists():
+            print(f"epub: missing {html}", file=sys.stderr)
+            return 1
+        try:
+            run([python(), "scripts/build_epub.py", "--html", str(html),
+                 "--output", str(html.with_suffix(".epub")),
+                 "--lang", lang])
+        except subprocess.CalledProcessError as exc:
+            return exc.returncode or 1
     return 0
 
 
@@ -328,9 +353,10 @@ def main(argv=None) -> int:
 
     bl = sub.add_parser("build", help="build a product")
     # products: book (御舆) and omp (第二分册, zh-first).
-    bl.add_argument("--product", default="book", choices=["book", "omp"])
+    bl.add_argument("--product", default="book", choices=["book", "omp", "pi"])
     bl.add_argument("--lang", default="both", choices=["zh", "en", "both"])
     bl.add_argument("--pdf", action="store_true")
+    bl.add_argument("--epub", action="store_true")
     bl.add_argument("--out-dir")
     bl.add_argument("--mermaid", default="render",
                     choices=["render", "source"])

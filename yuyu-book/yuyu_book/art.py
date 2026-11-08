@@ -18,6 +18,7 @@ ART_DIR = Path(__file__).resolve().parent.parent / "illustrations"
 # two directories can be searched in one pass without a product flag and a
 # drawing can never cross-ink the wrong book
 OMP_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-omp"
+PI_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-pi"
 MAX_BYTES = 6000
 PLATE_BYTES = 20000
 # one photograph the single-file edition can afford to carry: the offline
@@ -47,7 +48,7 @@ def _search_dirs() -> list[Path]:
 
     Read at call time: the tests point `ART_DIR` at a temporary folder.
     """
-    return [d for d in (OMP_ART_DIR, ART_DIR) if d.is_dir()]
+    return [d for d in (OMP_ART_DIR, PI_ART_DIR, ART_DIR) if d.is_dir()]
 
 
 def _read(name: str, budget: int = MAX_BYTES) -> str | None:

@@ -46,6 +46,21 @@
 
 `make check`（`bookctl check --fast/--full`）负责御舆装配、共享测试与全仓内容检查。Omp 的结构和交付门禁由 `omp/overhaul/audit_structure.py --check`、`audit_delivery.py` 单独检查；内容 CI 还会装配 Omp 中文源稿，Book CI 的独立 `omp` job 则构建中文 HTML/PDF。Windows 本地可运行 `powershell -File omp/overhaul/ci-local.ps1`，同时验证御舆中文 HTML 与 Omp 中文 HTML/PDF。
 
+## 第三分册 · Pi（初稿完成）
+
+同仓第三分册《Pi Agent：从原理到实战》（非官方），书稿在 [pi/](pi/README.md)，
+产物前缀 `yuyu-pi-*`，写作钉 **pi/1.5.0**。31 个单元（前言 + 25 章 + 附录 A–E）已落盘，
+通俗层与 43 份手绘 SVG 已接入。
+
+```bash
+make book-pi        # yuyu-book/dist/yuyu-pi-zh.html
+make book-pi-pdf    # 再加 A4 PDF
+make book-pi-epub   # 再加 EPUB
+```
+
+本机实测：HTML 1.24 MB；PDF 159 页 / 40 书签 / 9.00 MB；EPUB 1.05 MB（EPUBCheck 0 错误）。
+构建口径与本地证据见 [pi/BUILD-PLAN.md](pi/BUILD-PLAN.md) 与 [pi/VERIFY.md](pi/VERIFY.md)。
+
 概念可以互查，实现与钉版不能混用：御舆侧入口见 [docs/COMPARE-OMP.md](docs/COMPARE-OMP.md)，Omp 侧入口见 [omp/COMPARE-YUYU.md](omp/COMPARE-YUYU.md)，逐词共享表见 [docs/yuyu-overhaul/SHARED-TERMS.md](docs/yuyu-overhaul/SHARED-TERMS.md)。Omp 英文版目前只有 [预留说明](en/omp/README.md)，尚未开启构建。
 
 插画策略：Mermaid 架构图 + 手绘概念图双轨。与御舆概念可对照，实现与钉版勿混用。

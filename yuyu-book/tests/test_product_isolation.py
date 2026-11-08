@@ -17,6 +17,7 @@ same loader as `illustrations/`.
 import sys
 import unittest
 from pathlib import Path
+from typing import Any, cast
 
 if not __package__:  # direct run: see tests/__init__.py for the real bootstrap
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -31,11 +32,15 @@ OMP_UNITS = 39
 BOOK_PREFIX = "yuyu-agent-harness"  # build.py's fallback when a manifest declares none
 
 
+def _load(name: str) -> dict[str, Any]:
+    return cast(dict[str, Any], registry.load(name))
+
+
 class ProductIsolation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.book = registry.load(BOOK)
-        cls.omp = registry.load(OMP)
+        cls.book = _load(BOOK)
+        cls.omp = _load(OMP)
 
     def test_book_is_twenty_units(self):
         ids = expected_ids(self.book)
@@ -62,14 +67,14 @@ class ProductIsolation(unittest.TestCase):
         """`build.py` with no `--manifest` is the book path. If a default ever started
         resolving to omp, every book-only test below would silently be about omp."""
         manifest, _ = load_configs()
-        self.assertEqual(manifest.get("product") or "book", "book")
-        self.assertEqual(len(expected_ids(manifest)), BOOK_UNITS)
+        self.assertEqual(cast(dict[str, Any], manifest).get("product") or "book", "book")
+        self.assertEqual(len(expected_ids(cast(dict[str, Any], manifest))), BOOK_UNITS)
 
     def test_omp_manifest_passes_the_same_validator(self):
         """Isolation must not be paid for with a weaker check: omp goes through
         `core.validate_configs()` too, including the guides-cover-every-unit rule."""
         manifest, _ = load_configs(OMP, "sources-omp.json")
-        self.assertEqual(plain.manifest_langs(manifest), ("zh",))
+        self.assertEqual(plain.manifest_langs(cast(dict[str, Any], manifest)), ("zh",))
 
     def test_output_artifacts_cannot_collide(self):
         book_prefix = self.book.get("output_prefix") or BOOK_PREFIX
@@ -104,7 +109,8 @@ class ProductIsolation(unittest.TestCase):
         omp manifest sneaking into one of them would widen or blur that number."""
         here = Path(__file__).name
         hits = sorted(p.name for p in Path(__file__).parent.glob("test_*.py")
-                      if p.name != here and "manifest-omp" in p.read_text(encoding="utf-8"))
+                      if p.name not in (here, "test_pi_product.py")
+                      and "manifest-omp" in p.read_text(encoding="utf-8"))
         self.assertEqual(hits, [], f"{hits} load omp's manifest from a book-only suite")
 
 
@@ -119,8 +125,8 @@ class OmpArtTray(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.omp = registry.load(OMP)
-        cls.book = registry.load(BOOK)
+        cls.omp = _load(OMP)
+        cls.book = _load(BOOK)
 
     def test_every_omp_part_opens_with_its_own_drawing(self):
         want = [f'part-{p["id"]}' for p in self.omp["parts"]]

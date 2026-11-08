@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "version": "0.1.0-wip",
+      "date": "2026-11-08",
+      "zh": [
+        "第三分册开册：25 章 + 附录 A–E 初稿，写作钉 pi/1.5.0。",
+        "本机证据见 pi/VERIFY.md 与 pi/facts/pi-1.5.0/；构建接入见 pi/BUILD-PLAN.md。"
+      ]
+    }
+  ]
+}

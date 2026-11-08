@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "pi-repo": {
+    "title": "earendil-works/pi",
+    "authority": "Upstream repository and docs",
+    "kind": "github",
+    "url": "https://github.com/earendil-works/pi",
+    "snapshot": "Pinned to v1.5.0 (f9a26365568127461c47a07a37dcb42c140a3ac5)",
+    "accessed": "2026-11-08",
+    "license": "MIT",
+    "scope": "CLI behavior, docs, packages and release tags",
+    "pinned": {
+      "tag": "v1.5.0",
+      "commit": "f9a26365568127461c47a07a37dcb42c140a3ac5"
+    }
+  },
+  "pi-npm": {
+    "title": "@earendil-works/pi-coding-agent",
+    "authority": "npm registry metadata",
+    "kind": "npm",
+    "url": "https://www.npmjs.com/package/@earendil-works/pi-coding-agent",
+    "snapshot": "Version 1.5.0, read 2026-11-08",
+    "accessed": "2026-11-08",
+    "license": "MIT",
+    "scope": "Package metadata, engines and published files",
+    "pinned": {
+      "version": "1.5.0"
+    }
+  }
+}

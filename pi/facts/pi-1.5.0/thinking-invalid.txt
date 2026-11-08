@@ -1,0 +1,2 @@
+Warning: Invalid thinking level "bogus". Valid values: off, minimal, low, medium, high, xhigh, max
+OK
