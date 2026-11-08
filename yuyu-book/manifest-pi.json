@@ -29,7 +29,7 @@
   ],
   "output_prefix": "yuyu-pi",
   "revisions_registry": "revisions-pi.json",
-  "subject_index_registry": null,
+  "subject_index_registry": "subject-index-pi.json",
   "plain_optional": false,
   "pin": {
     "writing": "pi/1.5.0",

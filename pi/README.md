@@ -15,11 +15,12 @@ Pi（命令 `pi`，官网 [pi.dev](https://pi.dev)，仓库 [earendil-works/pi](
 | 目录与证据表（outline.md） | 已落盘，25 章 + 附录 A–E 的骨架 |
 | 前言 + 25 章 + 附录 A–E | 已落盘（初稿，v0.1.0-wip） |
 | 通俗层（词条 / 眉批 / 档位 / lead band） | 已接入：12 词、31 条眉批、156 枚芯片、218 处标记 |
+| 主题索引 | 已接入：36 个词条、18 个索引页脚 |
 | 插画 | 43 份手绘 SVG（31 枚单元章徽 + 6 幅篇题刻 + 6 幅正文长图） |
 | 构建（HTML / PDF / EPUB / CI） | 已接入：`make book-pi` / `-pdf` / `-epub` / `-all`；CI 有独立 `pi` job |
 | 英文版 | 未开始（`langs: ["zh"]`） |
 
-初稿的意思是：**31 个单元都按六要素写完，构建与产物已跑通**；还没做的是人工二稿、英文版和主题索引。
+初稿的意思是：**31 个单元都按六要素写完，构建与产物已跑通，主题索引已排**；还没做的是人工二稿与英文版。
 没有占位章节——`outline.md` 里每一行都指向真实正文。
 
 ## 和另两册的关系
@@ -61,7 +62,7 @@ Pi（命令 `pi`，官网 [pi.dev](https://pi.dev)，仓库 [earendil-works/pi](
 
 - `pi-src/` 源码树（按 [PIN.md](PIN.md) 的 tag 自己拉，不进书仓）
 - 上游许可证之外的第三方素材、生成的插画、API key、本机绝对路径
-- 英文稿、主题索引与人工二稿
+- 英文稿与人工二稿
 
 ## 构建与产物
 
@@ -72,7 +73,7 @@ make book-pi-epub   # 再加 yuyu-pi-zh.epub
 make book-pi-all    # HTML + PDF + EPUB
 ```
 
-本机 2026-11-08 实测：HTML 1.24 MB；PDF 9.00 MB、159 页、40 个书签；EPUB 1.05 MB（EPUBCheck 0 错误）；31 个 unit、28 张图（22 Mermaid + 6 手绘长图）、
+本机 2026-11-08 实测：HTML 1.26 MB；PDF 9.05 MB、161 页、41 个书签、18 个索引页脚；EPUB 1.05 MB（EPUBCheck 0 错误）；31 个 unit、28 张图（22 Mermaid + 6 手绘长图）、
 218 处术语标记、31 条 lead band、156 枚档位芯片、31 条眉批。构建口径与改动清单见 [BUILD-PLAN.md](BUILD-PLAN.md)，
 逐条验证记录见 [VERIFY.md](VERIFY.md)。
 

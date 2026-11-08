@@ -58,15 +58,18 @@ def main(argv=None):
                               for u, _k, _p in unit_stream(manifest)}
                 plain.validate_notes(notes, glosses, unit_texts, langs)
         if args.regen_index:
-            entries = glossary_to_index(manifest)
-            dump_json(BOOK_DIR / "subject-index.json",
-                      registry.wrap("subject-index.json", entries))
-            zh_n = sum(1 for e in entries if e["zh"]["refs"])
-            en_n = sum(1 for e in entries if e["en"]["refs"])
-            print(f"subject index: {len(entries)} terms ({zh_n} zh refs, "
-                  f"{en_n} en refs)")
-            if args.lang == "both" and not args.check:
-                pass  # index-only run still produces files; build continues
+            index_name = manifest.get("subject_index_registry",
+                                      "subject-index.json")
+            if index_name:
+                entries = glossary_to_index(manifest)
+                dump_json(BOOK_DIR / index_name,
+                          registry.wrap(index_name, entries))
+                zh_n = sum(1 for e in entries if e["zh"]["refs"])
+                en_n = sum(1 for e in entries if e["en"]["refs"])
+                print(f"subject index: {len(entries)} terms ({zh_n} zh refs, "
+                      f"{en_n} en refs)")
+            else:
+                print("subject index: disabled for this product")
         langs = ["zh", "en"] if args.lang == "both" else [args.lang]
         out_dir = Path(args.out_dir)
         if args.check:

@@ -157,30 +157,36 @@ $ python scripts/bookctl.py build --product pi --lang zh --pdf
 [zh]
   yuyu-pi-zh.html: 1.2 MB, 31 units, 28 plates, 2 cited links, 218 glosses,
   31 lead bands, 156 tier chips, 31 emblems, 6 headpieces, 31 keeper notes
-  yuyu-pi-zh.pdf: 9.0 MB, 159 pages, 40 bookmarks, 0 index folios
+  yuyu-pi-zh.pdf: 9.0 MB, 161 pages, 41 bookmarks, 18 index folios
 OK
 {"output": "...yuyu-pi-zh.epub", "images": 67, "rasterized_svg": 97,
- "navigation_entries": 238, "bytes": 1047475}
+ "navigation_entries": 251, "bytes": 1048415}
 ```
 
 | 产物 | 字节 | 页数 / 书签 | SHA-256 |
 | --- | ---: | --- | --- |
-| `yuyu-pi-zh.html` | 1,244,640 | 31 单元 | `20bdb03c020748414b3ee7b07d5c9bc0bf4f029f8ff9375f1a4e985f498a8070` |
-| `yuyu-pi-zh.pdf` | 9,001,507 | 159 页 / 40 书签 | `68719f599c6c6727f3ab0f12782024cee4614a6f049f02a76df812c836623090` |
-| `yuyu-pi-zh.epub` | 1,047,475 | 238 个导航项 / 67 图 | `37f46f582f3e6b0a07cd7d37e8baf9fd7a51ce92e95178c6d3d8c29227f0c28a` |
+| `yuyu-pi-zh.html` | 1,256,189 | 31 单元 | `df9f951fb05e49fd794f854db77db485e9ce26681e0084f69b3810804432509d` |
+| `yuyu-pi-zh.pdf` | 9,053,128 | 161 页 / 41 书签 / 18 索引页脚 | `4f39e72f2b5fa58816821480849aa12bcbf1092748582cad6a5a6de58bc204f8` |
+| `yuyu-pi-zh.epub` | 1,048,415 | 251 个导航项 / 67 图 | `89c38c19ef175c7773c44ccc401d2412201a2d26dfc27e4d71eedc44c058775d` |
 
-- EPUB 走 `scripts/build_epub.py`：67 张图（含 97 个 SVG 光栅化）、238 个导航项；EPUBCheck 5.4.0：0 错误 0 警告。
+- EPUB 走 `scripts/build_epub.py`：67 张图（含 97 个 SVG 光栅化）、251 个导航项；EPUBCheck 5.4.0：0 错误 0 警告。
 - 28 张图 = 22 张 Mermaid + 6 张 ```ill 手绘长图；31 枚章徽 + 6 幅篇题刻由
   `scripts/draw_pi_illustrations.py` 生成，43 份全部通过 `art._read` 的字节/禁用项/currentColor 检查。
-- 产品隔离测试：`python -m unittest yuyu-book.tests.test_product_isolation` → 21 项通过
-  （新增 Pi 的 31 单元、前缀、仅中文、章徽/篇题刻覆盖）。
+- 产品测试：`test_product_isolation`（14）+ `test_pi_product`（7）= 21 项通过；
+  本分支全量：`yuyu-book/tests` 528 项、`tests` 67 项均 OK。
 - PDF 首轮曾因路线图多出附录一行而触发空页门禁；print CSS 把 `.route-map .itinerary` 收到 88% 后，
   路线图与列表回到同一张纸。该规则对其他两册同样生效，属于排版修复而非 pi 特判。
+
+主题索引：36 个词条，按附录 D 的章节列生成，`subject-index-pi.json` 与御舆的 `subject-index.json` 分开。
 
 视觉抽查（程序化）：43 份 SVG 在 640×360 画布上均非空白，墨迹覆盖率 2.0%–8.1%，
 边界框全部落在画布内；31 枚章徽与 6 幅正文长图在元素数（7–40）上有明显层级。
 另用视觉模型复核了拼版图：6 幅正文长图的结构复杂度明显高于章徽，可读性通过；章徽有 5 处
 线宽/对齐的小问题已在本轮修掉（钥匙齿、书脊折线、流水线居中、地图节点、天平底座）。
+
+共享排版回归：同一 CSS 改动后重建 Omp 中文 PDF 为 **343 页 / 49 书签**（与此前记录一致）；
+御舆双语本机为 518 / 569 页（README 的 520 / 559 是 CI Noto 口径，字体不同，不能直接对比），
+三次构建都没有触发空页门禁。
 
 **仍未验证**：交互式 TUI 键位、真实 `/login` OAuth、扩展项目信任交互、SDK/RPC 实跑、容器隔离、
 英文版与 EPUB。它们不在本轮"完成"的范围内，正文相应位置已标"未验证"。

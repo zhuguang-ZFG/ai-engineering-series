@@ -49,7 +49,7 @@ reading-paths-pi.json
 revisions-pi.json
 ```
 
-`subject-index` 不排（manifest 里 `subject_index_registry: null`），所以不加 `subject-index-pi.json`。
+`subject-index-pi.json` 单独登记（36 词，按附录 D 的章节列生成），与御舆的 `subject-index.json` 分开。
 
 ### 2. 通俗层命名：不用改代码
 
@@ -134,7 +134,7 @@ book-pi-pdf:
 | P2（done） | `manifest-pi.json` + glosses/notes/reading-paths/sources/revisions + 白名单 | `build.py --check` 成功，31 units / 218 glosses / 31 notes |
 | P3（done） | `illustrations-pi/` 43 份（31 章徽 + 6 篇题刻 + 6 正文长图） | 43 份全部过 `art._read`；`PiArtTray` 3 项通过 |
 | P4（done） | `bookctl` + Makefile + Pi 产品隔离测试 | `make book-pi` 产出 HTML；`unittest test_product_isolation` 21 项通过 |
-| P5（done） | PDF + EPUB + CI + 产物核对 | 159 页 / 40 书签 / 9.00 MB；EPUB 1.05 MB，EPUBCheck 0 错误 |
+| P5（done） | PDF + EPUB + 索引 + CI + 产物核对 | 161 页 / 41 书签 / 18 索引页脚；EPUB 1.05 MB，EPUBCheck 0 错误 |
 
 施工顺序已按本表走完。唯一偏差：`plain_optional` 最终是 `false`，通俗层在 P2 一并接入，没有再留一版
 `--no-plain` 的产物；`--no-plain` 仍是 `build.py` 的正式开关。
