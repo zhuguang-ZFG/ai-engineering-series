@@ -20,6 +20,7 @@
 </ul>
 <p>模型提出的是类似这样的请求：</p>
 <pre><code class="language-json">{
+  &quot;action&quot;: &quot;tool&quot;,
   &quot;tool&quot;: &quot;calculator&quot;,
   &quot;arguments&quot;: {&quot;expression&quot;: &quot;3*14&quot;}
 }
@@ -61,7 +62,7 @@ python book/llm/examples/assistant/assistant.py run \
 <li><strong>坏参数/坏表达式</strong>：<code>arguments</code> 里传非字符串（如 <code>{&quot;expression&quot;: 3}</code>）或多余字段，预期 <code>invalid-response</code>，校验阶段就拒绝；表达式 <code>&quot;3+&quot;</code> 预期回执失败 <code>invalid-expression</code>，最终 <code>tool-failed</code>。字符串 <code>&quot;3+4&quot;</code> 是合法表达式，会算出 <code>7</code>，不能拿它当坏参数。要验证“不执行代码”，可传 <code>&quot;__import__(&#39;os&#39;).system(&#39;echo hi&#39;)&quot;</code> → <code>unsupported-expression</code>，或 <code>&quot;&#39;a&#39; + &#39;b&#39;&quot;</code> → <code>unsupported-literal</code>；这些都在 AST 白名单阶段失败。</li>
 <li><strong>除零</strong>：<code>{&quot;expression&quot;: &quot;1/0&quot;}</code>。预期回执 <code>failed</code>、错误 <code>division-by-zero</code>，不返回 <code>Infinity</code> 或一段“已计算”的摘要。</li>
 <li><strong>无权限读取</strong>：<code>read_document</code> 指向当前 <code>reader</code> 不可见的文档。预期回执 <code>permission-denied</code>、最终 <code>permission-denied</code>，正文不进入上下文。</li>
-<li><strong>未知工具</strong>：请求 <code>send_email</code> 或 <code>shell</code>。未列入 <code>--allowed-tools</code> 时预期 <code>permission-denied</code>；若显式把它加进白名单，程序仍会以 <code>tool-failed</code>/<code>unknown-tool</code> 拒绝执行。不要把未知工具加入白名单来“试一下”，除非在隔离环境专门验证错误码。</li>
+<li><strong>未知工具</strong>：模型请求 <code>send_email</code> 或 <code>shell</code>，预期 <code>permission-denied</code>，不执行。CLI 的 <code>--allowed-tools</code> 只接受 <code>calculator</code> 和 <code>read_document</code>；传 <code>--allowed-tools send_email</code> 会在参数解析时退出，退出码 2、提示 <code>unknown tools</code>，尚未生成助手报告。内部校验器另有 <code>tool-failed</code>/<code>unknown-tool</code> 防御分支，但不能把它写成这条 CLI 命令的预期输出。</li>
 <li><strong>超时/未知</strong>：真实远程工具可能出现“已发出但没收到回执”。本章本地工具不一定能制造真实网络超时；旧实验有模拟超时分支。若使用模拟，必须标“模拟”，不能冒充远程执行。状态应保留 <code>timeout</code>/<code>unknown</code>，不能写成成功或“没有执行”。</li>
 <li><strong>预算耗尽</strong>：把 <code>--max-tool-calls</code> 设为 0 或 1，让任务需要更多调用。预期在达到上限时停止，并说明未完成，而不是继续调用。</li>
 </ol>
@@ -131,4 +132,4 @@ notes/c16-tool-contract.md
 <p>答案与核对依据见 <a href="c16-answer.html">C16 答案</a>。</p>
 <h2 id="C16-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>工具循环与报告字段来自助手的 <code>run</code>/<code>--mode</code>/<code>--allowed-tools</code> 实际接口；固定工作流来自旧 D13 示例，已在仓库中可运行。本章不提供发送消息、写文件或联网写入工具，也不声称模拟超时是真实网络故障。工具参数校验、权限和停止条件必须由应用实现；模型的选择意图本身不等于执行。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c15.html">上一章 C15</a><a href="c16-answer.html">独立作答后核对</a><a href="c17.html">下一章 C17</a></nav></article></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c15.html">上一章 C15</a><a href="c16-answer.html">独立作答后核对</a><a href="c17.html">下一章 C17</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

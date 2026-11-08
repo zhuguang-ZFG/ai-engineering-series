@@ -120,8 +120,8 @@ python book/llm/examples/assistant/assistant.py run \
 - `--question-file` 与 `--question` 二选一。
 - `--repair-attempts 0`（默认）表示严格解析：输出带 Markdown 围栏就是 `invalid-response`，报告保留首次原始输出。设为 `1` 时会显式发起一次“只输出 JSON”的修复调用，并在 `usage.calls` 与原始响应列表中记录，仍不做静默剥壳。
 - `--max-new-tokens`、`--max-prompt-tokens`、`--top-k`、`--min-score`、`--max-steps`、`--max-tool-calls` 都是硬预算。prompt 超预算时按分数从低到高丢弃检索块并记录；仍放不下则 `prompt-budget-exceeded`。
-- `--claim-mode copy`（默认）：claim 必须逐字等于 quote，answer 只能由已核验 claim 组成。
-- `--claim-mode extract`（仅 fixed）：模型只给 `status`、`claims[{chunk_id,quote}]` 和可选 `reason`，主张文本由程序直接取 quote，answer 由已核验 quote 拼接。它不移除围栏、错选片段、漏检冲突这些失败；实测对比与限制见 [BASELINE.md](BASELINE.md)。agent 不支持该模式，会返回 `invalid-request`。
+- `--claim-mode copy`（默认）：claim 必须是 quote 的逐字连续子串，answer 只能由已核验 claim 组成。
+- `--claim-mode extract`（仅 fixed）：模型只给 `status`、`claims[{chunk_id,quote}]` 和可选 `reason`，主张文本由程序直接取 quote，answer 由已核验 quote 拼接。它不移除围栏、错选片段、漏检冲突这些失败；实测对比与限制见 [BASELINE.md](BASELINE.md)。agent 不支持该模式，会在读取资料和调用模型之前返回 `invalid-request`。
 
 ### 3. evaluate：先冻结，再调用
 
@@ -137,7 +137,9 @@ python book/llm/examples/assistant/assistant.py evaluate \
 - 逐例比较状态、引用文档和成功工具回执；stdout 打印摘要，`--json` 保存含完整报告的明细。
 - 评测完成（无论通过率）退出码为 0；清单或调用本身不可读等操作错误退出码为 1。
 
-样例 `eval-manifest.json` 覆盖：正常引用、零命中、冲突、越权读者、缺失源文件、缺失模型、未配置 API、Agent 计算器。0.5B 级模型经常无法通过严格引用/冲突判据；保留失败是基线证据，不应删用例或放宽校验。
+完整八题的 copy/extract 实跑与两种统计口径见 [EVALUATION-03.md](EVALUATION-03.md)。`--claim-mode extract` 会对所有题覆盖模式；其中 agent-calculator 仍按原题要求评分，不支持组合保留为失败，并与七题 fixed 子集分开列出。
+
+样例 `eval-manifest.json` 覆盖：正常引用、资料不足、冲突、越权读者、缺失源文件、缺失模型、未配置 API、Agent 计算器。`no-hit-coffee` 的历史注释称零命中，但词项检索实际会取回其他观测站片段；应按运行报告判断是否零命中，不按 case 名推断。原冻结清单不为修正文案而改写。0.5B 级模型经常无法通过严格引用/冲突判据；保留失败是基线证据，不应删用例或放宽校验。
 
 ### 4. serve：本地教学服务
 
@@ -157,6 +159,43 @@ curl -s -X POST http://127.0.0.1:8765/query \
 只允许回环地址；请求体上限 16 KiB。查询参数：`question`、`reader`（必填）、`mode`、`retriever`、`top_k`、`min_score`。响应就是 `assistant-report/1`。HTTP 码：内容状态 200；越权 403；输入/清单/引用错误 400；源文件缺失或版本不符 409；模型/生成失败 502。
 
 服务只允许请求使用启动时 `--reader` 选定的身份；请求体声明其他 reader 在读取文档前返回 403。CLI 的 reader 是本地操作者的教学配置，不是多用户登录系统；不要将该示例暴露公网，也不要把自报身份当认证。`/health` 仅证明服务循环活着，模型是否可用需通过一条有证据的 `/query` 检查。
+
+## 精确引文位置（仅 extract）
+
+抽取报告在 `config.claim_contract` 标记 `source-extract/2`。来源引用保留 `quote`、`start/end`，新增程序计算的 `quote_start/quote_end`：
+
+| 字段/约定 | 含义 |
+| --- | --- |
+| `start/end` | 整个 chunk 的文档范围；旧含义保持不变 |
+| `quote_start/quote_end` | 引文的 `[起点, 终点)`，基于去 BOM、统一为 LF 后的文档 Unicode 码点 |
+| 重复匹配 | 取模型所选 chunk 内、空白规范化后第一次匹配；不声称模型指定了多个重复位置中的哪一次 |
+| 空白 | 仅折叠连续空白用于匹配，返回位置映射到折叠前文本；不做大小写/标点/Unicode 归一化 |
+| `sha256` | 原文件字节的 SHA-256；不是解码后文本或单条 quote 的哈希 |
+| 兼容 | 顶层 `assistant-report/1` 保留；默认 copy/agent 和旧报告不新增这些位置字段。读取者应先检查 claim_contract |
+
+模型仍只提交 `chunk_id` 与 `quote`，不得自行提交偏移或另一条主张。Markdown 报告也显示精确范围。拿到一次有来源引用的 extract 报告后，可在仓库根目录用下面的方式回查第一条引用；`out/report.json` 需换成你的真实报告文件。
+
+```python
+import hashlib
+import json
+from pathlib import Path
+
+report = json.loads(Path("out/report.json").read_text(encoding="utf-8"))
+assert report["config"]["claim_contract"] == "source-extract/2"
+citation = report["claims"][0]["citations"][0]
+manifest_path = Path("book/llm/examples/assistant/documents.json")
+manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+entry = next(d for d in manifest["documents"] if d["id"] == citation["doc_id"])
+raw = (manifest_path.parent / entry["path"]).read_bytes()
+assert hashlib.sha256(raw).hexdigest() == citation["sha256"]
+text = raw.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+start, end = citation["quote_start"], citation["quote_end"]
+assert citation["start"] <= start < end <= citation["end"] <= len(text)
+assert " ".join(text[start:end].split()) == " ".join(citation["quote"].split())
+print(text[start:end])
+```
+
+这段代码假定你使用已核验的课程本地清单，并已有相应资料权限；自建项目应沿用助手的清单路径/权限校验。它只核对位置与文本，不能判断引文是否回答问题、是否漏掉条件或是否现行有效。
 
 ## 报告结构
 
@@ -178,10 +217,10 @@ curl -s -X POST http://127.0.0.1:8765/query \
     "authorized_doc_ids": ["station-log"],
     "hits": [{"chunk_id": "station-log@...", "doc_id": "station-log", "score": 0.61, "used": true}]
   },
-  "answer": "2026 年 10 月 3 日的风速是 4.2 米每秒。",
+  "answer": "风速 4.2 米每秒",
   "claims": [
     {
-      "text": "值班记录显示风速为 4.2 米每秒。",
+      "text": "风速 4.2 米每秒",
       "citations": [
         {"kind": "source", "chunk_id": "station-log@...", "doc_id": "station-log",
          "version": "1.0.0", "sha256": "...", "start": 120, "end": 168,
