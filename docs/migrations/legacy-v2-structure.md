@@ -186,7 +186,10 @@ unchecked until this review and integration are complete.
 - `docs/baseline/legacy-v2-deltas.json` 的 34 条规则全部带真实提交 SHA，没有
   `working tree (P5…)` 这类占位说明；加载器仍拒绝不存在的提交
   （`tests/test_compare_legacy.py::test_provenance_must_name_an_existing_commit`）。
-- 规则中没有 `kind` 取精确值的形式，数字增量边界校验留在 CLI 读取侧。
+- 34 条规则里 30 条用数字增量（`delta`），4 条用精确值对（`legacy`/`fresh`，分别是
+  `/book/version`、`/book/date`、`/registries/manifest/version`、`/registries/manifest/date`）；
+  两种形式都在 `compare_legacy.load_rules` 的读取边界校验：增量必须是有限数，精确对必须成对，
+  `kind` 只接受 `value`/`len`，且规则不得同时给出增量与精确对。
 - `tests/test_compare_legacy.py` 23 项全绿。
 - `claims.validate(..., release=True)` 在 `ffabfde` 上返回 0 条告警（6 条 claim）。
 
