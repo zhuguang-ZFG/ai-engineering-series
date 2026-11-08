@@ -25,7 +25,11 @@ def check():
     assert epubcheck["status"] == "passed" and epubcheck["version"] == "5.3.0"
     assert all(epubcheck[key] == 0 for key in ["fatals", "errors", "warnings"])
     assert metadata["lessons"] == 12
-    assert metadata["figures"] == len({file for lesson in course["lessons"] for file in [lesson["figure"], *lesson.get("extraFigures", [])]})
+    expected_figures = {file for lesson in course["lessons"] for file in [lesson["figure"], *lesson.get("extraFigures", [])]}
+    for name in ['architecture-guide.html', 'applications-guide.html', 'execution-guide.html']:
+        page = (ROOT / 'exports/llm' / name).read_text(encoding='utf-8')
+        expected_figures.update(re.findall(r'src="[^\"]*/handdraw/llm/([^\"]+)"', page))
+    assert metadata["figures"] == len(expected_figures)
     for name, expected in metadata["files"].items():
         data = (OUT / name).read_bytes()
         assert hashlib.sha256(data).hexdigest() == expected["sha256"], "Modified artifact " + name

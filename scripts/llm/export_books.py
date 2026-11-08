@@ -446,7 +446,13 @@ def run():
     (REVIEW / "images").mkdir(parents=True, exist_ok=True)
     css = (ROOT / "scripts/llm/book.css").read_bytes()
     (REVIEW / "book.css").write_bytes(css)
-    figures = sorted({file for lesson in lessons for file in [lesson["figure"], *lesson.get("extraFigures", [])]})
+    figure_files = {file for lesson in lessons for file in [lesson["figure"], *lesson.get("extraFigures", [])]}
+    # Reference chapters share the original book's maintained explanations and
+    # may introduce a figure that is not assigned to one of the twelve lessons.
+    for name in ['architecture-guide.html', 'applications-guide.html', 'execution-guide.html']:
+        reference = html.fromstring((WEB / name).read_bytes())
+        figure_files.update(Path(src).name for src in reference.xpath('//main//img/@src'))
+    figures = sorted(figure_files)
     (REVIEW / "images/cover.svg").write_text(cover_svg(), encoding="utf-8")
     for file in figures:
         shutil.copyfile(ROOT / "book/assets/handdraw/llm" / file, REVIEW / "images" / file)

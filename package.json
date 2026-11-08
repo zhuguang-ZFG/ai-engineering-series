@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "npm run test:llm && npm run check:fixtures:llm && npm run check:llm && npm run check:books:llm && npm run validate",
+    "test": "npm run check:book && npm run test:llm && npm run check:fixtures:llm && npm run check:llm && npm run check:books:llm && npm run validate",
     "validate": "node scripts/llm/media-manifest.mjs && node scripts/validate.mjs",
-    "build:llm": "node scripts/llm/build-learning-figures.mjs && node scripts/llm/build-story-figures.mjs && node scripts/llm/build-mechanism-figures.mjs && node scripts/build-llm.mjs && node scripts/llm/build-media.mjs",
+    "build:llm": "node scripts/llm/build-learning-figures.mjs && node scripts/llm/build-application-figures.mjs && node scripts/llm/build-story-figures.mjs && node scripts/llm/build-mechanism-figures.mjs && node scripts/build-llm.mjs && node scripts/llm/build-media.mjs && npm run build:book",
     "check:llm": "node scripts/llm/build-learning-figures.mjs --check && node scripts/llm/build-application-figures.mjs --check && node scripts/llm/build-story-figures.mjs --check && node scripts/llm/build-mechanism-figures.mjs --check && node scripts/build-llm.mjs --check && node scripts/llm/build-media.mjs --check && node scripts/validate-llm.mjs",
     "export:books:llm": "npm run build:llm && python scripts/llm/export_books.py",
     "check:books:llm": "python scripts/llm/check_books.py",
@@ -15,7 +15,11 @@
     "test:llm": "node --test scripts/llm/*.test.js",
     "fixtures:llm": "node scripts/llm/export-token-fixtures.mjs",
     "check:fixtures:llm": "node scripts/llm/export-token-fixtures.mjs --check",
-    "check:mechanisms:llm": "python scripts/llm/check_mechanisms.py"
+    "check:mechanisms:llm": "python scripts/llm/check_mechanisms.py",
+    "build:book": "node scripts/build-book-figures.mjs && node scripts/build-book.mjs",
+    "check:book": "node scripts/build-book-figures.mjs --check && node scripts/build-book.mjs --check",
+    "check:reading:book": "python scripts/check-book-reading.py",
+    "check:figures:book": "python scripts/check-book-figures.py"
   },
   "engines": {
     "node": ">=22"

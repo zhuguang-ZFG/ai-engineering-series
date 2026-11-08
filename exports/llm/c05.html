@@ -10,10 +10,8 @@
 <h2 id="C05-section-2d9b0641ee" tabindex="-1">从文字到编号：先切片，再查表</h2>
 <p>模型不直接读汉字。文本先被分词器切成片段（token），每个片段换成词表里的编号（ID），编号再用来查一行数字。片段可以是完整单词、半个单词、标点、空格，甚至一个汉字的部分字节。</p>
 <p>以 <code>Hello, world!</code> 为例，旧实验的快照把它切成 <code>Hello</code>、<code>,</code>、<code> world</code>、<code>!</code> 四片；注意 <code>world</code> 前面的空格跟着它一起走。换成中文或生僻字符，切口可能落在字的中间。UTF-8 里 <code>A</code> 是一个字节 <code>41</code>，<code>中</code> 是三个字节 <code>E4 B8 AD</code>；如果分词器从中间切开，单独显示半截字节就会看到替代字符。把所有片段的字节按原顺序接回去，原文可以无损还原。</p>
-<p><img src="../../book/assets/handdraw/llm/token-strip.svg" alt="先切片，再找编号"></p>
-<p><em>图：原文被切成片段，再查成编号。片段数不等于字数，编号只是存储地址。</em></p>
-<p><img src="../../book/assets/handdraw/llm/byte-reassembly.svg" alt="碎字节，拼回来再读"></p>
-<p><em>图：半截字节显示不成字，不代表原文坏了；按字节顺序拼接即可还原。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/token-strip.svg" alt="先切片，再找编号"><figcaption>图：原文被切成片段，再查成编号。片段数不等于字数，编号只是存储地址。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/byte-reassembly.svg" alt="碎字节，拼回来再读"><figcaption>图：半截字节显示不成字，不代表原文坏了；按字节顺序拼接即可还原。</figcaption></figure>
 <p>这里要记住两个“不相等”：</p>
 <ul>
 <li><strong>字数 ≠ token 数</strong>：一个汉字可能一片，也可能多片；英文单词也可能被拆开。</li>
@@ -36,8 +34,7 @@
 <p>温度改变的是“怎样从分数里抽”，不是“分数从哪里来”。它不能补上材料里缺失的地点，也不能把错误事实变正确。</p>
 <h2 id="C05-section-9ef1087989" tabindex="-1">选中之后：追加与停止</h2>
 <p>抽样选中一个片段后，把它接到输入末尾，形成新输入，再算下一轮。这个循环叫自回归生成。下一步的候选依赖刚才写下的内容：第一步选中“水”，下一步要接的可能是句号；选中“茶”，候选又会变。</p>
-<p><img src="../../book/assets/handdraw/llm/generation-fork.svg" alt="选一个，再往下走"></p>
-<p><em>图：当前输入产生候选；选中一片后接回末尾，更新输入再算。概率条只示意结构，准确数值由实验计算。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/generation-fork.svg" alt="选一个，再往下走"><figcaption>图：当前输入产生候选；选中一片后接回末尾，更新输入再算。概率条只示意结构，准确数值由实验计算。</figcaption></figure>
 <p>生成会在几种情况下停：</p>
 <ul>
 <li>选中停止标记（它通常不写进正文）；</li>
@@ -52,8 +49,7 @@
 <li>B 路：<code>0.4 × 0.9 = 0.36</code></li>
 </ul>
 <p>第一步 A 更大，整条路却更小。贪心解码每步取最大，采样按概率抽，top-k 先留若干高分候选，top-p 先留累计概率达到阈值的一组再归一化。它们决定怎么走，都不负责核验沿路写出的事实。</p>
-<p><img src="../../book/assets/handdraw/llm/sequence-paths.svg" alt="眼前大，整条未必大"></p>
-<p><em>图：只比较图中两条指定路径，不是完整搜索树；它说明“每步最大”不等于“整段最大”。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/sequence-paths.svg" alt="眼前大，整条未必大"><figcaption>图：只比较图中两条指定路径，不是完整搜索树；它说明“每步最大”不等于“整段最大”。</figcaption></figure>
 <h2 id="C05-section-4540eaf9d0" tabindex="-1">失败对照</h2>
 <ol>
 <li><strong>概率高就当真</strong>：最高概率只表示“这段前文后更容易接出它”，不表示事实为真。材料没写杯里是什么，抽到“水”也没有增加证据。</li>

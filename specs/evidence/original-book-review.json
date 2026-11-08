@@ -1,0 +1,1281 @@
+{
+  "date": "2026-11-08",
+  "scope": "Original Vibe Coding 101, in-place Stage 1–3 and appendices",
+  "status": "completed",
+  "bookSourceSha256": "c8b4867511edd5c8e28b8c8154d21806a0f3cc393e68b82eb6499db553bce255",
+  "chapterNamesAndOrderPreserved": true,
+  "chapterCount": 195,
+  "fullBookReading": {
+    "pages": 198,
+    "layouts": 594,
+    "localLinksAndAssets": 4992,
+    "failures": 0,
+    "navigation": [
+      "original entry",
+      "chapter TOC link",
+      "keyboard skip"
+    ]
+  },
+  "illustrations": [
+    {
+      "file": "book/assets/handdraw/learn-path.svg",
+      "sha256": "8a234f64cc80f8a71edfdef9b6f9af092bf7b7b038f85c01fd48b5a52d95939d",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "book/assets/handdraw/error-flow.svg",
+      "sha256": "675fd6cccfdd0be18b50fbfc207f930b37bd6441cfa3deda308936746d531e63",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "book/assets/handdraw/db-index.svg",
+      "sha256": "aed7902626b11a994d78187815be7c6e73af34ac2adfad8d64b9fd7fdbe86d60",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "book/assets/handdraw/deploy.svg",
+      "sha256": "f4f32a76b95ea95dde0172e2c57d591cbae062fbce97d589fd542cfc41426b8a",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "book/assets/handdraw/web-framework.svg",
+      "sha256": "36369f06aa137182530526b27a93f04eb1b9ce56298f5e4ef9ff9e15d0466807",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "book/assets/handdraw/git-history.svg",
+      "sha256": "ea47a6c484be4303e3bfdc8970bbf5e5d3ae05da387d6765309b6d8fefbd5cd6",
+      "textWithinCanvas": true,
+      "visuallyReviewed": true
+    }
+  ],
+  "examples": {
+    "jsonRoundtrip": "passed for ensure_ascii False and True",
+    "venvWithoutActivation": "passed",
+    "sqliteQueryPlan": {
+      "before": [
+        [
+          2,
+          0,
+          216,
+          "SCAN users"
+        ]
+      ],
+      "after": [
+        [
+          3,
+          0,
+          61,
+          "SEARCH users USING INDEX by_user_id (user_id=?)"
+        ]
+      ]
+    },
+    "paginationWithTiedTimes": "passed",
+    "attentionWeights": [
+      0.3302384506733431,
+      0.6697615493266569,
+      0
+    ],
+    "gradientProbability": 0.598687660112452,
+    "gradientLoss": 0.5130152523999526
+  },
+  "validation": {
+    "npmTest": "passed",
+    "originalChapterAndAssetCheck": "passed",
+    "epubcheck": "three companion EPUBs: zero errors/warnings"
+  },
+  "contentReviewScope": [
+    "beginner debugging",
+    "package managers and virtual environments",
+    "JSON encoding",
+    "database indexes and isolation",
+    "pagination boundaries",
+    "architecture and deployment",
+    "Git references",
+    "Claude Code setup and billing",
+    "Transformer attention, multihead and residuals",
+    "training gradient update",
+    "12 interactive chapter entry repairs"
+  ],
+  "limits": [
+    "Full-book structure and reading verified; technical deep review covers the listed topics.",
+    "No claims of human learner study, paid service execution, or independent e-reader testing."
+  ],
+  "chapters": [
+    {
+      "file": "chapter-001.html",
+      "title": "课程介绍",
+      "stage": "指南",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-002.html",
+      "title": "如何学习本课程",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-003.html",
+      "title": "AI 时代的编程初体验",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-004.html",
+      "title": "AI 编程工具介绍与使用",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-005.html",
+      "title": "从截图复刻：第一次模仿练习",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-006.html",
+      "title": "1. 寻找真实问题",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-007.html",
+      "title": "2. 筛选值得做的方向",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-008.html",
+      "title": "3. 看懂真实需求（JTBD）",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-009.html",
+      "title": "4. 用访谈验证需求",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-010.html",
+      "title": "5. 收敛方案（双钻模型）",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-011.html",
+      "title": "6. 做出可交互原型",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-012.html",
+      "title": "7. 接入真实 AI 能力",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-013.html",
+      "title": "8. 打磨并交付完整作品",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-014.html",
+      "title": "在魔搭社区发布你的 Vibe Coding 产物",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-015.html",
+      "title": "产品思维基础",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-016.html",
+      "title": "从真实工作流里找 AI 场景",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-017.html",
+      "title": "常见问题与排错",
+      "stage": "Stage 1",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-018.html",
+      "title": "NanoBanana 素材生产",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-019.html",
+      "title": "AI 设计入门",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-020.html",
+      "title": "Figma 与 MasterGo 入门",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-021.html",
+      "title": "UI 设计规范与多产品界面",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-022.html",
+      "title": "结合 Agent Skills 美化界面",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-023.html",
+      "title": "设计原型到项目代码",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-024.html",
+      "title": "现代组件库与界面升级",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-025.html",
+      "title": "数据库与 Supabase 入门",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-026.html",
+      "title": "大模型辅助接口开发",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-027.html",
+      "title": "Git 与 GitHub 入门指南",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-028.html",
+      "title": "把网站发到网上（简单方式）：Vercel/Cloudflare/CloudBase 一键发布",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-029.html",
+      "title": "把网站发到网上（进阶方式）：自己买台 VPS 服务器搭建发布",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-030.html",
+      "title": "CLI Coding Agent 编程助手",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-031.html",
+      "title": "Stripe 支付集成",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-032.html",
+      "title": "Dify 入门与知识库集成",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-033.html",
+      "title": "一起做霍格沃茨画像",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-034.html",
+      "title": "AI 营销文案 SaaS",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-035.html",
+      "title": "在线考试与管理系统",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-036.html",
+      "title": "现代 AI 生图 SaaS",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-037.html",
+      "title": "类 Dify 智能体平台",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-038.html",
+      "title": "智能旅游规划 Agent 平台",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-039.html",
+      "title": "Spring Boot 电影推荐系统",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-040.html",
+      "title": "生鲜电商微服务系统",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-041.html",
+      "title": "Go 交通数据分析平台",
+      "stage": "Stage 2",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-042.html",
+      "title": "Claude Code 快速上手核心指南",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-043.html",
+      "title": "Claude Code MCP 完全指南",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-044.html",
+      "title": "Claude Code Skills 完全指南",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-045.html",
+      "title": "如何让 Coding Tools 长时间工作",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-046.html",
+      "title": "Claude Agent Teams 完全指南",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-047.html",
+      "title": "Claude Code 工作流最佳实践",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-048.html",
+      "title": "Claude Code 手机远程开发",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-049.html",
+      "title": "Claude Agent SDK 完全指南",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-050.html",
+      "title": "Claude Code Superpowers 工程级开发",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-051.html",
+      "title": "从 Vibe Coding 到 Spec Coding",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-052.html",
+      "title": "GitHub Issues 驱动开发实战",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-053.html",
+      "title": "从开发一个网页，到真正的程序，再到 AI 原生创作者",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-054.html",
+      "title": "如何选择你的应用该开发的平台",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-055.html",
+      "title": "如何构建微信小程序",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-056.html",
+      "title": "如何构建微信小程序（包含后端）",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-057.html",
+      "title": "如何用 Jetpack Compose 开发 Android 原生应用",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-058.html",
+      "title": "如何用 SwiftUI 开发 iOS 原生应用",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-059.html",
+      "title": "从零开始用 React Native + Expo 做一个门店巡检应用",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-060.html",
+      "title": "如何开发 Flutter 跨平台应用",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-061.html",
+      "title": "如何开发 PWA 本地应用",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-062.html",
+      "title": "如何开发浏览器 AI 助手插件",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-063.html",
+      "title": "如何开发跨平台 Electron 桌面程序",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-064.html",
+      "title": "如何用 Godot 开发横版、像素与 3D 游戏",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-065.html",
+      "title": "如何在本地模拟链铸造 NFT",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-066.html",
+      "title": "如何开发 VS Code 插件",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-067.html",
+      "title": "如何开发企业 Qt 设备客户端",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-068.html",
+      "title": "如何构建属于自己的个人网页与学术博客",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-069.html",
+      "title": "如何把开发好的程序发布上架",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-070.html",
+      "title": "什么是 RAG 以及它如何工作",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-071.html",
+      "title": "中高级 RAG 与工作流编排 - 以 LangGraph 为例",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-072.html",
+      "title": "放弃月入过万，他在农村小学带孩子们\"用AI赶苍蝇\"",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-073.html",
+      "title": "期末考试周，我偷偷用AI造了个\"校园闲鱼\"",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-074.html",
+      "title": "我给每个学生，做了一个不会累的\"学霸同桌\"",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-075.html",
+      "title": "48岁货车司机，熬了几个通宵，硬是用AI磕出一个出海工具站",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-076.html",
+      "title": "七款 AI 编程工具对比",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-077.html",
+      "title": "用设计和编程 Agent 构建网站",
+      "stage": "Stage 3",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-078.html",
+      "title": "全栈开发导论：Vibe Coding 时代的计算机知识地图",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-079.html",
+      "title": "计算机系统全景：从开机到访问网站",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-080.html",
+      "title": "数字电路基础：从晶体管到 CPU",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-081.html",
+      "title": "计算机组成原理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-082.html",
+      "title": "操作系统原理：进程、内存与文件系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-083.html",
+      "title": "数据表示原理：编码、存储与传输",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-084.html",
+      "title": "计算机网络：从输入网址到渲染页面",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-085.html",
+      "title": "数据结构导论",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-086.html",
+      "title": "算法导论",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-087.html",
+      "title": "编程语言概念：范式、演化与选型",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-088.html",
+      "title": "编译原理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-089.html",
+      "title": "类型系统导论",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-090.html",
+      "title": "集成开发环境 (IDE) 基础",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-091.html",
+      "title": "命令行与 Shell 脚本",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-092.html",
+      "title": "Git：代码的时光机",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-093.html",
+      "title": "环境变量与 PATH",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-094.html",
+      "title": "端口与 localhost",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-095.html",
+      "title": "SSH 与密钥认证",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-096.html",
+      "title": "包管理器（npm / pip / cargo）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-097.html",
+      "title": "调试的艺术",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-098.html",
+      "title": "正则表达式",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-099.html",
+      "title": "JavaScript 语言深入",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-100.html",
+      "title": "TypeScript：给 JS 加上类型系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-101.html",
+      "title": "前端框架对比（React / Vue / Svelte / Angular）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-102.html",
+      "title": "浏览器渲染管道",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-103.html",
+      "title": "HTML / CSS 布局体系",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-104.html",
+      "title": "JavaScript 运行时",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-105.html",
+      "title": "前端框架的本质",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-106.html",
+      "title": "状态管理哲学",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-107.html",
+      "title": "路由与导航",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-108.html",
+      "title": "图形与动画（Canvas / SVG / WebGL）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-109.html",
+      "title": "实时通信（WebSocket / SSE）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-110.html",
+      "title": "网页性能的度量与优化",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-111.html",
+      "title": "前端工程化全貌",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-112.html",
+      "title": "前端项目文件目录设计",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-113.html",
+      "title": "无障碍与国际化",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-114.html",
+      "title": "后端语言对比（Node.js / Go / Java / Rust）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-115.html",
+      "title": "客户端语言对比（Swift / Kotlin / Dart）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-116.html",
+      "title": "跨平台方案对比（React Native / Flutter / Electron / Tauri）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-117.html",
+      "title": "HTTP 协议",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-118.html",
+      "title": "一个请求的完整旅程",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-119.html",
+      "title": "Web 框架的本质",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-120.html",
+      "title": "API 入门",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-121.html",
+      "title": "API 设计哲学（REST / GraphQL / gRPC）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-122.html",
+      "title": "序列化与数据格式",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-123.html",
+      "title": "认证与授权体系",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-124.html",
+      "title": "并发、异步与多线程",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-125.html",
+      "title": "缓存的层次与策略",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-126.html",
+      "title": "消息队列与事件驱动",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-127.html",
+      "title": "异步任务队列与生产消费模型",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-128.html",
+      "title": "限流与背压控制",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-129.html",
+      "title": "搜索引擎原理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-130.html",
+      "title": "文件存储与对象存储",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-131.html",
+      "title": "后端分层架构",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-132.html",
+      "title": "后端项目文件目录设计",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-133.html",
+      "title": "领域特定语言（DSL）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-134.html",
+      "title": "数据库原理（索引 / 事务 / 查询优化）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-135.html",
+      "title": "数据模型全景（文档 / 图 / 时序 / 向量）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-136.html",
+      "title": "数据埋点与用户行为采集",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-137.html",
+      "title": "数据分析基础（统计 / 指标 / 漏斗）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-138.html",
+      "title": "A/B 测试与实验驱动",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-139.html",
+      "title": "数据可视化与仪表盘",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-140.html",
+      "title": "数据治理与数据质量",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-141.html",
+      "title": "从单体到微服务的演进",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-142.html",
+      "title": "分布式系统的挑战",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-143.html",
+      "title": "高可用与容灾",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-144.html",
+      "title": "系统设计方法论",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-145.html",
+      "title": "Linux 基础",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-146.html",
+      "title": "Docker 容器化",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-147.html",
+      "title": "Kubernetes 编排",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-148.html",
+      "title": "CI / CD 自动化",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-149.html",
+      "title": "域名、DNS 与 HTTPS",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-150.html",
+      "title": "负载均衡与网关",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-151.html",
+      "title": "网关与反向代理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-152.html",
+      "title": "云平台实战",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-153.html",
+      "title": "IAM 权限管理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-154.html",
+      "title": "对象存储与 CDN",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-155.html",
+      "title": "基础设施即代码",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-156.html",
+      "title": "监控、日志与告警",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-157.html",
+      "title": "故障排查与应急响应",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-158.html",
+      "title": "AI 简史与核心概念",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-159.html",
+      "title": "神经网络与深度学习",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-160.html",
+      "title": "Transformer 与注意力机制",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-161.html",
+      "title": "大语言模型的工作原理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-162.html",
+      "title": "提示词工程",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-163.html",
+      "title": "上下文工程",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-164.html",
+      "title": "多模态模型（视觉 / 音频 / 视频）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-165.html",
+      "title": "图像生成原理",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-166.html",
+      "title": "语音合成与识别",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-167.html",
+      "title": "Embedding 与向量检索",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-168.html",
+      "title": "RAG 架构",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-169.html",
+      "title": "AI Agent 与工具调用",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-170.html",
+      "title": "AI 协议（MCP & A2A）",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-171.html",
+      "title": "模型微调与部署",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-172.html",
+      "title": "AI 原生应用设计",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-173.html",
+      "title": "AI 能力词典",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-174.html",
+      "title": "代码质量与重构",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-175.html",
+      "title": "测试策略",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-176.html",
+      "title": "设计模式",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-177.html",
+      "title": "安全思维与攻防基础",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-178.html",
+      "title": "技术文档写作",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-179.html",
+      "title": "开源协作",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-180.html",
+      "title": "技术选型方法论",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-181.html",
+      "title": "PRD：AI 营销文案 SaaS 平台",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-182.html",
+      "title": "PRD：类 Dify 智能体编排平台",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-183.html",
+      "title": "PRD：在线考试与管理系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-184.html",
+      "title": "PRD：现代 AI 生图 SaaS 平台",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-185.html",
+      "title": "PRD：Spring Boot 电影推荐系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-186.html",
+      "title": "PRD：生鲜电商微服务系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-187.html",
+      "title": "PRD：Go 交通数据分析与可视化平台",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-188.html",
+      "title": "PRD：智能旅游规划 Agent 编排平台",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-189.html",
+      "title": "调试原理与艺术",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-190.html",
+      "title": "附录",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-191.html",
+      "title": "index",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-192.html",
+      "title": "stage-1/appendix-consumer-scenarios/index",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-193.html",
+      "title": "初中级开发",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-194.html",
+      "title": "企业级知识库实战：用 LlamaIndex 搭建能落地的 RAG 系统",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    },
+    {
+      "file": "chapter-195.html",
+      "title": "进阶开发",
+      "stage": "附录",
+      "structureAndReading": "passed"
+    }
+  ]
+}

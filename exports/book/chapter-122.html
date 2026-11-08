@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>序列化与数据格式 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 122 / 195</p><article><h1 id="序列化与数据格式">序列化与数据格式</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#序列化原理数据的翻译">序列化原理：数据的翻译</a><ul><li><a href="#序列化数据的必要性">序列化数据的必要性</a></li><li><a href="#1-序列化反序列化定义">1. 序列化/反序列化定义</a></li><li><a href="#2-常见的序列化格式">2. 常见的序列化格式</a></li><li><a href="#3-各语言序列化方式对比">3. 各语言序列化方式对比</a></li><li><a href="#4-性能对比">4. 性能对比</a></li><li><a href="#5-常见问题">5. 常见问题</a></li><li><a href="#6-实战电商系统序列化方案">6. 实战：电商系统序列化方案</a></li><li><a href="#7-用-ai-辅助选择序列化方案">7. 用 AI 辅助选择序列化方案</a></li><li><a href="#名词速查表-5">名词速查表</a></li></ul></li></ul></nav></details><h2 id="序列化原理数据的翻译">序列化原理：数据的翻译</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>数据如何在网络上传输？</strong> 这就像问：一个人说的话，如何让另一个人听懂？序列化解决的就是&quot;数据翻译&quot;的问题——把内存中的对象翻译成可以传输的格式。</p>
+</blockquote>
+<h3 id="序列化数据的必要性">序列化数据的必要性</h3>
+<p>在前后端交互过程中，数据需要经历多次&quot;变形&quot;才能从服务器传递到客户端。</p>
+<p><strong>场景一：前端收到的数据&quot;变了&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 后端发送
+Date birth = new Date(1990, 5, 15)
+
+// 前端收到
+{ &quot;birth&quot;: &quot;1990-06-15T00:00:00Z&quot; }  // 字符串！
+</code></pre>
+<p>前端想用 <code>.getFullYear()</code>，结果报错了——因为这不是 Date 对象，是字符串。</p>
+<p><strong>场景二：中文乱码</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">// 期望
+{ &quot;name&quot;: &quot;张三&quot; }
+
+// 实际收到
+{ &quot;name&quot;: &quot;å¼ ä¸&quot; }
+</code></pre>
+<p>字符编码问题导致中文变成乱码。</p>
+<p><strong>场景三：性能瓶颈</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">// 一个包含 10000 条商品列表的响应
+{
+  &quot;products&quot;: [
+    { &quot;id&quot;: 1, &quot;name&quot;: &quot;...&quot;, &quot;description&quot;: &quot;...&quot;, ... },
+    // ... 9999 more
+  ]
+}
+// 大小：5.2 MB，传输时间：3.5 秒
+</code></pre>
+<p>JSON 格式的冗余导致数据包太大，严重影响性能。</p>
+<p><strong>序列化就像&quot;翻译&quot;</strong>——把内存对象&quot;翻译&quot;成可以传输的格式，接收方再&quot;翻译&quot;回去。</p>
+<h3 id="1-序列化反序列化定义">1. 序列化/反序列化定义</h3>
+<p><strong>序列化</strong>（Serialization）就是把对象转换成可传输格式的过程。</p>
+<p><strong>反序列化</strong>（Deserialization）就是把传输格式还原成对象的过程。</p>
+<h4 id="11-用寄快递来类比">1.1 用寄快递来类比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">寄快递</th>
+<th align="left">序列化</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">打包物品</td>
+<td align="left">序列化</td>
+<td align="left">把物品装箱，贴上标签</td>
+</tr>
+<tr>
+<td align="left">运输</td>
+<td align="left">网络传输</td>
+<td align="left">快递车运送到目的地</td>
+</tr>
+<tr>
+<td align="left">拆包取物</td>
+<td align="left">反序列化</td>
+<td align="left">收件人打开箱子，取出物品</td>
+</tr>
+</tbody></table></div>
+<h4 id="12-需要序列化的原理">1.2 需要序列化的原理</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">原因</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>网络传输</strong></td>
+<td align="left">网络只能传输字节流</td>
+<td align="left">API 调用、RPC 通信</td>
+</tr>
+<tr>
+<td align="left"><strong>持久化存储</strong></td>
+<td align="left">磁盘只能存储字节</td>
+<td align="left">保存对象到文件、数据库</td>
+</tr>
+<tr>
+<td align="left"><strong>跨语言</strong></td>
+<td align="left">不同语言的数据结构不同</td>
+<td align="left">Java 对象 → Python 字典</td>
+</tr>
+<tr>
+<td align="left"><strong>分布式缓存</strong></td>
+<td align="left">Redis/Memcached 存储字节</td>
+<td align="left">缓存用户信息</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-常见的序列化格式">2. 常见的序列化格式</h3>
+<p>👇 <strong>动手试试看</strong>：点击下方按钮，观察不同语言的序列化过程：</p>
+<h4 id="21-json最通用">2.1 JSON：最通用</h4>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>可读性好，调试方便</li>
+<li>所有语言都支持</li>
+<li>浏览器原生支持（<code>JSON.parse</code> / <code>JSON.stringify</code>）</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>体积大（有大量 <code>{}</code> <code>&quot;&quot;</code> 标记）</li>
+<li>不支持丰富的数据类型（Date、Map、Set 会被转换成字符串）</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>公开 API</li>
+<li>前后端通信</li>
+<li>配置文件</li>
+</ul>
+<h4 id="22-xml曾经的主流">2.2 XML：曾经的主流</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;user&gt;
+  &lt;id&gt;123&lt;/id&gt;
+  &lt;name&gt;张三&lt;/name&gt;
+  &lt;email&gt;zhangsan@example.com&lt;/email&gt;
+  &lt;age&gt;28&lt;/age&gt;
+&lt;/user&gt;
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>结构清晰，支持注释</li>
+<li>支持复杂的嵌套结构</li>
+<li>有 Schema 验证（XSD）</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>体积大，解析慢</li>
+<li>标签冗余（<code>&lt;open&gt;&lt;/close&gt;</code>）</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>配置文件（Spring、MyBatis）</li>
+<li>SOAP 协议</li>
+<li>复杂数据交换</li>
+</ul>
+<h4 id="23-protobuf最高效">2.3 Protobuf：最高效</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-protobuf">// user.proto
+syntax = &quot;proto3&quot;;
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  int32 age = 4;
+}
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>体积小（比 JSON 小 30-50%）</li>
+<li>速度快（解析速度快 5-10 倍）</li>
+<li>向后兼容（新增字段不影响老版本）</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>不可读（二进制格式）</li>
+<li>需要 .proto 文件定义</li>
+<li>不支持动态类型</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>微服务内部通信</li>
+<li>高性能场景（游戏、实时通信）</li>
+<li>移动端 App（节省流量）</li>
+</ul>
+<h4 id="24-messagepack兼顾可读性和性能">2.4 MessagePack：兼顾可读性和性能</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">// MessagePack 是 JSON 的二进制版本
+// 相同数据，MessagePack 比 JSON 小 30% 左右
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>比 JSON 小，比 JSON 快</li>
+<li>保持 JSON 的数据模型</li>
+<li>支持所有 JSON 类型</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>不可读</li>
+<li>不如 Protobuf 高效</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>需要性能但不想用 Protobuf</li>
+<li>Redis 缓存</li>
+<li>WebSocket 消息</li>
+</ul>
+<h3 id="3-各语言序列化方式对比">3. 各语言序列化方式对比</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">语言</th>
+<th align="left">JSON 库</th>
+<th align="left">Protobuf 库</th>
+<th align="left">XML 库</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>JavaScript</strong></td>
+<td align="left"><code>JSON.stringify()</code></td>
+<td align="left"><code>protobuf.js</code></td>
+<td align="left"><code>fast-xml-parser</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Python</strong></td>
+<td align="left"><code>json.dumps()</code></td>
+<td align="left"><code>protobuf</code></td>
+<td align="left"><code>xmltodict</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Java</strong></td>
+<td align="left"><code>Jackson</code> / <code>Gson</code></td>
+<td align="left"><code>protobuf-java</code></td>
+<td align="left"><code>JAXB</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Go</strong></td>
+<td align="left"><code>encoding/json</code></td>
+<td align="left"><code>proto</code></td>
+<td align="left"><code>encoding/xml</code></td>
+</tr>
+<tr>
+<td align="left"><strong>C++</strong></td>
+<td align="left"><code>nlohmann/json</code></td>
+<td align="left"><code>protobuf</code></td>
+<td align="left"><code>tinyxml2</code></td>
+</tr>
+<tr>
+<td align="left"><strong>C#</strong></td>
+<td align="left"><code>System.Text.Json</code></td>
+<td align="left"><code>Google.Protobuf</code></td>
+<td align="left"><code>System.Xml</code></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>选择建议</strong></p>
+</blockquote>
+<ul>
+<li><strong>前后端通信</strong>：JSON（调试方便）</li>
+<li><strong>微服务内部</strong>：Protobuf（性能最优）</li>
+<li><strong>配置文件</strong>：JSON 或 YAML</li>
+<li><strong>旧系统对接</strong>：XML（可能别无选择）</li>
+</ul>
+<h3 id="4-性能对比">4. 性能对比</h3>
+<h4 id="41-大小对比以用户对象为例">4.1 大小对比（以用户对象为例）</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">大小</th>
+<th align="left">相对 JSON</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">JSON</td>
+<td align="left">68 bytes</td>
+<td align="left">100%</td>
+</tr>
+<tr>
+<td align="left">XML</td>
+<td align="left">142 bytes</td>
+<td align="left">209%</td>
+</tr>
+<tr>
+<td align="left">Protobuf</td>
+<td align="left">38 bytes</td>
+<td align="left">56%</td>
+</tr>
+<tr>
+<td align="left">MessagePack</td>
+<td align="left">52 bytes</td>
+<td align="left">76%</td>
+</tr>
+</tbody></table></div>
+<h4 id="42-速度对比序列化-10000-次">4.2 速度对比（序列化 10000 次）</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">耗时</th>
+<th align="left">相对 JSON</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">JSON</td>
+<td align="left">45 ms</td>
+<td align="left">100%</td>
+</tr>
+<tr>
+<td align="left">XML</td>
+<td align="left">120 ms</td>
+<td align="left">267%</td>
+</tr>
+<tr>
+<td align="left">Protobuf</td>
+<td align="left">8 ms</td>
+<td align="left">18%</td>
+</tr>
+<tr>
+<td align="left">MessagePack</td>
+<td align="left">28 ms</td>
+<td align="left">62%</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>性能测试结论</strong></p>
+</blockquote>
+<ul>
+<li><strong>Protobuf 最快</strong>：适合高性能场景</li>
+<li><strong>MessagePack 次之</strong>：比 JSON 快 40% 左右</li>
+<li><strong>JSON 最慢</strong>：但对大多数场景已经足够</li>
+</ul>
+<h3 id="5-常见问题">5. 常见问题</h3>
+<h4 id="51-日期序列化问题">5.1 日期序列化问题</h4>
+<p><strong>问题</strong>：Date 对象序列化后变成字符串</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 序列化前
+const date = new Date(&#39;2024-01-01&#39;)
+
+// 序列化后
+JSON.stringify(date)  // &quot;2024-01-01T00:00:00.000Z&quot;
+</code></pre>
+<p><strong>解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 方案1：转成时间戳
+{ createdAt: date.getTime() }  // 1704067200000
+
+// 方案2：转成 ISO 字符串
+{ createdAt: date.toISOString() }  // &quot;2024-01-01T00:00:00.000Z&quot;
+
+// 方案3：自定义序列化
+JSON.stringify(obj, (key, value) =&gt; {
+  if (value instanceof Date) {
+    return { __type: &#39;Date&#39;, value: value.toISOString() }
+  }
+  return value
+})
+</code></pre>
+<h4 id="52-循环引用问题">5.2 循环引用问题</h4>
+<p><strong>问题</strong>：对象循环引用会报错</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const obj = { name: &#39;test&#39; }
+obj.self = obj
+JSON.stringify(obj)  // TypeError: Converting circular structure to JSON
+</code></pre>
+<p><strong>解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 方案1：过滤掉循环引用
+const seen = new WeakSet()
+JSON.stringify(obj, (key, value) =&gt; {
+  if (typeof value === &#39;object&#39; &amp;&amp; value !== null) {
+    if (seen.has(value)) return
+    seen.add(value)
+  }
+  return value
+})
+
+// 方案2：使用 flatted 库
+import { parse, stringify } from &#39;flatted&#39;
+stringify(obj)  // 自动处理循环引用
+</code></pre>
+<h4 id="53-中文乱码问题">5.3 中文乱码问题</h4>
+<p><code>&quot;\u4f60\u597d&quot;</code> 是“你好”的合法 JSON 转义形式，并不代表乱码。<code>ensure_ascii=False</code> 只控制是否把非 ASCII 字符转义；真正写入文件时，还需要指定字节编码。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">import json
+from pathlib import Path
+
+data = {&quot;消息&quot;: &quot;你好&quot;}
+path = Path(&quot;message.json&quot;)
+path.write_text(json.dumps(data, ensure_ascii=False), encoding=&quot;utf-8&quot;)
+restored = json.loads(path.read_text(encoding=&quot;utf-8&quot;))
+print(restored[&quot;消息&quot;])  # 你好
+assert restored == data
+</code></pre>
+<p>保存为 <code>json_roundtrip.py</code> 后运行 <code>python json_roundtrip.py</code>。再把 <code>ensure_ascii</code> 改成 <code>True</code>：文件中的文字表示变了，读回的内容应保持不变。若看到乱码，检查写入、传输和读取双方的编码，而不是只改 JSON 的显示方式。</p>
+<p>HTTP 响应还应使用正确的媒体类型，并实际发送 UTF-8 字节。只改响应头，无法修复已经错误解码的内容。</p>
+<h3 id="6-实战电商系统序列化方案">6. 实战：电商系统序列化方案</h3>
+<h4 id="61-场景分析">6.1 场景分析</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">格式选择</th>
+<th align="left">理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>App → 后端 API</strong></td>
+<td align="left">JSON</td>
+<td align="left">调试方便，前后端统一</td>
+</tr>
+<tr>
+<td align="left"><strong>后端 → 后端 RPC</strong></td>
+<td align="left">Protobuf</td>
+<td align="left">性能最优，节省流量</td>
+</tr>
+<tr>
+<td align="left"><strong>缓存到 Redis</strong></td>
+<td align="left">MessagePack</td>
+<td align="left">比 JSON 小，可序列化复杂对象</td>
+</tr>
+<tr>
+<td align="left"><strong>日志记录</strong></td>
+<td align="left">JSON</td>
+<td align="left">便于日志分析工具解析</td>
+</tr>
+</tbody></table></div>
+<h4 id="62-代码示例">6.2 代码示例</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// API 响应（JSON）
+app.get(&#39;/api/products/:id&#39;, async (req, res) =&gt; {
+  const product = await db.getProduct(req.params.id)
+  res.json({
+    code: 0,
+    data: product
+  })
+})
+
+// 微服务通信（Protobuf）
+// product.proto
+syntax = &quot;proto3&quot;;
+message Product {
+  int32 id = 1;
+  string name = 2;
+  int32 price = 3;
+}
+
+// 服务端
+const proto = require(&#39;./product.proto&#39;)
+const message = proto.Product.create(product)
+const buffer = proto.Product.encode(message).finish()
+
+// 客户端
+const decoded = proto.Product.decode(buffer)
+
+// Redis 缓存（MessagePack）
+const msgpack = require(&#39;msgpack-lite&#39;)
+await redis.set(
+  `product:${id}`,
+  msgpack.encode(product)
+)
+const cached = msgpack.decode(await redis.get(`product:${id}`))
+</code></pre>
+<h3 id="7-用-ai-辅助选择序列化方案">7. 用 AI 辅助选择序列化方案</h3>
+<p>AI 可以帮助你根据场景选择合适的序列化格式。</p>
+<h4 id="71-提示词模板">7.1 提示词模板</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你是一位资深的系统架构师，精通数据序列化技术。请帮我选择合适的序列化方案。
+
+## 业务场景
+[描述你的场景，例如：电商 App、游戏后端、微服务等]
+
+## 技术要求
+[列出约束条件，例如：
+- 前后端分离（Vue + Node.js）
+- 性能要求高（QPS &gt; 10000）
+- 流量敏感（移动端，需节省流量）
+- 需要跨语言（Java + Python + Go）]
+
+## 数据特征
+[描述数据特点，例如：
+- 数据量大（单次响应 &gt; 1MB）
+- 结构复杂（多层嵌套）
+- 包含日期、二进制数据等特殊类型]
+
+## 输出格式
+请按以下格式输出：
+1. 推荐方案（JSON/Protobuf/MessagePack/XML）
+2. 理由说明
+3. 性能对比（估算大小和速度）
+4. 代码示例
+</code></pre>
+<h4 id="72-实战示例">7.2 实战示例</h4>
+<p><strong>输入提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你是一位资深的系统架构师。我们的电商 App 需要优化商品列表接口性能。
+
+## 业务场景
+- 电商 App 的商品列表接口
+- 单次返回 100 个商品
+- 每个 商品包含：id, name, price, image, description 等 20 个字段
+- 当前使用 JSON，响应大小约 200KB，耗时 800ms
+
+## 技术要求
+- 前端是 Vue.js
+- 后端是 Node.js + Go 微服务
+- 需要兼顾性能和开发效率
+
+## 优化目标
+- 响应时间降到 300ms 以内
+- 数据包大小减少 30%
+</code></pre>
+<p><strong>AI 输出</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>推荐方案：混合方案
+
+1. **API 层**：继续使用 JSON（前端友好）
+2. **微服务通信**：切换到 Protobuf（性能提升）
+3. **静态数据**：启用 gzip 压缩
+
+### 理由说明
+- JSON 对前端最友好，无需额外解析
+- 后端微服务用 Protobuf，可以减少 40% 的数据量
+- gzip 压缩对文本效果明显（JSON 可压缩 70%）
+
+### 性能对比
+| 方案 | 大小 | 耗时 |
+|------|------|------|
+| 当前 (JSON) | 200 KB | 800 ms |
+| + gzip | 60 KB | 350 ms |
+| + Protobuf | 50 KB | 280 ms |
+
+### 代码示例
+[具体实现代码...]
+</code></pre>
+<h3 id="名词速查表-5">名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">名词</th>
+<th align="left">英文</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>序列化</strong></td>
+<td align="left">Serialization</td>
+<td align="left">对象 → 字节流</td>
+</tr>
+<tr>
+<td align="left"><strong>反序列化</strong></td>
+<td align="left">Deserialization</td>
+<td align="left">字节流 → 对象</td>
+</tr>
+<tr>
+<td align="left"><strong>JSON</strong></td>
+<td align="left">JavaScript Object Notation</td>
+<td align="left">最常用的文本格式</td>
+</tr>
+<tr>
+<td align="left"><strong>XML</strong></td>
+<td align="left">Extensible Markup Language</td>
+<td align="left">标记语言，曾主流</td>
+</tr>
+<tr>
+<td align="left"><strong>Protobuf</strong></td>
+<td align="left">Protocol Buffers</td>
+<td align="left">Google 开源的高效格式</td>
+</tr>
+<tr>
+<td align="left"><strong>MessagePack</strong></td>
+<td align="left">-</td>
+<td align="left">JSON 的二进制版本</td>
+</tr>
+<tr>
+<td align="left"><strong>编码</strong></td>
+<td align="left">Encoding</td>
+<td align="left">字符 → 字节</td>
+</tr>
+<tr>
+<td align="left"><strong>解码</strong></td>
+<td align="left">Decoding</td>
+<td align="left">字节 → 字符</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-121.html">← API 设计哲学（REST / GraphQL / gRPC）</a><a rel="next" href="chapter-123.html">认证与授权体系 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

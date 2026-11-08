@@ -4,6 +4,11 @@ import { renderReading, readingContents } from "./reading-outline.mjs";
 
 const escape = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
 
+// Pair an authored standalone image with its immediately following caption.
+// The site and both book formats retain this semantic group when they reflow.
+const groupFigures = html => html.replace(/<p>(<img\b[^>]*>)<\/p>\s*<p><em>([\s\S]*?)<\/em><\/p>/g,
+  (_, image, caption) => `<figure class="curriculum-figure">${image}<figcaption>${caption}</figcaption></figure>`);
+
 // Authored chapter/answer pairs share one manifest across the site and books.
 // The original L URLs are learning assets, not aliases for the new C chapters.
 export function buildCurriculum({ root, course, write }) {
@@ -39,7 +44,7 @@ export function buildCurriculum({ root, course, write }) {
   write("course.css", readFileSync(join(root, "scripts/llm/course.css"), "utf8"));
   for (const [index, chapter] of chapters.entries()) {
     const rendered = renderReading(readingMarkdown(chapter.file), chapter.id);
-    const html = rewriteLinks(rendered.html, chapter.file);
+    const html = groupFigures(rewriteLinks(rendered.html, chapter.file));
     if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) throw new Error(`${chapter.id}: expected one chapter title`);
     const previous = chapters[index - 1];
     const next = chapters[index + 1];

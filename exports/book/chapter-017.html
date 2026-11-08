@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>常见问题与排错 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 1 · 17 / 195</p><article><h1 id="常见问题与排错">常见问题与排错</h1><details class="contents"><summary>本章目录 <span>· 6 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#本章导读-7">本章导读</a></li><li><a href="#1-核心心法截图问-ai">1. 核心心法：截图问 AI</a><ul><li><a href="#11-最简单的提问方式">1.1 最简单的提问方式</a></li><li><a href="#12-如何把问题讲清楚">1.2 如何把问题讲清楚</a></li></ul></li><li><a href="#2-第一步直接描述现象提问">2. 第一步：直接描述现象提问</a><ul><li><a href="#21-常见现象怎么描述">2.1 常见现象怎么描述</a></li><li><a href="#22-如果-ai-直接解决了">2.2 如果 AI 直接解决了</a></li><li><a href="#23-如果-ai-说需要更多信息">2.3 如果 AI 说&quot;需要更多信息&quot;</a></li></ul></li><li><a href="#3-第二步补充关键信息">3. 第二步：补充关键信息</a><ul><li><a href="#31-什么时候需要补充信息">3.1 什么时候需要补充信息</a></li><li><a href="#32-补充-console-信息页面白屏报错">3.2 补充 Console 信息（页面白屏/报错）</a></li><li><a href="#33-补充-network-信息数据问题api-报错">3.3 补充 Network 信息（数据问题/API 报错）</a></li><li><a href="#34-补充-elements-信息样式问题">3.4 补充 Elements 信息（样式问题）</a></li></ul></li><li><a href="#4-第三步迭代直到解决">4. 第三步：迭代直到解决</a><ul><li><a href="#41-低效的做法">4.1 低效的做法</a></li><li><a href="#42-高效的做法">4.2 高效的做法</a></li></ul></li><li><a href="#5-总结完整流程">5. 总结：完整流程</a></li></ul></nav></details><span class="heading-anchor" id="常见问题与排错-1"></span>
+<h2 id="本章导读-7">本章导读</h2>
+<p>在 AI 时代，排查错误的方式已经变了。</p>
+<p>AI 可以帮助你读懂报错、提出修复办法。你要做的是提供证据，并确认修改是否真的有效；不必先背熟所有错误类型。</p>
+<p>本章从描述现象开始，再用浏览器的 Console 和 Network 补充信息。每次只验证一个猜测，最后按原来的操作复测。</p>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/error-flow.svg" aria-label="打开大图：排错循环：复现、收集证据、只改一处、用同样步骤复测；通过则保留，失败则撤回并补证据"><img src="../../book/assets/handdraw/error-flow.svg" alt="排错循环：复现、收集证据、只改一处、用同样步骤复测；通过则保留，失败则撤回并补证据" loading="lazy"></a>
+  <figcaption><strong>修复要有前后对照。</strong>AI 的建议是待验证的猜测。原来的报错消失后，还要检查正常流程和相邻功能；失败时撤回这次修改，带着新证据继续排查。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h2 id="1-核心心法截图问-ai">1. 核心心法：截图问 AI</h2>
+<p>截图能帮助描述页面，但错误原文、触发步骤和最近的改动通常更利于定位。看不懂报错时，可以让 AI 解释其中的文件名、行号和关键字段。</p>
+<pre class="prose-block"><code class="language-text">重现问题 → 记录预期与实际结果 → 请 AI 提一个原因 → 只改一处 → 原步骤复测
+</code></pre>
+<p>例如“保存失败”可能来自空输入、登录过期或服务器错误。先看请求状态与返回内容，再决定改哪一处。理解这个区别，比连续尝试多个修复建议更有用。</p>
+<h3 id="11-最简单的提问方式">1.1 最简单的提问方式</h3>
+<p>不需要复杂的模板，两种方式任选：</p>
+<p><strong>方式一：描述现象</strong></p>
+<p>格式：刚才做了什么，现在出现了什么</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>刚才我修改了登录页面的代码，现在页面白屏了，怎么办？
+</code></pre>
+<p><strong>方式二：截图</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>[截图]
+
+这个报错怎么解决？
+</code></pre>
+<p><strong>最好的方式：描述 + 截图</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>刚才我修改了登录页面的代码，现在页面白屏了。
+
+[截图]
+
+怎么办？
+</code></pre>
+<p><strong>记住：描述清楚上下文，加上截图，AI 能更快帮你解决问题。</strong></p>
+<h3 id="12-如何把问题讲清楚">1.2 如何把问题讲清楚</h3>
+<p>很多初学者知道要提问，但不知道怎么说。其实只需要讲清楚三件事：</p>
+<p><strong>1. 刚才做了什么</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>刚才我点击了保存按钮
+刚才我修改了登录页面的代码
+刚才我刷新了页面
+</code></pre>
+<p><strong>2. 现在看到了什么</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>现在页面是空白的
+现在按钮点了没反应
+现在显示报错信息
+</code></pre>
+<p><strong>3. 想要达到什么效果</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>我想让数据保存成功
+我想让页面正常显示
+我想让按钮点击后弹出提示
+</code></pre>
+<p><strong>完整示例：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>刚才我点击了保存按钮，现在页面显示&quot;保存失败&quot;的报错。
+
+[截图]
+
+我想让表单数据成功保存到数据库，该怎么办？
+</code></pre>
+<p>关键原则：</p>
+<ul>
+<li>用大白话描述，不用专业术语</li>
+<li>按时间顺序说：先做了什么，然后发生了什么</li>
+<li>把你的预期说出来，让 AI 知道你想要什么</li>
+</ul>
+<h2 id="2-第一步直接描述现象提问">2. 第一步：直接描述现象提问</h2>
+<p>先写下“做了什么、期待什么、实际发生什么”。如果页面已经显示报错，复制完整错误文本；如果只有白屏或保存失败，再用下文的 F12 方法查看线索。截图可以补充界面状态，但不能代替具体错误。</p>
+<h3 id="21-常见现象怎么描述">2.1 常见现象怎么描述</h3>
+<blockquote>
+<p><strong>直接描述即可</strong></p>
+</blockquote>
+<p><strong>页面白屏</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>页面打开是空白的，怎么办？
+
+[截图]
+</code></pre>
+<p><strong>按钮点击没反应</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>点击这个按钮没反应，帮我看看。
+
+[截图]
+</code></pre>
+<p><strong>数据保存不了</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>点了保存，数据没存上，怎么办？
+
+[截图]
+</code></pre>
+<p><strong>样式显示不对</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>这个按钮位置偏了，怎么调整？
+
+[截图]
+</code></pre>
+<p><strong>接口报错</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>调用接口报错了，帮我看看。
+
+[截图]
+</code></pre>
+<h3 id="22-如果-ai-直接解决了">2.2 如果 AI 直接解决了</h3>
+<p>先保存修改前的版本，再检查 AI 建议涉及哪些文件。每次只改一处，按原来的步骤重试；只有结果符合预期，才保留修改。</p>
+<p>例如修复了“空标题仍可保存”，还要试“正常标题能保存”和“连续点击不会重复创建”。看到 AI 回复“已修好”不等于完成验证。</p>
+<h3 id="23-如果-ai-说需要更多信息">2.3 如果 AI 说&quot;需要更多信息&quot;</h3>
+<p>按下文方法补充信息。即使 AI 没有追问，只要原因还不清楚，也可以主动查看 Console 和 Network。</p>
+<h2 id="3-第二步补充关键信息">3. 第二步：补充关键信息</h2>
+<p>当 AI 说需要更多信息时，根据问题类型，打开 F12 截取对应的内容。</p>
+<h3 id="31-什么时候需要补充信息">3.1 什么时候需要补充信息</h3>
+<p>AI 可能会这样回复：</p>
+<ul>
+<li>&quot;请打开 Console 看看有没有报错&quot;</li>
+<li>&quot;截图 Network 面板给我看看&quot;</li>
+<li>&quot;需要看具体的错误信息&quot;</li>
+</ul>
+<p>这时候，根据下面的指引补充截图。</p>
+<h3 id="32-补充-console-信息页面白屏报错">3.2 补充 Console 信息（页面白屏/报错）</h3>
+<blockquote>
+<p><strong>操作步骤</strong></p>
+</blockquote>
+<p><strong>第一步：按 F12 打开开发者工具</strong></p>
+<p>Mac 是 <code>Cmd+Option+I</code>，或者右键页面选&quot;检查&quot;。</p>
+<p><strong>第二步：切换到 Console 标签页</strong></p>
+<p><strong>第三步：截图红色报错信息</strong></p>
+<p><strong>第四步：发给 AI</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Console 报错如下：
+
+[截图]
+</code></pre>
+<h3 id="33-补充-network-信息数据问题api-报错">3.3 补充 Network 信息（数据问题/API 报错）</h3>
+<blockquote>
+<p><strong>操作步骤</strong></p>
+</blockquote>
+<p><strong>第一步：按 F12 打开开发者工具</strong></p>
+<p><strong>第二步：切换到 Network 标签页</strong></p>
+<p><strong>第三步：重新操作一遍</strong>（点保存/刷新页面）</p>
+<p><strong>第四步：找到对应请求，截图</strong></p>
+<ul>
+<li>看 URL 和状态码</li>
+<li>看 Payload（传的参数）</li>
+<li>看 Response（返回结果）</li>
+</ul>
+<p><strong>第五步：发给 AI</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Network 信息如下：
+
+请求：[截图1]
+参数：[截图2]
+返回：[截图3]
+</code></pre>
+<h3 id="34-补充-elements-信息样式问题">3.4 补充 Elements 信息（样式问题）</h3>
+<blockquote>
+<p><strong>操作步骤</strong></p>
+</blockquote>
+<p><strong>第一步：右键元素 → &quot;检查&quot;</strong></p>
+<p>开发者工具会自动定位到该元素。</p>
+<p><strong>第二步：截图 Styles 面板</strong></p>
+<p><strong>第三步：发给 AI</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>元素样式如下：
+
+[截图]
+</code></pre>
+<h2 id="4-第三步迭代直到解决">4. 第三步：迭代直到解决</h2>
+<h3 id="41-低效的做法">4.1 低效的做法</h3>
+<p>这些做法会浪费你的时间：</p>
+<p>看到报错就慌张，开始瞎改代码
+没有记录已试过的办法，反复执行同一个失败操作</p>
+<h3 id="42-高效的做法">4.2 高效的做法</h3>
+<p>按照这套流程来：</p>
+<p>记录一次能稳定重现问题的操作；用 Console 或 Network 收集线索。让 AI 说明一个可检验的原因与最小改动，改完按原步骤复测。</p>
+<p>如果问题仍在，撤回无效改动，补充本轮结果；不要叠加多个未经验证的补丁。发送日志前隐藏 Token、Cookie、密码和个人数据，保留状态码、字段名及错误原文。</p>
+<h2 id="5-总结完整流程">5. 总结：完整流程</h2>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>遇到问题
+
+↓
+写下复现步骤、预期和实际结果
+    ↓
+收集错误原文、截图、Console / Network 信息
+    ↓
+请 AI 解释一个原因，给出最小修改
+    ↓
+保存旧版本 → 修改 → 按原步骤复测
+    ↓
+通过：检查相邻功能，记录原因并保留修改
+失败：撤回无效修改，补证据后再试
+</code></pre>
+<p><strong>自己检查一次</strong>：把作品中的必填字段留空，记录预期和实际结果。若已有正确提示，解释它为何符合要求；若出现错误，用上述流程修复。保留一份“输入—结果—原因”的记录，再用正常输入复测。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-016.html">← 从真实工作流里找 AI 场景</a><a rel="next" href="chapter-018.html">NanoBanana 素材生产 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

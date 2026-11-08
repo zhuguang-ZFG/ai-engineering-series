@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RAG 架构 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 168 / 195</p><article><h1 id="rag-架构">RAG 架构</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#rag-原理检索增强生成">RAG 原理：检索增强生成</a><ul><li><a href="#0-全景图大模型需要查资料的原理">0. 全景图：大模型需要&quot;查资料的原理</a></li><li><a href="#1-rag-基础流程索引检索生成">1. RAG 基础流程：索引、检索、生成</a></li><li><a href="#2-文本分块把大象装进冰箱">2. 文本分块：把大象装进冰箱</a></li><li><a href="#3-找到最相关的内容的实现">3. 找到最相关的内容的实现</a></li><li><a href="#4-架构演进从简单到智能">4. 架构演进：从简单到智能</a></li><li><a href="#5-rag-vs-微调该选哪个">5. RAG vs 微调：该选哪个</a></li><li><a href="#总结-41">总结</a></li><li><a href="#延伸阅读-29">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="rag-原理检索增强生成">RAG 原理：检索增强生成</h2>
+<p>一份活动通知太长，或者分散在许多文件里，应用可以先按问题检索相关片段，再把片段和问题一起交给模型。这就是检索增强生成（RAG）的一种常见用法。</p>
+<p>检索提供了额外依据，但模型仍可能漏读、误引或补造事实。本章沿着“资料是否进入索引 → 正确片段是否命中 → 本次输入是否包含它 → 回答是否忠于原句”检查结果。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>要回答的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础流程</td>
+<td>哪些资料真正进入本次输入？</td>
+</tr>
+<tr>
+<td>文本分块</td>
+<td>切开后有没有丢失条件、标题或例外？</td>
+</tr>
+<tr>
+<td>检索方法</td>
+<td>分数高的片段是否真的支持答案？</td>
+</tr>
+<tr>
+<td>架构组织</td>
+<td>增加哪一步能解决已观察到的错误？</td>
+</tr>
+<tr>
+<td>方案选择</td>
+<td>直接给材料、检索、工具、微调分别改变什么？</td>
+</tr>
+</tbody></table></div>
+<p>无需账号可先做 <a href="../llm/retrieval.html">L09 本地检索实验</a>。它计算字符二元组重叠并使用人工标注事实，不调用嵌入模型或商用生成模型，不能视为通用语义搜索实测。</p>
+<h3 id="0-全景图大模型需要查资料的原理">0. 全景图：大模型需要&quot;查资料的原理</h3>
+<p>如果问题是“这份通知的活动地点在哪里”，答案应来自通知。单靠训练后的参数不能保证拿到指定版本的原文；模型的训练截止、资料覆盖和产品自带工具，也要按具体版本分别确认，不能一概断言私有文件从未被使用过。</p>
+<p>RAG 把相关外部资料加入回答过程。你可以把它理解成带着参考材料答题，但仍要检查拿到的是哪份材料、是否完整，以及答案有没有超出依据。</p>
+<p>这里讲的是应用在推理时检索并提供材料，通常不更新生成模型参数。<a href="https://arxiv.org/abs/2005.11401">原始 RAG 论文</a>还研究了结合检索器与生成器的微调方案，不能把所有 RAG 都概括成“完全不涉及训练”。</p>
+<h3 id="1-rag-基础流程索引检索生成">1. RAG 基础流程：索引、检索、生成</h3>
+<figure><a class="figure-zoom" href="../../book/assets/handdraw/llm/retrieve-then-answer.svg" aria-label="打开大图：资料先切块检索，仅命中片段进入本次输入；无结果时保留未知"><img src="../../book/assets/handdraw/llm/retrieve-then-answer.svg" width="480" height="688" alt="资料先切块检索，仅命中片段进入本次输入；无结果时保留未知"></a><figcaption>课程原创手绘 G10：关注命中片段到本次输入的箭头。教学实验使用字符重叠检索，不代表具名模型的语义能力。<span class="figure-hint">点图查看原尺寸</span></figcaption></figure><ol>
+<li><strong>准备与索引</strong>：读取、清洗并按需要切分文档，保留编号、日期、有效版本与访问权限。可以建立关键词索引、向量索引，或使用已有数据库/API；向量数据库不是必需条件。</li>
+<li><strong>检索</strong>：根据当前用户权限和问题取候选片段，必要时重排序。先保证只有用户可读的资料能进入模型输入，再考虑相关性；相似度分数不是事实置信度。</li>
+<li><strong>生成与核验</strong>：把问题、获准使用的片段及来源标识组成输入。核对每项主张能否由引用原句支持；没有命中、资料冲突或过期时，应保留未知、列出差异或补查来源。</li>
+</ol>
+<p>索引需要维护。原文修改、删除、权限变化后，要检查增量处理和索引刷新是否生效；“文件改了”不等于线上问答已经读到新版本。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>检查点</th>
+<th>记录什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>资料准备</td>
+<td>文档编号、版本、日期、可读范围、解析结果</td>
+</tr>
+<tr>
+<td>本次检索</td>
+<td>查询、片段编号、截取范围和排序</td>
+</tr>
+<tr>
+<td>本次生成</td>
+<td>实际送入的材料、回答、逐项引用和未知项</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-文本分块把大象装进冰箱">2. 文本分块：把大象装进冰箱</h3>
+<p>先检查资料规模。几段文字可以完整放进上下文时，直接给材料是一个值得比较的基线；并非每份文件都需要切块和建库。资料量、输入预算、延迟或定位要求使完整输入不合适时，再设计分块。</p>
+<p>固定字符数或 token 数便于实现，但可能切断条件。递归分块先按段落、句子等边界尝试；结构分块保留标题、列表、表格及其关联；语义分块借助表示或模型估计主题变化，也可能划错边界。</p>
+<p>例如“周六开放，节假日除外”不能只保留前半句。表格中的费用数字需要表头、单位和适用条件。片段带上文档编号和章节路径，必要时取相邻内容，才能回到原文判断。</p>
+<p>块长与重叠没有通用最优值。可以把 200–500 tokens、10%–20% 重叠作为某次实验的候选配置，不能当成普遍建议。用目标 tokenizer 核算预算，比较代表性问题中正确证据的命中、条件完整性、延迟和成本；也检查重复片段是否挤掉其他证据。</p>
+<h3 id="3-找到最相关的内容的实现">3. 找到最相关的内容的实现</h3>
+<p>不同方法会排出不同候选。先列出任务需要的证据，例如日期、产品编号、例外条款，再检查它们能否被找到。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>常见用途</th>
+<th>需要留意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关键词检索，如 BM25</td>
+<td>查专名、编号、原文词语</td>
+<td>不同说法可能漏检；分词、同义词扩展和语料会影响结果</td>
+</tr>
+<tr>
+<td>向量检索</td>
+<td>根据嵌入表示查相近表述</td>
+<td>可能把意思接近但条件不同的片段排高；型号、否定和数字仍要核对</td>
+</tr>
+<tr>
+<td>混合检索</td>
+<td>合并不同召回方式的候选</td>
+<td>融合与去重有额外成本，效果依任务验证</td>
+</tr>
+<tr>
+<td>重排序</td>
+<td>对候选与问题重新打分</td>
+<td>可用交叉编码器等方法，但不能找回初筛已经漏掉的资料，也不保证首项正确</td>
+</tr>
+</tbody></table></div>
+<p>检索分数表示排序依据，不表示“这句话有多少概率为真”。本地 L09 的字符二元组重叠尤其只能展示检索步骤，不能把它的分数叫作模型理解程度。</p>
+<p>分开评估两个问题：正确证据是否进入候选，以及生成的主张是否由证据支持。再测无命中、过期版本、相互矛盾的资料和夹带命令的片段；只测能搜到答案的题，会遗漏重要失败路径。</p>
+<h3 id="4-架构演进从简单到智能">4. 架构演进：从简单到智能</h3>
+<p>Naive、Advanced、Modular 是 <a href="https://arxiv.org/abs/2312.10997">RAG 综述</a>使用的组织方式，不是分别在 2023、2024、2025 年诞生并依次替代的三代产品，也不是越复杂越准确的阶梯。</p>
+<ul>
+<li><strong>Naive RAG</strong>：用基本的索引、检索、生成流程建立基线。</li>
+<li><strong>Advanced RAG</strong>：根据问题增加检索前后的改进，如查询改写、重排序或上下文整理；验证它解决了哪些错误，是否引入新遗漏。</li>
+<li><strong>Modular RAG</strong>：把路由、检索、生成等组织成可组合模块，适用于需要不同处理路径的任务；模块和调用次数也增加了调试与评估工作。</li>
+</ul>
+<p>例如资料中找不到“活动地址”时，先看索引是否漏了通知、查询是否匹配、片段是否切坏，再决定改哪一步。没有证据表明需要循环检索时，不必先搭一套多轮代理。</p>
+<h3 id="5-rag-vs-微调该选哪个">5. RAG vs 微调：该选哪个</h3>
+<p>先定位缺口：没有提供资料、算不准、需要执行动作，还是在许多有代表性的样本上都难以遵循目标行为？不同缺口需要不同办法。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>改变什么</th>
+<th>适用条件与限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>直接给材料与提示</td>
+<td>本次输入</td>
+<td>小量资料先比较此基线；仍受预算和信息利用效果限制</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>检索与本次提供的证据</td>
+<td>适合从较多、需更新或定位的资料里找依据；要维护索引、版本、权限与引用</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>可执行的运算或操作</td>
+<td>金额复算、数据库查询等按接口完成；需要参数校验和执行回执</td>
+</tr>
+<tr>
+<td>微调</td>
+<td>模型参数</td>
+<td>可适配任务和行为，也可能影响领域表现；需要合格数据、训练及独立评估，不能保证精确记忆或随时返回出处</td>
+</tr>
+</tbody></table></div>
+<p>RAG 的总成本包括解析、索引、存储、检索、模型调用和维护；微调也有数据整理、训练、评估与推理成本，不能脱离规模一概比高低。有来源标识便于追查，但引用可能不支持结论；二者都不能保证消除幻觉。</p>
+<p>从能满足任务的简单方案开始，遇到可复现缺口再增加组件。RAG 与微调可以组合，是否值得由留出的任务、延迟、成本和维护要求共同决定，不能预设组合最强。</p>
+<h3 id="总结-41">总结</h3>
+<p>RAG 让模型在回答时使用检索到的外部材料。可靠结果需要资料准备、检索、输入组织、生成和核验共同配合：漏了资料先查索引，搜错片段查召回，拿到证据却说错再查生成与引用。到 <a href="../llm/approaches.html">L11</a> 选一次方案，再用 <a href="../llm/project.html">L12</a> 完成带依据的资料报告。</p>
+<h3 id="延伸阅读-29">延伸阅读</h3>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">LangChain 资料检索文档</a>：当前官方入口；retriever 也可包装非向量来源，框架不是 RAG 的必要前提。</li>
+<li><a href="https://docs.llamaindex.ai/">LlamaIndex 文档</a>：框架文档入口，具体接口按所用版本文档核对。</li>
+<li><a href="https://arxiv.org/abs/2005.11401">原始 RAG 论文</a>：检索与参数化生成结合的研究方案，不等于本课推理时检索的全部实现。</li>
+<li><a href="https://arxiv.org/abs/2312.10997">RAG Survey</a>：Naive、Advanced、Modular 等分类及评估问题。</li>
+<li><a href="https://www.pinecone.io/learn/chunking-strategies/">Chunking Strategies</a>：供应商的策略文章，配置仍需按自己的资料评估。</li>
+<li><a href="https://superlinked.com/vector-db-comparison">向量数据库对比</a>：第三方产品比较汇总，不能当作权威性能排名。</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-167.html">← Embedding 与向量检索</a><a rel="next" href="chapter-169.html">AI Agent 与工具调用 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

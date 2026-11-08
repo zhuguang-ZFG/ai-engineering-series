@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PRD：Spring Boot 电影推荐系统 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 185 / 195</p><article><h1 id="prdspring-boot-电影推荐系统">PRD：Spring Boot 电影推荐系统</h1><details class="contents"><summary>本章目录 <span>· 19 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-项目定位-4">1. 项目定位</a></li><li><a href="#10-技术选型建议-1">1.0 技术选型建议</a></li><li><a href="#11-竞品参考官方-1">1.1 竞品参考（官方）</a></li><li><a href="#12-产品借鉴点-1">1.2 产品借鉴点</a></li><li><a href="#13-竞品页面拆解-1">1.3 竞品页面拆解</a></li><li><a href="#2-目标用户与核心目标-4">2. 目标用户与核心目标</a></li><li><a href="#3-mvp-范围-4">3. MVP 范围</a></li><li><a href="#4-角色与权限-4">4. 角色与权限</a></li><li><a href="#5-前端实现-2">5. 前端实现</a></li><li><a href="#51-页面架构总览-2">5.1 页面架构总览</a><ul><li><a href="#a-官网前台-wwwxxxcom-2">A. 官网前台 www.xxx.com</a></li><li><a href="#1-官网首页-www-4">1. 官网首页 www:/</a></li><li><a href="#b-用户前台-appxxxcom">B. 用户前台 app.xxx.com</a></li><li><a href="#2-登录页-applogin-4">2. 登录页 app:/login</a></li><li><a href="#3-电影列表页-appmovies">3. 电影列表页 app:/movies</a></li><li><a href="#4-电影详情页-appmoviesid">4. 电影详情页 app:/movies/:id</a></li><li><a href="#5-推荐页-apprecommendations">5. 推荐页 app:/recommendations</a></li><li><a href="#6-个人中心-appme">6. 个人中心 app:/me</a></li><li><a href="#c-后台管理台-adminxxxcom-2">C. 后台管理台 admin.xxx.com</a></li><li><a href="#7-后台首页-admin-1">7. 后台首页 admin:/</a></li><li><a href="#8-电影管理页-adminmovies">8. 电影管理页 admin:/movies</a></li><li><a href="#9-推荐概览页-adminrecommendations">9. 推荐概览页 admin:/recommendations</a></li></ul></li><li><a href="#52-关键用户链路-1">5.2 关键用户链路</a></li><li><a href="#6-后端实现-4">6. 后端实现</a></li><li><a href="#61-后台指标与监控-3">6.1 后台指标与监控</a></li><li><a href="#7-推荐策略">7. 推荐策略</a></li><li><a href="#8-接口草案-3">8. 接口草案</a></li><li><a href="#9-关键业务规则-1">9. 关键业务规则</a></li><li><a href="#10-非功能要求-2">10. 非功能要求</a></li><li><a href="#11-开发顺序建议-2">11. 开发顺序建议</a></li><li><a href="#12-待确认项-2">12. 待确认项</a></li></ul></nav></details><p>状态：Draft v0.1<br>目标：明确推荐系统项目的最小可用边界和前后端分工。</p>
+<h2 id="1-项目定位-4">1. 项目定位</h2>
+<p>这是一个“带推荐能力的电影站点”，不是纯展示页面。它需要把用户行为沉淀下来，并给出可解释推荐。</p>
+<p>一句话定义：
+做一个包含电影浏览、评分收藏、推荐结果与后台管理的电影推荐系统。</p>
+<p>系统总览：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart LR
+  WWW[&quot;www.xxx.com&lt;br/&gt;官网前台&quot;] --&gt; API[&quot;应用 API / 管理 API&quot;]
+  APP[&quot;app.xxx.com&lt;br/&gt;用户前台&quot;] --&gt; API
+  ADMIN[&quot;admin.xxx.com&lt;br/&gt;后台管理台&quot;] --&gt; API
+  API --&gt; AUTH[&quot;JWT Auth&quot;]
+  API --&gt; DB[&quot;MySQL&quot;]
+  API --&gt; REC[&quot;Recommendation Service&quot;]
+</code></pre>
+<h2 id="10-技术选型建议-1">1.0 技术选型建议</h2>
+<ul>
+<li>前端框架：<code>React</code> 或 <code>Vue</code></li>
+<li>后端框架：<code>Spring Boot 3</code></li>
+<li>数据库：<code>MySQL</code></li>
+<li>鉴权：<code>JWT</code></li>
+<li>缓存：<code>Redis</code>（可选）</li>
+</ul>
+<p>站点入口约定：</p>
+<ul>
+<li>官网前台：<code>www.xxx.com</code></li>
+<li>用户前台：<code>app.xxx.com</code></li>
+<li>后台管理台：<code>admin.xxx.com</code></li>
+</ul>
+<h2 id="11-竞品参考官方-1">1.1 竞品参考（官方）</h2>
+<ul>
+<li><a href="https://letterboxd.com/">Letterboxd</a></li>
+<li><a href="https://www.imdb.com/">IMDb</a></li>
+</ul>
+<h2 id="12-产品借鉴点-1">1.2 产品借鉴点</h2>
+<p>本项目的产品设计建议参考真实电影产品的做法：</p>
+<ul>
+<li>借鉴 <code>Letterboxd</code> 的社区化电影浏览体验：电影卡片、评分、收藏、个人记录要自然串起来</li>
+<li>借鉴 <code>IMDb</code> 的详情页信息组织：海报、简介、标签、评分、演员和关联内容分层展示</li>
+<li>推荐页不能只是一个列表，应当同时展示推荐理由</li>
+<li>个人中心要强调“我的评分 / 我的收藏 / 我的推荐偏好”</li>
+<li>后台管理应像内容后台，而不是简单 CRUD 页面</li>
+</ul>
+<h2 id="13-竞品页面拆解-1">1.3 竞品页面拆解</h2>
+<p>建议重点参考的竞品页面结构：</p>
+<ul>
+<li><code>Letterboxd</code> 首页与个人页<ul>
+<li>重点看：电影浏览、评分记录、收藏和个人偏好的组织方式</li>
+</ul>
+</li>
+<li><code>IMDb</code> 电影详情页<ul>
+<li>重点看：海报、简介、标签、评分、演员与相关内容的层次</li>
+</ul>
+</li>
+<li><code>IMDb</code> 排行榜和推荐内容区域<ul>
+<li>重点看：卡片式展示和浏览路径设计</li>
+</ul>
+</li>
+</ul>
+<p>因此本项目建议：</p>
+<ul>
+<li>列表页更像内容浏览页</li>
+<li>详情页更像内容详情页</li>
+<li>推荐页更像“为你推荐”</li>
+<li>后台页更像内容运营后台</li>
+</ul>
+<h2 id="2-目标用户与核心目标-4">2. 目标用户与核心目标</h2>
+<p>目标用户：</p>
+<ul>
+<li>浏览和筛选电影的普通用户</li>
+<li>愿意通过评分与收藏改善推荐结果的注册用户</li>
+<li>维护影片信息和推荐质量的管理员</li>
+</ul>
+<p>核心目标：</p>
+<ul>
+<li>用户可以完成浏览、评分、收藏全流程</li>
+<li>系统可给出 TopN 推荐结果</li>
+<li>推荐结果要有基础可解释性</li>
+</ul>
+<h2 id="3-mvp-范围-4">3. MVP 范围</h2>
+<p>第一版必须包含：</p>
+<ul>
+<li>注册/登录</li>
+<li>电影列表和详情</li>
+<li>搜索、分类、分页</li>
+<li>用户评分</li>
+<li>收藏电影</li>
+<li>推荐页</li>
+<li>管理后台维护电影数据</li>
+</ul>
+<p>第一版不做：</p>
+<ul>
+<li>复杂协同过滤算法</li>
+<li>视频播放</li>
+<li>评论社区</li>
+<li>多维画像系统</li>
+<li>实时推荐流计算</li>
+</ul>
+<h2 id="4-角色与权限-4">4. 角色与权限</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>游客</td>
+<td>浏览电影列表与详情</td>
+</tr>
+<tr>
+<td>注册用户</td>
+<td>评分、收藏、查看推荐</td>
+</tr>
+<tr>
+<td>管理员</td>
+<td>管理电影数据、查看推荐概览</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-前端实现-2">5. 前端实现</h2>
+<h2 id="51-页面架构总览-2">5.1 页面架构总览</h2>
+<p>当前 PRD 定义为 <code>3 套入口，9 个大页面</code>：</p>
+<ul>
+<li>官网前台 <code>1</code> 个大页面</li>
+<li>用户前台 <code>5</code> 个大页面</li>
+<li>后台管理台 <code>3</code> 个大页面</li>
+</ul>
+<h3 id="a-官网前台-wwwxxxcom-2">A. 官网前台 <code>www.xxx.com</code></h3>
+<h3 id="1-官网首页-www-4">1. 官网首页 <code>www:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>产品介绍</li>
+<li>热门电影</li>
+<li>注册入口</li>
+</ul>
+<h3 id="b-用户前台-appxxxcom">B. 用户前台 <code>app.xxx.com</code></h3>
+<h3 id="2-登录页-applogin-4">2. 登录页 <code>app:/login</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>登录</li>
+<li>注册入口</li>
+</ul>
+<h3 id="3-电影列表页-appmovies">3. 电影列表页 <code>app:/movies</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>浏览电影</li>
+<li>搜索和筛选</li>
+<li>分页</li>
+</ul>
+<h3 id="4-电影详情页-appmoviesid">4. 电影详情页 <code>app:/movies/:id</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看海报和简介</li>
+<li>评分</li>
+<li>收藏</li>
+<li>查看标签和推荐理由</li>
+</ul>
+<h3 id="5-推荐页-apprecommendations">5. 推荐页 <code>app:/recommendations</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看个性化推荐</li>
+<li>查看推荐理由</li>
+</ul>
+<h3 id="6-个人中心-appme">6. 个人中心 <code>app:/me</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看评分历史</li>
+<li>查看收藏</li>
+<li>查看个人偏好</li>
+</ul>
+<h3 id="c-后台管理台-adminxxxcom-2">C. 后台管理台 <code>admin.xxx.com</code></h3>
+<h3 id="7-后台首页-admin-1">7. 后台首页 <code>admin:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>电影总数</li>
+<li>用户行为概览</li>
+<li>推荐效果概览</li>
+</ul>
+<h3 id="8-电影管理页-adminmovies">8. 电影管理页 <code>admin:/movies</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>新增电影</li>
+<li>编辑电影</li>
+<li>管理标签</li>
+</ul>
+<h3 id="9-推荐概览页-adminrecommendations">9. 推荐概览页 <code>admin:/recommendations</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看推荐结果</li>
+<li>查看热门标签</li>
+<li>查看用户行为统计</li>
+</ul>
+<h2 id="52-关键用户链路-1">5.2 关键用户链路</h2>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  visitor[&quot;访客&quot;] --&gt; list[&quot;电影列表页&quot;]
+  list --&gt; detail[&quot;电影详情页&quot;]
+  visitor --&gt; login[&quot;登录 / 注册&quot;]
+  login --&gt; rate[&quot;评分 / 收藏&quot;]
+  rate --&gt; reco[&quot;推荐页&quot;]
+  reco --&gt; me[&quot;个人中心&quot;]
+  admin[&quot;管理员&quot;] --&gt; movies[&quot;电影管理页&quot;]
+  movies --&gt; recoAdmin[&quot;推荐概览页&quot;]
+</code></pre>
+<p>关键状态流：</p>
+<ul>
+<li>用户：游客 -&gt; 注册用户</li>
+<li>电影交互：未评分 -&gt; 已评分</li>
+<li>推荐：冷启动 -&gt; 有偏好推荐</li>
+</ul>
+<p>推荐技术栈：</p>
+<ul>
+<li>React 或 Vue</li>
+<li>TypeScript</li>
+<li>Ant Design / shadcn/ui</li>
+</ul>
+<p>建议页面：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>首页</td>
+<td><code>/</code></td>
+<td>热门电影、推荐入口</td>
+</tr>
+<tr>
+<td>电影列表页</td>
+<td><code>/movies</code></td>
+<td>搜索、筛选、分页</td>
+</tr>
+<tr>
+<td>电影详情页</td>
+<td><code>/movies/:id</code></td>
+<td>简介、标签、评分、收藏</td>
+</tr>
+<tr>
+<td>推荐页</td>
+<td><code>/recommendations</code></td>
+<td>个性化推荐列表</td>
+</tr>
+<tr>
+<td>个人中心</td>
+<td><code>/me</code></td>
+<td>评分与收藏记录</td>
+</tr>
+<tr>
+<td>管理后台</td>
+<td><code>/admin/movies</code></td>
+<td>电影维护</td>
+</tr>
+</tbody></table></div>
+<p>前端关键组件：</p>
+<ul>
+<li>电影卡片</li>
+<li>搜索筛选栏</li>
+<li>评分组件</li>
+<li>收藏按钮</li>
+<li>推荐理由展示卡片</li>
+<li>后台表格和编辑弹窗</li>
+</ul>
+<h2 id="6-后端实现-4">6. 后端实现</h2>
+<p>推荐技术栈：</p>
+<ul>
+<li>Java 17</li>
+<li>Spring Boot 3</li>
+<li>Spring Web</li>
+<li>Spring Data JPA</li>
+<li>MySQL 8</li>
+<li>JWT 鉴权</li>
+</ul>
+<p>后端模块：</p>
+<ul>
+<li><code>auth</code></li>
+<li><code>movies</code></li>
+<li><code>ratings</code></li>
+<li><code>favorites</code></li>
+<li><code>recommendations</code></li>
+<li><code>admin</code></li>
+</ul>
+<p>建议数据表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">users (
+  id bigint primary key auto_increment,
+  email varchar(120),
+  password_hash varchar(255),
+  role varchar(20),
+  created_at datetime
+)
+
+movies (
+  id bigint primary key auto_increment,
+  title varchar(200),
+  summary text,
+  release_year int,
+  poster_url varchar(500),
+  created_at datetime
+)
+
+movie_tags (
+  id bigint primary key auto_increment,
+  movie_id bigint,
+  tag varchar(50)
+)
+
+ratings (
+  id bigint primary key auto_increment,
+  user_id bigint,
+  movie_id bigint,
+  score int,
+  created_at datetime
+)
+
+favorites (
+  id bigint primary key auto_increment,
+  user_id bigint,
+  movie_id bigint,
+  created_at datetime
+)
+
+recommendation_logs (
+  id bigint primary key auto_increment,
+  user_id bigint,
+  strategy varchar(50),
+  result_count int,
+  created_at datetime
+)
+</code></pre>
+<h2 id="61-后台指标与监控-3">6.1 后台指标与监控</h2>
+<p>后台建议至少查看这些指标：</p>
+<ul>
+<li>电影总数</li>
+<li>日评分数</li>
+<li>收藏率</li>
+<li>推荐点击率</li>
+<li>热门标签分布</li>
+<li>冷启动用户占比</li>
+</ul>
+<p>基础监控建议：</p>
+<ul>
+<li>推荐接口响应耗时</li>
+<li>评分写入成功率</li>
+<li>数据库慢查询</li>
+<li>缓存命中率（如果用了 Redis）</li>
+</ul>
+<h2 id="7-推荐策略">7. 推荐策略</h2>
+<p>第一版推荐策略建议：</p>
+<ul>
+<li>基于标签偏好</li>
+<li>结合用户评分权重</li>
+<li>冷启动时叠加热门电影</li>
+<li>过滤已评分/已收藏电影</li>
+</ul>
+<p>推荐结果应展示：</p>
+<ul>
+<li>推荐分值</li>
+<li>推荐理由</li>
+<li>对应标签</li>
+</ul>
+<h2 id="8-接口草案-3">8. 接口草案</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/register</code></td>
+<td>注册</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/login</code></td>
+<td>登录</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/movies</code></td>
+<td>电影列表，支持搜索与分页</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/movies/:id</code></td>
+<td>电影详情</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/movies/:id/ratings</code></td>
+<td>提交评分</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/movies/:id/favorite</code></td>
+<td>收藏电影</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/movies/:id/favorite</code></td>
+<td>取消收藏</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/recommendations</code></td>
+<td>获取推荐结果</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/me/profile</code></td>
+<td>获取用户资料和行为摘要</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/admin/movies</code></td>
+<td>新增电影</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/admin/movies/:id</code></td>
+<td>编辑电影</td>
+</tr>
+</tbody></table></div>
+<p><code>GET /api/recommendations</code> 返回示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;items&quot;: [
+    {
+      &quot;movieId&quot;: 12,
+      &quot;title&quot;: &quot;Interstellar&quot;,
+      &quot;score&quot;: 0.91,
+      &quot;reason&quot;: &quot;你近期给高分的科幻与冒险标签影片较多&quot;
+    }
+  ]
+}
+</code></pre>
+<h2 id="9-关键业务规则-1">9. 关键业务规则</h2>
+<ul>
+<li>每个用户对同一电影只保留一条评分</li>
+<li>收藏与评分都能影响推荐</li>
+<li>管理员接口必须单独鉴权</li>
+<li>推荐结果至少返回 10 条或当前可用最大值</li>
+</ul>
+<h2 id="10-非功能要求-2">10. 非功能要求</h2>
+<ul>
+<li>推荐结果应可解释</li>
+<li>列表与详情页加载要可接受</li>
+<li>管理员接口与普通用户接口权限严格分离</li>
+<li>推荐缓存和行为数据允许后续扩展</li>
+</ul>
+<h2 id="11-开发顺序建议-2">11. 开发顺序建议</h2>
+<ol>
+<li>登录与用户体系</li>
+<li>电影列表与详情</li>
+<li>评分与收藏</li>
+<li>推荐接口</li>
+<li>后台管理页</li>
+</ol>
+<h2 id="12-待确认项-2">12. 待确认项</h2>
+<ul>
+<li>前端选 React 还是 Vue</li>
+<li>推荐解释文案是后端拼接还是前端渲染</li>
+<li>是否需要影片导入脚本</li>
+<li>后台是否要包含标签管理</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-184.html">← PRD：现代 AI 生图 SaaS 平台</a><a rel="next" href="chapter-186.html">PRD：生鲜电商微服务系统 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

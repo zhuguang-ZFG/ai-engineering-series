@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>现代组件库与界面升级 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 24 / 195</p><article><h1 id="现代组件库与界面升级">现代组件库与界面升级</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#使用现代组件库更新你的界面">使用现代组件库更新你的界面</a><ul><li><a href="#你将学到-2">你将学到</a></li><li><a href="#1-为什么需要组件库">1. 为什么需要组件库？</a></li><li><a href="#2-认识四个核心组件库">2. 认识四个核心组件库</a></li><li><a href="#3-实战一用-heroui-构建产品落地页">3. 实战一：用 HeroUI 构建产品落地页</a></li><li><a href="#4-实战二用-shadcnui-构建产品页面">4. 实战二：用 shadcn/ui 构建产品页面</a></li><li><a href="#5-实战三用-ant-design-构建后台管理界面">5. 实战三：用 Ant Design 构建后台管理界面</a></li><li><a href="#6-学会查文档组件库的说明书">6. 学会查文档：组件库的&quot;说明书&quot;</a></li><li><a href="#7-小结-1">7. 小结</a></li><li><a href="#附录更多组件库一览">附录：更多组件库一览</a></li></ul></li></ul></nav></details><h2 id="使用现代组件库更新你的界面">使用现代组件库更新你的界面</h2>
+<p>在前面的课程中，你已经学会了如何用设计工具画出界面、用 AI IDE 把设计稿变成代码，甚至完成了一个完整的前端项目。但你可能也发现了一个问题：自己从零写出来的按钮、表单、弹窗，虽然能用，但总觉得和&quot;专业产品&quot;差了点意思——样式不够统一、交互细节不够丝滑、适配不同屏幕也很头疼。</p>
+<p>这就是<strong>组件库</strong>要解决的问题。</p>
+<p>组件库是一套预先设计好、开发好的 UI 零件集合。按钮、输入框、下拉菜单、对话框、表格……这些你在任何产品中都会反复用到的界面元素，组件库已经帮你做好了，而且经过了大量用户的验证和打磨。你只需要像搭积木一样把它们组合起来，就能快速构建出专业级的界面。</p>
+<h3 id="你将学到-2">你将学到</h3>
+<ol>
+<li>理解什么是前端组件库，以及为什么现代开发几乎都在用它</li>
+<li>认识四个最具代表性的组件库，了解它们各自擅长的场景</li>
+<li>通过三个实战场景（落地页、产品页面、后台管理），学会用 AI IDE + 组件库进行 Vibe Coding</li>
+<li>学会阅读组件库文档，根据需求找到合适的组件并正确使用</li>
+</ol>
+<h3 id="1-为什么需要组件库">1. 为什么需要组件库？</h3>
+<p>想象你在装修房子。你可以自己从木头开始做一把椅子，但更常见的做法是去宜家买一把——设计好看、质量稳定、说明书清晰，拿回家组装就行。</p>
+<p>组件库就是前端开发中的&quot;宜家&quot;。它提供的不是家具，而是界面零件：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">自己手写</th>
+<th align="left">使用组件库</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">需要自己处理样式、交互、动画</td>
+<td align="left">开箱即用，样式和交互已经打磨好</td>
+</tr>
+<tr>
+<td align="left">不同页面的按钮可能长得不一样</td>
+<td align="left">全局风格统一，自动保持一致性</td>
+</tr>
+<tr>
+<td align="left">适配手机、平板需要额外工作</td>
+<td align="left">大多数组件库已内置响应式支持</td>
+</tr>
+<tr>
+<td align="left">无障碍访问（Accessibility）容易遗漏</td>
+<td align="left">专业组件库已处理好键盘导航、屏幕阅读器等</td>
+</tr>
+<tr>
+<td align="left">开发速度慢</td>
+<td align="left">开发速度快，专注业务逻辑</td>
+</tr>
+</tbody></table></div>
+<p>简单来说：<strong>组件库让你把时间花在&quot;做什么&quot;上，而不是&quot;怎么画&quot;上。</strong></p>
+<h4 id="眼见为实同一个需求加不加组件库的差距">眼见为实：同一个需求，加不加组件库的差距</h4>
+<p>光说不练没有说服力。我们在 Trae 中用几乎相同的需求，分别不指定和指定组件库，看看生成结果的差距。</p>
+<p><strong>提示词一：不使用组件库</strong></p>
+<pre class="prose-block"><code class="language-text">请帮我做一个 AI 写作助手的数据仪表盘页面，包含：
+- 顶部标题栏和导出按钮
+- 四张统计卡片显示用户数、活跃用户、文档数、收入，还要显示涨跌趋势
+- 一个折线图和一个饼图
+- 用户列表表格，带分页功能
+- 左侧导航侧边栏
+</code></pre>
+<p>在 Trae 中直接运行后的效果：</p>
+<!-- TODO: 替换为 Trae 中不使用组件库生成的仪表盘截图 -->
+<!-- ![Trae 生成的仪表盘（不使用组件库）](images/compare-without-lib.png) --><p><strong>提示词二：使用 shadcn/ui 组件库</strong></p>
+<pre class="prose-block"><code class="language-text">请帮我做一个 AI 写作助手的数据仪表盘页面，用 shadcn/ui 组件库来做，包含：
+- 顶部标题栏和导出按钮
+- 四张统计卡片显示用户数、活跃用户、文档数、收入，还要显示涨跌趋势
+- 一个折线图和一个饼图
+- 用户列表表格，带分页功能
+- 左侧导航侧边栏
+</code></pre>
+<p>同样在 Trae 中直接运行后的效果：</p>
+<!-- TODO: 替换为 Trae 中使用 shadcn/ui 生成的仪表盘截图 -->
+<!-- ![Trae 生成的仪表盘（使用 shadcn/ui）](images/compare-with-lib.png) --><p>同样的需求，唯一的区别只是在提示词开头加上了 <code>shadcn/ui + Tailwind CSS</code>，Trae 生成的结果在视觉一致性、交互细节、整体打磨程度上就完全不在一个层级。这就是组件库带来的&quot;免费升级&quot;——你只需要在提示词里多写一个组件库的名字。</p>
+<h3 id="2-认识四个核心组件库">2. 认识四个核心组件库</h3>
+<p>组件库数量众多（完整列表见<a href="#附录更多组件库一览">附录</a>），但你只需要先认识这四个最具代表性的：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件库</th>
+<th align="left">框架</th>
+<th align="left">一句话定位</th>
+<th align="left">官网</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://ant.design">Ant Design</a></td>
+<td align="left">React</td>
+<td align="left">蚂蚁集团出品，企业级中后台的事实标准，组件覆盖面极广</td>
+<td align="left">ant.design</td>
+</tr>
+<tr>
+<td align="left"><a href="https://ui.shadcn.com">shadcn/ui</a></td>
+<td align="left">React</td>
+<td align="left">不装 npm 包，直接把代码复制到你项目里，基于 Tailwind CSS，定制自由度最高</td>
+<td align="left">ui.shadcn.com</td>
+</tr>
+<tr>
+<td align="left"><a href="https://heroui.com">HeroUI</a>（原 NextUI）</td>
+<td align="left">React</td>
+<td align="left">默认样式精美、动画流畅，适合对视觉品质有要求的落地页和产品展示</td>
+<td align="left">heroui.com</td>
+</tr>
+<tr>
+<td align="left"><a href="https://mui.com">Material UI</a></td>
+<td align="left">React</td>
+<td align="left">最老牌的 React 组件库，实现 Google Material Design 规范，生态最成熟</td>
+<td align="left">mui.com</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>Vue 用户同样有丰富选择：<a href="https://element-plus.org">Element Plus</a>（国内最流行）、<a href="https://antdv.com">Ant Design Vue</a>、<a href="https://www.naiveui.com">Naive UI</a> 等，详见<a href="#附录更多组件库一览">附录</a>。</p>
+</blockquote>
+<p>不同组件库擅长不同场景。下面三个真实开发场景，带你体验怎么 AI IDE + 组件库进行 Vibe Coding。</p>
+<p>为了展示不同组件库的风格和特点，我们在每个场景中刻意选用了不同的库。但请注意：<strong>这只是为了让你多见识几种方案</strong>，实际开发中你完全可以只用自己最顺手的那一个。比如你喜欢 shadcn/ui 的风格，用它做落地页、产品页、后台管理都没问题。选一个你觉得好看、用着舒服的，比什么都重要。</p>
+<h3 id="3-实战一用-heroui-构建产品落地页">3. 实战一：用 HeroUI 构建产品落地页</h3>
+<p><strong>场景</strong>：你做了一个 AI 写作助手产品，需要一个漂亮的落地页来展示产品特性、吸引用户注册。落地页需要视觉冲击力强、动画流畅、在手机上也好看。</p>
+<p><strong>为什么选 HeroUI</strong>：HeroUI 的默认样式就很精美，自带流畅的过渡动画，非常适合面向用户的展示型页面。</p>
+<h4 id="31-创建项目">3.1 创建项目</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 使用 HeroUI 官方 CLI 创建项目
+npx create-heroui-app@latest ai-writer-landing
+cd ai-writer-landing
+npm install
+</code></pre>
+<!-- TODO: 替换为 HeroUI 官网首页或组件展示截图 -->
+<!-- ![HeroUI 组件库官网](images/heroui-homepage.png) --><h4 id="32-用-ai-ide-生成落地页">3.2 用 AI IDE 生成落地页</h4>
+<p>打开 AI IDE（Cursor、Trae 等），在对话框中输入：</p>
+<pre class="prose-block"><code class="language-text">请帮我做一个 AI 写作助手的落地页，用 HeroUI 组件库来做：
+
+**页面结构：**
+1. 顶部导航栏：左边放 Logo 和产品名，右边放&quot;功能&quot;、&quot;定价&quot;、&quot;关于&quot;三个链接，再加一个&quot;开始使用&quot;按钮
+2. 首屏区域：大标题写&quot;让 AI 成为你的写作搭档&quot;，副标题介绍产品价值，两个按钮&quot;免费试用&quot;和&quot;查看演示&quot;，下面放一张产品截图
+3. 功能展示：三列卡片，分别介绍&quot;智能续写&quot;、&quot;风格调整&quot;、&quot;多语言翻译&quot;三个功能，每张卡片要有图标、标题、描述
+4. 定价区域：三个定价卡片（免费版、专业版、团队版），专业版要突出显示推荐
+5. 底部号召：一句吸引人的文案，加上注册按钮
+6. 页脚：版权信息和社交媒体链接
+
+**设计要求：**
+- 看起来要现代、专业
+- 支持暗色模式
+- 手机上看也要好看
+</code></pre>
+<!-- TODO: 替换为 AI IDE 生成落地页的过程截图或生成结果截图 -->
+<!-- ![AI 生成的 HeroUI 落地页效果](images/heroui-landing-result.png) --><h4 id="33-ai-会用到的关键组件">3.3 AI 会用到的关键组件</h4>
+<p>AI 生成的代码中，你会看到这些 HeroUI 组件：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-jsx">import {
+  Navbar, NavbarBrand, NavbarContent, NavbarItem,
+  Button,
+  Card, CardHeader, CardBody, CardFooter,
+  Divider,
+  Link,
+  Chip
+} from &#39;@heroui/react&#39;
+</code></pre>
+<p>每个组件的作用：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件</th>
+<th align="left">用途</th>
+<th align="left">落地页中的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Navbar</code></td>
+<td align="left">顶部导航栏</td>
+<td align="left">页面最顶部，固定不动</td>
+</tr>
+<tr>
+<td align="left"><code>Button</code></td>
+<td align="left">按钮，支持多种变体和颜色</td>
+<td align="left">CTA 按钮、导航按钮</td>
+</tr>
+<tr>
+<td align="left"><code>Card</code></td>
+<td align="left">卡片容器</td>
+<td align="left">功能展示、定价卡片</td>
+</tr>
+<tr>
+<td align="left"><code>Chip</code></td>
+<td align="left">小标签</td>
+<td align="left">&quot;推荐&quot;、&quot;最受欢迎&quot;标记</td>
+</tr>
+<tr>
+<td align="left"><code>Divider</code></td>
+<td align="left">分割线</td>
+<td align="left">区域之间的视觉分隔</td>
+</tr>
+</tbody></table></div>
+<h4 id="34-迭代优化">3.4 迭代优化</h4>
+<p>生成的初版代码可能不完全满意，继续和 AI 对话调整：</p>
+<pre class="prose-block"><code class="language-text">请帮我优化一下落地页：
+
+1. 大标题加上渐变色，从蓝色渐变到紫色
+2. 功能卡片鼠标放上去要有上浮的动画效果
+3. 专业版定价卡片要突出显示，加个边框和&quot;最受欢迎&quot;的标签
+4. 手机上的导航改成汉堡菜单（三条横线那种）
+</code></pre>
+<!-- TODO: 替换为迭代优化后的落地页效果截图 -->
+<!-- ![迭代优化后的落地页](images/heroui-landing-iterated.png) --><blockquote>
+<p><strong>Vibe Coding 的核心</strong>：你不需要记住每个组件的 API，只需要用自然语言描述你想要的效果，AI 会帮你找到合适的组件和写法。遇到不满意的地方，继续对话迭代就好。</p>
+</blockquote>
+<h3 id="4-实战二用-shadcnui-构建产品页面">4. 实战二：用 shadcn/ui 构建产品页面</h3>
+<p><strong>场景</strong>：你的 AI 写作助手需要一个用户登录后的主界面——左侧是文档列表，右侧是编辑器，顶部有工具栏。这是一个功能型产品页面，需要高度定制化的 UI。</p>
+<p><strong>为什么选 shadcn/ui</strong>：shadcn/ui 把组件代码直接放进你的项目，你可以随意修改任何细节。对于需要深度定制的产品界面，这种&quot;拥有代码&quot;的模式最灵活。</p>
+<!-- TODO: 替换为 shadcn/ui 官网或组件展示截图 -->
+<!-- ![shadcn/ui 组件库官网](images/shadcn-homepage.png) --><h4 id="41-创建项目">4.1 创建项目</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 创建 Next.js 项目
+npx create-next-app@latest ai-writer-app --typescript --tailwind --app
+cd ai-writer-app
+
+# 初始化 shadcn/ui
+npx shadcn@latest init
+
+# 按需添加组件（不是一次性安装所有组件）
+npx shadcn@latest add button card input sidebar sheet dialog
+</code></pre>
+<p>shadcn/ui 的独特之处：每次 <code>add</code> 一个组件，它会把源代码复制到你项目的 <code>components/ui/</code> 目录下。你可以直接打开这些文件修改样式和行为。</p>
+<h4 id="42-用-ai-ide-生成产品界面">4.2 用 AI IDE 生成产品界面</h4>
+<pre class="prose-block"><code class="language-text">请帮我做一个 AI 写作助手的主界面，用 shadcn/ui 组件库来做：
+
+**整体布局：**
+- 左边是可折叠的侧边栏，宽度大概 280px：
+  - 顶部放&quot;新建文档&quot;按钮
+  - 下面是文档列表，每个文档显示标题和最后编辑时间
+  - 右键点击文档可以重命名或删除
+- 右边是主编辑区，分成上下两部分：
+  - 上面是工具栏：可以编辑文档标题、显示字数统计、&quot;AI 续写&quot;按钮、&quot;导出&quot;下拉菜单
+  - 下面是编辑区域：一个大的文本输入框，占满剩余空间
+
+**交互细节：**
+- 点击&quot;AI 续写&quot;后，按钮显示加载状态，编辑器底部出现 AI 生成的文本（像打字机一样逐字显示）
+- 手机上侧边栏变成抽屉式，从左边滑出
+- 当前选中的文档要高亮显示
+</code></pre>
+<!-- TODO: 替换为 AI 生成的 shadcn/ui 产品界面截图 -->
+<!-- ![AI 生成的 shadcn/ui 产品页面效果](images/shadcn-product-result.png) --><h4 id="43-ai-会用到的关键组件">4.3 AI 会用到的关键组件</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-tsx">import { Button } from &#39;@/components/ui/button&#39;
+import { Input } from &#39;@/components/ui/input&#39;
+import { Card, CardContent, CardHeader } from &#39;@/components/ui/card&#39;
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from &#39;@/components/ui/dropdown-menu&#39;
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger
+} from &#39;@/components/ui/sheet&#39;
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader
+} from &#39;@/components/ui/sidebar&#39;
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件</th>
+<th align="left">用途</th>
+<th align="left">产品页面中的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Sidebar</code></td>
+<td align="left">可折叠侧边栏</td>
+<td align="left">左侧文档列表</td>
+</tr>
+<tr>
+<td align="left"><code>Sheet</code></td>
+<td align="left">移动端抽屉</td>
+<td align="left">移动端侧边栏替代</td>
+</tr>
+<tr>
+<td align="left"><code>DropdownMenu</code></td>
+<td align="left">下拉菜单</td>
+<td align="left">&quot;导出&quot;按钮、右键菜单</td>
+</tr>
+<tr>
+<td align="left"><code>Dialog</code></td>
+<td align="left">对话框</td>
+<td align="left">重命名、删除确认</td>
+</tr>
+<tr>
+<td align="left"><code>Button</code></td>
+<td align="left">按钮，支持 variant 和 loading</td>
+<td align="left">各种操作按钮</td>
+</tr>
+<tr>
+<td align="left"><code>Input</code></td>
+<td align="left">输入框</td>
+<td align="left">文档标题编辑</td>
+</tr>
+</tbody></table></div>
+<h4 id="44-定制组件样式">4.4 定制组件样式</h4>
+<p>shadcn/ui 的优势在于你可以直接修改组件源码。比如你想让按钮的圆角更大：</p>
+<pre class="prose-block"><code class="language-text">请帮我修改 components/ui/button.tsx，
+把所有按钮的默认圆角从 rounded-md 改为 rounded-xl，
+并给 primary 变体加上微妙的阴影效果
+</code></pre>
+<p>AI 会直接修改你项目中的组件文件，而不是覆盖 npm 包的样式——这就是 shadcn/ui &quot;拥有代码&quot;的好处。</p>
+<!-- TODO: 替换为 shadcn/ui 组件源码在项目中的截图，展示可直接编辑 -->
+<!-- ![shadcn/ui 组件代码在项目中可直接编辑](images/shadcn-code-ownership.png) --><h3 id="5-实战三用-ant-design-构建后台管理界面">5. 实战三：用 Ant Design 构建后台管理界面</h3>
+<p><strong>场景</strong>：你的 AI 写作助手上线后，需要一个管理后台来查看用户数据、管理文档内容、处理付费订单。后台管理系统的核心是数据展示和操作效率。</p>
+<p><strong>为什么选 Ant Design</strong>：Ant Design 在中后台领域积累最深，表格、表单、图表等业务组件开箱即用，内置了大量企业级交互模式（批量操作、高级筛选、数据导出等）。</p>
+<!-- TODO: 替换为 Ant Design 官网或 Pro Components 展示截图 -->
+<!-- ![Ant Design 组件库官网](images/antd-homepage.png) --><h4 id="51-创建项目">5.1 创建项目</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 使用 Ant Design Pro 脚手架（内置布局、路由、权限）
+npx create-umi@latest ai-writer-admin
+# 选择 Ant Design Pro 模板
+cd ai-writer-admin
+npm install
+</code></pre>
+<p>或者从零开始：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npx create-react-app ai-writer-admin --template typescript
+cd ai-writer-admin
+npm install antd @ant-design/icons @ant-design/pro-components
+</code></pre>
+<h4 id="52-用-ai-ide-生成管理后台">5.2 用 AI IDE 生成管理后台</h4>
+<pre class="prose-block"><code class="language-text">请帮我做一个 AI 写作助手的管理后台，用 Ant Design 组件库来做：
+
+**整体布局：**
+- 左边是菜单栏：仪表盘、用户管理、文档管理、订单管理、系统设置
+- 顶部显示面包屑导航
+
+**用户管理页面：**
+- 顶部放四个统计卡片：总用户数、今日新增、活跃用户数、付费用户数
+- 搜索筛选区：可以按用户名搜索、选择注册时间范围、筛选用户状态，还有&quot;搜索&quot;和&quot;重置&quot;按钮
+- 用户表格：
+  - 显示头像、用户名、邮箱、注册时间、订阅计划（用不同颜色标签区分）、状态、操作
+  - 每页显示 20 条，支持分页
+  - 可以批量选择用户，批量禁用或导出
+  - 操作列：查看详情、编辑、禁用（禁用前要二次确认）
+- 点击&quot;查看详情&quot;从右侧滑出抽屉，显示用户详细信息和最近文档列表
+</code></pre>
+<!-- TODO: 替换为 AI 生成的 Ant Design 后台管理界面截图 -->
+<!-- ![AI 生成的 Ant Design 后台管理界面](images/antd-admin-result.png) --><h4 id="53-ai-会用到的关键组件">5.3 AI 会用到的关键组件</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-tsx">import { PageContainer, ProLayout } from &#39;@ant-design/pro-components&#39;
+import { ProTable } from &#39;@ant-design/pro-components&#39;
+import { StatisticCard } from &#39;@ant-design/pro-components&#39;
+import {
+  Button, Tag, Badge, Space, Drawer,
+  Popconfirm, message, Modal
+} from &#39;antd&#39;
+import {
+  UserOutlined, SearchOutlined, ExportOutlined
+} from &#39;@ant-design/icons&#39;
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件</th>
+<th align="left">用途</th>
+<th align="left">后台中的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>ProLayout</code></td>
+<td align="left">后台整体布局框架</td>
+<td align="left">页面骨架（菜单 + 内容区）</td>
+</tr>
+<tr>
+<td align="left"><code>ProTable</code></td>
+<td align="left">高级表格，内置搜索、分页、列设置</td>
+<td align="left">用户列表、文档列表、订单列表</td>
+</tr>
+<tr>
+<td align="left"><code>StatisticCard</code></td>
+<td align="left">数据统计卡片</td>
+<td align="left">仪表盘、页面顶部概览</td>
+</tr>
+<tr>
+<td align="left"><code>Tag</code> / <code>Badge</code></td>
+<td align="left">状态标签</td>
+<td align="left">订阅计划、用户状态</td>
+</tr>
+<tr>
+<td align="left"><code>Drawer</code></td>
+<td align="left">侧边抽屉</td>
+<td align="left">用户详情、编辑表单</td>
+</tr>
+<tr>
+<td align="left"><code>Popconfirm</code></td>
+<td align="left">气泡确认框</td>
+<td align="left">删除、禁用等危险操作</td>
+</tr>
+</tbody></table></div>
+<h4 id="54-继续迭代添加仪表盘">5.4 继续迭代：添加仪表盘</h4>
+<pre class="prose-block"><code class="language-text">请帮我做一个仪表盘页面：
+
+1. 顶部四个统计卡片：总用户数、总文档数、今日 API 调用次数、月收入，每个卡片显示数值和环比变化（涨了还是跌了）
+2. 中间放两个图表：
+   - 左边：最近 7 天的用户增长折线图
+   - 右边：订阅计划分布饼图
+3. 底部：最近操作日志表格，显示时间、用户、操作类型、详情
+
+用 Ant Design 的组件来布局，图表可以用 Ant Design Charts
+</code></pre>
+<!-- TODO: 替换为仪表盘页面效果截图 -->
+<!-- ![Ant Design 仪表盘页面效果](images/antd-dashboard-result.png) --><blockquote>
+<p><strong>后台管理的 Vibe Coding 技巧</strong>：后台页面结构相对固定（表格 + 搜索 + 弹窗），非常适合用 AI 批量生成。你可以先让 AI 生成一个&quot;用户管理&quot;页面作为模板，然后说&quot;参考用户管理页面的结构，帮我生成文档管理页面&quot;，AI 会复用相同的布局模式。</p>
+</blockquote>
+<h3 id="6-学会查文档组件库的说明书">6. 学会查文档：组件库的&quot;说明书&quot;</h3>
+<p>Vibe Coding 中 AI 会帮你写大部分代码，但当 AI 生成的结果不对、或者你想微调某个组件的行为时，<strong>查文档</strong>是最快的解决方式。</p>
+<p>以 Ant Design 为例，它的文档地址是：<code>https://ant.design/components/overview-cn</code></p>
+<p>查文档的标准流程：</p>
+<ol>
+<li><strong>明确需求</strong>：比如&quot;我需要表格支持行选择&quot;</li>
+<li><strong>在文档中搜索</strong>：搜索&quot;Table&quot;进入表格组件页面</li>
+<li><strong>查看示例</strong>：文档中每个组件都有多个在线示例，找到&quot;可选择&quot;示例</li>
+<li><strong>复制代码</strong>：把示例代码复制到你的项目中</li>
+<li><strong>查看 API 表格</strong>：在页面底部找到 <code>rowSelection</code> 属性的完整配置项</li>
+</ol>
+<blockquote>
+<p>你也可以把文档链接直接发给 AI IDE：&quot;请参考 <a href="https://ant.design/components/table-cn">https://ant.design/components/table-cn</a> 的 rowSelection API，帮我给用户表格加上批量选择功能&quot;。给 AI 提供文档链接，生成的代码会更准确。</p>
+</blockquote>
+<p>各组件库的文档地址速查：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件库</th>
+<th align="left">文档地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Ant Design</td>
+<td align="left"><code>https://ant.design/components/overview-cn</code></td>
+</tr>
+<tr>
+<td align="left">shadcn/ui</td>
+<td align="left"><code>https://ui.shadcn.com/docs/components</code></td>
+</tr>
+<tr>
+<td align="left">HeroUI</td>
+<td align="left"><code>https://heroui.com/docs/components</code></td>
+</tr>
+<tr>
+<td align="left">Material UI</td>
+<td align="left"><code>https://mui.com/material-ui/all-components/</code></td>
+</tr>
+<tr>
+<td align="left">Element Plus</td>
+<td align="left"><code>https://element-plus.org/zh-CN/component/overview.html</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="7-小结-1">7. 小结</h3>
+<p>三个实战场景覆盖了最常见的前端开发需求：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">推荐组件库</th>
+<th align="left">核心特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">落地页 / 展示页</td>
+<td align="left">HeroUI</td>
+<td align="left">默认样式精美，动画流畅，视觉冲击力强</td>
+</tr>
+<tr>
+<td align="left">产品功能页面</td>
+<td align="left">shadcn/ui</td>
+<td align="left">代码完全可控，深度定制灵活</td>
+</tr>
+<tr>
+<td align="left">后台管理系统</td>
+<td align="left">Ant Design</td>
+<td align="left">业务组件丰富，表格表单开箱即用</td>
+</tr>
+</tbody></table></div>
+<p>Vibe Coding 的工作流总结：</p>
+<ol>
+<li>根据场景选择合适的组件库</li>
+<li>用 AI IDE 描述你想要的页面结构和交互</li>
+<li>AI 生成初版代码，你预览效果</li>
+<li>用自然语言继续迭代调整</li>
+<li>遇到细节问题时查阅组件库文档</li>
+</ol>
+<h4 id="练习-1">练习</h4>
+<p>选择以下任一场景，用 AI IDE + 组件库从零完成：</p>
+<ol>
+<li>用 HeroUI 为你之前做的项目（比如霍格沃茨画像）做一个展示落地页</li>
+<li>用 shadcn/ui 构建一个笔记应用的主界面（侧边栏 + 编辑器）</li>
+<li>用 Ant Design 构建一个简单的内容管理后台（文章列表 + 新建文章表单）</li>
+</ol>
+<h3 id="附录更多组件库一览">附录：更多组件库一览</h3>
+<p>除了正文介绍的四个核心库，前端生态中还有大量优秀的组件库。下面按框架分类列出，方便你根据项目需求选择。</p>
+<h4 id="vue-生态">Vue 生态</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件库</th>
+<th align="left">Stars</th>
+<th align="left">简介</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://element-plus.org">Element Plus</a></td>
+<td align="left">~27k</td>
+<td align="left">饿了么团队打造的 Vue 3 企业级组件库，国内使用最广泛，中文生态极佳</td>
+<td align="left">中后台管理系统</td>
+</tr>
+<tr>
+<td align="left"><a href="https://vuetifyjs.com">Vuetify</a></td>
+<td align="left">~41k</td>
+<td align="left">最流行的 Vue Material Design 组件库，80+ 组件，文档完善</td>
+<td align="left">Google 设计风格项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://antdv.com">Ant Design Vue</a></td>
+<td align="left">~21k</td>
+<td align="left">基于蚂蚁设计体系的 Vue 3 组件库，设计规范统一</td>
+<td align="left">企业级中后台</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.naiveui.com">Naive UI</a></td>
+<td align="left">~18k</td>
+<td align="left">TypeScript 编写，主题定制性极强，不依赖 CSS 预处理器</td>
+<td align="left">对设计有独特要求的项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://quasar.dev">Quasar</a></td>
+<td align="left">~27k</td>
+<td align="left">一套代码构建 SPA、SSR、PWA、移动端和桌面端应用</td>
+<td align="left">跨平台项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://vant-ui.github.io/vant">Vant</a></td>
+<td align="left">~24k</td>
+<td align="left">有赞团队开发的轻量级移动端组件库，覆盖电商常见需求</td>
+<td align="left">移动端 H5 页面</td>
+</tr>
+<tr>
+<td align="left"><a href="https://primevue.org">PrimeVue</a></td>
+<td align="left">~14k</td>
+<td align="left">90+ 组件，支持多种主题（Material、Bootstrap 等）</td>
+<td align="left">需要丰富组件和多主题</td>
+</tr>
+<tr>
+<td align="left"><a href="https://arco.design/vue">Arco Design Vue</a></td>
+<td align="left">~3k</td>
+<td align="left">字节跳动出品，组件质量高，内置暗色模式</td>
+<td align="left">中后台产品</td>
+</tr>
+<tr>
+<td align="left"><a href="https://tdesign.tencent.com/vue-next">TDesign Vue Next</a></td>
+<td align="left">~2k</td>
+<td align="left">腾讯出品，设计语言统一，覆盖桌面端常用场景</td>
+<td align="left">腾讯生态或企业级项目</td>
+</tr>
+</tbody></table></div>
+<h4 id="react-生态">React 生态</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件库</th>
+<th align="left">Stars</th>
+<th align="left">简介</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://mui.com">Material UI (MUI)</a></td>
+<td align="left">~95k</td>
+<td align="left">Google Material Design 规范的老牌实现，组件最全面，生态最成熟</td>
+<td align="left">快速构建企业级应用</td>
+</tr>
+<tr>
+<td align="left"><a href="https://ant.design">Ant Design</a></td>
+<td align="left">~94k</td>
+<td align="left">蚂蚁集团出品，内置大量高质量业务组件，中文开发者社区主导地位</td>
+<td align="left">企业级中后台</td>
+</tr>
+<tr>
+<td align="left"><a href="https://ui.shadcn.com">shadcn/ui</a></td>
+<td align="left">~83k</td>
+<td align="left">代码复制到项目中而非 npm 安装，基于 Radix UI + Tailwind CSS，完全可控</td>
+<td align="left">需要高度定制的项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://chakra-ui.com">Chakra UI</a></td>
+<td align="left">~39k</td>
+<td align="left">以开发体验为核心，API 简洁，内置无障碍访问支持</td>
+<td align="left">快速原型开发</td>
+</tr>
+<tr>
+<td align="left"><a href="https://mantine.dev">Mantine</a></td>
+<td align="left">~28k</td>
+<td align="left">100+ 组件和 50+ hooks，涵盖日期选择器、富文本编辑器等高级组件</td>
+<td align="left">需要开箱即用的全功能方案</td>
+</tr>
+<tr>
+<td align="left"><a href="https://headlessui.com">Headless UI</a></td>
+<td align="left">~27k</td>
+<td align="left">Tailwind Labs 官方出品的无样式组件库，同时支持 React 和 Vue</td>
+<td align="left">搭配 Tailwind CSS 使用</td>
+</tr>
+<tr>
+<td align="left"><a href="https://heroui.com">HeroUI</a></td>
+<td align="left">~24k</td>
+<td align="left">基于 Tailwind CSS + React Aria，默认样式精美，动画流畅</td>
+<td align="left">追求视觉品质的项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.radix-ui.com">Radix UI</a></td>
+<td align="left">~17k</td>
+<td align="left">无样式底层组件原语库，专注无障碍和组件行为，是 shadcn/ui 的底层基础</td>
+<td align="left">构建自定义设计系统</td>
+</tr>
+</tbody></table></div>
+<h4 id="shadcnui-扩展生态">shadcn/ui 扩展生态</h4>
+<p>除了上述通用组件库，shadcn/ui 生态中还涌现了大量基于其理念的扩展库，为特定场景提供差异化选择。这些扩展库同样采用&quot;复制代码到项目&quot;的模式，让开发者拥有完全的源码控制权。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组件库</th>
+<th align="left">简介</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://ui.aceternity.com">Aceternity UI</a></td>
+<td align="left">200+ 生产级组件，主打发光卡片、文字渐变、3D 地球等特色视觉组件</td>
+<td align="left">高质感落地页、SaaS 产品</td>
+</tr>
+<tr>
+<td align="left"><a href="https://tailark.com">Tailark UI</a></td>
+<td align="left">营销网站组件块集合，产品展示、客户证言、CTA 按钮等营销高频模块</td>
+<td align="left">营销落地页、产品官网</td>
+</tr>
+<tr>
+<td align="left"><a href="https://ui.tripled.work">UI Tripled</a></td>
+<td align="left">基于 Framer Motion 的动态交互组件，弹窗、导航、卡片动画</td>
+<td align="left">创意工具、个人作品集</td>
+</tr>
+<tr>
+<td align="left"><a href="https://neobrutalism.dev">Neobrutalism UI</a></td>
+<td align="left">新粗野主义风格，粗线条、高对比度、鲜明色彩</td>
+<td align="left">个性化品牌官网、创意项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://reui.io">REUI</a></td>
+<td align="left">967+ 真实业务场景的组件组合模式</td>
+<td align="left">企业级后台、复杂表单</td>
+</tr>
+<tr>
+<td align="left"><a href="https://cult-ui.com">Cult UI</a></td>
+<td align="left">更细的交互/视觉打磨，数据表格、筛选面板等复合组件</td>
+<td align="left">高质感商业项目</td>
+</tr>
+<tr>
+<td align="left"><a href="https://kibo-ui.com">Kibo UI</a></td>
+<td align="left">高级业务组件，颜色选择器、富文本编辑器、文件上传等</td>
+<td align="left">管理后台、工具类产品</td>
+</tr>
+<tr>
+<td align="left"><a href="https://kokonutui.com">Kokonut UI</a></td>
+<td align="left">100+ 组件 + 7+ 完整模板，清新简约风格</td>
+<td align="left">SaaS 官网、博客、电商</td>
+</tr>
+<tr>
+<td align="left"><a href="https://ui.stackzero.co">Commerce UI</a></td>
+<td align="left">电商场景专用，商品卡片、购物车、结算表单</td>
+<td align="left">电商平台</td>
+</tr>
+<tr>
+<td align="left"><a href="https://shadcnblocks.com">shadcnblocks</a></td>
+<td align="left">1373 个 UI 块 + 13 套完整模板，资源最全面</td>
+<td align="left">所有场景</td>
+</tr>
+<tr>
+<td align="left"><a href="https://shoogle.dev">Shoogle</a></td>
+<td align="left">shadcn/ui 生态聚合检索平台</td>
+<td align="left">快速查找资源</td>
+</tr>
+<tr>
+<td align="left"><a href="https://allshadcn.com">Discover All Shadcn</a></td>
+<td align="left">聚合型资源导航</td>
+<td align="left">快速查找资源</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么选择 shadcn/ui 扩展？</strong> 这些扩展继承了 shadcn/ui&quot;代码所有权&quot;的理念，同时为特定场景做了深度定制。Vibe Coding 时代，它们让你能快速找到符合设计需求的组件，跳出主流 UI 库的同质化，跟别人拉开差距。</p>
+</blockquote>
+<hr>
+<h2 id="后端开发">后端开发</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-023.html">← 设计原型到项目代码</a><a rel="next" href="chapter-025.html">数据库与 Supabase 入门 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>端口与 localhost · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 94 / 195</p><article><h1 id="端口与-localhost">端口与 localhost</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#端口与-localhost-原理">端口与 localhost 原理</a><ul><li><a href="#0-引言那个天天见的-localhost5173-到底是什么">0. 引言：那个天天见的 localhost:5173 到底是什么</a></li><li><a href="#1-端口定义">1. 端口定义</a></li><li><a href="#2-localhost定义">2. localhost定义</a></li><li><a href="#3-端口冲突最常见的开发环境问题">3. 端口冲突：最常见的开发环境问题</a></li><li><a href="#4-开发中的同源策略与跨域">4. 开发中的&quot;同源策略&quot;与跨域</a></li><li><a href="#5-实战排查三个最常见的问题">5. 实战排查：三个最常见的问题</a></li><li><a href="#6-名词对照表">6. 名词对照表</a></li><li><a href="#总结-17">总结</a></li></ul></li></ul></nav></details><h2 id="端口与-localhost-原理">端口与 localhost 原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：当你执行 <code>npm run dev</code>，终端里出现 <code>http://localhost:5173</code> 时，你有没有想过：<code>localhost</code> 是什么？<code>5173</code> 又代表什么？为什么有时候会报 <code>EADDRINUSE</code> 错误？本章就来把这些日常开发中天天见、却很少深究的概念一次讲透。</p>
+</blockquote>
+<p>在开始之前，建议你先补两块&quot;基础砖&quot;：</p>
+<ul>
+<li><strong>网络基础</strong>：如果你不太清楚 IP 地址和 HTTP 的概念，可以先看 <a href="chapter-084.html#计算机网络从输入网址到渲染页面">计算机基础 - 网络通信</a> 部分。</li>
+<li><strong>终端基础</strong>：如果你还不熟悉终端命令行，可以先看 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/command-line-shell.md">命令行与 Shell 脚本导论</a>。</li>
+</ul>
+<h3 id="0-引言那个天天见的-localhost5173-到底是什么">0. 引言：那个天天见的 <code>localhost:5173</code> 到底是什么</h3>
+<p>每个开发者的日常都离不开这一行输出：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>➜  Local:   http://localhost:5173/
+</code></pre>
+<p>但你有没有想过，这短短一行字里，藏着好几个关键概念：</p>
+<ul>
+<li><strong>http://</strong> → 通信协议（用什么语言对话）</li>
+<li><strong>localhost</strong> → 目标地址（找谁）</li>
+<li><strong>:5173</strong> → 端口号（找到之后，敲哪扇门）</li>
+</ul>
+<p>分清这三件事，有助于定位开发环境中的地址、端口与访问路径问题。下面逐个拆开看。</p>
+<h3 id="1-端口定义">1. 端口定义</h3>
+<h4 id="11-一个直觉比喻">1.1 一个直觉比喻</h4>
+<p>想象一台服务器是一栋大楼：</p>
+<ul>
+<li><strong>IP 地址</strong>（如 <code>192.168.1.100</code>）就是大楼的门牌地址——告诉你&quot;去哪栋楼&quot;。</li>
+<li><strong>端口号</strong>（如 <code>:80</code>）就是楼里的房间号——告诉你&quot;进哪间房&quot;。</li>
+</ul>
+<p>一栋楼里可以同时有餐厅（80 号房）、咖啡厅（443 号房）、办公室（22 号房）。同理，一台电脑上可以同时运行 Web 服务器、数据库、SSH 服务，各自占用不同的端口。</p>
+<p>👇 <strong>动手点点看</strong>：
+点击下面的&quot;房间门牌&quot;，模拟向不同端口发起连接。注意观察：当端口&quot;开着&quot;（有程序在监听）和&quot;关着&quot;时，分别会发生什么？</p>
+<h4 id="12-端口号的取值范围">1.2 端口号的取值范围</h4>
+<p>端口号是一个 <strong>0–65535</strong> 之间的整数（共 65536 个）。这么多端口被分为三个区间：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">区间</th>
+<th align="left">范围</th>
+<th align="left">用途</th>
+<th align="left">举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>系统端口</strong></td>
+<td align="left">0 – 1023</td>
+<td align="left">预留给标准协议，普通用户不能随意占用</td>
+<td align="left">80 (HTTP)、443 (HTTPS)、22 (SSH)</td>
+</tr>
+<tr>
+<td align="left"><strong>注册端口</strong></td>
+<td align="left">1024 – 49151</td>
+<td align="left">给常见应用注册使用</td>
+<td align="left">3306 (MySQL)、5432 (PostgreSQL)、6379 (Redis)</td>
+</tr>
+<tr>
+<td align="left"><strong>动态端口</strong></td>
+<td align="left">49152 – 65535</td>
+<td align="left">操作系统临时分配</td>
+<td align="left">浏览器发请求时，系统随机分配一个源端口</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>为什么你的开发服务器喜欢用 3000、5173、8080？因为这些都在&quot;注册端口&quot;范围内，不需要管理员权限就能监听，又不太容易和系统服务冲突。</p>
+</blockquote>
+<h4 id="13-开发中常见的端口号速查">1.3 开发中常见的端口号速查</h4>
+<p>👇 <strong>动手点点看</strong>：
+输入端口号或服务名搜索，点击任意一行可以展开查看使用示例。</p>
+<h3 id="2-localhost定义">2. localhost定义</h3>
+<h4 id="21-环回的核心概念">2.1 &quot;环回&quot;的核心概念</h4>
+<p><code>localhost</code> 是一个特殊的域名，它永远指向<strong>你自己这台电脑</strong>。</p>
+<p>当你在浏览器输入 <code>http://localhost:3000</code> 时，发生了这些事：</p>
+<ol>
+<li>浏览器问操作系统：&quot;<code>localhost</code> 的 IP 是多少？&quot;</li>
+<li>操作系统直接回答：&quot;<code>127.0.0.1</code>&quot;（不需要联网查 DNS）</li>
+<li>数据包发往 <code>127.0.0.1</code>，但<strong>不会真的离开本机</strong></li>
+<li>操作系统通过&quot;环回接口（loopback interface）&quot;把数据包<strong>折返</strong>回来</li>
+<li>监听在 3000 端口上的程序收到请求，返回响应</li>
+</ol>
+<p><strong>整个过程不经过网线、不经过路由器、不需要联网。</strong></p>
+<p>👇 <strong>动手点点看</strong>：
+点击&quot;发送请求&quot;，观察数据包的完整旅程。然后点击下方的&quot;马甲卡片&quot;，了解 localhost 的几种写法和区别。</p>
+<h4 id="22-localhost-vs-127001-vs-0000">2.2 <code>localhost</code> vs <code>127.0.0.1</code> vs <code>0.0.0.0</code></h4>
+<p>这三个概念经常被混淆，但它们的含义完全不同：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">写法</th>
+<th align="left">含义</th>
+<th align="left">谁能访问</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>localhost</code> / <code>127.0.0.1</code></td>
+<td align="left">环回地址，仅本机</td>
+<td align="left">只有你自己的电脑</td>
+</tr>
+<tr>
+<td align="left"><code>0.0.0.0</code></td>
+<td align="left">监听所有网络接口</td>
+<td align="left">本机 + 局域网内其他设备</td>
+</tr>
+<tr>
+<td align="left"><code>192.168.x.x</code></td>
+<td align="left">局域网 IP</td>
+<td align="left">局域网内的设备</td>
+</tr>
+</tbody></table></div>
+<p><strong>实际场景</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 只有自己能访问（安全，适合开发）
+npm run dev -- --host localhost
+
+# 手机也能访问（适合移动端调试）
+npm run dev -- --host 0.0.0.0
+</code></pre>
+<blockquote>
+<p>很多框架（如 Vite、Next.js）默认监听 <code>localhost</code>，所以你的手机即使连着同一个 WiFi 也访问不了。想用手机调试？加上 <code>--host</code> 参数就行。</p>
+</blockquote>
+<h3 id="3-端口冲突最常见的开发环境问题">3. 端口冲突：最常见的开发环境问题</h3>
+<h4 id="31-会冲突的设计理由">3.1 会冲突的设计理由</h4>
+<p><strong>一个端口同一时刻只能被一个程序监听。</strong> 这就像一个房间只能住一户人家。</p>
+<p>如果你尝试启动第二个服务在同一个端口上，就会看到这个经典错误：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Error: listen EADDRINUSE :::3000
+</code></pre>
+<p>翻译成人话就是：<strong>&quot;3000 号房已经有人住了，你进不去！&quot;</strong></p>
+<p>常见的冲突场景：</p>
+<ul>
+<li>上次的开发服务器没关干净，还在后台运行</li>
+<li>两个不同的项目用了相同的默认端口</li>
+<li>某个系统服务已经占用了你想要的端口</li>
+</ul>
+<p>👇 <strong>动手点点看</strong>：
+试着在下面的模拟器里多次启动服务。当端口冲突时，对比&quot;直接启动&quot;和&quot;智能启动&quot;的不同处理方式。</p>
+<h4 id="32-排查与解决">3.2 排查与解决</h4>
+<p>遇到端口冲突时，排查流程非常固定：</p>
+<p><strong>macOS / Linux：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 第一步：查看谁在占用 3000 端口
+lsof -i :3000
+
+# 第二步：拿到 PID 后，强制终止
+kill -9 &lt;PID&gt;
+</code></pre>
+<p><strong>Windows：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 第一步：查看谁在占用 3000 端口
+netstat -ano | findstr :3000
+
+# 第二步：终止进程
+taskkill /PID &lt;PID&gt; /F
+</code></pre>
+<blockquote>
+<p>很多现代框架（Vite、Create React App 等）遇到端口冲突时会自动询问&quot;是否换一个端口？&quot;。但了解底层原理，能帮你更快地排查那些框架帮不了你的疑难杂症。</p>
+</blockquote>
+<h3 id="4-开发中的同源策略与跨域">4. 开发中的&quot;同源策略&quot;与跨域</h3>
+<h4 id="41-源概述">4.1 源概述</h4>
+<p>浏览器有一个安全机制叫做<strong>同源策略（Same-Origin Policy）</strong>：只有协议、域名、端口三者完全一致，才算&quot;同源&quot;。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">地址 A</th>
+<th align="left">地址 B</th>
+<th align="left">是否同源</th>
+<th align="left">原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>http://localhost:5173</code></td>
+<td align="left"><code>http://localhost:5173/about</code></td>
+<td align="left">✅ 同源</td>
+<td align="left">协议、域名、端口都一样</td>
+</tr>
+<tr>
+<td align="left"><code>http://localhost:5173</code></td>
+<td align="left"><code>http://localhost:3000</code></td>
+<td align="left">❌ 不同源</td>
+<td align="left"><strong>端口不同</strong>（5173 vs 3000）</td>
+</tr>
+<tr>
+<td align="left"><code>http://localhost:5173</code></td>
+<td align="left"><code>https://localhost:5173</code></td>
+<td align="left">❌ 不同源</td>
+<td align="left"><strong>协议不同</strong>（http vs https）</td>
+</tr>
+</tbody></table></div>
+<h4 id="42-前后端分离必然遇到跨域的原理">4.2 前后端分离必然遇到跨域的原理</h4>
+<p>当你的项目架构是：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>前端 (Vite)  →  http://localhost:5173
+后端 (Express) →  http://localhost:3000
+</code></pre>
+<p>前端页面从 <code>:5173</code> 加载，然后用 <code>fetch(&#39;/api/users&#39;)</code> 去请求 <code>:3000</code> 的接口——<strong>端口不一样，触发跨域限制！</strong></p>
+<p><strong>两种常见解决方案：</strong></p>
+<p><strong>方案一：后端配置 CORS</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// Express 后端
+app.use(cors({ origin: &#39;http://localhost:5173&#39; }))
+</code></pre>
+<p><strong>方案二：前端配置代理（推荐）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// vite.config.js
+export default {
+  server: {
+    proxy: {
+      &#39;/api&#39;: &#39;http://localhost:3000&#39;
+    }
+  }
+}
+</code></pre>
+<p>代理的原理：让 Vite 开发服务器帮你&quot;转发&quot;请求。浏览器以为自己在和 <code>:5173</code> 通信（同源），实际上 Vite 在背后偷偷帮你把请求转给了 <code>:3000</code>。</p>
+<h3 id="5-实战排查三个最常见的问题">5. 实战排查：三个最常见的问题</h3>
+<p>👇 <strong>动手点点看</strong>：
+选择一个你遇到过的问题，跟着步骤一起排查。每一步都可以点击&quot;执行&quot;查看输出。</p>
+<h3 id="6-名词对照表">6. 名词对照表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">英文术语</th>
+<th align="left">中文对照</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Port</strong></td>
+<td align="left">端口</td>
+<td align="left">一个 0–65535 的数字，用来区分同一台机器上的不同网络服务。每个服务&quot;监听&quot;一个端口，等待客户端连接。</td>
+</tr>
+<tr>
+<td align="left"><strong>localhost</strong></td>
+<td align="left">本地主机</td>
+<td align="left">一个特殊域名，永远指向本机（127.0.0.1）。用于在不联网的情况下访问本机上运行的服务。</td>
+</tr>
+<tr>
+<td align="left"><strong>Loopback Interface</strong></td>
+<td align="left">环回接口</td>
+<td align="left">操作系统的虚拟网络接口。发往 127.0.0.1 的数据包不会离开本机，而是通过该接口&quot;折返&quot;回来。</td>
+</tr>
+<tr>
+<td align="left"><strong>EADDRINUSE</strong></td>
+<td align="left">地址已被使用</td>
+<td align="left">Node.js / 操作系统报的错误，表示你要监听的端口已经被另一个程序占用了。</td>
+</tr>
+<tr>
+<td align="left"><strong>CORS</strong></td>
+<td align="left">跨域资源共享</td>
+<td align="left">浏览器安全机制。当前端页面尝试请求不同源（协议/域名/端口不同）的接口时，需要后端明确许可。</td>
+</tr>
+<tr>
+<td align="left"><strong>Same-Origin Policy</strong></td>
+<td align="left">同源策略</td>
+<td align="left">浏览器的安全基石：只允许同协议、同域名、同端口的请求自由通信，阻止跨域的数据读取。</td>
+</tr>
+<tr>
+<td align="left"><strong>Proxy</strong></td>
+<td align="left">代理</td>
+<td align="left">在开发环境中，代理服务器代替浏览器向后端转发请求，绕过浏览器的同源限制。</td>
+</tr>
+<tr>
+<td align="left"><strong>0.0.0.0</strong></td>
+<td align="left">所有接口</td>
+<td align="left">当服务监听 0.0.0.0 时，表示它接受来自任何网络接口（本机、局域网等）的连接。</td>
+</tr>
+<tr>
+<td align="left"><strong>Well-known Ports</strong></td>
+<td align="left">知名端口</td>
+<td align="left">0–1023 端口的统称，预留给 HTTP (80)、HTTPS (443)、SSH (22) 等标准协议。</td>
+</tr>
+<tr>
+<td align="left"><strong>PID</strong></td>
+<td align="left">进程 ID</td>
+<td align="left">操作系统为每个运行中的程序分配的唯一编号，用于管理和终止进程。</td>
+</tr>
+<tr>
+<td align="left"><strong>lsof</strong></td>
+<td align="left">列出打开的文件</td>
+<td align="left">macOS/Linux 命令，用于查看哪个进程占用了某个端口（<code>lsof -i :端口号</code>）。</td>
+</tr>
+<tr>
+<td align="left"><strong>HMR</strong></td>
+<td align="left">热模块替换</td>
+<td align="left">开发服务器的功能：你修改代码后，浏览器自动更新，无需手动刷新页面。底层通过 WebSocket 通知浏览器。</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-17">总结</h3>
+<p>端口和 localhost 是开发环境中最基础、最高频的概念：</p>
+<ul>
+<li><strong>端口</strong> = 一台机器上区分不同服务的&quot;门牌号&quot;（0–65535）</li>
+<li><strong>localhost</strong> = &quot;自己找自己&quot;的特殊地址（127.0.0.1），数据不出本机</li>
+<li><strong>端口冲突</strong>的本质是&quot;一个门牌只能挂一块牌子&quot;</li>
+<li><strong>跨域</strong>的本质是&quot;端口不同 = 不同源&quot;，需要 CORS 或代理来解决</li>
+</ul>
+<p>记住这四句话，你在开发环境里遇到的大多数网络问题，都能快速定位原因。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-093.html">← 环境变量与 PATH</a><a rel="next" href="chapter-095.html">SSH 与密钥认证 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

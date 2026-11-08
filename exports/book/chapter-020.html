@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Figma 与 MasterGo 入门 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 20 / 195</p><article><h1 id="figma-与-mastergo-入门">Figma 与 MasterGo 入门</h1><details class="contents"><summary>本章目录 <span>· 5 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-为什么要学前端设计工具">1. 为什么要学前端设计工具？</a><ul><li><a href="#11-前端设计工具的演变">1.1 前端设计工具的演变</a></li><li><a href="#12-诞生之旅">1.2 诞生之旅</a></li></ul></li><li><a href="#2-figma-入门">2. Figma 入门</a><ul><li><a href="#21-新建-design-文件">2.1 新建 Design 文件</a></li><li><a href="#22-创建你的第一个-frame画板">2.2 创建你的第一个 Frame（画板）</a></li><li><a href="#23-在-frame-里放文字和简单元素">2.3 在 Frame 里放文字和简单元素</a></li><li><a href="#24-善用-auto-layout-整合元素">2.4 善用 Auto Layout 整合元素</a></li><li><a href="#25-将按钮变为可复用组件">2.5 将按钮变为可复用组件</a></li></ul></li><li><a href="#3-mastergo-入门">3. MasterGo 入门</a><ul><li><a href="#31-新建设计文件">3.1 新建设计文件</a></li><li><a href="#32-创建你的第一个-frame">3.2 创建你的第一个 Frame</a></li><li><a href="#33-创建画板内容">3.3 创建画板内容</a></li><li><a href="#34-ai-生成页面">3.4 AI 生成页面</a></li></ul></li><li><a href="#4-下一步从原型到代码">4. 下一步：从原型到代码</a></li><li><a href="#5-总结">5. 总结</a></li></ul></nav></details><blockquote>
+<p><strong>核心问题</strong>
+<strong>如何从零开始使用现代设计工具创建网页原型？</strong></p>
+</blockquote>
+<h2 id="1-为什么要学前端设计工具">1. 为什么要学前端设计工具？</h2>
+<p>在开始之前，我们需要理解一个问题：为什么需要学&quot;前端设计工具&quot;？反正直接写 HTML / CSS 代码也能把页面搭出来，多学一个软件和技术，真的有必要吗？</p>
+<p>设计工具让你在写代码之前，先看清页面上应该放什么：主要信息在哪里，按钮是否容易找到，用户怎样从一个页面走到下一个页面。在画布上比较几种布局、调整顺序，通常比反复改完整页面更方便。</p>
+<p>你也可以直接用代码或 AI 做原型。无论采用哪种方式，都需要检查信息层级和操作流程。本章选择先画设计稿，再把确认过的布局转成代码。</p>
+<p>团队协作时，设计师、产品和开发可以围绕同一份画布标注问题、讨论修改。组件、自动布局和资源导出等功能，还能减少重复的对齐、标注和样式调整。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image8.webp" alt="" loading="lazy" decoding="async"></p>
+<h3 id="11-前端设计工具的演变">1.1 前端设计工具的演变</h3>
+<p>在时间的长河中，所谓前端设计工具其实是一条持续演化的技术。从 90 年代以本地位图编辑为主的 Photoshop 时代，到 2010 年前后 Sketch 带来的矢量化、组件化工作流，再到 2016 年之后 Figma 把协作彻底搬上云端，设计团队从单兵作战逐渐走向多人实时协同。来到 2025 年，AI 已经实打实地嵌入到这些工具内部：从&quot;根据一句话生成页面草稿&quot;，到&quot;把设计稿直接转成可运行的前端结构&quot;，&quot;设计即代码&quot;&quot;人机共创&quot;正在从概念变成可用的生产力。</p>
+<p>本节介绍两种最有代表性的现代前端设计工具，Figma 和 MasterGo。一方面，它们都覆盖了现代 UI/UX 所需要的核心能力（矢量编辑、组件系统、自动布局、代码交付等），可以支撑你完成从线框到高保真到开发交接的完整流程；另一方面，这两款工具都已经在 2025 年之后陆续加入了实用的 AI 功能，帮助你在保证原型不变的同时将设计图变成真正可运行的程序。</p>
+<h3 id="12-诞生之旅">1.2 诞生之旅</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image9.webp" alt="" loading="lazy" decoding="async"></p>
+<p>在现代前端专用工具尚未诞生的年代，整个界面设计行业的视觉设计工作，很长一段时间都由 Photoshop 这类 &quot;全能型&quot; 设计软件顺带承包。设计师会在本地通过一层层叠加的图层，细致完成页面整体视觉效果的设计，最终将体积不小的 .psd 源文件交付给前端工程师 —— 而前端要精准还原设计图，还必须手动完成三项繁琐且关键的工作：</p>
+<p>一是 &quot;切图&quot;：需要从 .psd 文件的多层结构里，把按钮、图标、Logo、背景模块等独立视觉元素逐一拆分提取，再导出为 PNG、JPG 等网页能直接加载的图片格式（毕竟网页无法直接识别 PSD 的图层信息，只能依赖这些拆分后的图片呈现细节）；</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image10.webp" alt="" loading="lazy" decoding="async"></p>
+<p>二是 &quot;量尺寸&quot;：得用软件自带的测量工具，逐一确认每个元素的宽高、不同模块间的间距（margin/padding）等数据，确保所有尺寸都精准到像素；</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image11.webp" alt="" loading="lazy" decoding="async"></p>
+<p>三是 &quot;抠标注&quot;：要从设计图中提取那些 &quot;看不见却必须有的&quot; 隐性参数 —— 比如文字的字号、字重、行距，每个色块的 RGB 或 HEX 色值等，相当于把设计师没写在纸上的 &quot;设计规格&quot; 手动 &quot;抠&quot; 出来记录。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image12.webp" alt="" loading="lazy" decoding="async"></p>
+<p>拿到图片、尺寸和标注后，前端开始还原页面。无论使用 HTML/CSS/JS，还是 Vue、React 等框架，都要先组织页面结构。</p>
+<p>这里可以先区分两个词：<strong>容器</strong>负责组织内部元素，用 Flex、Grid 等布局规则安排位置；<strong>结构块</strong>是读者能辨认出的页面区域，例如导航栏、文章列表和页脚。</p>
+<p>一个结构块里可以有多层容器。例如，文章列表的外层容器排列多张卡片，每张卡片里的容器再安排标题、摘要、时间和封面。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image13.webp" alt="" loading="lazy" decoding="async"></p>
+<p>在现代前端框架里，重复出现的界面单元通常会做成<strong>组件</strong>。例如，一张文章卡片包含标题、封面和点击行为；把它做成组件后，不同页面就可以复用同一套结构、样式和交互逻辑。</p>
+<p>接着，把设计参数落实到代码中：</p>
+<ul>
+<li><strong>切图 → 图片资源。</strong> PNG、JPG 等文件可以放进 <code>&lt;img&gt;</code>、作为背景图片，或按框架推荐的静态资源方式引入。</li>
+<li><strong>尺寸 → 布局样式。</strong> 宽高、间距和行高分别对应 <code>width</code>、<code>height</code>、<code>margin</code>、<code>padding</code>、<code>line-height</code> 等属性。</li>
+<li><strong>标注 → 外观与状态。</strong> 颜色、字体、阴影、圆角对应 <code>color</code>、<code>font-family</code>、<code>font-size</code>、<code>box-shadow</code>、<code>border-radius</code>；hover、active 等状态由伪类或状态类名表达。</li>
+</ul>
+<p>这些样式可以通过 CSS、CSS Modules、CSS-in-JS 或 Tailwind 等方案组织。先理解“设计参数对应哪些代码”，再熟悉项目采用的具体方案。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image14.webp" alt="" loading="lazy" decoding="async"></p>
+<p>但是，以本地文件为中心的模式天然是低效率的。版本通过邮件和网盘传输，新旧稿件容易混淆，设计和开发之间大量依赖上述的复杂交互方法，协作成本和出错概率都不低。</p>
+<p>移动互联网兴起后界面复杂度和迭代速度需求快速上升，Photoshop 的&quot;大而全&quot;逐渐显得笨重。这个阶段，出现了 Sketch。Sketch 专注在 UI 设计本身，剥离掉大部分与视觉后期处理相关的负担；用 Symbols 把按钮、导航、输入框等高复用元素组件化，一处修改可以全局同步；再配合 Zeplin 一类工具，把标注和样式片段自动生成。Sketch 把&quot;组件思维&quot;引入了设计工作流。不过它依然是基于本地文件的桌面应用，实时协作要靠云盘、第三方插件或版本工具绕行实现，没有从底层解决&quot;多个人同时改同一份稿子&quot;的问题。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image15.webp" alt="" loading="lazy" decoding="async"></p>
+<p>真正改变游戏规则的是 Figma。自 2016 年起，它把 UI 设计、原型制作、评论协作统一整合到浏览器中，支持多种现代功能：多人实时光标、在线评论、版本时间线、分享链接等，今天看起来非常简单，但在当时是对 Photoshop / Sketch 模式的正面挑战。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image16.webp" alt="" loading="lazy" decoding="async"></p>
+<p>至此，界面设计不再是散落在各自电脑里的文件，而是集中在一份在线、实时更新的云端画布上。围绕这块画布，我们可以想象更进一步，用自动化或 AI 的方式模糊设计和前端代码的边界。</p>
+<p>最开始，我们仅能依赖各类平台插件，将设计稿中的组件、样式信息半自动导出为代码片段（如 React/Vue 组件骨架、CSS 变量等），核心是靠插件把结构化信息提取出来。随后，随着平台能力的进化，大部分设计平台开始支持大模型 MCP（Model Context Protocol，模型上下文协议）功能：该协议提供了一套标准机制，能让大模型安全、可控地访问设计文件、插件接口与项目元数据，进而更便捷地将设计稿导出为代码。</p>
+<p>再往后，在插件与 MCP 的基础上，前端代码自动化进一步迈入到原生支持从设计稿直接推导代码结构的阶段。我们可在设计工具内一键生成前端项目骨架、组件层次、样式体系及对应的代码结果。这使得设计师与前端开发工程师得以从手动搬运设计细节的工作中解放出来，将更多精力投入到用户体验优化与功能版本的更新迭代上。</p>
+<h2 id="2-figma-入门">2. Figma 入门</h2>
+<p>接下来新建画板、放入文字和按钮，再用自动布局调整它们。完成这些操作后，可以继续阅读 <a href="https://help.figma.com/hc/en-us/sections/30880632542743-Figma-Design-for-beginners">Figma Design 官方入门教程</a>。</p>
+<p>想把设计做成个人作品集网页，可以参考 <a href="https://help.figma.com/hc/en-us/sections/35895585621655-Figma-Sites-collectio">Figma Sites 教程</a>。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image17.webp" alt="" loading="lazy" decoding="async"></p>
+<p>左侧是项目的新建和资源管理入口，右上角的几个按钮是 Figma 的常见功能。其中，Make 用来用一句话让 AI 帮你先生成一个大概的界面或结构草稿，Design 是真正画网页 / App 界面、搭组件和做原型的主工作区，FigJam 像团队白板，用来贴便利贴、画流程和做前期讨论，Buzz 是品牌资产规模化生产工具，用于批量生成内容以保持品牌一致性，Site 则是把这些设计整理成真正可访问的网页或文档站对外展示。</p>
+<p>乍一看 Figma 的功能非常多，不好入门，但其实这类功能工具本质上都是熟能生巧，不需要害怕一开始操作出错，也不用想着一步做对，只需要先玩起来，玩多了自然能快速上手。</p>
+<p>本篇教程中，为了快速入门，我们会对 Design 功能做简单讲解。</p>
+<h3 id="21-新建-design-文件">2.1 新建 Design 文件</h3>
+<p>在首页或者右上角的入口里，选择 <strong>Design</strong> ，新建一个文件，你会进入一个空白的设计画布。
+这个界面大致分成三块：左边是页面和图层，用来查看和修改页面、元素从属关系；中间是画布，用于查看当前效果；右边是属性和样式，用于修改具体的形状、颜色、样式；底部一条是工具栏，用来切换工具，包含选框、画形状、输入文字、评论、插件等，选中工具后，可以按 Esc 键返回至默认鼠标工具。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image18.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="22-创建你的第一个-frame画板">2.2 创建你的第一个 Frame（画板）</h3>
+<p>在正式放置元素之前，需要先为页面确定一个清晰的边界，这个边界由 Frame 来承担。你可以在底部工具栏中选择 Frame 工具，或者直接按键盘 F，然后在画布上拖出一个矩形区域。</p>
+<ol>
+<li>使用底部工具栏里的 Frame 工具，或者直接按键盘 <code>F</code>。</li>
+<li>在画布中拖出一个矩形区域，右侧属性栏里把宽度改成比如 <code>1440</code>，高度改成 <code>900</code>。</li>
+<li>在左侧图层栏，把这个 Frame 重命名，比如叫 <code>My First Page</code> 或者你项目的名字。</li>
+</ol>
+<p>这个 Frame 就是一屏界面的页面容器，之后的标题、文字、按钮、图片等内容都应该放在这个 Frame 内部，而不是散落在画布的任意位置。以 Frame 为边界来组织内容，有助于后续做滚动设置、适配不同设备尺寸、导出画面及制作原型时，保持结构可控。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image19.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="23-在-frame-里放文字和简单元素">2.3 在 Frame 里放文字和简单元素</h3>
+<p>有了容器，接着放最基本的组件，例如：标题、副标题、按钮、占位图块。</p>
+<ol>
+<li>选择文字工具（底部工具栏中的 <code>T</code>），在 Frame 里点击一下，输入页面标题，比如：<code>My Portfolio</code>。
+在右侧属性里，把字体大小调大一点（例如 96），字重调粗一点。</li>
+<li>在标题下面，再用文字工具输入一行简单说明，比如一两句描述这个页面要做什么。
+字号可以小一些，行高略放大一点，读起来不那么挤。</li>
+<li>画一个按钮雏形：
+用矩形工具在标题下面画一个大概 <code>200 × 48</code> 的矩形，右侧给它一个比较明显的填充颜色，再适当加一点圆角。
+<img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image20.png" alt="" loading="lazy" decoding="async"></li>
+<li>然后用文字工具在矩形上方输入按钮文字，比如 <code>Get Started</code>，把矩形和文字一并选中，用顶部的对齐工具让文字水平、垂直都居中。</li>
+<li>在按钮一侧或下方，再画一个较大的浅灰色矩形作为&quot;图片占位区&quot;，后面可以用来放展示图片。</li>
+</ol>
+<p>做到这里，其实你已经有了一个非常简陋但结构完整的&quot;首页草稿&quot;：一个标题、一段话、一个按钮、一个主要展示区域。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image21.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="24-善用-auto-layout-整合元素">2.4 善用 Auto Layout 整合元素</h3>
+<p>如果所有元素只是随手拖拽，页面很快会乱。Figma 里一个很重要的概念就是 <strong>Auto Layout</strong> ，它可以把一组元素变成一个带规则的容器。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image22.png" alt="" loading="lazy" decoding="async"></p>
+<p>你可以选中&quot;主标题 + 副标题 + 按钮&quot;这三样，在右侧属性栏里点击 <strong>Add Auto layout</strong> 。</p>
+<p>这时这三样会被包在一个容器里，你可以在右侧调整参数，其中的元素布局会根据参数自动适应调整：</p>
+<ul>
+<li>它们是竖着排还是横着排。</li>
+<li>元素之间的间距是多少。</li>
+<li>整个这一块离容器边缘有多少内边距（padding）。</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image23.png" alt="" loading="lazy" decoding="async"></p>
+<p>同样，按钮内部也可以用 Auto Layout，我们能够实现这样的一个效果：当我调整了文字，按钮的长度也会自动调整。</p>
+<p>先把按钮背景的矩形和按钮文字选中，添加 Auto Layout，让这两个东西变成一个&quot;按钮容器&quot;。接着选中这个按钮容器，把宽高都设置成 <strong>Hug contents</strong> 。这样一来，文字会一直保持在按钮正中间，文字多一点、少一点，按钮的宽度都会自动跟着变化。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image24.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="25-将按钮变为可复用组件">2.5 将按钮变为可复用组件</h3>
+<p>现在我们要学习一个新的概念，组件。组件的意思就是可以被反复利用的元素，比如按钮这种元素，只要你预感之后还会反复用到，就可以考虑把它做成组件。我们在刚才已经加好 Auto Layout 的按钮基础操作：</p>
+<ol>
+<li>选中整个按钮容器。</li>
+<li>右键选择 Create component（创建组件）。
+<img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image25.png" alt="" loading="lazy" decoding="async"></li>
+</ol>
+<p>这样，这个按钮就从一组普通图层，变成了一个组件母版。之后如果你在其他页面或 Frame 里需要同样风格的按钮，可以直接从左侧的 Assets 面板里拖出来使用。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image26.png" alt="" loading="lazy" decoding="async"></p>
+<p>此时所有用到的按钮，都是这个母版的同步拷贝。当你修改母版的颜色、圆角或间距时，所有实例都会自动保持同步更新。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image27.webp" alt="" loading="lazy" decoding="async"></p>
+<p>至此，你已经初步掌握了 Figma 的简单用法。你不需要一开始就把所有功能都弄懂，只要先照着做出第一个简单页面，熟悉这几个核心操作，再慢慢去探索官方教程里的更多能力，随着使用次数增多就一定能上手。</p>
+<h2 id="3-mastergo-入门">3. MasterGo 入门</h2>
+<p>在理解了 Figma 的基础工作流程之后，我们再来看 MasterGo，你可以把 MasterGo 简单看做是中国版的 Figma，但在部分功能上有一定区别。整体上，它延续了与 Figma 相似的界面布局和操作理念：同样有画布、图层树和属性面板，同样支持组件、样式、自动布局和多人协作。更详细的内容可参考 MasterGO 的官方教程：<a href="https://mastergo.com/tutorials/12?%E5%85%A8%E7%A8%8B%E9%AB%98%E8%83%BD%EF%BC%8CMasterGo%20%E6%9C%80%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%94%A8%E6%95%99%E7%A8%8B%EF%BC%8C%E8%AE%A9%E4%BD%A0%E4%BB%8E%E9%9B%B6%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%81">https://mastergo.com/tutorials/12?%E5%85%A8%E7%A8%8B%E9%AB%98%E8%83%BD%EF%BC%8CMasterGo%20%E6%9C%80%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%94%A8%E6%95%99%E7%A8%8B%EF%BC%8C%E8%AE%A9%E4%BD%A0%E4%BB%8E%E9%9B%B6%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%81</a></p>
+<h3 id="31-新建设计文件">3.1 新建设计文件</h3>
+<ol>
+<li><p><strong>进入 MasterGo 后台</strong></p>
+<ol>
+<li>打开 MasterGo 官网并登录账号。</li>
+<li>进入后，你会看到类似「文件列表 / 项目列表」的首页区域，用来管理你的设计文件。
+<img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image28.webp" alt="" loading="lazy" decoding="async"></li>
+</ol>
+</li>
+<li><p><strong>创建新文件</strong></p>
+<ol>
+<li>点右上角 + 设计文件的按钮，或者选择导入 Figma 等文件。</li>
+<li>点击后，你会进入一个空白画布，这就是 MasterGo 的设计工作区。</li>
+</ol>
+</li>
+<li><p><strong>认识基本界面区块</strong>
+当你学会使用 Figma 后，MasterGo 的使用方式大同小异，主要分为几个区域：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image29.png" alt="" loading="lazy" decoding="async"></p>
+<ol>
+<li>顶部工具栏：位于画布最上方，左侧是文件位置和文件名，中间是一排常用工具按钮（选择、区域/画板、形状、文本、注释、评论、插件选择和 AI 工具等），右侧是当前在线成员、分享入口以及画布缩放和预览控制功能入口。</li>
+<li>左侧面板：主要分为图层和资源，当前停留在图层标签，可看到页面列表，以及该页面下所有图层的结构和层级。</li>
+<li>中间画布区：具体绘制和排版的工作区，所有 Frame、组件和图形都会展示在这里。</li>
+<li>右侧属性面板：用于查看和编辑选中对象的属性，例如大小、位置、对齐方式、背景填充、描边、圆角等。如果没有选中任何对象，会显示画布相关设置，如画布背景色、标签和导出选项。</li>
+</ol>
+</li>
+</ol>
+<h3 id="32-创建你的第一个-frame">3.2 创建你的第一个 Frame</h3>
+<p>在正式放东西之前，我们需要一个页面容器用来确定界面的边界和尺寸。这个容器在 MasterGo 里，通常叫 Frame。</p>
+<p><strong>步骤：</strong></p>
+<ol>
+<li><strong>选择 Frame 工具</strong><ol>
+<li>在工具栏中找到 Frame / 画板工具，点击后可使用预设参数直接将内容创建到画板。</li>
+<li>或者使用快捷键（通常是 <code>F</code>，如果有差异以实际界面为准）。</li>
+</ol>
+</li>
+<li><strong>在画布中拖出一个矩形区域</strong><ol>
+<li>拖出后，你会看到一个带选中框的区域。</li>
+<li>右侧属性面板里，可以看到这个 Frame 的宽度和高度。</li>
+<li>把宽度改成比如 <code>1440</code>，高度改成 <code>900</code>（一屏网页常用尺寸之一）。</li>
+</ol>
+</li>
+<li><strong>重命名 Frame</strong><ol>
+<li>在左侧图层面板里找到这个 Frame。</li>
+<li>双击名称，把它改成你项目的名字，比如：<code>My First Page</code>，或者你自己随便起的页面名。</li>
+</ol>
+</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image30.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="33-创建画板内容">3.3 创建画板内容</h3>
+<p>有了容器，使用与 Figma 中我们已教过的类似方式，很容易可以得到相似的展示页面。（你可以尝试复制 Figma 画板中的文字元素，能够支持文本组件的直接粘贴导入）</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image31.png" alt="" loading="lazy" decoding="async"></p>
+<p>Auto Layout 的行为略有不同：在 MasterGo 中，如果你想实现和 Figma 相似的按钮长度随着文字的长度变化，你需要先在对应矩形元素的基础上创建一个容器或组件，如图所示：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image32.png" alt="" loading="lazy" decoding="async"></p>
+<p>成功创建容器后，先将按钮文字移动到容器中。此时容器内会暂时同时包含文字和原来的矩形图层，如下图所示：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image33.png" alt="" loading="lazy" decoding="async"></p>
+<p>这只是调整过程中的中间状态。接下来，将原矩形的填充色和圆角设置到容器本身，再删除容器内的矩形图层，让按钮文字成为容器中唯一的子图层。最后选中容器，在右侧启用 <strong>Auto Layout</strong>，设置水平内边距，并将宽度设置为适应内容。这样修改文字时，按钮宽度就会随文字长度自动变化，最终效果如下图所示：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image34.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="34-ai-生成页面">3.4 AI 生成页面</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image35.png" alt="" loading="lazy" decoding="async"></p>
+<p>在 MasterGo 中，一个值得注意的有趣功能是 AI 生成页面。你可以用一句话或携带参考图，生成对应的 MasterGo 可编辑版组件，并得到可直接使用的代码。你可以使用中文或者英文直接输入需求，页面会根据需求返回结构清晰的页面排布文档，效果如下：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image36.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image37.webp" alt="" loading="lazy" decoding="async"></p>
+<p>设计文档生成结束后，点击开始生成，稍作等待便能获取对应的实际网页效果：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image38.webp" alt="" loading="lazy" decoding="async"></p>
+<p>此时你有两种操作选择：一是点击蓝色按钮将生成结果直接插入画布，二是点击代码预览功能，直接获取当前完整页面的代码，具体操作界面如下：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image39.webp" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image40.webp" alt="" loading="lazy" decoding="async"></p>
+<p>将结果插入画布后，你还能更精细地调整网页的整体布局、元素细节（如字体、颜色、间距等），直至最终效果完全符合你的预期。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/figma-mastergo/images/image41.webp" alt="" loading="lazy" decoding="async"></p>
+<h2 id="4-下一步从原型到代码">4. 下一步：从原型到代码</h2>
+<p>在前面的内容中，我们已经学习了 Figma 和 MasterGo 的基础操作，能够创建出结构完整的界面原型。接下来的关键步骤是：<strong>如何将这些设计稿转化为真正能在浏览器里运行的前端代码？</strong></p>
+<blockquote>
+<p><strong>📚 后续教程</strong>
+详细的方法介绍请参考 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/design-to-code/index.md">从设计原型到项目代码</a>，你将学习到：</p>
+</blockquote>
+<ul>
+<li><strong>多模态 AI 直接转换</strong>：将设计稿截图发给 AI，直接生成 HTML/React 代码</li>
+<li><strong>Figma Make</strong>：使用 Figma 官方 AI 工具高精度还原设计并导出代码</li>
+<li><strong>MasterGo AI</strong>：一键生成可编辑页面并获取代码</li>
+</ul>
+<p>这些方法各有优劣，适用于不同的场景，建议根据项目需求选择合适的工作流。</p>
+<h2 id="5-总结">5. 总结</h2>
+<p>通过本章节的学习，你已经掌握了：</p>
+<ol>
+<li><p><strong>前端设计工具的价值</strong>：理解了为什么需要设计工具，以及它们如何解决信息分布、团队协作的问题。</p>
+</li>
+<li><p><strong>Figma 基础操作</strong>：</p>
+<ul>
+<li>创建 Design 文件和 Frame 画板</li>
+<li>添加文字、形状等基础元素</li>
+<li>使用 Auto Layout 实现自适应布局</li>
+<li>创建可复用的组件系统</li>
+</ul>
+</li>
+<li><p><strong>MasterGo 基础操作</strong>：</p>
+<ul>
+<li>熟悉与 Figma 相似的界面布局</li>
+<li>创建 Frame 和基础画板内容</li>
+<li>使用 AI 生成页面功能快速创建原型</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>下一步</strong>
+现在你已经掌握了前端设计工具的基础使用方法，可以尝试：</p>
+</blockquote>
+<ul>
+<li>为自己设计一个个人作品集页面</li>
+<li>为接下来的项目设计界面原型</li>
+<li>学习 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/design-to-code/index.md">从设计原型到项目代码</a>，将设计稿转化为可运行的代码</li>
+</ul>
+<p>如果你在完成 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/hogwarts-portraits/index.md">一起做霍格沃茨画像</a> 项目，可以先设计界面原型，再导出代码与 AI 对话功能结合。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-019.html">← AI 设计入门</a><a rel="next" href="chapter-021.html">UI 设计规范与多产品界面 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

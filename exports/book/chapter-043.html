@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code MCP 完全指南 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 43 / 195</p><article><h1 id="claude-code-mcp-完全指南">Claude Code MCP 完全指南</h1><details class="contents"><summary>本章目录 <span>· 11 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#什么是-claude-code-mcp">什么是 Claude Code MCP？</a></li><li><a href="#为什么需要在-claude-code-中使用-mcp">为什么需要在 Claude Code 中使用 MCP？</a><ul><li><a href="#没有-mcp-的-claude-code">没有 MCP 的 Claude Code</a></li><li><a href="#有了-mcp-的-claude-code">有了 MCP 的 Claude Code</a></li></ul></li><li><a href="#快速开始">快速开始</a><ul><li><a href="#步骤-1了解配置文件位置">步骤 1：了解配置文件位置</a></li><li><a href="#步骤-2用自然语言添加-mcp-服务器">步骤 2：用自然语言添加 MCP 服务器</a></li><li><a href="#步骤-3验证配置">步骤 3：验证配置</a></li><li><a href="#步骤-4开始使用">步骤 4：开始使用</a></li></ul></li><li><a href="#claude-code-的自然语言管理">Claude Code 的自然语言管理</a><ul><li><a href="#查看和管理-mcp-服务器">查看和管理 MCP 服务器</a></li><li><a href="#诊断问题">诊断问题</a></li></ul></li><li><a href="#配置方式详解">配置方式详解</a><ul><li><a href="#用户级配置全局">用户级配置（全局）</a></li><li><a href="#项目级配置推荐">项目级配置（推荐）</a></li><li><a href="#传输方式配置">传输方式配置</a></li><li><a href="#stdio本地进程">STDIO（本地进程）</a></li><li><a href="#http远程服务">HTTP（远程服务）</a></li><li><a href="#sse服务器推送">SSE（服务器推送）</a></li></ul></li><li><a href="#实战示例">实战示例</a><ul><li><a href="#示例-1github-工作流自动化">示例 1：GitHub 工作流自动化</a></li><li><a href="#示例-2数据库查询">示例 2：数据库查询</a></li><li><a href="#示例-3网页截图分析">示例 3：网页截图分析</a></li><li><a href="#示例-4与-notion-集成">示例 4：与 Notion 集成</a></li></ul></li><li><a href="#调试技巧">调试技巧</a><ul><li><a href="#使用自然语言诊断">使用自然语言诊断</a></li><li><a href="#常见问题排查">常见问题排查</a></li><li><a href="#手动诊断命令">手动诊断命令</a></li></ul></li><li><a href="#最佳实践">最佳实践</a><ul><li><a href="#1-项目级配置优先">1. 项目级配置优先</a></li><li><a href="#2-敏感信息环境变量化">2. 敏感信息环境变量化</a></li><li><a href="#3-版本锁定">3. 版本锁定</a></li><li><a href="#4-文档化你的-mcp-配置">4. 文档化你的 MCP 配置</a></li></ul></li><li><a href="#claude-code-vs-claude-desktop">Claude Code vs Claude Desktop</a></li><li><a href="#常用-mcp-服务器">常用 MCP 服务器</a><ul><li><a href="#github-服务器">GitHub 服务器</a></li><li><a href="#sqlite-服务器">SQLite 服务器</a></li><li><a href="#文件系统服务器">文件系统服务器</a></li><li><a href="#puppeteer-浏览器自动化">Puppeteer 浏览器自动化</a></li><li><a href="#brave-搜索服务器">Brave 搜索服务器</a></li></ul></li><li><a href="#参考资源-2">参考资源</a><ul><li><a href="#官方文档">官方文档</a></li><li><a href="#官方服务器">官方服务器</a></li><li><a href="#教程文章">教程文章</a></li><li><a href="#配置指南">配置指南</a></li><li><a href="#开发教程">开发教程</a></li><li><a href="#mcp-服务器资源">MCP 服务器资源</a></li><li><a href="#地图和天气服务">地图和天气服务</a></li><li><a href="#社区资源">社区资源</a></li><li><a href="#实际应用案例">实际应用案例</a></li></ul></li></ul></nav></details><h2 id="什么是-claude-code-mcp">什么是 Claude Code MCP？</h2>
+<p><strong>Claude Code</strong> 是 Anthropic 官方推出的 AI 命令行工具，而 <strong>MCP（Model Context Protocol）</strong> 则是让 Claude Code 能够连接外部工具和服务的协议。</p>
+<p>MCP 为 Claude Code 提供连接工具和数据源的统一方式。比如，接入数据库 MCP 服务器后，Claude Code 可以发现它提供的查询工具，再按工具定义发起调用。能执行哪些操作，取决于服务器提供的能力、账号权限和你的授权。</p>
+<h2 id="为什么需要在-claude-code-中使用-mcp">为什么需要在 Claude Code 中使用 MCP？</h2>
+<h3 id="没有-mcp-的-claude-code">没有 MCP 的 Claude Code</h3>
+<p>Claude Code 已经可以读写项目文件、编辑代码和运行终端命令。如果环境中装好了 GitHub CLI、数据库客户端或其他工具，并配置了网络与凭据，它也可以通过这些工具访问外部服务。</p>
+<h3 id="有了-mcp-的-claude-code">有了 MCP 的 Claude Code</h3>
+<p>MCP 把服务提供的能力按统一协议接入，让 Claude Code 获取工具名称、参数和返回结果。按需要配置服务器后，可以进行 GitHub 操作、数据库查询、外部资料检索或浏览器自动化。</p>
+<p><strong>先看任务需要什么，再决定是否接 MCP。</strong> 已有命令行工具能完成的工作，可以继续使用；需要统一接入或使用某个 MCP 专属工具时，再添加对应服务器。</p>
+<h2 id="快速开始">快速开始</h2>
+<h3 id="步骤-1了解配置文件位置">步骤 1：了解配置文件位置</h3>
+<p>同一台电脑上，可以按使用范围保存 MCP 配置：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>配置文件路径</th>
+<th>谁可以使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>local</code>（默认）</td>
+<td><code>~/.claude.json</code> 中当前项目的条目</td>
+<td>仅你自己，仅当前项目</td>
+</tr>
+<tr>
+<td><code>project</code></td>
+<td>项目根目录的 <code>.mcp.json</code></td>
+<td>使用这份项目配置的团队成员</td>
+</tr>
+<tr>
+<td><code>user</code></td>
+<td><code>~/.claude.json</code> 顶层的 <code>mcpServers</code></td>
+<td>仅你自己，所有项目</td>
+</tr>
+</tbody></table></div>
+<p><code>~</code> 表示当前用户的主目录。个人试用先选默认的 <code>local</code>；团队需要共享服务器定义时选 <code>project</code>。共享配置后，每个人仍需完成自己的认证，并确认是否信任这些服务器。</p>
+<h3 id="步骤-2用自然语言添加-mcp-服务器">步骤 2：用自然语言添加 MCP 服务器</h3>
+<p>可以请 Claude Code 协助准备配置，但要给出服务的官方说明、安装范围和所需权限。示例提示词：</p>
+<pre class="prose-block"><code class="language-text">请根据这个服务的官方 MCP 文档，列出接入当前项目所需的步骤。
+先说明服务器会读取哪些数据、能执行哪些操作。
+我先个人试用，使用 local 范围；凭据由我在本机配置，不写进对话或共享文件。
+完成后请给出连接状态和一次只读调用的实际结果。
+</code></pre>
+<p>也可以直接在终端添加服务器。下面以 Claude Code 官方文档提供的远程 MCP 服务为例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp
+</code></pre>
+<p>替换成其他服务时，使用该服务实际提供的 MCP 地址；普通 API 地址未必是 MCP 端点。需要认证的服务，按官方说明完成认证。</p>
+<h3 id="步骤-3验证配置">步骤 3：验证配置</h3>
+<p>在终端查看服务器列表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">claude mcp list
+</code></pre>
+<p>在 Claude Code 会话中输入：</p>
+<pre class="prose-block"><code class="language-text">/mcp
+</code></pre>
+<p>检查连接状态、可用工具和认证提示，再尝试一次只读调用。让 Claude Code 展示实际工具结果；仅看到“配置完成”的文字，不能证明连接和权限已经可用。<code>/doctor</code> 用于更广泛的安装与环境诊断。</p>
+<h3 id="步骤-4开始使用">步骤 4：开始使用</h3>
+<p>配置成功后，直接用自然语言调用 MCP 功能：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：帮我在 GitHub 上创建一个 Issue
+
+Claude：我可以帮你创建 GitHub Issue。请告诉我：
+- 仓库地址（如 owner/repo）
+- Issue 标题
+- Issue 描述
+</code></pre>
+<h2 id="claude-code-的自然语言管理">Claude Code 的自然语言管理</h2>
+<h3 id="查看和管理-mcp-服务器">查看和管理 MCP 服务器</h3>
+<p>你可以完全用自然语言与 Claude Code 交互：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：列出所有已配置的 MCP 服务器
+
+你：检查一下 MCP 服务器的连接状态
+
+你：删除 notion 这个 MCP 服务器
+
+你：更新 github 服务器的 token
+</code></pre>
+<h3 id="诊断问题">诊断问题</h3>
+<p>当遇到问题时：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：检查一下 MCP 连接有什么问题
+
+Claude：[会自动运行诊断，分析配置文件，检查服务器状态]
+</code></pre>
+<h2 id="配置方式详解">配置方式详解</h2>
+<h3 id="用户级配置全局">用户级配置（全局）</h3>
+<p>编辑 <code>~/.claude.json</code>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;filesystem&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;, &quot;/Users/yourname/Documents&quot;]
+    },
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;],
+      &quot;env&quot;: {
+        &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;${GITHUB_PERSONAL_ACCESS_TOKEN}&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="项目级配置推荐">项目级配置（推荐）</h3>
+<p>编辑项目根目录的 <code>.mcp.json</code>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;project-db&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-sqlite&quot;, &quot;--db-path&quot;, &quot;./data/app.db&quot;]
+    }
+  }
+}
+</code></pre>
+<p><strong>项目级配置优势：</strong></p>
+<ul>
+<li>团队成员可以共享配置（提交到 Git）</li>
+<li>不同项目使用不同的 MCP 服务</li>
+<li>配置更灵活，不会污染全局设置</li>
+</ul>
+<h3 id="传输方式配置">传输方式配置</h3>
+<p>Claude Code 支持三种传输方式：</p>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/integration-plug.svg" aria-label="打开大图：Claude Code 与 MCP 服务器的三种传输方式对照：STDIO 本地进程、HTTP 远程服务、SSE 服务器推送，各自的关键字段与常见坑"><img src="../../book/assets/handdraw/integration-plug.svg" alt="Claude Code 与 MCP 服务器的三种传输方式对照：STDIO 本地进程、HTTP 远程服务、SSE 服务器推送，各自的关键字段与常见坑" loading="lazy"></a>
+  <figcaption><strong>先区分本地进程与远程服务。</strong>STDIO 通过本地进程通信；远程服务优先使用 HTTP，它也可以流式返回结果；已有 SSE 接口按服务文档接入。项目共享配置放在 <code>.mcp.json</code>，接入后还要核对凭据、版本和实际调用结果。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h3 id="stdio本地进程">STDIO（本地进程）</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;local-tool&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;, &quot;/path&quot;]
+    }
+  }
+}
+</code></pre>
+<h3 id="http远程服务">HTTP（远程服务）</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;remote-api&quot;: {
+      &quot;url&quot;: &quot;https://api.example.com/mcp&quot;,
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;headers&quot;: {
+        &quot;Authorization&quot;: &quot;Bearer ${API_TOKEN}&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="sse服务器推送">SSE（服务器推送）</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;streaming&quot;: {
+      &quot;url&quot;: &quot;https://api.example.com/sse&quot;,
+      &quot;type&quot;: &quot;sse&quot;
+    }
+  }
+}
+</code></pre>
+<h2 id="实战示例">实战示例</h2>
+<h3 id="示例-1github-工作流自动化">示例 1：GitHub 工作流自动化</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：帮我把当前的修改推送到 GitHub，然后创建一个 PR，标题是&quot;添加新功能&quot;
+
+Claude：
+1. 检查当前 git 状态...
+2. 创建新分支 feature/new-feature...
+3. 提交更改...
+4. 推送到远程...
+5. 调用 github_create_pull_request 创建 PR...
+6. PR 已创建：https://github.com/owner/repo/pull/123
+</code></pre>
+<h3 id="示例-2数据库查询">示例 2：数据库查询</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：查询数据库中最近注册的 10 个用户
+
+Claude：
+1. 连接到 SQLite 数据库...
+2. 执行查询：SELECT * FROM users ORDER BY created_at DESC LIMIT 10
+3. 返回结果：
+   - 张三 (zhang@example.com) - 2025-02-28
+   - 李四 (li@example.com) - 2025-02-27
+   ...
+</code></pre>
+<h3 id="示例-3网页截图分析">示例 3：网页截图分析</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：打开 https://example.com 并截图，分析一下页面设计
+
+Claude：
+1. 启动浏览器...
+2. 导航到 https://example.com...
+3. 截取屏幕...
+4. [返回截图]
+5. 页面设计分析：
+   - 布局采用居中设计，最大宽度 1200px
+   - 主色调为蓝色 (#3b82f6)
+   - 导航栏固定在顶部
+   ...
+</code></pre>
+<h3 id="示例-4与-notion-集成">示例 4：与 Notion 集成</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：把我刚才的笔记保存到 Notion
+
+Claude：
+1. 使用 Notion MCP 服务器...
+2. 创建新页面...
+3. 已保存：https://notion.so/page/xxx
+</code></pre>
+<h2 id="调试技巧">调试技巧</h2>
+<h3 id="使用自然语言诊断">使用自然语言诊断</h3>
+<p>遇到问题时，直接告诉 Claude Code：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：我的 MCP 服务器连接不上了，帮我检查一下
+
+你：GitHub MCP 工具调用失败，是什么原因？
+
+你：为什么 sqlite 服务器一直显示连接中？
+</code></pre>
+<p>可以请 Claude Code 按以下顺序检查，并逐项给出实际结果：</p>
+<ol>
+<li>检查配置文件格式</li>
+<li>验证环境变量</li>
+<li>测试服务器连接</li>
+<li>提供具体的修复建议</li>
+</ol>
+<h3 id="常见问题排查">常见问题排查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>可能原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务器未连接</td>
+<td>配置文件格式错误</td>
+<td>检查 JSON 语法</td>
+</tr>
+<tr>
+<td>工具无法调用</td>
+<td>权限不足</td>
+<td>检查环境变量</td>
+</tr>
+<tr>
+<td>连接超时</td>
+<td>网络问题</td>
+<td>检查 URL 或网络</td>
+</tr>
+<tr>
+<td>进程崩溃</td>
+<td>服务器代码错误</td>
+<td>查看服务器日志</td>
+</tr>
+</tbody></table></div>
+<h3 id="手动诊断命令">手动诊断命令</h3>
+<p>在 Claude Code 中用 <code>/mcp</code> 查看 MCP 连接状态，遇到安装或运行环境问题再用 <code>/doctor</code>。也可以在终端执行 <code>claude mcp list</code>，检查实际读取到了哪些服务器。</p>
+<p>把排查结果记成下面这样即可；这是记录格式示例，不是命令的固定输出：</p>
+<pre class="prose-block"><code class="language-text">服务器：项目数据库
+连接状态：失败
+实际报错：Database file not found
+下一步：核对配置中的数据库路径，再重试连接
+复测结果：填写实际结果
+</code></pre>
+<h2 id="最佳实践">最佳实践</h2>
+<h3 id="1-项目级配置优先">1. 项目级配置优先</h3>
+<p><strong>为什么推荐项目级配置？</strong></p>
+<p>不同的项目往往需要不同的 MCP 服务。例如，前端项目可能需要浏览器测试工具，而后端项目则需要数据库连接。使用项目级配置可以让每个项目拥有自己专属的 MCP 服务器集合，避免全局配置的混乱。</p>
+<p>项目级配置可以提交到 Git 仓库，团队成员复用同一份服务器定义。各自的认证、环境变量和首次信任确认仍要完成；共享文件里不要放真实密钥。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>项目 A（前端项目）→ .mcp.json 包含浏览器测试 MCP
+项目 B（后端项目）→ .mcp.json 包含数据库 MCP
+</code></pre>
+<h3 id="2-敏感信息环境变量化">2. 敏感信息环境变量化</h3>
+<p><strong>永远不要在配置文件中硬编码密钥！</strong></p>
+<p>配置文件可能会被意外提交到 Git 仓库，导致密钥泄露。正确的做法是将敏感信息存储在环境变量中，配置文件只引用变量名。这样即使配置文件被公开，也不会暴露实际的密钥。</p>
+<p>下面是 <code>.mcp.json</code> 中服务器配置的 <code>env</code> 字段片段，变量引用使用 <code>${变量名}</code>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;env&quot;: {
+    &quot;GITHUB_TOKEN&quot;: &quot;${GITHUB_TOKEN}&quot;
+  }
+}
+</code></pre>
+<p>启动 Claude Code 前，在本机环境中设置该变量。变量名称要与服务器要求一致；上例只演示引用方式，不是一份完整服务器配置。</p>
+<p>本节配置范围、命令与变量语法参考 <a href="https://code.claude.com/docs/en/mcp">Claude Code MCP 官方文档</a>及<a href="https://code.claude.com/docs/en/mcp-quickstart">快速接入说明</a>。</p>
+<h3 id="3-版本锁定">3. 版本锁定</h3>
+<p><strong>为什么需要锁定版本？</strong></p>
+<p><code>npx -y</code> 中的 <code>-y</code> 表示自动确认安装提示，不表示锁定版本。没有指定版本时，实际运行的包可能随本地环境或包发布状态变化，新版本也可能引入不兼容的更改。</p>
+<p>在包名后添加 <code>@版本号</code> 可以固定服务器包版本。下面只演示格式，请把占位文字替换成真实包名与已验证的版本号；升级后仍要检查依赖和工具行为。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;command&quot;: &quot;npx&quot;,
+  &quot;args&quot;: [&quot;-y&quot;, &quot;包名@已验证的版本号&quot;]
+}
+</code></pre>
+<h3 id="4-文档化你的-mcp-配置">4. 文档化你的 MCP 配置</h3>
+<p><strong>让团队成员快速理解 MCP 配置</strong></p>
+<p>当项目中有多个 MCP 服务器时，新成员可能不清楚每个服务器的用途和配置要求。在 <code>.claude/</code> 目录下创建一个 <code>README.md</code> 文件，说明每个服务器的用途、所需的配置项以及获取方式，可以大大降低团队的沟通成本。</p>
+<p>在项目中创建 <code>.claude/README.md</code>：</p>
+<pre class="prose-block"><code class="language-markdown"># MCP 配置说明
+
+本项目使用的 MCP 服务器：
+
+## github
+用于自动化 GitHub 操作，需要配置 GITHUB_TOKEN。
+
+## sqlite
+连接到 ./data/app.db，用于查询和修改数据。
+
+## puppeteer
+用于 E2E 测试。
+</code></pre>
+<h2 id="claude-code-vs-claude-desktop">Claude Code vs Claude Desktop</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Claude Code</th>
+<th>Claude Desktop</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>配置文件</strong></td>
+<td><code>~/.claude.json</code> 或 <code>.mcp.json</code></td>
+<td><code>claude_desktop_config.json</code></td>
+</tr>
+<tr>
+<td><strong>项目级配置</strong></td>
+<td>✓ 支持</td>
+<td>✗ 不支持</td>
+</tr>
+<tr>
+<td><strong>自然语言管理</strong></td>
+<td>✓ 支持</td>
+<td>✗ 需手动编辑</td>
+</tr>
+<tr>
+<td><strong>连接检查</strong></td>
+<td><code>/mcp</code> 或 <code>claude mcp list</code></td>
+<td>在应用设置与日志中检查</td>
+</tr>
+<tr>
+<td><strong>配置更新后</strong></td>
+<td>用 <code>/mcp</code> 确认是否生效，必要时重启会话</td>
+<td>按当前版本的提示重新加载或重启</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>开发工作流、CI/CD</td>
+<td>日常使用、办公</td>
+</tr>
+</tbody></table></div>
+<h2 id="常用-mcp-服务器">常用 MCP 服务器</h2>
+<blockquote>
+<p>💡 完整的 MCP 服务器列表请参考附录 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/8-artificial-intelligence/ai-protocols.md">MCP 服务器大全</a></p>
+</blockquote>
+<h3 id="github-服务器">GitHub 服务器</h3>
+<p><strong>功能：</strong> Issues、PR、仓库管理</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;],
+      &quot;env&quot;: {
+        &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;${GITHUB_PERSONAL_ACCESS_TOKEN}&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p><strong>获取 Token：</strong> <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a></p>
+<h3 id="sqlite-服务器">SQLite 服务器</h3>
+<p><strong>功能：</strong> 查询和管理 SQLite 数据库</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;sqlite&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-sqlite&quot;, &quot;--db-path&quot;, &quot;./data/database.db&quot;]
+    }
+  }
+}
+</code></pre>
+<h3 id="文件系统服务器">文件系统服务器</h3>
+<p><strong>功能：</strong> 访问指定目录的文件</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;filesystem&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;, &quot;/Users/yourname/Documents&quot;]
+    }
+  }
+}
+</code></pre>
+<h3 id="puppeteer-浏览器自动化">Puppeteer 浏览器自动化</h3>
+<p><strong>功能：</strong> 浏览器控制、截图、自动化测试</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;puppeteer&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-puppeteer&quot;]
+    }
+  }
+}
+</code></pre>
+<h3 id="brave-搜索服务器">Brave 搜索服务器</h3>
+<p><strong>功能：</strong> 网络搜索</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;brave-search&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-brave-search&quot;],
+      &quot;env&quot;: {
+        &quot;BRAVE_API_KEY&quot;: &quot;your-brave-api-key&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="参考资源-2">参考资源</h2>
+<h3 id="官方文档">官方文档</h3>
+<ul>
+<li><a href="https://docs.anthropic.com/zh-CN/docs/claude-code/mcp">Claude Code 官方文档 - MCP</a></li>
+<li><a href="https://modelcontextprotocol.io/">MCP 官方网站</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/">MCP 规范文档</a></li>
+<li><a href="https://github.com/modelcontextprotocol">MCP GitHub 仓库</a></li>
+</ul>
+<h3 id="官方服务器">官方服务器</h3>
+<ul>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/github">@modelcontextprotocol/server-github</a> - GitHub 集成</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite">@modelcontextprotocol/server-sqlite</a> - SQLite 数据库</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/postgres">@modelcontextprotocol/server-postgres</a> - PostgreSQL 数据库</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem">@modelcontextprotocol/server-filesystem</a> - 文件系统访问</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer">@modelcontextprotocol/server-puppeteer</a> - 浏览器自动化</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/fetch">@modelcontextprotocol/server-fetch</a> - 网页抓取</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search">@modelcontextprotocol/server-brave-search</a> - Brave 搜索</li>
+<li><a href="https://github.com/modelcontextprotocol/servers/tree/main/src/git">@modelcontextprotocol/server-git</a> - Git 操作</li>
+</ul>
+<h3 id="教程文章">教程文章</h3>
+<ul>
+<li><a href="https://view.inews.qq.com/a/20250414A023WV00">一文讲透 MCP 的原理及实践</a></li>
+<li><a href="https://m.toutiao.com/w/1826385835060307/">MCP（Model Context Protocol）架构与工作原理</a></li>
+<li><a href="https://m.blog.csdn.net/weixin_45653328/article/details/150916706">2025 大模型最新教程：MCP 协议从入门到精通</a></li>
+<li><a href="https://juejin.cn/post/7582510291667419187">从零开始学 MCP（八）- 构建一个 MCP server</a></li>
+</ul>
+<h3 id="配置指南">配置指南</h3>
+<ul>
+<li><a href="https://www.anthropic.com/engineering/claude-code-best-practices">Claude Code 最佳实践</a></li>
+<li><a href="https://juejin.cn/post/7576838552472043563">Claude Code 完全配置指南</a></li>
+</ul>
+<h3 id="开发教程">开发教程</h3>
+<ul>
+<li><a href="https://m.blog.csdn.net/ztt123654/article/details/150844207">零基础构建 MCP 服务器 TypeScript/Python 双语言实战指南</a></li>
+<li><a href="https://m.blog.csdn.net/gitblog_00703/article/details/154862128">终极 MCP 服务器构建指南：TypeScript 与 Python 双版本完整教程</a></li>
+<li><a href="https://m.blog.csdn.net/weixin_45653525/article/details/148433757">使用 TypeScript 构建一个最简单的 MCP 服务器</a></li>
+<li><a href="https://learn.microsoft.com/zh-cn/azure/developer/ai/build-mcp-server-ts">使用 Azure 容器应用生成 TypeScript MCP 服务器</a></li>
+</ul>
+<h3 id="mcp-服务器资源">MCP 服务器资源</h3>
+<ul>
+<li><a href="https://github.com/punkpeye/awesome-mcp-servers">Awesome MCP Servers</a> - 最全面的 MCP 服务器列表</li>
+<li><a href="https://registry.modelcontextprotocol.io">Official MCP Registry</a> - Anthropic 官方「应用商店」</li>
+<li><a href="https://mcp.so">MCP.so</a> - 社区 MCP 服务器中心</li>
+<li><a href="https://glama.ai/mcp/servers">Glama.ai MCP</a> - 带评分评论的 MCP 目录</li>
+<li><a href="https://smithery.ai">Smithery</a> - MCP 服务器市场</li>
+<li><a href="https://mcphub.io/registry">MCPHub</a> - 界面简洁的目录</li>
+<li><a href="https://lobehub.com/zh/mcp">LobeHub MCP</a> - 中文 MCP 目录</li>
+</ul>
+<h3 id="地图和天气服务">地图和天气服务</h3>
+<ul>
+<li><a href="https://lobehub.com/zh/mcp/luozengchang-mcp-amap">高德地图 MCP Server</a></li>
+<li><a href="https://lbs.qq.com/service/MCPServer/MCPServerGuide/overview">腾讯位置服务 MCP 文档</a></li>
+<li><a href="https://github.com/caiyunapp/mcp-caiyun-weather">彩云天气 MCP Server</a></li>
+<li><a href="https://github.com/CodeByWaqas/weather-mcp-server">OpenWeatherMap MCP Server</a></li>
+</ul>
+<h3 id="社区资源">社区资源</h3>
+<ul>
+<li><a href="https://github.com/affaan-m/everything-claude-code">Everything Claude Code Config</a> - 生产级 Claude Code 配置集合</li>
+<li><a href="https://github.com/hacket/AICodingGuide">AI Coding Guide</a> - Claude Code 中文学习路径</li>
+</ul>
+<h3 id="实际应用案例">实际应用案例</h3>
+<ul>
+<li><a href="https://github.com/Belthur/blender-mcp">BlenderMCP - AI 驱动的 3D 建模</a> - 4,100+ ⭐</li>
+<li><a href="https://learn.microsoft.com/zh-cn/azure/azure-functions/scenario-mcp-apps">MCP 生产环境 15 条最佳实践</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-042.html">← Claude Code 快速上手核心指南</a><a rel="next" href="chapter-044.html">Claude Code Skills 完全指南 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

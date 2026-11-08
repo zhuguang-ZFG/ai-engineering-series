@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>网关与反向代理 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 151 / 195</p><article><h1 id="网关与反向代理">网关与反向代理</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#网关与反向代理原理">网关与反向代理原理</a><ul><li><a href="#1-网关的动机">1. 网关的动机</a></li><li><a href="#2-反向代理定义">2. 反向代理定义</a></li><li><a href="#3-能扛起百万并发的原理">3. 能扛起百万并发的原理</a></li><li><a href="#4-api网关定义">4. API网关定义</a></li><li><a href="#5-构建完整的网关架构的实现">5. 构建完整的网关架构的实现</a></li><li><a href="#6-守护系统大门的实现">6. 守护系统大门的实现</a></li><li><a href="#7-防止系统被流量洪水冲垮的实现">7. 防止系统被&quot;流量洪水&quot;冲垮的实现</a></li><li><a href="#8-总结网关设计的核心思维">8. 总结:网关设计的核心思维</a></li><li><a href="#9-名词速查表-1">9. 名词速查表</a></li></ul></li></ul></nav></details><h2 id="网关与反向代理原理">网关与反向代理原理</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>在高并发的互联网架构中,如何把流量安全、高效地送到正确的服务?</strong> 反向代理解决&quot;流量怎么分发&quot;,API网关解决&quot;请求怎么处理&quot;。本文通过真实案例(前台接待、保安系统、智能路由)深入理解网关的设计哲学和工程实践。</p>
+</blockquote>
+<h3 id="1-网关的动机">1. 网关的动机</h3>
+<h4 id="11-从一个真实案例说起某电商的架构演进">1.1 从一个真实案例说起:某电商的架构演进</h4>
+<p><strong>场景还原:</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>阶段一:直接暴露服务
+客户端 → 直接调用用户服务、订单服务、支付服务...
+         ↓
+问题1:服务IP暴露,存在安全隐患
+问题2:无法统一做认证、限流
+问题3:新增服务需要修改客户端配置
+</code></pre>
+<blockquote>
+<p><strong>直接暴露的致命问题</strong></p>
+</blockquote>
+<ul>
+<li><strong>安全隐患</strong>: 所有服务IP暴露,容易被攻击</li>
+<li><strong>功能重复</strong>: 每个服务都要做认证、限流、日志</li>
+<li><strong>扩展困难</strong>: 新增服务要修改所有客户端</li>
+<li><strong>协议混乱</strong>: 有的用HTTP,有的用gRPC,客户端要适配</li>
+</ul>
+<p><strong>改进后的架构(引入网关):</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端 → API网关(Nginx/Kong) → 内部服务
+         ↓
+      统一认证、限流、路由
+         ↓
+      客户端只知道网关地址
+</code></pre>
+<blockquote>
+<p>::: tip 改进后的效果</p>
+</blockquote>
+<ul>
+<li><strong>安全</strong>: 真实服务IP隐藏,只有网关对外</li>
+<li><strong>功能收敛</strong>: 认证、限流、日志在网关统一处理</li>
+<li><strong>扩展容易</strong>: 新增服务只需网关配置路由</li>
+<li><strong>协议统一</strong>: 对外HTTP,内部可用gRPC</li>
+</ul>
+<h4 id="12-网关的生活化比喻">1.2 网关的生活化比喻</h4>
+<p><strong>前台接待</strong></p>
+<ul>
+<li><strong>没有前台</strong>: 访客直接找各部门,不知道在哪,公司乱成一团</li>
+<li><strong>有前台</strong>: 访客先到前台,前台问清楚来意,再引导到对应部门</li>
+</ul>
+<p><strong>API网关就是系统的&quot;前台&quot;</strong>:</p>
+<ul>
+<li><strong>反向代理</strong>: 前台,引导访客到正确的部门</li>
+<li><strong>API网关</strong>: 智能前台,还能检查访客身份(认证)、限制访问人数(限流)</li>
+</ul>
+<h3 id="2-反向代理定义">2. 反向代理定义</h3>
+<h4 id="21-正向代理-vs-反向代理">2.1 正向代理 vs 反向代理</h4>
+<blockquote>
+<p>::: tip 🤔 术语解释
+<strong>正向代理(Forward Proxy)</strong>:</p>
+</blockquote>
+<ul>
+<li>部署在客户端侧</li>
+<li>代替客户端访问外部资源</li>
+<li>典型应用:VPN、翻墙工具</li>
+<li>例子:公司网络,你通过代理访问外网</li>
+</ul>
+<p><strong>反向代理(Reverse Proxy)</strong>:</p>
+<ul>
+<li>部署在服务器端</li>
+<li>接收客户端请求并转发给内部服务</li>
+<li>客户端只知道代理存在,不知道真实服务器</li>
+<li>例子:Nginx、HAProxy</li>
+</ul>
+<p><strong>对比表:</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>正向代理</th>
+<th>反向代理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>部署位置</strong></td>
+<td>客户端侧</td>
+<td>服务器端</td>
+</tr>
+<tr>
+<td><strong>服务对象</strong></td>
+<td>客户端</td>
+<td>服务器</td>
+</tr>
+<tr>
+<td><strong>典型应用</strong></td>
+<td>VPN、翻墙</td>
+<td>负载均衡、网关</td>
+</tr>
+<tr>
+<td><strong>透明性</strong></td>
+<td>服务器看到代理IP</td>
+<td>客户端看到代理IP</td>
+</tr>
+<tr>
+<td><strong>目的</strong></td>
+<td>隐藏真实客户端、加速访问</td>
+<td>隐藏真实服务器、负载均衡</td>
+</tr>
+</tbody></table></div>
+<h4 id="22-反向代理的核心价值">2.2 反向代理的核心价值</h4>
+<blockquote>
+<p>::: details 价值一:负载均衡
+将流量分发到多个后端服务器,避免单点过载。</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端
+  ↓
+Nginx(反向代理)
+  ↓
+┌─────────┬─────────┬─────────┐
+│ 服务器1 │ 服务器2 │ 服务器3 │
+└─────────┴─────────┴─────────┘
+</code></pre>
+<blockquote>
+<p>::: details 价值二:安全防护
+隐藏真实服务器IP,防止直接攻击。统一在代理层做安全防护。</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端 → 只能看到Nginx的IP
+真实服务器 → 只在内网,外部无法直接访问
+</code></pre>
+<blockquote>
+<p>::: details 价值三:SSL终结
+在代理层处理HTTPS加密解密,后端服务用HTTP,降低后端计算开销。</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>HTTPS客户端 → Nginx(加密/解密) → HTTP后端服务
+                   ↑
+              SSL终结点
+</code></pre>
+<h3 id="3-能扛起百万并发的原理">3. 能扛起百万并发的原理</h3>
+<h4 id="31-master-worker进程模型">3.1 Master-Worker进程模型</h4>
+<p>Nginx采用<strong>多进程</strong>架构,而不是多线程:</p>
+<p><strong>Master进程(管理者)</strong>:</p>
+<ul>
+<li>负责读取和验证配置文件</li>
+<li>管理Worker进程(启动、停止、重新加载)</li>
+<li>不处理具体请求</li>
+</ul>
+<p><strong>Worker进程(工作者)</strong>:</p>
+<ul>
+<li>实际处理HTTP请求</li>
+<li>每个Worker是独立的进程,相互隔离</li>
+<li>数量通常设置为CPU核心数,避免上下文切换开销</li>
+</ul>
+<blockquote>
+<p>::: tip 💡 优势</p>
+</blockquote>
+<ul>
+<li><strong>隔离性好</strong>: 一个Worker崩溃,不影响其他Worker</li>
+<li><strong>充分利用多核</strong>: 每个Worker独立运行</li>
+<li><strong>避免多线程复杂性</strong>: 无需处理锁、竞争等问题</li>
+</ul>
+<h4 id="32-事件驱动--异步非阻塞">3.2 事件驱动 + 异步非阻塞</h4>
+<p><strong>传统Apache(多进程/线程模型)</strong>:</p>
+<ul>
+<li>一个连接 = 一个进程/线程</li>
+<li>并发数受限于系统进程/线程数</li>
+<li>大量连接时,进程切换开销巨大</li>
+</ul>
+<p><strong>Nginx(事件驱动模型)</strong>:</p>
+<ul>
+<li>使用epoll(Linux)/kqueue(macOS)等高效I/O多路复用机制</li>
+<li>一个Worker进程可以同时处理数万个连接</li>
+<li>连接没有数据时,不会占用CPU,有新数据时通过事件通知唤醒</li>
+</ul>
+<blockquote>
+<p>::: tip 生活化比喻</p>
+</blockquote>
+<ul>
+<li><strong>Apache</strong>: 餐厅里每个顾客配一个服务员(进程),顾客多需要大量服务员</li>
+<li><strong>Nginx</strong>: 一个超级服务员,同时服务所有顾客,谁需要服务就去谁那里,而不是一直站在某个顾客旁边</li>
+</ul>
+<h3 id="4-api网关定义">4. API网关定义</h3>
+<h4 id="41-需要api网关的原理">4.1 需要API网关的原理</h4>
+<p><strong>想象一个没有网关的系统:</strong></p>
+<ul>
+<li>客户端需要知道多个服务的地址(用户服务、订单服务、支付服务...)</li>
+<li>每个服务都要自己做认证、限流、日志</li>
+<li>协议不统一,有的用HTTP,有的用gRPC</li>
+<li>服务升级时,客户端也需要跟着改</li>
+</ul>
+<blockquote>
+<p>::: warning ⚠️ 没有网关的问题</p>
+</blockquote>
+<ul>
+<li><strong>客户端复杂</strong>: 需要配置多个服务地址</li>
+<li><strong>功能重复</strong>: 每个服务都要实现认证、限流</li>
+<li><strong>协议混乱</strong>: 客户端要适配多种协议</li>
+<li><strong>升级困难</strong>: 服务升级,客户端也要改</li>
+</ul>
+<p><strong>有了API网关之后:</strong></p>
+<ul>
+<li>客户端只需要知道网关地址,网关负责路由到正确服务</li>
+<li>认证、限流、日志等横切逻辑统一在网关处理</li>
+<li>网关可以做协议转换,对外统一暴露HTTP</li>
+<li>后端服务升级,只需要改网关配置,客户端无感知</li>
+</ul>
+<h4 id="42-api网关的核心功能">4.2 API网关的核心功能</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">功能</th>
+<th align="left">说明</th>
+<th align="left">典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>路由转发</strong></td>
+<td align="left">根据URL、Header等规则,将请求转发到不同服务</td>
+<td align="left"><code>/api/users</code> → 用户服务,<code>/api/orders</code> → 订单服务</td>
+</tr>
+<tr>
+<td align="left"><strong>负载均衡</strong></td>
+<td align="left">同一个服务有多实例时,分摊流量</td>
+<td align="left">用户服务有3台实例,轮询分发请求</td>
+</tr>
+<tr>
+<td align="left"><strong>认证鉴权</strong></td>
+<td align="left">统一校验JWT、OAuth Token</td>
+<td align="left">未登录用户无法访问<code>/api/admin</code></td>
+</tr>
+<tr>
+<td align="left"><strong>限流熔断</strong></td>
+<td align="left">控制流量上限,防止服务被压垮</td>
+<td align="left">每秒最多1000请求,超过返回429</td>
+</tr>
+<tr>
+<td align="left"><strong>协议转换</strong></td>
+<td align="left">对外HTTP,内部可转gRPC</td>
+<td align="left">客户端用HTTP,网关转gRPC调用内部服务</td>
+</tr>
+<tr>
+<td align="left"><strong>灰度发布</strong></td>
+<td align="left">按Header或比例,将部分流量导到新版本</td>
+<td align="left">5%用户体验新版本,95%用旧版本</td>
+</tr>
+<tr>
+<td align="left"><strong>日志监控</strong></td>
+<td align="left">统一记录请求日志,便于分析和排障</td>
+<td align="left">记录每次请求的耗时、状态码、返回大小</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-构建完整的网关架构的实现">5. 构建完整的网关架构的实现</h3>
+<h4 id="51-完整架构图">5.1 完整架构图</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌───────────────────────────────────────────────────────────────────────┐
+│                           客户端(浏览器/APP)                               │
+└───────────────────────────┬─────────────────────────────────────────┘
+                                │ HTTPS
+                                ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                        外层:CDN + WAF                                  │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │  CDN(内容分发网络)                                        │  │
+│  │  - 静态资源缓存(图片、CSS、JS)                           │  │
+│  │  - 就近访问,降低延迟                                   │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  WAF(Web应用防火墙)                                     │  │
+│  │  - 防护SQL注入、XSS攻击                                │  │
+│  │  - 拦截恶意Bot、爬虫                                  │  │
+│  │  - CC攻击防护                              │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                     中层:API网关(Nginx/Kong)                      │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  第一层:SSL终结 + 安全防护                              │  │
+│  │  - HTTPS / TLS 1.3                                        │  │
+│  │  - HSTS、安全响应头                                        │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  第二层:认证与鉴权                                      │  │
+│  │  - JWT Token校验                                         │  │
+│  │  - OAuth 2.0 / SSO集成                                     │  │
+│  │  - API Key管理                                         │  │
+│  │  - 权限校验(RBAC)                                        │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  第三层:流量控制                                        │  │
+│  │  - 限流- 令牌桶/漏桶算法                             │  │
+│  │  - 熔断- 防止故障扩散                                 │  │
+│  │  - 降级- 服务不可用时的备用方案                         │  │
+│  │  - 灰度发布- 按比例分配流量                          │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  第四层:路由与负载均衡                                    │  │
+│  │  - 路径路由- Path-based Routing)                          │  │
+│  │  - 域名路由- Host-based Routing)                           │  │
+│  │  - Header路由- Header-based Routing)                             │  │
+│  │  - 负载均衡算法- 轮询/加权/最少连接/IP哈希)             │  │
+│  │  - 服务发现- Service Discovery)集成                        │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │  第五层:协议转换与数据处理                                 │  │
+│  │  - SSL终结- HTTPS ↔ HTTP)                                   │  │
+│  │  - 协议转换- HTTP ↔ gRPC / WebSocket)                         │  │
+│  │  - 请求/响应转换- JSON ↔ XML)                               │  │
+│  │  - 数据压缩- Gzip / Brotli)                                   │  │
+│  │  - 缓存- Cache)- 静态资源和API响应                          │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                        内层:微服务集群                             │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐      │
+│  │  用户服务    │ │  订单服务    │ │  商品服务    │ │  支付服务    │      │
+│  │  User Svc   │ │  Order Svc  │ │ Product Svc │ │ Payment Svc │      │
+│  │             │ │             │ │             │ │             │      │
+│  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘      │
+│         │                │                │                │               │
+│         └────────────────┴────────────────┴────────────────┘               │
+│                                       │                              │
+│                    服务发现与配置中心/ etcd)                          │
+│                    - 服务注册与发现                                      │
+│                    - 健康检查                                              │
+│                    - KV配置存储                                              │
+└───────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h4 id="52-路由与负载均衡">5.2 路由与负载均衡</h4>
+<p>网关的核心职责之一,就是<strong>把请求送到正确的地方</strong>。这涉及两个关键能力:路由(去哪台服务器)和负载均衡(怎么分配流量)。</p>
+<blockquote>
+<p>::: details 路由规则:从URL到服务
+想象一个电商系统,不同的URL对应不同的服务:</p>
+</blockquote>
+<ul>
+<li><code>/api/users/*</code> → 用户服务</li>
+<li><code>/api/orders/*</code> → 订单服务</li>
+<li><code>/api/products/*</code> → 商品服务</li>
+<li><code>/api/pay/*</code> → 支付服务</li>
+</ul>
+<p><strong>Nginx配置示例:</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name api.example.com;
+
+    # 用户服务
+    location /api/users/ {
+        proxy_pass http://user-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 订单服务
+    location /api/orders/ {
+        proxy_pass http://order-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 商品服务
+    location /api/products/ {
+        proxy_pass http://product-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 支付服务(需要更高安全级别)
+    location /api/pay/ {
+        # 限制IP访问
+        allow 10.0.0.0/8;
+        deny all;
+
+        proxy_pass http://payment-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+</code></pre>
+<blockquote>
+<p>::: details 负载均衡:四种策略对比
+当同一个服务有多个实例时,如何选择?</p>
+</blockquote>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">策略</th>
+<th align="left">原理</th>
+<th align="left">适用场景</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>轮询</strong></td>
+<td align="left">按顺序依次分配给每台服务器</td>
+<td align="left">服务器性能相近</td>
+<td align="left">简单公平</td>
+<td align="left">不考虑服务器当前负载</td>
+</tr>
+<tr>
+<td align="left"><strong>加权轮询</strong></td>
+<td align="left">按权重比例分配,权重高的分配更多</td>
+<td align="left">服务器性能不均</td>
+<td align="left">充分利用高性能服务器</td>
+<td align="left">需要合理设置权重</td>
+</tr>
+<tr>
+<td align="left"><strong>最少连接</strong></td>
+<td align="left">分配给当前连接数最少的服务器</td>
+<td align="left">长连接场景、视频流</td>
+<td align="left">动态适应负载变化</td>
+<td align="left">需要实时统计连接数</td>
+</tr>
+<tr>
+<td align="left"><strong>IP哈希</strong></td>
+<td align="left">根据客户端IP计算哈希,同一IP永远分配到同一台服务器</td>
+<td align="left">需要会话保持</td>
+<td align="left">保证会话一致性</td>
+<td align="left">某个IP流量大时会造成单点压力</td>
+</tr>
+</tbody></table></div>
+<p><strong>Nginx配置示例:</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx"># 加权轮询
+upstream backend_weighted {
+    server 10.0.1.10:8080 weight=3;  # 性能好,承担更多流量
+    server 10.0.1.11:8080 weight=2;
+    server 10.0.1.12:8080 weight=1;  # 性能差,承担较少流量
+}
+
+# 最少连接
+upstream backend_least_conn {
+    least_conn;
+    server 10.0.1.10:8080;
+    server 10.0.1.11:8080;
+    server 10.0.1.12:8080;
+}
+
+# IP哈希(会话保持)
+upstream backend_ip_hash {
+    ip_hash;
+    server 10.0.1.10:8080;
+    server 10.0.1.11:8080;
+    server 10.0.1.12:8080;
+}
+</code></pre>
+<h3 id="6-守护系统大门的实现">6. 守护系统大门的实现</h3>
+<h4 id="61-认证与鉴权">6.1 认证与鉴权</h4>
+<p><strong>传统方式(每个服务各自认证):</strong></p>
+<ul>
+<li>用户服务、订单服务、支付服务...每个都要校验JWT</li>
+<li>代码重复,维护困难</li>
+<li>secret分散在各个服务,泄露风险高</li>
+</ul>
+<p><strong>网关统一认证:</strong></p>
+<ul>
+<li>客户端携带Token访问网关</li>
+<li>网关校验Token合法性(签名、过期时间)</li>
+<li>校验通过后,将用户信息(如user_id)添加到请求头,转发给后端服务</li>
+<li>后端服务无需校验,直接从Header获取用户信息</li>
+</ul>
+<blockquote>
+<p>::: tip 💡 核心思想
+<strong>认证在网关,鉴权在服务</strong>:</p>
+</blockquote>
+<ul>
+<li><strong>认证</strong>: 你是谁?(校验Token,获取用户身份)</li>
+<li><strong>鉴权</strong>: 你能做什么?(根据用户角色判断权限)</li>
+</ul>
+<p>就像公司前台:前台认证你的身份(身份证),但具体权限由各部门判断。</p>
+<h4 id="62-https与ssl终结">6.2 HTTPS与SSL终结</h4>
+<p><strong>为什么需要HTTPS?</strong></p>
+<ol>
+<li><strong>安全</strong>: 防止数据在传输过程中被窃取</li>
+<li><strong>合规</strong>: 现代浏览器对HTTP网站显示&quot;不安全&quot;警告</li>
+<li><strong>SEO</strong>: 搜索引擎优先收录HTTPS网站</li>
+</ol>
+<p><strong>SSL终结方案:</strong></p>
+<ul>
+<li>只在网关层配置HTTPS和证书</li>
+<li>网关负责TLS握手和加解密</li>
+<li>网关和后端服务之间使用HTTP明文传输(内部网络可信)</li>
+<li>后端服务专注于业务逻辑,无需处理TLS</li>
+</ul>
+<blockquote>
+<p>::: tip 💡 SSL终结的优势</p>
+</blockquote>
+<ul>
+<li><strong>简化管理</strong>: 证书只在网关配置,后端无需配置</li>
+<li><strong>降低开销</strong>: 后端服务不需要处理TLS握手</li>
+<li><strong>统一更新</strong>: 证书更新只需在网关操作</li>
+</ul>
+<h3 id="7-防止系统被流量洪水冲垮的实现">7. 防止系统被&quot;流量洪水&quot;冲垮的实现</h3>
+<h4 id="71-限流算法对比">7.1 限流算法对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">算法</th>
+<th align="left">核心思想</th>
+<th align="left">突发流量</th>
+<th align="left">适用场景</th>
+<th align="left">实现复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>令牌桶</strong></td>
+<td align="left">桶里装令牌,有令牌才能通过</td>
+<td align="left">允许一定程度的突发</td>
+<td align="left">API限流、带宽控制</td>
+<td align="left">中等</td>
+</tr>
+<tr>
+<td align="left"><strong>漏桶</strong></td>
+<td align="left">请求进桶,匀速流出处理</td>
+<td align="left">强制平滑,突发会被缓存或拒绝</td>
+<td align="left">需要严格匀速处理的场景</td>
+<td align="left">中等</td>
+</tr>
+<tr>
+<td align="left"><strong>滑动窗口</strong></td>
+<td align="left">统计时间窗口内的请求数</td>
+<td align="left">严格按窗口计数,超出一律拒绝</td>
+<td align="left">精确统计(如&quot;1分钟内最多100次&quot;)</td>
+<td align="left">较高</td>
+</tr>
+</tbody></table></div>
+<h4 id="72-nginx限流配置实战">7.2 Nginx限流配置实战</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx"># 定义限流区域(放在http块中)
+
+# 1. 基于IP的限流(漏桶算法)
+# zone=mylimit:10m - 区域名称和内存大小(10MB约可存储16万IP)
+# rate=10r/s - 每秒允许10个请求
+limit_req_zone $binary_remote_addr zone=mylimit:10m rate=10r/s;
+
+# 2. 基于IP的连接数限制(防止单个IP建立过多连接)
+limit_conn_zone $binary_remote_addr zone=addr:10m;
+
+# 3. 基于服务端点的限流(不区分IP,保护后端整体)
+limit_req_zone $server_name zone=server_limit:10m rate=100r/s;
+
+server {
+    listen 80;
+    server_name api.example.com;
+
+    # 用户服务 - 普通限流
+    location /api/users/ {
+        # 应用限流
+        # burst=20 - 桶容量,允许突发20个请求
+        # nodelay - 不延迟处理突发请求(立即处理或拒绝)
+        limit_req zone=mylimit burst=20 nodelay;
+
+        # 限制单个IP的连接数
+        limit_conn addr 10;
+
+        proxy_pass http://user-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 订单服务 - 更严格的限流
+    location /api/orders/ {
+        # 更严格的限流:每秒5个请求
+        limit_req_zone $binary_remote_addr zone=order_limit:10m rate=5r/s;
+        limit_req zone=order_limit burst=10 nodelay;
+
+        proxy_pass http://order-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 限流后的处理
+    # 当请求被限流时,返回429 Too Many Requests
+    error_page 429 /429.html;
+    location = /429.html {
+        internal;
+        return 429 &#39;{&quot;error&quot;: &quot;Too Many Requests&quot;, &quot;message&quot;: &quot;Rate limit exceeded. Please try again later.&quot;}&#39;;
+        add_header Content-Type application/json;
+    }
+}
+</code></pre>
+<blockquote>
+<p>::: tip 💡 限流策略建议</p>
+</blockquote>
+<ul>
+<li><strong>普通接口</strong>: 每秒10个请求,允许突发20个</li>
+<li><strong>重要接口</strong>(支付、订单): 每秒5个请求,允许突发10个</li>
+<li><strong>全局保护</strong>: 所有请求总和不超过每秒100个</li>
+</ul>
+<h4 id="73-熔断防止故障扩散">7.3 熔断:防止故障扩散</h4>
+<p><strong>熔断器的工作原理:</strong></p>
+<ol>
+<li><strong>关闭状态</strong>: 正常转发请求,同时统计错误率</li>
+<li><strong>开启状态</strong>: 当错误率超过阈值,熔断器开启,直接返回错误,不再转发请求</li>
+<li><strong>半开状态</strong>: 经过一段时间后,允许少量请求通过试探,如果成功则关闭熔断器</li>
+</ol>
+<blockquote>
+<p>::: tip 💡 核心思想
+<strong>熔断就像电路保险丝</strong>: 电流过大时,保险丝自动熔断,保护整个电路不被烧毁。</p>
+</blockquote>
+<p>类似地,当后端服务出现大量错误时,熔断器&quot;跳闸&quot;,快速失败,防止故障扩散到整个系统。</p>
+<h3 id="8-总结网关设计的核心思维">8. 总结:网关设计的核心思维</h3>
+<h4 id="81-核心原则回顾-1">8.1 核心原则回顾</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>原则</th>
+<th>含义</th>
+<th>实践要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>路由</strong></td>
+<td>把请求送到正确的地方</td>
+<td>路径路由、域名路由、Header路由</td>
+</tr>
+<tr>
+<td><strong>负载均衡</strong></td>
+<td>分摊流量到多台服务器</td>
+<td>轮询、加权、最少连接、IP哈希</td>
+</tr>
+<tr>
+<td><strong>安全</strong></td>
+<td>守护系统大门</td>
+<td>认证鉴权、HTTPS、WAF</td>
+</tr>
+<tr>
+<td><strong>限流</strong></td>
+<td>防止被流量冲垮</td>
+<td>令牌桶、漏桶、滑动窗口</td>
+</tr>
+<tr>
+<td><strong>熔断</strong></td>
+<td>防止故障扩散</td>
+<td>快速失败、降级方案</td>
+</tr>
+<tr>
+<td><strong>可观测</strong></td>
+<td>监控和排障</td>
+<td>日志、指标、链路追踪</td>
+</tr>
+</tbody></table></div>
+<h4 id="82-技术选型建议">8.2 技术选型建议</h4>
+<blockquote>
+<p>::: tip 💡 选型决策树</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>选择网关:
+│
+├─ 只需要反向代理、负载均衡?
+│  ├─ 是 → Nginx(首选)
+│  └─ 否 → 继续
+│
+├─ 需要丰富的插件生态?
+│  ├─ 是 → Kong(基于Nginx)
+│  └─ 否 → 继续
+│
+├─ Spring Cloud 全家桶?
+│  ├─ 是 → Spring Cloud Gateway
+│  └─ 否 → Nginx
+</code></pre>
+<h3 id="9-名词速查表-1">9. 名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>名词</th>
+<th>英文</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>反向代理</strong></td>
+<td>Reverse Proxy</td>
+<td>部署在服务器端,接收客户端请求并转发给内部服务的代理服务。客户端只知道反向代理的存在,不知道真实服务器地址。</td>
+</tr>
+<tr>
+<td><strong>正向代理</strong></td>
+<td>Forward Proxy</td>
+<td>部署在客户端侧,代替客户端访问外部资源的代理服务。服务端看到的是代理的IP,不知道真实客户端。典型应用:VPN、翻墙工具。</td>
+</tr>
+<tr>
+<td><strong>API网关</strong></td>
+<td>API Gateway</td>
+<td>位于客户端和后端服务之间的中间层,提供路由、认证、限流、日志等功能,是微服务架构的&quot;统一大门&quot;。</td>
+</tr>
+<tr>
+<td><strong>负载均衡</strong></td>
+<td>Load Balancing</td>
+<td>将请求流量分配到多台服务器,避免单台服务器过载,提高系统可用性和性能。</td>
+</tr>
+<tr>
+<td><strong>SSL终结</strong></td>
+<td>SSL Termination</td>
+<td>在网关层处理HTTPS加密解密,后端服务使用HTTP,降低后端计算开销,简化证书管理。</td>
+</tr>
+<tr>
+<td><strong>限流</strong></td>
+<td>Rate Limiting</td>
+<td>限制单位时间内的请求数量,防止系统被突发流量压垮。常用算法:令牌桶、漏桶、滑动窗口。</td>
+</tr>
+<tr>
+<td><strong>熔断</strong></td>
+<td>Circuit Breaking</td>
+<td>当依赖服务出现故障时,自动切断调用,防止故障扩散,并提供降级方案。</td>
+</tr>
+<tr>
+<td><strong>会话保持</strong></td>
+<td>Session Persistence</td>
+<td>确保同一客户端的请求始终路由到同一台后端服务器,用于需要保持会话状态的场景。</td>
+</tr>
+<tr>
+<td><strong>健康检查</strong></td>
+<td>Health Check</td>
+<td>定期检查后端服务的健康状态,自动剔除故障节点,保证流量只发送到健康的服务实例。</td>
+</tr>
+<tr>
+<td><strong>灰度发布</strong></td>
+<td>Canary Release</td>
+<td>将少量流量导到新版本,验证稳定性后逐步扩大比例,降低发布风险。</td>
+</tr>
+<tr>
+<td><strong>WAF</strong></td>
+<td>Web Application Firewall</td>
+<td>Web应用防火墙,防护SQL注入、XSS、CC攻击等Web安全威胁。</td>
+</tr>
+<tr>
+<td><strong>CDN</strong></td>
+<td>Content Delivery Network</td>
+<td>内容分发网络,在全球部署边缘节点,加速静态资源访问。</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-150.html">← 负载均衡与网关</a><a rel="next" href="chapter-152.html">云平台实战 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

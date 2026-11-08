@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>如何开发企业 Qt 设备客户端 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 67 / 195</p><article><h1 id="如何开发企业-qt-设备客户端">如何开发企业 Qt 设备客户端</h1><details class="contents"><summary>本章目录 <span>· 18 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#为什么工业软件经常选择-qt">为什么工业软件经常选择 Qt</a></li><li><a href="#大家通常用-qt-做什么工业软件">大家通常用 Qt 做什么工业软件</a></li><li><a href="#真实企业里的-qt-长什么样">真实企业里的 Qt 长什么样</a><ul><li><a href="#bomag工程机械里的操作界面">BOMAG：工程机械里的操作界面</a></li><li><a href="#agile-robots机器人示教器">Agile Robots：机器人示教器</a></li></ul></li><li><a href="#再看几个不同类型的真实项目">再看几个不同类型的真实项目</a><ul><li><a href="#parker把座舱里的多个界面放进一个屏幕">Parker：把座舱里的多个界面放进一个屏幕</a></li><li><a href="#blue-ctrl船舶自动化平台">Blue Ctrl：船舶自动化平台</a></li><li><a href="#precision-planting农机实时监视器">Precision Planting：农机实时监视器</a></li></ul></li><li><a href="#先弄明白上位机和下位机">先弄明白上位机和下位机</a><ul><li><a href="#什么是下位机">什么是下位机</a></li><li><a href="#什么是上位机">什么是上位机</a></li><li><a href="#上位机和下位机怎么配合">上位机和下位机怎么配合</a></li></ul></li><li><a href="#上位机的数据一般从哪里来">上位机的数据一般从哪里来</a></li><li><a href="#这些项目一般用什么语言写">这些项目一般用什么语言写</a></li><li><a href="#企业怎样保证它一直能用">企业怎样保证它一直能用</a></li><li><a href="#1-准备环境">1. 准备环境</a></li><li><a href="#2-先把首页跑起来">2. 先把首页跑起来</a></li><li><a href="#3-连接一个本地设备模拟器">3. 连接一个本地设备模拟器</a></li><li><a href="#4-增加报警">4. 增加报警</a></li><li><a href="#5-用-sqlite-保存报警">5. 用 SQLite 保存报警</a></li><li><a href="#6-打包成独立的-macos-应用">6. 打包成独立的 macOS 应用</a></li><li><a href="#7-企业项目一般怎么选语言">7. 企业项目一般怎么选语言</a></li><li><a href="#8-换到-windows-后怎么继续">8. 换到 Windows 后怎么继续</a></li><li><a href="#9-从设备数据到安装包这条链路已经通了">9. 从设备数据到安装包，这条链路已经通了</a></li><li><a href="#参考资料-29">参考资料</a></li></ul></nav></details><p>Qt 经常出现在工厂、设备机房和工程车辆的操作屏里。下面先认识这些软件，再动手跑通一个小型上位机。</p>
+<p>如果你去过工厂、车间或设备机房，应该见过这样的软件：屏幕上不断刷新温度、压力和转速；设备变红以后，操作员可以查看报警、确认原因，再把处理结果留下来。它可能装在控制室的工业电脑上，也可能嵌在机床、机器人或工程车辆的触摸屏里。</p>
+<p>这些界面背后，经常能看到 Qt。动手做页面以前，先弄清楚企业为什么会选择它，以及现场经常说的“上位机”和“下位机”到底是什么。</p>
+<h2 id="为什么工业软件经常选择-qt">为什么工业软件经常选择 Qt</h2>
+<p>工业软件不一定追求最新的界面技术，它更在意能不能稳定运行很多年，断网以后还能不能工作，换一台 Windows 或 Linux 工控机时要不要全部重写，以及能不能持续接收设备数据而不卡住界面。</p>
+<p>Qt 比较适合这类项目，是因为它既能做桌面和嵌入式界面，也提供网络、线程、数据库和设备通信等能力。一套核心逻辑可以继续运行在 Windows、Linux、macOS 或嵌入式 Linux 上，不必给每个平台重新做一套。Qt 官方也把 HMI、SCADA、PLC 可视化、CNC 控制面板、机器人示教器和设备管理平台列为常见的工业自动化场景。</p>
+<p>什么时候可以优先考虑 Qt？如果项目需要长时间运行、离线使用、连接本地设备、处理持续数据，同时还要兼顾多个桌面或嵌入式平台，Qt 往往很合适。</p>
+<p>但它也不是所有项目的默认答案。只是做一个通过浏览器访问的内部表单或数据看板，普通 Web 技术通常更省事；需要毫秒级控制、电机联锁或急停保护时，任务应该留在 PLC、MCU 或实时系统里，不能交给桌面界面。</p>
+<h2 id="大家通常用-qt-做什么工业软件">大家通常用 Qt 做什么工业软件</h2>
+<p>Qt 不是一套买来就能用的 SCADA 或 PLC 软件，而是企业拿来开发这些软件的工具。工业现场比较常见的成品包括：</p>
+<ul>
+<li>机床、产线和包装设备的 HMI 操作面板；</li>
+<li>控制室使用的 SCADA 监控、趋势和报警客户端；</li>
+<li>CNC 控制面板和机器人示教器；</li>
+<li>工程机械、农业机械和船舶的驾驶室显示终端；</li>
+<li>设备配置、诊断、维护和远程运营工具；</li>
+<li>数字孪生、产线仿真和设备群管理平台。</li>
+</ul>
+<p>这不是只停留在概念里。Qt 官方案例中可以看到 <a href="https://www.qt.io/development/resources/videos/customer-case-siemens">Siemens SIMATIC Unified Comfort Panels</a>、DMG MORI 的 CELOS 机床操作系统、BOMAG 的 myCOCKPIT，以及 <a href="https://www.qt.io/development/parker-hannifin-built-with-qt">Parker Application Designer</a> 这类真实产品。它们的设备和业务不同，但都需要把复杂状态变成操作员能够迅速看懂的界面。</p>
+<h2 id="真实企业里的-qt-长什么样">真实企业里的 Qt 长什么样</h2>
+<p>先看真实产品。下面这些图片来自 Qt 官方客户案例，不是为了这篇教程临时生成的效果图。</p>
+<h3 id="bomag工程机械里的操作界面">BOMAG：工程机械里的操作界面</h3>
+<p>BOMAG 的 myCOCKPIT 用在压路机等工程机械上。屏幕要让驾驶员快速看到作业参数、车速、温度和设备状态，常用操作也要足够大，戴着手套仍然容易点击。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-enterprise-bomag-mycockpit.webp" alt="BOMAG myCOCKPIT 真实 HMI 界面" loading="lazy" decoding="async"></p>
+<p>单独看界面还不容易理解它为什么属于工业软件。装进驾驶室以后就清楚了：中间的 Qt 显示屏只是整台机器的一部分，它要和控制器、摄像头、传感器及车辆总线一起工作。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-enterprise-bomag-in-vehicle.jpg" alt="BOMAG 工程机械驾驶室中的 myCOCKPIT 显示终端" loading="lazy" decoding="async"></p>
+<p>Qt 官方案例提到，BOMAG 使用 Qt 已经超过十年，同一套 HMI 思路还要适应不同尺寸和不同设备。图片与案例来源：<a href="https://www.qt.io/development/bomag-built-with-qt">BOMAG Built with Qt</a>。</p>
+<h3 id="agile-robots机器人示教器">Agile Robots：机器人示教器</h3>
+<p>机器人示教器是操作员配置动作、查看程序和排查问题的手持终端。它不能只追求“好看”，还要让工程师在生产现场很快找到当前步骤、执行结果和故障原因。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-enterprise-agile-robots-interface.jpg" alt="Agile Robots 真实机器人示教终端" loading="lazy" decoding="async"></p>
+<p>Agile Robots 的官方案例介绍了它们怎样用一套 Qt 代码同时服务 Windows 和 Linux，并让研发测试界面与生产现场保持一致。图片与案例来源：<a href="https://www.qt.io/agile-robots-built-with-qt">Agile Robots Built with Qt</a>。</p>
+<h2 id="再看几个不同类型的真实项目">再看几个不同类型的真实项目</h2>
+<p>前面的 BOMAG 和 Agile Robots 分别属于工程机械和机器人。工业 Qt 的范围其实更广，下面三个项目可以继续参考。</p>
+<h3 id="parker把座舱里的多个界面放进一个屏幕">Parker：把座舱里的多个界面放进一个屏幕</h3>
+<p>Parker Application Designer 是给设备制造商使用的 HMI 设计工具。它不是某一台机器的固定页面，而是让工程机械厂商自己安排按钮、仪表和应用，再部署到 Parker Pro Display 上。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-reference-parker-hmi.png" alt="Parker Pro Display 上的真实应用入口界面" loading="lazy" decoding="async"></p>
+<p>这个案例值得看的不是图标样式，而是“平台化”：同一块显示终端可以装入不同应用，设备厂商不需要为每款机器重新做一整套界面。Parker 的工程师也在案例中介绍了 QML 在这套软件中的作用。图片与案例来源：<a href="https://www.qt.io/development/parker-hannifin-built-with-qt">Parker Hannifin Built with Qt</a>。</p>
+<h3 id="blue-ctrl船舶自动化平台">Blue Ctrl：船舶自动化平台</h3>
+<p>船上的电力、推进、压载水和报警来自不同系统，操作员却需要在一套界面里看到它们。Blue Ctrl 的 X-CONNECT 把设备配置、实时状态、报警和趋势放进同一套船舶自动化平台。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-reference-blue-ctrl.jpg" alt="Blue Ctrl X-CONNECT 船舶自动化平台的真实界面" loading="lazy" decoding="async"></p>
+<p>这张图很适合观察企业上位机的信息层级：总览页只放最重要的状态，报警页面强调异常，详细参数再进入下一层查看。图片与案例来源：<a href="https://www.qt.io/blue-ctrl-built-with-qt">Blue Ctrl Built with Qt</a>。</p>
+<h3 id="precision-planting农机实时监视器">Precision Planting：农机实时监视器</h3>
+<p>Precision Planting 的 20|20 显示终端安装在农业机械上。播种或收获时，它会把多行作业数据、速度、覆盖情况和异常位置持续显示给驾驶员。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-reference-precision-planting.webp" alt="Precision Planting 20|20 农业设备实时监视器" loading="lazy" decoding="async"></p>
+<p>它和普通数据大屏的区别很明显：驾驶员正在操作机器，不能停下来阅读长段文字，所以颜色、位置和报警必须一眼就能看懂。图片与案例来源：<a href="https://www.qt.io/precision-planting-built-with-qt">Precision Planting Built with Qt</a>。</p>
+<p>如果还想继续看，可以按自己关心的方向选择：</p>
+<ul>
+<li>想看产线触摸屏，参考 <a href="https://www.qt.io/development/resources/videos/customer-case-siemens">Siemens SIMATIC Unified Comfort Panels</a>；</li>
+<li>想看工业软件怎样做自动化界面测试，参考 <a href="https://www.qt.io/product/quality-assurance/success-stories/the-abb-group">ABB 保护继电器测试案例</a>；</li>
+<li>想看 OPC UA、机器人和数字孪生怎样连在一起，参考 <a href="https://www.qt.io/development/qt-industrial-automation-demo">Qt Industrial Automation Demo</a>。这一项是官方参考演示，不是客户现场产品。</li>
+</ul>
+<p>看这些案例时，不必照抄深色背景或仪表盘。更值得学习的是：最重要的状态放在哪里、异常怎样被看见、操作是否需要二次确认、设备离线以后页面怎样告诉用户。</p>
+<h2 id="先弄明白上位机和下位机">先弄明白上位机和下位机</h2>
+<p>“上位机”和“下位机”是工业现场很常见的叫法。这里的“上”和“下”说的是它们在控制链路中的位置，不是电脑的大小，也不是谁更高级。</p>
+<p>这两个词还是相对的。同一台 PLC 面对控制室里的 SCADA 时，可以被叫作下位机；但它继续管理伺服驱动器、远程 I/O 或采集模块时，又处在这些设备的上层。所以不要靠设备外形判断，要看它在当前系统里负责哪一层。</p>
+<h3 id="什么是下位机">什么是下位机</h3>
+<p>下位机直接靠近生产设备和现场信号，常见的有 PLC、MCU、运动控制器、机器人控制器、数据采集板和远程 I/O。它会按照固定周期读取温度、压力、限位开关等输入，再控制电机、阀门、继电器等输出。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-lower-computer-explained.svg" alt="下位机读取现场输入、执行控制逻辑并驱动设备" loading="lazy" decoding="async"></p>
+<p>它负责的是设备真正的控制动作，包括运行顺序、速度控制、条件判断、安全联锁和故障保护。即使上位机突然退出、网络断开或操作界面卡住，下位机仍然应该让设备保持安全，而不是等上位机回来以后才处理。</p>
+<p>这里还有一个容易混淆的地方：下位机不等于“低配置电脑”。一台性能很强的机器人控制器仍然可以是下位机，因为它负责的是现场控制；一块很小的触摸屏也可能属于上位机，因为它负责的是人机交互。</p>
+<h3 id="什么是上位机">什么是上位机</h3>
+<p>上位机是人观察和管理设备的入口，通常运行在工业电脑、工程师站、控制室工作站或设备触摸屏上。HMI、SCADA 客户端和设备运营平台都可以属于上位机软件，Qt 最常出现在这一层。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-upper-computer-explained.svg" alt="Qt 上位机把设备数据整理成状态、趋势、报警和操作入口" loading="lazy" decoding="async"></p>
+<p>它把下位机传来的原始数据变成操作员能看懂的状态、趋势和报警，也负责配方管理、参数下发、历史记录和报表。上位机可以发出“启动设备”“切换配方”或“把目标温度改为 80℃”这样的请求，但最终能不能执行，仍然要由下位机检查现场条件。</p>
+<p>因此，上位机不是用来代替 PLC 的。界面上的按钮只是发出请求，真正控制电机和阀门的逻辑仍然留在下位机。</p>
+<h3 id="上位机和下位机怎么配合">上位机和下位机怎么配合</h3>
+<p>两者通常通过串口、TCP、CAN、Modbus、OPC UA 或设备厂商自己的协议通信：下位机把实时数据、运行状态和故障信息传给上位机，上位机把经过授权的操作命令和参数传回下位机。</p>
+<p>举个常见的例子：操作员在 Qt 界面上点击“启动水泵”，上位机先把启动请求发给 PLC。PLC 会继续检查急停是否复位、阀门是否打开、液位是否正常。只有条件全部满足，PLC 才真正启动水泵；如果条件不满足，它会拒绝执行，并把原因返回给上位机显示。</p>
+<p>一句话记忆就是：<strong>下位机负责把设备控制正确，上位机负责让人看得懂、管得住、查得到。</strong></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-upper-lower-architecture.svg" alt="传感器、下位机、通信协议和 Qt 上位机之间的关系" loading="lazy" decoding="async"></p>
+<p>放到这篇教程里就很容易理解了：本地 TCP 设备模拟器扮演一个简化的下位机，持续发送压力、温度和振动；PySide6 客户端就是上位机，负责连接设备、显示趋势、触发报警并保存记录。这个模拟器只用于学习通信和断线处理，并不具备真实 PLC 的实时控制与安全联锁能力。</p>
+<p>以后接到真实项目，可以把 TCP 模拟器换成 Modbus TCP、OPC UA 或企业已有接口。上位机的界面和数据处理思路不会变，但设备控制与安全逻辑仍然要由真实下位机负责。</p>
+<h2 id="上位机的数据一般从哪里来">上位机的数据一般从哪里来</h2>
+<p>Qt 只负责把数据接进来、处理好，再显示给人看。温度、压力、转速这些数字，通常不是 Qt 自己生成的，也很少让上位机直接连接每一个传感器。</p>
+<p>现场最常见的数据来源是 PLC、机器人控制器、仪表和数据采集模块。它们先读取传感器，再通过串口、CAN 或工业以太网把整理后的数据交给上位机。项目里经常会遇到下面几种接法：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>数据从哪里来</th>
+<th>常见接法</th>
+<th>上位机通常拿到什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PLC、仪表、运动控制器</td>
+<td>Modbus TCP、Modbus RTU、厂商协议</td>
+<td>温度、压力、开关状态、转速和故障码</td>
+</tr>
+<tr>
+<td>机器人、CNC 或专用设备</td>
+<td>设备厂商提供的 SDK 或网络接口</td>
+<td>当前程序、坐标、运行阶段和设备报警</td>
+</tr>
+<tr>
+<td>OPC UA 服务器或边缘网关</td>
+<td>OPC UA、MQTT</td>
+<td>多台设备整理后的实时数据和连接状态</td>
+</tr>
+<tr>
+<td>MES、工单和企业后端</td>
+<td>HTTP API、WebSocket</td>
+<td>工单、配方、用户权限和维护任务</td>
+</tr>
+<tr>
+<td>历史数据库</td>
+<td>SQLite、SQL 数据库或企业查询接口</td>
+<td>报警历史、趋势、操作记录和生产统计</td>
+</tr>
+</tbody></table></div>
+<p>第一次接真实设备时，不需要把所有协议都学一遍。PLC 只开放了 Modbus TCP，就先按照设备说明书读取指定地址；企业已经有 OPC UA 服务器，就让上位机订阅需要的点位；现场网关已经把数据发送到 MQTT，就直接订阅对应主题。Qt 负责连接和展示，具体协议可以由 Qt 模块、第三方库或设备厂商的 SDK 完成。</p>
+<p>企业项目还会特别关心三个信息：<strong>数值、采集时间和数据是否可信</strong>。例如页面显示温度为 0℃，它可能真的是 0℃，也可能是设备刚刚断线。如果只传一个数字，上位机无法区分。所以真实项目通常还会一起记录时间、连接状态和数据质量，过期的数据要明确显示为“离线”或“数据已过期”，不能继续冒充实时值。</p>
+<p>记住一个简单的分工就够了：<strong>设备状态从控制器或网关来，工单和配方从企业后端来，历史记录从数据库来。</strong> 这篇教程为了让你能在一台电脑上跑通，先用本地 TCP 模拟器代替真实控制器。</p>
+<h2 id="这些项目一般用什么语言写">这些项目一般用什么语言写</h2>
+<p>Qt 最常见的语言组合不是只有一种，通常要看软件运行在哪里、要维护多久，以及团队原来会什么。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语言和工具</th>
+<th>企业里通常负责什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C++</td>
+<td>设备通信、数据处理、业务逻辑，以及对性能和内存比较敏感的部分</td>
+</tr>
+<tr>
+<td>QML / Qt Quick</td>
+<td>触摸屏、仪表盘、动画和可以随屏幕尺寸变化的现代界面</td>
+</tr>
+<tr>
+<td>Qt Widgets + C++</td>
+<td>工程师工具、诊断软件，以及需要长期维护的传统桌面客户端</td>
+</tr>
+<tr>
+<td>Python + PySide6</td>
+<td>内部工具、测试和诊断程序、数据处理较多的客户端，也适合快速做出第一版</td>
+</tr>
+</tbody></table></div>
+<p>新一些的嵌入式 HMI，常见做法是 <strong>QML 负责界面，C++ 负责业务和设备通信</strong>。这样设计师和前端开发可以调整页面，底层协议与控制逻辑仍然保持清晰。Qt 官方的应用开发指南也采用这种分工：<a href="https://master.qt.io/learning/developerguides/qtquickappdevintro/QtQuickAppDevIntro.pdf">Qt Quick Application Development</a>。</p>
+<p>本篇选择的是 <strong>Python + PySide6</strong>。PySide6 是 Qt 官方的 Python 绑定，不是另一套仿制框架。它更适合第一次跟着做，也方便我们快速验证界面、TCP 通信、报警和 SQLite。真正进入企业项目后，不必因为“工业软件”四个字就立刻全部改成 C++；先根据刷新频率、数据量、启动速度和团队维护能力做测试，再决定哪些部分需要用 C++。</p>
+<p>企业后端也不一定使用 Qt。上位机可以通过 OPC UA、MQTT、HTTP 或其他接口连接 Java、Go、C#、Python 写的服务，没必要强迫整套系统只用一种语言。</p>
+<h2 id="企业怎样保证它一直能用">企业怎样保证它一直能用</h2>
+<p>选了 Qt，不代表软件就会自动稳定。真正能在现场长期运行，靠的是下面这些很具体的工作。</p>
+<p>首先要守住控制边界。急停、安全联锁和电机保护放在 PLC、MCU 或机器人控制器里；Qt 上位机可以发出操作请求，却不能成为设备安全的唯一保障。这样即使界面退出或网络断开，设备仍然知道怎样进入安全状态。</p>
+<p>然后要专门测试故障，而不只是测试正常页面。拔掉网线、关闭模拟器、发送错误数据、让数据库写满，再看界面会不会卡死、能不能重连、报警是否留下记录。设备通信和耗时任务也不能堵住界面线程，每一次请求都要有超时、错误提示和恢复办法。</p>
+<p>发布前还要做一轮和开发电脑无关的验证：固定 Qt 和依赖版本，生成可安装的软件包，再放到没有开发环境的干净电脑上连续运行。企业常做的检查包括：</p>
+<ul>
+<li>重启电脑后软件能否恢复；</li>
+<li>断网、断电或设备离线后数据是否损坏；</li>
+<li>日志会不会无限占满磁盘；</li>
+<li>新版本失败时能不能回退；</li>
+<li>Windows 安装包和 macOS 应用是否完成签名；</li>
+<li>使用商业版还是开源版 Qt，是否已经按许可证要求发布。</li>
+</ul>
+<p>现场软件上线以后，还要保留日志、崩溃信息和版本号。遇到问题时，维护人员应该能回答“哪台设备、哪个版本、什么时间、发生了什么”，而不是只看到一句“软件打不开”。这才是企业项目里所说的“稳定”，不是演示十分钟没有报错。</p>
+<p>名词弄清楚以后，就从一个能在桌面运行的设备运营客户端开始，把数据、报警、存储和打包连起来。它会显示压力、温度和振动，设备断线时给出提醒，出现异常时生成报警，并把报警记录保存在本机。</p>
+<p>这一次没有先画效果图。我在一台 Mac 上把项目从安装 Qt、运行模拟数据、连接本地设备、触发报警、重启验证，一直做到生成独立应用和 DMG。下面的操作图都来自这次实际运行。</p>
+<p>这是最后从打包目录启动的成品：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-packaged-app.jpg" alt="从 macOS 独立应用包启动的 Plant Operations Console，历史报警仍然存在" loading="lazy" decoding="async"></p>
+<p>本篇使用 Qt 官方的 Python 绑定 <strong>PySide6</strong>。它仍然是 Qt 6，只是比第一次就配置 C++、CMake 和编译器更容易跟着做。等界面和数据链路稳定后，再根据团队情况决定要不要迁移到 C++。</p>
+<h2 id="1-准备环境">1. 准备环境</h2>
+<p>电脑需要有 Python 3.11 或更高版本，再准备一个能读取当前文件夹的 AI 开发工具。操作截图使用 Trae，Cursor 或其他类似工具也可以。</p>
+<p>先新建一个空文件夹，命名为 <code>PlantOperationsConsole</code>，然后用 Trae 打开。对 AI 说：</p>
+<blockquote>
+<p>请为当前项目创建独立的 Python 环境，并安装 Qt 官方的 PySide6，完成后告诉我 Qt 版本。</p>
+</blockquote>
+<p>我本机这次安装的是 Qt 6.11.1。安装完成以后，先不要做复杂功能，只检查能否打开一个 Qt 空窗口。</p>
+<p>如果空窗口没有出现，把终端里的最后一段报错交给 AI：</p>
+<blockquote>
+<p>Qt 空窗口没有打开，报错是【粘贴报错】，请只修复这个问题。</p>
+</blockquote>
+<h2 id="2-先把首页跑起来">2. 先把首页跑起来</h2>
+<p>环境正常后，让 AI 做第一版：</p>
+<blockquote>
+<p>请用 PySide6 做一个设备运营客户端，显示压力、温度、振动、连接状态和最近趋势，数据先每秒自动变化。</p>
+</blockquote>
+<p>AI 完成后，按它给出的方式启动程序。第一版不需要登录、数据库或真实设备，只确认窗口能打开，数字和曲线会持续变化。</p>
+<p>我本机运行后的结果如下。右上角显示“模拟运行中”，底部数据源是 <code>SIMULATOR</code>：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-simulator.jpg" alt="Qt 客户端使用模拟数据运行，压力、温度、振动和趋势持续更新" loading="lazy" decoding="async"></p>
+<p>如果文字被遮住或窗口缩放后布局错乱，只改布局：</p>
+<blockquote>
+<p>窗口缩小时有内容被遮住，请只调整布局，不改功能和颜色。</p>
+</blockquote>
+<h2 id="3-连接一个本地设备模拟器">3. 连接一个本地设备模拟器</h2>
+<p>现在的数字都在客户端内部生成，还不能验证连接和断线。先让 AI 增加一个单独运行的设备模拟器：</p>
+<blockquote>
+<p>请增加一个本地 TCP 设备模拟器，每秒向 127.0.0.1:50200 发送压力、温度和振动。</p>
+</blockquote>
+<p>先启动模拟器，确认它正在等待连接，再改客户端：</p>
+<blockquote>
+<p>请让客户端连接 127.0.0.1:50200，并增加“模拟数据”和“连接设备”两个按钮。</p>
+</blockquote>
+<p>客户端连接成功后，状态变成“设备已连接”，数据来源变成 <code>TCP</code>，页面数值也开始跟着模拟器变化：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-device-connected.jpg" alt="Qt 客户端成功连接本机 TCP 设备模拟器，数据来源显示为 127.0.0.1:50200" loading="lazy" decoding="async"></p>
+<p>接着直接关闭设备模拟器。客户端不能卡住，也不能继续假装在线。我本机关闭以后，状态立即变成了“设备已断开”：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-device-disconnected.jpg" alt="关闭设备模拟器后，Qt 客户端显示设备已断开并保留最后一次数据" loading="lazy" decoding="async"></p>
+<p>重新启动模拟器，再点一次“连接设备”，连接也恢复成功。</p>
+<p>如果断线后窗口卡住，可以这样问：</p>
+<blockquote>
+<p>设备断开后窗口会卡住，请只修复断线检测和重新连接。</p>
+</blockquote>
+<p>真实项目里可以把这个本地 TCP 模拟器换成 Modbus TCP、OPC UA 或企业已有接口。先把页面、报警和断线处理跑稳，再换协议会容易很多。</p>
+<h2 id="4-增加报警">4. 增加报警</h2>
+<p>先只做报警，不急着做数据库：</p>
+<blockquote>
+<p>请增加温度和振动报警，并放一个“测试报警”按钮让我立即验证。</p>
+</blockquote>
+<p>点击“测试报警”后，温度升到测试值，趋势出现尖峰，右侧出现红色报警卡片：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-alarm.jpg" alt="点击测试报警后，Qt 客户端显示高温报警、趋势尖峰和待确认记录" loading="lazy" decoding="async"></p>
+<p>报警至少要写清楚时间、内容和状态。只显示一句“温度过高”，以后很难追查什么时候发生、有没有处理。</p>
+<p>如果点击按钮没有反应，不要重新描述整个项目：</p>
+<blockquote>
+<p>点击“测试报警”没有出现报警，请只检查按钮和报警规则。</p>
+</blockquote>
+<h2 id="5-用-sqlite-保存报警">5. 用 SQLite 保存报警</h2>
+<p>报警能出现以后，再让 AI 保存记录：</p>
+<blockquote>
+<p>请把报警保存到本地 SQLite，确认以后更新状态，应用重启后记录还要存在。</p>
+</blockquote>
+<p>我先确认了刚才的报警，列表状态从“待确认”变成“已确认”：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-sqlite-saved.jpg" alt="确认报警后，SQLite 列表中的状态更新为已确认" loading="lazy" decoding="async"></p>
+<p>然后关闭整个应用，再重新启动。刚才那条报警仍然在列表里，说明这不是只存在页面内存里的假数据：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-restart-persisted.jpg" alt="完全关闭并重启 Qt 应用后，SQLite 中的已确认报警记录仍然存在" loading="lazy" decoding="async"></p>
+<p>如果重启以后记录消失，直接说：</p>
+<blockquote>
+<p>应用重启后报警记录消失了，请只检查数据库保存位置和提交操作。</p>
+</blockquote>
+<h2 id="6-打包成独立的-macos-应用">6. 打包成独立的 macOS 应用</h2>
+<p>开发环境里能运行还不够。接下来用 PySide6 自带的部署工具生成独立 <code>.app</code>：</p>
+<blockquote>
+<p>请用 pyside6-deploy 把当前项目打包成 macOS 独立应用，先做 dry-run，确认没有错误再正式打包。</p>
+</blockquote>
+<p>我第一次 dry-run 时遇到了一个真实问题：部署工具提示 macOS 打包不支持把 QtSql 作为额外模块加入。开发态虽然能运行，但继续打包会失败。</p>
+<p>这时只处理这个问题：</p>
+<blockquote>
+<p>macOS 打包提示 QtSql 不受支持，请保留 SQLite，改用 Python 自带的 sqlite3，只修复打包问题。</p>
+</blockquote>
+<p>修改后重新运行，部署工具成功生成了 <code>PlantOperationsConsole.app</code>。我没有停在“文件已经生成”，而是直接从这个 <code>.app</code> 的打包目录启动，模拟数据和 SQLite 历史都能正常显示。</p>
+<p>最后使用 macOS 自带的磁盘映像工具生成 DMG，并完成完整性校验。Finder 里可以看到 105.2 MB 的独立应用和 44.5 MB 的磁盘映像：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/qt-industrial-hmi/images/qt-run-package-files-cropped.webp" alt="Finder 列表中显示实际生成的 PlantOperationsConsole 应用和 DMG 文件及大小" loading="lazy" decoding="async"></p>
+<p>本次生成的 DMG 校验结果是 <code>VALID</code>。它还没有做开发者证书签名和 Apple 公证，所以这里只适合本机和内部测试。准备公开发布时再补签名、公证和升级策略。</p>
+<h2 id="7-企业项目一般怎么选语言">7. 企业项目一般怎么选语言</h2>
+<p>这个练习先用 PySide6，因为不用一开始就配置 C++ 编译器和 CMake，比较容易把数据、页面、报警和打包完整做一遍。PySide6 是 Qt 官方的 Python 绑定，企业里的内部工具、测试程序、诊断软件和第一版原型也会使用它。</p>
+<p>到了需要跟随设备长期交付的项目，常见组合还是 <strong>C++ + QML / Qt Quick</strong>。C++ 负责设备通信、业务逻辑、多线程和厂商 SDK，QML 负责触摸界面、仪表和动画。传统的工程师工具和诊断软件，也有不少使用 C++ + Qt Widgets。</p>
+<p>所以，这个 Python 版本可以继续用来验证需求。如果项目以后要放进机器人示教器、机床面板或嵌入式终端，再根据性能、硬件和维护周期决定是否迁移到 C++。</p>
+<p>如果准备把这次练习继续做成更接近企业项目的版本，不要一次全部重写。可以让 AI 分三次迁移：</p>
+<blockquote>
+<p>请用 C++ 和 QML 重做首页，数据先继续模拟。</p>
+</blockquote>
+<p>首页正常以后再说：</p>
+<blockquote>
+<p>请把 TCP 设备连接移到 C++，页面不要改。</p>
+</blockquote>
+<p>最后再迁移报警和数据库：</p>
+<blockquote>
+<p>请把报警和 SQLite 移到 C++，功能保持不变。</p>
+</blockquote>
+<p>这样每一步都能和 Python 版本对照。出现问题时，也知道是界面、通信还是数据保存出了错。</p>
+<h2 id="8-换到-windows-后怎么继续">8. 换到 Windows 后怎么继续</h2>
+<p>Qt 所说的跨平台，是大部分项目代码可以继续使用，不是一个安装包可以在所有系统上运行。Mac 生成的是 <code>.app</code>，Windows 仍然要在 Windows 机器上重新运行和打包。</p>
+<p>当前这个 PySide6 项目到了 Windows 后，先不要急着做安装包。安装相同版本的 Python 和 PySide6，把开发版启动起来，再测试模拟数据、TCP 连接、报警和 SQLite。</p>
+<p>先只对 AI 说：</p>
+<blockquote>
+<p>请在 Windows 上运行当前项目，只修复启动问题。</p>
+</blockquote>
+<p>开发版正常以后再说：</p>
+<blockquote>
+<p>请把它打包成 Windows 应用。</p>
+</blockquote>
+<p>最后把生成的程序复制到一台没有安装 Python 的干净 Windows 电脑中。重新测试启动、断线、报警和重启后的历史记录，这才算真正验证了 Windows 版本。</p>
+<p>如果以后换成 C++ + QML，Windows 上通常会配合 CMake 和 MSVC 或 MinGW 编译，再使用 <code>windeployqt</code> 收集 Qt 运行库。macOS、Windows 和 Linux 都应该在各自系统上生成并测试自己的安装包。</p>
+<h2 id="9-从设备数据到安装包这条链路已经通了">9. 从设备数据到安装包，这条链路已经通了</h2>
+<p>现在回头看，完成的不只是一张深色仪表盘。一个小型上位机最基本的链路已经连了起来：</p>
+<p><strong>设备模拟器 → TCP 通信 → Qt 页面 → 断线提示 → 报警 → SQLite → 独立应用。</strong></p>
+<p>我在这台 Mac 上实际验证了三件最重要的事：</p>
+<ul>
+<li>数据不只会变化，还能从单独运行的设备模拟器进入客户端，设备关闭后页面会明确显示断线；</li>
+<li>报警不只出现在屏幕上，还会写入 SQLite，应用完全退出再启动以后仍然存在；</li>
+<li>项目不只在开发环境运行，还生成了独立 <code>.app</code> 和 DMG，并从打包后的应用重新启动过。</li>
+</ul>
+<p>这还不是一套可以直接进工厂的 SCADA。它没有连接真实 PLC，也没有完成 Windows 包、代码签名、长时间压力测试和现场故障演练。但现在已经有了一条可以逐步替换的真实链路：下一步可以把 TCP 模拟器换成 Modbus 或 OPC UA，把 Python 版本迁移成 C++ + QML，再到目标工控机上连续运行和测试。</p>
+<p>Qt 工业软件真正难的地方也逐渐清楚了。它不只是把数字画得漂亮，而是设备在线时看得懂，设备离线时不骗人，出现异常时留得下记录，换一台电脑以后仍然能够稳定启动。这才是一个上位机项目真正的起点。</p>
+<h2 id="参考资料-29">参考资料</h2>
+<ul>
+<li><a href="https://doc.qt.io/qtforpython-6/">Qt for Python 官方文档</a></li>
+<li><a href="https://doc.qt.io/qtforpython-6/deployment/deployment-pyside6-deploy.html">PySide6 部署工具</a></li>
+<li><a href="https://doc.qt.io/qtforpython-6/PySide6/QtNetwork/">Qt Network</a></li>
+<li><a href="https://doc.qt.io/qtforpython-6/deployment/index.html">Qt for Python 打包说明</a></li>
+<li><a href="https://www.qt.io/development/qt-in-automation">Qt 工业自动化应用</a></li>
+<li><a href="https://www.qt.io/development/bomag-built-with-qt">BOMAG Built with Qt</a></li>
+<li><a href="https://www.qt.io/agile-robots-built-with-qt">Agile Robots Built with Qt</a></li>
+<li><a href="https://www.qt.io/development/parker-hannifin-built-with-qt">Parker Hannifin Built with Qt</a></li>
+<li><a href="https://www.qt.io/blue-ctrl-built-with-qt">Blue Ctrl Built with Qt</a></li>
+<li><a href="https://www.qt.io/precision-planting-built-with-qt">Precision Planting Built with Qt</a></li>
+<li><a href="https://www.qt.io/licensing/">Qt Licensing</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-066.html">← 如何开发 VS Code 插件</a><a rel="next" href="chapter-068.html">如何构建属于自己的个人网页与学术博客 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

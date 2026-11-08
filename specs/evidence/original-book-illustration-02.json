@@ -1,0 +1,170 @@
+{
+  "date": "2026-11-08",
+  "status": "completed",
+  "scope": "Original Vibe Coding 101: eight handdraw illustrations and adjacent learning explanations",
+  "originalChapterCount": 195,
+  "chapterNamesAndOrderPreserved": true,
+  "bookSha256": "0b08c5227e523e5a2130dee982fc633660c7442b6d0dd1fcdac7d6d79f22cb3f",
+  "figures": [
+    {
+      "name": "learn-path",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "2dfee63dea398ffd9b08084b951a21e7da7697d7c7dc2b377c4bfd3460d1101f",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "funnel",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "deaa5ac285c2002a3e97aff9a9c5c0909547ef733db75905ea62fb9858c12669",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "jtbd",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "1fd3465b0e7fb59c35df6c77f33da038b5a9bc0ab30d18287da737068cc9cb17",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "error-flow",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "0b5fdc9bd141a3cf76bc30ac5ff3bba3c27602e80b6dfb22990a5fa5bcb73a30",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "deploy",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "b2867076342ee98f6a33da04d5461c46dc5758df8b1802a103380cbc1cdab15e",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "db-index",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "142f43e72f2ac0789a47e9d0a5a47d4db45947071340be508e07e4ba1a4aeaa8",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "git-history",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "d448c6ea8e752afd019c24f87d57edc9bbd172f66c7cc4ce5773e0a31e4bf131",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "web-framework",
+      "width": 480,
+      "height": 640,
+      "outside": [],
+      "overlaps": [],
+      "minLabel": 26,
+      "labelAt320px": 15.6,
+      "sha256": "3f58ea38e89efd1ff586e2425841505b2eebbbc1216ad3ac0b5172d729fcc998",
+      "visuallyReviewed": true
+    }
+  ],
+  "chapterFigures": [
+    {
+      "figure": "learn-path",
+      "chapter": "chapter-002.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "funnel",
+      "chapter": "chapter-007.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "jtbd",
+      "chapter": "chapter-008.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "error-flow",
+      "chapter": "chapter-017.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "deploy",
+      "chapter": "chapter-028.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "db-index",
+      "chapter": "chapter-134.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "git-history",
+      "chapter": "chapter-092.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    },
+    {
+      "figure": "web-framework",
+      "chapter": "chapter-119.html",
+      "mobile": true,
+      "imageLinkWithoutJavaScript": true
+    }
+  ],
+  "reading": {
+    "pages": 198,
+    "layouts": 594,
+    "localLinksAndAssets": 5026,
+    "failures": 0
+  },
+  "galleryWidths": [
+    320,
+    768,
+    1440
+  ],
+  "tests": {
+    "npmTest": "passed",
+    "unitTests": 36,
+    "unitFailures": 0,
+    "buildConsistency": "passed",
+    "companionBooks": "existing fingerprints and validation passed"
+  },
+  "limitations": [
+    "Changed illustrations and adjacent content only; not a claim that every illustration was redrawn.",
+    "Chrome layout and keyboard/link checks; no external cloud deployment or human learner study."
+  ]
+}

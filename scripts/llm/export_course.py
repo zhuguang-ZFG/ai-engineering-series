@@ -113,7 +113,7 @@ def run():
     fingerprint = source_hash()
     WORK.mkdir(parents=True, exist_ok=True)
     (WORK / "images").mkdir(exist_ok=True)
-    css = (ROOT / "scripts/llm/book.css").read_bytes() + b"\npre, tr { break-inside: auto; } code { overflow-wrap: anywhere; } img { display: block; max-width: 100%; width: auto; height: auto; margin: 1em auto; } @media print { img { max-height: 145mm; max-width: 100%; object-fit: contain; } }\n"
+    css = (ROOT / "scripts/llm/book.css").read_bytes() + b"\npre, tr { break-inside: auto; } code { overflow-wrap: anywhere; } img { display: block; max-width: 100%; width: auto; height: auto; margin: 1em auto; } @media print { img { max-height: 145mm; max-width: 100%; object-fit: contain; } .curriculum-figure { margin: 1em auto; break-inside: avoid; } .curriculum-figure img { max-height: 128mm; margin: 0 auto; } }\n"
     (WORK / "book.css").write_bytes(css)
     node = shutil.which("node")
     if node:

@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>4. 用访谈验证需求 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 1 · 9 / 195</p><article><h1 id="4-用访谈验证需求">4. 用访谈验证需求</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#the-mom-test用户访谈方法">The Mom Test：用户访谈方法</a><ul><li><a href="#1-为什么访谈会得到假阳性top-mom">[1. 为什么访谈会得到假阳性](#top-mom)</a></li><li><a href="#2-意见与行为证据">2. 意见与行为证据</a></li><li><a href="#3-三个提问原则top-mom">[3. 三个提问原则](#top-mom)</a></li><li><a href="#4-为什么人们总会给你好听但没用的回答">4. 为什么人们总会给你好听但没用的回答</a></li><li><a href="#5-直接对比什么问题容易问废什么问题更有价值">5. 直接对比：什么问题容易问废，什么问题更有价值</a></li><li><a href="#6-访谈的基本顺序">6. 访谈的基本顺序</a></li><li><a href="#7-一个更完整的例子">7. 一个更完整的例子</a></li><li><a href="#8-the-mom-test-和-jtbd-怎么配合用">8. The Mom Test 和 JTBD 怎么配合用</a></li><li><a href="#9-新手做用户访谈时最常见的误区">9. 新手做用户访谈时最常见的误区</a></li><li><a href="#10-可以直接复制去用的问题清单">10. 可以直接复制去用的问题清单</a></li><li><a href="#11-使用-ai-准备和整理访谈top-mom">[11. 使用 AI 准备和整理访谈](#top-mom)</a></li><li><a href="#12-小结-1">12. 小结</a></li><li><a href="#13-练习-1">13. 练习</a></li><li><a href="#延伸阅读-1">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="the-mom-test用户访谈方法">The Mom Test：用户访谈方法</h2>
+<p><a id="top-mom"></a></p>
+<p>上一章得到的 JTBD 句子仍然是假设。我们需要通过访谈检查：这个问题最近是否真的发生过，用户是否已经为它付出了时间、金钱或精力。</p>
+<p>这听起来并不困难。但如果直接询问对方是否喜欢某个想法，往往只会得到礼貌而笼统的回答：</p>
+<ul>
+<li>你觉得我这个想法怎么样？</li>
+<li>如果有这样一个产品，你会不会用？</li>
+<li>这个功能听起来是不是还不错？</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>挺好的啊</li>
+<li>听起来很有用</li>
+<li>我觉得你可以试试</li>
+</ul>
+<p>这些回答并没有错，只是很难支持产品决策。The Mom Test 提醒我们少问未来的意愿，多问过去发生过什么、用户怎样处理、为此付出了什么。</p>
+<p>本章讨论如何避免这类“假阳性”反馈，并将注意力从意见和未来假设转向过去的行为、现有做法和已经付出的成本。</p>
+<p><a id="mom-what"></a></p>
+<h3 id="1-为什么访谈会得到假阳性top-mom"><a href="#top-mom">1. 为什么访谈会得到假阳性</a></h3>
+<p>The Mom Test 来自 Rob Fitzpatrick 的同名书籍。这个名称指出了访谈中的一个常见现象：</p>
+<p><strong>就算是你妈妈，也很难直接告诉你“这是个烂想法”。</strong></p>
+<p>原因不是她不诚实，而是：</p>
+<ul>
+<li>她不想伤害你</li>
+<li>她会下意识鼓励你</li>
+<li>她很容易顺着你的表达方式回答</li>
+</ul>
+<p>其实不只是妈妈，朋友、同事、前同学，甚至很多陌生人，在面对你的产品想法时，也常常会给出类似的“正向反馈”。这不代表需求真的存在，只代表你把问题问成了一个很容易得到好听答案的形式。</p>
+<p>因此，The Mom Test 的重点不是访谈谁，而是问题如何组织。访谈应尽量寻找可核对的经历，而不是收集对方对产品想法的评价。</p>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/mom-test.svg" aria-label="打开大图：左右两列对比：左列「少问：未来的意愿」列着「你会买吗」「你觉得这个想法好吗」并打叉，右列「多问：过去的事实」列着「上次遇到这问题是什么时候」「你当时是怎么处理的」「为此付出了多少时间或钱」"><img src="../../book/assets/handdraw/mom-test.svg" alt="左右两列对比：左列「少问：未来的意愿」列着「你会买吗」「你觉得这个想法好吗」并打叉，右列「多问：过去的事实」列着「上次遇到这问题是什么时候」「你当时是怎么处理的」「为此付出了多少时间或钱」" loading="lazy"></a>
+  <figcaption><strong>少问未来的意愿，多问过去发生过什么、用户怎样处理、为此付出了什么。</strong>左列只会换来「挺好的」，那是礼貌；右列的回答带着时间、步骤和金额，才算证据。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h3 id="2-意见与行为证据">2. 意见与行为证据</h3>
+<p>The Mom Test 主要解决的是一种非常常见的认知错觉：</p>
+<p><strong>把礼貌性的积极反馈，当成真实需求。</strong></p>
+<p>比如你问：</p>
+<ul>
+<li>你觉得这个 App 想法怎么样？</li>
+<li>如果我做一个 AI 帮你写简历的工具，你会用吗？</li>
+<li>这个功能是不是很有价值？</li>
+</ul>
+<p>这些问题的共同特点是：</p>
+<ul>
+<li>它们都在问“意见”</li>
+<li>它们都带着一点暗示</li>
+<li>它们都在谈一个还没发生的未来</li>
+</ul>
+<p>而人对“意见”和“未来假设”的回答，通常都不稳定。很多人会高估自己的兴趣、高估自己的执行力，也会高估自己未来的购买意愿。</p>
+<p>所以 The Mom Test 提醒你：</p>
+<ul>
+<li>不要太相信别人对你点子的评价</li>
+<li>不要太相信别人对未来行为的预测</li>
+<li>要尽量回到用户已经发生过的真实行为里</li>
+</ul>
+<p>因为和“你会不会用”相比，“你上次怎么处理这件事的”往往更接近真相。</p>
+<p><a id="mom-principles"></a></p>
+<h3 id="3-三个提问原则top-mom"><a href="#top-mom">3. 三个提问原则</a></h3>
+<p>下面三个原则将提问从产品方案转向用户已经发生的经历。</p>
+<h4 id="31-少谈你的点子多谈用户过去的真实经历">3.1 少谈你的点子，多谈用户过去的真实经历</h4>
+<p>很多无效访谈一开场就讲自己的方案，讲自己多么兴奋，讲自己准备做什么产品。问题是，一旦你讲得太多，对方就很容易切换到“配合你”“鼓励你”的状态。</p>
+<p>相比之下，更好的方式是把重点放在对方的经历上：</p>
+<ul>
+<li>最近一次遇到这个问题是什么时候？</li>
+<li>当时你在做什么？</li>
+<li>你最后是怎么处理的？</li>
+<li>哪一步最麻烦？</li>
+</ul>
+<p>这类问题能更自然地把对话带回现实，而不是停留在想象中的偏好。</p>
+<h4 id="32-少问抽象意见多问具体事实">3.2 少问抽象意见，多问具体事实</h4>
+<p>“我觉得这个功能挺好”“听起来不错”“好像有点用”，这些表达都太抽象了，很难指导产品决策。</p>
+<p>更有价值的信息通常长这样：</p>
+<ul>
+<li>我上周刚为了这件事折腾了 2 小时</li>
+<li>我现在是用 Excel 加微信硬撑</li>
+<li>我上个月已经为类似工具花过钱</li>
+<li>我最怕的是做错，不是做慢</li>
+</ul>
+<p>这些才是真正能帮你判断问题强度、频率和付费可能性的信息。</p>
+<h4 id="33-少问用户想要什么方案多看他现在怎么解决问题">3.3 少问用户想要什么方案，多看他现在怎么解决问题</h4>
+<p>用户很擅长描述自己的困扰，但不一定擅长设计解决方案。</p>
+<p>如果你问：</p>
+<ul>
+<li>你想不想要一个 AI 帮你自动做这个？</li>
+<li>你觉得加个智能功能有没有帮助？</li>
+</ul>
+<p>你得到的，通常只是对某个方案的模糊态度，而不是需求本身。</p>
+<p>更好的问题是：</p>
+<ul>
+<li>你现在用什么方法处理这个问题？</li>
+<li>为什么你会选择这种方式？</li>
+<li>它哪里不够好？</li>
+</ul>
+<p>看清现有替代方案，往往比直接问“你想要什么”更重要。</p>
+<figure class="field-figure">
+  <a href="https://commons.wikimedia.org/wiki/File:Participants_-_Interview.jpg" target="_blank" rel="noreferrer">
+    <img src="../../book/assets/images/public/images/product-discovery/mom-test/user-interview-session.jpg" alt="一次真实访谈现场，访谈者手持麦克风与参与者交谈，桌上放有电脑和记录材料" loading="lazy" />
+  </a>
+  <figcaption><strong>访谈的主体是对方，不是提纲。</strong>照片里，访谈者把注意力放在参与者的叙述上，电脑和纸面材料只是记录工具。实际访谈时也不必急着逐题打勾；听到“上周”“我后来只好”“我已经花了”这类具体线索，应顺着经历继续追问。照片：<a href="https://commons.wikimedia.org/wiki/File:Participants_-_Interview.jpg" target="_blank" rel="noreferrer">ManonB2018 / Wikimedia Commons</a>，<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>。</figcaption>
+</figure><h3 id="4-为什么人们总会给你好听但没用的回答">4. 为什么人们总会给你好听但没用的回答</h3>
+<p>如果你能理解这件事，做访谈时就会少很多误判。</p>
+<h4 id="41-人会下意识地保持礼貌">4.1 人会下意识地保持礼貌</h4>
+<p>尤其当对话对象和你有关系时，对方很难直接说：</p>
+<ul>
+<li>这个方向听起来不太行</li>
+<li>我根本不会用</li>
+<li>这个问题对我没那么重要</li>
+</ul>
+<p>他更可能说“挺好的”“有机会可以做做看”。</p>
+<h4 id="42-人会高估未来的自己">4.2 人会高估未来的自己</h4>
+<p>很多人真心相信自己未来会：</p>
+<ul>
+<li>更自律</li>
+<li>更愿意学习</li>
+<li>更愿意付费</li>
+<li>更愿意尝试新工具</li>
+</ul>
+<p>所以“如果有的话我应该会用”这句话，常常并不等于未来真的会用。</p>
+<h4 id="43-你的提问方式本身就在引导答案">4.3 你的提问方式本身就在引导答案</h4>
+<p>当你问：</p>
+<ul>
+<li>我这个想法是不是挺好？</li>
+<li>这个功能对你来说是不是很有帮助？</li>
+</ul>
+<p>你其实已经偷偷把“正确答案”塞进问题里了。</p>
+<p>这也是为什么 The Mom Test 特别强调：<strong>不要把访谈做成你在寻找认可。</strong></p>
+<h3 id="5-直接对比什么问题容易问废什么问题更有价值">5. 直接对比：什么问题容易问废，什么问题更有价值</h3>
+<p>下面这些对照，几乎是每个新手都会用到的。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>容易问废的问题</th>
+<th>更有价值的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>你觉得我这个想法怎么样？</td>
+<td>你最近一次遇到这个问题是什么时候？</td>
+</tr>
+<tr>
+<td>如果有这个产品你会用吗？</td>
+<td>你现在是怎么处理这件事的？</td>
+</tr>
+<tr>
+<td>你愿意为这个功能付费吗？</td>
+<td>你上次为了这个问题花过钱吗？花在什么上？</td>
+</tr>
+<tr>
+<td>你觉得这个功能重要吗？</td>
+<td>这个流程里最烦、最慢、最不放心的是哪一步？</td>
+</tr>
+<tr>
+<td>你想不想要一个 AI 帮你自动做？</td>
+<td>你现在为什么还没有找到更顺手的解决办法？</td>
+</tr>
+</tbody></table></div>
+<p>这些改写有三个共同点：</p>
+<ul>
+<li>从意见走向事实</li>
+<li>从未来走向过去</li>
+<li>从你的方案走向用户的问题</li>
+</ul>
+<p>下面的练习给出了六句常见的访谈原话。尝试判断哪些是可用的证据，哪些只是意见。</p>
+<h3 id="6-访谈的基本顺序">6. 访谈的基本顺序</h3>
+<p>一次简短访谈可以按下面的顺序进行。</p>
+<h4 id="61-开场说明你在学习不是在推销">6.1 开场：说明你在学习，不是在推销</h4>
+<p>比如：</p>
+<blockquote>
+<p>我最近在研究大家怎么处理这类问题，想先了解真实情况，不是来卖东西的。</p>
+</blockquote>
+<p>这种表达会让对方更容易放下“我要给你积极反馈”的心理负担。</p>
+<h4 id="62-从最近一次真实经历开始问">6.2 从最近一次真实经历开始问</h4>
+<p>可以先从这类问题开始：</p>
+<ul>
+<li>最近一次遇到这个问题是什么时候？</li>
+<li>当时发生了什么？</li>
+<li>你第一反应是怎么处理的？</li>
+</ul>
+<p>一旦对话进入具体事件，信息质量通常会明显提升。</p>
+<h4 id="63-往下追问行为成本和替代方案">6.3 往下追问行为、成本和替代方案</h4>
+<p>继续问：</p>
+<ul>
+<li>你现在用什么办法解决？</li>
+<li>这个办法最不舒服的地方是什么？</li>
+<li>你为此花过多少时间、钱或者精力？</li>
+<li>你试过别的方法吗？为什么没继续用？</li>
+</ul>
+<h4 id="64-最后再判断痛感和优先级">6.4 最后再判断痛感和优先级</h4>
+<p>你不需要直接问“痛不痛”，可以从细节里判断：</p>
+<ul>
+<li>他是不是经常遇到</li>
+<li>他是不是已经在主动补救</li>
+<li>他是不是已经愿意为此付出成本</li>
+<li>他在讲这件事时是不是带着明显情绪</li>
+</ul>
+<p>这些都比一句“这是不是你的痛点”更有用。</p>
+<h3 id="7-一个更完整的例子">7. 一个更完整的例子</h3>
+<p>假设你想做一个“AI 帮大学生改简历”的产品。</p>
+<h4 id="错误问法">错误问法</h4>
+<p>你去问同学：</p>
+<blockquote>
+<p>我想做一个 AI 简历优化工具，你觉得怎么样？<br>如果它能根据岗位自动改简历，你会不会用？</p>
+</blockquote>
+<p>这时候，对方很可能会说：</p>
+<ul>
+<li>听起来挺好</li>
+<li>我觉得应该有用</li>
+<li>如果免费我会试试</li>
+</ul>
+<p>这些回答几乎没有办法帮你判断需求到底强不强。</p>
+<h4 id="更好的问法">更好的问法</h4>
+<p>你可以改成：</p>
+<blockquote>
+<p>你最近一次改简历是什么时候？<br>当时为什么要改？<br>你是怎么改的？<br>哪一步最卡？<br>你有没有找过别人帮你看？<br>你以前为简历这件事花过钱或者花过很多时间吗？</p>
+</blockquote>
+<p>通过这些问题，你可能得到的信息会是：</p>
+<ul>
+<li>很多人会写，但不知道怎么针对不同岗位改写</li>
+<li>他们最痛的跟排版无关，是“不知道哪些经历值得写”</li>
+<li>他们拖延是因为每次改简历都很消耗，跟懒没关系</li>
+<li>他们已经在用学长建议、模板网站、AI 工具和朋友帮看来勉强解决</li>
+</ul>
+<p>这时候，你离真实问题就近得多了。</p>
+<h3 id="8-the-mom-test-和-jtbd-怎么配合用">8. The Mom Test 和 JTBD 怎么配合用</h3>
+<p>如果说 JTBD 帮你看清“用户想完成什么进展”，那么 The Mom Test 更像是在教你：</p>
+<p><strong>怎么通过访谈，确认这个 job 是不是真的存在。</strong></p>
+<p>你完全可以把两者接起来使用：</p>
+<ol>
+<li>先用 JTBD 假设一个 job</li>
+<li>再用 The Mom Test 的方式，去问用户最近一次真实经历</li>
+<li>看看这个 job 是否真的高频、真实、值得优先做</li>
+</ol>
+<p>比如你的 JTBD 假设是：</p>
+<blockquote>
+<p>当我准备投递实习时，我想快速把旧简历改成贴合岗位的版本，以便尽快完成投递。</p>
+</blockquote>
+<p>那你就可以用 The Mom Test 风格的问题去验证：</p>
+<ul>
+<li>你最近一次投递是什么时候？</li>
+<li>当时你是怎么改简历的？</li>
+<li>哪一段最难写？</li>
+<li>你改完之后怎么判断它够不够好？</li>
+</ul>
+<p>这样，方法就连起来了：</p>
+<ul>
+<li>JTBD 帮你定义需求假设</li>
+<li>The Mom Test 帮你访谈验证假设</li>
+</ul>
+<p>访谈帮助我们理解过去发生了什么，但它还不是最后一步。原型做出来后，还要让用户实际操作，观察他说的做法与真实行为是否一致。</p>
+<figure class="field-figure">
+  <a href="https://commons.wikimedia.org/wiki/File:03-Pau-DevCamp-usability-testing.jpg" target="_blank" rel="noreferrer">
+    <img src="../../book/assets/images/public/images/product-discovery/mom-test/usability-testing-session.jpg" alt="Bangalore DevCamp 现场，一名参与者正在实际操作新的翻译应用进行可用性测试" loading="lazy" />
+  </a>
+  <figcaption><strong>“我会用”之后，还要看“能不能用”。</strong>这张照片记录了 2012 年 Bangalore DevCamp 对新翻译应用的可用性测试。参与者直接在电脑上完成任务，研究者据此观察卡点。访谈验证问题是否存在；操作测试继续验证方案是否真的帮助用户完成任务。照片：<a href="https://commons.wikimedia.org/wiki/File:03-Pau-DevCamp-usability-testing.jpg" target="_blank" rel="noreferrer">Amire80 / Wikimedia Commons</a>，<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer">CC BY-SA 3.0</a>。</figcaption>
+</figure><h3 id="9-新手做用户访谈时最常见的误区">9. 新手做用户访谈时最常见的误区</h3>
+<h4 id="91-把访谈做成产品介绍会">9.1 把访谈做成产品介绍会</h4>
+<p>你一讲太多自己的想法，对方就容易开始配合你，而不是告诉你真实情况。</p>
+<h4 id="92-访谈对象全是熟人">9.2 访谈对象全是熟人</h4>
+<p>熟人不是不能聊，但熟人更容易鼓励你。你至少需要混合一些更接近真实用户的人，而不是只找支持你的人。</p>
+<h4 id="93-过早追着问功能">9.3 过早追着问功能</h4>
+<p>如果你还没搞清楚问题，就开始追问按钮、界面、功能细节，通常是在太早进入解决方案。</p>
+<h4 id="94-把一句我会用当成验证结果">9.4 把一句“我会用”当成验证结果</h4>
+<p>访谈最多帮你判断方向，不等于已经完成验证。真正的验证，最终还是要看用户是否愿意付出真实成本，比如时间、切换成本、试用行为，甚至付费。</p>
+<h4 id="95-访谈结束后不整理">9.5 访谈结束后不整理</h4>
+<p>如果你聊完就放着，信息很快会变成模糊印象。最好尽快整理：</p>
+<ul>
+<li>出现频率高的问题</li>
+<li>用户原话里的情绪词</li>
+<li>当前替代方案</li>
+<li>已经付出的成本</li>
+<li>你自己的新判断</li>
+</ul>
+<figure class="field-figure">
+  <a href="https://commons.wikimedia.org/wiki/File:Wikipedia-Affinity.jpg" target="_blank" rel="noreferrer">
+    <img src="../../book/assets/images/public/images/product-discovery/mom-test/wikipedia-affinity-synthesis.jpg" alt="Wikipedia 可用性项目把访谈和观察材料按主题聚类成亲和图" loading="lazy" />
+  </a>
+  <figcaption><strong>访谈完成，只代表原材料到手。</strong>图中是 Wikimedia Foundation 可用性项目的亲和图整理：先把观察拆成一条条证据，再按重复主题聚类。这样得到的是跨访谈的模式，而不是“我感觉大家都需要”。照片：Parul Vora / Wikimedia Foundation，<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer">CC BY-SA 3.0</a>。</figcaption>
+</figure><h3 id="10-可以直接复制去用的问题清单">10. 可以直接复制去用的问题清单</h3>
+<p>如果你想尽快开始，这里有一组足够通用的问题。</p>
+<h4 id="开场问题">开场问题</h4>
+<ul>
+<li>最近一次你遇到这个问题是什么时候？</li>
+<li>当时具体发生了什么？</li>
+</ul>
+<h4 id="行为问题">行为问题</h4>
+<ul>
+<li>你当时是怎么处理的？</li>
+<li>你为什么会选择这种方式？</li>
+</ul>
+<h4 id="成本问题">成本问题</h4>
+<ul>
+<li>这件事一般会花掉你多少时间或精力？</li>
+<li>你有没有为了解决它花过钱？</li>
+</ul>
+<h4 id="替代方案问题">替代方案问题</h4>
+<ul>
+<li>你试过别的工具或办法吗？</li>
+<li>为什么最后没有继续用？</li>
+</ul>
+<h4 id="收尾问题">收尾问题</h4>
+<ul>
+<li>如果以后还遇到同样的问题，你觉得最理想的解决方式应该是什么样？</li>
+</ul>
+<p>注意，这个收尾问题可以问，但最好放在后面。因为前面你更需要拿到事实，而不是愿望。</p>
+<p><a id="mom-ai"></a></p>
+<h3 id="11-使用-ai-准备和整理访谈top-mom"><a href="#top-mom">11. 使用 AI 准备和整理访谈</a></h3>
+<p>The Mom Test 本质上还是一套“和真人聊”的方法，所以 AI 不能替代真实访谈。但 AI 非常适合在访谈前、中、后给你打辅助，尤其适合帮新手降低门槛。</p>
+<h4 id="121-让-ai-帮你把容易问废的问题改写掉">12.1 让 AI 帮你把“容易问废”的问题改写掉</h4>
+<p>很多人知道自己不该问“你觉得我这个想法怎么样”，但一开口还是会回到这种句子。你可以先把自己准备问的问题交给 AI，让它帮你改写：</p>
+<pre class="prose-block"><code class="language-text">下面是我准备做用户访谈时想问的问题：
+[贴上你的问题]
+
+请你用 The Mom Test 的原则帮我改写：
+1. 删掉意见型问题
+2. 删掉假设未来的问题
+3. 尽量改成围绕过去真实行为、已有替代方案和已付成本的提问
+4. 最后整理成一套 8-10 个可以直接访谈的问题清单
+</code></pre>
+<p>一个很小白的输入也完全可以：</p>
+<pre class="prose-block"><code class="language-text">我想问用户：
+1. 你觉得我做一个 AI 改简历工具怎么样？
+2. 你会不会用？
+3. 你愿不愿意付费？
+
+请帮我改成更好的问法。
+</code></pre>
+<p>AI 可能给出的有用输出会像这样：</p>
+<pre class="prose-block"><code class="language-text">改写后的问题：
+
+1. 你最近一次改简历是什么时候？
+2. 当时为什么要改？
+3. 你是怎么改的？
+4. 哪一步最花时间？
+5. 你有没有找别人帮你看？
+6. 你以前有没有为简历修改花过钱或花过很多时间？
+</code></pre>
+<p>这种输出很有帮助，因为它直接把你原本“在问意见”的问题，改成了“在问真实行为”的问题。</p>
+<h4 id="122-让-ai-帮你生成不同对象的访谈提纲">12.2 让 AI 帮你生成不同对象的访谈提纲</h4>
+<p>同一个方向，面对不同人群，访谈重点会不一样。比如学生、HR、自由职业者，关心点完全不同。你可以让 AI 帮你针对不同对象各出一版提纲：</p>
+<ul>
+<li>面向新手用户，重点了解最近一次真实经历</li>
+<li>面向重度用户，重点了解替代方案和痛感</li>
+<li>面向付费用户，重点了解是否已经为此付过成本</li>
+</ul>
+<p>这样你在真正聊天时会更有节奏，而不会每个人都问同一套问题。</p>
+<p>比如你可以直接这样输入：</p>
+<pre class="prose-block"><code class="language-text">我要聊两类人：
+1. 第一次找实习的大学生
+2. 已经帮别人看过很多简历的学长学姐
+
+请分别给我一套访谈提纲，每套 6 个问题。
+</code></pre>
+<p>AI 可能输出：</p>
+<pre class="prose-block"><code class="language-text">对大学生：
+1. 最近一次投实习是什么时候？
+2. 当时最卡的是哪一步？
+3. 你怎么知道自己的简历能不能投？
+...
+
+对学长学姐：
+1. 你最近一次帮别人看简历是什么时候？
+2. 你最常看到哪些明显问题？
+3. 学弟学妹最容易卡在哪一步？
+...
+</code></pre>
+<p>这样一来，你不用自己从零编问题，访谈准备会轻松很多。</p>
+<h4 id="123-让-ai-帮你整理访谈记录">12.3 让 AI 帮你整理访谈记录</h4>
+<p>访谈做完之后，最容易出现的问题不是“没信息”，而是“信息太散”。AI 很适合帮你把碎片化对话整理成结构化笔记：</p>
+<figure class="field-figure">
+  <a href="https://commons.wikimedia.org/wiki/File:Volunteer_Molly_conducting_an_interview._Over_200_prospects_still_need_to_be_interviewed._Plus_the_park_needs_help_transcribing_(791cd068-1dd8-b71b-0b4d-48151192c96f).jpg" target="_blank" rel="noreferrer">
+    <img src="../../book/assets/images/public/images/product-discovery/mom-test/oral-history-interview.jpg" alt="美国国家公园管理局口述史项目中的面对面访谈，桌面上有提纲、照片和记录材料" loading="lazy" />
+  </a>
+  <figcaption><strong>整理不能脱离原始材料。</strong>这场口述史访谈同时使用提纲、历史照片和现场笔记；项目说明里还特别提到转写是让记录真正可用的关键一步。AI 可以协助转写和归类，但结论仍要能回到原话。照片：U.S. National Park Service，公有领域。</figcaption>
+</figure><pre class="prose-block"><code class="language-text">下面是我和 3 位用户的访谈记录。
+请按 The Mom Test 的角度整理：
+1. 哪些内容是事实，哪些只是意见
+2. 用户最近一次真实行为是什么
+3. 当前替代方案是什么
+4. 用户已经付出的时间、金钱或精力成本是什么
+5. 哪些问题被反复提到
+6. 哪些说法听起来积极，但证据不足
+</code></pre>
+<p>这一步尤其有价值，因为它能帮你把“听起来不错”的内容和“真的能支撑判断”的内容分开。</p>
+<p>一个简单输入可以是：</p>
+<pre class="prose-block"><code class="language-text">这是我和一个用户聊完后的记录：
+
+- 她说如果有个工具应该会试试
+- 她上周为了改简历花了一个晚上
+- 她现在主要靠朋友帮看
+- 她说最难的是不知道改到什么程度算可以投
+
+请你帮我分一下，哪些是意见，哪些是事实。
+</code></pre>
+<p>AI 可能输出：</p>
+<pre class="prose-block"><code class="language-text">意见：
+- 如果有个工具应该会试试
+
+事实：
+- 上周为了改简历花了一个晚上
+- 当前替代方案是找朋友帮看
+- 最难点是不知道什么时候算“可以投”
+
+可用于判断需求的重点：
+- 这个问题最近刚发生过
+- 用户已经投入了明显时间成本
+- 当前方案依赖他人，不稳定
+</code></pre>
+<p>这个输出就能很直观地告诉新手：哪些话能拿来做判断，哪些话只能听听。</p>
+<h4 id="124-让-ai-先做一轮轻量级网络搜索">12.4 让 AI 先做一轮轻量级网络搜索</h4>
+<p>如果你还没开始访谈，可以先让 AI 帮你做一些很轻的外部调研，比如：</p>
+<ul>
+<li>公开社区里，大家最近是怎么抱怨这个问题的</li>
+<li>现有工具被吐槽最多的是什么</li>
+<li>用户是不是已经为相似问题花过钱</li>
+<li>市场上有哪些替代方案已经存在</li>
+</ul>
+<p>这类信息不能替代真人访谈，但能帮你更快进入状态，知道该从哪里切入问题。</p>
+<p>比如一个简单输入可以是：</p>
+<pre class="prose-block"><code class="language-text">请你帮我搜一下：
+“大学生改简历时最常吐槽什么”
+帮我整理出 5 条最常见抱怨，用很白话的话写出来。
+</code></pre>
+<p>AI 可能输出：</p>
+<pre class="prose-block"><code class="language-text">常见抱怨：
+
+1. 不知道简历上到底该写什么
+2. 每投一个岗位都要改，太累
+3. 改了很多版还是不确定好不好
+4. 没人能给靠谱反馈
+5. 总觉得还没准备好，所以一直拖
+</code></pre>
+<p>这种结果的价值在于，它会让你更容易找到访谈切入口。</p>
+<h4 id="125-让-ai-扮演访谈复盘教练">12.5 让 AI 扮演“访谈复盘教练”</h4>
+<p>你还可以把自己刚做完的一场访谈记录丢给 AI，让它帮你挑刺：</p>
+<pre class="prose-block"><code class="language-text">下面是我的一段用户访谈记录。
+请从 The Mom Test 的角度帮我复盘：
+1. 我哪些问题问得太像在找认可
+2. 哪些问题带有明显引导
+3. 哪些地方本来可以继续追问事实
+4. 如果再来一次，这段对话可以怎么问得更好
+</code></pre>
+<p>这对新手特别有帮助，因为你会更快建立一种“我到底是在收集证据，还是在收集鼓励”的敏感度。</p>
+<h3 id="12-小结-1">12. 小结</h3>
+<ul>
+<li>对产品想法的积极评价不能单独作为需求证据。</li>
+<li>访谈应优先询问过去的具体经历，而不是对未来行为的预测。</li>
+<li>行为、时间、金钱和现有替代方案是判断问题强度的主要依据。</li>
+<li>AI 可以帮助准备提纲和整理记录，但不能替代真实访谈。</li>
+</ul>
+<h3 id="13-练习-1">13. 练习</h3>
+  <ol>
+    <li>选一个你最近想做的产品方向，写下五个准备询问的问题。</li>
+    <li>删掉“你会不会用”这类假设题，改问对方最近一次真实经历。</li>
+    <li>找一位可能遇到这个问题的人，完成一次访谈。</li>
+    <li>记下他的做法、替代方案、付出的成本和反复出现的困难。</li>
+  </ol>  <p>访谈时先听，不急着介绍自己的方案。一次认真访谈，比收集很多句“这个想法不错”更有用。</p><h3 id="延伸阅读-1">延伸阅读</h3>
+<ul>
+<li><a href="https://momtestbook.com/">The Mom Test 官方网站</a></li>
+<li><a href="https://www.robfitz.com/the-mom-test/">Rob Fitzpatrick: The Mom Test</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-008.html">← 3. 看懂真实需求（JTBD）</a><a rel="next" href="chapter-010.html">5. 收敛方案（双钻模型） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

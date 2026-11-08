@@ -42,8 +42,8 @@
 <p><strong>第四步，加权汇总 V</strong>：可见 V 是 <code>[1,0]</code> 与 <code>[0,1]</code>：</p>
 <p><code>输出 = 0.3302×[1,0] + 0.6698×[0,1] = [0.3302, 0.6698]</code></p>
 <p>第一个分量只来自位置 0 的 V 第一维，第二个分量只来自位置 1 的 V 第二维。权重说明“这次混合各取多少”，不是“模型有多相信某句话”。</p>
-<p><img src="../../book/assets/handdraw/llm/attention-mixing.svg" alt="权重决定各取多少"></p>
-<p><em>图：权重把不同位置的 V 缩放后相加；权重来自 Q 与 K 的比较，不是人工指定的重要度。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/attention-row.svg" alt="位置1的分数经掩码和softmax得到0.3302与0.6698，再汇总V得到同一输出向量"><figcaption>图：沿同一行从上往下读。位置 2 的分数先被遮成 −∞，因此权重为 0；另两项的条高按实际权重绘制，再分别乘对应的 V。这里与上面的单位投影例子使用同一组数。</figcaption></figure>
+<p>本例输出恰好等于两项权重，是因为 V 恰好为 <code>[1,0]</code> 与 <code>[0,1]</code>。如果只把 V 改成 <code>[2,0]</code> 与 <code>[0,4]</code>，保持 Q、K 不变，权重仍是 <code>[0.3302,0.6698]</code>，输出却变成约 <code>[0.6605,2.6790]</code>。权重决定取多少，V 决定取回什么；不要把“输出向量”与“注意力权重”混为一谈。</p>
 <h2 id="C07-section-951a883003" tabindex="-1">整张矩阵在算什么</h2>
 <p>把三个位置一起算，形状是这样：</p>
 <ul>
@@ -53,8 +53,7 @@
 <li>权重矩阵 3×3 乘 V（3×2），得到输出 3×2。</li>
 </ul>
 <p><code>Kᵀ</code> 只是把 K 的行列交换，好让 Q 的每一行与 K 的每一行逐一相乘。mask 在 softmax 之前生效；softmax 是按行做的，所以每一行的权重各自相加为 1。</p>
-<p><img src="../../book/assets/handdraw/llm/causal-spotlight.svg" alt="灯光只照到当前位置"></p>
-<p><em>图：因果掩码让每个位置只能看见自己和之前的位置；绿色表示可见范围，不是权重大小。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/causal-spotlight.svg" alt="灯光只照到当前位置"><figcaption>图：因果掩码让每个位置只能看见自己和之前的位置；绿色表示可见范围，不是权重大小。</figcaption></figure>
 <h2 id="C07-section-4464ee5ff3" tabindex="-1">改一个条件：动未来，输出会变吗</h2>
 <p>站在位置 1，把位置 2 的 V 从 <code>[1,1]</code> 改成 <code>[100,-100]</code>。先猜输出会不会变，再算：位置 2 的权重是 0，<code>0×[100,-100]=[0,0]</code>，所以输出仍是 <code>[0.3302, 0.6698]</code>。</p>
 <p>再把位置 2 的 K 改得很大，分数仍然被 mask 成负无穷，权重仍是 0，输出不变。这两个测试检查的是<strong>因果边界</strong>：未来内容不能通过这一层影响当前位置。</p>
@@ -82,7 +81,7 @@
 <li>取 <code>q=[1,1]</code>，可见 <code>k1=[1,0]</code>、<code>k2=[0,3]</code>，<code>d_k=2</code>。算两个缩放后分数、softmax 权重。</li>
 <li>对应 <code>V1=[1,2]</code>、<code>V2=[3,0]</code>，算加权汇总输出。</li>
 <li>若把未来的 <code>k3</code> 设为 <code>[9,9]</code>、<code>V3</code> 设为 <code>[5,5]</code>，输出会不会变？说明理由。</li>
-<li><code>X</code> 为 4×3，<code>WQ</code> 为 3×2：写出 Q、<code>QKᵀ</code>、权重矩阵、输出各自的形状。</li>
+<li><code>X</code> 为 4×3，<code>WQ</code>、<code>WK</code>、<code>WV</code> 均为 3×2：写出 Q、<code>QKᵀ</code>、权重矩阵、输出各自的形状。若只把 <code>WV</code> 换成 3×5，哪一步的形状会变？</li>
 <li>用自己的话说明：为什么“先 mask 再 softmax”与“先 softmax 再 mask”不等价。</li>
 </ol>
 <p>核对过程在 <a href="c07-answer.html">C07 答案</a>。</p>
@@ -91,5 +90,5 @@
 <p><code>位置 | 可见位置 | 原始分数 | 缩放后分数 | softmax 权重 | 各 V | 输出向量 | 未来改动是否影响</code></p>
 <p>至少做一次“修改未来 V”的对照，并保留修改前后的数值。数据可以来自旧实验或手算；标明是人工矩阵，不写成模型内部读数。</p>
 <h2 id="C07-section-82826587a3" tabindex="-1">来源与边界</h2>
-<p>本章沿用旧课 <a href="../../book/llm/lessons/attention.md">L04 模型怎样利用前文</a> 的 Q/K/V、因果掩码与加权汇总，复用图 G31/G32/G04/G50 的出处与旧实验 X04 的固定矩阵。单位投影与 <code>[0,0.7071]</code> 这组数是课程为手算设计的，<strong>不是 DeepSeek、Kimi 或任何模型的内部 Q/K/V</strong>；真实模型的头数、维度、缩放方式和掩码实现要按架构与代码核对。</p>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/attention.md">L04 模型怎样利用前文</a> 的 Q/K/V、因果掩码与加权汇总，以及旧实验 X04 的计算方法。G31 保留可见范围示意；G52 专为本章单位投影例子计算，不混用旧实验矩阵。单位投影与 <code>[0,0.7071]</code> 这组数是课程为手算设计的，<strong>不是 DeepSeek、Kimi 或任何模型的内部 Q/K/V</strong>；真实模型的头数、维度、缩放方式和掩码实现要按架构与代码核对。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c06.html">上一章 C06</a><a href="c07-answer.html">独立作答后核对</a><a href="c08.html">下一章 C08</a></nav></article></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

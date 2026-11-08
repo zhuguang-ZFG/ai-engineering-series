@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { extname, join, relative, resolve } from "node:path";
+import { marked } from "marked";
 
 const root = resolve(import.meta.dirname, "..");
 const failures = [];
@@ -70,7 +71,7 @@ function validateBook() {
   if (!markdown.startsWith("![Vibe Coding 101 封面](assets/cover.webp)")) fail("Book must begin with the current cover");
   if (!markdown.includes("# Vibe Coding 101：从一句需求到第一个可用作品")) fail("Current book title is missing");
   if (!markdown.includes("## 目录")) fail("Book table of contents is missing");
-  const chapters = markdown.match(/^###\s+/gm)?.length ?? 0;
+  const chapters = marked.lexer(markdown).filter(token => token.type === "heading" && token.depth === 3).length;
   if (chapters < 190) fail(`Expected at least 190 assembled chapters, found ${chapters}`);
   const staleImages = markdown.match(/!\[[^\]]*\]\(\.\.\/easy-vibe\/docs\//g)?.length ?? 0;
   if (staleImages) fail(`Found ${staleImages} unresolved upstream image paths`);

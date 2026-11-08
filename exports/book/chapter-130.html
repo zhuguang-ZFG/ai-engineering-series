@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文件存储与对象存储 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 130 / 195</p><article><h1 id="文件存储与对象存储">文件存储与对象存储</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#文件与对象存储导论">文件与对象存储导论</a><ul><li><a href="#0-全景图不能把文件存在服务器本地的原理">0. 全景图：不能把文件存在服务器本地的原理</a></li><li><a href="#1-存储类型对比块文件对象">1. 存储类型对比：块、文件、对象</a></li><li><a href="#2-对象存储核心概念">2. 对象存储核心概念</a></li><li><a href="#3-文件上传方案谁来传文件">3. 文件上传方案：谁来传文件</a></li><li><a href="#4-cdn-加速让全球用户都快">4. CDN 加速：让全球用户都快</a></li><li><a href="#5-最佳实践">5. 最佳实践</a></li><li><a href="#总结-23">总结</a></li><li><a href="#延伸阅读-14">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="文件与对象存储导论">文件与对象存储导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>用户上传了一张头像，你把它存在服务器的 <code>/uploads</code> 目录下——然后服务器磁盘满了，或者你加了第二台服务器，用户发现头像时有时无。</strong> 文件存储看似简单，但在分布式环境下却是一个需要认真对待的架构问题。对象存储就是互联网时代解决这个问题的标准答案。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>存储类型认知</strong>：理解块存储、文件存储、对象存储的区别和适用场景</li>
+<li><strong>对象存储核心概念</strong>：掌握 Bucket、Object、Key、Pre-signed URL 等核心概念</li>
+<li><strong>上传方案设计</strong>：学会客户端直传 vs 服务端中转的方案选型</li>
+<li><strong>CDN 加速原理</strong>：理解 CDN 如何加速静态资源的全球分发</li>
+<li><strong>最佳实践</strong>：掌握文件命名、权限控制、生命周期管理等实战技巧</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>存储类型对比</td>
+<td>块存储、文件存储、对象存储</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>对象存储核心概念</td>
+<td>Bucket、Object、Key、元数据</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>文件上传方案</td>
+<td>客户端直传、Pre-signed URL</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>CDN 加速</td>
+<td>边缘节点、缓存策略、回源</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>最佳实践</td>
+<td>命名规范、权限、生命周期</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图不能把文件存在服务器本地的原理">0. 全景图：不能把文件存在服务器本地的原理</h3>
+<p>刚开始做项目时，把用户上传的文件存在服务器本地目录是最直觉的做法。但随着项目发展，你会遇到一系列问题：</p>
+<ul>
+<li><strong>磁盘空间有限</strong>：服务器磁盘总会满，扩容麻烦</li>
+<li><strong>多服务器不共享</strong>：负载均衡后，用户请求可能打到不同服务器，文件找不到</li>
+<li><strong>没有备份</strong>：服务器挂了，文件就丢了</li>
+<li><strong>没有 CDN</strong>：全球用户访问同一台服务器，速度慢</li>
+</ul>
+<blockquote>
+<p><strong>对象存储的核心价值</strong>
+对象存储（如 AWS S3、阿里云 OSS）解决了所有这些问题：<strong>容量无限、全球可访问、自动备份、天然支持 CDN</strong>。它已经成为互联网应用存储文件的事实标准。</p>
+</blockquote>
+<h3 id="1-存储类型对比块文件对象">1. 存储类型对比：块、文件、对象</h3>
+<p>计算机世界有三种主要的存储方式，它们解决不同层次的问题。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>块存储</th>
+<th>文件存储</th>
+<th>对象存储</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据单位</td>
+<td>固定大小的块</td>
+<td>文件 + 目录</td>
+<td>对象（Key-Value）</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>iSCSI/FC</td>
+<td>NFS/SMB</td>
+<td>HTTP REST API</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>最高（毫秒级）</td>
+<td>中等</td>
+<td>较低（但够用）</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>有限</td>
+<td>中等</td>
+<td>近乎无限</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>最高</td>
+<td>中等</td>
+<td>最低</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>数据库</td>
+<td>共享文件</td>
+<td>图片/视频/备份</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>简单记忆</strong></p>
+</blockquote>
+<ul>
+<li><strong>块存储</strong>像硬盘——给数据库用</li>
+<li><strong>文件存储</strong>像网络共享文件夹——给多台服务器共享配置用</li>
+<li><strong>对象存储</strong>像网盘——给用户上传的图片、视频用</li>
+</ul>
+<h3 id="2-对象存储核心概念">2. 对象存储核心概念</h3>
+<p>对象存储的数据模型非常简单：<strong>Bucket（桶）</strong> 是容器，Object（对象） 是文件，每个对象通过唯一的 Key（键） 来标识。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-app-bucket/                    ← Bucket（桶）
+├── avatars/user-123.jpg          ← Object Key
+├── avatars/user-456.png          ← Object Key
+├── reports/2024/q1-report.pdf    ← Object Key（&quot;目录&quot;只是 Key 的前缀）
+└── uploads/temp/file.zip         ← Object Key
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bucket</td>
+<td>存储容器，全局唯一命名</td>
+<td><code>my-app-prod</code>、<code>company-assets</code></td>
+</tr>
+<tr>
+<td>Object</td>
+<td>存储的文件本体 + 元数据</td>
+<td>一张图片、一个 PDF</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>对象的唯一标识符</td>
+<td><code>avatars/user-123.jpg</code></td>
+</tr>
+<tr>
+<td>元数据</td>
+<td>对象的附加信息</td>
+<td>Content-Type、自定义标签</td>
+</tr>
+<tr>
+<td>ACL</td>
+<td>访问控制列表</td>
+<td>public-read、private</td>
+</tr>
+<tr>
+<td>Pre-signed URL</td>
+<td>临时授权访问链接</td>
+<td>有效期 15 分钟的上传/下载链接</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>对象存储没有真正的&quot;目录&quot;</strong>
+<code>avatars/user-123.jpg</code> 中的 <code>avatars/</code> 不是目录，只是 Key 的前缀。对象存储是扁平结构，所有对象在同一层级。控制台显示的&quot;文件夹&quot;只是按前缀分组的视觉效果。</p>
+</blockquote>
+<h3 id="3-文件上传方案谁来传文件">3. 文件上传方案：谁来传文件</h3>
+<p>文件上传有两种主流方案：服务端中转和客户端直传。对于大多数场景，<strong>客户端直传</strong>是更优的选择。</p>
+<blockquote>
+<p><strong>客户端直传的优势</strong></p>
+</blockquote>
+<ol>
+<li><strong>节省服务器带宽</strong>：文件不经过你的服务器，直接到 OSS</li>
+<li><strong>避免超时</strong>：大文件上传不会触发 Nginx/网关的超时限制</li>
+<li><strong>降低服务器负载</strong>：服务器只需要签发凭证，不需要处理文件流</li>
+<li><strong>支持断点续传</strong>：OSS 原生支持分片上传，前端可以实现断点续传</li>
+</ol>
+<p>实现步骤：前端请求后端获取 Pre-signed URL → 前端用这个 URL 直接上传到 OSS → OSS 回调通知后端</p>
+<h3 id="4-cdn-加速让全球用户都快">4. CDN 加速：让全球用户都快</h3>
+<p>当你的用户遍布全球时，从单一源站下载文件会很慢。CDN（Content Delivery Network）通过在全球部署边缘节点，将文件缓存到离用户最近的节点，大幅降低访问延迟。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>CDN 概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>边缘节点</td>
+<td>分布在全球各地的缓存服务器</td>
+</tr>
+<tr>
+<td>回源</td>
+<td>边缘节点没有缓存时，向源站请求文件</td>
+</tr>
+<tr>
+<td>缓存命中率</td>
+<td>请求被边缘节点直接响应的比例，越高越好</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>缓存有效期，过期后需要重新回源</td>
+</tr>
+<tr>
+<td>缓存刷新</td>
+<td>主动清除边缘节点的缓存，让新文件生效</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>CDN 最佳实践</strong></p>
+</blockquote>
+<ul>
+<li><strong>文件名加 hash</strong>：<code>logo.a3f2b1.png</code> 而不是 <code>logo.png</code>，这样更新文件时不需要刷新缓存</li>
+<li><strong>设置合理的 TTL</strong>：静态资源（JS/CSS/图片）设长 TTL（1年），HTML 设短 TTL（5分钟）</li>
+<li><strong>开启 Gzip/Brotli 压缩</strong>：文本类资源压缩后体积减少 60-80%</li>
+</ul>
+<h3 id="5-最佳实践">5. 最佳实践</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>实践</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Key 命名规范</td>
+<td>用有意义的前缀组织文件</td>
+<td><code>{type}/{date}/{uuid}.{ext}</code></td>
+</tr>
+<tr>
+<td>避免热点 Key</td>
+<td>不要用递增数字开头</td>
+<td>用 UUID 或 hash 前缀</td>
+</tr>
+<tr>
+<td>权限最小化</td>
+<td>Bucket 默认 private</td>
+<td>只对需要公开的文件设置 public-read</td>
+</tr>
+<tr>
+<td>生命周期规则</td>
+<td>自动清理过期文件</td>
+<td>临时文件 7 天后自动删除</td>
+</tr>
+<tr>
+<td>跨域配置</td>
+<td>前端直传需要配置 CORS</td>
+<td>允许你的域名 PUT/POST</td>
+</tr>
+<tr>
+<td>服务端加密</td>
+<td>敏感文件开启 SSE</td>
+<td>SSE-S3 或 SSE-KMS</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-23">总结</h3>
+<p>文件存储是每个 Web 应用都会遇到的基础问题。对象存储以其无限容量、低成本、高可用的特性，成为了互联网应用的标准选择。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>三种存储类型</strong>：块存储给数据库、文件存储给共享、对象存储给用户文件</li>
+<li><strong>对象存储模型</strong>：Bucket + Key + Object，扁平结构，HTTP API 访问</li>
+<li><strong>客户端直传</strong>：Pre-signed URL 方案，文件不经过服务器，高效省资源</li>
+<li><strong>CDN 加速</strong>：边缘节点缓存 + 文件名 hash，让全球用户都快</li>
+<li><strong>安全与管理</strong>：权限最小化、生命周期规则、服务端加密</li>
+</ol>
+<h3 id="延伸阅读-14">延伸阅读</h3>
+<ul>
+<li><a href="https://docs.aws.amazon.com/s3/">AWS S3 开发者指南</a> - 对象存储的标杆文档</li>
+<li><a href="https://help.aliyun.com/document_detail/31853.html">阿里云 OSS 最佳实践</a> - 国内最常用的对象存储</li>
+<li><a href="https://min.io/docs/minio/linux/index.html">MinIO 文档</a> - 开源的 S3 兼容对象存储</li>
+<li><a href="https://developers.cloudflare.com/r2/">Cloudflare R2</a> - 零出口费用的对象存储</li>
+<li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html">Pre-signed URL 详解</a> - 客户端直传的核心机制</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-129.html">← 搜索引擎原理</a><a rel="next" href="chapter-131.html">后端分层架构 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

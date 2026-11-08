@@ -1,5 +1,7 @@
 # 大模型原理与应用：从入门到独立交付 · 课程规格
 
+> 当前原书修订从[原书计划](../PLAN.md)继续。本文件保留配套大模型专题的规格；下方“尚未实施”等描述是 2026-11-07 规划快照。专题三十章及技术试读版现已实现，实际进展以 [IMPLEMENTATION.md](IMPLEMENTATION.md) 和 [ACCEPTANCE.md](ACCEPTANCE.md) 为准，K1–K5 未通过项保持原状态。
+
 规划版本：1.0 / 2026-11-07，**规划已重订，教材尚未按新版实施**。新版按五阶段三十章组织，终点是有原理依据的独立应用交付，不是基础模型研究全领域精通。第 2–4、8–9 节为当前目标与约束；0.10–0.14 的补充契约和 T00–T16 状态保留为既有资产基线，不表示新版已完成。参考依据见 [REFERENCE-BOOKS.md](REFERENCE-BOOKS.md)，新目录与迁移见 [CURRICULUM.md](CURRICULUM.md)，执行入口见 [PLAN.md](PLAN.md)。本轮只修订规划，不更改课文、代码、测试、生成网页或 PDF/EPUB，不沿用历史授权自动执行提交、推送、合并或付费操作。
 
 状态：0.14.0 / T16 本地技术完成，新增生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，并同步相邻讲解。契约及本轮证据见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)，发布与 CI 记录见 [PR #5](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/5)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并至 main，提交为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的本地书籍入口、手机长文中途回查、公式连读及四十八图的历史证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；该版成品与绿色 CI 不作为 T16 已通过的证据。完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。本轮不新增具名模型实测；真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。

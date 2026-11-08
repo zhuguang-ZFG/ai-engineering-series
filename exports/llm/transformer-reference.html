@@ -16,12 +16,15 @@
 <h3>2.1 编码器（Encoder）</h3>
 <p>原始编码器每层包含多头自注意力和逐位置前馈网络，外加残差连接与层归一化。现代实现可能采用 pre-norm、不同激活函数、位置表示或其他层结构；“6 层、512 维”是原论文配置，不能当成当前模型的通用规格。</p>
 <p>前馈层在各位置使用相同参数，做非线性变换；原论文写作 <code>FFN(x)=max(0,xW₁+b₁)W₂+b₂</code>。残差把子层输入与输出相加，归一化调整单个位置的特征尺度，帮助训练深层网络，但不保证训练一定稳定。原论文是 <code>LayerNorm(x+Sublayer(x))</code> 的 post-norm；课程深入图采用 <code>x+Sublayer(Norm(x))</code> 的 pre-norm 示意，两种顺序不能混写。</p>
-<figure><img src="../../book/assets/handdraw/llm/transformer-block.svg" width="480" height="798" alt="pre-norm 示意块：归一化、因果注意力与残差，再经过归一化、前馈层与残差"><figcaption>课程原创 G05：一个 pre-norm 解码器块示意。原始论文使用 post-norm；本图不表示用户指定模型的实际层结构。</figcaption></figure><h3>2.2 注意力的计算过程</h3>
+<p>用两个中间量把支路分清：<code>h = x + Attention(Norm(x))</code>，<code>y = h + FFN(Norm(h))</code>。第一条残差保留输入 x，第二条残差保留注意力之后的 h；第二次相加不能又拿原来的 x。相加两侧必须形状一致，FFN 即使在内部扩维，输出也要回到残差宽度。</p>
+<figure><img src="../../book/assets/handdraw/llm/transformer-block.svg" width="480" height="640" alt="pre-norm 块中的两条残差支路：x 绕过注意力得到 h，h 再绕过前馈层得到输出"><figcaption>课程原创 G05：沿支路检查两次加法分别保留谁。原始论文使用 post-norm；本图是 pre-norm 教学示意，不表示某个商用模型的实际层结构。</figcaption></figure><h3>2.2 注意力的计算过程</h3>
 <p>对某个位置，先算 <code>QKᵀ / √d_k</code>，再对可见位置做 softmax，最后用权重汇总 V：</p>
 <pre><code class="language-text">Attention(Q, K, V) = softmax(QKᵀ / √d_k + M)V
 </code></pre>
 <p><code>M</code> 在可见处加 0，在屏蔽处加负无穷。decoder-only 教学例里，输入位置 i 可以看自己及更早位置，用来预测 i 后的 token；不能看未来目标。训练时输入与预测目标错开一位，这才避免把答案提前给模型。注意力输出只是网络中的一个子层，注意力权重不能单独当作完整解释。</p>
-<h2>三、Query、Key、Value：注意力的三剑客</h2>
+<p><strong>算一次第二位置的输出</strong>：取人工输入 <code>X=[[1,0],[0,1],[1,1]]</code>，令 Q/K/V 的投影矩阵都是单位矩阵，所以本例 <code>Q=K=V=X</code>。第二位置的 Q 是 <code>[0,1]</code>，与三个 K 点积得到 <code>[0,1,1]</code>，除以 <code>√2</code> 后为 <code>[0,0.707107,0.707107]</code>。第三位置在未来，掩码后为 <code>[0,0.707107,-∞]</code>；softmax 得 <code>[0.330238,0.669762,0]</code>。</p>
+<p>最后计算 <code>0.330238×[1,0] + 0.669762×[0,1] = [0.330238,0.669762]</code>。权重有三个数，因为共有三个输入位置；输出只有两个数，因为每个 V 是二维。这是一个位置的隐藏表示，还不是词表上的概率，也没有直接选出下一个词。</p>
+<figure><img src="../../book/assets/handdraw/llm/attention-row.svg" width="480" height="640" alt="第二位置沿 Q 与 K 点积、除以根号二、屏蔽未来、softmax，再用权重加权 V 得到二维输出"><figcaption>课程原创 G52：按一行追踪注意力。数值来自上述人工矩阵并做了小数舍入；把未来第三行改大，第二位置的输出仍应不变。</figcaption></figure><h2>三、Query、Key、Value：注意力的三剑客</h2>
 <p>Q、K、V 是由隐藏表示经过不同线性投影得到的向量。把 Q 说成“正在提问”、K 说成“标签”、V 说成“内容”有助于入门，但这些是功能类比，不是模型里存着三张人能直接读懂的表。</p>
 <h3>3.1 三个向量的角色</h3>
 <p>Q 与 K 的匹配决定权重，V 参与加权汇总。Q/K 的相似度高，不代表 V 的内容一定与人类语义相似；投影矩阵和后续层共同决定表示。自注意力里的 Q、K、V 可以来自同一序列，交叉注意力则让一侧的 Q 读取另一侧的 K/V。</p>
@@ -34,7 +37,7 @@
 MultiHead(Q,K,V) = Concat(head_1, …, head_h)W^O
 </code></pre>
 <p>在本地的双头练习中，输入是三个二维向量，两个头各投影成一维，位置 2 只能看前两个位置。程序实际算出两头的权重和输出，再拼接、乘以 <code>W^O</code>。这能展示矩阵关系，但没有训练、位置编码、残差、归一化或完整 Transformer 层。</p>
-<figure><img src="../../book/assets/handdraw/llm/multihead-flow.svg" width="480" height="660" alt="同一输入投影到两个头，各自汇总可见 V，再拼接并经过输出矩阵"><figcaption>课程原创 G15：两个一维头的计算路线。数值来自本地人工矩阵，图中各头没有预设语言学职责。</figcaption></figure><!-- llm:multihead-result -->
+<figure><img src="../../book/assets/handdraw/llm/multihead-flow.svg" width="480" height="640" alt="同一输入投影到两个头，各自汇总可见 V，再拼接并经过输出矩阵"><figcaption>课程原创 G15：两个一维头的计算路线。数值来自本地人工矩阵，图中各头没有预设语言学职责。</figcaption></figure><!-- llm:multihead-result -->
 <p>人工输入 <code>X=[[1,0],[0,1],[1,1]]</code>，当前为第 2 个位置。各头投影矩阵见同源 fixture；本例两头 <code>d_k=1</code>，缩放因子为 1。</p>
 <table>
 <thead>
@@ -57,6 +60,7 @@ MultiHead(Q,K,V) = Concat(head_1, …, head_h)W^O
 </tbody></table>
 <p>拼接结果为 <code>[0.500000, 0.731059]</code>，经过人工输出矩阵后得到 <code>[1.231059, -0.231059]</code>。表中数值由源码计算后保留六位小数。</p>
 <!-- /llm:multihead-result --><p>在行向量约定下，拼接 <code>[a,b]</code> 乘 <code>W^O=[[1,1],[1,-1]]</code> 得 <code>[a+b,a-b]</code>。改掉输出投影矩阵，最终结果也应变化；把未来第三行改得很大，第二位置的输出仍应不变。记录按第 1、2、3 位置称呼，源码索引从 0 开始。</p>
+<p><strong>不要把拼接写成求和</strong>：两个一维输出拼接后是宽度为 2 的 <code>[a,b]</code>，再乘 2×2 的输出矩阵。如果先算 <code>a+b</code>，只剩一个数，既丢失了两头各自的信息，也无法按原形状乘这个矩阵。把 <code>W^O</code> 换成单位矩阵时，正确结果应保留 <code>[a,b]</code>，可以用这个反例自查。</p>
 <h3>4.2 多头的优势</h3>
 <p>多头提供了多个可学习的投影空间，并行计算这些头通常便于实现。原论文基础配置用 8 个头、每头较小维度；头数和维度是配置，不是固定标准。并行不等于免费，计算时间还受矩阵形状、内存和硬件影响，也不能保证多头天然更鲁棒。效果要在给定数据、参数和评估任务上比较。</p>
 <h2>五、Transformer 完整架构：编码器与解码器</h2>

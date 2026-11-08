@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>搜索引擎原理 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 129 / 195</p><article><h1 id="搜索引擎原理">搜索引擎原理</h1><details class="contents"><summary>本章目录 <span>· 8 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图搜索的本质是什么">0. 全景图：搜索的本质是什么</a></li><li><a href="#1-倒排索引搜索引擎的心脏">1. 倒排索引：搜索引擎的&quot;心脏&quot;</a></li><li><a href="#2-分词与文本分析">2. 分词与文本分析</a></li><li><a href="#3-相关性排序哪个结果最相关">3. 相关性排序：哪个结果最&quot;相关&quot;</a></li><li><a href="#4-elasticsearch最流行的搜索引擎">4. Elasticsearch：最流行的搜索引擎</a></li><li><a href="#5-搜索优化让搜索更聪明">5. 搜索优化：让搜索更&quot;聪明&quot;</a></li><li><a href="#总结-22">总结</a></li><li><a href="#延伸阅读-13">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>你在淘宝搜&quot;红色连衣裙&quot;，0.1 秒内从几十亿商品中找到了最相关的结果——这背后是怎么做到的？</strong> 搜索引擎是互联网最核心的基础设施之一，从 Google 到电商站内搜索，它的核心原理都是一样的：倒排索引 + 相关性排序。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>倒排索引</strong>：理解搜索引擎最核心的数据结构</li>
+<li><strong>分词技术</strong>：了解中文分词的挑战和常见方案</li>
+<li><strong>相关性排序</strong>：掌握 TF-IDF 和 BM25 的基本原理</li>
+<li><strong>Elasticsearch</strong>：了解最流行的搜索引擎的架构和使用场景</li>
+<li><strong>搜索优化</strong>：掌握同义词、纠错、高亮等实用搜索功能</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>倒排索引</td>
+<td>正排索引 vs 倒排索引</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>分词与分析</td>
+<td>中文分词、停用词、词干提取</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>相关性排序</td>
+<td>TF-IDF、BM25</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>Elasticsearch</td>
+<td>分布式架构、分片、副本</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>搜索优化</td>
+<td>同义词、纠错、自动补全</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-全景图搜索的本质是什么">0. 全景图：搜索的本质是什么</h2>
+<p>搜索的本质是一个**信息检索（Information Retrieval）**问题：给定一个查询，从海量文档中找到最相关的结果，并按相关性排序返回。</p>
+<p>这个过程分为两个阶段：</p>
+<ul>
+<li><strong>索引阶段（离线）</strong>：提前把所有文档处理好，建立高效的查找结构</li>
+<li><strong>查询阶段（在线）</strong>：用户输入关键词时，快速找到匹配的文档并排序</li>
+</ul>
+<blockquote>
+<p><strong>为什么不能用数据库 LIKE 查询？</strong>
+<code>SELECT * FROM products WHERE name LIKE &#39;%红色连衣裙%&#39;</code> 看起来能搜索，但它需要<strong>全表扫描</strong>——逐行检查每条记录。当数据量达到百万级时，这种查询会慢到不可用。倒排索引把这个 O(n) 的操作变成了 O(1) 的查找。</p>
+</blockquote>
+<h2 id="1-倒排索引搜索引擎的心脏">1. 倒排索引：搜索引擎的&quot;心脏&quot;</h2>
+<p>传统数据库用的是<strong>正排索引</strong>：从文档 ID 找到文档内容。而搜索引擎用的是倒排索引：从关键词找到包含它的文档列表。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>方向</th>
+<th>查找方式</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正排索引</td>
+<td>文档 → 内容</td>
+<td>知道 ID，查内容</td>
+<td>数据库主键查询</td>
+</tr>
+<tr>
+<td>倒排索引</td>
+<td>关键词 → 文档列表</td>
+<td>知道关键词，查文档</td>
+<td>全文搜索</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>倒排索引的构建过程</strong></p>
+</blockquote>
+<ol>
+<li><strong>文档收集</strong>：获取所有需要被搜索的文档</li>
+<li><strong>分词（Tokenization）</strong>：将文档拆分为一个个词语</li>
+<li><strong>建立映射</strong>：记录每个词语出现在哪些文档中（以及出现位置、频率等）</li>
+<li><strong>持久化存储</strong>：将索引写入磁盘，支持快速查找</li>
+</ol>
+<h2 id="2-分词与文本分析">2. 分词与文本分析</h2>
+<p>分词是搜索引擎的第一步，也是中文搜索的最大挑战。英文天然以空格分词，但中文没有分隔符——&quot;乒乓球拍卖了&quot;可以分成&quot;乒乓球/拍卖/了&quot;或&quot;乒乓/球拍/卖/了&quot;。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>分词方式</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标准分词</td>
+<td>按空格和标点切分（英文）</td>
+<td>&quot;hello world&quot; → [&quot;hello&quot;, &quot;world&quot;]</td>
+</tr>
+<tr>
+<td>中文分词</td>
+<td>基于词典或模型切分</td>
+<td>&quot;搜索引擎&quot; → [&quot;搜索&quot;, &quot;引擎&quot;]</td>
+</tr>
+<tr>
+<td>N-gram</td>
+<td>按固定长度滑动窗口切分</td>
+<td>&quot;搜索&quot; → [&quot;搜索&quot;, &quot;索引&quot;]</td>
+</tr>
+<tr>
+<td>自定义词典</td>
+<td>添加业务专有词汇</td>
+<td>&quot;iPhone16ProMax&quot; 作为一个词</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>文本分析管道</strong>
+分词只是文本分析的一步，完整的管道包括：</p>
+</blockquote>
+<ol>
+<li><strong>字符过滤</strong>：去除 HTML 标签、特殊字符</li>
+<li><strong>分词</strong>：将文本拆分为词语（Token）</li>
+<li><strong>停用词过滤</strong>：去除&quot;的&quot;、&quot;了&quot;、&quot;是&quot;等无意义的高频词</li>
+<li><strong>同义词扩展</strong>：将&quot;手机&quot;扩展为&quot;手机、电话、移动电话&quot;</li>
+<li><strong>词干提取</strong>：将 &quot;running&quot; 还原为 &quot;run&quot;（英文）</li>
+</ol>
+<h2 id="3-相关性排序哪个结果最相关">3. 相关性排序：哪个结果最&quot;相关&quot;</h2>
+<p>找到匹配的文档只是第一步，更重要的是<strong>排序</strong>——把最相关的结果排在最前面。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>原理</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TF-IDF</td>
+<td>词频(TF) × 逆文档频率(IDF)</td>
+<td>经典算法，简单有效</td>
+</tr>
+<tr>
+<td>BM25</td>
+<td>TF-IDF 的改进版，加入文档长度归一化</td>
+<td>Elasticsearch 默认算法</td>
+</tr>
+<tr>
+<td>向量检索</td>
+<td>将文档和查询转为向量，计算余弦相似度</td>
+<td>支持语义搜索</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>TF-IDF 直觉理解</strong></p>
+</blockquote>
+<ul>
+<li><strong>TF（词频）</strong>：一个词在文档中出现越多次，这个文档越可能与该词相关</li>
+<li><strong>IDF（逆文档频率）</strong>：一个词在越少的文档中出现，它的区分度越高</li>
+<li>&quot;的&quot;在所有文档中都出现（IDF 低），所以搜索&quot;的&quot;没有意义</li>
+<li>&quot;Elasticsearch&quot;只在少数文档中出现（IDF 高），搜索它能精确定位</li>
+</ul>
+<h2 id="4-elasticsearch最流行的搜索引擎">4. Elasticsearch：最流行的搜索引擎</h2>
+<p>Elasticsearch 是目前最流行的开源搜索引擎，基于 Apache Lucene 构建，提供分布式、RESTful API 的全文搜索能力。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Index</td>
+<td>类似数据库的&quot;表&quot;，存储同类文档</td>
+</tr>
+<tr>
+<td>Document</td>
+<td>一条记录，JSON 格式</td>
+</tr>
+<tr>
+<td>Shard</td>
+<td>分片，将索引拆分到多个节点</td>
+</tr>
+<tr>
+<td>Replica</td>
+<td>副本，提供高可用和读扩展</td>
+</tr>
+<tr>
+<td>Mapping</td>
+<td>字段类型定义，类似数据库 Schema</td>
+</tr>
+<tr>
+<td>Analyzer</td>
+<td>文本分析器，定义分词规则</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>ES vs 数据库</strong>
+Elasticsearch 不是用来替代数据库的，而是作为搜索层与数据库配合使用。典型架构：数据写入数据库 → 同步到 ES → 搜索请求走 ES → 详情请求走数据库。</p>
+</blockquote>
+<h2 id="5-搜索优化让搜索更聪明">5. 搜索优化：让搜索更&quot;聪明&quot;</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>优化手段</th>
+<th>说明</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同义词</td>
+<td>&quot;手机&quot;也能搜到&quot;电话&quot;</td>
+<td>提高召回率</td>
+</tr>
+<tr>
+<td>拼写纠错</td>
+<td>&quot;iphoen&quot; 自动纠正为 &quot;iphone&quot;</td>
+<td>容错性</td>
+</tr>
+<tr>
+<td>自动补全</td>
+<td>输入&quot;苹&quot;提示&quot;苹果手机&quot;</td>
+<td>提升体验</td>
+</tr>
+<tr>
+<td>高亮</td>
+<td>搜索结果中标红匹配词</td>
+<td>直观展示</td>
+</tr>
+<tr>
+<td>权重调整</td>
+<td>标题匹配权重 &gt; 内容匹配</td>
+<td>提高精确度</td>
+</tr>
+<tr>
+<td>过滤与聚合</td>
+<td>按价格区间、品牌筛选</td>
+<td>缩小范围</td>
+</tr>
+</tbody></table></div>
+<h2 id="总结-22">总结</h2>
+<p>搜索引擎是互联网应用的核心基础设施。理解倒排索引、分词、相关性排序这三个核心概念，就掌握了搜索引擎的本质。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>倒排索引</strong>：从关键词到文档的反向映射，是搜索引擎的核心数据结构</li>
+<li><strong>分词是基础</strong>：中文分词是搜索质量的关键，需要选择合适的分词器</li>
+<li><strong>BM25 排序</strong>：基于词频和文档频率的相关性评分，是 ES 的默认算法</li>
+<li><strong>ES 架构</strong>：分片 + 副本实现分布式和高可用</li>
+<li><strong>搜索优化</strong>：同义词、纠错、补全让搜索更智能</li>
+</ol>
+<h2 id="延伸阅读-13">延伸阅读</h2>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">Elasticsearch 官方文档</a> - 最权威的 ES 参考</li>
+<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html">Elasticsearch 权威指南</a> - 中文入门指南</li>
+<li><a href="https://lucene.apache.org/">Apache Lucene</a> - ES 底层的搜索引擎库</li>
+<li><a href="https://www.meilisearch.com/">MeiliSearch</a> - 轻量级搜索引擎，适合中小项目</li>
+<li><a href="https://typesense.org/">Typesense</a> - 开源的即时搜索引擎</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-128.html">← 限流与背压控制</a><a rel="next" href="chapter-130.html">文件存储与对象存储 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>
