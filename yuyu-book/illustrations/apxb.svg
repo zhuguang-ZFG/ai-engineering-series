@@ -1,1 +1,11 @@
-<svg class="a-list" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path class="tick t1" d="M10.4 19.2l3.7 3.7q4.2-4.9 7.9-8.7" stroke-width="2.4" pathLength="100"/><path d="M29.4 20.2q12.5-.6 25-.2" opacity=".6" pathLength="100"/><path class="tick t2" d="M10.4 33.2l3.7 3.7q4.2-4.9 7.9-8.7" stroke-width="2.4" pathLength="100"/><path d="M29.4 34.2q12.5-.6 25-.2" opacity=".6" pathLength="100"/><path class="tick t3" d="M10.4 47.2l3.7 3.7q4.2-4.9 7.9-8.7" stroke-width="2.4" pathLength="100"/><path d="M29.4 48.2q7.5-.6 15-.2" opacity=".6" pathLength="100"/><circle cx="48.5" cy="48" r="1.1" fill="currentColor" stroke="none" opacity=".45"/></svg>
+<svg class="a-list" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+  <path class="tick t1" d="M9.8 18.5q2.8 1.6 4.5 4.4Q18.2 17 22.7 14" stroke-width="3" pathLength="100"/>
+  <path d="M29.4 20.2q8.7-1 15.7-.4l9.3.2" stroke-width="1.6" opacity=".7" pathLength="100"/>
+  <path class="tick t2" d="M10.3 32.4q2.4 2 4.2 4.8 3.4-5.6 7.7-9.3" stroke-width="2.8" pathLength="100"/>
+  <path d="M29.4 34.2q12.8-1.4 25-.2" stroke-width="1.7" opacity=".7" pathLength="100"/>
+  <path class="tick t3" d="M10 46.6q2.2 1.5 4.2 4.5Q17.7 46 22.6 42" stroke-width="3.1" pathLength="100"/>
+  <path d="M29.4 48.2q7.9-.9 15-.2" stroke-width="1.5" opacity=".65" pathLength="100"/>
+  <path d="M30.4 22.3q8.3-.7 13.7-.2m-13.4 14q7.3-.5 11.5.1" stroke-width=".7" opacity=".25" pathLength="100"/>
+  <path d="m49.2 44.5 3.9-2.5m-2.8 5.1 4.4-3" stroke-width=".8" opacity=".32" pathLength="100"/>
+  <circle cx="48.5" cy="48" r="1.1" fill="currentColor" stroke="none" opacity=".45"/>
+</svg>

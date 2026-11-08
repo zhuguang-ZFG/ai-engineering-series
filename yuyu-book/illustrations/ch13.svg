@@ -1,1 +1,19 @@
-<svg class="a-funnel" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="13" r="1.6" fill="currentColor" stroke="none"/><circle cx="7" cy="32" r="1.6" fill="currentColor" stroke="none"/><circle cx="7" cy="51" r="1.6" fill="currentColor" stroke="none"/><path d="M9 13.3q6-.4 12-.2 3.2.4 5 3.4" pathLength="100"/><path d="M9 32.3q8.5-.6 17-.2" pathLength="100"/><path d="M9 51.3q6-.4 12-.2 3.2-.4 5-3.4" pathLength="100"/><path d="M26 16.6q7.2 6.8 13.2 13.8" pathLength="100"/><path d="M26 47.4q7.2-6.8 13.2-13.8" pathLength="100"/><path d="M39.4 30.2q3.8-.2 7.4-.2" pathLength="100"/><path d="M39.4 33.8q3.8.2 7.4.2" pathLength="100"/><path d="M46.8 22.4h11.3q.3 10.7.1 21.4H46.9z" pathLength="100"/><path d="M49.5 34.2q4.8-.5 9.4-.2" opacity=".5" stroke-width="1.7" pathLength="100"/><circle class="drip" cx="43.2" cy="32" r="1.2" fill="currentColor" stroke="none" opacity=".55"/><path d="M58.7 26.4l3.6 3.6-3.6 3.6" pathLength="100"/><path d="M58.7 36.6l3.6 3.6-3.6 3.6" pathLength="100"/></svg>
+<svg class="a-funnel" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="7" cy="13" r="1.6" fill="currentColor" stroke="none"/>
+  <circle cx="7" cy="32" r="1.6" fill="currentColor" stroke="none"/>
+  <circle cx="7" cy="51" r="1.6" fill="currentColor" stroke="none"/>
+  <path d="M9 13q7-1 12.5.1l4.9 3.4" stroke-width="2" pathLength="100"/>
+  <path d="M9 32.3q9-1.1 17-.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M9 51q7 .9 12.5-.1l4.9-3.4" stroke-width="2" pathLength="100"/>
+  <path d="M26.4 16.5q5.1 8.2 12.7 13.7" stroke-width="2.7" pathLength="100"/>
+  <path d="M26.4 47.5q5.1-8.1 12.7-13.7" stroke-width="2.5" pathLength="100"/>
+  <path d="M39.1 30.2q4-.8 7.7-.2" stroke-width="1.8" pathLength="100"/>
+  <path d="M39.1 33.8q3.5.9 7.7.2" stroke-width="1.8" pathLength="100"/>
+  <path d="M46.8 22.4q6.2-.8 10.9.2.7 10.5.2 21.2l-11 .4q.8-11.8-.1-21.8Z" stroke-width="2.3" pathLength="100"/>
+  <path d="M49.4 34.2q4.8-1.1 9.2-.2" stroke-width="1.6" opacity=".6" pathLength="100"/>
+  <circle class="drip" cx="43.2" cy="32" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+  <path d="m58.7 26.4 3.1 3.6-3.1 3.6" stroke-width="1.8" pathLength="100"/>
+  <path d="m58.7 36.6 3.1 3.6-3.1 3.6" stroke-width="1.8" pathLength="100"/>
+  <path d="M26.4 16.5q5.1 8.2 12.7 13.7l-2.1.1q-6.5-4.5-10.6-13.8ZM46.8 24l2 1q.2 10.3-.4 18.7l-1.5.5q.7-12.7-.1-20.2Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="m28.5 23 3.6-2.3m-1.8 4.8 3.5-2.1M50.2 40l3.4-2m-1.7 4.5 3.6-2.2" stroke-width=".8" opacity=".32" pathLength="100"/>
+</svg>

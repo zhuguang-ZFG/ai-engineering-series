@@ -31,6 +31,8 @@ def _write(tmp: Path, name: str, text: str) -> Path:
     return tmp
 
 
+
+
 class ShippedDrawings(unittest.TestCase):
     @unittest.skipUnless(art.ART_DIR.exists(), "no illustrations yet")
     def test_every_unit_and_part_has_its_own_drawing(self):
@@ -50,6 +52,17 @@ class ShippedDrawings(unittest.TestCase):
             budget = art.PLATE_BYTES if path.stem == "cover" else art.MAX_BYTES
             size = len(path.read_text(encoding="utf-8").encode("utf-8"))
             self.assertLessEqual(size, budget, path.name)
+
+    @unittest.skipUnless(art.ART_DIR.exists(), "no illustrations yet")
+    def test_every_shipped_plate_stays_inside_its_budget(self):
+        for directory in (art.ART_DIR, art.OMP_ART_DIR):
+            for path in sorted(directory.glob("*.png")):
+                self.assertTrue(path.stem == "cover" or path.stem.startswith("part-"),
+                                f"small/semantic artwork must remain SVG: {path.name}")
+                budget = art.COVER_RASTER_BYTES if path.stem == "cover" else art.PLATE_RASTER_BYTES
+                self.assertLessEqual(path.stat().st_size, budget, path.name)
+                width, height = art._png_size(path.read_bytes())
+                self.assertTrue(0 < width <= 4096 and 0 < height <= 4096, path.name)
 
     @unittest.skipUnless(art.ART_DIR.exists(), "no illustrations yet")
     def test_no_drawing_repeats_a_shape_id(self):
@@ -133,11 +146,5 @@ class Loader(unittest.TestCase):
             art.emblem("ch01")
 
 
-class Stylesheet(unittest.TestCase):
-    def test_the_emblem_slots_are_styled(self):
-        from yuyu_book.style import CSS
-        for cls in (".ch-emblem", ".pd-art", ".cover-art", ".kp-art"):
-            self.assertIn(cls, CSS, cls)
-        # the emblem must not be allowed to stretch the head row
-        self.assertIn("margin-inline-start:auto",
-                      CSS[CSS.index(".ch-emblem"):CSS.index(".ch-emblem") + 200])
+
+

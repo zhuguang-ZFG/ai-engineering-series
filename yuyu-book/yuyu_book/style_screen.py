@@ -104,6 +104,7 @@ section.front-page{break-before:page}
   var(--bronze-2),transparent)}
 .cover-art{width:min(34rem,94%);display:block;margin:.5rem auto 1.6rem;
   color:var(--ink-2)}
+.cover-art img{width:100%;height:auto;display:block}
 .book-sub{font-family:var(--sans);font-size:.95rem;color:var(--ink-2);
   margin:0 0 1.8rem;letter-spacing:.1em}
 .book-epi{font-family:var(--kai);font-size:1.02rem;color:var(--bronze-3);
@@ -246,6 +247,7 @@ ul>li::before{content:"◆";position:absolute;left:-1.15em;top:0;
    currentColor, so dark mode and paper re-ink the drawing on their own. */
 .pd-art{width:min(13.5rem,62%);margin:0 auto 1.1rem;color:var(--bronze);opacity:.9}
 .pd-art svg{width:100%;height:auto;display:block}
+.pd-art img{width:100%;height:auto;display:block}
 .pd-no{font-family:var(--sans);letter-spacing:.5em;text-indent:.5em;
   color:var(--bronze);font-size:.85rem;margin:0 0 .5rem}
 .pd-title{font-size:clamp(2rem,5.5vw,2.7rem);margin:0;letter-spacing:.08em}
@@ -293,6 +295,10 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
   width:4.6rem;height:4.6rem;color:var(--bronze);opacity:.92}
 .ch-emblem svg{width:100%;height:100%;display:block}
 .appendix .ch-emblem{color:var(--cinnabar);opacity:.8}
+/* a generated plate is black ink on a transparent field, so dark mode flips it
+   the way a currentColor drawing re-inks itself; paper and print stay black */
+@media screen and (prefers-color-scheme:dark){
+  body:not(.force-light) .ink-plate{filter:invert(1)}}
 @media (max-width:44rem){.ch-emblem{width:3.2rem;height:3.2rem}}
 /* the ink draws itself as a unit scrolls into view. Triple-guarded so the
    drawing can never half-exist where motion cannot run: print/PDF (screen

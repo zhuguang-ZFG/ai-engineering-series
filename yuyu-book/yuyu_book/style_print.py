@@ -128,6 +128,7 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
      sheet and let it draw bigger than it does beside the sticky rail */
   .pd-inner{padding-top:1.6rem}
   .pd-art{width:min(15rem,58%);margin-bottom:.7rem}
+  .pd-art img{width:100%;height:auto;display:block}
   /* the card is a plate, so it moves as one: allowed to break, its last row
      overflowed the text block by a point and Chromium handed the chapter an
      extra sheet carrying nothing at all — the one thing the empty-page gate

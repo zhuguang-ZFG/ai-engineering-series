@@ -2,9 +2,9 @@
 hand-inked illustration the book ships.
 
 Every figure carries a plain-language caption so a reader who opens nothing
-else can still tell what each drawing says. The page is self-contained
-(inline SVG, no external assets) and replays the ink drawing with character
-loops — the same verbs the book itself ships, guarded the same way.
+else can still tell what each drawing says. The page is self-contained:
+animated SVG for small/semantic art, embedded tonal PNG for large plates.
+Motion preferences guard both stroke replay and whole-plate reveal.
 
 Regenerate after touching yuyu-book/illustrations/:
 
@@ -15,6 +15,7 @@ C-15 cinnabar) — see CREDITS.md and docs/illustration-prompts.md.
 """
 import json
 
+from .. import art
 from ..paths import BOOK_DIR, REPO_ROOT
 from . import tokens
 
@@ -156,19 +157,20 @@ PLAIN_EN = {
 }
 
 def main():
-    on_disk = {p.stem for p in ART.glob("*.svg")}
+    on_disk = {p.stem for p in ART.iterdir() if p.suffix in {".svg", ".png"}}
     if on_disk != set(ORDER):
         raise SystemExit(
             "the gallery and the drawing shelf disagree: "
             f"only in ORDER {sorted(set(ORDER) - on_disk)}, "
             f"never hung {sorted(on_disk - set(ORDER))}")
-    svgs = {n: (ART / f"{n}.svg").read_text(encoding="utf-8").strip()
-            for n in ORDER}
+    drawings = {name: (art.cover_plate() if name == "cover" else
+                       art.headpiece(name.removeprefix("part-")) if name in BIG else
+                       art.drawing(name)) for name in ORDER}
     cells = "".join(
         f'<figure class="c" data-name="{n}" tabindex="0" role="button"'
         f' aria-label="重播 {n}：{PLAIN[n]}"'
         f' style="width:{WIDTH[n]+18}px">'
-        f'<div class="art" style="width:{WIDTH[n]}px">{svgs[n]}</div>'
+        f'<div class="art" style="width:{WIDTH[n]}px">{drawings[n]}</div>'
         f'<figcaption>{n}</figcaption>'
         f'<div class="plain">{PLAIN[n]}</div>'
         f'<div class="plain-en">{PLAIN_EN[n]}</div></figure>'
@@ -184,7 +186,7 @@ def main():
 
 
 def build_page(grid_light: str, grid_dark: str) -> str:
-    # the dark sheet re-uses the same markup: currentColor re-inks everything
+    # The dark sheet uses currentColor for SVG and inverted black for PNG ink.
     return PAGE_HEAD + grid_light + PAGE_DARK_OPEN + grid_dark + PAGE_TAIL
 
 
@@ -197,7 +199,7 @@ PAGE_HEAD = """<!doctype html>
 @@FAVICON@@
 <title>御舆插图 · 看图说话 — 手绘逐笔回放</title>
 <meta property="og:title" content="御舆插图 · 看图说话">
-<meta property="og:description" content="@@PLATES@@ 幅手绘插图的中英双语题注画廊：点击任意一幅，看墨线逐笔重演。">
+<meta property="og:description" content="@@PLATES@@ 幅手绘插图的中英双语题注画廊：小图逐笔重演，大图保留生成笔触。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="cover.png">
 <style>
@@ -232,6 +234,9 @@ button:focus-visible,a:focus-visible{outline:2px solid #B4472F;outline-offset:3p
 .c .art svg{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .c:hover figcaption{color:#B4472F}
 .art svg{display:block;width:100%;height:auto}
+.art .ink-plate{display:block;width:100%;height:auto}
+.dark-wrap .ink-plate{filter:invert(1)}
+@media print{.dark-wrap .ink-plate{filter:none}}
 .art{max-width:100%}
 .dark-wrap{background:#1E1D18;margin:6px 28px 34px;
            border-radius:14px 8px 13px 9px/9px 13px 8px 14px;
@@ -393,6 +398,15 @@ function prep(svg, baseDelay, factor) {
 function playFigure(figure, baseDelay, factor) {
   if (motionPreference.matches) return 0;
   const svg = figure.querySelector("svg");
+  if (!svg) {
+    const image = figure.querySelector('.ink-plate');
+    if (!image) return 0;
+    image.getAnimations().forEach(animation => animation.cancel());
+    image.animate([{opacity:0,transform:'translateY(8px)'},
+                   {opacity:1,transform:'translateY(0)'}],
+                  {duration:650 * factor,delay:baseDelay,easing:'ease-out'});
+    return baseDelay + 650 * factor;
+  }
   const {jobs} = prep(svg, 0, 1);
   const cap = 4200, est = jobs.length ? jobs[jobs.length-1].at + 400 : 0;
   /* compress, never stretch: a long plate fits the cap by DIVIDING its
@@ -477,7 +491,7 @@ document.getElementById("speed").addEventListener("click", e => {
 function replayFigure(fig, cx, cy) {
   if (motionPreference.matches) return;
   burst(cx, cy);
-  fig.querySelector("svg").classList.add("alive");
+  fig.querySelector("svg")?.classList.add("alive");
   playFigure(fig, 0, SPEEDS[speedIdx] * 0.8);
 }
 document.querySelectorAll("figure.c").forEach(fig => {
