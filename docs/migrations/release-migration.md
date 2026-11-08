@@ -1,6 +1,6 @@
 # 发布迁移说明：从旧构建链到 bookctl
 
-> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准；`release.yml` 已在候选提交上真实运行（run 42397600190），但 `v*` 发布标签与 GitHub Release 仍未创建。本文把“已验证”和“待补证”分开写，不把本地绿灯当成远端发布。
+> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准。`v0.3.6` 已由 `release.yml` 的标签推送运行（run 42423483244）装配并发布为 GitHub Release；发布正文已改为可读 Markdown。本文把“已验证”和“待补证”分开写。
 
 ## 1. 范围
 
@@ -91,7 +91,6 @@ python yuyu-book/build.py --lang both --pdf
 
 ### 仍待补证
 
-- `v*` 发布标签与 GitHub Release；目前都不存在。
 - P3/P5 门禁的正式批准；`task_verify` 仍为 unverified。
 - 若书稿或版式变化，README 的 PDF 页数与 HTML 体积要按发布 CI 的 Noto 产物重钉，不能用本机字体数字替代。
 
@@ -153,4 +152,14 @@ Omp 分册由 347 页增至 432 页、体积由 37.8 MB 增至 61.3 MB，来自�
 
 `SHA256SUMS` 覆盖 3 份 HTML、3 份 PDF、3 份 EPUB，共 9 项，用 Python `hashlib` 逐项复核一致。本机 Git Bash 的 `sha256sum -c` 因 MSYS 文本模式误报全部失败；同一清单格式在 Linux CI 的 `Verify checksums` 步骤已通过，产物本身无差异。两次重建的 EPUB 摘要不同（`source_sha256` 相同），转换会写入运行时间元数据，故跨运行复核以结构和 EPUBCheck 为准，不要求字节相等。
 
-未完成项保持不变：P8.6 的 `v*` 标签与 GitHub Release 尚未创建；P3/P5 门禁仍待独立审阅；P6.4 的字幕与关键帧比较仍缺旧版 SRT 证据；`task_verify` 仍返回 `project-or-git-baseline-unavailable`、`checks=[]`。README 的 PDF 页数与 HTML 体积继续采用 CI Noto 口径，不用本机字体数字替代。
+未完成项（当时）：P8.6 的 `v*` 标签与 GitHub Release 在合并当日尚未创建（见下节发布结果）；P3/P5 门禁仍待独立审阅；P6.4 的字幕与关键帧比较仍缺旧版 SRT 证据；`task_verify` 仍返回 `project-or-git-baseline-unavailable`、`checks=[]`。README 的 PDF 页数与 HTML 体积继续采用 CI Noto 口径，不用本机字体数字替代。
+
+## 2026-11-08 v0.3.6 发布
+
+标签 `v0.3.6`（标签对象 `cbdbe0f`）指向提交 `4050c7c5a758c23aa3ae769609b83fde22d43630`；该提交的 Book CI（run 42420868596）与 Pages（run 42420868560）在打标签前已全绿。`release.yml` 由标签推送触发（run 42423483244，52m23s），完成 Full、断言检查、装配、`sha256sum --check` 与 `gh release create`，发布 15 个资产：三册 HTML/PDF/EPUB、`site.zip`、`video-manifest.json`、`release-notes.json`、`build-report.json`、`artifact-manifest.json` 与 `SHA256SUMS`。
+
+发布后逐一复核：14 个可直接下载的文件与 `SHA256SUMS` 摘要一致；`SHA256SUMS` 另含 239 条 `video-manifests/**` 路径，它们只存在于装配目录与站点包，不作为单独资产上传（`unpublished_all_video=true`）。PDF 为中文 520 页 / 28 书签 / 34.5 MB、英文 559 页 / 28 书签 / 23.5 MB、Omp 432 页 / 49 书签 / 72.0 MB；三份 EPUB 的 ZIP 与未压缩 `mimetype` 首项通过；`site.zip` 含 `index.html` 与 `book.html`；`build-report.json` 记录提交 `4050c7c`、状态 `passed`。
+
+流水线把 `release-notes.json`（机器可读 JSON）直接当作 `gh release create --notes-file`，首次发布的正文因此是 JSON。已在发布后用 `gh release edit --notes-file` 换成可读 Markdown；未修改 `release.py` 或 workflow，也未改动测试与政策。后续若要让正文自动可读，应单独审查该输出格式。
+
+README 的 CI PDF 体积曾写为 36.4 / 24.3 MB，而发布资产实测为 34.5 / 23.5 MB；页数 520 / 559 与 `check_artifact_claims.py` 的对账口径未变。两版 README 的 PDF 体积与本机 Windows 体积已按发布与本轮干净克隆实测回填。
