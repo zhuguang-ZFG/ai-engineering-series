@@ -27,7 +27,8 @@
 }
 </code></pre>
 <p>字段关系（数值仅示意，不是一次成功运行的证明）：<code>claim.text</code> 必须是 <code>quote</code> 的逐字连续子串，<code>quote</code> 必须是所引 chunk 的逐字连续片段；<code>answer</code> 只能由已核验 claim 原文组成，不能加额外句子。<code>version</code>/<code>sha256</code> 对应清单里的当前文档；<code>usage</code> 反映实际调用。<code>tokens</code> 或 <code>cost</code> 未知时写 <code>null</code>，不要填 0 冒充“免费”。</p>
-<p>回查方法：在清单找到 <code>doc_id</code> 的 <code>path</code>，用编辑器打开对应版本，搜索 <code>quote</code>。若搜不到，检查是否换了版本、是否跨了切块边界、是否被 Markdown 渲染改变了空白。空白差异可以规范化后比较，但不能把改写的句子当成原文。</p>
+<p>回查方法：在清单找到 <code>doc_id</code> 的 <code>path</code>，先核对原文件字节的 SHA-256。对 <code>source-extract/2</code>，用 UTF-8 去 BOM 解码，把 CRLF/CR 统一为 LF，以 Python 字符范围 <code>[quote_start:quote_end]</code> 切片；两边折叠空白后应相同，且引用范围应位于 chunk 的 <code>[start:end]</code> 内。重复引文取该 chunk 内第一次匹配，emoji 也按 Unicode 码点计数。</p>
+<p>默认 copy 和旧报告没有精确字段时，用编辑器在对应 chunk 搜索 <code>quote</code>。若搜不到，检查是否换了版本、是否跨了切块边界、是否被 Markdown 渲染改变了空白。空白差异可以规范化后比较，但不能把改写的句子当成原文；位置正确也不证明语义适用。</p>
 <h2 id="C13-answer-section-15b644dd57" tabindex="-1">2. 材料未覆盖</h2>
 <p>问题：“今天食堂几点开门？”示例文档没有食堂。预期之一：</p>
 <pre><code class="language-json">{&quot;status&quot;: &quot;insufficient-evidence&quot;, &quot;claims&quot;: [], &quot;diagnostics&quot;: {&quot;first_failure&quot;: &quot;no-supporting-chunk&quot;}}
@@ -77,4 +78,4 @@
 <li>□ 资源/许可记录写清楚，没有把“未运行”写成“已验证”。</li>
 </ul>
 <p>本章不提供模型权重或 API 密钥；缺少资源时，以上检查只能记录为待验。</p>
-</article><nav class="lesson-nav"><a href="c13.html">返回 C13 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c13.html">返回 C13 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -27,10 +27,10 @@
 </code></pre>
 <p>图中任何一步失败，都应停在对应状态，而不是继续生成一段“看起来完成了”的答案。</p>
 <h2 id="C17-section-9bbaac5c57" tabindex="-1">从仓库根目录跑通正常路径</h2>
-<p>先列出可见文档，确认你要用的材料 ID：</p>
+<p>先读取本章使用的 <code>equipment-guide</code>，在返回的 <code>doc</code> 中确认 ID、版本和哈希，在 <code>text</code> 中核对正文：</p>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect read \
   --docs book/llm/examples/assistant/documents.json \
-  --reader student
+  --reader student --doc equipment-guide
 </code></pre>
 <p>再检索一次，确认问题能命中：</p>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect retrieve \
@@ -69,7 +69,7 @@ python book/llm/examples/assistant/assistant.py run \
 <li>若发生工具调用，<code>tool_receipt_id</code> 与 <code>tool_receipts[].receipt_id</code> 对应；</li>
 <li>Markdown 与 JSON 的主张一致，没有 Markdown 多出无出处内容。</li>
 </ul>
-<p>如果交付的是只摘录证据的固定流程，显式使用 <code>--mode fixed --claim-mode extract</code>，并在说明里写清输出是引文组合。上面的 agent 示例继续使用默认 <code>copy</code>；<code>agent + extract</code> 当前不受支持，会返回 <code>invalid-request</code>，不能把这个错误算作模型能力下降。</p>
+<p>如果交付的是只摘录证据的固定流程，显式使用 <code>--mode fixed --claim-mode extract</code>，并在说明里写清输出是引文组合。新报告的 <code>config.claim_contract=source-extract/2</code> 与 <code>quote_start/quote_end</code> 让接手者能按 C15 的方式回查精确范围；默认 copy 和旧报告继续按 chunk 回查。上面的 agent 示例使用默认 <code>copy</code>；<code>agent + extract</code> 当前不受支持，会在读取资料或调用模型前返回 <code>invalid-request</code>。完整对照要保留该失败，单列为模式适用范围，不把它解释成模型能力下降。</p>
 <h2 id="C17-section-59441248e2" tabindex="-1">边界用例：六种结果都要能出现</h2>
 <p>K3 要求以下场景各有正确结果。用同一套助手，换材料/读者/问题/模型条件，保存每次 JSON：</p>
 <h3 id="C17-section-e941519d86" tabindex="-1">1. 正常有证据</h3>
@@ -158,4 +158,4 @@ python book/llm/examples/assistant/assistant.py run \
 <p>答案与核对依据见 <a href="c17-answer.html">C17 答案</a>。答案只给评分与排查依据，不提供一份可抄的“标准报告”。</p>
 <h2 id="C17-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>助手命令、报告字段与示例文档来自 <code>book/llm/examples/assistant/README.md</code>、<code>documents.json</code> 与 <code>--help</code>；实际模型输出、耗时、费用和可用性由你的环境决定。本章不声称任何模型或 API 已在本机成功运行，也不提供付费账号。PDF/图片输入不在本阶段承诺范围内；C27 才处理 OCR/视觉，并且同样需要合法模型与授权材料。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c16.html">上一章 C16</a><a href="c17-answer.html">独立作答后核对</a><a href="c18.html">下一章 C18</a></nav></article></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c16.html">上一章 C16</a><a href="c17-answer.html">独立作答后核对</a><a href="c18.html">下一章 C18</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

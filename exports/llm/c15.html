@@ -86,7 +86,8 @@
 </ol>
 <p>一个常见错误是“引用存在就算支持”。例如原文写“若当晚有维护施工，保留主电源”，答案写“闭馆时必须关闭主电源”，引用片段确实包含“主电源”，但结论与条件相反。引用检查要读完整条件，不是关键词匹配。</p>
 <p>还要区分两层：<code>quote</code> 必须是所引 chunk 的逐字连续片段，<code>claim.text</code> 必须是 <code>quote</code> 的逐字连续子串，<code>answer</code> 只能列出已核验的 claim 原文。改写、概括或把两个片段拼成一句，运行时会被判 <code>citation-failed</code>（paraphrase requires human verification）；这类文本只能交人工复核，不能算自动验证通过。</p>
-<p><code>copy</code> 与 <code>extract</code> 都不替你判断资料是否适用。后者让模型只选原文，再由程序形成主张；它能减少自由改写的风险，但模型仍可能选到旧规定、漏掉例外或忽略另一份冲突材料。<code>start/end</code> 是 chunk 的文档偏移，核对具体 quote 仍需回到该 chunk；不要把它写成 quote 的精确坐标。</p>
+<p><code>copy</code> 与 <code>extract</code> 都不替你判断资料是否适用。后者让模型只选原文，再由程序形成主张；它能减少自由改写的风险，但模型仍可能选到旧规定、漏掉例外或忽略另一份冲突材料。<code>start/end</code> 是 chunk 的文档偏移；<code>source-extract/2</code> 另给 <code>quote_start/quote_end</code>，取该 chunk 内第一个匹配。位置基于去 BOM、统一为 LF 后的文档 Unicode 字符，而哈希绑定原文件字节。</p>
+<p>核对抽取报告时，先检查文件哈希，再用相同方式解码和统一换行，以 <code>[quote_start:quote_end]</code> 切出引文。比较两边折叠空白后的文本是否相同，然后读这个范围前后的限制条件。匹配忽略连续空白的数量，不忽略大小写、标点或全角/半角；找到了精确位置，仍不能跳过上下文判断。旧 copy 报告没有精确字段时，继续通过 chunk 搜索原文。</p>
 <h2 id="C15-section-a7538c4e9f" tabindex="-1">无命中与低分：不要强行补一个答案</h2>
 <p>当查询没有任何片段超过阈值时，正确结果是“未找到/证据不足”，不是把分数最低的片段称为证据。助手可能返回 <code>insufficient-evidence</code>；此时你应该：</p>
 <ul>
@@ -128,4 +129,4 @@ notes/c15-comparison.md
 <p>答案与核对依据见 <a href="c15-answer.html">C15 答案</a>。</p>
 <h2 id="C15-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>检索器与报告字段来自助手 <code>inspect retrieve</code>/<code>run</code> 的实际接口；embedding 模型和文本模型均需本地合法目录，本书不预置权重，也不声称某个模型在你的资料上更优。词项检索是教学基线，不等于生产级 BM25；embedding 相似度也不等于事实支持。真实索引更新、并发删除、跨文档权限继承仍需在你的项目中验证。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c14.html">上一章 C14</a><a href="c15-answer.html">独立作答后核对</a><a href="c16.html">下一章 C16</a></nav></article></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c14.html">上一章 C14</a><a href="c15-answer.html">独立作答后核对</a><a href="c16.html">下一章 C16</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

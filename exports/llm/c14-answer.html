@@ -8,7 +8,8 @@
 <ul>
 <li>用文本编辑器保存可能改变换行符（CRLF/LF）或编码，摘要随之变化；</li>
 <li>哈希匹配只说明字节一致，不说明内容正确或有权使用；</li>
-<li>清单里的路径基准必须与读取程序一致。若程序以仓库根为基准，<code>path</code> 就写相对仓库根的路径；若以清单目录为基准，就写相对清单的路径。不要在不同程序里混用两种解释。</li>
+<li>本章程序和助手都以清单所在目录解析 <code>path</code>；<code>--root</code> 是额外的允许读取范围，不改变路径基准。</li>
+<li>助手自带清单允许省略摘要，本章盘点程序要求摘要必填。先按正文生成 <code>c14-data</code> 副本，再校验；五项通过后，只修改副本制造 <code>sha256-mismatch</code>，不要修改冻结评测所用的课程文档。</li>
 </ul>
 <h2 id="C14-answer-section-37cb2b6263" tabindex="-1">2. 切块设计</h2>
 <p>一个按标题/段落切块的示例规则：</p>
@@ -87,4 +88,4 @@ report[&quot;visible&quot;] = visible
 <li>□ 没有把“哈希一致”写成“内容已核实”。</li>
 </ul>
 <p>本章的哈希与切块程序只处理本地 UTF-8 文本/Markdown；PDF 页码、图片区域和 OCR 置信度在 C27 处理。</p>
-</article><nav class="lesson-nav"><a href="c14.html">返回 C14 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c14.html">返回 C14 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

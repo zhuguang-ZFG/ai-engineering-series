@@ -53,9 +53,9 @@ export ASSISTANT_API_KEY=&quot;...&quot;
 <p>先读文档清单：</p>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect read \
   --docs book/llm/examples/assistant/documents.json \
-  --reader student
+  --reader student --doc station-log
 </code></pre>
-<p>预期输出是文档的 <code>id</code>、<code>version</code>、<code>path</code>，以及当前读者可见的标记。不要把教师材料的存在当成学生可读；权限检查必须发生在读入内容之前，而不是回答完之后再遮盖。</p>
+<p>这条命令读取学生有权查看的 <code>station-log</code>。输出包含 <code>doc.doc_id</code>、<code>version</code>、<code>path</code>、<code>sha256</code>、<code>readers</code> 和正文 <code>text</code>；<code>--doc</code> 是必填的文档 ID，并非列出全部文档的命令。不要把教师材料的存在当成学生可读；权限检查必须发生在读入内容之前，而不是回答完之后再遮盖。</p>
 <h2 id="C13-section-b581ac89ef" tabindex="-1">报告里必须有的证据</h2>
 <p>一次 <code>run</code> 会写出 JSON 和 Markdown。JSON 至少包含：</p>
 <ul>
@@ -69,7 +69,9 @@ export ASSISTANT_API_KEY=&quot;...&quot;
 <p>如果模型输出了无法解析的结构，助手应记录 <code>invalid-response</code> 或 <code>citation-failed</code>，并保留首次原始响应；它不能悄悄改写成一段人工答案。如果模型目录不存在、配置缺失或加载失败，应得到 <code>model-unavailable</code>，而不是 <code>answered</code>。</p>
 <h2 id="C13-section-982e37a3f6" tabindex="-1">可选抽取模式：让模型选证据</h2>
 <p>前面的命令使用默认 <code>--claim-mode copy</code>：模型同时输出主张和引用，程序检查它们的逐字关系。若只需要原文摘录，可以在 <code>run</code> 后加上 <code>--mode fixed --claim-mode extract</code>。模型只返回 <code>status</code>、<code>claims[{chunk_id,quote}]</code> 和可选 <code>reason</code>，程序从已验证的 quote 生成主张与 answer；它不调用另一个模型代写答案。</p>
-<p>quote 按程序的空白规范化后必须为 2–300 个字符，并连续出现在命中片段中。报告仍用 <code>claims[].text</code> 和 <code>citations[]</code>；<code>start/end</code> 指向整个 chunk 在文档中的位置，目前没有 quote 独立起止字段。展示主张时会去掉引用开头的 Markdown 标题标记，引用原文仍保留。</p>
+<p>quote 按程序的空白规范化后必须为 2–300 个字符，并连续出现在命中片段中。报告仍用 <code>claims[].text</code> 和 <code>citations[]</code>；<code>start/end</code> 指向整个 chunk，抽取模式另外给出 <code>quote_start/quote_end</code>，对应引文在文档中的精确字符范围 <code>[起点, 终点)</code>。程序先按 UTF-8 去 BOM 并把 CRLF/CR 统一成 LF，再计 Unicode 字符；这不是字节位置，也不是浏览器 JavaScript 的 UTF-16 下标。</p>
+<p>同一 chunk 内出现多个相同引文时，取空白规范化后第一次匹配的位置。空白折叠只用于匹配，位置仍映射回折叠前的文档；例如原文 <code>风速\t4.2</code> 可以匹配模型的 <code>风速 4.2</code>，范围包含原来的制表符。<code>sha256</code> 仍计算原文件字节，回查前要先核对文件版本。展示主张时去掉开头的 Markdown 标题标记，引用 quote 与定位范围仍保留标题。</p>
+<p>这项附加合同在 <code>config.claim_contract</code> 标记为 <code>source-extract/2</code>，JSON 与 Markdown 都能查看位置。旧报告和默认 copy 不含这两个精确字段，不能把旧 <code>start/end</code> 当作新字段使用。</p>
 <p>这是一种证据摘录模式，不能据此判定选中的句子完整回答了问题。当前真实模型在风速题和冲突题上仍会失败，详见 <a href="../../book/llm/examples/assistant/BASELINE.md">冻结基线</a>。<code>extract</code> 只支持 fixed；与 agent 组合会返回 <code>invalid-request</code>。不要切换模式后仍把结果与另一种协议的历史报告混为一谈。</p>
 <h2 id="C13-section-d12b3e2594" tabindex="-1">完整操作：从空输出到一条可核对主张</h2>
 <p>在仓库根目录：</p>
@@ -125,4 +127,4 @@ notes/c13-resource.md
 <p>答案与核对依据见 <a href="c13-answer.html">C13 答案</a>。</p>
 <h2 id="C13-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>助手命令与字段来自本课程 <code>book/llm/examples/assistant/README.md</code> 的实际接口；模型输出、耗时、费用和可用性必须在你的机器上实测，本书不预填成功结果。模型权重/服务许可由使用者确认；没有合法模型或授权时，只能记录资源阻碍，不能回退为手工答案。真实模型的内部实现、训练数据和能力边界不由本课推断。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c12.html">上一章 C12</a><a href="c13-answer.html">独立作答后核对</a><a href="c14.html">下一章 C14</a></nav></article></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c12.html">上一章 C12</a><a href="c13-answer.html">独立作答后核对</a><a href="c14.html">下一章 C14</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,8 +1,8 @@
 # 大模型原理与应用：从入门到独立交付 · 课程规格
 
-> 当前主线为《大模型：从入门到精通》五阶段三十章，原书作为编程实践补充。最新完成/剩余范围见 [STATUS](../STATUS.md)，本批修订见 [迭代02](IMPLEMENTATION-02.md)。下文注明日期的历史证据保留；K1–K5 的未通过项不因技术试读版发布而关闭。
+> 当前主线为《大模型：从入门到精通》五阶段三十章，原书作为编程实践补充。最新完成/剩余范围见 [STATUS](../STATUS.md)，本批修订见 [迭代03](IMPLEMENTATION-03.md)。下文注明日期的历史证据保留；K1–K5 的未通过项不因技术试读版发布而关闭。
 
-规格版本：1.0 / 2026-11-07；实施试读版：1.1.0 / 2026-11-08。三十章、题答、真实示例与同源成品已经实现；完整能力门仍未通过。课程终点是有原理依据的独立应用交付。第 2–4、8–9 节为当前目标与约束；0.10–0.14 的补充契约和 T00–T16 状态保留为历史资产基线，不表示新版已完成。参考依据见 [REFERENCE-BOOKS.md](REFERENCE-BOOKS.md)，目录见 [CURRICULUM.md](CURRICULUM.md)，执行入口见 [PLAN.md](PLAN.md)。原“仅规划、尚未实施”的描述已被实际实施记录取代。
+规格版本：1.0 / 2026-11-07；实施试读版：1.1.1 / 2026-11-09。三十章、题答、真实示例与同源成品已经实现；完整能力门仍未通过。课程终点是有原理依据的独立应用交付。第 2–4、8–9 节为当前目标与约束；0.10–0.14 的补充契约和 T00–T16 状态保留为历史资产基线，不表示新版已完成。参考依据见 [REFERENCE-BOOKS.md](REFERENCE-BOOKS.md)，目录见 [CURRICULUM.md](CURRICULUM.md)，执行入口见 [PLAN.md](PLAN.md)。原“仅规划、尚未实施”的描述已被实际实施记录取代。
 
 状态：0.14.0 / T16 本地技术完成，新增生成、注意力和蒸馏三套各四步手绘分镜，登记 G49–G51，累计五十一图，并同步相邻讲解。契约及本轮证据见 [MECHANISM-STORIES.md](MECHANISM-STORIES.md)，发布与 CI 记录见 [PR #5](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/5)。已发布基线 0.13.0 / T15 经 [PR #4](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/4) 合并至 main，提交为 `5d6a40cc010430f94eb9207eebad6e00ef1008c3`，[该提交的 CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42379858549) 通过。T15 的本地书籍入口、手机长文中途回查、公式连读及四十八图的历史证据保留在 [READING-EXPERIENCE.md](READING-EXPERIENCE.md)；该版成品与绿色 CI 不作为 T16 已通过的证据。完整结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。本轮不新增具名模型实测；真实初学者、独立阅读器与读屏验收仍待完成。立项日期：2026-11-06。进度更新：2026-11-07。项目：`vibe-coding-101-course`。
 

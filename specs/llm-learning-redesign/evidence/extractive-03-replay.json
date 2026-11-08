@@ -1,0 +1,37 @@
+{
+  "kind": "revalidation-of-recorded-model-output",
+  "notNewInference": true,
+  "originalReportSha256": "d19f524d714445ee5d860becb32b3a38557e655a01f40d9a9e9894075f5e0fda",
+  "originalGeneratedAt": "2026-11-07T23:38:38+00:00",
+  "firstRawResponse": "{\n  \"status\": \"answered\",\n  \"claims\": [\n    {\n      \"chunk_id\": \"station-log@9cb29b8d5e1a#000\",\n      \"quote\": \"# 2026-10-03\\n风速 4.2 米每秒\"\n    }\n  ],\n  \"reason\": \"仅 insufficient 时填写\"\n}",
+  "claimContract": "source-extract/2",
+  "result": {
+    "status": "answered",
+    "answer": "2026-10-03 风速 4.2 米每秒",
+    "claims": [
+      {
+        "text": "2026-10-03 风速 4.2 米每秒",
+        "citations": [
+          {
+            "kind": "source",
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 0,
+            "end": 389,
+            "quote_start": 66,
+            "quote_end": 90,
+            "quote": "# 2026-10-03\n风速 4.2 米每秒"
+          }
+        ]
+      }
+    ],
+    "config": {
+      "claim_contract": "source-extract/2"
+    }
+  },
+  "readmeExample": "passed against identical document hashes",
+  "limitation": "Validates location mapping only; does not replace frozen model evaluation or human acceptance"
+}

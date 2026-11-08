@@ -33,7 +33,9 @@
 
 字段关系（数值仅示意，不是一次成功运行的证明）：`claim.text` 必须是 `quote` 的逐字连续子串，`quote` 必须是所引 chunk 的逐字连续片段；`answer` 只能由已核验 claim 原文组成，不能加额外句子。`version`/`sha256` 对应清单里的当前文档；`usage` 反映实际调用。`tokens` 或 `cost` 未知时写 `null`，不要填 0 冒充“免费”。
 
-回查方法：在清单找到 `doc_id` 的 `path`，用编辑器打开对应版本，搜索 `quote`。若搜不到，检查是否换了版本、是否跨了切块边界、是否被 Markdown 渲染改变了空白。空白差异可以规范化后比较，但不能把改写的句子当成原文。
+回查方法：在清单找到 `doc_id` 的 `path`，先核对原文件字节的 SHA-256。对 `source-extract/2`，用 UTF-8 去 BOM 解码，把 CRLF/CR 统一为 LF，以 Python 字符范围 `[quote_start:quote_end]` 切片；两边折叠空白后应相同，且引用范围应位于 chunk 的 `[start:end]` 内。重复引文取该 chunk 内第一次匹配，emoji 也按 Unicode 码点计数。
+
+默认 copy 和旧报告没有精确字段时，用编辑器在对应 chunk 搜索 `quote`。若搜不到，检查是否换了版本、是否跨了切块边界、是否被 Markdown 渲染改变了空白。空白差异可以规范化后比较，但不能把改写的句子当成原文；位置正确也不证明语义适用。
 
 ## 2. 材料未覆盖
 

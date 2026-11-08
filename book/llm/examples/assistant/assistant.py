@@ -50,6 +50,7 @@ DEFAULT_MAX_PROMPT_TOKENS = 3072
 DEFAULT_MAX_STEPS = 4
 DEFAULT_MAX_TOOL_CALLS = 2
 DEFAULT_API_TIMEOUT = 60.0
+EXTRACT_CONTRACT_VERSION = "source-extract/2"
 
 CONTENT_STATUSES = {"answered", "insufficient-evidence", "conflict", "ok"}
 STATUSES = (
@@ -100,6 +101,31 @@ def sha256_bytes(data: bytes) -> str:
 
 def normalize_text(value: str) -> str:
     return NORMALIZE_RE.sub(" ", value).strip()
+
+
+def find_quote_span(text: str, quote: str) -> tuple[int, int] | None:
+    """Map the first whitespace-normalized match back to text code points.
+
+    Offsets are half-open and refer to the supplied text, not its collapsed
+    representation. No case, punctuation or Unicode normalization is applied.
+    """
+    normalized_quote = normalize_text(quote)
+    if not normalized_quote:
+        return None
+    characters: list[str] = []
+    spans: list[tuple[int, int]] = []
+    previous_end = 0
+    for match in re.finditer(r"\S", text):
+        if characters and previous_end < match.start():
+            characters.append(" ")
+            spans.append((previous_end, match.start()))
+        characters.append(match.group())
+        spans.append((match.start(), match.end()))
+        previous_end = match.end()
+    position = "".join(characters).find(normalized_quote)
+    if position < 0:
+        return None
+    return spans[position][0], spans[position + len(normalized_quote) - 1][1]
 
 
 def render_number(value: Any) -> str:
@@ -398,7 +424,7 @@ def load_workspace(manifest_path: Path, reader: str, chunk_chars: int, overlap: 
                 "source",
                 {"doc_id": meta.doc_id, "path": meta.rel_path, "reason": f"utf-8 decode failed: {exc}"},
             )
-        # 统一换行，保证切块偏移、引用与哈希对应同一份规范化文本。
+        # 偏移基于去 BOM、统一换行后的文本；哈希仍绑定原文件字节。
         text = text.replace("\r\n", "\n").replace("\r", "\n")
         digest = sha256_bytes(data)
         if expected is not None and expected != digest:
@@ -1245,7 +1271,8 @@ def validate_extract_payload(
         if not (2 <= len(normalized_quote) <= 300):
             citation_errors.append(f"{prefix}: quote length must be 2-300 chars")
             continue
-        if normalized_quote not in normalize_text(chunk.text):
+        quote_span = find_quote_span(chunk.text, quote)
+        if quote_span is None:
             citation_errors.append(f"{prefix}: quote is not a verbatim span of {chunk_id!r}")
             continue
         display = re.sub(r"^#{1,6}\s+", "", normalized_quote).strip() or normalized_quote
@@ -1262,6 +1289,8 @@ def validate_extract_payload(
                         "sha256": chunk.sha256,
                         "start": chunk.start,
                         "end": chunk.end,
+                        "quote_start": chunk.start + quote_span[0],
+                        "quote_end": chunk.start + quote_span[1],
                         "quote": quote,
                     }
                 ],
@@ -1748,6 +1777,8 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
             "warnings": [],
         },
     }
+    if settings.claim_mode == "extract":
+        report["config"]["claim_contract"] = EXTRACT_CONTRACT_VERSION
 
     def finish() -> dict[str, Any]:
         report["usage"] = meter.summary(engine.provider, engine.priced)
@@ -1760,6 +1791,14 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
     try:
         if settings.mode not in {"fixed", "agent"}:
             raise AssistantFailure("invalid-request", "config", {"reason": "mode must be fixed or agent"})
+        if settings.claim_mode not in {"copy", "extract"}:
+            raise AssistantFailure("invalid-request", "config", {"reason": "claim_mode must be copy or extract"})
+        if settings.claim_mode == "extract" and settings.mode != "fixed":
+            raise AssistantFailure(
+                "invalid-request",
+                "config",
+                {"reason": "claim_mode=extract currently supports fixed mode only"},
+            )
         workspace = engine.workspace(settings.reader)
         report["documents"] = _doc_report(workspace)
         threshold = settings.threshold()
@@ -1790,14 +1829,6 @@ def run_pipeline(engine: AssistantEngine, settings: RunSettings) -> dict[str, An
             return finish()
 
         repair_state = {"used": 0}
-        if settings.claim_mode not in {"copy", "extract"}:
-            raise AssistantFailure("invalid-request", "config", {"reason": "claim_mode must be copy or extract"})
-        if settings.claim_mode == "extract" and settings.mode != "fixed":
-            raise AssistantFailure(
-                "invalid-request",
-                "config",
-                {"reason": "claim_mode=extract currently supports fixed mode only"},
-            )
         if settings.mode == "fixed":
             messages, used_hits, dropped, prompt_size, prompt_unit = trim_hits(
                 engine,
@@ -2288,6 +2319,11 @@ def render_report_markdown(report: Mapping[str, Any]) -> str:
                         f"   - `{citation.get('chunk_id')}`（{citation.get('doc_id')} v{citation.get('version')}，"
                         f"sha256 {str(citation.get('sha256'))[:12]}）：「{citation.get('quote')}」"
                     )
+                    if "quote_start" in citation and "quote_end" in citation:
+                        lines.append(
+                            f"     摘录位置：去 BOM、统一换行后的文档字符 "
+                            f"[{citation['quote_start']}, {citation['quote_end']})；重复引文取该片段内首次匹配。"
+                        )
                 else:
                     lines.append(f"   - 工具回执 `{citation.get('tool_receipt_id')}`")
         lines.append("")

@@ -1,0 +1,187 @@
+{
+  "date": "2026-11-09",
+  "scope": "Assistant CLI examples in C11-C30 bash blocks; argparse and allowed_tools syntax only. No shell variables expanded, model/resources loaded, or commands executed. This is not the full runtime chapter audit.",
+  "total": 36,
+  "results": [
+    {
+      "chapter": "C13",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C13",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C13",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C13",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C14",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C15",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C15",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C16",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C16",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C16",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C17",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C17",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C17",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C18",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C18",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C18",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C18",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C19",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C19",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C19",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C19",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "serve",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "inspect",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C20",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C21",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C21",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C21",
+      "command": "run",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C22",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C22",
+      "command": "evaluate",
+      "result": "parsed"
+    },
+    {
+      "chapter": "C29",
+      "command": "serve",
+      "result": "parsed"
+    }
+  ]
+}

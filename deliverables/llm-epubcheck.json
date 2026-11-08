@@ -1,7 +1,7 @@
 {
   "checker": "EPUBCheck",
   "version": "5.3.0",
-  "epubSha256": "31e84cbce16f4f5b5991a897db06a98b6f00f77df5e6be6742649189fc3bc174",
+  "epubSha256": "e350968674393acdc9450ed462cabd001c647e528662d3d1e25dcd2626b614d2",
   "status": "passed",
   "fatals": 0,
   "errors": 0,

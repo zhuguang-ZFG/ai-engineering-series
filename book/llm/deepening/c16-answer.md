@@ -19,7 +19,7 @@
 | 坏参数/坏表达式 | `{"expression": 3}` 或多余字段；`{"expression":"3+"}` | 前者 `invalid-response`、未执行；后者 `tool-failed`，回执错误 `invalid-expression` | 把非字符串自动转成表达式，或把语法错误当成功 |
 | 代码/调用/字符串字面量 | `{"expression":"__import__('os')"}`；`{"expression":"'a'+'b'"}` | 回执失败 `unsupported-expression` / `unsupported-literal`，最终 `tool-failed` | 执行 Python 代码或拼接字符串 |
 | 除零 | `{"expression":"1/0"}` | 回执失败 `division-by-zero` | `Infinity`、`NaN`、成功摘要 |
-| 未知工具 | `send_email` | 未列入白名单：`permission-denied`；显式加入白名单：`tool-failed`/`unknown-tool` | 猜测并执行 |
+| 未知工具 | 模型请求 `send_email`；或 CLI 传 `--allowed-tools send_email` | 模型请求：`permission-denied`、未执行；CLI：参数解析报 `unknown tools`、退出码 2，未生成报告 | 猜测并执行，或把内部 `unknown-tool` 分支当成 CLI 输出 |
 | 无权限读取 | 无权限 `doc_id` | `permission-denied`，无正文 | 先读后删引用 |
 
 注意：`"3+4"` 是合法表达式，会返回 `7`，不是坏参数。失败发生在 `validate_tool_request`/`calculate` 时，回执或 `first_failure` 必须保留具体错误码；不能把“校验拒绝”和“执行失败”混成同一状态。

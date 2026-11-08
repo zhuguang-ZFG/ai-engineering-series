@@ -1,5 +1,7 @@
 # 真实助手冻结评测基线（K3/K4 证据）
 
+本文件保留首次基线、提示词对照和早期七题抽取试验的历史结果。精确位置扩展后的完整八题 copy/extract 对照见 [EVALUATION-03.md](EVALUATION-03.md)，不覆盖或重算下文旧结果。
+
 日期：2026-11-08。模型：本地 `Qwen/Qwen2.5-1.5B-Instruct`，revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`，CPU，`local_files_only=True`。清单：[eval-manifest.json](eval-manifest.json)，sha256 `5255ec38…b805fd`，调用前后未变。用例、预算与阈值均来自该文件；未改测试或 runner，本文件不是 CI 基线。
 
 ## 结果（8 例，4 通过 / 4 失败）

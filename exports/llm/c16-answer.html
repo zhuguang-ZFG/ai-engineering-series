@@ -66,9 +66,9 @@
 </tr>
 <tr>
 <td>未知工具</td>
-<td><code>send_email</code></td>
-<td>未列入白名单：<code>permission-denied</code>；显式加入白名单：<code>tool-failed</code>/<code>unknown-tool</code></td>
-<td>猜测并执行</td>
+<td>模型请求 <code>send_email</code>；或 CLI 传 <code>--allowed-tools send_email</code></td>
+<td>模型请求：<code>permission-denied</code>、未执行；CLI：参数解析报 <code>unknown tools</code>、退出码 2，未生成报告</td>
+<td>猜测并执行，或把内部 <code>unknown-tool</code> 分支当成 CLI 输出</td>
 </tr>
 <tr>
 <td>无权限读取</td>
@@ -145,4 +145,4 @@
 <li>□ 写操作有人工确认、权限、幂等和回滚设计；</li>
 <li>□ 没有把固定流程称为 Agent，也没有把模型“说要调用”当成已执行。</li>
 </ul>
-</article><nav class="lesson-nav"><a href="c16.html">返回 C16 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c16.html">返回 C16 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
