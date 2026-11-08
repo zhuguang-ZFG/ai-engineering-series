@@ -16,8 +16,10 @@ run of this scanner ranked the book on a false signal (see REVIEW O-06):
     python design/system/scan_deai.py --selftest
     python design/system/scan_deai.py --top 15
     python design/system/scan_deai.py --export design/system/_sites.md
+    python design/system/scan_deai.py --corpus 'videos/landscape/assets/voice/*.txt' --sites
 """
 import argparse
+import glob
 import re
 import statistics
 import sys
@@ -124,6 +126,38 @@ def ornament_emoji(line):
             and ORNAMENT.match(c) and not SEMANTIC_EMOJI.match(c)]
 
 
+def measure(title, prose, start, end):
+    counts = {k: 0 for k in KEYS}
+    sites = []
+    for ln, s in prose:
+        ln += start - 1                        # preserve line numbers in the source file
+        for _, content in rhetorical_bold(s):
+            counts["D2-句中随手强调"] += 1
+            sites.append((ln, "D2-句中随手强调", f"**{content}**", s))
+        for _, c in ornament_emoji(s):
+            counts["D1-装饰表情"] += 1
+            sites.append((ln, "D1-装饰表情", c, s))
+    for k, pats in PATTERNS.items():
+        for ln, s in prose:
+            for p in pats:
+                for m in re.finditer(p, s):
+                    counts[k] += 1
+                    sites.append((ln + start - 1, k, m.group(0), s))
+    joined = " ".join(s for _, s in prose)
+    chars = len(re.findall(r"[一-鿿]", joined))
+    lens = [len(x) for _, s in prose for x in sentences(s)]
+    sd = statistics.pstdev(lens) if len(lens) > 2 else 0.0
+    per1k = lambda n: round(1000.0 * n / chars, 2) if chars else 0.0  # noqa: E731
+    return {
+        "title": title, "start": start, "end": end, "chars": chars,
+        "total": sum(counts.values()),
+        "defects_per_1k": per1k(sum(counts.values())),
+        "conj_per_1k": per1k(len(re.findall(CONJ, joined))),
+        "mood_per_1k": per1k(len(re.findall(MOOD, joined))),
+        "sd": round(sd, 2), "sents": len(lens), "sites": sites, **counts,
+    }
+
+
 def scan(text):
     rows = []
     for title, start, end in section_map(text):
@@ -131,37 +165,9 @@ def scan(text):
         prose = list(prose_lines("\n".join(body)))
         if len(prose) < 12:
             continue
-        joined = " ".join(s for _, s in prose)
-        chars = len(re.findall(r"[一-鿿]", joined))
-        if chars < 600:
+        if len(re.findall(r"[一-鿿]", " ".join(s for _, s in prose))) < 600:
             continue
-        counts = {k: 0 for k in KEYS}
-        sites = []
-        for ln, s in prose:
-            ln += start - 1                        # sites must carry book.md line numbers
-            for _, content in rhetorical_bold(s):
-                counts["D2-句中随手强调"] += 1
-                sites.append((ln, "D2-句中随手强调", f"**{content}**", s))
-            for _, c in ornament_emoji(s):
-                counts["D1-装饰表情"] += 1
-                sites.append((ln, "D1-装饰表情", c, s))
-        for k, pats in PATTERNS.items():
-            for ln, s in prose:
-                for p in pats:
-                    for m in re.finditer(p, s):
-                        counts[k] += 1
-                        sites.append((ln + start - 1, k, m.group(0), s))
-        lens = [len(x) for _, s in prose for x in sentences(s)]
-        sd = statistics.pstdev(lens) if len(lens) > 2 else 0.0
-        per1k = lambda n: round(1000.0 * n / chars, 2)  # noqa: E731
-        rows.append({
-            "title": title, "start": start, "end": end, "chars": chars,
-            "total": sum(counts.values()),
-            "defects_per_1k": per1k(sum(counts.values())),
-            "conj_per_1k": per1k(len(re.findall(CONJ, joined))),
-            "mood_per_1k": per1k(len(re.findall(MOOD, joined))),
-            "sd": round(sd, 2), "sents": len(lens), "sites": sites, **counts,
-        })
+        rows.append(measure(title, prose, start, end))
     return rows
 
 
@@ -184,37 +190,71 @@ def export(rows, path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--top", type=int, default=20)
-    ap.add_argument("--sort", default="defects_per_1k")
+    ap.add_argument("--sort", default="defects_per_1k",
+                    choices=["defects_per_1k", "total", "chars", "conj_per_1k",
+                             "mood_per_1k", "sd", "sents", *KEYS])
     ap.add_argument("--export", metavar="PATH")
     ap.add_argument("--selftest", action="store_true", help="prove the scanner fires on a loaded sample")
+    ap.add_argument("--corpus", metavar="GLOB",
+                    help="measure a small corpus instead of the book (one file = one row, "
+                         "no size gate); used for narration scripts")
+    ap.add_argument("--sites", action="store_true", help="list every matched site with its source")
     args = ap.parse_args()
 
     if args.selftest:
         sys.exit(selftest())
+    if args.top < 0:
+        ap.error("--top must be zero or greater")
 
-    text = BOOK.read_text(encoding="utf-8")
-    rows = scan(text)
-    if not rows:
-        sys.exit("scan_deai: no sections met the minimum prose size")
+    if args.corpus:
+        rows = []
+        paths = sorted({Path(path) for path in glob.glob(args.corpus, recursive=True)
+                        if Path(path).is_file()})
+        for path in paths:
+            try:
+                body = path.read_text(encoding="utf-8-sig")
+            except (OSError, UnicodeError) as error:
+                ap.error(f"cannot read {path}: {error}")
+            n = len(body.split("\n"))
+            rows.append(measure(path.as_posix(), list(prose_lines(body)), 1, n))
+        if not rows:
+            ap.error(f"--corpus matched no files for {args.corpus}")
+    else:
+        text = BOOK.read_text(encoding="utf-8")
+        rows = scan(text)
+        if not rows:
+            sys.exit("scan_deai: no sections met the minimum prose size")
+        print(f"sections measured: {len(rows)}  (prose >=600 汉字, >=12 行)")
 
     rows.sort(key=lambda r: r[args.sort], reverse=True)
-    print(f"sections measured: {len(rows)}  (prose >=600 汉字, >=12 行)")
     print(HEADER)
     for r in rows[:args.top]:
         print(f"{r['defects_per_1k']:>7} {r['A-铺垫对比']:>5} {r['C-AI高频词']:>5} {r['D1-装饰表情']:>6} "
               f"{r['D2-句中随手强调']:>6} {r['E-客服腔']:>5} {r['F-中文套话']:>5} {r['conj_per_1k']:>7} "
-              f"{r['mood_per_1k']:>7} {r['sd']:>5}  {r['title'][:40]}")
+              f"{r['mood_per_1k']:>7} {r['sd']:>5}  {r['title']}")
+    if args.sites:
+        print("\n--- sites ---")
+        for r in rows:
+            for ln, kind, hit in sorted(set((ln, k, h) for ln, k, h, _ in r["sites"])):
+                print(f"{r['title']}:{ln} {kind} {hit}")
+    report(rows)
+    if args.export:
+        export(rows, args.export)
 
+
+def report(rows):
+    if not rows:
+        print("\n汇总：没有可测文本")
+        return
     tot = lambda k: sum(r[k] for r in rows)  # noqa: E731
     chars = tot("chars")
-    print(f"\n全书汇总：{chars:,} 汉字，缺陷 {sum(r['total'] for r in rows):,} 处")
+    print(f"\n汇总：{chars:,} 汉字，缺陷 {sum(r['total'] for r in rows):,} 处")
     for k in KEYS:
-        print(f"  {k:<12} {tot(k):>6} 处  ({1000.0 * tot(k) / chars:.2f}/1k)")
+        density = 1000.0 * tot(k) / chars if chars else 0.0
+        print(f"  {k:<12} {tot(k):>6} 处  ({density:.2f}/1k)")
     print(f"  连词密度   均值 {sum(r['conj_per_1k'] for r in rows) / len(rows):.2f}/1k，人写 13、AI 36")
     print(f"  语气词密度 均值 {sum(r['mood_per_1k'] for r in rows) / len(rows):.2f}/1k，人写 16、AI 3")
     print(f"  句长 SD   均值 {sum(r['sd'] for r in rows) / len(rows):.2f}，人写 15.15、AI 12.84")
-    if args.export:
-        export(rows, args.export)
 
 
 def selftest():

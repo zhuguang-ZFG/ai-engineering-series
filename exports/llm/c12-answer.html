@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C12 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C12-answer-section-8a174f4b2e" tabindex="-1">C12 答案与核对依据</h1>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C12 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C12-answer-section-8a174f4b2e" tabindex="-1">C12 答案与核对依据</h1>
 <h2 id="C12-answer-section-abcf029621" tabindex="-1">1. <code>/health</code>、<code>/echo</code>、<code>/admin</code></h2>
 <p>启动服务端后：</p>
 <pre><code class="language-bash">curl -i http://127.0.0.1:8765/health
@@ -59,4 +59,4 @@ if not isinstance(request_id, str) or not (1 &lt;= len(request_id) &lt;= 40):
 <li>幂等键在重试时保持不变，服务端有去重逻辑。</li>
 </ul>
 <p>本章只验证本地回环服务；真实模型 API 的鉴权、状态码和计费字段仍需按服务方当前文档核对。</p>
-</article><nav class="lesson-nav"><a href="c12.html">返回 C12 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c12.html">返回 C12 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "npm run check:book && npm run test:llm && npm run check:fixtures:llm && npm run check:llm && npm run check:books:llm && npm run validate",
+    "test": "npm run test:editorial && npm run check:book && npm run test:llm && npm run check:fixtures:llm && npm run check:llm && npm run check:books:llm && npm run validate",
+    "test:editorial": "python -m unittest discover -s design/system -p test_*.py && python -m unittest discover -s scripts -p test_*.py",
     "validate": "node scripts/llm/media-manifest.mjs && node scripts/validate.mjs",
     "build:llm": "node scripts/llm/build-learning-figures.mjs && node scripts/llm/build-application-figures.mjs && node scripts/llm/build-story-figures.mjs && node scripts/llm/build-mechanism-figures.mjs && node scripts/build-llm.mjs && node scripts/llm/build-media.mjs && npm run build:book",
     "check:llm": "node scripts/llm/build-learning-figures.mjs --check && node scripts/llm/build-application-figures.mjs --check && node scripts/llm/build-story-figures.mjs --check && node scripts/llm/build-mechanism-figures.mjs --check && node scripts/build-llm.mjs --check && node scripts/llm/build-media.mjs --check && node scripts/validate-llm.mjs",

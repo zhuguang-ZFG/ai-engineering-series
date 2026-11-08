@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C26 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C26-answer-section-3be20d95ae" tabindex="-1">C26 答案与核算：蒸馏学到的是什么</h1>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C26 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C26-answer-section-3be20d95ae" tabindex="-1">C26 答案与核算：蒸馏学到的是什么</h1>
 <h2 id="C26-answer-section-aaea9b1de9" tabindex="-1">1. 两个温度的 softmax</h2>
 <p>教师分数 <code>[3,2,0]</code>。</p>
 <p><code>T=1</code>：</p>
@@ -138,4 +138,4 @@ softmax 后水的概率 ≈ 32.03%
 <p><strong>第 4 题（错误教师）</strong>：公式 <code>αT(q-p)+(1-α)(q-y)</code>；方向是 <code>KL(p||q)</code>；默认 <code>α=.7,T=2,lr=.4</code>；水概率从 33.33% 降到约 32.03%；解释软信号压过硬标签。不能把教师错误当成事实，也不能把 25.95% 当成“杯中有茶”的概率。</p>
 <p><strong>第 5 题（单变量）</strong>：只改一个因素。例：去掉 <code>masked_fill</code> 后 <code>future_invisibility.bitwise_equal=false</code>；或把 LoRA rank 从 4 改 8，可训练参数从 6,600 变 13,200；或改温度，看分布变化。必须记录改动前后字段、命令和条件；说明这个实验不能证明什么。</p>
 <p>阶段门要求的是可复核证据，不是“看起来完成了”。没有真实运行的地方写“未验证”，不要用文字补成已完成。</p>
-</article><nav class="lesson-nav"><a href="c26.html">返回 C26 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c26.html">返回 C26 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

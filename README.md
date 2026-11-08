@@ -1,28 +1,28 @@
-# Vibe Coding 101
+# 大模型：从入门到精通
 
-> 不会写代码，也能从一句需求出发，做出第一个可用作品。
+从零基础开始，学会使用、理解原理、实现应用、评测与训练，最后独立交付一个可核验的大模型项目。
 
-双击根目录的 [开始阅读.html](开始阅读.html)，进入原《Vibe Coding 101》的 [Stage 1–3 与完整附录](exports/book/index.html)。网页逐章显示原稿，支持离线阅读、章内目录与跨章跳转；权威正文仍是 [book/book.md](book/book.md)。
+打开 [开始阅读.html](开始阅读.html)，进入[五阶段三十章](exports/llm/course.html)。从 [C01](exports/llm/c01.html) 跟做，或按先修关系查阅章节；正文、分离答案和纸上实验均可离线阅读。
 
-本轮在原章节内修正排错、包管理、数据库索引、编码和部署讲解，补充注意力与训练算例，并重绘六张原书流程图。具体范围与检查结果见 [原书修订验收](specs/original-book-review.md)。
+| 阶段 | 核心能力 | 可核验成果 |
+| --- | --- | --- |
+| S1 会使用 · C01–C04 | 任务约定、提示、原文核验、缺失与冲突 | 带来源的资料报告 |
+| S2 懂原理 · C05–C10 | 分词、向量、注意力、Transformer、梯度与对齐 | 完整手算与修改条件后的解释 |
+| S3 能实现 · C11–C17 | Python/HTTP、真实模型、检索、引用与工具 | 可运行的资料助手与失败诊断 |
+| S4 会改进 · C18–C26 | 冻结评测、对照实验、小 decoder、SFT/LoRA/蒸馏 | 质量与开销报告、训练和重载证据 |
+| S5 独立交付 · C27–C30 | OCR、方案选择、环境与回退、陌生项目 | 可由另一人复做的交付包 |
 
-本轮继续优化了 8 张原书手绘图，统一为 3:4 画幅，并补充需求验证与 JTBD 练习。[查看手绘图集](design/handdraw/book-figures.html) · [本轮改进记录](specs/original-book-illustration-02.md)。阅读页中的手绘图可以直接点开查看原尺寸。
+这里的“精通”以能解释、实现、评测和维护为目标。三十章已有正文和程序，但真实助手质量、独立交付与真人教学尚有缺项；[剩余项台账](specs/STATUS.md)逐项记录，不以 CI 通过代替能力验收。[当前计划](specs/PLAN.md)是维护入口。
 
-最新一轮已整理七章讲解、修正 MCP 配置说明，并改善章节目录、标题层级和手机提示词换行。[当前计划](specs/PLAN.md) · [阅读改进与验收](specs/original-book-readability-03.md)。
-
-![课程封面](book/assets/cover.webp)
-
-本仓库汇集一套面向零基础学习者的 Vibe Coding 课程交付物：完整中文书籍、横版课程视频、竖版短视频，以及可继续编辑的 HyperFrames 源码。
-
-大模型原理的[手绘实验](exports/llm/index.html)、[十二课 PDF](deliverables/llm-explained-handdraw.pdf) / [EPUB](deliverables/llm-explained-handdraw.epub)，以及已有三十章专题资料保留为配套材料。
+原《Vibe Coding 101》的 [195 章编程实践与附录](exports/book/index.html)保留为补充学习。原书阅读与插图的已发布改动见[修订记录](specs/original-book-review.md)、[手绘图集](design/handdraw/book-figures.html)和[阅读改进](specs/original-book-readability-03.md)。
 
 ## 内容
 
 | 内容 | 文件 |
 | --- | --- |
-| 原《Vibe Coding 101》· Stage 1–3 与附录 | [开始阅读](开始阅读.html) · [网页目录](exports/book/index.html) · [原稿](book/book.md) |
-| 配套专题：五阶段三十章 | [学习路线](exports/llm/course.html) · [正文 PDF](deliverables/llm-course.pdf) · [正文 EPUB](deliverables/llm-course.epub) |
+| 主课程：大模型五阶段三十章 | [学习路线](exports/llm/course.html) · [正文 PDF](deliverables/llm-course.pdf) · [正文 EPUB](deliverables/llm-course.epub) |
 | 分离作业核对依据 | [答案 PDF](deliverables/llm-course-answers.pdf) · [答案 EPUB](deliverables/llm-course-answers.epub) |
+| 补充：Vibe Coding 编程实践 · Stage 1–3 与附录 | [网页目录](exports/book/index.html) · [原稿](book/book.md) |
 | 可运行 Python 实例 | [资料助手](book/llm/examples/assistant/README.md) · [微型 decoder/SFT/LoRA](book/llm/examples/tiny_decoder/README.md) · [OCR](book/llm/examples/ocr/README.md) |
 | 大模型原理与应用 · 十二课试读 | [`exports/llm/index.html`](exports/llm/index.html) |
 | 手绘课程 PDF · A5 排版 | [`llm-explained-handdraw.pdf`](deliverables/llm-explained-handdraw.pdf) |
