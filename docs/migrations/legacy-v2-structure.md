@@ -176,3 +176,19 @@ unchecked until this review and integration are complete.
   the rendered Chinese opening and English layout without horizontal page overflow.
 - `task_verify(action=run)`: unverified, `project-or-git-baseline-unavailable`, `checks=[]`.
 
+## 2026-11-08 现状复核
+
+上面「Isolated provenance candidate — review required」与「Required next decision」两节是
+2026-11-07 的候选状态记录。`v0.3.6` 发布后前提已变，按 `origin/main`（`ffabfde`）复核：
+
+- `6d4e3c0475d28d2ebb7630518a2f6721c9a01620` 已是 `origin/main` 的祖先，P5 内容、账本实现
+  与运行案例都在主分支上。
+- `docs/baseline/legacy-v2-deltas.json` 的 34 条规则全部带真实提交 SHA，没有
+  `working tree (P5…)` 这类占位说明；加载器仍拒绝不存在的提交
+  （`tests/test_compare_legacy.py::test_provenance_must_name_an_existing_commit`）。
+- 规则中没有 `kind` 取精确值的形式，数字增量边界校验留在 CLI 读取侧。
+- `tests/test_compare_legacy.py` 23 项全绿。
+- `claims.validate(..., release=True)` 在 `ffabfde` 上返回 0 条告警（6 条 claim）。
+
+这些是「来源字段可用」的现行证据，不是审阅结论：P3 Gate 与 P5 Gate 仍未勾选，测试与政策
+变更的独立审阅仍由维护者完成。
