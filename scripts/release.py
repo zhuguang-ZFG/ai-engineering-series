@@ -25,6 +25,41 @@ def checksum_lines(staged: Path) -> str:
                    for path in sorted(staged.rglob("*")) if path.is_file())
 
 
+def release_notes_markdown(version: str, entry: dict) -> str:
+    """Readable release body: dated heading and bilingual revision bullets.
+
+    ``gh release create --notes-file`` renders this file as Markdown, so the
+    body has to be prose; the machine-readable ledger stays in
+    ``release-notes.json``.
+    """
+    date = str(entry.get("date") or "").strip()
+    heading = f"# 御舆 v{version}" + (f"（{date}）" if date else "")
+    lines = [heading]
+    for language, title in (("zh", "内容修订"), ("en", "Content changes")):
+        bullets = [" ".join(str(item).splitlines()).strip()
+                   for item in entry.get(language) or []]
+        bullets = [bullet for bullet in bullets if bullet]
+        if not bullets:
+            continue
+        lines += ["", f"## {title}", ""]
+        lines += [f"- {bullet}" for bullet in bullets]
+    lines += ["", "## 校验方式", "", "```bash",
+              "sha256sum --check SHA256SUMS", "```", "",
+              "迁移说明见 `docs/migrations/release-migration.md`。", ""]
+    return "\n".join(lines)
+
+
+def write_release_notes(staged: Path, version: str, revisions: dict) -> Path:
+    """Write the JSON ledger excerpt and the Markdown body the release uses."""
+    entry = revisions["entries"][0]
+    (staged / "release-notes.json").write_text(
+        json.dumps({"version": version, "entries": revisions["entries"][:1]},
+                   ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    markdown = staged / "release-notes.md"
+    markdown.write_text(release_notes_markdown(version, entry), encoding="utf-8")
+    return markdown
+
+
 def assemble(version: str, destination=None, *, epub=False) -> int:
     manifest = json.loads((ROOT / "yuyu-book/manifest.json").read_text(encoding="utf-8"))
     if version != manifest["version"]:
@@ -93,7 +128,7 @@ def assemble(version: str, destination=None, *, epub=False) -> int:
                 videos.append(json.loads((destination_dir / "manifest.json").read_text(encoding="utf-8")))
             (staged / "video-manifest.json").write_text(json.dumps({"schema_version": 1, "version": version, "chapters": videos}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             revisions = json.loads((ROOT / "yuyu-book/revisions.json").read_text(encoding="utf-8"))
-            (staged / "release-notes.json").write_text(json.dumps({"version": version, "entries": revisions["entries"][:1]}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            write_release_notes(staged, version, revisions)
             for step in measurements:
                 step["command"] = [part.replace(str(staged), ".") for part in step["command"]]
             files = [path for path in staged.rglob("*") if path.is_file()]

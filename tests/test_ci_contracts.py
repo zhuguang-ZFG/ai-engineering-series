@@ -105,6 +105,19 @@ class ReleaseWorkflow(unittest.TestCase):
         self.assertTrue(any("sha256sum --check SHA256SUMS" in command
                             for command in commands))
 
+    def test_release_body_is_published_from_markdown_notes(self):
+        job = load("release.yml")["jobs"]["release"]
+        publish = [step["run"] for step in job["steps"]
+                   if "gh release create" in step.get("run", "")]
+        self.assertEqual(len(publish), 1)
+        command = publish[0]
+        self.assertIn('--notes-file "$RELEASE_DESTINATION/release-notes.md"',
+                      command)
+        self.assertNotIn('--notes-file "$RELEASE_DESTINATION/release-notes.json"',
+                         command)
+        self.assertIn('"$RELEASE_DESTINATION"/*.md', command)
+        self.assertIn('"$RELEASE_DESTINATION"/*.json', command)
+
     def test_shared_setup_action_is_a_composite_with_both_toolchains(self):
         action = yaml.safe_load(
             (ROOT / ".github/actions/book-setup/action.yml")

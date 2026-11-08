@@ -1,6 +1,6 @@
 # 发布迁移说明：从旧构建链到 bookctl
 
-> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准。`v0.3.6` 已由 `release.yml` 的标签推送运行（run 42423483244）装配并发布为 GitHub Release；发布正文已改为可读 Markdown。本文把“已验证”和“待补证”分开写。
+> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准。`v0.3.6` 已由 `release.yml` 的标签推送运行（run 42423483244）装配并发布为 GitHub Release；该版正文由人工改写成 Markdown，装配脚本现改为直接生成 `release-notes.md`（下一次标签运行生效）。本文把“已验证”和“待补证”分开写。
 
 ## 1. 范围
 
@@ -47,6 +47,7 @@ release-<version>/
 ├── video-manifests/ch01..ch15/                                 # 各章内容包
 ├── video-manifest.json
 ├── release-notes.json
+├── release-notes.md                                            # gh release 正文
 ├── SHA256SUMS
 ├── build-report.json
 └── artifact-manifest.json
@@ -160,6 +161,6 @@ Omp 分册由 347 页增至 432 页、体积由 37.8 MB 增至 61.3 MB，来自�
 
 发布后逐一复核：14 个可直接下载的文件与 `SHA256SUMS` 摘要一致；`SHA256SUMS` 另含 239 条 `video-manifests/**` 路径，它们只存在于装配目录与站点包，不作为单独资产上传（`unpublished_all_video=true`）。PDF 为中文 520 页 / 28 书签 / 34.5 MB、英文 559 页 / 28 书签 / 23.5 MB、Omp 432 页 / 49 书签 / 72.0 MB；三份 EPUB 的 ZIP 与未压缩 `mimetype` 首项通过；`site.zip` 含 `index.html` 与 `book.html`；`build-report.json` 记录提交 `4050c7c`、状态 `passed`。
 
-流水线把 `release-notes.json`（机器可读 JSON）直接当作 `gh release create --notes-file`，首次发布的正文因此是 JSON。已在发布后用 `gh release edit --notes-file` 换成可读 Markdown；未修改 `release.py` 或 workflow，也未改动测试与政策。后续若要让正文自动可读，应单独审查该输出格式。
+流水线原先把 `release-notes.json`（机器可读 JSON）直接当作 `gh release create --notes-file`，`v0.3.6` 的正文因此是 JSON，发布后用 `gh release edit --notes-file` 换成可读 Markdown。现在装配脚本自己写两份：`release-notes.json` 保留机器可读记录，`release-notes.md` 由 `release_notes_markdown()` 从 `yuyu-book/revisions.json` 的最新条目渲染成 Markdown（标题带日期，中英各一节，附 `sha256sum --check SHA256SUMS` 与迁移说明指引）；`release.yml` 用它作 `--notes-file` 并把 `*.md` 一并上传。`tests/test_release_contracts.py` 的 `ReleaseNotes` 逐条对照账本，`tests/test_ci_contracts.py` 的 `test_release_body_is_published_from_markdown_notes` 钉住 workflow 只引用 Markdown。下一次标签运行的正文才会真正走这条路径；`v0.3.6` 的正文仍是人工修正的版本。
 
 README 的 CI PDF 体积曾写为 36.4 / 24.3 MB，而发布资产实测为 34.5 / 23.5 MB；页数 520 / 559 与 `check_artifact_claims.py` 的对账口径未变。两版 README 的 PDF 体积与本机 Windows 体积已按发布与本轮干净克隆实测回填。

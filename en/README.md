@@ -149,7 +149,7 @@ The release directory is assembled atomically by the command below (its version 
 python scripts/bookctl.py release --version 0.3.6 --out-dir ../book-release --epub
 ```
 
-It holds both HTML/PDF editions, the Chinese Omp HTML/PDF, optional EPUBs, `site.zip`, 15 chapter video manifests, `release-notes.json`, `SHA256SUMS`, and `build-report.json` / `artifact-manifest.json`, which record commands, commit, browser/font identity and artifact hashes. A failed step never leaves a partial release directory.
+It holds both HTML/PDF editions, the Chinese Omp HTML/PDF, optional EPUBs, `site.zip`, 15 chapter video manifests, `release-notes.json` plus `release-notes.md` (the body `gh release` publishes), `SHA256SUMS`, and `build-report.json` / `artifact-manifest.json`, which record commands, commit, browser/font identity and artifact hashes. A failed step never leaves a partial release directory.
 
 **Status (2026-11-08):** `v0.3.6` was assembled and published by the tag-push run of `release.yml` ([run 42423483244](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42423483244)) as a [GitHub Release](https://github.com/zhuguang-ZFG/claude-code-book/releases/tag/v0.3.6): 15 assets covering three editions of HTML/PDF/EPUB, `site.zip`, the 15 chapter video manifests, `SHA256SUMS`, and both build reports; all 14 published files match their `SHA256SUMS` entries. The P3/P5 gates still await independent review, and `task_verify` remains unverified. See the [architecture decisions](../docs/architecture-decisions.md), [P3 structural comparison](../docs/migrations/legacy-v2-structure.md), [product-page visual audit](../docs/migrations/product-visual-audit.md) and [release migration note](../docs/migrations/release-migration.md).
 
