@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>如何开发 VS Code 插件 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 66 / 195</p><article><h1 id="如何开发-vs-code-插件">如何开发 VS Code 插件</h1><details class="contents"><summary>本章目录 <span>· 14 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#真实产品把哪些工作搬进了-vs-code">真实产品把哪些工作搬进了 VS Code</a><ul><li><a href="#github-pull-requests把代码评审放回代码旁边">GitHub Pull Requests：把代码评审放回代码旁边</a></li><li><a href="#dev-containers把开发环境也放进项目">Dev Containers：把开发环境也放进项目</a></li><li><a href="#salesforce-extension-pack把企业平台变成开发工作台">Salesforce Extension Pack：把企业平台变成开发工作台</a></li><li><a href="#red-hat-ansible写自动化脚本时就发现问题">Red Hat Ansible：写自动化脚本时就发现问题</a></li><li><a href="#container-tools从-dockerfile-一直看到镜像仓库">Container Tools：从 Dockerfile 一直看到镜像仓库</a></li><li><a href="#eslint功能很窄也可以成为团队基础设施">ESLint：功能很窄，也可以成为团队基础设施</a></li><li><a href="#做公司内部插件时可以从它们学什么">做公司内部插件时，可以从它们学什么</a></li></ul></li><li><a href="#要做的插件engineering-guard">要做的插件：Engineering Guard</a></li><li><a href="#插件是怎样进入-vs-code-的">插件是怎样进入 VS Code 的</a></li><li><a href="#1-创建一个能调试的插件">1. 创建一个能调试的插件</a></li><li><a href="#2-先增加一条命令">2. 先增加一条命令</a></li><li><a href="#3-加入三条本地规则">3. 加入三条本地规则</a></li><li><a href="#4-把结果放进侧边栏和-problems">4. 把结果放进侧边栏和 Problems</a></li><li><a href="#5-增加菜单和状态栏">5. 增加菜单和状态栏</a></li><li><a href="#6-检查结果要让人看得懂">6. 检查结果要让人看得懂</a></li><li><a href="#7-ai-能力放到最后">7. AI 能力放到最后</a></li><li><a href="#8-从头验收一次">8. 从头验收一次</a></li><li><a href="#9-打包成-vsix">9. 打包成 VSIX</a></li><li><a href="#10-把插件装进另一个-vs-code">10. 把插件装进另一个 VS Code</a></li><li><a href="#参考资料-28">参考资料</a></li></ul></nav></details><p>如果你每天都在 VS Code 里写代码，应该已经装过不少插件。代码补全、格式化、Git、容器、数据库和远程开发，很多原本需要切换到其他软件的操作，现在都能直接留在编辑器里完成。</p>
+<p>企业自己做插件也是同一个思路：不是重新造一个编辑器，而是把项目模板、代码规范、安全检查、工单和发布流程放到开发者每天都打开的地方。</p>
+<h2 id="真实产品把哪些工作搬进了-vs-code">真实产品把哪些工作搬进了 VS Code</h2>
+<p>很多人第一次装插件，是为了代码补全、格式化或者换主题。真正用到工作里以后，插件能做的事情多得多：有人用它看 GitHub 评审，有人拿它连接 Salesforce，也有人直接在侧边栏里管理容器。</p>
+<p>下面挑几个已经上线的产品看看。不用记它们的功能清单，只要留意一件事：原来需要打开网页或敲命令的哪一步，被它们留在了 VS Code 里。</p>
+<h3 id="github-pull-requests把代码评审放回代码旁边">GitHub Pull Requests：把代码评审放回代码旁边</h3>
+<p>团队在 GitHub 上协作时，开发者通常要打开网页查看 Pull Request，再回到编辑器切换分支和修改代码。GitHub 的 <a href="https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github">Pull Requests and Issues</a> 插件把这段流程接进了 VS Code。</p>
+<p>安装以后，侧边栏会列出“等待我评审”“分配给我”和“我创建的”Pull Request。开发者可以检出对方的分支、查看修改文件、在差异代码旁评论、指定评审人，最后批准或合并。Issue 也能直接创建分支并进入开发状态。它同时支持 GitHub.com 和 GitHub Enterprise。</p>
+<p>下面是 VS Code 官方文档展示的真实评审页面。左边是待评审 PR 和改动文件，右边是 PR 描述、评审人、负责人和讨论：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-real-github-pr.png" alt="GitHub Pull Requests 插件在 VS Code 中展示真实评审信息" loading="lazy" decoding="async"></p>
+<p>图片与功能说明来源：<a href="https://code.visualstudio.com/docs/sourcecontrol/github">VS Code 官方 GitHub 协作指南</a>。</p>
+<p>这个产品没有在编辑器里重做一个完整 GitHub。它只把“当前 PR、当前分支、当前文件和当前行”连接起来，让评审意见紧挨着代码出现。</p>
+<h3 id="dev-containers把开发环境也放进项目">Dev Containers：把开发环境也放进项目</h3>
+<p>另一个常见问题是环境不一致：老同事的项目能启动，新同事却要花一天安装语言、数据库客户端和系统依赖；Windows、macOS 和 Linux 上的版本还可能不同。</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Dev Containers</a> 允许团队在项目里保存一份开发容器配置。开发者选择“在容器中重新打开”以后，VS Code 会连接到包含指定运行时和工具的容器，终端、代码补全、跳转和调试仍然留在熟悉的编辑器里。</p>
+<p>下面是微软 Dev Containers 插件的真实命令面板。它没有重新设计一套窗口，而是把“在容器中重新打开项目”做成普通 VS Code 命令：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-real-dev-containers.png" alt="Dev Containers 插件在 VS Code 命令面板中的真实入口" loading="lazy" decoding="async"></p>
+<p>图片与功能说明来源：<a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code 官方 Dev Containers 文档</a>。</p>
+<p>它真正省掉的，不只是几条 Docker 命令。开发环境跟着项目一起保存，新同事拿到仓库就能照着启动，不用再翻一份半年没人更新的安装文档。</p>
+<h3 id="salesforce-extension-pack把企业平台变成开发工作台">Salesforce Extension Pack：把企业平台变成开发工作台</h3>
+<p>Salesforce 的例子更完整。<a href="https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode">Salesforce Extension Pack</a> 不是单一语法插件，而是一组面向 Salesforce 平台开发的工具。</p>
+<p>开发者可以连接开发组织、Sandbox（沙盒）或 Scratch Org（临时开发环境），在本地编写 Apex、Lightning Web Components、Aura 和 Visualforce，使用 Salesforce 的 SOQL 查询数据，运行 Apex 测试，再把代码取回或部署到 Salesforce 环境。也就是说，VS Code 在这里已经变成了 Salesforce 平台的桌面开发客户端。</p>
+<p>下面是 Salesforce 官方文档提供的真实运行录屏。左侧是 Salesforce 项目和 Org Browser，底部可以看到 Salesforce CLI 正在读取组织中的对象定义：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-real-salesforce.gif" alt="Salesforce Extension Pack 在 VS Code 中连接组织并读取对象" loading="lazy" decoding="async"></p>
+<p>图片与功能说明来源：<a href="https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/vscode-overview.html">Salesforce Extensions for Visual Studio Code</a>。</p>
+<p>Salesforce 没有把整个管理后台塞进 VS Code。它只接进了开发时最常用的几件事：登录环境、浏览对象、写代码、跑测试和部署。这种取舍很值得做内部插件时参考。</p>
+<h3 id="red-hat-ansible写自动化脚本时就发现问题">Red Hat Ansible：写自动化脚本时就发现问题</h3>
+<p>Ansible Playbook 是描述服务器自动化任务的配置文件，会用来安装软件、修改配置和发布服务。一个缩进、模块名或参数写错，影响的可能不只是当前文件。</p>
+<p>Red Hat 的 <a href="https://marketplace.visualstudio.com/items?itemName=redhat.ansible">Ansible VS Code Extension</a> 提供语法高亮、自动补全、实时校验、<code>ansible-lint</code> 和模块文档提示，也支持多根工作区和容器化执行环境。开发者不用先切到浏览器搜索模块参数，鼠标停在模块上就能看到它的作用和注意事项。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-real-ansible.png" alt="Ansible 插件在 Playbook 代码旁显示官方模块说明" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://github.com/ansible/vscode-ansible">Ansible VS Code Extension 官方仓库</a>；功能说明可参考 <a href="https://docs.ansible.com/projects/vscode-ansible/">Red Hat Ansible VS Code 指南</a>。</p>
+<p>这种插件不能只丢下一句“第 12 行错了”。最好顺手告诉开发者为什么错、该怎么改，以及去哪里看对应文档，不然大家最后还是要切回浏览器搜索。</p>
+<h3 id="container-tools从-dockerfile-一直看到镜像仓库">Container Tools：从 Dockerfile 一直看到镜像仓库</h3>
+<p>微软的 <a href="https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-containers">Container Tools</a> 覆盖的是另一段流程：编写 Dockerfile 和 Compose、生成容器配置、启动调试、查看容器与日志，以及管理镜像、网络、数据卷和镜像仓库。</p>
+<p>下面的真实界面来自 VS Code 官方文档。开发者在 Container Explorer 中找到仓库镜像以后，可以从右键菜单拉取、复制摘要、查看清单，或者部署到 Azure 服务：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-real-container-tools.png" alt="Container Tools 在 VS Code 中管理镜像仓库" loading="lazy" decoding="async"></p>
+<p>图片与功能说明来源：<a href="https://code.visualstudio.com/docs/containers/overview">VS Code Container Tools 文档</a>。</p>
+<p>它没有替代 Docker 或云平台，而是把当前项目最常用的容器动作整理成命令和树形视图。复杂能力仍在后端工具中，插件负责提供上下文和操作入口。</p>
+<h3 id="eslint功能很窄也可以成为团队基础设施">ESLint：功能很窄，也可以成为团队基础设施</h3>
+<p>不是每个插件都要连接一整套平台。<a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint for VS Code</a> 会读取当前项目安装的 ESLint 和规则配置，把错误直接标在代码里，并提供“修复所有可自动修复问题”等命令。</p>
+<p>它的价值来自一致性：规则随项目提交，编辑器按照同一份配置提醒，持续集成仍然可以在提交后再次检查。插件负责尽早反馈，CI 负责最后把关。</p>
+<h3 id="做公司内部插件时可以从它们学什么">做公司内部插件时，可以从它们学什么</h3>
+<p>把这些插件放在一起看，会发现它们都挺克制。GitHub 插件没有重做 GitHub，Container Tools 也没有重做 Docker。它们只把当前项目最常用的动作接进来：</p>
+<ul>
+<li>能放进命令面板、侧边栏或 Problems 面板的，就沿用 VS Code 原来的位置；</li>
+<li>GitHub、Docker 和公司内部平台继续在后端运行，插件只负责连接；</li>
+<li>打开哪个仓库、文件或代码位置，就显示跟这里有关的操作；</li>
+<li>出错时不只报失败，还要告诉用户问题在哪、下一步怎么办；</li>
+<li>需要登录、读取文件或连接公司系统时，把权限说清楚。</li>
+</ul>
+<p>公司内部的插件往往也不复杂：创建一个符合规范的新项目、检查依赖版本、查当前服务的负责人、打开内部文档、提交工单，或者在发布前跑一遍安全检查。先把团队每天重复做的那几步接进来，就已经很有用了，不必一开始就加 AI。</p>
+<h2 id="要做的插件engineering-guard">要做的插件：Engineering Guard</h2>
+<p>要做的成品是一个本地代码检查插件：<strong>Engineering Guard</strong>。</p>
+<p>它会检查当前文件里的三类问题：疑似硬编码凭证、没有超时的网络请求和字符串拼接 SQL。结果进入侧边栏和问题列表，点击以后可以回到对应代码。第一版不调用模型、不上传源码，也不需要 API Key。</p>
+<p>这是 Engineering Guard 在 Extension Development Host 中的运行画面：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/engineering-guard-vscode.jpg" alt="Engineering Guard 展示代码风险、合并门禁和负责人" loading="lazy" decoding="async"></p>
+<p>先把边界说清楚：这不是一套真正的企业安全平台，也不能替代专业的 SAST、依赖扫描和代码审查。它只是用一个容易验证的小例子，带你跑通命令、规则、侧边栏、菜单、状态栏和 VSIX 打包。</p>
+<h2 id="插件是怎样进入-vs-code-的">插件是怎样进入 VS Code 的</h2>
+<p>普通桌面插件运行在 Extension Host 中。VS Code 负责编辑器、命令面板、侧边栏和状态栏，插件通过 Extension API 注册自己的功能。这样一个插件出错时，不应该把整个编辑器主界面一起拖死。</p>
+<p><code>package.json</code> 负责告诉 VS Code“有哪些命令和界面入口”，插件入口负责真正执行检查，Tree View 或 Problems 面板负责把结果展示出来。</p>
+<p>微软官方的 Tree View 示例就是这种结构。下面是真实的 References 结果视图：文件是父节点，具体命中位置是子节点，点击后回到代码。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-official-references-tree.png" alt="VS Code 官方 References Tree View 示例" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://code.visualstudio.com/api/extension-guides/tree-view">VS Code Tree View API</a>。Engineering Guard 的问题列表也采用同样的原生交互，不需要为了显示几行结果就先做复杂 Web 页面。</p>
+<h2 id="1-创建一个能调试的插件">1. 创建一个能调试的插件</h2>
+<p>电脑先安装 Node.js 当前 LTS 版本和 VS Code。新建一个空目录，用 VS Code 打开，然后对 AI 说：</p>
+<blockquote>
+<p>请用 VS Code 官方生成器创建 TypeScript 插件，名称叫 Engineering Guard。完成后告诉我怎样按 F5 调试。</p>
+</blockquote>
+<p>创建完成后先不要加业务功能。按 F5，VS Code 会再打开一个带有 <strong>Extension Development Host</strong> 标记的窗口。这个新窗口是插件的测试环境，原来的窗口继续显示代码和调试日志。</p>
+<p>如果 F5 没有打开测试窗口，把错误交给 AI：</p>
+<blockquote>
+<p>按 F5 后插件没有启动，错误是【粘贴错误】。请只修复调试配置。</p>
+</blockquote>
+<p>看到默认 Hello World 通知以后再继续。第一步只确认项目、编译和 Extension Host 已经连通。</p>
+<h2 id="2-先增加一条命令">2. 先增加一条命令</h2>
+<p>把默认命令换成“检查当前文件”：</p>
+<blockquote>
+<p>请增加“Engineering Guard: 检查当前文件”命令。运行后先显示当前文件名。</p>
+</blockquote>
+<p>重新按 F5，在测试窗口中打开任意代码文件，再从命令面板运行这条命令。</p>
+<p>这里要检查两个结果：打开文件时，通知里的文件名正确；没有打开文件时，插件提示“请先打开文件”。如果这两个状态都正常，说明插件已经能读取编辑器上下文。</p>
+<h2 id="3-加入三条本地规则">3. 加入三条本地规则</h2>
+<p>命令跑通后再做扫描：</p>
+<blockquote>
+<p>请检查疑似硬编码密钥、没有超时的网络请求和字符串拼接 SQL。只扫描当前文件，不上传代码。</p>
+</blockquote>
+<p>准备一个专门的测试文件，每种问题只放一处。运行检查后，三条规则都应该出现；修改其中一处再检查，对应问题应该消失。</p>
+<p>规则不要一次增加几十条。企业代码检查最怕“什么都报”，最后所有人都学会忽略。先让每一条规则都有清楚的命中条件、位置和修改建议。</p>
+<h2 id="4-把结果放进侧边栏和-problems">4. 把结果放进侧边栏和 Problems</h2>
+<p>现在让检查结果离代码更近：</p>
+<blockquote>
+<p>请把结果显示在 Problems 和 Engineering Guard 侧边栏。点击问题时跳到对应文件和行号。</p>
+</blockquote>
+<p>侧边栏先处理四种状态：还没检查、没有问题、发现问题、原文件已经关闭。空状态也要告诉用户下一步做什么，不能只留一块空白。</p>
+<p>VS Code 官方 Tree View 指南给出了独立活动栏入口的真实效果：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-official-tree-view.png" alt="VS Code 官方 Tree View 独立活动栏与侧边栏" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://code.visualstudio.com/api/extension-guides/tree-view">VS Code Tree View API</a>。</p>
+<p>Engineering Guard 的实际界面中，左侧保留检查入口，右侧显示命中的规则和风险等级：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/engineering-guard-sidebar.jpg" alt="Engineering Guard 侧边栏和检查结果" loading="lazy" decoding="async"></p>
+<h2 id="5-增加菜单和状态栏">5. 增加菜单和状态栏</h2>
+<p>检查命令不应该只能从命令面板找到。继续增加两个入口：</p>
+<blockquote>
+<p>请在编辑器右键菜单增加“检查选中代码”，没有选中内容时不显示。</p>
+</blockquote>
+<p>再给资源管理器增加文件检查：</p>
+<blockquote>
+<p>请在资源管理器右键菜单增加“检查这些文件”，跳过图片、依赖目录和超大文件。</p>
+</blockquote>
+<p>VS Code 的原生菜单可以出现在视图标题、列表项和右键菜单中。官方示例把这些位置标得很清楚：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/vscode-official-view-actions.png" alt="VS Code 官方 View Actions 与右键菜单位置" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://code.visualstudio.com/api/extension-guides/tree-view#view-actions">VS Code Tree View API：View Actions</a>。</p>
+<p>最后增加一个安静的状态栏入口：</p>
+<blockquote>
+<p>请在状态栏显示最近一次检查结果，点击后打开侧边栏。</p>
+</blockquote>
+<p>状态栏只需要显示“未检查”“通过”或问题数量，不要闪烁，也不要一直弹通知。</p>
+<h2 id="6-检查结果要让人看得懂">6. 检查结果要让人看得懂</h2>
+<p>现在从测试文件触发三条规则，确认文件名、行号、严重程度和建议都正确。最终结果应该类似下面这样：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/vscode-extension/images/engineering-guard-findings.jpg" alt="Engineering Guard 的真实风险检查结果" loading="lazy" decoding="async"></p>
+<p>这里最重要的不是风险分数，而是每一条结果都能回答三个问题：哪里有问题、为什么有风险、下一步应该做什么。点击问题还要回到对应代码，不能让用户自己搜索行号。</p>
+<h2 id="7-ai-能力放到最后">7. AI 能力放到最后</h2>
+<p>本地规则完整跑通以后，才考虑让模型解释问题或生成修复建议。AI 不应该成为“能不能检查代码”的前置条件。</p>
+<blockquote>
+<p>请增加一个可选的解释入口，只解释当前选中的检查结果。没有模型权限时，本地检查继续工作。</p>
+</blockquote>
+<p>发送代码前要明确告诉用户会包含哪些内容。企业版本还要遵守仓库权限、组织策略和数据边界，不能默认把整个项目上传给外部服务。</p>
+<h2 id="8-从头验收一次">8. 从头验收一次</h2>
+<p>不要只看最后一张漂亮页面。重新加载 Extension Development Host，然后依次检查：</p>
+<ol>
+<li>命令面板可以找到“检查当前文件”；</li>
+<li>无问题文件显示通过；</li>
+<li>测试文件能稳定命中三条规则；</li>
+<li>点击侧边栏和 Problems 结果能回到正确行；</li>
+<li>编辑器右键和资源管理器多选都能运行；</li>
+<li>修复代码后，旧问题会消失；</li>
+<li>禁用模型能力后，本地检查仍然可用；</li>
+<li>重新加载窗口后，命令、视图和状态栏仍然存在。</li>
+</ol>
+<p>某一步失败时，只描述这一项：</p>
+<blockquote>
+<p>第【几】步失败，现象是【描述】。请只修复这一项。</p>
+</blockquote>
+<h2 id="9-打包成-vsix">9. 打包成 VSIX</h2>
+<p>开发窗口里能运行，还不等于别人能安装。先补齐插件名称、版本、图标、仓库、许可证和隐私说明，然后对 AI 说：</p>
+<blockquote>
+<p>请用 VS Code 官方 vsce 工具打包 VSIX，并排除测试数据和无关文件。</p>
+</blockquote>
+<p>生成 VSIX 后，换一个 VS Code 配置或另一台电脑，选择“Install from VSIX”，再跑一遍命令、规则、侧边栏和定位功能。</p>
+<p>公司内部不一定要发布到公开 Marketplace。VSIX 可以放在内部制品库，也可以通过组织的软件分发方式安装。真正准备公开发布时，再按照当前的 <a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">VS Code 发布文档</a>创建发布者并提交。</p>
+<h2 id="10-把插件装进另一个-vs-code">10. 把插件装进另一个 VS Code</h2>
+<p>最后别停在 Extension Development Host。把刚生成的 VSIX 装进另一个 VS Code 配置，打开一份测试代码，再从命令面板运行 Engineering Guard。如果侧边栏能出现结果，点击问题能回到正确行，关掉模型能力以后本地规则仍然工作，这个插件才算真的离开了开发窗口。</p>
+<p>最终连起来的是这样一条链路：</p>
+<p><strong>VS Code 命令 → 读取当前文件 → 本地规则 → Problems / Tree View → 菜单和状态栏 → VSIX。</strong></p>
+<p>Engineering Guard 还不是企业级代码安全产品，不过它的命令、规则、问题定位和安装包都已经有了。以后可以逐步换成公司的项目模板、规则服务、代码负责人、工单系统或发布门禁。无论接入多少能力，都要让用户知道插件读了什么，让错误能回到具体代码，也别让本地检查因为模型不可用就一起消失。</p>
+<h2 id="参考资料-28">参考资料</h2>
+<ul>
+<li><a href="https://code.visualstudio.com/api">VS Code Extension API</a></li>
+<li><a href="https://code.visualstudio.com/api/get-started/your-first-extension">Your First Extension</a></li>
+<li><a href="https://code.visualstudio.com/api/get-started/extension-anatomy">Extension Anatomy</a></li>
+<li><a href="https://code.visualstudio.com/api/extension-guides/tree-view">Tree View API</a></li>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/views">VS Code UX Guidelines：Views</a></li>
+<li><a href="https://code.visualstudio.com/docs/sourcecontrol/github">VS Code 官方 GitHub 协作指南</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github">GitHub Pull Requests and Issues</a></li>
+<li><a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code Dev Containers</a></li>
+<li><a href="https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/vscode-overview.html">Salesforce Extensions for Visual Studio Code</a></li>
+<li><a href="https://docs.ansible.com/projects/vscode-ansible/">Red Hat Ansible VS Code Extension</a></li>
+<li><a href="https://code.visualstudio.com/docs/containers/overview">VS Code Container Tools</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint for VS Code</a></li>
+<li><a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">发布 VS Code 插件</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-065.html">← 如何在本地模拟链铸造 NFT</a><a rel="next" href="chapter-067.html">如何开发企业 Qt 设备客户端 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

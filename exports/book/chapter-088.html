@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>编译原理 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 88 / 195</p><article><h1 id="编译原理">编译原理</h1><details class="contents"><summary>本章目录 <span>· 10 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图编译流水线概览">0. 全景图：编译流水线概览</a></li><li><a href="#1-编译器的六步流水线">1. 编译器的六步流水线</a></li><li><a href="#2-词法分析源代码的分词处理">2. 词法分析：源代码的分词处理</a></li><li><a href="#3-语法分析构建语法树ast">3. 语法分析：构建语法树（AST）</a></li><li><a href="#4-ast-可视化代码结构的直观呈现">4. AST 可视化：代码结构的直观呈现</a></li><li><a href="#5-语义分析与代码优化">5. 语义分析与代码优化</a><ul><li><a href="#51-语义分析与类型检查">5.1 语义分析与类型检查</a></li><li><a href="#52-代码优化中间表示的等价变换">5.2 代码优化：中间表示的等价变换</a></li></ul></li><li><a href="#6-优化技术实战编译器代码优化机制">6. 优化技术实战：编译器代码优化机制</a></li><li><a href="#7-编译型-vs-解释型-vs-jit">7. 编译型 vs 解释型 vs JIT</a></li><li><a href="#总结-15">总结</a></li><li><a href="#延伸阅读-8">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>当你按下&quot;运行&quot;按钮，代码是怎么变成屏幕上的结果的？</strong> 你写的每一行代码，计算机其实都&quot;看不懂&quot;——它只认识 0 和 1。编译器就是那个把人类语言翻译成机器语言的&quot;翻译官&quot;。理解编译原理，你就能理解报错信息从哪来、为什么有些语言快有些慢、以及代码优化的底层逻辑。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>全局视野</strong>：掌握从源代码到可执行程序的完整编译流水线</li>
+<li><strong>词法分析</strong>：理解编译器如何把代码拆成一个个 Token</li>
+<li><strong>语法分析</strong>：理解 AST（抽象语法树）的构建过程</li>
+<li><strong>AST 可视化</strong>：直观看到代码的树形结构</li>
+<li><strong>语义分析与优化</strong>：理解类型检查和代码优化的原理</li>
+<li><strong>优化技术实战</strong>：掌握常量折叠、死代码消除等核心优化手段</li>
+<li><strong>执行模型</strong>：区分编译型、解释型和 JIT 三种执行方式</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>编译器是什么</td>
+<td>翻译官类比、编译流水线</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>词法分析</td>
+<td>Token、词法规则</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>语法分析</td>
+<td>AST、语法树、优先级</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>AST 可视化</td>
+<td>交互式语法树、节点类型</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>语义分析与优化</td>
+<td>类型检查、常量折叠、死代码消除</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>优化技术实战</td>
+<td>函数内联、循环外提、常量传播</td>
+</tr>
+<tr>
+<td><strong>第 7 章</strong></td>
+<td>编译型 vs 解释型 vs JIT</td>
+<td>三种执行模型对比</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-全景图编译流水线概览">0. 全景图：编译流水线概览</h2>
+<p>想象你是一个翻译官，要把一本中文小说翻译成英文。你不会一个字一个字地直译，而是：</p>
+<ol>
+<li><strong>识别词语</strong> — 把句子拆成一个个词（词法分析）</li>
+<li><strong>理解句法</strong> — 判断句子结构是否正确（语法分析）</li>
+<li><strong>理解语义</strong> — 确保意思通顺、没有矛盾（语义分析）</li>
+<li><strong>润色优化</strong> — 让译文更地道流畅（代码优化）</li>
+<li><strong>输出译文</strong> — 写出最终的英文版本（代码生成）</li>
+</ol>
+<p>编译器做的事情完全一样，只不过它翻译的是编程语言。</p>
+<h2 id="1-编译器的六步流水线">1. 编译器的六步流水线</h2>
+<p>编译器的工作可以分为六个阶段，像工厂流水线一样，每个阶段处理完交给下一个阶段。</p>
+<blockquote>
+<p><strong>编译流水线</strong></p>
+</blockquote>
+<ol>
+<li><strong>词法分析（Lexical Analysis）</strong>：把源代码拆成一个个 Token（单词）</li>
+<li><strong>语法分析（Syntax Analysis）</strong>：把 Token 组织成语法树（AST）</li>
+<li><strong>语义分析（Semantic Analysis）</strong>：检查类型是否正确、变量是否声明</li>
+<li><strong>中间代码生成（IR Generation）</strong>：生成与平台无关的中间表示</li>
+<li><strong>代码优化（Optimization）</strong>：让中间代码更高效</li>
+<li><strong>代码生成（Code Generation）</strong>：生成目标平台的机器码</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>输入</th>
+<th>输出</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>词法分析</td>
+<td>源代码字符流</td>
+<td>Token 流</td>
+<td>把句子拆成单词</td>
+</tr>
+<tr>
+<td>语法分析</td>
+<td>Token 流</td>
+<td>AST（语法树）</td>
+<td>分析句子结构</td>
+</tr>
+<tr>
+<td>语义分析</td>
+<td>AST</td>
+<td>带类型的 AST</td>
+<td>检查意思是否通顺</td>
+</tr>
+<tr>
+<td>中间代码</td>
+<td>带类型的 AST</td>
+<td>IR</td>
+<td>写出初稿</td>
+</tr>
+<tr>
+<td>代码优化</td>
+<td>IR</td>
+<td>优化后的 IR</td>
+<td>润色删减</td>
+</tr>
+<tr>
+<td>代码生成</td>
+<td>优化后的 IR</td>
+<td>机器码</td>
+<td>输出终稿</td>
+</tr>
+</tbody></table></div>
+<h2 id="2-词法分析源代码的分词处理">2. 词法分析：源代码的分词处理</h2>
+<p>词法分析是编译的第一步。编译器从左到右扫描源代码的每个字符，把它们组合成有意义的<strong>Token（词法单元）</strong>。</p>
+<p>就像读英文句子时，你的大脑会自动把字母组合成单词一样，词法分析器把字符组合成 Token：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>源代码: let x = 10 + 5;
+
+Token 流:
+[let]   → 关键字（语言保留字）
+[x]     → 标识符（变量名）
+[=]     → 运算符（赋值）
+[10]    → 数字字面量
+[+]     → 运算符（加法）
+[5]     → 数字字面量
+[;]     → 分隔符（语句结束）
+</code></pre>
+<blockquote>
+<p><strong>Token 的五大类型</strong></p>
+</blockquote>
+<ul>
+<li><strong>关键字</strong>：语言保留的特殊单词，如 <code>let</code>、<code>if</code>、<code>return</code>、<code>function</code></li>
+<li><strong>标识符</strong>：程序员定义的名字，如变量名、函数名</li>
+<li><strong>字面量</strong>：直接写在代码里的值，如数字 <code>42</code>、字符串 <code>&quot;hello&quot;</code></li>
+<li><strong>运算符</strong>：执行运算的符号，如 <code>+</code>、<code>-</code>、<code>=</code>、<code>===</code></li>
+<li><strong>分隔符</strong>：分隔代码结构的符号，如 <code>;</code>、<code>,</code>、<code>(</code>、<code>)</code></li>
+</ul>
+<h2 id="3-语法分析构建语法树ast">3. 语法分析：构建语法树（AST）</h2>
+<p>词法分析把代码拆成了 Token，但 Token 只是一个个孤立的&quot;单词&quot;。语法分析的任务是把这些 Token 按照语法规则组织成一棵<strong>抽象语法树（Abstract Syntax Tree, AST）</strong>——它反映了代码的结构和运算优先级。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>表达式: 1 + 2 * 3
+
+语法树:        为什么这样？
+       +       因为 * 的优先级
+      / \      高于 +，所以
+     1   *     2 * 3 先结合
+        / \    成为一个子树
+       2   3
+</code></pre>
+<blockquote>
+<p><strong>AST 的重要性</strong>
+AST 是编译器的&quot;核心数据结构&quot;，后续的语义分析、优化、代码生成都基于它进行。现代开发工具也大量使用 AST：</p>
+</blockquote>
+<ul>
+<li><strong>ESLint</strong>：解析代码为 AST，检查是否违反规则</li>
+<li><strong>Prettier</strong>：解析为 AST 后重新格式化输出</li>
+<li><strong>Babel</strong>：解析 AST → 转换 → 生成兼容代码</li>
+<li><strong>IDE 重构</strong>：基于 AST 安全地重命名变量、提取函数</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语法结构</th>
+<th>Token 序列</th>
+<th>AST 节点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>变量声明</td>
+<td><code>let</code> <code>x</code> <code>=</code> <code>10</code></td>
+<td>VariableDeclaration → Identifier + Literal</td>
+</tr>
+<tr>
+<td>函数调用</td>
+<td><code>add</code> <code>(</code> <code>1</code> <code>,</code> <code>2</code> <code>)</code></td>
+<td>CallExpression → Identifier + Arguments</td>
+</tr>
+<tr>
+<td>条件语句</td>
+<td><code>if</code> <code>(</code> <code>a</code> <code>&gt;</code> <code>b</code> <code>)</code></td>
+<td>IfStatement → BinaryExpression + Block</td>
+</tr>
+</tbody></table></div>
+<h2 id="4-ast-可视化代码结构的直观呈现">4. AST 可视化：代码结构的直观呈现</h2>
+<p>上面我们用文字描述了 AST 的结构，但&quot;看到&quot;比&quot;读到&quot;更直观。下面的交互组件让你选择不同的表达式，实时观察它们的语法树长什么样。</p>
+<p>可视化之后就能看出，AST 的核心规律其实很简单：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>代码结构</th>
+<th>AST 根节点</th>
+<th>子节点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>1 + 2 * 3</code></td>
+<td>BinaryExpression (+)</td>
+<td>左: NumericLiteral(1)，右: BinaryExpression(*)</td>
+</tr>
+<tr>
+<td><code>let x = 10</code></td>
+<td>VariableDeclaration</td>
+<td>VariableDeclarator → Identifier(x) + NumericLiteral(10)</td>
+</tr>
+<tr>
+<td><code>add(a, b)</code></td>
+<td>CallExpression</td>
+<td>Identifier(add) + Arguments(a, b)</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>AST 在日常开发中的应用</strong>
+你可能没直接写过编译器，但你每天都在用基于 AST 的工具：</p>
+</blockquote>
+<ul>
+<li><strong>ESLint / Prettier</strong>：解析代码为 AST，检查规则或重新格式化</li>
+<li><strong>Babel / SWC</strong>：解析 AST → 转换语法 → 生成兼容代码</li>
+<li><strong>IDE 重构</strong>：基于 AST 做安全的重命名、提取函数</li>
+<li><strong>Tree-shaking</strong>：分析 AST 中的 import/export，删除未使用的代码</li>
+</ul>
+<h2 id="5-语义分析与代码优化">5. 语义分析与代码优化</h2>
+<p>语法分析确保代码&quot;结构正确&quot;，但结构正确不代表&quot;意思正确&quot;。语义分析负责检查代码的含义是否合法，代码优化则让程序跑得更快。</p>
+<h3 id="51-语义分析与类型检查">5.1 语义分析与类型检查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>检查内容</th>
+<th>示例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型检查</td>
+<td><code>int x = &quot;hello&quot;</code></td>
+<td>❌ 类型不匹配</td>
+</tr>
+<tr>
+<td>作用域检查</td>
+<td>使用未声明的变量 <code>y</code></td>
+<td>❌ 变量不存在</td>
+</tr>
+<tr>
+<td>类型推断</td>
+<td><code>1 + 2.0</code></td>
+<td>✅ 推断结果为 float</td>
+</tr>
+<tr>
+<td>参数检查</td>
+<td><code>add(1, 2, 3)</code> 但函数只接受 2 个参数</td>
+<td>❌ 参数数量不匹配</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>你见过的报错，大多来自语义分析</strong></p>
+</blockquote>
+<ul>
+<li><code>TypeError: Cannot read properties of undefined</code> — 类型检查</li>
+<li><code>ReferenceError: x is not defined</code> — 作用域检查</li>
+<li><code>Expected 2 arguments, but got 3</code> — 参数检查</li>
+</ul>
+<h3 id="52-代码优化中间表示的等价变换">5.2 代码优化：中间表示的等价变换</h3>
+<p>编译器在生成最终代码前，会对中间代码做各种优化。这些优化对程序员透明，但能显著提升性能。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>优化技术</th>
+<th>优化前</th>
+<th>优化后</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>常量折叠</td>
+<td><code>x = 10 + 5</code></td>
+<td><code>x = 15</code></td>
+<td>编译时直接算出结果</td>
+</tr>
+<tr>
+<td>死代码消除</td>
+<td><code>if (false) { ... }</code></td>
+<td>直接删除</td>
+<td>永远不会执行的代码</td>
+</tr>
+<tr>
+<td>常量传播</td>
+<td><code>x = 15; y = x * 2</code></td>
+<td><code>y = 30</code></td>
+<td>已知值直接替换</td>
+</tr>
+<tr>
+<td>循环不变量外提</td>
+<td>循环内重复计算 <code>len = arr.length</code></td>
+<td>提到循环外</td>
+<td>避免重复计算</td>
+</tr>
+</tbody></table></div>
+<h2 id="6-优化技术实战编译器代码优化机制">6. 优化技术实战：编译器代码优化机制</h2>
+<p>上面我们提到了几种优化技术的名字，现在来深入看看编译器具体是怎么做的。下面的交互组件展示了 5 种最常见的编译器优化，你可以直观对比优化前后的代码差异。</p>
+<p>现代编译器和 JIT 引擎（如 V8、GCC、LLVM）会自动应用数十种优化。作为开发者，你不需要手动做这些优化，但理解它们能帮你：</p>
+<ul>
+<li><strong>写出更容易被优化的代码</strong>：比如用 <code>const</code> 而不是 <code>let</code>，编译器更容易做常量折叠</li>
+<li><strong>理解性能差异</strong>：为什么小函数比大函数快？因为编译器能内联它们</li>
+<li><strong>避免&quot;反优化&quot;</strong>：某些写法会阻止编译器优化，比如 <code>eval()</code> 和 <code>with</code></li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>优化技术</th>
+<th>触发条件</th>
+<th>性能影响</th>
+<th>开发者能做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>常量折叠</td>
+<td>表达式中全是常量</td>
+<td>消除运行时计算</td>
+<td>多用 const 声明</td>
+</tr>
+<tr>
+<td>死代码消除</td>
+<td>代码不可达或结果未使用</td>
+<td>减小代码体积</td>
+<td>及时清理无用代码</td>
+</tr>
+<tr>
+<td>循环不变量外提</td>
+<td>循环内有不变的计算</td>
+<td>减少重复计算</td>
+<td>手动提取也是好习惯</td>
+</tr>
+<tr>
+<td>函数内联</td>
+<td>小函数被频繁调用</td>
+<td>消除调用开销</td>
+<td>保持函数小而专注</td>
+</tr>
+<tr>
+<td>常量传播</td>
+<td>变量值在编译时可确定</td>
+<td>整条计算链被消除</td>
+<td>用常量代替魔法数字</td>
+</tr>
+</tbody></table></div>
+<h2 id="7-编译型-vs-解释型-vs-jit">7. 编译型 vs 解释型 vs JIT</h2>
+<p>代码写完后，有三种&quot;翻译方式&quot;让它运行起来。这三种方式各有优劣，直接决定了语言的性能特征和使用场景。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>编译型</th>
+<th>解释型</th>
+<th>JIT 即时编译</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>过程</td>
+<td>先全量编译成机器码，再执行</td>
+<td>边读边执行，逐行翻译</td>
+<td>先解释执行，热点代码再编译</td>
+</tr>
+<tr>
+<td>运行速度</td>
+<td>最快</td>
+<td>最慢</td>
+<td>中等（热点接近编译型）</td>
+</tr>
+<tr>
+<td>启动速度</td>
+<td>慢（需要编译）</td>
+<td>快（直接运行）</td>
+<td>中等（需要预热）</td>
+</tr>
+<tr>
+<td>跨平台</td>
+<td>需要重新编译</td>
+<td>天然跨平台</td>
+<td>跨平台</td>
+</tr>
+<tr>
+<td>代表语言</td>
+<td>C, Rust, Go</td>
+<td>Python, Ruby</td>
+<td>JavaScript (V8), Java</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么 JavaScript 这么快？</strong>
+V8 引擎的 JIT 编译器会监测哪些代码被频繁执行（热点代码），然后把它们编译成高度优化的机器码。所以虽然 JavaScript 是&quot;解释型语言&quot;，但在 V8 中它的性能可以接近编译型语言。这也是 Node.js 能做服务端的底气。</p>
+</blockquote>
+<h2 id="总结-15">总结</h2>
+<p>编译原理不是只有编译器开发者才需要了解的知识。理解编译流程，能帮你更好地理解报错信息、选择合适的语言、写出更高效的代码。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>编译器是翻译官</strong>：把人类可读的代码翻译成机器可执行的指令</li>
+<li><strong>六步流水线</strong>：词法分析 → 语法分析 → 语义分析 → 中间代码 → 优化 → 代码生成</li>
+<li><strong>词法分析拆 Token</strong>：把字符流拆成关键字、标识符、运算符等有意义的单元</li>
+<li><strong>语法分析建 AST</strong>：按语法规则把 Token 组织成树形结构，反映运算优先级</li>
+<li><strong>语义分析保正确</strong>：类型检查、作用域检查，你见过的大多数报错都来自这里</li>
+<li><strong>编译器自动优化</strong>：常量折叠、死代码消除、函数内联等技术让代码自动变快</li>
+<li><strong>三种执行模型</strong>：编译型最快、解释型最灵活、JIT 兼顾两者</li>
+</ol>
+<h2 id="延伸阅读-8">延伸阅读</h2>
+<ul>
+<li><a href="https://astexplorer.net/">AST Explorer</a> - 在线查看代码的 AST 结构</li>
+<li><a href="https://craftinginterpreters.com/">Crafting Interpreters</a> - 从零实现一门编程语言（免费在线书）</li>
+<li><a href="https://github.com/jamiebuilds/the-super-tiny-compiler">The Super Tiny Compiler</a> - 用 JavaScript 实现的超小编译器</li>
+<li><a href="https://v8.dev/blog">V8 Blog</a> - V8 引擎的 JIT 编译技术博客</li>
+<li><a href="https://llvm.org/">LLVM 官网</a> - 最流行的编译器基础设施</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-087.html">← 编程语言概念：范式、演化与选型</a><a rel="next" href="chapter-089.html">类型系统导论 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code 手机远程开发 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 48 / 195</p><article><h1 id="claude-code-手机远程开发">Claude Code 手机远程开发</h1><details class="contents"><summary>本章目录 <span>· 14 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#引言-1">引言</a></li><li><a href="#核心原理手机开发的架构模式">核心原理：手机开发的架构模式</a><ul><li><a href="#为什么手机开发是个问题">为什么手机开发是个问题？</a></li><li><a href="#核心思想瘦客户端架构">核心思想：瘦客户端架构</a></li></ul></li><li><a href="#方案一ios-官方-app">方案一：iOS 官方 App</a><ul><li><a href="#地区限制">地区限制</a></li><li><a href="#工作原理-1">工作原理</a></li><li><a href="#基本使用-1">基本使用</a></li><li><a href="#优缺点-1">优缺点</a></li></ul></li><li><a href="#方案二happy-coder">方案二：Happy Coder</a><ul><li><a href="#工作原理-2">工作原理</a></li><li><a href="#安装和使用">安装和使用</a></li><li><a href="#资源链接">资源链接</a></li><li><a href="#优缺点-2">优缺点</a></li></ul></li><li><a href="#方案三hapi">方案三：HAPI</a><ul><li><a href="#工作原理-3">工作原理</a></li><li><a href="#核心特性">核心特性</a></li><li><a href="#安装和使用-1">安装和使用</a></li><li><a href="#与-happy-coder-的区别">与 Happy Coder 的区别</a></li><li><a href="#资源链接-1">资源链接</a></li><li><a href="#优缺点-3">优缺点</a></li></ul></li><li><a href="#方案四ssh--tailscale--tmux">方案四：SSH + Tailscale + Tmux</a><ul><li><a href="#工作原理-4">工作原理</a></li><li><a href="#为什么需要-tailscale">为什么需要 Tailscale？</a></li><li><a href="#完整配置步骤">完整配置步骤</a></li><li><a href="#进阶技巧-1">进阶技巧</a></li><li><a href="#优缺点-4">优缺点</a></li></ul></li><li><a href="#方案五termux-本地运行">方案五：Termux 本地运行</a><ul><li><a href="#工作原理-5">工作原理</a></li><li><a href="#安装步骤">安装步骤</a></li><li><a href="#性能考虑">性能考虑</a></li><li><a href="#优缺点-5">优缺点</a></li></ul></li><li><a href="#方案六claude-code-ui">方案六：Claude Code UI</a><ul><li><a href="#工作原理-6">工作原理</a></li><li><a href="#安装和使用-2">安装和使用</a></li><li><a href="#功能">功能</a></li><li><a href="#优缺点-6">优缺点</a></li></ul></li><li><a href="#方案七云端开发环境">方案七：云端开发环境</a><ul><li><a href="#工作原理-7">工作原理</a></li><li><a href="#使用-sealos-devbox">使用 Sealos DevBox</a></li><li><a href="#云端方案对比">云端方案对比</a></li><li><a href="#优缺点-7">优缺点</a></li></ul></li><li><a href="#方案对比与选择">方案对比与选择</a><ul><li><a href="#对比表">对比表</a></li><li><a href="#选择指南">选择指南</a></li></ul></li><li><a href="#安全性与隐私">安全性与隐私</a><ul><li><a href="#中继服务器的风险">中继服务器的风险</a></li><li><a href="#安全最佳实践">安全最佳实践</a></li></ul></li><li><a href="#常见问题-3">常见问题</a><ul><li><a href="#需要内网穿透吗">需要内网穿透吗？</a></li><li><a href="#为什么中继模式不需要穿透">为什么中继模式不需要穿透？</a></li><li><a href="#手机开发会影响电池吗">手机开发会影响电池吗？</a></li><li><a href="#网络断开会怎样">网络断开会怎样？</a></li><li><a href="#能在手机上编译大型项目吗">能在手机上编译大型项目吗？</a></li></ul></li><li><a href="#总结-6">总结</a></li><li><a href="#参考资料-14">参考资料</a><ul><li><a href="#官方资源-4">官方资源</a></li><li><a href="#开源项目">开源项目</a></li><li><a href="#中文教程-1">中文教程</a></li><li><a href="#英文资源">英文资源</a></li><li><a href="#工具下载">工具下载</a></li></ul></li></ul></nav></details><h2 id="引言-1">引言</h2>
+<p>想象一下这些场景：你在通勤的地铁上突然想到一个绝妙的 bug 修复方案；你在咖啡厅排队时收到线上故障的紧急通知；你在陪女朋友逛街时想看看 AI 构建的项目进展如何。</p>
+<p>传统开发模式下，这些场景意味着你需要找个地方打开电脑，或者无奈地把事情推迟。但在 AI 辅助编程时代，规则变了。Claude Code 把开发环境装进了口袋，随时随地保持生产力。</p>
+<p>2025 年夏天，随着 Claude Code 的普及，开发者们开始探索各种&quot;手机编程&quot;方案。从简单的 Termux 本地运行，到复杂的 SSH + Tailscale 远程连接，再到专门的 Happy Coder 应用，一个完整的移动开发生态逐渐形成。</p>
+<p>本章要解决的核心问题是：如何让 Claude Code 跟随你的手机，成为真正的&quot;口袋开发助手&quot;。</p>
+<blockquote>
+<p><strong>社区反馈速览</strong></p>
+</blockquote>
+<p>根据群友实际使用反馈，各方案体验对比如下：</p>
+<p>Happy Coder（方案二）</p>
+<ul>
+<li>⚠️ 连接稳定性问题：经常断线，且断线后上下文丢失</li>
+<li>⚠️ 功能受限：无法使用 <code>/</code> 指令</li>
+<li>⚠️ 安全性顾虑：依赖官方中继服务器，部分用户担心数据安全</li>
+</ul>
+<p>HAPI（方案三）</p>
+<ul>
+<li>✅ 可自建服务器：支持部署在自己的 VPS 上</li>
+<li>✅ 搭配 Tailscale 使用体验更佳：电脑运行 <code>hapi server</code>，手机通过 Tailscale IP 连接</li>
+<li>✅ 连接相对稳定，适合长期使用</li>
+</ul>
+<p><strong>Claude Remote Control（官方方案）</strong></p>
+<ul>
+<li>✅ 官方出品，与 Claude Code 原生集成</li>
+<li>✅ 支持本地环境完整访问（MCP、工具、项目配置）</li>
+<li>⚠️ 需要 Max 订阅（Pro 支持即将到来）</li>
+<li>⚠️ 依赖 Anthropic 云服务连接</li>
+</ul>
+<p><strong>建议</strong>：如果对连接稳定性要求高，或担心第三方中继安全性，推荐选择 HAPI + Tailscale 或 官方 Remote Control 方案。</p>
+<h2 id="核心原理手机开发的架构模式">核心原理：手机开发的架构模式</h2>
+<p>在介绍各种方案之前，先理解问题的本质。</p>
+<h3 id="为什么手机开发是个问题">为什么手机开发是个问题？</h3>
+<p>传统的 IDE（如 VS Code、IntelliJ）需要完整的操作系统环境、强大的 CPU、大量内存和存储空间。手机虽然性能越来越强，但在开发体验上仍有天然限制：</p>
+<p><strong>输入限制</strong>：虚拟键盘输入代码效率低，复杂语法容易出错</p>
+<p><strong>屏幕限制</strong>：小屏幕难以同时查看代码、终端和浏览器</p>
+<p><strong>环境限制</strong>：手机无法运行完整的开发工具链（编译器、数据库、调试器）</p>
+<p><strong>连接限制</strong>：移动网络不稳定，SSH 连接容易断开</p>
+<h3 id="核心思想瘦客户端架构">核心思想：瘦客户端架构</h3>
+<p>所有手机开发方案的核心思想都是：手机只是&quot;控制台&quot;，真正的开发工作在别处完成。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│    ┌─────────────┐              ┌─────────────┐             │
+│    │   手机      │              │  主机/云端  │             │
+│    │  (控制端)   │   ────────►  │ (执行端)    │             │
+│    │             │   指令/结果  │             │             │
+│    │  • 输入指令 │              │  • 运行 CLI │             │
+│    │  • 查看输出 │              │  • 执行代码 │             │
+│    │  • 审查更改 │              │  • 访问文件 │             │
+│    └─────────────┘              └─────────────┘             │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>这种架构让手机只需要负责&quot;人机交互&quot;，把繁重的计算工作交给主机或云端。</p>
+<h2 id="方案一ios-官方-app">方案一：iOS 官方 App</h2>
+<p>2025 年 10 月，Anthropic 正式在 iOS App 中推出了 Claude Code 移动版，这是最简单的手机开发方案。</p>
+<h3 id="地区限制">地区限制</h3>
+<p>⚠️ <strong>重要提示</strong>：Claude App 在中国大陆地区无法直接使用。</p>
+<p>如果你在中国大陆，推荐直接使用 <strong>Happy Coder</strong>（方案二），它可以通过配置国内 API 中转服务正常工作。</p>
+<p>如果你有海外 Apple ID，可以通过切换地区下载 Claude App。</p>
+<h3 id="工作原理-1">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐                    ┌─────────────────┐
+│  iOS App    │ ──────────────────► │  Anthropic 云端 │
+│  (手机)     │   HTTPS + OAuth     │  Claude Code    │
+└─────────────┘                    └────────┬────────┘
+                                           │
+                                           ▼
+                                   ┌───────────────┐
+                                   │   GitHub API  │
+                                   └───────────────┘
+</code></pre>
+<p>你的手机 App 只是发送指令，所有代码执行都在 Anthropic 的云端沙盒中进行，结果通过 GitHub 同步。</p>
+<h3 id="基本使用-1">基本使用</h3>
+<p><strong>前提条件</strong>：</p>
+<ul>
+<li>iPhone iOS 15 或更高版本</li>
+<li>Claude Pro/Team/Enterprise 订阅（免费版不支持）</li>
+<li>GitHub 账号</li>
+</ul>
+<p><strong>使用步骤</strong>：</p>
+<ol>
+<li>从 App Store 下载 Claude App</li>
+<li>登录你的 Anthropic 账号</li>
+<li>在 App 中找到&quot;Code&quot;标签页</li>
+<li>通过 OAuth 连接你的 GitHub 仓库</li>
+<li>开始创建任务</li>
+</ol>
+<h3 id="优缺点-1">优缺点</h3>
+<p>优点是配置零门槛、体验流畅、有推送通知。缺点是只支持 iOS、主要支持 GitHub、功能相对受限（不能访问本地文件系统）、中国大陆无法使用。</p>
+<h2 id="方案二happy-coder">方案二：Happy Coder</h2>
+<p>Happy Coder 是一个为 Claude Code 和 Codex 设计的开源移动和 Web 客户端，支持端到端加密，可以从任何地方控制你的 AI 编程助手。</p>
+<h3 id="工作原理-2">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐              ┌─────────────┐              ┌─────────────┐
+│  Happy App  │   ────────►  │ Happy Server │   ◄────────   │happy-coder  │
+│  (手机/Web) │  加密WebSocket│  (中继服务器) │  WebSocket   │  (电脑CLI)  │
+└─────────────┘              └─────────────┘              └──────┬──────┘
+                                                               │
+                                                               ▼
+                                                        ┌─────────────┐
+                                                        │Claude Code  │
+                                                        │    CLI      │
+                                                        └─────────────┘
+</code></pre>
+<p>在电脑上运行 <code>happy</code> 代替 <code>claude</code> 启动 AI 编程助手。当需要在手机上控制时，会话会自动切换到远程模式。电脑上按任意键即可切回本地控制。</p>
+<h3 id="安装和使用">安装和使用</h3>
+<p><strong>步骤 1：下载 App</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iOS</td>
+<td><a href="https://apps.apple.com/us/app/happy-claude-code-client/id6748571505">App Store</a></td>
+</tr>
+<tr>
+<td>Android</td>
+<td><a href="https://play.google.com/store/apps/details?id=com.ex3ndr.happy">Google Play</a></td>
+</tr>
+<tr>
+<td>Web</td>
+<td><a href="https://app.happy.engineering">app.happy.engineering</a></td>
+</tr>
+</tbody></table></div>
+<p><strong>步骤 2：电脑安装 CLI</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm install -g happy-coder
+</code></pre>
+<p><strong>步骤 3：启动并配对</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在项目目录中运行
+cd ~/my-project
+happy
+
+# 会显示配对二维码
+</code></pre>
+<p><strong>步骤 4：手机扫码配对</strong></p>
+<p>打开 Happy App，扫描电脑上显示的二维码。配对成功后即可在手机上控制 Claude Code。</p>
+<p><strong>步骤 5：使用</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 启动 Claude Code
+happy
+
+# 或启动 Codex
+happy codex
+</code></pre>
+<h3 id="资源链接">资源链接</h3>
+<ul>
+<li><a href="https://github.com/slopus/happy">GitHub 项目</a> - 源代码</li>
+<li><a href="https://happy.engineering/docs">文档网站</a> - 使用文档</li>
+<li><a href="https://discord.gg/fX9WBAhyfD">Discord 社区</a> - 社区讨论</li>
+</ul>
+<h3 id="优缺点-2">优缺点</h3>
+<p>优点是配置简单、跨平台支持、端到端加密、开源可审计。缺点是需要依赖第三方中继服务器、手机应用需要自行验证可用性。</p>
+<h2 id="方案三hapi">方案三：HAPI</h2>
+<p>HAPI 是 Happy Coder 的替代方案，采用本地优先的设计理念，支持流畅切换设备和多种 AI 模型。</p>
+<h3 id="工作原理-3">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐              ┌─────────────┐              ┌─────────────┐
+│  HAPI App   │   ────────►  │ HAPI Server │   ◄────────   │    hapi    │
+│(手机/PWA/   │  WireGuard   │  (自建中继)  │   WireGuard  │  (电脑CLI)  │
+│  Telegram)  │   + TLS      │              │   + TLS      │             │
+└─────────────┘              └─────────────┘              └──────┬──────┘
+                                                               │
+                                                               ▼
+                                                        ┌─────────────┐
+                                                        │Claude Code  │
+                                                        │  / Codex /  │
+                                                        │  Gemini等   │
+                                                        └─────────────┘
+</code></pre>
+<p>HAPI 使用 WireGuard 配合 TLS 实现端到端加密，所有通信经过加密中继服务器。你可以自建中继服务器，完全掌控数据流。</p>
+<h3 id="核心特性">核心特性</h3>
+<ul>
+<li><strong>无缝切换</strong>：在电脑和手机之间来回切换控制，按任意键即可回到本地控制</li>
+<li><strong>原生优先</strong>：使用原生技术封装移动应用，提供流畅的交互体验</li>
+<li><strong>AFK 审批</strong>：离开电脑时，手机可以接收审批请求，无需中断工作流</li>
+<li><strong>多模型支持</strong>：支持 Claude Code、Codex、Gemini、OpenCode 等多种 AI 编程助手</li>
+<li><strong>随时随地终端</strong>：通过 PWA、Telegram Mini App 等多种方式访问</li>
+<li><strong>语音控制</strong>：支持语音输入指令，解放双手</li>
+</ul>
+<h3 id="安装和使用-1">安装和使用</h3>
+<p><strong>步骤 1：启动中继服务器</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在你的服务器上运行（或使用 npx 直接启动）
+npx @twsxtd/hapi hub --relay
+</code></pre>
+<p><strong>步骤 2：电脑安装 CLI</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在项目目录中运行
+cd ~/my-project
+npx @twsxtd/hapi
+
+# 或全局安装
+npm install -g @twsxtd/hapi
+hapi
+</code></pre>
+<p><strong>步骤 3：配对设备</strong></p>
+<p>按照终端提示，在手机上打开 HAPI App 并扫描二维码完成配对。</p>
+<p><strong>步骤 4：访问方式</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>访问方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web PWA</td>
+<td>浏览器访问，支持安装到桌面</td>
+</tr>
+<tr>
+<td>Telegram Mini App</td>
+<td>在 Telegram 内直接使用</td>
+</tr>
+<tr>
+<td>移动应用</td>
+<td>原生应用体验（如已发布）</td>
+</tr>
+</tbody></table></div>
+<h3 id="与-happy-coder-的区别">与 Happy Coder 的区别</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Happy Coder</th>
+<th>HAPI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>设计理念</td>
+<td>云端优先</td>
+<td>本地优先</td>
+</tr>
+<tr>
+<td>加密方式</td>
+<td>WebSocket + E2E</td>
+<td>WireGuard + TLS</td>
+</tr>
+<tr>
+<td>多模型支持</td>
+<td>Claude Code, Codex</td>
+<td>Claude, Codex, Gemini, OpenCode</td>
+</tr>
+<tr>
+<td>访问方式</td>
+<td>iOS/Android/Web</td>
+<td>PWA, Telegram, 更多</td>
+</tr>
+<tr>
+<td>语音控制</td>
+<td>❌</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>AFK 审批</td>
+<td>❌</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>自建中继</td>
+<td>⚠️ 需手动部署</td>
+<td>✅ 开箱即用</td>
+</tr>
+</tbody></table></div>
+<h3 id="资源链接-1">资源链接</h3>
+<ul>
+<li><a href="https://github.com/tiann/hapi">GitHub 项目</a> - 源代码</li>
+<li><a href="https://github.com/tiann/hapi/blob/main/docs/pwa.md">PWA 使用文档</a> - PWA 安装和使用</li>
+<li><a href="https://github.com/tiann/hapi/blob/main/docs/how-it-works.md">工作原理</a> - 技术实现细节</li>
+<li><a href="https://github.com/tiann/hapi/blob/main/docs/voice.md">语音助手</a> - 语音控制功能</li>
+<li><a href="https://github.com/tiann/hapi/blob/main/docs/why-hapi.md">为什么选择 HAPI</a> - 设计理念</li>
+<li><a href="https://github.com/tiann/hapi/blob/main/docs/faq.md">常见问题</a> - FAQ</li>
+</ul>
+<h3 id="优缺点-3">优缺点</h3>
+<p>优点是本地优先设计、多模型支持、端到端加密、支持语音控制、可自建中继。缺点是项目相对较新、社区生态仍在发展中。</p>
+<h2 id="方案四ssh--tailscale--tmux">方案四：SSH + Tailscale + Tmux</h2>
+<p>这是最适合专业开发者的方案，通过 SSH 远程连接到你的开发机器，配合 Tmux 保持会话持久化。</p>
+<h3 id="工作原理-4">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐              ┌─────────────┐              ┌─────────────┐
+│   手机      │   ────────►  │  Tailscale  │   ◄────────   │   电脑     │
+│  (SSH客户端)│   VPN P2P    │   中继/打洞  │   VPN P2P    │  (开发机)   │
+└─────────────┘              └─────────────┘              └──────┬──────┘
+                                                               │
+                                                               ▼
+                                                        ┌─────────────┐
+                                                        │    Tmux     │
+                                                        │  (会话保持)  │
+                                                        └─────────────┘
+</code></pre>
+<p>Tailscale 创建一个点对点 VPN 网络，让你在任何网络环境下都能直接访问家里的电脑。Tmux 确保即使 SSH 断开，Claude Code 仍在后台运行。</p>
+<h3 id="为什么需要-tailscale">为什么需要 Tailscale？</h3>
+<p><strong>传统的 SSH 连接问题</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>手机 (4G) ──XX──&gt; 路由器 NAT ──XX──&gt; 家里电脑
+              (无法穿透)         (内网隔离)
+</code></pre>
+<p>你的电脑在内网，手机在外网无法直接访问。传统的解决方案是配置端口转发和动态 DNS，过程复杂且有安全风险。</p>
+<p><strong>Tailscale 的解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>手机 (4G) ──► Tailscale 中继 ──◄── 家里电脑
+            (自动打洞或中继)
+</code></pre>
+<p>Tailscale 使用 NAT 打洞技术，如果打洞失败会自动使用中继服务器，全程加密。</p>
+<h3 id="完整配置步骤">完整配置步骤</h3>
+<p><strong>步骤 1：在电脑上安装 Tailscale</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># macOS
+brew install --cask tailscale
+
+# 或下载安装包
+# https://tailscale.com/download
+</code></pre>
+<p><strong>步骤 2：登录并获取 IP</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 启动 Tailscale
+sudo tailscale up
+
+# 查看 Tailscale IP
+tailscale ip -4
+# 输出示例: 100.x.x.x
+</code></pre>
+<p><strong>步骤 3：在手机上安装 Tailscale</strong></p>
+<p>从 App Store 或 Google Play 下载 Tailscale，用同一账号登录。</p>
+<p><strong>步骤 4：安装并配置 Tmux</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># macOS
+brew install tmux
+
+# 创建配置文件 ~/.tmux.conf
+cat &gt; ~/.tmux.conf &lt;&lt; &#39;EOF&#39;
+# 启用鼠标支持
+set -g mouse on
+
+# 设置默认终端模式为 256 色
+set -g default-terminal &quot;screen-256color&quot;
+
+# 更改按键绑定为 Ctrl+A（可选）
+unbind C-b
+set -g prefix C-a
+
+# 简化的分割面板快捷键
+bind v split-window -h
+bind h split-window
+</code></pre>
+<p><strong>步骤 5：创建持久化会话</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 创建名为 &quot;claude&quot; 的会话
+tmux new -s claude
+
+# 在这个会话中启动 Claude Code
+cd ~/my-project
+claude
+
+# 分离会话（不关闭）
+# 按 Ctrl+B 然后按 D
+</code></pre>
+<p><strong>步骤 6：手机 SSH 客户端连接</strong></p>
+<p>推荐使用的 SSH 客户端：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>客户端</th>
+<th>平台</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blink Shell</td>
+<td>iOS</td>
+<td>支持 MOSH，适合不稳定网络</td>
+</tr>
+<tr>
+<td>Termius</td>
+<td>iOS/Android</td>
+<td>跨平台，界面美观</td>
+</tr>
+<tr>
+<td>a-Shell</td>
+<td>iOS</td>
+<td>免费，轻量级</td>
+</tr>
+</tbody></table></div>
+<p>连接配置：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Host: 100.x.x.x (你的 Tailscale IP)
+Port: 22
+Username: 你的电脑用户名
+</code></pre>
+<p>连接后附加到 Tmux 会话：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">tmux attach -t claude
+</code></pre>
+<h3 id="进阶技巧-1">进阶技巧</h3>
+<p><strong>防止电脑休眠</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># macOS
+caffeinate -dimsu &amp;
+
+# 或设置系统偏好 &gt; 能源节能 &gt; 防止自动休眠
+</code></pre>
+<p><strong>使用 MOSH 应对不稳定网络</strong>：</p>
+<p>MOSH (Mobile Shell) 是专门为移动网络优化的 SSH 替代品，支持切换网络时自动恢复。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在电脑上安装
+brew install mosh
+
+# 在手机上使用 MOSH 连接
+# Blink Shell 原生支持 MOSH
+</code></pre>
+<p><strong>一键连接脚本</strong>：</p>
+<p>在 SSH 客户端中设置启动命令：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">tmux attach -t claude || tmux new -s claude
+</code></pre>
+<p>这样连接后会自动附加到现有会话，或创建新会话。</p>
+<h3 id="优缺点-4">优缺点</h3>
+<p>优点是功能完整、体验与桌面一致、支持所有开发工具。缺点是配置相对复杂、需要电脑保持运行。</p>
+<h2 id="方案五termux-本地运行">方案五：Termux 本地运行</h2>
+<p>如果你是 Android 用户，可以直接在手机上运行 Claude Code，无需连接外部设备。</p>
+<h3 id="工作原理-5">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│                    ┌─────────────┐                          │
+│                    │   Termux    │                          │
+│                    │  (Linux环境) │                         │
+│                    │             │                          │
+│                    │  • Node.js  │                          │
+│                    │  • Claude   │                          │
+│                    │    Code CLI │                          │
+│                    │             │                          │
+│                    │  • 项目文件 │                          │
+│                    │  • Git      │                          │
+│                    └─────────────┘                          │
+│                         │                                  │
+│                         ▼                                  │
+│                   ┌─────────────┐                          │
+│                   │Anthropic API│                          │
+│                   └─────────────┘                          │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>Termux 是 Android 上的终端模拟器和 Linux 环境，你可以直接在上面安装 Node.js 和 Claude Code。</p>
+<h3 id="安装步骤">安装步骤</h3>
+<p><strong>重要</strong>：从 <a href="https://f-droid.org/">F-Droid</a> 下载 Termux，不要用 Google Play 版本（已过时）。</p>
+<p><strong>步骤 1：安装基础工具</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 更新包管理器
+pkg update &amp;&amp; pkg upgrade
+
+# 安装开发工具
+pkg install git nodejs python vim
+</code></pre>
+<p><strong>步骤 2：安装 Claude Code</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm install -g @anthropic-ai/claude-code
+</code></pre>
+<p><strong>步骤 3：配置环境</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 创建工作目录
+mkdir -p ~/projects
+cd ~/projects
+
+# 初始化项目
+git clone https://github.com/your-repo.git
+cd your-repo
+
+# 启动 Claude Code
+claude
+</code></pre>
+<p><strong>步骤 4：配置外部键盘（推荐）</strong></p>
+<p>在 Termux 中：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 启用扩展键行
+# 长按屏幕 &gt; More &gt; Extra keys row
+
+# 配置快捷键
+# 在 ~/.termux/termux.properties 中添加
+extra-keys = [[&#39;ESC&#39;,&#39;/&#39;,&#39;-&#39;,&#39;HOME&#39;,&#39;UP&#39;,&#39;END&#39;,&#39;PGUP&#39;,&#39;~&#39;], \
+              [&#39;TAB&#39;,&#39;CTRL&#39;,&#39;ALT&#39;,&#39;LEFT&#39;,&#39;DOWN&#39;,&#39;RIGHT&#39;,&#39;PGDN&#39;,&#39;|&#39;]]
+</code></pre>
+<h3 id="性能考虑">性能考虑</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>任务类型</th>
+<th>Android 表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web 开发 (HTML/CSS/JS)</td>
+<td>✅ 优秀</td>
+</tr>
+<tr>
+<td>Python 脚本</td>
+<td>✅ 优秀</td>
+</tr>
+<tr>
+<td>Node.js 应用</td>
+<td>✅ 良好</td>
+</tr>
+<tr>
+<td>运行测试套件</td>
+<td>⚠️ 中等</td>
+</tr>
+<tr>
+<td>编译大型项目</td>
+<td>❌ 不推荐</td>
+</tr>
+</tbody></table></div>
+<h3 id="优缺点-5">优缺点</h3>
+<p>优点是完全本地化、无需网络、完全掌控。缺点是手机性能有限、输入体验差、仅限 Android。</p>
+<h2 id="方案六claude-code-ui">方案六：Claude Code UI</h2>
+<p>Claude Code UI（又名 CloudCLI）是一个开源项目，为 Claude Code 提供 Web 界面，支持手机浏览器访问。</p>
+<h3 id="工作原理-6">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐              ┌─────────────┐              ┌─────────────┐
+│  手机浏览器 │   ────────►  │  Web 服务器  │   ◄────────   │Claude Code  │
+│            │   HTTP/HTTPS │  (localhost)  │   调用       │    CLI      │
+└─────────────┘              └─────────────┘              └─────────────┘
+</code></pre>
+<p>在电脑上运行 Web 服务器，手机通过浏览器访问。这需要内网穿透或局域网访问。</p>
+<h3 id="安装和使用-2">安装和使用</h3>
+<p><strong>步骤 1：安装</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 一键启动（推荐）
+npx @siteboon/claude-code-ui
+
+# 或全局安装
+npm install -g @siteboon/claude-code-ui
+claude-code-ui
+</code></pre>
+<p><strong>步骤 2：访问界面</strong></p>
+<p>服务器默认运行在 <code>http://localhost:3001</code></p>
+<p><strong>步骤 3：手机访问</strong></p>
+<p>方法 A - 局域网访问（同一 WiFi）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 启动时绑定所有接口
+claude-code-ui --host 0.0.0.0
+
+# 手机访问
+http://电脑局域网IP:3001
+</code></pre>
+<p>方法 B - 使用 ngrok 内网穿透：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 ngrok
+brew install ngrok
+
+# 启动隧道
+ngrok http 3001
+
+# 手机访问 ngrok 提供的 URL
+</code></pre>
+<h3 id="功能">功能</h3>
+<ul>
+<li>响应式设计，支持移动端</li>
+<li>内置聊天界面</li>
+<li>文件浏览器</li>
+<li>Git 操作界面</li>
+<li>会话管理</li>
+</ul>
+<h3 id="优缺点-6">优缺点</h3>
+<p>优点是有图形界面、功能完整。缺点是需要内网穿透（除非局域网）、配置相对复杂。</p>
+<h2 id="方案七云端开发环境">方案七：云端开发环境</h2>
+<p>如果你没有常开的电脑，可以使用云端开发环境，Claude Code 运行在云服务器上。</p>
+<h3 id="工作原理-7">工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────┐              ┌─────────────┐              ┌─────────────┐
+│  手机       │   ────────►  │  云端容器    │   ─────────► │Claude Code  │
+│ (浏览器/App)│   HTTPS     │ (DevBox)     │               │    CLI      │
+└─────────────┘              └─────────────┘              └─────────────┘
+</code></pre>
+<p>云容器中预装了 Claude Code，你通过浏览器或手机 App 访问。</p>
+<h3 id="使用-sealos-devbox">使用 Sealos DevBox</h3>
+<p><strong>步骤 1：创建环境</strong></p>
+<p>访问 <a href="https://sealos.io/devbox">Sealos DevBox</a>，选择 Claude Code 模板创建环境。</p>
+<p><strong>步骤 2：启动开发环境</strong></p>
+<p>约 30-60 秒后环境就绪，你得到一个 Web 终端。</p>
+<p><strong>步骤 3：配置 Claude API</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">export ANTHROPIC_API_KEY=&quot;your-api-key&quot;
+</code></pre>
+<p><strong>步骤 4：连接 Happy App</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 happy-coder（已预装）
+npm install -g happy-coder
+
+# 生成配对二维码
+happy
+</code></pre>
+<p>手机扫码后即可使用。</p>
+<h3 id="云端方案对比">云端方案对比</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台</th>
+<th>Claude Code</th>
+<th>移动优化</th>
+<th>启动时间</th>
+<th>定价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sealos DevBox</td>
+<td>✅ 预装</td>
+<td>✅ Happy</td>
+<td>~60秒</td>
+<td>按量付费</td>
+</tr>
+<tr>
+<td>GitHub Codespaces</td>
+<td>⚠️ 手动</td>
+<td>⚠️ 浏览器</td>
+<td>~2-3分钟</td>
+<td>免费额度+按小时</td>
+</tr>
+<tr>
+<td>Gitpod</td>
+<td>⚠️ 手动</td>
+<td>⚠️ 浏览器</td>
+<td>~1-2分钟</td>
+<td>免费额度+按小时</td>
+</tr>
+<tr>
+<td>Replit</td>
+<td>❌</td>
+<td>✅ 原生App</td>
+<td>即时</td>
+<td>免费+订阅</td>
+</tr>
+</tbody></table></div>
+<h3 id="优缺点-7">优缺点</h3>
+<p>优点是无需本地电脑、环境一致、可扩展。缺点是需要付费、依赖网络、代码在云端。</p>
+<h2 id="方案对比与选择">方案对比与选择</h2>
+<p>各种方案各有特点，适合不同场景。</p>
+<h3 id="对比表">对比表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>难度</th>
+<th>需要内网穿透</th>
+<th>费用</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iOS 官方 App</td>
+<td>简单</td>
+<td>❌</td>
+<td>$20/月</td>
+<td>快速查看、简单任务</td>
+</tr>
+<tr>
+<td>Happy Coder</td>
+<td>较简单</td>
+<td>❌</td>
+<td>免费</td>
+<td>日常使用、便利性</td>
+</tr>
+<tr>
+<td>HAPI</td>
+<td>中等</td>
+<td>❌</td>
+<td>免费</td>
+<td>多模型支持、本地优先</td>
+</tr>
+<tr>
+<td>SSH + Tailscale</td>
+<td>较复杂</td>
+<td>❌</td>
+<td>免费</td>
+<td>专业开发、完整功能</td>
+</tr>
+<tr>
+<td>Termux</td>
+<td>中等</td>
+<td>❌</td>
+<td>免费</td>
+<td>Android 本地开发</td>
+</tr>
+<tr>
+<td>Claude Code UI</td>
+<td>中等</td>
+<td>✅ 需要</td>
+<td>免费</td>
+<td>需要 Web 界面</td>
+</tr>
+<tr>
+<td>云端 DevBox</td>
+<td>简单</td>
+<td>❌</td>
+<td>按量付费</td>
+<td>无本地电脑</td>
+</tr>
+</tbody></table></div>
+<h3 id="选择指南">选择指南</h3>
+<p><strong>如果你在中国大陆</strong>：推荐使用 Happy Coder，可以通过配置国内 API 中转服务正常工作。</p>
+<p><strong>如果你追求便利性</strong>：Happy Coder 最省心，扫码即用。</p>
+<p><strong>如果需要多模型支持</strong>：HAPI 支持多种 AI 编程助手，适合需要在不同模型间切换的开发者。</p>
+<p><strong>如果你有常开的电脑</strong>：SSH + Tailscale 是最佳选择，体验最完整。</p>
+<p><strong>如果你是 iPhone 用户（非大陆）</strong>：官方 App 是最简单的入门方式。</p>
+<p><strong>如果你只有 Android 手机</strong>：Termux 可以让你完全在手机上开发。</p>
+<p><strong>如果你没有电脑</strong>：云端 DevBox 是理想选择。</p>
+<h2 id="安全性与隐私">安全性与隐私</h2>
+<p>手机开发涉及代码在网络上传输，需要特别注意安全。</p>
+<h3 id="中继服务器的风险">中继服务器的风险</h3>
+<p>使用 Happy Coder、HAPI 等需要中继的服务时，考虑以下问题：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  中继服务器能看到什么？                                      │
+│                                                             │
+│  • 加密前的数据（如果端到端加密实现不当）                     │
+│  • 元数据（何时连接、连接多长时间）                           │
+│  • 你的 API Key（如果配置不当）                              │
+│                                                             │
+│  中继服务器能做什么？                                        │
+│                                                             │
+│  • 记录你的代码内容                                          │
+│  • 窃取 API 密钥                                             │
+│  • 注入恶意命令                                              │
+│  • 把你的设备当作节点攻击其他人                               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="安全最佳实践">安全最佳实践</h3>
+<p><strong>1. 代码敏感度分级</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  公开项目/学习代码 ──► 可以用任何方案                         │
+│                                                             │
+│  私人项目 ──► 推荐 SSH+Tailscale 或 自建中继                 │
+│                                                             │
+│  商业代码 ──► 只用 SSH+Tailscale，禁用所有第三方中继          │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>2. 密钥管理</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># ❌ 不要在代码中硬编码密钥
+const apiKey = &quot;sk-ant-xxxxx&quot;
+
+# ✅ 使用环境变量
+const apiKey = process.env.ANTHROPIC_API_KEY
+
+# ✅ 使用 .env 文件（加入 .gitignore）
+ANTHROPIC_API_KEY=sk-ant-xxxxx
+</code></pre>
+<p><strong>3. 使用沙盒</strong></p>
+<p>Claude Code 支持沙盒模式，限制其访问范围：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">claude --sandbox /path/to/project
+</code></pre>
+<p><strong>4. 自建中继</strong></p>
+<p>如果你使用 Happy Coder，可以考虑自建中继服务器：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 克隆项目（包含服务器代码）
+git clone https://github.com/slopus/happy.git
+cd happy
+
+# 部署服务器代码到你的 VPS
+# 具体步骤参考项目文档
+</code></pre>
+<p><strong>5. 使用 Headscale</strong></p>
+<p>Headscale 是 Tailscale 的开源实现，可以自建中继服务器：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># Docker 一键部署
+docker run -d \
+  --name headscale \
+  -v /srv/headscale:/etc/headscale \
+  -p 3478:3478/udp \
+  -p 8080:8080 \
+  headscale/headscale:latest
+</code></pre>
+<h2 id="常见问题-3">常见问题</h2>
+<h3 id="需要内网穿透吗">需要内网穿透吗？</h3>
+<p>大部分现代方案<strong>不需要</strong>内网穿透：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Happy Coder</td>
+<td>中继模式，双方主动连接服务器</td>
+</tr>
+<tr>
+<td>HAPI</td>
+<td>中继模式，WireGuard + TLS</td>
+</tr>
+<tr>
+<td>Tailscale</td>
+<td>NAT 打洞或中继</td>
+</tr>
+<tr>
+<td>iOS App</td>
+<td>云端执行</td>
+</tr>
+<tr>
+<td>Claude Code UI</td>
+<td>需要（被动入站）</td>
+</tr>
+</tbody></table></div>
+<h3 id="为什么中继模式不需要穿透">为什么中继模式不需要穿透？</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>主动出站（NAT允许）：
+电脑 ──► 中继服务器 ✓
+
+主动入站（NAT阻挡）：
+外部 ──► 电脑 ✗
+
+中继模式的巧妙之处：
+双方都主动连接中继服务器，都不需要入站！
+</code></pre>
+<h3 id="手机开发会影响电池吗">手机开发会影响电池吗？</h3>
+<p>不同方案耗电不同：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>耗电量</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SSH 终端</td>
+<td>低</td>
+<td>只是文本显示</td>
+</tr>
+<tr>
+<td>iOS App</td>
+<td>中</td>
+<td>云端执行，手机只做控制</td>
+</tr>
+<tr>
+<td>Termux</td>
+<td>高</td>
+<td>本地运行 CLI</td>
+</tr>
+<tr>
+<td>浏览器</td>
+<td>中</td>
+<td>Web 界面渲染</td>
+</tr>
+</tbody></table></div>
+<p>建议长时间使用时连接充电器。</p>
+<h3 id="网络断开会怎样">网络断开会怎样？</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>网络断开影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SSH + Tmux</td>
+<td>Claude 继续运行，重连后可恢复</td>
+</tr>
+<tr>
+<td>Happy Coder</td>
+<td>自动重连</td>
+</tr>
+<tr>
+<td>HAPI</td>
+<td>自动重连</td>
+</tr>
+<tr>
+<td>iOS App</td>
+<td>云端继续，App 提示断开</td>
+</tr>
+<tr>
+<td>Termux</td>
+<td>会话中断</td>
+</tr>
+</tbody></table></div>
+<h3 id="能在手机上编译大型项目吗">能在手机上编译大型项目吗？</h3>
+<p>不推荐。手机 CPU 和内存有限，大型编译会导致：</p>
+<ul>
+<li>手机发烫</li>
+<li>电池快速消耗</li>
+<li>编译时间过长</li>
+</ul>
+<p>建议将编译任务放到远程服务器或云端执行。</p>
+<h2 id="总结-6">总结</h2>
+<p>Claude Code 手机开发的核心思想是：<strong>手机只是控制端，真正的开发工作在别处完成</strong>。</p>
+<p>选择哪种方案取决于你的具体需求。</p>
+<p>如果你在中国大陆，推荐 <strong>Happy Coder</strong>，配置国内 API 中转即可使用。</p>
+<p>如果想要最省心的方案，用 <strong>Happy Coder</strong>。扫码即用，推送通知，设备切换流畅。</p>
+<p>如果需要多模型支持或本地优先设计，用 <strong>HAPI</strong>。支持多种 AI 编程助手，可自建中继。</p>
+<p>如果想要最完整的开发体验，用 <strong>SSH + Tailscale</strong>。配置稍复杂，但功能最全，体验与桌面一致。</p>
+<p>如果是 iOS 用户（非大陆），<strong>官方 App</strong> 是最简单的入门方式。</p>
+<p>如果是 Android 用户，<strong>Termux</strong> 让你完全在手机上开发。</p>
+<p>如果没有常开的电脑，<strong>云端 DevBox</strong> 是理想选择。</p>
+<p>无论哪种方案，都要注意安全性：敏感代码要慎用第三方中继，API 密钥要妥善管理，重要项目最好用自建中继。</p>
+<h2 id="参考资料-14">参考资料</h2>
+<h3 id="官方资源-4">官方资源</h3>
+<ul>
+<li><a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code 官方文档</a> - Claude Code 的完整官方文档</li>
+<li><a href="https://apps.apple.com/app/claude/id6473753684">Claude iOS App</a> - 官方 iOS 应用</li>
+</ul>
+<h3 id="开源项目">开源项目</h3>
+<ul>
+<li><a href="https://github.com/slopus/happy">slopus/happy</a> (2.5k⭐) - Happy Coder 移动客户端</li>
+<li><a href="https://github.com/tiann/hapi">tiann/hapi</a> - HAPI 本地优先的多模型 AI 编程助手</li>
+<li><a href="https://github.com/siteboon/claudecodeui">siteboon/claudecodeui</a> - Claude Code UI (CloudCLI)</li>
+<li><a href="https://github.com/juanfont/headscale">juanfont/headscale</a> (19k⭐) - Tailscale 的开源实现</li>
+</ul>
+<h3 id="中文教程-1">中文教程</h3>
+<ul>
+<li><a href="https://m.blog.csdn.net/haa_y/article/details/151156494">随时随地大小编，手机也能配置Claude Code</a> - Termux 配置教程</li>
+<li><a href="https://www.cnblogs.com/swizard/p/19308983">口袋里的 AI 实验室：永不掉线的 Claude Code 移动工作流</a> - Tmux + Docker 方案</li>
+<li><a href="https://post.m.smzdm.com/p/a3r7d63d/">陪女朋友逛街时，我带上了 Claude Code</a> - Tailscale 远程连接</li>
+<li><a href="https://m.toutiao.com/article/7611823834756301318/">手机就能写上线级App</a> - 移动开发实战案例</li>
+</ul>
+<h3 id="英文资源">英文资源</h3>
+<ul>
+<li><a href="https://sealos.io/blog/claude-code-on-phone/">The Definitive Guide to Using Claude Code on Your Phone | Sealos Blog</a> - 最全面的手机开发指南</li>
+<li><a href="https://m.blog.csdn.net/Lvyizhuo/article/details/157692953">SSH + Tailscale + Termius Complete Guide</a> - 远程连接详细教程</li>
+</ul>
+<h3 id="工具下载">工具下载</h3>
+<ul>
+<li><a href="https://tailscale.com/download">Tailscale</a> - 点对点 VPN 工具</li>
+<li><a href="https://f-droid.org/en/packages/com.termux/">Termux (F-Droid)</a> - Android 终端模拟器</li>
+<li><a href="https://blink.sh/">Blink Shell</a> - iOS SSH 客户端（支持 MOSH）</li>
+<li><a href="https://termius.com/">Termius</a> - 跨平台 SSH 客户端</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-047.html">← Claude Code 工作流最佳实践</a><a rel="next" href="chapter-049.html">Claude Agent SDK 完全指南 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

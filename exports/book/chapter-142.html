@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>分布式系统的挑战 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 142 / 195</p><article><h1 id="分布式系统的挑战">分布式系统的挑战</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#分布式系统原理">分布式系统原理</a><ul><li><a href="#0-全景图需要分布式系统的原理">0. 全景图：需要分布式系统的原理</a></li><li><a href="#1-cap-定理分布式系统的不可能三角">1. CAP 定理：分布式系统的&quot;不可能三角&quot;</a></li><li><a href="#2-一致性模型数据同步的严格程度">2. 一致性模型：数据同步的&quot;严格程度&quot;</a></li><li><a href="#3-八大挑战分布式系统的地雷阵">3. 八大挑战：分布式系统的&quot;地雷阵&quot;</a></li><li><a href="#4-让多台机器达成一致的实现">4. 让多台机器&quot;达成一致的实现</a></li><li><a href="#5-分布式事务跨节点的全有或全无">5. 分布式事务：跨节点的&quot;全有或全无&quot;</a></li><li><a href="#总结-28">总结</a></li><li><a href="#延伸阅读-18">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="分布式系统原理">分布式系统原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>当一台机器不够用时，问题才真正开始。</strong> 分布式系统是现代互联网的基石——从微信消息到淘宝下单，背后都是成百上千台机器协同工作。但&quot;分布式&quot;不是免费的午餐，它带来了一系列单机系统从未遇到的挑战。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>核心定理</strong>：理解 CAP 定理及其对系统设计的影响</li>
+<li><strong>一致性模型</strong>：区分强一致性、最终一致性、因果一致性</li>
+<li><strong>八大挑战</strong>：掌握分布式系统面临的核心难题</li>
+<li><strong>共识算法</strong>：了解 Paxos、Raft 等分布式共识的基本思想</li>
+<li><strong>实战模式</strong>：熟悉 2PC、Saga、CRDT 等常用解决方案</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>为什么需要分布式</td>
+<td>扩展性、可用性、地理分布</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>CAP 定理</td>
+<td>一致性、可用性、分区容错</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>一致性模型</td>
+<td>强一致、最终一致、因果一致</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>八大挑战</td>
+<td>网络、时钟、分区、脑裂等</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>共识算法</td>
+<td>Paxos、Raft、ZAB</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>分布式事务</td>
+<td>2PC、Saga、TCC</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图需要分布式系统的原理">0. 全景图：需要分布式系统的原理</h3>
+<p>单机系统简单可靠，但有三个无法逾越的瓶颈：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>瓶颈</th>
+<th>说明</th>
+<th>分布式的解法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>性能上限</td>
+<td>单机 CPU、内存、磁盘有物理极限</td>
+<td>水平扩展：加更多机器分担负载</td>
+</tr>
+<tr>
+<td>单点故障</td>
+<td>一台机器挂了，整个服务就挂了</td>
+<td>冗余副本：多台机器互为备份</td>
+</tr>
+<tr>
+<td>地理延迟</td>
+<td>用户在全球各地，单机只能在一个地方</td>
+<td>多地部署：就近服务用户</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>分布式的代价</strong>
+分布式系统解决了上面的问题，但引入了新的复杂性：网络不可靠、时钟不同步、部分失败、数据一致性……这些就是本文要讨论的&quot;挑战&quot;。</p>
+</blockquote>
+<p><strong>Peter Deutsch 的分布式计算八大谬误</strong>告诉我们，以下假设在分布式环境中都是错的：</p>
+<ol>
+<li>网络是可靠的</li>
+<li>延迟是零</li>
+<li>带宽是无限的</li>
+<li>网络是安全的</li>
+<li>拓扑不会变化</li>
+<li>只有一个管理员</li>
+<li>传输成本是零</li>
+<li>网络是同构的</li>
+</ol>
+<h3 id="1-cap-定理分布式系统的不可能三角">1. CAP 定理：分布式系统的&quot;不可能三角&quot;</h3>
+<p>2000 年，Eric Brewer 提出了 CAP 猜想（后被证明为定理）：一个分布式系统最多只能同时满足以下三个属性中的两个。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+<th>通俗理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C</strong>onsistency（一致性）</td>
+<td>所有节点在同一时刻看到相同的数据</td>
+<td>你在任何 ATM 查余额，结果都一样</td>
+</tr>
+<tr>
+<td><strong>A</strong>vailability（可用性）</td>
+<td>每个请求都能收到非错误的响应</td>
+<td>系统永远能回应你，不会说&quot;服务不可用&quot;</td>
+</tr>
+<tr>
+<td><strong>P</strong>artition tolerance（分区容错）</td>
+<td>网络分区时系统仍能继续运行</td>
+<td>即使部分网线断了，系统还能工作</td>
+</tr>
+</tbody></table></div>
+<h4 id="只能选两个的设计理由">只能选两个的设计理由</h4>
+<p>在分布式环境中，网络分区（P）是不可避免的——光纤会被挖断、交换机会故障、数据中心会断网。所以 P 是必选项，实际的选择是在 C 和 A 之间权衡：</p>
+<ul>
+<li><strong>选 CP</strong>：分区时拒绝不确定的请求，保证数据正确 → 适合金融、库存</li>
+<li><strong>选 AP</strong>：分区时继续服务，但数据可能暂时不一致 → 适合社交、内容</li>
+</ul>
+<blockquote>
+<p><strong>CAP 不是非黑即白</strong>
+现实中的系统不是简单的&quot;CP 或 AP&quot;。很多系统在不同操作上做不同的选择——比如同一个数据库，读操作可以是 AP（允许读旧数据），写操作可以是 CP（要求多数确认）。</p>
+</blockquote>
+<h3 id="2-一致性模型数据同步的严格程度">2. 一致性模型：数据同步的&quot;严格程度&quot;</h3>
+<p>一致性不是一个开关（有或没有），而是一个光谱。不同的一致性模型在&quot;正确性&quot;和&quot;性能&quot;之间做不同的权衡。</p>
+<h4 id="一致性模型对比">一致性模型对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>保证</th>
+<th>延迟</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>强一致性</td>
+<td>读到的一定是最新写入的值</td>
+<td>高（需等待同步）</td>
+<td>银行转账、库存扣减</td>
+</tr>
+<tr>
+<td>最终一致性</td>
+<td>最终所有副本会一致，但中间可能读到旧值</td>
+<td>低（写入立即返回）</td>
+<td>社交动态、DNS</td>
+</tr>
+<tr>
+<td>因果一致性</td>
+<td>有因果关系的操作保证顺序</td>
+<td>中等</td>
+<td>评论回复、协作编辑</td>
+</tr>
+<tr>
+<td>线性一致性</td>
+<td>所有操作看起来像在单机上按顺序执行</td>
+<td>最高</td>
+<td>分布式锁、选主</td>
+</tr>
+<tr>
+<td>会话一致性</td>
+<td>同一会话内保证读到自己的写入</td>
+<td>低-中</td>
+<td>用户个人数据</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>&quot;读己之写&quot;一致性</strong>
+最常见的实际需求是：用户修改了自己的数据后，自己能立即看到更新（但其他用户可以稍后看到）。这叫&quot;Read Your Own Writes&quot;一致性，是最终一致性的一个实用增强。</p>
+</blockquote>
+<h3 id="3-八大挑战分布式系统的地雷阵">3. 八大挑战：分布式系统的&quot;地雷阵&quot;</h3>
+<p>分布式系统的复杂性来自多个问题交织在一起。以下是最核心的八大挑战。</p>
+<h4 id="挑战之间的关联">挑战之间的关联</h4>
+<p>这八大挑战不是孤立的，它们相互关联：</p>
+<ul>
+<li><strong>网络不可靠</strong> → 导致 网络分区 → 触发 CAP 权衡</li>
+<li><strong>时钟不同步</strong> → 导致 事件排序困难 → 影响 数据一致性</li>
+<li><strong>部分失败</strong> → 可能导致 脑裂 → 需要 共识算法 来解决</li>
+<li><strong>数据一致性</strong> → 需要 分布式事务 → 但事务又受 网络不可靠 影响</li>
+</ul>
+<blockquote>
+<p><strong>没有银弹</strong>
+分布式系统没有&quot;完美&quot;的解决方案，只有&quot;合适&quot;的权衡。理解这些挑战的本质，才能在设计系统时正确取舍。</p>
+</blockquote>
+<h3 id="4-让多台机器达成一致的实现">4. 让多台机器&quot;达成一致的实现</h3>
+<p>共识算法是分布式系统的核心——它解决的问题是：多个节点如何就某个值达成一致？即使部分节点故障或网络延迟。</p>
+<h4 id="41-paxos">4.1 Paxos</h4>
+<p>Leslie Lamport 在 1990 年提出，是第一个被严格证明正确的共识算法。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Proposer</td>
+<td>提出提案（值）</td>
+</tr>
+<tr>
+<td>Acceptor</td>
+<td>投票接受或拒绝提案</td>
+</tr>
+<tr>
+<td>Learner</td>
+<td>学习最终被选定的值</td>
+</tr>
+</tbody></table></div>
+<p><strong>两阶段流程</strong>：</p>
+<ol>
+<li><strong>Prepare 阶段</strong>：Proposer 发送提案编号，Acceptor 承诺不再接受更小编号的提案</li>
+<li><strong>Accept 阶段</strong>：Proposer 发送具体值，多数 Acceptor 接受则提案通过</li>
+</ol>
+<blockquote>
+<p><strong>Paxos 的问题</strong>
+Paxos 虽然正确，但出了名的难以理解和实现。Lamport 自己的论文用了一个希腊议会的比喻，结果让更多人困惑了。</p>
+</blockquote>
+<h4 id="42-raft为可理解性而生">4.2 Raft：为可理解性而生</h4>
+<p>2014 年 Diego Ongaro 提出 Raft，目标是做一个&quot;容易理解的 Paxos&quot;。它把共识问题分解为三个子问题：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>子问题</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Leader 选举</td>
+<td>集群中选出一个 Leader，所有写入都经过 Leader</td>
+</tr>
+<tr>
+<td>日志复制</td>
+<td>Leader 将操作日志复制到所有 Follower</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>保证已提交的日志不会被覆盖</td>
+</tr>
+</tbody></table></div>
+<p><strong>Raft 的核心流程</strong>：</p>
+<ol>
+<li>集群启动时，所有节点都是 Follower</li>
+<li>如果 Follower 超时没收到 Leader 心跳，就变成 Candidate 发起选举</li>
+<li>获得多数票的 Candidate 成为新 Leader</li>
+<li>Leader 接收客户端请求，将日志复制到多数节点后提交</li>
+</ol>
+<h4 id="43-共识算法对比">4.3 共识算法对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>提出时间</th>
+<th>可理解性</th>
+<th>使用系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Paxos</td>
+<td>1990</td>
+<td>困难</td>
+<td>Google Chubby</td>
+</tr>
+<tr>
+<td>Raft</td>
+<td>2014</td>
+<td>容易</td>
+<td>etcd、Consul、TiKV</td>
+</tr>
+<tr>
+<td>ZAB</td>
+<td>2011</td>
+<td>中等</td>
+<td>ZooKeeper</td>
+</tr>
+<tr>
+<td>EPaxos</td>
+<td>2013</td>
+<td>困难</td>
+<td>学术研究为主</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-分布式事务跨节点的全有或全无">5. 分布式事务：跨节点的&quot;全有或全无&quot;</h3>
+<p>单机数据库的事务靠本地锁和日志就能实现 ACID。但当一个业务操作涉及多个服务/数据库时，如何保证原子性？</p>
+<h4 id="51-两阶段提交2pc">5.1 两阶段提交（2PC）</h4>
+<p>最经典的分布式事务协议，分为两个阶段：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>协调者动作</th>
+<th>参与者动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prepare</td>
+<td>问所有参与者&quot;能提交吗？&quot;</td>
+<td>执行操作但不提交，回复 Yes/No</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>如果全部 Yes，发送 Commit</td>
+<td>正式提交；如果有 No，全部回滚</td>
+</tr>
+</tbody></table></div>
+<p><strong>2PC 的问题</strong>：</p>
+<ul>
+<li><strong>阻塞</strong>：Prepare 后如果协调者挂了，参与者会一直等待</li>
+<li><strong>单点故障</strong>：协调者是单点，挂了整个事务卡住</li>
+<li><strong>性能差</strong>：需要多次网络往返，锁持有时间长</li>
+</ul>
+<h4 id="52-saga-模式">5.2 Saga 模式</h4>
+<p>Saga 把一个大事务拆成多个本地事务，每个本地事务有对应的补偿操作。如果某一步失败，就逆序执行补偿。</p>
+<p><strong>电商下单的 Saga 示例</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>正向操作</th>
+<th>补偿操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>创建订单（待支付）</td>
+<td>取消订单</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>扣减库存</td>
+<td>恢复库存</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>扣减余额</td>
+<td>退还余额</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>确认订单（已支付）</td>
+<td>—</td>
+</tr>
+</tbody></table></div>
+<p>如果 T3（扣减余额）失败：执行 C2（恢复库存）→ C1（取消订单）。</p>
+<p><strong>两种编排方式</strong>：</p>
+<ul>
+<li><strong>编排式（Choreography）</strong>：每个服务监听事件，自行决定下一步。简单但难以追踪全局状态</li>
+<li><strong>协调式（Orchestration）</strong>：有一个中心协调者控制流程。清晰但协调者是单点</li>
+</ul>
+<h4 id="53-tcctry-confirm-cancel">5.3 TCC（Try-Confirm-Cancel）</h4>
+<p>TCC 是 2PC 的业务层实现，把每个操作分为三个阶段：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>说明</th>
+<th>示例（扣库存）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Try</td>
+<td>预留资源，但不真正执行</td>
+<td>冻结 10 件库存（可用库存 -10，冻结库存 +10）</td>
+</tr>
+<tr>
+<td>Confirm</td>
+<td>确认执行，消耗预留资源</td>
+<td>冻结库存 -10（真正扣减）</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>取消预留，释放资源</td>
+<td>冻结库存 -10，可用库存 +10（恢复）</td>
+</tr>
+</tbody></table></div>
+<h4 id="54-三种方案对比">5.4 三种方案对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>一致性</th>
+<th>性能</th>
+<th>复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2PC</td>
+<td>强一致</td>
+<td>低</td>
+<td>中</td>
+<td>数据库层面的跨库事务</td>
+</tr>
+<tr>
+<td>Saga</td>
+<td>最终一致</td>
+<td>高</td>
+<td>高</td>
+<td>长流程业务（订单、物流）</td>
+</tr>
+<tr>
+<td>TCC</td>
+<td>最终一致</td>
+<td>中</td>
+<td>最高</td>
+<td>资金类高可靠场景</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>实际选择建议</strong></p>
+</blockquote>
+<ul>
+<li>能用单库事务就不要用分布式事务</li>
+<li>大多数业务场景用 Saga + 消息队列就够了</li>
+<li>TCC 适合对一致性要求极高的金融场景，但开发成本很高</li>
+<li>2PC 适合数据库中间件（如 ShardingSphere）自动处理</li>
+</ul>
+<h3 id="总结-28">总结</h3>
+<p>分布式系统是现代互联网的基础设施，但它的复杂性远超单机系统。理解这些挑战不是为了&quot;解决&quot;它们（很多是根本性的），而是为了在设计系统时正确权衡。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>CAP 定理</strong>：网络分区不可避免，实际选择是在一致性和可用性之间权衡</li>
+<li><strong>一致性模型</strong>：从强一致到最终一致是一个光谱，根据业务需求选择</li>
+<li><strong>八大挑战</strong>：网络不可靠、时钟不同步、网络分区、脑裂等相互关联</li>
+<li><strong>共识算法</strong>：Raft 是目前最实用的共识算法，etcd/Consul 都基于它</li>
+<li><strong>分布式事务</strong>：Saga 适合大多数场景，TCC 适合金融场景，2PC 适合数据库层</li>
+</ol>
+<h3 id="延伸阅读-18">延伸阅读</h3>
+<ul>
+<li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a> - Martin Kleppmann 的分布式系统经典</li>
+<li><a href="https://raft.github.io/">The Raft Consensus Algorithm</a> - Raft 官方可视化演示</li>
+<li><a href="https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/">CAP Twelve Years Later</a> - Brewer 对 CAP 的重新审视</li>
+<li><a href="https://jepsen.io/">Jepsen</a> - 分布式系统正确性测试框架</li>
+<li><a href="https://martinfowler.com/articles/patterns-of-distributed-systems/">分布式系统模式</a> - Martin Fowler 的分布式模式合集</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-141.html">← 从单体到微服务的演进</a><a rel="next" href="chapter-143.html">高可用与容灾 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

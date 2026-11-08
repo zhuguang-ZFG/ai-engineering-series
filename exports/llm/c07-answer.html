@@ -29,6 +29,7 @@
 <li>mask 后逐行 softmax → 权重 4×4，每行和为 1。</li>
 <li>权重 (4×4) 乘 <code>V</code> (4×2) → 输出 4×2。</li>
 </ul>
+<p>若只把 <code>WV</code> 换成 3×5，V 与输出都变成 4×5。Q、K 仍是 4×2，分数与权重仍是 4×4。匹配分数需要 Q、K 的维度相同；V 的宽度决定汇总后的宽度，不必等于 Q、K 的宽度。</p>
 <h2 id="C07-answer-section-0c0877f72a" tabindex="-1">六、先 mask 再 softmax</h2>
 <p>先 softmax 再 mask，未来位置已经分到非零权重；把它们置零后，该行权重和小于 1，输出被整体缩小，且相当于偷偷改变了归一化。先 mask 成负无穷再 softmax，未来位置的 <code>exp</code> 为 0，可见位置重新归一化到和为 1，输出才是“只在可见集合内做加权平均”。两者在数值和语义上都不同。</p>
 <h2 id="C07-answer-section-c175c41c89" tabindex="-1">七、评分要点</h2>

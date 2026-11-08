@@ -17,8 +17,7 @@
 <h2 id="C06-section-2d5dd2c4a1" tabindex="-1">编号查表，向量参与计算</h2>
 <p>token ID 像书架编号：它告诉程序“到第几行取数据”。取出的那一行数字叫嵌入向量，参与后续计算。42 号挨着 43 号，只说明存放位置相邻，不能说明语义相近。</p>
 <p>课程用人工数据把“苹果”暂当作一个 token，编号设为 42，初始向量为 <code>[0.8, 0.2, 0.1]</code>。这是示意，不是实际分词器或模型读数；真实 tokenizer 可能把这两个字切成多个片段，真实向量也不会正好是这三个数。</p>
-<p><img src="../../book/assets/handdraw/llm/apple-contexts.svg" alt="同一个词，走两条路"></p>
-<p><em>图：同一个编号从同一初始向量出发，在两种语境中得到不同示意表示。数字是人工 fixture，不是运行网络算出的真实表示。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/apple-contexts.svg" alt="同一个词，走两条路"><figcaption>图：同一个编号从同一初始向量出发，在两种语境中得到不同示意表示。数字是人工 fixture，不是运行网络算出的真实表示。</figcaption></figure>
 <p>在“切成小块”的语境里，课程把上下文表示写作 <code>[0.9, 0.1, 0.1]</code>；在“公司开发软件”里写作 <code>[0.1, 0.3, 0.95]</code>。两行都从同一行起点出发，结果不同，说明网络可以让当前位置的表示受到可见上下文影响。至于网络内部怎样逐层算出这两个结果，要等 C07 的注意力与 C08 的组装；现在先认清“起点相同、处理结果可以不同”。</p>
 <h2 id="C06-section-08f6d9a3b8" tabindex="-1">手算两次相似度</h2>
 <p>用同一初始向量分别和两种上下文表示比较：</p>
@@ -44,8 +43,7 @@
 <li>余弦 <code>2/(1.4142×2.4495) ≈ 0.5774</code></li>
 </ul>
 <p>影子一样，真实相似度并不是 1。图上的轴也只是数字维度，没有哪一根被保证是“甜度”或“公司程度”；训练可以形成有用的方向，但那是事后观察，不是事先贴好的标签。</p>
-<p><img src="../../book/assets/handdraw/llm/projection-shadow.svg" alt="影子重合，原物不同"></p>
-<p><em>图：只画前两维时两点重合；第三维仍参与计算，所以余弦不同。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/projection-shadow.svg" alt="影子重合，原物不同"><figcaption>图：只画前两维时两点重合；第三维仍参与计算，所以余弦不同。</figcaption></figure>
 <h2 id="C06-section-2c599115a9" tabindex="-1">相似度能做什么，不能做什么</h2>
 <p>语义搜索可以把问题和文档片段变成向量，按相似度找候选。例如“怎么退货”可能取回写着“申请退款与退回商品”的段落，而不必字面相同。但取回只是缩小范围：</p>
 <ul>

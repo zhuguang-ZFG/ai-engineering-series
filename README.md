@@ -2,23 +2,26 @@
 
 > 不会写代码，也能从一句需求出发，做出第一个可用作品。
 
-大模型新版：双击项目根目录的 [开始阅读.html](开始阅读.html)，进入 [五阶段三十章](exports/llm/course.html)。[新版 PDF](deliverables/llm-course.pdf) · [EPUB](deliverables/llm-course.epub) · [作答后核对答案](deliverables/llm-course-answers.pdf)。当前为实施试读版，真实助手质量、独立复做与真人学习效果尚未全部验收；不以成品存在或 CI 代替能力证明。原十二课 [PDF](deliverables/llm-explained-handdraw.pdf) / [EPUB](deliverables/llm-explained-handdraw.epub) 保留。
+双击根目录的 [开始阅读.html](开始阅读.html)，进入原《Vibe Coding 101》的 [Stage 1–3 与完整附录](exports/book/index.html)。网页逐章显示原稿，支持离线阅读、章内目录与跨章跳转；权威正文仍是 [book/book.md](book/book.md)。
+
+本轮在原章节内修正排错、包管理、数据库索引、编码和部署讲解，补充注意力与训练算例，并重绘六张原书流程图。具体范围与检查结果见 [原书修订验收](specs/original-book-review.md)。
+
+本轮继续优化了 8 张原书手绘图，统一为 3:4 画幅，并补充需求验证与 JTBD 练习。[查看手绘图集](design/handdraw/book-figures.html) · [本轮改进记录](specs/original-book-illustration-02.md)。阅读页中的手绘图可以直接点开查看原尺寸。
+
+最新一轮已整理七章讲解、修正 MCP 配置说明，并改善章节目录、标题层级和手机提示词换行。[当前计划](specs/PLAN.md) · [阅读改进与验收](specs/original-book-readability-03.md)。
 
 ![课程封面](book/assets/cover.webp)
 
 本仓库汇集一套面向零基础学习者的 Vibe Coding 课程交付物：完整中文书籍、横版课程视频、竖版短视频，以及可继续编辑的 HyperFrames 源码。
 
-大模型原理与应用十二课已开放：[打开手绘学习页](exports/llm/index.html)，从文字、注意力和训练，走到检索、工具与能回查证据的资料助手。可以下载 [PDF](deliverables/llm-explained-handdraw.pdf) 和 [EPUB](deliverables/llm-explained-handdraw.epub)，包含手绘图解、纸上实验与自测答案。本地实验无需账号或 API；实际模型练习采用 DeepSeek V4.1 Flash 和 Kimi K3，附官方资料与复做方法。真实初学者试读仍待完成。完整范围见 [课程改造规格与实施计划](specs/llm-learning-redesign/SPEC.md)。
-
-新版网页提供课内目录、三档字号、本机续读和手绘放大；手机打开即可接着读。PDF 目录有实际页码，EPUB 可以直接跳进小节。
-
-看一次变化怎样发生：[逐词生成](exports/llm/generation.html)、[注意力汇总](exports/llm/attention.html)和[蒸馏更新](exports/llm/training.html#distillation)各有四步手绘。网页可以前后步进，也可以播放一次，随时暂停、重置或展开完整步骤；PDF、EPUB 使用完整静态分镜。每一步的数字都来自课程教学模型，方便你对照计算，不代表实际聊天模型的内部读数。
+大模型原理的[手绘实验](exports/llm/index.html)、[十二课 PDF](deliverables/llm-explained-handdraw.pdf) / [EPUB](deliverables/llm-explained-handdraw.epub)，以及已有三十章专题资料保留为配套材料。
 
 ## 内容
 
 | 内容 | 文件 |
 | --- | --- |
-| 新版五阶段三十章 · 实施试读 | [学习路线](exports/llm/course.html) · [正文 PDF](deliverables/llm-course.pdf) · [正文 EPUB](deliverables/llm-course.epub) |
+| 原《Vibe Coding 101》· Stage 1–3 与附录 | [开始阅读](开始阅读.html) · [网页目录](exports/book/index.html) · [原稿](book/book.md) |
+| 配套专题：五阶段三十章 | [学习路线](exports/llm/course.html) · [正文 PDF](deliverables/llm-course.pdf) · [正文 EPUB](deliverables/llm-course.epub) |
 | 分离作业核对依据 | [答案 PDF](deliverables/llm-course-answers.pdf) · [答案 EPUB](deliverables/llm-course-answers.epub) |
 | 可运行 Python 实例 | [资料助手](book/llm/examples/assistant/README.md) · [微型 decoder/SFT/LoRA](book/llm/examples/tiny_decoder/README.md) · [OCR](book/llm/examples/ocr/README.md) |
 | 大模型原理与应用 · 十二课试读 | [`exports/llm/index.html`](exports/llm/index.html) |
@@ -66,6 +69,8 @@ git lfs pull
 npm ci
 python -m pip install -r scripts/llm/requirements-books.txt
 ```
+
+原书阅读页与八张手绘图由 `npm run build:book` 生成；修改 `book/llm/legacy-*.md` 后先运行 `npm run build:llm`，会同步回原稿并重建阅读页。`npm run check:reading:book` 检查全书链接、标题层级、四组窗口/字号布局，以及离线和无脚本导航。
 
 运行完整检查：
 

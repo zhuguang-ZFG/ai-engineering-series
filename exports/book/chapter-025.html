@@ -1,0 +1,1830 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据库与 Supabase 入门 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 25 / 195</p><article><h1 id="数据库与-supabase-入门">数据库与 Supabase 入门</h1><details class="contents"><summary>本章目录 <span>· 10 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#从数据库到-supabase">从数据库到 Supabase</a></li><li><a href="#你将学到-3">你将学到</a></li><li><a href="#1-什么是数据库">1. 什么是数据库</a><ul><li><a href="#11-什么是数据">1.1 什么是数据</a></li><li><a href="#12-为什么我们需要数据库">1.2 为什么我们需要数据库</a></li><li><a href="#13-关系型数据库与非关系型数据库">1.3 关系型数据库与非关系型数据库</a></li></ul></li><li><a href="#2-supabase">2. Supabase</a><ul><li><a href="#21-分步指南">2.1 分步指南</a></li><li><a href="#22-创建你的第一个-sql-数据表">2.2 创建你的第一个 SQL 数据表</a></li><li><a href="#23-sql-editor-简介与数据库基本操作">2.3 SQL Editor 简介与数据库基本操作</a></li><li><a href="#24-行级安全">2.4 行级安全</a></li></ul></li><li><a href="#3-第一个-sql-应用">3. 第一个 SQL 应用</a><ul><li><a href="#31-克隆并运行-supabase-示例项目">3.1 克隆并运行 Supabase 示例项目</a></li><li><a href="#32-项目1---汉堡店菜单增删改查">3.2 项目1 - 汉堡店菜单增删改查</a></li><li><a href="#33-项目2---汉堡店认证用户">3.3 项目2 - 汉堡店认证用户</a></li></ul></li><li><a href="#4-构建你的第一个-supabase-应用">4. 构建你的第一个 Supabase 应用</a><ul><li><a href="#41-为任意应用接入-supabase-数据库的标准化流程">4.1 为任意应用接入 Supabase 数据库的标准化流程</a></li><li><a href="#42-案例研究构建一个在线贪吃蛇游戏">4.2 案例研究：构建一个在线贪吃蛇游戏</a></li></ul></li><li><a href="#5-成为-supabase-大师">5. 成为 Supabase 大师</a><ul><li><a href="#51-为什么我们选择-supabase">5.1 为什么我们选择 Supabase</a></li><li><a href="#52-google-和-github-登录支持">5.2 Google 和 GitHub 登录支持</a></li><li><a href="#53-实时功能">5.3 实时功能</a></li><li><a href="#54-存储">5.4 存储</a></li><li><a href="#55-边缘函数">5.5 边缘函数</a></li><li><a href="#56-clerk-登录">5.6 Clerk 登录</a></li></ul></li><li><a href="#6-从-supabase-到更多后端开发组件进阶">6. 从 Supabase 到更多后端开发组件（进阶）</a><ul><li><a href="#同类-baas-平台">同类 Baas 平台</a></li><li><a href="#认证-auth">认证 (Auth)</a></li><li><a href="#文件存储-storage">文件存储 (Storage)</a></li><li><a href="#边缘函数-edge-functions">边缘函数 (Edge Functions)</a></li><li><a href="#实时通信-realtime">实时通信 (Realtime)</a></li><li><a href="#数据库">数据库</a></li></ul></li><li><a href="#总结-2">总结</a></li><li><a href="#课后作业">📚 课后作业</a></li></ul></nav></details><h2 id="从数据库到-supabase">从数据库到 Supabase</h2>
+<p>这一章要解决一个实际问题：页面已经能操作，怎样让用户的数据在刷新、重新登录后仍然保留，并且只能由有权限的人读取和修改？</p>
+<p>准备一个能在本地运行的网页应用即可，例如待办清单。前面的设计章节可以帮你整理界面；Git 和部署会在后面的章节继续讲，这里不要求你已经完成上线。</p>
+<p>我们先认识数据库，再用 Supabase 接入数据存储和用户登录。阅读时，把每个概念对应到自己的应用上：要保存什么，谁能访问，操作成功后怎样确认。</p>
+<h2 id="你将学到-3">你将学到</h2>
+<ol>
+<li>区分变量、JSON 与数据库，理解数据怎样长期保存。</li>
+<li>在 Supabase 中创建数据表，完成新增、查询、修改和删除。</li>
+<li>添加注册、登录与访问权限，让不同用户的数据按规则隔离。</li>
+<li>按项目需要了解 Realtime（实时更新）、Storage（文件存储）和 Edge Functions（运行服务端逻辑）。</li>
+<li>按需接入 Google、GitHub 登录。</li>
+</ol>
+<p><strong>第一次阅读先完成前三项。</strong> 目标是一款能登录、能保存数据的基础应用：刷新后数据仍在，用另一个账号尝试访问时，权限规则能按预期生效。后面的扩展功能可以等项目需要时再接入。</p>
+<p>完成练习后，保留数据库与用户管理代码，作为后续项目的起点。复用时仍要按新项目检查表结构和权限。</p>
+<h2 id="1-什么是数据库">1. 什么是数据库</h2>
+<h3 id="11-什么是数据">1.1 什么是数据</h3>
+<p>在数字世界里，数据（Data）无处不在。简单来说，数据是信息的载体。你朋友的联系方式、一篇微信文章、一条短视频、游戏里的角色等级，这些都是数据。在我们的应用中，数据就是需要被记录和管理的一切信息，比如用户的个人资料、订单历史、程序设置等。</p>
+<p>一般而言，数据在程序中有不同的表现形式，最简单的就是变量，我们可以用不同变量记录简单的数字：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># Python variable definition examples
+
+# Integer variable: stores age information
+age = 30
+
+# Boolean variable: stores status (whether active)
+is_active = True  # True means active, False means inactive
+
+# List variable: stores a set of score data
+scores = [85, 92, 78, 90]  # Contains 4 integer elements representing different scores
+
+# Dictionary variable: stores multiple related information of a user
+user_info = {
+    &quot;age&quot;: 30,           # Key &quot;age&quot; corresponds to the value of age
+    &quot;height&quot;: 1.80,      # Key &quot;height&quot; corresponds to the value of height (unit: meter)
+    &quot;login_count&quot;: 156   # Key &quot;login_count&quot; corresponds to the value of login times
+}
+</code></pre>
+<p>而对于上述所说的个人资料、订单历史这类复杂的数据而言，可以用更复杂的表格来表示：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>name</th>
+<th>email</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>Alice</td>
+<td><a href="mailto:alice@example.com">alice@example.com</a></td>
+</tr>
+<tr>
+<td>1002</td>
+<td>Bob</td>
+<td><a href="mailto:bob@example.com">bob@example.com</a></td>
+</tr>
+</tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>user_id</th>
+<th>amount</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>901</td>
+<td>1001</td>
+<td>29.99</td>
+<td>completed</td>
+</tr>
+<tr>
+<td>902</td>
+<td>1002</td>
+<td>15.50</td>
+<td>pending</td>
+</tr>
+</tbody></table></div>
+<p>一笔订单可能包含多个商品，每个商品都有名称、数量和价格。<strong>JSON 是一种表示和交换数据的格式</strong>，可以用嵌套结构表达这种关系，适合在前端与后端之间传递完整订单。</p>
+<p>关系型数据库也能保存这些信息：把订单和商品明细放在不同表里，再用订单编号关联。JSON 与数据表解决的侧重点不同；同一个应用可以用表存储数据，再把查询结果组织成 JSON 发给页面。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;order_id&quot;: 901,
+  &quot;user_id&quot;: 1001,
+  &quot;amount&quot;: 29.99,
+  &quot;status&quot;: &quot;completed&quot;,
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BG-001&quot;, &quot;name&quot;: &quot;牛肉汉堡&quot;, &quot;quantity&quot;: 1, &quot;price&quot;: 18.00 },
+    { &quot;sku&quot;: &quot;SD-003&quot;, &quot;name&quot;: &quot;炸薯条&quot;, &quot;quantity&quot;: 1, &quot;price&quot;: 6.99 },
+    { &quot;sku&quot;: &quot;DK-002&quot;, &quot;name&quot;: &quot;可乐&quot;, &quot;quantity&quot;: 1, &quot;price&quot;: 5.00 }
+  ],
+  &quot;shipping_address&quot;: {
+    &quot;street&quot;: &quot;科技园路123号&quot;,
+    &quot;city&quot;: &quot;深圳&quot;,
+    &quot;zip_code&quot;: &quot;518057&quot;
+  }
+}
+</code></pre>
+<p>更进一步的，如果我们考虑一个被编码成向量（Vector）的数据，向量数据通常是文本、图片或音频等非结构化数据经过 AI 模型（如 Embedding 模型）处理后得到的数值表示。它的表示形式可能是：</p>
+<p><code>[0.123, -0.456, 0.789, ..., -0.234]</code> (一个由几百甚至上千个浮点数组成的数组)</p>
+<p>同一个数据库可以支持多种数据形式。下面的图用于了解常见分类，不必逐个记住产品名称；本章先用 Supabase 中的 PostgreSQL 完成练习。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image1.webp" alt="" loading="lazy" decoding="async"></p>
+<h3 id="12-为什么我们需要数据库">1.2 为什么我们需要数据库</h3>
+<p>只放在程序内存里的变量，通常会随进程结束而消失。文件和浏览器本地存储也能保存数据；但当多个用户需要同时查询、修改和共享记录时，数据库能提供更完整的管理能力。</p>
+<p>日常说的“数据库”常把两件事合在一起：有组织的数据，以及管理这些数据的软件。你通过数据库软件保存记录、执行查询，并控制谁可以操作它们。</p>
+<p>以待办清单为例，数据库主要帮助你处理五件事：</p>
+<ul>
+<li><strong>保存数据。</strong> 把任务写入持久化存储，关闭应用后仍可读取。备份用于应对误删、损坏等情况。</li>
+<li><strong>查找数据。</strong> 用 SQL 等查询方式找出“我的未完成任务”，避免把所有记录读出来再逐条筛选。</li>
+<li><strong>处理同时发生的操作。</strong> 多人一起使用时，借助事务、锁等机制协调读写；索引可以改善合适查询的效率。</li>
+<li><strong>检查数据规则。</strong> 用约束限制必填字段、唯一编号等，减少不符合规则的记录。</li>
+<li><strong>控制访问。</strong> 配置身份验证和访问权限，限制谁能读取或修改哪些数据。加密、备份和恢复也需要按部署方式配置与检查。</li>
+</ul>
+<p>数据库可以运行在本地，也可以由云平台托管。托管服务能减少部分维护工作，但响应速度、并发能力和扩容成本仍取决于数据量、查询方式、索引、资源规格及服务限制。</p>
+<h3 id="13-关系型数据库与非关系型数据库">1.3 关系型数据库与非关系型数据库</h3>
+<p>先看数据怎样组织，再看你最常执行的操作。关系型数据库与 NoSQL 是常见分类，但“哪一种一定更快、一定更可靠”不能只凭类别判断。</p>
+<p><strong>关系型数据库</strong>用表、行、列组织数据。Schema（数据结构约定）规定字段名称、类型和约束，例如任务编号必须唯一。不同表可以用编号关联，再通过 JOIN（连接查询）一起读取。它常用于订单、库存、账务等需要关联查询和事务的业务。</p>
+<p><strong>NoSQL</strong>包含多种数据库：文档数据库保存类似 JSON 的文档，键值数据库按键读取值，此外还有宽列数据库和图数据库。它们的数据模型、查询方式和一致性能力各有不同，不能全部理解成“没有结构、没有事务”。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型与例子</th>
+<th>数据怎样组织</th>
+<th>先考虑的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关系型：PostgreSQL、MySQL</td>
+<td>表、行、列，通过字段关联</td>
+<td>是否经常跨表查询？哪些修改必须一起成功或失败？</td>
+</tr>
+<tr>
+<td>文档型：MongoDB</td>
+<td>包含嵌套字段的文档</td>
+<td>哪些信息总是一起读取？重复存储的数据怎样同步更新？</td>
+</tr>
+<tr>
+<td>键值型：Redis</td>
+<td>用键读取对应的值或数据结构</td>
+<td>是否主要按键访问？数据需要保留多久，怎样处理过期或丢失？</td>
+</tr>
+</tbody></table></div>
+<p>对本章的注册、登录和待办练习，先使用 Supabase 提供的 PostgreSQL 即可。等遇到明确的查询或性能问题，再评估是否需要增加其他数据库。</p>
+<p>企业选型还要比较备份恢复、可用性、运维能力和总成本。可以咨询云服务厂商，也可以自行部署开源数据库；托管会产生服务费用，自建则需要承担维护工作。</p>
+<p>云厂商的<a href="https://help.aliyun.com/zh/govcloud/getting-started/select-database-services">数据库选型说明</a>可作为参考。比较报价时，请统一地域、CPU、内存、存储、备份与可用性配置，按当前价格核算；产品名称本身不能决定哪个方案更便宜。</p>
+<p>光说不易理解，我们通过一个具体的“博客文章”场景，来看看同样的数据在关系数据库 (SQL) 和不同类型的非关系数据库 (NoSQL) 中是如何存储的。</p>
+<p>假设我们有一个博客平台，需要存储以下信息：</p>
+<ul>
+<li>用户（Users）：用户 ID、用户名、邮箱</li>
+<li>文章（Posts）：文章 ID、标题、内容、作者 ID</li>
+<li>评论（Comments）：评论 ID、评论内容、评论者 ID、所属文章 ID</li>
+<li>标签（Tags）：标签 ID、标签名</li>
+<li>文章与标签的关系：单篇文章关联的多个标签、单个标签对应的多篇文章</li>
+</ul>
+<h4 id="关系数据库-sql-示例">关系数据库 (SQL) 示例</h4>
+<p>在SQL数据库中，我们会将不同类型的数据分别存储在不同的表中，并通过“外键”将它们关联起来。这种结构清晰、规范，减少了数据冗余。</p>
+<p>以 “内容平台的文章管理” 为例，我们不会把 “用户、文章、评论、标签” 混存，而是拆成 5 张功能单一的表，每张表都有明确的 “职责边界” 和严格的结构定义（Schema）：</p>
+<ul>
+<li><code>users</code> 表 (存储用户信息)</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>user_id (主键)</th>
+<th>username</th>
+<th>email</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>101</td>
+<td>Alice</td>
+<td><a href="mailto:alice@example.com">alice@example.com</a></td>
+</tr>
+<tr>
+<td>102</td>
+<td>Bob</td>
+<td><a href="mailto:bob@example.com">bob@example.com</a></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><code>posts</code> 表 (存储文章信息)</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>post_id (主键)</th>
+<th>title</th>
+<th>content</th>
+<th>author_id (外键)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>初识SQL</td>
+<td>这是关于SQL数据库的一篇文章...</td>
+<td>101</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NoSQL入门</td>
+<td>NoSQL提供了灵活的数据模型...</td>
+<td>102</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><code>comments</code> 表 (存储评论信息)</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>comment_id (主键)</th>
+<th>body</th>
+<th>commenter_id (外键)</th>
+<th>post_id (外键)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>写得很棒！</td>
+<td>102</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>学习了。</td>
+<td>101</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>有没有更多例子？</td>
+<td>101</td>
+<td>1</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><code>tags</code> 表 (存储标签)</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>tag_id (主键)</th>
+<th>tag_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>51</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>52</td>
+<td>技术</td>
+</tr>
+<tr>
+<td>53</td>
+<td>入门</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><code>post_tags</code> 表 (存储文章与标签的多对多关系，体现联表特点)</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>post_id (外键)</th>
+<th>tag_id (外键)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>51</td>
+</tr>
+<tr>
+<td>1</td>
+<td>52</td>
+</tr>
+<tr>
+<td>2</td>
+<td>51</td>
+</tr>
+<tr>
+<td>2</td>
+<td>52</td>
+</tr>
+<tr>
+<td>2</td>
+<td>53</td>
+</tr>
+</tbody></table></div>
+<p>若需查询 “Alice 发表的《初识 SQL》（post_id=1）的完整信息（含文章内容、作者、评论、标签）”，需执行多表连接（JOIN）查询，通过外键关联 5 张表并聚合数据，SQL 语句如下：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT
+    p.title,
+    p.content,
+    u.username AS author,
+    c.body AS comment,
+    t.tag_name AS tag
+FROM
+    posts p
+JOIN
+    users u ON p.author_id = u.user_id
+LEFT JOIN
+    comments c ON p.post_id = c.post_id
+LEFT JOIN
+    post_tags pt ON p.post_id = pt.post_id
+LEFT JOIN
+    tags t ON pt.tag_id = t.tag_id
+WHERE
+    p.post_id = 1;
+</code></pre>
+<p>这个查询会跨越5个表，将所有相关数据聚合在一起返回。这是关系数据库的核心优势：通过规范化和连接操作，想怎么查就怎么查，同时保证了数据的一致性和最小冗余。</p>
+<h4 id="非关系数据库-nosql-示例">非关系数据库 (NoSQL) 示例</h4>
+<p>下面以文档数据库 MongoDB 为例，展示另一种组织博客数据的方式：把常常一起读取的信息嵌入同一个文档。这个例子不能代表所有 NoSQL 数据库；是否嵌入数据，要根据查询和更新方式判断。</p>
+<p>在 NoSQL 数据库中，文档数据库（Document Database） 是最常用的类型之一，MongoDB 就是典型代表。它以 “文档” 作为基本存储单元，这里的 “文档” 并非我们日常理解的 “文章”，而是一种类似 JSON 的数据结构（MongoDB 中实际使用 BSON 格式，支持更多数据类型）：无需预先定义统一的 Schema（数据结构），每个文档的字段可以灵活增减，字段类型也能自由调整，完美适配数据格式多变的场景。</p>
+<p>在文档数据库中，通常会将一篇文章及其所有相关信息（如评论、标签）存储在一个文档中（文档格式类似 JSON，可灵活定义字段，无需预先制定 Schema），核心逻辑是 “将‘一个业务场景下的完整信息’存放在一个文档中”，避免查询时的多数据源拼接。</p>
+<p><code>posts</code> 集合中的一个文档示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;_id&quot;: 1,
+  &quot;title&quot;: &quot;初识SQL&quot;,
+  &quot;content&quot;: &quot;这是关于SQL数据库的一篇文章...&quot;,
+  &quot;author&quot;: {
+    &quot;user_id&quot;: 101,
+    &quot;username&quot;: &quot;Alice&quot;,
+    &quot;email&quot;: &quot;alice@example.com&quot;
+  },
+  &quot;tags&quot;: [
+    &quot;数据库&quot;,
+    &quot;技术&quot;
+  ],
+  &quot;comments&quot;: [
+    {
+      &quot;comment_id&quot;: 1001,
+      &quot;body&quot;: &quot;写得很棒！&quot;,
+      &quot;commenter&quot;: {
+        &quot;user_id&quot;: 102,
+        &quot;username&quot;: &quot;Bob&quot;
+      }
+    },
+    {
+      &quot;comment_id&quot;: 1003,
+      &quot;body&quot;: &quot;有没有更多例子？&quot;,
+      &quot;commenter&quot;: {
+        &quot;user_id&quot;: 101,
+        &quot;username&quot;: &quot;Alice&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<p>在这个示例中，按 <code>_id: 1</code> 读取文档，就能一起得到文章、作者、评论和标签，省去跨表连接。是否比关系型方案更快，需要结合数据大小、索引和实际查询测量；文档越大，也不意味着读取越省时。</p>
+<p>这种设计的代价是<strong>重复存储的数据要同步更新</strong>。示例把作者 Alice 的 <code>username</code> 放进了每篇文章。如果用户名改为 <code>Alice_New</code>，相关文档的 <code>author.username</code> 都要更新；只更新一部分，就会出现显示不一致。</p>
+<p>设计时先问：这里保存的是“发布当时的作者名”，还是“作者当前的名字”？前者可能允许保留快照；后者需要同步更新，或通过作者编号引用统一资料。</p>
+<p>读多写少的场景可以考虑用适量冗余减少查询工作；更新频繁时，则要特别检查同步成本。选择嵌入还是引用，取决于这份数据怎样读、怎样改，以及业务允许多长时间的不一致。</p>
+<p>以上是对不同数据库的简单介绍，如果你对更多具体的数据库类型感兴趣，你可以参考如下资料尝试不同类型的数据库。</p>
+<p><strong>关系型数据库延伸阅读（按需查阅）：</strong>
+<a href="https://www.ibm.com/products/db2-database">Db2</a>、<a href="https://cloud.ibm.com/catalog#highlights">MySQL</a>、<a href="https://www.ibm.com/think/topics/postgresql">PostgreSQL</a>、<a href="https://www.yugabyte.com/">YugabyteDB</a>、<a href="https://www.cockroachlabs.com/">CockroachDB</a>、<a href="https://www.ibm.com/products/postgres-enterprise">Oracle Database</a>、<a href="https://www.ibm.com/consulting/microsoft">Azure SQL Database</a></p>
+<p><strong>NoSQL 数据库延伸阅读（按需查阅）：</strong>
+<a href="https://www.ibm.com/think/topics/redis">Redis</a>、<a href="https://www.ibm.com/think/topics/couchdb">CouchDB</a>、<a href="https://www.ibm.com/think/topics/mongodb">MongoDB</a>、<a href="https://cloud.ibm.com/catalog#highlights">Cassandra</a>、<a href="https://www.ibm.com/think/topics/elasticsearch">Elasticsearch</a>、<a href="https://www.techtarget.com/searchdatamanagement/news/252512583/Google-scales-up-Cloud-Bigtable-NoSQL-database">BigTable</a>、<a href="https://neo4j.com/users/ibm/">Neo4j</a>、<a href="https://www.ibm.com/think/topics/hbase">HBase</a></p>
+<h2 id="2-supabase">2. Supabase</h2>
+<p>有了数据库，应用还需要用户登录、权限校验、文件上传、API 接口等能力。这些通常属于<strong>后端</strong>：前端负责展示页面和接收操作，后端负责处理数据与业务规则。</p>
+<p>**BaaS（Backend as a Service，后端即服务）**把常见的后端能力做成可调用的服务。使用托管平台时，你可以通过 SDK 或 API 接入这些能力，减少从零搭建基础设施的工作；表结构、业务逻辑和权限规则仍需要自己设计。</p>
+<p><a href="https://supabase.com/">Supabase</a> 以 PostgreSQL 为核心。本章先使用数据库和 Auth（用户认证），再按需了解 Storage（文件存储）、Realtime（实时更新）、Edge Functions（服务端函数）以及向量相关能力。</p>
+<h3 id="21-分步指南">2.1 分步指南</h3>
+<p>下面沿着 Supabase 控制台的操作路径，逐项拆解它具体提供哪些核心能力，以及每项能力对应的核心职责。我们会详细介绍 supabase 涉及的每个选项，帮助你快速入门 supabase 的基本操作。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image2.png" alt="" loading="lazy" decoding="async"></p>
+<p>访问 Supabase 官网并登录后，在控制台首页点击 New project 进入创建流程；</p>
+<p>输入需要配置的主要内容 Project Name、数据库密码，地址只需要选择为与程序目标用户最接近的区域即可。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image3.png" alt="" loading="lazy" decoding="async"></p>
+<p>创建成功后，控制台左侧侧边栏将显示所有核心功能模块（Table Editor、SQL Editor、Database、Authentication 等），后续操作将围绕这些模块展开。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image4.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="表编辑器">表编辑器</h4>
+<p>Table Editor 可以当成是 Supabase 的可视化数据表编辑器，它能让你像操作 Excel 一样直接查看和修改数据库里的数据，无需编写 SQL 语句，只需要用鼠标交互即可修改数据内容。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image5.png" alt="" loading="lazy" decoding="async"></p>
+<p>其中值得关注的是 Schema，Schema 可理解为数据库内的 “资源容器”，用来把表、视图、函数、索引这些资源分组管好，主要作用有二：一是避免命名冲突（不同 Schema 下可存在同名table），二是实现权限隔离（如仅允许特定用户访问某 Schema 下的表）；</p>
+<p>点击编辑器顶部的 Schema 下拉框可切换不同容器，日常开发中一般只需关注两类：</p>
+<ul>
+<li><code>public</code>：默认的公共资源容器，开发者新建的业务表（如 “文章表”“评论表”）均存储于此；</li>
+<li><code>auth</code>：用户认证专属容器，其中的 <code>users</code> 表自动存储所有注册用户信息（如用户 ID、邮箱、登录时间），不建议手动修改此 Schema 下的默认表，避免影响认证功能；</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image6.png" alt="" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image7.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="sql-编辑器">SQL 编辑器</h4>
+<p>SQL Editor 作为 Supabase 的 SQL 语句执行器，可让你用代码的方式直接操作数据库。你可以让大模型直接生成 SQL 语句，在右侧输入后点击 RUN 即可用语句创建或修改 table，也可以直接在 Results 中直接看到筛选出的 table 数据。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image8.png" alt="" loading="lazy" decoding="async"></p>
+<p>你可以在运行 RUN 之后，在 Table Editor 的 public schema 里找到新建后的数据表；并且运行后的语句会保存在左侧的 PRIVATE 栏中，甚至可以点击下方的爱心标志，把这条查询或创建语句收藏起来。</p>
+<h4 id="数据库管理中心">数据库管理中心</h4>
+<p>Database 是 Supabase 的数据库管理中心，支持可视化地查看和管理所有数据表，并通过表的相互连线理解不同表间的关联关系（即外键约束，表示数据间的引用关系）。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image9.png" alt="" loading="lazy" decoding="async"></p>
+<p>如果你想要手动新建 table，可以在 tables 中直接新建表格，我们会在之后的教程中详细讲解。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image10.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="身份认证">身份认证</h4>
+<p>Authentication 负责管理用户的注册、登录和权限。默认的用户管理系统数据都在此处存储，它提供了开箱即用的用户注册、登录、密码重置、邮箱验证等功能，并支持第三方 OAuth 登录（如微信、GitHub、Google 等）。所有用户数据会自动同步到数据库的 <code>auth.users</code> 表中。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image11.png" alt="" loading="lazy" decoding="async"></p>
+<p>你可以在 Provider 选项中找到不同 supabase 支持的用户信息登录入口，默认使用 Email；如果你想使用 Github 或者 Google 账户登录，还需要更多属性配置，下面的课程会详细讲。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image12.png" alt="" loading="lazy" decoding="async"></p>
+<p>在 Sign In / Providers 里还包含了对注册邮箱行为的控制，如果你不想每次邮箱注册都必须让用户接受邀请后才能成为用户，你可以取消 Confirm email 的强制要求。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image13.png" alt="" loading="lazy" decoding="async"></p>
+<p>如果你想切换非 Supabase 的其他 auth 系统服务商，你可以点击 Third Party Auth，比如此处就使用 Clerk 作为第三方的系统服务商。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image14.png" alt="" loading="lazy" decoding="async"></p>
+<p>如果你担心注册用户在短期内访问量过大，你可以在 Rate Limits 中启用对应的流量限制策略：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image15.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="存储">存储</h4>
+<p>Storage 是 Supabase 的存储系统，兼容 amazon cloud 的 s3 概念，可用于存储任意类型的文件（如图片、视频、文档、音频等），并提供访问权限管理（公开或私有）和下载链接获取（永久链接或临时链接），你可以很方便地在应用里上传、下载用户相关的文件，还能直接借用 Supabase 的认证系统做精细的访问控制。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image16.png" alt="" loading="lazy" decoding="async"></p>
+<p>我们将会在本节课的进阶 project 中讲解 storage 的具体用法。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image17.png" alt="" loading="lazy" decoding="async"></p>
+<p>如果你想用 S3 的相关协议，可以直接使用对应的配置：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image18.png" alt="" loading="lazy" decoding="async"></p>
+<blockquote>
+<p>Amazon Cloud（亚马逊云服务，简称 AWS）是亚马逊提供的云计算平台（就像一个大型的网络机房，你可以按需租用计算和存储资源）。S3（Simple Storage Service）是 AWS 里专门用来存储文件的服务（类似一个无限大的网盘，可以存图片、视频、备份等各种文件），它是目前最流行的对象存储服务，已经成为了事实上的行业标准。</p>
+<p>**为什么要做成 S3 兼容 **<strong>API** ** ?</strong> ：S3 已经存在近 20 年，市面上有大量现成的工具、SDK 和文档，兼容 S3 意味着你可以直接用这些资源，不用从头开始制作各类相关工具，能够快速满足业务上线的需求。</p>
+</blockquote>
+<h4 id="边缘函数">边缘函数</h4>
+<p>如果你不想部署后端，但是想使用数据库和函数操作，你可以使用 Edge Functions 构建无需自建服务器的后端核心能力，它是 Supabase 提供的全球分布式服务端函数。简单来说，它让你无需购买和管理自己的后端服务器，就能直接编写并部署在云端的后端代码。这些函数部署在全球网络的边缘节点上，会自动在离你的用户最近的位置运行，从而大幅降低网络延迟，提供极致的响应速度。你可以在 Supabase 的仪表盘中直接创建、编辑和部署，整个开发流程非常便捷。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image19.png" alt="" loading="lazy" decoding="async"></p>
+<p>Edge Functions 的一个核心用途是充当安全的中间层，保护你的敏感信息和鉴权密钥。在前端代码中直接调用第三方服务（如 OpenAI、Stripe）会暴露你的 API Key，带来极大的安全风险。通过 Edge Functions，你的前端应用只与你的 supabase 函数通信，所有秘密只在 supabase 中保管。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image20.png" alt="" loading="lazy" decoding="async"></p>
+<p>Edge Functions 的函数使用 secrets 中暴露的密钥作为环境变量，通过 <code>Deno.env.get</code> 加载，从而实现第三方服务的调用。这样一来，敏感密钥就永远不会暴露在客户端（你的浏览器），彻底杜绝了被盗用的风险。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image21.png" alt="" loading="lazy" decoding="async"></p>
+<p>请求 Supabase Edge Function 时，需在请求头携带对应的 Supabase 密钥，下面是一个极简示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 核心配置（替换为你的实际信息）
+const projectId = &quot;你的 Supabase 项目ID&quot;;
+const functionName = &quot;目标 Edge Function 名称&quot;;
+const supabaseKey = &quot;Supabase anon_key&quot;;
+
+// 调用函数
+async function callEdgeFunction() {
+  const url = `https://${projectId}.supabase.co/functions/v1/${functionName}`;
+
+  try {
+    const response = await fetch(url, {
+      method: &quot;POST&quot;,
+      headers: {
+        &quot;Content-Type&quot;: &quot;application/json&quot;,
+        &quot;Authorization&quot;: `Bearer ${supabaseKey}` // 关键：携带密钥完成认证
+      },
+      body: JSON.stringify({ order_id: &quot;123&quot;, action: &quot;refund&quot; }) // 自定义请求数据
+    });
+
+    const result = await response.json();
+    console.log(&quot;调用成功：&quot;, result);
+  } catch (error) {
+    console.error(&quot;调用失败：&quot;, error.message);
+  }
+}
+
+// 执行调用
+callEdgeFunction();
+</code></pre>
+<p>此外，Edge Functions 与 Supabase 的用户认证系统直接打通。当已登录的用户调用一个函数时，其身份信息会传递给函数。这使得你可以在函数内部轻松识别当前用户，并根据其身份执行权限控制。更重要的是，函数在操作数据库时会自动遵循你设置好的行级安全策略（Row Level Security），确保用户只能访问和修改他们有权操作的数据，让构建安全的多用户应用变得简单。</p>
+<p>Edge Functions 的应用场景非常广泛，能够处理各种后端任务。它们非常适合用来监听来自第三方服务的 Webhook 事件（例如支付成功、代码提交等），并自动执行相应的数据处理逻辑。你也可以用它来发送邮件通知、生成 PDF 报告、创建自定义的 API 接口来封装复杂的业务逻辑，或者执行任何你希望在服务端完成的计算任务，极大地扩展了你应用的能力。</p>
+<p>具体到一个常见的例子：身份认证工具 Clerk 。Clerk 仅用于处理用户登录、注册、信息更新等认证相关操作，并不直接管理你的业务数据库。如果你想要将这些认证动态同步到业务数据库中，则需要通过触发 Webhook 事件请求 Edge Functions 实现。Edge Functions 能够监听 Clerk 发出的 Webhook 信号，自动执行数据同步逻辑，让 Supabase 数据库中的用户信息与 Clerk 登录状态实时对齐，全程无需你部署独立后端。</p>
+<h4 id="实时数据同步引擎">实时数据同步引擎</h4>
+<p>Realtime 是 Supabase 的实时数据同步引擎，它允许你的应用即时接收数据库的变化通知，而无需反复轮询 API。当数据库中的数据发生 <code>INSERT</code>、<code>UPDATE</code> 或 <code>DELETE</code> 操作时，Realtime 会通过 WebSocket 将这些变化实时推送给所有已连接的客户端。这对做实时交互类的应用很关键。</p>
+<p>Realtime 主要包含三大核心功能，覆盖了绝大多数实时场景：</p>
+<ol>
+<li><strong>Postgres Changes：</strong> 直接监听数据库表的变化。你可以精确地订阅特定表、特定事件（增、删、改），甚至可以根据筛选条件来接收通知，并与行级安全策略（Row Level Security）完美集成，确保用户只能收到他们有权限查看的数据变更。</li>
+<li><strong>Broadcast：</strong> 允许客户端之间通过频道（Channel）发送低延迟的临时消息。这非常适合实现聊天室、实时光标追踪、在线游戏状态同步等功能。</li>
+<li><strong>Presence：</strong> 用于追踪和同步在线用户状态。你可以用它来轻松实现“谁在线上”、“当前有X人正在查看”等功能，非常适合协作类应用。</li>
+</ol>
+<p>我们会在后续的项目制学习中详细介绍该部分的内容。</p>
+<h4 id="项目设置">项目设置</h4>
+<p>Project Settings 是 Supabase 项目的高级配置部分，你可在此实现计算资源的深度调度，以及各类功能底层参数的精细化配置。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image22.png" alt="" loading="lazy" decoding="async"></p>
+<p>在入门阶段，我们只需聚焦以下两个核心板块，一个是 Data API，我们在此可获取关键的 “Supabase URL”， 它是形如 <code>https://xxx.supabase.co</code> 的 RESTful 端点，是所有数据查询、新增、修改、删除操作的 “入口地址”。前端或服务端需通过该 URL 初始化 Supabase 客户端，建立与数据库的连接。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image23.png" alt="" loading="lazy" decoding="async"></p>
+<p>另一个重点是 API Keys，选择 “Legacy anon, service_role API keys” 标签页，其中的 anon public 密钥 是前端场景的重要身份凭证，它的权限被 RLS 严格限制，仅能访问用户被授权的数据。而 service_role 密钥属于 “服务端高权限密钥”，具备绕过行级安全的能力，可执行批量数据操作、系统级配置等敏感操作。绝对禁止公开分享，若泄露需立即生成新密钥并更新服务端配置。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image24.png" alt="" loading="lazy" decoding="async"></p>
+<p>其余配置项在当前阶段无需深究，待后续有进阶使用需求时再逐一探索即可。</p>
+<h3 id="22-创建你的第一个-sql-数据表">2.2 创建你的第一个 SQL 数据表</h3>
+<p>Supabase 的界面介绍完了，下面深入 Supabase 的核心数据库的操作环节。</p>
+<p>在 Supabase 中创建数据表，主要有以下两种常用方式，你可以根据需求选择：</p>
+<ol>
+<li>（推荐）借助大语言模型生成适配 Supabase 的 SQL 语句，直接在 <strong>SQL Editor（</strong> 前文介绍的 SQL 语句执行器）中粘贴执行，高效快捷，我们会在下个部分环节重点说明这个操作过程。</li>
+<li>通过可视化操作创建：在左侧侧边栏找到 Database 模块，点击进入后选中侧边栏的 Tables，在右侧点击 New table 按钮，即可通过图形化界面创建数据表。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image25.png" alt="" loading="lazy" decoding="async"></p>
+<p>数据表的名称、要存的数据类型，都在下方的 Columns 里指定。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image26.png" alt="" loading="lazy" decoding="async"></p>
+<p>对于关系数据库，其中很重要的特点是表与表之间的关联，你可以在下方找到 <code>Foreign keys</code> ，点击创建相应的关联关系：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image27.png" alt="" loading="lazy" decoding="async"></p>
+<p>其中 <code>Foreign keys</code> 表达了表与表之间的关联关系：一个或一组字段，它在当前表（子表）中的值，会引用另一张表（父表）中主键的值。</p>
+<p>例如，在创建 <code>学生表</code>的时候，我们可以这样定义外键：（<code>所属班级编号</code> 这一列是一个外键。这个外键引用了 <code>班级表</code> 里的 <code>班级编号</code> 这一列。）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">CREATE TABLE 学生表 (
+    学生学号 INT PRIMARY KEY,
+    学生姓名 VARCHAR(50),
+    所属班级编号 INT,
+    FOREIGN KEY (所属班级编号) REFERENCES 班级表(班级编号)
+);
+</code></pre>
+<p>更具体举例而言，我们可以可视化观察对应的表的结构：</p>
+<p>班级表：
+这张表里记录了所有班级的信息，每个班级都有一个独一无二的班级编号。班级编号就是这张表的主键 (Primary Key)，是每个班级的唯一身份证。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>班级编号</th>
+<th>班级名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>101</td>
+<td>一年级一班</td>
+</tr>
+<tr>
+<td>102</td>
+<td>一年级二班</td>
+</tr>
+</tbody></table></div>
+<p>学生表：
+这张表记录了所有学生的信息。每个学生都属于一个特定的班级，对吗？那么我们怎么知道哪个学生在哪个班级呢？</p>
+<p>我们可以在学生表里增加一列，叫做 <code>所属班级编号</code>。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>学生学号</th>
+<th>学生姓名</th>
+<th>所属班级编号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024001</td>
+<td>张三</td>
+<td>101</td>
+</tr>
+<tr>
+<td>2024002</td>
+<td>李四</td>
+<td>102</td>
+</tr>
+<tr>
+<td>2024003</td>
+<td>王五</td>
+<td>101</td>
+</tr>
+</tbody></table></div>
+<p>在该例子中，学生表中的 <code>所属班级编号</code> 列就是外键 (Foreign Key)。</p>
+<p>在 Supabse 中，点击添加 Foreign Key 后，你可以直接选出关联表里对应的那一列</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image28.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="23-sql-editor-简介与数据库基本操作">2.3 SQL Editor 简介与数据库基本操作</h3>
+<p>下面分步执行一系列 SQL 脚本，熟悉常见的 SQL 中的增删查改操作。你可以将每个步骤的代码复制到 SQL Editor 中，执行并观察结果。</p>
+<p>你可以在该目录下获得所有的测试 SQL 文件：</p>
+<p><a href="https://github.com/THU-SIGS-AIID/Project5-Supabase-Demos/tree/main/apps/sql-examples">https://github.com/THU-SIGS-AIID/Project5-Supabase-Demos/tree/main/apps/sql-examples</a></p>
+<h4 id="231-create---创建表结构"><strong>2.3.1 <strong><code>CREATE</code></strong> - 创建表结构</strong></h4>
+<p><code>CREATE TABLE</code> 语句用于为新表定义模式（Schema），包括其列（Columns）、对应的数据类型（Data Types）以及任何约束（Constraints），简单理解是创建了一个数据表。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 1: Create the &#39;orders&#39; table
+-- This file is fully independent and creates a sample table for later steps.
+CREATE TABLE IF NOT EXISTS orders (
+  id serial PRIMARY KEY,
+  user_id int NOT NULL,            -- User ID
+  status text NOT NULL,            -- Order status (e.g. paid, pending)
+  amount numeric(10, 2) NOT NULL,  -- Order total amount
+  details jsonb,                   -- Item and extra details as JSON
+  placed_at timestamptz DEFAULT now(), -- Order creation time
+  is_paid boolean DEFAULT false    -- Paid flag
+);
+
+-- Expected Output:
+-- Orders table created if it did not exist.
+-- No data inserted. (Querying returns zero rows for now.)
+-- If table already exists, no error occurs.
+</code></pre>
+<p>成功执行后，系统将提示脚本已完成。你可以在 Table Editor 中看到对应的表被创建完成：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image29.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="232-insert---填充初始数据"><strong>2.3.2 <strong><code>INSERT</code></strong> - 填充初始数据</strong></h4>
+<p>表结构创建完毕后，下一步是使用 <code>INSERT INTO</code> 语句向表中添加数据行。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 2: Insert initial rows into the orders table
+-- Provides realistic, varied data for demo/testing. All values are self-contained.
+INSERT INTO orders (user_id, status, amount, details, placed_at, is_paid) VALUES
+  (2001, &#39;pending&#39;, 23.50, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR001&quot;,&quot;name&quot;:&quot;Beef Burger&quot;,&quot;qty&quot;:1,&quot;price&quot;:12.00}]}&#39;, now() - interval &#39;2 days&#39;, false),
+  (2002, &#39;paid&#39;, 50.00, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR002&quot;,&quot;name&quot;:&quot;Chicken Burger&quot;,&quot;qty&quot;:2,&quot;price&quot;:10.00},{&quot;sku&quot;:&quot;DRK001&quot;,&quot;name&quot;:&quot;Lemonade&quot;,&quot;qty&quot;:2,&quot;price&quot;:5.00}]}&#39;, now() - interval &#39;1 day&#39;, true),
+  (2003, &#39;cancelled&#39;, 15.00, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;FRY001&quot;,&quot;name&quot;:&quot;French Fries&quot;,&quot;qty&quot;:3,&quot;price&quot;:5.00}], &quot;reason&quot;:&quot;Not available&quot;}&#39;, now() - interval &#39;45 days&#39;, false),
+  (2004, &#39;paid&#39;, 22.98, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR003&quot;,&quot;name&quot;:&quot;Veggie Burger&quot;,&quot;qty&quot;:2,&quot;price&quot;:9.99}], &quot;promo&quot;:&quot;SUMMER22&quot;}&#39;, now() - interval &#39;10 days&#39;, true),
+  (2005, &#39;pending&#39;, 18.75, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;SAL001&quot;,&quot;name&quot;:&quot;Salad&quot;,&quot;qty&quot;:1,&quot;price&quot;:6.75},{&quot;sku&quot;:&quot;BGR001&quot;,&quot;name&quot;:&quot;Beef Burger&quot;,&quot;qty&quot;:1,&quot;price&quot;:12.00}]}&#39;, now() - interval &#39;7 hours&#39;, false),
+  (2006, &#39;paid&#39;, 8.00, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;DRK002&quot;,&quot;name&quot;:&quot;Cola&quot;,&quot;qty&quot;:2,&quot;price&quot;:4.00}]}&#39;, now() - interval &#39;3 hours&#39;, true),
+  (2007, &#39;refunded&#39;, 14.50, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR003&quot;,&quot;name&quot;:&quot;Veggie Burger&quot;,&quot;qty&quot;:1,&quot;price&quot;:9.99},{&quot;sku&quot;:&quot;FRY001&quot;,&quot;name&quot;:&quot;French Fries&quot;,&quot;qty&quot;:1,&quot;price&quot;:4.51}], &quot;refund_reason&quot;:&quot;Late delivery&quot;}&#39;, now() - interval &#39;15 days&#39;, false),
+  (2008, &#39;paid&#39;, 26.99, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR002&quot;,&quot;name&quot;:&quot;Chicken Burger&quot;,&quot;qty&quot;:2,&quot;price&quot;:10.00},{&quot;sku&quot;:&quot;DRK001&quot;,&quot;name&quot;:&quot;Lemonade&quot;,&quot;qty&quot;:1,&quot;price&quot;:6.99}]}&#39;, now() - interval &#39;12 days&#39;, true),
+  (2009, &#39;pending&#39;, 9.99, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR003&quot;,&quot;name&quot;:&quot;Veggie Burger&quot;,&quot;qty&quot;:1,&quot;price&quot;:9.99}]}&#39;, now() - interval &#39;30 minutes&#39;, false),
+  (2010, &#39;paid&#39;, 19.89, &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR001&quot;,&quot;name&quot;:&quot;Beef Burger&quot;,&quot;qty&quot;:1,&quot;price&quot;:12.00},{&quot;sku&quot;:&quot;DRK002&quot;,&quot;name&quot;:&quot;Cola&quot;,&quot;qty&quot;:2,&quot;price&quot;:3.95}]}&#39;, now() - interval &#39;5 days&#39;, true),
+  (2011, &#39;cancelled&#39;, 0.00, &#39;{&quot;items&quot;:[], &quot;reason&quot;:&quot;User cancelled&quot;}&#39;, now() - interval &#39;2 days&#39;, false);
+
+-- Expected Output:
+-- After running this script, SELECT * FROM orders will show about 11 rows with varied user_id, status, amount, details (JSON), placed_at, and is_paid fields.
+-- For example:
+-- | id | user_id | status    | amount | is_paid | placed_at           |
+-- |----|---------|-----------|--------|---------|---------------------|
+-- | 1  | 2001    | pending   | 23.50  | false   | 2025-10-28 13:40:00Z|
+-- | 2  | 2002    | paid      | 50.00  | true    | ...                 |
+-- |... | ...     | ...       | ...    | ...     | ...                 |
+</code></pre>
+<p>执行成功后，此时表中已经插入了原始数据，你可以进入到 Table Editor 界面刷新后看到结果，也可以直接在 SQL Editor 界面中新建窗口，执行查询语句 <code>SELECT * FROM orders;</code>查看结果：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image30.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="233-select---读取与查询数据"><strong>2.3.3 <strong><code>SELECT</code></strong> - 读取与查询数据</strong></h4>
+<p><code>SELECT</code> 语句用于从表中检索数据。通过使用不同的子句，可以实现对数据的精确筛选、排序和格式化，我们可参考以下语句一步步执行查看结果：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 3: SELECT query examples for the orders table
+
+-- Example 1: Select all fields for all orders
+SELECT * FROM orders;
+-- Expected Output: Returns all rows and fields. Columns: id, user_id, status, amount, details, placed_at, is_paid.
+
+-- Example 2: Select only pending orders
+SELECT id, user_id, amount FROM orders WHERE status = &#39;pending&#39;;
+-- Expected Output: All rows with status &#39;pending&#39;; columns: id, user_id, amount.
+
+-- Example 3: Select specific fields and filter by payment status
+SELECT id, status, is_paid, amount FROM orders WHERE is_paid = true;
+-- Expected Output: All rows where is_paid is true; columns: id, status, is_paid, amount.
+
+-- Example 4: Extract all item names from the details (JSON) for each order
+SELECT id, details -&gt; &#39;items&#39; AS item_list FROM orders;
+-- Expected Output: Each row shows id and an array from JSON with item details.
+</code></pre>
+<ul>
+<li><strong>示例 1:</strong> 返回 <code>orders</code> 表中的所有行和列，与第二步的输出类似。</li>
+<li><strong>示例 2:</strong> 仅返回状态为 &#39;pending&#39; 的订单，且只包含指定的列：</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image31.png" alt="" loading="lazy" decoding="async"></p>
+<ul>
+<li><strong>示例 3:</strong> 仅返回已支付的订单，并显示指定的列：</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>id</th>
+<th>status</th>
+<th>is_paid</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>paid</td>
+<td>true</td>
+<td>50.00</td>
+</tr>
+<tr>
+<td>4</td>
+<td>paid</td>
+<td>true</td>
+<td>22.98</td>
+</tr>
+<tr>
+<td>6</td>
+<td>paid</td>
+<td>true</td>
+<td>8.00</td>
+</tr>
+<tr>
+<td>8</td>
+<td>paid</td>
+<td>true</td>
+<td>26.99</td>
+</tr>
+<tr>
+<td>10</td>
+<td>paid</td>
+<td>true</td>
+<td>19.89</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><strong>示例 4:</strong> 返回每个订单的 <code>id</code> 和从 <code>details</code> 字段中提取的 <code>items</code> 数组：</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>id</th>
+<th>item_list</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>[{&quot;qty&quot;:1,&quot;sku&quot;:&quot;BGR001&quot;,&quot;name&quot;:&quot;Beef Burger&quot;,&quot;price&quot;:12}]</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>[{&quot;qty&quot;:2,&quot;sku&quot;:&quot;BGR002&quot;,&quot;name&quot;:&quot;Chicken Burger&quot;,&quot;price&quot;:10},{&quot;qty&quot;:2,&quot;sku&quot;:&quot;DRK001&quot;,&quot;name&quot;:&quot;Lemonade&quot;,&quot;price&quot;:5}]</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>[{&quot;qty&quot;:3,&quot;sku&quot;:&quot;FRY001&quot;,&quot;name&quot;:&quot;French Fries&quot;,&quot;price&quot;:5}]</code></td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody></table></div>
+<h4 id="234-insert---插入单条记录"><strong>2.3.4 <strong><code>INSERT</code></strong> - 插入单条记录</strong></h4>
+<p>在 2.3.2 中，我们演示的是开头时刻初始化批量插入数据，现在我们查看如何新增插入单条数据。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 4: INSERT a new order (single row)
+-- Example: Add a new paid order for user 2012 with one Chicken Burger
+INSERT INTO orders (user_id, status, amount, details, is_paid)
+VALUES (
+  2012, &#39;paid&#39;, 9.99,
+  &#39;{&quot;items&quot;:[{&quot;sku&quot;:&quot;BGR002&quot;,&quot;name&quot;:&quot;AIID Burger&quot;,&quot;qty&quot;:100,&quot;price&quot;:1000}]}&#39;,
+  true
+);
+-- Expected Output:
+-- Before (table fragment):
+-- | id | user_id | status | amount | is_paid |
+-- | ...|   ...   |  ...   |  ...   |  ...    |
+--
+-- After (last row):
+-- | id | user_id | status | amount | is_paid |
+-- | xx |  2012   |  paid  |  9.99  |  true   |
+-- (where xx = next serial value)
+</code></pre>
+<p>此时再用 <code>SELECT * FROM orders;</code> 查一下，可以看到 orders 表成功从 11 个数据变成了 12 个数据。</p>
+<h4 id="235-update---修改现有数据"><strong>2.3.5 <strong><code>UPDATE</code></strong> - 修改现有数据</strong></h4>
+<p>实际工作中要频繁更新数据表，我们可以用 <code>UPDATE</code> 语句修改表中已存在的记录。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 5: UPDATE example
+-- Example: Mark order with id=1 as paid and update its status
+UPDATE orders SET status = &#39;paid&#39;, is_paid = true WHERE id = 1;
+-- Expected Output:
+-- Before (row with id=1):
+-- | id | status  | is_paid |
+-- | 1  | pending |  false  |
+-- After (row with id=1):
+-- | id | status | is_paid |
+-- | 1  | paid   |  true   |
+-- All other rows remain unchanged.
+</code></pre>
+<h4 id="236-delete---删除数据"><strong>2.3.6 <strong><code>DELETE</code></strong> - 删除数据</strong></h4>
+<p><code>DELETE</code> 语句可用于从表中移除记录，并结合条件只删指定的那部分数据。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Step 6: DELETE example
+-- Example: Delete orders older than 2 days to clean up old data
+DELETE FROM orders WHERE placed_at &lt; now() - interval &#39;2 days&#39;;
+-- Expected Output:
+-- Before (filtered for affected rows):
+-- | id | status    | placed_at           |
+-- |  3 | shipped   | 2025-10-13 ...     |  &lt;-- will be deleted
+--
+-- After:
+-- No such rows remain. SELECT * FROM orders WHERE placed_at &lt; now()-interval &#39;2 days&#39; yields zero rows.
+-- Other rows in orders table are unaffected.
+</code></pre>
+<p>执行前，你可先执行 <code>SELECT id, status, placed_at FROM orders WHERE placed_at &lt; now() - interval &#39;2 days&#39;;</code> 看看会筛出哪些数据。当运行 <code>DELETE</code> 命令后，再次执行相同的 <code>SELECT</code> 查询 <code>SELECT id, status, placed_at FROM orders WHERE placed_at &lt; now() - interval &#39;2 days&#39;;</code>，将返回一个空的结果，表明这些行已被成功删除。</p>
+<h3 id="24-行级安全">2.4 行级安全</h3>
+<p>在学习了数据库的基本操作后，我们需要进一步深入一个保障数据安全的核心概念 ——RLS（行级安全，Row Level Security）。</p>
+<p>不妨先思考一个实际场景中的关键问题：如何实现数据的 “隔离访问”？比如，只允许用户 A 查看自己的数据，而无法看到用户 B 的信息；再比如，即便某角色拥有数据库的访问权限，如何避免其误操作或泄露其他用户的敏感数据？</p>
+<p>RLS 正是为解决这类数据安全与隔离需求而生。它允许开发者为数据库表定义精细化的安全策略，根据用户的身份信息（如用户 ID、角色权限等），精确控制哪些用户能访问、修改表中的哪些行数据。
+举个典型示例：对于订单表（<code>orders</code>），我们可以定义这样一条 RLS 策略 ——“仅当 <code>orders</code> 表中某条记录的 <code>user_id</code> 列，与当前登录用户的 ID 完全一致时，该用户才能查询到这条订单数据”，从而实现 “用户只能看自己的订单” 的核心需求。</p>
+<p>当你为某张表启用 RLS后，该表的所有数据操作请求（包括 <code>SELECT</code> 查询、<code>INSERT</code> 新增、<code>UPDATE</code> 修改、<code>DELETE</code> 删除）都会触发 RLS 校验：必须通过至少一条安全策略的检查，操作才能执行。若不存在允许该操作的策略，或请求未满足任何策略的条件，数据库会直接拒绝此次操作，从底层阻断非授权访问。</p>
+<p>在 Supabase 中，RLS 与用户认证系统深度绑定，使用起来更为便捷。Supabase 提供了一个专用函数 <code>auth.uid()</code>，它能直接返回 “当前发起请求的已登录用户” 的唯一 ID（格式为 UUID）。借助这个函数，我们可以轻松编写策略，实现 “数据行与用户身份” 的精准关联（比如前文提到的 “订单 <code>user_id</code> 匹配当前用户 ID”）。</p>
+<p>启用 RLS 策略的方式很灵活，你可以在 Supabase 数据库管理界面中的 “RLS” 按钮，直接配置并启用策略：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image32.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image33.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image34.png" alt="" loading="lazy" decoding="async"></p>
+<p>主动配置难免显得麻烦，通常，我们在数据表语句创建、初始化的时候就会自动考虑植入对应的 RLS 策略。我们只需在 SQL Editor 中执行类似如下语句，即可自动开启对应数据表的行级安全策略。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image35.png" alt="" loading="lazy" decoding="async"></p>
+<h2 id="3-第一个-sql-应用">3. 第一个 SQL 应用</h2>
+<p>掌握了数据库基础操作与RLS核心逻辑，我们终于进入本次教程的实践环节。漫长的学习铺垫是为了让后续“从0到1搭建应用”的过程更清晰。接下来，我们将以“汉堡店订单管理”为场景，手把手演示Supabase的常见操作：从应用与Supabase的关联配置，到数据库与登录功能的集成，逐步学习不同操作逻辑。</p>
+<h3 id="31-克隆并运行-supabase-示例项目">3.1 克隆并运行 Supabase 示例项目</h3>
+<p>要开展实操，首先需要获取配套的演示代码仓库。你可以让 Trae 或 Claude Code 协助 git clone 以下仓库：<a href="https://github.com/THU-SIGS-AIID/Project5-Supabase-Demos">https://github.com/THU-SIGS-AIID/Project5-Supabase-Demos</a></p>
+<p>若已配置 SSH 密钥，建议使用 SSH 地址进行 clone（<a href="mailto:git@github.com">git@github.com</a>:THU-SIGS-AIID/Project5-Supabase-Demos.git）以提升安全性；若 SSH 或 HTTPS 连接遇到网络问题，可以直接点击仓库页面的 “Download ZIP”，获取压缩包后解压即可看到完整代码。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image36.png" alt="" loading="lazy" decoding="async"></p>
+<p>Clone 后，你同样可以让 Trae 或者是 Claude Code 帮你启动项目，例如直接在 Agent 界面中说明： <code>帮我直接启动这个项目里面的 project 1 </code>，或者复制对应想启动 project 的绝对路径，粘贴给大模型让大模型直接启动。</p>
+<h3 id="32-项目1---汉堡店菜单增删改查">3.2 项目1 - 汉堡店菜单增删改查</h3>
+<p>接下来进入实操环节 —— 以 <code>project-burger-shop-menu-crud-1</code> 为例，我们将学习如何通过 SQL 脚本一键初始化 Supabase 数据库，并完成本地项目与 Supabase 数据库的关联配置，让前端能正常读写菜单数据。</p>
+<h4 id="使用脚本创建数据库">使用脚本创建数据库</h4>
+<p>首先要在 Supabase 中把需要的数据表建出来。进入 Project1 项目目录看到名为 <code>scripts</code>的文件夹，其中包含 1 个 <code>init.sql</code>数据库脚本文件，它能帮我们自动完成所有数据库相关资源的创建（包括表结构、初始数据等），之后我们会经常用这个文件初始化数据库里的表。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">......
+
+-- ============================================================================
+-- 2. Create Menu Items Table
+-- ============================================================================
+
+create table if not exists public.menu_items (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text,
+  category text check (category in (&#39;burger&#39;,&#39;side&#39;,&#39;drink&#39;)) default &#39;burger&#39;,
+  price_cents int not null check (price_cents &gt; 0),
+  available boolean default true,
+  emoji text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+-- Comments for documentation
+comment on table public.menu_items is &#39;Burger shop menu items for CRUD demo&#39;;
+comment on column public.menu_items.id is &#39;Unique identifier for each menu item&#39;;
+comment on column public.menu_items.name is &#39;Display name of the menu item&#39;;
+comment on column public.menu_items.description is &#39;Detailed description of the menu item&#39;;
+comment on column public.menu_items.category is &#39;Category: burger, side, or drink&#39;;
+comment on column public.menu_items.price_cents is &#39;Price in cents (integer) to avoid floating point issues&#39;;
+comment on column public.menu_items.available is &#39;Whether the item is currently available for order&#39;;
+comment on column public.menu_items.emoji is &#39;Optional emoji representation of the menu item&#39;;
+comment on column public.menu_items.created_at is &#39;Timestamp when the item was created&#39;;
+comment on column public.menu_items.updated_at is &#39;Timestamp when the item was last updated&#39;;
+
+......
+</code></pre>
+<p>在 SQL Editor 中执行初始化 sql 脚本后，即可在 Table Editor 中看见已创建的数据表。其中数据库初始化代码具体执行逻辑如下：</p>
+<ol>
+<li>创建 menu_items 表 :</li>
+<li>这个表用于存储汉堡店菜单中的所有项目。它包含了如 name (商品名), description (描述), price_cents (以美分为单位的价格，避免浮点数精度问题), category (分类) 和 available (是否可售) 等字段。这基本涵盖了一个菜单项所需的所有信息。</li>
+<li>创建 promo_codes 表 :</li>
+<li>此表用于管理促销活动，例如折扣码。它定义了 code (折扣码), discount_type (折扣类型，如百分比或固定金额), discount_value (折扣数值) 等字段。</li>
+<li>禁用行级安全 (Row Level Security - RLS) :</li>
+<li>为了方便开发和测试，脚本中明确地禁用了 RLS。但结合我们之前学习的 RLS 核心逻辑：RLS 是 Supabase 保障数据安全的关键功能，能通过精细化策略控制 “谁能访问 / 修改哪些数据”（比如只允许管理员编辑促销码，普通用户只能查看菜单）。因此在生产环境中，必须开启 RLS 并配置合理策略，从底层阻断非授权访问（如防止用户恶意修改他人创建的菜单，或泄露促销码规则）。</li>
+<li>插入种子数据 (Seed Data) :</li>
+<li>为了让前端项目启动后就能看到真实的菜单与促销数据（无需手动录入测试数据），<code>init.sql</code>脚本还会向 <code>menu_items</code>和 <code>promo_codes</code>表中插入 “种子数据”（即示例数据）。例如，你可以看到各种汉堡、小食、饮料以及多种多样的折扣码。</li>
+</ol>
+<h4 id="设置与数据库的连接">设置与数据库的连接</h4>
+<p>数据库准备完成，要把这个前端项目和 Supabase 连上，才能正常读取库里的数据。我们需要将 Supabase 项目的 URL 和 anon key 写到指定配置中，本项目提供了两种灵活的配置方式：</p>
+<ol>
+<li>通过环境变量配置</li>
+</ol>
+<p>在项目根目录创建一个 .env 文件，并填入你的 Supabase 凭证：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+</code></pre>
+<ol start="2">
+<li>在项目页面中直接设置</li>
+</ol>
+<p>为了方便快速演示和切换不同的 Supabase 项目，首页页面右上角提供了一个 设置 按钮。你可以点击它，在弹出的模态框中直接输入或粘贴 Supabase URL 和 anon key。</p>
+<p>点击 “Save” 后，这些信息会用于动态创建 Supabase 客户端实例，类似下列代码所示：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-JavaScript">import { createClient, type SupabaseClient } from &#39;@supabase/supabase-js&#39;;
+
+// Optional client factory for demos: returns null when env is not set.
+export function maybeCreateBrowserClient(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !anon) return null;
+  return createClient(url, anon);
+}
+</code></pre>
+<p>创建完数据库，填写完对应的 Supabase Link 相关配置后，即可看到如下界面，你可以试着增删查改商品，并观察 Supabase 中对应部分数据表的变化。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image37.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image38.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="作业">📚 作业</h4>
+<ol>
+<li>尝试增加和删除已有项目，在 Table Editor 中查看修改操作对数据表内容变动的影响。</li>
+</ol>
+<h3 id="33-项目2---汉堡店认证用户">3.3 项目2 - 汉堡店认证用户</h3>
+<p>Project1 实现了 “菜单 CRUD + 数据库连接” ，Project2 将引入更贴近真实业务的核心能力，用户认证（Auth）与行级安全（RLS）权限管理。</p>
+<p>Project2 包含独立的登录页，支持用户通过「邮箱 + 密码」的方式登录。其核心逻辑是调用 Supabase Auth 提供的原生方法，快速实现认证流程，无需手动开发复杂的登录校验逻辑：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>const { error: err } = await supabaseClient.auth.signUp({
+  email,
+  password,
+  options: {
+    data: {
+      full_name: fullName || null,
+      birthday: birthday || null,
+      avatar_url: avatarUrl || null
+    }
+  }
+});
+</code></pre>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image39.png" alt="" loading="lazy" decoding="async"></p>
+<p>登录成功后，Supabase 会自动为用户创建一个会话（session），并在后续所有数据库请求中自动携带认证信息；通过 RLS 的作用，每个用户根据对应的认证信息只能看到自己的账户信息（已购买项目、钱包剩余额度），无法看到其他用户的账户信息，这就实现了不同用户登录后的数据隔离，每个人只能看到自己的内容。</p>
+<p>和 Project 1 一样，你需要先用 <code>init.sql</code> 初始化数据表（注：如果发现初始化出错，请先在 Table Editor 中删除已经创建的数据表，或者是直接删除这个 Supabase Project， 重新新建一个 Project）</p>
+<p>成功使用邮箱注册账户、在邮箱确认注册账户后，登录后进入 Shop 界面即可看到如下内容：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image40.png" alt="" loading="lazy" decoding="async"></p>
+<p>但此时点击 admin，你并不能看到如下界面，你需要尝试在数据表中找到控制用户权限的部分，将权限修改为 <code>admin</code>，从而能够在 Admin 界面正常看到如下内容：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image41.png" alt="" loading="lazy" decoding="async"></p>
+<p>值得提示的是，目前每次注册新的邮箱，你都得去邮箱点一下确认才能登录；但这一步并非是必须的，你可以在 Supabase 的 Authentication 栏目中找到 Sign In / Providers，点击Confirm email 取消邮箱的强制确认。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image42.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="作业-1">📚 作业</h4>
+<ol>
+<li>请先领取新手礼包，完成商品购买操作。</li>
+<li>尝试找到用户权限的设定数据表位置，将权限修改为 <code>admin</code>，并成功在订单管理界面修改商品数量</li>
+<li>尝试在数据表内定位到钱包金额相关表，通过修改使剩余钱包金额增加。</li>
+</ol>
+<h2 id="4-构建你的第一个-supabase-应用">4. 构建你的第一个 Supabase 应用</h2>
+<p>经过前面的系统学习，你已掌握 Supabase 的核心能力（数据库操作、用户认证、RLS 安全策略），现在是时候亲自动手，搭建属于你的第一个包含数据库、支持用户登录系统的应用了！</p>
+<h3 id="41-为任意应用接入-supabase-数据库的标准化流程">4.1 为任意应用接入 Supabase 数据库的标准化流程</h3>
+<p>我们可以使用标准化流程将任意应用接入 Supabase 数据库：</p>
+<ol>
+<li>先梳理需求、同步信息，明确目标并告知AI<ol>
+<li>你需要向AI清晰描述当前应用的核心功能、待新增的数据库需求。示例：“我现有一个本地React Todo应用，数据仅存在浏览器本地存储，需新增‘数据云端同步’功能并接入Supabase数据库。请帮我梳理：这个应用涉及哪些数据操作（如新增待办、修改状态、删除待办）？需要创建哪些数据表来存储这些数据？”</li>
+<li>补充关键约束条件（可选）：比如字段格式要求（时间戳用 <code>timestamptz</code>、金额用整数存分）、数据权限规则（仅自己可见待办），让AI的分析更贴合实际需求。</li>
+<li>审一遍 AI 返回的结果，若AI思路存在遗漏（如未考虑“待办截止时间”字段），补充提示修正：“你漏考虑截止时间了，帮我加上。”</li>
+</ol>
+</li>
+<li>让AI基于你确认后的表结构，生成适配Supabase的 <code>init.sql</code>脚本：“基于上述所说思路和表的结构，返回给我在 Supabase 中可以进行初始化的 init.sql 脚本”，之后你需要在 SQL Editor 中执行脚本；若执行报错，将错误信息反馈给AI，让其修正脚本。</li>
+<li>在 Supabase 运行 init.sql 脚本后，让 AI 基于脚本重构当前代码，让它能正常读写 Supabase 的数据：“请你根据我的 sql 脚本以及上面讨论的设定，重构项目的代码让它支持能够和 Supabase 对应的数据库进行通信并处理数据”。</li>
+<li>重构完毕，此时只需要配置好 Supabase 地址和 key 的参数（正式项目通常只用环境变量配置），随后检查一遍，没问题就算把应用接上了 Supabase 数据库。<ol>
+<li>运行项目，测试所有数据库交互功能，到Supabase Table Editor 实时查看数据是否同步；</li>
+<li>若出现问题（如数据无法插入、仅能看到部分数据），将问题现象反馈给AI，让其定位原因并修正代码。</li>
+</ol>
+</li>
+</ol>
+<p>此外，若目标是开发用户登录页面，可直接让 AI 协助集成登录页面 ：“现在你需要帮我给这个应用加入 Supabase 的用户登录系统，使用邮箱可以注册和登录”。另外，你还需要向 AI 明确页面的跳转逻辑与路径（如登录成功后跳转至系统首页、跳转首页的地址是什么、登录失败时留在当前页并显示错误提示）。集成完成后，你需要尝试注册登录后能在 Supabase 的 Authentication 项目中看到新增的用户数据，并在登录后能正常进入到原先未登录无法进入的应用界面即可。</p>
+<p>当然，你还可以直接让 AI 参考某个 project 的实现直接迁移对应的 Supabase 功能，比如某个 Project 用到了数据库以及 Edge fuction 的高级功能，你可以按照如下方式直接让 AI 迁移对应的相似功能：“请你参考该项目 {此处复制粘贴参考项目的绝对地址} 当中的 Supabase 相关功能实现逻辑，给当前项目加上类似的实现逻辑（如用户登录、数据库管理、函数请求等等）”。</p>
+<h3 id="42-案例研究构建一个在线贪吃蛇游戏">4.2 案例研究：构建一个在线贪吃蛇游戏</h3>
+<p>根据上面所提到的 SOP ，下面用一个具体案例 <code>Project5-Supabase-Demos/apps_snakegame</code>来实践：为一个已有的“贪吃蛇”游戏项目增加分数排行榜单，包含用户登录与数据库基础功能。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image43.webp" alt="" loading="lazy" decoding="async"></p>
+<h4 id="421-分析项目识别数据需求">4.2.1 分析项目，识别数据需求</h4>
+<p>首先，和在之前提到的标准化流程类似，我们可以先把需求澄清给 AI ，让 AI 基于我们项目和需求给出对应的修改方案，之后我们会基于这个修改方案。</p>
+<p><strong>你可以使用如下的提示词来指导 AI：</strong></p>
+<blockquote>
+<p>“我有一个贪吃蛇游戏，目录在 {此处粘贴贪吃蛇游戏的绝对路径}。现在我想结合 supabase 给它增加一个在线排行榜功能，并且支持用户登录系统，排行榜可以根据用户名和邮箱显示排名。</p>
+<p>请帮我分析一下，为了实现这个功能，我需要建立哪些数据表？每个表应该包含哪些字段？”</p>
+</blockquote>
+<p>此时你会得到类似如下返回：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image44.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="422-生成-initsql-脚本">4.2.2 生成 <code>init.sql</code> 脚本</h4>
+<p>确定需要的部分，我们可以让 AI 生成需要在 Supabase 执行的数据库初始化脚本：“请你基于上面的分析，帮我在项目中生成 scripts/init.sql 脚本用于在 Supabase 中初始化所需数据库”。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image45.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="423-改造项目代码">4.2.3 改造项目代码</h4>
+<p>接下来只需要让 AI 照着前面的内容，把贪吃蛇代码重构一遍：“接下来请你基于前面思考的内容以及 sql 表，使用 Supabase 帮我实现排行榜功能，排行榜是单独的一页，需要可以根据邮箱和用户名区分不同用户的总分，你还需要支持基于邮箱的用户登录系统，注册登录才能玩这个游戏。”</p>
+<p>如果当前 AI 对话轮次太多，你想重开一个会话来重构项目，你可以把上面提到的 <code>init.sql</code>作为上下文中的内容，让 AI 照着这个 sql 文件重构项目。</p>
+<p>若是发现 AI 实现的用户登录系统不够正常，你可以直接将我们之前写好的 <code>Project5-Supabase-Demos/apps/project-burger-shop-auth-users-2</code> 的地址一同放入提示词，让 AI 基于项目直接实现用户登录系统。并检查是否已经正确设定了连接到 Supabase 的必要条件，防止因为 Supabase 配置错误而报错。</p>
+<p>在代码修改过程中，若出现实际效果与预期不符的情况（如排行榜数据不显示、登录验证失效等），只需完整记录具体现象并反馈给 AI，即可逐步接近正确结果。改造成功的标准为：用户能顺利完成注册与登录操作，且登录后可正常查看对应的游戏排行榜单。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image46.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image47.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="课程作业">📚 课程作业</h4>
+<ol>
+<li>将用户管理系统集成到贪吃蛇游戏演示版中</li>
+<li>将用户管理系统集成到你的应用程序中（如果之前已开发过一个应用程序）</li>
+</ol>
+<h2 id="5-成为-supabase-大师">5. 成为 Supabase 大师</h2>
+<p>以上是 Supabase 的基本操作，接下来的旅程中我们将会接触 Supbase 的进阶原理和功能，你将理解为什么我们会选择 Supabase 作为教学案例，以及如何使用 Supbase 实现更高级的操作，协助你实现更复杂的交互功能，并且在学习这些功能后，即便面对 Supabase 之外的其他同类工具，你也能触类旁通，从更本质的层面理解后端服务的核心原理。当然，你并不需要在短时间内学会全部，也许只需要学会第三方登录支持已经足够，你可以先浏览下列内容，直到项目遇到对应的需求时再倒回来深入学习。</p>
+<h3 id="51-为什么我们选择-supabase">5.1 为什么我们选择 Supabase</h3>
+<p>在开始进阶之前，我们再次思考这个问题：众多后端技术方案中，为何我们最终选择 Supabase 作为技术底座？</p>
+<p>初创团队在技术选型时普遍面临一个矛盾：既想完全掌控后端系统，又必须快速上线产品——而自建后端通常意味着要投入数月时间搭建数据库与实时同步、用户认证、API服务、文件存储、定时任务、监控告警等核心组件，除非团队成员已在对应领域积累了丰富的实战经验。在资金不足、市场窗口短暂的双重压力下，一旦陷入基础设施泥潭，极易导致迭代滞后、错失早期增长空间。</p>
+<p>Supabase 将这些后端能力打包为开箱即用的服务（PostgreSQL数据库、实时订阅、身份认证、对象存储、边缘函数、自动生成API等），让初创团队得以将稀缺资源聚焦于核心功能开发，避免因底层建设拖慢上线速度——这已成为当前创投环境下务实的生存策略。当然，也可以换别的一栈式后端产品来做，例如 PocketBase（轻量极简）和 Appwrite（跨平台适配）等方案，但综合功能完整性、SQL 生态成熟度及 Github 社区关注度，Supabase 更适合支撑业务的长期稳定运行。</p>
+<p>在同类产品中，Supabase 的开源策略更具优势。 以市场占有率较高的 Firebase 为例：其闭源特性易导致平台绑定，迁移成本极高。Supabase 采用完全开源模式，支持私有化部署，规避了供应商锁定风险，可根据需求切换至其其他竞品。</p>
+<p>说到底，技术选型要匹配业务规模与目标。 对于个人项目或极小范围测试，PocketBase 等超轻量方案已足够；若企业需对接复杂身份系统，或要满足上市公司合规审计要求，WorkOS 这类企业级全身份治理方案更为适用。但对于验证 MVP、承载早期用户的核心业务场景，Supabase 的完整功能完全够用，它独立支撑至少万级用户规模没问题，还能灵活集成 Stripe（支付）、Resend（邮件）、Cloudflare（CDN）等第三方服务；即便未来业务扩展至企业级需求，Supabase 的开源架构也能与企业系统并行部署，不同功能挑最适配的平台来用。这种渐进式灵活性，使初创团队无需过早投入重型基础设施，又能保留 future-proof 的演进空间。</p>
+<h3 id="52-google-和-github-登录支持">5.2 Google 和 GitHub 登录支持</h3>
+<p>在前面的教程中，我们讲过怎么用邮箱注册和登录，但在实际操作中我们通常想要简化注册流程，例如用 Google 和 GitHub 的第三方登录，把注册登录一步搞定，我们将会在这节教程中展开每个细节；同时，一个完整的认证系统也必须提供安全可靠的密码重置功能，我们也会将密码重置功能集成在本节教程的项目中。</p>
+<p>本项目 <code>Project5-Supabase-Demos/apps/project-burger-shop-auth-advanced-supabase-6</code>)完整地演示了如何实现这些高级功能。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image48.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="521-oauth-流程第三方登录是如何工作的">5.2.1 OAuth 流程：第三方登录是如何工作的？</h4>
+<p>第三方登录的核心是 OAuth 2.0 开放授权协议，它的本质是 “授权代理”：允许用户授权我们的应用（汉堡店项目）访问其在第三方平台（如 Google）的公开信息（如邮箱、头像），但无需将第三方平台的密码暴露给我们的应用，从根本上规避了密码泄露风险。</p>
+<p>完整流程可拆解为 5 个关键步骤，以 Google 登录为例：</p>
+<ol>
+<li>用户发起授权请求：用户点击页面上的 “Sign in with Google” 按钮，我们的应用会自动将用户重定向到 Google 官方的授权页面（确保授权过程的安全性，避免钓鱼风险）。</li>
+<li>用户完成第三方授权：用户在 Google 页面登录自己的账户（验证用户身份），并同意我们的应用请求的权限（如 “获取邮箱地址”）。</li>
+<li>Google 返回一次性授权码：授权通过后，Google 会将用户重定向回我们提前约定的 “回调 URL（Callback URL）”，并在 URL 参数中附带一个一次性、短期有效的授权码（而非直接返回用户信息，进一步提升安全性）。</li>
+<li>Supabase 交换访问令牌（Access Token）：我们的后端（由 Supabase 托管，无需自建）会拿着这个授权码，向 Google 官方接口发起请求，换取可用于获取用户信息的 Access Token（授权码仅用于换 Token，避免 Token 直接在前端传输）。</li>
+<li>创建账户并建立会话：Supabase 使用 Access Token 从 Google 拉取用户的公开信息（如邮箱、头像），并在我们的项目中为该用户自动创建账户（若首次登录）或直接关联现有账户，最终生成一个有效的用户会话（Session），完成登录。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image49.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="522-配置-google-cloud-获取-client-id-和-secret">5.2.2 配置 Google Cloud 获取 Client ID 和 Secret</h4>
+<p>无论是何种第三方登录方式，通常都要先拿到 Client ID 与 Secret；对于 Google 的第三方登录，你首先需要在 Google Cloud Platform 中创建一个 OAuth 2.0 客户端 ID，拿到这两个参数。</p>
+<ol>
+<li><strong>进入 Google Cloud Console</strong> :</li>
+<li>访问 <a href="https://console.cloud.google.com/">Google Cloud Console</a>。</li>
+<li>创建一个新项目或选择一个现有项目。</li>
+<li><strong>配置 OAuth 同意屏幕 (OAuth consent screen)</strong> :</li>
+<li>在左侧导航栏中，找到 “APIs &amp; Services” -&gt; “OAuth consent screen”。</li>
+<li>选择 “External” 用户类型，然后点击 “Create”。</li>
+<li>填写应用名称、用户支持电子邮件等必填信息。</li>
+<li>在 “Authorized domains” 部分，添加你的 Supabase 项目域名，格式为 <code>*.supabase.co</code>。</li>
+<li>保存并继续。在 “Scopes” 和 “Test users” 步骤中，你可以暂时跳过，直接保存。</li>
+<li><strong>创建凭据 (Create Credentials)</strong> :</li>
+<li>进入 “APIs &amp; Services” -&gt; “Credentials”。</li>
+<li>点击 “+ CREATE CREDENTIALS”，选择 “OAuth client ID”。</li>
+<li>在 “Application type” 中选择 “Web application”。</li>
+<li>为它取一个名字，例如 “Supabase Auth”。</li>
+<li>在 “Authorized redirect URIs” 部分，点击 “ADD URI”，并填入你的 Supabase 项目的回调 URL。你可以在 Supabase Dashboard 的 “Authentication” -&gt; “Providers” -&gt; “Google” 中找到这个 URL，它的格式通常是 <code>https://&lt;你的项目ID&gt;.supabase.co/auth/v1/callback</code>。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image50.png" alt="" loading="lazy" decoding="async"></li>
+<li>点击 “CREATE”。</li>
+<li><strong>获取 Client ID 和 Client Secret</strong> :</li>
+<li>创建成功后，一个弹窗会显示你的 <strong>Client ID</strong> 和 Client Secret 。请务必立即复制并妥善保存 它们。</li>
+</ol>
+<h4 id="523-配置-github-获取-client-id-和-secret">5.2.3 配置 GitHub 获取 Client ID 和 Secret</h4>
+<p>同样地，你也需要在 GitHub 上注册一个 OAuth 应用。</p>
+<ol>
+<li><p>**进入 **<strong>GitHub** ** Developer Settings</strong> :</p>
+<ol>
+<li>登录你的 GitHub 账户。</li>
+<li>点击右上角的头像，进入 “Settings”。</li>
+<li>在左侧导航栏的底部，找到 “Developer settings”。</li>
+</ol>
+</li>
+<li><p><strong>注册新应用 (Register a new application)</strong> :</p>
+</li>
+<li><p>选择 “OAuth Apps”，然后点击 “New OAuth App”。</p>
+</li>
+<li><p>填写应用名称，例如 “My Burger Shop”。</p>
+</li>
+<li><p><strong>Homepage URL</strong> : 填写你应用的线上地址，或者本地开发地址 <code>http://localhost:3000</code>。</p>
+</li>
+<li><p>**Authorization **<strong>callback** ** URL</strong> : 填入你的 Supabase 项目的回调 URL。同样，你可以在 Supabase Dashboard 的 “Authentication” -&gt; “Providers” -&gt; “GitHub” 中找到它，格式为 <code>https://&lt;你的项目ID&gt;.supabase.co/auth/v1/callback</code>。</p>
+</li>
+<li><p>点击 “Register application”。</p>
+</li>
+<li><p><strong>获取 Client ID 和 Client Secret</strong> :</p>
+</li>
+<li><p>注册成功后，页面会显示你的 <strong>Client ID</strong> 。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image51.png" alt="" loading="lazy" decoding="async"></p>
+</li>
+<li><p>点击 “Generate a new client secret” 来生成你的 <strong>Client Secret</strong> 。同样，请立即复制并保存 它。</p>
+</li>
+</ol>
+<h4 id="524-在-supabase-中配置-provider">5.2.4 在 Supabase 中配置 Provider</h4>
+<p>现在，将我们获取到的凭证配置到 Supabase 中。</p>
+<ol>
+<li><strong>进入 Supabase Dashboard</strong> :</li>
+<li>选择你的项目，进入 “Authentication” -&gt; “Providers”。</li>
+<li><strong>启用并配置 Google</strong> :</li>
+<li>找到 “Google” 并启用它。</li>
+<li>将你从 Google Cloud 获取的 <strong>Client ID</strong> 和 Client Secret 粘贴到对应的输入框中。</li>
+<li>点击 “Save”。</li>
+<li>**启用并配置 ** GitHub :<ol>
+<li>找到 “GitHub” 并启用它。</li>
+<li>将你从 GitHub 获取的 <strong>Client ID</strong> 和 Client Secret 粘贴到对应的输入框中。</li>
+<li>点击 “Save”。</li>
+</ol>
+</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image52.png" alt="" loading="lazy" decoding="async"></p>
+<p>至此，你已经能用第三方账户登录自己做的网站了，你可以直接让 AI 基于 <code>Project5-Supabase-Demos/apps/project-burger-shop-auth-advanced-supabase-6</code>项目作为参考，在你的项目的基础上支持用户登录系统，以最小成本集成包含 github 与 google 鉴权的用户登录界面。</p>
+<h4 id="525-密码重置实现">5.2.5 密码重置实现</h4>
+<p>作为一个成熟的用户登录组件，密码重置也是极其重要的一环，本项目 <code>project-burger-shop-auth-advanced-supabase-6</code>也包含了该功能的完整实现，你可以直接让 AI 基于本项目的密码重置功能复刻完整的密码重置组件。其主要分为以下几步：</p>
+<ol>
+<li>发起请求 ：用户在忘记密码页面输入邮箱，前端调用 <code>supabase.auth.resetPasswordForEmail()</code> 函数，并指定一个重定向 redirectTo URL（例如 /auth/reset ）。</li>
+<li>发送邮件 ：Supabase 会向该邮箱发送一封包含唯一重置链接的邮件。</li>
+<li>访问链接 ：用户点击邮件中的链接，被重定向到应用内指定的重置页面。</li>
+<li>更新密码 ：在重置页面，用户输入新密码。前端调用 <code>supabase.auth.updateUser()</code> ，将新密码提交给 Supabase。Supabase 会自动验证链接的有效性并完成密码更新。</li>
+</ol>
+<p>最后，如果你觉得当前的密码重置邮件过于简陋，你可以 在 Supabase Dashboard 的 Authentication -&gt; Email Templates 中自定义“Reset Password”邮件模板。</p>
+<p>除了 Reset password 功能外，你还能看到许多其他与用户管理相关的高级功能设定（例如 Invite user 等），你可根据对应功能各自的开发文档，结合 Vibe coding 工具自行添加对应功能。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image53.png" alt="" loading="lazy" decoding="async"></p>
+<h3 id="53-实时功能">5.3 实时功能</h3>
+<p>Supabase 的实时功能是其最强大的特性之一，为构建协作文档、实时仪表盘、游戏大厅或客服系统提供了极大的便利。</p>
+<p>本项目 <code>Project5-Supabase-Demos/apps/project-burger-shop-realtime-orders-3 </code>通过构建一个 多人实时聊天室、光标位置共享 功能，展示了 Supabase Realtime 涉及到的三大核心能力：数据库变更监听 (Postgres Changes)、广播 (Broadcast) 和 在线状态 (Presence)。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image54.png" alt="" loading="lazy" decoding="async"></p>
+<p>如果你觉得相关代码部分有一定难度，可以直接让 AI 参考这部分文档，改你的程序。</p>
+<h4 id="531-数据库实时变动-postgres-changes">5.3.1 数据库实时变动 Postgres Changes</h4>
+<p>最常见的 Realtime 功能是实时监听数据库的变更 Postgres Changes 。它允许客户端订阅数据库中特定表、特定行甚至特定列的 INSERT 、 UPDATE 或 DELETE 事件。一旦数据库发生变动（无论是通过 API 调用、Supabase Dashboard 操作，还是 SQL 脚本执行），Supabase 都会利用 PostgreSQL 的底层复制机制，立即通过 WebSocket 将变更的数据推送到所有订阅了该频道的前端客户端，而无需前端通过轮询（Polling）去反复查询。</p>
+<p>一般而言，该功能可以在 Table Editor 中找到 Enable Realtime 点击后启动， 但更方便的是通过 SQL 脚本初始化执行，例如：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- Enable realtime replication
+ALTER TABLE public.chat_messages REPLICA IDENTITY FULL;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = &#39;supabase_realtime&#39;
+      AND schemaname = &#39;public&#39;
+      AND tablename = &#39;chat_messages&#39;
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.chat_messages;
+  END IF;
+END $$;
+</code></pre>
+<p>该语句将 <code>chat_messages</code> 表添加到了 Supabase 预设的 <code>supabase_realtime</code> 中，而一旦一个表被加入到这个特殊的 <code>publication</code> 中，Supabase 的实时服务器就会开始监听它的所有数据变更。</p>
+<p>基于上面的特殊数据表，我们能够用监听代码实时盯着表里的数据变动。我们需要实现的是当一个用户发送消息时，其他所有在线用户都能立刻在屏幕上看到这条消息。通过订阅 chat_messages 表的 INSERT 事件能够实现这一点。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">    const sub = supabase
+      .channel(&#39;chat_messages_channel&#39;)
+      .on(&#39;postgres_changes&#39;, {
+        event: &#39;INSERT&#39;,
+        schema: &#39;public&#39;,
+        table: &#39;chat_messages&#39;
+      }, (payload: any) =&gt; {
+        console.log(&#39;New message received:&#39;, payload.new);
+        const newMessage = payload.new as Message;
+        // ... //
+      .subscribe((status: string) =&gt; {
+        console.log(&#39;Chat subscription status:&#39;, status);
+      });
+</code></pre>
+<ul>
+<li><code>.channel(&#39;chat_messages_channel&#39;)</code>: 创建一个隔离的通信频道。</li>
+<li><code>.on(&#39;postgres_changes&#39;, ...)</code>: 这是核心的订阅方法。我们告诉 Supabase 我们只关心 <code>chat_messages</code> 表的 <code>INSERT</code> 事件。</li>
+<li><code>payload.new</code>: 当有新消息被插入数据库时，Supabase 会将这条新数据的完整内容通过 <code>payload.new</code> 推送给所有订阅的客户端。</li>
+<li><code>.subscribe()</code>: 启动订阅。</li>
+</ul>
+<h4 id="532-信息广播同步-broadcast--presence">5.3.2 信息广播同步 Broadcast &amp; Presence</h4>
+<p>对于那些不需要存入数据库的、更“即时”的交互，比如光标移动、在线状态等，Supabase 提供了 Broadcast 和 Presence 功能。</p>
+<ul>
+<li>Presence: 用于跟踪频道内所有客户端的 <strong>共享状态</strong> 。适合用来实现“谁在线”的功能。</li>
+<li>Broadcast: 用于向频道内的所有其他客户端发送<strong>低延迟</strong>的 临时消息 。</li>
+</ul>
+<p>Presence 的核心思想是： 让每个客户端声明自己的在线状态，并由 Supabase 的服务器负责将这些状态可靠地同步给频道内的所有其他客户端。实现 Presence 分为以下几个关键步骤：</p>
+<ol>
+<li>创建一个支持 Presence 的频道</li>
+</ol>
+<p>首先，我们创建了一个频道 <code>lobby_presence</code> 来专门处理这些交互，并在配置中指定一个唯一的 key 来标识当前用户。这个 key 通常是用户的 ID。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>const ch = supabase.channel
+(&#39;lobby_presence&#39;, {
+  config: {
+    presence: { key: anonymousUser.id },
+  }
+});
+</code></pre>
+<ol start="2">
+<li>订阅频道宣告“我在线”的信息</li>
+</ol>
+<p>一旦频道创建成功，我们需要订阅它。在订阅成功的回调（ status === &#39;SUBSCRIBED&#39; ）中，我们调用 channel.track() 方法。这个方法会将当前用户的信息（例如用户ID、名称、头像颜色等）广播给频道内的所有其他客户端，宣告自己的“在线”状态。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>const me = {
+  id: anonymousUser.id,
+  name: anonymousUser.name,
+  color: anonymousUser.color
+};
+
+ch.subscribe(async (status) =&gt; {
+  if (status === &#39;SUBSCRIBED&#39;) {
+    await ch.track(me);
+  }
+});
+</code></pre>
+<ol start="3">
+<li>同步完整的在线列表</li>
+</ol>
+<p>当一个新用户加入频道时，他们需要获取当前所有已经在线的用户列表。监听 presence 的 sync 事件就能拿到。 sync 事件会在你首次加入频道时触发，为你提供一个完整的“快照”。</p>
+<p>channel.presenceState() 方法会返回一个对象，包含了当前频道内所有在线用户的状态信息。我们将其处理后更新到应用的 state 中，从而渲染出完整的在线用户列表。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>ch.on(&#39;presence&#39;, { event: &#39;sync&#39; }, () 
+=&gt; {
+  const state = ch.presenceState();
+  const flat = {};
+  Object.values(state).forEach((arr) =&gt; {
+    arr.forEach((u) =&gt; { flat[u.id] = 
+    { ...u }; });
+  });
+  setOnline(flat);
+});
+</code></pre>
+<ol start="4">
+<li>监听单个用户的加入与离开</li>
+</ol>
+<p>除了 sync 事件，我们还可以监听 join 和 leave 事件，好在有新用户进出时立刻反应，例如显示一个 &quot;User has joined&quot; 的通知。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>ch.on(&#39;presence&#39;, { event: &#39;join&#39; }, ({ 
+key, newPresences }) =&gt; {
+  console.log(&#39;User joined:&#39;, key, 
+  newPresences);
+});
+
+ch.on(&#39;presence&#39;, { event: &#39;leave&#39; }, ({ 
+key, leftPresences }) =&gt; {
+  console.log(&#39;User left:&#39;, key, 
+  leftPresences);
+});
+</code></pre>
+<p>通过以上步骤，我们便构建了一个功能完备的在线状态系统。Supabase 自动处理了用户意外断开连接（如关闭浏览器或断网）的情况，并在适当的时候触发 leave 事件，确保了在线列表的准确性。</p>
+<p>当 Presence 让我们知道了“谁在场”之后， Broadcast 就能让他们互相“对话”，但对话的内容是短暂存储的。一个典型的例子就是实时光标追踪。如果每次鼠标移动都去读写数据库，会造成巨大的性能浪费和延迟。 Broadcast 完美地解决了这个问题，它允许消息在各个客户端之间直接通过 WebSocket 传递，完全绕过数据库。</p>
+<p>Broadcast 的工作模式主要依赖两个核心方法： channel.send() 用于发送，channel.on() 用于接收。】</p>
+<ol>
+<li>发送端：广播我的光标位置</li>
+</ol>
+<p>我们为 mousemove 事件添加了一个监听器。当鼠标移动时，我们构造一个包含用户 ID、坐标和颜色的 payload，然后通过 channel.send() 将其广播出去，并指定事件名称为 &#39;cursor&#39;。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">const handleMouseMove = (e) =&gt; {
+  const payload = {
+    id: anonymousUser.id,
+    x: e.clientX,
+    y: e.clientY,
+    name: anonymousUser.name,
+    color: anonymousUser.color
+  };
+
+  channelRef.current?.send({
+    type: &#39;broadcast&#39;,
+    event: &#39;cursor&#39;,
+    payload
+  });
+};
+
+document.addEventListener(&#39;mousemove&#39;, handleMouseMove);
+</code></pre>
+<ol start="2">
+<li>接收端：监听并渲染他人的光标</li>
+</ol>
+<p>在同一个频道内，所有客户端都使用 channel.on() 来监听 broadcast 类型的、且 event 为 &#39;cursor&#39; 的消息。一旦收到匹配的消息，回调函数就会被触发。我们从 payload 中解析出发送方的数据，并用它来更新本地的 online 状态，从而在屏幕上实时渲染出其他用户光标的位置。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">ch.on(&#39;broadcast&#39;, { event: &#39;cursor&#39; }, ({ payload }) =&gt; {
+  setOnline((prev) =&gt; ({
+    ...prev,
+    [payload.id]: {
+      ...(prev[payload.id] || {}),
+      x: payload.x,
+      y: payload.y
+    }
+  }));
+});
+</code></pre>
+<p>通过这种方式， Presence 和 Broadcast 协同工作；Presence 维护在线用户列表，而 Broadcast 则负责在这些用户之间传递像光标位置这样的临时状态，最终以较低的成本实现了丰富的实时互动功能。</p>
+<h3 id="54-存储">5.4 存储</h3>
+<p>除了用户信息、订单这类可规整定义的结构化数据，一个完整的应用通常还需要处理大量非结构化文件 —— 例如用户头像、商品展示图、用户上传的订单文档等。这类文件的特点是体积差异大、数量可能极多（比如电商平台的商品图可能达数万甚至数十万张），若直接存储在应用自身的业务服务器中，会显著增加服务器的存储负载，还可能拖慢数据读写速度，影响应用整体性能。</p>
+<p>实际开发中，这类非结构化文件会统一交由 “对象存储服务” 管理，OSS、Amazon S3 均属于这类服务，它们是专门为海量文件存储设计的 “专业存储工具”，能高效应对文件的存储、备份与快速读取需求。而我们在应用中获取这些文件时，并不会直接从对象存储服务的 “底层仓库” 调取，而是靠 URL 来取：每个存储在对象存储中的文件，都会被分配一个唯一的 URL（类似 “<a href="https://xxx.oss.com/avatar/user123.jpg">https://xxx.oss.com/avatar/user123.jpg</a>” 的地址，可简单理解为这个“网站”只有一张图片），这个 URL 就像文件的 “专属访问地址”，前端页面只需通过该地址，就能直接下载或加载头像、商品图，无需依赖应用业务服务器中转，既提升了文件加载速度，也减轻了业务服务器的压力。</p>
+<p>本项目 <code>project-burger-shop-storage-uploads-4</code> 便通过一个用户头像上传功能，深入演示了如何利用 Supabase Storage 构建现代化的文件上传系统，让开发者直观理解非结构化文件从上传到通过 URL 访问的完整流程。此外，本项目使用 <code>Uppy</code> 库来提供一个优秀的文件上传界面，并结合 <code>Tus</code> 插件实现了可续传上传，通过将 Uppy 的上传端点指向 Supabase 的标准 API (<code>&lt;supabaseUrl&gt;/storage/v1/upload/resumable</code>) 来实现，你可以照着这个思路写自己的上传组件。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image55.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image56.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="541-存储桶">5.4.1 存储桶</h4>
+<p>Supabase Storage 的组成单元是存储桶 Bucket。你可以把它想象成电脑操作系统中的文件夹。每个 Bucket 都可以有自己独立的安全策略和配置。</p>
+<p>Storage 内的所有文件都可以通过一个公开的 URL 直接访问，但并不意味着任何人都可以随意上传或修改，具体的访问权限将由更精细的策略来控制。和数据库一样，Storage 的访问权限也是通过行级安全策略来管理的。SQL 策略写在 storage.objects 和 storage.buckets 这两张特殊表上，可以精确定义谁能读取 (SELECT)、上传 (INSERT)、更新 (UPDATE) 或删除 (DELETE) 文件。</p>
+<p>例如，我们可以创建一条策略，只允许用户上传到以自己 user_id 命名的文件夹下，并且只能上传图片类型的文件：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>CREATE POLICY &quot;Allow authenticated 
+uploads to avatars bucket&quot;
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (
+  bucket_id = &#39;avatars&#39; AND
+  auth.uid() = (storage.foldername(name))
+  [1]::uuid AND
+  (storage.extension(name) IN (&#39;png&#39;, 
+  &#39;jpg&#39;, &#39;jpeg&#39;))
+);
+
+CREATE POLICY &quot;Allow public read access 
+to avatars&quot;
+ON storage.objects FOR SELECT
+USING ( bucket_id = &#39;avatars&#39; );
+</code></pre>
+<h4 id="542-获取可访问文件-url">5.4.2 获取可访问文件 URL</h4>
+<p>本项目需要你手动创建一个名为 avatars 的公共桶，所有文件都传到这个公共桶里存着。文件上传成功后，我们只得到了它在 Storage 中的存储路径 ，例如 public/avatar1.png 。这只是存储在数据库中的一个字符串，要让浏览器能够渲染这张图片，我们需要将其转换为一个可访问的 HTTP URL。</p>
+<p>Supabase 提供了两种截然不同的策略来获取这个 URL，它们在安全性、持久性和成本控制上有着本质的区别。</p>
+<h4 id="1-公开-url-public-url---永久链接">1. 公开 URL (Public URL) - 永久链接</h4>
+<p>这是最直接的方式。如果你的文件存放在一个<strong>Public Bucket</strong> 中，你可以获取一个固定、永久的公开链接。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">const { data } = supabase.storage
+  .from(&#39;avatars&#39;)
+  .getPublicUrl(&#39;public/avatar1.png&#39;);
+const publicUrl = data.publicUrl;
+</code></pre>
+<p>这类链接具有两大核心特点：一是简单直接，其 URL 结构固定，在实际操作中易于拼接和管理，降低了技术使用门槛；二是利于缓存，作为永久链接，它能被 CDN（内容分发网络）和浏览器有效缓存，从而大幅提升资源的访问速度，优化用户体验。基于这些特点，它适用于真正意义上的公共资源场景，例如网站 Logo、产品目录图片、博客文章配图等，能很好地满足这类资源的访问和管理需求。</p>
+<p>不过在生产环境中，这类链接存在明显的被盗刷流量（Hotlinking）风险。由于链接是永久公开的，外部人员可以轻易将你的图片链接嵌入到他们自己的高流量网站中，导致流量被非法占用。这一行为会让你的 Supabase 项目产生大量不必要的流量费用，而这些消耗的流量并未服务于你自身的应用，属于典型的成本浪费，是生产环境中需要高度警惕和防范的问题；因此，我们需要转向临时签名 URL 实现对外资源的暴露。</p>
+<h4 id="2-签名-url-signed-url---临时授权链接">2. 签名 URL (Signed URL) - 临时授权链接</h4>
+<p>为了解决公开 URL 的安全和成本问题，Supabase 提供了生成临时签名 URL 的方式。这是绝大多数线上应用推荐的最佳实践，比如文生图应用给用户生成限时查看的图片链接、电商平台仅让下单用户获取临时发票下载地址、付费内容平台为订阅用户提供短期有效的课程播放链接，既防文件盗用又能避免流量盗刷，适配性极强。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">const { data, error } = await supabase.storage
+  .from(&#39;avatars&#39;)
+  .createSignedUrl(&#39;private/user-invoice.pdf&#39;, 3600); // 链接有效期为 3600 秒 (1小时)
+const signedUrl = data?.signedUrl;
+</code></pre>
+<p>临时签名 URL（Signed URL）有三大核心优势：安全可控是指链接带安全标记、有有效期，过期就用不了；权限绑定很简单 —— 只有能看这文件的人，才能生成这个链接，就算文件藏在私有存储里（Private Bucket），他用这个链接也能正常打开；杜绝盗刷是因为链接是临时的，复制到别处很快就失效，不会被恶意刷流量。靠这些优势，像用户头像、私人照片、付费内容、订单发票这些需要管权限的文件，都能用它。</p>
+<p>从安全保障和成本控制的角度，建议养成优先使用临时签名 URL 的习惯。只有当某个资源明确需要永久公开、无限制访问（比如应用的公开 Logo、公共活动宣传图等）时，才考虑使用 Public URL。这样既能满足特定业务需求，又能最大程度规避不必要的风险和成本消耗。</p>
+<h3 id="55-边缘函数">5.5 边缘函数</h3>
+<p>Edge Function 是 Serverless（无服务器架构）生态中极具核心价值的形态之一，它为 “无自建后端” 场景提供了轻量、高效的函数运行支持。</p>
+<p>什么是 Serverless？ Serverless（无服务器架构）并不意味着真的没有服务器，而是指开发者无需关心服务器的购买、运维、配置和扩容 。你只需要编写业务代码（函数），云服务商会在特定事件触发时自动为你分配资源运行代码，并按实际运行时间计费。</p>
+<p>当你的应用需要执行一些不能或不应在客户端（浏览器）上完成的逻辑时——例如与需要私密密钥的第三方 API 交互、执行计算密集型任务、或强制执行复杂的业务规则——Edge Functions 就派上了用场。Supabase Edge Functions 基于 Deno 和 TypeScript，它们被部署在全球的边缘节点上，物理距离上靠近你的用户，从而提供极低的函数执行延迟。</p>
+<p>目前主流云厂商都推出了各自的 Edge Function 服务，常见的包括：</p>
+<ul>
+<li>AWS Lambda@Edge：基于 AWS Lambda 延伸的边缘函数服务，可与 CloudFront CDN 联动，支持 Node.js、Python 等语言；</li>
+<li>Cloudflare Workers：Cloudflare 推出的边缘函数，部署在其全球 275+ 边缘节点，支持 JavaScript/TypeScript，以 “毫秒级延迟” 为核心优势；</li>
+<li>Vercel Edge Functions：适配 Vercel 前端项目的边缘函数，与 Next.js 深度集成，支持 TypeScript，主打 “前端与边缘逻辑无缝衔接”；</li>
+</ul>
+<p>回到 Supabase ，当你的应用需要执行 “不能在客户端（浏览器）完成” 的逻辑时，比如用私密密钥调用第三方 API（如 LLM 接口）、处理计算密集型任务（如图片压缩）、或强制执行权限校验（如文件访问规则）时，Supabase Edge Functions 就能发挥作用。它基于 Deno runtime 和 TypeScript 构建，部署在全球边缘节点上，能以 “靠近用户的物理距离” 实现极低的执行延迟，是编写自定义、可信服务器端逻辑的核心工具。</p>
+<p>本项目 <code>Project5-Supabase-Demos/apps/project-burger-shop-edge-function-5</code>通过一个与大语言模型（LLM）实时流式对话的功能，展示了 Edge Functions 的最简应用流程。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image57.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="551-llm-chat-案例解析">5.5.1 LLM Chat 案例解析</h4>
+<p>假设你想在应用中集成一个类似 ChatGPT 的聊天机器人。你需要在服务器端调用 OpenAI 的 API，但这需要一个私密的 API Key。 这个 Key 绝对不能暴露在前端代码中 ，否则任何人都可以通过查看网页源码盗用你的 Key，产生高昂的费用。这正是 Edge Function 的用武之地。我们将创建一个名为 llm-chat 的函数，它充当了前端和 OpenAI API 之间的一个 安全代理 。</p>
+<p>参考 <code>project-burger-shop-edge-function-5/scripts/llm-chat.ts</code>的代码，我们来看看它是如何工作的：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">// scripts/llm-chat.ts
+import &quot;jsr:@supabase/functions-js/edge-runtime.d.ts&quot;;
+import { OpenAI } from &quot;npm:openai&quot;;
+
+const OPENAI_API_KEY = Deno.env.get(&quot;OPENAI_API_KEY&quot;);
+
+Deno.serve(async (req) =&gt; {
+  try {
+    const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+    const { prompt } = await req.json();
+
+    const stream = await openai.chat.completions.create({
+      model: &quot;gpt-3.5-turbo&quot;,
+      messages: [{ role: &quot;user&quot;, content: prompt }],
+      stream: true,
+    });
+
+    return new Response(stream.toReadableStream(), {
+      headers: { &quot;Content-Type&quot;: &quot;text/event-stream&quot; },
+    });
+  } catch (err) {
+  }
+});
+</code></pre>
+<p>在该案例中，对于密钥安全，OPENAI_API_KEY 作为环境变量被安全存储于 Supabase 的服务器。本地前端代码完全无法接触到该密钥，从而有效保障了密钥的安全性。</p>
+<h4 id="552-创建并部署函数">5.5.2 创建并部署函数</h4>
+<p>Supabase 提供了非常友好的界面，让你无需接触命令行即可完成部署。</p>
+<ol>
+<li><strong>进入 Edge Functions 面板</strong> :</li>
+<li>登录你的 Supabase 项目 Dashboard。</li>
+<li>在左侧导航栏中，点击像代码一样的图标，进入 “Edge Functions”。</li>
+<li><strong>创建新函数</strong> :</li>
+<li>点击 “Create a new function” 按钮。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image58.png" alt="" loading="lazy" decoding="async"></li>
+<li>为函数命名，例如 <code>llm-chat</code>。</li>
+<li><strong>粘贴代码</strong> :
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image59.png" alt="" loading="lazy" decoding="async"></li>
+<li>在弹出的在线编辑器中， <strong>删除所有默认的占位代码</strong> 。</li>
+<li>打开你本地的 <code>llm-chat.ts</code> 文件， <strong>复制其全部内容</strong> 。</li>
+<li>将复制的代码<strong>粘贴</strong>到 Supabase 的在线编辑器中。</li>
+<li>**配置**<strong>环境变量** ** (Secrets)</strong> :<ol>
+<li>在侧边栏找到 Secrets。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image60.png" alt="" loading="lazy" decoding="async"></li>
+<li>Name: 输入 <code>OPENAI_API_KEY</code>。</li>
+<li>Value: 粘贴你自己的 OpenAI API Key。</li>
+<li>点击 “Save”。在这里设置的 Secret 会被加密存储，并安全地注入到你的函数运行时环境中。</li>
+</ol>
+</li>
+</ol>
+<p>若有函数需要更新，记得在 Edge Function 部分执行 Deploy updates。Supabase 会在云端为你构建并部署这个函数。几分钟后，你的函数就可以在线访问。</p>
+<p>除了作为语言模型的安全代理，Edge Functions 的应用场景远不止于此。实际上，任何需要服务器端逻辑处理的任务，不管是简单的 API 调用、数据验证，还是更复杂的计算，交给 Edge Function 就行。它为你提供了一个轻量级、可扩展的后端，而无需管理任何服务器基础设施。</p>
+<p>如果你想探索更多可能性，可以参考项目中的其他示例。例如：</p>
+<ul>
+<li>图片生成 ( txt2img.ts ) : 这个函数展示了如何利用 Edge Function 调用第三方的文生图（Text-to-Image）API（如 Stability AI, Midjourney 等）来动态生成图片。这是一种典型的计算密集型或需要安全调用外部服务的场景。与 llm-chat 案例一样，API 密钥被安全地存储在 Supabase 后端，前端只负责发送文本描述，然后接收并展示生成的图片，整个过程安全、高效。</li>
+<li>发送邮件 ( send-email.ts ) : 在应用中发送欢迎邮件、交易通知或密码重置邮件是常见需求。 send-email.ts 示例演示了如何通过 Edge Function 集成邮件服务（如 Resend, SendGrid）。你无需在客户端代码中暴露敏感的邮件服务 API Key，只需创建一个函数，让前端通过调用这个函数来触发邮件发送。</li>
+</ul>
+<h3 id="56-clerk-登录">5.6 Clerk 登录</h3>
+<p>Clerk 是一款专注于身份认证与用户管理的专业开发工具，核心能力覆盖用户注册、登录、账号安全MFA、权限控制、会话管理等全链路身份认证相关需求，能帮助开发者快速搭建安全、灵活且符合现代应用标准的用户体系，无需从零开发复杂的身份逻辑。</p>
+<p>本部分将介绍如何从零开始配置 Clerk 服务，再把它和 Supabase 接起来。你可以在项目 <code>project-burger-shop-auth-advanced-clerk-7</code> 中体验全流程。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image61.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="561-创建-clerk-应用与获取密钥">5.6.1 创建 Clerk 应用与获取密钥</h4>
+<p>在使用本项目之前，你需要拥有一个 Clerk 账号并创建一个应用。</p>
+<ol>
+<li>注册与创建:<ol>
+<li>访问 <a href="https://dashboard.clerk.com/">dashboard.clerk.com</a> 并注册账号。</li>
+<li>点击 &quot;Create application&quot; 。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image62.png" alt="" loading="lazy" decoding="async"></li>
+<li>输入应用名称（例如 &quot;Burger Shop&quot;）。</li>
+<li>在 &quot;How will your users sign in?&quot; 中，默认勾选 Email , Google , GitHub 。</li>
+<li>点击 Create application 。</li>
+</ol>
+</li>
+<li>获取 API Keys:<ol>
+<li><p>创建成功后，你会被引导至 API Keys 页面。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image63.png" alt="" loading="lazy" decoding="async"></p>
+</li>
+<li><p>找到 Publishable key (以 <code>pk_</code> 开头) 和 Secret key (以 <code>sk_</code> 开头)。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image64.png" alt="" loading="lazy" decoding="async"></p>
+</li>
+<li><p>将它们复制到你的 <code>.env.local</code> 文件中（参考本项目 <code>.env.example</code>）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="562-配置-supabase-和-clerk-的原生集成">5.6.2 配置 Supabase 和 Clerk 的原生集成</h4>
+<p>在进一步使用前，我们需要集成 Supabase 与 Clerk 的关联关系，方便之后登录的鉴权跳转以及控制对特定数据库的访问权限。Supabase 与 Clerk 提供官方原生集成能力，两边的身份认证靠这个集成就能打通，不用手写适配逻辑，登录、权限校验这些功能开发起来省事得多：</p>
+<ol>
+<li>在 Clerk 中激活对 Supab ase 的官方集成<ol>
+<li>登录 <a href="https://dashboard.clerk.com/">Clerk Dashboard</a>。</li>
+<li>在左侧菜单导航至 Integrations (集成)。</li>
+<li>在列表中找到并点击 Supabase。</li>
+<li>开启 Enable Supabase 开关（或点击 Activate integration）。</li>
+<li>关键步骤：激活成功后，页面会显示你的 Clerk Domain（格式通常为 <code>https://&lt;your-id&gt;.clerk.accounts.dev</code> 或你的自定义域名）。请复制这个 Domain 地址，下一步会用到。</li>
+</ol>
+</li>
+<li>在 Supabase 中添加 Clerk 提供商<ol>
+<li>登录 <a href="https://supabase.com/dashboard">Supabase Dashboard</a> 并进入你的项目。</li>
+<li>在左侧菜单导航至 Authentication &gt; Sign In / Up (或者直接点击 Providers)。</li>
+<li>点击 Add provider 按钮，从下拉列表中选择 Clerk。</li>
+<li>在弹出的 Clerk Domain 输入框中，粘贴你刚才从 Clerk 复制的 Domain 地址。</li>
+<li>点击 Save 保存配置。</li>
+</ol>
+</li>
+</ol>
+<h4 id="563-通过-webhook-同步用户数据至-supabase">5.6.3 通过 Webhook 同步用户数据至 Supabase</h4>
+<p>仅仅是集成只满足了鉴定权限的需求，但这并不会将 Clerk 中已经注册的用户信息同步到 Supabase，为了方便管理，我们还需要在 Supabase 的 <code>public.users</code> 表中保留一份用户备份，以后关联查询、数据分析都用得上。这一步交给 Clerk Webhooks 就行，完整过程如下：</p>
+<ol>
+<li><strong>Clerk 发送通知</strong> : 当用户在 Clerk 注册或更新资料时，Clerk 会向我们配置的 Webhook URL 发送一个 POST 请求。</li>
+<li><strong>Supabase 接收并写入</strong> : Edge Function 接收请求，验证签名（确保安全），然后将用户数据更新到 Supabase 的数据库表中。</li>
+</ol>
+<p>在开始之前，我们需要配置同步信息所需的数据表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- File: init.sql
+
+-- 1. Create `users` table for synced Clerk users
+-- This table will store user data pushed from Clerk Webhooks.
+CREATE TABLE public.users (
+  id TEXT NOT NULL PRIMARY KEY, -- Corresponds to Clerk User ID
+  email TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  image_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Enable Row Level Security (RLS) on the table
+-- This is an important security measure to ensure users cannot access any data by default.
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- 3. Create RLS policies
+-- Policy 1: Allow authenticated users to read their own user info.
+-- `auth.jwt()-&gt;&gt;&#39;sub&#39;` extracts the user ID from the JWT provided by Clerk.
+CREATE POLICY &quot;Authenticated users can view their own user record&quot;
+ON public.users FOR SELECT
+TO authenticated
+USING ( (SELECT auth.jwt()-&gt;&gt;&#39;sub&#39;) = id );
+
+-- Policy 2: Allow users to update their own info.
+CREATE POLICY &quot;Authenticated users can update their own user record&quot;
+ON public.users FOR UPDATE
+TO authenticated
+USING ( (SELECT auth.jwt()-&gt;&gt;&#39;sub&#39;) = id );
+</code></pre>
+<p>以及在 Supabase 中启用对应的 Edge function：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-JavaScript">// File path: supabase/functions/clerk-webhooks/index.ts
+
+import { serve } from &#39;https://deno.land/std@0.177.0/http/server.ts&#39;
+import { Webhook } from &#39;npm:svix&#39;
+import { createClient } from &#39;https://esm.sh/@supabase/supabase-js@2&#39;
+
+// Get Clerk Webhook signing secret from environment variables
+const CLERK_WEBHOOK_SECRET = Deno.env.get(&#39;CLERK_WEBHOOK_SECRET&#39;)
+
+if (!CLERK_WEBHOOK_SECRET) {
+  throw new Error(&#39;CLERK_WEBHOOK_SECRET is not set in environment variables&#39;)
+}
+const supabaseAdmin = createClient(
+  Deno.env.get(&#39;SUPABASE_URL&#39;)!,
+  Deno.env.get(&#39;SUPABASE_SERVICE_ROLE_KEY&#39;)!
+)
+
+serve(async (req) =&gt; {
+  try {
+    // 1. Get Svix signature info from request headers
+    const headers = Object.fromEntries(req.headers)
+    const svix_id = headers[&#39;svix-id&#39;]
+    const svix_timestamp = headers[&#39;svix-timestamp&#39;]
+    const svix_signature = headers[&#39;svix-signature&#39;]
+
+    if (!svix_id || !svix_timestamp || !svix_signature) {
+      return new Response(&#39;Missing Svix headers&#39;, { status: 400 })
+    }
+
+    const payload = await req.json()
+    const body = JSON.stringify(payload)
+
+    // 2. Verify Webhook signature validity using the secret
+    const wh = new Webhook(CLERK_WEBHOOK_SECRET)
+    const evt = wh.verify(body, {
+      &#39;svix-id&#39;: svix_id,
+      &#39;svix-timestamp&#39;: svix_timestamp,
+      &#39;svix-signature&#39;: svix_signature,
+    })
+
+    const { id } = evt.data
+    const eventType = evt.type
+    console.log(`Received webhook event: ${eventType} for user: ${id}`)
+
+    // 3. Execute database operations based on event type
+    switch (eventType) {
+      case &#39;user.created&#39;: {
+        const { id, first_name, last_name, image_url, email_addresses } = evt.data
+        const { error } = await supabaseAdmin.from(&#39;users&#39;).insert({
+          id,
+          first_name,
+          last_name,
+          image_url,
+          email: email_addresses[0]?.email_address,
+        })
+        if (error) throw error
+        console.log(`User ${id} created in Supabase.`)
+        break
+      }
+
+      case &#39;user.updated&#39;: {
+        const { id, first_name, last_name, image_url, email_addresses } = evt.data
+        const { error } = await supabaseAdmin
+          .from(&#39;users&#39;)
+          .update({
+            first_name,
+            last_name,
+            image_url,
+            email: email_addresses[0]?.email_address,
+            updated_at: new Date().toISOString(), // Update timestamp
+          })
+          .eq(&#39;id&#39;, id)
+        if (error) throw error
+        console.log(`User ${id} updated in Supabase.`)
+        break
+      }
+
+      case &#39;user.deleted&#39;: {
+        // For delete events, ID might be at the top level
+        const deletedId = id
+        if (!deletedId) {
+          return new Response(&#39;Deleted user ID not found&#39;, { status: 400 })
+        }
+        const { error } = await supabaseAdmin.from(&#39;users&#39;).delete().eq(&#39;id&#39;, deletedId)
+        if (error) throw error
+        console.log(`User ${deletedId} deleted from Supabase.`)
+        break
+      }
+    }
+
+    return new Response(&#39;Webhook processed successfully&#39;, { status: 200 })
+  } catch (err) {
+    console.error(&#39;Error processing webhook:&#39;, err.message)
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 })
+  }
+})
+</code></pre>
+<p>初始化 Supabase 数据表与函数结束后，你还需要在 Clerk 中启用 Webhooks 支持：</p>
+<ul>
+<li>在 Clerk Dashboard -&gt; <strong>Webhooks</strong> 中添加 Endpoint，填入Supabase Edge Function 的 URL。</li>
+<li>勾选 <code>user.created</code>, <code>user.updated</code>, <code>user.deleted</code> 等事件。</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/database-supabase/images/image65.png" alt="" loading="lazy" decoding="async"></p>
+<p>一旦设置成功，你能够在 Message Attempts 中看到不同请求信息，点击后可看到详细的请求返回参数结果；如果 webhook 在请求 Edge function 时出现问题，你可以快速在返回值中找到详细原因结果。推荐你同时对照 Clerk 和 Supabase 的请求日志信息，用于分析各个函数设定是否正确。</p>
+<h4 id="564-clerk-中的第三方登录支持">5.6.4 Clerk 中的第三方登录支持</h4>
+<p>在深入了解如何对 Clerk 支持第三方登录前，我们先明确两个核心概念：开发环境与生产环境，这是软件从 “开发测试” 到 “上线可用” 的两个关键阶段，二者的定位、用途和安全要求截然不同：</p>
+<ul>
+<li>开发环境：开发者本地或测试服务器使用的环境，仅用于功能开发、调试和内部验证（如本地 localhost:3000 服务），不对外开放</li>
+<li>生产环境：应用正式上线后，面向真实用户的公开环境（如部署在 Vercel、阿里云等平台的 <a href="https://my-app.com）">https://my-app.com）</a></li>
+</ul>
+<p>而 Clerk 对社交登录区分这两种环境，本质是平衡 “开发效率” 与 “生产安全”：开发阶段需减少冗余配置以快速验证功能，生产阶段需通过专属凭证保障数据安全，同时符合 Google、GitHub 等第三方 OAuth 平台的规则（线上应用必须绑定专属域名与凭证，不允许使用共享资源）。下面具体说明两种环境下 Clerk 社交登录的差异配置：</p>
+<ol>
+<li><strong>开发环境快速验证</strong></li>
+</ol>
+<p>开发环境中，Clerk 已预置共享 OAuth 凭证和默认重定向 URI，无需前往 GitHub/Google 申请专属凭证，操作步骤如下：</p>
+<ul>
+<li><p>登录 Clerk Dashboard ，在左侧导航栏进入 SSO connections （SSO 连接）页面。</p>
+</li>
+<li><p>点击 Add connection （添加连接），选择 For all users （对所有用户生效）。</p>
+</li>
+<li><p>在 Choose provider （选择提供商）下拉菜单中，按需选择 GitHub 或 Google 。</p>
+</li>
+<li><p>直接点击 Add connection （添加连接），Clerk 会自动用共享凭证完成绑定。</p>
+<p>配置后，本地启动应用（如 <code>localhost:3000</code>）并点击“Sign in with GitHub/Google”，Clerk 会自动代理登录请求，快速验证功能是否正常。</p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>生产环境自定义凭证配置</strong></li>
+</ol>
+<p>（注：如果哪个环节和预期对不上，去翻官方文档看最新的做法）</p>
+<p>应用部署上线（如 Vercel、阿里云）并切换到 Clerk Production Instance 后，共享凭证失效，需为 GitHub/Google 配置自定义 OAuth 凭证（建议同时打开 Clerk Dashboard 和第三方平台页面，方便同步操作）：</p>
+<ul>
+<li>前置通用操作（Clerk 控制台）：<ul>
+<li>进入 Clerk SSO connections 页面，点击 Add connection → 选择 For all users 。</li>
+<li>选择目标平台（GitHub/Google），确保开启 Enable for sign-up and sign-in （允许注册登录）和 Use custom credentials （使用自定义凭证）。</li>
+<li>复制页面中的 Authorization Callback URL （GitHub）或 Authorized Redirect URI （Google），保存到安全位置，不要关闭当前页面/弹窗。</li>
+</ul>
+</li>
+<li>2.1 GitHub 平台配置：<ul>
+<li>登录 GitHub，进入 Developer Settings （路径：头像 → Settings → Developer settings → OAuth Apps）。</li>
+<li>点击 New OAuth app ，填写信息：<code>Application name</code>（应用名称）、<code>Homepage URL</code>（生产域名，如 <code>https://my-app.com</code>）、<code>Authorization Callback URL</code>（粘贴从 Clerk 复制的地址）。</li>
+<li>点击 Register application ，再点击 Generate a new client secret ，保存生成的 Client ID 和 Client Secret （Secret 仅显示一次）。</li>
+<li>回到 Clerk 弹窗，粘贴 Client ID 和 Client Secret，点击 Add connection 完成配置（若关闭弹窗，可在 SSO connections 找到 GitHub 连接，在“Use custom credentials”模块补填）。</li>
+</ul>
+</li>
+<li>2.2 Google 平台配置：<ul>
+<li>登录 Google Cloud Console ，选择已有项目或新建项目（如“My App Production”）。</li>
+<li>点击左上角菜单 → APIs &amp; Services → Credentials ，点击 Create Credentials → OAuth client ID （首次配置需先完成 OAuth consent screen 设置，选择“External”并填写应用信息）。</li>
+<li>选择 Application type 为 Web application ，配置：<ol>
+<li><code>Authorized JavaScript origins</code>：添加生产域名（如 <code>https://my-app.com</code>、<code>https://www.my-app.com</code>），本地验证可补充 <code>http://localhost:端口号</code>。</li>
+<li><code>Authorized Redirect URIs</code>：粘贴从 Clerk 复制的地址。</li>
+</ol>
+</li>
+<li>点击 Create ，保存弹窗中的 Client ID 和 Client Secret ，回到 Clerk 弹窗粘贴并点击 Add connection 。</li>
+<li>关键注意事项：<ol>
+<li>禁止 WebView 登录：Google OAuth 不支持应用内浏览器登录，需参考 <a href="https://support.google.com/cloud/answer/7657789">Google 官方文档</a> 调整。</li>
+<li>切换发布状态：默认“Testing”状态仅支持 100 个测试用户，需在 OAuth consent screen 将“Publishing status”改为 In production （需通过 Google 审核）。</li>
+<li>阻止子邮箱：Clerk 默认拦截含 <code>+</code>/<code>=</code>/<code>#</code> 的 Google 邮箱（如 <code>user+alias@example.com</code>），可在 Google 连接详情页开启/关闭 Block email subaddresses （建议开启提升安全性）。</li>
+<li>支持 Google One Tap：配置完成后，可集成 Clerk <code>&lt;GoogleOneTap /&gt;</code> 组件实现“一键登录”，参考 <a href="https://clerk.com/docs/components/social-connections/google-one-tap">Clerk 组件文档</a>。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>测试第三方登录连接</li>
+</ol>
+<p>配置完成后，通过 Clerk 内置 Account Portal 验证功能：</p>
+<ul>
+<li>进入 Clerk Dashboard，左侧导航栏进入 Account Portal 页面。</li>
+<li>在“Sign-in”模块右侧，点击“访问登录页面”按钮，跳转至对应环境登录页：<ul>
+<li>开发环境：<code>https://你的域名.accounts.dev/sign-in</code>（如 <code>https://my-app.accounts.dev/sign-in</code>）。</li>
+<li>生产环境：<code>https://accounts.你的域名.com/sign-in</code>（如 <code>https://accounts.my-app.com/sign-in</code>）。</li>
+</ul>
+</li>
+<li>点击“Sign in with GitHub/Google”，用对应平台账号登录，若能成功跳转并返回应用，说明连接配置正常。</li>
+</ul>
+<h2 id="6-从-supabase-到更多后端开发组件进阶">6. 从 Supabase 到更多后端开发组件（进阶）</h2>
+<p>在上文中，我们主要是站在 Supabase 的视角，去看“一个以 Postgres 为核心的一站式后端平台”能帮我们解决哪些问题：认证、数据库、文件存储、实时通信、边缘函数等，都被集成在同一个控制台里，开箱即用、体验统一，非常适合快速起步和中小型项目。</p>
+<p>但从更长期、更工程化的角度来看， <strong>Supabase 提供的每一块能力（Auth / Storage / Edge Functions / Realtime / Database），在业界几乎都有对应的专业替代方案</strong> ——既包括同类 BaaS 平台，也包括更“单点突破”的云服务和开源组件。作为上进的个人开发者和初创团队来说，了解这些替代选项有几个好处：</p>
+<ul>
+<li>判断当前项目是否“全用 Supabase 就够了”，还是某一块需要更专业/更便宜/更易合规的专用服务；</li>
+<li>当项目规模变大或需求变复杂时，是否可以把某个模块从 Supabase 替换出去（例如改用专门的 Auth 平台或对象存储），而不是一开始就被平台彻底锁死；</li>
+<li>拓宽技术选型视野，即使暂时不更换，也能大致知道“如果不用 Supabase 的 X 功能，我还有哪些常见选择”。</li>
+</ul>
+<p>本节将分别介绍 Supabase 所覆盖的几大能力在市场上的主流替代方案，例如：认证（Auth）、文件存储（Storage）、边缘函数（Edge Functions）、实时通信（Realtime）、数据库托管等。简单对比它们在功能特性、免费额度/定价、易用性以及社区流行度等方面的差异， 让你对后端组件工具库有更全面的理解。</p>
+<h3 id="同类-baas-平台">同类 Baas 平台</h3>
+<p>在开始之前，我们可以浏览同类的 Baas 平台，若觉得 Supabase 不够好用，你可以按需求换别的替代品试试。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台/服务</th>
+<th>类型</th>
+<th>免费额度/定价</th>
+<th>特点 / 适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Firebase（Google）</td>
+<td>全托管 BaaS（Auth + Firestore + Storage + Functions + Hosting）</td>
+<td>Spark：免费轻量额度；Blaze：按量计费（Firestore/Storage/Functions 分别算）</td>
+<td>行业最成熟、文档好、上手快、实时能力强。适用于中小型产品、移动/前端主导团队。缺点：计费复杂、锁定性强、查询限制多（尤其 Firestore）。</td>
+</tr>
+<tr>
+<td>Supabase</td>
+<td>开源 BaaS（Postgres + Auth + Storage + Edge Functions + Realtime）</td>
+<td>免费：500MB DB、1GB Storage、无服务器函数少量调用；Pro：按实例计费</td>
+<td>最像 Firebase 的 SQL 版；界面优秀、体验现代、可自托管。适用于需要强 SQL、BI、事务能力的应用。缺点：高并发或复杂函数成本较高。</td>
+</tr>
+<tr>
+<td>Appwrite Cloud</td>
+<td>开源一站式 BaaS（DB + Auth + Storage + Functions + Realtime）</td>
+<td>免费：包含基本 DB/Storage/FaaS；付费按资源级别计费</td>
+<td>体验现代化、API 统一、可自托管；适合开发者友好的应用快速迭代。缺点：生态还不如 Firebase/Supabase 成熟；性能在大型应用中需要测试。</td>
+</tr>
+<tr>
+<td>Nhost</td>
+<td>Postgres + GraphQL + Auth + Storage + Functions</td>
+<td>免费：1GB DB、1GB Storage、少量函数调用</td>
+<td>类似“Supabase + Hasura”；天然 GraphQL；适合前端团队与 React/Next.js 项目。缺点：生态小、成本随用量升高。</td>
+</tr>
+<tr>
+<td>AWS Amplify</td>
+<td>AWS 一站式后端（Cognito + AppSync + DynamoDB + Storage + Functions + Hosting）</td>
+<td>免费：Hosting 额度 + Cognito 10k MAU + 部分函数额度</td>
+<td>大而全，适合已有 AWS 基础的团队；企业级可靠性。缺点：最难上手，服务碎片化；初创团队维护成本高。</td>
+</tr>
+<tr>
+<td>Xata（近两年快速增长）</td>
+<td>多模型数据库 + Auth + Edge Functions</td>
+<td>免费：250k 记录、15GB 带宽</td>
+<td>虽然更偏「DB + API」，但提供 Auth、文件、逻辑，可作为轻量全栈后端。UI/开发体验极佳。缺点：功能不如 Firebase/Supabase 全面。</td>
+</tr>
+<tr>
+<td>Convex（开发者体验极强）</td>
+<td>托管数据库 + Auth + Functions（前端优先）</td>
+<td>免费开发版；付费按请求量计费</td>
+<td>极简上手；无需 schema；前端写函数即可用后端。适合 MVP/快速验证。缺点：高度绑定平台，迁移成本高；不算完全传统 BaaS。</td>
+</tr>
+</tbody></table></div>
+<h3 id="认证-auth">认证 (Auth)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具/平台</th>
+<th>功能特点</th>
+<th>免费额度/定价</th>
+<th>适用场景与优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Firebase Authentication</td>
+<td>Google 提供的 BaaS 身份验证服务，支持邮箱/密码、手机、社交登录、匿名等常见方式。Spark 免费方案支持最高50k 月活跃用户。</td>
+<td>Spark（免费）50k MAU；Blaze 按量计费</td>
+<td>集成 Google 生态，文档丰富，上手简单；功能全面（MFA、阻塞函数等），适合快速开发。但与 Firebase 平台绑定，扩展到其他服务需额外配置。</td>
+</tr>
+<tr>
+<td>Auth0 (Okta)</td>
+<td>全托管身份认证平台，支持社交登录、企业 SSO、多因子认证、规则扩展等强大功能。</td>
+<td>免费方案25k MAU，付费按 MAU 计费</td>
+<td>企业级功能齐全（RBAC、审计日志等），适合中大型应用；界面友好。缺点是 MAU 上升时成本高，免费版功能有限（如不含 MFA/RBAC）。社区知名度高，用户众多。</td>
+</tr>
+<tr>
+<td>AWS Cognito</td>
+<td>亚马逊云原生身份服务，支持社交及 SAML 联合登录。直接登录用户池提供每月10k MAU 免费，超过部分按 0.0055 美元/MAU 收费。</td>
+<td>免费10k MAU/月，超出按量付费</td>
+<td>与 AWS 生态深度集成（可无缝配合 API Gateway、Lambda 等），入门门槛略高，文档较复杂；免费额度有限，适合已有 AWS 使用习惯的团队。</td>
+</tr>
+<tr>
+<td>Logto</td>
+<td>开源身份认证平台，自托管版免费，云服务计划免费50k MAU。支持多语言、多租户、OAuth/OIDC 等。</td>
+<td>社区版免费；Logto Cloud 免费50k MAU</td>
+<td>近期流行的 Auth0 开源替代方案，GitHub 已有 10k+ Stars。易扩展，自托管降低成本；缺点是生态和文档相对较新，社区规模略逊于 Firebase/Auth0。</td>
+</tr>
+<tr>
+<td>Keycloak</td>
+<td>知名开源 IAM/SSO 解决方案，支持用户名密码、LDAP、SAML、OAuth2 等。</td>
+<td>完全免费，需自托管</td>
+<td>功能强大、可扩展（支持细粒度权限控制），企业级功能丰富；但部署和维护复杂度高，对小团队而言学习曲线较陡。缺点是对容器化和集群运维要求较高。</td>
+</tr>
+</tbody></table></div>
+<h3 id="文件存储-storage">文件存储 (Storage)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台/服务</th>
+<th>类型</th>
+<th>免费额度/定价</th>
+<th>特点/适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Amazon S3</td>
+<td>云对象存储（AWS）</td>
+<td>AWS 免费套餐提供 5GB 存储、20k GET/PUT 请求/月，超出按使用量付费</td>
+<td>行业标准的对象存储，可靠性高、全球多区域部署。功能全面，与 AWS 生态整合良好；定价较复杂，新用户需了解计费规则。</td>
+</tr>
+<tr>
+<td>Google Cloud Storage（Firebase Storage）</td>
+<td>云对象存储（Google）</td>
+<td>Firebase Spark 方案提供免费额度（1GB 存储 + 流量限制），Blaze 付费</td>
+<td>与 Firebase/Google Cloud 紧密集成，易于管理；支持 CDN 加速、细粒度安全规则。</td>
+</tr>
+<tr>
+<td>腾讯云 COS / 阿里云 OSS</td>
+<td>云对象存储（国内）</td>
+<td>按量付费（各有新用户赠送额度，如OSS有首年40GB免费等）</td>
+<td>面向国内市场，高性能、大规模对象存储；与中国云生态整合，文档较完善。阿里OSS 功能全面、全球加速；七牛KODO 专注多媒体处理，成本较低，适合个人和小团队。</td>
+</tr>
+<tr>
+<td>MinIO</td>
+<td>开源 S3 兼容存储</td>
+<td>开源免费（自建）</td>
+<td>轻量级、高性能、与 S3 API 兼容，适合在私有云或本地搭建对象存储。文档和社区活跃；需自己维护基础设施。</td>
+</tr>
+<tr>
+<td>Cloudinary / Imgix 等</td>
+<td>媒体存储+CDN</td>
+<td>基本免费方案（如 Cloudinary 免费 25GB/月带宽）</td>
+<td>针对图片/视频优化的云存储+CDN 服务，提供实时转码、压缩等高级功能。适合媒体项目，但功能较专一，作为通用文件存储使用成本偏高。</td>
+</tr>
+</tbody></table></div>
+<h3 id="边缘函数-edge-functions">边缘函数 (Edge Functions)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台/服务</th>
+<th>特点</th>
+<th>免费额度/定价</th>
+<th>适用场景与优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloudflare Workers</td>
+<td>全球分布式 JavaScript/Wasmtime 环境</td>
+<td>免费计划：每天 100k 请求；标准计划$5/月含1,000万请求</td>
+<td>运行在 Cloudflare 边缘节点，延迟极低；适合全局分发的逻辑、静态资源渲染等。免费配额较少（相当于每月约300万请求），上手简单。缺点是运行时（JS/Wasmtime）限制与调试工具有限。</td>
+</tr>
+<tr>
+<td>Vercel Edge Functions</td>
+<td>随 Next.js/前端框架无缝集成，支持 JS/TS/Go</td>
+<td>Hobby 免费：每月 100万 函数调用，100万 边缘请求</td>
+<td>深度集成前端框架，自动部署；适合现代 Web 应用。免费额度充足，默认运行时 10s，可提升至 60s。缺点是免费版团队协作功能受限；依赖 Vercel 平台。</td>
+</tr>
+<tr>
+<td>Netlify Edge / Functions</td>
+<td>Node.js 云函数＋边缘路由（NFT）</td>
+<td>免费：300 代币/月（约相当于每月 1M 请求）；按信用点计费</td>
+<td>支持 Node.js 函数、边缘处理路由等。免费额度用于构建、函数和带宽，适合前端全栈部署。优点是简便易用，集成 Git 部署；缺点是免费额度使用需算计（10k 请求 = 3 点）。</td>
+</tr>
+<tr>
+<td>AWS Lambda@Edge / CloudFront Functions</td>
+<td>AWS 无服务器边缘计算</td>
+<td>AWS Lambda（1M 免费请求/月+400k GB-s）+ CloudFront $0.085/每10万调用起</td>
+<td>与 CloudFront 集成，可在边缘执行代码。适合需要 AWS 生态（如在节点层面做权限或 A/B 测试）。优点是灵活强大；缺点是配置复杂，延迟略高于 Cloudflare/Vercel。</td>
+</tr>
+</tbody></table></div>
+<h3 id="实时通信-realtime">实时通信 (Realtime)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台/服务</th>
+<th>功能特点</th>
+<th>免费额度/定价</th>
+<th>适用场景与优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Firebase Realtime Database / Firestore</td>
+<td>Google BaaS 实时数据库；支持数据变更推送</td>
+<td>Spark 免费：实时数据库1GB 存储 &amp; 限额；Blaze 按量付费</td>
+<td>强集成 Firebase 生态，实时监听简单。优点是免费起步快；缺点是数据库类型（JSON/NoSQL），复杂查询能力弱。</td>
+</tr>
+<tr>
+<td>Ably</td>
+<td>实时消息与 pub/sub 平台，支持 WebSocket、MQTT 等</td>
+<td>免费包：每月 6,000,000 条消息</td>
+<td>功能全面的实时消息服务，高并发支持；免费额度可达600万消息/月。社区与文档较好，适合全球分布。</td>
+</tr>
+<tr>
+<td>Pusher Channels</td>
+<td>事件推送服务，支持频道/事件机制</td>
+<td>Sandbox 免费：每日 200k 消息，100 并发连接</td>
+<td>易用的 WebSocket 服务，文档齐全，适合快速实现聊天和通知功能。免费版限制消息量和连接数；付费后扩展性好。</td>
+</tr>
+<tr>
+<td>自建 WebSocket/Socket.IO</td>
+<td>自己搭建服务器（Node.js、Elixir 或 Go 等）</td>
+<td>自行托管成本（如服务器费用）</td>
+<td>灵活度最高，可根据需求定制协议和拓扑。适合对成本控制严格且技术成熟的团队。缺点是需自行处理可用性、扩展和跨域等问题。</td>
+</tr>
+</tbody></table></div>
+<h3 id="数据库">数据库</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台/工具</th>
+<th>数据库类型</th>
+<th>免费额度/定价</th>
+<th>主要特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Neon (Serverless PostgreSQL)</td>
+<td>关系型（PostgreSQL）</td>
+<td>免费计划：0.5GB 存储，主分支永久在线，20h 分支计算/月</td>
+<td>云原生无服务器 Postgres，支持自动伸缩和分支（fork 测试）。免费额度对小项目够用，适合现代开发流程。分支功能强大，但免费额度较小。</td>
+</tr>
+<tr>
+<td>Aiven PostgreSQL</td>
+<td>关系型（PostgreSQL/MySQL）</td>
+<td>免费计划：1GB 存储，1 vCPU，1GB 内存</td>
+<td>托管级数据库服务，支持跨云多区域迁移。提供有 MySQL、Redis 等可选。免费额度适合开发和小型项目；商业版支持高可用集群和监控。</td>
+</tr>
+<tr>
+<td>CockroachDB Cloud</td>
+<td>分布式 SQL（兼容 PostgreSQL）</td>
+<td>免费计划：10GB 存储</td>
+<td>类似 Google Spanner 的分布式 SQL 数据库，自动分片扩展。免费10GB 空间较慷慨；适合需要横向扩展和高一致性的应用。商业版 SLA 高。</td>
+</tr>
+<tr>
+<td>TiDB Cloud</td>
+<td>分布式关系型（MySQL 兼容）</td>
+<td>免费计划：每节点5GB，总计最多25GB</td>
+<td>开源 TiDB 的云版，兼容 MySQL 协议，分布式架构。免费额度充足，适合熟悉 MySQL 的团队，性能优秀；缺点是运维相对复杂（针对大型场景）。</td>
+</tr>
+<tr>
+<td>MongoDB Atlas</td>
+<td>文档型（NoSQL MongoDB）</td>
+<td>免费 M0 集群：0.5GB 存储</td>
+<td>云端 MongoDB，灵活的文档模型，支持丰富查询和索引。免费 0.5GB 数据库适合测试和小型应用；可按需横向扩展。学习曲线略高于关系型数据库。</td>
+</tr>
+<tr>
+<td>SQLPub</td>
+<td>多数据库（MySQL、PostgreSQL、Redis 等）</td>
+<td>免费计划：36,000 请求/小时，30 并发连接，500MB 存储</td>
+<td>一站式数据库平台，支持多种数据库类型。免费版适合学习和小项目；优点是支持多种 DB，缺点是存储额度较小。</td>
+</tr>
+</tbody></table></div>
+<p>以上替代方案各有侧重：开源更灵活可控（Keycloak、MinIO、Socket.IO、Neon、CockroachDB 等），云托管服务更易上手（Firebase、Auth0、Cloudflare、Vercel、Netlify、AWS、Aiven、MongoDB Atlas 等）。选择时可根据项目需求、团队技术栈、预算和社区生态等权衡。个人项目可优先选用免费配额充足、易集成的服务（如 Firebase 系列、七牛存储、Cloudflare Workers、Neon、CockroachDB 等），而对企业级或特定安全需求，则可考虑功能更丰富但收费较高的方案（Auth0、Alibaba/Tencent 云、AWS、TiDB/Aiven 等）。你可以在实际应用中不断尝试，直到选择出最适合的后端开发工具组件。</p>
+<h2 id="总结-2">总结</h2>
+<p>在今天的课程中，我们系统学习了数据库的基础概念、Supabase 的核心定义及其操作细节。后续在实践过程中，你可根据项目的实际应用场景与需求，随时回头翻阅这份文档作为参考。</p>
+<p>请时刻记住一个重要原则： <strong>先完成，再完美！</strong> 无需追求一步到位，我们完全可以通过持续迭代优化，逐步靠近更优的成果。祝你在后续的项目实践中一切顺利！</p>
+<h2 id="课后作业">📚 课后作业</h2>
+<ol>
+<li>开发一个包含用户管理系统和数据库的应用程序。最好包含更多的Supabase 功能 (Realtime / cloud storage / Edge function).</li>
+</ol>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-024.html">← 现代组件库与界面升级</a><a rel="next" href="chapter-026.html">大模型辅助接口开发 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

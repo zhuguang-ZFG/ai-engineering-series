@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 设计入门 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 19 / 195</p><article><h1 id="ai-设计入门">AI 设计入门</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#构建第一个现代应用程序---ui-设计">构建第一个现代应用程序 - UI 设计</a><ul><li><a href="#本节课你将学到">本节课你将学到</a></li><li><a href="#第-1-章前端设计入门从抄开始">第 1 章：前端设计入门，从&quot;抄&quot;开始</a></li><li><a href="#第-2-章会看才会设计拆解一个页面">第 2 章：会看，才会设计——拆解一个页面</a></li><li><a href="#第-3-章ai-时代的前端设计工具全景">第 3 章：AI 时代的前端设计工具全景</a></li><li><a href="#第-4-章实战一把别人的网页临摹到像">第 4 章：实战一：把&quot;别人的网页&quot;临摹到像</a></li><li><a href="#第-5-章实战二从设计到代码">第 5 章：实战二：从设计到代码</a></li><li><a href="#第-6-章把大厂的设计系统变成自己的">第 6 章：把大厂的设计系统变成自己的</a></li><li><a href="#第-7-章版权与伦理">第 7 章：版权与伦理</a></li><li><a href="#总结-1">总结</a></li></ul></li></ul></nav></details><h2 id="构建第一个现代应用程序---ui-设计">构建第一个现代应用程序 - UI 设计</h2>
+<p>还记得你第一次刷到一个设计精美的产品页面时的感受吗？明明功能差不多，别人的页面看起来就是更&quot;高级&quot;：配色干净、留白舒服、按钮的圆角恰到好处。你忍不住会想——<strong>&quot;他们是怎么设计出来的？我们能不能也做出这样的页面？&quot;</strong></p>
+<p>这种&quot;想搞清楚别人怎么做&quot;的念头，恰恰是前端设计最好的起点。在动手之前，先回顾一下我们已经掌握的能力：</p>
+<ul>
+<li>在前几节课里，我们学会了用 NanoBanana 批量生成设计素材，理解了提示词里的&quot;风格&quot;如何影响最终输出；</li>
+<li>认识了 Figma 与 MasterGo 这些专业设计工具，知道一份设计稿是如何组织起来的；</li>
+<li>也见识了从设计稿到前端代码的转化流程。</li>
+</ul>
+<p>但当你真正要为自己的项目做一个像样的页面时，可能还是会卡住：工具会用，素材能生成，却<strong>不知道&quot;好看&quot;长什么样，更不知道该怎么拆解和模仿一个优秀的页面</strong>。别担心，这节课就专门解决这个问题。</p>
+<p>为了帮你把前后内容串起来，可以先思考几个小问题：</p>
+<ol>
+<li>一个现代网页通常由哪些区块组成？</li>
+<li>&quot;好看&quot;是一种主观感受，还是可以被量化的数字（色值、字号、间距、圆角）？</li>
+<li>如果让你模仿一个网站的视觉风格，你会从哪里下手？</li>
+</ol>
+<p>如果对这些问题还没有清晰的答案，没关系——这正是本节课要教你的。操作中遇到难以理解的步骤，随时对当前页面截图发给大模型询问；大胆尝试，不必害怕出错，每一次尝试都是学习和进步的机会。</p>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>面对一款设计精美的 APP 或网页，如何分析它是怎么设计出来的，并借助 AI 设计工具把它临摹到&quot;以假乱真&quot;？</strong></p>
+</blockquote>
+<h3 id="本节课你将学到">本节课你将学到</h3>
+<ol>
+<li><strong>学会&quot;看&quot;设计</strong>：拿到一个页面，知道该看什么、怎么拆解</li>
+<li><strong>掌握入门方法论</strong>：找参考 → 分析 → 临摹 → 到像 → 入门</li>
+<li><strong>认识 2 条设计路线</strong>：Figma/MasterGo 与 Claude Design/Open Design（含 UI design Skills）</li>
+<li><strong>实战临摹</strong>：挑一个真实网页，从 0 临摹到高还原度交付</li>
+<li><strong>沉淀设计系统</strong>：把大厂的设计规范，变成你自己的</li>
+</ol>
+<blockquote>
+<p><strong>📚 前置知识</strong>
+本教程适合已经会用 AI 编程工具（如 Trae）、想为项目补齐前端视觉能力的开发者。若想先建立生图手感，建议先学 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/lovart-assets/index.md">NanoBanana 素材生产</a>；若想深入设计工具，可结合 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/figma-mastergo/index.md">Figma 与 MasterGo 入门</a> 学习。</p>
+</blockquote>
+<h3 id="第-1-章前端设计入门从抄开始">第 1 章：前端设计入门，从&quot;抄&quot;开始</h3>
+<p>上一节我们提出了三个问题——页面由哪些区块组成、好看看什么、怎么模仿。这一节先从方法论说起：<strong>前端设计的第一课，不是创造，而是复刻。</strong></p>
+<p>就像学书法先临帖、学画画先画石膏像一样，为什么偏偏是&quot;抄&quot;？</p>
+<ul>
+<li>设计的&quot;好&quot;是可以被量化的——<strong>色值、字号、间距、圆角、阴影</strong>，全是数字</li>
+<li>把一套成熟设计逐像素复刻出来，你就被迫搞懂了它背后的每一个决策</li>
+<li>当你&quot;抄到像&quot;了，下一次遇到类似场景，你就知道&quot;该往哪个方向抄&quot;</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-reference.jpg" alt="" loading="lazy" decoding="async"></p>
+<blockquote>
+<p>一句话总结：<strong>能临摹出一款好产品，说明你已经具备了前端设计的基本功；能在此基础上做改动，说明你已经出师了。</strong></p>
+</blockquote>
+<h4 id="11-为什么临摹是入门最快的方式">1.1 为什么临摹是入门最快的方式</h4>
+<p>有人会担心：&quot;我是在抄别人的东西，这样真的能学到东西吗？&quot; 答案是：能，而且是最快的路径。原因在于临摹不是照搬结果，而是<strong>强制自己还原过程</strong>：</p>
+<ul>
+<li>你会被迫去测量每一个间距，从而理解&quot;留白是怎么制造呼吸感的&quot;</li>
+<li>你会被迫去查每一个色值，从而理解&quot;这个配色为什么看起来协调&quot;</li>
+<li>你会被迫去比较每一个层级，从而理解&quot;主次信息是怎么被排出来的&quot;</li>
+</ul>
+<p>当你能把一个优秀页面&quot;拆到参数级别&quot;再重建出来，你对设计的理解，已经超过了很多只会&quot;凭感觉&quot;的人。</p>
+<h4 id="12-大厂也在参考这不是秘密">1.2 大厂也在&quot;参考&quot;，这不是秘密</h4>
+<p>设计师的工作方式天然包含参考：Pinterest 找灵感、Dribbble 看趋势、竞品分析看结构。AI 时代这件事被放大了——因为工具直接把&quot;参考&quot;变成了可执行的能力：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-inspiration.jpg" alt="" loading="lazy" decoding="async"></p>
+<ul>
+<li>Claude Design 可以导入你收藏的参考网站，按它的风格生成初稿</li>
+<li>Open Design 内置了 151 套开源设计系统，一键套用到自己的项目</li>
+<li>各种 UI design Skill 把&quot;大厂的视觉规范&quot;打包成 AI 可执行的指令</li>
+</ul>
+<p>所以你的问题不该是&quot;能不能抄&quot;，而是&quot;<strong>怎么抄得专业、抄得合法、抄出自己的东西</strong>&quot;。</p>
+<h4 id="去哪里找参考先收藏这些网站">去哪里找参考？先收藏这些网站</h4>
+<p>参考的第一步是<strong>积累一个&quot;参考库&quot;</strong>。下面这些网站按用途分类，建议全部收藏，按需取用：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">网站</th>
+<th align="left">用途</th>
+<th align="left">适合找什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://www.awwwards.com">Awwwards</a></td>
+<td align="left">网页设计界的&quot;奥斯卡&quot;</td>
+<td align="left">顶级创意、动效、交互，学&quot;天花板&quot;长什么样</td>
+</tr>
+<tr>
+<td align="left"><a href="https://godly.website">Recent（原 Godly）</a></td>
+<td align="left">高质量网页灵感合集</td>
+<td align="left">AI、Web3、作品集网站的先锋设计</td>
+</tr>
+<tr>
+<td align="left"><a href="https://land-book.com">Landbook</a></td>
+<td align="left">落地页设计精选</td>
+<td align="left">按行业/配色筛选官网、定价页、首屏布局</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.lapa.ninja">Lapa Ninja</a></td>
+<td align="left">7300+ 落地页截图库</td>
+<td align="left">按元素分类查导航、特性展示、客户评价</td>
+</tr>
+<tr>
+<td align="left"><a href="https://mobbin.com">Mobbin</a></td>
+<td align="left">真实 App 界面库</td>
+<td align="left">研究 Uber、Notion 等产品的真实页面与流程</td>
+</tr>
+<tr>
+<td align="left"><a href="https://dribbble.com">Dribbble</a></td>
+<td align="left">设计师社区</td>
+<td align="left">配色、图标、插画风格与微交互灵感</td>
+</tr>
+<tr>
+<td align="left"><a href="https://www.behance.net">Behance</a></td>
+<td align="left">完整项目案例库</td>
+<td align="left">看设计思路、调研过程与完整作品集</td>
+</tr>
+</tbody></table></div>
+<p>这些网站长什么样？先睹为快（点击图片可放大）：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-awwwards.jpg" alt="Awwwards — 网页设计的&quot;奥斯卡&quot;" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-godly.jpg" alt="Recent（原 Godly）— 高质量网页灵感合集" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-landbook.jpg" alt="Landbook — 落地页设计精选" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-lapa.jpg" alt="Lapa Ninja — 7300+ 落地页截图库" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-mobbin.jpg" alt="Mobbin — 真实 App 界面库" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-dribbble.jpg" alt="Dribbble — 设计师社区" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/site-behance.jpg" alt="Behance — 完整项目案例库" loading="lazy" decoding="async"></p>
+<blockquote>
+<p><strong>建立自己的参考库</strong>
+遇到心动的页面，<strong>立刻截图 + 存链接</strong>，按&quot;落地页 / 组件 / 配色 / 动效&quot;分类归档。临摹时直接从这个库里挑目标，比临时上网找快得多。</p>
+</blockquote>
+<h4 id="13-参考-vs-抄袭一条清晰的线">1.3 参考 vs 抄袭：一条清晰的线</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">参考（推荐 ✅）</th>
+<th align="left">抄袭（危险 ❌）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">对象</td>
+<td align="left">布局结构、视觉风格、设计规范</td>
+<td align="left">品牌 Logo、专属图标、原创插画</td>
+</tr>
+<tr>
+<td align="left">方式</td>
+<td align="left">理解后重做，融入自己的产品</td>
+<td align="left">直接复制素材、代码、图片</td>
+</tr>
+<tr>
+<td align="left">结果</td>
+<td align="left">像风格，但内容完全不同</td>
+<td align="left">连文案、配色、素材都一模一样</td>
+</tr>
+<tr>
+<td align="left">风险</td>
+<td align="left">低</td>
+<td align="left">版权/商业风险高</td>
+</tr>
+</tbody></table></div>
+<p>第 7 章会专门讲版权边界，先记住一句话：<strong>抄&quot;规则&quot;可以，抄&quot;结果&quot;危险。</strong></p>
+<h3 id="第-2-章会看才会设计拆解一个页面">第 2 章：会看，才会设计——拆解一个页面</h3>
+<p>&quot;抄得像&quot;的前提是&quot;看得懂&quot;。这一章教你一套通用的页面拆解框架。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/page-structure.jpg" alt="" loading="lazy" decoding="async"></p>
+<h4 id="21-看结构页面由哪些区块组成">2.1 看结构：页面由哪些区块组成</h4>
+<p>绝大多数现代网页都能拆成 4 大块：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────┐
+│ ① 导航栏 Nav             │  Logo · 菜单 · 登录/CTA
+├─────────────────────────┤
+│ ② 首屏 Hero              │  主标题 · 副标题 · 主按钮 · 产品图
+├─────────────────────────┤
+│ ③ 内容区 Sections         │  特性卡片 · 数据展示 · 评价 · 定价
+├─────────────────────────┤
+│ ④ 页脚 Footer            │  链接 · 版权 · 订阅
+└─────────────────────────┘
+</code></pre>
+<p>看一个页面时，先别管细节，<strong>先用眼睛画出它的&quot;骨架图&quot;</strong>：哪块是导航、哪块是首屏、中间分了几段、每段几个元素。</p>
+<h4 id="22-看视觉4-个可量化的要素">2.2 看视觉：4 个可量化的要素</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">要素</th>
+<th align="left">看什么</th>
+<th align="left">怎么记</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>色彩</strong></td>
+<td align="left">主色、背景色、文字色各是什么</td>
+<td align="left">用取色器直接取 Hex 值</td>
+</tr>
+<tr>
+<td align="left"><strong>字体</strong></td>
+<td align="left">标题/正文用什么字体、几号、多粗</td>
+<td align="left">浏览器 DevTools 里看 font-family/size/weight</td>
+</tr>
+<tr>
+<td align="left"><strong>间距</strong></td>
+<td align="left">区块之间、卡片内部的留白</td>
+<td align="left">记下常用的 8 / 16 / 24 / 48 px 节奏</td>
+</tr>
+<tr>
+<td align="left"><strong>圆角与阴影</strong></td>
+<td align="left">卡片、按钮的圆角半径与阴影强度</td>
+<td align="left">DevTools 里看 border-radius / box-shadow</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>前端设计的天然优势</strong>
+<strong>你是前端开发者，DevTools 就是你的设计分析仪。</strong> 右键 → 检查元素，任何页面的色值、字号、间距、圆角全都暴露无遗。这是设计师梦寐以求、而开发者天生就有的能力。</p>
+</blockquote>
+<p>常见取色工具：Chrome DevTools 的颜色选择器、<code>color-picker</code> 类扩展；也可以直接把截图丢给多模态大模型，让它帮你提取设计规范。</p>
+<h4 id="23-看组件拆出可复用零件">2.3 看组件：拆出&quot;可复用零件&quot;</h4>
+<p>把页面拆成一个个组件，每个组件记录它的样式参数：</p>
+<pre class="prose-block"><code class="language-text">按钮 Primary Button
+- 背景：#4F46E5
+- 文字：#FFFFFF，14px / 600
+- 圆角：8px
+- 内边距：12px 24px
+- 阴影：0 2px 8px rgba(79,70,229,0.3)
+
+卡片 Card
+- 背景：#FFFFFF
+- 圆角：16px
+- 边框：1px solid #E2E8F0
+- 阴影：0 4px 12px rgba(15,23,42,0.08)
+</code></pre>
+<p>拆完 3-5 个页面，你手里就有了一份&quot;组件样式库&quot;——这就是你自己的设计系统雏形。</p>
+<h4 id="24-把看到的设计翻译成ai-听得懂的话">2.4 把&quot;看到的设计&quot;翻译成&quot;AI 听得懂的话&quot;</h4>
+<p>临摹到 AI 工具里，你需要把视觉翻译成结构化描述。<strong>看得越细，翻译得越准，AI 抄得越像。</strong></p>
+<pre class="prose-block"><code class="language-text">参考这个落地页的风格，帮我做一个同构的页面：
+- 结构：导航 + 首屏(Hero) + 3 个特性卡片 + 定价区 + 页脚
+- 配色：主色 Indigo #4F46E5，背景 #F8FAFC，文字 #0F172A
+- 字体：标题 Space Grotesk 700，正文 Inter 400
+- 间距：区块 96px，卡片内 24px，栅格 24px
+- 圆角：卡片 16px，按钮 8px
+- 阴影：0 4px 12px rgba(15,23,42,0.08)
+</code></pre>
+<h3 id="第-3-章ai-时代的前端设计工具全景">第 3 章：AI 时代的前端设计工具全景</h3>
+<p>&quot;他们是怎么设计出来的？&quot;答案越来越多元。以下是 2 条典型路线，覆盖从&quot;手动精细控制&quot;到&quot;对话式自动生成&quot;。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/ai-design.jpg" alt="" loading="lazy" decoding="async"></p>
+<h4 id="31-路线一figma--mastergo专业设计稿工具">3.1 路线一：Figma / MasterGo——专业设计稿工具</h4>
+<p>如果你要的是<strong>可编辑、可协作、像素级可控的设计稿</strong>，用 Figma（国际主流）或 MasterGo（国产，上手更轻）：</p>
+<ul>
+<li>在画布里搭布局、调组件、做交互原型</li>
+<li>通过 Figma Make / MasterGo AI 等能力辅助生成与批量调整</li>
+<li>最终交给前端按设计稿实现，或通过插件转代码</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/figma_editor.jpg" alt="Figma 编辑器：左侧图层面板、中间画布、右侧属性面板" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/mastergo_editor.jpg" alt="MasterGo 编辑器：国产云端设计工具，与 Figma 类似的画布布局" loading="lazy" decoding="async"></p>
+<blockquote>
+<p>适合：需要严格设计稿交付、团队协作、复杂交互的场景。工具操作详见 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/figma-mastergo/index.md">Figma 与 MasterGo 入门</a>。</p>
+</blockquote>
+<h4 id="32-路线二claude-design--open-design对话式设计画布">3.2 路线二：Claude Design / Open Design——对话式设计画布</h4>
+<p>这类工具的共同点是<strong>用自然语言直接生成可交互的设计原型</strong>，而不是静态图片。代表工具是 Claude Design 与它的开源平替 Open Design。</p>
+<h4 id="claude-design官方对话式设计画布">Claude Design：官方对话式设计画布</h4>
+<p>Claude Design 是 Anthropic 推出的 AI 设计产品（入口 <code>claude.ai/design</code>）：</p>
+<ul>
+<li>输入一句话需求，默认产出 3 个设计变体，覆盖落地页、线框图、演示文稿等</li>
+<li>支持导入设计系统（GitHub 仓库、Figma 导出、网站截图、品牌文件），自动提取颜色/字体/组件</li>
+<li>在画布内直接评论修改、拖拽微调，最终导出 HTML / PDF / PPTX，或交接给 Claude Code 实现为真实代码</li>
+</ul>
+<p><strong>典型使用场景：</strong></p>
+<p><strong>① 从参考截图直接复刻高保真页（最常用）</strong></p>
+<p>输入产品描述与风格参考，Claude 自动生成完整落地页——左侧对话记录 prompt 和生成过程，右侧画布实时渲染结果。</p>
+<pre class="prose-block"><code class="language-text">Create a high-fidelity landing page designed to raise $500,000 from angel investors
+for &quot;雾屿咖啡 Mist Island Coffee&quot; - a boutique specialty coffee shop that combines
+premium coffee, quiet workspaces, and warm community events.
+Tone should feel warm, premium, calm, and trustworthy - think a mix of Blue Bottle
+Coffee + Apple Store + minimalist lifestyle design.
+</code></pre>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_landing.jpg" alt="Claude Design 实际生成：雾屿咖啡高保真落地页，左侧对话+进度，右侧画布渲染完整 Hero 区" loading="lazy" decoding="async"></p>
+<p><strong>② 默认产出 3 个设计变体，选方向再精修</strong></p>
+<p>Claude Design 不是只给一个答案，而是默认生成多个方向供你挑选——编辑器风、博物馆风、Zine 风等，点进去再细化。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_variants.jpg" alt="实际案例：PCWorld 记者让 Claude 解释 AI Tokens 概念，返回 Editorial / Museum / Field Notes 三种风格供选择" loading="lazy" decoding="async"></p>
+<p><strong>③ 生成可交互原型（不只是静态图）</strong></p>
+<p>生成的页面是真正可点击、可输入的 HTML——按钮有 hover 效果，表单能输入，数据会实时计算。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_interactive.jpg" alt="实际生成的 Token 科普页：内置实时分词器，输入句子后色块高亮显示每个 token，底部统计字符/词/token 数" loading="lazy" decoding="async"></p>
+<p><strong>④ 做产品演示文稿/PPT</strong></p>
+<p>不仅能做网页，还能生成完整的幻灯片（多页、带导航、可导出 PDF/PPTX）。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_slide.jpg" alt="实际生成：咖啡品牌 Pitch Deck，左侧列出 13 页大纲，右侧渲染当前幻灯片内容，底部可翻页" loading="lazy" decoding="async"></p>
+<p><strong>⑤ 生成动画视频</strong></p>
+<p>通过 &quot;From template&quot; 可以创建带动画的 HTML 视频——分镜脚本 + 实际渲染的动画画面，有播放控制条。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_video.jpg" alt="实际生成：45秒咖啡制作动画视频，左侧列出分镜时间表，右侧画布播放动画（咖啡豆→烘焙→冲泡）" loading="lazy" decoding="async"></p>
+<p><strong>⑥ 迭代已有设计（直接在画布上评论）</strong></p>
+<p>生成原型后，不用重新写 prompt，直接点 Comment 按钮圈选元素写评论，Claude 会局部修改。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_comment.jpg" alt="画布上点击 Comment 按钮，圈选任意元素后弹出评论框，写&quot;Suggest to Claude&quot;即可局部迭代" loading="lazy" decoding="async"></p>
+<p><strong>⑦ 移动端 App 页面设计</strong></p>
+<p>支持指定设备尺寸（如 iPhone），生成带设备外框的移动端 UI 原型。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_case_mobile.jpg" alt="实际生成：板球计分 App（Tracket）移动端界面——深色 Header + 比分显示 + 操作按钮，针对户外阳光场景做了高对比度设计" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/claude_design_canvas.jpg" alt="Claude Design 画布总览：左侧对话，右侧 Tweaks 面板可实时调整主题、断点、颜色等参数" loading="lazy" decoding="async"></p>
+<blockquote>
+<p>适合：没有设计背景、想跳过 Figma 学习曲线、快速拿到可交互原型的人。</p>
+</blockquote>
+<h4 id="open-designclaude-design-的开源平替">Open Design：Claude Design 的开源平替</h4>
+<p>如果你不想订阅、或更看重数据隐私，可以试试 Open Design（nexu-io 开源项目）。它与 Claude Design 是同一路线：<strong>对话式生成设计原型</strong>，区别在于<strong>本地优先、BYOK（自带模型 Key）、不绑定任何 Agent</strong>。</p>
+<p>它有两个核心概念：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">概念</th>
+<th align="left">说明</th>
+<th align="left">对你的价值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Skills（技能）</strong></td>
+<td align="left">16 个指令型设计技能（文案、配色、创意指导、头脑风暴…）</td>
+<td align="left">一个技能 = 一个专业任务模板</td>
+</tr>
+<tr>
+<td align="left"><strong>Templates（模板）</strong></td>
+<td align="left">288 个可运行模板（原型、幻灯片、动效…），都带 <code>example.html</code></td>
+<td align="left">fork 下来换数据就能交付</td>
+</tr>
+<tr>
+<td align="left"><strong>Design Systems（设计系统）</strong></td>
+<td align="left">151 套可移植的设计系统（色板、字体、动效、文风）</td>
+<td align="left">一句话套用大厂视觉规范</td>
+</tr>
+</tbody></table></div>
+<p>它会检测你本地的编码 Agent（Claude Code、Codex、Cursor、Qwen、Kimi 等，官方称支持 21 种）作为&quot;设计引擎&quot;——<strong>你现有的 Agent 就是设计师</strong>。此外，Claude Code 等工具生态里的 UI design Skill（如 frontend-design）也能把设计规范打包成 AI 可执行的指令，让 AI 按规范输出。</p>
+<p><strong>典型使用场景：</strong></p>
+<p><strong>① 新建项目：选 Skill + 设计体系 + 精度</strong></p>
+<p>创建原型时，可以选择线框图或高保真，指定目标平台（响应式 Web / 移动端等），并从内置的 150+ 设计体系中挑选一套作为视觉基础。</p>
+<pre class="prose-block"><code class="language-text">用 Open Design，套用 Linear 的设计系统，生成一个 SaaS 产品的落地页 HTML
+</code></pre>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/od_case_create.jpg" alt="Open Design 新建原型对话框：中文界面，可选原型/幻灯片/媒体，切换线框图/高保真，选择设计体系和目标平台" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/od_case_designsystems.jpg" alt="Open Design 内置 150+ 套设计系统（Agentic、Airbnb、Airtable、Linear、Stripe、Vercel…），按类别分组，每个都有色板预览和说明" loading="lazy" decoding="async"></p>
+<p><strong>② Studio 工作区：对话驱动，实时生成</strong></p>
+<p>左侧是对话面板（显示 AI 的思考步骤、Todo 列表、Write 操作），右侧是 iframe 画布实时渲染生成结果——和 Claude Design 类似，但底部显示本地正在调用哪个 CLI Agent（如 Claude Code、Codex、deepseek 等）。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/od_case_studio.jpg" alt="Open Design Studio 工作区：左侧 Chat 面板显示生成计划和进度，右侧画布渲染出&quot;Open Design&quot;大字封面页（幻灯片模式），顶部可切换 Preview/Source/Comment/Edit" loading="lazy" decoding="async"></p>
+<p><strong>③ 套用设计系统生成幻灯片/PPT</strong></p>
+<p>选择 Slide deck 类型，输入主题即可生成完整多页幻灯片。下图是社区用户用 Open Design 生成的中文演讲幻灯片。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/od_case_deck.jpg" alt="真实用户案例：&quot;一人公司 · 被 AI 折叠的组织&quot;演讲幻灯片封面——深色背景、衬线大字标题、演讲者信息、底部页码导航" loading="lazy" decoding="async"></p>
+<p><strong>④ 生成高保真移动端 App 原型</strong></p>
+<p>支持多屏同时预览，自动生成 iPhone 设备外框，Tab 栏、卡片布局、进度条等组件一应俱全。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/od_case_mobile.jpg" alt="真实生成案例：游戏化生活管理 App（Level）——3 屏并排预览，包含每日任务首页、任务分类仪表盘、任务详情页，浅色模式，彩色卡片" loading="lazy" decoding="async"></p>
+<p><strong>⑤ 用 UI design Skill 规范化 AI 输出</strong></p>
+<p>给 Claude Code / Cursor 装上 frontend-design 这类 Skill，AI 写页面时自动遵循设计规范：</p>
+<pre class="prose-block"><code class="language-text"># 在 Claude Code 里调用
+/frontend-design 帮我实现一个登录页面
+→ 自动按 Skill 内置的设计规范输出：
+   - 颜色：主色 #4F46E5，成功 #10B981，错误 #EF4444
+   - 间距：8px 基准网格
+   - 组件：符合无障碍标准的 Button / Input / Form
+   - 响应式：移动端 / 平板 / 桌面三端适配
+</code></pre>
+<p><strong>⑥ 本地私有项目不出网</strong></p>
+<p>公司内部项目、含敏感数据的产品设计，所有文件都在本地处理，模型可走本地部署或 BYOK：</p>
+<pre class="prose-block"><code class="language-text"># 本地启动 Open Design，模型走本地部署的 Qwen
+OPENAI_API_KEY=your-local-key OPENAI_BASE_URL=http://localhost:8000/v1 \
+opendesign
+# 所有设计文件保存在本地 ~/.open-design/，不经过任何第三方服务器
+</code></pre>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/opendesign_home.jpg" alt="Open Design 主界面：选择 Skill（原型/幻灯片/图片/视频等）+ 输入需求即可生成，本地 CLI Agent 自动作为引擎" loading="lazy" decoding="async"></p>
+<blockquote>
+<p>适合：注重数据隐私、已有编码 Agent、想完全掌控设计流程的开发者。</p>
+</blockquote>
+<h4 id="33-两条路线怎么选">3.3 两条路线怎么选</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">对比项</th>
+<th align="left">路线一：Figma / MasterGo</th>
+<th align="left">路线二：Claude Design / Open Design</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">定位</td>
+<td align="left">专业设计稿工具</td>
+<td align="left">对话式 AI 设计画布</td>
+</tr>
+<tr>
+<td align="left">代表工具</td>
+<td align="left">Figma、MasterGo</td>
+<td align="left">Claude Design（官方）、Open Design（开源平替）</td>
+</tr>
+<tr>
+<td align="left">产出</td>
+<td align="left">可编辑设计稿</td>
+<td align="left">可交互 HTML 原型</td>
+</tr>
+<tr>
+<td align="left">上手难度</td>
+<td align="left">⭐⭐ 中</td>
+<td align="left">⭐ 低</td>
+</tr>
+<tr>
+<td align="left">成本</td>
+<td align="left">免费版可用</td>
+<td align="left">Claude Design 需订阅；Open Design 开源免费（BYOK）</td>
+</tr>
+<tr>
+<td align="left">适合</td>
+<td align="left">严谨交付与协作</td>
+<td align="left">快速原型验证、隐私优先</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>现实中的组合用法</strong>
+<strong>参考 → 设计 → 交付</strong> 全程可以混用：用 Claude Design / Open Design 快速出方向和原型 → 定稿后导入 Figma/MasterGo 精修 → 交接给 Claude Code 写成代码。每条路线取长补短。</p>
+</blockquote>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-tools.jpg" alt="" loading="lazy" decoding="async"></p>
+<h3 id="第-4-章实战一把别人的网页临摹到像">第 4 章：实战一：把&quot;别人的网页&quot;临摹到像</h3>
+<p>目标很具体：<strong>选一个你喜欢的真实网页，临摹到&quot;像&quot;。</strong> 这里以落地页为例。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-workspace.jpg" alt="" loading="lazy" decoding="async"></p>
+<h4 id="step-1选定目标">Step 1：选定目标</h4>
+<p>选一个结构清晰、你有兴趣的落地页（SaaS 官网、产品介绍页都行）。保存它的截图和链接。</p>
+<h4 id="step-2用第-2-章框架拆解">Step 2：用第 2 章框架拆解</h4>
+<p>在浏览器里右键 → 检查，按 4 步记录：</p>
+<pre class="prose-block"><code class="language-text">目标：某 SaaS 官网落地页
+① 结构：导航(Logo/菜单/CTA) → Hero(标题/副标题/按钮/截图) → 3 特性卡片 → 定价(3 档) → 页脚
+② 色彩：主色 #0F172A 深色，强调 #6366F1，背景 #FFFFFF / #F8FAFC
+③ 字体：标题 Inter 800 48px，正文 Inter 400 16px
+④ 组件：按钮 圆角 8px/实色，卡片 圆角 16px/浅灰底/无边框
+</code></pre>
+<h4 id="step-3喂给-ai-设计工具生成第一版">Step 3：喂给 AI 设计工具，生成第一版</h4>
+<p>把拆解结果丢给 Claude Design / Open Design，让它按这套规范生成：</p>
+<pre class="prose-block"><code class="language-text">按以下设计规范生成一个同构落地页：
+[粘贴 Step 2 的拆解记录]
+产品：我的项目（一句话说明用途）
+要求：像素级遵循上面的色彩、字体、间距、圆角规范
+</code></pre>
+<p>第一版通常是&quot;神似而形不似&quot;——结构对，细节有偏差。<strong>这不叫失败，这正好告诉你接下来该调哪里。</strong></p>
+<h4 id="step-4逐区块对照迭代修改">Step 4：逐区块对照，迭代修改</h4>
+<p>把参考截图和生成结果并排，逐区块对照，用&quot;修改指令&quot;逼近：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">发现的问题</th>
+<th align="left">修改指令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">主色偏亮</td>
+<td align="left">&quot;把主色改为 #0F172A，强调色 #6366F1&quot;</td>
+</tr>
+<tr>
+<td align="left">按钮圆角不对</td>
+<td align="left">&quot;所有按钮统一 8px 圆角、实心背景&quot;</td>
+</tr>
+<tr>
+<td align="left">间距太挤</td>
+<td align="left">&quot;区块间距改为 96px，卡片内边距 24px&quot;</td>
+</tr>
+<tr>
+<td align="left">字体不对</td>
+<td align="left">&quot;标题改用 Inter 800，正文 Inter 400&quot;</td>
+</tr>
+<tr>
+<td align="left">多了装饰元素</td>
+<td align="left">&quot;去掉背景装饰，只保留核心内容&quot;</td>
+</tr>
+</tbody></table></div>
+<h4 id="step-5验收标准像">Step 5：验收标准——&quot;像&quot;</h4>
+<p>怎么判断自己入门了？给自己设一个客观标准：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 截两张图：原网页 vs 你的临摹版</li>
+<li><input disabled="" type="checkbox"> 把两张图并排放大，逐像素对比</li>
+<li><input disabled="" type="checkbox"> 色值、字号、间距、圆角<strong>肉眼看不出版式差异</strong></li>
+<li><input disabled="" type="checkbox"> 缩到 50% 再对比，依然分不清哪个是原版</li>
+</ul>
+<blockquote>
+<p><strong>&quot;像&quot;不是目的，是手段。</strong> 临摹 2-3 个风格完全不同的网站后，你会自然积累一套&quot;设计手感&quot;：什么时候该大留白、什么时候该高饱和、什么时候圆角要收敛。这时候再临摹新页面，速度会快得多。</p>
+</blockquote>
+<h3 id="第-5-章实战二从设计到代码">第 5 章：实战二：从设计到代码</h3>
+<p>临摹出的设计稿/原型，最终要变成产品里的真实页面。两条交接路径：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-to-code.jpg" alt="" loading="lazy" decoding="async"></p>
+<h4 id="51-路径-aai-设计工具--前端代码">5.1 路径 A：AI 设计工具 → 前端代码</h4>
+<ul>
+<li><strong>Claude Design</strong>：在画布定稿后，用 <code>/design-sync</code> 同步到 Claude Code，从设计直接续写代码，不必从截图重来</li>
+<li><strong>Open Design</strong>：可直接导出 HTML，再交给 Agent 改造成项目组件</li>
+<li><strong>Figma/MasterGo</strong>：通过插件或 MCP 导出 React / Vue 代码</li>
+</ul>
+<h4 id="52-路径-b截图--多模态大模型还原">5.2 路径 B：截图 → 多模态大模型还原</h4>
+<p>最简单：把临摹好的设计截图直接丢给多模态大模型，&quot;还原成 React 组件&quot;，逐区块落地。</p>
+<blockquote>
+<p>三种&quot;设计转代码&quot;路径的详细对比，见 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/design-to-code/index.md">从设计原型到项目代码</a>。想要组件级的工程化提效，可再看 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">使用现代组件库更新你的界面</a>。</p>
+</blockquote>
+<h3 id="第-6-章把大厂的设计系统变成自己的">第 6 章：把大厂的设计系统变成自己的</h3>
+<p>临摹 3 个页面后，规律就很明显了：<strong>好看的页面背后都有一套稳定的&quot;设计系统&quot;</strong>。与其自己从 0 造，不如站在巨人肩膀上。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/design-system.jpg" alt="" loading="lazy" decoding="async"></p>
+<h4 id="61-什么是可移植的设计系统">6.1 什么是&quot;可移植的设计系统&quot;</h4>
+<p>Open Design 把设计系统做成 <code>DESIGN.md</code> 文件（Linear、Vercel、Stripe、Apple、Cursor、Figma…），Claude Design 则从你的代码仓库/设计文件自动提取。它们本质都是同一件事：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-text">DESIGN.md  =  颜色 Token + 字体规范 + 间距节奏 + 组件样式 + 使用约定
+</code></pre>
+<p>一个真实的示例结构：</p>
+<pre class="prose-block"><code class="language-markdown"># Design System: Linear
+
+## Colors
+- background: #08090A
+- primary: #5E6AD2
+- text: #F7F7F8
+
+## Typography
+- heading: 22px / 600, letter-spacing -0.4px
+- body: 14px / 400
+
+## Radius
+- card: 8px
+- button: 6px
+
+## Spacing
+- 4 / 8 / 12 / 16 / 24 / 32 px
+
+## Do / Don&#39;t
+- Do: 大量留白，克制用色
+- Don&#39;t: 不使用渐变、不使用阴影堆叠
+</code></pre>
+<h4 id="62-三步建立自己的设计系统">6.2 三步建立自己的设计系统</h4>
+<ol>
+<li><strong>选基底</strong>：套用一个你认可的大厂设计系统（如 Linear 的克制暗色、Apple 的留白）</li>
+<li><strong>改参数</strong>：替换主色为你的品牌色、调整圆角与间距</li>
+<li><strong>沉淀成文件</strong>：保存为 <code>DESIGN.md</code> 或 Skill，让 AI 每次生成都自动遵守</li>
+</ol>
+<h4 id="63-进阶用-ui-design-skill-固定风格">6.3 进阶：用 UI design Skill 固定风格</h4>
+<p>把设计系统封装成 Skill 后，一句话即可调用：</p>
+<pre class="prose-block"><code class="language-text">使用 my-brand skill 的设计规范，生成 3 个功能页面的首屏方案
+</code></pre>
+<p>创建与使用 Skill 的方法，详见 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/llm-skills-beautiful/index.md">用 LLM 和 Skills 让界面变好看</a>。</p>
+<h3 id="第-7-章版权与伦理">第 7 章：版权与伦理</h3>
+<p>临摹能力越强，越要守住边界：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/frontend/ui-design/images/copyright.jpg" alt="" loading="lazy" decoding="async"></p>
+<p><strong>抄规则，不抄结果。</strong> 布局、配色、间距这些&quot;规则&quot;可以学习；Logo、图标、插画、文案等&quot;结果&quot;不要直接复制。</p>
+<p><strong>商用项目要谨慎。</strong> 商业交付前确认：素材版权、字体授权（商用字体需购买）、参考网站的使用条款。</p>
+<p><strong>AI 生成内容的归属。</strong> 不同平台（Claude Design、Open Design 等）条款不同，商用前查看服务协议。</p>
+<p><strong>标注 AI 参与。</strong> 部分平台/法规要求公开内容由 AI 生成。</p>
+<p><strong>最终把关。</strong> 品牌标识、广告物料等敏感场景务必人工审核。</p>
+<blockquote>
+<p><strong>建议</strong>
+学习与原型阶段放开临摹；<strong>进入商业交付时，把&quot;参考&quot;变成&quot;自己设计系统的再创作&quot;，并保留生成记录</strong>。</p>
+</blockquote>
+<h3 id="总结-1">总结</h3>
+<p>这一章把&quot;前端设计入门&quot;落到了可执行的路径上：</p>
+<ol>
+<li><strong>心态</strong>：前端设计入门从&quot;抄&quot;开始，抄规则、不抄结果</li>
+<li><strong>看</strong>：用结构(4 大块) + 视觉(色彩/字体/间距/圆角) + 组件 三层拆解任何页面，DevTools 是你的分析仪</li>
+<li><strong>工具</strong>：2 条路线——Figma/MasterGo（精细设计稿）、Claude Design / Open Design + UI design Skills（对话式原型）</li>
+<li><strong>临摹</strong>：选目标 → 拆解 → 生成 → 逐区块迭代 → 像素级对比验收</li>
+<li><strong>沉淀</strong>：把大厂 DESIGN.md 改造成自己的设计系统，再用 Skill 固定下来</li>
+</ol>
+<blockquote>
+<p><strong>下一步行动</strong>
+今天就完成一次完整的临摹练习：</p>
+</blockquote>
+<ol>
+<li>找一个你想&quot;抄&quot;的落地页，用 DevTools 拆出它的色彩/字体/间距/圆角</li>
+<li>用 Claude Design 或 Open Design 生成第一版，逐区块修改到&quot;像&quot;</li>
+<li>把定稿交给 AI 变成代码，并顺手保存一份自己的 DESIGN.md</li>
+</ol>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-018.html">← NanoBanana 素材生产</a><a rel="next" href="chapter-020.html">Figma 与 MasterGo 入门 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

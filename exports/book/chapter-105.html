@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前端框架的本质 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 105 / 195</p><article><h1 id="前端框架的本质">前端框架的本质</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#前端框架原理">前端框架原理</a><ul><li><a href="#dom概述">DOM概述</a></li><li><a href="#0-引言前端框架定义">0. 引言：前端框架定义</a></li><li><a href="#1-核心问题数据变了界面的处理流程">1. 核心问题：数据变了，界面的处理流程</a></li><li><a href="#2-框架的核心思想用数据描述界面">2. 框架的核心思想：用数据描述界面</a></li><li><a href="#3-响应式系统数据变更检测机制">3. 响应式系统：数据变更检测机制</a></li><li><a href="#4-组件把界面拆成可复用的小块">4. 组件：把界面拆成可复用的小块</a></li><li><a href="#5-框架要费这么大力气的原理">5. 框架要费这么大力气的原理</a></li><li><a href="#6-运行时-vs-编译时框架设计的核心权衡">6. 运行时 vs 编译时：框架设计的核心权衡</a></li><li><a href="#7-总结-3">7. 总结</a></li><li><a href="#名词对照表">名词对照表</a></li></ul></li></ul></nav></details><h2 id="前端框架原理">前端框架原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：这篇文章会回答一个根本问题——<strong>前端框架（Vue、React、Svelte 等）到底在做什么？</strong> 如果你只学过 HTML、CSS 和一点 JavaScript，完全没问题，我们从头讲起。</p>
+</blockquote>
+<p>在开始之前，先确认你知道这两个基础概念。如果不确定，可以先看对应章节：</p>
+<ul>
+<li><strong>HTML</strong>：网页的骨架，定义页面上有哪些元素（标题、段落、按钮、图片……）。参见 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/3-browser-and-frontend/html-css-layout.md">HTML 与 CSS 布局</a>。</li>
+<li><strong>JavaScript</strong>：让网页&quot;动起来&quot;的编程语言，可以修改页面内容、响应用户操作。参见 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive.md">JavaScript 原理</a>。</li>
+</ul>
+<p>还有一个概念会在后面频繁出现，这里先做一个完整的说明。</p>
+<h3 id="dom概述">DOM概述</h3>
+<p>DOM 的全称是 Document Object Model，中文叫&quot;文档对象模型&quot;。</p>
+<p>当你在浏览器中打开一个网页时，浏览器做的第一件事就是读取 HTML 代码。读完之后，浏览器不会直接拿 HTML 文本去显示页面，而是先把 HTML 代码<strong>转换成一棵树形结构</strong>，存放在内存里。这棵树就叫 DOM 树。</p>
+<p>树上的每一个节点（Node）对应 HTML 里的一个标签。标签之间的嵌套关系，在 DOM 树里就变成了父节点和子节点的关系。</p>
+<p>👇 <strong>动手试试看</strong>：
+把鼠标移到左边的 HTML 代码上，右边 DOM 树中对应的节点会高亮。反过来也一样。每一行 HTML 标签都对应 DOM 树上的一个节点。</p>
+<p><strong>为什么要了解 DOM？</strong> 因为 JavaScript 修改页面的方式，就是操作这棵 DOM 树——增加节点、删除节点、修改节点的内容。而前端框架做的核心工作，就是帮你自动化这些 DOM 操作。后面我们会反复提到 DOM，理解它是理解框架原理的基础。</p>
+<h3 id="0-引言前端框架定义">0. 引言：前端框架定义</h3>
+<p>先解释&quot;框架&quot;这个词。在编程中，<strong>框架（Framework）</strong> 是一套已经写好的代码和规则，它规定了你的代码应该怎么组织、怎么运行。你按照它的方式写代码，它帮你处理大量重复、繁琐的底层工作。</p>
+<p><strong>前端框架</strong>，就是专门帮你构建网页界面的框架。目前最常见的有 Vue、React、Svelte、Angular 这几个。</p>
+<p>那它们到底帮你解决了什么问题？下面这三张卡片概括了核心逻辑：</p>
+<p>接下来一步步展开，从最基础的问题讲起。</p>
+<h3 id="1-核心问题数据变了界面的处理流程">1. 核心问题：数据变了，界面的处理流程</h3>
+<h4 id="11-先搞清楚数据和界面是什么">1.1 先搞清楚&quot;数据&quot;和&quot;界面&quot;是什么</h4>
+<p>在任何一个网页应用中，都有两个东西在同时存在：</p>
+<ul>
+<li><strong>数据（Data / State）</strong>：程序内部存储的信息。比如&quot;购物车里有 3 件商品&quot;、&quot;用户名是张三&quot;、&quot;当前选中了第 2 个标签页&quot;。这些数据存在 JavaScript 的变量里，用户看不到它们。</li>
+<li><strong>界面（UI）</strong>：用户在屏幕上看到的东西。比如页面上显示&quot;购物车(3)&quot;、显示&quot;欢迎，张三&quot;、第 2 个标签页高亮。这些是 HTML 元素呈现出来的视觉效果。</li>
+</ul>
+<p><strong>数据和界面之间有对应关系</strong>：数据是&quot;3 件商品&quot;，界面上就应该显示&quot;3&quot;。如果数据变成了&quot;4 件商品&quot;，界面上也应该跟着变成&quot;4&quot;。</p>
+<p>问题是：<strong>这个&quot;跟着变&quot;的过程，谁来负责？</strong></p>
+<p>👇 <strong>动手点点看</strong>：
+点击&quot;添加商品&quot;按钮，注意观察：数据（左边）已经变了，但界面（右边）没有跟着更新——它们之间&quot;断开&quot;了。再点&quot;同步界面&quot;手动修复。</p>
+<h4 id="12-javascript-变量变了界面不会自动变的原理">1.2 JavaScript 变量变了，界面不会自动变的原理</h4>
+<p>这是零基础最容易困惑的地方，我们把底层原理一步步讲清楚。</p>
+<p>在 JavaScript 中，变量就是一块内存空间，用来存放数据。当你执行 <code>count = count + 1</code> 时，JavaScript 引擎做的事情非常简单：把内存中 count 这个位置的值从 3 改成 4。<strong>做完这一步就结束了，不会再发生任何事。</strong></p>
+<p>而页面上显示的内容（比如 <code>&lt;span&gt;3&lt;/span&gt;</code> 这个 DOM 节点）存放在另一块完全不同的内存空间里。JavaScript 引擎在修改变量时，根本不知道页面上有一个 DOM 节点正在显示这个变量的值，也没有任何机制让它去检查。</p>
+<p>所以本质原因是：<strong>JavaScript 的变量和 DOM 节点是两块独立的内存，它们之间没有任何自动联动机制。</strong> 修改变量只改变了变量所在的内存，DOM 节点所在的内存不会受到任何影响。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">let count = 3
+
+// 页面上有一个 DOM 节点显示着 count 的值：
+// &lt;span id=&quot;counter&quot;&gt;3&lt;/span&gt;
+
+count = 4
+// JavaScript 引擎做了什么？
+//   → 把变量 count 在内存中的值从 3 改成 4
+//   → 结束。没了。
+// 页面上 &lt;span&gt; 里显示的仍然是 &quot;3&quot;
+</code></pre>
+<p>如果你想让页面上的显示也变成&quot;4&quot;，你必须<strong>额外写代码</strong>，手动找到那个 DOM 节点，然后修改它的内容：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">count = 4  // 第 1 步：改变量
+
+// 第 2 步：你必须自己写——找到 DOM 节点，把它的文字改成新值
+document.getElementById(&#39;counter&#39;).textContent = count
+</code></pre>
+<p>如果页面上有 5 个地方显示着 count 的值（购物车数量、商品列表、总价、小计、状态提示），你就需要写 5 段这样的代码。<strong>漏掉任何一段，那个位置显示的就还是旧值，用户看到的就是错误信息。</strong></p>
+<h4 id="13-框架做了什么两步建立自动连接">1.3 框架做了什么：两步建立自动连接</h4>
+<p>框架能自动同步，靠的是<strong>两步配合</strong>——缺一不可。</p>
+<p><strong>第一步：你在模板里&quot;登记&quot;哪些地方要显示这个变量</strong></p>
+<p>框架的 HTML 模板里，你用 <code>{{ count }}</code> 这样的语法来标记&quot;这里要显示 count 的值&quot;：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- Vue 模板 --&gt;
+&lt;span&gt;购物车：{{ count }} 件&lt;/span&gt;    &lt;!-- 位置 A：我要显示 count --&gt;
+&lt;span&gt;总价：¥{{ count * 99 }}&lt;/span&gt;   &lt;!-- 位置 B：我也用了 count --&gt;
+&lt;span&gt;{{ count &gt; 5 ? &#39;过多&#39; : &#39;正常&#39; }}&lt;/span&gt;  &lt;!-- 位置 C：我也用了 count --&gt;
+</code></pre>
+<p>框架第一次渲染页面时，会把这个&quot;登记关系&quot;记录下来：<strong>位置 A、B、C 都依赖 count</strong>。</p>
+<p><strong>第二步：框架监视变量，变了就查登记表、自动更新</strong></p>
+<p>框架用 JavaScript 内置的 <code>Proxy</code>（代理）把你的变量&quot;包裹&quot;起来，让它变成一个&quot;被监视的变量&quot;。当你修改这个变量时，Proxy 会在赋值的同时悄悄多做一件事：通知框架&quot;count 变了&quot;。框架收到通知后，去查第一步的登记表，把 A、B、C 三个位置全部更新。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>原生 JS：
+  你写 HTML → &lt;span id=&quot;counter&quot;&gt;3&lt;/span&gt;（和变量无任何连接）
+  你改变量 → count = 4 → 结束，界面毫无反应
+  你手动补 → document.getElementById(&#39;counter&#39;).textContent = 4 → 界面才更新
+
+Vue 框架：
+  你写模板 → &lt;span&gt;{{ count }}&lt;/span&gt;（框架记住：这里依赖 count）
+  你改变量 → count = 4 → Proxy 拦截 → 通知框架 → 框架查登记表 → 自动更新 A/B/C
+</code></pre>
+<p>这就是为什么&quot;只有框架才能自动同步&quot;——原生 HTML 里的 <code>&lt;span&gt;</code> 和 JS 变量之间根本没有任何连接，框架的模板语法（<code>{{ }}</code>）才是建立这条连接的关键。你写了 <code>{{ count }}</code>，框架才知道这里要显示 count；框架才能在 count 变化时，精准找到这里并更新它。</p>
+<p>👇 <strong>动手点点看</strong>：
+先选&quot;原生 JavaScript&quot;，点&quot;执行&quot;后注意观察——变量改了但界面纹丝不动，你要一步步手动同步每个位置。再切换到&quot;使用框架&quot;，同样点&quot;执行&quot;——变量一改，框架自动完成所有步骤，界面立刻跟上。</p>
+<h4 id="14-对比手动同步-vs-自动同步的实际效果">1.4 对比：手动同步 vs 自动同步的实际效果</h4>
+<p>理解了原理之后，我们来看看在一个稍微复杂一点的场景下，手动同步和自动同步的区别有多大。</p>
+<p>👇 <strong>动手点点看</strong>：
+左边是没有框架时的&quot;手动同步&quot;方式——每个显示区域你都需要单独点&quot;同步&quot;按钮来更新。右边是有框架时的&quot;自动同步&quot;方式——你只管点&quot;添加商品&quot;，所有显示区域自动更新。试试在左边故意不同步某个区域，看看会发生什么。</p>
+<p><strong>这就是前端框架存在的根本原因：给 JavaScript 变量加上&quot;被修改时自动通知界面更新&quot;的能力，消灭手动同步带来的错误。</strong></p>
+<h3 id="2-框架的核心思想用数据描述界面">2. 框架的核心思想：用数据描述界面</h3>
+<h4 id="21-两种写法的区别">2.1 两种写法的区别</h4>
+<p>理解了&quot;自动同步&quot;的价值之后，我们来看框架具体是怎么实现的。</p>
+<p>在没有框架的时代（比如使用 jQuery），代码是这样写的——你一步一步告诉浏览器该做什么：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 第 1 步：找到页面上 id 为 counter 的元素
+var element = document.getElementById(&#39;counter&#39;)
+// 第 2 步：把这个元素的文字内容改成新的值
+element.textContent = &#39;4&#39;
+// 第 3 步：找到另一个元素，也改掉
+document.getElementById(&#39;total&#39;).textContent = &#39;¥396&#39;
+// 第 4 步：如果数量大于 5，还要改状态提示……
+</code></pre>
+<p>这种写法叫<strong>命令式（Imperative）</strong>——你在&quot;命令&quot;浏览器一步步执行操作。</p>
+<p>有了框架之后，代码变成这样——你只描述&quot;界面应该长什么样&quot;：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- 我不管这个值怎么更新到页面上的 --&gt;
+&lt;!-- 我只说：这里应该显示 count 的值 --&gt;
+&lt;span&gt;{{ count }}&lt;/span&gt;
+&lt;span&gt;总价：¥{{ count * 99 }}&lt;/span&gt;
+&lt;span v-if=&quot;count &gt; 5&quot;&gt;商品过多！&lt;/span&gt;
+</code></pre>
+<p>这种写法叫<strong>声明式（Declarative）</strong>——你在&quot;声明&quot;界面的最终状态，至于怎么达到这个状态，框架自己处理。</p>
+<h4 id="22-核心公式ui--fstate">2.2 核心公式：UI = f(State)</h4>
+<p>所有现代前端框架——不管是 Vue、React 还是 Svelte——都遵循同一个核心思想，可以用一个公式来表达：</p>
+<blockquote>
+<p><strong>UI = f(State)</strong></p>
+</blockquote>
+<p>这个公式的意思是：</p>
+<ul>
+<li><strong>State（状态）</strong>：你的应用数据。就是 JavaScript 里的那些变量：购物车里有几件商品、用户有没有登录、当前页面是哪个……</li>
+<li><strong>f（函数）</strong>：框架的渲染机制。它知道怎么把数据变成界面。</li>
+<li><strong>UI（界面）</strong>：用户在屏幕上看到的最终结果。</li>
+</ul>
+<p><strong>含义</strong>：给定一组数据（State），经过框架的处理（f），就能确定性地得到对应的界面（UI）。数据变了，界面就跟着变。开发者只需要关心数据，不需要关心界面怎么更新。</p>
+<p>👇 <strong>动手点点看</strong>：
+在左边修改数据（State），观察右边的界面（UI）如何自动跟着变化。这就是 <code>UI = f(State)</code> 的直观体现。</p>
+<h4 id="23-声明式比命令式好的原理">2.3 声明式比命令式好的原理</h4>
+<p>声明式写法的优势在于：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">对比维度</th>
+<th align="left">命令式（没有框架）</th>
+<th align="left">声明式（有框架）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>代码量</strong></td>
+<td align="left">每个更新都要写具体操作代码</td>
+<td align="left">只写一次模板，框架自动处理</td>
+</tr>
+<tr>
+<td align="left"><strong>出错概率</strong></td>
+<td align="left">容易漏更新某个地方</td>
+<td align="left">框架保证所有地方都更新</td>
+</tr>
+<tr>
+<td align="left"><strong>可读性</strong></td>
+<td align="left">代码里混杂着大量 DOM 操作</td>
+<td align="left">代码清晰地描述界面结构</td>
+</tr>
+<tr>
+<td align="left"><strong>维护成本</strong></td>
+<td align="left">修改一个功能要改很多地方</td>
+<td align="left">修改数据逻辑即可，界面自动跟随</td>
+</tr>
+</tbody></table></div>
+<p>简单说：声明式让你把精力集中在&quot;业务逻辑&quot;（数据怎么变化）上，不用操心&quot;界面怎么更新&quot;这个重复且容易出错的事情。</p>
+<h3 id="3-响应式系统数据变更检测机制">3. 响应式系统：数据变更检测机制</h3>
+<h4 id="31-响应式概述">3.1 响应式概述</h4>
+<p>前面说了&quot;数据变了，界面自动更新&quot;。但这里有一个技术问题：<strong>JavaScript 本身并没有&quot;变量被修改时自动通知别人&quot;的能力</strong>。</p>
+<p>你写 <code>count = 4</code>，JavaScript 只是把 <code>count</code> 的值从 3 改成 4，不会自动告诉任何人。框架需要一种机制来&quot;发现&quot;你修改了数据。</p>
+<p><strong>响应式（Reactivity）</strong> 就是这种机制的总称：当数据发生变化时，系统能自动感知到变化，并执行相应的更新操作。</p>
+<h4 id="32-三种不同的实现方式">3.2 三种不同的实现方式</h4>
+<p>不同的框架采用了不同的技术方案来实现响应式。这也是 Vue、React、Svelte 之间最根本的区别。</p>
+<p><strong>方式一：代理拦截（Vue 的做法）</strong></p>
+<p>Vue 使用 JavaScript 内置的 <code>Proxy</code>（代理）机制。<code>Proxy</code> 可以在你读取或修改一个对象的属性时，自动执行一段你指定的代码。</p>
+<p>Vue 把你的数据对象用 <code>Proxy</code> 包裹起来。当你执行 <code>count = 4</code> 时，<code>Proxy</code> 会拦截这次写入操作，通知 Vue：&quot;count 的值变了&quot;，然后 Vue 去更新所有用到 <code>count</code> 的界面部分。</p>
+<p>你作为开发者不需要做任何额外的事情——直接赋值就行，Vue 自动感知。</p>
+<p><strong>方式二：显式调用（React 的做法）</strong></p>
+<p>React 不使用 <code>Proxy</code>。它要求你必须通过一个专门的函数来修改数据：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// React 的写法
+const [count, setCount] = useState(0)
+
+// 不能直接写 count = 4（React 不会感知到）
+// 必须调用 setCount：
+setCount(4)
+</code></pre>
+<p>只有当你调用 <code>setCount()</code> 时，React 才知道数据变了，才会去更新界面。如果你直接写 <code>count = 4</code>，React 完全不知道，界面不会更新。</p>
+<p>这种方式更&quot;显式&quot;——每一次数据变化都是你主动告诉框架的，不会有意外的更新。</p>
+<p><strong>方式三：编译器分析（Svelte 的做法）</strong></p>
+<p>Svelte 采用了完全不同的路线。它有一个编译器（Compiler），在你的代码运行之前，编译器会先分析你的源代码。</p>
+<p>当编译器看到你写了 <code>count += 1</code> 这样的赋值语句时，它会自动在这行代码后面插入一段&quot;通知界面更新&quot;的代码。也就是说，在代码运行的时候，&quot;通知&quot;这个动作已经被编译器提前安排好了。</p>
+<p>你的代码看起来就是普通的 JavaScript 赋值，但编译后的代码里多了更新界面的逻辑。</p>
+<p>👇 <strong>动手点点看</strong>：
+选择不同的框架标签，点击&quot;修改数据&quot;，观察每种框架在&quot;引擎盖下&quot;经历了哪些步骤来完成数据变化的检测和界面更新。</p>
+<h4 id="33-三种方式的对比">3.3 三种方式的对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">对比维度</th>
+<th align="left">Vue（Proxy 代理）</th>
+<th align="left">React（显式调用）</th>
+<th align="left">Svelte（编译器）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>开发者写法</strong></td>
+<td align="left">直接赋值 <code>count = 4</code></td>
+<td align="left">必须用 <code>setCount(4)</code></td>
+<td align="left">直接赋值 <code>count = 4</code></td>
+</tr>
+<tr>
+<td align="left"><strong>感知变化的时机</strong></td>
+<td align="left">运行时自动拦截</td>
+<td align="left">开发者主动通知</td>
+<td align="left">编译时提前插入通知代码</td>
+</tr>
+<tr>
+<td align="left"><strong>运行时性能开销</strong></td>
+<td align="left">Proxy 有少量拦截开销</td>
+<td align="left">setState 调度有少量开销</td>
+<td align="left">几乎没有额外开销</td>
+</tr>
+<tr>
+<td align="left"><strong>调试难度</strong></td>
+<td align="left">中等</td>
+<td align="left">数据流清晰，较容易</td>
+<td align="left">需要理解编译后的代码</td>
+</tr>
+<tr>
+<td align="left"><strong>适合场景</strong></td>
+<td align="left">追求开发效率和自然写法</td>
+<td align="left">追求可预测的数据流</td>
+<td align="left">追求极致运行性能</td>
+</tr>
+</tbody></table></div>
+<p>三种方式没有绝对的好坏。Vue 写起来最自然，React 的数据流最可控，Svelte 的运行性能最好。选择哪个取决于项目的具体需求。</p>
+<h3 id="4-组件把界面拆成可复用的小块">4. 组件：把界面拆成可复用的小块</h3>
+<h4 id="41-拆的动机">4.1 拆的动机</h4>
+<p>一个完整的网页可能有导航栏、侧边栏、内容区、搜索框、用户头像、各种按钮……如果所有代码写在一个文件里，这个文件会变得非常长、非常难维护。</p>
+<p><strong>组件（Component）</strong> 就是把界面拆分成一个个独立的小块，每个小块管自己的数据、自己的界面、自己的逻辑。</p>
+<p>比如一个电商页面可以拆成这些组件：</p>
+<ul>
+<li><code>NavBar</code> 组件：负责顶部导航栏</li>
+<li><code>SearchBox</code> 组件：负责搜索框</li>
+<li><code>ProductCard</code> 组件：负责一张商品卡片</li>
+<li><code>ShoppingCart</code> 组件：负责购物车</li>
+</ul>
+<p>每个组件都是独立的。<code>ProductCard</code> 不需要知道 <code>NavBar</code> 里写了什么代码，它只需要管好自己。</p>
+<h4 id="42-组件的三个好处">4.2 组件的三个好处</h4>
+<p><strong>好处一：复用。</strong> 一个 <code>ProductCard</code> 组件写好之后，可以在页面上用 100 次——每次传入不同的商品数据，就会渲染出不同的商品卡片。不需要复制粘贴 100 份 HTML 代码。</p>
+<p><strong>好处二：封装。</strong> 组件内部的数据和逻辑是独立的。修改 <code>SearchBox</code> 组件的代码，不会影响到 <code>ProductCard</code> 组件。多人协作时，不同的人可以同时开发不同的组件，互不干扰。</p>
+<p><strong>好处三：可维护。</strong> 当某个功能出了问题，你可以直接定位到对应的组件去修复，不需要在一个几千行的大文件里翻找。</p>
+<p>👇 <strong>动手点点看</strong>：
+点击左边的组件名称，查看它在页面上对应的区域。注意观察：同一个 <code>ProductCard</code> 组件被复用了多次，每次显示不同的数据。</p>
+<h4 id="43-组件在代码里长什么样">4.3 组件在代码里长什么样</h4>
+<p>以 Vue 为例，一个组件就是一个 <code>.vue</code> 文件，里面包含三部分：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- ProductCard.vue --&gt;
+&lt;template&gt;
+  &lt;!-- 这里写 HTML 结构 —— 组件的&quot;外观&quot; --&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;{{ name }}&lt;/h3&gt;
+    &lt;p&gt;价格：¥{{ price }}&lt;/p&gt;
+    &lt;button @click=&quot;addToCart&quot;&gt;加入购物车&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// 这里写 JavaScript 逻辑 —— 组件的&quot;行为&quot;
+const props = defineProps([&#39;name&#39;, &#39;price&#39;])
+
+function addToCart() {
+  // 处理&quot;加入购物车&quot;的逻辑
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+/* 这里写 CSS 样式 —— 组件的&quot;样式&quot; */
+.card {
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+&lt;/style&gt;
+</code></pre>
+<p>使用这个组件时，就像使用一个自定义的 HTML 标签：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- 在其他地方使用 ProductCard 组件 --&gt;
+&lt;ProductCard name=&quot;无线耳机&quot; price=&quot;299&quot; /&gt;
+&lt;ProductCard name=&quot;机械键盘&quot; price=&quot;599&quot; /&gt;
+&lt;ProductCard name=&quot;显示器&quot; price=&quot;1999&quot; /&gt;
+</code></pre>
+<p>三行代码就渲染出了三张不同的商品卡片。</p>
+<h3 id="5-框架要费这么大力气的原理">5. 框架要费这么大力气的原理</h3>
+<h4 id="51-dom-操作概述">5.1 DOM 操作概述</h4>
+<p>前面提到过 DOM——浏览器把 HTML 解析后生成的树形结构。<strong>DOM 操作</strong>就是用 JavaScript 去修改这棵树上的节点。比如改一段文字、增加一个元素、删除一个元素、修改一个样式。</p>
+<p>这些操作本身不复杂，但是浏览器在执行 DOM 操作之后，需要做很多额外的工作才能让屏幕上的显示更新：</p>
+<ol>
+<li><strong>重新计算样式</strong>：这个节点以及它的子节点的 CSS 样式是否需要变化？</li>
+<li><strong>重新布局（Layout / Reflow）</strong>：页面上所有元素的位置和大小需要重新计算。因为一个元素的改变可能影响到其他元素的位置。</li>
+<li><strong>重新绘制（Paint）</strong>：把计算好的内容画到屏幕上。</li>
+</ol>
+<p>这三个步骤每一个都有计算成本。如果你的代码频繁触发 DOM 操作，浏览器就会反复执行这些步骤，页面就会变卡。</p>
+<p>👇 <strong>动手点点看</strong>：
+观察直接操作 DOM 和批量操作 DOM 的耗时对比。当修改次数增多时，&quot;逐个操作&quot;的耗时会急剧上升。</p>
+<h4 id="52-框架的问题解决方式">5.2 框架的问题解决方式</h4>
+<p>既然直接操作 DOM 很昂贵，框架就想办法<strong>减少 DOM 操作的次数</strong>。具体有两种策略：</p>
+<p><strong>策略一：虚拟 DOM + 差异比较（Vue、React 的做法）</strong></p>
+<p>虚拟 DOM（Virtual DOM）是一个 JavaScript 对象，它的结构和真实 DOM 树一一对应，但它只存在于内存中，不会触发浏览器的布局和绘制。</p>
+<p>当数据变化时，框架的处理流程是：</p>
+<ol>
+<li>用 JavaScript 对象创建一棵&quot;新的虚拟 DOM 树&quot;，描述数据变化后界面应该长什么样</li>
+<li>把这棵新树和旧树做对比（这个过程叫 <strong>Diff</strong>，即差异比较），找出哪些节点发生了变化</li>
+<li>只把真正变化的部分应用到真实 DOM 上（这个过程叫 <strong>Patch</strong>，即打补丁）</li>
+</ol>
+<p>这样一来，不管数据怎么变化，最终对真实 DOM 的操作总是最少的。</p>
+<p>👇 <strong>动手点点看</strong>：
+点击&quot;修改数据&quot;，观察虚拟 DOM 如何对比新旧两棵树，找出变化的节点。注意看最右边的&quot;真实 DOM&quot;——只有真正变化的部分才会闪烁。</p>
+<p><strong>策略二：编译时精确定位（Svelte 的做法）</strong></p>
+<p>Svelte 不使用虚拟 DOM。它的编译器在你写代码时就分析好了：&quot;当 <code>count</code> 变化时，需要更新第 3 行的 <code>&lt;span&gt;</code> 元素&quot;。运行时直接定位到那个元素去更新，完全不需要对比新旧树。</p>
+<p>这种做法跳过了 Diff 步骤，理论上性能更好。但它依赖编译器的分析能力——编译器需要足够聪明才能正确识别出所有需要更新的地方。</p>
+<h3 id="6-运行时-vs-编译时框架设计的核心权衡">6. 运行时 vs 编译时：框架设计的核心权衡</h3>
+<h4 id="61-两个阶段">6.1 两个阶段</h4>
+<p>前端代码从你写下到最终在浏览器里运行，会经过两个阶段：</p>
+<ul>
+<li><strong>编译时（Compile-time / Build-time）</strong>：你的源代码被构建工具（如 Vite、Webpack）处理，转换成浏览器能直接执行的代码。这个过程发生在你的电脑上，在用户打开网页之前。</li>
+<li><strong>运行时（Runtime）</strong>：转换后的代码在用户的浏览器中执行。框架的核心逻辑（比如虚拟 DOM 的 Diff、响应式的追踪）就在这个阶段工作。</li>
+</ul>
+<h4 id="62-框架在这两个阶段的工作分配">6.2 框架在这两个阶段的工作分配</h4>
+<p>不同框架在这两个阶段分配的工作量不同，这决定了它们的性能特征和包体积：</p>
+<ul>
+<li><strong>React</strong>：大部分工作在运行时完成。虚拟 DOM 的创建、Diff、Patch 都发生在浏览器中。好处是灵活性高；代价是需要把整个框架的运行时代码（约 40KB）发送给浏览器。</li>
+<li><strong>Vue</strong>：混合方式。模板在编译时被优化（编译器标记出哪些节点是静态的、不会变化的），但最终的界面更新仍然通过运行时的虚拟 DOM 完成。运行时代码约 30KB。</li>
+<li><strong>Svelte</strong>：大部分工作在编译时完成。编译器分析你的代码，直接生成精确的 DOM 更新指令。运行时几乎没有框架代码——最终打包出来只有你自己的业务代码。包体积最小。</li>
+</ul>
+<p>👇 <strong>动手点点看</strong>：
+点击不同的框架标签，查看它们在&quot;运行时 ↔ 编译时&quot;光谱上的位置，以及各自在打包体积、运行性能、开发体验上的权衡。</p>
+<h4 id="63-行业趋势">6.3 行业趋势</h4>
+<p>近几年框架的发展方向很明确：<strong>把越来越多的工作从运行时移到编译时</strong>。因为编译时的计算不占用用户的设备资源，不影响页面加载速度。</p>
+<ul>
+<li><strong>Vue</strong> 正在开发 Vapor Mode（蒸汽模式），可以跳过虚拟 DOM，在编译时直接生成 DOM 操作代码</li>
+<li><strong>React</strong> 推出了 React Compiler，在编译时自动优化组件的重渲染行为</li>
+<li><strong>Svelte 5</strong> 引入了 Runes 系统，进一步增强编译时的分析能力</li>
+</ul>
+<h3 id="7-总结-3">7. 总结</h3>
+<p>回顾这篇文章的核心要点：</p>
+<p><strong>前端框架解决的根本问题</strong>：当应用中的数据发生变化时，自动、高效、可靠地更新界面，不需要开发者手动操作 DOM。</p>
+<p><strong>它们共同遵循的核心思想</strong>：UI = f(State)——界面是数据的函数，开发者只需关注数据的变化，框架负责把数据的变化反映到界面上。</p>
+<p><strong>它们的关键技术差异</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">技术点</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>响应式系统</strong></td>
+<td align="left">框架如何检测数据变化。Vue 用 Proxy 拦截、React 用显式 setState、Svelte 用编译器分析。</td>
+</tr>
+<tr>
+<td align="left"><strong>虚拟 DOM</strong></td>
+<td align="left">Vue 和 React 用一个 JavaScript 对象来模拟 DOM 树，通过对比新旧两棵树（Diff）来找出最小更新量，减少真实 DOM 操作。</td>
+</tr>
+<tr>
+<td align="left"><strong>组件化</strong></td>
+<td align="left">把界面拆成独立的、可复用的小块，每个组件管理自己的数据和界面。</td>
+</tr>
+<tr>
+<td align="left"><strong>编译时优化</strong></td>
+<td align="left">在代码构建阶段提前做分析和优化，减少运行时的计算量。Svelte 在这方面走得最远。</td>
+</tr>
+</tbody></table></div>
+<p><strong>一句话</strong>：前端框架的本质工作就是——接管&quot;数据到界面&quot;的同步过程，让开发者只需要思考数据逻辑，不再需要手动操作界面。</p>
+<h3 id="名词对照表">名词对照表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">英文术语</th>
+<th align="left">中文对照</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Framework</strong></td>
+<td align="left">框架</td>
+<td align="left">一套预先编写好的代码和规则，为开发者提供应用的基础结构和常用功能。</td>
+</tr>
+<tr>
+<td align="left"><strong>DOM</strong></td>
+<td align="left">文档对象模型</td>
+<td align="left">浏览器把 HTML 解析后生成的树形数据结构，JavaScript 通过操作它来修改页面。</td>
+</tr>
+<tr>
+<td align="left"><strong>Virtual DOM</strong></td>
+<td align="left">虚拟 DOM</td>
+<td align="left">用 JavaScript 对象模拟 DOM 树，通过 Diff 算法找出最小更新路径，减少真实 DOM 操作次数。</td>
+</tr>
+<tr>
+<td align="left"><strong>State</strong></td>
+<td align="left">状态</td>
+<td align="left">应用中的数据，比如用户信息、购物车内容、页面当前状态等。</td>
+</tr>
+<tr>
+<td align="left"><strong>Reactivity</strong></td>
+<td align="left">响应式</td>
+<td align="left">当数据变化时，系统能自动感知并执行对应的界面更新操作。</td>
+</tr>
+<tr>
+<td align="left"><strong>Proxy</strong></td>
+<td align="left">代理</td>
+<td align="left">JavaScript 内置机制，可以拦截对一个对象的读取和写入操作。Vue 3 用它来实现响应式。</td>
+</tr>
+<tr>
+<td align="left"><strong>Component</strong></td>
+<td align="left">组件</td>
+<td align="left">一段独立的、可复用的界面代码，包含自己的 HTML 结构、JavaScript 逻辑和 CSS 样式。</td>
+</tr>
+<tr>
+<td align="left"><strong>Declarative</strong></td>
+<td align="left">声明式</td>
+<td align="left">一种编程方式：你描述&quot;最终想要什么结果&quot;，由框架来决定怎么实现。</td>
+</tr>
+<tr>
+<td align="left"><strong>Imperative</strong></td>
+<td align="left">命令式</td>
+<td align="left">一种编程方式：你一步一步告诉程序&quot;具体怎么做&quot;。</td>
+</tr>
+<tr>
+<td align="left"><strong>Diff</strong></td>
+<td align="left">差异比较</td>
+<td align="left">对比新旧两棵虚拟 DOM 树，找出哪些节点发生了变化。</td>
+</tr>
+<tr>
+<td align="left"><strong>Patch</strong></td>
+<td align="left">打补丁</td>
+<td align="left">把 Diff 找到的变化部分，应用到真实 DOM 上。</td>
+</tr>
+<tr>
+<td align="left"><strong>Compile-time</strong></td>
+<td align="left">编译时</td>
+<td align="left">代码在构建阶段被处理的时期，发生在用户打开网页之前。</td>
+</tr>
+<tr>
+<td align="left"><strong>Runtime</strong></td>
+<td align="left">运行时</td>
+<td align="left">代码在用户浏览器中执行的时期。</td>
+</tr>
+<tr>
+<td align="left"><strong>Compiler</strong></td>
+<td align="left">编译器</td>
+<td align="left">一个程序，把源代码转换成另一种形式的代码。Svelte 的编译器把 <code>.svelte</code> 文件转换成高效的 JavaScript。</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-104.html">← JavaScript 运行时</a><a rel="next" href="chapter-106.html">状态管理哲学 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

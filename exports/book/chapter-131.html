@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>后端分层架构 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 131 / 195</p><article><h1 id="后端分层架构">后端分层架构</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#后端分层架构原理">后端分层架构原理</a><ul><li><a href="#1-需要分层的必要性">1. 需要分层的必要性</a></li><li><a href="#2-四层架构详解">2. 四层架构详解</a></li><li><a href="#3-dto层与层之间的翻译官">3. DTO:层与层之间的&quot;翻译官&quot;</a></li><li><a href="#4-依赖方向分层架构的铁律">4. 依赖方向:分层架构的铁律</a></li><li><a href="#5-实战案例电商订单系统">5. 实战案例:电商订单系统</a></li><li><a href="#6-常见问题">6. 常见问题</a></li><li><a href="#7-总结-8">7. 总结</a></li><li><a href="#8-更多架构模式">8. 更多架构模式</a></li><li><a href="#9-总结">9. 总结</a></li><li><a href="#参考资料-30">参考资料</a></li></ul></li></ul></nav></details><h2 id="后端分层架构原理">后端分层架构原理</h2>
+<blockquote>
+<p><strong>核心问题</strong>: 代码越写越乱,怎么组织才能清晰易懂?</p>
+</blockquote>
+<p>当项目从几十行代码扩展到数万行,从单人开发到多人协作,从简单CRUD到复杂业务逻辑时,代码组织方式直接决定了项目的生死。分层架构不是为了炫技或遵循教条,而是为了解决软件工程中的一个根本性矛盾:<strong>业务复杂度的自然增长</strong>与人类认知能力的有限性之间的冲突。</p>
+<h3 id="1-需要分层的必要性">1. 需要分层的必要性</h3>
+<h4 id="11-问题的根源">1.1 问题的根源</h4>
+<p><strong>初期版本</strong>(100行代码):</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@PostMapping(&quot;/register&quot;)
+public Result register(@RequestBody User user) {
+    // 1. 检查用户名是否重复
+    if (userRepository.findByUsername(user.getUsername()) != null) {
+        return Result.error(&quot;用户名已存在&quot;);
+    }
+    // 2. 加密密码
+    user.setPassword(encrypt(user.getPassword()));
+    // 3. 保存用户
+    userRepository.save(user);
+    // 4. 发送欢迎邮件
+    emailService.sendWelcome(user.getEmail());
+    // 5. 记录日志
+    log.info(&quot;User registered: {}&quot;, user.getUsername());
+    return Result.success();
+}
+</code></pre>
+<p><strong>6个月后</strong>(500行代码):</p>
+<ul>
+<li>新增了手机号验证</li>
+<li>新增了实名认证</li>
+<li>新增了邀请奖励</li>
+<li>新增了风控检查</li>
+<li>...</li>
+</ul>
+<p>现在这个方法有500行,每次修改都提心吊胆,因为:</p>
+<ul>
+<li>逻辑混在一起,改一处可能影响其他功能</li>
+<li>难以测试,每次测试都要模拟完整的HTTP请求</li>
+<li>新人看不懂,因为所有逻辑都堆在一起</li>
+</ul>
+<p><strong>问题的本质</strong>:代码没有&quot;边界&quot;,所有职责都混在一起。</p>
+<p><strong>技术债的累积效应</strong>:</p>
+<ul>
+<li>❌ <strong>高耦合</strong>:业务逻辑与数据访问、HTTP协议耦合,修改牵一发而动全身</li>
+<li>❌ <strong>低内聚</strong>:一个方法承担了多个职责,违反单一职责原则</li>
+<li>❌ <strong>难测试</strong>:无法独立测试业务逻辑,必须启动完整HTTP容器</li>
+<li>❌ <strong>难复用</strong>:业务逻辑绑定在HTTP请求中,定时任务、消息队列无法复用</li>
+<li>❌ <strong>认知负荷</strong>:开发者需要同时理解所有层次的细节,无法聚焦</li>
+</ul>
+<h4 id="12-分层的核心思想">1.2 分层的核心思想</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────┐
+│  接收请求 ← Controller              │  只负责&quot;接单&quot;
+├─────────────────────────────────────┤
+│  业务编排 ← Service                 │  只负责&quot;做菜&quot;
+├─────────────────────────────────────┤
+│  数据存取 ← Repository              │  只负责&quot;取食材&quot;
+├─────────────────────────────────────┤
+│  业务定义 ← Domain                  │  只负责&quot;菜谱标准&quot;
+└─────────────────────────────────────┘
+</code></pre>
+<p><strong>关键原则</strong>:</p>
+<ul>
+<li>每一层只做自己的事</li>
+<li>层与层之间通过明确的接口通信</li>
+<li>业务逻辑集中在 Service 和 Domain</li>
+<li>数据访问逻辑集中在 Repository</li>
+</ul>
+<p><strong>分层架构的工程价值</strong>:</p>
+<ol>
+<li><strong>降低认知负荷</strong>:开发者可以专注于当前层的职责,无需理解全局细节</li>
+<li><strong>提高可测试性</strong>:每层可以独立单元测试,Mock依赖即可</li>
+<li><strong>增强可维护性</strong>:需求变更时,定位修改范围明确,降低风险</li>
+<li><strong>促进代码复用</strong>:业务逻辑不依赖HTTP,可在定时任务、消息队列中复用</li>
+<li><strong>支持团队协作</strong>:不同开发者可以并行开发不同层,减少冲突</li>
+<li><strong>延长代码寿命</strong>:清晰的边界让代码更容易重构和演进</li>
+</ol>
+<h3 id="2-四层架构详解">2. 四层架构详解</h3>
+<h4 id="21-整体结构">2.1 整体结构</h4>
+<p>分层架构的本质是<strong>关注点分离</strong>(Separation of Concerns)和依赖方向控制:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────────────────────┐
+│  前端请求                                            │
+└────────────────────┬────────────────────────────────┘
+                     │ HTTP Request
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│  Controller (控制器层)                               │
+│  - 接收请求、参数校验                                 │
+│  - DTO 转换                                          │
+│  - 调用 Service                                      │
+│  - 返回响应                                          │
+└────────────────────┬────────────────────────────────┘
+                     │ 业务调用
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│  Service (业务逻辑层)                                │
+│  - 业务逻辑编排                                      │
+│  - 事务管理                                          │
+│  - 协调多个 Repository                               │
+│  - 跨模块协调                                        │
+└────────────────────┬────────────────────────────────┘
+                     │ 数据访问
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│  Repository (数据访问层)                             │
+│  - 数据库 CRUD                                       │
+│  - 查询封装                                          │
+│  - ORM 映射                                          │
+└────────────────────┬────────────────────────────────┘
+                     │ 领域对象
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│  Domain (领域模型层)                                 │
+│  - 实体 (Entity)                                     │
+│  - 值对象 (Value Object)                             │
+│  - 业务规则                                          │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>依赖方向</strong>:代码依赖必须指向更稳定、更抽象的方向</p>
+<ul>
+<li>Controller 依赖 Service 接口(抽象)</li>
+<li>Service 依赖 Repository 接口(抽象)</li>
+<li>所有层都依赖 Domain(业务核心,最稳定)</li>
+<li><strong>不允许反向依赖</strong>(如 Repository 依赖 Service)</li>
+</ul>
+<h4 id="22-controller-层">2.2 Controller 层</h4>
+<p><strong>职责</strong>:请求的&quot;接待员&quot;</p>
+<ul>
+<li>接收 HTTP 请求,解析参数</li>
+<li>参数校验(格式、必填等)</li>
+<li>DTO 转换(Request → Param)</li>
+<li>调用 Service 执行业务</li>
+<li>DTO 转换(Result → Response)</li>
+<li>返回 HTTP 响应</li>
+</ul>
+<p><strong>不该做的事</strong>:</p>
+<ul>
+<li>直接写业务逻辑</li>
+<li>直接操作数据库</li>
+<li>处理事务</li>
+</ul>
+<p><strong>设计哲学</strong>:
+Controller 是系统的&quot;门面&quot;,承担适配器职责——将外部HTTP协议适配为内部业务调用。它不应该包含任何业务决策,因为业务决策是领域知识的体现,应该与传输协议解耦。</p>
+<p><strong>示例</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@RestController
+@RequestMapping(&quot;/api/users&quot;)
+public class UserController {
+
+    private final UserService userService;
+
+    @PostMapping
+    public UserResponse createUser(
+            @RequestBody @Valid UserRequest request) {
+        
+        // 1. Request DTO → Param DTO
+        UserParam param = UserParam.builder()
+                .username(request.getUsername())
+                .password(encrypt(request.getPassword()))
+                .email(request.getEmail())
+                .build();
+
+        // 2. 调用 Service
+        User user = userService.createUser(param);
+
+        // 3. Entity → Response DTO
+        return UserResponse.from(user);
+    }
+}
+</code></pre>
+<p><strong>关键点</strong>:</p>
+<ul>
+<li>用 <code>@Valid</code> 自动校验参数</li>
+<li>用 DTO 隔离前后端数据结构</li>
+<li>只做&quot;翻译&quot;和&quot;调度&quot;,不包含业务逻辑</li>
+</ul>
+<h4 id="23-service-层">2.3 Service 层</h4>
+<p><strong>职责</strong>:业务的&quot;厨师&quot;</p>
+<ul>
+<li>实现核心业务逻辑</li>
+<li>编排多个 Repository 的操作</li>
+<li>管理事务边界</li>
+<li>处理跨模块协调</li>
+</ul>
+<p><strong>不该做的事</strong>:</p>
+<ul>
+<li>直接写 SQL(交给 Repository)</li>
+<li>处理 HTTP 相关的事情</li>
+<li>返回数据库实体给 Controller</li>
+</ul>
+<p><strong>设计哲学</strong>:
+Service 层是业务逻辑的载体,应该保持纯粹性。它不依赖任何框架或传输协议,这样可以:</p>
+<ul>
+<li>独立于Web层做单元测试</li>
+<li>在定时任务、消息队列消费者中复用</li>
+<li>避免技术栈变更影响业务逻辑</li>
+</ul>
+<p><strong>示例</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Service
+@RequiredArgsConstructor
+public class UserService {
+
+    private final UserRepository userRepository;
+    private final EmailService emailService;
+
+    @Transactional
+    public User createUser(UserParam param) {
+        // 1. 业务规则:检查用户名是否重复
+        if (userRepository.existsByUsername(param.getUsername())) {
+            throw new UserAlreadyExistsException();
+        }
+
+        // 2. 创建用户实体
+        User user = new User();
+        user.setUsername(param.getUsername());
+        user.setPassword(param.getPassword());
+        user.setEmail(param.getEmail());
+
+        // 3. 保存到数据库
+        userRepository.save(user);
+
+        // 4. 发送欢迎邮件(跨模块协调)
+        emailService.sendWelcomeEmail(user);
+
+        return user;
+    }
+}
+</code></pre>
+<p><strong>关键点</strong>:</p>
+<ul>
+<li>用Transactional保证事务一致性</li>
+<li>抛出业务异常,让Controller统一处理</li>
+<li>不依赖HTTP概念,可以复用</li>
+</ul>
+<h4 id="24-repository-层">2.4 Repository 层</h4>
+<p><strong>职责</strong>:数据的&quot;仓管员&quot;</p>
+<ul>
+<li>封装所有数据访问逻辑</li>
+<li>执行CRUD操作</li>
+<li>处理ORM映射</li>
+<li>封装查询条件</li>
+</ul>
+<p><strong>不该做的事</strong>:</p>
+<ul>
+<li>写业务逻辑</li>
+<li>处理事务(Service层管理)</li>
+<li>依赖上层模块</li>
+</ul>
+<p><strong>设计哲学</strong>:
+Repository 是数据访问的抽象层,它隐藏了底层数据库的细节。这种抽象的价值在于:</p>
+<ul>
+<li>切换数据库时只需修改Repository实现,业务逻辑无需变动</li>
+<li>便于用Mock做单元测试</li>
+<li>查询逻辑集中管理,避免重复代码</li>
+</ul>
+<p><strong>示例</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Repository
+public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+
+    // Spring Data JPA 自动实现
+    Optional&lt;User&gt; findByUsername(String username);
+    boolean existsByUsername(String username);
+
+    // 自定义复杂查询
+    @Query(&quot;SELECT u FROM User u WHERE u.email = :email AND u.deleted = false&quot;)
+    Optional&lt;User&gt; findActiveByEmail(@Param(&quot;email&quot;) String email);
+}
+</code></pre>
+<p><strong>关键点</strong>:</p>
+<ul>
+<li>Repository是接口,不包含业务逻辑</li>
+<li>用方法名表达查询意图</li>
+<li>可以用Query自定义复杂查询</li>
+</ul>
+<h4 id="25-domain-层">2.5 Domain 层</h4>
+<p><strong>职责</strong>:业务的&quot;菜谱标准&quot;</p>
+<ul>
+<li>定义业务实体(Entity)</li>
+<li>定义值对象(Value Object)</li>
+<li>封装业务规则</li>
+<li>作为所有层的共同依赖</li>
+</ul>
+<p><strong>重要特性</strong>:</p>
+<ul>
+<li>Domain层不依赖任何其他层</li>
+<li>所有层都依赖Domain层</li>
+<li>是分层架构的基础</li>
+</ul>
+<p><strong>设计哲学</strong>:
+Domain层是整个系统的业务核心,它表达了领域知识和业务规则。它的纯粹性很重要:</p>
+<ul>
+<li>不依赖框架意味着业务逻辑不被技术栈绑架</li>
+<li>所有层都依赖它,保证了业务规则的统一性</li>
+<li>便于长期演进,技术栈可以替换,业务规则相对稳定</li>
+</ul>
+<p><strong>示例</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    // ✅ 业务方法:封装业务规则
+    public boolean isPasswordCorrect(String rawPassword) {
+        return BCrypt.checkpw(rawPassword, this.password);
+    }
+
+    public void changePassword(String oldPassword, String newPassword) {
+        if (!isPasswordCorrect(oldPassword)) {
+            throw new IncorrectPasswordException();
+        }
+        this.password = BCrypt.hashpw(newPassword);
+    }
+}
+</code></pre>
+<p><strong>关键点</strong>:</p>
+<ul>
+<li>Entity 有唯一标识</li>
+<li>业务规则封装在 Domain 对象中</li>
+<li>Domain 层是纯粹的业务逻辑,不依赖框架</li>
+</ul>
+<h3 id="3-dto层与层之间的翻译官">3. DTO:层与层之间的&quot;翻译官&quot;</h3>
+<h4 id="31-需要-dto的原理">3.1 需要 DTO的原理</h4>
+<p><strong>问题</strong>:如果直接把数据库实体返回给前端:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">// ❌ 错误:直接返回 Entity
+@Entity
+public class User {
+    private Long id;
+    private String username;
+    private String password;        // 敏感信息!
+    private Boolean isDeleted;      // 内部字段!
+}
+</code></pre>
+<p>前端会收到不该暴露的字段,存在安全风险。</p>
+<p><strong>解决方案</strong>:用 DTO 做&quot;翻译&quot;</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>数据库 Entity → Service Param/Result → Controller Request/Response → 前端
+</code></pre>
+<h4 id="32-dto-的类型">3.2 DTO 的类型</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Request DTO</td>
+<td>Controller 接收参数</td>
+<td>UserCreateRequest</td>
+</tr>
+<tr>
+<td>Response DTO</td>
+<td>Controller 返回数据</td>
+<td>UserResponse</td>
+</tr>
+<tr>
+<td>Param DTO</td>
+<td>Service 方法参数</td>
+<td>UserParam</td>
+</tr>
+<tr>
+<td>Result DTO</td>
+<td>Service 返回结果</td>
+<td>UserResult</td>
+</tr>
+<tr>
+<td>Entity</td>
+<td>数据库映射</td>
+<td>User</td>
+</tr>
+</tbody></table></div>
+<p><strong>关键原则</strong>:
+每层使用自己的 DTO,不要直接传递 Entity,DTO 只包含必要的字段,这样可以避免暴露内部实现细节,保证各层的独立性。</p>
+<h3 id="4-依赖方向分层架构的铁律">4. 依赖方向:分层架构的铁律</h3>
+<h4 id="41-依赖倒置原则">4.1 依赖倒置原则</h4>
+<p><strong>错误的做法</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Controller → UserServiceImpl → UserDaoImpl → UserEntity
+</code></pre>
+<p><strong>正确做法</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Controller → UserService(接口) → UserRepository(接口) → UserEntity
+</code></pre>
+<p><strong>依赖方向</strong>:</p>
+<p>正确的依赖方向是所有层都依赖更抽象、更稳定的层。具体来说,Controller 依赖 Service 接口,Service 依赖 Repository 接口,所有层都依赖 Domain 层,而 Domain 层不依赖任何其他层。这种依赖方向确保了业务逻辑的独立性和可测试性。</p>
+<p>错误的做法包括 Service 直接依赖 Repository 实现类,Controller 直接操作数据库,或者 Domain 层依赖其他层,这些都会导致耦合度升高,降低系统的可维护性。</p>
+<h4 id="42-代码示例">4.2 代码示例</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">// ✅ 正确:依赖接口
+@Service
+public class OrderService {
+    private final OrderRepository orderRepository;  // 接口
+    private final PaymentService paymentService;    // 接口
+}
+
+// ✅ 实现类通过 Spring 自动注入
+@Repository
+public class OrderRepositoryImpl implements OrderRepository {
+    // 实现细节
+}
+</code></pre>
+<h3 id="5-实战案例电商订单系统">5. 实战案例:电商订单系统</h3>
+<h4 id="51-需求">5.1 需求</h4>
+<ol>
+<li>用户选择商品</li>
+<li>检查库存</li>
+<li>计算金额</li>
+<li>创建订单</li>
+<li>扣减库存</li>
+</ol>
+<h4 id="52-代码实现">5.2 代码实现</h4>
+<p><strong>Domain 层</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Entity
+public class Order {
+    @Id
+    private Long id;
+    private Long userId;
+    private List&lt;OrderItem&gt; items;
+    private Money totalAmount;
+    private OrderStatus status;
+
+    public void calculateTotal() {
+        Money total = Money.zero();
+        for (OrderItem item : items) {
+            total = total.add(item.getSubTotal());
+        }
+        this.totalAmount = total;
+    }
+
+    public void cancel() {
+        if (this.status != OrderStatus.PENDING_PAYMENT) {
+            throw new IllegalStateException(&quot;只有待支付订单可以取消&quot;);
+        }
+        this.status = OrderStatus.CANCELLED;
+    }
+}
+</code></pre>
+<p><strong>Repository 层</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Repository
+public interface OrderRepository extends JpaRepository&lt;Order, Long&gt; {
+    List&lt;Order&gt; findByUserIdOrderByCreatedAtDesc(Long userId);
+}
+</code></pre>
+<p><strong>Service 层</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final InventoryService inventoryService;
+
+    @Transactional
+    public OrderDTO createOrder(OrderParam param) {
+        // 1. 验证商品并扣减库存
+        for (OrderItemParam item : param.getItems()) {
+            inventoryService.reserveStock(item.getProductId(), item.getQuantity());
+        }
+
+        // 2. 创建订单
+        Order order = new Order();
+        order.setUserId(param.getUserId());
+        order.calculateTotal();
+
+        // 3. 保存订单
+        orderRepository.save(order);
+
+        return OrderDTO.from(order);
+    }
+}
+</code></pre>
+<p><strong>Controller 层</strong>:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-java">@RestController
+@RequestMapping(&quot;/api/orders&quot;)
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @PostMapping
+    public OrderResponse createOrder(@RequestBody @Valid OrderRequest request) {
+        OrderParam param = OrderParam.builder()
+                .userId(request.getUserId())
+                .items(request.getItems())
+                .build();
+
+        OrderDTO order = orderService.createOrder(param);
+
+        return OrderResponse.from(order);
+    }
+}
+</code></pre>
+<h3 id="6-常见问题">6. 常见问题</h3>
+<h4 id="61-controller-可以写业务逻辑吗">6.1 Controller 可以写业务逻辑吗</h4>
+<p>Controller 不应该写业务逻辑,它只负责接收请求和返回响应。业务逻辑应该封装在 Service 层,这样做的好处是代码可以被复用,例如定时任务或消息队列消费者可以直接调用 Service,而不需要通过 HTTP 请求。同时,业务逻辑集中在一个地方,更容易测试和维护,避免了逻辑分散导致的不一致问题。</p>
+<h4 id="62-贫血模型和充血模型概述">6.2 贫血模型和充血模型概述</h4>
+<p>贫血模型是指实体类只包含属性和对应的 getter/setter 方法,不包含任何业务逻辑,所有的业务规则都放在 Service 层中实现。这种模型结构简单,易于理解,是大多数项目采用的方式。</p>
+<p>充血模型是指实体类不仅包含属性,还包含与该实体相关的业务方法,将业务规则封装在实体内部。这种方式更符合面向对象的设计思想,让数据和行为在一起,提高了代码的内聚性。</p>
+<p>建议根据团队的技术背景和项目复杂度选择合适的模型,但无论选择哪种,都应该保持一致性,并且 Domain 层至少应该包含基本的业务行为方法,而不是完全的空壳。</p>
+<h4 id="63-处理跨多个-service-的事务的实现">6.3 处理跨多个 Service 的事务的实现</h4>
+<p>当一个业务操作需要跨越多个 Service 时,应该在上层的 Service 中使用事务注解,在这个方法中依次调用多个下层的 Service。这样可以确保所有操作在同一个事务上下文中执行,要么全部成功要么全部失败,保证数据的一致性。需要注意的是,事务边界应该尽可能小,只包含必要的操作,避免长时间持有数据库锁影响并发性能。</p>
+<h3 id="7-总结-8">7. 总结</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>职责</th>
+<th>关键词</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Controller</td>
+<td>接收请求、参数校验、调用 Service、返回响应</td>
+<td>接待员</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>业务逻辑编排、事务管理、协调 Repository</td>
+<td>厨师</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>数据访问、ORM 映射、查询封装</td>
+<td>仓管员</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>实体定义、业务规则、值对象</td>
+<td>菜谱标准</td>
+</tr>
+</tbody></table></div>
+<p><strong>���心原则</strong>:</p>
+<ol>
+<li>每层只做自己的事</li>
+<li>层与层之间通过接口通信</li>
+<li>业务逻辑集中在 Service 和 Domain</li>
+<li>数据访问逻辑集中在 Repository</li>
+<li>用 DTO 隔离各层数据结构</li>
+</ol>
+<h3 id="8-更多架构模式">8. 更多架构模式</h3>
+<p>本文介绍的是<strong>分层架构</strong>(Layered Architecture),这是最常见、最易上手的后端架构模式。但后端架构远不止这一种,根据业务场景不同,还有其他值得了解的架构模式:</p>
+<h4 id="81-其他常见架构模式">8.1 其他常见架构模式</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>架构模式</th>
+<th>适用场景</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>单体架构</strong></td>
+<td>小型项目、MVP</td>
+<td>所有功能在一个应用中,部署简单</td>
+</tr>
+<tr>
+<td><strong>微服务架构</strong></td>
+<td>大型复杂系统</td>
+<td>拆分为多个独立服务,每个服务可独立部署</td>
+</tr>
+<tr>
+<td><strong>事件驱动架构</strong></td>
+<td>高并发、异步处理</td>
+<td>通过事件触发处理流程,解耦度高</td>
+</tr>
+<tr>
+<td><strong>整洁架构</strong></td>
+<td>复杂业务系统</td>
+<td>业务逻辑居中,依赖只能向内,框架在最外层</td>
+</tr>
+<tr>
+<td><strong>六边形架构</strong></td>
+<td>需要多种外部适配</td>
+<td>通过端口和适配器隔离核心与外部系统</td>
+</tr>
+<tr>
+<td><strong>洋葱架构</strong></td>
+<td>领域驱动设计</td>
+<td>同心圆分层,领域模型在最内层,基础设施在最外层</td>
+</tr>
+</tbody></table></div>
+<h4 id="单体架构-monolithic">单体架构 (Monolithic)</h4>
+<p>所有功能打包在一个应用中,共享同一个数据库和进程。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌──────────────────────────────┐
+│         单体应用              │
+│  ┌────┐ ┌────┐ ┌────┐       │
+│  │用户│ │订单│ │支付│ ...    │
+│  └──┬─┘ └──┬─┘ └──┬─┘       │
+│     └──────┼──────┘          │
+│         共享数据库            │
+└──────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>优点</strong>: 开发简单、部署方便、本地调试容易</li>
+<li><strong>缺点</strong>: 代码耦合度高,扩展困难,一个模块出问题可能拖垮整个系统</li>
+<li><strong>适用</strong>: 早期创业项目、单团队开发、快速原型验证</li>
+</ul>
+<h4 id="微服务架构-microservices">微服务架构 (Microservices)</h4>
+<p>将系统拆分为多个独立服务,每个服务拥有自己的数据和业务逻辑,可独立部署和扩展。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌────────┐  ┌────────┐  ┌────────┐
+│用户服务 │  │订单服务 │  │支付服务 │
+│  DB-1  │  │  DB-2  │  │  DB-3  │
+└───┬────┘  └───┬────┘  └───┬────┘
+    └───────────┼───────────┘
+          API Gateway
+</code></pre>
+<ul>
+<li><strong>优点</strong>: 独立部署和扩展、技术栈灵活、故障隔离</li>
+<li><strong>缺点</strong>: 服务间通信复杂、分布式数据一致性难、需要成熟的 DevOps 能力</li>
+<li><strong>适用</strong>: 大型复杂系统、多团队协作、需要独立扩展的场景</li>
+</ul>
+<h4 id="事件驱动架构-event-driven">事件驱动架构 (Event-Driven)</h4>
+<p>用异步事件通信,生产者发出事件,消费者响应事件,组件之间高度解耦。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>生产者 ──→ [事件总线/消息队列] ──→ 消费者A
+                               ──→ 消费者B
+                               ──→ 消费者C
+</code></pre>
+<ul>
+<li><strong>优点</strong>: 高度解耦、天然支持扩展、适合实时处理</li>
+<li><strong>缺点</strong>: 调试困难、事件顺序和幂等性需要额外处理</li>
+<li><strong>适用</strong>: 实时数据分析、IoT 系统、微服务间异步通信</li>
+</ul>
+<h4 id="整洁架构-clean-architecture">整洁架构 (Clean Architecture)</h4>
+<p>Robert C. Martin 提出,将系统分为四个同心圆层,依赖只能从外向内指向:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────────────────┐
+│  Frameworks &amp; Drivers (框架和驱动)   │
+│  ┌─────────────────────────────┐    │
+│  │  Interface Adapters (适配器) │    │
+│  │  ┌─────────────────────┐    │    │
+│  │  │  Use Cases (用例)    │    │    │
+│  │  │  ┌─────────────┐    │    │    │
+│  │  │  │  Entities    │    │    │    │
+│  │  │  │  (实体/领域)  │    │    │    │
+│  │  │  └─────────────┘    │    │    │
+│  │  └─────────────────────┘    │    │
+│  └─────────────────────────────┘    │
+└─────────────────────────────────────┘
+         依赖方向: 外 → 内
+</code></pre>
+<ul>
+<li><strong>核心规则</strong>: 内层不知道外层的存在,业务逻辑完全独立于框架和数据库</li>
+<li><strong>优点</strong>: 高可测试性、技术栈可替换、业务逻辑清晰</li>
+<li><strong>缺点</strong>: 初期开发成本高、层间映射代码多、小项目容易过度设计</li>
+<li><strong>适用</strong>: 复杂业务系统、需要长期维护的项目</li>
+</ul>
+<h4 id="六边形架构-hexagonal--ports--adapters">六边形架构 (Hexagonal / Ports &amp; Adapters)</h4>
+<p>通过&quot;端口&quot;定义核心业务的输入输出接口,通过&quot;适配器&quot;连接外部系统:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>        ┌─────────────┐
+  HTTP ──→ Port      │
+  CLI  ──→ (入端口)   │  核心业务逻辑  │  (出端口) ──→ 数据库
+  MQ   ──→           │               │  Port    ──→ 外部API
+        └─────────────┘
+</code></pre>
+<ul>
+<li><strong>核心思想</strong>: 业务逻辑不依赖任何外部技术,外部系统通过适配器接入</li>
+<li><strong>优点</strong>: 外部系统可随意替换、测试时用 Mock 适配器即可</li>
+<li><strong>适用</strong>: 需要对接多种外部系统的场景</li>
+</ul>
+<h4 id="洋葱架构-onion-architecture">洋葱架构 (Onion Architecture)</h4>
+<p>与整洁架构类似,强调领域模型在最内层,基础设施在最外层,依赖只能向内:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌──────────────────────────────┐
+│  Infrastructure (基础设施)    │
+│  ┌────────────────────────┐  │
+│  │  Application Services  │  │
+│  │  ┌──────────────────┐  │  │
+│  │  │  Domain Services  │  │  │
+│  │  │  ┌────────────┐   │  │  │
+│  │  │  │Domain Model│   │  │  │
+│  │  │  └────────────┘   │  │  │
+│  │  └──────────────────┘  │  │
+│  └────────────────────────┘  │
+└──────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>核心思想</strong>: 领域模型是系统的核心,所有依赖都指向它</li>
+<li><strong>与整洁架构的区别</strong>: 洋葱架构更强调领域服务层,整洁架构更强调用例层</li>
+<li><strong>适用</strong>: 采用领域驱动设计(DDD)的项目</li>
+</ul>
+<h4 id="82-架构演进路线">8.2 架构演进路线</h4>
+<p>这些架构不是互相替代的关系,而是逐步演进的:</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-text">传统分层架构 (N-Layered)
+  │  问题: 层间耦合、难以替换外部依赖
+  ▼
+六边形架构 (Ports &amp; Adapters)
+  │  改进: 用端口和适配器隔离外部系统
+  ▼
+洋葱架构 (Onion)
+  │  改进: 明确同心圆分层,领域模型居中
+  ▼
+整洁架构 (Clean Architecture)
+  │  改进: 统一依赖规则,明确四层职责
+  ▼
+根据业务需要选择合适的架构
+</code></pre>
+<h4 id="83-架构模式选择指南">8.3 架构模式选择指南</h4>
+<pre class="prose-block"><code class="language-text">用户量 &lt; 1k, 代码量 &lt; 5000 行
+    ↓
+单体架构 + 简单分层
+    ↓
+用户量 1k-100k, 需要多团队协作
+    ↓
+分层架构 (本文介绍)
+    ↓
+用户量 &gt; 100k, 业务复杂度高
+    ↓
+微服务架构 / 事件驱动架构
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>考虑因素</th>
+<th>简单分层</th>
+<th>整洁/六边形架构</th>
+<th>微服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>团队规模</td>
+<td>1-5 人</td>
+<td>5-20 人</td>
+<td>20+ 人</td>
+</tr>
+<tr>
+<td>业务复杂度</td>
+<td>低</td>
+<td>中高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>部署频率</td>
+<td>低</td>
+<td>中</td>
+<td>高(独立部署)</td>
+</tr>
+<tr>
+<td>技术栈多样性</td>
+<td>单一</td>
+<td>单一</td>
+<td>可多样</td>
+</tr>
+<tr>
+<td>运维成本</td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+</tr>
+</tbody></table></div>
+<h4 id="84-推荐阅读">8.4 推荐阅读</h4>
+<ul>
+<li><strong>单体架构</strong>: 查看本文的姐妹篇 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/4-server-and-backend/backend-project-architecture.md"><code>backend-project-architecture.md</code></a>,了解从脚本到单体的演进</li>
+<li><strong>微服务架构</strong>: 查看 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/6-architecture-and-system-design/monolith-to-microservices.md">单体到微服务演进导论</a></li>
+<li><strong>整洁架构</strong>: Robert C. Martin 的《Clean Architecture》— 提出依赖规则和四层同心圆模型的经典著作</li>
+<li><strong>企业架构模式</strong>: Martin Fowler 的《Patterns of Enterprise Application Architecture》— 分层架构、领域逻辑组织的权威参考</li>
+</ul>
+<h4 id="85-选择的方法">8.5 选择的方法</h4>
+<p><strong>记住这个原则</strong>: 架构服务于业务,不是为架构而架构。</p>
+<ul>
+<li>小项目用简单架构,快速上线验证</li>
+<li>大项目再考虑复杂架构,避免过度设计</li>
+<li>团队熟悉度也很重要,选择大家都能理解的方案</li>
+</ul>
+<h3 id="9-总结">9. 总结</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>职责</th>
+<th>关键词</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Controller</td>
+<td>接收请求、参数校验、调用 Service、返回响应</td>
+<td>接待员</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>业务逻辑编排、事务管理、协调 Repository</td>
+<td>厨师</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>数据访问、ORM 映射、查询封装</td>
+<td>仓管员</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>实体定义、业务规则、值对象</td>
+<td>菜谱标准</td>
+</tr>
+</tbody></table></div>
+<p><strong>核心原则</strong>:</p>
+<p>分层架构的核心在于明确的职责划分和依赖方向控制。每一层只关注自己的职责,通过接口与相邻层通信,业务逻辑集中在 Service 和 Domain 层,数据访问逻辑集中在 Repository 层,各层之间用 DTO 隔离数据结构,避免直接暴露内部实现。这样的设计让系统更易于理解、测试和维护,能够应对业务的持续演进。</p>
+<figure class="stack-figure">
+  <img src="../../book/assets/stacks/backend-layers.png" alt="后端分层架构工程图：前端请求经 Controller、Service、Repository 到 Domain 四段调用，上方定时任务与消息队列消费者以虚线绕过 HTTP 直接调用 Service；五列分别列出 HTTP 请求注解、控制器层校验与 DTO、业务逻辑层编排与事务、数据访问层仓储与查询、领域模型层实体与值对象" loading="lazy">
+  <figcaption><strong>一个请求从门口走到菜谱。</strong>Controller 是接待员，验完参数就交给 Service 这个厨师排菜；要取数据，厨师喊 Repository 仓管员，仓管员按 Domain 这份菜谱标准办事。定时任务和消息队列不走 HTTP，直接叫厨师；层与层之间递的是 DTO，不把自己家底摊给对方看。</figcaption>
+</figure><h3 id="参考资料-30">参考资料</h3>
+<ol>
+<li><a href="https://www.martinfowler.com/eaaCatalog/">Catalog of Patterns of Enterprise Application Architecture - Martin Fowler</a> — Martin Fowler 的企业应用架构模式目录，分层架构的经典参考</li>
+<li><a href="https://medium.com/@iamprovidence/backend-side-architecture-evolution-n-layered-ddd-hexagon-onion-clean-architecture-643d72444ce4">Backend Side Architecture Evolution (N-layered, DDD, Hexagon, Onion, Clean Architecture)</a> — 从 N 层架构到整洁架构的演进历程，理解每种架构诞生的原因</li>
+<li><a href="https://www.geeksforgeeks.org/complete-guide-to-clean-architecture/">Complete Guide to Clean Architecture - GeeksforGeeks</a> — 整洁架构完整指南，详解分层、依赖规则与关注点分离</li>
+<li><a href="https://romanglushach.medium.com/understanding-hexagonal-clean-onion-and-traditional-layered-architectures-a-deep-dive-c0f93b8a1b96">Understanding Hexagonal, Clean, Onion, and Traditional Layered Architectures: A Deep Dive</a> — 六边形、整洁、洋葱与传统分层架构的深度对比</li>
+<li><a href="https://leapcell.io/blog/building-clean-architectures-in-modern-backend-frameworks">Building Clean Architectures in Modern Backend Frameworks</a> — 在现代后端框架中实践整洁架构的实战指南</li>
+<li><a href="https://nerdleveltech.com/backend-architecture-patterns-from-monoliths-to-microservices">Backend Architecture Patterns: From Monoliths to Microservices</a> — 从单体到微服务的后端架构模式全景概览</li>
+<li><a href="https://www.cnblogs.com/TheMagicalRainbowSea/p/17409206.html">MVC 三层架构案例详细讲解</a> — MVC 与三层架构的关系及实战案例，适合中文读者入门</li>
+</ol>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-130.html">← 文件存储与对象存储</a><a rel="next" href="chapter-132.html">后端项目文件目录设计 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

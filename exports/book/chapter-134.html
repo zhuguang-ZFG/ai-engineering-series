@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据库原理（索引 / 事务 / 查询优化） · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 134 / 195</p><article><h1 id="数据库原理索引--事务--查询优化">数据库原理（索引 / 事务 / 查询优化）</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#数据库原理索引事务查询优化">数据库原理：索引/事务/查询优化</a><ul><li><a href="#1-数据库的动机">1. 数据库的动机</a></li><li><a href="#2-核心概念表行列主键">2. 核心概念：表、行、列、主键</a></li><li><a href="#3-与数据库交互sql-入门与实战">3. 与数据库交互：SQL 入门与实战</a></li><li><a href="#4-数据库这么快索引原理揭秘的必要性">4. 数据库这么快：索引原理揭秘的必要性</a></li><li><a href="#5-保证数据不丢不乱的实现">5. 保证数据不丢、不乱的实现</a></li><li><a href="#6-性能优化用查询计划验证改进">6. 性能优化：用查询计划验证改进</a></li><li><a href="#7-总结与学习路线-1">7. 总结与学习路线</a></li></ul></li></ul></nav></details><h2 id="数据库原理索引事务查询优化">数据库原理：索引/事务/查询优化</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>为什么你的 Excel 查询要 10 秒，而淘宝搜索只要 0.01 秒？</strong> 当数据从&quot;几千条&quot;变成&quot;十亿条&quot;，从&quot;单人使用&quot;变成&quot;千万人同时访问&quot;，Excel 就不够用了。数据库就是为解决这个问题而生的——它是专门处理海量数据、高并发访问的&quot;超级 Excel&quot;。本章将带你从零开始理解数据库的核心原理。</p>
+</blockquote>
+<h3 id="1-数据库的动机">1. 数据库的动机</h3>
+<h4 id="11-从小书店到淘宝数据规模的演变">1.1 从小书店到淘宝：数据规模的演变</h4>
+<p>想象你开了一家小书店，每天卖出几本书。你随手在笔记本上记下：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>2024-01-15：张三买了《百年孤独》，59元
+2024-01-16：李四买了《活着》，39元
+</code></pre>
+<p>这时候，笔记本完全够用。但当你的书店变成了&quot;亚马逊&quot;，每天有百万订单涌入，问题就出现了：</p>
+<ul>
+<li><strong>数据量大</strong>：不是几十行，而是几亿行</li>
+<li><strong>并发访问</strong>：不是一个人在查，而是几千万人同时访问</li>
+<li><strong>数据关联</strong>：订单关联用户、商品、库存、物流……复杂关系需要高效管理</li>
+<li><strong>数据安全</strong>：不能因为断电就丢失所有订单</li>
+</ul>
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>📓 Excel/笔记本</p>
+<ul>
+<li>适合个人或小团队</li>
+<li>数据量：几千到几万行</li>
+<li>单人使用，顺序访问</li>
+<li>手动查找，速度慢</li>
+</ul>
+</div>
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>🗄️ 数据库</p>
+<ul>
+<li>适合企业级应用</li>
+<li>数据量：亿级以上</li>
+<li>千万人同时在线访问</li>
+<li>毫秒级查询速度</li>
+</ul>
+</div>
+</div><p><strong>这就是&quot;数据库&quot;要解决的问题：如何高效存储、快速查询、安全地管理海量数据？</strong></p>
+<h4 id="12-案例不能用-excel-存用户数据">1.2 案例：不能用 Excel 存用户数据</h4>
+<p>你可能会说：&quot;我的项目才几万用户，Excel 不就够用了吗？&quot; 让我讲一个真实的故事。</p>
+<blockquote>
+<p><strong>小林的创业踩坑记</strong>
+小林创业做了一个社交应用，刚开始用户不多，他用 Excel 存储用户信息（姓名、手机、注册时间等）。每天导出 Excel 统计用户增长，一切正常。</p>
+</blockquote>
+<p>当用户突破 10 万时，问题开始出现了：</p>
+<ul>
+<li>Excel 打开要等 5 分钟</li>
+<li>筛选&quot;北京的用户&quot;要卡顿半天</li>
+<li>有一次 Excel 文件损坏，几千个用户数据永久丢失</li>
+</ul>
+<p>最致命的是，他想要实现&quot;查看某个用户的所有订单&quot;这个功能——但用户信息和订单分别在不同的 Excel 表里，他只能手动复制粘贴，每次都要花半小时。</p>
+<p>后来他请教师兄，师兄看了一眼就笑了：&quot;你需要的不是 Excel，而是数据库。&quot;</p>
+<p>改用数据库后，一切都变了：</p>
+<ul>
+<li>查询&quot;北京的用户&quot;只需要 0.01 秒</li>
+<li>通过&quot;关系&quot;自动关联用户和订单，一个 SQL 语句搞定</li>
+<li>数据自动备份，再也不怕文件损坏</li>
+</ul>
+<p>小林从此明白了一个道理：<strong>数据量小的时候，什么都能用；但数据一大，Excel 就是灾难。</strong></p>
+<blockquote>
+<p><strong>核心启示</strong>
+数据库不是&quot;更复杂的 Excel&quot;，而是完全不同的设计理念：</p>
+</blockquote>
+<ul>
+<li><strong>Excel</strong>：为小数据、单人使用设计</li>
+<li><strong>数据库</strong>：为大数据、高并发、复杂关联设计</li>
+</ul>
+<p>选择合适的工具，能让你的系统性能提升成千上万倍。</p>
+<h3 id="2-核心概念表行列主键">2. 核心概念：表、行、列、主键</h3>
+<blockquote>
+<p><strong>这些概念和数据库有什么关系？</strong>
+表、行、列、主键就是数据库的&quot;积木块&quot;。</p>
+</blockquote>
+<p>想象你要盖房子：</p>
+<ul>
+<li><strong>表</strong> = 一个房间（存放一类数据）</li>
+<li><strong>行</strong> = 房间里的一个箱子（一条完整记录）</li>
+<li><strong>列</strong> = 箱子上的标签（姓名、年龄等）</li>
+<li><strong>主键</strong> = 箱子的唯一编号（绝对不会重复）</li>
+</ul>
+<p>理解这些基础概念，你才能知道数据是如何组织的。</p>
+<p>在深入学习数据库之前，我们需要先搞清楚这几个核心概念。为了帮助你理解，我们用图书馆的比喻来类比。</p>
+<h4 id="21-用图书馆比喻理解数据库结构">2.1 用图书馆比喻理解数据库结构</h4>
+<p>想象你走进一座图书馆，里面的组织和数据库惊人地相似：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>📚 图书馆比喻</th>
+<th>实际作用</th>
+<th>具体例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据库 (Database)</strong></td>
+<td>整座图书馆</td>
+<td>存放所有数据的容器</td>
+<td>一个电商网站的数据库</td>
+</tr>
+<tr>
+<td><strong>表 (Table)</strong></td>
+<td>一个书架</td>
+<td>存放同一类数据的集合</td>
+<td>用户表、商品表、订单表</td>
+</tr>
+<tr>
+<td><strong>列 (Column)</strong></td>
+<td>书脊上的标签</td>
+<td>数据的属性（字段）</td>
+<td>姓名、年龄、手机号</td>
+</tr>
+<tr>
+<td><strong>行 (Row)</strong></td>
+<td>书架上的每一本书</td>
+<td>一条具体的数据记录</td>
+<td>&quot;张三，25岁，北京&quot;</td>
+</tr>
+<tr>
+<td><strong>主键 (Primary Key)</strong></td>
+<td>每本书的 ISBN 编号</td>
+<td>唯一标识每一行的 ID</td>
+<td>user_id = 1001</td>
+</tr>
+</tbody></table></div>
+<p><strong>看个真实例子</strong>：用户表 (users)</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="center">user_id (主键)</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+<th>email</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td>张三</td>
+<td>25</td>
+<td>北京</td>
+<td><a href="mailto:zhangsan@example.com">zhangsan@example.com</a></td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td>李四</td>
+<td>30</td>
+<td>上海</td>
+<td><a href="mailto:lisi@example.com">lisi@example.com</a></td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td>王五</td>
+<td>28</td>
+<td>北京</td>
+<td><a href="mailto:wangwu@example.com">wangwu@example.com</a></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><strong>表</strong>：<code>users</code>（存放所有用户数据）</li>
+<li><strong>列</strong>：<code>user_id</code>、<code>name</code>、<code>age</code>、<code>city</code>、<code>email</code>（每个用户的属性）</li>
+<li><strong>行</strong>：每一行是一个用户（如&quot;张三，25岁，北京&quot;）</li>
+<li><strong>主键</strong>：<code>user_id</code>（1001、1002、1003，永不重复）</li>
+</ul>
+<h4 id="22-主键primary-key数据的唯一标识">2.2 主键（Primary Key）：数据的唯一标识</h4>
+<blockquote>
+<p><strong>什么是主键？</strong>
+<strong>主键</strong>就是表中每一行的唯一标识，就像身份证号一样。</p>
+</blockquote>
+<p><strong>关键特点</strong>：</p>
+<ul>
+<li><strong>唯一性</strong>：绝对不会重复（没有两个人有相同的身份证号）</li>
+<li><strong>非空</strong>：必须有值（不可能有&quot;没有身份证号&quot;的人）</li>
+<li><strong>不变性</strong>：一旦设定，不会修改（你的身份证号不会变）</li>
+</ul>
+<p><strong>常见的做法</strong>：</p>
+<ul>
+<li>使用自增整数：1、2、3、4...</li>
+<li>使用 UUID（全球唯一标识符）：<code>550e8400-e29b-41d4-a716-446655440000</code></li>
+</ul>
+<p>为什么需要主键？想象一下没有主键的世界：</p>
+<p><strong>场景</strong>：你想修改&quot;张三&quot;的年龄，但表里有 3 个&quot;张三&quot;，系统该改哪一个？</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 没有主键，这会同时修改所有叫&quot;张三&quot;的人！
+UPDATE users SET age = 26 WHERE name = &#39;张三&#39;;
+
+-- 有主键，精确修改
+UPDATE users SET age = 26 WHERE user_id = 1001;
+</code></pre>
+<p><strong>主键的黄金法则</strong>：每个表都应该有一个主键，而且永远不要修改它。</p>
+<h4 id="23-外键-foreign-key连接表的桥梁">2.3 外键 (Foreign Key)：连接表的桥梁</h4>
+<p>这是数据库比 Excel 强大的关键——<strong>表之间可以建立关系</strong>。</p>
+<blockquote>
+<p><strong>什么是外键？</strong>
+<strong>外键</strong>是指向另一张表主键的列，用来建立表与表之间的关联。</p>
+</blockquote>
+<p><strong>简单理解</strong>：</p>
+<ul>
+<li>主键 = 我的身份证号</li>
+<li>外键 = 我引用的别人的身份证号</li>
+</ul>
+<p><strong>举个例子</strong>：订单表里的 <code>user_id</code> 就是外键，它指向用户表的主键。</p>
+<p>看一个真实的例子：</p>
+<p><strong>用户表 (users)</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="center">user_id (主键)</th>
+<th>name</th>
+<th>phone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td>张三</td>
+<td>138xxxx</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td>李四</td>
+<td>139xxxx</td>
+</tr>
+</tbody></table></div>
+<p><strong>订单表 (orders)</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="center">order_id (主键)</th>
+<th>product_name</th>
+<th>price</th>
+<th align="center">user_id (外键)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">5001</td>
+<td>iPhone 15</td>
+<td>5999</td>
+<td align="center">1001</td>
+</tr>
+<tr>
+<td align="center">5002</td>
+<td>MacBook</td>
+<td>14999</td>
+<td align="center">1001</td>
+</tr>
+<tr>
+<td align="center">5003</td>
+<td>AirPods</td>
+<td>1999</td>
+<td align="center">1002</td>
+</tr>
+</tbody></table></div>
+<p><strong>关键理解</strong>：</p>
+<ul>
+<li>订单表里的 <code>user_id = 1001</code> 指向用户表里的 <code>user_id = 1001</code>（张三）</li>
+<li>当你要查&quot;订单 5001 是谁买的&quot;，数据库会自动去用户表查找 <code>user_id = 1001</code> 的用户</li>
+</ul>
+<p><strong>好处</strong>：</p>
+<ul>
+<li><strong>数据不重复</strong>：张三买 100 单商品，他的信息也只在用户表存一次</li>
+<li><strong>易于维护</strong>：张三换手机号，只改用户表，所有订单自动关联新手机号</li>
+<li><strong>灵活查询</strong>：可以轻松回答&quot;每个用户的总消费是多少&quot;这类复杂问题</li>
+</ul>
+<h3 id="3-与数据库交互sql-入门与实战">3. 与数据库交互：SQL 入门与实战</h3>
+<p>你不能直接用鼠标&quot;点&quot;数据库（虽然有图形化工具，但本质也是转换成命令），你需要用一种特殊的语言来指挥数据库工作。</p>
+<p>这种语言就是 <strong>SQL (Structured Query Language，结构化查询语言)</strong>。</p>
+<p>好消息是：SQL 非常接近自然英语，读起来就像在说话。</p>
+<h4 id="31-sql-的核心操作crud">3.1 SQL 的核心操作：CRUD</h4>
+<p>大部分时候，你只需要掌握四种操作，江湖人称 <strong>CRUD</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>英文</th>
+<th>SQL 关键字</th>
+<th>通俗理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C</strong>reate</td>
+<td>创建</td>
+<td><code>INSERT</code></td>
+<td>新增一条数据</td>
+</tr>
+<tr>
+<td><strong>R</strong>ead</td>
+<td>读取</td>
+<td><code>SELECT</code></td>
+<td>查询数据</td>
+</tr>
+<tr>
+<td><strong>U</strong>pdate</td>
+<td>更新</td>
+<td><code>UPDATE</code></td>
+<td>修改数据</td>
+</tr>
+<tr>
+<td><strong>D</strong>elete</td>
+<td>删除</td>
+<td><code>DELETE</code></td>
+<td>删除数据</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+这四个操作覆盖了数据处理的全部场景：</p>
+</blockquote>
+<ul>
+<li><strong>Create</strong>：用户注册时，插入一条新用户记录</li>
+<li><strong>Read</strong>：用户登录时，查询用户名和密码</li>
+<li><strong>Update</strong>：用户修改个人资料时，更新表中的数据</li>
+<li><strong>Delete</strong>：用户注销账号时，删除用户数据</li>
+</ul>
+<p>记住这四个，你就掌握了 80% 的日常 SQL 操作。</p>
+<h4 id="32-查询数据-select数据库最常用的操作">3.2 查询数据 (SELECT)：数据库最常用的操作</h4>
+<p>查询是数据库最重要的功能，也是性能优化的关键。</p>
+<p><strong>示例 1</strong>：查找所有北京的用户</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT name, age FROM users WHERE city = &#39;北京&#39;;
+</code></pre>
+<p><strong>逐词理解</strong>：</p>
+<ul>
+<li><code>SELECT name, age</code>：选择 name 和 age 这两列</li>
+<li><code>FROM users</code>：从 users 这张表</li>
+<li><code>WHERE city = &#39;北京&#39;</code>：在 city 等于&quot;北京&quot;的条件下</li>
+</ul>
+<p><strong>返回结果</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>25</td>
+</tr>
+<tr>
+<td>王五</td>
+<td>28</td>
+</tr>
+</tbody></table></div>
+<p><strong>示例 2</strong>：查找价格在 5000 到 15000 之间的商品</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT name, price FROM products
+WHERE price BETWEEN 5000 AND 15000;
+</code></pre>
+<p><strong>示例 3</strong>：模糊搜索（查找名字包含&quot;张&quot;的用户）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT name FROM users WHERE name LIKE &#39;%张%&#39;;
+</code></pre>
+<blockquote>
+<p><strong>性能陷阱：LIKE 的使用</strong>
+<code>LIKE &#39;%张%&#39;</code> 会导致<strong>全表扫描</strong>，数据量大时非常慢。</p>
+</blockquote>
+<p><strong>优化建议</strong>：</p>
+<ul>
+<li>❌ 不要用 <code>LIKE &#39;%张%&#39;</code>（前后都有 %）</li>
+<li>✅ 可以用 <code>LIKE &#39;张%&#39;</code>（只有后面有 %）</li>
+</ul>
+<p>因为 <code>LIKE &#39;张%&#39;</code> 可以利用索引，而 <code>LIKE &#39;%张%&#39;</code> 无法使用索引。</p>
+<h4 id="33-插入数据-insert新增记录">3.3 插入数据 (INSERT)：新增记录</h4>
+<p><strong>示例</strong>：新增一个用户</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">INSERT INTO users (user_id, name, age, city, email)
+VALUES (1004, &#39;赵六&#39;, 35, &#39;广州&#39;, &#39;zhaoliu@example.com&#39;);
+</code></pre>
+<p><strong>逐词理解</strong>：</p>
+<ul>
+<li><code>INSERT INTO users</code>：插入到 users 表</li>
+<li><code>(user_id, name, age, city, email)</code>：指定要插入的列</li>
+<li><code>VALUES (1004, &#39;赵六&#39;, ...)</code>：对应的值</li>
+</ul>
+<p><strong>批量插入</strong>（更高效）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">INSERT INTO users (name, age, city) VALUES
+(&#39;小明&#39;, 25, &#39;北京&#39;),
+(&#39;小红&#39;, 28, &#39;上海&#39;),
+(&#39;小刚&#39;, 30, &#39;广州&#39;);
+</code></pre>
+<h4 id="34-更新数据-update修改记录">3.4 更新数据 (UPDATE)：修改记录</h4>
+<p><strong>示例</strong>：给所有北京的用户年龄加 1</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">UPDATE users SET age = age + 1 WHERE city = &#39;北京&#39;;
+</code></pre>
+<blockquote>
+<p><strong>❌ 非常危险：别忘了 WHERE！</strong>
+如果你忘记写 <code>WHERE</code> 子句，会修改<strong>所有行</strong>！</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 危险！会把所有用户的年龄都改成 26
+UPDATE users SET age = 26;
+
+-- 正确：只修改 user_id = 1001 的用户
+UPDATE users SET age = 26 WHERE user_id = 1001;
+</code></pre>
+<p><strong>真实教训</strong>：2012 年，某知名公司因为工程师忘记写 WHERE，导致生产环境数百万用户数据被错误更新，系统瘫痪 4 小时，损失巨大。</p>
+<h4 id="35-删除数据-delete删除记录">3.5 删除数据 (DELETE)：删除记录</h4>
+<p><strong>示例</strong>：删除 user_id = 1004 的用户</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">DELETE FROM users WHERE user_id = 1004;
+</code></pre>
+<blockquote>
+<p><strong>❌ 双重危险：DELETE 更需要 WHERE！</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 危险！会删除整张表的所有数据！
+DELETE FROM users;
+
+-- 正确：只删除指定行
+DELETE FROM users WHERE user_id = 1004;
+</code></pre>
+<p><strong>最佳实践</strong>：</p>
+<ol>
+<li>删除前先用 SELECT 确认数据</li>
+<li>在重要系统中，使用&quot;软删除&quot;（添加 <code>is_deleted</code> 字段标记删除）</li>
+<li>生产环境操作前先备份数据</li>
+</ol>
+<h4 id="36-多表查询-join数据库的魔法时刻">3.6 多表查询 (JOIN)：数据库的魔法时刻</h4>
+<p>还记得我们讲过的&quot;外键&quot;吗？SQL 最强大的地方在于可以一次性查询多张关联的表。</p>
+<p><strong>场景</strong>：查询&quot;张三买过的所有商品&quot;</p>
+<p>假设我们有三张表：</p>
+<p><strong>用户表 (users)</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+</tr>
+</tbody></table></div>
+<p><strong>商品表 (products)</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>product_id</th>
+<th>name</th>
+<th>price</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>201</td>
+<td>iPhone 15</td>
+<td>5999</td>
+</tr>
+<tr>
+<td>202</td>
+<td>MacBook</td>
+<td>14999</td>
+</tr>
+</tbody></table></div>
+<p><strong>订单表 (orders)</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>user_id</th>
+<th>product_id</th>
+<th>quantity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5001</td>
+<td>1001</td>
+<td>201</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5002</td>
+<td>1001</td>
+<td>202</td>
+<td>2</td>
+</tr>
+</tbody></table></div>
+<p><strong>SQL 查询</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT u.name, p.name AS product_name, p.price, o.quantity
+FROM orders o
+JOIN users u ON o.user_id = u.user_id
+JOIN products p ON o.product_id = p.product_id
+WHERE u.name = &#39;张三&#39;;
+</code></pre>
+<p><strong>返回结果</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>name</th>
+<th>product_name</th>
+<th>price</th>
+<th>quantity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>iPhone 15</td>
+<td>5999</td>
+<td>1</td>
+</tr>
+<tr>
+<td>张三</td>
+<td>MacBook</td>
+<td>14999</td>
+<td>2</td>
+</tr>
+</tbody></table></div>
+<p><strong>理解 JOIN 的过程</strong>：</p>
+<ol>
+<li><code>FROM orders o</code>：从订单表开始</li>
+<li><code>JOIN users u ON o.user_id = u.user_id</code>：通过 user_id 关联用户表</li>
+<li><code>JOIN products p ON o.product_id = p.product_id</code>：通过 product_id 关联商品表</li>
+<li><code>WHERE u.name = &#39;张三&#39;</code>：筛选张三的订单</li>
+</ol>
+<h3 id="4-数据库这么快索引原理揭秘的必要性">4. 数据库这么快：索引原理揭秘的必要性</h3>
+<p>这是数据库最神奇的地方，也是面试中最爱问的问题。</p>
+<p>如果你在 Excel 里查找&quot;所有姓张的人&quot;，Excel 需要从第一行扫到最后一行。这就是<strong>全表扫描</strong>——数据越多，速度越慢。</p>
+<p>在数据库里，合适的索引可以缩小查找范围。查询耗时还取决于数据量、查询条件、缓存、硬件和返回行数，不能由总行数直接推算。</p>
+<p><strong>秘诀就是：索引 (Index)。</strong></p>
+<h4 id="41-直观理解字典的启示">4.1 直观理解：字典的启示</h4>
+<p>想象你要在一本没有目录的 1000 页书里找一个词。你该怎么办？</p>
+<p><strong>只能一页一页翻</strong>。如果要找出所有出现的位置，就可能翻完整本书；数据库全表扫描也可能检查所有行。</p>
+<p>但如果这本书记有<strong>拼音索引</strong>呢？</p>
+<p>你要找&quot;数据库&quot;这个词：</p>
+<ol>
+<li>翻到索引，找到&quot;数&quot;字开头的区域</li>
+<li>在&quot;数&quot;字区域内，找&quot;据&quot;字</li>
+<li>索引告诉你：在第 256 页</li>
+</ol>
+<p>这三个动作说明如何逐步缩小范围，不代表实际数据库只比较三次或读取三次磁盘。</p>
+<p><strong>数据库的索引就像书的目录</strong>：</p>
+<ul>
+<li>没有可用索引：扫描数据并判断哪些行符合条件。</li>
+<li>有可用索引：沿索引找到匹配范围，按需读取数据行；范围很大时，扫描反而可能更合适。</li>
+</ul>
+<h4 id="42-全表扫描-vs-索引查找速度对比">4.2 全表扫描 vs 索引查找：速度对比</h4>
+<p>假设用户表有 1000 万条记录，要查找 <code>user_id = 5555555</code>。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>要做的事</th>
+<th>怎样验证</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全表扫描</td>
+<td>读取表中记录并判断条件；可能检查全部行</td>
+<td>查看查询计划中的扫描方式与实际行数</td>
+</tr>
+<tr>
+<td>B+ 树索引查找</td>
+<td>沿树定位匹配的叶子项，按需回表取其他列</td>
+<td>查看索引、过滤行数、回表与缓存命中情况</td>
+</tr>
+</tbody></table></div>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/db-index.svg" aria-label="打开大图：上半图依次扫描八条记录；下半图由分隔键 3、5、7 选择叶子范围，绿色路径进入 5、6 并定位 6；宽度和路径不代表耗时"><img src="../../book/assets/handdraw/db-index.svg" alt="上半图依次扫描八条记录；下半图由分隔键 3、5、7 选择叶子范围，绿色路径进入 5、6 并定位 6；宽度和路径不代表耗时" loading="lazy"></a>
+  <figcaption><strong>索引改变的是访问路径。</strong>图中八条记录仅示意查找过程。树高不等于比较次数，也不等于总磁盘读取次数；命中缓存和是否回表都会影响耗时。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><p>在练习数据库中，先用 <code>EXPLAIN</code> 查看计划，再为查询条件创建索引并比较。支持 <code>EXPLAIN ANALYZE</code> 的数据库会实际执行语句；这里只对练习库中的 SELECT 使用它。记录数据库版本、数据规模、返回行数、是否预热和多次耗时，不把一次测量推广到所有项目。</p>
+<p>索引需要额外空间；插入、删除以及涉及索引列的更新会带来维护成本。经常参与过滤、关联、排序的列值得评估，但不代表每列都应建索引。小表、低选择性的条件或频繁更新的列，都要结合查询计划和读写负载判断，没有“少于几千行就不需要”的统一界限。</p>
+<h4 id="43-底层数据结构b-树">4.3 底层数据结构：B+ 树</h4>
+<p>B+ 树的内部节点保存分隔键与子节点指针，用来选择下一段范围；叶子节点保存索引项，并便于沿叶子顺序进行范围扫描。叶子是否直接存整行数据，取决于存储引擎及索引类型。</p>
+<p>它通常“矮而宽”：一个节点可以容纳多个键和指针，从而用较少层数覆盖较多记录。但每个节点内仍要比较键，页是否已在缓存中也会改变实际 I/O。</p>
+<p><strong>容量示意</strong>：假设内部节点平均有 1000 个子指针、每个叶子页有 1000 条索引项，三层可容纳约 <code>1000 × 1000 × 1000 = 10 亿</code> 条索引项。这里假定节点充分填充，忽略页开销；实际容量与页大小、键宽、填充率和删除情况有关。</p>
+<p>“走过三层”只描述索引路径。查询可能还要读取数据页、检查可见性或返回大量记录，所以不能据此宣称“三次磁盘 I/O 就能完成任何查询”。</p>
+<h3 id="5-保证数据不丢不乱的实现">5. 保证数据不丢、不乱的实现</h3>
+<p>想象一下春运抢票的场景：</p>
+<ul>
+<li>时间 T1：用户 A 查询，发现&quot;G1234 次列车还剩 1 张票&quot;</li>
+<li>时间 T2：用户 B 也查询，也发现&quot;还剩 1 张票&quot;</li>
+<li>时间 T3：用户 A 点击&quot;购买&quot;，系统扣库存，票卖给了 A</li>
+<li>时间 T4：用户 B 点击&quot;购买&quot;——如果没有保护机制，系统会再次扣库存，把同一张票卖给 B！</li>
+</ul>
+<p>这就是典型的<strong>并发冲突</strong>问题。</p>
+<h4 id="51-事务-transaction概述">5.1 事务 (Transaction)概述</h4>
+<p><strong>事务</strong>是数据库的一组操作，这些操作要么全部成功，要么全部失败，不会出现&quot;做了一半&quot;的情况。</p>
+<blockquote>
+<p><strong>生活中的例子</strong>
+<strong>银行转账</strong>就是一个典型的事务：</p>
+</blockquote>
+<ol>
+<li>从账户 A 扣除 100 元</li>
+<li>给账户 B 增加 100 元</li>
+</ol>
+<p>如果第 1 步成功了，但第 2 步失败了（比如断电），会发生什么？</p>
+<ul>
+<li><strong>没有事务</strong>：账户 A 的钱没了，账户 B 没收到钱，钱凭空消失了</li>
+<li><strong>有事务</strong>：系统发现第 2 步失败，自动回滚第 1 步，两个账户都恢复原状</li>
+</ul>
+<p>这就是事务的<strong>原子性</strong>：要么全做，要么全不做。</p>
+<h4 id="52-事务的四大特性-acid">5.2 事务的四大特性 (ACID)</h4>
+<p>事务有四大特性，简称 <strong>ACID</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>英文</th>
+<th>含义</th>
+<th>银行转账的例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A</strong>tomicity</td>
+<td>原子性</td>
+<td>要么全做，要么全不做</td>
+<td>扣款和入账必须同时成功，不能只扣钱不入账</td>
+</tr>
+<tr>
+<td><strong>C</strong>onsistency</td>
+<td>一致性</td>
+<td>数据始终保持合法状态</td>
+<td>转账前后，两个账户的总金额应该不变</td>
+</tr>
+<tr>
+<td><strong>I</strong>solation</td>
+<td>隔离性</td>
+<td>多个事务互不影响</td>
+<td>A 在转账时，B 看到的应该是&quot;转账前&quot;或&quot;转账后&quot;的余额，不能看到中间状态</td>
+</tr>
+<tr>
+<td><strong>D</strong>urability</td>
+<td>持久性</td>
+<td>一旦提交，数据永久保存</td>
+<td>转账成功后，即使断电，账户余额也不会变回去</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+这四个特性保证了数据的安全性：</p>
+</blockquote>
+<ul>
+<li><strong>原子性</strong>：防止&quot;做一半&quot;（扣了钱但没到账）</li>
+<li><strong>一致性</strong>：防止数据不合理（转账后总金额变了）</li>
+<li><strong>隔离性</strong>：防止并发冲突（两个人同时修改同一数据）</li>
+<li><strong>持久性</strong>：防止数据丢失（提交后断电也不影响）</li>
+</ul>
+<p>没有这些保证，银行系统根本无法运行。</p>
+<h4 id="53-事务的隔离级别权衡安全与性能">5.3 事务的隔离级别：权衡安全与性能</h4>
+<p>隔离级别约束并发事务能观察到哪些结果。更强的隔离可能增加等待或事务重试，但实现不只有加锁，也可能使用快照与冲突检测；性能取决于负载，不能按级别简单排名。</p>
+<p>因此，数据库提供了四种<strong>隔离级别</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+<th>使用时注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读未提交</td>
+<td>标准允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>部分数据库按更强级别实现</td>
+</tr>
+<tr>
+<td>读已提交</td>
+<td>禁止</td>
+<td>允许</td>
+<td>允许</td>
+<td>两次语句可能看到不同的已提交结果</td>
+</tr>
+<tr>
+<td>可重复读</td>
+<td>禁止</td>
+<td>禁止</td>
+<td>标准允许</td>
+<td>具体数据库可提供更强保证；还要检查写入冲突</td>
+</tr>
+<tr>
+<td>串行化</td>
+<td>禁止</td>
+<td>禁止</td>
+<td>禁止</td>
+<td>效果等价于某种串行顺序；应用仍需处理重试</td>
+</tr>
+</tbody></table></div>
+<p>这张表是标准层面的读现象概括。防止超卖还需要条件更新、约束或适当的锁与重试；仅把几条 SQL 放进事务，并不自动保证库存不为负。</p>
+<blockquote>
+<p><strong>三个&quot;读&quot;是什么意思？</strong></p>
+</blockquote>
+<ul>
+<li><strong>脏读</strong>：读到了其他事务还没提交的数据（可能回滚，数据不准确）</li>
+<li><strong>不可重复读</strong>：同一事务里，两次读同一数据，结果不一样（被其他事务修改了）</li>
+<li><strong>幻读</strong>：同一事务里，两次查询，结果集的行数不一样（其他事务插入/删除了数据）</li>
+</ul>
+<p><strong>通俗例子</strong>（银行查余额）：</p>
+<ul>
+<li><strong>脏读</strong>：你查到余额 1000 元，但对方事务回滚了，实际只有 100 元</li>
+<li><strong>不可重复读</strong>：你第一次查余额 1000 元，第二次查变成 800 元（被扣款了）</li>
+<li><strong>幻读</strong>：你第一次查到 5 笔交易，第二次查变成 6 笔（新增了一笔）</li>
+</ul>
+<h3 id="6-性能优化用查询计划验证改进">6. 性能优化：用查询计划验证改进</h3>
+<p>现在你已经理解了索引、事务这些核心概念。但在真实项目中，你可能会遇到各种性能问题。</p>
+<p>本节给出<strong>可落地的优化策略</strong>。</p>
+<h4 id="61-索引使用避坑指南">6.1 索引使用避坑指南</h4>
+<blockquote>
+<p><strong>常见错误：索引失效的坑</strong>
+建了索引后，优化器仍可能选择扫描。以下写法可能影响普通 B+ 树索引的使用，但表达式索引、数据库实现和查询条件会改变结论，应以实际查询计划为准。</p>
+</blockquote>
+<p><strong>导致索引失效的常见原因</strong>：</p>
+<ol>
+<li>在索引列上使用函数</li>
+<li>隐式类型转换</li>
+<li>LIKE 查询以 % 开头</li>
+<li>OR 条件（部分情况）</li>
+<li>复合索引不满足最左前缀原则</li>
+</ol>
+<p><strong>坑 1：在索引列上使用函数</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 错误：对索引列使用函数，无法使用索引
+SELECT * FROM users WHERE YEAR(created_at) = 2024;
+
+-- ✅ 正确：改写为范围查询，可以使用索引
+SELECT * FROM users
+WHERE created_at &gt;= &#39;2024-01-01&#39; AND created_at &lt; &#39;2025-01-01&#39;;
+</code></pre>
+<p><strong>坑 2：隐式类型转换</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 假设 user_id 是 int 类型
+-- 类型转换是否影响索引取决于数据库及转换方向；先看计划
+SELECT * FROM users WHERE user_id = &#39;123&#39;;
+
+-- ✅ 正确：传对应类型
+SELECT * FROM users WHERE user_id = 123;
+</code></pre>
+<p><strong>坑 3：LIKE 以 % 开头</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 错误：以 % 开头，无法使用索引
+SELECT * FROM users WHERE name LIKE &#39;%张三%&#39;;
+
+-- 固定前缀可能利用普通索引，但已改变匹配语义
+SELECT * FROM users WHERE name LIKE &#39;张三%&#39;;
+
+-- 全文检索需先建相应索引；分词检索不等价于子串查找
+SELECT * FROM users WHERE MATCH(name) AGAINST(&#39;张三&#39;);
+</code></pre>
+<h4 id="62-sql-优化实战模板">6.2 SQL 优化实战模板</h4>
+<p><strong>模板 1：分页优化（深分页问题）</strong></p>
+<blockquote>
+<p><strong>查看问题与解决方案</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 问题：OFFSET 很大时，查询越来越慢
+SELECT * FROM orders
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 1000000;
+
+-- 使用上一页最后一行的时间和唯一 ID，避免同一时间的记录漏页
+SELECT * FROM orders
+WHERE created_at &lt; &#39;2024-01-15 12:00:00&#39;
+   OR (created_at = &#39;2024-01-15 12:00:00&#39; AND order_id &lt; 12345)
+ORDER BY created_at DESC, order_id DESC
+LIMIT 10;
+
+-- ✅ 优化方案 2：使用主键范围查询
+SELECT * FROM orders
+WHERE order_id &gt; 1000000
+ORDER BY order_id
+LIMIT 10;
+</code></pre>
+<p><strong>模板 2：批量插入优化</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 低效：多次单条插入（网络往返多次）
+INSERT INTO users (name, age) VALUES (&#39;张三&#39;, 25);
+INSERT INTO users (name, age) VALUES (&#39;李四&#39;, 30);
+INSERT INTO users (name, age) VALUES (&#39;王五&#39;, 28);
+
+-- ✅ 高效：单条 SQL 批量插入（只需一次网络往返）
+INSERT INTO users (name, age) VALUES
+(&#39;张三&#39;, 25),
+(&#39;李四&#39;, 30),
+(&#39;王五&#39;, 28);
+</code></pre>
+<p>**模板 3：避免 SELECT ***</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 低效：返回所有列（包括不需要的大字段）
+SELECT * FROM users WHERE user_id = 1;
+
+-- ✅ 高效：只返回需要的列
+SELECT user_id, name, email FROM users WHERE user_id = 1;
+</code></pre>
+<h4 id="63-高并发场景应对策略">6.3 高并发场景应对策略</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>热点数据</strong></td>
+<td>某行数据被频繁读写，导致锁竞争</td>
+<td>使用缓存（Redis）+ 读写分离</td>
+</tr>
+<tr>
+<td><strong>秒杀场景</strong></td>
+<td>瞬间高并发扣减库存</td>
+<td>乐观锁 + 库存预热 + 消息队列削峰</td>
+</tr>
+<tr>
+<td><strong>慢查询</strong></td>
+<td>复杂查询拖垮数据库</td>
+<td>索引优化 + 查询拆分 + 读写分离</td>
+</tr>
+<tr>
+<td><strong>连接数耗尽</strong></td>
+<td>太多并发请求导致连接池耗尽</td>
+<td>连接池优化 + 限流 + 服务降级</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>核心启示</strong>
+性能优化的基本原则：</p>
+</blockquote>
+<ol>
+<li><strong>先测量，后优化</strong>：用 <code>EXPLAIN</code> 分析查询计划，找到真正的瓶颈</li>
+<li><strong>索引优先</strong>：80% 的性能问题都可以通过优化索引解决</li>
+<li><strong>减少数据库压力</strong>：能用缓存就用缓存，能异步就异步</li>
+<li><strong>分而治之</strong>：大表拆分成小表，大查询拆分成小查询</li>
+</ol>
+<h3 id="7-总结与学习路线-1">7. 总结与学习路线</h3>
+<p>用一张表格回顾数据库的核心概念：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话解释</th>
+<th>解决的问题</th>
+<th>关键点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>表、行、列</strong></td>
+<td>数据的组织方式</td>
+<td>如何存储结构化数据</td>
+<td>表 = Excel 工作表，行 = 记录，列 = 字段</td>
+</tr>
+<tr>
+<td><strong>主键</strong></td>
+<td>每行的唯一标识</td>
+<td>如何精确找到一行数据</td>
+<td>唯一、非空、不变</td>
+</tr>
+<tr>
+<td><strong>外键</strong></td>
+<td>连接表的桥梁</td>
+<td>如何关联不同表的数据</td>
+<td>指向另一张表的主键</td>
+</tr>
+<tr>
+<td><strong>SQL</strong></td>
+<td>和数据库对话的语言</td>
+<td>如何增删改查数据</td>
+<td>SELECT、INSERT、UPDATE、DELETE</td>
+</tr>
+<tr>
+<td><strong>索引</strong></td>
+<td>加速查询的数据结构</td>
+<td>如何快速找到数据</td>
+<td>B+ 树，减少磁盘 I/O</td>
+</tr>
+<tr>
+<td><strong>事务</strong></td>
+<td>保证数据安全的机制</td>
+<td>如何防止并发冲突和丢失数据</td>
+<td>ACID：原子性、一致性、隔离性、持久性</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>写在最后</strong>
+数据库是一个博大精深的主题，本文只是入门。如果你想继续深入学习，建议按以下路线：</p>
+</blockquote>
+<p><strong>下一步学习</strong>：</p>
+<ol>
+<li><strong>动手实践</strong>：安装 MySQL 或 PostgreSQL，创建表、插入数据、写 SQL 查询</li>
+<li><strong>ORM 框架</strong>：学习如何在代码中使用数据库（如 SQLAlchemy、Prisma、TypeORM）</li>
+<li><strong>索引优化</strong>：深入研究复合索引、覆盖索引、索引下推等高级主题</li>
+<li><strong>事务原理</strong>：了解 MVCC（多版本并发控制）、锁机制、隔离级别实现</li>
+<li><strong>分布式数据库</strong>：学习分库分表、读写分离、主从复制等架构</li>
+</ol>
+<p>记住：<strong>理论 + 实践 = 真正的掌握</strong>。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-133.html">← 领域特定语言（DSL）</a><a rel="next" href="chapter-135.html">数据模型全景（文档 / 图 / 时序 / 向量） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

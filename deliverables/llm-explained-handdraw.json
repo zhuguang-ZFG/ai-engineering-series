@@ -2,8 +2,8 @@
   "title": "把大模型拆开看",
   "version": "0.14.0",
   "lessons": 12,
-  "figures": 51,
-  "pdfPages": 179,
+  "figures": 52,
+  "pdfPages": 181,
   "chapterPages": {
     "L01": 5,
     "L02": 14,
@@ -33,10 +33,10 @@
     "L12": 133,
     "advanced": 143,
     "architecture": 148,
-    "applications": 155,
-    "execution": 162,
-    "practice": 169,
-    "review": 173
+    "applications": 157,
+    "execution": 164,
+    "practice": 171,
+    "review": 175
   },
   "contentsLabels": {
     "L01": "L01 · 文字怎样变成模型的输入？",
@@ -63,23 +63,23 @@
     "llm-reading-tasks.pdf": 7,
     "llm-reading-guide.pdf": 10
   },
-  "sourceHash": "abf0e3af650394c4ccab0ae5bf1585ca75b499e93bfa4b2eede0a55d4ba679af",
+  "sourceHash": "c90e9bb7fd70dcf0af9d1c3a598532287c24aa184bc00c9f2644a338e2e96481",
   "files": {
     "llm-explained-handdraw.pdf": {
-      "bytes": 2063628,
-      "sha256": "d6d45adf0265b33a9c351a34e8f8319672eba83152c6c2e7f5daac6d222e670d"
+      "bytes": 2081809,
+      "sha256": "45b2db405644ee278ed4683be807687b07e62c4d1efeab60061806393989fcdd"
     },
     "llm-explained-handdraw.epub": {
-      "bytes": 6233119,
-      "sha256": "05e5c99022e50519b611b8df9d125e38631bd997edeb18657121bab4ff97a28c"
+      "bytes": 6273641,
+      "sha256": "fa0025a42a9f6c19a094f0c2532d57534a8536f0e62d548cde5c6a5e64551f40"
     },
     "llm-reading-tasks.pdf": {
       "bytes": 180920,
-      "sha256": "eed57d0683bb1c3aaf0b3cd786477bef94bb94805f2138b7821604130d1fed41"
+      "sha256": "e9038d7b8b70a7a7564f740f4e8b0785fc96de2cdecdf1ed8179869ba2d2fb15"
     },
     "llm-reading-guide.pdf": {
       "bytes": 283580,
-      "sha256": "4553484bc1a51fb5ce6cdaddebae1b85a730ef7b49552fb29d978561d7292242"
+      "sha256": "bab4394ea66ab3cd60ebd92769be6ef269a0f2376958f270264b3533eea39fac"
     }
   },
   "limitations": [

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t">
-  <title id="t">第三方集成：MCP 的三种传输方式 STDIO 本地进程、HTTP 远程服务、SSE 服务器推送，以及密钥泄露与版本漂移两个必炸点</title>
+  <title id="t">MCP 传输方式：STDIO 本地进程、HTTP 远程服务与旧 SSE 接口；核对配置、凭据和版本</title>
   <defs>
     <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
       <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
@@ -10,9 +10,9 @@
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <!-- 标题区 -->
     <text x="72" y="80" fill="#1f2328" font-size="34" font-weight="700">第三方集成：三种传输方式</text>
-    <text x="72" y="120" fill="#57606a" font-size="22">谁主动出手、要不要出门、钥匙放在哪</text>
+    <text x="72" y="120" fill="#57606a" font-size="22">本地还是远程，使用哪种接口</text>
     <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
-    <text x="1128" y="120" fill="#57606a" font-size="21" text-anchor="end">三种都写进同一份 .claude/mcp.json</text>
+    <text x="1128" y="120" fill="#57606a" font-size="21" text-anchor="end">项目共享配置：.mcp.json</text>
 
     <!-- 三张卡片 -->
     <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round">
@@ -25,12 +25,12 @@
     <g fill="#1f2328" font-size="23" font-weight="700">
       <text x="92" y="214">STDIO · 本地进程</text>
       <text x="452" y="214">HTTP · 远程服务</text>
-      <text x="812" y="214">SSE · 服务器推送</text>
+      <text x="812" y="214">SSE · 旧接口</text>
     </g>
     <g fill="#008635" font-size="20" font-weight="700">
       <text x="92" y="246">我请它进屋</text>
-      <text x="452" y="246">我带钥匙上门</text>
-      <text x="812" y="246">它往回推给我</text>
+      <text x="452" y="246">远程接入优先选用</text>
+      <text x="812" y="246">已有服务兼容使用</text>
     </g>
 
     <!-- 卡 1：一个容器里，Claude 与 npx 进程用插脚相连 -->
@@ -75,26 +75,26 @@
     <!-- 三张卡的说明行 -->
     <g font-size="18" fill="#57606a">
       <text x="240" y="378" text-anchor="middle">工具装在你自己的机器里</text>
-      <text x="600" y="378" text-anchor="middle">每问一次，等它回一次</text>
-      <text x="960" y="378" text-anchor="middle">消息它自己送上门</text>
+      <text x="600" y="378" text-anchor="middle">支持请求，也可流式返回</text>
+      <text x="960" y="378" text-anchor="middle">按服务文档连接旧端点</text>
     </g>
     <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="19" fill="#1f2328">
       <text x="92" y="406">"command": "npx"</text>
       <text x="92" y="432">"args": ["-y", …]</text>
       <text x="452" y="406">"url": "https://…/mcp"</text>
-      <text x="452" y="432">"transport": "http"</text>
+      <text x="452" y="432">"type": "http"</text>
       <text x="812" y="406">"url": "https://…/sse"</text>
-      <text x="812" y="432">"transport": "sse"</text>
+      <text x="812" y="432">"type": "sse"</text>
     </g>
     <g font-size="19" fill="#57606a">
       <text x="92" y="462">例：sqlite · filesystem</text>
       <text x="452" y="462">例：GitHub · Notion</text>
-      <text x="812" y="462">例：streaming 服务器</text>
+      <text x="812" y="462">例：已有 SSE 服务</text>
     </g>
     <g font-size="19" fill="#c74c00">
       <text x="92" y="492">坑：路径写错、进程崩溃</text>
-      <text x="452" y="492">坑：token 失效 · 少 /v1</text>
-      <text x="812" y="492">坑：断了先跑 /doctor</text>
+      <text x="452" y="492">检查：凭据与 MCP 地址</text>
+      <text x="812" y="492">检查：/mcp 连接状态</text>
     </g>
 
     <!-- 必炸的两处 -->
@@ -102,12 +102,12 @@
     <path d="M600 556v114" stroke="#e6e1d4" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 8"/>
 
     <g font-size="21" font-weight="700" fill="#1f2328">
-      <text x="100" y="578">会炸点 1：密钥泄露</text>
-      <text x="628" y="578">会炸点 2：版本漂移</text>
+      <text x="100" y="578">检查 1：密钥保存在哪里</text>
+      <text x="628" y="578">检查 2：版本是否固定</text>
     </g>
     <g font-size="19" fill="#57606a">
       <text x="100" y="608">配置文件被提交进 Git，密钥跟着泄露</text>
-      <text x="628" y="608">npx -y 默认永远拉最新版</text>
+      <text x="628" y="608">未固定版本可能引入不同的依赖</text>
     </g>
 
     <g stroke-width="4" stroke-linecap="round" fill="none">
@@ -118,16 +118,15 @@
     </g>
     <g font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="19">
       <text x="130" y="648" fill="#c74c00">"GITHUB_TOKEN": "ghp_abc123"</text>
-      <text x="130" y="678" fill="#008635">"GITHUB_TOKEN": "$GITHUB_TOKEN"</text>
+      <text x="130" y="678" fill="#008635" font-size="18">"GITHUB_TOKEN": "${GITHUB_TOKEN}"</text>
     </g>
     <g font-size="19">
       <text x="658" y="648" fill="#c74c00">新版本不兼容 · 服务器被下架</text>
-      <text x="658" y="678" fill="#008635" font-family="ui-monospace, 'JetBrains Mono', monospace">…/server-github@1.2.3</text>
-      <text x="912" y="678" fill="#57606a">固定版本</text>
+      <text x="658" y="678" fill="#008635">在包名后填写已验证的版本号</text>
     </g>
 
     <!-- 结论 -->
     <rect x="72" y="706" width="1056" height="62" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
-    <text x="600" y="745" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">先问谁主动、要不要出门，再问密钥写在哪、版本锁没锁</text>
+    <text x="600" y="745" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">先选接口，再核对配置、凭据和版本，最后验证实际调用</text>
   </g>
 </svg>

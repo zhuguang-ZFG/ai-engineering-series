@@ -1,5 +1,7 @@
 # 分阶段实施计划
 
+> 当前主任务已按范围确认恢复为原《Vibe Coding 101》Stage 1–3 与附录，继续执行请先读[原书当前计划](../PLAN.md)。下文 N00–N10 是配套大模型专题的历史实施台账及其自身验收标准，不是当前原书任务入口；未通过项继续保留。
+
 ## 新版执行计划 · 1.0 / 2026-11-07
 
 本节是当前执行入口，替代下方旧版“先铺十二课再补表现形式”的推进方式。五阶段三十章见 [CURRICULUM.md](CURRICULUM.md)，依据见 [REFERENCE-BOOKS.md](REFERENCE-BOOKS.md)，完成判据见 [ACCEPTANCE.md](ACCEPTANCE.md)。2026-11-08 已完成 N00 内容与先修盘点，见 [KNOWLEDGE-MAP.md](KNOWLEDGE-MAP.md) 和 [AUDIT.md](AUDIT.md)；本轮已实现三十章/分离答案、助手/训练/OCR 程序与同源成品；逐项实际状态见下表及 IMPLEMENTATION.md。K1–K5 仍未完成整体验收，不以绿色本地检查替代教学或运行质量。旧版 0.10–0.14/T00–T16 继续作为资产与历史证据，不清零、不转记新版完成，也不把旧授权视作本轮发布指令。

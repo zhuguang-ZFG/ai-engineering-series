@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>结合 Agent Skills 美化界面 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 22 / 195</p><article><h1 id="结合-agent-skills-美化界面">结合 Agent Skills 美化界面</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#用-llm-和-skills-让界面变好看提示词与插件实战">用 LLM 和 Skills 让界面变好看：提示词与插件实战</a><ul><li><a href="#你将学到-1">你将学到</a></li><li><a href="#1-为什么-ai-默认生成的界面很普通">1. 为什么 AI 默认生成的界面&quot;很普通&quot;？</a></li><li><a href="#2-方法一用提示词描述设计风格">2. 方法一：用提示词描述设计风格</a></li><li><a href="#3-方法二用-skills-插件自动加载设计规范">3. 方法二：用 Skills 插件自动加载设计规范</a></li><li><a href="#4-实战一用美化提示词重新设计落地页">4. 实战一：用美化提示词重新设计落地页</a></li><li><a href="#5-实战二用-skills-快速生成仪表盘">5. 实战二：用 Skills 快速生成仪表盘</a></li><li><a href="#6-实战三创建自己的设计系统-skill">6. 实战三：创建自己的设计系统 Skill</a></li><li><a href="#7-小结">7. 小结</a></li><li><a href="#附录设计风格速查表">附录：设计风格速查表</a></li><li><a href="#附录skills-安装速查">附录：Skills 安装速查</a></li><li><a href="#附录配色方案推荐">附录：配色方案推荐</a></li><li><a href="#附录设计风格提示词速查">附录：设计风格提示词速查</a></li></ul></li></ul></nav></details><h2 id="用-llm-和-skills-让界面变好看提示词与插件实战">用 LLM 和 Skills 让界面变好看：提示词与插件实战</h2>
+<p>在前面的课程中，你已经学会了用 AI IDE 把设计稿变成代码、用组件库快速搭建界面。但你可能也发现了一个尴尬的问题：<strong>同样的需求，AI 生成的页面总觉得差点意思</strong>——字体是千篇一律的 Inter，配色是随处可见的紫色渐变，布局是对称得让人打哈欠的卡片网格，整个页面散发着浓烈的&quot;AI 味&quot;。</p>
+<p>这不是 AI 的错，而是你没告诉它你想要什么<strong>风格</strong>。</p>
+<p>想象你去理发店。如果你只说&quot;帮我剪个头发&quot;，理发师会给你一个安全但平庸的结果。但如果你说&quot;我要日系慵懒卷，刘海要八字型，长度到锁骨，层次感明显&quot;，你就能得到真正符合你期待的效果。</p>
+<p>AI 也是一样。<strong>它需要你描述出清晰的审美方向</strong>，才能生成美观独特的界面。</p>
+<p>本节课教你两种让 AI 生成漂亮界面的方法：</p>
+<ol>
+<li><strong>精心设计的提示词模板</strong>——用自然语言告诉 AI 你想要的美学风格</li>
+<li><strong>前端 Skills 插件</strong>——让 AI 自动加载专业设计规范</li>
+</ol>
+<h3 id="你将学到-1">你将学到</h3>
+<ol>
+<li>理解为什么 AI 默认生成的界面&quot;很普通&quot;</li>
+<li>掌握描述设计风格的 5 个维度（字体、颜色、布局、动画、细节）</li>
+<li>学会使用 3 个让界面变漂亮的 Skills 插件</li>
+<li>通过三个实战场景，练习用提示词 + Skills 生成美观界面</li>
+</ol>
+<h3 id="1-为什么-ai-默认生成的界面很普通">1. 为什么 AI 默认生成的界面&quot;很普通&quot;？</h3>
+<p>AI 训练数据中有海量的前端代码，而大部分代码都使用一些&quot;安全&quot;的选择：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">AI 的默认选择</th>
+<th align="left">问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">字体</td>
+<td align="left">Inter、Roboto、Arial</td>
+<td align="left">太常见，没有个性</td>
+</tr>
+<tr>
+<td align="left">颜色</td>
+<td align="left">紫色渐变、蓝色主色</td>
+<td align="left">科技圈过度使用，视觉疲劳</td>
+</tr>
+<tr>
+<td align="left">布局</td>
+<td align="left">对称网格、卡片堆叠</td>
+<td align="left">预测性强，缺乏惊喜</td>
+</tr>
+<tr>
+<td align="left">动画</td>
+<td align="left">淡入淡出、简单的 hover</td>
+<td align="left">不够精致，缺乏层次</td>
+</tr>
+<tr>
+<td align="left">背景</td>
+<td align="left">纯色、简单渐变</td>
+<td align="left">单调，缺少质感</td>
+</tr>
+</tbody></table></div>
+<p>这些选择单独看都不错，但<strong>当所有 AI 生成的页面都用它们时，就变成了&quot;AI 味&quot;</strong>。</p>
+<blockquote>
+<p><strong>关键洞察</strong>：AI 不是不会设计，而是默认回到&quot;统计平均&quot;。你需要明确告诉它偏离平均值的方向。</p>
+</blockquote>
+<h3 id="2-方法一用提示词描述设计风格">2. 方法一：用提示词描述设计风格</h3>
+<h4 id="21-设计风格的-5-个维度">2.1 设计风格的 5 个维度</h4>
+<p>要生成美观的界面，你需要从 5 个维度描述你想要的效果：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">描述要点</th>
+<th align="left">示例关键词</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>字体</strong></td>
+<td align="left">标题用粗体展示字体，正文用易读正文字体</td>
+<td align="left">Space Grotesk、Playfair Display、JetBrains Mono</td>
+</tr>
+<tr>
+<td align="left"><strong>颜色</strong></td>
+<td align="left">主色 + 点缀色，避免均匀分布</td>
+<td align="left">#4F46E5 主色 + #F59E0B 点缀</td>
+</tr>
+<tr>
+<td align="left"><strong>布局</strong></td>
+<td align="left">不对称、重叠、打破网格</td>
+<td align="left">Bento Grid、不对称分区、浮动元素</td>
+</tr>
+<tr>
+<td align="left"><strong>动画</strong></td>
+<td align="left">精心编排的页面加载、微交互</td>
+<td align="left">staggered reveals、滚动触发</td>
+</tr>
+<tr>
+<td align="left"><strong>细节</strong></td>
+<td align="left">背景、阴影、边框、纹理</td>
+<td align="left">噪点、几何图案、渐变网格</td>
+</tr>
+</tbody></table></div>
+<h4 id="22-眼见为实普通提示词-vs-美化提示词">2.2 眼见为实：普通提示词 vs 美化提示词</h4>
+<p>用一个落地页示例来对比效果：</p>
+<p><strong>普通提示词：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请帮我做一个 AI 写作助手的落地页，包含导航栏、首屏、功能展示、定价、页脚
+</code></pre>
+<p><strong>美化提示词：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请帮我做一个 AI 写作助手的落地页，要求：
+
+**美学风格：新野兽派（Neubrutalism）**
+
+**字体：**
+- 标题：Space Grotesk，字重 700-900
+- 正文：IBM Plex Sans，字重 400
+
+**颜色：**
+- 主色：#000000（纯黑）
+- 强调色：#FF6B00（橙色）
+- 背景：#FFFDF0（米白色）
+- 边框：3px 黑色实线
+
+**布局：**
+- 不对称布局，元素之间用粗黑线分隔
+- 卡片有硬阴影（box-shadow: 8px 8px 0px #000）
+- 大胆的留白对比
+
+**动画：**
+- 页面加载时元素从下方弹入
+- hover 时按钮向上移动 2px
+
+**细节：**
+- 圆角全部用 0px（直角）
+- 按钮有强烈的 3D 效果
+- 背景添加微妙的噪点纹理
+</code></pre>
+<p>同样的需求，第二个提示词能让 AI 生成一个风格鲜明、令人印象深刻的页面。</p>
+<h4 id="23-前端美化-skills-资源库">2.3 前端美化 Skills 资源库</h4>
+<p>不要从零开始写提示词！这里收集了与前端美化直接相关的 AI Skills：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">仓库名</th>
+<th align="left">内容</th>
+<th align="left">Star</th>
+<th align="left">链接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>ui-ux-pro-max-skill</strong></td>
+<td align="left">57种风格 + 95种配色 + 56种字体</td>
+<td align="left">10k+</td>
+<td align="left"><a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill">GitHub</a></td>
+</tr>
+<tr>
+<td align="left"><strong>antigravity-awesome-skills</strong></td>
+<td align="left">避免通用 AI 审美套路</td>
+<td align="left">-</td>
+<td align="left"><a href="https://github.com/sickn33/antigravity-awesome-skills">GitHub</a></td>
+</tr>
+<tr>
+<td align="left"><strong>superdesigndev/superdesign</strong></td>
+<td align="left">AI 原生 UI 开发工具</td>
+<td align="left">4.7k</td>
+<td align="left"><a href="https://github.com/superdesigndev/superdesign">GitHub</a></td>
+</tr>
+<tr>
+<td align="left"><strong>anthropics/skills/frontend-design</strong></td>
+<td align="left">Anthropic 官方前端设计 Skill</td>
+<td align="left">-</td>
+<td align="left"><a href="https://github.com/anthropics/skills">GitHub</a></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>更多风格提示词请参考<a href="#附录设计风格提示词速查">附录：设计风格提示词速查</a></p>
+</blockquote>
+<h4 id="25-三款常用风格模板">2.5 三款常用风格模板</h4>
+<p>这里给你三款经过验证的风格模板，直接复制修改使用：</p>
+<h4 id="模板-1极简主义">模板 1：极简主义</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>**美学风格：极简主义**
+
+**字体：**
+- 标题：PP Neue Montreal，字重 500-700
+- 正文：Inter，字重 400
+
+**颜色：**
+- 主色：#FFFFFF（白色）
+- 文字：#1A1A1A（近黑）
+- 强调：#3B82F6（蓝色，少量使用）
+
+**布局：**
+- 大量留白（padding 最小 64px）
+- 单栏或双栏布局，居中对齐
+- 元素之间用留白而非分割线
+
+**动画：**
+- 缓慢的淡入效果（duration 600ms）
+- hover 时颜色渐变过渡
+
+**细节：**
+- 圆角：8px
+- 阴影：subtle（0 4px 12px rgba(0,0,0,0.08)）
+- 无背景装饰
+</code></pre>
+<h4 id="模板-2玻璃拟态">模板 2：玻璃拟态</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>**美学风格：Glassmorphism（玻璃拟态）**
+
+**字体：**
+- 标题：Outfit，字重 600-800
+- 正文：Plus Jakarta Sans，字重 400-500
+
+**颜色：**
+- 背景：渐变 #667eea 到 #764ba2
+- 卡片背景：rgba(255, 255, 255, 0.1)
+- 文字：#FFFFFF
+
+**布局：**
+- 浮动卡片设计
+- 卡片之间有重叠
+
+**动画：**
+- 页面加载时卡片依次浮现（staggered）
+- hover 时卡片放大 1.05 倍
+
+**细节：**
+- 圆角：20px
+- 背景模糊：backdrop-blur-xl
+- 边框：1px rgba(255, 255, 255, 0.2)
+- 微妙的渐变光晕效果
+</code></pre>
+<h4 id="模板-3bento-grid便当盒">模板 3：Bento Grid（便当盒）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>**美学风格：Bento Grid**
+
+**字体：**
+- 标题：SF Pro Display，字重 700
+- 正文：SF Pro Text，字重 400
+
+**颜色：**
+- 背景：#F5F5F7（浅灰）
+- 卡片：#FFFFFF（白色）
+- 强调：#0071E3（苹果蓝）
+
+**布局：**
+- 网格布局，不同大小的卡片拼在一起
+- 卡片之间 gap 16px
+- 圆角 24px
+
+**动画：**
+- hover 时卡片轻微上浮
+- 点击时有按压效果
+
+**细节：**
+- 大卡片展示重要内容
+- 小卡片展示次要信息
+- 用图标代替部分文字
+- 干净的阴影（0 4px 24px rgba(0,0,0,0.06)）
+</code></pre>
+<h3 id="3-方法二用-skills-插件自动加载设计规范">3. 方法二：用 Skills 插件自动加载设计规范</h3>
+<p>每次手动写风格提示词很麻烦。<strong>Skills</strong> 是一种可复用的设计规范包，安装后 AI 会自动应用这些规范。</p>
+<h4 id="31-三个让界面变漂亮的-skills">3.1 三个让界面变漂亮的 Skills</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">Skills</th>
+<th align="left">特点</th>
+<th align="left">安装命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>UI/UX Pro Max</strong></td>
+<td align="left">67 种风格、96 种配色、57 种字体组合</td>
+<td align="left"><code>npm install -g uipro-cli &amp;&amp; uipro init --ai claude</code></td>
+</tr>
+<tr>
+<td align="left"><strong>frontend-design</strong></td>
+<td align="left">Anthropic 官方，避免 AI 审美套路</td>
+<td align="left"><code>npx skills add anthropics/skills/frontend-design</code></td>
+</tr>
+<tr>
+<td align="left"><strong>SuperDesign</strong></td>
+<td align="left">IDE 插件，生成多个设计变体</td>
+<td align="left">VSCode 扩展市场搜索 &quot;SuperDesign&quot;</td>
+</tr>
+</tbody></table></div>
+<h4 id="32-安装-uiux-pro-max最推荐">3.2 安装 UI/UX Pro Max（最推荐）</h4>
+<p>UI/UX Pro Max 是目前最全面的设计规范 Skills，它预置了：</p>
+<ul>
+<li><strong>67 种 UI 风格</strong>：Glassmorphism、Neumorphism、Brutalism、Bento Grid...</li>
+<li><strong>96 种配色方案</strong>：按行业分类（SaaS、电商、社交...）</li>
+<li><strong>57 种字体搭配</strong>：专业设计师验证的组合</li>
+<li><strong>100+ 条设计规则</strong>：间距、圆角、阴影的规范</li>
+</ul>
+<p><strong>安装步骤：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 1. 全局安装 CLI
+npm install -g uipro-cli
+
+# 2. 初始化（选择你用的 AI 工具）
+uipro init --ai claude
+# 或者
+uipro init --ai cursor
+# 或者
+uipro init --ai trae
+</code></pre>
+<p>安装后，你只需要在提示词中加一句话：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>使用 UI/UX Pro Max 的 Glassmorphism 风格，帮我做一个 AI 写作助手落地页
+</code></pre>
+<p>AI 就会自动应用对应的字体、颜色、布局规范。</p>
+<h4 id="33-安装-anthropic-官方-frontend-design">3.3 安装 Anthropic 官方 frontend-design</h4>
+<p>这是 Anthropic 官方出品的前端设计 Skill，专门解决&quot;AI 审美套路&quot;问题：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在 Claude Code 中执行
+npx skills add anthropics/skills/frontend-design
+</code></pre>
+<p>安装后，AI 会自动避免：</p>
+<ul>
+<li>❌ Inter、Roboto、Arial 字体</li>
+<li>❌ 紫色渐变背景</li>
+<li>❌ 对称网格布局</li>
+<li>❌ 过淡的阴影</li>
+</ul>
+<p>而是倾向于：</p>
+<ul>
+<li>✅ 独特的字体组合</li>
+<li>✅ 大胆的主色 + 锐利的点缀色</li>
+<li>✅ 不对称、重叠的布局</li>
+<li>✅ 有质感的背景（噪点、几何图案）</li>
+</ul>
+<h3 id="4-实战一用美化提示词重新设计落地页">4. 实战一：用美化提示词重新设计落地页</h3>
+<p>用前面学到的知识，把一个普通的落地页变得好看。</p>
+<h4 id="41-普通版本">4.1 普通版本</h4>
+<p>先用普通提示词看看 AI 给什么：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请帮我做一个宠物领养平台的落地页，包含：
+- 导航栏（Logo、链接、注册按钮）
+- 首屏（标题、副标题、CTA 按钮、宠物图片）
+- 宠物展示（三张宠物卡片）
+- 关于我们
+- 页脚
+</code></pre>
+<p>生成的页面...能用，但很普通。</p>
+<h4 id="42-美化版本">4.2 美化版本</h4>
+<p>现在加上风格描述：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请帮我做一个宠物领养平台的落地页，要求：
+
+**美学风格：温暖柔和 + 手绘感**
+
+**字体：**
+- 标题：Nunito（圆体），字重 700-800
+- 正文：Nunito，字重 400-600
+
+**颜色：**
+- 主色：#FFB347（暖橙色）
+- 次色：#FFCCB3（浅橙色）
+- 背景：#FFF8F0（米白色）
+- 文字：#5D4037（棕色）
+
+**布局：**
+- 圆润的卡片（border-radius: 24px）
+- 卡片略微倾斜旋转（不同角度）
+- 元素浮动、重叠效果
+
+**动画：**
+- 页面加载时元素从两侧滑入
+- 宠物卡片 hover 时像宠物摇头（rotate 动画）
+- 按钮 hover 时弹跳效果
+
+**细节：**
+- 所有圆角用 16-24px
+- 阴影温暖柔和（0 8px 24px rgba(255,179,71,0.3)）
+- 背景添加爪印图案装饰
+- 图片用不规则裁切（clip-path）
+- 手绘风格的图标（outline 风格）
+</code></pre>
+<p>生成的页面会是一个温暖、可爱、让人想领养宠物的界面。</p>
+<h3 id="5-实战二用-skills-快速生成仪表盘">5. 实战二：用 Skills 快速生成仪表盘</h3>
+<p>Skills 特别适合需要大量页面的后台系统。</p>
+<h4 id="51-使用-uiux-pro-max">5.1 使用 UI/UX Pro Max</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>使用 UI/UX Pro Max 的 Dashboard Dark 风格，
+帮我做一个 SaaS 产品管理后台的仪表盘页面，包含：
+
+**顶部：** 四个统计卡片（用户数、活跃用户、收入、API 调用）
+
+**中间：**
+- 左边：用户增长折线图（最近 7 天）
+- 右边：订阅计划分布饼图
+
+**底部：** 最近活动列表（时间、用户、操作）
+</code></pre>
+<p>AI 会自动应用深色仪表盘的设计规范：</p>
+<ul>
+<li>深灰背景（#1A1A2E）</li>
+<li>高对比度卡片（#16213E）</li>
+<li>鲜艳的数据颜色（蓝色、绿色、橙色）</li>
+<li>玻璃拟态效果的悬浮卡片</li>
+</ul>
+<h4 id="52-使用-frontend-design-skill">5.2 使用 frontend-design Skill</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>使用 frontend-design skill，
+帮我做一个个人博客的主页，风格要独特、有个性
+</code></pre>
+<p>AI 会选择一个非主流的美学方向（比如复古未来主义或杂志风格），然后用独特的字体、配色、布局来实现。</p>
+<h3 id="6-实战三创建自己的设计系统-skill">6. 实战三：创建自己的设计系统 Skill</h3>
+<p>如果你有固定的品牌风格，可以创建自己的 Skill，让所有 AI 生成的页面都符合你的品牌。</p>
+<h4 id="61-创建-skill-文件">6.1 创建 Skill 文件</h4>
+<p>在项目中创建 <code>.claude/skills/my-brand/SKILL.md</code>：</p>
+<pre class="prose-block"><code class="language-markdown">---
+name: my-brand
+description: 我的项目专用设计系统，确保所有 UI 遵循统一的设计语言
+---
+
+# 我的项目设计系统
+
+## 品牌颜色
+- 主色：#6366F1（Indigo 500）
+- 次色：#8B5CF6（Violet 500）
+- 成功：#10B981
+- 警告：#F59E0B
+- 错误：#EF4444
+- 背景：#F9FAFB
+- 卡片：#FFFFFF
+
+## 字体系统
+- 标题：Plus Jakarta Sans
+  - H1: 700, 48px
+  - H2: 600, 36px
+  - H3: 600, 24px
+- 正文：Inter
+  - Body: 400, 16px
+  - Small: 400, 14px
+
+## 间距系统
+- 基础单位：4px
+- 组件内边距：8px / 12px / 16px
+- 区块间距：24px / 32px / 48px
+- 页面边距：64px
+
+## 圆角
+- 按钮：8px
+- 卡片：12px
+- 输入框：8px
+- 模态框：16px
+
+## 阴影
+- 小：0 1px 3px rgba(0,0,0,0.1)
+- 中：0 4px 12px rgba(0,0,0,0.1)
+- 大：0 8px 24px rgba(0,0,0,0.12)
+
+## 动画
+- 过渡时间：150ms / 300ms
+- 缓动函数：cubic-bezier(0.4, 0, 0.2, 1)
+- hover 效果：轻微放大（scale-105）
+
+## 禁止使用的样式
+- 不要使用紫色渐变背景
+- 不要使用 Inter 以外的字体
+- 不要使用大于 16px 的圆角
+- 不要使用纯黑（#000000），用 #1F2937
+</code></pre>
+<h4 id="62-使用自己的-skill">6.2 使用自己的 Skill</h4>
+<p>创建后，你只需要在提示词中说：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>使用 my-brand skill，帮我做一个用户设置页面
+</code></pre>
+<p>AI 就会自动应用你定义的所有设计规范。</p>
+<h3 id="7-小结">7. 小结</h3>
+<p>让 AI 生成漂亮界面有两种方法：</p>
+<p>| 方法 | 优点 | 缺点 | 适用场景 |
+| :--- | :--- | :--- |
+| <strong>提示词描述</strong> | 灵活、每次可调整 | 需要重复写 | 一次性页面、实验不同风格 |
+| <strong>Skills 插件</strong> | 一次安装、持续生效 | 需要安装配置 | 有固定风格要求的项目 |</p>
+<p><strong>Vibe Coding 工作流建议：</strong></p>
+<ol>
+<li><strong>探索阶段</strong>：用不同的风格提示词实验，找到你喜欢的美学方向</li>
+<li><strong>确定风格后</strong>：安装对应的 Skill（UI/UX Pro Max 或 frontend-design）</li>
+<li><strong>品牌项目</strong>：创建自己的 Skill，统一整个项目的设计语言</li>
+</ol>
+<h4 id="练习">练习</h4>
+<p>选择以下任一场景，用本节课的方法从零完成：</p>
+<ol>
+<li>用风格提示词为你之前做的一个项目重新设计界面（选一种你喜欢的风格）</li>
+<li>安装 UI/UX Pro Max，用它的某个风格生成一个新页面</li>
+<li>创建你自己的设计系统 Skill，定义你的品牌颜色和字体</li>
+</ol>
+<h3 id="附录设计风格速查表">附录：设计风格速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">风格</th>
+<th align="left">关键词</th>
+<th align="left">适用场景</th>
+<th align="left">示例产品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>极简主义</strong></td>
+<td align="left">留白、单色、简洁</td>
+<td align="left">高端产品、个人作品集</td>
+<td align="left">Apple官网</td>
+</tr>
+<tr>
+<td align="left"><strong>玻璃拟态</strong></td>
+<td align="left">毛玻璃、渐变、模糊</td>
+<td align="left">科技产品、SaaS 落地页</td>
+<td align="left">macOS Big Sur</td>
+</tr>
+<tr>
+<td align="left"><strong>新野兽派</strong></td>
+<td align="left">粗边框、硬阴影、纯色</td>
+<td align="left">潮流品牌、艺术类网站</td>
+<td align="left">Brassius</td>
+</tr>
+<tr>
+<td align="left"><strong>Bento Grid</strong></td>
+<td align="left">网格、拼贴、卡片</td>
+<td align="left">信息展示、仪表盘</td>
+<td align="left">Apple 宣传页</td>
+</tr>
+<tr>
+<td align="left"><strong>复古未来</strong></td>
+<td align="left">霓虹、渐变、合成器波</td>
+<td align="left">游戏类、音乐类</td>
+<td align="left">STRANGER THINGS</td>
+</tr>
+<tr>
+<td align="left"><strong>手绘风格</strong></td>
+<td align="left">不规则、圆润、插画</td>
+<td align="left">教育类、儿童产品</td>
+<td align="left">Duolingo</td>
+</tr>
+<tr>
+<td align="left"><strong>杂志风</strong></td>
+<td align="left">大字体、不对称、留白</td>
+<td align="left">内容型网站、博客</td>
+<td align="left">Medium</td>
+</tr>
+<tr>
+<td align="left"><strong>暗色奢华</strong></td>
+<td align="left">深色、金色、精致</td>
+<td align="left">高端产品、奢侈品</td>
+<td align="left">各种高端品牌</td>
+</tr>
+</tbody></table></div>
+<h3 id="附录skills-安装速查">附录：Skills 安装速查</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># UI/UX Pro Max
+npm install -g uipro-cli
+uipro init --ai claude
+
+# Anthropic frontend-design
+npx skills add anthropics/skills/frontend-design
+
+# Anthropic brand-guidelines
+npx skills add anthropics/skills/brand-guidelines
+
+# 查看 Claude Code 中已安装的 Skills
+/help
+</code></pre>
+<h3 id="附录配色方案推荐">附录：配色方案推荐</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">配色方案</th>
+<th align="left">主色</th>
+<th align="left">点缀色</th>
+<th align="left">背景</th>
+<th align="left">风格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>日落</strong></td>
+<td align="left">#F97316</td>
+<td align="left">#FBBF24</td>
+<td align="left">#FFF7ED</td>
+<td align="left">温暖、活力</td>
+</tr>
+<tr>
+<td align="left"><strong>海洋</strong></td>
+<td align="left">#0EA5E9</td>
+<td align="left">#06B6D4</td>
+<td align="left">#F0F9FF</td>
+<td align="left">清新、专业</td>
+</tr>
+<tr>
+<td align="left"><strong>森林</strong></td>
+<td align="left">#10B981</td>
+<td align="left">#34D399</td>
+<td align="left">#ECFDF5</td>
+<td align="left">自然、健康</td>
+</tr>
+<tr>
+<td align="left"><strong>浆果</strong></td>
+<td align="left">#8B5CF6</td>
+<td align="left">#EC4899</td>
+<td align="left">#FAF5FF</td>
+<td align="left">浪漫、创意</td>
+</tr>
+<tr>
+<td align="left"><strong>咖啡</strong></td>
+<td align="left">#78350F</td>
+<td align="left">#D97706</td>
+<td align="left">#FFFBEB</td>
+<td align="left">温暖、复古</td>
+</tr>
+<tr>
+<td align="left"><strong>单石</strong></td>
+<td align="left">#6B7280</td>
+<td align="left">#9CA3AF</td>
+<td align="left">#F9FAFB</td>
+<td align="left">专业、中性</td>
+</tr>
+</tbody></table></div>
+<h3 id="附录设计风格提示词速查">附录：设计风格提示词速查</h3>
+<p>让前端页面更好看可以尝试的提示词：</p>
+<h4 id="风格类别">风格类别</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">风格</th>
+<th align="left">关键词（英文）</th>
+<th align="left">核心视觉特征</th>
+<th align="left">提示词示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>波普艺术</strong></td>
+<td align="left">Pop Art</td>
+<td align="left">大胆的撞色、黑色轮廓线、网点纹理</td>
+<td align="left">Pop art style website, bold colors and comic dots, vibrant</td>
+</tr>
+<tr>
+<td align="left"><strong>极简主义</strong></td>
+<td align="left">Minimalism</td>
+<td align="left">大量留白、极少色彩与线条、无装饰</td>
+<td align="left">Minimalist web design, ample white space, geometric, serene</td>
+</tr>
+<tr>
+<td align="left"><strong>抽象表现主义</strong></td>
+<td align="left">Abstract Expressionism</td>
+<td align="left">充满情感张力的笔触、泼洒色彩</td>
+<td align="left">Abstract expressionism background, dynamic paint splashes, emotional</td>
+</tr>
+<tr>
+<td align="left"><strong>复古风格</strong></td>
+<td align="left">Retro/Vintage</td>
+<td align="left">旧式字体、做旧纹理、复古配色</td>
+<td align="left">Retro 80s website design, neon grid and synthwave color palette</td>
+</tr>
+<tr>
+<td align="left"><strong>赛博朋克</strong></td>
+<td align="left">Cyberpunk</td>
+<td align="left">高对比霓虹色、故障艺术效果、暗黑背景</td>
+<td align="left">Cyberpunk UI, neon lights on dark background, glitch effects</td>
+</tr>
+<tr>
+<td align="left"><strong>新拟态</strong></td>
+<td align="left">Neumorphism</td>
+<td align="left">柔和的阴影与高光，轻微凸起/凹陷质感</td>
+<td align="left">Neumorphism design style, soft shadows, clean and modern</td>
+</tr>
+<tr>
+<td align="left"><strong>生成式艺术</strong></td>
+<td align="left">Generative Art</td>
+<td align="left">算法生成的流动的视觉图案</td>
+<td align="left">Generative art background, flowing algorithmic patterns, digital</td>
+</tr>
+<tr>
+<td align="left"><strong>酸性设计</strong></td>
+<td align="left">Acid Graphics</td>
+<td align="left">金属质感、玻璃态、锯齿字体</td>
+<td align="left">Acid graphics web layout, glass morphism, chaotic typography</td>
+</tr>
+<tr>
+<td align="left"><strong>沉浸式3D</strong></td>
+<td align="left">Immersive 3D</td>
+<td align="left">互动3D场景、空间感极强</td>
+<td align="left">Immersive 3D website, interactive product model in space</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-021.html">← UI 设计规范与多产品界面</a><a rel="next" href="chapter-023.html">设计原型到项目代码 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

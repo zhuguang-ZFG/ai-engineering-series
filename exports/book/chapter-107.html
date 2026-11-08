@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>路由与导航 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 107 / 195</p><article><h1 id="路由与导航">路由与导航</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#路由与导航导论">路由与导航导论</a><ul><li><a href="#1-前端路由的动机">1. 前端路由的动机</a></li><li><a href="#2-核心概念路由模式导航">2. 核心概念：路由、模式、导航</a></li><li><a href="#3-演进之路从传统网站到现代路由">3. 演进之路：从传统网站到现代路由</a></li><li><a href="#4-原理深入路由的工作原理">4. 原理深入：路由的工作原理</a></li><li><a href="#5-路由配置实战指南">5. 路由配置实战指南</a></li><li><a href="#6-常见问题与解决方案">6. 常见问题与解决方案</a></li><li><a href="#7-总结-4">7. 总结</a></li></ul></li></ul></nav></details><h2 id="路由与导航导论">路由与导航导论</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>为什么有些网站切换页面时不会白屏刷新，像 App 一样流畅？</strong> 这就是前端路由的魔法。本章将带你从传统网站的&quot;翻书式跳转&quot;，进入到单页应用的&quot;幻灯片切换&quot;世界，理解前端路由如何让用户体验提升一个档次。</p>
+</blockquote>
+<h3 id="1-前端路由的动机">1. 前端路由的动机</h3>
+<h4 id="11-从传统网站到单页应用用户体验的质变">1.1 从传统网站到单页应用：用户体验的质变</h4>
+<p>回顾早期的网站浏览体验，每次点击链接都是一次&quot;完整翻页&quot;的过程：页面白屏一下、加载圈转动、整个页面重新渲染。如果网络慢，你还要盯着加载圈发呆几秒。这种体验在今天看来已经过时了，但当时这就是标准做法。</p>
+<p>现代前端开发完全改变了这种模式。我们使用前端路由技术，让页面切换像手机 App 一样流畅——没有白屏、没有加载圈、用户几乎感觉不到&quot;跳转&quot;的过程。这种体验的提升，靠的就是前端路由系统。</p>
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>📖 传统网站（MPA）</p>
+<ul>
+<li>点击链接 → 整页刷新</li>
+<li>每个页面是独立的 HTML 文件</li>
+<li>浏览器重新下载所有资源</li>
+<li>体验像&quot;翻书&quot;，有明显的翻页过程</li>
+</ul>
+</div>
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>📱 单页应用（SPA）</p>
+<ul>
+<li>点击链接 → 无刷新切换</li>
+<li>只有一个 HTML 入口文件</li>
+<li>只下载需要的数据</li>
+<li>体验像&quot;幻灯片&quot;，流畅自然</li>
+</ul>
+</div>
+</div><p><strong>这就是&quot;前端路由&quot;要解决的核心问题：在不刷新页面的情况下，实现视图的切换和 URL 的同步更新。</strong></p>
+<h4 id="12-案例理解路由模式">1.2 案例：理解路由模式</h4>
+<p>你可能会说：&quot;我用 Vue Router 或者 React Router，配置一下就能用，为什么还需要了解这些底层原理？&quot; 让我讲一个真实的故事，你就会明白为什么这些知识如此重要。</p>
+<blockquote>
+<p><strong>小李的部署踩坑记</strong>
+小李是一个前端新人，刚入职就负责开发一个基于 Vue 的单页应用。在本地开发时一切正常，路由跳转丝般顺滑。但是当他把项目部署到测试服务器后，问题出现了：用户直接访问某个路由（如 <code>example.com/user/123</code>）或者在详情页刷新页面时，会看到 <strong>404 Not Found</strong> 错误。</p>
+</blockquote>
+<p>小李懵了：明明本地能正常访问，为什么部署后就 404 了？他排查了很久，甚至怀疑是服务器配置问题。</p>
+<p>后来他请教师兄，师兄一眼就看出了问题：小李用的是 History 模式，但服务器没有配置 fallback。当用户直接访问 <code>/user/123</code> 时，服务器会去查找这个路径对应的文件，但 SPA 的所有路由其实都指向同一个 <code>index.html</code>。解决方案很简单：配置服务器让所有路由都回退到 <code>index.html</code>，让前端路由接管后续处理。</p>
+<p>小李从此明白了一个道理：<strong>不理解路由模式的原理和服务器配置要求，你连为什么报错都不知道，更别提解决问题了。</strong></p>
+<blockquote>
+<p><strong>核心启示</strong>
+前端路由不是&quot;黑魔法&quot;，理解它的工作原理能让你在遇到部署、性能、SEO 问题时快速定位、精准解决。更重要的是，它能在项目架构设计时帮你选得更准——什么时候用 Hash 模式、什么时候用 History 模式、如何避免常见的坑。</p>
+</blockquote>
+<h3 id="2-核心概念路由模式导航">2. 核心概念：路由、模式、导航</h3>
+<p>在深入具体实现之前，我们需要先搞清楚几个核心概念。为了帮助你更好地理解，我们用一个图书馆的比喻来类比它们之间的关系。</p>
+<blockquote>
+<p><strong>🤔 这些概念和路由有什么关系？</strong>
+路由、模式、导航就是前端路由系统的三大支柱。</p>
+</blockquote>
+<p>当你使用 Vue Router 或 React Router 时，框架会帮你处理：</p>
+<ol>
+<li><strong>路由映射</strong> → 定义 URL 和组件的对应关系</li>
+<li><strong>模式选择</strong> → 决定用 Hash 还是 History 模式</li>
+<li><strong>导航控制</strong> → 处理页面跳转、浏览器前进后退</li>
+</ol>
+<p>所以，<strong>理解这三个概念，你才能知道路由系统到底在做什么，为什么有时候需要特殊配置，为什么部署时会出问题。</strong></p>
+<h4 id="21-用图书馆比喻理解路由系统">2.1 用图书馆比喻理解路由系统</h4>
+<p>想象你在图书馆里找书，这个过程与前端路由的工作原理惊人地相似：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>📚 图书馆比喻</th>
+<th>实际作用</th>
+<th>具体例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>路由（Route）</strong></td>
+<td>书架编号和书籍的对应关系</td>
+<td>定义 URL 和页面组件的映射关系</td>
+<td><code>/user/123</code> 路径对应 <code>UserDetail.vue</code> 组件</td>
+</tr>
+<tr>
+<td><strong>路由器（Router）</strong></td>
+<td>图书馆的指引系统和定位服务</td>
+<td>管理所有路由、处理导航行为的核心模块</td>
+<td>Vue Router、React Router 就是路由器</td>
+</tr>
+<tr>
+<td><strong>路由模式</strong></td>
+<td>索引方式（卡片目录 vs 电子系统）</td>
+<td>决定 URL 的形式和底层实现方式</td>
+<td>Hash 模式用 <code>#</code>、History 模式用普通路径</td>
+</tr>
+<tr>
+<td><strong>导航</strong></td>
+<td>从一个书架走到另一个书架</td>
+<td>在不同页面之间切换的行为</td>
+<td>点击链接、编程式跳转、浏览器前进后退</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+我们逐行解读这张表：</p>
+</blockquote>
+<p><strong>路由</strong>：只是一个&quot;配置&quot;，告诉系统&quot;什么 URL 对应什么页面&quot;。就像图书馆的书号对应一本书的位置。</p>
+<p><strong>路由器</strong>：是&quot;管理者&quot;，负责根据当前的 URL 找到对应的组件并渲染。就像图书馆员根据你提供的书号帮你找到书。</p>
+<p><strong>路由模式</strong>：是&quot;实现方式&quot;，决定了 URL 长什么样、底层用什么技术实现。就像图书馆可以用纸质目录，也可以用电子查询系统。</p>
+<p><strong>导航</strong>：是&quot;行为&quot;，是用户触发页面切换的动作。就像你在图书馆里从 A 区走到 B 区。</p>
+<p>理解这四者的区别非常重要：<strong>路由是静态配置，路由器是动态管理者，模式是技术选型，导航是用户行为。</strong></p>
+<h4 id="22-路由routeurl-与组件的映射契约">2.2 路由（Route）：URL 与组件的映射契约</h4>
+<p>路由，本质上就是一个&quot;契约&quot;，它规定了访问某个 URL 时应该显示什么内容。在 Vue Router 中，一个典型的路由配置长这样：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const routes = [
+  {
+    path: &#39;/&#39;,           // URL 路径
+    component: Home      // 对应的组件
+  },
+  {
+    path: &#39;/user/:id&#39;,   // 带参数的动态路由
+    component: UserDetail,
+    children: [          // 嵌套路由
+      { path: &#39;profile&#39;, component: UserProfile },
+      { path: &#39;posts&#39;, component: UserPosts }
+    ]
+  }
+]
+</code></pre>
+<p><strong>你可能会有疑问：为什么不直接用 <code>&lt;a&gt;</code> 标签跳转，非要用路由？</strong></p>
+<p>答案在于&quot;单页应用&quot;的本质：SPA 只有一个 HTML 页面，所有的页面切换其实都是在同一个页面内替换组件。如果你用传统的 <code>&lt;a href=&quot;/user/123&quot;&gt;</code>，浏览器会真的去请求 <code>/user/123</code> 这个路径，导致页面刷新或 404 错误。路由的作用就是拦截这些跳转行为，用 JavaScript 动态替换组件，从而实现无刷新切换。</p>
+<blockquote>
+<p><strong>🔧 路由配置的几种常见模式</strong>
+<strong>静态路由</strong>（最简单）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">{ path: &#39;/home&#39;, component: Home }
+{ path: &#39;/about&#39;, component: About }
+</code></pre>
+<p><strong>动态路由</strong>（带参数）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">{ path: &#39;/user/:id&#39;, component: UserDetail }
+// 可以匹配 /user/123、/user/abc 等
+// 组件内可以通过 route.params.id 获取参数
+</code></pre>
+<p><strong>嵌套路由</strong>（父子关系）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">{
+  path: &#39;/user/:id&#39;,
+  component: UserLayout,    // 父组件
+  children: [
+    { path: &#39;profile&#39;, component: UserProfile },   // 实际路径 /user/:id/profile
+    { path: &#39;posts&#39;, component: UserPosts }        // 实际路径 /user/:id/posts
+  ]
+}
+</code></pre>
+<p><strong>通配符路由</strong>（404 页面）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">{ path: &#39;/:pathMatch(.*)*&#39;, component: NotFound }
+// 匹配所有未定义的路由
+</code></pre>
+<h4 id="23-路由模式hash-vs-history-的本质区别">2.3 路由模式：Hash vs History 的本质区别</h4>
+<p>前端路由有两种主流的实现模式：Hash 模式和 History 模式。它们在 URL 表现形式、底层实现、兼容性等方面有本质区别。</p>
+<blockquote>
+<p><strong>🤔 为什么需要两种模式？</strong>
+这其实是历史原因和技术权衡的结果。</p>
+</blockquote>
+<p><strong>Hash 模式</strong>是最早的前端路由实现方式，它利用 URL 中的 hash 部分（即 <code>#</code> 后面的内容）。hash 的变化不会触发页面刷新，而且兼容性极好（连 IE8 都支持）。</p>
+<p><strong>History 模式</strong>是 HTML5 推出后的&quot;标准做法&quot;，它利用 History API 提供的 <code>pushState</code> 和 <code>replaceState</code> 方法，可以让 URL 变得更&quot;正常&quot;（没有 <code>#</code>），但需要服务端配合配置。</p>
+<p>打个比方：Hash 模式就像&quot;给房间门口贴个便利贴&quot;（不影响房间结构），History 模式就像&quot;重新给房间编号&quot;（需要更新门牌系统）。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Hash 模式</th>
+<th>History 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL 示例</strong></td>
+<td><code>https://example.com/#/user/123</code></td>
+<td><code>https://example.com/user/123</code></td>
+</tr>
+<tr>
+<td><strong>实现原理</strong></td>
+<td>监听 <code>hashchange</code> 事件</td>
+<td>使用 History API (<code>pushState</code>、<code>replaceState</code>)</td>
+</tr>
+<tr>
+<td><strong>服务端配置</strong></td>
+<td>不需要（hash 不被发送到服务器）</td>
+<td><strong>必须配置 fallback 到 index.html</strong></td>
+</tr>
+<tr>
+<td><strong>浏览器兼容性</strong></td>
+<td>IE8+（几乎全部浏览器）</td>
+<td>IE10+（现代浏览器）</td>
+</tr>
+<tr>
+<td><strong>SEO 友好度</strong></td>
+<td>较差（搜索引擎可能忽略 hash）</td>
+<td>良好（URL 结构清晰）</td>
+</tr>
+<tr>
+<td><strong>用户体验</strong></td>
+<td>URL 有 <code>#</code>，看起来像&quot;锚点跳转&quot;</td>
+<td>URL 美观，接近传统网站</td>
+</tr>
+<tr>
+<td><strong>部署难度</strong></td>
+<td>低，无需特殊配置</td>
+<td>高，需要正确配置服务器</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+我们逐行解读这张表：</p>
+</blockquote>
+<p><strong>URL 示例</strong>：Hash 模式的 URL 中有明显的 <code>#</code>，用户会一眼看出这是个&quot;单页应用&quot;；History 模式的 URL 和传统网站一样，看起来更&quot;专业&quot;。</p>
+<p><strong>实现原理</strong>：Hash 模式监听的是 <code>hashchange</code> 事件（hash 变化时触发）；History 模式用的是 HTML5 的 History API，可以&quot;假装&quot;页面跳转了，但实际不刷新。</p>
+<p><strong>服务端配置</strong>：这是最容易踩坑的地方！Hash 模式的 <code>#</code> 后面的内容不会发送到服务器，所以服务器不需要知道路由的存在；但 History 模式的完整路径会发送到服务器，如果服务器没配置好，会返回 404。</p>
+<p><strong>SEO 友好度</strong>：搜索引擎爬虫通常不会执行 JavaScript，Hash 模式的 URL 可能被忽略；History 模式的 URL 结构清晰，更容易被收录。</p>
+<p><strong>部署难度</strong>：Hash 模式&quot;开箱即用&quot;，History 模式需要运维知识（Nginx、Apache 等）。这也是为什么很多个人项目默认用 Hash 模式的原因。</p>
+<h3 id="3-演进之路从传统网站到现代路由">3. 演进之路：从传统网站到现代路由</h3>
+<p>讲了这么多概念，我们看一个真实的案例：某电商网站是如何从&quot;传统多页面&quot;一步步进化到&quot;现代单页应用路由&quot;的。通过这个案例，你会更直观地理解前端路由解决了什么问题。</p>
+<blockquote>
+<p><strong>📖 背景知识：MPA、SPA、SSR 是什么？</strong>
+在开始案例之前，先简单介绍一下这些名词：</p>
+</blockquote>
+<ul>
+<li><strong>MPA（Multi-Page Application）</strong>：<strong>多页面应用</strong>，传统网站的开发方式。每个页面是独立的 HTML 文件，页面跳转会刷新整个页面。</li>
+<li><strong>SPA（Single-Page Application）</strong>：<strong>单页面应用</strong>，现代前端的主流方式。只有一个 HTML 入口，页面切换通过 JavaScript 动态替换组件，无刷新。</li>
+<li><strong>SSR（Server-Side Rendering）</strong>：<strong>服务端渲染</strong>，在服务器端生成完整的 HTML。结合了 SPA 和 MPA 的优点，首屏渲染快、SEO 好。</li>
+</ul>
+<p><strong>简单理解</strong>：MPA 是&quot;每次翻页都重新画&quot;，SPA 是&quot;在同一张纸上擦了再画&quot;，SSR 是&quot;提前在纸上画好再给你&quot;。</p>
+<h4 id="31-演进的全景图-1">3.1 演进的全景图</h4>
+<p>下面这张表展示了前端应用的四个演进阶段，你可以看到路由技术是如何一步步发展的：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>应用类型</th>
+<th>路由实现</th>
+<th>核心特点</th>
+<th>用户体验</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>阶段一：传统多页</strong></td>
+<td>MPA</td>
+<td>服务端路由</td>
+<td>每个页面独立 HTML 文件</td>
+<td>每次跳转都刷新</td>
+</tr>
+<tr>
+<td><strong>阶段二：早期 SPA</strong></td>
+<td>SPA（Hash 模式）</td>
+<td>Hash 路由</td>
+<td>URL 带 <code>#</code>，兼容性好</td>
+<td>无刷新，但 URL 不美观</td>
+</tr>
+<tr>
+<td><strong>阶段三：现代 SPA</strong></td>
+<td>SPA（History 模式）</td>
+<td>History 路由</td>
+<td>URL 美观，需服务端配置</td>
+<td>流畅，URL 接近传统网站</td>
+</tr>
+<tr>
+<td><strong>阶段四：混合渲染</strong></td>
+<td>SPA + SSR</td>
+<td>同构路由</td>
+<td>首屏服务端渲染，后续前端路由</td>
+<td>首屏快、SEO 好、体验流畅</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+我们逐行解读这张表：</p>
+</blockquote>
+<p><strong>阶段一 → 阶段二</strong>：从&quot;有刷新&quot;到&quot;无刷新&quot;，这是质的飞跃。用户第一次体验到了&quot;像 App 一样&quot;的流畅感，但代价是 URL 中带着 <code>#</code>，看起来不太专业。</p>
+<p><strong>阶段二 → 阶段三</strong>：从&quot;能用&quot;到&quot;好用&quot;。History 模式让 URL 变得美观，更接近传统网站，但代价是增加了部署复杂度（需要配置服务器）。</p>
+<p><strong>阶段三 → 阶段四</strong>：从&quot;体验好&quot;到&quot;体验好 + SEO 好&quot;。SSR 解决了 SPA 的 SEO 问题，首屏渲染速度也更快，但实现复杂度大幅提升。</p>
+<p><strong>总结一下</strong>：前端路由演进不只是&quot;切换变快了&quot;，而是整个应用架构的升级——从服务端主导到前端主导，再到前后端结合，每一步都在平衡用户体验、开发成本、SEO 等多个维度。</p>
+<h4 id="32-阶段一传统多页应用每次都刷新">3.2 阶段一：传统多页应用——每次都刷新</h4>
+<p>为什么叫&quot;传统多页应用&quot;？因为这个阶段每个页面都是独立的 HTML 文件，页面跳转时浏览器会重新下载所有资源（HTML、CSS、JS）。这是最早的 Web 开发方式，现在很多传统网站仍然这样运作。</p>
+<p>在这个阶段，电商网站&quot;买得多&quot;用的是典型的 MPA 架构：</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>路由实现</strong>：服务端路由，每个页面对应服务器上的一个 HTML 文件</li>
+<li><strong>页面跳转</strong>：使用 <code>&lt;a href=&quot;/products/123&quot;&gt;</code>，触发完整的页面刷新</li>
+<li><strong>状态管理</strong>：每次跳转都会丢失之前的页面状态（滚动位置、表单内容等）</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：实现简单，对搜索引擎友好（SEO 好），浏览器前进后退开箱即用</li>
+<li>❌ <strong>缺点</strong>：每次跳转都刷新，用户体验差，服务器压力大（重复加载相同资源）</li>
+</ul>
+<blockquote>
+<p><strong>查看当时的项目结构和访问流程</strong>
+<strong>项目结构</strong>（服务端渲染的典型结构）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>server/
+├── views/              # HTML 模板
+│   ├── index.html      # 首页模板
+│   ├── products.html   # 商品列表页模板
+│   └── product.html    # 商品详情页模板
+├── public/             # 静态资源
+│   ├── css/
+│   ├── js/
+│   └── images/
+└── server.js           # 服务器入口
+</code></pre>
+<p><strong>页面跳转流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 用户点击链接 &lt;a href=&quot;/products/123&quot;&gt;
+       ↓
+2. 浏览器发送 GET 请求到服务器
+       ↓
+3. 服务器渲染 product.html，插入数据
+       ↓
+4. 返回完整的 HTML 页面
+       ↓
+5. 浏览器解析 HTML、下载 CSS/JS、渲染页面
+       ↓
+6. 用户看到页面（这个过程通常需要 1-3 秒）
+</code></pre>
+<p><strong>用户的痛点</strong>：</p>
+<ul>
+<li>点击链接后页面白屏，等待时间长</li>
+<li>每次跳转都重新下载相同的 CSS/JS 文件</li>
+<li>浏览器前进后退会重新加载页面</li>
+<li>无法保存复杂的页面状态（如筛选条件、滚动位置）</li>
+</ul>
+<p>这种开发方式在小网站还能接受，但随着网站规模变大、用户对体验要求提高，这些问题开始严重影响用户留存和转化率。</p>
+<h4 id="33-阶段二早期单页应用hash-路由的时代">3.3 阶段二：早期单页应用——Hash 路由的时代</h4>
+<p>传统多页应用的问题积累到一定程度，&quot;买得多&quot;团队决定引入前端路由，升级到单页应用架构。这是一个重要的转折点——从&quot;服务端主导&quot;进入&quot;前端主导&quot;。</p>
+<p>但这个阶段也有代价：URL 中带着 <code>#</code>，看起来不够专业，搜索引擎收录也有问题。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>路由实现</strong>：Hash 路由，利用 URL 中的 <code>#</code> 部分</li>
+<li><strong>页面跳转</strong>：JavaScript 拦截链接点击，动态替换组件</li>
+<li><strong>状态管理</strong>：页面状态在客户端保持，不需要重新加载</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：无刷新切换，用户体验流畅，服务器压力减小</li>
+<li>❌ <strong>缺点</strong>：URL 带 <code>#</code>，SEO 不友好，首次加载较慢</li>
+</ul>
+<blockquote>
+<p><strong>查看 Hash 路由的实现方式</strong>
+<strong>项目结构</strong>（早期 SPA 的典型结构）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>project/
+├── index.html          # 唯一的 HTML 入口文件
+├── css/
+│   └── app.css         # 所有样式打包在一个文件
+├── js/
+│   ├── router.js       # 简单的路由实现
+│   ├── views/          # 页面组件
+│   │   ├── Home.js
+│   │   ├── ProductList.js
+│   │   └── ProductDetail.js
+│   └── app.js          # 应用入口
+└── server.js           # 简单的静态文件服务器
+</code></pre>
+<p><strong>Hash 路由的核心代码</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// router.js - 简化的 Hash 路由实现
+class HashRouter {
+  constructor(routes) {
+    this.routes = routes
+    this.currentPath = null
+
+    // 监听 hash 变化
+    window.addEventListener(&#39;hashchange&#39;, () =&gt; {
+      this.matchRoute()
+    })
+
+    // 初始化
+    this.matchRoute()
+  }
+
+  matchRoute() {
+    // 获取当前 hash（去掉 #）
+    const hash = window.location.hash.slice(1) || &#39;/&#39;
+    const route = this.routes.find(r =&gt; r.path === hash)
+
+    if (route) {
+      this.render(route.component)
+    } else {
+      this.render(NotFoundComponent)
+    }
+  }
+
+  render(component) {
+    const app = document.getElementById(&#39;app&#39;)
+    app.innerHTML = component.template()
+    component.mount?.(app)
+  }
+
+  navigate(path) {
+    window.location.hash = path
+  }
+}
+
+// 使用
+const router = new HashRouter([
+  { path: &#39;/&#39;, component: Home },
+  { path: &#39;/products&#39;, component: ProductList },
+  { path: &#39;/products/:id&#39;, component: ProductDetail }
+])
+
+// 导航
+router.navigate(&#39;/products/123&#39;)
+</code></pre>
+<p><strong>URL 形式</strong>：</p>
+<ul>
+<li>首页：<code>https://example.com/#/</code></li>
+<li>商品列表：<code>https://example.com/#/products</code></li>
+<li>商品详情：<code>https://example.com/#/products/123</code></li>
+</ul>
+<p><strong>带来的改善</strong>：</p>
+<ol>
+<li><strong>用户体验提升</strong>：页面切换无刷新，流畅自然</li>
+<li><strong>服务器压力减小</strong>：只加载一次 HTML/CSS/JS，后续只请求数据</li>
+<li><strong>状态保持</strong>：滚动位置、表单内容等状态可以在页面切换时保持</li>
+<li><strong>离线友好</strong>：配合 Service Worker 可以实现离线访问</li>
+</ol>
+<p><strong>新的痛点</strong>：</p>
+<ol>
+<li><strong>URL 不美观</strong>：<code>#</code> 让 URL 看起来像&quot;锚点跳转&quot;，不够专业</li>
+<li><strong>SEO 问题</strong>：搜索引擎爬虫可能忽略 hash 后的内容，导致页面无法被收录</li>
+<li><strong>首次加载慢</strong>：需要一次性加载所有 JavaScript，首屏时间较长</li>
+</ol>
+<h4 id="34-阶段三现代单页应用history-路由成为主流">3.4 阶段三：现代单页应用——History 路由成为主流</h4>
+<p>Hash 路由的痛点（URL 不美观、SEO 差）困扰了开发者很多年。随着 HTML5 的普及和浏览器兼容性的提升，History 路由逐渐成为主流。</p>
+<p>History 路由利用 HTML5 History API，可以让 URL 变得&quot;正常&quot;（没有 <code>#</code>），但代价是需要服务端配合配置。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>路由实现</strong>：History 路由，使用 <code>pushState</code> 和 <code>replaceState</code></li>
+<li><strong>路由库</strong>：Vue Router、React Router 等成熟路由库</li>
+<li><strong>服务端配置</strong>：需要配置服务器将所有路由回退到 <code>index.html</code></li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：URL 美观，SEO 友好，用户体验流畅</li>
+<li>❌ <strong>缺点</strong>：部署需要特殊配置，服务器端必须配合</li>
+</ul>
+<blockquote>
+<p><strong>History 路由的实现和部署配置</strong>
+<strong>项目结构</strong>（现代 SPA 的典型结构）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>project/
+├── public/
+│   └── index.html          # 唯一的 HTML 入口
+├── src/
+│   ├── router/
+│   │   └── index.js        # 路由配置
+│   ├── views/              # 页面组件
+│   │   ├── Home.vue
+│   │   ├── ProductList.vue
+│   │   └── ProductDetail.vue
+│   ├── App.vue
+│   └── main.js
+├── package.json
+└── vite.config.js          # 构建配置
+</code></pre>
+<p><strong>Vue Router 配置示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// src/router/index.js
+import { createRouter, createWebHistory } from &#39;vue-router&#39;
+
+const router = createRouter({
+  history: createWebHistory(),  // History 模式
+  routes: [
+    { path: &#39;/&#39;, component: () =&gt; import(&#39;@/views/Home.vue&#39;) },
+    { path: &#39;/products&#39;, component: () =&gt; import(&#39;@/views/ProductList.vue&#39;) },
+    { path: &#39;/products/:id&#39;, component: () =&gt; import(&#39;@/views/ProductDetail.vue&#39;) },
+    { path: &#39;/:pathMatch(.*)*&#39;, component: () =&gt; import(&#39;@/views/NotFound.vue&#39;) }
+  ]
+})
+
+export default router
+</code></pre>
+<p><strong>URL 形式</strong>：</p>
+<ul>
+<li>首页：<code>https://example.com/</code></li>
+<li>商品列表：<code>https://example.com/products</code></li>
+<li>商品详情：<code>https://example.com/products/123</code></li>
+</ul>
+<p><strong>关键：Nginx 配置</strong>（部署时必须配置）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name example.com;
+    root /var/www/app;
+    index index.html;
+
+    # 关键配置：所有路由都指向 index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+</code></pre>
+<p><strong>为什么需要这个配置？</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>场景：用户直接访问 https://example.com/products/123
+
+❌ 没有配置的情况：
+1. 浏览器向服务器请求 /products/123
+2. Nginx 在文件系统中查找 /products/123
+3. 找不到这个文件，返回 404
+
+✅ 配置了 try_files 的情况：
+1. 浏览器向服务器请求 /products/123
+2. Nginx 尝试查找文件 → 不存在
+3. 回退到 /index.html（根据 try_files 规则）
+4. 浏览器加载 index.html
+5. Vue Router 接管，解析 /products/123
+6. 渲染 ProductDetail 组件
+7. 页面正常显示！
+</code></pre>
+<p><strong>对比 Hash 模式的差异</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Hash 模式</th>
+<th>History 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>URL</td>
+<td><code>/#/products/123</code></td>
+<td><code>/products/123</code></td>
+</tr>
+<tr>
+<td>服务端配置</td>
+<td>不需要</td>
+<td><strong>必须配置</strong></td>
+</tr>
+<tr>
+<td>直接访问</td>
+<td>✅ 正常工作</td>
+<td>❌ 需要服务端支持</td>
+</tr>
+<tr>
+<td>SEO</td>
+<td>⚠️ 较差</td>
+<td>✅ 良好</td>
+</tr>
+</tbody></table></div>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/route-table.svg" aria-label="打开大图：前端路由机制图解：地址栏门牌号经路由表花名册匹配后请对应组件上台，Hash 与 History 模式对照，History 刷新分叉为 404 或 try_files 回退"><img src="../../book/assets/handdraw/route-table.svg" alt="前端路由机制图解：地址栏门牌号经路由表花名册匹配后请对应组件上台，Hash 与 History 模式对照，History 刷新分叉为 404 或 try_files 回退" loading="lazy"></a>
+  <figcaption><strong>刷新 404 不是路由坏了。</strong>地址栏是门牌号，路由表是前台花名册，对上哪行就请哪个组件上台；History 模式把整条路径发给服务器，服务器只认文件，得配 <code>try_files</code> 回退到 <code>/index.html</code>。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h4 id="35-阶段四混合渲染spa--ssr-的终极方案">3.5 阶段四：混合渲染——SPA + SSR 的终极方案</h4>
+<p>当 History 路由成熟后，团队开始关注更深层次的问题：如何既保留 SPA 的流畅体验，又解决 SEO 和首屏加载慢的问题？</p>
+<p>这个阶段的核心是&quot;同构渲染&quot;——首屏在服务端渲染（SEO 好、加载快），后续交互在前端路由（体验流畅）。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>框架选择</strong>：Next.js（React）、Nuxt.js（Vue）</li>
+<li><strong>渲染策略</strong>：服务端渲染 + 客户端水合（Hydration）</li>
+<li><strong>路由模式</strong>：History 模式（服务端已配置好）</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：首屏快、SEO 好、后续交互流畅</li>
+<li>❌ <strong>缺点</strong>：实现复杂度高，需要服务端运行环境</li>
+</ul>
+<blockquote>
+<p><strong>混合渲染的工作原理</strong>
+<strong>页面加载流程</strong>：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 用户访问 /products/123
+       ↓
+2. 服务端接收到请求
+       ↓
+3. 服务端渲染 ProductDetail 组件 → 生成完整 HTML
+       ↓
+4. 返回 HTML 到浏览器（包含了完整的内容）
+       ↓
+5. 浏览器快速显示内容（首屏渲染快）
+       ↓
+6. 加载 JavaScript，执行&quot;水合&quot;（Hydration）
+       ↓
+7. 后续页面切换由前端路由接管（无刷新）
+</code></pre>
+<p><strong>传统 SPA vs SSR 的首屏对比</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>传统 SPA</th>
+<th>SSR</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>首屏内容</td>
+<td>白屏 → 加载 JS → 渲染</td>
+<td>立即显示内容</td>
+</tr>
+<tr>
+<td>SEO</td>
+<td>爬虫可能看不到内容</td>
+<td>爬虫能看到完整 HTML</td>
+</tr>
+<tr>
+<td>首屏时间</td>
+<td>较慢（需要加载 JS）</td>
+<td>较快（HTML 已包含内容）</td>
+</tr>
+<tr>
+<td>后续交互</td>
+<td>流畅（前端路由）</td>
+<td>流畅（前端路由）</td>
+</tr>
+</tbody></table></div>
+<h3 id="4-原理深入路由的工作原理">4. 原理深入：路由的工作原理</h3>
+<p>了解了实际案例后，来看前端路由的工作原理，理解 Hash 和 History 两种模式到底有什么不同。</p>
+<h4 id="41-hash-模式的工作原理">4.1 Hash 模式的工作原理</h4>
+<p>Hash 模式的核心是利用 URL 中的 <code>hash</code> 部分（即 <code>#</code> 后面的内容）。hash 有两个重要特性：</p>
+<ol>
+<li><strong>hash 的变化不会触发页面刷新</strong></li>
+<li><strong>hash 的变化会记录在浏览器历史栈中</strong></li>
+</ol>
+<p>这意味着我们可以在不刷新页面的情况下改变 URL，同时浏览器的前进/后退按钮也能正常工作。</p>
+<p><strong>工作流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户点击链接 &lt;a href=&quot;#/user/123&quot;&gt;
+       ↓
+浏览器更新 URL（不刷新页面）
+https://example.com/#/user/123
+       ↓
+触发 hashchange 事件
+       ↓
+路由监听器捕获事件
+       ↓
+解析 hash 值 → /user/123
+       ↓
+匹配路由配置 → 找到 UserDetail 组件
+       ↓
+渲染组件到页面
+</code></pre>
+<p><strong>核心代码实现</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">class HashRouter {
+  constructor(routes) {
+    this.routes = routes
+
+    // 监听 hash 变化
+    window.addEventListener(&#39;hashchange&#39;, () =&gt; {
+      this.loadRoute()
+    })
+
+    // 初始化加载
+    this.loadRoute()
+  }
+
+  loadRoute() {
+    // 获取当前 hash，去掉开头的 #
+    const hash = window.location.hash.slice(1) || &#39;/&#39;
+    const route = this.matchRoute(hash)
+
+    if (route) {
+      this.render(route.component)
+    }
+  }
+
+  matchRoute(path) {
+    return this.routes.find(r =&gt; r.path === path)
+  }
+
+  render(component) {
+    document.getElementById(&#39;app&#39;).innerHTML = component.template()
+  }
+
+  push(path) {
+    window.location.hash = path
+  }
+}
+</code></pre>
+<blockquote>
+<p><strong>Hash 模式的优点</strong></p>
+</blockquote>
+<ul>
+<li><strong>兼容性好</strong>：IE8+ 都支持，几乎适用于所有浏览器</li>
+<li><strong>部署简单</strong>：不需要服务端配置，开箱即用</li>
+<li><strong>实现简单</strong>：只需要监听 <code>hashchange</code> 事件</li>
+</ul>
+<h4 id="42-history-模式的工作原理">4.2 History 模式的工作原理</h4>
+<p>History 模式利用 HTML5 History API，提供了 <code>pushState</code>、<code>replaceState</code> 等方法，可以改变 URL 而不刷新页面。</p>
+<p><strong>核心 API</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 添加新的历史记录
+history.pushState(state, title, url)
+// 示例：history.pushState({id: 123}, &#39;用户详情&#39;, &#39;/user/123&#39;)
+
+// 替换当前历史记录
+history.replaceState(state, title, url)
+
+// 监听历史记录变化（前进/后退按钮）
+window.addEventListener(&#39;popstate&#39;, (event) =&gt; {
+  // event.state 包含 pushState 时传入的 state
+})
+</code></pre>
+<p><strong>工作流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户点击链接 &lt;a href=&quot;/user/123&quot;&gt;
+       ↓
+JavaScript 拦截点击事件
+event.preventDefault()
+       ↓
+调用 history.pushState
+history.pushState({id: 123}, &#39;用户详情&#39;, &#39;/user/123&#39;)
+       ↓
+URL 更新（不刷新页面）
+https://example.com/user/123
+       ↓
+路由匹配并渲染组件
+       ↓
+用户点击浏览器后退按钮
+       ↓
+触发 popstate 事件
+       ↓
+路由监听器捕获事件
+       ↓
+根据新 URL 渲染对应组件
+</code></pre>
+<p><strong>核心代码实现</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">class HistoryRouter {
+  constructor(routes) {
+    this.routes = routes
+
+    // 拦截所有链接点击
+    document.addEventListener(&#39;click&#39;, (e) =&gt; {
+      const link = e.target.closest(&#39;a&#39;)
+      if (link &amp;&amp; link.getAttribute(&#39;href&#39;).startsWith(&#39;/&#39;)) {
+        e.preventDefault()
+        this.push(link.getAttribute(&#39;href&#39;))
+      }
+    })
+
+    // 监听浏览器前进/后退
+    window.addEventListener(&#39;popstate&#39;, () =&gt; {
+      this.loadRoute()
+    })
+
+    // 初始化加载
+    this.loadRoute()
+  }
+
+  loadRoute() {
+    const path = window.location.pathname
+    const route = this.matchRoute(path)
+
+    if (route) {
+      this.render(route.component)
+    }
+  }
+
+  push(path) {
+    history.pushState({}, &#39;&#39;, path)
+    this.loadRoute()
+  }
+
+  render(component) {
+    document.getElementById(&#39;app&#39;).innerHTML = component.template()
+  }
+}
+</code></pre>
+<blockquote>
+<p><strong>History 模式的陷阱</strong>
+History 模式最大的问题在于：<strong>当用户直接访问某个 URL 或刷新页面时，浏览器会向服务器发送请求</strong>。</p>
+</blockquote>
+<p>如果服务器没有正确配置，会返回 404。解决方案是配置服务器让所有路由都回退到 <code>index.html</code>，让前端路由接管后续处理。</p>
+<h3 id="5-路由配置实战指南">5. 路由配置实战指南</h3>
+<p>理论讲得差不多了，下面是实际项目中常用的路由配置模式和最佳实践。</p>
+<h4 id="51-基础路由配置">5.1 基础路由配置</h4>
+<blockquote>
+<p><strong>Vue Router 完整配置示例</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// src/router/index.js
+import { createRouter, createWebHistory } from &#39;vue-router&#39;
+import Home from &#39;@/views/Home.vue&#39;
+import NotFound from &#39;@/views/NotFound.vue&#39;
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: &#39;/&#39;,
+      name: &#39;Home&#39;,
+      component: Home
+    },
+    {
+      path: &#39;/user/:id&#39;,
+      name: &#39;UserDetail&#39;,
+      component: () =&gt; import(&#39;@/views/UserDetail.vue&#39;),
+      props: true  // 将路由参数作为 props 传递
+    },
+    {
+      path: &#39;/:pathMatch(.*)*&#39;,
+      name: &#39;NotFound&#39;,
+      component: NotFound
+    }
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    // 滚动行为：返回时保持滚动位置，否则滚动到顶部
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
+})
+
+export default router
+</code></pre>
+<h4 id="52-路由懒加载提升首屏性能">5.2 路由懒加载：提升首屏性能</h4>
+<p>路由懒加载是指只在访问某个路由时才加载对应的组件，而不是一次性加载所有组件。这可以显著减少首屏加载时间。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 一次性加载所有组件（首屏慢）
+import Home from &#39;@/views/Home.vue&#39;
+import About from &#39;@/views/About.vue&#39;
+import User from &#39;@/views/User.vue&#39;
+
+const routes = [
+  { path: &#39;/&#39;, component: Home },
+  { path: &#39;/about&#39;, component: About },
+  { path: &#39;/user&#39;, component: User }
+]
+
+// ✅ 懒加载（首屏快）
+const routes = [
+  { path: &#39;/&#39;, component: () =&gt; import(&#39;@/views/Home.vue&#39;) },
+  { path: &#39;/about&#39;, component: () =&gt; import(&#39;@/views/About.vue&#39;) },
+  { path: &#39;/user&#39;, component: () =&gt; import(&#39;@/views/User.vue&#39;) }
+]
+</code></pre>
+<blockquote>
+<p><strong>懒加载的原理</strong>
+当你使用 <code>import(&#39;@/views/Home.vue&#39;)</code> 时，Webpack/Vite 会把这个组件打包成单独的文件。只有当用户访问这个路由时，才会下载对应的文件。</p>
+</blockquote>
+<p>打个比方：懒加载就像&quot;按需点菜&quot;，而不是一次性把所有菜都端上来。这样可以减少首屏加载时间，提升用户体验。</p>
+<h4 id="53-路由守卫权限控制与导航拦截">5.3 路由守卫：权限控制与导航拦截</h4>
+<p>路由守卫可以在路由跳转前后执行逻辑，常用于权限验证、页面标题设置、数据预加载等场景。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 全局前置守卫
+router.beforeEach(async (to, from, next) =&gt; {
+  // 设置页面标题
+  document.title = to.meta.title || &#39;My App&#39;
+
+  // 权限验证
+  if (to.meta.requiresAuth) {
+    const isAuthenticated = await checkAuth()
+    if (!isAuthenticated) {
+      next(&#39;/login&#39;)
+      return
+    }
+  }
+
+  next()
+})
+
+// 全局后置钩子
+router.afterEach((to, from) =&gt; {
+  // 页面访问统计
+  analytics.trackPageView(to.path)
+})
+
+// 路由级守卫
+const routes = [
+  {
+    path: &#39;/admin&#39;,
+    component: Admin,
+    meta: { requiresAuth: true, roles: [&#39;admin&#39;] },
+    beforeEnter: (to, from, next) =&gt; {
+      // 这个路由的专属逻辑
+      if (hasPermission()) {
+        next()
+      } else {
+        next(&#39;/403&#39;)
+      }
+    }
+  }
+]
+</code></pre>
+<blockquote>
+<p><strong>路由守卫的常见用途</strong></p>
+</blockquote>
+<ul>
+<li><strong>权限验证</strong>：检查用户是否有权限访问某个页面</li>
+<li><strong>页面标题</strong>：动态设置 document.title</li>
+<li><strong>数据预加载</strong>：在进入页面前提前获取数据</li>
+<li><strong>进度条</strong>：显示页面切换的进度条</li>
+<li><strong>访问统计</strong>：记录页面访问情况</li>
+</ul>
+<h3 id="6-常见问题与解决方案">6. 常见问题与解决方案</h3>
+<h4 id="61-部署后刷新-404">6.1 部署后刷新 404</h4>
+<p><strong>问题</strong>：本地开发正常，部署到服务器后，直接访问某个路由或刷新页面会显示 404。</p>
+<p><strong>原因</strong>：History 模式下，服务器会将 URL 当作文件路径去查找，但 SPA 的所有路由其实都指向 <code>index.html</code>。</p>
+<p><strong>解决方案</strong>：配置服务器 fallback。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx"># Nginx 配置
+location / {
+    try_files $uri $uri/ /index.html;
+}
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-apache"># Apache 配置（.htaccess）
+&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+&lt;/IfModule&gt;
+</code></pre>
+<h4 id="62-路由参数丢失">6.2 路由参数丢失</h4>
+<p><strong>问题</strong>：页面刷新后，路由参数 <code>$route.params</code> 丢失。</p>
+<p><strong>原因</strong>：路由参数只在路由跳转时存在，刷新后需要从 URL 中重新解析。</p>
+<p><strong>解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 错误做法：只在 created 时获取参数
+created() {
+  const userId = this.$route.params.id
+  this.fetchUser(userId)
+}
+
+// ✅ 正确做法：监听路由变化
+watch: {
+  &#39;$route.params.id&#39;: {
+    immediate: true,
+    handler(newId) {
+      this.fetchUser(newId)
+    }
+  }
+}
+</code></pre>
+<h4 id="63-页面切换时滚动位置异常">6.3 页面切换时滚动位置异常</h4>
+<p><strong>问题</strong>：页面切换后，滚动位置没有重置，或者返回时没有保持之前的位置。</p>
+<p><strong>解决方案</strong>：配置路由的 <code>scrollBehavior</code>。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const router = createRouter({
+  scrollBehavior(to, from, savedPosition) {
+    // 返回时保持滚动位置
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 跳转到锚点
+    if (to.hash) {
+      return { el: to.hash }
+    }
+    // 否则滚动到顶部
+    return { top: 0 }
+  }
+})
+</code></pre>
+<h3 id="7-总结-4">7. 总结</h3>
+<p>我们用一张表格回顾前端路由的核心概念：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话解释</th>
+<th>解决的问题</th>
+<th>代表方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>路由</strong></td>
+<td>URL 和组件的映射关系</td>
+<td>访问不同 URL 显示不同内容</td>
+<td>Vue Router、React Router</td>
+</tr>
+<tr>
+<td><strong>Hash 模式</strong></td>
+<td>利用 URL hash 实现路由</td>
+<td>兼容性好、部署简单</td>
+<td>Vue Router Hash 模式</td>
+</tr>
+<tr>
+<td><strong>History 模式</strong></td>
+<td>利用 History API 实现路由</td>
+<td>URL 美观、SEO 好</td>
+<td>Vue Router History 模式</td>
+</tr>
+<tr>
+<td><strong>路由懒加载</strong></td>
+<td>按需加载路由组件</td>
+<td>减少首屏加载时间</td>
+<td><code>() =&gt; import(&#39;./Page.vue&#39;)</code></td>
+</tr>
+<tr>
+<td><strong>路由守卫</strong></td>
+<td>路由跳转前后的钩子函数</td>
+<td>权限控制、数据预加载</td>
+<td><code>beforeEach</code>、<code>beforeEnter</code></td>
+</tr>
+<tr>
+<td><strong>动态路由</strong></td>
+<td>带参数的路由</td>
+<td>匹配一类路径而非单个</td>
+<td><code>/user/:id</code></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>写在最后</strong>
+前端路由是现代单页应用的核心技术之一。从早期的 Hash 模式到现在主流的 History 模式，路由技术在不断进化，为用户提供更流畅的浏览体验。</p>
+</blockquote>
+<p>理解路由的原理和模式，能让你在遇到部署、性能、SEO 问题时快速定位、精准解决。更重要的是，它能在项目架构设计时帮你选得更准——什么时候用 Hash、什么时候用 History、如何避免常见的坑。</p>
+<p>到这里，你应该能建立起对前端路由的整体认知。当你在实际项目中遇到路由相关的问题时，能够知道从哪里入手、如何定位、怎样解决。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-106.html">← 状态管理哲学</a><a rel="next" href="chapter-108.html">图形与动画（Canvas / SVG / WebGL） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

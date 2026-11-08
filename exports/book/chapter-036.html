@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>现代 AI 生图 SaaS · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 36 / 195</p><article><h1 id="现代-ai-生图-saas">现代 AI 生图 SaaS</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#现代-ai-生图-saas-开发实战">现代 AI 生图 SaaS 开发实战</a><ul><li><a href="#概述-2">概述</a></li><li><a href="#前置知识-2">前置知识</a></li><li><a href="#学习目标-2">学习目标</a></li><li><a href="#项目简介-2">项目简介</a></li><li><a href="#第一部分需求分析-2">第一部分：需求分析</a></li><li><a href="#第二部分搭建项目骨架-2">第二部分：搭建项目骨架</a></li><li><a href="#第三部分迭代开发">第三部分：迭代开发</a></li><li><a href="#第四部分联调与上线-2">第四部分：联调与上线</a></li><li><a href="#交付物-2">交付物</a></li><li><a href="#评分标准-2">评分标准</a></li><li><a href="#参考资料-5">参考资料</a></li></ul></li></ul></nav></details><h2 id="现代-ai-生图-saas-开发实战">现代 AI 生图 SaaS 开发实战</h2>
+<h3 id="概述-2">概述</h3>
+<p>本实战项目要求你围绕一份真实的 PRD（产品需求文档），从零完成一个参考 Midjourney 体验的 AI 生图 SaaS 产品。你将完整经历需求分析、项目拆解、迭代开发、联调上线的全过程。</p>
+<p>这是 Stage 2 的综合实战环节。在前面几章中，你已经分别学习了前端页面设计、后端接口开发、数据库操作、支付集成等单项技能——这个项目要求你把它们全部串起来，交付一个可运行的产品原型。</p>
+<h3 id="前置知识-2">前置知识</h3>
+<p>在开始本项目之前，你应该已经掌握以下内容：</p>
+<ul>
+<li>前端页面设计与组件库使用（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">现代组件库</a>）</li>
+<li>后端接口设计与开发（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">接口代码编写</a>）</li>
+<li>数据库基础与 Supabase（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a>）</li>
+<li>支付集成（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/stripe-payment/index.md">Stripe 收费系统</a>）</li>
+<li>Git 工作流与部署（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">部署 Web 应用</a>）</li>
+</ul>
+<h3 id="学习目标-2">学习目标</h3>
+<p>完成本实战后，你将能够：</p>
+<ol>
+<li>阅读并理解一份真实的 PRD，从中提取开发任务清单</li>
+<li>基于 PRD 拆分模块，制定分步推进计划</li>
+<li>使用 AI 辅助完成前端骨架搭建和后端接口开发</li>
+<li>逐个模块验证、迭代优化</li>
+<li>完成端到端联调，将项目从&quot;能跑&quot;推进到&quot;能交付&quot;</li>
+</ol>
+<h3 id="项目简介-2">项目简介</h3>
+<p>你要构建的产品是一个现代 AI 生图 SaaS 平台，包含三个子系统：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>子系统</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>官网前台</strong></td>
+<td>产品介绍、定价、FAQ、注册转化</td>
+</tr>
+<tr>
+<td><strong>用户工作台</strong></td>
+<td>Prompt 输入、图片生成、图库、积分、套餐、社区互动</td>
+</tr>
+<tr>
+<td><strong>后台管理台</strong></td>
+<td>用户管理、任务管理、支付管理、内容审核、SaaS 指标、系统监控</td>
+</tr>
+</tbody></table></div>
+<p>后端需要支持以下核心能力：用户鉴权、图片生成任务、OSS 对象存储、积分与套餐支付、图片社交互动、运营数据监控。</p>
+<blockquote>
+<p><strong>PRD 入口</strong>
+本项目的需求文档在 GitHub： <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/modern-landing-page/PRD.md">查看 PRD</a></p>
+</blockquote>
+<div style="margin: 32px 0;">
+      { title: '需求分析', description: '阅读 PRD，提取页面、模块、数据模型和边界' },
+      { title: '搭建骨架', description: '用 AI 生成三套前端骨架（www / app / admin）' },
+      { title: '迭代开发', description: '逐模块补充接口、权限、支付、监控' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
+    ]" />
+</div><h3 id="第一部分需求分析-2">第一部分：需求分析</h3>
+<h4 id="11-阅读-prd-2">1.1 阅读 PRD</h4>
+<p>打开 PRD 文档，重点回答以下问题：</p>
+<ul>
+<li>系统有几个入口？各自覆盖哪些页面？</li>
+<li>每个页面的核心功能是什么？</li>
+<li>后端包含哪些模块和数据库表？</li>
+<li>MVP 范围是什么？第一版哪些做，哪些不做？</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ warning</strong>
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。</p>
+</blockquote>
+<h4 id="12-确认系统架构-2">1.2 确认系统架构</h4>
+<p>根据 PRD 中的描述，梳理出系统的整体架构：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  prd[&quot;PRD&quot;] --&gt; web[&quot;官网前台&quot;]
+  prd --&gt; app[&quot;用户工作台&quot;]
+  prd --&gt; admin[&quot;后台管理台&quot;]
+  app --&gt; auth[&quot;鉴权&quot;]
+  app --&gt; gen[&quot;图片生成任务&quot;]
+  gen --&gt; oss[&quot;OSS 对象存储&quot;]
+  gen --&gt; db[&quot;数据库&quot;]
+  billing[&quot;支付与套餐&quot;] --&gt; db
+  social[&quot;分享 / 点赞 / 评论 / 转发&quot;] --&gt; db
+  admin --&gt; analytics[&quot;SaaS 指标看板&quot;]
+  admin --&gt; observability[&quot;API / DB / Provider 监控&quot;]
+</code></pre>
+<p>建议你用自己的话把架构图画一遍，确认你对系统的理解是完整的。</p>
+<h3 id="第二部分搭建项目骨架-2">第二部分：搭建项目骨架</h3>
+<h4 id="21-生成前端页面-2">2.1 生成前端页面</h4>
+<p>使用 AI 先生成所有页面的基本结构和假数据。这一步的目标是搭出信息架构和路由，不需要接真实接口。</p>
+<p>提示词参考：</p>
+<pre class="prose-block"><code class="language-text">请基于当前 PRD，帮我生成一个现代 AI 生图 SaaS 的前端骨架。
+
+要求：
+1. 分成三个入口：www、app、admin
+2. 官网包括：首页、定价、FAQ
+3. app 包括：登录、注册、生成工作台、图库、套餐、积分、社区、作品详情、个人中心
+4. admin 包括：后台首页、用户管理、任务管理、内容管理、套餐管理、支付订单、运营配置、SaaS 指标、系统监控
+5. 先只生成页面结构和假数据，不接真实接口
+6. 风格参考 Midjourney，简洁、现代、带产品感
+</code></pre>
+<h4 id="22-验证页面结构">2.2 验证页面结构</h4>
+<p>骨架生成后，逐项检查：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 三个入口的路由是否独立（<code>/</code>、<code>/app</code>、<code>/admin</code>）</li>
+<li><input disabled="" type="checkbox"> 页面数量是否与 PRD 一致</li>
+<li><input disabled="" type="checkbox"> 每个页面是否可以正常访问和导航</li>
+<li><input disabled="" type="checkbox"> 假数据是否展示了基本的 UI 状态（列表、空状态、表单等）</li>
+</ul>
+<h3 id="第三部分迭代开发">第三部分：迭代开发</h3>
+<h4 id="31-按模块推进">3.1 按模块推进</h4>
+<p>在骨架的基础上，按以下顺序逐模块补充功能：</p>
+<ol>
+<li><strong>鉴权</strong>：注册、登录、角色区分</li>
+<li><strong>数据库</strong>：数据表创建、读写接口</li>
+<li><strong>核心业务</strong>：图片生成任务、结果存储</li>
+<li><strong>OSS 存储</strong>：图片上传与访问</li>
+<li><strong>支付</strong>：套餐、积分、Stripe 集成</li>
+<li><strong>社交互动</strong>：分享、点赞、评论</li>
+<li><strong>后台管理</strong>：用户管理、任务管理、内容审核</li>
+<li><strong>数据监控</strong>：SaaS 指标看板、系统监控</li>
+</ol>
+<p>每完成一个模块，按下表自检：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>验证方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>页面一致性</td>
+<td>页面数量、入口、功能是否符合 PRD</td>
+</tr>
+<tr>
+<td>接口正确性</td>
+<td>请求参数、返回结构、状态处理是否合理</td>
+</tr>
+<tr>
+<td>权限隔离</td>
+<td>普通用户和管理员是否互相隔离</td>
+</tr>
+<tr>
+<td>数据一致性</td>
+<td>数据库、OSS、支付、积分是否对得上</td>
+</tr>
+<tr>
+<td>可演示性</td>
+<td>是否能给别人完整演示一条业务链路</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>tip</strong>
+如果发现 AI 生成的内容偏离了 PRD，不要整页推翻重来，直接让它修改具体模块即可。</p>
+</blockquote>
+<h4 id="32-角色与分工">3.2 角色与分工</h4>
+<p>在迭代过程中，你需要同时扮演三个角色：</p>
+<ul>
+<li><strong>产品经理</strong>：确认每个模块的功能是否符合 PRD</li>
+<li><strong>技术负责人</strong>：确认实现方案是否合理</li>
+<li><strong>测试工程师</strong>：确认功能是否跑得通</li>
+</ul>
+<h3 id="第四部分联调与上线-2">第四部分：联调与上线</h3>
+<h4 id="41-端到端测试-2">4.1 端到端测试</h4>
+<p>最后阶段别再加新页面，把完整业务链路跑通。至少验证以下场景：</p>
+<ul>
+<li>注册 → 购买积分 → 生成图片 → 查看历史 → 分享互动</li>
+<li>管理员登录 → 查看用户数据 → 查看任务统计 → 查看系统监控</li>
+</ul>
+<h4 id="42-部署-2">4.2 部署</h4>
+<p>将项目部署到公网环境，确保：</p>
+<ul>
+<li>环境变量配置完整</li>
+<li>登录回调地址正确</li>
+<li>支付回调地址正确</li>
+<li>页面无缺失的 loading、空状态、错误提示</li>
+</ul>
+<p>部署教程参考：<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub 工作流</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">如何部署 Web 应用</a>。</p>
+<h3 id="交付物-2">交付物</h3>
+<p>完成本项目后，你需要提交以下内容：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 可访问的线上演示链接</li>
+<li><input disabled="" type="checkbox"> 源码仓库链接（含 README）</li>
+<li><input disabled="" type="checkbox"> PRD 文档</li>
+<li><input disabled="" type="checkbox"> 核心页面截图（官网首页、生图工作台、图库、套餐页、后台首页）</li>
+<li><input disabled="" type="checkbox"> 60 秒演示视频（覆盖注册 → 生成 → 查看 → 后台管理）</li>
+</ul>
+<p>README 至少包含：项目简介、核心页面说明、技术栈、本地启动步骤、环境变量清单。</p>
+<h3 id="评分标准-2">评分标准</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>基本要求</th>
+<th>进阶要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PRD 对齐</td>
+<td>页面、功能、数据结构基本符合 PRD</td>
+<td>能清晰说明每个设计决策与 PRD 的对应关系</td>
+</tr>
+<tr>
+<td>产品闭环</td>
+<td>注册 → 购买积分 → 生成图片 → 查看历史 → 分享互动可跑通</td>
+<td>支付状态、积分余额、生成次数数据一致</td>
+</tr>
+<tr>
+<td>后台能力</td>
+<td>用户、任务、支付、内容管理可查看</td>
+<td>SaaS 指标看板和系统监控页完整可用</td>
+</tr>
+<tr>
+<td>工程完整度</td>
+<td>前端、后端、数据库、OSS、支付链路已接通</td>
+<td>有错误处理、空状态、loading 状态</td>
+</tr>
+<tr>
+<td>交付质量</td>
+<td>可部署、可运行</td>
+<td>README 清楚、演示视频结构完整</td>
+</tr>
+</tbody></table></div>
+<h3 id="参考资料-5">参考资料</h3>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/multi-product-ui/index.md">参考 UI 设计规范设计页面和按钮</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/llm-skills-beautiful/index.md">用 LLM 和 Skills 让界面变好看</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/design-to-code/index.md">从设计原型到项目代码</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">使用现代组件库更新你的界面</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">大模型辅助编写接口代码与接口文档</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub 工作流</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">如何部署 Web 应用</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/stripe-payment/index.md">如何集成 Stripe 等收费系统</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-035.html">← 在线考试与管理系统</a><a rel="next" href="chapter-037.html">类 Dify 智能体平台 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

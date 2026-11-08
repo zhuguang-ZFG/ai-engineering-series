@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PRD：Go 交通数据分析与可视化平台 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 187 / 195</p><article><h1 id="prdgo-交通数据分析与可视化平台">PRD：Go 交通数据分析与可视化平台</h1><details class="contents"><summary>本章目录 <span>· 18 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-项目定位-6">1. 项目定位</a></li><li><a href="#10-技术选型建议-3">1.0 技术选型建议</a></li><li><a href="#11-竞品参考官方-3">1.1 竞品参考（官方）</a></li><li><a href="#12-产品借鉴点-3">1.2 产品借鉴点</a></li><li><a href="#13-竞品页面拆解-3">1.3 竞品页面拆解</a></li><li><a href="#2-目标用户与核心目标-6">2. 目标用户与核心目标</a></li><li><a href="#3-mvp-范围-6">3. MVP 范围</a></li><li><a href="#4-角色与权限-6">4. 角色与权限</a></li><li><a href="#5-前端实现-4">5. 前端实现</a></li><li><a href="#51-页面架构总览-4">5.1 页面架构总览</a><ul><li><a href="#a-分析看板-appxxxcom">A. 分析看板 app.xxx.com</a></li><li><a href="#1-总览页-appdashboard">1. 总览页 app:/dashboard</a></li><li><a href="#2-趋势页-appdashboardtrend">2. 趋势页 app:/dashboard/trend</a></li><li><a href="#3-路口排行页-appdashboardintersections">3. 路口排行页 app:/dashboard/intersections</a></li><li><a href="#4-告警页-appalerts">4. 告警页 app:/alerts</a></li><li><a href="#b-后台管理台-adminxxxcom">B. 后台管理台 admin.xxx.com</a></li><li><a href="#5-数据导入页-adminimports">5. 数据导入页 admin:/imports</a></li><li><a href="#6-任务与告警管理页-adminoperations">6. 任务与告警管理页 admin:/operations</a></li></ul></li><li><a href="#52-关键用户链路-3">5.2 关键用户链路</a></li><li><a href="#6-后端实现-6">6. 后端实现</a></li><li><a href="#61-后台指标与监控-5">6.1 后台指标与监控</a></li><li><a href="#7-指标与规则">7. 指标与规则</a></li><li><a href="#8-接口草案-5">8. 接口草案</a></li><li><a href="#9-非功能要求-3">9. 非功能要求</a></li><li><a href="#10-开发顺序建议-3">10. 开发顺序建议</a></li><li><a href="#11-待确认项-3">11. 待确认项</a></li></ul></nav></details><p>状态：Draft v0.1<br>目标：先明确数据产品的口径、模块和接口，再进入实现。</p>
+<h2 id="1-项目定位-6">1. 项目定位</h2>
+<p>这是一个“数据接入 + 聚合分析 + 看板展示”的完整型项目。重点是把原始交通数据转换成可读的分析结果和告警。</p>
+<p>一句话定义：
+做一个支持事件接入、窗口聚合、异常检测和大屏展示的 Go 数据分析平台。</p>
+<p>系统总览：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart LR
+  SOURCE[&quot;数据源 / 模拟器&quot;] --&gt; API[&quot;Go API&quot;]
+  API --&gt; RAW[&quot;原始数据表&quot;]
+  RAW --&gt; AGG[&quot;聚合任务&quot;]
+  AGG --&gt; ALERT[&quot;告警规则&quot;]
+  AGG --&gt; DASH[&quot;Dashboard API&quot;]
+  ALERT --&gt; DASH
+  ADMIN[&quot;admin.xxx.com&lt;br/&gt;管理后台&quot;] --&gt; DASH
+</code></pre>
+<h2 id="10-技术选型建议-3">1.0 技术选型建议</h2>
+<ul>
+<li>后端框架：<code>Go + Gin/Fiber</code></li>
+<li>数据库：<code>PostgreSQL</code></li>
+<li>聚合任务：<code>robfig/cron</code></li>
+<li>前端：<code>React / Next.js</code></li>
+<li>图表：<code>ECharts</code> 或 <code>AntV</code></li>
+</ul>
+<p>站点入口约定：</p>
+<ul>
+<li>分析看板：<code>app.xxx.com</code></li>
+<li>后台管理台：<code>admin.xxx.com</code></li>
+</ul>
+<h2 id="11-竞品参考官方-3">1.1 竞品参考（官方）</h2>
+<ul>
+<li><a href="https://www.tomtom.com/traffic-index/">TomTom Traffic Index</a></li>
+</ul>
+<h2 id="12-产品借鉴点-3">1.2 产品借鉴点</h2>
+<p>本项目的产品设计建议参考真实交通分析产品：</p>
+<ul>
+<li>借鉴 <code>TomTom Traffic Index</code> 的指标表达方式：趋势、拥堵程度、城市/路口排行应直观可读</li>
+<li>看板首页应优先展示关键指标和异常信息，而不是堆很多图</li>
+<li>趋势页、排行页、告警页要有清晰的分工</li>
+<li>管理端应强调数据导入、任务状态和告警处理，而不是只看静态图表</li>
+<li>整体设计要更像数据产品和运营看板，而不是普通后台列表</li>
+</ul>
+<h2 id="13-竞品页面拆解-3">1.3 竞品页面拆解</h2>
+<p>建议重点参考的竞品页面结构：</p>
+<ul>
+<li><code>TomTom Traffic Index</code> 的总览页<ul>
+<li>重点看：如何用少量关键指标快速建立全局认知</li>
+</ul>
+</li>
+<li><code>TomTom Traffic Index</code> 的趋势和排名表达<ul>
+<li>重点看：图表和排行如何帮助用户快速理解问题</li>
+</ul>
+</li>
+<li>数据产品常见监控页<ul>
+<li>重点看：告警、数据状态和任务状态如何分区展示</li>
+</ul>
+</li>
+</ul>
+<p>因此本项目建议：</p>
+<ul>
+<li>总览页强调关键指标</li>
+<li>趋势页强调时间变化</li>
+<li>告警页强调异常定位</li>
+<li>管理端强调数据导入和任务健康状态</li>
+</ul>
+<h2 id="2-目标用户与核心目标-6">2. 目标用户与核心目标</h2>
+<p>目标用户：</p>
+<ul>
+<li>关注交通趋势和拥堵状态的分析人员</li>
+<li>查看异常告警与处理结果的管理员</li>
+</ul>
+<p>核心目标：</p>
+<ul>
+<li>原始数据可稳定接入</li>
+<li>聚合指标可查询</li>
+<li>告警可见、可处理</li>
+<li>可视化页面可支撑汇报和演示</li>
+</ul>
+<h2 id="3-mvp-范围-6">3. MVP 范围</h2>
+<p>第一版必须包含：</p>
+<ul>
+<li>数据接入接口</li>
+<li>原始数据落库</li>
+<li>定时聚合任务</li>
+<li>异常检测规则</li>
+<li>趋势图、Top 路口、告警面板</li>
+<li>管理端数据导入或模拟数据入口</li>
+</ul>
+<p>第一版不做：</p>
+<ul>
+<li>Kafka/Flink 级流处理</li>
+<li>复杂 GIS 地图引擎</li>
+<li>机器学习预测模型</li>
+<li>多租户平台权限</li>
+</ul>
+<h2 id="4-角色与权限-6">4. 角色与权限</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分析用户</td>
+<td>查看看板、趋势、排行榜</td>
+</tr>
+<tr>
+<td>管理员</td>
+<td>导入数据、处理告警、查看任务状态</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-前端实现-4">5. 前端实现</h2>
+<h2 id="51-页面架构总览-4">5.1 页面架构总览</h2>
+<p>当前 PRD 定义为 <code>2 套入口，6 个大页面</code>：</p>
+<ul>
+<li>用户看板 <code>4</code> 个大页面</li>
+<li>后台管理台 <code>2</code> 个大页面</li>
+</ul>
+<h3 id="a-分析看板-appxxxcom">A. 分析看板 <code>app.xxx.com</code></h3>
+<h3 id="1-总览页-appdashboard">1. 总览页 <code>app:/dashboard</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>总车流</li>
+<li>当前告警数</li>
+<li>最拥堵路口</li>
+</ul>
+<h3 id="2-趋势页-appdashboardtrend">2. 趋势页 <code>app:/dashboard/trend</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>车流趋势图</li>
+<li>时间范围切换</li>
+</ul>
+<h3 id="3-路口排行页-appdashboardintersections">3. 路口排行页 <code>app:/dashboard/intersections</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>拥堵排行</li>
+<li>关键路口指标</li>
+</ul>
+<h3 id="4-告警页-appalerts">4. 告警页 <code>app:/alerts</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看告警</li>
+<li>筛选级别</li>
+<li>标记处理状态</li>
+</ul>
+<h3 id="b-后台管理台-adminxxxcom">B. 后台管理台 <code>admin.xxx.com</code></h3>
+<h3 id="5-数据导入页-adminimports">5. 数据导入页 <code>admin:/imports</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>导入 CSV</li>
+<li>查看导入任务状态</li>
+</ul>
+<h3 id="6-任务与告警管理页-adminoperations">6. 任务与告警管理页 <code>admin:/operations</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看聚合任务状态</li>
+<li>查看告警处理记录</li>
+</ul>
+<h2 id="52-关键用户链路-3">5.2 关键用户链路</h2>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  source[&quot;数据源&quot;] --&gt; ingest[&quot;接入接口&quot;]
+  ingest --&gt; raw[&quot;原始数据表&quot;]
+  raw --&gt; agg[&quot;聚合任务&quot;]
+  agg --&gt; trend[&quot;趋势页&quot;]
+  agg --&gt; rank[&quot;排行页&quot;]
+  agg --&gt; alerts[&quot;告警页&quot;]
+  admin[&quot;管理员&quot;] --&gt; imports[&quot;数据导入页&quot;]
+  imports --&gt; ingest
+  admin --&gt; ops[&quot;任务与告警管理页&quot;]
+</code></pre>
+<p>关键状态流：</p>
+<ul>
+<li>数据事件：接收成功 / 校验失败</li>
+<li>聚合任务：待执行 -&gt; 执行中 -&gt; 成功 / 失败</li>
+<li>告警：新建 -&gt; 已确认 -&gt; 已处理</li>
+</ul>
+<p>推荐技术栈：</p>
+<ul>
+<li>React / Next.js</li>
+<li>ECharts / AntV</li>
+<li>TypeScript</li>
+</ul>
+<p>建议页面：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>总览看板</td>
+<td><code>/dashboard</code></td>
+<td>今日流量、拥堵指数、告警数</td>
+</tr>
+<tr>
+<td>趋势页</td>
+<td><code>/dashboard/trend</code></td>
+<td>分时趋势图</td>
+</tr>
+<tr>
+<td>路口分析页</td>
+<td><code>/dashboard/intersections</code></td>
+<td>Top 路口排行</td>
+</tr>
+<tr>
+<td>告警页</td>
+<td><code>/alerts</code></td>
+<td>告警列表与处理状态</td>
+</tr>
+<tr>
+<td>数据管理页</td>
+<td><code>/admin/imports</code></td>
+<td>导入数据、查看任务日志</td>
+</tr>
+</tbody></table></div>
+<p>前端关键组件：</p>
+<ul>
+<li>指标卡片</li>
+<li>折线图/柱状图</li>
+<li>排行榜表格</li>
+<li>告警列表</li>
+<li>时间范围筛选器</li>
+</ul>
+<h2 id="6-后端实现-6">6. 后端实现</h2>
+<p>推荐技术栈：</p>
+<ul>
+<li>Go</li>
+<li>Gin 或 Fiber</li>
+<li>PostgreSQL</li>
+<li>robfig/cron</li>
+</ul>
+<p>后端模块：</p>
+<ul>
+<li><code>ingest</code></li>
+<li><code>aggregation</code></li>
+<li><code>alerts</code></li>
+<li><code>dashboard</code></li>
+<li><code>imports</code></li>
+<li><code>admin</code></li>
+</ul>
+<p>建议数据表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">raw_traffic_events (
+  id bigserial primary key,
+  intersection_id text,
+  event_time timestamptz,
+  vehicle_count int,
+  avg_speed numeric,
+  source text,
+  created_at timestamptz
+)
+
+traffic_agg_1m (
+  id bigserial primary key,
+  intersection_id text,
+  window_start timestamptz,
+  total_vehicles int,
+  avg_speed numeric,
+  congestion_index numeric
+)
+
+traffic_agg_5m (
+  id bigserial primary key,
+  intersection_id text,
+  window_start timestamptz,
+  total_vehicles int,
+  avg_speed numeric,
+  congestion_index numeric
+)
+
+alerts (
+  id bigserial primary key,
+  intersection_id text,
+  level text,
+  rule_code text,
+  status text,
+  message text,
+  created_at timestamptz,
+  resolved_at timestamptz
+)
+
+import_jobs (
+  id bigserial primary key,
+  filename text,
+  status text,
+  total_rows int,
+  success_rows int,
+  failed_rows int,
+  created_at timestamptz
+)
+</code></pre>
+<h2 id="61-后台指标与监控-5">6.1 后台指标与监控</h2>
+<p>后台建议至少查看这些指标：</p>
+<ul>
+<li>接入事件总数</li>
+<li>聚合任务成功率</li>
+<li>告警总数与处理率</li>
+<li>热点路口排行</li>
+<li>导入任务成功率</li>
+</ul>
+<p>基础监控建议：</p>
+<ul>
+<li>接入接口错误率</li>
+<li>聚合任务耗时</li>
+<li>数据库写入失败率</li>
+<li>看板查询接口耗时</li>
+</ul>
+<h2 id="7-指标与规则">7. 指标与规则</h2>
+<p>第一版指标：</p>
+<ul>
+<li>每分钟车流量</li>
+<li>每 5 分钟聚合车流量</li>
+<li>平均车速</li>
+<li>拥堵指数</li>
+<li>Top10 拥堵路口</li>
+</ul>
+<p>第一版告警规则：</p>
+<ul>
+<li>当前流量高于近 5 分钟均值阈值</li>
+<li>当前速度连续低于阈值</li>
+</ul>
+<h2 id="8-接口草案-5">8. 接口草案</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST</code></td>
+<td><code>/api/traffic/events</code></td>
+<td>写入单条交通事件</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/traffic/import</code></td>
+<td>上传 CSV 或批量导入</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/dashboard/overview</code></td>
+<td>获取概览卡片数据</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/dashboard/trend</code></td>
+<td>获取趋势图数据</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/dashboard/intersections/top</code></td>
+<td>获取拥堵路口排行</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/alerts</code></td>
+<td>获取告警列表</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/alerts/:id/resolve</code></td>
+<td>处理告警</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/import-jobs</code></td>
+<td>获取导入任务状态</td>
+</tr>
+</tbody></table></div>
+<p><code>POST /api/traffic/events</code> 请求示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;intersectionId&quot;: &quot;A-101&quot;,
+  &quot;timestamp&quot;: &quot;2026-04-01T08:30:00+08:00&quot;,
+  &quot;vehicleCount&quot;: 42,
+  &quot;avgSpeed&quot;: 18.6,
+  &quot;source&quot;: &quot;simulator&quot;
+}
+</code></pre>
+<h2 id="9-非功能要求-3">9. 非功能要求</h2>
+<ul>
+<li>聚合任务可重复执行且结果稳定</li>
+<li>API 返回结构统一</li>
+<li>导入失败要能定位原因</li>
+<li>看板查询响应时间可接受</li>
+</ul>
+<h2 id="10-开发顺序建议-3">10. 开发顺序建议</h2>
+<ol>
+<li>Go API 骨架与数据表</li>
+<li>事件接入接口</li>
+<li>聚合任务</li>
+<li>告警规则</li>
+<li>Dashboard 查询接口</li>
+<li>前端图表页</li>
+</ol>
+<h2 id="11-待确认项-3">11. 待确认项</h2>
+<ul>
+<li>是否提供 CSV 导入作为主要演示入口</li>
+<li>是否需要地图视图</li>
+<li>告警阈值是否写死还是后台可配</li>
+<li>前端图表库选 ECharts 还是 AntV</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-186.html">← PRD：生鲜电商微服务系统</a><a rel="next" href="chapter-188.html">PRD：智能旅游规划 Agent 编排平台 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

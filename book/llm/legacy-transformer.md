@@ -28,7 +28,9 @@ RNN 按时间步处理序列，每一步把隐藏状态传给下一步。这种�
 
 前馈层在各位置使用相同参数，做非线性变换；原论文写作 `FFN(x)=max(0,xW₁+b₁)W₂+b₂`。残差把子层输入与输出相加，归一化调整单个位置的特征尺度，帮助训练深层网络，但不保证训练一定稳定。原论文是 `LayerNorm(x+Sublayer(x))` 的 post-norm；课程深入图采用 `x+Sublayer(Norm(x))` 的 pre-norm 示意，两种顺序不能混写。
 
-<figure><img src="assets/handdraw/llm/transformer-block.svg" width="480" height="798" alt="pre-norm 示意块：归一化、因果注意力与残差，再经过归一化、前馈层与残差"><figcaption>课程原创 G05：一个 pre-norm 解码器块示意。原始论文使用 post-norm；本图不表示用户指定模型的实际层结构。</figcaption></figure>
+用两个中间量把支路分清：`h = x + Attention(Norm(x))`，`y = h + FFN(Norm(h))`。第一条残差保留输入 x，第二条残差保留注意力之后的 h；第二次相加不能又拿原来的 x。相加两侧必须形状一致，FFN 即使在内部扩维，输出也要回到残差宽度。
+
+<figure><img src="assets/handdraw/llm/transformer-block.svg" width="480" height="640" alt="pre-norm 块中的两条残差支路：x 绕过注意力得到 h，h 再绕过前馈层得到输出"><figcaption>课程原创 G05：沿支路检查两次加法分别保留谁。原始论文使用 post-norm；本图是 pre-norm 教学示意，不表示某个商用模型的实际层结构。</figcaption></figure>
 
 ###### 2.2 注意力的计算过程
 
@@ -39,6 +41,12 @@ Attention(Q, K, V) = softmax(QKᵀ / √d_k + M)V
 ```
 
 `M` 在可见处加 0，在屏蔽处加负无穷。decoder-only 教学例里，输入位置 i 可以看自己及更早位置，用来预测 i 后的 token；不能看未来目标。训练时输入与预测目标错开一位，这才避免把答案提前给模型。注意力输出只是网络中的一个子层，注意力权重不能单独当作完整解释。
+
+**算一次第二位置的输出**：取人工输入 `X=[[1,0],[0,1],[1,1]]`，令 Q/K/V 的投影矩阵都是单位矩阵，所以本例 `Q=K=V=X`。第二位置的 Q 是 `[0,1]`，与三个 K 点积得到 `[0,1,1]`，除以 `√2` 后为 `[0,0.707107,0.707107]`。第三位置在未来，掩码后为 `[0,0.707107,-∞]`；softmax 得 `[0.330238,0.669762,0]`。
+
+最后计算 `0.330238×[1,0] + 0.669762×[0,1] = [0.330238,0.669762]`。权重有三个数，因为共有三个输入位置；输出只有两个数，因为每个 V 是二维。这是一个位置的隐藏表示，还不是词表上的概率，也没有直接选出下一个词。
+
+<figure><img src="assets/handdraw/llm/attention-row.svg" width="480" height="640" alt="第二位置沿 Q 与 K 点积、除以根号二、屏蔽未来、softmax，再用权重加权 V 得到二维输出"><figcaption>课程原创 G52：按一行追踪注意力。数值来自上述人工矩阵并做了小数舍入；把未来第三行改大，第二位置的输出仍应不变。</figcaption></figure>
 
 ##### 三、Query、Key、Value：注意力的三剑客
 
@@ -65,7 +73,7 @@ MultiHead(Q,K,V) = Concat(head_1, …, head_h)W^O
 
 在本地的双头练习中，输入是三个二维向量，两个头各投影成一维，位置 2 只能看前两个位置。程序实际算出两头的权重和输出，再拼接、乘以 `W^O`。这能展示矩阵关系，但没有训练、位置编码、残差、归一化或完整 Transformer 层。
 
-<figure><img src="assets/handdraw/llm/multihead-flow.svg" width="480" height="660" alt="同一输入投影到两个头，各自汇总可见 V，再拼接并经过输出矩阵"><figcaption>课程原创 G15：两个一维头的计算路线。数值来自本地人工矩阵，图中各头没有预设语言学职责。</figcaption></figure>
+<figure><img src="assets/handdraw/llm/multihead-flow.svg" width="480" height="640" alt="同一输入投影到两个头，各自汇总可见 V，再拼接并经过输出矩阵"><figcaption>课程原创 G15：两个一维头的计算路线。数值来自本地人工矩阵，图中各头没有预设语言学职责。</figcaption></figure>
 
 <!-- llm:multihead-result -->
 人工输入 `X=[[1,0],[0,1],[1,1]]`，当前为第 2 个位置。各头投影矩阵见同源 fixture；本例两头 `d_k=1`，缩放因子为 1。
@@ -79,6 +87,8 @@ MultiHead(Q,K,V) = Concat(head_1, …, head_h)W^O
 <!-- /llm:multihead-result -->
 
 在行向量约定下，拼接 `[a,b]` 乘 `W^O=[[1,1],[1,-1]]` 得 `[a+b,a-b]`。改掉输出投影矩阵，最终结果也应变化；把未来第三行改得很大，第二位置的输出仍应不变。记录按第 1、2、3 位置称呼，源码索引从 0 开始。
+
+**不要把拼接写成求和**：两个一维输出拼接后是宽度为 2 的 `[a,b]`，再乘 2×2 的输出矩阵。如果先算 `a+b`，只剩一个数，既丢失了两头各自的信息，也无法按原形状乘这个矩阵。把 `W^O` 换成单位矩阵时，正确结果应保留 `[a,b]`，可以用这个反例自查。
 
 ###### 4.2 多头的优势
 

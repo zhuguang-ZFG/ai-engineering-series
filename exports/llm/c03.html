@@ -22,8 +22,7 @@
 <li><strong>这句话支持结论吗</strong>：原句的主语、时间、条件、否定词是否与结论一致。</li>
 </ol>
 <p>第三关最容易漏。原文“地点尚未确定”和结论“已在图书馆确定举行”都出现了“地点”，意思却相反；原文“参与者需提前报名”与结论“报名已截止”都谈报名，却不是一回事。</p>
-<p><img src="../../book/assets/handdraw/llm/claim-evidence-threads.svg" alt="一句答案拆成多项主张，每项各自找原句"></p>
-<p><em>图：一句完整回答要拆成时间、地点、费用、报名等小主张，再分别找落点。一条真实引用不能给整段话自动作保。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/claim-evidence-threads.svg" alt="一句答案拆成多项主张，每项各自找原句"><figcaption>图：一句完整回答要拆成时间、地点、费用、报名等小主张，再分别找落点。一条真实引用不能给整段话自动作保。</figcaption></figure>
 <h2 id="C03-section-654069dcea" tabindex="-1">完整核对：一句话拆成四项</h2>
 <p>把开头那句拆开，逐项检查：</p>
 <table>
@@ -103,8 +102,7 @@
 </tr>
 </tbody></table>
 <p>四类的处理不同。把冲突写成“未知”，会丢掉已有的两条线索；把缺失写成“冲突”，会让人以为有两份材料打架；把过期写成“现行”，会让同事按旧日期行动。</p>
-<p><img src="../../book/assets/handdraw/llm/notice-conflict.svg" alt="两张通知不能硬拼"></p>
-<p><em>图：A 与 C 各写一个时间。正确动作是并列原句、追版本，而不是把两个时间揉成一个更“完整”的答案。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/notice-conflict.svg" alt="两张通知不能硬拼"><figcaption>图：A 与 C 各写一个时间。正确动作是并列原句、追版本，而不是把两个时间揉成一个更“完整”的答案。</figcaption></figure>
 <h2 id="C03-section-e8aa968599" tabindex="-1">为什么“再检查一下”不算检查</h2>
 <p>对模型说“你再检查一下”，有时能发现遗漏，有时只得到更肯定的一遍原答案。原因是这句话没有引入新证据：模型看到的材料没变，能做的只是重新生成。要真正提高可核对性，检查动作要跟着主张走：</p>
 <ul>
@@ -117,8 +115,7 @@
 <h2 id="C03-section-78388d96d3" tabindex="-1">改一个条件：把“检查”换成“找反证”</h2>
 <p>假设你不问“这句话对吗”，而问“什么材料会推翻它”。对“地点是城市图书馆”，反证是：通知里没有地点，或另一份通知写了别处。对“报名11月7日截止”，反证是：存在更晚发布的延期通知。这个换法会逼你去找具体文件，而不是给答案再投一次信任票。</p>
 <p>课程的反例实验（<a href="evidence.html">X06B 证据核对</a>）预置了“时间说错、引用却是真的”等情形。它用人工标注陪你练拆句与核对，不理解任意新文件；页面上通过或失败，只说明这组固定材料的检查做对了没有。</p>
-<p><img src="../../book/assets/handdraw/llm/claim-evidence.svg" alt="引用存在还不够：主张、原句、日期与冲突材料要分别核对"></p>
-<p><em>图：检查顺序从“来源存在”走到“支持结论”，再走到“版本现行”。任一关不过，都不能把该项标成已确认。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/claim-evidence.svg" alt="引用存在还不够：主张、原句、日期与冲突材料要分别核对"><figcaption>图：检查顺序从“来源存在”走到“支持结论”，再走到“版本现行”。任一关不过，都不能把该项标成已确认。</figcaption></figure>
 <h2 id="C03-section-4540eaf9d0" tabindex="-1">失败对照</h2>
 <ol>
 <li><strong>真引用，错结论</strong>：引用“参与者需提前报名”，却得出“报名已截止”。引用存在，不支持。</li>

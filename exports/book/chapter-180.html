@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>技术选型方法论 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 180 / 195</p><article><h1 id="技术选型方法论">技术选型方法论</h1><details class="contents"><summary>本章目录 <span>· 7 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图技术选型的本质">0. 全景图：技术选型的本质</a></li><li><a href="#1-选型维度">1. 选型维度</a><ul><li><a href="#11-核心评估维度">1.1 核心评估维度</a></li><li><a href="#12-实际案例前端框架选型">1.2 实际案例：前端框架选型</a></li></ul></li><li><a href="#2-决策矩阵">2. 决策矩阵</a><ul><li><a href="#21-使用决策矩阵的方法">2.1 使用决策矩阵的方法</a></li><li><a href="#22-示例">2.2 示例</a></li></ul></li><li><a href="#3-常见陷阱">3. 常见陷阱</a><ul><li><a href="#31-简历驱动开发">3.1 简历驱动开发</a></li><li><a href="#32-盲目追新">3.2 盲目追新</a></li><li><a href="#33-忽视迁移成本">3.3 忽视迁移成本</a></li></ul></li><li><a href="#4-ai-助力用大模型辅助技术选型">4. AI 助力：用大模型辅助技术选型</a><ul><li><a href="#41-技术方案对比">4.1 技术方案对比</a></li><li><a href="#42-生成架构决策记录adr">4.2 生成架构决策记录（ADR）</a></li><li><a href="#43-调研新技术">4.3 调研新技术</a></li></ul></li><li><a href="#5-总结-2">5. 总结</a></li><li><a href="#延伸阅读-38">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>React 还是 Vue？MySQL 还是 PostgreSQL？</strong> 技术选型是每个项目开始时最重要的决策之一。选错了，可能要花几个月重写；选对了，团队效率翻倍。</p>
+</blockquote>
+<p>本章带你建立系统化的技术选型思维，不再凭感觉选技术。</p>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>技术雷达</td>
+<td>了解技术的成熟度</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>选型维度</td>
+<td>从哪些角度评估技术</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>决策矩阵</td>
+<td>量化对比做决策</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>常见陷阱</td>
+<td>避免选型中的坑</td>
+</tr>
+</tbody></table></div>
+<p>学完本章，你将掌握一套系统化的技术选型方法，能为项目理性地选技术。</p>
+<h2 id="0-全景图技术选型的本质">0. 全景图：技术选型的本质</h2>
+<p>技术选型不是&quot;哪个技术最好&quot;的问题，而是&quot;哪个技术最适合当前场景&quot;的问题。就像选交通工具——飞机最快，但去隔壁小区不需要坐飞机。</p>
+<blockquote>
+<p><strong>选型的核心原则</strong></p>
+</blockquote>
+<ul>
+<li><strong>没有银弹</strong>：没有一种技术适合所有场景</li>
+<li><strong>场景驱动</strong>：先明确需求，再选技术</li>
+<li><strong>团队优先</strong>：团队熟悉的技术往往是最好的选择</li>
+<li><strong>可逆性</strong>：优先选择容易替换的方案</li>
+</ul>
+<p>通过下面的交互组件，了解当前技术生态的全景：</p>
+<h2 id="1-选型维度">1. 选型维度</h2>
+<h3 id="11-核心评估维度">1.1 核心评估维度</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关注点</th>
+<th>权重建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>团队能力</strong></td>
+<td>团队是否熟悉？学习成本多高？</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>社区生态</strong></td>
+<td>文档质量、第三方库、Stack Overflow 答案数</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>性能需求</strong></td>
+<td>是否满足性能要求？</td>
+<td>中-高</td>
+</tr>
+<tr>
+<td><strong>维护状态</strong></td>
+<td>是否活跃维护？最近一次发布是什么时候？</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>许可证</strong></td>
+<td>是否与项目的商业模式兼容？</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>招聘市场</strong></td>
+<td>能否招到熟悉这个技术的人？</td>
+<td>中</td>
+</tr>
+</tbody></table></div>
+<h3 id="12-实际案例前端框架选型">1.2 实际案例：前端框架选型</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>项目：企业内部管理系统
+团队：5 人，3 人熟悉 Vue，1 人熟悉 React，1 人新手
+需求：表单密集、权限复杂、不需要 SEO
+
+分析：
+- 团队 60% 熟悉 Vue → Vue 优先
+- 表单密集 → Element Plus 生态成熟
+- 不需要 SSR → 不需要 Next.js/Nuxt
+- 结论：Vue 3 + Element Plus
+</code></pre>
+<h2 id="2-决策矩阵">2. 决策矩阵</h2>
+<p>当多个选项难以直觉判断时，用决策矩阵量化对比。</p>
+<p>通过下面的交互组件，体验决策矩阵的使用方法：</p>
+<h3 id="21-使用决策矩阵的方法">2.1 使用决策矩阵的方法</h3>
+<ol>
+<li><strong>列出候选方案</strong>：比如 React vs Vue vs Svelte</li>
+<li><strong>确定评估维度</strong>：团队能力、生态、性能、学习曲线</li>
+<li><strong>分配权重</strong>：根据项目需求，给每个维度打权重（总和 100%）</li>
+<li><strong>逐项打分</strong>：每个方案在每个维度上打 1-5 分</li>
+<li><strong>加权求和</strong>：得出最终得分</li>
+</ol>
+<h3 id="22-示例">2.2 示例</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>权重</th>
+<th>React</th>
+<th>Vue</th>
+<th>Svelte</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>团队能力</td>
+<td>30%</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+</tr>
+<tr>
+<td>社区生态</td>
+<td>25%</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>学习曲线</td>
+<td>20%</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>15%</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>招聘市场</td>
+<td>10%</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>加权总分</strong></td>
+<td></td>
+<td><strong>3.75</strong></td>
+<td><strong>4.35</strong></td>
+<td><strong>2.75</strong></td>
+</tr>
+</tbody></table></div>
+<h2 id="3-常见陷阱">3. 常见陷阱</h2>
+<h3 id="31-简历驱动开发">3.1 简历驱动开发</h3>
+<blockquote>
+<p>&quot;用这个新技术，我简历上又能多写一条&quot;</p>
+</blockquote>
+<p>选技术应该基于项目需求，而不是个人简历。新技术意味着更多的未知风险和更少的社区支持。</p>
+<h3 id="32-盲目追新">3.2 盲目追新</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>心态</th>
+<th>现实</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;新的一定比旧的好&quot;</td>
+<td>新技术可能有未发现的 Bug</td>
+</tr>
+<tr>
+<td>&quot;大厂在用，我们也该用&quot;</td>
+<td>大厂的场景和你的可能完全不同</td>
+</tr>
+<tr>
+<td>&quot;这个技术 Star 数最多&quot;</td>
+<td>Star 数不等于适合你的项目</td>
+</tr>
+</tbody></table></div>
+<h3 id="33-忽视迁移成本">3.3 忽视迁移成本</h3>
+<p>选型时不光要看&quot;用起来怎么样&quot;，还得看&quot;如果要换，代价多大&quot;。优先选择：</p>
+<ul>
+<li>遵循标准协议的方案（如 SQL vs 私有查询语言）</li>
+<li>有清晰迁移路径的方案</li>
+<li>不会深度锁定的方案</li>
+</ul>
+<h2 id="4-ai-助力用大模型辅助技术选型">4. AI 助力：用大模型辅助技术选型</h2>
+<p>大模型可以帮你快速调研技术方案、对比优劣、生成决策报告。</p>
+<h3 id="41-技术方案对比">4.1 技术方案对比</h3>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>我需要为一个电商项目选择数据库，候选方案：
+MySQL、PostgreSQL、MongoDB。
+项目特点：读多写少、需要复杂查询、数据量预计千万级。
+
+请从以下维度对比三个方案：
+性能、生态、学习曲线、运维成本、扩展性。
+用表格形式呈现，并给出最终推荐和理由。
+</code></pre>
+</blockquote>
+<h3 id="42-生成架构决策记录adr">4.2 生成架构决策记录（ADR）</h3>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>帮我写一份架构决策记录（ADR），格式如下：
+- 标题：选择 Vue 3 作为前端框架
+- 背景：[项目背景和需求]
+- 候选方案：React, Vue 3, Svelte
+- 决策：Vue 3
+- 理由：[基于团队能力、生态、性能等维度]
+- 后果：[选择后的影响和风险]
+</code></pre>
+</blockquote>
+<h3 id="43-调研新技术">4.3 调研新技术</h3>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>我在考虑是否在项目中引入 Bun 替代 Node.js，请帮我分析：
+1. Bun 相比 Node.js 的核心优势和劣势
+2. 当前生态成熟度（npm 兼容性、主流框架支持）
+3. 生产环境使用的风险点
+4. 适合和不适合使用 Bun 的场景
+给出客观评估，不要只说优点。
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>AI 使用建议</strong>
+AI 的知识有时效性——它可能不了解最新版本的变化。对于快速迭代的技术，用 AI 做初步调研后，务必查阅官方文档确认最新信息。</p>
+</blockquote>
+<h2 id="5-总结-2">5. 总结</h2>
+<ol>
+<li><strong>技术雷达</strong>：了解技术的成熟度，区分采纳/试验/评估/暂缓</li>
+<li><strong>选型维度</strong>：团队能力 &gt; 社区生态 &gt; 性能需求 &gt; 维护状态</li>
+<li><strong>决策矩阵</strong>：量化对比，减少主观偏见</li>
+<li><strong>避免陷阱</strong>：不追新、不跟风、考虑迁移成本</li>
+</ol>
+<blockquote>
+<p><strong>终极思考</strong>
+最好的技术选型往往是<strong>最无聊的选型</strong>。选择成熟、稳定、团队熟悉的技术，把创新的精力留给业务本身。记住：<strong>技术是手段，不是目的。用户不关心你用了什么框架，他们只关心产品好不好用。</strong></p>
+</blockquote>
+<h2 id="延伸阅读-38">延伸阅读</h2>
+<ul>
+<li><strong>ThoughtWorks 技术雷达</strong>：每半年发布一次，是了解技术趋势的权威参考。</li>
+<li><strong>实践建议</strong>：下次选型时，试着用决策矩阵做一次量化对比。</li>
+<li><strong>架构决策记录（ADR）</strong>：用文档记录每次技术选型的理由和权衡。</li>
+<li><strong>反面教材</strong>：了解一些因技术选型失误导致项目失败的案例。</li>
+</ul>
+<hr>
+<h2 id="补充内容官网目录未收录">补充内容（官网目录未收录）</h2>
+<h2 id="stage-2-实战项目-prd">Stage 2 实战项目 PRD</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-179.html">← 开源协作</a><a rel="next" href="chapter-181.html">PRD：AI 营销文案 SaaS 平台 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

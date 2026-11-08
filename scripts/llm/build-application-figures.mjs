@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 
+import { multiheadArt } from "./mechanism-art.mjs";
+
 const out = resolve(import.meta.dirname, "../../book/assets/handdraw/llm");
 const ink = "#1f2328", paper = "#fbfaf6", green = "#d3efd9";
 const text = (x, y, label, size = 26) => `<text x="${x}" y="${y}" font-size="${size}">${label}</text>`;
@@ -20,22 +22,7 @@ function figure(file, height, title, desc, body) {
   items.push({ file, svg });
 }
 
-figure("multihead-flow.svg", 660, "两个头先汇总，再拼接混合", "同一输入分到两组 Q/K/V 投影，每头使用因果掩码独立汇总；两头输出拼接后经过输出投影。没有预设语法头或情感头。", [
-  text(24, 40, "同一输入，两组投影", 28),
-  box(28, 70, 424, 64), text(48, 112, "输入 X：三个二维向量"),
-  `<path d="M240 144 L240 163 L128 163 M240 163 L352 163" fill="none" stroke="${ink}" stroke-width="2.5"/>`,
-  arrow(128, 163, 187), arrow(352, 163, 187),
-  box(28, 200, 200, 128), box(252, 200, 200, 128, green),
-  text(48, 239, "第 1 头"), text(48, 278, "投影 Q/K/V"), text(48, 316, "取第一维"),
-  text(272, 239, "第 2 头"), text(272, 278, "投影 Q/K/V"), text(272, 316, "取第二维"),
-  arrow(128, 338, 360), arrow(352, 338, 360),
-  box(28, 372, 200, 62), box(252, 372, 200, 62, green),
-  text(48, 412, "掩码后汇总"), text(272, 412, "掩码后汇总"),
-  `<path d="M128 444 L128 465 L352 465 L352 444" fill="none" stroke="${ink}" stroke-width="2.5"/>`,
-  arrow(240, 465, 486),
-  box(28, 498, 424, 66), text(48, 540, "拼接 → 输出投影 Wᵒ"),
-  text(28, 606, "各头不预设语言学职责"), text(28, 647, "人工小矩阵，不是完整模型")
-]);
+items.push({ file: "multihead-flow.svg", svg: multiheadArt() });
 figure("claim-evidence.svg", 590, "结论与引用分两道检查", "预置回答说周日，通知原句写周六。先确认原文存在，再检查它是否支持结论。", [
   text(24, 40, "引用编号不能代替核对", 28),
   box(32, 74, 416, 100), text(52, 113, "预置主张：周日 14:00"), text(52, 150, "引用：通知 A"),

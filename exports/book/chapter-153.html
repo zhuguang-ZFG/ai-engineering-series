@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IAM 权限管理 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 153 / 195</p><article><h1 id="iam-权限管理">IAM 权限管理</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#云身份与权限管理原理">云身份与权限管理原理</a><ul><li><a href="#0-引言刚上云就踩雷了的必要性">0. 引言：刚上云就&quot;踩雷&quot;了的必要性</a></li><li><a href="#1-iamram-定义从门禁系统说起">1. IAM/RAM 定义：从&quot;门禁系统&quot;说起</a></li><li><a href="#2-用户组角色到底该用哪个">2. 用户、组、角色：到底该用哪个</a></li><li><a href="#3-角色与策略权限管理的灵魂">3. 角色与策略：权限管理的&quot;灵魂&quot;</a></li><li><a href="#4-访问密钥aksk一把需要谨慎保管的钥匙">4. 访问密钥（AK/SK）：一把需要谨慎保管的&quot;钥匙&quot;</a></li><li><a href="#5-多因素认证mfa给你的账号加把锁">5. 多因素认证（MFA）：给你的账号加把&quot;锁&quot;</a></li><li><a href="#6-安全地串门的实现">6. 安全地&quot;串门的实现</a></li><li><a href="#7-实战构建安全的权限体系">7. 实战：构建安全的权限体系</a></li><li><a href="#8-常见误区与避坑指南">8. 常见误区与避坑指南</a></li><li><a href="#9-名词对照表">9. 名词对照表</a></li><li><a href="#总结云账号权限管理的核心原则">总结：云账号权限管理的核心原则</a></li></ul></li></ul></nav></details><h2 id="云身份与权限管理原理">云身份与权限管理原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：提示词工程解决的是&quot;怎么把话说清楚&quot;，云账号权限管理解决的是&quot;谁能做什么事&quot;。本章节会围绕一个问题展开：<strong>在云端世界里，如何既能方便地授权，又不把钥匙交给不该给的人？</strong></p>
+</blockquote>
+<p>在开始之前，建议你先补两块&quot;基础砖&quot;：</p>
+<ul>
+<li><strong>Token 是什么</strong>：可以先阅读 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/8-artificial-intelligence/llm-principles.md">大语言模型入门</a> 的「分词 &amp; Token」部分。</li>
+<li><strong>Prompt 是什么</strong>：如果你还不熟悉 System / User / Assistant 的基本结构，可以先看 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/8-artificial-intelligence/prompt-engineering.md">提示词工程</a>。</li>
+</ul>
+<h3 id="0-引言刚上云就踩雷了的必要性">0. 引言：刚上云就&quot;踩雷&quot;了的必要性</h3>
+<p>很多人刚开始使用云服务时都会遇到类似的情况：</p>
+<ul>
+<li>为了省事，直接把 AccessKey 写在代码里提交到 GitHub；</li>
+<li>给所有员工都开了&quot;管理员权限&quot;，结果有人误删了生产数据库；</li>
+<li>项目交接后，不知道谁手里还有旧员工的账号密码；</li>
+<li>听说要开 MFA，但觉得&quot;麻烦&quot;就一直拖着没开。</li>
+</ul>
+<p>直觉上，我们会以为是：<strong>&quot;这些员工安全意识不够&quot;</strong>。</p>
+<p>但大多数时候，问题并不在于人，而在于<strong>没有建立正确的权限管理体系</strong>。</p>
+<p>面对这些挑战，单纯依靠&quot;小心点操作&quot;已经行不通了。我们需要一套系统的权限管理方法论，这正是**IAM（Identity and Access Management，身份与访问管理）**试图解决的问题。</p>
+<h3 id="1-iamram-定义从门禁系统说起">1. IAM/RAM 定义：从&quot;门禁系统&quot;说起</h3>
+<h4 id="11-类比公司的智能门禁">1.1 类比：公司的智能门禁</h4>
+<p>想象一下，你们公司搬到了一栋新写字楼：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">没有 IAM 的做法</th>
+<th align="left">有 IAM 的做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">新员工入职</td>
+<td align="left">给他一把能开所有门的万能钥匙</td>
+<td align="left">给他一张门禁卡，只能刷他办公区域的门</td>
+</tr>
+<tr>
+<td align="left">员工离职</td>
+<td align="left">钥匙丢了就丢了，也不知道谁拿着</td>
+<td align="left">立即在系统里注销他的门禁卡，所有门都打不开了</td>
+</tr>
+<tr>
+<td align="left">外包人员</td>
+<td align="left">把钥匙借给他几天</td>
+<td align="left">发临时门禁卡，设置3天后自动失效</td>
+</tr>
+<tr>
+<td align="left">访客</td>
+<td align="left">前台配一把钥匙给他</td>
+<td align="left">发一次性访客码，只能进会议室</td>
+</tr>
+</tbody></table></div>
+<p><strong>IAM（Identity and Access Management，身份与访问管理）</strong>，就像是这套&quot;智能门禁系统&quot;：</p>
+<ul>
+<li><strong>身份（Identity）</strong>：谁？员工、外包、访客、应用程序</li>
+<li><strong>访问（Access）</strong>：能进哪些门？能做什么操作？</li>
+<li><strong>管理（Management）</strong>：怎么发钥匙、怎么收钥匙、怎么查记录</li>
+</ul>
+<h4 id="12-aws-iam-vs-阿里云-ram">1.2 AWS IAM vs 阿里云 RAM</h4>
+<p>不同的云厂商都有自己的 IAM 实现：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">云厂商</th>
+<th align="left">服务名称</th>
+<th align="left">核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>AWS</strong></td>
+<td align="left">IAM (Identity and Access Management)</td>
+<td align="left">User、Group、Role、Policy</td>
+</tr>
+<tr>
+<td align="left"><strong>阿里云</strong></td>
+<td align="left">RAM (Resource Access Management)</td>
+<td align="left">用户、用户组、角色、策略</td>
+</tr>
+<tr>
+<td align="left"><strong>腾讯云</strong></td>
+<td align="left">CAM (Cloud Access Management)</td>
+<td align="left">用户、用户组、角色、策略</td>
+</tr>
+<tr>
+<td align="left"><strong>华为云</strong></td>
+<td align="left">IAM</td>
+<td align="left">用户、用户组、委托、策略</td>
+</tr>
+<tr>
+<td align="left"><strong>Azure</strong></td>
+<td align="left">Azure AD + RBAC</td>
+<td align="left">User、Group、Role、RBAC</td>
+</tr>
+</tbody></table></div>
+<p>虽然名字不同，但<strong>核心概念都是相通的</strong>：</p>
+<ul>
+<li><strong>用户（User）</strong>：代表一个具体的人或应用程序</li>
+<li><strong>用户组（Group）</strong>：批量管理一批用户的权限</li>
+<li><strong>角色（Role）</strong>：定义一组权限，可以被&quot;扮演&quot;</li>
+<li><strong>策略（Policy）</strong>：具体的权限规则（允许/拒绝做什么）</li>
+</ul>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/iam-keycard.svg" aria-label="打开大图：IAM 四道关图解：身份（用户、用户组、长期凭证）、角色（临时凭证）、策略（Allow 与 Deny 及条件）、资源（能开哪几扇门），下方是 AK/SK 泄漏事故链"><img src="../../book/assets/handdraw/iam-keycard.svg" alt="IAM 四道关图解：身份（用户、用户组、长期凭证）、角色（临时凭证）、策略（Allow 与 Deny 及条件）、资源（能开哪几扇门），下方是 AK/SK 泄漏事故链" loading="lazy"></a>
+  <figcaption><strong>一张卡四道关。</strong>谁刷卡、什么岗位、能开哪几扇门、只到自己那一层；把长期 AK/SK 写进代码提交上去，等于把钥匙挂在门把手上。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h3 id="2-用户组角色到底该用哪个">2. 用户、组、角色：到底该用哪个</h3>
+<h4 id="21-三种身份的区别">2.1 三种&quot;身份&quot;的区别</h4>
+<p>用一个办公室的场景来类比：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">概念</th>
+<th align="left">类比</th>
+<th align="left">适用场景</th>
+<th align="left">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>用户（User）</strong></td>
+<td align="left">正式员工，有自己的工位和门禁卡</td>
+<td align="left">长期、稳定的团队成员</td>
+<td align="left">有永久凭证（密码、AK/SK）</td>
+</tr>
+<tr>
+<td align="left"><strong>用户组（Group）</strong></td>
+<td align="left">部门，如&quot;技术部&quot;、&quot;销售部&quot;</td>
+<td align="left">批量管理权限</td>
+<td align="left">不能登录，只是权限容器</td>
+</tr>
+<tr>
+<td align="left"><strong>角色（Role）</strong></td>
+<td align="left">临时访客证、外包临时卡</td>
+<td align="left">临时授权、跨账号访问</td>
+<td align="left">没有永久凭证，靠&quot;扮演&quot;获取临时凭证</td>
+</tr>
+</tbody></table></div>
+<h4 id="22-真实案例一个创业公司的权限演进">2.2 真实案例：一个创业公司的权限演进</h4>
+<p><strong>阶段一：创始团队（2-3人）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>问题：直接用根账号（Root Account）登录控制台，因为&quot;省事&quot;
+风险：根账号拥有所有权限，一旦泄露整个账号就废了
+</code></pre>
+<p><strong>阶段二：团队扩张（5-10人）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>改进：给每个人创建 IAM User，分配不同权限
+问题：
+- 运维小王离职了，他的 AK/SK 散落在哪些服务器上？
+- 新来的前端需要 S3 只读权限，后端需要 RDS 权限，手动一个个配太麻烦
+</code></pre>
+<p><strong>阶段三：规范化（10-30人）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>改进：
+1. 按角色创建 IAM Group：
+   - Developers（开发）：S3、EC2、RDS 读写
+   - DevOps（运维）：全权限，但需要 MFA
+   - ReadOnly（只读）：查看所有资源，不能修改
+   - QAs（测试）：测试环境资源访问
+
+2. 使用 IAM Role：
+   - EC2 实例使用 Instance Profile，不再在服务器上放 AK/SK
+   - 跨账号访问用 Role Assume，不用共享 AK/SK
+   - CI/CD 用 OIDC Federation，不用存储长期凭证
+</code></pre>
+<p><strong>阶段四：多账号/企业级（30人+）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>架构：
+- Master Account（主账号）：只用来管理账单和组织结构，不放任何资源
+- Audit Account（审计账号）：收集所有账号的日志
+- Dev Account（开发账号）：开发环境
+- Staging Account（预发布账号）：测试环境
+- Prod Account（生产账号）：线上环境，权限最严格
+
+权限流转：
+- 开发人员默认只有 Dev 账号的只读权限
+- 需要修改生产环境时，提工单申请 Assume 到 Prod 的临时 Role
+- 所有 Assume 操作都被 CloudTrail 记录，定期审计
+</code></pre>
+<h3 id="3-角色与策略权限管理的灵魂">3. 角色与策略：权限管理的&quot;灵魂&quot;</h3>
+<h4 id="31-角色的本质信任--权限">3.1 角色的本质：信任 + 权限</h4>
+<p>IAM Role 有两个核心组成部分：</p>
+<ol>
+<li><strong>信任策略（Trust Policy）</strong>：谁可以扮演这个角色？</li>
+<li><strong>权限策略（Permission Policy）</strong>：扮演成功后能做什么？</li>
+</ol>
+<p>用一个话剧表演的类比：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">概念</th>
+<th align="left">类比</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Role（角色）</strong></td>
+<td align="left">剧本里的&quot;哈姆雷特&quot;</td>
+<td align="left">定义了要演什么戏（权限）</td>
+</tr>
+<tr>
+<td align="left"><strong>Trust Policy</strong></td>
+<td align="left">导演说&quot;谁能演哈姆雷特&quot;</td>
+<td align="left">可能是&quot;本剧团的演员&quot;（本账号用户）、&quot;隔壁剧团借来的演员&quot;（跨账号）、&quot;特邀嘉宾&quot;（外部 IdP）</td>
+</tr>
+<tr>
+<td align="left"><strong>Permission Policy</strong></td>
+<td align="left">剧本内容</td>
+<td align="left">哈姆雷特能做什么：说台词、决斗、发疯（具体权限）</td>
+</tr>
+<tr>
+<td align="left"><strong>Assume Role</strong></td>
+<td align="left">演员上台表演</td>
+<td align="left">小李被导演选中演哈姆雷特，上台后他就拥有了剧本里定义的所有权限</td>
+</tr>
+<tr>
+<td align="left"><strong>临时凭证</strong></td>
+<td align="left">演出证</td>
+<td align="left">小李拿到一个&quot;临时演出证&quot;，演出结束后就失效了</td>
+</tr>
+</tbody></table></div>
+<h4 id="32-策略policy权限的语法">3.2 策略（Policy）：权限的&quot;语法&quot;</h4>
+<p>IAM Policy 是一个 JSON 文档，定义了&quot;谁能对什么资源做什么操作&quot;。</p>
+<p><strong>一个完整的 Policy 示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Sid&quot;: &quot;AllowS3ReadWrite&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [&quot;s3:GetObject&quot;, &quot;s3:PutObject&quot;, &quot;s3:DeleteObject&quot;],
+      &quot;Resource&quot;: &quot;arn:aws:s3:::my-app-bucket/*&quot;,
+      &quot;Condition&quot;: {
+        &quot;StringEquals&quot;: {
+          &quot;aws:RequestedRegion&quot;: &quot;ap-northeast-1&quot;
+        },
+        &quot;Bool&quot;: {
+          &quot;aws:MultiFactorAuthPresent&quot;: &quot;true&quot;
+        }
+      }
+    },
+    {
+      &quot;Sid&quot;: &quot;DenySensitiveData&quot;,
+      &quot;Effect&quot;: &quot;Deny&quot;,
+      &quot;Action&quot;: &quot;s3:*&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:s3:::my-app-bucket/sensitive/*&quot;
+    }
+  ]
+}
+</code></pre>
+<p><strong>关键字段解释</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">含义</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Version</strong></td>
+<td align="left">Policy 语法版本</td>
+<td align="left">&quot;2012-10-17&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>Statement</strong></td>
+<td align="left">权限声明数组，可包含多个规则</td>
+<td align="left">[...]</td>
+</tr>
+<tr>
+<td align="left"><strong>Sid</strong></td>
+<td align="left">声明 ID，可选，用于标识这条规则</td>
+<td align="left">&quot;AllowS3ReadWrite&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>Effect</strong></td>
+<td align="left">效果：Allow（允许）或 Deny（拒绝）</td>
+<td align="left">&quot;Allow&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>Action</strong></td>
+<td align="left">允许/拒绝的操作，支持通配符</td>
+<td align="left">&quot;s3:GetObject&quot;, &quot;s3:*&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>Resource</strong></td>
+<td align="left">作用的资源，用 ARN 标识</td>
+<td align="left">&quot;arn:aws:s3:::bucket/*&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>Condition</strong></td>
+<td align="left">可选，满足特定条件时才生效</td>
+<td align="left">区域限制、MFA 要求等</td>
+</tr>
+</tbody></table></div>
+<h4 id="33-权限的优先级deny--allow--默认拒绝">3.3 权限的优先级：Deny &gt; Allow &gt; 默认拒绝</h4>
+<p>IAM 的权限评估逻辑可以用一句话总结：<strong>显式 Deny 永远赢，没有 Allow 就是拒绝</strong>。</p>
+<p>评估流程如下：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 先看有没有 Deny 策略
+   ├─ 有 Deny → 拒绝（不管有没有 Allow）
+   └─ 没有 Deny → 继续看
+
+2. 再看有没有 Allow 策略
+   ├─ 有 Allow → 允许
+   └─ 没有 Allow → 拒绝（默认拒绝原则）
+</code></pre>
+<p><strong>实战案例：保护敏感数据</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">// 策略1：给开发者的普通权限
+{
+  &quot;Effect&quot;: &quot;Allow&quot;,
+  &quot;Action&quot;: [&quot;s3:*&quot;],
+  &quot;Resource&quot;: &quot;arn:aws:s3:::company-data/*&quot;
+}
+
+// 策略2：保护敏感目录（即使开发者有 s3:* 也不能访问）
+{
+  &quot;Effect&quot;: &quot;Deny&quot;,
+  &quot;Action&quot;: [&quot;s3:*&quot;],
+  &quot;Resource&quot;: &quot;arn:aws:s3:::company-data/sensitive/*&quot;
+}
+</code></pre>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>开发者虽然有 <code>s3:*</code> 的 Allow 权限</li>
+<li>但敏感目录有显式的 Deny 规则</li>
+<li>Deny 优先级更高，所以开发者无法访问敏感数据</li>
+<li>即使开发者是管理员，这个 Deny 也有效（除非是根账号）</li>
+</ul>
+<h3 id="4-访问密钥aksk一把需要谨慎保管的钥匙">4. 访问密钥（AK/SK）：一把需要谨慎保管的&quot;钥匙&quot;</h3>
+<h4 id="41-aksk-是什么">4.1 AK/SK 是什么</h4>
+<p>Access Key（访问密钥）是云服务提供的一种长期凭证，用于程序化的 API 调用。它由两部分组成：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">组成部分</th>
+<th align="left">名称</th>
+<th align="left">作用</th>
+<th align="left">类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Access Key ID</strong></td>
+<td align="left">访问密钥 ID</td>
+<td align="left">标识你是谁（类似于用户名）</td>
+<td align="left">银行卡号</td>
+</tr>
+<tr>
+<td align="left"><strong>Secret Access Key</strong></td>
+<td align="left">秘密访问密钥</td>
+<td align="left">证明你是你（类似于密码）</td>
+<td align="left">银行卡密码</td>
+</tr>
+</tbody></table></div>
+<h4 id="42-aksk-是高危物品的原理">4.2 AK/SK 是&quot;高危物品的原理</h4>
+<p><strong>真实案例：某创业公司的教训</strong></p>
+<p>小李是一家创业公司的新晋后端工程师。入职第一周，他的任务是调试一个文件上传功能。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 小李写的代码（有严重安全问题！）
+import boto3
+
+# 为了方便调试，直接把 AK/SK 写在代码里
+s3 = boto3.client(
+    &#39;s3&#39;,
+    aws_access_key_id=&#39;AKIAIOSFODNN7EXAMPLE&#39;,
+    aws_secret_access_key=&#39;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&#39;,
+    region_name=&#39;ap-northeast-1&#39;
+)
+
+def upload_file(file_path, bucket_name, object_name):
+    s3.upload_file(file_path, bucket_name, object_name)
+    print(f&quot;文件已上传到 s3://{bucket_name}/{object_name}&quot;)
+
+# 测试上传
+upload_file(&#39;./test.jpg&#39;, &#39;my-company-bucket&#39;, &#39;uploads/test.jpg&#39;)
+</code></pre>
+<p><strong>一周后发生的事情</strong>：</p>
+<ol>
+<li>小李提交代码到 GitHub（包括 AK/SK）</li>
+<li>GitHub 上的代码被爬虫扫描到，AK/SK 被提取</li>
+<li>攻击者使用这些凭证，在公司账号里创建了大量 EC2 实例挖矿</li>
+<li>月底收到账单：额外消费 12,000 美元</li>
+<li>审计发现 AK/SK 泄露，小李被约谈...</li>
+</ol>
+<p><strong>这个案例告诉我们什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">错误做法</th>
+<th align="left">正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">把 AK/SK 硬编码在代码中</td>
+<td align="left">使用 IAM Role，让程序自动获取临时凭证</td>
+</tr>
+<tr>
+<td align="left">把 AK/SK 提交到 Git 仓库</td>
+<td align="left">使用 <code>.gitignore</code> 忽略配置文件，使用密钥管理服务</td>
+</tr>
+<tr>
+<td align="left">长期使用同一个 AK/SK 不轮换</td>
+<td align="left">定期轮换 AK/SK，使用临时凭证替代长期凭证</td>
+</tr>
+<tr>
+<td align="left">给 AK/SK 分配过大权限</td>
+<td align="left">遵循最小权限原则，只授予必要的权限</td>
+</tr>
+</tbody></table></div>
+<h4 id="43-aksk-的安全使用指南">4.3 AK/SK 的安全使用指南</h4>
+<p><strong>场景一：本地开发</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 正确做法：使用 AWS CLI 配置凭证，不写在代码里
+aws configure
+# 然后根据提示输入 Access Key ID 和 Secret Access Key
+# 这些信息会被保存在 ~/.aws/credentials，权限设置为 600
+
+# 代码中不需要任何凭证配置
+import boto3
+s3 = boto3.client(&#39;s3&#39;)  # 自动从 ~/.aws/credentials 读取
+</code></pre>
+<p><strong>场景二：服务器/EC2</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 正确做法：使用 IAM Instance Profile
+# 1. 创建一个 IAM Role，附加需要的权限（如 S3ReadOnly）
+# 2. 创建一个 Instance Profile，关联这个 Role
+# 3. 启动 EC2 时，选择这个 Instance Profile
+
+# 代码中完全不需要凭证
+import boto3
+s3 = boto3.client(&#39;s3&#39;)  # 自动从 EC2 元数据服务获取临时凭证
+
+# 临时凭证会自动轮换，无需担心过期
+</code></pre>
+<p><strong>场景三：CI/CD 流水线</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># 正确做法：使用 OIDC Federation（OpenID Connect）
+# 以 GitHub Actions 为例：
+
+# 1. 在 AWS 创建 OIDC Identity Provider，信任 GitHub
+# 2. 创建一个 IAM Role，信任策略允许 GitHub 的特定仓库扮演
+# 3. 在 GitHub Actions 中配置
+
+name: Deploy
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # 关键：允许请求 OIDC token
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
+          aws-region: ap-northeast-1
+          # 注意：这里没有 Access Key！完全使用临时凭证
+
+      - name: Deploy
+        run: aws s3 sync ./build s3://my-bucket/
+</code></pre>
+<p><strong>总结：AK/SK 使用的安全层级</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">安全等级</th>
+<th align="left">做法</th>
+<th align="left">适用场景</th>
+<th align="left">风险等级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">最高</td>
+<td align="left">使用 IAM Role（无长期凭证）</td>
+<td align="left">EC2、Lambda、ECS、CI/CD</td>
+<td align="left">极低</td>
+</tr>
+<tr>
+<td align="left">高</td>
+<td align="left">使用 OIDC Federation</td>
+<td align="left">GitHub Actions、GitLab CI</td>
+<td align="left">低</td>
+</tr>
+<tr>
+<td align="left">中</td>
+<td align="left">使用密钥管理服务</td>
+<td align="left">本地开发、小团队</td>
+<td align="left">中</td>
+</tr>
+<tr>
+<td align="left">低</td>
+<td align="left">使用环境变量</td>
+<td align="left">快速原型、个人项目</td>
+<td align="left">高</td>
+</tr>
+<tr>
+<td align="left">极低</td>
+<td align="left">硬编码在代码中</td>
+<td align="left">任何场景都不推荐</td>
+<td align="left">极高</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-多因素认证mfa给你的账号加把锁">5. 多因素认证（MFA）：给你的账号加把&quot;锁&quot;</h3>
+<h4 id="51-mfa概述">5.1 MFA概述</h4>
+<p>MFA（Multi-Factor Authentication，多因素认证），也叫 2FA（Two-Factor Authentication，双因素认证），是一种安全机制，要求用户在登录时提供<strong>两种或以上</strong>不同类型的认证因素：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">因素类型</th>
+<th align="left">是什么</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>知识因素</strong>（你知道什么）</td>
+<td align="left">只有用户知道的信息</td>
+<td align="left">密码、PIN 码</td>
+</tr>
+<tr>
+<td align="left"><strong>持有因素</strong>（你有什么）</td>
+<td align="left">用户拥有的物理设备</td>
+<td align="left">手机、硬件密钥</td>
+</tr>
+<tr>
+<td align="left"><strong>生物因素</strong>（你是什么）</td>
+<td align="left">用户的生物特征</td>
+<td align="left">指纹、面部识别</td>
+</tr>
+</tbody></table></div>
+<h4 id="52-mfa-这么重要的原理">5.2 MFA 这么重要的原理</h4>
+<p><strong>真实数据告诉你答案</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">攻击方式</th>
+<th align="left">没有 MFA 时的成功率</th>
+<th align="left">有 MFA 时的成功率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">密码猜测/暴力破解</td>
+<td align="left">很高</td>
+<td align="left">极低（还需要第二因素）</td>
+</tr>
+<tr>
+<td align="left">钓鱼攻击获取密码</td>
+<td align="left">很高</td>
+<td align="left">极低（钓鱼页面无法获取 MFA 码）</td>
+</tr>
+<tr>
+<td align="left">密码泄露（其他网站泄露）</td>
+<td align="left">很高</td>
+<td align="left">极低（不知道第二因素）</td>
+</tr>
+</tbody></table></div>
+<p><strong>微软安全报告（2020）</strong>：启用 MFA 可以阻止 99.9% 的自动化攻击。</p>
+<h4 id="53-mfa-实战为-aws-根账号开启-mfa">5.3 MFA 实战：为 AWS 根账号开启 MFA</h4>
+<p><strong>步骤一：登录 AWS 控制台</strong></p>
+<ol>
+<li>使用根账号邮箱和密码登录</li>
+<li>在右上角点击你的账号名，选择 &quot;Security Credentials&quot;</li>
+</ol>
+<p><strong>步骤二：启用 MFA</strong></p>
+<ol>
+<li>找到 &quot;Multi-factor authentication (MFA)&quot; 区域</li>
+<li>点击 &quot;Assign MFA device&quot;</li>
+<li>选择 MFA 设备类型（推荐&quot;Authenticator app&quot;）</li>
+</ol>
+<p><strong>步骤三：配置虚拟 MFA</strong></p>
+<ol>
+<li>在手机上安装 Google Authenticator 或 Microsoft Authenticator</li>
+<li>扫描二维码或手动输入密钥</li>
+<li>输入 App 上显示的 6 位验证码（连续输入两个，因为验证码每 30 秒刷新）</li>
+</ol>
+<p><strong>完成！</strong> 你的根账号现在有了 MFA 保护。</p>
+<h3 id="6-安全地串门的实现">6. 安全地&quot;串门的实现</h3>
+<h4 id="61-需要跨账号访问的原理">6.1 需要跨账号访问的原理</h4>
+<p>随着业务增长，很多公司会使用<strong>多账号架构</strong>来隔离不同环境：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">账号类型</th>
+<th align="left">用途</th>
+<th align="left">权限要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Master Account</strong></td>
+<td align="left">组织管理、账单结算</td>
+<td align="left">几乎不使用</td>
+</tr>
+<tr>
+<td align="left"><strong>Security Audit</strong></td>
+<td align="left">集中收集所有账号的日志</td>
+<td align="left">只读访问其他账号</td>
+</tr>
+<tr>
+<td align="left"><strong>Shared Services</strong></td>
+<td align="left">共享资源（镜像仓库等）</td>
+<td align="left">其他账号只读访问</td>
+</tr>
+<tr>
+<td align="left"><strong>Development</strong></td>
+<td align="left">开发环境</td>
+<td align="left">开发者完全权限</td>
+</tr>
+<tr>
+<td align="left"><strong>Staging</strong></td>
+<td align="left">测试/预发布环境</td>
+<td align="left">测试人员权限</td>
+</tr>
+<tr>
+<td align="left"><strong>Production</strong></td>
+<td align="left">生产环境</td>
+<td align="left">严格限制，需要审批</td>
+</tr>
+</tbody></table></div>
+<p><strong>问题：Shared Services 账号里的镜像，怎么让 Production 账号的 EC2 拉取？</strong></p>
+<ul>
+<li>方案 A：把 AK/SK 写在 Production 的用户数据里 （危险！AK/SK 泄露风险）</li>
+<li>方案 B：使用跨账号 Role Assume （推荐！临时凭证，自动轮换）</li>
+</ul>
+<h4 id="62-跨账号-role-assume-的原理">6.2 跨账号 Role Assume 的原理</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>账号 A（Production）                    账号 B（Shared Services）
+    |                                           |
+    |  1. 请求 Assume Role                      |
+    |  &quot;我想扮演账号 B 的 ECRReadRole&quot;          |
+    |------------------------------------------&gt;|
+    |                                           |
+    |                    2. 检查信任策略         |
+    |                    &quot;账号 A 可以扮演我吗？&quot; |
+    |                                           |
+    |  3. 返回临时凭证                          |
+    |  AccessKeyId, SecretKey, SessionToken    |
+    |&lt;------------------------------------------|
+    |                                           |
+    |  4. 使用临时凭证访问 ECR                  |
+    |  docker pull 账号B.dkr.ecr...            |
+</code></pre>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>临时凭证有效期默认 1 小时，最长可配置 12 小时</li>
+<li>不需要在代码里存储任何长期凭证</li>
+<li>信任策略可以限制谁可以扮演这个角色（如指定账号、指定外部 ID）</li>
+</ul>
+<h4 id="63-实战配置跨账号-ecr-访问">6.3 实战：配置跨账号 ECR 访问</h4>
+<p><strong>场景</strong>：Production 账号的 EC2 需要拉取 Shared Services 账号的 Docker 镜像。</p>
+<p><strong>步骤一：在 Shared Services 账号创建 IAM Role</strong></p>
+<ol>
+<li>登录 Shared Services 账号的 AWS 控制台</li>
+<li>进入 IAM -&gt; Roles -&gt; Create role</li>
+<li>选择&quot;Another AWS account&quot;</li>
+<li>输入 Production 账号的 Account ID</li>
+<li>可选：勾选&quot;Require external ID&quot;并输入一个随机字符串（增加安全性）</li>
+<li>附加权限：AmazonEC2ContainerRegistryReadOnly</li>
+<li>给 Role 命名：CrossAccountECRReadRole</li>
+</ol>
+<p><strong>步骤二：获取 Role ARN</strong></p>
+<p>创建完成后，复制 Role 的 ARN：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>arn:aws:iam::SHARED_SERVICES_ACCOUNT_ID:role/CrossAccountECRReadRole
+</code></pre>
+<p><strong>步骤三：在 Production 账号配置 EC2 实例</strong></p>
+<p>方式 A：使用 Instance Profile（推荐）</p>
+<ol>
+<li>在 Production 账号创建 IAM Role（EC2 用）</li>
+<li>信任策略：信任 EC2 服务</li>
+<li>权限策略：允许 Assume 跨账号 Role</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;sts:AssumeRole&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:iam::SHARED_SERVICES_ACCOUNT_ID:role/CrossAccountECRReadRole&quot;
+    }
+  ]
+}
+</code></pre>
+<ol start="4">
+<li>创建 Instance Profile，关联这个 Role</li>
+<li>启动 EC2 时，选择这个 Instance Profile</li>
+</ol>
+<p>方式 B：在 EC2 用户数据里动态 Assume Role</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">#!/bin/bash
+# 安装 AWS CLI
+yum install -y aws-cli
+
+# Assume 跨账号 Role
+CREDS=$(aws sts assume-role \
+  --role-arn arn:aws:iam::SHARED_SERVICES_ACCOUNT_ID:role/CrossAccountECRReadRole \
+  --role-session-name EC2PullSession)
+
+# 提取临时凭证
+export AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r &#39;.Credentials.AccessKeyId&#39;)
+export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r &#39;.Credentials.SecretAccessKey&#39;)
+export AWS_SESSION_TOKEN=$(echo $CREDS | jq -r &#39;.Credentials.SessionToken&#39;)
+
+# 登录 ECR
+aws ecr get-login-password --region ap-northeast-1 | \
+  docker login --username AWS --password-stdin SHARED_SERVICES_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com
+
+# 拉取镜像
+docker pull SHARED_SERVICES_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/my-app:latest
+</code></pre>
+<p><strong>步骤四：测试跨账号访问</strong></p>
+<p>在 Production 的 EC2 上执行：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 测试能否 Assume Role
+aws sts get-caller-identity
+# 应该显示：arn:aws:sts::PRODUCTION_ACCOUNT_ID:assumed-role/CrossAccountECRReadRole/EC2PullSession
+
+# 测试能否列出 Shared Services 的 ECR 仓库
+aws ecr describe-repositories --registry-id SHARED_SERVICES_ACCOUNT_ID
+</code></pre>
+<p><strong>完成！</strong> 现在 Production 的 EC2 可以安全地拉取 Shared Services 的镜像，而无需共享任何长期凭证。</p>
+<h3 id="7-实战构建安全的权限体系">7. 实战：构建安全的权限体系</h3>
+<h4 id="71-从零开始搭建权限架构">7.1 从零开始搭建权限架构</h4>
+<p>假设你是一个 10 人创业公司的技术负责人，需要从零设计 AWS 权限架构。以下是推荐的实施步骤：</p>
+<p><strong>阶段一：根账号保护（第 1 天）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>目标：保护根账号，这是最重要的账号
+
+1. 启用根账号 MFA（必须）
+   - 推荐硬件 MFA（YubiKey），或者 Google Authenticator
+
+2. 创建 IAM 管理员账号
+   - 用户名：admin（或你的名字）
+   - 权限：AdministratorAccess（但后续会收紧）
+   - 启用 MFA
+
+3. 删除根账号的 Access Key（如果创建了的话）
+   - 根账号永远不应该有 AK/SK
+
+4. 配置根账号使用告警
+   - 使用 CloudWatch + SNS，一旦根账号登录就发邮件/短信
+</code></pre>
+<p><strong>阶段二：团队权限分组（第 1 周）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>目标：给团队成员分组，批量管理权限
+
+1. 分析团队角色：
+   - 后端开发（2人）
+   - 前端开发（1人）
+   - 移动端开发（1人）
+   - 产品经理（1人）
+   - 设计师（1人）
+   - 创始人/管理员（3人）
+
+2. 创建 IAM Groups：
+
+   Group: Developers
+   ├── 成员：所有开发（后端、前端、移动端）
+   ├── 权限：
+   │   ├── EC2: 启动、停止、查看（但不能删除别人的实例）
+   │   ├── S3: 读写开发环境的 bucket
+   │   ├── RDS: 只读权限（不能修改生产数据库）
+   │   └── CloudWatch: 查看日志
+   └── 限制：只能操作 ap-northeast-1 区域
+
+   Group: ProductTeam
+   ├── 成员：产品经理、设计师
+   ├── 权限：
+   │   ├── S3: 只读（查看数据文件）
+   │   ├── CloudWatch Dashboard: 查看监控图表
+   │   └── Cost Explorer: 查看账单（但不能修改）
+   └── 限制：只读权限，不能修改任何资源
+
+   Group: Administrators
+   ├── 成员：创始人、技术负责人
+   ├── 权限：AdministratorAccess
+   └── 要求：必须使用 MFA 才能操作
+
+3. 给每个人创建 IAM User，加入对应的 Group
+   - 不要给个人直接附加权限，一律通过 Group 管理
+   - 启用 MFA（强制要求）
+</code></pre>
+<p><strong>阶段三：应用层权限优化（第 2-4 周）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>目标：让应用程序安全地访问 AWS 资源
+
+1. EC2 实例使用 Instance Profile
+   - 不再在服务器上配置 AK/SK
+   - 创建 IAM Role，附加需要的权限（如 S3 读写）
+   - 创建 Instance Profile，关联这个 Role
+   - 启动 EC2 时选择这个 Instance Profile
+   - 应用代码中直接使用 boto3，无需配置凭证
+
+2. 如果必须使用 AK/SK（第三方集成）
+   - 使用 AWS Secrets Manager 存储 AK/SK
+   - 应用启动时从 Secrets Manager 读取
+   - 设置定期轮换（90天）
+   - 监控 AK/SK 的使用情况
+
+3. 配置 CloudTrail 记录所有 API 调用
+   - 创建单独的 S3 bucket 存储日志
+   - 设置日志文件校验（防止篡改）
+   - 配置 SNS 通知关键事件（如根账号使用、策略变更）
+</code></pre>
+<p><strong>阶段四：安全加固（持续）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>目标：建立持续的安全监控和改进机制
+
+1. 启用 AWS Config
+   - 监控资源配置变更
+   - 检查合规性（如安全组是否开放了 0.0.0.0/0）
+
+2. 启用 IAM Access Analyzer
+   - 持续分析资源策略
+   - 识别外部访问（如 S3 bucket 是否公开）
+
+3. 定期审查 IAM 配置
+   - 每月检查一次未使用的 IAM User、Role
+   - 检查 Access Key 的使用情况
+   - 验证 Group 成员是否合理
+
+4. 建立安全事件响应流程
+   - 如果发现 AK/SK 泄露：立即删除、轮换、审计影响范围
+   - 如果发现异常 API 调用：立即调查、限制权限
+</code></pre>
+<h3 id="8-常见误区与避坑指南">8. 常见误区与避坑指南</h3>
+<h4 id="81-十大-iam-反模式">8.1 十大 IAM 反模式</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">反模式</th>
+<th align="left">为什么不好</th>
+<th align="left">正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">使用根账号进行日常操作</td>
+<td align="left">根账号拥有所有权限，一旦泄露无法限制损害</td>
+<td align="left">创建 IAM 管理员账号，根账号仅在必要时使用</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">给所有人 AdministratorAccess</td>
+<td align="left">违反最小权限原则，增加误操作和内部威胁风险</td>
+<td align="left">按角色分组，只授予必要的权限</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">在代码中硬编码 AK/SK</td>
+<td align="left">AK/SK 容易通过 GitHub 泄露，且难以轮换</td>
+<td align="left">使用 IAM Role、环境变量或密钥管理服务</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">长期不轮换 AK/SK</td>
+<td align="left">增加凭证泄露后的风险敞口时间</td>
+<td align="left">设置 90 天轮换策略，或更好的——使用临时凭证</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">忽略 MFA</td>
+<td align="left">密码泄露后账号直接沦陷</td>
+<td align="left">为所有 IAM 用户启用 MFA，尤其是高权限用户</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">不使用 CloudTrail</td>
+<td align="left">无法审计谁做了什么操作，出事后无法溯源</td>
+<td align="left">启用 CloudTrail，并将日志存储到独立的审计账号</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">IAM Policy 过于宽松</td>
+<td align="left">如 <code>Resource: &quot;*&quot;</code>、<code>Action: &quot;*&quot;</code>，增加攻击面</td>
+<td align="left">明确指定资源 ARN 和具体 Action</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">不清理离职员工的 IAM User</td>
+<td align="left">僵尸账号可能成为后门</td>
+<td align="left">建立离职流程，立即禁用并删除 IAM User</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">不使用 IAM Access Analyzer</td>
+<td align="left">无法发现过度宽松的资源策略（如公开 S3 bucket）</td>
+<td align="left">启用 IAM Access Analyzer，定期检查外部访问</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">不在测试环境验证 Policy</td>
+<td align="left">直接在生产环境应用 Policy，可能导致服务中断</td>
+<td align="left">使用 IAM Policy Simulator 测试，先在测试环境验证</td>
+</tr>
+</tbody></table></div>
+<h3 id="9-名词对照表">9. 名词对照表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">英文术语</th>
+<th align="left">中文对照</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>IAM (Identity and Access Management)</strong></td>
+<td align="left">身份与访问管理</td>
+<td align="left">云服务中管理用户身份和访问权限的服务</td>
+</tr>
+<tr>
+<td align="left"><strong>RAM (Resource Access Management)</strong></td>
+<td align="left">资源访问管理</td>
+<td align="left">阿里云的 IAM 服务名称</td>
+</tr>
+<tr>
+<td align="left"><strong>Root Account</strong></td>
+<td align="left">根账号</td>
+<td align="left">注册云账号时创建的拥有者账号，拥有最高权限</td>
+</tr>
+<tr>
+<td align="left"><strong>IAM User</strong></td>
+<td align="left">IAM 用户/子账号</td>
+<td align="left">由根账号创建的子身份，用于日常操作</td>
+</tr>
+<tr>
+<td align="left"><strong>IAM Role</strong></td>
+<td align="left">IAM 角色</td>
+<td align="left">临时性权限载体，无长期凭证，需要被&quot;扮演&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>IAM Policy</strong></td>
+<td align="left">IAM 策略</td>
+<td align="left">JSON 格式的权限规则定义</td>
+</tr>
+<tr>
+<td align="left"><strong>ARN</strong></td>
+<td align="left">亚马逊资源名称</td>
+<td align="left">全局唯一的资源标识符</td>
+</tr>
+<tr>
+<td align="left"><strong>AK/SK</strong></td>
+<td align="left">访问密钥/密钥</td>
+<td align="left">程序访问云 API 的凭证</td>
+</tr>
+<tr>
+<td align="left"><strong>STS</strong></td>
+<td align="left">安全令牌服务</td>
+<td align="left">提供临时安全凭证的服务</td>
+</tr>
+<tr>
+<td align="left"><strong>MFA</strong></td>
+<td align="left">多因素认证</td>
+<td align="left">需要两个或以上因素的认证方式</td>
+</tr>
+<tr>
+<td align="left"><strong>SSO</strong></td>
+<td align="left">单点登录</td>
+<td align="left">用户一次登录即可访问多个系统的认证方式</td>
+</tr>
+<tr>
+<td align="left"><strong>ExternalId</strong></td>
+<td align="left">外部 ID</td>
+<td align="left">用于防止困惑代理攻击的安全标识符</td>
+</tr>
+<tr>
+<td align="left"><strong>CloudTrail</strong></td>
+<td align="left">云审计服务</td>
+<td align="left">记录云账号中所有 API 调用和操作的日志服务</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结云账号权限管理的核心原则">总结：云账号权限管理的核心原则</h3>
+<p>云账号权限管理需要根据团队规模和业务需求持续演进：</p>
+<ol>
+<li><p><strong>起步阶段</strong>（1-10 人）：</p>
+<ul>
+<li>保护根账号（MFA + 不用根账号日常操作）</li>
+<li>创建 IAM 管理员账号</li>
+<li>基本的分组（Developers、Admins）</li>
+</ul>
+</li>
+<li><p><strong>成长阶段</strong>（10-50 人）：</p>
+<ul>
+<li>细化的权限分组（前后端、运维、产品等）</li>
+<li>使用 IAM Role 替代 AK/SK</li>
+<li>启用 CloudTrail 审计</li>
+<li>定期权限审查</li>
+</ul>
+</li>
+<li><p><strong>成熟阶段</strong>（50 人以上 / 多账号）：</p>
+<ul>
+<li>多账号架构（Dev、Staging、Prod 分离）</li>
+<li>集中式日志审计账号</li>
+<li>自动化权限审查和告警</li>
+<li>完善的权限申请和审批流程</li>
+</ul>
+</li>
+</ol>
+<p><strong>核心原则记住三句话</strong>：</p>
+<ol>
+<li><strong>最小权限原则</strong>：只给必要的权限，不要给 AdministratorAccess</li>
+<li><strong>不用长期凭证</strong>：优先使用 IAM Role 和临时凭证，避免 AK/SK 泄露</li>
+<li><strong>启用 MFA</strong>：特别是根账号和高权限账号，这是最有效的安全措施</li>
+</ol>
+<blockquote>
+<p><strong>延伸阅读</strong>：</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/iam/">AWS IAM 官方文档</a></li>
+<li><a href="https://www.aliyun.com/product/ram">阿里云 RAM 官方文档</a></li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html">AWS IAM Best Practices</a></li>
+</ul>
+</blockquote>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-152.html">← 云平台实战</a><a rel="next" href="chapter-154.html">对象存储与 CDN →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

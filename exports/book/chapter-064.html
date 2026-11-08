@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>如何用 Godot 开发横版、像素与 3D 游戏 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 64 / 195</p><article><h1 id="如何用-godot-开发横版像素与-3d-游戏">如何用 Godot 开发横版、像素与 3D 游戏</h1><details class="contents"><summary>本章目录 <span>· 9 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#godot-是什么">Godot 是什么</a><ul><li><a href="#什么时候适合选择-godot">什么时候适合选择 Godot</a></li><li><a href="#gdscriptc-和-c-怎么选">GDScript、C# 和 C++ 怎么选</a></li></ul></li><li><a href="#先认识节点场景和脚本">先认识节点、场景和脚本</a></li><li><a href="#准备开发环境">准备开发环境</a></li><li><a href="#第一部分横版动作原型">第一部分：横版动作原型</a><ul><li><a href="#参考primal-light让路线和威胁一眼可读">参考《Primal Light》：让路线和威胁一眼可读</a></li><li><a href="#1-创建横版场景">1. 创建横版场景</a></li><li><a href="#2-让角色移动和跳跃">2. 让角色移动和跳跃</a></li><li><a href="#3-给玩家一个看得见的目标">3. 给玩家一个看得见的目标</a></li><li><a href="#从原型走向完整横版游戏">从原型走向完整横版游戏</a></li></ul></li><li><a href="#第二部分像素游戏原型">第二部分：像素游戏原型</a><ul><li><a href="#参考dome-keeper有限画面里只突出重要信息">参考《Dome Keeper》：有限画面里只突出重要信息</a></li><li><a href="#1-先把像素缩放设对">1. 先把像素缩放设对</a></li><li><a href="#2-做一张能行走的小地图">2. 做一张能行走的小地图</a></li><li><a href="#3-加入一个短玩法循环">3. 加入一个短玩法循环</a></li><li><a href="#从色块原型走向正式像素游戏">从色块原型走向正式像素游戏</a></li></ul></li><li><a href="#第三部分3d-探索原型">第三部分：3D 探索原型</a><ul><li><a href="#参考wrought-flesh先用空间和轮廓带路">参考《Wrought Flesh》：先用空间和轮廓带路</a></li><li><a href="#1-用简单几何体搭灰盒">1. 用简单几何体搭灰盒</a></li><li><a href="#2-让玩家在地面上移动">2. 让玩家在地面上移动</a></li><li><a href="#3-补上灯光阴影和目标反馈">3. 补上灯光、阴影和目标反馈</a></li><li><a href="#从灰盒走向正式-3d-游戏">从灰盒走向正式 3D 游戏</a></li></ul></li><li><a href="#三种原型该从哪一种开始">三种原型该从哪一种开始</a></li><li><a href="#导出前还要做什么">导出前还要做什么</a></li><li><a href="#最后一步选择一个原型继续打磨">最后一步：选择一个原型继续打磨</a></li></ul></nav></details><p>游戏原型最重要的不是先把画面做满，而是让角色能动、目标清楚，并且真的可以玩。</p>
+<p>第一次打开游戏引擎，很容易被“角色、碰撞、场景、材质、灯光”这些词吓住。其实不必一次学完。先让角色动起来，再给它一个明确目标，最后把手感和画面一点点补好，这就是很多游戏最早的样子。</p>
+<p>下面会在 Godot 里分别跑通三个小原型：横版跳跃、俯视角像素收集和 3D 探索。它们不是同一个游戏换三套皮肤，而是三种不同的起步方式。每一部分都先看一个已经正式发行的 Godot 游戏，再把其中一个值得学的做法放进自己的原型。</p>
+<h2 id="godot-是什么">Godot 是什么</h2>
+<p><a href="https://godotengine.org/">Godot</a> 是一套免费、开源的 2D 与 3D 游戏引擎。编辑器、运行时和主要功能都开放源代码，不按营业额收取引擎抽成。它可以制作 Windows、macOS、Linux、Web、Android 和 iOS 游戏；主机平台通常还需要获得平台方开发资格，并使用官方或第三方移植方案。</p>
+<p>Godot 的 2D 不是把 3D 摄像机压扁以后凑出来的。它有独立的 2D 渲染、物理、TileMap、动画、粒子和灯光系统，所以很适合从横版动作、俯视角冒险和像素游戏开始。3D 方面则提供场景、材质、光照、物理、导航和后处理，足够做完整的独立游戏，也很适合快速验证玩法。</p>
+<p>正式发行的 Godot 游戏已经覆盖很多类型。官方 <a href="https://godotengine.org/showcase/">Showcase</a> 里可以找到《Dome Keeper》《Cassette Beasts》《Brotato》《The Case of the Golden Idol》和《Wrought Flesh》等项目。Godot 对 Showcase 的收录也不是随便贴一个 Demo：官方标准要求项目已经发行或有公开试玩版本，并且有可访问的商店页面和一定完成度。后面使用的三个案例都来自这里。</p>
+<h3 id="什么时候适合选择-godot">什么时候适合选择 Godot</h3>
+<p>如果你准备做 2D 或中小规模 3D 游戏，希望很快做出可玩的版本，又不想一开始就背上复杂的引擎授权和工程配置，Godot 很合适。它尤其适合独立团队、游戏原型、教学项目、Game Jam，以及需要同时发布桌面和 Web 版本的作品。</p>
+<p>Godot 也不是所有项目的默认答案。团队已经积累了大量 Unity 或 Unreal 资源、依赖特定商业插件，或者目标是大型开放世界和顶级写实画面时，迁移到 Godot 未必划算。准备发布到 PlayStation、Xbox 或 Nintendo Switch 时，也要先确认主机 SDK、移植服务和平台资格，不能只看到“跨平台”三个字就认为可以直接导出。</p>
+<h3 id="gdscriptc-和-c-怎么选">GDScript、C# 和 C++ 怎么选</h3>
+<p>Godot 最常用的是 <strong>GDScript</strong>。它是为 Godot 设计的脚本语言，写法紧凑，和节点、场景、信号结合得很好，第一次学习时最省事。</p>
+<p>如果团队原来使用 .NET，也可以下载 Godot 的 .NET 版本并使用 C#。需要接入原生库或处理性能敏感模块时，还可以用 C++ 编写 GDExtension。一个常见的成熟项目组合是：玩法和界面用 GDScript 或 C#，真正需要优化的少数底层模块再交给 C++，而不是还没测性能就把所有东西重写一遍。</p>
+<p>三个练习项目都使用标准版 Godot 和 GDScript。</p>
+<h2 id="先认识节点场景和脚本">先认识节点、场景和脚本</h2>
+<p>Godot 编辑器左边最重要的区域叫“场景树”。里面的每一项都是一个<strong>节点</strong>，而每种节点只负责一类事情：<code>CharacterBody2D</code> 管角色运动与碰撞，<code>Camera2D</code> 负责镜头，<code>Label</code> 显示文字，<code>DirectionalLight3D</code> 提供方向光。</p>
+<p>把一组节点组织成树并保存下来，就得到一个<strong>场景</strong>。一个玩家场景可以包含角色、碰撞体、动画和摄像机，然后被主关卡重复使用；同一个敌人场景也可以实例化十次，而不用复制十套代码。</p>
+<p><strong>GDScript</strong> 则把行为挂到节点上。按键以后怎样移动、碰到道具以后怎样计数、进入目标门以后怎样切关，都写在对应节点的脚本里。场景负责“这里有什么”，脚本负责“它会做什么”。</p>
+<p>官方的 <a href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/nodes_and_scenes.html">Nodes and Scenes</a> 用一个简单角色解释了这套组合方式。遇到不认识的节点时，也可以直接在编辑器内打开帮助，不必离开项目去猜参数。</p>
+<p>下面这张图是本篇横版原型在 Godot 4.7.1 中的真实编辑器窗口。左边能看到 <code>World</code>、<code>Platforms</code>、<code>GoalBeacon</code>、<code>Player</code> 和 <code>HUD</code>；中间是 2D 场景；下方文件系统里是场景和 GDScript。截图只保留了 Godot 窗口，没有桌面、Finder 目录或个人文件。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-editor-platformer.png" alt="Godot 编辑器中的横版原型场景树与 2D 工作区" loading="lazy" decoding="async"></p>
+<p>先记住一个简单的拆法：玩家、关卡、HUD 和可收集物尽量各自负责一件事。原型很小时全部塞在主场景里确实也能运行，但功能一多就会互相牵连。</p>
+<h2 id="准备开发环境">准备开发环境</h2>
+<p>从 <a href="https://godotengine.org/download/">Godot 下载页</a> 获取当前稳定版。第一次使用 GDScript，下载标准版即可；只有确定使用 C# 时才需要 .NET 版。</p>
+<p>打开 Godot 后新建一个空项目。渲染器可以这样选：</p>
+<ul>
+<li>主要做桌面 3D，优先尝试 Forward+；</li>
+<li>需要照顾移动设备，先看 Mobile；</li>
+<li>2D、Web 或需要兼容较老显卡，可以选择 Compatibility。</li>
+</ul>
+<p>三个原型为了保持同一套运行环境，都使用 Compatibility。实际验证使用的是 <strong>Godot 4.7.1 stable</strong>。如果你使用更早的 Godot 4，个别菜单名称可能略有不同；如果是 Godot 3，不要直接照搬节点名称，因为 <code>CharacterBody2D</code>、<code>TileMapLayer</code> 等 API 已经发生变化。</p>
+<p>准备一个空文件夹，用 AI 开发工具打开，再说：</p>
+<blockquote>
+<p>请创建一个 Godot 4 项目，使用 GDScript 和 Compatibility 渲染器。</p>
+</blockquote>
+<p>Godot 能打开项目后，先按 F6 运行当前场景或按 F5 运行主场景。场景还不存在时出现选择提示是正常的。</p>
+<p>不要让 AI 一次生成三个游戏。分别创建三个项目，每次只验证一种玩法。</p>
+<h2 id="第一部分横版动作原型">第一部分：横版动作原型</h2>
+<p>横版游戏看起来直观，真正决定手感的却不是背景图，而是移动、跳跃、碰撞、镜头和关卡节奏。先看一个已经发行的项目怎样处理这些问题。</p>
+<h3 id="参考primal-light让路线和威胁一眼可读">参考《Primal Light》：让路线和威胁一眼可读</h3>
+<p>《Primal Light》是 Fat Gem 制作的线性 2D 动作平台游戏，已经发行到 Windows、macOS、Linux 和 Nintendo Switch。Godot 官方 Showcase 的开发者访谈特别提到，开发者看重 Godot 以像素为原生单位、信号系统和动画工具。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-case-primal-light.webp" alt="Godot Showcase 中的 Primal Light 官方展示图" loading="lazy" decoding="async"></p>
+<p>图片与案例来源：<a href="https://godotengine.org/showcase/primal-light/">Godot Showcase — Primal Light</a>。</p>
+<p>这款游戏值得借鉴的不是把主角和怪物照着画一遍，而是三个更基础的做法：角色始终和背景有明显反差，平台与危险物的边界清楚，一段路线里总能看到下一个落脚点或目标。玩家失败时应该知道是自己没有跳好，而不是看不清哪里能站。</p>
+<p>横版原型 <strong>Skyline Courier</strong> 也沿用这条思路：角色使用暖色，平台边缘使用高亮青色，画面右上角放一个持续发光的信标。美术很简单，但前进方向不会丢。</p>
+<p>动手前可以先打开两份官方资料：<a href="https://docs.godotengine.org/en/stable/getting_started/first_2d_game/">你的第一个 2D 游戏</a> 负责讲完整场景，<a href="https://docs.godotengine.org/en/stable/tutorials/2d/2d_movement.html">2D movement overview</a> 则专门解释 <code>CharacterBody2D</code>、输入和移动。</p>
+<h3 id="1-创建横版场景">1. 创建横版场景</h3>
+<p>先让 AI 只搭场景：</p>
+<blockquote>
+<p>请创建一个 1280×720 的横版场景，放入地面、四个平台、玩家和右上角目标信标。</p>
+</blockquote>
+<p>打开生成的主场景，确认左侧场景树至少能分出关卡、玩家和 HUD。此时玩家不能动也没关系，先按 F6 看平台是否都在画面内。</p>
+<p>如果场景打不开：</p>
+<blockquote>
+<p>主场景打不开，错误是【粘贴错误】。请只修复这个错误。</p>
+</blockquote>
+<h3 id="2-让角色移动和跳跃">2. 让角色移动和跳跃</h3>
+<p>场景正常后再增加运动：</p>
+<blockquote>
+<p>请让玩家用 A、D 和方向键移动，空格跳跃，并与平台碰撞。</p>
+</blockquote>
+<p>运行后专门试四件事：角色会落到地面、不能穿过平台、空中不能无限跳、掉出画面后能回到起点。不要在这一步增加敌人和道具，否则很难判断到底是哪一层出了问题。</p>
+<p>如果角色会穿过地面：</p>
+<blockquote>
+<p>玩家会穿过地面，请只检查碰撞体和物理移动。</p>
+</blockquote>
+<h3 id="3-给玩家一个看得见的目标">3. 给玩家一个看得见的目标</h3>
+<p>移动跑通以后再补目标：</p>
+<blockquote>
+<p>请让目标信标持续发光，玩家靠近时显示“已送达”。</p>
+</blockquote>
+<p>正式游戏通常还会播放音效、保存进度或切换关卡，但第一版只需要让玩家知道自己已经完成任务。</p>
+<p>这是本机实际运行后的画面。角色可以左右移动和跳跃，平台具有碰撞，右上角信标提供清楚的终点方向。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-run-platformer.png" alt="Godot 4.7.1 实际运行的 Skyline Courier 横版原型" loading="lazy" decoding="async"></p>
+<p>这张图不是效果稿。项目在 Godot 4.7.1 中加载了 <code>main.tscn</code>，<code>CharacterBody2D</code> 接收移动与跳跃输入，<code>StaticBody2D</code> 负责平台碰撞，运行窗口真实渲染后截取了这一帧。</p>
+<h3 id="从原型走向完整横版游戏">从原型走向完整横版游戏</h3>
+<p>现在的原型只证明“移动—跳跃—抵达目标”能成立。要接近《Primal Light》这类正式发行项目，下一步不是立刻堆十张地图，而是把这条短路线做扎实：</p>
+<ul>
+<li>用独立 Player 场景管理碰撞、动画和角色状态；</li>
+<li>增加土狼时间和跳跃输入缓冲，让晚一点或早一点按键也不显得生硬；</li>
+<li>用 <code>AnimationPlayer</code> 或 <code>AnimationTree</code> 管待机、奔跑、跳跃和受伤；</li>
+<li>用 <code>Camera2D</code> 设置前视范围和边界，避免镜头露出关卡外；</li>
+<li>用 TileMapLayer 或可复用场景搭关卡，不要在脚本里写死每块平台的位置；</li>
+<li>把抵达目标做成信号，让 HUD、音效和关卡切换各自响应。</li>
+</ul>
+<p>这就是成熟项目和本篇原型的连接：先保证路线可读和移动可靠，再替换正式角色、动画、音效和关卡内容。画面升级不能弥补基础手感的问题。</p>
+<h2 id="第二部分像素游戏原型">第二部分：像素游戏原型</h2>
+<p>“像素游戏”和“横版游戏”不是同一层概念。横版说的是玩法与视角，像素说的是画面怎样组成。像素游戏可以是横版动作，也可以是俯视角冒险、策略或生存游戏。</p>
+<p>这一部分换成俯视角，重点学习低分辨率、整数缩放、清晰轮廓和短循环。</p>
+<h3 id="参考dome-keeper有限画面里只突出重要信息">参考《Dome Keeper》：有限画面里只突出重要信息</h3>
+<p>《Dome Keeper》由 Bippinbits 制作，是一款已经正式发行的像素风生存采矿游戏。玩家在攻击间隙向地下挖掘资源，再回到穹顶抵御怪物，并用资源升级装备。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-case-dome-keeper.webp" alt="Godot Showcase 中的 Dome Keeper 官方展示图" loading="lazy" decoding="async"></p>
+<p>图片与案例来源：<a href="https://godotengine.org/showcase/dome-keeper/">Godot Showcase — Dome Keeper</a>。</p>
+<p>这个项目最值得原型阶段学习的是<strong>循环清楚</strong>：离开安全区寻找资源、带着资源回来、资源改变下一轮能力。它的像素画面信息很多，但角色、资源、危险和可通行区域仍然能够迅速区分。</p>
+<p>像素原型 <strong>Lantern Woods</strong> 不复制采矿和守城，而是保留“离开起点—寻找资源—看到计数变化”这条最小循环。三颗光晶使用最亮的青色，背景限制在深蓝与绿色，右上角一直显示收集进度。</p>
+<p>像素画面最容易踩坑的是缩放。先看 Godot 官方的 <a href="https://docs.godotengine.org/en/stable/tutorials/rendering/multiple_resolutions.html">Multiple resolutions</a>：官方建议像素项目使用低基础分辨率、Viewport 拉伸和整数缩放，避免一个原始像素被拉成宽窄不一的像素块。准备制作正式地图时，再阅读 <a href="https://docs.godotengine.org/en/stable/tutorials/2d/using_tilemaps.html">Using TileMaps</a>。</p>
+<h3 id="1-先把像素缩放设对">1. 先把像素缩放设对</h3>
+<p>新建第二个 Godot 项目，然后说：</p>
+<blockquote>
+<p>请把基础分辨率设为 320×180，窗口放大到 1280×720，并使用整数缩放。</p>
+</blockquote>
+<p>接着关闭纹理平滑：</p>
+<blockquote>
+<p>请让 2D 纹理使用 Nearest 过滤，不要模糊像素边缘。</p>
+</blockquote>
+<p>这两条要分开。第一条决定画布和比例，第二条决定纹理怎样采样。运行时如果像素边缘发糊，先检查过滤方式，不要急着重画素材。</p>
+<h3 id="2-做一张能行走的小地图">2. 做一张能行走的小地图</h3>
+<blockquote>
+<p>请做一个俯视角森林场景，加入小路、水面、树木和可移动角色。</p>
+</blockquote>
+<p>角色先用简单色块也可以。按 F6 后确认 WASD 与方向键都能移动，角色不会走出画面，移动停止时不会落在半个像素的位置。</p>
+<p>正式项目应使用 TileSet 图集和 TileMapLayer，而不是给每棵树单独放一张图片。这样才能统一碰撞、批量调整地图，也更方便设计师修改关卡。</p>
+<h3 id="3-加入一个短玩法循环">3. 加入一个短玩法循环</h3>
+<blockquote>
+<p>请在地图上放三颗光晶，角色碰到后收集，并更新右上角计数。</p>
+</blockquote>
+<p>先验证每颗光晶只计数一次。收集完成以后可以再加提示：</p>
+<blockquote>
+<p>三颗光晶收齐后，请显示“林灯已点亮”。</p>
+</blockquote>
+<p>这是本机实际运行的结果。内部画布是 320×180，显示窗口按 4 倍整数放大；角色、树木、路径和光晶都对齐到像素网格，画面没有使用平滑缩放。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-run-pixel.png" alt="Godot 4.7.1 实际运行的 Lantern Woods 像素原型" loading="lazy" decoding="async"></p>
+<p>原型中的三颗光晶会检查玩家距离并更新 <code>LIGHT 0/3</code>。截图停在第一次收集前，因此三颗仍然都在场景里；实际操作时可以依次走近它们验证计数。</p>
+<h3 id="从色块原型走向正式像素游戏">从色块原型走向正式像素游戏</h3>
+<p>现在的树、道路和角色是直接绘制的简单像素块，适合验证比例和玩法，不是正式美术。接下来可以沿着《Dome Keeper》的思路完善：</p>
+<ul>
+<li>先固定一套调色板，再画地表、角色和道具，避免每张素材各用一套颜色；</li>
+<li>使用 TileSet atlas、地形连接和 TileMapLayer 组织地图；</li>
+<li>用 SpriteFrames 管理走路方向和收集动画；</li>
+<li>让资源、出口和危险拥有稳定的颜色与轮廓，不要只靠文字说明；</li>
+<li>把“探索—收集—返回—升级”拆成几个可单独测试的状态；</li>
+<li>在 16:9、16:10 和超宽窗口检查黑边、扩展区域与 HUD 锚点。</li>
+</ul>
+<p>像素风并不等于制作成本低。角色动画、地形拼接、不同分辨率和 UI 可读性都会消耗大量时间。先用色块验证循环，再投入正式逐帧美术，通常比先画一个月素材更稳妥。</p>
+<h2 id="第三部分3d-探索原型">第三部分：3D 探索原型</h2>
+<p>进入 3D 以后，多出来的不只是一个 Z 轴。摄像机、光照、阴影、材质、碰撞层和性能都会影响结果。因此成熟团队常先做 <strong>灰盒</strong>：只用方块、圆柱和胶囊搭空间，确认角色能走、镜头看得清、目标找得到，再换正式模型。</p>
+<h3 id="参考wrought-flesh先用空间和轮廓带路">参考《Wrought Flesh》：先用空间和轮廓带路</h3>
+<p>《Wrought Flesh》由 Miziziziz 制作，是已经正式发行的 3D 生物朋克动作 RPG。Godot 官方 Showcase 列出了器官属性系统、武器、敌人、Boss、任务和多个生态区域。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-case-wrought-flesh.webp" alt="Godot Showcase 中的 Wrought Flesh 官方展示图" loading="lazy" decoding="async"></p>
+<p>图片与案例来源：<a href="https://godotengine.org/showcase/wrought-flesh/">Godot Showcase — Wrought Flesh</a>。</p>
+<p>这个案例和练习原型的规模完全不同，但仍有可以马上借鉴的地方：不同区域要有清楚的色彩和轮廓，关键目标要在复杂场景里被看到，战斗或移动反馈不能只依赖 HUD 文字。</p>
+<p>3D 原型 <strong>Signal Garden</strong> 先做最小灰盒：深色地面建立空间边界，粉色胶囊代表玩家，黄色晶体作为沿途参照，远处的青色发光门作为目标。方向光打开阴影，环境光保证暗部仍然可读。</p>
+<p>第一次学 3D，建议跟着 Godot 官方的 <a href="https://docs.godotengine.org/en/stable/getting_started/first_3d_game/">你的第一个 3D 游戏</a> 做一遍。它从地面、角色和输入开始，再加入敌人、碰撞、动画、得分与重开，比直接下载一套大型模板更容易看懂。</p>
+<h3 id="1-用简单几何体搭灰盒">1. 用简单几何体搭灰盒</h3>
+<p>新建第三个 Godot 项目，然后说：</p>
+<blockquote>
+<p>请创建一个 3D 场景，加入地面、胶囊玩家、摄像机和远处的门。</p>
+</blockquote>
+<p>先在编辑器的 3D 视图里检查比例。玩家不能埋进地面，摄像机要看得到角色和目标门，碰撞体大小要和可见模型接近。</p>
+<p>如果摄像机里看不到玩家：</p>
+<blockquote>
+<p>运行后看不到玩家，请只调整摄像机位置和朝向。</p>
+</blockquote>
+<h3 id="2-让玩家在地面上移动">2. 让玩家在地面上移动</h3>
+<blockquote>
+<p>请让 CharacterBody3D 用 WASD 和方向键在地面移动，并阻止它掉下去。</p>
+</blockquote>
+<p>运行以后分别按四个方向，确认镜头不会反向、角色不会穿过地面，也不会因为按斜方向而移动得更快。</p>
+<h3 id="3-补上灯光阴影和目标反馈">3. 补上灯光、阴影和目标反馈</h3>
+<p>灰盒不是把所有物体都留成默认灰色。只要目标不清楚，就无法判断空间设计是否有效。</p>
+<p>先增加基本光照：</p>
+<blockquote>
+<p>请加入环境光和方向光，并给方向光开启阴影。</p>
+</blockquote>
+<p>再强调目标：</p>
+<blockquote>
+<p>请让远处的门发青色光，并让玩家一开始就能看到它。</p>
+</blockquote>
+<p>这是本机实际运行的 3D 场景。地面和悬浮平台仍然是简单几何体，所以它诚实地说只是灰盒原型；但方向光、投影、环境颜色、发光材质和目标门都已经真实生效。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/godot-game-development/images/godot-run-3d.png" alt="Godot 4.7.1 实际运行的 Signal Garden 3D 灰盒原型" loading="lazy" decoding="async"></p>
+<p>图中角色是带碰撞体的 <code>CharacterBody3D</code>，摄像机跟随玩家；两个晶体会旋转，悬浮平台会上下移动。阴影能帮助判断物体离地高度，发光门则告诉玩家移动方向。这些反馈在正式模型进场以前就应该跑通。</p>
+<h3 id="从灰盒走向正式-3d-游戏">从灰盒走向正式 3D 游戏</h3>
+<p>接下来不要把所有工作合并成一句“做得更精美”。按生产项目常见的顺序逐层替换：</p>
+<ul>
+<li>先锁定移动速度、镜头距离、碰撞和关卡尺度；</li>
+<li>把玩家、目标门和互动道具拆成独立场景；</li>
+<li>用占位模型验证路径，再从 Blender 导入带正确尺度的正式模型；</li>
+<li>为材质建立统一规则，分别处理不透明、透明、发光和地表材质；</li>
+<li>用 <code>AnimationTree</code> 管角色动画，用信号或状态机管理互动；</li>
+<li>给目标门增加进入检测、声音、粒子和明确的完成反馈；</li>
+<li>用 Profiler 和可见性工具检查 CPU、GPU、阴影和绘制调用，不凭肉眼猜性能。</li>
+</ul>
+<p>《Wrought Flesh》这样的商业游戏包含多个区域、敌人、武器和任务系统，这个练习只取了“用轮廓、色彩和目标引导玩家”这一小点。原型和成熟产品之间不是一条提示词的距离，而是一轮轮玩法、关卡、美术、音频和性能验证。</p>
+<h2 id="三种原型该从哪一种开始">三种原型该从哪一种开始</h2>
+<p>如果你完全没有游戏开发经验，先做横版或俯视角 2D。二维坐标更容易理解，也能更快学会场景、输入、碰撞和信号。想做复古画面时，再把像素缩放、TileMap 和动画规范加进来。</p>
+<p>已经掌握 2D 基础，或者核心创意必须依赖空间、镜头和立体关卡，再进入 3D。不要因为 3D 看起来“更像大作”就从复杂角色模型开始。可玩的灰盒，比不能移动的精美场景更接近真正的游戏。</p>
+<p>可以用下面三句话判断：</p>
+<ul>
+<li>玩法靠跳跃路线、左右推进和平台节奏：先做横版；</li>
+<li>玩法靠地图探索、资源循环，并且画面要保持像素风：先做低分辨率像素原型；</li>
+<li>玩法离不开空间深度、镜头和立体路线：先做 3D 灰盒。</li>
+</ul>
+<h2 id="导出前还要做什么">导出前还要做什么</h2>
+<p>在编辑器里运行只是开发版通过，不等于已经发布。准备导出时，先在 <code>Editor &gt; Manage Export Templates</code> 安装与当前 Godot 版本完全匹配的导出模板，再从 <code>Project &gt; Export</code> 添加目标平台预设。</p>
+<p>桌面版本要在没有 Godot 编辑器的干净电脑上验证启动、输入、存档和全屏切换；Web 版本要通过本地服务器或 HTTPS 访问，不能只双击 HTML；Android 与 iOS 还要配置各自 SDK、签名、权限和真机测试。Steam、itch.io 或应用商店的上传流程也要单独完成。</p>
+<p>给 AI 的指令仍然保持一次一件事：</p>
+<blockquote>
+<p>请为当前系统配置 Godot 导出预设，不要修改游戏玩法。</p>
+</blockquote>
+<p>导出失败时：</p>
+<blockquote>
+<p>导出失败，错误是【粘贴错误】。请只检查模板和预设。</p>
+</blockquote>
+<p>本篇在 macOS 上实际验证了 Godot 4.7.1 编辑器、三个项目的场景加载和调试运行，并取得了横版、像素与 3D 的真实运行画面。横版输入与平台碰撞、像素整数缩放与收集计数、3D 移动与灯光阴影都已经接入临时验证项目。</p>
+<p>这里没有把 Windows、Linux、Web、Android、iOS 或主机导出写成“已经通过”。它们需要对应的导出模板、SDK、签名和设备，有目标平台时再在那套环境里实测并补图。临时原型工程也不随教程提交；读者跟着短提示词自己搭建，才能真正看懂场景树和每一步变化。</p>
+<h2 id="最后一步选择一个原型继续打磨">最后一步：选择一个原型继续打磨</h2>
+<p>三个项目分别练习了不同能力：横版原型检查移动、跳跃和路线；像素原型检查分辨率、地图和收集循环；3D 原型检查空间、镜头、灯光和目标引导。不要同时扩展三个项目，先选择最接近自己想法的一个。</p>
+<p>接着请一位没有参与开发的人试玩五分钟。试玩开始后不要解释操作，只记录下面三件事：</p>
+<ol>
+<li>他第一次停下来或走错的位置；</li>
+<li>他失败以后是否知道原因；</li>
+<li>他是否愿意马上再玩一次。</li>
+</ol>
+<p>把最明显的问题交给 AI，一次只改一项：</p>
+<blockquote>
+<p>试玩者在【位置】不知道该往哪里走。请只加强路线提示，不要增加新关卡。</p>
+</blockquote>
+<p>修改后再让同一个人重试。路线和目标已经看得懂，再增加下一关、正式美术和声音；如果仍然需要口头解释，就继续调整移动、镜头、碰撞和目标提示。完成这一轮试玩与修改，原型才真正进入游戏开发，而不只是编辑器里的演示场景。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-063.html">← 如何开发跨平台 Electron 桌面程序</a><a rel="next" href="chapter-065.html">如何在本地模拟链铸造 NFT →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

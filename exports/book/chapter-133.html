@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>领域特定语言（DSL） · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 133 / 195</p><article><h1 id="领域特定语言dsl">领域特定语言（DSL）</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#领域特定语言dsl原理">领域特定语言（DSL）原理</a><ul><li><a href="#1-dsl-总论通用语言之外的另一个世界">1. DSL 总论：通用语言之外的另一个世界</a></li><li><a href="#2-数据序列化格式用文本描述结构化数据">2. 数据序列化格式：用文本描述结构化数据</a></li><li><a href="#3-嵌入式脚本语言可编程的配置层">3. 嵌入式脚本语言：可编程的配置层</a></li><li><a href="#4-基础设施即代码infrastructure-as-code">4. 基础设施即代码（Infrastructure as Code）</a></li><li><a href="#5-胶水代码与-sdk-自动生成">5. 胶水代码与 SDK 自动生成</a></li><li><a href="#6-ai-与-dsl-的关系">6. AI 与 DSL 的关系</a></li><li><a href="#7-术语表">7. 术语表</a></li><li><a href="#总结-24">总结</a></li></ul></li></ul></nav></details><h2 id="领域特定语言dsl原理">领域特定语言（DSL）原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+在一个真实案例中，工程师 Armin 在新公司用 AI 构建了一套基础设施服务，总计约 4 万行代码（Go + YAML + Pulumi + SDK 胶水代码），其中超过 90% 由 AI 生成。这个案例中出现了许多初学者不熟悉的术语：YAML、Pulumi、HCL、Lua、SDK 胶水代码……它们既不是 Python，也不是 JavaScript，却在后端项目中无处不在。本文将从一个统一的视角——<strong>领域特定语言（DSL）</strong>——来系统地介绍这些技术。</p>
+</blockquote>
+<p><strong>本文的学习目标</strong></p>
+<p>在后端开发中，除了用通用编程语言（Python、Go、Java 等）编写的业务逻辑之外，还存在大量<strong>用途各异、语法各异、但都不属于通用编程语言</strong>的文件和代码。它们有一个共同的上位概念：<strong>DSL（Domain-Specific Language，领域特定语言）</strong>。</p>
+<p>学完本文后，你将能够：</p>
+<ul>
+<li>理解 DSL 与通用编程语言（GPL）的本质区别</li>
+<li>掌握 DSL 的分类体系：数据序列化格式、嵌入式脚本语言、基础设施定义语言</li>
+<li>区分 XML、JSON、YAML、TOML、CSV、Protobuf 等数据格式的适用场景</li>
+<li>理解 Lua 等嵌入式脚本语言的设计目的</li>
+<li>解释 Terraform（HCL）和 Pulumi 的原理与区别</li>
+<li>理解 OpenAPI 规范与 SDK 自动生成的工作原理</li>
+<li>判断哪些类型的代码适合交给 AI 生成</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>主题</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>DSL 总论</td>
+<td>DSL vs GPL 的定义、分类体系与全景图</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>数据序列化格式</td>
+<td>XML、JSON、YAML、TOML、CSV、Protobuf 等</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>嵌入式脚本语言</td>
+<td>Lua 等语言的设计哲学与典型应用</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>基础设施即代码</td>
+<td>Terraform（HCL）、Pulumi 的原理与对比</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>胶水代码与 SDK 生成</td>
+<td>OpenAPI 规范与客户端代码自动生成</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>AI 与 DSL 的关系</td>
+<td>为什么 AI 特别擅长生成 DSL 代码</td>
+</tr>
+</tbody></table></div>
+<h3 id="1-dsl-总论通用语言之外的另一个世界">1. DSL 总论：通用语言之外的另一个世界</h3>
+<h4 id="11-dsl概述">1.1 DSL概述</h4>
+<p><strong>DSL（Domain-Specific Language，领域特定语言）</strong> 是为某个特定领域或特定任务设计的语言。与之相对的是 <strong>GPL（General-Purpose Language，通用编程语言）</strong>，如 Python、Java、Go、C++ 等——它们被设计为可以解决任意计算问题。</p>
+<p>两者的核心区别：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>GPL（通用编程语言）</th>
+<th>DSL（领域特定语言）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>设计目标</strong></td>
+<td>解决任意计算问题</td>
+<td>解决某个特定领域的问题</td>
+</tr>
+<tr>
+<td><strong>表达范围</strong></td>
+<td>图灵完备，理论上可以计算任何东西</td>
+<td>通常有意限制表达范围</td>
+</tr>
+<tr>
+<td><strong>学习成本</strong></td>
+<td>较高，需要理解完整的语言体系</td>
+<td>较低，只需理解该领域的概念</td>
+</tr>
+<tr>
+<td><strong>典型代表</strong></td>
+<td>Python、Java、Go、C++、JavaScript</td>
+<td>SQL、HTML/CSS、正则表达式、YAML、HCL</td>
+</tr>
+</tbody></table></div>
+<p>你其实早就在使用 DSL 了：</p>
+<ul>
+<li><strong>SQL</strong> 是数据库查询领域的 DSL——你用 <code>SELECT * FROM users WHERE age &gt; 18</code> 来查数据，而不是用 Python 手写遍历逻辑</li>
+<li><strong>HTML/CSS</strong> 是网页结构与样式领域的 DSL——你用标签和属性描述页面，而不是用 C++ 操作像素</li>
+<li><strong>正则表达式</strong> 是文本模式匹配领域的 DSL——你用 <code>\d{3}-\d{4}</code> 匹配电话号码，而不是手写字符比较循环</li>
+</ul>
+<h4 id="12-dsl-的分类">1.2 DSL 的分类</h4>
+<p>DSL 可以按照&quot;是否具备图灵完备性&quot;分为两大类：</p>
+<p><strong>外部 DSL（External DSL）</strong></p>
+<p>拥有独立的语法和解析器，不依附于任何通用编程语言。用户编写的代码由专用的解释器或编译器处理。</p>
+<ul>
+<li>纯数据描述型：JSON、YAML、XML、TOML、CSV、Protobuf（不含任何逻辑）</li>
+<li>查询/操作型：SQL、GraphQL、正则表达式（有限的逻辑能力）</li>
+<li>领域建模型：HCL（Terraform）、Dockerfile、Nginx 配置语法（声明式描述特定领域的状态）</li>
+</ul>
+<p><strong>内部 DSL（Internal DSL / Embedded DSL）</strong></p>
+<p>寄生在某门通用编程语言内部，利用宿主语言的语法来构建领域专用的表达方式。代码本身是合法的宿主语言代码，但读起来像是一门专用语言。</p>
+<ul>
+<li>Pulumi（用 TypeScript/Python/Go 编写，但 API 设计得像声明式配置）</li>
+<li>Ruby on Rails 的路由定义（<code>get &#39;/users&#39;, to: &#39;users#index&#39;</code>，合法的 Ruby 代码，但读起来像配置）</li>
+<li>测试框架中的断言语法（<code>expect(value).toBe(42)</code>，合法的 JavaScript，但读起来像自然语言）</li>
+</ul>
+<h4 id="13-后端项目中的-dsl-全景图">1.3 后端项目中的 DSL 全景图</h4>
+<p>在一个典型的后端项目中，你会遇到以下几类 DSL：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>后端项目中的 DSL
+├── 数据序列化格式（描述数据结构）
+│   ├── 文本格式：JSON、YAML、XML、TOML、CSV、INI
+│   └── 二进制格式：Protobuf、MessagePack、Avro、BSON
+├── 嵌入式脚本语言（可编程的配置层）
+│   ├── Lua（游戏引擎、Nginx、Redis）
+│   ├── GDScript（Godot 引擎）
+│   └── Jsonnet（配置模板生成）
+├── 基础设施与运维 DSL（声明式描述系统状态）
+│   ├── HCL（Terraform）
+│   ├── Dockerfile / Docker Compose YAML
+│   └── Nginx / Apache 配置语法
+└── 接口描述语言（描述 API 契约）
+    ├── OpenAPI / Swagger
+    ├── Protocol Buffers（.proto 文件）
+    └── GraphQL Schema
+</code></pre>
+<p>理解了这张全景图，后续章节将逐一展开每个分支。</p>
+<h3 id="2-数据序列化格式用文本描述结构化数据">2. 数据序列化格式：用文本描述结构化数据</h3>
+<h4 id="21-数据序列化概述">2.1 数据序列化概述</h4>
+<p><strong>序列化（Serialization）</strong> 是指将内存中的数据结构（对象、字典、数组等）转换为一种可存储或可传输的文本/字节流的过程。反过来，从文本/字节流还原为内存中的数据结构，称为反序列化（Deserialization）。</p>
+<p>数据序列化格式是 DSL 中最基础的一类——它们属于纯数据描述型外部 DSL，不具备任何逻辑能力，只负责静态地描述&quot;值是什么&quot;。</p>
+<h4 id="22-需要这些格式的原理">2.2 需要这些格式的原理</h4>
+<p>假设你开发了一个后端服务，数据库地址为 <code>localhost:5432</code>。如果将这个地址硬编码在源代码中，本地开发没有问题，但部署到生产环境时，数据库地址变为 <code>db.prod.company.com:5432</code>，你就需要修改源代码并重新编译。</p>
+<p>工程实践中的通用做法是：<strong>将可变的参数从代码中分离出来，存放在独立的配置文件中。</strong> 程序在启动时读取配置文件，根据其中的值来决定行为。</p>
+<p>除了配置之外，数据序列化格式还广泛用于：系统间的数据交换（API 请求/响应）、数据持久化存储、跨语言通信等场景。</p>
+<h4 id="23-人类可读的文本格式">2.3 人类可读的文本格式</h4>
+<p>以下是工程中最常见的文本序列化格式，按历史顺序介绍。</p>
+<p><strong>INI</strong></p>
+<p>最早期的配置格式，起源于 Windows 系统。结构简单，由节（section）和键值对组成：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-ini">[database]
+host = localhost
+port = 5432
+
+[server]
+debug = true
+</code></pre>
+<p>优点是可读性强。局限在于不支持嵌套结构和数组类型，无法表达复杂配置。目前主要出现在遗留系统和部分 Linux 配置中（如 <code>php.ini</code>、<code>my.cnf</code>）。</p>
+<p><strong>CSV</strong></p>
+<p><strong>CSV（Comma-Separated Values，逗号分隔值）</strong> 是最简单的表格数据格式：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-csv">name,age,city
+Alice,30,Beijing
+Bob,25,Shanghai
+</code></pre>
+<p>每行是一条记录，字段之间用逗号分隔。CSV 广泛用于数据导入导出、电子表格交换、数据分析管道。它的局限是只能表达扁平的二维表格，不支持嵌套结构，且没有类型信息（所有值都是字符串）。</p>
+<p><strong>XML</strong></p>
+<p><strong>XML（eXtensible Markup Language，可扩展标记语言）</strong> 诞生于 1998 年，曾经是数据交换的主流标准：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;config&gt;
+  &lt;database&gt;
+    &lt;host&gt;localhost&lt;/host&gt;
+    &lt;port&gt;5432&lt;/port&gt;
+  &lt;/database&gt;
+  &lt;server&gt;
+    &lt;debug&gt;true&lt;/debug&gt;
+    &lt;allowed_origins&gt;
+      &lt;origin&gt;https://example.com&lt;/origin&gt;
+      &lt;origin&gt;https://app.example.com&lt;/origin&gt;
+    &lt;/allowed_origins&gt;
+  &lt;/server&gt;
+&lt;/config&gt;
+</code></pre>
+<p>XML 的表达力非常强，支持嵌套、属性、命名空间、Schema 验证等高级特性。但它的语法冗长——大量的开闭标签导致信噪比低，手动编写和阅读的体验较差。</p>
+<p>XML 在以下领域仍然广泛使用：</p>
+<ul>
+<li>Java 生态（Maven 的 <code>pom.xml</code>、Spring 配置、Android 布局文件）</li>
+<li>企业级 Web 服务（SOAP 协议）</li>
+<li>办公文档格式（<code>.docx</code>、<code>.xlsx</code> 本质上是 ZIP 压缩的 XML 文件集合）</li>
+<li>RSS/Atom 订阅源、SVG 矢量图形</li>
+</ul>
+<p><strong>JSON</strong></p>
+<p><strong>JSON（JavaScript Object Notation）</strong> 诞生于 2001 年，因其简洁性迅速取代 XML 成为 Web API 数据交换的事实标准：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;database&quot;: {
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 5432
+  },
+  &quot;server&quot;: {
+    &quot;debug&quot;: true
+  }
+}
+</code></pre>
+<p>优点是结构清晰，几乎所有编程语言都有原生解析支持。主要缺点是<strong>不支持注释</strong>，且大量的括号和引号在手动编写时容易出错。JSON 同时也是前端项目配置的标准格式（<code>package.json</code>、<code>tsconfig.json</code>）。</p>
+<p><strong>YAML</strong></p>
+<p><strong>YAML（YAML Ain&#39;t Markup Language）</strong> 同样诞生于 2001 年，是目前后端和 DevOps 领域使用最广泛的配置格式。Docker Compose、Kubernetes、GitHub Actions 等工具均采用 YAML：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># 数据库配置
+database:
+  host: localhost
+  port: 5432
+
+# 服务器配置
+server:
+  debug: true
+  allowed_origins:
+    - https://example.com
+    - https://app.example.com
+</code></pre>
+<p>优点是支持注释、语法简洁、可表达复杂嵌套结构。缺点是<strong>依赖缩进来表示层级关系</strong>，缩进错误会导致解析失败，这是初学者最常遇到的问题。</p>
+<blockquote>
+<p>补充：YAML 的全称 &quot;YAML Ain&#39;t Markup Language&quot; 是一个递归缩写。</p>
+</blockquote>
+<p><strong>TOML</strong></p>
+<p><strong>TOML（Tom&#39;s Obvious Minimal Language）</strong> 诞生于 2013 年，被 Rust 的包管理器 Cargo 和 Python 的 <code>pyproject.toml</code> 采用：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-toml">[database]
+host = &quot;localhost&quot;
+port = 5432
+
+[server]
+debug = true
+allowed_origins = [
+  &quot;https://example.com&quot;,
+  &quot;https://app.example.com&quot;
+]
+</code></pre>
+<p>TOML 试图兼顾 INI 的简洁性和 YAML 的表达力，同时避免缩进敏感带来的问题。</p>
+<h4 id="24-二进制序列化格式">2.4 二进制序列化格式</h4>
+<p>上述格式都是人类可读的文本。在对性能和体积有更高要求的场景中，还存在一类<strong>二进制序列化格式</strong>——它们牺牲可读性，换取更小的体积和更快的解析速度。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>开发方</th>
+<th>特点</th>
+<th>典型使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Protocol Buffers (Protobuf)</strong></td>
+<td>Google</td>
+<td>需要预定义 <code>.proto</code> Schema 文件，强类型，体积极小</td>
+<td>gRPC 通信、Google 内部服务、高性能微服务</td>
+</tr>
+<tr>
+<td><strong>MessagePack</strong></td>
+<td>社区</td>
+<td>类似 JSON 的二进制版本，无需 Schema</td>
+<td>Redis 内部编码、跨语言高性能通信</td>
+</tr>
+<tr>
+<td><strong>Avro</strong></td>
+<td>Apache</td>
+<td>支持 Schema 演进，适合大数据场景</td>
+<td>Hadoop / Kafka 生态的数据序列化</td>
+</tr>
+<tr>
+<td><strong>BSON</strong></td>
+<td>MongoDB</td>
+<td>JSON 的二进制扩展，支持更多数据类型</td>
+<td>MongoDB 数据库内部存储格式</td>
+</tr>
+</tbody></table></div>
+<p>以 Protocol Buffers 为例，需要先定义 Schema：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-protobuf">// user.proto
+syntax = &quot;proto3&quot;;
+
+message User {
+  string name = 1;
+  int32 age = 2;
+  string email = 3;
+}
+</code></pre>
+<p>然后通过编译器（<code>protoc</code>）自动生成各语言的序列化/反序列化代码。这种&quot;先定义 Schema，再生成代码&quot;的模式与后文将介绍的 OpenAPI SDK 生成思路一致。</p>
+<h4 id="25-完整对比">2.5 完整对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>类型</th>
+<th>诞生年代</th>
+<th>可读性</th>
+<th>支持注释</th>
+<th>典型使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>INI</strong></td>
+<td>文本</td>
+<td>1980s</td>
+<td>高</td>
+<td>✅</td>
+<td>系统配置、遗留项目</td>
+</tr>
+<tr>
+<td><strong>CSV</strong></td>
+<td>文本</td>
+<td>1972</td>
+<td>高</td>
+<td>❌</td>
+<td>数据导入导出、表格交换</td>
+</tr>
+<tr>
+<td><strong>XML</strong></td>
+<td>文本</td>
+<td>1998</td>
+<td>中</td>
+<td>✅</td>
+<td>Java 生态、企业级 Web 服务、文档格式</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td>文本</td>
+<td>2001</td>
+<td>高</td>
+<td>❌</td>
+<td>Web API 数据交换、前端配置</td>
+</tr>
+<tr>
+<td><strong>YAML</strong></td>
+<td>文本</td>
+<td>2001</td>
+<td>高</td>
+<td>✅</td>
+<td>Docker、K8s、CI/CD、后端服务配置</td>
+</tr>
+<tr>
+<td><strong>TOML</strong></td>
+<td>文本</td>
+<td>2013</td>
+<td>高</td>
+<td>✅</td>
+<td>Rust / Python 项目配置</td>
+</tr>
+<tr>
+<td><strong>Protobuf</strong></td>
+<td>二进制</td>
+<td>2008</td>
+<td>无</td>
+<td>—</td>
+<td>gRPC、高性能微服务通信</td>
+</tr>
+<tr>
+<td><strong>MessagePack</strong></td>
+<td>二进制</td>
+<td>2008</td>
+<td>无</td>
+<td>—</td>
+<td>高性能跨语言通信</td>
+</tr>
+<tr>
+<td><strong>Avro</strong></td>
+<td>二进制</td>
+<td>2009</td>
+<td>无</td>
+<td>—</td>
+<td>Hadoop / Kafka 大数据管道</td>
+</tr>
+<tr>
+<td><strong>BSON</strong></td>
+<td>二进制</td>
+<td>2009</td>
+<td>无</td>
+<td>—</td>
+<td>MongoDB 内部存储</td>
+</tr>
+</tbody></table></div>
+<p><strong>要点</strong>：所有这些格式的本质功能相同——将结构化数据转换为可存储、可传输的形式。文本格式优先考虑人类可读性和易编辑性；二进制格式优先考虑解析性能和传输体积。选择哪种格式取决于具体场景的需求权衡。</p>
+<h3 id="3-嵌入式脚本语言可编程的配置层">3. 嵌入式脚本语言：可编程的配置层</h3>
+<h4 id="31-概念定义">3.1 概念定义</h4>
+<p>Python、JavaScript、Go 等语言是通用编程语言（General-Purpose Language），它们可以独立运行，构建完整的应用程序。</p>
+<p>与之不同，还有一类语言<strong>专门设计为嵌入到其他宿主程序中运行</strong>，为宿主程序提供可编程的扩展能力。这类语言被称为<strong>嵌入式脚本语言（Embedded Scripting Language）</strong>。</p>
+<p>它们解决的核心问题是：<strong>当静态配置文件（YAML/JSON）的表达力不够，需要引入条件判断、循环等逻辑时，如何在不修改宿主程序源码的前提下实现动态行为。</strong></p>
+<h4 id="32-lua最具代表性的嵌入式脚本语言">3.2 Lua：最具代表性的嵌入式脚本语言</h4>
+<p>Lua（葡萄牙语中&quot;月亮&quot;的意思）是一门极其轻量的脚本语言，整个解释器编译后仅几百 KB。它的设计目标不是独立运行，而是作为可嵌入的扩展层。</p>
+<p>Lua 的典型应用场景：</p>
+<ul>
+<li><p><strong>游戏引擎</strong>：《魔兽世界》的插件系统、《Roblox》的游戏脚本均使用 Lua。游戏引擎用 C/C++ 实现核心渲染和物理计算，将关卡逻辑、NPC 对话等频繁变动的部分交给 Lua 脚本。这样，策划人员修改游戏内容时不需要重新编译引擎。</p>
+</li>
+<li><p><strong>Web 服务器</strong>：OpenResty 将 Lua 嵌入 Nginx 内部，使运维人员可以用 Lua 脚本实现请求过滤、限流、鉴权等逻辑，而无需修改 Nginx 的 C 源码。</p>
+</li>
+<li><p><strong>数据库</strong>：Redis 支持将 Lua 脚本发送到服务端执行，用于实现需要原子性保证的复合操作（如&quot;先读后写&quot;）。</p>
+</li>
+</ul>
+<p>以下是一段嵌入在 Nginx（OpenResty）中的 Lua 脚本示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-lua">-- 功能：对 /api/secret 路径进行 token 鉴权
+local uri = ngx.var.uri
+local token = ngx.req.get_headers()[&quot;Authorization&quot;]
+
+if uri == &quot;/api/secret&quot; and token ~= &quot;Bearer my-secret-token&quot; then
+    ngx.status = 403
+    ngx.say(&quot;Access denied&quot;)
+    return ngx.exit(403)
+end
+</code></pre>
+<h4 id="33-其他嵌入式脚本语言">3.3 其他嵌入式脚本语言</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语言</th>
+<th>宿主环境</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Lua</strong></td>
+<td>游戏引擎、Nginx（OpenResty）、Redis</td>
+<td>游戏逻辑、网关策略、缓存操作</td>
+</tr>
+<tr>
+<td><strong>VimScript / Lua</strong></td>
+<td>Vim / Neovim 编辑器</td>
+<td>编辑器插件开发</td>
+</tr>
+<tr>
+<td><strong>Emacs Lisp</strong></td>
+<td>Emacs 编辑器</td>
+<td>编辑器行为自定义</td>
+</tr>
+<tr>
+<td><strong>GDScript</strong></td>
+<td>Godot 游戏引擎</td>
+<td>游戏逻辑脚本</td>
+</tr>
+<tr>
+<td><strong>Jsonnet</strong></td>
+<td>Kubernetes 生态 / 配置生成工具</td>
+<td>模板化生成大量相似的 JSON/YAML 配置</td>
+</tr>
+</tbody></table></div>
+<p><strong>要点</strong>：嵌入式脚本语言在 DSL 分类中属于内部 DSL 与外部 DSL 的交界地带——它们是独立的语言（有自己的语法和解释器），但设计目标是嵌入宿主程序运行，而非独立构建应用。它们填补了&quot;静态配置文件&quot;（纯数据描述型 DSL）与&quot;通用编程语言&quot;（GPL）之间的空白：当配置需要表达逻辑（条件判断、循环、函数调用）时，嵌入一门轻量脚本语言是工程上的标准解决方案。</p>
+<h3 id="4-基础设施即代码infrastructure-as-code">4. 基础设施即代码（Infrastructure as Code）</h3>
+<h4 id="41-基础设施概述">4.1 基础设施概述</h4>
+<p>在后端工程中，&quot;基础设施&quot;（Infrastructure）指的是应用程序运行所依赖的底层资源：</p>
+<ul>
+<li>计算资源：服务器（虚拟机或容器）</li>
+<li>数据存储：数据库实例、对象存储桶</li>
+<li>网络：防火墙规则、负载均衡器、DNS 配置</li>
+<li>中间件：消息队列、缓存集群</li>
+</ul>
+<p>在云计算时代，这些资源通过云服务商（如 AWS、阿里云、腾讯云）的控制台以图形界面的方式创建和管理。</p>
+<h4 id="42-手动管理的局限性">4.2 手动管理的局限性</h4>
+<p>通过控制台手动操作在小规模项目中可行，但随着项目规模增长，会暴露以下问题：</p>
+<ol>
+<li><strong>不可重复</strong>：操作步骤没有记录，无法精确复现同一套环境</li>
+<li><strong>不可审计</strong>：无法追溯&quot;谁在什么时间修改了什么配置&quot;</li>
+<li><strong>不可协作</strong>：操作过程无法纳入版本控制，无法提交代码审查</li>
+<li><strong>容易出错</strong>：手动操作在生产环境中存在误操作风险</li>
+</ol>
+<p><strong>基础设施即代码（Infrastructure as Code，简称 IaC）</strong> 的核心思想是：<strong>用代码来声明式地定义基础设施资源，使其具备版本控制、自动化执行和可重复部署的能力。</strong></p>
+<h4 id="43-terraform">4.3 Terraform</h4>
+<p>Terraform 是目前使用最广泛的 IaC 工具，由 HashiCorp 公司开发。它使用专用的 <strong>HCL（HashiCorp Configuration Language）</strong> 语言。</p>
+<p>Terraform 采用<strong>声明式</strong>范式：用户描述期望的最终状态，Terraform 自动计算从当前状态到目标状态所需的操作。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-hcl"># 定义一台云服务器
+resource &quot;aws_instance&quot; &quot;my_server&quot; {
+  ami           = &quot;ami-0c55b159cbfafe1f0&quot;  # 操作系统镜像
+  instance_type = &quot;t3.micro&quot;               # 实例规格
+
+  tags = {
+    Name = &quot;my-first-server&quot;
+  }
+}
+
+# 定义一个 PostgreSQL 数据库实例
+resource &quot;aws_db_instance&quot; &quot;my_database&quot; {
+  engine         = &quot;postgres&quot;
+  instance_class = &quot;db.t3.micro&quot;
+  username       = &quot;admin&quot;
+  password       = &quot;please-use-secrets-manager&quot;
+}
+</code></pre>
+<p>执行流程：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">terraform plan    # 预览将要执行的变更
+terraform apply   # 确认并执行，自动在云平台创建资源
+</code></pre>
+<h4 id="44-pulumi">4.4 Pulumi</h4>
+<p>Pulumi 提供了另一种思路：<strong>直接使用通用编程语言（TypeScript、Python、Go 等）来定义基础设施</strong>，而非学习专用的 HCL 语法。</p>
+<p>同样的服务器定义，用 Pulumi + TypeScript 表达如下：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">import * as aws from &quot;@pulumi/aws&quot;;
+
+const server = new aws.ec2.Instance(&quot;my-server&quot;, {
+    ami: &quot;ami-0c55b159cbfafe1f0&quot;,
+    instanceType: &quot;t3.micro&quot;,
+    tags: { Name: &quot;my-first-server&quot; },
+});
+
+const bucket = new aws.s3.Bucket(&quot;my-bucket&quot;, {
+    acl: &quot;private&quot;,
+});
+
+export const serverIp = server.publicIp;
+</code></pre>
+<p>由于使用的是通用编程语言，开发者可以利用循环、条件判断、函数抽象等语言特性来处理复杂的基础设施逻辑。</p>
+<h4 id="45-terraform-与-pulumi-的对比">4.5 Terraform 与 Pulumi 的对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Terraform</th>
+<th>Pulumi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>HCL（专用语言）</td>
+<td>TypeScript / Python / Go 等通用语言</td>
+</tr>
+<tr>
+<td><strong>学习成本</strong></td>
+<td>需要学习 HCL 语法</td>
+<td>使用已掌握的编程语言，学习成本较低</td>
+</tr>
+<tr>
+<td><strong>社区生态</strong></td>
+<td>非常成熟，几乎覆盖所有云服务商</td>
+<td>快速增长中，但规模小于 Terraform</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>运维团队主导的标准化基础设施管理</td>
+<td>开发者主导的项目，需要复杂逻辑的场景</td>
+</tr>
+<tr>
+<td><strong>AI 代码生成适配度</strong></td>
+<td>高（模式固定）</td>
+<td>很高（本质是通用编程语言代码）</td>
+</tr>
+</tbody></table></div>
+<p><strong>要点</strong>：IaC 工具中的 HCL 是一种典型的外部 DSL——它有独立的语法和解析器，专门用于声明式描述基础设施状态。而 Pulumi 则采用内部 DSL 的策略——用通用编程语言的语法来表达领域特定的概念。两者目标一致（将基础设施管理从手动操作转为代码驱动），路径不同（专用语言 vs 通用语言）。代码可以纳入 Git 版本控制、团队审查、自动化执行和回滚。</p>
+<h3 id="5-胶水代码与-sdk-自动生成">5. 胶水代码与 SDK 自动生成</h3>
+<h4 id="51-胶水代码概述">5.1 胶水代码概述</h4>
+<p>在软件工程中，<strong>胶水代码（Glue Code）</strong> 指的是本身不包含业务逻辑，仅用于连接两个系统或模块的代码。</p>
+<p>典型的胶水代码包括：</p>
+<ul>
+<li>前端调用后端 API 时编写的 HTTP 请求代码（URL 拼接、请求头设置、响应解析）</li>
+<li>后端服务 A 调用服务 B 接口时编写的 HTTP 客户端代码</li>
+<li>不同编程语言之间的接口适配代码</li>
+</ul>
+<p>这类代码的特征是：<strong>高度重复、模式固定、但不可省略。</strong></p>
+<h4 id="52-openapi-规范与代码自动生成">5.2 OpenAPI 规范与代码自动生成</h4>
+<p>既然胶水代码具有高度的模式化特征，工程界的解决方案是：<strong>先用标准格式描述 API 接口，再用工具自动生成客户端代码。</strong></p>
+<p><strong>OpenAPI 规范</strong>（前身为 Swagger）是描述 REST API 的行业标准。它使用 YAML 或 JSON 格式，精确定义 API 的路径、参数、请求体和响应结构：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml">openapi: 3.0.0
+info:
+  title: 邮件服务 API
+  version: 1.0.0
+
+paths:
+  /emails:
+    post:
+      summary: 发送邮件
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  example: &quot;user@example.com&quot;
+                subject:
+                  type: string
+                body:
+                  type: string
+      responses:
+        &#39;200&#39;:
+          description: 发送成功
+</code></pre>
+<p>基于这份规范文件，使用 <code>openapi-generator</code> 等工具可以自动生成多种语言的客户端 SDK：</p>
+<ul>
+<li><strong>Python</strong>：<code>client.emails.send(to=&quot;user@example.com&quot;, subject=&quot;Hi&quot;, body=&quot;Hello&quot;)</code></li>
+<li><strong>TypeScript</strong>：<code>client.emails.send({ to: &quot;user@example.com&quot;, subject: &quot;Hi&quot;, body: &quot;Hello&quot; })</code></li>
+<li><strong>Go</strong>：<code>client.Emails.Send(ctx, &amp;SendEmailRequest{To: &quot;user@example.com&quot;, ...})</code></li>
+</ul>
+<p>生成的 SDK 封装了 HTTP 请求的所有细节，调用方无需关心 URL 路径、请求方法、序列化格式等底层实现。</p>
+<h4 id="53-重新理解-armin-的案例">5.3 重新理解 Armin 的案例</h4>
+<p>回到本文开头的案例，现在可以准确理解其中每个组成部分：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>组成部分</th>
+<th>性质</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Go</strong></td>
+<td>业务逻辑代码</td>
+<td>邮件收发服务的核心功能实现</td>
+</tr>
+<tr>
+<td><strong>YAML</strong></td>
+<td>配置文件</td>
+<td>服务配置、CI/CD 流水线定义、OpenAPI 规范文件</td>
+</tr>
+<tr>
+<td><strong>Pulumi</strong></td>
+<td>基础设施代码</td>
+<td>用 Go/TypeScript 定义云资源（服务器、数据库、网络）</td>
+</tr>
+<tr>
+<td><strong>SDK 胶水代码</strong></td>
+<td>自动生成的客户端库</td>
+<td>从 OpenAPI 规范自动生成的 Python 和 TypeScript SDK</td>
+</tr>
+</tbody></table></div>
+<p>其中 YAML 配置、Pulumi 资源定义、SDK 胶水代码这三类均属于高度模式化、有明确规范约束的代码，这正是 AI 代码生成能力最强的领域。因此&quot;4 万行代码中 90% 由 AI 生成&quot;是合理的。</p>
+<h3 id="6-ai-与-dsl-的关系">6. AI 与 DSL 的关系</h3>
+<h4 id="61-ai-代码生成的适用性分析">6.1 AI 代码生成的适用性分析</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特征维度</th>
+<th>适合 AI 生成</th>
+<th>不适合 AI 生成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>模式化程度</strong></td>
+<td>高度重复，存在固定模板</td>
+<td>需要创造性设计，无先例可循</td>
+</tr>
+<tr>
+<td><strong>规范约束</strong></td>
+<td>有明确的 schema 或语法规范</td>
+<td>需求模糊，边界不清晰</td>
+</tr>
+<tr>
+<td><strong>上下文依赖</strong></td>
+<td>局部自洽，单个定义不依赖全局理解</td>
+<td>需要理解整个系统的架构意图</td>
+</tr>
+<tr>
+<td><strong>可验证性</strong></td>
+<td>可被工具自动校验（如 <code>terraform validate</code>）</td>
+<td>只能依靠人工判断设计合理性</td>
+</tr>
+</tbody></table></div>
+<p>本文介绍的四类技术——配置文件、嵌入式脚本、IaC 代码、SDK 胶水代码——均具备左列的特征。这解释了为什么 AI 在这些领域的代码生成效果显著优于业务逻辑代码。</p>
+<h4 id="62-评估框架">6.2 评估框架</h4>
+<p>在判断某段代码是否适合交给 AI 生成时，可以参考以下三个标准：</p>
+<ol>
+<li><strong>是否存在现成的规范或 schema？</strong> —— 存在则 AI 友好</li>
+<li><strong>是否属于大量重复的模式？</strong> —— 是则 AI 友好</li>
+<li><strong>生成结果能否被工具自动验证？</strong> —— 能则 AI 友好</li>
+</ol>
+<p>三项均满足的代码（如从 OpenAPI 规范生成 SDK、用 Terraform 批量定义同构资源），可以高度依赖 AI 生成。三项均不满足的代码（如设计一个新的分布式一致性协议），仍需要工程师自行完成。</p>
+<h3 id="7-术语表">7. 术语表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>全称 / 中文</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DSL</strong></td>
+<td>Domain-Specific Language / 领域特定语言</td>
+<td>为特定领域设计的语言，与通用编程语言相对</td>
+</tr>
+<tr>
+<td><strong>GPL</strong></td>
+<td>General-Purpose Language / 通用编程语言</td>
+<td>可解决任意计算问题的编程语言，如 Python、Java、Go</td>
+</tr>
+<tr>
+<td><strong>外部 DSL</strong></td>
+<td>External DSL</td>
+<td>拥有独立语法和解析器的领域特定语言，如 SQL、HCL、YAML</td>
+</tr>
+<tr>
+<td><strong>内部 DSL</strong></td>
+<td>Internal DSL / Embedded DSL</td>
+<td>寄生在通用编程语言内部、利用宿主语法构建的领域专用表达，如 Pulumi</td>
+</tr>
+<tr>
+<td><strong>数据序列化</strong></td>
+<td>Data Serialization</td>
+<td>将内存中的数据结构转换为可存储或可传输的格式的过程</td>
+</tr>
+<tr>
+<td><strong>INI</strong></td>
+<td>Initialization</td>
+<td>最早期的键值对配置格式，起源于 Windows 系统</td>
+</tr>
+<tr>
+<td><strong>CSV</strong></td>
+<td>Comma-Separated Values / 逗号分隔值</td>
+<td>用逗号分隔字段的纯文本表格格式</td>
+</tr>
+<tr>
+<td><strong>XML</strong></td>
+<td>eXtensible Markup Language / 可扩展标记语言</td>
+<td>基于标签的文本数据格式，表达力强但语法冗长</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td>JavaScript Object Notation</td>
+<td>基于键值对的轻量数据交换格式，Web API 的事实标准</td>
+</tr>
+<tr>
+<td><strong>YAML</strong></td>
+<td>YAML Ain&#39;t Markup Language</td>
+<td>基于缩进的配置文件格式，后端和 DevOps 领域广泛使用</td>
+</tr>
+<tr>
+<td><strong>TOML</strong></td>
+<td>Tom&#39;s Obvious Minimal Language</td>
+<td>显式语法的配置格式，Rust 和 Python 生态常用</td>
+</tr>
+<tr>
+<td><strong>Protobuf</strong></td>
+<td>Protocol Buffers</td>
+<td>Google 开发的二进制序列化格式，需预定义 Schema，体积小、速度快</td>
+</tr>
+<tr>
+<td><strong>MessagePack</strong></td>
+<td>—</td>
+<td>类似 JSON 的二进制序列化格式，无需 Schema</td>
+</tr>
+<tr>
+<td><strong>Lua</strong></td>
+<td>—</td>
+<td>轻量级嵌入式脚本语言，常用于游戏引擎、Web 服务器和数据库扩展</td>
+</tr>
+<tr>
+<td><strong>IaC</strong></td>
+<td>Infrastructure as Code / 基础设施即代码</td>
+<td>用代码定义和管理云计算资源的工程实践</td>
+</tr>
+<tr>
+<td><strong>Terraform</strong></td>
+<td>—</td>
+<td>HashiCorp 开发的 IaC 工具，使用 HCL 声明式语言</td>
+</tr>
+<tr>
+<td><strong>HCL</strong></td>
+<td>HashiCorp Configuration Language</td>
+<td>Terraform 使用的专用配置语言</td>
+</tr>
+<tr>
+<td><strong>Pulumi</strong></td>
+<td>—</td>
+<td>支持通用编程语言的 IaC 工具</td>
+</tr>
+<tr>
+<td><strong>OpenAPI</strong></td>
+<td>—</td>
+<td>描述 REST API 接口的行业标准规范（前身为 Swagger）</td>
+</tr>
+<tr>
+<td><strong>SDK</strong></td>
+<td>Software Development Kit / 软件开发工具包</td>
+<td>封装了 API 调用细节的客户端库</td>
+</tr>
+<tr>
+<td><strong>胶水代码</strong></td>
+<td>Glue Code</td>
+<td>不含业务逻辑，仅用于连接两个系统的适配代码</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-24">总结</h3>
+<p>后端工程中存在大量非业务逻辑代码。它们有一个共同的上位概念：<strong>DSL（领域特定语言）</strong>——为特定领域设计的、与通用编程语言相对的语言。</p>
+<p>本文介绍的 DSL 可以归为四个类别：</p>
+<ol>
+<li><strong>数据序列化格式</strong>（XML / JSON / YAML / TOML / CSV / Protobuf 等）—— 纯数据描述型外部 DSL，将结构化数据转换为可存储、可传输的形式</li>
+<li><strong>嵌入式脚本语言</strong>（Lua 等）—— 介于配置与通用语言之间，为宿主程序提供可编程的扩展能力</li>
+<li><strong>基础设施定义语言</strong>（HCL / Dockerfile 等）—— 声明式外部 DSL，描述系统期望状态；Pulumi 则以内部 DSL 的方式实现同一目标</li>
+<li><strong>接口描述语言与胶水代码生成</strong>（OpenAPI / .proto）—— 通过规范描述自动生成系统间的连接代码</li>
+</ol>
+<p>理解 DSL 这一分类框架后，面对后端项目中各类&quot;不像代码的代码&quot;时，可以快速识别其性质：它属于哪类 DSL、解决什么领域的问题、为什么不用通用编程语言来写。</p>
+<p>同时，由于 DSL 代码具有高度模式化、规范驱动、可自动验证的特征，它们也是当前 AI 代码生成技术最有效的应用领域。</p>
+<hr>
+<h2 id="五数据">五、数据</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-132.html">← 后端项目文件目录设计</a><a rel="next" href="chapter-134.html">数据库原理（索引 / 事务 / 查询优化） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

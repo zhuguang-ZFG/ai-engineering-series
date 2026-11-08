@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 原生应用设计 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 172 / 195</p><article><h1 id="ai-原生应用设计">AI 原生应用设计</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#ai-原生应用设计导论">AI 原生应用设计导论</a><ul><li><a href="#0-全景图从加个-ai到ai-原生">0. 全景图：从&quot;加个 AI&quot;到&quot;AI 原生&quot;</a></li><li><a href="#1-架构对比两种完全不同的世界">1. 架构对比：两种完全不同的世界</a></li><li><a href="#2-设计原则ai-原生产品的设计规范">2. 设计原则：AI 原生产品的设计规范</a></li><li><a href="#3-prompt-工程ai-应用的编程语言">3. Prompt 工程：AI 应用的&quot;编程语言&quot;</a></li><li><a href="#4-交互模式ai-时代的用户体验">4. 交互模式：AI 时代的用户体验</a></li><li><a href="#5-请求流程一次-ai-调用的完整生命周期">5. 请求流程：一次 AI 调用的完整生命周期</a></li><li><a href="#总结-43">总结</a></li><li><a href="#延伸阅读-31">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="ai-原生应用设计导论">AI 原生应用设计导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>为什么有些 AI 产品让人惊艳，而有些只是&quot;套壳 ChatGPT&quot;？</strong> 差别不在于用了多强的模型，而在于产品是否从底层就围绕 AI 的特性来设计。AI 原生应用不是在传统应用上&quot;加个聊天框&quot;，而是重新思考用户交互、系统架构和产品逻辑的全新范式。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>范式认知</strong>：理解 AI 原生应用与传统应用的本质区别</li>
+<li><strong>设计原则</strong>：掌握 AI 原生产品设计的核心原则</li>
+<li><strong>Prompt 工程</strong>：了解如何设计高质量的 Prompt 来驱动 AI 能力</li>
+<li><strong>交互模式</strong>：认识 AI 时代的新型用户交互范式</li>
+<li><strong>架构思维</strong>：理解 AI 应用的请求处理流程和系统架构</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>架构对比</td>
+<td>传统应用 vs AI 原生应用</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>设计原则</td>
+<td>AI-First 思维、不确定性设计</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>Prompt 工程</td>
+<td>系统提示词、模板设计</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>交互模式</td>
+<td>流式输出、多模态、Agent</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>请求流程</td>
+<td>AI 应用的完整生命周期</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图从加个-ai到ai-原生">0. 全景图：从&quot;加个 AI&quot;到&quot;AI 原生&quot;</h3>
+<p>过去几年，很多产品的 AI 化路径是这样的：有一个现成的应用，然后在某个角落加一个&quot;AI 助手&quot;按钮。这种做法就像在马车上装一个引擎——能跑，但远不如从头设计一辆汽车。</p>
+<p><strong>AI 原生应用</strong>是一种全新的产品思维：从第一行代码开始，就把 AI 作为核心能力来设计，而不是事后附加的功能。</p>
+<blockquote>
+<p><strong>传统应用 vs AI 原生应用</strong></p>
+</blockquote>
+<ul>
+<li><strong>传统应用</strong>：用户操作 → 确定性逻辑 → 确定性结果。每次点击&quot;提交订单&quot;，流程完全一样。</li>
+<li><strong>AI 原生应用</strong>：用户意图 → AI 理解 → 概率性结果。同样的问题，每次回答可能略有不同。</li>
+<li><strong>核心转变</strong>：从&quot;编写规则&quot;到&quot;描述意图&quot;，从&quot;确定性&quot;到&quot;概率性&quot;，从&quot;操作界面&quot;到&quot;对话界面&quot;。</li>
+</ul>
+<h3 id="1-架构对比两种完全不同的世界">1. 架构对比：两种完全不同的世界</h3>
+<p>传统应用的架构是&quot;请求-响应&quot;模型：用户点击按钮，后端执行确定性逻辑，返回确定性结果。整个过程可预测、可测试、可复现。</p>
+<p>AI 原生应用则引入了一个全新的角色——<strong>大语言模型</strong>。它像一个&quot;智能中间层&quot;，接收自然语言输入，输出自然语言结果。这带来了架构上的根本性变化。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>传统应用</th>
+<th>AI 原生应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入方式</td>
+<td>表单、按钮、下拉框</td>
+<td>自然语言、图片、语音</td>
+</tr>
+<tr>
+<td>处理逻辑</td>
+<td>if-else、规则引擎</td>
+<td>LLM 推理、Prompt 驱动</td>
+</tr>
+<tr>
+<td>输出特性</td>
+<td>确定性、可复现</td>
+<td>概率性、每次可能不同</td>
+</tr>
+<tr>
+<td>延迟特征</td>
+<td>毫秒级</td>
+<td>秒级（需要流式输出）</td>
+</tr>
+<tr>
+<td>错误处理</td>
+<td>明确的错误码</td>
+<td>幻觉、拒绝回答、答非所问</td>
+</tr>
+<tr>
+<td>成本模型</td>
+<td>固定计算资源</td>
+<td>按 token 计费，成本波动大</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>架构演进的三个阶段</strong></p>
+</blockquote>
+<ol>
+<li><strong>AI 增强型</strong>：在现有应用中嵌入 AI 功能（如自动补全、智能推荐）</li>
+<li><strong>AI 协作型</strong>：AI 作为核心交互方式，但仍有传统 UI 兜底（如 Notion AI、GitHub Copilot）</li>
+<li><strong>AI 原生型</strong>：整个产品围绕 AI 构建，去掉 AI 产品就不成立（如 ChatGPT、Cursor、Midjourney）</li>
+</ol>
+<h3 id="2-设计原则ai-原生产品的设计规范">2. 设计原则：AI 原生产品的设计规范</h3>
+<p>设计 AI 原生应用不能照搬传统软件的设计思路。AI 的概率性、延迟性和不可预测性，要求我们建立一套全新的设计原则。</p>
+<blockquote>
+<p><strong>五大核心设计原则</strong></p>
+</blockquote>
+<ol>
+<li><strong>拥抱不确定性</strong>：AI 的输出不是 100% 可靠的，产品设计必须考虑&quot;AI 可能出错&quot;的情况。提供编辑、重试、反馈机制，让用户始终拥有控制权。</li>
+<li><strong>渐进式信任</strong>：不要一开始就让 AI 做高风险决策。先从低风险场景建立用户信任，再逐步扩展 AI 的自主权。</li>
+<li><strong>透明可解释</strong>：让用户知道 AI 在做什么、为什么这么做。展示推理过程、引用来源、标注置信度。</li>
+<li><strong>人机协作</strong>：AI 不是替代人，而是增强人。最好的设计是让 AI 做初稿，人做终审。</li>
+<li><strong>优雅降级</strong>：当 AI 服务不可用或结果不理想时，产品仍然可用。永远有 Plan B。</li>
+</ol>
+<h3 id="3-prompt-工程ai-应用的编程语言">3. Prompt 工程：AI 应用的&quot;编程语言&quot;</h3>
+<p>在传统应用中，你用代码告诉计算机做什么。在 AI 原生应用中，你用 Prompt 告诉模型做什么。<strong>Prompt 就是 AI 时代的编程语言</strong>——写得好，AI 表现惊艳；写得差，AI 胡说八道。</p>
+<blockquote>
+<p><strong>Prompt 设计的四层结构</strong></p>
+</blockquote>
+<ol>
+<li><strong>系统提示词（System Prompt）</strong>：定义 AI 的角色、能力边界和行为规范。这是&quot;宪法&quot;级别的指令，用户看不到但始终生效。</li>
+<li><strong>上下文注入（Context）</strong>：通过 RAG 检索到的相关文档、用户历史记录等，为 AI 提供回答所需的背景信息。</li>
+<li><strong>用户输入（User Message）</strong>：用户的实际问题或指令。</li>
+<li><strong>输出格式约束（Format）</strong>：指定 AI 的输出格式（JSON、Markdown、特定模板），确保结果可被程序解析。</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>Prompt 技巧</th>
+<th>说明</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>角色设定</td>
+<td>&quot;你是一个资深前端工程师&quot;</td>
+<td>提升专业领域回答质量</td>
+</tr>
+<tr>
+<td>Few-shot 示例</td>
+<td>给出 2-3 个输入输出示例</td>
+<td>让模型理解期望的格式和风格</td>
+</tr>
+<tr>
+<td>思维链（CoT）</td>
+<td>&quot;请一步步思考&quot;</td>
+<td>提升复杂推理的准确性</td>
+</tr>
+<tr>
+<td>输出约束</td>
+<td>&quot;用 JSON 格式回答&quot;</td>
+<td>确保输出可被程序解析</td>
+</tr>
+<tr>
+<td>负面指令</td>
+<td>&quot;不要编造不确定的信息&quot;</td>
+<td>减少幻觉和错误信息</td>
+</tr>
+</tbody></table></div>
+<h3 id="4-交互模式ai-时代的用户体验">4. 交互模式：AI 时代的用户体验</h3>
+<p>AI 原生应用催生了一批全新的交互模式。传统应用的交互是&quot;点击-等待-查看&quot;，而 AI 应用的交互更像是&quot;对话-观察-调整&quot;。</p>
+<blockquote>
+<p><strong>四种核心交互模式</strong></p>
+</blockquote>
+<ol>
+<li><strong>流式输出（Streaming）</strong>：AI 生成内容时逐字显示，而不是等全部生成完再展示。这大幅降低了用户的感知等待时间，也让用户可以在生成过程中判断方向是否正确。</li>
+<li><strong>多轮对话（Multi-turn）</strong>：靠上下文记忆连续对话，用户可以逐步细化需求。关键挑战是上下文窗口管理和对话历史压缩。</li>
+<li><strong>多模态交互（Multimodal）</strong>：支持文本、图片、语音、文件等多种输入方式，AI 也能输出图片、代码、表格等多种格式。</li>
+<li><strong>Agent 模式（Agentic）</strong>：AI 不只是回答问题，而是自主规划、执行多步骤任务。用户给出目标，AI 自行拆解步骤并逐一完成。</li>
+</ol>
+<h3 id="5-请求流程一次-ai-调用的完整生命周期">5. 请求流程：一次 AI 调用的完整生命周期</h3>
+<p>当用户在 AI 应用中发送一条消息，背后发生了什么？理解这个完整流程，是构建可靠 AI 应用的基础。</p>
+<blockquote>
+<p><strong>请求处理的六个阶段</strong></p>
+</blockquote>
+<ol>
+<li><strong>输入预处理</strong>：校验用户输入、内容安全审核、敏感信息脱敏</li>
+<li><strong>上下文组装</strong>：拼接系统提示词、检索相关文档（RAG）、加载对话历史</li>
+<li><strong>模型调用</strong>：将组装好的 Prompt 发送给 LLM API，开启流式响应</li>
+<li><strong>输出后处理</strong>：格式化输出、内容安全过滤、结构化数据提取</li>
+<li><strong>结果缓存</strong>：对常见问题缓存结果，降低成本和延迟</li>
+<li><strong>监控记录</strong>：记录 token 用量、响应时间、用户反馈，用于持续优化</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>关键考量</th>
+<th>常见问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入预处理</td>
+<td>注入攻击防护、长度限制</td>
+<td>Prompt 注入、越狱攻击</td>
+</tr>
+<tr>
+<td>上下文组装</td>
+<td>token 预算分配、信息优先级</td>
+<td>上下文溢出、关键信息被截断</td>
+</tr>
+<tr>
+<td>模型调用</td>
+<td>超时处理、重试策略、流式传输</td>
+<td>API 限流、网络超时</td>
+</tr>
+<tr>
+<td>输出后处理</td>
+<td>格式校验、幻觉检测</td>
+<td>输出格式不符预期</td>
+</tr>
+<tr>
+<td>缓存策略</td>
+<td>语义缓存 vs 精确缓存</td>
+<td>缓存命中率低</td>
+</tr>
+<tr>
+<td>监控告警</td>
+<td>成本监控、质量评估</td>
+<td>token 成本失控</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-43">总结</h3>
+<p>AI 原生应用设计不是简单地在传统应用上叠加 AI 功能，而是从架构、交互、工程实践等维度彻底重构。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>架构转变</strong>：从确定性逻辑到概率性推理，AI 原生应用需要全新的架构思维</li>
+<li><strong>设计原则</strong>：拥抱不确定性、渐进式信任、透明可解释、人机协作、优雅降级</li>
+<li><strong>Prompt 是核心</strong>：Prompt 工程是 AI 应用的&quot;编程语言&quot;，直接决定产品质量</li>
+<li><strong>交互革新</strong>：流式输出、多轮对话、多模态、Agent 模式重新定义了用户体验</li>
+<li><strong>全链路思维</strong>：从输入预处理到监控告警，每个环节都需要针对 AI 特性专门设计</li>
+</ol>
+<h3 id="延伸阅读-31">延伸阅读</h3>
+<ul>
+<li><a href="https://pair.withgoogle.com/">Google PAIR Guidelines</a> - Google 的人机交互 AI 设计指南</li>
+<li><a href="https://platform.openai.com/docs/guides/prompt-engineering">OpenAI Prompt Engineering Guide</a> - 官方 Prompt 工程最佳实践</li>
+<li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering">Anthropic Prompt Engineering</a> - Claude 的 Prompt 设计指南</li>
+<li><a href="https://www.nngroup.com/topic/artificial-intelligence/">Nielsen Norman Group: AI UX</a> - AI 用户体验研究</li>
+<li><a href="https://www.oreilly.com/library/view/building-llm-powered/9781835462317/">Building LLM Applications</a> - 构建 LLM 应用的实战指南</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-171.html">← 模型微调与部署</a><a rel="next" href="chapter-173.html">AI 能力词典 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

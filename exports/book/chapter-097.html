@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>调试的艺术 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 97 / 195</p><article><h1 id="调试的艺术">调试的艺术</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#浏览器调试器devtools基础">浏览器调试器（DevTools）基础</a><ul><li><a href="#1-devtools定义">1. DevTools定义</a></li><li><a href="#2-交互式演示devtools-模拟器">2. 交互式演示：DevTools 模拟器</a></li><li><a href="#3-核心面板详解">3. 核心面板详解</a></li><li><a href="#4-实战小技巧">4. 实战小技巧</a></li></ul></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/debugging-art/">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<h2 id="浏览器调试器devtools基础">浏览器调试器（DevTools）基础</h2>
+<blockquote>
+<p><strong>核心作用</strong>
+浏览器开发者工具（DevTools）是前端开发的“X光机”和“手术台”。它能让你看穿网页的骨架（HTML）、皮肤（CSS）和神经系统（JavaScript），并且允许你实时地修改和调试它们。</p>
+</blockquote>
+<h3 id="1-devtools定义">1. DevTools定义</h3>
+<p><strong>DevTools</strong> 是现代浏览器（Chrome, Edge, Firefox, Safari 等）内置的一套 Web 开发和调试工具。对于开发者来说，它比代码编辑器更接近“真相”，因为它展示的是代码在浏览器中实际运行的样子。</p>
+<p><strong>如何打开 DevTools？</strong></p>
+<ul>
+<li><strong>快捷键</strong>：<code>F12</code> 或 <code>Ctrl + Shift + I</code> (Mac: <code>Cmd + Option + I</code>)</li>
+<li><strong>鼠标</strong>：在网页任意元素上右键点击，选择 “检查 (Inspect)”。</li>
+<li><strong>菜单</strong>：浏览器右上角菜单 -&gt; 更多工具 -&gt; 开发者工具。</li>
+</ul>
+<h3 id="2-交互式演示devtools-模拟器">2. 交互式演示：DevTools 模拟器</h3>
+<p>为了让你快速上手，我们制作了一个模拟的 DevTools 面板，复刻了 Chrome 浏览器的调试界面。
+<strong>请尝试点击下方的“▶ 开始自动导览”按钮，跟随光标了解各个区域的功能。</strong></p>
+<h4 id="21-进阶演示实时修改网页-live-edit">2.1 进阶演示：实时修改网页 (Live Edit)</h4>
+<p>DevTools 最强大的功能之一就是<strong>实时修改</strong>。原课程的演示包含了一个“虚拟网页”（上方）和一个“DevTools”（下方）。</p>
+<p><strong>请尝试：</strong></p>
+<ol>
+<li>在下方的 Elements 面板中，点击 DOM 树中的 <code>h1</code> 或 <code>button</code> 元素。</li>
+<li>在右侧的 Styles 面板中，修改 <code>element.style</code> 中的属性值（例如将 <code>color</code> 改为 <code>red</code>）。</li>
+<li>观察上方的虚拟网页如何<strong>实时发生变化</strong>。</li>
+</ol>
+<h4 id="22-实战挑战修改真实网页文字">2.2 实战挑战：修改真实网页文字</h4>
+<p>既然你已经掌握了修改样式的技巧，现在来点更刺激的——<strong>直接修改你当前看到的网页！</strong></p>
+<ol>
+<li><strong>打开真实的 DevTools</strong>：按下 <code>F12</code>（或右键点击本行文字 -&gt; 选择“检查”）。</li>
+<li><strong>定位元素</strong>：在 Elements 面板中，你会看到一行被高亮选中的代码，那正是你刚刚点击的文字。</li>
+<li><strong>修改内容</strong>：双击 这行代码中的黑色文字部分，将其修改为“我是黑客！”，然后按下回车。</li>
+<li><strong>见证奇迹</strong>：看！网页上的文字是不是变了？</li>
+</ol>
+<blockquote>
+<p><strong>🤔 为什么刷新后就没了？</strong>
+你可能会发现，当你刷新页面后，所有的修改都消失了，网页又变回了原来的样子。</p>
+</blockquote>
+<p>这是因为 DevTools 的修改仅仅发生在<strong>你的浏览器本地内存</strong>中。</p>
+<ul>
+<li>当你访问网页时，浏览器从<strong>远程服务器</strong>下载了 HTML 代码并在本地渲染出来。</li>
+<li>你修改的只是<strong>本地的副本</strong>，并没有权限去修改服务器上的源代码。</li>
+<li>所以每次刷新，浏览器都会重新去服务器拉取最新的（未被修改的）代码，一切就复原了。</li>
+</ul>
+<h3 id="3-核心面板详解">3. 核心面板详解</h3>
+<h4 id="31-elements-元素面板">3.1 Elements (元素面板)</h4>
+<p><strong>作用</strong>：查看和实时编辑页面的 HTML 和 CSS。</p>
+<ul>
+<li><strong>左侧 (DOM 树)</strong>：显示网页的 HTML 结构。你可以双击标签或文本修改内容，甚至拖拽节点改变位置。</li>
+<li><strong>右侧 (Styles)</strong>：显示选中元素的 CSS 样式。你可以勾选/取消样式查看变化，或者直接修改数值（如颜色、边距）。</li>
+<li><strong>应用场景</strong>：<ul>
+<li>&quot;为什么这个按钮没有对齐？&quot; -&gt; 检查 CSS 样式。</li>
+<li>&quot;我想试试这个标题变成红色好看吗？&quot; -&gt; 直接在 Styles 里修改 <code>color: red</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="32-console-控制台面板">3.2 Console (控制台面板)</h4>
+<p><strong>作用</strong>：查看日志信息，运行 JavaScript 代码。</p>
+<ul>
+<li><strong>日志输出</strong>：网页运行时的 <code>console.log()</code> 信息、警告（黄色）和报错（红色）都会显示在这里。</li>
+<li><strong>交互环境</strong>：你可以在这里输入任意 JS 代码并立即执行。例如输入 <code>alert(&#39;Hello&#39;)</code> 会弹窗，输入 <code>document.body.style.background = &#39;red&#39;</code> 会把背景变红。</li>
+<li><strong>应用场景</strong>：<ul>
+<li>&quot;为什么点击按钮没反应？&quot; -&gt; 查看是否有红色报错信息。</li>
+<li>&quot;验证一个 JS 函数的返回值。&quot; -&gt; 直接在控制台运行测试。</li>
+</ul>
+</li>
+</ul>
+<h4 id="33-network-网络面板">3.3 Network (网络面板)</h4>
+<p><strong>作用</strong>：监控所有网络请求。</p>
+<ul>
+<li><strong>列表视图</strong>：显示加载的所有资源（HTML, CSS, JS, 图片, 接口请求）。</li>
+<li><strong>交互详情</strong>：点击任意请求行，右侧会滑出详情面板：<ul>
+<li><strong>Headers (标头)</strong>：查看请求头、响应头（如 <code>Content-Type</code>）。</li>
+<li><strong>Response (响应)</strong>：查看服务器返回的原始数据（JSON、HTML 代码等）。</li>
+<li><strong>Preview (预览)</strong>：以更易读的格式预览响应内容。</li>
+</ul>
+</li>
+<li><strong>关键指标</strong>：<ul>
+<li><strong>Status</strong>：状态码（200 成功，404 找不到，500 服务器错误）。</li>
+<li><strong>Type</strong>：资源类型（fetch/xhr 代表接口请求）。</li>
+<li><strong>Time</strong>：加载耗时。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：<ul>
+<li>&quot;接口是不是挂了？&quot; -&gt; 看接口请求是不是红色的 500。</li>
+<li>&quot;页面加载为什么这么慢？&quot; -&gt; 找哪个图片或文件加载时间最长。</li>
+</ul>
+</li>
+</ul>
+<h4 id="34-sources-源代码面板">3.4 Sources (源代码面板)</h4>
+<p><strong>作用</strong>：查看源代码，调试 JavaScript。</p>
+<ul>
+<li><strong>断点调试</strong>：点击行号可以设置“断点 (Breakpoint)”。当代码执行到这一行时会暂停，让你有机会查看当前的变量值，并单步执行代码。</li>
+<li><strong>应用场景</strong>：<ul>
+<li>&quot;代码逻辑哪里出错了？&quot; -&gt; 打断点，一步步看着代码跑，看变量值是否符合预期。</li>
+</ul>
+</li>
+</ul>
+<h4 id="35-application-应用面板">3.5 Application (应用面板)</h4>
+<p><strong>作用</strong>：查看和管理浏览器存储。</p>
+<ul>
+<li><strong>Storage</strong>：<ul>
+<li><strong>Local Storage</strong>：持久化存储的数据。</li>
+<li><strong>Session Storage</strong>：会话级存储（关闭标签页消失）。</li>
+<li><strong>Cookies</strong>：用于身份验证等的小型文本数据。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：<ul>
+<li>&quot;清除登录状态&quot; -&gt; 删除 Cookies 或 Local Storage 中的 token。</li>
+<li>&quot;查看缓存的数据&quot; -&gt; 检查 Local Storage 里存了什么。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-实战小技巧">4. 实战小技巧</h3>
+<ol>
+<li><strong>手机模式调试</strong>：点击 DevTools 左上角的“手机图标”，可以模拟不同型号的手机（iPhone, Pixel 等）屏幕尺寸，测试网页的响应式效果。</li>
+<li><strong>强制状态</strong>：在 Elements 面板，右键点击一个元素，选择 <code>Force state</code> -&gt; <code>:hover</code>，可以强制让元素保持悬停状态，方便调试鼠标悬停时的样式。</li>
+<li><strong>截图节点</strong>：在 Elements 面板选中一个节点，按下 <code>Ctrl + Shift + P</code> (Mac: <code>Cmd + Shift + P</code>) 打开命令菜单，输入 <code>screenshot</code>，选择 <code>Capture node screenshot</code>，可以直接把这个 DOM 节点截图保存为图片。</li>
+</ol>
+<blockquote>
+<p>::: warning ⚠️ 注意
+DevTools 中的所有修改（修改 HTML、CSS、JS）都是<strong>临时的</strong>，仅在当前浏览器页面生效。一旦刷新页面，所有修改都会丢失。如果想永久生效，必须修改你的源代码文件。</p>
+</blockquote>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-096.html">← 包管理器（npm / pip / cargo）</a><a rel="next" href="chapter-098.html">正则表达式 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

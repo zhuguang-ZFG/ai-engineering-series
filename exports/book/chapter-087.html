@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>编程语言概念：范式、演化与选型 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 87 / 195</p><article><h1 id="编程语言概念范式演化与选型">编程语言概念：范式、演化与选型</h1><details class="contents"><summary>本章目录 <span>· 7 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-引言编程语言的作用">0. 引言：编程语言的作用</a></li><li><a href="#1-编程语言的演化">1. 编程语言的演化</a></li><li><a href="#2-编程范式思考问题的方式">2. 编程范式：思考问题的方式</a><ul><li><a href="#21-命令式编程分步描述执行过程">2.1 命令式编程：分步描述执行过程</a></li><li><a href="#22-面向对象编程数据与行为的封装">2.2 面向对象编程：数据与行为的封装</a></li><li><a href="#23-函数式编程纯函数与状态不可变">2.3 函数式编程：纯函数与状态不可变</a></li><li><a href="#24-声明式编程描述目标而非步骤">2.4 声明式编程：描述目标而非步骤</a></li></ul></li><li><a href="#3-类型系统基础">3. 类型系统基础</a></li><li><a href="#4-编译型-vs-解释型">4. 编译型 vs 解释型</a></li><li><a href="#5-编程语言选型">5. 编程语言选型</a><ul><li><a href="#按场景选择">按场景选择</a></li><li><a href="#学习路线建议">学习路线建议</a></li></ul></li><li><a href="#6-总结">6. 总结</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+为什么有这么多编程语言？该学哪个？本章带你从&quot;语言演化&quot;到&quot;编程范式&quot;到&quot;如何选择&quot;，建立对编程语言全景的理解。<strong>结论先行：没有最好的语言，只有最适合场景的语言。</strong></p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>理性选型能力</strong>：面对&quot;学什么语言&quot;时，能根据项目需求判断，而不是盲目跟风</li>
+<li><strong>范式理解深度</strong>：理解&quot;面向对象&quot;、&quot;函数式编程&quot;是不同的思维方式，而不仅仅是语法差异</li>
+<li><strong>历史演进视角</strong>：看到 70 多年语言演化——从手写 0 和 1 到自然语言生成代码</li>
+<li><strong>后续学习基础</strong>：为理解新语言设计理念、技术选型决策打下基础</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>语言演化</td>
+<td>从机器语言到高级语言</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>编程范式</td>
+<td>命令式、面向对象、函数式</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>语言选择</td>
+<td>场景驱动的选型方法</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-引言编程语言的作用">0. 引言：编程语言的作用</h2>
+<p>想象你要和一个只懂二进制的机器人沟通：</p>
+<ul>
+<li><strong>直接打 0 和 1</strong> — 最原始，效率极低，一个 0 写成 1 就全错了（机器语言）</li>
+<li><strong>用助记符代替</strong> — <code>MOV AX, 1</code> 比 <code>10110000 00000001</code> 好认多了（汇编语言）</li>
+<li><strong>用接近自然语言</strong> — <code>int sum = 1 + 2;</code> 人类可以直接读懂（高级语言）</li>
+</ul>
+<p><strong>编程语言就是人类与计算机沟通的桥梁</strong>，70 多年来一直在朝着&quot;更接近人类思维&quot;的方向进化。</p>
+<h2 id="1-编程语言的演化">1. 编程语言的演化</h2>
+<p>👇 动手点点看：探索编程语言从 1940 年代到今天的演化历程</p>
+<blockquote>
+<p><strong>一句话总结</strong>
+编程语言的演化趋势：<strong>越来越接近人类思维，越来越安全，越来越高效</strong>。从手写 0/1，到汇编助记符，到 C 的结构化编程，到 Java 的面向对象，再到 Rust 的内存安全——每一代语言都在解决上一代的痛点。</p>
+</blockquote>
+<h2 id="2-编程范式思考问题的方式">2. 编程范式：思考问题的方式</h2>
+<p>编程范式不是语言特性，而是<strong>思维方式</strong>——就像写作有诗歌、小说、论文不同的文体。</p>
+<h3 id="21-命令式编程分步描述执行过程">2.1 命令式编程：分步描述执行过程</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-c">int sum = 0;
+for (int i = 0; i &lt; n; i++) {
+    sum += arr[i];
+}
+</code></pre>
+<h3 id="22-面向对象编程数据与行为的封装">2.2 面向对象编程：数据与行为的封装</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">class Dog:
+    def __init__(self, name):
+        self.name = name
+    def bark(self):
+        print(f&quot;{self.name} says woof!&quot;)
+</code></pre>
+<h3 id="23-函数式编程纯函数与状态不可变">2.3 函数式编程：纯函数与状态不可变</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-haskell">sum = foldl (+) 0
+-- 相同输入永远产生相同输出
+</code></pre>
+<h3 id="24-声明式编程描述目标而非步骤">2.4 声明式编程：描述目标而非步骤</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">SELECT name FROM users WHERE active = true
+-- 数据库自己决定怎么查最快
+</code></pre>
+<blockquote>
+<p><strong>实际开发中</strong>
+现代语言大多是<strong>多范式</strong>的。Python 既支持面向对象，也支持函数式；JavaScript 也一样。不用纠结&quot;哪个范式最好&quot;，而是根据问题选择最合适的方式。</p>
+</blockquote>
+<h2 id="3-类型系统基础">3. 类型系统基础</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th></th>
+<th>强类型</th>
+<th>弱类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>静态</strong></td>
+<td>Java, Rust, TypeScript — 最安全</td>
+<td>C, C++ — 高效但要小心</td>
+</tr>
+<tr>
+<td><strong>动态</strong></td>
+<td>Python, Ruby — 灵活且安全</td>
+<td>JavaScript, PHP — 灵活但易出错</td>
+</tr>
+</tbody></table></div>
+<p><strong>关键问题</strong>：<code>&quot;1&quot; + 1</code> 等于什么？</p>
+<ul>
+<li><strong>JavaScript（弱类型）</strong>：<code>&quot;11&quot;</code> — 悄悄帮你转了</li>
+<li><strong>Python（强类型）</strong>：<code>TypeError</code> — 让你自己想清楚</li>
+</ul>
+<p>想深入了解类型系统？→ <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/type-systems.md">类型系统导论</a> | <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/compilers.md">编译原理</a></p>
+<h2 id="4-编译型-vs-解释型">4. 编译型 vs 解释型</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th></th>
+<th>编译型</th>
+<th>解释型</th>
+<th>JIT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>过程</strong></td>
+<td>先全部翻译，再执行</td>
+<td>边读边执行</td>
+<td>先解释，热点再编译</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>最快</td>
+<td>较慢</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>调试</strong></td>
+<td>需编译等待</td>
+<td>即时反馈</td>
+<td>即时 + 优化</td>
+</tr>
+<tr>
+<td><strong>代表</strong></td>
+<td>C, Rust, Go</td>
+<td>Python, Ruby</td>
+<td>Java, JavaScript</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-编程语言选型">5. 编程语言选型</h2>
+<h3 id="按场景选择">按场景选择</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐语言</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Web 前端</strong></td>
+<td>JavaScript, TypeScript</td>
+<td>浏览器只认 JS</td>
+</tr>
+<tr>
+<td><strong>Web 后端</strong></td>
+<td>Go, Java, Python, Node.js</td>
+<td>生态成熟</td>
+</tr>
+<tr>
+<td><strong>移动开发</strong></td>
+<td>Swift (iOS), Kotlin (Android)</td>
+<td>官方推荐</td>
+</tr>
+<tr>
+<td><strong>AI / 数据</strong></td>
+<td>Python</td>
+<td>PyTorch、Pandas 全在 Python</td>
+</tr>
+<tr>
+<td><strong>系统编程</strong></td>
+<td>C, Rust</td>
+<td>直接操控硬件</td>
+</tr>
+<tr>
+<td><strong>云原生</strong></td>
+<td>Go, Rust</td>
+<td>Docker/K8s 都是 Go 写的</td>
+</tr>
+</tbody></table></div>
+<h3 id="学习路线建议">学习路线建议</h3>
+<ol>
+<li><strong>Python</strong> — 语法最简单，AI 时代入口</li>
+<li><strong>JavaScript</strong> — Web 开发必备，前后端通吃</li>
+<li><strong>TypeScript</strong> — 给 JS 加上类型系统，体验静态类型</li>
+<li><strong>Go 或 Rust</strong> — 理解编译型语言和底层概念</li>
+</ol>
+<h2 id="6-总结">6. 总结</h2>
+<blockquote>
+<p><strong>📚 核心要点</strong></p>
+</blockquote>
+<ol>
+<li><strong>语言演化</strong>：从机器语言到高级语言，越来越接近人类思维</li>
+<li><strong>编程范式</strong>：命令式、面向对象、函数式、声明式，各有适用场景</li>
+<li><strong>类型系统</strong>：静态/动态、强/弱，影响安全性和灵活性</li>
+<li><strong>运行方式</strong>：编译型快，解释型灵活，JIT 兼顾</li>
+<li><strong>没有银弹</strong>：根据场景选语言，而不是追求&quot;最好的语言&quot;</li>
+</ol>
+<p><strong>下一步学习</strong>：</p>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/compilers.md">编译原理</a> - 深入理解编译过程和代码优化</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/type-systems.md">类型系统导论</a> - 深入理解类型系统和类型安全</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/data-structures.md">数据结构导论</a> - 理解数据的组织方式</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/algorithm-thinking.md">算法导论</a> - 学习解决问题的方法</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-086.html">← 算法导论</a><a rel="next" href="chapter-088.html">编译原理 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>命令行与 Shell 脚本 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 91 / 195</p><article><h1 id="命令行与-shell-脚本">命令行与 Shell 脚本</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#命令行与-shell-脚本导论">命令行与 Shell 脚本导论</a><ul><li><a href="#0-快速上手打开终端的方法">0. 快速上手：打开终端的方法</a></li><li><a href="#1-终端概述-definition">1. 终端概述 (Definition)</a></li><li><a href="#2-核心架构解耦的艺术-the-big-picture">2. 核心架构：解耦的艺术 (The Big Picture)</a></li><li><a href="#3-视觉模型网格系统-the-grid-system">3. 视觉模型：网格系统 (The Grid System)</a></li><li><a href="#4-通信协议转义序列-escape-sequences">4. 通信协议：转义序列 (Escape Sequences)</a></li><li><a href="#5-输入机制字节流-input-as-byte-stream">5. 输入机制：字节流 (Input as Byte Stream)</a></li><li><a href="#6-运行模式打字机-vs-游戏机-cooked-vs-raw-mode">6. 运行模式：打字机 vs 游戏机 (Cooked vs. Raw Mode)</a></li><li><a href="#7-进程控制信号-signals">7. 进程控制：信号 (Signals)</a></li><li><a href="#8-高级应用全屏界面与缓冲区-buffers--tui">8. 高级应用：全屏界面与缓冲区 (Buffers &amp; TUI)</a></li><li><a href="#9-总结-summary">9. 总结 (Summary)</a></li><li><a href="#附录常用术语表-vocabulary">附录：常用术语表 (Vocabulary)</a></li><li><a href="#参考资料-reference">参考资料 (Reference)</a></li></ul></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/command-line-shell.html">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<h2 id="命令行与-shell-脚本导论">命令行与 Shell 脚本导论</h2>
+<blockquote>
+<p><strong>学习指南</strong>：本章节旨在为零基础读者提供一个关于终端（Terminal）工作原理的系统性认知。无需具备计算机专业背景，我们将通过交互式演示，由浅入深地解析终端的运行机制。</p>
+</blockquote>
+<h3 id="0-快速上手打开终端的方法">0. 快速上手：打开终端的方法</h3>
+<p>在你开始学习之前，首先得找到它。终端是每个操作系统的“出厂标配”，你不需要安装任何软件就能使用它。</p>
+<blockquote>
+<p><strong>🖥️ 不同系统的打开方式</strong></p>
+</blockquote>
+<p><strong> macOS (苹果电脑)</strong></p>
+<ol>
+<li>按下 <code>Command (⌘) + Space</code> 打开聚焦搜索（Spotlight）。</li>
+<li>输入 <code>Terminal</code> 或 <code>终端</code>。</li>
+<li>按回车键，你就会看到一个白底黑字（或黑底白字）的窗口。</li>
+</ol>
+<p><strong>🪟 Windows</strong></p>
+<ul>
+<li><strong>方法一 (CMD)</strong>：按下 <code>Win + R</code>，输入 <code>cmd</code>，按回车。这是最古老的命令行。</li>
+<li><strong>方法二 (PowerShell)</strong>：按下 <code>Win + R</code>，输入 <code>powershell</code>，按回车。这是更现代、功能更强大的终端。</li>
+<li><em>建议：日常简单操作两者皆可，开发环境推荐使用 PowerShell 或安装 WSL (Windows Subsystem for Linux)。</em></li>
+</ul>
+<p><strong>🐧 Linux</strong></p>
+<ul>
+<li>通常快捷键是 <code>Ctrl + Alt + T</code>。</li>
+<li>或者在应用菜单中搜索 <code>Terminal</code>。</li>
+</ul>
+<h4 id="01-实操演练先玩玩看-hands-on-lab">0.1 实操演练：先玩玩看 (Hands-on Lab)</h4>
+<p>光说不练假把式。在你了解枯燥的原理之前，我们先亲手体验一下“敲命令”的感觉。</p>
+<blockquote>
+<p><strong>提示</strong>：为了安全和方便，推荐你在原课程的网页模拟器中操作。如果你有信心，也可以按照第 0 章的方法打开你电脑上真实的终端，跟随步骤一起练习（效果是一样的）。</p>
+</blockquote>
+<p>在这个练习中，你将学会：</p>
+<ol>
+<li><strong>查看文件</strong>：学会用 <code>ls</code> 或 <code>dir</code> 看看当前目录下有什么。</li>
+<li><strong>创建与进入</strong>：学会用 <code>mkdir</code> 创建新文件夹，用 <code>cd</code> 像传送门一样进入它。</li>
+<li><strong>新建文件</strong>：学会用命令快速创建一个新文件。</li>
+<li><strong>安装软件</strong>：体验一行代码安装 Python 库或系统软件的快感。</li>
+<li><strong>删除清理</strong>：学会如何删除不需要的文件（慎用！）。</li>
+<li><strong>求助 AI</strong>：这是最重要的！当你忘记命令时，学会问 AI：“在 Mac 上怎么删除文件？”，它会直接告诉你答案。</li>
+</ol>
+<p><em>请在下方选择你常用的操作系统，然后跟随引导开始操作：</em></p>
+<h4 id="02-使用-cli-的动机">0.2 使用 CLI 的动机</h4>
+<p>你可能会问：<em>“现在的图形界面（GUI）这么好用，鼠标点点就行，为什么还要对着黑底白字的窗口敲复杂的命令？”</em></p>
+<p>这并非为了“装极客”，而是因为在特定场景下，<strong>语言（命令）比手势（鼠标）更强大</strong>。</p>
+<h4 id="1-鼠标难以表达批量与逻辑">1. 鼠标难以表达“批量”与“逻辑”</h4>
+<ul>
+<li><strong>GUI (鼠标)</strong>：适合“看见什么点什么”。如果你想删除一张照片，右键删除很快。但如果你想“删除所有 2023 年拍摄的、大小超过 5MB 的、格式为 PNG 的照片”，鼠标就无能为力了，你可能需要手动筛选半天。</li>
+<li><strong>CLI (命令)</strong>：适合“描述你想做什么”。上述需求只需要一行命令，计算机会自动帮你找出符合条件的文件并处理，哪怕有 10000 张。</li>
+</ul>
+<h4 id="2-命令可以被记录和复用">2. 命令可以被记录和复用</h4>
+<ul>
+<li><strong>GUI</strong>：你配置一次环境，需要点击几十次菜单。下次换台电脑，你还得凭记忆重新点一遍，很容易漏掉步骤。</li>
+<li><strong>CLI</strong>：你可以把所有命令写进一个文件（脚本）。下次只需要运行这个文件，计算机会零误差地重现你的操作。这就是“自动化”的基础。</li>
+</ul>
+<h4 id="3-远程控制的唯一选择">3. 远程控制的唯一选择</h4>
+<ul>
+<li><strong>GUI</strong>：传输画面就像看高清视频，需要极高的网速。如果网稍微卡一点，鼠标就会卡顿，根本没法操作。</li>
+<li><strong>CLI</strong>：传输的只是纯文本，几十个字符。哪怕你在信号极差的山区，也能流畅地控制远在地球另一端的数据中心服务器。</li>
+</ul>
+<p><strong>总结</strong>：GUI 适合探索（浏览网页、看图），CLI 适合生产（开发、运维、批处理）。作为开发者，我们用终端是因为它更精确、更可控、更高效。</p>
+<h3 id="1-终端概述-definition">1. 终端概述 (Definition)</h3>
+<p><em>不同操作系统下的终端长相不同，<strong>命令方式也不同</strong>。点击下方按钮切换查看，注意观察 macOS, Windows 和 Linux 是如何用不同的命令（如 <code>dir</code> vs <code>ls</code>）做同一件事的：</em></p>
+<p>在图形用户界面（GUI）普及之前，终端是人类与计算机交互的主要方式。即便在今天，它依然是开发者控制计算机最精确、最高效的工具。</p>
+<p>本质上，终端是一个<strong>字符流输入/输出环境</strong>：</p>
+<ul>
+<li><strong>输入</strong>：通过键盘发送指令（字符信号）。</li>
+<li><strong>输出</strong>：通过屏幕网格显示文本反馈。</li>
+</ul>
+<p>它不处理复杂的图形、图片或视频，而是专注于<strong>文本信息的交互</strong>。</p>
+<h3 id="2-核心架构解耦的艺术-the-big-picture">2. 核心架构：解耦的艺术 (The Big Picture)</h3>
+<p>在深入了解之前，请先思考一个问题：<strong>终端窗口自己真的懂你在说什么吗？</strong></p>
+<p>其实，终端（Terminal）就像是一个<strong>只会传话的显示器</strong>。当你输入 <code>date</code> 命令时，终端并不知道这是“查看日期”的意思，它只是把这 4 个字母打包发给了幕后的真正大佬——Shell。</p>
+<p>Shell 才是那个能听懂你说话、并指挥计算机干活的“大脑”。</p>
+<p>为了搞清楚它们是如何配合的，我们来看这三个分工明确的“打工人”。要理解它们的关系，最好的比喻是<strong>浏览器</strong>与网站服务器。</p>
+<h4 id="21-角色分工">2.1 角色分工</h4>
+<ul>
+<li><p><strong>🖥️ 终端 (Terminal) —— 就像“浏览器”</strong></p>
+<ul>
+<li><strong>职责</strong>：它只负责输入（把你的按键告诉对方）和显示（把对方传回来的字符画在屏幕上）。</li>
+<li><strong>特点</strong>：它本身没有任何智能，也不懂什么叫 <code>ls</code> 或 <code>cd</code>。它就像 Chrome 浏览器，不管你访问的是百度还是谷歌，它只管渲染网页。</li>
+<li><em>常见的终端</em>：Windows 的 CMD/PowerShell 窗口, macOS 的 Terminal.app, VS Code 内置的终端。</li>
+</ul>
+</li>
+<li><p><strong>🧠 Shell (壳) —— 就像“网站服务器”</strong></p>
+<ul>
+<li><strong>职责</strong>：它才是有逻辑的大脑。它运行在后台，负责接收你发来的命令字符串，解析它的含义，然后指挥操作系统干活。</li>
+<li><strong>特点</strong>：它看不见摸不着，只能通过文本流与外界交流。</li>
+<li><em>常见的 Shell</em>：Bash, Zsh, Fish, PowerShell。</li>
+</ul>
+</li>
+<li><p><strong>⚙️ 内核 (Kernel) —— 幕后的“大管家”</strong></p>
+<ul>
+<li><strong>职责</strong>：操作系统的核心，只有它能直接控制硬件（读写硬盘、分配内存、控制 CPU）。</li>
+<li><strong>关系</strong>：Shell 是内核的“秘书”，帮你把人话翻译给内核听。</li>
+</ul>
+</li>
+</ul>
+<h4 id="22-解耦设计终端与-shell-分离的设计理由">2.2 解耦设计：终端与 Shell 分离的设计理由</h4>
+<p>正因为<strong>显示层</strong>（终端）和逻辑层（Shell）是完全分开的，所以它们可以自由搭配：</p>
+<ul>
+<li><strong>换个“皮肤”</strong>：你可以在 macOS 上用自带的 Terminal，也可以下载 iTerm2，或者用 VS Code 的终端。它们长相不同，但连的都是同一个 Shell (zsh)，所以命令一模一样。</li>
+<li><strong>换个“大脑”</strong>：你可以在同一个终端窗口里，从 bash 切换到 zsh，或者切换到 python 交互环境。这时，终端没变，但处理命令的逻辑变了。</li>
+</ul>
+<h4 id="23-交互流程消失的按键">2.3 交互流程：消失的按键</h4>
+<p>你可能认为：<em>“我在键盘上按个 &#39;a&#39;，终端就在屏幕上画个 &#39;a&#39;。”</em>
+<strong>错！</strong> 真实的流程是这样的（这叫回显 Echo）：</p>
+<ol>
+<li><strong>按下 &#39;a&#39;</strong>：键盘信号传给终端。</li>
+<li><strong>发送信号</strong>：终端把 &#39;a&#39; 的编码发给 Shell。</li>
+<li><strong>Shell 处理</strong>：Shell 收到 &#39;a&#39;，觉得没问题，于是原样把 &#39;a&#39; 发回给终端。</li>
+<li><strong>显示字符</strong>：终端收到 Shell 发回来的 &#39;a&#39;，这才把它画在屏幕上。</li>
+</ol>
+<blockquote>
+<p><strong>小实验</strong>：有些命令（如输入密码时）会关闭 Shell 的回显功能。这时你按键盘，终端发给了 Shell，但 Shell 不发回任何东西，所以屏幕上一片空白。这就是为了保护隐私。</p>
+</blockquote>
+<p><strong>一句话总结流程</strong>：
+你在终端打字 ➡️ 信号传给 Shell ➡️ Shell 原样发回（你看到了字）并理解 ➡️ Shell 指挥内核干活。</p>
+<p><em>原课程的演示展示了这个过程，注意看 Shell 和内核之间那道“墙”，以及字符是如何一来一回的：</em></p>
+<h3 id="3-视觉模型网格系统-the-grid-system">3. 视觉模型：网格系统 (The Grid System)</h3>
+<p>与现代图形界面使用“像素”不同，终端的显示基础是<strong>字符网格（Character Grid）</strong>。
+终端屏幕被划分为若干行和列，每一个格子称为一个<strong>单元格（Cell）</strong>。</p>
+<h4 id="31-单元格的构成">3.1 单元格的构成</h4>
+<p>每个单元格是终端显示的最小单位，它包含两类核心信息：</p>
+<ol>
+<li><strong>字符 (Glyph)</strong>：实际显示的文字（如 <code>A</code>, <code>中</code>, <code>$</code>）。</li>
+<li><strong>属性 (Attributes)</strong>：字符的样式（如前景色、背景色、加粗、下划线）。</li>
+</ol>
+<p>当你拖动终端窗口改变大小时，本质上是在改变这个网格的<strong>行数 (Rows)</strong> 和 列数 (Columns)。</p>
+<p><em>请在下方交互区域尝试操作，观察网格如何承载字符：</em></p>
+<h4 id="32-样式检查">3.2 样式检查</h4>
+<p>终端无法显示图片，所有的“界面”都是靠字符颜色和样式拼出来的。</p>
+<p><em>点击下方单元格，查看每个格子背后包含的样式属性：</em></p>
+<h3 id="4-通信协议转义序列-escape-sequences">4. 通信协议：转义序列 (Escape Sequences)</h3>
+<p>你可能会疑惑：既然终端只传输文本，那彩色的文字、移动的光标、清屏操作是如何实现的？</p>
+<p>答案是<strong>转义序列 (Escape Sequences)</strong>。
+这是一串特殊的字符指令（通常以 <code>ESC</code> 字符开头）。当终端接收到这些字符时，<strong>不会将它们显示在屏幕上</strong>，而是将其解释为控制指令。</p>
+<p>例如：</p>
+<ul>
+<li>普通字符 <code>A</code> → 在屏幕上画出 A。</li>
+<li>序列 <code>\033[31m</code> → <strong>指令</strong>：将后续文字颜色设为红色。</li>
+<li>序列 <code>\033[2J</code> → <strong>指令</strong>：清空屏幕。</li>
+</ul>
+<p>这就好比你和朋友约定：如果我正常说话，你就记录下来；如果我举起左手（相当于 <code>ESC</code>），接下来的那句话就是命令而不是内容。</p>
+<p><em>点击下方的“播放”按钮，观察终端是如何逐个处理字符流，并识别出隐藏的指令：</em></p>
+<p><em>下方组件则展示了更多种类的转义序列及其渲染效果：</em></p>
+<h3 id="5-输入机制字节流-input-as-byte-stream">5. 输入机制：字节流 (Input as Byte Stream)</h3>
+<p>输入过程往往被误解。当你按下键盘时，终端并没有直接把字符“画”在屏幕上，而是先做了一次<strong>编码传输</strong>。</p>
+<ol>
+<li><strong>按键捕获</strong>：终端捕获你的物理按键动作。</li>
+<li><strong>编码转换</strong>：将按键转换为特定的字节序列。<ul>
+<li>按下 <code>a</code> → 发送字节 <code>a</code>。</li>
+<li>按下 <code>向上箭头</code> → 发送序列 <code>^[[A</code>。</li>
+</ul>
+</li>
+<li><strong>发送</strong>：将字节流发送给 Shell 或当前运行的程序。</li>
+</ol>
+<p><strong>关键点</strong>：所有的按键（包括功能键、鼠标点击）在传输层面上都是字节数据。</p>
+<p><em>在下方尝试按键，观察你的输入是如何被转换为底层数据的：</em></p>
+<h3 id="6-运行模式打字机-vs-游戏机-cooked-vs-raw-mode">6. 运行模式：打字机 vs 游戏机 (Cooked vs. Raw Mode)</h3>
+<p>终端有两种截然不同的性格。理解这一点，你就能明白为什么在终端里<strong>打命令</strong>和玩贪吃蛇是完全不同的体验。</p>
+<ul>
+<li><p><strong>加工模式 (Cooked Mode) —— 像打字机</strong></p>
+<ul>
+<li>这是默认模式。</li>
+<li><strong>行为</strong>：你输入的字符会被终端暂时扣留，直到你按下回车键（Enter）。</li>
+<li><strong>好处</strong>：这给了你修改的机会。打错了？按退格键（Backspace）删掉重写，程序根本不知道你之前打错过。</li>
+<li><em>适用场景：平时敲命令（如 <code>ls</code>, <code>cd</code>）。</em></li>
+</ul>
+</li>
+<li><p><strong>原始模式 (Raw Mode) —— 像游戏手柄</strong></p>
+<ul>
+<li>这是“高手”模式。</li>
+<li><strong>行为</strong>：你按下的每一个键（包括方向键、Ctrl组合键），都会瞬间发送给程序，没有任何缓冲。</li>
+<li><strong>好处</strong>：程序能实时响应你的操作。</li>
+<li><em>适用场景：玩终端游戏（如贪吃蛇）、使用 Vim 编辑器（一种纯键盘操作的编辑器）。</em></li>
+</ul>
+</li>
+</ul>
+<p><em>点击下方按钮切换模式，体验“写信”与“打游戏”的不同手感：</em></p>
+<h3 id="7-进程控制信号-signals">7. 进程控制：信号 (Signals)</h3>
+<p>在终端中按下 <code>Ctrl+C</code> 通常能停止程序。这并非靠发送字符实现，而是触发了<strong>信号 (Signal)</strong>。</p>
+<p>信号是操作系统级别的通知机制，用于告诉程序发生了特定事件。</p>
+<ul>
+<li><strong>Ctrl+C</strong> → 发送 <code>SIGINT</code> (Interrupt)：通知程序“请中断当前操作”。</li>
+<li><strong>Ctrl+Z</strong> → 发送 <code>SIGTSTP</code> (Suspend)：通知程序“请暂停并挂起到后台”。</li>
+</ul>
+<p>这一机制绕过了标准的数据输入通道，确保在程序卡死时用户仍有控制权。</p>
+<h3 id="8-高级应用全屏界面与缓冲区-buffers--tui">8. 高级应用：全屏界面与缓冲区 (Buffers &amp; TUI)</h3>
+<p>你有没有发现，当你用 <code>vim</code> 编辑文件或者用 <code>htop</code> 看系统状态时，它们会占满整个屏幕？而当你退出它们时，屏幕瞬间变回了原来的样子，之前的命令记录完全没变。</p>
+<p>这是因为终端有两块“画布”在来回切换：</p>
+<ul>
+<li><p><strong>主缓冲区 (Primary Buffer)</strong>：就像草稿本。</p>
+<ul>
+<li>你写一行，系统回一行。</li>
+<li>写满了就翻页（滚动），以前写的东西都在上面。</li>
+<li><em>用于：日常敲命令。</em></li>
+</ul>
+</li>
+<li><p><strong>备用缓冲区 (Alternate Buffer)</strong>：就像黑板。</p>
+<ul>
+<li>程序把黑板擦干净，在上面画画（全屏显示）。</li>
+<li>不管怎么画，都不会影响你桌子上的草稿本。</li>
+<li>当你退出程序时，就像把黑板收起来，你又回到了草稿本面前。</li>
+<li><em>用于：Vim, Nano, 游戏等全屏软件。</em></li>
+</ul>
+</li>
+</ul>
+<p><em>点击下方按钮，体验“草稿本”和“黑板”是如何瞬间切换的：</em></p>
+<h3 id="9-总结-summary">9. 总结 (Summary)</h3>
+<p>终端并非神秘的黑盒，它是一个标准化的文本交互接口。</p>
+<ul>
+<li><strong>显示</strong>：基于网格和字符。</li>
+<li><strong>控制</strong>：基于转义序列。</li>
+<li><strong>交互</strong>：基于输入输出流和信号。</li>
+</ul>
+<p>通过理解这些底层原理，你不再只是死记硬背命令，而是能真正理解每一次敲击键盘背后发生的逻辑流转。</p>
+<h3 id="附录常用术语表-vocabulary">附录：常用术语表 (Vocabulary)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">术语</th>
+<th align="left">英文</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>终端</strong></td>
+<td align="left">Terminal</td>
+<td align="left">负责显示和输入的窗口程序（前端）。</td>
+</tr>
+<tr>
+<td align="left"><strong>Shell</strong></td>
+<td align="left">Shell</td>
+<td align="left">负责解析命令和执行逻辑的程序（后端）。</td>
+</tr>
+<tr>
+<td align="left"><strong>CLI</strong></td>
+<td align="left">Command Line Interface</td>
+<td align="left">命令行界面，一种基于文本的交互方式。</td>
+</tr>
+<tr>
+<td align="left"><strong>TUI</strong></td>
+<td align="left">Text User Interface</td>
+<td align="left">文本用户界面，指在终端中通过字符构建的伪图形界面。</td>
+</tr>
+<tr>
+<td align="left"><strong>转义序列</strong></td>
+<td align="left">Escape Sequence</td>
+<td align="left">用于控制终端光标、颜色等的特殊字符指令。</td>
+</tr>
+<tr>
+<td align="left"><strong>标准输入/输出</strong></td>
+<td align="left">Stdin/Stdout</td>
+<td align="left">程序接收数据和输出数据的标准通道。</td>
+</tr>
+</tbody></table></div>
+<h3 id="参考资料-reference">参考资料 (Reference)</h3>
+<ul>
+<li><a href="https://how-terminals-work.vercel.app/">How Terminals Work</a>：本文的结构与演示灵感深受该项目的启发。如果你希望深入了解工程实现细节，强烈推荐阅读原版教程。</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-090.html">← 集成开发环境 (IDE) 基础</a><a rel="next" href="chapter-092.html">Git：代码的时光机 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

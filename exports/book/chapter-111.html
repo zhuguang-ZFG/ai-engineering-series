@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前端工程化全貌 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 111 / 195</p><article><h1 id="前端工程化全貌">前端工程化全貌</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#前端工程化全景">前端工程化全景</a><ul><li><a href="#1-工程化的动机">1. 工程化的动机</a></li><li><a href="#2-核心概念转译打包构建">2. 核心概念：转译、打包、构建</a></li><li><a href="#3-实战一个团队的工程化演进之路">3. 实战：一个团队的工程化演进之路</a></li><li><a href="#4-原理深入vite-的性能原理">4. 原理深入：Vite 的性能原理</a></li><li><a href="#5-webpack-的-loader-和-plugin">5. Webpack 的 Loader 和 Plugin</a></li><li><a href="#6-vite-配置模板">6. Vite 配置模板</a></li><li><a href="#61-sourcemap调试压缩代码的秘密武器">6.1 SourceMap：调试压缩代码的秘密武器</a></li><li><a href="#62-资源指纹长期缓存与版本控制">6.2 资源指纹：长期缓存与版本控制</a></li><li><a href="#7-总结-6">7. 总结</a></li></ul></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/frontend-engineering.html">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<h2 id="前端工程化全景">前端工程化全景</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>如何把你写的代码，变成用户浏览器能跑的网站？</strong> 这就像是问：如何把原材料变成成品，还要保证质量、控制成本？本章将带你深入理解前端工程化的核心概念和构建流程。</p>
+</blockquote>
+<h3 id="1-工程化的动机">1. 工程化的动机</h3>
+<h4 id="11-从简单到复杂前端开发的演变">1.1 从简单到复杂：前端开发的演变</h4>
+<p>回顾十年前的前端开发，那时候的我们工作方式非常简单：写几个 HTML 页面，内嵌一些 CSS 和 JavaScript，直接把文件拖到浏览器里就能看效果，部署的时候也只需要把文件夹上传到服务器，一个网站的总代码量可能也就几十 KB。那是一个&quot;所见即所得&quot;的时代，开发流程简单直接，几乎没有&quot;工程化&quot;这个概念。</p>
+<p>但现代前端开发完全变了样。我们现在用 TypeScript 代替 JavaScript，这意味着需要编译；我们用 Vue 或 React 的组件化开发方式，需要额外的转换；我们用 Sass 或 Less 写 CSS，需要预处理；我们通过 npm 安装各种依赖包，最终需要打包。一个中大型项目的前端依赖可能上千个，总大小几百 MB，这与十年前的&quot;简单直接&quot;形成了鲜明对比。</p>
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>👴 十年前的开发方式</p>
+<ul>
+<li>写几个 HTML + CSS + JS 就是一个项目</li>
+<li>直接拖到浏览器就能看效果</li>
+<li>上传文件夹到服务器就完成部署</li>
+<li>整个项目代码量通常只有几十 KB</li>
+</ul>
+</div>
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>现代的开发方式</p>
+<ul>
+<li>使用 TypeScript，需要编译才能运行</li>
+<li>使用 Vue/React，需要转换成原生 JS</li>
+<li>使用 npm 包管理，需要打包合并</li>
+<li>项目依赖动辄几百 MB</li>
+</ul>
+</div>
+</div><p><strong>这就是&quot;前端工程化&quot;要解决的问题：如何管理复杂度，让开发效率更高、代码质量更好、用户体验更优。</strong></p>
+<h4 id="12-案例了解构建原理">1.2 案例：了解构建原理</h4>
+<p>你可能会说：&quot;我用 Vite 或者 Create React App，开箱即用，为什么还需要了解这些构建原理？&quot; 让我讲一个真实的故事，你就会明白为什么这些知识如此重要。</p>
+<blockquote>
+<p><strong>小明的踩坑记</strong>
+小明是一个刚入职的前端新人，公司用的是 Vite 搭建的项目。有一天，产品经理跑过来说首页加载太慢了，用户都在抱怨，需要尽快优化。</p>
+</blockquote>
+<p>小明立刻行动起来：他压缩了图片、实现了路由懒加载、启用了 Gzip 压缩...一顿操作猛如虎，但首页加载速度依然很慢，问题根本没有解决。</p>
+<p>后来他请教师傅，师傅打开浏览器的开发者工具，看了一眼网络请求，立刻发现了问题所在：<code>vendor.js</code> 文件竟然有 2MB！原来小明为了使用某个日期格式化函数，直接引入了 <code>moment.js</code> 整个库，而 <code>moment.js</code> 包含了 100 多种语言的 locale 文件，大部分都是项目根本用不到的。</p>
+<p>解决方案很简单：把 <code>moment.js</code> 换成 <code>dayjs</code>，或者按需引入 <code>date-fns</code>。这样改动之后，2MB 的体积瞬间变成了 2KB，首页加载速度提升了十几倍。</p>
+<p>小明从此明白了一个道理：<strong>不了解构建和打包原理，你连问题出在哪都不知道，更别提解决问题了。</strong></p>
+<blockquote>
+<p><strong>核心启示</strong>
+构建工具不是黑魔法，理解它的工作原理能让你在遇到问题时快速定位、精准解决。更重要的是，它能在设计架构和选择依赖时帮你选得更准。</p>
+</blockquote>
+<h3 id="2-核心概念转译打包构建">2. 核心概念：转译、打包、构建</h3>
+<blockquote>
+<p><strong>🤔 这些概念和构建有什么关系？</strong>
+转译、打包就是流水线上的关键工序。</p>
+</blockquote>
+<p>当你运行 <code>npm run build</code> 时，构建工具会依次执行：</p>
+<ol>
+<li><strong>代码检查</strong> → 发现错误</li>
+<li><strong>转译</strong> → 把新语法翻译成浏览器能懂的代码</li>
+<li><strong>打包</strong> → 把分散的文件合并起来</li>
+<li><strong>优化</strong> → 压缩体积、删除无用代码</li>
+</ol>
+<p>所以，<strong>转译和打包是构建流程的核心环节</strong>。理解它们，你才能知道构建工具到底在做什么，为什么有时候构建很慢，为什么有时候打包后体积很大。</p>
+<p>在深入学习具体工具之前，我们需要先搞清楚这几个核心概念。为了帮助你更好地理解，我们用一个餐厅的比喻来类比它们之间的关系。</p>
+<h4 id="21-用餐厅比喻理解三个概念">2.1 用餐厅比喻理解三个概念</h4>
+<p>想象你经营一家餐厅，每天要为顾客提供各种美食。这个过程中涉及到的环节，与前端工程化的三个核心概念惊人地相似：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>🍽️ 餐厅比喻</th>
+<th>实际作用</th>
+<th>具体例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>转译</strong></td>
+<td>把中文菜谱翻译成英文，让外国厨师也能看懂</td>
+<td>把新语法转换成浏览器能理解的旧语法</td>
+<td>你写 <code>const name = user?.name</code>，转译后变成 <code>var name = user &amp;&amp; user.name</code></td>
+</tr>
+<tr>
+<td><strong>打包</strong></td>
+<td>把各桌点的菜装成一个个外卖盒，方便配送</td>
+<td>把分散的模块文件合并成少数几个文件</td>
+<td>你写了 50 个 .js 文件，打包后变成 2 个文件</td>
+</tr>
+<tr>
+<td><strong>构建</strong></td>
+<td>从接单、做菜、打包到配送的完整流程</td>
+<td>从源代码到生产代码的完整转换过程</td>
+<td>执行 <code>npm run build</code> 后，src 文件夹变成 dist 文件夹</td>
+</tr>
+</tbody></table></div>
+<h4 id="22-转译transpile代码的翻译官">2.2 转译（Transpile）：代码的&quot;翻译官&quot;</h4>
+<p>转译，顾名思义就是&quot;转换+编译&quot;，它的核心作用是把一种编程语言（或其新版本）转换成另一种（或其旧版本）。你可能会有疑问：为什么要这样做？直接写浏览器支持的代码不就行了吗？</p>
+<p>答案在于浏览器兼容性问题。虽然 JavaScript 每年都会发布新版本，带来更强大的语法和 API，但浏览器的更新速度远远跟不上。如果你使用了最新的 ES2022 语法，在旧版浏览器上可能完全无法运行。转译工具的作用就是把你的&quot;超前代码&quot;转换成&quot;保守代码&quot;，确保在所有浏览器上都能正常运行。</p>
+<blockquote>
+<p><strong>🔧 转译示例：看看转译做了什么</strong>
+我们看一个具体的例子。下面是你写的代码，使用了 ES2020 的可选链操作符和空值合并操作符：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// 你写的（ES2020+）
+const result = data?.items?.map(item =&gt; item.name) ?? []
+</code></pre>
+<p>这段代码很简洁优雅，但在旧浏览器上会报语法错误。转译工具会把它转换成等价的、兼容性更好的代码：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// 转译后（ES5 兼容版本）
+var _data$items, _data$items$map
+var result =
+  (_data$items$map =
+    (_data$items = data == null ? void 0 : data.items) == null
+      ? void 0
+      : _data$items.map(function (item) {
+          return item.name
+        })) != null
+    ? _data$items$map
+    : []
+</code></pre>
+<p>可以看到，一行简洁的代码被转换成了多行&quot;啰嗦&quot;的代码，但后者可以在任何浏览器上正常运行。</p>
+<p><strong>常用的转译工具：</strong></p>
+<ul>
+<li><strong>Babel</strong> 是最老牌、生态最丰富的 JavaScript 转译器，几乎可以处理所有现代语法。它的插件系统非常强大，但也因为灵活性高导致配置相对复杂。</li>
+<li><strong>SWC</strong> 是用 Rust 语言重写的转译器，速度比 Babel 快 20 倍以上，正在被越来越多的项目采用，包括 Next.js 等知名框架。</li>
+<li><strong>esbuild</strong> 是用 Go 语言编写的，同样以速度著称，Vite 在开发模式下就使用它来快速转译。</li>
+</ul>
+<blockquote>
+<p><strong>🔍 我的项目用的是什么转译工具？</strong>
+你不需要刻意选择，通常是由项目脚手架决定的：</p>
+</blockquote>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>项目类型</th>
+<th>默认转译工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vite 项目</td>
+<td>esbuild（开发模式）+ esbuild/rollup（生产模式）</td>
+</tr>
+<tr>
+<td>Create React App</td>
+<td>Babel</td>
+</tr>
+<tr>
+<td>Next.js</td>
+<td>SWC（新版本）/ Babel（旧版本）</td>
+</tr>
+<tr>
+<td>Vue CLI</td>
+<td>Babel</td>
+</tr>
+</tbody></table></div>
+<p>想知道自己项目用的是什么？打开 <code>package.json</code>，搜索 <code>babel</code>、<code>@babel/core</code> 这些关键词。如果找到了，说明用的是 Babel；如果没有，很可能是 esbuild 或 SWC。</p>
+<p><strong>其实你不需要关心这个</strong>——这些工具对开发者是&quot;透明&quot;的，你只管写代码，它们会在后台默默工作。</p>
+<h4 id="23-打包bundle模块的打包员">2.3 打包（Bundle）：模块的&quot;打包员&quot;</h4>
+<p>打包是指把多个分散的模块文件合并成一个（或几个）文件的过程。在早期的前端开发中，我们习惯把所有代码写在一个 JS 文件里，但随着项目规模增大，这种方式变得难以维护。现代前端采用模块化开发，每个功能一个文件，但浏览器加载大量小文件会带来性能问题，这就需要打包工具来帮忙。</p>
+<blockquote>
+<p><strong>📦 什么是 ES 模块？</strong>
+你可能听说过&quot;ES 模块&quot;这个词，它到底是什么？</p>
+</blockquote>
+<p><strong>先区分两个概念</strong>：</p>
+<ul>
+<li><strong>ECMAScript（ES）</strong>：是 JavaScript 的语言标准规范，定义了语法和 API</li>
+<li><strong>ES 模块</strong>：是 ECMAScript 标准中定义的模块化方案，通过 <code>import</code> 和 <code>export</code> 语法导入导出代码</li>
+</ul>
+<p>打个比方：ECMAScript 就像&quot;普通话标准&quot;，而 ES 模块就像&quot;普通话中的某种表达方式&quot;。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// utils.js - 导出模块
+export function add(a, b) { return a + b }
+export function subtract(a, b) { return a - b }
+
+// main.js - 导入模块
+import { add, subtract } from &#39;./utils.js&#39;
+console.log(add(1, 2))  // 3
+</code></pre>
+<p><strong>ES 版本小知识</strong>：ECMAScript 每年都会发布新版本：</p>
+<ul>
+<li><strong>ES5（2009）</strong>：经典版本，几乎所有浏览器都支持</li>
+<li><strong>ES6/ES2015</strong>：里程碑式大更新，引入了 <code>let/const</code>、箭头函数、ES 模块、<code>class</code> 等</li>
+<li><strong>ES2016-ES2024</strong>：每年持续添加新特性（如 <code>async/await</code>、可选链 <code>?.</code> 等）</li>
+</ul>
+<p>ES 模块正是在 ES6（2015年）引入的。在此之前，JavaScript 没有官方的模块系统，开发者只能用各种&quot;民间方案&quot;（如 CommonJS、AMD），这导致了模块规范不统一的问题。ES 模块统一了这些规范，成为现代前端开发的基石。</p>
+<p><strong>为什么需要打包？</strong> 主要有三个原因：首先，虽然现代浏览器已经支持 ES 模块，但在生产环境中加载上百个小文件仍然会带来性能开销；其次，打包过程可以进行 Tree Shaking，自动删除未使用的代码，减小文件体积；最后，打包后可以做代码分割，实现按需加载，提升首屏速度。</p>
+<blockquote>
+<p><strong>📁 打包前后对比：看看打包做了什么</strong>
+<strong>打包前的源码结构</strong>（分散的多个文件）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── index.js          (入口文件，导入其他模块)
+├── utils/
+│   ├── a.js          (工具函数 A)
+│   ├── b.js          (工具函数 B)
+│   └── c.js          (工具函数 C)
+└── components/
+    └── Button.vue    (按钮组件)
+</code></pre>
+<p><strong>打包后的产物</strong>（合并后的少数文件）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>dist/
+├── index.[hash].js      (主入口代码)
+├── vendor.[hash].js     (第三方库代码)
+└── assets/
+    └── logo.[hash].png  (静态资源)
+</code></pre>
+<p>打包工具会分析文件之间的依赖关系，按照正确的顺序把它们合并到一起，同时做各种优化。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了代码分割如何实现按需加载。点击不同的路由，观察哪些代码被加载了：</p>
+<h4 id="24-构建build完整的生产线">2.4 构建（Build）：完整的&quot;生产线&quot;</h4>
+<p>构建是一个更广义的概念，它涵盖了从源代码到可部署产物的完整转换过程。一个完整的构建流程通常包括以下步骤：</p>
+<ol>
+<li><strong>预编译阶段</strong>：把 TypeScript 编译成 JavaScript，把 Sass 编译成 CSS</li>
+<li><strong>代码检查阶段</strong>：运行 ESLint 检查代码规范，运行 TypeScript 类型检查</li>
+<li><strong>依赖解析阶段</strong>：分析模块之间的依赖关系，构建依赖图</li>
+</ol>
+<p>👇 <strong>动手看看</strong>：
+原课程的交互演示展示了项目中模块之间的依赖关系图谱。点击不同的节点，观察模块是如何相互引用的：</p>
+<ol start="4">
+<li><strong>转译阶段</strong>：使用 Babel 等工具转换语法，确保兼容性</li>
+<li><strong>打包阶段</strong>：合并模块文件，应用 Tree Shaking 删除无用代码</li>
+<li><strong>优化阶段</strong>：压缩代码、分割代码、提取公共模块</li>
+<li><strong>资源处理阶段</strong>：压缩图片、生成雪碧图、处理字体文件</li>
+<li><strong>产物生成阶段</strong>：输出最终文件到 dist 目录</li>
+</ol>
+<p>理解这个完整流程非常重要，因为当构建出现问题时，你需要知道问题出在哪个环节，才能有针对性地解决。</p>
+<h3 id="3-实战一个团队的工程化演进之路">3. 实战：一个团队的工程化演进之路</h3>
+<blockquote>
+<p><strong>🤔 什么是&quot;工程化&quot;？</strong>
+说了半天&quot;工程化&quot;，它到底是什么意思？</p>
+</blockquote>
+<p><strong>简单来说，工程化就是把&quot;手工作坊&quot;变成&quot;现代化工厂&quot;的过程。</strong></p>
+<p>想象一下：你在家做饭，想吃什么就做什么，很自由。但如果要开一家餐厅，每天服务几百个顾客，就不能再&quot;想做什么做什么&quot;了——你需要标准化的菜谱、规范的操作流程、统一的原材料采购，这样才能保证每道菜的质量稳定、出餐效率高。</p>
+<p>前端开发也一样。一个人写小项目，怎么写都行。但团队协作、项目变大后，就需要：</p>
+<ul>
+<li><strong>统一的代码规范</strong>：大家都按同样的方式写代码</li>
+<li><strong>自动化工具</strong>：让机器帮我们检查错误、转换代码、打包文件</li>
+<li><strong>标准化流程</strong>：从开发到上线有一套清晰的步骤</li>
+</ul>
+<p><strong>这就是工程化：用工具和规范，让开发更高效、代码更可靠、协作更顺畅。</strong></p>
+<p>讲了这么多概念，我们看一个真实的案例：某创业公司是如何从&quot;直接写 HTML&quot;一步步进化到&quot;现代化工程化流程&quot;的。通过这个案例，你会更直观地理解工程化到底解决了什么问题。</p>
+<blockquote>
+<p><strong>📖 背景知识：jQuery、Vue、React 是什么？</strong>
+在开始案例之前，先简单介绍一下这些名词：</p>
+</blockquote>
+<ul>
+<li><strong>jQuery</strong>：十多年前最流行的 JavaScript 库，用来简化 DOM 操作（比如&quot;点击按钮后改变文字&quot;）。现在已经被 Vue、React 等现代框架取代，但很多老项目还在用。</li>
+<li><strong>Vue / React</strong>：现代前端开发的主流框架。它们让你用&quot;组件&quot;的方式组织代码，数据和视图自动同步，开发效率更高。你现在学的很可能就是其中之一。</li>
+</ul>
+<p><strong>简单理解</strong>：jQuery 是&quot;手动挡&quot;，你要自己操作每一个元素；Vue/React 是&quot;自动挡&quot;，你只需要告诉它数据是什么，它会自动更新界面。</p>
+<h4 id="31-演进的全景图-3">3.1 演进的全景图</h4>
+<blockquote>
+<p><strong>🤔 什么是脚手架？</strong>
+脚手架就是帮你&quot;搭好项目骨架&quot;的工具。比如 <code>npm create vite@latest</code> 会自动创建一个配置好的项目，里面有目录结构、配置文件、示例代码，你直接开始写业务代码就行。</p>
+</blockquote>
+<p><strong>没有脚手架的时代</strong>：你要手动创建文件夹、写配置文件、安装依赖...一个项目搭建下来可能要半天。
+<strong>有脚手架的时代</strong>：一条命令，30 秒搞定。</p>
+<p>下面这张表展示了工程化演进的四个阶段，你可以看到构建工具、脚手架、框架是如何一步步进化的：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>构建工具</th>
+<th>脚手架</th>
+<th>框架</th>
+<th>核心变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>阶段一：原始时代</strong></td>
+<td>无（直接运行）</td>
+<td>无（手动建文件）</td>
+<td>jQuery</td>
+<td>没有任何工具，全靠手工</td>
+</tr>
+<tr>
+<td><strong>阶段二：模块化</strong></td>
+<td>Webpack + Babel</td>
+<td>简单模板复制</td>
+<td>Vue 2 / React</td>
+<td>开始有构建流程，但配置很麻烦</td>
+</tr>
+<tr>
+<td><strong>阶段三：现代化</strong></td>
+<td>Vite</td>
+<td>create-vite / create-react-app</td>
+<td>Vue 3 / React 18</td>
+<td>开箱即用，零配置启动</td>
+</tr>
+<tr>
+<td><strong>阶段四：持续优化</strong></td>
+<td>Vite + 插件</td>
+<td>自定义脚手架模板</td>
+<td>框架 + TypeScript</td>
+<td>团队规范化、模板化</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong>
+我们逐行解读这张表：</p>
+</blockquote>
+<p><strong>阶段一 → 阶段二</strong>：从&quot;没有工具&quot;到&quot;有了工具&quot;。这是质的飞跃——你开始用构建工具处理代码，用框架组织项目。但代价是配置复杂，新人上手难。</p>
+<p><strong>阶段二 → 阶段三</strong>：从&quot;能用&quot;到&quot;好用&quot;。Vite 把原来需要手动配置的东西都自动化了，脚手架一键生成项目，开发体验大幅提升。你现在大概率就处在这个阶段。</p>
+<p><strong>阶段三 → 阶段四</strong>：从&quot;个人好用&quot;到&quot;团队高效&quot;。当团队变大后，需要统一的技术栈和规范，这时候会自定义脚手架模板，让所有项目保持一致的风格。</p>
+<p><strong>总结一下</strong>：工程化演进不只是&quot;构建工具变快了&quot;，而是整个开发体验的升级——从手动搭建项目到脚手架一键生成，从复杂配置到开箱即用，从各自为战到团队规范。</p>
+<h4 id="32-阶段一原始时代全靠手工">3.2 阶段一：原始时代——全靠手工</h4>
+<p>为什么叫&quot;原始时代&quot;？因为这个阶段没有任何自动化工具，所有事情都要手动完成——创建文件夹、写代码、管理依赖、调试问题，全部靠人工。</p>
+<p>在这个阶段，团队只有 3 个前端工程师，做一个管理后台项目。项目很小，大家各写各的，看起来没什么问题。但随着项目变大，问题开始暴露出来。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>构建工具</strong>：无，直接写 HTML/JS/CSS，浏览器直接运行</li>
+<li><strong>脚手架</strong>：无，手动创建文件夹和文件</li>
+<li><strong>框架</strong>：jQuery，用选择器操作 DOM</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：简单直接，没有学习成本，写完就能跑</li>
+<li>❌ <strong>缺点</strong>：代码一多就乱，团队协作困难，没有代码检查容易出 bug</li>
+</ul>
+<blockquote>
+<p><strong>查看当时的项目结构和代码方式</strong>
+<strong>项目结构</strong>（手动创建）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>project/
+├── index.html
+├── login.html
+├── css/
+│   ├── bootstrap.css
+│   └── custom.css
+├── js/
+│   ├── jquery.js
+│   ├── bootstrap.js
+│   └── app.js
+└── images/
+</code></pre>
+<p><strong>遇到的问题</strong>：</p>
+<ol>
+<li><strong>全局变量污染</strong>：所有变量都在全局命名空间，不同文件中的同名变量会互相覆盖</li>
+<li><strong>依赖管理混乱</strong>：jQuery 插件必须先加载 jQuery，script 标签顺序错了就报错</li>
+<li><strong>代码难以复用</strong>：想复用某个功能，只能复制粘贴代码</li>
+<li><strong>没有代码检查</strong>：变量拼写错误等低级问题，只能运行后才发现</li>
+</ol>
+<p><strong>当时的临时解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// 用自执行函数模拟模块化（IIFE 模式）
+var ModuleA = (function () {
+  var privateVar = &#39;private&#39;  // 私有变量，外部无法访问
+
+  function privateFn() {
+    console.log(privateVar)
+  }
+
+  return {
+    publicMethod: function () {
+      privateFn()  // 暴露公共方法
+    }
+  }
+})()
+
+// 依赖管理全靠注释说明
+/**
+ * @requires jquery.js (must load first)
+ * @requires bootstrap.js
+ */
+</code></pre>
+<p>这种开发方式在小项目中还能应付，但随着团队扩大到 8 人、项目变得越来越复杂，这些问题开始严重影响开发效率和代码质量，团队迫切需要一种更好的组织方式。</p>
+<h4 id="33-阶段二模块化时代开始有工具链">3.3 阶段二：模块化时代——开始有工具链</h4>
+<p>原始时代的问题积累到一定程度，团队终于决定引入现代化工具链。这是一个重要的转折点——从&quot;手工劳动&quot;进入&quot;机械化生产&quot;。</p>
+<p>但这个阶段也有代价：工具链的学习成本很高，配置文件复杂，新人上手需要时间。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>构建工具</strong>：Webpack + Babel，需要写配置文件</li>
+<li><strong>脚手架</strong>：复制旧项目模板，手动改配置</li>
+<li><strong>框架</strong>：Vue 2 / React，组件化开发</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：模块化开发，代码可维护性大幅提升，有代码检查</li>
+<li>❌ <strong>缺点</strong>：配置复杂，启动慢，脚手架简陋容易出错</li>
+</ul>
+<blockquote>
+<p><strong>查看引入工具链后的变化</strong>
+<strong>项目结构</strong>（Webpack + Vue 2 时代）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-project/
+├── build/               # 构建配置（这个阶段配置很复杂！）
+│   ├── webpack.base.js
+│   ├── webpack.dev.js
+│   └── webpack.prod.js
+├── config/              # 环境配置
+│   ├── index.js
+│   ├── dev.env.js
+│   └── prod.env.js
+├── src/
+│   ├── components/      # 组件
+│   ├── views/           # 页面
+│   ├── router/          # 路由
+│   ├── store/           # 状态管理
+│   ├── App.vue
+│   └── main.js
+├── static/              # 静态资源
+├── .eslintrc.js         # ESLint 配置
+├── .babelrc             # Babel 配置
+├── package.json
+└── index.html
+</code></pre>
+<p><strong>配置文件示例</strong>（这就是为什么说&quot;配置复杂&quot;）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// webpack.base.js - 仅仅是基础配置就有这么多内容
+const path = require(&#39;path&#39;)
+const VueLoaderPlugin = require(&#39;vue-loader/lib/plugin&#39;)
+
+module.exports = {
+  entry: &#39;./src/main.js&#39;,
+  output: {
+    path: path.resolve(__dirname, &#39;../dist&#39;),
+    filename: &#39;[name].[contenthash].js&#39;
+  },
+  module: {
+    rules: [
+      { test: /\.vue$/, loader: &#39;vue-loader&#39; },
+      { test: /\.js$/, loader: &#39;babel-loader&#39;, exclude: /node_modules/ },
+      { test: /\.css$/, use: [&#39;style-loader&#39;, &#39;css-loader&#39;] },
+      { test: /\.scss$/, use: [&#39;style-loader&#39;, &#39;css-loader&#39;, &#39;sass-loader&#39;] },
+      { test: /\.(png|jpg|gif)$/, loader: &#39;url-loader&#39;, options: { limit: 8192 } }
+    ]
+  },
+  plugins: [new VueLoaderPlugin()],
+  resolve: {
+    extensions: [&#39;.js&#39;, &#39;.vue&#39;, &#39;.json&#39;],
+    alias: { &#39;@&#39;: path.resolve(__dirname, &#39;../src&#39;) }
+  }
+}
+</code></pre>
+<p><strong>带来的改善</strong>：</p>
+<ol>
+<li><strong>模块化开发</strong>：每个文件就是一个模块，通过 import/export 清晰管理依赖关系</li>
+<li><strong>代码复用</strong>：组件和工具函数可以在不同项目中复用，不用再复制粘贴</li>
+<li><strong>代码质量</strong>：ESLint 在保存时自动检查，TypeScript 在编译时发现类型错误</li>
+<li><strong>性能优化</strong>：Webpack 的代码分割和懒加载让首屏加载速度大幅提升</li>
+</ol>
+<p><strong>新的痛点</strong>：</p>
+<ol>
+<li><strong>配置复杂</strong>：webpack.config.js 动辄几百行，新人很难上手</li>
+<li><strong>启动慢</strong>：冷启动 30 秒以上，改代码热更新要等 5 秒</li>
+<li><strong>脚手架简陋</strong>：复制旧项目模板，经常忘记改配置，导致各种奇怪问题</li>
+</ol>
+<h4 id="34-阶段三现代化时代开箱即用">3.4 阶段三：现代化时代——开箱即用</h4>
+<p>阶段二的痛点（配置复杂、启动慢）困扰了开发者很多年。直到 2021 年，Vite 的出现彻底改变了这一切。</p>
+<p>Vite 的核心理念是&quot;约定优于配置&quot;——它内置了合理的默认配置，你不需要写几百行配置文件，开箱即用。这就像从&quot;自己组装电脑&quot;变成了&quot;买品牌机&quot;，省去了大量折腾的时间。</p>
+<p>2021 年之后，团队开始用 Vite 替代 Webpack，开发体验得到了质的提升。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>构建工具</strong>：Vite，零配置启动，秒级热更新</li>
+<li><strong>脚手架</strong>：<code>npm create vite@latest</code>，一键生成项目</li>
+<li><strong>框架</strong>：Vue 3 / React 18，更强大的组件系统</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：秒级启动，热更新极快，配置简单，新人友好</li>
+<li>❌ <strong>缺点</strong>：生态还在完善中，某些特殊需求可能需要额外配置</li>
+</ul>
+<blockquote>
+<p><strong>Vite 带来的变化</strong>
+<strong>项目结构</strong>（Vite + Vue 3 时代）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-project/
+├── src/
+│   ├── components/      # 组件
+│   ├── views/           # 页面
+│   ├── router/          # 路由
+│   ├── stores/          # 状态管理（Pinia）
+│   ├── assets/          # 静态资源
+│   ├── App.vue
+│   └── main.js
+├── public/              # 公共资源
+├── vite.config.js       # 配置文件（简洁！）
+├── package.json
+└── index.html
+</code></pre>
+<p><strong>配置文件对比</strong>（Vite 配置有多简洁）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// vite.config.js - 整个配置文件就这么点
+import { defineConfig } from &#39;vite&#39;
+import vue from &#39;@vitejs/plugin-vue&#39;
+
+export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: { &#39;@&#39;: &#39;/src&#39; }
+  }
+})
+// 对比上面 Webpack 的配置，是不是简洁太多了？
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>阶段二（Webpack）</th>
+<th>阶段三（Vite）</th>
+<th>体验提升</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建项目</td>
+<td>复制模板，手动改配置</td>
+<td><code>npm create vite@latest</code></td>
+<td>30 秒搞定</td>
+</tr>
+<tr>
+<td>冷启动</td>
+<td>30s+</td>
+<td>&lt;1s</td>
+<td><strong>快 30 倍</strong></td>
+</tr>
+<tr>
+<td>热更新</td>
+<td>3-5s</td>
+<td>&lt;100ms</td>
+<td><strong>快 30 倍</strong></td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>几百行</td>
+<td>几十行甚至不需要</td>
+<td><strong>大幅简化</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>实际体验对比</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 阶段二：使用 Webpack
+npm run dev
+# 等待 30 秒...喝杯咖啡回来还在编译
+# [INFO] Compiled successfully in 30123ms
+# 修改代码 -&gt; 保存 -&gt; 等待 5 秒 -&gt; 终于看到效果
+
+# 阶段三：使用 Vite
+npm create vite@latest my-project  # 一键创建项目
+cd my-project &amp;&amp; npm install
+npm run dev
+# 等待 300 毫秒...还没反应过来就好了
+# [INFO] ready in 312ms
+# 修改代码 -&gt; 保存 -&gt; 瞬间看到效果
+</code></pre>
+<h4 id="35-阶段四持续优化团队规范化">3.5 阶段四：持续优化——团队规范化</h4>
+<p>当工具链成熟后，团队开始关注更深层次的问题：如何让团队协作更高效？如何避免重复踩坑？如何统一代码风格？</p>
+<p>这个阶段的核心是&quot;规范化&quot;——不只是工具好用，还要让团队所有人用同样的方式工作。</p>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li><strong>构建工具</strong>：Vite + 自定义插件，适配团队特殊需求</li>
+<li><strong>脚手架</strong>：团队内部脚手架模板，统一技术栈和规范</li>
+<li><strong>框架</strong>：Vue 3 / React 18 + TypeScript，类型安全</li>
+</ul>
+<p><strong>这个阶段的特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：团队协作高效，代码风格统一，新人入职有模板可循</li>
+<li>❌ <strong>缺点</strong>：需要投入时间维护脚手架和规范，有一定维护成本</li>
+</ul>
+<p>这个阶段会做什么？</p>
+<ol>
+<li><strong>自定义脚手架模板</strong>：把团队常用的配置、目录结构、公共组件打包成模板，新项目一键生成</li>
+<li><strong>引入 TypeScript</strong>：让代码有类型检查，减少运行时错误</li>
+<li><strong>建立代码规范</strong>：ESLint 规则、Git 提交规范、代码审查流程</li>
+<li><strong>持续集成/持续部署（CI/CD）</strong>：代码提交后自动测试、自动部署</li>
+</ol>
+<blockquote>
+<p><strong>团队规范化阶段的项目结构</strong>
+<strong>项目结构</strong>（团队内部模板 + TypeScript）：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-project/
+├── .husky/              # Git hooks（提交前自动检查）
+├── src/
+│   ├── components/      # 组件
+│   ├── views/           # 页面
+│   ├── router/          # 路由
+│   ├── stores/          # 状态管理
+│   ├── api/             # API 接口
+│   ├── utils/           # 工具函数
+│   ├── types/           # TypeScript 类型定义
+│   ├── assets/          # 静态资源
+│   ├── App.vue
+│   └── main.ts          # 注意是 .ts 不是 .js
+├── public/
+├── .eslintrc.cjs        # ESLint 配置（团队统一规则）
+├── .prettierrc          # Prettier 配置（代码格式化）
+├── tsconfig.json        # TypeScript 配置
+├── vite.config.ts       # Vite 配置
+├── package.json
+└── README.md            # 项目文档
+</code></pre>
+<p><strong>团队规范化的具体体现</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// tsconfig.json - TypeScript 配置，类型安全
+{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2020&quot;,
+    &quot;strict&quot;: true,           // 开启严格模式
+    &quot;noImplicitAny&quot;: true,    // 禁止隐式 any
+    &quot;baseUrl&quot;: &quot;.&quot;,
+    &quot;paths&quot;: { &quot;@/*&quot;: [&quot;src/*&quot;] }
+  }
+}
+
+// .eslintrc.cjs - 团队统一的代码规范
+module.exports = {
+  extends: [
+    &#39;plugin:vue/vue3-recommended&#39;,
+    &#39;@vue/standard&#39;,
+    &#39;@vue/typescript/recommended&#39;
+  ],
+  rules: {
+    &#39;no-console&#39;: &#39;warn&#39;,     // 禁止 console.log
+    &#39;no-debugger&#39;: &#39;error&#39;,   // 禁止 debugger
+    &#39;vue/multi-word-component-names&#39;: &#39;error&#39;  // 组件名必须是多词
+  }
+}
+</code></pre>
+<p><strong>常见踩坑与解决方案</strong>：</p>
+<p><strong>坑一：引入整个库而不是按需引入</strong></p>
+<p>这是最常见的错误之一。很多时候我们只需要一个库中的某个函数，却不小心引入了整个库。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// ❌ 错误做法：引入整个 moment.js（2.5MB！）
+import moment from &#39;moment&#39;
+const formattedDate = moment(date).format(&#39;YYYY-MM-DD&#39;)
+
+// ✅ 正确做法：使用更轻量的 dayjs（2KB）
+import dayjs from &#39;dayjs&#39;
+const formattedDate = dayjs(date).format(&#39;YYYY-MM-DD&#39;)
+
+// 或者按需导入 date-fns 的函数
+import { format } from &#39;date-fns&#39;
+const formattedDate = format(date, &#39;yyyy-MM-dd&#39;)
+</code></pre>
+<p><strong>坑二：Tree Shaking 失效</strong></p>
+<p>Tree Shaking 是打包工具自动删除未使用代码的功能，但它需要正确的导入方式才能生效。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// ❌ 错误做法：这会引入整个 lodash（70KB+）
+import _ from &#39;lodash&#39;
+_.debounce(fn, 200)
+
+// ✅ 正确做法：只导入需要的函数
+import debounce from &#39;lodash/debounce&#39;
+
+// 或者使用 lodash-es（ES 模块版本，支持 Tree Shaking）
+import { debounce } from &#39;lodash-es&#39;
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了 Tree Shaking 的工作原理。勾选你需要的函数，观察打包后的体积变化：</p>
+<p><strong>坑三：没有使用文件 Hash，导致缓存问题</strong></p>
+<p>浏览器会缓存静态资源以提高加载速度，但如果文件名不变，更新代码后用户可能还在使用旧版本。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// ❌ 问题场景：文件名固定，用户缓存了旧版本
+// &lt;script src=&quot;/js/app.js&quot;&gt;&lt;/script&gt;
+
+// ✅ 正确做法：使用 content hash
+// Vite/Webpack 会自动处理：
+// &lt;script src=&quot;/js/app.a3f7b2c.js&quot;&gt;&lt;/script&gt;
+// 内容变化时 hash 也会变化，浏览器会自动获取新版本
+</code></pre>
+<h3 id="4-原理深入vite-的性能原理">4. 原理深入：Vite 的性能原理</h3>
+<p>了解了实际案例后，来看 Vite 的工作原理，理解它为什么能比传统工具快这么多。</p>
+<h4 id="41-两种截然不同的工作方式">4.1 两种截然不同的工作方式</h4>
+<p>传统打包工具（如 Webpack）的工作方式是&quot;先打包后服务&quot;：在启动开发服务器之前，它必须先把整个应用的所有模块打包成一个或几个 bundle 文件。这个过程中需要遍历所有源文件、解析依赖关系、转换代码、合并文件，项目越大，这个过程就越慢。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>传统打包工具的工作流程：
+
+源代码 (100+ 文件)
+    ↓
+[构建时全部打包] ← 这一步非常耗时！
+    ↓
+Bundle (单个/几个大文件)
+    ↓
+浏览器请求 → 返回打包后的文件
+</code></pre>
+<p>Vite 的工作方式完全不同，它采用了&quot;按需编译&quot;的策略：启动时几乎不做任何打包工作，直接启动开发服务器。当浏览器请求某个模块时，Vite 才会实时编译这个模块并返回。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Vite 的工作流程：
+
+源代码 (100+ 文件)
+    ↓
+[不打包！直接启动服务器] ← 几乎瞬间完成
+    ↓
+浏览器请求 index.html
+    ↓
+浏览器发现 &lt;script type=&quot;module&quot;&gt;，继续请求 JS 文件
+    ↓
+Vite 实时编译请求的模块 → 返回编译后的代码
+    ↓
+浏览器按需加载，用到的才请求
+</code></pre>
+<h4 id="42-vite-工作流程的三个关键时刻">4.2 Vite 工作流程的三个关键时刻</h4>
+<p><strong>启动时：冷启动秒开</strong></p>
+<p>Vite 启动时只做两件事：启动一个静态文件服务器，预处理一些依赖信息。它不需要打包，不需要编译所有文件，所以几乎瞬间就能启动完成。</p>
+<p><strong>请求时：按需编译</strong></p>
+<p>当浏览器通过 <code>&lt;script type=&quot;module&quot;&gt;</code> 请求 JavaScript 文件时，Vite 会拦截这个请求，实时编译代码后再返回。它会把 TypeScript 转成 JavaScript，把 Vue 单文件组件拆分成 template/script/style，把 CSS 预处理器编译成原生 CSS。</p>
+<p><strong>修改时：极速热更新</strong></p>
+<p>当你修改代码并保存时，Vite 会通过 WebSocket 通知浏览器，只更新发生变化的模块，而不是刷新整个页面。由于模块粒度很细（一个文件就是一个模块），更新速度非常快，通常在 100 毫秒以内。</p>
+<p>👇 <strong>动手看看</strong>：
+原课程的交互演示对比了传统刷新和 HMR 热更新的区别：</p>
+<blockquote>
+<p><strong>生产环境为什么还是要打包？</strong>
+你可能会问：既然不打包这么快，为什么生产环境还是要打包呢？原因有几个：首先，虽然 HTTP/2 支持多路复用，但加载大量小文件仍然有性能开销；其次，打包过程能做更激进的优化，比如代码压缩、作用域提升、更彻底的 Tree Shaking；最后，打包后可以做更好的缓存策略和 CDN 分发。所以 Vite 在生产构建时用 Rollup 打包。</p>
+</blockquote>
+<h3 id="5-webpack-的-loader-和-plugin">5. Webpack 的 Loader 和 Plugin</h3>
+<p>虽然 Vite 越来越流行，但很多老项目仍在使用 Webpack，而且 Webpack 的设计思想对理解构建工具很有帮助。如果你需要维护使用 Webpack 的项目，了解它的两个核心概念——Loader 和 Plugin——是必不可少的。</p>
+<h4 id="51-loader文件转换器">5.1 Loader：文件转换器</h4>
+<p>Webpack 的核心理念是&quot;一切皆模块&quot;，但 Webpack 本身只理解 JavaScript。Loader 的作用就是把其他类型的文件转换成 Webpack 能处理的 JavaScript 模块。</p>
+<p>比如，当你 import 一个 <code>.vue</code> 文件时，<code>vue-loader</code> 会把它转换成 JavaScript 组件对象；当你 import 一个 <code>.scss</code> 文件时，<code>sass-loader</code> 会把它编译成 CSS，然后 <code>css-loader</code> 解析其中的 <code>@import</code> 和 <code>url()</code>，最后 <code>style-loader</code> 把 CSS 注入到页面的 <code>&lt;style&gt;</code> 标签中。</p>
+<h4 id="52-plugin功能扩展器">5.2 Plugin：功能扩展器</h4>
+<p>Plugin 的能力比 Loader 更强，它可以访问 Webpack 的完整构建生命周期，在各个阶段执行自定义逻辑。比如，<code>HtmlWebpackPlugin</code> 可以自动生成 HTML 文件并注入打包后的资源引用；<code>MiniCssExtractPlugin</code> 可以把 CSS 提取成独立文件而不是内嵌在 JS 中；<code>BundleAnalyzerPlugin</code> 可以分析打包后的文件组成，帮助你找出体积过大的模块。</p>
+<h4 id="53-loader-与-plugin-的区别">5.3 Loader 与 Plugin 的区别</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Loader</th>
+<th>Plugin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>核心职责</strong></td>
+<td>文件转换，把非 JS 文件转成 JS 模块</td>
+<td>功能扩展，干预构建过程的各个环节</td>
+</tr>
+<tr>
+<td><strong>执行时机</strong></td>
+<td>在模块加载时执行，针对单个文件</td>
+<td>贯穿整个构建生命周期，可以监听各种事件</td>
+</tr>
+<tr>
+<td><strong>配置位置</strong></td>
+<td><code>module.rules</code> 数组中配置</td>
+<td><code>plugins</code> 数组中实例化</td>
+</tr>
+<tr>
+<td><strong>典型例子</strong></td>
+<td><code>babel-loader</code>、<code>vue-loader</code>、<code>sass-loader</code></td>
+<td><code>HtmlWebpackPlugin</code>、<code>MiniCssExtractPlugin</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="6-vite-配置模板">6. Vite 配置模板</h3>
+<p>理论讲得差不多了，下面是一个可以直接使用的 Vite 配置模板，涵盖了大多数项目需要的常用功能。你可以根据自己的项目需求删减和调整。</p>
+<blockquote>
+<p><strong>点击查看完整配置</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// vite.config.js
+import { defineConfig } from &#39;vite&#39;
+import vue from &#39;@vitejs/plugin-vue&#39;
+import { resolve } from &#39;path&#39;
+
+export default defineConfig(({ mode }) =&gt; ({
+  // 基础路径配置
+  base: &#39;./&#39;,  // 部署时的基础路径，相对路径更灵活
+
+  // 路径别名，让 import 更简洁
+  resolve: {
+    alias: {
+      &#39;@&#39;: resolve(__dirname, &#39;src&#39;),
+      &#39;@components&#39;: resolve(__dirname, &#39;src/components&#39;),
+      &#39;@utils&#39;: resolve(__dirname, &#39;src/utils&#39;),
+      &#39;@api&#39;: resolve(__dirname, &#39;src/api&#39;)
+    }
+  },
+
+  // CSS 配置
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // 自动导入全局样式变量
+        additionalData: `@use &quot;@/styles/vars.scss&quot; as *;`
+      }
+    }
+  },
+
+  // 开发服务器配置
+  server: {
+    port: 3000,           // 端口号
+    open: true,           // 自动打开浏览器
+    cors: true,           // 允许跨域
+    // API 代理配置，解决开发环境跨域问题
+    proxy: {
+      &#39;/api&#39;: {
+        target: &#39;http://localhost:8080&#39;,
+        changeOrigin: true,
+        rewrite: (path) =&gt; path.replace(/^\/api/, &#39;&#39;)
+      }
+    }
+  },
+
+  // 构建配置
+  build: {
+    outDir: &#39;dist&#39;,
+    sourcemap: mode !== &#39;production&#39;,  // 生产环境不生成 sourcemap
+
+    // Rollup 打包配置
+    rollupOptions: {
+      output: {
+        // 代码分割策略：把不同类型的依赖打包到不同文件
+        manualChunks: {
+          &#39;vue-vendor&#39;: [&#39;vue&#39;, &#39;vue-router&#39;, &#39;pinia&#39;],
+          &#39;ui-vendor&#39;: [&#39;element-plus&#39;],
+          &#39;utils-vendor&#39;: [&#39;lodash-es&#39;, &#39;axios&#39;, &#39;dayjs&#39;]
+        },
+        // 文件命名规则
+        entryFileNames: &#39;js/[name]-[hash].js&#39;,
+        chunkFileNames: &#39;js/[name]-[hash].js&#39;,
+        assetFileNames: (assetInfo) =&gt; {
+          const info = assetInfo.name.split(&#39;.&#39;)
+          const ext = info[info.length - 1]
+          if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(assetInfo.name)) {
+            return &#39;img/[name]-[hash][extname]&#39;
+          }
+          if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name)) {
+            return &#39;fonts/[name]-[hash][extname]&#39;
+          }
+          return &#39;[ext]/[name]-[hash][extname]&#39;
+        }
+      }
+    },
+
+    // 代码压缩配置
+    minify: &#39;terser&#39;,
+    terserOptions: {
+      compress: {
+        drop_console: true,   // 移除 console
+        drop_debugger: true   // 移除 debugger
+      }
+    },
+
+    // 大于 500KB 的 chunk 会触发警告
+    chunkSizeWarningLimit: 500
+  },
+
+  // 插件配置
+  plugins: [
+    vue()  // Vue 3 支持
+  ]
+}))
+</code></pre>
+<p>这个配置涵盖了日常开发的主要需求：路径别名让 import 语句更简洁，开发服务器代理解决了跨域问题，代码分割策略优化了加载性能，压缩配置移除了调试代码。</p>
+<h3 id="61-sourcemap调试压缩代码的秘密武器">6.1 SourceMap：调试压缩代码的秘密武器</h3>
+<p>你可能注意到了配置中的 <code>sourcemap</code> 选项。什么是 SourceMap？它为什么这么重要？</p>
+<p>在生产环境中，我们的代码会被压缩、合并、转译，最终变成一行难以阅读的&quot;天书&quot;。当代码出错时，浏览器只能告诉你错误发生在压缩后代码的第 1 行第 1234 个字符——这对调试毫无帮助。SourceMap 的作用就是建立一个映射关系，让你在浏览器开发者工具中看到的仍然是原始的源代码。</p>
+<p>👇 <strong>动手看看</strong>：
+原课程的交互演示展示了 SourceMap 如何将压缩后的代码映射回源代码：</p>
+<h3 id="62-资源指纹长期缓存与版本控制">6.2 资源指纹：长期缓存与版本控制</h3>
+<p>在配置中你可能注意到文件名带有 <code>[hash]</code>，这就是资源指纹。它的作用是实现长期缓存策略：当文件内容不变时，hash 也不变，浏览器可以直接使用缓存；当文件内容变化时，hash 随之变化，浏览器会自动获取新版本。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了资源指纹如何影响浏览器缓存行为。点击&quot;重新构建&quot;模拟代码变更，开启/关闭 Hash 观察缓存命中的变化：</p>
+<h3 id="7-总结-6">7. 总结</h3>
+<p>我们用一张表格回顾前端工程化的核心概念：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话解释</th>
+<th>解决的问题</th>
+<th>代表工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>转译</strong></td>
+<td>把新语法&quot;翻译&quot;成旧语法</td>
+<td>浏览器兼容性</td>
+<td>Babel、SWC、esbuild</td>
+</tr>
+<tr>
+<td><strong>打包</strong></td>
+<td>把多个文件合并成少数文件</td>
+<td>减少请求、模块管理</td>
+<td>Webpack、Rollup、Vite</td>
+</tr>
+<tr>
+<td><strong>构建</strong></td>
+<td>从源码到产物的完整流程</td>
+<td>自动化、优化</td>
+<td>上述所有工具</td>
+</tr>
+<tr>
+<td><strong>Tree Shaking</strong></td>
+<td>删除未使用的代码</td>
+<td>减小文件体积</td>
+<td>Webpack、Rollup</td>
+</tr>
+<tr>
+<td><strong>Code Splitting</strong></td>
+<td>把代码分成多个小块按需加载</td>
+<td>首屏性能优化</td>
+<td>Webpack、Vite</td>
+</tr>
+<tr>
+<td><strong>HMR</strong></td>
+<td>热模块替换，不刷新更新</td>
+<td>开发体验</td>
+<td>Webpack、Vite</td>
+</tr>
+</tbody></table></div>
+<figure class="stack-figure">
+  <img src="../../book/assets/stacks/frontend-tooling.png" alt="前端构建流水线工程图：源代码经代码检查、转译、打包、优化四道工序产出 dist，六列分别列出 TypeScript/Vue/React/npm、ESLint/Prettier/husky/CI-CD、Babel/SWC/esbuild/Sass、Webpack/Rollup/Vite、Tree Shaking/Code Splitting/Terser、资源指纹/SourceMap/CDN/浏览器" loading="lazy">
+  <figcaption><strong>`npm run build` 一跑，四道工序依次开工。</strong>检查（ESLint、Prettier、husky）→ 转译（TypeScript、Babel、SWC、esbuild、Sass）→ 打包（Webpack、Rollup、Vite）→ 优化（Tree Shaking、Code Splitting、Terser），产物带上 `[hash]` 和 SourceMap 经 CDN 进到浏览器；虚线是 Vite 在开发模式下借用 esbuild。</figcaption>
+</figure><blockquote>
+<p><strong>写在最后</strong>
+前端工程化是一个持续演进的话题，工具会变，但核心理念不变：<strong>用自动化手段提高效率、保证质量、优化性能</strong>。理解了这些基本原理，无论工具如何更新换代，你都能快速上手、从容应对。</p>
+</blockquote>
+<p>到这里，你应该能建立起对前端工程化的整体认知。当你在实际项目中遇到构建相关的问题时，能够知道从哪里入手、如何定位、怎样解决。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-110.html">← 网页性能的度量与优化</a><a rel="next" href="chapter-112.html">前端项目文件目录设计 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

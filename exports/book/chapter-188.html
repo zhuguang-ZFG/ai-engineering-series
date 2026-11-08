@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PRD：智能旅游规划 Agent 编排平台 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 188 / 195</p><article><h1 id="prd智能旅游规划-agent-编排平台">PRD：智能旅游规划 Agent 编排平台</h1><details class="contents"><summary>本章目录 <span>· 19 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-项目定位-7">1. 项目定位</a></li><li><a href="#10-技术选型建议-4">1.0 技术选型建议</a></li><li><a href="#11-竞品参考官方-4">1.1 竞品参考（官方）</a></li><li><a href="#12-产品借鉴点-4">1.2 产品借鉴点</a></li><li><a href="#13-竞品页面拆解-4">1.3 竞品页面拆解</a></li><li><a href="#2-目标用户与核心目标-7">2. 目标用户与核心目标</a></li><li><a href="#3-mvp-范围-7">3. MVP 范围</a></li><li><a href="#4-角色与权限-7">4. 角色与权限</a></li><li><a href="#5-前端实现-5">5. 前端实现</a></li><li><a href="#51-页面架构总览-5">5.1 页面架构总览</a><ul><li><a href="#a-官网前台-wwwxxxcom-4">A. 官网前台 www.xxx.com</a></li><li><a href="#1-官网首页-www-6">1. 官网首页 www:/</a></li><li><a href="#b-用户工作台-appxxxcom-1">B. 用户工作台 app.xxx.com</a></li><li><a href="#2-登录页-applogin-5">2. 登录页 app:/login</a></li><li><a href="#3-规划页-appplanner">3. 规划页 app:/planner</a></li><li><a href="#4-行程详情页-apptripsid">4. 行程详情页 app:/trips/:id</a></li><li><a href="#5-历史计划页-apphistory">5. 历史计划页 app:/history</a></li><li><a href="#6-反馈与导出页-appexports">6. 反馈与导出页 app:/exports</a></li><li><a href="#c-后台管理台-adminxxxcom-4">C. 后台管理台 admin.xxx.com</a></li><li><a href="#7-后台首页-admin-2">7. 后台首页 admin:/</a></li><li><a href="#8-任务与反馈页-adminruns">8. 任务与反馈页 admin:/runs</a></li></ul></li><li><a href="#52-关键用户链路-4">5.2 关键用户链路</a></li><li><a href="#6-后端实现-7">6. 后端实现</a></li><li><a href="#61-后台指标与监控-6">6.1 后台指标与监控</a></li><li><a href="#7-功能清单-4">7. 功能清单</a></li><li><a href="#8-接口草案-6">8. 接口草案</a></li><li><a href="#9-关键业务规则-2">9. 关键业务规则</a></li><li><a href="#10-非功能要求-3">10. 非功能要求</a></li><li><a href="#11-开发顺序建议-3">11. 开发顺序建议</a></li><li><a href="#12-待确认项-3">12. 待确认项</a></li></ul></nav></details><p>状态：Draft v0.1<br>目标：先确认这个 Agent 产品的最小可用范围，再进入开发。</p>
+<h2 id="1-项目定位-7">1. 项目定位</h2>
+<p>这是一个面向真实旅行规划场景的 AI 产品，不只是聊天，而是把结构化输入转成可执行行程。</p>
+<p>一句话定义：
+做一个可以生成、保存、调整与导出旅行计划的 Agent 编排平台。</p>
+<p>系统总览：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart LR
+  WWW[&quot;www.xxx.com&lt;br/&gt;官网前台&quot;] --&gt; API[&quot;应用 API / 管理 API&quot;]
+  APP[&quot;app.xxx.com&lt;br/&gt;用户工作台&quot;] --&gt; API
+  ADMIN[&quot;admin.xxx.com&lt;br/&gt;后台管理台&quot;] --&gt; API
+  API --&gt; AUTH[&quot;Supabase Auth&quot;]
+  API --&gt; DB[&quot;Supabase Postgres&quot;]
+  API --&gt; MODEL[&quot;LLM / Agent 编排层&quot;]
+  API --&gt; EXT[&quot;天气 / 地图 / POI 外部信息源&quot;]
+</code></pre>
+<h2 id="10-技术选型建议-4">1.0 技术选型建议</h2>
+<ul>
+<li>前端框架：<code>Next.js App Router</code></li>
+<li>用户鉴权：<code>Supabase Auth</code></li>
+<li>数据库：<code>Supabase Postgres</code></li>
+<li>模型层：统一后端服务调用大模型</li>
+<li>可选缓存：<code>Redis</code></li>
+</ul>
+<p>站点入口约定：</p>
+<ul>
+<li>官网前台：<code>www.xxx.com</code></li>
+<li>用户工作台：<code>app.xxx.com</code></li>
+<li>后台管理台：<code>admin.xxx.com</code></li>
+</ul>
+<h2 id="11-竞品参考官方-4">1.1 竞品参考（官方）</h2>
+<ul>
+<li><a href="https://wanderlog.com/">Wanderlog</a></li>
+</ul>
+<h2 id="12-产品借鉴点-4">1.2 产品借鉴点</h2>
+<p>本项目的产品设计建议参考真实旅行规划产品的做法：</p>
+<ul>
+<li>借鉴 <code>Wanderlog</code> 的路线规划表达方式：输入后直接看到可编辑的每日行程，而不是只返回一大段文本</li>
+<li>行程详情应突出日期、地点、预算、移动顺序和注意事项</li>
+<li>历史记录页应像“我的行程库”，支持再次打开和二次生成</li>
+<li>后台页应强调热门目的地、失败任务和用户反馈，而不是只看系统日志</li>
+<li>整体设计要体现“行程产品”感，而不是“聊天回答”感</li>
+</ul>
+<h2 id="13-竞品页面拆解-4">1.3 竞品页面拆解</h2>
+<p>建议重点参考的竞品页面结构：</p>
+<ul>
+<li><code>Wanderlog</code> 首页<ul>
+<li>重点看：如何同时讲清楚 itinerary、map、budget、collaboration 这些核心价值</li>
+</ul>
+</li>
+<li><code>Wanderlog</code> 行程页<ul>
+<li>重点看：一天一天的安排、地图与列表并存、预算与预订信息并列</li>
+</ul>
+</li>
+<li><code>Wanderlog</code> Pro 页面<ul>
+<li>重点看：如何把高级功能做成清晰权益，而不是一长串技术描述</li>
+</ul>
+</li>
+</ul>
+<p>因此本项目建议：</p>
+<ul>
+<li>规划页更像“行程编辑台”</li>
+<li>详情页更像“可执行 itinerary”</li>
+<li>历史页更像“我的旅行库”</li>
+<li>后台页更像“运营与任务中心”</li>
+</ul>
+<h2 id="2-目标用户与核心目标-7">2. 目标用户与核心目标</h2>
+<p>目标用户：</p>
+<ul>
+<li>想快速获得 3 到 7 天行程安排的普通用户</li>
+<li>需要预算与节奏建议的自由行用户</li>
+<li>维护平台质量和任务健康状态的管理员</li>
+</ul>
+<p>核心目标：</p>
+<ul>
+<li>用户能在一次表单提交后得到结构化行程</li>
+<li>用户能保存历史计划并再次编辑/重生成</li>
+<li>平台能记录失败任务和生成质量反馈</li>
+</ul>
+<h2 id="3-mvp-范围-7">3. MVP 范围</h2>
+<p>第一版必须包含：</p>
+<ul>
+<li>规划表单页</li>
+<li>行程详情页</li>
+<li>历史计划页</li>
+<li>计划保存与重生成</li>
+<li>预算拆分</li>
+<li>导出文本/PDF 占位能力</li>
+<li>后台查看任务与失败日志</li>
+</ul>
+<p>第一版不做：</p>
+<ul>
+<li>真正的机票/酒店预订</li>
+<li>多城市复杂路线联排</li>
+<li>实时票价与库存同步</li>
+<li>多人协同编辑</li>
+<li>多语言输出</li>
+</ul>
+<h2 id="4-角色与权限-7">4. 角色与权限</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>普通用户</td>
+<td>创建计划、查看历史、导出、反馈</td>
+</tr>
+<tr>
+<td>管理员</td>
+<td>查看热门目的地、失败任务、用户反馈</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-前端实现-5">5. 前端实现</h2>
+<h2 id="51-页面架构总览-5">5.1 页面架构总览</h2>
+<p>当前 PRD 定义为 <code>3 套入口，8 个大页面</code>：</p>
+<ul>
+<li>官网前台 <code>1</code> 个大页面</li>
+<li>用户工作台 <code>5</code> 个大页面</li>
+<li>后台管理台 <code>2</code> 个大页面</li>
+</ul>
+<h3 id="a-官网前台-wwwxxxcom-4">A. 官网前台 <code>www.xxx.com</code></h3>
+<h3 id="1-官网首页-www-6">1. 官网首页 <code>www:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>产品介绍</li>
+<li>典型使用场景</li>
+<li>Demo 行程展示</li>
+<li>CTA</li>
+</ul>
+<h3 id="b-用户工作台-appxxxcom-1">B. 用户工作台 <code>app.xxx.com</code></h3>
+<h3 id="2-登录页-applogin-5">2. 登录页 <code>app:/login</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>登录</li>
+<li>注册入口</li>
+</ul>
+<h3 id="3-规划页-appplanner">3. 规划页 <code>app:/planner</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>输入旅行需求</li>
+<li>选择偏好与预算</li>
+<li>发起规划任务</li>
+</ul>
+<h3 id="4-行程详情页-apptripsid">4. 行程详情页 <code>app:/trips/:id</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看每日行程</li>
+<li>查看预算拆分</li>
+<li>再次生成和导出</li>
+</ul>
+<h3 id="5-历史计划页-apphistory">5. 历史计划页 <code>app:/history</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看历史计划</li>
+<li>重新打开</li>
+<li>重新生成</li>
+</ul>
+<h3 id="6-反馈与导出页-appexports">6. 反馈与导出页 <code>app:/exports</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>导出计划</li>
+<li>提交反馈</li>
+</ul>
+<h3 id="c-后台管理台-adminxxxcom-4">C. 后台管理台 <code>admin.xxx.com</code></h3>
+<h3 id="7-后台首页-admin-2">7. 后台首页 <code>admin:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>热门目的地</li>
+<li>任务成功率</li>
+<li>失败任务数</li>
+</ul>
+<h3 id="8-任务与反馈页-adminruns">8. 任务与反馈页 <code>admin:/runs</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看失败任务</li>
+<li>查看用户反馈</li>
+<li>排查异常计划</li>
+</ul>
+<h2 id="52-关键用户链路-4">5.2 关键用户链路</h2>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  user[&quot;用户&quot;] --&gt; login[&quot;登录&quot;]
+  login --&gt; planner[&quot;规划页&quot;]
+  planner --&gt; submit[&quot;提交旅行需求&quot;]
+  submit --&gt; agent[&quot;Agent 编排层&quot;]
+  agent --&gt; result[&quot;生成结构化行程&quot;]
+  result --&gt; detail[&quot;行程详情页&quot;]
+  detail --&gt; history[&quot;保存到历史计划&quot;]
+  detail --&gt; export[&quot;导出 / 分享&quot;]
+  admin[&quot;管理员&quot;] --&gt; runs[&quot;任务与反馈页&quot;]
+  runs --&gt; optimize[&quot;排查失败任务&quot;]
+</code></pre>
+<p>关键状态流：</p>
+<ul>
+<li>规划任务：待生成 -&gt; 生成中 -&gt; 成功 / 失败</li>
+<li>行程：草稿 -&gt; 已保存 -&gt; 已导出</li>
+<li>反馈：未处理 -&gt; 已查看 -&gt; 已关闭</li>
+</ul>
+<p>推荐技术栈：</p>
+<ul>
+<li>Next.js App Router</li>
+<li>TypeScript</li>
+<li>Tailwind CSS</li>
+</ul>
+<p>建议页面：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>首页</td>
+<td><code>/</code></td>
+<td>产品介绍与创建入口</td>
+</tr>
+<tr>
+<td>规划页</td>
+<td><code>/planner</code></td>
+<td>输入需求并提交</td>
+</tr>
+<tr>
+<td>行程详情页</td>
+<td><code>/trips/:id</code></td>
+<td>查看每日计划、预算和注意事项</td>
+</tr>
+<tr>
+<td>历史记录页</td>
+<td><code>/history</code></td>
+<td>查看历史计划</td>
+</tr>
+<tr>
+<td>管理后台</td>
+<td><code>/admin</code></td>
+<td>查看任务状态和平台统计</td>
+</tr>
+</tbody></table></div>
+<p>前端关键组件：</p>
+<ul>
+<li>旅行需求表单</li>
+<li>任务进度状态条</li>
+<li>Day by Day 行程卡片</li>
+<li>预算拆分卡片</li>
+<li>历史记录列表</li>
+<li>错误重试与反馈组件</li>
+</ul>
+<h2 id="6-后端实现-7">6. 后端实现</h2>
+<p>推荐技术栈：</p>
+<ul>
+<li>Node.js + NestJS/Express</li>
+<li>PostgreSQL / Supabase</li>
+<li>LLM API</li>
+<li>可选 Redis 做短缓存</li>
+</ul>
+<p>后端模块：</p>
+<ul>
+<li><code>auth</code></li>
+<li><code>trip-plans</code></li>
+<li><code>planner</code></li>
+<li><code>exports</code></li>
+<li><code>admin</code></li>
+<li><code>feedback</code></li>
+</ul>
+<p>建议数据表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">trip_plans (
+  id uuid primary key,
+  user_id uuid,
+  origin text,
+  destination text,
+  start_date date,
+  end_date date,
+  budget numeric,
+  preferences jsonb,
+  pace text,
+  status text,
+  created_at timestamptz
+)
+
+itinerary_days (
+  id uuid primary key,
+  trip_plan_id uuid,
+  day_index int,
+  title text,
+  summary text,
+  day_budget numeric
+)
+
+itinerary_items (
+  id uuid primary key,
+  itinerary_day_id uuid,
+  start_time text,
+  end_time text,
+  place_name text,
+  category text,
+  notes text,
+  estimated_cost numeric
+)
+
+planner_runs (
+  id uuid primary key,
+  trip_plan_id uuid,
+  provider text,
+  latency_ms int,
+  status text,
+  error_message text,
+  created_at timestamptz
+)
+
+trip_feedback (
+  id uuid primary key,
+  trip_plan_id uuid,
+  user_id uuid,
+  score int,
+  comment text,
+  created_at timestamptz
+)
+</code></pre>
+<h2 id="61-后台指标与监控-6">6.1 后台指标与监控</h2>
+<p>后台建议至少查看这些指标：</p>
+<ul>
+<li>日规划任务数</li>
+<li>规划成功率</li>
+<li>平均生成耗时</li>
+<li>热门目的地排行</li>
+<li>用户反馈评分分布</li>
+<li>导出次数</li>
+</ul>
+<p>基础监控建议：</p>
+<ul>
+<li>模型调用成功率</li>
+<li>外部信息源失败率</li>
+<li>任务重试次数</li>
+<li>数据库存取耗时</li>
+</ul>
+<h2 id="7-功能清单-4">7. 功能清单</h2>
+<p>必须完成：</p>
+<ul>
+<li>创建旅行计划</li>
+<li>返回结构化每日行程</li>
+<li>查看历史计划</li>
+<li>重生成计划</li>
+<li>预算拆分</li>
+<li>管理端查看失败任务</li>
+</ul>
+<p>可选增强：</p>
+<ul>
+<li>热门目的地榜单</li>
+<li>POI 数据二次校验</li>
+<li>导出为分享图</li>
+</ul>
+<h2 id="8-接口草案-6">8. 接口草案</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST</code></td>
+<td><code>/api/trips/plan</code></td>
+<td>创建新的规划任务</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/trips/:id</code></td>
+<td>获取计划详情</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/trips/:id/regenerate</code></td>
+<td>按原条件重新生成</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/trips/:id/preferences</code></td>
+<td>更新偏好后重算</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/history</code></td>
+<td>获取历史计划列表</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/trips/:id/export</code></td>
+<td>导出行程</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/trips/:id/feedback</code></td>
+<td>提交用户反馈</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/planner-runs</code></td>
+<td>获取生成日志</td>
+</tr>
+</tbody></table></div>
+<p><code>POST /api/trips/plan</code> 请求示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;origin&quot;: &quot;上海&quot;,
+  &quot;destination&quot;: &quot;成都&quot;,
+  &quot;startDate&quot;: &quot;2026-05-01&quot;,
+  &quot;endDate&quot;: &quot;2026-05-04&quot;,
+  &quot;budget&quot;: 3500,
+  &quot;preferences&quot;: [&quot;美食&quot;, &quot;历史文化&quot;],
+  &quot;pace&quot;: &quot;standard&quot;
+}
+</code></pre>
+<h2 id="9-关键业务规则-2">9. 关键业务规则</h2>
+<ul>
+<li>第一版限制单目的地</li>
+<li>只支持 3 到 7 天</li>
+<li>预算必须返回总预算与每日预算</li>
+<li>失败任务必须可重试</li>
+<li>生成结果需要有结构化 JSON，不能只返回自由文本</li>
+</ul>
+<h2 id="10-非功能要求-3">10. 非功能要求</h2>
+<ul>
+<li>规划结果要有稳定的结构化 JSON</li>
+<li>长任务必须有状态反馈</li>
+<li>外部信息源失败时要优雅降级</li>
+<li>导出失败可重试</li>
+<li>移动端至少可查看详情和历史计划</li>
+</ul>
+<h2 id="11-开发顺序建议-3">11. 开发顺序建议</h2>
+<ol>
+<li>规划页表单与 mock 结果</li>
+<li>创建计划与详情接口</li>
+<li>历史记录与重生成</li>
+<li>导出与反馈</li>
+<li>管理后台日志页</li>
+</ol>
+<h2 id="12-待确认项-3">12. 待确认项</h2>
+<ul>
+<li>第一版是否需要接外部天气/地图数据</li>
+<li>导出先做 PDF 还是纯文本下载</li>
+<li>行程生成是否需要“省钱/均衡/深度游”预设模板</li>
+<li>管理端是否需要查看用户反馈详情</li>
+</ul>
+<hr>
+<h2 id="散页索引与补充单篇">散页索引与补充单篇</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-187.html">← PRD：Go 交通数据分析与可视化平台</a><a rel="next" href="chapter-189.html">调试原理与艺术 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -25,8 +25,7 @@
 </ul>
 <p>两条路线各有假设、数据和实现，不能当成同一个算法。实际模型还可能采用其他方法；<strong>不要根据一次回答反推某家公司的训练配方</strong>。</p>
 <p>偏好训练也不能保证事实正确。如果评分只看语气是否友好、文字是否饱满，一个补了地点、说得更漂亮的回答可能得分更高。标准选得怎样，直接决定模型被鼓励什么。</p>
-<p><img src="../../book/assets/handdraw/llm/learning-signals-desk.svg" alt="三种练习，教三件事"></p>
-<p><em>图：文本、示范与偏好对分别提供目标；角色模板另行组织消息。比较信号来源，不表示所有模型都遵循同一阶段配方。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/learning-signals-desk.svg" alt="三种练习，教三件事"><figcaption>图：文本、示范与偏好对分别提供目标；角色模板另行组织消息。比较信号来源，不表示所有模型都遵循同一阶段配方。</figcaption></figure>
 <h2 id="C10-section-ebc6c08f24" tabindex="-1">聊天模板：同一条消息，不同组织</h2>
 <p>把“提取时间”放进 system，还是放进 user？历史消息保留多少？工具结果放在哪？这些都属于输入组织。模板让模型知道“谁说了什么”，但：</p>
 <ul>
@@ -113,8 +112,7 @@
 <li>没有把模板说成训练、把偏好说成事实保证、或编造某模型的训练配方。</li>
 </ol>
 <p>任一项数值超出容差或分类错误，K2 不通过；不能用其他项的高分抵消。课程没有真人复核记录，K2 的数值部分可按答案自检，解释部分仍需一位评审者确认；在复核前保持<strong>未验证</strong>。</p>
-<p><img src="../../book/assets/handdraw/llm/polite-without-evidence.svg" alt="说得漂亮，依据在哪"></p>
-<p><em>图：偏好训练可能奖励“礼貌完整”，但材料没写的地点仍是未知；流畅不增加证据。</em></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/polite-without-evidence.svg" alt="说得漂亮，依据在哪"><figcaption>图：偏好训练可能奖励“礼貌完整”，但材料没写的地点仍是未知；流畅不增加证据。</figcaption></figure>
 <h2 id="C10-section-d235c69308" tabindex="-1">项目增量：S2 证据包</h2>
 <p>S2 结束时，把以下文件装进一个文件夹：</p>
 <ul>

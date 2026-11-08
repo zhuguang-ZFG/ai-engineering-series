@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>代码质量与重构 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 174 / 195</p><article><h1 id="代码质量与重构">代码质量与重构</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#代码质量与重构导论">代码质量与重构导论</a><ul><li><a href="#0-全景图代码的生命周期">0. 全景图：代码的生命周期</a></li><li><a href="#1-代码坏味道识别常见问题">1. 代码坏味道：识别常见问题</a></li><li><a href="#2-重构手法安全地改进代码">2. 重构手法：安全地改进代码</a></li><li><a href="#3-代码审查团队协作中的质量保障">3. 代码审查：团队协作中的质量保障</a></li><li><a href="#4-代码质量度量">4. 代码质量度量</a></li><li><a href="#5-ai-助力用大模型提升代码质量">5. AI 助力：用大模型提升代码质量</a></li><li><a href="#6-总结-5">6. 总结</a></li><li><a href="#延伸阅读-32">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="代码质量与重构导论">代码质量与重构导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>代码写出来能跑就行了吗？</strong> 你可能写过这样的代码：功能是实现了，但过了两周自己都看不懂了。或者团队里有人离职，留下一堆&quot;只有上帝和他才能看懂&quot;的代码。</p>
+</blockquote>
+<p>本章带你理解什么是好代码，如何识别坏代码，以及如何安全地改进它。</p>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>代码坏味道</td>
+<td>识别常见问题</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>重构手法</td>
+<td>安全地改进代码</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>代码审查</td>
+<td>团队协作中的质量保障</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>质量度量</td>
+<td>用数据衡量代码健康度</td>
+</tr>
+</tbody></table></div>
+<p>学完本章，你将掌握识别代码问题、安全重构、以及通过团队协作持续提升代码质量的方法。</p>
+<h3 id="0-全景图代码的生命周期">0. 全景图：代码的生命周期</h3>
+<p>在软件开发中，有一个常被忽视的事实：<strong>代码被阅读的次数远远多于被编写的次数</strong>。</p>
+<p>一段代码从诞生到退役，大致会经历这样的旅程：</p>
+<blockquote>
+<p><strong>代码的一生</strong></p>
+</blockquote>
+<ul>
+<li><strong>编写阶段</strong>：开发者写下第一版实现，功能跑通了，测试通过了。</li>
+<li><strong>审查阶段</strong>：团队成员阅读代码，提出改进建议。</li>
+<li><strong>维护阶段</strong>：修 Bug、加功能、适配新需求——这个阶段占据了代码生命周期的 80% 以上。</li>
+<li><strong>重构阶段</strong>：当代码变得难以维护时，需要在不改变外部行为的前提下改善内部结构。</li>
+<li><strong>退役阶段</strong>：技术迭代，旧代码被新方案替代。</li>
+</ul>
+<p>Martin Fowler 在《重构》一书中说过：<strong>&quot;任何一个傻瓜都能写出计算机能理解的代码，唯有好的程序员才能写出人类能理解的代码。&quot;</strong></p>
+<h3 id="1-代码坏味道识别常见问题">1. 代码坏味道：识别常见问题</h3>
+<h4 id="11-代码坏味道概述">1.1 代码坏味道概述</h4>
+<p>&quot;代码坏味道&quot;（Code Smell）这个概念由 Kent Beck 提出，指的是代码中那些<strong>虽然不是 Bug，但暗示着更深层设计问题</strong>的特征。就像房间里有股怪味——不会立刻让你生病，但说明某个地方需要清理了。</p>
+<p>通过下面的交互组件，识别几种最常见的代码坏味道：</p>
+<h4 id="12-常见坏味道清单">1.2 常见坏味道清单</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>坏味道</th>
+<th>症状</th>
+<th>危害</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>过长函数</strong></td>
+<td>函数超过 50 行</td>
+<td>难以理解、测试和复用</td>
+</tr>
+<tr>
+<td><strong>魔法数字</strong></td>
+<td>代码中直接写 <code>86400000</code></td>
+<td>含义不明，修改时容易遗漏</td>
+</tr>
+<tr>
+<td><strong>重复代码</strong></td>
+<td>相似逻辑出现在多处</td>
+<td>修改时必须同步多处，容易遗漏</td>
+</tr>
+<tr>
+<td><strong>过深嵌套</strong></td>
+<td>超过 3 层的 if/for</td>
+<td>逻辑像迷宫，难以追踪</td>
+</tr>
+<tr>
+<td><strong>过长参数列表</strong></td>
+<td>函数参数超过 4 个</td>
+<td>调用困难，容易传错顺序</td>
+</tr>
+<tr>
+<td><strong>上帝类</strong></td>
+<td>一个类/模块做了太多事</td>
+<td>职责不清，牵一发动全身</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>核心洞察</strong>
+坏味道不是&quot;错误&quot;，而是&quot;信号&quot;。它告诉你：这里的设计可能需要改进。不是所有坏味道都需要立刻修复，但你需要有能力识别它们。</p>
+</blockquote>
+<h3 id="2-重构手法安全地改进代码">2. 重构手法：安全地改进代码</h3>
+<h4 id="21-重构概述">2.1 重构概述</h4>
+<p>重构（Refactoring）的定义非常精确：<strong>在不改变代码外部行为的前提下，改善其内部结构。</strong></p>
+<p>关键词是&quot;不改变外部行为&quot;。重构不是重写，不是加功能，不是修 Bug。它是对代码内部的&quot;整理收纳&quot;。</p>
+<p>通过下面的组件，对比几种常见重构手法的前后变化：</p>
+<h4 id="22-常用重构手法">2.2 常用重构手法</h4>
+<p><strong>提炼函数（Extract Function）</strong></p>
+<p>这是最常用的重构手法。当一段代码可以用一个有意义的名字来概括时，就应该把它提炼成函数。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 重构前
+function printReport(data) {
+  // 计算总价
+  let total = 0
+  for (const item of data.items) {
+    total += item.price * item.qty
+  }
+  // 打印...
+}
+
+// 重构后
+function calculateTotal(items) {
+  return items.reduce((sum, item) =&gt; sum + item.price * item.qty, 0)
+}
+
+function printReport(data) {
+  const total = calculateTotal(data.items)
+  // 打印...
+}
+</code></pre>
+<p><strong>重命名（Rename）</strong></p>
+<p>好的命名是最廉价也最有效的文档。当你需要写注释来解释一个变量/函数的含义时，说明它的名字不够好。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 重构前
+const d = new Date() - startTime  // 经过的时间
+const arr = users.filter(u =&gt; u.a) // 活跃用户
+
+// 重构后
+const elapsedMs = new Date() - startTime
+const activeUsers = users.filter(user =&gt; user.isActive)
+</code></pre>
+<p><strong>用卫语句替代嵌套（Replace Nested Conditional with Guard Clauses）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 重构前
+function getPayAmount(employee) {
+  if (employee.isSeparated) {
+    return { amount: 0 }
+  } else {
+    if (employee.isRetired) {
+      return { amount: employee.pension }
+    } else {
+      return { amount: employee.salary }
+    }
+  }
+}
+
+// 重构后
+function getPayAmount(employee) {
+  if (employee.isSeparated) return { amount: 0 }
+  if (employee.isRetired) return { amount: employee.pension }
+  return { amount: employee.salary }
+}
+</code></pre>
+<blockquote>
+<p><strong>重构的安全网</strong>
+重构最大的风险是&quot;改着改着就改出 Bug 了&quot;。所以重构的前提是<strong>有测试覆盖</strong>。每次小步重构后运行测试，确保行为没变。没有测试的代码，先补测试再重构。</p>
+</blockquote>
+<h3 id="3-代码审查团队协作中的质量保障">3. 代码审查：团队协作中的质量保障</h3>
+<h4 id="31-需要代码审查的原理">3.1 需要代码审查的原理</h4>
+<p>代码审查（Code Review）是团队中最有效的质量保障手段之一。它的价值不止发现 Bug，还包括：</p>
+<ul>
+<li><strong>知识共享</strong>：团队成员了解彼此的代码，降低&quot;巴士因子&quot;（如果某人被巴士撞了，项目还能继续吗？）</li>
+<li><strong>统一风格</strong>：通过审查逐步形成团队的编码规范</li>
+<li><strong>提前发现设计问题</strong>：比 Bug 更难修的是糟糕的架构决策</li>
+<li><strong>互相学习</strong>：看别人的代码是提升编程能力的捷径</li>
+</ul>
+<h4 id="32-审查什么">3.2 审查什么</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关注点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>正确性</strong></td>
+<td>逻辑是否正确？边界条件是否处理？</td>
+</tr>
+<tr>
+<td><strong>可读性</strong></td>
+<td>命名是否清晰？结构是否易懂？</td>
+</tr>
+<tr>
+<td><strong>安全性</strong></td>
+<td>是否有注入风险？敏感数据是否暴露？</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>是否有明显的性能问题？N+1 查询？</td>
+</tr>
+<tr>
+<td><strong>测试</strong></td>
+<td>是否有对应的测试？覆盖了关键路径吗？</td>
+</tr>
+</tbody></table></div>
+<h4 id="33-审查的礼仪">3.3 审查的礼仪</h4>
+<p>好的代码审查是<strong>对代码的讨论，而不是对人的批评</strong>：</p>
+<ul>
+<li>用&quot;我们&quot;而不是&quot;你&quot;：<del>&quot;你这里写错了&quot;</del> → &quot;这里我们可以考虑用 guard clause&quot;</li>
+<li>提问而不是命令：<del>&quot;改成 const&quot;</del> → &quot;这个变量后面会被重新赋值吗？如果不会，用 const 更安全&quot;</li>
+<li>给出理由：不只说&quot;不好&quot;，要说&quot;为什么不好&quot;以及&quot;怎样更好&quot;</li>
+</ul>
+<h3 id="4-代码质量度量">4. 代码质量度量</h3>
+<h4 id="41-圈复杂度">4.1 圈复杂度</h4>
+<p>圈复杂度（Cyclomatic Complexity）衡量代码中独立路径的数量。每个 <code>if</code>、<code>for</code>、<code>case</code>、<code>&amp;&amp;</code>、<code>||</code> 都会增加复杂度。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>复杂度</th>
+<th>评价</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1-10</td>
+<td>简单</td>
+<td>容易理解和测试</td>
+</tr>
+<tr>
+<td>11-20</td>
+<td>中等</td>
+<td>考虑拆分</td>
+</tr>
+<tr>
+<td>21-50</td>
+<td>复杂</td>
+<td>必须重构</td>
+</tr>
+<tr>
+<td>50+</td>
+<td>不可维护</td>
+<td>紧急重构</td>
+</tr>
+</tbody></table></div>
+<h4 id="42-代码覆盖率">4.2 代码覆盖率</h4>
+<p>代码覆盖率衡量测试执行了多少比例的代码。常见指标：</p>
+<ul>
+<li><strong>行覆盖率</strong>：被执行的代码行占总行数的比例</li>
+<li><strong>分支覆盖率</strong>：被执行的条件分支占总分支的比例</li>
+</ul>
+<blockquote>
+<p><strong>覆盖率的陷阱</strong>
+80% 的覆盖率不代表代码质量好。覆盖率只能告诉你&quot;哪些代码没被测试到&quot;，不能告诉你&quot;测试是否有意义&quot;。一个只断言 <code>expect(true).toBe(true)</code> 的测试可以提高覆盖率，但毫无价值。</p>
+</blockquote>
+<h4 id="43-实用工具">4.3 实用工具</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ESLint</strong></td>
+<td>JavaScript/TypeScript 静态分析</td>
+</tr>
+<tr>
+<td><strong>Prettier</strong></td>
+<td>代码格式化，统一风格</td>
+</tr>
+<tr>
+<td><strong>SonarQube</strong></td>
+<td>综合代码质量平台</td>
+</tr>
+<tr>
+<td><strong>Husky</strong></td>
+<td>Git hooks，提交前自动检查</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-ai-助力用大模型提升代码质量">5. AI 助力：用大模型提升代码质量</h3>
+<p>大模型在代码质量领域已经非常实用，它可以充当你的&quot;24 小时在线的代码审查员&quot;。</p>
+<h4 id="51-识别代码坏味道">5.1 识别代码坏味道</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请审查以下代码，识别其中的代码坏味道（Code Smell），包括但不限于：
+过长函数、魔法数字、重复代码、过深嵌套、过长参数列表。
+对每个问题给出具体位置、问题描述和改进建议。
+
+[粘贴你的代码]
+</code></pre>
+</blockquote>
+<h4 id="52-自动重构">5.2 自动重构</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请对以下代码进行重构，要求：
+1. 不改变外部行为
+2. 使用提炼函数、卫语句替代嵌套等手法
+3. 改善命名，消除魔法数字
+4. 解释每一步重构的理由
+
+[粘贴你的代码]
+</code></pre>
+</blockquote>
+<h4 id="53-模拟-code-review">5.3 模拟 Code Review</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请以资深开发者的视角审查这段代码，从以下维度给出反馈：
+- 正确性：逻辑是否有 Bug？边界条件是否处理？
+- 可读性：命名是否清晰？结构是否易懂？
+- 性能：是否有明显的性能问题？
+- 安全性：是否有注入或数据泄露风险？
+用&quot;建议&quot;而非&quot;命令&quot;的语气，给出改进方案。
+
+[粘贴你的代码]
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>AI 使用建议</strong>
+AI 的重构建议需要你自己验证——跑测试确认行为没变。把 AI 当作&quot;提建议的同事&quot;，而不是&quot;无条件信任的权威&quot;。</p>
+</blockquote>
+<h3 id="6-总结-5">6. 总结</h3>
+<p>回顾这一路，我们从识别问题到解决问题，建立了一套完整的代码质量改进体系：</p>
+<ol>
+<li><strong>识别</strong>：学会闻到代码坏味道，知道哪里需要改进</li>
+<li><strong>重构</strong>：掌握安全的重构手法，在测试保护下小步改进</li>
+<li><strong>协作</strong>：通过代码审查，让团队共同守护代码质量</li>
+<li><strong>度量</strong>：用客观指标追踪代码健康度</li>
+</ol>
+<blockquote>
+<p><strong>终极思考</strong>
+代码质量不是一次性的工作，而是持续的习惯。就像保持房间整洁一样——不是等到乱得不行了才大扫除，而是每天随手整理。<strong>童子军法则</strong>说得好：离开时让代码比你来时更干净一点。</p>
+</blockquote>
+<h3 id="延伸阅读-32">延伸阅读</h3>
+<ul>
+<li><strong>经典书籍</strong>：Martin Fowler《重构：改善既有代码的设计》是这个领域的圣经。</li>
+<li><strong>代码整洁之道</strong>：Robert C. Martin《Clean Code》提供了大量实用的编码原则。</li>
+<li><strong>实践工具</strong>：尝试在项目中配置 ESLint + Prettier + Husky，体验自动化代码质量保障。</li>
+<li><strong>代码审查</strong>：Google 的 Code Review 指南是业界标杆，值得学习。</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-173.html">← AI 能力词典</a><a rel="next" href="chapter-175.html">测试策略 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>
