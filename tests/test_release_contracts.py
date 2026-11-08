@@ -102,5 +102,54 @@ class ChecksumManifest(unittest.TestCase):
             self.assertEqual(release.checksum_lines(empty), "")
 
 
+class ReleaseNotes(unittest.TestCase):
+    def revision(self) -> dict:
+        revisions = json.loads((ROOT / "yuyu-book/revisions.json")
+                               .read_text(encoding="utf-8"))
+        return revisions["entries"][0]
+
+    def test_body_is_markdown_not_the_machine_readable_ledger(self):
+        version = canonical_version()
+        entry = self.revision()
+        body = release.release_notes_markdown(version, entry)
+        self.assertEqual(body.splitlines()[0],
+                         f"# 御舆 v{version}（{entry['date']}）")
+        self.assertNotIn('"version":', body)
+        self.assertFalse(body.lstrip().startswith("{"),
+                         "the body must not be the JSON ledger")
+        self.assertTrue(body.endswith("\n"))
+
+    def test_every_revision_bullet_matches_the_ledger(self):
+        entry = self.revision()
+        body = release.release_notes_markdown("9.9.9", entry)
+        for heading in ("## 内容修订", "## Content changes"):
+            self.assertIn(heading, body)
+        for language in ("zh", "en"):
+            for bullet in entry[language]:
+                self.assertIn(f"- {bullet}", body)
+        self.assertIn("sha256sum --check SHA256SUMS", body)
+
+    def test_empty_language_section_is_omitted(self):
+        body = release.release_notes_markdown(
+            "9.9.9", {"date": "2026-01-01", "zh": ["只有中文"], "en": []})
+        self.assertIn("- 只有中文", body)
+        self.assertNotIn("Content changes", body)
+
+    def test_staging_writes_markdown_body_and_json_ledger(self):
+        entry = {"version": "9.9.9", "date": "2026-01-01",
+                 "zh": ["甲"], "en": ["A"]}
+        revisions = {"schema_version": 1,
+                     "entries": [entry, {"version": "9.9.8"}]}
+        with tempfile.TemporaryDirectory(prefix="release-notes-") as tmp:
+            staged = Path(tmp)
+            written = release.write_release_notes(staged, "9.9.9", revisions)
+            self.assertEqual(written, staged / "release-notes.md")
+            self.assertEqual(written.read_text(encoding="utf-8"),
+                             release.release_notes_markdown("9.9.9", entry))
+            ledger = json.loads((staged / "release-notes.json")
+                                .read_text(encoding="utf-8"))
+            self.assertEqual(ledger, {"version": "9.9.9", "entries": [entry]})
+
+
 if __name__ == "__main__":
     unittest.main()

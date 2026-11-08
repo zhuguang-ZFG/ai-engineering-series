@@ -54,4 +54,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
-        run: gh release create "$GITHUB_REF_NAME" "$RELEASE_DESTINATION"/*.html "$RELEASE_DESTINATION"/*.pdf "$RELEASE_DESTINATION"/*.epub "$RELEASE_DESTINATION"/*.zip "$RELEASE_DESTINATION"/*.json "$RELEASE_DESTINATION"/SHA256SUMS --verify-tag --title "$GITHUB_REF_NAME" --notes-file "$RELEASE_DESTINATION/release-notes.json"
+        run: gh release create "$GITHUB_REF_NAME" "$RELEASE_DESTINATION"/*.html "$RELEASE_DESTINATION"/*.pdf "$RELEASE_DESTINATION"/*.epub "$RELEASE_DESTINATION"/*.zip "$RELEASE_DESTINATION"/*.md "$RELEASE_DESTINATION"/*.json "$RELEASE_DESTINATION"/SHA256SUMS --verify-tag --title "$GITHUB_REF_NAME" --notes-file "$RELEASE_DESTINATION/release-notes.md"
