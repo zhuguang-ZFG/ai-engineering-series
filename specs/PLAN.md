@@ -1,32 +1,31 @@
-# 当前执行计划：原《Vibe Coding 101》修订
+# 当前执行计划：大模型从入门到精通
 
-更新：2026-11-08。本文件是继续任务的入口。按已记录的范围确认，主任务是原书 Stage 1–3 与附录，保留 195 个章节的名称和顺序；大模型五阶段专题保留为配套资料，其 K1–K5 研究验收不作为本轮原书修订的完成前提。
+更新：2026-11-08。按用户最新要求，主任务为五阶段三十章大模型课程，原《Vibe Coding 101》作为编程实践补充。用户已授权提交、推送、合并及确认 CI；本轮交付仍标为技术试读版，不把未通过的能力门改记完成。
 
-## 任务与验收
+## 当前进度与下一步
 
-| 批次 | 工作 | 状态与证据 |
-| --- | --- | --- |
-| 01 原书修订与阅读入口 | 在原章修正排错、包管理、数据库、部署等解释；从单一原稿生成逐章阅读页 | 已完成本批范围；[修订记录](original-book-review.md)保留具体审校范围及当时证据 |
-| 02 八张手绘图与需求练习 | 重绘原有图位，补需求验证和 JTBD 练习，支持离线打开大图 | 已完成；[插图记录](original-book-illustration-02.md) |
-| 03 章节阅读与 MCP 纠错 | 整理七章长段落；修正标题层级、目录、提示词换行与 MCP 配置解释；保留全部章节及旧锚点 | 已完成；[阅读记录](original-book-readability-03.md)及[本轮证据](evidence/original-book-readability-03.json) |
-| 03 收尾与计划同步 | 复查最新源码、全书链接与布局、无脚本导航和仓库检查；补正式证据及最新入口 | 已完成本地验收；198 页、792 组布局、5,888 处本地引用，36 项单元测试通过 |
+逐项已完成和未完成范围以 [STATUS.md](STATUS.md) 为入口，教学/真实运行判据保持在 [ACCEPTANCE.md](llm-learning-redesign/ACCEPTANCE.md)。
 
-## 交付与复核
+1. 完成本批入口与教材修订：主入口恢复五阶段路线，C13/C15/C17 对齐实际助手模式，C30 包自检拒绝缺哈希、越界路径与篡改，纳入此前遗留的 `scan_deai.py` 修改。
+2. 核对真实模型完整八题复跑的首次结果，保留失败，不以代码测试通过代替 K3 模型质量。
+3. 从同一源码重建网页、正文/答案及旧实验书；完成适用单元、构建、链接、布局、键盘及 EPUBCheck，并保存本批证据。
+4. 按既有授权提交、推送、合并；确认 PR 与合并后的 main CI，更新本地 main，检查工作树。
+5. 后续按 N05–N10 推进质量修复、工程全章实跑、陌生项目及真人验收。具体缺口与下一项检查见 [STATUS.md](STATUS.md)，不能因本批发布而关闭。
 
-阅读入口是[开始阅读](../开始阅读.html)，正文源是[book/book.md](../book/book.md)，生成结果在[全书目录](../exports/book/index.html)。修改原稿或阅读源码后执行：
+## 复核命令
 
 ```text
-npm run build:book
-npm run check:reading:book
+npm run build:llm
+npm run export:books:llm
+python scripts/llm/check_epub.py --jar <EPUBCheck-5.3.0/epubcheck.jar>
 npm test
+npm run check:reading:book
+npm run check:accessibility:llm
+npm run check:reading:llm
 ```
 
-修改配套专题的 `legacy-*.md` 时先运行 `npm run build:llm`，让对应原章从同源稿组装，再按受影响范围重建配套电子书。不要手改生成 HTML。
+新版正文和答案 EPUB 还需分别运行官方 EPUBCheck。代码、教材或生成器变更后重新绑定 sourceHash；生成 HTML/PDF/EPUB 不手改。真人、独立阅读器与实际读屏另记，不能用作者烟测替代。
 
-本轮记录以源码和生成文件的 SHA-256 绑定结果。早期两批证据是历史快照，不能拿其哈希或检查数量代表最新版本。当前没有本批提交、推送、合并或远端 CI 结果。
+## 原书历史交付
 
-## 范围边界
-
-本轮收尾覆盖以上已实施修订、全书结构与本地阅读。技术深度审校仅覆盖各批次列出的章节，不表示逐一实跑了全书所有外部 API、云服务或收费产品。MCP 接入说明按官方文档核对，未安装第三方服务器或访问真实账号。
-
-真人试读属于后续教学研究；本轮未生成真人数据。独立电子书阅读器、实际读屏及大模型专题 K1–K5 的未验项目仍保留在[专题验收](llm-learning-redesign/ACCEPTANCE.md)中。本轮不改变这些项目的通过标准或状态。
+原书 195 章、八张图及阅读修订已随 [PR #9](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/9) 合并为 `80d05130a213d15e6ef1785590ed2844ae69e702`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42489349958) 通过。各批记录保留在[技术修订](original-book-review.md)、[插图](original-book-illustration-02.md)和[阅读修订](original-book-readability-03.md)。这些证据仅覆盖当时列明的章节/技术与阅读范围，不表示所有第三方 API 均已实跑，也不代表大模型 K1–K5 已通过。

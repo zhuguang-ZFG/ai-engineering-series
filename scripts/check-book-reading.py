@@ -79,13 +79,17 @@ def run():
                 print(f'Checked {index+1}/{len(pages)} pages', flush=True)
         page.goto((ROOT / '开始阅读.html').as_uri())
         page.locator('.primary').click()
+        assert page.url.endswith('exports/llm/course.html')
+        assert page.locator('h1').inner_text() == '大模型：从入门到精通'
+        page.goto((ROOT / '开始阅读.html').as_uri())
+        page.locator('#original-book-link').click()
         assert page.url.endswith('exports/book/index.html')
         page.get_by_role('link', name='常见问题与排错', exact=True).click()
         assert page.locator('h1').inner_text() == '常见问题与排错'
         page.locator('.skip').focus()
         page.keyboard.press('Enter')
         assert page.evaluate('document.activeElement.id') == 'main'
-        report['navigation'] = ['original entry', 'chapter TOC link', 'keyboard skip']
+        report['navigation'] = ['LLM primary entry', 'original book supplementary entry', 'chapter TOC link', 'keyboard skip']
         # Native disclosure, anchor navigation and figures must also work without JS.
         offline = browser.new_context(java_script_enabled=False, viewport={'width':375, 'height':900})
         offline.set_offline(True)

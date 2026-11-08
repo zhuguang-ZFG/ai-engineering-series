@@ -128,10 +128,10 @@ def run():
         page = context.new_page()
         for answers in (False, True):
             stem = "llm-course-answers" if answers else "llm-course"
-            title = "五阶段三十章 · 核对依据" if answers else "把大模型拆开看 · 从入门到独立交付"
+            title = curriculum["title"] + (" · 核对依据" if answers else "")
             intro = element("body", **{"class": "reading-part"})
             append(intro, "h1", title)
-            append(intro, "p", "实施试读版 1.0.0；真人学习效果、独立复做与资源条件以验收记录为准，不因出版成品而通过。")
+            append(intro, "p", f"实施试读版 {curriculum['version']}；真人学习效果、独立复做与资源条件以验收记录为准，不因出版成品而通过。")
             append(intro, "p", "先独立作答，再打开单独的核对依据。正文中的程序在本地环境运行，纸书和 EPUB 不执行模型或代码。旧 L01–L12 实验与网页回查保留。")
             nav_body = element("body", **{"class": "reading-part"})
             append(nav_body, "h1", "核对依据目录" if answers else "五阶段目录")

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C24 核对依据 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C24-answer-section-48a0e56c12" tabindex="-1">C24 答案与核算：从零组装最小 decoder</h1>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C24 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C24-answer-section-48a0e56c12" tabindex="-1">C24 答案与核算：从零组装最小 decoder</h1>
 <h2 id="C24-answer-section-b95382c0cb" tabindex="-1">1. 因果掩码</h2>
 <p><code>T=3</code> 时允许的位置是“自己及左边”，禁止右侧：</p>
 <pre><code class="language-text">M = [[ 0, -inf, -inf],
@@ -114,4 +114,4 @@ target: [the, small, kite, shines, ., EOS]
 <li>带 checkpoint 时 <code>sample</code> 有实际生成字段。</li>
 </ul>
 <p>运行 <code>train.py train</code> 后，<code>checks.reload</code> 应给出保存/重载比较；<code>losses.val</code> 与 <code>losses.test</code> 是留出组测量，不是通用能力。与 X05 的 bigram 对照时，记住 bigram 没有注意力、位置和 FFN，不能用同一损失数字直接排名。</p>
-</article><nav class="lesson-nav"><a href="c24.html">返回 C24 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.0.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c24.html">返回 C24 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.0 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
