@@ -216,6 +216,8 @@ Pi 1.5.0、pi-purge 0.2.1（提交 `ffafeb940339d59fc6af4a05dc754019cef3a1ac`）
 
 执行 `python scripts/bookctl.py build --product pi --lang zh --pdf --epub --out-dir <本地输出目录>`，得到 HTML、PDF 和 EPUB。PDF 为 174 页、41 个书签，未发现无文本页；EPUBCheck 5.4.0 返回 0。第 18 章的模式对照、版本差异和第 15 章代码页已打开抽查。
 
-`python scripts/bookctl.py check --fast` 六步通过，包括通用测试 67 项、构建器测试 529 项。Git 工具示例另用宿主类型声明做 TypeScript 严格检查，通过。上述页数与旧版第 7 节是不同时间的构建记录，不能互相替换。
+合并主分支前，`python scripts/bookctl.py check --fast` 六步通过，包括通用测试 67 项、构建器测试 529 项。Git 工具示例另用宿主类型声明做 TypeScript 严格检查，通过。上述页数与旧版第 7 节是不同时间的构建记录，不能互相替换。
 
 接入最新主分支时，Pi 的 41 个行号引用已迁移成稳定块标识，共插入 39 个不可见标记；迁移报告无缺失或歧义。构建入口统一为 `scripts/bookctl.py` / `python -m yuyu_book`。同时修正中文段落样式误入 Mermaid 标签导致的文字裁切，最终输出以下一轮构建为准。
+
+接入后的 Fast 八步全部通过：通用测试 224 项、构建器测试 556 项，包含流程图标签在屏幕与打印样式下的浏览器回归。最终 Pi 本地 PDF 仍为 174 页、41 个书签，体积 9,331,867 字节；EPUB 1,213,251 字节，EPUBCheck 0 错误、0 警告。图示、命令表和失败恢复段落已在 PDF 中打开抽查。
