@@ -5,6 +5,7 @@
 
 ## C.1 文件位置
 
+<!-- block: pi-apxc.b-246da7f1 -->
 | 路径 | 作用 |
 | --- | --- |
 | `~/.pi/agent/settings.json` | 用户级设置 |

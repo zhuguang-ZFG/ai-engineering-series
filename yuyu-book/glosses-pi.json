@@ -16,13 +16,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:6"
+      "pi-ch01.b-5f3b016e"
     ],
     "why": {
       "zh": "模型只会出文字，必须有人把工具结果接回下一轮"
     },
     "why_evidence": [
-      "pi/ch01.md:6"
+      "pi-ch01.b-5f3b016e"
     ]
   },
   "tool": {
@@ -40,13 +40,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:6"
+      "pi-ch01.b-5f3b016e"
     ],
     "why": {
       "zh": "没有工具，模型碰不到文件、命令和网络"
     },
     "why_evidence": [
-      "pi/ch01.md:6"
+      "pi-ch01.b-5f3b016e"
     ]
   },
   "loop": {
@@ -64,13 +64,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:19"
+      "pi-ch01.b-c9ea4597"
     ],
     "why": {
       "zh": "一次请求只能走一步，多步任务要反复回喂"
     },
     "why_evidence": [
-      "pi/ch01.md:19"
+      "pi-ch01.b-c9ea4597"
     ]
   },
   "session": {
@@ -88,13 +88,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:97"
+      "pi-ch01.b-c70da23b"
     ],
     "why": {
       "zh": "同一件事常有多个方案，树让旧路可回退"
     },
     "why_evidence": [
-      "pi/ch01.md:97"
+      "pi-ch01.b-c70da23b"
     ]
   },
   "context": {
@@ -112,13 +112,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:48"
+      "pi-ch01.b-48e65cfa"
     ],
     "why": {
       "zh": "窗口有限，装什么决定模型能想到什么"
     },
     "why_evidence": [
-      "pi/ch01.md:48"
+      "pi-ch01.b-48e65cfa"
     ]
   },
   "model": {
@@ -136,13 +136,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:3"
+      "pi-ch01.b-be05ebfe"
     ],
     "why": {
       "zh": "同一套循环换模型就换能力，所以要能选"
     },
     "why_evidence": [
-      "pi/ch01.md:3"
+      "pi-ch01.b-be05ebfe"
     ]
   },
   "extension": {
@@ -160,13 +160,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:59"
+      "pi-ch01.b-358074aa"
     ],
     "why": {
       "zh": "Pi 默认只给四个工具，缺的能力要能补"
     },
     "why_evidence": [
-      "pi/ch01.md:59"
+      "pi-ch01.b-358074aa"
     ]
   },
   "skill": {
@@ -184,13 +184,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:83"
+      "pi-ch01.b-dc402a5a"
     ],
     "why": {
       "zh": "全文常驻会吃光窗口，按需读才付得起"
     },
     "why_evidence": [
-      "pi/ch01.md:83"
+      "pi-ch01.b-dc402a5a"
     ]
   },
   "trust": {
@@ -208,13 +208,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:69"
+      "pi-ch01.b-64e3428d"
     ],
     "why": {
       "zh": "项目资源能执行代码，加载前要你点头"
     },
     "why_evidence": [
-      "pi/ch01.md:69"
+      "pi-ch01.b-64e3428d"
     ]
   },
   "compaction": {
@@ -232,13 +232,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch03.md:205"
+      "pi-ch03.b-d14a7522"
     ],
     "why": {
       "zh": "长会话必然超窗，摘要换窗口、原文仍落盘"
     },
     "why_evidence": [
-      "pi/ch03.md:205"
+      "pi-ch03.b-d14a7522"
     ]
   },
   "prompt": {
@@ -256,13 +256,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:82"
+      "pi-ch01.b-dc402a5a"
     ],
     "why": {
       "zh": "重复的长提示不该每次手打"
     },
     "why_evidence": [
-      "pi/ch01.md:82"
+      "pi-ch01.b-dc402a5a"
     ]
   },
   "package": {
@@ -279,13 +279,13 @@
     },
     "priority": "core",
     "evidence": [
-      "pi/ch01.md:85"
+      "pi-ch01.b-dc402a5a"
     ],
     "why": {
       "zh": "一套资源要能一起装、一起钉版本"
     },
     "why_evidence": [
-      "pi/ch01.md:85"
+      "pi-ch01.b-dc402a5a"
     ]
   }
 }

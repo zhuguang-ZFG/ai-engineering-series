@@ -306,7 +306,7 @@
         "zh": "为什么再写一本：Pi 的取舍与本书范围。"
       },
       "plain_evidence": [
-        "pi/00-前言.md:3"
+        "pi-front.b-5adf2cbd"
       ]
     },
     "pi-ch01": {
@@ -323,7 +323,7 @@
         "zh": "Pi 的卖点是可做小，不是功能多。"
       },
       "plain_evidence": [
-        "pi/ch01.md:3"
+        "pi-ch01.b-be05ebfe"
       ]
     },
     "pi-ch02": {
@@ -340,7 +340,7 @@
         "zh": "装好、确认版本、在正确目录跑第一圈。"
       },
       "plain_evidence": [
-        "pi/ch02.md:3"
+        "pi-ch02.b-40d523a2"
       ]
     },
     "pi-ch03": {
@@ -357,7 +357,7 @@
         "zh": "模型、provider、凭据三层，缺一层就找不到。"
       },
       "plain_evidence": [
-        "pi/ch03.md:1"
+        "pi-ch03.b-3330b11a"
       ]
     },
     "pi-ch04": {
@@ -374,7 +374,7 @@
         "zh": "输入分发送与排队，选错只会让补充晚到。"
       },
       "plain_evidence": [
-        "pi/ch04.md:3"
+        "pi-ch04.b-350c65d9"
       ]
     },
     "pi-ch05": {
@@ -391,7 +391,7 @@
         "zh": "回退不是覆盖，旧分支仍在树里。"
       },
       "plain_evidence": [
-        "pi/ch05.md:1"
+        "pi-ch05.b-d5fa49f1"
       ]
     },
     "pi-ch06": {
@@ -408,7 +408,7 @@
         "zh": "位置决定作用域，信任不保护上下文文件。"
       },
       "plain_evidence": [
-        "pi/ch06.md:1"
+        "pi-ch06.b-78c81e74"
       ]
     },
     "pi-ch07": {
@@ -425,7 +425,7 @@
         "zh": "摘要换窗口，原始条目不会被删。"
       },
       "plain_evidence": [
-        "pi/ch07.md:1"
+        "pi-ch07.b-34d5ee32"
       ]
     },
     "pi-ch08": {
@@ -442,7 +442,7 @@
         "zh": "文本、事件流、双向控制，三种出口别混用。"
       },
       "plain_evidence": [
-        "pi/ch08.md:10"
+        "pi-ch08.b-9715dd0a"
       ]
     },
     "pi-ch09": {
@@ -459,7 +459,7 @@
         "zh": "一个 turn 是一次回复加它的工具结果。"
       },
       "plain_evidence": [
-        "pi/ch09.md:3"
+        "pi-ch09.b-f58eb790"
       ]
     },
     "pi-ch10": {
@@ -476,7 +476,7 @@
         "zh": "统一消息与事件，不统一 provider 的私有字段。"
       },
       "plain_evidence": [
-        "pi/ch10.md:1"
+        "pi-ch10.b-a6ce50b5"
       ]
     },
     "pi-ch11": {
@@ -493,7 +493,7 @@
         "zh": "默认四个工具，其余按需声明。"
       },
       "plain_evidence": [
-        "pi/ch11.md:1"
+        "pi-ch11.b-3c03a60d"
       ]
     },
     "pi-ch12": {
@@ -510,7 +510,7 @@
         "zh": "会话是公开的 JSONL 契约，按版本读。"
       },
       "plain_evidence": [
-        "pi/ch12.md:1"
+        "pi-ch12.b-4d959b7a"
       ]
     },
     "pi-ch13": {
@@ -527,7 +527,7 @@
         "zh": "事件到组件到差分渲染，主题跟着终端。"
       },
       "plain_evidence": [
-        "pi/ch13.md:3"
+        "pi-ch13.b-6ec9b230"
       ]
     },
     "pi-ch14": {
@@ -544,7 +544,7 @@
         "zh": "扩展在进程内，信任只管加载。"
       },
       "plain_evidence": [
-        "pi/ch14.md:1"
+        "pi-ch14.b-607d1c91"
       ]
     },
     "pi-ch15": {
@@ -561,7 +561,7 @@
         "zh": "注册工具、命令与 UI，让 Pi 长出你要的手。"
       },
       "plain_evidence": [
-        "pi/ch15.md:1"
+        "pi-ch15.b-3e0764bc"
       ]
     },
     "pi-ch16": {
@@ -578,7 +578,7 @@
         "zh": "技能只广告描述，全文按需读。"
       },
       "plain_evidence": [
-        "pi/ch16.md:1"
+        "pi-ch16.b-7cabc2e9"
       ]
     },
     "pi-ch17": {
@@ -595,7 +595,7 @@
         "zh": "模板扩展命令，主题扩展外观。"
       },
       "plain_evidence": [
-        "pi/ch17.md:1"
+        "pi-ch17.b-4bbf0d0e"
       ]
     },
     "pi-ch18": {
@@ -612,7 +612,7 @@
         "zh": "一个包带走扩展、技能、模板与主题。"
       },
       "plain_evidence": [
-        "pi/ch18.md:1"
+        "pi-ch18.b-90148ca1"
       ]
     },
     "pi-ch19": {
@@ -629,7 +629,7 @@
         "zh": "SDK 进程内嵌，RPC 子进程控制。"
       },
       "plain_evidence": [
-        "pi/ch19.md:5"
+        "pi-ch19.b-836e8334"
       ]
     },
     "pi-ch20": {
@@ -646,7 +646,7 @@
         "zh": "验收标准、diff、测试，一个都不能省。"
       },
       "plain_evidence": [
-        "pi/ch20.md:49"
+        "pi-ch20.b-d004451f"
       ]
     },
     "pi-ch21": {
@@ -663,7 +663,7 @@
         "zh": "退出码、stderr、agent_settled，三者一起看。"
       },
       "plain_evidence": [
-        "pi/ch21.md:12"
+        "pi-ch21.b-d5a7fd94"
       ]
     },
     "pi-ch22": {
@@ -680,7 +680,7 @@
         "zh": "信任不等于隔离，隔离靠容器与操作系统。"
       },
       "plain_evidence": [
-        "pi/ch22.md:5"
+        "pi-ch22.b-3f6f3a98"
       ]
     },
     "pi-ch23": {
@@ -697,7 +697,7 @@
         "zh": "先分层，再看 stderr、事件与会话。"
       },
       "plain_evidence": [
-        "pi/ch23.md:5"
+        "pi-ch23.b-5c7ba987"
       ]
     },
     "pi-ch24": {
@@ -714,7 +714,7 @@
         "zh": "12 个包按入口层到基础层读。"
       },
       "plain_evidence": [
-        "pi/ch24.md:11"
+        "pi-ch24.b-62db62a5"
       ]
     },
     "pi-ch25": {
@@ -731,7 +731,7 @@
         "zh": "先钉版本，再比较，不借别家的数字。"
       },
       "plain_evidence": [
-        "pi/ch25.md:5"
+        "pi-ch25.b-8789675f"
       ]
     },
     "pi-apxa": {
@@ -748,7 +748,7 @@
         "zh": "旗标按组查，错误行为有实测表。"
       },
       "plain_evidence": [
-        "pi/appendix-A.md:3"
+        "pi-apxa.b-58f609b7"
       ]
     },
     "pi-apxb": {
@@ -765,7 +765,7 @@
         "zh": "命令与键位以当前会话的菜单为准。"
       },
       "plain_evidence": [
-        "pi/appendix-B.md:3"
+        "pi-apxb.b-6fa100d1"
       ]
     },
     "pi-apxc": {
@@ -782,7 +782,7 @@
         "zh": "设置与环境变量按优先级查。"
       },
       "plain_evidence": [
-        "pi/appendix-C.md:10"
+        "pi-apxc.b-246da7f1"
       ]
     },
     "pi-apxd": {
@@ -799,7 +799,7 @@
         "zh": "一个词一句话，冲突时看上游。"
       },
       "plain_evidence": [
-        "pi/appendix-D.md:7"
+        "pi-apxd.b-37f2813d"
       ]
     },
     "pi-apxe": {
@@ -816,7 +816,7 @@
         "zh": "改钉要改三处，并留下复验记录。"
       },
       "plain_evidence": [
-        "pi/appendix-E.md:9"
+        "pi-apxe.b-b8d4d3db"
       ]
     }
   }

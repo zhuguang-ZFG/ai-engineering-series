@@ -33,5 +33,5 @@ omp 用 `-omp` 后缀，pi 用 `-pi` 后缀（`glosses-pi.json` / `notes-pi.json
 `make book-pi` 只编 pi，`make book` / `make book-omp` 不会碰它。
 
 通俗层已经接入：12 个词条、31 条 lead band、31 条眉批、156 枚档位芯片、218 处虚线术语标记。
-主题索引 36 个词条，单独写 `subject-index-pi.json`，不碰御舆的索引。英文版尚未开始；`langs` 只有 `zh`。
+主题索引 37 个词条，含 pi-purge，单独写 `subject-index-pi.json`，不碰御舆的索引。英文版尚未开始；`langs` 只有 `zh`。
 构建口径、页数与体积见 `pi/README.md` 与 `pi/VERIFY.md`，接入改动清单见 `pi/BUILD-PLAN.md`。
