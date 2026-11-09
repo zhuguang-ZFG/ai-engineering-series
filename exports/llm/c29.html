@@ -96,7 +96,7 @@ python -c &quot;import torch, transformers; print(torch.__version__, transformer
   -H &quot;Content-Type: application/json&quot; \
   -d &#39;{&quot;question&quot;:&quot;2026-10-03 的风速是多少？&quot;,&quot;reader&quot;:&quot;student&quot;,&quot;mode&quot;:&quot;fixed&quot;,&quot;top_k&quot;:3}&#39;
 </code></pre>
-<p>若返回 200 且报告带引用，才说明“进程 + 文档 + 模型 + 引用校验”这条链在当前环境可用。若返回 502，保留响应体里的 <code>status</code>、<code>diagnostics.first_failure</code> 和 <code>usage</code>，不要反复重启掩盖。</p>
+<p>对这个已知有证据的问题，须返回 200、<code>status: &quot;answered&quot;</code> 且报告带可回查的引用，才说明“进程 + 文档 + 模型 + 引用校验”这条链在当前环境可用。只返回 200 但状态为证据不足也不通过就绪检查。格式或引用失败在当前实现中返回 400，源文件失败返回 409，模型不可用返回 502；均保留响应体里的 <code>status</code>、<code>diagnostics.first_failure</code> 和 <code>usage</code>，不要反复重启掩盖。</p>
 <p>对产品手册系统，把上面的命令换成你的 <code>serve</code> 入口；健康检查至少要报告：进程、版本、手册版本、模型标签、当前读者/权限模式。没有 HTTP 入口的 CLI 也要提供等价的 <code>healthcheck</code> 子命令或启动自检。</p>
 <h2 id="C29-section-7198426e51" tabindex="-1">配置与权限</h2>
 <p>配置分三层：</p>
@@ -178,7 +178,7 @@ python -c &quot;import torch, transformers; print(torch.__version__, transformer
 <li>对只读问答没有副作用，但仍要保留未知状态，不能把超时当“没有答案”。</li>
 </ul>
 <h2 id="C29-section-13394dd8a7" tabindex="-1">回退：实际演练一次</h2>
-<p>回退不是“把代码改回去再试”。用版本目录和显式切换：</p>
+<p>回退不是“把代码改回去再试”。可以使用 <a href="../../book/llm/examples/delivery/README.md">本地发布与回退工具</a>：它生成全文件哈希清单、校验后切换 <code>current.json</code>，并提供 Windows CPU 环境的哈希锁定文件。下文的 <code>current-release.json</code> 是通用示例名，使用该工具时对应 <code>current.json</code>。用版本目录和显式切换：</p>
 <ol>
 <li>确认当前版本：<code>current-release.json</code> 指向 <code>2026-11-08-a</code>，记录其手册/模型/程序哈希；</li>
 <li>触发条件：健康检查连续失败，或就绪查询返回 502/引用校验失败率超阈值，或手册版本错误；</li>
@@ -304,4 +304,4 @@ python -c &quot;import torch, transformers; print(torch.__version__, transformer
 <li>不要求公网、付费托管或云服务；本地回环服务即可。若使用 API，费用与数据驻留由你记录，不编造金额。</li>
 <li>独立复做需要真人；没有真人时 K5 保持待验，不能用作者自测或 agent 记录补齐。</li>
 </ul>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c28.html">上一章 C28</a><a href="c29-answer.html">独立作答后核对</a><a href="c30.html">下一章 C30</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c28.html">上一章 C28</a><a href="c29-answer.html">独立作答后核对</a><a href="c30.html">下一章 C30</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

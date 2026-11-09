@@ -43,6 +43,7 @@ print(w.grad, b.grad)   # tensor(14.) tensor(-7.)
 
 ```python
 w.requires_grad_(False)
+w.grad = None
 b.grad = None
 pred = w * x + b
 loss = (pred - y) ** 2
@@ -50,7 +51,7 @@ loss.backward()
 print(w.grad, b.grad)   # None tensor(-7.)
 ```
 
-`w.grad is None` 表示 `w` 没有进入反向图；这不是“梯度等于 0”。若在已经建好的图上改 `requires_grad`，行为容易让你误判；要冻结就在下一次前向前设置，并重新建图。
+冻结不会自动删除上一次的 `w.grad`，所以这里先清掉历史梯度，再做新的前向与反向。此后 `w.grad is None` 表示这次没有为 `w` 累积梯度，不是“梯度等于 0”；`w` 仍参与前向计算，`b` 也仍能得到梯度。要冻结就在下一次前向前设置，并重新建图。
 
 ## 2. 广播
 

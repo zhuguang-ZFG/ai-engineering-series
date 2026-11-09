@@ -1,0 +1,541 @@
+{
+  "scope": "Real 0.5B HTTP inference in clean environment, same known-answer query before and after rollback; source-missing fault between. No mocked model or adjusted rubric.",
+  "events": [
+    {
+      "label": "before",
+      "selected": {
+        "status": "ok",
+        "release": "trial-a",
+        "manifest_sha256": "9146a32a636be27e251e2f018940a13be971b1ab1f8228be58efb68922690833"
+      },
+      "health": {
+        "http": 200,
+        "report": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-a\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 400,
+        "report": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T18:52:09+00:00",
+          "status": "invalid-response",
+          "question": "2026-10-03 的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-a\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 3,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [
+            {
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "path": "docs/station-log.md",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "path": "docs/equipment-guide.md",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "path": "docs/visitor-policy.md",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "path": "docs/closing-notice.md",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            }
+          ],
+          "retrieval": {
+            "retriever": "keyword",
+            "threshold": 0.08,
+            "top_k": 3,
+            "hits": [
+              {
+                "chunk_id": "station-log@9cb29b8d5e1a#000",
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "start": 0,
+                "end": 389,
+                "score": 0.52140258,
+                "used": true
+              },
+              {
+                "chunk_id": "equipment-guide@a4d0a287abe2#001",
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "start": 261,
+                "end": 563,
+                "score": 0.30633086,
+                "used": true
+              },
+              {
+                "chunk_id": "closing-notice@afd0ca4b251b#000",
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "start": 0,
+                "end": 263,
+                "score": 0.30332976,
+                "used": true
+              }
+            ],
+            "filtered_doc_count": 1,
+            "authorized_doc_ids": [
+              "station-log",
+              "equipment-guide",
+              "visitor-policy",
+              "closing-notice"
+            ],
+            "chunk_count": 5
+          },
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 1357,
+            "completion_tokens": 107,
+            "latency_ms": 64829.74,
+            "model_load_ms": 4648.65,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": "{\n  \"answer\": \"4.2 米每秒\",\n  \"claims\": [\n    {\n      \"text\": \"风速 4.2 米每秒\",\n      \"citation\": [\n        {\n          \"chunk_id\": \"station-log@9cb29b8d5e1a#000\",\n          \"quote\": \"本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。\"\n        }\n      ]\n    }\n  ]\n}",
+            "first_failure": {
+              "status": "invalid-response",
+              "stage": "validate",
+              "detail": {
+                "errors": [
+                  "missing keys: ['status']",
+                  "status must be answered, insufficient or conflict",
+                  "claims[0] must have exactly text and citations",
+                  "claims[0].citations must contain 1-3 items"
+                ],
+                "status": null
+              }
+            },
+            "raw_responses": [
+              {
+                "step": 1,
+                "attempt": 0,
+                "raw": "{\n  \"answer\": \"4.2 米每秒\",\n  \"claims\": [\n    {\n      \"text\": \"风速 4.2 米每秒\",\n      \"citation\": [\n        {\n          \"chunk_id\": \"station-log@9cb29b8d5e1a#000\",\n          \"quote\": \"本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。\"\n        }\n      ]\n    }\n  ]\n}",
+                "prompt_tokens": 1357,
+                "completion_tokens": 107,
+                "latency_ms": 64829.74
+              }
+            ],
+            "warnings": [],
+            "prompt": {
+              "size": 1357,
+              "unit": "tokens",
+              "limit": 3072,
+              "used_chunk_ids": [
+                "station-log@9cb29b8d5e1a#000",
+                "equipment-guide@a4d0a287abe2#001",
+                "closing-notice@afd0ca4b251b#000"
+              ]
+            }
+          },
+          "elapsed_ms": 78202.92
+        }
+      },
+      "denied": {
+        "http": 403,
+        "report": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "ready": false,
+      "packageAfterService": "trial-a"
+    },
+    {
+      "label": "fault",
+      "selected": {
+        "status": "ok",
+        "release": "trial-b",
+        "manifest_sha256": "a491c582f82dab17ab00b8c7a94066138df0b25c05b0af1bdf19cf714acceb53"
+      },
+      "health": {
+        "http": 200,
+        "report": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-b\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 409,
+        "report": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T18:53:28+00:00",
+          "status": "missing-source",
+          "question": "2026-10-03 的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-b\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 3,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [],
+          "retrieval": null,
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "latency_ms": 0.0,
+            "model_load_ms": 0.0,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": null,
+            "first_failure": {
+              "status": "missing-source",
+              "stage": "source",
+              "detail": {
+                "doc_id": "station-log",
+                "path": "docs/intentional-missing.md",
+                "reason": "file-not-found"
+              }
+            },
+            "raw_responses": [],
+            "warnings": []
+          },
+          "elapsed_ms": 3.178
+        }
+      },
+      "denied": {
+        "http": 403,
+        "report": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "ready": false,
+      "packageAfterService": "trial-b"
+    },
+    {
+      "label": "rollback",
+      "selected": {
+        "status": "ok",
+        "release": "trial-a",
+        "manifest_sha256": "9146a32a636be27e251e2f018940a13be971b1ab1f8228be58efb68922690833"
+      },
+      "health": {
+        "http": 200,
+        "report": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-a\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 400,
+        "report": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T18:53:29+00:00",
+          "status": "invalid-response",
+          "question": "2026-10-03 的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-readiness\\store\\releases\\trial-a\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 3,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [
+            {
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "path": "docs/station-log.md",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "path": "docs/equipment-guide.md",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "path": "docs/visitor-policy.md",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "path": "docs/closing-notice.md",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            }
+          ],
+          "retrieval": {
+            "retriever": "keyword",
+            "threshold": 0.08,
+            "top_k": 3,
+            "hits": [
+              {
+                "chunk_id": "station-log@9cb29b8d5e1a#000",
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "start": 0,
+                "end": 389,
+                "score": 0.52140258,
+                "used": true
+              },
+              {
+                "chunk_id": "equipment-guide@a4d0a287abe2#001",
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "start": 261,
+                "end": 563,
+                "score": 0.30633086,
+                "used": true
+              },
+              {
+                "chunk_id": "closing-notice@afd0ca4b251b#000",
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "start": 0,
+                "end": 263,
+                "score": 0.30332976,
+                "used": true
+              }
+            ],
+            "filtered_doc_count": 1,
+            "authorized_doc_ids": [
+              "station-log",
+              "equipment-guide",
+              "visitor-policy",
+              "closing-notice"
+            ],
+            "chunk_count": 5
+          },
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 1357,
+            "completion_tokens": 107,
+            "latency_ms": 64533.601,
+            "model_load_ms": 4124.68,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": "{\n  \"answer\": \"4.2 米每秒\",\n  \"claims\": [\n    {\n      \"text\": \"风速 4.2 米每秒\",\n      \"citation\": [\n        {\n          \"chunk_id\": \"station-log@9cb29b8d5e1a#000\",\n          \"quote\": \"本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。\"\n        }\n      ]\n    }\n  ]\n}",
+            "first_failure": {
+              "status": "invalid-response",
+              "stage": "validate",
+              "detail": {
+                "errors": [
+                  "missing keys: ['status']",
+                  "status must be answered, insufficient or conflict",
+                  "claims[0] must have exactly text and citations",
+                  "claims[0].citations must contain 1-3 items"
+                ],
+                "status": null
+              }
+            },
+            "raw_responses": [
+              {
+                "step": 1,
+                "attempt": 0,
+                "raw": "{\n  \"answer\": \"4.2 米每秒\",\n  \"claims\": [\n    {\n      \"text\": \"风速 4.2 米每秒\",\n      \"citation\": [\n        {\n          \"chunk_id\": \"station-log@9cb29b8d5e1a#000\",\n          \"quote\": \"本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。\"\n        }\n      ]\n    }\n  ]\n}",
+                "prompt_tokens": 1357,
+                "completion_tokens": 107,
+                "latency_ms": 64533.601
+              }
+            ],
+            "warnings": [],
+            "prompt": {
+              "size": 1357,
+              "unit": "tokens",
+              "limit": 3072,
+              "used_chunk_ids": [
+                "station-log@9cb29b8d5e1a#000",
+                "equipment-guide@a4d0a287abe2#001",
+                "closing-notice@afd0ca4b251b#000"
+              ]
+            }
+          },
+          "elapsed_ms": 72492.384
+        }
+      },
+      "denied": {
+        "http": 403,
+        "report": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "ready": false,
+      "packageAfterService": "trial-a"
+    }
+  ],
+  "restoredKnownAnswerReadiness": false,
+  "restoredSameOutcome": true,
+  "manifests": {
+    "trial-a": {
+      "release": "trial-a",
+      "created": "2026-11-09",
+      "scope": "known-answer readiness and rollback on course fixtures",
+      "start": "see runbook.md",
+      "health": "GET /health and known wind query",
+      "files": {
+        "app/assistant.py": "47f30eec1cb1e2d1e1e69c6979b79b53d2a7ad382ad9103f26a3edbe279f826e",
+        "app/docs/closing-notice.md": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+        "app/docs/equipment-guide.md": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+        "app/docs/review-budget.md": "0a7842c74c17f1ce1733b08ea7f1fcf08afb501ac7ba15bf5df5a9cd607604a2",
+        "app/docs/station-log.md": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+        "app/docs/visitor-policy.md": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+        "app/documents.json": "a3b9e354fbfae946ade3dc39f43e702627b38dbfb222d220cf6ca851f9b37736",
+        "requirements.lock": "7c739f9c2cc21d59e21c10876615ab27f970473f9752e7dbf64d1cec30ca4721",
+        "runbook.md": "a72ae365b661680422e38b539ca3f3f90c039a3986fdb4a28ffb2a97ee8fe8e6",
+        "user-guide.md": "eda381c2b9f4d567bbd7e124780a2b2cb99fc524b8f1a0a2e547a626f2021ea5"
+      }
+    },
+    "trial-b": {
+      "release": "trial-b",
+      "created": "2026-11-09",
+      "scope": "known-answer readiness and rollback on course fixtures",
+      "start": "see runbook.md",
+      "health": "GET /health and known wind query",
+      "files": {
+        "app/assistant.py": "47f30eec1cb1e2d1e1e69c6979b79b53d2a7ad382ad9103f26a3edbe279f826e",
+        "app/docs/closing-notice.md": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+        "app/docs/equipment-guide.md": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+        "app/docs/review-budget.md": "0a7842c74c17f1ce1733b08ea7f1fcf08afb501ac7ba15bf5df5a9cd607604a2",
+        "app/docs/station-log.md": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+        "app/docs/visitor-policy.md": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+        "app/documents.json": "d5a6301829fe238fe99118ddee85034fbfd73a9ede6a19fc8cd3efbb3d6c0f12",
+        "requirements.lock": "7c739f9c2cc21d59e21c10876615ab27f970473f9752e7dbf64d1cec30ca4721",
+        "runbook.md": "a72ae365b661680422e38b539ca3f3f90c039a3986fdb4a28ffb2a97ee8fe8e6",
+        "user-guide.md": "eda381c2b9f4d567bbd7e124780a2b2cb99fc524b8f1a0a2e547a626f2021ea5"
+      }
+    }
+  }
+}

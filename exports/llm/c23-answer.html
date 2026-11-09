@@ -30,13 +30,14 @@ print(w.grad, b.grad)   # tensor(14.) tensor(-7.)
 </code></pre>
 <p>如果希望在<strong>新的前向图</strong>里冻结 <code>w</code>：</p>
 <pre><code class="language-python">w.requires_grad_(False)
+w.grad = None
 b.grad = None
 pred = w * x + b
 loss = (pred - y) ** 2
 loss.backward()
 print(w.grad, b.grad)   # None tensor(-7.)
 </code></pre>
-<p><code>w.grad is None</code> 表示 <code>w</code> 没有进入反向图；这不是“梯度等于 0”。若在已经建好的图上改 <code>requires_grad</code>，行为容易让你误判；要冻结就在下一次前向前设置，并重新建图。</p>
+<p>冻结不会自动删除上一次的 <code>w.grad</code>，所以这里先清掉历史梯度，再做新的前向与反向。此后 <code>w.grad is None</code> 表示这次没有为 <code>w</code> 累积梯度，不是“梯度等于 0”；<code>w</code> 仍参与前向计算，<code>b</code> 也仍能得到梯度。要冻结就在下一次前向前设置，并重新建图。</p>
 <h2 id="C23-answer-section-a4251f51ac" tabindex="-1">2. 广播</h2>
 <pre><code class="language-python">a = torch.tensor([[1.0], [2.0], [3.0]])       # [3, 1]
 b = torch.tensor([[10.0, 20.0, 30.0, 40.0]])  # [1, 4]
@@ -154,4 +155,4 @@ model.load_state_dict(payload[&quot;state_dict&quot;], strict=True)
 <h2 id="C23-answer-section-88fbd4fdad" tabindex="-1">6. 项目检查</h2>
 <p><code>inspect</code> 的 <code>parameters</code> 表来自 <code>count_parameters</code>：<code>model.parameters()</code> 会去重，所以 tied embedding/head 只算一次。固定正弦位置没有参数；<code>architecture</code> 中的 <code>positions</code> 说明它是 <code>max_len</code> 长度的固定编码。<code>checks.future_invisibility</code> 在未训练模型上也应给出布尔结果；它检查的是掩码实现，不是模型质量。</p>
 <p><code>train</code> 的 <code>checks.reload</code> 是保存后重新载入再比较 logits；<code>checks.target_shift</code> 是输入/目标错位检查。三者都不是“训练效果”指标；训练效果要看 <code>losses</code> 和独立留出材料。</p>
-</article><nav class="lesson-nav"><a href="c23.html">返回 C23 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c23.html">返回 C23 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

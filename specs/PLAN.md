@@ -6,14 +6,14 @@
 
 逐项已完成和未完成范围以 [STATUS.md](STATUS.md) 为入口，教学/真实运行判据保持在 [ACCEPTANCE.md](llm-learning-redesign/ACCEPTANCE.md)。
 
-本批已完成 source-extract/2 精确位置合同、提前拒绝不支持组合、原冻结八题的 0.5B 独立对照、C13/C14/C16/C17 命令修订与同源成品验证。完整八题 copy 4/8、extract 4/8；fixed 七题子集分别 4/7、4/7，K3 仍未通过。代码/运行/书籍证据见[迭代03](llm-learning-redesign/IMPLEMENTATION-03.md)，发布按用户既有授权执行。
+本批完成原 1.5B 八题复测：copy 4/8、extract 修前/修后均 5/8。extract 专用系统提示消除格式合同冲突，未测得质量提升。C11–C30 逐章覆盖、20 条本地模型命令、6 轮评测共 41 个用例执行、K4 默认训练/适配与边界、38 包干净环境及 OCR 依赖修正、发布包校验/选择/回退见[迭代04](llm-learning-redesign/IMPLEMENTATION-04.md)。真实已知查询在回滚前后均 HTTP 400，模型就绪仍失败；K1–K5 整体仍未通过。
 
-1. 下一批先在资源允许时补完 1.5B 新版本八题复测，再处理 N05 的首个质量失败边界：保留本批完整首次响应，分别定位 JSON 格式、摘录不符、冲突遗漏与工具请求错误；固定问题/模型/预算，每次只改变一个因素。原八题硬判据不改。
-2. 继续 C11–C30 全章命令与图文来源实跑审校；本批只关闭已核对的局部错误，不能推广成全章/全书验收。
-3. 汇集 K4 完整阶段证据，随后冻结陌生题材任务，完成锁定环境、故障与回退演练，再进入独立复做。
+1. 继续处理 N05 模型质量：格式围栏、原文改写、冲突条件遗漏与错误工具动作仍未解决。固定原问题/模型/预算，每次只改一个因素；不得为了通过剥围栏、放宽引用或改原八题预期。采用本批提示修正只代表合同一致，不代表质量提升。
+2. 按 [C11–C30 覆盖表](llm-learning-redesign/CHAPTER-RUN-04.md)补齐未覆盖命令分支、图文来源、读者自选材料和独立作业；实际模型失败继续列出，不用命令退出码 0 关闭质量缺口。
+3. 用 [K4 证据](llm-learning-redesign/K4-TECHNICAL-04.md)组织完整独立作业/讲解。K5 先解决并复测本批失败的有引用就绪查询，再冻结获授权陌生题材与 20 题判据，复用已交付的环境锁和发布工具，完成真实问答、留出、就绪和回退，再由另一人独立复做。课程内置材料不算陌生项目。
 4. 独立阅读器、实际读屏与 K1–K5 真人验收继续保留；逐项条件见 [STATUS.md](STATUS.md)。
 
-上一批主入口、C30 包校验和遗留扫描脚本已随 [PR #10](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/10) 合并为 `ab27bd1`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42492449772) 通过；本地工作树当时干净。该结果不替代本批检查。
+上一批精确引用与 0.5B 对照已随 [PR #11](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/11) 合并为 `327dd33`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42503813403) 通过；此前遗留扫描脚本已随 PR #10 完成。历史结果不替代本批检查。
 
 ## 复核命令
 

@@ -1,9 +1,9 @@
 {
-  "version": "1.1.1",
-  "sourceHash": "79953c30f12ae465c336082e0a6c41ef562282b20a8a1cab832f8d8ffd43508a",
+  "version": "1.1.2",
+  "sourceHash": "422eebd9fd7ecd4ebb3e9b491e9fc03ddac54b341c2c927e46b0de264fdcce59",
   "editions": {
     "llm-course": {
-      "pdfPages": 446,
+      "pdfPages": 449,
       "outlineEntries": 436,
       "chapters": 30,
       "images": 37
@@ -17,20 +17,20 @@
   },
   "files": {
     "llm-course.pdf": {
-      "bytes": 7889603,
-      "sha256": "b7110a223cdea90319c1c5a508b78298e0399c240fa315b8e2f37a295e49662c"
+      "bytes": 7905606,
+      "sha256": "ea6a1603c1ae5aba889e02b44df22a84bce19998de84b08fa9e519329f2e99d5"
     },
     "llm-course.epub": {
-      "bytes": 4515888,
-      "sha256": "0cde680a4209bef4518d1b15abb16c61895d21d44fe0bd7a7cb75a3d9e017dfa"
+      "bytes": 4517734,
+      "sha256": "c3708eff27a9e61cb7c7cb07e5863a6448043650f2efb12e77f6c8a43b829d87"
     },
     "llm-course-answers.pdf": {
-      "bytes": 2729313,
-      "sha256": "56d860f3d0c7d9fe0d4941347eb80af1d1be8fb7289f08c3b533c13f07a113bc"
+      "bytes": 2732900,
+      "sha256": "d29dfa951bddefbc88d648bd66de9a9100a56b5e82de49e69d387b506d49ef2a"
     },
     "llm-course-answers.epub": {
-      "bytes": 120494,
-      "sha256": "9b752826b2ed058f1951d412c594fc4e1d56932842c0bdb02b109f5a03924bf2"
+      "bytes": 120739,
+      "sha256": "f795ed80a22993b6427f2885c292b6fc23094efff812428a91a519bf3ea293bd"
     }
   },
   "limitations": [

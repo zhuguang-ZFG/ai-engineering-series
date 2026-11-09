@@ -16,7 +16,7 @@
 | --- | --- |
 | `extract.py` | 单行提取 CLI；权限、模型、图像、区域、推理五类错误分别落为状态 |
 | `make_sample.py` | 生成原创样张 `REPAIR WORKSHOP AT 10:00`，用于可重复的本机试跑 |
-| `requirements.txt` | 固定本轮 CPU 测试使用的 torch / transformers / Pillow / sentencepiece 版本 |
+| `requirements.txt` | 固定 CPU 测试使用的 torch / transformers / Pillow / sentencepiece / protobuf 版本 |
 | `README.md` | 本文：授权边界、模型许可、命令、输出字段和已知限制 |
 
 ## 授权与隐私边界
@@ -52,7 +52,7 @@ python -m venv .venv
 python -m pip install -r book/llm/examples/ocr/requirements.txt
 ```
 
-`sentencepiece==0.2.1` 是 TrOCR 分词器的实际依赖。**本轮课程维护环境实测的第一次失败就是环境里缺 `sentencepiece`**：模型加载阶段报错。后来在隔离虚拟环境安装 `sentencepiece==0.2.1` 后，同一模型目录的识别才成功。不要看到 `transformers` 已安装就跳过这一步。
+`sentencepiece==0.2.1` 和 `protobuf==7.36.2` 是这份 TrOCR 分词器的实际依赖。历史环境第一次因缺少 sentencepiece 加载失败，安装后识别成功；该虚拟环境继承了系统包，不能视为干净复建证据。2026-11-09 改用不继承系统包的环境后，又暴露了未登记的 protobuf：SentencePiece 转换先报缺 protobuf，再回退并报缺 tiktoken。应按最早的错误补齐 protobuf，不能只追最后一行错误。完整依赖及 wheel 哈希见[交付环境锁](../delivery/README.md)。不要看到 transformers 已安装就认为分词器依赖已经齐全。
 
 如果平台没有对应 `torch==2.14.1` 的轮子，记录你的实际版本、设备和差异，不要把未测版本写成已验证。`requirements.txt` 是本轮实测下限，不是所有平台的通用锁文件。
 

@@ -79,7 +79,7 @@ loss.backward()
 
 print(w.grad, b.grad)   # tensor(-18.) tensor(-6.)
 </code></pre>
-<p><code>requires_grad=True</code> 只对叶子张量有意义。反向传播时，只有需要梯度的叶子会累积 <code>.grad</code>；中间结果的梯度是计算过程中的临时量。<code>loss.backward()</code> 默认把梯度<strong>累加</strong>到 <code>.grad</code>，所以训练循环每步都要先 <code>optimizer.zero_grad(set_to_none=True)</code>，否则上一步的梯度会混进来。这个细节在 C09 只是文字，现在你可以亲手制造一次“忘记清零”的对比。</p>
+<p>这里的 <code>w</code>、<code>b</code> 是需要梯度的叶子张量；由它们计算出的 <code>pred</code>、<code>loss</code> 也会有 <code>requires_grad=True</code>，反向传播需要沿这些中间结果回溯。默认只有需要梯度的叶子会累积 <code>.grad</code>；若要检查中间结果的 <code>.grad</code>，先对它调用 <code>retain_grad()</code>。<code>loss.backward()</code> 默认把梯度<strong>累加</strong>到 <code>.grad</code>，所以训练循环每步都要先 <code>optimizer.zero_grad(set_to_none=True)</code>，否则上一步的梯度会混进来。这个细节在 C09 只是文字，现在你可以亲手制造一次“忘记清零”的对比。</p>
 <p>把标量换成向量，交叉熵的梯度有一个很好用的形式。若 <code>p = softmax(logits)</code>，目标 one-hot 是 <code>y</code>，那么：</p>
 <pre><code class="language-text">∂CE/∂logit_i = p_i - y_i
 </code></pre>
@@ -101,7 +101,7 @@ torch.save(payload, path)
 <h2 id="C23-section-402d11771f" tabindex="-1">改一个条件，看看哪里会坏</h2>
 <ul>
 <li><strong>忘记 <code>zero_grad</code></strong>：连续两步的梯度相加，参数走的方向不再对应当前批次。把 <code>zero_grad</code> 注释掉跑两步，对比 <code>.grad</code>。</li>
-<li><strong><code>requires_grad=False</code></strong>：参数被冻结，<code>backward()</code> 后 <code>.grad</code> 仍是 <code>None</code>。这不是“梯度为零”，而是根本没有进入反向图。C25 的 LoRA 冻结检查会用到这个区别。</li>
+<li><strong><code>requires_grad=False</code></strong>：从创建时就冻结的参数不会累积自己的梯度，<code>.grad</code> 仍是 <code>None</code>；它仍可参与计算，梯度也可能沿这条计算路径传给其他可训练参数。冻结已有参数时还要清掉历史 <code>.grad</code>。C25 的 LoRA 冻结检查会用到这个区别。</li>
 <li><strong>在 <code>torch.no_grad()</code> 里训练</strong>：前向能算，反向会报“没有 requires_grad 的输入”；推理时用它省内存是对的，训练时用错就学不动。</li>
 <li><strong>形状碰巧能广播</strong>：例如把本应 <code>[T, T]</code> 的掩码写成 <code>[T, 1]</code>，它可能广播成每一列都相同，代码不报错但语义全错。看到注意力权重每一行都一样，先查掩码形状。</li>
 <li><strong>保存了模块而不是 <code>state_dict</code></strong>，又在载入时换了类名或目录：路径能读到文件，但反序列化失败。统一用 <code>state_dict</code> + 配置 + 词表。</li>
@@ -125,4 +125,4 @@ torch.save(payload, path)
 <p><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="G20 两候选分数按梯度更新"></p>
 <p><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="G33 训练才拧旋钮，推理只读参数"></p>
 <p>本地对照实验：<a href="training.html">X05 训练与推理</a>。它用的是 bigram 分数表，不是本章的 decoder；对照的是“预测—比较—更新”的动作，不是模型能力。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c22.html">上一章 C22</a><a href="c23-answer.html">独立作答后核对</a><a href="c24.html">下一章 C24</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c22.html">上一章 C22</a><a href="c23-answer.html">独立作答后核对</a><a href="c24.html">下一章 C24</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

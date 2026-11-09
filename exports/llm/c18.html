@@ -332,9 +332,27 @@ summary.total / passed / failed / status_counts
 每个 case 的 report.diagnostics.first_failure
 </code></pre>
 <p><code>evaluate</code> 完成即返回 0，即使通过率很低；退出码不是质量分数。清单不可读、用例字段非法等操作错误才返回 1。不要把“命令成功结束”误读成“助手答对了”。</p>
-<p>样例清单里的 <code>model-missing</code>、<code>api-unconfigured</code> 是故意制造的失败路径，它们降低 <code>summary.passed</code> 是正常的。这也说明：<strong>不要把不同性质的用例混成一个通过率来宣传。</strong> 报告应分状态、分失败阶段，并说明哪些用例本来就应该失败。</p>
+<p>样例清单里的 <code>model-missing</code>、<code>api-unconfigured</code> 是故意制造的失败路径。若实际返回各自预期的 <code>model-unavailable</code>、<code>api-config-missing</code>，且其他检查成立，就计入 <code>summary.passed</code>；“系统按预期拒绝”是边界用例通过，不是答题能力通过。报告应分状态、分失败阶段，并说明哪些用例本来就应该失败，不能用边界用例的通过率冒充正常问答质量。</p>
+<p>同样，<code>no-hit-coffee</code> 的名字和 note 不保证真的零命中。问题含有“观测站”等共有词，可能取回不包含保修期的片段并调用模型；必须看实际 <code>retrieval.hits</code> 与 <code>usage.calls</code>。原冻结题仍按证据不足评分，不在看到结果后改题。另测真正零命中时，单独冻结查询和判据，不用旧题的名称代替测量。</p>
 <h2 id="C18-section-f84d285089" tabindex="-1">改一个条件，才知道是谁起作用</h2>
-<p>假设你怀疑“检索条数太少”。只改 <code>top_k</code>：同一批问题、同一文档版本、同一模型、同一提示、同一阈值、同一预算，只把 <code>top_k</code> 从 3 改成 5。不要同时改切块大小和提示措辞，否则即使变好也不知道原因。</p>
+<p>假设你怀疑“检索条数太少”。只改 <code>top_k</code>：同一批问题、同一文档版本、同一模型、同一提示、同一阈值、其余预算相同，只把 <code>top_k</code> 从 3 改成 5。不要同时改切块大小和提示措辞，否则即使变好也不知道原因。先准备两个清单；迁移清单目录时同步调整用例路径，保持指向相同资源（缺失资源仍指向原来缺失的位置）：</p>
+<pre><code class="language-python">import json
+import os
+from pathlib import Path
+
+src = Path(&quot;book/llm/examples/assistant/eval-manifest.json&quot;).resolve()
+data = json.loads(src.read_text(encoding=&quot;utf-8&quot;))
+target = Path(&quot;out/c18&quot;).resolve()
+target.mkdir(parents=True, exist_ok=True)
+for case in data[&quot;cases&quot;]:
+    for key in (&quot;documents&quot;, &quot;model&quot;, &quot;embedding&quot;):
+        if key in case:
+            case[key] = Path(os.path.relpath((src.parent / case[key]).resolve(), target)).as_posix()
+for name, top_k in ((&quot;eval-val-topk3.json&quot;, 3), (&quot;eval-val-topk5.json&quot;, 5)):
+    item = json.loads(json.dumps(data))
+    item[&quot;budgets&quot;][&quot;top_k&quot;] = top_k
+    (target / name).write_text(json.dumps(item, ensure_ascii=False, indent=2) + &quot;\n&quot;, encoding=&quot;utf-8&quot;)
+</code></pre>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py evaluate \
   --manifest out/c18/eval-val-topk3.json \
   --model path/to/local-model \
@@ -365,7 +383,7 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <li><strong>建三份题</strong>：用你自己的文档建 dev/val/heldout，比例可以是 6/3/3。每例写 <code>reader</code>、<code>question</code>、<code>expectStatus</code>、<code>expectCitationDocs</code> 和人工复核说明。先不运行模型，先冻结文件哈希。</li>
 <li><strong>算一次检索账</strong>：选 5 个查询，人工标出相关 chunk；用 <code>top_k=3</code> 跑 <code>inspect retrieve</code>，计算每个查询的 P/R、hit，以及微平均和宏平均。必须写出分母。</li>
 <li><strong>算一次证据账</strong>：从基线报告取 10 个用例，逐条核对 claim。报告主张支持率和严格用例通过率；说明没有主张的用例如何处理。</li>
-<li><strong>制造一次清单变更</strong>：跑完基线后改一个字节，再跑 <code>evaluate</code>，确认 <code>manifest_unchanged</code> 为 <code>false</code>；恢复文件并说明为什么这次结果不能用于比较。</li>
+<li><strong>制造一次清单变更</strong>：在清单副本上跑完基线后添加一个换行，再跑 <code>evaluate</code>。比较两份报告的 <code>manifest.sha256</code>：应当不同；只要各次运行期间没有改动，两个 <code>manifest_unchanged</code> 都仍可为 <code>true</code>。恢复副本，并说明为什么单次运行的“不变”不能代替两次之间的版本核对。</li>
 <li><strong>解释提取式契约</strong>：用“地点尚未确定”的例子说明三种结果：改写 claim、逐字提取、额外推断。指出哪一种只是机械通过，哪一种仍需人判断语义支持。</li>
 </ol>
 <p>答案与核对依据见 <a href="c18-answer.html">C18 答案</a>。</p>
@@ -390,4 +408,4 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <p><code>claim-review.csv</code> 至少包含 <code>case_id, claim_index, quote, supported(true/false/unknown), reviewer, note</code>。<code>decisions.md</code> 记录每次单因素改动、质量底线、采用或拒绝的理由；没有提升也要写“不采用”。</p>
 <h2 id="C18-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>本章使用 <code>book/llm/examples/assistant/README.md</code> 与 <code>assistant.py</code> 中的 <code>evaluate</code>、<code>manifest</code>、<code>checks</code>、<code>usage</code> 字段；样例文档与清单来自同目录。<code>eval-manifest.json</code> 是待评审样例，不是 CI 基线，也不代表真实模型的表现。检索精确率/召回率例子是教师手写的小集合，不是模型测量；“地点尚未确定”的最小复现来自本轮引用校验缺陷的修复记录，修复前行为只作为历史反例，不能复现为当前输出。本章不声称任何模型、API 或评测已经在本机成功运行；实际状态、耗时和费用必须由读者自己的报告提供。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c17.html">上一章 C17</a><a href="c18-answer.html">独立作答后核对</a><a href="c19.html">下一章 C19</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c17.html">上一章 C17</a><a href="c18-answer.html">独立作答后核对</a><a href="c19.html">下一章 C19</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

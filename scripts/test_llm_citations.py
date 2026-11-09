@@ -39,6 +39,22 @@ def engine(docs_path):
 
 
 class CitationSpanTests(unittest.TestCase):
+    def test_extract_system_example_matches_the_active_output_validator(self):
+        source = chunk("资料中的连续原文片段")
+        messages = assistant.build_fixed_messages([(source, 1.0)], "查找依据", "extract")
+        example = next(line for line in messages[0]["content"].splitlines() if line.startswith("{"))
+        payload = json.loads(example)
+        payload["claims"][0]["chunk_id"] = source.chunk_id
+        status, answer, claims = assistant.validate_extract_payload(payload, {source.chunk_id: source})
+        self.assertEqual(status, "answered")
+        self.assertEqual(answer, source.text)
+        self.assertEqual(claims[0]["citations"][0]["quote"], source.text)
+        # Copy retains its own schema; a copy example must not be accepted by extract.
+        copy = assistant.build_fixed_messages([(source, 1.0)], "查找依据")
+        copy_example = next(line for line in copy[0]["content"].splitlines() if line.startswith("{"))
+        with self.assertRaises(assistant.AssistantFailure):
+            assistant.validate_extract_payload(json.loads(copy_example), {source.chunk_id: source})
+
     def test_unicode_and_collapsed_whitespace_map_to_document_characters(self):
         prefix = "上一段\n\n"
         body = "  ## 🛰️ 记录\n温度\t\u00a0  4.2\n米每秒  \n结束。"

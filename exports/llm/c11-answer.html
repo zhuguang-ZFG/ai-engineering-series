@@ -96,10 +96,12 @@ else:
 <h2 id="C11-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
 <ul>
 <li>程序运行成功时退出码为 0，失败时不伪装成功。</li>
+<li><code>时间：周六 14:00</code> 和 <code>时间:周六 14:00</code> 都保留完整时间；只移除字段前缀，不继续分割值中的冒号。</li>
+<li>UTF-8 BOM 由文件头识别并在解码时去除；它不触发 UTF-8 解码异常，不能靠“先 utf-8，失败再 utf-8-sig”处理。</li>
 <li>缺失字段在 JSON 中是 <code>null</code>，且进入 <code>missing</code> 列表。</li>
 <li>文件路径与编码在输出中可回查。</li>
 <li>只有四个约定字段会被提取；无关行不进入结果。</li>
 <li>你能从 <code>Traceback</code> 最后一行说出错误类型和出错行。</li>
 </ul>
 <p>本章没有调用模型、OCR 或网络，因此不需要模型输出证据；它验证的是本地程序、文件与错误处理。</p>
-</article><nav class="lesson-nav"><a href="c11.html">返回 C11 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</article><nav class="lesson-nav"><a href="c11.html">返回 C11 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

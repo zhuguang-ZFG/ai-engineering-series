@@ -45,19 +45,26 @@ status_counts + first_failure.stage     失败分布，不是被平均掉
 
 python - &lt;&lt;&#39;PY&#39;
 import json
+import os
 import pathlib
 
-src = pathlib.Path(&quot;book/llm/examples/assistant/eval-manifest.json&quot;)
+src = pathlib.Path(&quot;book/llm/examples/assistant/eval-manifest.json&quot;).resolve()
 data = json.loads(src.read_text(encoding=&quot;utf-8&quot;))
+target = pathlib.Path(&quot;out/c22&quot;).resolve()
+target.mkdir(parents=True, exist_ok=True)
+for case in data[&quot;cases&quot;]:
+    for key in (&quot;documents&quot;, &quot;model&quot;, &quot;embedding&quot;):
+        if key in case:
+            case[key] = pathlib.Path(os.path.relpath((src.parent / case[key]).resolve(), target)).as_posix()
 for name, top_k in ((&quot;eval-val-topk3.json&quot;, 3), (&quot;eval-val-topk1.json&quot;, 1)):
     item = json.loads(json.dumps(data))
     item[&quot;budgets&quot;][&quot;top_k&quot;] = top_k
-    out = pathlib.Path(&quot;out/c22&quot;) / name
+    out = target / name
     out.write_text(json.dumps(item, ensure_ascii=False, indent=2) + &quot;\n&quot;, encoding=&quot;utf-8&quot;)
     print(out)
 PY
 </code></pre>
-<p>两个文件只有 <code>budgets.top_k</code> 不同；它们各自的 SHA-256 不同，因此是两个条件，不是“同一个冻结清单”。运行：</p>
+<p>两个文件之间只有 <code>budgets.top_k</code> 不同；用例路径已随清单目录迁移，仍指向原来的同一份文档、模型或故意缺失的路径。它们各自的 SHA-256 不同，因此是两个条件，不是“同一个冻结清单”。若只复制 JSON 而不改相对路径，<code>missing-source</code> 用例可能提前报 <code>invalid-manifest</code>，比较条件就变了。运行：</p>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py evaluate \
   --manifest out/c22/eval-val-topk3.json \
   --model path/to/local-model \
@@ -294,4 +301,4 @@ PY
 <p><code>metrics.md</code> 记录质量/延迟/费用的定义和样本数；<code>percentile.md</code> 写排序后的原始值、中位数和 p95 算法；<code>decision.md</code> 写采用/拒绝理由、适用条件和未验证项。</p>
 <h2 id="C22-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
 <p>本章使用 <code>assistant.py</code> 的 <code>usage.latency_ms</code>、<code>usage.model_load_ms</code>、<code>elapsed_ms</code>、<code>cost</code>、<code>cost_basis</code>、<code>evaluate</code> 的 <code>summary</code> 与逐例报告；字段以 <code>book/llm/examples/assistant/README.md</code> 与源码为准。价格公式是通用算术，示例价格不是任何供应商的报价；本地费用固定为 <code>null</code>，不声称免费。分位数例子是教师手写数据，不是模型测量；<code>n=8</code> 的 p95 只用于说明小样本问题。样例 <code>eval-manifest.json</code> 是待评审样例，不是 CI 基线；本章不声称任何设置带来普遍提升，也不提供实际延迟、费用或通过率。</p>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c21.html">上一章 C21</a><a href="c22-answer.html">独立作答后核对</a><a href="c23.html">下一章 C23</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c21.html">上一章 C21</a><a href="c22-answer.html">独立作答后核对</a><a href="c23.html">下一章 C23</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

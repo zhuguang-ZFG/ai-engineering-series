@@ -159,18 +159,23 @@ def main() -&gt; int:
     parser.add_argument(&quot;--overlap&quot;, type=int, default=150)
     parser.add_argument(&quot;--top-k&quot;, type=int, default=4)
     args = parser.parse_args()
+    if args.chunk_chars &lt;= 0 or not 0 &lt;= args.overlap &lt; args.chunk_chars:
+        parser.error(&quot;require chunk-chars &gt; 0 and 0 &lt;= overlap &lt; chunk-chars&quot;)
+    if args.top_k &lt;= 0:
+        parser.error(&quot;require top-k &gt; 0&quot;)
 
     text = Path(args.text).read_text(encoding=&quot;utf-8&quot;)
-    pages = text.count(&quot;\f&quot;) + 1
+    pages = text.count(&quot;\f&quot;) + 1 if text else 0
     cjk = sum(1 for ch in text if is_cjk(ch))
     other = len(text) - cjk
     # Rough bounds only: tokenizers differ. Replace with a real tokenizer before freezing.
     low_tokens = math.ceil(cjk * 0.5 + other / 6)
     high_tokens = math.ceil(cjk * 1.5 + other / 2)
-    step = max(1, args.chunk_chars - args.overlap)
-    chunks = max(1, math.ceil(max(1, len(text) - args.overlap) / step))
-    avg_chunk = len(text) / chunks
-    context_guess = args.top_k * avg_chunk
+    step = args.chunk_chars - args.overlap
+    chunks = max(1, math.ceil((len(text) - args.overlap) / step)) if text else 0
+    lengths = [min(args.chunk_chars, len(text) - i * step) for i in range(chunks)]
+    avg_chunk = sum(lengths) / chunks if chunks else 0
+    context_bound = sum(sorted(lengths, reverse=True)[:args.top_k])
 
     print(json.dumps({
         &quot;file&quot;: str(args.text),
@@ -185,7 +190,7 @@ def main() -&gt; int:
         &quot;chunks&quot;: chunks,
         &quot;average_chunk_chars&quot;: round(avg_chunk, 1),
         &quot;top_k&quot;: args.top_k,
-        &quot;retrieved_chars_per_query&quot;: round(context_guess, 1),
+        &quot;retrieved_chars_upper_bound&quot;: context_bound,
         &quot;note&quot;: &quot;Estimates only; verify with the actual tokenizer and frozen evaluation.&quot;,
     }, ensure_ascii=False, indent=2))
     return 0
@@ -197,7 +202,7 @@ if __name__ == &quot;__main__&quot;:
 <p>用法：</p>
 <pre><code class="language-bash">python plan_budget.py manual-v2.0.txt --chunk-chars 1200 --overlap 150 --top-k 4
 </code></pre>
-<p>把输出记进架构决定。若 <code>token_estimate_high</code> 已经接近上下文上限，方案 A 没有余量；若 <code>retrieved_chars_per_query</code> 很小，B 的上下文压力低，但检索漏检风险仍在。不要用估算器替代真实 tokenizer、真实检索和冻结评测。</p>
+<p>把输出记进架构决定。若 <code>token_estimate_high</code> 已经接近上下文上限，方案 A 没有余量。<code>retrieved_chars_upper_bound</code> 把最长的至多 k 个固定窗口相加，包含重叠字符；它是这种切块方式的检索字符上界，不是实际命中长度，也不含提示词、元数据与输出。空文本对应 0 块，不能当成有证据。不要用估算器替代真实 tokenizer、真实检索和冻结评测。</p>
 <h2 id="C28-section-7ea72ba0c3" tabindex="-1">改一个条件：什么时候 B 也不够？</h2>
 <h3 id="C28-section-4ac35c1d58" tabindex="-1">条件 1：手册只有 18 页</h3>
 <p>整本约 9,000 字符，上下文足够，问题也集中在少数章节。此时方案 A 可能更小：一个提示、无索引、无检索阈值。你需要实测长上下文是否能保留安全警告，并比较引用校验的通过率。若 A 通过验收，就不必为了“架构完整”上 B。</p>
@@ -206,7 +211,7 @@ if __name__ == &quot;__main__&quot;:
 <h3 id="C28-section-7d886fc6bd" tabindex="-1">条件 3：8 页扫描件不可读</h3>
 <p>OCR 返回 <code>unreadable</code>/<code>uncertain</code> 时，不能从相邻页猜内容。该页进入“需要人工录入/重扫描”清单；问答系统对该页问题返回“材料不可读”。如果扫描页恰好是安全警告，这会影响验收，不能静默跳过。</p>
 <h3 id="C28-section-d490d300c2" tabindex="-1">条件 4：只允许旧版 v1.4</h3>
-<p>版本过滤必须在检索前完成；旧版文本不能进入上下文。若新旧版本都可见，冲突要显式返回两条引用，而不是让模型选一个。版本元数据不是装饰，是权限与事实的一部分。</p>
+<p>版本过滤必须在检索前完成；此时只让获准的 v1.4 进入上下文，未获准版本不能进入。若新旧版本都可见，冲突要显式返回两条引用，而不是让模型选一个。版本元数据不是装饰，是权限与事实的一部分。</p>
 <h2 id="C28-section-67d4131ffd" tabindex="-1">失败反例：四种“架构看起来对，结果不可用”</h2>
 <ol>
 <li><strong>静默截断</strong>：整本提示超出上下文，程序从尾部截断，模型没看到前面的警告，却仍给出步骤。必须记录 prompt token 数和丢弃项；超预算要失败或显式降级。</li>
@@ -256,4 +261,4 @@ if __name__ == &quot;__main__&quot;:
 <li>不提供产品手册原文、第三方标准或安全规程；真实产品手册的引用与安全责任由使用组织承担。</li>
 <li>本章的“答案 = 逐字引用/人工复核改写”是课程契约，不是对所有产品的法律结论；高风险场景需要组织自己的审核流程。</li>
 </ul>
-</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c27.html">上一章 C27</a><a href="c28-answer.html">独立作答后核对</a><a href="c29.html">下一章 C29</a></nav></article></main><footer>实施试读版 1.1.1 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c27.html">上一章 C27</a><a href="c28-answer.html">独立作答后核对</a><a href="c29.html">下一章 C29</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
