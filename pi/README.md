@@ -74,7 +74,7 @@ make book-pi-epub   # 再加 yuyu-pi-zh.epub
 make book-pi-all    # HTML + PDF + EPUB
 ```
 
-本机 2026-11-09 实测：HTML 1.4 MB；PDF 9.33 MB、174 页、41 个书签、18 个索引页脚；EPUB 1.21 MB（EPUBCheck 0 错误）；31 个 unit、34 张图（23 Mermaid + 11 手绘长图）、
+本机 2026-11-09 实测：HTML 1.4 MB；PDF 9.33 MB、174 页、41 个书签、18 个索引页脚；EPUB 1.31 MB（EPUBCheck 0 错误）；31 个 unit、34 张图（23 Mermaid + 11 手绘长图）、
 221 处术语标记、31 条 lead band、156 枚档位芯片、31 条眉批。构建口径与改动清单见 [BUILD-PLAN.md](BUILD-PLAN.md)，
 逐条验证记录见 [VERIFY.md](VERIFY.md)。
 
