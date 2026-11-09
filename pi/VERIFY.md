@@ -157,17 +157,17 @@ $ python scripts/bookctl.py build --product pi --lang zh --pdf
 [zh]
   yuyu-pi-zh.html: 1.2 MB, 31 units, 28 plates, 2 cited links, 218 glosses,
   31 lead bands, 156 tier chips, 31 emblems, 6 headpieces, 31 keeper notes
-  yuyu-pi-zh.pdf: 9.0 MB, 161 pages, 41 bookmarks, 18 index folios
+  yuyu-pi-zh.pdf: 9.0 MB, 164 pages, 41 bookmarks, 18 index folios
 OK
-{"output": "...yuyu-pi-zh.epub", "images": 67, "rasterized_svg": 97,
- "navigation_entries": 251, "bytes": 1048415}
+{"output": "...yuyu-pi-zh.epub", "images": 72, "rasterized_svg": 102,
+ "navigation_entries": 251, "bytes": 1251055}
 ```
 
 | 产物 | 字节 | 页数 / 书签 | SHA-256 |
 | --- | ---: | --- | --- |
-| `yuyu-pi-zh.html` | 1,256,189 | 31 单元 | `df9f951fb05e49fd794f854db77db485e9ce26681e0084f69b3810804432509d` |
-| `yuyu-pi-zh.pdf` | 9,053,128 | 161 页 / 41 书签 / 18 索引页脚 | `4f39e72f2b5fa58816821480849aa12bcbf1092748582cad6a5a6de58bc204f8` |
-| `yuyu-pi-zh.epub` | 1,048,415 | 251 个导航项 / 67 图 | `89c38c19ef175c7773c44ccc401d2412201a2d26dfc27e4d71eedc44c058775d` |
+| `yuyu-pi-zh.html` | 1,279,493 | 31 单元 | `1f2277b9fb48b4118b2eadfefce1c53529b687d350377d45897e29bb29cd6119` |
+| `yuyu-pi-zh.pdf` | 9,433,650 | 164 页 / 41 书签 / 18 索引页脚 | `038fd2ed0ba9a741407e1da7b61b79bc74c5ca6b5b2639623dee3824cd13b2b3` |
+| `yuyu-pi-zh.epub` | 1,251,055 | 251 个导航项 / 72 图 | `f83cb61318828e78fcfe1a8715ce2e45f354c449b220d9e8cbd482735267be9e` |
 
 - EPUB 走 `scripts/build_epub.py`：67 张图（含 97 个 SVG 光栅化）、251 个导航项；EPUBCheck 5.4.0：0 错误 0 警告。
 - 28 张图 = 22 张 Mermaid + 6 张 ```ill 手绘长图；31 枚章徽 + 6 幅篇题刻由
@@ -189,4 +189,31 @@ OK
 三次构建都没有触发空页门禁。
 
 **仍未验证**：交互式 TUI 键位、真实 `/login` OAuth、扩展项目信任交互、SDK/RPC 实跑、容器隔离、
-英文版与 EPUB。它们不在本轮"完成"的范围内，正文相应位置已标"未验证"。
+英文版。它们不在本轮"完成"的范围内，正文相应位置已标"未验证"。中文 EPUB 的构建与校验已记在上表。
+
+## 8. 插件专项复核（2026-11-09）
+
+Pi 1.5.0、pi-purge 0.2.1（提交 `ffafeb940339d59fc6af4a05dc754019cef3a1ac`）、Node 24.14.0。未修改全局设置、凭据或用户会话。
+
+| 检查 | 方法与结果 | 输出 |
+| --- | --- | --- |
+| 上游原测试 | 复制固定版本的必要文件到工作区临时目录，运行 `node test/pi-purge.test.mjs`；9 组通过 | [purge-upstream.txt](facts/plugins-20261109/purge-upstream.txt) |
+| 与真实宿主提示词组合 | `node pi/examples/check-purge.mjs <purge-dir> <pi-package>`；12 组通过 | [purge-compatibility.txt](facts/plugins-20261109/purge-compatibility.txt) |
+| Git 状态工具 | `node pi/examples/check-git-status.mjs <pi-package>`；临时 Git 仓库、真实宿主 exec，6 组通过 | [git-status-tool.txt](facts/plugins-20261109/git-status-tool.txt) |
+
+受限 Windows 环境执行后两项时加 `--preserve-symlinks`，避免 Node 在用户目录做 realpath 时被拒绝；不改变全局运行配置。测试脚本与用法见 [examples/README.md](examples/README.md)。
+
+关键差异已经写入第 18 章：
+
+- `replace` 对 Pi 1.5.0 真实默认提示词的两处旧标记均匹配失败，返回内容等于前置追加。
+- 文档声称存在 `/purge reload`，该提交实际返回未知子命令；重新 `source` 或 `on` 才会读文件。
+- `append` 不更新切除诊断，显示可能过期；`strict` 的匹配诊断也不能用来判断宿主内容是否保留。
+- 旧标记部分匹配时独立删除，来源切换失败会尝试重新读取旧来源。
+
+这些检查直接调用注册的处理器，没有真实提供方请求或 TUI 驱动。网络安装、交互菜单与模型行为改善仍未实测；上游测试里的模拟 prompt 是旧格式，9 组通过不能代替与 Pi 1.5.0 的组合检查。第 14 章重载与事件链、第 15 章默认工具激活规则另外依据宿主 1.5.0 的文档与实现核对。
+
+## 9. 插件修订版的本机构建（2026-11-09）
+
+执行 `python scripts/bookctl.py build --product pi --lang zh --pdf --epub --out-dir <本地输出目录>`，得到 HTML、PDF 和 EPUB。PDF 为 174 页、41 个书签，未发现无文本页；EPUBCheck 5.4.0 返回 0。第 18 章的模式对照、版本差异和第 15 章代码页已打开抽查。
+
+`python scripts/bookctl.py check --fast` 六步通过，包括通用测试 67 项、构建器测试 529 项。Git 工具示例另用宿主类型声明做 TypeScript 严格检查，通过。上述页数与旧版第 7 节是不同时间的构建记录，不能互相替换。

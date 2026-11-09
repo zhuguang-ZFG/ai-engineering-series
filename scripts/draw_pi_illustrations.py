@@ -72,13 +72,14 @@ class Pen:
             self.path([(x0, y + h), (x0 + h * 0.6, y)], amp=0.5,
                       width=0.8, opacity=opacity)
 
-    def arrow(self, x1, y1, x2, y2, amp=0.5, width=None) -> None:
-        self.path([(x1, y1), (x2, y2)], amp=amp, width=width)
+    def arrow(self, x1, y1, x2, y2, amp=0.5, width=None,
+              opacity: float | None = None) -> None:
+        self.path([(x1, y1), (x2, y2)], amp=amp, width=width, opacity=opacity)
         a = math.atan2(y2 - y1, x2 - x1)
         for side in (-0.5, 0.5):
             self.path([(x2, y2),
                        (x2 - 5 * math.cos(a + side), y2 - 5 * math.sin(a + side))],
-                      amp=0.3, width=width)
+                      amp=0.3, width=width, opacity=opacity)
 
     def render(self, width: float) -> str:
         return (f'<svg viewBox="0 0 {self.w} {self.h}" fill="none" '
@@ -442,7 +443,130 @@ def part_plate(pid: str, seed: int) -> str:
 BODY = {
     "p1": ("loop", 11), "p2": ("daily", 12), "p3": ("engine", 13),
     "p4": ("modules", 14), "p5": ("delivery", 15), "p6": ("map", 16),
+    "ch05-tree": ("tree", 17), "ch11-lane": ("lane", 18), "ch12-entries": ("entries", 19),
+    "ch19-boundary": ("boundary", 20), "ch22-trust": ("trust", 21),
 }
+
+
+# ------------------------------------------------------------- small icons --
+# Kept here rather than in the emblem vocabulary: these plates carry the
+# argument, and an icon that can be named (a key, a disk, a globe) is more
+# explicit than another ring of dots. Everything still strokes with the pen's
+# currentColor and stays inside the 640x360 sheet.
+def icon_gear(p: Pen, cx: float, cy: float, r: float = 8) -> None:
+    p.circle(cx, cy, r)
+    p.circle(cx, cy, max(1.8, r * .33))
+    for i in range(8):
+        a = math.radians(i * 45)
+        p.path([(cx + r * math.cos(a), cy + r * math.sin(a)),
+                (cx + (r + 4) * math.cos(a), cy + (r + 4) * math.sin(a))],
+               width=1.2)
+
+
+def icon_bubble(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    w, h = 16 * s, 11 * s
+    p.box(cx - w / 2, cy - h / 2, w, h, amp=.3, width=1.3)
+    p.path([(cx - 3 * s, cy + h / 2), (cx - 6 * s, cy + h / 2 + 4 * s),
+            (cx + 1 * s, cy + h / 2)], width=1.2)
+
+
+def icon_play(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx, cy, 8 * s, width=1.2)
+    p.path([(cx - 3 * s, cy - 4 * s), (cx + 5 * s, cy),
+            (cx - 3 * s, cy + 4 * s)], close=True, amp=.3, width=1.2)
+
+
+def icon_stop(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx, cy, 8 * s, width=1.2)
+    p.box(cx - 3.2 * s, cy - 3.2 * s, 6.4 * s, 6.4 * s, amp=.2, width=1.2)
+
+
+def icon_update(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx, cy, 9 * s, width=1.1, opacity=.65)
+    p.path([(cx - 5 * s, cy - 2 * s), (cx, cy - 6 * s),
+            (cx + 5 * s, cy - 2 * s)], width=1.4)
+    p.path([(cx + 5 * s, cy + 2 * s), (cx, cy + 6 * s),
+            (cx - 5 * s, cy + 2 * s)], width=1.4)
+
+
+def icon_return(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.path([(cx + 6 * s, cy - 6 * s), (cx + 6 * s, cy + 3 * s),
+            (cx - 5 * s, cy + 3 * s)], width=1.4)
+    p.path([(cx - 1 * s, cy - 1 * s), (cx - 5 * s, cy + 3 * s),
+            (cx - 1 * s, cy + 7 * s)], width=1.4)
+
+
+def icon_scissors(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx - 4 * s, cy - 4 * s, 2.8 * s, width=1.1)
+    p.circle(cx - 4 * s, cy + 4 * s, 2.8 * s, width=1.1)
+    p.path([(cx - 1 * s, cy - 2 * s), (cx + 8 * s, cy - 7 * s)], width=1.1)
+    p.path([(cx - 1 * s, cy + 2 * s), (cx + 8 * s, cy + 7 * s)], width=1.1)
+
+
+def icon_key(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx - 8 * s, cy, 4.5 * s, width=1.1)
+    p.path([(cx - 3.5 * s, cy), (cx + 12 * s, cy)], width=1.6)
+    p.path([(cx + 8 * s, cy), (cx + 8 * s, cy + 5 * s)], width=1.2)
+    p.path([(cx + 12 * s, cy), (cx + 12 * s, cy + 4 * s)], width=1.2)
+
+
+def icon_disk(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.box(cx - 9 * s, cy - 7 * s, 18 * s, 14 * s, amp=.3, width=1.2)
+    p.circle(cx, cy - 1 * s, 3.5 * s, width=1.1)
+    p.path([(cx - 9 * s, cy + 4 * s), (cx + 9 * s, cy + 4 * s)],
+           width=1, opacity=.45)
+
+
+def icon_globe(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx, cy, 9 * s, width=1.2)
+    p.path([(cx - 9 * s, cy), (cx + 9 * s, cy)], width=.9, opacity=.55)
+    p.path([(cx - 5 * s, cy - 7 * s), (cx - 5 * s, cy + 7 * s)],
+           width=.9, opacity=.4)
+    p.path([(cx + 5 * s, cy - 7 * s), (cx + 5 * s, cy + 7 * s)],
+           width=.9, opacity=.4)
+
+
+def icon_terminal(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.box(cx - 10 * s, cy - 7 * s, 20 * s, 14 * s, amp=.3, width=1.2)
+    p.path([(cx - 6 * s, cy - 3 * s), (cx - 2 * s, cy),
+            (cx - 6 * s, cy + 3 * s)], width=1.1)
+    p.path([(cx, cy + 3 * s), (cx + 5 * s, cy + 3 * s)], width=1.1)
+
+
+def icon_person(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.circle(cx, cy - 5 * s, 4 * s, width=1.2)
+    p.path([(cx - 7 * s, cy + 7 * s), (cx - 7 * s, cy + 3 * s),
+            (cx - 3 * s, cy + 1 * s), (cx + 3 * s, cy + 1 * s),
+            (cx + 7 * s, cy + 3 * s), (cx + 7 * s, cy + 7 * s)],
+           width=1.2, close=False)
+
+
+def icon_folder(p: Pen, x: float, y: float, w: float, h: float) -> None:
+    p.path([(x, y + 7), (x, y), (x + w * .42, y), (x + w * .5, y + 7),
+            (x + w, y + 7), (x + w, y + h), (x, y + h)],
+           close=True, amp=.4)
+
+
+def icon_warning(p: Pen, cx: float, cy: float, s: float = 1.0) -> None:
+    p.path([(cx, cy - 8 * s), (cx + 9 * s, cy + 7 * s), (cx - 9 * s, cy + 7 * s)],
+           close=True, amp=.3, width=1.2)
+    p.path([(cx, cy - 2 * s), (cx, cy + 3 * s)], width=1.3)
+    p.dot(cx, cy + 5.5 * s, 1.2, .8)
+
+
+def icon_lock(p: Pen, cx: float, cy: float, s: float = 1.0,
+              open_: bool = False) -> None:
+    p.box(cx - 7 * s, cy - 1 * s, 14 * s, 11 * s, amp=.3, width=1.2)
+    if open_:
+        p.path([(cx - 4 * s, cy - 1 * s), (cx - 4 * s, cy - 5 * s),
+                (cx, cy - 8 * s), (cx + 3 * s, cy - 7 * s)], width=1.3)
+        p.path([(cx - 9 * s, cy - 10 * s), (cx + 9 * s, cy + 9 * s)],
+               width=1.4)
+    else:
+        p.path([(cx - 4 * s, cy - 1 * s), (cx - 4 * s, cy - 5 * s),
+                (cx, cy - 8 * s), (cx + 4 * s, cy - 5 * s),
+                (cx + 4 * s, cy - 1 * s)], width=1.3)
+    p.dot(cx, cy + 4 * s, 1.4, .7)
 
 
 def body_plate(pid: str, seed: int) -> str:
@@ -500,6 +624,207 @@ def body_plate(pid: str, seed: int) -> str:
         p.path([(90, 82), (160, 82)], opacity=.5)
         p.path([(90, 100), (140, 100)], opacity=.5)
         p.hatch(520, 280, 18, 24, 7, 4, .22)
+    elif pid == "ch05-tree":
+        # one session is a tree: the active path is inked solid, the abandoned
+        # sibling stays faint, and the JSONL strip on the right is where those
+        # parent links actually live.
+        p.circle(190, 58, 18)
+        p.circle(190, 58, 2.5, opacity=.85)
+        p.path([(190, 40), (190, 30)], opacity=.5)
+        p.path([(182, 30), (198, 30)], width=1.2, opacity=.5)
+        p.dot(190, 34, 1.5, .5)
+        p.path([(190, 76), (190, 145)], width=2.4, opacity=.9)
+        p.path([(190, 145), (105, 215)], width=1.2, opacity=.4)
+        p.path([(190, 145), (280, 210)], width=2.4, opacity=.9)
+        p.circle(105, 228, 12, opacity=.45)
+        p.circle(105, 228, 2, opacity=.6)
+        p.path([(105, 240), (105, 285)], opacity=.35)
+        p.circle(105, 296, 8, opacity=.35)
+        p.path([(92, 292), (102, 302)], width=1.2, opacity=.5)
+        p.path([(102, 292), (92, 302)], width=1.2, opacity=.5)
+        p.circle(280, 222, 20, opacity=.3)
+        p.circle(280, 222, 13)
+        p.circle(280, 222, 2.2, .85)
+        p.path([(280, 235), (280, 258)], width=2, opacity=.9)
+        p.path([(280, 258), (235, 292)], width=2, opacity=.9)
+        p.path([(280, 258), (330, 290)], width=2, opacity=.9)
+        p.circle(235, 300, 9)
+        p.circle(235, 300, 1.8, .8)
+        p.circle(330, 298, 9)
+        p.circle(330, 298, 1.8, .8)
+        # the same session on disk: one JSON object per line, parent links in
+        # the right-hand column
+        p.box(408, 52, 184, 244, amp=.6, opacity=.9)
+        p.path([(408, 86), (592, 86)], opacity=.5)
+        p.path([(424, 69), (470, 69)], width=1.4, opacity=.7)
+        p.path([(484, 69), (570, 69)], width=1, opacity=.4)
+        rows = (104, 136, 168, 200, 232, 264)
+        for y in rows:
+            p.dot(422, y, 1.6, .6)
+            p.path([(432, y), (466, y)], width=1.2, opacity=.65)
+            p.path([(476, y), (510, y)], width=1, opacity=.4)
+            p.path([(520, y), (560, y)], width=1, opacity=.3)
+        icon_key(p, 574, 136, .5)
+        icon_bubble(p, 574, 168, .5)
+        icon_bubble(p, 574, 200, .55)
+        icon_terminal(p, 574, 232, .5)
+        icon_scissors(p, 574, 264, .5)
+        for a, b in ((136, 104), (200, 168), (264, 232)):
+            p.path([(466, a), (472, (a + b) / 2), (466, b)],
+                   width=.8, opacity=.35)
+        p.path([(576, 168), (582, 184), (576, 200)], width=.8, opacity=.35)
+        p.arrow(500, 300, 500, 316, width=1.2)
+        p.hatch(60, 306, 12, 12, 4, 3, .22)
+    elif pid == "ch11-lane":
+        # four event lanes and a result lane; the dotted bypass is the
+        # "unknown or blocked" path, which still lands on tool_execution_end.
+        lanes = (58, 108, 158, 208, 258)
+        p.path([(92, 34), (566, 34)], opacity=.35)
+        p.arrow(566, 34, 578, 34, width=1.1)
+        for y in lanes:
+            p.path([(95, y - 15), (570, y - 15)], width=.8, opacity=.18)
+            p.path([(95, y + 15), (570, y + 15)], width=.8, opacity=.18)
+        icon_bubble(p, 60, lanes[0], .9)
+        icon_play(p, 60, lanes[1], .9)
+        icon_update(p, 60, lanes[2], .9)
+        icon_stop(p, 60, lanes[3], .9)
+        icon_return(p, 60, lanes[4], .9)
+        x_call, x_start = 170, 240
+        x_up1, x_up2 = 300, 345
+        x_end, x_res = 410, 470
+        p.dot(x_call, lanes[0], 3, .9)
+        p.dot(x_start, lanes[1], 3, .9)
+        p.dot(x_up1, lanes[2], 2.5, .8)
+        p.dot(x_up2, lanes[2], 2.5, .8)
+        p.circle(x_end, lanes[3], 9, opacity=.4)
+        p.dot(x_end, lanes[3], 3, .9)
+        p.dot(x_res, lanes[4], 3, .9)
+        p.arrow(x_call + 5, lanes[0] + 6, x_start - 4, lanes[1] - 7, width=1.4)
+        p.arrow(x_start + 5, lanes[1] + 6, x_up1 - 4, lanes[2] - 7, width=1.4)
+        p.path([(x_up1 + 5, lanes[2]), (x_up2 - 4, lanes[2])], width=1.4)
+        p.path([(x_up1, lanes[2] + 5), (x_up1, lanes[2] + 12)], width=.8, opacity=.3)
+        p.arrow(x_up2 + 5, lanes[2] + 6, x_end - 4, lanes[3] - 7, width=1.4)
+        p.arrow(x_end + 5, lanes[3] + 6, x_res - 4, lanes[4] - 7, width=1.4)
+        p.path([(x_call + 8, lanes[0] + 5), (198, lanes[0] + 18),
+                (198, lanes[3] - 18)], width=1.1, opacity=.35)
+        p.path([(198, lanes[3] - 18), (198, lanes[3] - 6),
+                (x_end - 9, lanes[3])], width=1.1, opacity=.35)
+        p.path([(191, 136), (205, 150)], width=1.1, opacity=.45)
+        p.path([(205, 136), (191, 150)], width=1.1, opacity=.45)
+        p.hatch(60, 300, 14, 14, 5, 3, .22)
+    elif pid == "ch12-entries":
+        # six entry kinds, each with its own glyph; the right-hand spine is the
+        # parentId chain, with one relation inked brighter than the rest.
+        rows = ((42, "header"), (88, "model"), (134, "user"),
+                (180, "assistant"), (226, "tool"), (272, "compact"))
+        for y, kind in rows:
+            p.box(70, y, 340, 32, amp=.4)
+            p.dot(82, y + 16, 1.6, .6)
+            p.path([(92, y + 16), (112, y + 16)], width=1.1, opacity=.5)
+            p.path([(128, y + 12), (382, y + 12)], width=1.1, opacity=.55)
+            p.path([(128, y + 21), (342, y + 21)], width=1, opacity=.32)
+            p.dot(410, y + 16, 1.6, .55)
+            p.path([(410, y + 16), (434, y + 16)], width=.9, opacity=.4)
+            if kind == "header":
+                icon_terminal(p, 121, y + 16, .45)
+            elif kind == "model":
+                icon_key(p, 121, y + 16, .45)
+            elif kind == "user":
+                icon_bubble(p, 121, y + 16, .45)
+            elif kind == "assistant":
+                icon_bubble(p, 121, y + 16, .55)
+            elif kind == "tool":
+                icon_terminal(p, 121, y + 16, .45)
+            else:
+                icon_scissors(p, 121, y + 16, .45)
+        p.path([(434, 58), (434, 288)], width=.9, opacity=.4)
+        for y, _ in rows:
+            p.dot(434, y + 16, 1.4, .5)
+        p.path([(434, 212), (456, 204), (456, 172), (434, 164)],
+               width=1.3, opacity=.65)
+        p.arrow(456, 172, 434, 164, width=1.1)
+        p.path([(60, 40), (60, 306)], width=1, opacity=.3)
+        p.arrow(60, 296, 60, 312, width=1.1)
+        p.hatch(74, 306, 12, 12, 4, 3, .22)
+    elif pid == "ch19-boundary":
+        # left: SDK, two modules inside one process; right: RPC, two processes
+        # with a packet channel between them. The dotted direct call is crossed
+        # out because object identity does not cross that boundary.
+        p.box(45, 55, 250, 200, amp=.6)
+        p.box(53, 63, 234, 184, amp=.4, opacity=.35)
+        icon_gear(p, 115, 145, 13)
+        # the SDK side calls a code module directly, inside the same process
+        p.box(198, 125, 50, 40, amp=.4)
+        p.path([(214, 136), (206, 145), (214, 154)], width=1.4)
+        p.path([(232, 136), (240, 145), (232, 154)], width=1.4)
+        p.path([(228, 133), (218, 157)], width=1.1, opacity=.55)
+        p.path([(133, 145), (191, 145)], width=1.8)
+        p.arrow(183, 138, 193, 145, width=1.2)
+        p.arrow(140, 138, 130, 145, width=1.2)
+        # process boundary: SDK cannot reach across it by object reference
+        p.path([(320, 36), (320, 314)], opacity=.42)
+        for y in range(40, 314, 22):
+            p.path([(314, y), (326, y)], width=.8, opacity=.28)
+        p.path([(295, 90), (340, 90)], width=1, opacity=.35)
+        p.path([(306, 82), (318, 98)], width=1.2, opacity=.6)
+        p.path([(318, 82), (306, 98)], width=1.2, opacity=.6)
+        p.box(340, 55, 135, 200, amp=.6)
+        p.box(505, 55, 105, 200, amp=.6)
+        icon_gear(p, 407, 145, 12)
+        icon_gear(p, 557, 145, 12)
+        # RPC carries bytes, not object identity: a packet channel with
+        # envelopes between the two process boxes
+        p.path([(419, 145), (505, 145)], width=1, opacity=.45)
+        for x in (445, 475):
+            p.box(x - 8, 137, 16, 12, amp=.3, width=1.1)
+            p.path([(x - 8, 137), (x, 145), (x + 8, 137)], width=.9, opacity=.5)
+        p.arrow(497, 143, 503, 145, width=1.1)
+        p.arrow(429, 143, 435, 145, width=1.1)
+        p.arrow(470, 300, 560, 300, width=1.2, opacity=.55)
+        p.arrow(100, 300, 240, 300, width=1.4)
+        p.box(500, 294, 5, 5, amp=.2, width=.8)
+        p.box(520, 294, 5, 5, amp=.2, width=.8)
+        p.hatch(56, 306, 12, 12, 4, 3, .22)
+        p.dot(610, 60, 1.4, .35)
+    elif pid == "ch22-trust":
+        # untrusted repo -> worker -> the account's key, disk, network and
+        # shell, all solid lines: Pi has no gate to put in the middle.
+        icon_folder(p, 55, 110, 120, 95)
+        p.path([(68, 124), (100, 124), (130, 146)], width=1.1, opacity=.55)
+        p.path([(68, 138), (94, 138), (130, 158)], width=1.1, opacity=.45)
+        p.path([(68, 152), (86, 152), (130, 170)], width=1.1, opacity=.35)
+        p.dot(130, 146, 1.5, .5)
+        p.dot(130, 158, 1.5, .5)
+        p.dot(130, 170, 1.5, .5)
+        icon_warning(p, 168, 108, .8)
+        p.arrow(180, 155, 232, 155, width=1.5)
+        p.box(238, 90, 180, 180, amp=.7)
+        p.path([(392, 102), (408, 118), (398, 126), (414, 142)],
+               width=1.2, opacity=.45)
+        icon_gear(p, 300, 150, 14)
+        icon_person(p, 350, 150, 1.0)
+        icon_lock(p, 398, 230, 1.0, open_=True)
+        p.path([(430, 180), (478, 180)], width=1.4)
+        p.dot(430, 180, 2.2, .8)
+        targets = ((500, 110, "key"), (500, 170, "disk"),
+                   (500, 230, "globe"), (500, 290, "terminal"))
+        for x, y, kind in targets:
+            p.path([(432, 180), (462, y), (488, y)], width=1.1, opacity=.55)
+            p.dot(462, y, 1.4, .5)
+            if kind == "key":
+                icon_key(p, x, y, .9)
+            elif kind == "disk":
+                icon_disk(p, x, y, .9)
+            elif kind == "globe":
+                icon_globe(p, x, y, .9)
+            else:
+                icon_terminal(p, x, y, .9)
+        p.circle(580, 58, 20)
+        icon_person(p, 580, 58, .9)
+        p.path([(410, 105), (526, 74), (552, 66)], width=1.2, opacity=.5)
+        p.arrow(544, 68, 552, 65, width=1.1)
+        p.hatch(56, 300, 14, 14, 5, 3, .22)
+        p.dot(610, 60, 1.4, .3)
     else:
         for i, (x, y) in enumerate(((80, 70), (240, 50), (400, 80), (520, 60),
                                     (140, 190), (300, 170), (460, 200),
@@ -517,6 +842,8 @@ def body_plate(pid: str, seed: int) -> str:
     p.dot(600, 40, 2, .25)
     p.dot(36, 44, 1.5, .2)
     return p.render(1.8)
+
+
 
 
 def build() -> dict[Path, str]:

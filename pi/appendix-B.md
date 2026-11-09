@@ -47,6 +47,8 @@
 | `/changelog` | 查看更新日志 |
 | `/quit` | 退出 |
 
+`/purge` 不是内置命令，只在加载 pi-purge 扩展后出现。本文固定的 0.2.1 支持 `on`、`off`、`status`、`mode`、`source`；README 提到的 `reload` 子命令尚未实现。完整操作与版本差异见第 18 章。不要把宿主 `/reload` 与 `/purge reload` 混为一谈。
+
 ## B.5 快捷键：默认与自定义
 
 - 交互常用：`Enter` 发送、`Shift+Enter` 换行、`Ctrl+O` 展开工具输出、`Ctrl+T` 切换 thinking、

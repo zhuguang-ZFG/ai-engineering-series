@@ -65,3 +65,6 @@ class PiArtTray(unittest.TestCase):
     def test_every_shipped_pi_drawing_passes_the_loader(self):
         for path in sorted(art.PI_ART_DIR.glob("*.svg")):
             self.assertTrue(art._read(path.stem), path.name)
+
+    def test_body_plates_are_drawn_as_well(self):
+        self.assertGreaterEqual(len(list(art.PI_ART_DIR.glob("pi-plate-*.svg"))), 11)

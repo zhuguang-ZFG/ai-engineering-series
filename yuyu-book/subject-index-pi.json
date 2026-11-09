@@ -453,6 +453,27 @@
       }
     },
     {
+      "key": "pi-purge",
+      "letter": "P",
+      "zh": {
+        "term": "pi-purge",
+        "refs": [
+          {
+            "anchor": "pi-ch14",
+            "label": "第 14 章"
+          },
+          {
+            "anchor": "pi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "pi-purge",
+        "refs": []
+      }
+    },
+    {
       "key": "print 模式",
       "letter": "P",
       "zh": {

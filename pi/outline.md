@@ -42,7 +42,7 @@
 | 15 | 扩展实战：工具、命令、快捷键与 UI | `docs/extensions.md#custom-tools`、`examples/extensions/` | 已落盘 |
 | 16 | 技能：按需加载的指令包 | `docs/skills.md`、`examples/sdk/` | 已落盘 |
 | 17 | 提示模板与主题 | `docs/prompt-templates.md`、`docs/themes.md`、`docs/tui.md` | 已落盘 |
-| 18 | Pi 包：打包、安装与分发 | `docs/packages.md`、`package.json` 的 `pi` 字段 | 已落盘 |
+| 18 | Pi 包：打包、安装与 pi-purge 实战 | `docs/packages.md`；pi-purge 0.2.1 固定提交、源码与离线实验 | 案例已扩写 |
 | 19 | SDK 与 RPC：把 Pi 嵌进程序 | `docs/sdk.md`、`docs/rpc.md`、`docs/rpc-commands.md`、`examples/rpc-client.ts` | 已落盘 |
 
 ## 第五篇 · 实战

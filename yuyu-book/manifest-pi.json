@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "product": "pi",
-  "version": "0.1.0-wip",
-  "date": "2026-11-08",
+  "version": "0.2.0-wip",
+  "date": "2026-11-09",
   "author": "朱光",
   "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
   "license": {
@@ -555,7 +555,7 @@
         "zh": "能写一个 registerTool 并让模型调用。"
       },
       "boundary": {
-        "zh": "扩展工具要被 --tools 选中才声明。"
+        "zh": "注册与激活分开看，默认 direct 工具通常会激活。"
       },
       "plain": {
         "zh": "注册工具、命令与 UI，让 Pi 长出你要的手。"
@@ -600,13 +600,13 @@
     },
     "pi-ch18": {
       "question": {
-        "zh": "一套资源怎么打包分发？"
+        "zh": "插件装进 Pi 后改了什么，怎样用 pi-purge 验证？"
       },
       "deliverable": {
-        "zh": "能读懂 pi 字段与安装/钉版本语义。"
+        "zh": "能管理包的范围与版本，复现 pi-purge 的三种模式和失败路径。"
       },
       "boundary": {
-        "zh": "包不是沙箱。"
+        "zh": "改系统提示词不等于删历史、撤销工具权限或隔离执行。"
       },
       "plain": {
         "zh": "一个包带走扩展、技能、模板与主题。"

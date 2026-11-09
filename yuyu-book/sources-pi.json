@@ -26,5 +26,19 @@
     "pinned": {
       "version": "1.5.0"
     }
+  },
+  "pi-purge": {
+    "title": "ZiChuanLan/pi-purge 0.2.1",
+    "authority": "Upstream source, README and tests",
+    "kind": "github",
+    "url": "https://github.com/ZiChuanLan/pi-purge/tree/ffafeb940339d59fc6af4a05dc754019cef3a1ac",
+    "snapshot": "Version 0.2.1, pinned to ffafeb940339d59fc6af4a05dc754019cef3a1ac; source and Pi 1.5.0 prompt checked locally",
+    "accessed": "2026-11-09",
+    "license": "MIT",
+    "scope": "Chapter 18: commands, prompt modes, session state, source failure and version drift",
+    "pinned": {
+      "version": "0.2.1",
+      "commit": "ffafeb940339d59fc6af4a05dc754019cef3a1ac"
+    }
   }
 }

@@ -108,3 +108,21 @@ Pi 发版很快（`v1.1.0` 发布于 2026-10-07，`v1.5.0` 发布于 2026-11-02�
 - 上游改了什么，看仓库 releases 与 `CHANGELOG.md`；本机 `pi update` 更新自己。
 - 本书改钉时，**改这一页、改附录 E、改受影响章节的核对清单**，三处一起改；只改正文不改这里，等于没有钉。
 - 上次核对：2026-11-08，钉 `v1.5.0`。
+
+## 7. 插件案例：pi-purge（2026-11-09）
+
+第 18 章独立固定插件版本，不随 Pi 的版本号推断兼容性。
+
+| 项目 | 值 |
+| --- | --- |
+| 仓库与固定源码 | [ZiChuanLan/pi-purge](https://github.com/ZiChuanLan/pi-purge/tree/ffafeb940339d59fc6af4a05dc754019cef3a1ac) |
+| `package.json` 版本 | `0.2.1` |
+| 完整提交 | `ffafeb940339d59fc6af4a05dc754019cef3a1ac` |
+| 许可 | MIT；源码与内嵌人设不复制进书仓 |
+| 宿主声明 | `@earendil-works/pi-coding-agent >=0.80.0 <2` |
+| 本书实查宿主 | Pi 1.5.0；Node 24.14.0 |
+| 主要证据 | `extensions/pi-purge.ts`、`package.json`、`test/pi-purge.test.mjs`，以及宿主 `dist/core/system-prompt.js` |
+
+本机已安装的 git checkout 为上述提交；跟踪文件无修改，仅有未跟踪的安装锁文件。本次没有更改全局插件设置或真实会话。README 列出的 `/purge reload` 在命令分派中不存在；`replace` 的旧文案匹配在 Pi 1.5.0 默认提示词上失败。正文以源码与离线复现为准，未把插件的 peer dependency 范围当成行为兼容保证。
+
+本书原创示例见 [examples/README.md](examples/README.md)，输出见 [facts/plugins-20261109/](facts/plugins-20261109/)。

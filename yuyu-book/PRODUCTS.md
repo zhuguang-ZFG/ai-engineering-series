@@ -29,7 +29,7 @@ omp 用 `-omp` 后缀，pi 用 `-pi` 后缀（`glosses-pi.json` / `notes-pi.json
 ## Pi 分册
 
 `pi` 是第三分册，31 个 unit（1 前言 + 25 章 + 5 附录），中文单语，写作钉 **pi/1.5.0**。
-它与另两册共用构建器，但登记表、插画托盘（`yuyu-book/illustrations-pi/`，43 份）和产物前缀都是自己的：
+它与另两册共用构建器，但登记表、插画托盘（`yuyu-book/illustrations-pi/`，48 份）和产物前缀都是自己的：
 `make book-pi` 只编 pi，`make book` / `make book-omp` 不会碰它。
 
 通俗层已经接入：12 个词条、31 条 lead band、31 条眉批、156 枚档位芯片、218 处虚线术语标记。
