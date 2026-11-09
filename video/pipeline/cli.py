@@ -4,6 +4,7 @@
     python video/pipeline/cli.py check [--chapter ch02] [--audio]
     python video/pipeline/cli.py build [--chapter ch02]
     python video/pipeline/cli.py prove
+    python video/pipeline/cli.py compare --help
 """
 from __future__ import annotations
 
@@ -16,9 +17,9 @@ from pathlib import Path
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from pipeline import composition, content, migrate, model, proof, quality, timeline, voice
+    from pipeline import composition, content, media_compare, migrate, model, proof, quality, timeline, voice
 else:
-    from . import composition, content, migrate, model, proof, quality, timeline, voice
+    from . import composition, content, media_compare, migrate, model, proof, quality, timeline, voice
 
 BUILD = model.VIDEO / ".build"
 
@@ -226,6 +227,17 @@ def main(argv=None) -> int:
                              help="require all declared renderer/media assets")
         cmd.set_defaults(handler=handler)
     sub.add_parser("migrate").set_defaults(handler=migrate_cmd)
+    compare = sub.add_parser("compare", help="compare explicit legacy/current media evidence")
+    compare.add_argument("--chapter", choices=model.CHAPTER_IDS, required=True)
+    compare.add_argument("--format", choices=("long", "short"), required=True)
+    compare.add_argument("--legacy-captions", type=Path, required=True,
+                         help="legacy SRT or VTT witness")
+    compare.add_argument("--current-captions", type=Path, required=True,
+                         help="transcript-long.json or transcript-short.json from the current build")
+    compare.add_argument("--legacy-video", type=Path)
+    compare.add_argument("--current-video", type=Path)
+    compare.add_argument("--report", type=Path, required=True)
+    compare.set_defaults(handler=media_compare.compare)
     args = parser.parse_args(argv)
     try:
         return args.handler(args)

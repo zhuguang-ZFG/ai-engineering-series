@@ -9,6 +9,7 @@ store an unverified field that would make the committed reports stale.
 from __future__ import annotations
 
 import hashlib
+import math
 import re
 import subprocess
 from pathlib import Path
@@ -29,6 +30,7 @@ CAPTION_TIME = re.compile(
 CAPTION_SUFFIXES = (".srt", ".vtt")
 CAPTION_TOLERANCE_S = 0.25
 KEYFRAME_POINTS = (0.1, 0.5, 0.9)
+VIDEO_DURATION_TOLERANCE_S = 0.1
 
 
 def parse_index(path: Path) -> dict:
@@ -121,18 +123,20 @@ def legacy_caption_path(episode: dict, chapter_dir: Path,
 
 
 def caption_report(episode: dict, chapter_dir: Path, cues: dict,
-                   fmt: str) -> dict:
+                   fmt: str, *, legacy_path: Path | None = None) -> dict:
     """Compare a legacy SRT/VTT with the current cue track.
 
     Returns `{"status": "unverified", "reason": ...}` when no legacy caption
     file exists. This is intentionally not part of `compat()`: storing an
     unverified field would make the committed compat reports stale.
     """
-    path = legacy_caption_path(episode, chapter_dir, fmt)
+    path = legacy_path or legacy_caption_path(episode, chapter_dir, fmt)
     if path is None:
         return {"status": "unverified",
                 "reason": f"{episode['id']} {fmt}: no legacy SRT/VTT "
                           "captions under the legacy base"}
+    if not path.is_file():
+        return {"status": "unverified", "reason": f"captions are missing: {path}"}
     legacy = parse_captions(path)
     if not legacy:
         return {"status": "unverified",
@@ -145,13 +149,18 @@ def caption_report(episode: dict, chapter_dir: Path, cues: dict,
             "".join(cue["text"] for cue in current)):
         mismatches.append("caption text differs")
     for index, (before, after) in enumerate(zip(legacy, current)):
+        if normalized(before["text"]) != normalized(after["text"]):
+            mismatches.append(f"cue {index}: text differs")
         for field in ("start", "end"):
             if abs(before[field] - after[field]) > CAPTION_TOLERANCE_S:
                 mismatches.append(
                     f"cue {index}: {field} {before[field]} != {after[field]}")
     return {
         "status": "match" if not mismatches else "mismatch",
-        "captions": str(path.relative_to(chapter_dir)).replace("\\", "/"),
+        "captions": (path.relative_to(chapter_dir).as_posix()
+                     if path.is_relative_to(chapter_dir) else path.as_posix()),
+        "legacy_count": len(legacy),
+        "current_count": len(current),
         "mismatches": mismatches,
     }
 
@@ -162,6 +171,8 @@ def _probe_duration(path: Path) -> float | None:
             ["ffprobe", "-v", "error", "-show_entries", "format=duration",
              "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
             capture_output=True, text=True, timeout=30, encoding="utf-8")
+        if run.returncode:
+            return None
         return round(float(run.stdout.strip()), 3)
     except (OSError, subprocess.SubprocessError, ValueError):
         return None
@@ -188,21 +199,29 @@ def keyframe_report(old_video: Path, new_video: Path, *,
     Missing videos or unavailable ffmpeg/ffprobe yield an explicit
     `unverified` result instead of a fabricated match.
     """
+    if not points or any(type(point) not in (int, float)
+                         or not math.isfinite(point) or not 0 <= point < 1
+                         for point in points):
+        raise VideoError("keyframe points must be non-empty finite fractions in [0, 1)")
     old, new = Path(old_video), Path(new_video)
     missing = [str(path) for path in (old, new) if not path.is_file()]
     if missing:
         return {"status": "unverified",
                 "reason": "video is missing: " + ", ".join(missing)}
+    if old.samefile(new):
+        return {"status": "unverified",
+                "reason": "old and new video refer to the same file"}
     old_duration = _probe_duration(old)
     new_duration = _probe_duration(new)
-    if old_duration is None or new_duration is None:
+    if any(duration is None or not math.isfinite(duration) or duration <= 0
+           for duration in (old_duration, new_duration)):
         return {"status": "unverified",
                 "reason": f"ffprobe could not read a video duration: "
                           f"{old} or {new}"}
     frames = []
     for fraction in points:
-        old_at = round(old_duration * fraction, 3)
-        new_at = round(new_duration * fraction, 3)
+        old_at = round(min(old_duration, new_duration) * fraction, 3)
+        new_at = old_at
         old_sha = _frame_sha(old, old_at)
         new_sha = _frame_sha(new, new_at)
         frames.append({
@@ -218,13 +237,14 @@ def keyframe_report(old_video: Path, new_video: Path, *,
         "new": str(new),
         "old_duration_s": old_duration,
         "new_duration_s": new_duration,
+        "duration_match": abs(old_duration - new_duration) <= VIDEO_DURATION_TOLERANCE_S,
         "frames": frames,
     }
     if any(frame["old_sha256"] is None or frame["new_sha256"] is None
            for frame in frames):
         report["status"] = "unverified"
         report["reason"] = "ffmpeg could not extract every comparison frame"
-    elif all(frame["match"] for frame in frames):
+    elif report["duration_match"] and all(frame["match"] for frame in frames):
         report["status"] = "identical"
     else:
         report["status"] = "different"

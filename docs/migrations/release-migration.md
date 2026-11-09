@@ -1,6 +1,6 @@
 # 发布迁移说明：从旧构建链到 bookctl
 
-> 状态（2026-11-08）：命令入口与发布装配脚本已经落地；P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按远端/干净克隆证据勾选，P3/P5 门禁尚未批准。`v0.3.6` 已由 `release.yml` 的标签推送运行（run 42423483244）装配并发布为 GitHub Release；该版正文由人工改写成 Markdown，装配脚本现改为直接生成 `release-notes.md`（下一次标签运行生效）。本文把“已验证”和“待补证”分开写。
+> 状态（2026-11-09）：P3 输出与 P5 现有账本 Gate 已完成本地审阅，见[验收续作](spec-verification-2026-11-09.md)；P3.8 的迁移偏差仍保留。P4 产品页视觉审计为 GREEN，P7 门禁与 P8.5 已按此前远端/干净克隆证据勾选。P6 缺独立新版视频，用户确认保留媒体验收未完成。`v0.3.6` 已由 `release.yml` 的标签运行 42423483244 发布；本轮没有新的远端 CI 或发布结果。该版正文由人工改写成 Markdown，装配脚本已改为生成 `release-notes.md`，下一次标签运行生效。
 
 ## 1. 范围
 
@@ -85,14 +85,15 @@ python yuyu-book/build.py --lang both --pdf
 ### 已有本地证据
 
 - 入口迁移：`bookctl` 的 `doctor` / `check` / `build` / `video` / `release` / `deps` / `clean` 已接线，旧 `yuyu-book/build.py` 已从入口删除。
-- P3 同输入结构对照：两套内核产物的结构差异为零，索引页码漂移与纯家具空白页均为零，见 [legacy-v2-structure.md](legacy-v2-structure.md)。该报告同时说明 P3 Gate 尚未批准，provenance 审阅仍未完成。
+- P3 同输入结构对照：两套内核产物的结构差异为零，索引页码漂移与纯家具空白页均为零，见 [legacy-v2-structure.md](legacy-v2-structure.md)。来源与政策已在 2026-11-09 复核，冻结工件摘要一致，输出 Gate 收口。
 - P4 产品页视觉审计：门户、两版入门分册与图集共用一套墨色令牌，生成器两次运行字节一致，见 [product-visual-audit.md](product-visual-audit.md)。
-- P5 内容与断言账本：15 章案例可执行、中英代码对应、claim 边界测试通过；来源提交与候选测试仍待独立审阅，见 [legacy-v2-structure.md](legacy-v2-structure.md) 的候选记录。
+- P5 内容与断言账本：15 章案例可执行、中英代码对应，现有 6 条 claim 发布校验无告警，18 项边界测试通过；过期条目在发布入口实际阻断。范围见[验收续作](spec-verification-2026-11-09.md)。
 - 发布装配的代码合同：版本一致性、临时目录装配、原子改名、`SHA256SUMS` 与两份构建报告都在 `scripts/release.py` 中实现。
 
 ### 仍待补证
 
-- P3/P5 门禁的正式批准；`task_verify` 仍为 unverified。
+- P3.8 跳过弃用阶段的迁移偏差、P6 旧新字幕与独立渲染视频的兼容审阅。
+- 本轮代码的远端 CI 尚未运行；历史 `task_verify` 的 unverified 不改写成通过。
 - 若书稿或版式变化，README 的 PDF 页数与 HTML 体积要按发布 CI 的 Noto 产物重钉，不能用本机字体数字替代。
 
 ## 7. 发布检查清单

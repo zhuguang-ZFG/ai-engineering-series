@@ -297,6 +297,8 @@ PDF 阶段另有五道：命名目标缺失（`no destination found for ...`）�
 
 CI 的书籍门禁统一在 `.github/workflows/book.yml`：`Fast` 运行源码装配、两套单测、内容、图语法、视频配置和产品幂等检查；`Full` 在 Fast 后运行渲染与双语 PDF；`Omp` 独立检查第二分册；`Bootstrap` 矩阵检查 Windows 与 Ubuntu 环境。`.github/workflows/release.yml` 负责版本一致性、最终装配、校验和与标签发布；`pages.yml` 负责站点部署。旧 `check-book.yml` 已退出。工作流存在不等于已执行通过，合并时必须核对同一候选提交的远端状态。架构边界见 [架构决策记录](docs/architecture-decisions.md)。
 
+视频迁移的实物比较使用 `python scripts/bookctl.py video compare --help`。指定章节、长短格式、旧 SRT/VTT、新流程生成的 transcript JSON，以及独立渲染的旧新版视频；`--report` 写出带输入 SHA-256 的审阅结果。缺少任何一侧的视频或字幕证据都不能判为通过；抽样帧检查不代替 `video check --audio`。分句或时间轴有意变更时，保留差异报告并审阅，不能放宽比较阈值消除结果。示例及已知缺口见 [P6 验收续作](docs/migrations/spec-verification-2026-11-09.md)。
+
 ## 9. 反馈渠道
 
 技术错误、案例补充、表达改进都欢迎走 Issue 或 PR，请附上章节、小节、建议改法与参考来源。涉及 Anthropic 官方行为变更时，优先给出可钉住的来源链接（带 tag 或完整 commit SHA）。

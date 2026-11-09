@@ -260,6 +260,20 @@ class LegacyCaptionComparison(unittest.TestCase):
         self.assertIn("cue 0: start 0.0 != 0.5", result["mismatches"])
         self.assertIn("cue 0: end 2.0 != 2.5", result["mismatches"])
 
+    def test_equal_joined_text_cannot_hide_words_in_the_wrong_cue(self):
+        with tempfile.TemporaryDirectory() as directory:
+            chapter = self._chapter(directory)
+            (chapter / "legacy" / "captions.srt").write_text(
+                "1\n00:00:00,000 --> 00:00:02,000\n甲乙\n\n"
+                "2\n00:00:02,000 --> 00:00:04,000\n丙丁\n",
+                encoding="utf-8")
+            result = timeline.caption_report(
+                episode(legacy={"dir": "legacy"}), chapter,
+                {"long": [{"start": 0, "end": 2, "text": "甲"},
+                          {"start": 2, "end": 4, "text": "乙丙丁"}]}, "long")
+        self.assertEqual(result["status"], "mismatch", result)
+        self.assertIn("cue 0: text differs", result["mismatches"])
+
     def test_compat_report_does_not_store_unverified_captions(self):
         index = (
             '<div id="root" data-duration="20" data-width="1080" '
@@ -286,6 +300,63 @@ class LegacyCaptionComparison(unittest.TestCase):
 
 
 class KeyframeComparison(unittest.TestCase):
+    def test_equal_frames_cannot_hide_changed_duration(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old, new = Path(directory) / "old.mp4", Path(directory) / "new.mp4"
+            old.touch()
+            new.touch()
+            with mock.patch.object(timeline, "_probe_duration", side_effect=[10., 20.]), \
+                    mock.patch.object(timeline, "_frame_sha", return_value="a" * 64):
+                result = timeline.keyframe_report(old, new)
+        self.assertEqual(result["status"], "different", result)
+        self.assertFalse(result["duration_match"])
+
+    def test_both_frames_are_sampled_at_the_same_absolute_time(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old, new = Path(directory) / "old.mp4", Path(directory) / "new.mp4"
+            old.touch()
+            new.touch()
+            with mock.patch.object(timeline, "_probe_duration", side_effect=[10., 10.05]), \
+                    mock.patch.object(timeline, "_frame_sha", return_value="a" * 64):
+                result = timeline.keyframe_report(old, new)
+        self.assertEqual(result["status"], "identical", result)
+        for frame in result["frames"]:
+            self.assertEqual(frame["old_at_s"], frame["new_at_s"])
+
+    def test_empty_or_invalid_sample_points_cannot_pass(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old, new = Path(directory) / "old.mp4", Path(directory) / "new.mp4"
+            old.touch()
+            new.touch()
+            with mock.patch.object(timeline, "_probe_duration", return_value=10.), \
+                    mock.patch.object(timeline, "_frame_sha", return_value="a" * 64):
+                for points in ((), (-0.1,), (1.,), (float("nan"),), (True,)):
+                    with self.subTest(points=points):
+                        with self.assertRaises(model.VideoError):
+                            timeline.keyframe_report(old, new, points=points)
+
+    def test_nonpositive_or_nonfinite_duration_is_unverified(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old, new = Path(directory) / "old.mp4", Path(directory) / "new.mp4"
+            old.touch()
+            new.touch()
+            with mock.patch.object(timeline, "_frame_sha", return_value="a" * 64):
+                for duration in (0., -1., float("inf"), float("nan")):
+                    with self.subTest(duration=duration), \
+                            mock.patch.object(timeline, "_probe_duration", return_value=duration):
+                        result = timeline.keyframe_report(old, new)
+                        self.assertEqual(result["status"], "unverified", result)
+
+    def test_the_same_file_is_not_an_independent_render(self):
+        with tempfile.TemporaryDirectory() as directory:
+            old = Path(directory) / "old.mp4"
+            old.touch()
+            with mock.patch.object(timeline, "_probe_duration", return_value=10.), \
+                    mock.patch.object(timeline, "_frame_sha", return_value="a" * 64):
+                result = timeline.keyframe_report(old, old)
+        self.assertEqual(result["status"], "unverified", result)
+        self.assertIn("same file", result["reason"])
+
     def test_missing_videos_are_explicitly_unverified(self):
         with tempfile.TemporaryDirectory() as directory:
             old = Path(directory) / "old.mp4"
