@@ -507,6 +507,21 @@ Claude Code 的四级压缩是装在对话循环里的自动防线，而 oh-my-p
 - 对话循环的预处理管线中，上下文压缩在哪一步执行？为什么在这个位置？
 - Fork 创建子 Agent 时，如果父 Agent 的上下文已经压缩过，子 Agent 会继承什么？这对子 Agent 的行为有什么影响？
 
+**最小可运行案例：** 按 200,000 窗口与 16,384 输出上限算有效窗口（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `effective=183616 reserved=16384`
+**前置：** 第 6 章的记忆文件；**回链：** 第 6 章的记忆文件成本
+
+```python
+# exercise: ch07
+# expected: effective=183616 reserved=16384
+WINDOW = 200_000
+MAX_OUTPUT = 16_384
+reserved = min(MAX_OUTPUT, 20_000)
+print(f"effective={WINDOW - reserved} reserved={reserved}")
+```
+
 ---
 
 ## 关键要点

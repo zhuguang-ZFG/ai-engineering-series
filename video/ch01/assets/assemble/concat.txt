@@ -1,6 +1,0 @@
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-hook.mp4'
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-paradigm.mp4'
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-arch.mp4'
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-principles.mp4'
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-practice.mp4'
-file 'D:/Users/claude/claude-code-book-main/video/ch01/assets/assemble/part-outro.mp4'

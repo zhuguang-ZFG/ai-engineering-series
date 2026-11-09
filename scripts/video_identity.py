@@ -57,6 +57,13 @@ def classify(path: str) -> tuple[str, str] | None:
         return "review", "review artefact"
     if name in CONFIG_NAMES or name.endswith(".lock.json"):
         return "config", "project/tool configuration"
+    if parts[:2] == ["video", "chapters"]:
+        if suffix in {".yaml", ".yml"}:
+            return "source", "chapter pipeline config"
+        if name in {"content-pack.json", "compat-report.json"}:
+            return "generated", "pipeline output"
+        if name.startswith("script-") and suffix in {".md", ".txt"}:
+            return "source", "chapter narration script"
     if name in SOURCE_NAMES:
         return "source", "authored narration/visual spec"
     if "huashu-specs" in parts:

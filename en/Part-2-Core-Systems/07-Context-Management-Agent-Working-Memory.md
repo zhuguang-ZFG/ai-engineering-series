@@ -507,6 +507,21 @@ Combining Chapter 2 (Conversation Loop) and Chapter 9 (Fork Pattern), analyze th
 - In the conversation loop's preprocessing pipeline, at which step does context compression execute? Why at that position?
 - When a Fork creates a sub-Agent, if the parent Agent's context already went through compression, what does the sub-Agent inherit? What impact does this have on the sub-Agent's behavior?
 
+**Minimal runnable case:** Compute the effective window from 200,000 and a 16,384 output cap (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `effective=183616 reserved=16384`
+**Prerequisite:** Chapter 6's memory files; **Backlink:** Chapter 6's cost of memory files
+
+```python
+# exercise: ch07
+# expected: effective=183616 reserved=16384
+WINDOW = 200_000
+MAX_OUTPUT = 16_384
+reserved = min(MAX_OUTPUT, 20_000)
+print(f"effective={WINDOW - reserved} reserved={reserved}")
+```
+
 ---
 
 ## Key Takeaways

@@ -1,1 +1,24 @@
-<svg class="a-hub" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M28.5 24.6q4.6-1.8 8.8.6t3.2 7.6q-2.4 5.2-8.4 5.2t-8.6-4.4q-1.6-5.4 5-9" pathLength="100"/><circle class="pulse" cx="12" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="52" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="12" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2"/><circle class="pulse" cx="52" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2"/><path d="M25.8 25.8q-6.5-6.5-9.8-9.2" pathLength="100"/><path d="M38.2 25.8q6.5-6.5 9.8-9.2" pathLength="100"/><path d="M25.8 38.2q-6.5 6.5-9.8 9.2" pathLength="100"/><path d="M38.2 38.2q6.5 6.5 9.8 9.2" pathLength="100"/><path d="M31.5 23.5q1-5.5.6-11" opacity=".25" stroke-width="1.2" pathLength="100"/><circle cx="32" cy="32" r="2" fill="currentColor" stroke="none"/><circle cx="20.6" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="43.2" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="20.6" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/><circle cx="43.2" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/><path d="M27.5 29.8q4.5-2 8.2.4t2.8 6.8" opacity=".5" stroke-width="1.3" pathLength="100"/><circle cx="12" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="52" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="12" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/><circle cx="52" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/></svg>
+<svg class="a-hub" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M29.7 23.8c7.3-2.8 13.3 4.2 10.3 10.2-3 7-13 6-16.5-1-2.8-5 1.2-9 6.2-9.2Z" stroke-width="2.7" pathLength="100"/>
+  <circle class="pulse" cx="12" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="52" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="12" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="52" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <path d="M25.8 25.8q-6.7-4.1-9.8-9.2" stroke-width="2.3" pathLength="100"/>
+  <path d="M38.2 25.8q3.9-6.1 9.8-9.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M25.8 38.2q-4.2 6.5-9.8 9.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M38.2 38.2q6 3.3 9.8 9.2" stroke-width="2.6" pathLength="100"/>
+  <path d="M31.5 23.5q1.2-5.4.5-11.2" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <path d="M25.6 25.1c-3.4 5.8 0 12.8 7.1 12.8q-7.2 2.3-9.7-4.8-1.7-4.9 2.6-8Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+  <circle cx="20.6" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="43.2" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="20.6" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="43.2" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="M27.5 29.8q4.5-2 8.2.4t2.2 5.8" stroke-width=".9" opacity=".4" pathLength="100"/>
+  <path d="m35.5 35.6 2.1 2.1m-3.9-.6 2.6 2.1" stroke-width=".75" opacity=".35" pathLength="100"/>
+  <circle cx="12" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="52" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="12" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="52" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+</svg>

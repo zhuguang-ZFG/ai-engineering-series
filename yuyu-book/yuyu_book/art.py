@@ -1,15 +1,23 @@
-"""Chapter emblems — one small line drawing per unit, kept in the book's hand.
+"""Inline art: one small line drawing per unit, one plate per part opening.
 
-The rules below are what make a hand-drawn SVG safe to inline 20 times into a
-single offline file: no ids (the audit fails on a duplicate), no scripts or
-styles, no external references, and `currentColor` everywhere so one drawing
+The SVG rules below are what make a hand-drawn drawing safe to inline 20 times
+into a single offline file: no ids (the audit fails on a duplicate), no scripts
+or styles, no external references, and `currentColor` everywhere so one drawing
 re-inks itself in dark mode and on paper without a second asset.
+
+A generated plate cannot do any of that: it carries its own black ink with
+graded alpha, so the stylesheet flips it for dark screens and leaves it black on
+paper. Only the cover and the part openers may use one; repeated small artwork
+and the explanatory figures keep their SVG geometry and semantic animation.
 """
 from __future__ import annotations
 
 import base64
+import io
 import re
 from pathlib import Path
+
+from PIL import Image, UnidentifiedImageError
 
 from .core import BuildError
 
@@ -26,6 +34,22 @@ PLATE_BYTES = 20000
 PHOTO_BYTES = 300_000
 PHOTO_TYPES = {".png": "image/png", ".jpg": "image/jpeg",
                ".jpeg": "image/jpeg", ".webp": "image/webp"}
+# Only cover and part-openers may use tonal raster ink. Repeated small artwork
+# and explanatory figures keep SVG geometry and semantic animation anchors.
+PLATE_RASTER_BYTES = 200_000
+COVER_RASTER_BYTES = 400_000
+# A plate sits inside an aria-hidden frame, so its name is never announced
+# twice; the page contract still requires every <img> to carry one, and a
+# reader who lifts the image out of the page should know what it shows.
+PLATE_ALT = {
+    "zh": {"cover": "卷首墨版：古车与四匹马", "p1": "篇题墨版：大罗盘",
+           "p2": "篇题墨版：革带箱匣与罗盘", "p3": "篇题墨版：山径",
+           "p4": "篇题墨版：牌坊"},
+    "en": {"cover": "Cover plate: the old chariot and its four horses",
+           "p1": "Part plate: the great compass", "p2": "Part plate: the strapped chest and its compass",
+           "p3": "Part plate: the mountain path", "p4": "Part plate: the gateway"},
+}
+PLATE_ALT_FALLBACK = {"zh": "墨版插图", "en": "Ink plate"}
 
 # the one rule that decides whether a drawing is a filmstrip: `seq` among the
 # classes of its root element. render.py asks it, and the filmstrip frame-order
@@ -71,6 +95,56 @@ def _read(name: str, budget: int = MAX_BYTES) -> str | None:
     return text
 
 
+def _raster(name: str) -> Path | None:
+    """A generated ink plate for this slot, or None when none was drawn."""
+    for directory in _search_dirs():
+        path = directory / f"{name}.png"
+        if path.is_file():
+            return path
+    return None
+
+
+def _png_size(raw: bytes) -> tuple[int, int]:
+    """Decode ink pixels, not just IHDR: corrupt or opaque art must not ship."""
+    try:
+        with Image.open(io.BytesIO(raw)) as image:
+            if image.format != "PNG" or image.mode != "RGBA":
+                raise BuildError("a raster plate must be an RGBA PNG")
+            if not (0 < image.width <= 4096 and 0 < image.height <= 4096):
+                raise BuildError("a raster plate must fit within 4096 pixels per side")
+            image.load()
+            if any(high != 0 for _low, high in image.getextrema()[:3]):
+                raise BuildError("a raster plate must contain only black ink")
+            low, high = image.getchannel("A").getextrema()
+            if low != 0 or high == 0:
+                raise BuildError("a raster plate needs transparent paper and visible ink")
+            return image.size
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        raise BuildError("a raster plate must be a complete decodable PNG") from exc
+
+
+def _ink_image(name: str, budget: int, label: str = "") -> str | None:
+    """The generated plate as an inline data URI, or None when there is none.
+
+    A raster plate carries its own pixels, so it cannot follow `currentColor`;
+    it is black ink on a transparent field and the stylesheet flips it in dark
+    mode. Width and height come from the PNG header so the browser and the
+    print pass agree on the aspect ratio before the data arrives.
+    """
+    path = _raster(name)
+    if path is None:
+        return None
+    raw = path.read_bytes()
+    if len(raw) > budget:
+        raise BuildError(f"{path.name}: {len(raw)} bytes, over the {budget} "
+                         "budget for an inlined plate")
+    width, height = _png_size(raw)
+    return (f'<img class="ink-plate" src="data:image/png;base64,'
+            f'{base64.b64encode(raw).decode("ascii")}" width="{width}" '
+            f'height="{height}" alt="{label or PLATE_ALT_FALLBACK["zh"]}" '
+            'decoding="async">')
+
+
 def emblem(unit_id: str) -> str:
     """The unit's emblem as inline markup, or '' when the unit has none."""
     text = _read(unit_id)
@@ -88,18 +162,25 @@ def keeper() -> str:
     return f'<span class="kp-art" aria-hidden="true">{text}</span>'
 
 
-def headpiece(part_id: str) -> str:
+def headpiece(part_id: str, lang: str = "zh") -> str:
     """The drawing a part divider opens with, or '' when there is none."""
+    names = PLATE_ALT.get(lang, PLATE_ALT["zh"])
+    image = _ink_image(f"part-{part_id}", PLATE_RASTER_BYTES,
+                       names.get(part_id, PLATE_ALT_FALLBACK.get(lang, "")))
+    if image:
+        return f'<div class="pd-art" aria-hidden="true">{image}</div>'
     text = _read(f"part-{part_id}")
     if not text:
         return ""
     return f'<div class="pd-art" aria-hidden="true">{text}</div>'
 
 
-def cover_plate() -> str:
-    """The cover's four-horse chariot, drafted in the same hand as the
-    emblems: an inline plate costs the file 11 KB and needs no crop, no
-    filter and no bitmap."""
+def cover_plate(lang: str = "zh") -> str:
+    """The large cover plate, separate from the animated small artwork."""
+    names = PLATE_ALT.get(lang, PLATE_ALT["zh"])
+    image = _ink_image("cover", COVER_RASTER_BYTES, names["cover"])
+    if image:
+        return f'<div class="cover-art" aria-hidden="true">{image}</div>'
     text = _read("cover", PLATE_BYTES)
     if not text:
         return ""
@@ -148,4 +229,5 @@ def photo_path(path: Path, *, label: str | None = None) -> str:
 def missing(names: list[str]) -> list[str]:
     dirs = _search_dirs()
     return [n for n in names
-            if not any((d / f"{n}.svg").exists() for d in dirs)]
+            if not ((n == "cover" or n.startswith("part-")) and _raster(n))
+            and not any((d / f"{n}.svg").exists() for d in dirs)]

@@ -1,1 +1,0 @@
-aborted_streaming 与 aborted_tools 对应用户在流式或工具期中断；max_turns、blocking_limit、prompt_too_long、model_error、stop_hook_prevented、hook_stopped、image_error 覆盖循环上限、硬顶、恢复失败、API 异常、Hook 拦截与图片格式问题。

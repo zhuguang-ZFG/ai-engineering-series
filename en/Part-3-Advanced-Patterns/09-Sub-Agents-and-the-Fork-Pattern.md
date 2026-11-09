@@ -11,7 +11,7 @@
 
 You ask Claude Code to add OAuth2 to the login module. It opens `src/routes/auth.ts`, follows the imports into the middleware, then into the tests, and by the fortieth file the window holds nothing but source it will never use again. When you finally tell it to start writing, it has lost the line you typed three turns ago: "we use Prisma."
 
-The model is not the problem. You have crammed recon and construction into one head. What works is this: the main agent stays put and decides the next step, while "go find out how authentication works today" goes to a brand-new agent carrying a single sentence — it reads the files and comes back with a conclusion. The less it brings back, the cleaner the main conversation stays. And when several independent investigations each need to see the same context, you use the Fork pattern: one fork spawns parallel agents that share the prefix the main conversation has already cached, so nobody pays the tuition twice.
+Reconnaissance and implementation are competing for the same context. An ordinary sub-task can receive a specific investigation: locate the authentication entry point, identify the ORM and existing tests, then report file locations, call relationships, and unresolved questions. The main agent keeps the findings it needs for decisions rather than every raw search result. When several independent investigations depend on background already established in the main conversation, Fork preserves the common prefix at the split and appends a separate directive for each task. That reduces the cost of processing the shared prefix again; new input, generated output, and tool calls still have their own costs.
 
 <!-- block: ch09.b-556173a5 -->
 That is what a Subagent is. The main agent is like an orchestra conductor: it does not play every instrument itself but hands each section to its own expert. This chapter covers the complete AgentTool architecture, the design philosophy of built-in agents, and how the Fork pattern uses cache sharing to run in parallel without wasting tokens.
@@ -34,6 +34,8 @@ The AgentTool code resides in the agent tools directory and consists of the foll
 | Utility functions | Tool filtering, parsing, result formatting, etc. | Reusable infrastructure |
 
 The core design principle of this architecture is **separation of concerns**: the tool main entry is responsible for "deciding what to do," the runner is responsible for "how to do it," and the Fork module handles a specific "how to do it more efficiently" strategy.
+
+Trace one call to separate the responsibilities: the input asks for an investigation of authentication middleware; the entry point selects an execution path; the runner assembles the chosen definition's prompt, tools, and resources; the sub-task returns its findings. Background execution changes whether the main conversation waits for the result. Fork changes how the request context is built. Neither replaces permission checks when a tool is called.
 
 <!-- block: ch09.b-0d35473a -->
 > **Architecture Insight: Why not merge routing logic and execution logic?**
@@ -251,6 +253,8 @@ If you are familiar with the `fork()` system call in Unix, Claude Code's Fork pa
 | Resource savings | Copy-on-Write memory sharing | Prompt Cache token sharing |
 | Recursion protection | Process level limits | querySource check |
 
+The analogy borrows only the idea of splitting from one point in time. It does not mean the harness calls the operating system's `fork()`, or that parent and child share writable memory. A later instruction in the parent conversation to leave the login API unchanged does not automatically reach an already-running child. Yet a child with access to the same working directory may read files that someone has since edited. A conversation-prefix snapshot is not a filesystem snapshot.
+
 ### Core Design of the forkSubagent Module
 
 Activating the Fork pattern requires three conditions: the feature gate enabled, non-Coordinator mode, and non-non-interactive mode. When Coordinator mode is active, Fork mode automatically disables because the Coordinator already has its own task delegation model.
@@ -302,6 +306,8 @@ graph TD
 
 These five dimensions correspond to the components of the Anthropic API cache key: system prompt, tools, model, messages prefix, and thinking config. Only when all five dimensions are exactly consistent can a sub-request hit the parent request's cache.
 
+Do not match these two sets of five by field name. `CacheSafeParams` is the caller's structure for carrying context; the second list describes request content whose consistency matters. The model and thinking configuration must also be checked through `toolUseContext`. Comparing five top-level fields is not enough to declare a hit. Consistency preserves the conditions for reuse; returned cache usage shows how much was actually reused.
+
 The Fork path sets the `useExactTools` flag, so tool definitions stay unchanged — when Fork mode activates, it uses the parent's tool pool directly rather than re-resolving agent tools, and the definitions line up byte for byte.
 
 This cache contract breaks most often under the confidence of "I only changed a few words." The five costliest wrong turns:
@@ -317,6 +323,8 @@ This cache contract breaks most often under the confidence of "I only changed a 
 ### How buildForkedMessages Builds Messages
 
 The Fork message construction function is the core of cache sharing. Its processing logic is as follows: first, preserve the complete parent assistant message (including all tool_use blocks, thinking, and text, but with new UUIDs assigned); then collect all tool_use blocks; generate a uniform fixed-string placeholder tool_result for each tool_use; and finally construct a single user message containing the placeholder results and the sub-task directive.
+
+The placeholders solve a message-structure problem. When the parent assistant emits several `tool_use` blocks, the child request needs corresponding result slots before it can continue with its own directive. A fixed string is not evidence that those tools ran successfully. The child must establish its own findings rather than treating a placeholder as proof that a file was read or an edit completed.
 
 The key point is that all Fork sub-agents share the placeholder results as the fixed string "Fork started -- processing in background." What follows:
 
@@ -582,7 +590,7 @@ Async (background) agents have their toolset further restricted to a whitelist s
 
 ### filterToolsForAgent
 
-The tool filtering function is the final arbiter, implementing a three-layer filtering mechanism: MCP tools are always available; it always excludes globally disallowed tools; async agents can only use whitelisted tools, but in-process teammates can receive partial exemptions.
+The filtering function decides which tools appear in a sub-agent's tool pool: MCP tools remain; globally disallowed tools are excluded; asynchronous agents also face a whitelist, with some exemptions for in-process teammates. Available here does not mean authorized to execute. A database MCP tool may remain in the pool, for example, but a write still has to pass the MCP permission checks in Chapter 12. Surviving the filter does not waive approval.
 
 > **Design Consideration: Why are MCP tools always available?**
 >
@@ -633,6 +641,8 @@ Before a sub-agent begins execution, the runner constructs a complete execution 
 3. **MCP server initialization**: Establishes connections for agent-specific MCP servers
 4. **Skill preloading**: Loads the skills specified in the agent definition
 5. **Memory injection**: If the memory option is enabled, injects persistent memory content
+
+Resource ownership matters here too. This run establishes and cleans up its dedicated MCP connections; a connection borrowed from the parent must not be closed just because the child finishes. Preloading a Skill prepares instructions, not evidence that the requested operations happened. The final findings, tool operations actually performed, and usage incurred need separate records.
 
 ### Resource Cleanup Phase
 
@@ -696,6 +706,25 @@ Design a complete software development workflow using the following combination 
 5. Verify the implementation with an independent verification agent; if the built-in Verification Agent is unavailable, use a custom agent with explicit tool restrictions
 
 Write out the input and expected output for each step.
+
+**Minimal runnable case:** Compare the byte prefix of a parent request and its fork (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** two lines: `prefix: [{"content": "fix", "role": "user"}]` and `shared: True`
+**Prerequisite:** Chapter 8's hook ordering; **Backlink:** Chapter 2's context rebuild
+
+```python
+# exercise: ch09
+# expected:
+# prefix: [{"content": "fix", "role": "user"}]
+# shared: True
+import json
+parent = [{"role": "user", "content": "fix"}]
+fork = parent + [{"role": "tool", "content": "ok"}]
+prefix = json.dumps(parent, sort_keys=True)
+print("prefix:", prefix)
+print("shared:", json.dumps(fork[:len(parent)], sort_keys=True) == prefix)
+```
 
 ---
 

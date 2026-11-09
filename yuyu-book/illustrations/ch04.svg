@@ -1,1 +1,13 @@
-<svg class="a-gate" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 32.3q5.5-1 10.5-.3" pathLength="100"/><path d="M47.5 31.7q5.5-.7 10.5.3" pathLength="100"/><path d="M22 12q-1 20 .5 40" opacity=".5" pathLength="100"/><path d="M42 12q1 20-.5 40" opacity=".5" pathLength="100"/><path class="redraw" d="M26.5 33.5q2 2.5 4 4.5 5-8 10.5-13.5" stroke-width="2.6" pathLength="100"/><path d="M28 34.5q2.5 2.5 3.5 4" opacity=".3" stroke-width="1.2" pathLength="100"/><circle cx="22" cy="17" r="1.2" fill="currentColor" stroke="none" opacity=".55"/><circle cx="42" cy="47" r="1.2" fill="currentColor" stroke="none" opacity=".55"/></svg>
+<svg class="a-gate" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5.7 32.4q5.1-1.1 10.8-.4" stroke-width="2.5" pathLength="100"/>
+  <path d="M48 31.8q5.2-.8 10.5.2" stroke-width="2.5" pathLength="100"/>
+  <path d="M21.4 12Q20 31 21.7 51.5l3-.5" stroke-width="2.7" pathLength="100"/>
+  <path d="M42.4 12q1.2 20-.6 39.3l-3.1.4" stroke-width="2.5" pathLength="100"/>
+  <path class="redraw" d="M26.1 33.5q2.3 1.4 4.5 4.7Q35 30.8 40.9 25" stroke-width="3" pathLength="100"/>
+  <path d="M27.5 34.3q2.2 1 3.6 3.8" stroke-width=".8" opacity=".32" pathLength="100"/>
+  <path d="m18.1 12.4 6.3-.8m14.4.5 6.3.4M18.9 51.8l6.3-.3m13.5.9 6.1-.9" stroke-width="1.2" opacity=".65" pathLength="100"/>
+  <path d="M21.4 13q1.6 20 .3 37.4l-1.3-15.7ZM42.4 13l1.3 24.6-1.9 12.6Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="m17.3 18 3.4-2m-3.4 5.5 3.3-2m22.6 25.4 3.3-2.2m-3.6 5.5 3.3-2" stroke-width=".8" opacity=".32" pathLength="100"/>
+  <circle cx="22" cy="17" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+  <circle cx="42" cy="47" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+</svg>

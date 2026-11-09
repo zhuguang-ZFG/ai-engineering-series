@@ -1,1 +1,0 @@
-stop_hook_blocking：Stop hook 拦停后把信息注回，让模型有机会换策略。token_budget_continuation：预算提醒，不是粗暴掐断。每条路径写清 transition reason，异常时就是黑匣子。

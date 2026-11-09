@@ -1,180 +1,129 @@
 name: Book CI
-
 on:
   push:
     branches: [main]
-    paths:
-      - '00-前言.md'
-      - '第一部分-基础篇/**'
-      - '第二部分-核心系统篇/**'
-      - '第三部分-高级模式篇/**'
-      - '第四部分-工程实践篇/**'
-      - '附录/**'
-      - 'en/**'
-      - 'omp/**'
-      - 'pi/**'
-      - 'yuyu-book/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - 'docs/yuyu-overhaul/check_bilingual_parity.py'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/book.yml'
   pull_request:
     paths:
-      - '00-前言.md'
-      - '第一部分-基础篇/**'
-      - '第二部分-核心系统篇/**'
-      - '第三部分-高级模式篇/**'
-      - '第四部分-工程实践篇/**'
-      - '附录/**'
-      - 'en/**'
-      - 'omp/**'
+      - '**.md'
       - 'pi/**'
       - 'yuyu-book/**'
       - 'scripts/**'
       - 'tests/**'
-      - 'docs/yuyu-overhaul/check_bilingual_parity.py'
+      - 'video/**'
+      - 'docs/**'
+      - '.github/**'
+      - '*lock*'
+      - 'pyproject.toml'
       - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/book.yml'
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+concurrency:
+  group: book-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  book:
+  fast:
+    name: Fast
     runs-on: ubuntu-latest
-    # A healthy run finishes in under 4 minutes, so 30 was never about the
-    # build — it was the ceiling that killed a run whose apt mirror crawled.
-    # Kept generous enough that a slow mirror still ships a book.
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
+        with:
+          browser: 'true'
+      - run: python docs/yuyu-overhaul/check_bilingual_parity.py
+      - run: python scripts/bookctl.py check --fast
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fast-reports
+          path: .scratch/reports/*.json
+          if-no-files-found: error
+          include-hidden-files: true
+  full:
+    name: Full
+    needs: fast
+    # Fast is the only tier a pull request must pay for; rendered HTML/PDF
+    # evidence is produced on main and by explicit dispatch.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: npm
-
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
         with:
-          python-version: '3.12'
-
-      - run: npm ci
-
-      - run: python -m pip install -r yuyu-book/requirements.txt
-
-      - name: Check bilingual chapter structure
-        run: python docs/yuyu-overhaul/check_bilingual_parity.py
-
-      # Playwright ships as a Python dependency here, so the browser comes from
-      # `python -m playwright install`, not `npx playwright`. The build is run
-      # without --browser on purpose: only the auto-detected msedge/chrome/
-      # chromium launches pass --allow-file-access-from-files, which the mermaid
-      # harness needs to import the ESM bundle from file://. Noto CJK faces are
-      # required for the printed pages and the diagram labels.
-      #
-      # Two downloads, two steps, each with its own clock. One run drew an
-      # azure.archive.ubuntu.com serving fonts-noto-cjk at 25 kB/s: it spent 26
-      # minutes on the font package, never reached the browser, and the job died
-      # as "cancelled" with the culprit buried in the log. Bounding each fetch
-      # says which mirror failed, on the step that failed, in minutes.
-      - name: Install CJK fonts
-        timeout-minutes: 12
-        run: |
-          sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 \
-               install -y fonts-noto-cjk
-
-      - name: Install Chromium
-        timeout-minutes: 15
-        run: python -m playwright install --with-deps chromium
-
+          browser: 'true'
       - run: python scripts/bookctl.py check --full
-
-      # README quotes how long each printed sheet runs and how big each single
-      # file is. The page count follows the CJK face on the build machine, so
-      # this only goes green against the same sheets CI just typeset.
-      - name: The README numbers match the built book
-        run: python scripts/check_artifact_claims.py
-
+      - run: python scripts/check_artifact_claims.py
+      - run: python scripts/check_visual_layout.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: product-visual-layout
+          path: .scratch/visual-check/*
+          include-hidden-files: true
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: yuyu-book-dist
           path: yuyu-book/dist/*
           if-no-files-found: error
-
-  # 第二分册 omp（product=omp · 仅中文）。独立 job、故意不写 needs：omp 排印失败
-  # 不把御舆那一格染红，御舆失败也不挡 omp —— Task M4 Step 4 的口径。
-  # 上面 paths 里加了 'omp/**'，所以改 omp 也会重跑御舆那一格：这是有意的，
-  # 「不伤 book」这条契约只能在 omp 改动上被验证，而不是靠约定。
   omp:
+    name: Omp
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: npm
-
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
         with:
-          python-version: '3.12'
-
-      - run: npm ci
-
-      - run: python -m pip install -r yuyu-book/requirements.txt
-
-      - name: Install CJK fonts
-        timeout-minutes: 12
-        run: |
-          sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 \
-               install -y fonts-noto-cjk
-
-      - name: Install Chromium
-        timeout-minutes: 15
-        run: python -m playwright install --with-deps chromium
-
-      - name: Build the omp edition (zh + PDF)
-        run: |
+          browser: 'true'
+      - run: |
           python omp/overhaul/audit_structure.py --check
           python omp/overhaul/audit_delivery.py
+          python scripts/bookctl.py build --product omp --check --mermaid source
           python scripts/bookctl.py build --product omp --lang zh --pdf
-
       - uses: actions/upload-artifact@v4
         with:
           name: yuyu-omp-dist
           path: yuyu-book/dist/yuyu-omp-*
           if-no-files-found: error
-
+  bootstrap:
+    name: Bootstrap (${{ matrix.os }})
+    if: github.event_name != 'pull_request'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
+        with:
+          browser: 'true'
+      - run: python scripts/bookctl.py doctor
+      - run: python scripts/bookctl.py build --check --mermaid source
   pi:
+    name: Pi
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: npm
-      - uses: actions/setup-python@v5
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
         with:
-          python-version: '3.12'
-      - run: npm ci
-      - run: python -m pip install -r yuyu-book/requirements.txt
-      - name: Install CJK fonts
-        timeout-minutes: 12
-        run: |
-          sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30                install -y fonts-noto-cjk
-      - name: Install Chromium
-        timeout-minutes: 15
-        run: python -m playwright install --with-deps chromium
-      - name: Build the Pi edition (zh + PDF + EPUB)
-        run: python scripts/bookctl.py build --product pi --lang zh --pdf --epub
+          browser: 'true'
+      - run: python scripts/bookctl.py build --product pi --lang zh --pdf --epub
       - uses: actions/upload-artifact@v4
         with:
           name: yuyu-pi-dist

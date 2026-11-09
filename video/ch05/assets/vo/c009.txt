@@ -1,1 +1,0 @@
-你自己的临时调整，比如今天要开 verbose、这个项目要多给一条权限，写进 settings.local.json——它在 .gitignore 里，不会污染别人。第二种，CI/CD 专用。

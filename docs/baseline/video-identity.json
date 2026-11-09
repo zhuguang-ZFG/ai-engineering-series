@@ -1,10 +1,10 @@
 {
   "counts": {
     "cache": 0,
-    "config": 35,
-    "generated": 98,
-    "review": 15,
-    "source": 325,
+    "config": 25,
+    "generated": 80,
+    "review": 20,
+    "source": 392,
     "third_party": 1
   },
   "files": [
@@ -23,13 +23,6 @@
       "sha256": "28c230756a51c8c844af334463348f41f7ea2184e72db58fcb6aead4d1c29d30"
     },
     {
-      "bytes": 132,
-      "category": "generated",
-      "path": "video/ch01/assets/build/assemble-meta.json",
-      "reason": "pipeline output",
-      "sha256": "bf4939764d7858b475e43e84619a4b743c557c5641dc30693c0cef782388d39b"
-    },
-    {
       "bytes": 4819,
       "category": "source",
       "path": "video/ch01/assets/build/assemble.py",
@@ -42,13 +35,6 @@
       "path": "video/ch01/assets/build/build_all.py",
       "reason": "authored build script",
       "sha256": "7ee89ca2569ed626461eaf508f11d2724c20f52325e466bfab1c4e6d6e1b1b11"
-    },
-    {
-      "bytes": 20877,
-      "category": "generated",
-      "path": "video/ch01/assets/build/chunks.json",
-      "reason": "pipeline output",
-      "sha256": "0081234b82ef6c4258fe6747c69dcbf133dc41ad3a6977cab2c007735281fb90"
     },
     {
       "bytes": 4564,
@@ -84,13 +70,6 @@
       "path": "video/ch01/assets/build/segments/list.txt",
       "reason": "narration slice / concat list",
       "sha256": "f0b1e68fcf2a5ea466d73843d9ffd5cfed4e7aca9949417d1a8742a45439e2bc"
-    },
-    {
-      "bytes": 27276,
-      "category": "generated",
-      "path": "video/ch01/assets/build/timeline.json",
-      "reason": "pipeline output",
-      "sha256": "a94addc8944aa428f53333b3d40386150aed2dd28ed0df2bb6222a81d787ebea"
     },
     {
       "bytes": 2975,
@@ -135,25 +114,11 @@
       "sha256": "f19ab0a60c55769ec3987eadd53f37673430272732ec3705d316d1597f040fc2"
     },
     {
-      "bytes": 1646,
-      "category": "generated",
-      "path": "video/ch01/assets/sample-meta.json",
-      "reason": "pipeline output",
-      "sha256": "0daa1cd4c701194e08ef5b0b390ccccd2453e400798e34e1bce004d16d59c6d1"
-    },
-    {
       "bytes": 337,
       "category": "source",
       "path": "video/ch01/assets/sample-short.txt",
       "reason": "authored narration/visual spec",
       "sha256": "4347a5ba3726cb5303ee7f8c6f4ce141040b4e0ab926aa9fdaf628d81cd35b93"
-    },
-    {
-      "bytes": 2800,
-      "category": "generated",
-      "path": "video/ch01/assets/short-scan.json",
-      "reason": "pipeline output",
-      "sha256": "9fc91280445a2816bb90f12bf5cbc2439b2e9ff2115acda0586797b8c7f7d7bb"
     },
     {
       "bytes": 1115,
@@ -674,32 +639,11 @@
       "sha256": "27e8187c88101c4debfef3cf1e5a62755eb05c929decdfe59c0336fd45c38aca"
     },
     {
-      "bytes": 6433,
-      "category": "generated",
-      "path": "video/ch01/assets/vo/timeline.json",
-      "reason": "pipeline output",
-      "sha256": "aa50416edf8d289f2afd4a4908d8fcdfb6c6ac69841084929030fe281fd0b283"
-    },
-    {
-      "bytes": 253,
-      "category": "generated",
-      "path": "video/ch01/assets/voice-render-info.json",
-      "reason": "pipeline output",
-      "sha256": "8cbde605ba673fa61767efa5ddf4c985781ba5677b1b3c9cb10b483f26b658b9"
-    },
-    {
       "bytes": 11735,
       "category": "source",
       "path": "video/ch01/hf-long/index.html",
       "reason": "authored HyperFrames scene/composition",
       "sha256": "3422f3a04dab081c4bdd72bdb50320de7df32d2b4fe3b29e81337d0e38fdb68b"
-    },
-    {
-      "bytes": 62,
-      "category": "config",
-      "path": "video/ch01/hf-long/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "d3b69a8fcecfe359268f7644bc75a02924130acc9e8ed6a9d09532d4d5ae0d36"
     },
     {
       "bytes": 11755,
@@ -1143,13 +1087,6 @@
       "sha256": "2803a57c73db0c886bcbe605cbe21abcbe66fee72d5fd7d06fe842d577752e5b"
     },
     {
-      "bytes": 298,
-      "category": "config",
-      "path": "video/ch01/hf-remake/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "497a0cb016ff365400a0ecbdc6043efd3d0299df4b974a1cbf4ed583142051f5"
-    },
-    {
       "bytes": 411,
       "category": "review",
       "path": "video/ch01/hf-remake/short-v2/POLISH-NOTES.md",
@@ -1169,20 +1106,6 @@
       "path": "video/ch01/hf-remake/short-v2/SYNC-MAP.md",
       "reason": "authored design/plan note",
       "sha256": "e89dac9f19ba4225e01ad9deda0965e1658f2d0a25c7be314514a04ca839e5d1"
-    },
-    {
-      "bytes": 1234,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short-v2/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "669cdc15c64c57f67cdcb3a9f4d9eb5889ff9b2bf972ce7fbace4981f4562a0a"
-    },
-    {
-      "bytes": 682,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short-v2/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "60b6571c4f4b42cc5c943a4dce6f63c0cb894e327d729d1437cbf297aeff2965"
     },
     {
       "bytes": 46,
@@ -1211,13 +1134,6 @@
       "path": "video/ch01/hf-remake/short-v2/meta.json",
       "reason": "project/tool configuration",
       "sha256": "8ed027c01af62dd76114f8b02781685851fab4048e5f5edca634bcfa23e3f83f"
-    },
-    {
-      "bytes": 201,
-      "category": "config",
-      "path": "video/ch01/hf-remake/short-v2/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "dc90efba72c52bd3cf46ad27de573324f0c5ba6400ef623b4ccf7b69beba0315"
     },
     {
       "bytes": 753,
@@ -1255,20 +1171,6 @@
       "sha256": "0f2aa653e798cffb6d31f638808208b7b33cb6ffdbbddc35161c3409bdf6b9ba"
     },
     {
-      "bytes": 1234,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short-v3/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "669cdc15c64c57f67cdcb3a9f4d9eb5889ff9b2bf972ce7fbace4981f4562a0a"
-    },
-    {
-      "bytes": 682,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short-v3/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "60b6571c4f4b42cc5c943a4dce6f63c0cb894e327d729d1437cbf297aeff2965"
-    },
-    {
       "bytes": 46,
       "category": "generated",
       "path": "video/ch01/hf-remake/short-v3/assets/vo-concat.txt",
@@ -1297,13 +1199,6 @@
       "sha256": "8ed027c01af62dd76114f8b02781685851fab4048e5f5edca634bcfa23e3f83f"
     },
     {
-      "bytes": 198,
-      "category": "config",
-      "path": "video/ch01/hf-remake/short-v3/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "04e9a77123ded2f6693e552a20fecbd5db0b0c60e184a1f682835dbade7d200b"
-    },
-    {
       "bytes": 753,
       "category": "generated",
       "path": "video/ch01/hf-remake/short-v3/short-meta.json",
@@ -1316,20 +1211,6 @@
       "path": "video/ch01/hf-remake/short/SHORT-RENDER-REPORT.md",
       "reason": "review artefact",
       "sha256": "6d0fbd10c9e4144475970231a528bd5fa63c93a8ed14c7b85b2e585499094219"
-    },
-    {
-      "bytes": 1981,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "dbc089c0bcfaf374c0f3d28739b881d71bae2ff7e3289cc50012f8680ff2a76f"
-    },
-    {
-      "bytes": 2,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/short/assets/short-words.json",
-      "reason": "pipeline output",
-      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     {
       "bytes": 46,
@@ -1360,25 +1241,11 @@
       "sha256": "efec781316e1f23b422c85922a1d1b956cd1bc34b8c7b68f7f83bfe4e73e7751"
     },
     {
-      "bytes": 251,
-      "category": "config",
-      "path": "video/ch01/hf-remake/short/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "03d3bd05f7e7b87931fda93bb49511ebcabf62e3263473c243473b53d9989e2b"
-    },
-    {
       "bytes": 168,
       "category": "generated",
       "path": "video/ch01/hf-remake/short/short-meta.json",
       "reason": "pipeline output",
       "sha256": "5503dcbf6f3663af86f8e49a6154b36fca0c48ba853ff165597ebd630f128c39"
-    },
-    {
-      "bytes": 27199,
-      "category": "generated",
-      "path": "video/ch01/hf-remake/transcript.json",
-      "reason": "pipeline output",
-      "sha256": "8a1239bdca28a69aba81f81bfb48e2ccbdeb7b5cdc638e4f20566756f8f13e65"
     },
     {
       "bytes": 369,
@@ -1612,25 +1479,11 @@
       "sha256": "6c6b8387b4df633c5252d388462334305bfa0e1bb92dd2cf96210aba3129150a"
     },
     {
-      "bytes": 9557,
-      "category": "generated",
-      "path": "video/ch02/assets/vo/chunks.json",
-      "reason": "pipeline output",
-      "sha256": "253667ab2e8ac0fdebe254817ab62e1aae2d487ca187e6e2b062975e8667db53"
-    },
-    {
       "bytes": 7727,
       "category": "generated",
       "path": "video/ch02/assets/vo/full-script.txt",
       "reason": "narration slice / concat list",
       "sha256": "51eb2522cf0ffa6af547772860b2e560f907eea03963f5c78696d6e6011dd1f6"
-    },
-    {
-      "bytes": 12449,
-      "category": "generated",
-      "path": "video/ch02/assets/vo/vo-manifest.json",
-      "reason": "pipeline output",
-      "sha256": "551504c77c78cce71749f67a7e832fac24843616bd2538b8303a46bd24ac8462"
     },
     {
       "bytes": 7275,
@@ -1738,13 +1591,6 @@
       "sha256": "8adb332ec4ff744b53cf83edf1abf74aedae3dd41499b5594ae4061eeb066828"
     },
     {
-      "bytes": 253,
-      "category": "config",
-      "path": "video/ch02/hf-remake/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "46aec6217fde7e03bec3e7eeffa5f0160b3ea00fe7d0348d8c6175111893837e"
-    },
-    {
       "bytes": 542,
       "category": "review",
       "path": "video/ch02/hf-remake/short/SHORT-V1-REPORT.md",
@@ -1771,20 +1617,6 @@
       "path": "video/ch02/hf-remake/short/SYNC-MAP.md",
       "reason": "authored design/plan note",
       "sha256": "be565c06ce56f72a8942db6b6fdc909953c4a52eb8e46ab5a414edf1f302f8bc"
-    },
-    {
-      "bytes": 1323,
-      "category": "generated",
-      "path": "video/ch02/hf-remake/short/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "5efc45089ff7feb3a3de8b415a568d8e3f64ad8cf48204442564ccf3a5244f2c"
-    },
-    {
-      "bytes": 842,
-      "category": "generated",
-      "path": "video/ch02/hf-remake/short/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "fc11f5ad3619987e7b7ba542e25dfb41d109b6aff6f14238069d87a99fceea96"
     },
     {
       "bytes": 46,
@@ -1815,13 +1647,6 @@
       "sha256": "c8692dc2a0ff701c466792dde2ec6e78b65fe23c5585475edbf3137fb29ce386"
     },
     {
-      "bytes": 198,
-      "category": "config",
-      "path": "video/ch02/hf-remake/short/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "0f83b3a8ddc7e703b1d19ab7c40b7942f1c0a9ddb665167803b384c4f546a5d2"
-    },
-    {
       "bytes": 814,
       "category": "generated",
       "path": "video/ch02/hf-remake/short/short-meta.json",
@@ -1834,13 +1659,6 @@
       "path": "video/ch02/hf-remake/synth_long_vo.py",
       "reason": "authored build script",
       "sha256": "331f293d5794217471abffd0796f089c0ade4f65d323e458061908d6befab85f"
-    },
-    {
-      "bytes": 41382,
-      "category": "generated",
-      "path": "video/ch02/hf-remake/transcript.json",
-      "reason": "pipeline output",
-      "sha256": "852bdd87d78b162f252177de8c48a0cae7d110b69a5e08cbed9030c7ee5be1ad"
     },
     {
       "bytes": 2356,
@@ -2074,25 +1892,11 @@
       "sha256": "1f4c2ba7836cb773ae55a7cd777a6cb74680604eb9f2f70e91bab3e9bda630a5"
     },
     {
-      "bytes": 9306,
-      "category": "generated",
-      "path": "video/ch03/assets/vo/chunks.json",
-      "reason": "pipeline output",
-      "sha256": "acc1aed540ade2faeb9bfddab25ed273fde61f56feac4a25cb71a6d74a95b1a0"
-    },
-    {
       "bytes": 7567,
       "category": "generated",
       "path": "video/ch03/assets/vo/full-script.txt",
       "reason": "narration slice / concat list",
       "sha256": "e9a65442292a743ce2e015b2378a0cb9bfbbf027aa6ab8de6c979a4ddf56b857"
-    },
-    {
-      "bytes": 12189,
-      "category": "generated",
-      "path": "video/ch03/assets/vo/vo-manifest.json",
-      "reason": "pipeline output",
-      "sha256": "f349d5a65b743fc5d777deccb44cc77d235751315e155aee9884ed545617c235"
     },
     {
       "bytes": 7275,
@@ -2277,13 +2081,6 @@
       "sha256": "8ea75d4669daa426fc31e476de979f5e27ee6b3dd8f94aba423ab4c47b3f5fa2"
     },
     {
-      "bytes": 253,
-      "category": "config",
-      "path": "video/ch03/hf-remake/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "a5f92c57684a0aa5e28db2370a7c534c68aa9e06ca9bc35fa9c3fd8abd32c23b"
-    },
-    {
       "bytes": 190,
       "category": "review",
       "path": "video/ch03/hf-remake/short/SHORT-V1-REPORT.md",
@@ -2296,20 +2093,6 @@
       "path": "video/ch03/hf-remake/short/SYNC-MAP.md",
       "reason": "authored design/plan note",
       "sha256": "e7408c1b7c65df95c6ca9d411f3d4ef7e3dd67a8928afb3607d694aa26cee5cf"
-    },
-    {
-      "bytes": 1760,
-      "category": "generated",
-      "path": "video/ch03/hf-remake/short/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "7e051ebb5c9f789b35db7bd08cdd30e4c311eaac9ff282d4c3d1dc0b0e38d597"
-    },
-    {
-      "bytes": 1145,
-      "category": "generated",
-      "path": "video/ch03/hf-remake/short/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "a828ef4b8db147abf8c36f9cc0582616d0421405e41d400ec5cd1d7e3b1905e9"
     },
     {
       "bytes": 46,
@@ -2340,13 +2123,6 @@
       "sha256": "b45e1125b2169a4ea44743d4b4a5ad893aed5774a0dd3402fec9cabc50e892b0"
     },
     {
-      "bytes": 198,
-      "category": "config",
-      "path": "video/ch03/hf-remake/short/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "e876bf5e65163a26ff8402533bcbfdc7687cbd27af949ec35174ee68aec4b5cf"
-    },
-    {
       "bytes": 1026,
       "category": "generated",
       "path": "video/ch03/hf-remake/short/short-meta.json",
@@ -2359,13 +2135,6 @@
       "path": "video/ch03/hf-remake/synth_long_vo.py",
       "reason": "authored build script",
       "sha256": "ab06552f1b180a3c16c6ad589b2e81ef302c883ab452c4bb2353ae1b69e3562d"
-    },
-    {
-      "bytes": 39466,
-      "category": "generated",
-      "path": "video/ch03/hf-remake/transcript.json",
-      "reason": "pipeline output",
-      "sha256": "60a75cac8a97301eafde6cc0dc101a46230e231a36d1547fa7fd3e74aab9bdad"
     },
     {
       "bytes": 2356,
@@ -2550,25 +2319,11 @@
       "sha256": "7874bb7ca1f057fc0b69993d8f9ff70ffd398a81a25a3d14bce88d364bdab4b1"
     },
     {
-      "bytes": 7006,
-      "category": "generated",
-      "path": "video/ch04/assets/vo/chunks.json",
-      "reason": "pipeline output",
-      "sha256": "19391521c0bab66a57f9d48ad2b464b4918bad75448b9cffb22c643c4596e892"
-    },
-    {
       "bytes": 5686,
       "category": "generated",
       "path": "video/ch04/assets/vo/full-script.txt",
       "reason": "narration slice / concat list",
       "sha256": "acbd92b901897b6cf82c64ee69b161d1f6497fa59fb4bac312fe9bd5493f69c6"
-    },
-    {
-      "bytes": 9274,
-      "category": "generated",
-      "path": "video/ch04/assets/vo/vo-manifest.json",
-      "reason": "pipeline output",
-      "sha256": "b8b48f6738a217fcda6d222cd81f21fc7552f0b0f5e146098d6efc82a21fbe0b"
     },
     {
       "bytes": 7275,
@@ -2732,13 +2487,6 @@
       "sha256": "f9f155afc1439fd38d797f3a588c14dc1ed4d862356b04447fd4b4cd633fcf8b"
     },
     {
-      "bytes": 255,
-      "category": "config",
-      "path": "video/ch04/hf-remake/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "2b4ee74a60d0c1dc17007166ef73e5c3278177a660179a105ed762739f798e91"
-    },
-    {
       "bytes": 244,
       "category": "review",
       "path": "video/ch04/hf-remake/short/SHORT-V1-REPORT.md",
@@ -2751,20 +2499,6 @@
       "path": "video/ch04/hf-remake/short/SYNC-MAP.md",
       "reason": "authored design/plan note",
       "sha256": "c209f931b26deda9c5cd14ceab72e9f9dcf4c551b5abc9ef86e0541cc7069023"
-    },
-    {
-      "bytes": 1511,
-      "category": "generated",
-      "path": "video/ch04/hf-remake/short/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "b7412e419b92f450f8ccc39f1bd5a7682932542a71aab471c875cb7aa4e3d024"
-    },
-    {
-      "bytes": 961,
-      "category": "generated",
-      "path": "video/ch04/hf-remake/short/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "a632c1f34f0610d4dff5c7c633e75040879373028d5c3ba614a31efa1fbbf5aa"
     },
     {
       "bytes": 46,
@@ -2795,13 +2529,6 @@
       "sha256": "4bf37d77c96157a501f3965ec03a851ac56c0e4077abda6c25a8bb20518d232b"
     },
     {
-      "bytes": 198,
-      "category": "config",
-      "path": "video/ch04/hf-remake/short/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "0891d5f4716e5fedc91c6b4fd0255e11c292b47c61802aeb898a336e64102631"
-    },
-    {
       "bytes": 880,
       "category": "generated",
       "path": "video/ch04/hf-remake/short/short-meta.json",
@@ -2814,13 +2541,6 @@
       "path": "video/ch04/hf-remake/synth_long_vo.py",
       "reason": "authored build script",
       "sha256": "e06d72b05fd15d1854176be61fe6cac73bc96f619fcf971d82d1f45f777b80b5"
-    },
-    {
-      "bytes": 31726,
-      "category": "generated",
-      "path": "video/ch04/hf-remake/transcript.json",
-      "reason": "pipeline output",
-      "sha256": "079e2a2b34abf5f6b1e2ee66f4600dbfaf70f1c2a3400f9c64bdd62d7ad1cab0"
     },
     {
       "bytes": 1824,
@@ -3208,25 +2928,11 @@
       "sha256": "0398d0f7ef24ad0008c06ded2536db515b9948115f63dad4a4df5a4641e86ed9"
     },
     {
-      "bytes": 16814,
-      "category": "generated",
-      "path": "video/ch05/assets/vo/chunks.json",
-      "reason": "pipeline output",
-      "sha256": "b231e7734c993acc325b1b1020a736aca35a7ae3380b951bd976fd180da47585"
-    },
-    {
       "bytes": 13912,
       "category": "generated",
       "path": "video/ch05/assets/vo/full-script.txt",
       "reason": "narration slice / concat list",
       "sha256": "d1244fe20eb4465fa982cdbb2f47f88e3d74d0488aea7a2a0b32dc85a948ba5c"
-    },
-    {
-      "bytes": 21652,
-      "category": "generated",
-      "path": "video/ch05/assets/vo/vo-manifest.json",
-      "reason": "pipeline output",
-      "sha256": "9706ce3ce4ae45f9334dc2c6fed46c267db3e42e0ccbad94fe969b9bc82ffdde"
     },
     {
       "bytes": 25970,
@@ -3257,20 +2963,6 @@
       "sha256": "869088fcd29bce8432f4df015c96bc7ec12da3c41bb6d0d0760eecad4b59ad02"
     },
     {
-      "bytes": 2381,
-      "category": "generated",
-      "path": "video/ch05/hf-remake/short/assets/short-caps.json",
-      "reason": "pipeline output",
-      "sha256": "a2550a8c23eea730642076245b9f10de2ed780b360d91088f362ab6d5e40d931"
-    },
-    {
-      "bytes": 1291,
-      "category": "generated",
-      "path": "video/ch05/hf-remake/short/assets/short-sents.json",
-      "reason": "pipeline output",
-      "sha256": "21ee2028700c116be817fde96a780371e2aeb27f2e43b300aa6ede5058b08cfe"
-    },
-    {
       "bytes": 46,
       "category": "generated",
       "path": "video/ch05/hf-remake/short/assets/vo-concat.txt",
@@ -3299,13 +2991,6 @@
       "sha256": "f977f50ef1f4e5f110f8b1c0ea6fac872585c45ee4dbb939ad509a376f6929b7"
     },
     {
-      "bytes": 198,
-      "category": "config",
-      "path": "video/ch05/hf-remake/short/package.json",
-      "reason": "project/tool configuration",
-      "sha256": "213e4b4706f1e7bc334f08c11bc8928311fa6da0e18e3ee357a9433372791fca"
-    },
-    {
       "bytes": 1749,
       "category": "generated",
       "path": "video/ch05/hf-remake/short/short-meta.json",
@@ -3325,9 +3010,632 @@
       "path": "video/ch05/hf-remake/tpl/dense-short-v3.tpl.html",
       "reason": "authored HyperFrames scene/composition",
       "sha256": "99fcb79121fdaa551aa2578c33ee8cc53a9f404c8963facac2d1a4aa0ba25416"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch01/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "cab87b1296b9654acb83c94e9359bf076995005e554ac06df1ccb2d2062029bd"
+    },
+    {
+      "bytes": 4183,
+      "category": "generated",
+      "path": "video/chapters/ch01/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "7baece399b68f4cb51f502828bc4a92168d3d994073299e80e539c720f3454e0"
+    },
+    {
+      "bytes": 1031,
+      "category": "source",
+      "path": "video/chapters/ch01/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "9bdf83b113802fd336e36f86a24cc53a2c6f044048e417415caaeed8f5954d6b"
+    },
+    {
+      "bytes": 1098,
+      "category": "source",
+      "path": "video/chapters/ch01/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "eba6b855c334166957f91931b88e2062b543059c94c96fc62492c6917300eda7"
+    },
+    {
+      "bytes": 15067,
+      "category": "source",
+      "path": "video/chapters/ch01/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "5306e9577a5f6c4fda8cd69a0aa7601dbf85914cea0528fb529c2378a8e2a8b5"
+    },
+    {
+      "bytes": 3949,
+      "category": "source",
+      "path": "video/chapters/ch01/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "79cea1154161a2b0193313908dee82f8e44abb601578850476b67c2c3ad134e6"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch02/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "f9ace07f4ac52bdd0f8aac178cab7874a3ed2f43e666d49954815b2fb049ec38"
+    },
+    {
+      "bytes": 3913,
+      "category": "generated",
+      "path": "video/chapters/ch02/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "3e0b0785d09393b4d3c8ce1d30f6fcddeebc801ab6a8e4302bf836b8dce57db6"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch02/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "95bbd889b9dfefce549d71210592aae6baa32abcb164a0f60b21fdb758554efe"
+    },
+    {
+      "bytes": 1076,
+      "category": "source",
+      "path": "video/chapters/ch02/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "42247a99fb843fa1474f7237d7d98cfef48b9d029e3913a8e7577553b7bde68e"
+    },
+    {
+      "bytes": 7727,
+      "category": "source",
+      "path": "video/chapters/ch02/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "51eb2522cf0ffa6af547772860b2e560f907eea03963f5c78696d6e6011dd1f6"
+    },
+    {
+      "bytes": 1047,
+      "category": "source",
+      "path": "video/chapters/ch02/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "1b85812f2c16c0a9eb13bb6d3a8eac092464fc350f075935bebf7b04961d1c62"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch03/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "0d0fa8eea526fc3ace9ef2a225bcd5dded16f07915d2538d035847aa5961ad9c"
+    },
+    {
+      "bytes": 3711,
+      "category": "generated",
+      "path": "video/chapters/ch03/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "f62135e530f03d68a60108266d5c0ec0ea5a527b529c15c571a17459dcc39adc"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch03/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "d974e7cd8f6adf6ec4d54fa3726a1e06920595cd8790c50f9d872ff89b6b7c12"
+    },
+    {
+      "bytes": 1069,
+      "category": "source",
+      "path": "video/chapters/ch03/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "89e6ec547a5b4689e088c95849b54c7f61b159666952ad73768b4b8396e9b518"
+    },
+    {
+      "bytes": 7567,
+      "category": "source",
+      "path": "video/chapters/ch03/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "e9a65442292a743ce2e015b2378a0cb9bfbbf027aa6ab8de6c979a4ddf56b857"
+    },
+    {
+      "bytes": 2006,
+      "category": "source",
+      "path": "video/chapters/ch03/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "fc9e375edeb0772c2d5f69495b6f15259c1b0051858d09d08a15203076eea058"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch04/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "260f5f4e4f93d048c8b1d8b1d26003627ab7375f5e0c4806622c87a7ba4ef6ee"
+    },
+    {
+      "bytes": 5391,
+      "category": "generated",
+      "path": "video/chapters/ch04/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "2c9e921b08f37f702cd9944ad42da1c867ab2ea05f5118423d19699635f55581"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch04/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "69398581e1fe2750a2742660dd841b89028375f204e890e08de969a8f41792cd"
+    },
+    {
+      "bytes": 1081,
+      "category": "source",
+      "path": "video/chapters/ch04/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "a7b46e142ad23f0fbe4377360c855cfa9a3fde86001c8cd749a5cdb89af3d411"
+    },
+    {
+      "bytes": 5686,
+      "category": "source",
+      "path": "video/chapters/ch04/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "acbd92b901897b6cf82c64ee69b161d1f6497fa59fb4bac312fe9bd5493f69c6"
+    },
+    {
+      "bytes": 1599,
+      "category": "source",
+      "path": "video/chapters/ch04/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "518b967338be1c7b3390c6343b38bb9699f0f67186a7f6de91329d02be687602"
+    },
+    {
+      "bytes": 175,
+      "category": "review",
+      "path": "video/chapters/ch05/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "15894477a6603f9d3432b067d30e3f8b9e3794169337dc326e7cf74d84df38ab"
+    },
+    {
+      "bytes": 3668,
+      "category": "generated",
+      "path": "video/chapters/ch05/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "32a639ae3dd2b78c4cc07902fd1d5f6f777b0e5ff58ad2051c17f8aba7e1e103"
+    },
+    {
+      "bytes": 1029,
+      "category": "source",
+      "path": "video/chapters/ch05/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "af02c658876da7ab95b1c5890753bd208801ed5feba6abd5dfd539fe0196b03c"
+    },
+    {
+      "bytes": 264,
+      "category": "source",
+      "path": "video/chapters/ch05/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "ff04ac0368136fb0d814097a6a2f00eab5b5d98852e7e6e7cd3dc1f258e8a3a6"
+    },
+    {
+      "bytes": 13912,
+      "category": "source",
+      "path": "video/chapters/ch05/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "d1244fe20eb4465fa982cdbb2f47f88e3d74d0488aea7a2a0b32dc85a948ba5c"
+    },
+    {
+      "bytes": 2319,
+      "category": "source",
+      "path": "video/chapters/ch05/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "a1eeb1bdd6c17ad3b944b50d30b479a0d2171ee888de393817ee3374dae9ef1a"
+    },
+    {
+      "bytes": 3403,
+      "category": "generated",
+      "path": "video/chapters/ch06/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "8e5e68a7b41fd20fe3280387d8765779817735e8490c45c95ad3cc02dae1f53c"
+    },
+    {
+      "bytes": 941,
+      "category": "source",
+      "path": "video/chapters/ch06/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "802d2448a52b02a35bfcdb3dcef06ac7a51352e3ac2100c714821bcf36f256b2"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch06/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "68c31ff91af533567a4092224f6e547a606376cbe15ed18500c73d3f5f946806"
+    },
+    {
+      "bytes": 2484,
+      "category": "source",
+      "path": "video/chapters/ch06/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "ce5aa015a6bf6173cec409c8958069f38a5f7cd1e22b9cf7f855e29971b12377"
+    },
+    {
+      "bytes": 518,
+      "category": "source",
+      "path": "video/chapters/ch06/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "4131fd315a5df6268ca5a094d62aa16f69fa835e2cd889e4367fb6f393b9d49e"
+    },
+    {
+      "bytes": 3861,
+      "category": "generated",
+      "path": "video/chapters/ch07/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "0dd69c388f6db03a10f30fb252b6e952d139fdf0f9ae57c8ca99724c2255f68d"
+    },
+    {
+      "bytes": 944,
+      "category": "source",
+      "path": "video/chapters/ch07/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "8bacce4c77611ddfa30af7559a532979347bc8b3ff2d06cee5b3f9ab414ec38c"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch07/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "d4fff82efb56956385f9c5d85dd49b360aca11a3860c09e1e63d054d5c5de2eb"
+    },
+    {
+      "bytes": 2854,
+      "category": "source",
+      "path": "video/chapters/ch07/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "e2cbe0c2a4136f2b2f2ee9052fa15f17cf3cd96c2bc91aac476dbc8f6e11caa5"
+    },
+    {
+      "bytes": 513,
+      "category": "source",
+      "path": "video/chapters/ch07/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "1d6acde1f176be8d14b9705420bf80706394175cfbc2a508571b1bcadfa820aa"
+    },
+    {
+      "bytes": 4545,
+      "category": "generated",
+      "path": "video/chapters/ch08/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "b5d56257880e76274bba8ed0077ab75252074573eeecb59f01efc3769a2bbac9"
+    },
+    {
+      "bytes": 949,
+      "category": "source",
+      "path": "video/chapters/ch08/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e519e24ce51a04d621ce566c7026645866e8ab38200c9501d5cda3b58d88a3db"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch08/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "715c14bfca9f92e9385e089565e1413d5e46c9040a26b1684679faaa56b3ce17"
+    },
+    {
+      "bytes": 3523,
+      "category": "source",
+      "path": "video/chapters/ch08/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "3361310e371c3d0d1a94b39d7b0621f6a0e3d5a4acb16691f665b437e0ec6259"
+    },
+    {
+      "bytes": 806,
+      "category": "source",
+      "path": "video/chapters/ch08/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "28faa7ef9d1a08e764da7e73e1b1066cd6bd47a86b3d8390ebc00351ff32a9e2"
+    },
+    {
+      "bytes": 3989,
+      "category": "generated",
+      "path": "video/chapters/ch09/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "1403fa4ab9d311eeb312a105cbaba56340fa452c10205047c43a5e74b76e32f8"
+    },
+    {
+      "bytes": 930,
+      "category": "source",
+      "path": "video/chapters/ch09/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "49d543ad9304ad8a16da2f08a91648aec7f000b2cb9002547557181c00d7c1cd"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch09/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "17b93408ae156ef0d72f740adc08604711b6960026bfcd24b8f009ec9f30a4e9"
+    },
+    {
+      "bytes": 2929,
+      "category": "source",
+      "path": "video/chapters/ch09/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "749bc01470a378c566f7d3e0fab72dfd88e8bbe259335a2369fb30f35777b674"
+    },
+    {
+      "bytes": 594,
+      "category": "source",
+      "path": "video/chapters/ch09/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "c96ccb621f0efc1ffeda87166a406c447dfcc96083d0914658ed36dcc1271cd5"
+    },
+    {
+      "bytes": 4857,
+      "category": "generated",
+      "path": "video/chapters/ch10/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "c61a7bbc0b386fc47f49fd8bf70b6b50578fc7922b2c3a83100433a569d66342"
+    },
+    {
+      "bytes": 950,
+      "category": "source",
+      "path": "video/chapters/ch10/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "6250cadd43ab562db1d9aeca6ab0aa4e83ce6b77f8c241482ad42663f533bb26"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch10/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "a406a73b27e7997fcc3ac064f5bbbcf853271b39f91a931b03f23aab67680969"
+    },
+    {
+      "bytes": 3708,
+      "category": "source",
+      "path": "video/chapters/ch10/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "dda0664ef9003ff55fa608ff0055409725a72264582bada6cbb7e3dbfe84d6c9"
+    },
+    {
+      "bytes": 515,
+      "category": "source",
+      "path": "video/chapters/ch10/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "2ac3a6ea341020b5c151eeb2af2aea279d2b7589c9ecfcbf4879d048fb8ca74c"
+    },
+    {
+      "bytes": 3891,
+      "category": "generated",
+      "path": "video/chapters/ch11/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "9978c9dc61572bbdaaf570df9b37c125070ddfc9c2d449b927f5d4776e05d38f"
+    },
+    {
+      "bytes": 930,
+      "category": "source",
+      "path": "video/chapters/ch11/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "3a8d4acc08a592e4172d8fc1396885880c34414382657e0942f35eea4c332233"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch11/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "88a5d5baffcc00bc22ef236377030a2720fc4d479748567c060b9dd5c86477f3"
+    },
+    {
+      "bytes": 2914,
+      "category": "source",
+      "path": "video/chapters/ch11/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "dfa65b828e0dbdcc5fc3cef7ae2066bfe357464cb6ac3b62ffdea908e5d99ea2"
+    },
+    {
+      "bytes": 609,
+      "category": "source",
+      "path": "video/chapters/ch11/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "9355f1fa91da34d1e1e8a3a73108e261bc41f22a36f521838721161aa9bf954a"
+    },
+    {
+      "bytes": 4993,
+      "category": "generated",
+      "path": "video/chapters/ch12/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "9e35819138449e972b39cec27469ae39f41caf0f7f495f7a6e2861fd2a445286"
+    },
+    {
+      "bytes": 928,
+      "category": "source",
+      "path": "video/chapters/ch12/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "dfe0b97c719834603dd8b7a171f2c0cbba0f3128dba8d7ffd87c73a14e655f84"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch12/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e5a3062e7448b3110d26003c21e7379c054f525083b16af0eae503518f7c87fc"
+    },
+    {
+      "bytes": 4016,
+      "category": "source",
+      "path": "video/chapters/ch12/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "709333939be935c6d158d49635b4c73fd35a481af702b86c0c1031fe5bda0b75"
+    },
+    {
+      "bytes": 611,
+      "category": "source",
+      "path": "video/chapters/ch12/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "01d08a04be2153fc65e2c266df7b13438867b776fbb0d6a20a347e894b0e8e26"
+    },
+    {
+      "bytes": 4707,
+      "category": "generated",
+      "path": "video/chapters/ch13/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "8fd5d3db912ad596b3cf79701671ee86cdb0811e50c12c4949bfe0d77b391f0a"
+    },
+    {
+      "bytes": 931,
+      "category": "source",
+      "path": "video/chapters/ch13/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "b74d5599fb1fd4277a2af2e0dc36ec8ce8b47cad1295c4480f66b55e27204dbc"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch13/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "ef55ec513a361f2df44f975cdf6204bc6b130b1b9cd376a66998d464988765bc"
+    },
+    {
+      "bytes": 3634,
+      "category": "source",
+      "path": "video/chapters/ch13/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "8363cbf31fa6d902c87c6b57ad489882fdf2ded3c0f1e71916fb028586a0e5ac"
+    },
+    {
+      "bytes": 677,
+      "category": "source",
+      "path": "video/chapters/ch13/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "b81de8f6692b3be9e34f117cbc81c6c893c1e95a0a2e7e8d9feca1151acb430f"
+    },
+    {
+      "bytes": 4435,
+      "category": "generated",
+      "path": "video/chapters/ch14/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "1c75e0e8df87153c6d70586079d1f2cc9ff1c1a13ba6f537d24589f7f6a3ec70"
+    },
+    {
+      "bytes": 937,
+      "category": "source",
+      "path": "video/chapters/ch14/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "cad03719a58211d15e68052b1926c77565d77e9146f459d2376e097f6b618d79"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch14/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "76a656921b6332404b08f522fde25533beadd6bbeca37f0e0554490c398857d8"
+    },
+    {
+      "bytes": 3346,
+      "category": "source",
+      "path": "video/chapters/ch14/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "5f01d57ba8a90df853d708a74a30bc5266b578a565cae6d597ea1caf3abc205e"
+    },
+    {
+      "bytes": 726,
+      "category": "source",
+      "path": "video/chapters/ch14/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "d0b6bf915df54de08b38fd2bf75b142117e12c52f230e7f4bb52bb9b7b5a4b99"
+    },
+    {
+      "bytes": 5025,
+      "category": "generated",
+      "path": "video/chapters/ch15/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "c507f831e99096b2c3971238808b85ac3bb1391af41bf4f3ee54e274b6069b29"
+    },
+    {
+      "bytes": 937,
+      "category": "source",
+      "path": "video/chapters/ch15/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e7865137e19594c419a2035558991f48f8044ccd82655f7e9ee9fa751a9d6af3"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch15/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "6d8c0988d3147ef41ab05b93353b2962c14a3ce75119f0fdaa87ba82afdcac32"
+    },
+    {
+      "bytes": 3971,
+      "category": "source",
+      "path": "video/chapters/ch15/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "176ea67ce6e2fe7aa6e45e6a8d229362c4ff948bfb189a9290b4187677adc6f4"
+    },
+    {
+      "bytes": 785,
+      "category": "source",
+      "path": "video/chapters/ch15/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "47e8801d436de2e3f4a0b572bb993b4c38b4630247604303e139f55b88a3098b"
+    },
+    {
+      "bytes": 64385,
+      "category": "config",
+      "path": "video/package-lock.json",
+      "reason": "project/tool configuration",
+      "sha256": "a22a7a30539c48445e99c05047b90f9273dcdc12b39ca4d8b810271c717df54a"
+    },
+    {
+      "bytes": 343,
+      "category": "config",
+      "path": "video/package.json",
+      "reason": "project/tool configuration",
+      "sha256": "05d0f4d56dd1e5e4bafe0c0e5a1600672cd0431bf8712ee7255c99d9b8bce198"
+    },
+    {
+      "bytes": 11616,
+      "category": "source",
+      "path": "video/pipeline/cli.py",
+      "reason": "authored build script",
+      "sha256": "6e557f29f08a7a100516de14d1975e641a50d31f680fe358abbfc192919d77d8"
+    },
+    {
+      "bytes": 5363,
+      "category": "source",
+      "path": "video/pipeline/content.py",
+      "reason": "authored build script",
+      "sha256": "6745955943a74d68d5c979c9f663a76252773a6e8788f03d7021396f65840ec9"
+    },
+    {
+      "bytes": 10307,
+      "category": "source",
+      "path": "video/pipeline/migrate.py",
+      "reason": "authored build script",
+      "sha256": "7c7c001b439f7e9734cf28f17bc85f08235043fbc086fd2773daeb3bd8191beb"
+    },
+    {
+      "bytes": 14276,
+      "category": "source",
+      "path": "video/pipeline/model.py",
+      "reason": "authored build script",
+      "sha256": "b4aa0ed804a419211e6f1395fae4ea1256a58ba1a43e3ec73492663afe96e0cd"
+    },
+    {
+      "bytes": 8361,
+      "category": "source",
+      "path": "video/pipeline/quality.py",
+      "reason": "authored build script",
+      "sha256": "6e50b7733aba2942610a677f5ceb732ef81c7345b798ce9575fc64ba24b77d6d"
+    },
+    {
+      "bytes": 6038,
+      "category": "source",
+      "path": "video/pipeline/timeline.py",
+      "reason": "authored build script",
+      "sha256": "b33e392ef8354fc5da11be9a26430b288485a770e7aa31fea8371e4e3b401521"
+    },
+    {
+      "bytes": 10349,
+      "category": "source",
+      "path": "video/pipeline/voice.py",
+      "reason": "authored build script",
+      "sha256": "b8eb634496c62c9bc4ef8b9409843d34ce50b33646ef3c90efcecbfd9b9133b5"
     }
   ],
   "schema_version": 1,
-  "source_commit": "6212391c2eaf5f6f8d4b4f28fb48f19382e9c113",
-  "tracked": 474
+  "source_commit": "dcdc3950425178a4f4639901641d43161dc81b00",
+  "tracked": 518
 }

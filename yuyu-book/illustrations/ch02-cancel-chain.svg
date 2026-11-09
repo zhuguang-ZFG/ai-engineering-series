@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-label="Pausing event consumption differs from cancelling work and cleaning up" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 30Q15 20 29 19L327 21Q341 20 340 34L338 274Q340 282 326 282L28 280Q17 281 18 268ZM380 30Q378 20 392 20L692 18Q705 19 702 33L704 267Q704 282 690 281L392 283Q379 282 380 268Z" opacity=".35"/>
+  <g fill="currentColor" stroke="none" font-family="serif" text-anchor="middle">
+    <text x="178" y="53" font-size="20">A · PAUSE</text><text x="541" y="53" font-size="20">B · CANCEL</text>
+    <text x="75" y="113" font-size="18">UI</text><text x="270" y="113" font-size="18">yield</text>
+    <text x="75" y="215" font-size="18">API</text><text x="270" y="215" font-size="18">tool</text>
+    <text x="432" y="113" font-size="18">UI</text><text x="630" y="113" font-size="18">yield</text>
+    <text x="432" y="215" font-size="18">API</text><text x="630" y="215" font-size="18">tool</text>
+  </g>
+  <path d="M43 82C60 77 83 79 103 82l-1 47q-31 6-59 1q-3-25 0-48ZM238 82q29-5 64 0l1 46q-3 6-12 5l-53-2q-3-25 0-49ZM111 107q36-4 73 0M206 107q11-1 22 0M220 100l9 7-9 7" stroke-width="3.2"/>
+  <path d="M187 92q-1 14 1 30M199 91q1 16-1 32" stroke-width="5.8"/>
+  <path d="M75 141L75 173M270 141L270 173" stroke-dasharray="3 7" opacity=".45"/>
+  <path d="M42 184q29-5 65 0l-2 46q-28 5-63 0q-3-23 0-46ZM237 184q31-6 66 0l-2 46q-30 6-63 1q-3-22-1-47ZM114 208c34-19 74-15 110 0M214 197l11 11-14 5M221 241c-33 18-70 12-105-2M124 233l-10 5 7 9" stroke-width="3.1"/>
+  <path d="M403 82q28-6 58 0l1 46q0 5-6 5l-53-3q-3-23 0-48ZM599 82q32-5 63 0l-1 48q-28 5-61 1q-3-24-1-49ZM470 106q59-3 118 0M580 99l9 7-9 7" stroke-width="3.2"/>
+  <path d="M432 142q-2 16-1 31M423 164l8 11 8-12M629 143q3 15 2 31M623 165l8 11 8-12" stroke-width="4.1"/>
+  <path d="M402 184q31-6 65 0l-1 45q-30 6-64 1q-3-24 0-46ZM599 183q32-4 65 0l-1 47q-31 5-64 0q-3-23 0-47Z" stroke-width="3.2"/>
+  <path d="M450 187l11 12M461 187l-11 12M649 187l11 12M660 187l-11 12" stroke-width="3.8"/>
+  <path d="M472 250q20 22 44-1M479 249l6 7 14-14M582 251q-22 22-43-1M554 248l7 8 13-14" stroke-width="3"/>
+  <path d="M47 87q-2 20 0 37M241 88l-1 33M406 87l1 36M604 87l-1 36M47 188l-1 35M242 189l-1 34M406 188l1 35M604 188l-1 35" opacity=".3" stroke-width="1.1"/>
+  <path d="M358 39Q355 154 358 264" opacity=".25" stroke-dasharray="2 8"/>
+</svg>

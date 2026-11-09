@@ -1,1 +1,0 @@
-把三条规则放进一个例子里走一遍，你就彻底记住了。一个前端团队。小张的家目录里写了：模型用 sonnet，允许 Bash 跑 npm 和 node，verbose 打开。团队的项目配置里写了：允许 npm run lint、npm test、还有 Read 全部，另外挂了一个 PreToolUse 的审计 hook。

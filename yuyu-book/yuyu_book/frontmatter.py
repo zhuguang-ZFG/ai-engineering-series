@@ -16,7 +16,7 @@ def cover(manifest: dict, lang: str) -> str:
     if not epi:
         epi, epi_src = epigraph, ""
     lic = manifest["license"]
-    plate = cover_plate()
+    plate = cover_plate(lang)
     # the plate carries a 30-spoke wheel of its own; a second one under the
     # title would be the same motif twice within a hand's width
     mark = "" if plate else wheel(26)
@@ -140,7 +140,7 @@ def part_divider(part: dict, lang: str, idx: int,
         for anchor, no, label in rows)
     return (f'<section class="part-divider" id="{part["id"]}">'
             f'<span class="pd-ghost" aria-hidden="true">{wheel(360)}</span>'
-            f'<div class="pd-inner">{art.headpiece(part["id"])}'
+            f'<div class="pd-inner">{art.headpiece(part["id"], lang)}'
             f'<p class="pd-no">{esc(part["no"][lang])}</p>'
             f'<h1 class="pd-title">{esc(part["title"][lang])}</h1>'
             f'<div class="cover-rule"><i></i>{wheel(24)}<i></i></div>'

@@ -1,2 +1,0 @@
-类型系统逼你把路走清楚。
-七条 Continue 路径要能叫出名字。next_turn：工具跑完，历史扩展，最常见。max_output_tokens_escalate：首次截断先抬输出上限。

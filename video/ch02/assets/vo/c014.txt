@@ -1,1 +1,0 @@
-一，工具结果预算，超长输出先截断或外置。二，Snip，按消息级裁历史。三，Microcompact，缓存友好的轻量压缩，尽量别把 API 侧已缓存 token 整段作废。四，Context Collapse，把一段对话收成更高密度的摘要图。

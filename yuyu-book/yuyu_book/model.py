@@ -3,8 +3,8 @@
 Phase P2 introduces the model before any renderer changes. The first slice is
 deliberately small: the edition → part → unit → section → block spine plus one
 diagnostic format, because a stable block ID is meaningless until there is a
-block to hang it on. Terms, claims, sources and video types join when a
-consumer needs them; empty placeholders would be dead weight.
+block to hang it on. Terms and the plain-language guide join when a consumer
+needs them; claims, sources and video types follow the same rule.
 
 Diagnostics are the only error format the migration adds:
 
@@ -70,6 +70,35 @@ class Section:
 
 
 @dataclass
+class Guide:
+    """The plain-language layer of one unit, keyed by language.
+
+    These are the same fields the builder renders into the lead band and the
+    compass cards; a product that quotes them must escape them exactly as
+    `pages.esc()` does instead of trusting registry text as markup.
+    """
+    question: dict[str, str] = field(default_factory=dict)
+    deliverable: dict[str, str] = field(default_factory=dict)
+    boundary: dict[str, str] = field(default_factory=dict)
+    plain: dict[str, str] = field(default_factory=dict)
+    analogy: dict[str, str] = field(default_factory=dict)
+    sources: list[str] = field(default_factory=list)
+
+
+@dataclass
+class Term:
+    """One glossary entry from glosses.json, shared by both editions."""
+    id: str
+    term: dict[str, str] = field(default_factory=dict)
+    forms: dict[str, list[str]] = field(default_factory=dict)
+    plain: dict[str, str] = field(default_factory=dict)
+    priority: str = ""
+    evidence: list = field(default_factory=list)
+    analogy: dict[str, str] = field(default_factory=dict)
+    why: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class Unit:
     id: str
     kind: str                       # front | chapter | appendix
@@ -77,12 +106,28 @@ class Unit:
     path: str
     title: str
     sections: list[Section] = field(default_factory=list)
+    no: str = ""                    # "第 2 章" / "Chapter 2" / ""
+    anchor: str = ""                # article id used across the book
+    part_id: str = ""               # empty for the foreword and appendices
+    guide: Guide = field(default_factory=Guide)
+    keeper: str = ""                # the note that closes the unit
+
+    @property
+    def display(self) -> str:
+        if not self.no:
+            return self.title
+        return f"{self.no}　{self.title}" if self.lang == "zh" \
+            else f"{self.no}: {self.title}"
 
 
 @dataclass
 class Part:
     id: str
     unit_ids: list[str] = field(default_factory=list)
+    no: dict[str, str] = field(default_factory=dict)
+    title: dict[str, str] = field(default_factory=dict)
+    motto: dict[str, str] = field(default_factory=dict)
+    goal: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -96,3 +141,11 @@ class BookModel:
     editions: dict[str, Edition] = field(default_factory=dict)
     parts: list[Part] = field(default_factory=list)
     diagnostics: list[Diagnostic] = field(default_factory=list)
+    version: str = ""
+    terms: list[Term] = field(default_factory=list)
+
+    def unit(self, lang: str, unit_id: str) -> Unit | None:
+        for unit in self.editions.get(lang, Edition(lang)).units:
+            if unit.id == unit_id:
+                return unit
+        return None

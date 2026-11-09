@@ -1,0 +1,4781 @@
+{
+  "schema_version": 1,
+  "baseline": "0.3.6",
+  "terms": [
+    {
+      "id": "ab-testing",
+      "term": {
+        "zh": "A/B 实验",
+        "en": "A/B test"
+      },
+      "forms": {
+        "zh": [
+          "A/B 实验",
+          "A/B 测试"
+        ],
+        "en": [
+          "A/B"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "新旧两版同时上线，各给一部分人用，比谁效果好",
+        "en": "run two versions for different slices of users at once and compare"
+      },
+      "units": [
+        "ch05",
+        "apxc"
+      ],
+      "related": [
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "feature-flag",
+          "shared": 1
+        },
+        {
+          "id": "least-privilege",
+          "shared": 1
+        },
+        {
+          "id": "plugin",
+          "shared": 1
+        },
+        {
+          "id": "settings-json",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "abort-controller",
+      "term": {
+        "zh": "AbortController",
+        "en": "AbortController"
+      },
+      "forms": {
+        "zh": [
+          "AbortController"
+        ],
+        "en": [
+          "AbortController",
+          "abortController"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "一个能随时按下的停止开关，正在干活的得自己去瞅它",
+        "en": "a stop switch anyone can flip; running work must check it to bail out"
+      },
+      "units": [
+        "ch02",
+        "ch03",
+        "ch14"
+      ],
+      "related": [
+        {
+          "id": "cache-invalidation",
+          "shared": 2
+        },
+        {
+          "id": "fail-fast",
+          "shared": 2
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "adapter-pattern",
+      "term": {
+        "zh": "适配器模式",
+        "en": "adapter pattern"
+      },
+      "forms": {
+        "zh": [
+          "适配器模式",
+          "适配器"
+        ],
+        "en": [
+          "Adapter pattern",
+          "adapter pattern",
+          "adapter"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "中间垫一层做转换，两边各说各话也能接上",
+        "en": "a middle layer translates so two mismatched sides connect"
+      },
+      "units": [
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "mcp-resource",
+          "shared": 1
+        },
+        {
+          "id": "oauth",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "agent-harness",
+      "term": {
+        "zh": "智能体线束",
+        "en": "Agent Harness"
+      },
+      "forms": {
+        "zh": [
+          "Agent Harness",
+          "智能体线束"
+        ],
+        "en": [
+          "Agent Harness",
+          "agent harness"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "把模型包在中间的那层程序：接需求、发工具、收结果",
+        "en": "the program wrapped around the model: it takes the request, hands out tools, checks permission, brings back the answer"
+      },
+      "units": [
+        "front",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        },
+        {
+          "id": "defense-in-depth",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "async-generator",
+      "term": {
+        "zh": "异步生成器",
+        "en": "async generator"
+      },
+      "forms": {
+        "zh": [
+          "异步生成器"
+        ],
+        "en": [
+          "async generator",
+          "AsyncGenerator",
+          "Async Generator"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "边算边一段段往外交结果的函数，取一段停一段",
+        "en": "a function that hands out results one piece at a time and can pause between pieces"
+      },
+      "units": [
+        "ch02",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        },
+        {
+          "id": "event-stream",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "atomic-update",
+      "term": {
+        "zh": "原子更新",
+        "en": "atomic update"
+      },
+      "forms": {
+        "zh": [
+          "原子更新"
+        ],
+        "en": [
+          "atomic update"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一组改动要么全生效要么全不生效，不会改到一半",
+        "en": "a batch of changes either all land or none does, never halfway"
+      },
+      "units": [
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "auto-compact",
+      "term": {
+        "zh": "自动压缩",
+        "en": "auto-compact"
+      },
+      "forms": {
+        "zh": [
+          "自动压缩",
+          "AutoCompact",
+          "Autocompact"
+        ],
+        "en": [
+          "auto-compact",
+          "auto-compaction",
+          "AutoCompact",
+          "Autocompact",
+          "AutoCompact("
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "聊天快装满时，把前面的内容自动折成一份摘要",
+        "en": "when the chat nears full, the harness summarizes the earlier part so the conversation can keep going"
+      },
+      "units": [
+        "ch07",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "system-prompt",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "avalanche",
+      "term": {
+        "zh": "雪崩效应",
+        "en": "avalanche"
+      },
+      "forms": {
+        "zh": [
+          "雪崩效应"
+        ],
+        "en": [
+          "avalanche"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一处出问题把压力传给邻居，一路跟着倒，越滚越大",
+        "en": "one failure loads its neighbours, which fail too, compounding outward"
+      },
+      "units": [
+        "ch07"
+      ],
+      "related": [
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "context-window",
+          "shared": 1
+        },
+        {
+          "id": "prompt-cache",
+          "shared": 1
+        },
+        {
+          "id": "system-prompt",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "backpressure",
+      "term": {
+        "zh": "背压",
+        "en": "backpressure"
+      },
+      "forms": {
+        "zh": [
+          "背压控制",
+          "背压"
+        ],
+        "en": [
+          "backpressure control",
+          "backpressure"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "下游处理不过来，就反过来让上游慢一点",
+        "en": "when the consumer falls behind, it pushes the producer to slow down"
+      },
+      "units": [
+        "front",
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "blocking",
+      "term": {
+        "zh": "阻塞",
+        "en": "blocking"
+      },
+      "forms": {
+        "zh": [
+          "阻塞"
+        ],
+        "en": [
+          "blocking",
+          "block"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "卡在原地干等，等的时候什么都干不了",
+        "en": "stuck waiting in place, unable to do anything else meanwhile"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "bun-runtime",
+      "term": {
+        "zh": "Bun",
+        "en": "Bun"
+      },
+      "forms": {
+        "zh": [
+          "Bun"
+        ],
+        "en": [
+          "Bun"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "跑这类程序的一套引擎，兼管出厂打包，书里图它起得快",
+        "en": "the engine that runs and builds the program; chosen here for speed"
+      },
+      "units": [
+        "front",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        },
+        {
+          "id": "defense-in-depth",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "bundling",
+      "term": {
+        "zh": "打包",
+        "en": "bundler"
+      },
+      "forms": {
+        "zh": [
+          "打包"
+        ],
+        "en": [
+          "bundler",
+          "bundle",
+          "Bundle"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "把散在各处的零件压成一份成品，好分发、好起跑",
+        "en": "squash many source files into one distributable artifact"
+      },
+      "units": [
+        "ch11",
+        "apxd"
+      ],
+      "related": [
+        {
+          "id": "idempotent",
+          "shared": 1
+        },
+        {
+          "id": "main-loop",
+          "shared": 1
+        },
+        {
+          "id": "race-condition",
+          "shared": 1
+        },
+        {
+          "id": "singleton",
+          "shared": 1
+        },
+        {
+          "id": "skill",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "cache-hit-rate",
+      "term": {
+        "zh": "缓存命中率",
+        "en": "cache hit rate"
+      },
+      "forms": {
+        "zh": [
+          "缓存命中率"
+        ],
+        "en": [
+          "cache hit rate",
+          "hit rate"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "要用的东西已在手边备好的比例，低了就得现跑现取",
+        "en": "how often the thing you want is already kept nearby, ready to grab"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        },
+        {
+          "id": "event-stream",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "cache-invalidation",
+      "term": {
+        "zh": "缓存失效",
+        "en": "cache invalidation"
+      },
+      "forms": {
+        "zh": [
+          "缓存失效"
+        ],
+        "en": [
+          "cache invalidation",
+          "Cache invalidation"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "备好的那份不再算数，得扔掉重做，白白慢一次",
+        "en": "the kept copy no longer counts, so it's thrown out and rebuilt"
+      },
+      "units": [
+        "ch02",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 2
+        },
+        {
+          "id": "fail-fast",
+          "shared": 2
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "callback",
+      "term": {
+        "zh": "回调",
+        "en": "callback"
+      },
+      "forms": {
+        "zh": [
+          "回调地狱",
+          "回调"
+        ],
+        "en": [
+          "callback",
+          "callbacks"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "把接下来要做的事托给对方，他办完再回头喊你",
+        "en": "you hand over what to do next and get called when it finishes"
+      },
+      "units": [
+        "ch01",
+        "front"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        },
+        {
+          "id": "defense-in-depth",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "cancellation-propagation",
+      "term": {
+        "zh": "取消传播",
+        "en": "cancellation propagation"
+      },
+      "forms": {
+        "zh": [
+          "取消传播",
+          "级联取消"
+        ],
+        "en": [
+          "cancellation propagation",
+          "Cancellation propagation"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "上面一喊停，底下每一层都收到停，各自收尾",
+        "en": "a stop call at the top reaches every layer below, each wrapping up"
+      },
+      "units": [
+        "front",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "main-loop",
+          "shared": 2
+        },
+        {
+          "id": "promise",
+          "shared": 2
+        },
+        {
+          "id": "streaming",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "chain-of-responsibility",
+      "term": {
+        "zh": "责任链模式",
+        "en": "chain of responsibility"
+      },
+      "forms": {
+        "zh": [
+          "责任链模式",
+          "责任链"
+        ],
+        "en": [
+          "Chain of Responsibility",
+          "chain of responsibility"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "一件事依次经手多人，谁有权限谁拦下，否则往后传",
+        "en": "a request passes down a line; whoever can handle it stops it there"
+      },
+      "units": [
+        "ch08",
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "observer-pattern",
+          "shared": 2
+        },
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "hook",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "circuit-breaker",
+      "term": {
+        "zh": "断路器",
+        "en": "circuit breaker"
+      },
+      "forms": {
+        "zh": [
+          "断路器模式",
+          "断路器",
+          "熔断"
+        ],
+        "en": [
+          "circuit breaker",
+          "Circuit Breaker"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "连着失败够多次就先跳过这步，别硬试拖累全局",
+        "en": "after enough failures in a row it skips the call instead of dragging everything"
+      },
+      "units": [
+        "ch07",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        },
+        {
+          "id": "context-window",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        },
+        {
+          "id": "graceful-degradation",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "circular-dependency",
+      "term": {
+        "zh": "循环依赖",
+        "en": "circular dependency"
+      },
+      "forms": {
+        "zh": [
+          "循环依赖"
+        ],
+        "en": [
+          "circular dependency",
+          "circular dependencies"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "A 要等 B 先就绪，B 又回头等 A，谁都起不了步",
+        "en": "A waits for B ready and B waits for A ready, so neither can start"
+      },
+      "units": [
+        "ch01",
+        "ch10"
+      ],
+      "related": [
+        {
+          "id": "lazy-loading",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "claude-md",
+      "term": {
+        "zh": "CLAUDE.md",
+        "en": "CLAUDE.md"
+      },
+      "forms": {
+        "zh": [
+          "CLAUDE.md"
+        ],
+        "en": [
+          "CLAUDE.md"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "项目里那份说明文件，每次开工都被自动塞进背景里",
+        "en": "the project's note file, dropped into the background on every start so its rules survive a reset"
+      },
+      "units": [
+        "ch02",
+        "ch06"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "closure",
+      "term": {
+        "zh": "闭包",
+        "en": "closure"
+      },
+      "forms": {
+        "zh": [
+          "闭包"
+        ],
+        "en": [
+          "closure"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "函数带着它出生时的环境一起走，别人够不着那份数据",
+        "en": "a function that carries its birth environment wherever it goes"
+      },
+      "units": [
+        "ch02",
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "cold-start",
+      "term": {
+        "zh": "冷启动",
+        "en": "cold start"
+      },
+      "forms": {
+        "zh": [
+          "冷启动"
+        ],
+        "en": [
+          "cold start"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "啥都没预热，从零把程序拉起来花的那段时间",
+        "en": "bringing the program up from nothing, with nothing warmed beforehand"
+      },
+      "units": [
+        "ch15"
+      ],
+      "related": [
+        {
+          "id": "token-budget",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "compile-time",
+      "term": {
+        "zh": "编译时",
+        "en": "compile time"
+      },
+      "forms": {
+        "zh": [
+          "编译期",
+          "编译时"
+        ],
+        "en": [
+          "compile time",
+          "Compile-time",
+          "compile-time"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "出厂定稿的那一刻，跟跑起来才现场决定相对",
+        "en": "the moment the program is built, as opposed to while it runs"
+      },
+      "units": [
+        "ch03",
+        "apxc"
+      ],
+      "related": [
+        {
+          "id": "ab-testing",
+          "shared": 1
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        },
+        {
+          "id": "deferred-tool-discovery",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "concurrency",
+      "term": {
+        "zh": "并发",
+        "en": "concurrency"
+      },
+      "forms": {
+        "zh": [
+          "并发安全",
+          "并发"
+        ],
+        "en": [
+          "concurrency",
+          "concurrent"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "几件事同时在推进，抢同一份资源就得安排先后",
+        "en": "several tasks in flight at once, competing for shared things"
+      },
+      "units": [
+        "front",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "defense-in-depth",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "context-window",
+      "term": {
+        "zh": "上下文窗口",
+        "en": "context window"
+      },
+      "forms": {
+        "zh": [
+          "上下文窗口"
+        ],
+        "en": [
+          "context window",
+          "Context Window",
+          "context windows"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "模型一轮能装下的内容总量上限，装满了就得把旧的挤出去",
+        "en": "how much text the model can hold in mind at once; new material pushes the oldest material off the edge"
+      },
+      "units": [
+        "ch01",
+        "ch07"
+      ],
+      "related": [
+        {
+          "id": "tool-result",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "coordinator",
+      "term": {
+        "zh": "协调器",
+        "en": "coordinator"
+      },
+      "forms": {
+        "zh": [
+          "协调器模式",
+          "协调器",
+          "协调者"
+        ],
+        "en": [
+          "Coordinator pattern",
+          "coordinator",
+          "Coordinator",
+          "coordinators"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "只派活、收结论，自己从不动手写代码的那个角色",
+        "en": "the one agent that splits the work among workers and merges their answers without touching tools itself"
+      },
+      "units": [
+        "ch10",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "circular-dependency",
+          "shared": 1
+        },
+        {
+          "id": "end-to-end",
+          "shared": 1
+        },
+        {
+          "id": "graceful-degradation",
+          "shared": 1
+        },
+        {
+          "id": "lazy-loading",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "coroutine",
+      "term": {
+        "zh": "协程",
+        "en": "coroutine"
+      },
+      "forms": {
+        "zh": [
+          "协程"
+        ],
+        "en": [
+          "coroutine"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "能主动让位、之后从让处接着跑的一段流程",
+        "en": "a routine that gives up the floor and resumes exactly where it stopped"
+      },
+      "units": [
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "dead-code-elimination",
+      "term": {
+        "zh": "死代码消除",
+        "en": "dead code elimination"
+      },
+      "forms": {
+        "zh": [
+          "死代码消除",
+          "死代码"
+        ],
+        "en": [
+          "dead code elimination",
+          "dead code"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "出厂前把永远跑不到的代码整块扔掉，成品更小也不透密",
+        "en": "the build strips code that can never run, shrinking the artifact"
+      },
+      "units": [
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "deferred-tool-discovery",
+          "shared": 1
+        },
+        {
+          "id": "destructive",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "deadlock",
+      "term": {
+        "zh": "死锁",
+        "en": "deadlock"
+      },
+      "forms": {
+        "zh": [
+          "死锁"
+        ],
+        "en": [
+          "deadlock"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "两边各握着对方要的东西都不撒手，一起僵住不动",
+        "en": "each side holds what the other needs and neither lets go"
+      },
+      "units": [
+        "ch14"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "plan-mode",
+          "shared": 1
+        },
+        {
+          "id": "transcript",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "defense-in-depth",
+      "term": {
+        "zh": "纵深防御",
+        "en": "defense in depth"
+      },
+      "forms": {
+        "zh": [
+          "纵深防御"
+        ],
+        "en": [
+          "defense in depth",
+          "Defense in Depth"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "层层关卡各管一段，漏了一层还有下一层兜着",
+        "en": "several independent checks in a row; if one leaks, the next catches"
+      },
+      "units": [
+        "front",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "deferred-tool-discovery",
+      "term": {
+        "zh": "延迟工具发现",
+        "en": "deferred tool discovery"
+      },
+      "forms": {
+        "zh": [
+          "延迟工具发现",
+          "延迟发现"
+        ],
+        "en": [
+          "deferred tool discovery",
+          "Deferred tool discovery",
+          "deferred discovery"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "开场先只报工具名字，真要用了才把完整说明书取来",
+        "en": "the model first sees only a list of tool names; the full manual is fetched only once it actually needs one"
+      },
+      "units": [
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        },
+        {
+          "id": "destructive",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "dependency-injection",
+      "term": {
+        "zh": "依赖注入",
+        "en": "dependency injection"
+      },
+      "forms": {
+        "zh": [
+          "依赖注入"
+        ],
+        "en": [
+          "dependency injection",
+          "Dependency Injection"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "要用的东西不自己造，而是由外面递进来，随时能换",
+        "en": "you don't build what you need; it's handed in from outside and swappable"
+      },
+      "units": [
+        "ch02",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        },
+        {
+          "id": "event-stream",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "destructive",
+      "term": {
+        "zh": "破坏性",
+        "en": "destructive"
+      },
+      "forms": {
+        "zh": [
+          "破坏性",
+          "破坏性标记"
+        ],
+        "en": [
+          "destructive",
+          "Destructive",
+          "isDestructive"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "这一步做完就退不回去，比如删文件、覆盖数据",
+        "en": "a flag meaning the action cannot be undone afterwards, so it deserves a stricter warning"
+      },
+      "units": [
+        "ch01",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "factory-function",
+          "shared": 2
+        },
+        {
+          "id": "sub-agent",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "destructuring",
+      "term": {
+        "zh": "解构",
+        "en": "destructuring"
+      },
+      "forms": {
+        "zh": [
+          "解构"
+        ],
+        "en": [
+          "destructured",
+          "destructuring"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一次把整包数据里的各部件分名别类取出，省得逐个翻",
+        "en": "pull many named parts out of one bundle in a single move"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "event-stream",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "end-to-end",
+      "term": {
+        "zh": "端到端",
+        "en": "end-to-end"
+      },
+      "forms": {
+        "zh": [
+          "端到端"
+        ],
+        "en": [
+          "end-to-end"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "从最开头一路走到最结尾，中间每一环都真连上",
+        "en": "all the way from the first step to the last, every link real"
+      },
+      "units": [
+        "ch10",
+        "ch13"
+      ],
+      "related": [
+        {
+          "id": "circular-dependency",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        },
+        {
+          "id": "garbage-collection",
+          "shared": 1
+        },
+        {
+          "id": "lazy-loading",
+          "shared": 1
+        },
+        {
+          "id": "telemetry",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "event-emitter",
+      "term": {
+        "zh": "事件发射器",
+        "en": "event emitter"
+      },
+      "forms": {
+        "zh": [
+          "事件发射器"
+        ],
+        "en": [
+          "event emitter",
+          "EventEmitter"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "会广播动静的物件，谁想听谁自己来挂上监听",
+        "en": "an object that broadcasts happenings to whoever subscribed"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "event-stream",
+      "term": {
+        "zh": "事件流",
+        "en": "event stream"
+      },
+      "forms": {
+        "zh": [
+          "事件流"
+        ],
+        "en": [
+          "event stream"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "发生的事一条条排队送出来，边到边处理，不等攒齐",
+        "en": "happenings come out one by one and are handled as they arrive"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "exponential-backoff",
+      "term": {
+        "zh": "指数退避",
+        "en": "exponential backoff"
+      },
+      "forms": {
+        "zh": [
+          "指数退避"
+        ],
+        "en": [
+          "exponential backoff",
+          "backoff"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "每次重试之间等得越来越久，别追着人家猛敲门",
+        "en": "wait longer between each retry instead of hammering a struggling service"
+      },
+      "units": [
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "mcp-resource",
+          "shared": 1
+        },
+        {
+          "id": "oauth",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "factory-function",
+      "term": {
+        "zh": "工厂函数",
+        "en": "factory function"
+      },
+      "forms": {
+        "zh": [
+          "工厂函数"
+        ],
+        "en": [
+          "factory function",
+          "Factory Function"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "专门造东西的一道工序，规格统一，要几个现造几个",
+        "en": "a routine whose only job is building objects to one spec, on demand"
+      },
+      "units": [
+        "ch01",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "destructive",
+          "shared": 2
+        },
+        {
+          "id": "sub-agent",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "fail-fast",
+      "term": {
+        "zh": "快速失败",
+        "en": "fail fast"
+      },
+      "forms": {
+        "zh": [
+          "快速失败"
+        ],
+        "en": [
+          "fail fast",
+          "failing fast"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一看出事立刻停手报错，不硬撑到后面代价更大",
+        "en": "stop at the first sign of trouble instead of pushing on at higher cost"
+      },
+      "units": [
+        "ch02",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 2
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 2
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "feature-flag",
+      "term": {
+        "zh": "功能开关",
+        "en": "feature flag"
+      },
+      "forms": {
+        "zh": [
+          "功能开关",
+          "功能标志"
+        ],
+        "en": [
+          "feature flag",
+          "Feature Flag",
+          "Feature flag"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "代码里留的一道闸，不重装机就能让某功能开或关",
+        "en": "a built-in switch that turns a capability on or off without rebuilding"
+      },
+      "units": [
+        "ch05",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "least-privilege",
+          "shared": 2
+        },
+        {
+          "id": "ab-testing",
+          "shared": 1
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "fork-pattern",
+      "term": {
+        "zh": "Fork 模式",
+        "en": "Fork pattern"
+      },
+      "forms": {
+        "zh": [
+          "Fork 模式",
+          "完美分叉"
+        ],
+        "en": [
+          "Fork pattern",
+          "Fork Pattern",
+          "fork pattern",
+          "Fork mode"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "把此刻的对话原样复制成几份，让几路任务同时开工",
+        "en": "copying the conversation as it stands into several branches so parallel jobs share one starting point"
+      },
+      "units": [
+        "ch09",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "garbage-collection",
+      "term": {
+        "zh": "垃圾回收",
+        "en": "garbage collection"
+      },
+      "forms": {
+        "zh": [
+          "垃圾回收"
+        ],
+        "en": [
+          "garbage collection",
+          "garbage-collected"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "没人再引用的内存由系统定时清走，别的资源仍要自己收尾",
+        "en": "the runtime reclaims memory nothing references; other resources don't"
+      },
+      "units": [
+        "ch13"
+      ],
+      "related": [
+        {
+          "id": "end-to-end",
+          "shared": 1
+        },
+        {
+          "id": "telemetry",
+          "shared": 1
+        },
+        {
+          "id": "tree-shaking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "generics",
+      "term": {
+        "zh": "泛型",
+        "en": "generics"
+      },
+      "forms": {
+        "zh": [
+          "泛型接口",
+          "泛型"
+        ],
+        "en": [
+          "generic",
+          "Generic"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "先留个空类型位，用时才填，一份定义套多种数据",
+        "en": "a type slot left blank until use, so one definition fits many data kinds"
+      },
+      "units": [
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        },
+        {
+          "id": "deferred-tool-discovery",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "graceful-degradation",
+      "term": {
+        "zh": "优雅降级",
+        "en": "graceful degradation"
+      },
+      "forms": {
+        "zh": [
+          "优雅降级",
+          "降级"
+        ],
+        "en": [
+          "graceful degradation",
+          "degrade"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "出问题时不整个瘫掉，砍掉非必要部分，保住还能用的",
+        "en": "on failure, drop the nice-to-haves and keep the core running"
+      },
+      "units": [
+        "ch02",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "session",
+          "shared": 2
+        },
+        {
+          "id": "union-type",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "hook",
+      "term": {
+        "zh": "钩子",
+        "en": "hook"
+      },
+      "forms": {
+        "zh": [
+          "钩子系统",
+          "钩子"
+        ],
+        "en": [
+          "Hook",
+          "hook",
+          "Hooks",
+          "hooks"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "在关键节点外挂一段你自己的脚本，时刻一到就自动跑",
+        "en": "your own script hung on a lifecycle moment so it runs by itself when that moment arrives"
+      },
+      "units": [
+        "ch08"
+      ],
+      "related": [
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "mcp-server",
+          "shared": 1
+        },
+        {
+          "id": "observer-pattern",
+          "shared": 1
+        },
+        {
+          "id": "serialization",
+          "shared": 1
+        },
+        {
+          "id": "standard-streams",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "idempotent",
+      "term": {
+        "zh": "幂等",
+        "en": "idempotent"
+      },
+      "forms": {
+        "zh": [
+          "幂等"
+        ],
+        "en": [
+          "idempotent"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "同一件事做一次和做五遍，最后结果一模一样",
+        "en": "doing it once or five times leaves exactly the same result"
+      },
+      "units": [
+        "ch03",
+        "apxd"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "bundling",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "immutable-state",
+      "term": {
+        "zh": "不可变",
+        "en": "immutability"
+      },
+      "forms": {
+        "zh": [
+          "不可变性",
+          "不可变"
+        ],
+        "en": [
+          "immutable",
+          "immutability"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "数据不涂改，要改就整份抄新的再改，旧的照原样留着",
+        "en": "never overwrite data; copy it, change the copy, keep the original"
+      },
+      "units": [
+        "ch01",
+        "front"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "interrupt",
+      "term": {
+        "zh": "中断",
+        "en": "interrupt"
+      },
+      "forms": {
+        "zh": [
+          "中断"
+        ],
+        "en": [
+          "interrupt",
+          "interrupts",
+          "Interrupt",
+          "interruption",
+          "Interruption",
+          "Interrupting"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "你按停那一刻：正在跑的活要不要立刻收手、留下什么",
+        "en": "what happens the instant you hit stop: whether the running action is killed and what it leaves behind"
+      },
+      "units": [
+        "front",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "json-schema",
+      "term": {
+        "zh": "JSON Schema",
+        "en": "JSON Schema"
+      },
+      "forms": {
+        "zh": [
+          "JSON Schema"
+        ],
+        "en": [
+          "JSON Schema"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一份书面格式说明：这段数据该有哪些字段、各是什么类型",
+        "en": "a written spec of which fields a payload must carry and their types"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "lazy-loading",
+      "term": {
+        "zh": "延迟加载",
+        "en": "lazy loading"
+      },
+      "forms": {
+        "zh": [
+          "延迟加载",
+          "懒加载"
+        ],
+        "en": [
+          "lazy loading",
+          "lazy load"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "用到的那一刻才去取，没用到就一直不搬进来",
+        "en": "fetch a thing only when it's first needed, not all at the start"
+      },
+      "units": [
+        "ch01",
+        "ch10"
+      ],
+      "related": [
+        {
+          "id": "circular-dependency",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "least-privilege",
+      "term": {
+        "zh": "最小权限",
+        "en": "least privilege"
+      },
+      "forms": {
+        "zh": [
+          "最小权限"
+        ],
+        "en": [
+          "least privilege"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "只发刚好够干这活的权限，多一分都不给",
+        "en": "grant only what this task needs and nothing more"
+      },
+      "units": [
+        "ch03",
+        "ch05"
+      ],
+      "related": [
+        {
+          "id": "feature-flag",
+          "shared": 2
+        },
+        {
+          "id": "ab-testing",
+          "shared": 1
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "main-loop",
+      "term": {
+        "zh": "主循环",
+        "en": "Main Loop"
+      },
+      "forms": {
+        "zh": [
+          "主循环",
+          "Main Loop"
+        ],
+        "en": [
+          "Main Loop",
+          "main loop"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "问一次模型、跑一轮工具、再问一次，直到任务做完",
+        "en": "ask the model, run the tools it asks for, ask again, until the task is finished"
+      },
+      "units": [
+        "front",
+        "ch02",
+        "apxd"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cancellation-propagation",
+          "shared": 2
+        },
+        {
+          "id": "promise",
+          "shared": 2
+        },
+        {
+          "id": "streaming",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "mcp-resource",
+      "term": {
+        "zh": "MCP 资源",
+        "en": "MCP resource"
+      },
+      "forms": {
+        "zh": [
+          "MCP 资源",
+          "资源列表",
+          "资源"
+        ],
+        "en": [
+          "MCP resource",
+          "MCP resources",
+          "resource",
+          "resources",
+          "Resource"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "外部服务摆出来给 Agent 翻阅的现成资料，只能读不能执行",
+        "en": "readable data an outside service exposes -- files, records, docs -- as opposed to actions it can run"
+      },
+      "units": [
+        "ch12",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "mcp-server",
+      "term": {
+        "zh": "MCP 服务器",
+        "en": "MCP server"
+      },
+      "forms": {
+        "zh": [
+          "MCP 服务器"
+        ],
+        "en": [
+          "MCP server",
+          "MCP servers",
+          "MCP Server"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "按统一协议接在外面的服务，给 Agent 补上额外的工具和资料",
+        "en": "an outside program that speaks one shared protocol, handing the agent extra tools and data"
+      },
+      "units": [
+        "ch03",
+        "ch08"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "memory",
+      "term": {
+        "zh": "记忆",
+        "en": "memory"
+      },
+      "forms": {
+        "zh": [
+          "记忆系统",
+          "记忆"
+        ],
+        "en": [
+          "memory",
+          "Memory"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "跨对话留在硬盘上的小纸条，下次开机还会被读进来",
+        "en": "notes kept on disk between conversations and re-read next time, so the agent does not start from zero"
+      },
+      "units": [
+        "ch06"
+      ],
+      "related": [
+        {
+          "id": "claude-md",
+          "shared": 1
+        },
+        {
+          "id": "prompt-cache",
+          "shared": 1
+        },
+        {
+          "id": "technical-debt",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "memory-overflow",
+      "term": {
+        "zh": "内存溢出",
+        "en": "memory overflow"
+      },
+      "forms": {
+        "zh": [
+          "内存溢出"
+        ],
+        "en": [
+          "memory overflow",
+          "out of memory"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "攒着不放的东西太多，撑爆存放处，程序当场倒下",
+        "en": "too much kept at once runs out of room and the process dies"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "oauth",
+      "term": {
+        "zh": "OAuth",
+        "en": "OAuth"
+      },
+      "forms": {
+        "zh": [
+          "OAuth2",
+          "OAuth"
+        ],
+        "en": [
+          "OAuth"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "给第三方一张限额授权的通行条，不必交出主密码",
+        "en": "hands a third party a limited pass instead of your main password"
+      },
+      "units": [
+        "ch12",
+        "ch09"
+      ],
+      "related": [
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "fork-pattern",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "observer-pattern",
+      "term": {
+        "zh": "观察者模式",
+        "en": "observer pattern"
+      },
+      "forms": {
+        "zh": [
+          "观察者模式"
+        ],
+        "en": [
+          "observer pattern",
+          "Observer Pattern",
+          "Observer"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "谁关心就登记，事一发生挨个通知，发事的不用认识谁",
+        "en": "anyone interested signs up; when something happens, all get told"
+      },
+      "units": [
+        "ch08",
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "chain-of-responsibility",
+          "shared": 2
+        },
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "hook",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "permission-classifier",
+      "term": {
+        "zh": "分类器",
+        "en": "classifier"
+      },
+      "forms": {
+        "zh": [
+          "分类器",
+          "模式分类器"
+        ],
+        "en": [
+          "classifier",
+          "Classifier"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "另一个模型替你估计这次操作危不危险，决定放行还是来问你",
+        "en": "a second model that judges how risky an action looks, so it can approve or escalate without waiting for you"
+      },
+      "units": [
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        },
+        {
+          "id": "graceful-degradation",
+          "shared": 1
+        },
+        {
+          "id": "permission-mode",
+          "shared": 1
+        },
+        {
+          "id": "permission-pipeline",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "permission-mode",
+      "term": {
+        "zh": "权限模式",
+        "en": "permission mode"
+      },
+      "forms": {
+        "zh": [
+          "权限模式",
+          "授权模式"
+        ],
+        "en": [
+          "permission mode",
+          "Permission Mode",
+          "permissionMode",
+          "permission modes"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "Agent 动手前该找谁批准、多久问一次的规矩",
+        "en": "the rule for who approves each action, and how often the agent has to stop and ask"
+      },
+      "units": [
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        },
+        {
+          "id": "graceful-degradation",
+          "shared": 1
+        },
+        {
+          "id": "permission-classifier",
+          "shared": 1
+        },
+        {
+          "id": "permission-pipeline",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "permission-pipeline",
+      "term": {
+        "zh": "权限管线",
+        "en": "permission pipeline"
+      },
+      "forms": {
+        "zh": [
+          "权限管线"
+        ],
+        "en": [
+          "permission pipeline",
+          "Permission Pipeline"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "每次调用工具都要连闯的几道关卡，任一道说停就停",
+        "en": "several gates every tool call must pass in order; if any gate says stop, it stops right there"
+      },
+      "units": [
+        "ch01",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "sandbox",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "plan-mode",
+      "term": {
+        "zh": "计划模式",
+        "en": "plan mode"
+      },
+      "forms": {
+        "zh": [
+          "计划模式",
+          "Plan 模式",
+          "规划模式"
+        ],
+        "en": [
+          "plan mode",
+          "Plan mode",
+          "Plan Mode",
+          "Planning Mode"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "先只看不改，把方案写清楚给人过目，点头之后才动手",
+        "en": "a look-but-do-not-touch phase: the agent drafts a proposal first and only edits after you approve it"
+      },
+      "units": [
+        "ch14"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "deadlock",
+          "shared": 1
+        },
+        {
+          "id": "transcript",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "plugin",
+      "term": {
+        "zh": "插件",
+        "en": "plugin"
+      },
+      "forms": {
+        "zh": [
+          "插件",
+          "插件系统"
+        ],
+        "en": [
+          "plugin",
+          "Plugin",
+          "plugins",
+          "Plugins"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "别人打包好的一包能力，装上就多一批工具和命令",
+        "en": "someone else's bundled package of tools, commands and settings that you install in one go"
+      },
+      "units": [
+        "ch05",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "ab-testing",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "prefetch",
+      "term": {
+        "zh": "预取",
+        "en": "prefetch"
+      },
+      "forms": {
+        "zh": [
+          "预取"
+        ],
+        "en": [
+          "prefetch",
+          "prefetching",
+          "Prefetch"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "还没用上就先把要的东西搬到手边，用时不必现等",
+        "en": "fetch what you'll need before you need it, so nothing waits later"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "producer-consumer",
+      "term": {
+        "zh": "生产者与消费者",
+        "en": "producer and consumer"
+      },
+      "forms": {
+        "zh": [
+          "生产者",
+          "消费者"
+        ],
+        "en": [
+          "producer",
+          "consumer"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一边只管做、一边只管用，两边速度不同就得协调",
+        "en": "one side only makes, the other only takes; their speeds rarely match"
+      },
+      "units": [
+        "ch02",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "promise",
+      "term": {
+        "zh": "Promise",
+        "en": "Promise"
+      },
+      "forms": {
+        "zh": [
+          "Promise 链",
+          "Promise"
+        ],
+        "en": [
+          "Promise",
+          "promise"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "一张“将来给你结果”的凭条，只兑一次，成或败都算交代",
+        "en": "a receipt for a value that arrives later; it settles exactly once"
+      },
+      "units": [
+        "front",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cancellation-propagation",
+          "shared": 2
+        },
+        {
+          "id": "main-loop",
+          "shared": 2
+        },
+        {
+          "id": "streaming",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "prompt-cache",
+      "term": {
+        "zh": "提示缓存",
+        "en": "prompt cache"
+      },
+      "forms": {
+        "zh": [
+          "提示缓存",
+          "Prompt 缓存",
+          "Prompt Caching"
+        ],
+        "en": [
+          "prompt cache",
+          "Prompt cache",
+          "Prompt Cache",
+          "prompt caching",
+          "Prompt Caching"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "前面那段没变的话服务端已经记着，不必重新算钱重新算时间",
+        "en": "the service remembers the unchanged front part of your request, so it is neither re-processed nor re-charged"
+      },
+      "units": [
+        "ch06",
+        "ch07"
+      ],
+      "related": [
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        },
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "claude-md",
+          "shared": 1
+        },
+        {
+          "id": "context-window",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "race-condition",
+      "term": {
+        "zh": "竞态条件",
+        "en": "race condition"
+      },
+      "forms": {
+        "zh": [
+          "竞态条件"
+        ],
+        "en": [
+          "race condition",
+          "Race condition"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "两件事同时抢着改同一份数据，结果取决于谁手快",
+        "en": "two paths touch the same data at once; the outcome depends on timing"
+      },
+      "units": [
+        "ch01",
+        "ch11"
+      ],
+      "related": [
+        {
+          "id": "skill",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "regex",
+      "term": {
+        "zh": "正则表达式",
+        "en": "regular expression"
+      },
+      "forms": {
+        "zh": [
+          "正则表达式",
+          "正则匹配",
+          "正则"
+        ],
+        "en": [
+          "regular expression",
+          "regex",
+          "Regex"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "写一串模式符号，让机器照它在文本里筛出匹配的内容",
+        "en": "a pattern string the machine uses to pick out matching text"
+      },
+      "units": [
+        "ch03",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "runtime-validation",
+      "term": {
+        "zh": "运行时验证",
+        "en": "runtime validation"
+      },
+      "forms": {
+        "zh": [
+          "运行时验证"
+        ],
+        "en": [
+          "runtime validation",
+          "Runtime Validation",
+          "Runtime validation"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "跑起来那一刻才查数据合不合规格，当场挡住脏输入",
+        "en": "checking the data while the program runs, so bad input stops right there"
+      },
+      "units": [
+        "ch03",
+        "front"
+      ],
+      "related": [
+        {
+          "id": "separation-of-concerns",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "sandbox",
+      "term": {
+        "zh": "沙箱",
+        "en": "sandbox"
+      },
+      "forms": {
+        "zh": [
+          "沙箱模式",
+          "沙箱"
+        ],
+        "en": [
+          "sandbox",
+          "sandboxed"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "圈一块受限的地方让代码玩，出事也溅不到外面",
+        "en": "an enclosed area where code plays without touching anything outside"
+      },
+      "units": [
+        "ch01",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "permission-pipeline",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "separation-of-concerns",
+      "term": {
+        "zh": "关注点分离",
+        "en": "separation of concerns"
+      },
+      "forms": {
+        "zh": [
+          "关注点分离"
+        ],
+        "en": [
+          "separation of concerns"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "每块代码只管自己那件事，别把判断和跑腿搅一起",
+        "en": "each piece of code handles one job and doesn't mix in another's"
+      },
+      "units": [
+        "ch03",
+        "front"
+      ],
+      "related": [
+        {
+          "id": "runtime-validation",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "serial-execution",
+      "term": {
+        "zh": "串行",
+        "en": "serial"
+      },
+      "forms": {
+        "zh": [
+          "串行"
+        ],
+        "en": [
+          "serial",
+          "serially"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一件彻底办完才轮到下一件，中间绝不重叠",
+        "en": "one job finishes completely before the next one starts"
+      },
+      "units": [
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "serialization",
+      "term": {
+        "zh": "序列化",
+        "en": "serialization"
+      },
+      "forms": {
+        "zh": [
+          "序列化",
+          "反序列化"
+        ],
+        "en": [
+          "serialization",
+          "serialize",
+          "deserialization"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "把内存里的对象摊平成一段文字，好存好发；反过来叫还原",
+        "en": "flattening an object into text so it can be stored or sent, and undoing it"
+      },
+      "units": [
+        "ch08",
+        "ch09"
+      ],
+      "related": [
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "fork-pattern",
+          "shared": 1
+        },
+        {
+          "id": "hook",
+          "shared": 1
+        },
+        {
+          "id": "mcp-server",
+          "shared": 1
+        },
+        {
+          "id": "oauth",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "session",
+      "term": {
+        "zh": "会话",
+        "en": "session"
+      },
+      "forms": {
+        "zh": [
+          "会话"
+        ],
+        "en": [
+          "session",
+          "Session"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "从打开到退出的一段连续对话，中途记录会被存下来",
+        "en": "one continuous run of conversation whose history can be saved and picked up again later"
+      },
+      "units": [
+        "ch04",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "graceful-degradation",
+          "shared": 2
+        },
+        {
+          "id": "union-type",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "settings-json",
+      "term": {
+        "zh": "settings.json",
+        "en": "settings.json"
+      },
+      "forms": {
+        "zh": [
+          "settings.json",
+          "配置文件"
+        ],
+        "en": [
+          "settings.json"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "存放选项的纯文本文件，改里面的字段就等于改 Agent 的行为",
+        "en": "the plain text file where options live: edit a field there and the agent behaves differently next run"
+      },
+      "units": [
+        "ch05"
+      ],
+      "related": [
+        {
+          "id": "ab-testing",
+          "shared": 1
+        },
+        {
+          "id": "feature-flag",
+          "shared": 1
+        },
+        {
+          "id": "least-privilege",
+          "shared": 1
+        },
+        {
+          "id": "plugin",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "side-effect",
+      "term": {
+        "zh": "副作用",
+        "en": "side effect"
+      },
+      "forms": {
+        "zh": [
+          "副作用"
+        ],
+        "en": [
+          "side effect",
+          "side effects"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "算数的同时还改了外面：写文件、发消息、动全局状态",
+        "en": "besides computing, it also changes things outside itself: files, messages, state"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "singleton",
+      "term": {
+        "zh": "单例",
+        "en": "singleton"
+      },
+      "forms": {
+        "zh": [
+          "惰性单例",
+          "单例"
+        ],
+        "en": [
+          "singleton"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "全程只许存在一份的对象，谁来拿都是同一个",
+        "en": "one shared instance for the whole program; everyone gets the same one"
+      },
+      "units": [
+        "ch11"
+      ],
+      "related": [
+        {
+          "id": "bundling",
+          "shared": 1
+        },
+        {
+          "id": "race-condition",
+          "shared": 1
+        },
+        {
+          "id": "skill",
+          "shared": 1
+        },
+        {
+          "id": "symbolic-link",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "skill",
+      "term": {
+        "zh": "技能",
+        "en": "skill"
+      },
+      "forms": {
+        "zh": [
+          "技能",
+          "技能系统"
+        ],
+        "en": [
+          "Skill",
+          "skill",
+          "skills",
+          "Skills"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "一份事先写好的操作说明书，被点到时交给模型照着做",
+        "en": "a written-down procedure the model can be handed and follow, instead of being re-taught every time"
+      },
+      "units": [
+        "ch11",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "race-condition",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        },
+        {
+          "id": "blocking",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "snapshot",
+      "term": {
+        "zh": "快照",
+        "en": "snapshot"
+      },
+      "forms": {
+        "zh": [
+          "状态快照",
+          "快照"
+        ],
+        "en": [
+          "snapshot",
+          "Snapshot"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "把某一瞬间的全部原样抄一份留着，之后怎么变都不影响它",
+        "en": "a copy of everything at one instant, untouched by later changes"
+      },
+      "units": [
+        "ch02",
+        "ch01"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "standard-streams",
+      "term": {
+        "zh": "标准输入输出",
+        "en": "standard streams"
+      },
+      "forms": {
+        "zh": [
+          "stdin",
+          "stdout",
+          "stderr"
+        ],
+        "en": [
+          "stdin",
+          "stdout",
+          "stderr"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "程序约定好的三个口：喂进去的话、打印的话、抱怨的话",
+        "en": "three agreed channels: what you feed in, what it prints, what it complains"
+      },
+      "units": [
+        "ch08"
+      ],
+      "related": [
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "hook",
+          "shared": 1
+        },
+        {
+          "id": "mcp-server",
+          "shared": 1
+        },
+        {
+          "id": "observer-pattern",
+          "shared": 1
+        },
+        {
+          "id": "serialization",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "state-machine",
+      "term": {
+        "zh": "状态机",
+        "en": "state machine"
+      },
+      "forms": {
+        "zh": [
+          "状态机"
+        ],
+        "en": [
+          "state machine",
+          "State Machine"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "把流程画成几个格子，箭头规定哪格能跳到哪格",
+        "en": "a flow drawn as boxes, with arrows listing the legal jumps"
+      },
+      "units": [
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "strategy-pattern",
+      "term": {
+        "zh": "策略模式",
+        "en": "strategy pattern"
+      },
+      "forms": {
+        "zh": [
+          "策略模式"
+        ],
+        "en": [
+          "Strategy Pattern",
+          "strategy pattern"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "同一件事备几套做法，按情况挑一套，主干不动",
+        "en": "several interchangeable ways for one job; pick one, core code unchanged"
+      },
+      "units": [
+        "ch09"
+      ],
+      "related": [
+        {
+          "id": "fork-pattern",
+          "shared": 1
+        },
+        {
+          "id": "oauth",
+          "shared": 1
+        },
+        {
+          "id": "serialization",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "streaming",
+      "term": {
+        "zh": "流式",
+        "en": "streaming"
+      },
+      "forms": {
+        "zh": [
+          "流式"
+        ],
+        "en": [
+          "streaming",
+          "Streaming"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "结果一点点到就一点点用；书里指模型回复逐字涌出",
+        "en": "handle bits as they land; here, the model's reply arrives word by word"
+      },
+      "units": [
+        "front",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cancellation-propagation",
+          "shared": 2
+        },
+        {
+          "id": "main-loop",
+          "shared": 2
+        },
+        {
+          "id": "promise",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "sub-agent",
+      "term": {
+        "zh": "子智能体",
+        "en": "sub-agent"
+      },
+      "forms": {
+        "zh": [
+          "子智能体",
+          "子 Agent"
+        ],
+        "en": [
+          "sub-agent",
+          "Sub-agent",
+          "sub-agents",
+          "Sub-Agent"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "被派出去办一件小事的另一条对话线，办完只带回结论",
+        "en": "a second agent spawned for one small task with its own message history, reporting back only the answer"
+      },
+      "units": [
+        "ch01",
+        "ch03"
+      ],
+      "related": [
+        {
+          "id": "destructive",
+          "shared": 2
+        },
+        {
+          "id": "factory-function",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "symbolic-link",
+      "term": {
+        "zh": "符号链接",
+        "en": "symbolic link"
+      },
+      "forms": {
+        "zh": [
+          "符号链接"
+        ],
+        "en": [
+          "symbolic link",
+          "symlink"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一个指路牌式的假条目，打开它其实走到别处的真文件",
+        "en": "a shortcut entry that quietly sends you to a file somewhere else"
+      },
+      "units": [
+        "ch11"
+      ],
+      "related": [
+        {
+          "id": "bundling",
+          "shared": 1
+        },
+        {
+          "id": "race-condition",
+          "shared": 1
+        },
+        {
+          "id": "singleton",
+          "shared": 1
+        },
+        {
+          "id": "skill",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "system-prompt",
+      "term": {
+        "zh": "系统提示",
+        "en": "system prompt"
+      },
+      "forms": {
+        "zh": [
+          "系统提示词",
+          "系统提示"
+        ],
+        "en": [
+          "system prompt",
+          "System Prompt",
+          "system prompts"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "每轮对话都置顶的岗位说明书：它是谁、能做什么、听谁的",
+        "en": "the standing instruction sent on top of every request: who it is, what it may do, what it must obey"
+      },
+      "units": [
+        "ch02",
+        "ch07"
+      ],
+      "related": [
+        {
+          "id": "auto-compact",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "technical-debt",
+      "term": {
+        "zh": "技术债",
+        "en": "technical debt"
+      },
+      "forms": {
+        "zh": [
+          "技术债"
+        ],
+        "en": [
+          "technical debt"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "为赶工欠下的马虎账，日后要连本带利花时间还",
+        "en": "the shortcut you take today, paid back with interest later"
+      },
+      "units": [
+        "ch12",
+        "ch06"
+      ],
+      "related": [
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "claude-md",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "telemetry",
+      "term": {
+        "zh": "遥测",
+        "en": "telemetry"
+      },
+      "forms": {
+        "zh": [
+          "遥测"
+        ],
+        "en": [
+          "telemetry",
+          "Telemetry"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "程序运行途中悄悄记下发生了什么，事后传回来供分析",
+        "en": "the program writes down what happened while running and ships the numbers back for later analysis"
+      },
+      "units": [
+        "ch07",
+        "ch13"
+      ],
+      "related": [
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        },
+        {
+          "id": "circuit-breaker",
+          "shared": 1
+        },
+        {
+          "id": "context-window",
+          "shared": 1
+        },
+        {
+          "id": "end-to-end",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "test-mock",
+      "term": {
+        "zh": "mock",
+        "en": "mock"
+      },
+      "forms": {
+        "zh": [
+          "mock"
+        ],
+        "en": [
+          "mock",
+          "mocks",
+          "spy"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "测试时用的假替身，照剧本回应，不去碰真的外部服务",
+        "en": "a stand-in built for tests that answers from a script instead of the real thing"
+      },
+      "units": [
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "token-budget",
+      "term": {
+        "zh": "Token 预算",
+        "en": "token budget"
+      },
+      "forms": {
+        "zh": [
+          "Token 预算"
+        ],
+        "en": [
+          "Token Budget",
+          "token budget",
+          "Token budget"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一轮允许花掉的篇幅上限，快到线就提醒或收尾",
+        "en": "the cap on how much text a round may spend before it wraps up"
+      },
+      "units": [
+        "ch02",
+        "ch15"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "tombstone",
+      "term": {
+        "zh": "墓碑消息",
+        "en": "tombstone"
+      },
+      "forms": {
+        "zh": [
+          "墓碑消息"
+        ],
+        "en": [
+          "tombstone",
+          "Tombstone"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "立个牌子写明“这条已作废”，而不是悄悄抹掉",
+        "en": "a marker saying this entry is dead, instead of silently removing it"
+      },
+      "units": [
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "backpressure",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "tool-result",
+      "term": {
+        "zh": "工具结果",
+        "en": "tool result"
+      },
+      "forms": {
+        "zh": [
+          "工具结果",
+          "工具执行结果"
+        ],
+        "en": [
+          "tool result",
+          "tool results",
+          "Tool Result",
+          "Tool results"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "一次动作的返回内容：文件正文、命令输出或报错，被塞回对话",
+        "en": "what an action hands back -- file text, command output or an error -- fed into the chat as a new message"
+      },
+      "units": [
+        "ch01",
+        "ch07"
+      ],
+      "related": [
+        {
+          "id": "context-window",
+          "shared": 2
+        },
+        {
+          "id": "agent-harness",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "auto-compact",
+          "shared": 1
+        },
+        {
+          "id": "avalanche",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "transcript",
+      "term": {
+        "zh": "会话记录",
+        "en": "transcript"
+      },
+      "forms": {
+        "zh": [
+          "会话记录",
+          "Transcript"
+        ],
+        "en": [
+          "transcript",
+          "Transcript"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一整段对话被逐条写成的流水账，恢复和审计都靠它",
+        "en": "the message-by-message log of a conversation, used to resume it later or to audit what actually happened"
+      },
+      "units": [
+        "ch14",
+        "ch10"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "circular-dependency",
+          "shared": 1
+        },
+        {
+          "id": "coordinator",
+          "shared": 1
+        },
+        {
+          "id": "deadlock",
+          "shared": 1
+        },
+        {
+          "id": "end-to-end",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "tree-shaking",
+      "term": {
+        "zh": "tree-shaking",
+        "en": "tree-shaking"
+      },
+      "forms": {
+        "zh": [
+          "tree-shaking"
+        ],
+        "en": [
+          "tree-shaking"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "打包时抖落用不上的分支代码，只留真被摇到的那几根",
+        "en": "shaking unused branches off the bundle so only reachable code ships"
+      },
+      "units": [
+        "ch03",
+        "ch13"
+      ],
+      "related": [
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "cache-invalidation",
+          "shared": 1
+        },
+        {
+          "id": "compile-time",
+          "shared": 1
+        },
+        {
+          "id": "dead-code-elimination",
+          "shared": 1
+        },
+        {
+          "id": "deferred-tool-discovery",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "unicode",
+      "term": {
+        "zh": "Unicode",
+        "en": "Unicode"
+      },
+      "forms": {
+        "zh": [
+          "Unicode"
+        ],
+        "en": [
+          "Unicode"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "给天下文字统一编号的一张表，各系统认字不打架",
+        "en": "one shared numbering table so every system reads the same characters"
+      },
+      "units": [
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "mcp-resource",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "union-type",
+      "term": {
+        "zh": "联合类型",
+        "en": "union type"
+      },
+      "forms": {
+        "zh": [
+          "联合类型"
+        ],
+        "en": [
+          "union type"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一个位置只允许列出的几种形状之一，用前得先分辨是哪种",
+        "en": "one slot holding any of several listed shapes; you must tell which first"
+      },
+      "units": [
+        "ch02",
+        "ch04"
+      ],
+      "related": [
+        {
+          "id": "graceful-degradation",
+          "shared": 2
+        },
+        {
+          "id": "session",
+          "shared": 2
+        },
+        {
+          "id": "abort-controller",
+          "shared": 1
+        },
+        {
+          "id": "async-generator",
+          "shared": 1
+        },
+        {
+          "id": "atomic-update",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "websocket",
+      "term": {
+        "zh": "WebSocket",
+        "en": "WebSocket"
+      },
+      "forms": {
+        "zh": [
+          "WebSocket"
+        ],
+        "en": [
+          "WebSocket"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "一条一直留着的双向通道，两头随时都能主动开口",
+        "en": "a connection kept open so either side can speak up any time"
+      },
+      "units": [
+        "ch12"
+      ],
+      "related": [
+        {
+          "id": "adapter-pattern",
+          "shared": 1
+        },
+        {
+          "id": "chain-of-responsibility",
+          "shared": 1
+        },
+        {
+          "id": "closure",
+          "shared": 1
+        },
+        {
+          "id": "exponential-backoff",
+          "shared": 1
+        },
+        {
+          "id": "mcp-resource",
+          "shared": 1
+        }
+      ]
+    },
+    {
+      "id": "whitelist",
+      "term": {
+        "zh": "白名单",
+        "en": "allowlist"
+      },
+      "forms": {
+        "zh": [
+          "白名单",
+          "黑白名单"
+        ],
+        "en": [
+          "whitelist",
+          "allowlist"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "事先列好许可名册，名册外一律挡在门外",
+        "en": "a prepared list of the permitted; everything else is denied"
+      },
+      "units": [
+        "ch01",
+        "front"
+      ],
+      "related": [
+        {
+          "id": "agent-harness",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "bun-runtime",
+          "shared": 2
+        },
+        {
+          "id": "callback",
+          "shared": 2
+        },
+        {
+          "id": "concurrency",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "yield",
+      "term": {
+        "zh": "yield",
+        "en": "yield"
+      },
+      "forms": {
+        "zh": [
+          "yield"
+        ],
+        "en": [
+          "yield"
+        ]
+      },
+      "priority": "core",
+      "plain": {
+        "zh": "交出一个结果，然后停在原地等对方来取下一个",
+        "en": "hand out one value, then sit still until the caller asks for the next"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    },
+    {
+      "id": "yield-star",
+      "term": {
+        "zh": "yield*",
+        "en": "yield*"
+      },
+      "forms": {
+        "zh": [
+          "yield*"
+        ],
+        "en": [
+          "yield*"
+        ]
+      },
+      "priority": "extra",
+      "plain": {
+        "zh": "把往外逐个交活这整件事，转包给另一段同样的代码",
+        "en": "delegate the whole hand-out job to another generator and pass its output along"
+      },
+      "units": [
+        "ch01",
+        "ch02"
+      ],
+      "related": [
+        {
+          "id": "async-generator",
+          "shared": 2
+        },
+        {
+          "id": "backpressure",
+          "shared": 2
+        },
+        {
+          "id": "cache-hit-rate",
+          "shared": 2
+        },
+        {
+          "id": "dependency-injection",
+          "shared": 2
+        },
+        {
+          "id": "destructuring",
+          "shared": 2
+        }
+      ]
+    }
+  ]
+}

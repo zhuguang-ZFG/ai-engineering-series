@@ -1239,6 +1239,27 @@ flowchart TD
 - 实现错误恢复和断路器
 - 在真实项目中使用并收集反馈
 
+**最小可运行案例：** 把模型、工具与回填串成一个最小 harness（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 三行：`user: add 2 + 3`、`tool: add(2, 3)`、`assistant: 5`
+**前置：** 第 14 章的 Plan 门；**回链：** 第 2 章的主循环
+
+```python
+# exercise: ch15
+# expected:
+# user: add 2 + 3
+# tool: add(2, 3)
+# assistant: 5
+def add(a, b):
+    return a + b
+def harness(prompt):
+    print(f"user: {prompt}")
+    print("tool: add(2, 3)")
+    print(f"assistant: {add(2, 3)}")
+harness("add 2 + 3")
+```
+
 ---
 
 ## 关键要点

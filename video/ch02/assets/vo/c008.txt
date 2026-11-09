@@ -1,1 +1,0 @@
-Message：结构化消息，助手、用户、系统，相当于剪辑好的镜头。TombstoneMessage：流式回退时的墓碑，告诉 UI 某段历史作废。ToolUseSummaryMessage：一批工具跑完后的折叠摘要，长会话才不至于被输出淹没。

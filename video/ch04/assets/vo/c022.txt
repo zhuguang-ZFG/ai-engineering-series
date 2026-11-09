@@ -1,1 +1,0 @@
-收五句。一，护栏是四道闸，不是一扇门。二，deny 大于 ask 大于 allow。三，PermissionContext 不可变快照。四，模式光谱按场景选，bypass 仍有底线。

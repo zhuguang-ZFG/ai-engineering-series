@@ -1,1 +1,0 @@
-ResolveOnce 提供 resolve、isResolved、claim。单线程里 claim 就是轻量互斥：两个回调几乎同时到，也只有一个能兑票。跟第 02 章不可变状态流转一脉相承——状态要么旧要么新，没有一半一半。

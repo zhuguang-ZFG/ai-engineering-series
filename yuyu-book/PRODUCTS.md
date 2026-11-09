@@ -10,7 +10,7 @@
 取同名兄弟文件——御舆用裸名（`glosses.json` / `notes.json` / `reading-paths.json`），
 omp 用 `-omp` 后缀，pi 用 `-pi` 后缀（`glosses-pi.json` / `notes-pi.json` / `reading-paths-pi.json`），
 写第二分册的通俗层不会顺手改到第一分册。`omp` 过去走 `--no-plain` 整层跳过，M2 之后已不传该
-开关；`--no-plain` 仍是 `build.py` 的正式开关，留着出「无通俗层」对照排版。插画双轨：正文
+开关；`--no-plain` 仍是 `python -m yuyu_book` / `bookctl build` 的正式开关，留着出「无通俗层」对照排版。插画双轨：正文
 `omp/images/` 手绘嵌入 + Mermaid 管道。不要用 `make book` 编 omp。
 
 ## Omp 英文开启条件

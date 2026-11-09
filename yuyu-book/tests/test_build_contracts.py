@@ -59,6 +59,38 @@ def _root_children(svg: str) -> list[tuple[str, str]]:
             for child in root]
 
 
+class StyleSources(unittest.TestCase):
+    """The stylesheet is four sources, not one file: tokens, screen rules,
+    component rules and the print overlay. The build inlines them in that
+    order, and the reading-column block stays the last screen word."""
+
+    def test_the_stylesheet_is_assembled_in_cascade_order(self):
+        from yuyu_book import style_components, style_print, style_screen, style_tokens
+        self.assertEqual(
+            CSS,
+            style_tokens.TOKENS_CSS + style_screen.SCREEN_CSS
+            + style_components.COMPONENTS_CSS + style_print.PRINT_CSS)
+        self.assertLess(CSS.index("--paper:#FBF7EF"), CSS.index(".sheet{"))
+        self.assertLess(CSS.index(".sheet{"), CSS.index(".callout{"))
+        self.assertLess(CSS.index(".callout{"), CSS.index("@media print{"))
+
+    def test_tokens_hold_the_palette_and_no_screen_source_redefines_it(self):
+        from yuyu_book import style_components, style_screen, style_tokens
+        for token in ("--paper:", "--ink:", "--cinnabar:", "--measure:"):
+            self.assertIn(token, style_tokens.TOKENS_CSS)
+        for source in (style_screen.SCREEN_CSS, style_components.COMPONENTS_CSS):
+            self.assertNotIn(":root{", source)
+
+    def test_the_reading_column_stays_the_last_screen_block(self):
+        from yuyu_book import style_components, style_print
+        column = style_components.COMPONENTS_CSS.index("the reading column")
+        self.assertGreater(column, style_components.COMPONENTS_CSS.index(".kp-art"))
+        self.assertTrue(
+            style_components.COMPONENTS_CSS.rstrip().endswith("margin-inline:auto}"))
+        self.assertTrue(style_print.PRINT_CSS.startswith(
+            "/* ------- print / PDF ------- */"))
+
+
 class Palette(unittest.TestCase):
     def test_the_book_defines_its_own_token_set(self):
         for key in ("paper", "paper-2", "paper-3", "card", "ink", "ink-2",
@@ -363,7 +395,7 @@ class RunningHeads(unittest.TestCase):
         """The PDF pass reads its section map out of the bookmarks. Part ids
         were once filtered out, which left each divider page wearing the head
         of the chapter that ended before it."""
-        import build
+        from yuyu_book import app as build
         from yuyu_book.core import load_configs
         manifest, _ = load_configs()
         outline = [(1, p["no"]["zh"] + " · " + p["title"]["zh"], p["id"])
@@ -640,7 +672,7 @@ class ChapterOpening(unittest.TestCase):
     at the tail."""
 
     def _article(self):
-        from build import _article
+        from yuyu_book.app import _article
         from yuyu_book.core import Unit
         u = Unit("ch02", "chapter", "zh", "第 2 章", "对话循环", "")
         payload = {"unit": u, "html": "<p>正文第一段</p>",
@@ -721,14 +753,38 @@ class Deliverables(unittest.TestCase):
         build which published nothing into a red run."""
         text = (REPO_ROOT / ".github" / "workflows" / "book.yml").read_text(
             encoding="utf-8")
-        block = re.search(r"uses:\s*actions/upload-artifact@\S+\s+with:\n"
-                          r"((?:[ \t]+\S.*\n?)+)", text)
-        self.assertIsNotNone(block, "no upload-artifact step")
-        keys = set(re.findall(r"^[ \t]+([\w-]+):", block.group(1), re.M))
-        self.assertLessEqual(keys, {"name", "path", "if-no-files-found",
-                                    "retention-days", "compression-level",
-                                    "overwrite", "include-hidden-files"})
-        self.assertIn("if-no-files-found", keys)
+        lines = text.splitlines()
+        blocks = []
+        for index, line in enumerate(lines):
+            if not re.search(r"uses:\s*actions/upload-artifact@", line):
+                continue
+            step_indent = len(line) - len(line.lstrip())
+            block = []
+            cursor = index + 1
+            while cursor < len(lines):
+                current = lines[cursor]
+                if current.strip() and \
+                        len(current) - len(current.lstrip()) <= step_indent:
+                    break
+                block.append(current)
+                cursor += 1
+            blocks.append(block)
+        self.assertTrue(blocks, "no upload-artifact step")
+        for block in blocks:
+            with_index = next(i for i, line in enumerate(block)
+                              if line.strip().startswith("with:"))
+            with_indent = len(block[with_index]) - len(block[with_index].lstrip())
+            keys = set()
+            for line in block[with_index + 1:]:
+                if not line.strip():
+                    continue
+                if len(line) - len(line.lstrip()) <= with_indent:
+                    break
+                keys.add(line.strip().split(":", 1)[0])
+            self.assertLessEqual(keys, {"name", "path", "if-no-files-found",
+                                        "retention-days", "compression-level",
+                                        "overwrite", "include-hidden-files"})
+            self.assertIn("if-no-files-found", keys)
 
 
 class EndToEndNoBrowser(unittest.TestCase):
@@ -737,9 +793,9 @@ class EndToEndNoBrowser(unittest.TestCase):
 
     def check(self, *extra: str) -> str:
         proc = subprocess.run(
-            [sys.executable, str(BOOK_DIR / "build.py"), "--check",
+            [sys.executable, "-m", "yuyu_book", "--check",
              "--mermaid=source", *extra],
-            cwd=str(REPO_ROOT), capture_output=True, text=True, encoding="utf-8")
+            cwd=str(BOOK_DIR), capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("CHECK OK", proc.stdout)
         return proc.stdout

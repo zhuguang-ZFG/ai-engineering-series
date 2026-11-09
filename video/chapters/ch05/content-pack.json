@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "ch05",
+  "title": "第 5 章　设置与配置 — Agent 的基因",
+  "source": "第二部分-核心系统篇/05-设置与配置-Agent的基因.md",
+  "sections": [
+    {
+      "index": 1,
+      "title": "5.2 安全边界设计",
+      "summary": "配置系统的核心安全挑战是：projectSettings（.claude/settings.json）会跟着提交进 Git 仓库，谁克隆了恶意仓库，谁就可能不知不觉把攻击者的配置加载进来。Claude Code 的防护策略是：在安全敏感的检查中，系统性地排除 projectSettings。"
+    },
+    {
+      "index": 2,
+      "title": "5.3 功能开关系统",
+      "summary": "Claude Code 的功能开关系统分为两层：编译时的 feature() 函数和运行时的 GrowthBook 实验框架。这种双层设计反映了软件发布工程中的一个经典权衡：编译时开关控制特性但不增加运行时开销，运行时开关则不用重新部署就能快速迭代。"
+    },
+    {
+      "index": 3,
+      "title": "5.4 状态管理系统",
+      "summary": "状态管理是 Agent 系统的\"神经系统\"——配置是基因，决定了 Agent 的潜力；状态是神经系统，实时传递和协调 Agent 的运行时行为。Claude Code 的状态管理方案极简，其设计哲学值得深入分析。"
+    }
+  ],
+  "takeaways": [
+    "六层优先级链：pluginSettings -> userSettings -> projectSettings -> localSettings -> flagSettings -> policySettings，后者覆盖前者。理解每一层的角色是设计合理配置策略的基础。",
+    "合并策略：数组拼接去重，对象深度合并，标量直接覆盖。数组拼接的设计确保权限规则只会增加，合并不会意外删除它们。",
+    "安全边界：所有安全敏感检查都排除 projectSettings，防止恶意仓库的供应链攻击。这是\"信任半径递减\"原则的直接体现。",
+    "策略层的特殊合并：policySettings 使用\"首个非空源胜出\"而非深度合并，确保企业策略的确定性和可审计性。",
+    "双重功能开关：feature() 提供编译时死代码消除（零运行时开销），GrowthBook 提供运行时实验控制（灵活但依赖缓存）。两者的选择取决于功能是否需要在发布后动态调整。",
+    "不可变状态：Store 使用 Object.is 引用比较，强制不可变更新模式，配合 React 的 useSyncExternalStore 实现精细化的订阅渲染。34 行代码就把状态管理该做的都做完了。",
+    "DeepImmutable 类型：让类型系统拦住对状态的直接修改，让正确的事情容易，让错误的事情不可能。"
+  ],
+  "core_terms": [
+    {
+      "zh": "状态机",
+      "en": "state machine"
+    },
+    {
+      "zh": "回调",
+      "en": "callback"
+    },
+    {
+      "zh": "不可变",
+      "en": "immutability"
+    },
+    {
+      "zh": "阻塞",
+      "en": "blocking"
+    },
+    {
+      "zh": "并发",
+      "en": "concurrency"
+    },
+    {
+      "zh": "最小权限",
+      "en": "least privilege"
+    },
+    {
+      "zh": "权限模式",
+      "en": "permission mode"
+    },
+    {
+      "zh": "钩子",
+      "en": "hook"
+    }
+  ]
+}

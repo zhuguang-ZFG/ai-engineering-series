@@ -1,1 +1,8 @@
-<svg class="a-toggle" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19.2 21.4q12.8-.8 25.6-.2 11-.4 10.9 10.8t-10.7 11q-12.8.8-25.6.2-11 .4-10.9-10.8t10.7-11" pathLength="100"/><circle class="knob" cx="44" cy="32" r="6.5" fill="currentColor" stroke="none"/><circle cx="44" cy="32" r="9.6" opacity=".3" stroke-width="1.3" pathLength="100"/><path d="M20.5 26.4q-.4 5.6.2 11.2" opacity=".4" pathLength="100"/></svg>
+<svg class="a-toggle" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M19 20.7q13.1-1.6 26.2-.1c7.4-.6 12.3 4.8 11.2 12.2-.3 7.7-5.3 11.4-12.2 10.9q-12.6 1.3-25.3-.1C11.5 44.7 7 38.7 7.6 31.9c-.4-6.1 4.8-11.6 11.4-11.2Z" stroke-width="2.5" pathLength="100"/>
+  <circle class="knob" cx="44" cy="32" r="6.5" fill="currentColor" stroke="none"/>
+  <circle cx="44" cy="32" r="9.6" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M20.5 26.4q-1 5.7.2 11.2" stroke-width="1.8" opacity=".55" pathLength="100"/>
+  <path d="M8.9 28.5c-1.5 8.6 3 14.7 10.5 13.1l24.8.8q8.3 1 11.6-7.4c-.4 6.7-6 9.4-11.6 8.7q-12.6 1.3-25.3-.1C10 45 5.8 36.5 8.9 28.5Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="M19.2 23.5q10.7-1.1 16.3-.6m-12 16.4 4.2-2.5m-.3 3.4 3.7-2.2" stroke-width=".8" opacity=".3" pathLength="100"/>
+</svg>

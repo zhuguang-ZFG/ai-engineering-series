@@ -13,7 +13,7 @@
 
 ## 重生成
 
-先构建（或复用 `yuyu-book/dist/` 中的同名产物），再从仓库根目录运行。基线里的 HTML 与片段取自 `--pdf` 之后的产物（主题索引已写入页码），重生成时要用同一命令 `python yuyu-book/build.py --lang both --pdf`；只跑 HTML 会让 `subject-index` 片段与基线不同。
+先构建（或复用 `yuyu-book/dist/` 中的同名产物），再从仓库根目录运行。基线里的 HTML 与片段取自 `--pdf` 之后的产物（主题索引已写入页码），重生成时要用等效的当前命令 `python scripts/bookctl.py build --product book --lang both --pdf`；只跑 HTML 会让 `subject-index` 片段与基线不同。基线本身记录的是改造前构建器的输出，命令入口换成 `bookctl` 不改变比较口径。
 
     python scripts/baseline.py
     python scripts/baseline_snapshot.py

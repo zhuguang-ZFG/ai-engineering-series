@@ -1,6 +1,9 @@
 # 附录 A 命令行参数速查
 
+<!-- block: omp-apxa.b-7c5cbd9c -->
 权威全文：`docs/cli-reference.md`。本页帮你建立地图并跟做核对；旗标会变。**冲突时以本机二进制行为为准**；`omp --help` 是常用摘要，不一定列全。子命令清单**不写死条数**，以 `omp --help` 的 COMMANDS 表为准。写作钉 omp v18.15.0；用户本机验证 v18.16.0（详见 `VERIFY.md`）。
+
+> **开门一句话：**查命令行参数按子命令找；旗标以本机 --help 原文为准。
 
 ## A.1 调用形态
 
@@ -24,9 +27,11 @@ omp -p "List all .ts files in src/"
 omp --continue "我们刚谈到哪？"
 ```
 
-参数习惯：`@路径` 把文件或图片挂到初始消息；在非协议模式下，非 TTY 的 stdin 会读到 EOF 当作提示文本，不必再加 `-` 标记；管道或非 TTY stdin 在未指定 `--mode` 时常选打印模式；stdin 文本、文本附件与第一条位置消息合成初始提示，其余位置消息作为后续轮次；`--` 结束旗标解析，其后即便长得像旗标也当正文。
+参数习惯：`@路径` 把文件或图片挂到初始消息。非协议模式下，非 TTY 的 stdin 会读到 EOF 当作提示文本，不必再加 `-` 标记；管道或非 TTY stdin 在未指定 `--mode` 时，常选打印模式。stdin 文本、文本附件与第一条位置消息合成初始提示，其余位置消息作为后续轮次。`--` 结束旗标解析，其后即便长得像旗标，也当正文。
 
 ## A.3 会话与工作区旗标
+
+启动时你在「哪个会话、哪片工作区」由这组旗标决定。
 
 | 旗标 | 含义（摘要） |
 |------|----------------|
@@ -39,7 +44,13 @@ omp --continue "我们刚谈到哪？"
 | `--session-dir <dir>` | 会话存储与查找目录 |
 | `--no-session` | 不保存会话（临时） |
 
+![图A-1 旗标分层](images/figA-1-flag-layers.jpg)
+
+*图A-1：第一位置参数先分类：进 launch、进子命令，还是当提示词——三条路各有一套旗标。*
+
 ## A.4 会话历史旗标
+
+历史不会丢，但要会取：这一组管「翻旧账」的姿势。
 
 | 旗标 | 含义（摘要） |
 |------|----------------|
@@ -53,6 +64,10 @@ omp --continue "我们刚谈到哪？"
 
 注意：continue/resume/restore/fork 与外来导入需要持久化，不能搭配 `--no-session`；两个 from-* 互斥，且不能与 continue/resume/fork 组合——细节以原文为准。
 
+![图A-2 模型与推理旗标](images/figA-2-model-flags.jpg)
+
+*图A-2：指模型有三种写法，推理档与会话微调各一层；摘要漏列要回 cli-reference。*
+
 ## A.5 模型与推理相关
 
 `--model` 可接角色（如 `slow` / `@slow`）或模糊模型名；带提供方时 id 须精确。另有 `--smol`、`--slow`、`--plan` 及对应环境变量，`--provider`（遗留）、`--api-key`、`--provider-session-id`、`--prompt-cache-key`、`--service-tier` 等。thinking/reasoning 另有专节旗标。后几项可能不在 `--help` 摘要里——以 cli-reference 与二进制解析为准。
@@ -60,6 +75,10 @@ omp --continue "我们刚谈到哪？"
 ## A.6 打印模式与输出模式
 
 `-p` 走非交互。`--mode` 控制输出形态。本机 `--help` 摘要写：`text`（默认）、`json`、`rpc`、`rpc-ui`；cli-reference 另列 `acp`，且二进制接受 `--mode acp`（也可用子命令 `omp acp`）。第一次学手感请留在 TUI（第6章）；脚本与 CI 再用打印模式。计划类默认启动行为在打印模式可能被忽略。
+
+![图A-3 输出模式矩阵](images/figA-3-mode-matrix.jpg)
+
+*图A-3：`-p` 走非交互，`--mode` 选输出形态——脚本与 CI 用打印模式。*
 
 ## A.7 跟做：十分钟核对
 
@@ -75,6 +94,10 @@ omp --help | grep -E 'profile|continue|no-extensions|mode' || true
 omp --trusted-extension 2>&1 | head -n 3 || true
 omp --fork 2>&1 | head -n 3 || true
 ```
+
+![图A-4 帮助漏列怎么核](images/figA-4-binary-probe.jpg)
+
+*图A-4：帮助没列不等于二进制不认识；用缺值探针和 cli-reference 交叉验证。*
 
 ## A.8 子命令地图（按用途分格，不冒充完整表）
 
@@ -96,6 +119,10 @@ omp --fork 2>&1 | head -n 3 || true
 | 出网搜索自测 | `omp search` | 第12章 |
 
 拿不准某条命令存不存在时别猜：`omp <猜的名字>` 不会报「未知命令」，整句会被当提示词送进模型（本机 18.16.0 实测 `omp notasubcommand` 停在 `Working...`，`fail/bad-command.txt`）。**未知旗标**才会明确报错、exit 2。
+
+![图A-5 子命令格子](images/figA-5-subcommand-grid.jpg)
+
+*图A-5：按问题分的子命令地图——接模型、会话迁移、配置、技能包、服务模式。*
 
 ## A.9 排障三问与可勾选
 

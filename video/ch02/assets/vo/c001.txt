@@ -1,2 +1,0 @@
-书稿给它起了个名字：Agent 的心跳。
-先停三秒想一下：如果你在源码里找「心跳」，它最可能是什么？回调地图？Promise 链？还是一个 async function 星号？答案写在本章标题里——异步生成器 AsyncGenerator。

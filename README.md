@@ -44,7 +44,7 @@
 
 两条命令各编各的书，不再是「尚未接入」：`make book` / `make book-pdf` 仍只构建御舆（双语），`make book-omp` / `make book-omp-pdf` 构建 omp 中文版（后者多出 A4 PDF），等价命令是 `python scripts/bookctl.py build --product omp --lang zh [--pdf]`。两边产物同名不同前缀，都落在 `yuyu-book/dist/`，编一本不会盖掉另一本。构建口径与本机实测的体积/页数见 [omp/BUILD.md](omp/BUILD.md)，双产品的机制与边界见 [STRUCTURE.md](STRUCTURE.md) 的 §3.6。
 
-`make check`（`bookctl check --fast/--full`）负责御舆装配、共享测试与全仓内容检查。Omp 的结构和交付门禁由 `omp/overhaul/audit_structure.py --check`、`audit_delivery.py` 单独检查；内容 CI 还会装配 Omp 中文源稿，Book CI 的独立 `omp` job 则构建中文 HTML/PDF。Windows 本地可运行 `powershell -File omp/overhaul/ci-local.ps1`，同时验证御舆中文 HTML 与 Omp 中文 HTML/PDF。
+`make check` / `make check-full`（即 `bookctl check --fast` / `--full`）负责御舆装配、共享测试与全仓内容检查。Omp 的结构和交付门禁由 `omp/overhaul/audit_structure.py --check`、`audit_delivery.py` 单独检查；内容 CI 还会装配 Omp 中文源稿，Book CI 的独立 `omp` job 则构建中文 HTML/PDF。Windows 本地可运行 `powershell -File omp/overhaul/ci-local.ps1`，同时验证御舆中文 HTML 与 Omp 中文 HTML/PDF。
 
 ## 第三分册 · Pi（初稿完成）
 
@@ -128,24 +128,32 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 5.8 MB / 英文版 5.9 MB）与 A4 排版的 PDF（中文版 516 页 / 36.1 MB，英文版 552 页 / 24.1 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 的页数与体积跟着构建机上那套中文字体走：上面的数字是 CI 用 Noto CJK 排出来的，换一台装了微软雅黑的 Windows 排中文是 518 页 / 25.1 MB、英文 569 页 / 12.6 MB。构建日志把每份 PDF 实际排出的体积与页数都打出来，读者可以在自己机器上对着看。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 6.3 MB / 英文版 6.4 MB）与 A4 排版的 PDF（中文版 520 页 / 34.8 MB，英文版 559 页 / 23.7 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 页数与体积随构建机的中文字体变化；上述数字来自 CI 的 Noto CJK 排版，不代替 Windows 本机实测。构建日志会报告每份 PDF 的实际页数与体积。
 
-上面那对 CI 数字钉的是通俗层改造之前的排版；书稿每加厚一轮，Noto 那一套就得跟着复排一次。`scripts/check_artifact_claims.py`（在 `book.yml` 里跑）会把 README 的数字和当次构建的 PDF 逐一对账，不一致就报红——所以推送后第一件事是看 CI 排出的页数，再回来把这两个数改写掉，本机雅黑的数字另记在 `docs/yuyu-overhaul/PDF-PAGES.md`。
+上述数字取自[合并后的 Full 运行](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42473136200)：实际构建的 10 步检查通过；最终手绘稿比候选版更小，英文 HTML 的 CI 实测舍入值从 6.5 MB 变为 6.4 MB，README 未同步而在对账处失败。本次只回填实测数字，不改变 `scripts/check_artifact_claims.py` 的检查规则。已发布的 `v0.3.6` 标签与资产保持不变。
 
 | 文件 | 语言 |
 |------|------|
 | `yuyu-agent-harness-zh.html` / `.pdf` | 中文 |
 | `yuyu-agent-harness-en.html` / `.pdf` | English |
 
-整书自带封面、版本与许可页、修订史、阅读路线、带页码的目录、**全书线路图**（目录之后自成一页：前言是路头的辐轮，十五章是蛇形路上依次排开的站圈，附录走虚线岔线）、分部过渡页与每篇题刻、每章「本章问题 / 读完交付 / 本章边界」罗盘与来源锚点、每版 160 张（中英合计 320）按书的配色预渲染的图版、代码块语言角标、脚注、来源与许可页和主题索引（中文版在 A–Z 之后另立「中文」词条块，只记得译名也查得到）；书里的装饰全是自绘矢量——扉页一辆四马古车、每单元一枚章徽、每篇一幅题刻，章眉下一条按单元 id 生成的手绘走线（20 章各不相同），章末两道渐次散开的车辙，分部过渡页横一条与章数一一对应的道路，提示块与小节分隔也各自带着手写墨记，没有一处用字体符号或图片素材凑数。宽屏（≥1360px）另有一列常驻侧栏目录，线路图在那里带一枚辐轮入口。PDF 另有侧边书签、页脚页码与奇偶不同的页眉，书末主题索引的每一行也印出它所指的那一页，正文里的「参见第 N 章」自动成为可点击链接。每一章都收在它自己结束的那张纸上——全书没有一张只剩页眉与页码的空页。太宽放不下竖版的图版会独占一张横向纸页，图里的文字在 PDF 里依然可选中、可检索。`KAIROS_GITHUB_WEBHOOKS`、`skipDangerousModePermissionPrompt`、`~/.claude/settings.json` 这类长名字在构建时自动获得断点：两端对齐的中文行不会被一根放不下的长名拉成字距空洞，纸面上也不会把整张表顶出版心（断点只落在 `_`、`/` 与大小写交界处，普通英文词永不被切断）。HTML 断网双击即可阅读——不加载任何外部字体、图片或脚本。
+整书包含封面、版本与许可页、修订史、阅读路线、带页码的目录和**全书线路图**。线路图在目录后独占一页：前言是路头的辐轮，十五章沿四段蛇形道路排站，附录走虚线岔线。每章的「本章问题 / 读完交付 / 本章边界」罗盘与来源锚点，帮助读者先判断这一章能解决什么。每版 160 张（中英合计 320）Mermaid 图与 17 张解释性手绘组成 177 张编号图版，全部随书内联。书中另有代码块语言角标、脚注、来源与许可页、主题索引；中文版索引在 A–Z 后另列中文词条。
 
-为第一次读这一类书的工程师，构建时还会叠一层**通俗层**（只叠加，不改写正文）：每章开头一句白话导读带加一个比方；术语首现处画虚线（若一个术语在该章只以行内代码现身，虚线就画在那段代码上——`AbortController` 这类只写作代码的词，读者第一眼撞上它时同样悬得出浮窗），屏幕上悬停出白话浮窗——一句白话定义、一句「为什么非这样不可」、一个比方，44 个主干术语的原理都取自正文自己的论证，纸面上另有书末「原理札记」一页按章收拢（屏幕上不够宽、或术语坐在要横向滚动的宽表里时，浮窗改钉在屏幕底部，免得被裁掉看不见），纸面上新词收在章末的面板，正文第一句仍落在开篇那一页；每个小节右上角盖一枚「起步 / 主干 / 进阶」徽，前言据此给出三条阅读路线。每章章末的车辙上方还坐着一位老驿卒：一行按语（全书 20 行，存在 `yuyu-book/notes.json`）用白话回头看他刚跑完的这一段，书末「按语集」一页把它们按阅读顺序收齐、每行链回自己那一章。按语不许长成第二份正文——**术语锁**要求每句都含一个已注册术语，且那个词形必须真正出现在它自己那一单元的正文里（拿第 14 章的话说「规划模式」，不能写只有别的章才用的词）；中文一句限 36 字、英文限 130 字符，英文版还不许夹汉字。全书另有 42 份手写线描图——扉页一幅四马古车、20 枚章徽配在章名右侧、4 幅题刻开在每篇首页、章末一枚驿卒的斗笠、正文里一组插图（一道五柱门廊、一条心跳循环、一张工具台、四道权限门、一架信任梯、一只记忆漏斗、一条四格胶片与四级压缩、一声钩响、一条fork四格胶片、一场协调与fork的对照、一段技能阶梯、一只状态表盘、一道并发闸、一扇计划门与一只线束轮）——只用 `currentColor` 描线，所以屏幕、暗色模式与纸面共用同一份图。通俗层可以整块用 `--no-plain` 关掉。
+插图采用混合格式：章徽、驿卒与解释图保留自绘动画 SVG，第一、二篇题刻使用生成后审阅的透明墨版 PNG；封面与其余篇题仍是 SVG。章眉手绘走线按单元 id 生成，章末车辙与分部道路呼应阅读路线。宽屏（≥1360px）提供常驻侧栏目录。全部图像随离线文件打包，深色屏幕反色不影响纸面的黑墨。
+
+PDF 另有侧边书签、页脚页码、奇偶页眉，以及带目标页码的主题索引；正文中的「参见第 N 章」可点击跳转。章节不另留只有页眉、页码的空页；竖版放不下的宽图使用独立横向页，图中文字仍可选中、检索。`KAIROS_GITHUB_WEBHOOKS`、`skipDangerousModePermissionPrompt`、`~/.claude/settings.json` 等长名字在 `_`、`/` 与大小写交界处获得断点，普通英文词不切开，减少字距空洞与表格越界。HTML 断网双击即可阅读，不加载外部字体、图片或脚本。
+
+第一次读这一类书的工程师，可以先沿**通俗层**进入正文：每章开头是一句白话与一个比方；术语首现处的虚线可展开「是什么 / 为什么 / 像什么」浮窗。术语若只以行内代码出现，虚线就落在代码上，`AbortController` 等名字也能查。窄屏或宽表格中的浮窗钉在屏幕底部，避免被裁切；打印时则由章末术语面板与书末「原理札记」接住。44 个主干术语的原理按正文论证分章归档，小节旁的「起步 / 主干 / 进阶」徽记对应前言三条阅读路线。
+
+每章末的驿卒用一行按语回看这一段路，20 行内容存在 `yuyu-book/notes.json`，书末按阅读顺序收齐并链回原章。按语受术语锁约束：必须含有本章正文真正使用的注册词形；中文不超过 36 字，英文不超过 130 字符且不夹汉字。它不是另一份正文。
+
+全书另有 43 份手写线描图——扉页一幅四马古车、20 枚章徽配在章名右侧、4 幅题刻，另有 1 位驿卒与 17 幅解释图，SVG 源稿完整保留。解释图分别承担关系或状态的读图任务，例如暂停与取消的差别、权限门、记忆漏斗、Fork 四格、状态表盘与并发闸。除已采用墨版的两幅篇题外，这些图继续使用 `currentColor` SVG，保留暗色、减动效与打印下的同一含义。通俗层可用 `--no-plain` 整块关闭。
 
 ```bash
 npm ci                                              # 图版渲染需要 Mermaid 11.17.2
 python -m pip install -r yuyu-book/requirements.txt
 python scripts/bookctl.py doctor                    # 一次列全环境缺失与修复命令
-python scripts/bookctl.py check --fast              # 源码模式装配 + 两套单测 + 内容/图语法
+python scripts/bookctl.py check --fast              # Fast 全套：依赖/源码装配 + 两套单测 + 内容/图语法/视频/产品幂等
 python scripts/bookctl.py build --product book --lang zh
 python scripts/bookctl.py build --product book --lang both --pdf
 ```
@@ -154,11 +162,25 @@ python scripts/bookctl.py build --product book --lang both --pdf
 
 PDF 与图版渲染需要一个本机 Chromium 或 Edge（自动探测 `msedge`/`chrome`，也可用 `--browser <路径>` 指定）。正文 Markdown 是唯一事实来源，构建过程不回写、不改写任何章节文件。
 
+## 构建与发布
+
+`scripts/bookctl.py` 是仓库唯一的命令入口，`make` 只是它的薄包装；底层构建器也可以直接以 `python -m yuyu_book` 运行（在 `yuyu-book/` 下，或设 `PYTHONPATH=yuyu-book`）。检查分三层：**Fast**（PR 层：依赖固定、源码模式装配、两套单测、内容检查、Mermaid 语法、视频配置、产品幂等）、**Full**（主分支或手动：Fast 加渲染装配与双语 PDF）、**Release**（标签或手动：Full 加产物声明核对，再由发布装配生成校验和与发布目录）。CI 对应 `.github/workflows/book.yml` 的 `Fast` / `Full` / `Omp` / `Bootstrap` 四个 job 与 `.github/workflows/release.yml`；旧的 `check-book.yml` 已并入 `Fast`，不再单独存在。
+
+发布目录由下面这条命令原子生成（版本必须等于 `yuyu-book/manifest.json` 的 `version`；`--epub` 可选）：
+
+```bash
+python scripts/bookctl.py release --version 0.3.6 --out-dir ../book-release --epub
+```
+
+目录里有中英双语 HTML/PDF、Omp 中文 HTML/PDF、可选 EPUB、`site.zip`、15 章视频清单、`release-notes.json` 与 `release-notes.md`（后者是 `gh release` 的正文）、`SHA256SUMS` 以及记录命令、提交、浏览器/字体与产物哈希的 `build-report.json` / `artifact-manifest.json`。任一步失败都不会留下半成品发布目录。
+
+**状态（2026-11-08）：** `v0.3.6` 已由 `release.yml` 在标签推送运行（[run 42423483244](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42423483244)）中装配并发布到 [GitHub Release](https://github.com/zhuguang-ZFG/claude-code-book/releases/tag/v0.3.6)：三册 HTML/PDF/EPUB、`site.zip`、15 章视频清单、`SHA256SUMS` 与两份构建报告共 15 个资产；已发布的 14 个文件逐一与 `SHA256SUMS` 对上。P3/P5 门禁仍待独立审阅，`task_verify` 仍为 unverified。改造边界与证据见 [架构决策记录](docs/architecture-decisions.md)、[P3 结构对照](docs/migrations/legacy-v2-structure.md)、[产品页视觉审计](docs/migrations/product-visual-audit.md) 与 [发布迁移说明](docs/migrations/release-migration.md)。
+
 ## 参与修订
 
 欢迎通过 Issue 或 PR 修正技术错误、补充案例和改进表达。请提供章节、小节、建议修改和参考来源；显示问题请注明阅读平台和复现步骤。涉及双语内容时，请同步检查英文版；英文书稿不得夹带汉字，附录 D 术语表的中文译名列是唯一例外，构建器会逐行检查。
 
-提交前运行 `python3 scripts/bookctl.py check --fast`；它依次跑源码模式装配、两套 unittest、`scripts/check_book.py` 与 `npm run check:diagrams`。涉及图版或 PDF 时改用 `check --full`。Mermaid 检查需要 Node.js 22 或更高版本，先执行 `npm ci`。仓库结构与构建契约见 [STRUCTURE.md](STRUCTURE.md)，贡献流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+提交前运行 `python3 scripts/bookctl.py check --fast`；它依次跑依赖对账、源码模式装配、两套 unittest、`scripts/check_book.py`、`npm run check:diagrams`、视频配置与产品幂等检查。涉及图版或 PDF 时改用 `check --full`。Mermaid 检查需要 Node.js 22 或更高版本，先执行 `npm ci`。仓库结构与构建契约见 [STRUCTURE.md](STRUCTURE.md)，贡献流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 许可与致谢
 

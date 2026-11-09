@@ -1,1 +1,0 @@
-企业侧还有两道闸。第一道，allowManagedHooksOnly：开了之后只有 policySettings 的托管 hooks 会跑，user、project、local 的全部跳过。

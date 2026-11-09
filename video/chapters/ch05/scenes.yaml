@@ -1,0 +1,14 @@
+schema_version: 1
+episode: ch05
+formats:
+  short:
+  - id: dense-short
+    start_s: 0.0
+    duration_s: 50.936
+    source: compositions/dense-short.html
+    intent: hook
+audio:
+  short:
+    path: assets/short-vo.mp3
+    duration_s: 50.936
+flashes: {}

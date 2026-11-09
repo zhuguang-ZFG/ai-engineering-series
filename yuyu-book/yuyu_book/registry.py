@@ -40,6 +40,7 @@ FILES = (
     "revisions.json",
     "revisions-omp.json",
     "revisions-pi.json",
+    "claims.json",
     "subject-index.json",
     "subject-index-pi.json",
 )

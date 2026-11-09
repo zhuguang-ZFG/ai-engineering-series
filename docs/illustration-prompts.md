@@ -2,7 +2,9 @@
 
 本书 26 份插图（章徽、篇题刻、老驿卒、扉页车图）以开源项目
 [yang0/handraw-style](https://github.com/yang0/handraw-style) 的画风体系绘制：
-另有 16 张章内插图不走「提示词 → 手写 SVG」这条管线，边界与名单见文末一节。
+另有 17 张章内插图不走「提示词 → 手写 SVG」这条管线，边界与名单见文末一节。
+封面与四个篇题刻自 2026-11-08 起允许改用生成的透明墨版 PNG，规则与当前供给状态见
+下文「混合格式」一节；章徽、驿卒与信息性章内图仍以 `currentColor` 手写 SVG 为准。
 基准配方为 `FD-001 · Yuko Shimizu | Dynamic East-Asian Ink Editorial` 画风，
 `C-32 炭黑（Charcoal Black）` 统领、`C-15 朱砂红（Cinnabar Red）` 点缀
 （朱砂仅用于章印与书级点缀，不在画面内）。本手册按该项目的输出规范给出
@@ -21,6 +23,58 @@ Midjourney、Flux 等），即可在别的媒介重制同一幅图，或为未�
   停顿与轻微不齐整感、书写性与留白意识）
 - 主题色：C-32 炭黑统领 + C-15 朱砂点缀（章印/首字）
 - 画幅习惯：章徽 64×64、篇题刻 200×140、扉页 1000×470、章末驿卒 64×64
+
+## 混合格式：大图生成墨版，小图手绘 SVG（2026-11-08 定稿）
+
+格式决定：**大图生成，小图手绘**。封面与四个篇题刻允许使用生成墨版 PNG；章徽、章末驿卒、
+17 张信息性章内图，以及第二分册的全部插图继续用动画 SVG——只有 SVG 能继承 `currentColor`、
+按子形状落墨，并在深色屏幕与纸上重新上色。
+
+- 装配优先级：`cover.png`、`part-*.png` 存在时优先；其余槽位只认 SVG，小图槽位的同名 PNG 不会被采用
+  （回归 `yuyu-book/tests/test_mixed_art.py`）。
+- 体积与像素上限：封面 400,000 字节，篇题刻 200,000 字节，单边不超过 4096 像素；必须是只含黑墨、
+  透明纸面的 RGBA PNG。
+- 灰阶处理：`to_tonal_plate()` 保留 alpha 级差，默认 64 级；超预算时按 64→48→32→24→16→12 降级
+  （`to_tonal_plate_within()`），宁可少一点排线也不裁切主体；降到 12 级仍超限则拒绝出图并保留原图。
+- 打印与深色屏幕：深色屏幕 `filter:invert(1)` 反色，作用域限于 `@media screen`；打印不反色，纸上是黑墨。
+- 计费与凭据：转换脚本离线运行；生成必须显式给出 `--out` 审阅目录并归档原图，付费请求结果不明时
+  不自动重试，避免重复扣费。
+
+逐图验收要核对主体关系，不以「有图、风格相似」代替语义完整：山径必须串起三枚递减驿站环，
+牌坊右旁必须保留转向远处的直角驿道。SVG 重绘同样遵守这一条，保存动画 class 并不证明没有漏画道路。
+网页生图时先把提示词压成单行，回读输入框确认全文与主体词完整，再显式提交；回传提示词缺少主体时，
+先查输入边界，不换模型重试。任务已成功而取图超时，只恢复下载，不重新发起收费生成。
+驿站环的路径起点不是圆心：外圈以同一圆心的两段半椭圆弧闭合，圆心点与虚线路径据此对齐。
+验收以 SVG 实际 `getBBox()`、闭合点与完整绕行圈数为准；三枚环之间必须留出笔宽之外的净距。
+沿用 `path` 与 `pathLength="100"`，确保既有画廊逐笔回放覆盖外圈，不另增动画分支。
+
+当前供给状态（2026-11-08）：
+
+| 槽位 | 状态 |
+|---|---|
+| `part-p1.png` 篇题刻 | Lupi 既有画图样张已审阅入库：原图 1536×1024 RGBA；成品 900×630、153,865 字节、64 级 alpha；十六向罗盘、双环、盘心墨点完整，四周留白。该样张来自基础画图模型，不是下行所述的 `auto` 对话实测 |
+| `part-p2.png` 篇题刻 | 已生成并入库：请求 1536×1024，实测 1536×1024 RGBA；成品 900×630、190,686 字节、48 级 alpha；视觉核对为革带箱匣与罗盘，主体不出画 |
+| 封面 `cover.png`、`part-p3/p4.png` | 尚未入库；山径候选虽已出图，但缺少虚线路径与三枚驿站环，拒绝采用。相应槽位保留 SVG，不以错图补数 |
+| Lupi `1K / auto` 路径 | 已用单行完整提示词实测：`对话 / auto` 返回临时聊天无法调用图片工具，没有图片；不据此改走其他模型 |
+| 第二分册 7 张篇题刻 | 按已确认格式继续使用 SVG；本轮完成七幅笔压重绘，不安装生成 PNG |
+| 原 Orbitix 通道 | 工作室预扣额度不足；直接 API 的 TLS 握手超时。均不自动重试收费请求 |
+
+维护者已决定停止生图 API 调用：本轮后续只做手绘 SVG 迭代，不等待充值或换通道。
+两幅已验收 PNG 保留；封面与其余篇题以 SVG 作为当前成品，不将缺少新 PNG 视为待补空槽。
+生成脚本保留为离线转换与历史再生入口，未经新的明确授权不调用生图服务。
+
+English: the agreed format is mixed — generated tonal plates only for the cover and the four part
+openers, animated SVG everywhere else, because SVG alone inherits `currentColor`, animates per
+subshape and re-inks itself for dark screens and paper. Plates are RGBA black-ink PNGs on
+transparent paper, capped at 400 kB for the cover and 200 kB per part, with alpha graded down from
+64 levels before anything is cropped. `part-p1` and `part-p2` now ship as PNGs. The mountain-path
+candidate was rejected because it omitted the dotted path and three station rings. The tested
+Lupi `1K / auto` conversation route returned text saying image tools were unavailable, not an
+image; the earlier accepted compass came from its basic image-generation route. The cover,
+remaining part plates and the companion volume retain SVG. Further image-generation API calls
+are stopped by maintainer decision; subsequent iterations are hand-drawn SVG only. Existing
+accepted PNGs remain. Station rings use two closed half-ellipse arcs around their actual center;
+verify bounding-box alignment, full winding, spacing and the existing path animation together.
 
 ## 逐图提示词
 
@@ -752,21 +806,21 @@ Core style traits: flowing ink linework with an East-Asian brush spirit; visible
 
 </details>
 
-## 手册不覆盖的另一类：16 张章内插图
+## 手册不覆盖的另一类：17 张章内插图
 
 本手册的 26 条提示词只覆盖**章徽、篇题刻、老驿卒、扉页车图**这一类——它们是靠生图提示词
-起稿、再转成手写 SVG 的。盘上另有 **16 张章内插图**（正文里跟着小节走的那种）不属于这条管线，
-它们没有中英双语提示词，也不必强行编一份，故在此登记边界，别让「42 张图 vs 26 条提示词」
+起稿、再转成手写 SVG 的。盘上另有 **17 张章内插图**（正文里跟着小节走的那种）不属于这条管线，
+它们没有中英双语提示词，也不必强行编一份，故在此登记边界，别让「43 张图 vs 26 条提示词」
 这个差额看起来像漏项：
 
-`ch01-five-pillars`、`ch02-turn-loop`、`ch03-tool-bench`、`ch03-tool-pipeline`、
+`ch01-five-pillars`、`ch02-turn-loop`、`ch02-cancel-chain`、`ch03-tool-bench`、`ch03-tool-pipeline`、
 `ch04-gate-steps`、`ch05-trust-ladder`、`ch06-memory-funnel`、`ch07-four-levels`、
 `ch08-hook-line`、`ch09-fork-pipeline`、`ch10-coordinator-fork`、`ch11-skill-stairs`、
 `ch12-mcp-state-dial`、`ch13-concurrency-gate`、`ch14-plan-gate`、`ch15-harness-wheel`
 
-（26 + 16 = 42，正好是 `yuyu-book/illustrations/*.svg` 的盘上计数。）
+（26 + 17 = 43，正好是 `yuyu-book/illustrations/*.svg` 的盘上计数。）
 
-- 这 16 张的取舍与逐轮修订记录在 `.superpowers/sdd/2026-11-02-illustration-rollout/`
+- 这 17 张的取舍与逐轮修订记录在 `.superpowers/sdd/2026-11-02-illustration-rollout/`
   里（`progress.md` 与 `fix-round-1-section.md`），不在本手册；要改画先读那两份。
 - 两类图共用同一套硬契约，即上一节第 4 条：`yuyu-book/yuyu_book/art.py` 要求单 svg + viewBox、
   至少一处 `currentColor`、禁 id/href/url/script/style，质感只能来自几何笔触。
@@ -800,9 +854,9 @@ Core style traits: flowing ink linework with an East-Asian brush spirit; visible
 
 这一批走的是**独立目录** `yuyu-book/illustrations-omp/`，装载顺序先查它、查不到再回落共享目录
 （`yuyu-book/yuyu_book/art.py`），所以它**没有**打穿御舆侧被测试盯住的张数：`test_docclaims.py` 数
-`illustrations/*.svg` 仍是 **42**，`README.md` / `en/README.md` / `CREDITS.md` / `STRUCTURE.md` 那几句不用改；
-另有一条 `omp_drawings()` 数 `illustrations-omp/*.svg`，钉住 `STRUCTURE.md` 那一行的 **46** =
-7 幅题刻 + 39 枚章徽（章徽那一层同日 19:3x 落地，配方与字节账就在本节末尾）。
+`illustrations/*.svg` 的当前值是 **43**，`README.md` / `en/README.md` / `CREDITS.md` / `STRUCTURE.md` 那几句必须同轮改；
+另有一条 `omp_drawings()` 数 `illustrations-omp/*.svg`，钉住 `STRUCTURE.md` 那一行的 **47** =
+7 幅题刻 + 39 枚章徽 + 1 幅正文插图（`omp-session-disk.svg`）。
 omp 的图也**不进** `docs/illustration-gallery.html`——那是御舆读者侧的成品。过程与本轮全部读数在
 `docs/yuyu-overhaul/ILLUST-SYNC.md` 第九、十节。
 
@@ -1085,3 +1139,14 @@ stroke-linejoin="round">`；每个描线 `path` / `circle` 带 `pathLength="100"
 本节引用的 `FA-010` 画风与 `C-32` / `C-35` / `C-15` 主题色编号，逐条核过该项目
 `skills/handdraw-style-prompter/references/styles.json`（367 条）与 `colors.json`（36 条），
 编号-名称-作者三列都对上；上游 `images/` 参考图库不复制进本仓。
+
+## 新增解释性手绘：暂停、取消与磁盘状态
+
+这两幅由本项目直接绘制 SVG 几何，不使用第三方图像或生成模型。沿用东方墨线与 `currentColor`，与既有手册的画风索引、署名边界相同；不增加外部字体、纹理或脚本。
+
+| 文件 | 正文位置 | 读图任务 |
+|---|---|---|
+| `ch02-cancel-chain.svg` | 御舆第 2 章中英版 §2.1 | 左栏 PAUSE 只挡住 UI 的下一次取值，底部 API/tool 仍可能工作；右栏 CANCEL 把信号送到实际操作，再清理资源。不能把“屏幕不动了”当作“工作停止了”。 |
+| `omp-session-disk.svg` | Omp 第 7 章 §7.2 | 左边 leaf 回到 A，右边 `file.ts` 仍保留 B 的内容；会话导航不是磁盘回滚。 |
+
+English reading guide: PAUSE suspends event consumption, while CANCEL must reach the operation and cleanup. Moving a conversation leaf does not undo filesystem changes. Both drawings are static and retain the same meaning in dark mode, reduced motion and print.

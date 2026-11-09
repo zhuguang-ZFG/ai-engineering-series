@@ -1,1 +1,0 @@
-精确串匹配更幂等。Write 最重，整文件覆盖，权限最严。最佳实践：能 Edit 别 Write，能 Read 别 Bash。Glob 对文件名，Grep 对内容，底层 fast-glob 与 ripgrep。

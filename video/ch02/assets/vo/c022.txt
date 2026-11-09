@@ -1,1 +1,0 @@
-State 可变但可控，每次 continue 造新对象，transition 字段记下「为什么继续」。Continue 是继续信号，带原因与附件。Terminal 是终止信号，带原因交还给调用方。

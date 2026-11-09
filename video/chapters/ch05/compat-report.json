@@ -1,0 +1,10 @@
+{
+  "chapter": "ch05",
+  "formats": {
+    "short": {
+      "index": "../../ch05/hf-remake/short/index.html",
+      "match": true,
+      "mismatches": []
+    }
+  }
+}

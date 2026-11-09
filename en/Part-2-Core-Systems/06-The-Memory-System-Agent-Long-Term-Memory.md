@@ -14,6 +14,8 @@ You had the Agent remember a pile of things: file structure, API routes, depende
 <!-- block: ch06.b-19c8efc9 -->
 Memory is not a warehouse; it is a notebook of leads. What the code already tells you has no business taking up a memory slot. What the code cannot tell you -- human preference, the reason behind a decision, an external entry point -- is what belongs on the page. Claude Code's memdir draws exactly this line across four types: user, feedback, project, reference.
 
+Apply that rule when reading a memory. If it says where a service is deployed, check the current deployment entry point. If it says an interface was kept for an older client, use that as decision context and check whether the client still exists. Current files, observed runtime results, and the user's present request take precedence. Correct or remove a stale entry rather than letting it overrule current evidence.
+
 > **What you can do after this chapter:**
 > - Take any piece of information and judge which memory type it belongs to, or whether the system should keep it out of storage entirely
 > - Write a memory file with frontmatter, body, and index each in their place, without blowing the limit
@@ -266,6 +268,8 @@ The format for index entries requires one line per entry, no more than 150 chara
 ```
 
 The `truncateEntrypointContent` function sets two capacity gates: first truncation by lines (200-line limit), then truncation by bytes (25KB limit). When content exceeds a limit, the function appends a warning at the end of the file naming which gate tripped.
+
+Truncating the index does not delete the memory files it points to. An entry on line 201 may still have a file on disk, but automatic loading no longer exposes that pointer, so the model loses a clue about what to read. The reverse matters too: a link in the index does not mean the linked body is already in context. The model sees a summary, judges relevance, then reads the file. When a remembered fact seems unused, check three separate steps: does the file exist, was its index entry loaded, and was its body actually read?
 
 **The Design Wisdom of Dual Capacity Protection**
 
@@ -670,6 +674,30 @@ You maintain 5 projects simultaneously, each with 20-30 memories in its memory d
 - Memories naturally stay isolated by project (paths follow the Git root directory); only user-type memories cross projects
 - Regularly review the memory directory and delete low-value memories that fail the "would behavior change if deleted" test
 - Control the description length of each memory entry, and periodically merge memory entries on related topics
+
+**Minimal runnable case:** Read memory metadata out of a frontmatter block (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `{'name': 'build-command', 'type': 'project'}`
+**Prerequisite:** Chapter 5's configuration precedence; **Backlink:** the six configuration sources in Chapter 5 §5.1
+
+```python
+# exercise: ch06
+# expected: {'name': 'build-command', 'type': 'project'}
+text = """---
+name: build-command
+type: project
+---
+Run make check before every commit.
+"""
+meta = {}
+for line in text.splitlines()[1:]:
+    if line == "---":
+        break
+    key, _, value = line.partition(":")
+    meta[key.strip()] = value.strip()
+print(meta)
+```
 
 ---
 

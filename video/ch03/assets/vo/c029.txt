@@ -1,1 +1,0 @@
-一，五要素协议是工具 DNA。二，buildTool 安全默认，fail-closed。三，并发分区用正确标记换速度。四，StreamingToolExecutor 让双手零等待上手。

@@ -1,1 +1,0 @@
-PermissionUpdate 六种操作乘五种配置源，三十种组合。apply 改内存，立刻生效；persist 写文件，重启仍在。只有 local、user、project 能持久化；

@@ -1,0 +1,42 @@
+[
+  {
+    "chapter": "ch01",
+    "chunks": "identical",
+    "vo_manifest": "text matches slices (no legacy manifest)",
+    "captions": "consistent",
+    "audio_slices": "sum 1147.58s + 0.768s concat padding = full 1148.35s",
+    "transcript": "deterministic"
+  },
+  {
+    "chapter": "ch02",
+    "chunks": "identical",
+    "vo_manifest": "identical",
+    "captions": "consistent",
+    "audio_slices": "sum matches",
+    "transcript": "deterministic"
+  },
+  {
+    "chapter": "ch03",
+    "chunks": "identical",
+    "vo_manifest": "identical",
+    "captions": "consistent",
+    "audio_slices": "sum matches",
+    "transcript": "deterministic"
+  },
+  {
+    "chapter": "ch04",
+    "chunks": "identical",
+    "vo_manifest": "identical",
+    "captions": "consistent",
+    "audio_slices": "sum matches",
+    "transcript": "deterministic"
+  },
+  {
+    "chapter": "ch05",
+    "chunks": "identical",
+    "vo_manifest": "identical",
+    "captions": "consistent",
+    "audio_slices": "53 slices, long not yet rendered",
+    "transcript": "deterministic"
+  }
+]

@@ -24,8 +24,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "yuyu-book"))
-from yuyu_book.core import BuildError  # pyright: ignore[reportMissingImports]
-from yuyu_book.pdf import _launch  # pyright: ignore[reportMissingImports]
+from yuyu_book.core import BuildError
+from yuyu_book.pdf import _launch
 
 XHTML = "http://www.w3.org/1999/xhtml"
 EPUB = "http://www.idpf.org/2007/ops"
@@ -54,10 +54,10 @@ class XHTMLBody(HTMLParser):
         self.resources = resources
         self.base = base
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag, attributes):
         original = tag
         tag = tag if tag in BLOCK else ("div" if tag in {"details", "summary", "form"} else "span")
-        attrs = {key: value for key, value in attrs if key in ATTR and value is not None}
+        attrs = {key: value for key, value in attributes if key in ATTR and value is not None}
         if tag == "img":
             src = attrs.get("src", "")
             if src.startswith("data:"):

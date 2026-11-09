@@ -64,8 +64,8 @@
   "snapshot_en": "Four webp demos (ask, slash, models, lspv) converted to in-budget JPG",
   "license": "MIT（上游 LICENSE）",
   "license_en": "MIT (upstream LICENSE)",
-  "scope": "omp/images/fig6-6-ask-shot.jpg、fig6-7-slash-shot.jpg、fig5-3-model-selector.jpg、fig11-4-lsp-shot.jpg",
-  "scope_en": "omp/images fig6-6, fig6-7, fig5-3, fig11-4 JPGs",
+  "scope": "omp/images/fig6-6-ask-shot.jpg、fig6-7-slash-shot.jpg、fig5-5-model-selector.jpg、fig11-3-lsp-shot.jpg",
+  "scope_en": "omp/images fig6-6, fig6-7, fig5-5, fig11-3 JPGs",
   "normative": false,
   "pinned": {
    "commit": "88a69582c755bd000e8dc0290981fc787a4f400c"

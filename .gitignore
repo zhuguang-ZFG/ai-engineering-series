@@ -4,7 +4,7 @@ node_modules/
 __pycache__/
 .venv/
 
-# derived by yuyu-book/build.py; CI publishes dist as an artifact
+# derived by the yuyu_book package; CI publishes dist as an artifact
 yuyu-book/dist/
 yuyu-book/.cache/
 yuyu-book/cover-art.png
@@ -22,6 +22,7 @@ video/**/*.mp3
 video/**/*.wav
 video/**/*.mp4
 video/**/out/
+video/.build/
 
 # video workspace churn: HyperFrames caches and extracted frames, vendored
 # toolchains reached through junctions, one-off probe scripts, and the

@@ -19,12 +19,15 @@ uv.lock, which is what keeps the exported pins from going stale.
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import platform
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import tomllib
 from importlib.metadata import distributions
 from pathlib import Path
@@ -128,11 +131,25 @@ def dependency_problems() -> list[str]:
 
 def run(cmd: list[str]) -> None:
     print("+ " + " ".join(cmd), flush=True)
-    subprocess.run(cmd, cwd=ROOT, check=True)
+    env = {**os.environ, "PYTHONPATH": str(VENDOR)}
+    subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
 def version_tuple(text: str) -> tuple[int, ...]:
     return tuple(int(part) for part in re.findall(r"\d+", text)[:3])
+
+
+def report_artifacts(destination: Path) -> list[Path]:
+    """Every built file the report may claim: PDF/EPUB and nested assets too.
+
+    Reporting only ``destination/*.html`` dropped printed editions and nested
+    site files from artifact-manifest.json, so a release could not prove what
+    it shipped.
+    """
+    destination = Path(destination)
+    if not destination.is_dir():
+        return []
+    return sorted(path for path in destination.rglob("*") if path.is_file())
 
 
 def browser_probe() -> tuple[bool, str, str | None]:
@@ -250,7 +267,7 @@ def doctor() -> int:
 def check(full: bool) -> int:
     steps = [
         ("dependencies", [python(), "scripts/bookctl.py", "deps"]),
-        ("source build", [python(), "yuyu-book/build.py", "--check",
+        ("source build", [python(), "-m", "yuyu_book", "--check",
                           "--mermaid", "source"]),
         ("general tests", [python(), "-m", "unittest", "discover",
                            "-s", "tests"]),
@@ -258,72 +275,108 @@ def check(full: bool) -> int:
                            "-s", "yuyu-book/tests"]),
         ("content", [python(), "scripts/check_book.py"]),
         ("mermaid", [npm() or "npm", "run", "check:diagrams"]),
+        ("video configuration", [python(), "video/pipeline/cli.py", "check",
+                                 "--config-only"]),
+        ("product idempotence", [python(), "scripts/check_products.py"]),
     ]
     if full:
         steps += [
-            ("render build", [python(), "yuyu-book/build.py", "--check"]),
-            ("pdf", [python(), "yuyu-book/build.py", "--lang", "both",
-                     "--pdf"]),
+            ("render build", [python(), "-m", "yuyu_book", "--check"]),
+            ("pdf", [python(), "-m", "yuyu_book", "--lang", "both", "--pdf"]),
         ]
+    measurements = []
     try:
         for label, cmd in steps:
             print(f"\n== {label} ==", flush=True)
+            started = time.perf_counter()
             run(cmd)
+            measurements.append({"name": label, "command": cmd, "returncode": 0,
+                                 "seconds": round(time.perf_counter() - started, 3)})
     except subprocess.CalledProcessError as exc:
+        measurements.append({"name": label, "command": cmd,
+                             "returncode": exc.returncode,
+                             "seconds": round(time.perf_counter() - started, 3)})
+        from build_reports import write_reports
+        write_reports(ROOT / ".scratch/reports", measurements)
         print(f"\ncheck failed: {label} (exit {exc.returncode})", file=sys.stderr)
         return 1
+    from build_reports import write_reports
+    write_reports(ROOT / ".scratch/reports", measurements,
+                  report_artifacts(DIST) if full else [])
     print(f"\ncheck {'full' if full else 'fast'}: {len(steps)} steps passed")
     return 0
 
 
 def build(args) -> int:
+    products = {"site": None, "reader": "build_beginner_reader.py",
+                "gallery": "build_illustration_gallery.py",
+                "cards": "build_knowledge_cards.py", "sample": "build_sample_chapter.py",
+                "indices": "build_site_indices.py"}
+    if args.product in products:
+        names = (["build_beginner_reader.py", "build_illustration_gallery.py",
+                  "build_knowledge_cards.py", "build_sample_chapter.py",
+                  "build_site_indices.py", "build_site_portal.py"]
+                 if args.product == "site" else [products[args.product]])
+        try:
+            for name in names:
+                run([python(), "scripts/" + name])
+        except subprocess.CalledProcessError as exc:
+            return exc.returncode or 1
+        return 0
     if args.product not in ("book", "omp", "pi"):
         print(f"unknown product: {args.product}", file=sys.stderr)
         return 2
     lang = args.lang
-    cmd = [python(), "yuyu-book/build.py", "--mermaid", args.mermaid]
+    cmd = [python(), "-m", "yuyu_book", "--mermaid", args.mermaid]
     if args.product in ("omp", "pi"):
-        manifest = f"manifest-{args.product}.json"
-        sources = f"sources-{args.product}.json"
         # Chinese-first second volume; "both" quietly means zh until en/omp exists.
         if lang == "en":
             print(f"{args.product} product is zh-only for now", file=sys.stderr)
             return 2
         lang = "zh"
         cmd += ["--lang", lang,
-                "--manifest", manifest,
-                "--sources", sources]
+                "--manifest", f"manifest-{args.product}.json",
+                "--sources", f"sources-{args.product}.json"]
     else:
         cmd += ["--lang", lang]
     if args.pdf:
         cmd.append("--pdf")
     if args.out_dir:
         cmd += ["--out-dir", args.out_dir]
+    for flag in ("check", "no_plain", "regen_index"):
+        if getattr(args, flag, False):
+            cmd.append("--" + flag.replace("_", "-"))
+    started = time.perf_counter()
     try:
         run(cmd)
     except subprocess.CalledProcessError as exc:
         return exc.returncode or 1
-    if args.epub:
-        return epub(args)
+    if getattr(args, "epub", False) and not getattr(args, "check", False):
+        result = epub(args)
+        if result:
+            return result
+    from build_reports import write_reports
+    destination = Path(args.out_dir) if args.out_dir else DIST
+    write_reports(destination, [{"name": args.product, "command": cmd,
+                  "returncode": 0, "seconds": round(time.perf_counter() - started, 3)}],
+                  report_artifacts(destination))
     return 0
 
 
 def epub(args) -> int:
-    """Post-pass each built HTML edition into a reflowable EPUB."""
-    prefixes = {"book": "yuyu-agent-harness", "omp": "yuyu-omp",
-                "pi": "yuyu-pi"}
-    prefix = prefixes[args.product]
-    langs = ["zh", "en"] if args.lang == "both" else [args.lang]
+    """Convert the editions just built, respecting Chinese-only products."""
+    prefixes = {"book": "yuyu-agent-harness", "omp": "yuyu-omp", "pi": "yuyu-pi"}
+    langs = (["zh"] if args.product in ("omp", "pi") else
+             ["zh", "en"] if args.lang == "both" else [args.lang])
     out_dir = Path(args.out_dir) if args.out_dir else DIST
     for lang in langs:
-        html = out_dir / f"{prefix}-{lang}.html"
+        html = out_dir / f"{prefixes[args.product]}-{lang}.html"
         if not html.exists():
             print(f"epub: missing {html}", file=sys.stderr)
             return 1
         try:
             run([python(), "scripts/build_epub.py", "--html", str(html),
-                 "--output", str(html.with_suffix(".epub")),
-                 "--lang", lang])
+                 "--output", str(html.with_suffix(".epub")), "--lang", lang])
         except subprocess.CalledProcessError as exc:
             return exc.returncode or 1
     return 0
@@ -353,13 +406,24 @@ def main(argv=None) -> int:
 
     bl = sub.add_parser("build", help="build a product")
     # products: book (御舆) and omp (第二分册, zh-first).
-    bl.add_argument("--product", default="book", choices=["book", "omp", "pi"])
+    bl.add_argument("--product", default="book", choices=["book", "omp", "pi", "site",
+                    "reader", "gallery", "cards", "sample", "indices"])
     bl.add_argument("--lang", default="both", choices=["zh", "en", "both"])
     bl.add_argument("--pdf", action="store_true")
     bl.add_argument("--epub", action="store_true")
     bl.add_argument("--out-dir")
     bl.add_argument("--mermaid", default="render",
                     choices=["render", "source"])
+    bl.add_argument("--check", action="store_true")
+    bl.add_argument("--no-plain", action="store_true")
+    bl.add_argument("--regen-index", action="store_true")
+
+    video = sub.add_parser("video", help="chapter video factory")
+    video.add_argument("arguments", nargs=argparse.REMAINDER)
+    release = sub.add_parser("release", help="assemble a traceable release")
+    release.add_argument("--version", required=True)
+    release.add_argument("--out-dir")
+    release.add_argument("--epub", action="store_true")
 
     sub.add_parser("clean", help="remove yuyu-book/dist")
     sub.add_parser("deps", help="compare requirements.txt with uv.lock")
@@ -371,6 +435,15 @@ def main(argv=None) -> int:
         return check(args.full)
     if args.command == "build":
         return build(args)
+    if args.command == "video":
+        try:
+            run([python(), "video/pipeline/cli.py", *args.arguments])
+            return 0
+        except subprocess.CalledProcessError as exc:
+            return exc.returncode or 1
+    if args.command == "release":
+        from release import assemble
+        return assemble(args.version, args.out_dir, epub=args.epub)
     if args.command == "clean":
         return clean()
     if args.command == "deps":
