@@ -1,0 +1,53 @@
+# OpenCode 插件验证记录
+
+基线 v1.19.5，完整提交与来源见 [锁文件](../docs/agent-series/sources.lock.json)。两次实验分别记录，保留各自的证据边界。
+
+## 2026-11-09：处理器与类型
+
+- 读取钉版 V1 类型、加载器、trigger、请求准备与子任务执行路径，核对共享 output、顺序调用、dispose 和缺失结果路径。
+- 使用 Node 24.14.0 运行 `node --test opencode/examples/check-review-trace.mjs`：8 项通过。
+- 将原创样例复制到临时依赖目录，使用 TypeScript 5.9.3、真实 @opencode-ai/plugin 1.19.5 类型执行 strict/noEmit：通过。skipLibCheck 只跳过依赖声明内部检查。
+- 依赖安装使用 ignore-scripts；没有加载上游 CLI 运行时。安装时一个间接依赖报告 Node engines 警告，不能据此声称宿主可在本机 Node 上完整运行。
+
+这次没有加载完整 CLI：SDK 为替身，dispose 为显式调用，最后一个调度器为教学实现。[当日摘要](facts/plugin-sample-20261109.json)保留原始结论，不用后来的实跑结果回填历史。
+
+仓库整体检查：执行 `python scripts/bookctl.py check --fast`，8 个步骤全部通过，包括通用测试 225 项、构建器测试 556 项、内容与 Mermaid 检查，以及衍生页面重复构建的一致性检查。新增处理器测试另接入 Book CI 的 Fast job。
+
+本机 npm ci 两次因下载访问失败未完成；复用了同一锁文件、同一基线工作树中已有的 Node 依赖后运行上述检查。没有修改依赖锁或绕过检查；干净安装由 PR CI 另行验证。
+
+## 2026-11-10：Windows 发布程序与真实插件宿主
+
+从官方 v1.19.5 release 下载 Windows x64 ZIP，核对官方 asset SHA-256 后解压。CLI 的 --version 为 1.19.5；ZIP、exe 与实验脚本摘要见[宿主结果](facts/host-plugins-20261110.json)。
+
+命令：
+
+```powershell
+python opencode/examples/check-host-plugins.py --binary .scratch/opencode-bin/opencode.exe --dependency-dir .scratch/plugin-types
+```
+
+四个场景全部通过：
+
+| 场景 | 观察结果 |
+| --- | --- |
+| 显式 B 与目录发现 A | init/config/工具 before/after/dispose 为 B → A；系统提示词进入请求，真实 read 正文进入下一轮请求，reviewTrace 关联成功 |
+| 同进程清理后重建实例 | 初始化再次执行，模块级计数从 1 到 2；修改后的源码没有生效；坏插件初始化失败后 B/A 仍完成任务 |
+| 重启进程 | 模块级计数回到 1，修改后的提示词生效 |
+| --pure | 外部插件无初始化或回调，read 任务仍完成 |
+
+真实 SDK 的 app.log 消息出现在服务端日志中。fixture.txt 的内容在所有场景结束后保持不变；实验事件文件会追加写入。实例清理通过真实 HTTP 端点触发，并等待插件 dispose 事件。
+
+模型协议由本地替身提供，不调用外部模型。宿主环境、配置、缓存、数据库和临时文件均隔离；通过 debug paths 核对路径。依赖目录来自预先安装的真实发布包，本轮未验证首次在线安装。
+
+本次验证的入口是 Windows serve 下的 V1。V2 的 add/remove/wait 和 Scope 仅做钉版源码核对，不据此推断所有客户端或启动选项的默认值。
+
+加入第 9 章后重新运行仓库 Fast：8 步通过，包含通用测试 225 项、构建器测试 556 项、247 份 Markdown 与 360 张 Mermaid，以及衍生页面重复构建一致性检查。8 项处理器测试和中英文结构检查也通过。
+
+## 仍未验证
+
+TUI、其他平台、自动热重载、异常退出、取消与并发清理、权限拒绝/询问、真实模型效果与费用、性能和 V2 运行时。文件监听在本轮被关闭；第 8 章提到的子任务失败后 after 收到 undefined 的整条链仍只有源码与处理器实验。
+
+本册尚未注册产品，尚无整书 HTML/PDF/EPUB。接入与本地成品交付属于后续任务。
+
+## 复现与证据
+
+[示例说明](examples/README.md)包含下载校验、依赖准备与两类实验命令。原始请求和日志留在忽略的 .scratch；公开结果只提交版本、摘要、事件名称及已测/未测范围。源码事实可通过两章末尾的固定提交链接复核。

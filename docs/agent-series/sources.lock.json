@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "accessed": "2026-11-09",
+  "purpose": "Research baselines; products are not yet registered with the book builder",
+  "repositories": [
+    {
+      "id": "opencode",
+      "repo": "anomalyco/opencode",
+      "tag": "v1.19.5",
+      "tag_object": "810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+      "commit": "810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+      "license": "MIT",
+      "paths": [
+        "packages/plugin/src/index.ts",
+        "packages/plugin/src/tool.ts",
+        "packages/opencode/src/plugin/index.ts",
+        "packages/opencode/src/session/prompt.ts",
+        "packages/opencode/src/session/llm/request.ts",
+        "packages/core/src/plugin.ts",
+        "packages/opencode/src/config/plugin.ts",
+        "packages/opencode/src/config/paths.ts",
+        "packages/opencode/src/config/config.ts",
+        "packages/opencode/src/plugin/loader.ts",
+        "packages/opencode/src/project/bootstrap.ts",
+        "packages/opencode/src/server/routes/instance/httpapi/lifecycle.ts",
+        "packages/opencode/src/cli/cmd/serve.ts",
+        "packages/core/src/global.ts",
+        "packages/core/src/npm.ts",
+        "packages/core/src/flag/flag.ts",
+        "packages/opencode/src/effect/runtime-flags.ts"
+      ],
+      "verification": "Tag resolved through commits API; listed files read at this commit; official Windows v1.19.5 serve V1 host exercised in four isolated scenarios",
+      "url": "https://github.com/anomalyco/opencode/tree/810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+      "reuse": "Link and original analysis; upstream source is not redistributed",
+      "accessed_dates": [
+        "2026-11-09",
+        "2026-11-10"
+      ],
+      "evidence": "opencode/facts/host-plugins-20261110.json"
+    },
+    {
+      "id": "deepseek",
+      "repo": "deepseek-ai/deepseek-harness",
+      "tag": null,
+      "observed_branch": "master",
+      "commit": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+      "license": "MIT",
+      "paths": [
+        "packages/core",
+        "docs/architecture.md"
+      ],
+      "verification": "Commit and core directory confirmed; runtime experiments pending",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+      "reuse": "Link and original analysis; upstream source is not redistributed"
+    },
+    {
+      "id": "hermes",
+      "repo": "NousResearch/hermes-agent",
+      "tag": "v0.23.0",
+      "tag_object": "df1774294af26285ae758c6114f3f2f60e2a602d",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+      "license": "MIT",
+      "paths": [
+        "run_agent.py",
+        "agent",
+        "tools",
+        "skills",
+        "cron",
+        "gateway",
+        "hermes_state.py"
+      ],
+      "verification": "Annotated tag dereferenced through commits API; root directory inspected",
+      "url": "https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+      "reuse": "Link and original analysis; upstream source is not redistributed"
+    },
+    {
+      "id": "codex",
+      "repo": "openai/codex",
+      "tag": "rust-v0.167.0",
+      "tag_object": "cb41599ccbe371272892f156286a236aa097bada",
+      "commit": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+      "license": "Apache-2.0",
+      "paths": [
+        "codex-rs/cli",
+        "codex-rs/core",
+        "codex-rs/exec",
+        "codex-rs/app-server",
+        "codex-rs/sandboxing",
+        "codex-rs/linux-sandbox",
+        "codex-rs/windows-sandbox-rs"
+      ],
+      "verification": "Annotated tag dereferenced through commits API; Rust workspace directory inspected",
+      "url": "https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+      "reuse": "Link and original analysis; upstream source is not redistributed"
+    }
+  ],
+  "official_docs": [
+    {
+      "url": "https://developers.openai.com/codex/cli/",
+      "accessed": "2026-11-09",
+      "scope": "CLI workflow, resume, MCP and permissions",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://developers.openai.com/codex/agent-approvals-security",
+      "accessed": "2026-11-09",
+      "scope": "Distinguish approvals, sandboxing and platform execution boundaries",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://opencode.ai/docs/plugins",
+      "accessed": "2026-11-10",
+      "scope": "Local discovery, configuration and load order; consulted through Context7",
+      "version": "rolling; pinned source and host results take precedence for this experiment"
+    }
+  ],
+  "updated": "2026-11-10"
+}

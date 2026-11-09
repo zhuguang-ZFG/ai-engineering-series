@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-10",
+  "sequence": [
+    "opencode",
+    "deepseek",
+    "hermes",
+    "codex"
+  ],
+  "active": "opencode",
+  "current_milestone": "S1: OpenCode chapters 8-9 and four Windows V1 host scenarios verified",
+  "tasks": [
+    {
+      "id": "opencode",
+      "status": "in_progress",
+      "stage": "plugin_host_verified",
+      "outline": "opencode/outline.md",
+      "next": "Trace custom tools and permission allow/deny/ask in the pinned host for chapters 6-7; then cover failures and cancellation",
+      "blocked_by": [],
+      "product_registered": false,
+      "evidence": [
+        "opencode/ch08.md",
+        "opencode/ch09.md",
+        "opencode/VERIFY.md",
+        "opencode/facts/host-plugins-20261110.json"
+      ]
+    },
+    {
+      "id": "deepseek",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "deepseek/outline.md",
+      "next": "Trace Cordis mounts and run a reversible plugin experiment",
+      "blocked_by": [
+        "opencode"
+      ],
+      "product_registered": false
+    },
+    {
+      "id": "hermes",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "hermes/outline.md",
+      "next": "Trace memory/skill persistence in an isolated profile",
+      "blocked_by": [
+        "deepseek"
+      ],
+      "product_registered": false
+    },
+    {
+      "id": "codex",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "codex/outline.md",
+      "next": "Map pinned CLI/exec/app-server entry points and platform approval/sandbox tests",
+      "blocked_by": [
+        "hermes"
+      ],
+      "product_registered": false
+    }
+  ]
+}
