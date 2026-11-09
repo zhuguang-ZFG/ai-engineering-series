@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-11-09",
+  "updated": "2026-11-10",
   "sequence": [
     "opencode",
     "deepseek",
@@ -8,16 +8,22 @@
     "codex"
   ],
   "active": "opencode",
-  "current_milestone": "S0: baselines, four outlines and one OpenCode handler experiment",
+  "current_milestone": "S1: OpenCode chapters 8-9 and four Windows V1 host scenarios verified",
   "tasks": [
     {
       "id": "opencode",
       "status": "in_progress",
-      "stage": "plugin_sample",
+      "stage": "plugin_host_verified",
       "outline": "opencode/outline.md",
-      "next": "Run pinned CLI with a local V1 plugin in an isolated project; verify loading, hook order and disposal",
+      "next": "Trace custom tools and permission allow/deny/ask in the pinned host for chapters 6-7; then cover failures and cancellation",
       "blocked_by": [],
-      "product_registered": false
+      "product_registered": false,
+      "evidence": [
+        "opencode/ch08.md",
+        "opencode/ch09.md",
+        "opencode/VERIFY.md",
+        "opencode/facts/host-plugins-20261110.json"
+      ]
     },
     {
       "id": "deepseek",

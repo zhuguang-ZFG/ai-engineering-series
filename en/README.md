@@ -52,7 +52,7 @@ Illustration strategy: Mermaid architecture diagrams and hand-drawn concept art 
 
 ## Four further volumes: research and sample chapters
 
-Separate tasks and outlines now cover [OpenCode](../opencode/README.md), [DeepSeek Harness](../deepseek/README.md), [Hermes](../hermes/README.md), and [Codex CLI](../codex/README.md), in that order. OpenCode has a Chinese plugin sample chapter and an offline example. Complete book builds and English editions have not started. See the [research index](../docs/agent-series-research.md) for pinned sources, scope, and next steps.
+Separate tasks and outlines now cover [OpenCode](../opencode/README.md), [DeepSeek Harness](../deepseek/README.md), [Hermes](../hermes/README.md), and [Codex CLI](../codex/README.md), in that order. OpenCode has Chinese plugin chapters 8–9, handler tests, and experiments with the official Windows host. Complete book builds and English editions have not started. See the [research index](../docs/agent-series-research.md) for pinned sources, scope, and next steps.
 
 ## Reading notes
 

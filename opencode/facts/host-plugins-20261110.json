@@ -1,0 +1,121 @@
+{
+  "version": "1.19.5",
+  "source_commit": "810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+  "platform": "nt",
+  "binary_sha256": "d7b473388cb62555970e400ce54cdfb6d6573608beea6f8fdf382cd1a698a3fa",
+  "external_model_used": false,
+  "filesystem_watch_disabled": true,
+  "cases": [
+    {
+      "case": "discovery-and-real-read",
+      "passed": true,
+      "model_requests": 3,
+      "hook_events": [
+        "B:init",
+        "A:init",
+        "B:config",
+        "A:config",
+        "B:system",
+        "A:system",
+        "B:system",
+        "A:system",
+        "B:before",
+        "A:before",
+        "B:after",
+        "A:after",
+        "B:system",
+        "A:system",
+        "B:dispose",
+        "A:dispose"
+      ]
+    },
+    {
+      "case": "same-process-reinitialization",
+      "passed": true,
+      "model_requests": 3,
+      "hook_events": [
+        "B:init",
+        "broken:failed-init",
+        "A:init",
+        "B:config",
+        "A:config",
+        "B:system",
+        "A:system",
+        "B:system",
+        "A:system",
+        "B:before",
+        "A:before",
+        "B:after",
+        "A:after",
+        "B:system",
+        "A:system",
+        "B:dispose",
+        "A:dispose"
+      ]
+    },
+    {
+      "case": "new-process-reloads-module",
+      "passed": true,
+      "model_requests": 3,
+      "hook_events": [
+        "B:init",
+        "broken:failed-init",
+        "A:init",
+        "B:config",
+        "A:config",
+        "B:system",
+        "A:system",
+        "B:system",
+        "A:system",
+        "B:before",
+        "A:before",
+        "B:after",
+        "A:after",
+        "B:system",
+        "A:system",
+        "B:dispose",
+        "A:dispose"
+      ]
+    },
+    {
+      "case": "pure-skips-external-plugins",
+      "passed": true,
+      "model_requests": 3,
+      "hook_events": []
+    }
+  ],
+  "real_sdk_log_observed": true,
+  "fixture_unchanged": true,
+  "passed": true,
+  "date": "2026-11-10",
+  "command": "python opencode/examples/check-host-plugins.py --binary .scratch/opencode-bin/opencode.exe --dependency-dir .scratch/plugin-types",
+  "release_asset": {
+    "url": "https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip",
+    "id": 683997723,
+    "bytes": 81738227,
+    "sha256": "09a6e693157f0887e504f2cf4357a8cbddc5ead5d0dffb9a269dcc47c48640f5",
+    "verification": "Downloaded ZIP matched the official GitHub release asset digest; executable hash is measured after extraction"
+  },
+  "fixtures": {
+    "check-host-plugins.py": "230c5a1865952eea6c8960c3d2925662bc63822ec3dcd8b40e0a392aea8bc182",
+    "review-trace.ts": "dc01f2708908affa1d9c7188800e0b350b021011333a16a3078be77955357d1c"
+  },
+  "scope": {
+    "host": "Official Windows x64 serve binary, V1 path",
+    "model": "Local OpenAI-compatible SSE fixture",
+    "dependencies": "Real preinstalled @opencode-ai/plugin@1.19.5 and lockfile copied into isolated config directories",
+    "disposal": "POST /instance/dispose followed by observed plugin dispose events",
+    "sdk": "Real app.log request observed in server log",
+    "paths": "debug paths verified home/data/config/cache/state/tmp are inside the temporary fixture"
+  },
+  "limitations": [
+    "No real model, quality, cost, performance or network traffic audit",
+    "No first-time online dependency installation",
+    "No TUI, other platforms or V2 runtime",
+    "Filesystem watcher disabled; automatic hot reload not tested",
+    "No crash/exit/cancellation/concurrent-cleanup timing guarantees",
+    "Tool read-allow path tested; deny and ask cases pending",
+    "Initialization failure isolation does not establish arbitrary hook failure isolation or rollback",
+    "Subtask failure with undefined after output remains source/handler evidence only"
+  ]
+}
