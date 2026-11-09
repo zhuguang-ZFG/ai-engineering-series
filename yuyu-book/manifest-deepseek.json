@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "deepseek",
+  "version": "1.0.0",
+  "date": "2026-11-10",
+  "title": {
+    "zh": "DeepSeek Harness：插件化运行时"
+  },
+  "subtitle": {
+    "zh": "从 Cordis 生命周期到可替换 Agent 循环 · 非官方源码读本"
+  },
+  "kicker": {
+    "zh": "Services · Effects · Agent Runtime"
+  },
+  "notice": {
+    "zh": "本书是独立的中文技术读本，与 DeepSeek 无隶属关系。源码固定于提交 fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159；实跑范围为 Cordis 组件，完整宿主及外部模型尚未运行。"
+  },
+  "epigraph": {
+    "zh": "换掉一个零件之前，先知道谁依赖它，谁负责把它关掉。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-deepseek",
+  "revisions_registry": "revisions-deepseek.json",
+  "subject_index_registry": "subject-index-deepseek.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "verified_windows": "Cordis 4.1.0 component at fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "先理解插件"
+      },
+      "body": {
+        "zh": "第 1–4 章 → 第 11–12 章 → 附录 C。"
+      }
+    },
+    {
+      "label": {
+        "zh": "研究代理循环"
+      },
+      "body": {
+        "zh": "第 5–9 章 → 第 13–14 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "准备实际改造"
+      },
+      "body": {
+        "zh": "第 10 章 → 第 15–18 章。"
+      }
+    }
+  ],
+  "front": {
+    "id": "deepseek-front",
+    "zh": "deepseek/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "deepseek-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "组合运行时"
+      },
+      "motto": {
+        "zh": "从配置入口走进插件的依赖与清理。"
+      },
+      "goal": {
+        "zh": "从配置入口走进插件的依赖与清理。"
+      },
+      "units": [
+        {
+          "id": "deepseek-ch01",
+          "zh": "deepseek/ch01.md"
+        },
+        {
+          "id": "deepseek-ch02",
+          "zh": "deepseek/ch02.md"
+        },
+        {
+          "id": "deepseek-ch03",
+          "zh": "deepseek/ch03.md"
+        },
+        {
+          "id": "deepseek-ch04",
+          "zh": "deepseek/ch04.md"
+        }
+      ]
+    },
+    {
+      "id": "deepseek-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "任务怎样向前推进"
+      },
+      "motto": {
+        "zh": "沿 Agent、会话和模型协议追踪一次任务。"
+      },
+      "goal": {
+        "zh": "沿 Agent、会话和模型协议追踪一次任务。"
+      },
+      "units": [
+        {
+          "id": "deepseek-ch05",
+          "zh": "deepseek/ch05.md"
+        },
+        {
+          "id": "deepseek-ch06",
+          "zh": "deepseek/ch06.md"
+        },
+        {
+          "id": "deepseek-ch07",
+          "zh": "deepseek/ch07.md"
+        },
+        {
+          "id": "deepseek-ch08",
+          "zh": "deepseek/ch08.md"
+        },
+        {
+          "id": "deepseek-ch09",
+          "zh": "deepseek/ch09.md"
+        }
+      ]
+    },
+    {
+      "id": "deepseek-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "扩展能力与观察状态"
+      },
+      "motto": {
+        "zh": "把工具、事件和作用域放进同一条调用链。"
+      },
+      "goal": {
+        "zh": "把工具、事件和作用域放进同一条调用链。"
+      },
+      "units": [
+        {
+          "id": "deepseek-ch10",
+          "zh": "deepseek/ch10.md"
+        },
+        {
+          "id": "deepseek-ch11",
+          "zh": "deepseek/ch11.md"
+        },
+        {
+          "id": "deepseek-ch12",
+          "zh": "deepseek/ch12.md"
+        },
+        {
+          "id": "deepseek-ch13",
+          "zh": "deepseek/ch13.md"
+        },
+        {
+          "id": "deepseek-ch14",
+          "zh": "deepseek/ch14.md"
+        }
+      ]
+    },
+    {
+      "id": "deepseek-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "交付自己的组合"
+      },
+      "motto": {
+        "zh": "明确权限、包装插件，并评估改造与升级。"
+      },
+      "goal": {
+        "zh": "明确权限、包装插件，并评估改造与升级。"
+      },
+      "units": [
+        {
+          "id": "deepseek-ch15",
+          "zh": "deepseek/ch15.md"
+        },
+        {
+          "id": "deepseek-ch16",
+          "zh": "deepseek/ch16.md"
+        },
+        {
+          "id": "deepseek-ch17",
+          "zh": "deepseek/ch17.md"
+        },
+        {
+          "id": "deepseek-ch18",
+          "zh": "deepseek/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "deepseek-apxa",
+      "zh": "deepseek/appendix-a.md"
+    },
+    {
+      "id": "deepseek-apxb",
+      "zh": "deepseek/appendix-b.md"
+    },
+    {
+      "id": "deepseek-apxc",
+      "zh": "deepseek/appendix-c.md"
+    },
+    {
+      "id": "deepseek-apxd",
+      "zh": "deepseek/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "deepseek-front": {
+      "question": {
+        "zh": "为什么研究代理内部的组合方式？"
+      },
+      "deliverable": {
+        "zh": "认识本册源码范围与组件实验。"
+      },
+      "boundary": {
+        "zh": "完整应用与真实模型未实跑。"
+      },
+      "plain": {
+        "zh": "想替换代理的零件，先弄清它的职责和离开后的清理责任。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-front.b-opening"
+      ]
+    },
+    "deepseek-ch01": {
+      "question": {
+        "zh": "第一次启动时，配置来自哪里？"
+      },
+      "deliverable": {
+        "zh": "区分安装、工作目录和配置层。"
+      },
+      "boundary": {
+        "zh": "完整 dsh 启动命令是复现指引。"
+      },
+      "plain": {
+        "zh": "安装目录、工作目录和配置目录承担不同职责。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch01.b-opening"
+      ]
+    },
+    "deepseek-ch02": {
+      "question": {
+        "zh": "依赖还没到齐时，插件会怎样？"
+      },
+      "deliverable": {
+        "zh": "解释服务等待、激活和替换。"
+      },
+      "boundary": {
+        "zh": "服务隔离不等于操作系统沙箱。"
+      },
+      "plain": {
+        "zh": "声明依赖后，服务的出现与消失都会影响插件。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch02.b-opening"
+      ]
+    },
+    "deepseek-ch03": {
+      "question": {
+        "zh": "卸载插件后，还会留下哪些工作？"
+      },
+      "deliverable": {
+        "zh": "理解 effect、父子所有权和异步清理。"
+      },
+      "boundary": {
+        "zh": "资源清理不会回滚任意外部副作用。"
+      },
+      "plain": {
+        "zh": "把监听器和连接交给拥有它们的插件管理，才能可靠地再次加载。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch03.b-opening"
+      ]
+    },
+    "deepseek-ch04": {
+      "question": {
+        "zh": "不同阶段的失败应该怎样恢复？"
+      },
+      "deliverable": {
+        "zh": "区分缺依赖、初始化失败和事件错误。"
+      },
+      "boundary": {
+        "zh": "配置行为以固定快照为准。"
+      },
+      "plain": {
+        "zh": "先分清失败发生在哪一层，再选择恢复方式。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch04.b-opening"
+      ]
+    },
+    "deepseek-ch05": {
+      "question": {
+        "zh": "替换循环需要保留哪些公共行为？"
+      },
+      "deliverable": {
+        "zh": "辨认工厂、句柄、发布和清理契约。"
+      },
+      "boundary": {
+        "zh": "替代驱动是设计练习，未做完整集成。"
+      },
+      "plain": {
+        "zh": "公共 Agent 接口与默认循环分开，替代驱动仍须承担原有契约。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch05.b-opening"
+      ]
+    },
+    "deepseek-ch06": {
+      "question": {
+        "zh": "一轮任务为什么会包含多次请求？"
+      },
+      "deliverable": {
+        "zh": "读懂 Turn、Step、inbox 和取消边界。"
+      },
+      "boundary": {
+        "zh": "事件顺序来自源码契约。"
+      },
+      "plain": {
+        "zh": "Turn 表达用户任务，Step 表达一次模型请求及其工具处理。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch06.b-opening"
+      ]
+    },
+    "deepseek-ch07": {
+      "question": {
+        "zh": "恢复时以哪一份记录为准？"
+      },
+      "deliverable": {
+        "zh": "区分事件日志、投影与模型历史。"
+      },
+      "boundary": {
+        "zh": "没有运行真实存储崩溃恢复。"
+      },
+      "plain": {
+        "zh": "会话日志保存事实，模型历史从这些事实中投影出来。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch07.b-opening"
+      ]
+    },
+    "deepseek-ch08": {
+      "question": {
+        "zh": "稳定指令和动态上下文怎样分开？"
+      },
+      "deliverable": {
+        "zh": "理解片段排序、complete 与撤销。"
+      },
+      "boundary": {
+        "zh": "没有向真实模型发送提示词。"
+      },
+      "plain": {
+        "zh": "固定指令和每次请求变化的上下文需要分开组装。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch08.b-opening"
+      ]
+    },
+    "deepseek-ch09": {
+      "question": {
+        "zh": "流式响应如何变成可靠的循环输入？"
+      },
+      "deliverable": {
+        "zh": "辨认增量、工具参数、完成与取消。"
+      },
+      "boundary": {
+        "zh": "未验证外部提供者的兼容性。"
+      },
+      "plain": {
+        "zh": "流式协议还要表达工具、结束与取消，只有文本增量不够。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch09.b-opening"
+      ]
+    },
+    "deepseek-ch10": {
+      "question": {
+        "zh": "模型提出工具调用后经过哪些步骤？"
+      },
+      "deliverable": {
+        "zh": "读懂 schema、策略和结果呈现。"
+      },
+      "boundary": {
+        "zh": "教学工具未在完整宿主集成实跑。"
+      },
+      "plain": {
+        "zh": "参数校验、权限判断、执行和结果规范化共同构成工具管线。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch10.b-opening"
+      ]
+    },
+    "deepseek-ch11": {
+      "question": {
+        "zh": "中间件什么时候应该调用 next？"
+      },
+      "deliverable": {
+        "zh": "辨认事件模式、委派、短路和返回链。"
+      },
+      "boundary": {
+        "zh": "实跑限定为 Cordis 组件事件。"
+      },
+      "plain": {
+        "zh": "监听同一事件的插件可能包装、修改或截断后续调用。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch11.b-opening"
+      ]
+    },
+    "deepseek-ch12": {
+      "question": {
+        "zh": "同一宿主里的任务怎样各用各的能力？"
+      },
+      "deliverable": {
+        "zh": "区分局部注册、服务域和清理所有权。"
+      },
+      "boundary": {
+        "zh": "两个真实 Agent 的完整并发路径未实跑。"
+      },
+      "plain": {
+        "zh": "作用域决定能力对谁可见，也决定谁结束时撤销注册。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch12.b-opening"
+      ]
+    },
+    "deepseek-ch13": {
+      "question": {
+        "zh": "恢复会不会再次执行已完成操作？"
+      },
+      "deliverable": {
+        "zh": "区分历史重建、缓存与副作用恢复。"
+      },
+      "boundary": {
+        "zh": "不能从会话重放推断外部操作回滚。"
+      },
+      "plain": {
+        "zh": "恢复需要分别处理消息、运行状态和已经发生的外部副作用。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch13.b-opening"
+      ]
+    },
+    "deepseek-ch14": {
+      "question": {
+        "zh": "断线重连如何避免漏读和重复显示？"
+      },
+      "deliverable": {
+        "zh": "区分实时事件、持久历史与远程呈现。"
+      },
+      "boundary": {
+        "zh": "浏览器重连和远端审批未实跑。"
+      },
+      "plain": {
+        "zh": "实时流和持久历史不是同一份数据，重连时需要重新对齐。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch14.b-opening"
+      ]
+    },
+    "deepseek-ch15": {
+      "question": {
+        "zh": "工具审批能限制插件自身代码吗？"
+      },
+      "deliverable": {
+        "zh": "划分宿主、工具、凭据和操作系统边界。"
+      },
+      "boundary": {
+        "zh": "不宣称当前环境已有操作系统隔离。"
+      },
+      "plain": {
+        "zh": "审批工具调用，并不自动限制加载插件的 JavaScript。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch15.b-opening"
+      ]
+    },
+    "deepseek-ch16": {
+      "question": {
+        "zh": "插件怎样从本地文件变成可安装包？"
+      },
+      "deliverable": {
+        "zh": "理解入口、版本、配置与卸载责任。"
+      },
+      "boundary": {
+        "zh": "没有执行 npm 对外发布。"
+      },
+      "plain": {
+        "zh": "可交付的插件包还要说明入口、版本、配置和清理契约。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch16.b-opening"
+      ]
+    },
+    "deepseek-ch17": {
+      "question": {
+        "zh": "如何组装一套可解释的审查助手？"
+      },
+      "deliverable": {
+        "zh": "把能力需求映射为服务和测试路径。"
+      },
+      "boundary": {
+        "zh": "完整审查 Harness 是集成设计。"
+      },
+      "plain": {
+        "zh": "让审查助手的每项能力都有来源、状态和停止方式。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch17.b-opening"
+      ]
+    },
+    "deepseek-ch18": {
+      "question": {
+        "zh": "哪些设计值得带进自己的系统？"
+      },
+      "deliverable": {
+        "zh": "用固定证据比较升级成本与架构取舍。"
+      },
+      "boundary": {
+        "zh": "不以未运行的模型效果做排名。"
+      },
+      "plain": {
+        "zh": "服务、生命周期和作用域可以组成一套机制，也需要明确的管理责任。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-ch18.b-opening"
+      ]
+    },
+    "deepseek-apxa": {
+      "question": {
+        "zh": "怎样找到本册引用的准确实现？"
+      },
+      "deliverable": {
+        "zh": "取得固定提交与源码导航。"
+      },
+      "boundary": {
+        "zh": "滚动主分支不作为此快照证据。"
+      },
+      "plain": {
+        "zh": "本册解释固定提交，根包与 Cordis 分别有自己的版本。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-apxa.b-opening"
+      ]
+    },
+    "deepseek-apxb": {
+      "question": {
+        "zh": "命令与配置入口怎样快速查找？"
+      },
+      "deliverable": {
+        "zh": "按用途定位本册使用的入口。"
+      },
+      "boundary": {
+        "zh": "命令列表不表示完整应用已运行。"
+      },
+      "plain": {
+        "zh": "运行命令之前，先确认版本、工作目录和应用安装条件。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-apxb.b-opening"
+      ]
+    },
+    "deepseek-apxc": {
+      "question": {
+        "zh": "哪些结果能在本地复现？"
+      },
+      "deliverable": {
+        "zh": "复现七项组件场景并辨认证据范围。"
+      },
+      "boundary": {
+        "zh": "完整宿主、模型和平台沙箱未实跑。"
+      },
+      "plain": {
+        "zh": "七项组件实验已运行，完整应用和远端模型未参与。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-apxc.b-opening"
+      ]
+    },
+    "deepseek-apxd": {
+      "question": {
+        "zh": "跨册使用同一术语时怎么避免误解？"
+      },
+      "deliverable": {
+        "zh": "按对象与生命周期理解术语。"
+      },
+      "boundary": {
+        "zh": "名称相同不表示接口兼容。"
+      },
+      "plain": {
+        "zh": "先确定术语指向的对象和生命周期，再套用其他代理的经验。"
+      },
+      "sources": [
+        "deepseek-repo"
+      ],
+      "plain_evidence": [
+        "deepseek-apxd.b-opening"
+      ]
+    }
+  }
+}

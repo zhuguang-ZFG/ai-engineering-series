@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "codex-repo": {
+    "title": "openai/codex rust-v0.167.0",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+    "snapshot": "rust-v0.167.0 at full commit",
+    "accessed": "2026-11-10",
+    "license": "Apache-2.0",
+    "scope": "CLI, exec, instructions, configuration, rules, plugin resources, hooks and app-server",
+    "pinned": {
+      "tag": "rust-v0.167.0",
+      "commit": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a"
+    }
+  },
+  "codex-docs": {
+    "title": "Official Codex documentation",
+    "authority": "OpenAI official documentation",
+    "kind": "web",
+    "url": "https://developers.openai.com/codex/cli/",
+    "snapshot": "Rolling documentation; queried through Context7",
+    "accessed": "2026-11-10",
+    "license": "Copyright OpenAI; linked and paraphrased, not redistributed",
+    "scope": "Product concepts; never used alone to prove pinned runtime behavior"
+  }
+}

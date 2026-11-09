@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-10",
+  "baseline": "Hermes v0.23.0",
+  "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+  "platform": "win32",
+  "python": "3.13.14",
+  "scope": "Real upstream storage and metadata components; no agent/model/gateway",
+  "adapter": "tools.memory_tool path/OS-lock facade plus original validator AST; package initializers bypassed",
+  "yaml_import_omitted": true,
+  "budgets": {
+    "memory_chars": 100,
+    "user_chars": 70
+  },
+  "upstream_sha256": {
+    "tools/memory_tool_store.py": "0f665c95fcf44e3115c7a625622885e20254418b414a92a1f8570d1300e9fc31",
+    "tools/memory_tool.py": "00c86420cb4d824dbfe2806b1f748a1fc182b8c11ea2f902e8b77d3d035624dd",
+    "tools/threat_patterns.py": "9e93a48960d55b7403c04bb30ca24ea178ba60dfc79e1a3938ce4e19a792fa02",
+    "utils.py": "8e4581644a502283d7c900a597c822f44bfdaf5c9ab08bd217945a5ed419f2a0",
+    "hermes_constants.py": "3eb7cee13539d8cc57de582659d72c95d0d292a9345d8d5c5647c7997d532fed",
+    "hermes_dir_acl.py": "d978e1fbddffd05f4506e9c6d80a279ac9d5fea799d9a3174b260a7ff02bb50e",
+    "hermes_yaml.py": "f97f0f08b6474c52434d0cffaa7ba0ecaa5b9279c4abcbb35c11d15f9c89db76",
+    "agent/skill_utils.py": "9b643866caf9b0db3b568045e2b49bf2903f89197497c815a492afec89b33722"
+  },
+  "cases": [
+    {
+      "case": "write persists but prompt snapshot is frozen until load",
+      "passed": true
+    },
+    {
+      "case": "duplicate add is idempotent and patch preserves entry context",
+      "passed": true
+    },
+    {
+      "case": "character limit refuses overflow without changing disk",
+      "passed": true
+    },
+    {
+      "case": "ambiguous substring removal is refused",
+      "passed": true
+    },
+    {
+      "case": "failed batch commits none of its operations",
+      "passed": true
+    },
+    {
+      "case": "new store restores both targets after exact removal",
+      "passed": true
+    },
+    {
+      "case": "invalid UTF-8 refuses write without erasing the file",
+      "passed": true
+    },
+    {
+      "case": "skill frontmatter handles BOM and support folders are excluded",
+      "passed": true,
+      "yaml_path": "fallback"
+    }
+  ],
+  "passed": true,
+  "book_script_sha256": "2ea5af90f7f8ca41ea89e3ca46a6533150c21c8677c4b4e8fe21085da44e7700"
+}

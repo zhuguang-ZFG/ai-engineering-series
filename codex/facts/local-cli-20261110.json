@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-10",
+  "version": "codex-cli 0.167.0",
+  "source_commit": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+  "platform": "nt",
+  "binary_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+  "cases": [
+    {
+      "name": "read-status",
+      "command": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "result": {
+        "matchedRules": [
+          {
+            "prefixRuleMatch": {
+              "matchedPrefix": [
+                "git",
+                "status"
+              ],
+              "decision": "allow",
+              "justification": "Inspect a repository without changing its history."
+            }
+          }
+        ],
+        "decision": "allow"
+      },
+      "passed": true
+    },
+    {
+      "name": "read-diff",
+      "command": [
+        "git",
+        "diff",
+        "--stat"
+      ],
+      "result": {
+        "matchedRules": [
+          {
+            "prefixRuleMatch": {
+              "matchedPrefix": [
+                "git",
+                "diff"
+              ],
+              "decision": "allow",
+              "justification": "Inspect a repository without changing its history."
+            }
+          }
+        ],
+        "decision": "allow"
+      },
+      "passed": true
+    },
+    {
+      "name": "publish",
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "review"
+      ],
+      "result": {
+        "matchedRules": [
+          {
+            "prefixRuleMatch": {
+              "matchedPrefix": [
+                "git",
+                "push"
+              ],
+              "decision": "prompt",
+              "justification": "Review the destination and commit before publishing."
+            }
+          }
+        ],
+        "decision": "prompt"
+      },
+      "passed": true
+    },
+    {
+      "name": "force-publish",
+      "command": [
+        "git",
+        "push",
+        "--force",
+        "origin",
+        "review"
+      ],
+      "result": {
+        "matchedRules": [
+          {
+            "prefixRuleMatch": {
+              "matchedPrefix": [
+                "git",
+                "push"
+              ],
+              "decision": "prompt",
+              "justification": "Review the destination and commit before publishing."
+            }
+          },
+          {
+            "prefixRuleMatch": {
+              "matchedPrefix": [
+                "git",
+                "push",
+                "--force"
+              ],
+              "decision": "forbidden",
+              "justification": "Use a reviewed branch update without force rewriting shared history."
+            }
+          }
+        ],
+        "decision": "forbidden"
+      },
+      "passed": true
+    },
+    {
+      "name": "unmatched",
+      "command": [
+        "git",
+        "commit",
+        "-m",
+        "example"
+      ],
+      "result": {
+        "matchedRules": []
+      },
+      "passed": true
+    },
+    {
+      "name": "absolute-unmatched",
+      "command": [
+        "C:/book/bin/git.exe",
+        "status"
+      ],
+      "result": {
+        "matchedRules": []
+      },
+      "passed": true
+    },
+    {
+      "name": "invalid-positive-example",
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "name": "static-app-server-schema",
+      "files": 322,
+      "passed": true
+    }
+  ],
+  "model_used": false,
+  "agent_session_started": false,
+  "sandbox_enforcement_tested": false,
+  "passed": true,
+  "fixtures": {
+    "check-local-cli.py": "7ed48ba7087feffb6715c8388280578fd55b2b801310e4b24f8cd0225d5d48e9",
+    "review.rules": "392861f82bc9c70c78d49aac6fc1b4a23a9940bfbece2eedf01d574f44aa890b"
+  }
+}

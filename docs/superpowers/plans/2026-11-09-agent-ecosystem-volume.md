@@ -1,52 +1,27 @@
 # 实施计划：四本 Agent 分册
 
-[规格](../specs/2026-11-09-agent-ecosystem-volume.md) · [任务状态](../../agent-series/tasks.json) · [研究入口](../../agent-series-research.md)
+[规格](../specs/2026-11-09-agent-ecosystem-volume.md) · [任务状态](../../agent-series/tasks.json) · [分册入口](../../agent-series-research.md)
 
-## S0：本次启动
+2026-11-10 按用户要求改为并行：主代理负责 OpenCode 与公共出版流程，三位子 agent 分别负责 DeepSeek、Hermes、Codex。原先的阅读顺序不再阻塞后续分册写作。
 
-- [x] 建立四个分册任务和独立产品身份。
-- [x] 解析实际提交，区分标签对象与 commit。
-- [x] 建立逐章提纲和源码入口。
-- [x] 完成 OpenCode V1 插件样章、处理器实验及验证说明。
-- [x] 完成内容、示例与仓库 Fast 检查；详情见 OpenCode VERIFY。
+## 正文与实验
 
-## S1：OpenCode（当前）
+- [x] 固定四册实际 commit、许可证与来源，不混淆 tag object。
+- [x] OpenCode：前言、18 章、A–D；8 项处理器检查、4 个 Windows V1 宿主场景、10 个工具权限场景。
+- [x] DeepSeek：前言、18 章、A–D；真实 vendored Cordis 的 7 个注入、失败、卸载与重挂场景。
+- [x] Codex：前言、18 章、A–D；固定 CLI 的 execpolicy 与 app-server schema 实验。
+- [x] Hermes：前言、18 章、A–D；隔离记忆/会话实验与插件示例收尾。
 
-- [x] 在临时项目验证 Windows 发布版 CLI 的本地插件发现、加载和实例清理；四场景与复现命令见 OpenCode VERIFY。
-- [x] 完成第 9 章，记录初始化失败、同进程模块复用、进程重启与 --pure 的实测边界。
-- [ ] 追踪 V1/V2 入口与默认选择，分别记录兼容边界。
-- [x] 跟踪一次 serve → 会话 → 本地模型替身 → 内置 read → 工具结果返回的只读路径。
-- [ ] 跟踪一次读写任务的客户端、服务端、会话、模型请求和工具结果。
-- [ ] 完成 Hooks、自定义工具、失败、资源释放、MCP 与权限专题。
-- [ ] 按 [提纲](../../../opencode/outline.md) 完成正文和图示。
-- [ ] 注册 opencode 产品，完成本地 HTML/PDF/EPUB、视觉复核及 CI。
+每册明确区分源码观察、组件实验、真实宿主和供读者练习的任务。取消、跨平台沙箱、外部 MCP/LSP、完整模型改码和长期 cron/gateway 运行等未实跑项目保留在各册 VERIFY，不计入首版已验证结果。
 
-## S2：DeepSeek Harness
+## 出版与交付
 
-- [ ] 从 Cordis 配置追到服务注入与插件初始化。
-- [ ] 验证挂载、依赖缺失、卸载、重新挂载。
-- [ ] 跟踪事件日志、提示词、工具与循环，实跑替换循环实验。
-- [ ] 按 [提纲](../../../deepseek/outline.md) 完成正文、图示和实验。
-- [ ] 注册 deepseek 产品，完成三种本地格式与 CI。
+- [x] 注册四册产品、配置独立元数据及输出前缀。
+- [x] 支持源 Markdown 相对链接转书内跳转、18 章自动交叉引用及重复引用脚注。
+- [x] CI 增加四册独立 PDF/EPUB 构建和成品 artifact，PR 同样执行。
+- [x] 四册实际生成 HTML、PDF、EPUB，检查目录、书签、代码、图示和 EPUBCheck。
+- [x] 验证后复制 12 份成品到主工作区 yuyu-book/dist。
+- [x] 仓库 Fast、内容和元数据检查通过；同步任务记录。
+- [ ] 提交、推送、PR CI 全绿后合并，核对 main 的 Book CI 与 Pages。
 
-## S3：Hermes
-
-- [ ] 核对 memory、skills、历史检索的保存位置与加载策略。
-- [ ] 用隔离目录验证跨会话读取、修正和清理。
-- [ ] 检查 cron/gateway 的任务身份、重复执行和凭据边界。
-- [ ] 区分知识文件变化、请求变化和权重训练。
-- [ ] 按 [提纲](../../../hermes/outline.md) 完成正文、图示和实验。
-- [ ] 注册 hermes 产品，完成三种本地格式与 CI。
-
-## S4：Codex CLI
-
-- [ ] 对齐 release、Rust workspace、CLI/exec/app-server 入口。
-- [ ] 用临时文件建立审批/沙箱矩阵，逐平台记录支持状态。
-- [ ] 验证取消、工具失败、resume/fork 与磁盘副作用的关系。
-- [ ] 核对 AGENTS.md、skills、MCP、hooks 的钉版接口。
-- [ ] 按 [提纲](../../../codex/outline.md) 完成正文、图示和实验。
-- [ ] 注册 codex 产品，完成三种本地格式与 CI。
-
-执行顺序：源码核对 → 最小实验 → 样章 → 完整正文 → 装配 → 本地 PDF/EPUB → 视觉复核 → PR/CI。只勾实际完成项。
-
-2026-11-10：V1 serve 已实跑；V2 仅源码核对，自动热重载未测。下一步沿第 6、7 章做自定义工具与权限允许/拒绝/询问实验，再补工具失败与取消路径。
+旧 P6 视频媒体验收仍未完成，不由书籍构建代替。

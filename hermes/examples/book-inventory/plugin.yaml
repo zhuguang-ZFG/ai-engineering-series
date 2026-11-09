@@ -1,0 +1,5 @@
+name: book-inventory
+version: 0.1.0
+description: List Markdown files under an operator-configured workspace.
+provides_tools:
+  - book_inventory

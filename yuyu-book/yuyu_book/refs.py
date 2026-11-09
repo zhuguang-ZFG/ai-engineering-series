@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import html
+import posixpath
 import re
+from pathlib import Path
+from urllib.parse import quote, unquote, urlsplit
 
 _EXT_LINK_RE = re.compile(
     r'<a href="(https?://[^"]+)"(\s[^>]*)?>(.*?)</a>', re.S)
@@ -10,6 +13,49 @@ _SKIP_TAGS = {"a", "code", "pre", "h1", "svg", "style", "sup", "figure"}
 _VOID_TAGS = ("br", "img", "hr", "meta", "input", "wbr")
 _TAG_RE = re.compile(r"<(/?)([a-zA-Z][a-zA-Z0-9]*)[^>]*?(/)?>")
 _COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
+
+
+def resolve_local_links(doc: str, source: str, targets: dict[str, str],
+                        repository: Path, *, chapters: bool) -> str:
+    """Resolve chapter links after ID prefixing, source links before footnotes.
+
+    Included chapters stay inside the offline book. Other existing repository
+    files open their published source; paths outside the repository stay
+    untouched so malformed links are still caught by the assembly audit.
+    """
+    root = repository.resolve()
+
+    def replace(match):
+        url = urlsplit(html.unescape(match.group(1)))
+        if url.scheme or url.netloc or not url.path or url.path.startswith("/"):
+            return match.group(0)
+        path = posixpath.normpath(posixpath.join(
+            posixpath.dirname(source), unquote(url.path)))
+        if path == ".." or path.startswith("../"):
+            return match.group(0)
+        target = targets.get(path)
+        if target:
+            if not chapters:
+                return match.group(0)
+            fragment = unquote(url.fragment)
+            anchor = target
+            if fragment:
+                anchor = (fragment if fragment == target or
+                          fragment.startswith(target + "-")
+                          else target + "-" + fragment)
+            href = "#" + anchor
+        else:
+            if chapters:
+                return match.group(0)
+            file = (root / path).resolve()
+            if not file.is_relative_to(root) or not file.is_file():
+                return match.group(0)
+            href = "https://github.com/zhuguang-ZFG/claude-code-book/blob/main/" + quote(path, safe="/")
+            if url.fragment:
+                href += "#" + url.fragment
+        return 'href="' + html.escape(href, quote=True) + '"'
+
+    return re.sub(r'\bhref="([^"]+)"', replace, doc)
 
 
 def process_links(doc: str, external: list[str]) -> str:
@@ -21,12 +67,14 @@ def process_links(doc: str, external: list[str]) -> str:
         url, attrs, label = m.group(1), m.group(2) or "", m.group(3)
         if "class=" in attrs or 'rel="' in attrs or "<a " in label:
             return m.group(0)
-        if url not in counter:
+        first = url not in counter
+        if first:
             external.append(url)
             counter[url] = len(external)
         num = counter[url]
+        ref_id = f' id="fnref-{num}"' if first else ""
         return (f'<a class="ext" href="{url}" rel="noopener"{attrs}>{label}</a>'
-                f'<sup class="fnum"><a href="#fn-{num}" id="fnref-{num}">[{num}]</a></sup>')
+                f'<sup class="fnum"><a href="#fn-{num}"{ref_id}>[{num}]</a></sup>')
     return _EXT_LINK_RE.sub(repl, doc)
 
 
@@ -93,7 +141,7 @@ class RefLinker:
 
     def __init__(self, mapping: dict[str, str], current: str, lang: str):
         if lang == "zh":
-            self.rx = re.compile(r"第\s*([1-9]|1[0-5])\s*章|附录\s*([A-D])")
+            self.rx = re.compile(r"第\s*(\d{1,2})\s*章|附录\s*([A-D])")
         else:
             self.rx = re.compile(
                 r"\bChapter\s+(\d{1,2})\b|\bAppendix\s+([A-D])\b")
@@ -114,7 +162,7 @@ class RefLinker:
             g1, g2 = m.group(1), m.group(2)
             aid = f"ch{int(g1):02d}" if g1 else f"apx{g2.lower()}"
             anchor = self.map.get(aid)
-            if not anchor or aid == self.current or aid in used:
+            if not anchor or anchor == self.current or aid in used:
                 continue
             used.add(aid)
             out.append(text[last:m.start()])

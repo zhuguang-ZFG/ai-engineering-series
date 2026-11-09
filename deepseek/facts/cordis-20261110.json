@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-10",
+  "source": {
+    "repository": "https://github.com/deepseek-ai/deepseek-harness",
+    "commit": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "license": "MIT",
+    "component": "vendor/cordis",
+    "version": "4.1.0"
+  },
+  "environment": {
+    "platform": "Windows",
+    "node": "24.14.0",
+    "tsx": "4.23.13"
+  },
+  "dependency_versions": {
+    "@deepseek-ai/cordis": "4.1.0",
+    "@deepseek-ai/cosmokit": "1.9.0",
+    "@standard-schema/spec": "1.1.0",
+    "tsx": "4.23.13"
+  },
+  "source_normalization": "Decode UTF-8 without BOM, CRLF to LF, exactly one terminal LF; SHA-256 of UTF-8 bytes.",
+  "source_sha256": {
+    "context.ts": "fd5a4f1d2bc6b8b34729c87fda7639a07759ce07fb070ab05374acbcb9ccdc0e",
+    "events.ts": "a464c843822da4eb31a8d998c5e2216a817b8a7dfeacb6e1aab7f830e7320d6b",
+    "fiber.ts": "b64c3a97f15f0381479dcf3d25965e56dc4cecfa4a0881fc055a49f65b9945df",
+    "index.ts": "071fb226e9a21556625e4391b28e6641b9b34b1cd402155246e0437993d8b740",
+    "logger.ts": "a6836ace311d0bd1abc9c1211cffcba73eff61c89ca47641efd82d91747401cb",
+    "reflect.ts": "047f01fcdef2aa34b4afc39deaf18c16733fabd2a5ef0d55e5c2595b22caadfd",
+    "registry.ts": "34bbd60ae502b4f85201c204afb52a9acabde6878d9278493478c1b2183debd3",
+    "service.ts": "614205c6ce7cf1a057b8b352e96aa4fcd734c967a3d2283a126c9c61f268e3be",
+    "utils.ts": "c68bab85514ebd8cb08227367ea306b0109a214cd10965c497474eeadaaca756"
+  },
+  "example_sha256": {
+    "review-observer.mjs": "455ca2ef2baeb034d2bf7fe5d5e2b91c302f2ff00924d3791672219b7c83b330",
+    "check-cordis.mjs": "df62010148b8af324d39882cbf9e82b8f60bb49ffc811e5fd997ea571ad6817f"
+  },
+  "command": "node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs deepseek/examples/check-cordis.mjs --source .scratch/deepseek-runtime/pinned-cordis/src/index.ts",
+  "exit_code": 0,
+  "model_used": false,
+  "passed": true,
+  "cases": [
+    {
+      "name": "required injection waits, activates and cleans up",
+      "passed": true
+    },
+    {
+      "name": "provider removal deactivates dependent; replacement reactivates",
+      "passed": true
+    },
+    {
+      "name": "failed initialization rolls back managed effects, not raw writes",
+      "passed": true
+    },
+    {
+      "name": "waterfall preserves nested order and result",
+      "passed": true
+    },
+    {
+      "name": "waterfall veto skips body and duplicate next is rejected",
+      "passed": true
+    },
+    {
+      "name": "parent disposal awaits asynchronous child cleanup",
+      "passed": true
+    },
+    {
+      "name": "isolated service realms keep counters separate",
+      "passed": true
+    }
+  ],
+  "limits": [
+    "No complete dsh host was started.",
+    "No remote model, credentials or messages were used.",
+    "No Agent/Session persistence integration, Web reconnect, package publication or OS sandbox was exercised."
+  ],
+  "source_git_blobs": {
+    "context.ts": "b7dcf44ff6003f5443fa6e117ebdc623ae13f8ec",
+    "events.ts": "9e7b6a6633bd661309968cc7743754d16965f62c",
+    "fiber.ts": "6da19b4767c79a9f8a019e701fa852a0b07d4072",
+    "index.ts": "5c27008b44d50b8319ab3828ba02bd94adc5aa16",
+    "logger.ts": "0dc97c16b35351fa74e811515e7e28ab45144962",
+    "reflect.ts": "89123616a0cb99c8f97b312d76340f797cbe2d1f",
+    "registry.ts": "478cf036cb2339fcd6c092ee0cb6f2babc500014",
+    "service.ts": "dc5742f8c22d338e6aee874b5bca51b3e3031165",
+    "utils.ts": "07f52e6477b2ecd7cc402c3025468c959cad7271"
+  }
+}

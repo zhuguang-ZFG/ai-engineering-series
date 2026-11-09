@@ -39,6 +39,7 @@ jobs:
           browser: 'true'
       - run: python docs/yuyu-overhaul/check_bilingual_parity.py
       - run: node --test opencode/examples/check-review-trace.mjs
+      - run: python -m unittest discover -s hermes/examples -p "test_*.py" -v
       - run: python scripts/bookctl.py check --fast
       - uses: actions/upload-artifact@v4
         if: always()
@@ -50,8 +51,8 @@ jobs:
   full:
     name: Full
     needs: fast
-    # Fast is the only tier a pull request must pay for; rendered HTML/PDF
-    # evidence is produced on main and by explicit dispatch.
+    # The full bilingual audit remains a main/dispatch tier. Agent volumes
+    # below render their own PDF and EPUB on pull requests as well.
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -134,3 +135,65 @@ jobs:
           name: yuyu-pi-dist
           path: yuyu-book/dist/yuyu-pi-*
           if-no-files-found: error
+  agent-volumes:
+    name: Agent volume (${{ matrix.product }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [opencode, deepseek, hermes, codex]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
+        with:
+          browser: 'true'
+      - name: Build complete Chinese HTML, PDF and EPUB
+        run: python scripts/bookctl.py build --product ${{ matrix.product }} --lang zh --pdf --epub
+      - name: Check every publication format exists
+        shell: bash
+        run: |
+          for extension in html pdf epub; do
+            test -s "yuyu-book/dist/yuyu-${{ matrix.product }}-zh.${extension}"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yuyu-${{ matrix.product }}-dist
+          path: yuyu-book/dist/yuyu-${{ matrix.product }}-zh.*
+          if-no-files-found: error
+  deepseek-components:
+    name: DeepSeek Cordis components
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch the pinned Cordis source
+        uses: actions/checkout@v4
+        with:
+          repository: deepseek-ai/deepseek-harness
+          ref: fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159
+          path: .scratch/deepseek-runtime/pinned-source
+          sparse-checkout: vendor/cordis/src
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - name: Verify source and example fingerprints
+        run: python deepseek/examples/verify-evidence.py --source-root .scratch/deepseek-runtime/pinned-source/vendor/cordis/src
+      - name: Install the pinned component dependencies
+        run: >-
+          npm install --prefix .scratch/deepseek-runtime --ignore-scripts --no-audit --no-fund
+          @deepseek-ai/cordis@4.1.0 @deepseek-ai/cosmokit@1.9.0
+          @standard-schema/spec@1.1.0 tsx@4.23.13
+      - name: Exercise Cordis without a model or full host
+        run: >-
+          node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs
+          deepseek/examples/check-cordis.mjs
+          --source .scratch/deepseek-runtime/pinned-source/vendor/cordis/src/index.ts

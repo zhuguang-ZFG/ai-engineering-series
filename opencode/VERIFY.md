@@ -42,12 +42,29 @@ python opencode/examples/check-host-plugins.py --binary .scratch/opencode-bin/op
 
 加入第 9 章后重新运行仓库 Fast：8 步通过，包含通用测试 225 项、构建器测试 556 项、247 份 Markdown 与 360 张 Mermaid，以及衍生页面重复构建一致性检查。8 项处理器测试和中英文结构检查也通过。
 
+## 2026-11-10：原创工具与真实权限队列
+
+使用相同官方 Windows 二进制，加载原创 read-fixture.ts，由本地模型替身发起 book_probe。工具在读取临时 fixture.txt 前调用真实 context.ask；脚本操作真实 permission HTTP 队列，并用 entered/approved/read-done 事件验证执行顺序。
+
+```powershell
+python opencode/examples/check-tool-permissions.py --binary .scratch/opencode-bin/opencode.exe --dependency-dir .scratch/plugin-types
+```
+
+10 个场景全部通过：allow、deny、ask-once、ask-reject、hidden、once-first、once-new-session、always-first、always-new-session、always-after-dispose。once 在新会话重问；always 在同实例新会话沿用，实例 dispose 后重问。拒绝与隐藏工具时没有读取 fixture。
+
+read-fixture.ts 使用 TypeScript 5.9.3 与真实 plugin 1.19.5 类型执行 strict/noEmit，通过。公开版本、场景与脚本摘要见 [权限实验结果](facts/tool-permissions-20261110.json)。模型协议仍由本地替身提供，不证明真实模型的工具选择能力。
+
 ## 仍未验证
 
-TUI、其他平台、自动热重载、异常退出、取消与并发清理、权限拒绝/询问、真实模型效果与费用、性能和 V2 运行时。文件监听在本轮被关闭；第 8 章提到的子任务失败后 after 收到 undefined 的整条链仍只有源码与处理器实验。
+TUI、其他平台、自动热重载、异常退出、取消与并发清理、真实模型效果与费用、性能和 V2 运行时。文件监听在本轮被关闭；第 8 章提到的子任务失败后 after 收到 undefined 的整条链仍只有源码与处理器实验。
 
-本册尚未注册产品，尚无整书 HTML/PDF/EPUB。接入与本地成品交付属于后续任务。
+本册已注册独立产品 opencode，前言、18 章和附录 A–D 均进入装配。产物构建与交付记录见四册任务表。
 
 ## 复现与证据
 
 [示例说明](examples/README.md)包含下载校验、依赖准备与两类实验命令。原始请求和日志留在忽略的 .scratch；公开结果只提交版本、摘要、事件名称及已测/未测范围。源码事实可通过两章末尾的固定提交链接复核。
+
+
+## 本地成品
+
+2026-11-10 已生成 HTML、PDF（99 页）和 EPUB，并校验复制到主工作区 `yuyu-book/dist/`。PDF 包含 29 个书签，EPUBCheck 5.4.0 零错误、零警告。[交付摘要与文件校验值](../docs/agent-series/local-publication-20261110.json)记录这次成品。

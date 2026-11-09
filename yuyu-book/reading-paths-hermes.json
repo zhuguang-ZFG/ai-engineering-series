@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "hermes-front": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch02": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch03": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch04": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch05": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch06": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch07": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch08": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch09": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch10": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch11": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch12": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch13": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch14": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch15": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch16": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch17": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-ch18": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-apxa": [
+    "start",
+    "core",
+    "deep"
+  ],
+  "hermes-apxb": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-apxc": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "hermes-apxd": [
+    "start",
+    "core",
+    "deep"
+  ]
+}

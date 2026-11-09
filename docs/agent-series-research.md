@@ -1,31 +1,27 @@
-# 四本 Agent 分册：研究入口
+# 四本 Agent 分册
 
 [任务表](agent-series/tasks.json) · [规格](superpowers/specs/2026-11-09-agent-ecosystem-volume.md) · [计划](superpowers/plans/2026-11-09-agent-ecosystem-volume.md)
 
-| 对象 | 写作基线 | 书稿与提纲 | 阶段 |
+四册均含前言、18 章和附录 A–D。它们共用电子书构建器，各自维护版本、来源、目录、阅读路径和索引。当前交付中文版，英文版尚未启动。
+
+| 分册 | 固定版本 | 内容重点 | 实验记录 |
 | --- | --- | --- | --- |
-| OpenCode | v1.19.5 | [OpenCode](../opencode/README.md) | 第 8、9 章；处理器与 Windows 宿主实验 |
-| DeepSeek Harness | fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159 | [DeepSeek](../deepseek/README.md) | 规划，待宿主实验 |
-| Hermes Agent | v0.23.0 | [Hermes](../hermes/README.md) | 规划，待宿主实验 |
-| Codex CLI | rust-v0.167.0 | [Codex CLI](../codex/README.md) | 规划，待宿主实验 |
+| [OpenCode](../opencode/README.md) | v1.19.5 | 请求链、工具与权限、Hook、加载和缓存 | [Windows V1 宿主、10 个权限场景](../opencode/VERIFY.md) |
+| [DeepSeek Harness](../deepseek/README.md) | fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159 | Cordis 注入与卸载、循环、工具和事件 | [7 个真实组件场景](../deepseek/VERIFY.md) |
+| [Hermes Agent](../hermes/README.md) | v0.23.0 | 记忆快照、会话、技能、插件、cron 和 gateway | [隔离的记忆与会话实验](../hermes/VERIFY.md) |
+| [Codex CLI](../codex/README.md) | rust-v0.167.0 | CLI/exec/app-server、规则、沙箱、skills 和 hooks | [固定 CLI 的规则与 schema 实验](../codex/VERIFY.md) |
 
-完整提交、许可证、访问时间和源码入口见 [sources.lock.json](agent-series/sources.lock.json)。它是研究锁文件，暂不注册进电子书构建器。Hermes、Codex 的 annotated tag 已解析到实际 commit。
+完整 commit、许可证和源码入口见 [sources.lock.json](agent-series/sources.lock.json)。Hermes、Codex 的 annotated tag 已解析到实际提交。官方滚动文档用于解释概念，具体版本行为以固定源码和对应实验为准。
 
-## 已核对与待核对
+在仓库根目录运行：
 
-| 观察 | 证据层级 | 范围 |
-| --- | --- | --- |
-| OpenCode V1 Plugin 返回 Hooks；工具事件为 (input, output)，返回 Promise<void> | 钉版类型声明 | packages/plugin/src/index.ts |
-| V1 trigger 顺序调用处理器，共享 output，不使用回调返回值 | 钉版源码 | packages/opencode/src/plugin/index.ts 的 trigger |
-| V1 注册了事件取消订阅与 dispose 清理 | 钉版源码、宿主实跑 | Windows serve 的实例清理触发了 B/A dispose；其他退出路径未测 |
-| 显式 B 和目录发现 A 按顺序调用，read 结果返回模型请求 | 宿主实跑 | 模型协议用本地替身，插件、内置工具与 SDK 日志为真实实现 |
-| 实例重建再次初始化，但同进程复用旧模块；重启后读取新源码 | 宿主实跑 | 文件监听关闭，不代表自动热重载行为 |
-| 坏插件初始化失败不阻断 B/A；--pure 跳过外部插件 | 钉版源码、宿主实跑 | 不推及其他 Hook 异常或全部内置插件 |
-| v1.19.5 另有 V2 PluginV2，以 Scope 管理注册 | 钉版源码 | packages/core/src/plugin.ts |
-| DeepSeek 将循环、会话、提示词、工具分成包 | 钉版目录 | packages/core；运行行为待验证 |
-| Hermes 有会话状态、技能、cron、gateway 子系统 | 钉版目录、官网研究线索 | 加载策略和记忆预算待追踪 |
-| Codex 有 CLI、exec、app-server 和平台沙箱模块 | 钉版目录、官方文档 | 所钉二进制尚未实跑 |
+```bash
+python scripts/bookctl.py build --product opencode --lang zh --pdf --epub
+python scripts/bookctl.py build --product deepseek --lang zh --pdf --epub
+python scripts/bookctl.py build --product hermes --lang zh --pdf --epub
+python scripts/bookctl.py build --product codex --lang zh --pdf --epub
+```
 
-回调单测不等于完整 CLI 加载；提示词改变不等于权限改变；记忆文件更新不等于模型权重训练。
+有 make 时也可使用 `make book-agents`。产物前缀分别是 `yuyu-opencode-zh`、`yuyu-deepseek-zh`、`yuyu-hermes-zh`、`yuyu-codex-zh`，输出到 `yuyu-book/dist/`。本机交付目录为 `D:\Users\claude\claude-code-book-main\yuyu-book\dist`。
 
-上游原文、源码、日志放在忽略的 .scratch/upstream 与 .scratch/agent-series。提交原创分析、样例、复现命令和脱敏摘要。第一份结果见 [OpenCode VERIFY](../opencode/VERIFY.md)。
+实验没有调用外部付费模型。OpenCode 使用本地 SSE 替身驱动真实宿主；其余册的组件或 CLI 实验也保留明确边界。尚未实跑的模型效果、网络服务和跨平台行为列在各册验证记录中。旧 P6 视频媒体验收仍未完成。

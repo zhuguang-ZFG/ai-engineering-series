@@ -122,6 +122,12 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
         u.part = part  # type: ignore[attr-defined]
         units.append(u)
 
+    local_targets = {u.path: u.id for u in units}
+    for u in units:
+        alias = re.search(r"(?:^|-)(ch\d{2}|apx[a-d])$", u.id)
+        if alias:
+            mapping[alias.group(1)] = u.id
+
     all_blocks, caps = [], {}
     for u in units:
         caps.update(mm.captions_for(read_text(REPO_ROOT / u.path), u.blocks,
@@ -138,7 +144,8 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     for u in units:
         payloads.append(render.render_unit(u, mapping, diagrams=diagrams,
                                            autolink=autolink, gloss=layer,
-                                           tiers=paths.get(u.id)))
+                                           tiers=paths.get(u.id),
+                                           local_targets=local_targets))
     by_id = {p["unit"].id: p for p in payloads}
     layer.check_coverage()
 

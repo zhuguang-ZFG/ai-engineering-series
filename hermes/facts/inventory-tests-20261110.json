@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-10",
+  "python": "3.13.14",
+  "scope": "Original handler and FakeContext only; no Hermes PluginManager",
+  "tests_run": 7,
+  "failures": 0,
+  "errors": 0,
+  "skipped": [],
+  "successful": true,
+  "sha256": {
+    "hermes/examples/book-inventory/__init__.py": "663563221615fa5cb4c98dc9106d9a48b750aafcad711815b7aa852fc29df71a",
+    "hermes/examples/test_book_inventory.py": "5ea8bc5a748bfc179a642192809f0b9919df261bf5f171de736da9c925125f3a"
+  }
+}

@@ -76,4 +76,15 @@ PASS --pure skips external plugins
 
 证据目录包含 `report.json`、`events.jsonl`、`model-requests.json` 以及 initial/restart/pure 三份服务端日志。宿主在 finally 中终止，本地模型服务也会关闭；实验文件保留供排错，均在 Git 忽略范围内。不要把原始请求和机器路径复制进公开记录，提交脱敏摘要即可。
 
-尚未覆盖 TUI、自动热重载、异常退出清理、真实取消、权限拒绝/询问和 V2 运行时。`--pure` 只用于最后一项对照；正常的外部插件实验不能加这个参数。
+尚未覆盖 TUI、自动热重载、异常退出清理、真实取消和 V2 运行时。`--pure` 只用于最后一项对照；正常的外部插件实验不能加这个参数。
+
+
+## 原创工具与权限
+
+[read-fixture.ts](read-fixture.ts) 注册无参数 book_probe 工具，先发起 book_read 审批，再读取 fixture.txt。按前述步骤准备同一官方二进制与依赖后运行：
+
+```powershell
+python opencode/examples/check-tool-permissions.py --binary .scratch/opencode-bin/opencode.exe --dependency-dir .scratch/plugin-types
+```
+
+脚本复用宿主隔离设施，核对允许、拒绝、询问、隐藏、单次批准和实例内持续批准，共 10 个场景。临时目录内保存请求、事件与 report.json；输出摘要见 [权限结果](../facts/tool-permissions-20261110.json)。第 6、7 章解释工具实现和授权有效期。

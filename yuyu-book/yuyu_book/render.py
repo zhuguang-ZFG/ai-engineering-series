@@ -18,13 +18,13 @@ import markdown
 from markdown.extensions.toc import TocExtension
 from markdown.extensions.codehilite import CodeHiliteExtension
 
-from .core import BuildError, Unit
+from .core import REPO_ROOT, BuildError, Unit
 from .style import ink_mark, knot
 from . import art, pages, plain
 from .plates import (_PLATE_PH_RE, drawing_slots, floor_wide_svg, illu_figure,
                      mermaid_figure, plate_cap, plate_landscape)  # noqa: F401
 from .refs import (RefLinker, _TAG_RE, _VOID_TAGS, footnotes_html, iter_doc,
-                   process_links)
+                   process_links, resolve_local_links)
 
 # ------------------------------------------------------------ callouts ----
 
@@ -382,7 +382,8 @@ def curlify(doc: str) -> str:
 def render_unit(unit: Unit, mapping: dict[str, str], *,
                 diagrams: dict[str, tuple[str, str]],
                 autolink: bool = True, gloss=None,
-                tiers: list[str] | None = None) -> dict:
+                tiers: list[str] | None = None,
+                local_targets: dict[str, str] | None = None) -> dict:
     body = re.sub(r"\A[ \t]*>[ \t]*(English|中文)[^\n]*\n+", "", unit.md)
     if unit.kind == "front":
         h1 = f"# {unit.title}"
@@ -398,6 +399,9 @@ def render_unit(unit: Unit, mapping: dict[str, str], *,
     external: list[str] = []
     doc = classify_callouts(doc, unit.lang)
     doc = ink_rules(doc)
+    if local_targets is not None:
+        doc = resolve_local_links(doc, unit.path, local_targets, REPO_ROOT,
+                                  chapters=False)
     doc = process_links(doc, external)
     doc += footnotes_html(external, unit.lang)
     doc = wrap_tables(doc)
@@ -443,6 +447,9 @@ def render_unit(unit: Unit, mapping: dict[str, str], *,
     doc = photo_figures(doc)
 
     doc = prefix_ids(doc, unit.id)
+    if local_targets is not None:
+        doc = resolve_local_links(doc, unit.path, local_targets, REPO_ROOT,
+                                  chapters=True)
     if autolink:
         doc = RefLinker(mapping, unit.id, unit.lang).transform(doc)
 

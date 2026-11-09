@@ -1,0 +1,467 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "always",
+      "letter": "A",
+      "zh": {
+        "term": "always",
+        "refs": [
+          {
+            "anchor": "opencode-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "always",
+        "refs": []
+      }
+    },
+    {
+      "key": "callid",
+      "letter": "C",
+      "zh": {
+        "term": "callID",
+        "refs": [
+          {
+            "anchor": "opencode-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "opencode-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "callID",
+        "refs": []
+      }
+    },
+    {
+      "key": "compaction",
+      "letter": "C",
+      "zh": {
+        "term": "Compaction",
+        "refs": [
+          {
+            "anchor": "opencode-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Compaction",
+        "refs": []
+      }
+    },
+    {
+      "key": "dispose",
+      "letter": "D",
+      "zh": {
+        "term": "dispose",
+        "refs": [
+          {
+            "anchor": "opencode-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "dispose",
+        "refs": []
+      }
+    },
+    {
+      "key": "harness",
+      "letter": "H",
+      "zh": {
+        "term": "Harness",
+        "refs": [
+          {
+            "anchor": "opencode-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "opencode-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Harness",
+        "refs": []
+      }
+    },
+    {
+      "key": "hook",
+      "letter": "H",
+      "zh": {
+        "term": "Hook",
+        "refs": [
+          {
+            "anchor": "opencode-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Hook",
+        "refs": []
+      }
+    },
+    {
+      "key": "instance",
+      "letter": "I",
+      "zh": {
+        "term": "Instance",
+        "refs": [
+          {
+            "anchor": "opencode-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "opencode-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Instance",
+        "refs": []
+      }
+    },
+    {
+      "key": "lsp",
+      "letter": "L",
+      "zh": {
+        "term": "LSP",
+        "refs": [
+          {
+            "anchor": "opencode-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "LSP",
+        "refs": []
+      }
+    },
+    {
+      "key": "mcp",
+      "letter": "M",
+      "zh": {
+        "term": "MCP",
+        "refs": [
+          {
+            "anchor": "opencode-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "MCP",
+        "refs": []
+      }
+    },
+    {
+      "key": "module cache",
+      "letter": "M",
+      "zh": {
+        "term": "Module cache",
+        "refs": [
+          {
+            "anchor": "opencode-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Module cache",
+        "refs": []
+      }
+    },
+    {
+      "key": "once",
+      "letter": "O",
+      "zh": {
+        "term": "once",
+        "refs": [
+          {
+            "anchor": "opencode-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "once",
+        "refs": []
+      }
+    },
+    {
+      "key": "output",
+      "letter": "O",
+      "zh": {
+        "term": "output",
+        "refs": [
+          {
+            "anchor": "opencode-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "output",
+        "refs": []
+      }
+    },
+    {
+      "key": "part",
+      "letter": "P",
+      "zh": {
+        "term": "Part",
+        "refs": [
+          {
+            "anchor": "opencode-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Part",
+        "refs": []
+      }
+    },
+    {
+      "key": "pattern",
+      "letter": "P",
+      "zh": {
+        "term": "Pattern",
+        "refs": [
+          {
+            "anchor": "opencode-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Pattern",
+        "refs": []
+      }
+    },
+    {
+      "key": "permission",
+      "letter": "P",
+      "zh": {
+        "term": "Permission",
+        "refs": [
+          {
+            "anchor": "opencode-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Permission",
+        "refs": []
+      }
+    },
+    {
+      "key": "provider",
+      "letter": "P",
+      "zh": {
+        "term": "Provider",
+        "refs": [
+          {
+            "anchor": "opencode-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Provider",
+        "refs": []
+      }
+    },
+    {
+      "key": "schema",
+      "letter": "S",
+      "zh": {
+        "term": "Schema",
+        "refs": [
+          {
+            "anchor": "opencode-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Schema",
+        "refs": []
+      }
+    },
+    {
+      "key": "scope",
+      "letter": "S",
+      "zh": {
+        "term": "Scope",
+        "refs": [
+          {
+            "anchor": "opencode-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Scope",
+        "refs": []
+      }
+    },
+    {
+      "key": "sdk",
+      "letter": "S",
+      "zh": {
+        "term": "SDK",
+        "refs": [
+          {
+            "anchor": "opencode-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "SDK",
+        "refs": []
+      }
+    },
+    {
+      "key": "serve",
+      "letter": "S",
+      "zh": {
+        "term": "serve",
+        "refs": [
+          {
+            "anchor": "opencode-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "opencode-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "serve",
+        "refs": []
+      }
+    },
+    {
+      "key": "session",
+      "letter": "S",
+      "zh": {
+        "term": "Session",
+        "refs": [
+          {
+            "anchor": "opencode-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "opencode-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Session",
+        "refs": []
+      }
+    },
+    {
+      "key": "snapshot",
+      "letter": "S",
+      "zh": {
+        "term": "Snapshot",
+        "refs": [
+          {
+            "anchor": "opencode-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Snapshot",
+        "refs": []
+      }
+    },
+    {
+      "key": "sse",
+      "letter": "S",
+      "zh": {
+        "term": "SSE",
+        "refs": [
+          {
+            "anchor": "opencode-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "SSE",
+        "refs": []
+      }
+    },
+    {
+      "key": "subagent",
+      "letter": "S",
+      "zh": {
+        "term": "Subagent",
+        "refs": [
+          {
+            "anchor": "opencode-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Subagent",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool",
+      "letter": "T",
+      "zh": {
+        "term": "Tool",
+        "refs": [
+          {
+            "anchor": "opencode-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Tool",
+        "refs": []
+      }
+    },
+    {
+      "key": "worktree",
+      "letter": "W",
+      "zh": {
+        "term": "Worktree",
+        "refs": [
+          {
+            "anchor": "opencode-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Worktree",
+        "refs": []
+      }
+    }
+  ]
+}

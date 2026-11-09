@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "AGENTS.md",
+      "letter": "A",
+      "zh": {
+        "term": "AGENTS.md",
+        "refs": [
+          {
+            "anchor": "codex-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "AGENTS.md",
+        "refs": []
+      }
+    },
+    {
+      "key": "app-server",
+      "letter": "A",
+      "zh": {
+        "term": "app-server",
+        "refs": [
+          {
+            "anchor": "codex-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "codex-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "app-server",
+        "refs": []
+      }
+    },
+    {
+      "key": "approval",
+      "letter": "A",
+      "zh": {
+        "term": "approval",
+        "refs": [
+          {
+            "anchor": "codex-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "approval",
+        "refs": []
+      }
+    },
+    {
+      "key": "sandbox",
+      "letter": "S",
+      "zh": {
+        "term": "sandbox",
+        "refs": [
+          {
+            "anchor": "codex-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "codex-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "sandbox",
+        "refs": []
+      }
+    },
+    {
+      "key": "execpolicy",
+      "letter": "E",
+      "zh": {
+        "term": "execpolicy",
+        "refs": [
+          {
+            "anchor": "codex-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "execpolicy",
+        "refs": []
+      }
+    },
+    {
+      "key": "Hook",
+      "letter": "H",
+      "zh": {
+        "term": "Hook",
+        "refs": [
+          {
+            "anchor": "codex-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Hook",
+        "refs": []
+      }
+    },
+    {
+      "key": "Skill",
+      "letter": "S",
+      "zh": {
+        "term": "Skill",
+        "refs": [
+          {
+            "anchor": "codex-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Skill",
+        "refs": []
+      }
+    },
+    {
+      "key": "Plugin",
+      "letter": "P",
+      "zh": {
+        "term": "Plugin",
+        "refs": [
+          {
+            "anchor": "codex-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Plugin",
+        "refs": []
+      }
+    },
+    {
+      "key": "MCP",
+      "letter": "M",
+      "zh": {
+        "term": "MCP",
+        "refs": [
+          {
+            "anchor": "codex-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "MCP",
+        "refs": []
+      }
+    },
+    {
+      "key": "exec",
+      "letter": "E",
+      "zh": {
+        "term": "exec",
+        "refs": [
+          {
+            "anchor": "codex-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "exec",
+        "refs": []
+      }
+    },
+    {
+      "key": "thread",
+      "letter": "T",
+      "zh": {
+        "term": "thread",
+        "refs": [
+          {
+            "anchor": "codex-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "codex-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "thread",
+        "refs": []
+      }
+    },
+    {
+      "key": "turn",
+      "letter": "T",
+      "zh": {
+        "term": "turn",
+        "refs": [
+          {
+            "anchor": "codex-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "codex-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "turn",
+        "refs": []
+      }
+    },
+    {
+      "key": "worktree",
+      "letter": "W",
+      "zh": {
+        "term": "worktree",
+        "refs": [
+          {
+            "anchor": "codex-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "worktree",
+        "refs": []
+      }
+    },
+    {
+      "key": "恢复",
+      "letter": "Z",
+      "zh": {
+        "term": "恢复",
+        "refs": [
+          {
+            "anchor": "codex-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "codex-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "恢复",
+        "refs": []
+      }
+    },
+    {
+      "key": "交付",
+      "letter": "Z",
+      "zh": {
+        "term": "交付",
+        "refs": [
+          {
+            "anchor": "codex-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "交付",
+        "refs": []
+      }
+    }
+  ]
+}

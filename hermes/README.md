@@ -1,19 +1,14 @@
 # Hermes Agent：记忆、技能与持续任务
 
-状态：已立项，当前为提纲与源码研究阶段。整书 HTML、PDF 和 EPUB 尚未生成。
+中文初稿已写齐：前言、18 章、附录 A–D。正文从独立配置与 Agent 循环讲起，重点解释记忆快照、技能修订、历史检索、插件注册与卸载，后半册讨论定时任务、网关、隔离和长期项目。
 
-研究重点：跨会话知识、技能维护和持续任务。基线：v0.23.0，提交 `2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19`。[上游固定版本](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19)，许可证 MIT，访问日期 2026-11-09。
+[完整目录](outline.md) · [本地验证](VERIFY.md) · [可运行示例](examples/README.md)
 
-[逐章提纲](outline.md) · [统一任务表](../docs/agent-series/tasks.json) · [来源锁文件](../docs/agent-series/sources.lock.json)
+基线是 [Hermes v0.23.0](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19)，提交 `2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19`，上游许可证 MIT。来源访问日期为 2026-11-10。
 
-按中文分册推进，英文版尚未启动。完成正文后将复用公共构建器，生成独立的 `yuyu-hermes-zh.html/.pdf/.epub`，最终放到主工作区 `yuyu-book/dist/`。
+已实际运行记忆与技能元数据组件实验；完整模型、插件宿主、网关和调度实验的边界写在验证记录中。原创资料清单插件附带离线检查，读者可以从它继续做完整宿主实验。
 
-首轮源码入口：
+本册使用公共构建器，产品名为 `hermes`，输出文件名为 `yuyu-hermes-zh.html`、`yuyu-hermes-zh.pdf` 与 `yuyu-hermes-zh.epub`。最终成品由主任务统一生成到主工作区 `yuyu-book/dist/`。英文版尚未启动。
 
-- [run_agent.py](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/run_agent.py)
-- [agent](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/agent)
-- [tools](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools)
-- [skills](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/skills)
-- [cron](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/cron)
-- [gateway](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/gateway)
-- [hermes_state.py](https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_state.py)
+
+2026-11-10 已完成三种格式的本地构建与交付，见[成品记录](../docs/agent-series/local-publication-20261110.json)。

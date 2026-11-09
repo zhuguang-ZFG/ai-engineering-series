@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "hermes-repo": {
+    "title": "Pinned Hermes repository",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Installation, architecture and version baseline",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-loop": {
+    "title": "Agent run loop",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/run_agent.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Agent initialization and tool loop",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-state": {
+    "title": "Persistent session state",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_state.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Session records and storage",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-memory": {
+    "title": "Memory store implementation",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/memory_tool_store.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Memory snapshots, budgets, atomic updates and recovery",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-memory-tool": {
+    "title": "Memory tool interface",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/memory_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Memory targets and model-facing actions",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-skills": {
+    "title": "Skill discovery and metadata",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/agent/skill_utils.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Skill roots, metadata and exclusions",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-skill-manage": {
+    "title": "Skill editing tool",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/skill_manager_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Skill maintenance and write locations",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-search": {
+    "title": "History search tool",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/session_search_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "History search, source filtering and result limits",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-plugins": {
+    "title": "Plugin context and lifecycle",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_cli/plugins.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Registration, hooks, settings and unload",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-discovery": {
+    "title": "Plugin discovery",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_cli/plugins_discovery.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Plugin sources, precedence and enable gates",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-registry": {
+    "title": "Tool registry",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/registry.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Tool ownership and registration",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-mcp": {
+    "title": "MCP tool integration",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/mcp_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "MCP connection and tool invocation",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-cron": {
+    "title": "Cron scheduler",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/cron/scheduler.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Task scheduling and delivery",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-jobs": {
+    "title": "Cron job storage",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/cron/jobs.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Job records and claims",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-gateway": {
+    "title": "Gateway sessions",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/gateway/session.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Platform source and session routing",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-terminal": {
+    "title": "Terminal tool",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/terminal_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Execution backends and sessions",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-delegate": {
+    "title": "Delegation tool",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/delegate_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Child agents and shared execution conditions",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-config": {
+    "title": "Hermes configuration",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_cli/config.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Configuration storage and migrations",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  }
+}

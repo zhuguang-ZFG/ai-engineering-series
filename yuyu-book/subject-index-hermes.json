@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "agent",
+      "letter": "A",
+      "zh": {
+        "term": "Agent",
+        "refs": [
+          {
+            "anchor": "hermes-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "hermes-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Agent",
+        "refs": []
+      }
+    },
+    {
+      "key": "cron",
+      "letter": "C",
+      "zh": {
+        "term": "Cron",
+        "refs": [
+          {
+            "anchor": "hermes-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Cron",
+        "refs": []
+      }
+    },
+    {
+      "key": "gateway",
+      "letter": "G",
+      "zh": {
+        "term": "Gateway",
+        "refs": [
+          {
+            "anchor": "hermes-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Gateway",
+        "refs": []
+      }
+    },
+    {
+      "key": "hook",
+      "letter": "H",
+      "zh": {
+        "term": "Hook",
+        "refs": [
+          {
+            "anchor": "hermes-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Hook",
+        "refs": []
+      }
+    },
+    {
+      "key": "memory",
+      "letter": "M",
+      "zh": {
+        "term": "Memory",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "hermes-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Memory",
+        "refs": []
+      }
+    },
+    {
+      "key": "mcp",
+      "letter": "M",
+      "zh": {
+        "term": "MCP",
+        "refs": [
+          {
+            "anchor": "hermes-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "MCP",
+        "refs": []
+      }
+    },
+    {
+      "key": "plugin",
+      "letter": "P",
+      "zh": {
+        "term": "Plugin",
+        "refs": [
+          {
+            "anchor": "hermes-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Plugin",
+        "refs": []
+      }
+    },
+    {
+      "key": "session",
+      "letter": "S",
+      "zh": {
+        "term": "Session",
+        "refs": [
+          {
+            "anchor": "hermes-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "hermes-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Session",
+        "refs": []
+      }
+    },
+    {
+      "key": "skill",
+      "letter": "S",
+      "zh": {
+        "term": "Skill",
+        "refs": [
+          {
+            "anchor": "hermes-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "hermes-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Skill",
+        "refs": []
+      }
+    },
+    {
+      "key": "toolset",
+      "letter": "T",
+      "zh": {
+        "term": "Toolset",
+        "refs": [
+          {
+            "anchor": "hermes-ch02",
+            "label": "第 2 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Toolset",
+        "refs": []
+      }
+    },
+    {
+      "key": "冻结快照",
+      "letter": "D",
+      "zh": {
+        "term": "冻结快照",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "hermes-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "冻结快照",
+        "refs": []
+      }
+    },
+    {
+      "key": "历史检索",
+      "letter": "L",
+      "zh": {
+        "term": "历史检索",
+        "refs": [
+          {
+            "anchor": "hermes-ch07",
+            "label": "第 7 章"
+          },
+          {
+            "anchor": "hermes-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "历史检索",
+        "refs": []
+      }
+    },
+    {
+      "key": "任务委派",
+      "letter": "R",
+      "zh": {
+        "term": "任务委派",
+        "refs": [
+          {
+            "anchor": "hermes-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "任务委派",
+        "refs": []
+      }
+    },
+    {
+      "key": "终端后端",
+      "letter": "Z",
+      "zh": {
+        "term": "终端后端",
+        "refs": [
+          {
+            "anchor": "hermes-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "终端后端",
+        "refs": []
+      }
+    },
+    {
+      "key": "备份恢复",
+      "letter": "B",
+      "zh": {
+        "term": "备份恢复",
+        "refs": [
+          {
+            "anchor": "hermes-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "备份恢复",
+        "refs": []
+      }
+    },
+    {
+      "key": "自我改进",
+      "letter": "Z",
+      "zh": {
+        "term": "自我改进",
+        "refs": [
+          {
+            "anchor": "hermes-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "自我改进",
+        "refs": []
+      }
+    }
+  ]
+}
