@@ -108,6 +108,8 @@ PRINT_CSS = r"""/* ------- print / PDF ------- */
   /* the map is the one page a reader consults before choosing a route, so on
      paper it takes the full measure and its station numbers grow a point */
   .itinerary{width:100%;opacity:.95;color:var(--bronze-3)}
+  /* Keep the longer Pi route map and its list on one sheet. */
+  .route-map .itinerary{width:88%;margin-inline:auto}
   .itinerary text{font-size:12px}
   .rmk{color:var(--bronze-3);opacity:1}
   /* the page has to stay on one sheet: the map is the point, and a list that

@@ -1,0 +1,722 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "abort",
+      "letter": "A",
+      "zh": {
+        "term": "abort",
+        "refs": [
+          {
+            "anchor": "pi-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "abort",
+        "refs": []
+      }
+    },
+    {
+      "key": "agent",
+      "letter": "A",
+      "zh": {
+        "term": "agent",
+        "refs": [
+          {
+            "anchor": "pi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          },
+          {
+            "anchor": "pi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "agent",
+        "refs": []
+      }
+    },
+    {
+      "key": "上下文文件",
+      "letter": "A",
+      "zh": {
+        "term": "上下文文件",
+        "refs": [
+          {
+            "anchor": "pi-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "上下文文件",
+        "refs": []
+      }
+    },
+    {
+      "key": "上下文窗口",
+      "letter": "A",
+      "zh": {
+        "term": "上下文窗口",
+        "refs": [
+          {
+            "anchor": "pi-ch07",
+            "label": "第 7 章"
+          },
+          {
+            "anchor": "pi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "上下文窗口",
+        "refs": []
+      }
+    },
+    {
+      "key": "分支摘要",
+      "letter": "A",
+      "zh": {
+        "term": "分支摘要",
+        "refs": [
+          {
+            "anchor": "pi-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "分支摘要",
+        "refs": []
+      }
+    },
+    {
+      "key": "提示模板",
+      "letter": "A",
+      "zh": {
+        "term": "提示模板",
+        "refs": [
+          {
+            "anchor": "pi-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "提示模板",
+        "refs": []
+      }
+    },
+    {
+      "key": "未验证",
+      "letter": "A",
+      "zh": {
+        "term": "未验证",
+        "refs": [
+          {
+            "anchor": "pi-ch20",
+            "label": "第 20 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "未验证",
+        "refs": []
+      }
+    },
+    {
+      "key": "活动分支",
+      "letter": "A",
+      "zh": {
+        "term": "活动分支",
+        "refs": [
+          {
+            "anchor": "pi-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "pi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "活动分支",
+        "refs": []
+      }
+    },
+    {
+      "key": "漂移",
+      "letter": "A",
+      "zh": {
+        "term": "漂移",
+        "refs": [
+          {
+            "anchor": "pi-ch25",
+            "label": "第 25 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "漂移",
+        "refs": []
+      }
+    },
+    {
+      "key": "系统提示",
+      "letter": "A",
+      "zh": {
+        "term": "系统提示",
+        "refs": [
+          {
+            "anchor": "pi-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "系统提示",
+        "refs": []
+      }
+    },
+    {
+      "key": "项目信任",
+      "letter": "A",
+      "zh": {
+        "term": "项目信任",
+        "refs": [
+          {
+            "anchor": "pi-ch22",
+            "label": "第 22 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "项目信任",
+        "refs": []
+      }
+    },
+    {
+      "key": "classifier 模型",
+      "letter": "C",
+      "zh": {
+        "term": "classifier 模型",
+        "refs": [
+          {
+            "anchor": "pi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "classifier 模型",
+        "refs": []
+      }
+    },
+    {
+      "key": "codemode",
+      "letter": "C",
+      "zh": {
+        "term": "codemode",
+        "refs": [
+          {
+            "anchor": "pi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "codemode",
+        "refs": []
+      }
+    },
+    {
+      "key": "凭据（credential）",
+      "letter": "C",
+      "zh": {
+        "term": "凭据（credential）",
+        "refs": [
+          {
+            "anchor": "pi-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "pi-ch22",
+            "label": "第 22 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "凭据（credential）",
+        "refs": []
+      }
+    },
+    {
+      "key": "压缩（compaction）",
+      "letter": "C",
+      "zh": {
+        "term": "压缩（compaction）",
+        "refs": [
+          {
+            "anchor": "pi-ch07",
+            "label": "第 7 章"
+          },
+          {
+            "anchor": "pi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "压缩（compaction）",
+        "refs": []
+      }
+    },
+    {
+      "key": "扩展（extension）",
+      "letter": "E",
+      "zh": {
+        "term": "扩展（extension）",
+        "refs": [
+          {
+            "anchor": "pi-ch14",
+            "label": "第 14 章"
+          },
+          {
+            "anchor": "pi-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "扩展（extension）",
+        "refs": []
+      }
+    },
+    {
+      "key": "follow-up",
+      "letter": "F",
+      "zh": {
+        "term": "follow-up",
+        "refs": [
+          {
+            "anchor": "pi-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "follow-up",
+        "refs": []
+      }
+    },
+    {
+      "key": "harness",
+      "letter": "H",
+      "zh": {
+        "term": "harness",
+        "refs": [
+          {
+            "anchor": "pi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "pi-ch25",
+            "label": "第 25 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "harness",
+        "refs": []
+      }
+    },
+    {
+      "key": "json 模式",
+      "letter": "J",
+      "zh": {
+        "term": "JSON 模式",
+        "refs": [
+          {
+            "anchor": "pi-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "pi-ch21",
+            "label": "第 21 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "JSON 模式",
+        "refs": []
+      }
+    },
+    {
+      "key": "叶（leaf）",
+      "letter": "L",
+      "zh": {
+        "term": "叶（leaf）",
+        "refs": [
+          {
+            "anchor": "pi-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "pi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "叶（leaf）",
+        "refs": []
+      }
+    },
+    {
+      "key": "mcp",
+      "letter": "M",
+      "zh": {
+        "term": "MCP",
+        "refs": [
+          {
+            "anchor": "pi-ch14",
+            "label": "第 14 章"
+          },
+          {
+            "anchor": "pi-ch22",
+            "label": "第 22 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "MCP",
+        "refs": []
+      }
+    },
+    {
+      "key": "模型（model）",
+      "letter": "M",
+      "zh": {
+        "term": "模型（model）",
+        "refs": [
+          {
+            "anchor": "pi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "pi-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "pi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "模型（model）",
+        "refs": []
+      }
+    },
+    {
+      "key": "pi 包",
+      "letter": "P",
+      "zh": {
+        "term": "Pi 包",
+        "refs": [
+          {
+            "anchor": "pi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Pi 包",
+        "refs": []
+      }
+    },
+    {
+      "key": "pi-purge",
+      "letter": "P",
+      "zh": {
+        "term": "pi-purge",
+        "refs": [
+          {
+            "anchor": "pi-ch14",
+            "label": "第 14 章"
+          },
+          {
+            "anchor": "pi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "pi-purge",
+        "refs": []
+      }
+    },
+    {
+      "key": "print 模式",
+      "letter": "P",
+      "zh": {
+        "term": "print 模式",
+        "refs": [
+          {
+            "anchor": "pi-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "pi-ch21",
+            "label": "第 21 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "print 模式",
+        "refs": []
+      }
+    },
+    {
+      "key": "provider",
+      "letter": "P",
+      "zh": {
+        "term": "provider",
+        "refs": [
+          {
+            "anchor": "pi-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "provider",
+        "refs": []
+      }
+    },
+    {
+      "key": "钉版（pin）",
+      "letter": "P",
+      "zh": {
+        "term": "钉版（pin）",
+        "refs": [
+          {
+            "anchor": "pi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "pi-ch25",
+            "label": "第 25 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "钉版（pin）",
+        "refs": []
+      }
+    },
+    {
+      "key": "rpc 模式",
+      "letter": "R",
+      "zh": {
+        "term": "RPC 模式",
+        "refs": [
+          {
+            "anchor": "pi-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "pi-ch19",
+            "label": "第 19 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "RPC 模式",
+        "refs": []
+      }
+    },
+    {
+      "key": "run",
+      "letter": "R",
+      "zh": {
+        "term": "run",
+        "refs": [
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "run",
+        "refs": []
+      }
+    },
+    {
+      "key": "sdk",
+      "letter": "S",
+      "zh": {
+        "term": "SDK",
+        "refs": [
+          {
+            "anchor": "pi-ch19",
+            "label": "第 19 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "SDK",
+        "refs": []
+      }
+    },
+    {
+      "key": "steering",
+      "letter": "S",
+      "zh": {
+        "term": "steering",
+        "refs": [
+          {
+            "anchor": "pi-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "steering",
+        "refs": []
+      }
+    },
+    {
+      "key": "会话（session）",
+      "letter": "S",
+      "zh": {
+        "term": "会话（session）",
+        "refs": [
+          {
+            "anchor": "pi-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "pi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "会话（session）",
+        "refs": []
+      }
+    },
+    {
+      "key": "技能（skill）",
+      "letter": "S",
+      "zh": {
+        "term": "技能（skill）",
+        "refs": [
+          {
+            "anchor": "pi-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "技能（skill）",
+        "refs": []
+      }
+    },
+    {
+      "key": "token",
+      "letter": "T",
+      "zh": {
+        "term": "token",
+        "refs": [
+          {
+            "anchor": "pi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "token",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool call",
+      "letter": "T",
+      "zh": {
+        "term": "tool call",
+        "refs": [
+          {
+            "anchor": "pi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "tool call",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool result",
+      "letter": "T",
+      "zh": {
+        "term": "tool result",
+        "refs": [
+          {
+            "anchor": "pi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "tool result",
+        "refs": []
+      }
+    },
+    {
+      "key": "turn",
+      "letter": "T",
+      "zh": {
+        "term": "turn",
+        "refs": [
+          {
+            "anchor": "pi-ch09",
+            "label": "第 9 章"
+          },
+          {
+            "anchor": "pi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "turn",
+        "refs": []
+      }
+    }
+  ]
+}

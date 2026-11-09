@@ -13,7 +13,7 @@ PYTHON     ?= python
 BOOK_LANG  ?= both
 BOOKCTL    := $(PYTHON) scripts/bookctl.py
 
-.PHONY: help doctor check check-fast check-full book book-pdf book-omp book-omp-pdf index clean
+.PHONY: help doctor check check-fast check-full book book-pdf book-omp book-omp-pdf book-pi book-pi-pdf book-pi-epub book-pi-all index clean
 
 help:
 	@echo "make doctor     environment report (python/node/browser/font/deps)"
@@ -23,6 +23,10 @@ help:
 	@echo "make book-pdf   both HTML editions + A4 PDF post-pass"
 	@echo "make book-omp   omp Chinese HTML (yuyu-omp-zh.html); does not touch harness"
 	@echo "make book-omp-pdf  omp Chinese HTML + A4 PDF"
+	@echo "make book-pi    Pi Chinese HTML (yuyu-pi-zh.html)"
+	@echo "make book-pi-pdf  Pi Chinese HTML + A4 PDF"
+	@echo "make book-pi-epub  Pi Chinese HTML + EPUB"
+	@echo "make book-pi-all  Pi Chinese HTML + A4 PDF + EPUB"
 	@echo "make index      rebuild subject-index.json from appendix D"
 	@echo "make clean      remove yuyu-book/dist/ (no rm -rf)"
 	@echo "variables in use: PYTHON=$(PYTHON) BOOK_LANG=$(BOOK_LANG)"
@@ -49,6 +53,18 @@ book-omp:
 
 book-omp-pdf:
 	$(BOOKCTL) build --product omp --lang zh --pdf
+
+book-pi:
+	$(BOOKCTL) build --product pi --lang zh
+
+book-pi-pdf:
+	$(BOOKCTL) build --product pi --lang zh --pdf
+
+book-pi-epub:
+	$(BOOKCTL) build --product pi --lang zh --epub
+
+book-pi-all:
+	$(BOOKCTL) build --product pi --lang zh --pdf --epub
 
 # --regen-index rebuilds subject-index.json and then continues into a full
 # assembly; the canonical package CLI has no index-only invocation.

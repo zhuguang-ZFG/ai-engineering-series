@@ -12,7 +12,8 @@ body.lang-en{font-family:"Iowan Old Style",Palatino,Georgia,var(--serif);
 /* book blocks: flush both edges; CJK breaks strictly, Latin hyphenates */
 .chapter-body p,.chapter-body li{text-align:justify}
 body.lang-zh .chapter-body p,body.lang-zh .chapter-body li,
-body.lang-zh .chapter-body blockquote{line-break:strict;border-inline-start:2.5px solid rgba(180,71,47,.3);padding-inline-start:.8rem}
+body.lang-zh .chapter-body blockquote{line-break:strict}
+body.lang-zh .chapter-body blockquote{border-inline-start:2.5px solid rgba(180,71,47,.3);padding-inline-start:.8rem}
 body.lang-en .chapter-body p,body.lang-en .chapter-body li{hyphens:auto}
 /* ragged-right beats a grid of gaps once the line is short enough that one
    unbreakable token costs the whole row its spacing -- see the contract test */

@@ -24,18 +24,25 @@ CURRENT = 1
 FILES = (
     "manifest.json",
     "manifest-omp.json",
+    "manifest-pi.json",
     "glosses.json",
     "glosses-omp.json",
+    "glosses-pi.json",
     "sources.json",
     "sources-omp.json",
+    "sources-pi.json",
     "notes.json",
     "notes-omp.json",
+    "notes-pi.json",
     "reading-paths.json",
     "reading-paths-omp.json",
+    "reading-paths-pi.json",
     "revisions.json",
     "revisions-omp.json",
+    "revisions-pi.json",
     "claims.json",
     "subject-index.json",
+    "subject-index-pi.json",
 )
 
 SUBJECT_INDEX = "subject-index.json"
@@ -60,7 +67,7 @@ MIGRATIONS = {0: _migrate_v0}
 
 def migrate(name: str, data):
     """Return the payload for a parsed registry, applying migrations in memory."""
-    if name == SUBJECT_INDEX and isinstance(data, list):
+    if name.startswith("subject-index") and isinstance(data, list):
         data = {"schema_version": 0, "entries": data}
     if not isinstance(data, dict):
         _fail("registry must be a JSON object", code="registry-shape",
@@ -82,7 +89,7 @@ def migrate(name: str, data):
                   code="registry-version", file=name)
         payload = migration(name, payload)
         version += 1
-    if name == SUBJECT_INDEX:
+    if name.startswith("subject-index"):
         entries = payload.get("entries")
         if not isinstance(entries, list):
             _fail("entries must be a JSON array", code="registry-shape",
@@ -108,7 +115,7 @@ def load(name: str):
 
 def wrap(name: str, payload):
     """Serialize a payload into the on-disk shape with the current version."""
-    if name == SUBJECT_INDEX:
+    if name.startswith("subject-index"):
         return {"schema_version": CURRENT, "entries": payload}
     if not isinstance(payload, dict):
         _fail("payload must be a JSON object", code="registry-shape",

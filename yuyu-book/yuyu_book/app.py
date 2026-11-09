@@ -18,7 +18,16 @@ from .style import CSS, key_mark, page, rut, trace, wheel
 
 def glossary_to_index(manifest: dict) -> list[dict]:
     """Build the subject index from appendix D tables (both languages)."""
-    apxd = next(a for a in manifest["appendices"] if a["id"] == "apxd")
+    apxd = next((a for a in manifest["appendices"]
+                 if a["id"] == "apxd" or a["id"].endswith("-apxd")), None)
+    if apxd is None:
+        return []
+    chapter_ids: dict[int, str] = {}
+    for unit, _kind, _part in unit_stream(manifest):
+        m = re.search(r"(?:^|-)ch(\d{1,2})$", unit["id"])
+        if m:
+            chapter_ids[int(m.group(1))] = unit["id"]
+    max_chapter = max(chapter_ids) if chapter_ids else 15
     entries: dict[str, dict] = {}
 
     def add(term: str, lang: str, anchor: str, label: str):
@@ -52,6 +61,8 @@ def glossary_to_index(manifest: dict) -> list[dict]:
     rx_zh = re.compile(r"第\s*(\d{1,2})\s*章")
     rx_en = re.compile(r"Chapter\s+(\d{1,2})", re.I)
     for lang in ("zh", "en"):
+        if lang not in apxd:
+            continue
         text = read_text(REPO_ROOT / apxd[lang])
         fence = None
         for line in text.split("\n"):
@@ -71,11 +82,12 @@ def glossary_to_index(manifest: dict) -> list[dict]:
             term = cells[0].strip("*` ")
             tail = " ".join(cells[2:])
             rx = rx_zh if lang == "zh" else rx_en
-            nums = [int(n) for n in rx.findall(tail) if 1 <= int(n) <= 15]
+            nums = [int(n) for n in rx.findall(tail)
+                    if 1 <= int(n) <= max_chapter]
             if not nums or len(term) < 2:
                 continue
             for n in nums[:4]:
-                add(term, lang, f"ch{n:02d}",
+                add(term, lang, chapter_ids.get(n, f"ch{n:02d}"),
                     f"第 {n} 章" if lang == "zh" else f"Ch {n}")
             if lang == "zh" and len(cells) >= 5:
                 # the 中文译名 column, split on the slash that lets one English
@@ -83,7 +95,8 @@ def glossary_to_index(manifest: dict) -> list[dict]:
                 for part in re.split(r"\s*/\s*", cells[1].strip("*` ")):
                     if len(part) >= 2 and HAN_RE.search(part):
                         for n in nums[:4]:
-                            add_alias(part, f"ch{n:02d}", f"第 {n} 章")
+                            add_alias(part, chapter_ids.get(n, f"ch{n:02d}"),
+                                      f"第 {n} 章")
     out = sorted(entries.values(), key=lambda e: (e["letter"], e["key"]))
     return [e for e in out if e.get("zh", {}).get("refs")
             or e.get("en", {}).get("refs")]

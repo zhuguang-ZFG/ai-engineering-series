@@ -1,0 +1,3 @@
+$ pi --print --no-tools --no-session "只回复两个字：在线"
+在线
+exit=0
