@@ -125,7 +125,9 @@ def build(html: Path, output: Path, lang: str, browser: str | None = None) -> di
             if not page.locator("main").count():
                 raise BuildError("EPUB: validated edition must contain main")
             page.evaluate("""() => {
-                document.querySelectorAll('script,main style,main button,main input,main svg[aria-hidden="true"],main .fig-hint,main .page-ref').forEach(e=>e.remove());
+                // Mermaid keeps its paint rules inside the SVG. Preserve those
+                // until rasterization; removing them here turns nodes/edges black.
+                document.querySelectorAll('script,main button,main input,main svg[aria-hidden="true"],main .fig-hint,main .page-ref').forEach(e=>e.remove());
                 document.querySelectorAll('main svg').forEach((e,i)=>e.dataset.epubSvg=String(i));
             }""")
             svg_count = page.locator("main svg").count()
@@ -149,6 +151,7 @@ def build(html: Path, output: Path, lang: str, browser: str | None = None) -> di
                 image = raster.locator("svg").screenshot(type="png", animations="disabled", timeout=30000)
                 encoded = base64.b64encode(image).decode("ascii")
                 node.evaluate("""(e,src) => {const i=document.createElement('img');i.src=src;i.alt=e.getAttribute('aria-label')||e.closest('figure')?.querySelector('figcaption')?.textContent||e.querySelector('title')?.textContent||'Illustration';e.replaceWith(i)}""", "data:image/png;base64," + encoded)
+            page.evaluate("document.querySelectorAll('main style').forEach(e=>e.remove())")
             markup = page.locator("main").inner_html()
             author = page.locator('meta[name="author"]').get_attribute("content") if page.locator('meta[name="author"]').count() else ""
         finally:
