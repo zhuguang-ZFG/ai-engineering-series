@@ -65,6 +65,10 @@ make book-pi-epub   # 再加 EPUB
 
 插画策略：Mermaid 架构图 + 手绘概念图双轨。与御舆概念可对照，实现与钉版勿混用。
 
+## 后续四册（研究与试章）
+
+已为 [OpenCode](opencode/README.md)、[DeepSeek Harness](deepseek/README.md)、[Hermes](hermes/README.md)、[Codex CLI](codex/README.md) 分别建立任务和提纲，按此顺序推进。OpenCode 已有插件样章与离线示例；四册尚未完成整书构建。版本、范围和下一步见 [研究入口](docs/agent-series-research.md)。
+
 ## 阅读说明
 
 阅读时需区分源码可确认的行为、架构推演和教学示例。功能标志与工具可用性取决于构建和运行时配置；数量和耗时示例不代表当前发行版承诺。

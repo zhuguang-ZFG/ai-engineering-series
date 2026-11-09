@@ -6,6 +6,10 @@ on:
     paths:
       - '**.md'
       - 'pi/**'
+      - 'opencode/**'
+      - 'deepseek/**'
+      - 'hermes/**'
+      - 'codex/**'
       - 'yuyu-book/**'
       - 'scripts/**'
       - 'tests/**'
@@ -34,6 +38,7 @@ jobs:
         with:
           browser: 'true'
       - run: python docs/yuyu-overhaul/check_bilingual_parity.py
+      - run: node --test opencode/examples/check-review-trace.mjs
       - run: python scripts/bookctl.py check --fast
       - uses: actions/upload-artifact@v4
         if: always()

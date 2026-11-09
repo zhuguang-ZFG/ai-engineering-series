@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-09",
+  "sequence": [
+    "opencode",
+    "deepseek",
+    "hermes",
+    "codex"
+  ],
+  "active": "opencode",
+  "current_milestone": "S0: baselines, four outlines and one OpenCode handler experiment",
+  "tasks": [
+    {
+      "id": "opencode",
+      "status": "in_progress",
+      "stage": "plugin_sample",
+      "outline": "opencode/outline.md",
+      "next": "Run pinned CLI with a local V1 plugin in an isolated project; verify loading, hook order and disposal",
+      "blocked_by": [],
+      "product_registered": false
+    },
+    {
+      "id": "deepseek",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "deepseek/outline.md",
+      "next": "Trace Cordis mounts and run a reversible plugin experiment",
+      "blocked_by": [
+        "opencode"
+      ],
+      "product_registered": false
+    },
+    {
+      "id": "hermes",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "hermes/outline.md",
+      "next": "Trace memory/skill persistence in an isolated profile",
+      "blocked_by": [
+        "deepseek"
+      ],
+      "product_registered": false
+    },
+    {
+      "id": "codex",
+      "status": "planned",
+      "stage": "outline",
+      "outline": "codex/outline.md",
+      "next": "Map pinned CLI/exec/app-server entry points and platform approval/sandbox tests",
+      "blocked_by": [
+        "hermes"
+      ],
+      "product_registered": false
+    }
+  ]
+}

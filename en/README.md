@@ -50,6 +50,10 @@ Reading routes are available from the [Yù Yú side](../docs/COMPARE-OMP.md) and
 
 Illustration strategy: Mermaid architecture diagrams and hand-drawn concept art on two tracks. Concepts can be read across the two volumes; implementations and pinned versions cannot be mixed.
 
+## Four further volumes: research and sample chapters
+
+Separate tasks and outlines now cover [OpenCode](../opencode/README.md), [DeepSeek Harness](../deepseek/README.md), [Hermes](../hermes/README.md), and [Codex CLI](../codex/README.md), in that order. OpenCode has a Chinese plugin sample chapter and an offline example. Complete book builds and English editions have not started. See the [research index](../docs/agent-series-research.md) for pinned sources, scope, and next steps.
+
 ## Reading notes
 
 Readers should distinguish observed implementation, architectural interpretation, and teaching examples. Feature flags and tool availability depend on build and runtime configuration; counts and timing examples are not promises about current releases.
