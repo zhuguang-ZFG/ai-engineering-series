@@ -58,7 +58,7 @@ make book-pi-pdf    # 再加 A4 PDF
 make book-pi-epub   # 再加 EPUB
 ```
 
-插件章节已扩写，新增 pi-purge 完整案例。本机 2026-11-09 实测：HTML 1.4 MB；PDF 174 页 / 41 书签 / 9.86 MB（18 个索引页脚）；EPUB 1.21 MB（EPUBCheck 0 错误）。
+插件章节已扩写，新增 pi-purge 完整案例。本机 2026-11-09 实测：HTML 1.4 MB；PDF 174 页 / 41 书签 / 9.33 MB（18 个索引页脚）；EPUB 1.21 MB（EPUBCheck 0 错误）。
 构建口径与本地证据见 [pi/BUILD-PLAN.md](pi/BUILD-PLAN.md) 与 [pi/VERIFY.md](pi/VERIFY.md)。
 
 概念可以互查，实现与钉版不能混用：御舆侧入口见 [docs/COMPARE-OMP.md](docs/COMPARE-OMP.md)，Omp 侧入口见 [omp/COMPARE-YUYU.md](omp/COMPARE-YUYU.md)，逐词共享表见 [docs/yuyu-overhaul/SHARED-TERMS.md](docs/yuyu-overhaul/SHARED-TERMS.md)。Omp 英文版目前只有 [预留说明](en/omp/README.md)，尚未开启构建。
