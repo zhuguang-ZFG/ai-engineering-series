@@ -2,7 +2,7 @@
 
 更新：2026-11-10。按用户最新要求，主任务为五阶段三十章大模型课程，原《Vibe Coding 101》作为编程实践补充。用户已授权提交、推送、合并及确认 CI；本轮交付仍标为技术试读版，不把未通过的能力门改记完成。
 
-本批正文审校（去 AI 味、图注补齐、可读性）：按 REVIEW.md 校准选择性去 AI 味——保留功能性粗体与真辨析句，实修客服腔/AI 高频词清零、解开 4 处整句装饰粗体，扫描缺陷 122 → 116；为 c11–c30 的 27 处无注图按 c01–c10 房规补 `*图：…*` 图注并清理 alt 中的 `G##` 内部编号，构建后全部成为 `<figure class="curriculum-figure"><figcaption>`（网页/PDF/EPUB 同步）；另修 `vectors.md`、`generation.md` 两处措辞。只改 `book/llm/lessons/*.md`，未动测试/runner/扫描政策；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，电子书已重导并重绑 EPUBCheck。
+本批正文审校（去 AI 味、图注补齐、可读性）：按 REVIEW.md 校准选择性去 AI 味——保留功能性粗体与真辨析句，实修客服腔/AI 高频词清零、解开 4 处整句装饰粗体，扫描缺陷 122 → 116；为 c11–c30 的 27 处无注图按 c01–c10 房规补 `*图：…*` 图注并清理 alt 中的 `G##` 内部编号，构建后全部成为 `<figure class="curriculum-figure"><figcaption>`（网页/PDF/EPUB 同步）；另修 `vectors.md`、`generation.md` 两处措辞。只改 `book/llm/lessons/*.md`，未动测试/runner/扫描政策；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，电子书已重导并重绑 EPUBCheck。已随 [PR #13](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/13) 合并为 `ded8491`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42777133014) 通过。
 
 ## 当前进度与下一步
 
