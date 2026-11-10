@@ -39,3 +39,5 @@
 四册前言、正文与附录共 92 个阅读单元已逐章精修，整理重复解释、训诫语气和抽象结尾，保留实例与技术细节。代码围栏、图示、行内代码、标题、表格、链接和显式 ID 已与修订前比对一致。
 
 新版 HTML、PDF、EPUB 已生成到主工作区 dist，PDF 依次为 148、125、127、144 页；Fast 检查及四份 EPUBCheck 通过，PDF 完成抽样查看。文件摘要见[本次交付记录](../../agent-series/local-publication-20261110-reading.json)。
+
+本次发布对应 [PR #45](https://github.com/zhuguang-ZFG/claude-code-book/pull/45)，CI 与合并状态以该 PR 为准。
