@@ -1,0 +1,129 @@
+{
+  "date": "2026-11-10",
+  "revision": "readability edit",
+  "destination": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist",
+  "volumes": {
+    "opencode": {
+      "version": "1.1.1",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 53686,
+      "mermaid_figures": 26,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-opencode-zh.html",
+          "bytes": 1215053,
+          "sha256": "aa85cc6fba0b0768c7a2f736681dafe887f3da6af0a0dd8beea80ef86855a20a"
+        },
+        "pdf": {
+          "file": "yuyu-opencode-zh.pdf",
+          "bytes": 5351917,
+          "sha256": "4cf338bda154f01f52bfebe1711b228748cf1b52b3a84bb0f3b29255400c997f"
+        },
+        "epub": {
+          "file": "yuyu-opencode-zh.epub",
+          "bytes": 1920853,
+          "sha256": "4570bee1c5f4da1c2de02182e3da87f305fc36b78cbaf246b73a3e0dc709ffc4"
+        }
+      },
+      "pdf_pages": 148,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "deepseek": {
+      "version": "1.1.1",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 47995,
+      "mermaid_figures": 14,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-deepseek-zh.html",
+          "bytes": 878971,
+          "sha256": "87aa36a95f1c69fb5261907bb62675cc25ae4f6c09c3f14c1c0269ab9ab68ad3"
+        },
+        "pdf": {
+          "file": "yuyu-deepseek-zh.pdf",
+          "bytes": 4953288,
+          "sha256": "83ef47ccd81894ca20377ba257a16f7c6e2ac32d44ec52df5fad509ea97d8230"
+        },
+        "epub": {
+          "file": "yuyu-deepseek-zh.epub",
+          "bytes": 933432,
+          "sha256": "61ef48a5f301eefb841cce1214f09733632527e2ed26702f25bab0b5a445f049"
+        }
+      },
+      "pdf_pages": 125,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "hermes": {
+      "version": "0.2.1",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 52054,
+      "mermaid_figures": 17,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-hermes-zh.html",
+          "bytes": 923865,
+          "sha256": "094d773b612ffa38101d16bbf4acaac92fc8dd60727800a0b9e6d4652c156eae"
+        },
+        "pdf": {
+          "file": "yuyu-hermes-zh.pdf",
+          "bytes": 5024553,
+          "sha256": "4c1208a124871b7783d371539a6a049631f93daa56062264d5404fd04fdecd35"
+        },
+        "epub": {
+          "file": "yuyu-hermes-zh.epub",
+          "bytes": 1101914,
+          "sha256": "e0e84028224a7386a8f83e53056258f8a5ad30b5bb148899dbe2e6098d80292d"
+        }
+      },
+      "pdf_pages": 127,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "codex": {
+      "version": "0.2.1",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 49006,
+      "mermaid_figures": 15,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-codex-zh.html",
+          "bytes": 1007729,
+          "sha256": "17c43cc242e5021c3d7bf3b41368d19ddf492af2563ba0bf0b9b5e056f702705"
+        },
+        "pdf": {
+          "file": "yuyu-codex-zh.pdf",
+          "bytes": 5452754,
+          "sha256": "74cf255dfe4a6b1e223e81796a580aa0cfb5e57297e24aa1121982c3f0228c28"
+        },
+        "epub": {
+          "file": "yuyu-codex-zh.epub",
+          "bytes": 1080797,
+          "sha256": "c88536375b505174270e73c9f2425bb6cf2a5af69c54065b18edb1a87ee7206f"
+        }
+      },
+      "pdf_pages": 144,
+      "pdf_bookmarks": 30,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    }
+  },
+  "editorial_validation": {
+    "baseline": "a20d009cc522503a1177bfaf002e4daba5f82bd6",
+    "scope": "Prose and reader introductions; examples and source baselines retained.",
+    "protected_content": "All fenced code, diagrams, inline code, headings, table rows, links and explicit IDs match the baseline.",
+    "review": "Compared changed passages with their originals for meaning, qualifiers and experiment scope.",
+    "fast_checks": "python scripts/bookctl.py check --fast: 8 steps passed, including 228 repository tests and 570 builder tests.",
+    "visual_review": "Inspected sampled PDF covers, contents, chapter openings, examples and indexes in all four volumes; no overlap or clipping found in the sampled pages.",
+    "reference_correction": "Hermes appendix D now describes the DeepSeek Harness volume as Cordis services, plugin lifecycle and Agent/Session runtime, matching the actual book.",
+    "legacy_p6_media_acceptance": "incomplete"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kimi-repo": {
+    "title": "MoonshotAI/kimi-code 2.5.2",
+    "authority": "Pinned upstream source and documentation",
+    "kind": "github",
+    "url": "https://github.com/MoonshotAI/kimi-code/tree/1c142a007c10e881602690def96057c23a2baa12",
+    "snapshot": "@moonshot-ai/kimi-code@2.5.2 at full commit",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "CLI, plugin and Agent parsers, Hook runner, session documentation, MCP and ACP; runtime results separately recorded",
+    "pinned": {
+      "tag": "@moonshot-ai/kimi-code@2.5.2",
+      "commit": "1c142a007c10e881602690def96057c23a2baa12"
+    }
+  }
+}

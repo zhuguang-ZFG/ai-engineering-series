@@ -1,0 +1,220 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #fbfaf6;
+    }
+    #m-tag {
+      position: absolute;
+      top: 96px;
+      left: 120px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #57606a;
+    }
+    #m-title {
+      position: absolute;
+      top: 180px;
+      left: 120px;
+      width: 640px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 92px;
+      line-height: 1.3;
+      color: #1f2328;
+    }
+    #m-title .g {
+      color: #1f883d;
+    }
+    #m-note {
+      position: absolute;
+      top: 560px;
+      left: 124px;
+      width: 620px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.6;
+      color: #57606a;
+    }
+    .m-stage {
+      position: absolute;
+      left: 820px;
+      width: 980px;
+      background: #fffdf8;
+      border: 4px solid #1f2328;
+      border-radius: 15px 10px 17px 9px;
+      padding: 26px 38px;
+      box-shadow: 8px 9px 0 rgba(31,35,40,.12);
+    }
+    .m-stage-h {
+      display: flex;
+      align-items: baseline;
+    }
+    .m-stage-n {
+      font-family: "Archivo Black", sans-serif;
+      font-size: 42px;
+      color: #1f883d;
+      margin-right: 22px;
+    }
+    .m-stage-t {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      color: #1f2328;
+    }
+    .m-stage-d {
+      margin-top: 10px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.5;
+      color: #57606a;
+    }
+    #m-1 { top: 110px; border-left: 10px solid #1f883d; }
+    #m-2 { top: 530px; }
+    #m-3 { top: 725px; }
+    .m-journey {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .m-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      align-items: center;
+      min-height: 104px;
+      font-family: "Noto Sans JP", sans-serif;
+      color: #1f2328;
+      background: #fbfaf6;
+      border: 1px solid #d8dee4;
+      border-radius: 15px 10px 17px 9px;
+      padding: 14px 18px;
+    }
+    .m-step-n {
+      font-family: "Archivo Black", sans-serif;
+      font-size: 30px;
+      color: #1f883d;
+    }
+    .m-step-k {
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+    .m-step-d {
+      margin-top: 4px;
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.35;
+      color: #57606a;
+    }
+    #m-foot {
+      position: absolute;
+      top: 1010px;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #88919b;
+    }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-jv7n" id="root" data-composition-id="map" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-f0oy" id="m-tag" class="clip" data-start="0" data-duration="48">THE LEARNING MAP · easy-vibe</div>
+    <div data-hf-id="hf-hvk1" id="m-title" class="clip" data-start="0" data-duration="48.1">从入门<br data-hf-id="hf-x5px" />到<span data-hf-id="hf-37ns" class="g">精通</span></div>
+    <div data-hf-id="hf-5bdt" id="m-note" class="clip" data-start="0.7" data-duration="48">先做出一个作品<br data-hf-id="hf-rsrt" />再升级下一层能力</div>
+    <div data-hf-id="hf-9qx5" id="m-1" class="m-stage clip" data-start="1.2" data-duration="48">
+      <div data-hf-id="hf-57lb" class="m-stage-h"><span data-hf-id="hf-01m6" class="m-stage-n">S1</span><span data-hf-id="hf-8ws5" class="m-stage-t">入门 · 做出第一个作品</span></div>
+      <div data-hf-id="hf-lci2" class="m-journey">
+        <div data-hf-id="hf-p1p4" id="m-step-1" class="m-step"><span data-hf-id="hf-mzzz" class="m-step-n">1</span><span data-hf-id="hf-uckh"><span data-hf-id="hf-b4up" class="m-step-k">找到问题</span><br data-hf-id="hf-szow" /><span data-hf-id="hf-cu4a" class="m-step-d">真实问题 · 筛选方向</span></span></div>
+        <div data-hf-id="hf-xpkz" id="m-step-2" class="m-step"><span data-hf-id="hf-mloy" class="m-step-n">2</span><span data-hf-id="hf-l73p"><span data-hf-id="hf-d31e" class="m-step-k">看懂需求</span><br data-hf-id="hf-sldv" /><span data-hf-id="hf-0ikp" class="m-step-d">JTBD · 访谈验证</span></span></div>
+        <div data-hf-id="hf-trgy" id="m-step-3" class="m-step"><span data-hf-id="hf-m7dx" class="m-step-n">3</span><span data-hf-id="hf-me0s"><span data-hf-id="hf-zfzs" class="m-step-k">做出方案</span><br data-hf-id="hf-qluq" /><span data-hf-id="hf-hy24" class="m-step-d">双钻收敛 · 可交互原型</span></span></div>
+        <div data-hf-id="hf-azr9" id="m-step-4" class="m-step"><span data-hf-id="hf-ozj4" class="m-step-n">4</span><span data-hf-id="hf-lzpr"><span data-hf-id="hf-7dvt" class="m-step-k">完成交付</span><br data-hf-id="hf-q7jp" /><span data-hf-id="hf-kifh" class="m-step-d">接入 AI · 打磨上线</span></span></div>
+      </div>
+    </div>
+    <div data-hf-id="hf-3x9f" id="m-2" class="m-stage clip" data-start="2.6" data-duration="48">
+      <div data-hf-id="hf-t32n" class="m-stage-h"><span data-hf-id="hf-0fx7" class="m-stage-n">S2</span><span data-hf-id="hf-f75e" class="m-stage-t">初中级 · 八个实战项目</span></div>
+      <div data-hf-id="hf-4vb8" class="m-stage-d">把作品做完整：设计、数据库、部署、支付</div>
+    </div>
+    <div data-hf-id="hf-2b37" id="m-3" class="m-stage clip" data-start="3.8" data-duration="48">
+      <div data-hf-id="hf-sorm" class="m-stage-h"><span data-hf-id="hf-0u88" class="m-stage-n">S3</span><span data-hf-id="hf-ckr2" class="m-stage-t">进阶 · Agent 与全平台</span></div>
+      <div data-hf-id="hf-idor" class="m-stage-d">Claude Code · MCP · Agent · 小程序 / App / 游戏</div>
+    </div>
+    <div data-hf-id="hf-lwl7" id="m-foot" class="clip" data-start="0" data-duration="48" data-layout-ignore>OPEN SOURCE CURRICULUM · DATAWHALECHINA/EASY-VIBE</div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#m-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#m-title"));
+    tl.set("#m-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#m-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#m-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#m-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#m-note", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.5)", scale: 1 }, 0.7);
+    tl.fromTo("#m-1", { x: -50, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 1.2);
+    ["#m-step-1", "#m-step-2", "#m-step-3", "#m-step-4"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, [4.0, 7.7, 11.6, 15.2][i]);
+    });
+    tl.fromTo("#m-2", { x: -50, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 28.9);
+    tl.fromTo("#m-3", { x: -50, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)", scale: 1 }, 35.6);
+    tl.to("#m-title .g", { scale: 1.08, transformOrigin: "left center", duration: 0.35, ease: "back.out(1.4)" }, 44.1);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 47.5, ease: "none" }, 0);
+    window.__timelines["map"] = tl;
+  </script>
+</template>

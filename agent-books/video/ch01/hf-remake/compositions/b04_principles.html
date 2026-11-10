@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b04_principles" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="341.832" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="341.832" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">§1.3 五大原则</div></div></div></div>
+  <div id="b04_principles_beat0_wrap" class="beat clip" data-start="0.000" data-duration="4.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat0"><div class="panel-body" id="b04_principles_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">§1.3 五大原则</div><div class="h2">红线，不是口号</div>
+    </div></div></div><div class="flash clip" id="b04_principles_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat1_wrap" class="beat clip" data-start="4.000" data-duration="4.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat1"><div class="panel-body" id="b04_principles_beat1">
+      <div class="kicker">KEY</div>
+      <div class="h1">权限四阶段也值得先记住名字：可见性过</div><div class="h2">后文原则二会展开，这里先当骨架钉子——全景图</div>
+    </div></div></div><div id="b04_principles_beat2_wrap" class="beat clip" data-start="8.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat2"><div class="panel-body" id="b04_principles_beat2">
+          <div class="quiz-card"><div class="quiz-tag">猜一猜</div>
+          <div class="h1" style="opacity:1;font-size:48px">五大原则里，哪条最容易被当成口号？</div>
+          <div class="h2" style="opacity:1">流式 · 安全 · 缓存 · 扩展 · 不可变 —— 先选一条</div>
+          <div class="quiz-ans" id="b04_principles_beat2-ans">答案稍候揭晓 · 先自己想 3 秒</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash2" data-start="8.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat3_wrap" class="beat clip" data-start="13.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat3"><div class="panel-body" id="b04_principles_beat3">
+          <div class="kicker">记下这一点</div><div class="h1">后文原则二会展开，这里先</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash3" data-start="13.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat4_wrap" class="beat clip" data-start="18.000" data-duration="5.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat4"><div class="panel-body" id="b04_principles_beat4">
+      <div class="kicker">P</div>
+      <div class="h1">1 · 异步流式优先</div><div class="h2">Async Generator First</div>
+    </div></div></div><div id="b04_principles_beat5_wrap" class="beat clip" data-start="23.500" data-duration="4.277" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat5"><div class="panel-body" id="b04_principles_beat5">
+      <div class="kicker">KEY</div>
+      <div class="h1">你后面读源码时，先问「这一段落在哪一</div><div class="h2">主循环每轮大致七步：组请求（系统 Promp</div>
+    </div></div></div><div id="b04_principles_beat6_wrap" class="beat clip" data-start="27.777" data-duration="6.955" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat6"><div class="panel-body" id="b04_principles_beat6">
+      <div class="kicker">KEY</div>
+      <div class="h1">你后面读源码时，先问「这一段落在哪一</div><div class="h2">主循环每轮大致七步：组请求（系统 Promp</div>
+    </div></div></div><div id="b04_principles_beat7_wrap" class="beat clip" data-start="34.732" data-duration="5.268" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat7"><div class="panel-body" id="b04_principles_beat7">
+      <div class="kicker">KEY</div>
+      <div class="h1">主循环每轮大致七步：组请求（系统 P</div><div class="h2">用生成器而不是回调，上层才能 for awa</div>
+    </div></div></div><div id="b04_principles_beat8_wrap" class="beat clip" data-start="40.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat8"><div class="panel-body" id="b04_principles_beat8">
+      <div class="kicker">KEY</div>
+      <div class="h1">流式体验</div><div class="h2">首包延迟 · 可取消 · 背压</div>
+    </div></div></div><div id="b04_principles_beat9_wrap" class="beat clip" data-start="45.000" data-duration="5.909" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat9"><div class="panel-body" id="b04_principles_beat9">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 用生成器而不是回调，</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash9" data-start="45.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat10_wrap" class="beat clip" data-start="50.909" data-duration="4.091" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat10"><div class="panel-body" id="b04_principles_beat10">
+      <div class="kicker">KEY</div>
+      <div class="h1">用生成器而不是回调，上层才能 for</div><div class="h2">跨轮状态用不可变对象整体替换</div>
+    </div></div></div><div id="b04_principles_beat11_wrap" class="beat clip" data-start="55.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat11"><div class="panel-body" id="b04_principles_beat11">
+          <div class="kicker">记下这一点</div><div class="h1">跨轮状态用不可变对象整体</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash11" data-start="55.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat12_wrap" class="beat clip" data-start="60.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat12"><div class="panel-body" id="b04_principles_beat12">
+      <div class="kicker">KEY</div>
+      <div class="h1">跨轮状态用不可变对象整体替换</div><div class="h2">五个关键模块——入口、QueryEngine</div>
+    </div></div></div><div id="b04_principles_beat13_wrap" class="beat clip" data-start="65.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat13"><div class="panel-body" id="b04_principles_beat13">
+      <div class="kicker">KEY</div>
+      <div class="h1">五个关键模块——入口、QueryEn</div><div class="h2">注册中心还是单一事实来源：条件注册、延迟加载</div>
+    </div></div></div><div id="b04_principles_beat14_wrap" class="beat clip" data-start="70.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat14"><div class="panel-body" id="b04_principles_beat14">
+      <div class="kicker">P</div>
+      <div class="h1">2 · 安全边界内嵌</div><div class="h2">Security at the Perimeter</div>
+    </div></div></div><div id="b04_principles_beat15_wrap" class="beat clip" data-start="75.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat15"><div class="panel-body" id="b04_principles_beat15">
+      <div class="kicker">KEY</div>
+      <div class="h1">注册中心还是单一事实来源：条件注册、</div><div class="h2">细节后面几章再拆</div>
+    </div></div></div><div id="b04_principles_beat16_wrap" class="beat clip" data-start="80.000" data-duration="6.068" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat16"><div class="panel-body" id="b04_principles_beat16">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 细节后面几章再拆</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash16" data-start="80.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat17_wrap" class="beat clip" data-start="86.068" data-duration="3.608" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat17"><div class="panel-body" id="b04_principles_beat17">
+      <div class="kicker">KEY</div>
+      <div class="h1">架构背后是五条互相支撑的原则</div><div class="h2">每条都在回答：为什么不选更简单的做法；不这样</div>
+    </div></div></div><div id="b04_principles_beat18_wrap" class="beat clip" data-start="89.676" data-duration="5.536" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat18"><div class="panel-body" id="b04_principles_beat18">
+          <div class="kicker">记下这一点</div><div class="h1">每条都在回答：为什么不选</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash18" data-start="89.676" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat19_wrap" class="beat clip" data-start="95.212" data-duration="4.788" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat19"><div class="panel-body" id="b04_principles_beat19">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则一：异步流式优先，Async G</div><div class="h2">传统调用是请求—响应：发完 Prompt 干</div>
+    </div></div></div><div id="b04_principles_beat20_wrap" class="beat clip" data-start="100.000" data-duration="5.125" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat20"><div class="panel-body" id="b04_principles_beat20">
+      <div class="kicker">KEY</div>
+      <div class="h1">权限四阶段</div><div class="h2">声明 · 校验 · 执行 · 审计</div>
+    </div></div></div><div id="b04_principles_beat21_wrap" class="beat clip" data-start="105.125" data-duration="4.875" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat21"><div class="panel-body" id="b04_principles_beat21">
+      <div class="kicker">KEY</div>
+      <div class="h1">Agent 不是这样——一轮用户请求</div><div class="h2">生成器刚好匹配：用 yield 增量吐事件；</div>
+    </div></div></div><div id="b04_principles_beat22_wrap" class="beat clip" data-start="110.000" data-duration="4.737" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat22"><div class="panel-body" id="b04_principles_beat22">
+      <div class="kicker">KEY</div>
+      <div class="h1">生成器刚好匹配：用 yield 增量</div><div class="h2">回调易变地狱；Promise 链好看些，但用</div>
+    </div></div></div><div id="b04_principles_beat23_wrap" class="beat clip" data-start="114.737" data-duration="5.263" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat23"><div class="panel-body" id="b04_principles_beat23">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 生成器刚好匹配：用 </div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash23" data-start="114.737" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat24_wrap" class="beat clip" data-start="120.000" data-duration="5.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat24"><div class="panel-body" id="b04_principles_beat24">
+      <div class="kicker">KEY</div>
+      <div class="h1">生成器刚好匹配：用 yield 增量</div><div class="h2">回调易变地狱；Promise 链好看些，但用</div>
+    </div></div></div><div id="b04_principles_beat25_wrap" class="beat clip" data-start="125.500" data-duration="4.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat25"><div class="panel-body" id="b04_principles_beat25">
+          <div class="kicker">记下这一点</div><div class="h1">回调易变地狱；Promi</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash25" data-start="125.500" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat26_wrap" class="beat clip" data-start="130.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat26"><div class="panel-body" id="b04_principles_beat26">
+      <div class="kicker">P</div>
+      <div class="h1">3 · 缓存感知设计</div><div class="h2">Cache-Aware Architecture</div>
+    </div></div></div><div id="b04_principles_beat27_wrap" class="beat clip" data-start="135.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat27"><div class="panel-body" id="b04_principles_beat27">
+      <div class="kicker">KEY</div>
+      <div class="h1">同时要流式、可取消、类型安全——As</div><div class="h2">原则二：安全边界内嵌，Security at</div>
+    </div></div></div><div id="b04_principles_beat28_wrap" class="beat clip" data-start="140.000" data-duration="4.484" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat28"><div class="panel-body" id="b04_principles_beat28">
+      <div class="kicker">KEY</div>
+      <div class="h1">同时要流式、可取消、类型安全——As</div><div class="h2">原则二：安全边界内嵌，Security at</div>
+    </div></div></div><div id="b04_principles_beat29_wrap" class="beat clip" data-start="144.484" data-duration="4.788" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat29"><div class="panel-body" id="b04_principles_beat29">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则二：安全边界内嵌，Securit</div><div class="h2">权限不是外挂，是管线正中的检查点</div>
+    </div></div></div><div id="b04_principles_beat30_wrap" class="beat clip" data-start="149.272" data-duration="5.728" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat30"><div class="panel-body" id="b04_principles_beat30">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 权限不是外挂，是管线</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash30" data-start="149.272" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat31_wrap" class="beat clip" data-start="155.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat31"><div class="panel-body" id="b04_principles_beat31">
+      <div class="kicker">KEY</div>
+      <div class="h1">先过滤工具可见性，模型看不见禁用工具</div><div class="h2">纵深防御，没有银弹，但每层都能独立短路</div>
+    </div></div></div><div id="b04_principles_beat32_wrap" class="beat clip" data-start="160.000" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat32"><div class="panel-body" id="b04_principles_beat32">
+      <div class="kicker">KEY</div>
+      <div class="h1">上下文成本</div><div class="h2">前缀稳定 · 复用命中</div>
+    </div></div></div><div id="b04_principles_beat33_wrap" class="beat clip" data-start="165.833" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat33"><div class="panel-body" id="b04_principles_beat33">
+          <div class="kicker">记下这一点</div><div class="h1">纵深防御，没有银弹，但每</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash33" data-start="165.833" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat34_wrap" class="beat clip" data-start="171.667" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat34"><div class="panel-body" id="b04_principles_beat34">
+      <div class="kicker">KEY</div>
+      <div class="h1">纵深防御，没有银弹，但每层都能独立短</div><div class="h2">白名单不够用：安全性看上下文——删 node</div>
+    </div></div></div><div id="b04_principles_beat35_wrap" class="beat clip" data-start="177.500" data-duration="6.464" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat35"><div class="panel-body" id="b04_principles_beat35">
+      <div class="kicker">KEY</div>
+      <div class="h1">白名单不够用：安全性看上下文——删 </div><div class="h2">原则三：缓存感知，Cache-Aware</div>
+    </div></div></div><div id="b04_principles_beat36_wrap" class="beat clip" data-start="183.964" data-duration="6.650" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat36"><div class="panel-body" id="b04_principles_beat36">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则三：缓存感知，Cache-Awa</div><div class="h2">Prompt Caching 能砍成本和延迟</div>
+    </div></div></div><div id="b04_principles_beat37_wrap" class="beat clip" data-start="190.614" data-duration="4.386" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat37"><div class="panel-body" id="b04_principles_beat37">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 系统 Prompt </div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash37" data-start="190.614" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat38_wrap" class="beat clip" data-start="195.000" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat38"><div class="panel-body" id="b04_principles_beat38">
+      <div class="kicker">P</div>
+      <div class="h1">4 · 渐进式能力扩展</div><div class="h2">Tool → Skill → Plugin → MCP</div>
+    </div></div></div><div id="b04_principles_beat39_wrap" class="beat clip" data-start="200.833" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat39"><div class="panel-body" id="b04_principles_beat39">
+      <div class="kicker">KEY</div>
+      <div class="h1">不关心缓存，每次重拼 Prompt，</div><div class="h2">原则四：渐进式能力扩展，Progressiv</div>
+    </div></div></div><div id="b04_principles_beat40_wrap" class="beat clip" data-start="206.667" data-duration="6.121" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat40"><div class="panel-body" id="b04_principles_beat40">
+          <div class="kicker">记下这一点</div><div class="h1">不关心缓存，每次重拼 P</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash40" data-start="206.667" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat41_wrap" class="beat clip" data-start="212.788" data-duration="4.872" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat41"><div class="panel-body" id="b04_principles_beat41">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则四：渐进式能力扩展，Progre</div><div class="h2">四级阶梯，从内建到外部：Tool 实现类型接</div>
+    </div></div></div><div id="b04_principles_beat42_wrap" class="beat clip" data-start="217.660" data-duration="6.507" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat42"><div class="panel-body" id="b04_principles_beat42">
+      <div class="kicker">KEY</div>
+      <div class="h1">四级阶梯，从内建到外部：Tool 实</div><div class="h2">简单需求别逼人搭服务器，复杂集成也别逼人改核</div>
+    </div></div></div><div id="b04_principles_beat43_wrap" class="beat clip" data-start="224.167" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat43"><div class="panel-body" id="b04_principles_beat43">
+      <div class="kicker">KEY</div>
+      <div class="h1">四级阶梯，从内建到外部：Tool 实</div><div class="h2">简单需求别逼人搭服务器，复杂集成也别逼人改核</div>
+    </div></div></div><div id="b04_principles_beat44_wrap" class="beat clip" data-start="230.000" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat44"><div class="panel-body" id="b04_principles_beat44">
+      <div class="kicker">KEY</div>
+      <div class="h1">扩展阶梯</div><div class="h2">先工具，再技能，再协议</div>
+    </div></div></div><div id="b04_principles_beat45_wrap" class="beat clip" data-start="235.833" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat45"><div class="panel-body" id="b04_principles_beat45">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 简单需求别逼人搭服务</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash45" data-start="235.833" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat46_wrap" class="beat clip" data-start="241.667" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat46"><div class="panel-body" id="b04_principles_beat46">
+      <div class="kicker">KEY</div>
+      <div class="h1">简单需求别逼人搭服务器，复杂集成也别</div><div class="h2">只有 Tool，生态长不大；只留 MCP，小</div>
+    </div></div></div><div id="b04_principles_beat47_wrap" class="beat clip" data-start="247.500" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat47"><div class="panel-body" id="b04_principles_beat47">
+          <div class="kicker">记下这一点</div><div class="h1">只有 Tool，生态长不</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash47" data-start="247.500" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat48_wrap" class="beat clip" data-start="253.333" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat48"><div class="panel-body" id="b04_principles_beat48">
+      <div class="kicker">KEY</div>
+      <div class="h1">让每类贡献者站在合适抽象层上工作，扩</div><div class="h2">原则五：不可变状态流转，Immutable </div>
+    </div></div></div><div id="b04_principles_beat49_wrap" class="beat clip" data-start="259.167" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat49"><div class="panel-body" id="b04_principles_beat49">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则五：不可变状态流转，Immuta</div><div class="h2">更新走 updater，基于 prev 算 </div>
+    </div></div></div><div id="b04_principles_beat50_wrap" class="beat clip" data-start="265.000" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat50"><div class="panel-body" id="b04_principles_beat50">
+      <div class="kicker">P</div>
+      <div class="h1">5 · 不可变状态流转</div><div class="h2">Immutable State Flow</div>
+    </div></div></div><div id="b04_principles_beat51_wrap" class="beat clip" data-start="270.833" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat51"><div class="panel-body" id="b04_principles_beat51">
+      <div class="kicker">KEY</div>
+      <div class="h1">对话里跨轮状态整体替换，每轮用只读快</div><div class="h2">可变对象在并发和子智能体场景下，容易读到改一</div>
+    </div></div></div><div id="b04_principles_beat52_wrap" class="beat clip" data-start="276.667" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat52"><div class="panel-body" id="b04_principles_beat52">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 可变对象在并发和子智</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash52" data-start="276.667" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat53_wrap" class="beat clip" data-start="282.500" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat53"><div class="panel-body" id="b04_principles_beat53">
+      <div class="kicker">KEY</div>
+      <div class="h1">可变对象在并发和子智能体场景下，容易</div><div class="h2">不可变，是可预测、可回滚、可安全传快照的底气</div>
+    </div></div></div><div id="b04_principles_beat54_wrap" class="beat clip" data-start="288.333" data-duration="5.834" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat54"><div class="panel-body" id="b04_principles_beat54">
+          <div class="kicker">记下这一点</div><div class="h1">不可变，是可预测、可回滚</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash54" data-start="288.333" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat55_wrap" class="beat clip" data-start="294.167" data-duration="5.833" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat55"><div class="panel-body" id="b04_principles_beat55">
+      <div class="kicker">KEY</div>
+      <div class="h1">把五条再钉一遍，避免只记口号</div><div class="h2">流式原则回答的是交互形态：Agent 不是一</div>
+    </div></div></div><div id="b04_principles_beat56_wrap" class="beat clip" data-start="300.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat56"><div class="panel-body" id="b04_principles_beat56">
+      <div class="kicker">KEY</div>
+      <div class="h1">状态可追溯</div><div class="h2">回合快照 · 恢复点</div>
+    </div></div></div><div id="b04_principles_beat57_wrap" class="beat clip" data-start="305.000" data-duration="4.810" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat57"><div class="panel-body" id="b04_principles_beat57">
+      <div class="kicker">KEY</div>
+      <div class="h1">安全原则回答的是信任边界：模型可以提</div><div class="h2">缓存原则回答的是经济账：同一段系统提示词反复</div>
+    </div></div></div><div id="b04_principles_beat58_wrap" class="beat clip" data-start="309.810" data-duration="5.190" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat58"><div class="panel-body" id="b04_principles_beat58">
+      <div class="kicker">KEY</div>
+      <div class="h1">安全原则回答的是信任边界：模型可以提</div><div class="h2">缓存原则回答的是经济账：同一段系统提示词反复</div>
+    </div></div></div><div id="b04_principles_beat59_wrap" class="beat clip" data-start="315.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat59"><div class="panel-body" id="b04_principles_beat59">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 缓存原则回答的是经济</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash59" data-start="315.000" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat60_wrap" class="beat clip" data-start="320.000" data-duration="6.338" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat60"><div class="panel-body" id="b04_principles_beat60">
+      <div class="kicker">KEY</div>
+      <div class="h1">缓存原则回答的是经济账：同一段系统提</div><div class="h2">扩展原则回答的是生态：内部贡献者和外部生态要</div>
+    </div></div></div><div id="b04_principles_beat61_wrap" class="beat clip" data-start="326.338" data-duration="3.662" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat61"><div class="panel-body" id="b04_principles_beat61">
+          <div class="kicker">记下这一点</div><div class="h1">扩展原则回答的是生态：内</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b04_principles_flash61" data-start="326.338" data-duration="0.35" data-track-index="5"></div><div id="b04_principles_beat62_wrap" class="beat clip" data-start="330.000" data-duration="11.832" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b04_principles_beat62"><div class="panel-body" id="b04_principles_beat62">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则合在一起</div><div class="h2">构成 Harness 的工程红线</div>
+    </div></div></div><div class="flash clip" id="b04_principles_flash62" data-start="330.000" data-duration="0.35" data-track-index="5"></div><div id="hv_b04_principles_0" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_0-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_0_vid" src="../assets/huashu/07_p_async.mp4" muted playsinline data-start="20.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_1" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_1-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_1_vid" src="../assets/huashu/08_p_security.mp4" muted playsinline data-start="90.000" data-duration="7.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_2" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_2-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_2_vid" src="../assets/huashu/09_p_cache.mp4" muted playsinline data-start="160.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_3" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_3-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_3_vid" src="../assets/huashu/10_p_progressive.mp4" muted playsinline data-start="230.000" data-duration="7.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_4" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_4-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_4_vid" src="../assets/huashu/11_p_immutable.mp4" muted playsinline data-start="300.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_5" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_5-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_5_vid" src="../assets/huashu/07_p_async.mp4" muted playsinline data-start="60.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_6" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_6-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_6_vid" src="../assets/huashu/08_p_security.mp4" muted playsinline data-start="130.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_7" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_7-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_7_vid" src="../assets/huashu/09_p_cache.mp4" muted playsinline data-start="200.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b04_principles_8" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b04_principles_8-in" style="opacity:0;width:100%;height:100%"><video id="hv_b04_principles_8_vid" src="../assets/huashu/10_p_progressive.mp4" muted playsinline data-start="270.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b04_principles_beat0", {opacity:0}, {opacity:1,duration:0.2}, 0.000);
+tl.fromTo("#b04_principles_beat0 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 0.000);
+tl.fromTo("#b04_principles_beat0 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 0.080);
+tl.fromTo("#b04_principles_beat0 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 0.280);
+tl.to("#b04_principles_beat0", {opacity:0,y:-12,duration:0.28}, 3.650);
+tl.fromTo("#b04_principles_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b04_principles_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b04_principles_beat1", {opacity:0}, {opacity:1,duration:0.2}, 4.000);
+tl.fromTo("#b04_principles_beat1 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 4.000);
+tl.fromTo("#b04_principles_beat1 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 4.080);
+tl.fromTo("#b04_principles_beat1 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 4.280);
+tl.to("#b04_principles_beat1", {opacity:0,y:-12,duration:0.28}, 7.650);
+tl.fromTo("#b04_principles_beat2", {opacity:0}, {opacity:1,duration:0.2}, 8.000);
+tl.fromTo("#b04_principles_beat2 .quiz-card", {opacity:0,scale:0.9,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"back.out(1.5)"}, 8.000);
+tl.fromTo("#b04_principles_beat2-ans", {opacity:0,y:10}, {opacity:1,y:0,duration:0.35}, 10.200);
+tl.to("#b04_principles_beat2", {opacity:0,duration:0.3}, 12.650);
+tl.fromTo("#b04_principles_flash2", {opacity:0}, {opacity:0.35,duration:0.06}, 8.000);
+tl.to("#b04_principles_flash2", {opacity:0,duration:0.25}, 8.060);
+tl.fromTo("#b04_principles_beat3", {opacity:0}, {opacity:1,duration:0.2}, 13.000);
+tl.fromTo("#b04_principles_beat3 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 13.000);
+tl.fromTo("#b04_principles_beat3 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 13.350);
+tl.to("#b04_principles_beat3", {opacity:0,duration:0.3}, 17.650);
+tl.fromTo("#b04_principles_flash3", {opacity:0}, {opacity:0.35,duration:0.06}, 13.000);
+tl.to("#b04_principles_flash3", {opacity:0,duration:0.25}, 13.060);
+tl.fromTo("#b04_principles_beat4", {opacity:0}, {opacity:1,duration:0.2}, 18.000);
+tl.fromTo("#b04_principles_beat4 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 18.000);
+tl.fromTo("#b04_principles_beat4 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 18.080);
+tl.fromTo("#b04_principles_beat4 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 18.280);
+tl.to("#b04_principles_beat4", {opacity:0,y:-12,duration:0.28}, 23.150);
+tl.fromTo("#b04_principles_beat5", {opacity:0}, {opacity:1,duration:0.2}, 23.500);
+tl.fromTo("#b04_principles_beat5 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 23.500);
+tl.fromTo("#b04_principles_beat5 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 23.580);
+tl.fromTo("#b04_principles_beat5 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 23.780);
+tl.to("#b04_principles_beat5", {opacity:0,y:-12,duration:0.28}, 27.427);
+tl.fromTo("#b04_principles_beat6", {opacity:0}, {opacity:1,duration:0.2}, 27.777);
+tl.fromTo("#b04_principles_beat6 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 27.777);
+tl.fromTo("#b04_principles_beat6 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 27.857);
+tl.fromTo("#b04_principles_beat6 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 28.057);
+tl.to("#b04_principles_beat6", {opacity:0,y:-12,duration:0.28}, 34.382);
+tl.fromTo("#b04_principles_beat7", {opacity:0}, {opacity:1,duration:0.2}, 34.732);
+tl.fromTo("#b04_principles_beat7 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 34.732);
+tl.fromTo("#b04_principles_beat7 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 34.812);
+tl.fromTo("#b04_principles_beat7 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 35.012);
+tl.to("#b04_principles_beat7", {opacity:0,y:-12,duration:0.28}, 39.650);
+tl.fromTo("#b04_principles_beat8", {opacity:0}, {opacity:1,duration:0.2}, 40.000);
+tl.fromTo("#b04_principles_beat8 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 40.000);
+tl.fromTo("#b04_principles_beat8 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 40.080);
+tl.fromTo("#b04_principles_beat8 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 40.280);
+tl.to("#b04_principles_beat8", {opacity:0,y:-12,duration:0.28}, 44.650);
+tl.fromTo("#b04_principles_beat9", {opacity:0}, {opacity:1,duration:0.2}, 45.000);
+tl.fromTo("#b04_principles_beat9 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 45.000);
+tl.to("#b04_principles_beat9", {opacity:0,duration:0.3}, 50.559);
+tl.fromTo("#b04_principles_flash9", {opacity:0}, {opacity:0.35,duration:0.06}, 45.000);
+tl.to("#b04_principles_flash9", {opacity:0,duration:0.25}, 45.060);
+tl.fromTo("#b04_principles_beat10", {opacity:0}, {opacity:1,duration:0.2}, 50.909);
+tl.fromTo("#b04_principles_beat10 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 50.909);
+tl.fromTo("#b04_principles_beat10 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 50.989);
+tl.fromTo("#b04_principles_beat10 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 51.189);
+tl.to("#b04_principles_beat10", {opacity:0,y:-12,duration:0.28}, 54.650);
+tl.fromTo("#b04_principles_beat11", {opacity:0}, {opacity:1,duration:0.2}, 55.000);
+tl.fromTo("#b04_principles_beat11 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 55.000);
+tl.fromTo("#b04_principles_beat11 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 55.350);
+tl.to("#b04_principles_beat11", {opacity:0,duration:0.3}, 59.650);
+tl.fromTo("#b04_principles_flash11", {opacity:0}, {opacity:0.35,duration:0.06}, 55.000);
+tl.to("#b04_principles_flash11", {opacity:0,duration:0.25}, 55.060);
+tl.fromTo("#b04_principles_beat12", {opacity:0}, {opacity:1,duration:0.2}, 60.000);
+tl.fromTo("#b04_principles_beat12 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 60.000);
+tl.fromTo("#b04_principles_beat12 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 60.080);
+tl.fromTo("#b04_principles_beat12 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 60.280);
+tl.to("#b04_principles_beat12", {opacity:0,y:-12,duration:0.28}, 64.650);
+tl.fromTo("#b04_principles_beat13", {opacity:0}, {opacity:1,duration:0.2}, 65.000);
+tl.fromTo("#b04_principles_beat13 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 65.000);
+tl.fromTo("#b04_principles_beat13 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 65.080);
+tl.fromTo("#b04_principles_beat13 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 65.280);
+tl.to("#b04_principles_beat13", {opacity:0,y:-12,duration:0.28}, 69.650);
+tl.fromTo("#b04_principles_beat14", {opacity:0}, {opacity:1,duration:0.2}, 70.000);
+tl.fromTo("#b04_principles_beat14 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 70.000);
+tl.fromTo("#b04_principles_beat14 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 70.080);
+tl.fromTo("#b04_principles_beat14 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 70.280);
+tl.to("#b04_principles_beat14", {opacity:0,y:-12,duration:0.28}, 74.650);
+tl.fromTo("#b04_principles_beat15", {opacity:0}, {opacity:1,duration:0.2}, 75.000);
+tl.fromTo("#b04_principles_beat15 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 75.000);
+tl.fromTo("#b04_principles_beat15 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 75.080);
+tl.fromTo("#b04_principles_beat15 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 75.280);
+tl.to("#b04_principles_beat15", {opacity:0,y:-12,duration:0.28}, 79.650);
+tl.fromTo("#b04_principles_beat16", {opacity:0}, {opacity:1,duration:0.2}, 80.000);
+tl.fromTo("#b04_principles_beat16 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 80.000);
+tl.to("#b04_principles_beat16", {opacity:0,duration:0.3}, 85.718);
+tl.fromTo("#b04_principles_flash16", {opacity:0}, {opacity:0.35,duration:0.06}, 80.000);
+tl.to("#b04_principles_flash16", {opacity:0,duration:0.25}, 80.060);
+tl.fromTo("#b04_principles_beat17", {opacity:0}, {opacity:1,duration:0.2}, 86.068);
+tl.fromTo("#b04_principles_beat17 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 86.068);
+tl.fromTo("#b04_principles_beat17 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 86.148);
+tl.fromTo("#b04_principles_beat17 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 86.348);
+tl.to("#b04_principles_beat17", {opacity:0,y:-12,duration:0.28}, 89.326);
+tl.fromTo("#b04_principles_beat18", {opacity:0}, {opacity:1,duration:0.2}, 89.676);
+tl.fromTo("#b04_principles_beat18 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 89.676);
+tl.fromTo("#b04_principles_beat18 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 90.026);
+tl.to("#b04_principles_beat18", {opacity:0,duration:0.3}, 94.862);
+tl.fromTo("#b04_principles_flash18", {opacity:0}, {opacity:0.35,duration:0.06}, 89.676);
+tl.to("#b04_principles_flash18", {opacity:0,duration:0.25}, 89.736);
+tl.fromTo("#b04_principles_beat19", {opacity:0}, {opacity:1,duration:0.2}, 95.212);
+tl.fromTo("#b04_principles_beat19 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 95.212);
+tl.fromTo("#b04_principles_beat19 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 95.292);
+tl.fromTo("#b04_principles_beat19 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 95.492);
+tl.to("#b04_principles_beat19", {opacity:0,y:-12,duration:0.28}, 99.650);
+tl.fromTo("#b04_principles_beat20", {opacity:0}, {opacity:1,duration:0.2}, 100.000);
+tl.fromTo("#b04_principles_beat20 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 100.000);
+tl.fromTo("#b04_principles_beat20 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 100.080);
+tl.fromTo("#b04_principles_beat20 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 100.280);
+tl.to("#b04_principles_beat20", {opacity:0,y:-12,duration:0.28}, 104.775);
+tl.fromTo("#b04_principles_beat21", {opacity:0}, {opacity:1,duration:0.2}, 105.125);
+tl.fromTo("#b04_principles_beat21 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 105.125);
+tl.fromTo("#b04_principles_beat21 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 105.205);
+tl.fromTo("#b04_principles_beat21 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 105.405);
+tl.to("#b04_principles_beat21", {opacity:0,y:-12,duration:0.28}, 109.650);
+tl.fromTo("#b04_principles_beat22", {opacity:0}, {opacity:1,duration:0.2}, 110.000);
+tl.fromTo("#b04_principles_beat22 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 110.000);
+tl.fromTo("#b04_principles_beat22 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 110.080);
+tl.fromTo("#b04_principles_beat22 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 110.280);
+tl.to("#b04_principles_beat22", {opacity:0,y:-12,duration:0.28}, 114.387);
+tl.fromTo("#b04_principles_beat23", {opacity:0}, {opacity:1,duration:0.2}, 114.737);
+tl.fromTo("#b04_principles_beat23 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 114.737);
+tl.to("#b04_principles_beat23", {opacity:0,duration:0.3}, 119.650);
+tl.fromTo("#b04_principles_flash23", {opacity:0}, {opacity:0.35,duration:0.06}, 114.737);
+tl.to("#b04_principles_flash23", {opacity:0,duration:0.25}, 114.797);
+tl.fromTo("#b04_principles_beat24", {opacity:0}, {opacity:1,duration:0.2}, 120.000);
+tl.fromTo("#b04_principles_beat24 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 120.000);
+tl.fromTo("#b04_principles_beat24 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 120.080);
+tl.fromTo("#b04_principles_beat24 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 120.280);
+tl.to("#b04_principles_beat24", {opacity:0,y:-12,duration:0.28}, 125.150);
+tl.fromTo("#b04_principles_beat25", {opacity:0}, {opacity:1,duration:0.2}, 125.500);
+tl.fromTo("#b04_principles_beat25 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 125.500);
+tl.fromTo("#b04_principles_beat25 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 125.850);
+tl.to("#b04_principles_beat25", {opacity:0,duration:0.3}, 129.650);
+tl.fromTo("#b04_principles_flash25", {opacity:0}, {opacity:0.35,duration:0.06}, 125.500);
+tl.to("#b04_principles_flash25", {opacity:0,duration:0.25}, 125.560);
+tl.fromTo("#b04_principles_beat26", {opacity:0}, {opacity:1,duration:0.2}, 130.000);
+tl.fromTo("#b04_principles_beat26 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 130.000);
+tl.fromTo("#b04_principles_beat26 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 130.080);
+tl.fromTo("#b04_principles_beat26 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 130.280);
+tl.to("#b04_principles_beat26", {opacity:0,y:-12,duration:0.28}, 134.650);
+tl.fromTo("#b04_principles_beat27", {opacity:0}, {opacity:1,duration:0.2}, 135.000);
+tl.fromTo("#b04_principles_beat27 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 135.000);
+tl.fromTo("#b04_principles_beat27 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 135.080);
+tl.fromTo("#b04_principles_beat27 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 135.280);
+tl.to("#b04_principles_beat27", {opacity:0,y:-12,duration:0.28}, 139.650);
+tl.fromTo("#b04_principles_beat28", {opacity:0}, {opacity:1,duration:0.2}, 140.000);
+tl.fromTo("#b04_principles_beat28 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 140.000);
+tl.fromTo("#b04_principles_beat28 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 140.080);
+tl.fromTo("#b04_principles_beat28 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 140.280);
+tl.to("#b04_principles_beat28", {opacity:0,y:-12,duration:0.28}, 144.134);
+tl.fromTo("#b04_principles_beat29", {opacity:0}, {opacity:1,duration:0.2}, 144.484);
+tl.fromTo("#b04_principles_beat29 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 144.484);
+tl.fromTo("#b04_principles_beat29 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 144.564);
+tl.fromTo("#b04_principles_beat29 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 144.764);
+tl.to("#b04_principles_beat29", {opacity:0,y:-12,duration:0.28}, 148.922);
+tl.fromTo("#b04_principles_beat30", {opacity:0}, {opacity:1,duration:0.2}, 149.272);
+tl.fromTo("#b04_principles_beat30 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 149.272);
+tl.to("#b04_principles_beat30", {opacity:0,duration:0.3}, 154.650);
+tl.fromTo("#b04_principles_flash30", {opacity:0}, {opacity:0.35,duration:0.06}, 149.272);
+tl.to("#b04_principles_flash30", {opacity:0,duration:0.25}, 149.332);
+tl.fromTo("#b04_principles_beat31", {opacity:0}, {opacity:1,duration:0.2}, 155.000);
+tl.fromTo("#b04_principles_beat31 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 155.000);
+tl.fromTo("#b04_principles_beat31 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 155.080);
+tl.fromTo("#b04_principles_beat31 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 155.280);
+tl.to("#b04_principles_beat31", {opacity:0,y:-12,duration:0.28}, 159.650);
+tl.fromTo("#b04_principles_beat32", {opacity:0}, {opacity:1,duration:0.2}, 160.000);
+tl.fromTo("#b04_principles_beat32 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 160.000);
+tl.fromTo("#b04_principles_beat32 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 160.080);
+tl.fromTo("#b04_principles_beat32 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 160.280);
+tl.to("#b04_principles_beat32", {opacity:0,y:-12,duration:0.28}, 165.483);
+tl.fromTo("#b04_principles_beat33", {opacity:0}, {opacity:1,duration:0.2}, 165.833);
+tl.fromTo("#b04_principles_beat33 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 165.833);
+tl.fromTo("#b04_principles_beat33 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 166.183);
+tl.to("#b04_principles_beat33", {opacity:0,duration:0.3}, 171.317);
+tl.fromTo("#b04_principles_flash33", {opacity:0}, {opacity:0.35,duration:0.06}, 165.833);
+tl.to("#b04_principles_flash33", {opacity:0,duration:0.25}, 165.893);
+tl.fromTo("#b04_principles_beat34", {opacity:0}, {opacity:1,duration:0.2}, 171.667);
+tl.fromTo("#b04_principles_beat34 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 171.667);
+tl.fromTo("#b04_principles_beat34 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 171.747);
+tl.fromTo("#b04_principles_beat34 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 171.947);
+tl.to("#b04_principles_beat34", {opacity:0,y:-12,duration:0.28}, 177.150);
+tl.fromTo("#b04_principles_beat35", {opacity:0}, {opacity:1,duration:0.2}, 177.500);
+tl.fromTo("#b04_principles_beat35 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 177.500);
+tl.fromTo("#b04_principles_beat35 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 177.580);
+tl.fromTo("#b04_principles_beat35 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 177.780);
+tl.to("#b04_principles_beat35", {opacity:0,y:-12,duration:0.28}, 183.614);
+tl.fromTo("#b04_principles_beat36", {opacity:0}, {opacity:1,duration:0.2}, 183.964);
+tl.fromTo("#b04_principles_beat36 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 183.964);
+tl.fromTo("#b04_principles_beat36 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 184.044);
+tl.fromTo("#b04_principles_beat36 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 184.244);
+tl.to("#b04_principles_beat36", {opacity:0,y:-12,duration:0.28}, 190.264);
+tl.fromTo("#b04_principles_beat37", {opacity:0}, {opacity:1,duration:0.2}, 190.614);
+tl.fromTo("#b04_principles_beat37 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 190.614);
+tl.to("#b04_principles_beat37", {opacity:0,duration:0.3}, 194.650);
+tl.fromTo("#b04_principles_flash37", {opacity:0}, {opacity:0.35,duration:0.06}, 190.614);
+tl.to("#b04_principles_flash37", {opacity:0,duration:0.25}, 190.674);
+tl.fromTo("#b04_principles_beat38", {opacity:0}, {opacity:1,duration:0.2}, 195.000);
+tl.fromTo("#b04_principles_beat38 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 195.000);
+tl.fromTo("#b04_principles_beat38 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 195.080);
+tl.fromTo("#b04_principles_beat38 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 195.280);
+tl.to("#b04_principles_beat38", {opacity:0,y:-12,duration:0.28}, 200.483);
+tl.fromTo("#b04_principles_beat39", {opacity:0}, {opacity:1,duration:0.2}, 200.833);
+tl.fromTo("#b04_principles_beat39 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 200.833);
+tl.fromTo("#b04_principles_beat39 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 200.913);
+tl.fromTo("#b04_principles_beat39 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 201.113);
+tl.to("#b04_principles_beat39", {opacity:0,y:-12,duration:0.28}, 206.317);
+tl.fromTo("#b04_principles_beat40", {opacity:0}, {opacity:1,duration:0.2}, 206.667);
+tl.fromTo("#b04_principles_beat40 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 206.667);
+tl.fromTo("#b04_principles_beat40 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 207.017);
+tl.to("#b04_principles_beat40", {opacity:0,duration:0.3}, 212.438);
+tl.fromTo("#b04_principles_flash40", {opacity:0}, {opacity:0.35,duration:0.06}, 206.667);
+tl.to("#b04_principles_flash40", {opacity:0,duration:0.25}, 206.727);
+tl.fromTo("#b04_principles_beat41", {opacity:0}, {opacity:1,duration:0.2}, 212.788);
+tl.fromTo("#b04_principles_beat41 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 212.788);
+tl.fromTo("#b04_principles_beat41 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 212.868);
+tl.fromTo("#b04_principles_beat41 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 213.068);
+tl.to("#b04_principles_beat41", {opacity:0,y:-12,duration:0.28}, 217.310);
+tl.fromTo("#b04_principles_beat42", {opacity:0}, {opacity:1,duration:0.2}, 217.660);
+tl.fromTo("#b04_principles_beat42 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 217.660);
+tl.fromTo("#b04_principles_beat42 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 217.740);
+tl.fromTo("#b04_principles_beat42 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 217.940);
+tl.to("#b04_principles_beat42", {opacity:0,y:-12,duration:0.28}, 223.817);
+tl.fromTo("#b04_principles_beat43", {opacity:0}, {opacity:1,duration:0.2}, 224.167);
+tl.fromTo("#b04_principles_beat43 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 224.167);
+tl.fromTo("#b04_principles_beat43 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 224.247);
+tl.fromTo("#b04_principles_beat43 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 224.447);
+tl.to("#b04_principles_beat43", {opacity:0,y:-12,duration:0.28}, 229.650);
+tl.fromTo("#b04_principles_beat44", {opacity:0}, {opacity:1,duration:0.2}, 230.000);
+tl.fromTo("#b04_principles_beat44 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 230.000);
+tl.fromTo("#b04_principles_beat44 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 230.080);
+tl.fromTo("#b04_principles_beat44 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 230.280);
+tl.to("#b04_principles_beat44", {opacity:0,y:-12,duration:0.28}, 235.483);
+tl.fromTo("#b04_principles_beat45", {opacity:0}, {opacity:1,duration:0.2}, 235.833);
+tl.fromTo("#b04_principles_beat45 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 235.833);
+tl.to("#b04_principles_beat45", {opacity:0,duration:0.3}, 241.317);
+tl.fromTo("#b04_principles_flash45", {opacity:0}, {opacity:0.35,duration:0.06}, 235.833);
+tl.to("#b04_principles_flash45", {opacity:0,duration:0.25}, 235.893);
+tl.fromTo("#b04_principles_beat46", {opacity:0}, {opacity:1,duration:0.2}, 241.667);
+tl.fromTo("#b04_principles_beat46 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 241.667);
+tl.fromTo("#b04_principles_beat46 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 241.747);
+tl.fromTo("#b04_principles_beat46 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 241.947);
+tl.to("#b04_principles_beat46", {opacity:0,y:-12,duration:0.28}, 247.150);
+tl.fromTo("#b04_principles_beat47", {opacity:0}, {opacity:1,duration:0.2}, 247.500);
+tl.fromTo("#b04_principles_beat47 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 247.500);
+tl.fromTo("#b04_principles_beat47 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 247.850);
+tl.to("#b04_principles_beat47", {opacity:0,duration:0.3}, 252.983);
+tl.fromTo("#b04_principles_flash47", {opacity:0}, {opacity:0.35,duration:0.06}, 247.500);
+tl.to("#b04_principles_flash47", {opacity:0,duration:0.25}, 247.560);
+tl.fromTo("#b04_principles_beat48", {opacity:0}, {opacity:1,duration:0.2}, 253.333);
+tl.fromTo("#b04_principles_beat48 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 253.333);
+tl.fromTo("#b04_principles_beat48 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 253.413);
+tl.fromTo("#b04_principles_beat48 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 253.613);
+tl.to("#b04_principles_beat48", {opacity:0,y:-12,duration:0.28}, 258.817);
+tl.fromTo("#b04_principles_beat49", {opacity:0}, {opacity:1,duration:0.2}, 259.167);
+tl.fromTo("#b04_principles_beat49 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 259.167);
+tl.fromTo("#b04_principles_beat49 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 259.247);
+tl.fromTo("#b04_principles_beat49 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 259.447);
+tl.to("#b04_principles_beat49", {opacity:0,y:-12,duration:0.28}, 264.650);
+tl.fromTo("#b04_principles_beat50", {opacity:0}, {opacity:1,duration:0.2}, 265.000);
+tl.fromTo("#b04_principles_beat50 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 265.000);
+tl.fromTo("#b04_principles_beat50 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 265.080);
+tl.fromTo("#b04_principles_beat50 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 265.280);
+tl.to("#b04_principles_beat50", {opacity:0,y:-12,duration:0.28}, 270.483);
+tl.fromTo("#b04_principles_beat51", {opacity:0}, {opacity:1,duration:0.2}, 270.833);
+tl.fromTo("#b04_principles_beat51 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 270.833);
+tl.fromTo("#b04_principles_beat51 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 270.913);
+tl.fromTo("#b04_principles_beat51 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 271.113);
+tl.to("#b04_principles_beat51", {opacity:0,y:-12,duration:0.28}, 276.317);
+tl.fromTo("#b04_principles_beat52", {opacity:0}, {opacity:1,duration:0.2}, 276.667);
+tl.fromTo("#b04_principles_beat52 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 276.667);
+tl.to("#b04_principles_beat52", {opacity:0,duration:0.3}, 282.150);
+tl.fromTo("#b04_principles_flash52", {opacity:0}, {opacity:0.35,duration:0.06}, 276.667);
+tl.to("#b04_principles_flash52", {opacity:0,duration:0.25}, 276.727);
+tl.fromTo("#b04_principles_beat53", {opacity:0}, {opacity:1,duration:0.2}, 282.500);
+tl.fromTo("#b04_principles_beat53 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 282.500);
+tl.fromTo("#b04_principles_beat53 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 282.580);
+tl.fromTo("#b04_principles_beat53 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 282.780);
+tl.to("#b04_principles_beat53", {opacity:0,y:-12,duration:0.28}, 287.983);
+tl.fromTo("#b04_principles_beat54", {opacity:0}, {opacity:1,duration:0.2}, 288.333);
+tl.fromTo("#b04_principles_beat54 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 288.333);
+tl.fromTo("#b04_principles_beat54 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 288.683);
+tl.to("#b04_principles_beat54", {opacity:0,duration:0.3}, 293.817);
+tl.fromTo("#b04_principles_flash54", {opacity:0}, {opacity:0.35,duration:0.06}, 288.333);
+tl.to("#b04_principles_flash54", {opacity:0,duration:0.25}, 288.393);
+tl.fromTo("#b04_principles_beat55", {opacity:0}, {opacity:1,duration:0.2}, 294.167);
+tl.fromTo("#b04_principles_beat55 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 294.167);
+tl.fromTo("#b04_principles_beat55 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 294.247);
+tl.fromTo("#b04_principles_beat55 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 294.447);
+tl.to("#b04_principles_beat55", {opacity:0,y:-12,duration:0.28}, 299.650);
+tl.fromTo("#b04_principles_beat56", {opacity:0}, {opacity:1,duration:0.2}, 300.000);
+tl.fromTo("#b04_principles_beat56 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 300.000);
+tl.fromTo("#b04_principles_beat56 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 300.080);
+tl.fromTo("#b04_principles_beat56 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 300.280);
+tl.to("#b04_principles_beat56", {opacity:0,y:-12,duration:0.28}, 304.650);
+tl.fromTo("#b04_principles_beat57", {opacity:0}, {opacity:1,duration:0.2}, 305.000);
+tl.fromTo("#b04_principles_beat57 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 305.000);
+tl.fromTo("#b04_principles_beat57 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 305.080);
+tl.fromTo("#b04_principles_beat57 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 305.280);
+tl.to("#b04_principles_beat57", {opacity:0,y:-12,duration:0.28}, 309.460);
+tl.fromTo("#b04_principles_beat58", {opacity:0}, {opacity:1,duration:0.2}, 309.810);
+tl.fromTo("#b04_principles_beat58 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 309.810);
+tl.fromTo("#b04_principles_beat58 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 309.890);
+tl.fromTo("#b04_principles_beat58 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 310.090);
+tl.to("#b04_principles_beat58", {opacity:0,y:-12,duration:0.28}, 314.650);
+tl.fromTo("#b04_principles_beat59", {opacity:0}, {opacity:1,duration:0.2}, 315.000);
+tl.fromTo("#b04_principles_beat59 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 315.000);
+tl.to("#b04_principles_beat59", {opacity:0,duration:0.3}, 319.650);
+tl.fromTo("#b04_principles_flash59", {opacity:0}, {opacity:0.35,duration:0.06}, 315.000);
+tl.to("#b04_principles_flash59", {opacity:0,duration:0.25}, 315.060);
+tl.fromTo("#b04_principles_beat60", {opacity:0}, {opacity:1,duration:0.2}, 320.000);
+tl.fromTo("#b04_principles_beat60 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 320.000);
+tl.fromTo("#b04_principles_beat60 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 320.080);
+tl.fromTo("#b04_principles_beat60 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 320.280);
+tl.to("#b04_principles_beat60", {opacity:0,y:-12,duration:0.28}, 325.988);
+tl.fromTo("#b04_principles_beat61", {opacity:0}, {opacity:1,duration:0.2}, 326.338);
+tl.fromTo("#b04_principles_beat61 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 326.338);
+tl.fromTo("#b04_principles_beat61 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 326.688);
+tl.to("#b04_principles_beat61", {opacity:0,duration:0.3}, 329.650);
+tl.fromTo("#b04_principles_flash61", {opacity:0}, {opacity:0.35,duration:0.06}, 326.338);
+tl.to("#b04_principles_flash61", {opacity:0,duration:0.25}, 326.398);
+tl.fromTo("#b04_principles_beat62", {opacity:0}, {opacity:1,duration:0.2}, 330.000);
+tl.fromTo("#b04_principles_beat62 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 330.000);
+tl.fromTo("#b04_principles_beat62 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 330.080);
+tl.fromTo("#b04_principles_beat62 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 330.280);
+tl.to("#b04_principles_beat62", {opacity:0,y:-12,duration:0.28}, 341.482);
+tl.fromTo("#b04_principles_flash62", {opacity:0}, {opacity:0.35,duration:0.06}, 330.000);
+tl.to("#b04_principles_flash62", {opacity:0,duration:0.25}, 330.060);
+tl.to("#hv_b04_principles_0-in", {opacity:1, duration:0.4}, 20.000);
+tl.to("#hv_b04_principles_0-in", {opacity:0, duration:0.4}, 26.600);
+tl.to("#hv_b04_principles_1-in", {opacity:1, duration:0.4}, 90.000);
+tl.to("#hv_b04_principles_1-in", {opacity:0, duration:0.4}, 97.100);
+tl.to("#hv_b04_principles_2-in", {opacity:1, duration:0.4}, 160.000);
+tl.to("#hv_b04_principles_2-in", {opacity:0, duration:0.4}, 166.600);
+tl.to("#hv_b04_principles_3-in", {opacity:1, duration:0.4}, 230.000);
+tl.to("#hv_b04_principles_3-in", {opacity:0, duration:0.4}, 237.100);
+tl.to("#hv_b04_principles_4-in", {opacity:1, duration:0.4}, 300.000);
+tl.to("#hv_b04_principles_4-in", {opacity:0, duration:0.4}, 306.600);
+tl.to("#hv_b04_principles_5-in", {opacity:1, duration:0.4}, 60.000);
+tl.to("#hv_b04_principles_5-in", {opacity:0, duration:0.4}, 66.100);
+tl.to("#hv_b04_principles_6-in", {opacity:1, duration:0.4}, 130.000);
+tl.to("#hv_b04_principles_6-in", {opacity:0, duration:0.4}, 136.100);
+tl.to("#hv_b04_principles_7-in", {opacity:1, duration:0.4}, 200.000);
+tl.to("#hv_b04_principles_7-in", {opacity:0, duration:0.4}, 206.100);
+tl.to("#hv_b04_principles_8-in", {opacity:1, duration:0.4}, 270.000);
+tl.to("#hv_b04_principles_8-in", {opacity:0, duration:0.4}, 276.100);
+window.__timelines["b04_principles"] = tl;
+</script>
+</body></html>

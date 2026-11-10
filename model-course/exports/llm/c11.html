@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C11 从空目录运行第一段程序 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details open><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html" aria-current="page">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C11-section-e0574c4bfc">先修检查：你已经会什么，还缺什么</a></li><li class="toc-level-2"><a href="#C11-section-de5ba1828f">从空目录开始：环境只要一个 Python</a></li><li class="toc-level-2"><a href="#C11-section-b3b505b8b9">变量、类型、分支、循环：用四行代码建立手感</a></li><li class="toc-level-2"><a href="#C11-section-3866f852cc">路径与编码：先确认读的是哪个文件</a></li><li class="toc-level-2"><a href="#C11-section-77dd9cf399">完整程序：读取通知并输出核对表</a></li><li class="toc-level-2"><a href="#C11-section-a9652750d4">错误定位：先看最后一行，再缩小输入</a></li><li class="toc-level-2"><a href="#C11-section-e69df56aa9">改一个条件：让程序输出 Markdown 核对表</a></li><li class="toc-level-2"><a href="#C11-section-a5f7169601">失败反例：看起来成功，其实没读</a></li><li class="toc-level-2"><a href="#C11-section-ebc44dd5e6">与图、实验和后续章节的关系</a></li><li class="toc-level-2"><a href="#C11-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C11-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C11"><header class="chapter-opener"><p class="chapter-number">C11</p><p class="chapter-kicker">S3 · 能实现 / K3</p><h1>从空目录运行第一段程序</h1><p class="chapter-abstract">从空目录、一个文本文件开始，写出能读材料、报错误、输出 JSON 的第一段程序。</p></header><p class="chapter-meta">先修：<a href="c10.html">C10</a> · <a href="stage-s3.html">S3 阶段导言</a></p><div class="article-body"><p>你把一份课程通知存成了 <code>通知.txt</code>，又在表格里记了“时间、地点、报名要求”三列。现在想把这件事交给程序：读文件、取出字段、把缺失项写清楚。问题不在“会不会 AI”，而在你能不能从空目录开始，让一段代码真的跑起来，并在它出错时找到是哪一行。</p>
+<p>本章不要求你先前写过 Python，也不要求账号。你只需要会打开终端、新建文件夹、用文本编辑器保存文件。读完并做完作业，你应该能独立写出一个读取本地通知、输出 JSON 核对表的小程序，并能根据报错定位输入、路径、编码或字段问题。</p>
+<h2 id="C11-section-e0574c4bfc" tabindex="-1">先修检查：你已经会什么，还缺什么</h2>
+<p>到这里，你已经能判断一次回答有没有材料依据（C03），也见过“任务、材料、约束、输出”的交接单（C02）。但前两阶段的例子大多由网页实验代劳：按钮替你读文件、算结果、显示状态。到了 S3，程序要由你自己启动，文件路径、编码和错误退出都要自己处理。</p>
+<p>先做三个不写代码的检查：</p>
+<ol>
+<li>你能指出 <code>C:\Users\me\course\通知.txt</code> 和 <code>通知.txt</code> 哪个是绝对路径、哪个依赖“当前目录”吗？</li>
+<li>同一段中文保存成 UTF-8 和 GBK，字节数通常不同。你能不能说出为什么程序读错编码时会出现乱码，而不是“文件损坏”？</li>
+<li>运行一条命令后终端打印了 <code>Traceback</code>，你会先看最后一行，还是从第一行开始猜？</li>
+</ol>
+<p>如果第 1、2 题没有把握，本章后面的“路径与编码”小节会补；第 3 题会在“错误定位”里用真实报错练。</p>
+<h2 id="C11-section-de5ba1828f" tabindex="-1">从空目录开始：环境只要一个 Python</h2>
+<p>在仓库外新建一个练习目录，例如：</p>
+<pre><code class="language-text">llm-practice/
+  notices/
+    通知.txt
+  notice_report.py
+</code></pre>
+<p>Windows PowerShell：</p>
+<pre><code class="language-powershell">cd $HOME
+mkdir llm-practice
+cd llm-practice
+python --version
+</code></pre>
+<p>macOS / Linux：</p>
+<pre><code class="language-bash">cd ~
+mkdir llm-practice
+cd llm-practice
+python3 --version
+</code></pre>
+<p>预期看到 <code>Python 3.11</code> 或更高版本（3.10 也能完成本章，只要不采用 3.11 之后才有的语法）。如果终端说找不到 <code>python</code>，先试 <code>python3</code>；仍然找不到，就安装 Python 官方发行版并把安装选项中的“Add to PATH”勾上。不要为了本章去装深度学习框架，本章只用标准库。</p>
+<p>“标准库”指随 Python 一起安装、无需另外下载的模块。本章会用到 <code>argparse</code>、<code>json</code>、<code>pathlib</code>、<code>sys</code> 和 <code>textwrap</code>。它们足够完成一个可交付的本地程序，也避免把“环境装不上”与“程序写错”混在一起。</p>
+<h2 id="C11-section-b3b505b8b9" tabindex="-1">变量、类型、分支、循环：用四行代码建立手感</h2>
+<p>先把下面四行存成 <code>first.py</code>：</p>
+<pre><code class="language-python">name = &quot;课程通知&quot;
+count = 3
+missing = None
+print(f&quot;{name}：需要核对 {count} 个字段；地点是否缺失 = {missing is None}&quot;)
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">python first.py
+</code></pre>
+<p>预期输出：</p>
+<pre><code class="language-text">课程通知：需要核对 3 个字段；地点是否缺失 = True
+</code></pre>
+<p>这里有四种常见值：字符串 <code>&quot;课程通知&quot;</code>、整数 <code>3</code>、空值 <code>None</code>、布尔值 <code>True</code>。<code>f&quot;...&quot;</code> 叫格式化字符串，花括号里可以放变量或简单表达式。<code>missing is None</code> 的结果是布尔值，不是字符串 <code>&quot;None&quot;</code>。</p>
+<p>分支让程序按条件走不同路：</p>
+<pre><code class="language-python">place = None
+if place is None:
+    print(&quot;地点：缺失，需回查原文&quot;)
+else:
+    print(f&quot;地点：{place}&quot;)
+</code></pre>
+<p>循环让同一段处理重复多次：</p>
+<pre><code class="language-python">fields = [&quot;活动&quot;, &quot;时间&quot;, &quot;地点&quot;, &quot;报名要求&quot;]
+for field in fields:
+    print(f&quot;待核对：{field}&quot;)
+</code></pre>
+<p><code>fields</code> 是列表（list），<code>for</code> 每次取出一个元素。稍后读 JSON 时还会遇到字典（dict）：用键取值，例如 <code>record[&quot;地点&quot;]</code>。键不存在时 Python 会抛 <code>KeyError</code>，这正好可以用来区分“字段为空”和“字段根本没写”；但直接让异常冒出来不友好，本章的程序会显式检查。</p>
+<p>函数把一段可复用逻辑命名：</p>
+<pre><code class="language-python">def normalize_line(line: str) -&gt; str:
+    &quot;&quot;&quot;去掉行尾换行和首尾空白。&quot;&quot;&quot;
+    return line.strip()
+
+print(normalize_line(&quot;  时间：周日 10:00  \n&quot;))
+</code></pre>
+<p><code>def</code> 后面是函数名、参数和返回类型标注。类型标注不会在运行时强制检查，但它让读代码的人知道预期。函数体缩进四个空格，这是 Python 的语法，不是排版偏好。</p>
+<h2 id="C11-section-3866f852cc" tabindex="-1">路径与编码：先确认读的是哪个文件</h2>
+<p>相对路径 <code>notices/通知.txt</code> 是相对于“当前工作目录”，不是相对于脚本文件。很多“文件明明存在却读不到”的错误，都是因为从不同目录启动了程序。本程序统一以脚本所在目录为基准：</p>
+<pre><code class="language-python">from pathlib import Path
+
+BASE = Path(__file__).resolve().parent
+path = BASE / &quot;notices&quot; / &quot;通知.txt&quot;
+print(path)
+</code></pre>
+<p><code>Path(__file__)</code> 得到脚本路径，<code>.resolve()</code> 变成绝对路径，<code>.parent</code> 取所在目录，<code>/</code> 拼接路径。这样无论你从哪个目录运行，读到的都是脚本旁边的文件。</p>
+<p>文本文件还有编码。Python 3 的 <code>open()</code> 在 Windows 上默认可能使用系统区域编码，在 Linux/macOS 上通常是 UTF-8。为了避免同一份材料在不同机器上表现不同，本章程序显式写 <code>encoding=&quot;utf-8&quot;</code>。保存 <code>通知.txt</code> 时也要选 UTF-8。若你的编辑器加上了 BOM，读入的字符串开头可能出现 <code>\ufeff</code>；程序用 <code>utf-8-sig</code> 兼容 BOM，但会在输出里记录实际使用的编码，避免把“读到了隐藏字符”当成内容。</p>
+<p>先准备材料文件：</p>
+<pre><code class="language-text">课程通知
+活动：社区读书会
+时间：周六 14:00
+报名要求：提前报名
+负责人：李明
+</code></pre>
+<p>这份材料故意没有“地点”。不要替它补；程序应输出“缺失”，并保留原文行。</p>
+<h2 id="C11-section-77dd9cf399" tabindex="-1">完整程序：读取通知并输出核对表</h2>
+<p>把下面代码存入 <code>notice_report.py</code>。它不是伪代码，复制后可以直接运行。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;读取一份本地通知，输出字段核对 JSON。
+
+只处理 UTF-8 文本；不做模型调用，不推断缺失信息。
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+FIELDS = (&quot;活动&quot;, &quot;时间&quot;, &quot;地点&quot;, &quot;报名要求&quot;)
+BASE = Path(__file__).resolve().parent
+
+
+def read_text(path: Path) -&gt; tuple[str, str]:
+    &quot;&quot;&quot;返回 (文本, 实际编码)；按文件头识别 BOM，不猜其他编码。&quot;&quot;&quot;
+    data = path.read_bytes()
+    encoding = &quot;utf-8-sig&quot; if data.startswith(b&quot;\xef\xbb\xbf&quot;) else &quot;utf-8&quot;
+    return data.decode(encoding), encoding
+
+
+def extract_fields(text: str) -&gt; dict[str, dict[str, str | None]]:
+    &quot;&quot;&quot;按“字段：值”提取；找不到的字段保留 missing，不猜值。&quot;&quot;&quot;
+    result: dict[str, dict[str, str | None]] = {}
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    for field in FIELDS:
+        match = None
+        for line in lines:
+            if line.startswith(field + &quot;：&quot;) or line.startswith(field + &quot;:&quot;):
+                match = line[len(field) + 1:].strip() or None
+                break
+        result[field] = {&quot;value&quot;: match, &quot;status&quot;: &quot;found&quot; if match else &quot;missing&quot;}
+    return result
+
+
+def main(argv: list[str] | None = None) -&gt; int:
+    parser = argparse.ArgumentParser(description=&quot;读取本地通知并输出字段核对表&quot;)
+    parser.add_argument(
+        &quot;path&quot;,
+        nargs=&quot;?&quot;,
+        default=str(BASE / &quot;notices&quot; / &quot;通知.txt&quot;),
+        help=&quot;通知文件路径；默认读取脚本旁的 notices/通知.txt&quot;,
+    )
+    parser.add_argument(&quot;--output&quot;, help=&quot;可选：把 JSON 写入这个文件&quot;)
+    args = parser.parse_args(argv)
+
+    path = Path(args.path)
+    if not path.is_file():
+        print(json.dumps({&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;file-not-found&quot;, &quot;path&quot;: str(path)}, ensure_ascii=False))
+        return 2
+
+    try:
+        text, encoding = read_text(path)
+    except UnicodeDecodeError as exc:
+        print(json.dumps({
+            &quot;status&quot;: &quot;error&quot;,
+            &quot;error&quot;: &quot;decode-failed&quot;,
+            &quot;path&quot;: str(path),
+            &quot;detail&quot;: str(exc),
+            &quot;hint&quot;: &quot;用编辑器另存为 UTF-8，或确认文件不是二进制/压缩包&quot;,
+        }, ensure_ascii=False))
+        return 3
+
+    fields = extract_fields(text)
+    report = {
+        &quot;status&quot;: &quot;ok&quot;,
+        &quot;path&quot;: str(path),
+        &quot;encoding&quot;: encoding,
+        &quot;line_count&quot;: len(text.splitlines()),
+        &quot;fields&quot;: fields,
+        &quot;missing&quot;: [name for name, item in fields.items() if item[&quot;status&quot;] == &quot;missing&quot;],
+    }
+    payload = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.output:
+        Path(args.output).write_text(payload + &quot;\n&quot;, encoding=&quot;utf-8&quot;)
+    print(payload)
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">python notice_report.py notices/通知.txt
+</code></pre>
+<p>预期输出（键的顺序可能因 Python 版本略有差异，值应一致）：</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;path&quot;: &quot;...\\notices\\通知.txt&quot;,
+  &quot;encoding&quot;: &quot;utf-8&quot;,
+  &quot;line_count&quot;: 5,
+  &quot;fields&quot;: {
+    &quot;活动&quot;: {&quot;value&quot;: &quot;社区读书会&quot;, &quot;status&quot;: &quot;found&quot;},
+    &quot;时间&quot;: {&quot;value&quot;: &quot;周六 14:00&quot;, &quot;status&quot;: &quot;found&quot;},
+    &quot;地点&quot;: {&quot;value&quot;: null, &quot;status&quot;: &quot;missing&quot;},
+    &quot;报名要求&quot;: {&quot;value&quot;: &quot;提前报名&quot;, &quot;status&quot;: &quot;found&quot;}
+  },
+  &quot;missing&quot;: [&quot;地点&quot;]
+}
+</code></pre>
+<p>注意几个决定：</p>
+<ul>
+<li>缺失地点输出 <code>null</code> 和 <code>missing</code>，不出一个“常见地点”的猜测。</li>
+<li>程序只认“字段：值”行，遇到表格、JSON 或更复杂的文档会读不到；这是有意的范围限制，C14 会把“切块、版本、来源”补上。</li>
+<li>提取时只移除字段名及紧随其后的一个分隔符，保留值中的冒号；例如 <code>时间：周六 14:00</code> 必须仍得到 <code>周六 14:00</code>。值为空时保留 <code>null</code>，不输出空字符串冒充已知值。</li>
+<li>退出码分开：找不到文件是 <code>2</code>，解码失败是 <code>3</code>，正常是 <code>0</code>。调用方可以据此区分失败，而不必解析中文错误句。</li>
+</ul>
+<h2 id="C11-section-a9652750d4" tabindex="-1">错误定位：先看最后一行，再缩小输入</h2>
+<p>故意把文件名写错：</p>
+<pre><code class="language-bash">python notice_report.py notices/不存在.txt
+</code></pre>
+<p>程序会输出 <code>&quot;error&quot;: &quot;file-not-found&quot;</code> 并返回退出码 2。如果你看到的是 Python 的 <code>Traceback</code>，说明错误发生在程序没有捕获的位置；先读最后一行，通常是 <code>FileNotFoundError</code>、<code>UnicodeDecodeError</code>、<code>JSONDecodeError</code> 或 <code>KeyError</code>，再往上看它指向你代码的哪一行。不要从第一行开始逐字读。</p>
+<p>第二个练习：把通知文件用 GBK 另存一次，再运行。程序会报告 <code>decode-failed</code>，提示另存为 UTF-8。你可以临时把 <code>read_text()</code> 改成先试 <code>gbk</code>，观察中文能否恢复；但交付时不要让程序偷偷尝试多种编码，否则读错文件也可能显示成“成功”。真实项目应在入口约定编码，并把例外写进错误信息。</p>
+<p>第三个练习：把某一行的全角冒号 <code>：</code> 改成半角 <code>:</code>，程序仍能读到，因为提取逻辑同时接受两种分隔符。再把“地点”写成“地 点”（中间加空格），程序会报告缺失。你要决定这是“格式不符合约定”还是“字段不存在”；本章选择后者，因为程序没有资格替原文补字。</p>
+<h2 id="C11-section-e69df56aa9" tabindex="-1">改一个条件：让程序输出 Markdown 核对表</h2>
+<p>只把 JSON 改成 Markdown 表格，不改变提取逻辑。最小改动是在 <code>report</code> 构造后加一个函数：</p>
+<pre><code class="language-python">def to_markdown(fields: dict[str, dict[str, str | None]]) -&gt; str:
+    rows = [&quot;| 字段 | 状态 | 原文值 |&quot;, &quot;| --- | --- | --- |&quot;]
+    for name, item in fields.items():
+        value = item[&quot;value&quot;] if item[&quot;value&quot;] is not None else &quot;（缺失）&quot;
+        rows.append(f&quot;| {name} | {item[&#39;status&#39;]} | {value} |&quot;)
+    return &quot;\n&quot;.join(rows)
+</code></pre>
+<p>然后在 <code>print(payload)</code> 前加：</p>
+<pre><code class="language-python">if args.output and args.output.endswith(&quot;.md&quot;):
+    Path(args.output).write_text(to_markdown(fields) + &quot;\n&quot;, encoding=&quot;utf-8&quot;)
+</code></pre>
+<p>这里暴露一个设计问题：同一个 <code>--output</code> 参数根据扩展名切换格式，容易让调用方误解。更稳妥的做法是加 <code>--format json|markdown</code> 显式选择。作业会让你改成显式格式，并补充未知格式的错误分支。</p>
+<h2 id="C11-section-a5f7169601" tabindex="-1">失败反例：看起来成功，其实没读</h2>
+<p>下面这种写法在演示里“总能输出”，但作为交付程序不合格：</p>
+<pre><code class="language-python">try:
+    text = Path(&quot;通知.txt&quot;).read_text()
+    print(&quot;读取成功&quot;)
+except Exception:
+    print(&quot;读取成功&quot;)
+</code></pre>
+<p>它在文件不存在、编码错误、权限不足时都打印“读取成功”，把失败抹平了。第二个坏例子是：</p>
+<pre><code class="language-python">place = &quot;待确认&quot;
+print(f&quot;地点：{place}&quot;)
+</code></pre>
+<p><code>待确认</code> 看起来像“已知但未定”，实际是把缺失伪装成字段值。正确的做法是保留 <code>null</code>/<code>missing</code>，并在报告中单独列出待回查项。</p>
+<p>第三个坏例子是把用户输入直接拼进 shell 或 <code>eval</code>。本章不需要执行任何通知内容；通知里的“忽略规则”“立即完成”等句子只是文本，程序不应把它当命令。到 C16 讲工具时，这个边界会更具体。</p>
+<h2 id="C11-section-ebc44dd5e6" tabindex="-1">与图、实验和后续章节的关系</h2>
+<p>下图把“原材料→任务约定→处理→逐项核验→交付”放在一条线上。本章只完成了最左端到“文本字段”那一步；图中的证据栏、失败项和交付说明会在 C17 汇总。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/materials-to-result.svg" alt="材料到结果的流程"><figcaption>图：从任务约定到交付的整条整理流程。本章只走到“文本字段”这一步；证据栏、失败项与交付说明在 C17 才补齐。</figcaption></figure>
+<p>你也可以打开旧的 <a href="evidence.html">X06 材料与结果核验</a> 实验，回看“地点缺失”和“两版冲突”如何被保留。那个实验是网页预置数据，不是本章程序；两者相同的地方是都拒绝替原文补缺失。</p>
+<p>本章项目增量：在你的练习目录建立 <code>notices/</code>、<code>notice_report.py</code> 和一份实际通知。下一章会用同一个目录启动本地 HTTP 服务，把“读文件”变成“发请求、收响应、检查状态码”。</p>
+<h2 id="C11-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>新建 <code>notices/通知2.txt</code>，故意包含半角冒号、空行、一行无关说明和缺失的“报名要求”。运行程序，保存输出 JSON，并用自己的话解释 <code>line_count</code> 为什么与“字段数”不同。</li>
+<li>给程序加 <code>--format json|markdown</code>，默认 <code>json</code>。非法格式必须以非零退出码失败，并说明可用值；不要静默回退。</li>
+<li>制造三种失败：文件不存在、GBK 编码、权限不足（可用只读目录或另一用户文件模拟）。分别记录终端输出、退出码和你定位到的第一处失败。权限问题应通过修改文件权限或换用有权读取的副本解决，不能靠捕获异常假装成功。</li>
+<li>把 <code>extract_fields()</code> 改成同时接受“字段: 值”和“字段：值”，但只对这四个字段生效；写一个测试输入，证明无关行不会被误收。</li>
+<li>解释：为什么 <code>Path(__file__).resolve().parent</code> 比直接写 <code>&quot;notices/通知.txt&quot;</code> 更适合交付给别人？</li>
+</ol>
+<p>答案与核对依据见 <a href="c11-answer.html">C11 答案</a>。先自己做，再对照；答案不是唯一写法。</p>
+<h2 id="C11-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>本章材料、通知样本和程序为课程自建，不需要外部账号。Python 标准库的行为以你本机版本的官方文档为准；本章不声称已在所有操作系统、所有终端编码下运行。程序只处理 UTF-8 文本和简单的“字段：值”行，不解析 PDF、图片或任意表格；这些限制会在 C14 和 C27 分别处理。终端里的路径、权限和编码错误必须通过实际环境解决，不能用“捕获所有异常”绕过。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c10.html">上一章 C10</a><a href="c11-answer.html">独立作答后核对</a><a href="c12.html">下一章 C12</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

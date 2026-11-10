@@ -1,0 +1,4 @@
+project D:\Users\claude\claude-code-book-main — broker not running
+  no processes
+
+Use --all to include other projects and exited global services.

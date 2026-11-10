@@ -1,0 +1,18 @@
+.DS_Store
+Thumbs.db
+node_modules/
+**/.hyperframes/
+**/.thumbnails/
+**/.waveform-cache/
+**/renders/
+!design/handdraw/renders/
+!design/handdraw/renders/**
+exports/cards/output/
+**/archive/
+__pycache__/
+*.log
+tmp/
+local-feedback/
+
+# local experiment outputs
+out/

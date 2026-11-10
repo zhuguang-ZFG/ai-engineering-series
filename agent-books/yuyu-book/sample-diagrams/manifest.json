@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "purpose": "Reviewed chapter-2 sample plates; source changes require regeneration and review.",
+  "diagrams": {
+    "cf962c47d0de": {
+      "source_sha256": "999a7416adc6c73464dfbcd6e9fd466208c75c4e9c58d4bd8830557fe4526828",
+      "svg_sha256": "f5c6669e068283fc89d1a10c9b16a0295b91ed5ad9cf48db8479bcef6eeed5bc"
+    },
+    "999dffc3698a": {
+      "source_sha256": "e1bb7606982759c237a153520407b3f055a572277983180a5618b9b5dbba5147",
+      "svg_sha256": "45373ee768f81ff81192deb931f1fbaa746832ef5e25db334a25e307d0b0ec04"
+    },
+    "96244921f829": {
+      "source_sha256": "ec2dd8fc8f878677672e03f2f251cb196f70bf07bfa6862345386dd7792e02a2",
+      "svg_sha256": "66cfb4f01ff9949369f9686f67afd08f5c655b819c696fbf7c46ed1bfd2b4262"
+    },
+    "f74c94de797d": {
+      "source_sha256": "52220e8b23773af32ae354f525daac860a7c675514dbb3e269073ad1517d8bbd",
+      "svg_sha256": "f2ba54c4ab8670e204c1732eb91c7282a25b43f3d6d052d1dc48893c8fbbd74e"
+    },
+    "183f00b40cd2": {
+      "source_sha256": "b8149ace00f24a77a2873eafb47449ee94ffb81abb95cdd3b774f7f48977dafb",
+      "svg_sha256": "7c0864988fb0f049015b8c7d969a38fa40f02d214f0abbaaffa2e9f4625481ff"
+    },
+    "f44693dc1ec7": {
+      "source_sha256": "2f6bc3a6b4ac32e67b7bdc2f18c5c2f2b49fab2089d99ea32d988a3fdd95ec4c",
+      "svg_sha256": "88d0c8a5503b708871d7e39d73e73dbb7a20c12d6e7edf034e8f4fb7ba05f84f"
+    },
+    "5db29e80e63b": {
+      "source_sha256": "1e0f70728d578c712d9909c6dd2033f561b84d723d267ae016a96fe96f92e866",
+      "svg_sha256": "89def25e1a0bf3792689c72134d98971fd2b820d879cc4e1f911894453104b2a"
+    },
+    "7470b3643d5c": {
+      "source_sha256": "98f0cb7e57dd28f50edd33e8180d50d9607b0c7cbc2f96d60658c4c1e591a285",
+      "svg_sha256": "c5edd686ab1ecdbe61e35a856c5f2e69cb200a2c84eda6b2187516c85bfaa16b"
+    },
+    "08bee8a6c4ab": {
+      "source_sha256": "b102c2fa0fa337c9025113a394e1484ffb680a7ba143e8ce896d06fd9e53d2f5",
+      "svg_sha256": "7225358298f09ebd3bc5eb4f04d1324a388de53406c9abeb780efd1c017dc8c0"
+    },
+    "4cb92fa51a9b": {
+      "source_sha256": "dab338a371adf6f319b26276ff2fdaf07c15e508c6058458953659b7c046cf23",
+      "svg_sha256": "58985e0a5fb5cb83a2d1ece9247fd685a4aadb0ae55d3be7f243135142c3b059"
+    }
+  }
+}

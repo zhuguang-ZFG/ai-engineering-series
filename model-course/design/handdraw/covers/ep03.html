@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>EP.03 封面</title>
+<link rel="stylesheet" href="cover.css" />
+</head>
+<body>
+  <div class="head">
+    <div class="kicker">VIBE CODING 101 · EP.03</div>
+    <div class="rule"></div>
+    <h1>这条蛇，<br /><span class="g hl">住进项目里</span></h1>
+  </div>
+
+  <div class="art">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="绿色方块蛇拖着一只行李箱，搬进一栋用文件夹搭成的房子，房门是终端窗口，门牌写着 git">
+      <defs>
+        <filter id="hard" x="-8%" y="-8%" width="116%" height="118%">
+          <feDropShadow dx="0" dy="9" stdDeviation="0" flood-color="#1f2328" flood-opacity="0.12" />
+        </filter>
+      </defs>
+
+      <!-- folder house -->
+      <g filter="url(#hard)">
+        <!-- file-folder tabs -->
+        <path d="M300 214h150a18 18 0 0 1 18 18v28H282v-28a18 18 0 0 1 18-18Z" fill="#d3efd9" stroke="#1f2328" stroke-width="8" />
+        <path d="M470 190h150a18 18 0 0 1 18 18v52H452v-52a18 18 0 0 1 18-18Z" fill="#fffdf8" stroke="#1f2328" stroke-width="8" />
+        <path d="M640 214h130a18 18 0 0 1 18 18v28H622v-28a18 18 0 0 1 18-18Z" fill="#d3efd9" stroke="#1f2328" stroke-width="8" />
+        <!-- folder body -->
+        <path d="M188 268h640a22 22 0 0 1 22 22v452a22 22 0 0 1-22 22H188a22 22 0 0 1-22-22V290a22 22 0 0 1 22-22Z"
+              fill="#fffdf8" stroke="#1f2328" stroke-width="9" />
+      </g>
+
+      <!-- git door plate -->
+      <g>
+        <rect x="352" y="330" width="112" height="56" rx="12" fill="#fbfaf6" stroke="#1f2328" stroke-width="6" />
+        <text x="408" y="368" fill="#1f2328" font-size="34" font-weight="700" text-anchor="middle"
+              font-family="'JetBrains Mono', ui-monospace, monospace">git</text>
+      </g>
+
+      <!-- terminal door -->
+      <g>
+        <rect x="252" y="410" width="304" height="356" rx="20" fill="#1f2328" />
+        <path d="M252 470h304" stroke="#3fb950" stroke-width="5" opacity=".5" />
+        <text x="286" y="556" fill="#3fb950" font-size="40" font-weight="700"
+              font-family="'JetBrains Mono', ui-monospace, monospace">$ git init</text>
+        <text x="286" y="616" fill="#f6f8fa" font-size="34"
+              font-family="'JetBrains Mono', ui-monospace, monospace">src/</text>
+        <text x="286" y="668" fill="#f6f8fa" font-size="34"
+              font-family="'JetBrains Mono', ui-monospace, monospace">snake.js</text>
+        <rect x="286" y="700" width="26" height="34" fill="#3fb950" />
+      </g>
+
+      <!-- suitcase -->
+      <g transform="translate(604 616)">
+        <path d="M34 0v-26a20 20 0 0 1 20-20h32a20 20 0 0 1 20 20v26" fill="none" stroke="#1f2328" stroke-width="9" stroke-linecap="round" />
+        <rect x="0" y="0" width="146" height="118" rx="18" fill="#e2601f" stroke="#1f2328" stroke-width="8" />
+        <path d="M0 46h146" stroke="#1f2328" stroke-width="7" />
+        <rect x="62" y="36" width="22" height="20" rx="4" fill="#fbfaf6" stroke="#1f2328" stroke-width="5" />
+      </g>
+
+      <!-- snake walking in from the right -->
+      <g fill="#1f883d" stroke="#1f2328" stroke-width="8">
+        <rect x="836" y="700" width="96" height="96" rx="24" />
+        <rect x="826" y="596" width="96" height="96" rx="24" />
+        <rect x="842" y="494" width="96" height="96" rx="24" />
+      </g>
+      <g transform="translate(770 396) rotate(6)">
+        <rect x="0" y="0" width="128" height="118" rx="32" fill="#1f883d" stroke="#1f2328" stroke-width="9" />
+        <circle cx="42" cy="46" r="10" fill="#1f2328" />
+        <circle cx="90" cy="46" r="10" fill="#1f2328" />
+        <path d="M54 82q16 12 32 0" fill="none" stroke="#1f2328" stroke-width="8" stroke-linecap="round" />
+        <path d="M-2 104q-40 10-22 30" fill="none" stroke="#e2601f" stroke-width="8" stroke-linecap="round" />
+      </g>
+      <!-- motion lines -->
+      <g stroke="#57606a" stroke-width="6" stroke-linecap="round" opacity=".45">
+        <path d="M944 470h44" /><path d="M952 508h34" /><path d="M940 654h48" /><path d="M948 692h36" />
+      </g>
+
+      <path d="M60 962q140 10 280 0t280 0t280 0" fill="none" stroke="#1f2328" stroke-width="6"
+            stroke-linecap="round" opacity=".28" />
+    </svg>
+  </div>
+
+  <div class="foot"><span>VIBE CODING 101</span><span class="dot">●</span><span>BEGINNER COURSE</span></div>
+</body>
+</html>

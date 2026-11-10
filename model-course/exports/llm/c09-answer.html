@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C09 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C09-answer-section-9f7ad718ee" tabindex="-1">C09 作业核对：训练为什么能改变预测</h1>
+<p>题目在 <a href="c09.html">C09 正文</a>，容差 ±0.002。按“更新前—梯度—更新后”顺序给值。</p>
+<h2 id="C09-answer-section-ce995a6dcc" tabindex="-1">一、更新前的概率</h2>
+<p>分数 <code>[1,0]</code>：</p>
+<ul>
+<li><code>exp(1)=2.71828</code>，<code>exp(0)=1</code></li>
+<li>总和 <code>3.71828</code></li>
+<li>概率 <code>[0.7311, 0.2689]</code></li>
+</ul>
+<p>目标第一个，更新前损失 <code>−ln(0.7311)≈0.3133</code>。</p>
+<h2 id="C09-answer-section-3dc806043b" tabindex="-1">二、梯度与更新</h2>
+<p>softmax 交叉熵梯度 = 预测概率 − 目标指示值：</p>
+<ul>
+<li>第一个：<code>0.7311 − 1 = −0.2689</code></li>
+<li>第二个：<code>0.2689 − 0 = 0.2689</code></li>
+</ul>
+<p>学习率 0.5：</p>
+<ul>
+<li>新分数：<code>1 − 0.5×(−0.2689) = 1.1345</code>；<code>0 − 0.5×0.2689 = −0.1345</code></li>
+</ul>
+<h2 id="C09-answer-section-747fbbca2d" tabindex="-1">三、更新后的概率与损失</h2>
+<ul>
+<li><code>exp(1.1345)≈3.1095</code>，<code>exp(−0.1345)≈0.8742</code></li>
+<li>总和 <code>≈3.9837</code></li>
+<li>概率 <code>[0.7806, 0.2194]</code></li>
+<li>损失 <code>−ln(0.7806)≈0.2477</code></li>
+</ul>
+<p>损失从约 0.3133 降到约 0.2477，下降了。目标候选概率上升，另一个下降，符合“朝降低损失的方向走一步”。</p>
+<h2 id="C09-answer-section-e66a6b1ee3" tabindex="-1">四、链式法则</h2>
+<p><code>∂L/∂w = (∂L/∂s)×h = (−0.4)×2 = −0.8</code></p>
+<p>更新：<code>w = 1.5 − 0.1×(−0.8) = 1.58</code>。负梯度意味着增大 w 会降低损失，所以减去负数等于加上 0.08。</p>
+<h2 id="C09-answer-section-bcb24bc557" tabindex="-1">五、序列目标</h2>
+<p>序列“A B C”：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>输入</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>A</td>
+<td>B</td>
+</tr>
+<tr>
+<td>1</td>
+<td>A B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A B C</td>
+<td>无下一个</td>
+</tr>
+</tbody></table>
+<p>最后一个位置没有下一个 token，常见处理是：不计算该位置损失，或在序列末尾加结束符 EOS 作为目标。不能拿 C 预测 C 自己，也不能让位置 2 看到未来。</p>
+<h2 id="C09-answer-section-df709307d7" tabindex="-1">六、损失降但提取错地点</h2>
+<p>三句话即可：</p>
+<ol>
+<li>训练损失衡量的是这批材料上的下一个 token 预测，不是“通知字段提取正确率”。</li>
+<li>模型可能学到材料里的偶然线索（例如“活动”后总跟某个地点词），换一份通知就失效。</li>
+<li>训练目标或材料本身可能错；损失下降只会让模型更熟悉这些目标，不会自动核验事实。</li>
+</ol>
+<p>还可以补：训练集与留出集若来自同一批模板，分数会虚高；任务层要另设字段级检查。</p>
+<h2 id="C09-answer-section-c175c41c89" tabindex="-1">七、评分要点</h2>
+<ul>
+<li>更新前概率正确：2 分。</li>
+<li>两个梯度正确：2 分。</li>
+<li>更新后分数、概率、损失正确且说明下降：4 分。</li>
+<li>链式法则与更新值正确：2 分。</li>
+<li>目标错位表正确，最后位置处理合理：2 分。</li>
+<li>三句话分别覆盖“指标不同、虚假线索、目标/材料可能错”：3 分。</li>
+</ul>
+<p>关键失败：用当前位置预测自己；把训练损失当任务准确率；学习率符号弄反；把一次更新说成“模型学会了”。</p>
+</article><nav class="lesson-nav"><a href="c09.html">返回 C09 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,471 @@
+{
+  "date": "2026-11-09",
+  "status": "passed-local-technical-scope",
+  "scope": "source-extract/2 exact citation positions and full frozen copy/extract comparison",
+  "sourceHash": "79953c30f12ae465c336082e0a6c41ef562282b20a8a1cab832f8d8ffd43508a",
+  "checks": {
+    "unittest": {
+      "total": 28,
+      "citationTests": 14,
+      "skipped": 0
+    },
+    "nodeTests": 36,
+    "npmTest": "passed",
+    "unsupportedModeCli": {
+      "status": "invalid-request",
+      "exitCode": 1,
+      "modelCalls": 0,
+      "documentAccess": false
+    },
+    "epubcheck": {
+      "version": "5.3.0",
+      "editions": 3,
+      "fatals": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "editions": {
+      "status": "passed",
+      "sourceHash": "79953c30f12ae465c336082e0a6c41ef562282b20a8a1cab832f8d8ffd43508a",
+      "editions": {
+        "llm-course": {
+          "pdfPages": 446,
+          "outlineEntries": 436,
+          "chapters": 30,
+          "images": 37
+        },
+        "llm-course-answers": {
+          "pdfPages": 207,
+          "outlineEntries": 281,
+          "chapters": 30,
+          "images": 0
+        }
+      },
+      "epubLocalLinks": {
+        "llm-course": 558,
+        "llm-course-answers": 311
+      },
+      "epubReflowLayouts": 240,
+      "webLayouts": 44,
+      "screenshots": [
+        "specs/llm-learning-redesign/evidence/extractive-03-c13-mobile.jpg",
+        "specs/llm-learning-redesign/evidence/extractive-03-c15-desktop.jpg",
+        "specs/llm-learning-redesign/evidence/extractive-03-pdf-review.jpg"
+      ],
+      "failures": [],
+      "pdfInspectedPages": [
+        172,
+        200,
+        221
+      ]
+    },
+    "documents": {
+      "status": "passed",
+      "markdownFiles": 22,
+      "localLinks": 300
+    },
+    "task_verify": "unverified: no callable tool/project baseline",
+    "accessibility": {
+      "pages": 92,
+      "keyboardFlows": 4,
+      "offlineRequests": 0
+    },
+    "reading": {
+      "flows": 15,
+      "layouts": 50,
+      "offlineRequests": 0
+    },
+    "newTestsReview": "Local execution passed; independent review/new baseline and task_verify remain unverified.",
+    "assistantCliSyntax": {
+      "file": "extractive-03-cli-syntax.json",
+      "commands": 36,
+      "scope": "argparse only; not full chapter runtime audit"
+    },
+    "inspectReadExamples": {
+      "c13": {
+        "exitCode": 0,
+        "docId": "station-log",
+        "sourceSha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206"
+      },
+      "c17": {
+        "exitCode": 0,
+        "docId": "equipment-guide",
+        "sourceSha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b"
+      }
+    }
+  },
+  "chapterCommands": "extractive-03-chapter-commands.json",
+  "comparison": "extractive-03-comparison.json",
+  "replay": "extractive-03-replay.json",
+  "inputs": [
+    {
+      "file": "book/llm/examples/assistant/assistant.py",
+      "sha256Lf": "1b3857e3b76193d01577ba0a12fee2f674371d1ad48504f11d57ce1777b3247b"
+    },
+    {
+      "file": "book/llm/examples/assistant/README.md",
+      "sha256Lf": "966ec706bdc3c848f760c53c634cc7fecff626eaff8a18b79b0084c4ac056b4d"
+    },
+    {
+      "file": "book/llm/examples/assistant/EVALUATION-03.md",
+      "sha256Lf": "b906c822aae7a77a4798f3447fab922060dd9409750ee7d4d6ad921f9de248e7"
+    },
+    {
+      "file": "book/llm/examples/assistant/eval-manifest.json",
+      "sha256Lf": "5255ec386cd139b139cb72645c1f9de2c35b1ba569d8175c5eb50ab263b805fd"
+    },
+    {
+      "file": "book/llm/course.json",
+      "sha256Lf": "ba9200e7c9963d3f45a487469753003f8383457bd7176dd0fd86f7a12e638fc4"
+    },
+    {
+      "file": "book/llm/lessons/c13.md",
+      "sha256Lf": "7fc8e86e5a52b6d32298af46b1be68834eeae688790952ef3bf1aa4b761dc150"
+    },
+    {
+      "file": "book/llm/lessons/c14.md",
+      "sha256Lf": "8d0bc53fc586bbde4dbdc5086905709d3ee7b59772ddc83a7fa81975fa44a55d"
+    },
+    {
+      "file": "book/llm/lessons/c16.md",
+      "sha256Lf": "d0c4b6b2054c862c1497bd6559e9d2078bc8e995bf95269da7f427e47eb9d781"
+    },
+    {
+      "file": "book/llm/deepening/c14-answer.md",
+      "sha256Lf": "e11f90fcbdb642239fea3557a08d182be6aca43c2f8a0fb0b39fd6ec76d92fc4"
+    },
+    {
+      "file": "book/llm/deepening/c16-answer.md",
+      "sha256Lf": "a8ceb1e42fdd9c52932ced00cf4d559bd551095919ee1ffc8528bf6d1df45803"
+    },
+    {
+      "file": "book/llm/lessons/c15.md",
+      "sha256Lf": "25673b54d2a07c682b6b0c40c4030d7ea4cd8e4bd61de02a7c6ef37afeabed44"
+    },
+    {
+      "file": "book/llm/lessons/c17.md",
+      "sha256Lf": "b1a4b44a002ba81f9d91beed6f9836142b287c08de6433c0ad71a3366640f299"
+    },
+    {
+      "file": "book/llm/deepening/c13-answer.md",
+      "sha256Lf": "b09a937d9595bf890c312b56284263a0179f28d6f4b52369a42706b6aafa752c"
+    },
+    {
+      "file": "scripts/test_llm_citations.py",
+      "sha256Lf": "93172bd9027f31b863e495586f5336af9e2ad3d663c7767773a655c5bc76a681"
+    }
+  ],
+  "generated": [
+    {
+      "file": "exports/llm/c01-answer.html",
+      "sha256Lf": "39d9a0f78e48c1814acfb738b705d745f18b1b361e25f1e9f9bd276c29516bf7"
+    },
+    {
+      "file": "exports/llm/c01.html",
+      "sha256Lf": "eef3f73d31a73a16d374e544626518868052a5d6341696ee0c3d8b06aa12c398"
+    },
+    {
+      "file": "exports/llm/c02-answer.html",
+      "sha256Lf": "0969d53ffdf1d3d193da9879eac15ff66357ec8fa7e37189704f7cb9db1e721c"
+    },
+    {
+      "file": "exports/llm/c02.html",
+      "sha256Lf": "9f3531f5e0e7636b0a62c77f321459b3e6191731c5ebcf4fa88b6a1d9aa5fd9a"
+    },
+    {
+      "file": "exports/llm/c03-answer.html",
+      "sha256Lf": "2168b7e09cde79d50f90801ff03d87ad3a9e7f11a3be24999010cf9befcbd322"
+    },
+    {
+      "file": "exports/llm/c03.html",
+      "sha256Lf": "1150d6c53090c3fac902e47143f0ba442b39058f553b85900df1bf5ed85000e6"
+    },
+    {
+      "file": "exports/llm/c04-answer.html",
+      "sha256Lf": "39b8da7662c95fa47665abb63fe26876840ceebc55f5fb75c4a4a2fa34c55a62"
+    },
+    {
+      "file": "exports/llm/c04.html",
+      "sha256Lf": "5ae9f52ffd5aaf0f0225734ef1bb5ab9a0e4db832c65aeb55b226c17e1546e94"
+    },
+    {
+      "file": "exports/llm/c05-answer.html",
+      "sha256Lf": "804c584e78bf1ced92bdafbb7dd33d5b90cb5f1667d6048373bca0736a305abd"
+    },
+    {
+      "file": "exports/llm/c05.html",
+      "sha256Lf": "824c8bdecc47e8ec56a8caf882f4308df83d24da8440b896d7da93e97e1ee2ff"
+    },
+    {
+      "file": "exports/llm/c06-answer.html",
+      "sha256Lf": "dab61d54edcf384f84da0294122cdcae9e6002d0c8ed39475a827261f0eb6638"
+    },
+    {
+      "file": "exports/llm/c06.html",
+      "sha256Lf": "d560f77e09620d9765df4bee33b6656e99085eece3245ae2b4e13cbba6932941"
+    },
+    {
+      "file": "exports/llm/c07-answer.html",
+      "sha256Lf": "5305417f5db93eeeff5108322814e0a4e48301354840bf9f8f6b229f18007237"
+    },
+    {
+      "file": "exports/llm/c07.html",
+      "sha256Lf": "2c3e8bbeee6c3708251c312854d888fd5987b0c88fee654bea7fb4037642c0ec"
+    },
+    {
+      "file": "exports/llm/c08-answer.html",
+      "sha256Lf": "3bdaadb31cd1d189b06fc915e79d2fccd0ba1d5355aaa1ec1cf4ebb2456f71ec"
+    },
+    {
+      "file": "exports/llm/c08.html",
+      "sha256Lf": "ac10f65c86e61edf89112f20ce463a8f585e9328a75ed53e57d72337941bfa4b"
+    },
+    {
+      "file": "exports/llm/c09-answer.html",
+      "sha256Lf": "ff01fc76b8ce125f5fe0f5831cff36e64ee5c378cafdf479f48f14a981cbc2bc"
+    },
+    {
+      "file": "exports/llm/c09.html",
+      "sha256Lf": "e9f0c4a410ed94933c821a5d54d2612acce1f23071c6adb52eb41b99fd495f01"
+    },
+    {
+      "file": "exports/llm/c10-answer.html",
+      "sha256Lf": "95a8a7a4713f74d2c3ea304b8346ae2655cd12e56f82b267485d9f750165533f"
+    },
+    {
+      "file": "exports/llm/c10.html",
+      "sha256Lf": "a1f93a8c5d8deebe99579627c0fc2b071a755960ba8133a151a9c7bd4f8f8f54"
+    },
+    {
+      "file": "exports/llm/c11-answer.html",
+      "sha256Lf": "eae0f46c5c2f7b3b6a86b6416f6d3a6c394a685934ec54e5fca4bbd924d88d66"
+    },
+    {
+      "file": "exports/llm/c11.html",
+      "sha256Lf": "08869088d385717fccacf1e0cf6abaa3e5fa0a5ba992f04cb8f90d9eb352b80a"
+    },
+    {
+      "file": "exports/llm/c12-answer.html",
+      "sha256Lf": "50a16cb5f000f737ee3b6739a96110dd23ff3b88288a8a396f56f675c5448bf1"
+    },
+    {
+      "file": "exports/llm/c12.html",
+      "sha256Lf": "e8c3f57ba02221dc63c6bab0486dbaf6ca9416da7f5a40b94db2c7e21ee8818e"
+    },
+    {
+      "file": "exports/llm/c13-answer.html",
+      "sha256Lf": "47f169b8c2934f259c7aaaa37ff66fa6c603bcb3caabc6a00ec0fa6294b72528"
+    },
+    {
+      "file": "exports/llm/c13.html",
+      "sha256Lf": "15ab65d4eeaadf789139d2c55eb25bbd0c641fdf019b4d00ed7bad21f5c9e3b2"
+    },
+    {
+      "file": "exports/llm/c14-answer.html",
+      "sha256Lf": "016c502dc405aad579948a93f60cb1c5be131009d89ff297e6677d3f06b2949b"
+    },
+    {
+      "file": "exports/llm/c14.html",
+      "sha256Lf": "10e6111448923df32f65d2fdbc62dfe78017dfbd33961458e735d1dae264bfab"
+    },
+    {
+      "file": "exports/llm/c15-answer.html",
+      "sha256Lf": "bfc2781bd669ae0625c27a45f9ef54c3f4253f66f3be4376c9eb1e61ee8124cc"
+    },
+    {
+      "file": "exports/llm/c15.html",
+      "sha256Lf": "4624b297237a048701bc2b88cab3f3a260023572e9ea16bde5bc21122424e525"
+    },
+    {
+      "file": "exports/llm/c16-answer.html",
+      "sha256Lf": "7ee261c643d59de5374587dd031b1c68e0cfc5e2cba47e93a6540ea76d969dee"
+    },
+    {
+      "file": "exports/llm/c16.html",
+      "sha256Lf": "6ef1b83cfdbbf3b4464a8a842c9e4d6d691e3259a01931d2b84f64e84b51760e"
+    },
+    {
+      "file": "exports/llm/c17-answer.html",
+      "sha256Lf": "3369ee04d5197623c4f35664cfb989c16d6bdbfaeddd1c9408c5d0ae0ee3cd17"
+    },
+    {
+      "file": "exports/llm/c17.html",
+      "sha256Lf": "f12992438b4ac97b712d35db8f428673b7c212f3c4f63f9c65dbd4d244cf0291"
+    },
+    {
+      "file": "exports/llm/c18-answer.html",
+      "sha256Lf": "9729d8717f9de33b4634c3876d77ef693c150720e5c6d9f3ce7be9f3f808c236"
+    },
+    {
+      "file": "exports/llm/c18.html",
+      "sha256Lf": "e2c51ae274a133ae2dc95355974b3234fb9ebf9391e44f624f7a2c7516fd44da"
+    },
+    {
+      "file": "exports/llm/c19-answer.html",
+      "sha256Lf": "b5b4de8b503dc640c08a45cb12f9f69b6819897a43846742d53a2d3471c99454"
+    },
+    {
+      "file": "exports/llm/c19.html",
+      "sha256Lf": "42044f330f700c4595a8e4b8e8396ddda23bfa645d70749321010aa30ea769be"
+    },
+    {
+      "file": "exports/llm/c20-answer.html",
+      "sha256Lf": "3334309f25c264993da33be3adf1d98ace097573dc3a84b475889da235e6ab52"
+    },
+    {
+      "file": "exports/llm/c20.html",
+      "sha256Lf": "4bcd5ae7aa6fed9499700571013773fad30178eddb199b439dc94c6a41558dc6"
+    },
+    {
+      "file": "exports/llm/c21-answer.html",
+      "sha256Lf": "fe2ed2bf09f20586454034ca08cebc4950c8ab7efc0b29ccb9f27963561c8a80"
+    },
+    {
+      "file": "exports/llm/c21.html",
+      "sha256Lf": "326ad7a1102df395b0534ce3467f8d6260ebcd19ca420411dd31a55be7af76e4"
+    },
+    {
+      "file": "exports/llm/c22-answer.html",
+      "sha256Lf": "96b85bb981a5cdaa590bb91360a7ac9e3512a198bc80c14266c46c130711d7f8"
+    },
+    {
+      "file": "exports/llm/c22.html",
+      "sha256Lf": "41316c8576e31dfeac6d3861b760c0e616b6a206e76aadbd580f921c77e18fc1"
+    },
+    {
+      "file": "exports/llm/c23-answer.html",
+      "sha256Lf": "711c39aecde7773c8fbb33020e17af622c01882b2f231ac9c3444646f7f22bc3"
+    },
+    {
+      "file": "exports/llm/c23.html",
+      "sha256Lf": "b2e9844e3d457e6a4b1e9e79059984e29f7956f27303e7383130a92928ebf878"
+    },
+    {
+      "file": "exports/llm/c24-answer.html",
+      "sha256Lf": "a8ed98c26e24ff940e1b1b6a3914ca7f20bc5e6f0d6de724d0e949efc2bc2eb3"
+    },
+    {
+      "file": "exports/llm/c24.html",
+      "sha256Lf": "f8d8bf2eb20f2cc0b5e3c34901e2b0a3b5bc814e74adac343ad6dbee299f82e8"
+    },
+    {
+      "file": "exports/llm/c25-answer.html",
+      "sha256Lf": "340d6ea288a80dd8c2d70286653493543e5b5c72787066ff3e62175e1fbd0c71"
+    },
+    {
+      "file": "exports/llm/c25.html",
+      "sha256Lf": "225e05707915cae4d939339f60158aa1be0ba414294d5bbf3a84dbeb3083091c"
+    },
+    {
+      "file": "exports/llm/c26-answer.html",
+      "sha256Lf": "ae0f44f5df51b9a9a42757c923a94676ebce3476f013f2e9b016e211ab4e4c94"
+    },
+    {
+      "file": "exports/llm/c26.html",
+      "sha256Lf": "7f248990eab71093439b85b37a46e49250f5691a145a35071c439482a7d515c9"
+    },
+    {
+      "file": "exports/llm/c27-answer.html",
+      "sha256Lf": "34e2d0cff879c6a3947ab1c6821a65075ad2ef43894848747245cdb436830302"
+    },
+    {
+      "file": "exports/llm/c27.html",
+      "sha256Lf": "acdc566ce3eaf059a979321e3079e0350e8409d045969b5b1c8ed90cfea1dd80"
+    },
+    {
+      "file": "exports/llm/c28-answer.html",
+      "sha256Lf": "503456e4185d1b46fb31065febd292bf18b864cfe03f1c0af3807caae717959d"
+    },
+    {
+      "file": "exports/llm/c28.html",
+      "sha256Lf": "fcc3686324b99c275360c976f3ffe9df305b36419eafaaea84f7cd505739e0b5"
+    },
+    {
+      "file": "exports/llm/c29-answer.html",
+      "sha256Lf": "667272bcd1991b9d39166eac79bac5d2bf98656a2349076388db2d9f3949a48d"
+    },
+    {
+      "file": "exports/llm/c29.html",
+      "sha256Lf": "00165ef763b753c04f4a32b388c93ff8c840ba23c3c0c06e0455986162d66fdc"
+    },
+    {
+      "file": "exports/llm/c30-answer.html",
+      "sha256Lf": "7787af3fa3a72016bc964683d716b4a29ce43bd886b4a7307b46edfb522c9c83"
+    },
+    {
+      "file": "exports/llm/c30.html",
+      "sha256Lf": "f1cb98a640379e05ce88e91009346ad154bb2bd39a6b40af6cf846388a90e74d"
+    },
+    {
+      "file": "exports/llm/cards.html",
+      "sha256Lf": "4924662dedfba7e809df876f8d9be732bcbe3cdef62afe09adcee4140010800b"
+    },
+    {
+      "file": "exports/llm/check-understanding.html",
+      "sha256Lf": "d5f6d994994d46a9fdc81491a1042a8d132964ab607e8b15fac2af78595b127b"
+    },
+    {
+      "file": "exports/llm/context-reference.html",
+      "sha256Lf": "b5659c197037d0a543aee58d6b4ab49986114f1565664d53e3631f26182eef4b"
+    },
+    {
+      "file": "exports/llm/context.html",
+      "sha256Lf": "932e05c7ff5c431f33da656eae2f5e790ca4e5745e5460a6945a064e4d900db4"
+    },
+    {
+      "file": "exports/llm/course.html",
+      "sha256Lf": "d304fb4cd8e5b174fab9d50a4426aef725d75940664f603cf80a4a6c60a39efd"
+    },
+    {
+      "file": "deliverables/llm-course-answers.pdf",
+      "sha256": "56d860f3d0c7d9fe0d4941347eb80af1d1be8fb7289f08c3b533c13f07a113bc"
+    },
+    {
+      "file": "deliverables/llm-course.pdf",
+      "sha256": "b7110a223cdea90319c1c5a508b78298e0399c240fa315b8e2f37a295e49662c"
+    },
+    {
+      "file": "deliverables/llm-explained-handdraw.pdf",
+      "sha256": "ab885bc691b688fe234a484a6537d4eeea3853204fc9fce89ab3f96e32b403e8"
+    },
+    {
+      "file": "deliverables/llm-reading-guide.pdf",
+      "sha256": "54bdcce64d9e02be8da841676db45c3163b41c76c26d319ed0c254d64aabe949"
+    },
+    {
+      "file": "deliverables/llm-reading-tasks.pdf",
+      "sha256": "6f3adaa083a27d0ad536d8df36e4bf3ff702241bd7ea1ab960e70e7df2ad877c"
+    },
+    {
+      "file": "deliverables/llm-course-answers.epub",
+      "sha256": "9b752826b2ed058f1951d412c594fc4e1d56932842c0bdb02b109f5a03924bf2"
+    },
+    {
+      "file": "deliverables/llm-course.epub",
+      "sha256": "0cde680a4209bef4518d1b15abb16c61895d21d44fe0bd7a7cb75a3d9e017dfa"
+    },
+    {
+      "file": "deliverables/llm-explained-handdraw.epub",
+      "sha256": "e350968674393acdc9450ed462cabd001c647e528662d3d1e25dcd2626b614d2"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/extractive-03-c13-mobile.jpg",
+      "sha256": "6083447979c7a29486cc30ad52797de075da80ab11f562916acc9bdf517e546f"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/extractive-03-c15-desktop.jpg",
+      "sha256": "9f4bd4ecf9a8e6141bcfeab0566ba4bfd193af903eb2b7d7ccc2a76c4326e9d7"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/extractive-03-pdf-review.jpg",
+      "sha256": "e140b1cefbad7978a4e53d8b3a2ee646a6c92548ec7f0a1743664fc5de0be821"
+    }
+  ],
+  "remaining": [
+    "Original 1.5B new-version full comparison remains pending after two incomplete attempts; complete 0.5B runs are a separate experiment.",
+    "K3 model quality and unsupported agent/extract remain failures against original full rubric",
+    "C11-C30 full runtime audit and K4 integrated evidence",
+    "Unfamiliar-topic independent delivery and K1-K5 human learning",
+    "Independent ebook reader and real screen-reader acceptance"
+  ]
+}

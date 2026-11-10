@@ -1,0 +1,15 @@
+$ omp models find flash
+# 输出含本机私有 provider 名与模型 id，全部脱敏为 <provider>/<model>；此处保留的是输出形状与统计
+<provider> (1)
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+<provider> (7)
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+│ <model> │ <context> │ <max-out> │ <thinking> │ <images> │
+
+（脱敏后统计：匹配行 8 条，provider 分组 2 个）
+exit=0

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>图形与动画（Canvas / SVG / WebGL） · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 108 / 195</p><article><h1 id="图形与动画canvas--svg--webgl">图形与动画（Canvas / SVG / WebGL）</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#图形与动画基础canvas-与他的朋友们">图形与动画基础：Canvas 与他的朋友们</a><ul><li><a href="#1-canvas定义">1. Canvas定义</a></li><li><a href="#2-第一笔理解反直觉的坐标系">2. 第一笔：理解反直觉的坐标系</a></li><li><a href="#3-逐帧动画flipbook-模式与平滑优化">3. 逐帧动画：Flipbook 模式与平滑优化</a></li><li><a href="#4-canvas-交互检测命中判定算法">4. Canvas 交互检测：命中判定算法</a></li><li><a href="#5-解放算力粒子系统与视觉魔法">5. 解放算力：粒子系统与视觉魔法</a></li><li><a href="#6-守护-fps-荣耀应对高烧的-cpu-的方法">6. 守护 FPS 荣耀：应对高烧的 CPU 的方法</a></li><li><a href="#7-专业名词总结">7. 专业名词总结</a></li></ul></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/graphics-animation.html">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<h2 id="图形与动画基础canvas-与他的朋友们">图形与动画基础：Canvas 与他的朋友们</h2>
+<blockquote>
+<p><strong>核心问题</strong></p>
+</blockquote>
+<p>以前的网页只能展示干巴巴的文字和图片。但如果你想做打砖块游戏、华丽的动态特效、或是可以自由拖拽的数据报表，仅仅靠 <code>&lt;div&gt;</code> 是远远不够的。这就是 <strong>Canvas（画布）</strong> 诞生的原因。</p>
+<p>本指南将带你从画下第一条线开始，一路打怪升级，最终亲手写出能在浏览器中流畅运行 60 帧的粒子引擎。</p>
+<h3 id="1-canvas定义">1. Canvas定义</h3>
+<p>如果说早期的网页是用<strong>乐高积木</strong>（HTML 标签）拼凑起来的静态模型，那么 HTML5 的 <code>&lt;canvas&gt;</code> 标签就是扔给你一张巨大的数字白纸，然后递给你一支靠代码控制的画笔，剩下的全交给你自由发挥。</p>
+<p>这里面的画没有任何标签结构。你用画笔涂上去的心血，一旦落笔就变成了最纯粹的**“像素颜料”**。</p>
+<h4 id="11-canvas-vs-svg两种不同流派的艺术家">1.1 Canvas vs SVG：两种不同流派的艺术家</h4>
+<p>在前端画图界，Canvas 有个宿敌叫 <strong>SVG</strong>。它们代表了两种截然不同的绘画观念：</p>
+<ul>
+<li><strong>Canvas（位图画板）：</strong><ul>
+<li><strong>原理</strong>：就像真实在纸上涂色，几笔画上去就变成一团颜料（像素点）。</li>
+<li><strong>优势</strong>：电脑只管往屏幕上“洒颜料”，性能起飞！能同时画出大几千个活蹦乱跳的闪烁粒子。</li>
+<li><strong>缺点</strong>：画完就没法单独反悔（没法通过 DOM 节点选择），且放大会造成马赛克发虚。</li>
+</ul>
+</li>
+<li><strong>SVG（矢量图拼接）：</strong><ul>
+<li><strong>原理</strong>：就像做 PPT。你画一个圆，它就生成一个独立标签的“圆实体”放在画面上。</li>
+<li><strong>优势</strong>：不管放大 100 倍还是 10 万倍，永远极其清晰。每个形状都是独立的 DOM 节点，你可以随时用 CSS 和 JS 改变它的颜色或绑定点击事件。</li>
+<li><strong>缺点</strong>：如果你试图放几万个对象乱飞，繁重的 DOM 树和排版引擎会直接把浏览器卡死。</li>
+</ul>
+</li>
+</ul>
+<p><strong>🎮 简单总结：玩动态游戏、做酷炫粒子特效用 Canvas；画精密的 Logo、写交互清晰的小图表用 SVG。</strong></p>
+<h3 id="2-第一笔理解反直觉的坐标系">2. 第一笔：理解反直觉的坐标系</h3>
+<h4 id="21-坐标翻转的原理">2.1 坐标翻转的原理</h4>
+<p>当你准备下笔时，得先明白 Canvas 里的尺子是反着的。对于传统的数学课坐标系，中心点零点在中间，越往上越大。但在计算机屏幕显示领域，几乎所有设备的“原点（0，0）”都定在<strong>屏幕的最左上角</strong>。向右走 X 轴变大没问题，但是向下走，Y 轴变大。</p>
+<p>Canvas 坐标系统的核心原则：</p>
+<ul>
+<li><strong>原生单位：</strong> 像素 (px)，与屏幕物理像素 1:1 对应。</li>
+<li><strong>X 轴：</strong> 向右为正方向，从 <code>0</code> 到 <code>canvas.width</code>。</li>
+<li><strong>Y 轴：</strong> 向下为正方向，从 <code>0</code> 到 <code>canvas.height</code>。</li>
+</ul>
+<p>👇 拖拽下面的小圆点，直观感受计算机图形学中的坐标原点与走向：</p>
+<h4 id="22-给你的魔法画笔上调料">2.2 给你的魔法画笔上调料</h4>
+<p>有了坐标体系，我们就能召唤画笔了（代码中称为 <code>Context</code>，或缩写 <code>ctx</code>）。就如同拿着真实的调色盘作画，Canvas 的 API 设计完美遵循了物理作画的三个步骤：</p>
+<ol>
+<li><strong>调色（State）</strong>：通过 <code>fillStyle</code> 设置填充色，<code>strokeStyle</code> 设置描边色。</li>
+<li><strong>构形（Path）</strong>：构思你是要画一条线（<code>lineTo</code>）、还是一个圆（<code>arc</code>）、亦或一个矩形（<code>rect</code>）。</li>
+<li><strong>极简下笔（Render）</strong>：决定是内部填充（<code>fill()</code>）还是勾勒边缘（<code>stroke()</code>）。</li>
+</ol>
+<p>由于 Canvas 是纯粹的位图画布，“落子无悔”，你一旦画下，它立刻干涸成为像素，无法再被撤销为独立对象。</p>
+<p>👇 尝试在原课程的演示中挑选不同形状和颜色，看看背后的代码是如何执行上述“三步走”的：</p>
+<h3 id="3-逐帧动画flipbook-模式与平滑优化">3. 逐帧动画：Flipbook 模式与平滑优化</h3>
+<p>既然 Canvas 一旦填色就变成了永久的像素，那么各种 HTML5 页游里满屏乱跑的角色是怎么做出来的？</p>
+<p>答案是**“骗过你的眼睛”**。这和手翻动画书或者电影胶片的原理一模一样。</p>
+<ol>
+<li><strong>擦黑板（Clear）：</strong> 用 <code>clearRect()</code> 把整块画布上的内容毫不留情地清空。</li>
+<li><strong>计算新位置（Update）：</strong> 让角色的 X 坐标往前偷偷加 2 个像素点。</li>
+<li><strong>下笔重画（Render）：</strong> 把角色在新的位置重新画一次。</li>
+<li><strong>疯狂循环（Loop）：</strong> 结合浏览器内置的极其精准的节拍器 <code>requestAnimationFrame</code>。它会以显示器的刷新率（通常是每秒 60 次，即 60 FPS）重复这三个动作。</li>
+</ol>
+<p>由于人眼自带“视觉残留”，在每秒 60 次的【擦除 -&gt; 更新 -&gt; 重绘】中，你看到的不仅不是闪烁的黑板，反而是如同丝绸般顺滑的动画。</p>
+<p>👇 在原课程的演示中调整播放速度，观察每一帧的位移是如何连缀成流畅运动的：</p>
+<h3 id="4-canvas-交互检测命中判定算法">4. Canvas 交互检测：命中判定算法</h3>
+<p>因为 Canvas 画布在浏览器眼里只是一张没有任何结构的“颜料布”。假设你在画布上用 <code>arc()</code> 画了一只怪兽，当你想要实现“点击怪兽扣血”时，你<strong>根本没法</strong>使用传统的 <code>document.getElementById</code> 来获取这个怪兽。因为在 HTML 结构中，只有那个宽 600 像素的死板 <code>&lt;canvas&gt;</code> 标签。</p>
+<p>这就是图形编程中最经典的问题：<strong>碰撞检测 (Collision Detection) 与事件代理</strong>。</p>
+<p>由于浏览器只知道你的鼠标点击了 Canvas 的屏幕坐标 <code>(x, y)</code>，你需要自己用初中的几何数学反算：</p>
+<ul>
+<li><strong>对于圆形：</strong> 通过勾股定理计算 <code>鼠标点击处</code> 到 <code>圆心位置</code> 的距离，如果距离小于半径，则说明“被点中了”。</li>
+<li><strong>对于矩形：</strong> 判断点击的 <code>x</code> 是否在矩形的左右边界内，同时 <code>y</code> 是否在上下边界内。</li>
+</ul>
+<p>无论你的画布上有多少元素，鼠标悬停或点击事件永远是绑定在 Canvas 这个唯一容器上的，这就是终极的“事件委托”。</p>
+<p>👇 试着在下面使用鼠标（点击、拖拽、悬停）或键盘（方向键移动），体会这种“手动算距离”的底层交互逻辑：</p>
+<h3 id="5-解放算力粒子系统与视觉魔法">5. 解放算力：粒子系统与视觉魔法</h3>
+<p>到了这一步，当我们把“坐标系”、“动画循环”以及“颜色与形状”全部融合，并将其数量暴增到成百上千个微小碎片时，你就掌握了引爆视觉的终极杀气：<strong>粒子系统（Particle System）</strong>。</p>
+<p>其核心思路极其粗暴且有效：</p>
+<ol>
+<li>建立一个巨大的数组，里面塞满了几百个独立的“粒子对象”。</li>
+<li>每个对象拥有自己的独立生命周期（<code>life</code>）、加速度（<code>vx/vy</code>）、重力阻尼（<code>gravity</code>）。</li>
+<li>每次 <code>requestAnimationFrame</code> 触发时，遍历更新这几百个粒子，然后渲染，最后悄悄清理掉那些“死亡”（生命值耗尽/掉出屏幕）的粒子。</li>
+</ol>
+<p>你的浏览器一瞬间就能变成一台制造烟花、大雪和爆炸的梦工厂。</p>
+<p>👇 点击不同的效果，调整重力与粒子数，观察它们是如何通过最简单的物理数学公式呈现出复杂的群体视觉：</p>
+<h3 id="6-守护-fps-荣耀应对高烧的-cpu-的方法">6. 守护 FPS 荣耀：应对高烧的 CPU 的方法</h3>
+<p>让成千上万个对象在一秒内计算并重画 60 遍是非常消耗性能的。如果毫无章法，你的电脑风扇很快就会起飞。</p>
+<p>以下是真正引擎大佬用来抢救帧率的“护体绝技”：</p>
+<ol>
+<li><p><strong>局部擦黑板（脏矩形 Dirty Rect）：</strong>
+一个角色在宽广的草原上奔跑，你千万不要每帧去 <code>clearRect</code> 整片大草原！角色经过哪一小块，你就用“小板擦”擦掉那一块并覆盖重绘，性能立刻飙升指数倍。</p>
+</li>
+<li><p><strong>后台替身魔法（离屏 Canvas）：</strong>
+如果背景是繁星漫天、有着各种复杂绚丽的山脉，每次都实时渲染太蠢了。我们通常在内存里偷偷建一个看不见的 <code>&lt;canvas&gt;</code>，把它精美地画上去一次。之后的每一帧刷新中，只需要通过 <code>drawImage()</code> 将这张合成好的“静态底片”直接贴出，免去了海量的基础计算。</p>
+</li>
+<li><p><strong>批量洗画笔（Batching）：</strong>
+调色盘里从红色换到蓝色，在底层是昂贵的。如果画布上有 1000 个红色圆和 1000 个蓝色圆交叉散落。最快的方法是：先把红颜料准备好，遍历画完所有红圈，再换蓝颜料画所有蓝圈。这是著名的批量渲染（Batch Rendering）思想。</p>
+</li>
+</ol>
+<p>👇 将对象数量拉到 3000 以上，看着网页掉进卡顿的深渊，再依次打开右下方的“优化技术”开关，亲眼见证实打实的帧率抢救：</p>
+<h3 id="7-专业名词总结">7. 专业名词总结</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>通俗解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Canvas</strong></td>
+<td>HTML5 提供的 2D 画布。绘制极快，但画完就变成颜料像素，不支持通过 DOM 操作内容。</td>
+</tr>
+<tr>
+<td><strong>SVG</strong></td>
+<td>矢量图。放大永远不模糊，且每个图形都是独立的标签元素，可以轻易绑定各种 CSS 样式和交互。</td>
+</tr>
+<tr>
+<td><strong>Context (ctx)</strong></td>
+<td>你申请到的那支“2D 魔法画笔”，用来调色、设定形状和绘制各种特殊效果。</td>
+</tr>
+<tr>
+<td><strong>requestAnimationFrame</strong></td>
+<td>浏览器内置的神级节拍器，会严格依照显示器的刷新率执行回调，是制作丝滑动画的不二之选。</td>
+</tr>
+<tr>
+<td><strong>FPS (Frame Rate)</strong></td>
+<td>帧率。60 FPS 代表一秒内浏览器帮你无缝擦除了 60 次画布并重画了 60 副新图。</td>
+</tr>
+<tr>
+<td><strong>脏矩形 (Dirty Rect)</strong></td>
+<td>只在发生变化的那一点微小区域内进行精准擦除和重绘，从而强力保留性能。</td>
+</tr>
+<tr>
+<td><strong>离屏 Canvas</strong></td>
+<td>藏在内存里的“影子画布”。把极度复杂但不会动的景物提前画好，以后就当死贴图拿来重复使用。</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>从一条简单的直线段，到宏大绚丽的粒子系统引擎；一切看似魔法的特效，不过是每秒 60 次的坐标计算与重绘轮回罢了。</p>
+</blockquote>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-107.html">← 路由与导航</a><a rel="next" href="chapter-109.html">实时通信（WebSocket / SSE） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

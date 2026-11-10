@@ -1,0 +1,7 @@
+# CPU-tested versions. CPU wheels for torch resolve with the plain version pin;
+# a CUDA build of the same version is also acceptable if your platform provides it.
+torch==2.14.1
+transformers==5.21.0
+Pillow==12.3.0
+sentencepiece==0.2.1
+protobuf==7.36.2

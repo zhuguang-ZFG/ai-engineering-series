@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spring Boot 电影推荐系统 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 39 / 195</p><article><h1 id="spring-boot-电影推荐系统">Spring Boot 电影推荐系统</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#spring-boot-电影推荐系统开发实战">Spring Boot 电影推荐系统开发实战</a><ul><li><a href="#概述-5">概述</a></li><li><a href="#前置知识-5">前置知识</a></li><li><a href="#学习目标-5">学习目标</a></li><li><a href="#项目简介-5">项目简介</a></li><li><a href="#第一部分需求分析-5">第一部分：需求分析</a></li><li><a href="#第二部分搭建项目骨架-5">第二部分：搭建项目骨架</a></li><li><a href="#第三部分迭代开发-3">第三部分：迭代开发</a></li><li><a href="#第四部分联调与上线-5">第四部分：联调与上线</a></li><li><a href="#交付物-5">交付物</a></li><li><a href="#评分标准-5">评分标准</a></li><li><a href="#参考资料-8">参考资料</a></li></ul></li></ul></nav></details><h2 id="spring-boot-电影推荐系统开发实战">Spring Boot 电影推荐系统开发实战</h2>
+<h3 id="概述-5">概述</h3>
+<p>本实战项目要求你围绕一份真实的 PRD，使用 Spring Boot 完成一个带推荐能力的电影网站。这个项目的核心挑战在于：它并不只是增删改查，你得想清楚&quot;用户行为如何影响推荐结果&quot;以及&quot;推荐如何可解释&quot;。</p>
+<p>这是 Stage 2 的综合实战环节。你将第一次接触&quot;内容 + 行为 + 推荐&quot;型产品的开发模式，这种模式在电商、内容平台、个性化 Feed 等场景中非常常见。</p>
+<h3 id="前置知识-5">前置知识</h3>
+<p>在开始本项目之前，你应该已经掌握以下内容：</p>
+<ul>
+<li>前端页面设计与组件库使用（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">现代组件库</a>）</li>
+<li>后端接口设计与开发（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">接口代码编写</a>）</li>
+<li>数据库基础与 Supabase（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a>）</li>
+<li>Git 工作流与部署（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">部署 Web 应用</a>）</li>
+</ul>
+<h3 id="学习目标-5">学习目标</h3>
+<p>完成本实战后，你将能够：</p>
+<ol>
+<li>阅读 PRD 并从中提取推荐系统的开发任务清单</li>
+<li>使用 Spring Boot 搭建后端项目并实现 RESTful API</li>
+<li>设计&quot;用户行为 → 推荐&quot;的完整数据链路</li>
+<li>实现可解释的推荐逻辑</li>
+<li>完成端到端联调，交付可演示的产品原型</li>
+</ol>
+<h3 id="项目简介-5">项目简介</h3>
+<p>你要构建的产品是一个带推荐能力的电影网站：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>浏览与搜索</strong></td>
+<td>用户可以浏览和搜索电影</td>
+</tr>
+<tr>
+<td><strong>评分与收藏</strong></td>
+<td>用户可以给电影评分、添加收藏</td>
+</tr>
+<tr>
+<td><strong>个性化推荐</strong></td>
+<td>系统根据用户行为给出推荐结果</td>
+</tr>
+<tr>
+<td><strong>管理后台</strong></td>
+<td>管理员维护电影数据、查看推荐效果</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>PRD 入口</strong>
+本项目的需求文档在 GitHub： <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/movie-recommendation-springboot/PRD.md">查看 PRD</a></p>
+</blockquote>
+<div style="margin: 32px 0;">
+      { title: '需求分析', description: '阅读 PRD，明确推荐策略、行为数据和后台范围' },
+      { title: '搭建骨架', description: '用 AI 生成列表页、详情页、推荐页和后台页' },
+      { title: '迭代开发', description: '补充推荐逻辑、行为记录和后台管理' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
+    ]" />
+</div><h3 id="第一部分需求分析-5">第一部分：需求分析</h3>
+<h4 id="11-阅读-prd-5">1.1 阅读 PRD</h4>
+<p>打开 PRD 文档，重点回答以下问题：</p>
+<ul>
+<li>推荐策略是什么？第一版是否使用可解释版本（如基于评分相似度）？</li>
+<li>用户行为数据要存哪些？（评分、收藏、浏览记录等）</li>
+<li>管理员需要看哪些推荐效果指标？</li>
+<li>页面清单是否完整？</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ warning</strong>
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。</p>
+</blockquote>
+<h4 id="12-确认系统架构-5">1.2 确认系统架构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  prd[&quot;PRD&quot;] --&gt; web[&quot;前端页面&quot;]
+  web --&gt; auth[&quot;用户鉴权&quot;]
+  web --&gt; movie[&quot;电影列表 / 详情&quot;]
+  web --&gt; behavior[&quot;评分 / 收藏&quot;]
+  behavior --&gt; reco[&quot;推荐逻辑&quot;]
+  reco --&gt; db[&quot;数据库&quot;]
+  admin[&quot;后台管理&quot;] --&gt; db
+</code></pre>
+<h3 id="第二部分搭建项目骨架-5">第二部分：搭建项目骨架</h3>
+<h4 id="21-生成前端页面-5">2.1 生成前端页面</h4>
+<p>提示词参考：</p>
+<pre class="prose-block"><code class="language-text">请基于当前 PRD，帮我生成一个 Spring Boot 电影推荐系统的前端骨架。
+
+要求：
+1. 页面包括：首页、电影列表、电影详情、推荐页、个人中心、后台管理
+2. 先只生成页面结构和假数据，不接真实接口
+3. 风格要像真实内容产品，而不是课堂 demo
+</code></pre>
+<h4 id="22-验证页面结构-3">2.2 验证页面结构</h4>
+<p>逐项检查：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 电影列表页支持搜索和筛选</li>
+<li><input disabled="" type="checkbox"> 电影详情页包含评分和收藏按钮</li>
+<li><input disabled="" type="checkbox"> 推荐页能展示推荐结果和推荐理由</li>
+<li><input disabled="" type="checkbox"> 管理后台能展示电影数据和推荐效果</li>
+</ul>
+<h3 id="第三部分迭代开发-3">第三部分：迭代开发</h3>
+<h4 id="31-按模块推进-3">3.1 按模块推进</h4>
+<ol>
+<li><strong>Spring Boot 项目搭建</strong>：项目结构、数据库配置、基础 CRUD</li>
+<li><strong>电影数据管理</strong>：电影列表、详情、搜索接口</li>
+<li><strong>用户行为</strong>：评分、收藏接口，行为数据写入</li>
+<li><strong>推荐逻辑</strong>：基于用户行为的推荐算法实现</li>
+<li><strong>推荐展示</strong>：推荐结果展示，包含推荐理由</li>
+<li><strong>管理后台</strong>：电影数据维护、推荐效果查看</li>
+</ol>
+<h4 id="32-模块自检-1">3.2 模块自检</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>验证方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础功能</td>
+<td>列表、详情、评分、收藏是否闭环</td>
+</tr>
+<tr>
+<td>推荐联动</td>
+<td>用户行为是否影响推荐结果</td>
+</tr>
+<tr>
+<td>推荐可解释性</td>
+<td>用户能理解为什么被推荐这些电影</td>
+</tr>
+<tr>
+<td>后台数据</td>
+<td>管理员能查看电影数据和推荐效果</td>
+</tr>
+</tbody></table></div>
+<h3 id="第四部分联调与上线-5">第四部分：联调与上线</h3>
+<h4 id="41-端到端测试-5">4.1 端到端测试</h4>
+<p>至少验证以下场景：</p>
+<ul>
+<li>浏览电影 → 评分 → 收藏 → 查看推荐页，确认推荐结果发生变化</li>
+<li>管理员登录 → 添加电影 → 查看推荐效果统计</li>
+</ul>
+<h3 id="交付物-5">交付物</h3>
+<p>完成本项目后，你需要提交以下内容：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 可访问的线上演示链接</li>
+<li><input disabled="" type="checkbox"> 源码仓库链接（含 README）</li>
+<li><input disabled="" type="checkbox"> PRD 文档</li>
+<li><input disabled="" type="checkbox"> 核心页面截图（电影列表、电影详情、推荐页、管理后台）</li>
+<li><input disabled="" type="checkbox"> 60 秒演示视频</li>
+</ul>
+<h3 id="评分标准-5">评分标准</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>基本要求</th>
+<th>进阶要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PRD 对齐</td>
+<td>页面、功能、数据结构基本符合 PRD</td>
+<td>能清晰说明设计决策</td>
+</tr>
+<tr>
+<td>产品闭环</td>
+<td>浏览 → 评分 → 收藏 → 推荐可跑通</td>
+<td>评分行为明显影响推荐结果</td>
+</tr>
+<tr>
+<td>推荐质量</td>
+<td>推荐结果合理、推荐理由可解释</td>
+<td>支持多种推荐策略</td>
+</tr>
+<tr>
+<td>后台能力</td>
+<td>电影数据和推荐效果可查看</td>
+<td>有推荐准确率等统计指标</td>
+</tr>
+<tr>
+<td>工程完整度</td>
+<td>前端、Spring Boot 后端、数据库链路已接通</td>
+<td>推荐接口有缓存或性能优化</td>
+</tr>
+</tbody></table></div>
+<h3 id="参考资料-8">参考资料</h3>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">使用现代组件库更新你的界面</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">大模型辅助编写接口代码与接口文档</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub 工作流</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">如何部署 Web 应用</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-038.html">← 智能旅游规划 Agent 平台</a><a rel="next" href="chapter-040.html">生鲜电商微服务系统 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

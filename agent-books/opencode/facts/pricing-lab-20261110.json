@@ -1,0 +1,151 @@
+{
+  "cases": 19,
+  "broken_failures": [
+    {
+      "input": [
+        "19.99",
+        2
+      ],
+      "expected": "39.98",
+      "actual": "39"
+    },
+    {
+      "input": [
+        "0.05",
+        1,
+        "0.5"
+      ],
+      "expected": "0.03",
+      "actual": "0.0"
+    },
+    {
+      "input": [
+        "2.50",
+        3,
+        "0.1"
+      ],
+      "expected": "6.75",
+      "actual": "6.3"
+    },
+    {
+      "input": [
+        "19.99",
+        0
+      ],
+      "expected": "0.00",
+      "actual": "0"
+    },
+    {
+      "input": [
+        "19.99",
+        2,
+        "1"
+      ],
+      "expected": "0.00",
+      "actual": "0"
+    },
+    {
+      "input": [
+        "1000000",
+        1000000
+      ],
+      "expected": "1000000000000.00",
+      "actual": "1000000000000"
+    },
+    {
+      "input": [
+        "-1",
+        1
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1",
+        -1
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1",
+        true
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1",
+        1.5
+      ],
+      "wrong_error": "TypeError"
+    },
+    {
+      "input": [
+        "1",
+        1000001
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1000001",
+        1
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1",
+        1,
+        "-0.1"
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "1",
+        1,
+        "1.1"
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "Infinity",
+        1
+      ],
+      "wrong_error": "OverflowError"
+    },
+    {
+      "input": [
+        "1",
+        1,
+        "NaN"
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        1.25,
+        1
+      ],
+      "missing_error": "ValueError"
+    },
+    {
+      "input": [
+        "invalid",
+        1
+      ],
+      "wrong_error": "InvalidOperation"
+    }
+  ],
+  "reference_failures": [],
+  "external_model_used": false,
+  "date": "2026-11-10",
+  "files_sha256": {
+    "check_pricing.py": "4928e2d951bf57d31005d80dbdfb70c5e91cb3447de5449549a93ea812f7146c",
+    "pricing.py": "d4498e80e801278022023b49d0fc597b9274190ef2f3bcab89ad7b6bb5950752",
+    "pricing_broken.py": "3613300e376686fe00d75dffb4f2d86a8acc25c126d8a0b88772d3fb14b582fb"
+  }
+}

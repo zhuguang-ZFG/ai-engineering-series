@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+
+.persona-card{display:flex;gap:22px;align-items:center;padding:28px 36px;border:2px solid #5b8def;
+  border-radius:18px;background:rgba(12,18,28,.82);box-shadow:0 12px 40px rgba(0,0,0,.45);max-width:1100px}
+.persona-badge{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#0b1020;flex-shrink:0}
+.persona-name{font-size:20px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.persona-title{font-size:36px;font-weight:800;color:#eef3f8;line-height:1.25}
+.persona-sub{font-size:22px;color:#a8b4c4;margin-top:10px;line-height:1.4}
+
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b01_hook" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="56.112" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="56.112" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">开场钩子 · 心跳</div></div></div></div>
+  <div id="b01_hook_beat0_wrap" class="beat clip" data-start="0.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat0"><div class="panel-body" id="b01_hook_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">心跳</div><div class="h2">开场钩子 · 心跳</div>
+    </div></div></div><div class="flash clip" id="b01_hook_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b01_hook_beat1_wrap" class="beat clip" data-start="5.000" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b01_hook_beat1"><div class="persona-card" style="border-color:#6bcf7f"><div class="persona-badge" style="background:#6bcf7f">AH</div><div class="persona-body"><div class="persona-name" style="color:#6bcf7f">Agent</div><div class="persona-title">Agent Harness</div><div class="persona-sub">考工记御者 · 收辔控速</div></div></div></div></div><div class="flash clip" id="b01_hook_flash1" data-start="5.000" data-duration="0.35" data-track-index="5"></div><div id="b01_hook_beat2_wrap" class="beat clip" data-start="10.200" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat2"><div class="panel-body" id="b01_hook_beat2">
+      <div class="kicker">KEY</div>
+      <div class="h1">PI 套壳，是能跑、能停、</div><div class="h2">PI 套壳，是能跑、能停、能诊断的整车。</div>
+    </div></div></div><div id="b01_hook_beat3_wrap" class="beat clip" data-start="15.750" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat3"><div class="panel-body" id="b01_hook_beat3">
+          <div class="kicker">记下这一点</div><div class="h1">这一集拆开发动机的点火节</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b01_hook_flash3" data-start="15.750" data-duration="0.35" data-track-index="5"></div><div id="b01_hook_beat4_wrap" class="beat clip" data-start="21.650" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat4"><div class="panel-body" id="b01_hook_beat4">
+      <div class="kicker">KEY</div>
+      <div class="h1">先停三秒想一下：如果你在源码里找</div><div class="h2">先停三秒想一下：如果你在源码里找「心跳」，它最可能是什么？</div>
+    </div></div></div><div id="b01_hook_beat5_wrap" class="beat clip" data-start="26.850" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat5"><div class="panel-body" id="b01_hook_beat5">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 它最可能是什么？回调</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b01_hook_flash5" data-start="26.850" data-duration="0.35" data-track-index="5"></div><div id="b01_hook_beat6_wrap" class="beat clip" data-start="32.400" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat6"><div class="panel-body" id="b01_hook_beat6">
+      <div class="kicker">KEY</div>
+      <div class="h1">unction 星号？答案写</div><div class="h2">unction 星号？答案写在本章标题里——异步</div>
+    </div></div></div><div class="flash clip" id="b01_hook_flash6" data-start="32.400" data-duration="0.35" data-track-index="5"></div><div id="b01_hook_beat7_wrap" class="beat clip" data-start="38.300" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat7"><div class="panel-body" id="b01_hook_beat7">
+      <div class="kicker">KEY</div>
+      <div class="h1">nerator。每一次 yiel</div><div class="h2">nerator。每一次 yield，就像一次脉搏：把「正在发生的</div>
+    </div></div></div><div id="b01_hook_beat8_wrap" class="beat clip" data-start="43.500" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b01_hook_beat8"><div class="panel-body" id="b01_hook_beat8">
+      <div class="kicker">KEY</div>
+      <div class="h1">而不是等整场手术做完才开门。书稿</div><div class="h2">而不是等整场手术做完才开门。书稿第二节开篇就说：</div>
+    </div></div></div><div id="b01_hook_beat9_wrap" class="beat clip" data-start="49.050" data-duration="7.062" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b01_hook_beat9"><div class="persona-card" style="border-color:#5b8def"><div class="persona-badge" style="background:#5b8def">Cl</div><div class="persona-body"><div class="persona-name" style="color:#5b8def">Claude</div><div class="persona-title">Claude</div><div class="persona-sub">会诊医生 · 边想边说边开检查</div></div></div></div></div><div class="flash clip" id="b01_hook_flash9" data-start="49.050" data-duration="0.35" data-track-index="5"></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b01_hook_beat0", {opacity:0}, {opacity:1,duration:0.2}, 0.000);
+tl.fromTo("#b01_hook_beat0 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 0.000);
+tl.fromTo("#b01_hook_beat0 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 0.080);
+tl.fromTo("#b01_hook_beat0 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 0.280);
+tl.to("#b01_hook_beat0", {opacity:0,y:-12,duration:0.28}, 4.650);
+tl.fromTo("#b01_hook_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b01_hook_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b01_hook_beat1", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 5.000);
+tl.to("#b01_hook_beat1", {opacity:0,y:-12,duration:0.28}, 9.880);
+tl.fromTo("#b01_hook_flash1", {opacity:0}, {opacity:0.35,duration:0.06}, 5.000);
+tl.to("#b01_hook_flash1", {opacity:0,duration:0.25}, 5.060);
+tl.fromTo("#b01_hook_beat2", {opacity:0}, {opacity:1,duration:0.2}, 10.200);
+tl.fromTo("#b01_hook_beat2 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 10.200);
+tl.fromTo("#b01_hook_beat2 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 10.280);
+tl.fromTo("#b01_hook_beat2 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 10.480);
+tl.to("#b01_hook_beat2", {opacity:0,y:-12,duration:0.28}, 15.400);
+tl.fromTo("#b01_hook_beat3", {opacity:0}, {opacity:1,duration:0.2}, 15.750);
+tl.fromTo("#b01_hook_beat3 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 15.750);
+tl.fromTo("#b01_hook_beat3 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 16.100);
+tl.to("#b01_hook_beat3", {opacity:0,duration:0.3}, 21.300);
+tl.fromTo("#b01_hook_flash3", {opacity:0}, {opacity:0.35,duration:0.06}, 15.750);
+tl.to("#b01_hook_flash3", {opacity:0,duration:0.25}, 15.810);
+tl.fromTo("#b01_hook_beat4", {opacity:0}, {opacity:1,duration:0.2}, 21.650);
+tl.fromTo("#b01_hook_beat4 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 21.650);
+tl.fromTo("#b01_hook_beat4 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 21.730);
+tl.fromTo("#b01_hook_beat4 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 21.930);
+tl.to("#b01_hook_beat4", {opacity:0,y:-12,duration:0.28}, 26.500);
+tl.fromTo("#b01_hook_beat5", {opacity:0}, {opacity:1,duration:0.2}, 26.850);
+tl.fromTo("#b01_hook_beat5 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 26.850);
+tl.to("#b01_hook_beat5", {opacity:0,duration:0.3}, 32.050);
+tl.fromTo("#b01_hook_flash5", {opacity:0}, {opacity:0.35,duration:0.06}, 26.850);
+tl.to("#b01_hook_flash5", {opacity:0,duration:0.25}, 26.910);
+tl.fromTo("#b01_hook_beat6", {opacity:0}, {opacity:1,duration:0.2}, 32.400);
+tl.fromTo("#b01_hook_beat6 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 32.400);
+tl.fromTo("#b01_hook_beat6 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 32.480);
+tl.fromTo("#b01_hook_beat6 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 32.680);
+tl.to("#b01_hook_beat6", {opacity:0,y:-12,duration:0.28}, 37.950);
+tl.fromTo("#b01_hook_flash6", {opacity:0}, {opacity:0.35,duration:0.06}, 32.400);
+tl.to("#b01_hook_flash6", {opacity:0,duration:0.25}, 32.460);
+tl.fromTo("#b01_hook_beat7", {opacity:0}, {opacity:1,duration:0.2}, 38.300);
+tl.fromTo("#b01_hook_beat7 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 38.300);
+tl.fromTo("#b01_hook_beat7 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 38.380);
+tl.fromTo("#b01_hook_beat7 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 38.580);
+tl.to("#b01_hook_beat7", {opacity:0,y:-12,duration:0.28}, 43.150);
+tl.fromTo("#b01_hook_beat8", {opacity:0}, {opacity:1,duration:0.2}, 43.500);
+tl.fromTo("#b01_hook_beat8 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 43.500);
+tl.fromTo("#b01_hook_beat8 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 43.580);
+tl.fromTo("#b01_hook_beat8 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 43.780);
+tl.to("#b01_hook_beat8", {opacity:0,y:-12,duration:0.28}, 48.700);
+tl.fromTo("#b01_hook_beat9", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 49.050);
+tl.to("#b01_hook_beat9", {opacity:0,y:-12,duration:0.28}, 55.792);
+tl.fromTo("#b01_hook_flash9", {opacity:0}, {opacity:0.35,duration:0.06}, 49.050);
+tl.to("#b01_hook_flash9", {opacity:0,duration:0.25}, 49.110);
+window.__timelines["b01_hook"] = tl;
+</script>
+</body></html>

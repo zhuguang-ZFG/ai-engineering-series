@@ -1,0 +1,32 @@
+[
+  {
+    "name": "plugins_directory",
+    "status": "ok",
+    "message": "Found at C:\\Users\\<用户名>\\.omp\\plugins"
+  },
+  {
+    "name": "package_manifest",
+    "status": "ok",
+    "message": "Found"
+  },
+  {
+    "name": "node_modules",
+    "status": "ok",
+    "message": "Found"
+  },
+  {
+    "name": "plugin:omp-cache-optimizer",
+    "status": "ok",
+    "message": "v1.2.3 - Improve OMP prompt/KV cache hit rates with safer prompt churn cleanup, proxy compat warnings, and footer cache stats."
+  },
+  {
+    "name": "plugin:omp-model-profile",
+    "status": "ok",
+    "message": "v0.2.4 - Named model-role profiles for omp — switch your whole Architect/Default/Subtask model set with /model-profile"
+  },
+  {
+    "name": "plugin:pi-hermes-memory",
+    "status": "ok",
+    "message": "v0.9.11 - 🧠 Persistent memory + 🔍 session search + 🛡️ secret scanning for Pi. Token-aware policy-only memory by default, SQLite FTS5 search, auto-consolidation, procedural skills. 732 tests. Ported from Hermes agent."
+  }
+]

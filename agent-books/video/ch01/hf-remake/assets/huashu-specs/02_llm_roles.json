@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "对话伙伴", "data": {"icon": "bulb"}},
+    {"at": 1.4, "kind": "point", "text": "2023：生成段落"},
+    {"at": 2.8, "kind": "draw", "text": "推理引擎", "data": {"icon": "target"}},
+    {"at": 4.2, "kind": "point", "text": "2024：编排工具调用"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

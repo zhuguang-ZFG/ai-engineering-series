@@ -1,0 +1,71 @@
+===== write =====
+# write
+
+> Create or overwrite a file, writable internal resource, archive entry, SQLite row, or merge-conflict resolution.
+
+## Source
+
+- Entry: `packages/coding-agent/src/tools/write.ts`
+- Model-facing prompt: `packages/coding-agent/src/prompts/tools/write.md`
+- Key collaborators:
+   - `packages/utils/src/ar` (`@oh-my-pi/pi-utils/ar`) — archive selector parsing, member loading, and serialization; the write tool supplies the atomic temp-file/rename boundary.
+   - `packages/coding-agent/src/tools/sqlite-reader.ts` — detect SQLite paths and perform row insert/update/delete.
+   - `packages/coding-agent/src/tools/conflict-detect.ts` / `conflict-uri.ts` — register/validate conflict regions, expand side tokens, and resolve writes through the internal URL handler.
+   - `packages/coding-agent/src/internal-urls/router.ts` / `packages/coding-agent/src/tools/xdev.ts` — writable internal resources and `xd://` tool-device dispatch.
+   - `packages/coding-agent/src/lsp/writethrough.ts` — format-on-write and diagnostics writethrough.
+   - `packages/coding-agent/src/tools/auto-generated-guard.ts` — block overwriting generated files.
+   - `packages/coding-agent/src/tools/plan-mode-guard.ts` — resolve paths and enforce plan-mode write policy.
+
+## Inputs
+
+| Field     | Type     | Required                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --------- | -------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `path`    | `string` | Yes                       | Target path. Plain paths write files. Writable internal URLs delegate to their handler. `xd://<device>` dispatches a mounted tool using JSON in `content`. `archive.ext:inner/path` writes an archive entry for `.zip` and ZIP-format aliases (`.jar`, `.war`, `.ear`, `.apk`, …), `.tar`, `.tar.gz`/`.tgz`, `.tar.zst`/`.tzst`, or `.asar`. `db.sqlite:table` inserts a row; `db.sqlite:table:key` updates/deletes one. `conflict://<id>` resolves a registered conflict and `conflict://*` performs a bulk resolution. A copied `[path#TAG]` wrapper is accepted and removed. |
+| `content` | `string` | Except `proc://<id>/kill` | Full replacement file/archive/internal-resource content, conflict replacement, or SQLite row payload. Ignored for `/kill`. SQLite non-delete writes must parse as a JSON5 object; empty or whitespace-only content deletes a keyed row. For `xd://`, this is the mounted tool's JSON argument object.                                                                                                                                                                                                                                                                           |
+
+Worked examples:
+
+```text
+path: "src/config.json"
+content: "{\n  \"enabled\": true\n}\n"
+```
+
+```text
+path: "fixtures/archive.zip:templates/email.txt"
+content: "hello\n"
+```
+
+```text
+path: "data/app.sqlite:users:42"
+content: "{name: 'Ada', active: true}"
+```
+
+## Outputs
+
+Single-shot result.
+
+- Success always returns at least one text block, except that an `xd://` dispatch preserves the mounted tool's own content/error result.
+   - Plain file write: `Successfully wrote <bytes> bytes to <relative-path>` (UTF-8 byte length of the final formatted content; the ACP bridge receipt counts the submitted content).
+   - Internal URL write: handler-provided receipt/status text when present; otherwise `Successfully wrote <bytes> bytes to <url>`. File-backed URL writes (`local://`, `vault://`) name the URL too, never the backing path.
+   - Archive write: `Successfully wrote <bytes> bytes to <relative-archive-path>:<entry-path>` (UTF-8 member-content size).
+   - SQLite write: one of `Inserted row into <table>`, `Updated row '<key>' in <table>`, `No row updated ...`, `Deleted row ...`, `No row deleted ...`.
+   - Conflict resolution: conflict-specific success text, with fresh hashline snapshot headers when applicable. Bulk resolution can return `isError: true` after some files succeeded and others failed.
+- During execution, `onUpdate` may emit `Writing <bytes> bytes to <path>...` using UTF-8 byte length; `xd://` forwards the mounted tool's updates.
+- If hashline prefixes were copied from `read` output and stripped first, the first text block gets an extra note.
+- In hashline display mode, plain file writes (including ACP bridge writes) and conflict resolutions prepend a fresh `[<relative-path>#TAG]` header (`[<url>#TAG]` for file-backed URL writes). The snapshot has no seen-line provenance: anchored edits still need to read their anchor lines. Bulk conflict resolutions append a `Snapshots:` block listing one header per successfully written file.
+- Plain file writes may also return `details.diagnostics` plus `details.meta.diagnostics` when LSP diagnostics-on-write is enabled, and `details.madeExecutable` when a shebang file gains execute bits.
+- Plain/archive/single-conflict results set `details.resolvedPath` when backed by a file. SQLite writes additionally set `details.meta.source` through `sourcePath(...)`. Handler-owned URL writes preserve handler details (for example `details.proc`); generic handler receipts use empty details and device dispatch sets `details.xdev`.
+
+## Flow
+
+1. `WriteTool.execute()` unwraps a copied `[path#TAG]` argument and peels a valid read selector from internal URLs so write and read address the same resource. Malformed/range selectors on writable URLs are rejected.
+2. It requires `content` unless the target's write policy makes it optional (`proc://<id>/kill`). Device-only sessions allow device/coordination writes and, in active plan mode, local sandbox drafts; other targets fail before mutation. Hashline display prefixes are stripped from text payloads, but messages, process input, settings, and conflict directives reach their handlers verbatim.
+3. It validates URI-like targets. Unknown schemes and common `xd://` misspellings fail instead of becoming local filenames; prefix with `./` to deliberately create a URI-looking POSIX filename.
+4. If `path` is an internal URL whose handler exposes `write`, the tool delegates to it. `xd://` validates and dispatches JSON to the mounted tool while preserving its result and approval tier; `local://` falls through to the session-local filesystem path.
+5. `conflict://...` is one of those handler-owned writes, implemented by `ConflictProtocolHandler` and `tools/conflict-uri.ts`. Scope reads such as `conflict://<id>/ours` are read-only; writable conflict URIs omit the scope. Registered markers are revalidated before replacement.
+6. It calls `#resolveArchiveWritePath()`. Candidate archive files are checked longest-first; when none exists, the shortest candidate archive path is used for creating a new container.
+7. Archive writes call `enforcePlanModeWrite(..., { op: exists ? "update" : "create" })`, then `#writeArchiveEntry()`.
+   - The parent directory is created recursively.
+   - Existing entries are loaded through `readArchiveEntries()`, the target is replaced in the entry map, and `writeArchive()` serializes a complete replacement.
+   - Empty writes to missing selector-shaped members are refused. Replacing an existing text member with an incomplete read projection is also refused.
+   - The replacement is written to a sibling temporary path and renamed over the destination. Existing archive symlinks are resolved first so the target is updated rather than replacing the symlink.

@@ -1,0 +1,129 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #d-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #d-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #d-title .g { color: #1f883d; }
+    #d-pkg { position: absolute; left: 110px; top: 312px; width: 940px; height: 408px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 16px 11px 18px 9px; overflow: hidden; }
+    #d-pkg-h { height: 54px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 26px; font: 28px "JetBrains Mono", monospace; color: #768390; }
+    #d-code { padding: 18px 30px; font: 28px/1.45 "JetBrains Mono", monospace; color: #f6f8fa; }
+    #d-code .k { color: #a5d6ff; }
+    #d-code .n { color: #79c0ff; }
+    #d-new { position: relative; display: block; margin: 6px -14px; padding: 4px 14px; border-radius: 6px; background: rgba(63,185,80,.16); border-left: 4px solid #3fb950; }
+    #d-new span { color: #3fb950; }
+    #d-term { position: absolute; left: 110px; top: 744px; width: 940px; height: 140px; padding: 20px 28px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 15px 10px 17px 9px; box-sizing: border-box; font: 28px/1.55 "JetBrains Mono", monospace; }
+    #d-t1 { color: #f6f8fa; }
+    #d-t2 { color: #3fb950; }
+    .d-check { position: absolute; left: 1090px; width: 720px; height: 158px; padding: 24px 30px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
+    #d-k1 { top: 316px; } #d-k2 { top: 494px; }
+    .d-check-k { font: 700 36px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .d-check-d { margin-top: 10px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
+    #d-ignore { position: absolute; left: 1090px; top: 672px; width: 720px; height: 198px; padding: 24px 30px; background: #fffdf8; border: 1px solid #cf222e; border-left: 9px solid #cf222e; border-radius: 15px 10px 17px 9px; box-sizing: border-box; }
+    #d-ignore-k { font: 700 32px "JetBrains Mono", monospace; color: #cf222e; }
+    #d-ignore-d { margin-top: 12px; font: 28px/1.4 "Noto Sans JP", sans-serif; color: #57606a; }
+    #d-ignore-d b { color: #1f2328; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-d1aa" id="root" data-composition-id="deps" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-d2bb" id="d-tag" class="clip" data-start="0" data-duration="25.5">DEPENDENCIES · 清单说了算</div>
+    <div data-hf-id="hf-d3cc" id="d-title" class="clip" data-start="0" data-duration="25.5">装东西，<span data-hf-id="hf-d4dd" class="g">只写清单</span></div>
+    <div data-hf-id="hf-d5ee" id="d-pkg" class="clip" data-start="2.0" data-duration="23.5">
+      <div data-hf-id="hf-d6ff" id="d-pkg-h">package.json</div>
+      <div data-hf-id="hf-d7gg" id="d-code">
+        <div data-hf-id="hf-d8hh">{</div>
+        <div data-hf-id="hf-d9ii">  <span data-hf-id="hf-daja" class="k">"name"</span>: <span data-hf-id="hf-dbkb" class="n">"snake-project"</span>,</div>
+        <div data-hf-id="hf-dclc">  <span data-hf-id="hf-dcmd" class="k">"scripts"</span>: { <span data-hf-id="hf-dene" class="k">"dev"</span>: <span data-hf-id="hf-dfof" class="n">"vite"</span> },</div>
+        <div data-hf-id="hf-dgpg">  <span data-hf-id="hf-dhph" class="k">"dependencies"</span>: {</div>
+        <div data-hf-id="hf-diqh" id="d-new"><span data-hf-id="hf-djrj">    "howler": "^2.2.4"</span></div>
+        <div data-hf-id="hf-dksk">  }</div>
+        <div data-hf-id="hf-dltl">}</div>
+      </div>
+    </div>
+    <div data-hf-id="hf-dmum" id="d-term" class="clip" data-start="5.6" data-duration="19.9">
+      <div data-hf-id="hf-dnvn" id="d-t1">$ npm i howler</div>
+      <div data-hf-id="hf-dowo" id="d-t2">added 1 package, audited 2 in 1s</div>
+    </div>
+    <div data-hf-id="hf-dppp" id="d-k1" class="d-check clip" data-start="17.6" data-duration="7.9">
+      <div data-hf-id="hf-dqqq" class="d-check-k">① 清单变了没有</div>
+      <div data-hf-id="hf-drrr" class="d-check-d">package.json · 版本让命令写，别手抄</div>
+    </div>
+    <div data-hf-id="hf-dsss" id="d-k2" class="d-check clip" data-start="19.8" data-duration="5.7">
+      <div data-hf-id="hf-dttt" class="d-check-k">② 锁文件提交了没有</div>
+      <div data-hf-id="hf-duuu" class="d-check-d">package-lock.json · 保证别人装到同一版</div>
+    </div>
+    <div data-hf-id="hf-dvvv" id="d-ignore" class="clip" data-start="12.4" data-duration="13.1">
+      <div data-hf-id="hf-dwww" id="d-ignore-k">node_modules /</div>
+      <div data-hf-id="hf-dxxx" id="d-ignore-d"><b>装完就多出几万个文件。</b>别读它，也别提交它。</div>
+    </div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#d-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#d-title"));
+    tl.set("#d-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#d-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#d-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#d-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#d-pkg", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 2.0);
+    tl.fromTo("#d-term", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 5.6);
+    tl.fromTo("#d-t2", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .3, ease: "power2.out", scale: 1 }, 6.8);
+    tl.fromTo("#d-new", { opacity: 0, x: -18, scale: 0.95 }, { opacity: 1, x: 0, duration: .45, ease: "back.out(1.5)", scale: 1 }, 8.6);
+    tl.fromTo("#d-new", { backgroundColor: "rgba(63,185,80,.55)" }, { backgroundColor: "rgba(63,185,80,.16)", duration: .9, ease: "power2.out" }, 9.05);
+    tl.fromTo("#d-ignore", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 12.4);
+    tl.fromTo("#d-k1", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 17.6);
+    tl.fromTo("#d-k2", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 19.8);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 25.5, ease: "none" }, 0);
+    window.__timelines["deps"] = tl;
+  </script>
+</template>

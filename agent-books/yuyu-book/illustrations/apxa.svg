@@ -1,0 +1,16 @@
+<svg class="a-locate" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 21.3q23-1.6 48-.2" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M8 32.3q24-1.3 48-.2" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M8 43.3q23.5-1.2 48-.2" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M21 8.3q-1.3 23-.2 48" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M32 8.3q-1 24-.2 48" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path d="M43 8.3q1.2 24-.2 48" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path class="pulse" d="M31 22.3c6.8-1.4 12 4 11 10.2-1 6.7-7.1 10-13.1 7.6-5.4-2-7.8-7.5-4.9-12.7q1.9-3.6 7-5.1Z" stroke-width="2.5" pathLength="100"/>
+  <path d="M32 14.3q-1-3.2.2-6.3" stroke-width="2.5" pathLength="100"/>
+  <path d="M32 49.7q.7 3.5.2 6.3" stroke-width="2.5" pathLength="100"/>
+  <path d="M14 32.3q-3.1-1-6.3.2" stroke-width="2.5" pathLength="100"/>
+  <path d="M49.7 32.3q3.5.7 6.3.2" stroke-width="2.5" pathLength="100"/>
+  <circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+  <path d="M26 26q-5 7.7 2.9 14.1-7-1.8-6.5-8.5.3-3.9 3.6-5.6Z" fill="currentColor" stroke="none" opacity=".75"/>
+  <path d="m25.2 38.4 3-3m-1.1 4.7 3.2-3.2M46.5 15.7l4.5-3m-3.7 6.3 4.8-3.4" stroke-width=".8" opacity=".3" pathLength="100"/>
+</svg>

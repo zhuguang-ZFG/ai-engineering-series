@@ -1,0 +1,61 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #cap-stage {
+      position: absolute;
+      left: 0;
+      top: 1300px;
+      width: 1080px;
+      text-align: center;
+      overflow: visible;
+    }
+    .cap-group {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1.34;
+      color: #ffffff;
+      visibility: hidden;
+    }
+    .cap-group span {
+      background: rgba(31, 35, 40, 0.78);
+      border-radius: 10px;
+      padding: 12px 26px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  </style>
+  <div data-hf-id="hf-jn2k" id="root" data-composition-id="reel-captions" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-fhg2" id="cap-stage"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const GROUPS = [{"text": "不会写代码，能做软件吗？", "start": 0.1, "end": 2.575}, {"text": "能。", "start": 2.837, "end": 3.488}, {"text": "做法就一句话：", "start": 3.737, "end": 5.112}, {"text": "需求你说给 AI 听，它做出来，", "start": 5.125, "end": 8.005}, {"text": "你看过再让它改。", "start": 8.025, "end": 9.513}, {"text": "这叫 Vibe Coding。", "start": 9.775, "end": 11.275}, {"text": "入门三步。", "start": 11.55, "end": 12.8}, {"text": "第一步不装环境，", "start": 13.05, "end": 14.6}, {"text": "聊天框里打一句：", "start": 14.625, "end": 16.225}, {"text": "帮我做个贪吃蛇，几分钟就能玩。", "start": 16.275, "end": 19.138}, {"text": "第二步把 AI IDE 装到本地，", "start": 19.4, "end": 22.042}, {"text": "报错、改文件都在自己电脑上。", "start": 22.062, "end": 25.05}, {"text": "第三步扔张 App 截图给 AI，", "start": 25.312, "end": 28.117}, {"text": "让它照着复刻，", "start": 28.137, "end": 29.512}, {"text": "练的是把需求说清楚。", "start": 29.525, "end": 31.513}, {"text": "底下是开源课程 easy-vibe：", "start": 31.788, "end": 34.312}, {"text": "第一阶段做出第一个作品，", "start": 34.388, "end": 36.555}, {"text": "第二阶段做完整项目，", "start": 36.575, "end": 38.518}, {"text": "第三阶段上 Agent 和全平台。", "start": 38.538, "end": 41.388}, {"text": "评论区扣入门领课程，", "start": 41.65, "end": 43.95}, {"text": "下期一起做那条会写诗的贪吃蛇。", "start": 43.987, "end": 47.162}];
+    const stage = document.getElementById("cap-stage");
+    GROUPS.forEach((g, i) => {
+      const div = document.createElement("div");
+      div.className = "cap-group";
+      div.id = "cap-" + i;
+      const inner = document.createElement("span");
+      inner.textContent = g.text;
+      div.appendChild(inner);
+      stage.appendChild(div);
+      gsap.set(div, { opacity: 0, visibility: "hidden" });
+      const start = Math.max(g.start, 0.1);
+      const end = Math.max(g.end, start + 0.3);
+      tl.set(div, { visibility: "visible" }, start);
+      tl.fromTo(div, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, start);
+      tl.to(div, { opacity: 0, duration: 0.12, ease: "power2.in" }, end - 0.12);
+      tl.set(div, { visibility: "hidden" }, end);
+    });
+    window.__timelines["reel-captions"] = tl;
+  </script>
+</template>

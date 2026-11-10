@@ -1,0 +1,17 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7.5,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "注册发现", "data": {"icon": "target"}},
+    {"at": 1.0, "kind": "draw", "text": "参数校验", "data": {"icon": "bulb"}},
+    {"at": 2.0, "kind": "draw", "text": "权限管控", "data": {"icon": "clock"}},
+    {"at": 3.0, "kind": "point", "text": "错误恢复 · 状态一致 · 并发调度"},
+    {"at": 4.8, "kind": "draw", "text": "Harness", "data": {"icon": "target"}},
+    {"at": 6.0, "kind": "highlight", "data": {"target": "draw", "index": 3}}
+  ]
+}

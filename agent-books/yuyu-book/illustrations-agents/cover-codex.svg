@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M30 38H770M30 422H770" opacity=".25"/>
+  <rect x="78" y="76" width="644" height="310" rx="4" stroke-dasharray="4 9"/>
+  <rect x="128" y="112" width="544" height="236" rx="4" stroke-width="3"/>
+  <rect x="238" y="166" width="334" height="136" rx="5" fill="currentColor" fill-opacity=".08"/>
+  <path d="M238 199H572"/><circle cx="256" cy="182" r="3" fill="currentColor"/>
+  <path d="M262 224L279 238L262 252M292 252H345" stroke-width="5"/>
+  <path d="M371 228H541M371 247H502M371 266H521" stroke-width="4" opacity=".35"/>
+  <path d="M35 235H217M590 235H764" stroke-width="5"/>
+  <rect x="151" y="210" width="35" height="50" fill="currentColor"/>
+  <path d="M160 236L167 243L178 227" stroke="#fff" stroke-width="3"/>
+  <path d="M651 220L666 235L651 250" stroke-width="4"/>
+  <g fill="currentColor" stroke="none" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.7">
+    <text x="97" y="99">POLICY</text><text x="146" y="139">SANDBOX</text>
+    <text x="281" y="186">EXEC / LOCAL WORKSPACE</text>
+    <text x="46" y="281">APPROVAL</text><text x="601" y="281">EVIDENCE</text>
+    <text x="130" y="410">ONE COMMAND. EXPLICIT BOUNDARIES.</text>
+  </g>
+  <path d="M604 329H645M604 317H630" stroke-width="3" opacity=".5"/>
+</svg>

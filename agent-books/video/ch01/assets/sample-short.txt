@@ -1,0 +1,1 @@
+很多人以为 Agent Harness 就是 API 套壳加 while 循环。生产里超时、格式错、权限乱、上下文会满，理想假设会被逐个打破。简单封装像装遥控器；Harness 是能跑、能停、能诊断的整车。模型是马，Harness 是缰绳和鞍具。完整版在 B 站合集「驭者·Agent Harness」。

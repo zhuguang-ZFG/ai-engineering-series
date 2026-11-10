@@ -1,0 +1,8 @@
+$ omp --help > /tmp/h.txt   # 见 help-top.txt
+$ awk "/^COMMANDS/{f=1;next} /^Environment Variables:/{f=0} f" /tmp/h.txt | grep -Ec "^  [a-z][a-z0-9-]+"   # COMMANDS 段条目数
+51
+$ awk "/^FLAGS/{f=1;next} /^EXAMPLES/{f=0} f" /tmp/h.txt | grep -Ec "^[ -]"   # FLAGS 行
+57
+$ awk "/^Available Tools/{f=1;next} /^Plugin Options/{f=0} f" /tmp/h.txt | grep -Ec "^  [a-z_]"   # 工具行数
+15
+exit=0 (UTC 2026-11-03T11:26:29Z)

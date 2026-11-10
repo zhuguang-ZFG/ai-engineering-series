@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CI / CD 自动化 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 148 / 195</p><article><h1 id="ci--cd-自动化">CI / CD 自动化</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#cicd-自动化导论">CI/CD 自动化导论</a><ul><li><a href="#1-服务上线的动机">1. 服务上线的动机</a></li><li><a href="#2-构建把代码变成构建产物">2. 构建：把代码变成&quot;构建产物&quot;</a></li><li><a href="#3-服务器找一台永远不关门的房子">3. 服务器：找一台永远不关门的&quot;房子&quot;</a></li><li><a href="#4-部署把代码搬进房子">4. 部署：把代码搬进&quot;房子&quot;</a></li><li><a href="#5-域名和-dns给网站起个好名字">5. 域名和 DNS：给网站起个好名字</a></li><li><a href="#6-https给网站装一把锁">6. HTTPS：给网站装一把&quot;锁&quot;</a></li><li><a href="#7-cicd让机器人帮你干活">7. CI/CD：让机器人帮你干活</a></li><li><a href="#8-监控和日志做网站的守夜人">8. 监控和日志：做网站的&quot;守夜人&quot;</a></li><li><a href="#9-常见问题速查表">9. 常见问题速查表</a></li><li><a href="#总结-34">总结</a></li><li><a href="#名词速查表-6">名词速查表</a></li></ul></li></ul></nav></details><h2 id="cicd-自动化导论">CI/CD 自动化导论</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>代码在本地跑得好好的，怎么让全世界的人都能访问？</strong></p>
+</blockquote>
+<h3 id="1-服务上线的动机">1. 服务上线的动机</h3>
+<p>想象一下，你在自己家里做了一桌子菜，非常好吃。但问题是，只有自家人能吃到，邻居、保安、陌生人他们都尝不到。</p>
+<p>怎么办？你需要<strong>把菜端到餐厅里</strong>。这就是&quot;服务上线&quot;要做的事——把你写的代码，从个人电脑，搬到一个7×24小时永远开着的&quot;公共电脑&quot;上。这样任何人只要能上网，就能访问你的网站。</p>
+<p>服务上线涉及很多环节。就像开餐厅不仅仅是端菜出去，你还需要租店面、装修、办执照、雇服务员等。开发网站也是同理。从代码到用户能访问的网站，中间隔着很多步骤。需要一步步完成构建、部署、配置网络、保证安全等工作。</p>
+<p>下面我会把整个流程拆开来讲。每个环节都掰碎、揉细。保证连完全没基础的小白也能看懂。</p>
+<h3 id="2-构建把代码变成构建产物">2. 构建：把代码变成&quot;构建产物&quot;</h3>
+<h4 id="21-构建的动机">2.1 构建的动机</h4>
+<p>新手常问：代码写好了，为什么不能直接放到服务器上让用户访问？</p>
+<p>要回答这个问题，先搞清楚你写的代码是什么格式。你可能用 Vue、React、Express、Koa 等框架。这些框架有一个共同特点：<strong>它们不是给浏览器或服务器直接用的</strong>。</p>
+<p>举个例子。你写 Vue 代码时，是不是用过 <code>&lt;template&gt;</code>、<code>&lt;script setup&gt;</code> 这种标签？这种语法只有 Vue 认识。浏览器根本看不懂。浏览器只认识三种语言：HTML（网页结构）、CSS（网页样式）、JavaScript（网页逻辑）。Vue 组件语法对浏览器来说就像天书，完全无法理解。</p>
+<p>所以在把代码放到服务器之前，必须做一件重要的事：<strong>把它翻译成浏览器能看懂的语言</strong>。这个翻译过程叫做&quot;构建&quot;（Build）。</p>
+<h4 id="22-构建具体做什么">2.2 构建具体做什么</h4>
+<p>构建不只是翻译。它还会做很多优化。让网站跑起来更快、更省资源。详细说说它具体都干了哪些活：</p>
+<p><strong>第一步：解析依赖</strong></p>
+<p>写代码时，会用到各种第三方库。比如 Vue、Vue Router、Axios、Vite 等。这些库不可能每次都让用户从 npm 下载。那样太慢了。构建工具会分析代码，把所有依赖找出来。然后把它们&quot;打包&quot;到一起。</p>
+<p><strong>第二步：编译转换</strong></p>
+<p>这是最核心的一步。把 Vue 组件编译成 HTML 和 JavaScript。把 SASS/LESS 编译成 CSS。把 ES6+ 新语法转换成兼容性更好的 ES5 代码。这步完成后，代码就从&quot;开发者能看懂的格式&quot;变成&quot;机器能执行的格式&quot;。</p>
+<p><strong>第三步：压缩混淆</strong></p>
+<p>压缩就是把所有空格、换行、注释删掉。把变量名从英文单词改成单个字母。比如 <code>userName</code> 变成 <code>a</code>，<code>calculateTotalPrice</code> 变成 <code>b</code>。这样文件大小大幅减小。用户下载起来就快多了。混淆后的代码人类基本看不懂。也能起到一点&quot;保护代码&quot;的作用。</p>
+<p><strong>第四步：代码分割</strong></p>
+<p>可能写了10个页面。每个页面有自己的代码。但用户可能只访问其中一个页面。为什么要下载其他9个页面的代码？构建工具会把代码分割成多个小块。用户访问哪个页面就下载哪个页面的代码。这就是&quot;按需加载&quot;。能大幅提升首次访问的速度。</p>
+<p><strong>第五步：生成哈希</strong></p>
+<p>这是非常重要的一步。但很多人会忽略。构建完成后，文件名会变成类似 <code>app.abc123.js</code>、<code>vendor.def456.css</code> 这样的格式。后面那串字母数字混合的字符串叫&quot;哈希&quot;。</p>
+<p>哈希的作用是：当代码有任何改动时，哈希值就会变化。浏览器就知道&quot;这个文件变了，需要重新下载&quot;。没变的文件，浏览器继续使用缓存。不用重复下载。这样既能保证用户看到最新代码，又能充分利用缓存提升速度。</p>
+<h4 id="23-执行构建的方法">2.3 执行构建的方法</h4>
+<p>大多数现代前端项目都已经配好构建工具。只需要记住一个命令：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 如果用 npm
+npm run build
+
+# 如果用 yarn
+yarn build
+
+# 如果用 pnpm
+pnpm build
+</code></pre>
+<p>运行完后，去项目根目录找一个叫 <code>dist</code> 的文件夹（有时也叫 <code>build</code> 或 <code>.output</code>）。里面就是构建好的所有文件。这些文件就是最终要上传到服务器的东西。不需要再做任何修改。直接拖到服务器上就行。</p>
+<h4 id="24-构建产物里有什么">2.4 构建产物里有什么</h4>
+<p>打开 dist 文件夹，会看到里面主要是三类文件：</p>
+<ul>
+<li><strong>HTML文件</strong>：通常叫 <code>index.html</code>。这是入口文件。浏览器首先加载的就是它。</li>
+<li><strong>JS文件</strong>：所有 JavaScript 代码。可能是1个也可能是好几个。</li>
+<li><strong>CSS文件</strong>：所有样式代码。可能内联在 HTML 里，也可能是单独的 CSS 文件。</li>
+</ul>
+<p>如果是比较复杂的后端项目（比如 Node.js），构建产物可能是一个可执行文件，或者一个 Docker 镜像。但原理是一样的：把代码变成服务器能直接运行的形式。</p>
+<h3 id="3-服务器找一台永远不关门的房子">3. 服务器：找一台永远不关门的&quot;房子&quot;</h3>
+<h4 id="31-服务器到底是什么">3.1 服务器到底是什么</h4>
+<p>很多人第一次听到&quot;服务器&quot;，觉得是什么高大上的神秘设备。其实没那么复杂。<strong>服务器就是一台电脑</strong>。一台永远不关机、一直插着网线的电脑。</p>
+<p>可能有人问：我自己家里不是有电脑吗？为什么要额外花钱租服务器？</p>
+<p>这个问题问得好。帮你分析一下：</p>
+<p>首先，你家的电脑不可能24小时开着。你要出门、要睡觉、偶尔还会死机重启。但服务器不一样。它专门用来干这个。可以365天全年无休地运行。网站随时都能访问。</p>
+<p>其次，你家的网络也不行。家用宽带的上传速度通常很慢。而且家用宽带的 IP 是动态变化的。今天是这个 IP，明天可能就变成另外一个了。根本没法用来做网站服务器。服务器用的是数据中心的高速网络。IP 固定，网速飞快。</p>
+<p>第三，你家的电脑没有&quot;公网IP&quot;。什么叫公网IP？就是全世界独一无二的地址。只有有这个地址，别人才能在互联网上找到你的电脑。你家电脑的 IP 通常只能在你家局域网里用。外面的人根本找不到你。服务器就不同了。它有一个固定的公网 IP。全世界的人都能通过这个 IP 找到它。</p>
+<h4 id="32-选服务器的实现">3.2 选服务器的实现</h4>
+<p>选服务器主要看三个指标：<strong>CPU核数</strong>、内存大小、硬盘空间。这三个指标越高，服务器性能越好，价格也越贵。</p>
+<p>对于刚入门的新手，完全没必要买特别贵的配置。记住一个简单的选法：</p>
+<ul>
+<li><strong>个人项目、学习练手</strong>：1核2G内存，足够了。一个月大概几十块钱。</li>
+<li><strong>小型商业项目</strong>：2核4G内存。能承载每天几千到几万访问量。</li>
+<li><strong>中型项目</strong>：4核8G或更高。需要专业团队来运维了。</li>
+</ul>
+<p>还有一个要考虑的点：<strong>地域</strong>。如果用户主要在中国，就买国内的服务器（阿里云、腾讯云），访问速度快。如果用户主要在海外，就买国外的服务器（AWS、Google Cloud、DigitalOcean），或者买香港的服务器。速度快而且不用备案。</p>
+<h4 id="33-国内还是国外">3.3 国内还是国外</h4>
+<p>这是个很重要的问题。很多人刚开始没想清楚。后期会遇到麻烦。</p>
+<p><strong>买国内服务器</strong>的好处是速度快、延迟低。缺点是需要备案（提交网站信息给国家相关部门审核）。通常要等一周到一个月。而且国内服务器价格相对贵一些。</p>
+<p><strong>买国外服务器</strong>的好处是不用备案。买了就能用。价格也可能更便宜。缺点是中国大陆用户访问速度可能慢一些。如果是香港或新加坡机房会好很多。</p>
+<p>建议是：如果是个人项目、学习展示用的网站，买香港或海外的服务器。省去备案的麻烦。如果是做正规商业项目，需要长期运营，就买国内服务器。老老实实备案，后期会省很多麻烦。</p>
+<h4 id="34-主流云厂商对比">3.4 主流云厂商对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>适合人群</th>
+<th>特点</th>
+<th>新用户价格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>国内业务</td>
+<td>市场占有率第一，生态完善</td>
+<td>首年几十到一百多</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>小程序、游戏</td>
+<td>小程序云开发支持好</td>
+<td>首年优惠力度大</td>
+</tr>
+<tr>
+<td>华为云</td>
+<td>企业用户</td>
+<td>政府、政务项目首选</td>
+<td>价格偏高</td>
+</tr>
+<tr>
+<td>DigitalOcean</td>
+<td>开发者</td>
+<td>简单好用，价格透明</td>
+<td>$4/月起</td>
+</tr>
+<tr>
+<td>Vercel</td>
+<td>前端项目</td>
+<td>零配置，直接推送就上线</td>
+<td>免费额度够用</td>
+</tr>
+</tbody></table></div>
+<p>新手最推荐 <strong>阿里云</strong> 或 腾讯云 的学生机/新用户优惠。通常一年只需要几十块钱。性价比极高。如果做的是纯前端项目，想省事，也可以直接用 Vercel 或 Netlify。连服务器都不用买。把代码推送上去就自动部署好了。</p>
+<h4 id="35-拿到服务器后该做什么">3.5 拿到服务器后该做什么</h4>
+<p>买完服务器后，会收到一封邮件。里面包含几个重要信息：</p>
+<ul>
+<li><strong>IP地址</strong>：一串类似 <code>123.45.67.89</code> 的数字。这是服务器在互联网上的门牌号。</li>
+<li><strong>登录用户名</strong>：通常是 <code>root</code>（管理员账号）。</li>
+<li><strong>登录密码</strong>：初始密码，或者是让你设置密码的链接。</li>
+</ul>
+<p>有了这些信息，就可以用 <strong>SSH（Secure Shell）</strong> 远程登录到服务器上。对它做各种配置。SSH 就像是给服务器发的一条加密的远程控制命令。让自己电脑上就能操作远在天边的服务器。</p>
+<p>登录命令是这样的：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh root@123.45.67.89
+# 按回车后会让你输入密码。输入正确的密码后就登录成功了。
+</code></pre>
+<p>登录成功后，就进入了服务器的命令行界面。看起来和在自己电脑上开了一个终端窗口差不多。可以在这里安装软件、创建文件夹、修改配置。一切操作都和本地电脑一样。</p>
+<h3 id="4-部署把代码搬进房子">4. 部署：把代码搬进&quot;房子&quot;</h3>
+<h4 id="41-部署是什么">4.1 部署是什么</h4>
+<p>部署就是租好了服务器（房子）之后，把代码（行李家具）搬进去。然后打开门开始营业的过程。</p>
+<p>具体来说，部署包括以下几个步骤：</p>
+<ol>
+<li><strong>把代码上传到服务器</strong>：把构建产物从本地电脑传到服务器上。</li>
+<li><strong>安装依赖</strong>：服务器上可能没有项目需要的各种包。需要安装。</li>
+<li><strong>配置环境变量</strong>：比如数据库密码、API密钥等敏感信息。</li>
+<li><strong>启动服务</strong>：让应用程序跑起来。开始监听用户的请求。</li>
+</ol>
+<p>这四个步骤听起来挺复杂。但其实做起来没那么难。下面会详细介绍每一步怎么做。</p>
+<h4 id="42-把代码上传到服务器的实现">4.2 把代码上传到服务器的实现</h4>
+<p><strong>方法一：FTP/SFTP 上传</strong></p>
+<p>这是最直观的方式。就像用网盘一样。把文件拖到服务器上。可以在自己电脑上下载一个叫 <strong>FileZilla</strong> 的免费软件。填入服务器的IP、用户名、密码。就能像管理本地文件一样管理服务器上的文件了。</p>
+<p><strong>方法二：Git 拉取</strong></p>
+<p>这是更推荐的方式。先在 GitHub、GitLab 或 Gitee 上创建一个代码仓库。把代码推送到云端。然后在服务器上用 <code>git clone</code> 命令把代码拉下来。</p>
+<p>这样好处是：后续更新代码只需要在服务器上执行 <code>git pull</code> 命令就行。不用每次都手动上传。而且代码存云端也安全。服务器重装了也不怕。</p>
+<p><strong>方法三：CI/CD 自动部署</strong></p>
+<p>这是最专业的方式。也是强烈推荐的方式。通过配置 CI/CD（持续集成/持续部署），只需要把代码推送到 GitHub。CI/CD 系统就会自动帮你完成：拉取代码 → 安装依赖 → 构建 → 部署的全过程。甚至不需要登录服务器。一切都是自动完成的。</p>
+<h4 id="43-部署的具体步骤">4.3 部署的具体步骤</h4>
+<p>假设用最简单的方式——Git 手动部署。一步步演示整个过程：</p>
+<p><strong>第一步：连接到服务器</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh root@123.45.67.89
+</code></pre>
+<p><strong>第二步：安装必要的软件</strong></p>
+<p>如果是 Node.js 项目，需要先安装 Node.js：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 以 Ubuntu 系统为例
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+</code></pre>
+<p><strong>第三步：拉取代码</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 创建放网站的目录
+mkdir -p /var/www/my-website
+cd /var/www/my-website
+
+# 克隆代码仓库（需要先在GitHub上创建好仓库）
+git clone https://github.com/你的用户名/你的仓库名.git .
+</code></pre>
+<p><strong>第四步：安装依赖并构建</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装项目依赖
+npm install
+
+# 构建项目（生成 dist 目录）
+npm run build
+</code></pre>
+<p><strong>第五步：用 PM2 启动服务</strong></p>
+<p>为什么要用 PM2？它是一个进程管理工具。可以让网站在后台持续运行。就算服务器重启了也能自动启动。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 全局安装 PM2
+sudo npm install -g pm2
+
+# 启动网站（假设入口文件是 index.js）
+pm2 start index.js
+
+# 设置开机自启
+pm2 startup
+pm2 save
+</code></pre>
+<p><strong>第六步：配置 Nginx 反向代理</strong></p>
+<p>Node.js 应用通常跑在 3000 或 8080 这样的端口上。但用户访问的是 80 端口（HTTP默认端口）。需要用 Nginx 把 80 端口的请求转发到应用端口。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 Nginx
+sudo apt install -y nginx
+
+# 创建 Nginx 配置文件
+sudo nano /etc/nginx/sites-available/my-website
+</code></pre>
+<p>在打开的编辑器里写入以下配置：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name example.com www.example.com;
+
+    # 静态文件（构建产物）直接返回
+    location / {
+        root /var/www/my-website/dist;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # API 请求转发到 Node.js 后端
+    location /api/ {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &#39;upgrade&#39;;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+</code></pre>
+<p>保存退出后，启用这个配置：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 启用配置
+sudo ln -s /etc/nginx/sites-available/my-website /etc/nginx/sites-enabled/
+
+# 测试配置是否有错误
+sudo nginx -t
+
+# 重启 Nginx
+sudo systemctl restart nginx
+</code></pre>
+<p>现在访问 <code>http://example.com</code>（记得先把域名解析到这个服务器IP），应该就能看到网站了！</p>
+<h3 id="5-域名和-dns给网站起个好名字">5. 域名和 DNS：给网站起个好名字</h3>
+<h4 id="51-买域名的动机">5.1 买域名的动机</h4>
+<p>有了服务器 IP，为什么还要买域名？</p>
+<p>想想看。让你记住一串数字 <code>123.45.67.89</code> 是不是很困难？是不是很容易敲错？但让你记住 <code>baidu.com</code>、<code>taobao.com</code> 这样的名字是不是就简单多了？</p>
+<p>域名就是网站的名字。好记、专业。还能体现品牌形象。想象一下。告诉别人&quot;访问我做的网站，IP 是 123.45.67.89&quot;，和&quot;访问 woshishuaige.com&quot;，哪个更像那么回事？</p>
+<h4 id="52-dns-是什么">5.2 DNS 是什么</h4>
+<p>好。现在买了一个域名。比如叫 <code>my-awesome-website.com</code>。但问题来了：电脑只认识 IP 地址。不认识 &quot;my-awesome-website.com&quot; 这种人类语言啊。</p>
+<p>这就需要 DNS 出场了。DNS 的全称是 &quot;Domain Name System&quot;。翻译过来就是&quot;域名系统&quot;。可以把它理解成一本巨大的&quot;电话簿&quot;。专门负责把人类好记的域名翻译成电脑能看懂的 IP 地址。</p>
+<p>当在浏览器里输入 <code>my-awesome-website.com</code> 并回车时。背后发生了这些事情：</p>
+<ol>
+<li>浏览器问 DNS：&quot;hey，my-awesome-website.com 的 IP 地址是多少？&quot;</li>
+<li>DNS 查了一下&quot;电话簿&quot;，告诉浏览器：&quot;它的 IP 是 123.45.67.89&quot;</li>
+<li>浏览器根据这个 IP 地址，找到了服务器，发出了请求</li>
+</ol>
+<p>整个过程通常只需要几十毫秒。用户完全感知不到。</p>
+<h4 id="53-配置-dns-的实现">5.3 配置 DNS 的实现</h4>
+<p>配置 DNS 通常有两个地方可以操作：</p>
+<p><strong>方式一：在域名购买商那里配置</strong></p>
+<p>在哪里买的域名，就去哪里配置 DNS 记录。最常见的记录类型是 <strong>A 记录</strong>：</p>
+<ul>
+<li><strong>记录类型</strong>：A</li>
+<li><strong>主机记录</strong>：通常填 <code>@</code>（代表域名本身，如 my-awesome-website.com）或者 <code>www</code>（代表 <a href="http://www.my-awesome-website.com）">www.my-awesome-website.com）</a></li>
+<li><strong>记录值</strong>：服务器 IP 地址，如 <code>123.45.67.89</code></li>
+</ul>
+<p><strong>方式二：使用第三方 DNS 服务</strong></p>
+<p>很多专业玩家不用域名商自带的 DNS。而是用 Cloudflare、阿里云 DNSPod、腾讯云 DNS 这些专业的 DNS 服务商。这些服务通常更稳定、解析速度更快。还自带 CDN、DDoS 防护等增值功能。</p>
+<h4 id="54-dns-生效要多久">5.4 DNS 生效要多久</h4>
+<p>这是很多人关心的问题。答案是：<strong>不一定。通常几分钟到 24 小时</strong>。</p>
+<p>DNS 修改后，全球所有的 DNS 服务器需要同步这个变更。这就像往大海里扔一颗石子。波浪需要时间才能传到远方。有些 DNS 服务器更新快，几分钟就生效了。有些比较慢，可能需要等很久。</p>
+<p>可以用以下命令检查 DNS 是否生效：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># Windows
+ping 你的域名
+
+# Mac/Linux
+ping 你的域名
+</code></pre>
+<p>如果 ping 得通，显示的是服务器的 IP。说明 DNS 已经生效了。</p>
+<h3 id="6-https给网站装一把锁">6. HTTPS：给网站装一把&quot;锁&quot;</h3>
+<h4 id="61-http-和-https-的区别">6.1 HTTP 和 HTTPS 的区别</h4>
+<p>可能注意到了。有些网站地址是 <code>http://</code> 开头的。有些是 <code>https://</code> 开头的。这个&quot;s&quot;很重要。它代表&quot;安全&quot;（Secure）。</p>
+<p><strong>HTTP（HyperText Transfer Protocol）</strong> 是用来传输网页的协议。可以把它理解成运输数据的卡车。但这辆卡车是<strong>透明的</strong>。里面装的东西所有人都能看见。在 HTTP 网站上输入的密码、填写的个人信息。在传输过程中可能被中间的任何人偷看到。</p>
+<p><strong>HTTPS（HTTP Secure）</strong> 是给这辆卡车加了一个密封的集装箱。还配了一把钥匙。只有发送方和接收方有钥匙。中间的人就算截获了也看不懂里面是什么东西。这就是加密传输。</p>
+<h4 id="62-https-的动机">6.2 HTTPS 的动机</h4>
+<p>第一个原因：<strong>安全</strong>。没有 HTTPS，用户在网站上输入的密码是明文传输的。但凡有点技术的人都能截获。这年头，谁敢用没有 HTTPS 的网站？</p>
+<p>第二个原因：<strong>浏览器警告</strong>。现在 Chrome、Edge 这些主流浏览器都会对没有 HTTPS 的网站显示&quot;不安全&quot;的警告。用户一看 warning 图标。跑了都来不及。更别说注册、充值了。</p>
+<p>第三个原因：<strong>SEO</strong>。Google、百度这些搜索引擎都会优先收录 HTTPS 的网站。SEO 效果会更好。</p>
+<h4 id="63-获取-https-证书的实现">6.3 获取 HTTPS 证书的实现</h4>
+<p>以前 HTTPS 证书很贵。每年要花几百甚至几千块钱。现在好了。出了一个叫 <strong>Let&#39;s Encrypt</strong> 的组织。提供完全免费的 SSL/TLS 证书。而且社区有很多自动化工具帮你安装和续期。</p>
+<p><strong>方式一：使用 Certbot（推荐）</strong></p>
+<p>Certbot 是一个自动申请和配置 Let&#39;s Encrypt 证书的工具。非常简单：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 Certbot
+sudo apt install -y certbot python3-certbot-nginx
+
+# 一键申请证书并配置 Nginx
+sudo certbot --nginx -d example.com -d www.example.com
+</code></pre>
+<p>运行过程中会问几个问题。比如邮箱（用于证书到期提醒）。回答完后证书就自动配置好了。访问网站会发现地址栏多了一个小锁🔒。</p>
+<p>证书有效期是 90 天。但 Certbot 会帮你设置定时任务自动续期。基本不用管它。</p>
+<p><strong>方式二：使用 Cloudflare</strong></p>
+<p>如果使用了 Cloudflare 的 DNS 服务。那 HTTPS 证书根本不用自己配置。Cloudflare 会自动为域名提供 HTTPS 支持。而且连 90 天续期的问题都帮你解决了。</p>
+<h4 id="64-配置-https-后发生了什么变化">6.4 配置 HTTPS 后发生了什么变化</h4>
+<p>配置好 HTTPS 后，用户访问从原来的 <code>http://example.com</code> 变成了 <code>https://example.com</code>。这个变化带来了一系列的安全保障：</p>
+<ol>
+<li><strong>加密传输</strong>：用户和服务器之间的所有通信都是加密的。</li>
+<li><strong>身份验证</strong>：证书可以证明&quot;我真的是这个网站&quot;。防止钓鱼网站。</li>
+<li><strong>数据完整性</strong>：能检测到数据是否被篡改。</li>
+</ol>
+<h3 id="7-cicd让机器人帮你干活">7. CI/CD：让机器人帮你干活</h3>
+<h4 id="71-cicd概述">7.1 CI/CD概述</h4>
+<p>CI/CD 是两个词的缩写：<strong>C</strong>ontinuous Integration（持续集成）和 Continuous Deployment（持续部署）。可以理解为一套帮你自动干活的机器人系统。</p>
+<p>在没有 CI/CD 的时候。每次要发布新功能。流程是这样的：</p>
+<ol>
+<li>打开电脑，登录 GitHub</li>
+<li>拉取最新代码</li>
+<li>运行测试，看看有没有bug</li>
+<li>手动构建项目</li>
+<li>登录服务器</li>
+<li>拉取最新代码</li>
+<li>安装依赖</li>
+<li>构建项目</li>
+<li>重启服务</li>
+</ol>
+<p>这9个步骤。每次发布都要手动做一遍。烦不烦？而且很容易漏掉某一步。比如忘记运行测试、忘记重启服务等。</p>
+<p>有了 CI/CD 之后。流程变成了这样：</p>
+<ol>
+<li>把代码 push 到 GitHub</li>
+<li>喝茶坐等</li>
+<li>（机器人自动完成上面9个步骤）</li>
+<li>网站自动更新了</li>
+</ol>
+<p>这就是 CI/CD 的魅力：<strong>只需要把代码推上去。剩下的全部自动完成</strong>。</p>
+<h4 id="72-cicd-的工作流程">7.2 CI/CD 的工作流程</h4>
+<p>一个典型的 CI/CD 流程是这样的：</p>
+<p><strong>第一步：代码提交（Push）</strong></p>
+<p>完成了新功能的开发。把代码 push 到 GitHub。</p>
+<p><strong>第二步：CI（持续集成）触发</strong></p>
+<p>GitHub 检测到代码变动。通知 CI 系统（GitHub Actions、GitLab CI 等）开始工作。</p>
+<p><strong>第三步：安装依赖和测试</strong></p>
+<p>CI 系统会启动一台虚拟电脑。在上面：</p>
+<ul>
+<li>安装项目需要的各种依赖</li>
+<li>运行测试代码，确保没有 bug</li>
+<li>构建项目，生成产物</li>
+</ul>
+<p>如果测试失败。CI 会发邮件通知。这次部署就停了。不会把有问题的代码部署到生产环境。</p>
+<p><strong>第四步：CD（持续部署）执行</strong></p>
+<p>测试全部通过后。CI 系统会：</p>
+<ul>
+<li>通过 SSH 连接到服务器</li>
+<li>拉取最新代码</li>
+<li>安装依赖</li>
+<li>构建项目</li>
+<li>重启服务</li>
+</ul>
+<p>整个过程可能只需要几分钟。全部自动完成。</p>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/cicd.svg" aria-label="打开大图：五步流水线：代码提交、CI 触发、测试与构建、CD 部署、监控告警；测试失败时用虚线箭头退回并邮件通知"><img src="../../book/assets/handdraw/cicd.svg" alt="五步流水线：代码提交、CI 触发、测试与构建、CD 部署、监控告警；测试失败时用虚线箭头退回并邮件通知" loading="lazy"></a>
+  <figcaption><strong>九步手动变两步：push，然后喝茶坐等。</strong>机器人把登录、测试、构建、上服务器、重启全包了；测试一失败就停下并发邮件，坏代码到不了线上。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h4 id="73-配置-github-actions-的实现">7.3 配置 GitHub Actions 的实现</h4>
+<p>GitHub Actions 是 GitHub 自带的 CI/CD 功能。不需要额外付费（免费额度足够个人项目用）。配置起来也非常简单。</p>
+<p>在项目根目录下创建 <code>.github/workflows/deploy.yml</code> 文件。写入以下配置：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml">name: Deploy to Production
+
+# 触发条件：每当 main 分支有代码推送时
+on:
+  push:
+    branches: [main]
+
+# 任务列表
+jobs:
+  # 部署任务
+  deploy:
+    # 在什么系统上运行
+    runs-on: ubuntu-latest
+    
+    # 具体步骤
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. 安装 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: &#39;18&#39;
+
+      # 3. 安装依赖并构建
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      # 4. 部署到服务器
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/my-website
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart all
+</code></pre>
+<p>这个配置文件告诉 GitHub Actions：</p>
+<ul>
+<li>当 main 分支有新代码时触发</li>
+<li>在一台 Ubuntu 电脑上执行任务</li>
+<li>先安装 Node.js 18</li>
+<li>然后安装依赖并构建项目</li>
+<li>最后通过 SSH 连接到服务器，执行一系列部署命令</li>
+</ul>
+<p>配置好之后。每次 <code>git push origin main</code>。GitHub 就会自动开始部署。非常方便。</p>
+<h3 id="8-监控和日志做网站的守夜人">8. 监控和日志：做网站的&quot;守夜人&quot;</h3>
+<h4 id="81-监控的动机">8.1 监控的动机</h4>
+<p>网站上线后。理论上应该 7×24 小时不间断运行。但现实世界没有这么美好。服务器可能会宕机。网络可能会抖动。代码可能会有bug。在真实的生产环境中。各种意外情况都有可能发生。</p>
+<p>如果没有监控。就只能等用户打电话告诉你&quot;网站打不开了&quot;。这时候往往已经晚了。用户可能已经流失了。</p>
+<p>有了监控之后。可以：</p>
+<ul>
+<li><strong>提前发现问题</strong>：CPU 使用率 90% 了。提前加服务器。</li>
+<li><strong>快速定位问题</strong>：网站慢了。查监控看是哪里瓶颈。</li>
+<li><strong>心里有底</strong>：每天多少人访问、访问量什么时候最高。</li>
+</ul>
+<h4 id="82-监控哪些指标">8.2 监控哪些指标</h4>
+<p>最重要的监控指标就这几个：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>正常范围</th>
+<th>超过怎么办</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU 使用率</td>
+<td>&lt; 70%</td>
+<td>升级服务器配置或优化代码</td>
+</tr>
+<tr>
+<td>内存使用率</td>
+<td>&lt; 80%</td>
+<td>检查是否有内存泄漏</td>
+</tr>
+<tr>
+<td>磁盘使用率</td>
+<td>&lt; 80%</td>
+<td>清理日志或无用文件</td>
+</tr>
+<tr>
+<td>网站可达性</td>
+<td>100%</td>
+<td>检查服务是否正常运行</td>
+</tr>
+<tr>
+<td>响应时间</td>
+<td>&lt; 2 秒</td>
+<td>优化数据库查询或加缓存</td>
+</tr>
+<tr>
+<td>错误率</td>
+<td>&lt; 1%</td>
+<td>查看错误日志定位问题</td>
+</tr>
+</tbody></table></div>
+<h4 id="83-配置监控的实现">8.3 配置监控的实现</h4>
+<p><strong>最简单的方案：Uptime Robot</strong></p>
+<p>注册 uptimerobot.com。添加网站URL。它会每 5 分钟自动检查一次网站是否正常。网站挂了会发邮件通知你。免费版本可以监控 50 个网站。对个人项目来说完全够用。</p>
+<p><strong>进阶方案：阿里云/腾讯云监控</strong></p>
+<p>如果服务器是在阿里云或腾讯云买的。它们自带监控功能。配置一下阈值报警就行。</p>
+<p><strong>专业方案：Prometheus + Grafana</strong></p>
+<p>这两个是监控领域的&quot;瑞士军刀&quot;。功能非常强大。可以监控任何能想到的指标。还能画出漂亮的可视化图表。不过配置起来比较复杂。适合有一定经验的开发者。</p>
+<h4 id="84-日志故障排查流程">8.4 日志：故障排查流程</h4>
+<p>监控告诉你&quot;网站出问题了&quot;。但具体是什么问题、为什么出问题。需要靠<strong>日志</strong>来定位。</p>
+<p>日志就是程序运行时的&quot;日记本&quot;。记录了程序运行过程中的点点滴滴：</p>
+<ul>
+<li>哪个用户在什么时候访问了什么页面</li>
+<li>数据库查询花了多长时间</li>
+<li>有没有报错，错误信息是什么</li>
+</ul>
+<p><strong>最基础的日志用法</strong></p>
+<p>在服务器上查看应用日志：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 查看 PM2 的日志
+pm2 logs
+
+# 查看 Nginx 的访问日志
+tail -f /var/log/nginx/access.log
+
+# 查看 Nginx 的错误日志
+tail -f /var/log/nginx/error.log
+</code></pre>
+<p><strong>进阶的日志方案</strong></p>
+<p>如果项目比较复杂。推荐使用专业的日志收集工具：</p>
+<ul>
+<li><strong>Loki</strong>：免费开源。和 Prometheus 一家的。</li>
+<li><strong>ELK（Elasticsearch + Logstash + Kibana）</strong>：功能强大。但配置复杂。</li>
+<li><strong>Sentry</strong>：专门用于收集应用错误的工具。能自动收集报错信息。</li>
+</ul>
+<h4 id="85-告警故障通知机制">8.5 告警：故障通知机制</h4>
+<p>监控告诉你有问题。但如果没有盯着监控面板看，怎么办？这就需要<strong>告警</strong>了。</p>
+<p>告警就是当监控系统检测到异常时。自动通过短信、微信、钉钉、邮件等方式通知你。可以设置不同的告警级别：</p>
+<ul>
+<li><strong>紧急（网站完全挂掉）</strong>：发短信+打电话。必须马上知道。</li>
+<li><strong>严重（错误率飙升）</strong>：发钉钉/微信消息。看到就处理。</li>
+<li><strong>一般（CPU 偏高）</strong>：发邮件汇总。一天看一次就行。</li>
+</ul>
+<p>告警配置的核心原则是：<strong>分级告警，别把自己烦死</strong>。如果什么鸡毛蒜皮的小事都给你发短信。用不了多久你就会把告警关掉。</p>
+<h3 id="9-常见问题速查表">9. 常见问题速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题现象</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网站打不开</td>
+<td>域名没解析 / 服务器挂了 / Nginx 没启动</td>
+<td><code>ping 域名</code> 看通不通；<code>pm2 list</code> 看服务状态；<code>systemctl status nginx</code> 看 Nginx</td>
+</tr>
+<tr>
+<td>打开是空白页面</td>
+<td>构建产物路径不对 / 静态文件没正确配置</td>
+<td>检查 Nginx 的 root 路径是否指向 dist 目录</td>
+</tr>
+<tr>
+<td>404 页面找不到</td>
+<td>路由没正确配置 / 路径拼写错误</td>
+<td>Nginx 配置里加上 <code>try_files $uri $uri/ /index.html</code></td>
+</tr>
+<tr>
+<td>502 Bad Gateway</td>
+<td>后端服务挂了 / 端口没开</td>
+<td><code>pm2 list</code> 看进程是否在运行；检查端口是否正确</td>
+</tr>
+<tr>
+<td>403 Forbidden</td>
+<td>权限不对 / 索引目录没开</td>
+<td>检查文件权限 <code>chmod -R 755</code>；Nginx 配置加上 <code>autoindex on</code></td>
+</tr>
+<tr>
+<td>HTTPS 证书过期</td>
+<td>证书到期没续期</td>
+<td><code>certbot renew</code> 手动续期；检查自动续期定时任务</td>
+</tr>
+<tr>
+<td>更新后看不到变化</td>
+<td>浏览器缓存 / CDN 缓存</td>
+<td>Ctrl+Shift+R 强制刷新；去 CDN 控制台&quot;刷新缓存&quot;</td>
+</tr>
+<tr>
+<td>网站打开很慢</td>
+<td>带宽不够 / 没开缓存 / 没配置 CDN</td>
+<td>升级服务器带宽；配置 Redis 缓存；接入 CDN</td>
+</tr>
+<tr>
+<td>数据库连不上</td>
+<td>数据库没启动 / 密码错了 / 权限问题</td>
+<td>检查数据库服务状态；核对配置里的连接信息</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-34">总结</h3>
+<p>服务上线是一个系统性的大工程。涉及从代码构建到服务器部署、从网络配置到安全防护、从监控告警到日志分析的方方面面。对于初学者来说。不需要一开始就追求完美。先把最小可用版本（MVP）跑起来。然后在此基础上逐步完善。</p>
+<p>整个流程的核心要点可以归纳为以下几点：</p>
+<h4 id="核心流程">核心流程</h4>
+<ol>
+<li><strong>构建</strong> → 用 <code>npm run build</code> 把代码变成浏览器能看懂的 HTML/CSS/JS</li>
+<li><strong>部署</strong> → 把构建产物上传到服务器。用 Nginx 配置反向代理。</li>
+<li><strong>域名</strong> → 购买域名并配置 DNS 解析到服务器 IP</li>
+<li><strong>HTTPS</strong> → 用 Let&#39;s Encrypt 申请免费证书。保护数据传输安全。</li>
+<li><strong>CI/CD</strong> → 配置自动化部署。代码 push 后自动上线。</li>
+<li><strong>监控</strong> → 配置监控和告警。出问题第一时间知道。</li>
+</ol>
+<h4 id="学习路线建议-1">学习路线建议</h4>
+<ul>
+<li><strong>第1天</strong>：用 Vercel/Netlify 部署一个静态网页。体验一下&quot;代码变成网站&quot;的感觉。</li>
+<li><strong>第1周</strong>：租一台云服务器。手动部署一个 Node.js 项目。配置域名和 HTTPS。</li>
+<li><strong>第2-4周</strong>：配置完整的 CI/CD 流程。建立监控和告警体系。</li>
+<li><strong>持续学习</strong>：学习 Docker 容器化、学习 Kubernetes 集群、学习微服务架构。</li>
+</ul>
+<h3 id="名词速查表-6">名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>名词</th>
+<th>英文</th>
+<th>用人话解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>构建</td>
+<td>Build</td>
+<td>把源代码翻译打包成浏览器能执行的格式</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>Deploy</td>
+<td>把代码放到服务器上让用户能访问</td>
+</tr>
+<tr>
+<td>服务器</td>
+<td>Server</td>
+<td>7×24小时不关机、联网的电脑</td>
+</tr>
+<tr>
+<td>域名</td>
+<td>Domain</td>
+<td>网站的好记名字（如 baidu.com）</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>Domain Name System</td>
+<td>把域名翻译成 IP 地址的&quot;电话簿&quot;</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>HyperText Transfer Protocol</td>
+<td>网页传输协议（不安全，明文传输）</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>HTTP Secure</td>
+<td>加密传输的网页协议（安全）</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>Engine X</td>
+<td>高性能 Web 服务器。做反向代理的。</td>
+</tr>
+<tr>
+<td>反向代理</td>
+<td>Reverse Proxy</td>
+<td>站在门口的服务员。把请求转发给后端。</td>
+</tr>
+<tr>
+<td>SSH</td>
+<td>Secure Shell</td>
+<td>远程登录服务器的加密工具</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>Content Delivery Network</td>
+<td>全球分布的服务器网络。加快访问速度。</td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td>Continuous Integration/Deployment</td>
+<td>自动化流水线。代码 push 后自动测试部署。</td>
+</tr>
+<tr>
+<td>SSL/TLS</td>
+<td>Secure Sockets Layer / Transport Layer Security</td>
+<td>加密协议。给 HTTPS 提供安全保障。</td>
+</tr>
+<tr>
+<td>PM2</td>
+<td>Process Manager 2</td>
+<td>Node.js 进程管理器。让应用持续运行。</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-147.html">← Kubernetes 编排</a><a rel="next" href="chapter-149.html">域名、DNS 与 HTTPS →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

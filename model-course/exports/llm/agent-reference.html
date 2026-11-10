@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="从一只杯子、一份通知开始，沿五十一张手绘拆开生成、注意力、训练和蒸馏，再动手查资料、用工具、核对答案。"><title>Agent 与工具调用回查 · 把大模型拆开看</title><link rel="stylesheet" href="lab.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="index.html">把大模型拆开看</a><span>Vibe Coding 101 · 原理与应用</span><a href="../landing.html">返回课程</a></header>
+<main class="shell review-page" id="main" tabindex="-1"><article><h1>AI Agent 原理与工具调用</h1>
+<p>页面写着“已计算”，与程序真的运行过乘法，是两件事。本章沿着请求、校验、执行、回执与结束条件，说明一个应用怎样把模型的建议变成可核验的动作。</p>
+<p>先用 <a href="tools.html">L10 本地工具实验</a>观察流程，再运行章末的本地两步工作流。实验请求和商品价格都是人工材料；不需要账号，也没有运行商业模型或生成真实订单。</p>
+<h2>0. 引言：从&quot;能说&quot;到&quot;能做&quot;</h2>
+<p>对话产品有的能联网、运行代码或操作文件，有的没有这些功能；应检查当前产品、模式、权限和实际工具。不能笼统地说聊天产品只能说、不能做。</p>
+<p>在模型与应用的分工里，模型输出工具请求，运行时校验并调度工具，工具返回结果。最终回答要与这些结果一致，不能把“准备查询”写成“已经查到”。</p>
+<h3>0.1 让 AI 从&quot;聊天&quot;变成&quot;行动的实现</h3>
+<p>应用需要决定：可以调用什么工具、怎样检查参数和权限、如何把前一步结果交给下一步、失败后怎样停止，以及用什么证据判断完成。模型可参与选择动作，但规则和授权不能只靠它自己承诺遵守。</p>
+<h2>1. 第一步：工具调用 (Tool Calling)</h2>
+<p>工具可以是本地计算、资料查询、文件读取或其他接口。它把应用可执行的一部分能力提供给模型使用。列出工具名称和参数结构，仍不等于工具已经执行或模型一定会正确选择。</p>
+<h3>1.1 LLM 不能直接执行操作的原理</h3>
+<p>对本课讨论的工具调用接口，模型的输出是回答或调用请求；外部变化由运行时连接的工具产生。这是职责划分，不表示所有模型都只接受纯文本，也不表示任何模型服务都天然与网络和文件隔离。</p>
+<p>看一次调用时，要分别保存请求的名称、参数、调用标识和执行结果。隔离程度、可用凭据和文件范围由应用环境配置决定，不能从模型名称推断。</p>
+<h3>1.2 解决方案：Tool Calling（工具调用）</h3>
+<p>下面是本地教学协议，不是通用 API 的字段格式：</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;multiply-1&quot;,
+  &quot;name&quot;: &quot;multiply&quot;,
+  &quot;arguments&quot;: { &quot;a&quot;: 12.5, &quot;b&quot;: 8 }
+}
+</code></pre>
+<p>程序先检查工具名、字段、类型和允许范围，再执行运算。成功回执带同一调用标识；失败回执没有可用结果。接口可能支持多个调用或不同消息类型，按所用版本保留正确的调用/结果关联。</p>
+<figure><img src="../../book/assets/handdraw/llm/tool-execution-loop.svg" width="480" height="680" alt="请求先经程序校验，再执行本地乘法，返回数值后结束；失败或取消不显示成功"><figcaption>课程原创手绘 G11：12.5 × 8 的本地计算确实得到 100；请求是教学输入，不是模型实测。取消不会自动撤销此前已经发生的操作。</figcaption></figure><h2>2. 核心难题：完成复杂任务的实现</h2>
+<p>“查某商品单价，再算八件总价”有明确依赖：没查到价格前，不能给乘法补造单价。报告、代码修复等任务还可能有来源筛选、版本确认和验证步骤，不能只用一串漂亮的步骤名表示完成。</p>
+<h3>2.1 需要规划的原理</h3>
+<p>把任务拆开，是为了知道每一步输入来自哪里、输出交给谁、什么情况必须停止。步骤数不是越多越好；如果一项确定计算已经够用，不需要为了称作 Agent 增加循环。</p>
+<h3>2.2 解决方案：Planning（规划能力）</h3>
+<p>区分两种流程：工作流由程序预先定义路径；Agent 循环允许模型根据观察选择下一步。两者可以组合。模型给出的计划需要校验依赖和边界，也可能因新结果而调整；既定计划不意味着后续每一步都已获准执行。</p>
+<p>本章示例采用固定两步工作流，便于看清结果传递。它没有模型动态决策，不能称作已经实现完整自主 Agent。</p>
+<h2>3. 记忆系统：不止于当前上下文</h2>
+<p>应用可以保存会话、任务进度和资料，再选择一部分加入下一次输入。关闭页面是否清空、不同会话是否共享，由保存与恢复机制决定，不是模型统一的“失忆规则”。窗口限制应按具体模型和接口的 token 用量核算，不能固定说只有几千到几万字。</p>
+<h3>3.1 需要记忆的原理</h3>
+<p>假设查询单价已经成功，而计算总价尚未执行。恢复任务时，需要知道查的是哪件商品、哪个版本、结果是多少、对应哪次调用，才能继续。仅保存“已查完”三个字不足以复核，也可能导致重复操作。</p>
+<h3>3.2 解决方案：三层记忆架构</h3>
+<p>“短期、工作、长期”是一种设计拆分，没有所有 Agent 都必须采用的统一三层架构，也不能据名称判断是否持久化。</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>可能的保存方式</th>
+<th>恢复时核对</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对话与当前输入</td>
+<td>会话记录或检查点</td>
+<td>实际选入哪些消息，调用和结果是否配对</td>
+</tr>
+<tr>
+<td>任务进度与回执</td>
+<td>状态对象、数据库或日志</td>
+<td>已执行、未执行、未知和已取消分别是什么</td>
+</tr>
+<tr>
+<td>跨任务资料</td>
+<td>文件、资料库、偏好记录</td>
+<td>当前权限、有效版本、更正与删除是否生效</td>
+</tr>
+</tbody></table>
+<p>持久保存不等于永久正确；取回后仍需核对来源和适用范围。相关输入组织见<a href="context-reference.html">上下文回查</a>。</p>
+<h2>4. Agent 的核心循环</h2>
+<p>一种常见循环是：组装当前输入 → 模型给回答或请求 → 程序校验并执行工具 → 记录回执 → 根据结果继续或结束。也可以在确定步骤中直接返回工具结果，不必每次都让模型再解释一遍。</p>
+<p>除了完成任务，还应有失败、取消、预算耗尽、需要补资料或等待已授权确认等结束路径。循环不是无限“直到成功”，模型说完成也不等于实际验收通过。</p>
+<p>纸上追踪本章商品任务：查价成功后结果进入乘法；查价失败则停止，不能用默认价格继续。乘法成功才有总价；两个步骤都没有下单动作，因此总价成功也不能汇报“订单已提交”。</p>
+<h2>5. Agent 的能力分级</h2>
+<p>没有一个通行标准规定“无工具 L0 到多 Agent L5”就是可靠性逐级提高。可以按下面的维度描述系统，但不要把工具更多、循环更长或协作者更多当成更强的证据。</p>
+<table>
+<thead>
+<tr>
+<th>描述维度</th>
+<th>需要观察的行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工具范围</td>
+<td>只读、计算、写入分别开放什么</td>
+</tr>
+<tr>
+<td>决策方式</td>
+<td>预定路径、模型选择或组合</td>
+</tr>
+<tr>
+<td>状态恢复</td>
+<td>是否保留回执，恢复会否重复执行</td>
+</tr>
+<tr>
+<td>自主范围</td>
+<td>哪些动作已授权，哪些条件需要停下</td>
+</tr>
+<tr>
+<td>任务表现</td>
+<td>独立样本是否成功，失败、时延与成本是什么</td>
+</tr>
+</tbody></table>
+<h2>6. Agent 的核心架构</h2>
+<p>下面按职责拆分，模块可以合并实现，不要求每个应用都单独部署五个系统。</p>
+<h3>1. <strong>LLM（大脑）</strong></h3>
+<p>根据当前任务和输入生成回答、计划或工具请求；可能误解需求或给出非法参数。大脑是比喻，不能由它推出模型有完整环境感知、权限或专业资质。</p>
+<h3>2. <strong>Tools（手脚）</strong></h3>
+<p>实际读取、计算或修改环境。工具要定义输入、结果和错误，按调用标识关联回执。返回“请求已接收”与操作已完成也可能不同，需要按工具契约判断。</p>
+<h3>3. <strong>Memory（记忆）</strong></h3>
+<p>保存并按需提供历史、依据和进度。未知状态不能被摘要成成功；旧回执也不能自动证明当前环境仍然相同。</p>
+<h3>4. <strong>Planning（规划）</strong></h3>
+<p>说明目标、依赖、下一步和停止条件。程序约束与模型建议可配合使用；不要求公开内部隐含思维链，只交付能核验的计划、证据和结果。</p>
+<h3>5. <strong>Guardrails（护栏）</strong></h3>
+<p>应用检查工具、参数、权限、执行范围与预算。JSON 合法只是一层检查；例如合法的退款请求也可能无权执行。按任务保留回执和失败路径，隔离机制不能只写在提示词里。</p>
+<h2>7. 主流框架对比</h2>
+<p>框架帮忙组织模型、工具和状态，但功能、接口及维护状态会变化。以下只描述截至核对时的官方文档范围，不比较“最流行”、上手速度或代码质量，也不因几行演示代码就宣布能直接上线。</p>
+<h3>7.1 核心差异：官方原生 vs 第三方封装</h3>
+<p>“官方”是相对于谁而言：Claude Agent SDK 由 Anthropic 维护，其他框架也有各自维护方与原生抽象。它们不是只给同一个 SDK 套壳。选择时检查所需模型、执行循环、工具与权限、状态持久化和运行环境。</p>
+<h3>7.2 Claude Agent SDK vs LangChain</h3>
+<p><a href="https://github.com/anthropics/claude-agent-sdk-python">Claude Agent SDK</a>提供围绕 Claude Agent 的调用、工具和 hooks 等能力；<a href="https://docs.langchain.com/oss/python/langchain/agents">LangChain 当前 Agent 文档</a>也描述模型调用工具的循环，不能说它一律要求手写循环。</p>
+<p>二者的模型接入、消息、状态和部署方式不同。先用相同任务核对能力与失败路径；SDK 和框架名称本身不证明哪个更会修代码。本章不附未经安装和测试的跨版本 SDK 片段。</p>
+<h3>7.3 Claude Agent SDK vs CrewAI</h3>
+<p><a href="https://github.com/crewAIInc/crewAI">CrewAI</a>同时提供基于角色与任务的 Crews 和控制状态、分支的 Flows；不能把它仅称作角色扮演，也不能把角色设定当成专业能力。Claude Agent SDK 的工具与循环也不能仅凭“代码场景”概括全部用途。</p>
+<p>多 Agent 是否值得，要看任务能否分开验证、交接的信息是否完整，以及新增调用和冲突处理的成本。单个流程能完成时，不必先模拟一整支团队。</p>
+<h3>7.4 Claude Agent SDK vs LlamaIndex</h3>
+<p><a href="https://github.com/run-llama/llama_index">LlamaIndex</a>除了数据与检索组件，也有使用工具的 Agent、Workflows 与多 Agent 组织方式。RAG 查询可以是 Agent 的一个工具，不代表框架只能查资料、不能行动。</p>
+<p>比较时看实际需要的连接器、工具协议、流程控制和版本支持；“数据连接器”和“任务执行器”不是互斥类别。</p>
+<h3>7.5 综合对比表</h3>
+<table>
+<thead>
+<tr>
+<th>工具或框架</th>
+<th>官方文档所覆盖的部分</th>
+<th>选型时继续核对</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Agent SDK</td>
+<td>Agent 调用、工具、hooks 与权限配置</td>
+<td>运行环境、实际模型接入与授权设置</td>
+</tr>
+<tr>
+<td>LangChain</td>
+<td>Agent 循环、工具和中间件</td>
+<td>状态、模型/工具适配与部署方式</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>Crews 和 Flows</td>
+<td>交接、状态和分支是否便于验证</td>
+</tr>
+<tr>
+<td>LlamaIndex</td>
+<td>数据接入、Agent 与 Workflows</td>
+<td>检索与执行能否按任务组合</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td>历史多 Agent 框架；核对时官方仓库标记为归档</td>
+<td>新项目先查看维护方迁移与当前支持说明</td>
+</tr>
+</tbody></table>
+<p><a href="https://github.com/microsoft/autogen">AutoGen 官方仓库</a>的维护状态不是永久结论，使用前应再核对。不能把旧表里的功能对勾或叉号当成当前支持承诺。</p>
+<h3>7.6 框架选择建议</h3>
+<p>先列出模型、工具、状态恢复和验证需求，用最小流程试通。需要更多组件时再选框架，并记录版本、依赖和未验证项。本课实际模型复做仍采用 DeepSeek V4.1 Flash 与 Kimi K3；上述框架比较不表示已经把两者逐一接入测试。</p>
+<h2>8. 实战：构建你的第一个 Agent</h2>
+<p>先运行一个能看清每次输入和回执的执行层，再决定怎样接模型。在仓库根目录执行：</p>
+<pre><code class="language-shell">node book/llm/examples/tool-workflow.mjs
+</code></pre>
+<p>完整源码在<a href="../../book/llm/examples/tool-workflow.mjs">本地工作流示例</a>，人工商品表在<a href="../../book/llm/fixtures/tool-workflow.json">练习数据</a>。仅依赖 Node 标准库，先输出成功任务，再输出不存在商品的失败任务。这里没有网络查询、天气数据或任意表达式执行。</p>
+<h3>8.1 基础版本：单工具 Agent</h3>
+<p>先看一个被显式请求的乘法工具。它是执行层，不含模型决策。请求形如本章前面的 <code>multiply-1</code>；程序只允许已定义工具和字段，检查数值是否为有限数且处于示例范围，再调用固定运算。</p>
+<!-- llm:single-tool-code -->
+<pre><code class="language-javascript">const fixture = {
+  &quot;catalog&quot;: {
+    &quot;practice-book&quot;: 12.5,
+    &quot;pencil&quot;: 2
+  }
+};
+
+export function executeTool(request, catalog = fixture.catalog) {
+  const fail = error =&gt; ({ id: request?.id ?? null, status: &quot;failed&quot;, result: null, error });
+  const args = request?.arguments;
+  if (!request || typeof request.id !== &quot;string&quot; || !request.id || !args || typeof args !== &quot;object&quot; || Array.isArray(args)) return fail(&quot;invalid-request&quot;);
+  const sameKeys = keys =&gt; Object.keys(args).length === keys.length &amp;&amp; keys.every(key =&gt; Object.hasOwn(args, key));
+  let result;
+  if (request.name === &quot;lookup_price&quot;) {
+    if (!sameKeys([&quot;sku&quot;]) || typeof args.sku !== &quot;string&quot; || args.sku.length &gt; 80) return fail(&quot;invalid-sku&quot;);
+    if (!Object.hasOwn(catalog, args.sku)) return fail(&quot;not-found&quot;);
+    result = catalog[args.sku];
+    if (!Number.isFinite(result) || result &lt; 0) return fail(&quot;invalid-price&quot;);
+  } else if (request.name === &quot;multiply&quot;) {
+    if (!sameKeys([&quot;a&quot;, &quot;b&quot;]) || ![args.a, args.b].every(value =&gt; typeof value === &quot;number&quot; &amp;&amp; Number.isFinite(value) &amp;&amp; Math.abs(value) &lt;= 1e6)) return fail(&quot;invalid-number&quot;);
+    result = args.a * args.b;
+  } else return fail(&quot;unknown-tool&quot;);
+  return { id: request.id, status: &quot;succeeded&quot;, result, error: null };
+}
+</code></pre>
+<!-- /llm:single-tool-code --><p>这段函数返回真实本地结果；没有调用 <code>eval</code>，也不能把输入字符串当作代码。示例采用浮点数且设置范围，只用于流程教学，不是财务精度计算器或任意工具沙箱。</p>
+<h3>8.2 进阶版本：多工具 + 规划</h3>
+<p>本地任务是“从人工目录查练习册单价，计算八本总价”。路径由程序固定为两步：先 <code>lookup_price</code>，成功后把回执里的数值作为 <code>multiply</code> 的参数。它展示依赖传递，尚未接入模型规划。</p>
+<!-- llm:workflow-code -->
+<pre><code class="language-javascript">export function runPriceWorkflow(sku, quantity, options = {}) {
+  const { catalog = fixture.catalog, maxCalls = 2, cancelAfterLookup = false, simulateTimeout = false } = options;
+  const receipts = [];
+  const stop = status =&gt; ({ status, total: null, receipts });
+  if (typeof sku !== &quot;string&quot; || !Number.isInteger(quantity) || quantity &lt; 1 || quantity &gt; 10000) return stop(&quot;invalid-task&quot;);
+  if (!Number.isInteger(maxCalls) || maxCalls &lt; 0 || maxCalls &gt; 2) return stop(&quot;invalid-budget&quot;);
+  const call = request =&gt; {
+    if (receipts.length &gt;= maxCalls) return null;
+    // Timeout here is a teaching branch; no asynchronous service is called.
+    const receipt = simulateTimeout
+      ? { id: request.id, status: &quot;timeout&quot;, result: null, error: &quot;simulated-timeout&quot; }
+      : executeTool(request, catalog);
+    receipts.push({ request, receipt });
+    return receipt;
+  };
+  const price = call({ id: &quot;lookup-1&quot;, name: &quot;lookup_price&quot;, arguments: { sku } });
+  if (!price) return stop(&quot;budget-exhausted&quot;);
+  if (price.status !== &quot;succeeded&quot;) return stop(price.status);
+  if (cancelAfterLookup) return stop(&quot;cancelled&quot;);
+  // Feed the actual successful lookup result to the next tool.
+  const total = call({ id: &quot;multiply-1&quot;, name: &quot;multiply&quot;, arguments: { a: price.result, b: quantity } });
+  if (!total) return stop(&quot;budget-exhausted&quot;);
+  if (total.status !== &quot;succeeded&quot;) return stop(total.status);
+  return { status: &quot;done&quot;, total: total.result, receipts };
+}
+</code></pre>
+<!-- /llm:workflow-code --><p>当前人工目录的单价是 12.5，8 本总价 100；这是运行本地示例可复算的结果，不是现实报价或模型输出。把商品换成不存在的编号时，查价回执为失败，总价保持空值，乘法不执行。</p>
+<p>另可调用 <code>runPriceWorkflow</code> 的教学选项：<code>maxCalls: 1</code> 限制调用次数，<code>cancelAfterLookup: true</code> 在查价后取消，<code>simulateTimeout: true</code> 模拟超时。它们分别返回预算耗尽、取消或超时，不显示成功总价；已完成的查价回执保留，取消没有撤销过去步骤。</p>
+<p>如果以后接入模型，只能把模型输出作为待校验的请求，让同样的执行层核验。保存实际模型版本、模式、请求、回执和停止原因，不把预定路径冒充模型自主决策。</p>
+<h2>9. 应用场景</h2>
+<h3>9.1 个人助理</h3>
+<p>区分整理日程草稿与写入日历、拟邮件与发送邮件、计算总价与下单。按已授权范围开放相应动作，交付时说清真正完成了哪一步。</p>
+<h3>9.2 软件开发</h3>
+<p>把读代码、提出修改、写文件和运行测试分别记录。生成了测试命令不代表已经运行；测试通过也应说明覆盖范围，不能自动证明需求全部满足。</p>
+<h3>9.3 数据分析</h3>
+<p>先确认数据版本、字段、单位和缺失值，再计算与画图。保存可复算步骤；工具执行成功不代表数据解释正确，仍需检查结论与条件。</p>
+<h3>9.4 内容创作</h3>
+<p>文稿、图像和视频可以分步交付，事实、许可、版式与最终文件分别核对。发布属于独立动作，需要在用户已授权范围内执行；本课工作流不包含发布工具。</p>
+<h2>10. 挑战与局限</h2>
+<h3>10.1 技术挑战</h3>
+<p>模型可能选错工具、参数无效或误判完成；外部服务可能失败、延迟或返回过期结果。任务较长时，状态恢复还可能导致重复执行。保留调用标识、实际回执、次数与时间预算，在明确的停止条件下运行。</p>
+<p>超时尤其要区分“没有拿到结果”与“操作没有发生”。对可能写入环境的工具，先查询执行状态，必要时使用工具支持的幂等键，再决定能否重试；不能盲目重复下单或付款。本课超时是教学分支，没有真实远程操作。</p>
+<h3>10.2 安全问题</h3>
+<p>网页、文档和工具返回值可能夹带改变任务的指令。把它们当作待处理数据，应用另做资料范围、工具、参数和授权检查。工具名称在白名单里，也不意味着所有参数和目标都可访问。</p>
+<p>检查路径或资源是否在允许范围内，按任务限制凭据与执行环境，并核验回执。需要确认的动作按已有授权和具体条件处理，不能把“一律再问一次”当成完整防护。更多解释见<a href="prompt-reference.html">提示词中的注入边界</a>。</p>
+<h2>11. 未来趋势</h2>
+<p>研究与产品正在尝试更好的状态恢复、长任务决策、多模态工具和协作。它们是待验证的方向，不能由演示或路线图宣布复杂任务已经可靠解决。</p>
+<h3>11.1 技术演进方向</h3>
+<p>评估新方法时保留具体问题：长任务中能否正确恢复依赖？工具失败后是否重复操作？图像或音频依据能否回查？多个协作者的结果能否独立核验？多出来的计算、延迟和维护是否值得？</p>
+<p>这些问题比“更自主”“集体智能”等标签更便于比较。使用哪个模型和框架，都要在目标任务上留下真实结果。</p>
+<h2>12. 总结与学习路线</h2>
+<p>先到 <a href="tools.html">L10</a>走完请求、校验、执行与回传，再运行本地两步示例，改变商品、调用预算和取消条件。然后用 <a href="approaches.html">L11</a>选方案，在 <a href="project.html">L12</a>核对一份可交付报告。</p>
+<p>需要研究背景时可读 <a href="https://arxiv.org/abs/2210.03629">ReAct</a>，它研究交错的推理轨迹与任务动作；论文所测环境和结果不能自动外推到当前模型，也不能由一次工具调用推出完整 Agent 能力。</p>
+<h2>13. 名词速查表 (Glossary)</h2>
+<table>
+<thead>
+<tr>
+<th>名词</th>
+<th>含义与边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent</td>
+<td>本章指模型在应用约束下选择动作、使用观察继续推进的系统；边界由任务定义</td>
+</tr>
+<tr>
+<td>Tool Calling</td>
+<td>模型产生请求，运行时校验与执行，结果按调用标识回传</td>
+</tr>
+<tr>
+<td>Planning</td>
+<td>指明依赖、产物与停止条件；计划不是执行证据</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>把检索得到的外部资料用于回答，也可以作为一个工具</td>
+</tr>
+<tr>
+<td>ReAct</td>
+<td>交错推理与动作的研究方法，范围以论文和实现为准</td>
+</tr>
+<tr>
+<td>CoT</td>
+<td>与中间推理步骤相关的方法，不保证答案正确</td>
+</tr>
+<tr>
+<td>Receipt</td>
+<td>执行回执，区分成功、失败、超时和未完成等状态</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>重复同一操作仍保持约定效果的性质，需由具体工具或服务支持</td>
+</tr>
+</tbody></table>
+</article><nav class="lesson-nav"><a href="index.html">返回十二课</a><a href="applications-guide.html">应用回查精选</a></nav></main><footer>十二课 · 可离线阅读与操作 · 试读版<br><a href="../../deliverables/llm-explained-handdraw.pdf">阅读 PDF</a> · <a href="../../deliverables/llm-explained-handdraw.epub" download>下载 EPUB</a><br><a href="../../book/llm/README.md">课文与维护说明</a> · <a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">验收记录</a></footer>
+</body></html>

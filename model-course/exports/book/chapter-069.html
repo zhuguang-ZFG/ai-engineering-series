@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>如何把开发好的程序发布上架 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 69 / 195</p><article><h1 id="如何把开发好的程序发布上架">如何把开发好的程序发布上架</h1><details class="contents"><summary>本章目录 <span>· 14 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-先分清四件事">1. 先分清四件事</a></li><li><a href="#2-一张表选发布渠道">2. 一张表选发布渠道</a></li><li><a href="#3-所有平台共用的发布前检查">3. 所有平台共用的发布前检查</a><ul><li><a href="#31-用组织身份持有资产">3.1 用组织身份持有资产</a></li><li><a href="#32-尽早固定应用身份">3.2 尽早固定应用身份</a></li><li><a href="#33-区分版本号和构建号">3.3 区分版本号和构建号</a></li><li><a href="#34-准备真正的-release-环境">3.4 准备真正的 Release 环境</a></li><li><a href="#35-准备商店素材">3.5 准备商店素材</a></li><li><a href="#36-让隐私声明与真实行为一致">3.6 让隐私声明与真实行为一致</a></li><li><a href="#37-给审核人员一条走得通的路径">3.7 给审核人员一条走得通的路径</a></li></ul></li><li><a href="#4-androidgoogle-play-与中国大陆应用市场">4. Android：Google Play 与中国大陆应用市场</a><ul><li><a href="#41-生成正式包">4.1 生成正式包</a></li><li><a href="#42-提交-google-play">4.2 提交 Google Play</a></li><li><a href="#43-提交中国大陆-android-应用市场">4.3 提交中国大陆 Android 应用市场</a></li></ul></li><li><a href="#5-ios通过-app-store-发布">5. iOS：通过 App Store 发布</a><ul><li><a href="#51-创建应用记录">5.1 创建应用记录</a></li><li><a href="#52-归档与-testflight">5.2 归档与 TestFlight</a></li><li><a href="#53-提交审核">5.3 提交审核</a></li></ul></li><li><a href="#6-windowsmicrosoft-store-或官网安装包">6. Windows：Microsoft Store 或官网安装包</a><ul><li><a href="#61-microsoft-store">6.1 Microsoft Store</a></li><li><a href="#62-官网直接下载">6.2 官网直接下载</a></li></ul></li><li><a href="#7-macosmac-app-store-或签名公证后分发">7. macOS：Mac App Store 或签名公证后分发</a><ul><li><a href="#71-mac-app-store">7.1 Mac App Store</a></li><li><a href="#72-官网分发">7.2 官网分发</a></li></ul></li><li><a href="#8-linuxflathubsnap-store-与直接软件包">8. Linux：Flathub、Snap Store 与直接软件包</a><ul><li><a href="#flathub">Flathub</a></li><li><a href="#snap-store">Snap Store</a></li><li><a href="#直接发布">直接发布</a></li></ul></li><li><a href="#9-web--pwa部署就是主要发布方式">9. Web / PWA：部署就是主要发布方式</a></li><li><a href="#10-小程序和浏览器插件怎么发布">10. 小程序和浏览器插件怎么发布</a><ul><li><a href="#微信小程序">微信小程序</a></li><li><a href="#浏览器插件">浏览器插件</a></li></ul></li><li><a href="#11-审核最常见的失败原因">11. 审核最常见的失败原因</a></li><li><a href="#12-不要直接全量发布">12. 不要直接全量发布</a></li><li><a href="#13-更新时不能变的东西">13. 更新时不能变的东西</a></li><li><a href="#14-第一次上架的最短行动清单">14. 第一次上架的最短行动清单</a></li></ul></nav></details><span class="heading-anchor" id="如何把开发好的程序发布上架-1"></span>
+<p>程序在自己的电脑和手机上能运行，和真正发布给用户，是两回事。</p>
+<p>无论使用 Flutter、React Native、Electron、Qt 还是原生开发，最后都要走过下面这段路：</p>
+<blockquote>
+<p>确定渠道 → 固定应用身份 → 构建 Release 包 → 签名 → 内测 → 准备商店资料 → 提交审核 → 灰度发布 → 监控与更新</p>
+</blockquote>
+<p>下面分别介绍 Android、iOS、Windows、macOS、Linux 和 Web/PWA 的发布方式，同时补充国内 Android 商店、小程序和浏览器插件。</p>
+<blockquote>
+<p><strong>规则会变化</strong>
+商店支持的 SDK、目标系统版本、截图尺寸、账号验证和审核规则会持续更新。这里讲的是稳定的发布方法；真正提交前，请再查看对应后台的最新提示和文末链接的官方文档。</p>
+</blockquote>
+<h2 id="1-先分清四件事">1. 先分清四件事</h2>
+<p>打包、签名、分发和审核经常被混在一起说成“上架”，其实它们解决的是四个不同问题。</p>
+<h2 id="2-一张表选发布渠道">2. 一张表选发布渠道</h2>
+<p>手机、电脑和网页的发布入口并不相同。点击下面的平台，可以直接查看它最常见的公开渠道、需要准备的文件和其他分发方式。</p>
+<p>如果是第一款作品，不必第一天同时上六个平台。先选择用户最集中的一个渠道，把一次完整发布做通，再复用商店资料和自动化流程扩展其他平台。</p>
+<h2 id="3-所有平台共用的发布前检查">3. 所有平台共用的发布前检查</h2>
+<h3 id="31-用组织身份持有资产">3.1 用组织身份持有资产</h3>
+<p>正式产品尽量使用组织控制的账号、邮箱、域名、云服务和支付资料。不要把应用永久绑定在外包人员或某位员工的私人账号里。</p>
+<p>这些资产要明确负责人，并开启双重验证：</p>
+<ul>
+<li>开发者账号和商店后台；</li>
+<li>域名、DNS 和官网；</li>
+<li>签名证书、密钥库及恢复材料；</li>
+<li>云服务、数据库、对象存储和监控平台；</li>
+<li>收款、税务与合同资料。</li>
+</ul>
+<h3 id="32-尽早固定应用身份">3.2 尽早固定应用身份</h3>
+<p>Android 的包名、Apple 的 Bundle ID、Windows 的包身份和各商店中的产品记录，都是应用的“身份证”。发布后随意更换，通常会被平台视为一个全新的应用，旧用户也无法正常升级。</p>
+<p>可以用反向域名格式统一命名，例如：</p>
+<pre class="prose-block"><code class="language-text">com.example.fridgechef
+</code></pre>
+<p>正式发布前确认名称、包名、开发者主体和商标归属，不要继续使用教程里的 <code>com.example.myapplication</code>。</p>
+<h3 id="33-区分版本号和构建号">3.3 区分版本号和构建号</h3>
+<p>用户看到的是版本号，例如 <code>1.2.0</code>；商店识别每次上传的是构建号，例如 Android 的 <code>versionCode</code> 或 Apple 的 Build。即使只是修复同一版本的打包错误，再次上传时也要增加构建号。</p>
+<p>建议从一开始就记录：</p>
+<pre class="prose-block"><code class="language-text">版本：1.0.0
+构建：1
+Git 标签：v1.0.0
+发布日期：计划中的日期
+</code></pre>
+<h3 id="34-准备真正的-release-环境">3.4 准备真正的 Release 环境</h3>
+<p>发布包不能继续连接本机地址、测试数据库或沙盒支付。至少确认：</p>
+<ul>
+<li>API 使用生产域名和 HTTPS；</li>
+<li>没有把管理员口令、模型密钥或服务端密钥写进客户端；</li>
+<li>测试账号、演示数据和调试菜单不会暴露给普通用户；</li>
+<li>Release 包关闭不必要的详细日志；</li>
+<li>崩溃监控、服务告警和客服入口可用；</li>
+<li>数据库升级不会清空旧用户的数据。</li>
+</ul>
+<h3 id="35-准备商店素材">3.5 准备商店素材</h3>
+<p>可以先建一个 <code>release-assets</code> 文件夹集中管理：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-text">release-assets/
+├── icon/
+├── screenshots/
+│   ├── android/
+│   ├── ios/
+│   └── desktop/
+├── descriptions/
+├── privacy-policy.md
+├── support.md
+├── review-notes.md
+└── licenses.csv
+</code></pre>
+<p>常见必需项包括应用名称、副标题或简短介绍、完整介绍、图标、真实运行截图、分类、年龄分级、支持邮箱、官网、隐私政策链接和版权信息。</p>
+<p>截图必须与当前版本一致。不要用设计稿冒充真实功能，也不要在截图中留下手机号、真实聊天记录、访问令牌和客户数据。</p>
+<h3 id="36-让隐私声明与真实行为一致">3.6 让隐私声明与真实行为一致</h3>
+<p>先盘点应用和第三方 SDK 实际收集的数据，再填写商店问卷和隐私政策。重点检查：</p>
+<ul>
+<li>收集什么数据，为什么收集；</li>
+<li>数据发送给谁、保存多久、如何删除；</li>
+<li>定位、相册、相机、通讯录和麦克风是否确有必要；</li>
+<li>分析、广告、崩溃监控和登录 SDK 会收集什么；</li>
+<li>用户能否注销账号并删除数据；</li>
+<li>未成年人、健康、金融等敏感场景是否有额外要求。</li>
+</ul>
+<p>最常见的问题不是“没有隐私政策”，而是代码、权限弹窗、商店申报和隐私政策四者互相矛盾。</p>
+<h3 id="37-给审核人员一条走得通的路径">3.7 给审核人员一条走得通的路径</h3>
+<p>应用需要登录时，在审核备注中提供专用测试账号、密码和操作步骤。如果某个功能只在特定地区、时间、设备或账号下出现，也要写清楚。</p>
+<p>审核账号不能要求短信验证码，也不能依赖已经过期的邀请链接。提交前请让一位没有参与开发的人，完全照着审核说明走一遍。</p>
+<h2 id="4-androidgoogle-play-与中国大陆应用市场">4. Android：Google Play 与中国大陆应用市场</h2>
+<h3 id="41-生成正式包">4.1 生成正式包</h3>
+<p>在 Android Studio 中选择 <code>Build -&gt; Generate Signed Bundle / APK</code>。面向 Google Play 的新应用通常选择 <strong>Android App Bundle (<code>.aab</code>)</strong>；直接发给设备安装时才使用 APK。</p>
+<p>创建签名材料后：</p>
+<ol>
+<li>把 keystore、别名和恢复说明保存在团队密码库或受控密钥系统中；</li>
+<li>不要把 keystore 和密码提交到 Git；</li>
+<li>用 Release 配置构建，并在至少一台真实设备上安装测试；</li>
+<li>保存本次构建对应的源码提交、版本号和符号文件。</li>
+</ol>
+<p>Google Play 对新应用使用 Play App Signing。上传 <code>.aab</code> 后，Play 会为不同设备生成优化过的 APK。官方流程见<a href="https://developer.android.com/studio/publish/upload-bundle">上传应用到 Play Console</a>。</p>
+<h3 id="42-提交-google-play">4.2 提交 Google Play</h3>
+<ol>
+<li>注册并完成 Play Console 的身份验证；</li>
+<li>创建应用，谨慎填写永久且唯一的包名；</li>
+<li>完成商店详情、内容分级、目标受众、广告和数据安全等声明；</li>
+<li>上传 <code>.aab</code>，处理目标 API、权限和包体检查；</li>
+<li>先发布到内部或封闭测试轨道；</li>
+<li>使用商店安装出来的版本复测登录、支付、通知和升级；</li>
+<li>创建正式发布，先小范围逐步推出，再根据崩溃和差评扩大比例。</li>
+</ol>
+<p>不同类型和注册时间的开发者账号可能有额外测试要求，以 <a href="https://support.google.com/googleplay/android-developer/answer/9859152?hl=zh-Hans">Play Console 创建与设置应用</a>中的当前提示为准。</p>
+<h3 id="43-提交中国大陆-android-应用市场">4.3 提交中国大陆 Android 应用市场</h3>
+<p>中国大陆没有单一 Android 商店。通常要根据目标手机用户选择华为、小米、OPPO、vivo、荣耀、腾讯应用宝等渠道，并在每个平台分别注册、填写资料和提交审核。</p>
+<p>可以建立一份渠道表：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>渠道</th>
+<th>后台账号</th>
+<th>当前包版本</th>
+<th>审核状态</th>
+<th>商店链接</th>
+<th>负责人</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>华为应用市场</td>
+<td>组织账号</td>
+<td>1.0.0</td>
+<td>待提交</td>
+<td>-</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>小米应用商店</td>
+<td>组织账号</td>
+<td>1.0.0</td>
+<td>审核中</td>
+<td>-</td>
+<td>李四</td>
+</tr>
+</tbody></table></div>
+<p>在中国境内从事互联网信息服务的 App 主办者需要按规定履行 APP 备案手续。备案通常由网络接入服务提供者或分发平台协助提交；不同业务还可能需要相应许可。先阅读工信部的<a href="https://www.gov.cn/zhengce/zhengceku/202308/content_6897341.htm">APP 备案通知与要求</a>，再按云服务商和目标商店的当前流程准备材料。</p>
+<p>多市场发布时务必保持：</p>
+<ul>
+<li>包名一致；</li>
+<li>更新使用兼容的正式签名；</li>
+<li>版本号和版本代码只增不减；</li>
+<li>隐私政策、权限用途和实际代码一致；</li>
+<li>每个渠道包都能定位到同一份源码和构建记录。</li>
+</ul>
+<p>不要为了统计渠道而临时接入来源不明的 SDK。渠道统计更适合在合规的后端归因或构建流水线中完成。</p>
+<h2 id="5-ios通过-app-store-发布">5. iOS：通过 App Store 发布</h2>
+<p>iPhone 面向普通用户的标准公开渠道是 App Store。完整流程由 Apple Developer、Xcode 和 App Store Connect 三部分组成。</p>
+<h3 id="51-创建应用记录">5.1 创建应用记录</h3>
+<ol>
+<li>使用组织控制的 Apple Account 加入合适的开发者计划；</li>
+<li>在 Certificates, Identifiers &amp; Profiles 中确认 App ID 和能力；</li>
+<li>在 App Store Connect 创建 App 记录；</li>
+<li>保证 App Store Connect 中的 Bundle ID 与 Xcode 完全一致；</li>
+<li>配置版本、价格、销售地区和团队角色。</li>
+</ol>
+<p>付费 App 或应用内购买还需要在后台完成协议、税务和收款信息。</p>
+<h3 id="52-归档与-testflight">5.2 归档与 TestFlight</h3>
+<p>在 Xcode 中选择真实设备构建目标，使用 <code>Product -&gt; Archive</code> 生成归档。先 Validate，再上传到 App Store Connect。</p>
+<p>上传完成并经过处理后，把构建加入 TestFlight：</p>
+<ol>
+<li>先让内部测试员完成核心流程；</li>
+<li>再邀请外部测试员覆盖更多设备和账号；</li>
+<li>验证首次安装、覆盖升级、登录、订阅恢复、推送和后台恢复；</li>
+<li>确认最终提交的就是测试通过的那个构建。</li>
+</ol>
+<p>Apple 的完整后台顺序可参考 <a href="https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-workflow">App Store Connect 工作流</a>。</p>
+<h3 id="53-提交审核">5.3 提交审核</h3>
+<p>在版本页面选中构建，补齐截图、描述、隐私申报、年龄分级、出口合规和审核信息。然后先点 <strong>Add for Review</strong>，再在审核页面点 Submit for Review；只完成前一步并不等于已经送审。官方步骤见<a href="https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app">提交 App</a>。</p>
+<p>如果应用需要登录，审核备注应包括：</p>
+<pre class="prose-block"><code class="language-text">测试账号：review@example.com
+测试密码：保存在审核后台，不要写入公开仓库
+入口：首页 -&gt; 登录 -&gt; 演示项目
+特殊说明：演示账号已预置数据，不需要短信验证
+</code></pre>
+<p>审核被拒后，先根据具体条款复现问题。能通过补充说明解决的，就在 App Store Connect 回复；需要改代码时，增加构建号、重新归档并选择新构建，不要只上传同一个包反复碰运气。</p>
+<h2 id="6-windowsmicrosoft-store-或官网安装包">6. Windows：Microsoft Store 或官网安装包</h2>
+<p>Windows 有两条常见路线。</p>
+<h3 id="61-microsoft-store">6.1 Microsoft Store</h3>
+<p>独立开发者第一次公开发布，优先考虑商店：用户安装路径统一，更新和可信度也更容易管理。</p>
+<ol>
+<li>注册 Microsoft Store 开发者账号；</li>
+<li>在 Partner Center 预留应用名称；</li>
+<li>生成并本地测试 MSIX 包；</li>
+<li>创建提交，上传包、截图、介绍、年龄分级和隐私信息；</li>
+<li>运行 Windows App Certification Kit 或项目对应的发布检查；</li>
+<li>提交认证，通过后设置发布时间和可用市场；</li>
+<li>从 Store 安装正式版本并复测自动更新。</li>
+</ol>
+<p>提交 MSIX 到商店时，商店会在认证流程中重新签名。若提交传统 Win32 的 MSI/EXE，安装程序和其中的可执行文件仍需满足相应签名要求。当前流程见 Microsoft 的<a href="https://learn.microsoft.com/windows/apps/package-and-deploy/publish-first-app">发布第一个 Windows 应用</a>。</p>
+<h3 id="62-官网直接下载">6.2 官网直接下载</h3>
+<p>官网分发适合已有销售网站、企业客户或不适合商店的工具。你需要自己负责：</p>
+<ul>
+<li>使用受信任的代码签名证书签署 EXE、MSI 或 MSIX；</li>
+<li>通过 HTTPS 托管安装包，并公布 SHA-256；</li>
+<li>处理 SmartScreen 信誉和误报；</li>
+<li>提供静默安装、卸载和自动更新方案；</li>
+<li>保留旧版本与紧急回滚通道；</li>
+<li>明确支持的 Windows 版本与 CPU 架构。</li>
+</ul>
+<p>不要把未签名的陌生 EXE 直接发到群里作为正式发布方式。它既难以建立用户信任，也无法形成可靠更新链路。</p>
+<h2 id="7-macosmac-app-store-或签名公证后分发">7. macOS：Mac App Store 或签名公证后分发</h2>
+<h3 id="71-mac-app-store">7.1 Mac App Store</h3>
+<p>流程与 iOS 类似：在 App Store Connect 创建 macOS App，配置签名和 App Sandbox，使用 Xcode Archive 上传，补齐商店资料后提交审核。</p>
+<p>商店版本要遵守沙盒、能力和更新规则。通过 Mac App Store 分发的应用，应由商店提供后续更新。</p>
+<h3 id="72-官网分发">7.2 官网分发</h3>
+<p>Electron、Qt 和其他桌面应用也常通过官网提供 DMG 或 PKG。正式流程不是“压缩后上传”这么简单，而是：</p>
+<ol>
+<li>使用 Developer ID 对应用及内部组件签名；</li>
+<li>检查 hardened runtime、entitlements 和嵌套程序签名；</li>
+<li>将成品提交 Apple 公证服务；</li>
+<li>等待通过后把公证票据 staple 到交付物；</li>
+<li>在一台干净的 Mac 上从官网下载并验证 Gatekeeper；</li>
+<li>再接入安全的自动更新机制。</li>
+</ol>
+<p>Apple 建议对 Mac App Store 之外分发的软件做公证，详见<a href="https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases/">使用 Xcode 分发测试版与正式版</a>。</p>
+<h2 id="8-linuxflathubsnap-store-与直接软件包">8. Linux：Flathub、Snap Store 与直接软件包</h2>
+<p>Linux 没有覆盖所有发行版的唯一商店，常见选择是 Flathub 和 Snap Store。</p>
+<h3 id="flathub">Flathub</h3>
+<p>准备 Flatpak manifest、AppStream 元数据、图标和截图，在本地完成构建与 lint，然后按 Flathub 流程向 <code>flathub/flathub</code> 的 <code>new-pr</code> 分支提交 Pull Request。审核合并后，应用会进入独立仓库，后续更新在该仓库维护。详见 <a href="https://docs.flathub.org/docs/for-app-authors/submission">Flathub Submission</a>。</p>
+<h3 id="snap-store">Snap Store</h3>
+<p>创建开发者账号，注册唯一的 snap 名称，准备 <code>snapcraft.yaml</code>，构建并测试 <code>.snap</code>，再上传到测试或 stable 渠道。Snap 支持用 channel 管理 edge、candidate 和 stable。详见 <a href="https://documentation.ubuntu.com/snapcraft/latest/how-to/publishing/publish-a-snap/">Publish a snap</a>。</p>
+<h3 id="直接发布">直接发布</h3>
+<p>AppImage 适合提供单文件下载，<code>.deb</code> 和 <code>.rpm</code> 更贴近发行版的软件包管理。直接发布时仍要提供校验值、依赖说明、架构说明、更新方式和可信下载源。</p>
+<h2 id="9-web--pwa部署就是主要发布方式">9. Web / PWA：部署就是主要发布方式</h2>
+<p>网站没有统一的“上架按钮”。把生产版本部署到 HTTPS 域名并让用户稳定访问，就是最主要的发布。</p>
+<p>上线前检查：</p>
+<ul>
+<li>正式域名、HTTPS、DNS 和证书续期；</li>
+<li>环境变量与服务端密钥没有进入前端产物；</li>
+<li>404、离线页和后端故障有可理解的提示；</li>
+<li><code>manifest.webmanifest</code> 中名称、图标、启动地址和显示模式正确；</li>
+<li>Service Worker 更新后不会让用户长期停留在旧版本；</li>
+<li>手机、桌面、触屏和键盘操作都经过测试；</li>
+<li>配置监控、备份、回滚和状态通知。</li>
+</ul>
+<p>如果需要“安装到桌面”的体验，再补齐 PWA 的 Manifest、图标和 Service Worker。PWA 也可以进一步提交到部分桌面应用商店，但不要为了上架而套壳；先确保浏览器中的安装和更新体验可靠。</p>
+<p>相关教程：<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-3/cross-platform/pwa-local-app/index.md">开发 PWA 本地应用</a></p>
+<h2 id="10-小程序和浏览器插件怎么发布">10. 小程序和浏览器插件怎么发布</h2>
+<h3 id="微信小程序">微信小程序</h3>
+<p>一般流程是：在微信开发者工具上传代码 → 后台选择版本 → 配置隐私保护指引和业务类目 → 提交审核 → 审核通过后发布。涉及支付、内容、医疗、教育等业务时，还要按当前类目准备资质。</p>
+<p>体验版和正式版使用不同环境时，特别检查 API 域名、云环境、支付商户号和隐私弹窗，避免审核包仍连接测试服务。</p>
+<h3 id="浏览器插件">浏览器插件</h3>
+<p>Chrome Web Store、Microsoft Edge Add-ons 和 Firefox AMO 都有自己的开发者后台。通常需要上传扩展压缩包，填写功能、权限用途、隐私行为、截图与测试说明，再等待审核。</p>
+<p>权限要遵循“最少够用”：只读取当前站点，就不要申请所有网站；只在用户点击时执行，就不要持续读取浏览历史。参考 <a href="https://developer.chrome.com/docs/webstore/">Chrome Web Store 发布入口</a>和 <a href="https://learn.microsoft.com/microsoft-edge/extensions/publish/publish-extension">Microsoft Edge 扩展发布流程</a>。</p>
+<h2 id="11-审核最常见的失败原因">11. 审核最常见的失败原因</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>现象</th>
+<th>常见原因</th>
+<th>提交前怎么发现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一启动就崩溃或白屏</td>
+<td>Release 配置、生产接口或架构未测试</td>
+<td>从商店测试渠道全新安装</td>
+</tr>
+<tr>
+<td>审核人员无法登录</td>
+<td>验证码、地区限制、账号过期</td>
+<td>用审核说明在另一台设备操作</td>
+</tr>
+<tr>
+<td>隐私问题</td>
+<td>SDK 行为、权限和声明不一致</td>
+<td>做一次数据与权限盘点</td>
+</tr>
+<tr>
+<td>功能太少或像未完成 Demo</td>
+<td>占位页、死链接、按钮无作用</td>
+<td>删除未完成入口或补齐完整链路</td>
+</tr>
+<tr>
+<td>支付被拒</td>
+<td>数字内容没有使用平台要求的支付方式</td>
+<td>开发前阅读目标商店支付规则</td>
+</tr>
+<tr>
+<td>权限过度</td>
+<td>请求了与核心功能无关的敏感权限</td>
+<td>删除权限后复测核心流程</td>
+</tr>
+<tr>
+<td>素材侵权</td>
+<td>图标、字体、音乐或截图来源不明</td>
+<td>保存授权、发票或许可证记录</td>
+</tr>
+<tr>
+<td>描述与程序不一致</td>
+<td>复用了旧截图和营销文案</td>
+<td>以候选发布包重新制作素材</td>
+</tr>
+</tbody></table></div>
+<p>不要让 AI 凭印象解释某条审核规则。把审核后台给出的原文、条款编号和当前应用行为一起交给 AI，再要求它给出“复现步骤、可能原因、最小修改、复测方法”。最终仍以平台回复为准。</p>
+<p>可以使用这个提示词：</p>
+<blockquote>
+<p>这是商店的审核反馈：【粘贴原文】。请指出对应规则和需要修改的功能，不要猜测。</p>
+</blockquote>
+<p>修改完成后，再问一次：</p>
+<blockquote>
+<p>请列出重新提交前要复测的操作，以及需要更新的商店资料。</p>
+</blockquote>
+<h2 id="12-不要直接全量发布">12. 不要直接全量发布</h2>
+<p>更稳妥的发布顺序是：</p>
+<ol>
+<li>开发者本机和真机测试；</li>
+<li>团队内部测试；</li>
+<li>邀请少量真实用户封闭测试；</li>
+<li>提交商店审核；</li>
+<li>通过后分阶段或小比例发布；</li>
+<li>观察崩溃率、接口错误、登录、支付和客服反馈；</li>
+<li>指标稳定后再扩大到全部用户。</li>
+</ol>
+<p>真正的发布计划还要写清楚：谁按下发布按钮、谁盯监控、出现什么指标就暂停、如何回滚、用户需要怎样被通知。</p>
+<h2 id="13-更新时不能变的东西">13. 更新时不能变的东西</h2>
+<p>新版本通常必须保持相同的应用身份和兼容签名，并提高构建号。更新前重点检查：</p>
+<ul>
+<li>Android 包名、Apple Bundle ID、Windows 包身份没有变化；</li>
+<li>Android 上传密钥和签名链可用；</li>
+<li>本地数据库能够从旧结构迁移到新结构；</li>
+<li>自动更新不会破坏正在编辑的数据；</li>
+<li>商店隐私申报随新增 SDK 和功能一起更新；</li>
+<li>后端接口先兼容旧客户端，再发布新客户端；</li>
+<li>旧版本仍有一段受控的可用或升级窗口。</li>
+</ul>
+<p>签名密钥、开发者账号和包身份不是普通构建文件。丢失它们，可能等于失去给现有用户发布更新的能力。</p>
+<h2 id="14-第一次上架的最短行动清单">14. 第一次上架的最短行动清单</h2>
+<p>如果信息太多，先完成下面十步：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 选择第一个平台和唯一发布渠道；</li>
+<li><input disabled="" type="checkbox"> 用组织账号注册开发者后台；</li>
+<li><input disabled="" type="checkbox"> 固定应用名、包名或 Bundle ID；</li>
+<li><input disabled="" type="checkbox"> 准备并安全备份签名材料；</li>
+<li><input disabled="" type="checkbox"> 构建 Release 包，在干净设备上安装；</li>
+<li><input disabled="" type="checkbox"> 准备图标、截图、介绍、支持页和隐私政策；</li>
+<li><input disabled="" type="checkbox"> 提供长期有效的审核测试账号；</li>
+<li><input disabled="" type="checkbox"> 通过内测渠道安装并走完核心流程；</li>
+<li><input disabled="" type="checkbox"> 提交审核，保存每次反馈与修改记录；</li>
+<li><input disabled="" type="checkbox"> 小范围发布，确认监控正常后再全量。</li>
+</ul>
+<p>上架不是开发结束后的行政手续，而是产品工程的一部分。把身份、签名、隐私、测试、监控和回滚从第一版就设计好，第二次发布会比第一次轻松很多。</p>
+<hr>
+<h2 id="ai-能力强化">AI 能力强化</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-068.html">← 如何构建属于自己的个人网页与学术博客</a><a rel="next" href="chapter-070.html">什么是 RAG 以及它如何工作 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

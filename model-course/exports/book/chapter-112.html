@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前端项目文件目录设计 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 112 / 195</p><article><h1 id="前端项目文件目录设计">前端项目文件目录设计</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#前端项目架构原理">前端项目架构原理</a><ul><li><a href="#1-架构演进从简单到复杂">1. 架构演进：从简单到复杂</a></li><li><a href="#2-入门级htmlcssjs-项目">2. 入门级：HTML/CSS/JS 项目</a></li><li><a href="#3-进阶级vuereact-框架项目">3. 进阶级：Vue/React 框架项目</a></li><li><a href="#4-企业级大型应用架构">4. 企业级：大型应用架构</a></li><li><a href="#5-按用户量级别的架构选择">5. 按用户量级别的架构选择</a></li><li><a href="#6-架构演进路线图">6. 架构演进路线图</a></li><li><a href="#7-总结-7">7. 总结</a></li><li><a href="#参考资源-3">参考资源</a></li></ul></li></ul></nav></details><h2 id="前端项目架构原理">前端项目架构原理</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>从简单的 HTML 页面到复杂的企业级应用，如何为不同规模的项目选择合适的架构？</strong> 这就像问：从单身公寓到大型商场，如何根据需求设计不同的空间布局？好的架构应该随项目成长而演进，而不是一开始就过度设计。</p>
+</blockquote>
+<h3 id="1-架构演进从简单到复杂">1. 架构演进：从简单到复杂</h3>
+<h4 id="11-三个复杂度级别概览">1.1 三个复杂度级别概览</h4>
+<p>前端项目的架构应该与项目复杂度相匹配。我们按<strong>技术复杂度</strong>和用户规模两个维度，将项目分为三个级别：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>级别</th>
+<th>技术栈</th>
+<th>用户规模</th>
+<th>典型场景</th>
+<th>核心关注点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>入门级</strong></td>
+<td>HTML/CSS/JS</td>
+<td>个人/小团队</td>
+<td>个人博客、宣传页、简单工具</td>
+<td>快速上线、简单维护</td>
+</tr>
+<tr>
+<td><strong>进阶级</strong></td>
+<td>Vue/React + 构建工具</td>
+<td>中小型企业</td>
+<td>管理系统、电商前台、SaaS</td>
+<td>组件复用、状态管理</td>
+</tr>
+<tr>
+<td><strong>企业级</strong></td>
+<td>框架 + 微前端/SSR</td>
+<td>大型应用</td>
+<td>大型平台、复杂业务系统</td>
+<td>性能优化、团队协作、可扩展性</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>如何选择？</strong>
+<strong>不要过度设计！</strong> 很多项目从简单的 HTML 开始，随着需求增长逐步引入框架和工具。</p>
+</blockquote>
+<ul>
+<li>个人项目 → 入门级</li>
+<li>创业公司 MVP → 入门级或进阶级</li>
+<li>企业管理系统 → 进阶级</li>
+<li>大型互联网平台 → 企业级</li>
+</ul>
+<h3 id="2-入门级htmlcssjs-项目">2. 入门级：HTML/CSS/JS 项目</h3>
+<h4 id="21-适用场景">2.1 适用场景</h4>
+<ul>
+<li>个人博客、简历页面</li>
+<li>产品宣传页（Landing Page）</li>
+<li>简单的工具页面（计算器、转换器等）</li>
+<li>原型验证、快速 Demo</li>
+</ul>
+<h4 id="22-推荐目录结构">2.2 推荐目录结构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-simple-project/
+├── index.html              # 首页
+├── about.html              # 关于页面（如有）
+├── css/
+│   ├── reset.css           # 重置样式
+│   ├── variables.css       # CSS 变量（颜色、字体等）
+│   ├── components.css      # 组件样式（按钮、卡片等）
+│   └── main.css            # 主样式文件
+├── js/
+│   ├── utils.js            # 工具函数
+│   ├── api.js              # 简单的 API 调用
+│   └── main.js             # 主逻辑
+├── assets/
+│   ├── images/             # 图片资源
+│   └── fonts/              # 字体文件
+└── README.md               # 项目说明
+</code></pre>
+<h4 id="23-代码组织原则">2.3 代码组织原则</h4>
+<p><strong>HTML</strong>：语义化标签，清晰的结构</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- index.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;我的个人博客&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/reset.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/variables.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/components.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css/main.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header class=&quot;site-header&quot;&gt;
+    &lt;nav class=&quot;main-nav&quot;&gt;
+      &lt;a href=&quot;index.html&quot;&gt;首页&lt;/a&gt;
+      &lt;a href=&quot;about.html&quot;&gt;关于&lt;/a&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+  
+  &lt;main class=&quot;content&quot;&gt;
+    &lt;article class=&quot;blog-post&quot;&gt;
+      &lt;h1&gt;文章标题&lt;/h1&gt;
+      &lt;p&gt;文章内容...&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/main&gt;
+  
+  &lt;footer class=&quot;site-footer&quot;&gt;
+    &lt;p&gt;&amp;copy; 2024 我的博客&lt;/p&gt;
+  &lt;/footer&gt;
+  
+  &lt;script src=&quot;js/utils.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;js/main.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>CSS</strong>：使用 CSS 变量管理主题</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* variables.css */
+:root {
+  --primary-color: #3498db;
+  --text-color: #333;
+  --bg-color: #fff;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --font-base: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, sans-serif;
+}
+
+/* components.css - 可复用的组件样式 */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: 4px;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+
+.card {
+  padding: var(--spacing-md);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+</code></pre>
+<p><strong>JavaScript</strong>：模块化组织（使用 ES6 模块或简单拆分）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// utils.js
+const utils = {
+  // DOM 操作简化
+  $(selector) {
+    return document.querySelector(selector);
+  },
+  
+  // 简单的防抖
+  debounce(fn, delay) {
+    let timer;
+    return function(...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() =&gt; fn.apply(this, args), delay);
+    };
+  },
+  
+  // 本地存储封装
+  storage: {
+    get(key) {
+      return JSON.parse(localStorage.getItem(key) || &#39;null&#39;);
+    },
+    set(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  }
+};
+
+// main.js
+document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
+  // 页面初始化逻辑
+  initNavigation();
+  loadBlogPosts();
+});
+</code></pre>
+<h4 id="24-最佳实践">2.4 最佳实践</h4>
+<p>✅ <strong>应该做的</strong>：</p>
+<ul>
+<li>使用语义化 HTML 标签</li>
+<li>CSS 变量管理颜色和间距</li>
+<li>图片压缩和懒加载</li>
+<li>添加基础的 SEO meta 标签</li>
+</ul>
+<p>❌ <strong>避免的</strong>：</p>
+<ul>
+<li>内联样式（<code>style=&quot;...&quot;</code>）</li>
+<li>全局变量污染</li>
+<li>重复代码（复制粘贴）</li>
+</ul>
+<h3 id="3-进阶级vuereact-框架项目">3. 进阶级：Vue/React 框架项目</h3>
+<h4 id="31-适用场景">3.1 适用场景</h4>
+<ul>
+<li>企业管理系统（ERP、CRM、OA）</li>
+<li>电商前台/后台</li>
+<li>SaaS 应用</li>
+<li>需要复杂交互的 Web 应用</li>
+</ul>
+<h4 id="32-vue-项目推荐结构">3.2 Vue 项目推荐结构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-vue-project/
+├── public/                     # 静态资源
+│   ├── index.html
+│   └── favicon.ico
+├── src/
+│   ├── assets/                 # 样式、图片、字体
+│   │   ├── styles/
+│   │   │   ├── variables.scss
+│   │   │   ├── mixins.scss
+│   │   │   └── global.scss
+│   │   └── images/
+│   ├── components/             # 通用组件
+│   │   ├── common/             # 全局通用（Button、Modal 等）
+│   │   │   ├── Button/
+│   │   │   │   ├── index.vue
+│   │   │   │   └── Button.scss
+│   │   │   └── Modal/
+│   │   └── business/           # 业务组件（UserCard 等）
+│   ├── views/                  # 页面组件
+│   │   ├── Home/
+│   │   ├── User/
+│   │   │   ├── List.vue
+│   │   │   └── Detail.vue
+│   │   └── Product/
+│   ├── router/                 # 路由配置
+│   │   └── index.js
+│   ├── stores/                 # Pinia/Vuex 状态管理
+│   │   ├── user.js
+│   │   └── app.js
+│   ├── services/               # API 服务
+│   │   ├── request.js          # axios 封装
+│   │   ├── user.js
+│   │   └── product.js
+│   ├── utils/                  # 工具函数
+│   │   ├── format.js
+│   │   ├── validate.js
+│   │   └── storage.js
+│   ├── composables/            # 组合式函数
+│   │   ├── useAuth.js
+│   │   └── useLoading.js
+│   ├── constants/              # 常量定义
+│   │   └── index.js
+│   ├── App.vue
+│   └── main.js
+├── tests/                      # 测试文件
+├── .env                        # 环境变量
+├── vite.config.js
+├── package.json
+└── README.md
+</code></pre>
+<h4 id="33-react-项目推荐结构">3.3 React 项目推荐结构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-react-project/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   ├── common/             # 通用组件
+│   │   │   ├── Button/
+│   │   │   │   ├── index.jsx
+│   │   │   │   └── Button.module.css
+│   │   │   └── Modal/
+│   │   └── business/           # 业务组件
+│   ├── pages/                  # 页面组件
+│   │   ├── Home/
+│   │   ├── User/
+│   │   └── Product/
+│   ├── hooks/                  # 自定义 Hooks
+│   │   ├── useAuth.js
+│   │   └── useFetch.js
+│   ├── services/               # API 服务
+│   │   ├── api.js
+│   │   └── userService.js
+│   ├── store/                  # Redux/Zustand 状态管理
+│   │   ├── slices/
+│   │   └── index.js
+│   ├── utils/
+│   ├── constants/
+│   ├── App.jsx
+│   └── main.jsx
+├── tests/
+└── package.json
+</code></pre>
+<h4 id="34-关键概念详解">3.4 关键概念详解</h4>
+<h4 id="组件设计原则">组件设计原则</h4>
+<p><strong>单一职责</strong>：一个组件只做一件事</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-vue">&lt;!-- ❌ 不好的例子：组件做了太多事 --&gt;
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;form @submit=&quot;handleSubmit&quot;&gt;
+      &lt;!-- 表单内容 --&gt;
+    &lt;/form&gt;
+    &lt;table&gt;
+      &lt;!-- 数据表格 --&gt;
+    &lt;/table&gt;
+    &lt;div class=&quot;charts&quot;&gt;
+      &lt;!-- 统计图表 --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;!-- ✅ 好的例子：拆分成独立组件 --&gt;
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;UserForm @submit=&quot;fetchData&quot; /&gt;
+    &lt;UserTable :data=&quot;users&quot; /&gt;
+    &lt;UserStats :data=&quot;users&quot; /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<h4 id="状态管理策略">状态管理策略</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>状态类型</th>
+<th>存储位置</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>全局状态</strong></td>
+<td>Pinia/Redux</td>
+<td>用户信息、登录状态、主题设置</td>
+</tr>
+<tr>
+<td><strong>页面状态</strong></td>
+<td>页面组件</td>
+<td>列表查询条件、分页信息</td>
+</tr>
+<tr>
+<td><strong>组件状态</strong></td>
+<td>组件内部</td>
+<td>表单输入、弹窗显示/隐藏</td>
+</tr>
+<tr>
+<td><strong>服务端状态</strong></td>
+<td>TanStack Query/SWR</td>
+<td>服务器数据、缓存</td>
+</tr>
+</tbody></table></div>
+<h4 id="目录组织方式选择">目录组织方式选择</h4>
+<p><strong>方式一：按类型组织（适合小型项目）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── components/     # 所有组件
+├── views/          # 所有页面
+├── stores/         # 所有状态
+└── services/       # 所有服务
+</code></pre>
+<p><strong>方式二：按功能组织（适合中大型项目）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── features/
+│   ├── auth/       # 认证功能的所有代码
+│   ├── user/       # 用户功能的所有代码
+│   └── product/    # 商品功能的所有代码
+├── shared/         # 共享资源
+└── App.vue
+</code></pre>
+<blockquote>
+<p><strong>如何选择？</strong></p>
+</blockquote>
+<ul>
+<li>项目页面 &lt; 10 个 → 按类型组织</li>
+<li>项目页面 &gt; 20 个 → 按功能组织</li>
+<li>团队 &gt; 5 人 → 按功能组织，便于并行开发</li>
+</ul>
+<h3 id="4-企业级大型应用架构">4. 企业级：大型应用架构</h3>
+<h4 id="41-适用场景">4.1 适用场景</h4>
+<ul>
+<li>大型互联网平台（电商、社交、内容平台）</li>
+<li>复杂的企业级应用</li>
+<li>需要支持多团队协作的项目</li>
+<li>对性能和可维护性要求极高的项目</li>
+</ul>
+<h4 id="42-微前端架构">4.2 微前端架构</h4>
+<p>当项目规模大到一定程度，单个代码库难以维护时，可以考虑<strong>微前端</strong>架构。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>大型电商平台/
+├── 基座应用（主框架）
+│   ├── 顶部导航
+│   ├── 侧边菜单
+│   ├── 用户中心入口
+│   └── 子应用容器
+├── 商品子应用（独立部署）
+│   ├── 商品列表
+│   ├── 商品详情
+│   └── 商品管理
+├── 订单子应用（独立部署）
+│   ├── 购物车
+│   ├── 订单列表
+│   └── 支付流程
+├── 用户子应用（独立部署）
+│   ├── 个人中心
+│   ├── 收货地址
+│   └── 优惠券
+└── 营销子应用（独立部署）
+    ├── 活动页面
+    ├── 优惠券发放
+    └── 积分商城
+</code></pre>
+<p><strong>微前端的优势</strong>：</p>
+<ul>
+<li>团队自治：每个子应用独立开发、部署</li>
+<li>技术栈无关：不同团队可以用不同框架</li>
+<li>渐进式升级：可以逐步重构老系统</li>
+</ul>
+<h4 id="43-企业级目录结构">4.3 企业级目录结构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>enterprise-project/
+├── apps/                       # 微前端子应用
+│   ├── main/                   # 基座应用
+│   ├── product/
+│   ├── order/
+│   └── user/
+├── packages/                   # 共享包（Monorepo）
+│   ├── ui-components/          # 通用组件库
+│   ├── utils/                  # 工具函数
+│   ├── constants/              # 常量定义
+│   └── types/                  # TypeScript 类型
+├── shared/                     # 共享配置
+│   ├── eslint-config/
+│   ├── ts-config/
+│   └── vite-config/
+├── docs/                       # 项目文档
+├── scripts/                    # 构建脚本
+└── package.json
+</code></pre>
+<h4 id="44-性能优化架构">4.4 性能优化架构</h4>
+<p>大型应用需要关注性能优化：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>性能优化策略/
+├── 构建时优化
+│   ├── 代码分割（Code Splitting）
+│   ├── 路由懒加载
+│   ├── Tree Shaking
+│   └── 资源压缩
+├── 运行时优化
+│   ├── 虚拟滚动（长列表）
+│   ├── 图片懒加载
+│   ├── 组件按需渲染
+│   └── 缓存策略
+└── 网络优化
+    ├── CDN 加速
+    ├── HTTP 缓存
+    ├── 资源预加载
+    └── Service Worker
+</code></pre>
+<h4 id="45-ssrssg-架构">4.5 SSR/SSG 架构</h4>
+<p>对于需要 SEO 或首屏性能的场景：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适用场景</th>
+<th>代表框架</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SSR</strong></td>
+<td>需要 SEO、首屏渲染快</td>
+<td>Next.js、Nuxt.js</td>
+</tr>
+<tr>
+<td><strong>SSG</strong></td>
+<td>内容静态、更新不频繁</td>
+<td>Astro、VitePress</td>
+</tr>
+<tr>
+<td><strong>混合</strong></td>
+<td>部分静态、部分动态</td>
+<td>Next.js (ISR)</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-按用户量级别的架构选择">5. 按用户量级别的架构选择</h3>
+<h4 id="51-个人小团队日活--1000">5.1 个人/小团队（日活 &lt; 1000）</h4>
+<p><strong>特点</strong>：快速迭代、资源有限、需求变化快</p>
+<p><strong>推荐架构</strong>：</p>
+<ul>
+<li>技术栈：Vue 3 + Vite 或 React + Vite</li>
+<li>状态管理：Pinia 或 Zustand（轻量级）</li>
+<li>UI 库：Element Plus / Ant Design</li>
+<li>部署：Vercel / Netlify / 云服务器</li>
+</ul>
+<p><strong>目录结构</strong>：简单按类型组织即可</p>
+<h4 id="52-中型企业日活-1k-100k">5.2 中型企业（日活 1k-100k）</h4>
+<p><strong>特点</strong>：业务复杂、团队协作、需要稳定性</p>
+<p><strong>推荐架构</strong>：</p>
+<ul>
+<li>技术栈：Vue 3 + TypeScript 或 React + TypeScript</li>
+<li>状态管理：Pinia + 组合式函数 或 Redux Toolkit</li>
+<li>UI 库：自建组件库 + 业务组件库</li>
+<li>测试：单元测试 + E2E 测试</li>
+<li>部署：CI/CD 流水线 + Docker</li>
+</ul>
+<p><strong>目录结构</strong>：按功能组织，建立规范</p>
+<h4 id="53-大型平台日活--100k">5.3 大型平台（日活 &gt; 100k）</h4>
+<p><strong>特点</strong>：高并发、多团队协作、长期维护</p>
+<p><strong>推荐架构</strong>：</p>
+<ul>
+<li>技术栈：React/Vue + TypeScript（严格模式）</li>
+<li>架构：微前端 + Monorepo</li>
+<li>状态管理：细粒度状态管理 + 服务端状态缓存</li>
+<li>性能：SSR/SSG + CDN + 边缘计算</li>
+<li>监控：前端监控 + 错误追踪 + 性能分析</li>
+</ul>
+<p><strong>目录结构</strong>：Monorepo + 微前端</p>
+<h3 id="6-架构演进路线图">6. 架构演进路线图</h3>
+<h4 id="61-演进示例从博客到平台">6.1 演进示例：从博客到平台</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>阶段 1：个人博客（HTML/CSS/JS）
+    ↓ 需求：需要后台管理
+阶段 2：增加管理后台（Vue/React + 简单结构）
+    ↓ 需求：用户系统、评论功能
+阶段 3：功能模块化（按功能组织）
+    ↓ 需求：多团队协作、独立部署
+阶段 4：微前端架构（Monorepo）
+</code></pre>
+<h4 id="62-何时该升级架构">6.2 何时该升级架构</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>信号</th>
+<th>说明</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>构建时间 &gt; 5 分钟</td>
+<td>项目过大</td>
+<td>代码分割、微前端</td>
+</tr>
+<tr>
+<td>多人频繁冲突</td>
+<td>协作困难</td>
+<td>按功能组织、模块拆分</td>
+</tr>
+<tr>
+<td>改一处崩多处</td>
+<td>耦合严重</td>
+<td>重构、加强测试</td>
+</tr>
+<tr>
+<td>首屏加载 &gt; 3 秒</td>
+<td>性能问题</td>
+<td>懒加载、SSR、优化</td>
+</tr>
+<tr>
+<td>新成员上手慢</td>
+<td>结构混乱</td>
+<td>文档、规范、重构</td>
+</tr>
+</tbody></table></div>
+<h3 id="7-总结-7">7. 总结</h3>
+<blockquote>
+<p><strong>核心思想</strong>
+<strong>架构没有银弹，适合的才是最好的。</strong></p>
+</blockquote>
+<ul>
+<li><strong>小项目</strong>不要过度设计，HTML/CSS/JS 足够</li>
+<li><strong>中项目</strong>建立规范，组件化、模块化</li>
+<li><strong>大项目</strong>考虑微前端、性能优化、团队协作</li>
+</ul>
+<p><strong>记住这几点</strong>：</p>
+<ol>
+<li><strong>渐进式演进</strong>：从简单开始，随需求增长</li>
+<li><strong>统一约定</strong>：命名、结构、代码风格保持一致</li>
+<li><strong>文档先行</strong>：架构决策要记录，便于传承</li>
+<li><strong>定期重构</strong>：技术债务要及时偿还</li>
+</ol>
+<p><strong>最终目标</strong>：让代码像整理好的空间一样，无论大小，都能高效运转。</p>
+<h3 id="参考资源-3">参考资源</h3>
+<ul>
+<li><a href="https://vuejs.org/style-guide/">Vue 风格指南</a></li>
+<li><a href="https://react.dev/learn/thinking-in-react">React 项目结构建议</a></li>
+<li><a href="https://github.com/alan2207/bulletproof-react">Bulletproof React - 架构指南</a></li>
+<li><a href="https://feature-sliced.design/">Feature Sliced Design</a></li>
+<li><a href="https://micro-frontends.org/">微前端架构</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-111.html">← 前端工程化全貌</a><a rel="next" href="chapter-113.html">无障碍与国际化 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

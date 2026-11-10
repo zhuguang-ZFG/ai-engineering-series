@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>在魔搭社区发布你的 Vibe Coding 产物 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 1 · 14 / 195</p><article><h1 id="在魔搭社区发布你的-vibe-coding-产物">在魔搭社区发布你的 Vibe Coding 产物</h1><details class="contents"><summary>本章目录 <span>· 11 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#先选对发布方式">先选对发布方式</a></li><li><a href="#推荐用官方-skill-和-ai-协作发布">推荐：用官方 Skill 和 AI 协作发布</a><ul><li><a href="#安装-skill">安装 Skill</a></li><li><a href="#怎样用-skill-发布">怎样用 Skill 发布</a></li><li><a href="#最简单的提示词">最简单的提示词</a></li><li><a href="#ai-接下来会做什么">AI 接下来会做什么</a></li></ul></li><li><a href="#手动第-0-步准备可以发布的网站">手动：第 0 步，准备可以发布的网站</a><ul><li><a href="#情况-a纯-html-网页">情况 A：纯 HTML 网页</a></li><li><a href="#情况-bvuereactvite-等项目">情况 B：Vue、React、Vite 等项目</a></li></ul></li><li><a href="#手动第-1-步进入创空间并登录">手动：第 1 步，进入创空间并登录</a></li><li><a href="#手动第-2-步填写空间基础信息">手动：第 2 步，填写空间基础信息</a></li><li><a href="#手动第-3-步上传网页文件">手动：第 3 步，上传网页文件</a></li><li><a href="#手动第-4-步在部署设置中选择-static">手动：第 4 步，在部署设置中选择 Static</a></li><li><a href="#手动第-5-步等待部署并验收">手动：第 5 步，等待部署并验收</a></li><li><a href="#手动第-6-步更新已经发布的网页">手动：第 6 步，更新已经发布的网页</a></li><li><a href="#排障仍然推荐使用-skill">排障仍然推荐使用 Skill</a></li><li><a href="#资料来源">资料来源</a></li></ul></nav></details><p>网页终于做出来了，接下来当然要找个地方展示，让朋友、同学或者真正的用户可以直接打开它。</p>
+<p>我们可以租一台服务器，自己配置域名、HTTPS 和部署流程；也可以把作品托管到成熟的开源社区，少处理一些运维工作，把精力留给页面本身。这一节我们选择第二种方式：把网页发布到 <strong>魔搭社区（ModelScope）</strong>。</p>
+<p>魔搭社区（ModelScope）是由阿里巴巴联合 CCF 开源发展委员会发起的开源社区。除了 20 万+开源模型和 3 万+数据集，它也提供用于展示应用的 <strong>创空间（Studio）</strong>。对我们来说，创空间最实用的一点是：不用先成为运维专家，也能给自己的作品准备一个可以免费分享的展示地址。</p>
+<blockquote>
+<p>本文依据魔搭社区当前的创空间页面、官方 Skill 和命令行资料整理，最后核验于 <strong>2026 年 8 月 11 日</strong>。魔搭仍在快速更新，按钮位置可能变化，但“创建 Static 创空间 → 上传构建产物 → 部署 → 通过创空间链接访问”的主流程不变。</p>
+</blockquote>
+<p>魔搭社区的 <strong>创空间（Studio）</strong> 不只可以运行 Gradio、Streamlit 和 Docker 应用，也支持 <code>static</code> 类型，即已经构建好的纯静态网站。如果你的网页最终能变成 <code>index.html</code>、CSS、JavaScript、图片等文件，就可以用这种方式发布。</p>
+<p>发布完成后，你会得到一个类似下面的公开页面：</p>
+<pre class="prose-block"><code class="language-text">https://modelscope.cn/studios/你的用户名/你的空间名
+</code></pre>
+<h2 id="先选对发布方式">先选对发布方式</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>你的项目</th>
+<th>选择的创空间类型</th>
+<th>发布前要做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>纯 HTML / CSS / JavaScript</td>
+<td><strong>Static / 静态网页</strong></td>
+<td>不需要构建，直接准备网页文件</td>
+</tr>
+<tr>
+<td>Vue、React、Vite、Svelte 等前端项目</td>
+<td><strong>Static / 静态网页</strong></td>
+<td>先执行构建，只上传 <code>dist</code> 或 <code>build</code> 里的内容</td>
+</tr>
+<tr>
+<td>Gradio 应用</td>
+<td>Gradio</td>
+<td>准备 <code>app.py</code> 和 <code>requirements.txt</code></td>
+</tr>
+<tr>
+<td>Streamlit 应用</td>
+<td>Streamlit</td>
+<td>准备 Streamlit 入口文件和依赖</td>
+</tr>
+<tr>
+<td>有自定义后端、系统依赖或特殊启动方式</td>
+<td>Docker</td>
+<td>编写 Dockerfile，服务监听平台要求的端口</td>
+</tr>
+</tbody></table></div>
+<p>本文重点讲前两种。<strong>不要把 Vue、React 的源代码直接当成 Static 网站上传</strong>：浏览器不能替你执行 <code>npm install</code> 和 <code>npm run build</code>。</p>
+<h2 id="推荐用官方-skill-和-ai-协作发布">推荐：用官方 Skill 和 AI 协作发布</h2>
+<p>魔搭官方维护了 <a href="https://github.com/modelscope/modelscope-skills">ModelScope Skills</a>，其中与发布网页最相关的是下面两个 Skill：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>作用</th>
+<th>什么时候使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ms-hub</code></td>
+<td>魔搭平台的统一入口，覆盖仓库、模型、数据集、创空间、MCP 和 Skills Center</td>
+<td>第一次接入魔搭，或只需执行创空间快捷操作</td>
+</tr>
+<tr>
+<td><code>ms-studio-deploy</code></td>
+<td>专门把本地项目部署到创空间，覆盖项目识别、创建空间、Git 同步、部署、日志检查和故障诊断</td>
+<td><strong>发布或更新本地网页时优先使用</strong></td>
+</tr>
+</tbody></table></div>
+<p><code>ms-studio-deploy</code> 会根据项目文件判断运行类型：根目录已有 <code>index.html</code> 的构建产物会识别为 <code>static</code>。Static 创空间不负责运行 <code>npm run build</code>，因此 Vue、React、Vite 项目仍要先在本地构建。</p>
+<h3 id="安装-skill">安装 Skill</h3>
+<p>先安装魔搭 SDK，再安装统一入口和创空间部署 Skill：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">python -m pip install -U modelscope
+modelscope skills add @ModelScope/ms-hub @ModelScope/ms-studio-deploy
+</code></pre>
+<p>如果当前安装的 <code>modelscope</code> 命令没有 <code>skills</code> 子命令，可以使用官方安装脚本：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">curl -fsSL https://modelscope.cn/skills/install.sh | bash -s -- @ModelScope/ms-hub
+curl -fsSL https://modelscope.cn/skills/install.sh | bash -s -- @ModelScope/ms-studio-deploy
+</code></pre>
+<p>Skill 默认安装到 <code>~/.agents/skills/</code>，Codex、Cursor、Claude Code 等支持 Agent Skills 的工具可以从这里发现它们。安装后重新开始一次智能体会话，让工具刷新可用 Skill 列表。</p>
+<h3 id="怎样用-skill-发布">怎样用 Skill 发布</h3>
+<p>按照魔搭官方 <a href="https://github.com/modelscope/modelscope-skills/blob/main/skills/ms-studio-deploy/SKILL.md"><code>ms-studio-deploy</code> 教程</a>，你不需要自己照着文档逐条执行创建、推送、部署和查日志命令。准备好下面三样东西，就可以把完整流程交给 AI：</p>
+<ol>
+<li>已经安装 <code>ms-studio-deploy</code> Skill，并重新打开了一次智能体会话；</li>
+<li>当前目录是准备发布的目录，而且根目录直接包含 <code>index.html</code>；</li>
+<li>本机已经配置魔搭 Access Token。</li>
+</ol>
+<p>第一次使用时，前往 <a href="https://modelscope.cn/my/myaccesstoken">Access Token 页面</a> 获取令牌，并在终端设置：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">export MODELSCOPE_API_KEY=&quot;你的令牌&quot;
+</code></pre>
+<p>纯 HTML 项目直接进入网页目录。Vue、React、Vite 等项目先构建，再进入产物目录：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm run build
+cd dist
+</code></pre>
+<p>上面以 Vite 的 <code>dist</code> 为例；如果项目生成的是 <code>build</code> 目录，就进入 <code>build</code>。</p>
+<p>然后在 Codex、Cursor、Claude Code 等支持 Agent Skills 的工具中打开这个目录。</p>
+<h3 id="最简单的提示词">最简单的提示词</h3>
+<p>只需要说这一句：</p>
+<pre class="prose-block"><code class="language-text">请使用 ms-studio-deploy Skill，把当前网页发布到魔搭社区的 Static 创空间，完成后把访问链接发给我。
+</code></pre>
+<p>Skill 会先检查 <code>index.html</code> 和登录信息。如果需要创建新空间，它还会确认空间名称以及公开或私有；没有特别说明时，建议先使用私有空间。</p>
+<p>如果想一次把要求说清楚，可以使用下面这个版本：</p>
+<pre class="prose-block"><code class="language-text">请使用 ms-studio-deploy Skill，把当前目录发布到魔搭国内站的 Static 创空间。
+空间名使用 my-portfolio，先设为私有；部署后检查运行状态和日志，
+如果失败就根据日志修复并重新部署，成功后把访问链接发给我。
+</code></pre>
+<h3 id="ai-接下来会做什么">AI 接下来会做什么</h3>
+<p>官方 Skill 把发布过程整理成了一套协作流程：</p>
+<pre class="prose-block"><code class="language-text">识别项目类型 → 确认国内站或国际站 → 获取账号信息
+→ 创建或复用创空间 → 检查敏感信息 → 同步到 master
+→ 触发部署 → 检查状态与日志 → 诊断并修复 → 返回访问链接
+</code></pre>
+<p>过程中如果 AI 询问“公开还是私有”，第一次发布建议选择私有，确认页面正常后再改为公开。Static 网站不需要付费硬件；如果其他类型的空间涉及付费资源，Skill 必须先得到你的明确同意。</p>
+<p>令牌同时用于 API 认证和 Git 推送。不要把令牌直接写入网页源码、README、提示词或可分享截图。</p>
+<h2 id="手动第-0-步准备可以发布的网站">手动：第 0 步，准备可以发布的网站</h2>
+<p>前面的 Skill 方式更省事。下面保留一套不使用 Skill 的手动流程，方便你理解创空间页面，或者在智能体暂时不可用时完成发布。</p>
+<h3 id="情况-a纯-html-网页">情况 A：纯 HTML 网页</h3>
+<p>最小目录如下，<code>index.html</code> 必须位于准备发布内容的根目录：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-text">my-site/
+├── index.html
+├── styles.css
+├── app.js
+└── images/
+    └── cover.jpg
+</code></pre>
+<p>发布前可以在终端里做一次本地检查：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">cd my-site
+python3 -m http.server 8000
+</code></pre>
+<p>浏览器打开 <code>http://localhost:8000</code>。不要只双击 <code>index.html</code> 检查，因为 <code>file://</code> 和真正的 HTTP 访问在模块、跨域和路径处理上并不相同。</p>
+<h3 id="情况-bvuereactvite-等项目">情况 B：Vue、React、Vite 等项目</h3>
+<p>先安装依赖并构建：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm install
+npm run build
+</code></pre>
+<p>常见输出目录：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具或框架</th>
+<th>常见输出目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vite / Vue + Vite / React + Vite</td>
+<td><code>dist/</code></td>
+</tr>
+<tr>
+<td>Create React App</td>
+<td><code>build/</code></td>
+</tr>
+<tr>
+<td>Vue CLI</td>
+<td><code>dist/</code></td>
+</tr>
+</tbody></table></div>
+<p>你要发布的是输出目录里的<strong>内容</strong>，并确保最终仓库根目录直接出现 <code>index.html</code>：</p>
+<pre class="prose-block"><code class="language-text">正确：index.html
+错误：dist/index.html
+</code></pre>
+<p>如果部署后 CSS、JavaScript 或图片 404，Vite 项目可以先尝试把资源基路径改为相对路径：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">// vite.config.js / vite.config.ts
+export default {
+  base: &#39;./&#39;
+}
+</code></pre>
+<p>修改后重新执行 <code>npm run build</code>。单页应用还建议使用 Hash 路由（例如 <code>/#/about</code>），因为纯静态托管不一定会把所有路径都回退到 <code>index.html</code>。</p>
+<h2 id="手动第-1-步进入创空间并登录">手动：第 1 步，进入创空间并登录</h2>
+<p>打开 <a href="https://modelscope.cn/studios">魔搭社区创空间</a>。页面顶部会显示“创建空间 → 搭建应用 → 发布空间 → 分享创意”的流程。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-1/appendix-modelscope-static-site/images/modelscope-static-site/01-studios-home.webp" alt="魔搭社区创空间首页，页面顶部展示创建、搭建、发布和分享流程" loading="lazy" decoding="async"></p>
+<p>点击页面中的创建按钮，或直接访问 <a href="https://modelscope.cn/studios/create">创建创空间</a>。未登录时，平台会先要求登录或注册。国内站 <code>modelscope.cn</code> 和国际站 <code>modelscope.ai</code> 的账号、令牌与内容并不互通；面向国内用户时通常选择国内站。</p>
+<h2 id="手动第-2-步填写空间基础信息">手动：第 2 步，填写空间基础信息</h2>
+<p>在“创建创空间”页面填写基础信息：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-1/appendix-modelscope-static-site/images/modelscope-static-site/02-create-studio.jpg" alt="魔搭社区“创建创空间”页面，包含名称、所有者、许可证、可见性和描述等基础信息" loading="lazy" decoding="async"></p>
+<ol>
+<li><strong>所属账号或组织</strong>：决定链接中的拥有者名称。</li>
+<li><strong>空间名称</strong>：建议使用小写英文字母、数字和连字符，例如 <code>my-portfolio</code>。</li>
+<li><strong>显示名称与简介</strong>：填写访客能够看懂的标题和说明。</li>
+<li><strong>可见性</strong>：第一次部署建议先选择私有，验收后再公开。</li>
+<li><strong>许可证</strong>：根据项目实际情况选择。</li>
+</ol>
+<p>确认信息后，点击页面底部的创建按钮，等待进入创空间详情页。</p>
+<h2 id="手动第-3-步上传网页文件">手动：第 3 步，上传网页文件</h2>
+<p>下面是一个已经运行的 Static 创空间文件页。可以看到网页入口 <code>index.html</code> 直接位于仓库根目录，同时还有平台生成或项目自带的 <code>README.md</code>。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-1/appendix-modelscope-static-site/images/modelscope-static-site/04-studio-files.jpg" alt="魔搭社区 Static 创空间文件页，根目录包含 index.html 和 README.md" loading="lazy" decoding="async"></p>
+<p>进入新空间的 <strong>文件</strong> 页，点击新增或上传文件，把 <code>index.html</code>、CSS、JavaScript 和图片等发布文件传上去。上传完成后，文件列表的根目录必须直接出现 <code>index.html</code>，不能多包一层 <code>dist/</code>、<code>build/</code> 或项目目录。</p>
+<p>手动上传适合纯 HTML 页面或文件很少的项目。文件较多、需要频繁更新时，返回前面的推荐方式，让 <code>ms-studio-deploy</code> 自动完成 Git 同步更稳妥。</p>
+<h2 id="手动第-4-步在部署设置中选择-static">手动：第 4 步，在部署设置中选择 Static</h2>
+<p>文件上传完成后，进入创空间的部署设置，在 SDK 类型中选择 <strong>Static</strong>。页面会提示 Static 适合展示已经准备好的 HTML 页面；同一区域也会提供 Gradio、Streamlit 和 Docker 等类型。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-1/appendix-modelscope-static-site/images/modelscope-static-site/03-select-static.webp" alt="魔搭社区创空间的部署设置，在“接入 SDK”区域选择 Static" loading="lazy" decoding="async"></p>
+<p>再次确认仓库根目录有 <code>index.html</code>，然后保存部署设置。</p>
+<blockquote>
+<p>如果网页需要数据库、私密 API Key 或服务端计算，它就不是纯静态网页。此时应选择 Gradio、Streamlit、Docker，或把后端部署到其他服务。把密钥写进前端 JavaScript 无法保密。</p>
+</blockquote>
+<h2 id="手动第-5-步等待部署并验收">手动：第 5 步，等待部署并验收</h2>
+<p>保存部署设置后，平台通常会自动开始部署。如果没有自动触发，就在创空间页面点击部署、重启或重新运行。等待状态变为“运行中”，然后打开类似下面的地址：</p>
+<pre class="prose-block"><code class="language-text">https://modelscope.cn/studios/你的用户名/你的空间名
+</code></pre>
+<p>打开最终链接，重点确认：</p>
+<ul>
+<li>首页能否打开；</li>
+<li>CSS、JavaScript 和图片是否正常；</li>
+<li>浏览器控制台是否有 404、CORS 或 JavaScript 错误；</li>
+<li>手机宽度下是否能正常使用；</li>
+<li>复制公开链接后，在未登录窗口中是否仍能访问。</li>
+</ul>
+<p>如果空间目前是私有的，确认页面正常后，再到空间设置中把可见性改为公开，并使用未登录窗口检查公开链接。</p>
+<h2 id="手动第-6-步更新已经发布的网页">手动：第 6 步，更新已经发布的网页</h2>
+<p>修改源代码后，先在本地测试并重新构建。回到创空间的 <strong>文件</strong> 页，用新的 <code>dist</code> 或 <code>build</code> 目录内容替换旧文件，然后重新部署。</p>
+<pre class="prose-block"><code class="language-text">修改源代码 → 本地测试 → 重新构建 → 手动替换创空间文件
+→ 重新部署 → 打开最终链接验收
+</code></pre>
+<p>对于 Vite、React、Vue 项目，仍然只上传构建产物，不要上传 <code>node_modules</code>、开发配置和完整源代码。更新次数变多以后，建议改用前面的 Skill 方式。</p>
+<h2 id="排障仍然推荐使用-skill">排障仍然推荐使用 Skill</h2>
+<h2 id="资料来源">资料来源</h2>
+<ul>
+<li><a href="https://modelscope.cn/studios">魔搭社区创空间</a>（页面与截图核验于 2026-08-11）</li>
+<li><a href="https://community.modelscope.cn/683562c6870cef7360622f7f.html">“搭友来碰头”魔搭核心开发者共创会回顾</a>（杭州开发者社区活动）</li>
+<li><a href="https://github.com/modelscope/modelscope-skills/blob/main/skills/ms-hub/SKILL.md">ModelScope 官方统一操作说明</a>（其中列出 <code>gradio</code>、<code>streamlit</code>、<code>docker</code>、<code>static</code> 四种 Studio SDK 类型，并说明默认分支、部署、停止、日志和 Git 同步方式）</li>
+<li><a href="https://github.com/modelscope/modelscope-skills/blob/main/skills/ms-studio-deploy/SKILL.md">ModelScope 官方创空间部署 Skill</a>（本地项目识别、创空间创建、代码同步、部署、日志监控和自动诊断的完整协作流程）</li>
+<li><a href="https://github.com/modelscope/modelscope_hub">ModelScope Hub 官方客户端</a>（当前 CLI、认证和 Studio 生命周期命令）</li>
+<li><a href="https://modelscope.cn/studios/studio-demo-station/funasr-demo-static-multiple/summary">公开创空间示例</a>（用于核对当前详情页的“内容 / 文件”布局）</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-013.html">← 8. 打磨并交付完整作品</a><a rel="next" href="chapter-015.html">产品思维基础 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

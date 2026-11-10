@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>多模态模型（视觉 / 音频 / 视频） · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 164 / 195</p><article><h1 id="多模态模型视觉--音频--视频">多模态模型（视觉 / 音频 / 视频）</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#多模态模型原理视觉音频视频">多模态模型原理：视觉/音频/视频</a><ul><li><a href="#0-引言给大脑装上眼睛">0. 引言：给大脑装上眼睛</a></li><li><a href="#1-第一步把图片变成单词-visual-tokenization">1. 第一步：把图片变成“单词” (Visual Tokenization)</a></li><li><a href="#2-第二步跨物种翻译-projection">2. 第二步：跨物种翻译 (Projection)</a></li><li><a href="#3-第三步合体-the-architecture">3. 第三步：合体 (The Architecture)</a></li><li><a href="#多模态训练流程training">多模态训练流程（Training）</a></li><li><a href="#5-进阶看得更清-advanced-tricks">5. 进阶：看得更清 (Advanced Tricks)</a></li><li><a href="#6-总结-4">6. 总结</a></li><li><a href="#7-名词速查表-glossary-2">7. 名词速查表 (Glossary)</a></li></ul></li></ul></nav></details><h2 id="多模态模型原理视觉音频视频">多模态模型原理：视觉/音频/视频</h2>
+<p>把一张通知照片交给模型，先问两件事：图片里哪些信息保留下来了？回答中的每个字段能否回指原图？本章用公开的 ViT、LLaVA 与 BLIP-2 说明几种设计，不推断 DeepSeek V4.1 Flash 或 Kimi K3 的内部架构，也不预先保证它们支持哪些输入。</p>
+<h3 id="0-引言给大脑装上眼睛">0. 引言：给大脑装上眼睛</h3>
+<p>纯文本语言模型接收文本 token 的表示；视觉语言系统还要处理像素。常见做法是先编码图片，再将连续视觉特征接入语言模型。视觉特征通常没有对应的可读单词，也不必先识别成文字。</p>
+<p>例如一张通知同时含日期、地点和位置关系。OCR 可以提取文字，但可能丢失删除线、表格对应或印章覆盖；直接处理图片也可能漏看小字。两条路线都需要核对原图。</p>
+<h3 id="1-第一步把图片变成单词-visual-tokenization">1. 第一步：把图片变成“单词” (Visual Tokenization)</h3>
+<p>以下从固定大小图块的 ViT 路线讲起。图块、投影后的向量和语言模型实际接收的视觉 token 数量是三个概念，不能直接画等号。</p>
+<h4 id="11-切块-patchify--制作视觉单词">1.1 切块 (Patchify) —— 制作视觉单词</h4>
+<p>对大小为 H×W、每块 P×P 且尺寸可整除的图片，图块数 N=HW/P²。人工例子：224×224 图片按 16×16 切分，得到 14×14=196 块。若有裁剪、补边、多尺度或额外 token，序列长度还会改变。</p>
+<p>Patch 是像素区域，不能据此说一块对应一个物体或一个词。“视觉流形切片”不是这里必需的术语。</p>
+<h4 id="12-序列化-flatten--排成一句话">1.2 序列化 (Flatten) —— 排成一句话</h4>
+<p>每块 RGB 像素可摊平为长度 3P² 的向量，再乘可学习的矩阵 E，映射到隐藏维度 d。P=16 时是 768 个像素通道数值；投影输出的 d 是另一个设计参数，不一定为 768。</p>
+<p>随后加入位置关系并经过视觉编码器，各块表示可以汇入其他区域的信息。把图块按序存放没有消除二维关系，也不表示模型只能从左向右看图。纸上可把四块标为左上、右上、左下、右下，检查交换两块时位置标记是否也交换。</p>
+<h3 id="2-第二步跨物种翻译-projection">2. 第二步：跨物种翻译 (Projection)</h3>
+<p>视觉编码器的输出与语言模型的输入接口在维度、统计分布和训练目标上可能不同。连接模块需要把它们对接；维度相同只是接口条件，还需要训练让语言模型利用这些特征。</p>
+<h4 id="21-翻译官的作用-latent-space-alignment">2.1 翻译官的作用 (Latent Space Alignment)</h4>
+<p>设视觉特征为 Z，简单连接器可以计算 Hᵥ=ZW+b，再将 Hᵥ 与文本表示送入后续网络。Hᵥ 仍是连续向量，不是“猫”“树”等 token ID，也没有唯一可逆的文字译文。</p>
+<p>编码器可能已经包含语义信息；不能把它限定为只识别颜色与几何，把语义全部归给语言模型。</p>
+<h4 id="22-不同的翻译流派">2.2 不同的翻译流派</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>路线</th>
+<th>如何连接</th>
+<th>应检查的代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>线性层或 MLP</td>
+<td>对视觉特征做投影，LLaVA 是公开例子之一</td>
+<td>保留多少位置、序列多长、计算量如何变化</td>
+</tr>
+<tr>
+<td>学习查询的桥接模块</td>
+<td>BLIP-2 的 Q-Former 从视觉特征提取供后续使用的表示</td>
+<td>查询数、训练目标及细节是否丢失</td>
+</tr>
+<tr>
+<td>池化或局部合并</td>
+<td>按具体实现减少空间位置</td>
+<td>局部关系和小字保留到什么程度</td>
+</tr>
+</tbody></table></div>
+<p>这不是“直译/意译”的质量排名。压缩可能丢失信息，直接投影也不保证无损。没有对应公开实现时，不把某个具名模型归入其中。</p>
+<h3 id="3-第三步合体-the-architecture">3. 第三步：合体 (The Architecture)</h3>
+<p>“视觉编码器—连接模块—语言模型”是一种便于拆解的架构。另一些系统使用交叉注意力、统一序列或其他融合方法，不能把三段式说成所有多模态模型的统一法则。</p>
+<h4 id="31-vlm-的身体结构">3.1 VLM 的身体结构</h4>
+<p>视觉编码器提取图像表示，连接模块调整接口，语言模型结合图像表示与文字生成回答。它们可以来自已有组件，也可以联合训练；不能只凭参数量判断哪个部分决定理解能力。</p>
+<figure class="handdraw-figure"><a class="figure-zoom" href="../../book/assets/handdraw/llm/multimodal-flow.svg" aria-label="打开大图：通知图片先编码为连续视觉表示，经连接模块与文字共同输入；输出字段仍要回到原图核对"><img src="../../book/assets/handdraw/llm/multimodal-flow.svg" alt="通知图片先编码为连续视觉表示，经连接模块与文字共同输入；输出字段仍要回到原图核对"></a><figcaption>视觉表示没有自动变成文字证据。模糊的地点，不能靠常识补齐。<span class="figure-hint">点图查看原尺寸</span></figcaption></figure><h3 id="多模态训练流程training">多模态训练流程（Training）</h3>
+<p>训练方式依架构与目标而异。下面以连接已有视觉编码器和语言模型的路线说明“先对接、再学指令”的思路；BLIP-2 的两个阶段有自身目标与冻结策略，并不等同于所有 LLaVA 配方。</p>
+<h4 id="阶段一认物-feature-alignment--认物预训练">阶段一：认物 (Feature Alignment —— 认物预训练)</h4>
+<p>一种做法是使用图像及其文字描述，冻结已有组件、训练连接模块，用描述的预测损失让视觉特征能影响文本生成。样本不只包含白底单物体，规模也不是固定的“上亿张”。</p>
+<p>若采用生成目标，优化的是给定图片和文本前缀时目标文本的似然，不必让图像向量与某个词向量逐点重合。具体哪些参数更新，以论文或训练配置为准。</p>
+<h4 id="阶段二多轮交互微调-visual-instruction-tuning">阶段二：多轮交互微调 (Visual Instruction Tuning)</h4>
+<p>再使用图文指令及回答，训练系统按问题利用视觉信息。例如问通知的活动地点，目标回答应来自可辨认区域；看不清时保留未知。</p>
+<p>可更新连接器、语言模型、视觉编码器的一部分或采用适配器；不存在普遍适用的“第二阶段必须解冻全部语言模型”。损失下降也不能证明未见图片上的细节回答可靠。</p>
+<h3 id="5-进阶看得更清-advanced-tricks">5. 进阶：看得更清 (Advanced Tricks)</h3>
+<p>输入缩小可能抹掉小字；增加分辨率、裁剪数或帧数通常会增加序列与计算。先检查预处理后的实际输入，再谈模型有没有看见某个细节。</p>
+<h4 id="51-动态高分辨率切分布局-dynamic-high-resolution-mapping">5.1 动态高分辨率切分布局 (Dynamic High-Resolution Mapping)</h4>
+<p>一些设计把全图概览与局部裁剪共同编码，并保存裁剪位置或对应关系。裁剪大小、数量与拼接方法依实现，336×336 不是通用标准；缩放、裁剪和重采样也不能一概称为无损。</p>
+<p>练习：先读一张通知缩略图，再看日期与地点的局部放大。若两处信息来自不同版本，不要拼成同一条安排。</p>
+<h4 id="52-换个天生的大眼睛-scaling-the-vision-encoder">5.2 换个天生的大眼睛 (Scaling the Vision Encoder)</h4>
+<p>扩大视觉编码器可能改变容量和成本，但参数量不直接决定输入分辨率，也不自动取代切图或解决小字识别。InternVL 等公开系统的编码器规模、输入策略与后续版本需要分别核对，不用“超级眼睛”作性能证据。</p>
+<h3 id="6-总结-4">6. 总结</h3>
+<p>图片路线的关键是像素如何成为可用表示、这些表示如何参与回答，以及证据在哪里丢失。</p>
+<p>音频可以走“语音识别→文字模型”，也可使用音频表示直接连接后续模型；文字转写通常不保留全部声学信息。视频要处理随时间变化的画面，可能还包含音轨；只抽到前后两帧，不能证明中间没有发生动作。它们都不是简单地把图片切块重复一次。</p>
+<p>换材料检查：通知照片地点模糊、录音人声重叠、视频关键动作落在两帧之间时，分别保留什么未知？先保存原始媒体与处理方式，再核对输出。</p>
+<h3 id="7-名词速查表-glossary-2">7. 名词速查表 (Glossary)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>本章含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VLM</td>
+<td>处理视觉和语言的模型或系统，不等于所有多模态系统</td>
+</tr>
+<tr>
+<td>ViT</td>
+<td>用图块序列等表示处理视觉输入的 Transformer 路线</td>
+</tr>
+<tr>
+<td>Patch</td>
+<td>像素区域，未必对应一个物体或文字词元</td>
+</tr>
+<tr>
+<td>Projector</td>
+<td>视觉表示与后续网络之间的一种连接模块</td>
+</tr>
+<tr>
+<td>Alignment</td>
+<td>依训练目标建立可用对应关系，不保证表示可逆或事实正确</td>
+</tr>
+</tbody></table></div>
+<p>来源：<a href="https://arxiv.org/abs/2010.11929">ViT</a>、<a href="https://arxiv.org/abs/2304.08485">LLaVA</a>、<a href="https://arxiv.org/abs/2301.12597">BLIP-2</a>。本章没有采集实际模型的图像、音频或视频测试结果。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-163.html">← 上下文工程</a><a rel="next" href="chapter-165.html">图像生成原理 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

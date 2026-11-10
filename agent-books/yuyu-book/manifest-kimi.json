@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "kimi",
+  "version": "0.1.0",
+  "date": "2026-11-10",
+  "title": {
+    "zh": "Kimi Code：从插件到审查助手"
+  },
+  "subtitle": {
+    "zh": "跟做澄明库存：Skill、自定义 Agent、Hook、MCP 与 ACP · 非官方"
+  },
+  "kicker": {
+    "zh": "Kimi Code · Rules into evidence"
+  },
+  "notice": {
+    "zh": "本书为独立技术教程，与 Moonshot AI 无隶属关系。固定 Kimi Code 2.5.2，源码、组件实验与真实 CLI 结果分别注明。"
+  },
+  "epigraph": {
+    "zh": "让每条审查结论，都能回到一份规则和一个输入。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-kimi",
+  "revisions_registry": "revisions-kimi.json",
+  "subject_index_registry": "subject-index-kimi.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "@moonshot-ai/kimi-code@2.5.2",
+    "verified_windows": "Kimi Code 2.5.2"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "第一次跟做"
+      },
+      "body": {
+        "zh": "从第 1 章跑离线案例，第 4 章建立副本，再沿配置、权限与会话走到第 18 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "编写插件"
+      },
+      "body": {
+        "zh": "第 9—13 章连续装配 Skill、只读角色、插件、Hook 和规则服务。"
+      }
+    },
+    {
+      "label": {
+        "zh": "接入客户端"
+      },
+      "body": {
+        "zh": "先读第 2、5 章的请求链，再做第 14 章握手，结合第 16、17 章处理输出与恢复。"
+      }
+    }
+  ],
+  "front": {
+    "id": "kimi-front",
+    "zh": "kimi/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "kimi-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "启动与项目"
+      },
+      "motto": {
+        "zh": "先复现一处错误，再搭好工作目录。"
+      },
+      "goal": {
+        "zh": "核对程序、配置和业务规则。"
+      },
+      "units": [
+        {
+          "id": "kimi-ch01",
+          "zh": "kimi/ch01.md"
+        },
+        {
+          "id": "kimi-ch02",
+          "zh": "kimi/ch02.md"
+        },
+        {
+          "id": "kimi-ch03",
+          "zh": "kimi/ch03.md"
+        },
+        {
+          "id": "kimi-ch04",
+          "zh": "kimi/ch04.md"
+        }
+      ]
+    },
+    {
+      "id": "kimi-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "执行与状态"
+      },
+      "motto": {
+        "zh": "沿一次任务理解工具、权限和会话。"
+      },
+      "goal": {
+        "zh": "区分执行意图、实际结果与可恢复状态。"
+      },
+      "units": [
+        {
+          "id": "kimi-ch05",
+          "zh": "kimi/ch05.md"
+        },
+        {
+          "id": "kimi-ch06",
+          "zh": "kimi/ch06.md"
+        },
+        {
+          "id": "kimi-ch07",
+          "zh": "kimi/ch07.md"
+        },
+        {
+          "id": "kimi-ch08",
+          "zh": "kimi/ch08.md"
+        }
+      ]
+    },
+    {
+      "id": "kimi-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "扩展与装配"
+      },
+      "motto": {
+        "zh": "把审查习惯保存成可维护的资源。"
+      },
+      "goal": {
+        "zh": "完成 Skill、Agent、插件、Hook 和 MCP 的连续案例。"
+      },
+      "units": [
+        {
+          "id": "kimi-ch09",
+          "zh": "kimi/ch09.md"
+        },
+        {
+          "id": "kimi-ch10",
+          "zh": "kimi/ch10.md"
+        },
+        {
+          "id": "kimi-ch11",
+          "zh": "kimi/ch11.md"
+        },
+        {
+          "id": "kimi-ch12",
+          "zh": "kimi/ch12.md"
+        },
+        {
+          "id": "kimi-ch13",
+          "zh": "kimi/ch13.md"
+        }
+      ]
+    },
+    {
+      "id": "kimi-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "集成与交付"
+      },
+      "motto": {
+        "zh": "让客户端、日志和验证接住运行结果。"
+      },
+      "goal": {
+        "zh": "理解 ACP、委派、JSONL 和失败恢复，并交付审查流程。"
+      },
+      "units": [
+        {
+          "id": "kimi-ch14",
+          "zh": "kimi/ch14.md"
+        },
+        {
+          "id": "kimi-ch15",
+          "zh": "kimi/ch15.md"
+        },
+        {
+          "id": "kimi-ch16",
+          "zh": "kimi/ch16.md"
+        },
+        {
+          "id": "kimi-ch17",
+          "zh": "kimi/ch17.md"
+        },
+        {
+          "id": "kimi-ch18",
+          "zh": "kimi/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "kimi-apxa",
+      "zh": "kimi/appendix-a.md"
+    },
+    {
+      "id": "kimi-apxb",
+      "zh": "kimi/appendix-b.md"
+    },
+    {
+      "id": "kimi-apxc",
+      "zh": "kimi/appendix-c.md"
+    },
+    {
+      "id": "kimi-apxd",
+      "zh": "kimi/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "kimi-front": {
+      "question": {
+        "zh": "怎样把一次审查留成可复用流程？"
+      },
+      "deliverable": {
+        "zh": "选好阅读路线，区分离线案例、组件实验与真实宿主。"
+      },
+      "boundary": {
+        "zh": "书中固定现役 TypeScript 项目；模型练习的未测范围见附录 C。"
+      },
+      "plain": {
+        "zh": "Kimi Code 把会话、工具、技能和插件组织在同一个运行时中，本书用库存审查案例解释它们怎样配合。"
+      },
+      "plain_evidence": [
+        "kimi-front.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch01": {
+      "question": {
+        "zh": "当前运行的是哪个 Kimi，库存案例错在哪里？"
+      },
+      "deliverable": {
+        "zh": "记录程序入口，运行错误与参考实现的相同输入。"
+      },
+      "boundary": {
+        "zh": "本机发布程序已核对；首次在线安装未复验。"
+      },
+      "plain": {
+        "zh": "CLI 的版本和实际入口决定可用参数；先运行库存案例，可以给后续审查建立可重复的起点。"
+      },
+      "plain_evidence": [
+        "kimi-ch01.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch02": {
+      "question": {
+        "zh": "一次请求经过哪些层？"
+      },
+      "deliverable": {
+        "zh": "沿入口、会话、工具与结果定位实现职责。"
+      },
+      "boundary": {
+        "zh": "图示用于解释往返关系，省略缓存与并发细节。"
+      },
+      "plain": {
+        "zh": "Kimi Code 的客户端负责交互，核心引擎负责会话和工具；沿请求与结果的往返路径阅读源码更容易定位问题。"
+      },
+      "plain_evidence": [
+        "kimi-ch02.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch03": {
+      "question": {
+        "zh": "配置与模型凭据从哪里读取？"
+      },
+      "deliverable": {
+        "zh": "建立独立数据根，分清别名、provider 和服务端模型名。"
+      },
+      "boundary": {
+        "zh": "示例端点与模型名是占位值，不代表可用线上服务。"
+      },
+      "plain": {
+        "zh": "KIMI_CODE_HOME 决定 Kimi 专用配置与会话的位置，模型别名再把用户选择连接到具体服务。"
+      },
+      "plain_evidence": [
+        "kimi-ch03.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch04": {
+      "question": {
+        "zh": "怎样准备不会改到书稿的练习项目？"
+      },
+      "deliverable": {
+        "zh": "复制新工作区，写入业务规则和运行说明。"
+      },
+      "boundary": {
+        "zh": "项目说明属于任务材料，不等于系统沙箱。"
+      },
+      "plain": {
+        "zh": "工作目录决定相对路径，AGENTS.md 提供项目说明；独立练习副本让审查、修复与书稿互不混淆。"
+      },
+      "plain_evidence": [
+        "kimi-ch04.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch05": {
+      "question": {
+        "zh": "模型提出的动作与实际结果怎样对应？"
+      },
+      "deliverable": {
+        "zh": "沿工具请求和反馈定位第一处偏差。"
+      },
+      "boundary": {
+        "zh": "静态推演和实际执行在报告中分别标注。"
+      },
+      "plain": {
+        "zh": "工具调用表达执行意图，工具结果提供实际反馈；Agent 的下一步推理需要把两者对应起来。"
+      },
+      "plain_evidence": [
+        "kimi-ch05.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch06": {
+      "question": {
+        "zh": "权限模式、工具列表与 Plan 有何关系？"
+      },
+      "deliverable": {
+        "zh": "识别正在等待的交互，并为审查选择合适能力。"
+      },
+      "boundary": {
+        "zh": "产品审批策略不等于操作系统权限。"
+      },
+      "plain": {
+        "zh": "工具集合决定 Agent 能提出哪些操作，审批模式决定操作怎样得到处理；Plan 还影响任务从探索进入执行的过程。"
+      },
+      "plain_evidence": [
+        "kimi-ch06.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch07": {
+      "question": {
+        "zh": "恢复旧会话会恢复哪些状态？"
+      },
+      "deliverable": {
+        "zh": "正确继续、分叉或导出会话，并复核当前文件。"
+      },
+      "boundary": {
+        "zh": "会话复制不会创建独立工作树。"
+      },
+      "plain": {
+        "zh": "会话保存对话与运行状态，恢复它不会自动还原工作目录中的代码；分叉会话也不会创建独立工作树。"
+      },
+      "plain_evidence": [
+        "kimi-ch07.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch08": {
+      "question": {
+        "zh": "长任务里怎样保留关键规则？"
+      },
+      "deliverable": {
+        "zh": "建立可重新读取的检查点，理解压缩后的复核。"
+      },
+      "boundary": {
+        "zh": "压缩摘要不能代替当前文件和测试结果。"
+      },
+      "plain": {
+        "zh": "上下文压缩把长历史整理成后续可用的材料；可靠的审查还需要把业务规则与验证结果保存在可重新读取的文件里。"
+      },
+      "plain_evidence": [
+        "kimi-ch08.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch09": {
+      "question": {
+        "zh": "怎样写一个会被正确使用的审查 Skill？"
+      },
+      "deliverable": {
+        "zh": "理解完整技能文件、发现目录和插件调用名。"
+      },
+      "boundary": {
+        "zh": "工作步骤不会自动增加或移除工具权限。"
+      },
+      "plain": {
+        "zh": "Skill 用文件保存可重复的工作步骤，描述字段帮助发现它，正文与辅助材料在调用时进入任务。"
+      },
+      "plain_evidence": [
+        "kimi-ch09.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch10": {
+      "question": {
+        "zh": "怎样定义只读取材料的审查员？"
+      },
+      "deliverable": {
+        "zh": "核对 Agent 工具列表、发现顺序和新会话绑定。"
+      },
+      "boundary": {
+        "zh": "解析器实验覆盖字段语义，未替代完整宿主执行。"
+      },
+      "plain": {
+        "zh": "自定义 Agent 文件规定角色提示词与工具列表，选择结果绑定到新会话；恢复会话会恢复原来的角色绑定。"
+      },
+      "plain_evidence": [
+        "kimi-ch10.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch11": {
+      "question": {
+        "zh": "插件安装后，哪些资源什么时候生效？"
+      },
+      "deliverable": {
+        "zh": "安装清单、检查诊断，分清源目录与安装副本。"
+      },
+      "boundary": {
+        "zh": "真实清单解析已测，交互安装和重载留作练习。"
+      },
+      "plain": {
+        "zh": "插件清单把 Skill、Agent、命令和 Hook 组织成一个安装单元，安装副本与当前会话的生效状态需要分别检查。"
+      },
+      "plain_evidence": [
+        "kimi-ch11.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch12": {
+      "question": {
+        "zh": "Hook 怎样拒绝，又会怎样失败？"
+      },
+      "deliverable": {
+        "zh": "运行处理器，核对退出码、JSON 拒绝与超时结果。"
+      },
+      "boundary": {
+        "zh": "Hook 是 fail-open，不能用作唯一执行约束。"
+      },
+      "plain": {
+        "zh": "Hook 在生命周期事件发生时启动本地程序；明确拒绝会影响可阻断事件，错误和超时则按 fail-open 放行。"
+      },
+      "plain_evidence": [
+        "kimi-ch12.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch13": {
+      "question": {
+        "zh": "怎样把规则查询接成 MCP 工具？"
+      },
+      "deliverable": {
+        "zh": "运行 stdio 例子，在副本生成配置并调整工具列表。"
+      },
+      "boundary": {
+        "zh": "最小服务的子进程通信已测，模型调用未实跑。"
+      },
+      "plain": {
+        "zh": "MCP 把外部程序提供的能力接成工具，连接配置、工具发现和 Agent 可用列表是三个不同环节。"
+      },
+      "plain_evidence": [
+        "kimi-ch13.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch14": {
+      "question": {
+        "zh": "客户端怎样与 Kimi 协商能力？"
+      },
+      "deliverable": {
+        "zh": "运行真实 ACP 握手，理解会话方法与反向调用。"
+      },
+      "boundary": {
+        "zh": "握手已测，完整 IDE 会话和模型提示未实跑。"
+      },
+      "plain": {
+        "zh": "ACP 让客户端驱动 Kimi 会话，初始化返回能力声明；文件和终端操作还涉及客户端反向调用。"
+      },
+      "plain_evidence": [
+        "kimi-ch14.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch15": {
+      "question": {
+        "zh": "如何给子 Agent 一项独立而完整的任务？"
+      },
+      "deliverable": {
+        "zh": "写出可验收的委派说明，检查返回结论。"
+      },
+      "boundary": {
+        "zh": "独立上下文不等于独立文件系统。"
+      },
+      "plain": {
+        "zh": "子 Agent 使用独立上下文，主 Agent 应把目标、材料和完成条件明确交给它，再核对返回结论。"
+      },
+      "plain_evidence": [
+        "kimi-ch15.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch16": {
+      "question": {
+        "zh": "怎样消费无人值守的结构化输出？"
+      },
+      "deliverable": {
+        "zh": "区分消息类型，关联工具 ID，保留独立验证。"
+      },
+      "boundary": {
+        "zh": "模型 print 流程是读者练习；字段以固定源码为准。"
+      },
+      "plain": {
+        "zh": "JSONL 将输出组织成逐行 JSON，消费者仍需区分助手消息、工具结果、元信息和错误，不能只取最后一行。"
+      },
+      "plain_evidence": [
+        "kimi-ch16.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch17": {
+      "question": {
+        "zh": "中断后应从哪里恢复？"
+      },
+      "deliverable": {
+        "zh": "辨认最后完成的动作，保存能复现的故障材料。"
+      },
+      "boundary": {
+        "zh": "取消不保证外部操作回滚。"
+      },
+      "plain": {
+        "zh": "恢复任务要先识别最后完成的动作，再核对文件和会话状态；盲目重发请求可能重复已经执行的操作。"
+      },
+      "plain_evidence": [
+        "kimi-ch17.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-ch18": {
+      "question": {
+        "zh": "怎样交付完整的库存审查助手？"
+      },
+      "deliverable": {
+        "zh": "串起案例、规则、角色和验证，检查自己的修复。"
+      },
+      "boundary": {
+        "zh": "已完成实验与后续模型、IDE 练习分别列出。"
+      },
+      "plain": {
+        "zh": "完整审查流程需要把规则、角色、证据和验证接起来，最终交付能解释缺陷的报告与可重复的检查。"
+      },
+      "plain_evidence": [
+        "kimi-ch18.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-apxa": {
+      "question": {
+        "zh": "命令应该在哪个目录和界面运行？"
+      },
+      "deliverable": {
+        "zh": "查找常用命令和构建入口。"
+      },
+      "boundary": {
+        "zh": "占位会话 ID 必须替换为实际值。"
+      },
+      "plain": {
+        "zh": "CLI 命令在 shell 执行，斜杠命令在 Kimi 界面输入；运行目录和当前会话会影响它们的结果。"
+      },
+      "plain_evidence": [
+        "kimi-apxa.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-apxb": {
+      "question": {
+        "zh": "一个行为应从哪份配置和源码查起？"
+      },
+      "deliverable": {
+        "zh": "定位固定文件与输入摘要。"
+      },
+      "boundary": {
+        "zh": "源码入口仍需结合调用者和结果消费者阅读。"
+      },
+      "plain": {
+        "zh": "配置文件描述运行选择，源码落点解释这些选择如何被解析和消费；引用时保留固定提交。"
+      },
+      "plain_evidence": [
+        "kimi-apxb.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-apxc": {
+      "question": {
+        "zh": "哪些结论已经实际运行验证？"
+      },
+      "deliverable": {
+        "zh": "重跑分层实验并理解未测范围。"
+      },
+      "boundary": {
+        "zh": "选定组件与完整工程的运行要求不同。"
+      },
+      "plain": {
+        "zh": "实验记录区分原创样例、上游组件和真实 CLI；每种结果只证明它实际覆盖的范围。"
+      },
+      "plain_evidence": [
+        "kimi-apxc.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "kimi-apxd": {
+      "question": {
+        "zh": "同名概念为什么不能直接互换？"
+      },
+      "deliverable": {
+        "zh": "区分技能、角色、插件、协议和持久化状态。"
+      },
+      "boundary": {
+        "zh": "其他分册的同名字段不保证相同契约。"
+      },
+      "plain": {
+        "zh": "术语相近时先看它由谁读取、何时生效、保存在哪里，再判断能否从一个机制推导另一个机制。"
+      },
+      "plain_evidence": [
+        "kimi-apxd.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    }
+  }
+}

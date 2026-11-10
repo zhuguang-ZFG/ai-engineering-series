@@ -1,0 +1,8 @@
+ok 1 - clean tracked files have an explicitly limited description
+ok 2 - untracked files are not called tracked modifications
+ok 3 - modified tracked files reach model-facing content
+ok 4 - non-repository errors reject instead of returning clean status
+ok 5 - pre-aborted execution rejects
+ok 6 - large status output is marked as truncated
+PASS: 6 offline tool checks
+exit=0

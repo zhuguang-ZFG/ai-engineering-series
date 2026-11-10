@@ -1,0 +1,41 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {
+      "at": 0.0,
+      "kind": "draw",
+      "text": "default"
+    },
+    {
+      "at": 1.1,
+      "kind": "draw",
+      "text": "plan"
+    },
+    {
+      "at": 2.2,
+      "kind": "draw",
+      "text": "auto"
+    },
+    {
+      "at": 3.3,
+      "kind": "draw",
+      "text": "bypass"
+    },
+    {
+      "at": 4.4,
+      "kind": "draw",
+      "text": "bubble"
+    },
+    {
+      "at": 5.6,
+      "kind": "point",
+      "text": "\u4e25\u683c \u2192 \u5bbd\u677e \u00b7 \u6309\u573a\u666f\u9009"
+    }
+  ]
+}

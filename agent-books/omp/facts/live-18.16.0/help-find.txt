@@ -1,0 +1,14 @@
+Semantic search: describe a behavior, get the files and line ranges that implement it
+
+USAGE
+  $ omp find [QUERY] [PATH] [FLAGS]
+
+ARGUMENTS
+  QUERY   What to find, in plain language
+  PATH    Directory or omp:// docs scope to search
+
+FLAGS
+  -k, --keyword=<value>  Extra lexical keyword (repeatable, or comma-separated)
+      --hidden           Include dot-files and dot-folders
+      --json             Emit the full result as JSON
+  -q, --quiet            Suppress progress on stderr

@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-08",
+  "scope": "C07-C09 mechanisms; C18/C19/C22 tables; shared figure captions",
+  "sourceHash": "2e97b38489467f070426aece991bb2fb580ac96cd2b7bdd1bd760606b2fe7e01",
+  "artifacts": {
+    "llm-course.pdf": {
+      "bytes": 7847917,
+      "sha256": "11c8ef0d8b849aba39f35b9dadb9fb0d1171431376540f691c223b1f7e232d78"
+    },
+    "llm-course.epub": {
+      "bytes": 4489622,
+      "sha256": "39dfbb7b9d0cf7e50bb51d19e922e162b03f864be4c22bf14cd5ef16ccd2c38b"
+    },
+    "llm-course-answers.pdf": {
+      "bytes": 2723518,
+      "sha256": "0421258e3735b92fbfb4376af27c25e7c0b0ac996b35623a1e4fa54c5f80a9a7"
+    },
+    "llm-course-answers.epub": {
+      "bytes": 116267,
+      "sha256": "0830e1199de5687ce224f41915297bf6f41a05de293e63b5684a34bda402a405"
+    }
+  },
+  "checks": {
+    "npmTest": {
+      "status": "passed",
+      "tests": 36,
+      "skipped": 0
+    },
+    "epubcheck": [
+      {
+        "edition": "llm-course",
+        "version": "5.3.0",
+        "fatals": 0,
+        "errors": 0,
+        "warnings": 0,
+        "sha256": "39dfbb7b9d0cf7e50bb51d19e922e162b03f864be4c22bf14cd5ef16ccd2c38b"
+      },
+      {
+        "edition": "llm-course-answers",
+        "version": "5.3.0",
+        "fatals": 0,
+        "errors": 0,
+        "warnings": 0,
+        "sha256": "0830e1199de5687ce224f41915297bf6f41a05de293e63b5684a34bda402a405"
+      },
+      {
+        "edition": "llm-explained-handdraw",
+        "checker": "EPUBCheck",
+        "version": "5.3.0",
+        "epubSha256": "18e159f17cfdea08c2859f8974f41b134418039a3ee3d7423ec41caf205a9619",
+        "status": "passed",
+        "fatals": 0,
+        "errors": 0,
+        "warnings": 0
+      }
+    ],
+    "editions": {
+      "status": "passed",
+      "sourceHash": "2e97b38489467f070426aece991bb2fb580ac96cd2b7bdd1bd760606b2fe7e01",
+      "editions": {
+        "llm-course": {
+          "pdfPages": 439,
+          "outlineEntries": 435,
+          "chapters": 30,
+          "images": 37
+        },
+        "llm-course-answers": {
+          "pdfPages": 205,
+          "outlineEntries": 281,
+          "chapters": 30,
+          "images": 0
+        }
+      },
+      "figureCaptionsTogether": 24,
+      "epubLocalLinks": {
+        "llm-course": 557,
+        "llm-course-answers": 311
+      },
+      "epubReflowLayouts": 240,
+      "javascriptEnabled": false
+    },
+    "visual": {
+      "figures": [
+        {
+          "figure": "attention-row",
+          "overflow": [],
+          "overlaps": [],
+          "minMobileFont": 16.35
+        },
+        {
+          "figure": "multihead-flow",
+          "overflow": [],
+          "overlaps": [],
+          "minMobileFont": 16.35
+        },
+        {
+          "figure": "transformer-block",
+          "overflow": [],
+          "overlaps": [],
+          "minMobileFont": 16.35
+        },
+        {
+          "figure": "gradient-step",
+          "overflow": [],
+          "overlaps": [],
+          "minMobileFont": 16.35
+        }
+      ],
+      "chapterLayouts": 20
+    },
+    "accessibility": {
+      "pages": 92,
+      "keyboardFlows": 4,
+      "status": "passed"
+    },
+    "reading": {
+      "flows": 15,
+      "layouts": 50,
+      "status": "passed"
+    },
+    "legacyEpubReflow": {
+      "layouts": 84,
+      "navigationFlows": 7,
+      "status": "passed"
+    }
+  },
+  "limitations": [
+    "Reflow checks use offline Chrome with JavaScript disabled, not independent e-reader evidence.",
+    "K1-K5, independent users, actual screen reader and task_verify remain unverified."
+  ]
+}

@@ -1,0 +1,279 @@
+name: Series CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      build_books:
+        description: Build the prompt and model-course reading editions
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: series-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONUTF8: '1'
+
+jobs:
+  root:
+    name: Root structure and contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install the pinned workflow parser
+        run: python -m pip install PyYAML==6.0.3
+      - name: Check the series layout
+        run: python series.py check --project all --structure-only
+      - name: Test the root entry point and effective CI
+        run: python -m unittest discover -s tests -v
+
+  agent-books:
+    name: Agent books and offline exercises
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: agent-books/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: agent-books/yuyu-book/requirements.txt
+      - name: Install locked dependencies
+        working-directory: agent-books
+        run: |
+          npm ci
+          python -m pip install -r yuyu-book/requirements.txt
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-agent-browser-${{ hashFiles('agent-books/uv.lock') }}
+      - uses: actions/cache@v4
+        with:
+          path: agent-books/yuyu-book/.cache
+          key: ${{ runner.os }}-agent-mermaid-${{ hashFiles('agent-books/package-lock.json', 'agent-books/yuyu-book/yuyu_book/mermaid.py') }}
+      - name: Install browser and CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m playwright install --with-deps chromium
+      - name: Check companion examples
+        working-directory: agent-books
+        run: |
+          python docs/yuyu-overhaul/check_bilingual_parity.py
+          node --test opencode/examples/check-review-trace.mjs
+          python -m unittest discover -s hermes/examples -p "test_*.py" -v
+          python hermes/examples/check_aurora_workflow.py
+          python -B codex/examples/check_workshop.py
+          python -m unittest discover -s kimi/examples -p "test_*.py" -v
+          python opencode/examples/pricing-lab/check_pricing.py
+      - name: Run the Agent project checks through the root entry point
+        run: python series.py check --project agent-books
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-books-check-reports
+          path: agent-books/.scratch/reports/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+
+  model-course:
+    name: Model course and offline reading
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      COURSE_BROWSER_CHANNEL: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          persist-credentials: false
+      - name: Check LFS objects and hydrated illustrations
+        run: |
+          git lfs fsck
+          python - <<'PY'
+          from pathlib import Path
+          images = [path for path in Path('model-course/book/assets/images').rglob('*') if path.is_file()]
+          assert images, 'The course illustration directory is empty'
+          pointers = []
+          for path in images:
+              with path.open('rb') as stream:
+                  if stream.read(130).startswith(b'version https://git-lfs.github.com/spec/v1'):
+                      pointers.append(str(path))
+          assert not pointers, f'Unhydrated LFS illustrations: {pointers[:5]}'
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: model-course/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: model-course/scripts/llm/requirements-books.txt
+      - name: Install locked dependencies
+        working-directory: model-course
+        run: |
+          npm ci
+          python -m pip install -r scripts/llm/requirements-books.txt
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-course-browser-${{ hashFiles('model-course/scripts/llm/requirements-books.txt') }}
+      - name: Install FFprobe, fonts and browser
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+          python -m playwright install --with-deps chromium
+      - name: Run the course checks through the root entry point
+        # The course's npm test checks existing PDF/EPUB files, source hashes,
+        # and the EPUBCheck 5.3.0 reports already bound to those editions.
+        # This step does not claim to rerun the external EPUBCheck executable.
+        run: python series.py check --project model-course
+      - name: Check accessibility, reading and mechanism behavior
+        working-directory: model-course
+        run: |
+          npm run check:accessibility:llm
+          npm run check:reading:llm
+          npm run check:mechanisms:llm
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model-course-reading-reports
+          path: |
+            model-course/tmp/llm-review/accessibility-report.json
+            model-course/tmp/reading-review/*.json
+            model-course/tmp/mechanism-review/*.json
+          if-no-files-found: error
+
+  build:
+    name: Build ${{ matrix.product }} reading editions
+    if: github.event_name == 'workflow_dispatch' && inputs.build_books
+    needs: [root, agent-books, model-course]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - product: prompt
+            project: agent-books
+            requirements: agent-books/yuyu-book/requirements.txt
+          - product: llm
+            project: model-course
+            requirements: model-course/scripts/llm/requirements-books.txt
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: ${{ matrix.requirements }}
+      - name: Install the selected project's locked dependencies
+        working-directory: ${{ matrix.project }}
+        run: npm ci
+      - run: python -m pip install -r "${{ matrix.requirements }}"
+      - name: Install browser, fonts and media inspection tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk ffmpeg
+          python -m playwright install --with-deps chromium
+      - name: Install Chrome required by the course exporter
+        if: matrix.product == 'llm'
+        run: python -m playwright install --with-deps chrome
+      - name: Build HTML, PDF and EPUB
+        run: python series.py build --product "${{ matrix.product }}" --lang zh --pdf --epub
+      - name: Package the prompt exercises and illustrations
+        if: matrix.product == 'prompt'
+        run: python agent-books/scripts/package_prompt.py --output agent-books/yuyu-book/dist/yuyu-prompt-zh-examples.zip
+      - name: Verify both reading formats exist
+        env:
+          PRODUCT: ${{ matrix.product }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          product = os.environ['PRODUCT']
+          if product == 'prompt':
+              paths = [Path(f'agent-books/yuyu-book/dist/yuyu-prompt-zh.{extension}') for extension in ('html', 'pdf', 'epub')]
+              paths.append(Path('agent-books/yuyu-book/dist/yuyu-prompt-zh-examples.zip'))
+          else:
+              paths = [Path(f'model-course/deliverables/llm-course{suffix}.{extension}') for suffix in ('', '-answers') for extension in ('pdf', 'epub')]
+              paths.append(Path('model-course/exports/llm/course.html'))
+          for path in paths:
+              assert path.is_file() and path.stat().st_size, f'Missing or empty edition: {path}'
+          PY
+      - name: Set up Java for EPUBCheck
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install pinned EPUBCheck 5.3.0
+        shell: bash
+        run: |
+          curl -fL --retry 3 https://github.com/w3c/epubcheck/releases/download/v5.3.0/epubcheck-5.3.0.zip -o "$RUNNER_TEMP/epubcheck.zip"
+          echo "6c07e68584b2e2ce2f89fe06e1246dfead3eb36b46b340e7d93524f29dcff6c5  $RUNNER_TEMP/epubcheck.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/epubcheck.zip" -d "$RUNNER_TEMP/epubcheck"
+      - name: Validate the prompt EPUB and bind its report to this build
+        if: matrix.product == 'prompt'
+        shell: bash
+        run: |
+          python model-course/scripts/llm/check_epub.py --jar "$RUNNER_TEMP/epubcheck/epubcheck-5.3.0/epubcheck.jar" --epub agent-books/yuyu-book/dist/yuyu-prompt-zh.epub --report agent-books/yuyu-book/dist/yuyu-prompt-zh-epubcheck.json
+      - name: Revalidate all three course EPUBs and their reading editions
+        if: matrix.product == 'llm'
+        working-directory: model-course
+        shell: bash
+        run: |
+          python scripts/llm/check_epub.py --jar "$RUNNER_TEMP/epubcheck/epubcheck-5.3.0/epubcheck.jar" --epub deliverables/llm-explained-handdraw.epub --report deliverables/llm-epubcheck.json
+          python scripts/llm/check_epub.py --jar "$RUNNER_TEMP/epubcheck/epubcheck-5.3.0/epubcheck.jar" --epub deliverables/llm-course.epub --report deliverables/llm-course-epubcheck.json
+          python scripts/llm/check_epub.py --jar "$RUNNER_TEMP/epubcheck/epubcheck-5.3.0/epubcheck.jar" --epub deliverables/llm-course-answers.epub --report deliverables/llm-course-answers-epubcheck.json
+          npm run check:books:llm
+          npm run check:course:llm
+      - name: Collect the selected project's books and offline reading resources
+        run: python series.py collect --project "${{ matrix.project }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: series-${{ matrix.product }}-reading-editions
+          path: dist/
+          if-no-files-found: error
+      - name: Retain the prompt EPUBCheck report
+        if: matrix.product == 'prompt'
+        uses: actions/upload-artifact@v4
+        with:
+          name: series-prompt-epubcheck
+          path: agent-books/yuyu-book/dist/yuyu-prompt-zh-epubcheck.json
+          if-no-files-found: error
+
+# Only this root workflow is active. The .github directories inside the two
+# projects retain their historical contracts; they do not publish or commit.
+# No job calls a model provider, deploys Pages, creates releases or pushes Git.

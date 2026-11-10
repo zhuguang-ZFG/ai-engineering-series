@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>调试原理与艺术 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 189 / 195</p><article><h1 id="调试原理与艺术">调试原理与艺术</h1><details class="contents"><summary>本章目录 <span>· 8 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图调试是一种科学方法">0. 全景图：调试是一种科学方法</a></li><li><a href="#1-读懂错误信息报错不是敌人是线索">1. 读懂错误信息：报错不是敌人，是线索</a><ul><li><a href="#11-错误的三大类型">1.1 错误的三大类型</a></li><li><a href="#12-阅读错误堆栈的方法">1.2 阅读错误堆栈的方法</a></li><li><a href="#13-常见错误类型速查">1.3 常见错误类型速查</a></li><li><a href="#14-python-错误信息对比">1.4 Python 错误信息对比</a></li></ul></li><li><a href="#2-经典调试方法前人总结的智慧">2. 经典调试方法：前人总结的智慧</a><ul><li><a href="#21-二分法调试">2.1 二分法调试</a></li><li><a href="#22-橡皮鸭调试法">2.2 橡皮鸭调试法</a></li><li><a href="#23-最小复现">2.3 最小复现</a></li><li><a href="#24-回退法git-bisect">2.4 回退法（Git Bisect）</a></li></ul></li><li><a href="#3-调试工具箱用对工具事半功倍">3. 调试工具箱：用对工具事半功倍</a><ul><li><a href="#31-consolelog--print最朴素也最实用">3.1 console.log / print：最朴素也最实用</a></li><li><a href="#32-断点调试逐行执行看清每一步">3.2 断点调试：逐行执行，看清每一步</a></li><li><a href="#33-网络调试前后端之间的问题">3.3 网络调试：前后端之间的问题</a></li><li><a href="#34-调试工具选择速查">3.4 调试工具选择速查</a></li></ul></li><li><a href="#4-ai-时代的调试让-ai-当你的助手">4. AI 时代的调试：让 AI 当你的助手</a><ul><li><a href="#41-ai-擅长什么">4.1 AI 擅长什么</a></li><li><a href="#42-向-ai-提问的正确姿势">4.2 向 AI 提问的正确姿势</a></li><li><a href="#43-ai-调试的陷阱">4.3 AI 调试的陷阱</a></li><li><a href="#44-ai--人工的最佳组合">4.4 AI + 人工的最佳组合</a></li></ul></li><li><a href="#5-调试心态与习惯从救火到防火">5. 调试心态与习惯：从&quot;救火&quot;到&quot;防火&quot;</a><ul><li><a href="#51-防御性编程">5.1 防御性编程</a></li><li><a href="#52-写好日志">5.2 写好日志</a></li><li><a href="#53-调试检查清单">5.3 调试检查清单</a></li><li><a href="#54-新手常踩的调试陷阱">5.4 新手常踩的调试陷阱</a></li></ul></li><li><a href="#6-总结-10">6. 总结</a></li><li><a href="#延伸阅读-39">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>代码写完了，运行报错——然后呢？</strong> 很多新手在这一步就卡住了，盯着屏幕不知所措。调试（Debug）是编程中最核心的技能之一，甚至比写代码本身更重要。因为写代码只占开发时间的 30%，剩下的 70% 都在理解问题、定位 Bug、验证修复。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>调试思维</strong>：建立系统化的问题定位方法，不再&quot;瞎猜&quot;</li>
+<li><strong>错误阅读能力</strong>：看懂报错信息，从错误堆栈中快速定位问题</li>
+<li><strong>常用调试方法</strong>：掌握二分法、橡皮鸭、最小复现等经典调试技巧</li>
+<li><strong>工具使用能力</strong>：了解断点调试、日志调试、网络调试等工具的使用场景</li>
+<li><strong>AI 辅助调试</strong>：学会用 AI 加速调试过程，但不依赖 AI</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>读懂错误信息</td>
+<td>错误类型、堆栈追踪</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>经典调试方法</td>
+<td>二分法、橡皮鸭、最小复现</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>调试工具箱</td>
+<td>断点、日志、网络抓包</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>AI 时代的调试</td>
+<td>AI 辅助 + 人工判断</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>调试心态与习惯</td>
+<td>防御性编程、调试日志</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-全景图调试是一种科学方法">0. 全景图：调试是一种科学方法</h2>
+<p>调试不是&quot;碰运气&quot;，而是一个严谨的科学过程。物理学家做实验的方法论，完全适用于调试：</p>
+<ol>
+<li><strong>观察现象</strong>：程序出了什么问题？报了什么错？</li>
+<li><strong>提出假设</strong>：可能是什么原因导致的？</li>
+<li><strong>设计实验</strong>：怎么验证这个假设？</li>
+<li><strong>验证结论</strong>：假设对了就修复，错了就换一个假设</li>
+</ol>
+<blockquote>
+<p><strong>调试的黄金法则</strong></p>
+</blockquote>
+<ul>
+<li><strong>先复现，再修复</strong>：不能稳定复现的 Bug，修了也不知道是不是真的修好了</li>
+<li><strong>一次只改一个变量</strong>：同时改多处，就不知道是哪个改动解决了问题</li>
+<li><strong>相信证据，不相信直觉</strong>：你觉得&quot;不可能是这里的问题&quot;，往往就是这里的问题</li>
+<li><strong>最近改了什么？</strong>：80% 的 Bug 都是最近的改动引入的</li>
+</ul>
+<h2 id="1-读懂错误信息报错不是敌人是线索">1. 读懂错误信息：报错不是敌人，是线索</h2>
+<p>新手最常犯的错误：看到报错就慌，直接关掉或者忽略。其实，<strong>错误信息是程序在告诉你哪里出了问题</strong>——它是你最好的朋友。</p>
+<h3 id="11-错误的三大类型">1.1 错误的三大类型</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>什么时候出现</th>
+<th>举例</th>
+<th>严重程度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语法错误</strong></td>
+<td>代码还没运行就报错</td>
+<td>少了括号、拼错关键字</td>
+<td>最容易修</td>
+</tr>
+<tr>
+<td><strong>运行时错误</strong></td>
+<td>代码运行到某一行崩溃</td>
+<td>访问不存在的变量、除以零</td>
+<td>中等难度</td>
+</tr>
+<tr>
+<td><strong>逻辑错误</strong></td>
+<td>代码能运行，但结果不对</td>
+<td>计算公式写错、条件判断反了</td>
+<td>最难发现</td>
+</tr>
+</tbody></table></div>
+<h3 id="12-阅读错误堆栈的方法">1.2 阅读错误堆栈的方法</h3>
+<p>以 JavaScript 为例，一个典型的错误信息：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>TypeError: Cannot read properties of undefined (reading &#39;name&#39;)
+    at getUserName (app.js:15:23)
+    at handleClick (app.js:42:10)
+    at HTMLButtonElement.&lt;anonymous&gt; (app.js:58:5)
+</code></pre>
+<p><strong>从上往下读</strong>：</p>
+<ol>
+<li><strong>第一行</strong>：错误类型 + 错误描述 → <code>TypeError</code>，试图读取 <code>undefined</code> 的 <code>name</code> 属性</li>
+<li><strong>第二行</strong>：出错的函数和位置 → <code>getUserName</code> 函数，<code>app.js</code> 第 15 行第 23 列</li>
+<li><strong>后续行</strong>：调用链 → 谁调用了这个函数？<code>handleClick</code> → 按钮点击事件</li>
+</ol>
+<blockquote>
+<p><strong>阅读堆栈的口诀</strong>
+<strong>从上往下找原因，从下往上找源头。</strong> 第一行告诉你&quot;出了什么错&quot;，最后一行告诉你&quot;从哪里开始的&quot;。</p>
+</blockquote>
+<h3 id="13-常见错误类型速查">1.3 常见错误类型速查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>错误名称</th>
+<th>含义</th>
+<th>常见原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SyntaxError</code></td>
+<td>语法错误</td>
+<td>括号不匹配、少了逗号</td>
+</tr>
+<tr>
+<td><code>TypeError</code></td>
+<td>类型错误</td>
+<td>对 <code>undefined</code>/<code>null</code> 做操作</td>
+</tr>
+<tr>
+<td><code>ReferenceError</code></td>
+<td>引用错误</td>
+<td>使用了未声明的变量</td>
+</tr>
+<tr>
+<td><code>RangeError</code></td>
+<td>范围错误</td>
+<td>数组越界、递归太深</td>
+</tr>
+<tr>
+<td><code>NetworkError</code></td>
+<td>网络错误</td>
+<td>API 请求失败、跨域问题</td>
+</tr>
+<tr>
+<td><code>404 Not Found</code></td>
+<td>资源不存在</td>
+<td>URL 写错、文件被删除</td>
+</tr>
+<tr>
+<td><code>500 Internal Server Error</code></td>
+<td>服务器内部错误</td>
+<td>后端代码崩溃</td>
+</tr>
+</tbody></table></div>
+<h3 id="14-python-错误信息对比">1.4 Python 错误信息对比</h3>
+<p>Python 的堆栈和 JavaScript 相反——<strong>从下往上读</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">Traceback (most recent call last):
+  File &quot;main.py&quot;, line 10, in &lt;module&gt;
+    result = calculate(data)
+  File &quot;main.py&quot;, line 5, in calculate
+    return data[&quot;price&quot;] * data[&quot;quantity&quot;]
+KeyError: &#39;quantity&#39;
+</code></pre>
+<p><strong>最后一行</strong>才是错误原因：<code>KeyError: &#39;quantity&#39;</code>，字典里没有 <code>quantity</code> 这个键。</p>
+<blockquote>
+<p><strong>不同语言，同一个思路</strong>
+不管什么语言，错误信息都包含三个关键信息：<strong>什么错</strong>（错误类型）、哪里错（文件和行号）、为什么错（错误描述）。学会提取这三个信息，就能读懂任何语言的报错。</p>
+</blockquote>
+<h2 id="2-经典调试方法前人总结的智慧">2. 经典调试方法：前人总结的智慧</h2>
+<p>这些方法不需要任何工具，只需要你的大脑。它们是所有高级调试技巧的基础。</p>
+<h3 id="21-二分法调试">2.1 二分法调试</h3>
+<p><strong>核心思想</strong>：把问题范围缩小一半，再缩小一半，直到找到根源。</p>
+<p><strong>场景</strong>：代码很长，不知道哪一段出了问题。</p>
+<p><strong>步骤</strong>：</p>
+<ol>
+<li>在代码中间加一个 <code>console.log</code>（或 <code>print</code>）</li>
+<li>如果中间点之前就出错了 → 问题在上半部分</li>
+<li>如果中间点之后才出错 → 问题在下半部分</li>
+<li>对出错的那一半，重复上述步骤</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>100 行代码出了 Bug
+    ↓ 在第 50 行加 log
+问题在 50-100 行
+    ↓ 在第 75 行加 log
+问题在 50-75 行
+    ↓ 在第 62 行加 log
+问题在第 60-62 行！
+</code></pre>
+<blockquote>
+<p><strong>二分法的威力</strong>
+100 行代码，最多只需要 7 次（log₂100 ≈ 7）就能定位到具体行。1000 行也只需要 10 次。</p>
+</blockquote>
+<h3 id="22-橡皮鸭调试法">2.2 橡皮鸭调试法</h3>
+<p><strong>核心思想</strong>：把问题一行一行地&quot;讲&quot;给别人听（或者一只橡皮鸭），讲着讲着你自己就发现问题了。</p>
+<p><strong>为什么有效？</strong> 因为&quot;写代码&quot;和&quot;解释代码&quot;用的是大脑的不同区域。当你被迫用语言描述每一步逻辑时，那些你&quot;以为对了&quot;的假设会暴露出来。</p>
+<p><strong>实践方法</strong>：</p>
+<ol>
+<li>打开出问题的代码</li>
+<li>逐行解释：&quot;这一行做了什么？为什么要这么做？&quot;</li>
+<li>当你说出&quot;嗯，这里应该是……等等&quot;的时候，Bug 往往就在那里</li>
+</ol>
+<h3 id="23-最小复现">2.3 最小复现</h3>
+<p><strong>核心思想</strong>：把复杂的问题简化到最小，只保留能触发 Bug 的最少代码。</p>
+<p><strong>为什么重要？</strong></p>
+<ul>
+<li>复杂系统中，Bug 可能被其他代码&quot;掩盖&quot;</li>
+<li>最小复现能排除干扰因素，让问题一目了然</li>
+<li>也方便你向别人求助——没人愿意看你 500 行代码</li>
+</ul>
+<p><strong>步骤</strong>：</p>
+<ol>
+<li>创建一个新的空文件</li>
+<li>只复制和问题相关的代码</li>
+<li>逐步删减，直到删掉任何一行 Bug 就消失</li>
+<li>剩下的就是 Bug 的根源</li>
+</ol>
+<h3 id="24-回退法git-bisect">2.4 回退法（Git Bisect）</h3>
+<p><strong>核心思想</strong>：如果代码&quot;之前是好的，现在坏了&quot;，那就找到是哪次提交引入的问题。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># Git 自带的二分查找工具
+git bisect start
+git bisect bad          # 标记当前版本有 Bug
+git bisect good abc123  # 标记某个正常的旧版本
+# Git 会自动切换到中间的提交，你测试后告诉它 good 或 bad
+# 重复几次就能找到引入 Bug 的那次提交
+</code></pre>
+<blockquote>
+<p><strong>调试方法选择指南</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>情况</th>
+<th>推荐方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不知道哪一段代码出错</td>
+<td>二分法</td>
+</tr>
+<tr>
+<td>逻辑看起来对但结果不对</td>
+<td>橡皮鸭</td>
+</tr>
+<tr>
+<td>复杂系统中的 Bug</td>
+<td>最小复现</td>
+</tr>
+<tr>
+<td>&quot;之前好好的突然坏了&quot;</td>
+<td>回退法 / Git Bisect</td>
+</tr>
+</tbody></table></div>
+</blockquote>
+<h2 id="3-调试工具箱用对工具事半功倍">3. 调试工具箱：用对工具事半功倍</h2>
+<p>方法论是基础，但好的工具能让调试效率翻倍。</p>
+<h3 id="31-consolelog--print最朴素也最实用">3.1 console.log / print：最朴素也最实用</h3>
+<p><strong>适用场景</strong>：快速查看变量值、确认代码执行到了哪里。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// JavaScript
+console.log(&#39;函数被调用了，参数是：&#39;, data)
+console.log(&#39;计算结果：&#39;, result)
+console.table(arrayData)  // 表格形式展示数组/对象
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># Python
+print(f&quot;当前值: {value}&quot;)
+print(f&quot;类型: {type(data)}&quot;)  # 检查数据类型
+</code></pre>
+<p><strong>进阶技巧</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>console.log()</code></td>
+<td>普通输出</td>
+</tr>
+<tr>
+<td><code>console.warn()</code></td>
+<td>黄色警告，容易在大量日志中找到</td>
+</tr>
+<tr>
+<td><code>console.error()</code></td>
+<td>红色错误</td>
+</tr>
+<tr>
+<td><code>console.table()</code></td>
+<td>表格展示数组和对象</td>
+</tr>
+<tr>
+<td><code>console.time()</code> / <code>console.timeEnd()</code></td>
+<td>测量代码执行时间</td>
+</tr>
+<tr>
+<td><code>console.trace()</code></td>
+<td>打印调用堆栈</td>
+</tr>
+</tbody></table></div>
+<h3 id="32-断点调试逐行执行看清每一步">3.2 断点调试：逐行执行，看清每一步</h3>
+<p><strong>适用场景</strong>：逻辑复杂，需要一步步跟踪代码执行过程。</p>
+<p><strong>在浏览器中</strong>（Chrome DevTools）：</p>
+<ol>
+<li>打开开发者工具（F12）→ Sources 面板</li>
+<li>找到源代码文件，点击行号设置断点</li>
+<li>触发相关操作，代码会在断点处暂停</li>
+<li>用控制按钮逐步执行：<ul>
+<li><strong>继续</strong>（F8）：运行到下一个断点</li>
+<li><strong>单步跳过</strong>（F10）：执行当前行，不进入函数内部</li>
+<li><strong>单步进入</strong>（F11）：进入函数内部</li>
+<li><strong>单步跳出</strong>（Shift+F11）：跳出当前函数</li>
+</ul>
+</li>
+</ol>
+<p><strong>在 VS Code 中</strong>：</p>
+<ol>
+<li>点击行号左侧设置断点（红色圆点）</li>
+<li>按 F5 启动调试</li>
+<li>在&quot;变量&quot;面板查看所有变量的当前值</li>
+<li>在&quot;监视&quot;面板添加你关心的表达式</li>
+</ol>
+<blockquote>
+<p><strong>断点 vs console.log</strong>
+<strong>console.log</strong> 适合快速验证，用完就删。断点调试适合深入分析复杂逻辑。两者不是替代关系，而是互补关系。</p>
+</blockquote>
+<h3 id="33-网络调试前后端之间的问题">3.3 网络调试：前后端之间的问题</h3>
+<p><strong>适用场景</strong>：页面显示不对，但不确定是前端的问题还是后端返回的数据有问题。</p>
+<p><strong>Chrome DevTools → Network 面板</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>查看内容</th>
+<th>能发现什么问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>状态码</strong></td>
+<td>404（地址错）、500（服务器崩了）、403（没权限）</td>
+</tr>
+<tr>
+<td><strong>请求参数</strong></td>
+<td>前端发送的数据对不对</td>
+</tr>
+<tr>
+<td><strong>响应数据</strong></td>
+<td>后端返回的数据格式对不对</td>
+</tr>
+<tr>
+<td><strong>请求时间</strong></td>
+<td>哪个接口太慢，拖慢了页面</td>
+</tr>
+<tr>
+<td><strong>请求头</strong></td>
+<td>Token 有没有带、Content-Type 对不对</td>
+</tr>
+</tbody></table></div>
+<p><strong>调试口诀</strong>：先看状态码，再看请求参数，最后看响应数据。</p>
+<h3 id="34-调试工具选择速查">3.4 调试工具选择速查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题类型</th>
+<th>推荐工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>变量值不对</td>
+<td>console.log / 断点</td>
+</tr>
+<tr>
+<td>逻辑执行顺序不对</td>
+<td>断点调试</td>
+</tr>
+<tr>
+<td>API 请求失败</td>
+<td>Network 面板</td>
+</tr>
+<tr>
+<td>页面样式不对</td>
+<td>Elements 面板（检查 CSS）</td>
+</tr>
+<tr>
+<td>性能问题</td>
+<td>Performance 面板 / console.time</td>
+</tr>
+<tr>
+<td>内存泄漏</td>
+<td>Memory 面板</td>
+</tr>
+</tbody></table></div>
+<h2 id="4-ai-时代的调试让-ai-当你的助手">4. AI 时代的调试：让 AI 当你的助手</h2>
+<p>AI 工具（ChatGPT、Claude、Cursor 等）能大幅加速调试过程，但前提是你得知道怎么用。</p>
+<h3 id="41-ai-擅长什么">4.1 AI 擅长什么</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>AI 擅长</th>
+<th>AI 不擅长</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>解释错误信息的含义</td>
+<td>理解你的业务逻辑</td>
+</tr>
+<tr>
+<td>提供常见问题的解决方案</td>
+<td>判断哪个方案最适合你的项目</td>
+</tr>
+<tr>
+<td>生成调试代码片段</td>
+<td>复现只在特定环境出现的 Bug</td>
+</tr>
+<tr>
+<td>分析代码中的潜在问题</td>
+<td>理解复杂的系统上下文</td>
+</tr>
+</tbody></table></div>
+<h3 id="42-向-ai-提问的正确姿势">4.2 向 AI 提问的正确姿势</h3>
+<p><strong>差的提问</strong>：</p>
+<blockquote>
+<p>&quot;我的代码报错了，帮我看看&quot;</p>
+</blockquote>
+<p><strong>好的提问</strong>：</p>
+<blockquote>
+<p>&quot;我在用 React 写一个表单组件，提交时报错 <code>TypeError: Cannot read properties of undefined (reading &#39;email&#39;)</code>。以下是相关代码：[贴代码]。我已经确认 API 返回的数据格式是正确的，问题可能出在前端数据处理。&quot;</p>
+</blockquote>
+<p><strong>提问模板</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 我在做什么：[背景]
+2. 期望的行为：[应该怎样]
+3. 实际的行为：[实际怎样]
+4. 错误信息：[完整报错]
+5. 相关代码：[贴代码]
+6. 我已经尝试了：[排除了什么]
+</code></pre>
+<h3 id="43-ai-调试的陷阱">4.3 AI 调试的陷阱</h3>
+<blockquote>
+<p><strong>AI 调试的三个坑</strong></p>
+</blockquote>
+<ol>
+<li><strong>AI 可能&quot;自信地胡说&quot;</strong>：AI 给的方案看起来很合理，但可能完全不对。永远要自己验证。</li>
+<li><strong>AI 不了解你的上下文</strong>：它不知道你的项目结构、依赖版本、运行环境。你需要提供足够的上下文。</li>
+<li><strong>过度依赖 AI 会退化调试能力</strong>：如果每次报错都直接丢给 AI，你永远学不会自己调试。建议先自己分析 5 分钟，再求助 AI。</li>
+</ol>
+<h3 id="44-ai--人工的最佳组合">4.4 AI + 人工的最佳组合</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>遇到 Bug
+  ↓
+第 1 步：自己读错误信息（1 分钟）
+  ↓
+第 2 步：自己提出假设（2 分钟）
+  ↓
+第 3 步：快速验证假设（2 分钟）
+  ↓
+卡住了？→ 把错误信息 + 代码 + 你的分析发给 AI
+  ↓
+AI 给出建议 → 你判断是否合理 → 验证
+</code></pre>
+<h2 id="5-调试心态与习惯从救火到防火">5. 调试心态与习惯：从&quot;救火&quot;到&quot;防火&quot;</h2>
+<p>最好的调试是不需要调试。养成好习惯，能从源头减少 Bug。</p>
+<h3 id="51-防御性编程">5.1 防御性编程</h3>
+<p><strong>核心思想</strong>：写代码时就假设&quot;一切都可能出错&quot;，提前做好防护。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 差：假设 data 一定存在
+const name = data.user.name
+
+// 好：防御性写法
+const name = data?.user?.name ?? &#39;未知用户&#39;
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 差：假设文件一定能打开
+content = open(&#39;config.json&#39;).read()
+
+# 好：防御性写法
+try:
+    content = open(&#39;config.json&#39;).read()
+except FileNotFoundError:
+    print(&quot;配置文件不存在，使用默认配置&quot;)
+    content = &#39;{}&#39;
+</code></pre>
+<h3 id="52-写好日志">5.2 写好日志</h3>
+<p>日志是&quot;事后调试&quot;的关键。线上环境不能打断点，只能靠日志。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>日志级别</th>
+<th>用途</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DEBUG</strong></td>
+<td>开发时的详细信息</td>
+<td>变量值、函数参数</td>
+</tr>
+<tr>
+<td><strong>INFO</strong></td>
+<td>正常的业务流程</td>
+<td>&quot;用户登录成功&quot;、&quot;订单创建&quot;</td>
+</tr>
+<tr>
+<td><strong>WARN</strong></td>
+<td>不影响功能但需要注意</td>
+<td>&quot;缓存未命中&quot;、&quot;重试第 2 次&quot;</td>
+</tr>
+<tr>
+<td><strong>ERROR</strong></td>
+<td>出错了，需要处理</td>
+<td>&quot;数据库连接失败&quot;、&quot;API 超时&quot;</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>好日志的标准</strong>
+一条好的日志应该回答：<strong>什么时候</strong>、在哪里、发生了什么、关键数据是什么。</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>[2025-01-15 14:30:22] [ERROR] [OrderService] 创建订单失败
+  用户ID: 12345, 商品ID: 67890, 原因: 库存不足
+</code></pre>
+<h3 id="53-调试检查清单">5.3 调试检查清单</h3>
+<p>遇到 Bug 时，按这个顺序排查：</p>
+<ol>
+<li><strong>读错误信息</strong>：错误类型、文件、行号</li>
+<li><strong>最近改了什么？</strong>：用 <code>git diff</code> 看最近的改动</li>
+<li><strong>能复现吗？</strong>：找到稳定的复现步骤</li>
+<li><strong>缩小范围</strong>：用二分法或最小复现定位</li>
+<li><strong>提出假设并验证</strong>：一次只改一个变量</li>
+<li><strong>修复后回归测试</strong>：确保修复没有引入新问题</li>
+</ol>
+<h3 id="54-新手常踩的调试陷阱">5.4 新手常踩的调试陷阱</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>陷阱</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不看报错就开始改代码</td>
+<td>先完整阅读错误信息</td>
+</tr>
+<tr>
+<td>同时改好几个地方</td>
+<td>一次只改一处，验证后再改下一处</td>
+</tr>
+<tr>
+<td>改完不测试就提交</td>
+<td>每次修改后都运行测试</td>
+</tr>
+<tr>
+<td>只在自己电脑上测试</td>
+<td>考虑不同环境（浏览器、系统、网络）</td>
+</tr>
+<tr>
+<td>调试完不清理 console.log</td>
+<td>提交前删除所有调试代码</td>
+</tr>
+<tr>
+<td>遇到问题就重启/重装</td>
+<td>先理解问题原因，重启只是临时方案</td>
+</tr>
+</tbody></table></div>
+<h2 id="6-总结-10">6. 总结</h2>
+<p>调试是一门手艺，需要刻意练习。回顾本章的核心要点：</p>
+<ol>
+<li><strong>调试是科学方法</strong>：观察 → 假设 → 实验 → 验证，不是碰运气</li>
+<li><strong>错误信息是朋友</strong>：学会从报错中提取&quot;什么错、哪里错、为什么错&quot;</li>
+<li><strong>经典方法永不过时</strong>：二分法、橡皮鸭、最小复现是所有调试的基础</li>
+<li><strong>工具要用对场景</strong>：console.log 快速验证，断点深入分析，Network 排查接口</li>
+<li><strong>AI 是助手不是拐杖</strong>：先自己分析，再让 AI 辅助，最后自己验证</li>
+<li><strong>防火胜于救火</strong>：防御性编程、好的日志习惯能从源头减少 Bug</li>
+</ol>
+<blockquote>
+<p><strong>记住这句话</strong>
+<strong>每个 Bug 都是一次学习机会。</strong> 你修过的每一个 Bug，都在帮你建立&quot;模式识别&quot;能力——下次遇到类似问题，你会更快地定位到原因。</p>
+</blockquote>
+<h2 id="延伸阅读-39">延伸阅读</h2>
+<ul>
+<li><a href="https://developer.chrome.com/docs/devtools/">Chrome DevTools 官方文档</a> — 浏览器调试工具的完整指南</li>
+<li><a href="https://code.visualstudio.com/docs/editor/debugging">VS Code Debugging</a> — VS Code 断点调试教程</li>
+<li><a href="https://www.debuggingbook.org/">How to Debug Anything</a> — 系统化调试方法论</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-188.html">← PRD：智能旅游规划 Agent 编排平台</a><a rel="next" href="chapter-190.html">附录 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

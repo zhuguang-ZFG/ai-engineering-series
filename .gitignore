@@ -1,0 +1,13 @@
+/dist/
+/.scratch/
+node_modules/
+__pycache__/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+!.env.sample

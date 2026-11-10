@@ -1,0 +1,35 @@
+{
+  "preparation": {
+    "planned_responses": 28,
+    "executed_model_calls": 0
+  },
+  "comparison": {
+    "kind": "manual_review_accounting",
+    "complete": false,
+    "scores": {
+      "a": {
+        "planned": 14,
+        "pass": 0,
+        "fail": 0,
+        "error": 0,
+        "missing": 14
+      },
+      "b": {
+        "planned": 14,
+        "pass": 0,
+        "fail": 0,
+        "error": 0,
+        "missing": 14
+      }
+    },
+    "pairs": {
+      "both_pass": 0,
+      "a_only_pass": 0,
+      "b_only_pass": 0,
+      "neither_pass": 0,
+      "incomplete": 14
+    },
+    "pass_count_delta_b_minus_a": null,
+    "note": "统计人工评审记录，不自动判定语义、模型来源或显著性；error 保留在分母内。"
+  }
+}

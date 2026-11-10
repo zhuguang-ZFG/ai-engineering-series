@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C07 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C07-answer-section-f3df42621d" tabindex="-1">C07 作业核对：注意力到底计算了什么</h1>
+<p>题目在 <a href="c07.html">C07 正文</a>，容差 ±0.002。按“分数—softmax—加权”顺序给值。</p>
+<h2 id="C07-answer-section-4f488cf273" tabindex="-1">一、两个缩放后分数</h2>
+<ul>
+<li><code>q·k1 = 1×1 + 1×0 = 1</code></li>
+<li><code>q·k2 = 1×0 + 1×3 = 3</code></li>
+<li><code>√d_k = √2 ≈ 1.4142</code></li>
+<li>缩放后：<code>1/1.4142 ≈ 0.7071</code>，<code>3/1.4142 ≈ 2.1213</code></li>
+</ul>
+<h2 id="C07-answer-section-8ed319c6c8" tabindex="-1">二、softmax 权重</h2>
+<ul>
+<li><code>exp(0.7071) ≈ 2.0281</code></li>
+<li><code>exp(2.1213) ≈ 8.3421</code></li>
+<li>总和 <code>≈ 10.3703</code></li>
+<li>权重：<code>[2.0281/10.3703, 8.3421/10.3703] ≈ [0.1956, 0.8044]</code></li>
+</ul>
+<p>两权重相加为 1。第二个位置分数更高，权重更大，但第一个位置仍保留约 19.6% 的贡献。</p>
+<h2 id="C07-answer-section-1b3edd8b46" tabindex="-1">三、加权输出</h2>
+<p><code>0.1956×[1,2] + 0.8044×[3,0] = [0.1956+2.4133, 0.3911+0] ≈ [2.6089, 0.3911]</code></p>
+<p>第一维主要来自 V2 的 3，第二维只来自 V1 的 2。</p>
+<h2 id="C07-answer-section-fc7714c27a" tabindex="-1">四、未来的 k3/V3 改动</h2>
+<p>输出<strong>不变</strong>。位置 0 和 1 看不见位置 2；它的分数在 softmax 前被设为负无穷，权重为 0。即把 V3 改成 <code>[5,5]</code> 甚至 <code>[100,-100]</code>，乘 0 后都不贡献。这正是因果掩码要保证的：训练时不能靠未来 token 预测当前目标。</p>
+<p>若站在最后一个位置，未来为空，改前面的 V 就会改变输出；边界是“不能看自己后面”，不是“只能看固定两个位置”。</p>
+<h2 id="C07-answer-section-1697c2efbb" tabindex="-1">五、形状</h2>
+<ul>
+<li><code>X</code>：4×3；<code>WQ</code>：3×2 → <code>Q</code>：4×2（K、V 同理）。</li>
+<li><code>QKᵀ</code>：(4×2)·(2×4) → 4×4。行是查询位置，列是被看位置。</li>
+<li>mask 后逐行 softmax → 权重 4×4，每行和为 1。</li>
+<li>权重 (4×4) 乘 <code>V</code> (4×2) → 输出 4×2。</li>
+</ul>
+<p>若只把 <code>WV</code> 换成 3×5，V 与输出都变成 4×5。Q、K 仍是 4×2，分数与权重仍是 4×4。匹配分数需要 Q、K 的维度相同；V 的宽度决定汇总后的宽度，不必等于 Q、K 的宽度。</p>
+<h2 id="C07-answer-section-0c0877f72a" tabindex="-1">六、先 mask 再 softmax</h2>
+<p>先 softmax 再 mask，未来位置已经分到非零权重；把它们置零后，该行权重和小于 1，输出被整体缩小，且相当于偷偷改变了归一化。先 mask 成负无穷再 softmax，未来位置的 <code>exp</code> 为 0，可见位置重新归一化到和为 1，输出才是“只在可见集合内做加权平均”。两者在数值和语义上都不同。</p>
+<h2 id="C07-answer-section-c175c41c89" tabindex="-1">七、评分要点</h2>
+<ul>
+<li>两个缩放分数正确：2 分。</li>
+<li>softmax 的 exp、总和、权重齐全且落在容差内：3 分。</li>
+<li>加权输出正确：2 分。</li>
+<li>未来改动判断“不变”并给出权重为 0 的理由：2 分。</li>
+<li>四个形状正确：3 分。</li>
+<li>先 mask/后 mask 的归一化差异说清：2 分。</li>
+</ul>
+<p>关键失败：mask 用 0 分；把权重当事实置信度；形状转置弄反；输出只写权重不乘 V。</p>
+</article><nav class="lesson-nav"><a href="c07.html">返回 C07 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

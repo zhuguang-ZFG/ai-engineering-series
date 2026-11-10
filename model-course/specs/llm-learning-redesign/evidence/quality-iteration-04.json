@@ -1,0 +1,219 @@
+{
+  "date": "2026-11-09",
+  "status": "passed-local-technical-scope",
+  "version": "1.1.2",
+  "sourceHash": "422eebd9fd7ecd4ebb3e9b491e9fc03ddac54b341c2c927e46b0de264fdcce59",
+  "checks": {
+    "npmTestExit": 0,
+    "pythonTests": 33,
+    "nodeTests": 36,
+    "totalUnitTests": 69,
+    "newTests": 5,
+    "newTestsScope": "4 release store behaviors and 1 system schema/validator compatibility check; not model quality",
+    "epubcheck": {
+      "version": "5.3.0",
+      "editions": 3,
+      "fatals": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "editions": {
+      "status": "passed",
+      "sourceHash": "422eebd9fd7ecd4ebb3e9b491e9fc03ddac54b341c2c927e46b0de264fdcce59",
+      "editions": {
+        "llm-course": {
+          "pdfPages": 449,
+          "outlineEntries": 436,
+          "chapters": 30,
+          "images": 37
+        },
+        "llm-course-answers": {
+          "pdfPages": 207,
+          "outlineEntries": 281,
+          "chapters": 30,
+          "images": 0
+        }
+      },
+      "epubLocalLinks": {
+        "llm-course": 558,
+        "llm-course-answers": 311
+      },
+      "epubReflowLayouts": 240,
+      "webLayouts": 56,
+      "screenshots": [
+        "specs/llm-learning-redesign/evidence/quality-04-c18-mobile.jpg",
+        "specs/llm-learning-redesign/evidence/quality-04-c29-desktop.jpg",
+        "specs/llm-learning-redesign/evidence/quality-04-pdf-review.jpg"
+      ],
+      "failures": [],
+      "pdfInspectedPages": [
+        403,
+        243,
+        391
+      ]
+    },
+    "documents": {
+      "status": "passed",
+      "markdownFiles": 23,
+      "localLinks": 253
+    },
+    "accessibility": {
+      "pages": 92,
+      "keyboardFlows": 4,
+      "offlineRequests": 0
+    },
+    "reading": {
+      "flows": 15,
+      "layouts": 50,
+      "offlineRequests": 0
+    },
+    "originalBookReading": "passed; see native exit record",
+    "task_verify": "unverified: no callable tool or executable project baseline"
+  },
+  "comparison": "quality-04-comparison.json",
+  "integration": "quality-04-integration.json",
+  "k4": "quality-04-k4.json",
+  "environment": "quality-04-environment.json",
+  "ocr": "quality-04-ocr.json",
+  "deliveryBoundaries": "quality-04-delivery-boundaries.json",
+  "visualReview": "Inspected PDF pages 403/243/391 and C18 mobile/C29 desktop captures; text, code and updated statements visible. No new clipping observed.",
+  "harnessCorrections": [
+    "PowerShell redirection treated unittest stderr as NativeCommandError despite completed checks. Re-executed through subprocess and recorded actual exit 0.",
+    "First screenshot locator searched raw extracted Chinese text across PDF line wraps and raised StopIteration after layout checks. Whitespace-normalized lookup succeeded; complete final edition check passed.",
+    "Initial C20 HTTP wrapper bypassed main allowed_tools normalization; retained first reports and repeated only the two HTTP queries using the actual CLI subprocess. Both returned invalid-response with correct calculator whitelist; release readiness already used the CLI."
+  ],
+  "remaining": [
+    "K3 model quality: extract system contract repair did not improve 5/8",
+    "Independent K4 stage work, explanation and reproduction",
+    "K5 unfamiliar authorized project, frozen held-out evaluation and independent startup",
+    "Independent ebook reader, real screen-reader speech, K1-K5 real learners",
+    "Optional API branches, reader-specific tasks and complete external-source audit",
+    "Real 0.5B known-answer readiness returned HTTP 400 before and after rollback; package and prior failure outcome restored, readiness not restored."
+  ],
+  "inputs": [
+    {
+      "file": "book/llm/examples/assistant/assistant.py",
+      "sha256Lf": "47f30eec1cb1e2d1e1e69c6979b79b53d2a7ad382ad9103f26a3edbe279f826e"
+    },
+    {
+      "file": "book/llm/examples/assistant/EVALUATION-04.md",
+      "sha256Lf": "1cbe20b9bb0e32c746e38c5836759d303a286f29a15795cfd3cca384c626d7bc"
+    },
+    {
+      "file": "book/llm/examples/delivery/release_store.py",
+      "sha256Lf": "61797561c0719414bf3038e8ba8a613ffe508c35996b0d0e878f53aca10e34a3"
+    },
+    {
+      "file": "book/llm/examples/delivery/requirements-windows-cpu.lock",
+      "sha256Lf": "699aee7ad15d08cbd6b4545fc7d794c2c55a5be15e8ba120c1b9726e65423c5c"
+    },
+    {
+      "file": "book/llm/examples/ocr/requirements.txt",
+      "sha256": "743ab4e14d2137d79c7249b8b62ecab5c769b586977909b5bc14de53693ae46f"
+    },
+    {
+      "file": "book/llm/course.json",
+      "sha256Lf": "961c814f4ff0af46d468f952986caac0271957ec140e429690cb5d757e925d56"
+    },
+    {
+      "file": "scripts/test_llm_citations.py",
+      "sha256Lf": "10d1399b48080d8192510f0db971d938a91c5d39bdf12373b432d6abd0012f84"
+    },
+    {
+      "file": "scripts/test_llm_release_store.py",
+      "sha256Lf": "77436e9240218297c380c3300d307d8675305b6acf081b9e021de8e06abadf64"
+    },
+    {
+      "file": "book/llm/lessons/c11.md",
+      "sha256Lf": "5dc3efe8744cfeb88980e345ae40300525ad0de4f7c8309325ccb6672b68612e"
+    },
+    {
+      "file": "book/llm/lessons/c12.md",
+      "sha256Lf": "aaa5693ec1383bdd8a48c2fbbce6cce4d5a5bb67a3b6203d32891319dcb0b9d6"
+    },
+    {
+      "file": "book/llm/lessons/c18.md",
+      "sha256Lf": "a8ec5826984c070f8bc17d43c9fba35d597522c3ce338639040c3d16cfaefbe0"
+    },
+    {
+      "file": "book/llm/lessons/c22.md",
+      "sha256Lf": "368ecdc698f7e5bd900ceb82c9ad8e485f380c20016faf75e1c3be1d2fc87734"
+    },
+    {
+      "file": "book/llm/lessons/c23.md",
+      "sha256Lf": "29eb03d06b0295120551939cb47098acddf164e0e11c8bc5b5feb56fd7f8d103"
+    },
+    {
+      "file": "book/llm/lessons/c27.md",
+      "sha256Lf": "5358a17ec3ba7aee2a9308d601a14e603fe76c4df7f3661cc9d0b7d3f3d9b9fb"
+    },
+    {
+      "file": "book/llm/lessons/c28.md",
+      "sha256Lf": "208474feeb71a69c5f4f2f170923f30a7f5228c20e2c2411e777ebfaba4d6e70"
+    },
+    {
+      "file": "book/llm/lessons/c29.md",
+      "sha256Lf": "854fab0e9807ae76d842b3e71186e6dee89e5b41f81e515771d806b28e5d1d74"
+    },
+    {
+      "file": "book/llm/deepening/c11-answer.md",
+      "sha256Lf": "6c5626c8c692a6ccf0ad04b83a432f09969eebeee4bb031bf7bc035163efd9fb"
+    },
+    {
+      "file": "book/llm/deepening/c23-answer.md",
+      "sha256Lf": "eaec526694ed4549f2c401d6bf0e65761d8c3360173cd408570746ab800ac920"
+    },
+    {
+      "file": "book/llm/deepening/c28-answer.md",
+      "sha256Lf": "3c99ed4da56b3cb770b3f721041233d2cd7aeb3c97013f46f9494033fa325eaf"
+    }
+  ],
+  "generated": [
+    {
+      "file": "deliverables/llm-course-answers.pdf",
+      "sha256": "d29dfa951bddefbc88d648bd66de9a9100a56b5e82de49e69d387b506d49ef2a"
+    },
+    {
+      "file": "deliverables/llm-course.pdf",
+      "sha256": "ea6a1603c1ae5aba889e02b44df22a84bce19998de84b08fa9e519329f2e99d5"
+    },
+    {
+      "file": "deliverables/llm-explained-handdraw.pdf",
+      "sha256": "d105368fe74ca2625079b2d9c7dffdebb560a13a5534570aefebf81a2d32fcca"
+    },
+    {
+      "file": "deliverables/llm-reading-guide.pdf",
+      "sha256": "2ca91586cbf4769cda8a13aa623bc736ce4fe9b733bbb03c86aa7f05ae7d423b"
+    },
+    {
+      "file": "deliverables/llm-reading-tasks.pdf",
+      "sha256": "86b50d5fcf5d9cac4e6d484e007623b420b1ab4dcc5639d37058b249a45c3fd7"
+    },
+    {
+      "file": "deliverables/llm-course-answers.epub",
+      "sha256": "f795ed80a22993b6427f2885c292b6fc23094efff812428a91a519bf3ea293bd"
+    },
+    {
+      "file": "deliverables/llm-course.epub",
+      "sha256": "c3708eff27a9e61cb7c7cb07e5863a6448043650f2efb12e77f6c8a43b829d87"
+    },
+    {
+      "file": "deliverables/llm-explained-handdraw.epub",
+      "sha256": "cd7958a3b414a7ad34aed96a76b0222016d42bd1dcc1e8e22fbc10e06ec0f647"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/quality-04-c18-mobile.jpg",
+      "sha256": "e47ddea70806eb1a92d545ef28ea441f6ac3df031631373310b94628d85b0c20"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/quality-04-c29-desktop.jpg",
+      "sha256": "27736d2faa65d0b7a74073c130ed1afb23530ac43d91a0c9e53d668828079069"
+    },
+    {
+      "file": "specs/llm-learning-redesign/evidence/quality-04-pdf-review.jpg",
+      "sha256": "0cfcaae3bb87cfbb4d7828f0409c2a2dc3930b4e422953dae7a47b33fec53423"
+    }
+  ],
+  "chapterModels": "quality-04-chapter-models.json",
+  "deliveryReadiness": "quality-04-delivery-readiness.json"
+}

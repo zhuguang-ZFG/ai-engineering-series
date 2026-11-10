@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C22 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C22-answer-section-6a4e9465b9" tabindex="-1">C22 答案与核对依据</h1>
+<p>本文件给出指标定义、分位数和费用的算例，以及单因素对照的合格结论。实际质量、延迟和费用必须来自你的报告；没有调用就写“未运行”。</p>
+<h2 id="C22-answer-section-12f1e03984" tabindex="-1">1. 质量指标的答案</h2>
+<p>至少报告：</p>
+<pre><code class="language-text">summary.passed / summary.total       机械检查通过
+strict pass / total                  人工逐例严格通过
+supported claims / all claims        主张级支持率
+status_counts                        完成/不足/冲突/各类失败
+first_failure.stage 分布             失败发生在哪一环
+</code></pre>
+<p><code>summary.passed</code> 只覆盖 status、expectCitationDocs、expectTool；它不判断 quote 是否支持 claim，也不判断 answer 是否只含已核验文本。机械通过率可以很高，但严格通过率很低；两者不能互相替代。</p>
+<p>示例：</p>
+<ul>
+<li>12 个用例，机械通过 10 个：10/12≈0.8333；</li>
+<li>人工严格复核后只有 7 个满足“状态正确 + 全部 claim 有支持 + 无额外文字”：7/12≈0.5833；</li>
+<li>共 20 条主张，16 条支持：16/20=0.8。</li>
+</ul>
+<p>结论应同时写三个数，并说明失败用例是本应失败还是意外失败。</p>
+<h2 id="C22-answer-section-61aeb6c066" tabindex="-1">2. 延迟的答案</h2>
+<p>两个字段：</p>
+<ul>
+<li><code>usage.latency_ms</code>：模型调用累计耗时；</li>
+<li><code>elapsed_ms</code>：整条流水线墙钟时间。</li>
+</ul>
+<p>本地第一次调用：</p>
+<pre><code class="language-text">usage.latency_ms 包含模型加载；
+usage.model_load_ms 是其中加载部分的耗时；
+后续调用 load_ms 通常为 0。
+</code></pre>
+<p>因此：</p>
+<ul>
+<li>比较本地冷启动时，要标注“冷”并报告 <code>model_load_ms</code>；</li>
+<li>比较热启动时，先预热或只取后续调用；</li>
+<li>不要把 <code>elapsed_ms</code> 与 <code>usage.latency_ms</code> 混在一列；</li>
+<li>API 的 <code>load_ms=0</code>，但 <code>latency_ms</code> 包含网络请求；网络波动要多次采样。</li>
+</ul>
+<p>失败用例可能很快返回（例如权限失败、零命中），把所有状态混在一起求平均会制造“更快”的假象。正确做法：</p>
+<ol>
+<li>先看质量/状态分布；</li>
+<li>分别报告 <code>all</code>、<code>model_called</code>、<code>strict pass</code> 的 n 和分位数；</li>
+<li>说明每个子集的含义和选择偏差。</li>
+</ol>
+<h2 id="C22-answer-section-91e8367332" tabindex="-1">3. 分位数算例</h2>
+<p>数据（毫秒）：</p>
+<pre><code class="language-text">1200, 1300, 1400, 1500, 1600, 1700, 1800, 9000
+</code></pre>
+<p>排序后不变，n=8。</p>
+<p>中位数：</p>
+<ul>
+<li>偶数个，取中间两个：第 4 个 1500，第 5 个 1600；</li>
+<li>((1500+1600)/2=1550) ms。</li>
+</ul>
+<p>nearest-rank p95：</p>
+<ul>
+<li>(0.95\times8=7.6)；</li>
+<li>(\lceil7.6\rceil=8)；</li>
+<li>第 8 个值是 9000 ms。</li>
+</ul>
+<p>平均值：</p>
+<p>[
+(1200+1300+1400+1500+1600+1700+1800+9000)/8
+=19500/8=2437.5
+]</p>
+<p>单位为毫秒。逐项相加：1200+1300=2500；+1400=3900；+1500=5400；+1600=7000；+1700=8700；+1800=10500；+9000=19500。</p>
+<p>结论：</p>
+<ul>
+<li>中位数 1550 ms，p95（nearest-rank）9000 ms，平均 2437.5 ms；</li>
+<li>n=8 时 p95 就是最大值，不能宣称“95% 请求在 9000 ms 内”作为稳定估计；</li>
+<li>若用线性插值，p95 会不同；必须报告算法。</li>
+</ul>
+<p>n=20 时 p95 位置是 (\lceil19\rceil=19)；n=100 时是第 95 个。样本少时，报告所有原始值或 min/median/max，比只给一个分位数更诚实。</p>
+<h2 id="C22-answer-section-186533fb74" tabindex="-1">4. API 费用算例</h2>
+<p>公式：</p>
+<p>[
+\text{cost}=
+\frac{\text{prompt_tokens}}{1000}\times \text{price_input_per_1k}
++\frac{\text{completion_tokens}}{1000}\times \text{price_output_per_1k}
+]</p>
+<p>假设：</p>
+<pre><code class="language-text">prompt_tokens = 1000
+completion_tokens = 200
+price_input_per_1k = 0.5
+price_output_per_1k = 1.5
+</code></pre>
+<p>计算：</p>
+<p>[
+1000/1000\times0.5 + 200/1000\times1.5
+=0.5+0.3=0.8
+]</p>
+<p>单位是“你的价格表单位”，不要擅自写成美元。若只提供输入价、没有输出价，或 usage 缺字段，报告 <code>cost=null</code> / <code>prices-not-configured-or-usage-missing</code>，不要只算一半。</p>
+<p>本地：</p>
+<pre><code class="language-json">{&quot;cost&quot;: null, &quot;cost_basis&quot;: &quot;local-compute-not-priced&quot;}
+</code></pre>
+<p><code>null</code> 不是 0。不要把它加入平均值，也不要在汇总时把 <code>null</code> 当 0；正确做法是单独报告“本地未计价”，API 用例单独汇总。</p>
+<p><code>evaluate</code> 的聚合：</p>
+<pre><code class="language-text">usage.cost = null
+usage.cost_basis = &quot;per-case reports&quot;
+</code></pre>
+<p>所以总费用要从 <code>cases[].report.usage.cost</code> 汇总，并且只汇总非 <code>null</code> 的用例；同时报告有多少用例没有价格/usage。</p>
+<h2 id="C22-answer-section-c41ff02457" tabindex="-1">5. 单因素对照的合格结论</h2>
+<p>条件：</p>
+<pre><code class="language-text">同一验证集、同一文档哈希、同一模型、同一提示模板、同一预算
+只改 top_k: 3 → 1
+</code></pre>
+<p>两个清单只有 <code>budgets.top_k</code> 不同，因此哈希不同；它们是两个条件，不能声称“同一个冻结清单”。</p>
+<p>合格比较表：</p>
+<table>
+<thead>
+<tr>
+<th>质量指标</th>
+<th>top_k=3</th>
+<th>top_k=1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>样本数 n</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>机械通过</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>严格通过</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>支持率</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>失败状态</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+</tbody></table>
+<p>运行开销与上表使用同一次评测记录：</p>
+<table>
+<thead>
+<tr>
+<th>运行指标</th>
+<th>top_k=3</th>
+<th>top_k=1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>调用次数</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>中位耗时</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>p95 耗时</td>
+<td>实际</td>
+<td>实际</td>
+</tr>
+<tr>
+<td>费用</td>
+<td>本地 null / API 实际</td>
+<td>本地 null / API 实际</td>
+</tr>
+</tbody></table>
+<p>合格结论示例：</p>
+<blockquote>
+<p>在 12 个验证用例上，top_k=1 的严格通过从 7/12 降到 5/12；其中两个需要同一文档多段证据的用例变成 insufficient-evidence。虽然中位耗时下降、调用次数减少，但质量底线未满足，因此不采用。该结论只适用于这批文档、模型和预算，不外推到其他任务。</p>
+</blockquote>
+<p>不合格结论：</p>
+<ul>
+<li>只报“平均快 30%”；</li>
+<li>n=3 却报 p95；</li>
+<li>把本地 <code>null</code> 当 0 说“免费”；</li>
+<li>只算输入 token 价格；</li>
+<li>在 heldout 上调到变好；</li>
+<li>同时改 <code>top_k</code> 和 <code>max_new_tokens</code>；</li>
+<li>删掉失败用例后重算。</li>
+</ul>
+<h2 id="C22-answer-section-aa3fcac2d8" tabindex="-1">6. “更快但更差”的定位</h2>
+<p>一个典型：</p>
+<ol>
+<li><code>top_k</code> 从 3 降到 1；</li>
+<li>某些问题只取回一段，缺少第二段条件；</li>
+<li>模型返回 <code>insufficient-evidence</code>，在检索/生成前结束，<code>elapsed_ms</code> 变小；</li>
+<li>平均延迟下降，但严格通过率下降。</li>
+</ol>
+<p>定位证据：</p>
+<ul>
+<li>对比两个条件的 <code>status_counts</code>；</li>
+<li>找出状态变化的 case；</li>
+<li>看这些 case 在 top_k=3 时的 <code>retrieval.hits</code> 和 <code>prompt.used_chunk_ids</code>；</li>
+<li>看 top_k=1 时缺少哪个 chunk；</li>
+<li>确认不是模型/环境变化。</li>
+</ul>
+<p>结论：不是“top_k=1 更快更好”，而是“top_k=1 让部分用例更早失败”。质量底线优先。</p>
+<h2 id="C22-answer-section-a7381b7d0b" tabindex="-1">7. 冷/热、缓存、批处理、模型选择</h2>
+<ul>
+<li><strong>冷启动</strong>：本地第一次调用包含加载；API 也可能冷启动。报告 <code>model_load_ms</code>，不要把冷/热混在一起。</li>
+<li><strong>前缀缓存</strong>：只复用相同前缀；不同问题不保证命中；缓存要按读者/版本隔离，避免旧内容或越权内容。</li>
+<li><strong>批处理</strong>：提高吞吐，可能增加单请求排队和 p95；报告批大小、队列等待和单请求延迟。</li>
+<li><strong>模型选择</strong>：更小模型可能更便宜，但必须同验证集重测质量；tokenizer/聊天模板变化也会影响引用校验。</li>
+<li><strong>Agent</strong>：每步一次模型调用，工具回执增加上下文；质量没有提升时，固定流程更可预测。</li>
+</ul>
+<h2 id="C22-answer-section-9479bf87bc" tabindex="-1">8. 评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>合格</th>
+<th>不合格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>质量</td>
+<td>机械/严格/支持率/失败分布分开</td>
+<td>只看平均或只看一个成功案例</td>
+</tr>
+<tr>
+<td>样本</td>
+<td>报告 n 和原始值</td>
+<td>n=3 报 p95、隐去样本数</td>
+</tr>
+<tr>
+<td>分位</td>
+<td>写明 nearest-rank/插值</td>
+<td>与他人 p95 直接比</td>
+</tr>
+<tr>
+<td>延迟</td>
+<td>冷/热、model/elapsed 分开</td>
+<td>混用字段、把失败当快</td>
+</tr>
+<tr>
+<td>费用</td>
+<td>本地 null、API 公式和单位清楚</td>
+<td>本地当 0、只算一半价格</td>
+</tr>
+<tr>
+<td>对照</td>
+<td>同验证集只改一个因素</td>
+<td>多因素混改、heldout 调参</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>采用/拒绝都有适用条件</td>
+<td>宣称通用提升率</td>
+</tr>
+</tbody></table>
+<p>没有实际报告时，以上只能作为检查表；不能写成“已通过”。</p>
+</article><nav class="lesson-nav"><a href="c22.html">返回 C22 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

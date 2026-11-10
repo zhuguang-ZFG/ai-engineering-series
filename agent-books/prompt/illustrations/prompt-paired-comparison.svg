@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 740" role="img" aria-label="先冻结题目材料判据和环境，再把同题同次的 A 与 B 配对；四对假设结果显示两版都三比四，但错误位置不同" color="#263f35">
+  <title>总分相同，也要看同题同次的成对变化</title>
+  <desc>先冻结题目、材料、判据、环境和重复次数，只改变提示 A 与 B。下方四对是人工教学算例，不是模型实测。第 1 对和第 2 对两版都通过，第 3 对只有 A 通过，第 4 对只有 B 通过，因此 A 和 B 都是 3/4，通过数净差为零，但错误位置不同。正文真实准备计划为七题、每题重复两次、两版共二十八份请求，模型尚未调用。</desc>
+  <path d="M13 15 Q380 8 747 16 L749 723 Q381 732 12 724 Z" fill="#f7f1e5"/>
+  <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M37 90 Q380 85 724 90" opacity=".4"/>
+    <path d="M44 113 L44 153 Q377 158 716 152 L716 113"/>
+    <path d="M290 160 C293 179 295 187 296 200 M288 191 L296 202 304 191"/>
+    <path d="M475 160 C475 180 478 186 479 200 M471 191 L479 202 487 191" stroke="#a26732"/>
+    <path d="M296 249 Q292 438 296 588 M479 249 Q483 439 479 588" opacity=".18" stroke-width="6"/>
+    <path d="M166 316 Q372 313 578 316 M166 383 Q372 386 578 383 M166 450 Q372 447 578 450 M166 517 Q371 521 578 517" stroke-dasharray="3 7" opacity=".55"/>
+    <circle cx="296" cy="316" r="21" fill="#f7f1e5"/>
+    <circle cx="479" cy="316" r="21" fill="#f7f1e5"/>
+    <circle cx="296" cy="383" r="21" fill="#f7f1e5"/>
+    <circle cx="479" cy="383" r="21" fill="#f7f1e5"/>
+    <circle cx="296" cy="450" r="21" fill="#f7f1e5"/>
+    <circle cx="479" cy="450" r="21" fill="#f7f1e5" stroke="#a26732"/>
+    <circle cx="296" cy="517" r="21" fill="#f7f1e5" stroke="#a26732"/>
+    <circle cx="479" cy="517" r="21" fill="#f7f1e5"/>
+    <path d="M285 315 L293 323 307 307 M468 315 L476 323 490 307 M285 382 L293 390 307 374 M468 382 L476 390 490 374 M285 449 L293 457 307 441 M468 516 L476 524 490 508" stroke-width="3"/>
+    <path d="M470 442 L488 460 M488 442 L470 460 M287 509 L305 527 M305 509 L287 527" stroke="#a26732" stroke-width="3"/>
+    <path d="M257 596 Q296 603 335 596 M440 596 Q480 603 518 596"/>
+    <path d="M42 661 Q385 656 718 661" opacity=".4"/>
+  </g>
+  <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <text x="39" y="57" font-size="29" font-weight="700">先冻结条件，再按同题、同次配对</text>
+    <text x="379" y="138" text-anchor="middle" font-size="24">题目 · 材料 · 判据 · 环境 · 重复次数</text>
+    <text x="296" y="232" text-anchor="middle" font-size="27" font-weight="700">提示 A</text>
+    <text x="479" y="232" text-anchor="middle" font-size="27" font-weight="700" fill="#8b5529">提示 B</text>
+    <text x="50" y="278" font-size="21" font-weight="700">下面四对仅为教学算例，非模型实测</text>
+    <text x="51" y="324" font-size="22">第 1 对</text>
+    <text x="51" y="391" font-size="22">第 2 对</text>
+    <text x="51" y="458" font-size="22">第 3 对</text>
+    <text x="51" y="525" font-size="22">第 4 对</text>
+    <text x="590" y="324" font-size="21">共同通过</text>
+    <text x="590" y="391" font-size="21">共同通过</text>
+    <text x="590" y="458" font-size="21" fill="#8b5529">只有 A 通过</text>
+    <text x="590" y="525" font-size="21" fill="#8b5529">只有 B 通过</text>
+    <text x="296" y="582" text-anchor="middle" font-size="30" font-weight="700">3/4</text>
+    <text x="479" y="582" text-anchor="middle" font-size="30" font-weight="700">3/4</text>
+    <text x="379" y="637" text-anchor="middle" font-size="25">净差为 0；错误位置却发生了交换。</text>
+    <text x="42" y="692" font-size="20">正文计划：7 题 × 2 次 = 14 对，共 28 份请求。</text>
+    <text x="42" y="719" font-size="19">准备输入不等于得到成绩；新册模型 A/B 对照尚未运行。</text>
+  </g>
+</svg>

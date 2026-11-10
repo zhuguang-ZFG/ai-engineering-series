@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前端框架对比（React / Vue / Svelte / Angular） · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 101 / 195</p><article><h1 id="前端框架对比react--vue--svelte--angular">前端框架对比（React / Vue / Svelte / Angular）</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#前端框架导论">前端框架导论</a><ul><li><a href="#1-关注前端演进史的动机">1. 关注前端演进史的动机</a></li><li><a href="#2-第一阶段静态网页与切图2000s">2. 第一阶段：静态网页与&quot;切图&quot;（2000s）</a></li><li><a href="#3-第二阶段jquery-时代---手动搬砖2010s">3. 第二阶段：jQuery 时代 - &quot;手动搬砖&quot;（2010s）</a></li><li><a href="#4-第三阶段从手动搬砖到数据驱动vuereact">4. 第三阶段：从&quot;手动搬砖&quot;到&quot;数据驱动&quot;（Vue/React）</a></li><li><a href="#5-渲染策略从-csr-到-ssrssg">5. 渲染策略：从 CSR 到 SSR/SSG</a></li><li><a href="#6-第四阶段工程化与构建工具2015s-2020s">6. 第四阶段：工程化与构建工具（2015s-2020s）</a></li><li><a href="#7-主流框架对比">7. 主流框架对比</a></li><li><a href="#8-总结演进的本质">8. 总结：演进的本质</a></li><li><a href="#9-学习路线图">9. 学习路线图</a></li><li><a href="#10-你现在应该能识别的代码">10. 你现在应该能识别的代码</a></li><li><a href="#名词速查表-1">名词速查表</a></li></ul></li></ul></nav></details><h2 id="前端框架导论">前端框架导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+你已经学会了 HTML、CSS 和 JavaScript 基础，能做出简单的网页了。但随着网页功能越来越复杂，你可能会发现：用原生 JavaScript 写代码变得很难维护，改一处要动很多地方，多人协作时经常冲突。</p>
+</blockquote>
+<p>这就是我们需要前端框架的原因——它让代码更有条理、更易维护、更高效开发。在 vibecoding 里，AI 会帮你写大部分代码。但你至少得能看懂不同框架的代码风格，知道它们的优缺点，这样 AI 才能帮你选择最合适的技术栈。</p>
+<p>读完这篇，你就能：</p>
+<ul>
+<li>理解前端技术为什么要不断演进</li>
+<li>知道 Vue、React、Svelte、Angular 各有什么特点</li>
+<li>懂得&quot;数据驱动&quot;、&quot;组件化&quot;这些核心概念</li>
+<li>能根据项目选择合适的框架</li>
+</ul>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>学完能干嘛</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>为什么要关注前端演进</td>
+<td>明白技术演进是为了解决什么问题</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>静态网页时代</td>
+<td>了解最早期的网页开发方式</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>jQuery 时代</td>
+<td>理解&quot;命令式&quot;编程的痛点</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>Vue/React 时代</td>
+<td>掌握&quot;声明式&quot;和&quot;数据驱动&quot;思想</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>渲染策略</td>
+<td>知道 CSR、SSR、SSG 的区别和适用场景</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>工程化工具</td>
+<td>理解 Webpack、Vite 等构建工具的作用</td>
+</tr>
+</tbody></table></div>
+<p>每一章都从&quot;为什么需要这个技术&quot;开始，让你理解技术演进背后的逻辑。</p>
+<h3 id="1-关注前端演进史的动机">1. 关注前端演进史的动机</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>为什么网页越来越复杂？前端技术为什么要不断演进？</strong> 这个问题会带你理解从简单网页到现代 Web 应用的技术演变之路。</p>
+</blockquote>
+<h4 id="11-从电子海报到桌面应用">1.1 从&quot;电子海报&quot;到&quot;桌面应用&quot;</h4>
+<p>想象一下你在街上看到的<strong>海报</strong>：</p>
+<ul>
+<li>✅ 有内容（文字、图片）</li>
+<li>✅ 有设计（颜色、排版）</li>
+<li>❌ 但你跟它说话，它不会回应</li>
+<li>❌ 你点击某个地方，不会发生什么</li>
+</ul>
+<p><strong>最早的网页</strong>就是这样的&quot;电子海报&quot;：只能看、不能改、内容固定。</p>
+<p><strong>现代网页</strong>完全不同了。它们像桌面应用（VS Code、Figma）：</p>
+<ul>
+<li>✅ 可以编辑文档、画图、玩游戏</li>
+<li>✅ 实时响应你的每个操作</li>
+<li>✅ 甚至可以离线工作</li>
+</ul>
+<p><strong>这种转变的核心原因：网页的功能越来越复杂，需要更高效的技术和开发方式。</strong></p>
+<h4 id="12-一个生活的比喻盖房子">1.2 一个生活的比喻：盖房子</h4>
+<p>前端技术的演进，就像盖房子方式的进化：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>时代</th>
+<th>🏠 盖房比喻</th>
+<th>实际特点</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2000s</strong></td>
+<td><strong>贴海报</strong></td>
+<td>静态网页，写好 HTML 就行</td>
+<td>✅ 简单 ❌ 不能互动</td>
+</tr>
+<tr>
+<td><strong>2010s</strong></td>
+<td><strong>请工人手动装修</strong></td>
+<td>jQuery 时代，手动操作每个元素</td>
+<td>✅ 能互动 ❌ 代码乱、难维护</td>
+</tr>
+<tr>
+<td><strong>2020s</strong></td>
+<td><strong>用乐高搭房子</strong></td>
+<td>Vue/React 时代，组件化开发</td>
+<td>✅ 高效、可维护 ❌ 学习曲线</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从表格中你能看到什么？</strong></p>
+</blockquote>
+<p><strong>阶段一 → 阶段二</strong>：从&quot;不能动&quot;到&quot;能动&quot;。这是质的飞跃——网页开始有交互，但代价是代码变得混乱。</p>
+<p><strong>阶段二 → 阶段三</strong>：从&quot;能用&quot;到&quot;好用&quot;。组件化让代码像积木一样可复用，大幅提升开发效率。</p>
+<p><strong>核心思想</strong>：技术演进不是&quot;为了新而新&quot;，而是为了解决上一个阶段的痛点。</p>
+<h3 id="2-第一阶段静态网页与切图2000s">2. 第一阶段：静态网页与&quot;切图&quot;（2000s）</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>最早的网页是什么样的？为什么那时候不需要框架？</strong> 理解这个阶段的局限性，才能明白后来技术演进的必要性。</p>
+</blockquote>
+<h4 id="21-这个时代是什么样的">2.1 这个时代是什么样的</h4>
+<p><strong>开发方式</strong>：</p>
+<ul>
+<li>写几个 HTML 文件</li>
+<li>内嵌一些 CSS 和 JavaScript</li>
+<li>直接把文件拖到浏览器就能看效果</li>
+<li>上传文件夹到服务器就完成部署</li>
+</ul>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>✅ <strong>优点</strong>：简单直接，没有学习成本，写完就能跑</li>
+<li>❌ <strong>缺点</strong>：无法实现复杂交互，代码一多就乱</li>
+</ul>
+<blockquote>
+<p><strong>查看当时的项目结构</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>project/
+├── index.html
+├── login.html
+├── css/
+│   ├── bootstrap.css
+│   └── custom.css
+├── js/
+│   ├── jquery.js
+│   └── app.js
+└── images/
+</code></pre>
+<p><strong>遇到的问题</strong>：</p>
+<ol>
+<li><strong>全局变量污染</strong>：所有变量都在全局命名空间，容易互相覆盖</li>
+<li><strong>依赖管理混乱</strong>：必须按正确顺序加载 JS 文件，否则会报错</li>
+<li><strong>代码难以复用</strong>：想复用某个功能，只能复制粘贴</li>
+</ol>
+<h4 id="22-切图是什么">2.2 &quot;切图&quot;是什么</h4>
+<p>你可能听说过&quot;切图&quot;这个词。它是早期前端的主要工作：</p>
+<p><strong>什么是切图？</strong></p>
+<p>设计师用 Photoshop 设计好页面 → 前端把设计切成小图片 → 用 HTML 把图片拼成页面</p>
+<p><strong>为什么这么慢？</strong></p>
+<p>网页上的每张小图片，浏览器都要发一次<strong>网络请求</strong>。请求越多，加载越慢。</p>
+<p>👇 <strong>动手试试看</strong>：观察图片请求对加载性能的影响</p>
+<blockquote>
+<p><strong>雪碧图（Sprite）</strong></p>
+</blockquote>
+<p>为了减少请求数，出现了&quot;雪碧图&quot;技术：把很多小图合成一张大图。</p>
+<p>优点是请求数变少，缺点是制作和维护都很麻烦。</p>
+<p>这个阶段的教训：<strong>请求太多是性能大敌</strong>。</p>
+<h3 id="3-第二阶段jquery-时代---手动搬砖2010s">3. 第二阶段：jQuery 时代 - &quot;手动搬砖&quot;（2010s）</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>为什么需要 jQuery？它解决了什么问题，又带来了什么新问题？</strong> 理解 jQuery 的局限性，才能明白 Vue/React 的价值。</p>
+</blockquote>
+<h4 id="31-需要-jquery的必要性">3.1 需要 jQuery的必要性</h4>
+<p>随着网页变复杂，原生 JavaScript 的问题暴露出来：</p>
+<ul>
+<li>❌ <strong>API 繁琐</strong>：简单的操作也要写很多代码</li>
+<li>❌ <strong>浏览器兼容</strong>：不同浏览器的 API 不一样，要写很多兼容代码</li>
+<li>❌ <strong>选择器弱</strong>：找元素很麻烦</li>
+</ul>
+<p><strong>jQuery</strong> 诞生了。它让 JavaScript 变得简单：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 原生 JavaScript（繁琐）
+const element = document.getElementById(&#39;title&#39;)
+
+// jQuery（简洁）
+const element = $(&#39;#title&#39;)
+</code></pre>
+<h4 id="32-jquery-的思路亲手改页面">3.2 jQuery 的思路：亲手改页面</h4>
+<p>jQuery 的核心思路是<strong>命令式</strong>：你告诉浏览器&quot;怎么做&quot;。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 找到标题元素
+$(&#39;#title&#39;).text(&#39;新标题&#39;)
+
+// 找到按钮并禁用
+$(&#39;#submit-btn&#39;).attr(&#39;disabled&#39;, true)
+
+// 找到列表并添加一项
+$(&#39;ul&#39;).append(&#39;&lt;li&gt;新项目&lt;/li&gt;&#39;)
+</code></pre>
+<p><strong>问题</strong>：你需要记住页面上有哪些元素，每次数据变化都要手动更新所有相关元素。</p>
+<p>👇 <strong>动手试试看</strong>：对比 jQuery 和数据驱动的方式</p>
+<blockquote>
+<p><strong>jQuery 的痛点</strong></p>
+</blockquote>
+<p>想象你在做一个购物车：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 用户点击&quot;添加到购物车&quot;
+function addToCart() {
+  cartCount++ // 数据变化
+
+  // 你要手动更新所有相关地方
+  $(&#39;#cart-count&#39;).text(cartCount) // 右上角小红点
+  $(&#39;#cart-page-count&#39;).text(cartCount) // 购物车页面
+  $(&#39;#checkout-price&#39;).text(calculatePrice()) // 结算按钮
+
+  // 如果漏了一个地方，页面就不一致了！
+}
+</code></pre>
+<p><strong>这就是&quot;手动搬砖&quot;的代价</strong>：容易出错，难以维护。</p>
+<h4 id="33-移动端普及响应式设计的出现">3.3 移动端普及：响应式设计的出现</h4>
+<p>这个阶段还有一个重要变化：<strong>手机和平板开始流行</strong>。</p>
+<p>网页必须适配不同屏幕。这需要<strong>响应式布局</strong>：同一套 HTML/CSS，自动根据屏幕宽度变换布局。</p>
+<p><strong>响应式布局的核心：媒体查询（Media Query）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* 电脑屏幕（大于 640px） */
+@media (min-width: 640px) {
+  .container {
+    display: flex;
+  }
+}
+
+/* 手机屏幕（小于 640px） */
+@media (max-width: 640px) {
+  .container {
+    display: block;
+  }
+}
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：调整浏览器宽度，观察响应式布局的效果</p>
+<blockquote>
+<p><strong>响应式就像&quot;智能相框&quot;</strong></p>
+</blockquote>
+<p>想象你在不同房间看同一张照片：</p>
+<ul>
+<li>在<strong>大客厅</strong>（电脑屏幕），照片可以摆大一些，旁边还能放其他装饰品</li>
+<li>在<strong>小卧室</strong>（手机屏幕），照片需要缩小，其他装饰品要收起来</li>
+</ul>
+<p><strong>响应式布局</strong>就是&quot;智能相框&quot;，它会自动根据房间大小调整展示方式。</p>
+<h3 id="4-第三阶段从手动搬砖到数据驱动vuereact">4. 第三阶段：从&quot;手动搬砖&quot;到&quot;数据驱动&quot;（Vue/React）</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>为什么需要 Vue/React？它们和 jQuery 的本质区别是什么？</strong> 理解&quot;声明式&quot;和&quot;数据驱动&quot;，是掌握现代前端框架的关键。</p>
+</blockquote>
+<h4 id="41-需要新框架的必要性">4.1 需要新框架的必要性</h4>
+<p>jQuery 时代的问题积累到一定程度：</p>
+<ul>
+<li><strong>代码一多就乱</strong>：到处都是 DOM 操作，难以维护</li>
+<li><strong>容易出 bug</strong>：漏更新一个地方，页面就不一致</li>
+<li><strong>协作困难</strong>：多人修改同一个文件，容易冲突</li>
+</ul>
+<p><strong>Vue / React</strong> 的核心思路：只改数据，页面自动更新。</p>
+<h4 id="42-vuereact-的思路声明式-ui">4.2 Vue/React 的思路：声明式 UI</h4>
+<p><strong>jQuery（命令式）</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 你要告诉浏览器每一步怎么做
+$(&#39;#title&#39;).text(&#39;新标题&#39;)
+$(&#39;#title&#39;).css(&#39;color&#39;, &#39;red&#39;)
+$(&#39;#title&#39;).show()
+</code></pre>
+<p><strong>Vue（声明式）</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 你只需告诉浏览器&quot;要显示什么&quot;
+data() {
+  return {
+    title: &quot;新标题&quot;,
+    color: &quot;red&quot;,
+    visible: true
+  }
+}
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：对比命令式和声明式的区别</p>
+<blockquote>
+<p><strong>命令式 vs 声明式</strong></p>
+</blockquote>
+<p>就像画一幅画：</p>
+<ul>
+<li><strong>命令式</strong>：你告诉画家&quot;拿起笔，蘸红颜料，在坐标（10,10）画一个圈&quot;</li>
+<li><strong>声明式</strong>：你直接给画家一张照片，&quot;给我画成这样&quot;</li>
+</ul>
+<p>Vue/React 就是&quot;声明式&quot;：你描述&quot;页面长什么样&quot;，框架负责&quot;怎么把它画出来&quot;。</p>
+<h4 id="43-组件化像搭乐高一样写页面">4.3 组件化：像搭乐高一样写页面</h4>
+<p><strong>Vue / React</strong> 最强大的特性是组件化：把页面拆成一个个独立的&quot;积木&quot;。</p>
+<p>想象一下你在搭乐高：</p>
+<ul>
+<li>你不需要&quot;从头开始雕刻每一块积木&quot;（从头写 HTML/CSS）</li>
+<li>你只需要&quot;按说明书把积木拼在一起&quot;（把组件组合起来）</li>
+<li>每个积木都是<strong>独立的</strong>，你可以在不同的套装里重复使用</li>
+</ul>
+<p><strong>组件的好处</strong>：</p>
+<ul>
+<li><strong>复用</strong>：写一个&quot;商品卡片&quot;组件，可以用 100 次</li>
+<li><strong>封装</strong>：组件内部的状态不影响别人</li>
+<li><strong>维护</strong>：修改一个组件，所有用到它的地方都会更新</li>
+</ul>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>&lt;ComponentName /&gt;</code> → 这是一个组件</li>
+<li>看到 <code>import xxx from &#39;./xxx.vue&#39;</code> → 在导入一个组件</li>
+<li>看到 <code>props: {...}</code> → 组件接收的参数</li>
+<li>看到 <code>emit(&#39;xxx&#39;)</code> → 组件向父组件发送事件</li>
+</ul>
+<h4 id="44-spa单页应用的诞生">4.4 SPA：单页应用的诞生</h4>
+<p><strong>Vue / React</strong> 时代还有一个重要变化：从 MPA 到 SPA。</p>
+<p><strong>MPA（Multi-Page Application）</strong>：</p>
+<ul>
+<li>点一个链接 → 整页刷新 → 显示新页面</li>
+<li>就像<strong>翻书</strong>：每翻一页都要把旧书合上、去书架拿新书</li>
+</ul>
+<p><strong>SPA（Single-Page Application）</strong>：</p>
+<ul>
+<li>点一个链接 → 只刷新内容区域 → 页面不刷新</li>
+<li>就像<strong>同一本书里换章节</strong>：只擦掉旧内容、写上新内容</li>
+</ul>
+<p>👇 <strong>动手试试看</strong>：体验 MPA 和 SPA 的区别</p>
+<p><strong>SPA 的优点</strong>：</p>
+<ul>
+<li>✅ <strong>体验丝滑</strong>：页面切换快</li>
+<li>✅ <strong>状态好管理</strong>：输入的内容、滚动位置都在</li>
+<li>❌ <strong>首屏可能慢</strong>：需要先下载 JavaScript</li>
+<li>❌ <strong>SEO 要额外处理</strong>：搜索引擎可能抓不到内容（需要 SSR/SSG）</li>
+</ul>
+<h3 id="5-渲染策略从-csr-到-ssrssg">5. 渲染策略：从 CSR 到 SSR/SSG</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>页面是在服务器生成，还是在浏览器生成？</strong> 不同渲染策略各有优劣，选择合适的策略会直接影响性能和 SEO。</p>
+</blockquote>
+<p><strong>CSR（Client-Side Rendering）客户端渲染</strong>：</p>
+<ul>
+<li>浏览器下载 JavaScript → 执行代码 → 生成页面</li>
+<li>优点：交互流畅，服务器压力小</li>
+<li>缺点：首屏慢，不利于 SEO</li>
+</ul>
+<p><strong>SSR（Server-Side Rendering）服务端渲染</strong>：</p>
+<ul>
+<li>服务器生成 HTML → 发给浏览器 → 浏览器直接显示</li>
+<li>优点：首屏快，利于 SEO</li>
+<li>缺点：服务器压力大，实现复杂</li>
+</ul>
+<p><strong>SSG（Static Site Generation）静态站点生成</strong>：</p>
+<ul>
+<li>构建时生成所有页面的 HTML</li>
+<li>优点：极快，完全静态，CDN 友好</li>
+<li>缺点：不适合动态内容</li>
+</ul>
+<p>👇 <strong>动手试试看</strong>：对比不同渲染策略的特点</p>
+<blockquote>
+<p><strong>如何选择？</strong></p>
+</blockquote>
+<ul>
+<li><strong>内容网站</strong>（博客、文档）：优先 SSG</li>
+<li><strong>需要 SEO 的动态网站</strong>（电商、新闻）：使用 SSR</li>
+<li><strong>后台管理系统</strong>：使用 CSR</li>
+<li><strong>混合需求</strong>：考虑 Nuxt/Next.js 的混合渲染</li>
+</ul>
+<h3 id="6-第四阶段工程化与构建工具2015s-2020s">6. 第四阶段：工程化与构建工具（2015s-2020s）</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>为什么前端需要&quot;工程化&quot;？构建工具到底在做什么？</strong> 理解工程化，才能看懂现代前端项目的工作流程。</p>
+</blockquote>
+<h4 id="61-需要工程化的必要性">6.1 需要&quot;工程化的必要性</h4>
+<p>前端项目越来越大，不能再靠&quot;手动引入脚本&quot;。</p>
+<p><strong>工程化</strong>就是用工具和规范，让开发更高效、代码更可靠、协作更顺畅。</p>
+<blockquote>
+<p><strong>工程化 = 从&quot;手工作坊&quot;到&quot;现代化工厂&quot;</strong></p>
+</blockquote>
+<p>想象一下你在家做饭 vs 开餐厅：</p>
+<ul>
+<li><strong>在家做饭</strong>：想吃什么就做什么，很自由</li>
+<li><strong>开餐厅</strong>：需要标准化的菜谱、规范的操作流程、统一的原材料采购</li>
+</ul>
+<p>前端开发也一样：</p>
+<ul>
+<li><strong>小项目</strong>：怎么写都行</li>
+<li><strong>大项目</strong>：需要统一的代码规范、自动化工具、标准化流程</li>
+</ul>
+<h4 id="62-构建工具webpack--vite">6.2 构建工具：Webpack → Vite</h4>
+<p><strong>Webpack</strong>（传统）：</p>
+<ul>
+<li>工作方式：<strong>先打包，后服务</strong></li>
+<li>启动时：打包所有代码 → 启动服务器</li>
+<li>问题：<strong>慢</strong>。项目越大，启动越慢（可能要等 30 秒）</li>
+</ul>
+<p><strong>Vite</strong>（现代）：</p>
+<ul>
+<li>工作方式：<strong>按需编译</strong></li>
+<li>启动时：不打包，直接启动服务器</li>
+<li>浏览器请求哪个文件，就实时编译哪个</li>
+<li>优势：<strong>快</strong>。通常 1 秒内启动</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Webpack</th>
+<th>Vite</th>
+<th>提升</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冷启动</td>
+<td>30s+</td>
+<td>&lt;1s</td>
+<td><strong>快 30 倍</strong></td>
+</tr>
+<tr>
+<td>热更新</td>
+<td>3-5s</td>
+<td>&lt;100ms</td>
+<td><strong>快 30 倍</strong></td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>几百行</td>
+<td>几十行</td>
+<td><strong>大幅简化</strong></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么 Vite 这么快？</strong></p>
+</blockquote>
+<p><strong>Webpack</strong> 就像整备家当搬家：先把所有东西打包，再出门。</p>
+<p><strong>Vite</strong> 就像轻装旅行：只带必需品，用到什么再买什么。</p>
+<p>在开发环境，大多数时候你只需要修改几个文件，Vite 只编译这几个文件，当然快。</p>
+<h3 id="7-主流框架对比">7. 主流框架对比</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>Vue、React、Svelte、Angular 各有什么特点？如何选择适合自己的框架？</strong> 了解它们的设计理念和使用场景，才知道该选哪个。</p>
+</blockquote>
+<h4 id="71-四大框架对比">7.1 四大框架对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Vue</th>
+<th>React</th>
+<th>Svelte</th>
+<th>Angular</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>设计理念</strong></td>
+<td>渐进式框架</td>
+<td>UI 库</td>
+<td>编译时框架</td>
+<td>完整平台</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>⭐⭐ 简单</td>
+<td>⭐⭐⭐ 中等</td>
+<td>⭐⭐ 简单</td>
+<td>⭐⭐⭐⭐ 陡峭</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>快</td>
+<td>快</td>
+<td><strong>极快</strong></td>
+<td>快</td>
+</tr>
+<tr>
+<td><strong>生态系统</strong></td>
+<td>完善</td>
+<td><strong>最完善</strong></td>
+<td>成长中</td>
+<td>完善</td>
+</tr>
+<tr>
+<td><strong>包大小</strong></td>
+<td>小</td>
+<td>中等</td>
+<td><strong>最小</strong></td>
+<td>大</td>
+</tr>
+<tr>
+<td><strong>适合场景</strong></td>
+<td>中小型项目</td>
+<td>大型项目</td>
+<td>性能要求高</td>
+<td>企业级应用</td>
+</tr>
+<tr>
+<td><strong>公司支持</strong></td>
+<td>尤雨溪（独立）</td>
+<td>Meta</td>
+<td>社区</td>
+<td>Google</td>
+</tr>
+</tbody></table></div>
+<h4 id="72-vue渐进式框架">7.2 Vue：渐进式框架</h4>
+<p><strong>核心理念</strong>：渐进式采用，可以只用一部分，也可以用全家桶</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-vue">&lt;template&gt;
+  &lt;div&gt;{{ message }}&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      message: &#39;Hello Vue&#39;
+    }
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>✅ 学习曲线平缓，中文文档完善</li>
+<li>✅ 模板语法直观，易于理解</li>
+<li>✅ 单文件组件（.vue）结构清晰</li>
+<li>✅ 适合快速开发</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>❌ 大型项目的状态管理需要额外学习 Vuex/Pinia</li>
+<li>❌ 灵活性略逊于 React</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>中小型 Web 应用</li>
+<li>快速原型开发</li>
+<li>中文团队（文档友好）</li>
+</ul>
+<h4 id="73-reactui-库">7.3 React：UI 库</h4>
+<p><strong>核心理念</strong>：只负责视图层，其他问题交给社区</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-jsx">function App() {
+  const [message, setMessage] = useState(&#39;Hello React&#39;)
+  return &lt;div&gt;{message}&lt;/div&gt;
+}
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>✅ 生态系统最完善，组件库丰富</li>
+<li>✅ JSX 语法灵活，表达能力强大</li>
+<li>✅ 虚拟 DOM 性能优秀</li>
+<li>✅ 适合大型项目</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>❌ 学习曲线较陡，需要掌握额外概念</li>
+<li>❌ 需要自己选择和搭配各种库</li>
+<li>❌ JSX 需要编译，不能直接在浏览器运行</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>大型复杂应用</li>
+<li>需要丰富生态的项目</li>
+<li>跨平台开发（React Native）</li>
+</ul>
+<h4 id="74-svelte编译时框架">7.4 Svelte：编译时框架</h4>
+<p><strong>核心理念</strong>：没有虚拟 DOM，编译时将组件转换为高效的原生代码</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-svelte">&lt;script&gt;
+  let message = &#39;Hello Svelte&#39;
+&lt;/script&gt;
+
+&lt;div&gt;{message}&lt;/div&gt;
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>✅ <strong>性能最优</strong>（无虚拟 DOM 运行时开销）</li>
+<li>✅ 包体积最小</li>
+<li>✅ 语法简单直观</li>
+<li>✅ 响应式系统天然支持</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>❌ 生态相对较小</li>
+<li>❌ 社区规模不如 Vue/React</li>
+<li>❌ 第三方库较少</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>性能要求极高的应用</li>
+<li>包体积敏感的项目</li>
+<li>愿意尝试新技术的团队</li>
+</ul>
+<h4 id="75-angular完整平台">7.5 Angular：完整平台</h4>
+<p><strong>核心理念</strong>：提供完整的解决方案，开箱即用</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">@Component({
+  selector: &#39;app-root&#39;,
+  template: &#39;&lt;div&gt;{{ message }}&lt;/div&gt;&#39;
+})
+export class AppComponent {
+  message = &#39;Hello Angular&#39;
+}
+</code></pre>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>✅ 功能完整，路由、HTTP、表单全都有</li>
+<li>✅ TypeScript 原生支持</li>
+<li>✅ 适合大型团队和项目</li>
+<li>✅ 代码规范统一</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>❌ 学习曲线陡峭</li>
+<li>❌ 概念多，复杂度高</li>
+<li>❌ 包体积大</li>
+<li>❌ 不适合小型项目</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>大型企业级应用</li>
+<li>需要严格规范的团队</li>
+<li>已有 TypeScript 技术栈的项目</li>
+</ul>
+<h3 id="8-总结演进的本质">8. 总结：演进的本质</h3>
+<p>前端技术的演进，本质上是在解决两个问题：</p>
+<h4 id="81-效率从手动到自动">8.1 效率：从手动到自动</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>时代</th>
+<th>开发方式</th>
+<th>效率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2000s</strong></td>
+<td>手写 HTML/CSS/JS</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>2010s</strong></td>
+<td>jQuery + 手动 DOM 操作</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>2020s</strong></td>
+<td>Vue/React + 数据驱动</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>现在</strong></td>
+<td>组件化 + 工程化 + 自动化</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+</tbody></table></div>
+<h4 id="82-规模从个人到团队">8.2 规模：从个人到团队</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>时代</th>
+<th>项目规模</th>
+<th>协作方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2000s</strong></td>
+<td>几个文件</td>
+<td>单人就能维护</td>
+</tr>
+<tr>
+<td><strong>2010s</strong></td>
+<td>几十个文件</td>
+<td>小团队，容易冲突</td>
+</tr>
+<tr>
+<td><strong>2020s</strong></td>
+<td>几百个文件</td>
+<td>中团队，需要规范</td>
+</tr>
+<tr>
+<td><strong>现在</strong></td>
+<td>几千个文件</td>
+<td>大团队，需要完整工程体系</td>
+</tr>
+</tbody></table></div>
+<h3 id="9-学习路线图">9. 学习路线图</h3>
+<h4 id="91-如果你是零基础">9.1 如果你是零基础</h4>
+<p><strong>第 1 步：HTML/CSS/JavaScript 基础</strong></p>
+<ul>
+<li>理解网页的三大基石</li>
+<li>能写出简单的静态页面</li>
+</ul>
+<p><strong>第 2 步：学习一个框架（Vue 推荐）</strong></p>
+<ul>
+<li>理解&quot;数据驱动&quot;的思想</li>
+<li>掌握组件化开发</li>
+</ul>
+<p><strong>第 3 步：实战项目</strong></p>
+<ul>
+<li>做一个完整的单页应用</li>
+<li>熟悉路由、状态管理、API 调用</li>
+</ul>
+<h4 id="92-如果你有基础">9.2 如果你有基础</h4>
+<p><strong>进阶方向</strong>：</p>
+<ul>
+<li><strong>工程化</strong>：学习 Vite/Webpack，理解构建流程</li>
+<li><strong>性能优化</strong>：学习懒加载、代码分割、缓存策略</li>
+<li><strong>TypeScript</strong>：为代码加上类型，提升可靠性</li>
+<li><strong>服务端渲染</strong>：学习 Nuxt/Next.js，解决 SEO 和首屏问题</li>
+</ul>
+<h3 id="10-你现在应该能识别的代码">10. 你现在应该能识别的代码</h3>
+<p>通过阅读本章，你应该能够：</p>
+<ul>
+<li>✅ 理解前端技术演进的脉络和原因</li>
+<li>✅ 区分 Vue、React、Svelte、Angular 的特点</li>
+<li>✅ 理解&quot;命令式&quot;和&quot;声明式&quot;的区别</li>
+<li>✅ 掌握&quot;数据驱动&quot;的核心思想</li>
+<li>✅ 知道组件化开发的价值</li>
+<li>✅ 了解 CSR、SSR、SSG 的适用场景</li>
+<li>✅ 理解构建工具（Webpack、Vite）的作用</li>
+<li>✅ 能根据项目选择合适的框架和技术栈</li>
+</ul>
+<blockquote>
+<p><strong>实际应用</strong>
+当你用 AI 做项目时，你可以这样告诉它：</p>
+</blockquote>
+<ul>
+<li>&quot;这是一个需要 SEO 的博客网站，用 Nuxt（Vue 的 SSR 框架）&quot;</li>
+<li>&quot;这是一个后台管理系统，用 Vue + Element Plus，不需要 SSR&quot;</li>
+<li>&quot;这是一个性能要求高的 Web 应用，考虑使用 Svelte&quot;</li>
+<li>&quot;项目已经用 React 了，继续用 React 生态的库&quot;</li>
+</ul>
+<h3 id="名词速查表-1">名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>名词</th>
+<th>英文</th>
+<th>用人话解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DOM</strong></td>
+<td>Document Object Model</td>
+<td>文档对象模型。用对象树表示页面，可被 JS 读写。</td>
+</tr>
+<tr>
+<td><strong>jQuery</strong></td>
+<td>-</td>
+<td>早期流行的 JS 库，简化了 DOM 操作。</td>
+</tr>
+<tr>
+<td><strong>Vue/React</strong></td>
+<td>-</td>
+<td>现代前端框架，采用数据驱动和组件化开发。</td>
+</tr>
+<tr>
+<td><strong>组件</strong></td>
+<td>Component</td>
+<td>可复用的 UI 单元，如按钮、卡片、导航栏。</td>
+</tr>
+<tr>
+<td><strong>MPA</strong></td>
+<td>Multi-Page Application</td>
+<td>多页应用。每次跳转都重新加载整个页面。</td>
+</tr>
+<tr>
+<td><strong>SPA</strong></td>
+<td>Single-Page Application</td>
+<td>单页应用。只加载一次，后续切换不刷新页面。</td>
+</tr>
+<tr>
+<td><strong>路由</strong></td>
+<td>Routing</td>
+<td>管理页面之间切换的规则和过程。</td>
+</tr>
+<tr>
+<td><strong>SSR</strong></td>
+<td>Server-Side Rendering</td>
+<td>服务端渲染。服务器生成 HTML 后发给浏览器。</td>
+</tr>
+<tr>
+<td><strong>SSG</strong></td>
+<td>Static Site Generation</td>
+<td>静态站点生成。构建时预渲染页面为静态 HTML。</td>
+</tr>
+<tr>
+<td><strong>CSR</strong></td>
+<td>Client-Side Rendering</td>
+<td>客户端渲染。浏览器通过 JS 生成页面。</td>
+</tr>
+<tr>
+<td><strong>Webpack</strong></td>
+<td>-</td>
+<td>传统打包工具，先打包后服务。</td>
+</tr>
+<tr>
+<td><strong>Vite</strong></td>
+<td>-</td>
+<td>现代构建工具，按需编译，速度极快。</td>
+</tr>
+<tr>
+<td><strong>响应式</strong></td>
+<td>Responsive Design</td>
+<td>页面自动适配不同屏幕尺寸的设计。</td>
+</tr>
+<tr>
+<td><strong>媒体查询</strong></td>
+<td>Media Query</td>
+<td>CSS 的条件判断，根据屏幕宽度应用不同样式。</td>
+</tr>
+<tr>
+<td><strong>命令式</strong></td>
+<td>Imperative</td>
+<td>告诉程序&quot;怎么做&quot;。</td>
+</tr>
+<tr>
+<td><strong>声明式</strong></td>
+<td>Declarative</td>
+<td>告诉程序&quot;要什么&quot;。</td>
+</tr>
+<tr>
+<td><strong>数据驱动</strong></td>
+<td>Data-Driven</td>
+<td>只修改数据，界面自动更新。</td>
+</tr>
+<tr>
+<td><strong>Tree Shaking</strong></td>
+<td>-</td>
+<td>摇树优化。自动移除未使用的代码，减小包体积。</td>
+</tr>
+<tr>
+<td><strong>代码分割</strong></td>
+<td>Code Splitting</td>
+<td>把代码分成多个小块，按需加载。</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-100.html">← TypeScript：给 JS 加上类型系统</a><a rel="next" href="chapter-102.html">浏览器渲染管道 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

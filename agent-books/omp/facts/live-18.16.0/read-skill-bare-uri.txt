@@ -1,0 +1,3 @@
+$ omp read skill://
+skill:// URL requires a skill name: skill://<name>
+exit=1

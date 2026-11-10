@@ -1,0 +1,34 @@
+Inspect and test Time-Traveling Stream Rules (TTSR)
+
+USAGE
+  $ omp ttsr [ACTION] [SNIPPET] [FLAGS]
+
+ARGUMENTS
+  ACTION    TTSR action (test|list|scan)
+  SNIPPET   Inline snippet text to test (ttsr test) or directory to scan (ttsr scan)
+
+FLAGS
+      --file=<value>     Snippet file path, or - for stdin (ttsr test)
+  -r, --rule=<value>     Rule markdown file to test in isolation (skips project rule loading)
+      --source=<value>   Match source: text, thinking, or tool (inferred from --file when omitted)
+      --tool=<value>     Tool name when source is tool (e.g. edit, write); defaults to edit
+  -p, --path=<value>     Candidate file path for scope/glob matching and AST language inference
+      --agent=<value>    Agent name to evaluate rule `agents` scoping as (ttsr test); defaults to main
+  -v, --verbose          Show every evaluated rule, not just triggered ones
+      --json             Output JSON
+      --no-gitignore     Include files excluded by .gitignore (ttsr scan)
+      --max-bytes=<int>  Maximum file size to scan in bytes; 0 disables the limit (ttsr scan)
+
+EXAMPLES
+  omp ttsr list
+  omp ttsr test 'const x: any = 1'
+  omp ttsr test src/foo.ts
+  omp ttsr test --file src/foo.ts
+  omp ttsr test --file src/foo.ts --source text
+  omp ttsr test --rule .omp/rules/no-any.md --source tool --path src/foo.ts 'const x: any = 1'
+  omp ttsr test --agent scout 'const x: any = 1'
+  echo 'Box::leak(&mut v)' | omp ttsr test --file - --path src/lib.rs
+  omp ttsr test --source tool --tool edit --path src/foo.ts 'const x: any = 1'
+  omp ttsr scan
+  omp ttsr scan src/
+  omp ttsr scan -r .omp/rules/no-any.md src/

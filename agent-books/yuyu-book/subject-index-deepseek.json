@@ -1,0 +1,695 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "agent",
+      "letter": "A",
+      "zh": {
+        "term": "Agent",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "agent",
+        "refs": []
+      }
+    },
+    {
+      "key": "agent-handle",
+      "letter": "A",
+      "zh": {
+        "term": "AgentHandle",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "agent-handle",
+        "refs": []
+      }
+    },
+    {
+      "key": "aggregate-error",
+      "letter": "A",
+      "zh": {
+        "term": "AggregateError",
+        "refs": [
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "AggregateError",
+        "refs": []
+      }
+    },
+    {
+      "key": "canonical-value",
+      "letter": "C",
+      "zh": {
+        "term": "canonical value",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "canonical value",
+        "refs": []
+      }
+    },
+    {
+      "key": "committed",
+      "letter": "C",
+      "zh": {
+        "term": "committed",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "committed",
+        "refs": []
+      }
+    },
+    {
+      "key": "context",
+      "letter": "C",
+      "zh": {
+        "term": "Context",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "context",
+        "refs": []
+      }
+    },
+    {
+      "key": "cordis",
+      "letter": "C",
+      "zh": {
+        "term": "Cordis",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "cordis",
+        "refs": []
+      }
+    },
+    {
+      "key": "effect",
+      "letter": "E",
+      "zh": {
+        "term": "effect",
+        "refs": [
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "effect",
+        "refs": []
+      }
+    },
+    {
+      "key": "epoch",
+      "letter": "E",
+      "zh": {
+        "term": "epoch",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "epoch",
+        "refs": []
+      }
+    },
+    {
+      "key": "factory",
+      "letter": "F",
+      "zh": {
+        "term": "factory",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "factory",
+        "refs": []
+      }
+    },
+    {
+      "key": "fiber",
+      "letter": "F",
+      "zh": {
+        "term": "fiber",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "fiber",
+        "refs": []
+      }
+    },
+    {
+      "key": "guard",
+      "letter": "G",
+      "zh": {
+        "term": "guard",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          },
+          {
+            "anchor": "deepseek-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "guard",
+        "refs": []
+      }
+    },
+    {
+      "key": "inbox",
+      "letter": "I",
+      "zh": {
+        "term": "inbox",
+        "refs": [
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "inbox",
+        "refs": []
+      }
+    },
+    {
+      "key": "initiator",
+      "letter": "I",
+      "zh": {
+        "term": "initiator",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "initiator",
+        "refs": []
+      }
+    },
+    {
+      "key": "inject",
+      "letter": "I",
+      "zh": {
+        "term": "inject",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "inject",
+        "refs": []
+      }
+    },
+    {
+      "key": "isolate",
+      "letter": "I",
+      "zh": {
+        "term": "isolate",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "isolate",
+        "refs": []
+      }
+    },
+    {
+      "key": "named-entries",
+      "letter": "N",
+      "zh": {
+        "term": "NamedEntries",
+        "refs": [
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "NamedEntries",
+        "refs": []
+      }
+    },
+    {
+      "key": "next",
+      "letter": "N",
+      "zh": {
+        "term": "next",
+        "refs": [
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "next",
+        "refs": []
+      }
+    },
+    {
+      "key": "owner-ctx",
+      "letter": "O",
+      "zh": {
+        "term": "ownerCtx",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ownerCtx",
+        "refs": []
+      }
+    },
+    {
+      "key": "plugin-package",
+      "letter": "P",
+      "zh": {
+        "term": "插件包",
+        "refs": [
+          {
+            "anchor": "deepseek-ch16",
+            "label": "第 16 章"
+          },
+          {
+            "anchor": "deepseek-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "plugin-package",
+        "refs": []
+      }
+    },
+    {
+      "key": "prepare-call",
+      "letter": "P",
+      "zh": {
+        "term": "prepareCall",
+        "refs": [
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "prepareCall",
+        "refs": []
+      }
+    },
+    {
+      "key": "profile",
+      "letter": "P",
+      "zh": {
+        "term": "profile",
+        "refs": [
+          {
+            "anchor": "deepseek-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "deepseek-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "profile",
+        "refs": []
+      }
+    },
+    {
+      "key": "prompt",
+      "letter": "P",
+      "zh": {
+        "term": "系统提示词",
+        "refs": [
+          {
+            "anchor": "deepseek-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "prompt",
+        "refs": []
+      }
+    },
+    {
+      "key": "review-lab",
+      "letter": "R",
+      "zh": {
+        "term": "review-lab",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "review-lab",
+        "refs": []
+      }
+    },
+    {
+      "key": "scope",
+      "letter": "S",
+      "zh": {
+        "term": "作用域",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "scope",
+        "refs": []
+      }
+    },
+    {
+      "key": "scope-key",
+      "letter": "S",
+      "zh": {
+        "term": "ScopeKey",
+        "refs": [
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ScopeKey",
+        "refs": []
+      }
+    },
+    {
+      "key": "scoped-layers",
+      "letter": "S",
+      "zh": {
+        "term": "ScopedLayers",
+        "refs": [
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ScopedLayers",
+        "refs": []
+      }
+    },
+    {
+      "key": "serial",
+      "letter": "S",
+      "zh": {
+        "term": "serial",
+        "refs": [
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "serial",
+        "refs": []
+      }
+    },
+    {
+      "key": "session",
+      "letter": "S",
+      "zh": {
+        "term": "Session",
+        "refs": [
+          {
+            "anchor": "deepseek-ch07",
+            "label": "第 7 章"
+          },
+          {
+            "anchor": "deepseek-ch13",
+            "label": "第 13 章"
+          },
+          {
+            "anchor": "deepseek-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "session",
+        "refs": []
+      }
+    },
+    {
+      "key": "step",
+      "letter": "S",
+      "zh": {
+        "term": "Step",
+        "refs": [
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "step",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool",
+      "letter": "T",
+      "zh": {
+        "term": "工具管线",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          },
+          {
+            "anchor": "deepseek-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "tool",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool-execution-pipeline",
+      "letter": "T",
+      "zh": {
+        "term": "ToolExecutionPipeline",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ToolExecutionPipeline",
+        "refs": []
+      }
+    },
+    {
+      "key": "turn",
+      "letter": "T",
+      "zh": {
+        "term": "Turn",
+        "refs": [
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "turn",
+        "refs": []
+      }
+    },
+    {
+      "key": "waterfall",
+      "letter": "W",
+      "zh": {
+        "term": "waterfall",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          },
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "waterfall",
+        "refs": []
+      }
+    }
+  ]
+}

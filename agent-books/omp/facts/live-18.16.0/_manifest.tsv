@@ -1,0 +1,149 @@
+command	exit	bytes	captured_at
+omp --version	0	12	2026-11-03T11:01:06Z
+omp --help	0	16968	2026-11-03T11:01:06Z
+omp acp --help	0	79	2026-11-03T11:01:07Z
+omp agents --help	0	701	2026-11-03T11:01:07Z
+omp auth --help	0	537	2026-11-03T11:01:07Z
+omp auth-broker --help	0	2485	2026-11-03T11:01:08Z
+omp bench --help	0	2832	2026-11-03T11:01:08Z
+omp browser-relay --help	0	764	2026-11-03T11:01:09Z
+omp cleanse --help	0	668	2026-11-03T11:01:09Z
+omp clip --help	0	580	2026-11-03T11:01:09Z
+omp collab --help	0	552	2026-11-03T11:01:10Z
+omp commit --help	0	399	2026-11-03T11:01:10Z
+omp completions --help	0	354	2026-11-03T11:01:10Z
+omp compress --help	0	700	2026-11-03T11:01:11Z
+omp config --help	0	395	2026-11-03T11:01:11Z
+omp dry-balance --help	0	1058	2026-11-03T11:01:11Z
+omp find --help	0	486	2026-11-03T11:01:12Z
+omp gallery --help	0	1056	2026-11-03T11:01:12Z
+omp gc --help	0	1231	2026-11-03T11:01:13Z
+omp git --help	0	358	2026-11-03T11:01:13Z
+omp grievances --help	0	632	2026-11-03T11:01:13Z
+omp if-bench --help	0	1011	2026-11-03T11:01:14Z
+omp images --help	0	676	2026-11-03T11:01:14Z
+omp install --help	0	471	2026-11-03T11:01:15Z
+omp join --help	0	182	2026-11-03T11:01:15Z
+omp login --help	0	309	2026-11-03T11:01:15Z
+omp models --help	0	1005	2026-11-03T11:01:16Z
+omp play --help	0	434	2026-11-03T11:01:16Z
+omp plugin --help	0	809	2026-11-03T11:01:17Z
+omp predict --help	0	120	2026-11-03T11:01:17Z
+omp ps --help	0	1157	2026-11-03T11:01:17Z
+omp read --help	0	455	2026-11-03T11:01:18Z
+omp render --help	0	840	2026-11-03T11:01:18Z
+omp say --help	0	588	2026-11-03T11:01:18Z
+omp search --help	0	297	2026-11-03T11:01:19Z
+omp session --help	0	1166	2026-11-03T11:01:19Z
+omp setup --help	0	274	2026-11-03T11:01:20Z
+omp share --help	0	249	2026-11-03T11:01:20Z
+omp shell --help	0	241	2026-11-03T11:01:20Z
+omp skill --help	0	1552	2026-11-03T11:01:21Z
+omp ssh --help	0	493	2026-11-03T11:01:21Z
+omp stats --help	0	235	2026-11-03T11:01:21Z
+omp stream --help	0	460	2026-11-03T11:01:22Z
+omp tiny-models --help	0	268	2026-11-03T11:01:22Z
+omp token --help	0	900	2026-11-03T11:01:23Z
+omp toks --help	0	352	2026-11-03T11:01:23Z
+omp ttsr --help	0	1624	2026-11-03T11:01:23Z
+omp update --help	0	367	2026-11-03T11:01:24Z
+omp usage --help	0	1814	2026-11-03T11:01:24Z
+omp worktree --help	0	1051	2026-11-03T11:01:24Z
+omp models	0	5077	2026-11-03T11:01:25Z
+omp toks omp/README.md	0	945	2026-11-03T11:01:26Z
+omp completions bash	0	29571	2026-11-03T11:01:26Z
+omp config --help	0	395	2026-11-03T11:01:27Z
+omp config get memory.backend	0	47	2026-11-03T11:19:45Z
+omp config get autolearn.enabled	0	48	2026-11-03T11:19:46Z
+omp config get skills.enabled	0	44	2026-11-03T11:19:46Z
+omp config get magicKeywords.enabled	0	51	2026-11-03T11:19:47Z
+omp config get tools.approvalMode	0	48	2026-11-03T11:19:47Z
+omp config get mcp.enableProjectConfig	0	54	2026-11-03T11:19:47Z
+omp config get mcp.startupTimeoutMs	0	49	2026-11-03T11:19:48Z
+omp config get plan.enabled	0	42	2026-11-03T11:19:48Z
+omp config get modelRoles.smol	1	118	2026-11-03T11:19:49Z
+omp skill list	0	5322	2026-11-03T11:19:49Z
+omp read memory://root	1	223	2026-11-03T11:19:50Z
+omp read skill://hello	1	524	2026-11-03T11:19:56Z
+omp read skill://	1	78	2026-11-03T11:19:57Z
+omp read skill://sepia-review	0	1198	2026-11-03T11:19:57Z
+omp config get modelRoles (role keys only, values redacted)	0	230	2026-11-03T11:20:31Z
+omp config list --scope project	0	132	2026-11-03T11:23:12Z
+omp toks omp/ch02.md	0	944	2026-11-03T11:23:47Z
+omp config path	0	26	2026-11-03T11:23:47Z
+omp models find zzz-none-xyz-9876	0	39	2026-11-03T11:23:47Z
+omp models find flash (provider/model ids redacted)	0	830	2026-11-03T11:26:10Z
+omp --help piped through awk+grep -c (COMMANDS/FLAGS/Available Tools section counts)	0	425	2026-11-03T11:26:29Z
+omp config get modelRoleStorage	0	48	2026-11-03T11:26:53Z
+omp config get prewalk.enabled	0	46	2026-11-03T11:26:54Z
+omp config get advisor.enabled	0	45	2026-11-03T11:26:54Z
+omp config get plan.defaultOnStartup	0	52	2026-11-03T11:26:55Z
+omp config get tools.approval	0	100	2026-11-03T11:26:55Z
+omp config get skills.enableSkillCommands	0	56	2026-11-03T11:26:56Z
+omp config get mcp.notifications	0	48	2026-11-03T11:26:56Z
+omp config get magicKeywords.ultrathink	0	54	2026-11-03T11:29:46Z
+omp config get magicKeywords.workflow	0	52	2026-11-03T11:29:47Z
+omp config get modelRoles.default	1	500	2026-11-03T11:33:05Z
+omp --mode rpc --no-session --model openai/gpt-4o (in a dir with a broken .omp/mcp.json; stopped before MCP discovery)	1	384	2026-11-03T11:34:17Z
+powershell -NoProfile -Command omp-not-a-real-command-zzz (shell 报错文案探针，非 omp 命令)	1	542	2026-11-03T11:36:15Z
+omp anonymize --help	0	485	2026-11-03T11:42:41Z
+omp auth-gateway --help	0	2264	2026-11-03T11:42:41Z
+omp grep --help	0	440	2026-11-03T11:42:42Z
+omp read omp/ch06.md:1-3	0	365	2026-11-03T12:00:00Z
+omp read omp/ch09.md:raw	0	3650	2026-11-03T12:00:01Z
+omp read omp/ch09.md:-3	0	365	2026-11-03T12:00:02Z
+omp read omp/ch09.md:0 (line selector 0 invalid)	1	76	2026-11-03T12:00:03Z
+omp read omp/overhaul (directory listing)	0	900	2026-11-03T12:00:04Z
+omp grep hashline omp/ch09.md	0	1200	2026-11-03T12:00:05Z
+omp grep hashline omp/ch09.md -c	0	300	2026-11-03T12:00:06Z
+omp grep hashline omp/ch09.md -f	0	300	2026-11-03T12:00:07Z
+omp ps --plain	0	150	2026-11-03T12:00:08Z
+omp toks "hello world"	0	900	2026-11-03T12:00:09Z
+omp worktree list --json	0	5	2026-11-03T12:00:10Z
+omp session lease --json (missing id)	1	250	2026-11-03T12:00:11Z
+omp agents unpack --json	0	700	2026-11-03T12:00:12Z
+omp tiny-models list	0	900	2026-11-03T12:00:13Z
+omp --mode rpc --no-session --no-extensions </dev/null	0	131	2026-11-03T12:44:00Z
+omp --mode rpc --no-session --no-extensions + get_state	0	260	2026-11-03T12:44:05Z
+omp acp + initialize	0	534	2026-11-03T12:44:10Z
+omp ps --json	0	200	2026-11-03T12:44:15Z
+omp toks omp/ch28..ch33.md	0	5x900	2026-11-03T12:44:20Z
+omp skill list --json	0	9000	2026-11-03T12:44:25Z
+omp plugin list	0	400	2026-11-03T12:44:30Z
+omp plugin doctor	0	1400	2026-11-03T12:44:35Z
+omp plugin doctor --json	0	1400	2026-11-03T12:44:40Z
+omp config get secrets.enabled	0	20	2026-11-03T12:44:45Z
+omp --trusted-extension (missing value)	2	150	2026-11-03T12:44:50Z
+omp config get lsp.enabled	0	5	2026-11-03T14:25:45Z
+omp config get lsp.lazy	0	5	2026-11-03T14:25:45Z
+omp config get lsp.shared	0	5	2026-11-03T14:25:45Z
+omp config get lsp.diagnosticsOnWrite	0	5	2026-11-03T14:25:45Z
+omp config get lsp.diagnosticsOnEdit	0	6	2026-11-03T14:25:45Z
+omp config get lsp.formatOnWrite	0	6	2026-11-03T14:25:45Z
+omp config get lsp.requestTimeout	0	3	2026-11-03T14:25:45Z
+omp config get browser.enabled	0	5	2026-11-03T14:25:45Z
+omp config get computer.enabled	0	6	2026-11-03T14:25:45Z
+omp config get github.enabled	0	6	2026-11-03T14:25:45Z
+omp config get compaction.enabled	0	5	2026-11-03T14:25:45Z
+omp config get compaction.thresholdPercent	0	3	2026-11-03T14:25:45Z
+omp config get compaction.idleEnabled	0	5	2026-11-03T14:25:45Z
+omp config get compaction.keepRecentTokens	0	6	2026-11-03T14:25:45Z
+omp config get compaction.methodOrder	0	18	2026-11-03T14:25:45Z
+omp config get compaction.midTurnEnabled	0	5	2026-11-03T14:25:45Z
+omp config get compaction.idleThresholdTokens	0	7	2026-11-03T14:25:45Z
+omp config get compaction.idleTimeoutSeconds	0	4	2026-11-03T14:25:45Z
+omp config get branchSummary.enabled	0	6	2026-11-03T14:25:45Z
+omp config get contextPromotion.enabled	0	5	2026-11-03T14:25:45Z
+omp config get contextFiles.extra	0	3	2026-11-03T14:25:45Z
+omp config get enabledProviders	0	3	2026-11-03T14:25:45Z
+omp config get task.batch	0	5	2026-11-03T14:25:45Z
+omp config get task.isolation.enabled	0	6	2026-11-03T14:25:45Z
+omp config get bash.autoBackground.thresholdMs	0	6	2026-11-03T14:25:45Z
+omp config get eval.autoBackground.thresholdMs	0	6	2026-11-03T14:25:45Z
+omp read proc://	0	32	2026-11-03T14:26:28Z
+omp ps logs nope-zzz (unknown daemon)	1	24	2026-11-03T14:26:28Z
+omp config list (full key/value dump; private gateway ids redacted-adjacent, not for quoting)	0	32306	2026-11-03T14:26:38Z
+omp config get tools.maxTimeout	0	2	2026-11-03T14:26:45Z
+omp config get providers.webSearchTimeoutSeconds	0	3	2026-11-03T14:29:59Z
+omp -p 只回复两个字：在线 --no-session	0	18	2026-11-03T23:58:32Z
+omp --version / --help / models (redacted summary: recheck-20261105.txt)	0	393	2026-11-05T03:31:27Z

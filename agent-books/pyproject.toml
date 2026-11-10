@@ -1,0 +1,21 @@
+[project]
+name = "yuyu-book"
+version = "0.3.6"
+description = "Build and check the bilingual offline editions of 御舆：解码 Agent Harness"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "CC BY-NC-SA 4.0" }
+dependencies = [
+    "Markdown==3.11",
+    "Pygments==2.20.0",
+    "playwright==1.61.0",
+    "PyMuPDF==1.28.0",
+    "fonttools==4.66.1",
+    "Pillow==12.3.0",
+    "PyYAML==6.0.3",
+]
+
+# The book itself is Markdown plus scripts, not an installed library: uv sync
+# installs the toolchain above and leaves the repository layout alone.
+[tool.uv]
+package = false

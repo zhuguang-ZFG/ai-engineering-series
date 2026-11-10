@@ -1,0 +1,17 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Bun", "data": {"icon": "bulb"}},
+    {"at": 1.0, "kind": "draw", "text": "React+Ink", "data": {"icon": "target"}},
+    {"at": 2.0, "kind": "draw", "text": "Zod v4", "data": {"icon": "clock"}},
+    {"at": 3.2, "kind": "point", "text": "Commander.js · @anthropic-ai/sdk"},
+    {"at": 4.8, "kind": "draw", "text": "55 工具", "data": {"icon": "target"}},
+    {"at": 6.0, "kind": "highlight", "data": {"target": "draw", "index": 3}}
+  ]
+}

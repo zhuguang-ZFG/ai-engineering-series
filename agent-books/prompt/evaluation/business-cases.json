@@ -1,0 +1,14 @@
+[
+  {"id": "spare", "input": {"capacity": 2, "confirmed": ["Q01"], "waiting": [], "person": "Q02", "action": "register"}, "expected": {"status": "confirmed", "confirmed": ["Q01", "Q02"], "waiting": []}},
+  {"id": "full", "input": {"capacity": 2, "confirmed": ["Q01", "Q02"], "waiting": [], "person": "Q03", "action": "register"}, "expected": {"status": "waiting", "confirmed": ["Q01", "Q02"], "waiting": ["Q03"]}},
+  {"id": "zero", "input": {"capacity": 0, "confirmed": [], "waiting": [], "person": "Q01", "action": "register"}, "expected": {"status": "waiting", "confirmed": [], "waiting": ["Q01"]}},
+  {"id": "duplicate-confirmed", "input": {"capacity": 2, "confirmed": ["Q01", "Q02"], "waiting": [], "person": "Q01", "action": "register"}, "expected": {"status": "duplicate", "confirmed": ["Q01", "Q02"], "waiting": []}},
+  {"id": "duplicate-waiting", "input": {"capacity": 2, "confirmed": ["Q01", "Q02"], "waiting": ["Q03"], "person": "Q03", "action": "register"}, "expected": {"status": "duplicate", "confirmed": ["Q01", "Q02"], "waiting": ["Q03"]}},
+  {"id": "cancel-promote", "input": {"capacity": 2, "confirmed": ["Q01", "Q02"], "waiting": ["Q03", "Q04"], "person": "Q01", "action": "cancel"}, "expected": {"status": "cancelled", "confirmed": ["Q02", "Q03"], "waiting": ["Q04"]}},
+  {"id": "cancel-waiting", "input": {"capacity": 1, "confirmed": ["Q01"], "waiting": ["Q02", "Q03"], "person": "Q02", "action": "cancel"}, "expected": {"status": "cancelled", "confirmed": ["Q01"], "waiting": ["Q03"]}},
+  {"id": "cancel-unknown", "input": {"capacity": 1, "confirmed": ["Q01"], "waiting": [], "person": "Q02", "action": "cancel"}, "expected": {"status": "not_found", "confirmed": ["Q01"], "waiting": []}},
+  {"id": "boolean-capacity", "input": {"capacity": true, "confirmed": [], "waiting": [], "person": "Q01", "action": "register"}, "expected": {"status": "invalid", "confirmed": [], "waiting": []}},
+  {"id": "negative-capacity", "input": {"capacity": -1, "confirmed": [], "waiting": [], "person": "Q01", "action": "register"}, "expected": {"status": "invalid", "confirmed": [], "waiting": []}},
+  {"id": "overbooked-state", "input": {"capacity": 0, "confirmed": ["Q01"], "waiting": [], "person": "Q02", "action": "register"}, "expected": {"status": "invalid", "confirmed": ["Q01"], "waiting": []}},
+  {"id": "blank-person", "input": {"capacity": 1, "confirmed": [], "waiting": [], "person": " ", "action": "register"}, "expected": {"status": "invalid", "confirmed": [], "waiting": []}}
+]

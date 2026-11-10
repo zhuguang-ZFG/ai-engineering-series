@@ -1,0 +1,6114 @@
+{
+  "schema_version": 1,
+  "baseline": "0.3.6",
+  "units": [
+    {
+      "id": "front",
+      "zh": {
+        "no": "",
+        "title": "前言",
+        "anchor": "front"
+      },
+      "en": {
+        "no": "",
+        "title": "Foreword",
+        "anchor": "front"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "前言",
+            "anchor": "front"
+          },
+          "en": {
+            "title": "Foreword",
+            "anchor": "front"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "御舆——从造车到造 Agent",
+            "anchor": "front-御舆-从造车到造-agent"
+          },
+          "en": {
+            "title": "Yù Yú: From Chariot-Making to Agent-Building",
+            "anchor": "front-yù-yú-from-chariot-making-to-agent-building"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "为什么写这本书",
+            "anchor": "front-为什么写这本书"
+          },
+          "en": {
+            "title": "Why This Book",
+            "anchor": "front-why-this-book"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "AI 编程范式的三次浪潮",
+            "anchor": "front-ai-编程范式的三次浪潮"
+          },
+          "en": {
+            "title": "The Three Waves of AI-Assisted Programming",
+            "anchor": "front-the-three-waves-of-ai-assisted-programming"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Agent Harness：一个新架构概念的诞生",
+            "anchor": "front-agent-harness一个新架构概念的诞生"
+          },
+          "en": {
+            "title": "Agent Harness: The Birth of a New Architectural Concept",
+            "anchor": "front-agent-harness-the-birth-of-a-new-architectural-concept"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Claude Code 的诞生与意外公开",
+            "anchor": "front-claude-code-的诞生与意外公开"
+          },
+          "en": {
+            "title": "The Birth of Claude Code and Its Accidental Public Disclosure",
+            "anchor": "front-the-birth-of-claude-code-and-its-accidental-public-disclosure"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "为什么是现在",
+            "anchor": "front-为什么是现在"
+          },
+          "en": {
+            "title": "Why Now",
+            "anchor": "front-why-now"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "Claude Code 为什么值得深入学习",
+            "anchor": "front-claude-code-为什么值得深入学习"
+          },
+          "en": {
+            "title": "Why Claude Code Is Worth Studying in Depth",
+            "anchor": "front-why-claude-code-is-worth-studying-in-depth"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "本书特点",
+            "anchor": "front-本书特点"
+          },
+          "en": {
+            "title": "Features of This Book",
+            "anchor": "front-features-of-this-book"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "读者画像与阅读路径",
+            "anchor": "front-读者画像与阅读路径"
+          },
+          "en": {
+            "title": "Reader Profiles and Reading Paths",
+            "anchor": "front-reader-profiles-and-reading-paths"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "四类核心读者",
+            "anchor": "front-四类核心读者"
+          },
+          "en": {
+            "title": "Four Core Reader Types",
+            "anchor": "front-four-core-reader-types"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阅读路径建议",
+            "anchor": "front-阅读路径建议"
+          },
+          "en": {
+            "title": "Reading Path Recommendations",
+            "anchor": "front-reading-path-recommendations"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "知识地图与章节关联",
+            "anchor": "front-知识地图与章节关联"
+          },
+          "en": {
+            "title": "Knowledge Map and Chapter Connections",
+            "anchor": "front-knowledge-map-and-chapter-connections"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关于本书",
+            "anchor": "front-关于本书"
+          },
+          "en": {
+            "title": "About This Book",
+            "anchor": "front-about-this-book"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "致谢",
+            "anchor": "front-致谢"
+          },
+          "en": {
+            "title": "Acknowledgments",
+            "anchor": "front-acknowledgments"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch01",
+      "zh": {
+        "no": "第 1 章",
+        "title": "智能体编程的新范式",
+        "anchor": "ch01"
+      },
+      "en": {
+        "no": "Chapter 1",
+        "title": "The New Paradigm of Agent Programming",
+        "anchor": "ch01"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第 1 章 智能体编程的新范式",
+            "anchor": "ch01"
+          },
+          "en": {
+            "title": "Chapter 1: The New Paradigm of Agent Programming",
+            "anchor": "ch01"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "学习目标",
+            "anchor": "ch01-学习目标"
+          },
+          "en": {
+            "title": "Learning Objectives",
+            "anchor": "ch01-learning-objectives"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "1.1 从 Chatbot 到 Agent：软件工程的范式转移",
+            "anchor": "ch01-11-从-chatbot-到-agent软件工程的范式转移"
+          },
+          "en": {
+            "title": "1.1 From Chatbot to Agent: A Paradigm Shift in Software Engineering",
+            "anchor": "ch01-11-from-chatbot-to-agent-a-paradigm-shift-in-software-engineering"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "LLM 作为推理引擎 vs. LLM 作为对话伙伴",
+            "anchor": "ch01-llm-作为推理引擎-vs-llm-作为对话伙伴"
+          },
+          "en": {
+            "title": "LLM as a Reasoning Engine vs. LLM as a Conversational Partner",
+            "anchor": "ch01-llm-as-a-reasoning-engine-vs-llm-as-a-conversational-partner"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工具调用（Tool Use）的突破性意义",
+            "anchor": "ch01-工具调用tool-use的突破性意义"
+          },
+          "en": {
+            "title": "The Breakthrough Significance of Tool Use",
+            "anchor": "ch01-the-breakthrough-significance-of-tool-use"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "为什么需要 Agent Harness 而非简单封装",
+            "anchor": "ch01-为什么需要-agent-harness-而非简单封装"
+          },
+          "en": {
+            "title": "Why Agent Harness Instead of Simple Wrappers",
+            "anchor": "ch01-why-agent-harness-instead-of-simple-wrappers"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "1.2 Claude Code 全景架构导览",
+            "anchor": "ch01-12-claude-code-全景架构导览"
+          },
+          "en": {
+            "title": "1.2 Claude Code Panoramic Architecture Overview",
+            "anchor": "ch01-12-claude-code-panoramic-architecture-overview"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "AI 编程工具演进时间线",
+            "anchor": "ch01-ai-编程工具演进时间线"
+          },
+          "en": {
+            "title": "AI Programming Tools Evolution Timeline",
+            "anchor": "ch01-ai-programming-tools-evolution-timeline"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "项目规模：1,884 个 TypeScript 文件，512,664 行代码",
+            "anchor": "ch01-项目规模1884-个-typescript-文件512664-行代码"
+          },
+          "en": {
+            "title": "Project Scale: 1,884 TypeScript Files, 512,664 Lines of Code",
+            "anchor": "ch01-project-scale-1884-typescript-files-512664-lines-of-code"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "技术栈",
+            "anchor": "ch01-技术栈"
+          },
+          "en": {
+            "title": "Technology Stack",
+            "anchor": "ch01-technology-stack"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "核心源码文件及其职责",
+            "anchor": "ch01-核心源码文件及其职责"
+          },
+          "en": {
+            "title": "Core Source Files and Their Responsibilities",
+            "anchor": "ch01-core-source-files-and-their-responsibilities"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "入口点模块",
+            "anchor": "ch01-入口点模块"
+          },
+          "en": {
+            "title": "Entry Point Module",
+            "anchor": "ch01-entry-point-module"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "LLM 查询引擎核心",
+            "anchor": "ch01-llm-查询引擎核心"
+          },
+          "en": {
+            "title": "LLM Query Engine Core",
+            "anchor": "ch01-llm-query-engine-core"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "异步生成器对话主循环",
+            "anchor": "ch01-异步生成器对话主循环"
+          },
+          "en": {
+            "title": "Async Generator Dialog Main Loop",
+            "anchor": "ch01-async-generator-dialog-main-loop"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "工具类型系统基石",
+            "anchor": "ch01-工具类型系统基石"
+          },
+          "en": {
+            "title": "Tool Type System Foundation",
+            "anchor": "ch01-tool-type-system-foundation"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "工具注册中心",
+            "anchor": "ch01-工具注册中心"
+          },
+          "en": {
+            "title": "Tool Registry",
+            "anchor": "ch01-tool-registry"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "1.3 Agent Harness 设计哲学的五大原则",
+            "anchor": "ch01-13-agent-harness-设计哲学的五大原则"
+          },
+          "en": {
+            "title": "1.3 Five Principles of Agent Harness Design Philosophy",
+            "anchor": "ch01-13-five-principles-of-agent-harness-design-philosophy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "原则一：异步流式优先（Async Generator First）",
+            "anchor": "ch01-原则一异步流式优先async-generator-first"
+          },
+          "en": {
+            "title": "Principle One: Async-Streaming-First",
+            "anchor": "ch01-principle-one-async-streaming-first"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "原则二：安全边界内嵌（Security at the Perimeter）",
+            "anchor": "ch01-原则二安全边界内嵌security-at-the-perimeter"
+          },
+          "en": {
+            "title": "Principle Two: Security at the Perimeter",
+            "anchor": "ch01-principle-two-security-at-the-perimeter"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "原则三：缓存感知设计（Cache-Aware Architecture）",
+            "anchor": "ch01-原则三缓存感知设计cache-aware-architecture"
+          },
+          "en": {
+            "title": "Principle Three: Cache-Aware Architecture",
+            "anchor": "ch01-principle-three-cache-aware-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "原则四：渐进式能力扩展（Progressive Capability）",
+            "anchor": "ch01-原则四渐进式能力扩展progressive-capability"
+          },
+          "en": {
+            "title": "Principle Four: Progressive Capability Extension",
+            "anchor": "ch01-principle-four-progressive-capability-extension"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "原则五：不可变状态流转（Immutable State Flow）",
+            "anchor": "ch01-原则五不可变状态流转immutable-state-flow"
+          },
+          "en": {
+            "title": "Principle Five: Immutable State Flow",
+            "anchor": "ch01-principle-five-immutable-state-flow"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习：安装与初次诊断",
+            "anchor": "ch01-实战练习安装与初次诊断"
+          },
+          "en": {
+            "title": "Hands-On Exercise: Installation and Initial Diagnosis",
+            "anchor": "ch01-hands-on-exercise-installation-and-initial-diagnosis"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "步骤一：安装 Claude Code",
+            "anchor": "ch01-步骤一安装-claude-code"
+          },
+          "en": {
+            "title": "Step 1: Install Claude Code",
+            "anchor": "ch01-step-1-install-claude-code"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "步骤二：运行 `/doctor` 诊断命令",
+            "anchor": "ch01-步骤二运行-doctor-诊断命令"
+          },
+          "en": {
+            "title": "Step 2: Run the `/doctor` Diagnostic Command",
+            "anchor": "ch01-step-2-run-the-doctor-diagnostic-command"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "步骤三：观察系统自检流程",
+            "anchor": "ch01-步骤三观察系统自检流程"
+          },
+          "en": {
+            "title": "Step 3: Observe the System Self-Check Process",
+            "anchor": "ch01-step-3-observe-the-system-self-check-process"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "步骤四：观察一次完整的工具调用",
+            "anchor": "ch01-步骤四观察一次完整的工具调用"
+          },
+          "en": {
+            "title": "Step 4: Observe a Complete Tool Call",
+            "anchor": "ch01-step-4-observe-a-complete-tool-call"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "步骤五：思考题",
+            "anchor": "ch01-步骤五思考题"
+          },
+          "en": {
+            "title": "Step 5: Reflection Questions",
+            "anchor": "ch01-step-5-reflection-questions"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点总结",
+            "anchor": "ch01-关键要点总结"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch01-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch02",
+      "zh": {
+        "no": "第 2 章",
+        "title": "对话循环 — Agent 的心跳",
+        "anchor": "ch02"
+      },
+      "en": {
+        "no": "Chapter 2",
+        "title": "The Dialog Loop — The Agent's Heartbeat",
+        "anchor": "ch02"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第2章：对话循环 -- Agent 的心跳",
+            "anchor": "ch02"
+          },
+          "en": {
+            "title": "Chapter 2: The Dialog Loop -- The Agent's Heartbeat",
+            "anchor": "ch02"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "2.1 异步生成器：对话循环的骨骼",
+            "anchor": "ch02-21-异步生成器对话循环的骨骼"
+          },
+          "en": {
+            "title": "2.1 Async Generators: The Skeleton of the Dialog Loop",
+            "anchor": "ch02-21-async-generators-the-skeleton-of-the-dialog-loop"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "函数签名与 AsyncGenerator 模式",
+            "anchor": "ch02-函数签名与-asyncgenerator-模式"
+          },
+          "en": {
+            "title": "Function Signature and the AsyncGenerator Pattern",
+            "anchor": "ch02-function-signature-and-the-asyncgenerator-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "流式事件类型",
+            "anchor": "ch02-流式事件类型"
+          },
+          "en": {
+            "title": "Streaming Event Types",
+            "anchor": "ch02-streaming-event-types"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "消息类型体系",
+            "anchor": "ch02-消息类型体系"
+          },
+          "en": {
+            "title": "Message Type System",
+            "anchor": "ch02-message-type-system"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "2.2 一个完整 Turn 的生命周期",
+            "anchor": "ch02-22-一个完整-turn-的生命周期"
+          },
+          "en": {
+            "title": "2.2 The Lifecycle of a Complete Turn",
+            "anchor": "ch02-22-the-lifecycle-of-a-complete-turn"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阶段一：状态初始化",
+            "anchor": "ch02-阶段一状态初始化"
+          },
+          "en": {
+            "title": "Phase 1: State Initialization",
+            "anchor": "ch02-phase-1-state-initialization"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阶段二：上下文预处理",
+            "anchor": "ch02-阶段二上下文预处理"
+          },
+          "en": {
+            "title": "Phase 2: Context Preprocessing",
+            "anchor": "ch02-phase-2-context-preprocessing"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阶段三：API 调用",
+            "anchor": "ch02-阶段三api-调用"
+          },
+          "en": {
+            "title": "Phase 3: API Call",
+            "anchor": "ch02-phase-3-api-call"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阶段四：工具调用检测与执行",
+            "anchor": "ch02-阶段四工具调用检测与执行"
+          },
+          "en": {
+            "title": "Phase 4: Tool Call Detection and Execution",
+            "anchor": "ch02-phase-4-tool-call-detection-and-execution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "阶段五：工具结果回填与下一轮",
+            "anchor": "ch02-阶段五工具结果回填与下一轮"
+          },
+          "en": {
+            "title": "Phase 5: Tool Result Backfill and Next Round",
+            "anchor": "ch02-phase-5-tool-result-backfill-and-next-round"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "终止条件判断",
+            "anchor": "ch02-终止条件判断"
+          },
+          "en": {
+            "title": "Termination Condition Judgment",
+            "anchor": "ch02-termination-condition-judgment"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "2.3 依赖注入与可测试性",
+            "anchor": "ch02-23-依赖注入与可测试性"
+          },
+          "en": {
+            "title": "2.3 Dependency Injection and Testability",
+            "anchor": "ch02-23-dependency-injection-and-testability"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "QueryDeps 接口",
+            "anchor": "ch02-querydeps-接口"
+          },
+          "en": {
+            "title": "The QueryDeps Interface",
+            "anchor": "ch02-the-querydeps-interface"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "为什么对话循环采用函数式设计",
+            "anchor": "ch02-为什么对话循环采用函数式设计"
+          },
+          "en": {
+            "title": "Why the Dialog Loop Uses a Functional Design",
+            "anchor": "ch02-why-the-dialog-loop-uses-a-functional-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "2.4 状态转换模型",
+            "anchor": "ch02-24-状态转换模型"
+          },
+          "en": {
+            "title": "2.4 State Transition Model",
+            "anchor": "ch02-24-state-transition-model"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "State 类型与 Continue/Terminal",
+            "anchor": "ch02-state-类型与-continueterminal"
+          },
+          "en": {
+            "title": "State Type and Continue/Terminal",
+            "anchor": "ch02-state-type-and-continueterminal"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "状态转换的决策逻辑",
+            "anchor": "ch02-状态转换的决策逻辑"
+          },
+          "en": {
+            "title": "State Transition Decision Logic",
+            "anchor": "ch02-state-transition-decision-logic"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch02-实战练习"
+          },
+          "en": {
+            "title": "Hands-On Exercises",
+            "anchor": "ch02-hands-on-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch02-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch02-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch03",
+      "zh": {
+        "no": "第 3 章",
+        "title": "工具系统 — Agent 的双手",
+        "anchor": "ch03"
+      },
+      "en": {
+        "no": "Chapter 3",
+        "title": "The Tool System — The Agent's Hands",
+        "anchor": "ch03"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第3章：工具系统 -- Agent 的双手",
+            "anchor": "ch03"
+          },
+          "en": {
+            "title": "Chapter 3: The Tool System -- The Agent's Hands",
+            "anchor": "ch03"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "3.1 工具定义协议",
+            "anchor": "ch03-31-工具定义协议"
+          },
+          "en": {
+            "title": "3.1 The Tool Definition Protocol",
+            "anchor": "ch03-31-the-tool-definition-protocol"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "核心类型：Tool、Tools、ToolDef、buildTool",
+            "anchor": "ch03-核心类型tool-tools-tooldef-buildtool"
+          },
+          "en": {
+            "title": "Core Types: Tool, Tools, ToolDef, buildTool",
+            "anchor": "ch03-core-types-tool-tools-tooldef-buildtool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "buildTool 工厂函数",
+            "anchor": "ch03-buildtool-工厂函数"
+          },
+          "en": {
+            "title": "The buildTool Factory Function",
+            "anchor": "ch03-the-buildtool-factory-function"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "3.2 工具注册与动态发现",
+            "anchor": "ch03-32-工具注册与动态发现"
+          },
+          "en": {
+            "title": "3.2 Tool Registration and Dynamic Discovery",
+            "anchor": "ch03-32-tool-registration-and-dynamic-discovery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "getAllBaseTools() 完整工具清单",
+            "anchor": "ch03-getallbasetools-完整工具清单"
+          },
+          "en": {
+            "title": "getAllBaseTools() -- The Complete Tool Inventory",
+            "anchor": "ch03-getallbasetools----the-complete-tool-inventory"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "死代码消除在工具注册中的应用",
+            "anchor": "ch03-死代码消除在工具注册中的应用"
+          },
+          "en": {
+            "title": "Dead Code Elimination in Tool Registration",
+            "anchor": "ch03-dead-code-elimination-in-tool-registration"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "ToolSearchTool 延迟发现机制",
+            "anchor": "ch03-toolsearchtool-延迟发现机制"
+          },
+          "en": {
+            "title": "ToolSearchTool Deferred Discovery Mechanism",
+            "anchor": "ch03-toolsearchtool-deferred-discovery-mechanism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工具过滤管线",
+            "anchor": "ch03-工具过滤管线"
+          },
+          "en": {
+            "title": "Tool Filtering Pipeline",
+            "anchor": "ch03-tool-filtering-pipeline"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "3.3 核心工具深度解析",
+            "anchor": "ch03-33-核心工具深度解析"
+          },
+          "en": {
+            "title": "3.3 Deep Dive into Core Tools",
+            "anchor": "ch03-33-deep-dive-into-core-tools"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "BashTool：命令执行的瑞士军刀",
+            "anchor": "ch03-bashtool命令执行的瑞士军刀"
+          },
+          "en": {
+            "title": "BashTool: The Swiss Army Knife of Command Execution",
+            "anchor": "ch03-bashtool-the-swiss-army-knife-of-command-execution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "文件三件套：FileReadTool、FileEditTool、FileWriteTool",
+            "anchor": "ch03-文件三件套filereadtool-fileedittool-filewritetool"
+          },
+          "en": {
+            "title": "The File Trio: FileReadTool, FileEditTool, FileWriteTool",
+            "anchor": "ch03-the-file-trio-filereadtool-fileedittool-filewritetool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "搜索双雄：GlobTool 与 GrepTool",
+            "anchor": "ch03-搜索双雄globtool-与-greptool"
+          },
+          "en": {
+            "title": "The Search Duo: GlobTool and GrepTool",
+            "anchor": "ch03-the-search-duo-globtool-and-greptool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "AgentTool：子智能体入口",
+            "anchor": "ch03-agenttool子智能体入口"
+          },
+          "en": {
+            "title": "AgentTool: The Sub-Agent Entry Point",
+            "anchor": "ch03-agenttool-the-sub-agent-entry-point"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "3.4 工具编排引擎",
+            "anchor": "ch03-34-工具编排引擎"
+          },
+          "en": {
+            "title": "3.4 The Tool Orchestration Engine",
+            "anchor": "ch03-34-the-tool-orchestration-engine"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "runTools() 函数与并发分区",
+            "anchor": "ch03-runtools-函数与并发分区"
+          },
+          "en": {
+            "title": "The runTools() Function and Concurrency Partitioning",
+            "anchor": "ch03-the-runtools-function-and-concurrency-partitioning"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "StreamingToolExecutor 流式执行",
+            "anchor": "ch03-streamingtoolexecutor-流式执行"
+          },
+          "en": {
+            "title": "StreamingToolExecutor Streaming Execution",
+            "anchor": "ch03-streamingtoolexecutor-streaming-execution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工具状态机在对话主循环中的集成",
+            "anchor": "ch03-工具状态机在对话主循环中的集成"
+          },
+          "en": {
+            "title": "Tool State Machine Integration in the Dialog Main Loop",
+            "anchor": "ch03-tool-state-machine-integration-in-the-dialog-main-loop"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch03-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch03-practical-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch03-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch03-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch04",
+      "zh": {
+        "no": "第 4 章",
+        "title": "权限管线 — Agent 的护栏",
+        "anchor": "ch04"
+      },
+      "en": {
+        "no": "Chapter 4",
+        "title": "The Permission Pipeline — Agent Guardrails",
+        "anchor": "ch04"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第4章：权限管线 -- Agent 的护栏",
+            "anchor": "ch04"
+          },
+          "en": {
+            "title": "Chapter 4: The Permission Pipeline -- Agent Guardrails",
+            "anchor": "ch04"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4.1 权限管线的四个阶段",
+            "anchor": "ch04-41-权限管线的四个阶段"
+          },
+          "en": {
+            "title": "4.1 The Four Stages of the Permission Pipeline",
+            "anchor": "ch04-41-the-four-stages-of-the-permission-pipeline"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.1.1 阶段一：validateInput -- Zod Schema 验证",
+            "anchor": "ch04-411-阶段一validateinput----zod-schema-验证"
+          },
+          "en": {
+            "title": "4.1.1 Stage 1: validateInput -- Zod Schema Validation",
+            "anchor": "ch04-411-stage-1-validateinput----zod-schema-validation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.1.2 阶段二：hasPermissionsToUseTool -- 规则匹配",
+            "anchor": "ch04-412-阶段二haspermissionstousetool----规则匹配"
+          },
+          "en": {
+            "title": "4.1.2 Stage 2: hasPermissionsToUseTool -- Rule Matching",
+            "anchor": "ch04-412-stage-2-haspermissionstousetool----rule-matching"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.1.3 阶段三：checkPermissions -- 上下文评估",
+            "anchor": "ch04-413-阶段三checkpermissions----上下文评估"
+          },
+          "en": {
+            "title": "4.1.3 Stage 3: checkPermissions -- Context Evaluation",
+            "anchor": "ch04-413-stage-3-checkpermissions----context-evaluation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.1.4 阶段四：交互式提示 -- 用户确认",
+            "anchor": "ch04-414-阶段四交互式提示----用户确认"
+          },
+          "en": {
+            "title": "4.1.4 Stage 4: Interactive Prompt -- User Confirmation",
+            "anchor": "ch04-414-stage-4-interactive-prompt----user-confirmation"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4.2 PermissionContext 的设计",
+            "anchor": "ch04-42-permissioncontext-的设计"
+          },
+          "en": {
+            "title": "4.2 PermissionContext Design",
+            "anchor": "ch04-42-permissioncontext-design"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.2.1 ToolPermissionContext 类型结构",
+            "anchor": "ch04-421-toolpermissioncontext-类型结构"
+          },
+          "en": {
+            "title": "4.2.1 ToolPermissionContext Type Structure",
+            "anchor": "ch04-421-toolpermissioncontext-type-structure"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.2.2 PermissionDecision 的来源：hook、user、classifier",
+            "anchor": "ch04-422-permissiondecision-的来源hook-user-classifier"
+          },
+          "en": {
+            "title": "4.2.2 PermissionDecision Sources: hook, user, classifier",
+            "anchor": "ch04-422-permissiondecision-sources-hook-user-classifier"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.2.3 ResolveOnce 模式：原子化的竞争解决",
+            "anchor": "ch04-423-resolveonce-模式原子化的竞争解决"
+          },
+          "en": {
+            "title": "4.2.3 The ResolveOnce Pattern: Atomic Race Resolution",
+            "anchor": "ch04-423-the-resolveonce-pattern-atomic-race-resolution"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4.3 权限模式谱系",
+            "anchor": "ch04-43-权限模式谱系"
+          },
+          "en": {
+            "title": "4.3 The Permission Mode Spectrum",
+            "anchor": "ch04-43-the-permission-mode-spectrum"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.1 default 模式：逐次确认",
+            "anchor": "ch04-431-default-模式逐次确认"
+          },
+          "en": {
+            "title": "4.3.1 default Mode: Per-Use Confirmation",
+            "anchor": "ch04-431-default-mode-per-use-confirmation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.2 plan 模式：只读为主",
+            "anchor": "ch04-432-plan-模式只读为主"
+          },
+          "en": {
+            "title": "4.3.2 plan Mode: Read-Only Focused",
+            "anchor": "ch04-432-plan-mode-read-only-focused"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.3 auto 模式：自动审批（带分类器）",
+            "anchor": "ch04-433-auto-模式自动审批带分类器"
+          },
+          "en": {
+            "title": "4.3.3 auto Mode: Automatic Approval (with Classifier)",
+            "anchor": "ch04-433-auto-mode-automatic-approval-with-classifier"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.4 bypassPermissions 模式：完全跳过",
+            "anchor": "ch04-434-bypasspermissions-模式完全跳过"
+          },
+          "en": {
+            "title": "4.3.4 bypassPermissions Mode: Full Bypass",
+            "anchor": "ch04-434-bypasspermissions-mode-full-bypass"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.5 bubble 模式：子智能体权限冒泡",
+            "anchor": "ch04-435-bubble-模式子智能体权限冒泡"
+          },
+          "en": {
+            "title": "4.3.5 bubble Mode: Sub-Agent Permission Bubbling",
+            "anchor": "ch04-435-bubble-mode-sub-agent-permission-bubbling"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.3.6 对照面：没人答话时，`ask` 去了哪里",
+            "anchor": "ch04-436-对照面没人答话时ask-去了哪里"
+          },
+          "en": {
+            "title": "4.3.6 Cross-Check: Where `ask` Goes When Nobody Answers",
+            "anchor": "ch04-436-cross-check-where-ask-goes-when-nobody-answers"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4.4 BashTool 的权限细节",
+            "anchor": "ch04-44-bashtool-的权限细节"
+          },
+          "en": {
+            "title": "4.4 BashTool Permission Details",
+            "anchor": "ch04-44-bashtool-permission-details"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.4.1 命令分类与通配符匹配",
+            "anchor": "ch04-441-命令分类与通配符匹配"
+          },
+          "en": {
+            "title": "4.4.1 Command Classification and Wildcard Matching",
+            "anchor": "ch04-441-command-classification-and-wildcard-matching"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.4.2 前缀提取规则",
+            "anchor": "ch04-442-前缀提取规则"
+          },
+          "en": {
+            "title": "4.4.2 Prefix Extraction Rules",
+            "anchor": "ch04-442-prefix-extraction-rules"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.4.3 分类器自动审批机制",
+            "anchor": "ch04-443-分类器自动审批机制"
+          },
+          "en": {
+            "title": "4.4.3 Classifier Automatic Approval Mechanism",
+            "anchor": "ch04-443-classifier-automatic-approval-mechanism"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4.5 权限更新与持久化",
+            "anchor": "ch04-45-权限更新与持久化"
+          },
+          "en": {
+            "title": "4.5 Permission Updates and Persistence",
+            "anchor": "ch04-45-permission-updates-and-persistence"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.5.1 PermissionUpdate 模式",
+            "anchor": "ch04-451-permissionupdate-模式"
+          },
+          "en": {
+            "title": "4.5.1 The PermissionUpdate Pattern",
+            "anchor": "ch04-451-the-permissionupdate-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "4.5.2 applyPermissionUpdates 与 persistPermissionUpdates",
+            "anchor": "ch04-452-applypermissionupdates-与-persistpermissionupdates"
+          },
+          "en": {
+            "title": "4.5.2 applyPermissionUpdates and persistPermissionUpdates",
+            "anchor": "ch04-452-applypermissionupdates-and-persistpermissionupdates"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习：配置项目级权限系统",
+            "anchor": "ch04-实战练习配置项目级权限系统"
+          },
+          "en": {
+            "title": "Hands-On Exercises: Configuring a Project-Level Permission System",
+            "anchor": "ch04-hands-on-exercises-configuring-a-project-level-permission-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：配置项目级 .claude/settings.json",
+            "anchor": "ch04-练习-1配置项目级-claudesettingsjson"
+          },
+          "en": {
+            "title": "Exercise 1: Configuring Project-Level .claude/settings.json",
+            "anchor": "ch04-exercise-1-configuring-project-level-claudesettingsjson"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：更精细的通配符控制",
+            "anchor": "ch04-练习-2更精细的通配符控制"
+          },
+          "en": {
+            "title": "Exercise 2: More Fine-Grained Wildcard Control",
+            "anchor": "ch04-exercise-2-more-fine-grained-wildcard-control"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：企业级安全配置模板",
+            "anchor": "ch04-练习-3企业级安全配置模板"
+          },
+          "en": {
+            "title": "Exercise 3: Enterprise Security Configuration Template",
+            "anchor": "ch04-exercise-3-enterprise-security-configuration-template"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：权限决策流的情景分析",
+            "anchor": "ch04-练习-4权限决策流的情景分析"
+          },
+          "en": {
+            "title": "Exercise 4: Scenario Analysis of Permission Decision Flow",
+            "anchor": "ch04-exercise-4-scenario-analysis-of-permission-decision-flow"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点总结",
+            "anchor": "ch04-关键要点总结"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch04-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch05",
+      "zh": {
+        "no": "第 5 章",
+        "title": "设置与配置 — Agent 的基因",
+        "anchor": "ch05"
+      },
+      "en": {
+        "no": "Chapter 5",
+        "title": "Settings and Configuration — Agent DNA",
+        "anchor": "ch05"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第5章：设置与配置 -- Agent 的基因",
+            "anchor": "ch05"
+          },
+          "en": {
+            "title": "Chapter 5: Settings and Configuration -- Agent DNA",
+            "anchor": "ch05"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "5.1 六层配置源的优先级体系",
+            "anchor": "ch05-51-六层配置源的优先级体系"
+          },
+          "en": {
+            "title": "5.1 The Priority System of Six Configuration Sources",
+            "anchor": "ch05-51-the-priority-system-of-six-configuration-sources"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.1.1 配置源定义与顺序",
+            "anchor": "ch05-511-配置源定义与顺序"
+          },
+          "en": {
+            "title": "5.1.1 Configuration Source Definition and Order",
+            "anchor": "ch05-511-configuration-source-definition-and-order"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.1.2 合并规则",
+            "anchor": "ch05-512-合并规则"
+          },
+          "en": {
+            "title": "5.1.2 Merge Rules",
+            "anchor": "ch05-512-merge-rules"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.1.3 配置文件的实际路径",
+            "anchor": "ch05-513-配置文件的实际路径"
+          },
+          "en": {
+            "title": "5.1.3 Actual Paths of Configuration Files",
+            "anchor": "ch05-513-actual-paths-of-configuration-files"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.1.4 策略层的特殊地位",
+            "anchor": "ch05-514-策略层的特殊地位"
+          },
+          "en": {
+            "title": "5.1.4 The Special Status of the Policy Layer",
+            "anchor": "ch05-514-the-special-status-of-the-policy-layer"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.1.5 配置加载的真实项目实践",
+            "anchor": "ch05-515-配置加载的真实项目实践"
+          },
+          "en": {
+            "title": "5.1.5 Real-World Project Practices for Configuration Loading",
+            "anchor": "ch05-515-real-world-project-practices-for-configuration-loading"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "5.2 安全边界设计",
+            "anchor": "ch05-52-安全边界设计"
+          },
+          "en": {
+            "title": "5.2 Security Boundary Design",
+            "anchor": "ch05-52-security-boundary-design"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.2.1 供应链攻击的威胁模型",
+            "anchor": "ch05-521-供应链攻击的威胁模型"
+          },
+          "en": {
+            "title": "5.2.1 Threat Model of Supply Chain Attacks",
+            "anchor": "ch05-521-threat-model-of-supply-chain-attacks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.2.2 shouldAllowManagedHooksOnly",
+            "anchor": "ch05-522-shouldallowmanagedhooksonly"
+          },
+          "en": {
+            "title": "5.2.2 shouldAllowManagedHooksOnly",
+            "anchor": "ch05-522-shouldallowmanagedhooksonly"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.2.3 pluginOnlyPolicy",
+            "anchor": "ch05-523-pluginonlypolicy"
+          },
+          "en": {
+            "title": "5.2.3 pluginOnlyPolicy",
+            "anchor": "ch05-523-pluginonlypolicy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.2.4 projectSettings 的系统性排除",
+            "anchor": "ch05-524-projectsettings-的系统性排除"
+          },
+          "en": {
+            "title": "5.2.4 Systematic Exclusion of projectSettings",
+            "anchor": "ch05-524-systematic-exclusion-of-projectsettings"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "5.3 功能开关系统",
+            "anchor": "ch05-53-功能开关系统"
+          },
+          "en": {
+            "title": "5.3 Feature Flag System",
+            "anchor": "ch05-53-feature-flag-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.3.1 编译时死代码消除",
+            "anchor": "ch05-531-编译时死代码消除"
+          },
+          "en": {
+            "title": "5.3.1 Compile-Time Dead Code Elimination",
+            "anchor": "ch05-531-compile-time-dead-code-elimination"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.3.2 GrowthBook 实验框架",
+            "anchor": "ch05-532-growthbook-实验框架"
+          },
+          "en": {
+            "title": "5.3.2 GrowthBook Experimentation Framework",
+            "anchor": "ch05-532-growthbook-experimentation-framework"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "5.4 状态管理系统",
+            "anchor": "ch05-54-状态管理系统"
+          },
+          "en": {
+            "title": "5.4 State Management System",
+            "anchor": "ch05-54-state-management-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.4.1 Store：极简不可变状态容器",
+            "anchor": "ch05-541-store极简不可变状态容器"
+          },
+          "en": {
+            "title": "5.4.1 Store: A Minimalist Immutable State Container",
+            "anchor": "ch05-541-store-a-minimalist-immutable-state-container"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.4.2 AppState：全局状态的类型定义",
+            "anchor": "ch05-542-appstate全局状态的类型定义"
+          },
+          "en": {
+            "title": "5.4.2 AppState: Global State Type Definition",
+            "anchor": "ch05-542-appstate-global-state-type-definition"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "5.4.3 AppStateProvider：React Context 封装",
+            "anchor": "ch05-543-appstateproviderreact-context-封装"
+          },
+          "en": {
+            "title": "5.4.3 AppStateProvider: React Context Wrapper",
+            "anchor": "ch05-543-appstateprovider-react-context-wrapper"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch05-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch05-practical-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：配置合并预测",
+            "anchor": "ch05-练习-1配置合并预测"
+          },
+          "en": {
+            "title": "Exercise 1: Configuration Merge Prediction",
+            "anchor": "ch05-exercise-1-configuration-merge-prediction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：安全边界分析",
+            "anchor": "ch05-练习-2安全边界分析"
+          },
+          "en": {
+            "title": "Exercise 2: Security Boundary Analysis",
+            "anchor": "ch05-exercise-2-security-boundary-analysis"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：状态订阅优化",
+            "anchor": "ch05-练习-3状态订阅优化"
+          },
+          "en": {
+            "title": "Exercise 3: State Subscription Optimization",
+            "anchor": "ch05-exercise-3-state-subscription-optimization"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：配置策略设计",
+            "anchor": "ch05-练习-4配置策略设计"
+          },
+          "en": {
+            "title": "Exercise 4: Configuration Strategy Design",
+            "anchor": "ch05-exercise-4-configuration-strategy-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch05-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch05-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch06",
+      "zh": {
+        "no": "第 6 章",
+        "title": "记忆系统 — Agent 的长期记忆",
+        "anchor": "ch06"
+      },
+      "en": {
+        "no": "Chapter 6",
+        "title": "The Memory System — Agent Long-Term Memory",
+        "anchor": "ch06"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第6章：记忆系统 -- Agent 的长期记忆",
+            "anchor": "ch06"
+          },
+          "en": {
+            "title": "Chapter 6: The Memory System -- Agent Long-Term Memory",
+            "anchor": "ch06"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "6.1 四种记忆类型的分类学",
+            "anchor": "ch06-61-四种记忆类型的分类学"
+          },
+          "en": {
+            "title": "6.1 Taxonomy of the Four Memory Types",
+            "anchor": "ch06-61-taxonomy-of-the-four-memory-types"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.1.1 闭合类型系统",
+            "anchor": "ch06-611-闭合类型系统"
+          },
+          "en": {
+            "title": "6.1.1 Closed Type System",
+            "anchor": "ch06-611-closed-type-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.1.2 四种类型的详细解析",
+            "anchor": "ch06-612-四种类型的详细解析"
+          },
+          "en": {
+            "title": "6.1.2 Detailed Analysis of the Four Types",
+            "anchor": "ch06-612-detailed-analysis-of-the-four-types"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.1.3 明确排除的信息",
+            "anchor": "ch06-613-明确排除的信息"
+          },
+          "en": {
+            "title": "6.1.3 Explicitly Excluded Information",
+            "anchor": "ch06-613-explicitly-excluded-information"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.1.4 记忆使用的最佳实践",
+            "anchor": "ch06-614-记忆使用的最佳实践"
+          },
+          "en": {
+            "title": "6.1.4 Best Practices for Memory Usage",
+            "anchor": "ch06-614-best-practices-for-memory-usage"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.1.5 记忆管理的常见误区",
+            "anchor": "ch06-615-记忆管理的常见误区"
+          },
+          "en": {
+            "title": "6.1.5 Common Misconceptions in Memory Management",
+            "anchor": "ch06-615-common-misconceptions-in-memory-management"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "6.2 记忆文件格式",
+            "anchor": "ch06-62-记忆文件格式"
+          },
+          "en": {
+            "title": "6.2 Memory File Format",
+            "anchor": "ch06-62-memory-file-format"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.2.1 Frontmatter 格式",
+            "anchor": "ch06-621-frontmatter-格式"
+          },
+          "en": {
+            "title": "6.2.1 Frontmatter Format",
+            "anchor": "ch06-621-frontmatter-format"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.2.2 MEMORY.md 索引文件",
+            "anchor": "ch06-622-memorymd-索引文件"
+          },
+          "en": {
+            "title": "6.2.2 MEMORY.md Index File",
+            "anchor": "ch06-622-memorymd-index-file"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.2.3 记忆文件的目录结构",
+            "anchor": "ch06-623-记忆文件的目录结构"
+          },
+          "en": {
+            "title": "6.2.3 Directory Structure of Memory Files",
+            "anchor": "ch06-623-directory-structure-of-memory-files"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "6.3 自动记忆提取",
+            "anchor": "ch06-63-自动记忆提取"
+          },
+          "en": {
+            "title": "6.3 Automatic Memory Extraction",
+            "anchor": "ch06-63-automatic-memory-extraction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.3.1 基于 Fork 模式的后台提取",
+            "anchor": "ch06-631-基于-fork-模式的后台提取"
+          },
+          "en": {
+            "title": "6.3.1 Background Extraction Based on the Fork Pattern",
+            "anchor": "ch06-631-background-extraction-based-on-the-fork-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.3.2 互斥机制",
+            "anchor": "ch06-632-互斥机制"
+          },
+          "en": {
+            "title": "6.3.2 Mutex Mechanism",
+            "anchor": "ch06-632-mutex-mechanism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.3.3 工具权限白名单",
+            "anchor": "ch06-633-工具权限白名单"
+          },
+          "en": {
+            "title": "6.3.3 Tool Permission Allowlist",
+            "anchor": "ch06-633-tool-permission-allowlist"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.3.4 节流与协调",
+            "anchor": "ch06-634-节流与协调"
+          },
+          "en": {
+            "title": "6.3.4 Throttling and Coordination",
+            "anchor": "ch06-634-throttling-and-coordination"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "6.4 缓存感知的记忆架构",
+            "anchor": "ch06-64-缓存感知的记忆架构"
+          },
+          "en": {
+            "title": "6.4 Cache-Aware Memory Architecture",
+            "anchor": "ch06-64-cache-aware-memory-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.4.1 提示缓存共享",
+            "anchor": "ch06-641-提示缓存共享"
+          },
+          "en": {
+            "title": "6.4.1 Prompt Cache Sharing",
+            "anchor": "ch06-641-prompt-cache-sharing"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.4.2 工具列表的一致性要求",
+            "anchor": "ch06-642-工具列表的一致性要求"
+          },
+          "en": {
+            "title": "6.4.2 Tool List Consistency Requirement",
+            "anchor": "ch06-642-tool-list-consistency-requirement"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.4.3 记忆的生命周期",
+            "anchor": "ch06-643-记忆的生命周期"
+          },
+          "en": {
+            "title": "6.4.3 Memory Lifecycle",
+            "anchor": "ch06-643-memory-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "6.4.4 记忆的读取与验证",
+            "anchor": "ch06-644-记忆的读取与验证"
+          },
+          "en": {
+            "title": "6.4.4 Memory Reading and Validation",
+            "anchor": "ch06-644-memory-reading-and-validation"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch06-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch06-practical-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：记忆类型分类",
+            "anchor": "ch06-练习-1记忆类型分类"
+          },
+          "en": {
+            "title": "Exercise 1: Memory Type Classification",
+            "anchor": "ch06-exercise-1-memory-type-classification"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：Frontmatter 编写",
+            "anchor": "ch06-练习-2frontmatter-编写"
+          },
+          "en": {
+            "title": "Exercise 2: Frontmatter Writing",
+            "anchor": "ch06-exercise-2-frontmatter-writing"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：缓存感知架构分析",
+            "anchor": "ch06-练习-3缓存感知架构分析"
+          },
+          "en": {
+            "title": "Exercise 3: Cache-Aware Architecture Analysis",
+            "anchor": "ch06-exercise-3-cache-aware-architecture-analysis"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：记忆管理策略设计",
+            "anchor": "ch06-练习-4记忆管理策略设计"
+          },
+          "en": {
+            "title": "Exercise 4: Memory Management Strategy Design",
+            "anchor": "ch06-exercise-4-memory-management-strategy-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch06-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch06-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch07",
+      "zh": {
+        "no": "第 7 章",
+        "title": "上下文管理 — Agent 的工作记忆",
+        "anchor": "ch07"
+      },
+      "en": {
+        "no": "Chapter 7",
+        "title": "Context Management — The Agent's Working Memory",
+        "anchor": "ch07"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第7章：上下文管理 -- Agent 的工作记忆",
+            "anchor": "ch07"
+          },
+          "en": {
+            "title": "Chapter 7: Context Management -- The Agent's Working Memory",
+            "anchor": "ch07"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7.1 上下文窗口的约束",
+            "anchor": "ch07-71-上下文窗口的约束"
+          },
+          "en": {
+            "title": "7.1 Context Window Constraints",
+            "anchor": "ch07-71-context-window-constraints"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "有效窗口公式",
+            "anchor": "ch07-有效窗口公式"
+          },
+          "en": {
+            "title": "The Effective Window Formula",
+            "anchor": "ch07-the-effective-window-formula"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "缓冲区与阈值",
+            "anchor": "ch07-缓冲区与阈值"
+          },
+          "en": {
+            "title": "Buffers and Thresholds",
+            "anchor": "ch07-buffers-and-thresholds"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "断路器设计",
+            "anchor": "ch07-断路器设计"
+          },
+          "en": {
+            "title": "Circuit Breaker Design",
+            "anchor": "ch07-circuit-breaker-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7.2 四级压缩策略",
+            "anchor": "ch07-72-四级压缩策略"
+          },
+          "en": {
+            "title": "7.2 The Four-Level Compression Strategy",
+            "anchor": "ch07-72-the-four-level-compression-strategy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Level 1: Snip（裁剪）",
+            "anchor": "ch07-level-1-snip裁剪"
+          },
+          "en": {
+            "title": "Level 1: Snip",
+            "anchor": "ch07-level-1-snip"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Level 2: MicroCompact（微压缩）",
+            "anchor": "ch07-level-2-microcompact微压缩"
+          },
+          "en": {
+            "title": "Level 2: MicroCompact",
+            "anchor": "ch07-level-2-microcompact"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Level 3: Collapse（折叠）",
+            "anchor": "ch07-level-3-collapse折叠"
+          },
+          "en": {
+            "title": "Level 3: Collapse",
+            "anchor": "ch07-level-3-collapse"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Level 4: AutoCompact（自动压缩）",
+            "anchor": "ch07-level-4-autocompact自动压缩"
+          },
+          "en": {
+            "title": "Level 4: AutoCompact",
+            "anchor": "ch07-level-4-autocompact"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7.3 压缩提示工程",
+            "anchor": "ch07-73-压缩提示工程"
+          },
+          "en": {
+            "title": "7.3 Compression Prompt Engineering",
+            "anchor": "ch07-73-compression-prompt-engineering"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "压缩专用提示模板",
+            "anchor": "ch07-压缩专用提示模板"
+          },
+          "en": {
+            "title": "Compression-Specific Prompt Templates",
+            "anchor": "ch07-compression-specific-prompt-templates"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "双阶段输出结构",
+            "anchor": "ch07-双阶段输出结构"
+          },
+          "en": {
+            "title": "Dual-Phase Output Structure",
+            "anchor": "ch07-dual-phase-output-structure"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "CompactBoundaryMessage 压缩边界标记",
+            "anchor": "ch07-compactboundarymessage-压缩边界标记"
+          },
+          "en": {
+            "title": "CompactBoundaryMessage",
+            "anchor": "ch07-compactboundarymessage"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7.4 令牌预算追踪",
+            "anchor": "ch07-74-令牌预算追踪"
+          },
+          "en": {
+            "title": "7.4 Token Budget Tracking",
+            "anchor": "ch07-74-token-budget-tracking"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "多级警告状态",
+            "anchor": "ch07-多级警告状态"
+          },
+          "en": {
+            "title": "Multi-Level Warning States",
+            "anchor": "ch07-multi-level-warning-states"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "压缩后的令牌预算",
+            "anchor": "ch07-压缩后的令牌预算"
+          },
+          "en": {
+            "title": "Post-Compression Token Budget",
+            "anchor": "ch07-post-compression-token-budget"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "真实令牌估算",
+            "anchor": "ch07-真实令牌估算"
+          },
+          "en": {
+            "title": "True Token Estimation",
+            "anchor": "ch07-true-token-estimation"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7.5 长对话的上下文管理策略",
+            "anchor": "ch07-75-长对话的上下文管理策略"
+          },
+          "en": {
+            "title": "7.5 Context Management Strategies for Long Conversations",
+            "anchor": "ch07-75-context-management-strategies-for-long-conversations"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "策略一：主动压缩优于被动压缩",
+            "anchor": "ch07-策略一主动压缩优于被动压缩"
+          },
+          "en": {
+            "title": "Strategy 1: Proactive Compression Over Reactive Compression",
+            "anchor": "ch07-strategy-1-proactive-compression-over-reactive-compression"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "策略二：分阶段工作",
+            "anchor": "ch07-策略二分阶段工作"
+          },
+          "en": {
+            "title": "Strategy 2: Phased Work",
+            "anchor": "ch07-strategy-2-phased-work"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "策略三：用记忆系统补充上下文",
+            "anchor": "ch07-策略三用记忆系统补充上下文"
+          },
+          "en": {
+            "title": "Strategy 3: Use the Memory System to Supplement Context",
+            "anchor": "ch07-strategy-3-use-the-memory-system-to-supplement-context"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "多文件项目的上下文策略",
+            "anchor": "ch07-多文件项目的上下文策略"
+          },
+          "en": {
+            "title": "Context Strategies for Multi-File Projects",
+            "anchor": "ch07-context-strategies-for-multi-file-projects"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "对照面：把压缩做成手上的刀",
+            "anchor": "ch07-对照面把压缩做成手上的刀"
+          },
+          "en": {
+            "title": "Cross-check: compression as hand tools",
+            "anchor": "ch07-cross-check-compression-as-hand-tools"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch07-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch07-practical-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch07-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch07-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch08",
+      "zh": {
+        "no": "第 8 章",
+        "title": "钩子系统 — Agent 的生命周期扩展点",
+        "anchor": "ch08"
+      },
+      "en": {
+        "no": "Chapter 8",
+        "title": "The Hook System — Agent's Lifecycle Extension Points",
+        "anchor": "ch08"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第8章：钩子系统 -- Agent 的生命周期扩展点",
+            "anchor": "ch08"
+          },
+          "en": {
+            "title": "Chapter 8: The Hook System -- Agent's Lifecycle Extension Points",
+            "anchor": "ch08"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8.1 钩子类型与执行模型",
+            "anchor": "ch08-81-钩子类型与执行模型"
+          },
+          "en": {
+            "title": "8.1 Hook Types and Execution Model",
+            "anchor": "ch08-81-hook-types-and-execution-model"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "五种钩子类型",
+            "anchor": "ch08-五种钩子类型"
+          },
+          "en": {
+            "title": "Five Hook Types",
+            "anchor": "ch08-five-hook-types"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "同步 vs 异步钩子",
+            "anchor": "ch08-同步-vs-异步钩子"
+          },
+          "en": {
+            "title": "Sync vs Async Hooks",
+            "anchor": "ch08-sync-vs-async-hooks"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8.2 核心生命周期事件",
+            "anchor": "ch08-82-核心生命周期事件"
+          },
+          "en": {
+            "title": "8.2 Core Lifecycle Events",
+            "anchor": "ch08-82-core-lifecycle-events"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工具调用生命周期",
+            "anchor": "ch08-工具调用生命周期"
+          },
+          "en": {
+            "title": "Tool Call Lifecycle",
+            "anchor": "ch08-tool-call-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "用户交互生命周期",
+            "anchor": "ch08-用户交互生命周期"
+          },
+          "en": {
+            "title": "User Interaction Lifecycle",
+            "anchor": "ch08-user-interaction-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "会话生命周期",
+            "anchor": "ch08-会话生命周期"
+          },
+          "en": {
+            "title": "Session Lifecycle",
+            "anchor": "ch08-session-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "子代理生命周期",
+            "anchor": "ch08-子代理生命周期"
+          },
+          "en": {
+            "title": "Sub-agent Lifecycle",
+            "anchor": "ch08-sub-agent-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "压缩生命周期",
+            "anchor": "ch08-压缩生命周期"
+          },
+          "en": {
+            "title": "Compression Lifecycle",
+            "anchor": "ch08-compression-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "权限与安全事件",
+            "anchor": "ch08-权限与安全事件"
+          },
+          "en": {
+            "title": "Permission and Security Events",
+            "anchor": "ch08-permission-and-security-events"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "其他事件",
+            "anchor": "ch08-其他事件"
+          },
+          "en": {
+            "title": "Other Events",
+            "anchor": "ch08-other-events"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8.3 钩子响应协议",
+            "anchor": "ch08-83-钩子响应协议"
+          },
+          "en": {
+            "title": "8.3 Hook Response Protocol",
+            "anchor": "ch08-83-hook-response-protocol"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "响应协议全景图",
+            "anchor": "ch08-响应协议全景图"
+          },
+          "en": {
+            "title": "Response Protocol Overview",
+            "anchor": "ch08-response-protocol-overview"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "顶层决策字段",
+            "anchor": "ch08-顶层决策字段"
+          },
+          "en": {
+            "title": "Top-level Decision Fields",
+            "anchor": "ch08-top-level-decision-fields"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "hookSpecificOutput 事件特定输出",
+            "anchor": "ch08-hookspecificoutput-事件特定输出"
+          },
+          "en": {
+            "title": "hookSpecificOutput Event-specific Output",
+            "anchor": "ch08-hookspecificoutput-event-specific-output"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "additionalContext：注入额外上下文",
+            "anchor": "ch08-additionalcontext注入额外上下文"
+          },
+          "en": {
+            "title": "additionalContext: Injecting Additional Context",
+            "anchor": "ch08-additionalcontext-injecting-additional-context"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "continue 字段",
+            "anchor": "ch08-continue-字段"
+          },
+          "en": {
+            "title": "continue Field",
+            "anchor": "ch08-continue-field"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "退出码与 JSON 响应的协作关系",
+            "anchor": "ch08-退出码与-json-响应的协作关系"
+          },
+          "en": {
+            "title": "Collaboration Between Exit Codes and JSON Response",
+            "anchor": "ch08-collaboration-between-exit-codes-and-json-response"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8.4 钩子配置与安全",
+            "anchor": "ch08-84-钩子配置与安全"
+          },
+          "en": {
+            "title": "8.4 Hook Configuration and Security",
+            "anchor": "ch08-84-hook-configuration-and-security"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "配置验证",
+            "anchor": "ch08-配置验证"
+          },
+          "en": {
+            "title": "Configuration Validation",
+            "anchor": "ch08-configuration-validation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "钩子来源与优先级",
+            "anchor": "ch08-钩子来源与优先级"
+          },
+          "en": {
+            "title": "Hook Sources and Priority",
+            "anchor": "ch08-hook-sources-and-priority"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "优先级冲突解决案例分析",
+            "anchor": "ch08-优先级冲突解决案例分析"
+          },
+          "en": {
+            "title": "Priority Conflict Resolution Case Studies",
+            "anchor": "ch08-priority-conflict-resolution-case-studies"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "紧急禁用开关",
+            "anchor": "ch08-紧急禁用开关"
+          },
+          "en": {
+            "title": "Emergency Disable Switches",
+            "anchor": "ch08-emergency-disable-switches"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "会话钩子的特殊设计",
+            "anchor": "ch08-会话钩子的特殊设计"
+          },
+          "en": {
+            "title": "Session Hook Special Design",
+            "anchor": "ch08-session-hook-special-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8.5 钩子最佳实践与反模式",
+            "anchor": "ch08-85-钩子最佳实践与反模式"
+          },
+          "en": {
+            "title": "8.5 Hook Best Practices and Anti-patterns",
+            "anchor": "ch08-85-hook-best-practices-and-anti-patterns"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "最佳实践清单",
+            "anchor": "ch08-最佳实践清单"
+          },
+          "en": {
+            "title": "Best Practices Checklist",
+            "anchor": "ch08-best-practices-checklist"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "反模式警告",
+            "anchor": "ch08-反模式警告"
+          },
+          "en": {
+            "title": "Anti-pattern Warnings",
+            "anchor": "ch08-anti-pattern-warnings"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "完整实战案例：企业级安全审计系统",
+            "anchor": "ch08-完整实战案例企业级安全审计系统"
+          },
+          "en": {
+            "title": "Complete Practical Case: Enterprise-level Security Audit System",
+            "anchor": "ch08-complete-practical-case-enterprise-level-security-audit-system"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch08-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch08-practical-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch08-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch08-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch09",
+      "zh": {
+        "no": "第 9 章",
+        "title": "子智能体与 Fork 模式",
+        "anchor": "ch09"
+      },
+      "en": {
+        "no": "Chapter 9",
+        "title": "Sub-Agents and the Fork Pattern",
+        "anchor": "ch09"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第9章：子智能体与 Fork 模式",
+            "anchor": "ch09"
+          },
+          "en": {
+            "title": "Chapter 9: Sub-Agents and the Fork Pattern",
+            "anchor": "ch09"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.1 AgentTool 架构",
+            "anchor": "ch09-91-agenttool-架构"
+          },
+          "en": {
+            "title": "9.1 AgentTool Architecture",
+            "anchor": "ch09-91-agenttool-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "目录结构与模块职责",
+            "anchor": "ch09-目录结构与模块职责"
+          },
+          "en": {
+            "title": "Directory Structure and Module Responsibilities",
+            "anchor": "ch09-directory-structure-and-module-responsibilities"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "BaseAgentDefinition 类型定义",
+            "anchor": "ch09-baseagentdefinition-类型定义"
+          },
+          "en": {
+            "title": "BaseAgentDefinition Type Definition",
+            "anchor": "ch09-baseagentdefinition-type-definition"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "三种智能体来源",
+            "anchor": "ch09-三种智能体来源"
+          },
+          "en": {
+            "title": "Three Agent Sources",
+            "anchor": "ch09-three-agent-sources"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.2 内置智能体",
+            "anchor": "ch09-92-内置智能体"
+          },
+          "en": {
+            "title": "9.2 Built-in Agents",
+            "anchor": "ch09-92-built-in-agents"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Explore Agent：只读代码探索专家",
+            "anchor": "ch09-explore-agent只读代码探索专家"
+          },
+          "en": {
+            "title": "Explore Agent: Read-Only Code Exploration Expert",
+            "anchor": "ch09-explore-agent-read-only-code-exploration-expert"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Plan Agent：结构化规划智能体",
+            "anchor": "ch09-plan-agent结构化规划智能体"
+          },
+          "en": {
+            "title": "Plan Agent: Structured Planning Agent",
+            "anchor": "ch09-plan-agent-structured-planning-agent"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "General Purpose Agent：通用智能体",
+            "anchor": "ch09-general-purpose-agent通用智能体"
+          },
+          "en": {
+            "title": "General Purpose Agent: General Agent",
+            "anchor": "ch09-general-purpose-agent-general-agent"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Verification Agent：受门控的验证设计",
+            "anchor": "ch09-verification-agent受门控的验证设计"
+          },
+          "en": {
+            "title": "Verification Agent: A Gated Verification Design",
+            "anchor": "ch09-verification-agent-a-gated-verification-design"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "对抗性设计的深层哲学",
+            "anchor": "ch09-对抗性设计的深层哲学"
+          },
+          "en": {
+            "title": "The Deep Philosophy of Adversarial Design",
+            "anchor": "ch09-the-deep-philosophy-of-adversarial-design"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.3 Fork 模式：缓存安全的并行执行",
+            "anchor": "ch09-93-fork-模式缓存安全的并行执行"
+          },
+          "en": {
+            "title": "9.3 Fork Pattern: Cache-Safe Parallel Execution",
+            "anchor": "ch09-93-fork-pattern-cache-safe-parallel-execution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Fork 模式的直觉理解",
+            "anchor": "ch09-fork-模式的直觉理解"
+          },
+          "en": {
+            "title": "Intuitive Understanding of the Fork Pattern",
+            "anchor": "ch09-intuitive-understanding-of-the-fork-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "forkSubagent 模块的核心设计",
+            "anchor": "ch09-forksubagent-模块的核心设计"
+          },
+          "en": {
+            "title": "Core Design of the forkSubagent Module",
+            "anchor": "ch09-core-design-of-the-forksubagent-module"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "继承父对话的完整上下文和系统提示",
+            "anchor": "ch09-继承父对话的完整上下文和系统提示"
+          },
+          "en": {
+            "title": "Inheriting the Full Context and System Prompt from the Parent Conversation",
+            "anchor": "ch09-inheriting-the-full-context-and-system-prompt-from-the-parent-conversation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "CacheSafeParams 五个维度",
+            "anchor": "ch09-cachesafeparams-五个维度"
+          },
+          "en": {
+            "title": "CacheSafeParams: Five Dimensions",
+            "anchor": "ch09-cachesafeparams-five-dimensions"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "buildForkedMessages 的消息构建逻辑",
+            "anchor": "ch09-buildforkedmessages-的消息构建逻辑"
+          },
+          "en": {
+            "title": "How buildForkedMessages Builds Messages",
+            "anchor": "ch09-how-buildforkedmessages-builds-messages"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "递归 Fork 防护",
+            "anchor": "ch09-递归-fork-防护"
+          },
+          "en": {
+            "title": "Recursive Fork Protection",
+            "anchor": "ch09-recursive-fork-protection"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.4 自定义智能体",
+            "anchor": "ch09-94-自定义智能体"
+          },
+          "en": {
+            "title": "9.4 Custom Agents",
+            "anchor": "ch09-94-custom-agents"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": ".claude/agents/ 目录中的定义文件",
+            "anchor": "ch09-claudeagents-目录中的定义文件"
+          },
+          "en": {
+            "title": "Definition Files in the .claude/agents/ Directory",
+            "anchor": "ch09-definition-files-in-the-claudeagents-directory"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Markdown frontmatter 格式",
+            "anchor": "ch09-markdown-frontmatter-格式"
+          },
+          "en": {
+            "title": "Markdown Frontmatter Format",
+            "anchor": "ch09-markdown-frontmatter-format"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "更多自定义 Agent 案例",
+            "anchor": "ch09-更多自定义-agent-案例"
+          },
+          "en": {
+            "title": "More Custom Agent Examples",
+            "anchor": "ch09-more-custom-agent-examples"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.5 智能体工具隔离",
+            "anchor": "ch09-95-智能体工具隔离"
+          },
+          "en": {
+            "title": "9.5 Agent Tool Isolation",
+            "anchor": "ch09-95-agent-tool-isolation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "全局禁止列表",
+            "anchor": "ch09-全局禁止列表"
+          },
+          "en": {
+            "title": "Global Disallow List",
+            "anchor": "ch09-global-disallow-list"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "异步智能体白名单",
+            "anchor": "ch09-异步智能体白名单"
+          },
+          "en": {
+            "title": "Async Agent Whitelist",
+            "anchor": "ch09-async-agent-whitelist"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "filterToolsForAgent",
+            "anchor": "ch09-filtertoolsforagent"
+          },
+          "en": {
+            "title": "filterToolsForAgent",
+            "anchor": "ch09-filtertoolsforagent"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9.6 子智能体生命周期管理",
+            "anchor": "ch09-96-子智能体生命周期管理"
+          },
+          "en": {
+            "title": "9.6 Sub-Agent Lifecycle Management",
+            "anchor": "ch09-96-sub-agent-lifecycle-management"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "生命周期状态转换",
+            "anchor": "ch09-生命周期状态转换"
+          },
+          "en": {
+            "title": "Lifecycle State Transitions",
+            "anchor": "ch09-lifecycle-state-transitions"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "上下文构建阶段",
+            "anchor": "ch09-上下文构建阶段"
+          },
+          "en": {
+            "title": "Context Construction Phase",
+            "anchor": "ch09-context-construction-phase"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "资源清理阶段",
+            "anchor": "ch09-资源清理阶段"
+          },
+          "en": {
+            "title": "Resource Cleanup Phase",
+            "anchor": "ch09-resource-cleanup-phase"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch09-实战练习"
+          },
+          "en": {
+            "title": "Hands-On Exercises",
+            "anchor": "ch09-hands-on-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch09-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch09-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch10",
+      "zh": {
+        "no": "第 10 章",
+        "title": "协调器模式 — 多智能体企业级编排",
+        "anchor": "ch10"
+      },
+      "en": {
+        "no": "Chapter 10",
+        "title": "The Coordinator Pattern — Multi-Agent Enterprise Orchestration",
+        "anchor": "ch10"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第10章：协调器模式 -- 多智能体企业级编排",
+            "anchor": "ch10"
+          },
+          "en": {
+            "title": "Chapter 10: The Coordinator Pattern -- Multi-Agent Enterprise Orchestration",
+            "anchor": "ch10"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.1 协调器架构",
+            "anchor": "ch10-101-协调器架构"
+          },
+          "en": {
+            "title": "10.1 Coordinator Architecture",
+            "anchor": "ch10-101-coordinator-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "coordinatorMode 核心模块",
+            "anchor": "ch10-coordinatormode-核心模块"
+          },
+          "en": {
+            "title": "The coordinatorMode Core Module",
+            "anchor": "ch10-the-coordinatormode-core-module"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "激活条件与互斥关系",
+            "anchor": "ch10-激活条件与互斥关系"
+          },
+          "en": {
+            "title": "Activation Conditions and Mutual Exclusion",
+            "anchor": "ch10-activation-conditions-and-mutual-exclusion"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "会话恢复的模式匹配",
+            "anchor": "ch10-会话恢复的模式匹配"
+          },
+          "en": {
+            "title": "Pattern Matching for Session Recovery",
+            "anchor": "ch10-pattern-matching-for-session-recovery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Coordinator 的系统提示",
+            "anchor": "ch10-coordinator-的系统提示"
+          },
+          "en": {
+            "title": "The Coordinator's System Prompt",
+            "anchor": "ch10-the-coordinator-s-system-prompt"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.2 工作器工具分配",
+            "anchor": "ch10-102-工作器工具分配"
+          },
+          "en": {
+            "title": "10.2 Worker Tool Allocation",
+            "anchor": "ch10-102-worker-tool-allocation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "INTERNAL_WORKER_TOOLS",
+            "anchor": "ch10-internalworkertools"
+          },
+          "en": {
+            "title": "INTERNAL_WORKER_TOOLS",
+            "anchor": "ch10-internalworkertools"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Simple 模式和完整模式的工具集",
+            "anchor": "ch10-simple-模式和完整模式的工具集"
+          },
+          "en": {
+            "title": "Simple Mode and Full Mode Tool Sets",
+            "anchor": "ch10-simple-mode-and-full-mode-tool-sets"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工具池的独立组装",
+            "anchor": "ch10-工具池的独立组装"
+          },
+          "en": {
+            "title": "Independent Assembly of the Tool Pool",
+            "anchor": "ch10-independent-assembly-of-the-tool-pool"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.3 团队管理",
+            "anchor": "ch10-103-团队管理"
+          },
+          "en": {
+            "title": "10.3 Team Management",
+            "anchor": "ch10-103-team-management"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "TeamCreateTool / TeamDeleteTool",
+            "anchor": "ch10-teamcreatetool-teamdeletetool"
+          },
+          "en": {
+            "title": "TeamCreateTool / TeamDeleteTool",
+            "anchor": "ch10-teamcreatetool-teamdeletetool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "团队删除的安全保障",
+            "anchor": "ch10-团队删除的安全保障"
+          },
+          "en": {
+            "title": "Safety Guarantees for Team Deletion",
+            "anchor": "ch10-safety-guarantees-for-team-deletion"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "SendMessageTool 消息传递",
+            "anchor": "ch10-sendmessagetool-消息传递"
+          },
+          "en": {
+            "title": "SendMessageTool Message Passing",
+            "anchor": "ch10-sendmessagetool-message-passing"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.4 协作空间",
+            "anchor": "ch10-104-协作空间"
+          },
+          "en": {
+            "title": "10.4 Collaboration Space",
+            "anchor": "ch10-104-collaboration-space"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Scratchpad 协作空间设计",
+            "anchor": "ch10-scratchpad-协作空间设计"
+          },
+          "en": {
+            "title": "Scratchpad Collaboration Space Design",
+            "anchor": "ch10-scratchpad-collaboration-space-design"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Scratchpad 的典型使用模式",
+            "anchor": "ch10-scratchpad-的典型使用模式"
+          },
+          "en": {
+            "title": "Typical Scratchpad Usage Patterns",
+            "anchor": "ch10-typical-scratchpad-usage-patterns"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "协调者的任务工作流",
+            "anchor": "ch10-协调者的任务工作流"
+          },
+          "en": {
+            "title": "The Coordinator's Task Workflow",
+            "anchor": "ch10-the-coordinator-s-task-workflow"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "并发策略",
+            "anchor": "ch10-并发策略"
+          },
+          "en": {
+            "title": "Concurrency Strategy",
+            "anchor": "ch10-concurrency-strategy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "任务通知协议",
+            "anchor": "ch10-任务通知协议"
+          },
+          "en": {
+            "title": "Task Notification Protocol",
+            "anchor": "ch10-task-notification-protocol"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.5 完整案例：从需求到交付",
+            "anchor": "ch10-105-完整案例从需求到交付"
+          },
+          "en": {
+            "title": "10.5 Complete Case Study: From Requirements to Delivery",
+            "anchor": "ch10-105-complete-case-study-from-requirements-to-delivery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景：为 Web 应用添加用户通知系统",
+            "anchor": "ch10-场景为-web-应用添加用户通知系统"
+          },
+          "en": {
+            "title": "Scenario: Adding a User Notification System to a Web Application",
+            "anchor": "ch10-scenario-adding-a-user-notification-system-to-a-web-application"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Phase 1: Research（研究阶段）",
+            "anchor": "ch10-phase-1-research研究阶段"
+          },
+          "en": {
+            "title": "Phase 1: Research",
+            "anchor": "ch10-phase-1-research"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Phase 2: Synthesis（综合阶段）",
+            "anchor": "ch10-phase-2-synthesis综合阶段"
+          },
+          "en": {
+            "title": "Phase 2: Synthesis",
+            "anchor": "ch10-phase-2-synthesis"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Phase 3: Implementation（实施阶段）",
+            "anchor": "ch10-phase-3-implementation实施阶段"
+          },
+          "en": {
+            "title": "Phase 3: Implementation",
+            "anchor": "ch10-phase-3-implementation"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Phase 4: Verification（验证阶段）",
+            "anchor": "ch10-phase-4-verification验证阶段"
+          },
+          "en": {
+            "title": "Phase 4: Verification",
+            "anchor": "ch10-phase-4-verification"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.6 故障恢复与部分完成",
+            "anchor": "ch10-106-故障恢复与部分完成"
+          },
+          "en": {
+            "title": "10.6 Fault Recovery and Partial Completion",
+            "anchor": "ch10-106-fault-recovery-and-partial-completion"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "工作者失败的处理策略",
+            "anchor": "ch10-工作者失败的处理策略"
+          },
+          "en": {
+            "title": "Handling Strategies for Worker Failures",
+            "anchor": "ch10-handling-strategies-for-worker-failures"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "部分完成的处理",
+            "anchor": "ch10-部分完成的处理"
+          },
+          "en": {
+            "title": "Handling Partial Completion",
+            "anchor": "ch10-handling-partial-completion"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10.7 Coordinator 模式与 Fork 模式对比",
+            "anchor": "ch10-107-coordinator-模式与-fork-模式对比"
+          },
+          "en": {
+            "title": "10.7 Coordinator Pattern vs. Fork Pattern Comparison",
+            "anchor": "ch10-107-coordinator-pattern-vs-fork-pattern-comparison"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch10-实战练习"
+          },
+          "en": {
+            "title": "Hands-On Exercises",
+            "anchor": "ch10-hands-on-exercises"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch10-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch10-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch11",
+      "zh": {
+        "no": "第 11 章",
+        "title": "技能系统与插件架构",
+        "anchor": "ch11"
+      },
+      "en": {
+        "no": "Chapter 11",
+        "title": "The Skill System and Plugin Architecture",
+        "anchor": "ch11"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第11章 技能系统与插件架构",
+            "anchor": "ch11"
+          },
+          "en": {
+            "title": "Chapter 11: The Skill System and Plugin Architecture",
+            "anchor": "ch11"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11.1 技能系统架构",
+            "anchor": "ch11-111-技能系统架构"
+          },
+          "en": {
+            "title": "11.1 Skill System Architecture",
+            "anchor": "ch11-111-skill-system-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.1.1 内置技能清单",
+            "anchor": "ch11-1111-内置技能清单"
+          },
+          "en": {
+            "title": "11.1.1 Built-in Skill Inventory",
+            "anchor": "ch11-1111-built-in-skill-inventory"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.1.2 内置技能注册机制",
+            "anchor": "ch11-1112-内置技能注册机制"
+          },
+          "en": {
+            "title": "11.1.2 Built-in Skill Registration Mechanism",
+            "anchor": "ch11-1112-built-in-skill-registration-mechanism"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "文件提取的安全设计",
+            "anchor": "ch11-文件提取的安全设计"
+          },
+          "en": {
+            "title": "Security Design of File Extraction",
+            "anchor": "ch11-security-design-of-file-extraction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.1.3 技能加载引擎",
+            "anchor": "ch11-1113-技能加载引擎"
+          },
+          "en": {
+            "title": "11.1.3 Skill Loading Engine",
+            "anchor": "ch11-1113-skill-loading-engine"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11.2 技能定义格式",
+            "anchor": "ch11-112-技能定义格式"
+          },
+          "en": {
+            "title": "11.2 Skill Definition Format",
+            "anchor": "ch11-112-skill-definition-format"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.2.1 Markdown Frontmatter 配置",
+            "anchor": "ch11-1121-markdown-frontmatter-配置"
+          },
+          "en": {
+            "title": "11.2.1 Markdown Frontmatter Configuration",
+            "anchor": "ch11-1121-markdown-frontmatter-configuration"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "字段详解与最佳实践",
+            "anchor": "ch11-字段详解与最佳实践"
+          },
+          "en": {
+            "title": "Field Details and Best Practices",
+            "anchor": "ch11-field-details-and-best-practices"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.2.2 参数替换机制",
+            "anchor": "ch11-1122-参数替换机制"
+          },
+          "en": {
+            "title": "11.2.2 Parameter Substitution Mechanism",
+            "anchor": "ch11-1122-parameter-substitution-mechanism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.2.3 LoadedFrom 类型",
+            "anchor": "ch11-1123-loadedfrom-类型"
+          },
+          "en": {
+            "title": "11.2.3 LoadedFrom Types",
+            "anchor": "ch11-1123-loadedfrom-types"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11.3 技能加载路径",
+            "anchor": "ch11-113-技能加载路径"
+          },
+          "en": {
+            "title": "11.3 Skill Loading Paths",
+            "anchor": "ch11-113-skill-loading-paths"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.3.1 分层加载策略",
+            "anchor": "ch11-1131-分层加载策略"
+          },
+          "en": {
+            "title": "11.3.1 Tiered Loading Strategy",
+            "anchor": "ch11-1131-tiered-loading-strategy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.3.2 动态技能发现",
+            "anchor": "ch11-1132-动态技能发现"
+          },
+          "en": {
+            "title": "11.3.2 Dynamic Skill Discovery",
+            "anchor": "ch11-1132-dynamic-skill-discovery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.3.3 条件技能",
+            "anchor": "ch11-1133-条件技能"
+          },
+          "en": {
+            "title": "11.3.3 Conditional Skills",
+            "anchor": "ch11-1133-conditional-skills"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11.4 插件系统",
+            "anchor": "ch11-114-插件系统"
+          },
+          "en": {
+            "title": "11.4 Plugin System",
+            "anchor": "ch11-114-plugin-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.4.1 插件目录结构",
+            "anchor": "ch11-1141-插件目录结构"
+          },
+          "en": {
+            "title": "11.4.1 Plugin Directory Structure",
+            "anchor": "ch11-1141-plugin-directory-structure"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.4.2 缓存优先加载策略",
+            "anchor": "ch11-1142-缓存优先加载策略"
+          },
+          "en": {
+            "title": "11.4.2 Cache-First Loading Strategy",
+            "anchor": "ch11-1142-cache-first-loading-strategy"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "11.4.3 MCP 技能的间接注册",
+            "anchor": "ch11-1143-mcp-技能的间接注册"
+          },
+          "en": {
+            "title": "11.4.3 Indirect Registration of MCP Skills",
+            "anchor": "ch11-1143-indirect-registration-of-mcp-skills"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11.5 创建自定义技能完整教程",
+            "anchor": "ch11-115-创建自定义技能完整教程"
+          },
+          "en": {
+            "title": "11.5 Complete Tutorial for Creating Custom Skills",
+            "anchor": "ch11-115-complete-tutorial-for-creating-custom-skills"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "案例：创建一个 API 端点生成技能",
+            "anchor": "ch11-案例创建一个-api-端点生成技能"
+          },
+          "en": {
+            "title": "Case Study: Creating an API Endpoint Generation Skill",
+            "anchor": "ch11-case-study-creating-an-api-endpoint-generation-skill"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Step 1: 创建技能目录",
+            "anchor": "ch11-step-1-创建技能目录"
+          },
+          "en": {
+            "title": "Step 1: Create the Skill Directory",
+            "anchor": "ch11-step-1-create-the-skill-directory"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Step 2: 编写 SKILL.md",
+            "anchor": "ch11-step-2-编写-skillmd"
+          },
+          "en": {
+            "title": "Step 2: Write SKILL.md",
+            "anchor": "ch11-step-2-write-skillmd"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Step 3: 测试技能",
+            "anchor": "ch11-step-3-测试技能"
+          },
+          "en": {
+            "title": "Step 3: Test the Skill",
+            "anchor": "ch11-step-3-test-the-skill"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "Step 4: 迭代优化",
+            "anchor": "ch11-step-4-迭代优化"
+          },
+          "en": {
+            "title": "Step 4: Iterative Refinement",
+            "anchor": "ch11-step-4-iterative-refinement"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "技能组合使用的最佳实践",
+            "anchor": "ch11-技能组合使用的最佳实践"
+          },
+          "en": {
+            "title": "Best Practices for Skill Composition",
+            "anchor": "ch11-best-practices-for-skill-composition"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "模式一：技能链",
+            "anchor": "ch11-模式一技能链"
+          },
+          "en": {
+            "title": "Pattern 1: Skill Chain",
+            "anchor": "ch11-pattern-1-skill-chain"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "模式二：条件技能 + 智能体",
+            "anchor": "ch11-模式二条件技能-智能体"
+          },
+          "en": {
+            "title": "Pattern 2: Conditional Skills + Agents",
+            "anchor": "ch11-pattern-2-conditional-skills-agents"
+          }
+        },
+        {
+          "level": 4,
+          "zh": {
+            "title": "模式三：技能 + Hook",
+            "anchor": "ch11-模式三技能-hook"
+          },
+          "en": {
+            "title": "Pattern 3: Skills + Hooks",
+            "anchor": "ch11-pattern-3-skills-hooks"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch11-实战练习"
+          },
+          "en": {
+            "title": "Hands-on Exercises",
+            "anchor": "ch11-hands-on-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：创建一个自定义项目级技能",
+            "anchor": "ch11-练习-1创建一个自定义项目级技能"
+          },
+          "en": {
+            "title": "Exercise 1: Create a Custom Project-level Skill",
+            "anchor": "ch11-exercise-1-create-a-custom-project-level-skill"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：创建一个带命名参数的用户级技能",
+            "anchor": "ch11-练习-2创建一个带命名参数的用户级技能"
+          },
+          "en": {
+            "title": "Exercise 2: Create a User-level Skill with Named Parameters",
+            "anchor": "ch11-exercise-2-create-a-user-level-skill-with-named-parameters"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：探索技能加载的调试日志",
+            "anchor": "ch11-练习-3探索技能加载的调试日志"
+          },
+          "en": {
+            "title": "Exercise 3: Explore Skill Loading Debug Logs",
+            "anchor": "ch11-exercise-3-explore-skill-loading-debug-logs"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：创建一个带生命周期钩子的技能",
+            "anchor": "ch11-练习-4创建一个带生命周期钩子的技能"
+          },
+          "en": {
+            "title": "Exercise 4: Create a Skill with Lifecycle Hooks",
+            "anchor": "ch11-exercise-4-create-a-skill-with-lifecycle-hooks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 5：设计一个条件技能系统",
+            "anchor": "ch11-练习-5设计一个条件技能系统"
+          },
+          "en": {
+            "title": "Exercise 5: Design a Conditional Skill System",
+            "anchor": "ch11-exercise-5-design-a-conditional-skill-system"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch11-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch11-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch12",
+      "zh": {
+        "no": "第 12 章",
+        "title": "MCP 集成与外部协议",
+        "anchor": "ch12"
+      },
+      "en": {
+        "no": "Chapter 12",
+        "title": "MCP Integration and External Protocols",
+        "anchor": "ch12"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第12章 MCP 集成与外部协议",
+            "anchor": "ch12"
+          },
+          "en": {
+            "title": "Chapter 12: MCP Integration and External Protocols",
+            "anchor": "ch12"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "12.1 MCP 架构概览",
+            "anchor": "ch12-121-mcp-架构概览"
+          },
+          "en": {
+            "title": "12.1 MCP Architecture Overview",
+            "anchor": "ch12-121-mcp-architecture-overview"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.1.1 为什么需要 MCP：问题与解决方案",
+            "anchor": "ch12-1211-为什么需要-mcp问题与解决方案"
+          },
+          "en": {
+            "title": "12.1.1 Why MCP: Problems and Solutions",
+            "anchor": "ch12-1211-why-mcp-problems-and-solutions"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.1.2 连接配置与底层传输",
+            "anchor": "ch12-1212-连接配置与底层传输"
+          },
+          "en": {
+            "title": "12.1.2 Connection Configurations and Transports",
+            "anchor": "ch12-1212-connection-configurations-and-transports"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.1.3 连接管理器 MCPConnectionManager",
+            "anchor": "ch12-1213-连接管理器-mcpconnectionmanager"
+          },
+          "en": {
+            "title": "12.1.3 Connection Manager: MCPConnectionManager",
+            "anchor": "ch12-1213-connection-manager-mcpconnectionmanager"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.1.4 服务器连接状态与生命周期",
+            "anchor": "ch12-1214-服务器连接状态与生命周期"
+          },
+          "en": {
+            "title": "12.1.4 Server Connection States and Lifecycle",
+            "anchor": "ch12-1214-server-connection-states-and-lifecycle"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "12.2 MCP 工具集成",
+            "anchor": "ch12-122-mcp-工具集成"
+          },
+          "en": {
+            "title": "12.2 MCP Tool Integration",
+            "anchor": "ch12-122-mcp-tool-integration"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.2.1 工具发现与映射",
+            "anchor": "ch12-1221-工具发现与映射"
+          },
+          "en": {
+            "title": "12.2.1 Tool Discovery and Mapping",
+            "anchor": "ch12-1221-tool-discovery-and-mapping"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.2.2 工具名称前缀：mcp__server__tool",
+            "anchor": "ch12-1222-工具名称前缀mcpservertool"
+          },
+          "en": {
+            "title": "12.2.2 Tool Name Prefix: mcp__server__tool",
+            "anchor": "ch12-1222-tool-name-prefix-mcpservertool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.2.3 MCP 工具的权限模型",
+            "anchor": "ch12-1223-mcp-工具的权限模型"
+          },
+          "en": {
+            "title": "12.2.3 MCP Tool Permission Model",
+            "anchor": "ch12-1223-mcp-tool-permission-model"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "12.3 MCP 权限与安全",
+            "anchor": "ch12-123-mcp-权限与安全"
+          },
+          "en": {
+            "title": "12.3 MCP Permissions and Security",
+            "anchor": "ch12-123-mcp-permissions-and-security"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.3.1 配置范围与作用域",
+            "anchor": "ch12-1231-配置范围与作用域"
+          },
+          "en": {
+            "title": "12.3.1 Configuration Scopes",
+            "anchor": "ch12-1231-configuration-scopes"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.3.2 服务器审批与白名单",
+            "anchor": "ch12-1232-服务器审批与白名单"
+          },
+          "en": {
+            "title": "12.3.2 Server Approval and Allowlists",
+            "anchor": "ch12-1232-server-approval-and-allowlists"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.3.3 插件去重",
+            "anchor": "ch12-1233-插件去重"
+          },
+          "en": {
+            "title": "12.3.3 Plugin Deduplication",
+            "anchor": "ch12-1233-plugin-deduplication"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.3.4 IDE 工具白名单",
+            "anchor": "ch12-1234-ide-工具白名单"
+          },
+          "en": {
+            "title": "12.3.4 IDE Tool Allowlist",
+            "anchor": "ch12-1234-ide-tool-allowlist"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "12.4 IDE 集成：Bridge 系统",
+            "anchor": "ch12-124-ide-集成bridge-系统"
+          },
+          "en": {
+            "title": "12.4 IDE Integration: The Bridge System",
+            "anchor": "ch12-124-ide-integration-the-bridge-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.1 架构概览",
+            "anchor": "ch12-1241-架构概览"
+          },
+          "en": {
+            "title": "12.4.1 Architecture Overview",
+            "anchor": "ch12-1241-architecture-overview"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.2 双向通信层",
+            "anchor": "ch12-1242-双向通信层"
+          },
+          "en": {
+            "title": "12.4.2 Bidirectional Communication Layer",
+            "anchor": "ch12-1242-bidirectional-communication-layer"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.3 控制协议",
+            "anchor": "ch12-1243-控制协议"
+          },
+          "en": {
+            "title": "12.4.3 Control Protocol",
+            "anchor": "ch12-1243-control-protocol"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.4 传输层抽象",
+            "anchor": "ch12-1244-传输层抽象"
+          },
+          "en": {
+            "title": "12.4.4 Transport Layer Abstraction",
+            "anchor": "ch12-1244-transport-layer-abstraction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.5 VS Code 和 JetBrains 扩展集成",
+            "anchor": "ch12-1245-vs-code-和-jetbrains-扩展集成"
+          },
+          "en": {
+            "title": "12.4.5 VS Code and JetBrains Extension Integration",
+            "anchor": "ch12-1245-vs-code-and-jetbrains-extension-integration"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "12.4.6 Bridge 权限门控",
+            "anchor": "ch12-1246-bridge-权限门控"
+          },
+          "en": {
+            "title": "12.4.6 Bridge Permission Gating",
+            "anchor": "ch12-1246-bridge-permission-gating"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch12-实战练习"
+          },
+          "en": {
+            "title": "Hands-on Exercises",
+            "anchor": "ch12-hands-on-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：配置一个 stdio 类型的 MCP 服务器",
+            "anchor": "ch12-练习-1配置一个-stdio-类型的-mcp-服务器"
+          },
+          "en": {
+            "title": "Exercise 1: Configure a stdio-type MCP Server",
+            "anchor": "ch12-exercise-1-configure-a-stdio-type-mcp-server"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：理解工具名称解析",
+            "anchor": "ch12-练习-2理解工具名称解析"
+          },
+          "en": {
+            "title": "Exercise 2: Understand Tool Name Resolution",
+            "anchor": "ch12-exercise-2-understand-tool-name-resolution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：配置企业级 MCP 安全策略",
+            "anchor": "ch12-练习-3配置企业级-mcp-安全策略"
+          },
+          "en": {
+            "title": "Exercise 3: Configure Enterprise-level MCP Security Policies",
+            "anchor": "ch12-exercise-3-configure-enterprise-level-mcp-security-policies"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：多服务器集成实战",
+            "anchor": "ch12-练习-4多服务器集成实战"
+          },
+          "en": {
+            "title": "Exercise 4: Multi-server Integration in Practice",
+            "anchor": "ch12-exercise-4-multi-server-integration-in-practice"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 5：理解 Bridge 通信流程",
+            "anchor": "ch12-练习-5理解-bridge-通信流程"
+          },
+          "en": {
+            "title": "Exercise 5: Understand Bridge Communication Flow",
+            "anchor": "ch12-exercise-5-understand-bridge-communication-flow"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch12-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch12-key-takeaways"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch13",
+      "zh": {
+        "no": "第 13 章",
+        "title": "流式架构与性能优化",
+        "anchor": "ch13"
+      },
+      "en": {
+        "no": "Chapter 13",
+        "title": "Streaming Architecture & Performance Optimization",
+        "anchor": "ch13"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第13章：流式架构与性能优化",
+            "anchor": "ch13"
+          },
+          "en": {
+            "title": "Chapter 13: Streaming Architecture & Performance Optimization",
+            "anchor": "ch13"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.1 流式 API 交互",
+            "anchor": "ch13-131-流式-api-交互"
+          },
+          "en": {
+            "title": "13.1 Streaming API Interaction",
+            "anchor": "ch13-131-streaming-api-interaction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.1.1 QueryEngine：查询生命周期的管理者",
+            "anchor": "ch13-1311-queryengine查询生命周期的管理者"
+          },
+          "en": {
+            "title": "13.1.1 QueryEngine: The Manager of Query Lifecycle",
+            "anchor": "ch13-1311-queryengine-the-manager-of-query-lifecycle"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.1.2 Token 流的实时接收",
+            "anchor": "ch13-1312-token-流的实时接收"
+          },
+          "en": {
+            "title": "13.1.2 Real-time Reception of Token Streams",
+            "anchor": "ch13-1312-real-time-reception-of-token-streams"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.1.3 工具调用块的即时检测",
+            "anchor": "ch13-1313-工具调用块的即时检测"
+          },
+          "en": {
+            "title": "13.1.3 Immediate Detection of Tool Call Blocks",
+            "anchor": "ch13-1313-immediate-detection-of-tool-call-blocks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.1.4 完整的流式数据流全景图",
+            "anchor": "ch13-1314-完整的流式数据流全景图"
+          },
+          "en": {
+            "title": "13.1.4 Complete Streaming Data Flow Overview",
+            "anchor": "ch13-1314-complete-streaming-data-flow-overview"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.2 StreamingToolExecutor 的并发控制",
+            "anchor": "ch13-132-streamingtoolexecutor-的并发控制"
+          },
+          "en": {
+            "title": "13.2 Concurrency Control of StreamingToolExecutor",
+            "anchor": "ch13-132-concurrency-control-of-streamingtoolexecutor"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.2.1 设计哲学：流到即执行",
+            "anchor": "ch13-1321-设计哲学流到即执行"
+          },
+          "en": {
+            "title": "13.2.1 Design Philosophy: Execute on Arrival",
+            "anchor": "ch13-1321-design-philosophy-execute-on-arrival"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.2.2 并发安全：并行与串行的抉择",
+            "anchor": "ch13-1322-并发安全并行与串行的抉择"
+          },
+          "en": {
+            "title": "13.2.2 Concurrency Safety: The Choice Between Parallel and Serial",
+            "anchor": "ch13-1322-concurrency-safety-the-choice-between-parallel-and-serial"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.2.3 结果缓冲与顺序输出",
+            "anchor": "ch13-1323-结果缓冲与顺序输出"
+          },
+          "en": {
+            "title": "13.2.3 Result Buffering and Ordered Output",
+            "anchor": "ch13-1323-result-buffering-and-ordered-output"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.2.4 兄弟工具错误级联",
+            "anchor": "ch13-1324-兄弟工具错误级联"
+          },
+          "en": {
+            "title": "13.2.4 Sibling Tool Error Cascading",
+            "anchor": "ch13-1324-sibling-tool-error-cascading"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.3 启动性能优化",
+            "anchor": "ch13-133-启动性能优化"
+          },
+          "en": {
+            "title": "13.3 Startup Performance Optimization",
+            "anchor": "ch13-133-startup-performance-optimization"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.3.1 并行预取：与模块评估赛跑",
+            "anchor": "ch13-1331-并行预取与模块评估赛跑"
+          },
+          "en": {
+            "title": "13.3.1 Parallel Prefetching: Racing Against Module Evaluation",
+            "anchor": "ch13-1331-parallel-prefetching-racing-against-module-evaluation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.3.2 延迟加载",
+            "anchor": "ch13-1332-延迟加载"
+          },
+          "en": {
+            "title": "13.3.2 Lazy Loading",
+            "anchor": "ch13-1332-lazy-loading"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.3.3 惰性 Schema 评估",
+            "anchor": "ch13-1333-惰性-schema-评估"
+          },
+          "en": {
+            "title": "13.3.3 Lazy Schema Evaluation",
+            "anchor": "ch13-1333-lazy-schema-evaluation"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.3.4 启动优化 Checklist",
+            "anchor": "ch13-1334-启动优化-checklist"
+          },
+          "en": {
+            "title": "13.3.4 Startup Optimization Checklist",
+            "anchor": "ch13-1334-startup-optimization-checklist"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.4 令牌成本追踪",
+            "anchor": "ch13-134-令牌成本追踪"
+          },
+          "en": {
+            "title": "13.4 Token Cost Tracking",
+            "anchor": "ch13-134-token-cost-tracking"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.4.1 成本计算引擎",
+            "anchor": "ch13-1341-成本计算引擎"
+          },
+          "en": {
+            "title": "13.4.1 Cost Calculation Engine",
+            "anchor": "ch13-1341-cost-calculation-engine"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.4.2 accumulateUsage 累加模式",
+            "anchor": "ch13-1342-accumulateusage-累加模式"
+          },
+          "en": {
+            "title": "13.4.2 accumulateUsage Accumulation Pattern",
+            "anchor": "ch13-1342-accumulateusage-accumulation-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.4.3 Token 成本追踪的最佳实践",
+            "anchor": "ch13-1343-token-成本追踪的最佳实践"
+          },
+          "en": {
+            "title": "13.4.3 Best Practices for Token Cost Tracking",
+            "anchor": "ch13-1343-best-practices-for-token-cost-tracking"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.5 缓存优化策略",
+            "anchor": "ch13-135-缓存优化策略"
+          },
+          "en": {
+            "title": "13.5 Caching Optimization Strategies",
+            "anchor": "ch13-135-caching-optimization-strategies"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.5.1 提示缓存共享的五个维度",
+            "anchor": "ch13-1351-提示缓存共享的五个维度"
+          },
+          "en": {
+            "title": "13.5.1 Five Dimensions of Prompt Cache Sharing",
+            "anchor": "ch13-1351-five-dimensions-of-prompt-cache-sharing"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.5.2 Fork 模式的字节级一致性",
+            "anchor": "ch13-1352-fork-模式的字节级一致性"
+          },
+          "en": {
+            "title": "13.5.2 Byte-level Consistency in Fork Mode",
+            "anchor": "ch13-1352-byte-level-consistency-in-fork-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.5.3 缓存断裂检测",
+            "anchor": "ch13-1353-缓存断裂检测"
+          },
+          "en": {
+            "title": "13.5.3 Cache Break Detection",
+            "anchor": "ch13-1353-cache-break-detection"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "13.5.4 缓存优化的实战策略",
+            "anchor": "ch13-1354-缓存优化的实战策略"
+          },
+          "en": {
+            "title": "13.5.4 Practical Strategies for Cache Optimization",
+            "anchor": "ch13-1354-practical-strategies-for-cache-optimization"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch13-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch13-practical-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：分析工具并发行为",
+            "anchor": "ch13-练习-1分析工具并发行为"
+          },
+          "en": {
+            "title": "Exercise 1: Analyze Tool Concurrency Behavior",
+            "anchor": "ch13-exercise-1-analyze-tool-concurrency-behavior"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：追踪缓存命中率",
+            "anchor": "ch13-练习-2追踪缓存命中率"
+          },
+          "en": {
+            "title": "Exercise 2: Track Cache Hit Rate",
+            "anchor": "ch13-exercise-2-track-cache-hit-rate"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：评估并行预取效果",
+            "anchor": "ch13-练习-3评估并行预取效果"
+          },
+          "en": {
+            "title": "Exercise 3: Evaluate Parallel Prefetch Effect",
+            "anchor": "ch13-exercise-3-evaluate-parallel-prefetch-effect"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：Token 成本分析实战",
+            "anchor": "ch13-练习-4token-成本分析实战"
+          },
+          "en": {
+            "title": "Exercise 4: Token Cost Analysis in Practice",
+            "anchor": "ch13-exercise-4-token-cost-analysis-in-practice"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 5：性能调优 Checklist 自评",
+            "anchor": "ch13-练习-5性能调优-checklist-自评"
+          },
+          "en": {
+            "title": "Exercise 5: Performance Tuning Checklist Self-assessment",
+            "anchor": "ch13-exercise-5-performance-tuning-checklist-self-assessment"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch13-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch13-key-takeaways"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "13.6 流式与性能：常见翻车 / 正确做法",
+            "anchor": "ch13-136-流式与性能常见翻车-正确做法"
+          },
+          "en": {
+            "title": "13.6 Streaming and Performance: Common Failures / The Right Move",
+            "anchor": "ch13-136-streaming-and-performance-common-failures-the-right-move"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch14",
+      "zh": {
+        "no": "第 14 章",
+        "title": "Plan 模式与结构化工作流",
+        "anchor": "ch14"
+      },
+      "en": {
+        "no": "Chapter 14",
+        "title": "Plan Mode & Structured Workflows",
+        "anchor": "ch14"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第14章：Plan 模式与结构化工作流",
+            "anchor": "ch14"
+          },
+          "en": {
+            "title": "Chapter 14: Plan Mode & Structured Workflows",
+            "anchor": "ch14"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.1 Plan 模式的架构",
+            "anchor": "ch14-141-plan-模式的架构"
+          },
+          "en": {
+            "title": "14.1 Plan Mode Architecture",
+            "anchor": "ch14-141-plan-mode-architecture"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.1.1 设计哲学：先规划后执行",
+            "anchor": "ch14-1411-设计哲学先规划后执行"
+          },
+          "en": {
+            "title": "14.1.1 Design Philosophy: Plan Before Execute",
+            "anchor": "ch14-1411-design-philosophy-plan-before-execute"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.1.2 模式切换机制",
+            "anchor": "ch14-1412-模式切换机制"
+          },
+          "en": {
+            "title": "14.1.2 Mode Switching Mechanism",
+            "anchor": "ch14-1412-mode-switching-mechanism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.1.3 退出 Plan 模式",
+            "anchor": "ch14-1413-退出-plan-模式"
+          },
+          "en": {
+            "title": "14.1.3 Exiting Plan Mode",
+            "anchor": "ch14-1413-exiting-plan-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.1.4 Plan 模式完整案例：从需求到计划到实施",
+            "anchor": "ch14-1414-plan-模式完整案例从需求到计划到实施"
+          },
+          "en": {
+            "title": "14.1.4 Plan Mode Complete Case: From Requirement to Plan to Implementation",
+            "anchor": "ch14-1414-plan-mode-complete-case-from-requirement-to-plan-to-implementation"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.2 计划验证机制",
+            "anchor": "ch14-142-计划验证机制"
+          },
+          "en": {
+            "title": "14.2 Plan Verification Mechanism",
+            "anchor": "ch14-142-plan-verification-mechanism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.2.1 验证智能体",
+            "anchor": "ch14-1421-验证智能体"
+          },
+          "en": {
+            "title": "14.2.1 Verification Agent",
+            "anchor": "ch14-1421-verification-agent"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.2.2 计划文件的持久化与恢复",
+            "anchor": "ch14-1422-计划文件的持久化与恢复"
+          },
+          "en": {
+            "title": "14.2.2 Plan File Persistence and Recovery",
+            "anchor": "ch14-1422-plan-file-persistence-and-recovery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.2.3 计划文件恢复的深度分析",
+            "anchor": "ch14-1423-计划文件恢复的深度分析"
+          },
+          "en": {
+            "title": "14.2.3 Deep Analysis of Plan File Recovery",
+            "anchor": "ch14-1423-deep-analysis-of-plan-file-recovery"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.3 工作流系统",
+            "anchor": "ch14-143-工作流系统"
+          },
+          "en": {
+            "title": "14.3 Workflow System",
+            "anchor": "ch14-143-workflow-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.3.1 WorkflowTool 与 Skill 系统",
+            "anchor": "ch14-1431-workflowtool-与-skill-系统"
+          },
+          "en": {
+            "title": "14.3.1 WorkflowTool and Skill System",
+            "anchor": "ch14-1431-workflowtool-and-skill-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.3.2 Fork Agent 的状态隔离",
+            "anchor": "ch14-1432-fork-agent-的状态隔离"
+          },
+          "en": {
+            "title": "14.3.2 Fork Agent State Isolation",
+            "anchor": "ch14-1432-fork-agent-state-isolation"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.4 调度系统",
+            "anchor": "ch14-144-调度系统"
+          },
+          "en": {
+            "title": "14.4 Scheduling System",
+            "anchor": "ch14-144-scheduling-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.4.1 ScheduleCronTool：本地定时任务",
+            "anchor": "ch14-1441-schedulecrontool本地定时任务"
+          },
+          "en": {
+            "title": "14.4.1 ScheduleCronTool: Local Scheduled Tasks",
+            "anchor": "ch14-1441-schedulecrontool-local-scheduled-tasks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.4.2 CronScheduler：调度器核心",
+            "anchor": "ch14-1442-cronscheduler调度器核心"
+          },
+          "en": {
+            "title": "14.4.2 CronScheduler: Scheduler Core",
+            "anchor": "ch14-1442-cronscheduler-scheduler-core"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.4.3 RemoteTriggerTool：远程触发",
+            "anchor": "ch14-1443-remotetriggertool远程触发"
+          },
+          "en": {
+            "title": "14.4.3 RemoteTriggerTool: Remote Triggering",
+            "anchor": "ch14-1443-remotetriggertool-remote-triggering"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.4.4 定时任务的会话级生命周期",
+            "anchor": "ch14-1444-定时任务的会话级生命周期"
+          },
+          "en": {
+            "title": "14.4.4 Session-scoped Lifecycle of Scheduled Tasks",
+            "anchor": "ch14-1444-session-scoped-lifecycle-of-scheduled-tasks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.4.5 工作流设计模式与反模式",
+            "anchor": "ch14-1445-工作流设计模式与反模式"
+          },
+          "en": {
+            "title": "14.4.5 Workflow Design Patterns and Anti-patterns",
+            "anchor": "ch14-1445-workflow-design-patterns-and-anti-patterns"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.5 后台任务与主动模式",
+            "anchor": "ch14-145-后台任务与主动模式"
+          },
+          "en": {
+            "title": "14.5 Background Tasks and Active Mode",
+            "anchor": "ch14-145-background-tasks-and-active-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.5.1 SleepTool",
+            "anchor": "ch14-1451-sleeptool"
+          },
+          "en": {
+            "title": "14.5.1 SleepTool",
+            "anchor": "ch14-1451-sleeptool"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.5.2 后台会话管理",
+            "anchor": "ch14-1452-后台会话管理"
+          },
+          "en": {
+            "title": "14.5.2 Background Session Management",
+            "anchor": "ch14-1452-background-session-management"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "14.5.3 后台任务的生命周期管理",
+            "anchor": "ch14-1453-后台任务的生命周期管理"
+          },
+          "en": {
+            "title": "14.5.3 Background Task Lifecycle Management",
+            "anchor": "ch14-1453-background-task-lifecycle-management"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch14-实战练习"
+          },
+          "en": {
+            "title": "Practical Exercises",
+            "anchor": "ch14-practical-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 1：体验 Plan 模式完整流程",
+            "anchor": "ch14-练习-1体验-plan-模式完整流程"
+          },
+          "en": {
+            "title": "Exercise 1: Experience Plan Mode Complete Flow",
+            "anchor": "ch14-exercise-1-experience-plan-mode-complete-flow"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 2：创建 Cron 定时任务",
+            "anchor": "ch14-练习-2创建-cron-定时任务"
+          },
+          "en": {
+            "title": "Exercise 2: Create Cron Scheduled Tasks",
+            "anchor": "ch14-exercise-2-create-cron-scheduled-tasks"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 3：分析计划文件恢复",
+            "anchor": "ch14-练习-3分析计划文件恢复"
+          },
+          "en": {
+            "title": "Exercise 3: Analyze Plan File Recovery",
+            "anchor": "ch14-exercise-3-analyze-plan-file-recovery"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "练习 4：设计一个完整的事件驱动工作流",
+            "anchor": "ch14-练习-4设计一个完整的事件驱动工作流"
+          },
+          "en": {
+            "title": "Exercise 4: Design a Complete Event-Driven Workflow",
+            "anchor": "ch14-exercise-4-design-a-complete-event-driven-workflow"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch14-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch14-key-takeaways"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "14.6 结构化工作流：常见翻车 / 正确做法",
+            "anchor": "ch14-146-结构化工作流常见翻车-正确做法"
+          },
+          "en": {
+            "title": "14.6 Structured Workflows: Common Failures / The Right Move",
+            "anchor": "ch14-146-structured-workflows-common-failures-the-right-move"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch15",
+      "zh": {
+        "no": "第 15 章",
+        "title": "构建你自己的 Agent Harness",
+        "anchor": "ch15"
+      },
+      "en": {
+        "no": "Chapter 15",
+        "title": "Building Your Own Agent Harness",
+        "anchor": "ch15"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "第15章：构建你自己的 Agent Harness",
+            "anchor": "ch15"
+          },
+          "en": {
+            "title": "Chapter 15: Building Your Own Agent Harness",
+            "anchor": "ch15"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.1 设计原则回顾与选型指南",
+            "anchor": "ch15-151-设计原则回顾与选型指南"
+          },
+          "en": {
+            "title": "15.1 Design Principles Review and Selection Guide",
+            "anchor": "ch15-151-design-principles-review-and-selection-guide"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "五大设计原则在实际项目中的应用",
+            "anchor": "ch15-五大设计原则在实际项目中的应用"
+          },
+          "en": {
+            "title": "Five Design Principles in Practice",
+            "anchor": "ch15-five-design-principles-in-practice"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "何时使用 Agent Harness 模式 vs 简单 LLM API 调用",
+            "anchor": "ch15-何时使用-agent-harness-模式-vs-简单-llm-api-调用"
+          },
+          "en": {
+            "title": "When to Use Agent Harness Pattern vs. Simple LLM API Calls",
+            "anchor": "ch15-when-to-use-agent-harness-pattern-vs-simple-llm-api-calls"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "运行时选择：Bun vs. Node.js vs. Python",
+            "anchor": "ch15-运行时选择bun-vs-nodejs-vs-python"
+          },
+          "en": {
+            "title": "Runtime Selection: Bun vs. Node.js vs. Python",
+            "anchor": "ch15-runtime-selection-bun-vs-nodejs-vs-python"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.2 核心组件实现路线图",
+            "anchor": "ch15-152-核心组件实现路线图"
+          },
+          "en": {
+            "title": "15.2 Core Component Implementation Roadmap",
+            "anchor": "ch15-152-core-component-implementation-roadmap"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 1：对话循环",
+            "anchor": "ch15-step-1对话循环"
+          },
+          "en": {
+            "title": "Step 1: Dialog Loop",
+            "anchor": "ch15-step-1-dialog-loop"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 2：工具系统",
+            "anchor": "ch15-step-2工具系统"
+          },
+          "en": {
+            "title": "Step 2: Tool System",
+            "anchor": "ch15-step-2-tool-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 3：权限管线",
+            "anchor": "ch15-step-3权限管线"
+          },
+          "en": {
+            "title": "Step 3: Permission Pipeline",
+            "anchor": "ch15-step-3-permission-pipeline"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 4：上下文管理",
+            "anchor": "ch15-step-4上下文管理"
+          },
+          "en": {
+            "title": "Step 4: Context Management",
+            "anchor": "ch15-step-4-context-management"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 5：记忆系统",
+            "anchor": "ch15-step-5记忆系统"
+          },
+          "en": {
+            "title": "Step 5: Memory System",
+            "anchor": "ch15-step-5-memory-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "Step 6：钩子系统",
+            "anchor": "ch15-step-6钩子系统"
+          },
+          "en": {
+            "title": "Step 6: Hook System",
+            "anchor": "ch15-step-6-hook-system"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.3 从 Claude Code 学到的架构教训",
+            "anchor": "ch15-153-从-claude-code-学到的架构教训"
+          },
+          "en": {
+            "title": "15.3 Architectural Lessons from Claude Code",
+            "anchor": "ch15-153-architectural-lessons-from-claude-code"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "循环依赖的打破策略",
+            "anchor": "ch15-循环依赖的打破策略"
+          },
+          "en": {
+            "title": "Breaking Circular Dependencies",
+            "anchor": "ch15-breaking-circular-dependencies"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "大型代码库的模块化设计",
+            "anchor": "ch15-大型代码库的模块化设计"
+          },
+          "en": {
+            "title": "Modular Design for Large Codebases",
+            "anchor": "ch15-modular-design-for-large-codebases"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "功能开关驱动的渐进式发布",
+            "anchor": "ch15-功能开关驱动的渐进式发布"
+          },
+          "en": {
+            "title": "Feature Flag-Driven Progressive Releases",
+            "anchor": "ch15-feature-flag-driven-progressive-releases"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "错误处理与断路器模式",
+            "anchor": "ch15-错误处理与断路器模式"
+          },
+          "en": {
+            "title": "Error Handling and the Circuit Breaker Pattern",
+            "anchor": "ch15-error-handling-and-the-circuit-breaker-pattern"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "可观测性的深度讨论",
+            "anchor": "ch15-可观测性的深度讨论"
+          },
+          "en": {
+            "title": "In-Depth Discussion on Observability",
+            "anchor": "ch15-in-depth-discussion-on-observability"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.4 生产化考量",
+            "anchor": "ch15-154-生产化考量"
+          },
+          "en": {
+            "title": "15.4 Production Considerations",
+            "anchor": "ch15-154-production-considerations"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "遥测与可观测性",
+            "anchor": "ch15-遥测与可观测性"
+          },
+          "en": {
+            "title": "Telemetry and Observability",
+            "anchor": "ch15-telemetry-and-observability"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "多环境适配：CLI / IDE / SDK / Server",
+            "anchor": "ch15-多环境适配cli-ide-sdk-server"
+          },
+          "en": {
+            "title": "Multi-Environment Adaptation: CLI / IDE / SDK / Server",
+            "anchor": "ch15-multi-environment-adaptation-cli-ide-sdk-server"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "安全审计",
+            "anchor": "ch15-安全审计"
+          },
+          "en": {
+            "title": "Security Auditing",
+            "anchor": "ch15-security-auditing"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.5 Agent Harness 的未来",
+            "anchor": "ch15-155-agent-harness-的未来"
+          },
+          "en": {
+            "title": "15.5 The Future of Agent Harnesses",
+            "anchor": "ch15-155-the-future-of-agent-harnesses"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "多模态交互",
+            "anchor": "ch15-多模态交互"
+          },
+          "en": {
+            "title": "Multimodal Interaction",
+            "anchor": "ch15-multimodal-interaction"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "长期运行智能体（Daemon 模式）",
+            "anchor": "ch15-长期运行智能体daemon-模式"
+          },
+          "en": {
+            "title": "Long-Running Agents (Daemon Mode)",
+            "anchor": "ch15-long-running-agents-daemon-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "标准化协议（MCP 演进方向）",
+            "anchor": "ch15-标准化协议mcp-演进方向"
+          },
+          "en": {
+            "title": "Standardized Protocols (MCP Evolution)",
+            "anchor": "ch15-standardized-protocols-mcp-evolution"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "未来架构的前瞻性分析",
+            "anchor": "ch15-未来架构的前瞻性分析"
+          },
+          "en": {
+            "title": "Forward-Looking Analysis of Future Architectures",
+            "anchor": "ch15-forward-looking-analysis-of-future-architectures"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "实战练习",
+            "anchor": "ch15-实战练习"
+          },
+          "en": {
+            "title": "Hands-on Exercises",
+            "anchor": "ch15-hands-on-exercises"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "延伸练习：实现一个最小 Agent Harness",
+            "anchor": "ch15-延伸练习实现一个最小-agent-harness"
+          },
+          "en": {
+            "title": "Extended Exercise: Implementing a Minimal Agent Harness",
+            "anchor": "ch15-extended-exercise-implementing-a-minimal-agent-harness"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "关键要点",
+            "anchor": "ch15-关键要点"
+          },
+          "en": {
+            "title": "Key Takeaways",
+            "anchor": "ch15-key-takeaways"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "15.6 搭建 Agent Harness：常见翻车 / 正确做法",
+            "anchor": "ch15-156-搭建-agent-harness常见翻车-正确做法"
+          },
+          "en": {
+            "title": "15.6 Building an Agent Harness: Common Failures / The Right Move",
+            "anchor": "ch15-156-building-an-agent-harness-common-failures-the-right-move"
+          }
+        }
+      ]
+    },
+    {
+      "id": "apxa",
+      "zh": {
+        "no": "附录 A",
+        "title": "架构导航地图",
+        "anchor": "apxa"
+      },
+      "en": {
+        "no": "Appendix A",
+        "title": "Architecture Navigation Map",
+        "anchor": "apxa"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "附录 A：架构导航地图",
+            "anchor": "apxa"
+          },
+          "en": {
+            "title": "Appendix A: Architecture Navigation Map",
+            "anchor": "apxa"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A.1 核心模块索引表",
+            "anchor": "apxa-a1-核心模块索引表"
+          },
+          "en": {
+            "title": "A.1 Core Module Index",
+            "anchor": "apxa-a1-core-module-index"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A.2 模块依赖关系",
+            "anchor": "apxa-a2-模块依赖关系"
+          },
+          "en": {
+            "title": "A.2 Module Dependency Relationships",
+            "anchor": "apxa-a2-module-dependency-relationships"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.2.1 分层架构说明",
+            "anchor": "apxa-a21-分层架构说明"
+          },
+          "en": {
+            "title": "A.2.1 Layered Architecture Description",
+            "anchor": "apxa-a21-layered-architecture-description"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.2.2 核心循环与数据驱动模型",
+            "anchor": "apxa-a22-核心循环与数据驱动模型"
+          },
+          "en": {
+            "title": "A.2.2 Core Loop and Data-Driven Model",
+            "anchor": "apxa-a22-core-loop-and-data-driven-model"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.2.3 模块间耦合度分析",
+            "anchor": "apxa-a23-模块间耦合度分析"
+          },
+          "en": {
+            "title": "A.2.3 Inter-Module Coupling Analysis",
+            "anchor": "apxa-a23-inter-module-coupling-analysis"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A.3 数据流路径速查",
+            "anchor": "apxa-a3-数据流路径速查"
+          },
+          "en": {
+            "title": "A.3 Data Flow Path Quick Reference",
+            "anchor": "apxa-a3-data-flow-path-quick-reference"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "标准工具调用流程",
+            "anchor": "apxa-标准工具调用流程"
+          },
+          "en": {
+            "title": "Standard Tool Call Flow",
+            "anchor": "apxa-standard-tool-call-flow"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "权限判定路径",
+            "anchor": "apxa-权限判定路径"
+          },
+          "en": {
+            "title": "Permission Decision Path",
+            "anchor": "apxa-permission-decision-path"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "上下文压缩触发路径",
+            "anchor": "apxa-上下文压缩触发路径"
+          },
+          "en": {
+            "title": "Context Compression Trigger Path",
+            "anchor": "apxa-context-compression-trigger-path"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "记忆注入路径",
+            "anchor": "apxa-记忆注入路径"
+          },
+          "en": {
+            "title": "Memory Injection Path",
+            "anchor": "apxa-memory-injection-path"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "MCP 工具动态注册路径",
+            "anchor": "apxa-mcp-工具动态注册路径"
+          },
+          "en": {
+            "title": "MCP Tool Dynamic Registration Path",
+            "anchor": "apxa-mcp-tool-dynamic-registration-path"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "子智能体 Fork 执行路径",
+            "anchor": "apxa-子智能体-fork-执行路径"
+          },
+          "en": {
+            "title": "Sub-Agent Fork Execution Path",
+            "anchor": "apxa-sub-agent-fork-execution-path"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A.4 模块接口契约概述",
+            "anchor": "apxa-a4-模块接口契约概述"
+          },
+          "en": {
+            "title": "A.4 Module Interface Contract Overview",
+            "anchor": "apxa-a4-module-interface-contract-overview"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.4.1 对话主循环与查询引擎的契约",
+            "anchor": "apxa-a41-对话主循环与查询引擎的契约"
+          },
+          "en": {
+            "title": "A.4.1 Contract Between Conversation Main Loop and Query Engine",
+            "anchor": "apxa-a41-contract-between-conversation-main-loop-and-query-engine"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.4.2 对话主循环与工具注册表的契约",
+            "anchor": "apxa-a42-对话主循环与工具注册表的契约"
+          },
+          "en": {
+            "title": "A.4.2 Contract Between Conversation Main Loop and Tool Registry",
+            "anchor": "apxa-a42-contract-between-conversation-main-loop-and-tool-registry"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.4.3 工具类型系统的标准协议",
+            "anchor": "apxa-a43-工具类型系统的标准协议"
+          },
+          "en": {
+            "title": "A.4.3 Standard Protocol of the Tool Type System",
+            "anchor": "apxa-a43-standard-protocol-of-the-tool-type-system"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "A.4.4 钩子系统的生命周期契约",
+            "anchor": "apxa-a44-钩子系统的生命周期契约"
+          },
+          "en": {
+            "title": "A.4.4 Lifecycle Contract of the Hook System",
+            "anchor": "apxa-a44-lifecycle-contract-of-the-hook-system"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A.5 架构设计模式速览",
+            "anchor": "apxa-a5-架构设计模式速览"
+          },
+          "en": {
+            "title": "A.5 Architectural Design Pattern Quick Reference",
+            "anchor": "apxa-a5-architectural-design-pattern-quick-reference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "apxb",
+      "zh": {
+        "no": "附录 B",
+        "title": "工具完整清单",
+        "anchor": "apxb"
+      },
+      "en": {
+        "no": "Appendix B",
+        "title": "Complete Tool Inventory",
+        "anchor": "apxb"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "附录 B：工具完整清单",
+            "anchor": "apxb"
+          },
+          "en": {
+            "title": "Appendix B: Complete Tool Inventory",
+            "anchor": "apxb"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "1. 文件操作",
+            "anchor": "apxb-1-文件操作"
+          },
+          "en": {
+            "title": "1. File Operations",
+            "anchor": "apxb-1-file-operations"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "2. 搜索",
+            "anchor": "apxb-2-搜索"
+          },
+          "en": {
+            "title": "2. Search",
+            "anchor": "apxb-2-search"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "3. 执行",
+            "anchor": "apxb-3-执行"
+          },
+          "en": {
+            "title": "3. Execution",
+            "anchor": "apxb-3-execution"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "4. 网络",
+            "anchor": "apxb-4-网络"
+          },
+          "en": {
+            "title": "4. Network",
+            "anchor": "apxb-4-network"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "5. 智能体",
+            "anchor": "apxb-5-智能体"
+          },
+          "en": {
+            "title": "5. Agent",
+            "anchor": "apxb-5-agent"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "6. 任务管理",
+            "anchor": "apxb-6-任务管理"
+          },
+          "en": {
+            "title": "6. Task Management",
+            "anchor": "apxb-6-task-management"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "7. 计划",
+            "anchor": "apxb-7-计划"
+          },
+          "en": {
+            "title": "7. Plan",
+            "anchor": "apxb-7-plan"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "8. 工作树",
+            "anchor": "apxb-8-工作树"
+          },
+          "en": {
+            "title": "8. Worktree",
+            "anchor": "apxb-8-worktree"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "9. 调度",
+            "anchor": "apxb-9-调度"
+          },
+          "en": {
+            "title": "9. Scheduling",
+            "anchor": "apxb-9-scheduling"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "10. 交互",
+            "anchor": "apxb-10-交互"
+          },
+          "en": {
+            "title": "10. Interaction",
+            "anchor": "apxb-10-interaction"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "11. MCP",
+            "anchor": "apxb-11-mcp"
+          },
+          "en": {
+            "title": "11. MCP",
+            "anchor": "apxb-11-mcp"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "12. 其他",
+            "anchor": "apxb-12-其他"
+          },
+          "en": {
+            "title": "12. Other",
+            "anchor": "apxb-12-other"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "工具启用条件速查",
+            "anchor": "apxb-工具启用条件速查"
+          },
+          "en": {
+            "title": "Tool Enablement Conditions Quick Reference",
+            "anchor": "apxb-tool-enablement-conditions-quick-reference"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "工具注册流程",
+            "anchor": "apxb-工具注册流程"
+          },
+          "en": {
+            "title": "Tool Registration Flow",
+            "anchor": "apxb-tool-registration-flow"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "工具组合使用推荐模式",
+            "anchor": "apxb-工具组合使用推荐模式"
+          },
+          "en": {
+            "title": "Recommended Tool Composition Patterns",
+            "anchor": "apxb-recommended-tool-composition-patterns"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式一：代码探索与理解",
+            "anchor": "apxb-模式一代码探索与理解"
+          },
+          "en": {
+            "title": "Pattern 1: Code Exploration and Understanding",
+            "anchor": "apxb-pattern-1-code-exploration-and-understanding"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式二：代码修改",
+            "anchor": "apxb-模式二代码修改"
+          },
+          "en": {
+            "title": "Pattern 2: Code Modification",
+            "anchor": "apxb-pattern-2-code-modification"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式三：信息调研",
+            "anchor": "apxb-模式三信息调研"
+          },
+          "en": {
+            "title": "Pattern 3: Information Research",
+            "anchor": "apxb-pattern-3-information-research"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式四：多任务并行",
+            "anchor": "apxb-模式四多任务并行"
+          },
+          "en": {
+            "title": "Pattern 4: Multi-Task Parallelism",
+            "anchor": "apxb-pattern-4-multi-task-parallelism"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式五：安全规划",
+            "anchor": "apxb-模式五安全规划"
+          },
+          "en": {
+            "title": "Pattern 5: Safe Planning",
+            "anchor": "apxb-pattern-5-safe-planning"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "模式六：外部集成",
+            "anchor": "apxb-模式六外部集成"
+          },
+          "en": {
+            "title": "Pattern 6: External Integration",
+            "anchor": "apxb-pattern-6-external-integration"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "工具性能特征概览",
+            "anchor": "apxb-工具性能特征概览"
+          },
+          "en": {
+            "title": "Tool Performance Characteristics Overview",
+            "anchor": "apxb-tool-performance-characteristics-overview"
+          }
+        }
+      ]
+    },
+    {
+      "id": "apxc",
+      "zh": {
+        "no": "附录 C",
+        "title": "功能标志速查表",
+        "anchor": "apxc"
+      },
+      "en": {
+        "no": "Appendix C",
+        "title": "Feature Flag Reference",
+        "anchor": "apxc"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "附录 C：功能标志速查表",
+            "anchor": "apxc"
+          },
+          "en": {
+            "title": "Appendix C: Feature Flag Reference",
+            "anchor": "apxc"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.1 核心交互模式标志",
+            "anchor": "apxc-c1-核心交互模式标志"
+          },
+          "en": {
+            "title": "C.1 Core Interaction Mode Flags",
+            "anchor": "apxc-c1-core-interaction-mode-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.2 智能体与子任务标志",
+            "anchor": "apxc-c2-智能体与子任务标志"
+          },
+          "en": {
+            "title": "C.2 Agent and Subtask Flags",
+            "anchor": "apxc-c2-agent-and-subtask-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.3 上下文管理与压缩标志",
+            "anchor": "apxc-c3-上下文管理与压缩标志"
+          },
+          "en": {
+            "title": "C.3 Context Management and Compression Flags",
+            "anchor": "apxc-c3-context-management-and-compression-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.4 权限与安全标志",
+            "anchor": "apxc-c4-权限与安全标志"
+          },
+          "en": {
+            "title": "C.4 Permission and Security Flags",
+            "anchor": "apxc-c4-permission-and-security-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.5 工具与技能标志",
+            "anchor": "apxc-c5-工具与技能标志"
+          },
+          "en": {
+            "title": "C.5 Tool and Skill Flags",
+            "anchor": "apxc-c5-tool-and-skill-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.6 会话与持久化标志",
+            "anchor": "apxc-c6-会话与持久化标志"
+          },
+          "en": {
+            "title": "C.6 Session and Persistence Flags",
+            "anchor": "apxc-c6-session-and-persistence-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.7 记忆与知识管理标志",
+            "anchor": "apxc-c7-记忆与知识管理标志"
+          },
+          "en": {
+            "title": "C.7 Memory and Knowledge Management Flags",
+            "anchor": "apxc-c7-memory-and-knowledge-management-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.8 远程与连接标志",
+            "anchor": "apxc-c8-远程与连接标志"
+          },
+          "en": {
+            "title": "C.8 Remote and Connectivity Flags",
+            "anchor": "apxc-c8-remote-and-connectivity-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.9 UI 与界面标志",
+            "anchor": "apxc-c9-ui-与界面标志"
+          },
+          "en": {
+            "title": "C.9 UI and Interface Flags",
+            "anchor": "apxc-c9-ui-and-interface-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.10 设置同步标志",
+            "anchor": "apxc-c10-设置同步标志"
+          },
+          "en": {
+            "title": "C.10 Settings Synchronization Flags",
+            "anchor": "apxc-c10-settings-synchronization-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.11 遥测与诊断标志",
+            "anchor": "apxc-c11-遥测与诊断标志"
+          },
+          "en": {
+            "title": "C.11 Telemetry and Diagnostic Flags",
+            "anchor": "apxc-c11-telemetry-and-diagnostic-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.12 基础设施与构建标志",
+            "anchor": "apxc-c12-基础设施与构建标志"
+          },
+          "en": {
+            "title": "C.12 Infrastructure and Build Flags",
+            "anchor": "apxc-c12-infrastructure-and-build-flags"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.13 标志使用统计",
+            "anchor": "apxc-c13-标志使用统计"
+          },
+          "en": {
+            "title": "C.13 Flag Usage Statistics",
+            "anchor": "apxc-c13-flag-usage-statistics"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.14 常见配置场景推荐",
+            "anchor": "apxc-c14-常见配置场景推荐"
+          },
+          "en": {
+            "title": "C.14 Common Configuration Scenario Recommendations",
+            "anchor": "apxc-c14-common-configuration-scenario-recommendations"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景一：日常开发（标准模式）",
+            "anchor": "apxc-场景一日常开发标准模式"
+          },
+          "en": {
+            "title": "Scenario 1: Daily Development (Standard Mode)",
+            "anchor": "apxc-scenario-1-daily-development-standard-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景二：IDE 集成开发",
+            "anchor": "apxc-场景二ide-集成开发"
+          },
+          "en": {
+            "title": "Scenario 2: IDE Integration Development",
+            "anchor": "apxc-scenario-2-ide-integration-development"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景三：多智能体协作",
+            "anchor": "apxc-场景三多智能体协作"
+          },
+          "en": {
+            "title": "Scenario 3: Multi-Agent Collaboration",
+            "anchor": "apxc-scenario-3-multi-agent-collaboration"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景四：自动化 CI/CD 集成",
+            "anchor": "apxc-场景四自动化-cicd-集成"
+          },
+          "en": {
+            "title": "Scenario 4: Automated CI/CD Integration",
+            "anchor": "apxc-scenario-4-automated-cicd-integration"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景五：安全审计模式",
+            "anchor": "apxc-场景五安全审计模式"
+          },
+          "en": {
+            "title": "Scenario 5: Security Audit Mode",
+            "anchor": "apxc-scenario-5-security-audit-mode"
+          }
+        },
+        {
+          "level": 3,
+          "zh": {
+            "title": "场景六：性能调试与优化",
+            "anchor": "apxc-场景六性能调试与优化"
+          },
+          "en": {
+            "title": "Scenario 6: Performance Debugging and Optimization",
+            "anchor": "apxc-scenario-6-performance-debugging-and-optimization"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C.15 标志间全局依赖关系图",
+            "anchor": "apxc-c15-标志间全局依赖关系图"
+          },
+          "en": {
+            "title": "C.15 Global Flag Dependency Relationship Diagram",
+            "anchor": "apxc-c15-global-flag-dependency-relationship-diagram"
+          }
+        }
+      ]
+    },
+    {
+      "id": "apxd",
+      "zh": {
+        "no": "附录 D",
+        "title": "术语表",
+        "anchor": "apxd"
+      },
+      "en": {
+        "no": "Appendix D",
+        "title": "Glossary",
+        "anchor": "apxd"
+      },
+      "sections": [
+        {
+          "level": 1,
+          "zh": {
+            "title": "附录 D：术语表",
+            "anchor": "apxd"
+          },
+          "en": {
+            "title": "Appendix D: Glossary",
+            "anchor": "apxd"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "核心概念关系图",
+            "anchor": "apxd-核心概念关系图"
+          },
+          "en": {
+            "title": "Core Concept Relationship Diagram",
+            "anchor": "apxd-core-concept-relationship-diagram"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "A",
+            "anchor": "apxd-a"
+          },
+          "en": {
+            "title": "A",
+            "anchor": "apxd-a"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "B",
+            "anchor": "apxd-b"
+          },
+          "en": {
+            "title": "B",
+            "anchor": "apxd-b"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "C",
+            "anchor": "apxd-c"
+          },
+          "en": {
+            "title": "C",
+            "anchor": "apxd-c"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "D",
+            "anchor": "apxd-d"
+          },
+          "en": {
+            "title": "D",
+            "anchor": "apxd-d"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "E",
+            "anchor": "apxd-e"
+          },
+          "en": {
+            "title": "E",
+            "anchor": "apxd-e"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "F",
+            "anchor": "apxd-f"
+          },
+          "en": {
+            "title": "F",
+            "anchor": "apxd-f"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "G-H",
+            "anchor": "apxd-g-h"
+          },
+          "en": {
+            "title": "G-H",
+            "anchor": "apxd-g-h"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "I-J-K",
+            "anchor": "apxd-i-j-k"
+          },
+          "en": {
+            "title": "I-J-K",
+            "anchor": "apxd-i-j-k"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "L-M",
+            "anchor": "apxd-l-m"
+          },
+          "en": {
+            "title": "L-M",
+            "anchor": "apxd-l-m"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "N-O-P",
+            "anchor": "apxd-n-o-p"
+          },
+          "en": {
+            "title": "N-O-P",
+            "anchor": "apxd-n-o-p"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "Q-R",
+            "anchor": "apxd-q-r"
+          },
+          "en": {
+            "title": "Q-R",
+            "anchor": "apxd-q-r"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "S",
+            "anchor": "apxd-s"
+          },
+          "en": {
+            "title": "S",
+            "anchor": "apxd-s"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "T",
+            "anchor": "apxd-t"
+          },
+          "en": {
+            "title": "T",
+            "anchor": "apxd-t"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "U-V",
+            "anchor": "apxd-u-v"
+          },
+          "en": {
+            "title": "U-V",
+            "anchor": "apxd-u-v"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "W-Z",
+            "anchor": "apxd-w-z"
+          },
+          "en": {
+            "title": "W-Z",
+            "anchor": "apxd-w-z"
+          }
+        },
+        {
+          "level": 2,
+          "zh": {
+            "title": "丛书共享词",
+            "anchor": "apxd-丛书共享词"
+          },
+          "en": {
+            "title": "Series-wide shared terms",
+            "anchor": "apxd-series-wide-shared-terms"
+          }
+        }
+      ]
+    }
+  ]
+}

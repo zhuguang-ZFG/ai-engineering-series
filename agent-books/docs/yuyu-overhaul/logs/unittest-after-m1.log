@@ -1,0 +1,129 @@
+..................................................................................F.............................................................F...................................................................................................refs 0 (0 unique): mapped 0, ambiguous 0, missing 0; blocks 0
+..E............F..............................................................................................................E..F..F......FF.....E..............................................................................................................
+======================================================================
+ERROR: test_shipped_registry_survives_fifty_inserted_lines (test_migrate.DualPaths.test_shipped_registry_survives_fifty_inserted_lines)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_migrate.py", line 155, in test_shipped_registry_survives_fifty_inserted_lines
+    plain.validate_plain(self.glosses, self.paths, self.manifest,
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         root=root)
+                         ^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\plain.py", line 374, in validate_plain
+    f"every edition (found {sorted(seen)})")
+yuyu_book.core.BuildError: plain layer invalid:
+  gloss dependency-injection: block ch02.b-4c8829c3 does not contain any registered form in en
+  gloss permission-mode: block ch04.b-c1787eb4 does not contain any registered form in zh
+  gloss permission-mode: block ch04.b-c717f6e2 does not contain any registered form in en
+
+======================================================================
+ERROR: test_the_shipped_registry_and_paths_validate (test_plain.RealRegistry.test_the_shipped_registry_and_paths_validate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 617, in test_the_shipped_registry_and_paths_validate
+    plain.validate_plain(self.glosses, self.paths, self.manifest)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\plain.py", line 374, in validate_plain
+    f"every edition (found {sorted(seen)})")
+yuyu_book.core.BuildError: plain layer invalid:
+  gloss dependency-injection: block ch02.b-4c8829c3 does not contain any registered form in en
+  gloss permission-mode: block ch04.b-c1787eb4 does not contain any registered form in zh
+  gloss permission-mode: block ch04.b-c717f6e2 does not contain any registered form in en
+
+======================================================================
+ERROR: test_the_shipped_files_validate_when_present (test_plain.RegistryValidation.test_the_shipped_files_validate_when_present)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 400, in test_the_shipped_files_validate_when_present
+    plain.validate_plain(glosses, paths, manifest)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\yuyu_book\plain.py", line 374, in validate_plain
+    f"every edition (found {sorted(seen)})")
+yuyu_book.core.BuildError: plain layer invalid:
+  gloss dependency-injection: block ch02.b-4c8829c3 does not contain any registered form in en
+  gloss permission-mode: block ch04.b-c1787eb4 does not contain any registered form in zh
+  gloss permission-mode: block ch04.b-c717f6e2 does not contain any registered form in en
+
+======================================================================
+FAIL: test_check_mode_passes_for_both_languages (test_build_contracts.EndToEndNoBrowser.test_check_mode_passes_for_both_languages)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_build_contracts.py", line 745, in test_check_mode_passes_for_both_languages
+    out = self.check()
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_build_contracts.py", line 740, in check
+    self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : BUILD FAILED: plain layer invalid:
+  gloss dependency-injection: block ch02.b-4c8829c3 does not contain any registered form in en
+  gloss permission-mode: block ch04.b-c1787eb4 does not contain any registered form in zh
+  gloss permission-mode: block ch04.b-c717f6e2 does not contain any registered form in en
+
+
+======================================================================
+FAIL: test_the_tool_inventory_is_the_number_the_book_quotes (test_docclaims.TextTotalsMatchTheirOwnTables.test_the_tool_inventory_is_the_number_the_book_quotes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_docclaims.py", line 372, in test_the_tool_inventory_is_the_number_the_book_quotes
+    self.assertEqual(bad, [], f"[{lang}] " + "\n  " + "\n  ".join(bad))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ["第一部分-基础篇/03-工具系统-Agent的双手.md: nothing matches '(\\\\d+) 个已注册工具'"] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+"第一部分-基础篇/03-工具系统-Agent的双手.md: nothing matches '(\\\\d+) 个已注册工具'"
+
+- ["第一部分-基础篇/03-工具系统-Agent的双手.md: nothing matches '(\\\\d+) 个已注册工具'"]
++ [] : [zh] 
+  第一部分-基础篇/03-工具系统-Agent的双手.md: nothing matches '(\\d+) 个已注册工具'
+
+======================================================================
+FAIL: test_zh_only_id_cannot_prove_the_english_edition (test_migrate.ResolverScope.test_zh_only_id_cannot_prove_the_english_edition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_migrate.py", line 240, in test_zh_only_id_cannot_prove_the_english_edition
+    self.assertIn("core glosses need evidence in both languages", str(ctx.exception))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'core glosses need evidence in both languages' not found in "plain layer invalid:\n  gloss harness: core glosses need evidence in every edition (found ['zh'])"
+
+======================================================================
+FAIL: test_a_lead_band_needs_prose_on_both_sides_of_the_manuscript (test_plain.RegistryValidation.test_a_lead_band_needs_prose_on_both_sides_of_the_manuscript)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 541, in test_a_lead_band_needs_prose_on_both_sides_of_the_manuscript
+    self.assertIn("both languages", str(ctx.exception))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'both languages' not found in "plain layer invalid:\n  guide ch02: plain_evidence must point at prose in every edition (found ['zh'])"
+
+======================================================================
+FAIL: test_a_reason_needs_its_own_prose_line_in_each_language (test_plain.RegistryValidation.test_a_reason_needs_its_own_prose_line_in_each_language)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 465, in test_a_reason_needs_its_own_prose_line_in_each_language
+    self.assertIn("why needs one prose line in each language",
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                  str(ctx.exception))
+                  ^^^^^^^^^^^^^^^^^^^
+AssertionError: 'why needs one prose line in each language' not found in "plain layer invalid:\n  gloss ag: why needs one prose line in each edition (found ['zh'])"
+
+======================================================================
+FAIL: test_core_glosses_need_both_languages (test_plain.RegistryValidation.test_core_glosses_need_both_languages)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 430, in test_core_glosses_need_both_languages
+    self.assertIn("both languages", str(ctx.exception))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'both languages' not found in "plain layer invalid:\n  gloss ag: core glosses need evidence in every edition (found ['zh'])"
+
+======================================================================
+FAIL: test_every_chapter_needs_tiers (test_plain.RegistryValidation.test_every_chapter_needs_tiers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Users\claude\claude-code-book-main\yuyu-book\tests\test_plain.py", line 505, in test_every_chapter_needs_tiers
+    with self.assertRaises(BuildError) as ctx:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: BuildError not raised
+
+----------------------------------------------------------------------
+Ran 501 tests in 69.829s
+
+FAILED (failures=7, errors=3)

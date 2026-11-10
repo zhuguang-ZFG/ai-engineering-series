@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>驭者·Agent Harness 01</title>
+<style>
+  html, body { margin: 0; background: #070b14; overflow: hidden; }
+  #stage {
+    position: relative; width: 1920px; height: 1080px;
+    background: radial-gradient(1200px 700px at 30% 20%, #122038 0%, #070b14 55%, #05070d 100%);
+    color: #e8eefc; font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: hidden;
+  }
+  .badge {
+    position: absolute; top: 48px; left: 64px;
+    display: flex; gap: 14px; align-items: center; opacity: 0.95;
+  }
+  .badge .dot { width: 14px; height: 14px; border-radius: 50%; background: #5eead4; box-shadow: 0 0 18px #5eead4; }
+  .badge .series { font-size: 28px; letter-spacing: 0.04em; color: #9fb4d9; }
+  .badge .chap { font-size: 28px; color: #e8eefc; font-weight: 650; }
+  #canvas { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+  .title-block {
+    position: absolute; left: 64px; bottom: 120px; max-width: 1100px;
+  }
+  .title-block h1 {
+    margin: 0 0 16px; font-size: 64px; line-height: 1.15; font-weight: 700;
+    text-shadow: 0 8px 40px rgba(0,0,0,.45);
+  }
+  .title-block p {
+    margin: 0; font-size: 32px; color: #a9b9d6; line-height: 1.45;
+  }
+  .stat {
+    position: absolute; right: 72px; top: 180px; text-align: right;
+  }
+  .stat .num { font-size: 92px; font-weight: 750; color: #5eead4; letter-spacing: -0.02em; }
+  .stat .lbl { font-size: 28px; color: #9fb4d9; margin-top: 8px; }
+  .pill-row {
+    position: absolute; left: 64px; top: 220px; display: flex; flex-wrap: wrap; gap: 16px; max-width: 1200px;
+  }
+  .pill {
+    border: 2px solid rgba(94,234,212,.35); background: rgba(18,32,56,.7);
+    border-radius: 999px; padding: 14px 28px; font-size: 28px; color: #d7e4ff;
+    opacity: 0.35; transform: translateY(8px);
+  }
+  .pill.on { opacity: 1; border-color: #5eead4; box-shadow: 0 0 24px rgba(94,234,212,.25); transform: none; }
+  .footer {
+    position: absolute; left: 64px; right: 64px; bottom: 42px;
+    display: flex; justify-content: space-between; color: #7f91b0; font-size: 24px;
+  }
+</style>
+</head>
+<body data-scene="principles">
+<div id="stage"
+     data-composition-id="ch01long"
+     data-start="0"
+     data-duration="12"
+     data-width="1920"
+     data-height="1080"
+     data-fps="24">
+
+  <canvas id="canvas" width="1920" height="1080"></canvas>
+
+  <div class="badge">
+    <div class="dot"></div>
+    <div class="series">驭者·Agent Harness</div>
+    <div class="chap" id="chapLabel">01 · 智能体编程的新范式</div>
+  </div>
+
+  <div class="pill-row" id="pills"></div>
+
+  <div class="stat" id="statBox" style="display:none">
+    <div class="num" id="statNum">1,884</div>
+    <div class="lbl" id="statLbl">TypeScript 文件</div>
+  </div>
+
+  <div class="title-block">
+    <h1 id="mainTitle">Chatbot 胶水 vs Agent 编排</h1>
+    <p id="subTitle">模型负责推理，Harness 负责驾驭与把关</p>
+  </div>
+
+  <div class="footer">
+    <span>基于开源书稿 · 小电讲电路</span>
+    <span id="footerRight">手绘讲解风 · HyperFrames</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  const scene = params.get('scene') || document.body.dataset.scene || 'hook';
+  const SCENES = {
+    hook: {
+      label: '01 · 开场钩子',
+      title: 'Chatbot 胶水 vs Agent 编排',
+      sub: '为什么需要 Agent Harness，而不是一层 API 封装',
+      pills: ['Prompt 粘贴', '手工胶水', 'Tool Use', 'Harness 驭者'],
+      draw: 'glue',
+      stat: null,
+    },
+    paradigm: {
+      label: '01 · §1.1 范式转移',
+      title: '从文本补全到工具调用',
+      sub: '推理引擎 · Tool Use · 六大工程挑战',
+      pills: ['推理引擎', 'Tool Use', '权限管控', '失败恢复', '状态一致', '上下文预算'],
+      draw: 'roles',
+      stat: null,
+    },
+    arch: {
+      label: '01 · §1.2 全景架构',
+      title: 'Claude Code 的工程体量',
+      sub: '入口 → QueryEngine → 对话循环 → 工具注册',
+      pills: ['Entry', 'QueryEngine', 'AsyncGenerator', 'Tools', 'MCP', 'Hooks'],
+      draw: 'arch',
+      stat: { num: '1,884', lbl: 'TypeScript 文件 · 512,664 行' },
+    },
+    principles: {
+      label: '01 · §1.3 五大原则',
+      title: '支撑架构选择的红线',
+      sub: '异步流式 · 安全边界 · 缓存感知 · 渐进扩展 · 不可变状态',
+      pills: ['Async Generator First', 'Security at Perimeter', 'Cache-Aware', 'Progressive Capability', 'Immutable State'],
+      draw: 'principles',
+      stat: null,
+    },
+    practice: {
+      label: '01 · 实战速览',
+      title: '安装 → /doctor → 一次工具调用',
+      sub: '把原则落到一次真实的 Agent 心跳上',
+      pills: ['install', '/doctor', 'Glob *.ts', '权限三阶段', 'Ctrl+C'],
+      draw: 'doctor',
+      stat: null,
+    },
+    outro: {
+      label: '01 · 片尾',
+      title: '驭者·Agent Harness',
+      sub: '基于开源书稿 · 完整目录见简介置顶 · 下期对话主循环',
+      pills: ['范式转移', '工程系统', '五模块', '五原则'],
+      draw: 'outro',
+      stat: null,
+    },
+  };
+  const cfg = SCENES[scene] || SCENES.hook;
+  document.getElementById('chapLabel').textContent = cfg.label;
+  document.getElementById('mainTitle').textContent = cfg.title;
+  document.getElementById('subTitle').textContent = cfg.sub;
+  const pills = document.getElementById('pills');
+  cfg.pills.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'pill';
+    el.textContent = t;
+    el.dataset.i = String(i);
+    pills.appendChild(el);
+  });
+  if (cfg.stat) {
+    const box = document.getElementById('statBox');
+    box.style.display = 'block';
+    document.getElementById('statNum').textContent = cfg.stat.num;
+    document.getElementById('statLbl').textContent = cfg.stat.lbl;
+  }
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1920, H = 1080;
+
+  function ink(a=0.85){ return `rgba(94,234,212,${a})`; }
+  function strokePath(points, t, lw=3){
+    const n = Math.max(2, Math.floor(points.length * Math.min(1, Math.max(0,t))));
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i=1;i<n;i++) ctx.lineTo(points[i][0], points[i][1]);
+    ctx.strokeStyle = ink(0.9);
+    ctx.lineWidth = lw;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+  function node(x,y,r,label,on){
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle = on ? 'rgba(94,234,212,0.18)' : 'rgba(255,255,255,0.04)';
+    ctx.fill();
+    ctx.strokeStyle = on ? ink(0.95) : 'rgba(159,180,217,0.35)';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    if (label){
+      ctx.fillStyle = '#d7e4ff';
+      ctx.font = '600 26px Segoe UI, Microsoft YaHei';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, x, y+r+34);
+    }
+  }
+
+  const state = { t: 0 };
+  function drawFrame(localT){
+    ctx.clearRect(0,0,W,H);
+    // subtle grid (engineering board)
+    ctx.strokeStyle = 'rgba(120,150,200,0.06)';
+    ctx.lineWidth = 1;
+    for (let x=0;x<W;x+=48){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y=0;y<H;y+=48){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    const p = (localT % 12) / 12;
+    const pillEls = [...document.querySelectorAll('.pill')];
+    pillEls.forEach((el,i)=>{
+      const on = p > (i+1)/(pillEls.length+1);
+      el.classList.toggle('on', on);
+    });
+
+    if (cfg.draw === 'glue'){
+      // left chat bubbles stacking -> right hub
+      const bubbles = [[220,260],[300,340],[250,430],[330,510]];
+      bubbles.forEach((b,i)=>{
+        const appear = Math.min(1, Math.max(0, (p - i*0.08)/0.15));
+        if (appear<=0) return;
+        ctx.globalAlpha = appear;
+        ctx.fillStyle = 'rgba(232,238,252,0.12)';
+        ctx.strokeStyle = ink(0.5);
+        ctx.lineWidth = 2;
+        roundRect(ctx, b[0], b[1], 220, 64, 18); ctx.fill(); ctx.stroke();
+        ctx.globalAlpha = 1;
+      });
+      const hub = [1280, 420];
+      node(hub[0], hub[1], 58, 'Harness', p>0.35);
+      [['Tool',1180,280],['FS',1400,280],['Git',1180,560],['Shell',1400,560]].forEach((n,i)=>{
+        const on = p > 0.45 + i*0.08;
+        if (on){
+          strokePath([[hub[0],hub[1]],[n[1],n[2]]], Math.min(1,(p-0.45-i*0.08)/0.12), 3);
+        }
+        node(n[1], n[2], 36, n[0], on);
+      });
+    } else if (cfg.draw === 'roles'){
+      strokePath([[240,520],[700,520]], Math.min(1,p/0.3), 4);
+      node(240,520,40,'LLM', p>0.05);
+      node(700,520,40,'Tools', p>0.25);
+      node(1160,360,40,'FS', p>0.4);
+      node(1160,520,40,'Git', p>0.5);
+      node(1160,680,40,'Shell', p>0.6);
+      if (p>0.35) strokePath([[700,520],[1160,360]], Math.min(1,(p-0.35)/0.2));
+      if (p>0.45) strokePath([[700,520],[1160,520]], Math.min(1,(p-0.45)/0.2));
+      if (p>0.55) strokePath([[700,520],[1160,680]], Math.min(1,(p-0.55)/0.2));
+    } else if (cfg.draw === 'arch'){
+      const layers = [
+        [200,260,1520,90,'Entry / CLI'],
+        [200,380,1520,90,'QueryEngine'],
+        [200,500,1520,90,'AsyncGenerator 对话循环'],
+        [200,620,1520,90,'Tools · Permissions · MCP'],
+      ];
+      layers.forEach((L,i)=>{
+        const a = Math.min(1, Math.max(0, (p - i*0.12)/0.18));
+        if (a<=0) return;
+        ctx.globalAlpha = 0.25 + 0.75*a;
+        ctx.fillStyle = 'rgba(94,234,212,0.08)';
+        ctx.strokeStyle = ink(0.7);
+        ctx.lineWidth = 2;
+        roundRect(ctx, L[0], L[1], L[2], L[3], 16); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#e8eefc';
+        ctx.font = '650 34px Segoe UI, Microsoft YaHei';
+        ctx.textAlign = 'left';
+        ctx.fillText(L[4], L[0]+28, L[1]+58);
+        ctx.globalAlpha = 1;
+      });
+    } else if (cfg.draw === 'principles'){
+      const items = ['Async','Security','Cache','Progressive','Immutable'];
+      items.forEach((name,i)=>{
+        const x = 220 + i*320;
+        const on = p > 0.12 + i*0.12;
+        node(x, 430, 52, name, on);
+        if (i>0 && on) strokePath([[x-320,430],[x,430]], 1, 2.5);
+      });
+    } else if (cfg.draw === 'doctor'){
+      const steps = [[320,420,'env'],[640,420,'perm'],[960,420,'MCP'],[1280,420,'API'],[1600,420,'FS']];
+      steps.forEach((s,i)=>{
+        const on = p > i*0.14;
+        node(s[0], s[1], 44, s[2], on);
+        if (i>0 && on) strokePath([[steps[i-1][0],420],[s[0],420]], Math.min(1,(p-(i-1)*0.14)/0.14));
+      });
+      ctx.fillStyle = '#9fb4d9';
+      ctx.font = '28px Segoe UI, Microsoft YaHei';
+      ctx.textAlign = 'left';
+      ctx.fillText('/doctor 流式逐项冒出 · 不是一次性刷屏', 320, 620);
+    } else {
+      // outro constellation
+      node(960,400,70,'Harness', true);
+      [['模型',700,260],['工具',1220,260],['权限',700,560],['状态',1220,560]].forEach((n,i)=>{
+        const on = p > 0.15 + i*0.1;
+        if (on) strokePath([[960,400],[n[1],n[2]]], 1);
+        node(n[1], n[2], 40, n[0], on);
+      });
+    }
+  }
+  function roundRect(c,x,y,w,h,r){
+    c.beginPath();
+    c.moveTo(x+r,y);
+    c.arcTo(x+w,y,x+w,y+h,r);
+    c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r);
+    c.arcTo(x,y,x+w,y,r);
+    c.closePath();
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  tl.to(state, { t: 12, duration: 12, ease: 'none', onUpdate: () => drawFrame(state.t) }, 0);
+  // soft title fade
+  tl.from(['#mainTitle','#subTitle'], { opacity: 0, y: 24, duration: 1.2, stagger: 0.15 }, 0.2);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines.ch01long = tl;
+  drawFrame(0);
+})();
+</script>
+</body>
+</html>
+

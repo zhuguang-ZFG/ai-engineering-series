@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="610" viewBox="0 0 480 610" role="img" aria-labelledby="title desc">
+  <title id="title">训练更新参数，推理读取参数</title>
+  <desc id="desc">训练比较预测与目标得到损失，计算梯度后更新参数；推理用当前参数生成分布。</desc><defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect width="480" height="610" fill="#fbfaf6"/><rect width="480" height="610" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="592" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 580 V601 H30 M450 601 H471 V580" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">训练：哪一个参数该调？</text>
+    <path d="M33 67 L451 66 Q457 68 456 76 L455 125 Q454 131 446 130 L28 129 Q23 128 24 120 L25 72 Q26 66 33 67 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="108" font-size="26">数据 → 预测，与目标比较</text>
+    <path d="M240 138 Q238 151 240 164" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 177 L451 176 Q457 178 456 186 L455 235 Q454 241 446 240 L28 239 Q23 238 24 230 L25 182 Q26 176 33 177 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="217" font-size="26">交叉熵损失 → 梯度</text>
+    <path d="M240 248 Q238 262 240 276" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 289 L451 288 Q457 290 456 298 L455 347 Q454 353 446 352 L28 351 Q23 350 24 342 L25 294 Q26 288 33 289 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="329" font-size="26">参数 − 学习率 × 梯度</text>
+    <path d="M24 388 Q240 386 456 388" stroke="#1f2328" stroke-width="2"/>
+    <text x="24" y="435" font-size="28">推理：用现在的参数</text>
+    <path d="M33 465 L451 464 Q457 466 456 474 L455 523 Q454 529 446 528 L28 527 Q23 526 24 518 L25 470 Q26 464 33 465 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="506" font-size="26">输入 → 当前参数 → 概率</text>
+    <text x="24" y="578" font-size="26">只做这次预测，不更新参数</text>
+  </g>
+</svg>

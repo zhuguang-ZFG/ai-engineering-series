@@ -1,0 +1,1 @@
+{"session_id":"workshop-session","turn_id":"turn-1","transcript_path":null,"cwd":"C:/work/parcel","hook_event_name":"PreToolUse","model":"fixture-model","permission_mode":"default","tool_name":"exec_command","tool_input":{"command":"git push --force origin main"},"tool_use_id":"tool-2"}

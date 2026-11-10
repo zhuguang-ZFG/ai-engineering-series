@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "ch09",
+  "title": "第 9 章　子智能体与 Fork 模式",
+  "source": "第三部分-高级模式篇/09-子智能体与Fork模式.md",
+  "sections": [
+    {
+      "index": 1,
+      "title": "9.2 内置智能体",
+      "summary": "getBuiltInAgents() 根据当前环境组装可用智能体，并不是固定返回四个智能体。注册结果受入口、构建标志和运行时开关影响。下文按探索、规划、执行和验证四类职责分析设计，不应将其视为所有用户都能调用的产品清单。"
+    },
+    {
+      "index": 2,
+      "title": "9.3 Fork 模式：缓存安全的并行执行",
+      "summary": "Fork 模式让主智能体把同一时刻的完整上下文\"分叉\"给多个并行子任务，同时靠 Anthropic API 的 prompt cache 机制避免重复传输大量 token。"
+    },
+    {
+      "index": 3,
+      "title": "9.6 子智能体生命周期管理",
+      "summary": "子智能体从创建到销毁经历完整的生命周期。设计高效的多智能体协作流程，先把这条生命周期走一遍。"
+    }
+  ],
+  "takeaways": [
+    "AgentTool 的三层智能体体系（内置、自定义、插件）从开箱即用一路做到深度定制，优先级机制允许企业级覆盖。自定义智能体通过 Markdown 文件定义，降低了创建门槛。",
+    "内置智能体各司其职：Explore 专注高速只读搜索，Plan 做结构化规划，General Purpose 是万能选手，Verification 采取对抗性验证策略。这些角色展示了核心工作流，可用性仍取决于注册门控。",
+    "Fork 模式的核心创新是字节级继承直接共享 prompt cache：相同的系统提示、工具定义、消息前缀加上统一的占位符结果，最大化缓存命中面积。在大规模并行场景下可节省 60%+ 的 token。",
+    "CacheSafeParams 的五个维度（system prompt、user context、system context、tool context、messages）是缓存命中的充分必要条件，任何维度的偏离都会导致缓存失效。这就是为什么 Fork 路径优先传递已渲染的原始字节。",
+    "工具隔离的三层防线（全局禁止列表、异步白名单、filterToolsForAgent 过滤）确保子智能体不会产生递归、不会越权、不会在后台模式下阻塞用户交互。",
+    "子智能体生命周期管理从创建到清理经过完整的状态转换。合理设置 maxTurns、选择合适的 model、正确配置工具集，是高效使用子智能体的关键。",
+    "对抗性验证哲学：与其相信代码\"应该能工作\"，不如主动尝试证明它不能工作。"
+  ],
+  "core_terms": [
+    {
+      "zh": "序列化",
+      "en": "serialization"
+    },
+    {
+      "zh": "阻塞",
+      "en": "blocking"
+    },
+    {
+      "zh": "并发",
+      "en": "concurrency"
+    },
+    {
+      "zh": "优雅降级",
+      "en": "graceful degradation"
+    },
+    {
+      "zh": "最小权限",
+      "en": "least privilege"
+    },
+    {
+      "zh": "流式",
+      "en": "streaming"
+    },
+    {
+      "zh": "权限模式",
+      "en": "permission mode"
+    },
+    {
+      "zh": "钩子",
+      "en": "hook"
+    }
+  ]
+}

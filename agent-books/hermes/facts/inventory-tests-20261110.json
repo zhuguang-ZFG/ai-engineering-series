@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-10",
+  "python": "3.13.14",
+  "scope": "Original inventory handler and FakeContext only; no Hermes PluginManager",
+  "tests_run": 9,
+  "passed": [
+    "test_book_inventory.InventoryTests.test_disappeared_root_is_an_error",
+    "test_book_inventory.InventoryTests.test_missing_config_never_registers_a_tool",
+    "test_book_inventory.InventoryTests.test_missing_or_empty_root",
+    "test_book_inventory.InventoryTests.test_parameters_cannot_change_root",
+    "test_book_inventory.InventoryTests.test_registration_contract_with_fake_context",
+    "test_book_inventory.InventoryTests.test_rejected_registration_is_visible",
+    "test_book_inventory.InventoryTests.test_relative_markdown_inventory",
+    "test_book_inventory.InventoryTests.test_result_limit_and_scan_budget",
+    "test_book_inventory.InventoryTests.test_symlinks_are_excluded_and_root_is_rejected"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "skipped": [],
+  "successful": true,
+  "sha256": {
+    "hermes/examples/aurora_lab.py": "50217b3d1b22b3688b1bff4c757887152a534ed06939659e0cecb41ab0693ccb",
+    "hermes/examples/book-inventory/__init__.py": "83e0bd111176d072fcc73faaacd688c951c8a00ab86b69f6e32ba3da3cc9b6aa",
+    "hermes/examples/check_aurora_workflow.py": "15f93703c612c265d92ae35d2201f6b9af5addd3aba35604be760a3cac3481dc",
+    "hermes/examples/check_memory_components.py": "29ab2d9ba169039ec8ec85cca38c322d92f0af42c44ef61ce7b36d6067d52e88",
+    "hermes/examples/test_aurora_lab.py": "da223903d273fba42dc66a12b85e4c8654e5e1f39432618448699b26333866a8",
+    "hermes/examples/test_book_inventory.py": "d12eab7217ffd0808d2fd4afdd7abd0092e6782505fbf276937b4cfd2347de43"
+  }
+}

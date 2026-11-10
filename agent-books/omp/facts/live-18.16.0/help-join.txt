@@ -1,0 +1,10 @@
+Join a shared collab session (same as /join)
+
+USAGE
+  $ omp join LINK
+
+ARGUMENTS
+  LINK   Collab link shared by the host (/collab)
+
+EXAMPLES
+  omp join "relay.example.sh/abc123#key"

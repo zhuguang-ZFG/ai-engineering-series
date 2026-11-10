@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "languages": [
+    {
+      "language": "zh",
+      "screenshots": [
+        {
+          "language": "zh",
+          "name": "cover",
+          "file": "screenshots/zh-cover.png",
+          "selector": "#cover",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 146385,
+          "sha256": "308e19f192463c7ec75910b024f8b58ea41f2dd186179dbc7e81dc01f743d97f"
+        },
+        {
+          "language": "zh",
+          "name": "toc",
+          "file": "screenshots/zh-toc.png",
+          "selector": "#toc",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 123648,
+          "sha256": "8ed948bfbc5d900f4d4f01b686f2febf26adb624789068a1c35c69fef555b66f"
+        },
+        {
+          "language": "zh",
+          "name": "body",
+          "file": "screenshots/zh-body.png",
+          "selector": "#ch01 h1",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 250092,
+          "sha256": "6f093250453ab2ef4cc1b008bf848c3530aac2eae1e8be4fa09842913e5fe7a9"
+        },
+        {
+          "language": "zh",
+          "name": "wide-table",
+          "file": "screenshots/zh-wide-table.png",
+          "selector": "div.table-scroll",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 257001,
+          "sha256": "0189d67853bf606ac436010eaf523edae864a46e95ba2e0c7506be5cfc3c2d5a"
+        },
+        {
+          "language": "zh",
+          "name": "landscape-plate",
+          "file": "screenshots/zh-landscape-plate.png",
+          "selector": "figure.diagram.wide.landscape",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 219096,
+          "sha256": "df51ff5c09489dcfbbb12b659940ae107e60a48916d3948bf7e82b9a81943021"
+        },
+        {
+          "language": "zh",
+          "name": "subject-index",
+          "file": "screenshots/zh-subject-index.png",
+          "selector": "#subject-index",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 126668,
+          "sha256": "808cfc78a67c67142674a77b47811c798a9e87af66ef539dbbf978d08d13f090"
+        },
+        {
+          "language": "zh",
+          "name": "dark-narrow",
+          "file": "screenshots/zh-dark-narrow.png",
+          "selector": "#ch01 h1",
+          "viewport": [
+            390,
+            844
+          ],
+          "color_scheme": "dark",
+          "bytes": 105252,
+          "sha256": "3be866ef304c06aa27b069a012c4304485f61fc0125efc160497bddb10169cc7"
+        }
+      ]
+    },
+    {
+      "language": "en",
+      "screenshots": [
+        {
+          "language": "en",
+          "name": "cover",
+          "file": "screenshots/en-cover.png",
+          "selector": "#cover",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 155403,
+          "sha256": "af1f51aa226e56d2b1297c0ebae2423e959a0c9ed7c0da5ac02040a193dc74a3"
+        },
+        {
+          "language": "en",
+          "name": "toc",
+          "file": "screenshots/en-toc.png",
+          "selector": "#toc",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 102044,
+          "sha256": "ee4a1092982af94ea9a5cb6138cd6ed7c354922a0d94867ec04cd6ab32613f65"
+        },
+        {
+          "language": "en",
+          "name": "body",
+          "file": "screenshots/en-body.png",
+          "selector": "#ch05 h1",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 212461,
+          "sha256": "8452822901d45cdfb1ea34921ca266bbb2316b4f1f2fb0b3f89b983236ab41e6"
+        },
+        {
+          "language": "en",
+          "name": "wide-table",
+          "file": "screenshots/en-wide-table.png",
+          "selector": "div.table-scroll",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 127223,
+          "sha256": "1427667b6ace54148cdf4b286da14adaff7d865e5c2dcdb5caa729b8742710c0"
+        },
+        {
+          "language": "en",
+          "name": "landscape-plate",
+          "file": "screenshots/en-landscape-plate.png",
+          "selector": "figure.diagram.wide.landscape",
+          "viewport": [
+            1440,
+            900
+          ],
+          "color_scheme": "light",
+          "bytes": 138381,
+          "sha256": "12a1a3814fbd8eabc35da0ad2e027dcd85cf417a36666ee5c4b69928f971b1bb"
+        }
+      ]
+    }
+  ]
+}

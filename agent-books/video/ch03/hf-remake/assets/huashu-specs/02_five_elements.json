@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "五要素", "data": {"icon": "target"}},
+    {"at": 1.2, "kind": "point", "text": "名字 · Schema · 权限"},
+    {"at": 2.8, "kind": "draw", "text": "执行 · UI", "data": {"icon": "bulb"}},
+    {"at": 4.2, "kind": "point", "text": "工具 DNA 先协议后清单"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

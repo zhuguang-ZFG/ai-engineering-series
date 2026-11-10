@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "opencode-source": {
+    "title": "OpenCode v1.19.5 source",
+    "authority": "Upstream fixed source and release",
+    "kind": "github",
+    "url": "https://github.com/anomalyco/opencode/tree/810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+    "snapshot": "v1.19.5 at 810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "V1 configuration, session, plugin, tools, permissions, MCP, LSP and snapshots",
+    "pinned": {
+      "tag": "v1.19.5",
+      "commit": "810c0eba1a7348036f8bdf61e6632d0c36c6876c"
+    }
+  },
+  "deepseek-repo": {
+    "title": "deepseek-ai/deepseek-harness",
+    "authority": "Upstream source, architecture docs and vendored Cordis",
+    "kind": "github",
+    "url": "https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "snapshot": "Root package 0.2.2-rc.1 and Cordis 4.1.0 at fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Runtime composition, plugin lifecycle, Agent contracts, tools, sessions and component experiments",
+    "pinned": {
+      "commit": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159"
+    }
+  },
+  "hermes-repo": {
+    "title": "Pinned Hermes repository",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/tree/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Installation, architecture and version baseline",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "codex-repo": {
+    "title": "openai/codex rust-v0.167.0",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+    "snapshot": "rust-v0.167.0 at full commit",
+    "accessed": "2026-11-10",
+    "license": "Apache-2.0",
+    "scope": "CLI, exec JSONL, app-server schemas, project instructions, policy, plugin resource parsing, skill discovery, Hook matching/output/concurrency/trust",
+    "pinned": {
+      "tag": "rust-v0.167.0",
+      "commit": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a"
+    }
+  },
+  "kimi-repo": {
+    "title": "MoonshotAI/kimi-code 2.5.2",
+    "authority": "Pinned upstream source and documentation",
+    "kind": "github",
+    "url": "https://github.com/MoonshotAI/kimi-code/tree/1c142a007c10e881602690def96057c23a2baa12",
+    "snapshot": "@moonshot-ai/kimi-code@2.5.2 at full commit",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "CLI, plugin and Agent parsers, Hook runner, session documentation, MCP and ACP; runtime results separately recorded",
+    "pinned": {
+      "tag": "@moonshot-ai/kimi-code@2.5.2",
+      "commit": "1c142a007c10e881602690def96057c23a2baa12"
+    }
+  },
+  "dmx-evaluation": {
+    "title": "DMX EVALUATION-04: extract prompt comparison",
+    "authority": "Recorded experiment in the companion course",
+    "kind": "github",
+    "url": "https://github.com/zhuguang-ZFG/vibe-coding-101-course/blob/e74c7315bb8e72aa501e11ba4aef29a8efc66c17/book/llm/examples/assistant/EVALUATION-04.md",
+    "snapshot": "Full commit; cited comparison was not rerun for this volume",
+    "accessed": "2026-11-10",
+    "license": "Referenced for discussion only; no source text or code redistributed",
+    "scope": "Before and after extract scores are both 5/8; boundary checks included, no quality or speed improvement claim",
+    "pinned": {
+      "commit": "e74c7315bb8e72aa501e11ba4aef29a8efc66c17"
+    }
+  }
+}

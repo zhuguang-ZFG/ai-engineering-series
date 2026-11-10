@@ -1,0 +1,522 @@
+# 第2章：对话循环 -- Agent 的心跳
+
+> **开门一句话：**对话循环是 Agent 的心跳：每 yield 一次就搏动一下；肯收缰的马，才敢跑远路。
+
+> "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
+> -- Augustine of Hippo
+
+**学习目标：** 读完这章，你能：
+
+- 说清主循环为什么是一个异步生成器：每 `yield` 一次，外面就有一次插手的机会——显示、取消、限速都靠它
+- 画完一个 Turn 的五个阶段和七条 Continue 路径，标出每条跳到哪个状态
+- 徒手写一个最小循环：吐出中间事件、接住取消信号、终止时写清原因
+
+**难度定位：**主干章：2.1 是起步；2.2、2.4 是主干，讲清一轮怎么跑、状态怎么跳；2.3 依赖注入和实战练习标了进阶，初读可跳过，不妨碍跟上主线。
+
+---
+
+## 2.1 异步生成器：对话循环的骨骼
+
+先试试"停"一个 Agent 有多难：你让它跑测试，它跑偏了，你按 Ctrl+C。界面确实停了——模型那边还在生成 token，子进程还在写文件，重试的定时器已经排进队列。你以为停了，其实只停了打印。本章的循环之所以做成异步生成器，就是为了这一刻：每个 `yield` 都是一个能插手的中转站，停得下来、清得干净、也扛得住生产快过消费。
+
+<!-- block: ch02.b-4fcb835b -->
+Claude Code 的对话主循环是一个以 `async function*` 定义的异步生成器。它不是一次性执行完毕的普通函数，而是一个可暂停、可恢复、可取消的"活"的流程。每一次 `yield` 就像心跳的一次搏动，将流式事件推向调用方。
+
+这个设计选择值得用更多篇幅来理解。在传统的编程模型中，函数调用是同步的：调用者发起请求，被调用者执行计算，返回结果。但 Agent 的交互模式打破了这种同步假设——模型可能需要几十秒才能完成一次响应，而且响应是逐 token 到达的；工具执行可能耗时数分钟，期间需要实时反馈进度；用户可能随时中断操作，要求立即停止。
+
+<!-- block: ch02.b-495b008f -->
+面对这些需求，传统的函数调用模型力不从心。异步生成器正好补上这个缺口：它像一个可以随时暂停和恢复的"协程"，在"生产者"（对话循环）和"消费者"（UI 渲染层）之间建立了一条实时的事件管道。
+
+具体看消费者怎样取值：UI 调用一次 `next()`，循环运行到一个 `yield`，交出事件后暂停；UI 处理完，再调用 `next()`，循环才继续。这就是这里的背压——让上游等下游，而不是另开一个无限增长的待显示队列。它只约束这条拉取链；如果子进程仍在往独立缓冲区写日志，那个缓冲区仍需自己的容量和取消控制。按 Ctrl+C 也一样：停止取事件只会停住显示，真正停止工作还得把取消信号传到正在等待的操作，再走清理路径。
+
+```ill
+ch02-cancel-chain
+```
+
+```mermaid
+flowchart TD
+    subgraph layer1["第一层：流式输出"]
+        direction LR
+        e1["事件1"] -->|"yield"| e2["事件2"] -->|"yield"| e3["事件3"]
+    end
+
+    note1["UI 即时渲染每个事件，用户无需等待全部完成"]
+
+    subgraph layer2["第二层：可取消性"]
+        cancel["AbortSignal 通知底层操作；return() 请求关闭生成器"]
+        clean["操作响应取消后，沿 finally 清理资源"]
+        scene2["对应场景：用户按 Ctrl+C 中断操作"]
+        cancel --> clean --> scene2
+    end
+
+    subgraph layer3["第三层：背压控制"]
+        bp["消费者再次 next() 前，生成器停在 yield"]
+        mem["限制这条拉取链；独立缓冲区仍须限容"]
+        scene3["对应场景：工具执行产生大量输出时"]
+        bp --> mem --> scene3
+    end
+
+    layer1 --- note1
+    layer1 ~~~ layer2
+    layer2 ~~~ layer3
+
+    classDef layer fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef note fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
+    class layer1,layer2,layer3 layer
+    class note1 note
+```
+
+### 函数签名与 AsyncGenerator 模式
+
+<!-- block: ch02.b-950e8cc9 -->
+整个对话循环的入口是一个导出的异步生成器函数，它接受一个参数对象，可向外产出五种类型的事件（流式事件、请求开始事件、消息、墓碑消息、工具调用摘要），最终返回一个表示对话终结状态的对象。
+
+这个函数签名蕴含了三层设计决策：
+
+<!-- block: ch02.b-d91bdfd7 -->
+1. **Yield 类型联合体（Union of yielded types）**：生成器可向外产出五种类型的事件——流式 token 到达事件、API 请求开始事件、用户/助手/系统消息、标记已废弃消息的墓碑消息、工具调用摘要消息。这五种事件覆盖了对话过程中所有需要传递给 UI 层的信息。使用联合类型而非多个独立的生成器，确保了事件的时序一致性——UI 看到的事件顺序与产生顺序完全一致。
+
+<!-- block: ch02.b-300c5d5d -->
+2. **返回类型 Terminal**：生成器可以返回终结状态，但 `for await...of` 只消费 `yield` 值，不会把最终的 `return` 值交给循环体。需要终结状态时，应显式调用 `await iterator.next()`，在 `done === true` 时读取该结果的 `value`，或在另一个生成器内通过 `yield*` 捕获委托返回值。不能将循环变量当作最终状态。
+
+<!-- block: ch02.b-b8c32f1b -->
+3. **参数对象**：将所有入参封装在一个结构化对象中，而非散列参数，调用方按需给字段即可。关键字段包括消息历史、系统提示词、权限检查函数、工具执行上下文、最大循环次数等。
+
+为什么选择 AsyncGenerator 而非回调或 Promise？因为生成器天然适配"流式生产-流式消费"的模型。模型的响应是逐 token 到达的，工具的执行结果是逐步产出的，生成器的 `yield` 机制让每一层都可以做到"有数据就推送，没数据就等待"，而不需要回调地狱或 Promise 链。
+
+<!-- block: ch02.b-350df6e6 -->
+> **设计哲学对比：** 回调模式需要额外组织事件顺序和消费速度；单个 Promise 只表示一次完成，不能单独承载连续事件。RxJS Observable 能表达事件流，但需要额外依赖与相应的订阅管理。这里用 AsyncGenerator，是为了以原生语法逐个交出事件；取消仍要由调用方、底层操作和清理逻辑共同实现，不是 `async function*` 自动提供的能力。
+
+### 流式事件类型
+
+对话循环中流转的事件可分为以下几类，它们共同构成了对话过程的"心跳信号"：
+
+- **stream_request_start**：每次 API 请求开始前发出，告知 UI 层一个新请求即将发起。在循环的每次迭代开头都会发出此事件。这个事件的实用价值在于 UI 可以展示"正在思考..."的状态指示器。
+
+- **StreamEvent**：来自 Anthropic API 的原始流式事件，包括文本块增量（`content_block_delta`）、thinking 块、tool_use 块等。这些事件直接从 API 响应流透传给 UI。想象你在看一场直播——StreamEvent 就是视频流中的每一帧画面，UI 层负责将这些画面拼接成流畅的视频。
+
+- **Message**：结构化的消息对象，包括 `AssistantMessage`（助手回复，可能包含 tool_use 块）、`UserMessage`（用户输入或 tool_result）、`SystemMessage`（系统通知）等。与 StreamEvent 不同，Message 是经过解析和结构化的——相当于直播结束后的回放，画面经过了编辑和组织。
+
+- **TombstoneMessage**：当流式回退（streaming fallback）发生时，已经产出的那部分消息要打上废弃标记。墓碑消息告诉 UI 移除对应的历史消息。这个名字来自程序员熟知的"墓碑标记"模式——就像墓碑标记了一个生命的终结，TombstoneMessage 标记了一条消息的"失效"。
+
+<!-- block: ch02.b-9b219a6d -->
+- **ToolUseSummaryMessage**：在一批工具执行完成后，异步生成的简要摘要，用于在 UI 中折叠展示工具调用结果。这对于长时间的 Agent 会话尤为重要——如果没有摘要，几十次工具调用的完整输出会淹没整个屏幕。
+
+### 消息类型体系
+
+Claude Code 的消息系统定义了清晰的角色分工。核心消息类型包括：
+
+```mermaid
+classDiagram
+    class UserMessage {
+        +用户输入
+        +承载工具执行结果(tool_result)
+    }
+    class AssistantMessage {
+        +文本块
+        +工具调用块(tool_use)
+    }
+    class SystemMessage {
+        +系统级通知
+        +权限变更
+        +模型回退提示
+    }
+    class AttachmentMessage {
+        +文件变更通知
+        +内存文件内容
+        +任务通知
+    }
+    class ProgressMessage {
+        +工具执行进度
+        +Bash 输出流
+        +文件读取进度
+    }
+    class TombstoneMessage {
+        +标记消息废弃
+        +流式回退触发
+    }
+    class ToolUseSummaryMessage {
+        +工具调用摘要
+        +UI 折叠展示
+    }
+
+    UserMessage : API 角色为 user
+    AssistantMessage : 可同时包含文本和工具调用
+    SystemMessage : 不参与 API 通信
+    TombstoneMessage : 标记消息"失效"
+```
+
+<!-- block: ch02.b-52497bfc -->
+- **UserMessage**：用户的输入消息，也承载工具执行结果（tool_result）。在 API 的视角里，工具结果总是以 user 角色发送。这个设计可能看起来违反直觉——为什么工具结果是"user"角色？原因是 API 协议只认三种角色（system/user/assistant），工具结果得让模型"看到"，所以必须以 user 角色发送。这是一个工程约束驱动设计决策的典型案例。
+- **AssistantMessage**：模型返回的消息，可能包含文本块和 tool_use 块。当模型检测到需要调用工具时，响应中会包含 `type: 'tool_use'` 的内容块。AssistantMessage 的关键特性是它可能同时包含文本和工具调用——模型可能先输出一段解释（"我需要查看你的文件"），然后附加一个工具调用。这种"边说边做"的模式让 Agent 的行为更加透明。
+- **SystemMessage**：系统级通知，如权限变更、模型回退提示等。不参与 API 通信，仅在 UI 展示。SystemMessage 是"第四面墙"——它不参与模型对话，但告诉用户系统内部正在发生什么。
+- **AttachmentMessage**：附件消息，承载文件变更通知、内存文件（CLAUDE.md）内容、任务通知等附加信息。
+- **ProgressMessage**：工具执行的进度消息，用于实时反馈工具运行状态（如 Bash 命令的输出流、文件读取进度等）。
+
+> **交叉引用：** 消息类型与第 3 章的工具渲染方法紧密相关。每个工具定义的 `renderToolUseMessage`、`renderToolResultMessage` 等方法决定了不同消息类型在终端中的视觉呈现方式。
+
+---
+
+## 2.2 一个完整 Turn 的生命周期
+
+<!-- block: ch02.b-e588ade6 -->
+现在跟着一个完整的 Turn 走一遍——从用户按下回车键，到模型答完或者决定调用工具——`queryLoop` 函数内部就是这么转的。
+
+先追踪一个小任务：“读取 `package.json`，解释测试命令”。第一次 API 请求发出历史消息和工具定义，模型返回 Read 的 `tool_use`；运行时检查并执行它，得到文件内容，再把对应的 `tool_result` 加入消息列表。下一次 API 请求才带着这份结果让模型解释脚本。因此，一个用户任务可以经历多次模型请求；收到工具请求不等于工具已成功，工具成功也不等于模型已经看见结果。五个阶段就是在接这几次交接。
+
+```mermaid
+flowchart TD
+    input["用户输入: 帮我修复这个 bug"]
+
+    phase1["阶段一：状态初始化<br/>从状态对象解构当前迭代所需的变量<br/>构建新的可变状态容器"]
+
+    phase2["阶段二：上下文预处理（七步管线）<br/>① 工具结果预算 → ② Snip压缩 → ③ Microcompact<br/>④ Context Collapse → ⑤ 系统提示组装<br/>⑥ Autocompact → ⑦ Token阻断检查"]
+
+    phase3["阶段三：API 调用（流式接收）<br/>发送系统提示 + 消息历史 + 工具定义<br/>流式接收响应事件<br/>收集 assistant 消息和工具调用块"]
+
+    decision{"有工具调用？"}
+
+    phase4["阶段四：工具调用执行<br/>权限检查 · 并发分区调度<br/>流式/批量执行 · 进度即时产出"]
+
+    terminal["终止路径<br/>检查 stop hooks · 检查 token 预算<br/>返回 Terminal 状态"]
+
+    phase5["阶段五：工具结果回填与下一轮<br/>附件注入 · 打包新状态对象<br/>continue 回到阶段一"]
+
+    input --> phase1 --> phase2 --> phase3 --> decision
+    decision -->|是| phase4 --> phase5
+    decision -->|否| terminal
+    phase5 -.->|下一轮迭代| phase1
+
+    classDef phase fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef term fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef dec fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    class input,phase1,phase2,phase3,phase4,phase5 phase
+    class terminal term
+    class decision dec
+```
+
+### 阶段一：状态初始化
+
+<!-- block: ch02.b-b2489b31 -->
+`queryLoop` 是一个 `while(true)` 无限循环。每次迭代代表一次"模型调用 + 工具执行"的完整回合。在循环顶部，函数从状态对象中解构出当前迭代所需的变量，包括工具使用上下文、消息列表、自动压缩追踪、恢复计数器等。
+
+状态对象是一个可变状态容器，包含跨迭代传递的全部状态：消息列表、工具上下文、自动压缩追踪、恢复计数器、turn 计数等。每次 `continue` 回到循环顶部时，都会写入一个新的状态对象。
+
+<!-- block: ch02.b-3084d4d5 -->
+这个设计的关键洞察是：**状态在"读"和"写"之间有明确的分界线。** 在每次迭代的开始，函数通过解构一次性读取所有需要的状态字段（快照语义）；在迭代结束时，通过构造新对象一次性写入更新后的状态（原子更新语义）。这避免了迭代到一半只写进部分状态、前后对不上。
+
+### 阶段二：上下文预处理
+
+在调用模型之前，循环执行一系列预处理步骤。这些步骤构成了一个精心设计的"压缩管线"，目的是在有限的上下文窗口中保留最有价值的信息：
+
+1. **工具结果预算**：工具结果太大就先截断，或者干脆持久化到磁盘，确保不超过上下文窗口限制。这类似于计算机科学中的"分页"机制——当数据太大无法全部放入内存（上下文窗口）时，将部分数据存储到磁盘，只保留摘要或引用。
+
+2. **Snip 压缩**：启用历史裁剪后，系统裁的是消息序列本身，整条整条地丢，然后把返回的消息及释放的令牌数传入后续处理。它不同于截断某个超长工具输出，也不同于 MicroCompact 对工具结果正文的替换。
+
+3. **Microcompact**：赶在自动压缩之前先轻量压一遍，用缓存编辑技术减少 token 消耗。Microcompact 的设计是"缓存友好"的——它尽量复用 API 侧已缓存的 token，避免因压缩导致缓存全面失效。
+
+4. **Context Collapse**：选择性重构消息组，而不是立即把整段对话换成一份摘要。它与 AutoCompact 的区别在于处理范围和触发路径，不是“只折叠寒暄且绝不丢信息”。第 7 章还会说明，启用 Collapse 后会抑制普通自动压缩；这里列出预处理位置，不代表四种机制每轮都会执行。
+
+<!-- block: ch02.b-7b170c19 -->
+5. **系统提示组装**：将基础系统提示与动态上下文（如当前工作目录、用户配置等）合并为完整的系统提示。这一步的设计直接影响了缓存命中率——如果组装顺序不稳定，每次调用生成的 Prompt 字节内容可能不同，导致缓存失效。
+
+<!-- block: ch02.b-4c37bb20 -->
+6. **Autocompact**：如果上下文超过阈值，自动压缩机制会触发，将历史对话摘要为压缩后的消息，然后替换待发送的消息列表。Autocompact 是压缩管线的"最后一道防线"——当其他轻量级压缩手段都无法将上下文缩减到限制以内时，它会执行一次全量摘要。
+
+<!-- block: ch02.b-fc1585d9 -->
+7. **Token 阻断检查**：如果 token 数超过硬性限制，直接返回错误消息，不再发起 API 调用。这是一个"快速失败"机制——与其发送一个注定会失败的 API 请求，不如在本地就阻止它。
+
+> **最佳实践提示：** 这七步管线的设计遵循了一个重要原则：**压缩手段从轻量到重量排列，每一步都先尝试最小代价的方案。** 这个原则在你自己构建 Agent 系统时也值得遵循——先用 Snip 裁剪历史消息序列，再用 Microcompact 减少缓存浪费，再用 Context Collapse 折叠冗余信息，最后才用 Autocompact 做全量摘要。因为每一步都会丢失一些信息，应该尽量延迟最"激进"的压缩手段的使用。
+
+### 阶段三：API 调用
+
+所有预处理完成后，进入核心的 API 调用阶段。这里使用注入的模型调用依赖发起流式请求，将组装好的消息列表、系统提示和工具定义传递给模型 API。模型调用函数返回一个异步生成器，逐个产出流式事件。每次收到事件，循环执行以下逻辑：
+
+- 如果事件包含 assistant 消息，将其加入助手消息数组。
+- 如果事件包含工具调用块，将其收集起来，并标记需要后续工具执行。
+- 如果启用了流式工具执行，在收到工具调用块时立即开始执行工具，而不必等待整个响应完成。
+
+这个阶段的一个微妙之处在于：模型可能在一个响应中同时包含文本内容和工具调用。例如，模型可能先输出"我来看看你的 package.json 文件"，然后附加一个 Read 工具调用。循环需要正确处理这种混合输出——既要 yield 文本事件让 UI 渲染，又要收集工具调用块为后续执行做准备。
+
+### 阶段四：工具调用检测与执行
+
+当流式响应结束后，循环检查是否需要执行工具。如果模型没有请求调用工具，进入终止路径，检查各种退出条件（stop hooks、token budget 等）后返回。
+
+如果模型请求了工具调用，循环执行工具：根据是否启用了流式执行，选择从流式执行器获取剩余结果，或使用传统的批量执行函数。
+
+> **交叉引用：** 工具执行的详细机制（并发分区、流式执行器、状态机）在第 3 章的工具编排引擎部分有深入分析。
+
+工具执行同样是一个异步生成器。每产出一个结果消息，循环就将其 yield 给上层消费者（UI），同时收集到工具结果数组中。
+
+这里拆开的是两件事：**"结果收集"和"结果传递"是解耦的。** 工具结果既收集到数组中用于下一轮 API 调用，又 yield 给 UI 用于实时展示。一个 yield 就把这两件事一起做完，不需要额外的状态同步逻辑。
+
+### 阶段五：工具结果回填与下一轮
+
+工具执行完毕后，循环执行附件注入（内存文件、文件变更通知、排队命令等），然后将所有消息（原始消息 + 助手消息 + 工具结果）打包为新的状态对象，通过 `continue` 回到 `while(true)` 的顶部。
+
+下一轮迭代将使用这个扩展后的消息列表重新调用模型，模型将看到之前的工具结果，然后决定是继续调用工具还是给出最终回复。
+
+<!-- block: ch02.b-1f451e2b -->
+附件注入是一个容易忽视但非常重要的步骤。想象这样一个场景：在工具执行期间，用户修改了 CLAUDE.md 文件。如果不注入这个变更，模型下一轮调用就可能拿着过时的配置做决策。有了附件注入，每一轮循环开始时，模型拿到的都是最新的环境信息。
+
+### 终止条件判断
+
+对话循环的终止发生在多个位置，每个终止原因对应不同的系统状态和清理逻辑：
+
+<!-- block: ch02.b-f796e356 -->
+| 终止原因 | 触发条件 | 用户体验 | 设计意图 |
+|----------|----------|---------|---------|
+| `completed` | 模型正常回复且无工具调用 | Agent 给出最终回复 | 正常的"成功完成"路径 |
+| `aborted_streaming` | 用户中断（Ctrl+C） | 操作立即停止 | 用户主动中断，需要即时响应 |
+| `aborted_tools` | 工具执行期间中断 | 当前工具被取消，结果丢弃 | 工具执行可能耗时较长，需要中断支持 |
+| `max_turns` | 达到最大循环次数 | Agent 停止并说明原因 | 防止无限循环消耗 token |
+| `blocking_limit` | Token 数超过硬性限制 | Agent 报错退出 | 硬性安全边界，防止 API 错误 |
+| `prompt_too_long` | 上下文过长且恢复失败 | Agent 报错退出 | 所有压缩手段已用尽 |
+| `model_error` | API 调用异常 | Agent 报错并展示错误信息 | 网络或服务端问题的优雅降级 |
+| `stop_hook_prevented` | Stop hook 阻止继续 | Agent 停止并说明原因 | 用户配置的自动停止条件 |
+| `hook_stopped` | 工具 hook 阻止继续 | Agent 停止并说明原因 | 外部 Hook 脚本的决定 |
+| `image_error` | 图片尺寸/格式错误 | Agent 报错退出 | 输入数据格式问题 |
+
+<!-- block: ch02.b-e44b1398 -->
+> **设计洞察：** 十种终止原因的精细划分并非过度设计。在调试 Agent 行为时，准确的终止原因是定位问题的第一线索。如果所有错误都返回一个笼统的"error"，开发者将无从判断是 API 超时、上下文溢出还是用户中断导致了问题。细粒度的终止原因是"可观测性"（Observability）的基础。
+
+这些终止原因还可以分为三类：
+
+```mermaid
+flowchart TD
+    subgraph normal["正常终止"]
+        completed["completed<br/>Agent 完成了任务"]
+    end
+
+    subgraph user_stop["用户主动终止"]
+        aborted_s["aborted_streaming<br/>用户 Ctrl+C 中断"]
+        aborted_t["aborted_tools<br/>工具执行期间中断"]
+    end
+
+    subgraph error["异常终止"]
+        max_turns["max_turns<br/>达到最大循环次数"]
+        blocking["blocking_limit<br/>Token 超过硬性限制"]
+        too_long["prompt_too_long<br/>上下文过长且恢复失败"]
+        model_err["model_error<br/>API 调用异常"]
+        stop_hook["stop_hook_prevented<br/>Stop hook 阻止"]
+        hook_stop["hook_stopped<br/>工具 Hook 阻止"]
+        img_err["image_error<br/>图片尺寸/格式错误"]
+    end
+
+    classDef ok fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef user fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef err fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    class completed ok
+    class aborted_s,aborted_t user
+    class max_turns,blocking,too_long,model_err,stop_hook,hook_stop,img_err err
+```
+
+- **正常终止**：`completed`——Agent 完成了任务
+- **用户主动终止**：`aborted_streaming`、`aborted_tools`——用户决定停止
+- **异常终止**：其余七种——系统遇到了无法继续的情况
+
+对于异常终止，系统在返回终止状态之前会执行清理逻辑：取消正在执行的工具、释放资源引用、记录终止原因到日志。清理走完，即使 Agent 异常退出，也不会留下"脏"的状态。
+
+一个 Turn 走四拍：提问、模型点工具、工具跑完、结果回填再问。
+
+```ill
+ch02-turn-loop
+```
+
+> **交叉引用：** 想看这一圈在真实终端里第一次跑起来的样子，参见 omp 分册第 6 章《第一次对话》。
+
+---
+
+<!-- block: ch02.b-eafe3df9 -->
+## 2.3 依赖注入与可测试性
+
+### QueryDeps 接口
+
+对话主循环的设计中最值得注意的工程决策之一是依赖注入模式。系统定义了一个精简的依赖接口，包含四个核心依赖：模型调用函数、轻量压缩函数、自动压缩函数和 UUID 生成器。
+
+生产环境的依赖实现返回真实的 API 调用、压缩逻辑和随机 UUID 生成器。
+
+在主循环中，通过参数获取依赖，如果未提供则使用生产环境默认值。测试时，调用方可以传入自定义的依赖对象，替换掉真实的 API 调用、压缩逻辑和 UUID 生成器。正如设计注释所说：
+
+> "Passing a deps override into QueryParams lets tests inject fakes directly instead of spyOn-per-module -- the most common mocks (callModel, autocompact) are each spied in 6-8 test files today with module-import-and-spy boilerplate."
+
+<!-- block: ch02.b-f57c46ac -->
+这段注释揭示了一个重要的工程洞察：没有依赖注入，测试代码只能靠模块级的 spy/mock 去替换外部依赖。这种 spy-per-module 的模式有几个问题：它耦合了测试代码与模块内部结构，当模块重命名或移动时测试需要同步修改；它在多个测试文件中重复相同的 mock 样板代码；它可能因为模块缓存导致测试之间的状态泄漏。
+
+依赖注入把这三个问题一起解决了：测试只需传入一个自定义的依赖对象，不关心模块内部结构；每个测试用例创建独立的依赖实例，避免了状态泄漏；依赖接口是明确的，当接口变化时编译器会指出需要更新的测试。
+
+### 为什么对话循环采用函数式设计
+
+Claude Code 的对话循环选择 `async function*` 而非 class，这个选择有其深层考量：
+
+<!-- block: ch02.b-017ed0a3 -->
+1. **天然的状态隔离**：每次调用对话函数都创建一个全新的闭包，所有可变状态都是函数局部变量。没有跨调用的状态泄漏风险。对比 class 方案：如果对话循环是一个 class 的方法，那么多个并发的对话实例可能意外共享 class 实例上的属性，导致状态污染。
+
+<!-- block: ch02.b-8967fb7d -->
+2. **生成器的背压语义**：`yield` 暂停执行直到消费者请求下一个值。UI 层跟不上产出速度时，生成器自己就停在那里等，不会把输出堆在内存里。这是生产级系统必须考虑的问题——当工具执行产生大量输出（如 `npm install` 的完整日志）时，没有背压控制的系统可能因为内存堆积而崩溃。
+
+<!-- block: ch02.b-13c277f8 -->
+3. **取消传播**：`.return()` 请求关闭生成器，并执行适用的 `finally` 清理块，但不能自行打断正在等待的 Promise，也不会自动取消外部 I/O。及时取消需要 `AbortController` 以及主动响应信号的 API、工具和子进程；资源释放仍需由明确的清理路径负责。
+
+4. **可组合性**：`yield*` 委托语法允许将子生成器的输出直接转发。主循环的结果经委托语法传到外层生成器，工具执行也串在同一条链上。这种"生成器链"把不同层次的代码无缝拼在一起——对话循环产出事件，工具执行也产出事件，上层 UI 只需要一个统一的 `for await...of` 循环就能消费所有层次的事件。
+
+> **反模式警告：** 如果你正在构建自己的 Agent 循环，避免将对话状态存储在全局变量或 class 的实例属性中。全局状态让并发测试无从下手，class 实例状态则会让多个对话实例互相干扰。函数闭包是最安全的状态容器——它天然隔离、天然不可共享。
+
+---
+
+## 2.4 状态转换模型
+
+### State 类型与 Continue/Terminal
+
+<!-- block: ch02.b-b6bd4f82 -->
+对话循环的核心状态机由两个概念驱动：可变循环状态（State）和终止信号（Terminal）。
+
+State 类型定义了循环的完整可变状态，包含消息列表、工具使用上下文、自动压缩追踪状态、输出 token 恢复计数器、是否已尝试响应式压缩、输出 token 覆盖限制、待处理的工具摘要、stop hook 是否激活、turn 计数，以及上一次继续循环的原因。每次 `continue` 回到循环顶部时，都会构造一个全新的状态对象。`transition` 字段记录了上一次 continue 的原因，用于在恢复逻辑中避免重复执行相同的恢复路径。
+
+Terminal 和 Continue 类型定义在独立的模块中。Terminal 标记对话的终结（携带 reason 字段），而 Continue 标记继续循环的决策（携带 reason 和可选的附加信息）。
+
+这个三元模型（State + Continue + Terminal）用类型系统把循环的正确性变成了编译期约束：
+
+- State 是"可变但可控"的数据容器，每次 continue 都创建新实例
+- Continue 是"继续"的信号，携带原因和附加信息，指导下一轮迭代的行为
+- Terminal 是"终止"的信号，携带原因，结束循环并返回给调用方
+
+### 状态转换的决策逻辑
+
+<!-- block: ch02.b-c375317a -->
+整个循环的状态转换可以归纳为以下状态机：
+
+```mermaid
+flowchart TD
+    init["初始化"] --> preprocess["预处理"]
+    preprocess --> api["API调用"]
+    api --> has_tool{"工具调用?"}
+
+    has_tool -->|无工具| no_tool["终止检查"]
+    has_tool -->|有工具| yes_tool["工具执行"]
+
+    no_tool --> done{"终止结果"}
+    done -->|完成| terminal1["Terminal: completed"]
+    done -->|stop hook| terminal2["Terminal: stop_hook_prevented"]
+    done -->|recovery| recovery_path["continue → recovery"]
+
+    yes_tool --> result["结果回填"]
+    result --> next_turn["continue → next_turn"]
+    next_turn -.->|下一轮| init
+
+    recovery_path -.->|重试| init
+
+    classDef state fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef decision fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef terminal fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef cont fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    class init,preprocess,api,no_tool,yes_tool,result state
+    class has_tool,done decision
+    class terminal1,terminal2 terminal
+    class next_turn,recovery_path cont
+```
+
+关键的转换路径包括：
+
+1. **next_turn**：正常的工具调用后继续。消息列表扩展为原始消息加上助手消息和工具结果，turn 计数递增。这是最常见也是最简单的转换路径。
+
+2. **max_output_tokens_recovery**：模型输出截断时，注入恢复消息后继续循环。恢复消息指导模型从截断处继续。最多重试 3 次。这个路径的存在是因为 LLM 的输出有时过长，API 会截断它——不是错误，而是模型"说得太多"了。恢复消息相当于告诉模型"你刚才的话说到一半中断了，请从中断处继续"。
+
+3. **max_output_tokens_escalate**：首次截断时尝试提升输出 token 限制，而非注入恢复消息。这是一种更直接的恢复策略——与其让模型从中断处继续，不如给它更大的输出空间，让它一次性完成。只有当提升限制后仍然截断时，才回退到 recovery 路径。
+
+4. **reactive_compact_retry**：上下文过长时，通过响应式压缩恢复。压缩失败则终止循环。这个路径是对话循环的"紧急刹车"——当所有预防性压缩手段都没能阻止上下文溢出时，reactive compact 作为最后的恢复手段尝试挽救对话。
+
+5. **collapse_drain_retry**：上下文折叠的溢出恢复路径。优先于响应式压缩执行，因为折叠保留粒度更细的上下文。恢复手段按"最小信息损失"排序：哪个丢得最少，先用哪个。
+
+6. **stop_hook_blocking**：Stop hook 返回阻塞错误时，将错误注入消息列表后继续，让模型有机会修正。这个路径展示了 Agent 系统的一个关键设计理念：**错误不一定是终止条件，也可以是反馈信号。** 模型收到 hook 的错误信息后，可能会调整策略并尝试不同的方案。
+
+<!-- block: ch02.b-a9aa0f71 -->
+7. **token_budget_continuation**：Token 预算管理触发的继续，注入一个提示消息提醒模型注意预算。这类似于手机流量套餐的"余额不足提醒"——不是立即断网，而是提醒用户注意剩余流量。
+
+<!-- block: ch02.b-f232a379 -->
+每条 continue 路径都精心构造了新的状态对象，确保不同的恢复策略之间不会冲突。`transition` 字段留着，后续迭代就认得出"我是怎么来到这里的"，往下的判断也就更有依据。
+
+> **最佳实践：** 在设计自己的 Agent 循环时，为每条 Continue 路径记录原因（transition reason）是一个简单但极其有效的调试手段。当 Agent 行为异常时，追溯 transition 链可以帮助你快速定位是哪一次转换引入了问题。
+
+自己写循环时最容易踩的坑，就是只留一个出口、只记一种原因。下表把本章讲过的岔路列全：
+
+| 常见翻车 | 正确做法 |
+|:--------:|------|
+| 循环只判断"有没有工具调用"，没有就退出 | 十种终止原因分开记，`completed` 与 `model_error` 走的不是同一条出口 |
+| 模型输出截断在半路，就原样重发同一份消息 | 先考虑抬高输出上限，仍截断再注入恢复消息，最多重试 3 次 |
+| Ctrl+C 只关掉界面，工具和定时器照跑 | 取消信号一路传到工具，`finally` 里做完清理再退 |
+| 上下文满了直接丢掉最早的几条消息 | 压缩手段按代价从轻到重排队，全量摘要留到最后 |
+| 轮次状态存进全局变量或实例属性 | 收进一个不可变 State，每轮整体换一份 |
+
+---
+
+## 实战练习
+
+**练习 1：追踪一次完整的工具调用流**
+
+在对话主循环的以下关键位置添加日志：
+- 请求开始时（stream_request_start 事件发出后）
+- 工具调用块检测时（第一个 tool_use 块到达时）
+- 工具执行开始时（runTools 或 StreamingToolExecutor 被调用时）
+- 下一轮状态构建时（continue 之前）
+
+向 Claude Code 发送一个需要调用工具的请求（如"读取当前目录的 package.json"），观察消息如何从 API 流经工具执行，再回填到下一轮 API 调用。
+
+**扩展思考：** 如果连续发送三个需要工具调用的请求，观察 turn 计数如何递增。尝试在工具执行期间按 Ctrl+C，观察 `aborted_tools` 终止路径的清理逻辑。
+
+**练习 2：模拟一个 max_output_tokens 恢复**
+
+在测试环境中注入自定义依赖，让模型调用函数返回一条输出截断的助手消息。观察循环如何跳过首次的 yield（withheld 机制），尝试提升 token 限制，并在重试次数耗尽后 finally surface 错误。
+
+**扩展思考：** 修改截断次数的阈值，观察 escalate 和 recovery 两条路径的切换条件。如果截断恰好发生在工具调用块内部（工具名只输出了一半），系统会如何处理？
+
+**练习 3：理解依赖注入的价值**
+
+<!-- block: ch02.b-0f67253c -->
+思考：如果模型调用函数是直接硬编码在循环中，测试需要多少 mock 才能覆盖主循环的各种分支？对比当前依赖注入方案，评估其对测试可维护性的影响。
+
+**具体估算：** 假设主循环有 7 种 Continue 路径和 10 种终止原因。如果没有依赖注入，测试每个分支都需要：(a) 拦截模块级别的 API 调用，(b) 控制压缩函数的行为，(c) 固定 UUID 生成。估算一下 mock 样板代码的总量，然后考虑当模块结构变化时这些 mock 需要多少维护工作。
+
+**练习 4：上下文压缩管线实战**
+
+向 Claude Code 发送一系列需要大量上下文的请求（如"读取这个大文件，然后基于它生成文档，再运行测试"），观察压缩管线是如何触发的。注意以下线索：
+- 何时触发 Snip 压缩（消息级历史裁剪）
+- 何时触发 Autocompact（对话历史正在摘要的标志）
+- 压缩后模型的推理能力是否受到影响
+
+> **交叉引用：** 上下文压缩管线的详细实现将在第二部分的核心篇中深入分析，包括缓存感知的压缩策略和上下文折叠的粒度控制。
+
+**最小可运行案例：** 用生成器复刻一次「工具调用—结果回填」（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**前置：** 第 1 章的四步状态链；**回链：** 第 1 章 1.2 节的异步生成器对话主循环
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
+---
+
+## 关键要点
+
+1. **AsyncGenerator 适合做 Agent 循环的载体**：`yield` 逐步交出事件，`yield*` 委托子生成器，`.return()` 请求关闭生成器。真正的及时取消还需要底层 I/O 响应取消信号，并由清理路径释放资源。把这几件事分开，才不会把“界面停了”误认为“工具停了”。
+
+2. **预处理管线是上下文管理的核心**：Snip、Microcompact、Context Collapse、Autocompact 四层压缩策略层层递进，从轻量裁剪到全量摘要，确保 Agent 在无限对话中始终保持在 token 预算内。理解这四层管线的设计原则（从轻量到重量排列），有助于你在自己的 Agent 系统中设计上下文管理策略。
+
+3. **状态不可变，转换可追踪**：每次 continue 都构造新的 `State`，配合 `transition` 字段，循环每一次跳转都有据可查。这是函数式设计在命令式循环中的折中。在实际调试中，transition 链是追踪 Agent 行为的"面包屑"。
+
+<!-- block: ch02.b-cf88cfe0 -->
+4. **依赖注入使测试成为可能**：`QueryDeps` 的四个依赖（callModel、microcompact、autocompact、uuid）覆盖了循环的核心副作用，测试不碰 API 也能验证状态转换逻辑。这四个依赖的选择也很有讲究——它们正好是循环中所有"与外部世界交互"的边界点，把它们抽象成接口，循环内部就成了纯逻辑。
+
+5. **终止不是失败，是设计**：十种终止原因各有其触发条件和清理逻辑。理解这些终止路径是理解整个循环健壮性的关键。在生产级 Agent 系统中，错误的终止处理比错误的正常流程更危险——因为它可能导致资源泄漏、状态不一致或用户数据丢失。
+
+> **三句话带走：**①主循环是一个异步生成器：yield 推事件、yield* 委托子生成器、return() 取消，状态不可变，每一跳都有 transition 可查。②把 callModel、microcompact、autocompact、uuid 四个副作用注入成 QueryDeps，循环内部就成了纯逻辑——可测性是设计出来的，不是事后补的。③掂量一个 Agent 循环就三问：能不能暂停、能不能取消、终止时收不收拾现场。
+
+在下一章中，我们将转向 Agent 的"双手"——工具系统。对话循环是 Agent 的心脏，工具系统则是 Agent 的四肢。理解了工具系统的设计，你将知道 Agent 是如何从"只能说话"进化到"能动手做事"的。

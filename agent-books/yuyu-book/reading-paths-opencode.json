@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "opencode-front": [
+    "start",
+    "core",
+    "deep"
+  ],
+  "opencode-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch02": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch03": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch04": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch05": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch06": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch07": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch08": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch09": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch10": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch11": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch12": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch13": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch14": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch15": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch16": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch17": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-ch18": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-apxa": [
+    "start",
+    "core",
+    "deep"
+  ],
+  "opencode-apxb": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-apxc": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "opencode-apxd": [
+    "start",
+    "core",
+    "deep"
+  ]
+}

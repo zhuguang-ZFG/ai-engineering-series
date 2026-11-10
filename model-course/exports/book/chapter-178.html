@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>技术文档写作 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 178 / 195</p><article><h1 id="技术文档写作">技术文档写作</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#技术文档写作导论">技术文档写作导论</a><ul><li><a href="#0-全景图技术文档重要的原理">0. 全景图：技术文档重要的原理</a></li><li><a href="#1-文档的类型与结构">1. 文档的类型与结构</a></li><li><a href="#2-写作原则">2. 写作原则</a></li><li><a href="#3-实战对比">3. 实战对比</a></li><li><a href="#4-文档维护">4. 文档维护</a></li><li><a href="#5-ai-助力用大模型提升文档质量">5. AI 助力：用大模型提升文档质量</a></li><li><a href="#6-总结-8">6. 总结</a></li><li><a href="#延伸阅读-36">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="技术文档写作导论">技术文档写作导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>你写的文档有人看吗？</strong> 很多开发者觉得&quot;代码能跑就行，文档以后再说&quot;。结果就是：新人入职看不懂项目、API 对接全靠口头沟通、半年后自己都忘了当初为什么这么设计。</p>
+</blockquote>
+<p>本章带你掌握技术文档写作的核心方法，让你的文档真正有人看、看得懂、用得上。</p>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>文档的类型与结构</td>
+<td>不同文档的写法</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>写作原则</td>
+<td>清晰、准确、简洁</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>实战对比</td>
+<td>好文档 vs 差文档</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>文档维护</td>
+<td>让文档保持更新</td>
+</tr>
+</tbody></table></div>
+<p>学完本章，你将能写出结构清晰、内容准确、易于维护的技术文档。</p>
+<h3 id="0-全景图技术文档重要的原理">0. 全景图：技术文档重要的原理</h3>
+<p>代码告诉计算机&quot;怎么做&quot;，文档告诉人类&quot;为什么这么做&quot;。没有文档的项目就像没有说明书的电器——能用，但用起来全靠猜。</p>
+<blockquote>
+<p><strong>好文档的价值</strong></p>
+</blockquote>
+<ul>
+<li><strong>降低沟通成本</strong>：新人自助上手，减少重复解答</li>
+<li><strong>保存决策上下文</strong>：记录&quot;为什么&quot;，而不只是&quot;是什么&quot;</li>
+<li><strong>提升项目可信度</strong>：好文档是开源项目的门面</li>
+<li><strong>加速协作</strong>：API 文档让前后端并行开发</li>
+</ul>
+<h3 id="1-文档的类型与结构">1. 文档的类型与结构</h3>
+<p>通过下面的交互组件，了解不同类型文档的标准结构：</p>
+<h4 id="11-常见文档类型">1.1 常见文档类型</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>文档类型</th>
+<th>目标读者</th>
+<th>核心内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>README</strong></td>
+<td>所有人</td>
+<td>项目是什么、怎么用、怎么贡献</td>
+</tr>
+<tr>
+<td><strong>API 文档</strong></td>
+<td>接口调用方</td>
+<td>端点、参数、响应、错误码</td>
+</tr>
+<tr>
+<td><strong>架构文档</strong></td>
+<td>开发团队</td>
+<td>系统设计、技术选型、数据流</td>
+</tr>
+<tr>
+<td><strong>变更日志</strong></td>
+<td>用户/开发者</td>
+<td>版本变化、新增/修复/破坏性变更</td>
+</tr>
+<tr>
+<td><strong>贡献指南</strong></td>
+<td>贡献者</td>
+<td>开发环境、代码规范、PR 流程</td>
+</tr>
+</tbody></table></div>
+<h4 id="12-readme-的黄金结构">1.2 README 的黄金结构</h4>
+<p>一个好的 README 应该包含：</p>
+<ol>
+<li><strong>项目名称 + 一句话描述</strong>：让人 3 秒内知道这是什么</li>
+<li><strong>快速开始</strong>：最少步骤跑起来</li>
+<li><strong>功能特性</strong>：核心卖点</li>
+<li><strong>安装方式</strong>：详细的环境要求和安装步骤</li>
+<li><strong>使用示例</strong>：可复制粘贴的代码</li>
+<li><strong>贡献指南</strong>：如何参与</li>
+<li><strong>许可证</strong>：法律信息</li>
+</ol>
+<h3 id="2-写作原则">2. 写作原则</h3>
+<h4 id="21-清晰优先">2.1 清晰优先</h4>
+<pre class="prose-block"><code class="language-markdown">&lt;!-- 差：模糊不清 --&gt;
+这个函数处理数据。
+
+&lt;!-- 好：具体明确 --&gt;
+将原始订单数据转换为发票格式，包含税费计算和币种转换。
+</code></pre>
+<h4 id="22-面向读者">2.2 面向读者</h4>
+<p>写文档前先问：<strong>谁会读这个文档？他们需要什么信息？</strong></p>
+<ul>
+<li>给新手写：解释术语，提供完整示例</li>
+<li>给有经验的开发者写：直奔主题，提供 API 参考</li>
+<li>给非技术人员写：用类比，避免术语</li>
+</ul>
+<h4 id="23-代码示例是最好的文档">2.3 代码示例是最好的文档</h4>
+<pre class="prose-block"><code class="language-markdown">&lt;!-- 差：只有文字描述 --&gt;
+调用 createUser 函数，传入用户名和邮箱参数。
+
+&lt;!-- 好：给出可运行的示例 --&gt;
+const user = await createUser({
+  name: &#39;张三&#39;,
+  email: &#39;zhangsan@example.com&#39;
+})
+// 返回: { id: &#39;u_123&#39;, name: &#39;张三&#39;, createdAt: &#39;2025-01-15&#39; }
+</code></pre>
+<h3 id="3-实战对比">3. 实战对比</h3>
+<p>通过下面的交互组件，对比好的技术写作和差的技术写作：</p>
+<h4 id="31-commit-message-规范">3.1 Commit Message 规范</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code># 差
+fix bug
+update code
+
+# 好（Conventional Commits）
+fix: 修复登录页在 Safari 下白屏的问题
+feat: 支持批量导出 PDF 格式报表
+docs: 更新 API 认证章节的示例代码
+</code></pre>
+<h4 id="32-注释的艺术">3.2 注释的艺术</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 差：描述&quot;是什么&quot;（代码已经说了）
+// 遍历数组
+for (const item of items) { ... }
+
+// 好：解释&quot;为什么&quot;
+// 倒序遍历，因为删除元素时正序会跳过下一个
+for (let i = items.length - 1; i &gt;= 0; i--) { ... }
+</code></pre>
+<h3 id="4-文档维护">4. 文档维护</h3>
+<h4 id="41-文档即代码">4.1 文档即代码</h4>
+<p>把文档和代码放在同一个仓库，用同样的工作流管理：</p>
+<ul>
+<li>文档变更随代码一起提交 PR</li>
+<li>CI 检查文档格式和链接有效性</li>
+<li>版本发布时同步更新文档</li>
+</ul>
+<h4 id="42-避免文档腐烂">4.2 避免文档腐烂</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文档过时</td>
+<td>代码变更时强制更新文档（PR 检查）</td>
+</tr>
+<tr>
+<td>无人维护</td>
+<td>指定文档负责人</td>
+</tr>
+<tr>
+<td>内容重复</td>
+<td>单一信息源，其他地方引用链接</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-ai-助力用大模型提升文档质量">5. AI 助力：用大模型提升文档质量</h3>
+<p>大模型在技术写作领域几乎是&quot;天赋异禀&quot;——生成文档、改善表达、翻译内容都是它的强项。</p>
+<h4 id="51-生成-api-文档">5.1 生成 API 文档</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>根据以下 Express 路由代码，生成完整的 API 文档，包括：
+- 端点路径和方法
+- 请求参数（路径参数、查询参数、请求体）及类型
+- 成功和错误的响应示例
+- 使用 curl 的调用示例
+
+[粘贴你的路由代码]
+</code></pre>
+</blockquote>
+<h4 id="52-改善技术写作">5.2 改善技术写作</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请改善以下技术文档的表达，要求：
+1. 语言简洁清晰，去掉冗余表述
+2. 用主动语态替代被动语态
+3. 专业术语保持准确
+4. 添加必要的代码示例
+保持原意不变，只改善表达质量。
+
+[粘贴你的文档内容]
+</code></pre>
+</blockquote>
+<h4 id="53-生成-readme">5.3 生成 README</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>根据以下项目信息，生成一份高质量的 README.md：
+- 项目名称：[名称]
+- 一句话描述：[描述]
+- 技术栈：[列出]
+- 核心功能：[列出]
+
+要求包含：项目简介、快速开始、功能特性、
+安装步骤（含代码）、使用示例、贡献指南、许可证。
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>AI 使用建议</strong>
+AI 生成的文档要检查技术细节是否准确——它可能编造不存在的 API 参数或错误的返回值。始终对照实际代码验证。</p>
+</blockquote>
+<h3 id="6-总结-8">6. 总结</h3>
+<ol>
+<li><strong>类型匹配</strong>：不同文档有不同的结构和写法</li>
+<li><strong>清晰优先</strong>：具体、准确、面向读者</li>
+<li><strong>示例驱动</strong>：好的代码示例胜过千言万语</li>
+<li><strong>持续维护</strong>：文档即代码，随项目一起演进</li>
+</ol>
+<blockquote>
+<p><strong>终极思考</strong>
+写文档不是浪费时间，而是<strong>节省未来的时间</strong>。你今天花 30 分钟写的文档，可能帮 10 个人各节省 1 小时。好的文档是对团队最好的投资。</p>
+</blockquote>
+<h3 id="延伸阅读-36">延伸阅读</h3>
+<ul>
+<li><strong>写作指南</strong>：Google 的技术写作课程（Technical Writing）免费且实用。</li>
+<li><strong>文档工具</strong>：VitePress、Docusaurus、GitBook 等现代文档框架。</li>
+<li><strong>API 文档</strong>：OpenAPI/Swagger 规范是 API 文档的行业标准。</li>
+<li><strong>实践建议</strong>：从给自己的项目写一个好的 README 开始。</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-177.html">← 安全思维与攻防基础</a><a rel="next" href="chapter-179.html">开源协作 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

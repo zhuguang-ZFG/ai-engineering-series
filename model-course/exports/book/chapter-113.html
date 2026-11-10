@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>无障碍与国际化 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 113 / 195</p><article><h1 id="无障碍与国际化">无障碍与国际化</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#网页的隐藏维度国际化与无障碍全景">网页的隐藏维度：国际化与无障碍全景</a><ul><li><a href="#1-网页访问中的语言协商-i18n">1. 网页访问中的语言协商 (i18n)</a></li><li><a href="#2-浏览器内部的无形之树-a11y">2. 浏览器内部的无形之树 (a11y)</a></li><li><a href="#3-web-为所有人服务">3. Web 为所有人服务</a></li></ul></li></ul></nav></details><h2 id="网页的隐藏维度国际化与无障碍全景">网页的隐藏维度：国际化与无障碍全景</h2>
+<blockquote>
+<p><strong>核心导读</strong>
+<strong>什么是 i18n 及其来龙去脉？</strong>
+在前端和软件工程领域，我们常说的 <strong>i18n</strong> 其实就是指 <strong>多语言支持（国际化，Internationalization）</strong>。因为这个英文单词的首字母 <code>i</code> 和尾字母 <code>n</code> 之间恰好相隔了 18 个字母，为了书写简便，业界便发明了这个特定的缩写。
+同理，<strong>无障碍访问（Accessibility）</strong> 也因为首字母 <code>a</code> 与尾字母 <code>y</code> 之间有 11 个字母，因此被统称为 a11y。</p>
+</blockquote>
+<p>在浏览器将代码渲染出五彩斑斓的网页背后，其实还并行着两条肉眼往往看不见的“暗线”：
+当你输入网址访问网页时，浏览器怎么知道该给你展示中文还是德文（即 i18n 多语言流程）？在浏览器将 HTML 解析成 DOM 树准备画图的同时，又是如何专门为视障人士构建出另一棵“盲文树”的（即 a11y 无障碍流程）？</p>
+<p>本章我们将再次回到“网页访问与渲染”的微观流程中，解码浏览器及前端工程在这两个体现技术人文关怀的领域是如何默默工作的。</p>
+<h3 id="1-网页访问中的语言协商-i18n">1. 网页访问中的语言协商 (i18n)</h3>
+<p>当我们输入一个网址、按下回车，浏览器在向服务器发送 HTTP 请求时，通常会默默附带一个头信息：<code>Accept-Language</code>。</p>
+<ul>
+<li><em>例如：<code>Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</code></em></li>
+</ul>
+<p>这就好比你在餐厅点单前，浏览器私下对服务员说：“我的主人优先看简体中文，如果没有的话，英文也凑合能看。” 这就是 Web 访问时的<strong>初次协商</strong>。</p>
+<h4 id="11-前端工程与字典替换">1.1 前端工程与字典替换</h4>
+<p>而在现代前端框架中，页面的骨架通常是由 JavaScript 在本地动态生成的。在这个阶段，前端应用会主动读取浏览器的本地偏好（例如通过 <code>navigator.language</code> API），然后从服务器按需拉取对应的语言“字典包（JSON）”——遇到中文显示“确定”，遇到英文字典则显示“Confirm”。</p>
+<h4 id="12-排版约束文字长度与双向书写">1.2 排版约束：文字长度与双向书写</h4>
+<p>但除了字典替换，真正的国际化在浏览器布局（Layout）阶段面临着深渊般的挑战。</p>
+<p>不同的语言表达相同的含义时，所需的字母长度可能天差地别。例如德语常将多个词根拼接成巨长的单词。如果我们在编写 CSS 时使用绝对固定宽度，很容易在切换德语时出现文字撑破容器的惨状。因此浏览器鼓励使用弹性盒模型（Flexbox）来自适应不同的文字体量。</p>
+<p>更为颠覆的挑战在于阅读方向。阿拉伯语（Arabic）、希伯来语（Hebrew）等语言的阅读习惯是<strong>从右向左（Right-to-Left, 简称 RTL）</strong>。
+当页面切换到这类语言时，不仅仅是文本方向要变，<strong>浏览器引擎还需要把整个网页的内容块沿水平方向镜像反转</strong>！浏览器为此提供了原生的 <code>dir=&quot;rtl&quot;</code> 属性。我们在编写 CSS 时，应当避免使用绝对的方向词，例如用 Flexbox 的 <code>justify-content: flex-start</code> 来替代硬编码的 <code>margin-left</code>，从而让浏览器能够随着区域切换自动化反转布局。</p>
+<h4 id="13-告别正则拥抱浏览器的-intl-标准">1.3 告别正则：拥抱浏览器的 Intl 标准</h4>
+<p>除了界面排版，浏览器底层还自带了一个强大的“本地化格式引擎”。
+对于同样的数字 <code>1200.5</code>，美国人习惯看到 <code>$1,200.50</code>，而欧洲许多国家习惯用逗号做小数点 <code>€ 1.200,50</code>。日期格式更是千奇百怪。</p>
+<p>现代浏览器暴露了 <strong><code>Intl</code> 核心对象</strong>（例如 <code>Intl.DateTimeFormat</code> 和 <code>Intl.NumberFormat</code>）。依靠这个 API，我们在代码里只要指明当前环境代号，浏览器便会直接调用底层的操作系统数据规范，准确生成符合当地习惯的展示字符串。</p>
+<p>👇 操作下方组件，观察在不改变源数据的前提下，浏览器是如何通过底层 API 完成布局反转（RTL）与系统级数据转换的：</p>
+<h3 id="2-浏览器内部的无形之树-a11y">2. 浏览器内部的无形之树 (a11y)</h3>
+<p>回到浏览器渲染引擎。我们都知道，浏览器解析 HTML 时会生成一棵 <strong>DOM 树</strong>，然后再结合 CSS 计算生成用于绘制界面的渲染树 (Render Tree)。</p>
+<p>但鲜为人知的是，在网页访问时，浏览器实际上还在并行构建一棵专供操作系统“看”的树——<strong>AOM 树（Accessibility Object Model，无障碍对象模型）</strong>。</p>
+<h4 id="21-屏幕阅读器与语义化的本质">2.1 屏幕阅读器与语义化的本质</h4>
+<p>为了让视力障碍用户使用计算机，操作系统内置了**屏幕阅读器（Screen Reader）**辅助软件（如 macOS 的 VoiceOver）。这类软件“看不见”屏幕的颜色像素，它们完全依赖浏览器暴露出来的 AOM 树来朗读网页。</p>
+<p>如果开发者用普通 <code>&lt;div&gt;</code> 标签加 CSS 样式，画出了一个外观无可挑剔的按钮，在常规的渲染树中它是完美的。但在屏幕阅读器连接的 AOM 树中，它只是一个毫无意义的纯文本节点。视障用户既无法听到“按钮”提示，也无法用 <code>Tab</code> 键选中它。</p>
+<p>因此，为何我们要反复强调**“坚持使用语义化的 HTML 标签”**？因为当你使用 <code>&lt;button&gt;</code>、<code>&lt;nav&gt;</code> 或 <code>&lt;a&gt;</code> 标签时，浏览器引擎会自动在 AOM 树里补全它们内置的焦点管理与角色(Role)信息。语义化，本质上是给视障工具绘制出的高质量蓝图。</p>
+<h4 id="22-wai-aria手动修剪-aom-树">2.2 WAI-ARIA：手动修剪 AOM 树</h4>
+<p>在现代 Web 应用中，有很多复杂的定制交互组件（例如弹窗面板、带开关动画的手风琴菜单），浏览器原生标签无法完全覆盖。此时就需要利用 <strong>WAI-ARIA</strong> 规范。</p>
+<p>ARIA 本质上是一组特殊的 HTML 属性，<strong>它们不会改变任何视觉呈现，唯一的使命就是向浏览器发送强行修改 AOM 树节点的指令</strong>：</p>
+<ul>
+<li><code>aria-label</code>：给缺失可见文字的元素补充朗读说明（例如仅一个图标的“关闭”按钮）。</li>
+<li><code>aria-hidden=&quot;true&quot;</code>：告诉浏览器，这个节点仅具装饰性，不要将它塞入 AOM 树中。</li>
+<li><code>role=&quot;alert&quot;</code>：告诉浏览器这个区域极其关键，如果其内容刷新，需要立刻打断当前的语音阅读器直接插播。</li>
+</ul>
+<p>👇 体验以下通过 AOM 树感知到的两个截然不同的“世界”：</p>
+<h3 id="3-web-为所有人服务">3. Web 为所有人服务</h3>
+<p>结合我们在前面章节所学的网络层与浏览器渲染知识，我们可以重新理解这个宏大的图景：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">网页访问维度</th>
+<th align="left">浏览器与工程师共同的职责</th>
+<th align="left">想要消弭的鸿沟</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>国际化 (i18n)</strong></td>
+<td align="left">通过请求头协商、基于 Intl API 格式化、弹性支持 RTL 布局镜像反转。</td>
+<td align="left">跨越<strong>语言与文化的鸿沟</strong>，让应用能够无缝匹配不同国家的语言规范及排版直觉。</td>
+</tr>
+<tr>
+<td align="left"><strong>无障碍访问 (a11y)</strong></td>
+<td align="left">除了构建渲染树，还要基于语义化 HTML 和 ARIA 规范构建高清晰度的 <strong>AOM 树</strong>。</td>
+<td align="left">跨越<strong>生理与设备的鸿沟</strong>，将控制权平滑地交接给屏幕阅读器等辅助工具。</td>
+</tr>
+</tbody></table></div>
+<p>真正的资深工程师，在其代码编译出绚丽界面的背后，依然精心雕琢着那些看不见的通信头和语义树，使得 Web 的能量能辐射至使用着完全不同语言或操作设备的每一种普通人。这就是 Web 作为全球最大平台最底气十足的人文底色。</p>
+<hr>
+<h2 id="四服务器与后端">四、服务器与后端</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-112.html">← 前端项目文件目录设计</a><a rel="next" href="chapter-114.html">后端语言对比（Node.js / Go / Java / Rust） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

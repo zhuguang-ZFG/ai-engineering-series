@@ -1,0 +1,71 @@
+===== grep =====
+# grep
+
+> Grep file contents with a regex across files, directories, globs, and internal URLs.
+
+## Source
+
+- Entry: `packages/coding-agent/src/tools/grep.ts`
+- Model-facing prompt: `packages/coding-agent/src/prompts/tools/grep.md`
+- Key collaborators:
+   - `packages/tui/src/tools/match-line-format.ts` — model-facing anchor formatting.
+   - `packages/coding-agent/src/tools/path-utils.ts` — path normalization, glob splitting (host paths and internal URLs), result-path joining.
+   - `packages/coding-agent/src/internal-urls/url-filesystem.ts` — `InternalUrlFilesystem`, the URL filesystem native grep walks and reads through.
+   - `packages/coding-agent/src/tools/file-recorder.ts` — file ordering for grouped output.
+   - `packages/tui/src/tools/grouped-file-output.ts` — grouped per-file text layout.
+   - `packages/tui/src/tools/streaming-output.ts` — inline output budgets and final byte truncation.
+   - `packages/coding-agent/src/edit/store.ts` — session-scoped native `EditStore` snapshots and seen-line tracking.
+   - `packages/coding-agent/src/tools/settings.ts` — default context lines.
+   - `packages/natives/native/index.d.ts` — native `grep()` types exposed to TS.
+   - `crates/pi-natives/src/grep.rs` — native regex/file search implementation.
+   - `docs/natives-text-search-pipeline.md` — native search pipeline overview.
+
+## Inputs
+
+| Field       | Type             | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ----------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pattern`   | `string`         | Yes      | Regex pattern. `grep.ts` rejects whitespace-only input but preserves it verbatim. The native matcher tries Rust regex first, then PCRE2 for features such as lookaround/backreferences, then targeted literal recovery for malformed braces/parentheses. Multiline is enabled only when the pattern contains a literal newline or the two-character sequence `\\n`.                                                                                                                                                                                                            |
+| `path`      | `string`         | No       | One file path, directory path, glob-like path, archive member, readable external URL, internal URL, or one-file line selector such as `src/foo.ts:50-100` — or several of those as a semicolon-delimited list (`"src; tests"`). Omitted or empty defaults to `.`. Empty entries are rejected. Semicolon-delimited lists split unconditionally; entries accidentally joined with comma or whitespace are expanded only after existence validation; existing paths containing delimiters stay intact. Internal URLs may glob below their root (`local://*.md`, `omp://**/*.md`). |
+| `case`      | `boolean`        | No       | Case-sensitive search. Defaults to `true`. Passed to native `ignoreCase`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `gitignore` | `boolean`        | No       | Respect `.gitignore` during directory scans. Defaults to `true`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `skip`      | `number \| null` | No       | File-page offset for multi-file results. Omitted or `null` means `0`; `grep.ts` floors finite numbers and rejects negative or non-finite values. Single-file searches ignore it because they do not paginate by file.                                                                                                                                                                                                                                                                                                                                                          |
+
+`grep` is enabled by default (`grep.enabled = true`) and is discoverable rather than essential. Context defaults are configurable with `grep.contextBefore` and `grep.contextAfter`.
+
+## Outputs
+
+The tool returns a single text block in `content[0].text` plus structured `details`.
+
+- Match lines are formatted by `formatMatchLine()` as `*LINE:content` for matches and ` LINE:content` for context under a `[PATH#TAG]` header in hashline mode.
+   - Hashline mode: `[src/login.ts#1F2A]`, `*5:content`, ` 9:content`.
+   - Plain mode: `*5|content`, ` 9|content`.
+- Directory and multi-file results are grouped through `formatGroupedFiles()` as a multi-level, prefix-folded directory tree: one `#` per nesting level, directory headers end with `/`, and file headers carry a `#TAG` suffix when editable hashline anchors are available.
+- `details` may include:
+   - `scopePath` — formatted search scope.
+   - `matchCount`, `fileCount`, `files`, `fileMatches` — counts for the returned page.
+   - `fileLimitReached` — more matching files remain beyond the current 20-file page.
+   - `perFileLimitReached` — a hot file was trimmed to the per-file match cap.
+   - `linesTruncated` — one or more matched lines exceeded the `512`-byte UTF-8 budget. Native output keeps the line's head plus `...` when the first match fits there; otherwise it keeps a window centred on that match with `...` on each cut side (e.g. `*1|...aaaadeadline [s120]bbbb... [col 12001]`). A cut match line ends with `[col N]`, the 1-indexed character column where its first match starts. Context lines keep the head plus `...`.
+   - `truncated` — any file/match/native/line/output limit was reached; `truncation` and `meta.truncation` describe final byte truncation by `truncateHead()`.
+   - `displayContent` — TUI-only rendering text with `│` gutters instead of model anchors.
+   - `missingPaths` — multi-path entries skipped because their base path did not exist.
+- No-match result text is `No matches found` (or `No more results (...)` when `skip` points past the last file page), optionally followed by skipped missing-path, unreadable-archive, or oversized-file notes.
+
+## Flow
+
+1. `GrepTool.execute()` validates and normalizes input in `packages/coding-agent/src/tools/grep.ts`:
+   - rejects whitespace-only patterns while preserving the pattern verbatim;
+   - defaults omitted or empty `path` to `["."]` (the workspace root);
+   - normalizes `skip` to a non-negative integer;
+   - expands delimiter-flattened `path` entries with `expandDelimitedPathEntries()`, keeping existing delimiter-containing paths intact, splitting semicolon-delimited lists unconditionally, accepting comma splits when at least one part resolves, and accepting whitespace splits only when every part resolves;
+   - peels any line-range selector from each resulting entry;
+   - reads `grep.contextBefore` and `grep.contextAfter` from session settings (`1` and `3` by default);
+   - enables multiline only when `pattern` contains `\n` or an actual newline.
+2. Each `path` root is normalized with `normalizePathLikeInput()` again during shared scope resolution; this is a no-op for entries already normalized by delimiter expansion.
+3. Archive member paths such as `bundle.zip:src/foo.ts` are materialized to temporary UTF-8 scratch files before native grep. Binary or non-UTF-8 archive members are reported as skipped/unreadable.
+4. Each call builds one `InternalUrlFilesystem` from the session's `sessionResolveContext()` and the tier the call was approved at (`resolveToolTier()`, i.e. `router.readTier()` over the raw paths). Internal URLs stay URLs (single-slash aliases normalized by `router.normalize()`); they are never located or materialized by the tool:
+   - internal URL globs split like host globs (`parseSearchPath()`): the base stays a URL, the glob tail (percent-decoded; encoded metacharacters stay literal) matches raw entry names. `router.isGlob()` decides whether a URL globs at all, so the query (`?key=…`, e.g. `issue://?search=fix*`), fragment, and authority brackets (an IPv6 host) are never glob syntax;
+   - readable external URLs (`http(s)://`, collapsed `http(s):/host`, `www.` spellings when no local path exists) are fetched and materialized to immutable local files; `ftp`/`ws`/`wss` and declined fetches fail with an explicit error.
+5. For multi-path calls, `partitionExistingPaths()` stats every base through the URL filesystem and skips only ENOENT entries. If every entry is missing, the tool errors.
+6. Path resolution branches:
+   - one entry: `parseSearchPath()` splits `basePath` and optional glob;

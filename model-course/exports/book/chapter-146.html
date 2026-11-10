@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Docker 容器化 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 146 / 195</p><article><h1 id="docker-容器化">Docker 容器化</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#docker-容器化导论">Docker 容器化导论</a><ul><li><a href="#1-需要容器的原理">1. 需要容器的原理</a></li><li><a href="#2-核心概念">2. 核心概念</a></li><li><a href="#3-docker-生命周期">3. Docker 生命周期</a></li><li><a href="#4-docker-compose多服务编排">4. Docker Compose：多服务编排</a></li><li><a href="#5-最佳实践-1">5. 最佳实践</a></li><li><a href="#总结-32">总结</a></li><li><a href="#延伸阅读-22">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="docker-容器化导论">Docker 容器化导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>&quot;在我机器上能跑&quot;是开发者最经典的借口，Docker 让这个借口彻底消失。</strong> 容器化技术将应用及其所有依赖打包成一个标准化的单元，确保在任何环境中都能一致运行。它是现代软件交付的基石。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>核心概念</strong>：理解镜像、容器、仓库三大核心概念</li>
+<li><strong>架构对比</strong>：明白容器和虚拟机的本质区别</li>
+<li><strong>实操能力</strong>：掌握 Dockerfile 编写和常用命令</li>
+<li><strong>编排基础</strong>：学会用 Docker Compose 管理多服务应用</li>
+<li><strong>最佳实践</strong>：了解镜像优化、安全加固等生产级实践</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>为什么需要容器</td>
+<td>环境一致性、资源效率、标准化交付</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>核心概念</td>
+<td>镜像、容器、仓库、Dockerfile</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>Docker 生命周期</td>
+<td>编写、构建、推送、运行、管理</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>Docker Compose</td>
+<td>多服务编排、网络、数据卷</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>最佳实践</td>
+<td>镜像优化、安全、多阶段构建</td>
+</tr>
+</tbody></table></div>
+<h3 id="1-需要容器的原理">1. 需要容器的原理</h3>
+<p>在容器出现之前，部署一个应用需要在服务器上手动安装运行时、配置环境变量、处理依赖冲突。不同环境（开发、测试、生产）之间的差异是 bug 的温床。</p>
+<h4 id="容器解决了什么问题">容器解决了什么问题</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>传统方式</th>
+<th>容器方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>环境不一致</td>
+<td>&quot;我本地能跑&quot;</td>
+<td>打包所有依赖，到处一致</td>
+</tr>
+<tr>
+<td>依赖冲突</td>
+<td>App A 要 Node 14，App B 要 Node 18</td>
+<td>每个容器独立环境</td>
+</tr>
+<tr>
+<td>资源浪费</td>
+<td>每个 VM 一个完整 OS</td>
+<td>共享内核，MB 级开销</td>
+</tr>
+<tr>
+<td>部署慢</td>
+<td>手动安装配置</td>
+<td>docker run 一条命令</td>
+</tr>
+<tr>
+<td>扩容难</td>
+<td>新建 VM、装环境、部署</td>
+<td>秒级启动新容器</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>容器的本质</strong>
+容器不是轻量级虚拟机。它的本质是<strong>被隔离的进程</strong>。Linux 内核用两个机制实现容器：</p>
+</blockquote>
+<ul>
+<li><strong>Namespace</strong>：隔离进程的视野（PID、网络、文件系统等）</li>
+<li><strong>Cgroups</strong>：限制进程的资源使用（CPU、内存、IO）</li>
+</ul>
+<p>容器里的进程和宿主机上的普通进程没有本质区别，只是被&quot;关在了一个看不到外面的房间里&quot;。</p>
+<h3 id="2-核心概念">2. 核心概念</h3>
+<p>Docker 的世界围绕三个核心概念：镜像（Image）、容器（Container）、仓库（Registry）。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>类比</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>镜像（Image）</td>
+<td>类 / 模板</td>
+<td>只读的应用模板，包含代码、运行时、库、配置</td>
+</tr>
+<tr>
+<td>容器（Container）</td>
+<td>实例 / 对象</td>
+<td>镜像的运行实例，可读写，有独立的生命周期</td>
+</tr>
+<tr>
+<td>仓库（Registry）</td>
+<td>应用商店</td>
+<td>存储和分发镜像的服务（Docker Hub、ACR、ECR）</td>
+</tr>
+<tr>
+<td>Dockerfile</td>
+<td>配方 / 蓝图</td>
+<td>定义如何构建镜像的文本文件</td>
+</tr>
+<tr>
+<td>数据卷（Volume）</td>
+<td>外接硬盘</td>
+<td>持久化数据，容器删除后数据不丢失</td>
+</tr>
+</tbody></table></div>
+<h4 id="镜像的分层结构">镜像的分层结构</h4>
+<p>Docker 镜像由多个只读层（Layer）叠加而成，每条 Dockerfile 指令创建一层：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>┌─────────────────────────┐
+│  CMD [&quot;node&quot;, &quot;app.js&quot;] │  ← 启动命令层
+├─────────────────────────┤
+│  COPY . /app            │  ← 应用代码层（经常变）
+├─────────────────────────┤
+│  RUN npm install        │  ← 依赖安装层（偶尔变）
+├─────────────────────────┤
+│  FROM node:18-alpine    │  ← 基础镜像层（很少变）
+└─────────────────────────┘
+</code></pre>
+<blockquote>
+<p><strong>为什么分层很重要？</strong>
+Docker 会缓存每一层。如果某一层没有变化，构建时会直接复用缓存。所以 Dockerfile 中应该把<strong>变化频率低的指令放在前面</strong>（如安装依赖），变化频率高的放在后面（如复制代码）。这样大部分构建都能命中缓存，速度快很多。</p>
+</blockquote>
+<h3 id="3-docker-生命周期">3. Docker 生命周期</h3>
+<p>从编写 Dockerfile 到容器运行，Docker 的工作流程是一条清晰的流水线。</p>
+<h4 id="dockerfile-常用指令速查">Dockerfile 常用指令速查</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FROM</code></td>
+<td>指定基础镜像</td>
+<td><code>FROM node:18-alpine</code></td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>设置工作目录</td>
+<td><code>WORKDIR /app</code></td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td>复制文件到镜像</td>
+<td><code>COPY package.json ./</code></td>
+</tr>
+<tr>
+<td><code>RUN</code></td>
+<td>构建时执行命令</td>
+<td><code>RUN npm install</code></td>
+</tr>
+<tr>
+<td><code>ENV</code></td>
+<td>设置环境变量</td>
+<td><code>ENV NODE_ENV=production</code></td>
+</tr>
+<tr>
+<td><code>EXPOSE</code></td>
+<td>声明端口（仅文档作用）</td>
+<td><code>EXPOSE 3000</code></td>
+</tr>
+<tr>
+<td><code>CMD</code></td>
+<td>容器启动命令</td>
+<td><code>CMD [&quot;node&quot;, &quot;app.js&quot;]</code></td>
+</tr>
+<tr>
+<td><code>ENTRYPOINT</code></td>
+<td>容器入口点（不易被覆盖）</td>
+<td><code>ENTRYPOINT [&quot;nginx&quot;]</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="4-docker-compose多服务编排">4. Docker Compose：多服务编排</h3>
+<p>真实项目通常不止一个容器。一个 Web 应用可能需要：应用服务器 + 数据库 + Redis + Nginx。Docker Compose 用一个 YAML 文件定义和管理多个容器。</p>
+<h4 id="docker-composeyml-示例">docker-compose.yml 示例</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml">version: &#39;3.8&#39;
+services:
+  app:
+    build: .
+    ports:
+      - &quot;3000:3000&quot;
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=secret
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  db-data:
+</code></pre>
+<h4 id="compose-核心概念">Compose 核心概念</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>services</td>
+<td>定义各个容器服务</td>
+<td>app、db、redis</td>
+</tr>
+<tr>
+<td>volumes</td>
+<td>持久化数据卷</td>
+<td>db-data 保存数据库文件</td>
+</tr>
+<tr>
+<td>networks</td>
+<td>自定义网络（默认自动创建）</td>
+<td>服务间通过服务名互相访问</td>
+</tr>
+<tr>
+<td>depends_on</td>
+<td>启动顺序依赖</td>
+<td>app 依赖 db 和 redis</td>
+</tr>
+<tr>
+<td>environment</td>
+<td>环境变量</td>
+<td>数据库密码、连接地址</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>服务发现</strong>
+在 Docker Compose 中，服务名就是主机名。app 容器可以直接用 <code>db:5432</code> 访问数据库，用 <code>redis:6379</code> 访问 Redis，不需要知道 IP 地址。这是 Docker 内置 DNS 的功劳。</p>
+</blockquote>
+<h3 id="5-最佳实践-1">5. 最佳实践</h3>
+<h4 id="51-多阶段构建multi-stage-build">5.1 多阶段构建（Multi-stage Build）</h4>
+<p>多阶段构建是优化镜像大小的利器。构建阶段安装所有工具和依赖，最终阶段只保留运行时需要的文件。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-dockerfile"># 构建阶段
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# 运行阶段
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+EXPOSE 3000
+CMD [&quot;node&quot;, &quot;dist/server.js&quot;]
+</code></pre>
+<h4 id="52-镜像优化清单">5.2 镜像优化清单</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>优化项</th>
+<th>做法</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>选择小基础镜像</td>
+<td>用 <code>alpine</code> 而非 <code>ubuntu</code></td>
+<td>镜像从 ~200MB 降到 ~50MB</td>
+</tr>
+<tr>
+<td>合并 RUN 指令</td>
+<td>多个命令用 <code>&amp;&amp;</code> 连接</td>
+<td>减少镜像层数</td>
+</tr>
+<tr>
+<td>使用 .dockerignore</td>
+<td>排除 node_modules、.git 等</td>
+<td>加速构建，减小上下文</td>
+</tr>
+<tr>
+<td>多阶段构建</td>
+<td>分离构建和运行环境</td>
+<td>最终镜像不含构建工具</td>
+</tr>
+<tr>
+<td>固定版本号</td>
+<td><code>node:18.17-alpine</code> 而非 <code>node:latest</code></td>
+<td>构建可重复</td>
+</tr>
+</tbody></table></div>
+<h4 id="53-安全实践">5.3 安全实践</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>实践</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不用 root 运行</td>
+<td><code>USER node</code> 指定非 root 用户</td>
+</tr>
+<tr>
+<td>扫描漏洞</td>
+<td><code>docker scout</code> 或 Trivy 扫描镜像</td>
+</tr>
+<tr>
+<td>最小权限</td>
+<td>只安装必要的包，不装调试工具</td>
+</tr>
+<tr>
+<td>不硬编码密钥</td>
+<td>用环境变量或 Docker Secrets</td>
+</tr>
+<tr>
+<td>定期更新基础镜像</td>
+<td>及时修复安全漏洞</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-32">总结</h3>
+<p>Docker 容器化是现代软件交付的基础设施，值得每个开发者理解。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>容器 vs 虚拟机</strong>：容器共享宿主内核，更轻量、更快，但隔离性略弱于 VM</li>
+<li><strong>核心三件套</strong>：镜像（模板）、容器（实例）、仓库（分发）</li>
+<li><strong>Dockerfile</strong>：分层构建，利用缓存，变化少的指令放前面</li>
+<li><strong>Docker Compose</strong>：用 YAML 定义多服务应用，服务名即主机名</li>
+<li><strong>生产实践</strong>：多阶段构建减小镜像、alpine 基础镜像、非 root 运行</li>
+</ol>
+<h3 id="延伸阅读-22">延伸阅读</h3>
+<ul>
+<li><a href="https://docs.docker.com/">Docker 官方文档</a> - 最权威的参考资料</li>
+<li><a href="https://docs.docker.com/get-started/">Docker Getting Started</a> - 官方入门教程</li>
+<li><a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">Dockerfile Best Practices</a> - 官方最佳实践指南</li>
+<li><a href="https://docs.docker.com/compose/">Docker Compose 文档</a> - Compose 完整参考</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-145.html">← Linux 基础</a><a rel="next" href="chapter-147.html">Kubernetes 编排 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

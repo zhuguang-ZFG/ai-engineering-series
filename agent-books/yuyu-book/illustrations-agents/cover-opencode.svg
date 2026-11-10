@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M28 38H772M28 422H772" opacity=".25"/>
+  <g stroke-width="1" opacity=".13"><path d="M100 70V390M200 70V390M300 70V390M400 70V390M500 70V390M600 70V390M700 70V390M50 130H750M50 230H750M50 330H750"/></g>
+  <path d="M74 230H272M528 230H728M400 92V138M400 322V370" stroke-width="6"/>
+  <path d="M148 230V106H320M652 230V354H480" stroke-width="3" stroke-dasharray="7 9"/>
+  <rect x="272" y="138" width="256" height="184" rx="10" fill="currentColor" fill-opacity=".055" stroke-width="3"/>
+  <path d="M272 186H528"/><circle cx="294" cy="162" r="4" fill="currentColor"/><circle cx="310" cy="162" r="4" opacity=".4" fill="currentColor"/>
+  <path d="M300 215H389M300 237H460M300 259H430M300 281H356" stroke-width="5" opacity=".35"/>
+  <rect x="40" y="200" width="68" height="60" rx="8" fill="currentColor"/>
+  <path d="M58 216L70 230L58 244M78 244H94" stroke="#fff" stroke-width="3"/>
+  <circle cx="728" cy="230" r="24" fill="currentColor"/>
+  <path d="M716 231L724 239L740 220" stroke="#fff" stroke-width="3"/>
+  <circle cx="400" cy="92" r="10" fill="currentColor"/>
+  <circle cx="400" cy="370" r="10" fill="currentColor"/>
+  <circle cx="148" cy="106" r="7" fill="currentColor"/>
+  <circle cx="652" cy="354" r="7" fill="currentColor"/>
+  <g fill="currentColor" stroke="none" font-family="Arial, sans-serif" font-size="13" letter-spacing="2">
+    <text x="40" y="290">CLIENT</text><text x="316" y="171">SESSION / 01</text>
+    <text x="665" y="283">RESULT</text><text x="425" y="96">PLUGINS</text>
+    <text x="425" y="375">TOOLS</text><text x="173" y="99">REQUEST</text>
+    <text x="550" y="386">PERMISSION</text>
+  </g>
+</svg>

@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "prompt",
+      "letter": "中",
+      "zh": {
+        "term": "提示",
+        "refs": [
+          {
+            "anchor": "prompt-ch01",
+            "label": "第 1 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "prompt",
+        "refs": []
+      }
+    },
+    {
+      "key": "context",
+      "letter": "中",
+      "zh": {
+        "term": "上下文",
+        "refs": [
+          {
+            "anchor": "prompt-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "context",
+        "refs": []
+      }
+    },
+    {
+      "key": "receipt",
+      "letter": "中",
+      "zh": {
+        "term": "工具回执",
+        "refs": [
+          {
+            "anchor": "prompt-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "receipt",
+        "refs": []
+      }
+    },
+    {
+      "key": "holdout",
+      "letter": "中",
+      "zh": {
+        "term": "留出集",
+        "refs": [
+          {
+            "anchor": "prompt-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "holdout",
+        "refs": []
+      }
+    },
+    {
+      "key": "injection",
+      "letter": "中",
+      "zh": {
+        "term": "提示注入",
+        "refs": [
+          {
+            "anchor": "prompt-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "injection",
+        "refs": []
+      }
+    },
+    {
+      "key": "skill",
+      "letter": "S",
+      "zh": {
+        "term": "Skill",
+        "refs": [
+          {
+            "anchor": "prompt-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "skill",
+        "refs": []
+      }
+    },
+    {
+      "key": "agent",
+      "letter": "A",
+      "zh": {
+        "term": "Agent",
+        "refs": [
+          {
+            "anchor": "prompt-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "agent",
+        "refs": []
+      }
+    },
+    {
+      "key": "json",
+      "letter": "J",
+      "zh": {
+        "term": "JSON",
+        "refs": [
+          {
+            "anchor": "prompt-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "json",
+        "refs": []
+      }
+    },
+    {
+      "key": "token",
+      "letter": "T",
+      "zh": {
+        "term": "token",
+        "refs": [
+          {
+            "anchor": "prompt-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "token",
+        "refs": []
+      }
+    },
+    {
+      "key": "regression",
+      "letter": "中",
+      "zh": {
+        "term": "回归",
+        "refs": [
+          {
+            "anchor": "prompt-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "regression",
+        "refs": []
+      }
+    },
+    {
+      "key": "任务说明",
+      "letter": "中",
+      "zh": {
+        "term": "任务说明",
+        "refs": [
+          {
+            "anchor": "prompt-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "prompt-ch02",
+            "label": "第 2 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "任务说明",
+        "refs": []
+      }
+    },
+    {
+      "key": "引文核对",
+      "letter": "中",
+      "zh": {
+        "term": "引文核对",
+        "refs": [
+          {
+            "anchor": "prompt-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "prompt-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "引文核对",
+        "refs": []
+      }
+    },
+    {
+      "key": "少样本",
+      "letter": "中",
+      "zh": {
+        "term": "少样本",
+        "refs": [
+          {
+            "anchor": "prompt-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "少样本",
+        "refs": []
+      }
+    },
+    {
+      "key": "材料版本",
+      "letter": "中",
+      "zh": {
+        "term": "材料版本",
+        "refs": [
+          {
+            "anchor": "prompt-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "prompt-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "材料版本",
+        "refs": []
+      }
+    },
+    {
+      "key": "会话交接",
+      "letter": "中",
+      "zh": {
+        "term": "会话交接",
+        "refs": [
+          {
+            "anchor": "prompt-ch08",
+            "label": "第 8 章"
+          },
+          {
+            "anchor": "prompt-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "会话交接",
+        "refs": []
+      }
+    },
+    {
+      "key": "修复副本",
+      "letter": "中",
+      "zh": {
+        "term": "修复副本",
+        "refs": [
+          {
+            "anchor": "prompt-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "修复副本",
+        "refs": []
+      }
+    },
+    {
+      "key": "文件所有权",
+      "letter": "中",
+      "zh": {
+        "term": "文件所有权",
+        "refs": [
+          {
+            "anchor": "prompt-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "文件所有权",
+        "refs": []
+      }
+    },
+    {
+      "key": "配对比较",
+      "letter": "中",
+      "zh": {
+        "term": "配对比较",
+        "refs": [
+          {
+            "anchor": "prompt-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "配对比较",
+        "refs": []
+      }
+    },
+    {
+      "key": "环境迁移",
+      "letter": "中",
+      "zh": {
+        "term": "环境迁移",
+        "refs": [
+          {
+            "anchor": "prompt-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "环境迁移",
+        "refs": []
+      }
+    }
+  ]
+}

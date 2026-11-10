@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Glob / Grep", "data": {"icon": "bulb"}},
+    {"at": 1.3, "kind": "point", "text": "结构化 · 只读 · 可并行"},
+    {"at": 2.9, "kind": "draw", "text": "不必 Bash", "data": {"icon": "target"}},
+    {"at": 4.3, "kind": "point", "text": "专门化打败万能锤"},
+    {"at": 5.7, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

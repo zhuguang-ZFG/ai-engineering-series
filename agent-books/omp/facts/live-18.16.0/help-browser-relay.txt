@@ -1,0 +1,19 @@
+Run the local CDP relay that lets the browser prelude drive your own Chrome tabs
+
+USAGE
+  $ omp browser-relay [ACTION] [FLAGS]
+
+ARGUMENTS
+  ACTION   Action: serve | install (default serve) (serve|install)
+
+FLAGS
+  -p, --port=<int>     Port to listen on
+      --token=<value>  Require the extension to present this token
+      --dir=<value>    Extension install directory (install; default ~/.omp/browser-relay/extension)
+      --no-group       Don't gather controllable tabs into an 'omp' tab group
+  -v, --verbose        Log relay traffic summaries to stderr
+
+EXAMPLES
+  omp browser-relay install    # write the Chrome extension to disk + setup steps
+  omp browser-relay            # serve the relay on the default port
+  omp browser-relay -p 9333 --token s3cret

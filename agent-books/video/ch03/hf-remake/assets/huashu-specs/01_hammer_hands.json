@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "锤子 Bash", "data": {"icon": "bulb"}},
+    {"at": 1.3, "kind": "point", "text": "万能 · 不精 · 难编排"},
+    {"at": 2.8, "kind": "draw", "text": "双手专工具", "data": {"icon": "target"}},
+    {"at": 4.2, "kind": "point", "text": "Read · Edit · Grep · 护栏"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

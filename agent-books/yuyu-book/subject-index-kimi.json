@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "key": "上下文压缩",
+      "letter": "#",
+      "zh": {
+        "term": "上下文压缩",
+        "refs": [
+          {
+            "anchor": "kimi-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "上下文压缩",
+        "refs": []
+      }
+    },
+    {
+      "key": "会话分叉",
+      "letter": "#",
+      "zh": {
+        "term": "会话分叉",
+        "refs": [
+          {
+            "anchor": "kimi-ch07",
+            "label": "第 7 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "会话分叉",
+        "refs": []
+      }
+    },
+    {
+      "key": "会话恢复",
+      "letter": "#",
+      "zh": {
+        "term": "会话恢复",
+        "refs": [
+          {
+            "anchor": "kimi-ch07",
+            "label": "第 7 章"
+          },
+          {
+            "anchor": "kimi-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "会话恢复",
+        "refs": []
+      }
+    },
+    {
+      "key": "只读审查",
+      "letter": "#",
+      "zh": {
+        "term": "只读审查",
+        "refs": [
+          {
+            "anchor": "kimi-ch10",
+            "label": "第 10 章"
+          },
+          {
+            "anchor": "kimi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "只读审查",
+        "refs": []
+      }
+    },
+    {
+      "key": "安装副本",
+      "letter": "#",
+      "zh": {
+        "term": "安装副本",
+        "refs": [
+          {
+            "anchor": "kimi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "安装副本",
+        "refs": []
+      }
+    },
+    {
+      "key": "工作目录",
+      "letter": "#",
+      "zh": {
+        "term": "工作目录",
+        "refs": [
+          {
+            "anchor": "kimi-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "kimi-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "工作目录",
+        "refs": []
+      }
+    },
+    {
+      "key": "权限模式",
+      "letter": "#",
+      "zh": {
+        "term": "权限模式",
+        "refs": [
+          {
+            "anchor": "kimi-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "权限模式",
+        "refs": []
+      }
+    },
+    {
+      "key": "输入域",
+      "letter": "#",
+      "zh": {
+        "term": "输入域",
+        "refs": [
+          {
+            "anchor": "kimi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "kimi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "输入域",
+        "refs": []
+      }
+    },
+    {
+      "key": "ACP",
+      "letter": "A",
+      "zh": {
+        "term": "ACP",
+        "refs": [
+          {
+            "anchor": "kimi-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "kimi-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ACP",
+        "refs": []
+      }
+    },
+    {
+      "key": "AGENTS.md",
+      "letter": "A",
+      "zh": {
+        "term": "AGENTS.md",
+        "refs": [
+          {
+            "anchor": "kimi-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "AGENTS.md",
+        "refs": []
+      }
+    },
+    {
+      "key": "Agent",
+      "letter": "A",
+      "zh": {
+        "term": "Agent",
+        "refs": [
+          {
+            "anchor": "kimi-ch10",
+            "label": "第 10 章"
+          },
+          {
+            "anchor": "kimi-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Agent",
+        "refs": []
+      }
+    },
+    {
+      "key": "fail-open",
+      "letter": "F",
+      "zh": {
+        "term": "fail-open",
+        "refs": [
+          {
+            "anchor": "kimi-ch12",
+            "label": "第 12 章"
+          },
+          {
+            "anchor": "kimi-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "fail-open",
+        "refs": []
+      }
+    },
+    {
+      "key": "Hook",
+      "letter": "H",
+      "zh": {
+        "term": "Hook",
+        "refs": [
+          {
+            "anchor": "kimi-ch11",
+            "label": "第 11 章"
+          },
+          {
+            "anchor": "kimi-ch12",
+            "label": "第 12 章"
+          },
+          {
+            "anchor": "kimi-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Hook",
+        "refs": []
+      }
+    },
+    {
+      "key": "initialize",
+      "letter": "I",
+      "zh": {
+        "term": "initialize",
+        "refs": [
+          {
+            "anchor": "kimi-ch13",
+            "label": "第 13 章"
+          },
+          {
+            "anchor": "kimi-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "initialize",
+        "refs": []
+      }
+    },
+    {
+      "key": "inventory.py",
+      "letter": "I",
+      "zh": {
+        "term": "inventory.py",
+        "refs": [
+          {
+            "anchor": "kimi-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "kimi-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "kimi-ch18",
+            "label": "第 18 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "inventory.py",
+        "refs": []
+      }
+    },
+    {
+      "key": "JSONL",
+      "letter": "J",
+      "zh": {
+        "term": "JSONL",
+        "refs": [
+          {
+            "anchor": "kimi-ch05",
+            "label": "第 5 章"
+          },
+          {
+            "anchor": "kimi-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "JSONL",
+        "refs": []
+      }
+    },
+    {
+      "key": "KIMI_CODE_HOME",
+      "letter": "K",
+      "zh": {
+        "term": "KIMI_CODE_HOME",
+        "refs": [
+          {
+            "anchor": "kimi-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "kimi-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "KIMI_CODE_HOME",
+        "refs": []
+      }
+    },
+    {
+      "key": "MCP",
+      "letter": "M",
+      "zh": {
+        "term": "MCP",
+        "refs": [
+          {
+            "anchor": "kimi-ch13",
+            "label": "第 13 章"
+          },
+          {
+            "anchor": "kimi-ch14",
+            "label": "第 14 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "MCP",
+        "refs": []
+      }
+    },
+    {
+      "key": "Plan",
+      "letter": "P",
+      "zh": {
+        "term": "Plan",
+        "refs": [
+          {
+            "anchor": "kimi-ch06",
+            "label": "第 6 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Plan",
+        "refs": []
+      }
+    },
+    {
+      "key": "PreToolUse",
+      "letter": "P",
+      "zh": {
+        "term": "PreToolUse",
+        "refs": [
+          {
+            "anchor": "kimi-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "PreToolUse",
+        "refs": []
+      }
+    },
+    {
+      "key": "plugin manifest",
+      "letter": "P",
+      "zh": {
+        "term": "plugin manifest",
+        "refs": [
+          {
+            "anchor": "kimi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "plugin manifest",
+        "refs": []
+      }
+    },
+    {
+      "key": "provider",
+      "letter": "P",
+      "zh": {
+        "term": "provider",
+        "refs": [
+          {
+            "anchor": "kimi-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "provider",
+        "refs": []
+      }
+    },
+    {
+      "key": "Skill",
+      "letter": "S",
+      "zh": {
+        "term": "Skill",
+        "refs": [
+          {
+            "anchor": "kimi-ch09",
+            "label": "第 9 章"
+          },
+          {
+            "anchor": "kimi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Skill",
+        "refs": []
+      }
+    },
+    {
+      "key": "sessionStart.skill",
+      "letter": "S",
+      "zh": {
+        "term": "sessionStart.skill",
+        "refs": [
+          {
+            "anchor": "kimi-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "sessionStart.skill",
+        "refs": []
+      }
+    },
+    {
+      "key": "stream-json",
+      "letter": "S",
+      "zh": {
+        "term": "stream-json",
+        "refs": [
+          {
+            "anchor": "kimi-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "stream-json",
+        "refs": []
+      }
+    },
+    {
+      "key": "tools / disallowedTools",
+      "letter": "T",
+      "zh": {
+        "term": "tools / disallowedTools",
+        "refs": [
+          {
+            "anchor": "kimi-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "tools / disallowedTools",
+        "refs": []
+      }
+    }
+  ]
+}

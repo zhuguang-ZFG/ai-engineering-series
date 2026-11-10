@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Vibe Coding 101：不会写代码，也能做软件</title>
+  <desc id="desc">手绘风封面：一句中文需求从对话气泡里掉出来，变成一条粗轮廓的绿色贪吃蛇和一颗橙红色苹果。</desc>
+
+  <rect width="1600" height="1000" fill="#fbfaf6"/>
+
+  <!-- 纸张纹理：极淡的横向手绘线（墨色低透明） -->
+  <g stroke="#1f2328" stroke-width="2" stroke-linecap="round" opacity="0.06">
+    <path d="M0 176h1600"/><path d="M0 352h1600"/><path d="M0 528h1600"/><path d="M0 704h1600"/><path d="M0 880h1600"/>
+  </g>
+
+  <!-- 顶部小字 -->
+  <text x="100" y="108" fill="#57606a" font-family="ui-monospace, 'Cascadia Mono', monospace" font-size="28" letter-spacing="6">VIBE CODING 101 · 零基础实战课</text>
+  <g stroke="#1f2328" stroke-width="8" stroke-linecap="round" fill="none">
+    <path d="M100 140c120-7 240 6 360-2"/>
+  </g>
+
+  <!-- 主标题 -->
+  <g font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-weight="800" fill="#1f2328">
+    <text x="96" y="300" font-size="118" transform="rotate(-0.7 96 300)">不会写代码</text>
+    <text x="96" y="446" font-size="118" transform="rotate(-0.4 96 446)">也能做<tspan fill="#1f883d">软件</tspan></text>
+  </g>
+
+  <!-- 手绘下划线 -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M96 486c180 10 360-6 540 4" stroke="#1f883d" stroke-width="14"/>
+    <path d="M104 500c180 8 356-4 528 6" stroke="#1f883d" stroke-width="6" opacity="0.55"/>
+  </g>
+
+  <text x="102" y="570" fill="#57606a" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="44">从一句需求，到第一个可用作品</text>
+
+  <!-- 对话气泡 -->
+  <g transform="rotate(-1.2 1240 210)">
+    <path d="M1000 128h472c14 0 26 12 26 26v126c0 14-12 26-26 26h-236l-52 46 6-46h-190c-14 0-26-12-26-26V154c0-14 12-26 26-26z" fill="#fffdf8" stroke="#1f2328" stroke-width="10" stroke-linejoin="round"/>
+    <text x="1046" y="212" fill="#1f2328" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="38" font-weight="700">做一个会计分的贪吃蛇</text>
+  </g>
+
+  <!-- 蛇：先黑轮廓后绿身 -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1196 330c0 74-96 58-96 132 0 66 88 60 88 124 0 60-84 54-84 116" stroke="#1f2328" stroke-width="86"/>
+    <path d="M1196 330c0 74-96 58-96 132 0 66 88 60 88 124 0 60-84 54-84 116" stroke="#1f883d" stroke-width="62"/>
+  </g>
+
+  <!-- 蛇头 -->
+  <g transform="translate(1196 332)">
+    <circle r="72" fill="#1f883d" stroke="#1f2328" stroke-width="10"/>
+    <circle cx="-22" cy="-16" r="12" fill="#1f2328"/>
+    <circle cx="24" cy="-16" r="12" fill="#1f2328"/>
+    <path d="M-26 22c18 14 38 14 56-4" fill="none" stroke="#1f2328" stroke-width="9" stroke-linecap="round"/>
+  </g>
+
+  <!-- 苹果 -->
+  <g transform="translate(1110 790)">
+    <path d="M0-38c26-16 58 6 58 40 0 40-38 66-58 66S-58 42-58 2c0-34 32-56 58-40z" fill="#e2601f" stroke="#1f2328" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M2-44c2-20 14-30 28-32" fill="none" stroke="#1f2328" stroke-width="9" stroke-linecap="round"/>
+    <path d="M28-74c22-8 34 6 30 22-20 6-30-6-30-22z" fill="#1f883d" stroke="#1f2328" stroke-width="8"/>
+  </g>
+
+  <!-- 底部信息卡 -->
+  <g transform="rotate(0.8 520 862)">
+    <rect x="96" y="786" width="908" height="152" rx="26" fill="#fffdf8" stroke="#1f2328" stroke-width="8"/>
+    <rect x="96" y="786" width="16" height="152" rx="8" fill="#1f883d"/>
+    <text x="152" y="846" fill="#1f2328" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="40" font-weight="800">4 集视频 · 一本书 · 从零到上线</text>
+    <text x="152" y="902" fill="#57606a" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="30">EP.01 做出来 · EP.02 会写诗 · EP.03 搬进项目 · EP.04 放到公网</text>
+  </g>
+
+  <!-- 角标 -->
+  <g transform="translate(1304 782)">
+    <rect width="196" height="156" rx="22" fill="#008635" stroke="#1f2328" stroke-width="8"/>
+    <text x="98" y="66" text-anchor="middle" fill="#fbfaf6" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="34" font-weight="800">不会写</text>
+    <text x="98" y="112" text-anchor="middle" fill="#fbfaf6" font-family="'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif" font-size="34" font-weight="800">也能做</text>
+  </g>
+
+  <text x="96" y="978" fill="#57606a" font-family="ui-monospace, 'Cascadia Mono', monospace" font-size="22" letter-spacing="4">BASED ON OPEN SOURCE COURSE · EASY-VIBE</text>
+</svg>

@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PRD：现代 AI 生图 SaaS 平台 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 184 / 195</p><article><h1 id="prd现代-ai-生图-saas-平台">PRD：现代 AI 生图 SaaS 平台</h1><details class="contents"><summary>本章目录 <span>· 14 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-项目定位-3">1. 项目定位</a></li><li><a href="#11-技术选型建议-2">1.1 技术选型建议</a></li><li><a href="#2-目标用户与核心目标-3">2. 目标用户与核心目标</a></li><li><a href="#3-mvp-范围-3">3. MVP 范围</a></li><li><a href="#4-角色与权限-3">4. 角色与权限</a></li><li><a href="#5-前端实现-1">5. 前端实现</a></li><li><a href="#51-页面架构总览-1">5.1 页面架构总览</a><ul><li><a href="#a-官网前台-wwwxxxcom-1">A. 官网前台 www.xxx.com</a></li><li><a href="#1-官网首页-www-3">1. 官网首页 www:/</a></li><li><a href="#b-用户工作台-appxxxcom">B. 用户工作台 app.xxx.com</a></li><li><a href="#2-登录页-applogin-3">2. 登录页 app:/login</a></li><li><a href="#3-注册页-appregister-1">3. 注册页 app:/register</a></li><li><a href="#4-生成工作台-appgenerate-1">4. 生成工作台 app:/generate</a></li><li><a href="#5-历史图库-appgallery">5. 历史图库 app:/gallery</a></li><li><a href="#6-套餐页-appbilling-1">6. 套餐页 app:/billing</a></li><li><a href="#7-积分页-apppoints">7. 积分页 app:/points</a></li><li><a href="#8-社区广场-appexplore">8. 社区广场 app:/explore</a></li><li><a href="#9-作品详情页-apppostsid">9. 作品详情页 app:/posts/:id</a></li><li><a href="#10-个人中心-appsettings">10. 个人中心 app:/settings</a></li><li><a href="#c-后台管理台-adminxxxcom-1">C. 后台管理台 admin.xxx.com</a></li><li><a href="#11-后台首页-admin">11. 后台首页 admin:/</a></li><li><a href="#12-用户管理-adminusers">12. 用户管理 admin:/users</a></li><li><a href="#13-任务管理-admintasks">13. 任务管理 admin:/tasks</a></li><li><a href="#14-内容管理-adminposts">14. 内容管理 admin:/posts</a></li><li><a href="#15-套餐管理-adminplans">15. 套餐管理 admin:/plans</a></li><li><a href="#16-支付订单-adminbilling">16. 支付订单 admin:/billing</a></li><li><a href="#17-运营配置-adminoperations">17. 运营配置 admin:/operations</a></li><li><a href="#18-saas-指标看板-adminanalytics">18. SaaS 指标看板 admin:/analytics</a></li><li><a href="#19-系统监控页-adminobservability">19. 系统监控页 admin:/observability</a></li></ul></li><li><a href="#6-后端实现-3">6. 后端实现</a></li><li><a href="#7-功能清单-3">7. 功能清单</a></li><li><a href="#81-套餐设计草案">8.1 套餐设计草案</a></li><li><a href="#9-接口草案">9. 接口草案</a></li><li><a href="#10-非功能要求-1">10. 非功能要求</a></li><li><a href="#11-开发顺序建议-1">11. 开发顺序建议</a></li><li><a href="#12-待确认项-1">12. 待确认项</a></li></ul></nav></details><p>状态：Draft v0.2<br>目标：先完成可 review 的产品与实现方案，不进入开发。</p>
+<h2 id="1-项目定位-3">1. 项目定位</h2>
+<p>这是一个现代化 AI 生图 SaaS 网站，产品体验参考 Midjourney、Leonardo、Playground 这类平台，但后端不训练自己的模型，而是对接第三方图像生成模型服务。</p>
+<p>第一版要做的不是“一个展示页”，而是一套最小可用的完整产品：</p>
+<ul>
+<li>官网落地页</li>
+<li>用户注册登录</li>
+<li>Prompt 输入与图片生成</li>
+<li>图片历史记录与结果管理</li>
+<li>套餐/额度体系</li>
+<li>积分体系</li>
+<li>图片分享与公开展示</li>
+<li>点赞、评论、转发等互动能力</li>
+<li>管理后台</li>
+</ul>
+<p>一句话定义：
+做一个面向普通创作者和独立开发者的现代 AI 生图 SaaS 平台，前端提供官网、生成工作台和分享社区，后端对接第三方生图模型，支持注册登录、按套餐购买积分、图片分享与互动。</p>
+<p>站点入口约定：</p>
+<ul>
+<li>官网前台：<code>www.xxx.com</code></li>
+<li>用户工作台：<code>app.xxx.com</code></li>
+<li>后台管理台：<code>admin.xxx.com</code></li>
+</ul>
+<h2 id="11-技术选型建议-2">1.1 技术选型建议</h2>
+<p>当前默认技术方案：</p>
+<ul>
+<li>前端框架：<code>Next.js App Router</code></li>
+<li>用户鉴权：<code>Supabase Auth</code></li>
+<li>数据库：<code>Supabase Postgres</code></li>
+<li>文件存储：<code>Supabase Storage</code></li>
+<li>支付：<code>Stripe</code></li>
+<li>图像生成模型：通过统一后端适配层对接第三方模型 API</li>
+</ul>
+<p>默认原因：</p>
+<ul>
+<li><code>Supabase Auth + Supabase Postgres</code> 适合第一版 SaaS 快速落地</li>
+<li>用户系统、数据库、对象存储可以一起解决</li>
+<li>对 <code>app.xxx.com</code> 和 <code>admin.xxx.com</code> 两套前端都友好</li>
+<li>后续如果要拆独立服务，也保留扩展空间</li>
+</ul>
+<p>默认鉴权设计：</p>
+<ul>
+<li>普通用户支持邮箱密码登录和第三方登录</li>
+<li>管理员使用同一套登录系统，但在用户表中标记 <code>role=admin</code></li>
+<li>后台管理台必须校验管理员权限</li>
+<li>用户前台与后台管理台接口分开鉴权</li>
+</ul>
+<p>默认数据库设计：</p>
+<ul>
+<li>主业务库使用 <code>PostgreSQL</code></li>
+<li>用户、任务、支付、积分、社区内容、监控日志先放一套主库</li>
+<li>分析型查询先基于主库聚合，后续如数据量变大再拆分析库</li>
+</ul>
+<p>系统总览：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart LR
+  WWW[&quot;www.xxx.com&lt;br/&gt;官网前台&quot;] --&gt; API[&quot;应用 API / 管理 API&quot;]
+  APP[&quot;app.xxx.com&lt;br/&gt;用户工作台&quot;] --&gt; API
+  ADMIN[&quot;admin.xxx.com&lt;br/&gt;后台管理台&quot;] --&gt; API
+  API --&gt; AUTH[&quot;Supabase Auth&quot;]
+  API --&gt; DB[&quot;Supabase Postgres&quot;]
+  API --&gt; OSS[&quot;OSS 对象存储&quot;]
+  API --&gt; PAY[&quot;Stripe&quot;]
+  API --&gt; MODEL[&quot;第三方生图模型&quot;]
+</code></pre>
+<h2 id="2-目标用户与核心目标-3">2. 目标用户与核心目标</h2>
+<p>目标用户：</p>
+<ul>
+<li>想快速生成营销图、封面图、海报图的普通用户</li>
+<li>需要批量试 Prompt 的设计师或内容创作者</li>
+<li>喜欢浏览他人作品、参与互动的社区用户</li>
+<li>管理用户、任务和额度消耗的管理员</li>
+</ul>
+<p>核心目标：</p>
+<ul>
+<li>用户可以在 3 分钟内完成注册并生成第一张图</li>
+<li>用户能清晰看到每次生成结果、积分消耗和历史记录</li>
+<li>用户可以把满意作品分享出来并获得互动反馈</li>
+<li>平台能支持积分购买、积分消耗、失败重试、内容互动和后台管理</li>
+</ul>
+<p>建议北极星指标：</p>
+<ul>
+<li>新用户首图生成成功率</li>
+<li>日活跃生成用户数</li>
+<li>人均生成次数</li>
+<li>生成任务成功率</li>
+<li>付费转化率</li>
+<li>分享图片数</li>
+<li>点赞/评论互动率</li>
+<li>日活跃积分用户数</li>
+</ul>
+<h2 id="3-mvp-范围-3">3. MVP 范围</h2>
+<p>第一版必须包含：</p>
+<ul>
+<li>官网首页</li>
+<li>注册/登录</li>
+<li>生图工作台</li>
+<li>图片历史页</li>
+<li>套餐/积分页</li>
+<li>积分页</li>
+<li>支付/订阅能力</li>
+<li>图片公开分享页</li>
+<li>点赞、评论、转发</li>
+<li>图片生成接口</li>
+<li>生成任务状态查询</li>
+<li>后台查看用户、生成任务、积分使用和内容互动情况</li>
+</ul>
+<p>第一版不做：</p>
+<ul>
+<li>自训练模型</li>
+<li>多模型工作流编排</li>
+<li>图片编辑器</li>
+<li>团队协作</li>
+<li>多语言</li>
+</ul>
+<h2 id="4-角色与权限-3">4. 角色与权限</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>游客</td>
+<td>浏览官网、查看产品介绍、注册登录</td>
+</tr>
+<tr>
+<td>注册用户</td>
+<td>创建生成任务、查看历史图片、管理自己的积分和结果、查看积分明细、分享作品、点赞评论转发</td>
+</tr>
+<tr>
+<td>管理员</td>
+<td>查看用户、任务状态、失败日志、套餐与积分消耗情况，管理积分规则、公开内容与互动数据</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-前端实现-1">5. 前端实现</h2>
+<p>推荐技术栈：</p>
+<ul>
+<li>Next.js App Router</li>
+<li>TypeScript</li>
+<li>Tailwind CSS</li>
+<li>shadcn/ui</li>
+</ul>
+<p>前端形态说明：</p>
+<ul>
+<li>官网前台和用户工作台都属于“前端产品”</li>
+<li>后台管理系统本质上也是前端页面，只是面向内部运营和管理员使用</li>
+<li>因此本项目会有两套前端界面：<ul>
+<li>面向用户的产品前台</li>
+<li>面向运营/管理员的后台管理台</li>
+</ul>
+</li>
+<li>同时后台管理台需要配套独立的管理员接口与权限校验</li>
+</ul>
+<p>入口建议：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>站点类型</th>
+<th>建议入口</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>官网前台</td>
+<td><code>www.xxx.com</code></td>
+<td>产品介绍、定价、FAQ、注册入口</td>
+</tr>
+<tr>
+<td>用户工作台</td>
+<td><code>app.xxx.com</code></td>
+<td>登录后生成图片、看图库、看积分、发动态</td>
+</tr>
+<tr>
+<td>后台管理台</td>
+<td><code>admin.xxx.com</code></td>
+<td>管理用户、套餐、任务、内容、风控</td>
+</tr>
+</tbody></table></div>
+<h2 id="51-页面架构总览-1">5.1 页面架构总览</h2>
+<p>当前 PRD 定义为 <code>3 套入口，19 个大页面</code>：</p>
+<ul>
+<li>官网前台 <code>1</code> 个大页面</li>
+<li>用户工作台 <code>9</code> 个大页面</li>
+<li>后台管理台 <code>9</code> 个大页面</li>
+</ul>
+<h3 id="a-官网前台-wwwxxxcom-1">A. 官网前台 <code>www.xxx.com</code></h3>
+<h3 id="1-官网首页-www-3">1. 官网首页 <code>www:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>Hero 区与主 CTA</li>
+<li>产品能力介绍</li>
+<li>作品展示</li>
+<li>套餐预览</li>
+<li>FAQ</li>
+<li>注册/登录/进入工作台入口</li>
+</ul>
+<h3 id="b-用户工作台-appxxxcom">B. 用户工作台 <code>app.xxx.com</code></h3>
+<h3 id="2-登录页-applogin-3">2. 登录页 <code>app:/login</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>邮箱/密码登录</li>
+<li>第三方登录入口</li>
+<li>找回密码入口</li>
+<li>跳转注册页</li>
+</ul>
+<h3 id="3-注册页-appregister-1">3. 注册页 <code>app:/register</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>新用户注册</li>
+<li>同意协议与隐私政策</li>
+<li>第三方登录注册</li>
+<li>注册成功后进入工作台</li>
+</ul>
+<h3 id="4-生成工作台-appgenerate-1">4. 生成工作台 <code>app:/generate</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>输入 Prompt 与 Negative Prompt</li>
+<li>选择模型、比例、数量、质量参数</li>
+<li>提交生图任务</li>
+<li>查看生成中/成功/失败状态</li>
+<li>对结果再次生成、收藏、发布</li>
+</ul>
+<h3 id="5-历史图库-appgallery">5. 历史图库 <code>app:/gallery</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看个人历史生成记录</li>
+<li>按时间/模型/状态筛选</li>
+<li>删除图片</li>
+<li>收藏图片</li>
+<li>从历史记录再次进入详情或复用 Prompt</li>
+</ul>
+<h3 id="6-套餐页-appbilling-1">6. 套餐页 <code>app:/billing</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看 Basic / Standard / Pro / Mega 套餐</li>
+<li>月付/年付切换</li>
+<li>查看每档套餐包含的积分和权益</li>
+<li>发起购买套餐</li>
+<li>购买额外积分包</li>
+<li>FAQ 与账号关联说明</li>
+</ul>
+<h3 id="7-积分页-apppoints">7. 积分页 <code>app:/points</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看当前积分余额</li>
+<li>查看积分获取记录</li>
+<li>查看积分消耗记录</li>
+<li>每日签到</li>
+<li>积分兑换权益或生成次数</li>
+</ul>
+<h3 id="8-社区广场-appexplore">8. 社区广场 <code>app:/explore</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>浏览公开作品流</li>
+<li>按热门/最新排序</li>
+<li>点赞作品</li>
+<li>评论作品</li>
+<li>转发作品</li>
+<li>进入作品详情页</li>
+</ul>
+<h3 id="9-作品详情页-apppostsid">9. 作品详情页 <code>app:/posts/:id</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看单个作品大图</li>
+<li>查看作者信息与发布时间</li>
+<li>查看完整 Prompt 与参数</li>
+<li>查看点赞、评论、转发数据</li>
+<li>复制 Prompt / 再次生成 / 点赞 / 评论 / 转发</li>
+</ul>
+<h3 id="10-个人中心-appsettings">10. 个人中心 <code>app:/settings</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看个人资料</li>
+<li>绑定/关联账号</li>
+<li>查看当前套餐</li>
+<li>查看登录方式与安全设置</li>
+<li>管理公开分享偏好</li>
+</ul>
+<h3 id="c-后台管理台-adminxxxcom-1">C. 后台管理台 <code>admin.xxx.com</code></h3>
+<h3 id="11-后台首页-admin">11. 后台首页 <code>admin:/</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>用户总数</li>
+<li>生成任务总量</li>
+<li>支付收入概览</li>
+<li>内容分享与互动概览</li>
+<li>异常任务提醒</li>
+</ul>
+<h3 id="12-用户管理-adminusers">12. 用户管理 <code>admin:/users</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看用户列表</li>
+<li>搜索和筛选用户</li>
+<li>查看用户套餐、积分、活跃情况</li>
+<li>封禁/解封账号</li>
+<li>手动调整积分</li>
+</ul>
+<h3 id="13-任务管理-admintasks">13. 任务管理 <code>admin:/tasks</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看全部生成任务</li>
+<li>按状态筛选成功/失败/处理中任务</li>
+<li>查看失败原因</li>
+<li>手动重试或标记异常任务</li>
+</ul>
+<h3 id="14-内容管理-adminposts">14. 内容管理 <code>admin:/posts</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看公开作品列表</li>
+<li>审核作品是否可展示</li>
+<li>下架违规内容</li>
+<li>查看评论与互动记录</li>
+<li>审核或删除评论</li>
+</ul>
+<h3 id="15-套餐管理-adminplans">15. 套餐管理 <code>admin:/plans</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>配置套餐价格</li>
+<li>配置月付/年付优惠</li>
+<li>配置套餐积分数</li>
+<li>配置积分包 top-up</li>
+<li>配置并发和高级权益</li>
+</ul>
+<h3 id="16-支付订单-adminbilling">16. 支付订单 <code>admin:/billing</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看支付订单列表</li>
+<li>查看订阅状态</li>
+<li>查看退款/失败订单</li>
+<li>搜索异常支付记录</li>
+</ul>
+<h3 id="17-运营配置-adminoperations">17. 运营配置 <code>admin:/operations</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>配置签到积分规则</li>
+<li>配置分享/互动奖励规则</li>
+<li>配置活动公告</li>
+<li>配置风控和审核开关</li>
+</ul>
+<h3 id="18-saas-指标看板-adminanalytics">18. SaaS 指标看板 <code>admin:/analytics</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看新增用户、DAU、WAU、MAU</li>
+<li>查看注册转化率、付费转化率</li>
+<li>查看次日/7日/30日留存</li>
+<li>查看套餐分布和订阅续费情况</li>
+<li>查看积分发放、积分消耗、积分结余情况</li>
+<li>查看社区分享数、点赞率、评论率、转发率</li>
+</ul>
+<h3 id="19-系统监控页-adminobservability">19. 系统监控页 <code>admin:/observability</code></h3>
+<p>核心功能：</p>
+<ul>
+<li>查看 API 调用量、成功率、错误率、平均耗时</li>
+<li>查看第三方生图模型调用情况</li>
+<li>查看数据库连接状态、慢查询和失败率</li>
+<li>查看支付接口回调状态</li>
+<li>查看任务队列积压和重试情况</li>
+<li>查看系统告警与异常日志</li>
+</ul>
+<p>建议页面明细：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>官网首页</td>
+<td><code>www:/</code></td>
+<td>Hero、作品展示、功能介绍、价格方案、FAQ、CTA</td>
+</tr>
+<tr>
+<td>登录页</td>
+<td><code>app:/login</code></td>
+<td>登录表单</td>
+</tr>
+<tr>
+<td>注册页</td>
+<td><code>app:/register</code></td>
+<td>注册表单</td>
+</tr>
+<tr>
+<td>生成工作台</td>
+<td><code>app:/generate</code></td>
+<td>Prompt、参数设置、任务提交、结果查看</td>
+</tr>
+<tr>
+<td>历史图库</td>
+<td><code>app:/gallery</code></td>
+<td>查看历史图片、筛选、删除、收藏</td>
+</tr>
+<tr>
+<td>套餐页</td>
+<td><code>app:/billing</code></td>
+<td>展示套餐档位、月付/年付、积分权益</td>
+</tr>
+<tr>
+<td>积分页</td>
+<td><code>app:/points</code></td>
+<td>查看积分余额、获取记录、兑换规则</td>
+</tr>
+<tr>
+<td>社区广场</td>
+<td><code>app:/explore</code></td>
+<td>浏览公开作品、点赞、评论、转发</td>
+</tr>
+<tr>
+<td>作品详情页</td>
+<td><code>app:/posts/:id</code></td>
+<td>查看单张公开作品的详情与互动信息</td>
+</tr>
+<tr>
+<td>个人中心</td>
+<td><code>app:/settings</code></td>
+<td>用户资料、积分、绑定信息</td>
+</tr>
+<tr>
+<td>后台首页</td>
+<td><code>admin:/</code></td>
+<td>后台概览看板</td>
+</tr>
+<tr>
+<td>用户管理</td>
+<td><code>admin:/users</code></td>
+<td>查看用户、封禁、积分与套餐状态</td>
+</tr>
+<tr>
+<td>任务管理</td>
+<td><code>admin:/tasks</code></td>
+<td>查看生图任务、失败任务、重试情况</td>
+</tr>
+<tr>
+<td>内容管理</td>
+<td><code>admin:/posts</code></td>
+<td>审核公开作品、评论、转发数据</td>
+</tr>
+<tr>
+<td>套餐管理</td>
+<td><code>admin:/plans</code></td>
+<td>配置套餐、积分包、价格与权益</td>
+</tr>
+<tr>
+<td>支付订单</td>
+<td><code>admin:/billing</code></td>
+<td>查看支付记录、退款状态、异常订单</td>
+</tr>
+<tr>
+<td>运营配置</td>
+<td><code>admin:/operations</code></td>
+<td>配置签到规则、积分规则、公告与活动</td>
+</tr>
+<tr>
+<td>SaaS 指标看板</td>
+<td><code>admin:/analytics</code></td>
+<td>查看留存、转化、积分、订阅与社区活跃指标</td>
+</tr>
+<tr>
+<td>系统监控页</td>
+<td><code>admin:/observability</code></td>
+<td>查看 API、模型调用、数据库、支付、队列状态</td>
+</tr>
+</tbody></table></div>
+<p>前端核心组件：</p>
+<ul>
+<li>Hero 区与 CTA</li>
+<li>Prompt 输入面板</li>
+<li>模型参数配置区</li>
+<li>图片结果卡片</li>
+<li>任务状态轮询组件</li>
+<li>图库列表/瀑布流</li>
+<li>套餐卡片组件</li>
+<li>月付/年付切换组件</li>
+<li>积分概览卡片</li>
+<li>积分明细列表</li>
+<li>FAQ 折叠区</li>
+<li>公开作品卡片</li>
+<li>评论列表与评论输入框</li>
+<li>点赞/转发操作栏</li>
+<li>套餐价格卡片</li>
+<li>空态、加载、失败重试组件</li>
+<li>管理后台表格、筛选器、统计卡片、审核面板</li>
+<li>监控图表、趋势图、健康状态卡片、告警列表</li>
+</ul>
+<p>前端状态与数据流：</p>
+<ul>
+<li>游客从首页进入注册或登录</li>
+<li>登录后进入 <code>/generate</code></li>
+<li>用户输入 Prompt 和参数后提交生成任务</li>
+<li>前端轮询或订阅任务状态</li>
+<li>成功后展示图片并写入历史记录</li>
+<li>用户完成签到、生成、分享、互动后可获得积分</li>
+<li>用户可将图片发布到公开广场</li>
+<li>其他用户可点赞、评论、转发该作品</li>
+<li>套餐页展示剩余积分、套餐差异与升级入口</li>
+<li>积分页展示积分来源、消费记录和兑换入口</li>
+<li>管理员从独立后台入口进入运营看板和管理模块</li>
+<li>管理员可在后台查看业务指标和系统健康状态</li>
+</ul>
+<h2 id="6-后端实现-3">6. 后端实现</h2>
+<p>推荐技术栈：</p>
+<ul>
+<li>Next.js Route Handlers 或 Node.js/Express</li>
+<li>PostgreSQL / Supabase</li>
+<li>对接第三方图像生成模型 API</li>
+</ul>
+<p>后端模块：</p>
+<ul>
+<li><code>auth</code>：注册、登录、鉴权</li>
+<li><code>generation</code>：创建生图任务、查询任务状态、失败重试</li>
+<li><code>images</code>：图片历史、删除、收藏、详情</li>
+<li><code>points</code>：积分购买、累计、扣减、任务奖励、兑换记录</li>
+<li><code>billing</code>：套餐、支付记录、升级状态</li>
+<li><code>social</code>：公开发布、点赞、评论、转发</li>
+<li><code>analytics</code>：留存、转化、订阅、积分、社区活跃统计</li>
+<li><code>observability</code>：API 调用、模型调用、数据库状态、告警日志</li>
+<li><code>admin</code>：后台查看用户、任务、错误日志、审核内容、运营配置</li>
+</ul>
+<p>核心数据流：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  user[&quot;用户&quot;] --&gt; gen[&quot;提交生成任务&quot;]
+  gen --&gt; payCheck[&quot;检查套餐/积分&quot;]
+  payCheck --&gt; model[&quot;调用第三方生图模型&quot;]
+  model --&gt; oss[&quot;上传结果到 OSS&quot;]
+  oss --&gt; db[&quot;写入 Postgres: tasks / images / points&quot;]
+  db --&gt; gallery[&quot;历史图库 / 社区发布&quot;]
+  gallery --&gt; social[&quot;点赞 / 评论 / 转发&quot;]
+  social --&gt; db
+  db --&gt; analytics[&quot;SaaS 指标看板&quot;]
+  db --&gt; observability[&quot;API / DB / Provider 监控&quot;]
+</code></pre>
+<p>建议数据表：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">profiles (
+  id uuid primary key,
+  email text,
+  role text,
+  plan text,
+  points int,
+  created_at timestamptz
+)
+
+generation_tasks (
+  id uuid primary key,
+  user_id uuid,
+  prompt text,
+  negative_prompt text,
+  model text,
+  aspect_ratio text,
+  image_count int,
+  status text,
+  error_message text,
+  provider_task_id text,
+  points_cost int,
+  created_at timestamptz
+)
+
+generated_images (
+  id uuid primary key,
+  task_id uuid,
+  user_id uuid,
+  image_url text,
+  width int,
+  height int,
+  is_favorite boolean,
+  created_at timestamptz
+)
+
+billing_records (
+  id uuid primary key,
+  user_id uuid,
+  plan_code text,
+  billing_cycle text,
+  type text,
+  amount_cents int,
+  points_delta int,
+  status text,
+  created_at timestamptz
+)
+
+point_records (
+  id uuid primary key,
+  user_id uuid,
+  type text,
+  points_delta int,
+  source text,
+  created_at timestamptz
+)
+
+api_call_logs (
+  id uuid primary key,
+  route text,
+  method text,
+  user_id uuid,
+  status_code int,
+  duration_ms int,
+  request_id text,
+  created_at timestamptz
+)
+
+provider_call_logs (
+  id uuid primary key,
+  provider_name text,
+  task_id uuid,
+  status text,
+  duration_ms int,
+  error_message text,
+  created_at timestamptz
+)
+
+system_health_checks (
+  id uuid primary key,
+  service_name text,
+  check_type text,
+  status text,
+  detail jsonb,
+  created_at timestamptz
+)
+
+subscription_plans (
+  id uuid primary key,
+  code text,
+  name text,
+  monthly_price_cents int,
+  yearly_price_cents int,
+  monthly_points int,
+  concurrent_image_jobs int,
+  concurrent_video_jobs int,
+  supports_hd_video boolean,
+  supports_stealth boolean,
+  created_at timestamptz
+)
+
+shared_posts (
+  id uuid primary key,
+  image_id uuid,
+  user_id uuid,
+  caption text,
+  visibility text,
+  repost_from_post_id uuid,
+  created_at timestamptz
+)
+
+post_likes (
+  id uuid primary key,
+  post_id uuid,
+  user_id uuid,
+  created_at timestamptz
+)
+
+post_comments (
+  id uuid primary key,
+  post_id uuid,
+  user_id uuid,
+  content text,
+  created_at timestamptz
+)
+</code></pre>
+<h2 id="7-功能清单-3">7. 功能清单</h2>
+<p>必须完成：</p>
+<ul>
+<li>官网价值展示</li>
+<li>注册/登录</li>
+<li>Prompt 输入与参数选择</li>
+<li>图片生成任务提交</li>
+<li>图片结果展示</li>
+<li>历史记录查看</li>
+<li>套餐/积分展示</li>
+<li>积分展示与明细</li>
+<li>支付/订阅</li>
+<li>图片公开分享</li>
+<li>点赞、评论、转发</li>
+<li>后台独立入口</li>
+<li>管理员查看任务、用户、支付和社区内容</li>
+<li>管理员审核公开内容与评论</li>
+<li>管理员配置积分规则与套餐规则</li>
+<li>后台查看 SaaS 留存、转化、积分与订阅指标</li>
+<li>后台查看 API 调用、模型调用和数据库健康状态</li>
+</ul>
+<p>可选增强：</p>
+<ul>
+<li>图片收藏</li>
+<li>再次生成同款</li>
+<li>Prompt 模板</li>
+<li>水印与下载规格选择</li>
+<li>任务失败自动重试</li>
+<li>评论通知</li>
+<li>个人主页与作品墙</li>
+<li>积分兑换生成次数或高级功能</li>
+</ul>
+<h2 id="81-套餐设计草案">8.1 套餐设计草案</h2>
+<p>套餐逻辑：</p>
+<ul>
+<li>用户购买的是 <code>积分型订阅套餐</code></li>
+<li>月付和年付两种计费方式</li>
+<li>年付默认比月付优惠 <code>20%</code></li>
+<li>套餐按月发放积分</li>
+<li>生成图片、生成视频、高清能力、并发能力由套餐共同决定</li>
+</ul>
+<p>建议档位：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>套餐</th>
+<th>月付</th>
+<th>年付折后</th>
+<th>每月积分</th>
+<th>图片并发</th>
+<th>视频并发</th>
+<th>其他权益</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Basic</td>
+<td><code>$10</code></td>
+<td><code>$8</code></td>
+<td>2000</td>
+<td>3</td>
+<td>1</td>
+<td>基础生图、可补充购买积分</td>
+</tr>
+<tr>
+<td>Standard</td>
+<td><code>$30</code></td>
+<td><code>$24</code></td>
+<td>8000</td>
+<td>3</td>
+<td>3</td>
+<td>支持高清视频、无限慢速图像生成</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td><code>$60</code></td>
+<td><code>$48</code></td>
+<td>18000</td>
+<td>12</td>
+<td>6</td>
+<td>隐身生成、更多并发</td>
+</tr>
+<tr>
+<td>Mega</td>
+<td><code>$120</code></td>
+<td><code>$96</code></td>
+<td>40000</td>
+<td>12</td>
+<td>12</td>
+<td>更高上限、适合高频创作用户</td>
+</tr>
+</tbody></table></div>
+<p>补充说明：</p>
+<ul>
+<li>套餐价格和积分数值是第一版草案，后续可调整</li>
+<li>不同模型与分辨率对应不同积分消耗</li>
+<li>视频生成会比图片生成消耗更多积分</li>
+<li>支持额外购买积分包作为 top-up</li>
+</ul>
+<p>建议 FAQ 内容：</p>
+<ul>
+<li>我买了套餐但没生效怎么办？</li>
+<li>月付和年付有什么差别？</li>
+<li>积分用完了怎么办？</li>
+<li>积分会不会过期？</li>
+<li>账号能不能绑定多个登录方式？</li>
+<li>哪些内容支持公开分享？</li>
+</ul>
+<h2 id="9-接口草案">9. 接口草案</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/register</code></td>
+<td>用户注册</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/login</code></td>
+<td>用户登录</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/link-account</code></td>
+<td>关联不同登录账号</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/me</code></td>
+<td>获取当前用户资料与积分</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/points</code></td>
+<td>获取积分余额和明细</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/points/check-in</code></td>
+<td>每日签到获取积分</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/points/redeem</code></td>
+<td>积分兑换权益或生成次数</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/generations</code></td>
+<td>创建生图任务</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/generations/:id</code></td>
+<td>获取任务状态和结果</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/gallery</code></td>
+<td>获取当前用户历史图片</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/gallery/:id</code></td>
+<td>删除某张图片</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/gallery/:id/favorite</code></td>
+<td>收藏/取消收藏图片</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/billing/plans</code></td>
+<td>获取套餐列表</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/billing/checkout</code></td>
+<td>创建支付订单或订阅会话</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/billing/top-up</code></td>
+<td>购买额外积分包</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/billing/records</code></td>
+<td>获取消费与充值记录</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/posts</code></td>
+<td>将一张图片发布为公开作品</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/posts</code></td>
+<td>获取公开作品流</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/posts/:id</code></td>
+<td>获取作品详情</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/posts/:id/likes</code></td>
+<td>点赞作品</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/posts/:id/likes</code></td>
+<td>取消点赞</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/posts/:id/comments</code></td>
+<td>评论作品</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/posts/:id/repost</code></td>
+<td>转发作品</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/overview</code></td>
+<td>获取后台总览</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/users</code></td>
+<td>获取用户列表与账户状态</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/tasks</code></td>
+<td>获取生成任务列表</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/posts</code></td>
+<td>获取公开作品与互动列表</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/analytics/overview</code></td>
+<td>获取新增、活跃、付费转化等核心 SaaS 指标</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/analytics/retention</code></td>
+<td>获取次日/7日/30日留存数据</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/analytics/points</code></td>
+<td>获取积分发放、消耗、结余数据</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/analytics/subscriptions</code></td>
+<td>获取订阅与套餐分布数据</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/admin/posts/:id/moderate</code></td>
+<td>审核或下架公开作品</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/admin/comments/:id/moderate</code></td>
+<td>审核或删除评论</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/billing</code></td>
+<td>获取支付订单与订阅记录</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/plans</code></td>
+<td>获取套餐与积分包配置</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/admin/plans/:id</code></td>
+<td>更新套餐配置</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/point-rules</code></td>
+<td>获取积分规则</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/admin/point-rules</code></td>
+<td>更新积分规则</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/observability/apis</code></td>
+<td>获取 API 调用量、错误率、耗时等监控数据</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/observability/providers</code></td>
+<td>获取第三方模型调用情况</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/observability/database</code></td>
+<td>获取数据库连接、慢查询、失败率</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/admin/observability/health</code></td>
+<td>获取系统健康检查结果</td>
+</tr>
+</tbody></table></div>
+<p><code>POST /api/generations</code> 请求示例：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;prompt&quot;: &quot;a cinematic futuristic city at sunset, ultra detailed&quot;,
+  &quot;negativePrompt&quot;: &quot;blurry, low quality&quot;,
+  &quot;model&quot;: &quot;flux-dev&quot;,
+  &quot;aspectRatio&quot;: &quot;1:1&quot;,
+  &quot;imageCount&quot;: 4
+}
+</code></pre>
+<h2 id="10-非功能要求-1">10. 非功能要求</h2>
+<ul>
+<li>生成过程有明确状态反馈</li>
+<li>失败任务能提示原因</li>
+<li>移动端至少可查看和浏览历史结果</li>
+<li>首页具备现代 SaaS 视觉质量</li>
+<li>用户只能访问自己的图片和任务</li>
+<li>积分扣减逻辑要稳定可追踪</li>
+<li>积分发放与扣减逻辑要可审计</li>
+<li>公开内容需要有最小审核或风控预留能力</li>
+<li>互动接口需要防刷和限流预留</li>
+<li>管理后台关键指标需支持日/周/月维度查看</li>
+<li>API 日志、数据库状态、第三方模型调用结果需可追踪</li>
+</ul>
+<h2 id="11-开发顺序建议-1">11. 开发顺序建议</h2>
+<ol>
+<li>搭官网首页与登录注册页</li>
+<li>实现用户鉴权</li>
+<li>实现生成工作台 UI</li>
+<li>接入生图任务接口</li>
+<li>实现历史图库</li>
+<li>实现支付、套餐、积分与 FAQ 页</li>
+<li>实现分享、点赞、评论、转发</li>
+<li>实现独立后台入口与后台任务、用户、积分、支付、内容管理页</li>
+<li>实现 SaaS 指标看板与系统监控页</li>
+</ol>
+<h2 id="12-待确认项-1">12. 待确认项</h2>
+<ul>
+<li>第三方模型服务优先接哪一家</li>
+<li>图片是否允许公开分享</li>
+<li>后台是否必须使用独立二级域名，还是允许先用独立路由入口</li>
+<li>积分获取规则是签到 + 分享 + 互动，还是还要包含邀请奖励</li>
+<li>积分是否只用于生成消耗，还是还要兑换会员权益</li>
+<li>年付优惠是否固定为 <code>20%</code></li>
+<li>是否需要单独的积分包 top-up</li>
+<li>鉴权是否接受默认方案：<code>Supabase Auth</code></li>
+<li>数据库是否接受默认方案：<code>Supabase Postgres</code></li>
+<li>留存与系统监控是否先做基础后台报表，后续再接专业监控平台</li>
+<li>评论是否允许二级回复</li>
+<li>转发是站内转发，还是还要带外链分享</li>
+<li>第一版是否需要人工审核公开作品</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-183.html">← PRD：在线考试与管理系统</a><a rel="next" href="chapter-185.html">PRD：Spring Boot 电影推荐系统 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

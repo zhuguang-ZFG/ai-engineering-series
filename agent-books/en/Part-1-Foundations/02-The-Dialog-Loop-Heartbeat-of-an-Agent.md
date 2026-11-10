@@ -1,0 +1,522 @@
+# Chapter 2: The Dialog Loop -- The Agent's Heartbeat
+
+> **In one line:** The dialog loop is the agent's heartbeat: every yield is one beat, and a horse that takes the rein can run the long road.
+
+> "The truth is like a lion. You don't have to defend it. Let it loose. It will defend itself."
+> -- Augustine of Hippo
+
+**Learning Objectives:** By the end of this chapter, you can:
+
+<!-- block: ch02.b-4c8829c3 -->
+- Explain why the main loop is an async generator: each `yield` hands the outside world one chance to intervene -- rendering, cancellation and backpressure all ride on it
+- Draw the five phases of one Turn and the seven Continue paths, marking which state each one lands in
+- Write a minimal loop yourself: it emits intermediate events, honours a cancel signal, and names its own termination reason when it stops — then judge whether dependency injection makes that loop easier to test or harder to read
+
+**Difficulty:** A Core chapter: 2.1 is Start level; 2.2 and 2.4 carry the trunk -- how one turn runs and how the state jumps; 2.3 (dependency injection) and the exercises sit at the Advanced tier, and skipping them on a first read costs you nothing of the main line.
+
+---
+
+<!-- block: ch02.b-9e126a40 -->
+## 2.1 Async Generators: The Skeleton of the Dialog Loop
+
+Try how hard it is to stop an agent first. You ask it to run the tests, it wanders off, you press Ctrl+C. The screen does stop -- the model keeps generating tokens, a child process keeps writing files, and a retry timer already sits in the queue. Nothing stopped; only the printing did. The loop in this chapter is an async generator precisely for this moment: every `yield` is a transfer point where you can intervene, so the loop can halt, clean up, and survive a producer that outruns its consumer.
+
+<!-- block: ch02.b-831a1dbe -->
+Claude Code's dialog main loop is an async generator defined with `async function*`. It is not a regular function that executes to completion in one shot, but rather a "living" process that you can pause, resume, and cancel. Each `yield` is like a heartbeat pulse, pushing streaming events to the caller.
+
+This design choice deserves more space to fully understand. In traditional programming models, function calls are synchronous: the caller initiates a request, the callee computes and returns a result. But the Agent's interaction pattern breaks this synchronous assumption -- the model may take tens of seconds to complete a response, and responses arrive token by token; tool execution may take minutes, during which you need real-time progress feedback; the user may interrupt the operation at any time, demanding an immediate stop.
+
+<!-- block: ch02.b-46cf49cd -->
+Faced with these requirements, the traditional function call model falls short. Async generators fill exactly this gap: they act like a "coroutine" that you can pause and resume at any time, establishing a real-time event pipeline between the "producer" (the dialog loop) and the "consumer" (the UI rendering layer).
+
+Follow the consumer's steps: the UI calls `next()`, the loop runs to a `yield`, hands out an event, and pauses. Only after the UI handles that event and calls `next()` again does the loop continue. That is backpressure here: upstream waits for downstream instead of filling an unbounded display queue. It governs this pull chain, not every buffer underneath it. A child process still writing logs into a separate buffer needs its own capacity and cancellation controls. Ctrl+C has the same distinction: no longer consuming events stops the display; stopping the work requires a cancellation signal to reach the pending operation, followed by cleanup.
+
+```ill
+ch02-cancel-chain
+```
+
+```mermaid
+flowchart TD
+    subgraph layer1["Layer 1: Streaming Output"]
+        direction LR
+        e1["Event 1"] -->|"yield"| e2["Event 2"] -->|"yield"| e3["Event 3"]
+    end
+
+    note1["UI renders each event immediately; user does not need to wait for completion"]
+
+    subgraph layer2["Layer 2: Cancellability"]
+        cancel["AbortSignal notifies pending work; return() requests generator closure"]
+        clean["Once work responds to cancellation, finally releases resources"]
+        scene2["Corresponding scenario: user presses Ctrl+C to interrupt"]
+        cancel --> clean --> scene2
+    end
+
+    subgraph layer3["Layer 3: Backpressure Control"]
+        bp["The generator waits at yield until the consumer calls next() again"]
+        mem["Bounds this pull chain; independent buffers still need limits"]
+        scene3["Corresponding scenario: tool execution produces large amounts of output"]
+        bp --> mem --> scene3
+    end
+
+    layer1 --- note1
+    layer1 ~~~ layer2
+    layer2 ~~~ layer3
+
+    classDef layer fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef note fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
+    class layer1,layer2,layer3 layer
+    class note1 note
+```
+
+### Function Signature and the AsyncGenerator Pattern
+
+<!-- block: ch02.b-140f0675 -->
+The entry point for the entire dialog loop is an exported async generator function that accepts a parameter object, can yield five types of events (streaming events, request start events, messages, tombstone messages, and tool call summaries), and ultimately returns an object representing the dialog's terminal state.
+
+This function signature encapsulates three layers of design decisions:
+
+<!-- block: ch02.b-5636a0a5 -->
+1. **Union of Yielded Types**: The generator can yield five types of events -- streaming token arrival events, API request start events, user/assistant/system messages, tombstone messages that mark deprecated messages, and tool call summary messages. These five event types cover all information the UI layer needs during the dialog process. Using a union type rather than multiple independent generators ensures temporal consistency of events -- the order of events seen by the UI is exactly the same as the order the loop produced them.
+
+<!-- block: ch02.b-e7314265 -->
+2. **Terminal return type**: The generator returns a terminal state, but `for await...of` consumes only yielded values and discards the final return value. To obtain it, explicitly call `await iterator.next()` until `done` is true and read that result’s `value`, or capture a delegated generator’s return with `yield*`. Do not assume the loop variable contains the terminal state.
+
+<!-- block: ch02.b-2bda8885 -->
+3. **Parameter Object**: All input parameters live in a single structured object rather than positional parameters, so the caller supplies only the fields it needs. Key fields include message history, system prompt, permission check function, tool execution context, maximum loop count, and so on.
+
+<!-- block: ch02.b-87402d3e -->
+Why choose AsyncGenerator over callbacks or Promises? Because generators naturally fit the "streaming produce - streaming consume" model. Model responses arrive token by token, tool execution results come out step by step, and the generator's `yield` mechanism allows each layer to "push when data is available, wait when it's not," without callback hell or Promise chains.
+
+<!-- block: ch02.b-83093f34 -->
+> **Design Philosophy Comparison:** Callbacks need explicit coordination of event order and consumption speed. A single Promise represents one completion, not a continuous event stream on its own. RxJS Observables can express streams but add a dependency and subscription management. AsyncGenerator provides native syntax for yielding events one at a time here; cancellation still depends on the caller, pending operations, and cleanup logic working together, not on `async function*` alone.
+
+### Streaming Event Types
+
+The events flowing through the dialog loop fall into the following categories. Together they form the "heartbeat signals" of the dialog process:
+
+- **stream_request_start**: Emitted before each API request begins, informing the UI layer that a new request is coming. The loop emits this event at the beginning of each iteration. Its practical value is that the UI can display a "thinking..." status indicator.
+
+- **StreamEvent**: Raw streaming events from the Anthropic API, including text block deltas (`content_block_delta`), thinking blocks, tool_use blocks, and so on. These events pass directly from the API response stream to the UI. Imagine watching a live broadcast -- StreamEvent is each frame in the video stream, and the UI layer stitches these frames into a smooth video.
+
+- **Message**: Structured message objects, including `AssistantMessage` (assistant replies, possibly containing tool_use blocks), `UserMessage` (user input or tool_result), `SystemMessage` (system notifications), and so on. Unlike StreamEvent, Messages go through parsing and structuring -- like a replay after the live broadcast ends, where the footage has gone through editing and organizing.
+
+- **TombstoneMessage**: When streaming fallback occurs, some previously produced messages need marking as deprecated. Tombstone messages tell the UI to remove the corresponding historical messages. The name comes from the "tombstone marker" pattern familiar to programmers -- just as a tombstone marks the end of a life, TombstoneMessage marks a message's "invalidation."
+
+<!-- block: ch02.b-bef8ed35 -->
+- **ToolUseSummaryMessage**: After a batch of tool executions completes, an asynchronously generated brief summary used for collapsed display of tool call results in the UI. This is especially important for long Agent sessions -- without summaries, the complete output from dozens of tool calls would overwhelm the screen.
+
+### Message Type System
+
+Claude Code's messaging system defines clear role divisions. The core message types include:
+
+```mermaid
+classDiagram
+    class UserMessage {
+        +User input
+        +Carries tool execution results (tool_result)
+    }
+    class AssistantMessage {
+        +Text blocks
+        +Tool call blocks (tool_use)
+    }
+    class SystemMessage {
+        +System-level notifications
+        +Permission changes
+        +Model fallback prompts
+    }
+    class AttachmentMessage {
+        +File change notifications
+        +Memory file contents
+        +Task notifications
+    }
+    class ProgressMessage {
+        +Tool execution progress
+        +Bash output stream
+        +File read progress
+    }
+    class TombstoneMessage {
+        +Marks message as deprecated
+        +Triggered by streaming fallback
+    }
+    class ToolUseSummaryMessage {
+        +Tool call summary
+        +UI collapsed display
+    }
+
+    UserMessage : API role is user
+    AssistantMessage : Can contain both text and tool calls
+    SystemMessage : Does not participate in API communication
+    TombstoneMessage : Marks message as "invalidated"
+```
+
+<!-- block: ch02.b-b197797c -->
+- **UserMessage**: The user's input message, which also carries tool execution results (tool_result). From the API's perspective, tool results always travel with the user role. This design may seem counterintuitive -- why are tool results in the "user" role? The reason is that the API protocol knows only three roles (system/user/assistant), and the model needs to "see" tool results, so they must go out in the user role. This is a classic case of an engineering constraint driving a design decision.
+- **AssistantMessage**: The message returned by the model, which may contain text blocks and tool_use blocks. When the model detects that a tool needs to be called, the response will include a content block with `type: 'tool_use'`. A key characteristic of AssistantMessage is that it may simultaneously contain text and tool calls -- the model might first output an explanation ("Let me check your package.json file"), then append a tool call. This "talking while doing" pattern makes the Agent's behavior more transparent.
+- **SystemMessage**: System-level notifications, such as permission changes, model fallback prompts, and so on. Does not participate in API communication; only displayed in the UI. SystemMessage is the "fourth wall" -- it doesn't participate in the model conversation but tells the user what's happening inside the system.
+- **AttachmentMessage**: Attachment messages carrying file change notifications, memory file (CLAUDE.md) contents, task notifications, and other supplementary information.
+- **ProgressMessage**: Progress messages for tool execution, used for real-time feedback on tool running status (such as Bash command output streams, file read progress, etc.).
+
+> **Cross-Reference:** Message types are closely related to the tool rendering methods in Chapter 3. Each tool definition's `renderToolUseMessage`, `renderToolResultMessage`, and other methods determine how the terminal visually presents different message types.
+
+---
+
+## 2.2 The Lifecycle of a Complete Turn
+
+<!-- block: ch02.b-dcb10c57 -->
+Now let's follow a complete Turn -- from the user pressing the Enter key to the model completing its response or deciding to call a tool -- to understand the complete flow inside the `queryLoop` function.
+
+Trace a small task: “read `package.json` and explain the test command.” The first API request carries the message history and tool definitions, and the model returns a Read `tool_use`. The runtime checks and executes it, obtains the file contents, and appends the matching `tool_result` to the message list. Only the next API request carries that result back to the model for explanation. One user task can therefore involve several model requests. Receiving a tool request does not mean the tool succeeded, and tool success does not mean the model has seen the result. The five phases handle these handoffs.
+
+```mermaid
+flowchart TD
+    input["User Input: Help me fix this bug"]
+
+    phase1["Phase 1: State Initialization<br/>Destructure variables needed for current iteration from state object<br/>Build new mutable state container"]
+
+    phase2["Phase 2: Context Preprocessing (Seven-Step Pipeline)<br/>1. Tool result budget -> 2. Snip compression -> 3. Microcompact<br/>4. Context Collapse -> 5. System prompt assembly<br/>6. Autocompact -> 7. Token block check"]
+
+    phase3["Phase 3: API Call (Streaming Reception)<br/>Send system prompt + message history + tool definitions<br/>Receive streaming response events<br/>Collect assistant messages and tool call blocks"]
+
+    decision{"Tool calls?"}
+
+    phase4["Phase 4: Tool Call Execution<br/>Permission check · Concurrency partition scheduling<br/>Streaming/batch execution · Instant progress output"]
+
+    terminal["Termination Path<br/>Check stop hooks · Check token budget<br/>Return Terminal state"]
+
+    phase5["Phase 5: Tool Result Backfill & Next Round<br/>Attachment injection · Package new state object<br/>continue back to Phase 1"]
+
+    input --> phase1 --> phase2 --> phase3 --> decision
+    decision -->|Yes| phase4 --> phase5
+    decision -->|No| terminal
+    phase5 -.->|Next iteration| phase1
+
+    classDef phase fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef term fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef dec fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    class input,phase1,phase2,phase3,phase4,phase5 phase
+    class terminal term
+    class decision dec
+```
+
+### Phase 1: State Initialization
+
+`queryLoop` is a `while(true)` infinite loop. Each iteration represents a complete round of "model call + tool execution." At the top of the loop, the function destructures the variables needed for the current iteration from the state object, including tool usage context, message list, auto-compaction tracking, recovery counters, and so on.
+
+The state object is a mutable state container holding all state passed across iterations: message list, tool context, auto-compaction tracking, recovery counters, turn count, and so on. Each time `continue` returns to the top of the loop, the loop writes a new state object.
+
+<!-- block: ch02.b-44921f07 -->
+The key insight of this design is: **there is a clear boundary between "read" and "write" for state.** At the beginning of each iteration, the function reads all needed state fields at once through destructuring (snapshot semantics); at the end of the iteration, it writes the updated state at once by constructing a new object (atomic update semantics). So no iteration can end with only some fields written and the rest stale.
+
+### Phase 2: Context Preprocessing
+
+Before calling the model, the loop executes a series of preprocessing steps. These steps form a carefully designed "compression pipeline" aimed at preserving the most valuable information within a limited context window:
+
+1. **Tool Result Budget**: When a tool result is too large, truncate it or persist it to disk, ensuring the loop never exceeds the context window limit. This is similar to the "paging" mechanism in computer science -- when data is too large to fit entirely in memory (the context window), the system stores some data to disk, retaining only a summary or reference.
+
+2. **Snip compression**: When history trimming is on, the system trims the message sequence and passes the returned messages and freed-token count downstream. This is distinct from truncating a single oversized tool result or replacing its body during MicroCompact.
+
+<!-- block: ch02.b-7b4593eb -->
+3. **Microcompact**: Lightly compresses the context once before auto-compaction, using cached editing techniques to reduce token consumption. Microcompact aims to stay "cache-friendly" -- it tries to reuse tokens already cached on the API side, avoiding complete cache invalidation caused by compression.
+
+4. **Context Collapse**: Selectively restructures groups of messages rather than immediately replacing the entire conversation with one summary. Its scope and trigger path distinguish it from AutoCompact; it is not a promise to fold only acknowledgments or lose no information. Chapter 7 also explains that enabling Collapse suppresses ordinary auto-compaction. Listing these preprocessing positions does not mean all four mechanisms run on every iteration.
+
+<!-- block: ch02.b-1778fcfa -->
+5. **System Prompt Assembly**: Merges the base system prompt with dynamic context (such as current working directory, user configuration, etc.) into the complete system prompt. The design of this step directly impacts cache hit rates -- if the assembly order is unstable, the byte content of the prompt may differ on each call, causing cache invalidation.
+
+<!-- block: ch02.b-d108089a -->
+6. **Autocompact**: If the context exceeds the threshold, the auto-compaction mechanism kicks in, summarizing the conversation history into a compressed message and then replacing the outgoing message list. Autocompact is the "last line of defense" of the compression pipeline -- when other lightweight compression methods cannot reduce the context below the limit, it summarizes everything.
+
+<!-- block: ch02.b-820bb02e -->
+7. **Token Block Check**: If the token count exceeds a hard limit, the loop returns an error message directly without making an API call. This is a "fail fast" mechanism -- rather than sending an API request doomed to fail, it's better to block it locally.
+
+> **Best Practice:** The design of this seven-step pipeline follows an important principle: **arrange compression methods from lightweight to heavyweight, and let each step try the lowest-cost approach first.** This principle is worth following when building your own Agent system -- first use Snip to trim the historical message sequence, then use Microcompact to reduce cache waste, then use Context Collapse to fold redundant information, and only finally use Autocompact for a full summary. Because each step loses some information, you should delay using the most "aggressive" compression methods as long as possible.
+
+### Phase 3: API Call
+
+After all preprocessing is complete, the core API call phase begins. Here, the loop uses the injected model-calling dependency to initiate a streaming request, passing the assembled message list, system prompt, and tool definitions to the model API. The model calling function returns an async generator that produces streaming events one by one. Each time an event arrives, the loop executes the following logic:
+
+- If the event contains an assistant message, add it to the assistant message array.
+- If the event contains tool call blocks, collect them and flag that tools still need to run.
+- If streaming tool execution is on, start executing tools immediately upon receiving tool call blocks, without waiting for the entire response to complete.
+
+A subtlety of this phase is that the model may include both text content and tool calls in a single response. For example, the model might first output "Let me check your package.json file," then append a Read tool call. The loop must correctly handle this mixed output -- both yielding text events for UI rendering and collecting tool call blocks for subsequent execution.
+
+### Phase 4: Tool Call Detection and Execution
+
+<!-- block: ch02.b-67ed2d72 -->
+After the streaming response ends, the loop checks whether any tools need to run. If the model did not request any tool calls, it enters the termination path, checks various exit conditions (stop hooks, token budget, etc.), and returns.
+
+If the model did request tool calls, the loop executes the tools: depending on whether streaming execution is on, it either gets remaining results from the streaming executor or uses the traditional batch execution function.
+
+<!-- block: ch02.b-a390d2fd -->
+> **Cross-Reference:** Chapter 3's Tool Orchestration Engine section analyzes the detailed mechanisms of tool execution (concurrency partitioning, streaming executor, state machine) in depth.
+
+Tool execution is also an async generator. For each result message produced, the loop yields it to the upper-level consumer (UI) while also collecting it into the tool results array.
+
+Two things come apart here: **"result collection" and "result passing" stay independent.** The loop both collects tool results into an array for the next API call and yields them to the UI for real-time display. A single yield does both at once, so you need no extra state-synchronization logic.
+
+### Phase 5: Tool Result Backfill and Next Round
+
+After tool execution completes, the loop injects attachments (memory files, file change notifications, queued commands, etc.), then packages all messages (original messages + assistant messages + tool results) into a new state object and returns to the top of the `while(true)` via `continue`.
+
+The next iteration will use this expanded message list to call the model again. The model will see the previous tool results and then decide whether to continue calling tools or provide a final response.
+
+<!-- block: ch02.b-25c5513d -->
+Attachment injection is an easily overlooked but very important step. Imagine this scenario: during tool execution, the user modifies the CLAUDE.md file. Without injecting this change, the model might make decisions based on stale configuration in the next call. With that injection, the model starts each loop iteration holding the latest environment information.
+
+### Termination Condition Judgment
+
+The dialog loop's termination occurs at multiple points, with each termination reason corresponding to different system states and cleanup logic:
+
+| Termination Reason | Trigger Condition | User Experience | Design Intent |
+|--------------------|-------------------|-----------------|---------------|
+| `completed` | Model responds normally with no tool calls | Agent gives final response | Normal "successful completion" path |
+| `aborted_streaming` | User interrupt (Ctrl+C) | Operation stops immediately | User-initiated interrupt requiring instant response |
+| `aborted_tools` | Interrupt during tool execution | Current tool cancelled, results discarded | Tool execution may be lengthy, interrupt support needed |
+| `max_turns` | Maximum loop count reached | Agent stops and explains why | Prevent infinite loops consuming tokens |
+| `blocking_limit` | Token count exceeds hard limit | Agent reports error and exits | Hard safety boundary, prevents API errors |
+| `prompt_too_long` | Context too long and recovery failed | Agent reports error and exits | All compression methods exhausted |
+| `model_error` | API call exception | Agent reports error and displays error message | Graceful degradation for network or server issues |
+| `stop_hook_prevented` | Stop hook prevented continuation | Agent stops and explains why | User-configured auto-stop condition |
+| `hook_stopped` | Tool hook prevented continuation | Agent stops and explains why | Decision from external Hook script |
+| `image_error` | Image size/format error | Agent reports error and exits | Input data format issue |
+
+<!-- block: ch02.b-0c4f7d92 -->
+> **Design Insight:** The fine-grained classification of ten termination reasons is not over-engineering. When you debug Agent behavior, the accurate termination reason is the first clue for identifying problems. If all errors return a generic "error," developers would have no way to determine whether the issue was an API timeout, context overflow, or user interrupt. Fine-grained termination reasons are the foundation of "observability."
+
+These termination reasons also fall into three groups:
+
+```mermaid
+flowchart TD
+    subgraph normal["Normal Termination"]
+        completed["completed<br/>Agent completed the task"]
+    end
+
+    subgraph user_stop["User-Initiated Termination"]
+        aborted_s["aborted_streaming<br/>User Ctrl+C interrupt"]
+        aborted_t["aborted_tools<br/>Interrupt during tool execution"]
+    end
+
+    subgraph error["Abnormal Termination"]
+        max_turns["max_turns<br/>Maximum loop count reached"]
+        blocking["blocking_limit<br/>Token exceeds hard limit"]
+        too_long["prompt_too_long<br/>Context too long and recovery failed"]
+        model_err["model_error<br/>API call exception"]
+        stop_hook["stop_hook_prevented<br/>Stop hook prevented"]
+        hook_stop["hook_stopped<br/>Tool Hook prevented"]
+        img_err["image_error<br/>Image size/format error"]
+    end
+
+    classDef ok fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef user fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef err fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    class completed ok
+    class aborted_s,aborted_t user
+    class max_turns,blocking,too_long,model_err,stop_hook,hook_stop,img_err err
+```
+
+- **Normal Termination**: `completed` -- the Agent completed the task
+- **User-Initiated Termination**: `aborted_streaming`, `aborted_tools` -- the user decided to stop
+- **Abnormal Termination**: the remaining seven -- the system encountered a situation where it could not continue
+
+For abnormal termination, the system cleans up before returning the terminal state: cancelling tools in execution, releasing resource references, logging the termination reason. Do that and even an abnormal exit leaves no "dirty" state behind.
+
+A turn runs on four beats: ask, the model picks a tool, the tool runs, the result goes back in and the loop asks again.
+
+```ill
+ch02-turn-loop
+```
+
+> **Cross-Reference:** to watch this same circle run once in a real terminal, see Chapter 6 of the omp volume, "The First Conversation".
+
+---
+
+## 2.3 Dependency Injection and Testability
+
+### The QueryDeps Interface
+
+One of the most notable engineering decisions in the dialog main loop's design is the dependency injection pattern. The system defines a minimal dependency interface containing four core dependencies: the model calling function, the lightweight compression function, the auto-compaction function, and the UUID generator.
+
+The production dependency implementation returns real API calls, compression logic, and random UUID generation.
+
+In the main loop, dependencies come in via parameters, falling back to production defaults when absent. During testing, callers can pass in custom dependency objects, replacing the real API calls, compression logic, and UUID generation. As the design comment states:
+
+<!-- block: ch02.b-a4136f55 -->
+> "Passing a deps override into QueryParams lets tests inject fakes directly instead of spyOn-per-module -- the most common mocks (callModel, autocompact) are each spied in 6-8 test files today with module-import-and-spy boilerplate."
+
+<!-- block: ch02.b-10bbbd1d -->
+This comment reveals an important engineering insight: without dependency injection, test code needs to replace external dependencies through module-level spy/mock. This spy-per-module pattern has several problems: it couples test code to module internal structure, requiring synchronized changes when you rename or move modules; it repeats the same mock boilerplate code across multiple test files; and it may cause state leakage between tests due to module caching.
+
+Dependency injection solves all three problems at once: tests only need to pass in a custom dependency object, without caring about module internal structure; each test case creates an independent dependency instance, avoiding state leakage; the dependency interface is explicit, and when the interface changes, the compiler points out which tests need updating.
+
+### Why the Dialog Loop Uses a Functional Design
+
+Claude Code's dialog loop chooses `async function*` over a class, and this choice has deep reasoning behind it:
+
+<!-- block: ch02.b-c5da4562 -->
+1. **Natural State Isolation**: Each call to the dialog function creates a brand-new closure, and all mutable state is local to the function. There is no risk of cross-call state leakage. Contrast with a class approach: if the dialog loop were a method on a class, multiple concurrent dialog instances might accidentally share properties on the class instance, leading to state pollution.
+
+<!-- block: ch02.b-f710a691 -->
+2. **Generator Backpressure Semantics**: `yield` pauses execution until the consumer requests the next value. If the UI layer can't keep up with production speed, the generator pauses on its own and the output never piles up in memory. This is a concern production systems must address -- when tool execution produces large amounts of output (such as the full `npm install` log), a system without backpressure control could crash from memory accumulation.
+
+<!-- block: ch02.b-ad6f58cc -->
+3. **Cancellation propagation**: `.return()` requests generator closure and runs applicable `finally` blocks, but cannot interrupt a pending `await` or cancel external I/O on its own. Cancellation requires an `AbortController` and operations that observe its signal; resource cleanup remains the responsibility of explicit cleanup paths.
+
+4. **Composability**: The `yield*` delegation syntax allows sub-generator output to flow through directly. Delegation syntax hands the main loop's results to the outer generator, and tool execution joins the same chain. That "generator chain" lets code at different levels compose seamlessly -- the dialog loop produces events, tool execution also produces events, and the upper-level UI only needs a single unified `for await...of` loop to consume events from all levels.
+
+> **Anti-Pattern Warning:** If you are building your own Agent loop, avoid storing dialog state in global variables or class instance properties. Global state rules out concurrent testing; class instance state lets separate dialog instances interfere with one another. Function closures are the safest state container -- they keep state naturally isolated and naturally unshareable.
+
+---
+
+## 2.4 State Transition Model
+
+### State Type and Continue/Terminal
+
+The dialog loop's core state machine is driven by two concepts: mutable loop state (State) and termination signals (Terminal).
+
+The State type defines the loop's complete mutable state, including the message list, tool usage context, auto-compaction tracking state, output token recovery counter, whether reactive compression has run, output token override limit, pending tool summaries, whether stop hooks are active, turn count, and the reason for the last continue. Each time `continue` returns to the top of the loop, the loop constructs a brand-new state object. The `transition` field records the reason for the last continue, used in recovery logic to avoid re-executing the same recovery path.
+
+A separate module defines the Terminal and Continue types. Terminal marks the dialog's termination (carrying a reason field), while Continue marks the decision to continue the loop (carrying a reason and optional additional information).
+
+This three-element model (State + Continue + Terminal) turns loop correctness into a compile-time constraint:
+
+- State is a "mutable but controlled" data container, with a new instance created each continue
+- Continue is a "continue" signal, carrying the reason and additional information, guiding the behavior of the next iteration
+- Terminal is a "terminate" signal, carrying the reason, ending the loop and returning to the caller
+
+### State Transition Decision Logic
+
+The following state machine summarizes the entire loop's state transitions:
+
+```mermaid
+flowchart TD
+    init["Initialization"] --> preprocess["Preprocessing"]
+    preprocess --> api["API Call"]
+    api --> has_tool{"Tool calls?"}
+
+    has_tool -->|No tools| no_tool["Termination check"]
+    has_tool -->|Has tools| yes_tool["Tool Execution"]
+
+    no_tool --> done{"Terminal result"}
+    done -->|Complete| terminal1["Terminal: completed"]
+    done -->|Stop hook| terminal2["Terminal: stop_hook_prevented"]
+    done -->|Recovery| recovery_path["continue -> recovery"]
+
+    yes_tool --> result["Result Backfill"]
+    result --> next_turn["continue -> next_turn"]
+    next_turn -.->|Next round| init
+
+    recovery_path -.->|Retry| init
+
+    classDef state fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef decision fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef terminal fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef cont fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    class init,preprocess,api,no_tool,yes_tool,result state
+    class has_tool,done decision
+    class terminal1,terminal2 terminal
+    class next_turn,recovery_path cont
+```
+
+Key transition paths include:
+
+1. **next_turn**: Normal continuation after tool calls. The message list grows to the original messages plus assistant messages and tool results, and the turn count increments. This is the most common and simplest transition path.
+
+2. **max_output_tokens_recovery**: When model output truncates, the loop injects a recovery message and continues. The recovery message instructs the model to continue from the truncation point. Maximum 3 retries. This path exists because LLM output sometimes runs too long and the API cuts it off -- not an error, but the model "said too much." The recovery message is equivalent to telling the model "your words stopped midway; please continue from where they broke off."
+
+3. **max_output_tokens_escalate**: On first truncation, attempts to increase the output token limit rather than injecting a recovery message. This is a more direct recovery strategy -- rather than having the model continue from the interruption point, it gives it more output space to complete in one go. Only when the limit increase still results in truncation does it fall back to the recovery path.
+
+4. **reactive_compact_retry**: When context is too long, recovers through reactive compaction. If compaction fails, the loop terminates. This path is the dialog loop's "emergency brake" -- when all preventive compression methods have failed to prevent context overflow, reactive compact serves as the last recovery attempt to salvage the conversation.
+
+5. **collapse_drain_retry**: The overflow recovery path for context collapse. Executes with higher priority than reactive compaction because collapse preserves finer-grained context. Recovery methods run in order of minimum information loss: whichever discards least runs first.
+
+6. **stop_hook_blocking**: When a stop hook returns a blocking error, the loop injects the error into the message list and continues, so the model gets a chance to correct itself. This path demonstrates a key design philosophy of Agent systems: **errors are not necessarily termination conditions; they can also be feedback signals.** After receiving the hook's error message, the model might adjust its strategy and try a different approach.
+
+7. **token_budget_continuation**: Continuation triggered by token budget management, injecting a reminder message to alert the model about the budget. This is like a mobile data plan's "low balance warning" -- not immediately cutting off access, but reminding the user about remaining data.
+
+<!-- block: ch02.b-a95374b9 -->
+Each continue path carefully constructs a new state object, ensuring different recovery strategies don't conflict. The `transition` field lets later iterations see "how did I get here," and decide better.
+
+> **Best Practice:** When designing your own Agent loop, recording the reason (transition reason) for each Continue path is a simple but extremely effective debugging technique. When Agent behavior is abnormal, tracing the transition chain can help you quickly identify which transition introduced the problem.
+
+The usual way to break a loop like this is to leave one exit and one reason. The table collects the forks this chapter walked through:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Checking only "did the model ask for a tool", exiting otherwise | Keep all ten termination reasons distinct; `completed` and `model_error` do not leave by the same door |
+| Resending the identical message after output cuts off mid-sentence | Raise the output ceiling first; if it still truncates, inject a recovery message, and retry at most 3 times |
+| Letting Ctrl+C stop the display while tools and timers keep running | Carry the cancel signal down into the tool, and finish cleanup in `finally` before exiting |
+| Dropping the oldest messages once the context fills | Queue compression by cost, lightest first; keep the full summary for last |
+| Storing turn state in a global or an instance field | Hold it in one immutable State object and swap the whole object each turn |
+
+---
+
+## Hands-On Exercises
+
+**Exercise 1: Trace a Complete Tool Call Flow**
+
+Add logging at the following key points in the dialog main loop:
+- When a request starts (after the loop emits the stream_request_start event)
+- When the loop detects a tool call block (when the first tool_use block arrives)
+- When tool execution begins (when runTools or StreamingToolExecutor is called)
+- When the loop constructs the next round's state (before continue)
+
+Send Claude Code a request that requires tool calling (such as "read the package.json in the current directory"), and observe how messages flow from the API through tool execution and back into the next API call.
+
+**Extended Reflection:** If you send three consecutive requests requiring tool calls, observe how the turn count increments. Try pressing Ctrl+C during tool execution and observe the cleanup logic of the `aborted_tools` termination path.
+
+**Exercise 2: Simulate a max_output_tokens Recovery**
+
+In a test environment, inject custom dependencies so that the model calling function returns an assistant message with truncated output. Observe how the loop skips the first yield (the withheld mechanism), attempts to increase the token limit, and finally surfaces the error after retries run out.
+
+**Extended Reflection:** Modify the truncation count threshold and observe the switching conditions between the escalate and recovery paths. What happens if truncation occurs exactly inside a tool call block (only half of the tool name is output)? How does the system handle this?
+
+**Exercise 3: Understanding the Value of Dependency Injection**
+
+Reflection: If the model calling function were hard-coded directly in the loop, how many mocks would tests need to cover the various branches of the main loop? Compare this with the current dependency injection approach and evaluate its impact on test maintainability.
+
+**Specific Estimation:** Suppose the main loop has 7 Continue paths and 10 termination reasons. Without dependency injection, testing each branch would require: (a) intercepting module-level API calls, (b) controlling the compression function's behavior, (c) fixing UUID generation. Estimate the total amount of mock boilerplate code, then consider how much maintenance work these mocks would need when the module structure changes.
+
+**Exercise 4: Context Compression Pipeline in Practice**
+
+Send Claude Code a series of requests that require substantial context (such as "read this large file, then generate documentation based on it, then run tests"), and observe how the compression pipeline triggers. Note the following clues:
+- When Snip compression kicks in (message-level history trimming)
+- When Autocompact kicks in (sign that the loop is summarizing conversation history)
+- Whether compression affects the model's reasoning ability
+
+> **Cross-Reference:** Part 2's core chapters analyze the context compression pipeline's detailed implementation in depth, including cache-aware compression strategies and context collapse granularity control.
+
+**Minimal runnable case:** Replay one tool round-trip with a generator (Python 3.12 standard library, no third-party dependencies; this is a teaching model, not Claude Code source). Save the code as `case.py` and run `python case.py`.
+
+**Version lock:** Python 3.12 standard library, no third-party dependencies.
+**Expected result:** `[('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]`
+**Prerequisite:** Chapter 1's four-state chain; **Backlink:** the async generator dialog loop in Chapter 1 §1.2
+
+```python
+# exercise: ch02
+# expected: [('tool_use', 'read'), ('tool_result', 'READ'), ('done',)]
+def loop(request):
+    yield ("tool_use", request)
+    yield ("tool_result", request.upper())
+    yield ("done",)
+print(list(loop("read")))
+```
+
+---
+
+## Key Takeaways
+
+1. **AsyncGenerator suits the Agent loop as a vehicle**: `yield` hands out events incrementally, `yield*` delegates to sub-generators, and `.return()` requests generator closure. Prompt cancellation still requires underlying I/O to observe the cancellation signal and cleanup paths to release resources. Keeping these responsibilities separate prevents “the display stopped” from becoming “the tool stopped.”
+
+2. **The preprocessing pipeline is the core of context management**: The four-layer compression strategy of Snip, Microcompact, Context Collapse, and Autocompact progresses step by step, from lightweight trimming to full summarization, ensuring the Agent always stays within the token budget during infinite conversations. Understanding the design principles of this four-layer pipeline (arranged from lightweight to heavyweight) helps you design context management strategies in your own Agent systems.
+
+3. **State is immutable, transitions are traceable**: Each continue constructs a new `State`, and combined with the `transition` field, every jump in the loop is traceable. This is a trade-off between functional design and an imperative loop. When debugging in practice, the transition chain is the "breadcrumb trail" for tracing Agent behavior.
+
+<!-- block: ch02.b-10c4ab0e -->
+4. **Dependency injection makes testing possible**: The four dependencies of `QueryDeps` (callModel, microcompact, autocompact, uuid) cover the loop's core side effects, so tests can check state transition logic without touching the API. The selection of these four dependencies is also well considered -- they are exactly all the "boundary points of interaction with the external world" in the loop. Abstracting them into interfaces turns the loop internals into pure logic.
+
+5. **Termination is not failure, it is design**: Ten termination reasons each have their trigger conditions and cleanup logic. Understanding these termination paths is key to understanding the entire loop's robustness. In production-grade Agent systems, incorrect termination handling is more dangerous than incorrect normal flow -- because it can lead to resource leaks, state inconsistency, or user data loss.
+
+> **Three sentences to keep:** ①The main loop is an async generator: yield pushes events, yield* delegates to sub-generators, return() cancels, and the state stays immutable with a transition recorded at every jump. ②Inject the four side effects -- callModel, microcompact, autocompact, uuid -- as QueryDeps, and the loop's interior turns into pure logic: you design testability in, you never bolt it on. ③To size up an agent loop, ask three things: can it pause, can it cancel, and does it clean up when it ends.
+
+In the next chapter, we will turn to the Agent's "hands" -- the tool system. The dialog loop is the Agent's heart; the tool system, its limbs. Understanding the tool system's design will show you how the Agent stopped being only a voice and started getting things done.

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "summary": {
+    "refs": 111,
+    "unique_refs": 72,
+    "mapped": 111,
+    "ambiguous": 0,
+    "missing": 0,
+    "text_equal": 111,
+    "text_mismatch": 0,
+    "blocks": 2291
+  },
+  "dual": {
+    "schema_version": 1,
+    "blocks": 72,
+    "consistent": 72,
+    "mismatches": []
+  }
+}

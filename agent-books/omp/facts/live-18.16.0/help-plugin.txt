@@ -1,0 +1,19 @@
+Manage plugins (install, uninstall, list, etc.)
+
+USAGE
+  $ omp plugin [ACTION] [TARGETS...] [FLAGS]
+
+ARGUMENTS
+  ACTION    Plugin action (install|uninstall|list|link|doctor|features|config|enable|disable|marketplace|discover|upgrade)
+  TARGETS   Packages, paths, or plugin names
+
+FLAGS
+      --json             Output JSON
+      --fix              Attempt to fix issues (doctor)
+      --force            Force install
+      --dry-run          Show actions without applying changes (install, uninstall, link, upgrade of marketplace plugins)
+  -l, --local            Operate on local plugin directory
+      --enable=<value>   Enable a feature
+      --disable=<value>  Disable a feature
+      --set=<value>      Set plugin config (key=value)
+      --scope=<value>    Install scope: "user" (default) or "project"

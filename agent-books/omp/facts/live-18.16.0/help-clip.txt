@@ -1,0 +1,17 @@
+Upload a /record recording to live.omp.sh as a public clip and print its URL
+
+USAGE
+  $ omp clip [FILE] [FLAGS]
+
+ARGUMENTS
+  FILE   Recording to upload (default: the newest /record capture)
+
+FLAGS
+  -t, --title=<value>        Clip title (defaults to the recording's title)
+  -d, --description=<value>  Clip description shown under the player
+      --server=<value>       Stream server base URL (overrides stream.serverUrl)
+
+EXAMPLES
+  omp clip
+  omp clip -t "Streaming the lexer" -d "Rewrote the tokenizer live"
+  omp clip /tmp/omp-recordings/2026-09-22T10-00-00-1a2b3c4d.ompcast

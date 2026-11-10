@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "product": "prompt",
+  "version": "0.1.0",
+  "language": "zh",
+  "edition": "technical_reading_edition",
+  "recorded_at": "2026-11-10T15:29:58.129470+00:00",
+  "status": "local_delivery_verified",
+  "source_worktree": "D:\\Users\\claude\\.agent-series-wt",
+  "chapters": 18,
+  "reading_units": 23,
+  "files": [
+    {
+      "name": "yuyu-prompt-zh.html",
+      "source": "D:\\Users\\claude\\.agent-series-wt\\yuyu-book\\dist\\yuyu-prompt-zh.html",
+      "delivery": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist\\yuyu-prompt-zh.html",
+      "bytes": 510938,
+      "sha256": "13391a81ed5105b0694fe4e5775674c3cc4d39eb97059f1c6808a7c8a51e68d7",
+      "copied_bytes_verified": true
+    },
+    {
+      "name": "yuyu-prompt-zh.pdf",
+      "source": "D:\\Users\\claude\\.agent-series-wt\\yuyu-book\\dist\\yuyu-prompt-zh.pdf",
+      "delivery": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist\\yuyu-prompt-zh.pdf",
+      "bytes": 4484998,
+      "sha256": "e7f7e6c6134428e284a0f4b16fc11706a937d8f9a742380d4e700abbac21a9d0",
+      "copied_bytes_verified": true
+    },
+    {
+      "name": "yuyu-prompt-zh.epub",
+      "source": "D:\\Users\\claude\\.agent-series-wt\\yuyu-book\\dist\\yuyu-prompt-zh.epub",
+      "delivery": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist\\yuyu-prompt-zh.epub",
+      "bytes": 129207,
+      "sha256": "1b273431c5addaf2f0b3cb4ff2f860c3be7c6f1a8f4f2b412c3407e40347a312",
+      "copied_bytes_verified": true
+    },
+    {
+      "name": "yuyu-prompt-zh-examples.zip",
+      "source": "D:\\Users\\claude\\.agent-series-wt\\yuyu-book\\dist\\yuyu-prompt-zh-examples.zip",
+      "delivery": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist\\yuyu-prompt-zh-examples.zip",
+      "bytes": 158817,
+      "sha256": "f5cab8a44c537465867f4c3df1b649ebf2813f04ed45475fa4fe3cf3527329ab",
+      "copied_bytes_verified": true
+    }
+  ],
+  "validation": {
+    "repository_check": {
+      "report": "prompt/evidence/repository-check-full.json",
+      "steps_passed": 8,
+      "general_tests_passed": 259,
+      "builder_tests_passed": 573,
+      "final_layout_related_tests_passed": 30
+    },
+    "pdf": {
+      "pages": 107,
+      "bookmarks": 29,
+      "sampled_pages": [
+        1,
+        56,
+        60,
+        68,
+        77,
+        107
+      ],
+      "replacement_chars": 0,
+      "empty_sheets": [],
+      "text_outside_page": []
+    },
+    "html": [
+      {
+        "media": "screen",
+        "width": 390,
+        "scheme": "light",
+        "rows": 19,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 6.070204190249166,
+        "viewport": 390,
+        "scrollWidth": 390
+      },
+      {
+        "media": "screen",
+        "width": 1280,
+        "scheme": "dark",
+        "rows": 19,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 6.804320921720831,
+        "viewport": 1280,
+        "scrollWidth": 1280
+      },
+      {
+        "media": "print",
+        "width": 665,
+        "scheme": "light",
+        "rows": 19,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 6.123956990821564,
+        "viewport": 665,
+        "scrollWidth": 665
+      }
+    ],
+    "epubcheck": {
+      "path": ".\\.scratch\\prompt-epub-validation-final.epub",
+      "filename": "prompt-epub-validation-final.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "11-10-2026 23:19:40",
+      "elapsedTime": 13822,
+      "nFatal": 0,
+      "nError": 0,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "package": {
+      "report": "docs/series/prompt-package-verification-20261110.json",
+      "files": 71,
+      "verified_source_hashes": 70,
+      "tool_tests_passed": 31,
+      "reference_cases": "12/12",
+      "baseline": "8/12",
+      "standalone": "8/12"
+    },
+    "source_snapshot": "prompt/evidence/provenance-release.json",
+    "final_content": {
+      "command": "python scripts/check_book.py",
+      "markdown_files": 427,
+      "mermaid_diagrams": 436,
+      "errors": 0
+    },
+    "final_source_checks": {
+      "utf8_json_whitespace_files": 80,
+      "status": "passed",
+      "git_diff_check": "passed"
+    }
+  },
+  "editorial_review": "All 23 reading units reviewed for empty framing, duplicate conclusions, unnecessary contrasts and cross-chapter consistency. Technical facts, code, evidence and uncertainty preserved.",
+  "model_calls": 0,
+  "external_publication": false,
+  "unverified": [
+    "New volume real-model A/B",
+    "Migration across two actual model environments",
+    "Actual host permission combinations",
+    "Independent reader trials and learning outcomes",
+    "English edition"
+  ]
+}

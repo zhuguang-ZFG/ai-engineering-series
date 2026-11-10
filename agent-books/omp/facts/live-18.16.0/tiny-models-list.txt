@@ -1,0 +1,20 @@
+Tiny local models
+lfm2.5-230m default
+  LFM2.5 230M — Recommended local model; fastest LFM2.5 option, about 214 MB cached.
+lfm2.5-350m
+  LFM2.5 350M — Larger LFM2.5 option, about 292 MB cached; tends toward terse titles.
+falcon-h1-90m
+  Falcon H1 Tiny 90M — Smallest option, about 147 MB cached; lower fidelity on complex prompts.
+qwen3-1.7b
+  Qwen3 1.7B — MLX only (providers.tinyModelDevice=mlx): onnxruntime-node cannot run this ONNX export's RotaryEmbedding cache updates.
+llama3.2:3b
+  Llama 3.2 3B — Larger Llama 3.2 option for local memory/classifier tasks; higher quality potential at higher disk/RAM/latency cost.
+gemma-3-1b
+  Gemma 3 1B — Best consolidation/dedup; lighter footprint, but leaks small talk during extraction.
+qwen2.5-1.5b
+  Qwen2.5 1.5B — Best extraction granularity (atomic facts); weaker consolidation.
+lfm2-1.2b
+  LFM2 1.2B — Fastest load; solid all-rounder, slightly noisier extraction labels.
+smollm
+  SmolLM2-135M — Word completion (spelling.autocomplete auto/smollm), 140.1MB, not downloaded
+  C:\Users\<用户名>\.omp\agent\cache\tiny-models\predict\HuggingFaceTB--SmolLM2-135M

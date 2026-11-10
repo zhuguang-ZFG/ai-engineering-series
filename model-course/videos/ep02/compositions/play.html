@@ -1,0 +1,146 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #y-tag { position: absolute; top: 78px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #y-title { position: absolute; top: 138px; left: 110px; width: 800px; font: 700 64px/1.3 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #y-title .g { color: #1f883d; }
+    #y-chat { position: absolute; left: 110px; top: 340px; width: 820px; height: 470px; overflow: hidden; background: #111820; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 17px 12px 19px 10px; box-shadow: 0 14px 36px rgba(31,35,40,.16); }
+    #y-chat-head { height: 66px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; border-bottom: 1px solid #30363d; background: #1f2328; font: 700 28px "JetBrains Mono", monospace; color: #f6f8fa; }
+    #y-chat-state { font-size: 28px; color: #3fb950; }
+    #y-bubble { position: absolute; left: 26px; top: 92px; width: 620px; padding: 20px 24px; background: #fbfaf6; border-radius: 16px 11px 18px 9px; font: 500 28px/1.55 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #y-reply { position: absolute; left: 26px; top: 236px; width: 700px; padding: 20px 24px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 16px 11px 18px 9px; font: 500 28px/1.7 "JetBrains Mono", monospace; color: #3fb950; }
+    #y-reply .muted { color: #768390; }
+    #y-file { position: absolute; left: 986px; top: 340px; width: 824px; height: 96px; display: flex; align-items: center; gap: 20px; padding: 0 26px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); }
+    #y-file-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px 11px 18px 9px; background: #dafbe1; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
+    #y-file-name { font: 700 32px "JetBrains Mono", monospace; color: #1f2328; }
+    #y-file-hint { margin-left: auto; font: 500 28px "Noto Sans JP", sans-serif; color: #57606a; }
+    #y-run { position: absolute; left: 986px; top: 456px; width: 824px; height: 354px; overflow: hidden; background: #111820; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 17px 12px 19px 10px; box-shadow: 0 14px 36px rgba(31,35,40,.16); }
+    #y-run-head { height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid #30363d; background: #1f2328; font: 700 28px "JetBrains Mono", monospace; color: #f6f8fa; }
+    #y-run-score { color: #3fb950; }
+    #y-board { position: absolute; left: 24px; top: 80px; width: 400px; height: 250px; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 15px 10px 17px 9px; background-color: #0d1117; background-image: linear-gradient(rgba(139,148,158,.11) 1px, transparent 1px), linear-gradient(90deg, rgba(139,148,158,.11) 1px, transparent 1px); background-size: 50px 50px; }
+    .y-bit { position: absolute; width: 42px; height: 42px; border-radius: 16px 11px 18px 9px; background: #3fb950; box-shadow: 0 0 16px rgba(63,185,80,.28); }
+    #y-head { width: 48px; height: 48px; background: #1f883d; z-index: 3; }
+    #y-food { position: absolute; left: 300px; top: 100px; width: 34px; height: 34px; border-radius: 15px 10px 17px 9px; background: #dafbe1; border: 2px solid #3fb950; }
+    #y-checks { position: absolute; left: 452px; top: 84px; width: 340px; }
+    .y-check { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; font: 700 28px "Noto Sans JP", sans-serif; color: #768390; }
+    .y-dot { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #21262d; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); font: 700 28px "JetBrains Mono", monospace; color: #768390; }
+    .y-check.on { color: #f6f8fa; }
+    .y-check.on .y-dot { background: #1f883d; border-color: #1f883d; color: #fff; }
+    #y-final { position: absolute; left: 110px; top: 800px; width: 824px; height: 72px; display: flex; align-items: center; padding: 0 28px; background: #dafbe1; border-radius: 15px 10px 17px 9px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-y001" id="root" data-composition-id="play" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-y002" id="y-tag" class="clip" data-start="0" data-duration="21.4">FIRST BUILD · 第一轮只求能跑</div>
+    <div data-hf-id="hf-y003" id="y-title" class="clip" data-start="0" data-duration="21.6">把需求发出去，<span data-hf-id="hf-y004" class="g">等它吐出能跑的版本</span></div>
+
+    <div data-hf-id="hf-y005" id="y-chat" class="clip" data-start="0.9" data-duration="21.4">
+      <div data-hf-id="hf-y006" id="y-chat-head"><span data-hf-id="hf-y007">CHAT · 网页版对话</span><span data-hf-id="hf-y008" id="y-chat-state">在线</span></div>
+      <div data-hf-id="hf-y009" id="y-bubble">网页版贪吃蛇：方向键控制，吃到食物变长，撞墙结束，单文件不依赖任何库。</div>
+      <div data-hf-id="hf-y010" id="y-reply"><span data-hf-id="hf-y011" class="muted">// AI</span><br />已生成 snake.html<br /><span data-hf-id="hf-y012" class="muted">// 共 142 行，双击即可运行</span></div>
+    </div>
+
+    <div data-hf-id="hf-y013" id="y-file" class="clip" data-start="8" data-duration="21.4">
+      <span data-hf-id="hf-y014" id="y-file-icon">HTML</span>
+      <span data-hf-id="hf-y015" id="y-file-name">snake.html</span>
+      <span data-hf-id="hf-y016" id="y-file-hint">双击打开</span>
+    </div>
+
+    <div data-hf-id="hf-y017" id="y-run" class="clip" data-start="11" data-duration="21.4">
+      <div data-hf-id="hf-y018" id="y-run-head"><span data-hf-id="hf-y019">SNAKE · 本地运行</span><span data-hf-id="hf-y020" id="y-run-score">SCORE 0</span></div>
+      <div data-hf-id="hf-y021" id="y-board">
+        <span data-hf-id="hf-y022" id="y-food"></span>
+        <span data-hf-id="hf-y023" class="y-bit" style="left: 60px; top: 150px"></span>
+        <span data-hf-id="hf-y024" class="y-bit" style="left: 110px; top: 150px"></span>
+        <span data-hf-id="hf-y025" class="y-bit" style="left: 160px; top: 150px"></span>
+        <span data-hf-id="hf-y026" id="y-head" class="y-bit" style="left: 210px; top: 148px"></span>
+      </div>
+      <div data-hf-id="hf-y027" id="y-checks">
+        <div data-hf-id="hf-y028" id="y-check-1" class="y-check"><span data-hf-id="hf-y029" id="y-dot-1" class="y-dot">✓</span>方向键能动</div>
+        <div data-hf-id="hf-y030" id="y-check-2" class="y-check"><span data-hf-id="hf-y031" id="y-dot-2" class="y-dot">✓</span>吃到变长</div>
+        <div data-hf-id="hf-y032" id="y-check-3" class="y-check"><span data-hf-id="hf-y033" id="y-dot-3" class="y-dot">✓</span>撞墙结束</div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-y034" id="y-final" class="clip" data-start="18.5" data-duration="21.4">丑一点、慢一点没关系，先让它跑起来</div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#y-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#y-title"));
+    tl.set("#y-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#y-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#y-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#y-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#y-chat", { x: -36, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .55, ease: "back.out(1.5)", scale: 1 }, .9);
+    tl.fromTo("#y-bubble", { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 1.0);
+    tl.fromTo("#y-reply", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .5, ease: "power2.out", scale: 1 }, 2.5);
+    tl.fromTo("#y-file", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 8);
+    tl.fromTo("#y-run", { x: 36, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .55, ease: "back.out(1.5)", scale: 1 }, 11);
+    tl.to("#y-head", { x: 48, y: 0, duration: .5, ease: "power2.inOut" }, 12.2);
+    tl.to("#y-food", { scale: 0, opacity: 0, duration: .15, ease: "power2.in" }, 12.7);
+    tl.set("#y-run-score", { textContent: "SCORE 1" }, 12.85);
+    tl.fromTo("#y-check-1", { opacity: .35 }, { opacity: 1, duration: .25, ease: "power2.out" }, 12.5);
+    tl.to("#y-dot-1", { backgroundColor: "#1f883d", borderColor: "#1f883d", color: "#ffffff", duration: .25, ease: "power2.out" }, 12.5);
+    tl.to("#y-head", { x: 0, y: -52, duration: .5, ease: "power2.inOut" }, 14.3);
+    tl.fromTo("#y-check-2", { opacity: .35 }, { opacity: 1, duration: .25, ease: "power2.out" }, 14.5);
+    tl.to("#y-dot-2", { backgroundColor: "#1f883d", borderColor: "#1f883d", color: "#ffffff", duration: .25, ease: "power2.out" }, 14.5);
+    tl.to("#y-head", { x: -150, y: -52, duration: .55, ease: "power2.inOut" }, 16.0);
+    tl.fromTo("#y-check-3", { opacity: .35 }, { opacity: 1, duration: .25, ease: "power2.out" }, 16.5);
+    tl.to("#y-dot-3", { backgroundColor: "#1f883d", borderColor: "#1f883d", color: "#ffffff", duration: .25, ease: "power2.out" }, 16.5);
+    tl.to("#y-head", { x: -190, y: -52, duration: .45, ease: "power2.inOut" }, 17.0);
+    tl.fromTo("#y-final", { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 18.5);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 21.4, ease: "none" }, 0);
+    window.__timelines["play"] = tl;
+  </script>
+</template>

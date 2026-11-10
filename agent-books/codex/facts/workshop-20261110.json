@@ -1,0 +1,153 @@
+{
+  "date": "2026-11-10",
+  "kind": "original-offline-workshop",
+  "model_used": false,
+  "codex_host_started": false,
+  "cases": [
+    {
+      "name": "plugin-files-and-handler-copy",
+      "passed": true
+    },
+    {
+      "name": "parcel-before",
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "name": "parcel-after",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "hook-read.json",
+      "passed": true,
+      "output": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "additionalContext": "Parcel fee uses integer cents and grams."
+        }
+      }
+    },
+    {
+      "name": "hook-deny.json",
+      "passed": true,
+      "output": {
+        "hookSpecificOutput": {
+          "hookEventName": "PreToolUse",
+          "permissionDecision": "deny",
+          "permissionDecisionReason": "Review the patch before publishing."
+        }
+      }
+    },
+    {
+      "name": "hook-malformed",
+      "passed": true
+    },
+    {
+      "name": "exec-success.jsonl:exit=0",
+      "passed": true,
+      "result": {
+        "thread_id": "fixture-thread",
+        "turn_terminal": "turn.completed",
+        "process_exit": 0,
+        "stream_ok": true,
+        "failed_commands": [],
+        "unfinished_items": [],
+        "failed_items": [],
+        "diagnostics": [],
+        "needs_review": false
+      }
+    },
+    {
+      "name": "exec-command-failed.jsonl:exit=0",
+      "passed": true,
+      "result": {
+        "thread_id": "fixture-thread",
+        "turn_terminal": "turn.completed",
+        "process_exit": 0,
+        "stream_ok": true,
+        "failed_commands": [
+          "test-1"
+        ],
+        "unfinished_items": [],
+        "failed_items": [
+          "test-1"
+        ],
+        "diagnostics": [],
+        "needs_review": true
+      }
+    },
+    {
+      "name": "exec-incomplete.jsonl:exit=0",
+      "passed": true,
+      "result": {
+        "thread_id": "fixture-thread",
+        "turn_terminal": null,
+        "process_exit": 0,
+        "stream_ok": false,
+        "failed_commands": [
+          "test-1"
+        ],
+        "unfinished_items": [
+          "test-1"
+        ],
+        "failed_items": [],
+        "diagnostics": [],
+        "needs_review": true
+      }
+    },
+    {
+      "name": "exec-success.jsonl:exit=1",
+      "passed": true,
+      "result": {
+        "thread_id": "fixture-thread",
+        "turn_terminal": "turn.completed",
+        "process_exit": 1,
+        "stream_ok": false,
+        "failed_commands": [],
+        "unfinished_items": [],
+        "failed_items": [],
+        "diagnostics": [],
+        "needs_review": true
+      }
+    },
+    {
+      "name": "reject-non-json",
+      "passed": true
+    },
+    {
+      "name": "reject-missing-item-id",
+      "passed": true
+    },
+    {
+      "name": "failed-patch-needs-review",
+      "passed": true
+    }
+  ],
+  "inputs": {
+    "check-local-cli.py": "7ed48ba7087feffb6715c8388280578fd55b2b801310e4b24f8cd0225d5d48e9",
+    "check_protocol.py": "dd0046f6a6de0746ffb5208beb00642f5ef29b88c3a8441c0da0261e8549639a",
+    "check_workshop.py": "6a868fec107fd34ba3f8906c4da0a4311e538069314f0b66f405054bce0dbb93",
+    "fixtures/app-server-requests.json": "fa037b94994c75369097b3d9bf715a9f4a779feb2081ab065603c17f1946a423",
+    "fixtures/exec-command-failed.jsonl": "86dff99ef3bc4aea8db51a5dbebb773b4a9d9bf9d8e4f22421376b89ceebaa52",
+    "fixtures/exec-incomplete.jsonl": "5b26271f0922c84b4565708adc2c689aac97326547199553b96c1799b119efcf",
+    "fixtures/exec-success.jsonl": "2d568609c549f0a1470f177abe153022443750ccb188afbe74d7581afb72a818",
+    "fixtures/hook-deny.json": "6eea5bc20995d7cc8f3c95f192a5c2f1cdde46ba15fa90bd64c01ddb4ec7bf05",
+    "fixtures/hook-read.json": "ce8ff73f3439d70f87293480dc8770910ea4981dac7cc74673b441e67955db05",
+    "hook_guard.py": "02c479576b89732e95272bf8ef64ad6559933758f42af05a738bdfcf6a8049be",
+    "inspect_exec.py": "7365470d358bfdc12cdabd2ec70baa207fd263b4afd1c445423b40fcf88b93e2",
+    "plugin-example/.codex-plugin/plugin.json": "7ce19487fda7b932d31a774241a977508a33568cd0a22d288769570256e8b793",
+    "plugin-example/hooks/hooks.json": "a4093af6c4634db27ebfe211f195d55654ca6414cf9027e4ad5b3a8c661bf0a2",
+    "plugin-example/hooks/hooks.powershell.json": "6ac59cf0d7ce10471c2bcf12af225d2f352129fbbdc401100459808f243fcc5c",
+    "plugin-example/README.md": "13af78cd7f0b2c28cd557fbe0794b857ec1d4e9833919728abcba1b012602419",
+    "plugin-example/scripts/hook_guard.py": "02c479576b89732e95272bf8ef64ad6559933758f42af05a738bdfcf6a8049be",
+    "plugin-example/skills/parcel-boundary-review/SKILL.md": "34cfccef1f231f78c0091a3efcdb50983b2df6e57cb4f1d924eaeb9200221712",
+    "README.md": "d65514326eec128a22a1b7de4a53e67d9934a0bf940a82b1e7c2653402418b30",
+    "review-change/SKILL.md": "7691eeece86730b4fa8826a2bf0a17a4cf953e4338a4202baff362047524e6bd",
+    "workshop/AGENTS.md": "a72ca44d8a89829ad3928d885ca24e51d9773c517e875b40f3764f820989897d",
+    "workshop/parcel.py": "47049a0627864e3fa2978ad2379e53b175ee524eda0e8a85423be9437cbed493",
+    "workshop/report.schema.json": "963f782476d6aeb4aaf50f9a217657a42ac9f5873bec5c978606cdcf15cd25af",
+    "workshop/test_parcel.py": "762254463fec48e43826217483fa8bf3c41dbce421180707afbe116d1210e098"
+  },
+  "passed": true
+}

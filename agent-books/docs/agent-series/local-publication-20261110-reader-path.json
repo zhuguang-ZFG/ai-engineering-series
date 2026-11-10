@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-10",
+  "revision": "reader paths and index layout",
+  "destination": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist",
+  "volumes": {
+    "opencode": {
+      "version": "1.1.2",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 54781,
+      "mermaid_figures": 26,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-opencode-zh.html",
+          "bytes": 1220116,
+          "sha256": "1cd2bdc4acc048d410e26155ac5c36a751bcbf59336f97067290dc1e81fdf8a8"
+        },
+        "pdf": {
+          "file": "yuyu-opencode-zh.pdf",
+          "bytes": 5362906,
+          "sha256": "c08cde1a2fc9aba88331ca1c8d2d17ac338d16c330018b3c1941420c431ec780"
+        },
+        "epub": {
+          "file": "yuyu-opencode-zh.epub",
+          "bytes": 1922657,
+          "sha256": "b91de7bbd563ae0899e227c7e9a896c5ad77cccd243b5f3b332af4acabe61666"
+        }
+      },
+      "pdf_pages": 148,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "deepseek": {
+      "version": "1.1.2",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 49728,
+      "mermaid_figures": 14,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-deepseek-zh.html",
+          "bytes": 890157,
+          "sha256": "7070ec242ac852f8db8e29cc9e337faff0fb0eaa0b3b80fc6736b7d5c260e759"
+        },
+        "pdf": {
+          "file": "yuyu-deepseek-zh.pdf",
+          "bytes": 4988867,
+          "sha256": "c4e056123562d8b37dcd75e39167bb87fc4dfc5328f68892481275cc910c72f6"
+        },
+        "epub": {
+          "file": "yuyu-deepseek-zh.epub",
+          "bytes": 936629,
+          "sha256": "4f20a8f35a8baa10fa364185368e34572b3dc7419d828e7a85971cbd68ffc8a4"
+        }
+      },
+      "pdf_pages": 129,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "hermes": {
+      "version": "0.2.2",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 54302,
+      "mermaid_figures": 17,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-hermes-zh.html",
+          "bytes": 941007,
+          "sha256": "b9840b903b619953ec027a47f47060536de56bb60ef037b0c0a9be6602a597b3"
+        },
+        "pdf": {
+          "file": "yuyu-hermes-zh.pdf",
+          "bytes": 5094057,
+          "sha256": "fd9d32d7f787cd53bf5ad6f409b02ee2dcb58a97bb2295ac2a8a3f0319c1cdb7"
+        },
+        "epub": {
+          "file": "yuyu-hermes-zh.epub",
+          "bytes": 1107233,
+          "sha256": "29e53b761c83b57ce822db6a890360cb1d285bac9947e1791b9006637b2810ef"
+        }
+      },
+      "pdf_pages": 130,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "codex": {
+      "version": "0.2.2",
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "chinese_characters": 52341,
+      "mermaid_figures": 15,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-codex-zh.html",
+          "bytes": 1022838,
+          "sha256": "d15803a49a9322aaf7511017c72e1e9f1e1d96889630776c89c15c9103add11b"
+        },
+        "pdf": {
+          "file": "yuyu-codex-zh.pdf",
+          "bytes": 5501607,
+          "sha256": "48055979830c578f3eff9c85ac01ad97c867ba4637094dcb65687a3857e3f023"
+        },
+        "epub": {
+          "file": "yuyu-codex-zh.epub",
+          "bytes": 1085896,
+          "sha256": "7e46055479d8e187dd7216619bd62add5553e85d352cab515c63d4613c563722"
+        }
+      },
+      "pdf_pages": 146,
+      "pdf_bookmarks": 30,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    }
+  },
+  "validation": {
+    "baseline": "9d4d96d0b151796d802f21afca342a5db5cc37bd",
+    "content": "35 reading units edited; existing 264 code blocks and diagrams retained; two command blocks copied from existing example instructions.",
+    "layout": "Four HTML indexes checked at 390 px, 1280 px/dark and print width; PDF covers, chapter openings and indexes visually sampled.",
+    "screenshot": "docs/images/agent-index-layout-20261110.png",
+    "fast_checks": "python scripts/bookctl.py check --fast: 8 steps passed; 228 repository tests and 570 builder tests passed.",
+    "legacy_p6_media_acceptance": "incomplete"
+  }
+}

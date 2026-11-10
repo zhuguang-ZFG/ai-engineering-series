@@ -1,0 +1,13 @@
+{
+  "id": "D13",
+  "kind": "illustrative",
+  "version": "1.0.0",
+  "source": "课程人工商品目录；不代表现实报价或联网查询",
+  "limitations": "固定两步的本地工作流，用于检查工具执行和结果依赖；没有运行语言模型、真实订单、网络请求或财务结算。数值使用 JavaScript 浮点数。",
+  "catalog": {
+    "practice-book": 12.5,
+    "pencil": 2
+  },
+  "task": { "sku": "practice-book", "quantity": 8 },
+  "expectedTotal": 100
+}

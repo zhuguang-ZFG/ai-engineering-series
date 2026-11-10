@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Git 与 GitHub 入门指南 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 27 / 195</p><article><h1 id="git-与-github-入门指南">Git 与 GitHub 入门指南</h1><details class="contents"><summary>本章目录 <span>· 5 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#git-和-github-工作流">Git 和 GitHub 工作流</a></li><li><a href="#git-快速开始">Git 快速开始</a><ul><li><a href="#如何安装-git">如何安装 Git</a></li><li><a href="#git-初始化">Git 初始化</a></li></ul></li><li><a href="#什么是-github">什么是 GitHub</a><ul><li><a href="#注册-github-账号">注册 GitHub 账号</a></li><li><a href="#在-github-上创建你的第一个仓库">在 GitHub 上创建你的第一个仓库</a></li><li><a href="#绑定本地-ssh">绑定本地 SSH</a></li></ul></li><li><a href="#使用-trae-进行-github-操作">使用 Trae 进行 GitHub 操作</a><ul><li><a href="#git-clone--下载现有仓库">Git clone : 下载现有仓库</a></li><li><a href="#git-pull--从远程仓库获取更新">Git pull : 从远程仓库获取更新</a></li><li><a href="#git-commit--git-push--暂存更新并推送到-github">Git commit &amp; Git push : 暂存更新并推送到 GitHub</a></li></ul></li><li><a href="#参考资料-2">参考资料</a></li></ul></nav></details><h2 id="git-和-github-工作流">Git 和 GitHub 工作流</h2>
+<p>在之前的课程中，我们学习了如何使用基于 Web 的 vibe coding 工具编写代码。每次对话都会创建一个新版本的代码。但有个问题：如果我们想恢复到之前的修改，有没有方便的方法？有没有一种工具可以记录我们在不同阶段的代码，使我们能够随时在不同版本之间切换和修改？</p>
+<p>为了满足这一需求，版本控制软件应运而生。在这篇文章中，我们将介绍最著名的版本控制程序——Git——以及最好的代码托管平台——GitHub。你会学会怎么用 Git 管代码，如何从 GitHub 获取他人的代码，如何上传我们自己的代码，以及怎么和别人一起做大型项目。</p>
+<p>无论是个人项目的版本跟踪，团队协作中的代码同步，还是为开源社区做贡献，Git 和 GitHub 都是现代开发者的必备工具。通过掌握它们，你将能够更高效地管理代码，根据需要创建检查点，在代码的不同阶段之间自由切换，并轻松处理从单个文件更改到开发大型项目的所有事务——使每一次代码迭代都可控且可追溯。</p>
+<blockquote>
+<p><strong>前置知识</strong></p>
+<p>在学习 Git 之前，建议你先了解以下概念：</p>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/command-line-shell.md">什么是终端/命令行</a> - 学习如何使用命令行与计算机交互</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/git-version-control.md">什么是 Git</a> - 了解 Git 版本控制系统的核心概念</li>
+</ul>
+<p>本文将重点介绍 GitHub 工作流和实际操作，上述基础知识请参考附录链接。</p>
+</blockquote>
+<h2 id="git-快速开始">Git 快速开始</h2>
+<p>在开始使用 Git 之前，请确保你已经阅读了附录中关于<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/command-line-shell.md">命令行</a>和<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/git-version-control.md">Git 基础</a>的内容。本文将假设你已经具备这些基础知识，下面直接讲怎么安装配置 Git，怎么用 GitHub 跟人协作。</p>
+<h3 id="如何安装-git">如何安装 Git</h3>
+<p>下面演示三种在不同操作系统上安装 Git 的方法，按你的系统版本挑一种照做：</p>
+<h4 id="windows">Windows</h4>
+<ol>
+<li><p>前往 <a href="https://git-scm.com/download/win">Git 官方下载页面</a> 并下载适合你系统的安装程序：<a href="https://github.com/git-for-windows/git/releases/download/v2.51.0.windows.1/Git-2.51.0-64-bit.exe">安装包</a>。默认情况下，推荐使用 x64 安装程序。</p>
+</li>
+<li><p>双击安装程序，跟着安装向导走：
+<img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image5.png" alt="" loading="lazy" decoding="async"></p>
+<ol>
+<li>建议保持默认选项。如果你需要自定义，请注意以下几点：（在大多数情况下，你可以一直点击&quot;Next&quot;）<ul>
+<li>选择 Git 使用的默认编辑器：选择你喜欢的编辑器（如 VS Code）。你可以默认选择第一个选项，即 Vim（一个文本编辑器），或选择&quot;Visual Studio Code as Git&#39;s default editor&quot;选项（需要预先安装 VS Code）。你可以保持默认选择并点击&quot;Next&quot;继续。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image6.png" alt="" loading="lazy" decoding="async"></li>
+<li>选择如何使用 Git：这三个选项控制 Git 在系统中的可访问性。建议选择选项 2（&quot;from command line and 3rd-party software&quot;）——它将基本的 Git 工具添加到 PATH 中，让你可以在 Git Bash、命令提示符、PowerShell 和 IDE 中使用 Git，而不会使系统混乱。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image7.png" alt="" loading="lazy" decoding="async"></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>安装后，在桌面上右键单击。如果在菜单中看到&quot;Git Bash Here&quot;，则安装成功。</p>
+</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image8.png" alt="" loading="lazy" decoding="async"></p>
+<h4 id="macos">MacOS</h4>
+<p>对于 macOS，你可以首先在终端中输入 <code>git --version</code> 来检查是否已经安装了 Git。如果没有，系统会提示你安装——只需按照说明完成安装即可。</p>
+<ol>
+<li>方法 1：通过 Homebrew 安装
+如果你安装了 <a href="https://brew.sh/">Homebrew</a>（Mac 包管理器），请打开终端并输入<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">brew install git
+</code></pre>
+</li>
+<li>方法 2：（推荐）通过 Xcode 安装： <a href="https://developer.apple.com/xcode/">https://developer.apple.com/xcode/</a> ，Xcode 内置了 Git。安装后，只需按照说明继续操作。</li>
+</ol>
+<h4 id="linux">Linux</h4>
+<p>大多数 Linux 发行版可以通过其包管理器安装 Git：</p>
+<ul>
+<li>Ubuntu/Debian:</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo apt update
+sudo apt install git
+</code></pre>
+<ul>
+<li>CentOS/RHEL:</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo yum install git
+</code></pre>
+<ul>
+<li>验证安装：在终端中输入 git --version。如果显示版本号，则安装成功。</li>
+</ul>
+<h3 id="git-初始化">Git 初始化</h3>
+<p>安装 Git 后，你首先需要配置你的用户信息——这是用 Git 管版本的第一步。在终端中执行以下命令（将括号中的内容替换为你自己的信息）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 设置全局用户名（将显示在提交记录中）
+git config --global user.name &quot;Your Name&quot;
+
+# 设置全局邮箱（建议使用在 GitHub/GitLab 等平台上注册的邮箱）
+git config --global user.email &quot;your.email@example.com&quot;
+</code></pre>
+<p>Git 会将此信息嵌入到每个提交记录中，作为每次修改的&quot;作者信息&quot;。查看版本历史记录（例如，使用 git log）时，你可以清楚地看到谁修改了每一行代码，便于追溯责任和沟通。在协作项目中，统一的身份信息使团队成员能够快速识别谁做了哪些更改，从而提高协作效率（例如通过提交记录找到相关开发人员讨论问题）。</p>
+<p>你可以通过在命令行中输入 <code>git config --list</code> 来查看当前的 Git 配置信息，以确认设置成功。</p>
+<h2 id="什么是-github">什么是 GitHub</h2>
+<p>GitHub 是一个基于 Git 的代码托管平台。它除了给 Git 仓库做远程存储，还带了协作工具（如 Issues、Pull Requests、Projects），使开发者更容易分享代码和协作。简而言之，Git 是一个本地版本控制工具，而 GitHub 是一个远程&quot;代码仓库云盘 + 协作社区&quot;。</p>
+<p>GitHub 不仅是世界上最大的代码托管平台，也是全球最活跃、最具影响力的开源社区。这里&quot;开源&quot;的核心思想是任何人都可以下载并运行软件的源代码。这种模式允许世界各地的人们检查别人的代码并动手改，或者基于此开一个新项目。例如，你可以在 GitHub 上找到各种学习教程以及用于训练 GPT 模型的框架（如 PyTorch）的完整源代码。每天，无数人在全球范围内协作审查和改进代码。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image9.webp" alt="" loading="lazy" decoding="async"></p>
+<p>许多大公司在 GitHub 上开源他们的程序或教程，以获得行业竞争优势——这也可以看作是一种广告形式。在 GitHub 社区中，项目获得的&quot;星标 (stars)&quot;数量是衡量其价值的主要指标；项目或组织拥有的星标越多，其可信度和影响力就越大。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image10.png" alt="" loading="lazy" decoding="async"></p>
+<p>在我们的课程中，支持资源和作业也将上传到专用的 GitHub 仓库。通过上传作业的过程，你将逐渐熟悉并掌握 GitHub 的使用，为未来应用程序开发中的版本控制打下坚实的基础。</p>
+<h3 id="注册-github-账号">注册 GitHub 账号</h3>
+<ol>
+<li>访问 <a href="https://github.com/">GitHub 官网</a> 并点击右上角的&quot;Sign up&quot;。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image11.webp" alt="" loading="lazy" decoding="async"></li>
+<li>输入你的电子邮件地址（建议使用常用邮箱，因为验证和通知将发送到那里），设置密码（必须包含字母、数字和特殊字符）。</li>
+<li>完成人工验证，按照提示验证邮箱，你的账号就创建好了。</li>
+</ol>
+<h3 id="在-github-上创建你的第一个仓库">在 GitHub 上创建你的第一个仓库</h3>
+<p>接下来，我们将创建第一个存储文件夹，也称为仓库或&quot;repo&quot;。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image12.png" alt="" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image13.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image14.png" alt="" loading="lazy" decoding="async"></p>
+<ol>
+<li>Repository name：向他人显示的仓库名称。</li>
+<li>Description：仓库的详细描述。</li>
+<li>Choose visibility：对于个人仓库，如果设置为 private，只有你和特别邀请的人可以看到。如果设置为 public，所有人都可以看到。
+对于组织内的仓库，如果是 Private，只有组织内的人可以看到。
+如果是 Public，组织外的人也可以看到。</li>
+<li>README：通常的惯例是每个仓库都应该有一个 README 文件。你可以把它看作是仓库的完整介绍，包括使用说明、文件列表和操作方法。</li>
+<li>Add .gitignore and license：<ol>
+<li>.gitignore 文件告诉 Git 在上传到 GitHub 时忽略某些文件夹或文件，因此它们不会被跟踪或添加到暂存区。这对于临时测试文件、依赖包或大文件很有用。一旦指定，这些文件将不再被跟踪。</li>
+<li>license 指的是你选择的开源许可证类型。不同的许可证详细规定了他人是否可以将你的代码用于商业目的，并包含其他条款和条件。</li>
+</ol>
+</li>
+</ol>
+<p>建议勾选&quot;Add README&quot;，将仓库可见性设置为&quot;Private&quot;，并根据自己的喜好填写仓库名称和描述，然后点击&quot;Create repository&quot;完成创建第一个远程仓库。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image15.png" alt="" loading="lazy" decoding="async"></p>
+<p>之后，你将拥有一个没有任何额外文件的干净仓库。接下来你可以开始上传文件了。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image16.png" alt="" loading="lazy" decoding="async"></p>
+<p>获取仓库的命令是 <code>git clone</code>，但它需要仓库地址。你可以通过点击绿色的&quot;Code&quot;按钮找到仓库地址，你会看到 HTTPS 和 SSH 选项。通常，你可以使用这两种方法中的任何一种将仓库下载到本地机器（只有这样你才能修改和上传文件）。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image17.png" alt="" loading="lazy" decoding="async"></p>
+<p>一般来说，通过 HTTP 克隆的仓库适合临时下载和测试他人的仓库，但不建议用于自己的开发。为了更好的学习体验，你应该先设置 SSH 认证。</p>
+<h3 id="绑定本地-ssh">绑定本地 SSH</h3>
+<p>在 GitHub 中，&quot;SSH 协议绑定&quot;本质上意味着将你本地设备的 SSH 公钥与你的 GitHub 账号关联，允许 GitHub 通过 SSH 协议识别你的设备。这使你能够安全地操作远程仓库，而无需密码（如 clone、push 或 pull 代码）。</p>
+<p>简单来说：这就像给你的设备一张&quot;GitHub 专属门禁卡&quot;。绑定后，当你的设备通过 SSH 协议访问 GitHub 仓库时，GitHub 会验证这张&quot;门禁卡&quot;（你的 SSH 公钥）。一旦确认为你的授权设备，你就可以直接操作——不需要每次都输入账号密码。</p>
+<blockquote>
+<p>什么是 SSH</p>
+</blockquote>
+<h4 id="为什么需要-ssh-协议绑定">为什么需要 SSH 协议绑定？</h4>
+<p>GitHub 支持两种主要的仓库操作协议：HTTPS 协议和 SSH 协议：</p>
+<ul>
+<li>HTTPS 协议：每次操作（如 push）都需要输入 GitHub 账号密码（或个人访问令牌 PAT）。验证过程繁琐，且存在密码泄露风险。</li>
+<li>SSH 协议：身份验证通过&quot;密钥对&quot;完成，因此不需要重复输入密码，且加密传输更加安全。</li>
+</ul>
+<p>&quot;SSH 协议绑定&quot;是启用 GitHub SSH 认证的前提步骤——只有将本地 SSH 公钥&quot;绑定&quot;到 GitHub 账号后，GitHub 才能识别你的设备并允许对仓库进行 SSH 操作。</p>
+<h4 id="绑定的核心逻辑ssh-密钥对的作用">&quot;绑定&quot;的核心逻辑：SSH 密钥对的作用</h4>
+<p>SSH 认证依赖于密钥对（公钥 + 私钥），它们是匹配的加密文件。生成后，你需要将&quot;公钥&quot;提供给 GitHub（&quot;绑定&quot;），而&quot;私钥&quot;留在本地设备上：</p>
+<ol>
+<li>私钥：存储在本地设备（如电脑）的指定目录中（通常是 ~/.ssh/），充当&quot;你的专属钥匙&quot;，绝不能与任何人分享。</li>
+<li>公钥：这是一把可以公开分享的&quot;锁&quot;——你需要将其复制到 GitHub 账号的&quot;SSH keys list&quot;中（&quot;绑定&quot;操作）。</li>
+</ol>
+<p>当你通过 SSH 操作 GitHub 仓库时（例如 git push <a href="mailto:git@github.com">git@github.com</a>:xxx/xxx.git）：</p>
+<ul>
+<li>你的本地设备使用私钥加密&quot;操作请求&quot;并发送给 GitHub；</li>
+<li>收到请求后，GitHub 就用你之前绑定的公钥试着解密；</li>
+<li>如果解密成功，你的设备被确认为已授权，操作被允许；否则，访问被拒绝。</li>
+</ul>
+<h4 id="绑定的具体步骤核心流程">&quot;绑定&quot;的具体步骤（核心流程）</h4>
+<p>一旦你理解了原理，实际操作就很简单——核心是&quot;生成密钥对 → 上传公钥到 GitHub&quot;：</p>
+<ol>
+<li><p>本地生成 SSH 密钥对</p>
+<ol>
+<li>使用 Trae 获取公钥（推荐）
+提示词：<code>Help me create the SSH key needed for GitHub login. My email is your_email@gmail.com , Please return the public key for me to copy</code></li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image18.webp" alt="" loading="lazy" decoding="async"></p>
+<p>输入提示词后，你还需要在左侧终端按 Enter 键，否则命令会一直等待而不执行。由于 Trae 无法帮你执行任何条件判断，我们只需要一直按 Enter 即可。</p>
+<p>最后，你会看到右侧的 Trae 返回了它读取的公钥。你只需复制它并准备在下一步中粘贴。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image19.webp" alt="" loading="lazy" decoding="async"> 2. 手动获取公钥
+打开你的本地终端（在 Windows 上使用 Git Bash 或 PowerShell；在 macOS/Linux 上使用终端），输入以下命令（将 <a href="mailto:your_email@example.com">your_email@example.com</a> 替换为你注册 GitHub 账号时使用的邮箱）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;
+</code></pre>
+<ol>
+<li>按 Enter 接受默认值（默认文件路径，无密码，或根据需要设置密码）。这将在 ~/.ssh/ 目录中生成两个文件：<ul>
+<li>id_ed25519：私钥（本地保存，<strong>绝不分享</strong>）；</li>
+<li>id_ed25519.pub：公钥（需要上传到 GitHub）。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>将公钥&quot;绑定&quot;到你的 GitHub 账号</p>
+</li>
+</ol>
+<p>这是核心绑定步骤——将本地公钥添加到 GitHub 账号的&quot;SSH keys list&quot;中：</p>
+<ol>
+<li>复制公钥内容：<ol>
+<li>Trae：</li>
+<li>Windows：用记事本打开 C:\Users&lt;your&gt;.ssh\id_ed25519.pub 并复制其所有内容；</li>
+<li>macOS/Linux：在终端运行 cat ~/.ssh/id_ed25519.pub 并复制所有输出（从开头的 SSH-ed25519 到结尾的邮箱）。</li>
+</ol>
+</li>
+<li>登录 GitHub 并进入&quot;SSH Key Management&quot;页面：<ol>
+<li>点击右上角头像 → Settings → 左侧菜单 SSH and GPG keys → 点击 New SSH key。
+<img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image20.png" alt="" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image21.png" alt="" loading="lazy" decoding="async"></li>
+<li>输入任何标题（例如，your local computer&#39;s SSH），然后将你刚刚获取的 SSH 公钥粘贴到这里。</li>
+</ol>
+</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image22.png" alt="" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image23.png" alt="" loading="lazy" decoding="async"></p>
+<ol start="3">
+<li>验证绑定是否成功</li>
+</ol>
+<p>在终端中输入以下命令（<strong>Trae 也可以做以下操作</strong>）来测试 GitHub 是否能识别你的设备：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<ul>
+<li>如果你看到类似 Hi [your GitHub username]! You&#39;ve successfully authenticated... 的内容，说明你已成功绑定密钥；</li>
+<li>如果遇到错误，通常是因为公钥复制不完整、私钥权限过高（你的本地 ~/.ssh/ 目录应仅由你读写）等。根据需要检查这些问题。</li>
+</ul>
+<h4 id="重要注意事项">重要注意事项</h4>
+<p>如果你有多个设备（如笔记本电脑和台式机），你需要为每个设备生成单独的 SSH 密钥对，并将每个公钥绑定到同一个 GitHub 账号——每个设备都有自己的&quot;门禁卡&quot;。</p>
+<p>切勿分享你的私钥（不要上传到 GitHub 或与他人分享），否则有人可能会冒充你操作你的仓库。如果私钥泄露，请立即从 GitHub 删除相应的公钥并生成新的密钥对。</p>
+<p>绑定 SSH 后，把仓库地址换成 SSH 格式（例如 <a href="mailto:git@github.com">git@github.com</a>:username/repository.git），而不是 HTTPS 格式（例如 <a href="https://github.com/username/repository.git）。如果你之前用">https://github.com/username/repository.git）。如果你之前用</a> HTTPS 克隆了仓库，可以用 git remote set-url origin <code>&lt;new&gt;</code> 切换协议。</p>
+<h2 id="使用-trae-进行-github-操作">使用 Trae 进行 GitHub 操作</h2>
+<p>我们已经解释了什么是 Git，什么是 GitHub，什么是 SSH，以及如何配置它。现在你可以自由使用 Trae 执行 Git 操作。第一步先把远程仓库克隆到本地。</p>
+<h3 id="git-clone--下载现有仓库">Git clone : 下载现有仓库</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image24.webp" alt="" loading="lazy" decoding="async"></p>
+<h3 id="git-pull--从远程仓库获取更新">Git pull : 从远程仓库获取更新</h3>
+<p>每次更新仓库之前，由于它可能由多人维护，你需要先拉取最新的更改。之后，你可以修改并推送文件。</p>
+<p><strong>记得包含文件夹名称及其相对或绝对路径，以避免推送到错误的仓库。</strong></p>
+<p>prompt:<code>Help me pull this repository AIID-TEST in ./AIID-TEST.</code></p>
+<h3 id="git-commit--git-push--暂存更新并推送到-github">Git commit &amp; Git push : 暂存更新并推送到 GitHub</h3>
+<p>一切准备就绪后，你可以尝试修改本地文件，在文件夹中添加或删除项目。然后，让 Trae 检测更改并帮你推送到 GitHub。</p>
+<p>prompt:<code>I finished. Commit and push to the repository AIID-TEST in ./AIID-TEST.</code></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/git-workflow/images/image25.webp" alt="" loading="lazy" decoding="async"></p>
+<p>推送成功。现在你可以在 GitHub 上看到更新的内容了。</p>
+<h2 id="参考资料-2">参考资料</h2>
+<ul>
+<li>Pro Git book <a href="https://git-scm.com/book/en/v2">https://git-scm.com/book/en/v2</a></li>
+<li>GitHub Docs <a href="https://docs.github.com/en">https://docs.github.com/en</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-026.html">← 大模型辅助接口开发</a><a rel="next" href="chapter-028.html">把网站发到网上（简单方式）：Vercel/Cloudflare/CloudBase 一键发布 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

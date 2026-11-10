@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>生鲜电商微服务系统 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 40 / 195</p><article><h1 id="生鲜电商微服务系统">生鲜电商微服务系统</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#生鲜电商微服务系统开发实战">生鲜电商微服务系统开发实战</a><ul><li><a href="#概述-6">概述</a></li><li><a href="#前置知识-6">前置知识</a></li><li><a href="#学习目标-6">学习目标</a></li><li><a href="#项目简介-6">项目简介</a></li><li><a href="#第一部分需求分析-6">第一部分：需求分析</a></li><li><a href="#第二部分搭建项目骨架-6">第二部分：搭建项目骨架</a></li><li><a href="#第三部分迭代开发-4">第三部分：迭代开发</a></li><li><a href="#第四部分联调与上线-6">第四部分：联调与上线</a></li><li><a href="#交付物-6">交付物</a></li><li><a href="#评分标准-6">评分标准</a></li><li><a href="#参考资料-9">参考资料</a></li></ul></li></ul></nav></details><h2 id="生鲜电商微服务系统开发实战">生鲜电商微服务系统开发实战</h2>
+<h3 id="概述-6">概述</h3>
+<p>本实战项目要求你围绕一份真实的 PRD，从零完成一个生鲜电商微服务系统。与前面的单服务项目不同，这个项目的后端按业务拆分成多个独立服务，通过 API 网关统一对外。你将学习如何设计服务边界、如何处理跨服务的数据一致性问题。</p>
+<p>这是 Stage 2 的综合实战环节。微服务架构在实际工作中非常常见，掌握服务拆分和网关路由的基本思路后，你能够应对更复杂的后端系统设计。</p>
+<h3 id="前置知识-6">前置知识</h3>
+<p>在开始本项目之前，你应该已经掌握以下内容：</p>
+<ul>
+<li>前端页面设计与组件库使用（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">现代组件库</a>）</li>
+<li>后端接口设计与开发（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">接口代码编写</a>）</li>
+<li>数据库基础与 Supabase（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a>）</li>
+<li>Git 工作流与部署（<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub</a>、<a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">部署 Web 应用</a>）</li>
+</ul>
+<h3 id="学习目标-6">学习目标</h3>
+<p>完成本实战后，你将能够：</p>
+<ol>
+<li>阅读 PRD 并提取微服务系统的开发任务清单</li>
+<li>按业务领域拆分服务边界（鉴权、商品、库存、订单）</li>
+<li>设计和实现 API 网关路由</li>
+<li>处理库存扣减和订单一致性等跨服务问题</li>
+<li>完成端到端联调，交付可演示的微服务原型</li>
+</ol>
+<h3 id="项目简介-6">项目简介</h3>
+<p>你要构建的产品是一个生鲜电商微服务系统：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>子系统</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>用户端</strong></td>
+<td>浏览商品、下单、查看订单</td>
+</tr>
+<tr>
+<td><strong>管理端</strong></td>
+<td>商品管理、库存管理、订单管理</td>
+</tr>
+</tbody></table></div>
+<p>后端按业务拆分为以下服务：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>API Gateway</strong></td>
+<td>统一入口、路由转发、鉴权校验</td>
+</tr>
+<tr>
+<td><strong>Auth Service</strong></td>
+<td>用户注册、登录、JWT 颁发</td>
+</tr>
+<tr>
+<td><strong>Catalog Service</strong></td>
+<td>商品信息管理</td>
+</tr>
+<tr>
+<td><strong>Inventory Service</strong></td>
+<td>库存数量管理</td>
+</tr>
+<tr>
+<td><strong>Order Service</strong></td>
+<td>订单创建、状态管理</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>PRD 入口</strong>
+本项目的需求文档在 GitHub： <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/assignments/simple-grocery-microservices/PRD.md">查看 PRD</a></p>
+</blockquote>
+<div style="margin: 32px 0;">
+      { title: '需求分析', description: '阅读 PRD，明确服务拆分、页面和交易链路' },
+      { title: '搭建骨架', description: '生成前端、网关和各服务骨架' },
+      { title: '迭代开发', description: '逐模块补接口、修库存与订单一致性' },
+      { title: '联调上线', description: '端到端跑通，部署并准备演示' }
+    ]" />
+</div><h3 id="第一部分需求分析-6">第一部分：需求分析</h3>
+<h4 id="11-阅读-prd-6">1.1 阅读 PRD</h4>
+<p>打开 PRD 文档，重点回答以下问题：</p>
+<ul>
+<li>服务如何拆分？每个服务的职责边界是什么？</li>
+<li>前台和管理端分别有哪些页面？</li>
+<li>下单后库存扣减的策略是什么？成功 / 失败 / 超时各怎么处理？</li>
+<li>第一版哪些复杂能力（如分布式事务、消息队列）先不做？</li>
+</ul>
+<blockquote>
+<p><strong>⚠️ warning</strong>
+如果以上问题没有明确答案，不要开始写代码。需求理解不清楚是导致返工的最常见原因。</p>
+</blockquote>
+<h4 id="12-确认系统架构-6">1.2 确认系统架构</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-mermaid">flowchart TD
+  prd[&quot;PRD&quot;] --&gt; fe[&quot;前端页面&quot;]
+  fe --&gt; gw[&quot;API Gateway&quot;]
+  gw --&gt; auth[&quot;Auth Service&quot;]
+  gw --&gt; catalog[&quot;Catalog Service&quot;]
+  gw --&gt; inventory[&quot;Inventory Service&quot;]
+  gw --&gt; order[&quot;Order Service&quot;]
+  order --&gt; inventory
+</code></pre>
+<h3 id="第二部分搭建项目骨架-6">第二部分：搭建项目骨架</h3>
+<h4 id="21-生成项目结构">2.1 生成项目结构</h4>
+<p>提示词参考：</p>
+<pre class="prose-block"><code class="language-text">请基于当前 PRD，帮我生成一个生鲜电商微服务系统的项目骨架。
+
+要求：
+1. 生成前端用户端和管理端骨架
+2. 生成 api-gateway、auth-service、catalog-service、inventory-service、order-service 五个目录
+3. 每个服务先只做最小可运行入口
+4. 先不接真实数据库和支付
+</code></pre>
+<h4 id="22-验证项目结构">2.2 验证项目结构</h4>
+<p>逐项检查：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 五个服务目录结构清晰</li>
+<li><input disabled="" type="checkbox"> API Gateway 可以启动并转发请求</li>
+<li><input disabled="" type="checkbox"> 各服务健康检查接口可用</li>
+<li><input disabled="" type="checkbox"> 前端用户端和管理端页面可访问</li>
+</ul>
+<h3 id="第三部分迭代开发-4">第三部分：迭代开发</h3>
+<h4 id="31-按模块推进-4">3.1 按模块推进</h4>
+<ol>
+<li><strong>API Gateway</strong>：路由配置、JWT 校验中间件</li>
+<li><strong>Auth Service</strong>：注册、登录、JWT 颁发</li>
+<li><strong>Catalog Service</strong>：商品 CRUD、列表查询</li>
+<li><strong>Inventory Service</strong>：库存查询、库存扣减</li>
+<li><strong>Order Service</strong>：订单创建、状态流转、库存联动</li>
+<li><strong>管理端</strong>：商品管理、库存管理、订单管理</li>
+</ol>
+<h4 id="32-模块自检-2">3.2 模块自检</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>验证方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网关路由</td>
+<td>各服务接口是否通过网关正确转发</td>
+</tr>
+<tr>
+<td>权限隔离</td>
+<td>用户端和管理端接口是否隔离</td>
+</tr>
+<tr>
+<td>数据一致</td>
+<td>商品和库存数据是否同步</td>
+</tr>
+<tr>
+<td>交易闭环</td>
+<td>下单后库存扣减、订单状态是否一致</td>
+</tr>
+<tr>
+<td>失败处理</td>
+<td>库存不足或超时时是否有补偿机制</td>
+</tr>
+</tbody></table></div>
+<h3 id="第四部分联调与上线-6">第四部分：联调与上线</h3>
+<h4 id="41-端到端测试-6">4.1 端到端测试</h4>
+<p>至少验证以下场景：</p>
+<ul>
+<li>浏览商品 → 加入购物车 → 下单 → 查看订单</li>
+<li>管理员 → 添加商品 → 更新库存 → 查看订单</li>
+</ul>
+<h3 id="交付物-6">交付物</h3>
+<p>完成本项目后，你需要提交以下内容：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 可访问的线上演示链接</li>
+<li><input disabled="" type="checkbox"> 源码仓库链接（含 README）</li>
+<li><input disabled="" type="checkbox"> PRD 文档</li>
+<li><input disabled="" type="checkbox"> 核心页面截图（商品列表、下单页、订单页、管理后台）</li>
+<li><input disabled="" type="checkbox"> 60 秒演示视频</li>
+</ul>
+<h3 id="评分标准-6">评分标准</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>基本要求</th>
+<th>进阶要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PRD 对齐</td>
+<td>页面、功能、服务拆分基本符合 PRD</td>
+<td>能清晰说明服务拆分的理由</td>
+</tr>
+<tr>
+<td>产品闭环</td>
+<td>浏览 → 下单 → 库存扣减 → 查看订单可跑通</td>
+<td>订单超时或库存不足有补偿机制</td>
+</tr>
+<tr>
+<td>服务架构</td>
+<td>各服务可独立启动，通过网关统一访问</td>
+<td>服务间通信有错误处理和重试</td>
+</tr>
+<tr>
+<td>后台能力</td>
+<td>商品、库存、订单管理可操作</td>
+<td>管理端有数据统计</td>
+</tr>
+<tr>
+<td>工程完整度</td>
+<td>前端、网关、服务、数据库链路已接通</td>
+<td>有 Docker Compose 或类似编排</td>
+</tr>
+</tbody></table></div>
+<h3 id="参考资料-9">参考资料</h3>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/ui-design/index.md">UI 设计</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/frontend/modern-component-library/index.md">使用现代组件库更新你的界面</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/database-supabase/index.md">从数据库到 Supabase</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/ai-interface-code/index.md">大模型辅助编写接口代码与接口文档</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/git-workflow/index.md">Git 和 GitHub 工作流</a></li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">如何部署 Web 应用</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-039.html">← Spring Boot 电影推荐系统</a><a rel="next" href="chapter-041.html">Go 交通数据分析平台 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

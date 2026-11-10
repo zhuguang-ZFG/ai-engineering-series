@@ -1,0 +1,434 @@
+{
+  "date": "2026-11-10",
+  "python": "3.13.14",
+  "scope": "Original Aurora CLI only; no Hermes host or model",
+  "script_sha256": "50217b3d1b22b3688b1bff4c757887152a534ed06939659e0cecb41ab0693ccb",
+  "driver_sha256": "15f93703c612c265d92ae35d2201f6b9af5addd3aba35604be760a3cac3481dc",
+  "passed": true,
+  "cases": [
+    {
+      "step": "initial",
+      "exit_code": 0,
+      "stdout": {
+        "input_digest": "f03183b8ed1551e9813c311263706a4ec124c7a11afa9a97f8ef92f72138c683",
+        "status": "checked",
+        "issues": [],
+        "observations": []
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "f03183b8ed1551e9813c311263706a4ec124c7a11afa9a97f8ef92f72138c683",
+        "snapshot": {
+          "rules_sha256": "6c189c55023c5f157b2a98f3e5652bd9a855d9d1db78ed01fbb3fa5a00c241c1",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "551a7e7bdc43379ed1d8ab58356cb1d0d9d8c3477bffaf575f7baef1a1e49cfb"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            },
+            {
+              "path": "docs/setup.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            }
+          ]
+        },
+        "status": "checked",
+        "issues": [],
+        "observations": [],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": false
+        }
+      }
+    },
+    {
+      "step": "rename without updating index",
+      "exit_code": 1,
+      "stdout": {
+        "input_digest": "606b7f22600cf4bc67fb08b5a4a20e076cc8381836d86260c2611e68e041a5e8",
+        "status": "needs-review",
+        "issues": [
+          {
+            "path": "docs/index.md",
+            "line": 3,
+            "kind": "missing-target",
+            "target": "setup.md"
+          }
+        ],
+        "observations": []
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "606b7f22600cf4bc67fb08b5a4a20e076cc8381836d86260c2611e68e041a5e8",
+        "snapshot": {
+          "rules_sha256": "6c189c55023c5f157b2a98f3e5652bd9a855d9d1db78ed01fbb3fa5a00c241c1",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "551a7e7bdc43379ed1d8ab58356cb1d0d9d8c3477bffaf575f7baef1a1e49cfb"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "needs-review",
+        "issues": [
+          {
+            "path": "docs/index.md",
+            "line": 3,
+            "kind": "missing-target",
+            "target": "setup.md"
+          }
+        ],
+        "observations": [],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": false
+        }
+      }
+    },
+    {
+      "step": "update index to install.md",
+      "exit_code": 0,
+      "stdout": {
+        "input_digest": "362ce25403fd4d9ea703f1555690dc23794a985c79f3542b36856a12fdc807ec",
+        "status": "checked",
+        "issues": [],
+        "observations": []
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "362ce25403fd4d9ea703f1555690dc23794a985c79f3542b36856a12fdc807ec",
+        "snapshot": {
+          "rules_sha256": "6c189c55023c5f157b2a98f3e5652bd9a855d9d1db78ed01fbb3fa5a00c241c1",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "checked",
+        "issues": [],
+        "observations": [],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": false
+        }
+      }
+    },
+    {
+      "step": "include example URLs",
+      "exit_code": 0,
+      "stdout": {
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ]
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "snapshot": {
+          "rules_sha256": "42c1d477724e263a917cf80a35c24f79b4fcaf93e3be0ca0d7dcaea2a9066d18",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": true
+        }
+      }
+    },
+    {
+      "step": "include archived documents",
+      "exit_code": 1,
+      "stdout": {
+        "input_digest": "2c3ae987892688ab744e876a8ee4fe943e734a1e7022f9aad4e709c57ab920f4",
+        "status": "needs-review",
+        "issues": [
+          {
+            "path": "archive/old-plan.md",
+            "line": 3,
+            "kind": "missing-target",
+            "target": "removed.md"
+          }
+        ],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ]
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "2c3ae987892688ab744e876a8ee4fe943e734a1e7022f9aad4e709c57ab920f4",
+        "snapshot": {
+          "rules_sha256": "7af6913e3917e59cd456ab47e1c92f55fea51ca128f82f77db6d927d3f6b2de2",
+          "files": [
+            {
+              "path": "archive/old-plan.md",
+              "sha256": "3b8b9f80042ef21ae0d64b91a76cbe6ab31f65379944f8ca7efe22243eff4a01"
+            },
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "needs-review",
+        "issues": [
+          {
+            "path": "archive/old-plan.md",
+            "line": 3,
+            "kind": "missing-target",
+            "target": "removed.md"
+          }
+        ],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": true,
+          "scan_examples": true
+        }
+      }
+    },
+    {
+      "step": "invalid JSON boolean leaves old report",
+      "exit_code": 2,
+      "stdout": {
+        "error": "scan_examples must be a JSON boolean."
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "2c3ae987892688ab744e876a8ee4fe943e734a1e7022f9aad4e709c57ab920f4",
+        "snapshot": {
+          "rules_sha256": "7af6913e3917e59cd456ab47e1c92f55fea51ca128f82f77db6d927d3f6b2de2",
+          "files": [
+            {
+              "path": "archive/old-plan.md",
+              "sha256": "3b8b9f80042ef21ae0d64b91a76cbe6ab31f65379944f8ca7efe22243eff4a01"
+            },
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "needs-review",
+        "issues": [
+          {
+            "path": "archive/old-plan.md",
+            "line": 3,
+            "kind": "missing-target",
+            "target": "removed.md"
+          }
+        ],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": true,
+          "scan_examples": true
+        }
+      }
+    },
+    {
+      "step": "restore valid policy",
+      "exit_code": 0,
+      "stdout": {
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ]
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "snapshot": {
+          "rules_sha256": "42c1d477724e263a917cf80a35c24f79b4fcaf93e3be0ca0d7dcaea2a9066d18",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": true
+        }
+      }
+    },
+    {
+      "step": "repeat unchanged input",
+      "exit_code": 0,
+      "stdout": {
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ]
+      },
+      "saved_report": {
+        "schema_version": 1,
+        "input_digest": "d663368ef3bd83e6dcd38dbff97a6b7c1180da931552a1811b0966d62e3f6718",
+        "snapshot": {
+          "rules_sha256": "42c1d477724e263a917cf80a35c24f79b4fcaf93e3be0ca0d7dcaea2a9066d18",
+          "files": [
+            {
+              "path": "docs/index.md",
+              "sha256": "0dc867e0233071745471e1f64eaed31834daa159e8296132b262ff0ad4bdb7d5"
+            },
+            {
+              "path": "docs/install.md",
+              "sha256": "4f50f10b6f8e765e0b48adca2f328fcaee3161dfd41d1a321c22bdfb93e8937a"
+            },
+            {
+              "path": "docs/release-notes.md",
+              "sha256": "46210e143b38e0f2adbc5780fb57f554dc8939faf69362d17a2c75eb8fd7b898"
+            }
+          ]
+        },
+        "status": "checked",
+        "issues": [],
+        "observations": [
+          {
+            "path": "docs/install.md",
+            "line": 6,
+            "kind": "example-url",
+            "value": "https://example.invalid/demo",
+            "placeholder": true
+          }
+        ],
+        "scope": {
+          "schema_version": 1,
+          "include_archive": false,
+          "scan_examples": true
+        }
+      }
+    }
+  ]
+}

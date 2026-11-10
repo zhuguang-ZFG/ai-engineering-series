@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>设计模式 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 176 / 195</p><article><h1 id="设计模式">设计模式</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#设计模式基础">设计模式基础</a><ul><li><a href="#0-全景图设计模式的本质">0. 全景图：设计模式的本质</a></li><li><a href="#1-优雅地创建对象的实现">1. 优雅地创建对象的实现</a></li><li><a href="#2-组织代码结构的实现">2. 组织代码结构的实现</a></li><li><a href="#3-管理对象间的交互的实现">3. 管理对象间的交互的实现</a></li><li><a href="#4-选择设计模式的方法">4. 选择设计模式的方法</a></li><li><a href="#5-ai-助力用大模型学习和应用设计模式">5. AI 助力：用大模型学习和应用设计模式</a></li><li><a href="#6-总结-7">6. 总结</a></li><li><a href="#延伸阅读-34">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="设计模式基础">设计模式基础</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>为什么你的代码总是&quot;能跑但很乱&quot;？</strong> 你可能遇到过这样的情况：需求一变，代码就要大改；想复用一段逻辑，却发现它和其他代码纠缠在一起。设计模式就是前人总结的&quot;代码组织套路&quot;，帮你写出灵活、可维护的代码。</p>
+</blockquote>
+<p>本章带你理解最实用的设计模式，不是死记硬背，而是理解&quot;什么场景用什么套路&quot;。</p>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>设计模式是什么</td>
+<td>模式的本质与分类</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>创建型模式</td>
+<td>如何优雅地创建对象</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>结构型模式</td>
+<td>如何组织代码结构</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>行为型模式</td>
+<td>如何管理对象间的交互</td>
+</tr>
+</tbody></table></div>
+<p>学完本章，你将掌握最常用的设计模式，能在实际项目中识别适用场景并灵活运用。</p>
+<h3 id="0-全景图设计模式的本质">0. 全景图：设计模式的本质</h3>
+<p>想象你在学做菜。你可以每次都从零开始摸索，也可以学习经典菜谱——菜谱不会限制你的创造力，反而让你站在前人的肩膀上。设计模式就是编程世界的&quot;经典菜谱&quot;。</p>
+<blockquote>
+<p><strong>设计模式的价值</strong></p>
+</blockquote>
+<ul>
+<li><strong>共同语言</strong>：说&quot;这里用观察者模式&quot;，团队立刻理解你的设计意图</li>
+<li><strong>经验复用</strong>：不用重新踩前人踩过的坑</li>
+<li><strong>灵活扩展</strong>：好的模式让代码面对变化时只需小改，而不是大改</li>
+</ul>
+<p>通过下面的交互组件，浏览常见设计模式的分类和用途：</p>
+<h3 id="1-优雅地创建对象的实现">1. 优雅地创建对象的实现</h3>
+<h4 id="11-单例模式singleton">1.1 单例模式（Singleton）</h4>
+<p><strong>场景</strong>：全局只需要一个实例，比如配置管理器、日志记录器、数据库连接池。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">class ConfigManager {
+  static instance = null
+
+  static getInstance() {
+    if (!ConfigManager.instance) {
+      ConfigManager.instance = new ConfigManager()
+    }
+    return ConfigManager.instance
+  }
+
+  constructor() {
+    this.config = {}
+  }
+}
+
+// 无论调用多少次，都是同一个实例
+const a = ConfigManager.getInstance()
+const b = ConfigManager.getInstance()
+console.log(a === b) // true
+</code></pre>
+<h4 id="12-工厂模式factory">1.2 工厂模式（Factory）</h4>
+<p><strong>场景</strong>：根据不同条件创建不同类型的对象，调用方不需要知道具体的创建细节。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">function createNotification(type, message) {
+  switch (type) {
+    case &#39;email&#39;:
+      return { send: () =&gt; console.log(`发送邮件: ${message}`) }
+    case &#39;sms&#39;:
+      return { send: () =&gt; console.log(`发送短信: ${message}`) }
+    case &#39;push&#39;:
+      return { send: () =&gt; console.log(`推送通知: ${message}`) }
+    default:
+      throw new Error(`未知通知类型: ${type}`)
+  }
+}
+
+// 调用方不关心具体实现
+const notification = createNotification(&#39;email&#39;, &#39;你好&#39;)
+notification.send()
+</code></pre>
+<h3 id="2-组织代码结构的实现">2. 组织代码结构的实现</h3>
+<h4 id="21-适配器模式adapter">2.1 适配器模式（Adapter）</h4>
+<p><strong>场景</strong>：两个接口不兼容，需要一个&quot;转换插头&quot;。比如旧 API 返回的数据格式和新组件期望的格式不一致。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 旧 API 返回的格式
+const oldApi = {
+  getUserInfo: () =&gt; ({ user_name: &#39;张三&#39;, user_age: 25 })
+}
+
+// 适配器：转换为新格式
+function adaptUser(oldUser) {
+  return { name: oldUser.user_name, age: oldUser.user_age }
+}
+
+const user = adaptUser(oldApi.getUserInfo())
+// { name: &#39;张三&#39;, age: 25 }
+</code></pre>
+<h4 id="22-装饰器模式decorator">2.2 装饰器模式（Decorator）</h4>
+<p><strong>场景</strong>：在不修改原有代码的前提下，给对象添加新功能。像给手机套壳——手机功能不变，但多了保护。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 基础日志函数
+function log(message) {
+  console.log(message)
+}
+
+// 装饰：添加时间戳
+function withTimestamp(fn) {
+  return (message) =&gt; fn(`[${new Date().toISOString()}] ${message}`)
+}
+
+// 装饰：添加日志级别
+function withLevel(fn, level) {
+  return (message) =&gt; fn(`[${level}] ${message}`)
+}
+
+const enhancedLog = withTimestamp(withLevel(log, &#39;INFO&#39;))
+enhancedLog(&#39;服务启动成功&#39;)
+// [2025-01-15T10:30:00.000Z] [INFO] 服务启动成功
+</code></pre>
+<h3 id="3-管理对象间的交互的实现">3. 管理对象间的交互的实现</h3>
+<h4 id="31-观察者模式observer">3.1 观察者模式（Observer）</h4>
+<p><strong>场景</strong>：一个对象状态变化时，需要自动通知其他对象。比如用户下单后，需要同时发邮件、扣库存、记日志。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">class EventEmitter {
+  constructor() {
+    this.listeners = {}
+  }
+
+  on(event, callback) {
+    if (!this.listeners[event]) this.listeners[event] = []
+    this.listeners[event].push(callback)
+  }
+
+  emit(event, data) {
+    (this.listeners[event] || []).forEach(cb =&gt; cb(data))
+  }
+}
+
+const bus = new EventEmitter()
+bus.on(&#39;order:created&#39;, (order) =&gt; console.log(&#39;发送确认邮件&#39;, order.id))
+bus.on(&#39;order:created&#39;, (order) =&gt; console.log(&#39;扣减库存&#39;, order.id))
+bus.emit(&#39;order:created&#39;, { id: &#39;ORD-001&#39; })
+</code></pre>
+<h4 id="32-策略模式strategy">3.2 策略模式（Strategy）</h4>
+<p><strong>场景</strong>：同一个操作有多种算法/策略，需要在运行时切换。比如不同的排序方式、不同的价格计算规则。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const pricingStrategies = {
+  normal: (price) =&gt; price,
+  vip: (price) =&gt; price * 0.8,
+  svip: (price) =&gt; price * 0.6
+}
+
+function calculatePrice(price, memberLevel) {
+  const strategy = pricingStrategies[memberLevel] || pricingStrategies.normal
+  return strategy(price)
+}
+
+calculatePrice(100, &#39;vip&#39;)  // 80
+calculatePrice(100, &#39;svip&#39;) // 60
+</code></pre>
+<p>通过下面的交互组件，动手体验不同设计模式的运行效果：</p>
+<h3 id="4-选择设计模式的方法">4. 选择设计模式的方法</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>你遇到的问题</th>
+<th>推荐模式</th>
+<th>核心思路</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局只需一个实例</td>
+<td>单例</td>
+<td>控制实例数量</td>
+</tr>
+<tr>
+<td>根据条件创建不同对象</td>
+<td>工厂</td>
+<td>封装创建逻辑</td>
+</tr>
+<tr>
+<td>接口不兼容需要转换</td>
+<td>适配器</td>
+<td>包装一层转换</td>
+</tr>
+<tr>
+<td>动态添加功能</td>
+<td>装饰器</td>
+<td>层层包装增强</td>
+</tr>
+<tr>
+<td>状态变化需通知多方</td>
+<td>观察者</td>
+<td>发布-订阅解耦</td>
+</tr>
+<tr>
+<td>多种算法需运行时切换</td>
+<td>策略</td>
+<td>将算法封装为对象</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>核心原则</strong>
+设计模式不是越多越好。<strong>过度设计</strong>和没有设计一样糟糕。只在真正需要灵活性的地方使用模式，简单问题用简单方案。记住 KISS 原则：Keep It Simple, Stupid。</p>
+</blockquote>
+<h3 id="5-ai-助力用大模型学习和应用设计模式">5. AI 助力：用大模型学习和应用设计模式</h3>
+<p>大模型可以帮你识别代码中适合使用设计模式的场景，并给出具体的重构方案。</p>
+<h4 id="51-识别适用模式">5.1 识别适用模式</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>分析以下代码，判断是否存在可以用设计模式改进的地方。
+如果有，请说明：
+1. 当前代码的问题
+2. 推荐使用哪种设计模式
+3. 重构后的代码示例
+4. 为什么这个模式适合这个场景
+
+[粘贴你的代码]
+</code></pre>
+</blockquote>
+<h4 id="52-用具体场景学习模式">5.2 用具体场景学习模式</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用一个&quot;外卖点餐系统&quot;的真实场景，分别演示以下设计模式的应用：
+- 工厂模式：创建不同类型的订单
+- 观察者模式：订单状态变化通知
+- 策略模式：不同的配送费计算规则
+
+用 JavaScript 代码示例，每个模式先展示不用模式的问题，
+再展示用模式后的改进。
+</code></pre>
+</blockquote>
+<h4 id="53-判断是否过度设计">5.3 判断是否过度设计</h4>
+<blockquote>
+<p><strong>提示词</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>审查以下代码，判断是否存在过度设计的问题。
+是否有不必要的抽象、用不到的设计模式、或过早的优化？
+如果有，请建议如何简化，遵循 KISS 原则。
+
+[粘贴你的代码]
+</code></pre>
+</blockquote>
+<blockquote>
+<p><strong>AI 使用建议</strong>
+让 AI 用你熟悉的业务场景来解释设计模式，比看抽象的 UML 图有效得多。但记住：AI 可能倾向于推荐更复杂的方案，你需要自己判断是否真的需要。</p>
+</blockquote>
+<h3 id="6-总结-7">6. 总结</h3>
+<ol>
+<li><strong>创建型模式</strong>：解决&quot;如何创建对象&quot;的问题，让创建过程更灵活</li>
+<li><strong>结构型模式</strong>：解决&quot;如何组织代码&quot;的问题，让结构更清晰</li>
+<li><strong>行为型模式</strong>：解决&quot;对象间如何交互&quot;的问题，让协作更松耦合</li>
+<li><strong>灵活运用</strong>：根据实际场景选择，不要为了用模式而用模式</li>
+</ol>
+<blockquote>
+<p><strong>终极思考</strong>
+设计模式的本质是<strong>管理变化</strong>。好的设计让变化的部分容易修改，不变的部分保持稳定。当你写代码时问自己：&quot;如果需求变了，我需要改多少地方？&quot;——如果答案是&quot;很多地方&quot;，那可能需要一个设计模式来帮忙了。</p>
+</blockquote>
+<h3 id="延伸阅读-34">延伸阅读</h3>
+<ul>
+<li><strong>经典书籍</strong>：GoF《设计模式：可复用面向对象软件的基础》是设计模式的开山之作。</li>
+<li><strong>现代视角</strong>：JavaScript 中很多模式因为语言特性（闭包、高阶函数）变得更简洁。</li>
+<li><strong>实践建议</strong>：先理解问题，再考虑模式。不要拿着锤子找钉子。</li>
+<li><strong>进阶学习</strong>：了解 SOLID 原则，它是设计模式背后的指导思想。</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-175.html">← 测试策略</a><a rel="next" href="chapter-177.html">安全思维与攻防基础 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

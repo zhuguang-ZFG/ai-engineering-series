@@ -1,0 +1,12 @@
+{
+  "name": "llm101-ep04",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.210 preview",
+    "check": "npx --yes hyperframes@0.8.210 check",
+    "render": "npx --yes hyperframes@0.8.210 render",
+    "render:4k": "npx --yes hyperframes@0.8.210 render --quality delivery --resolution landscape-4k",
+    "deliver": "python tools/deliver.py"
+  }
+}

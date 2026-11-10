@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-09",
+  "scope": "Executed C14 Markdown code verbatim in an isolated fixture copy; C16 tool contract and CLI checks do not call a model",
+  "c14": [
+    {
+      "case": "normal",
+      "exitCode": 0,
+      "checked": 5,
+      "errors": []
+    },
+    {
+      "case": "tampered",
+      "exitCode": 3,
+      "checked": 4,
+      "errors": [
+        "sha256-mismatch"
+      ]
+    },
+    {
+      "case": "missing",
+      "exitCode": 3,
+      "checked": 4,
+      "errors": [
+        "missing-file"
+      ]
+    },
+    {
+      "case": "outside",
+      "exitCode": 3,
+      "checked": 4,
+      "errors": [
+        "path-outside-root"
+      ]
+    },
+    {
+      "case": "missing-hash",
+      "exitCode": 3,
+      "checked": 4,
+      "errors": [
+        "missing-fields"
+      ]
+    },
+    {
+      "case": "invalid-path-type",
+      "exitCode": 3,
+      "checked": 4,
+      "errors": [
+        "invalid-relative-path"
+      ]
+    },
+    {
+      "case": "invalid-schema",
+      "exitCode": 2,
+      "checked": 0,
+      "errors": [
+        "manifest-invalid"
+      ]
+    },
+    {
+      "case": "prepare-existing-directory",
+      "exitCode": 1,
+      "error": "FileExistsError"
+    }
+  ],
+  "c16": {
+    "exampleResult": 42,
+    "unknownModelRequest": "permission-denied",
+    "unknownCliToolExit": 2,
+    "unknownCliToolMessage": "unknown tools"
+  },
+  "sources": [
+    {
+      "file": "book/llm/lessons/c14.md",
+      "sha256Lf": "8d0bc53fc586bbde4dbdc5086905709d3ee7b59772ddc83a7fa81975fa44a55d"
+    },
+    {
+      "file": "book/llm/lessons/c16.md",
+      "sha256Lf": "d0c4b6b2054c862c1497bd6559e9d2078bc8e995bf95269da7f427e47eb9d781"
+    },
+    {
+      "file": "book/llm/examples/assistant/assistant.py",
+      "sha256Lf": "1b3857e3b76193d01577ba0a12fee2f674371d1ad48504f11d57ce1777b3247b"
+    }
+  ]
+}

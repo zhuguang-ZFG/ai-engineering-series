@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "title": "大模型与智能体工程",
+  "projects": {
+    "agent-books": {
+      "path": "agent-books",
+      "description": "Agent 工具分册与提示词方法册；保持各册原有版本和验证范围。",
+      "required": ["README.md", "scripts/bookctl.py", "yuyu-book", "prompt"],
+      "source": "https://github.com/zhuguang-ZFG/claude-code-book",
+      "license_note": "沿用各册来源与许可记录；新增提示词册为原创教学材料。"
+    },
+    "model-course": {
+      "path": "model-course",
+      "description": "大模型五阶段三十章及原有编程实践补充材料。",
+      "required": ["README.md", "package.json", "scripts/llm/export_books.py", "book/llm/course.json", "exports/llm/course.html", "开始阅读.html"],
+      "source": "https://github.com/zhuguang-ZFG/vibe-coding-101-course",
+      "license_note": "保留课程原创内容与旧 Vibe Coding 上游材料的各自来源声明。旧合订内容的再分发授权仍按原 README 说明，整合不改变许可。"
+    }
+  },
+  "books": [
+    {"id": "book", "project": "agent-books", "title": "御舆：解码 Agent Harness", "source_entry": "README.md", "read_entry": "yuyu-book/dist/yuyu-agent-harness-zh.html", "artifact_prefix": "yuyu-agent-harness", "languages": ["zh", "en"]},
+    {"id": "omp", "project": "agent-books", "title": "Omp 从入门到精通：原理与实战", "source_entry": "omp/README.md", "read_entry": "yuyu-book/dist/yuyu-omp-zh.html", "artifact_prefix": "yuyu-omp", "languages": ["zh"]},
+    {"id": "pi", "project": "agent-books", "title": "Pi Agent：从原理到实战", "source_entry": "pi/README.md", "read_entry": "yuyu-book/dist/yuyu-pi-zh.html", "artifact_prefix": "yuyu-pi", "languages": ["zh"]},
+    {"id": "opencode", "project": "agent-books", "title": "OpenCode：从原理到实战", "source_entry": "opencode/README.md", "read_entry": "yuyu-book/dist/yuyu-opencode-zh.html", "artifact_prefix": "yuyu-opencode", "languages": ["zh"]},
+    {"id": "deepseek", "project": "agent-books", "title": "DeepSeek Harness：插件化运行时", "source_entry": "deepseek/README.md", "read_entry": "yuyu-book/dist/yuyu-deepseek-zh.html", "artifact_prefix": "yuyu-deepseek", "languages": ["zh"]},
+    {"id": "hermes", "project": "agent-books", "title": "Hermes Agent：记忆、技能与持续任务", "source_entry": "hermes/README.md", "read_entry": "yuyu-book/dist/yuyu-hermes-zh.html", "artifact_prefix": "yuyu-hermes", "languages": ["zh"]},
+    {"id": "codex", "project": "agent-books", "title": "Codex CLI：执行边界与工程实践", "source_entry": "codex/README.md", "read_entry": "yuyu-book/dist/yuyu-codex-zh.html", "artifact_prefix": "yuyu-codex", "languages": ["zh"]},
+    {"id": "kimi", "project": "agent-books", "title": "Kimi Code：从插件到审查助手", "source_entry": "kimi/README.md", "read_entry": "yuyu-book/dist/yuyu-kimi-zh.html", "artifact_prefix": "yuyu-kimi", "languages": ["zh"]},
+    {"id": "prompt", "project": "agent-books", "title": "提示词工程：从提问到 Agent 协作", "source_entry": "prompt/README.md", "read_entry": "yuyu-book/dist/yuyu-prompt-zh.html", "artifact_prefix": "yuyu-prompt", "languages": ["zh"]},
+    {"id": "llm", "project": "model-course", "title": "大模型：从入门到精通", "source_entry": "book/llm/README.md", "read_entry": "exports/llm/course.html", "artifact_prefix": "llm-course", "languages": ["zh"]}
+  ]
+}

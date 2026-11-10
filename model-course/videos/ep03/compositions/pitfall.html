@@ -1,0 +1,111 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #p-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #p-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #p-title .g { color: #1f883d; }
+    .p-card { position: absolute; top: 320px; width: 540px; height: 300px; padding: 28px 32px; background: #fffdf8; border: 4px solid #1f2328; border-top: 8px solid #cf222e; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
+    #p-c1 { left: 110px; } #p-c2 { left: 690px; } #p-c3 { left: 1270px; }
+    .p-n { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    .p-k { margin-top: 12px; font: 700 42px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    .p-d { margin-top: 16px; font: 28px/1.42 "Noto Sans JP", sans-serif; color: #57606a; }
+    .p-fix { position: absolute; top: 646px; height: 106px; padding: 0 28px; display: flex; align-items: center; gap: 16px; background: #dafbe1; border-radius: 15px 10px 17px 9px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; box-sizing: border-box; }
+    #p-f1 { left: 110px; width: 540px; } #p-f2 { left: 690px; width: 540px; } #p-f3 { left: 1270px; width: 540px; }
+    .p-fix em { font-style: normal; font-size: 34px; }
+    #p-final { position: absolute; left: 110px; top: 792px; width: 1700px; height: 76px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #p-final .g { color: #3fb950; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-p1aa" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-p2bb" id="p-tag" class="clip" data-start="0" data-duration="22.1">PITFALL · 这一步最容易白干</div>
+    <div data-hf-id="hf-p3cc" id="p-title" class="clip" data-start="0" data-duration="22.1">三个坑，<span data-hf-id="hf-p4dd" class="g">现在就躲开</span></div>
+    <div data-hf-id="hf-p5ee" id="p-c1" class="p-card clip" data-start="2.2" data-duration="19.9">
+      <div data-hf-id="hf-p6ff" class="p-n">PITFALL 01</div>
+      <div data-hf-id="hf-p7gg" class="p-k">把 node_modules<br data-hf-id="hf-p8hh" />喂给 AI</div>
+      <div data-hf-id="hf-p9ii" class="p-d">几万个别人的文件，上下文瞬间爆满</div>
+    </div>
+    <div data-hf-id="hf-paja" id="p-c2" class="p-card clip" data-start="5.4" data-duration="16.7">
+      <div data-hf-id="hf-pbkb" class="p-n">PITFALL 02</div>
+      <div data-hf-id="hf-pclc" class="p-k">一次装<br data-hf-id="hf-pdmd" />五个依赖</div>
+      <div data-hf-id="hf-pene" class="p-d">出了问题，不知道是哪一个引起的</div>
+    </div>
+    <div data-hf-id="hf-pfof" id="p-c3" class="p-card clip" data-start="9.0" data-duration="13.1">
+      <div data-hf-id="hf-pgpg" class="p-n">PITFALL 03</div>
+      <div data-hf-id="hf-phph" class="p-k">不写<br data-hf-id="hf-piqi" />.gitignore</div>
+      <div data-hf-id="hf-pjrj" class="p-d">几十万个文件进版本库，提交一次要半天</div>
+    </div>
+    <div data-hf-id="hf-pksk" id="p-f1" class="p-fix clip" data-start="12.6" data-duration="9.5"><em>✓</em>只给它你的代码和报错</div>
+    <div data-hf-id="hf-pltl" id="p-f2" class="p-fix clip" data-start="14.4" data-duration="7.7"><em>✓</em>一次只装一个，装完就跑</div>
+    <div data-hf-id="hf-pmum" id="p-f3" class="p-fix clip" data-start="16.4" data-duration="5.7"><em>✓</em>node_modules 一律不提交</div>
+    <div data-hf-id="hf-pnvn" id="p-final" class="clip" data-start="18.8" data-duration="3.3">被坑一次的成本，<span data-hf-id="hf-powo" class="g">是几小时的返工</span></div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#p-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#p-title"));
+    tl.set("#p-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#p-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#p-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#p-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    [["#p-c1", 2.2], ["#p-c2", 5.4], ["#p-c3", 9.0]].forEach(([sel, t]) => {
+      tl.fromTo(sel, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .42, ease: "power3.out" }, t);
+    });
+    [["#p-f1", 12.6], ["#p-f2", 14.4], ["#p-f3", 16.4]].forEach(([sel, t]) => {
+      tl.fromTo(sel, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: "power3.out" }, t);
+    });
+    tl.fromTo("#p-final", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 18.8);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 22.1, ease: "none" }, 0);
+    window.__timelines["pitfall"] = tl;
+  </script>
+</template>

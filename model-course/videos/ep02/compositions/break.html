@@ -1,0 +1,133 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #b-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #b-title { position: absolute; top: 126px; left: 110px; width: 1500px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #b-title .g { color: #1f883d; }
+    .b-card { position: absolute; top: 300px; width: 540px; height: 210px; padding: 26px 32px; background: #fffdf8; border: 4px solid #1f2328; border-top: 8px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
+    #b-card-1 { left: 110px; } #b-card-2 { left: 690px; } #b-card-3 { left: 1270px; }
+    .b-card-n { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #57606a; }
+    .b-card-k { margin-top: 10px; font: 700 46px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .b-card-d { margin-top: 12px; font: 28px "Noto Sans JP", sans-serif; color: #57606a; }
+    #b-bad { position: absolute; top: 580px; left: 110px; width: 700px; height: 360px; padding: 30px 34px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 15px 10px 17px 9px; box-shadow: 0 8px 24px rgba(31,35,40,.06); box-sizing: border-box; }
+    #b-bad-tag { display: inline-block; padding: 8px 16px; background: #fbfaf6; border: 4px solid #1f2328; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #57606a; }
+    #b-bad-text { margin-top: 34px; font: 700 44px/1.5 "Noto Sans JP", sans-serif; color: #57606a; text-decoration: line-through; text-decoration-color: #57606a; text-decoration-thickness: 3px; }
+    #b-good { position: absolute; top: 580px; left: 850px; width: 960px; height: 196px; padding: 24px 34px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
+    #b-good-tag { display: inline-block; padding: 8px 16px; background: #dafbe1; border-radius: 99px; font: 700 28px "JetBrains Mono", monospace; color: #116329; }
+    .b-good-line { margin-top: 14px; font: 500 34px "JetBrains Mono", monospace; color: #1f2328; }
+    #b-good-l2 { margin-top: 8px; color: #57606a; }
+    #b-term { position: absolute; top: 760px; left: 850px; width: 960px; height: 128px; padding: 20px 30px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 15px 10px 17px 9px; box-sizing: border-box; font: 28px/1.6 "JetBrains Mono", monospace; }
+    #b-term div { white-space: nowrap; overflow: hidden; }
+    #b-term-l1 { color: #768390; }
+    #b-term-l2 { color: #f6f8fa; }
+    #b-term-l3 { color: #57606a; }
+    #b-final { position: absolute; top: 972px; left: 110px; width: 1700px; height: 84px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 700 38px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #b-final .g { color: #3fb950; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-q7f2" id="root" data-composition-id="break" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-m3k8" id="b-tag" class="clip" data-start="0" data-duration="24.1">DEBUG · 用现象 + 期望说话</div>
+    <div data-hf-id="hf-z9p4" id="b-title" class="clip" data-start="0" data-duration="24.1">能跑之后，<span data-hf-id="hf-t5n1" class="g">问题才会浮出来</span></div>
+    <div data-hf-id="hf-w8r6" id="b-card-1" class="b-card clip" data-start="2.0" data-duration="22.1">
+      <div data-hf-id="hf-h2v9" id="b-card-1-n" class="b-card-n">BUG 01</div>
+      <div data-hf-id="hf-c4x7" id="b-card-1-k" class="b-card-k">穿墙</div>
+      <div data-hf-id="hf-j6y3" id="b-card-1-d" class="b-card-d">从右边出去，从左边钻回来</div>
+    </div>
+    <div data-hf-id="hf-u1b5" id="b-card-2" class="b-card clip" data-start="2.25" data-duration="21.85">
+      <div data-hf-id="hf-o0d8" id="b-card-2-n" class="b-card-n">BUG 02</div>
+      <div data-hf-id="hf-a9e2" id="b-card-2-k" class="b-card-k">吃到自己不停</div>
+      <div data-hf-id="hf-s4i7" id="b-card-2-d" class="b-card-d">身体越吃越长，游戏不结束</div>
+    </div>
+    <div data-hf-id="hf-g6l0" id="b-card-3" class="b-card clip" data-start="2.5" data-duration="21.6">
+      <div data-hf-id="hf-k3m5" id="b-card-3-n" class="b-card-n">BUG 03</div>
+      <div data-hf-id="hf-p8t2" id="b-card-3-k" class="b-card-k">按键延迟</div>
+      <div data-hf-id="hf-r5w9" id="b-card-3-d" class="b-card-d">按了方向，半秒后才转身</div>
+    </div>
+    <div data-hf-id="hf-n2q6" id="b-bad" class="clip" data-start="8.0" data-duration="16.1">
+      <span data-hf-id="hf-x7h4" id="b-bad-tag">✕ 错误示范</span>
+      <div data-hf-id="hf-v1c8" id="b-bad-text">我做不出来，蛇有问题</div>
+    </div>
+    <div data-hf-id="hf-b9f3" id="b-good" class="clip" data-start="10.8" data-duration="13.3">
+      <span data-hf-id="hf-y4j7" id="b-good-tag">✓ 正确示范 · 现象 + 期望</span>
+      <div data-hf-id="hf-e6s1" id="b-good-l1" class="b-good-line">按上键后蛇从底部钻出来了</div>
+      <div data-hf-id="hf-i8u5" id="b-good-l2" class="b-good-line">应该是撞墙结束</div>
+    </div>
+    <div data-hf-id="hf-l2o9" id="b-term" class="clip" data-start="14.4" data-duration="9.7">
+      <div data-hf-id="hf-f7a4" id="b-term-l1">$ node snake.js</div>
+      <div data-hf-id="hf-d3g8" id="b-term-l2">TypeError: reading 'x' of undefined</div>
+    </div>
+    <div data-hf-id="hf-k8p3" id="b-final" class="clip" data-start="18.0" data-duration="6.1">AI 见到现象和期望，<span data-hf-id="hf-q2t7" class="g">改一次就中</span></div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#b-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#b-title"));
+    tl.set("#b-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#b-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#b-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#b-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    ["#b-card-1", "#b-card-2", "#b-card-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "power3.out" }, 2 + i * .25);
+    });
+    tl.fromTo("#b-bad", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 8.0);
+    tl.fromTo("#b-good", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 10.8);
+    tl.fromTo("#b-good-l1", { y: 14, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .35, ease: "back.out(1.5)", scale: 1 }, 11.1);
+    tl.fromTo("#b-good-l2", { y: 14, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .35, ease: "back.out(1.5)", scale: 1 }, 11.5);
+    tl.fromTo("#b-term", { y: 24, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 14.4);
+    tl.fromTo("#b-term-l2", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .3, ease: "power2.out", scale: 1 }, 14.7);
+    tl.fromTo("#b-final", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 18.0);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.1, ease: "none" }, 0);
+    window.__timelines["break"] = tl;
+  </script>
+</template>

@@ -1,0 +1,39 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {
+      "at": 0.0,
+      "kind": "draw",
+      "text": "apply \u5185\u5b58"
+    },
+    {
+      "at": 1.5,
+      "kind": "point",
+      "text": "\u7acb\u523b\u751f\u6548"
+    },
+    {
+      "at": 3.0,
+      "kind": "draw",
+      "text": "persist \u6587\u4ef6"
+    },
+    {
+      "at": 4.4,
+      "kind": "point",
+      "text": "\u91cd\u542f\u4ecd\u5728 \u00b7 \u5206\u5c42\u522b\u6df7"
+    },
+    {
+      "at": 5.8,
+      "kind": "highlight",
+      "data": {
+        "target": "draw",
+        "index": 1
+      }
+    }
+  ]
+}

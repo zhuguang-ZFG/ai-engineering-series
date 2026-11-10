@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-10",
+  "destination": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist",
+  "volumes": {
+    "opencode": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-opencode-zh.html",
+          "bytes": 1223178,
+          "sha256": "3091649b9d5dd4be1a14782da50124082efb36293fc8a46cb0b6092ad6328453"
+        },
+        "pdf": {
+          "file": "yuyu-opencode-zh.pdf",
+          "bytes": 5450416,
+          "sha256": "bff5a41dd80fbefc90eab903aff80247784a9f07c5869f8553e6efa074f051b4"
+        },
+        "epub": {
+          "file": "yuyu-opencode-zh.epub",
+          "bytes": 1924728,
+          "sha256": "5a72e753f156027470e72037e72eeb28ade55d82003e812eaf497e5c08bb72f7"
+        }
+      },
+      "version": "1.1.0",
+      "chinese_characters": 56458,
+      "mermaid_figures": 26,
+      "pdf_pages": 150,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "deepseek": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-deepseek-zh.html",
+          "bytes": 890171,
+          "sha256": "6621bb1051fa46cf5e7b74ca6d384dcf21df88a289e2c1626998f955ae13abac"
+        },
+        "pdf": {
+          "file": "yuyu-deepseek-zh.pdf",
+          "bytes": 5064297,
+          "sha256": "bdbe175e3353416bb10734f783a7a56b9f9547e212b22dfbc2b8d8f2a880b111"
+        },
+        "epub": {
+          "file": "yuyu-deepseek-zh.epub",
+          "bytes": 938769,
+          "sha256": "fc7482232b4fd89f20754fbaa873d32a86a8cb8618b112d2d96ad9092f9ebd1c"
+        }
+      },
+      "version": "1.1.0",
+      "chinese_characters": 51480,
+      "mermaid_figures": 14,
+      "pdf_pages": 128,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "hermes": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-hermes-zh.html",
+          "bytes": 924806,
+          "sha256": "fb682445a6bb453aad86b87575ae7b82038470362a87b1d475ff6a2faf3bd8b6"
+        },
+        "pdf": {
+          "file": "yuyu-hermes-zh.pdf",
+          "bytes": 5099034,
+          "sha256": "64117da29e6b07b06d0ddf956799adb8c6993c2bfd3a4509a7f097a3271b2618"
+        },
+        "epub": {
+          "file": "yuyu-hermes-zh.epub",
+          "bytes": 1103154,
+          "sha256": "4a286eb44baaa1119798771de6ddee15080e730c3f11c81f70d998e6ff0b6b86"
+        }
+      },
+      "version": "0.2.0",
+      "chinese_characters": 53155,
+      "mermaid_figures": 17,
+      "pdf_pages": 128,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "codex": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-codex-zh.html",
+          "bytes": 1020258,
+          "sha256": "1a6f9f5d8464c1498c0573d7b2c8037292fa7e715a5cf27839abed45acd732e6"
+        },
+        "pdf": {
+          "file": "yuyu-codex-zh.pdf",
+          "bytes": 5604193,
+          "sha256": "8c8da7ce541cdb71bd0f03c581fd31c07ce7ef1977f4d2f555c266d8b12d9235"
+        },
+        "epub": {
+          "file": "yuyu-codex-zh.epub",
+          "bytes": 1085807,
+          "sha256": "cd5fc33d66321b7e9a6af91741e3ef8f7b358e9bc3b63c9e9aad5e3ae46d6ebe"
+        }
+      },
+      "version": "0.2.0",
+      "chinese_characters": 52790,
+      "mermaid_figures": 15,
+      "pdf_pages": 147,
+      "pdf_bookmarks": 30,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    }
+  },
+  "validation": {
+    "fast": {
+      "command": "python scripts/bookctl.py check --fast",
+      "steps": 8,
+      "general_tests": 228,
+      "builder_tests": 570,
+      "result": "passed"
+    },
+    "final_theme_checks": {
+      "style_contracts": 23,
+      "browser_light_dark_and_forced_light": 12,
+      "result": "passed"
+    },
+    "visual_review": "Cover, contents, plugin and tool chapters, final practice chapters and index sampled in all four PDFs; no clipped headings or replacement characters found.",
+    "delivery": "All 12 destination files match the final build SHA-256 values above.",
+    "scope": "Component and original example checks do not claim complete model, host or cross-platform acceptance; see each volume VERIFY.md.",
+    "legacy_p6_media_acceptance": "incomplete"
+  }
+}

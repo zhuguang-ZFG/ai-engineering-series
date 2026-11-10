@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Chatbot", "data": {"icon": "bulb"}},
+    {"at": 1.2, "kind": "point", "text": "人当胶水：复制 · 贴回 · 切终端"},
+    {"at": 2.8, "kind": "draw", "text": "Agent", "data": {"icon": "target"}},
+    {"at": 4.0, "kind": "point", "text": "自己编排工具调用"},
+    {"at": 5.4, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

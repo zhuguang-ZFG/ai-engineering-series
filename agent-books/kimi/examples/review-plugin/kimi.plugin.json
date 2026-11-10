@@ -1,0 +1,17 @@
+{
+  "name": "chengming-review",
+  "version": "1.0.0",
+  "description": "A read-only review workflow for the Chengming inventory exercise",
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "sessionStart": {"skill": "review-inventory"},
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "^(Write|Edit|Bash)$",
+      "command": "python ./hooks/review_only.py",
+      "timeout": 5
+    }
+  ]
+}

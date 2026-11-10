@@ -1,0 +1,157 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #1f2328;
+    }
+    #x-tag {
+      position: absolute;
+      top: 96px;
+      left: 120px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #8c959f;
+    }
+    #x-title {
+      position: absolute;
+      top: 150px;
+      left: 120px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 76px;
+      color: #f6f8fa;
+    }
+    #x-title .g {
+      color: #3fb950;
+    }
+    .x-row {
+      position: absolute;
+      left: 120px;
+      width: 1680px;
+      background: #2d333b;
+      border: 1px solid #444c56;
+      border-radius: 15px 10px 17px 9px;
+      padding: 30px 42px;
+      display: flex;
+      align-items: baseline;
+    }
+    .x-mark {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 52px;
+      color: #f85149;
+      margin-right: 30px;
+    }
+    .x-text {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      color: #f6f8fa;
+    }
+    .x-text .fix {
+      font-weight: 400;
+      font-size: 30px;
+      color: #3fb950;
+      margin-left: 20px;
+    }
+    #x-1 { top: 330px; }
+    #x-2 { top: 530px; }
+    #x-3 { top: 730px; }
+    #x-src {
+      position: absolute;
+      top: 960px;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #768390;
+    }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-f7oh" id="root" data-composition-id="myth" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-37jt" id="x-tag" class="clip" data-start="0" data-duration="45">COMMON MISTAKES · 新手最容易卡住的三件事</div>
+    <div data-hf-id="hf-1um7" id="x-title" class="clip" data-start="0" data-duration="45.1">新手最痛的<span data-hf-id="hf-joym" class="g">三个坑</span></div>
+    <div data-hf-id="hf-ublv" id="x-1" class="x-row clip" data-start="1.2" data-duration="45">
+      <span data-hf-id="hf-ilfo" class="x-mark">✗</span>
+      <span data-hf-id="hf-k78l" class="x-text">卡住不问 AI，死磕两小时<span data-hf-id="hf-q2n4" class="fix">→ AI 是第一求助对象</span></span>
+    </div>
+    <div data-hf-id="hf-cwn1" id="x-2" class="x-row clip" data-start="2.6" data-duration="45">
+      <span data-hf-id="hf-viv0" class="x-mark">✗</span>
+      <span data-hf-id="hf-akou" class="x-text">一句话甩给 AI 就等完美结果<span data-hf-id="hf-94bp" class="fix">→ 当产品经理，不当甲方</span></span>
+    </div>
+    <div data-hf-id="hf-82zw" id="x-3" class="x-row clip" data-start="4.0" data-duration="45">
+      <span data-hf-id="hf-ubxx" class="x-mark">✗</span>
+      <span data-hf-id="hf-vp88" class="x-text">只看教程不动手<span data-hf-id="hf-n15n" class="fix">→ 每章配实操，做完才算学会</span></span>
+    </div>
+    <div data-hf-id="hf-xljh" id="x-src" class="clip" data-start="5.2" data-duration="45" data-layout-ignore>SOURCE · EASY-VIBE · 学习原则与动手要求</div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#x-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#x-title"));
+    tl.set("#x-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#x-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#x-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#x-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    ["#x-1", "#x-2", "#x-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, [5.1, 13.7, 24.4][i]);
+    });
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 31.1, ease: "none" }, 0);
+    window.__timelines["myth"] = tl;
+  </script>
+</template>

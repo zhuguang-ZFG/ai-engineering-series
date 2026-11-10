@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "fail-closed", "data": {"icon": "target"}},
+    {"at": 1.2, "kind": "point", "text": "默认人人过检"},
+    {"at": 2.7, "kind": "draw", "text": "特赦显式", "data": {"icon": "bulb"}},
+    {"at": 4.1, "kind": "point", "text": "validate · hasPerm · 并发"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

@@ -1,0 +1,106 @@
+.curriculum-home { max-width: 880px; }
+.curriculum-home > section { margin-top: 2.2rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); }
+.curriculum-home h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.45; }
+.curriculum-home .stage-card { border-top: 2px solid var(--ink); padding-top: 1rem; }
+.curriculum-home .stage-card-label { margin: 0 0 .25rem; color: var(--accent-ink); font-family: var(--font-mono); font-size: .82rem; letter-spacing: .12em; }
+.curriculum-home .stage-card h2 { margin: 0 0 .35rem; }
+.curriculum-home .stage-card h2 a { color: var(--ink); text-decoration: none; }
+.curriculum-home .stage-card h2 a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.curriculum-home .stage-card .stage-thesis { margin: 0 0 .4rem; font-size: 1.08rem; color: var(--ink); }
+.curriculum-home .stage-card > p:not(.stage-card-label):not(.stage-thesis) { color: var(--ink-soft); }
+.curriculum-home .stage-card ol { columns: 2; column-gap: 2rem; margin-top: .7rem; }
+.curriculum-home .stage-card li { break-inside: avoid; margin: .35rem 0; }
+
+.curriculum-layout { display: grid; grid-template-columns: minmax(190px, 240px) minmax(0, 1fr); gap: 2rem; align-items: start; }
+.curriculum-nav { position: sticky; top: 1rem; max-height: 90vh; overflow-y: auto; overflow-wrap: anywhere; padding-right: .5rem; }
+.curriculum-nav summary { cursor: pointer; padding: .6rem 0; }
+.curriculum-nav ol { padding-left: 1.3rem; }
+.curriculum-nav li { margin: .45rem 0; }
+.curriculum-nav [aria-current="page"] { font-weight: 600; text-decoration-thickness: 2px; }
+.curriculum-nav .stage-nav-link { margin: -.2rem 0 .5rem; font-size: .85rem; }
+.curriculum-nav .stage-nav-link a { color: var(--ink-soft); }
+
+.curriculum-chapter, .curriculum-answer { min-width: 0; max-width: 48rem; }
+.curriculum-chapter h1, .curriculum-answer h1 { font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.5; }
+.curriculum-chapter h2, .curriculum-answer h2 { margin-top: 2rem; scroll-margin-top: 1rem; }
+.curriculum-chapter p, .curriculum-chapter li, .curriculum-answer p, .curriculum-answer li { line-height: 1.9; overflow-wrap: anywhere; }
+.curriculum-chapter pre, .curriculum-answer pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; padding: 1rem; background: var(--paper); border: 1px solid var(--rule); }
+.curriculum-chapter img, .curriculum-answer img { display: block; width: auto; max-width: 100%; max-height: 760px; margin: 1.5rem auto; }
+.curriculum-figure { margin: 1.8rem auto; max-width: 480px; }
+.curriculum-figure img { margin: 0 auto; }
+.curriculum-figure figcaption { margin-top: .8rem; color: var(--ink-soft); font-size: .95rem; line-height: 1.8; overflow-wrap: anywhere; }
+.curriculum-chapter table, .curriculum-answer table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.curriculum-chapter th, .curriculum-chapter td, .curriculum-answer th, .curriculum-answer td { padding: .5rem; vertical-align: top; border-bottom: 1px solid var(--rule); overflow-wrap: anywhere; }
+.curriculum-chapter .lesson-nav, .curriculum-answer .lesson-nav { flex-wrap: wrap; gap: 1rem; }
+
+.chapter-opener { margin: 0 0 1.8rem; padding: 0 0 1.1rem; border-bottom: 2px solid var(--ink); }
+.chapter-opener .chapter-number { margin: 0 0 .5rem; color: var(--accent-ink); font-family: var(--font-mono); font-size: .86rem; letter-spacing: .18em; }
+.chapter-opener .chapter-kicker { margin: 0 0 .4rem; color: var(--ink-soft); font-size: .9rem; letter-spacing: .04em; }
+.chapter-opener h1 { margin: .1rem 0 .65rem; }
+.chapter-opener .chapter-abstract { margin: 0; color: var(--ink-soft); font-size: 1.04rem; line-height: 1.85; max-width: 39em; }
+.chapter-meta { margin: 0 0 2rem; color: var(--ink-soft); font-size: .88rem; }
+.curriculum-chapter .article-body { counter-reset: section; }
+.curriculum-chapter .article-body > h2::before { counter-increment: section; content: counter(section) ". "; color: var(--accent-ink); font-family: var(--font-mono); font-size: .78em; margin-right: .35em; }
+
+.stage-page { max-width: 54rem; }
+.stage-figure { margin: 0 0 2.4rem; }
+.stage-figure img { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+.stage-figure figcaption { margin-top: .8rem; color: var(--ink-soft); text-align: center; font-size: .88rem; }
+.stage-header { border-top: 2px solid var(--ink); padding-top: 1.2rem; }
+.stage-header .stage-label { margin: 0 0 .4rem; color: var(--accent-ink); font-family: var(--font-mono); font-size: .86rem; letter-spacing: .16em; }
+.stage-header h1 { margin: 0 0 .5rem; font-size: clamp(1.9rem, 4vw, 2.8rem); }
+.stage-thesis { margin: 0 0 .8rem; font-size: 1.3rem; line-height: 1.7; }
+.stage-outcome { margin: 0 0 1.5rem; color: var(--ink-soft); font-size: 1rem; line-height: 1.85; }
+.stage-prose { max-width: 41em; }
+.stage-prose p { font-size: 1.04rem; line-height: 1.95; }
+.stage-chapters { margin-top: 2.2rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+.stage-chapters h2 { margin-top: 0; font-size: 1rem; color: var(--ink-soft); letter-spacing: .1em; }
+.stage-chapters ol { list-style: none; padding: 0; margin: 0; }
+.stage-chapters li { padding: .8rem 0; border-bottom: 1px solid var(--rule); }
+.stage-chapters li a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.stage-chapters li a:hover { text-decoration: underline; text-underline-offset: .22em; }
+.stage-chapters .chapter-id { display: inline-block; margin-right: .6em; color: var(--accent-ink); font-family: var(--font-mono); font-size: .9em; }
+.stage-chapters li p { margin: .3rem 0 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.8; }
+.stage-next { margin: 2rem 0 0; font-size: .95rem; }
+
+.deep-reading-page { max-width: 46rem; }
+.deep-reading-page h1 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.deep-reading-page > .article-body > p:first-of-type { font-size: 1.1rem; color: var(--ink-soft); }
+.deep-reading-page h2 { margin-top: 2.8rem; padding-top: .8rem; border-top: 1px solid var(--ink); font-size: 1.45rem; line-height: 1.6; }
+.deep-reading-page h2::before { content: "深读"; display: inline-block; margin-right: .55em; color: var(--accent-ink); font-family: var(--font-mono); font-size: .62em; letter-spacing: .12em; vertical-align: .28em; }
+.deep-reading-page p { font-size: 1.04rem; line-height: 1.95; }
+.deep-reading-page p:last-child { color: var(--ink-soft); }
+
+.glossary-page { max-width: 54rem; }
+.glossary-page h1 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.glossary-page h2 { margin-top: 2.6rem; padding-top: .7rem; border-top: 1px solid var(--ink); font-size: 1.3rem; }
+.glossary-page p { font-size: 1.02rem; line-height: 1.9; }
+.glossary-page table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 2rem; font-size: .92rem; line-height: 1.7; }
+.glossary-page th, .glossary-page td { padding: .55rem .5rem; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.glossary-page th { border-bottom: 2px solid var(--ink); font-weight: 600; }
+.glossary-page td:first-child { white-space: nowrap; color: var(--accent-ink); font-family: var(--font-mono); font-size: .88em; }
+
+.book-map-page { max-width: 56rem; }
+.map-header .eyebrow { margin-bottom: .6rem; }
+.map-header h1 { margin-bottom: .5rem; }
+.map-header p { max-width: 40em; color: var(--ink-soft); }
+.map-figure { margin: 1.6rem auto 2.4rem; text-align: center; }
+.map-figure img { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; box-shadow: 0 14px 28px rgba(31, 35, 40, .12); }
+.map-figure figcaption { margin-top: .8rem; color: var(--ink-soft); font-size: .9rem; }
+.map-list { border-top: 1px solid var(--rule); padding-top: 1rem; }
+.map-list h2 { margin-top: 0; font-size: 1.1rem; }
+.map-list ol { list-style: none; padding: 0; margin: 0; }
+.map-list li { padding: .7rem 0; border-bottom: 1px solid var(--rule); line-height: 1.8; }
+.map-list li strong { color: var(--accent-ink); font-family: var(--font-mono); font-size: .88em; margin-right: .5em; }
+.map-list li span { display: block; color: var(--ink-soft); font-size: .92rem; }
+
+@media (max-width: 760px) {
+  .curriculum-layout { display: block; }
+  .curriculum-nav { position: static; max-height: none; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .curriculum-nav > details:not([open]) { display: block; }
+  .curriculum-chapter table, .curriculum-answer table { font-size: .88rem; }
+  .curriculum-chapter th, .curriculum-chapter td, .curriculum-answer th, .curriculum-answer td { padding: .35rem; }
+  .curriculum-home .stage-card ol { columns: 1; }
+  .stage-figure img { max-width: 100%; }
+}
+@media print { .curriculum-nav, .topbar, footer, .skip, .lesson-nav { display: none; } .curriculum-layout { display: block; } }

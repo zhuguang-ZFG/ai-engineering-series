@@ -1,0 +1,4 @@
+$ pi --mode json --no-session --no-tools "只回复两个字：在线" | head -3
+{"type":"session","version":3,"id":"01a1bb43-5ad8-7162-870e-502a89c2f0a0","timestamp":"2026-11-08T13:05:15.993Z","cwd":"D:\\Temp\\User"}
+{"type":"agent_start"}
+{"type":"turn_start"}

@@ -1,0 +1,5 @@
+$ omp bad-model -p hi --model definitely-not-a-model-xyz --no-session
+Model "definitely-not-a-model-xyz" not found
+
+Run `omp models find <pattern>` to search, or `omp models` to list all.
+exit=1

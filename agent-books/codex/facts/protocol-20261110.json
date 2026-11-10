@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-10",
+  "kind": "static-schema-validation",
+  "source_commit": "086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a",
+  "model_used": false,
+  "connection_started": false,
+  "jsonschema_version": "4.26.0",
+  "cases": [
+    {
+      "name": "initialize",
+      "passed": true
+    },
+    {
+      "name": "thread/start",
+      "passed": true
+    },
+    {
+      "name": "turn/start",
+      "passed": true
+    },
+    {
+      "name": "turn/interrupt",
+      "passed": true
+    },
+    {
+      "name": "thread/resume",
+      "passed": true
+    },
+    {
+      "name": "item/commandExecution/requestApproval",
+      "passed": true
+    },
+    {
+      "name": "approval-response",
+      "passed": true
+    },
+    {
+      "name": "reject-thread_id-instead-of-threadId",
+      "passed": true
+    },
+    {
+      "name": "hook-read.json:input+output",
+      "passed": true
+    },
+    {
+      "name": "hook-deny.json:input+output",
+      "passed": true
+    },
+    {
+      "name": "reject-hook-missing-turn-id",
+      "passed": true
+    }
+  ],
+  "schemas_sha256": {
+    "v1/InitializeParams.json": "c608ff6bdd94e661423dca9b44cd1dcea7eac610f74e1310284c61eab64280bc",
+    "v2/ThreadStartParams.json": "e9c6d3cc18d049bfbc0249add3808fb8e5a27e1a0b5a423767aafbc3859a9428",
+    "v2/TurnStartParams.json": "4e25cd48986f73e600d9949a055ddb994a75b4a38790e935274646f0fece00ad",
+    "v2/TurnInterruptParams.json": "6dff382dae73d1dbc58406ed045605f647e7a49660e2540fbd2c6c24d60c5f2b",
+    "v2/ThreadResumeParams.json": "cba2b0a25e99cc2a9ea083f3ad8cea4d1a3a198922d8c2ba5224b6414eff7334",
+    "CommandExecutionRequestApprovalParams.json": "70cbd93a2bef34dfeb082baf2185a2d03e370b54041ef46035db474ca5343c55",
+    "CommandExecutionRequestApprovalResponse.json": "6d0767113e22f311381809b6b236b0dde2b99b01992879c26bf7b1ea0e003cb7",
+    "pre-tool-use.command.input.schema.json": "fabed428f0fe75767c5700208b166da5faef4e031d601dfc8bff2f96d340c682",
+    "pre-tool-use.command.output.schema.json": "e684f81c63fbb5972892f6a848b49fec68c8ce137931651093d2dd1da56a1dd6"
+  },
+  "inputs_sha256": {
+    "check_protocol.py": "dd0046f6a6de0746ffb5208beb00642f5ef29b88c3a8441c0da0261e8549639a",
+    "hook_guard.py": "02c479576b89732e95272bf8ef64ad6559933758f42af05a738bdfcf6a8049be",
+    "fixtures/app-server-requests.json": "fa037b94994c75369097b3d9bf715a9f4a779feb2081ab065603c17f1946a423",
+    "fixtures/hook-read.json": "ce8ff73f3439d70f87293480dc8770910ea4981dac7cc74673b441e67955db05",
+    "fixtures/hook-deny.json": "6eea5bc20995d7cc8f3c95f192a5c2f1cdde46ba15fa90bd64c01ddb4ec7bf05"
+  },
+  "passed": true
+}

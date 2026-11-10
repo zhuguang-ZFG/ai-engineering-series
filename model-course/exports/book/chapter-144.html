@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>系统设计方法论 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 144 / 195</p><article><h1 id="系统设计方法论">系统设计方法论</h1><details class="contents"><summary>本章目录 <span>· 7 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-系统设计四步法">1. 系统设计四步法</a></li><li><a href="#2-容量估算信封背面的艺术">2. 容量估算：信封背面的艺术</a><ul><li><a href="#常用换算速查">常用换算速查</a></li><li><a href="#2-8-法则在估算中的应用">2-8 法则在估算中的应用</a></li></ul></li><li><a href="#3-核心设计模式">3. 核心设计模式</a><ul><li><a href="#31-缓存模式">3.1 缓存模式</a></li><li><a href="#32-分库分表">3.2 分库分表</a></li><li><a href="#33-消息队列">3.3 消息队列</a></li></ul></li><li><a href="#4-权衡思维没有银弹">4. 权衡思维：没有银弹</a><ul><li><a href="#常见的错误权衡">常见的错误权衡</a></li></ul></li><li><a href="#5-经典案例">5. 经典案例</a><ul><li><a href="#51-短链服务tinyurl">5.1 短链服务（TinyURL）</a></li><li><a href="#52-feed-流系统">5.2 Feed 流系统</a></li><li><a href="#53-秒杀系统">5.3 秒杀系统</a></li></ul></li><li><a href="#总结-30">总结</a></li><li><a href="#延伸阅读-20">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>系统设计不是拍脑袋画架构图，而是一套有章可循的方法论。</strong> 无论是面试中的系统设计题，还是实际工作中的架构设计，都遵循相似的思考框架：先搞清楚问题，再估算规模，然后设计方案，最后深入优化。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>设计流程</strong>：掌握系统设计的四步法框架</li>
+<li><strong>容量估算</strong>：学会&quot;信封背面估算&quot;的技巧</li>
+<li><strong>常见模式</strong>：熟悉缓存、分库分表、消息队列等核心模式</li>
+<li><strong>权衡思维</strong>：理解架构设计中的 trade-off 思维</li>
+<li><strong>实战案例</strong>：通过短链服务、Feed 流等案例理解设计过程</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>设计四步法</td>
+<td>需求澄清、容量估算、架构设计、深入优化</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>容量估算</td>
+<td>QPS、存储、带宽、信封背面估算</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>核心设计模式</td>
+<td>缓存、分库分表、消息队列、CDN</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>权衡思维</td>
+<td>一致性 vs 可用性、性能 vs 成本</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>经典案例</td>
+<td>短链服务、Feed 流、秒杀系统</td>
+</tr>
+</tbody></table></div>
+<h2 id="1-系统设计四步法">1. 系统设计四步法</h2>
+<p>系统设计不是一上来就画架构图。无论是面试还是实战，都应该遵循一个结构化的流程。</p>
+<blockquote>
+<p><strong>为什么要先澄清需求？</strong>
+很多人拿到题目就开始画图，结果设计了一个&quot;正确但不是面试官想要的&quot;系统。花 5 分钟问清楚需求，能避免后面 30 分钟的返工。</p>
+</blockquote>
+<p>常见的澄清问题：</p>
+<ul>
+<li>系统的核心功能是什么？（不要设计所有功能）</li>
+<li>用户规模多大？（决定是否需要分布式）</li>
+<li>读写比例？（决定缓存策略）</li>
+<li>数据需要保留多久？（决定存储方案）</li>
+</ul>
+<h2 id="2-容量估算信封背面的艺术">2. 容量估算：信封背面的艺术</h2>
+<p>&quot;信封背面估算&quot;（Back-of-envelope estimation）是系统设计中的核心技能。不需要精确计算，只需要知道量级。</p>
+<h3 id="常用换算速查">常用换算速查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>量级</th>
+<th>换算</th>
+<th>记忆技巧</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 天</td>
+<td>86,400 秒</td>
+<td>≈ 10 万秒</td>
+</tr>
+<tr>
+<td>1 亿请求/天</td>
+<td>≈ 1,200 QPS</td>
+<td>除以 10 万</td>
+</tr>
+<tr>
+<td>1 KB × 1 亿</td>
+<td>≈ 100 GB</td>
+<td>1 亿条小记录</td>
+</tr>
+<tr>
+<td>1 MB × 100 万</td>
+<td>≈ 1 TB</td>
+<td>100 万张图片</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-8-法则在估算中的应用">2-8 法则在估算中的应用</h3>
+<p>大多数系统遵循 80/20 法则：20% 的数据承载 80% 的请求。这意味着：</p>
+<ul>
+<li><strong>缓存大小</strong> ≈ 总数据量 × 20%</li>
+<li><strong>热点 QPS</strong> ≈ 总 QPS × 80% 集中在 20% 的 key 上</li>
+<li><strong>缓存命中率</strong>目标 ≈ 80%+（低于这个值说明缓存策略有问题）</li>
+</ul>
+<h2 id="3-核心设计模式">3. 核心设计模式</h2>
+<p>系统设计中反复出现的模式，掌握这些就能应对大多数场景。</p>
+<h3 id="31-缓存模式">3.1 缓存模式</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>读路径</th>
+<th>写路径</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cache-Aside</td>
+<td>先查缓存，miss 则查 DB 并回填</td>
+<td>先写 DB，再删缓存</td>
+<td>通用场景，最常用</td>
+</tr>
+<tr>
+<td>Read-Through</td>
+<td>缓存层自动从 DB 加载</td>
+<td>同 Cache-Aside</td>
+<td>需要缓存框架支持</td>
+</tr>
+<tr>
+<td>Write-Behind</td>
+<td>同 Cache-Aside</td>
+<td>先写缓存，异步写 DB</td>
+<td>写密集型，可容忍丢数据</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么是&quot;删缓存&quot;而不是&quot;更新缓存&quot;？</strong>
+更新缓存在并发场景下容易出现数据不一致：线程 A 和 B 同时更新，A 先写 DB 但 B 先更新缓存，导致缓存中是 B 的旧值。删除缓存则让下次读请求重新从 DB 加载，天然避免这个问题。</p>
+</blockquote>
+<h3 id="32-分库分表">3.2 分库分表</h3>
+<p>当单表数据量超过千万级，或单库 QPS 超过瓶颈时，就需要考虑分库分表。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>做法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>垂直分库</td>
+<td>按业务域拆分数据库</td>
+<td>业务解耦，独立扩展</td>
+<td>跨库 JOIN 困难</td>
+</tr>
+<tr>
+<td>水平分表</td>
+<td>同一张表按规则拆成多张</td>
+<td>单表数据量可控</td>
+<td>分片键选择关键</td>
+</tr>
+<tr>
+<td>垂直分表</td>
+<td>把大字段拆到独立表</td>
+<td>减少 IO，提升查询效率</td>
+<td>需要额外 JOIN</td>
+</tr>
+</tbody></table></div>
+<p><strong>分片键选择原则</strong>：</p>
+<ul>
+<li>选择查询最频繁的字段（如 user_id）</li>
+<li>数据分布要均匀，避免热点</li>
+<li>尽量让同一用户的数据在同一分片（减少跨分片查询）</li>
+</ul>
+<h3 id="33-消息队列">3.3 消息队列</h3>
+<p>消息队列是分布式系统的&quot;减震器&quot;，核心作用是解耦、异步、削峰。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>不用队列</th>
+<th>用队列</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>下单后发通知</td>
+<td>下单接口同步调用通知服务，通知失败导致下单失败</td>
+<td>下单成功后发消息，通知服务异步消费</td>
+</tr>
+<tr>
+<td>秒杀抢购</td>
+<td>瞬间流量打爆数据库</td>
+<td>请求先入队列，后端按能力消费</td>
+</tr>
+<tr>
+<td>数据同步</td>
+<td>服务 A 直接调用服务 B 的接口</td>
+<td>服务 A 发事件，服务 B 订阅处理</td>
+</tr>
+</tbody></table></div>
+<h2 id="4-权衡思维没有银弹">4. 权衡思维：没有银弹</h2>
+<p>架构设计的本质是权衡（Trade-off）。每个决策都有代价，关键是理解代价，选适合当前阶段的方案。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>权衡维度</th>
+<th>选项 A</th>
+<th>选项 B</th>
+<th>决策依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性 vs 可用性</td>
+<td>强一致（CP）</td>
+<td>高可用（AP）</td>
+<td>业务能否容忍短暂不一致？</td>
+</tr>
+<tr>
+<td>性能 vs 成本</td>
+<td>全量缓存</td>
+<td>按需缓存</td>
+<td>数据量和预算</td>
+</tr>
+<tr>
+<td>简单 vs 灵活</td>
+<td>单体架构</td>
+<td>微服务</td>
+<td>团队规模和业务复杂度</td>
+</tr>
+<tr>
+<td>实时 vs 批量</td>
+<td>流式处理</td>
+<td>批处理</td>
+<td>数据时效性要求</td>
+</tr>
+<tr>
+<td>自建 vs 托管</td>
+<td>自己搭 MySQL</td>
+<td>用云数据库 RDS</td>
+<td>运维能力和成本</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>架构决策记录（ADR）</strong>
+每个重要的架构决策都应该记录下来：<strong>背景是什么、考虑了哪些方案、为什么选了这个、有什么代价</strong>。这不是为了甩锅，而是为了让后来的人理解&quot;为什么当时这么设计&quot;。</p>
+</blockquote>
+<p>格式很简单：</p>
+<ul>
+<li><strong>标题</strong>：用 XXX 替代 YYY</li>
+<li><strong>背景</strong>：我们遇到了什么问题</li>
+<li><strong>决策</strong>：我们选择了什么方案</li>
+<li><strong>理由</strong>：为什么选这个</li>
+<li><strong>代价</strong>：这个决策的缺点和风险</li>
+</ul>
+<h3 id="常见的错误权衡">常见的错误权衡</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>错误</th>
+<th>表现</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>过早优化</td>
+<td>日活 1000 就上分库分表</td>
+<td>先用单库，遇到瓶颈再拆</td>
+</tr>
+<tr>
+<td>技术驱动</td>
+<td>&quot;我想用 Kafka&quot; 而不是 &quot;我需要异步&quot;</td>
+<td>从问题出发，而非从技术出发</td>
+</tr>
+<tr>
+<td>忽略运维成本</td>
+<td>选了最优方案但团队维护不了</td>
+<td>方案要匹配团队能力</td>
+</tr>
+<tr>
+<td>追求完美一致性</td>
+<td>所有场景都用分布式事务</td>
+<td>大多数场景最终一致性就够了</td>
+</tr>
+</tbody></table></div>
+<h2 id="5-经典案例">5. 经典案例</h2>
+<p>通过三个经典案例，把前面学到的方法论串起来。</p>
+<h3 id="51-短链服务tinyurl">5.1 短链服务（TinyURL）</h3>
+<p>短链服务是系统设计面试的经典题目，麻雀虽小五脏俱全。</p>
+<p><strong>需求澄清</strong>：</p>
+<ul>
+<li>核心功能：长链接 → 短链接（写），短链接 → 重定向（读）</li>
+<li>读写比：约 100:1（读远多于写）</li>
+<li>日均重定向：1 亿次</li>
+<li>短链永不过期</li>
+</ul>
+<p><strong>容量估算</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>计算</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>写 QPS</td>
+<td>1 亿 / 100 / 86400</td>
+<td>≈ 12 QPS</td>
+</tr>
+<tr>
+<td>读 QPS</td>
+<td>1 亿 / 86400</td>
+<td>≈ 1,200 QPS</td>
+</tr>
+<tr>
+<td>峰值读 QPS</td>
+<td>1,200 × 3</td>
+<td>≈ 3,600 QPS</td>
+</tr>
+<tr>
+<td>5 年存储</td>
+<td>100 万/天 × 365 × 5 × 100B</td>
+<td>≈ 18 GB</td>
+</tr>
+<tr>
+<td>缓存（20%）</td>
+<td>18 GB × 20%</td>
+<td>≈ 3.6 GB</td>
+</tr>
+</tbody></table></div>
+<p><strong>架构设计</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>写路径：客户端 → API Server → ID 生成器 → Base62 编码 → 写入 MySQL + Redis
+读路径：客户端 → CDN → API Server → Redis 查询 → 302 重定向
+                                    ↓ (cache miss)
+                                  MySQL 查询 → 回填 Redis
+</code></pre>
+<p><strong>关键设计决策</strong>：</p>
+<ul>
+<li>短码生成：Snowflake 分布式 ID + Base62 编码，避免哈希冲突</li>
+<li>缓存策略：Cache-Aside，热点短链用 CDN 加速</li>
+<li>数据库：单表即可（18GB 很小），按短码做索引</li>
+</ul>
+<h3 id="52-feed-流系统">5.2 Feed 流系统</h3>
+<p>社交平台的 Feed 流（朋友圈、微博首页）是另一个经典题目。</p>
+<p><strong>核心挑战</strong>：用户发一条动态，如何让所有关注者看到？</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>做法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉模式（Pull）</td>
+<td>读取时实时聚合关注者的动态</td>
+<td>写入简单，存储少</td>
+<td>读取慢，关注多时延迟高</td>
+</tr>
+<tr>
+<td>推模式（Push）</td>
+<td>发布时写入所有粉丝的收件箱</td>
+<td>读取极快</td>
+<td>大 V 发动态写扩散严重</td>
+</tr>
+<tr>
+<td>推拉结合</td>
+<td>普通用户推，大 V 拉</td>
+<td>平衡读写性能</td>
+<td>实现复杂</td>
+</tr>
+</tbody></table></div>
+<p><strong>推拉结合方案</strong>：</p>
+<ul>
+<li>粉丝数 &lt; 1 万：发布时推送到所有粉丝的 Feed 缓存（推模式）</li>
+<li>粉丝数 &gt; 1 万：不推送，粉丝读取时实时拉取（拉模式）</li>
+<li>用户打开 Feed 时：合并推送的内容 + 实时拉取大 V 的内容，按时间排序</li>
+</ul>
+<h3 id="53-秒杀系统">5.3 秒杀系统</h3>
+<p>秒杀的核心挑战：瞬间超高并发 + 库存不能超卖。</p>
+<p><strong>流量特征</strong>：</p>
+<ul>
+<li>活动开始前：大量用户刷新页面等待</li>
+<li>活动开始瞬间：QPS 可能是平时的 100 倍以上</li>
+<li>活动结束后：流量迅速回落</li>
+</ul>
+<p><strong>分层削峰策略</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户请求 → CDN（静态页面）→ 网关（限流）→ 消息队列（削峰）→ 库存服务（扣减）
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>策略</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前端</td>
+<td>按钮置灰 + 随机延迟 + 验证码</td>
+<td>过滤机器人，分散请求</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>静态资源缓存</td>
+<td>减少 90% 的页面请求</td>
+</tr>
+<tr>
+<td>网关</td>
+<td>令牌桶限流</td>
+<td>只放行系统能承受的流量</td>
+</tr>
+<tr>
+<td>消息队列</td>
+<td>请求入队，异步处理</td>
+<td>削峰填谷，保护数据库</td>
+</tr>
+<tr>
+<td>库存服务</td>
+<td>Redis 预扣减 + Lua 原子操作</td>
+<td>防止超卖，毫秒级响应</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>秒杀的核心原则</strong></p>
+</blockquote>
+<ol>
+<li><strong>尽量拦截在上游</strong>：能在 CDN 挡住的就不要到应用层</li>
+<li><strong>读写分离</strong>：商品详情页走缓存，只有下单走数据库</li>
+<li><strong>异步处理</strong>：用户点击&quot;抢购&quot;后立即返回&quot;排队中&quot;，后台异步处理</li>
+<li><strong>兜底方案</strong>：限流、熔断、降级，任何一层出问题都有 Plan B</li>
+</ol>
+<h2 id="总结-30">总结</h2>
+<p>系统设计是一门实践性很强的技能，核心在于结构化思考和权衡取舍。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>四步法框架</strong>：需求澄清 → 容量估算 → 架构设计 → 深入优化，每一步都不可跳过</li>
+<li><strong>信封背面估算</strong>：不需要精确，只需要知道量级，用于指导架构决策</li>
+<li><strong>核心模式</strong>：缓存、分库分表、消息队列、CDN、限流熔断——这些是系统设计的&quot;积木&quot;</li>
+<li><strong>权衡思维</strong>：没有完美方案，只有适合当前阶段的方案，记录每个决策的理由和代价</li>
+<li><strong>经典案例</strong>：短链服务练基础、Feed 流练推拉模型、秒杀练高并发——掌握这三个就能举一反三</li>
+</ol>
+<h2 id="延伸阅读-20">延伸阅读</h2>
+<ul>
+<li><a href="https://www.amazon.com/System-Design-Interview-insiders-Second/dp/B08CMF2CQF">System Design Interview</a> - Alex Xu 系统设计面试经典</li>
+<li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a> - Martin Kleppmann 数据密集型应用设计</li>
+<li><a href="https://github.com/donnemartin/system-design-primer">The System Design Primer</a> - GitHub 上最全的系统设计学习资源</li>
+<li><a href="https://bytebytego.com/">ByteByteGo</a> - Alex Xu 的系统设计可视化博客</li>
+</ul>
+<hr>
+<h2 id="七基础设施与运维">七、基础设施与运维</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-143.html">← 高可用与容灾</a><a rel="next" href="chapter-145.html">Linux 基础 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

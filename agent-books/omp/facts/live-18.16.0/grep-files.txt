@@ -1,0 +1,10 @@
+Searching in: D:\Users\claude\claude-code-book-main\omp\ch09.md
+Pattern: hashline
+Mode: filesWithMatches, Limit: 20, Context: 2, Gitignore: true
+
+Total matches: 2
+Files with matches: 1
+Files searched: 1
+Limit reached: true
+
+D:/Users/claude/claude-code-book-main/omp/ch09.md

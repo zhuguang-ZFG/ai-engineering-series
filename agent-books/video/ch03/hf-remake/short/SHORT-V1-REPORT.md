@@ -1,0 +1,1 @@
+# ch03-short-v1\n\n**Path:** video/ch03/out/ch03-short-v1.mp4\n**Duration:** ~46.1s · 1080×1920 · 7.5 MB\n**No publish / no long densify**\n\nHook: 锤子 vs 双手 · Yunyang -10%/-5Hz\n

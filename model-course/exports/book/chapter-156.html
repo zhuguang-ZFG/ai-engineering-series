@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>监控、日志与告警 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 156 / 195</p><article><h1 id="监控日志与告警">监控、日志与告警</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#监控日志与告警原理">监控日志与告警原理</a><ul><li><a href="#0-引言系统上线只是开始">0. 引言：系统上线只是开始</a></li><li><a href="#1-监控体系-monitoring">1. 监控体系 (Monitoring)</a></li><li><a href="#2-告警系统-alerting">2. 告警系统 (Alerting)</a></li><li><a href="#3-日志管理-logging">3. 日志管理 (Logging)</a></li><li><a href="#4-链路追踪-tracing">4. 链路追踪 (Tracing)</a></li><li><a href="#5-故障排查流程">5. 故障排查流程</a></li><li><a href="#6-性能优化">6. 性能优化</a></li><li><a href="#7-容量规划">7. 容量规划</a></li><li><a href="#8-安全运维">8. 安全运维</a></li><li><a href="#9-自动化运维-devops">9. 自动化运维 (DevOps)</a></li><li><a href="#10-总结与最佳实践">10. 总结与最佳实践</a></li><li><a href="#11-名词速查表-glossary">11. 名词速查表 (Glossary)</a></li><li><a href="#12-延伸阅读">12. 延伸阅读</a></li></ul></li></ul></nav></details><h2 id="监控日志与告警原理">监控日志与告警原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：本章节无需编程基础，通过交互式演示带你了解运维的完整知识体系。从监控告警到故障排查，从容量规划到自动化运维，全面掌握线上系统运维技能。</p>
+</blockquote>
+<h3 id="0-引言系统上线只是开始">0. 引言：系统上线只是开始</h3>
+<p>很多新手认为：&quot;代码部署上线，任务就完成了。&quot;</p>
+<p><strong>大错特错！</strong></p>
+<p>系统上线只是<strong>运维工作的起点</strong>。就像买了一辆新车，后续的保养、维修、加油才是常态。</p>
+<p>运维的目标有三个：</p>
+<ol>
+<li><strong>稳定性 (Stability)</strong>：系统不宕机，服务一直可用</li>
+<li><strong>性能 (Performance)</strong>：响应快速，用户体验好</li>
+<li><strong>安全 (Security)</strong>：数据不泄露，防止被攻击</li>
+</ol>
+<h3 id="1-监控体系-monitoring">1. 监控体系 (Monitoring)</h3>
+<p>监控是运维的&quot;眼睛&quot;。没有监控的系统就像盲人开车，出了问题都不知道。</p>
+<h4 id="11-监控的三个层次">1.1 监控的三个层次</h4>
+<p><strong>基础设施监控</strong>：关注服务器硬件资源</p>
+<ul>
+<li>CPU 使用率</li>
+<li>内存使用率</li>
+<li>磁盘空间和 I/O</li>
+<li>网络带宽</li>
+</ul>
+<p><strong>应用监控</strong>：关注软件运行状态</p>
+<ul>
+<li>QPS（每秒请求数）</li>
+<li>响应时间（延迟）</li>
+<li>错误率</li>
+<li>依赖服务调用情况</li>
+</ul>
+<p><strong>业务监控</strong>：关注业务健康度</p>
+<ul>
+<li>DAU/MAU（日活/月活）</li>
+<li>订单量</li>
+<li>支付成功率</li>
+<li>用户留存率</li>
+</ul>
+<h4 id="12-监控工具栈">1.2 监控工具栈</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">用途</th>
+<th align="left">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Prometheus</strong></td>
+<td align="left">指标采集与存储</td>
+<td align="left">时序数据库，适合监控数据</td>
+</tr>
+<tr>
+<td align="left"><strong>Grafana</strong></td>
+<td align="left">可视化面板</td>
+<td align="left">强大的图表和 dashboard</td>
+</tr>
+<tr>
+<td align="left"><strong>Zabbix</strong></td>
+<td align="left">综合监控</td>
+<td align="left">老牌工具，功能全面</td>
+</tr>
+<tr>
+<td align="left"><strong>Datadog</strong></td>
+<td align="left">SaaS 监控平台</td>
+<td align="left">一站式解决方案，收费</td>
+</tr>
+</tbody></table></div>
+<p><strong>关键点</strong>：监控要分层，从基础设施到业务全方位覆盖，避免&quot;盲区&quot;。</p>
+<h3 id="2-告警系统-alerting">2. 告警系统 (Alerting)</h3>
+<p>监控发现问题后，需要及时通知运维人员，这就是<strong>告警</strong>。</p>
+<h4 id="21-告警流程">2.1 告警流程</h4>
+<h4 id="22-告警级别设计">2.2 告警级别设计</h4>
+<p>合理的告警分级能避免&quot;告警疲劳&quot;：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">级别</th>
+<th align="left">响应时间</th>
+<th align="left">典型场景</th>
+<th align="left">通知渠道</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>P0</strong></td>
+<td align="left">立即（5分钟内）</td>
+<td align="left">核心服务宕机、支付失败</td>
+<td align="left">电话 + 短信 + 钉钉</td>
+</tr>
+<tr>
+<td align="left"><strong>P1</strong></td>
+<td align="left">30分钟内</td>
+<td align="left">部分功能异常、性能严重下降</td>
+<td align="left">短信 + 钉钉 + 邮件</td>
+</tr>
+<tr>
+<td align="left"><strong>P2</strong></td>
+<td align="left">当天处理</td>
+<td align="left">资源使用率偏高、偶发错误</td>
+<td align="left">钉钉 + 邮件</td>
+</tr>
+<tr>
+<td align="left"><strong>P3</strong></td>
+<td align="left">本周处理</td>
+<td align="left">非核心问题、优化建议</td>
+<td align="left">邮件</td>
+</tr>
+</tbody></table></div>
+<h4 id="23-告警收敛与降噪">2.3 告警收敛与降噪</h4>
+<p><strong>痛点</strong>：一个小问题可能触发成百上千条告警，导致值班人员麻木。</p>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li><strong>告警分组</strong>：相似告警合并（如同一台服务器的多个问题合并为一条）</li>
+<li><strong>告警抑制</strong>：如果父问题已触发，子问题不重复告警</li>
+<li><strong>静默规则</strong>：维护期间自动暂停告警</li>
+<li><strong>频率限制</strong>：同一告警短时间内不重复通知</li>
+</ol>
+<p><strong>关键点</strong>：告警要&quot;少而精&quot;，每条都要值得处理。</p>
+<h3 id="3-日志管理-logging">3. 日志管理 (Logging)</h3>
+<p>日志是排查问题的&quot;黑匣子&quot;。</p>
+<h4 id="31-日志分级">3.1 日志分级</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">console.debug(&#39;详细调试信息&#39;) // 开发时使用
+console.info(&#39;一般信息&#39;) // 正常流程记录
+console.warn(&#39;警告信息&#39;) // 潜在问题
+console.error(&#39;错误信息&#39;) // 需要关注的错误
+</code></pre>
+<h4 id="32-结构化日志">3.2 结构化日志</h4>
+<p>传统日志（不好）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>2024-01-15 10:23:45 ERROR User john failed to login, attempts=3, ip=192.168.1.100
+</code></pre>
+<p>结构化日志（推荐）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-json">{
+  &quot;timestamp&quot;: &quot;2024-01-15T10:23:45Z&quot;,
+  &quot;level&quot;: &quot;ERROR&quot;,
+  &quot;message&quot;: &quot;User login failed&quot;,
+  &quot;user&quot;: &quot;john&quot;,
+  &quot;attempts&quot;: 3,
+  &quot;ip&quot;: &quot;192.168.1.100&quot;,
+  &quot;service&quot;: &quot;auth-service&quot;
+}
+</code></pre>
+<h4 id="33-elk-日志栈">3.3 ELK 日志栈</h4>
+<p><strong>ELK = Elasticsearch + Logstash + Kibana</strong></p>
+<ul>
+<li><strong>Logstash</strong>：日志采集和过滤</li>
+<li><strong>Elasticsearch</strong>：日志存储和搜索</li>
+<li><strong>Kibana</strong>：日志可视化查询</li>
+</ul>
+<p><strong>最佳实践</strong>：</p>
+<ul>
+<li>✅ 敏感信息（密码、token）不要记入日志</li>
+<li>✅ 关键操作（登录、支付、权限变更）必须记录</li>
+<li>✅ 日志要包含上下文（用户 ID、请求 ID、时间戳）</li>
+<li>✅ 定期清理过期日志，避免磁盘爆满</li>
+</ul>
+<h3 id="4-链路追踪-tracing">4. 链路追踪 (Tracing)</h3>
+<p>在微服务架构中，一个请求可能经过十几个服务，如何追踪它的完整路径？</p>
+<p><strong>Trace ID 和 Span ID</strong></p>
+<ul>
+<li><strong>Trace ID</strong>：整个请求链路的唯一标识（像快递单号）</li>
+<li><strong>Span ID</strong>：单个服务调用的标识（像每个中转站）</li>
+</ul>
+<h4 id="41-分布式追踪演示">4.1 分布式追踪演示</h4>
+<h4 id="42-opentelemetry-标准">4.2 OpenTelemetry 标准</h4>
+<p>OpenTelemetry (OTel) 是链路追踪的<strong>行业标准</strong>，提供统一的 API 和 SDK。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 示例：使用 OpenTelemetry 记录 Span
+import { trace } from &#39;@opentelemetry/api&#39;
+
+const tracer = trace.getTracer(&#39;my-service&#39;)
+
+async function processOrder(orderId) {
+  // 创建一个 Span
+  const span = tracer.startSpan(&#39;processOrder&#39;)
+
+  try {
+    // 设置属性
+    span.setAttribute(&#39;order.id&#39;, orderId)
+
+    // 业务逻辑...
+    await validateOrder(orderId)
+    await saveToDatabase(orderId)
+
+    span.setStatus({ code: SpanStatusCode.OK })
+  } catch (error) {
+    span.recordException(error)
+    span.setStatus({ code: SpanStatusCode.ERROR, message: error.message })
+  } finally {
+    span.end() // 结束 Span
+  }
+}
+</code></pre>
+<p><strong>关键点</strong>：链路追踪能快速定位性能瓶颈和故障点，是微服务必备工具。</p>
+<h3 id="5-故障排查流程">5. 故障排查流程</h3>
+<p>线上故障不可避免，关键是<strong>快速响应、快速恢复</strong>。</p>
+<h4 id="51-故障处理流程">5.1 故障处理流程</h4>
+<h4 id="52-常用排查工具">5.2 常用排查工具</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">用途</th>
+<th align="left">典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>tcpdump</strong></td>
+<td align="left">抓包分析</td>
+<td align="left">网络不通、数据包丢失</td>
+</tr>
+<tr>
+<td align="left"><strong>strace</strong></td>
+<td align="left">追踪系统调用</td>
+<td align="left">进程卡住、文件权限问题</td>
+</tr>
+<tr>
+<td align="left"><strong>Arthas</strong></td>
+<td align="left">Java 诊断</td>
+<td align="left">CPU 飙高、内存泄漏、死锁</td>
+</tr>
+<tr>
+<td align="left"><strong>top/htop</strong></td>
+<td align="left">系统资源监控</td>
+<td align="left">CPU/内存占用高</td>
+</tr>
+<tr>
+<td align="left"><strong>netstat</strong></td>
+<td align="left">网络连接查看</td>
+<td align="left">端口占用、连接数异常</td>
+</tr>
+<tr>
+<td align="left"><strong>lsof</strong></td>
+<td align="left">查看打开文件</td>
+<td align="left">文件被占用、磁盘满</td>
+</tr>
+</tbody></table></div>
+<p><strong>Arthas 示例</strong>（阿里开源的 Java 诊断工具）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 查看 CPU 最高的前 5 个线程
+$ top -H -p 12345
+
+# 查看某个方法的调用耗时
+$ trace com.example.OrderService createOrder
+
+# 查看类的静态字段
+$ getstatic com.example.Config MAX_CONNECTIONS
+
+# 热更新代码（无需重启）
+$ mc /tmp/Test.java
+$ redefine /tmp/Test.class
+</code></pre>
+<h4 id="53-故障复盘-post-mortem">5.3 故障复盘 (Post-mortem)</h4>
+<p><strong>复盘不是追责会！</strong></p>
+<p>复盘的目的是：</p>
+<ol>
+<li>梳理故障时间线</li>
+<li>找出根本原因 (Root Cause Analysis)</li>
+<li>总结经验教训</li>
+<li>制定改进措施</li>
+</ol>
+<p><strong>5 Why 分析法</strong>：</p>
+<p>问&quot;为什么&quot;至少 5 次，找到根本原因：</p>
+<ul>
+<li>为什么服务宕机？<ul>
+<li>因为内存溢出</li>
+</ul>
+</li>
+<li>为什么内存溢出？<ul>
+<li>因为缓存数据过多</li>
+</ul>
+</li>
+<li>为什么缓存数据过多？<ul>
+<li>因为没有设置过期时间</li>
+</ul>
+</li>
+<li>为什么没有设置过期时间？<ul>
+<li>因为开发时遗漏了</li>
+</ul>
+</li>
+<li><strong>根本原因</strong>：缺少代码审查和测试用例</li>
+</ul>
+<p><strong>关键点</strong>：建立 blameless 文化，关注流程改进而非个人责任。</p>
+<h3 id="6-性能优化">6. 性能优化</h3>
+<h4 id="61-性能瓶颈分析">6.1 性能瓶颈分析</h4>
+<p><strong>从上到下的优化思路</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户感知
+  ↓
+前端优化（减少请求、CDN、懒加载）
+  ↓
+网络优化（HTTP/2、压缩、长连接）
+  ↓
+后端优化（缓存、异步、批处理）
+  ↓
+数据库优化（索引、查询优化、分库分表）
+  ↓
+系统优化（内核参数、JVM 调优）
+</code></pre>
+<h4 id="62-数据库优化">6.2 数据库优化</h4>
+<p><strong>索引优化</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- 查询慢（无索引）
+SELECT * FROM orders WHERE user_id = 12345;
+
+-- 创建索引后快 100 倍
+CREATE INDEX idx_user_id ON orders(user_id);
+</code></pre>
+<p><strong>查询优化</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-sql">-- ❌ 避免 SELECT *
+SELECT * FROM users WHERE id = 123;
+
+-- ✅ 只查需要的字段
+SELECT id, name, email FROM users WHERE id = 123;
+
+-- ❌ 避免 IN 子句太多
+SELECT * FROM orders WHERE user_id IN (1, 2, 3, ..., 10000);
+
+-- ✅ 使用 JOIN 或批量查询
+SELECT * FROM orders o JOIN user_ids u ON o.user_id = u.id;
+</code></pre>
+<h4 id="63-缓存优化">6.3 缓存优化</h4>
+<p><strong>多级缓存架构</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>浏览器缓存 (CDN)
+  ↓
+本地缓存 (内存/Guava)
+  ↓
+分布式缓存 (Redis/Memcached)
+  ↓
+数据库 (MySQL/PostgreSQL)
+</code></pre>
+<p><strong>缓存更新策略</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">策略</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Cache-Aside</strong></td>
+<td align="left">简单、可靠</td>
+<td align="left">首次查询慢</td>
+<td align="left">读多写少</td>
+</tr>
+<tr>
+<td align="left"><strong>Write-Through</strong></td>
+<td align="left">数据一致性好</td>
+<td align="left">写入慢</td>
+<td align="left">读写均衡</td>
+</tr>
+<tr>
+<td align="left"><strong>Write-Behind</strong></td>
+<td align="left">写入极快</td>
+<td align="left">可能丢失数据</td>
+<td align="left">写多读少、允许短时不一致</td>
+</tr>
+</tbody></table></div>
+<p><strong>关键点</strong>：缓存不是银弹，要考虑一致性、雪崩、穿透等问题（参考《系统缓存设计》章节）。</p>
+<h3 id="7-容量规划">7. 容量规划</h3>
+<h4 id="71-容量评估">7.1 容量评估</h4>
+<h4 id="72-压力测试">7.2 压力测试</h4>
+<p><strong>工具选择</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">工具</th>
+<th align="left">特点</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>JMeter</strong></td>
+<td align="left">功能强大、可视化</td>
+<td align="left">HTTP 接口压测</td>
+</tr>
+<tr>
+<td align="left"><strong>wrk/ab</strong></td>
+<td align="left">轻量、命令行</td>
+<td align="left">快速基准测试</td>
+</tr>
+<tr>
+<td align="left"><strong>Locust</strong></td>
+<td align="left">Python 脚本、分布式</td>
+<td align="left">复杂场景压测</td>
+</tr>
+<tr>
+<td align="left"><strong>K6</strong></td>
+<td align="left">现代、JS 脚本</td>
+<td align="left">CI/CD 集成</td>
+</tr>
+</tbody></table></div>
+<p><strong>wrk 示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 wrk
+$ brew install wrk  # macOS
+$ apt install wrk   # Ubuntu
+
+# 压测 HTTP 接口（10 线程，持续 30 秒）
+$ wrk -t10 -c100 -d30s http://example.com/api/users
+
+# 输出：
+# Running 30s test @ http://example.com/api/users
+#   10 threads and 100 connections
+# Thread Stats Avg Stdev Max +/- Stdev
+
+# Latency 45.32ms 12.45ms 120.50ms 87.56%
+
+# Req/Sec 2.12k 123.45 3.45k 89.01%
+
+#   632450 requests in 30.00s, 1.23GB read
+# Requests/sec: 21081.67
+</code></pre>
+<h4 id="73-弹性扩缩容">7.3 弹性扩缩容</h4>
+<p><strong>云原生时代的自动扩缩容</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># Kubernetes HPA (Horizontal Pod Autoscaler)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+</code></pre>
+<p><strong>当 CPU 使用率超过 70% 时，自动扩容 Pod（最多 10 个）</strong></p>
+<p><strong>关键点</strong>：结合业务预测（如双 11）提前扩容，避免来不及。</p>
+<h3 id="8-安全运维">8. 安全运维</h3>
+<h4 id="81-访问控制">8.1 访问控制</h4>
+<p><strong>最小权限原则</strong>：</p>
+<ul>
+<li>开发人员只能访问开发环境</li>
+<li>运维人员只能访问生产环境，且需要审批</li>
+<li>数据库敏感操作需要二次确认</li>
+</ul>
+<p><strong>堡垒机 (Jump Server)</strong>：</p>
+<p>所有运维操作通过堡垒机进行，记录完整操作日志。</p>
+<h4 id="82-数据备份">8.2 数据备份</h4>
+<p><strong>3-2-1 备份原则</strong>：</p>
+<ul>
+<li><strong>3</strong>份数据副本（1 份原始 + 2 份备份）</li>
+<li><strong>2</strong>种不同存储介质（本地磁盘 + 云存储）</li>
+<li><strong>1</strong>份异地备份（防止单点灾难）</li>
+</ul>
+<p><strong>备份策略</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">频率</th>
+<th align="left">保留时间</th>
+<th align="left">RTO</th>
+<th align="left">RPO</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>全量备份</strong></td>
+<td align="left">每周</td>
+<td align="left">1 个月</td>
+<td align="left">4 小时</td>
+<td align="left">24 小时</td>
+</tr>
+<tr>
+<td align="left"><strong>增量备份</strong></td>
+<td align="left">每天</td>
+<td align="left">1 周</td>
+<td align="left">2 小时</td>
+<td align="left">1 小时</td>
+</tr>
+<tr>
+<td align="left"><strong>实时备份</strong></td>
+<td align="left">秒级</td>
+<td align="left">7 天</td>
+<td align="left">分钟级</td>
+<td align="left">秒级</td>
+</tr>
+</tbody></table></div>
+<p><strong>RTO (Recovery Time Objective)</strong>：恢复时间目标（服务最多中断多久）
+<strong>RPO (Recovery Point Objective)</strong>：恢复点目标（最多丢失多少数据）</p>
+<h4 id="83-漏洞扫描">8.3 漏洞扫描</h4>
+<p><strong>定期扫描</strong>：</p>
+<ul>
+<li><strong>代码扫描</strong>：SonarQube、ESLint（发现潜在漏洞）</li>
+<li><strong>依赖扫描</strong>：npm audit、Snyk（检测第三方库漏洞）</li>
+<li><strong>容器扫描</strong>：Trivy、Clair（检测镜像漏洞）</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># npm audit 示例
+$ npm audit
+
+found 3 vulnerabilities (1 moderate, 2 high)
+
+Package         Severity  Vulnerable versions
+lodash          high      &lt;4.17.21
+express         moderate  4.0.0 - 4.18.2
+
+# 自动修复
+$ npm audit fix
+</code></pre>
+<h3 id="9-自动化运维-devops">9. 自动化运维 (DevOps)</h3>
+<h4 id="91-cicd-流水线">9.1 CI/CD 流水线</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># .gitlab-ci.yml 示例
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  stage: test
+  script:
+    - npm install
+    - npm test
+  tags:
+    - docker
+
+build:
+  stage: build
+  script:
+    - docker build -t myapp:$CI_COMMIT_SHA .
+    - docker push registry.example.com/myapp:$CI_COMMIT_SHA
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl set image deployment/myapp myapp=registry.example.com/myapp:$CI_COMMIT_SHA
+  environment:
+    name: production
+  when: manual # 手动触发部署
+</code></pre>
+<h4 id="92-基础设施即代码-iac">9.2 基础设施即代码 (IaC)</h4>
+<p><strong>Terraform 示例</strong>（管理云资源）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-hcl"># main.tf
+resource &quot;aws_instance&quot; &quot;web&quot; {
+  ami           = &quot;ami-0c55b159cbfafe1f0&quot;
+  instance_type = &quot;t2.micro&quot;
+
+  tags = {
+    Name = &quot;WebServer&quot;
+    Env  = &quot;production&quot;
+  }
+}
+
+resource &quot;aws_security_group&quot; &quot;web&quot; {
+  name = &quot;web-sg&quot;
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = &quot;tcp&quot;
+    cidr_blocks = [&quot;0.0.0.0/0&quot;]
+  }
+}
+</code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>✅ 版本控制：所有配置在 Git 中</li>
+<li>✅ 可重复：环境一致性</li>
+<li>✅ 可审计：变更历史清晰</li>
+<li>✅ 可回滚：快速恢复到之前版本</li>
+</ul>
+<h4 id="93-gitops-实践">9.3 GitOps 实践</h4>
+<p><strong>GitOps = Git + IaC + Automation</strong></p>
+<p>核心理念：<strong>Git 仓库是基础设施的唯一真实来源</strong></p>
+<p>工作流程：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 修改配置文件（push 到 Git）
+   ↓
+2. Git 仓库变更触发 CI/CD
+   ↓
+3. 自动执行terraform apply/kubectl apply
+   ↓
+4. 基础设施自动更新
+   ↓
+5. 监控对比实际状态与期望状态
+</code></pre>
+<p><strong>工具</strong>：ArgoCD、Flux（Kubernetes 部署）</p>
+<h3 id="10-总结与最佳实践">10. 总结与最佳实践</h3>
+<p>运维是一个庞大的体系，但核心可以概括为：</p>
+<h4 id="101-运维成熟度模型">10.1 运维成熟度模型</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">等级</th>
+<th align="left">特征</th>
+<th align="left">实践</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>初级</strong></td>
+<td align="left">被动响应，人工操作</td>
+<td align="left">出问题才处理，手工部署</td>
+</tr>
+<tr>
+<td align="left"><strong>中级</strong></td>
+<td align="left">自动化，标准化</td>
+<td align="left">CI/CD、监控告警、文档化</td>
+</tr>
+<tr>
+<td align="left"><strong>高级</strong></td>
+<td align="left">预防为主，自愈</td>
+<td align="left">容量规划、故障演练、自动扩缩容</td>
+</tr>
+<tr>
+<td align="left"><strong>专家</strong></td>
+<td align="left">智能化，无人值守</td>
+<td align="left">AIOps、混沌工程、Serverless</td>
+</tr>
+</tbody></table></div>
+<h4 id="102-运维工程师的一天">10.2 运维工程师的一天</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>09:00 - 查看夜间告警，确认系统状态
+10:00 - 处理用户反馈的问题
+11:00 - 参加研发周会，评估新方案运维风险
+14:00 - 优化慢查询，提升性能
+15:00 - 代码审查（Code Review）
+16:00 - 编写部署文档，更新监控规则
+17:00 - 故障演练（Chaos Engineering）
+18:00 - 值班交接
+</code></pre>
+<h4 id="103-学习路线">10.3 学习路线</h4>
+<p><strong>入门阶段</strong>（1-3 个月）：</p>
+<ul>
+<li>学会 Linux 常用命令</li>
+<li>了解监控系统（Prometheus + Grafana）</li>
+<li>掌握日志查询（ELK）</li>
+</ul>
+<p><strong>进阶阶段</strong>（3-6 个月）：</p>
+<ul>
+<li>深入理解容器技术（Docker + K8s）</li>
+<li>掌握一门诊断工具（Arthas、tcpdump）</li>
+<li>实践 CI/CD 流水线</li>
+</ul>
+<p><strong>高级阶段</strong>（6-12 个月）：</p>
+<ul>
+<li>性能调优（数据库、JVM、网络）</li>
+<li>容量规划与成本优化</li>
+<li>故障复盘与流程改进</li>
+</ul>
+<p><strong>专家阶段</strong>（1 年以上）：</p>
+<ul>
+<li>架构设计（高可用、容灾）</li>
+<li>混沌工程（主动注入故障）</li>
+<li>AIOps（智能运维）</li>
+</ul>
+<h3 id="11-名词速查表-glossary">11. 名词速查表 (Glossary)</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">名词</th>
+<th align="left">全称</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Monitoring</strong></td>
+<td align="left">-</td>
+<td align="left">监控，实时观测系统运行状态。</td>
+</tr>
+<tr>
+<td align="left"><strong>Alerting</strong></td>
+<td align="left">-</td>
+<td align="left">告警，异常时通知相关人员。</td>
+</tr>
+<tr>
+<td align="left"><strong>Logging</strong></td>
+<td align="left">-</td>
+<td align="left">日志，记录系统运行过程中的事件。</td>
+</tr>
+<tr>
+<td align="left"><strong>Tracing</strong></td>
+<td align="left">-</td>
+<td align="left">链路追踪，跟踪请求在分布式系统中的完整路径。</td>
+</tr>
+<tr>
+<td align="left"><strong>QPS</strong></td>
+<td align="left">Queries Per Second</td>
+<td align="left">每秒请求数，衡量系统吞吐量。</td>
+</tr>
+<tr>
+<td align="left"><strong>Latency</strong></td>
+<td align="left">-</td>
+<td align="left">延迟，请求从发出到响应的时间。</td>
+</tr>
+<tr>
+<td align="left"><strong>RTO</strong></td>
+<td align="left">Recovery Time Objective</td>
+<td align="left">恢复时间目标，服务最多中断多久。</td>
+</tr>
+<tr>
+<td align="left"><strong>RPO</strong></td>
+<td align="left">Recovery Point Objective</td>
+<td align="left">恢复点目标，最多丢失多少数据。</td>
+</tr>
+<tr>
+<td align="left"><strong>Post-mortem</strong></td>
+<td align="left">-</td>
+<td align="left">故障复盘，分析故障原因和改进措施。</td>
+</tr>
+<tr>
+<td align="left"><strong>CI/CD</strong></td>
+<td align="left">Continuous Integration/Delivery</td>
+<td align="left">持续集成与持续交付，自动化测试与部署。</td>
+</tr>
+<tr>
+<td align="left"><strong>IaC</strong></td>
+<td align="left">Infrastructure as Code</td>
+<td align="left">基础设施即代码，用代码管理服务器、网络等资源。</td>
+</tr>
+<tr>
+<td align="left"><strong>GitOps</strong></td>
+<td align="left">-</td>
+<td align="left">Git 运维，Git 仓库是基础设施的唯一真实来源。</td>
+</tr>
+<tr>
+<td align="left"><strong>ELK</strong></td>
+<td align="left">Elasticsearch + Logstash + Kibana</td>
+<td align="left">日志采集、存储、可视化三件套。</td>
+</tr>
+<tr>
+<td align="left"><strong>SLA</strong></td>
+<td align="left">Service Level Agreement</td>
+<td align="left">服务等级协议，承诺的服务可用性（如 99.9%）。</td>
+</tr>
+<tr>
+<td align="left"><strong>Blameless</strong></td>
+<td align="left">-</td>
+<td align="left">无责备文化，复盘关注流程改进而非个人责任。</td>
+</tr>
+</tbody></table></div>
+<h3 id="12-延伸阅读">12. 延伸阅读</h3>
+<ul>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/4-server-and-backend/caching.md">系统缓存设计</a></strong> - 缓存原理、模式与最佳实践</li>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/4-server-and-backend/message-queues.md">消息队列设计</a></strong> - 削峰填谷、异步解耦</li>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/4-server-and-backend/auth-authorization.md">鉴权原理与实战</a></strong> - 认证授权、安全加固</li>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/4-server-and-backend/backend-layered-architecture.md">后端进化史</a></strong> - 从单体到微服务到 Serverless</li>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/7-infrastructure-and-operations/ci-cd.md">部署与上线</a></strong> - 从开发到生产的最后一公里</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-155.html">← 基础设施即代码</a><a rel="next" href="chapter-157.html">故障排查与应急响应 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

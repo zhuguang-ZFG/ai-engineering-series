@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>计算机组成原理 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 81 / 195</p><article><h1 id="计算机组成原理">计算机组成原理</h1><details class="contents"><summary>本章目录 <span>· 10 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图计算机硬件系统">0. 全景图：计算机硬件系统</a></li><li><a href="#1-冯诺依曼架构现代计算机的基础模型">1. 冯诺依曼架构：现代计算机的基础模型</a><ul><li><a href="#11-存储程序原理">1.1 存储程序原理</a></li><li><a href="#12-五大组成部件">1.2 五大组成部件</a></li><li><a href="#13-数据通路">1.3 数据通路</a></li><li><a href="#14-冯诺依曼瓶颈">1.4 冯诺依曼瓶颈</a></li></ul></li><li><a href="#2-指令系统cpu-与软件的接口">2. 指令系统：CPU 与软件的接口</a><ul><li><a href="#21-从代码到指令一行代码的翻译之旅">2.1 从代码到指令：一行代码的翻译之旅</a></li><li><a href="#22-指令格式">2.2 指令格式</a></li><li><a href="#23-寻址方式">2.3 寻址方式</a></li><li><a href="#24-cpu-的能力清单指令分类">2.4 CPU 的能力清单——指令分类</a></li><li><a href="#25-两种设计哲学cisc-vs-risc">2.5 两种设计哲学：CISC vs RISC</a></li></ul></li><li><a href="#3-控制器cpu-的控制单元">3. 控制器：CPU 的控制单元</a><ul><li><a href="#31-控制器的组成">3.1 控制器的组成</a></li><li><a href="#32-指令周期">3.2 指令周期</a></li><li><a href="#33-微操作">3.3 微操作</a></li><li><a href="#34-硬布线-vs-微程序控制器">3.4 硬布线 vs 微程序控制器</a></li></ul></li><li><a href="#4-存储体系与缓存原理">4. 存储体系与缓存原理</a><ul><li><a href="#41-存储层次结构">4.1 存储层次结构</a></li><li><a href="#42-缓存原理">4.2 缓存原理</a></li><li><a href="#缓存的工作方式">缓存的工作方式</a></li><li><a href="#43-缓存映射方式">4.3 缓存映射方式</a></li><li><a href="#44-虚拟内存">4.4 虚拟内存</a></li></ul></li><li><a href="#5-总线与-io-系统">5. 总线与 I/O 系统</a><ul><li><a href="#51-系统总线">5.1 系统总线</a></li><li><a href="#52-总线仲裁">5.2 总线仲裁</a></li><li><a href="#53-io-设备访问方式">5.3 I/O 设备访问方式</a></li><li><a href="#54-dma-原理">5.4 DMA 原理</a></li><li><a href="#55-中断机制">5.5 中断机制</a></li></ul></li><li><a href="#6-cpu-性能优化流水线技术">6. CPU 性能优化：流水线技术</a><ul><li><a href="#61-指令流水线">6.1 指令流水线</a></li><li><a href="#流水线的工作原理">流水线的工作原理</a></li><li><a href="#62-流水线冒险">6.2 流水线冒险</a></li></ul></li><li><a href="#7-总结计算机的执行模型">7. 总结：计算机的执行模型</a></li><li><a href="#延伸阅读-4">延伸阅读</a></li><li><a href="#下一步-3">下一步</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>从晶体管到 CPU 后，计算机如何组成完整系统？</strong> 上一章我们从晶体管出发，构建了加法器、寄存器、运算单元，最终拼出了 CPU 核心。但仅有 CPU 是不够的——它需要和内存、I/O 设备协同工作，需要总线连接各个部件，需要指令系统来驱动。这一章我们将从 CPU 的内部视角转向整个计算机系统的视角，深入理解冯诺依曼架构、指令系统、存储层次、总线与 I/O 的专业原理。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>系统视角</strong>：理解 CPU、内存、I/O 是如何协同工作的不再是孤立的硬件爱好者</li>
+<li><strong>硬件专业术语</strong>：掌握指令周期、流水线、CPI、缓存命中率等硬核概念</li>
+<li><strong>性能思维</strong>：理解计算机组成中的瓶颈与优化手段</li>
+<li><strong>后续学习基础</strong>：为操作系统、体系结构、嵌入式开发打下专业基础</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>冯诺依曼架构</td>
+<td>存储程序、五大组成部件、数据通路</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>指令系统</td>
+<td>指令格式、寻址方式、CISC vs RISC</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>CPU 控制器</td>
+<td>控制单元、微操作、指令周期</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>存储体系</td>
+<td>缓存、主存、虚拟内存、分页机制</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>总线与 I/O</td>
+<td>总线仲裁、DMA、中断机制</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-全景图计算机硬件系统">0. 全景图：计算机硬件系统</h2>
+<p>在上一章&quot;从晶体管到 CPU&quot;中，我们已经理解了 CPU 内部是如何工作的——从取指、译码、执行到写回。但 CPU 本身只是一个执行单元，要让计算机真正&quot;能用&quot;，还需要一系列外围部件的配合。</p>
+<blockquote>
+<p><strong>逐层解构：计算机硬件系统</strong></p>
+</blockquote>
+<ul>
+<li><p><strong>第一层：CPU 核心</strong>
+负责指令执行，包括控制单元（发出控制信号）和运算单元（执行算术逻辑运算）</p>
+</li>
+<li><p><strong>第二层：寄存器组</strong>
+CPU 内部的高速存储单元，包括通用寄存器和专用寄存器（PC、IR、MAR、MDR 等）</p>
+</li>
+<li><p><strong>第三层：主存储器</strong>
+用于存放程序和数据的内存，CPU 通过地址总线和数据总线访问</p>
+</li>
+<li><p><strong>第四层：I/O 设备</strong>
+输入输出设备通过 I/O 控制器与系统总线相连</p>
+</li>
+<li><p><strong>第五层：系统总线</strong>
+连接 CPU、内存、I/O 的数据通道，包括地址总线、数据总线、控制总线</p>
+</li>
+</ul>
+<h2 id="1-冯诺依曼架构现代计算机的基础模型">1. 冯诺依曼架构：现代计算机的基础模型</h2>
+<h3 id="11-存储程序原理">1.1 存储程序原理</h3>
+<p>1945 年，数学家约翰·冯·诺依曼（John von Neumann）提出了划时代的**存储程序（Stored-program）**架构思想。这一思想奠定了现代计算机的基础。</p>
+<blockquote>
+<p><strong>核心概念</strong>
+<strong>存储程序</strong>：程序本身作为一种特殊的数据，和普通数据一样存储在内存中。CPU 可以像读写数据一样读取并执行存储在内存中的程序指令。</p>
+</blockquote>
+<p>这意味着：</p>
+<ul>
+<li><strong>早期计算机</strong>：程序是固定布线实现的，改变程序需要重新焊接电路</li>
+<li><strong>冯诺依曼架构</strong>：程序存储在内存中，改变程序只需修改内存内容</li>
+</ul>
+<h3 id="12-五大组成部件">1.2 五大组成部件</h3>
+<p>冯诺依曼架构将计算机划分为五个核心组成部分：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>部件</th>
+<th>英文</th>
+<th>功能</th>
+<th>主要组成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>运算器</strong></td>
+<td>ALU (Arithmetic Logic Unit)</td>
+<td>执行算术和逻辑运算</td>
+<td>加法器、移位器、比较器</td>
+</tr>
+<tr>
+<td><strong>控制器</strong></td>
+<td>CU (Control Unit)</td>
+<td>指挥协调各部件工作</td>
+<td>指令寄存器、译码器、时序发生器</td>
+</tr>
+<tr>
+<td><strong>存储器</strong></td>
+<td>Memory</td>
+<td>存储程序和数据</td>
+<td>内存地址寄存器(MAR)、内存数据寄存器(MDR)</td>
+</tr>
+<tr>
+<td><strong>输入设备</strong></td>
+<td>Input</td>
+<td>信息输入</td>
+<td>键盘、鼠标、扫描仪</td>
+</tr>
+<tr>
+<td><strong>输出设备</strong></td>
+<td>Output</td>
+<td>信息输出</td>
+<td>显示器、打印机</td>
+</tr>
+</tbody></table></div>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/computer-org.svg" aria-label="打开大图：冯诺依曼计算机五大件：输入设备、存储器、CPU（控制器、运算器、寄存器）、输出设备，全部挂在系统总线上，下方是指令周期与存储速度阶梯"><img src="../../book/assets/handdraw/computer-org.svg" alt="冯诺依曼计算机五大件：输入设备、存储器、CPU（控制器、运算器、寄存器）、输出设备，全部挂在系统总线上，下方是指令周期与存储速度阶梯" loading="lazy"></a>
+  <figcaption><strong>瓶颈常常不在算，而在取数据。</strong>五大件靠一条总线串起来，内存管快、断电就忘，硬盘管长期保存；从桌上拿纸到另一个国家取件，速度差上百万倍。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h3 id="13-数据通路">1.3 数据通路</h3>
+<p>**数据通路（Data Path）**是数据在各个功能部件之间流动的路径。在 CPU 内部，数据通路连接了：</p>
+<ul>
+<li>寄存器组</li>
+<li>算术逻辑单元(ALU)</li>
+<li>内存数据寄存器(MDR)</li>
+</ul>
+<p>数据通路的宽度（一次能传输多少位）直接影响了计算机的性能。</p>
+<h3 id="14-冯诺依曼瓶颈">1.4 冯诺依曼瓶颈</h3>
+<p>冯诺依曼架构有一个著名的<strong>性能瓶颈</strong>：</p>
+<blockquote>
+<p>CPU 与内存之间的数据传输速度，远低于 CPU 的处理速度。</p>
+</blockquote>
+<p>这导致 CPU 经常处于&quot;等待数据&quot;的空闲状态。现代计算机的很多优化技术都是围绕这个问题展开的：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>优化技术</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>缓存(Cache)</strong></td>
+<td>在 CPU 附近放置小容量高速存储</td>
+</tr>
+<tr>
+<td><strong>指令流水线</strong></td>
+<td>让多条指令同时处于不同阶段</td>
+</tr>
+<tr>
+<td><strong>超标量</strong></td>
+<td>同一时钟周期发射多条指令</td>
+</tr>
+<tr>
+<td><strong>多核并行</strong></td>
+<td>多个 CPU 核心分担计算任务</td>
+</tr>
+</tbody></table></div>
+<h2 id="2-指令系统cpu-与软件的接口">2. 指令系统：CPU 与软件的接口</h2>
+<p>上一节我们知道了冯诺依曼架构的核心思想：<strong>程序和数据一样存储在内存中</strong>。但这引出了一个关键问题——存在内存里的&quot;程序&quot;到底长什么样？CPU 怎么读懂它？</p>
+<p>答案就是<strong>指令系统（Instruction Set Architecture, ISA）</strong>。如果把 CPU 比作一个服务，那指令系统就是它的 <strong>API 文档</strong>——它定义了 CPU 能听懂的所有命令、每条命令的格式、以及命令能操作的数据范围。你写的每一行代码，最终都会被编译器翻译成这套&quot;API&quot;的调用序列。</p>
+<h3 id="21-从代码到指令一行代码的翻译之旅">2.1 从代码到指令：一行代码的翻译之旅</h3>
+<p>我们先建立一个全局认知：你在编辑器里写的代码，和 CPU 实际执行的东西，中间隔了好几层翻译。</p>
+<p>这个翻译链路是理解指令系统的关键：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>内容</th>
+<th>谁能看懂</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高级语言</td>
+<td><code>int a = 10 + 5;</code></td>
+<td>人类</td>
+</tr>
+<tr>
+<td>汇编语言</td>
+<td><code>MOV R1, #10</code> / <code>ADD R3, R1, R2</code></td>
+<td>人类（需要训练）</td>
+</tr>
+<tr>
+<td>机器码</td>
+<td><code>0001 0001 0000 1010</code></td>
+<td>CPU</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么要理解这个链路？</strong></p>
+</blockquote>
+<ul>
+<li>看到编译报错时，你知道错误发生在&quot;高级语言→汇编&quot;这一步</li>
+<li>看到运行时崩溃时，你知道问题出在 CPU 执行指令的阶段</li>
+<li>理解性能优化时，你知道编译器在&quot;翻译&quot;过程中做了哪些优化</li>
+<li>选择 CPU 架构时（x86 vs ARM），你知道差异在于&quot;指令集 API&quot;不同</li>
+</ul>
+<h3 id="22-指令格式">2.2 指令格式</h3>
+<p>知道了代码会被翻译成指令，下一个问题是：<strong>一条指令的内部结构是什么？</strong></p>
+<p>每条机器指令本质上就是一串二进制数字，但它有严格的内部格式。最核心的两个部分：</p>
+<ul>
+<li><strong>操作码（Opcode）</strong>：告诉 CPU「做什么」——是加法？跳转？还是读内存？</li>
+<li><strong>操作数（Operand）</strong>：告诉 CPU「对谁做」——哪个寄存器？哪个内存地址？什么常数？</li>
+</ul>
+<p>就像一句话有「动词 + 宾语」的结构，指令也有「操作 + 对象」的结构：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>指令:  ADD  R3, R1, R2
+       ───  ──────────
+       操作码  操作数
+       (做加法) (R3 = R1 + R2)
+</code></pre>
+<p>根据操作数的数量，指令格式从简单到复杂分为四种：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>结构</th>
+<th>例子</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>零地址</td>
+<td>只有操作码</td>
+<td><code>RET</code>（返回）</td>
+<td>堆栈计算机，操作数隐含在栈顶</td>
+</tr>
+<tr>
+<td>一地址</td>
+<td>操作码 + 1个地址</td>
+<td><code>INC R1</code>（R1加1）</td>
+<td>单操作数运算</td>
+</tr>
+<tr>
+<td>二地址</td>
+<td>操作码 + 2个地址</td>
+<td><code>MOV R1, R2</code></td>
+<td>最常用，数据传送和运算</td>
+</tr>
+<tr>
+<td>三地址</td>
+<td>操作码 + 3个地址</td>
+<td><code>ADD R3, R1, R2</code></td>
+<td>不破坏源操作数</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么有这么多格式？</strong>
+这是<strong>空间和灵活性的权衡</strong>。零地址指令最短（省内存），但需要额外的栈操作；三地址指令最灵活（不破坏源数据），但占用更多位数。不同 CPU 架构会选择不同的指令格式组合。</p>
+</blockquote>
+<h3 id="23-寻址方式">2.3 寻址方式</h3>
+<p>指令告诉 CPU「做加法」，但加法的两个数在哪里？可能直接写在指令里，可能在寄存器里，也可能在内存的某个地址。<strong>寻址方式</strong>就是告诉 CPU「去哪里找操作数」的规则。</p>
+<p>用生活中「找人」来类比：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>寻址方式</th>
+<th>类比</th>
+<th>指令示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>立即数寻址</strong></td>
+<td>人就站在你面前</td>
+<td><code>MOV R1, #100</code></td>
+<td>数据直接写在指令里，最快</td>
+</tr>
+<tr>
+<td><strong>寄存器寻址</strong></td>
+<td>打内线电话找同事</td>
+<td><code>MOV R1, R2</code></td>
+<td>数据在 CPU 内部的寄存器里，很快</td>
+</tr>
+<tr>
+<td><strong>直接寻址</strong></td>
+<td>知道门牌号，直接上门</td>
+<td><code>MOV R1, [0x1000]</code></td>
+<td>指令里写了内存地址</td>
+</tr>
+<tr>
+<td><strong>间接寻址</strong></td>
+<td>问前台「张三在哪个房间」</td>
+<td><code>MOV R1, [R2]</code></td>
+<td>寄存器里存的是地址，要多查一次</td>
+</tr>
+<tr>
+<td><strong>变址寻址</strong></td>
+<td>「3号楼 + 5层」算出房间</td>
+<td><code>MOV R1, [R2+10]</code></td>
+<td>基地址 + 偏移量，用于数组访问</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么需要这么多寻址方式？</strong>
+不同场景需要不同的「找数据」策略：</p>
+</blockquote>
+<ul>
+<li><strong>常量赋值</strong>（<code>x = 100</code>）→ 立即数寻址，数据就在指令里</li>
+<li><strong>变量运算</strong>（<code>a + b</code>）→ 寄存器寻址，数据已经加载到寄存器</li>
+<li><strong>数组访问</strong>（<code>arr[i]</code>）→ 变址寻址，基地址 + 下标偏移</li>
+<li><strong>指针操作</strong>（<code>*ptr</code>）→ 间接寻址，寄存器里存的是地址</li>
+</ul>
+<p>你写 <code>arr[i]</code> 时不会想到寻址方式，但编译器会自动选择最合适的方式。</p>
+<h3 id="24-cpu-的能力清单指令分类">2.4 CPU 的能力清单——指令分类</h3>
+<p>现在我们知道了指令的格式和寻址方式，最后一个问题：<strong>CPU 到底能做哪些事？</strong></p>
+<p>所有指令可以归为六大类，它们覆盖了计算机能做的一切操作：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>做什么</th>
+<th>代表指令</th>
+<th>对应你写的代码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据传送</strong></td>
+<td>搬运数据</td>
+<td>MOV, LOAD, STORE</td>
+<td><code>let x = y</code>、函数传参</td>
+</tr>
+<tr>
+<td><strong>算术运算</strong></td>
+<td>加减乘除</td>
+<td>ADD, SUB, MUL, DIV</td>
+<td><code>a + b</code>、<code>count++</code></td>
+</tr>
+<tr>
+<td><strong>逻辑运算</strong></td>
+<td>位操作</td>
+<td>AND, OR, NOT, XOR</td>
+<td><code>flags &amp; 0xFF</code>、权限判断</td>
+</tr>
+<tr>
+<td><strong>移位操作</strong></td>
+<td>左移右移</td>
+<td>SHL, SHR</td>
+<td><code>x &lt;&lt; 2</code>（等价于乘4）</td>
+</tr>
+<tr>
+<td><strong>控制转移</strong></td>
+<td>跳转和调用</td>
+<td>JMP, CALL, RET</td>
+<td><code>if</code>、<code>for</code>、函数调用</td>
+</tr>
+<tr>
+<td><strong>输入输出</strong></td>
+<td>与外设通信</td>
+<td>IN, OUT</td>
+<td>读键盘、写屏幕</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>一个关键洞察</strong>
+你写的所有代码——不管多复杂的业务逻辑、多炫酷的 UI 动画——最终都会被拆解成这六类基本操作的组合。CPU 的&quot;智能&quot;不在于它能做多复杂的事，而在于它能以每秒几十亿次的速度执行这些简单操作。</p>
+</blockquote>
+<h3 id="25-两种设计哲学cisc-vs-risc">2.5 两种设计哲学：CISC vs RISC</h3>
+<p>指令系统的设计有一个根本性的分歧：<strong>是让每条指令尽可能强大，还是让每条指令尽可能简单？</strong></p>
+<p>这个分歧产生了两大阵营，直接影响了你今天用的每一台设备：</p>
+<p>用一个类比来理解：</p>
+<ul>
+<li><strong>CISC 像瑞士军刀</strong>：一把刀集成了剪刀、开瓶器、螺丝刀……功能多但每个不一定最好用</li>
+<li><strong>RISC 像专业工具套装</strong>：每个工具只做一件事，但做得又快又好</li>
+</ul>
+<blockquote>
+<p><strong>为什么你的手机用 ARM、电脑用 x86？</strong></p>
+</blockquote>
+<ul>
+<li><strong>x86 (CISC)</strong> 统治了 PC 和服务器市场 40 年，积累了庞大的软件生态。换架构意味着所有软件都要重新编译</li>
+<li><strong>ARM (RISC)</strong> 凭借低功耗优势统治了移动设备。手机电池小，每一毫瓦都很珍贵</li>
+<li><strong>Apple Silicon</strong> 证明了 RISC 也能做到高性能——M 系列芯片在性能和功耗上同时超越了 x86 对手</li>
+<li><strong>RISC-V</strong> 是开源的 RISC 架构，正在 IoT、教育、AI 芯片领域快速崛起</li>
+</ul>
+<blockquote>
+<p><strong>小结</strong>：指令系统是连接软件和硬件的桥梁。你写的代码通过编译器翻译成指令，指令通过操作码和操作数告诉 CPU 做什么、对谁做，寻址方式决定了数据从哪里来。不同的指令集设计（CISC/RISC）决定了 CPU 的性能特征和适用场景。</p>
+<p>现在我们知道了指令的「静态结构」——它长什么样、有哪些类型。下一个问题是：<strong>CPU 内部是怎么一步步执行这些指令的？</strong> 这就是控制器的工作。</p>
+</blockquote>
+<h2 id="3-控制器cpu-的控制单元">3. 控制器：CPU 的控制单元</h2>
+<h3 id="31-控制器的组成">3.1 控制器的组成</h3>
+<p>控制器是 CPU 的&quot;大脑&quot;，负责协调各部件按指令要求工作：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>程序计数器 (PC)</strong></td>
+<td>存放下一条指令的地址</td>
+</tr>
+<tr>
+<td><strong>指令寄存器 (IR)</strong></td>
+<td>存放当前正在执行的指令</td>
+</tr>
+<tr>
+<td><strong>指令译码器</strong></td>
+<td>解析指令的操作码和操作数</td>
+</tr>
+<tr>
+<td><strong>时序发生器</strong></td>
+<td>产生节拍信号，控制各部件时序</td>
+</tr>
+<tr>
+<td><strong>微操作序列生成器</strong></td>
+<td>产生执行指令所需的一系列控制信号</td>
+</tr>
+</tbody></table></div>
+<h3 id="32-指令周期">3.2 指令周期</h3>
+<p>CPU 执行一条指令需要经历一个完整的<strong>指令周期</strong>，通常包括：</p>
+<ol>
+<li><strong>取指周期 (Fetch)</strong>: 从内存读取指令到 IR</li>
+<li><strong>译码周期 (Decode)</strong>: 解析指令含义</li>
+<li><strong>执行周期 (Execute)</strong>: 执行操作</li>
+<li><strong>访存周期 (Memory Access)</strong>: 如果需要访存，访问内存</li>
+<li><strong>写回周期 (Write Back)</strong>: 把结果写回寄存器或内存</li>
+</ol>
+<h3 id="33-微操作">3.3 微操作</h3>
+<p><strong>微操作</strong>是控制信号驱动下的最基本操作。例如，&quot;取指&quot;这个阶段可以分解为以下微操作：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>节拍</th>
+<th>微操作</th>
+<th>控制信号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>PC → MAR</td>
+<td>PCout, MARin</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>MEM → MDR</td>
+<td>MEMout, MDRin</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>MDR → IR</td>
+<td>MDRout, IRin</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>PC + 1 → PC</td>
+<td>PC+1, PCin</td>
+</tr>
+</tbody></table></div>
+<h3 id="34-硬布线-vs-微程序控制器">3.4 硬布线 vs 微程序控制器</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>硬布线控制器</th>
+<th>微程序控制器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>实现方式</strong></td>
+<td>组合逻辑电路</td>
+<td>微指令序列(固件)</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>快</td>
+<td>稍慢</td>
+</tr>
+<tr>
+<td><strong>设计难度</strong></td>
+<td>复杂</td>
+<td>较简单</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>差(改动需重新设计电路)</td>
+<td>好(修改微程序即可)</td>
+</tr>
+<tr>
+<td><strong>典型应用</strong></td>
+<td>RISC 处理器</td>
+<td>CISC 处理器早期</td>
+</tr>
+</tbody></table></div>
+<h2 id="4-存储体系与缓存原理">4. 存储体系与缓存原理</h2>
+<h3 id="41-存储层次结构">4.1 存储层次结构</h3>
+<p>计算机的存储设备构成了一个金字塔结构：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>存储类型</th>
+<th>访问时间</th>
+<th>典型容量</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>寄存器</strong></td>
+<td>SRAM</td>
+<td>&lt;1ns</td>
+<td>几 KB</td>
+<td>CPU 内部</td>
+</tr>
+<tr>
+<td><strong>L1 缓存</strong></td>
+<td>SRAM</td>
+<td>~1ns</td>
+<td>32-64KB</td>
+<td>CPU 核心附近</td>
+</tr>
+<tr>
+<td><strong>L2 缓存</strong></td>
+<td>SRAM</td>
+<td>~3-10ns</td>
+<td>256KB-1MB</td>
+<td>CPU 芯片内</td>
+</tr>
+<tr>
+<td><strong>L3 缓存</strong></td>
+<td>SRAM</td>
+<td>~10-20ns</td>
+<td>2-16MB</td>
+<td>CPU 芯片内/共享</td>
+</tr>
+<tr>
+<td><strong>主存(内存)</strong></td>
+<td>DRAM</td>
+<td>~50-100ns</td>
+<td>8-64GB</td>
+<td>主板上</td>
+</tr>
+<tr>
+<td><strong>SSD</strong></td>
+<td>Flash</td>
+<td>~10-100μs</td>
+<td>256GB-2TB</td>
+<td>主板上</td>
+</tr>
+<tr>
+<td><strong>HDD</strong></td>
+<td>磁盘</td>
+<td>~5-10ms</td>
+<td>1-10TB</td>
+<td>机箱内</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>速度差异的比喻</strong>
+如果把 CPU 访问 L1 缓存比作<strong>从桌上拿一张纸</strong>：</p>
+</blockquote>
+<ul>
+<li>访问内存 → 坐电梯去楼下便利店买纸</li>
+<li>访问 SSD → 开车去另一个城市买纸</li>
+<li>访问 HDD → 坐飞机去另一个国家买纸</li>
+</ul>
+<p>速度差异可达<strong>上百万倍</strong>！</p>
+<h3 id="42-缓存原理">4.2 缓存原理</h3>
+<p><strong>缓存(Cache)</strong> 是位于 CPU 和内存之间的快速存储，其核心思想基于两个局部性原理：</p>
+<blockquote>
+<p><strong>局部性原理</strong></p>
+</blockquote>
+<ul>
+<li><strong>时间局部性</strong>：如果一个数据刚被访问，它很可能很快又被访问</li>
+<li><strong>空间局部性</strong>：如果一个数据被访问，它附近的数据很可能也被访问</li>
+</ul>
+<h3 id="缓存的工作方式">缓存的工作方式</h3>
+<ol>
+<li><strong>命中(Hit)</strong>：CPU 要的数据在缓存中，直接读取</li>
+<li><strong>缺失(Miss)</strong>：数据不在缓存中，需要从内存加载</li>
+</ol>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>命中率 = 命中次数 / 总访问次数
+平均访问时间 = 命中率 × 缓存时间 + (1-命中率) × 内存时间
+</code></pre>
+<h3 id="43-缓存映射方式">4.3 缓存映射方式</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>直接映射</strong></td>
+<td>每个内存块只能放到一个固定位置</td>
+<td>简单快速</td>
+<td>冲突率高</td>
+</tr>
+<tr>
+<td><strong>组相联</strong></td>
+<td>每个内存块可以放到 N 个位置(N路)</td>
+<td>平衡速度与命中率</td>
+<td>实现复杂</td>
+</tr>
+<tr>
+<td><strong>全相联</strong></td>
+<td>任意位置</td>
+<td>最低冲突率</td>
+<td>实现困难(需要比较所有标签)</td>
+</tr>
+</tbody></table></div>
+<h3 id="44-虚拟内存">4.4 虚拟内存</h3>
+<p><strong>虚拟内存</strong>是操作系统提供的重要抽象：</p>
+<ul>
+<li>每个进程都认为自己拥有完整的虚拟地址空间</li>
+<li>操作系统负责把虚拟地址翻译成物理地址</li>
+<li>不常用的页面可以换出到磁盘(交换空间)</li>
+</ul>
+<blockquote>
+<p><strong>虚拟内存的比喻</strong>
+把虚拟内存想象成<strong>酒店管理房间</strong>：</p>
+</blockquote>
+<ul>
+<li>你(进程)以为整栋楼都是你的</li>
+<li>实际上酒店(OS)只给你分配当前需要的房间</li>
+<li>不住的房间会被&quot;换出&quot;到仓库(磁盘)</li>
+<li>需要的房间可以随时&quot;换入&quot;</li>
+</ul>
+<h2 id="5-总线与-io-系统">5. 总线与 I/O 系统</h2>
+<h3 id="51-系统总线">5.1 系统总线</h3>
+<p><strong>总线(Bus)</strong> 是连接计算机各部件的数据通道：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>总线类型</th>
+<th>功能</th>
+<th>方向</th>
+<th>典型宽度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>地址总线</strong></td>
+<td>传送内存地址</td>
+<td>单向(CPU→内存)</td>
+<td>32位/64位</td>
+</tr>
+<tr>
+<td><strong>数据总线</strong></td>
+<td>传送数据</td>
+<td>双向</td>
+<td>32位/64位</td>
+</tr>
+<tr>
+<td><strong>控制总线</strong></td>
+<td>传送控制信号</td>
+<td>双向</td>
+<td>多个信号线</td>
+</tr>
+</tbody></table></div>
+<h3 id="52-总线仲裁">5.2 总线仲裁</h3>
+<p>当多个设备同时请求使用总线时，需要<strong>仲裁</strong>机制决定谁先使用：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>仲裁方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>集中仲裁</strong></td>
+<td>中央仲裁器统一决定</td>
+</tr>
+<tr>
+<td><strong>分布式仲裁</strong></td>
+<td>各设备自行协商</td>
+</tr>
+</tbody></table></div>
+<h3 id="53-io-设备访问方式">5.3 I/O 设备访问方式</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>程序查询</strong></td>
+<td>CPU 轮询检查 I/O 状态</td>
+<td>简单</td>
+<td>CPU 利用率低</td>
+</tr>
+<tr>
+<td><strong>中断方式</strong></td>
+<td>I/O 完成后主动通知 CPU</td>
+<td>CPU 可并行工作</td>
+<td>中断处理有开销</td>
+</tr>
+<tr>
+<td><strong>DMA</strong></td>
+<td>I/O 设备直接访问内存</td>
+<td>CPU 完全不参与</td>
+<td>需要 DMA 控制器</td>
+</tr>
+</tbody></table></div>
+<h3 id="54-dma-原理">5.4 DMA 原理</h3>
+<p><strong>DMA (Direct Memory Access，直接内存访问)</strong> 允许 I/O 设备直接与内存交换数据：</p>
+<ul>
+<li><strong>无 DMA</strong>：CPU 全程参与数据传送，CPU 无法做其他事</li>
+<li><strong>有 DMA</strong>：CPU 告诉 DMA 控制器&quot;从哪里传到哪里、传多少&quot;，然后去执行其他任务，DMA 完成后通知 CPU</li>
+</ul>
+<blockquote>
+<p><strong>DMA 的比喻</strong>
+这就像<strong>点外卖</strong>：</p>
+</blockquote>
+<ul>
+<li><strong>没有 DMA</strong>：你亲自去超市买菜、回家、洗菜、炒菜（全过程参与）</li>
+<li><strong>有 DMA</strong>：你打电话下单，外卖小哥直接送到厨房（别人帮你搞定，你只需要最后&quot;收货&quot;）</li>
+</ul>
+<h3 id="55-中断机制">5.5 中断机制</h3>
+<p><strong>中断</strong>是计算机系统中非常重要的机制：</p>
+<ol>
+<li>I/O 设备完成操作后，向 CPU 发送<strong>中断请求</strong></li>
+<li>CPU 正在执行指令，完成当前指令后响应中断</li>
+<li>CPU 保存当前状态，跳转到中断处理程序</li>
+<li>处理完成后，恢复状态继续执行</li>
+</ol>
+<h2 id="6-cpu-性能优化流水线技术">6. CPU 性能优化：流水线技术</h2>
+<h3 id="61-指令流水线">6.1 指令流水线</h3>
+<p><strong>指令流水线</strong>是一种让 CPU 效率最大化的并行技术：</p>
+<h3 id="流水线的工作原理">流水线的工作原理</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>顺序执行（5条指令，15个周期）：
+指令1: IF→ID→EX→MEM→WB
+指令2:            IF→ID→EX→MEM→WB
+指令3:                         IF→ID→EX→MEM→WB
+...
+
+流水线执行（5条指令，9个周期）：
+指令1: IF→ID→EX→MEM→WB
+指令2:    IF→ID→EX→MEM→WB
+指令3:       IF→ID→EX→MEM→WB
+...
+</code></pre>
+<p>理想情况下，N 条指令的 CPI(每指令周期数) ≈ 1</p>
+<h3 id="62-流水线冒险">6.2 流水线冒险</h3>
+<p>流水线虽然能提高性能，但也会带来<strong>冒险(Hazard)</strong> 问题：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>结构冒险</strong></td>
+<td>硬件资源冲突</td>
+<td>增加硬件/错开执行</td>
+</tr>
+<tr>
+<td><strong>数据冒险</strong></td>
+<td>后面的指令需要前面的结果</td>
+<td>数据转发/气泡/调度</td>
+</tr>
+<tr>
+<td><strong>控制冒险</strong></td>
+<td>跳转指令改变执行流</td>
+<td>延迟槽/分支预测</td>
+</tr>
+</tbody></table></div>
+<h2 id="7-总结计算机的执行模型">7. 总结：计算机的执行模型</h2>
+<p>下面用专业术语把整个流程串一遍：</p>
+<blockquote>
+<p><strong>程序启动后，操作系统将可执行文件从磁盘加载到内存。CPU 的取指单元(IF)通过地址总线从内存读取指令到指令寄存器(IR)。控制器译码指令(ID)，识别出操作类型后产生相应的控制信号。运算单元(EX)执行算术逻辑运算，如果需要访存则通过数据总线访问内存(MEM)，最后结果写回(WB)到寄存器或内存。整个过程由时钟驱动，控制器发出的微操作序列协调各部件有序工作。</strong></p>
+</blockquote>
+<h2 id="延伸阅读-4">延伸阅读</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>主题</th>
+<th>推荐深入学习内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机体系结构</td>
+<td>《计算机组成与设计：硬件/软件接口》- Patterson &amp; Hennessy</td>
+</tr>
+<tr>
+<td>CPU 微架构</td>
+<td>《深入理解计算机系统》- Bryant &amp; O&#39;Hallaron</td>
+</tr>
+<tr>
+<td>指令集架构</td>
+<td>ARMv8 架构手册、Intel x64 手册</td>
+</tr>
+<tr>
+<td>缓存原理</td>
+<td>缓存一致性协议(MESI)、缓存写策略</td>
+</tr>
+<tr>
+<td>操作系统</td>
+<td>后续章节《操作系统》</td>
+</tr>
+</tbody></table></div>
+<h2 id="下一步-3">下一步</h2>
+<p>现在你已经掌握了计算机组成原理的专业知识。接下来可以继续学习：</p>
+<ul>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/operating-systems.md">操作系统</a></strong>：了解程序是如何在操作系统上运行的，进程、线程、内存管理是如何实现的</li>
+<li><strong><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/1-computer-fundamentals/data-encoding-storage.md">数据的编码、存储与传输</a></strong>：深入理解数据在计算机中的表示方式</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-080.html">← 数字电路基础：从晶体管到 CPU</a><a rel="next" href="chapter-082.html">操作系统原理：进程、内存与文件系统 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

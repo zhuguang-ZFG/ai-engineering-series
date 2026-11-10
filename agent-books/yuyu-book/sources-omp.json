@@ -1,0 +1,94 @@
+{
+ "schema_version": 1,
+ "omp-oh-my-pi": {
+  "title": "oh-my-pi (omp)",
+  "title_en": "oh-my-pi (omp)",
+  "authority": "can1357 / Stencil Labs（开源上游）",
+  "authority_en": "can1357 / Stencil Labs (upstream)",
+  "kind": "github",
+  "url": "https://github.com/can1357/oh-my-pi",
+  "snapshot": "写作钉 omp/18.15.0；本机曾核 omp/18.16.0",
+  "snapshot_en": "Writing pin omp/18.15.0; verified omp/18.16.0 locally",
+  "license": "见上游仓库 LICENSE",
+  "license_en": "See upstream LICENSE",
+  "scope": "CLI、工具面、扩展与文档的权威源码与发行",
+  "scope_en": "Authoritative source and releases for CLI, tools, extensions",
+  "pinned": {
+   "tag": "omp/18.15.0"
+  },
+  "accessed": "2026-11-03"
+ },
+ "yuyu-comparison": {
+  "title": "御舆：分册对照与共享术语",
+  "title_en": "Yuyu: volume comparison and shared terminology",
+  "authority": "本仓库作者与贡献者",
+  "authority_en": "Repository authors and contributors",
+  "kind": "github",
+  "url": "https://github.com/zhuguang-ZFG/claude-code-book/tree/1ec7749bdea31b96729eb307f69e12f446284b2e",
+  "snapshot": "对照地图与共享词表；仅供跨册导航，不支撑 omp 行为断言",
+  "snapshot_en": "Chapter map and shared terms; navigation only, not evidence for omp behavior",
+  "license": "CC BY-NC-SA 4.0",
+  "license_en": "CC BY-NC-SA 4.0",
+  "scope": "docs/COMPARE-OMP.md、docs/yuyu-overhaul/SHARED-TERMS.md、omp/overhaul/CROSSREF-MAP.md",
+  "scope_en": "docs/COMPARE-OMP.md, docs/yuyu-overhaul/SHARED-TERMS.md, omp/overhaul/CROSSREF-MAP.md",
+  "normative": false,
+  "pinned": {
+   "commit": "1ec7749bdea31b96729eb307f69e12f446284b2e"
+  },
+  "accessed": "2026-11-05"
+ },
+ "omp-site": {
+  "title": "omp.sh",
+  "title_en": "omp.sh",
+  "authority": "项目官网",
+  "authority_en": "Project site",
+  "kind": "community",
+  "url": "https://omp.sh",
+  "snapshot": "产品入口与安装导引（非规范；以仓库为准）",
+  "snapshot_en": "Product entry and install guide (non-normative)",
+  "license": "网站条款以站点为准",
+  "license_en": "Site terms as published",
+  "scope": "发现与安装入口",
+  "scope_en": "Discovery and install entry",
+  "normative": false,
+  "accessed": "2026-11-03"
+ },
+ "omp-readme-assets": {
+  "title": "oh-my-pi README 演示图",
+  "title_en": "oh-my-pi README demo assets",
+  "authority": "can1357 / Stencil Labs（上游仓库 assets/）",
+  "authority_en": "can1357 / Stencil Labs (upstream assets/)",
+  "kind": "github",
+  "url": "https://github.com/can1357/oh-my-pi/tree/88a69582c755bd000e8dc0290981fc787a4f400c/assets",
+  "snapshot": "取 ask / slash / models / lspv 四张 webp，按内嵌预算转 JPG 后进入正文",
+  "snapshot_en": "Four webp demos (ask, slash, models, lspv) converted to in-budget JPG",
+  "license": "MIT（上游 LICENSE）",
+  "license_en": "MIT (upstream LICENSE)",
+  "scope": "omp/images/fig6-6-ask-shot.jpg、fig6-7-slash-shot.jpg、fig5-5-model-selector.jpg、fig11-3-lsp-shot.jpg",
+  "scope_en": "omp/images fig6-6, fig6-7, fig5-5, fig11-3 JPGs",
+  "normative": false,
+  "pinned": {
+   "commit": "88a69582c755bd000e8dc0290981fc787a4f400c"
+  },
+  "accessed": "2026-11-05"
+ },
+ "omp-readme": {
+  "title": "oh-my-pi README（能力自述）",
+  "title_en": "oh-my-pi README (feature overview)",
+  "authority": "can1357 / Stencil Labs（上游 README）",
+  "authority_en": "can1357 / Stencil Labs (upstream README)",
+  "kind": "github",
+  "url": "https://github.com/can1357/oh-my-pi/blob/88a69582c755bd000e8dc0290981fc787a4f400c/README.md",
+  "snapshot": "附录 E.9 的二十一项能力对照；仅作阅读索引，行为断言以二进制与 docs 为准",
+  "snapshot_en": "Appendix E.9 feature map; navigation only, behavior claims defer to the binary and docs",
+  "license": "MIT（上游 LICENSE）",
+  "license_en": "MIT (upstream LICENSE)",
+  "scope": "README 的能力清单与演示链接",
+  "scope_en": "README feature list and demo links",
+  "normative": false,
+  "pinned": {
+   "commit": "88a69582c755bd000e8dc0290981fc787a4f400c"
+  },
+  "accessed": "2026-11-05"
+ }
+}

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:'Noto Sans SC';src:local('Noto Sans SC'),local('Microsoft YaHei');font-weight:100 900}
+@font-face{font-family:'Microsoft YaHei';src:local('Microsoft YaHei'),local('Noto Sans SC');font-weight:100 900}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#05070d}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#f4f7ff}
+#root{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 35% 12%,#182742 0%,transparent 52%),
+  radial-gradient(ellipse at 72% 78%,#2b1428 0%,transparent 46%),
+  linear-gradient(168deg,#06090f,#0d1526 44%,#130b16)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:50}
+.scene{position:absolute;inset:0;opacity:0}
+.wm{position:absolute;top:64px;right:40px;text-align:right;opacity:.72;z-index:60;pointer-events:none}
+.wm-b{font-size:24px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px #000a}
+.wm-s{font-size:20px;color:#f0a050;margin-top:4px}
+.series{position:absolute;top:72px;left:54px;font-size:28px;letter-spacing:.12em;color:#f0a050;opacity:0;z-index:8}
+.kinetic{position:absolute;left:60px;right:60px;top:210px;text-align:center;font-weight:900;opacity:0;z-index:25;
+  font-size:46px;text-shadow:0 0 24px currentColor;pointer-events:none}
+.title{position:absolute;left:70px;right:70px;top:1180px;text-align:center;font-size:66px;font-weight:900;
+  letter-spacing:2px;text-shadow:0 0 40px #4af,0 6px 0 #000;opacity:0}
+.sub{position:absolute;left:90px;right:90px;top:1300px;text-align:center;font-size:32px;color:#9ecbff;opacity:0}
+.cta{position:absolute;left:60px;right:60px;top:1270px;text-align:center}
+.cta .b{font-size:56px;font-weight:900;letter-spacing:1px;color:#ffd27a;
+  text-shadow:0 0 24px #f0a05088;opacity:0}
+.cta .s{margin-top:16px;font-size:30px;font-weight:700;letter-spacing:6px;color:#9ecbff;opacity:0}
+.cta-mark{position:absolute;left:50%;margin-left:-360px;top:860px;width:720px;
+  display:flex;flex-direction:column-reverse;align-items:center;gap:9px;opacity:0}
+.cta-mark i{display:block;height:32px;border-radius:9px}
+
+/* ---- scene 1: the settings file that does not take ---- */
+.filecard{position:absolute;left:110px;right:110px;top:520px;padding:34px 30px;border-radius:26px;
+  background:#0a101c;border:3px solid #2e4a6a;font-family:Consolas,"Noto Sans SC",monospace;
+  font-size:34px;line-height:1.7;opacity:0;box-shadow:0 0 46px #1a90ff44}
+.filecard .fn{font-size:28px;color:#7ea8d8;letter-spacing:.04em;margin-bottom:14px;font-weight:700}
+.kline{position:relative;color:#c8d6ea}
+.kline .val{color:#ffd27a;font-weight:900}
+.kline.hot{background:#1a90ff22;border-radius:10px;padding:0 10px}
+.badge{position:absolute;font-size:28px;font-weight:900;padding:10px 18px;border-radius:14px;opacity:0}
+.b-edit{left:150px;top:400px;background:#1a90ff;color:#fff}
+.b-restart{right:150px;top:400px;background:#7a3dff;color:#fff}
+.b-dead{left:50%;margin-left:-118px;top:960px;background:#ff3b5c;color:#fff;width:236px;text-align:center}
+.xmark{position:absolute;left:50%;margin-left:-110px;top:1000px;font-size:210px;color:#ff3b5c;
+  font-weight:900;opacity:0;text-shadow:0 0 40px #f33;z-index:10}
+
+/* ---- scene 2: six strata ---- */
+.stack{position:absolute;left:0;right:0;top:600px;display:flex;flex-direction:column-reverse;
+  align-items:center;gap:12px}
+.band{height:112px;border-radius:16px;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;opacity:0;box-shadow:0 10px 26px #0009}
+.band .cn{font-size:38px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 2px 8px #0008}
+.band .en{font-size:28px;color:#eaf2ff;font-weight:800;margin-top:2px;text-shadow:0 1px 5px #000b}
+.band.l1{width:520px;background:linear-gradient(180deg,#5a6c86,#3d4c60)}
+.band.l2{width:600px;background:linear-gradient(180deg,#43748f,#2d5266)}
+.band.l3{width:680px;background:linear-gradient(180deg,#4f8a72,#33604c)}
+.band.l4{width:760px;background:linear-gradient(180deg,#b0913f,#7d6425)}
+.band.l5{width:840px;background:linear-gradient(180deg,#c1743c,#8a4d22)}
+.band.l6{width:920px;background:linear-gradient(180deg,#a4567e,#6d3553)}
+.prio{position:absolute;right:96px;top:640px;height:760px;width:74px;opacity:0}
+.prio .arrow{position:absolute;left:34px;top:0;bottom:0;width:6px;background:linear-gradient(180deg,#ffd27a,#ffd27a00)}
+.prio .head{position:absolute;left:22px;top:-6px;width:0;height:0;border:16px solid transparent;border-bottom:26px solid #ffd27a}
+.prio .txt{position:absolute;left:-6px;top:300px;font-size:28px;font-weight:900;color:#ffd27a;
+  writing-mode:vertical-rl;letter-spacing:.28em}
+.filetag{position:absolute;left:0;right:0;top:1490px;text-align:center;font-size:30px;color:#8fa8c6;opacity:0}
+.filetag b{color:#ffd27a}
+
+/* ---- scene 3: covered is not deleted ---- */
+.pair{position:absolute;left:90px;right:90px;top:560px;height:660px}
+.lower{position:absolute;left:0;right:0;bottom:0;height:300px;border-radius:22px;padding:30px 34px;
+  background:linear-gradient(160deg,#132038,#0b1424);border:3px solid #4f8a72;opacity:0}
+.lower h3{font-size:30px;color:#9fe8c2;margin-bottom:12px}
+.lower p{font-size:28px;line-height:1.5;color:#cde;font-family:Consolas,monospace}
+.slab{position:absolute;left:40px;right:40px;top:120px;height:300px;border-radius:22px;padding:30px 34px;
+  background:#a4567ecc;border:3px solid #ffd27a;opacity:0;box-shadow:0 18px 50px #000b}
+.slab h3{font-size:30px;color:#ffe6ad;margin-bottom:12px}
+.slab p{font-size:28px;line-height:1.5;color:#fff;font-family:Consolas,monospace}
+.still{position:absolute;left:0;right:0;bottom:-96px;text-align:center;font-size:34px;font-weight:900;
+  color:#7dffb0;opacity:0;text-shadow:0 0 22px #0f8}
+.verdict{position:absolute;left:60px;right:60px;top:1400px;text-align:center;font-size:52px;font-weight:900;
+  opacity:0;letter-spacing:2px;text-shadow:0 0 34px #1a90ff}
+.verdict em{font-style:normal;color:#ff9aab}
+
+/* ---- scene 4: guess + key ring ---- */
+.guess{position:absolute;left:70px;right:70px;top:300px;padding:38px 30px;border-radius:28px;
+  background:linear-gradient(160deg,#241838,#120a20);border:4px solid #c9a0ff;opacity:0;text-align:center;
+  box-shadow:0 0 40px #a0f8}
+.guess .q{font-size:40px;font-weight:900;color:#ffd27a;margin-bottom:18px}
+.guess .opts{font-size:30px;line-height:1.7;color:#dce}
+.guess .ans{font-size:44px;font-weight:900;color:#7dffb0;margin-top:22px;opacity:0}
+.ringbox{position:absolute;left:40px;right:40px;top:880px;height:720px}
+.ringbox svg{width:100%;height:100%}
+.keyrule{position:absolute;left:60px;right:60px;top:700px;text-align:center;font-size:40px;font-weight:900;
+  color:#ffd27a;opacity:0;text-shadow:0 0 26px #f0a050aa}
+.denychip{position:absolute;left:50%;margin-left:-230px;top:780px;width:460px;text-align:center;
+  padding:18px 22px;border-radius:999px;background:linear-gradient(135deg,#1a2840,#101828);
+  border:3px solid #ff9aab;font-size:32px;font-weight:800;opacity:0}
+
+/* ---- scene 5: the stratum security skips ---- */
+.mini-stack{position:absolute;left:110px;right:110px;top:380px;display:flex;flex-direction:column-reverse;
+  align-items:center;gap:8px}
+.mband{height:78px;border-radius:12px;opacity:0;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#eaf2ff;text-shadow:0 1px 6px #0008}
+.sign{position:absolute;left:50%;margin-left:-250px;top:1000px;width:500px;padding:30px 26px;border-radius:18px;
+  background:linear-gradient(160deg,#d8c39a,#a98d5f);border:6px solid #6b4a2a;color:#2a1c0c;
+  text-align:center;opacity:0;box-shadow:0 16px 40px #000b}
+.sign .t{font-size:34px;font-weight:900}
+.sign .s{font-size:28px;margin-top:8px;color:#3a2810}
+.nail{position:absolute;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#666);
+  opacity:0;box-shadow:0 3px 8px #000a}
+.greybar{position:absolute;left:110px;right:110px;top:638px;height:78px;border-radius:12px;
+  background:#4a4a52;border:3px dashed #ff9aab;opacity:0;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:900;color:#ffd0d8}
+.cutline{position:absolute;left:60px;right:60px;top:1300px;text-align:center;font-size:54px;font-weight:900;
+  opacity:0;color:#fff;text-shadow:0 0 30px #ff3b5c}
+.cutline em{font-style:normal;color:#ff9aab}
+.cutwhy{position:absolute;left:60px;right:60px;top:1410px;text-align:center;font-size:34px;
+  color:#9ecbff;opacity:0}
+</style></head><body>
+<div id="root" class="clip" data-composition-id="dense-short" data-start="0" data-duration="$TOTAL$" data-width="1080" data-height="1920" data-fps="$FPS$">
+  <div class="flash" id="flash"></div>
+  <div class="wm" id="wm" data-layout-ignore="true">
+    <div class="wm-b">小电讲电路</div>
+    <div class="wm-s">驭者 · Agent Harness</div>
+  </div>
+  <div class="series" id="series">驭者 · 第 05 章 · 设置与配置</div>
+  <div class="kinetic" id="kx"></div>
+
+  <!-- S1 一个文件：改了不生效 -->
+  <div class="scene" id="sc-file" style="opacity:1">
+    <div class="badge b-edit" id="b-edit">改这里</div>
+    <div class="badge b-restart" id="b-restart">重启</div>
+    <div class="filecard" id="filecard">
+      <div class="fn">~/.claude/settings.json</div>
+      <div class="kline">{</div>
+      <div class="kline hot" id="hotline">  "model": <span class="val" id="mval">"claude-sonnet-4"</span>,</div>
+      <div class="kline">  "permissions": { … },</div>
+      <div class="kline">}</div>
+    </div>
+    <div class="xmark" id="xmark">✕</div>
+    <div class="badge b-dead" id="b-dead">还是老样子</div>
+    <div class="title" id="ftitle">一个文件 vs 六层岩</div>
+    <div class="sub" id="fsub">你没改错值 · 你改错了层</div>
+  </div>
+
+  <!-- S2 六层沉积岩 -->
+  <div class="scene" id="sc-rock">
+    <div class="stack" id="stack">
+      <div class="band l1" id="bd1"><div class="cn">插件</div><div class="en">pluginSettings</div></div>
+      <div class="band l2" id="bd2"><div class="cn">用户</div><div class="en">userSettings</div></div>
+      <div class="band l3" id="bd3"><div class="cn">项目</div><div class="en">projectSettings</div></div>
+      <div class="band l4" id="bd4"><div class="cn">本地</div><div class="en">localSettings</div></div>
+      <div class="band l5" id="bd5"><div class="cn">CLI</div><div class="en">flagSettings</div></div>
+      <div class="band l6" id="bd6"><div class="cn">企业</div><div class="en">policySettings</div></div>
+    </div>
+    <div class="prio" id="prio">
+      <div class="arrow"></div><div class="head"></div><div class="txt">优先级</div>
+    </div>
+    <div class="filetag" id="filetag">六层各有各的文件</div>
+  </div>
+
+  <!-- S3 盖住 ≠ 删掉 -->
+  <div class="scene" id="sc-cover">
+    <div class="pair">
+      <div class="lower" id="lower">
+        <h3>下层 · 还在</h3>
+        <p>"model": "claude-sonnet-4"<br/>"permissions": { … }</p>
+        <div class="still" id="still">内容一条没少</div>
+      </div>
+      <div class="slab" id="slab">
+        <h3>上层 · 压下来</h3>
+        <p>"model": "claude-opus-4"</p>
+      </div>
+    </div>
+    <div class="verdict" id="verdict">盖住 <em>≠</em> 删掉 · 挑层比改值要紧</div>
+  </div>
+
+  <!-- S4 猜一猜 + 钥匙圈 -->
+  <div class="scene" id="sc-ring">
+    <div class="guess" id="guess" data-hold="true">
+      <div class="q">猜一猜｜权限数组会被上层覆盖掉吗？</div>
+      <div class="opts">A. 会被整段替换<br/>B. 只拼接、再去重</div>
+      <div class="ans" id="gans">✅ B · 谁也摘不掉别人的</div>
+    </div>
+    <div class="ringbox" id="ringbox" data-layout-allow-overflow="true">
+      <svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="500" cy="300" r="190" fill="none" stroke="#c9a0ff" stroke-width="14" opacity=".9"/>
+        <circle cx="500" cy="300" r="190" fill="none" stroke="#fff" stroke-width="4" opacity=".28"/>
+        <g id="ky1"><circle cx="330" cy="150" r="30" fill="#5a6c86" stroke="#fff" stroke-width="4"/>
+          <rect x="318" y="176" width="24" height="86" rx="8" fill="#5a6c86"/><text x="300" y="96" fill="#cfe" font-size="30" font-weight="700">插件</text></g>
+        <g id="ky2"><circle cx="470" cy="86" r="30" fill="#43748f" stroke="#fff" stroke-width="4"/>
+          <rect x="458" y="112" width="24" height="86" rx="8" fill="#43748f"/><text x="440" y="36" fill="#cfe" font-size="30" font-weight="700">用户</text></g>
+        <g id="ky3"><circle cx="640" cy="132" r="30" fill="#4f8a72" stroke="#fff" stroke-width="4"/>
+          <rect x="628" y="158" width="24" height="86" rx="8" fill="#4f8a72"/><text x="612" y="82" fill="#cfe" font-size="30" font-weight="700">项目</text></g>
+        <g id="ky4"><circle cx="736" cy="272" r="30" fill="#b0913f" stroke="#fff" stroke-width="4"/>
+          <rect x="724" y="298" width="24" height="86" rx="8" fill="#b0913f"/><text x="700" y="222" fill="#cfe" font-size="30" font-weight="700">本地</text></g>
+        <g id="ky5"><circle cx="640" cy="430" r="30" fill="#c1743c" stroke="#fff" stroke-width="4"/>
+          <rect x="628" y="456" width="24" height="86" rx="8" fill="#c1743c"/><text x="612" y="380" fill="#cfe" font-size="30" font-weight="700">CLI</text></g>
+        <g id="ky6"><circle cx="356" cy="440" r="30" fill="#a4567e" stroke="#fff" stroke-width="4"/>
+          <rect x="344" y="466" width="24" height="86" rx="8" fill="#a4567e"/><text x="330" y="390" fill="#cfe" font-size="30" font-weight="700">企业</text></g>
+        <text x="500" y="312" text-anchor="middle" fill="#ffd27a" font-size="30" font-weight="900">allow / deny 数组</text>
+      </svg>
+    </div>
+    <div class="denychip" id="denychip">要撤销 · 用 deny 明说</div>
+    <div class="keyrule" id="keyrule">数组只合并 · 不覆盖</div>
+  </div>
+
+  <!-- S5 收刀：项目那一层，安全上不看它 -->
+  <div class="scene" id="sc-cut">
+    <div class="mini-stack" id="mini-stack">
+      <div class="mband" id="mb1" style="width:50%;background:#5a6c86">插件</div>
+      <div class="mband" id="mb2" style="width:58%;background:#43748f">用户</div>
+      <div class="mband" id="mb3" style="width:66%;background:#4f8a72"><span id="mb3t">项目</span></div>
+      <div class="mband" id="mb4" style="width:74%;background:#b0913f">本地</div>
+      <div class="mband" id="mb5" style="width:82%;background:#c1743c">CLI</div>
+      <div class="mband" id="mb6" style="width:90%;background:#a4567e">企业</div>
+    </div>
+    <div class="greybar" id="greybar" data-layout-allow-occlusion="true">projectSettings · 安全上不读它</div>
+    <div class="sign" id="sign">
+      <div class="t">别人的仓库</div>
+      <div class="s">跟着仓库走</div>
+    </div>
+    <div class="nail" id="nail1" style="left:306px;top:984px"></div>
+    <div class="nail" id="nail2" style="left:527px;top:984px"></div>
+    <div class="nail" id="nail3" style="left:748px;top:984px"></div>
+    <div class="cutline" id="cutline">六层里有一层<em>安全上根本不看它</em></div>
+    <div class="cutwhy" id="cutwhy">它来自你刚 clone 的那个仓库</div>
+  </div>
+
+  <!-- S6 导流 -->
+  <div class="scene" id="sc-cta">
+    <div class="cta-mark" id="ctamark" data-layout-ignore="true">
+      <i style="width:420px;background:#5a6c86"></i>
+      <i style="width:480px;background:#43748f"></i>
+      <i style="width:540px;background:#4f8a72"></i>
+      <i style="width:600px;background:#b0913f"></i>
+      <i style="width:660px;background:#c1743c"></i>
+      <i style="width:720px;background:#a4567e"></i>
+    </div>
+    <div class="cta" id="cta">
+      <div class="b" id="ctatitle">驭者 · Agent Harness</div>
+      <div class="s" id="ctasub">小电讲电路</div>
+    </div>
+  </div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+// flashes are collected, then emitted in time order with a gap so two never overlap
+const flashes = [];
+const flash = (t) => flashes.push(t);
+let lastFlash = -1;
+
+tl.set("#wm", {opacity:0.72}, 0);
+tl.set("#kx", {opacity:0, scale:1, y:0}, 0);
+tl.set("#root", {x:0}, 0);
+tl.fromTo("#series", {opacity:1, y:-16}, {opacity:1, y:0, duration:0.3}, 0);
+
+// S1 hook: edit -> restart -> snap back (the card is already on screen at frame 0)
+tl.fromTo("#filecard", {opacity:1, y:60}, {opacity:1, y:0, duration:0.34}, 0);
+tl.fromTo("#b-edit", {opacity:0, scale:1.4}, {opacity:1, scale:1, duration:0.2}, 0.60);
+flash(0.62);
+tl.to("#hotline", {backgroundColor:"#ffd27a33", duration:0.18}, 0.80);
+tl.set("#mval", {textContent:'"claude-opus-4"'}, 1.10);
+tl.to("#mval", {scale:1.12, duration:0.12, yoyo:true, repeat:1}, 1.10);
+tl.fromTo("#b-restart", {opacity:0, scale:1.4}, {opacity:1, scale:1, duration:0.2}, 1.60);
+flash(1.62);
+tl.to("#filecard", {x:8, duration:0.05, yoyo:true, repeat:5}, 1.80);
+tl.set("#mval", {textContent:'"claude-sonnet-4"'}, 2.20);
+tl.to("#hotline", {backgroundColor:"#ff3b5c33", duration:0.16}, 2.20);
+tl.fromTo("#xmark", {opacity:0, scale:0, rotation:-25}, {opacity:1, scale:1.25, rotation:0, duration:0.22}, 2.30);
+tl.to("#xmark", {scale:1, duration:0.12}, 2.52);
+flash(2.32);
+tl.fromTo("#b-dead", {opacity:0, y:20}, {opacity:1, y:0, duration:0.2}, 2.60);
+tl.to(["#filecard","#b-edit","#b-restart","#xmark"], {opacity:0.18, duration:0.28}, 3.30);
+tl.fromTo("#ftitle", {opacity:0, scale:1.2, filter:"blur(10px)"}, {opacity:1, scale:1, filter:"blur(0px)", duration:0.38}, 3.50);
+tl.fromTo("#fsub", {opacity:0, y:18}, {opacity:1, y:0, duration:0.28}, 3.95);
+flash(3.55);
+tl.to("#sc-file", {opacity:0, duration:0.16}, $T_ROCK$ - 0.16);
+tl.set("#sc-rock", {opacity:1}, $T_ROCK$);
+
+// S2 six strata light up bottom -> top, on the phrase that names each layer
+tl.fromTo("#stack", {opacity:0, y:40}, {opacity:1, y:0, duration:0.24}, $T_ROCK$);
+$BAND_TL$
+tl.fromTo("#prio", {opacity:0, x:40}, {opacity:1, x:0, duration:0.3}, $T_PRIO$);
+flash($T_PRIO$);
+tl.fromTo("#filetag", {opacity:0, y:16}, {opacity:1, y:0, duration:0.24}, $T_ROCK$ + 2.2);
+tl.to("#sc-rock", {opacity:0, duration:0.14}, $T_COVER$ - 0.14);
+tl.set("#sc-cover", {opacity:1}, $T_COVER$);
+
+// S3 a translucent slab presses down; the layer under it is still readable
+tl.fromTo("#lower", {opacity:0, y:70}, {opacity:1, y:0, duration:0.3}, $T_COVER$);
+tl.fromTo("#slab", {opacity:0, y:-140, scale:1.04}, {opacity:0.94, y:0, scale:1, duration:0.4, ease:"power2.out"}, $T_COVER$ + 0.55);
+flash($T_COVER$ + 0.55);
+tl.to("#slab", {y:26, duration:0.2, yoyo:true, repeat:1}, $T_COVER$ + 1.0);
+tl.fromTo("#still", {opacity:0, scale:0.8}, {opacity:1, scale:1, duration:0.24}, $T_COVER$ + 1.5);
+flash($T_COVER$ + 1.5);
+tl.fromTo("#verdict", {opacity:0, y:26, scale:0.94}, {opacity:1, y:0, scale:1, duration:0.34}, $T_COVER$ + 1.9);
+tl.to("#sc-cover", {opacity:0, duration:0.14}, $T_RING$ - 0.14);
+tl.set("#sc-ring", {opacity:1}, $T_RING$);
+
+// S4 guess -> key ring
+tl.fromTo("#guess", {opacity:0, scale:0.85, y:40}, {opacity:1, scale:1, y:0, duration:0.28}, $T_RING$);
+flash($T_RING$);
+tl.fromTo("#gans", {opacity:0, scale:0.8}, {opacity:1, scale:1.05, duration:0.25}, $T_ANS$);
+tl.to("#gans", {scale:1, duration:0.12}, $T_ANS$ + 0.25);
+flash($T_ANS$);
+tl.fromTo("#ringbox", {opacity:0, scale:0.88}, {opacity:1, scale:1, duration:0.34}, $T_RINGBOX$);
+flash($T_RINGBOX$);
+tl.to("#ringbox", {rotation:5, transformOrigin:"50% 40%", duration:0.5, yoyo:true, repeat:3, ease:"sine.inOut"}, $T_RINGBOX$ + 0.4);
+$KEY_TL$
+tl.fromTo("#keyrule", {opacity:0, y:20}, {opacity:1, y:0, duration:0.26}, $T_KEYRULE$);
+tl.fromTo("#denychip", {opacity:0, scale:0.85}, {opacity:1, scale:1, duration:0.24}, $T_DENY$);
+flash($T_DENY$);
+tl.to("#sc-ring", {opacity:0, duration:0.14}, $T_CUT$ - 0.14);
+tl.set("#sc-cut", {opacity:1}, $T_CUT$);
+
+// S5 the stratum security refuses to read
+tl.fromTo("#mini-stack", {opacity:0, y:50}, {opacity:1, y:0, duration:0.3}, $T_CUT$);
+tl.fromTo("#mb1", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.10);
+tl.fromTo("#mb2", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.22);
+tl.fromTo("#mb3", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.34);
+tl.fromTo("#mb4", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.46);
+tl.fromTo("#mb5", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.58);
+tl.fromTo("#mb6", {opacity:0}, {opacity:1, duration:0.16}, $T_CUT$ + 0.70);
+tl.fromTo("#sign", {opacity:0, y:-160, rotation:-10}, {opacity:1, y:0, rotation:0, duration:0.2, ease:"power3.in"}, $T_SIGN$);
+flash($T_SIGN$);
+tl.fromTo(["#nail1","#nail2","#nail3"], {opacity:0, scale:1.8}, {opacity:1, scale:1, duration:0.14, stagger:0.09}, $T_SIGN$ + 0.22);
+tl.to("#mb3t", {opacity:0, duration:0.18}, $T_GREY$);
+tl.fromTo("#greybar", {opacity:0, scale:1.1}, {opacity:1, scale:1, duration:0.24}, $T_GREY$ + 0.2);
+flash($T_GREY$ + 0.2);
+tl.fromTo("#cutline", {opacity:0, y:24}, {opacity:1, y:0, duration:0.3}, $T_GREY$ + 0.7);
+tl.fromTo("#cutwhy", {opacity:0, y:18}, {opacity:1, y:0, duration:0.26}, $T_GREY$ + 1.2);
+tl.to("#sc-cut", {opacity:0, duration:0.14}, $T_CTA$ - 0.14);
+tl.set("#sc-cta", {opacity:1}, $T_CTA$);
+
+// S6 cta
+tl.fromTo("#ctamark", {opacity:0, y:34}, {opacity:1, y:0, duration:0.3}, $T_CTA$ + 0.15);
+tl.fromTo("#ctatitle", {opacity:0, y:26, scale:0.96}, {opacity:1, y:0, scale:1, duration:0.3}, $T_CTA$);
+tl.fromTo("#ctasub", {opacity:0, y:18}, {opacity:1, y:0, duration:0.28}, $T_CTA$ + 0.34);
+flash($T_CTA$);
+tl.to("#ctatitle", {scale:1.04, duration:0.35, yoyo:true, repeat:1}, $T_CTA$ + 0.5);
+
+$KINETIC$
+$SHAKE$
+
+flashes.sort((a, b) => a - b).forEach((t) => {
+  if (t - lastFlash < 0.2) return;
+  lastFlash = t;
+  tl.to("#flash", {opacity:0.5, duration:0.04}, t);
+  tl.to("#flash", {opacity:0, duration:0.14}, t + 0.04);
+});
+
+tl.set("#sc-cta", {opacity:1}, $T_CTA$ + 1.2);
+window.__timelines["dense-short"] = tl;
+</script></body></html>

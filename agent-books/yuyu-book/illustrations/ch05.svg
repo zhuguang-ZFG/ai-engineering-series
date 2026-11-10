@@ -1,0 +1,10 @@
+<svg class="a-stack" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M31 9q12 3.8 23 10.5-10 5.5-21.8 12Q20 27.5 10 20.4 19.6 13.5 31 9Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M31 9q-.7 5.4 1.2 11.3" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path class="ripple d1" d="M11.8 30.4q10.5 5.6 20.3 10.4Q43 35.5 52.4 30" stroke-width="2.4" opacity=".75" pathLength="100"/>
+  <path class="ripple d2" d="M14.7 40.4Q24 46 32.2 50q8.6-4 17-9.2" stroke-width="1.8" opacity=".45" pathLength="100"/>
+  <path d="M10 20.4q11 3.4 22.2 8.1L54 19.5q-10 5.5-21.8 12Q20 27.5 10 20.4Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <path d="m22.7 17.1 5 2.4m-1.6-4.2 5.3 2.4m-1.9-3.9 4.8 2" stroke-width=".85" opacity=".35" pathLength="100"/>
+  <path d="M15.3 22.4q7.2 4.9 14.1 6.5" stroke-width=".65" opacity=".4" pathLength="100"/>
+  <circle cx="43" cy="22" r="1.3" fill="currentColor" stroke="none" opacity=".55"/>
+</svg>

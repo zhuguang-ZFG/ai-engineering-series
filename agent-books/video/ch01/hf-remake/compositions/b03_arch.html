@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b03_arch" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="303.312" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="303.312" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">§1.2 全景架构</div></div></div></div>
+  <div id="b03_arch_beat0_wrap" class="beat clip" data-start="0.000" data-duration="5.333" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat0"><div class="panel-body" id="b03_arch_beat0">
+          <div class="kicker">隐喻对照</div>
+          <div class="vs-grid">
+            <div class="vpanel"><h3>遥控器</h3><p>简单封装<br/>人按一下，才动一下</p></div>
+            <div class="vpanel r"><h3>自动驾驶</h3><p>Agent Harness<br/>自主规划 · 工具 · 边界</p></div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="h2">简单封装 vs Agent Harness</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat1_wrap" class="beat clip" data-start="5.333" data-duration="5.334" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat1"><div class="panel-body" id="b03_arch_beat1">
+      <div class="kicker">KEY</div>
+      <div class="h1">Agent Harness 是整辆能</div><div class="h2">一句话定义：Agent Harness 是围</div>
+    </div></div></div><div id="b03_arch_beat2_wrap" class="beat clip" data-start="10.667" data-duration="5.333" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat2"><div class="panel-body" id="b03_arch_beat2">
+          <div class="kicker">记下这一点</div><div class="h1">Agent Harnes</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash2" data-start="10.667" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat3_wrap" class="beat clip" data-start="16.000" data-duration="6.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat3"><div class="panel-body" id="b03_arch_beat3">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">你的封装更像哪边？</div>
+          <div class="h2" style="opacity:1">遥控器：按一下动一下 · 自动驾驶：自主规划与边界</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash3" data-start="16.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat4_wrap" class="beat clip" data-start="22.000" data-duration="4.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat4"><div class="panel-body" id="b03_arch_beat4">
+      <div class="kicker">KEY</div>
+      <div class="h1">§1.2 全景架构</div><div class="h2">从 Copilot 到 Claude Code / MCP</div>
+    </div></div></div><div class="flash clip" id="b03_arch_flash4" data-start="22.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat5_wrap" class="beat clip" data-start="26.500" data-duration="5.376" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat5"><div class="panel-body" id="b03_arch_beat5">
+      <div class="kicker">KEY</div>
+      <div class="h1">反模式警告也原样提醒你：如果核心循环</div><div class="h2">流式、上下文、错误恢复想清楚了吗？</div>
+    </div></div></div><div id="b03_arch_beat6_wrap" class="beat clip" data-start="31.876" data-duration="3.624" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat6"><div class="panel-body" id="b03_arch_beat6">
+      <div class="kicker">KEY</div>
+      <div class="h1">反模式警告也原样提醒你：如果核心循环</div><div class="h2">流式、上下文、错误恢复想清楚了吗？</div>
+    </div></div></div><div id="b03_arch_beat7_wrap" class="beat clip" data-start="35.500" data-duration="4.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat7"><div class="panel-body" id="b03_arch_beat7">
+      <div class="kicker">KEY</div>
+      <div class="h1">反模式警告也原样提醒你：如果核心循环</div><div class="h2">流式、上下文、错误恢复想清楚了吗？</div>
+    </div></div></div><div id="b03_arch_beat8_wrap" class="beat clip" data-start="40.000" data-duration="5.845" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat8"><div class="panel-body" id="b03_arch_beat8">
+          <div class="kicker">个 TypeScript 文件</div><div class="big-num">1,884</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash8" data-start="40.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat9_wrap" class="beat clip" data-start="45.845" data-duration="4.155" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat9"><div class="panel-body" id="b03_arch_beat9">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 没想清楚，你需要的不</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash9" data-start="45.845" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat10_wrap" class="beat clip" data-start="50.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat10"><div class="panel-body" id="b03_arch_beat10">
+      <div class="kicker">KEY</div>
+      <div class="h1">概念有了，用 Claude Code</div><div class="h2">先从宏观尺度看代码库——数字本身就有信息量</div>
+    </div></div></div><div id="b03_arch_beat11_wrap" class="beat clip" data-start="55.000" data-duration="5.820" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat11"><div class="panel-body" id="b03_arch_beat11">
+          <div class="kicker">行代码</div><div class="big-num">512,664</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash11" data-start="55.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat12_wrap" class="beat clip" data-start="60.820" data-duration="4.180" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat12"><div class="panel-body" id="b03_arch_beat12">
+          <div class="kicker">记下这一点</div><div class="h1">时间线很清楚</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash12" data-start="60.820" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat13_wrap" class="beat clip" data-start="65.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat13"><div class="panel-body" id="b03_arch_beat13">
+      <div class="kicker">KEY</div>
+      <div class="h1">二零二一年六月 Copilot 技术</div><div class="h2">二零二四年前后，Devin、Cursor A</div>
+    </div></div></div><div id="b03_arch_beat14_wrap" class="beat clip" data-start="70.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat14"><div class="panel-body" id="b03_arch_beat14">
+      <div class="kicker">KEY</div>
+      <div class="h1">二零二一年六月 Copilot 技术</div><div class="h2">二零二四年前后，Devin、Cursor A</div>
+    </div></div></div><div id="b03_arch_beat15_wrap" class="beat clip" data-start="75.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat15"><div class="panel-body" id="b03_arch_beat15">
+      <div class="kicker">KEY</div>
+      <div class="h1">不是炫耀体量</div><div class="h2">复杂度来自工程现实</div>
+    </div></div></div><div id="b03_arch_beat16_wrap" class="beat clip" data-start="80.000" data-duration="5.472" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat16"><div class="panel-body" id="b03_arch_beat16">
+      <div class="kicker">KEY</div>
+      <div class="h1">二零二四年前后，Devin、Curs</div><div class="h2">二零二五年 Claude Code 以终端原</div>
+    </div></div></div><div id="b03_arch_beat17_wrap" class="beat clip" data-start="85.472" data-duration="4.528" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat17"><div class="panel-body" id="b03_arch_beat17">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 二零二四年前后，De</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash17" data-start="85.472" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat18_wrap" class="beat clip" data-start="90.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat18"><div class="panel-body" id="b03_arch_beat18">
+      <div class="kicker">KEY</div>
+      <div class="h1">二零二五年 Claude Code </div><div class="h2">规律只有一句：演进方向始终是给 LLM 更多</div>
+    </div></div></div><div id="b03_arch_beat19_wrap" class="beat clip" data-start="95.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat19"><div class="panel-body" id="b03_arch_beat19">
+          <div class="kicker">记下这一点</div><div class="h1">二零二五年 Claude</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash19" data-start="95.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat20_wrap" class="beat clip" data-start="100.000" data-duration="4.597" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat20"><div class="panel-body" id="b03_arch_beat20">
+          <div class="kicker">Entry → QueryEngine → Loop → Tools → Ext</div><div class="h1">五模块骨架</div>
+          <div class="layers-row"><div class="layer">Entry</div><div class="layer">QueryEngine</div><div class="layer">Loop</div><div class="layer">Tools</div><div class="layer">Ext</div></div>
+        </div></div></div><div id="b03_arch_beat21_wrap" class="beat clip" data-start="104.597" data-duration="5.403" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat21"><div class="panel-body" id="b03_arch_beat21">
+      <div class="kicker">KEY</div>
+      <div class="h1">规律只有一句：演进方向始终是给 LL</div><div class="h2">Harness 是这方向在架构层面的必然产物</div>
+    </div></div></div><div id="b03_arch_beat22_wrap" class="beat clip" data-start="110.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat22"><div class="panel-body" id="b03_arch_beat22">
+      <div class="kicker">KEY</div>
+      <div class="h1">规律只有一句：演进方向始终是给 LL</div><div class="h2">Harness 是这方向在架构层面的必然产物</div>
+    </div></div></div><div id="b03_arch_beat23_wrap" class="beat clip" data-start="115.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat23"><div class="panel-body" id="b03_arch_beat23">
+      <div class="kicker">KEY</div>
+      <div class="h1">Harness 是这方向在架构层面的</div><div class="h2">再看体量</div>
+    </div></div></div><div id="b03_arch_beat24_wrap" class="beat clip" data-start="120.000" data-duration="4.213" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat24"><div class="panel-body" id="b03_arch_beat24">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · Harness 是这</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash24" data-start="120.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat25_wrap" class="beat clip" data-start="124.213" data-duration="5.787" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat25"><div class="panel-body" id="b03_arch_beat25">
+      <div class="kicker">KEY</div>
+      <div class="h1">src 里有,一千八百八十四,个 T</div><div class="h2">一个终端工具，体量接近 VS Code 核心</div>
+    </div></div></div><div id="b03_arch_beat26_wrap" class="beat clip" data-start="130.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat26"><div class="panel-body" id="b03_arch_beat26">
+      <div class="kicker">KEY</div>
+      <div class="h1">Entry</div><div class="h2">启动 · 配置 · 会话入口</div>
+    </div></div></div><div id="b03_arch_beat27_wrap" class="beat clip" data-start="135.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat27"><div class="panel-body" id="b03_arch_beat27">
+          <div class="kicker">记下这一点</div><div class="h1">一个终端工具，体量接近 </div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash27" data-start="135.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat28_wrap" class="beat clip" data-start="140.000" data-duration="3.546" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat28"><div class="panel-body" id="b03_arch_beat28">
+      <div class="kicker">KEY</div>
+      <div class="h1">这说明可靠 Agent 的工程复杂度</div><div class="h2">它不是臃肿，而是高度模块化：工具独立、子系统</div>
+    </div></div></div><div id="b03_arch_beat29_wrap" class="beat clip" data-start="143.546" data-duration="6.306" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat29"><div class="panel-body" id="b03_arch_beat29">
+      <div class="kicker">KEY</div>
+      <div class="h1">它不是臃肿，而是高度模块化：工具独立</div><div class="h2">模块化，正是 Harness 可维护性的关键</div>
+    </div></div></div><div id="b03_arch_beat30_wrap" class="beat clip" data-start="149.852" data-duration="5.148" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat30"><div class="panel-body" id="b03_arch_beat30">
+      <div class="kicker">KEY</div>
+      <div class="h1">模块化，正是 Harness 可维护</div><div class="h2">架构从上到下几层</div>
+    </div></div></div><div id="b03_arch_beat31_wrap" class="beat clip" data-start="155.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat31"><div class="panel-body" id="b03_arch_beat31">
+      <div class="kicker">KEY</div>
+      <div class="h1">QueryEngine</div><div class="h2">请求编排与流式输出</div>
+    </div></div></div><div id="b03_arch_beat32_wrap" class="beat clip" data-start="160.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat32"><div class="panel-body" id="b03_arch_beat32">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 查询引擎 Query</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash32" data-start="160.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat33_wrap" class="beat clip" data-start="165.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat33"><div class="panel-body" id="b03_arch_beat33">
+      <div class="kicker">KEY</div>
+      <div class="h1">查询引擎 QueryEngine：会</div><div class="h2">心脏是对话主循环，一个 AsyncGener</div>
+    </div></div></div><div id="b03_arch_beat34_wrap" class="beat clip" data-start="170.000" data-duration="3.832" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat34"><div class="panel-body" id="b03_arch_beat34">
+          <div class="kicker">记下这一点</div><div class="h1">心脏是对话主循环，一个 </div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash34" data-start="170.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat35_wrap" class="beat clip" data-start="173.832" data-duration="6.168" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat35"><div class="panel-body" id="b03_arch_beat35">
+      <div class="kicker">KEY</div>
+      <div class="h1">心脏是对话主循环，一个 AsyncG</div><div class="h2">旁边是工具系统——约五十五个工具、编排与并发</div>
+    </div></div></div><div id="b03_arch_beat36_wrap" class="beat clip" data-start="180.000" data-duration="6.124" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat36"><div class="panel-body" id="b03_arch_beat36">
+      <div class="kicker">KEY</div>
+      <div class="h1">Loop</div><div class="h2">主循环 · 工具调用回合</div>
+    </div></div></div><div id="b03_arch_beat37_wrap" class="beat clip" data-start="186.124" data-duration="3.876" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat37"><div class="panel-body" id="b03_arch_beat37">
+      <div class="kicker">KEY</div>
+      <div class="h1">旁边是工具系统——约五十五个工具、编</div><div class="h2">主循环是心脏，驱动数据在子系统之间流转</div>
+    </div></div></div><div id="b03_arch_beat38_wrap" class="beat clip" data-start="190.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat38"><div class="panel-body" id="b03_arch_beat38">
+      <div class="kicker">KEY</div>
+      <div class="h1">旁边是工具系统——约五十五个工具、编</div><div class="h2">主循环是心脏，驱动数据在子系统之间流转</div>
+    </div></div></div><div id="b03_arch_beat39_wrap" class="beat clip" data-start="195.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat39"><div class="panel-body" id="b03_arch_beat39">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 主循环是心脏，驱动数</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash39" data-start="195.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat40_wrap" class="beat clip" data-start="200.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat40"><div class="panel-body" id="b03_arch_beat40">
+      <div class="kicker">KEY</div>
+      <div class="h1">主循环是心脏，驱动数据在子系统之间流</div><div class="h2">技术栈也很克制</div>
+    </div></div></div><div id="b03_arch_beat41_wrap" class="beat clip" data-start="205.000" data-duration="3.651" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat41"><div class="panel-body" id="b03_arch_beat41">
+      <div class="kicker">KEY</div>
+      <div class="h1">Tools</div><div class="h2">权限四阶段 · 55 个工具</div>
+    </div></div></div><div id="b03_arch_beat42_wrap" class="beat clip" data-start="208.651" data-duration="6.349" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat42"><div class="panel-body" id="b03_arch_beat42">
+          <div class="kicker">记下这一点</div><div class="h1">运行时 Bun，图启动快</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash42" data-start="208.651" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat43_wrap" class="beat clip" data-start="215.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat43"><div class="panel-body" id="b03_arch_beat43">
+      <div class="kicker">KEY</div>
+      <div class="h1">终端 UI 用 React 加 In</div><div class="h2">CLI 用 Commander.js</div>
+    </div></div></div><div id="b03_arch_beat44_wrap" class="beat clip" data-start="220.000" data-duration="4.095" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat44"><div class="panel-body" id="b03_arch_beat44">
+      <div class="kicker">KEY</div>
+      <div class="h1">CLI 用 Commander.js</div><div class="h2">校验用 Zod 第四版：运行时类型安全，还能</div>
+    </div></div></div><div id="b03_arch_beat45_wrap" class="beat clip" data-start="224.095" data-duration="5.905" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat45"><div class="panel-body" id="b03_arch_beat45">
+      <div class="kicker">KEY</div>
+      <div class="h1">CLI 用 Commander.js</div><div class="h2">校验用 Zod 第四版：运行时类型安全，还能</div>
+    </div></div></div><div id="b03_arch_beat46_wrap" class="beat clip" data-start="230.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat46"><div class="panel-body" id="b03_arch_beat46">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 校验用 Zod 第四</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash46" data-start="230.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat47_wrap" class="beat clip" data-start="235.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat47"><div class="panel-body" id="b03_arch_beat47">
+      <div class="kicker">STACK</div>
+      <div class="h1">技术栈</div><div class="h2">Bun · React+Ink · Zod v4 · SDK</div>
+    </div></div></div><div id="b03_arch_beat48_wrap" class="beat clip" data-start="240.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat48"><div class="panel-body" id="b03_arch_beat48">
+      <div class="kicker">KEY</div>
+      <div class="h1">LLM 侧用 Anthropic 官</div><div class="h2">Zod 尤其关键：模型参数不可预测，校验就是</div>
+    </div></div></div><div id="b03_arch_beat49_wrap" class="beat clip" data-start="245.000" data-duration="3.581" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat49"><div class="panel-body" id="b03_arch_beat49">
+          <div class="kicker">记下这一点</div><div class="h1">Zod 尤其关键：模型参</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_arch_flash49" data-start="245.000" data-duration="0.35" data-track-index="5"></div><div id="b03_arch_beat50_wrap" class="beat clip" data-start="248.581" data-duration="6.419" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat50"><div class="panel-body" id="b03_arch_beat50">
+      <div class="kicker">KEY</div>
+      <div class="h1">启动路径上，性能探针先挂，可并行的预</div><div class="h2">再补一层读架构的方法</div>
+    </div></div></div><div id="b03_arch_beat51_wrap" class="beat clip" data-start="255.000" data-duration="6.412" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat51"><div class="panel-body" id="b03_arch_beat51">
+      <div class="kicker">KEY</div>
+      <div class="h1">再补一层读架构的方法</div><div class="h2">从上往下看：入口解决「怎么进来」，Query</div>
+    </div></div></div><div id="b03_arch_beat52_wrap" class="beat clip" data-start="261.412" data-duration="3.588" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat52"><div class="panel-body" id="b03_arch_beat52">
+      <div class="kicker">KEY</div>
+      <div class="h1">再补一层读架构的方法</div><div class="h2">从上往下看：入口解决「怎么进来」，Query</div>
+    </div></div></div><div id="b03_arch_beat53_wrap" class="beat clip" data-start="265.000" data-duration="38.312" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_arch_beat53"><div class="panel-body" id="b03_arch_beat53">
+      <div class="kicker">KEY</div>
+      <div class="h1">可维护性</div><div class="h2">模块化是 Harness 的关键保障</div>
+    </div></div></div><div id="hv_b03_arch_0" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b03_arch_0-in" style="opacity:0;width:100%;height:100%"><video id="hv_b03_arch_0_vid" src="../assets/huashu/05_arch_layers.mp4" muted playsinline data-start="80.000" data-duration="7.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b03_arch_1" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b03_arch_1-in" style="opacity:0;width:100%;height:100%"><video id="hv_b03_arch_1_vid" src="../assets/huashu/06_tech_stack.mp4" muted playsinline data-start="180.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b03_arch_2" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b03_arch_2-in" style="opacity:0;width:100%;height:100%"><video id="hv_b03_arch_2_vid" src="../assets/huashu/05_arch_layers.mp4" muted playsinline data-start="120.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b03_arch_3" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b03_arch_3-in" style="opacity:0;width:100%;height:100%"><video id="hv_b03_arch_3_vid" src="../assets/huashu/06_tech_stack.mp4" muted playsinline data-start="220.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b03_arch_beat0", {opacity:0}, {opacity:1,duration:0.25}, 0.000);
+tl.fromTo("#b03_arch_beat0 .vpanel", {opacity:0,y:30,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.45,stagger:0.12,ease:"back.out(1.4)"}, 0.100);
+tl.fromTo("#b03_arch_beat0 .vs", {opacity:0,scale:2.2}, {opacity:1,scale:1,duration:0.4,ease:"back.out(2)"}, 0.500);
+tl.fromTo("#b03_arch_beat0 .h2", {opacity:0,y:16}, {opacity:1,y:0,duration:0.35}, 0.700);
+tl.to("#b03_arch_beat0", {opacity:0,duration:0.3}, 4.983);
+tl.fromTo("#b03_arch_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b03_arch_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b03_arch_beat1", {opacity:0}, {opacity:1,duration:0.2}, 5.333);
+tl.fromTo("#b03_arch_beat1 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 5.333);
+tl.fromTo("#b03_arch_beat1 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 5.413);
+tl.fromTo("#b03_arch_beat1 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 5.613);
+tl.to("#b03_arch_beat1", {opacity:0,y:-12,duration:0.28}, 10.317);
+tl.fromTo("#b03_arch_beat2", {opacity:0}, {opacity:1,duration:0.2}, 10.667);
+tl.fromTo("#b03_arch_beat2 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 10.667);
+tl.fromTo("#b03_arch_beat2 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 11.017);
+tl.to("#b03_arch_beat2", {opacity:0,duration:0.3}, 15.650);
+tl.fromTo("#b03_arch_flash2", {opacity:0}, {opacity:0.35,duration:0.06}, 10.667);
+tl.to("#b03_arch_flash2", {opacity:0,duration:0.25}, 10.727);
+tl.fromTo("#b03_arch_beat3", {opacity:0}, {opacity:1,duration:0.2}, 16.000);
+tl.fromTo("#b03_arch_beat3 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 16.000);
+tl.to("#b03_arch_beat3", {opacity:0,duration:0.3}, 21.650);
+tl.fromTo("#b03_arch_flash3", {opacity:0}, {opacity:0.35,duration:0.06}, 16.000);
+tl.to("#b03_arch_flash3", {opacity:0,duration:0.25}, 16.060);
+tl.fromTo("#b03_arch_beat4", {opacity:0}, {opacity:1,duration:0.2}, 22.000);
+tl.fromTo("#b03_arch_beat4 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 22.000);
+tl.fromTo("#b03_arch_beat4 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 22.080);
+tl.fromTo("#b03_arch_beat4 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 22.280);
+tl.to("#b03_arch_beat4", {opacity:0,y:-12,duration:0.28}, 26.150);
+tl.fromTo("#b03_arch_flash4", {opacity:0}, {opacity:0.35,duration:0.06}, 22.000);
+tl.to("#b03_arch_flash4", {opacity:0,duration:0.25}, 22.060);
+tl.fromTo("#b03_arch_beat5", {opacity:0}, {opacity:1,duration:0.2}, 26.500);
+tl.fromTo("#b03_arch_beat5 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 26.500);
+tl.fromTo("#b03_arch_beat5 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 26.580);
+tl.fromTo("#b03_arch_beat5 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 26.780);
+tl.to("#b03_arch_beat5", {opacity:0,y:-12,duration:0.28}, 31.526);
+tl.fromTo("#b03_arch_beat6", {opacity:0}, {opacity:1,duration:0.2}, 31.876);
+tl.fromTo("#b03_arch_beat6 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 31.876);
+tl.fromTo("#b03_arch_beat6 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 31.956);
+tl.fromTo("#b03_arch_beat6 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 32.156);
+tl.to("#b03_arch_beat6", {opacity:0,y:-12,duration:0.28}, 35.150);
+tl.fromTo("#b03_arch_beat7", {opacity:0}, {opacity:1,duration:0.2}, 35.500);
+tl.fromTo("#b03_arch_beat7 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 35.500);
+tl.fromTo("#b03_arch_beat7 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 35.580);
+tl.fromTo("#b03_arch_beat7 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 35.780);
+tl.to("#b03_arch_beat7", {opacity:0,y:-12,duration:0.28}, 39.650);
+tl.fromTo("#b03_arch_beat8", {opacity:0}, {opacity:1,duration:0.2}, 40.000);
+tl.fromTo("#b03_arch_beat8 .big-num", {opacity:0,scale:0.5}, {opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}, 40.000);
+tl.fromTo("#b03_arch_beat8 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.3}, 40.200);
+tl.to("#b03_arch_beat8", {opacity:0,duration:0.3}, 45.495);
+tl.fromTo("#b03_arch_flash8", {opacity:0}, {opacity:0.35,duration:0.06}, 40.000);
+tl.to("#b03_arch_flash8", {opacity:0,duration:0.25}, 40.060);
+tl.fromTo("#b03_arch_beat9", {opacity:0}, {opacity:1,duration:0.2}, 45.845);
+tl.fromTo("#b03_arch_beat9 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 45.845);
+tl.to("#b03_arch_beat9", {opacity:0,duration:0.3}, 49.650);
+tl.fromTo("#b03_arch_flash9", {opacity:0}, {opacity:0.35,duration:0.06}, 45.845);
+tl.to("#b03_arch_flash9", {opacity:0,duration:0.25}, 45.905);
+tl.fromTo("#b03_arch_beat10", {opacity:0}, {opacity:1,duration:0.2}, 50.000);
+tl.fromTo("#b03_arch_beat10 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 50.000);
+tl.fromTo("#b03_arch_beat10 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 50.080);
+tl.fromTo("#b03_arch_beat10 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 50.280);
+tl.to("#b03_arch_beat10", {opacity:0,y:-12,duration:0.28}, 54.650);
+tl.fromTo("#b03_arch_beat11", {opacity:0}, {opacity:1,duration:0.2}, 55.000);
+tl.fromTo("#b03_arch_beat11 .big-num", {opacity:0,scale:0.5}, {opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}, 55.000);
+tl.fromTo("#b03_arch_beat11 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.3}, 55.200);
+tl.to("#b03_arch_beat11", {opacity:0,duration:0.3}, 60.470);
+tl.fromTo("#b03_arch_flash11", {opacity:0}, {opacity:0.35,duration:0.06}, 55.000);
+tl.to("#b03_arch_flash11", {opacity:0,duration:0.25}, 55.060);
+tl.fromTo("#b03_arch_beat12", {opacity:0}, {opacity:1,duration:0.2}, 60.820);
+tl.fromTo("#b03_arch_beat12 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 60.820);
+tl.fromTo("#b03_arch_beat12 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 61.170);
+tl.to("#b03_arch_beat12", {opacity:0,duration:0.3}, 64.650);
+tl.fromTo("#b03_arch_flash12", {opacity:0}, {opacity:0.35,duration:0.06}, 60.820);
+tl.to("#b03_arch_flash12", {opacity:0,duration:0.25}, 60.880);
+tl.fromTo("#b03_arch_beat13", {opacity:0}, {opacity:1,duration:0.2}, 65.000);
+tl.fromTo("#b03_arch_beat13 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 65.000);
+tl.fromTo("#b03_arch_beat13 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 65.080);
+tl.fromTo("#b03_arch_beat13 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 65.280);
+tl.to("#b03_arch_beat13", {opacity:0,y:-12,duration:0.28}, 69.650);
+tl.fromTo("#b03_arch_beat14", {opacity:0}, {opacity:1,duration:0.2}, 70.000);
+tl.fromTo("#b03_arch_beat14 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 70.000);
+tl.fromTo("#b03_arch_beat14 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 70.080);
+tl.fromTo("#b03_arch_beat14 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 70.280);
+tl.to("#b03_arch_beat14", {opacity:0,y:-12,duration:0.28}, 74.650);
+tl.fromTo("#b03_arch_beat15", {opacity:0}, {opacity:1,duration:0.2}, 75.000);
+tl.fromTo("#b03_arch_beat15 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 75.000);
+tl.fromTo("#b03_arch_beat15 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 75.080);
+tl.fromTo("#b03_arch_beat15 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 75.280);
+tl.to("#b03_arch_beat15", {opacity:0,y:-12,duration:0.28}, 79.650);
+tl.fromTo("#b03_arch_beat16", {opacity:0}, {opacity:1,duration:0.2}, 80.000);
+tl.fromTo("#b03_arch_beat16 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 80.000);
+tl.fromTo("#b03_arch_beat16 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 80.080);
+tl.fromTo("#b03_arch_beat16 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 80.280);
+tl.to("#b03_arch_beat16", {opacity:0,y:-12,duration:0.28}, 85.122);
+tl.fromTo("#b03_arch_beat17", {opacity:0}, {opacity:1,duration:0.2}, 85.472);
+tl.fromTo("#b03_arch_beat17 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 85.472);
+tl.to("#b03_arch_beat17", {opacity:0,duration:0.3}, 89.650);
+tl.fromTo("#b03_arch_flash17", {opacity:0}, {opacity:0.35,duration:0.06}, 85.472);
+tl.to("#b03_arch_flash17", {opacity:0,duration:0.25}, 85.532);
+tl.fromTo("#b03_arch_beat18", {opacity:0}, {opacity:1,duration:0.2}, 90.000);
+tl.fromTo("#b03_arch_beat18 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 90.000);
+tl.fromTo("#b03_arch_beat18 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 90.080);
+tl.fromTo("#b03_arch_beat18 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 90.280);
+tl.to("#b03_arch_beat18", {opacity:0,y:-12,duration:0.28}, 94.650);
+tl.fromTo("#b03_arch_beat19", {opacity:0}, {opacity:1,duration:0.2}, 95.000);
+tl.fromTo("#b03_arch_beat19 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 95.000);
+tl.fromTo("#b03_arch_beat19 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 95.350);
+tl.to("#b03_arch_beat19", {opacity:0,duration:0.3}, 99.650);
+tl.fromTo("#b03_arch_flash19", {opacity:0}, {opacity:0.35,duration:0.06}, 95.000);
+tl.to("#b03_arch_flash19", {opacity:0,duration:0.25}, 95.060);
+tl.fromTo("#b03_arch_beat20", {opacity:0}, {opacity:1,duration:0.25}, 100.000);
+tl.fromTo("#b03_arch_beat20 .kicker", {opacity:0,y:10}, {opacity:1,y:0,duration:0.3}, 100.000);
+tl.fromTo("#b03_arch_beat20 .h1", {opacity:0,y:24,scale:0.96}, {opacity:1,y:0,scale:1,duration:0.4,ease:"power3.out"}, 100.100);
+tl.fromTo("#b03_arch_beat20 .layers-row", {opacity:0}, {opacity:1,duration:0.2}, 100.250);
+tl.fromTo("#b03_arch_beat20 .layer", {opacity:0,y:28}, {opacity:1,y:0,duration:0.35,stagger:0.08,ease:"power2.out"}, 100.300);
+tl.to("#b03_arch_beat20", {opacity:0,duration:0.3}, 104.247);
+tl.fromTo("#b03_arch_beat21", {opacity:0}, {opacity:1,duration:0.2}, 104.597);
+tl.fromTo("#b03_arch_beat21 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 104.597);
+tl.fromTo("#b03_arch_beat21 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 104.677);
+tl.fromTo("#b03_arch_beat21 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 104.877);
+tl.to("#b03_arch_beat21", {opacity:0,y:-12,duration:0.28}, 109.650);
+tl.fromTo("#b03_arch_beat22", {opacity:0}, {opacity:1,duration:0.2}, 110.000);
+tl.fromTo("#b03_arch_beat22 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 110.000);
+tl.fromTo("#b03_arch_beat22 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 110.080);
+tl.fromTo("#b03_arch_beat22 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 110.280);
+tl.to("#b03_arch_beat22", {opacity:0,y:-12,duration:0.28}, 114.650);
+tl.fromTo("#b03_arch_beat23", {opacity:0}, {opacity:1,duration:0.2}, 115.000);
+tl.fromTo("#b03_arch_beat23 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 115.000);
+tl.fromTo("#b03_arch_beat23 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 115.080);
+tl.fromTo("#b03_arch_beat23 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 115.280);
+tl.to("#b03_arch_beat23", {opacity:0,y:-12,duration:0.28}, 119.650);
+tl.fromTo("#b03_arch_beat24", {opacity:0}, {opacity:1,duration:0.2}, 120.000);
+tl.fromTo("#b03_arch_beat24 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 120.000);
+tl.to("#b03_arch_beat24", {opacity:0,duration:0.3}, 123.863);
+tl.fromTo("#b03_arch_flash24", {opacity:0}, {opacity:0.35,duration:0.06}, 120.000);
+tl.to("#b03_arch_flash24", {opacity:0,duration:0.25}, 120.060);
+tl.fromTo("#b03_arch_beat25", {opacity:0}, {opacity:1,duration:0.2}, 124.213);
+tl.fromTo("#b03_arch_beat25 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 124.213);
+tl.fromTo("#b03_arch_beat25 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 124.293);
+tl.fromTo("#b03_arch_beat25 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 124.493);
+tl.to("#b03_arch_beat25", {opacity:0,y:-12,duration:0.28}, 129.650);
+tl.fromTo("#b03_arch_beat26", {opacity:0}, {opacity:1,duration:0.2}, 130.000);
+tl.fromTo("#b03_arch_beat26 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 130.000);
+tl.fromTo("#b03_arch_beat26 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 130.080);
+tl.fromTo("#b03_arch_beat26 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 130.280);
+tl.to("#b03_arch_beat26", {opacity:0,y:-12,duration:0.28}, 134.650);
+tl.fromTo("#b03_arch_beat27", {opacity:0}, {opacity:1,duration:0.2}, 135.000);
+tl.fromTo("#b03_arch_beat27 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 135.000);
+tl.fromTo("#b03_arch_beat27 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 135.350);
+tl.to("#b03_arch_beat27", {opacity:0,duration:0.3}, 139.650);
+tl.fromTo("#b03_arch_flash27", {opacity:0}, {opacity:0.35,duration:0.06}, 135.000);
+tl.to("#b03_arch_flash27", {opacity:0,duration:0.25}, 135.060);
+tl.fromTo("#b03_arch_beat28", {opacity:0}, {opacity:1,duration:0.2}, 140.000);
+tl.fromTo("#b03_arch_beat28 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 140.000);
+tl.fromTo("#b03_arch_beat28 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 140.080);
+tl.fromTo("#b03_arch_beat28 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 140.280);
+tl.to("#b03_arch_beat28", {opacity:0,y:-12,duration:0.28}, 143.196);
+tl.fromTo("#b03_arch_beat29", {opacity:0}, {opacity:1,duration:0.2}, 143.546);
+tl.fromTo("#b03_arch_beat29 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 143.546);
+tl.fromTo("#b03_arch_beat29 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 143.626);
+tl.fromTo("#b03_arch_beat29 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 143.826);
+tl.to("#b03_arch_beat29", {opacity:0,y:-12,duration:0.28}, 149.502);
+tl.fromTo("#b03_arch_beat30", {opacity:0}, {opacity:1,duration:0.2}, 149.852);
+tl.fromTo("#b03_arch_beat30 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 149.852);
+tl.fromTo("#b03_arch_beat30 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 149.932);
+tl.fromTo("#b03_arch_beat30 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 150.132);
+tl.to("#b03_arch_beat30", {opacity:0,y:-12,duration:0.28}, 154.650);
+tl.fromTo("#b03_arch_beat31", {opacity:0}, {opacity:1,duration:0.2}, 155.000);
+tl.fromTo("#b03_arch_beat31 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 155.000);
+tl.fromTo("#b03_arch_beat31 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 155.080);
+tl.fromTo("#b03_arch_beat31 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 155.280);
+tl.to("#b03_arch_beat31", {opacity:0,y:-12,duration:0.28}, 159.650);
+tl.fromTo("#b03_arch_beat32", {opacity:0}, {opacity:1,duration:0.2}, 160.000);
+tl.fromTo("#b03_arch_beat32 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 160.000);
+tl.to("#b03_arch_beat32", {opacity:0,duration:0.3}, 164.650);
+tl.fromTo("#b03_arch_flash32", {opacity:0}, {opacity:0.35,duration:0.06}, 160.000);
+tl.to("#b03_arch_flash32", {opacity:0,duration:0.25}, 160.060);
+tl.fromTo("#b03_arch_beat33", {opacity:0}, {opacity:1,duration:0.2}, 165.000);
+tl.fromTo("#b03_arch_beat33 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 165.000);
+tl.fromTo("#b03_arch_beat33 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 165.080);
+tl.fromTo("#b03_arch_beat33 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 165.280);
+tl.to("#b03_arch_beat33", {opacity:0,y:-12,duration:0.28}, 169.650);
+tl.fromTo("#b03_arch_beat34", {opacity:0}, {opacity:1,duration:0.2}, 170.000);
+tl.fromTo("#b03_arch_beat34 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 170.000);
+tl.fromTo("#b03_arch_beat34 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 170.350);
+tl.to("#b03_arch_beat34", {opacity:0,duration:0.3}, 173.482);
+tl.fromTo("#b03_arch_flash34", {opacity:0}, {opacity:0.35,duration:0.06}, 170.000);
+tl.to("#b03_arch_flash34", {opacity:0,duration:0.25}, 170.060);
+tl.fromTo("#b03_arch_beat35", {opacity:0}, {opacity:1,duration:0.2}, 173.832);
+tl.fromTo("#b03_arch_beat35 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 173.832);
+tl.fromTo("#b03_arch_beat35 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 173.912);
+tl.fromTo("#b03_arch_beat35 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 174.112);
+tl.to("#b03_arch_beat35", {opacity:0,y:-12,duration:0.28}, 179.650);
+tl.fromTo("#b03_arch_beat36", {opacity:0}, {opacity:1,duration:0.2}, 180.000);
+tl.fromTo("#b03_arch_beat36 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 180.000);
+tl.fromTo("#b03_arch_beat36 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 180.080);
+tl.fromTo("#b03_arch_beat36 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 180.280);
+tl.to("#b03_arch_beat36", {opacity:0,y:-12,duration:0.28}, 185.774);
+tl.fromTo("#b03_arch_beat37", {opacity:0}, {opacity:1,duration:0.2}, 186.124);
+tl.fromTo("#b03_arch_beat37 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 186.124);
+tl.fromTo("#b03_arch_beat37 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 186.204);
+tl.fromTo("#b03_arch_beat37 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 186.404);
+tl.to("#b03_arch_beat37", {opacity:0,y:-12,duration:0.28}, 189.650);
+tl.fromTo("#b03_arch_beat38", {opacity:0}, {opacity:1,duration:0.2}, 190.000);
+tl.fromTo("#b03_arch_beat38 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 190.000);
+tl.fromTo("#b03_arch_beat38 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 190.080);
+tl.fromTo("#b03_arch_beat38 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 190.280);
+tl.to("#b03_arch_beat38", {opacity:0,y:-12,duration:0.28}, 194.650);
+tl.fromTo("#b03_arch_beat39", {opacity:0}, {opacity:1,duration:0.2}, 195.000);
+tl.fromTo("#b03_arch_beat39 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 195.000);
+tl.to("#b03_arch_beat39", {opacity:0,duration:0.3}, 199.650);
+tl.fromTo("#b03_arch_flash39", {opacity:0}, {opacity:0.35,duration:0.06}, 195.000);
+tl.to("#b03_arch_flash39", {opacity:0,duration:0.25}, 195.060);
+tl.fromTo("#b03_arch_beat40", {opacity:0}, {opacity:1,duration:0.2}, 200.000);
+tl.fromTo("#b03_arch_beat40 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 200.000);
+tl.fromTo("#b03_arch_beat40 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 200.080);
+tl.fromTo("#b03_arch_beat40 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 200.280);
+tl.to("#b03_arch_beat40", {opacity:0,y:-12,duration:0.28}, 204.650);
+tl.fromTo("#b03_arch_beat41", {opacity:0}, {opacity:1,duration:0.2}, 205.000);
+tl.fromTo("#b03_arch_beat41 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 205.000);
+tl.fromTo("#b03_arch_beat41 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 205.080);
+tl.fromTo("#b03_arch_beat41 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 205.280);
+tl.to("#b03_arch_beat41", {opacity:0,y:-12,duration:0.28}, 208.301);
+tl.fromTo("#b03_arch_beat42", {opacity:0}, {opacity:1,duration:0.2}, 208.651);
+tl.fromTo("#b03_arch_beat42 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 208.651);
+tl.fromTo("#b03_arch_beat42 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 209.001);
+tl.to("#b03_arch_beat42", {opacity:0,duration:0.3}, 214.650);
+tl.fromTo("#b03_arch_flash42", {opacity:0}, {opacity:0.35,duration:0.06}, 208.651);
+tl.to("#b03_arch_flash42", {opacity:0,duration:0.25}, 208.711);
+tl.fromTo("#b03_arch_beat43", {opacity:0}, {opacity:1,duration:0.2}, 215.000);
+tl.fromTo("#b03_arch_beat43 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 215.000);
+tl.fromTo("#b03_arch_beat43 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 215.080);
+tl.fromTo("#b03_arch_beat43 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 215.280);
+tl.to("#b03_arch_beat43", {opacity:0,y:-12,duration:0.28}, 219.650);
+tl.fromTo("#b03_arch_beat44", {opacity:0}, {opacity:1,duration:0.2}, 220.000);
+tl.fromTo("#b03_arch_beat44 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 220.000);
+tl.fromTo("#b03_arch_beat44 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 220.080);
+tl.fromTo("#b03_arch_beat44 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 220.280);
+tl.to("#b03_arch_beat44", {opacity:0,y:-12,duration:0.28}, 223.745);
+tl.fromTo("#b03_arch_beat45", {opacity:0}, {opacity:1,duration:0.2}, 224.095);
+tl.fromTo("#b03_arch_beat45 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 224.095);
+tl.fromTo("#b03_arch_beat45 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 224.175);
+tl.fromTo("#b03_arch_beat45 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 224.375);
+tl.to("#b03_arch_beat45", {opacity:0,y:-12,duration:0.28}, 229.650);
+tl.fromTo("#b03_arch_beat46", {opacity:0}, {opacity:1,duration:0.2}, 230.000);
+tl.fromTo("#b03_arch_beat46 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 230.000);
+tl.to("#b03_arch_beat46", {opacity:0,duration:0.3}, 234.650);
+tl.fromTo("#b03_arch_flash46", {opacity:0}, {opacity:0.35,duration:0.06}, 230.000);
+tl.to("#b03_arch_flash46", {opacity:0,duration:0.25}, 230.060);
+tl.fromTo("#b03_arch_beat47", {opacity:0}, {opacity:1,duration:0.2}, 235.000);
+tl.fromTo("#b03_arch_beat47 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 235.000);
+tl.fromTo("#b03_arch_beat47 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 235.080);
+tl.fromTo("#b03_arch_beat47 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 235.280);
+tl.to("#b03_arch_beat47", {opacity:0,y:-12,duration:0.28}, 239.650);
+tl.fromTo("#b03_arch_beat48", {opacity:0}, {opacity:1,duration:0.2}, 240.000);
+tl.fromTo("#b03_arch_beat48 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 240.000);
+tl.fromTo("#b03_arch_beat48 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 240.080);
+tl.fromTo("#b03_arch_beat48 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 240.280);
+tl.to("#b03_arch_beat48", {opacity:0,y:-12,duration:0.28}, 244.650);
+tl.fromTo("#b03_arch_beat49", {opacity:0}, {opacity:1,duration:0.2}, 245.000);
+tl.fromTo("#b03_arch_beat49 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 245.000);
+tl.fromTo("#b03_arch_beat49 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 245.350);
+tl.to("#b03_arch_beat49", {opacity:0,duration:0.3}, 248.231);
+tl.fromTo("#b03_arch_flash49", {opacity:0}, {opacity:0.35,duration:0.06}, 245.000);
+tl.to("#b03_arch_flash49", {opacity:0,duration:0.25}, 245.060);
+tl.fromTo("#b03_arch_beat50", {opacity:0}, {opacity:1,duration:0.2}, 248.581);
+tl.fromTo("#b03_arch_beat50 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 248.581);
+tl.fromTo("#b03_arch_beat50 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 248.661);
+tl.fromTo("#b03_arch_beat50 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 248.861);
+tl.to("#b03_arch_beat50", {opacity:0,y:-12,duration:0.28}, 254.650);
+tl.fromTo("#b03_arch_beat51", {opacity:0}, {opacity:1,duration:0.2}, 255.000);
+tl.fromTo("#b03_arch_beat51 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 255.000);
+tl.fromTo("#b03_arch_beat51 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 255.080);
+tl.fromTo("#b03_arch_beat51 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 255.280);
+tl.to("#b03_arch_beat51", {opacity:0,y:-12,duration:0.28}, 261.062);
+tl.fromTo("#b03_arch_beat52", {opacity:0}, {opacity:1,duration:0.2}, 261.412);
+tl.fromTo("#b03_arch_beat52 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 261.412);
+tl.fromTo("#b03_arch_beat52 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 261.492);
+tl.fromTo("#b03_arch_beat52 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 261.692);
+tl.to("#b03_arch_beat52", {opacity:0,y:-12,duration:0.28}, 264.650);
+tl.fromTo("#b03_arch_beat53", {opacity:0}, {opacity:1,duration:0.2}, 265.000);
+tl.fromTo("#b03_arch_beat53 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 265.000);
+tl.fromTo("#b03_arch_beat53 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 265.080);
+tl.fromTo("#b03_arch_beat53 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 265.280);
+tl.to("#b03_arch_beat53", {opacity:0,y:-12,duration:0.28}, 302.962);
+tl.to("#hv_b03_arch_0-in", {opacity:1, duration:0.4}, 80.000);
+tl.to("#hv_b03_arch_0-in", {opacity:0, duration:0.4}, 87.100);
+tl.to("#hv_b03_arch_1-in", {opacity:1, duration:0.4}, 180.000);
+tl.to("#hv_b03_arch_1-in", {opacity:0, duration:0.4}, 186.600);
+tl.to("#hv_b03_arch_2-in", {opacity:1, duration:0.4}, 120.000);
+tl.to("#hv_b03_arch_2-in", {opacity:0, duration:0.4}, 126.100);
+tl.to("#hv_b03_arch_3-in", {opacity:1, duration:0.4}, 220.000);
+tl.to("#hv_b03_arch_3-in", {opacity:0, duration:0.4}, 226.100);
+window.__timelines["b03_arch"] = tl;
+</script>
+</body></html>

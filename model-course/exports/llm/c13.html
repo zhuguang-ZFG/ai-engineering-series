@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C13 接上真实模型 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details open><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html" aria-current="page">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C13-section-6cf4775f06">先修检查：请求、权限与报告</a></li><li class="toc-level-2"><a href="#C13-section-85896b1e88">两条合法路径，不要求付费账号</a></li><li class="toc-level-3"><a href="#C13-section-696e62a227">路径 A：本地 Transformers 模型目录</a></li><li class="toc-level-3"><a href="#C13-section-cba3d9111f">路径 B：显式授权的 OpenAI 兼容接口</a></li><li class="toc-level-2"><a href="#C13-section-8fb6402ec4">先看材料权限，再看问题</a></li><li class="toc-level-2"><a href="#C13-section-b581ac89ef">报告里必须有的证据</a></li><li class="toc-level-2"><a href="#C13-section-982e37a3f6">可选抽取模式：让模型选证据</a></li><li class="toc-level-2"><a href="#C13-section-d12b3e2594">完整操作：从空输出到一条可核对主张</a></li><li class="toc-level-2"><a href="#C13-section-5dd75a3d35">改一个条件：问题超出材料</a></li><li class="toc-level-2"><a href="#C13-section-8d37ccfa57">图与实验</a></li><li class="toc-level-2"><a href="#C13-section-2c42167d8d">失败反例：三种假成功</a></li><li class="toc-level-2"><a href="#C13-section-934920737b">项目增量</a></li><li class="toc-level-2"><a href="#C13-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C13-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C13"><header class="chapter-opener"><p class="chapter-number">C13</p><p class="chapter-kicker">S3 · 能实现 / K3</p><h1>接上真实模型</h1><p class="chapter-abstract">把同一套请求结构接到真实模型，保留输入、输出、引用和不可用状态。</p></header><p class="chapter-meta">先修：<a href="c12.html">C12</a> · <a href="stage-s3.html">S3 阶段导言</a></p><div class="article-body"><p>上一章的本地服务会回显 JSON，但它没有“生成”任何东西。现在把问题换成：给助手一份设备手册，问“闭馆前要检查什么”，让它基于材料给出带出处的回答。你要么在本机加载一个合法取得的模型，要么使用明确授权的兼容 API。二者都必须是真调用：输入变了，输出和记录要跟着变；模型不可用就报告不可用，不能退回一段手工写好的“成功答案”。</p>
+<p>本章使用贯穿项目的真实助手 <code>book/llm/examples/assistant/assistant.py</code>。接口已经固定到命令和报告字段；不同机器上的模型路径、输出内容和耗时当然不同，但<strong>状态、引用、错误和未知</strong>的结构必须一致。</p>
+<h2 id="C13-section-6cf4775f06" tabindex="-1">先修检查：请求、权限与报告</h2>
+<p>C12 已经讲过：请求要区分成功、坏输入、未认证、无权限、服务失败和未知；凭据不能写进仓库。本章再加三条：</p>
+<ol>
+<li>你能读懂一个 JSON 报告里的 <code>status</code>、<code>claims</code>、<code>citations</code> 和 <code>diagnostics</code> 字段，而不是只看最后一段自然语言。</li>
+<li>你知道“模型目录存在”不等于“模型可用”：还需要配置、权重、分词器/处理器文件，以及与当前 <code>transformers</code>/<code>torch</code> 版本兼容。</li>
+<li>你愿意在模型不可达时留下资源阻碍记录，而不是把示例输出改个名字当成真实调用。</li>
+</ol>
+<p>如果第 2 条不熟，先在本机设置并列出模型目录：</p>
+<pre><code class="language-bash"># 替换为你已合法取得、已下载到本机的模型目录绝对路径
+MODEL_DIR=&quot;/absolute/path/to/local-model&quot;
+ls &quot;$MODEL_DIR&quot;
+</code></pre>
+<p>至少应看到 <code>config.json</code>、权重文件（<code>.safetensors</code> 或 <code>.bin</code>）和 tokenizer/processor 相关文件。具体文件名由模型类型决定，不能靠猜；加载失败时报告里的错误类型比“跑不通”更有用。</p>
+<h2 id="C13-section-85896b1e88" tabindex="-1">两条合法路径，不要求付费账号</h2>
+<h3 id="C13-section-696e62a227" tabindex="-1">路径 A：本地 Transformers 模型目录</h3>
+<p><code>--model</code> 指向一个已经在磁盘上的模型目录。助手以 <code>local_files_only=True</code> 加载，不会自动联网下载。模型和权重的许可、来源、允许用途由你或提供方确认；本书不把一个模型名称当成授权。</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;闭馆前需要检查哪些项目？请逐条给出材料出处。&quot; \
+  --model &quot;$MODEL_DIR&quot; \
+  --json out/c13-local.json \
+  --markdown out/c13-local.md
+</code></pre>
+<p><code>$MODEL_DIR</code> 沿用上一节设置的本地目录。这次运行是否得到 <code>answered</code> 取决于模型、材料和逐字引用校验；任何失败状态都是可保存的证据，不要用示例回答替代。</p>
+<h3 id="C13-section-cba3d9111f" tabindex="-1">路径 B：显式授权的 OpenAI 兼容接口</h3>
+<p>只有当你明确选择 <code>--provider api</code>，并配置了 <code>ASSISTANT_API_BASE</code>、<code>ASSISTANT_API_MODEL</code>、<code>ASSISTANT_API_KEY</code> 时，助手才会走网络。三个变量放在本机受控环境里：</p>
+<p>Windows PowerShell：</p>
+<pre><code class="language-powershell">$env:ASSISTANT_API_BASE = &quot;https://your-authorized-endpoint.example/v1&quot;
+$env:ASSISTANT_API_MODEL = &quot;provider-model-id&quot;
+$env:ASSISTANT_API_KEY = &quot;...&quot;   # 不要粘贴到聊天、课文或提交记录
+</code></pre>
+<p>macOS / Linux：</p>
+<pre><code class="language-bash">export ASSISTANT_API_BASE=&quot;https://your-authorized-endpoint.example/v1&quot;
+export ASSISTANT_API_MODEL=&quot;provider-model-id&quot;
+export ASSISTANT_API_KEY=&quot;...&quot;
+</code></pre>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;闭馆前需要检查哪些项目？请逐条给出材料出处。&quot; \
+  --provider api \
+  --json out/c13-api.json \
+  --markdown out/c13-api.md
+</code></pre>
+<p>不要在示例里填入真实密钥；不要用别人的密钥“试一下”；不要把密钥写进 <code>documents.json</code>、脚本或报告。API 的费用、限流、可用模型名和字段支持由服务方当前文档定义，本章不替你猜价格或能力。</p>
+<h2 id="C13-section-8fb6402ec4" tabindex="-1">先看材料权限，再看问题</h2>
+<p>助手的 <code>--reader</code> 是必需的，不是装饰。以 <code>--reader student</code> 读取 <code>documents.json</code> 时，只有 <code>readers</code> 包含 <code>student</code> 的文档会被列出/检索；<code>review-budget</code> 这类教师材料对学生会显示为无权限或不可见。换一个没有权限的读者再问同一问题，预期不是“回答得更少”，而是 <code>unauthorized</code>/无权限，或只基于该读者可见的材料回答并明确范围。</p>
+<p>先读文档清单：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect read \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student --doc station-log
+</code></pre>
+<p>这条命令读取学生有权查看的 <code>station-log</code>。输出包含 <code>doc.doc_id</code>、<code>version</code>、<code>path</code>、<code>sha256</code>、<code>readers</code> 和正文 <code>text</code>；<code>--doc</code> 是必填的文档 ID，并非列出全部文档的命令。不要把教师材料的存在当成学生可读；权限检查必须发生在读入内容之前，而不是回答完之后再遮盖。</p>
+<h2 id="C13-section-b581ac89ef" tabindex="-1">报告里必须有的证据</h2>
+<p>一次 <code>run</code> 会写出 JSON 和 Markdown。JSON 至少包含：</p>
+<ul>
+<li><code>status</code>：<code>answered</code>、<code>insufficient-evidence</code>、<code>conflict</code>、<code>unauthorized</code>、<code>missing-source</code>、<code>invalid-response</code>、<code>citation-failed</code>、<code>model-unavailable</code> 等；</li>
+<li><code>question</code>、<code>reader</code>、模型/提供方标识和版本（能记录的部分）；</li>
+<li><code>claims</code>：拆开的主张；每条有 <code>text</code> 和 <code>citations</code> 数组。来源引用写作 <code>{&quot;chunk_id&quot;:&quot;...&quot;,&quot;quote&quot;:&quot;...&quot;}</code>，报告会补 <code>doc_id</code>、<code>version</code>、<code>sha256</code>、<code>start</code>、<code>end</code>；工具引用写作 <code>{&quot;tool_receipt_id&quot;:&quot;tool-1&quot;}</code>。<code>claim.text</code> 必须是其 <code>quote</code> 的逐字连续子串；<code>answer</code> 只能由已核验 claim 的原文组成，不能额外加入未列主张。改写句会被判 <code>citation-failed</code>（paraphrase requires human verification），只能进入人工复核，不能当作自动验证通过。</li>
+<li><code>diagnostics</code>：至少保留 <code>first_raw_response</code> 和 <code>first_failure</code>，用于区分“模型没回”“回了但格式不对”“引用对不上”；</li>
+<li><code>usage</code>：调用次数、token、延迟；费用字段在未配置价格时为 <code>null</code>，不能编一个金额。</li>
+</ul>
+<p><code>status: answered</code> 不是“每个字都正确”，而是“报告声称的每条主张都有可回查的来源或工具回执，且 claim 原文、quote、answer 三者的逐字关系通过校验”。引用存在也不自动等于引用支持结论；C15/C18 会逐条核对。</p>
+<p>如果模型输出了无法解析的结构，助手应记录 <code>invalid-response</code> 或 <code>citation-failed</code>，并保留首次原始响应；它不能悄悄改写成一段人工答案。如果模型目录不存在、配置缺失或加载失败，应得到 <code>model-unavailable</code>，而不是 <code>answered</code>。</p>
+<h2 id="C13-section-982e37a3f6" tabindex="-1">可选抽取模式：让模型选证据</h2>
+<p>前面的命令使用默认 <code>--claim-mode copy</code>：模型同时输出主张和引用，程序检查它们的逐字关系。若只需要原文摘录，可以在 <code>run</code> 后加上 <code>--mode fixed --claim-mode extract</code>。模型只返回 <code>status</code>、<code>claims[{chunk_id,quote}]</code> 和可选 <code>reason</code>，程序从已验证的 quote 生成主张与 answer；它不调用另一个模型代写答案。</p>
+<p>quote 按程序的空白规范化后必须为 2–300 个字符，并连续出现在命中片段中。报告仍用 <code>claims[].text</code> 和 <code>citations[]</code>；<code>start/end</code> 指向整个 chunk，抽取模式另外给出 <code>quote_start/quote_end</code>，对应引文在文档中的精确字符范围 <code>[起点, 终点)</code>。程序先按 UTF-8 去 BOM 并把 CRLF/CR 统一成 LF，再计 Unicode 字符；这不是字节位置，也不是浏览器 JavaScript 的 UTF-16 下标。</p>
+<p>同一 chunk 内出现多个相同引文时，取空白规范化后第一次匹配的位置。空白折叠只用于匹配，位置仍映射回折叠前的文档；例如原文 <code>风速\t4.2</code> 可以匹配模型的 <code>风速 4.2</code>，范围包含原来的制表符。<code>sha256</code> 仍计算原文件字节，回查前要先核对文件版本。展示主张时去掉开头的 Markdown 标题标记，引用 quote 与定位范围仍保留标题。</p>
+<p>这项附加合同在 <code>config.claim_contract</code> 标记为 <code>source-extract/2</code>，JSON 与 Markdown 都能查看位置。旧报告和默认 copy 不含这两个精确字段，不能把旧 <code>start/end</code> 当作新字段使用。</p>
+<p>这是一种证据摘录模式，不能据此判定选中的句子完整回答了问题。当前真实模型在风速题和冲突题上仍会失败，详见 <a href="../../book/llm/examples/assistant/BASELINE.md">冻结基线</a>。<code>extract</code> 只支持 fixed；与 agent 组合会返回 <code>invalid-request</code>。不要切换模式后仍把结果与另一种协议的历史报告混为一谈。</p>
+<h2 id="C13-section-d12b3e2594" tabindex="-1">完整操作：从空输出到一条可核对主张</h2>
+<p>在仓库根目录：</p>
+<pre><code class="language-bash">mkdir -p out
+python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;设备手册里，闭馆前要检查哪些项目？&quot; \
+  --model &quot;$MODEL_DIR&quot; \
+  --json out/c13-first.json \
+  --markdown out/c13-first.md \
+  --repair-attempts 1
+</code></pre>
+<p><code>$MODEL_DIR</code> 沿用前文的本地模型目录。<code>--repair-attempts 1</code> 允许在结构不合格时做一次格式修复请求，但修复请求也必须走同一个真实模型，不能由程序拼接模板冒充模型输出。若第二次仍不合格，报告保持失败并保留两次诊断。</p>
+<p>打开 <code>out/c13-first.json</code>，按顺序检查：</p>
+<ol>
+<li><code>status</code> 是否与问题、材料和模型能力相符；</li>
+<li>每条 <code>claim.text</code> 是否是其 <code>quote</code> 的逐字连续子串，且 <code>quote</code> 能在对应 <code>chunk_id</code> 指向的文档版本中找到；</li>
+<li><code>diagnostics.first_raw_response</code> 是否存在，是否与解析后的结果一致；</li>
+<li><code>usage</code> 是否记录了实际调用，而不是固定值；</li>
+<li>若失败，<code>first_failure</code> 是否指出是网络、模型、解析还是引用问题。</li>
+</ol>
+<p>这一步的证据价值来自“首次输出”而非事后润色。不要在报告生成后手工修改 <code>claims</code> 来让它看起来有依据；如果你改了，必须标记为人工修改并保留原始文件。</p>
+<h2 id="C13-section-5dd75a3d35" tabindex="-1">改一个条件：问题超出材料</h2>
+<p>把问题换成“今天食堂几点开门？”——文档清单里没有食堂安排。预期 <code>status</code> 是 <code>insufficient-evidence</code>，或者报告明确说明材料未覆盖，而不是让模型凭常识补一个时间。若模型仍然回答，<code>claims</code> 里应没有伪造的文档 <code>quote</code>；引用校验应失败或报告无依据。</p>
+<p>再改一个条件：把 <code>--reader</code> 换成没有权限的身份。预期是权限错误或可见范围缩小，不能因为“问题一样”就绕过权限。权限失败要通过授权或改用有权材料解决，不能把 <code>readers</code> 字段删掉求通过。</p>
+<h2 id="C13-section-8d37ccfa57" tabindex="-1">图与实验</h2>
+<p>下图把本次请求拆成“任务、材料、当前输入、输出预算”。模型只看到被选中的材料和问题；它看不到未检索到的文件，也不会因为文件在磁盘上就自动知道。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/context-workbench.svg" alt="上下文工作台"><figcaption>图：模型只看见被选进本次输入的任务、材料和问题；未检索到的文件不会因为“在磁盘上”就自动可见。每项结论仍要回查原文，写得合理不等于有依据。</figcaption></figure>
+<p>旧的 <a href="tools.html">L10 工具执行</a> 实验展示了“模型说调用了”与“程序真的执行”之间的差别。C13 先不把工具接进来，只要求真实推理和引用；C16 再加入计算器与只读查找。</p>
+<h2 id="C13-section-2c42167d8d" tabindex="-1">失败反例：三种假成功</h2>
+<ol>
+<li><strong>固定回答</strong>：无论问题是什么都输出同一段“闭馆前检查门窗、电源”。它的 <code>diagnostics.first_raw_response</code> 与问题无关，<code>usage</code> 固定为 0，换问题也不变。这是模板，不是模型调用。</li>
+<li><strong>模型没加载，却返回示例答案</strong>：<code>--model</code> 路径错误时仍打印 <code>answered</code>。正确行为是 <code>model-unavailable</code>，并给出路径/加载错误。</li>
+<li><strong>引用装饰</strong>：每条主张都挂同一个 <code>chunk_id</code>，但 <code>quote</code> 在原文中不存在或只支持半句。引用校验应发现 <code>citation-failed</code>；人工核对时要把 <code>quote</code> 放回原文上下文，而不是只看 ID。</li>
+</ol>
+<p>遇到这些情况，先检查 <code>status</code> 和 <code>diagnostics</code>，再检查模型/凭据/材料。不要通过改报告字段或换一个“更听话”的模型来掩盖失败。</p>
+<h2 id="C13-section-934920737b" tabindex="-1">项目增量</h2>
+<p>在你的项目目录保存：</p>
+<pre><code class="language-text">out/c13-first.json
+out/c13-first.md
+notes/c13-resource.md
+</code></pre>
+<p><code>notes/c13-resource.md</code> 记录：使用的模型/提供方、来源与许可（若已知）、加载方式（本地目录/API）、版本、设备（CPU/GPU）、耗时、费用条件、首次失败与修复尝试。没有付费账号不是失败；把“没有真实调用”写成“已验证”才是失败。</p>
+<h2 id="C13-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>用本地模型或授权 API 跑一次真实 <code>run</code>，保存 JSON 与 Markdown；在报告中指出至少一条 <code>claim</code> 的 <code>quote</code> 在原文中的位置。</li>
+<li>提一个材料没有覆盖的问题，记录 <code>status</code> 和诊断；解释系统为什么不能补常识。</li>
+<li>把 <code>--reader</code> 换成无权限身份，记录结果；不要修改 manifest 的 <code>readers</code> 来“通过”。</li>
+<li>故意把 <code>--model</code> 指向一个不存在的目录，记录 <code>status</code>、错误类型和退出码；再恢复正确路径重跑，比较两次 <code>usage</code>。</li>
+<li>解释 <code>diagnostics.first_raw_response</code> 与 <code>claims</code> 的关系：为什么保留原始输出比只保留整理后的答案更重要？</li>
+</ol>
+<p>答案与核对依据见 <a href="c13-answer.html">C13 答案</a>。</p>
+<h2 id="C13-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>助手命令与字段来自本课程 <code>book/llm/examples/assistant/README.md</code> 的实际接口；模型输出、耗时、费用和可用性必须在你的机器上实测，本书不预填成功结果。模型权重/服务许可由使用者确认；没有合法模型或授权时，只能记录资源阻碍，不能回退为手工答案。真实模型的内部实现、训练数据和能力边界不由本课推断。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c12.html">上一章 C12</a><a href="c13-answer.html">独立作答后核对</a><a href="c14.html">下一章 C14</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

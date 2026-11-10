@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>术语、符号与能力门 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell glossary-page" id="main" tabindex="-1"><article class="article-body"><h1 id="glossary-section-0d9057b138" tabindex="-1">术语、符号与能力门</h1>
+<p>这一页不是背单词。术语表只收正文反复使用、且容易混淆的词；每条给出最短解释和首次出现的章节。符号表固定同一套写法，避免同一个字母在不同章指两件事。最后一节把五道能力门写成可检查的证据，而不是“读完即可”的口号。</p>
+<p>遇到不熟的词，先回到它首次出现的章节看例子，再回来看这条解释。术语解释不能代替正文里的条件、数字和失败对照。</p>
+<h2 id="glossary-section-982b8598ed" tabindex="-1">S1 会使用</h2>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>最短解释</th>
+<th>章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原文</td>
+<td>材料里逐字出现的句子；核对时最好连标点一起保留</td>
+<td>C01</td>
+</tr>
+<tr>
+<td>转述</td>
+<td>用自己的话重说，可以帮忙阅读，但不能冒充原文</td>
+<td>C01</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>你的判断；可能对也可能错，必须能回到原文检查</td>
+<td>C01</td>
+</tr>
+<tr>
+<td>任务约定</td>
+<td>材料、字段、缺失规则、输出格式、交付对象和完成标准的合称</td>
+<td>C02</td>
+</tr>
+<tr>
+<td>证据位置</td>
+<td>能定位到具体文档、版本和字符范围的引用，不是一段可被重复出现的字符串</td>
+<td>C01、C14</td>
+</tr>
+<tr>
+<td>未知</td>
+<td>材料没有提供，不能用常识补全的状态</td>
+<td>C01</td>
+</tr>
+<tr>
+<td>冲突</td>
+<td>两份材料给出不同说法，尚未确认哪份现行有效</td>
+<td>C01、C03</td>
+</tr>
+<tr>
+<td>可核对性</td>
+<td>另一个陌生人能否在有限步骤内找到支持结论的原句</td>
+<td>C01、C04</td>
+</tr>
+</tbody></table>
+<h2 id="glossary-section-471b99129e" tabindex="-1">S2 懂原理</h2>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>最短解释</th>
+<th>章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>token</td>
+<td>分词器切出的片段；可以是一个词、半个词、标点，甚至部分 UTF-8 字节</td>
+<td>C05</td>
+</tr>
+<tr>
+<td>词表 ID</td>
+<td>token 在词表中的存储编号；编号大小不表示词义远近</td>
+<td>C05、C06</td>
+</tr>
+<tr>
+<td>logit</td>
+<td>模型对候选给出的未归一化分数，可正可负，不相加为 1</td>
+<td>C05</td>
+</tr>
+<tr>
+<td>softmax</td>
+<td>把一组分数变成非负、总和为 1 的份额；分数差越大，分布越尖</td>
+<td>C05</td>
+</tr>
+<tr>
+<td>温度</td>
+<td>采样前对分数做缩放的参数；低温更集中，高温更分散，但不补事实</td>
+<td>C05</td>
+</tr>
+<tr>
+<td>向量</td>
+<td>一串数字；本章用它表示 token 的初始查表值或上下文后的表示</td>
+<td>C06</td>
+</tr>
+<tr>
+<td>余弦相似度</td>
+<td>两个向量夹角的余弦；只看方向，不看长度，且要用完整维度计算</td>
+<td>C06</td>
+</tr>
+<tr>
+<td>Q / K / V</td>
+<td>同一行输入经过三组不同投影得到的查询、键、值</td>
+<td>C07</td>
+</tr>
+<tr>
+<td>因果掩码</td>
+<td>在 softmax 之前把未来位置的分数设为负无穷，使其权重为 0</td>
+<td>C07</td>
+</tr>
+<tr>
+<td>注意力权重</td>
+<td>对 V 的混合比例，按行相加为 1；不是事实置信度</td>
+<td>C07</td>
+</tr>
+<tr>
+<td>残差</td>
+<td>把子层输入原样加回输出，保留一条信息通路</td>
+<td>C08</td>
+</tr>
+<tr>
+<td>前馈层</td>
+<td>对每个位置独立作用的两层线性变换加非线性</td>
+<td>C08</td>
+</tr>
+<tr>
+<td>交叉熵</td>
+<td>用目标概率给预测概率算的损失；目标概率越低，罚分越大</td>
+<td>C09</td>
+</tr>
+<tr>
+<td>梯度</td>
+<td>损失对参数的局部斜率；更新时沿负方向走一小步</td>
+<td>C09</td>
+</tr>
+<tr>
+<td>学习率</td>
+<td>每次更新走多远；太大会越过，太小会走不动</td>
+<td>C09</td>
+</tr>
+<tr>
+<td>预训练</td>
+<td>用大量文本学习“下一个 token”的通用目标</td>
+<td>C10</td>
+</tr>
+<tr>
+<td>指令微调</td>
+<td>用示范数据教模型按任务形式作答</td>
+<td>C10</td>
+</tr>
+<tr>
+<td>偏好优化</td>
+<td>用回答比较信号调整行为；不保证每条事实正确</td>
+<td>C10</td>
+</tr>
+</tbody></table>
+<h2 id="glossary-section-4b217afcba" tabindex="-1">S3 能实现</h2>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>最短解释</th>
+<th>章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HTTP 状态码</td>
+<td>服务端对请求的分类结果；401、404、500 指向不同的失败层</td>
+<td>C12</td>
+</tr>
+<tr>
+<td>超时</td>
+<td>客户端在限定时间内没收到回执；不等于服务端没有执行</td>
+<td>C12、C16</td>
+</tr>
+<tr>
+<td>未知状态</td>
+<td>既不能确认成功、也不能确认失败的状态；必须先查状态再重试</td>
+<td>C12、C16</td>
+</tr>
+<tr>
+<td>片段</td>
+<td>从文档切出的可检索单元；应带稳定 ID、版本、哈希和字符位置</td>
+<td>C14</td>
+</tr>
+<tr>
+<td>版本</td>
+<td>文档的某次发布；更新后旧片段的结论可能过期</td>
+<td>C14</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>谁可以读哪份材料；检索前就要检查，不能等回答完再补</td>
+<td>C14、C17</td>
+</tr>
+<tr>
+<td>词项检索</td>
+<td>按字词匹配取回片段；对同义改写不敏感</td>
+<td>C15</td>
+</tr>
+<tr>
+<td>embedding 检索</td>
+<td>用向量相似度取回片段；可能把“词像”但“事不对”的段落排前</td>
+<td>C15</td>
+</tr>
+<tr>
+<td>top-k</td>
+<td>取回片段的数量；多不等于证据充分</td>
+<td>C15</td>
+</tr>
+<tr>
+<td>工具调用</td>
+<td>模型提出请求，由应用校验、程序执行、回执返回的链路</td>
+<td>C16</td>
+</tr>
+<tr>
+<td>回执</td>
+<td>工具执行后的结果与终态；没有回执就不能汇报完成</td>
+<td>C16</td>
+</tr>
+<tr>
+<td>幂等</td>
+<td>同一个请求重复执行，结果与执行一次相同；重试前要有这个约定</td>
+<td>C16</td>
+</tr>
+<tr>
+<td>引用校验</td>
+<td>检查引用是否存在、是否支持结论、是否来自当前版本</td>
+<td>C17</td>
+</tr>
+</tbody></table>
+<h2 id="glossary-section-365a71bd22" tabindex="-1">S4 会改进</h2>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>最短解释</th>
+<th>章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冻结评测</td>
+<td>改动前固定材料、题目、判据和预算，之后用同一把尺子比较</td>
+<td>C18</td>
+</tr>
+<tr>
+<td>开发 / 验证 / 保留</td>
+<td>开发集用于改，验证集用于选，保留集最后独立评估</td>
+<td>C18</td>
+</tr>
+<tr>
+<td>检索失败</td>
+<td>正确片段没有被取回，或取回了错误版本</td>
+<td>C19</td>
+</tr>
+<tr>
+<td>生成失败</td>
+<td>片段在上下文里，模型却选错、漏掉或改写</td>
+<td>C19</td>
+</tr>
+<tr>
+<td>引用失败</td>
+<td>回答写了引用，但引用不支持该结论或已过期</td>
+<td>C19</td>
+</tr>
+<tr>
+<td>上下文窗口</td>
+<td>本次调用最多能放多少 token；不是长期记忆，也不是参数容量</td>
+<td>C20</td>
+</tr>
+<tr>
+<td>KV 缓存</td>
+<td>推理时缓存每层 K 和 V，避免重复计算；大小随层数、头数、序列长度增长</td>
+<td>C20</td>
+</tr>
+<tr>
+<td>外部记忆</td>
+<td>存在模型之外、需要检索或读取的材料；不会自动进入本次输入</td>
+<td>C20</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>让模型根据中间结果决定下一步的架构；必须有边界、权限和停止条件</td>
+<td>C21</td>
+</tr>
+<tr>
+<td>分位数</td>
+<td>把延迟或费用排序后取 50%、90%、99% 位置的值；平均值会掩盖长尾</td>
+<td>C22</td>
+</tr>
+<tr>
+<td>张量</td>
+<td>带形状的多维数组；<code>[B, T, C]</code> 分别表示批次、序列和通道</td>
+<td>C23</td>
+</tr>
+<tr>
+<td>自动微分</td>
+<td>由计算图反向求梯度，不靠手写每个参数的导数</td>
+<td>C23</td>
+</tr>
+<tr>
+<td>decoder</td>
+<td>按因果顺序读入并生成下一个 token 的模型结构</td>
+<td>C24</td>
+</tr>
+<tr>
+<td>全量 SFT</td>
+<td>用示范数据更新全部参数；改变面大，成本也大</td>
+<td>C25</td>
+</tr>
+<tr>
+<td>LoRA</td>
+<td>冻结底座，只训练低秩适配矩阵；改变面小，但仍需数据和评测</td>
+<td>C25</td>
+</tr>
+<tr>
+<td>蒸馏</td>
+<td>用教师的分布、分数或回答训练学生；不是复制教师权重</td>
+<td>C26</td>
+</tr>
+<tr>
+<td>软标签</td>
+<td>教师对多个候选的概率分布；比只给正确答案多出类间关系</td>
+<td>C26</td>
+</tr>
+<tr>
+<td>KL 散度</td>
+<td>衡量两个分布的差异；方向不同，惩罚的重点也不同</td>
+<td>C26</td>
+</tr>
+</tbody></table>
+<h2 id="glossary-section-8d7998c911" tabindex="-1">S5 独立交付</h2>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>最短解释</th>
+<th>章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OCR</td>
+<td>从图像中识别文字；结果要保留图像哈希、区域和原文回看</td>
+<td>C27</td>
+</tr>
+<tr>
+<td>文本层</td>
+<td>PDF 里可直接提取的文字；扫描件可能没有文本层</td>
+<td>C27</td>
+</tr>
+<tr>
+<td>多模态</td>
+<td>同时处理文字、图像、音频等输入；能看图不等于能核对像素来源</td>
+<td>C27</td>
+</tr>
+<tr>
+<td>最小系统</td>
+<td>满足任务与约束的最少组件；不是组件越多越专业</td>
+<td>C28</td>
+</tr>
+<tr>
+<td>存活检查</td>
+<td>进程还在吗；通常只返回 200，不代表能接真实请求</td>
+<td>C29</td>
+</tr>
+<tr>
+<td>就绪检查</td>
+<td>模型、索引、权限、依赖都可用吗；要能解释失败在哪一层</td>
+<td>C29</td>
+</tr>
+<tr>
+<td>发布包</td>
+<td>代码、模型、索引、配置、环境和运行手册的整包</td>
+<td>C29</td>
+</tr>
+<tr>
+<td>清单哈希</td>
+<td>发布包内每个文件的 SHA-256；启动前逐项校验，不匹配就拒绝启动</td>
+<td>C29</td>
+</tr>
+<tr>
+<td>回退</td>
+<td>切回上一个可用整包；能恢复文件，恢复不了已发生的外部副作用</td>
+<td>C29</td>
+</tr>
+<tr>
+<td>陌生项目</td>
+<td>没有演示过、材料与任务都需自己确认的项目；不能照抄案例改标题</td>
+<td>C30</td>
+</tr>
+<tr>
+<td>独立复做</td>
+<td>另一个人只凭发布包、README、冻结题目和判据，从零走完并留下记录</td>
+<td>C30</td>
+</tr>
+</tbody></table>
+<h2 id="glossary-section-769a4ee2d3" tabindex="-1">符号表</h2>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+<th>首次出现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x</code></td>
+<td>一个位置的输入向量</td>
+<td>C07</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>多个位置组成的输入矩阵</td>
+<td>C07</td>
+</tr>
+<tr>
+<td><code>WQ / WK / WV</code></td>
+<td>生成 Q、K、V 的投影矩阵</td>
+<td>C07</td>
+</tr>
+<tr>
+<td><code>q / k / v</code></td>
+<td>查询、键、值向量</td>
+<td>C07</td>
+</tr>
+<tr>
+<td><code>d_k</code></td>
+<td>键向量的维度；缩放因子是 <code>√d_k</code></td>
+<td>C07</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>序列长度（位置数）</td>
+<td>C07、C20</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>温度，或序列长度；按上下文区分</td>
+<td>C05、C26</td>
+</tr>
+<tr>
+<td><code>p_i</code></td>
+<td>第 i 个候选的概率</td>
+<td>C05</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>损失</td>
+<td>C09、C26</td>
+</tr>
+<tr>
+<td><code>η</code></td>
+<td>学习率</td>
+<td>C09</td>
+</tr>
+<tr>
+<td><code>KL(p‖q)</code></td>
+<td>分布 p 相对 q 的 KL 散度</td>
+<td>C26</td>
+</tr>
+<tr>
+<td><code>α</code></td>
+<td>蒸馏中软目标与硬目标的混合权重</td>
+<td>C26</td>
+</tr>
+<tr>
+<td><code>B / T / C</code></td>
+<td>批次大小 / 序列长度 / 通道维度</td>
+<td>C23</td>
+</tr>
+<tr>
+<td><code>top_k</code></td>
+<td>检索取回的片段数</td>
+<td>C15</td>
+</tr>
+</tbody></table>
+<p>同一个字母在不同章可能有不同含义，正文第一次使用时都会说明；读公式时先看这一段在定义什么，不要拿上一章的 <code>T</code> 直接套。</p>
+<h2 id="glossary-section-f84ffd9082" tabindex="-1">五阶段能力门自检</h2>
+<p>能力门不是“读完”，而是“留下可检查的证据”。下面列出最低证据和常见替代品；替代品不能算通过。这张表只帮助自检，不替代 <a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收</a> 里的真人、独立复做与读屏条件。</p>
+<table>
+<thead>
+<tr>
+<th>门</th>
+<th>最低证据</th>
+<th>常见替代品（不算）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>K1 会使用</td>
+<td>一份陌生通知的报告：每格有原文位置或“材料未提供”，冲突单列，另一个人能复找</td>
+<td>一段通顺总结、只有结论没有原句、把常识补进表</td>
+</tr>
+<tr>
+<td>K2 懂原理</td>
+<td>手算一组注意力权重与输出，说明形状；完成一次参数更新并解释损失变化</td>
+<td>只背公式、只看图、把示意值当模型内部读数</td>
+</tr>
+<tr>
+<td>K3 能实现</td>
+<td>干净环境跑通资料助手：正常、缺失、冲突、无命中、越权、服务失败各有记录</td>
+<td>一次截图、预置成功答案、只跑 happy path</td>
+</tr>
+<tr>
+<td>K4 会改进</td>
+<td>冻结题与判据；单变量对照；训练/重载/留出证据；失败与开销报告</td>
+<td>只报平均分、改题后对比、把损失下降当能力提升</td>
+</tr>
+<tr>
+<td>K5 独立交付</td>
+<td>陌生题材的发布包、就绪/失败/回退记录，以及另一人按文档复做</td>
+<td>作者演示、把案例改标题、只交代码不交环境与回退</td>
+</tr>
+</tbody></table>
+</article><nav class="lesson-nav"><a href="course.html">学习路线</a><a href="deep-reading.html">五个深读问题</a><a href="c01.html">从 C01 开始</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

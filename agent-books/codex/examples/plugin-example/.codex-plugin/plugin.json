@@ -1,0 +1,7 @@
+{
+  "name": "parcel-review",
+  "version": "0.1.0",
+  "description": "Review integer parcel fees",
+  "skills": ["./skills"],
+  "hooks": "./hooks/hooks.json"
+}

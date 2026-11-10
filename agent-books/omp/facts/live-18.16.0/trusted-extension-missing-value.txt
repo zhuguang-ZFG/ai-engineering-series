@@ -1,0 +1,2 @@
+Error: --trusted-extension requires a non-empty, non-flag value
+Run `omp --help` for available flags.

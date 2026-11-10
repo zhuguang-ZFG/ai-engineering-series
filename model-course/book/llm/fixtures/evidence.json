@@ -1,0 +1,16 @@
+{
+  "id": "X06B",
+  "kind": "illustrative",
+  "version": "1.0.0",
+  "source": "复用 X06 的虚构通知及人工事实标注；本文件提供待核对主张和引用",
+  "limitations": "程序只核对锁定材料及人工标注，不能判断任意自然语言的蕴含关系；列出的回答都是课程预置反例。",
+  "expectedObservations": ["存在引用不等于支持主张", "原文没有日历日期时不能补具体日期", "相互冲突的来源必须同时展示"],
+  "cases": [
+    {"id": "wrong-time", "name": "时间说错，引用却是真的", "documents": ["A"], "claim": {"field": "时间", "value": "周日14:00"}, "citation": {"documentId": "A", "quote": "周六14:00开始"}, "feedback": "A 的原句写周六，回答写周日。引用确实存在，但它反而暴露了错误。"},
+    {"id": "missing-place", "name": "有来源编号，没有地点证据", "documents": ["A"], "claim": {"field": "地点", "value": "城市图书馆"}, "citation": {"documentId": "A", "quote": "参与者需提前报名"}, "feedback": "报名要求不能支持地点。A 没写地点，应保留“材料未提供”。"},
+    {"id": "fake-quote", "name": "引用的句子不在原文里", "documents": ["A"], "claim": {"field": "地点", "value": "城市图书馆"}, "citation": {"documentId": "A", "quote": "活动地点是城市图书馆"}, "feedback": "编号 A 存在，引用的句子却不存在。先检查原文，不要把引用格式当作保证。"},
+    {"id": "fake-source", "name": "引用了不存在的通知", "documents": ["A"], "claim": {"field": "时间", "value": "周六14:00"}, "citation": {"documentId": "Z", "quote": "周六14:00开始"}, "feedback": "时间恰好与 A 一致，也不能替 Z 这条不存在的引用背书。结论和引用要分别核对。"},
+    {"id": "absolute-date", "name": "把周六补成一个具体日期", "documents": ["A"], "claim": {"field": "时间", "value": "2026年11月7日14:00"}, "citation": {"documentId": "A", "quote": "周六14:00开始"}, "feedback": "材料没有给日历基准，即便这个日期恰好是周六，也不能确认指的就是这一天。"},
+    {"id": "conflict", "name": "两份通知说法不同", "documents": ["A", "C"], "claim": {"field": "时间", "value": "周六14:00"}, "citation": {"documentId": "A", "quote": "周六14:00开始"}, "feedback": "A 支持周六，C 提到周日。只引用 A 会藏掉另一份材料；需要核对发布者和有效版本。"}
+  ]
+}

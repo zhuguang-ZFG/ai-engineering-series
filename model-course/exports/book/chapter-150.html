@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>负载均衡与网关 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 150 / 195</p><article><h1 id="负载均衡与网关">负载均衡与网关</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#负载均衡与网关原理">负载均衡与网关原理</a><ul><li><a href="#1-负载均衡的动机">1. 负载均衡的动机</a></li><li><a href="#2-负载均衡定义">2. 负载均衡定义</a></li><li><a href="#3-故障节点摘除机制">3. 故障节点摘除机制</a></li><li><a href="#4-会话粘性会话保持机制">4. 会话粘性（会话保持）机制</a></li><li><a href="#5-核心问题三实现零停机部署的实现">5. 核心问题三：实现零停机部署的实现</a></li><li><a href="#6-核心问题四让系统自己呼吸的实现">6. 核心问题四：让系统自己&quot;呼吸的实现</a></li><li><a href="#7-选择负载均衡器的方法">7. 选择负载均衡器的方法</a></li><li><a href="#8-总结负载均衡的核心思维">8. 总结:负载均衡的核心思维</a></li><li><a href="#9-名词速查表">9. 名词速查表</a></li></ul></li></ul></nav></details><h2 id="负载均衡与网关原理">负载均衡与网关原理</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>当单台服务器扛不住时,如何把流量&quot;聪明地&quot;分配到多个服务器实例?</strong> 负载均衡是现代分布式系统的&quot;分发员&quot;。本文通过真实案例(奶茶店收银、快递分拣、交通指挥)深入理解负载均衡的设计哲学和工程实践。</p>
+</blockquote>
+<h3 id="1-负载均衡的动机">1. 负载均衡的动机</h3>
+<h4 id="11-从一个真实案例说起某网站的架构演进">1.1 从一个真实案例说起:某网站的架构演进</h4>
+<p><strong>场景还原:</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>阶段一:单台服务器
+用户 → 服务器(1核2G)
+       ↓
+  日活1000 → 活跃时间:1000人同时访问
+       ↓
+问题:CPU 100%,响应慢,经常宕机
+</code></pre>
+<blockquote>
+<p><strong>单台服务器的致命问题</strong></p>
+</blockquote>
+<ul>
+<li><strong>性能瓶颈</strong>: CPU 100%,响应时间&gt; 5秒</li>
+<li><strong>单点故障</strong>: 服务器挂了,整个网站不可用</li>
+<li><strong>扩展困难</strong>: 只能垂直升级(加CPU、内存),贵且有限</li>
+</ul>
+<p><strong>改进后的架构(引入负载均衡):</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>阶段二:多台服务器 + 负载均衡
+用户 → 负载均衡器(Nginx)
+       ↓
+     ├→ 服务器1 (1核2G)
+     ├→ 服务器2 (1核2G)
+     └→ 服务器3 (1核2G)
+</code></pre>
+<blockquote>
+<p>::: tip 改进后的效果</p>
+</blockquote>
+<ul>
+<li><strong>性能提升</strong>: 3台服务器并行处理,响应时间&lt; 1秒</li>
+<li><strong>高可用</strong>: 1台服务器挂了,其他服务器继续服务</li>
+<li><strong>水平扩展</strong>: 需要更多性能?加服务器就行</li>
+</ul>
+<h4 id="12-负载均衡的生活化比喻">1.2 负载均衡的生活化比喻</h4>
+<p><strong>奶茶店收银台</strong></p>
+<ul>
+<li><strong>1个收银台</strong>: 顾客排队,后面的人等不及,差评</li>
+<li><strong>3个收银台</strong>: 员工分配顾客到不同收银台,效率提升3倍</li>
+</ul>
+<p><strong>负载均衡就是&quot;收银台分配员&quot;</strong>:</p>
+<ul>
+<li><strong>用户</strong>(顾客) → 请求服务</li>
+<li><strong>负载均衡器</strong>(分配员) → 把请求分配到不同服务器</li>
+<li><strong>服务器</strong>(收银台) → 处理请求</li>
+</ul>
+<h3 id="2-负载均衡定义">2. 负载均衡定义</h3>
+<h4 id="21-四层负载均衡l4只看门牌号">2.1 四层负载均衡(L4):只看门牌号</h4>
+<p><strong>工作在传输层(TCP/UDP)</strong>,就像快递小哥只看你家的门牌号(IP地址+端口号),不关心你家是做什么。</p>
+<p><strong>特点:</strong></p>
+<ul>
+<li><strong>速度超快</strong>: 只做简单的地址转发,不解析数据包内容</li>
+<li><strong>适用场景</strong>: 数据库连接、Redis缓存、长连接游戏服务器</li>
+<li><strong>代表产品</strong>: LVS(Linux Virtual Server)、AWS NLB、Azure Load Balancer</li>
+</ul>
+<blockquote>
+<p>::: details 工作原理</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端请求 → L4负载均衡器 → 后端服务器
+              ↓
+         只看IP + Port
+              ↓
+         快速转发(不解包内容)
+</code></pre>
+<h4 id="22-七层负载均衡l7七层内容路由">2.2 七层负载均衡(L7):七层内容路由</h4>
+<p><strong>工作在应用层(HTTP/HTTPS)</strong>,就像快递小哥不仅看门牌号,还会打开包裹检查内容,根据内容决定怎么送。</p>
+<p><strong>特点:</strong></p>
+<ul>
+<li><strong>智能路由</strong>: 可以根据URL路径、HTTP头、Cookie等做精细化路由</li>
+<li><strong>高级功能</strong>: SSL卸载、内容缓存、压缩、安全WAF</li>
+<li><strong>适用场景</strong>: Web应用、API网关、微服务架构</li>
+<li><strong>代表产品</strong>: Nginx、HAProxy、AWS ALB、Envoy</li>
+</ul>
+<blockquote>
+<p>::: details 工作原理</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端请求 → L7负载均衡器 → 解析HTTP内容
+              ↓
+         检查URL、Header、Cookie
+              ↓
+         智能路由到特定服务器
+</code></pre>
+<h4 id="23-l4-vs-l7-对比一览">2.3 L4 vs L7 对比一览</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">四层负载均衡(L4)</th>
+<th align="left">七层负载均衡(L7)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>工作层级</strong></td>
+<td align="left">传输层(TCP/UDP)</td>
+<td align="left">应用层(HTTP/HTTPS)</td>
+</tr>
+<tr>
+<td align="left"><strong>决策依据</strong></td>
+<td align="left">IP地址 + 端口号</td>
+<td align="left">URL、Header、Cookie、Body</td>
+</tr>
+<tr>
+<td align="left"><strong>处理速度</strong></td>
+<td align="left">极快(内核态处理)</td>
+<td align="left">较快(用户态解析)</td>
+</tr>
+<tr>
+<td align="left"><strong>功能丰富度</strong></td>
+<td align="left">基础转发</td>
+<td align="left">SSL卸载、缓存、压缩、WAF</td>
+</tr>
+<tr>
+<td align="left"><strong>典型场景</strong></td>
+<td align="left">数据库、游戏、长连接</td>
+<td align="left">Web应用、API网关、微服务</td>
+</tr>
+<tr>
+<td align="left"><strong>代表产品</strong></td>
+<td align="left">LVS、AWS NLB</td>
+<td align="left">Nginx、HAProxy、AWS ALB</td>
+</tr>
+</tbody></table></div>
+<h3 id="3-故障节点摘除机制">3. 故障节点摘除机制</h3>
+<h4 id="31-健康检查别让生病的服务器拖累系统">3.1 健康检查:别让&quot;生病&quot;的服务器拖累系统</h4>
+<p>想象一下,你的某个收银台突然坏了,但分配员不知道,还在源源不断地把顾客分过去。结果队伍越来越长,顾客怨声载道。</p>
+<p><strong>健康检查(Health Check)就是防止这种情况发生的&quot;哨兵&quot;</strong>。它定期&quot;体检&quot;每台服务器,发现&quot;生病&quot;的立即从队列中移除,等&quot;康复&quot;了再请回来。</p>
+<!-- <HealthCheckDemo /> --><h4 id="32-主动健康检查-vs-被动健康检查">3.2 主动健康检查 vs 被动健康检查</h4>
+<p><strong>主动健康检查(Active Health Check)</strong>: 负载均衡器主动&quot;敲门&quot;问服务器&quot;你还在吗?&quot;</p>
+<ul>
+<li>定期发送探测请求(如 HTTP /health、TCP ping)</li>
+<li>响应超时或返回错误码则认为不健康</li>
+<li><strong>优点</strong>: 检测结果准确可靠</li>
+<li><strong>缺点</strong>: 产生额外的探测流量</li>
+</ul>
+<p><strong>被动健康检查(Passive Health Check)</strong>: 负载均衡器&quot;观察&quot;真实业务流量的响应情况</p>
+<ul>
+<li>统计实际请求的响应时间、错误率</li>
+<li>连续多次失败则认为不健康</li>
+<li><strong>优点</strong>: 不产生额外流量</li>
+<li><strong>缺点</strong>: 需要足够的流量样本才能判定</li>
+</ul>
+<blockquote>
+<p>::: details 阈值设定表</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">健康阈值</th>
+<th align="left">不健康阈值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>HTTP状态码</strong></td>
+<td align="left">200-399</td>
+<td align="left">400+或超时</td>
+<td align="left">4xx/5xx都认为失败</td>
+</tr>
+<tr>
+<td align="left"><strong>TCP连接</strong></td>
+<td align="left">成功建立</td>
+<td align="left">连接超时</td>
+<td align="left">检查端口是否可达</td>
+</tr>
+<tr>
+<td align="left"><strong>响应时间</strong></td>
+<td align="left">&lt; 500ms</td>
+<td align="left">&gt; 2000ms</td>
+<td align="left">超时时间通常设为2-5秒</td>
+</tr>
+<tr>
+<td align="left"><strong>连续失败次数</strong></td>
+<td align="left">-</td>
+<td align="left">3次</td>
+<td align="left">避免单次抖动误判</td>
+</tr>
+<tr>
+<td align="left"><strong>检查间隔</strong></td>
+<td align="left">-</td>
+<td align="left">5s</td>
+<td align="left">太频繁会增加负载</td>
+</tr>
+</tbody></table></div>
+</blockquote>
+<blockquote>
+<p>::: tip 💡 踸见坑:阈值设置太&quot;敏感&quot;
+某团队将健康检查的响应时间阈值设为100ms,而他们的应用平均响应时间在80-120ms之间波动。结果是服务器频繁被标记为&quot;不健康&quot;,导致流量在健康和不健康之间反复横跳,系统整体可用率反而下降。</p>
+</blockquote>
+<p><strong>正确的做法</strong>: 阈值应该设置为P99响应时间的2-3倍,给正常波动留出足够的缓冲空间。</p>
+<h3 id="4-会话粘性会话保持机制">4. 会话粘性（会话保持）机制</h3>
+<h4 id="41-会话粘性会话保持机制">4.1 会话粘性（会话保持）机制</h4>
+<p>想象你是奶茶店的常客,每次来都由同一个店员接待。她知道你的口味偏好(半糖、去冰),服务起来又快又贴心。但如果每次来都换一个新人,你得一遍遍重复同样的要求,效率大打折扣。</p>
+<p><strong>会话保持(Session Persistence/Sticky Session)</strong> 就是解决这个问题的方法:确保同一个用户的请求,始终被路由到同一台后端服务器。</p>
+<h4 id="42-三种会话保持机制对比">4.2 三种会话保持机制对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">机制</th>
+<th align="left">实现原理</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Cookie插入</strong></td>
+<td align="left">LB在响应中插入Cookie,后续请求携带此Cookie</td>
+<td align="left">不受IP变化影响,首次请求即可保持</td>
+<td align="left">客户端需支持Cookie,可能被禁用</td>
+<td align="left">电商购物车、登录态保持</td>
+</tr>
+<tr>
+<td align="left"><strong>IP哈希</strong></td>
+<td align="left">对客户端IP做哈希计算,映射到特定服务器</td>
+<td align="left">无需客户端支持,无状态</td>
+<td align="left">IP变化会丢失会话,难以均匀分布</td>
+<td align="left">无Cookie环境、WebSocket</td>
+</tr>
+<tr>
+<td align="left"><strong>粘性会话表</strong></td>
+<td align="left">LB维护会话到服务器的映射表</td>
+<td align="left">支持会话复制和故障转移</td>
+<td align="left">占用LB内存,需要额外同步</td>
+<td align="left">高可用要求严格的场景</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>::: tip 💡 使用建议</p>
+</blockquote>
+<ul>
+<li><strong>Cookie插入</strong>: 优先推荐,兼容性好</li>
+<li><strong>IP哈希</strong>: 只用于WebSocket等特殊场景</li>
+<li><strong>粘性会话表</strong>: 配合Cookie,提供故障转移能力</li>
+</ul>
+<h3 id="5-核心问题三实现零停机部署的实现">5. 核心问题三：实现零停机部署的实现</h3>
+<h4 id="51-蓝绿部署一键切换的零停机发布">5.1 蓝绿部署:&quot;一键切换&quot;的零停机发布</h4>
+<p><strong>核心思想</strong>: 同时维护两套完全相同的生产环境(蓝环境和绿环境),但只有一个环境对外提供服务。</p>
+<p><strong>工作流程:</strong></p>
+<ol>
+<li><strong>初始状态</strong>: 蓝环境运行v1.0(生产),绿环境待命。</li>
+<li><strong>部署新版本</strong>: 在绿环境部署v1.1,做内部冒烟测试。</li>
+<li><strong>切换流量</strong>: 将负载均衡器指向绿环境,流量瞬间切换到v1.1。</li>
+<li><strong>监控观察</strong>: 观察绿环境运行状态,确认无异常。</li>
+<li><strong>保留旧版本</strong>: 蓝环境保持v1.0一段时间(如24小时),作为快速回滚的保险。</li>
+</ol>
+<blockquote>
+<p>::: tip 优缺点分析</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">✅ 零停机时间,切换在毫秒级完成</td>
+<td align="left">❌ 资源成本高,需要同时维护两套环境</td>
+</tr>
+<tr>
+<td align="left">✅ 快速回滚,发现问题立即切回原环境</td>
+<td align="left">❌ 数据库Schema变更时需要特别处理兼容性</td>
+</tr>
+<tr>
+<td align="left">✅ 新环境可完整测试后再接管流量</td>
+<td align="left">❌ 不适用于有状态服务(如WebSocket长连接)</td>
+</tr>
+</tbody></table></div>
+</blockquote>
+<h4 id="52-金丝雀发布小步快跑的灰度策略">5.2 金丝雀发布:&quot;小步快跑&quot;的灰度策略</h4>
+<p>金丝雀发布得名于历史上的&quot;煤矿金丝雀&quot;——矿工带着金丝雀下井,如果金丝雀出现异常,说明有毒气体泄漏,矿工立即撤离。在软件发布中,金丝雀发布就是先让一小部分用户试用新版本,观察没有问题后再逐步扩大范围。</p>
+<p><strong>核心思想:</strong></p>
+<ol>
+<li><strong>小流量先行</strong>: 先将1%的流量导入新版本服务器。</li>
+<li><strong>观察指标</strong>: 持续监控错误率、延迟、业务关键指标。</li>
+<li><strong>逐步放量</strong>: 如果一切正常,逐步将比例提升到5%、10%、25%、50%、100%。</li>
+<li><strong>快速回滚</strong>: 一旦发现异常,立即将所有流量切回旧版本。</li>
+</ol>
+<blockquote>
+<p>::: tip 💡 金丝雀发布的优势</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">优势</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🎯 <strong>风险可控</strong></td>
+<td align="left">即使新版本有严重Bug,也只影响少量用户</td>
+</tr>
+<tr>
+<td align="left">📊 <strong>真实验证</strong></td>
+<td align="left">在真实生产环境验证,比测试环境更可靠</td>
+</tr>
+<tr>
+<td align="left">🚀 <strong>快速迭代</strong></td>
+<td align="left">团队可以更自信地频繁发布新功能</td>
+</tr>
+<tr>
+<td align="left">💰 <strong>资源友好</strong></td>
+<td align="left">不需要像蓝绿部署那样准备两套完整环境</td>
+</tr>
+</tbody></table></div>
+</blockquote>
+<h3 id="6-核心问题四让系统自己呼吸的实现">6. 核心问题四：让系统自己&quot;呼吸的实现</h3>
+<h4 id="61-自动扩缩容hpavpa">6.1 自动扩缩容（HPA/VPA）</h4>
+<ul>
+<li><strong>午餐高峰期</strong>: 需要10个服务员,但下午3点闲时只需要2个</li>
+<li>如果一直维持10个**: 人工成本爆炸</li>
+<li>如果一直只有2个: 高峰期顾客等不及,全跑了</li>
+</ul>
+<p><strong>自动扩缩容(Auto Scaling)</strong> 就是让系统像餐厅一样&quot;灵活排班&quot;——忙的时候自动加服务器,闲的时候自动减服务器。</p>
+<h4 id="62-扩容指标的选择">6.2 扩容指标的选择</h4>
+<p>自动扩缩容的核心是回答一个问题:** <strong>什么时候该加机器?什么时候该减机器?</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">扩容阈值</th>
+<th align="left">缩容阈值</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>CPU使用率</strong></td>
+<td align="left">&gt; 70%</td>
+<td align="left">&lt; 30%</td>
+<td align="left">计算密集型应用</td>
+</tr>
+<tr>
+<td align="left"><strong>内存使用率</strong></td>
+<td align="left">&gt; 75%</td>
+<td align="left">&lt; 40%</td>
+<td align="left">内存密集型应用</td>
+</tr>
+<tr>
+<td align="left"><strong>QPS(每秒请求数)</strong></td>
+<td align="left">&gt; 1000/s</td>
+<td align="left">&lt; 400/s</td>
+<td align="left">API网关、Web服务</td>
+</tr>
+<tr>
+<td align="left"><strong>连接数</strong></td>
+<td align="left">&gt; 5000</td>
+<td align="left">&lt; 1000</td>
+<td align="left">数据库、消息队列</td>
+</tr>
+<tr>
+<td align="left"><strong>自定义业务指标</strong></td>
+<td align="left">视业务而定</td>
+<td align="left">视业务而定</td>
+<td align="left">特定业务场景</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>::: tip 💡 扩容策略的&quot;坑&quot;与&quot;解&quot;</p>
+</blockquote>
+<p><strong>坑1:扩容反应太慢,流量洪峰已经把系统打挂了</strong></p>
+<p>某电商大促期间,设置CPU &gt; 80%触发扩容,但监控采集有1分钟延迟,新实例启动需要3分钟。结果流量来得太快,扩容还没完成,服务器已经被打挂。</p>
+<p><strong>解决方案:</strong></p>
+<ul>
+<li><strong>提前扩容</strong>: 基于历史数据预测流量高峰,提前30分钟开始扩容</li>
+<li><strong>多级阈值</strong>: 设置60%预警(开始预热新实例)、70%正式扩容、80%紧急扩容</li>
+<li><strong>快速扩容</strong>: 使用容器化部署,新实例30秒内启动(相比虚拟机3-5分钟)</li>
+</ul>
+<p><strong>坑2:扩容太激进,成本爆炸</strong></p>
+<p>某创业公司设置了激进的自动扩容策略:CPU &gt; 50%就扩容。结果一个正常的业务波动就触发了扩容,服务器数量从5台膨胀到30台,月底云账单吓哭了CTO。</p>
+<p><strong>解决方案:</strong></p>
+<ul>
+<li><strong>设置扩容冷却时间</strong>: 一次扩容后,至少等待5分钟才能再次扩容</li>
+<li><strong>设置最大实例数</strong>: max = 当前实例数 × 2,防止无限膨胀</li>
+<li><strong>区分突刺和趋势</strong>: 只有连续3个周期都超过阈值才扩容,避免单点突刺触发</li>
+</ul>
+<p><strong>坑3:缩容太快,刚扩容的机器马上就缩了</strong></p>
+<p>某团队设置了CPU &lt; 30%缩容。扩容后流量还在消化,CPU短暂回落到25%,触发了缩容。刚缩完CPU又飙到80%,又触发扩容——系统在&quot;扩容-缩容-扩容&quot;中疯狂震荡。</p>
+<p><strong>解决方案:</strong></p>
+<ul>
+<li><strong>缩容更保守</strong>: 扩容阈值70%,缩容阈值25%,中间有足够的缓冲带</li>
+<li><strong>缩容冷却时间更长</strong>: 扩容后至少等待10分钟才能缩容</li>
+<li><strong>渐进式缩容</strong>: 一次只缩1台,观察后再决定要不要继续缩</li>
+</ul>
+<h3 id="7-选择负载均衡器的方法">7. 选择负载均衡器的方法</h3>
+<h4 id="71-主流负载均衡器对比">7.1 主流负载均衡器对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Nginx</th>
+<th>HAProxy</th>
+<th>Envoy</th>
+<th>云厂商负载均衡</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定位</strong></td>
+<td>高性能反向代理/负载均衡</td>
+<td>开源负载均衡</td>
+<td>云原生代理</td>
+<td>托管负载均衡</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>极高(C语言,事件驱动)</td>
+<td>高(事件驱动)</td>
+<td>高(C++/Rust)</td>
+<td>极高</td>
+</tr>
+<tr>
+<td><strong>功能丰富度</strong></td>
+<td>基础负载均衡、静态文件、缓存</td>
+<td>丰富的负载均衡算法</td>
+<td>高级路由、观测</td>
+<td>功能全面</td>
+</tr>
+<tr>
+<td><strong>配置</strong></td>
+<td>配置文件(nginx.conf)</td>
+<td>配置文件(haproxy.cfg)</td>
+<td>API/配置文件</td>
+<td>UI控制台</td>
+</tr>
+<tr>
+<td><strong>扩展</strong></td>
+<td>C模块/Lua脚本</td>
+<td>Lua脚本</td>
+<td>WASM/Filter</td>
+<td>插件</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>静态资源、七层负载均衡、SSL终结</td>
+<td>七层负载均衡、高可用</td>
+<td>服务网格、多云</td>
+<td>快速上手</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>::: tip 💡 选型建议
+<strong>决策树:</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>选择负载均衡器:
+│
+├─ 只需要基础的四层负载均衡?
+│  ├─ 是 → LVS(开源免费)或 云厂商NLB
+│  └─ 否 → 继续
+│
+├─ 需要服务网格、多云部署?
+│  ├─ 是 → Envoy
+│  └─ 否 → 继续
+│
+├─ 需要极其复杂的配置和插件?
+│  ├─ 是 → HAProxy
+│  └─ 否 → 继续
+│
+├─ 需要高性能+简单配置?
+│  ├─ 是 → Nginx(首选)
+│  └─ 继续
+│
+├─ 想要托管运维?
+│  ├─ 是 → 云厂商负载均衡(AWS ALB、阿里SLB)
+│  └─ Nginx自建
+</code></pre>
+<h3 id="8-总结负载均衡的核心思维">8. 总结:负载均衡的核心思维</h3>
+<h4 id="81-核心原则回顾">8.1 核心原则回顾</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>原则</th>
+<th>含义</th>
+<th>实践要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分层</strong></td>
+<td>L4处理&quot;快递分拣&quot;(快但简单)</td>
+<td>L4处理数据库、游戏;L7处理Web、API</td>
+</tr>
+<tr>
+<td><strong>冗余</strong></td>
+<td>单点故障是架构的敌人</td>
+<td>通过多实例、多区域部署提升可用性</td>
+</tr>
+<tr>
+<td><strong>渐进</strong></td>
+<td>发布新版本不要&quot;一刀切&quot;</td>
+<td>蓝绿部署实现零停机;金丝雀实现风险可控</td>
+</tr>
+<tr>
+<td><strong>弹性</strong></td>
+<td>系统应该像生命体一样&quot;呼吸&quot;</td>
+<td>忙时自动扩容,闲时自动缩容</td>
+</tr>
+</tbody></table></div>
+<h4 id="82-设计检查清单">8.2 设计检查清单</h4>
+<p>在引入负载均衡前,问自己以下问题:</p>
+<ul>
+<li><input disabled="" type="checkbox"> 是否真的需要负载均衡?(单机性能是否真的不够)</li>
+<li><input disabled="" type="checkbox"> 选择L4还是L7?(根据业务场景)</li>
+<li><input disabled="" type="checkbox"> 如何处理会话保持?(Cookie、IP哈希、会话表)</li>
+<li><input disabled="" type="checkbox"> 如何实现健康检查?(主动、被动、阈值设置)</li>
+<li><input disabled="" type="checkbox"> 如何实现零停机?(蓝绿部署、金丝雀)</li>
+<li><input disabled="" type="checkbox"> 如何实现弹性?(扩缩指标、冷却时间、最大实例数)</li>
+</ul>
+<h3 id="9-名词速查表">9. 名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>名词</th>
+<th>英文</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>负载均衡器</strong></td>
+<td>Load Balancer</td>
+<td>将流量分发到多个后端服务器的设备或软件</td>
+</tr>
+<tr>
+<td><strong>四层负载均衡</strong></td>
+<td>L4 Load Balancing</td>
+<td>基于传输层(TCP/UDP)的负载均衡</td>
+</tr>
+<tr>
+<td><strong>七层负载均衡</strong></td>
+<td>L7 Load Balancing</td>
+<td>基于应用层(HTTP/HTTPS)的负载均衡</td>
+</tr>
+<tr>
+<td><strong>健康检查</strong></td>
+<td>Health Check</td>
+<td>定期检查后端服务器的健康状态的机制</td>
+</tr>
+<tr>
+<td><strong>会话保持</strong></td>
+<td>Session Persistence</td>
+<td>确保同一用户的请求始终路由到同一台服务器</td>
+</tr>
+<tr>
+<td><strong>粘性会话</strong></td>
+<td>Sticky Session</td>
+<td>另一种称呼，同Session Persistence</td>
+</tr>
+<tr>
+<td><strong>蓝绿部署</strong></td>
+<td>Blue-Green Deployment</td>
+<td>两套环境切换的零停机发布策略</td>
+</tr>
+<tr>
+<td><strong>金丝雀发布</strong></td>
+<td>Canary Release</td>
+<td>小流量先行验证的灰度发布策略</td>
+</tr>
+<tr>
+<td><strong>自动扩缩容</strong></td>
+<td>Auto Scaling</td>
+<td>根据负载自动增加或减少服务器数量</td>
+</tr>
+<tr>
+<td><strong>水平扩展</strong></td>
+<td>Horizontal Scaling</td>
+<td>增加服务器数量来提升处理能力</td>
+</tr>
+<tr>
+<td><strong>垂直扩展</strong></td>
+<td>Vertical Scaling</td>
+<td>提升单机配置(CPU、内存)来提升处理能力</td>
+</tr>
+<tr>
+<td><strong>多区域</strong></td>
+<td>Multi-Region</td>
+<td>在多个地理区域部署服务</td>
+</tr>
+<tr>
+<td><strong>多活</strong></td>
+<td>Active-Active</td>
+<td>多个区域同时对外提供服务</td>
+</tr>
+<tr>
+<td><strong>主备</strong></td>
+<td>Active-Standby</td>
+<td>只有一个区域提供服务，其他待命</td>
+</tr>
+<tr>
+<td><strong>数据同步</strong></td>
+<td>Data Replication</td>
+<td>跨区域的数据复制机制</td>
+</tr>
+<tr>
+<td><strong>RTO</strong></td>
+<td>Recovery Time Objective (RTO)</td>
+<td>恢复时间目标，系统故障后需要在多长时间内恢复</td>
+</tr>
+<tr>
+<td><strong>RPO</strong></td>
+<td>Recovery Point Objective (RPO)</td>
+<td>恢复点目标，系统故障后可以接受的数据丢失量</td>
+</tr>
+</tbody></table></div>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-149.html">← 域名、DNS 与 HTTPS</a><a rel="next" href="chapter-151.html">网关与反向代理 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+
+.persona-card{display:flex;gap:22px;align-items:center;padding:28px 36px;border:2px solid #5b8def;
+  border-radius:18px;background:rgba(12,18,28,.82);box-shadow:0 12px 40px rgba(0,0,0,.45);max-width:1100px}
+.persona-badge{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#0b1020;flex-shrink:0}
+.persona-name{font-size:20px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.persona-title{font-size:36px;font-weight:800;color:#eef3f8;line-height:1.25}
+.persona-sub{font-size:22px;color:#a8b4c4;margin-top:10px;line-height:1.4}
+
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b03_turn" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="160.608" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="160.608" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">§2.2 Turn 生命周期</div></div></div></div>
+  <div id="b03_turn_beat0_wrap" class="beat clip" data-start="0.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat0"><div class="panel-body" id="b03_turn_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">§2.2 Turn 生命周期</div><div class="h2">§2.2 Turn 生命周期</div>
+    </div></div></div><div class="flash clip" id="b03_turn_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat1_wrap" class="beat clip" data-start="5.000" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat1"><div class="panel-body" id="b03_turn_beat1">
+      <div class="kicker">KEY</div>
+      <div class="h1">再决定继续或收束——这就是一次心</div><div class="h2">再决定继续或收束——这就是一次心跳周期。书稿用医学比喻：</div>
+    </div></div></div><div id="b03_turn_beat2_wrap" class="beat clip" data-start="10.550" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat2"><div class="panel-body" id="b03_turn_beat2">
+          <div class="kicker">记下这一点</div><div class="h1">模型是医生，先问诊再开检</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash2" data-start="10.550" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat3_wrap" class="beat clip" data-start="16.450" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat3"><div class="panel-body" id="b03_turn_beat3">
+      <div class="kicker">KEY</div>
+      <div class="h1">个 while true。每一圈</div><div class="h2">个 while true。每一圈大致五阶段。阶段一，</div>
+    </div></div></div><div id="b03_turn_beat4_wrap" class="beat clip" data-start="21.650" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat4"><div class="panel-body" id="b03_turn_beat4">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 阶段一，状态初始化：</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash4" data-start="21.650" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat5_wrap" class="beat clip" data-start="27.200" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat5"><div class="panel-body" id="b03_turn_beat5">
+      <div class="kicker">KEY</div>
+      <div class="h1">再准备本圈可写容器——读和写</div><div class="h2">再准备本圈可写容器——读和写之间有清晰边界。阶段</div>
+    </div></div></div><div class="flash clip" id="b03_turn_flash5" data-start="27.200" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat6_wrap" class="beat clip" data-start="33.100" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat6"><div class="panel-body" id="b03_turn_beat6">
+      <div class="kicker">KEY</div>
+      <div class="h1">七步管线。阶段三，注入的 cal</div><div class="h2">七步管线。阶段三，注入的 callModel 发起流式请求，</div>
+    </div></div></div><div id="b03_turn_beat7_wrap" class="beat clip" data-start="38.300" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat7"><div class="panel-body" id="b03_turn_beat7">
+      <div class="kicker">KEY</div>
+      <div class="h1">边收边 yield，同时收集助手</div><div class="h2">边收边 yield，同时收集助手消息与工具块；</div>
+    </div></div></div><div id="b03_turn_beat8_wrap" class="beat clip" data-start="43.850" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat8"><div class="panel-body" id="b03_turn_beat8">
+      <div class="kicker">KEY</div>
+      <div class="h1">若开启流式工具执行，甚至可以在响</div><div class="h2">若开启流式工具执行，甚至可以在响应未完成时先跑工具。</div>
+    </div></div></div><div id="b03_turn_beat9_wrap" class="beat clip" data-start="49.750" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="chariot-wrap" id="b03_turn_beat9" data-beat="b03_turn_beat9">
+          <div class="kicker">前言隐喻 · 落地本书</div>
+          <div class="h1" style="font-size:42px;margin:8px 0 12px">辔绳收得住</div>
+          <div class="h2" style="font-size:26px;margin-bottom:8px">上下文窗口就是舆的载重</div>
+          
+<div class="book-plate" style="position:relative;width:1600px;height:620px;margin:0 auto;border:2px solid #8a735588;border-radius:6px;overflow:hidden;background:#0e0b09;box-shadow:0 12px 40px #000a">
+  <img src="../assets/book-chariot-paper.png" alt="kaogongji plate" style="width:100%;height:100%;object-fit:contain;display:block"/>
+  <div style="position:absolute;left:36px;top:48px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">骏马<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">模型 · LLM</span></div>
+  <div style="position:absolute;left:520px;top:28px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">辔 / 缰绳<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">Harness</span></div>
+  <div style="position:absolute;right:48px;top:80px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">舆<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">整车系统</span></div>
+  <div style="position:absolute;right:80px;top:220px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">御者 · 你<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">架构认知</span></div>
+  <div style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:serif;letter-spacing:.28em;color:#c9b48a;font-size:22px">考工记 · 四马古车图版</div>
+</div>
+
+          <div class="map-row">
+            <span class="chip">御者 = 你 / 应用</span>
+            <span class="chip">骏马 = LLM</span>
+            <span class="chip">缰绳+鞍具 = Harness</span>
+            <span class="chip">舆辕辐軎辖轼 = 运行时构件</span>
+          </div>
+        </div></div><div class="flash clip" id="b03_turn_flash9" data-start="49.750" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat10_wrap" class="beat clip" data-start="54.950" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat10"><div class="panel-body" id="b03_turn_beat10">
+      <div class="kicker">KEY</div>
+      <div class="h1">附件注入、打包新 State、c</div><div class="h2">附件注入、打包新 State、continue 回阶段一。</div>
+    </div></div></div><div id="b03_turn_beat11_wrap" class="beat clip" data-start="60.500" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat11"><div class="panel-body" id="b03_turn_beat11">
+          <div class="kicker">步预处理 · 从轻到重</div><div class="big-num">7</div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash11" data-start="60.500" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat12_wrap" class="beat clip" data-start="66.400" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat12"><div class="panel-body" id="b03_turn_beat12">
+      <div class="kicker">KEY</div>
+      <div class="h1">顺序刻意从轻到重。一，工具结果预</div><div class="h2">顺序刻意从轻到重。一，工具结果预算，超长输出先截断或外置。</div>
+    </div></div></div><div id="b03_turn_beat13_wrap" class="beat clip" data-start="71.600" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat13"><div class="panel-body" id="b03_turn_beat13">
+          <div class="kicker">记下这一点</div><div class="h1">二，Snip，按消息级裁</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash13" data-start="71.600" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat14_wrap" class="beat clip" data-start="77.150" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat14"><div class="panel-body" id="b03_turn_beat14">
+      <div class="kicker">KEY</div>
+      <div class="h1">缓存友好的轻量压缩，尽量别把 A</div><div class="h2">缓存友好的轻量压缩，尽量别把 API 侧已缓</div>
+    </div></div></div><div id="b03_turn_beat15_wrap" class="beat clip" data-start="83.050" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat15"><div class="panel-body" id="b03_turn_beat15">
+          <div class="kicker">隐喻对照</div>
+          <div class="vs-grid">
+            <div class="vpanel"><h3>遥控器</h3><p>简单封装<br/>人按一下，才动一下</p></div>
+            <div class="vpanel r"><h3>自动驾驶</h3><p>Agent Harness<br/>自主规划 · 工具 · 边界</p></div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="h2">刚刚好的那一档</div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash15" data-start="83.050" data-duration="0.35" data-track-index="5"></div><div id="b03_turn_beat16_wrap" class="beat clip" data-start="88.250" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat16"><div class="panel-body" id="b03_turn_beat16">
+      <div class="kicker">KEY</div>
+      <div class="h1">把一段对话收成更高密度的摘要图。</div><div class="h2">把一段对话收成更高密度的摘要图。五，系统提示组装，</div>
+    </div></div></div><div id="b03_turn_beat17_wrap" class="beat clip" data-start="93.800" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat17"><div class="panel-body" id="b03_turn_beat17">
+      <div class="kicker">P</div>
+      <div class="h1">稳定前缀才能保住缓存命中</div><div class="h2">稳定前缀才能保住缓存命中。六，Autocompa</div>
+    </div></div></div><div id="b03_turn_beat18_wrap" class="beat clip" data-start="99.700" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat18"><div class="panel-body" id="b03_turn_beat18">
+      <div class="kicker">KEY</div>
+      <div class="h1">是重量级最后手段之一。七，Tok</div><div class="h2">是重量级最后手段之一。七，Token 阻断检查，</div>
+    </div></div></div><div id="b03_turn_beat19_wrap" class="beat clip" data-start="104.900" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat19"><div class="panel-body" id="b03_turn_beat19">
+          <div class="kicker">yield 事件 · return Terminal</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">async function*</div>
+        </div></div></div><div id="b03_turn_beat20_wrap" class="beat clip" data-start="110.450" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat20"><div class="panel-body" id="b03_turn_beat20">
+      <div class="kicker">KEY</div>
+      <div class="h1">原则就一句：先付最小代价。马车意</div><div class="h2">原则就一句：先付最小代价。马车意象也在这里：辔绳收得住，</div>
+    </div></div></div><div id="b03_turn_beat21_wrap" class="beat clip" data-start="116.350" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat21"><div class="panel-body" id="b03_turn_beat21">
+          <div class="kicker">流式 · AbortSignal · 背压</div><div class="h1">三层能力</div>
+          <div class="layers-row"><div class="layer">Entry</div><div class="layer">QueryEngine</div><div class="layer">Loop</div><div class="layer">Tools</div><div class="layer">Ext</div></div>
+        </div></div></div><div id="b03_turn_beat22_wrap" class="beat clip" data-start="121.550" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat22"><div class="panel-body" id="b03_turn_beat22">
+      <div class="kicker">KEY</div>
+      <div class="h1">车轴会断。终止不是含糊的 err</div><div class="h2">车轴会断。终止不是含糊的 error。书稿列了十种原因：</div>
+    </div></div></div><div id="b03_turn_beat23_wrap" class="beat clip" data-start="127.100" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat23"><div class="panel-body" id="b03_turn_beat23">
+      <div class="kicker">FLOW</div>
+      <div class="h1">想 → 调 → 收 → 再想</div><div class="h2">一次脉搏</div>
+    </div></div></div><div id="b03_turn_beat24_wrap" class="beat clip" data-start="133.000" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat24"><div class="panel-body" id="b03_turn_beat24">
+      <div class="kicker">KEY</div>
+      <div class="h1">aming 与 aborted_</div><div class="h2">aming 与 aborted_tools 对应用户在流式或工具</div>
+    </div></div></div><div id="b03_turn_beat25_wrap" class="beat clip" data-start="138.200" data-duration="5.550" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat25"><div class="panel-body" id="b03_turn_beat25">
+      <div class="kicker">SUM</div>
+      <div class="h1">max_turns、bloc</div><div class="h2">max_turns、blocking_limit、</div>
+    </div></div></div><div id="b03_turn_beat26_wrap" class="beat clip" data-start="143.750" data-duration="5.900" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat26"><div class="panel-body" id="b03_turn_beat26">
+      <div class="kicker">KEY</div>
+      <div class="h1">prompt_too_long、</div><div class="h2">prompt_too_long、model_error、stop</div>
+    </div></div></div><div id="b03_turn_beat27_wrap" class="beat clip" data-start="149.650" data-duration="5.200" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat27"><div class="panel-body" id="b03_turn_beat27">
+      <div class="kicker">KEY</div>
+      <div class="h1">evented、hook_sto</div><div class="h2">evented、hook_stopped、image_error</div>
+    </div></div></div><div id="b03_turn_beat28_wrap" class="beat clip" data-start="154.850" data-duration="5.758" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b03_turn_beat28"><div class="panel-body" id="b03_turn_beat28">
+          <div class="kicker">记下这一点</div><div class="h1">覆盖循环上限、硬顶、恢复</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b03_turn_flash28" data-start="154.850" data-duration="0.35" data-track-index="5"></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b03_turn_beat0", {opacity:0}, {opacity:1,duration:0.2}, 0.000);
+tl.fromTo("#b03_turn_beat0 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 0.000);
+tl.fromTo("#b03_turn_beat0 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 0.080);
+tl.fromTo("#b03_turn_beat0 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 0.280);
+tl.to("#b03_turn_beat0", {opacity:0,y:-12,duration:0.28}, 4.650);
+tl.fromTo("#b03_turn_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b03_turn_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b03_turn_beat1", {opacity:0}, {opacity:1,duration:0.2}, 5.000);
+tl.fromTo("#b03_turn_beat1 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 5.000);
+tl.fromTo("#b03_turn_beat1 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 5.080);
+tl.fromTo("#b03_turn_beat1 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 5.280);
+tl.to("#b03_turn_beat1", {opacity:0,y:-12,duration:0.28}, 10.200);
+tl.fromTo("#b03_turn_beat2", {opacity:0}, {opacity:1,duration:0.2}, 10.550);
+tl.fromTo("#b03_turn_beat2 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 10.550);
+tl.fromTo("#b03_turn_beat2 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 10.900);
+tl.to("#b03_turn_beat2", {opacity:0,duration:0.3}, 16.100);
+tl.fromTo("#b03_turn_flash2", {opacity:0}, {opacity:0.35,duration:0.06}, 10.550);
+tl.to("#b03_turn_flash2", {opacity:0,duration:0.25}, 10.610);
+tl.fromTo("#b03_turn_beat3", {opacity:0}, {opacity:1,duration:0.2}, 16.450);
+tl.fromTo("#b03_turn_beat3 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 16.450);
+tl.fromTo("#b03_turn_beat3 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 16.530);
+tl.fromTo("#b03_turn_beat3 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 16.730);
+tl.to("#b03_turn_beat3", {opacity:0,y:-12,duration:0.28}, 21.300);
+tl.fromTo("#b03_turn_beat4", {opacity:0}, {opacity:1,duration:0.2}, 21.650);
+tl.fromTo("#b03_turn_beat4 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 21.650);
+tl.to("#b03_turn_beat4", {opacity:0,duration:0.3}, 26.850);
+tl.fromTo("#b03_turn_flash4", {opacity:0}, {opacity:0.35,duration:0.06}, 21.650);
+tl.to("#b03_turn_flash4", {opacity:0,duration:0.25}, 21.710);
+tl.fromTo("#b03_turn_beat5", {opacity:0}, {opacity:1,duration:0.2}, 27.200);
+tl.fromTo("#b03_turn_beat5 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 27.200);
+tl.fromTo("#b03_turn_beat5 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 27.280);
+tl.fromTo("#b03_turn_beat5 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 27.480);
+tl.to("#b03_turn_beat5", {opacity:0,y:-12,duration:0.28}, 32.750);
+tl.fromTo("#b03_turn_flash5", {opacity:0}, {opacity:0.35,duration:0.06}, 27.200);
+tl.to("#b03_turn_flash5", {opacity:0,duration:0.25}, 27.260);
+tl.fromTo("#b03_turn_beat6", {opacity:0}, {opacity:1,duration:0.2}, 33.100);
+tl.fromTo("#b03_turn_beat6 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 33.100);
+tl.fromTo("#b03_turn_beat6 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 33.180);
+tl.fromTo("#b03_turn_beat6 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 33.380);
+tl.to("#b03_turn_beat6", {opacity:0,y:-12,duration:0.28}, 37.950);
+tl.fromTo("#b03_turn_beat7", {opacity:0}, {opacity:1,duration:0.2}, 38.300);
+tl.fromTo("#b03_turn_beat7 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 38.300);
+tl.fromTo("#b03_turn_beat7 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 38.380);
+tl.fromTo("#b03_turn_beat7 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 38.580);
+tl.to("#b03_turn_beat7", {opacity:0,y:-12,duration:0.28}, 43.500);
+tl.fromTo("#b03_turn_beat8", {opacity:0}, {opacity:1,duration:0.2}, 43.850);
+tl.fromTo("#b03_turn_beat8 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 43.850);
+tl.fromTo("#b03_turn_beat8 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 43.930);
+tl.fromTo("#b03_turn_beat8 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 44.130);
+tl.to("#b03_turn_beat8", {opacity:0,y:-12,duration:0.28}, 49.400);
+tl.fromTo("#b03_turn_beat9", {opacity:0,scale:0.97}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 49.750);
+tl.fromTo("#b03_turn_beat9 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.32}, 49.830);
+tl.fromTo("#b03_turn_beat9 .h1", {opacity:0,y:18}, {opacity:1,y:0,duration:0.36}, 49.910);
+tl.fromTo("#b03_turn_beat9 .book-plate", {opacity:0,scale:1.04}, {opacity:1,scale:1,duration:0.45}, 50.030);
+tl.fromTo("#b03_turn_beat9 .book-plate > div", {opacity:0,y:10,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.28,stagger:0.1}, 50.300);
+tl.to("#b03_turn_beat9 .book-plate img", {scale:1.04,x:-10,duration:4.000,ease:"none"}, 50.450);
+tl.fromTo("#b03_turn_beat9 .chip", {opacity:0,y:14,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.28,stagger:0.07}, 50.750);
+tl.to("#b03_turn_beat9", {opacity:0,scale:0.99,duration:0.32}, 54.600);
+tl.fromTo("#b03_turn_flash9", {opacity:0}, {opacity:0.35,duration:0.06}, 49.750);
+tl.to("#b03_turn_flash9", {opacity:0,duration:0.25}, 49.810);
+tl.fromTo("#b03_turn_beat10", {opacity:0}, {opacity:1,duration:0.2}, 54.950);
+tl.fromTo("#b03_turn_beat10 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 54.950);
+tl.fromTo("#b03_turn_beat10 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 55.030);
+tl.fromTo("#b03_turn_beat10 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 55.230);
+tl.to("#b03_turn_beat10", {opacity:0,y:-12,duration:0.28}, 60.150);
+tl.fromTo("#b03_turn_beat11", {opacity:0}, {opacity:1,duration:0.2}, 60.500);
+tl.fromTo("#b03_turn_beat11 .big-num", {opacity:0,scale:0.5}, {opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}, 60.500);
+tl.fromTo("#b03_turn_beat11 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.3}, 60.700);
+tl.to("#b03_turn_beat11", {opacity:0,duration:0.3}, 66.050);
+tl.fromTo("#b03_turn_flash11", {opacity:0}, {opacity:0.35,duration:0.06}, 60.500);
+tl.to("#b03_turn_flash11", {opacity:0,duration:0.25}, 60.560);
+tl.fromTo("#b03_turn_beat12", {opacity:0}, {opacity:1,duration:0.2}, 66.400);
+tl.fromTo("#b03_turn_beat12 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 66.400);
+tl.fromTo("#b03_turn_beat12 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 66.480);
+tl.fromTo("#b03_turn_beat12 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 66.680);
+tl.to("#b03_turn_beat12", {opacity:0,y:-12,duration:0.28}, 71.250);
+tl.fromTo("#b03_turn_beat13", {opacity:0}, {opacity:1,duration:0.2}, 71.600);
+tl.fromTo("#b03_turn_beat13 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 71.600);
+tl.fromTo("#b03_turn_beat13 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 71.950);
+tl.to("#b03_turn_beat13", {opacity:0,duration:0.3}, 76.800);
+tl.fromTo("#b03_turn_flash13", {opacity:0}, {opacity:0.35,duration:0.06}, 71.600);
+tl.to("#b03_turn_flash13", {opacity:0,duration:0.25}, 71.660);
+tl.fromTo("#b03_turn_beat14", {opacity:0}, {opacity:1,duration:0.2}, 77.150);
+tl.fromTo("#b03_turn_beat14 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 77.150);
+tl.fromTo("#b03_turn_beat14 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 77.230);
+tl.fromTo("#b03_turn_beat14 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 77.430);
+tl.to("#b03_turn_beat14", {opacity:0,y:-12,duration:0.28}, 82.700);
+tl.fromTo("#b03_turn_beat15", {opacity:0}, {opacity:1,duration:0.25}, 83.050);
+tl.fromTo("#b03_turn_beat15 .vpanel", {opacity:0,y:30,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.45,stagger:0.12,ease:"back.out(1.4)"}, 83.150);
+tl.fromTo("#b03_turn_beat15 .vs", {opacity:0,scale:2.2}, {opacity:1,scale:1,duration:0.4,ease:"back.out(2)"}, 83.550);
+tl.fromTo("#b03_turn_beat15 .h2", {opacity:0,y:16}, {opacity:1,y:0,duration:0.35}, 83.750);
+tl.to("#b03_turn_beat15", {opacity:0,duration:0.3}, 87.900);
+tl.fromTo("#b03_turn_flash15", {opacity:0}, {opacity:0.35,duration:0.06}, 83.050);
+tl.to("#b03_turn_flash15", {opacity:0,duration:0.25}, 83.110);
+tl.fromTo("#b03_turn_beat16", {opacity:0}, {opacity:1,duration:0.2}, 88.250);
+tl.fromTo("#b03_turn_beat16 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 88.250);
+tl.fromTo("#b03_turn_beat16 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 88.330);
+tl.fromTo("#b03_turn_beat16 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 88.530);
+tl.to("#b03_turn_beat16", {opacity:0,y:-12,duration:0.28}, 93.450);
+tl.fromTo("#b03_turn_beat17", {opacity:0}, {opacity:1,duration:0.2}, 93.800);
+tl.fromTo("#b03_turn_beat17 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 93.800);
+tl.fromTo("#b03_turn_beat17 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 93.880);
+tl.fromTo("#b03_turn_beat17 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 94.080);
+tl.to("#b03_turn_beat17", {opacity:0,y:-12,duration:0.28}, 99.350);
+tl.fromTo("#b03_turn_beat18", {opacity:0}, {opacity:1,duration:0.2}, 99.700);
+tl.fromTo("#b03_turn_beat18 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 99.700);
+tl.fromTo("#b03_turn_beat18 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 99.780);
+tl.fromTo("#b03_turn_beat18 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 99.980);
+tl.to("#b03_turn_beat18", {opacity:0,y:-12,duration:0.28}, 104.550);
+tl.fromTo("#b03_turn_beat19", {opacity:0}, {opacity:1,duration:0.2}, 104.900);
+tl.fromTo("#b03_turn_beat19 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 104.900);
+tl.fromTo("#b03_turn_beat19 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 104.980);
+tl.fromTo("#b03_turn_beat19 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 105.180);
+tl.to("#b03_turn_beat19", {opacity:0,y:-12,duration:0.28}, 110.100);
+tl.fromTo("#b03_turn_beat20", {opacity:0}, {opacity:1,duration:0.2}, 110.450);
+tl.fromTo("#b03_turn_beat20 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 110.450);
+tl.fromTo("#b03_turn_beat20 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 110.530);
+tl.fromTo("#b03_turn_beat20 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 110.730);
+tl.to("#b03_turn_beat20", {opacity:0,y:-12,duration:0.28}, 116.000);
+tl.fromTo("#b03_turn_beat21", {opacity:0}, {opacity:1,duration:0.25}, 116.350);
+tl.fromTo("#b03_turn_beat21 .kicker", {opacity:0,y:10}, {opacity:1,y:0,duration:0.3}, 116.350);
+tl.fromTo("#b03_turn_beat21 .h1", {opacity:0,y:24,scale:0.96}, {opacity:1,y:0,scale:1,duration:0.4,ease:"power3.out"}, 116.450);
+tl.fromTo("#b03_turn_beat21 .layers-row", {opacity:0}, {opacity:1,duration:0.2}, 116.600);
+tl.fromTo("#b03_turn_beat21 .layer", {opacity:0,y:28}, {opacity:1,y:0,duration:0.35,stagger:0.08,ease:"power2.out"}, 116.650);
+tl.to("#b03_turn_beat21", {opacity:0,duration:0.3}, 121.200);
+tl.fromTo("#b03_turn_beat22", {opacity:0}, {opacity:1,duration:0.2}, 121.550);
+tl.fromTo("#b03_turn_beat22 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 121.550);
+tl.fromTo("#b03_turn_beat22 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 121.630);
+tl.fromTo("#b03_turn_beat22 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 121.830);
+tl.to("#b03_turn_beat22", {opacity:0,y:-12,duration:0.28}, 126.750);
+tl.fromTo("#b03_turn_beat23", {opacity:0}, {opacity:1,duration:0.2}, 127.100);
+tl.fromTo("#b03_turn_beat23 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 127.100);
+tl.fromTo("#b03_turn_beat23 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 127.180);
+tl.fromTo("#b03_turn_beat23 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 127.380);
+tl.to("#b03_turn_beat23", {opacity:0,y:-12,duration:0.28}, 132.650);
+tl.fromTo("#b03_turn_beat24", {opacity:0}, {opacity:1,duration:0.2}, 133.000);
+tl.fromTo("#b03_turn_beat24 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 133.000);
+tl.fromTo("#b03_turn_beat24 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 133.080);
+tl.fromTo("#b03_turn_beat24 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 133.280);
+tl.to("#b03_turn_beat24", {opacity:0,y:-12,duration:0.28}, 137.850);
+tl.fromTo("#b03_turn_beat25", {opacity:0}, {opacity:1,duration:0.2}, 138.200);
+tl.fromTo("#b03_turn_beat25 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 138.200);
+tl.fromTo("#b03_turn_beat25 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 138.280);
+tl.fromTo("#b03_turn_beat25 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 138.480);
+tl.to("#b03_turn_beat25", {opacity:0,y:-12,duration:0.28}, 143.400);
+tl.fromTo("#b03_turn_beat26", {opacity:0}, {opacity:1,duration:0.2}, 143.750);
+tl.fromTo("#b03_turn_beat26 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 143.750);
+tl.fromTo("#b03_turn_beat26 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 143.830);
+tl.fromTo("#b03_turn_beat26 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 144.030);
+tl.to("#b03_turn_beat26", {opacity:0,y:-12,duration:0.28}, 149.300);
+tl.fromTo("#b03_turn_beat27", {opacity:0}, {opacity:1,duration:0.2}, 149.650);
+tl.fromTo("#b03_turn_beat27 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 149.650);
+tl.fromTo("#b03_turn_beat27 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 149.730);
+tl.fromTo("#b03_turn_beat27 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 149.930);
+tl.to("#b03_turn_beat27", {opacity:0,y:-12,duration:0.28}, 154.500);
+tl.fromTo("#b03_turn_beat28", {opacity:0}, {opacity:1,duration:0.2}, 154.850);
+tl.fromTo("#b03_turn_beat28 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 154.850);
+tl.fromTo("#b03_turn_beat28 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 155.200);
+tl.to("#b03_turn_beat28", {opacity:0,duration:0.3}, 160.258);
+tl.fromTo("#b03_turn_flash28", {opacity:0}, {opacity:0.35,duration:0.06}, 154.850);
+tl.to("#b03_turn_flash28", {opacity:0,duration:0.25}, 154.910);
+window.__timelines["b03_turn"] = tl;
+</script>
+</body></html>

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+
+.persona-card{display:flex;gap:22px;align-items:center;padding:28px 36px;border:2px solid #5b8def;
+  border-radius:18px;background:rgba(12,18,28,.82);box-shadow:0 12px 40px rgba(0,0,0,.45);max-width:1100px}
+.persona-badge{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#0b1020;flex-shrink:0}
+.persona-name{font-size:20px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.persona-title{font-size:36px;font-weight:800;color:#eef3f8;line-height:1.25}
+.persona-sub{font-size:22px;color:#a8b4c4;margin-top:10px;line-height:1.4}
+
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b05_bash" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="40.680" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="40.680" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">§4.4 BashTool 细粒度</div></div></div></div>
+  <div id="b05_bash_beat0_wrap" class="beat clip" data-start="0.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat0"><div class="panel-body" id="b05_bash_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">§4.4 BashTool 细粒</div><div class="h2">§4.4 BashTool 细粒度</div>
+    </div></div></div><div class="flash clip" id="b05_bash_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat1_wrap" class="beat clip" data-start="2.800" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b05_bash_beat1"><div class="persona-card" style="border-color:#5b8def"><div class="persona-badge" style="background:#5b8def">Cl</div><div class="persona-body"><div class="persona-name" style="color:#5b8def">Claude</div><div class="persona-title">Claude</div><div class="persona-sub">会诊医生 · 边想边过闸</div></div></div></div></div><div class="flash clip" id="b05_bash_flash1" data-start="2.800" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat2_wrap" class="beat clip" data-start="5.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat2"><div class="panel-body" id="b05_bash_beat2">
+      <div class="kicker">KEY</div>
+      <div class="h1">精确 Bash(npm test</div><div class="h2">精确 Bash(npm test)；前缀 Bash(npm:*)</div>
+    </div></div></div><div id="b05_bash_beat3_wrap" class="beat clip" data-start="7.200" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat3"><div class="panel-body" id="b05_bash_beat3">
+      <div class="kicker">FLOW</div>
+      <div class="h1">前缀 Bash(npm:*)</div><div class="h2">优先级铁律</div>
+    </div></div></div><div id="b05_bash_beat4_wrap" class="beat clip" data-start="9.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat4"><div class="panel-body" id="b05_bash_beat4">
+      <div class="kicker">KEY</div>
+      <div class="h1">通配 Bash(git </div><div class="h2">commit *)</div>
+    </div></div></div><div id="b05_bash_beat5_wrap" class="beat clip" data-start="10.550" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat5"><div class="panel-body" id="b05_bash_beat5">
+          <div class="kicker">记下这一点</div><div class="h1">通配 Bash(git </div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash5" data-start="10.550" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat6_wrap" class="beat clip" data-start="12.350" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b05_bash_beat6"><div class="persona-card" style="border-color:#5b8def"><div class="persona-badge" style="background:#5b8def">Cl</div><div class="persona-body"><div class="persona-name" style="color:#5b8def">Claude</div><div class="persona-title">Claude</div><div class="persona-sub">会诊医生 · 边想边过滤</div></div></div></div></div><div class="flash clip" id="b05_bash_flash6" data-start="12.350" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat7_wrap" class="beat clip" data-start="13.380" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat7"><div class="panel-body" id="b05_bash_beat7">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 表达能力递增</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一想</div></div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash7" data-start="13.380" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat8_wrap" class="beat clip" data-start="15.180" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat8"><div class="panel-body" id="b05_bash_beat8">
+      <div class="kicker">FLOW</div>
+      <div class="h1">误放行风险也递增</div><div class="h2">deny &gt; ask &gt; allow</div>
+    </div></div></div><div id="b05_bash_beat9_wrap" class="beat clip" data-start="16.450" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat9"><div class="panel-body" id="b05_bash_beat9">
+      <div class="kicker">KEY</div>
+      <div class="h1">优先前缀：语义清晰，少踩坑。</div><div class="h2">优先前缀：语义清晰，少踩坑。git:* 和 git 空格星，</div>
+    </div></div></div><div id="b05_bash_beat10_wrap" class="beat clip" data-start="18.250" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat10"><div class="panel-body" id="b05_bash_beat10">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 语义清晰</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash10" data-start="18.250" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat11_wrap" class="beat clip" data-start="19.425" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat11"><div class="panel-body" id="b05_bash_beat11">
+          <div class="kicker">allow · deny · ask</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">git:* 和 git 空格星</div>
+        </div></div></div><div id="b05_bash_beat12_wrap" class="beat clip" data-start="21.650" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat12"><div class="panel-body" id="b05_bash_beat12">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 设计成等价，减轻记忆</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash12" data-start="21.650" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat13_wrap" class="beat clip" data-start="24.328" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat13"><div class="panel-body" id="b05_bash_beat13">
+      <div class="kicker">KEY</div>
+      <div class="h1">减轻记忆负担</div><div class="h2">分类器还有投机审批：</div>
+    </div></div></div><div id="b05_bash_beat14_wrap" class="beat clip" data-start="26.128" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat14"><div class="panel-body" id="b05_bash_beat14">
+          <div class="kicker">allow · deny · ask</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">分类器还有投机审批：</div>
+        </div></div></div><div id="b05_bash_beat15_wrap" class="beat clip" data-start="27.200" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat15"><div class="panel-body" id="b05_bash_beat15">
+      <div class="kicker">KEY</div>
+      <div class="h1">分类器还有投机审批：ask </div><div class="h2">分类器还有投机审批：ask 时与两秒定时器赛跑。</div>
+    </div></div></div><div class="flash clip" id="b05_bash_flash15" data-start="27.200" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat16_wrap" class="beat clip" data-start="29.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat16"><div class="panel-body" id="b05_bash_beat16">
+      <div class="kicker">KEY</div>
+      <div class="h1">ask 时与两秒定时器赛跑</div><div class="h2">两秒内高置信度就自动放</div>
+    </div></div></div><div id="b05_bash_beat17_wrap" class="beat clip" data-start="30.900" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat17"><div class="panel-body" id="b05_bash_beat17">
+          <div class="kicker">记下这一句</div><div class="h1">两秒内高置信度就自动放</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash17" data-start="30.900" data-duration="0.35" data-track-index="5"></div><div id="b05_bash_beat18_wrap" class="beat clip" data-start="33.100" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat18"><div class="panel-body" id="b05_bash_beat18">
+      <div class="kicker">KEY</div>
+      <div class="h1">超时就弹窗给你。太短易空等网络，</div><div class="h2">超时就弹窗给你。太短易空等网络，</div>
+    </div></div></div><div id="b05_bash_beat19_wrap" class="beat clip" data-start="35.627" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat19"><div class="panel-body" id="b05_bash_beat19">
+      <div class="kicker">FLOW</div>
+      <div class="h1">太短易空等网络</div><div class="h2">太长用户烦——两秒是甜蜜点</div>
+    </div></div></div><div id="b05_bash_beat20_wrap" class="beat clip" data-start="38.153" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_bash_beat20"><div class="panel-body" id="b05_bash_beat20">
+          <div class="kicker">PermissionUp</div><div class="big-num">太长用户烦——两秒是甜蜜点</div>
+        </div></div></div><div class="flash clip" id="b05_bash_flash20" data-start="38.153" data-duration="0.35" data-track-index="5"></div><div id="hv_b05_bash_0" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_bash_0-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_bash_0_vid" src="../assets/huashu/06_bash_match.mp4" muted playsinline data-start="8.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b05_bash_1" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_bash_1-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_bash_1_vid" src="../assets/huashu/06_bash_match.mp4" muted playsinline data-start="25.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b05_bash_beat0", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 0.000);
+tl.fromTo("#b05_bash_beat0 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 0.060);
+tl.fromTo("#b05_bash_beat0 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 0.120);
+tl.fromTo("#b05_bash_beat0 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 0.280);
+tl.to("#b05_bash_beat0", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 0.500);
+tl.to("#b05_bash_beat0", {opacity:0,y:-16,scale:0.98,duration:0.28}, 3.150);
+tl.fromTo("#b05_bash_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b05_bash_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b05_bash_beat1", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 2.800);
+tl.to("#b05_bash_beat1", {opacity:0,y:-12,duration:0.28}, 5.980);
+tl.fromTo("#b05_bash_flash1", {opacity:0}, {opacity:0.35,duration:0.06}, 2.800);
+tl.to("#b05_bash_flash1", {opacity:0,duration:0.25}, 2.860);
+tl.fromTo("#b05_bash_beat2", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 5.000);
+tl.fromTo("#b05_bash_beat2 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 5.060);
+tl.fromTo("#b05_bash_beat2 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 5.120);
+tl.fromTo("#b05_bash_beat2 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 5.280);
+tl.to("#b05_bash_beat2", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 5.500);
+tl.to("#b05_bash_beat2", {opacity:0,y:-16,scale:0.98,duration:0.28}, 8.150);
+tl.fromTo("#b05_bash_beat3", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 7.200);
+tl.fromTo("#b05_bash_beat3 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 7.260);
+tl.fromTo("#b05_bash_beat3 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 7.320);
+tl.fromTo("#b05_bash_beat3 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 7.480);
+tl.to("#b05_bash_beat3", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 7.700);
+tl.to("#b05_bash_beat3", {opacity:0,y:-16,scale:0.98,duration:0.28}, 10.350);
+tl.fromTo("#b05_bash_beat4", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 9.000);
+tl.fromTo("#b05_bash_beat4 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 9.060);
+tl.fromTo("#b05_bash_beat4 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 9.120);
+tl.fromTo("#b05_bash_beat4 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 9.280);
+tl.to("#b05_bash_beat4", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 9.500);
+tl.to("#b05_bash_beat4", {opacity:0,y:-16,scale:0.98,duration:0.28}, 12.150);
+tl.fromTo("#b05_bash_beat5", {opacity:0}, {opacity:1,duration:0.2}, 10.550);
+tl.fromTo("#b05_bash_beat5 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 10.550);
+tl.fromTo("#b05_bash_beat5 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 10.900);
+tl.to("#b05_bash_beat5", {opacity:0,duration:0.3}, 13.700);
+tl.fromTo("#b05_bash_flash5", {opacity:0}, {opacity:0.35,duration:0.06}, 10.550);
+tl.to("#b05_bash_flash5", {opacity:0,duration:0.25}, 10.610);
+tl.fromTo("#b05_bash_beat6", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 12.350);
+tl.to("#b05_bash_beat6", {opacity:0,y:-12,duration:0.28}, 15.530);
+tl.fromTo("#b05_bash_flash6", {opacity:0}, {opacity:0.35,duration:0.06}, 12.350);
+tl.to("#b05_bash_flash6", {opacity:0,duration:0.25}, 12.410);
+tl.fromTo("#b05_bash_beat7", {opacity:0}, {opacity:1,duration:0.2}, 13.380);
+tl.fromTo("#b05_bash_beat7 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 13.380);
+tl.to("#b05_bash_beat7", {opacity:0,duration:0.3}, 16.530);
+tl.fromTo("#b05_bash_flash7", {opacity:0}, {opacity:0.35,duration:0.06}, 13.380);
+tl.to("#b05_bash_flash7", {opacity:0,duration:0.25}, 13.440);
+tl.fromTo("#b05_bash_beat8", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 15.180);
+tl.fromTo("#b05_bash_beat8 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 15.240);
+tl.fromTo("#b05_bash_beat8 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 15.300);
+tl.fromTo("#b05_bash_beat8 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 15.460);
+tl.to("#b05_bash_beat8", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 15.680);
+tl.to("#b05_bash_beat8", {opacity:0,y:-16,scale:0.98,duration:0.28}, 18.330);
+tl.fromTo("#b05_bash_beat9", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 16.450);
+tl.fromTo("#b05_bash_beat9 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 16.510);
+tl.fromTo("#b05_bash_beat9 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 16.570);
+tl.fromTo("#b05_bash_beat9 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 16.730);
+tl.to("#b05_bash_beat9", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 16.950);
+tl.to("#b05_bash_beat9", {opacity:0,y:-16,scale:0.98,duration:0.28}, 19.600);
+tl.fromTo("#b05_bash_beat10", {opacity:0}, {opacity:1,duration:0.2}, 18.250);
+tl.fromTo("#b05_bash_beat10 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 18.250);
+tl.to("#b05_bash_beat10", {opacity:0,duration:0.3}, 21.400);
+tl.fromTo("#b05_bash_flash10", {opacity:0}, {opacity:0.35,duration:0.06}, 18.250);
+tl.to("#b05_bash_flash10", {opacity:0,duration:0.25}, 18.310);
+tl.fromTo("#b05_bash_beat11", {opacity:0}, {opacity:1,duration:0.2}, 19.425);
+tl.fromTo("#b05_bash_beat11 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 19.425);
+tl.fromTo("#b05_bash_beat11 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 19.505);
+tl.fromTo("#b05_bash_beat11 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 19.705);
+tl.to("#b05_bash_beat11", {opacity:0,y:-12,duration:0.28}, 22.575);
+tl.fromTo("#b05_bash_beat12", {opacity:0}, {opacity:1,duration:0.2}, 21.650);
+tl.fromTo("#b05_bash_beat12 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 21.650);
+tl.to("#b05_bash_beat12", {opacity:0,duration:0.3}, 24.800);
+tl.fromTo("#b05_bash_flash12", {opacity:0}, {opacity:0.35,duration:0.06}, 21.650);
+tl.to("#b05_bash_flash12", {opacity:0,duration:0.25}, 21.710);
+tl.fromTo("#b05_bash_beat13", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 24.328);
+tl.fromTo("#b05_bash_beat13 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 24.388);
+tl.fromTo("#b05_bash_beat13 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 24.448);
+tl.fromTo("#b05_bash_beat13 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 24.608);
+tl.to("#b05_bash_beat13", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 24.828);
+tl.to("#b05_bash_beat13", {opacity:0,y:-16,scale:0.98,duration:0.28}, 27.478);
+tl.fromTo("#b05_bash_beat14", {opacity:0}, {opacity:1,duration:0.2}, 26.128);
+tl.fromTo("#b05_bash_beat14 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 26.128);
+tl.fromTo("#b05_bash_beat14 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 26.208);
+tl.fromTo("#b05_bash_beat14 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 26.408);
+tl.to("#b05_bash_beat14", {opacity:0,y:-12,duration:0.28}, 29.278);
+tl.fromTo("#b05_bash_beat15", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 27.200);
+tl.fromTo("#b05_bash_beat15 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 27.260);
+tl.fromTo("#b05_bash_beat15 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 27.320);
+tl.fromTo("#b05_bash_beat15 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 27.480);
+tl.to("#b05_bash_beat15", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 27.700);
+tl.to("#b05_bash_beat15", {opacity:0,y:-16,scale:0.98,duration:0.28}, 30.350);
+tl.fromTo("#b05_bash_flash15", {opacity:0}, {opacity:0.35,duration:0.06}, 27.200);
+tl.to("#b05_bash_flash15", {opacity:0,duration:0.25}, 27.260);
+tl.fromTo("#b05_bash_beat16", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 29.000);
+tl.fromTo("#b05_bash_beat16 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 29.060);
+tl.fromTo("#b05_bash_beat16 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 29.120);
+tl.fromTo("#b05_bash_beat16 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 29.280);
+tl.to("#b05_bash_beat16", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 29.500);
+tl.to("#b05_bash_beat16", {opacity:0,y:-16,scale:0.98,duration:0.28}, 32.150);
+tl.fromTo("#b05_bash_beat17", {opacity:0}, {opacity:1,duration:0.2}, 30.900);
+tl.fromTo("#b05_bash_beat17 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 30.900);
+tl.fromTo("#b05_bash_beat17 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 31.250);
+tl.to("#b05_bash_beat17", {opacity:0,duration:0.3}, 34.050);
+tl.fromTo("#b05_bash_flash17", {opacity:0}, {opacity:0.35,duration:0.06}, 30.900);
+tl.to("#b05_bash_flash17", {opacity:0,duration:0.25}, 30.960);
+tl.fromTo("#b05_bash_beat18", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 33.100);
+tl.fromTo("#b05_bash_beat18 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 33.160);
+tl.fromTo("#b05_bash_beat18 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 33.220);
+tl.fromTo("#b05_bash_beat18 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 33.380);
+tl.to("#b05_bash_beat18", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 33.600);
+tl.to("#b05_bash_beat18", {opacity:0,y:-16,scale:0.98,duration:0.28}, 36.250);
+tl.fromTo("#b05_bash_beat19", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 35.627);
+tl.fromTo("#b05_bash_beat19 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 35.687);
+tl.fromTo("#b05_bash_beat19 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 35.747);
+tl.fromTo("#b05_bash_beat19 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 35.907);
+tl.to("#b05_bash_beat19", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 36.127);
+tl.to("#b05_bash_beat19", {opacity:0,y:-16,scale:0.98,duration:0.28}, 38.777);
+tl.fromTo("#b05_bash_beat20", {opacity:0}, {opacity:1,duration:0.2}, 38.153);
+tl.fromTo("#b05_bash_beat20 .big-num", {opacity:0,scale:0.5}, {opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}, 38.153);
+tl.fromTo("#b05_bash_beat20 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.3}, 38.353);
+tl.to("#b05_bash_beat20", {opacity:0,duration:0.3}, 41.303);
+tl.fromTo("#b05_bash_flash20", {opacity:0}, {opacity:0.35,duration:0.06}, 38.153);
+tl.to("#b05_bash_flash20", {opacity:0,duration:0.25}, 38.213);
+tl.to("#hv_b05_bash_0-in", {opacity:1, duration:0.4}, 8.000);
+tl.to("#hv_b05_bash_0-in", {opacity:0, duration:0.4}, 14.600);
+tl.to("#hv_b05_bash_1-in", {opacity:1, duration:0.4}, 25.000);
+tl.to("#hv_b05_bash_1-in", {opacity:0, duration:0.4}, 31.100);
+window.__timelines["b05_bash"] = tl;
+</script>
+</body></html>

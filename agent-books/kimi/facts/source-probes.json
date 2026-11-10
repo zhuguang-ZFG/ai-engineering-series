@@ -1,0 +1,25 @@
+{
+  "commit": "1c142a007c10e881602690def96057c23a2baa12",
+  "node": "v24.14.0",
+  "esbuild": "0.28.2",
+  "passed": [
+    "real parser accepts the complete workshop plugin",
+    "real parser diagnoses a skill path outside the plugin",
+    "root manifest takes precedence over .kimi-plugin/plugin.json",
+    "real parser preserves the reviewer tool lists",
+    "real parser rejects an agent without a description",
+    "empty tools list remains empty",
+    "real hook runner: allow -> allow",
+    "real hook runner: deny-json -> block",
+    "real hook runner: deny-exit -> block",
+    "real hook runner: error -> allow",
+    "real hook runner: timeout -> allow",
+    "real hook runner allows after a process launch failure"
+  ],
+  "source_sha256": {
+    "packages/agent-core-v2/src/app/plugin/manifest.ts": "177c4d6bab9b4d20aefb4a801fbfc08a94298d34956281f7a0e2088fd43a3dd0",
+    "packages/agent-core-v2/src/workspace/workspaceAgentProfileLoader/internal/agentFile.ts": "aaf79403334b6224a2bb7c8f981b866a7f1ca9e77625f69a65bb392ba51191ca",
+    "packages/agent-core-v2/src/features/externalHooks/internal/runHook.ts": "e2916a8f588f340bdb44c7de53af134880d0e16cc999e8818e9fe7c3fd55f028"
+  },
+  "scope": "selected upstream parsers and hook runner with local child processes; not a full Kimi session"
+}

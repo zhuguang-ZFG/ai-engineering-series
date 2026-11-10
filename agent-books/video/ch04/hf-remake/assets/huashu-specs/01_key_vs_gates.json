@@ -1,0 +1,45 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {
+      "at": 0.0,
+      "kind": "draw",
+      "text": "\u4e07\u80fd\u94a5\u5319",
+      "data": {
+        "icon": "bulb"
+      }
+    },
+    {
+      "at": 1.2,
+      "kind": "point",
+      "text": "\u4e71\u5f00 \u00b7 \u88f8\u5954 \u00b7 \u65e0\u8fb9\u754c"
+    },
+    {
+      "at": 2.6,
+      "kind": "draw",
+      "text": "\u56db\u9053\u95f8",
+      "data": {
+        "icon": "target"
+      }
+    },
+    {
+      "at": 4.0,
+      "kind": "point",
+      "text": "\u7eb5\u6df1\u9632\u5fa1 \u00b7 \u9010\u5173\u843d\u4e0b"
+    },
+    {
+      "at": 5.5,
+      "kind": "highlight",
+      "data": {
+        "target": "draw",
+        "index": 1
+      }
+    }
+  ]
+}

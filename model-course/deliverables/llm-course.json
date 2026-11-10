@@ -1,0 +1,129 @@
+{
+  "version": "1.1.2",
+  "sourceHash": "a09e4ea2c7f792f48005ca5db29aa63261ede89a5329671bf0064aceec9e2203",
+  "design": {
+    "page": "A5",
+    "bodyFace": "Noto Serif SC / Songti",
+    "cover": "cover-course.svg",
+    "stagePlates": 5,
+    "deepReading": "深读：五个不能再简化的问题",
+    "glossary": "术语、符号与能力门"
+  },
+  "editions": {
+    "llm-course": {
+      "pdfPages": 414,
+      "outlineEntries": 466,
+      "chapters": 30,
+      "stagePages": 10,
+      "tocEntries": 38,
+      "tocPages": 2,
+      "contentsPasses": 2,
+      "images": 44,
+      "pages": {
+        "map": 7,
+        "S1": 9,
+        "C01": 10,
+        "C02": 18,
+        "C03": 25,
+        "C04": 35,
+        "S2": 46,
+        "C05": 48,
+        "C06": 58,
+        "C07": 66,
+        "C08": 75,
+        "C09": 85,
+        "C10": 94,
+        "S3": 105,
+        "C11": 107,
+        "C12": 122,
+        "C13": 137,
+        "C14": 148,
+        "C15": 163,
+        "C16": 172,
+        "C17": 182,
+        "S4": 195,
+        "C18": 197,
+        "C19": 216,
+        "C20": 232,
+        "C21": 251,
+        "C22": 264,
+        "C23": 281,
+        "C24": 292,
+        "C25": 306,
+        "C26": 318,
+        "S5": 333,
+        "C27": 334,
+        "C28": 347,
+        "C29": 363,
+        "C30": 380,
+        "deep-reading": 398,
+        "glossary": 406
+      }
+    },
+    "llm-course-answers": {
+      "pdfPages": 171,
+      "outlineEntries": 283,
+      "chapters": 30,
+      "stagePages": 0,
+      "tocEntries": 30,
+      "tocPages": 2,
+      "contentsPasses": 2,
+      "images": 44,
+      "pages": {
+        "C01": 5,
+        "C02": 8,
+        "C03": 11,
+        "C04": 15,
+        "C05": 19,
+        "C06": 22,
+        "C07": 25,
+        "C08": 28,
+        "C09": 31,
+        "C10": 35,
+        "C11": 39,
+        "C12": 44,
+        "C13": 48,
+        "C14": 53,
+        "C15": 57,
+        "C16": 61,
+        "C17": 67,
+        "C18": 71,
+        "C19": 81,
+        "C20": 89,
+        "C21": 97,
+        "C22": 105,
+        "C23": 113,
+        "C24": 119,
+        "C25": 125,
+        "C26": 132,
+        "C27": 139,
+        "C28": 145,
+        "C29": 151,
+        "C30": 157
+      }
+    }
+  },
+  "files": {
+    "llm-course.pdf": {
+      "bytes": 15907173,
+      "sha256": "9799f8955d0eba42fc88cb3a16386f82d1626736876057e00f3fbdef89a047d7"
+    },
+    "llm-course.epub": {
+      "bytes": 5673534,
+      "sha256": "03a2447eab74a9a990dd3615940310dc4afe1a6da21ca320e5714b03000293c6"
+    },
+    "llm-course-answers.pdf": {
+      "bytes": 7333887,
+      "sha256": "b97a123c9930e904aa1f0c94eedd7f6e6c0c85d23341180d4ce57a81ecf381b5"
+    },
+    "llm-course-answers.epub": {
+      "bytes": 5538246,
+      "sha256": "183fde74aa0f0dc553b415ab78b194fe2ac7ab4b5e063d72048a412ac37c16d0"
+    }
+  },
+  "limitations": [
+    "真实初学者验收未完成",
+    "运行证据与独立复做分开",
+    "EPUB和PDF不执行代码"
+  ]
+}

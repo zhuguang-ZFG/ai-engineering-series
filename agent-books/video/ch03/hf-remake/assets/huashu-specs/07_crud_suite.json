@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Read Edit Write", "data": {"icon": "target"}},
+    {"at": 1.4, "kind": "point", "text": "文件三件套 CRUD"},
+    {"at": 2.9, "kind": "draw", "text": "故意无 Delete", "data": {"icon": "bulb"}},
+    {"at": 4.3, "kind": "point", "text": "破坏性操作走更严权限"},
+    {"at": 5.7, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

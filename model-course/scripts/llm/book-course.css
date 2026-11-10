@@ -1,0 +1,355 @@
+/* Course reading edition: A5 print, EPUB reflow, and a quiet screen preview.
+   The 30-chapter book uses its own sheet so the twelve-lesson hand-drawn
+   edition keeps its already-verified print metrics. */
+
+:root {
+  color-scheme: light;
+  --paper: #fbf8f1;
+  --card: #fffdf8;
+  --ink: #1f2328;
+  --ink-soft: #5f5a4f;
+  --pine: #1f5c45;
+  --pine-soft: #3f7a60;
+  --sage: #d9e6d7;
+  --sand: #eee5d3;
+  --rule: #cfc5b1;
+  --clay: #a8492b;
+}
+
+html { background: var(--paper); }
+body {
+  margin: 0 auto;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+  font-size: 10.5pt;
+  line-height: 1.78;
+  font-feature-settings: "kern" 1, "liga" 1;
+  overflow-wrap: anywhere;
+  line-break: strict;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-align-last: left;
+}
+
+p { margin: 0 0 .72em; orphans: 3; widows: 3; font-weight: 400; }
+em { font-style: normal; color: var(--ink-soft); }
+strong { font-weight: 700; }
+a { color: var(--pine); text-decoration: none; }
+ul, ol { margin: .4em 0 .9em; padding-left: 1.35em; }
+li { margin: .22em 0; }
+li > p { margin: 0; }
+blockquote {
+  margin: 1.05em 0;
+  padding: .15em 0 .15em 1.1em;
+  border-left: 2.2pt solid var(--pine);
+  color: var(--ink);
+  font-size: .97em;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+h1, h2, h3, h4,
+.chapter-kicker, .chapter-number, .stage-label, .stage-gate,
+figcaption, .caption, .toc-stage, .toc-page, .book-navigation,
+.cover-meta, .title-page, .colophon, .reading-guide h2,
+.deep-reading h2, .stage-intro h2 {
+  font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+h1 { font-size: 22pt; line-height: 1.35; font-weight: 600; letter-spacing: .01em; margin: 0 0 .7em; }
+h2 { font-size: 14pt; line-height: 1.45; font-weight: 600; margin: 1.55em 0 .55em; }
+h3 { font-size: 11.5pt; line-height: 1.5; font-weight: 600; margin: 1.1em 0 .4em; }
+h1, h2, h3 { break-after: avoid; }
+h2 + p, h3 + p { margin-top: 0; }
+
+code, pre, .formula {
+  font-family: "Cascadia Mono", "Consolas", "DejaVu Sans Mono", monospace;
+  font-size: .86em;
+  overflow-wrap: anywhere;
+}
+pre {
+  margin: 1em 0;
+  padding: .8em 1em;
+  background: #f4efe4;
+  border-left: 2pt solid var(--pine-soft);
+  border-radius: 0 3px 3px 0;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  break-inside: auto;
+}
+.book-equation, .book-equation-intro { break-after: avoid; break-inside: avoid; }
+.book-equation {
+  margin: .9em 0;
+  padding: .55em .8em;
+  background: #f4efe4;
+  border-left: 2pt solid var(--pine-soft);
+  font-size: .9em;
+}
+
+figure { margin: 1.25em auto; text-align: center; break-inside: avoid; }
+figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 112mm;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+figcaption {
+  margin-top: .65em;
+  color: var(--ink-soft);
+  font-size: 8.6pt;
+  line-height: 1.6;
+  text-align: left;
+  text-align-last: left;
+}
+figcaption b, figcaption strong { color: var(--pine); font-weight: 600; }
+.curriculum-figure { margin: 1.15em auto 1.35em; }
+
+table {
+  width: 100%;
+  margin: 1.15em 0;
+  border-collapse: collapse;
+  border-top: 1.1pt solid var(--ink);
+  border-bottom: 1.1pt solid var(--ink);
+  font-family: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: 8.8pt;
+  line-height: 1.55;
+  break-inside: avoid;
+}
+thead { display: table-header-group; }
+th {
+  padding: .5em .55em;
+  border-bottom: .6pt solid var(--ink);
+  text-align: left;
+  vertical-align: bottom;
+  font-weight: 600;
+  background: none;
+}
+td { padding: .48em .55em; border: 0; text-align: left; vertical-align: top; }
+tr { break-inside: avoid; }
+
+.chapter { break-before: page; }
+.chapter:not(.answer-edition) .article-body { counter-reset: section; }
+.chapter:not(.answer-edition) .article-body > h2::before {
+  counter-increment: section;
+  content: counter(section) ". ";
+  color: var(--pine);
+  font-family: "Cascadia Mono", "Consolas", monospace;
+  font-size: .78em;
+  margin-right: .4em;
+}
+.chapter-opener {
+  margin: 0 0 1.6em;
+  padding: 0 0 1.1em;
+  border-bottom: 1.5pt solid var(--ink);
+  break-after: avoid;
+}
+.chapter-opener::before {
+  content: "";
+  display: block;
+  width: 28mm;
+  height: 2.5pt;
+  background: var(--pine);
+  margin: 0 0 .9em;
+}
+.chapter-number {
+  display: block;
+  color: var(--pine);
+  font-size: 9pt;
+  letter-spacing: .18em;
+  font-weight: 600;
+  margin: 0 0 .55em;
+}
+.chapter-kicker {
+  color: var(--ink-soft);
+  font-size: 8.4pt;
+  letter-spacing: .06em;
+  margin: 0 0 .55em;
+}
+.chapter-opener h1 { margin: 0 0 .45em; font-size: 23pt; }
+.chapter-abstract {
+  margin: .35em 0 0;
+  color: var(--ink-soft);
+  font-size: 10pt;
+  line-height: 1.7;
+  text-align: left;
+}
+.chapter-id { margin: .8em 0 0; color: var(--ink-soft); font-size: 8.6pt; }
+.chapter-id .stage-gate { color: var(--pine); font-weight: 600; }
+.objective { border-left: 2pt solid var(--pine); padding-left: 1em; color: var(--ink-soft); font-size: .92em; }
+
+/* Front matter */
+.cover-page { margin: 0; padding: 3mm 0 0; text-align: center; break-after: page; }
+.cover-page img { display: block; width: 100%; max-width: 118mm; height: auto; margin: 0 auto; }
+.cover-meta {
+  margin: .9em 0 0;
+  color: var(--ink-soft);
+  font-size: 8.2pt;
+  letter-spacing: .08em;
+  text-align: center;
+}
+.title-page {
+  min-height: 150mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  break-after: page;
+  text-align: left;
+}
+.title-page .title-kicker { color: var(--ink-soft); font-size: 9pt; letter-spacing: .16em; margin: 0 0 1.4em; }
+.title-page h1 { font-size: 28pt; line-height: 1.32; margin: 0 0 .4em; letter-spacing: .04em; }
+.title-page .title-sub { color: var(--ink-soft); font-size: 12pt; line-height: 1.7; margin: 0 0 2.2em; }
+.title-page .title-rule { width: 40mm; height: 2pt; background: var(--pine); margin: 0 0 2.2em; }
+.title-page .title-edition { color: var(--ink-soft); font-size: 9pt; line-height: 1.9; letter-spacing: .04em; }
+.colophon { color: var(--ink-soft); font-size: 8.5pt; line-height: 1.8; break-after: page; }
+.colophon p { margin-bottom: .5em; }
+.colophon .colophon-mark { color: var(--pine); font-weight: 600; letter-spacing: .08em; }
+
+.reading-guide { break-before: page; }
+.reading-guide h1 { font-size: 19pt; }
+.reading-guide h2 { font-size: 11.5pt; margin-top: 1.2em; }
+.reading-guide ol, .reading-guide ul { font-size: 9.6pt; }
+
+/* Contents */
+.toc { break-before: page; }
+.toc h1 { font-size: 20pt; margin-bottom: 1em; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0; }
+.toc-stage {
+  display: flex;
+  align-items: baseline;
+  gap: .45em;
+  margin: 1.15em 0 .35em;
+  padding-bottom: .22em;
+  border-bottom: .6pt solid var(--rule);
+  color: var(--pine);
+  font-size: 9pt;
+  font-weight: 600;
+  letter-spacing: .1em;
+}
+.toc-stage a { color: inherit; text-decoration: none; flex: 0 1 auto; min-width: 0; }
+.toc-stage:first-child { margin-top: 0; }
+.toc-stage .toc-page { color: var(--pine); letter-spacing: 0; margin-left: auto; }
+.toc-line { display: flex; align-items: baseline; gap: .45em; padding: .2em 0; font-size: 9.3pt; line-height: 1.5; }
+.toc-line .toc-id { flex: 0 0 auto; color: var(--pine); font-family: "Cascadia Mono", "Consolas", monospace; font-size: .92em; }
+.toc-line .toc-label { flex: 1 1 auto; min-width: 0; color: var(--ink); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toc-line .toc-label span { white-space: nowrap; }
+.toc-line .toc-dots { flex: 1 1 auto; min-width: 1.2em; border-bottom: .5pt dotted #b9ae98; transform: translateY(-.25em); }
+.toc-line .toc-page { flex: 0 0 auto; color: var(--ink); font-variant-numeric: tabular-nums; font-size: .92em; }
+.toc-appendix { margin-top: .7em; font-size: 9.3pt; }
+.toc-appendix .toc-line { border-top: .5pt solid var(--rule); padding-top: .45em; }
+.toc-map { margin-top: .8em; font-weight: 600; }
+.toc-map .toc-label { color: var(--pine); }
+
+/* Stage openings */
+.stage-plate { margin: 0; padding: 0; text-align: center; break-before: page; break-after: page; }
+.stage-plate-figure { margin: 0; padding: 0; }
+.stage-plate img { display: block; width: 100%; max-width: 112mm; height: auto; margin: 8mm auto 0; }
+.stage-plate figcaption { margin-top: .8em; text-align: center; font-size: 8pt; letter-spacing: .04em; }
+
+/* Full-page reading map */
+.book-map { margin: 0; padding: 0; text-align: center; break-before: page; break-after: page; }
+.book-map h1 { font-size: 18pt; margin: 0 0 .15em; }
+.book-map .map-sub { margin: 0 0 .6em; color: var(--ink-soft); font-size: 8.6pt; }
+.book-map img { display: block; width: 104mm; max-width: 100%; max-height: none; height: auto; margin: 0 auto; }
+.book-map figcaption { margin: .7em auto 0; max-width: 100mm; text-align: center; font-size: 8pt; letter-spacing: .02em; }
+.stage-intro { break-before: page; }
+.stage-label { color: var(--pine); font-size: 9pt; letter-spacing: .16em; font-weight: 600; margin: 0 0 .8em; }
+.stage-intro h1 { font-size: 24pt; margin: 0 0 .35em; }
+.stage-thesis { color: var(--ink); font-size: 13pt; line-height: 1.65; margin: 0 0 1.2em; }
+.stage-gate { color: var(--ink-soft); font-size: 8.5pt; letter-spacing: .08em; margin: 0 0 1.2em; }
+.stage-intro p { font-size: 10pt; }
+.stage-chapters { margin-top: 1.4em; border-top: .8pt solid var(--rule); padding-top: .7em; }
+.stage-chapters h2 { font-size: 9pt; letter-spacing: .1em; color: var(--ink-soft); margin: 0 0 .5em; }
+.stage-chapters ol { list-style: none; padding: 0; margin: 0; }
+.stage-chapters li { margin: .25em 0; font-size: 9.4pt; }
+.stage-chapters .chapter-id { color: var(--pine); font-family: "Cascadia Mono", "Consolas", monospace; margin-right: .5em; }
+
+/* Deep reading */
+.deep-reading { break-before: page; }
+.deep-reading h1 { font-size: 21pt; }
+.deep-reading > p:first-of-type { font-size: 10.5pt; color: var(--ink-soft); }
+.deep-reading h2 {
+  margin-top: 1.8em;
+  padding-top: .55em;
+  border-top: 1pt solid var(--ink);
+  font-size: 13pt;
+}
+.deep-reading h2::before {
+  content: "深读";
+  display: inline-block;
+  margin-right: .6em;
+  color: var(--pine);
+  font-size: 8pt;
+  letter-spacing: .12em;
+  vertical-align: .2em;
+}
+.deep-reading .question { color: var(--ink-soft); border-left: 2pt solid var(--sand); padding-left: .8em; }
+
+/* Glossary and capability gates */
+.glossary { break-before: page; }
+.glossary h1 { font-size: 21pt; }
+.glossary > p:first-of-type { color: var(--ink-soft); }
+.glossary h2 {
+  margin-top: 1.7em;
+  padding-top: .55em;
+  border-top: 1pt solid var(--ink);
+  font-size: 12.5pt;
+}
+.glossary table { font-size: 8.1pt; break-inside: auto; margin: .9em 0 1.4em; }
+.glossary th:first-child, .glossary td:first-child { width: 20%; }
+.glossary th:nth-child(3), .glossary td:nth-child(3) { width: 31%; }
+.glossary td:first-child { color: var(--pine); font-family: "Cascadia Mono", "Consolas", monospace; font-size: .92em; white-space: nowrap; }
+.glossary tr { break-inside: avoid; }
+.glossary p { font-size: 9.8pt; }
+
+/* Back matter */
+.lab { border: .6pt solid var(--rule); border-left: 2pt solid var(--pine); padding: .9em 1em; margin: 1.2em 0; background: var(--card); }
+.lab h2 { margin-top: 0; }
+.quiz { border-top: 1.5pt solid var(--ink); margin-top: 1.6em; padding-top: .6em; }
+.answer { background: #f4efe4; padding: .8em 1em; margin: .8em 0; }
+.sources { border-top: .8pt solid var(--rule); font-size: 8.6pt; color: var(--ink-soft); margin-top: 1.5em; padding-top: .55em; }
+.sources a { color: var(--ink-soft); }
+.mechanism-static img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.book-navigation, .book-section-navigation { font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+.book-navigation-start { margin: 0 0 1em; font-size: 8.2pt; color: var(--ink-soft); }
+.book-section-navigation { margin: -.2em 0 .8em; font-size: 8pt; color: var(--ink-soft); }
+.book-navigation-end { border-top: .6pt solid var(--rule); padding-top: .7em; margin-top: 1.5em; font-size: 8.5pt; }
+
+/* Screen and EPUB reflow */
+@page { size: A5; margin: 17mm 15mm 19mm; }
+
+@media screen {
+  html { background: #e9e3d6; }
+  body { max-width: 39em; padding: 2.4em 1.6em 4em; background: var(--paper); }
+  .cover-page img { max-width: 26em; }
+  .toc-line .toc-dots { border-bottom-style: dotted; }
+  .book-navigation, .book-section-navigation { display: none; }
+  .chapter { break-before: auto; }
+  .stage-plate img { max-width: 26em; }
+}
+@media screen and (max-width: 520px) {
+  body { padding: 1.4em 1.1em 3em; font-size: 1em; }
+  .cover-page img { max-width: 100%; }
+}
+
+@media print {
+  html, body { background: #ffffff; }
+  body { font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { color: var(--ink); }
+  .book-navigation, .book-section-navigation { display: none; }
+  .chapter, .stage-plate, .stage-intro, .deep-reading, .toc, .reading-guide, .title-page, .colophon { break-before: page; }
+  .cover-page { break-before: auto; }
+  .chapter-opener, h1, h2, h3 { break-after: avoid; }
+  figure img { max-height: 112mm; max-width: 100%; }
+  .stage-plate img { max-height: 158mm; max-width: 112mm; }
+  .book-map img { max-height: none; }
+  pre, table, blockquote, .lab { break-inside: avoid; }
+  .sources { break-inside: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

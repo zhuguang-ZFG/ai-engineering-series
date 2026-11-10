@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C12 请求、响应和数据约定 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details open><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html" aria-current="page">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C12-section-83d554a5e3">先修检查：文件、函数与错误处理</a></li><li class="toc-level-2"><a href="#C12-section-3398aebfcb">JSON 不是“带引号的文字”</a></li><li class="toc-level-2"><a href="#C12-section-2fb6a0cbb9">HTTP 的最小结构</a></li><li class="toc-level-2"><a href="#C12-section-2276f89b98">完整程序：本地请求实验室</a></li><li class="toc-level-2"><a href="#C12-section-31b3a6dd50">状态码与失败分支：把“未知”留在结果里</a></li><li class="toc-level-2"><a href="#C12-section-4c3cf2edf4">改一个条件：端口关掉，看“连接失败”与“500”的区别</a></li><li class="toc-level-2"><a href="#C12-section-8d37ccfa57">图与实验</a></li><li class="toc-level-2"><a href="#C12-section-934920737b">项目增量</a></li><li class="toc-level-2"><a href="#C12-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C12-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C12"><header class="chapter-opener"><p class="chapter-number">C12</p><p class="chapter-kicker">S3 · 能实现 / K3</p><h1>请求、响应和数据约定</h1><p class="chapter-abstract">用本地服务看清请求、响应、状态码、超时和“不知道对方有没有执行”。</p></header><p class="chapter-meta">先修：<a href="c11.html">C11</a> · <a href="stage-s3.html">S3 阶段导言</a></p><div class="article-body"><p>上一章的程序只会读本机文件。现在假设通知由另一个程序提供：你发送一个请求，对方返回一段 JSON。屏幕上可能出现 <code>200</code>、<code>401</code>、<code>404</code>、<code>500</code>，也可能什么都没回来。你要能分清“我的输入坏了”“我没有权限”“服务坏了”和“我不知道对方有没有执行”，而不是看到一段文字就当作成功。</p>
+<p>本章先在本机启动一个小服务，用 Python 标准库完成请求和响应，不联网、不注册账号。你会看到 JSON 的类型、HTTP 状态码、请求头、超时与未知状态。下一章才把同样的请求结构接到真实模型上。</p>
+<h2 id="C12-section-83d554a5e3" tabindex="-1">先修检查：文件、函数与错误处理</h2>
+<p>C11 的程序已经包含路径、函数、分支、循环和退出码。本章默认你会：</p>
+<ul>
+<li>用 <code>Path</code> 读写 UTF-8 文件；</li>
+<li>用 <code>try/except</code> 捕获特定异常，而不是 <code>except Exception: pass</code>；</li>
+<li>看懂 JSON 中的对象 <code>{}</code>、数组 <code>[]</code>、字符串、数字、布尔值和 <code>null</code>；</li>
+<li>从终端启动一个会持续运行的进程，并用 <code>Ctrl+C</code> 停止。</li>
+</ul>
+<p>如果“进程持续运行”不熟，先记住：服务程序启动后不会立刻退出，它在等请求；客户端是另一个终端里运行的一次性程序。两者可以不在同一个文件里，但本章为了便于复做，把它们放进同一个脚本，用线程启动服务。</p>
+<h2 id="C12-section-3398aebfcb" tabindex="-1">JSON 不是“带引号的文字”</h2>
+<p>先看一段合法 JSON：</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;notice-001&quot;,
+  &quot;fields&quot;: {&quot;活动&quot;: &quot;社区读书会&quot;, &quot;地点&quot;: null},
+  &quot;tags&quot;: [&quot;通知&quot;, &quot;核对&quot;],
+  &quot;verified&quot;: false,
+  &quot;revision&quot;: 3
+}
+</code></pre>
+<p><code>id</code> 是字符串，<code>revision</code> 是数字，<code>verified</code> 是布尔值，<code>fields</code> 是对象，<code>tags</code> 是数组，<code>地点</code> 的值是 <code>null</code>。这些类型在 Python 中分别对应 <code>str</code>、<code>int</code>/<code>float</code>、<code>bool</code>、<code>dict</code>、<code>list</code>、<code>None</code>。<code>json.loads()</code> 负责转换，<code>json.dumps()</code> 负责反向序列化。</p>
+<p>常见错误不是语法，而是类型假设：</p>
+<pre><code class="language-python">data = {&quot;revision&quot;: &quot;3&quot;}          # 字符串，不是数字
+if data[&quot;revision&quot;] &gt; 2:           # TypeError
+    ...
+</code></pre>
+<p>另一个常见错误是把整个对象当字符串比较。<code>json.dumps(a) == json.dumps(b)</code> 可能因为键顺序或空格不同而失败；要比较结构，应比较解析后的字段，或使用明确的规范化规则。</p>
+<p>UTF-8 还有一个容易混淆的点：<code>len(&quot;通知&quot;)</code> 是 2（两个 Unicode 码点），<code>len(&quot;通知&quot;.encode(&quot;utf-8&quot;))</code> 是 6（六个字节）。HTTP 的 <code>Content-Length</code> 计算的是字节数，不是字符数。发送中文时如果长度算错，服务可能只读到半截请求。</p>
+<h2 id="C12-section-2fb6a0cbb9" tabindex="-1">HTTP 的最小结构</h2>
+<p>一次 HTTP 请求大致包含：</p>
+<pre><code class="language-text">POST /echo HTTP/1.1
+Host: 127.0.0.1:8765
+Content-Type: application/json; charset=utf-8
+Content-Length: 42
+
+{&quot;message&quot;: &quot;地点缺失，需要回查&quot;}
+</code></pre>
+<p>第一行是方法、路径和协议版本；接着是请求头；空行之后是正文。响应类似：</p>
+<pre><code class="language-text">HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 57
+
+{&quot;status&quot;:&quot;ok&quot;,&quot;echo&quot;:{&quot;message&quot;:&quot;地点缺失，需要回查&quot;}}
+</code></pre>
+<p>状态码按大类读：</p>
+<ul>
+<li><code>2xx</code>：请求被接受并完成（例如 <code>200</code>、<code>201</code>、<code>204</code>）。</li>
+<li><code>3xx</code>：重定向；客户端要决定是否跟随，不能假装已经拿到最终资源。</li>
+<li><code>4xx</code>：请求方问题或权限问题（<code>400</code> 坏输入、<code>401</code> 未认证、<code>403</code> 无权限、<code>404</code> 路径不存在、<code>409</code> 冲突）。</li>
+<li><code>5xx</code>：服务端失败；这不等同于“请求没有到达”或“操作没有发生”。</li>
+</ul>
+<p><code>401</code> 和 <code>403</code> 不同：前者通常表示缺少或无效凭证，后者表示身份已识别但不允许。真实系统如何区分由服务方定义，客户端不能自行把 <code>403</code> 重试成成功。凭据放在环境变量或本地受控配置中，不写进仓库、不打印到日志、不发给无关服务。</p>
+<h2 id="C12-section-2276f89b98" tabindex="-1">完整程序：本地请求实验室</h2>
+<p>把下面代码保存为 <code>request_lab.py</code>。它启动一个只监听 <code>127.0.0.1</code> 的教学服务，然后依次发出正常请求、坏 JSON、缺少凭据、无权限路径、慢请求和连接失败。所有结果打印为 JSON，便于核对。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;本地 HTTP/JSON 教学实验室。只监听回环地址，不访问外网。&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import json
+import os
+import threading
+import time
+import urllib.error
+import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+HOST = &quot;127.0.0.1&quot;
+PORT = 8765
+TOKEN_ENV = &quot;TEACHING_TOKEN&quot;
+DEFAULT_TOKEN = &quot;local-teaching-only&quot;  # 仅用于本机实验，不是真实凭据
+
+
+class Handler(BaseHTTPRequestHandler):
+    server_version = &quot;TeachingLab/1.0&quot;
+
+    def log_message(self, fmt: str, *args: object) -&gt; None:
+        # 不打印请求头，避免把凭据写进终端记录。
+        print(f&quot;[server] {self.command} {self.path}&quot;)
+
+    def _send(self, status: int, payload: dict) -&gt; None:
+        body = json.dumps(payload, ensure_ascii=False).encode(&quot;utf-8&quot;)
+        self.send_response(status)
+        self.send_header(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;)
+        self.send_header(&quot;Content-Length&quot;, str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self) -&gt; None:
+        if self.path == &quot;/health&quot;:
+            self._send(200, {&quot;status&quot;: &quot;ok&quot;, &quot;service&quot;: &quot;teaching-lab&quot;})
+        elif self.path == &quot;/admin&quot;:
+            if not self._authorized():
+                self._send(403, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;forbidden&quot;})
+            else:
+                self._send(200, {&quot;status&quot;: &quot;ok&quot;, &quot;area&quot;: &quot;admin&quot;})
+        elif self.path == &quot;/slow&quot;:
+            time.sleep(2.0)
+            self._send(200, {&quot;status&quot;: &quot;ok&quot;, &quot;note&quot;: &quot;slow-response&quot;})
+        else:
+            self._send(404, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;not-found&quot;, &quot;path&quot;: self.path})
+
+    def do_POST(self) -&gt; None:
+        if self.path != &quot;/echo&quot;:
+            self._send(404, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;not-found&quot;, &quot;path&quot;: self.path})
+            return
+        length = int(self.headers.get(&quot;Content-Length&quot;, &quot;0&quot;))
+        raw = self.rfile.read(length)
+        if not self._authorized():
+            self._send(401, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;unauthorized&quot;})
+            return
+        try:
+            data = json.loads(raw.decode(&quot;utf-8&quot;))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            self._send(400, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;bad-json&quot;, &quot;detail&quot;: str(exc)})
+            return
+        if not isinstance(data, dict) or &quot;message&quot; not in data:
+            self._send(422, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;missing-message&quot;})
+            return
+        if not isinstance(data[&quot;message&quot;], str):
+            self._send(422, {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;message-must-be-string&quot;})
+            return
+        self._send(200, {&quot;status&quot;: &quot;ok&quot;, &quot;echo&quot;: data, &quot;bytes&quot;: len(raw)})
+
+    def _authorized(self) -&gt; bool:
+        expected = os.environ.get(TOKEN_ENV, DEFAULT_TOKEN)
+        return self.headers.get(&quot;Authorization&quot;) == f&quot;Bearer {expected}&quot;
+
+
+def start_server() -&gt; ThreadingHTTPServer:
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server
+
+
+def call(method: str, path: str, payload: dict | None = None,
+         token: str | None = None, timeout: float = 1.0) -&gt; dict:
+    url = f&quot;http://{HOST}:{PORT}{path}&quot;
+    body = None if payload is None else json.dumps(payload, ensure_ascii=False).encode(&quot;utf-8&quot;)
+    headers = {&quot;Content-Type&quot;: &quot;application/json; charset=utf-8&quot;} if body else {}
+    if token is not None:
+        headers[&quot;Authorization&quot;] = f&quot;Bearer {token}&quot;
+    request = urllib.request.Request(url, data=body, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read()
+            return {
+                &quot;ok&quot;: True,
+                &quot;status&quot;: response.status,
+                &quot;json&quot;: json.loads(raw.decode(&quot;utf-8&quot;)),
+                &quot;bytes&quot;: len(raw),
+            }
+    except urllib.error.HTTPError as exc:
+        raw = exc.read()
+        try:
+            parsed = json.loads(raw.decode(&quot;utf-8&quot;))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            parsed = {&quot;raw&quot;: raw.decode(&quot;utf-8&quot;, errors=&quot;replace&quot;)}
+        return {&quot;ok&quot;: False, &quot;status&quot;: exc.code, &quot;json&quot;: parsed, &quot;bytes&quot;: len(raw)}
+    except urllib.error.URLError as exc:
+        # 连接失败不一定等于服务端没有收到；这里只记录本机观察到的错误。
+        return {&quot;ok&quot;: False, &quot;status&quot;: None, &quot;error&quot;: f&quot;url-error: {exc.reason}&quot;}
+    except TimeoutError:
+        return {&quot;ok&quot;: False, &quot;status&quot;: None, &quot;error&quot;: &quot;client-timeout&quot;}
+
+
+def main() -&gt; int:
+    token = os.environ.get(TOKEN_ENV) or DEFAULT_TOKEN
+    server = start_server()
+    try:
+        cases = [
+            (&quot;健康检查&quot;, call(&quot;GET&quot;, &quot;/health&quot;)),
+            (&quot;正常回显&quot;, call(&quot;POST&quot;, &quot;/echo&quot;, {&quot;message&quot;: &quot;地点缺失&quot;}, token)),
+            (&quot;坏 JSON&quot;, call(&quot;POST&quot;, &quot;/echo&quot;, {&quot;message&quot;: &quot;x&quot;}, token)),
+            (&quot;缺少凭据&quot;, call(&quot;POST&quot;, &quot;/echo&quot;, {&quot;message&quot;: &quot;x&quot;})),
+            (&quot;无权限区域&quot;, call(&quot;GET&quot;, &quot;/admin&quot;, token=&quot;wrong-token&quot;)),
+            (&quot;超时&quot;, call(&quot;GET&quot;, &quot;/slow&quot;, timeout=0.2)),
+        ]
+        print(json.dumps({name: result for name, result in cases}, ensure_ascii=False, indent=2))
+    finally:
+        server.shutdown()
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">python request_lab.py
+</code></pre>
+<p>你会看到类似结果（端口被占用时先停止占用它的进程，或改 <code>PORT</code>）：</p>
+<pre><code class="language-json">{
+  &quot;健康检查&quot;: {&quot;ok&quot;: true, &quot;status&quot;: 200, &quot;json&quot;: {&quot;status&quot;: &quot;ok&quot;, &quot;service&quot;: &quot;teaching-lab&quot;}, &quot;bytes&quot;: 43},
+  &quot;正常回显&quot;: {&quot;ok&quot;: true, &quot;status&quot;: 200, &quot;json&quot;: {&quot;status&quot;: &quot;ok&quot;, &quot;echo&quot;: {&quot;message&quot;: &quot;地点缺失&quot;}, &quot;bytes&quot;: 27}, &quot;bytes&quot;: 66},
+  &quot;缺少凭据&quot;: {&quot;ok&quot;: false, &quot;status&quot;: 401, &quot;json&quot;: {&quot;status&quot;: &quot;error&quot;, &quot;error&quot;: &quot;unauthorized&quot;}, &quot;bytes&quot;: 44},
+  &quot;超时&quot;: {&quot;ok&quot;: false, &quot;status&quot;: null, &quot;error&quot;: &quot;client-timeout&quot;}
+}
+</code></pre>
+<p>上面的“坏 JSON”一项其实发送了合法 JSON：<code>{&quot;message&quot;: &quot;x&quot;}</code> 是合法对象。要真的测试坏 JSON，必须发送原始字节：</p>
+<pre><code class="language-python">def call_raw(body: bytes, token: str | None = None, timeout: float = 1.0) -&gt; dict:
+    request = urllib.request.Request(
+        f&quot;http://{HOST}:{PORT}/echo&quot;,
+        data=body,
+        headers={
+            &quot;Content-Type&quot;: &quot;application/json; charset=utf-8&quot;,
+            **({&quot;Authorization&quot;: f&quot;Bearer {token}&quot;} if token else {}),
+        },
+        method=&quot;POST&quot;,
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return {&quot;ok&quot;: True, &quot;status&quot;: response.status,
+                    &quot;json&quot;: json.loads(response.read().decode(&quot;utf-8&quot;))}
+    except urllib.error.HTTPError as exc:
+        return {&quot;ok&quot;: False, &quot;status&quot;: exc.code,
+                &quot;json&quot;: json.loads(exc.read().decode(&quot;utf-8&quot;))}
+</code></pre>
+<p>然后调用 <code>call_raw(b&#39;{&quot;message&quot;: &#39;, token)</code>，会得到 <code>400</code> 和 <code>bad-json</code>。这个细节说明：用 <code>json.dumps()</code> 构造的请求永远是合法 JSON，测试“坏输入”必须绕过序列化器。</p>
+<h2 id="C12-section-31b3a6dd50" tabindex="-1">状态码与失败分支：把“未知”留在结果里</h2>
+<p>把 <code>call()</code> 的返回分成四类：</p>
+<ol>
+<li><strong>成功</strong>：<code>status</code> 是 2xx，且响应 JSON 通过字段校验。仅状态码 200 不够；服务可能返回 <code>{&quot;status&quot;:&quot;error&quot;}</code>。</li>
+<li><strong>请求方错误</strong>：4xx。按错误码区分坏输入、未认证、无权限、路径不存在；不要自动重试所有 4xx。</li>
+<li><strong>服务端错误</strong>：5xx。可以按策略有限重试，但必须记录首次失败；重试可能造成重复执行，涉及写入时要使用幂等键。</li>
+<li><strong>未知</strong>：连接超时、连接中断、只收到部分响应。此时不能断言“没有执行”，也不能断言“执行成功”。真实系统需要服务端提供按请求 ID 查询的能力。</li>
+</ol>
+<p>本章的超时是本地 <code>2.0</code> 秒睡眠对 <code>0.2</code> 秒客户端超时的真实结果。它不是模拟分支，但也不是远程网络故障。</p>
+<h2 id="C12-section-4c3cf2edf4" tabindex="-1">改一个条件：端口关掉，看“连接失败”与“500”的区别</h2>
+<p>把客户端指向一个没有服务监听的端口：</p>
+<pre><code class="language-python">print(call(&quot;GET&quot;, &quot;/health&quot;, timeout=0.5))  # 先把 PORT 改成 8766 或不启动 server
+</code></pre>
+<p>你会得到 <code>URLError</code>/<code>ConnectionRefusedError</code>，<code>status</code> 为 <code>null</code>。这与服务返回 <code>500</code> 不同：前者说明连接层面没有建立，后者说明请求到达了服务并由服务报告失败。把两者都写成“服务错误”会丢失排查信息。</p>
+<p>再改一个条件：把 <code>Authorization</code> 头改成 <code>Bearer </code> 加空字符串。服务端返回 <code>401</code>，而不是 <code>200</code> 或 <code>500</code>。权限失败必须通过提供正确凭据或由授权方调整权限解决；不能通过关闭检查、伪造头或把错误吞掉来“通过”。</p>
+<h2 id="C12-section-8d37ccfa57" tabindex="-1">图与实验</h2>
+<p>下图专门画“请求已发出，但回执未收到”的状态。超时只说明客户端在等待窗口内没有拿到结果，不能推出对方没执行。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/timeout-receipt.svg" alt="超时后的未知回执"><figcaption>图：超时只代表“没等到回执”，不代表“没执行”；下一步是按任务号查询状态，重试前先看服务端的去重约定。本课没有远端副作用，流程为示意。</figcaption></figure>
+<p>旧的 <a href="tools.html">X08 工具调用</a> 实验把“模型建议、程序执行、回执、失败终态”分开显示。本章先把网络层的请求/响应对齐；C16 再把工具参数校验和执行回执接上。</p>
+<h2 id="C12-section-934920737b" tabindex="-1">项目增量</h2>
+<p>在你的练习目录新增 <code>service_contract.md</code>，写下：</p>
+<ul>
+<li>服务地址只允许回环地址；</li>
+<li>请求 JSON 的字段和类型；</li>
+<li>成功、坏输入、未认证、无权限、服务失败、超时各自的状态码和错误字段；</li>
+<li>凭据来自环境变量，日志不打印；</li>
+<li>客户端最多重试几次，哪些请求允许重试。</li>
+</ul>
+<p>这份约定是 C13 接真实模型、C16 做工具调用的基础。不要把“示例密钥”写进约定或仓库；<code>local-teaching-only</code> 只用于本机实验，见到它不能推断任何真实权限。</p>
+<h2 id="C12-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>用 <code>curl</code> 或 <code>Invoke-RestMethod</code> 分别请求 <code>/health</code>、<code>/echo</code>、<code>/admin</code>，记录状态码和响应体。比较 <code>curl -i</code> 与只看正文时你漏掉了什么。</li>
+<li>给 <code>/echo</code> 增加 <code>request_id</code> 必填字段（字符串、1–40 字符）。缺失返回 <code>422</code>，格式错误返回 <code>400</code>，成功时原样回显。写三个请求覆盖这三条路径。</li>
+<li>把客户端超时从 <code>0.2</code> 改成 <code>3.0</code>，观察 <code>/slow</code> 从超时变成成功；解释服务端是否因此“没有执行”。</li>
+<li>设计一个幂等键：同一个 <code>request_id</code> 重复提交两次，服务端只执行一次。说明为什么仅在客户端重试而不带幂等键不安全。</li>
+<li>读本章代码，找出至少两处“失败被当成成功”的风险，并改成显式错误。提示：<code>json.loads</code> 失败、<code>HTTPError</code> 之外的连接错误、字段存在但类型不对。</li>
+</ol>
+<p>答案与核对依据见 <a href="c12-answer.html">C12 答案</a>。</p>
+<h2 id="C12-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>本章服务与客户端为课程自建，使用 Python 标准库 <code>http.server</code> 与 <code>urllib</code>；只监听 <code>127.0.0.1</code>，不调用外部 API，不需要真实凭据。HTTP 语义以你所用 Python 版本和 RFC 9110 的公开定义为准；本章不展开代理、TLS、压缩、重定向细节。真实模型 API 的路径、状态码、鉴权头和计费字段由服务方文档定义，C13 会要求在调用前核对当前版本，不能把本章的本地约定当成任何供应商的合同。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c11.html">上一章 C11</a><a href="c12-answer.html">独立作答后核对</a><a href="c13.html">下一章 C13</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

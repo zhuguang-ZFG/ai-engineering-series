@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "product": "codex",
+  "version": "0.2.2",
+  "date": "2026-11-10",
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "title": {
+    "zh": "Codex CLI：执行边界与工程实践"
+  },
+  "subtitle": {
+    "zh": "跟做运费修复：配置、插件、审批与会话恢复 · 非官方"
+  },
+  "kicker": {
+    "zh": "Codex CLI · From prompt to patch"
+  },
+  "notice": {
+    "zh": "本书为独立技术分析与教程，与 OpenAI 无隶属关系。固定 Codex CLI 0.167.0；源码、实跑与未测范围分别标注。"
+  },
+  "epigraph": {
+    "zh": "从一行运费公式，读懂命令、插件与会话。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-codex",
+  "revisions_registry": "revisions-codex.json",
+  "subject_index_registry": "subject-index-codex.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "rust-v0.167.0",
+    "verified_windows": "codex-cli 0.167.0"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "跟做修复"
+      },
+      "body": {
+        "zh": "第 1 章先跑离线驱动，第 3 章复制运费项目，第 11 章手动修复；有模型配置后，再用新副本接第 14、17、18 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "开发扩展"
+      },
+      "body": {
+        "zh": "从第 12 章的运费技能、包结构与 Hook 输入输出开始，读懂处理器后再查信任和并发；命令规则与 MCP 分别见第 10、13 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "实现客户端"
+      },
+      "body": {
+        "zh": "沿第 4、5、7、15 章认识任务历史、流式事件和审批，再用固定 schema 检查客户端消息。"
+      }
+    }
+  ],
+  "front": {
+    "id": "codex-front",
+    "zh": "codex/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "codex-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "启动与状态"
+      },
+      "motto": {
+        "zh": "从终端启动，到重新接续一项任务。"
+      },
+      "goal": {
+        "zh": "核对本机程序、配置与项目说明，区分会话历史和工作树。"
+      },
+      "units": [
+        {
+          "id": "codex-ch01",
+          "zh": "codex/ch01.md"
+        },
+        {
+          "id": "codex-ch02",
+          "zh": "codex/ch02.md"
+        },
+        {
+          "id": "codex-ch03",
+          "zh": "codex/ch03.md"
+        },
+        {
+          "id": "codex-ch04",
+          "zh": "codex/ch04.md"
+        }
+      ]
+    },
+    {
+      "id": "codex-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "执行与边界"
+      },
+      "motto": {
+        "zh": "一条测试命令怎样成为本机操作。"
+      },
+      "goal": {
+        "zh": "沿请求、工具、审批和沙箱追踪执行，并用固定规则检查命令参数。"
+      },
+      "units": [
+        {
+          "id": "codex-ch05",
+          "zh": "codex/ch05.md"
+        },
+        {
+          "id": "codex-ch06",
+          "zh": "codex/ch06.md"
+        },
+        {
+          "id": "codex-ch07",
+          "zh": "codex/ch07.md"
+        },
+        {
+          "id": "codex-ch08",
+          "zh": "codex/ch08.md"
+        },
+        {
+          "id": "codex-ch09",
+          "zh": "codex/ch09.md"
+        },
+        {
+          "id": "codex-ch10",
+          "zh": "codex/ch10.md"
+        }
+      ]
+    },
+    {
+      "id": "codex-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "修改与扩展"
+      },
+      "motto": {
+        "zh": "修好一行公式，再把检查方法做成扩展。"
+      },
+      "goal": {
+        "zh": "先修复运费公式，再把检查步骤写成技能，运行 Hook 处理器并查看插件包。"
+      },
+      "units": [
+        {
+          "id": "codex-ch11",
+          "zh": "codex/ch11.md"
+        },
+        {
+          "id": "codex-ch12",
+          "zh": "codex/ch12.md"
+        },
+        {
+          "id": "codex-ch13",
+          "zh": "codex/ch13.md"
+        }
+      ]
+    },
+    {
+      "id": "codex-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "自动化与交付"
+      },
+      "motto": {
+        "zh": "将运行结果交给脚本和客户端处理。"
+      },
+      "goal": {
+        "zh": "读取 JSONL、维护协议状态、整合并行修改，并从失败现场继续任务。"
+      },
+      "units": [
+        {
+          "id": "codex-ch14",
+          "zh": "codex/ch14.md"
+        },
+        {
+          "id": "codex-ch15",
+          "zh": "codex/ch15.md"
+        },
+        {
+          "id": "codex-ch16",
+          "zh": "codex/ch16.md"
+        },
+        {
+          "id": "codex-ch17",
+          "zh": "codex/ch17.md"
+        },
+        {
+          "id": "codex-ch18",
+          "zh": "codex/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "codex-apxa",
+      "zh": "codex/appendix-a.md"
+    },
+    {
+      "id": "codex-apxb",
+      "zh": "codex/appendix-b.md"
+    },
+    {
+      "id": "codex-apxc",
+      "zh": "codex/appendix-c.md"
+    },
+    {
+      "id": "codex-apxd",
+      "zh": "codex/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "codex-front": {
+      "question": {
+        "zh": "怎样让代理执行过程可检查、可恢复？"
+      },
+      "deliverable": {
+        "zh": "选好跟做路线，分清书籍仓库与运费副本各自运行哪些命令。"
+      },
+      "boundary": {
+        "zh": "固定源码、本机运行和读者实验分别标注；完整实验范围见附录 C。"
+      },
+      "plain": {
+        "zh": "这本书从命令、文件和会话的实际变化解释 Codex CLI，重点是让自动开发过程可检查、可恢复。"
+      },
+      "plain_evidence": [
+        "codex-front.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch01": {
+      "question": {
+        "zh": "当前终端究竟启动了哪个程序？"
+      },
+      "deliverable": {
+        "zh": "核对 CLI 入口，或先只用 Python 运行离线练习，再准备自己的项目副本。"
+      },
+      "boundary": {
+        "zh": "本机使用 Windows 发布程序；首次在线安装与模型会话未复验，见附录 C。"
+      },
+      "plain": {
+        "zh": "确认版本、入口、工作目录和运行身份，是使用 Codex CLI 的第一步；这些信息决定后面的配置与文件操作。"
+      },
+      "plain_evidence": [
+        "codex-ch01.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch02": {
+      "question": {
+        "zh": "如何沿一次任务读懂 Rust workspace？"
+      },
+      "deliverable": {
+        "zh": "沿命令输入、工具执行和结果返回，定位 Rust workspace 中的实现。"
+      },
+      "boundary": {
+        "zh": "源码导航解释实现职责，各平台运行范围见附录 C。"
+      },
+      "plain": {
+        "zh": "阅读 Codex 源码时，从入口追到会话、工具和结果，比按目录逐个浏览更容易建立因果关系。"
+      },
+      "plain_evidence": [
+        "codex-ch02.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch03": {
+      "question": {
+        "zh": "配置和项目指令分别在哪一层生效？"
+      },
+      "deliverable": {
+        "zh": "复制运费项目、复现失败并保留原始状态，再跟读配置与项目指令发现。"
+      },
+      "boundary": {
+        "zh": "配置解析和指令加载依据固定源码；真实模型是否采用这些说明仍需补测。"
+      },
+      "plain": {
+        "zh": "配置决定程序怎样运行，AGENTS.md 提供项目工作说明；项目被信任也不等于其中每条指令都能越过执行权限。"
+      },
+      "plain_evidence": [
+        "codex-ch03.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch04": {
+      "question": {
+        "zh": "恢复会话会恢复哪些状态？"
+      },
+      "deliverable": {
+        "zh": "将 thread、turn、item 与 Git 状态关联，准备恢复任务的记录。"
+      },
+      "boundary": {
+        "zh": "恢复请求已做静态形状检查，未在真实模型会话中运行，见附录 C。"
+      },
+      "plain": {
+        "zh": "恢复会话延续的是任务历史，分支会话复制的是对话起点；两者都应与 Git 工作树的实际状态分别核对。"
+      },
+      "plain_evidence": [
+        "codex-ch04.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch05": {
+      "question": {
+        "zh": "如何区分流式内容、工具活动和终态？"
+      },
+      "deliverable": {
+        "zh": "区分正文增量、工具活动与回合终态，理解 exec 和 app-server 的事件差别。"
+      },
+      "boundary": {
+        "zh": "本册未接入模型替身运行 Codex 会话；已有记录为源码与静态协议检查。"
+      },
+      "plain": {
+        "zh": "模型请求把任务历史、指令和工具描述组合起来；流式事件则逐步报告动作，只有明确终态才表示这一轮结束。"
+      },
+      "plain_evidence": [
+        "codex-ch05.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch06": {
+      "question": {
+        "zh": "命令怎样变成真实文件与进程操作？"
+      },
+      "deliverable": {
+        "zh": "运行子进程示例，读取 stdout、stderr、退出码和命令 item。"
+      },
+      "boundary": {
+        "zh": "示例用于讲解执行器；平台取消与完整模型调用尚未验证。"
+      },
+      "plain": {
+        "zh": "工具执行要经过参数解析、执行准备、策略判断、进程或补丁操作与结果收集；错误发生在哪一层，决定修复方法。"
+      },
+      "plain_evidence": [
+        "codex-ch06.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch07": {
+      "question": {
+        "zh": "审批与执行能力有什么区别？"
+      },
+      "deliverable": {
+        "zh": "对照规则、审批与执行结果，逐字段阅读命令审批请求。"
+      },
+      "boundary": {
+        "zh": "规则决策已实跑，审批消息做静态校验；界面、自动审查和管理 checkpoint 未实跑。"
+      },
+      "plain": {
+        "zh": "审批策略决定何时请求决定、由谁回应；它与沙箱执行能力、命令规则和 Hook 信任分别生效。"
+      },
+      "plain_evidence": [
+        "codex-ch07.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch08": {
+      "question": {
+        "zh": "沙箱范围怎样设计和验证？"
+      },
+      "deliverable": {
+        "zh": "为运费项目列出写入需求，用文件摘要设计范围内外的访问实验。"
+      },
+      "boundary": {
+        "zh": "文件探针是实验设计；本书未运行 Codex 的 OS 越界写入检查。"
+      },
+      "plain": {
+        "zh": "沙箱约束进程能够访问的文件与网络等能力；读写范围、审批和任务意图必须分别确认。"
+      },
+      "plain_evidence": [
+        "codex-ch08.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch09": {
+      "question": {
+        "zh": "哪些跨平台差异必须单独检查？"
+      },
+      "deliverable": {
+        "zh": "比较解释器、shell、路径与换行，保留可跨平台对照的结果。"
+      },
+      "boundary": {
+        "zh": "本机 CLI 记录来自 Windows，Linux/macOS 实测范围见附录 C。"
+      },
+      "plain": {
+        "zh": "Windows、Linux 与 macOS 的命令、路径和进程约束不同；跨平台结论需要逐个平台留下执行证据。"
+      },
+      "plain_evidence": [
+        "codex-ch09.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch10": {
+      "question": {
+        "zh": "命令前缀规则实际怎样匹配？"
+      },
+      "deliverable": {
+        "zh": "运行 review.rules，观察前缀、替代 token、冲突与无匹配结果。"
+      },
+      "boundary": {
+        "zh": "检查器只评价命令 token，不执行 Git；示例不覆盖全部 Git 发布方式。"
+      },
+      "plain": {
+        "zh": "执行规则按有序 token 匹配前缀，多条命中时取最严格决定；无匹配并不等于允许。"
+      },
+      "plain_evidence": [
+        "codex-ch10.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch11": {
+      "question": {
+        "zh": "怎样把代码差异变成可审阅结果？"
+      },
+      "deliverable": {
+        "zh": "在运费副本中手动修复一行公式，用原测试和 Git 差异核对结果。"
+      },
+      "boundary": {
+        "zh": "本地 Python 驱动已复验修复，未由 Codex 模型执行，见附录 C。"
+      },
+      "plain": {
+        "zh": "代理产生补丁之后，还需要核对差异、运行项目检查并保留基线；会话成功与代码正确是不同判断。"
+      },
+      "plain_evidence": [
+        "codex-ch11.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch12": {
+      "question": {
+        "zh": "技能、Hook、插件应该怎样分工？"
+      },
+      "deliverable": {
+        "zh": "将运费检查写成技能，沿包结构运行 Hook 输入输出，再回查匹配、信任与失败处理。"
+      },
+      "boundary": {
+        "zh": "处理器与 schema 已离线检查；宿主发现、信任和实际触发尚未实跑。"
+      },
+      "plain": {
+        "zh": "技能提供任务方法，Hook 在特定事件运行，插件把多类资源打包；安装、发现、信任与实际执行是四个不同阶段。"
+      },
+      "plain_evidence": [
+        "codex-ch12.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch13": {
+      "question": {
+        "zh": "外部服务的权限与失败由谁负责？"
+      },
+      "deliverable": {
+        "zh": "了解 MCP 连接、工具调用和断线恢复，并设计固定输入的测试服务。"
+      },
+      "boundary": {
+        "zh": "MCP 宿主实验尚未运行；本章按固定接口讲解接入与排错方法。"
+      },
+      "plain": {
+        "zh": "MCP 提供外部工具和资源接口，服务连接、认证、调用权限与业务副作用仍需要分别管理。"
+      },
+      "plain_evidence": [
+        "codex-ch13.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch14": {
+      "question": {
+        "zh": "脚本怎样判断代理任务真正完成？"
+      },
+      "deliverable": {
+        "zh": "先读离线 JSONL；准备真实任务时，从错误副本运行 exec 并保存原始输出。"
+      },
+      "boundary": {
+        "zh": "JSONL 是人工 fixture；完整模型任务需在读者环境运行。"
+      },
+      "plain": {
+        "zh": "非交互任务应同时保存退出码、事件与最终输出，并用项目检查验证实际改动，不能只读取最后一句答复。"
+      },
+      "plain_evidence": [
+        "codex-ch14.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch15": {
+      "question": {
+        "zh": "客户端如何正确维护协议状态？"
+      },
+      "deliverable": {
+        "zh": "校验七份协议消息，用状态表组织请求、通知、审批和恢复。"
+      },
+      "boundary": {
+        "zh": "已校验静态参数与结果形状，尚未建立真实 app-server 会话。"
+      },
+      "plain": {
+        "zh": "app-server 把会话能力暴露为请求与事件；客户端必须完成握手、关联标识、处理审批并等待回合终态。"
+      },
+      "plain_evidence": [
+        "codex-ch15.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch16": {
+      "question": {
+        "zh": "并行任务怎样避免相互覆盖？"
+      },
+      "deliverable": {
+        "zh": "划分文件责任与工作树，检查并行修改的接口、整合结果和取消现场。"
+      },
+      "boundary": {
+        "zh": "本章提供协作方法，不表示 Codex 自动分配文件所有权。"
+      },
+      "plain": {
+        "zh": "多个会话可以并行思考，但代码修改应有明确文件责任和独立工作状态；会话分支不能代替 Git 工作树隔离。"
+      },
+      "plain_evidence": [
+        "codex-ch16.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch17": {
+      "question": {
+        "zh": "失败后应该恢复还是重试？"
+      },
+      "deliverable": {
+        "zh": "接着第 14 章的不完整日志练习，回到项目确认公式与测试现状，再决定怎样继续。"
+      },
+      "boundary": {
+        "zh": "离线故障样本与真实任务分开记录；完整会话恢复尚待补测。"
+      },
+      "plain": {
+        "zh": "排错先确定失败阶段与已发生副作用，再选择恢复、重试或开始新任务；保存证据比盲目重跑更有用。"
+      },
+      "plain_evidence": [
+        "codex-ch17.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-ch18": {
+      "question": {
+        "zh": "怎样完成一项可交付修复？"
+      },
+      "deliverable": {
+        "zh": "带着手动或模型修复的结果核对交付；需要重做时，从新的错误副本开始。"
+      },
+      "boundary": {
+        "zh": "离线驱动已运行；真实模型、沙箱和完整插件宿主仍需各自实验。"
+      },
+      "plain": {
+        "zh": "完整工程任务把需求、基线、最小修改、实际检查和交付证据连起来；代理框架比较也应基于同一任务与明确边界。"
+      },
+      "plain_evidence": [
+        "codex-ch18.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-apxa": {
+      "question": {
+        "zh": "如何找到本书固定版本的实现？"
+      },
+      "deliverable": {
+        "zh": "查阅固定提交、二进制摘要和各章使用的源码入口。"
+      },
+      "boundary": {
+        "zh": "滚动文档用于补充当前用法，技术实现仍按所列固定提交阅读。"
+      },
+      "plain": {
+        "zh": "本书固定 Codex CLI 0.167.0 与完整源码提交；导航按问题组织，帮助读者从行为回到实现。"
+      },
+      "plain_evidence": [
+        "codex-apxa.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-apxb": {
+      "question": {
+        "zh": "该用哪个命令和选项？"
+      },
+      "deliverable": {
+        "zh": "按任务查找启动、权限、输出和规则检查选项。"
+      },
+      "boundary": {
+        "zh": "会话命令需要自己的模型与认证条件；本书已执行项在表中注明。"
+      },
+      "plain": {
+        "zh": "先按任务选择命令，再读取固定版本帮助；会写配置、启动模型或产生外部副作用的命令需要对应的运行条件。"
+      },
+      "plain_evidence": [
+        "codex-apxb.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-apxc": {
+      "question": {
+        "zh": "本册实际验证了哪些行为？"
+      },
+      "deliverable": {
+        "zh": "查阅命令、结果文件与未测项，复跑 CLI、离线练习和 schema 检查。"
+      },
+      "boundary": {
+        "zh": "三组检查各有范围，均未启动真实模型任务或验证 OS 沙箱。"
+      },
+      "plain": {
+        "zh": "本册完成了固定 Windows CLI 的规则与静态协议实验；模型任务、平台沙箱和外部服务实验没有被计入已验证结果。"
+      },
+      "plain_evidence": [
+        "codex-apxc.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    },
+    "codex-apxd": {
+      "question": {
+        "zh": "如何比较不同代理的相似概念？"
+      },
+      "deliverable": {
+        "zh": "对照常用术语，按发现、调用、状态和清理迁移扩展。"
+      },
+      "boundary": {
+        "zh": "跨册比较以各自固定版本和实验记录为准。"
+      },
+      "plain": {
+        "zh": "相似名称不保证相同契约；比较代理时，应逐项核对入口、状态、权限、错误与清理方式。"
+      },
+      "plain_evidence": [
+        "codex-apxd.b-opening"
+      ],
+      "sources": [
+        "codex-repo"
+      ]
+    }
+  }
+}

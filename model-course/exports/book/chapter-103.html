@@ -1,0 +1,2043 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HTML / CSS 布局体系 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 103 / 195</p><article><h1 id="html--css-布局体系">HTML / CSS 布局体系</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#htmlcss-布局基础">HTML/CSS 布局基础</a><ul><li><a href="#1-htmlcssjavascript-分别是什么">1. HTML、CSS、JavaScript 分别是什么</a></li><li><a href="#2-html网页的骨架">2. HTML：网页的骨架</a></li><li><a href="#3-css网页的皮肤">3. CSS：网页的皮肤</a></li><li><a href="#4-javascript网页的大脑">4. JavaScript：网页的大脑</a></li><li><a href="#5-三者的协作关系">5. 三者的协作关系</a></li><li><a href="#6-不认识的代码故障排查">6. 不认识的代码故障排查</a></li><li><a href="#7-名词速查表">7. 名词速查表</a></li><li><a href="#总结-18">总结</a></li></ul></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/html-css-layout.html">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<h2 id="htmlcss-布局基础">HTML/CSS 布局基础</h2>
+<blockquote>
+<p><strong>核心问题</strong>
+<strong>网页是怎么做出来的？为什么有的网页只有文字，有的却像应用一样可以交互？</strong> 这个问题会引出 Web 开发的三大基石，让你理解每一个网页背后的结构。</p>
+</blockquote>
+<h3 id="1-htmlcssjavascript-分别是什么">1. HTML、CSS、JavaScript 分别是什么</h3>
+<h4 id="11-从静态网页到动态应用-1">1.1 从静态网页到动态应用</h4>
+<p>想象一下你在街上看到的<strong>海报</strong>。你只能看，不能互动——海报不会因为你看了就改变内容，也不会因为你点了某个地方就弹出更多信息。</p>
+<p>早期的网页就是这样的&quot;电子海报&quot;：只能看、不能改、内容固定。</p>
+<p>但现代网页完全不同了。它们像<strong>桌面应用</strong>一样：</p>
+<ul>
+<li>你可以点击、拖拽、输入、上传</li>
+<li>页面会根据你的操作实时变化</li>
+<li>可以像软件一样完成复杂任务（比如在线视频剪辑）</li>
+</ul>
+<p><strong>这种转变的核心原因，就是网页技术的三大基石：HTML + CSS + JavaScript</strong>。</p>
+<h4 id="12-一个比喻盖房子">1.2 一个比喻：盖房子</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>技术</th>
+<th>🏠 房子比喻</th>
+<th>实际作用</th>
+<th>具体例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTML</strong></td>
+<td>房子的<strong>结构和材料</strong></td>
+<td>定义网页的内容和层级</td>
+<td>这是一面墙、这是一扇窗、这是一个房间</td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>房子的<strong>装修和外观</strong></td>
+<td>控制网页的样式和布局</td>
+<td>墙刷成蓝色、窗户放在东边、地板铺瓷砖</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>房子的<strong>电器和智能系统</strong></td>
+<td>让网页具备交互和逻辑</td>
+<td>按开关灯亮了、开门窗帘自动拉开</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>三者的关系</strong></p>
+</blockquote>
+<p><strong>HTML → CSS</strong>：先有房子，才能装修。HTML 是基础，CSS 是美化。</p>
+<p><strong>HTML + CSS → JavaScript</strong>：先有房子和装修，才能装智能系统。JavaScript 会让&quot;死&quot;的页面变&quot;活&quot;。</p>
+<p><strong>核心思想</strong>：三者各司其职，缺一不可。只有 HTML 的页面很丑，只有 HTML+CSS 的页面不能互动，三者齐全才能做出像微信网页版、淘宝这样的&quot;Web 应用&quot;。</p>
+<h4 id="13-动手试试看">1.3 动手试试看</h4>
+<p>👇 原课程的交互演示展示了 HTML/CSS/JavaScript 三者如何协作：</p>
+<h3 id="2-html网页的骨架">2. HTML：网页的骨架</h3>
+<h4 id="21-需要-html的原理">2.1 需要 HTML的原理</h4>
+<p>在 HTML 出现之前，互联网上的内容只是<strong>纯文本</strong>。就像你现在看的这段文字，没有任何格式、没有层级、没有链接。</p>
+<p>纯文本的问题是什么？</p>
+<ul>
+<li>❌ <strong>无法表达层级</strong>：分不清哪是标题、哪是正文、哪是注释</li>
+<li>❌ <strong>机器看不懂</strong>：搜索引擎、屏幕阅读器（盲人用）无法理解内容</li>
+<li>❌ <strong>无法交互</strong>：没有链接、没有按钮、没有输入框</li>
+</ul>
+<p><strong>HTML (HyperText Markup Language)</strong> 就是为了解决这个问题诞生的。它用&quot;标签&quot;（tag）来标记内容的含义，让浏览器知道&quot;这是什么&quot;。</p>
+<h4 id="22-html-代码长什么样">2.2 HTML 代码长什么样</h4>
+<p>HTML 的基本单位是&quot;标签&quot;（tag）。标签用尖括号 <code>&lt; &gt;</code> 包裹，成对出现：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;h1&gt;这是标题&lt;/h1&gt;
+&lt;p&gt;这是段落&lt;/p&gt;
+&lt;a href=&quot;url&quot;&gt;这是链接&lt;/a&gt;
+</code></pre>
+<p><strong>关键概念</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>解释</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>标签</strong></td>
+<td>用尖括号包裹的标记</td>
+<td><code>&lt;h1&gt;</code>、<code>&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+<td><strong>元素</strong></td>
+<td>标签 + 内容的整体</td>
+<td><code>&lt;h1&gt;标题&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+<td><strong>属性</strong></td>
+<td>标签上的附加信息</td>
+<td><code>href=&quot;url&quot;</code>、<code>class=&quot;card&quot;</code></td>
+</tr>
+<tr>
+<td><strong>嵌套</strong></td>
+<td>标签里再放标签</td>
+<td><code>&lt;div&gt;&lt;p&gt;文字&lt;/p&gt;&lt;/div&gt;</code></td>
+</tr>
+</tbody></table></div>
+<h4 id="23-看懂-html-代码的方法">2.3 看懂 HTML 代码的方法</h4>
+<blockquote>
+<p><strong>零基础必读：看代码的方法</strong></p>
+</blockquote>
+<p>很多新手看到一堆 <code>&lt;xxx&gt;</code> 就晕了。其实看 HTML 代码有<strong>固定套路</strong>：</p>
+<p><strong>第一步：找&quot;最外层&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;div class=&quot;card&quot;&gt;        ← 这是容器，里面装着内容
+  &lt;h2&gt;标题&lt;/h2&gt;
+  &lt;p&gt;描述文字&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>第二步：看标签名猜含义</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>标签名</th>
+<th>一眼记住</th>
+<th>里面放什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;div&gt;</code></td>
+<td>大盒子</td>
+<td>任何内容，用来分组</td>
+</tr>
+<tr>
+<td><code>&lt;span&gt;</code></td>
+<td>小盒子</td>
+<td>文字片段，用来标记</td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;</code></td>
+<td>段落</td>
+<td>一段文字</td>
+</tr>
+<tr>
+<td><code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code></td>
+<td>标题</td>
+<td>标题文字，数字越小越重要</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td>锚点/链接</td>
+<td>可点击跳转的内容</td>
+</tr>
+<tr>
+<td><code>&lt;img&gt;</code></td>
+<td>图片</td>
+<td>不放内容，用 src 指向图片</td>
+</tr>
+<tr>
+<td><code>&lt;button&gt;</code></td>
+<td>按钮</td>
+<td>可点击的文字/图标</td>
+</tr>
+<tr>
+<td><code>&lt;input&gt;</code></td>
+<td>输入框</td>
+<td>不放内容，用户输入的地方</td>
+</tr>
+</tbody></table></div>
+<p><strong>第三步：看 class 和 id</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;div class=&quot;user-card&quot; id=&quot;user-123&quot;&gt;
+</code></pre>
+<ul>
+<li><code>class=&quot;user-card&quot;</code> → 这个元素的&quot;类型&quot;，CSS 可以批量选中</li>
+<li><code>id=&quot;user-123&quot;</code> → 这个元素的&quot;身份证号&quot;，唯一标识</li>
+</ul>
+<p><strong>第四步：缩进表示层级</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;body&gt;
+  &lt;header&gt;           ← 缩进表示 header 是 body 的孩子
+    &lt;nav&gt;            ← nav 是 header 的孩子
+      &lt;a&gt;首页&lt;/a&gt;    ← a 是 nav 的孩子
+    &lt;/nav&gt;
+  &lt;/header&gt;
+&lt;/body&gt;
+</code></pre>
+<h4 id="24-常用-html-标签速查">2.4 常用 HTML 标签速查</h4>
+<p><strong>结构标签</strong>（定义页面骨架）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;h1&gt;这是一级标题&lt;/h1&gt;
+&lt;h2&gt;这是二级标题&lt;/h2&gt;
+&lt;p&gt;这是一个段落&lt;/p&gt;
+&lt;div&gt;这是一个容器（用来分组）&lt;/div&gt;
+&lt;span&gt;这是行内容器（用来标记文字）&lt;/span&gt;
+</code></pre>
+<p><strong>链接与媒体</strong>（让页面丰富）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;a href=&quot;https://example.com&quot;&gt;点击这里跳转&lt;/a&gt;
+&lt;img src=&quot;photo.jpg&quot; alt=&quot;照片描述&quot; /&gt;
+&lt;video src=&quot;movie.mp4&quot; controls&gt;&lt;/video&gt;
+</code></pre>
+<p><strong>表单</strong>（收集用户输入）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;form&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;请输入用户名&quot; /&gt;
+  &lt;input type=&quot;password&quot; placeholder=&quot;请输入密码&quot; /&gt;
+  &lt;button type=&quot;submit&quot;&gt;登录&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p><strong>语义化标签</strong>（HTML5 新增，让页面含义更明确）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;header&gt;页面头部&lt;/header&gt;
+&lt;nav&gt;导航栏&lt;/nav&gt;
+&lt;main&gt;主要内容区&lt;/main&gt;
+&lt;article&gt;一篇文章&lt;/article&gt;
+&lt;aside&gt;侧边栏&lt;/aside&gt;
+&lt;footer&gt;页脚&lt;/footer&gt;
+</code></pre>
+<blockquote>
+<p><strong>为什么要用语义化标签？</strong></p>
+</blockquote>
+<p><code>&lt;div class=&quot;header&quot;&gt;</code> 和 <code>&lt;header&gt;</code> 看起来效果一样，为什么要用后者？</p>
+<ol>
+<li><strong>SEO 友好</strong>：搜索引擎能更好理解页面结构</li>
+<li><strong>可访问性</strong>：屏幕阅读器能快速定位&quot;导航&quot;&quot;主要内容&quot;等区域</li>
+<li><strong>代码可读性</strong>：看到 <code>&lt;header&gt;</code> 一眼就知道是头部</li>
+</ol>
+<p><strong>什么时候用 div？</strong> 当没有合适的语义标签时。比如一个纯装饰性的容器。</p>
+<h4 id="25-记住这么多-html-标签的方法">2.5 记住这么多 HTML 标签的方法</h4>
+<blockquote>
+<p><strong>新手困惑</strong></p>
+</blockquote>
+<p>&quot;HTML 标签有一百多个，怎么记得住？&quot;</p>
+<p><strong>答案是：不需要全部记住。</strong> 实际开发中，90% 的情况只用 20 个左右的标签。</p>
+<h4 id="按用途分类记忆">按用途分类记忆</h4>
+<p><strong>一、页面结构类（画骨架）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>记忆口诀</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;header&gt;</code></td>
+<td>头</td>
+<td>页面或区块的头部</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>导航</td>
+<td>导航链接区域</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>主体</td>
+<td>页面主要内容（每页只有一个）</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>文章</td>
+<td>独立的内容块（可以单独拿走还有意义）</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>章节</td>
+<td>有主题的内容分组</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>旁边</td>
+<td>侧边栏、补充内容</td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>脚</td>
+<td>页面或区块的底部</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：想象一张报纸——有报头（header）、目录（nav）、正文（main/article）、专栏（aside）、报脚（footer）。</p>
+<p><strong>二、内容标记类（说清楚是什么）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>记忆口诀</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code></td>
+<td>标题1-6</td>
+<td>标题层级，h1 最大最重要</td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;</code></td>
+<td>段落</td>
+<td>一段文字</td>
+</tr>
+<tr>
+<td><code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>/<code>&lt;li&gt;</code></td>
+<td>无序/有序/列表项</td>
+<td>列表</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td>锚点</td>
+<td>链接，跳转用</td>
+</tr>
+<tr>
+<td><code>&lt;img&gt;</code></td>
+<td>图片</td>
+<td>图片</td>
+</tr>
+<tr>
+<td><code>&lt;video&gt;</code>/<code>&lt;audio&gt;</code></td>
+<td>视频/音频</td>
+<td>多媒体</td>
+</tr>
+<tr>
+<td><code>&lt;strong&gt;</code>/<code>&lt;em&gt;</code></td>
+<td>强调/斜体强调</td>
+<td>语义化的强调</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：<code>&lt;a&gt;</code> 是 anchor（锚）的缩写，想象船抛锚停在一个地方，链接就是&quot;停&quot;到另一个页面。</p>
+<p><strong>三、表单交互类（收集用户输入）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>记忆口诀</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;form&gt;</code></td>
+<td>表单</td>
+<td>表单容器</td>
+</tr>
+<tr>
+<td><code>&lt;input&gt;</code></td>
+<td>输入</td>
+<td>各种输入框（type 决定类型）</td>
+</tr>
+<tr>
+<td><code>&lt;textarea&gt;</code></td>
+<td>文本区域</td>
+<td>多行文本输入</td>
+</tr>
+<tr>
+<td><code>&lt;select&gt;</code>/<code>&lt;option&gt;</code></td>
+<td>选择/选项</td>
+<td>下拉选择</td>
+</tr>
+<tr>
+<td><code>&lt;button&gt;</code></td>
+<td>按钮</td>
+<td>按钮</td>
+</tr>
+<tr>
+<td><code>&lt;label&gt;</code></td>
+<td>标签</td>
+<td>输入框的说明文字</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：<code>&lt;input&gt;</code> 的 type 属性决定它长什么样：</p>
+<ul>
+<li><code>type=&quot;text&quot;</code> → 文本框</li>
+<li><code>type=&quot;password&quot;</code> → 密码框</li>
+<li><code>type=&quot;email&quot;</code> → 邮箱框</li>
+<li><code>type=&quot;checkbox&quot;</code> → 复选框</li>
+<li><code>type=&quot;radio&quot;</code> → 单选框</li>
+</ul>
+<p><strong>四、容器类（分组用）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>记忆口诀</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;div&gt;</code></td>
+<td>大盒子</td>
+<td>块级容器，独占一行</td>
+</tr>
+<tr>
+<td><code>&lt;span&gt;</code></td>
+<td>小盒子</td>
+<td>行内容器，只占内容宽度</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：div = division（分区），span = span（跨度）。div 用来划分大区域，span 用来标记文字片段。</p>
+<h4 id="遇到不认识的标签怎么办">遇到不认识的标签怎么办？</h4>
+<p><strong>方法一：猜英文单词</strong></p>
+<p>很多标签是英文单词的缩写：</p>
+<ul>
+<li><code>&lt;abbr&gt;</code> = abbreviation（缩写）</li>
+<li><code>&lt;blockquote&gt;</code> = block quote（块引用）</li>
+<li><code>&lt;caption&gt;</code> = caption（标题/说明）</li>
+<li><code>&lt;figcaption&gt;</code> = figure caption（图片说明）</li>
+</ul>
+<p><strong>方法二：查 MDN</strong></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element">MDN HTML 元素参考</a> 有所有标签的详细说明。</p>
+<p><strong>方法三：问 AI</strong></p>
+<blockquote>
+<p>&quot;HTML 中的 <code>&lt;dl&gt;</code> 标签是什么意思？什么时候用？&quot;</p>
+</blockquote>
+<h4 id="不用刻意背标签">不用刻意背标签</h4>
+<p><strong>实际的工作流程</strong>：</p>
+<ol>
+<li>你知道要用一个&quot;容器&quot; → 写 <code>&lt;div&gt;</code></li>
+<li>后来发现这是&quot;导航区域&quot; → 改成 <code>&lt;nav&gt;</code></li>
+<li>后来发现这是&quot;独立文章&quot; → 改成 <code>&lt;article&gt;</code></li>
+</ol>
+<p><strong>先写出来，再优化语义</strong>。标签可以随时改，不用一开始就纠结用哪个。</p>
+<h3 id="3-css网页的皮肤">3. CSS：网页的皮肤</h3>
+<h4 id="31-需要-css的原理">3.1 需要 CSS的原理</h4>
+<p>想象你住进了一个<strong>毛坯房</strong>：有墙、有窗、有门，能住人，但是：</p>
+<ul>
+<li>墙是灰色的水泥，不好看</li>
+<li>插座和开关随便装，不美观</li>
+<li>没有家具，生活不方便</li>
+</ul>
+<p>只有 HTML 的网页就是这样：有内容、有结构，但<strong>丑</strong>、乱、不友好。</p>
+<p>CSS (Cascading Style Sheets) 就是网页的&quot;装修队&quot;。它不改变 HTML 的结构（不拆墙、不改门），只负责：</p>
+<ul>
+<li>🎨 <strong>刷墙</strong>：改变颜色、背景</li>
+<li>🖼️ <strong>挂画</strong>：添加边框、阴影、圆角</li>
+<li>🪑 <strong>摆家具</strong>：调整布局、间距、对齐</li>
+</ul>
+<h4 id="32-css-代码长什么样">3.2 CSS 代码长什么样</h4>
+<p>CSS 代码有固定格式：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">选择器 {
+  属性名: 属性值;
+  属性名: 属性值;
+}
+</code></pre>
+<p><strong>三种写法</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!-- 方式一：行内样式（临时测试用） --&gt;
+&lt;div style=&quot;color: red;&quot;&gt;红色文字&lt;/div&gt;
+
+&lt;!-- 方式二：内部样式（写在 HTML 文件里） --&gt;
+&lt;style&gt;
+  .red-text { color: red; }
+&lt;/style&gt;
+
+&lt;!-- 方式三：外部样式（独立 CSS 文件，推荐） --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot; /&gt;
+</code></pre>
+<h4 id="33-看懂-css-代码的方法">3.3 看懂 CSS 代码的方法</h4>
+<blockquote>
+<p><strong>零基础必读：看 CSS 的方法</strong></p>
+</blockquote>
+<p><strong>第一步：看选择器——&quot;给谁装修？&quot;</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标签选择器</td>
+<td><code>p { }</code></td>
+<td>所有 <code>&lt;p&gt;</code> 标签</td>
+</tr>
+<tr>
+<td>类选择器</td>
+<td><code>.card { }</code></td>
+<td>所有 <code>class=&quot;card&quot;</code> 的元素</td>
+</tr>
+<tr>
+<td>ID 选择器</td>
+<td><code>#header { }</code></td>
+<td>唯一的 <code>id=&quot;header&quot;</code> 元素</td>
+</tr>
+<tr>
+<td>后代选择器</td>
+<td><code>.card h2 { }</code></td>
+<td><code>.card</code> 里面的所有 <code>&lt;h2&gt;</code></td>
+</tr>
+<tr>
+<td>组合选择器</td>
+<td><code>.card, .box { }</code></td>
+<td><code>.card</code> 或 <code>.box</code> 都选中</td>
+</tr>
+</tbody></table></div>
+<p><strong>第二步：看属性——&quot;装修什么？&quot;</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性分类</th>
+<th>常见属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文字</td>
+<td><code>color</code>, <code>font-size</code>, <code>font-weight</code></td>
+<td>颜色、大小、粗细</td>
+</tr>
+<tr>
+<td>背景</td>
+<td><code>background</code>, <code>background-color</code></td>
+<td>背景色、背景图</td>
+</tr>
+<tr>
+<td>边框</td>
+<td><code>border</code>, <code>border-radius</code></td>
+<td>边框线、圆角</td>
+</tr>
+<tr>
+<td>间距</td>
+<td><code>margin</code>, <code>padding</code></td>
+<td>外边距、内边距</td>
+</tr>
+<tr>
+<td>布局</td>
+<td><code>display</code>, <code>flex</code>, <code>grid</code></td>
+<td>排列方式</td>
+</tr>
+</tbody></table></div>
+<p><strong>第三步：看值——&quot;装修成什么样？&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">.card {
+  width: 300px;        /* 固定宽度 */
+  padding: 16px;       /* 内边距 16 像素 */
+  border-radius: 8px;  /* 圆角 8 像素 */
+  background: #fff;    /* 白色背景 */
+}
+</code></pre>
+<p><strong>常见单位</strong>：</p>
+<ul>
+<li><code>px</code>：像素，固定大小</li>
+<li><code>%</code>：百分比，相对于父元素</li>
+<li><code>rem</code>：相对于根元素字体大小</li>
+<li><code>vw/vh</code>：相对于视口宽度/高度</li>
+</ul>
+<h4 id="34-选择器优先级">3.4 选择器优先级</h4>
+<p>如果一个元素同时被多个选择器选中，谁说了算？</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;p class=&quot;highlight&quot; id=&quot;special&quot;&gt;这段文字是什么颜色？&lt;/p&gt;
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">p { color: red; }             /* 优先级：1 */
+.highlight { color: yellow; } /* 优先级：10 */
+#special { color: blue; }     /* 优先级：100 */
+</code></pre>
+<p><strong>答案</strong>：蓝色。ID 选择器优先级最高，类选择器次之，标签选择器最低。</p>
+<p><strong>内联样式</strong>（写在 style 属性里）优先级是 1000，最高！</p>
+<h4 id="35-宽度对不上的原理">3.5 宽度对不上的原理</h4>
+<blockquote>
+<p><strong>真实场景</strong></p>
+</blockquote>
+<p>你做一个网页，要求三个卡片并排显示，每个卡片宽度 300px，容器总宽度 900px。你写了：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">.card { width: 300px; }
+</code></pre>
+<p>结果：<strong>第三个卡片掉到下一行了！</strong></p>
+<p><strong>为什么？</strong> 因为 <code>width: 300px</code> 只是内容宽度，你忘了算 padding 和 border。如果卡片有 <code>padding: 20px</code> 和 <code>border: 1px</code>，实际宽度是 342px，三个卡片就是 1026px，超出了容器！</p>
+<p>每个 HTML 元素在 CSS 中都被看作一个&quot;盒子&quot;，由四层组成。想象你在<strong>打包快递</strong>：内容是商品，padding 是气泡膜，border 是纸箱，margin 是箱子之间的间隔。</p>
+<p>👇 <strong>动手试试看</strong>：拖动滑块调节各层大小，观察盒模型的变化：</p>
+<p><strong>解决方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">.box {
+  box-sizing: border-box;  /* 让 width 包含 padding 和 border */
+  width: 200px;
+  padding: 10px;
+  border: 5px;
+}
+</code></pre>
+<p>这样，<code>width: 200px</code> 就是最终宽度，padding 和 border 会&quot;挤&quot;在里面。</p>
+<h4 id="36-让元素自动对齐的实现">3.6 让元素自动对齐的实现</h4>
+<p>Flexbox 是现代 CSS 最常用的布局方式。它让元素自动排列对齐，就像书架上的书会自动对齐一样。</p>
+<p>👇 <strong>动手试试看</strong>：切换方向、对齐方式，观察盒子如何排列：</p>
+<p><strong>Flex 核心概念</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display: flex</code></td>
+<td>开启 Flex 布局</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>flex-direction</code></td>
+<td>主轴方向</td>
+<td><code>row</code>（水平）、<code>column</code>（垂直）</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td>主轴对齐</td>
+<td><code>flex-start</code>、<code>center</code>、<code>space-between</code></td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td>交叉轴对齐</td>
+<td><code>stretch</code>、<code>center</code>、<code>flex-start</code></td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td>是否换行</td>
+<td><code>nowrap</code>、<code>wrap</code></td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>元素间距</td>
+<td><code>10px</code>、<code>1rem</code></td>
+</tr>
+</tbody></table></div>
+<h4 id="37-css-预处理器scsssass-与-less">3.7 CSS 预处理器：SCSS/SASS 与 LESS</h4>
+<blockquote>
+<p><strong>真实场景</strong></p>
+</blockquote>
+<p>你写了一个项目，CSS 文件有 2000 行。后来要改主题色，你发现：</p>
+<ul>
+<li>主色调 <code>#3b82f6</code> 出现了 50 次</li>
+<li>改一个颜色要全局搜索替换，还要担心漏改</li>
+<li>选择器写成 <code>.nav .nav-list .nav-item .nav-link</code> 又长又难维护</li>
+</ul>
+<p><strong>CSS 预处理器</strong>就是来解决这些问题的。它让 CSS 也能&quot;编程&quot;：有变量、有嵌套、能复用代码。</p>
+<h4 id="371-什么是-css-预处理器">3.7.1 什么是 CSS 预处理器？</h4>
+<p><strong>用人话解释</strong>：预处理器是一种&quot;更聪明的 CSS&quot;。你用更强大的语法写样式，然后它帮你编译成普通 CSS，浏览器就能正常识别了。</p>
+<p><strong>为什么要用？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>痛点</th>
+<th>原生 CSS</th>
+<th>预处理器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>颜色重复出现</td>
+<td>到处复制粘贴</td>
+<td>定义变量，一处修改全局生效</td>
+</tr>
+<tr>
+<td>选择器层级太深</td>
+<td>写成一长串</td>
+<td>嵌套语法，层级一目了然</td>
+</tr>
+<tr>
+<td>相同样式重复写</td>
+<td>复制粘贴</td>
+<td>混入（Mixin），像函数一样复用</td>
+</tr>
+</tbody></table></div>
+<h4 id="372-三大预处理器对比">3.7.2 三大预处理器对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>原生 CSS</th>
+<th><strong>SCSS/SASS</strong></th>
+<th><strong>LESS</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>变量写法</strong></td>
+<td><code>--primary</code></td>
+<td><code>$primary</code></td>
+<td><code>@primary</code></td>
+</tr>
+<tr>
+<td><strong>嵌套语法</strong></td>
+<td>❌ 不支持</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td><strong>混入（复用代码）</strong></td>
+<td>❌ 不支持</td>
+<td>✅ <code>@mixin</code></td>
+<td>✅ <code>.mixin()</code></td>
+</tr>
+<tr>
+<td><strong>学习难度</strong></td>
+<td>简单</td>
+<td>中等</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>流行程度</strong></td>
+<td>-</td>
+<td>⭐⭐⭐ 最流行</td>
+<td>⭐⭐ 较流行</td>
+</tr>
+</tbody></table></div>
+<p><strong>简单记忆</strong>：</p>
+<ul>
+<li><strong>SCSS</strong>：用 <code>$</code> 符号，Bootstrap 5 在用，生态最好</li>
+<li><strong>LESS</strong>：用 <code>@</code> 符号，和 CSS 的 <code>@media</code> 写法一致，容易上手</li>
+</ul>
+<h4 id="373-核心功能对比示例">3.7.3 核心功能对比示例</h4>
+<h4 id="1-变量一处修改全局生效">1. 变量：一处修改，全局生效</h4>
+<p><strong>场景</strong>：主题色 <code>#3b82f6</code> 在 20 个地方用到，要改成红色。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* 要改 20 处，容易漏 */
+.button { background: #3b82f6; }
+.link { color: #3b82f6; }
+.border { border-color: #3b82f6; }
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-scss">$primary: #3b82f6;
+
+.button { background: $primary; }
+.link { color: $primary; }
+.border { border-color: $primary; }
+/* 改 $primary 一处即可 */
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-less">@primary: #3b82f6;
+
+.button { background: @primary; }
+.link { color: @primary; }
+.border { border-color: @primary; }
+/* 改 @primary 一处即可 */
+</code></pre>
+<h4 id="2-嵌套层级关系一目了然">2. 嵌套：层级关系一目了然</h4>
+<p><strong>场景</strong>：导航栏里有多层结构。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* 写成一长串，难看出层级关系 */
+.navbar .nav-list .nav-item .nav-link { }
+.navbar .nav-list .nav-item .nav-link:hover { }
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-scss">.navbar {
+  .nav-list {
+    .nav-item {
+      .nav-link {
+        &amp;:hover { }  /* &amp; 表示父选择器 */
+      }
+    }
+  }
+}
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-less">.navbar {
+  .nav-list {
+    .nav-item {
+      .nav-link {
+        &amp;:hover { }
+      }
+    }
+  }
+}
+</code></pre>
+<h4 id="3-混入mixin复用代码片段">3. 混入（Mixin）：复用代码片段</h4>
+<p><strong>场景</strong>：多个按钮都需要&quot;居中显示&quot;的样式。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* 复制粘贴 3 次 */
+.btn-primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-secondary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-scss">@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary { @include center; }
+.btn-secondary { @include center; }
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-less">.center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary { .center(); }
+.btn-secondary { .center(); }
+</code></pre>
+<h4 id="374-如何选择">3.7.4 如何选择？</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>情况</th>
+<th>推荐选择</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>刚开始学，项目小</td>
+<td><strong>原生 CSS</strong>（先打好基础）</td>
+</tr>
+<tr>
+<td>项目用 Bootstrap 5</td>
+<td><strong>SCSS</strong>（Bootstrap 源码是 SCSS）</td>
+</tr>
+<tr>
+<td>团队熟悉 <code>@</code> 符号</td>
+<td><strong>LESS</strong>（和 CSS 的 <code>@media</code> 写法一致）</td>
+</tr>
+<tr>
+<td>需要复杂逻辑（循环、条件）</td>
+<td><strong>SCSS</strong>（功能更强大）</td>
+</tr>
+</tbody></table></div>
+<h4 id="375-在项目中使用">3.7.5 在项目中使用</h4>
+<p><strong>Vite 项目（最简单）</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 sass
+npm install -D sass
+
+# 直接使用 .scss 或 .less 文件
+</code></pre>
+<blockquote>
+<p><strong>新手建议</strong></p>
+</blockquote>
+<ol>
+<li><strong>先学好原生 CSS</strong>：预处理器只是&quot;语法糖&quot;，不懂 CSS 基础会越用越乱</li>
+<li><strong>小项目不用强上</strong>：CSS 不到 200 行，直接写 CSS 更简单</li>
+<li><strong>从 SCSS 开始</strong>：语法和 CSS 几乎一样，只是多了 <code>$</code> 变量</li>
+<li><strong>不要嵌套太深</strong>：超过 3 层会让代码难维护</li>
+</ol>
+<h4 id="376-不同技术栈的文件组织对比">3.7.6 不同技术栈的文件组织对比</h4>
+<p><strong>同样的项目，用不同技术栈，文件结构有什么不同？</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>my-website/
+├── index.html              # 页面结构
+├── about.html
+├── css/
+│   ├── reset.css           # 重置样式
+│   ├── layout.css          # 布局样式
+│   ├── components.css      # 组件样式
+│   └── style.css           # 主样式（可能上千行）
+├── js/
+│   └── main.js
+└── images/
+    └── logo.png
+</code></pre>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>CSS 集中在一个或几个文件</li>
+<li>改样式要来回切换 HTML 和 CSS 文件</li>
+<li>样式容易互相冲突</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── components/             # 组件文件夹
+│   ├── Button/
+│   │   ├── Button.vue      # 模板 + 样式 + 逻辑
+│   │   └── Button.test.js
+│   ├── Header/
+│   │   └── Header.vue
+│   └── Footer/
+│       └── Footer.vue
+├── views/                  # 页面文件夹
+│   ├── Home.vue
+│   └── About.vue
+├── App.vue                 # 根组件
+└── main.js                 # 入口文件
+</code></pre>
+<p><strong>Button.vue 内部结构</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-vue">&lt;template&gt;
+  &lt;button class=&quot;btn&quot;&gt;点击&lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default { name: &#39;Button&#39; }
+&lt;/script&gt;
+
+&lt;style scoped&gt;              &lt;!-- scoped 样式只影响当前组件 --&gt;
+.btn { background: #3b82f6; }
+&lt;/style&gt;
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── assets/
+│   └── styles/
+│       ├── _variables.scss     # 变量：颜色、间距等
+│       ├── _mixins.scss        # 混入：复用代码块
+│       ├── _functions.scss     # 函数：颜色计算等
+│       └── global.scss         # 全局样式入口
+├── components/
+│   ├── Button/
+│   │   └── Button.vue          # 组件内用 @import 引入变量
+│   └── Card/
+│       └── Card.vue
+├── views/
+│   ├── Home.vue
+│   └── About.vue
+├── App.vue
+└── main.js
+</code></pre>
+<p><strong>_variables.scss</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-scss">$primary: #3b82f6;
+$secondary: #64748b;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+</code></pre>
+<p><strong>Button.vue</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-vue">&lt;style scoped lang=&quot;scss&quot;&gt;
+@import &#39;@/assets/styles/variables&#39;;
+
+.btn {
+  background: $primary;      // 使用变量
+  padding: $spacing-md;
+}
+&lt;/style&gt;
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>src/
+├── components/
+│   ├── Button.vue          # 不需要 style 块
+│   ├── Card.vue
+│   └── Header.vue
+├── views/
+│   ├── Home.vue
+│   └── About.vue
+├── App.vue
+└── main.js
+
+# 配置文件（根目录）
+tailwind.config.js          # 主题配置
+tailwind.css                # 基础样式入口
+</code></pre>
+<p><strong>Button.vue</strong>（没有 style 块）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-vue">&lt;template&gt;
+  &lt;button class=&quot;bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded&quot;&gt;
+    点击
+  &lt;/button&gt;
+&lt;/template&gt;
+</code></pre>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>没有单独的样式文件</li>
+<li>类名就是样式（<code>bg-blue-500</code> = 蓝色背景）</li>
+<li>配置集中在 <code>tailwind.config.js</code></li>
+</ul>
+<p><strong>核心区别总结</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>技术栈</th>
+<th>样式文件位置</th>
+<th>主题管理</th>
+<th>代码复用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原生 HTML+CSS</td>
+<td>集中式 <code>css/</code> 文件夹</td>
+<td>搜索替换</td>
+<td>复制粘贴</td>
+</tr>
+<tr>
+<td>Vue + CSS</td>
+<td>分散在 <code>.vue</code> 组件内</td>
+<td>搜索替换</td>
+<td>复制粘贴</td>
+</tr>
+<tr>
+<td>Vue + SCSS</td>
+<td>组件内 + <code>styles/</code> 公共文件</td>
+<td>变量统一管理</td>
+<td>混入复用</td>
+</tr>
+<tr>
+<td>Vue + Tailwind</td>
+<td>无（类名里）</td>
+<td><code>tailwind.config.js</code></td>
+<td>类名组合</td>
+</tr>
+</tbody></table></div>
+<h4 id="38-记住这么多-css-属性的方法">3.8 记住这么多 CSS 属性的方法</h4>
+<blockquote>
+<p><strong>新手困惑</strong></p>
+</blockquote>
+<p>&quot;CSS 属性有好几百个，怎么记得住？&quot;</p>
+<p><strong>答案是：按用途分类，记住核心属性，其他的用到再查。</strong></p>
+<h4 id="按用途分类记忆-1">按用途分类记忆</h4>
+<p><strong>一、文字排版类（管文字长什么样）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>color</code></td>
+<td>颜色</td>
+<td><code>red</code>、<code>#fff</code>、<code>rgb(0,0,0)</code></td>
+</tr>
+<tr>
+<td><code>font-size</code></td>
+<td>字号</td>
+<td><code>16px</code>、<code>1rem</code>、<code>1.5em</code></td>
+</tr>
+<tr>
+<td><code>font-weight</code></td>
+<td>字重</td>
+<td><code>normal</code>、<code>bold</code>、<code>100</code>-<code>900</code></td>
+</tr>
+<tr>
+<td><code>font-family</code></td>
+<td>字体</td>
+<td><code>&quot;微软雅黑&quot;</code>、<code>sans-serif</code></td>
+</tr>
+<tr>
+<td><code>line-height</code></td>
+<td>行高</td>
+<td><code>1.5</code>、<code>24px</code></td>
+</tr>
+<tr>
+<td><code>text-align</code></td>
+<td>文字对齐</td>
+<td><code>left</code>、<code>center</code>、<code>right</code></td>
+</tr>
+<tr>
+<td><code>text-decoration</code></td>
+<td>文字装饰</td>
+<td><code>none</code>、<code>underline</code>、<code>line-through</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：想象你在 Word 里排版——改颜色、改大小、加粗、改字体、调行距、对齐、加下划线。</p>
+<p><strong>二、盒模型类（管元素占多大空间）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>width</code>/<code>height</code></td>
+<td>宽/高</td>
+<td><code>100px</code>、<code>50%</code>、<code>100vw</code></td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td>内边距</td>
+<td><code>10px</code>、<code>10px 20px</code></td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>外边距</td>
+<td><code>10px</code>、<code>auto</code>（居中用）</td>
+</tr>
+<tr>
+<td><code>border</code></td>
+<td>边框</td>
+<td><code>1px solid #ccc</code></td>
+</tr>
+<tr>
+<td><code>border-radius</code></td>
+<td>圆角</td>
+<td><code>4px</code>、<code>50%</code>（圆形）</td>
+</tr>
+<tr>
+<td><code>box-sizing</code></td>
+<td>盒模型</td>
+<td><code>border-box</code>（推荐）</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：padding 是&quot;内&quot;边距（内容到边框的距离），margin 是&quot;外&quot;边距（边框到其他元素的距离）。</p>
+<p><strong>简写规则</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* 四个值：上 右 下 左（顺时针） */
+padding: 10px 20px 15px 25px;
+
+/* 两个值：上下 左右 */
+padding: 10px 20px;
+
+/* 一个值：四个方向都一样 */
+padding: 10px;
+</code></pre>
+<p><strong>三、背景与边框类（管元素长什么样）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>background</code></td>
+<td>背景</td>
+<td><code>#fff</code>、<code>url(bg.jpg)</code>、<code>linear-gradient(...)</code></td>
+</tr>
+<tr>
+<td><code>background-color</code></td>
+<td>背景色</td>
+<td><code>#fff</code>、<code>rgba(0,0,0,0.5)</code></td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>背景图</td>
+<td><code>url(photo.jpg)</code></td>
+</tr>
+<tr>
+<td><code>background-size</code></td>
+<td>背景大小</td>
+<td><code>cover</code>、<code>contain</code>、<code>100%</code></td>
+</tr>
+<tr>
+<td><code>background-position</code></td>
+<td>背景位置</td>
+<td><code>center</code>、<code>top left</code></td>
+</tr>
+<tr>
+<td><code>box-shadow</code></td>
+<td>盒阴影</td>
+<td><code>0 2px 10px rgba(0,0,0,0.1)</code></td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>透明度</td>
+<td><code>0</code>-<code>1</code>（0 完全透明）</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：<code>background</code> 是简写，可以一次设置多个值：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">background: #fff url(bg.jpg) no-repeat center/cover;
+/*          颜色  图片      是否重复   位置/大小 */
+</code></pre>
+<p><strong>四、布局类（管元素怎么排列）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display</code></td>
+<td>显示方式</td>
+<td><code>block</code>、<code>inline</code>、<code>flex</code>、<code>grid</code>、<code>none</code></td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td>定位</td>
+<td><code>static</code>、<code>relative</code>、<code>absolute</code>、<code>fixed</code>、<code>sticky</code></td>
+</tr>
+<tr>
+<td><code>top</code>/<code>right</code>/<code>bottom</code>/<code>left</code></td>
+<td>四个方向</td>
+<td><code>10px</code>、<code>50%</code>（配合 position 使用）</td>
+</tr>
+<tr>
+<td><code>z-index</code></td>
+<td>层级</td>
+<td>数字越大越在上层</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>浮动</td>
+<td><code>left</code>、<code>right</code>（老方法，不推荐）</td>
+</tr>
+<tr>
+<td><code>overflow</code></td>
+<td>溢出处理</td>
+<td><code>visible</code>、<code>hidden</code>、<code>scroll</code>、<code>auto</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>position 记忆方法</strong>：</p>
+<ul>
+<li><code>static</code>：默认，正常流</li>
+<li><code>relative</code>：相对自己原来的位置偏移</li>
+<li><code>absolute</code>：相对最近的定位祖先元素定位</li>
+<li><code>fixed</code>：相对视口定位（滚动也不动）</li>
+<li><code>sticky</code>：滚动到一定位置后固定</li>
+</ul>
+<p><strong>五、Flexbox 布局类（一维布局神器）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display: flex</code></td>
+<td>开启 Flex</td>
+<td>容器变成 Flex 容器</td>
+</tr>
+<tr>
+<td><code>flex-direction</code></td>
+<td>方向</td>
+<td><code>row</code>（横向）、<code>column</code>（纵向）</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td>主轴对齐</td>
+<td>元素在主轴上怎么排</td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td>交叉轴对齐</td>
+<td>元素在交叉轴上怎么对齐</td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td>换行</td>
+<td><code>nowrap</code>、<code>wrap</code></td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>间隙</td>
+<td>元素之间的间距</td>
+</tr>
+<tr>
+<td><code>flex</code></td>
+<td>弹性</td>
+<td>子元素的伸缩比例</td>
+</tr>
+</tbody></table></div>
+<p><strong>记忆方法</strong>：</p>
+<ul>
+<li><code>justify</code> = 证明/对齐 → 主轴对齐</li>
+<li><code>align</code> = 排列/对齐 → 交叉轴对齐</li>
+</ul>
+<p><strong>六、动画过渡类（管元素怎么动）</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>记忆口诀</th>
+<th>常用值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>transition</code></td>
+<td>过渡</td>
+<td><code>all 0.3s ease</code></td>
+</tr>
+<tr>
+<td><code>transform</code></td>
+<td>变换</td>
+<td><code>translate(10px)</code>、<code>rotate(45deg)</code>、<code>scale(1.1)</code></td>
+</tr>
+<tr>
+<td><code>animation</code></td>
+<td>动画</td>
+<td><code>fadeIn 1s ease forwards</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>简写规则</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-css">/* transition: 属性 时长 缓动函数 延迟 */
+transition: all 0.3s ease 0s;
+
+/* transform 可以组合多个变换 */
+transform: translateX(10px) rotate(45deg) scale(1.1);
+</code></pre>
+<h4 id="遇到不认识的属性怎么办">遇到不认识的属性怎么办？</h4>
+<p><strong>方法一：猜英文单词</strong></p>
+<p>很多属性是英文单词或缩写：</p>
+<ul>
+<li><code>margin</code> = 边缘、余地</li>
+<li><code>padding</code> = 填充</li>
+<li><code>border</code> = 边界</li>
+<li><code>visibility</code> = 可见性</li>
+<li><code>cursor</code> = 光标</li>
+</ul>
+<p><strong>方法二：按场景联想</strong></p>
+<p>当你想实现某个效果时，想想&quot;关键词&quot;：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>我想...</th>
+<th>可能的属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>改颜色</td>
+<td><code>color</code>、<code>background-color</code>、<code>border-color</code></td>
+</tr>
+<tr>
+<td>改大小</td>
+<td><code>width</code>、<code>height</code>、<code>font-size</code></td>
+</tr>
+<tr>
+<td>改位置</td>
+<td><code>margin</code>、<code>position</code>、<code>top/left</code></td>
+</tr>
+<tr>
+<td>改间距</td>
+<td><code>padding</code>、<code>margin</code>、<code>gap</code></td>
+</tr>
+<tr>
+<td>隐藏元素</td>
+<td><code>display: none</code>、<code>visibility: hidden</code>、<code>opacity: 0</code></td>
+</tr>
+<tr>
+<td>居中</td>
+<td><code>margin: auto</code>、<code>text-align: center</code>、<code>justify-content: center</code></td>
+</tr>
+<tr>
+<td>加圆角</td>
+<td><code>border-radius</code></td>
+</tr>
+<tr>
+<td>加阴影</td>
+<td><code>box-shadow</code>、<code>text-shadow</code></td>
+</tr>
+<tr>
+<td>加动画</td>
+<td><code>transition</code>、<code>animation</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>方法三：查 MDN 或问 AI</strong></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference">MDN CSS 属性参考</a> 有所有属性的详细说明。</p>
+<blockquote>
+<p>&quot;CSS 中如何让文字只显示一行，超出部分用省略号？&quot;</p>
+</blockquote>
+<p><strong>方法四：用开发者工具&quot;偷师&quot;</strong></p>
+<p>看到喜欢的网页效果：</p>
+<ol>
+<li>右键 → &quot;检查&quot;</li>
+<li>选中元素，看 Styles 面板</li>
+<li>直接复制 CSS 属性</li>
+</ol>
+<h4 id="不用刻意背属性">不用刻意背属性</h4>
+<p><strong>实际的工作流程</strong>：</p>
+<ol>
+<li>你知道要&quot;居中&quot; → 搜索&quot;CSS 居中&quot;</li>
+<li>复制代码，改改数值</li>
+<li>用多了就记住了</li>
+</ol>
+<p><strong>推荐的学习路径</strong>：</p>
+<ol>
+<li><strong>先掌握盒模型</strong>：<code>width</code>、<code>height</code>、<code>padding</code>、<code>margin</code>、<code>border</code></li>
+<li><strong>再掌握 Flexbox</strong>：<code>display: flex</code>、<code>justify-content</code>、<code>align-items</code></li>
+<li><strong>然后掌握定位</strong>：<code>position</code>、<code>top/left</code>、<code>z-index</code></li>
+<li><strong>最后学动画</strong>：<code>transition</code>、<code>transform</code>、<code>animation</code></li>
+</ol>
+<p>其他属性用到再查，用多了自然就记住了。</p>
+<figure class="handdraw-figure">
+  <a class="figure-zoom" href="../../book/assets/handdraw/layout-system.svg" aria-label="打开大图：CSS 布局的四级台阶：盒模型、Flexbox、定位、动画，以及 300px 卡片被 padding 和 border 撑成 342px 的换算"><img src="../../book/assets/handdraw/layout-system.svg" alt="CSS 布局的四级台阶：盒模型、Flexbox、定位、动画，以及 300px 卡片被 padding 和 border 撑成 342px 的换算" loading="lazy"></a>
+  <figcaption><strong>CSS 属性几百个，值得先记的只有四级台阶。</strong>盒模型 → Flexbox → 定位 → 动画；卡片写 `width: 300px`，加上 `padding: 20px` 和 `border: 1px` 实际占 342px，三个就是 1026px，容器只有 900px，第三个卡片于是掉到下一行——一句 `box-sizing: border-box` 让 width 把 padding 和 border 包进去。<span class="figure-hint">点图查看原尺寸</span></figcaption>
+</figure><h3 id="4-javascript网页的大脑">4. JavaScript：网页的大脑</h3>
+<h4 id="41-需要-javascript的原理">4.1 需要 JavaScript的原理</h4>
+<p>只有 HTML + CSS 的网页，就像<strong>商店橱窗里的模特</strong>：</p>
+<ul>
+<li>✅ 看起来很漂亮（CSS）</li>
+<li>✅ 结构很清晰（HTML）</li>
+<li>❌ 但你跟它说话，它不会回应</li>
+<li>❌ 你按了按钮，什么也不会发生</li>
+</ul>
+<p><strong>JavaScript</strong> 让网页从&quot;橱窗模特&quot;变成&quot;真人&quot;：</p>
+<ul>
+<li>✅ 点击按钮，会弹出提示</li>
+<li>✅ 输入文字，会实时检查格式</li>
+<li>✅ 滚动页面，会加载更多内容</li>
+<li>✅ 提交表单，会显示&quot;正在提交...&quot;</li>
+</ul>
+<h4 id="42-javascript-代码长什么样">4.2 JavaScript 代码长什么样</h4>
+<p><strong>能力一：记住数据</strong>（变量）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">let userName = &#39;张三&#39;
+let isLoggedIn = true
+let cartCount = 5
+</code></pre>
+<p><strong>能力二：重复做事</strong>（函数）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">function sayHello(name) {
+  return &#39;你好，&#39; + name + &#39;！&#39;
+}
+
+console.log(sayHello(&#39;张三&#39;))  // 输出：你好，张三！
+</code></pre>
+<p><strong>能力三：响应事件</strong>（事件监听）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">button.addEventListener(&#39;click&#39;, function() {
+  alert(&#39;按钮被点击了！&#39;)
+})
+</code></pre>
+<p><strong>能力四：修改页面</strong>（DOM 操作）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">document.getElementById(&#39;title&#39;).textContent = &#39;新标题&#39;
+document.getElementById(&#39;box&#39;).style.background = &#39;red&#39;
+</code></pre>
+<h4 id="43-看懂-javascript-代码的方法">4.3 看懂 JavaScript 代码的方法</h4>
+<blockquote>
+<p><strong>零基础必读：看 JS 代码的方法</strong></p>
+</blockquote>
+<p><strong>第一步：找变量——&quot;记住了什么？&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const API_URL = &#39;https://api.example.com&#39;  // 常量，不会变
+let count = 0                                // 变量，会变
+const user = { name: &#39;张三&#39;, age: 25 }       // 对象，多个数据
+const items = [&#39;苹果&#39;, &#39;香蕉&#39;, &#39;橙子&#39;]        // 数组，列表数据
+</code></pre>
+<p><strong>第二步：找函数——&quot;能做什么？&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 函数名通常能猜出用途
+function handleClick() { }      // 处理点击
+function fetchData() { }        // 获取数据
+function validateForm() { }     // 验证表单
+</code></pre>
+<p><strong>第三步：找事件——&quot;什么时候触发？&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">button.addEventListener(&#39;click&#39;, handleClick)     // 点击时
+input.addEventListener(&#39;input&#39;, validateForm)     // 输入时
+window.addEventListener(&#39;scroll&#39;, loadMore)       // 滚动时
+</code></pre>
+<p><strong>第四步：找 DOM 操作——&quot;改了什么？&quot;</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">element.textContent = &#39;新内容&#39;     // 改文字
+element.classList.add(&#39;active&#39;)    // 加样式类
+element.style.display = &#39;none&#39;     // 隐藏元素
+parent.appendChild(child)          // 添加元素
+</code></pre>
+<h4 id="44-domjavascript-的页面操作方法">4.4 DOM：JavaScript 的页面操作方法</h4>
+<p>浏览器读取 HTML 代码后，不会把它们当成一堆字符串，而是在内存里把它们画成一棵&quot;树&quot;：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Document (文档)
+    ↓
+&lt;html&gt;
+    ├─&lt;head&gt;
+    │   └─&lt;title&gt;我的网页&lt;/title&gt;
+    └─&lt;body&gt;
+        ├─&lt;h1&gt;欢迎&lt;/h1&gt;
+        └─&lt;div class=&quot;card&quot;&gt;
+            ├─&lt;img src=&quot;photo.jpg&quot;&gt;
+            └─&lt;p&gt;一段文字&lt;/p&gt;
+</code></pre>
+<p>这棵树就叫 <strong>DOM 树</strong>。每个 HTML 标签都是这棵树上的一个&quot;节点&quot;。</p>
+<p><strong>怎么找到节点？</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 按 ID 找（最快，唯一）
+const element = document.getElementById(&#39;header&#39;)
+
+// 按选择器找（最常用）
+const element = document.querySelector(&#39;.card h2&#39;)    // 找第一个
+const elements = document.querySelectorAll(&#39;button&#39;)  // 找所有
+
+// 按关系找
+element.parentNode           // 找父节点
+element.children             // 找子节点
+element.nextElementSibling   // 找下一个兄弟
+</code></pre>
+<p><strong>性能警告</strong>：操作 DOM 是很贵的。每次修改 DOM，浏览器都要重新计算布局、重新绘制。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 低效：循环 1000 次，每次都操作 DOM
+for (let i = 0; i &lt; 1000; i++) {
+  document.body.appendChild(createDiv())
+}
+
+// ✅ 高效：先拼好，一次性插入
+const fragment = document.createDocumentFragment()
+for (let i = 0; i &lt; 1000; i++) {
+  fragment.appendChild(createDiv())
+}
+document.body.appendChild(fragment)
+</code></pre>
+<p>这也正是 <strong>Vue / React</strong> 等现代框架诞生的原因：它们在内存里玩&quot;虚拟 DOM&quot;，计算好最小修改量，最后才去动真正的 DOM。</p>
+<p>👇 <strong>动手试试看</strong>：DOM 操作的基本方法：</p>
+<h4 id="45-ecmascriptjavascript-的版本演进">4.5 ECMAScript：JavaScript 的版本演进</h4>
+<p><strong>ECMAScript</strong> 是 JavaScript 的&quot;标准说明书&quot;。浏览器厂商按照这个标准来实现 JavaScript 引擎。</p>
+<h4 id="为什么要有版本号">为什么要有版本号？</h4>
+<p>JavaScript 不是一成不变的。每年都会新增功能、修复问题。版本号告诉你&quot;这个浏览器支持哪些功能&quot;。</p>
+<h4 id="重要版本一览">重要版本一览</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>版本</th>
+<th>年份</th>
+<th>核心特性</th>
+<th>解决了什么问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ES5</strong></td>
+<td>2009</td>
+<td>严格模式、<code>forEach</code>/<code>map</code>/<code>filter</code></td>
+<td>规范化语言，增加数组方法</td>
+</tr>
+<tr>
+<td><strong>ES6/ES2015</strong></td>
+<td>2015</td>
+<td><code>let/const</code>、箭头函数、<code>class</code>、<code>Promise</code>、模块化</td>
+<td>最大的更新，现代 JS 的起点</td>
+</tr>
+<tr>
+<td><strong>ES2016</strong></td>
+<td>2016</td>
+<td><code>includes()</code>、<code>**</code> 幂运算</td>
+<td>小更新</td>
+</tr>
+<tr>
+<td><strong>ES2017</strong></td>
+<td>2017</td>
+<td><code>async/await</code>、<code>Object.entries()</code></td>
+<td>异步代码更易读</td>
+</tr>
+<tr>
+<td><strong>ES2018</strong></td>
+<td>2018</td>
+<td><code>...</code> 扩展运算符、<code>Promise.finally()</code></td>
+<td>对象和异步增强</td>
+</tr>
+<tr>
+<td><strong>ES2020</strong></td>
+<td>2020</td>
+<td>可选链 <code>?.</code>、空值合并 <code>??</code>、<code>BigInt</code></td>
+<td>安全访问嵌套属性</td>
+</tr>
+<tr>
+<td><strong>ES2021</strong></td>
+<td>2021</td>
+<td><code>replaceAll()</code>、逻辑赋值 <code>??=</code></td>
+<td>字符串和赋值增强</td>
+</tr>
+<tr>
+<td><strong>ES2022</strong></td>
+<td>2022</td>
+<td>顶层 <code>await</code>、<code>.at()</code> 索引</td>
+<td>模块异步加载更方便</td>
+</tr>
+</tbody></table></div>
+<h4 id="es6-最常用的新语法">ES6+ 最常用的新语法</h4>
+<p><strong>1. <code>let</code> 和 <code>const</code> 替代 <code>var</code></strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 旧写法：var 有变量提升，容易出 bug
+var name = &#39;张三&#39;
+if (true) {
+  var name = &#39;李四&#39;  // 覆盖了外面的 name
+}
+console.log(name)  // &#39;李四&#39;，不是预期的结果
+
+// ✅ 新写法：let 有块级作用域
+let name = &#39;张三&#39;
+if (true) {
+  let name = &#39;李四&#39;  // 只在这个 if 里有效
+}
+console.log(name)  // &#39;张三&#39;，符合预期
+
+// ✅ const：声明后不能重新赋值
+const PI = 3.14159
+PI = 3  // 报错！防止意外修改
+</code></pre>
+<p><strong>2. 箭头函数：更简洁的函数写法</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 旧写法
+const add = function(a, b) {
+  return a + b
+}
+
+// ✅ 新写法
+const add = (a, b) =&gt; a + b
+
+// 箭头函数的 this 绑定外层作用域
+const obj = {
+  name: &#39;张三&#39;,
+  // ❌ 普通函数：this 指向调用者
+  oldWay: function() {
+    setTimeout(function() {
+      console.log(this.name)  // undefined
+    }, 100)
+  },
+  // ✅ 箭头函数：this 继承自 obj
+  newWay: function() {
+    setTimeout(() =&gt; {
+      console.log(this.name)  // &#39;张三&#39;
+    }, 100)
+  }
+}
+</code></pre>
+<p><strong>3. 解构赋值：从对象/数组中提取数据</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 对象解构
+const user = { name: &#39;张三&#39;, age: 25, city: &#39;北京&#39; }
+const { name, age } = user  // 直接提取
+console.log(name)  // &#39;张三&#39;
+
+// 数组解构
+const colors = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;]
+const [first, second] = colors
+console.log(first)  // &#39;red&#39;
+
+// 函数参数解构
+function greet({ name, age }) {
+  console.log(`${name} 今年 ${age} 岁`)
+}
+greet(user)  // &#39;张三 今年 25 岁&#39;
+</code></pre>
+<p><strong>4. 模板字符串：字符串拼接不再痛苦</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 旧写法：一堆引号和加号
+const msg = &#39;用户 &#39; + name + &#39; 的年龄是 &#39; + age + &#39; 岁&#39;
+
+// ✅ 新写法：反引号 + ${}
+const msg = `用户 ${name} 的年龄是 ${age} 岁`
+
+// 还支持多行
+const html = `
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h2&gt;${name}&lt;/h2&gt;
+    &lt;p&gt;年龄：${age}&lt;/p&gt;
+  &lt;/div&gt;
+`
+</code></pre>
+<p><strong>5. <code>async/await</code>：异步代码像同步一样写</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// ❌ 回调地狱
+fetchUser(function(user) {
+  fetchOrders(user.id, function(orders) {
+    fetchDetails(orders[0].id, function(details) {
+      console.log(details)
+    })
+  })
+})
+
+// ✅ async/await
+async function getUserData() {
+  const user = await fetchUser()
+  const orders = await fetchOrders(user.id)
+  const details = await fetchDetails(orders[0].id)
+  console.log(details)
+}
+</code></pre>
+<p><strong>6. 可选链 <code>?.</code> 和空值合并 <code>??</code></strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const user = {
+  name: &#39;张三&#39;,
+  address: {
+    city: &#39;北京&#39;
+  }
+}
+
+// ❌ 旧写法：层层判断
+const street = user &amp;&amp; user.address &amp;&amp; user.address.street
+const streetName = street !== undefined ? street : &#39;未知&#39;
+
+// ✅ 新写法：可选链 + 空值合并
+const streetName = user?.address?.street ?? &#39;未知&#39;
+</code></pre>
+<blockquote>
+<p><strong>如何知道浏览器支持哪些特性？</strong></p>
+</blockquote>
+<ol>
+<li><strong>查兼容表</strong>：<a href="https://caniuse.com/">caniuse.com</a> 输入特性名</li>
+<li><strong>用构建工具</strong>：Babel 可以把新语法转成旧浏览器支持的代码</li>
+<li><strong>看目标用户</strong>：如果只支持现代浏览器，大部分 ES6+ 特性都能直接用</li>
+</ol>
+<h4 id="46-typescript给-javascript-加上类型约束">4.6 TypeScript：给 JavaScript 加上类型约束</h4>
+<h4 id="为什么需要-typescript">为什么需要 TypeScript？</h4>
+<p><strong>场景一：函数参数类型不确定</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// JavaScript
+function calculateTotal(price, quantity) {
+  return price * quantity
+}
+
+calculateTotal(100, 5)      // 500 ✅
+calculateTotal(&#39;100&#39;, 5)    // &#39;1005&#39; ❌ 字符串拼接，不是乘法
+calculateTotal(100, &#39;5&#39;)    // 500 ✅ 但这是运气好
+</code></pre>
+<p>JavaScript 不会告诉你参数类型错了，直到运行时才发现问题。</p>
+<p><strong>场景二：对象属性拼写错误</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// JavaScript
+const user = {
+  name: &#39;张三&#39;,
+  age: 25
+}
+
+console.log(user.nmae)  // undefined，拼写错误但不报错
+</code></pre>
+<p><strong>TypeScript 解决这些问题</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">// TypeScript
+interface User {
+  name: string
+  age: number
+}
+
+function greet(user: User) {
+  console.log(`你好，${user.name}`)
+  console.log(user.nmae)  // ❌ 编译时报错：属性 &#39;nmae&#39; 不存在
+}
+
+greet({ name: &#39;张三&#39;, age: 25 })        // ✅
+greet({ name: &#39;张三&#39;, age: &#39;25&#39; })      // ❌ 编译时报错：age 应该是 number
+greet({ name: &#39;张三&#39; })                 // ❌ 编译时报错：缺少 age
+</code></pre>
+<h4 id="typescript-的核心概念">TypeScript 的核心概念</h4>
+<p><strong>1. 基本类型</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">let name: string = &#39;张三&#39;
+let age: number = 25
+let isActive: boolean = true
+let anyValue: any = &#39;可以是任何类型&#39;  // 不推荐，失去类型检查的意义
+</code></pre>
+<p><strong>2. 接口（Interface）：定义对象结构</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">interface Product {
+  id: number
+  name: string
+  price: number
+  discount?: number  // 可选属性
+  readonly createdAt: Date  // 只读属性
+}
+
+const product: Product = {
+  id: 1,
+  name: &#39;iPhone 15&#39;,
+  price: 6999,
+  createdAt: new Date()
+}
+</code></pre>
+<p><strong>3. 类型别名（Type）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">type ID = string | number  // 联合类型
+type Status = &#39;pending&#39; | &#39;approved&#39; | &#39;rejected&#39;  // 字面量类型
+
+function updateStatus(id: ID, status: Status) {
+  // ...
+}
+
+updateStatus(1, &#39;approved&#39;)      // ✅
+updateStatus(&#39;abc&#39;, &#39;pending&#39;)   // ✅
+updateStatus(1, &#39;processing&#39;)    // ❌ &#39;processing&#39; 不是有效的 Status
+</code></pre>
+<p><strong>4. 泛型：可复用的类型</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">// 不用泛型：每个类型写一遍
+function getFirstNumber(arr: number[]): number {
+  return arr[0]
+}
+function getFirstString(arr: string[]): string {
+  return arr[0]
+}
+
+// 用泛型：一个函数搞定
+function getFirst&lt;T&gt;(arr: T[]): T {
+  return arr[0]
+}
+
+getFirst([1, 2, 3])        // 返回 number
+getFirst([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])  // 返回 string
+</code></pre>
+<h4 id="typescript-vs-javascript-对比">TypeScript vs JavaScript 对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JavaScript</th>
+<th>TypeScript</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型检查</td>
+<td>运行时才发现错误</td>
+<td>编译时就发现错误</td>
+</tr>
+<tr>
+<td>IDE 支持</td>
+<td>基础提示</td>
+<td>智能补全、重构、跳转定义</td>
+</tr>
+<tr>
+<td>学习曲线</td>
+<td>简单</td>
+<td>需要学习类型系统</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>小项目、原型</td>
+<td>大型项目、团队协作</td>
+</tr>
+<tr>
+<td>运行方式</td>
+<td>浏览器直接运行</td>
+<td>需要编译成 JavaScript</td>
+</tr>
+</tbody></table></div>
+<h4 id="实际开发中的-typescript">实际开发中的 TypeScript</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-typescript">// API 响应类型定义
+interface ApiResponse&lt;T&gt; {
+  code: number
+  message: string
+  data: T
+}
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+// 带类型的 API 请求
+async function fetchUser(id: number): Promise&lt;ApiResponse&lt;User&gt;&gt; {
+  const response = await fetch(`/api/users/${id}`)
+  return response.json()
+}
+
+// 使用时 IDE 会提示所有属性
+fetchUser(1).then(res =&gt; {
+  console.log(res.data.name)   // ✅ IDE 自动补全
+  console.log(res.data.nmae)   // ❌ 编译时报错
+})
+</code></pre>
+<blockquote>
+<p><strong>新手建议</strong></p>
+</blockquote>
+<ol>
+<li><strong>先学好 JavaScript</strong>：TypeScript 是 JS 的超集，不懂 JS 学 TS 会很痛苦</li>
+<li><strong>小项目不用强上 TS</strong>：类型定义会增加代码量，简单项目反而变复杂</li>
+<li><strong>从 JSDoc 开始过渡</strong>：在 JS 文件里写 <code>/** @type {User} */</code> 注释，体验类型提示</li>
+<li><strong>用 <code>any</code> 是妥协，不是解决方案</strong>：遇到类型问题先尝试解决，不要直接 <code>any</code></li>
+</ol>
+<h4 id="47-现代-javascript-开发工具链">4.7 现代 JavaScript 开发工具链</h4>
+<blockquote>
+<p><strong>为什么需要工具链？</strong></p>
+</blockquote>
+<p>浏览器只认识 HTML/CSS/JS。但现代开发中，我们会用：</p>
+<ul>
+<li><strong>TypeScript</strong>：浏览器不认识，需要编译成 JS</li>
+<li><strong>SCSS/Less</strong>：浏览器不认识，需要编译成 CSS</li>
+<li><strong>模块化</strong>：<code>import/export</code> 需要打包成一个文件</li>
+<li><strong>新语法</strong>：ES6+ 需要转译成旧浏览器支持的代码</li>
+</ul>
+<p>工具链就是把这些&quot;开发时用的代码&quot;转换成&quot;浏览器能运行的代码&quot;。</p>
+<p><strong>核心工具</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>作用</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Node.js</strong></td>
+<td>JavaScript 运行环境</td>
+<td>让 JS 可以脱离浏览器运行</td>
+</tr>
+<tr>
+<td><strong>npm/yarn/pnpm</strong></td>
+<td>包管理器</td>
+<td>下载别人写好的代码库</td>
+</tr>
+<tr>
+<td><strong>Vite/Webpack</strong></td>
+<td>构建工具</td>
+<td>把源代码打包成浏览器能运行的代码</td>
+</tr>
+<tr>
+<td><strong>Babel</strong></td>
+<td>编译器</td>
+<td>把新语法转成旧语法</td>
+</tr>
+<tr>
+<td><strong>ESLint</strong></td>
+<td>代码检查</td>
+<td>发现代码问题和风格不一致</td>
+</tr>
+</tbody></table></div>
+<p><strong>一个典型的开发流程</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 1. 初始化项目
+npm create vite@latest my-app -- --template vue-ts
+
+# 2. 安装依赖
+cd my-app
+npm install
+
+# 3. 开发模式（热更新）
+npm run dev
+
+# 4. 构建生产版本
+npm run build
+</code></pre>
+<h3 id="5-三者的协作关系">5. 三者的协作关系</h3>
+<h4 id="51-分工对比">5.1 分工对比</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>负责什么</th>
+<th>不做什么</th>
+<th>典型示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTML</strong></td>
+<td>定义结构与语义</td>
+<td>不负责样式/交互</td>
+<td><code>&lt;section&gt;&lt;h1&gt;标题&lt;/h1&gt;&lt;/section&gt;</code></td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>控制外观与布局</td>
+<td>不负责逻辑/数据</td>
+<td><code>.card { background: white; }</code></td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>处理交互与逻辑</td>
+<td>不负责结构定义</td>
+<td><code>button.onclick = () =&gt; alert()</code></td>
+</tr>
+</tbody></table></div>
+<h4 id="52-一个完整的协作示例">5.2 一个完整的协作示例</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    /* CSS：让卡片好看 */
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      max-width: 300px;
+    }
+    .card button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- HTML：定义卡片结构 --&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h2 id=&quot;title&quot;&gt;点击按钮&lt;/h2&gt;
+    &lt;button id=&quot;btn&quot;&gt;点我&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // JavaScript：让按钮能点击
+    const btn = document.getElementById(&#39;btn&#39;)
+    const title = document.getElementById(&#39;title&#39;)
+    
+    btn.addEventListener(&#39;click&#39;, function() {
+      title.textContent = &#39;已点击！&#39;
+      alert(&#39;标题已改变&#39;)
+    })
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="6-不认识的代码故障排查">6. 不认识的代码故障排查</h3>
+<h4 id="61-问-ai">6.1 问 AI</h4>
+<blockquote>
+<p>&quot;HTML 中的 <code>&lt;aside&gt;</code> 标签是什么意思？什么时候用？&quot;</p>
+<p>&quot;CSS 中的 <code>position: sticky</code> 是什么效果？&quot;</p>
+</blockquote>
+<h4 id="62-查-mdn">6.2 查 MDN</h4>
+<p><a href="https://developer.mozilla.org/">MDN Web Docs</a> 是最权威的 Web 技术文档。遇到不认识的标签、属性、方法，直接搜索即可。</p>
+<h4 id="63-浏览器开发者工具">6.3 浏览器开发者工具</h4>
+<ol>
+<li>右键点击页面元素 → &quot;检查&quot;</li>
+<li>在 <strong>Elements</strong> 面板看到 HTML 结构</li>
+<li>在 <strong>Styles</strong> 面板看到 CSS 样式</li>
+<li>在 <strong>Console</strong> 面板可以执行 JS 代码</li>
+</ol>
+<h4 id="64-常见-css-属性速查">6.4 常见 CSS 属性速查</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>看到这个</th>
+<th>它是干嘛的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display: flex</code></td>
+<td>开启弹性布局</td>
+</tr>
+<tr>
+<td><code>position: absolute</code></td>
+<td>绝对定位</td>
+</tr>
+<tr>
+<td><code>z-index: 100</code></td>
+<td>层级，数字大的在上面</td>
+</tr>
+<tr>
+<td><code>overflow: hidden</code></td>
+<td>超出部分隐藏</td>
+</tr>
+<tr>
+<td><code>cursor: pointer</code></td>
+<td>鼠标变成手型</td>
+</tr>
+<tr>
+<td><code>transition: all 0.3s</code></td>
+<td>动画过渡效果</td>
+</tr>
+<tr>
+<td><code>box-sizing: border-box</code></td>
+<td>让 width 包含 padding 和 border</td>
+</tr>
+</tbody></table></div>
+<h3 id="7-名词速查表">7. 名词速查表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>名词</th>
+<th>英文</th>
+<th>用人话解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTML</strong></td>
+<td>HyperText Markup Language</td>
+<td>超文本标记语言，用标签描述网页结构</td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>Cascading Style Sheets</td>
+<td>层叠样式表，控制颜色、布局、动画</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>JavaScript</td>
+<td>网页的编程语言，负责交互和逻辑</td>
+</tr>
+<tr>
+<td><strong>DOM</strong></td>
+<td>Document Object Model</td>
+<td>文档对象模型，用对象树表示页面</td>
+</tr>
+<tr>
+<td><strong>Flexbox</strong></td>
+<td>Flexible Box Layout</td>
+<td>一种一维布局方案，易于对齐与分布</td>
+</tr>
+<tr>
+<td><strong>盒模型</strong></td>
+<td>CSS Box Model</td>
+<td>元素从内容到外边距的层层盒子</td>
+</tr>
+<tr>
+<td><strong>SCSS</strong></td>
+<td>Sassy CSS</td>
+<td>CSS 预处理器，支持变量、嵌套、混入</td>
+</tr>
+<tr>
+<td><strong>TypeScript</strong></td>
+<td>TypeScript</td>
+<td>JavaScript 的超集，增加了类型系统</td>
+</tr>
+<tr>
+<td><strong>ES6</strong></td>
+<td>ECMAScript 2015</td>
+<td>JavaScript 的一个重要版本，新增很多语法</td>
+</tr>
+<tr>
+<td><strong>语义化</strong></td>
+<td>Semantic HTML</td>
+<td>使用有含义的标签（如 header）而不是 div</td>
+</tr>
+<tr>
+<td><strong>响应式</strong></td>
+<td>Responsive Design</td>
+<td>页面自动适配不同屏幕尺寸的设计</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-18">总结</h3>
+<p>现在你已经知道：<strong>HTML 定义骨架，CSS 负责颜值，JavaScript 赋予灵魂</strong>。</p>
+<p>这三者是 Web 开发的基石。理解了它们，你就能：</p>
+<ul>
+<li>看懂任何网页的源代码（右键 → &quot;查看网页源代码&quot;）</li>
+<li>修改别人的网页（浏览器 DevTools → Elements）</li>
+<li>开始学习前端框架（Vue/React），它们都是基于这三者的</li>
+</ul>
+<p><strong>下一步建议</strong>：</p>
+<ul>
+<li>如果你想快速做出网页，可以学习 <strong>Vue</strong> 或 React 框架</li>
+<li>如果你想深入理解 CSS，可以学习 <strong>Flexbox</strong> 和 Grid 布局</li>
+<li>如果你想提升代码质量，可以学习 <strong>TypeScript</strong></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-102.html">← 浏览器渲染管道</a><a rel="next" href="chapter-104.html">JavaScript 运行时 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,3 @@
+$ omp config get magicKeywords.enabled
+true
+exit=0

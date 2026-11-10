@@ -1,0 +1,61 @@
+{
+  "schema": "assistant-eval/1",
+  "description": "API 变体：从冻结清单复制，问题、期望与预算逐字保持一致，仅给四个实际调用模型的用例加 provider=api；其余边界用例仍在冻结清单本地运行。冻结清单 SHA-256 为 5255ec386cd139b139cb72645c1f9de2c35b1ba569d8175c5eb50ab263b805fd。",
+  "api_timeout": 15,
+  "budgets": {
+    "max_new_tokens": 192,
+    "max_prompt_tokens": 2048,
+    "max_steps": 3,
+    "max_tool_calls": 2,
+    "repair_attempts": 0,
+    "top_k": 3,
+    "min_score": 0.08,
+    "chunk_chars": 480,
+    "chunk_overlap": 80
+  },
+  "cases": [
+    {
+      "id": "normal-wind",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "provider": "api",
+      "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+      "expectStatus": "answered",
+      "expectCitationDocs": ["station-log"],
+      "note": "正常路径：回答必须引用值班记录原文。"
+    },
+    {
+      "id": "no-hit-coffee",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "provider": "api",
+      "question": "观测站的咖啡机保修期是多长时间？",
+      "expectStatus": "insufficient-evidence",
+      "note": "零命中：不调用生成模型，也不编造答案。"
+    },
+    {
+      "id": "conflict-closing",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "provider": "api",
+      "question": "冬季闭站时间到底是几点？",
+      "expectStatus": "conflict",
+      "note": "政策写 17:30，临时通知写 18:00；模型应报告冲突并引用两个文档。"
+    },
+    {
+      "id": "agent-calculator",
+      "reader": "student",
+      "mode": "agent",
+      "retriever": "keyword",
+      "provider": "api",
+      "question": "值班记录里 2026-10-03 的风速是 4.2 米每秒。如果连续 24 小时都保持这个风速，总行程是多少米？请用 calculator 计算 4.2*86400。",
+      "allowed_tools": ["calculator"],
+      "expectStatus": "answered",
+      "expectTool": "calculator",
+      "note": "模型自选工具的有界循环；工具回执必须作为 claim 的引用。"
+    }
+  ]
+}
