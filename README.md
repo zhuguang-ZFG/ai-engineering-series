@@ -4,9 +4,9 @@
 
 [打开系列书架](index.html) · [选择阅读路线](docs/reading-routes.md) · [整合记录](docs/integration/README.md) · [来源与许可](LICENSES.md)
 
-提示词册当前源码为 0.1.2，新增三张适合窄屏阅读的手绘图，并修正书中材料链接，详见[本轮阅读修订](docs/integration/prompt-0.1.2.md)。下面的下载记录对应前次 0.1.1 交付。
+提示词册当前源码为 0.1.2，新增三张适合窄屏阅读的手绘图，并修正书中材料链接，详见[本轮阅读修订](docs/integration/prompt-0.1.2.md)。
 
-[PR #1](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/1) 已合并，合并提交 `f09bca1` 的 [main 检查](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42882355610)通过。[完整构建](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268)的五个任务全部通过，可直接下载[提示词 0.1.1 阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268/artifacts/13794072343)或[大模型课程阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268/artifacts/13793988383)，解压后打开包内 `index.html`。阅读包包含 HTML、PDF、EPUB；提示词包还含独立练习 ZIP。验证范围和报告见[发布记录](docs/integration/release-20261111.md)。
+[PR #2](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/2) 已合并，测试提交 `6f47476` 与合并提交 `f24ef4e` 的文件树一致，合并后的 [main 检查](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42900801463)通过。[完整构建](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42898554763)的五个任务全部通过，可直接下载[提示词 0.1.2 阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42898554763/artifacts/13802617099)或[大模型课程阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42898554763/artifacts/13801274311)，解压后打开包内 `index.html`。阅读包包含 HTML、PDF、EPUB；提示词包还含独立练习 ZIP，另有[提示词 EPUBCheck 报告](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42898554763/artifacts/13802651925)。验证范围与云端交付数据见[本轮阅读修订](docs/integration/prompt-0.1.2.md)；0.1.1 的交付记录保留在[发布记录](docs/integration/release-20261111.md)。
 
 ![跨书选读路线：从课程或具体任务进入，整理材料，按需实践工具，再核验结果；课程先修要求与阶段作业仍按原课程执行。](assets/series-map.svg)
 
