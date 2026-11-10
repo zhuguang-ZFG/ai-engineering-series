@@ -109,7 +109,7 @@
 <p>一次只改一个因素，才能把差异归因到检索器。若同时改查询、切块和模型，你无法判断是哪一项造成结果变化。</p>
 <h2 id="C15-section-8d37ccfa57" tabindex="-1">图与实验</h2>
 <p>下图把失败拆成两条路：一条是资料根本没被取回，另一条是取回了却被错误使用。先判断失败发生在哪条路，再改对应环节。</p>
-<p><img src="../../book/assets/handdraw/llm/retrieval-failures.svg" alt="检索失败的两条路径"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/retrieval-failures.svg" alt="检索失败的两条路径"><figcaption>图：检索失败分两条路。没取回相关片段，先查查询、切块和取回数量；取回了却用错，先查引用与主张是否真正对应。两种失败修法不同。</figcaption></figure>
 <p>旧的 <a href="retrieval.html">X07 检索与生成</a> 实验可以改查询、片段大小与取回数量，观察实际进入上下文的内容；它的检索器是教学词项实现，不是 embedding。</p>
 <h2 id="C15-section-934920737b" tabindex="-1">项目增量</h2>
 <p>在你的项目中保存：</p>

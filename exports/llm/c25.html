@@ -125,8 +125,8 @@ comparison.lora.losses.before / after / delta_val / delta_test
 <li>需要逐条引用和最新事实：参数化记忆不适合作为唯一来源；保留检索与引用链。</li>
 </ul>
 <p>SFT 和偏好训练也不是一回事。SFT 用示范告诉模型“这样回答”；偏好训练用成对比较告诉模型“这两种回答里更偏好哪一种”。本课只做 SFT 和 LoRA，不执行偏好优化，也不把“礼貌”或“自信”当成事实正确。</p>
-<p><img src="../../book/assets/handdraw/llm/training-signals.svg" alt="G21 文本、示范与偏好是不同信号"></p>
-<p><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="G33 训练才改旋钮，推理只读取参数"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/training-signals.svg" alt="文本、示范与偏好是不同信号"><figcaption>图：文本、示范、偏好是三种不同信号：分别教“接下去”“这样答”“哪种更好”。标准本身错了，偏好训练也会照单奖励；角色模板只组织输入，不执行一次训练。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="训练才改旋钮，推理只读取参数"><figcaption>图：适配（SFT/LoRA）也只发生在训练一侧，沿损失更新参数；推理始终只读取参数。</figcaption></figure>
 <p>本地对照：<a href="training.html">X05 训练与推理</a>、<a href="assistant.html">L06 指令跟随</a>。注意 X05 是 bigram 分数表，L06 的演示回答是教学编写，不是本课 LoRA 的教师输出。</p>
 <h2 id="C25-section-14b1f96a96" tabindex="-1">改一个条件，看结论会不会变</h2>
 <ul>

@@ -275,7 +275,7 @@ PY
 <p>还有一个隐蔽失败：API 价格只提供输入价、没提供输出价，报告 <code>cost=null</code>；不要用输入价乘以全部 token。必须两个价格都有且 usage 完整才计算。</p>
 <h2 id="C22-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
 <p>下图强调开发、验证、留出的分工；C22 的比较只在验证集上进行，留出集留到最终决定。</p>
-<p><img src="../../book/assets/handdraw/llm/evaluation-split.svg" alt="同一验证集上比较，不用留出集调参"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/evaluation-split.svg" alt="同一验证集上比较，不用留出集调参"><figcaption>图：比较只在验证集上做，留出集留到最终决定；用留出集反复调参，它就失去了“没见过”的价值。</figcaption></figure>
 <p>旧实验 <a href="approaches.html">L11 方法选择</a> 用网页材料讨论提示、检索、工具和微调的适用条件；它不提供真实延迟/费用数据，也不能替代本章的实测表。</p>
 <h2 id="C22-section-7a2f6c8265" tabindex="-1">独立作业</h2>
 <ol>

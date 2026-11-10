@@ -1,6 +1,6 @@
 # 大模型：从入门到精通 · 实际进度
 
-更新：2026-11-09。按用户最新要求，主线为五阶段三十章：会使用 → 懂原理 → 能实现 → 会改进 → 独立交付。这里的“精通”对应五道能力门，不承诺读完即可掌握基础模型研究的所有领域。原《Vibe Coding 101》保留为编程实践补充。
+更新：2026-11-10。按用户最新要求，主线为五阶段三十章：会使用 → 懂原理 → 能实现 → 会改进 → 独立交付。这里的“精通”对应五道能力门，不承诺读完即可掌握基础模型研究的所有领域。原《Vibe Coding 101》保留为编程实践补充。
 
 **当前是技术试读版，完整 spec 尚未完成。** 三十章、分离答案、真实模型/训练/OCR 示例和网页/PDF/EPUB 已实现；程序能运行、构建通过与读者能独立完成课程是不同证据。
 
@@ -16,6 +16,7 @@
 | 主线与工程修订 | 恢复大模型主入口；C13/C15/C17 对齐实际抽取字段与限制；C30 修复包校验；完成扫描脚本及回归检查，已合并 | [迭代02](llm-learning-redesign/IMPLEMENTATION-02.md)、[PR #10](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/10)、[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42492449772) |
 | 上批抽取位置与对照 | source-extract/2 精确字符位置；0.5B 完整八题 copy/extract 均 4/8；C13/C14/C16/C17 修订；已合并为 327dd33 | [迭代03](llm-learning-redesign/IMPLEMENTATION-03.md)、[PR #11](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/11)、[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42503813403) |
 | 本批章节审校 | C11–C30 已有覆盖表；20 条本地模型命令、6 轮评测共 41 个用例执行及 HTTP/回滚实测完成；修正八章工程与说明错误，所有模型失败保留 | [实跑审校表](llm-learning-redesign/CHAPTER-RUN-04.md)、[章节原始结果](llm-learning-redesign/evidence/quality-04-chapter-models.json)、[迭代04](llm-learning-redesign/IMPLEMENTATION-04.md) |
+| 本批正文审校 | 去 AI 味按校准实修（客服腔/高频词清零、4 处整句装饰粗体解开，扫描 122 → 116，保留功能性强调）；c11–c30 共 27 处图补齐图注并清理 alt 内部编号，构建后为 figure/figcaption；`vectors.md`/`generation.md` 两处措辞；全部门禁通过 | `design/system/scan_deai.py` 复扫、`npm test`、`check:reading:llm`、`check:accessibility:llm`；电子书重导并重绑 EPUBCheck；`llm-course.epub`/`llm-course-answers.epub` 官方 EPUBCheck 5.3.0 零错误零警告，结果登记在 [llm-course-epubcheck.json](../deliverables/llm-course-epubcheck.json)、[llm-course-answers-epubcheck.json](../deliverables/llm-course-answers-epubcheck.json) |
 | 原书上一批发布 | 原书结构/阅读修订及机制图已合并，本地 main 同步至 `80d0513`；这是上一批证据 | [PR #9](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/9)、[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42489349958) |
 
 ## 尚未完成的 spec

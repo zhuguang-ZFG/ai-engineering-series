@@ -122,7 +122,7 @@ torch.save(payload, path)
 <li>本课 <code>model.py</code> 的实际实现与手算数值；手算部分不依赖运行结果。</li>
 <li>边界：本章的标量梯度、广播和保存检查都是教学规模。真实训练还要处理混合精度、设备、分布式、数据加载和更复杂的优化器状态；本课不声称这些都被覆盖。固定正弦位置是本实现的选择，不是“所有 Transformer 都如此”。</li>
 </ul>
-<p><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="G20 两候选分数按梯度更新"></p>
-<p><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="G33 训练才拧旋钮，推理只读参数"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="两候选分数按梯度更新"><figcaption>图：减去梯度后，水的分数从 50.0% 升到 59.9%，损失从 0.693 降到 0.513。这只是固定教学数字上的一步，不等于留出评测通过。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="训练才拧旋钮，推理只读参数"><figcaption>图：训练时看误差、沿梯度拧动参数旋钮；推理时只读取参数做预测，换提问不换旋钮。</figcaption></figure>
 <p>本地对照实验：<a href="training.html">X05 训练与推理</a>。它用的是 bigram 分数表，不是本章的 decoder；对照的是“预测—比较—更新”的动作，不是模型能力。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c22.html">上一章 C22</a><a href="c23-answer.html">独立作答后核对</a><a href="c24.html">下一章 C24</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

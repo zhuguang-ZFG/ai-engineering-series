@@ -338,7 +338,7 @@ python book/llm/examples/assistant/assistant.py inspect retrieve \
 <p>还有一种隐蔽错误：<code>answered</code> 且 <code>quote</code> 逐字存在，但 quote 只覆盖半句条件。例如材料写“灯会期间 12 月 1 日至 20 日调整为 18:00”，claim 只写“闭站时间 18:00”，丢掉日期范围。机械校验会通过，语义上却把临时规定当成永久规定。这属于<strong>最终语义复核</strong>，需要人读上下文，不是再跑一次检索就能发现。</p>
 <h2 id="C19-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
 <p>下图把“没有取回”和“取回了却仍答错”分开：前者要查查询、切块、排序和阈值，后者要查提示选择、模型、claim 和引用。</p>
-<p><img src="../../book/assets/handdraw/llm/retrieval-failures.svg" alt="答错了，资料在哪一步丢了？"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/retrieval-failures.svg" alt="答错了，资料在哪一步丢了？"><figcaption>图：失败先分路：没取回相关片段，查查询、切块、排序和阈值；取回了却仍答错，查提示选择、模型、claim 和引用。两种失败的修法不同。</figcaption></figure>
 <p>旧的 <a href="retrieval.html">L09 检索实验</a> 用网页预置材料演示“改变查询、切块和条数，看真正进入输入的材料与无结果分支”。它适合练习观察顺序，但不是本章真实助手的运行结果，也不提供你的模型性能数据。</p>
 <h2 id="C19-section-7a2f6c8265" tabindex="-1">独立作业</h2>
 <ol>

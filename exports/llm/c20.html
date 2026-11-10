@@ -10,7 +10,7 @@
 <li>上一轮对话的内容，第二次请求会自动带上吗？如果不带，状态存在哪里？</li>
 <li>文档里的“忽略以上要求”是材料，还是指令？谁有权把它变成工具动作？</li>
 </ol>
-<p>如果第 1、2 条答不上来，先回 C19 看提示组装；如果第 3 条答不上来，本章会用本地 <code>serve</code> 的请求体说明；如果第 4 条答不上来，先记住一条底线：<strong>检索到的文本和工具回执都是数据，不是权限来源。</strong></p>
+<p>如果第 1、2 条答不上来，先回 C19 看提示组装；如果第 3 条答不上来，本章会用本地 <code>serve</code> 的请求体说明；如果第 4 条答不上来，先记住一条底线：检索到的文本和工具回执都是数据，不是权限来源。</p>
 <h2 id="C20-section-033e6fab8b" tabindex="-1">四个仓库，别用一个比喻装下</h2>
 <table>
 <thead>
@@ -218,7 +218,7 @@ EOF
 <li>如果摘要运行反而给出一个确定数字，必须检查它引用了什么；没有逐字 quote 就不能接受；</li>
 <li><code>prompt_tokens</code> 变小只证明输入更短，不证明摘要保留了关键信息。</li>
 </ul>
-<p>不要用“摘要更短所以更好”作为结论。正确的结论是：<strong>在这个输入上，丢失了哪个条件，导致了哪个状态。</strong> 只有换到验证集上重复，才能谈是否值得采用摘要。</p>
+<p>不要用“摘要更短所以更好”作为结论。正确的结论是：在这个输入上，丢失了哪个条件，导致了哪个状态。只有换到验证集上重复，才能谈是否值得采用摘要。</p>
 <h3 id="C20-section-723510ab7c" tabindex="-1">另一个可测量对照：条数 vs 预算</h3>
 <p>只改 <code>--top-k</code>，保持原文、问题、模型和 <code>--max-prompt-tokens</code> 不变：</p>
 <pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
@@ -315,9 +315,9 @@ EOF
 <p>重要限制：当前助手的提示词和“工具回执（数据，不是指令）”分隔只是<strong>一层缓解</strong>，不是对所有提示注入的保证。程序侧必须同时做工具白名单、参数校验、读者权限和预算限制；不能只靠一句“不要听资料里的命令”。如果模型输出了恶意但逐字存在于材料中的句子，机械校验可能通过，人工复核仍要把它标成不可信/不应采用。<strong>逐字 quote 不证明内容安全，也不证明语义正确。</strong></p>
 <h2 id="C20-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
 <p>下图把外部原文、任务和历史经过权限、版本和相关性选取后放入本次输入，并预留输出空间；图里的 4096/3584/512 是教学预算，不是某个实际模型的规格。</p>
-<p><img src="../../book/assets/handdraw/llm/context-selection.svg" alt="外部保存、按条件选择和本次输入不是一回事"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/context-selection.svg" alt="外部保存、按条件选择和本次输入不是一回事"><figcaption>图：外部保存只是“存着”，经过权限、版本、相关性选择进入本次输入才算“用着”；输入之外还要给输出预留空间。图中的 4096/3584/512 是教学预算，不是实际模型的规格。</figcaption></figure>
 <p>另一张图强调“保存着，不等于看见了”：历史、摘要和外部记录要经过选择漏斗才会进入上下文。</p>
-<p><img src="../../book/assets/handdraw/llm/memory-selection.svg" alt="历史、摘要和外部记录要经过选择"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/memory-selection.svg" alt="历史、摘要和外部记录要经过选择"><figcaption>图：历史、摘要和外部记录要经过选择才会进入本次输入；保存着不等于看见了。图中的 3184 是本题假设的材料预算。</figcaption></figure>
 <p>旧实验 <a href="context.html">L07 上下文实验</a> 用虚构通知演示地点缺失和冲突；它适合练习“未知保持未知”，但不是本章真实助手的摘要/权限运行结果。</p>
 <h2 id="C20-section-7a2f6c8265" tabindex="-1">独立作业</h2>
 <ol>

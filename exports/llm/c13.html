@@ -100,7 +100,7 @@ python book/llm/examples/assistant/assistant.py run \
 <p>再改一个条件：把 <code>--reader</code> 换成没有权限的身份。预期是权限错误或可见范围缩小，不能因为“问题一样”就绕过权限。权限失败要通过授权或改用有权材料解决，不能把 <code>readers</code> 字段删掉求通过。</p>
 <h2 id="C13-section-8d37ccfa57" tabindex="-1">图与实验</h2>
 <p>下图把本次请求拆成“任务、材料、当前输入、输出预算”。模型只看到被选中的材料和问题；它看不到未检索到的文件，也不会因为文件在磁盘上就自动知道。</p>
-<p><img src="../../book/assets/handdraw/llm/context-workbench.svg" alt="上下文工作台"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/context-workbench.svg" alt="上下文工作台"><figcaption>图：模型只看见被选进本次输入的任务、材料和问题；未检索到的文件不会因为“在磁盘上”就自动可见。每项结论仍要回查原文，写得合理不等于有依据。</figcaption></figure>
 <p>旧的 <a href="tools.html">L10 工具执行</a> 实验展示了“模型说调用了”与“程序真的执行”之间的差别。C13 先不把工具接进来，只要求真实推理和引用；C16 再加入计算器与只读查找。</p>
 <h2 id="C13-section-2c42167d8d" tabindex="-1">失败反例：三种假成功</h2>
 <ol>

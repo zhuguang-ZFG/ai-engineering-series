@@ -80,7 +80,7 @@ python book/llm/examples/assistant/assistant.py run \
 <p>“模型说已经发送”不等于现实动作完成；只有带确认与回执的执行记录才算。</p>
 <h2 id="C16-section-8d37ccfa57" tabindex="-1">图与实验</h2>
 <p>下图把“模型提出调用、程序校验、执行、回执、继续或停止”画成一个环。失败线不回到成功线；预算耗尽和未知状态也要有自己的出口。</p>
-<p><img src="../../book/assets/handdraw/llm/tool-execution-loop.svg" alt="工具执行循环"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/tool-execution-loop.svg" alt="工具执行循环"><figcaption>图：从“说要计算”到“真的计算”：程序校验通过才执行，回执到手才算完成；失败、超时、取消都停在各自的终态，不回到成功线。图中的请求是预置示例，不是模型实测。</figcaption></figure>
 <h2 id="C16-section-a75364cd0e" tabindex="-1">改一个条件：固定流程 vs Agent</h2>
 <p>同一问题分别跑。先设置模型目录与问题，再分别执行完整命令：</p>
 <pre><code class="language-bash"># 替换为你本机的模型目录绝对路径

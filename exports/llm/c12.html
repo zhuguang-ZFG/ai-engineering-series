@@ -236,7 +236,7 @@ if __name__ == &quot;__main__&quot;:
 <p>再改一个条件：把 <code>Authorization</code> 头改成 <code>Bearer </code> 加空字符串。服务端返回 <code>401</code>，而不是 <code>200</code> 或 <code>500</code>。权限失败必须通过提供正确凭据或由授权方调整权限解决；不能通过关闭检查、伪造头或把错误吞掉来“通过”。</p>
 <h2 id="C12-section-8d37ccfa57" tabindex="-1">图与实验</h2>
 <p>下图专门画“请求已发出，但回执未收到”的状态。超时只说明客户端在等待窗口内没有拿到结果，不能推出对方没执行。</p>
-<p><img src="../../book/assets/handdraw/llm/timeout-receipt.svg" alt="超时后的未知回执"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/timeout-receipt.svg" alt="超时后的未知回执"><figcaption>图：超时只代表“没等到回执”，不代表“没执行”；下一步是按任务号查询状态，重试前先看服务端的去重约定。本课没有远端副作用，流程为示意。</figcaption></figure>
 <p>旧的 <a href="tools.html">X08 工具调用</a> 实验把“模型建议、程序执行、回执、失败终态”分开显示。本章先把网络层的请求/响应对齐；C16 再把工具参数校验和执行回执接上。</p>
 <h2 id="C12-section-934920737b" tabindex="-1">项目增量</h2>
 <p>在你的练习目录新增 <code>service_contract.md</code>，写下：</p>

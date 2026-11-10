@@ -236,7 +236,7 @@ if __name__ == &quot;__main__&quot;:
 <p>再改一个条件：把 <code>path</code> 改成 <code>../../outside.txt</code>。校验程序应报 <code>path-outside-root</code>，即使文件真实存在。路径越界是权限/安全问题，不是“路径写错”那么简单。</p>
 <h2 id="C14-section-8d37ccfa57" tabindex="-1">图与实验</h2>
 <p>下图把整座书架筛成少量片段：检索只应拿到当前读者可见、当前版本、可回查的片段，而不是把整个资料库塞进上下文。</p>
-<p><img src="../../book/assets/handdraw/llm/retrieval-sieve.svg" alt="从资料库筛出片段"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/retrieval-sieve.svg" alt="从资料库筛出片段"><figcaption>图：检索像从整座书架只取几片：只有当前读者可见、当前版本、实际进入输入的片段参与回答。相关不等于正确、最新或完整。</figcaption></figure>
 <p>旧的 <a href="retrieval.html">X07 检索与生成的分工</a> 实验可以改查询、切块大小和取回数量，观察实际进入上下文的片段。它使用预置教学资料，不是你的文档；用它练“切块如何改变命中”，再回到本章的真实清单。</p>
 <h2 id="C14-section-934920737b" tabindex="-1">项目增量</h2>
 <p>在你的项目中新增：</p>

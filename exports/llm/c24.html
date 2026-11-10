@@ -165,8 +165,8 @@ optimizer.step()
     tokens.append(token)
 </code></pre>
 <p><code>temperature &lt;= 0</code> 时取 argmax（贪心）；<code>temperature &gt; 0</code> 时先除以温度再 softmax；<code>top-k</code> 只保留分数最高的 <code>k</code> 个候选再采样。生成到 <code>max_len=48</code> 会停止，不会偷偷把左边截掉再继续；<code>sample.positions_used</code> 告诉你实际用了多少位置，<code>hit_eos</code> 告诉你是否自然结束。生成结果没有查表拼接，也没有预写答案；但“真的生成了 token”不等于“生成的内容正确或有意义”。</p>
-<p><img src="../../book/assets/handdraw/llm/training-versus-inference.svg" alt="G06 训练比较目标，推理只读取参数"></p>
-<p><img src="../../book/assets/handdraw/llm/attention-mask.svg" alt="注意力掩码：当前位置只能看自己和左边"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/training-versus-inference.svg" alt="训练比较目标，推理只读取参数"><figcaption>图：训练把预测和目标比较、算出梯度再改参数；推理只读取当前参数给出概率，不做更新。同一个模型，两种动作。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/attention-mask.svg" alt="注意力掩码：当前位置只能看自己和左边"><figcaption>图：因果掩码让位置 1 只看自己，位置 2 看 1–2，依此类推；被遮住的位置权重为 0，输出只由可见位置的 V 加权和组成。</figcaption></figure>
 <p>本地实验：<a href="attention.html">X04 因果注意力</a> 可以逐位置看 Q/K/V、掩码、权重和“修改未来 V 后较早输出不变”；<a href="training.html">X05 训练与推理</a> 用 bigram 展示更新，不能代替本章的 decoder。</p>
 <h2 id="C24-section-590acccb63" tabindex="-1">三个检查：未来不可见、目标错位、重载一致</h2>
 <ol>

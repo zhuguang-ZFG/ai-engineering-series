@@ -47,14 +47,14 @@
 学生新分数 ≈ [0.1994, -0.0410, -0.1584]
 </code></pre>
 <p>这些数是固定教学分数上的计算，不是某个商用模型的内部读数。教师的 <code>[3,2,0]</code> 在整个更新中保持不变；真正变化的是学生。</p>
-<p><img src="../../book/assets/handdraw/llm/distillation-distributions.svg" alt="G34 教师给的是一份分布，硬标签给的是一个目标"></p>
-<p><img src="../../book/assets/handdraw/llm/distillation-steps.svg" alt="G51 教师不动，学生改一步"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/distillation-distributions.svg" alt="教师给的是一份分布，硬标签给的是一个目标"><figcaption>图：教师给的是一份分布（水约 70.5%、茶约 25.9%、咖啡约 3.5%），硬标签只给一个目标；学生学的是两者加权后的输出差异，不搬教师的参数。教师也会错，仍需独立检查。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/distillation-steps.svg" alt="教师不动，学生改一步"><figcaption>图：教师不动，学生改一步：先对齐分布、算出差距和方向，沿反方向更新学生，再算一次确认有没有变好。图中是本章的固定教学数字。</figcaption></figure>
 <p>本地实验：<a href="training.html#distillation">X09 蒸馏</a>。它会显示 <code>q(T)</code> 与 <code>q(1)</code>、教师/学生更新前后、温度与权重的切换，以及错误教师对照；网页与书籍使用同一组公式和数值。</p>
 <h2 id="C26-section-0d4eb4a77c" tabindex="-1">错误教师：更像教师，不等于更接近事实</h2>
 <p>现在做一次故意破坏：保持 <code>α=0.7</code>、<code>T=2</code>，把教师换成偏向茶的 <code>[0,3,2]</code>。题目仍然核实杯中是水。实际更新一步后，学生给水的推理概率会从 <code>33.33%</code> 降到约 <code>32.03%</code>。</p>
 <p>为什么？在这个权重下，软信号把学生往教师分布拉，硬标签只占 0.3；错误教师的软信号压过了硬标签。学生确实“更像教师”了，但对已核实的水却分得更少。这演示的是<strong>模仿与事实的分离</strong>：蒸馏损失下降、输出更像教师，都不等于事实正确。</p>
 <p>把 <code>α</code> 调到 0，再更新一步，学生只按硬标签学习；这是对照，不是宣布 <code>α=0</code> 永远最好。即使 KL 很小，也只说明学生在这批输入上的分布很像教师。教师错得很稳定时，学生也可能学得很像。真实项目里要保留数据来源、错误类型和独立评测，不能只看蒸馏损失。</p>
-<p><img src="../../book/assets/handdraw/llm/distillation-flow.svg" alt="G18 冻结教师、训练信号与学生更新"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/distillation-flow.svg" alt="冻结教师、训练信号与学生更新"><figcaption>图：蒸馏更新的是学生：教师冻结、只提供软分布或筛选文本，损失与梯度都落在学生参数上；部署时学生可以独立生成。教师的错误也可能被一起学走。</figcaption></figure>
 <h2 id="C26-section-0e0fa4e6f0" tabindex="-1">只有教师文本时：序列蒸馏</h2>
 <p>如果接口只给回答文本，前面的整张概率表就用不上。设教师对题目 <code>x</code> 生成示范序列 <code>ŷ_1,…,ŷ_m</code>，一个常见的学生目标是：</p>
 <pre><code class="language-text">L_text = -Σ_t ln q_学生(ŷ_t | x, ŷ_&lt;t)

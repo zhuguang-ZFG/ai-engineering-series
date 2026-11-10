@@ -376,7 +376,7 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <p>还有一个容易忽略的失败：<code>evaluate</code> 的 <code>passed</code> 为真，但人工复核发现 quote 答非所问。这不是评测工具坏了，而是机械检查的边界。逐例复核不能省。</p>
 <h2 id="C18-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
 <p>下图把开发、验证、留出和最终报告分开：改动只在开发集发生，验证集用于选择，留出集在最后才打开。</p>
-<p><img src="../../book/assets/handdraw/llm/evaluation-split.svg" alt="先留一份没见过的材料"></p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/evaluation-split.svg" alt="先留一份没见过的材料"><figcaption>图：改动只在开发集发生，验证集用于选择，留出集最后才打开；反复看测试题再改参数，评估就失效。图中是流程，不是真人试读成绩。</figcaption></figure>
 <p>旧实验 <a href="project.html">L12 项目交付</a> 用网页预置材料演示“留一封没拆过的题”。它可以帮助理解划分，但不是本章真实助手的基线，也不包含你的模型运行结果。</p>
 <h2 id="C18-section-7a2f6c8265" tabindex="-1">独立作业</h2>
 <ol>

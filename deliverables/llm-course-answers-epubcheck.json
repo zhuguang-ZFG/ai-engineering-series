@@ -1,0 +1,10 @@
+{
+  "checker": "EPUBCheck",
+  "version": "5.3.0",
+  "epub": "llm-course-answers.epub",
+  "epubSha256": "6c3b65dbdc0e07a2ef6c0150a3c463842b0b68fdc002ee0a9f30cce64d445680",
+  "status": "passed",
+  "fatals": 0,
+  "errors": 0,
+  "warnings": 0
+}
