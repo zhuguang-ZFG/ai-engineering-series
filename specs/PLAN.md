@@ -4,6 +4,8 @@
 
 本批正文审校（去 AI 味、图注补齐、可读性）：按 REVIEW.md 校准选择性去 AI 味——保留功能性粗体与真辨析句，实修客服腔/AI 高频词清零、解开 4 处整句装饰粗体，扫描缺陷 122 → 116；为 c11–c30 的 27 处无注图按 c01–c10 房规补 `*图：…*` 图注并清理 alt 中的 `G##` 内部编号，构建后全部成为 `<figure class="curriculum-figure"><figcaption>`（网页/PDF/EPUB 同步）；另修 `vectors.md`、`generation.md` 两处措辞。只改 `book/llm/lessons/*.md`，未动测试/runner/扫描政策；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，电子书已重导并重绑 EPUBCheck。已随 [PR #13](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/13) 合并为 `ded8491`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42777133014) 通过。
 
+本批动画教学图：给 c11–c30 课文引用的 7 张流程图（tool-execution-loop、retrieve-then-answer、context-selection、choose-an-approach、materials-to-result、evaluation-split、gradient-step）在生成器中加入 SMIL 错峰高亮——绿色描边逐步巡访步骤、循环播放；底图始终完整，EPUB/打印/无 SMIL 读者看到静态全图。共享帮手 `stepTour` 在 `mechanism-art.mjs`，动画只进生成器（`--check` 字节比对），网页/PDF/EPUB 同步重导；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，三本书 EPUBCheck 5.3.0 重绑零错误零警告。本批待提交合并，merge 证据在 PR 正文登记，不再另推登记提交。
+
 ## 当前进度与下一步
 
 逐项已完成和未完成范围以 [STATUS.md](STATUS.md) 为入口，教学/真实运行判据保持在 [ACCEPTANCE.md](llm-learning-redesign/ACCEPTANCE.md)。

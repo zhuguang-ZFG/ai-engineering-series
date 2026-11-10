@@ -23,5 +23,6 @@
     <path d="M240 548 Q238 562 240 576" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="26" y="616" font-size="26">带出处回答；版本仍需核对</text>
     <text x="26" y="662" font-size="26">检索没有把文件训练进参数</text>
+    <g pointer-events="none"><rect x="22" y="66" width="432" height="80" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="22" y="188" width="434" height="72" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="22" y="302" width="434" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="22" y="448" width="434" height="94" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
   </g>
 </svg>

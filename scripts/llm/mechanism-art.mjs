@@ -15,6 +15,15 @@ const arrow = (d, color = green) => p(d, color, 2.8);
 const down = (x, y1, y2, color = green) => arrow(`M${x} ${y1} Q${x - 1.5} ${(y1 + y2) / 2} ${x} ${y2} M${x - 6} ${y2 - 8} L${x} ${y2} L${x + 6} ${y2 - 8}`, color);
 const plus = (x, y) => `<circle cx="${x}" cy="${y}" r="17" fill="${paper}" stroke="${ink}" stroke-width="2.5"/>` + p(`M${x - 7} ${y} H${x + 7} M${x} ${y - 7} V${y + 7}`, ink, 2.5);
 const f = value => value.toFixed(4).replace("-", "−");
+// Teaching animation: a green outline tours the steps in a loop. The base
+// drawing stays fully visible (SMIL only adds the highlight), so print, EPUB
+// and SMIL-less readers keep the complete static figure.
+export function stepTour(steps, stepDur = 2.6) {
+  const dur = steps.length * stepDur;
+  return `<g pointer-events="none">${steps.map(([x, y, w, h], i) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${green}" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="${dur}s" begin="${(i * stepDur).toFixed(2)}s" repeatCount="indefinite"/></rect>`
+  ).join("")}</g>`;
+}
 function frame(title, desc, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc><rect width="480" height="640" fill="${paper}"/><g font-family="Microsoft YaHei,sans-serif">${t(28, 43, title, 30)}${p("M28 59 Q132 55 226 59", green, 4)}${body}${p("M28 583 Q240 581 452 583", rule, 1.5)}</g></svg>\n`;
 }
@@ -104,5 +113,6 @@ export function gradientStepArt() {
     t(240, 399, "新分数 = 0 − 0.4 × 梯度", 27, "middle") +
     t(28, 444, "更新后 · 分数 [0.2, −0.2]", 26) + distribution(461, after) +
     t(240, 571, `损失 ${(-Math.log(initial[0])).toFixed(3)} → ${(-Math.log(after[0])).toFixed(3)}`, 29, "middle") +
-    t(28, 618, "一步更像训练目标，仍需留出评测", 24));
+    t(28, 618, "一步更像训练目标，仍需留出评测", 24) +
+    stepTour([[24, 129, 432, 101], [24, 264, 432, 106], [24, 434, 432, 101], [24, 553, 432, 43]], 2.2));
 }

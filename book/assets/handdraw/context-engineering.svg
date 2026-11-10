@@ -20,6 +20,7 @@
     <path d="M36 508 L448 509 Q452 510 452 516 L451 600 Q450 604 444 604 L32 603 Q28 602 28 596 L29 514 Q30 508 36 508 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
     <text x="48" y="545" font-size="26">人工预算：窗口 4096 token</text>
     <text x="48" y="585" font-size="26">输入 3584 + 输出预留 512</text>
+    <g pointer-events="none"><rect x="24" y="72" width="432" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="24" y="216" width="432" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="24" y="360" width="432" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="24" y="504" width="432" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
     <text x="28" y="650" font-size="26">缓存复用计算，不扩大窗口</text>
     <text x="28" y="687" font-size="26">示意数字，不是实际模型规格</text>
   </g>
