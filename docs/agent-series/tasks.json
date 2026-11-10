@@ -8,14 +8,14 @@
     "codex"
   ],
   "active": [],
-  "current_milestone": "Four expanded editions written, verified and delivered locally; publication history is tracked by PR #43",
+  "current_milestone": "Four reading revisions delivered locally; publication checks and merge history are tracked by PR #45",
   "tasks": [
     {
       "id": "opencode",
       "status": "completed",
-      "stage": "revised_publication_verified",
+      "stage": "reading_revision_verified",
       "outline": "opencode/outline.md",
-      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "next": "Use the reading revisions; consult PR #45 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -23,15 +23,16 @@
         "opencode/outline.md",
         "yuyu-book/manifest-opencode.json",
         "docs/agent-series/local-publication-20261110.json",
-        "docs/agent-series/local-publication-20261110-revised.json"
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json"
       ]
     },
     {
       "id": "deepseek",
       "status": "completed",
-      "stage": "revised_publication_verified",
+      "stage": "reading_revision_verified",
       "outline": "deepseek/outline.md",
-      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "next": "Use the reading revisions; consult PR #45 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -39,15 +40,16 @@
         "deepseek/outline.md",
         "yuyu-book/manifest-deepseek.json",
         "docs/agent-series/local-publication-20261110.json",
-        "docs/agent-series/local-publication-20261110-revised.json"
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json"
       ]
     },
     {
       "id": "hermes",
       "status": "completed",
-      "stage": "revised_publication_verified",
+      "stage": "reading_revision_verified",
       "outline": "hermes/outline.md",
-      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "next": "Use the reading revisions; consult PR #45 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -55,15 +57,16 @@
         "hermes/outline.md",
         "yuyu-book/manifest-hermes.json",
         "docs/agent-series/local-publication-20261110.json",
-        "docs/agent-series/local-publication-20261110-revised.json"
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json"
       ]
     },
     {
       "id": "codex",
       "status": "completed",
-      "stage": "revised_publication_verified",
+      "stage": "reading_revision_verified",
       "outline": "codex/outline.md",
-      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "next": "Use the reading revisions; consult PR #45 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -71,14 +74,16 @@
         "codex/outline.md",
         "yuyu-book/manifest-codex.json",
         "docs/agent-series/local-publication-20261110.json",
-        "docs/agent-series/local-publication-20261110-revised.json"
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json"
       ]
     }
   ],
   "execution": "parallel; explicitly requested by the user on 2026-11-10",
-  "quality_revision": "Continuous runnable examples, detailed plugin internals, failure diagnosis and stronger visual identity",
+  "quality_revision": "Edited repeated explanations and report-like prose; retained technical detail, examples and evidence scope",
   "release": {
-    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/43",
-    "status_source": "GitHub pull request checks and merge history"
+    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/45",
+    "status_source": "GitHub pull request checks and merge history",
+    "previous_pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/43"
   }
 }

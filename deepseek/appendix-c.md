@@ -12,7 +12,7 @@
 node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs deepseek/examples/check-cordis.mjs --source .scratch/deepseek-runtime/pinned-cordis/src/index.ts
 ```
 
-实际导入的是 pinned-cordis/src/index.ts，npm 发布包提供依赖准备与对照，不把发布包源码偷换成固定提交。TypeScript 由 tsx 转译运行。原始下载可能带 BOM 或 Windows 换行，事实文件的源码摘要采用去 BOM、统一 LF、结尾规范为一个 LF 的文本形式，便于跨平台比较。
+实际导入 pinned-cordis/src/index.ts，npm 发布包用于准备依赖与对照，TypeScript 由 tsx 转译运行。摘要按固定规则计算：去 BOM、统一 LF，并将结尾规范为一个 LF，以消除下载与平台换行差异。
 
 ## C.2 七项基础场景
 
@@ -26,7 +26,7 @@ node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs deeps
 | 父子异步清理 | 父 dispose 返回前子资源已关闭，重复清理不重复效果 |
 | 两个服务 realm | 计数器各自从 1 开始 |
 
-上述实验有明确的失败断言：移除 next 委派、删掉 effect disposer、让计数服务变成全局变量，都应让相应检查失败。这样测试检查的是可观察契约，而不是只证明示例函数被调用过。
+移除 next 委派、删掉 effect disposer 或把计数服务改为全局变量，都应使相应检查失败。这些断言检查委派、回收和隔离的具体行为。
 
 ## C.3 十三项连续实例场景
 
@@ -59,13 +59,13 @@ review-lab 把工具表、日志、策略和拥有资源的审查插件放在一
 | Linux/Windows 操作系统沙箱 | 未实跑 |
 | npm 对外发布与完整插件升级 | 未执行 |
 
-“未实跑”不使相应机制无法解释，但要求措辞停留在契约和复现步骤。不能把源码里存在一个方法写成已经在用户平台成功使用。日后补实验时保留日期、版本和命令，新增事实记录，不覆盖历史来制造从一开始就验证过的印象。
+表中未实跑的部分依据源码契约和复现步骤讲解，不代表已在本机验证。补做实验时，应新增含日期、版本与命令的记录，并保留原记录。
 
 ## C.5 扩展验证时的最小矩阵
 
 下一步先用本地模型替身接完整 SDK profile，验证一个只读工具，再接 Session 存储，最后才加真实模型与浏览器。每步都留一个正常与一个失败场景。路径隔离、凭据隔离和子进程清理是实验驱动本身的责任，不应依赖模型听话。
 
-对运行环境有要求的测试应失败或明确跳过，不能悄悄换成教学调度器。教学调度器适合解释概念，但它不是官方宿主，证据层级必须保留。
+环境不满足时，测试应报告失败或跳过。教学调度器可以用于讲解概念，其结果需要与官方宿主的运行记录区分。
 
 ## 固定版本来源
 

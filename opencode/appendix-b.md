@@ -1,11 +1,11 @@
 # 附录 B：配置与命令速查
 
 <!-- block: opencode-apxb.b-opening -->
-本附录按任务列出本书实际使用的命令与配置片段。运行路径以书仓根目录为基准；真实项目中的模型认证和目录选择需要按自己的环境配置，不能直接复制实验占位值。
+本附录按任务列出本书实际使用的命令与配置片段，运行路径以书仓根目录为基准。用于真实项目时，需要将模型认证和目录的实验占位值替换为自己的配置。
 
 ## B.1 安装与版本
 
-下载、ZIP 校验与解压的完整 PowerShell 命令见[示例说明](examples/README.md)。不要省掉校验就运行来源不明的同名程序。
+下载、ZIP 校验与解压的完整 PowerShell 命令见[示例说明](examples/README.md)。校验用于确认下载文件的来源，文件同名并不能保证内容一致。
 
 ```powershell
 .scratch/opencode-bin/opencode.exe --version
@@ -22,7 +22,7 @@ python opencode/examples/check-host-plugins.py --binary .scratch/opencode-bin/op
 python opencode/examples/check-tool-permissions.py --binary .scratch/opencode-bin/opencode.exe --dependency-dir .scratch/plugin-types
 ```
 
-Python 不使用 `-O`，因为驱动的 assert 承担检查。失败时保留 Evidence 指向的目录，先看相应日志再改源码。不要把失败运行中只完成一部分的 report 当成全通过。
+运行 Python 时不使用 `-O`，以保留驱动中承担检查的 assert。失败后，Evidence 指向的目录及其中的日志可用于定位问题；此时 report 可能只包含已完成的部分，不能据此判断整组实验通过。
 
 ## B.3 常用配置字段
 
@@ -41,7 +41,7 @@ Python 不使用 `-O`，因为驱动的 assert 承担检查。失败时保留 Ev
 
 驱动使用 OPENCODE_TEST_HOME、独立 XDG 数据/配置/缓存/状态路径、OPENCODE_DB 和临时目录。只给子进程保留必要的 Windows 环境与 PATH，不继承个人模型账号、代理和配置变量。第九章实验还检查 debug paths 的输出。
 
-绑定地址为 127.0.0.1，服务端密码随机生成。文件监听、默认插件、模型列表拉取、更新和自动下载等按实验需要关闭。这些设置是为了复现机制，不是替代网络抓包或操作系统隔离。
+绑定地址为 127.0.0.1，服务端密码随机生成。文件监听、默认插件、模型列表拉取、更新和自动下载等按实验需要关闭。这些设置用于复现实验中的机制，不能代替网络抓包或操作系统隔离。
 
 ## B.5 三种本地书籍格式
 

@@ -1,6 +1,6 @@
 # 附录 B：配置与命令速查
 <!-- block: hermes-apxb.b-opening -->
-速查表的用途是把你带回正确的配置入口。它不能替代本机帮助，也不能证明模型、平台账户或终端后端已经可用。操作前先确认 profile，尤其是在同一台机器上既有日常助手，又有书中实验环境的时候。
+这份速查表列出配置入口；具体命令仍以本机帮助为准，模型、平台账户和终端后端的可用性也需另行检查。同一台机器同时有日常助手和实验环境时，先确认当前 profile。
 
 ## B.1 四个目录不要认成一个
 | 位置 | 主要保存什么 | 操作时最容易混淆的事 |
@@ -17,10 +17,10 @@ $env:HERMES_HOME = Join-Path $PWD ".hermes-book-lab"
 hermes --help
 ```
 
-这是进程环境设置；如果其他进程早已启动，它们不会因此自动改用新目录。实验完毕可以关闭该终端，也可以用 Remove-Item Env:HERMES_HOME 清除当前进程环境变量，再启动日常会话。不要把家目录或整个用户配置目录当成临时垃圾目录删除。
+这是进程环境设置；如果其他进程早已启动，它们不会因此自动改用新目录。实验完毕可以关闭该终端，也可以用 Remove-Item Env:HERMES_HOME 清除当前进程环境变量，再启动日常会话。清理文件时，只处理自己创建的实验目录，保留家目录与其余用户配置。
 
 ## B.2 原创插件的配置形状
-第 9 章的 book-inventory 放在当前 Hermes home 下的 plugins/book-inventory 中。钉版 get_config 从 plugins.entries 中找到插件条目，再读取 settings；config 子树作为旧格式兼容路径存在。新示例使用 settings。
+第 9 章的 book-inventory 放在当前 Hermes home 下的 plugins/book-inventory 中。本书所用版本的 get_config 从 plugins.entries 中找到插件条目，再读取 settings；config 子树作为旧格式兼容路径存在。本书示例使用 settings。
 
 ```yaml
 plugins:
@@ -34,14 +34,14 @@ plugins:
 
 这个根目录要由你预先创建并放入测试 Markdown。示例故意不以空字符串或当前目录作为默认可读位置；缺少 root 时，注册应失败并说明原因。否则一次拼写错误可能让工具转而扫描启动目录，产生看似合理却来自错误工程的清单。
 
-插件名单可能已经包含其他插件。把示例合并进已有配置，不要整段覆盖原文件。disabled 名单优先于 enabled，某插件同时在两边时不会因“已经启用”而强行加载。项目内 .hermes/plugins 还有 HERMES_ENABLE_PROJECT_PLUGINS 门控，本书示例使用用户插件目录，避免把两种来源混起来。
+插件名单可能已经包含其他插件。把示例合并进已有配置，保留原文件中的其他条目。disabled 名单优先于 enabled，某插件同时在两边时不会因“已经启用”而强行加载。项目内 .hermes/plugins 还有 HERMES_ENABLE_PROJECT_PLUGINS 门控，本书示例使用用户插件目录，避免把两种来源混起来。
 
 ## B.3 Memory 工具与磁盘文件
-memory 工具的 target 区分 memory 与 user。钉版默认预算分别为 2200 与 1375 字符；字符数不是 token 数，也不是文件字节数。存储层使用分隔符区分条目，批量编辑和精确匹配都依赖这种条目结构。
+memory 工具的 target 区分 memory 与 user。该版本的默认预算分别为 2200 与 1375 字符；字符数不是 token 数，也不是文件字节数。存储层使用分隔符区分条目，批量编辑和精确匹配都依赖这种条目结构。
 
 添加项目事实时先写出项目与适用条件，例如“Aurora 的公开文档以 release-notes.md 为准”。只写“以 release-notes.md 为准”会让这条记忆脱离来源，后续换一个项目时仍可能被误用。用户偏好也应保留条件，例如“讲解代码时先给可运行最小示例”，而不是无条件“回答越短越好”。
 
-工具中的 patch 用于修改匹配文本；删除时先确认命中的是唯一条目。存储层的 replace 表面与当前工具公开 schema 不应混用，不能因为看到一个 Python 方法就臆造同名的模型工具动作。
+工具中的 patch 用于修改匹配文本；删除时先确认命中的是唯一条目。存储层的 replace 方法与当前工具公开 schema 不同；Python 类中存在这个方法，并不说明模型能直接调用同名动作。
 
 ## B.4 排错时保留的最小信息
 | 症状 | 先记录什么 | 对应章节 |
