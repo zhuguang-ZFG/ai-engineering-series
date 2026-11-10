@@ -43,7 +43,7 @@ python codex/examples/check-local-cli.py --binary PATH_TO_PINNED_CODEX_EXE
 
 ## C.6 十三项原创离线练习
 
-运行 `python -B codex/examples/check_workshop.py`。驱动先检查插件资源文件与处理器副本，再将运费模板复制到自己创建的临时目录。错误版在跨千克边界失败，修复一行取整后通过。它没有调用模型，也没有修改读者项目。
+在书籍仓库根目录运行 `python -B codex/examples/check_workshop.py`。驱动先检查插件资源文件与处理器副本，再将运费模板复制到自己创建的临时目录。错误版在跨千克边界失败，修复一行取整后通过。它没有调用模型，也没有修改读者项目。
 
 随后以普通 Python 子进程运行 Hook 处理器，分别检查附加上下文、明确拒绝和损坏 JSON；再对教学 JSONL 检查进程/事件结果、失败命令、未完成活动、错误数据和失败补丁。共十三个命名检查项通过。JSONL 是手工 fixture，里面的 thread 身份与零 token 不构成真实会话记录。
 
@@ -51,6 +51,6 @@ python codex/examples/check-local-cli.py --binary PATH_TO_PINNED_CODEX_EXE
 
 ## C.7 十一项固定 schema 校验
 
-运行 `check_protocol.py` 时分别传入固定 CLI 生成的协议目录和固定源码的 Hook schema 目录。程序使用 jsonschema 4.26.0，校验七份消息参数/结果、错误 thread_id 字段、两份 Hook 输入输出和缺少 turn_id 的反例。结果见 `codex/facts/protocol-20261110.json`。
+从书籍仓库根目录运行 `check_protocol.py` 时，分别传入固定 CLI 生成的协议目录和固定源码的 Hook schema 目录，完整准备步骤见第 15 章。程序使用 jsonschema 4.26.0，校验七份消息参数/结果、错误 thread_id 字段、两份 Hook 输入输出和缺少 turn_id 的反例。结果见 `codex/facts/protocol-20261110.json`。
 
 这组检查可发现字段名、必需项与类型错误，未启动 app-server 连接。服务端能否找到 thread、接受 cwd 或调用工具，仍需实际连接验证。Hook 输出还要按第 12 章核对固定 parser 支持的字段组合，包括 allow 的具体用法。

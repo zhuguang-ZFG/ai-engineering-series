@@ -21,6 +21,12 @@ AGENT_CSS = r"""
 .agent-book .pd-inner{border-top:3px solid var(--cinnabar);padding-top:1.8rem}
 .agent-book .pd-ghost{opacity:.02}
 .agent-book .pd-title{font-family:var(--sans);letter-spacing:-.02em}
+.agent-book .idx-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.15rem .6rem;padding:.4rem 0;border-bottom:1px solid var(--line)}
+.agent-book .idx-term{grid-column:1 / -1}
+.agent-book .idx-refs{grid-column:1;white-space:normal;font-size:.85em;line-height:1.7;color:var(--ink-2)}
+.agent-book .idx-refs a{display:inline-block;white-space:nowrap}
+.agent-book .idx-row .leader{display:none}
+.agent-book .idx-ref{grid-column:2;grid-row:2;align-self:end}
 @media(max-width:860px){.agent-book .compass-card+.compass-card{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
 .agent-volume{--volume-ink:#205C68}
 .av-deepseek{--volume-ink:#315AA6}
@@ -60,6 +66,9 @@ AGENT_CSS = r"""
   .agent-book .compass-card p{font-size:8pt}
   .agent-book .lead-band{padding:2.5mm 3mm}
   .agent-book .ch-seal{font-size:26pt}
+  .agent-book .idx-letter{margin:.85rem 0 .3rem;font-size:1.1rem}
+  .agent-book .idx-row{padding:.22rem 0;line-height:1.5;break-inside:avoid}
+  .agent-book .idx-refs{line-height:1.5}
   .agent-volume{--volume-ink:#205C68}.av-deepseek{--volume-ink:#315AA6}
   .av-hermes{--volume-ink:#79613B}.av-codex{--volume-ink:#326853}
   .agent-volume .cover-inner{padding:12mm 8mm 6mm;box-shadow:none;border-top:3mm solid var(--volume-ink);border-bottom:1px solid var(--line);justify-content:flex-start}

@@ -29,6 +29,6 @@ python scripts/bookctl.py build --product codex --lang zh --pdf --epub
 
 ## 当前版本
 
-四册均已扩写连续工程案例和插件机制，使用各自的架构封面与章节配色。本次阅读修订整理了重复说明和报告式语气。当前 PDF 为 OpenCode 148 页、DeepSeek 125 页、Hermes 127 页、Codex CLI 144 页；EPUB 与 HTML 同步生成，见[当前交付记录](agent-series/local-publication-20261110-reading.json)。
+四册均已扩写连续工程案例和插件机制，使用各自的架构封面与章节配色。本轮补清首次练习、目录切换和跨章实例，并改善索引排版。当前 PDF 为 OpenCode 148 页、DeepSeek 129 页、Hermes 130 页、Codex CLI 146 页；EPUB 与 HTML 同步生成，见[当前交付记录](agent-series/local-publication-20261110-reader-path.json)。
 
 OpenCode 包含 19 项金额计算案例；DeepSeek 连续插件新增 13 项真实 Cordis 场景；Hermes 补足 Aurora 八步流程及记忆写入失败实验；Codex 增加 Hook、JSONL 与协议 schema 的离线练习。它们分别说明原创程序、真实组件和完整宿主的运行范围，不能互相替代。

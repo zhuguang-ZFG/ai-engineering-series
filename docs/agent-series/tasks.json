@@ -8,14 +8,14 @@
     "codex"
   ],
   "active": [],
-  "current_milestone": "Four reading revisions delivered locally; publication checks and merge history are tracked by PR #45",
+  "current_milestone": "Reader-path revisions and index layout delivered locally; publication review pending",
   "tasks": [
     {
       "id": "opencode",
       "status": "completed",
-      "stage": "reading_revision_verified",
+      "stage": "reader_path_verified",
       "outline": "opencode/outline.md",
-      "next": "Use the reading revisions; consult PR #45 for publication history",
+      "next": "Follow publication review for reader paths and index layout",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -24,15 +24,16 @@
         "yuyu-book/manifest-opencode.json",
         "docs/agent-series/local-publication-20261110.json",
         "docs/agent-series/local-publication-20261110-revised.json",
-        "docs/agent-series/local-publication-20261110-reading.json"
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
       ]
     },
     {
       "id": "deepseek",
       "status": "completed",
-      "stage": "reading_revision_verified",
+      "stage": "reader_path_verified",
       "outline": "deepseek/outline.md",
-      "next": "Use the reading revisions; consult PR #45 for publication history",
+      "next": "Follow publication review for reader paths and index layout",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -41,15 +42,16 @@
         "yuyu-book/manifest-deepseek.json",
         "docs/agent-series/local-publication-20261110.json",
         "docs/agent-series/local-publication-20261110-revised.json",
-        "docs/agent-series/local-publication-20261110-reading.json"
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
       ]
     },
     {
       "id": "hermes",
       "status": "completed",
-      "stage": "reading_revision_verified",
+      "stage": "reader_path_verified",
       "outline": "hermes/outline.md",
-      "next": "Use the reading revisions; consult PR #45 for publication history",
+      "next": "Follow publication review for reader paths and index layout",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -58,15 +60,16 @@
         "yuyu-book/manifest-hermes.json",
         "docs/agent-series/local-publication-20261110.json",
         "docs/agent-series/local-publication-20261110-revised.json",
-        "docs/agent-series/local-publication-20261110-reading.json"
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
       ]
     },
     {
       "id": "codex",
       "status": "completed",
-      "stage": "reading_revision_verified",
+      "stage": "reader_path_verified",
       "outline": "codex/outline.md",
-      "next": "Use the reading revisions; consult PR #45 for publication history",
+      "next": "Follow publication review for reader paths and index layout",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -75,15 +78,15 @@
         "yuyu-book/manifest-codex.json",
         "docs/agent-series/local-publication-20261110.json",
         "docs/agent-series/local-publication-20261110-revised.json",
-        "docs/agent-series/local-publication-20261110-reading.json"
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
       ]
     }
   ],
   "execution": "parallel; explicitly requested by the user on 2026-11-10",
-  "quality_revision": "Edited repeated explanations and report-like prose; retained technical detail, examples and evidence scope",
+  "quality_revision": "Clarified first runnable steps, working directories, example state across chapters and index readability",
   "release": {
-    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/45",
-    "status_source": "GitHub pull request checks and merge history",
-    "previous_pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/43"
+    "status": "pending_review",
+    "previous_pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/45"
   }
 }

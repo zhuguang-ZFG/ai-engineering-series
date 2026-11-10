@@ -1,6 +1,6 @@
 # DeepSeek Harness：插件化运行时
 
-中文正文已齐：前言、18 章、附录 A–D，共约 4.8 万汉字，配有 14 张机制图。内容从配置入口、Cordis 依赖与清理，延伸到 Agent 循环、工具管线、会话恢复和插件交付。
+中文正文已齐：前言、18 章、附录 A–D，共约 5.0 万汉字，配有 14 张机制图。内容从配置入口、Cordis 依赖与清理，延伸到 Agent 循环、工具管线、会话恢复和插件交付。
 
 源码基线：提交 `fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159`，根包 `0.2.2-rc.1`，vendored Cordis `4.1.0`。[上游固定版本](https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159)，许可证 MIT，访问日期 2026-11-10。
 
@@ -15,4 +15,4 @@
 - [packages/core](https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/packages/core)
 - [docs/architecture.md](https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159/docs/architecture.md)
 
-本地 1.1.1 已生成 HTML、PDF（125 页）和 EPUB，保留 14 张机制图。本次修订整理重复解释、改写报告式语气，并调整章节导读；示例代码、图示和来源保持原样。[当前文件与校验值](../docs/agent-series/local-publication-20261110-reading.json)。
+本地 1.1.2 已生成 HTML、PDF（129 页）和 EPUB。本轮补清练习入口、工作目录和跨章衔接，索引改为术语与章节引用分行显示。[当前成品记录](../docs/agent-series/local-publication-20261110-reader-path.json)。
