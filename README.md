@@ -132,9 +132,9 @@ Claude Code 为 Anthropic 产品，本书是独立的技术分析作品，并非
 
 ## 离线整书
 
-`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 6.3 MB / 英文版 6.4 MB）与 A4 排版的 PDF（中文版 519 页 / 34.8 MB，英文版 559 页 / 23.7 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 页数与体积随构建机的中文字体变化；上述数字来自 CI 的 Noto CJK 排版，不代替 Windows 本机实测。构建日志会报告每份 PDF 的实际页数与体积。
+`yuyu-book/` 把 20 个单元装配成**一本可离线阅读的书**：单文件 HTML（中文版 6.3 MB / 英文版 6.5 MB）与 A4 排版的 PDF（中文版 519 页 / 34.8 MB，英文版 559 页 / 23.7 MB），中英各一份，产物在 `yuyu-book/dist/`。PDF 页数与体积随构建机的中文字体变化；上述数字来自 CI 的 Noto CJK 排版，不代替 Windows 本机实测。构建日志会报告每份 PDF 的实际页数与体积。
 
-上述数字取自[合并后的 Full 运行](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42473136200)：实际构建的 10 步检查通过；最终手绘稿比候选版更小，英文 HTML 的 CI 实测舍入值从 6.5 MB 变为 6.4 MB，README 未同步而在对账处失败。本次只回填实测数字，不改变 `scripts/check_artifact_claims.py` 的检查规则。已发布的 `v0.3.6` 标签与资产保持不变。
+HTML 体积与 PDF 页数以[本次合并后的 Full 构建](https://github.com/zhuguang-ZFG/claude-code-book/actions/runs/42758268750)为准。共用样式更新后，英文 HTML 的体积舍入为 6.5 MB；中英 PDF 仍为 519、559 页。已发布的 `v0.3.6` 标签与资产保持不变。
 
 | 文件 | 语言 |
 |------|------|
