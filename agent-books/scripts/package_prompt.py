@@ -25,7 +25,8 @@ def package(output):
     for path in sorted(set(paths)):
         name = path.relative_to(ROOT).as_posix()
         files[name] = path.read_bytes()
-    manifest = {"version": "0.1.1", "kind": "offline_teaching_sources",
+    edition = json.loads((ROOT / "yuyu-book/manifest-prompt.json").read_text(encoding="utf-8"))
+    manifest = {"version": edition["version"], "kind": "offline_teaching_sources",
                 "sha256": {name: hashlib.sha256(data).hexdigest() for name, data in files.items()}}
     files["package-manifest.json"] = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     output = Path(output)

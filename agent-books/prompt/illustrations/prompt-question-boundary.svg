@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 680" role="img" aria-label="同一个房间缺口，整理内部草稿时保留待确认，提供到场路线前则先取得场地依据" color="#263f35">
+  <title>房间未定，先看它是否阻断当前交付</title>
+  <desc>青禾虚构教学通知 N01-v1 确定场地为青禾社区中心，具体房间尚未确认。整理内部核对草稿时，可以写已有安排并保留房间待确认。任务改成从入口走到房间的路线时，应先确认入口与房间，暂不画路线。是否追问取决于这个缺口对当前交付的影响。</desc>
+  <path d="M10 12 Q280 5 548 13 L550 664 Q278 674 10 665 Z" fill="#f7f1e5"/>
+  <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M31 72 Q280 68 529 73" opacity=".4"/>
+    <path d="M90 98 Q273 94 471 99 L468 226 88 222 Z"/>
+    <path d="M97 104 Q284 100 461 105" opacity=".25"/>
+    <path d="M280 232 Q278 245 280 261 M272 254 L280 263 288 254"/>
+    <path d="M280 302 C276 319 228 322 84 321 Q66 321 65 344 L65 538"/>
+    <path d="M66 366 Q82 365 100 366 M92 358 L102 366 92 374" stroke-width="3"/>
+    <path d="M65 538 Q80 539 99 538 M91 530 L101 538 91 546" stroke="#a26732" stroke-width="3"/>
+    <path d="M129 354 L139 365 158 342" stroke-width="3.5"/>
+    <path d="M130 515 L153 515 161 526 155 541 131 542 123 528 Z" stroke="#a26732" stroke-width="3"/>
+    <path d="M140 521 L140 532 M140 536 L140 537" stroke="#a26732" stroke-width="3"/>
+    <path d="M122 456 Q308 459 510 455" opacity=".22"/>
+    <path d="M31 626 Q279 622 529 626" stroke-dasharray="4 7" opacity=".5"/>
+  </g>
+  <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <text x="30" y="51" font-size="32" font-weight="700">房间未定，要不要先问？</text>
+    <text x="113" y="136" font-size="28" font-weight="700">N01-v1 · 同一份通知</text>
+    <text x="113" y="176" font-size="29">场地：青禾社区中心</text>
+    <text x="113" y="213" font-size="29" fill="#8b5529">房间：尚未确认</text>
+    <text x="280" y="292" text-anchor="middle" font-size="31" font-weight="700">这次要交付什么？</text>
+    <text x="177" y="366" font-size="32" font-weight="700">内部核对草稿</text>
+    <text x="124" y="411" font-size="30">先写已有安排</text>
+    <text x="124" y="449" font-size="30">房间保留“待确认”</text>
+    <text x="177" y="540" font-size="32" font-weight="700" fill="#8b5529">到场路线</text>
+    <text x="124" y="582" font-size="30">先确认入口与房间</text>
+    <text x="124" y="617" font-size="28" fill="#8b5529">路线暂不画，其余可先做</text>
+    <text x="30" y="660" font-size="26">用途已说明，就不必重复追问。</text>
+  </g>
+</svg>

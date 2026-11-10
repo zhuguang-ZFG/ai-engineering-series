@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "author": "朱光",
-  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "repository": "https://github.com/zhuguang-ZFG/ai-engineering-series/tree/main/agent-books",
   "license": {
     "name": "CC BY-NC-SA 4.0",
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "prompt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "date": "2026-11-11",
   "title": {
     "zh": "提示词工程：从提问到 Agent 协作"

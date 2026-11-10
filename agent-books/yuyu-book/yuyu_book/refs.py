@@ -50,7 +50,8 @@ def resolve_local_links(doc: str, source: str, targets: dict[str, str],
             file = (root / path).resolve()
             if not file.is_relative_to(root) or not file.is_file():
                 return match.group(0)
-            href = "https://github.com/zhuguang-ZFG/claude-code-book/blob/main/" + quote(path, safe="/")
+            href = ("https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/"
+                    "agent-books/" + quote(path, safe="/"))
             if url.fragment:
                 href += "#" + url.fragment
         return 'href="' + html.escape(href, quote=True) + '"'

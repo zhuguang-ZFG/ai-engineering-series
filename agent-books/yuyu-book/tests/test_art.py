@@ -85,7 +85,8 @@ class ShippedDrawings(unittest.TestCase):
         self.assertNotIn(drawings[0], art.cover_plate("zh", "book"))
 
     def test_prompt_figures_remain_embedded_and_accessible(self):
-        for name in ("prompt-context-fields", "prompt-handoff-state", "prompt-paired-comparison"):
+        for name in ("prompt-context-fields", "prompt-handoff-state", "prompt-paired-comparison",
+                     "prompt-question-boundary", "prompt-tool-receipt", "prompt-evaluation-freeze"):
             drawing = art.drawing(name)
             self.assertIn("<title>", drawing)
             self.assertIn("<desc>", drawing)

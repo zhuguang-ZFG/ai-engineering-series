@@ -4,12 +4,16 @@
 
 [打开系列书架](index.html) · [选择阅读路线](docs/reading-routes.md) · [整合记录](docs/integration/README.md) · [来源与许可](LICENSES.md)
 
+提示词册当前源码为 0.1.2，新增三张适合窄屏阅读的手绘图，并修正书中材料链接，详见[本轮阅读修订](docs/integration/prompt-0.1.2.md)。下面的下载记录对应前次 0.1.1 交付。
+
+[PR #1](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/1) 已合并，合并提交 `f09bca1` 的 [main 检查](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42882355610)通过。[完整构建](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268)的五个任务全部通过，可直接下载[提示词 0.1.1 阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268/artifacts/13794072343)或[大模型课程阅读包](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268/artifacts/13793988383)，解压后打开包内 `index.html`。阅读包包含 HTML、PDF、EPUB；提示词包还含独立练习 ZIP。验证范围和报告见[发布记录](docs/integration/release-20261111.md)。
+
 ![跨书选读路线：从课程或具体任务进入，整理材料，按需实践工具，再核验结果；课程先修要求与阶段作业仍按原课程执行。](assets/series-map.svg)
 
 | 内容 | 从这里开始 | 范围 |
 | --- | --- | --- |
 | 大模型：从入门到精通 | [C01 先做一份资料报告](model-course/book/llm/lessons/c01.md) · [课程说明](model-course/README.md) | 五阶段三十章，模型原理、应用、评测、训练与交付；课程版本 1.1.2，技术试读版 |
-| 提示词工程：从提问到 Agent 协作 | [第 1 章](agent-books/prompt/ch01.md) · [全册目录](agent-books/prompt/README.md) | 十八章与附录，练习任务约定、材料组织、工具回执和配对比较；版本 0.1.1，技术试读版 |
+| 提示词工程：从提问到 Agent 协作 | [第 1 章](agent-books/prompt/ch01.md) · [全册目录](agent-books/prompt/README.md) | 十八章与附录，练习任务约定、材料组织、工具回执和配对比较；版本 0.1.2，技术试读版 |
 | Agent 实战与机制 | [御舆](agent-books/README.md) · [各册产品表](agent-books/yuyu-book/PRODUCTS.md) | 御舆、Omp、Pi、OpenCode、DeepSeek Harness、Hermes、Codex CLI、Kimi Code，按所用工具选读 |
 | 编程项目补充 | [Vibe Coding 原稿](model-course/book/book.md) | 保留原课程的编程实践与来源说明 |
 
