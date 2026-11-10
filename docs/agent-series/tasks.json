@@ -7,20 +7,15 @@
     "hermes",
     "codex"
   ],
-  "active": [
-    "opencode",
-    "deepseek",
-    "hermes",
-    "codex"
-  ],
-  "current_milestone": "Substantially expanded editions with distinct covers delivered in HTML/PDF/EPUB; release CI pending",
+  "active": [],
+  "current_milestone": "Four expanded editions written, verified and delivered locally; publication history is tracked by PR #43",
   "tasks": [
     {
       "id": "opencode",
-      "status": "in_progress",
+      "status": "completed",
       "stage": "revised_publication_verified",
       "outline": "opencode/outline.md",
-      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
+      "next": "Use the revised local editions; consult PR #43 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -33,10 +28,10 @@
     },
     {
       "id": "deepseek",
-      "status": "in_progress",
+      "status": "completed",
       "stage": "revised_publication_verified",
       "outline": "deepseek/outline.md",
-      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
+      "next": "Use the revised local editions; consult PR #43 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -49,10 +44,10 @@
     },
     {
       "id": "hermes",
-      "status": "in_progress",
+      "status": "completed",
       "stage": "revised_publication_verified",
       "outline": "hermes/outline.md",
-      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
+      "next": "Use the revised local editions; consult PR #43 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -65,10 +60,10 @@
     },
     {
       "id": "codex",
-      "status": "in_progress",
+      "status": "completed",
       "stage": "revised_publication_verified",
       "outline": "codex/outline.md",
-      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
+      "next": "Use the revised local editions; consult PR #43 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -81,5 +76,9 @@
     }
   ],
   "execution": "parallel; explicitly requested by the user on 2026-11-10",
-  "quality_revision": "Continuous runnable examples, detailed plugin internals, failure diagnosis and stronger visual identity"
+  "quality_revision": "Continuous runnable examples, detailed plugin internals, failure diagnosis and stronger visual identity",
+  "release": {
+    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/43",
+    "status_source": "GitHub pull request checks and merge history"
+  }
 }

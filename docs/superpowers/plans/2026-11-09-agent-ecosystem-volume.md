@@ -22,7 +22,7 @@
 - [x] 四册实际生成 HTML、PDF、EPUB，检查目录、书签、代码、图示和 EPUBCheck。
 - [x] 验证后复制 12 份成品到主工作区 yuyu-book/dist。
 - [x] 仓库 Fast、内容和元数据检查通过；同步任务记录。
-- [ ] 提交、推送、PR CI 全绿后合并，核对 main 的 Book CI 与 Pages。
+- [x] 提交、推送并建立 [PR #43](https://github.com/zhuguang-ZFG/claude-code-book/pull/43)；CI、合并及 main 构建记录以 GitHub 为准。
 
 旧 P6 视频媒体验收仍未完成，不由书籍构建代替。
 
@@ -32,4 +32,4 @@
 - [x] 根据用户对内容与视觉的反馈，四册全章扩写连续实例、源码机制与失败恢复，保留真实证据范围。
 - [x] 四册各自设计架构封面，更新章节排版与配色，增加时序和状态图。
 - [x] 重新生成并检查全部 HTML/PDF/EPUB，旧初稿另存，新版复制至主 dist。
-- [ ] 深化版提交后完成 CI 与合并。
+深化版与首版在同一个 PR 中发布。[PR #43](https://github.com/zhuguang-ZFG/claude-code-book/pull/43) 保留最终检查与合并记录。
