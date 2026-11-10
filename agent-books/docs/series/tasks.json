@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-10",
+  "series_name": "大模型与智能体工程",
+  "tasks": [
+    {
+      "id": "prompt-engineering-volume",
+      "status": "technical_reading_edition_complete",
+      "current_scope": "complete Chinese manuscript, offline delivery and HTML/PDF/EPUB technical reading edition",
+      "stage": "local_delivery_verified",
+      "spec": "docs/superpowers/specs/2026-11-10-prompt-engineering-volume.md",
+      "plan": "docs/superpowers/plans/2026-11-10-prompt-engineering-volume.md",
+      "outline": "docs/series/prompt-engineering-outline.md",
+      "series_map": "docs/series/README.md",
+      "proposed_product": "prompt",
+      "product_registered": true,
+      "manuscript_started": true,
+      "manuscript_chapters_complete": 18,
+      "reading_units_complete": 23,
+      "pilot_chapters": [
+        1,
+        7,
+        16
+      ],
+      "entry": "prompt/README.md",
+      "completed_phases": [
+        "P0",
+        "P1",
+        "P2"
+      ],
+      "completed_work": [
+        "P3 manuscript and offline exercises",
+        "P4 product registration and local formats",
+        "Chinese editorial review"
+      ],
+      "next": "Record real-model A/B and cross-environment experiments, independent reader trials and learning-outcome review separately; these are not completed by the technical edition.",
+      "verification": "prompt/VERIFY.md",
+      "validation": {
+        "planning_links_and_chapters": "passed",
+        "prompt_tool_tests": "31 passed",
+        "general_tests": "259 passed",
+        "builder_tests": "573 passed",
+        "content": "426 Markdown files, 436 Mermaid diagrams, 0 errors at full gate",
+        "bookctl_check_fast": "8 steps passed",
+        "log": ".scratch/prompt-full-check.log",
+        "report": "prompt/evidence/repository-check-full.json",
+        "pdf": "107 pages, 29 bookmarks",
+        "epubcheck": "0 fatals, 0 errors, 0 warnings",
+        "layout": "passed; narrow screen, dark mode and print checked",
+        "model_calls": 0,
+        "final_content": "427 Markdown files, 436 Mermaid diagrams, 0 errors",
+        "exercise_zip": "71 entries; 70 source hashes verified; 31 tests passed from fresh extraction; baseline 8/12, reference 12/12",
+        "copied_artifacts": "HTML, PDF, EPUB and exercise ZIP; destination bytes verified"
+      },
+      "publication_record": "docs/series/prompt-publication-20261110.json"
+    }
+  ]
+}

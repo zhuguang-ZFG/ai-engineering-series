@@ -1,0 +1,202 @@
+# Plan：御舆项目彻底改造执行路线
+
+对应规格：docs/superpowers/specs/2026-11-03-total-project-transformation.md
+
+执行纪律：
+
+- 每个阶段先补契约测试，再迁移实现。
+- 每个 PR 只承担一种主要风险：数据迁移、行为重构、视觉改造或文件搬家。
+- 正文改写与构建器核心重构分开。
+- 所有删除先证明可重建，并保留迁移标签或清单。
+- 当前未提交的 R4 改动不纳入本计划的任何平台 PR。
+
+## P0：冻结基线与收口在途工作
+
+- [x] P0.1 完成或独立保存当前 R4 衍生物料改动，保证平台改造从干净提交开始。
+- [x] P0.2 生成 baseline.json：单元、章节、标题、锚点、术语、来源、图版、插画、HTML 体积、PDF 页数。
+- [x] P0.3 保存 20 个关键 HTML 片段和 12 张关键页截图，覆盖封面、目录、正文、宽表、横版图、索引和暗色窄屏。
+- [x] P0.4 建立 video 文件身份清单：source、config、review、generated、cache、third_party。
+- [x] P0.5 建立 legacy 标签，记录最后一版旧构建器和视频目录。
+- [x] Gate：现有 Fast 检查通过；完整依赖环境下 make check 通过；基线文件可重复生成（PR #6 → 06bd6fb）。
+
+## P1：环境、依赖与统一 CLI
+
+- [x] P1.1 新增 pyproject.toml，登记 Python 3.12、包元数据、测试和工具配置。
+- [x] P1.2 引入 Python 锁文件；requirements.txt 改为从锁定环境导出或与锁文件一致性校验。
+- [x] P1.3 实现 bookctl doctor，检查 Python、Node、浏览器、字体、依赖、路径和写权限。
+- [x] P1.4 实现 bookctl check --fast，统一通用测试、构建器测试、内容检查和 Mermaid 检查。
+- [x] P1.5 Makefile 改为跨平台薄包装，clean 不再依赖 rm -rf。
+- [x] P1.6 CI 使用与本地相同的 bookctl 命令。
+- [x] Gate：全新环境的缺依赖错误在 doctor 中一次列全；Windows/Ubuntu 命令一致（PR #7 → 4155de9）。
+
+## P2：Schema、稳定 ID 与数据迁移
+
+- [x] P2.1 为 manifest、glosses、sources、notes、reading-paths、revisions、subject-index 定义 schema_version。
+- [x] P2.2 建立 BookModel 基础类型和统一 Diagnostic。
+- [x] P2.3 设计 block_id 语法与 Markdown 承载方式，先在 ch01、ch03、ch12 三章试点。
+- [x] P2.4 编写 line-ref → block-ref 迁移器，输出自动映射、歧义、缺失三类报告。
+- [x] P2.5 双读所有登记表，比较 line-ref 与 block-ref 指向文本是否一致。
+- [x] P2.6 全量迁移 20 个单元，加入“任意插入 50 行仍通过”的回归测试。
+- [x] P2.7 停止新增行号证据；shift_anchors.py 标记为迁移期工具。
+- [x] Gate：所有旧证据映射完成，歧义项为 0；正文插行不触发登记表 diff。
+
+## P3：构建内核模块化
+
+- [x] P3.1 将 build.py 的 CLI、应用服务和产品装配拆开。
+- [x] P3.2 拆 core.py：I/O、路径、配置、模型、诊断。
+- [x] P3.3 拆 render.py：Markdown、HTML 变换、引用、图版、长名称。
+- [x] P3.4 拆 pages.py：前置页、正文单元、后置页、导航。
+- [x] P3.5 拆 style.py：令牌、屏幕、打印、组件、装饰 SVG；构建时合并内联。
+- [x] P3.6 定义 PrintManifest，让 PDF 后处理读取结构化元数据。
+- [x] P3.7 每完成一个模块，运行 legacy/v2 双构建并比较结构报告。
+- [ ] P3.8 新内核成为默认后，保留旧入口一个阶段并输出弃用提示。
+      旧入口 `yuyu-book/build.py` 已直接删除，没有保留弃用阶段；残留兼容层见 P8.1。
+- [x] Gate：结构等价报告全绿；HTML 离线、无脚本、PDF 契约全部保持。
+      2026-11-07 来源收口候选在本地分支 `feat/p5-provenance-gate`：P5 内容已形成
+      `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`；规则的匹配范围不变，来源改为真实提交，
+      数字增量与精确值规则改在 CLI 读取边界校验。回归测试与政策改动待审，P3 Gate 不勾选。
+      同内容双内核实测与候选的范围区别见 `docs/migrations/legacy-v2-structure.md`；
+      当前结构对照为零结构差异，离线、无脚本与 PDF 契约由构建器测试覆盖。
+      2026-11-08 复核：`6d4e3c0` 已是 `origin/main` 祖先，34 条规则全部带真实提交 SHA，
+      `tests/test_compare_legacy.py` 23 项全绿；来源字段可用的证据现行有效。
+      独立审阅仍未完成，P3 Gate 不勾选。
+
+      2026-11-09 审阅更新：34 条政策的来源、匹配条件与 23 项边界测试已复核；
+      重读冻结报告仍为同输入零差异、P0 差异 93/93 匹配，8 份历史 HTML/PDF 摘要均一致。
+      结合现行构建器契约检查，P3 输出 Gate 收口；上段未勾选结论为历史状态。
+      P3.8 当时跳过弃用阶段的偏差仍保留，不声称本次重新打印了 PDF。
+      见 `docs/migrations/spec-verification-2026-11-09.md`。
+
+## P4：产品生成器统一
+
+- [x] P4.1 建立共享设计令牌和组件语义，覆盖大书、portal、reader、gallery、cards、sample。
+- [x] P4.2 beginner reader 从读取 dist HTML 改为读取 BookModel。
+- [x] P4.3 illustration gallery、site portal、知识卡和样章改为产品适配器。
+- [x] P4.4 生成静态双语搜索索引、同段语言跳转表和概念关联表。
+- [x] P4.5 增加站点键盘、读屏、窄屏、暗色和 reduced-motion 测试。
+- [x] P4.6 对三个现有生成页执行统一视觉审计，保留御舆墨线体系。
+- [x] Gate：所有产品重跑无 diff；关闭脚本仍可完整阅读和导航。
+      2026-11-07 实测：`scripts/check_products.py` 11 个产物字节一致、本地锚点通过；
+      站点无障碍与无脚本导航测试全绿。视觉审计见 `docs/migrations/product-visual-audit.md`。
+
+## P5：事实与双语治理
+
+- [x] P5.1 建立 Claim Ledger schema 和 claim_id 规则。
+- [x] P5.2 导入版本、价格、数量、默认行为、性能数据和功能标志等高风险断言。
+- [x] P5.3 中英文段落共享 claim_id，增加单边更新失败测试。
+- [x] P5.4 增加复查周期、过期告警和发布阻断级别。
+- [x] P5.5 为 15 章补齐最小可运行案例、练习、预期结果和版本锁。
+- [x] P5.6 把事实、推断、教学简化和作者建议的标记规则写入 CONTRIBUTING.md。
+- [x] Gate：正式发布模拟中，过期高风险 claim 为 0；双语事实差异为 0。
+      P5.1–P5.6 已隔离提交为 `6d4e3c0475d28d2ebb7630518a2f6721c9a01620`，但本地
+      测试/政策变更仍待审，不把实现提交当作 Gate 通过。已执行 15 段案例、4 项练习测试、
+      17 项账本边界测试、542 项构建器测试和双语源稿装配；不包含 P3/P4/P6 混合改动。
+      2026-11-07 复验：release=True 校验 0 条告警，账本测试逐条验证中英同 claim_id；
+      独立审阅仍未完成，Gate 不勾选。
+      2026-11-08 复核：在 `ffabfde` 上以 `release=True` 运行账本校验返回 0 条告警
+      （6 条 claim）；独立审阅仍未完成，Gate 不勾选。
+
+      2026-11-09 审阅更新：现有 6 条 claim 的发布校验告警 0，18 项账本测试通过；
+      过期账本注入真实 CLI 校验后，发布模式在构建前返回 1，检查模式只告警。
+      现有账本的双语/过期 Gate 收口，不宣称自动发现了全部未登记断言。见本轮审阅报告。
+
+## P6：视频工厂重建
+
+- [x] P6.1 根级固定唯一 HyperFrames 版本，建立 video/pipeline/。
+- [x] P6.2 定义 episode schema、scene schema、voice/caption manifest。
+- [x] P6.3 抽出长版、短版、字幕、封面和音频检查的共享步骤。
+- [ ] P6.4 迁移 ch01，完成旧新时间线、字幕、时长和关键帧比较。
+      ch01 时间线、尺寸、fps、时长与音频时长已匹配 `compat-report.json`；旧版 SRT
+      不在 legacy 基目录，视频也未入库，字幕与关键帧比较保持 unverified，故不勾选。
+      2026-11-09：新增 `bookctl video compare`。本机找回旧 ch01 长版 SRT（147 条）；
+      新配置产物为 389 条，总文字一致但分句、时码不一致，报告为 mismatch。
+      未提供独立新版渲染，关键帧仍 unverified；详情及输入摘要见本轮审阅报告。
+      用户确认「暂无新版，保留媒体验收未完成」。
+- [x] P6.5 迁移 ch02–ch05，删除章节级重复构建脚本和 package.json。
+      原有重复脚本和派生音频文字已从候选索引删除；保留旧场景源与必要配置。
+- [x] P6.6 证明 transcript、chunks、vo-manifest、字幕 HTML、音频切片可重建后停止跟踪。
+      独立进程重建证明见 `docs/migrations/video-rebuild-proof.md`；候选索引清单测试通过。
+- [x] P6.7 用统一内容包扩展 ch06–ch15。
+- [x] P6.8 增加字幕一致性、安全区、字号、停留时间、闪烁、响度和版权门禁。
+- [ ] Gate：15 章配置可检查；ch01–ch05 完成兼容审阅；中间物不进入 Git。
+      15 章配置检查已覆盖；ch01 时间线/尺寸/fps/时长与 `compat-report.json` 一致，
+      旧字幕已找回并发现分句/时码差异，新版关键帧仍缺证；派生中间物（transcript、chunks、vo-manifest、SRT、音频）
+      在 `git ls-tree` 中为 0 条。P6.4 未完成，Gate 不勾选。
+
+## P7：CI 与发布系统
+
+- [x] P7.1 抽取公共环境准备 workflow/composite action。
+- [x] P7.2 建立 Fast、Full、Release 三层任务和路径过滤。
+- [x] P7.3 缓存 Python、npm、Playwright、Mermaid 和字体资源。
+- [x] P7.4 每次构建输出 build-report.json 与 artifact-manifest.json。
+- [x] P7.5 Release 生成双语 HTML/PDF、站点包、视频清单、SHA-256 和版本说明。
+- [x] P7.6 增加生成器幂等、关键页视觉回归、链接和重定向检查。
+      2026-11-08 复核：生成器幂等与本地链接由 `scripts/check_products.py` 覆盖（Fast
+      与发布装配均运行）；关键页视觉回归由 `scripts/check_visual_layout.py` 覆盖
+      4 页 × 320/1280 × 明暗 × 禁脚本/reduce 共 16 场景，接入 Full 并上传
+      `product-visual-layout`；重定向由 `scripts/check_site_redirects.py` 与
+      `tests/test_site_redirects.py` 覆盖，接入 `pages.yml` 和 `release.py` 的站点校验。
+- [x] P7.7 合并或删除重复 workflow，README 徽章与真实门禁一致。
+- [x] Gate：PR 只跑必要层；主分支与发布层稳定；产物能追溯到 commit 和依赖。
+      2026-11-07 `release.yml` 在 `30ca46a`（树 `b65e1970e9765326e44c9796919420d74846c1b3`，
+      与合并提交 `ca807e6` 相同）实际运行成功（run 42397600190），装配出
+      330,036,272 B 工件并通过 `sha256sum --check SHA256SUMS`；`build-report.json` 与
+      `artifact-manifest.json` 记录提交、工作树状态和依赖。PR 只跑 Fast；
+      Full/Omp/Bootstrap 仅在主分支与手动触发运行。
+
+## P8：清理、文档与正式切换
+
+- [x] P8.1 删除旧 line-ref 写入、旧构建入口和失效兼容层。
+      `plain.py` 只接收稳定块且拒绝围栏证据；旧 writer 与专属测试删除。
+      line-ref 拒绝、术语围栏、导读带围栏分别先红后绿；plain 70 / migration 19 项通过，测试变更待新基线复核。
+- [x] P8.2 清理 video/ 中已证明可重建的中间物和重复配置。
+      已完成候选索引停止跟踪，独立重建与清单检查有实际证据；不把本机媒体入库。
+- [x] P8.3 更新 STRUCTURE.md、CONTRIBUTING.md、README.md、en/README.md。
+- [x] P8.4 增加架构决策记录：稳定 ID、BookModel、PDF 边界、站点脚本边界、视频资产策略。
+- [x] P8.5 从干净 clone 完成 Windows 与 Ubuntu 双平台演练。
+      2026-11-08：全新 Windows clone（detach `ca807e6`、未复用旧 `dist/`）按 `bookctl`
+      重建三册 HTML/PDF 与 EPUB，`build-report.json` 记录的提交为该合并提交；Ubuntu
+      由同树候选的 Bootstrap（ubuntu-latest）与 `release.yml` 全量装配/校验完成，
+      Bootstrap（windows-latest）同时通过。
+- [x] P8.6 发布首个新架构版本并保留 legacy 标签与迁移说明。
+      `v0.3.6`（标签对象 `cbdbe0f`，提交 `4050c7c`）由 `release.yml` 的标签运行
+      42423483244 装配并发布为 GitHub Release，15 个资产；发布后 14 个可下载文件与
+      `SHA256SUMS` 逐一一致。`legacy/pre-platform-2026-11-03` 保留，迁移说明见
+      `docs/migrations/release-migration.md`。
+- [ ] Gate：规格第 7 节全部验收；旧路径无调用者；正式发布产物可下载、可校验。
+      P8.5/P8.6 已完成；P3/P5 既有审阅已于 2026-11-09 收口，P3.8 的迁移偏差、
+      P6.4 及 ch01–ch05 媒体兼容审阅仍未完成，总验收不勾选。
+
+## 建议 PR 切片
+
+| PR | 范围 | 主要风险 |
+|---|---|---|
+| 1 | P0 基线与视频身份清单 | 无行为变化 |
+| 2 | pyproject、锁文件、doctor | 环境 |
+| 3 | bookctl check 与 CI 对齐 | 工具入口 |
+| 4 | Schema + BookModel 骨架 | 数据读取 |
+| 5 | 三章稳定 ID 试点 | 证据绑定 |
+| 6 | 全量稳定 ID 迁移 | 数据迁移 |
+| 7–9 | 构建器按 core/render/style-pages 拆分 | 输出等价 |
+| 10 | PDF PrintManifest | 分页与书签 |
+| 11–12 | reader/gallery/portal/cards 统一 | 产品输出 |
+| 13 | Claim Ledger | 内容治理 |
+| 14–16 | 视频 ch01、ch02–05、ch06–15 | 媒体迁移 |
+| 17 | CI 三层与发布清单 | 发布 |
+| 18 | 删除兼容层与文档收官 | 清理 |
+
+## 每个 PR 的完成定义
+
+- [ ] Spec 对应条目有测试或可复核证据。
+- [ ] 通用测试、构建器测试、内容检查、Mermaid 检查通过。
+- [ ] 涉及输出时，生成器连续运行两次无 diff。
+- [ ] 涉及双语内容时，中英文同批更新。
+- [ ] 涉及视觉或 PDF 时，附关键页比较。
+- [ ] 涉及删除时，附可重建证明和删除清单。
+- [ ] 不提交 dist、缓存、中间媒体或第三方工具副本。
+- [ ] 更新相关结构文档，不在修订账本中写无法重算的数字。
+
+## 推荐执行顺序
+
+先完成 P0–P2，消除环境和行号锚点这两个会放大后续改动成本的问题；随后执行 P3–P4，建立统一内核和产品适配器；再做 P5 内容治理与 P6 视频工厂；最后用 P7–P8 收拢 CI、发布和旧代码。P2 未完成前不开始大规模正文扩写，P3 未稳定前不做全站视觉换骨，P6 不与 PDF 内核迁移并行。
+

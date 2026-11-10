@@ -1,0 +1,9 @@
+{
+  "kind": "mechanical_check_of_authored_false_answer",
+  "input_kind": "authored_example_from_ch16_not_model_output",
+  "result": {
+    "mechanical_ok": true,
+    "errors": [],
+    "manual_review_required": true
+  }
+}

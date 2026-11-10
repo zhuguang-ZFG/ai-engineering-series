@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "并发分区", "data": {"icon": "target"}},
+    {"at": 1.2, "kind": "point", "text": "安全工具捆一批"},
+    {"at": 2.7, "kind": "draw", "text": "Bash 切断", "data": {"icon": "bulb"}},
+    {"at": 4.2, "kind": "point", "text": "副作用边界要干净"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

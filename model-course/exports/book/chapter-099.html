@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JavaScript 语言深入 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 99 / 195</p><article><h1 id="javascript-语言深入">JavaScript 语言深入</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#javascript-原理">JavaScript 原理</a><ul><li><a href="#1-javascript-是什么">1. JavaScript 是什么</a></li><li><a href="#2-数据篇变量与数据类型">2. 数据篇：变量与数据类型</a></li><li><a href="#3-逻辑篇函数与流程控制">3. 逻辑篇：函数与流程控制</a></li><li><a href="#4-交互篇dom事件与异步">4. 交互篇：DOM、事件与异步</a></li><li><a href="#5-实战篇读懂代码看懂报错精准描述">5. 实战篇：读懂代码、看懂报错、精准描述</a></li></ul></li></ul></nav></details><h2 id="javascript-原理">JavaScript 原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+你已经学会了 HTML 和 CSS，能做出好看的网页了。但你可能会发现：点击按钮没反应，填了表单提交不了，网页就像一张&quot;静态&quot;的图片。</p>
+</blockquote>
+<p>这就是我们需要 JavaScript 的原因——它让网页&quot;活&quot;起来。点击按钮能弹出菜单，输入文字能实时搜索，滚动页面能加载更多内容……这些交互效果都靠 JavaScript。</p>
+<p>在 vibecoding 里，AI 会帮你写大部分代码。但你至少得能看懂代码在做什么，否则 AI 写错了你也发现不了。读完这篇，你就能：</p>
+<ul>
+<li>读懂 AI 写的代码在做什么</li>
+<li>看出代码哪里有问题</li>
+<li>用清晰的话告诉 AI 怎么改</li>
+</ul>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>学完能干嘛</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>JavaScript 是什么</td>
+<td>明白它在网页里扮演什么角色</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>数据与变量</td>
+<td>知道程序怎么存东西、怎么用东西</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>函数与逻辑</td>
+<td>看懂代码的判断、循环和复用逻辑</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>DOM 与事件</td>
+<td>知道代码怎么控制网页、怎么响应用户操作</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>实战技巧</td>
+<td>拿到 AI 代码怎么读、遇到报错怎么说</td>
+</tr>
+</tbody></table></div>
+<p>每一章都从&quot;能识别代码&quot;开始，不需要你会手写。遇到不懂的代码，随时回来查就行。</p>
+<h3 id="1-javascript-是什么">1. JavaScript 是什么</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>为什么网页需要 JavaScript？</strong> HTML 和 CSS 已经能让网页有内容、有样式了，为什么还要学一门新语言？</p>
+</blockquote>
+<h4 id="11-从静态网页到动态应用">1.1 从&quot;静态网页&quot;到&quot;动态应用&quot;</h4>
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>📄 没有 JavaScript 的网页</p>
+<ul>
+<li>内容固定，无法交互</li>
+<li>点击按钮没反应</li>
+<li>填写表单提交不了</li>
+<li>页面不会自动更新</li>
+</ul>
+<p><em>就像一张纸质海报，只能看</em></p>
+</div>
+<div style="flex: 1; padding: 16px; border: 1px solid #e4e7ed; border-radius: 12px;"><p>有 JavaScript 的网页</p>
+<ul>
+<li>点击按钮弹出菜单</li>
+<li>输入文字实时搜索</li>
+<li>滚动自动加载内容</li>
+<li>数据实时更新显示</li>
+</ul>
+<p><em>就像一个真正的应用程序</em></p>
+</div>
+</div><p><strong>用一句话理解三者的关系：</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>技术</th>
+<th>比喻</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTML</strong></td>
+<td>骨架</td>
+<td>定义网页的结构和内容</td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>皮肤</td>
+<td>定义网页的外观和样式</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>肌肉和神经系统</td>
+<td>让网页能响应、能交互、能思考</td>
+</tr>
+</tbody></table></div>
+<h4 id="12-vibecoding-也需要懂-javascript的原理">1.2 vibecoding 也需要懂 JavaScript的原理</h4>
+<blockquote>
+<p><strong>刚学 JS 的开发者踩坑记</strong>
+一位刚学 JavaScript 的开发者用 AI 做了一个&quot;计数器&quot;应用：点击按钮，数字加 1。AI 生成的代码能正常工作。</p>
+</blockquote>
+<p>但他想改成&quot;点击加 2&quot;，对 AI 说：&quot;让每次点击加 2。&quot; AI 改了代码，可数字还是只加 1。</p>
+<p>他问 AI 为啥没效果，AI 解释了一通，但他看不懂代码里的 <code>count = count + 1</code> 是什么意思，也不知道 AI 改的是不是这个地方。只能反复说&quot;加 2 没效果&quot;，AI 又改了好几版，有的把初始值改成 2，有的在完全不相关的地方加了 2。</p>
+<p>最后他看了第 2 章&quot;变量&quot;的概念，明白了 <code>count = count + 1</code> 是在把 count 的值加 1 再存回去。然后他对 AI 说：&quot;把 <code>count + 1</code> 改成 <code>count + 2</code>。&quot;</p>
+<p>一次就改对了。</p>
+<p><strong>这就是为什么要懂 JavaScript——不是为了手写代码，而是为了在 AI 没改对时，你能一眼看出问题在哪，一句话说到点子上。</strong></p>
+<h4 id="13-先睹为快一段真实的-ai-代码">1.3 先睹为快：一段真实的 AI 代码</h4>
+<p>先来看一段 AI 生成的真实代码。不要担心看不懂，只要有个印象，后面我们会逐一讲解每个部分。</p>
+<p><strong>场景</strong>：做一个&quot;点击按钮切换背景颜色&quot;的功能</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 定义一组颜色
+const colors = [&#39;#ff6b6b&#39;, &#39;#4ecdc4&#39;, &#39;#45b7d1&#39;, &#39;#96ceb4&#39;]
+let currentIndex = 0
+
+// 找到页面上的按钮
+const button = document.querySelector(&#39;#changeBtn&#39;)
+
+// 给按钮添加点击事件
+button.addEventListener(&#39;click&#39;, () =&gt; {
+  currentIndex = (currentIndex + 1) % colors.length
+  document.body.style.backgroundColor = colors[currentIndex]
+})
+</code></pre>
+<p><strong>这段代码在做什么？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>代码</th>
+<th>作用</th>
+<th>对应章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>const colors = [...]</code></td>
+<td>定义一组颜色数据</td>
+<td>第 2 章：数组</td>
+</tr>
+<tr>
+<td><code>let currentIndex = 0</code></td>
+<td>记录当前显示第几个颜色</td>
+<td>第 2 章：变量</td>
+</tr>
+<tr>
+<td><code>document.querySelector(...)</code></td>
+<td>找到页面上的按钮</td>
+<td>第 4 章：DOM 查找</td>
+</tr>
+<tr>
+<td><code>button.addEventListener(...)</code></td>
+<td>给按钮添加点击事件</td>
+<td>第 4 章：事件监听</td>
+</tr>
+<tr>
+<td><code>() =&gt; {...}</code></td>
+<td>定义点击后要执行的代码</td>
+<td>第 3 章：箭头函数</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>核心启示</strong>
+你不需要现在就理解每一行代码。只要记住：<strong>JavaScript 代码就是一系列指令，告诉浏览器&quot;当用户做某事时，应该发生什么&quot;。</strong></p>
+</blockquote>
+<h3 id="2-数据篇变量与数据类型">2. 数据篇：变量与数据类型</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>程序是怎么&quot;记住&quot;东西的？</strong> 用户输入的内容、从服务器获取的数据、计算过程中的中间结果——这些信息都存在哪里？</p>
+</blockquote>
+<h4 id="21-变量给数据起个名字">2.1 变量：给数据起个名字</h4>
+<p><strong>变量就像一个有标签的盒子</strong>——你可以把数据放进去，以后通过标签来取用。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const name = &quot;张三&quot;   // 名字不会变，用 const
+let age = 25          // 年龄可能会变，用 let
+</code></pre>
+<p><strong>为什么要区分 const 和 let？</strong></p>
+<p>想象一下：你的身份证号码（const）这辈子都不会变，但你的年龄（let）每年都会变。JavaScript 让你用不同的关键字来表达这种&quot;变与不变&quot;的意图。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>能否修改</th>
+<th>使用场景</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>const</code></td>
+<td>❌ 不能</td>
+<td>值不会变的数据</td>
+<td>身份证号、配置项、颜色列表</td>
+</tr>
+<tr>
+<td><code>let</code></td>
+<td>✅ 能</td>
+<td>值会变化的数据</td>
+<td>计数器、当前选中的选项、用户输入</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>🔍 看一个具体的例子</strong></p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 用 const：这些值不会变
+const PI = 3.14159
+const MAX_USERS = 100
+const APP_NAME = &quot;TodoList&quot;
+
+// 用 let：这些值会变化
+let count = 0
+count = 1  // ✅ 可以修改
+
+count = count + 1  // ✅ 可以基于原值计算
+
+// 如果用 const 会怎样？
+const fixedCount = 0
+fixedCount = 1  // ❌ 报错！const 不能重新赋值
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：修改下面的代码，看看 const 和 let 的区别</p>
+<h4 id="22-数据类型javascript-里的几种东西">2.2 数据类型：JavaScript 里的几种&quot;东西&quot;</h4>
+<p>JavaScript 把数据分成几种类型，最常用的有三种：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>示例</th>
+<th>实际场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>string</code>（字符串）</td>
+<td>文本内容</td>
+<td><code>&quot;hello&quot;</code>, <code>&#39;你好&#39;</code></td>
+<td>用户名、商品描述、提示信息</td>
+</tr>
+<tr>
+<td><code>number</code>（数字）</td>
+<td>数值</td>
+<td><code>42</code>, <code>3.14</code></td>
+<td>价格、数量、评分</td>
+</tr>
+<tr>
+<td><code>boolean</code>（布尔值）</td>
+<td>是/否</td>
+<td><code>true</code>, <code>false</code></td>
+<td>是否登录、是否完成、是否可见</td>
+</tr>
+</tbody></table></div>
+<p><strong>还有两个特殊值需要知道：</strong></p>
+<ul>
+<li><code>undefined</code> → 变量声明了，但还没给值</li>
+<li><code>null</code> → 故意设为空（表示&quot;这里没有值&quot;）</li>
+</ul>
+<blockquote>
+<p><strong>🔍 模板字符串：更方便地拼接文本</strong>
+在 AI 代码里，你经常会看到用反引号（<code>`</code>）包裹的字符串，里面还有 <code>${...}</code>：</p>
+</blockquote>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const name = &quot;张三&quot;
+const age = 25
+
+// 传统写法（麻烦）
+const message = &quot;我叫&quot; + name + &quot;，今年&quot; + age + &quot;岁&quot;
+
+// 模板字符串（简洁）
+const message = `我叫${name}，今年${age}岁`
+// 结果：&quot;我叫张三，今年25岁&quot;
+</code></pre>
+<p><strong>识别要点</strong>：看到反引号和 <code>${}</code>，就知道是在把变量插入到文本中。</p>
+<h4 id="23-对象和数组把数据组织起来">2.3 对象和数组：把数据组织起来</h4>
+<p><strong>对象 = 一组有名字的属性</strong>（像一张个人信息表）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const user = {
+  name: &quot;张三&quot;,
+  age: 25,
+  isVIP: true
+}
+
+// 使用点号访问属性
+console.log(user.name)    // &quot;张三&quot;
+console.log(user.age)     // 25
+</code></pre>
+<p><strong>数组 = 一组有顺序的数据</strong>（像一个列表）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const colors = [&#39;红色&#39;, &#39;绿色&#39;, &#39;蓝色&#39;]
+
+// 用索引访问（从 0 开始）
+console.log(colors[0])  // &quot;红色&quot;
+console.log(colors[1])  // &quot;绿色&quot;
+</code></pre>
+<p><strong>嵌套结构：对象里套数组、数组里套对象</strong></p>
+<p>这是 AI 代码中最常见的数据结构：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const todos = [
+  { id: 1, text: &quot;学习 JavaScript&quot;, done: false },
+  { id: 2, text: &quot;做项目&quot;, done: true },
+  { id: 3, text: &quot;写文档&quot;, done: false }
+]
+
+// 访问：先取数组的第 0 项，再取它的 text 属性
+console.log(todos[0].text)  // &quot;学习 JavaScript&quot;
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>{}</code> → 这是一个对象，里面是一组 <code>名字: 值</code></li>
+<li>看到 <code>[]</code> → 这是一个数组，里面是一组按顺序排列的值</li>
+<li>看到 <code>data[0].name</code> → 先取数组第 0 项，再取它的 name 属性</li>
+</ul>
+<h4 id="24-值与引用一个容易踩的坑">2.4 值与引用：一个容易踩的坑</h4>
+<p>这是新手最常遇到的问题之一！</p>
+<p><strong>基本类型（string、number、boolean）赋值 = 复制一份全新的数据：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">let a = 10
+let b = a      // b 得到 a 的副本
+b = 20
+console.log(a) // 10（a 不受影响）
+</code></pre>
+<p><strong>对象和数组赋值 = 复制的是&quot;地址&quot;（指向同一个东西）：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">let user1 = { name: &quot;张三&quot; }
+let user2 = user1      // user2 指向同一个对象
+user2.name = &quot;李四&quot;     // 修改 user2 会影响 user1
+console.log(user1.name) // &quot;李四&quot;（user1 也变了！）
+</code></pre>
+<p><strong>为什么要创建副本？</strong></p>
+<p>在 React/Vue 中，直接修改数据会导致界面不更新。所以 AI 代码里经常看到 <code>[...array]</code> 或 <code>{...obj}</code>——它在创建副本，避免互相影响。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 用展开运算符创建副本
+const arr1 = [1, 2, 3]
+const arr2 = [...arr1]     // 创建新数组
+arr2.push(4)
+console.log(arr1)          // [1, 2, 3]（不受影响）
+console.log(arr2)          // [1, 2, 3, 4]
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：观察修改副本时原数据的变化</p>
+<h4 id="25-解构与展开现代-javascript-的快捷写法">2.5 解构与展开：现代 JavaScript 的快捷写法</h4>
+<p>这两个语法在 AI 代码里到处都是，不认识就读不懂代码。</p>
+<p><strong>解构赋值：从对象或数组里快速提取数据</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const user = { name: &quot;张三&quot;, age: 25, city: &quot;北京&quot; }
+
+// 传统写法（麻烦）
+const name = user.name
+const age = user.age
+
+// 解构写法（简洁）
+const { name, age } = user
+// 效果一样，但一行搞定
+</code></pre>
+<p><strong>展开运算符：复制并扩展数据</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 复制数组并添加新元素
+const arr1 = [1, 2, 3]
+const arr2 = [...arr1, 4, 5]  // [1, 2, 3, 4, 5]
+
+// 复制对象并添加新属性
+const user1 = { name: &quot;张三&quot;, age: 25 }
+const user2 = { ...user1, city: &quot;北京&quot; }
+// { name: &quot;张三&quot;, age: 25, city: &quot;北京&quot; }
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>const { name, age } = person</code> → 从 person 对象里提取 name 和 age</li>
+<li>看到 <code>...array</code> 或 <code>...obj</code> → 把数组或对象展开铺平</li>
+<li>你不需要能手写，但必须能读懂</li>
+</ul>
+<h3 id="3-逻辑篇函数与流程控制">3. 逻辑篇：函数与流程控制</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>代码是怎么&quot;做决定&quot;和&quot;重复做事&quot;的？</strong> 程序需要根据条件执行不同的操作，也需要重复执行某些任务——这些逻辑怎么表达？</p>
+</blockquote>
+<h4 id="31-条件判断如果就否则">3.1 条件判断：如果...就...否则...</h4>
+<p><strong>if/else：最基本的条件判断</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const age = 18
+
+if (age &gt;= 18) {
+  console.log(&quot;成年人&quot;)
+} else {
+  console.log(&quot;未成年&quot;)
+}
+</code></pre>
+<p><strong>三元运算符：简写的 if/else</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 完整写法（4 行）
+let message
+if (age &gt;= 18) {
+  message = &quot;成年人&quot;
+} else {
+  message = &quot;未成年&quot;
+}
+
+// 三元运算符（1 行）
+const message = age &gt;= 18 ? &quot;成年人&quot; : &quot;未成年&quot;
+// 格式：条件 ? 条件为真时的值 : 条件为假时的值
+</code></pre>
+<p><strong>&amp;&amp; 短路写法：React 代码里常见</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 只有 isLoggedIn 为 true 时才显示用户面板
+isLoggedIn &amp;&amp; &lt;UserPanel /&gt;
+
+// 等价于
+if (isLoggedIn) {
+  return &lt;UserPanel /&gt;
+}
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>? :</code> → 这是三元运算符，简写的 if/else</li>
+<li>看到 <code>&amp;&amp;</code> → 前面为 true 才执行后面</li>
+</ul>
+<h4 id="32-函数把操作打包起来">3.2 函数：把操作打包起来</h4>
+<p><strong>函数 = 一道菜的配方</strong></p>
+<ul>
+<li>定义函数 = 写下配方</li>
+<li>调用函数 = 按配方做菜</li>
+<li>参数 = 原料</li>
+<li>返回值 = 成品</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 定义函数（写下配方）
+function greet(name) {
+  return &quot;Hello &quot; + name
+}
+
+// 调用函数（按配方做菜）
+console.log(greet(&quot;张三&quot;))  // &quot;Hello 张三&quot;
+console.log(greet(&quot;李四&quot;))  // &quot;Hello 李四&quot;
+</code></pre>
+<p><strong>三种写法，一眼识别：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 1. function 声明（传统写法）
+function greet(name) {
+  return &quot;Hello &quot; + name
+}
+
+// 2. 箭头函数（AI 代码里用得最多）
+const greet = (name) =&gt; {
+  return &quot;Hello &quot; + name
+}
+
+// 3. 箭头函数简写（只有一行时）
+const greet = (name) =&gt; &quot;Hello &quot; + name
+</code></pre>
+<p>👇 <strong>动手试试看</strong>：输入不同的名字，看看函数怎么工作</p>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>function</code> 或 <code>=&gt;</code> → 这是一个函数</li>
+<li>看到 <code>fn()</code> → 在调用这个函数</li>
+<li>看到 <code>() =&gt; {}</code> → 箭头函数，现代 JS 的主流写法</li>
+</ul>
+<h4 id="33-数组方法处理列表的利器">3.3 数组方法：处理列表的利器</h4>
+<p>在 React/Vue 里，几乎每个列表渲染都会用到这些方法。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const todos = [
+  { id: 1, text: &quot;学习&quot;, done: false },
+  { id: 2, text: &quot;工作&quot;, done: true }
+]
+
+// .map()：把数组的每一项变成另一个东西
+const texts = todos.map(todo =&gt; todo.text)
+// [&quot;学习&quot;, &quot;工作&quot;]
+
+// .filter()：筛选出符合条件的项
+const unfinished = todos.filter(todo =&gt; !todo.done)
+// [{ id: 1, text: &quot;学习&quot;, done: false }]
+
+// .find()：找到第一个符合条件的项
+const found = todos.find(todo =&gt; todo.id === 1)
+// { id: 1, text: &quot;学习&quot;, done: false }
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>.map()</code> → 对数组做变换，返回新数组</li>
+<li>看到 <code>.filter()</code> → 筛选数组</li>
+<li>看到 <code>items.map(item =&gt; &lt;li&gt;{item.name}&lt;/li&gt;)</code> → 把每个数据项变成列表标签</li>
+</ul>
+<h4 id="34-作用域变量的可见范围">3.4 作用域：变量的&quot;可见范围&quot;</h4>
+<p><strong>用&quot;房间&quot;比喻：</strong></p>
+<ul>
+<li>函数内部的变量就像房间里的东西，外面看不到</li>
+<li>但房间里的人可以看到走廊（外层作用域）的东西</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const global = &quot;全局变量&quot;  // 走廊里的东西
+
+function room() {
+  const local = &quot;房间里的东西&quot;  // 房间里的东西
+  console.log(global)  // ✅ 能看到走廊
+}
+
+console.log(local)  // ❌ 报错！外面看不到房间里的东西
+</code></pre>
+<p><strong>核心直觉：</strong> 代码写在哪里，决定了它能看到什么变量。</p>
+<p>👇 <strong>动手试试看</strong>：点击不同的作用域，看看能访问哪些变量</p>
+<h4 id="35-闭包函数记住了它诞生时的环境">3.5 闭包：函数&quot;记住&quot;了它诞生时的环境</h4>
+<p><strong>不要把它当成独立的概念，从一个具体场景理解：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">function setupCounter() {
+  let count = 0  // 这个变量在函数内部
+
+  return {
+    add: () =&gt; { count++; return count },
+    getCount: () =&gt; count
+  }
+}
+
+const counter = setupCounter()
+console.log(counter.add())      // 1
+console.log(counter.add())      // 2
+console.log(counter.getCount()) // 2
+</code></pre>
+<p><strong>核心直觉：</strong> 函数在被创建时，会&quot;记住&quot;它周围的变量，即使外层函数已经执行完了。</p>
+<p>👇 <strong>动手试试看</strong>：观察闭包如何让函数&quot;记住&quot;状态</p>
+<h4 id="36-this函数被谁调用">3.6 this：函数被谁调用</h4>
+<p><strong>不讲复杂的绑定规则，只讲最常见的场景：</strong></p>
+<p><strong>场景 1：在对象的方法里，this 指向这个对象</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const user = {
+  name: &quot;张三&quot;,
+  sayHi() {
+    console.log(&quot;你好，我是&quot; + this.name)  // this 指向 user
+  }
+}
+user.sayHi()  // &quot;你好，我是张三&quot;
+</code></pre>
+<p><strong>场景 2：在事件监听里，this 指向触发事件的元素</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">button.addEventListener(&#39;click&#39;, function() {
+  console.log(this)  // this 指向 button 元素
+})
+
+// 但箭头函数不会改变 this
+button.addEventListener(&#39;click&#39;, () =&gt; {
+  console.log(this)  // this 指向外层的 this
+})
+</code></pre>
+<blockquote>
+<p><strong>遇到问题怎么办？</strong>
+如果 AI 代码里出现 this 相关的 bug（比如 <code>Cannot read property of undefined</code>），告诉 AI：&quot;这个方法里的 this 指向不对，改成箭头函数或者用 bind&quot;</p>
+</blockquote>
+<h3 id="4-交互篇dom事件与异步">4. 交互篇：DOM、事件与异步</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>JavaScript 怎么跟网页&quot;互动&quot;？</strong> 怎么找到页面上的元素？怎么响应用户的点击、输入？怎么从服务器获取数据？</p>
+</blockquote>
+<h4 id="41-domjavascript-看到的网页">4.1 DOM：JavaScript 看到的网页</h4>
+<p>网页在 JavaScript 眼里是一棵&quot;树&quot;，每个 HTML 标签都是树上的一个&quot;节点&quot;。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-html">&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;标题&lt;/h1&gt;
+    &lt;p&gt;段落&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;项目1&lt;/li&gt;
+      &lt;li&gt;项目2&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>JS 操控网页 = 找到节点 + 修改节点 + 创建/删除节点</strong></p>
+<p>👇 <strong>动手试试看</strong>：点击节点，看看 DOM 树是怎么组织的</p>
+<h4 id="42-查找与修改元素">4.2 查找与修改元素</h4>
+<p><strong>查找元素：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 根据 CSS 选择器查找（最常用）
+const title = document.querySelector(&#39;h1&#39;)      // 找第一个 h1
+const button = document.querySelector(&#39;#btn&#39;)   // 找 id=&quot;btn&quot; 的元素
+const items = document.querySelectorAll(&#39;.item&#39;) // 找所有 class=&quot;item&quot; 的元素
+</code></pre>
+<p><strong>修改元素：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 改文字
+title.textContent = &quot;新标题&quot;
+
+// 改样式
+element.style.color = &quot;red&quot;
+element.style.fontSize = &quot;20px&quot;
+
+// 改 CSS 类
+element.classList.add(&#39;active&#39;)      // 添加类
+element.classList.remove(&#39;hidden&#39;)   // 移除类
+element.classList.toggle(&#39;open&#39;)     // 切换类（有就移除，没有就添加）
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>document.querySelector</code> → 在查找网页元素</li>
+<li>看到 <code>.textContent</code> → 改文字</li>
+<li>看到 <code>.style.xxx</code> → 改样式</li>
+<li>看到 <code>.classList.add/remove/toggle</code> → 改 CSS 类</li>
+</ul>
+<h4 id="43-事件当用户做了某个操作时">4.3 事件：当用户做了某个操作时...</h4>
+<p><strong>addEventListener：给元素添加事件监听</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">button.addEventListener(&#39;click&#39;, () =&gt; {
+  console.log(&quot;按钮被点击了&quot;)
+})
+</code></pre>
+<p><strong>常见事件：</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>触发时机</th>
+<th>实际场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>click</code></td>
+<td>点击</td>
+<td>按钮点击、链接跳转</td>
+</tr>
+<tr>
+<td><code>input</code></td>
+<td>输入框内容变化</td>
+<td>实时搜索、表单验证</td>
+</tr>
+<tr>
+<td><code>submit</code></td>
+<td>表单提交</td>
+<td>登录、注册、提交数据</td>
+</tr>
+<tr>
+<td><code>scroll</code></td>
+<td>滚动页面</td>
+<td>懒加载、回到顶部</td>
+</tr>
+</tbody></table></div>
+<p><strong>事件对象：获取更多信息</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">input.addEventListener(&#39;input&#39;, (e) =&gt; {
+  console.log(e.target.value)  // 获取输入框的值
+  e.preventDefault()            // 阻止默认行为（比如表单提交后刷新页面）
+})
+</code></pre>
+<blockquote>
+<p><strong>实际应用</strong>
+当你想给按钮加一个功能，本质上就是在告诉 AI：&quot;给这个按钮添加一个点击事件，点击后执行某某操作&quot;</p>
+</blockquote>
+<h4 id="44-有些操作不是立刻完成的的原理">4.4 有些操作不是立刻完成的的原理</h4>
+<p><strong>餐厅比喻：</strong></p>
+<p>点菜后不用站在厨房门口等，可以先做别的事，菜好了服务员会端过来。</p>
+<p><strong>最常见场景：从服务器获取数据</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 同步写法（会卡住页面，不要用）
+const data = fetch(&#39;/api/data&#39;)  // ❌ 这样写会卡住
+
+// 异步写法（正确）
+async function loadData() {
+  try {
+    const response = await fetch(&#39;/api/data&#39;)
+    const data = await response.json()
+    console.log(data)
+  } catch (error) {
+    console.error(&#39;出错了:&#39;, error)
+  }
+}
+</code></pre>
+<p><strong>async/await 语法：</strong></p>
+<ul>
+<li><code>async</code> → 标记这个函数里有异步操作</li>
+<li><code>await</code> → 等待这个操作完成（但不会卡住页面）</li>
+<li><code>try/catch</code> → 处理可能出现的错误</li>
+</ul>
+<p>👇 <strong>动手试试看</strong>：观察异步操作的执行顺序</p>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>async/await</code> → 在等待耗时操作</li>
+<li>看到 <code>fetch()</code> → 在从服务器获取数据</li>
+<li>看到 <code>try/catch</code> → 在处理可能的错误</li>
+</ul>
+<h4 id="45-事件循环javascript-的工作原理">4.5 事件循环：JavaScript 的工作原理</h4>
+<p><strong>不用术语&quot;微任务/宏任务&quot;，用一个简单的模型理解：</strong></p>
+<p><strong>JS 是一个&quot;单人工位&quot;</strong>，同时只做一件事，但有一个&quot;待办便签栏&quot;（任务队列）。</p>
+<p>当遇到要等待的操作（网络请求、定时器），JS 不是傻等，而是把&quot;等好了之后做什么&quot;贴到便签栏，自己继续往下执行。等当前事情做完了，才去看便签栏。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">console.log(&quot;1&quot;)
+
+setTimeout(() =&gt; console.log(&quot;2&quot;), 0)  // 即使是 0 秒，也会推迟
+
+console.log(&quot;3&quot;)
+
+// 输出：1, 3, 2（不是 1, 2, 3！）
+</code></pre>
+<p>为什么？</p>
+<ol>
+<li>执行 <code>console.log(&quot;1&quot;)</code> → 输出 1</li>
+<li>遇到 <code>setTimeout</code> → 把回调贴到便签栏，继续往下</li>
+<li>执行 <code>console.log(&quot;3&quot;)</code> → 输出 3</li>
+<li>当前代码执行完了，去看便签栏</li>
+<li>执行 <code>setTimeout</code> 的回调 → 输出 2</li>
+</ol>
+<p>👇 <strong>动手试试看</strong>：观察代码的执行顺序</p>
+<blockquote>
+<p><strong>遇到问题怎么办？</strong>
+如果 AI 代码里数据还没获取到页面就渲染了，告诉 AI：&quot;数据还没加载完就开始渲染了，需要添加 loading 状态，等数据到了再渲染&quot;</p>
+</blockquote>
+<h4 id="46-模块import-和-export">4.6 模块：import 和 export</h4>
+<p>AI 生成的 React/Vue 代码第一行几乎都是 <code>import</code>。</p>
+<p><strong>import = 从别的文件引入功能</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 从工具文件引入函数
+import { formatDate } from &#39;./utils&#39;
+
+// 从第三方包引入
+import React from &#39;react&#39;
+import { useState } from &#39;react&#39;
+</code></pre>
+<p><strong>export = 把功能暴露出去给别人用</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// utils.js
+export function formatDate(date) {
+  // ...
+}
+
+// 或者默认导出
+export default function formatDate(date) {
+  // ...
+}
+</code></pre>
+<p><strong>npm 包 = 别人写好的工具，安装后就能用</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 安装包：npm install lodash
+// 使用包
+import _ from &#39;lodash&#39;
+</code></pre>
+<blockquote>
+<p><strong>识别技巧</strong></p>
+</blockquote>
+<ul>
+<li>看到 <code>import</code> → 从别的文件引入功能</li>
+<li>看到 <code>export</code> → 把功能暴露给别人用</li>
+<li>看到 <code>from &#39;react&#39;</code> → 从 React 包引入</li>
+<li>看到 <code>from &#39;./utils&#39;</code> → 从本地文件引入</li>
+</ul>
+<h3 id="5-实战篇读懂代码看懂报错精准描述">5. 实战篇：读懂代码、看懂报错、精准描述</h3>
+<blockquote>
+<p><strong>🤔 核心问题</strong>
+<strong>前面学了这么多语法，实际拿到 AI 代码时怎么用？</strong> 怎么快速读懂代码？遇到报错怎么办？怎么让 AI 准确地帮你改代码？</p>
+</blockquote>
+<h4 id="51-ai-代码的阅读方法">5.1 AI 代码的阅读方法</h4>
+<p><strong>四步法：</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>看什么</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第一步：看整体结构</strong></td>
+<td>有几个函数？分别做什么？</td>
+<td><code>loadData()</code> 加载数据，<code>renderList()</code> 渲染列表</td>
+</tr>
+<tr>
+<td><strong>第二步：找入口</strong></td>
+<td>程序从哪里开始执行？</td>
+<td><code>addEventListener(&#39;click&#39;, ...)</code> 点击时开始</td>
+</tr>
+<tr>
+<td><strong>第三步：追踪数据流</strong></td>
+<td>数据从哪里来？到哪里去？</td>
+<td>从 API 获取 → 解析 → 渲染到页面</td>
+</tr>
+<tr>
+<td><strong>第四步：看细节逻辑</strong></td>
+<td>具体函数里怎么处理的？</td>
+<td>循环、判断、计算</td>
+</tr>
+</tbody></table></div>
+<p><strong>用第 1 章的代码示例做一次完整的&quot;阅读演示&quot;：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 第一步：整体结构
+// - 一个颜色数组
+// - 一个变量记录当前索引
+// - 一个按钮的点击事件
+
+// 第二步：入口点
+// button.addEventListener(&#39;click&#39;, ...) → 点击按钮时执行
+
+// 第三步：数据流
+// colors（颜色数组）→ currentIndex（当前索引）→ backgroundColor（背景色）
+
+// 第四步：细节逻辑
+// currentIndex = (currentIndex + 1) % colors.length
+// 这个公式的意思：每次 +1，但不超过数组长度（循环）
+</code></pre>
+<h4 id="52-常见报错速查">5.2 常见报错速查</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>报错</th>
+<th>大白话解释</th>
+<th>怎么跟 AI 说</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TypeError: Cannot read properties of undefined</code></td>
+<td>你想从一个不存在的东西上取值</td>
+<td>&quot;第 X 行报错，某某变量是 undefined，检查它的赋值逻辑&quot;</td>
+</tr>
+<tr>
+<td><code>ReferenceError: xxx is not defined</code></td>
+<td>用了一个没有声明过的变量名</td>
+<td>&quot;变量 xxx 没有定义，是不是拼写错了或者忘了导入&quot;</td>
+</tr>
+<tr>
+<td><code>TypeError: xxx is not a function</code></td>
+<td>把一个不是函数的东西当函数调用了</td>
+<td>&quot;xxx 不是函数，检查一下它的类型和来源&quot;</td>
+</tr>
+<tr>
+<td><code>SyntaxError: Unexpected token</code></td>
+<td>语法写错了（括号不匹配、少了逗号等）</td>
+<td>&quot;第 X 行语法错误，检查括号和标点&quot;</td>
+</tr>
+<tr>
+<td><code>CORS error</code></td>
+<td>浏览器阻止了跨域请求</td>
+<td>&quot;遇到 CORS 错误，需要配置跨域资源共享&quot;</td>
+</tr>
+<tr>
+<td><code>404 Not Found</code></td>
+<td>请求的资源不存在</td>
+<td>&quot;API 返回 404，检查接口地址是否正确&quot;</td>
+</tr>
+</tbody></table></div>
+<h4 id="53-精准描述问题的实现">5.3 精准描述问题的实现</h4>
+<p>新手和熟练开发者的差距，往往就体现在<strong>描述问题的精准度</strong>上。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>❌ 差的描述</th>
+<th>✅ 好的描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;代码有 bug&quot;</td>
+<td>&quot;点击删除按钮时，删除的不是当前项而是最后一项&quot;</td>
+</tr>
+<tr>
+<td>&quot;样式不对&quot;</td>
+<td>&quot;标题应该居中，现在是左对齐&quot;</td>
+</tr>
+<tr>
+<td>&quot;数据显示不出来&quot;</td>
+<td>&quot;fetch 请求返回了数据（控制台能看到），但页面没有重新渲染&quot;</td>
+</tr>
+<tr>
+<td>&quot;加一个功能&quot;</td>
+<td>&quot;在用户列表页面添加一个搜索框，输入时实时过滤列表，按 name 字段模糊匹配&quot;</td>
+</tr>
+<tr>
+<td>&quot;点击没反应&quot;</td>
+<td>&quot;点击按钮时控制台报错 &#39;Cannot read property of undefined&#39;，错误在第 X 行&quot;</td>
+</tr>
+</tbody></table></div>
+<p><strong>一个实战练习：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 有 bug 的代码
+function deleteTodo(index) {
+  todos.splice(index, 1)  // 总是删除最后一项
+}
+
+// 错误现象：无论点哪个删除按钮，删的都是最后一项
+</code></pre>
+<p><strong>❌ 差的描述：</strong> &quot;删除功能有 bug&quot;</p>
+<p><strong>✅ 好的描述：</strong> &quot;点击删除按钮时，删除的不是当前项而是最后一项。代码里用了 splice(index, 1)，但 index 可能不正确。需要改成用每个事项的唯一 id 来匹配删除。&quot;</p>
+<h4 id="54-你现在应该能识别的代码">5.4 你现在应该能识别的代码</h4>
+<ul>
+<li>看到 <code>const/let</code> → 知道变量能不能重新赋值</li>
+<li>看到 <code>{}</code> → 对象 / 看到 <code>[]</code> → 数组</li>
+<li>看到 <code>{...obj}</code> 或 <code>[...arr]</code> → 在创建副本</li>
+<li>看到 <code>function</code> 或 <code>=&gt;</code> → 定义了一段可重复执行的操作</li>
+<li>看到 <code>if/else</code> 或 <code>? :</code> → 代码在做判断</li>
+<li>看到 <code>.map()</code> / <code>.filter()</code> → 在变换或筛选数组</li>
+<li>看到 <code>document.querySelector</code> → 在查找网页元素</li>
+<li>看到 <code>addEventListener</code> → 在监听用户操作</li>
+<li>看到 <code>async/await</code> → 在等待耗时操作</li>
+<li>看到 <code>import/export</code> → 在引入或导出模块</li>
+<li>遇到报错 → 能读懂大意并精准描述给 AI</li>
+</ul>
+<p><strong>如果你认真读了每章的&quot;深入&quot;部分，你还掌握了这些核心概念：</strong></p>
+<ul>
+<li><strong>值 vs 引用</strong>：基本类型复制值，对象/数组复制的是地址</li>
+<li><strong>作用域与闭包</strong>：函数能&quot;记住&quot;它诞生时周围的变量</li>
+<li><strong>this 的本质</strong>：取决于函数被谁调用，而不是写在哪里</li>
+<li><strong>事件循环</strong>：JS 是单线程的，靠任务队列实现&quot;不阻塞&quot;</li>
+</ul>
+<p>这些概念会帮你更快定位问题。</p>
+<blockquote>
+<p><strong>遇到问题时这样跟 AI 说</strong></p>
+</blockquote>
+<ul>
+<li>&quot;第 X 行报错 XXX，帮我看看是什么问题&quot;</li>
+<li>&quot;这个函数的逻辑是 XXX，但结果不对，应该是 XXX&quot;</li>
+<li>&quot;我想修改 XXX 功能，具体要求是 XXX&quot;</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-098.html">← 正则表达式</a><a rel="next" href="chapter-100.html">TypeScript：给 JS 加上类型系统 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据治理与数据质量 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 140 / 195</p><article><h1 id="数据治理与数据质量">数据治理与数据质量</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#数据治理导论">数据治理导论</a><ul><li><a href="#0-全景图需要数据治理的原理">0. 全景图：需要数据治理的原理</a></li><li><a href="#1-数据质量的六个维度">1. 数据质量的六个维度</a></li><li><a href="#2-数据治理框架全生命周期管理">2. 数据治理框架：全生命周期管理</a></li><li><a href="#2-数据治理框架">2. 数据治理框架</a></li><li><a href="#3-数据血缘从哪来到哪去">3. 数据血缘：从哪来，到哪去</a></li><li><a href="#4-元数据管理描述数据的数据">4. 元数据管理：&quot;描述数据的数据&quot;</a></li><li><a href="#5-数据分层架构ods--dwd--dws--ads">5. 数据分层架构：ODS → DWD → DWS → ADS</a></li><li><a href="#6-治理工具与实践">6. 治理工具与实践</a></li><li><a href="#总结-26">总结</a></li><li><a href="#延伸阅读-16">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="数据治理导论">数据治理导论</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>你有没有遇到过这种情况：报表上的数字和实际业务对不上，两个系统里同一个用户的信息不一样，或者分析结果因为脏数据完全不可信？</strong> 数据治理就是解决这些问题的系统性方法。在&quot;数据驱动决策&quot;的时代，数据质量直接决定了决策质量——垃圾进，垃圾出（Garbage In, Garbage Out）。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>数据质量维度</strong>：理解完整性、准确性、一致性等六大质量维度</li>
+<li><strong>数据治理体系</strong>：了解从组织、流程到技术的治理框架</li>
+<li><strong>数据血缘</strong>：掌握数据从源头到消费的全链路追踪</li>
+<li><strong>元数据管理</strong>：理解&quot;描述数据的数据&quot;的重要性</li>
+<li><strong>数据分层架构</strong>：掌握 ODS → DWD → DWS → ADS 的数仓分层模型</li>
+<li><strong>实战能力</strong>：知道如何在项目中落地数据治理</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>数据质量维度</td>
+<td>完整性、准确性、一致性、时效性</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>数据治理框架</td>
+<td>组织、流程、技术、文化</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>数据血缘追踪</td>
+<td>影响分析、问题排查、合规审计</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>元数据管理</td>
+<td>技术元数据、业务元数据、操作元数据</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>数据分层架构</td>
+<td>ODS、DWD、DWS、ADS</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>治理工具与实践</td>
+<td>Great Expectations、dbt、DataHub</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图需要数据治理的原理">0. 全景图：需要数据治理的原理</h3>
+<p>数据治理不是一个技术问题，而是一个<strong>管理问题</strong>。它回答的核心问题是：<strong>谁对数据负责？数据的标准是什么？如何保证数据持续可信？</strong></p>
+<p>想象一个公司有 100 个数据表，每个表由不同团队维护，没有统一的命名规范、没有数据字典、没有质量检查。结果就是：同一个&quot;月活用户&quot;指标，市场部算出来 500 万，产品部算出来 300 万——因为定义不一样。</p>
+<blockquote>
+<p><strong>数据治理的四个支柱</strong></p>
+</blockquote>
+<ol>
+<li><strong>组织</strong>：明确数据 Owner、数据管家（Data Steward）的角色和职责</li>
+<li><strong>流程</strong>：建立数据接入、变更、下线的标准流程</li>
+<li><strong>技术</strong>：部署数据质量监控、元数据管理、血缘追踪等工具</li>
+<li><strong>文化</strong>：让全公司认同&quot;数据是资产&quot;，而不是&quot;数据是副产品&quot;</li>
+</ol>
+<h3 id="1-数据质量的六个维度">1. 数据质量的六个维度</h3>
+<p>数据质量可以从六个具体维度来衡量。每个维度都有明确的定义和检测方法。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>定义</th>
+<th>检测方法</th>
+<th>常见问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>完整性</td>
+<td>数据是否存在缺失</td>
+<td>空值率检查</td>
+<td>必填字段为空、关联数据缺失</td>
+</tr>
+<tr>
+<td>准确性</td>
+<td>数据是否正确</td>
+<td>规则校验、抽样核对</td>
+<td>金额为负、日期不合法</td>
+</tr>
+<tr>
+<td>一致性</td>
+<td>多源数据是否一致</td>
+<td>跨系统比对</td>
+<td>CRM 和订单系统用户名不同</td>
+</tr>
+<tr>
+<td>时效性</td>
+<td>数据是否及时更新</td>
+<td>更新时间检查</td>
+<td>库存数据滞后、价格未同步</td>
+</tr>
+<tr>
+<td>唯一性</td>
+<td>是否存在重复记录</td>
+<td>去重检查</td>
+<td>同一用户注册两次</td>
+</tr>
+<tr>
+<td>有效性</td>
+<td>是否符合格式规则</td>
+<td>正则/范围校验</td>
+<td>邮箱格式错误、年龄为负数</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>数据质量的 1-10-100 法则</strong></p>
+</blockquote>
+<ul>
+<li><strong>1 元</strong>：在数据入口做校验，预防脏数据进入</li>
+<li><strong>10 元</strong>：在数据仓库中清洗已有的脏数据</li>
+<li><strong>100 元</strong>：因为脏数据导致错误决策的损失</li>
+</ul>
+<p>越早发现和修复数据质量问题，成本越低。</p>
+<h3 id="2-数据治理框架全生命周期管理">2. 数据治理框架：全生命周期管理</h3>
+<p>数据治理不是一次性项目，而是贯穿数据全生命周期的持续过程。从数据的产生到销毁，每个阶段都需要明确的规范和责任人。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>核心产出</th>
+<th>关键角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>定义标准</td>
+<td>数据字典、命名规范、分类分级标准</td>
+<td>数据架构师</td>
+</tr>
+<tr>
+<td>采集接入</td>
+<td>接入规范、校验规则、血缘记录</td>
+<td>数据工程师</td>
+</tr>
+<tr>
+<td>存储管理</td>
+<td>分层模型、权限矩阵、生命周期策略</td>
+<td>DBA / 平台工程师</td>
+</tr>
+<tr>
+<td>使用消费</td>
+<td>数据目录、脱敏规则、质量报告</td>
+<td>数据分析师 / 业务方</td>
+</tr>
+<tr>
+<td>归档销毁</td>
+<td>归档策略、删除记录、审计日志</td>
+<td>安全合规团队</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-数据治理框架">2. 数据治理框架</h3>
+<p>数据治理不是买一个工具就能解决的，它需要一套完整的框架来支撑。业界最常用的参考框架是 DAMA-DMBOK（数据管理知识体系）。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>治理领域</th>
+<th>核心内容</th>
+<th>关键产出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据架构</td>
+<td>定义数据模型、数据流、存储策略</td>
+<td>数据架构图、ER 图</td>
+</tr>
+<tr>
+<td>数据标准</td>
+<td>统一命名规范、编码规范、指标定义</td>
+<td>数据字典、指标库</td>
+</tr>
+<tr>
+<td>数据质量</td>
+<td>建立质量规则、监控告警、修复流程</td>
+<td>质量报告、SLA 仪表盘</td>
+</tr>
+<tr>
+<td>数据安全</td>
+<td>分级分类、访问控制、脱敏加密</td>
+<td>安全策略、审计日志</td>
+</tr>
+<tr>
+<td>主数据管理</td>
+<td>统一客户、商品等核心实体的&quot;黄金记录&quot;</td>
+<td>主数据中心</td>
+</tr>
+<tr>
+<td>数据生命周期</td>
+<td>管理数据从创建到归档到销毁的全过程</td>
+<td>保留策略、归档规则</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>数据治理的成熟度模型</strong></p>
+</blockquote>
+<ul>
+<li><strong>Level 1 - 初始级</strong>：没有统一标准，各团队各自为政</li>
+<li><strong>Level 2 - 可重复级</strong>：有基本的规范文档，但执行不一致</li>
+<li><strong>Level 3 - 已定义级</strong>：有统一的治理流程和工具，大部分团队遵守</li>
+<li><strong>Level 4 - 已管理级</strong>：有量化的质量指标和自动化监控</li>
+<li><strong>Level 5 - 优化级</strong>：持续改进，数据治理融入日常开发流程</li>
+</ul>
+<h3 id="3-数据血缘从哪来到哪去">3. 数据血缘：从哪来，到哪去</h3>
+<p>数据血缘（Data Lineage）记录了数据从源头到最终消费的完整流转路径。它就像数据的&quot;族谱&quot;，让你能追溯任何一个数据的来龙去脉。</p>
+<p>数据血缘在实际工作中有三个核心应用场景：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>血缘如何帮助</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>影响分析</td>
+<td>要修改用户表的字段，会影响哪些下游报表？</td>
+<td>沿血缘向下追踪所有依赖</td>
+</tr>
+<tr>
+<td>根因定位</td>
+<td>今天的 GMV 报表数据异常，问题出在哪一步？</td>
+<td>沿血缘向上回溯每个环节</td>
+</tr>
+<tr>
+<td>合规审计</td>
+<td>用户的手机号经过了哪些系统？是否都做了脱敏？</td>
+<td>追踪敏感字段的全链路流转</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>血缘采集的两种方式</strong></p>
+</blockquote>
+<ul>
+<li><strong>主动采集</strong>：解析 SQL 语句、ETL 配置，自动提取表级/字段级血缘关系</li>
+<li><strong>被动采集</strong>：通过 Hook 拦截查询引擎（如 Hive、Spark）的执行计划，实时记录血缘</li>
+</ul>
+<p>主流工具如 Apache Atlas、DataHub、OpenLineage 都支持自动化血缘采集。</p>
+<h3 id="4-元数据管理描述数据的数据">4. 元数据管理：&quot;描述数据的数据&quot;</h3>
+<p>元数据（Metadata）是关于数据的数据。如果数据是一本书的内容，元数据就是书的目录、作者、出版日期、ISBN 号。没有元数据，数据就是一堆无法理解的数字和字符串。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>元数据类型</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>技术元数据</td>
+<td>数据的物理存储信息</td>
+<td>表名、字段类型、分区方式、存储位置</td>
+</tr>
+<tr>
+<td>业务元数据</td>
+<td>数据的业务含义</td>
+<td>字段中文名、业务定义、计算口径</td>
+</tr>
+<tr>
+<td>操作元数据</td>
+<td>数据的运行状态</td>
+<td>ETL 执行时间、数据量、更新频率</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>数据字典的重要性</strong>
+数据字典是元数据管理最基础的产出。一个好的数据字典应该包含：</p>
+</blockquote>
+<ul>
+<li><strong>字段名</strong>：英文名和中文名</li>
+<li><strong>数据类型</strong>：VARCHAR(50)、INT、DATETIME 等</li>
+<li><strong>业务定义</strong>：这个字段代表什么？怎么计算的？</li>
+<li><strong>取值范围</strong>：有效值是什么？空值是否允许？</li>
+<li><strong>负责人</strong>：谁维护这个字段？有问题找谁？</li>
+</ul>
+<p>没有数据字典的团队，新人入职后理解一张表的含义可能需要一周；有数据字典的团队，10 分钟就够了。</p>
+<h3 id="5-数据分层架构ods--dwd--dws--ads">5. 数据分层架构：ODS → DWD → DWS → ADS</h3>
+<p>数据仓库按照<strong>加工程度</strong>分层存储。每一层有明确的职责，上层依赖下层，逐步从原始数据提炼为业务可用的数据。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>全称</th>
+<th>职责</th>
+<th>数据特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ODS</td>
+<td>操作数据层</td>
+<td>原样同步业务数据库</td>
+<td>最原始，未经处理</td>
+</tr>
+<tr>
+<td>DWD</td>
+<td>明细数据层</td>
+<td>清洗、标准化、去重</td>
+<td>干净的明细记录</td>
+</tr>
+<tr>
+<td>DWS</td>
+<td>汇总数据层</td>
+<td>按主题聚合（日/周/月）</td>
+<td>预计算的聚合指标</td>
+</tr>
+<tr>
+<td>ADS</td>
+<td>应用数据层</td>
+<td>面向具体报表/接口</td>
+<td>直接可用的结果数据</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>为什么要分层？</strong></p>
+</blockquote>
+<ul>
+<li><strong>复用</strong>：DWD 层清洗一次，所有上层共享，避免重复清洗</li>
+<li><strong>解耦</strong>：业务库表结构变更只影响 ODS 层，不会波及报表</li>
+<li><strong>性能</strong>：DWS 层预聚合，报表查询直接读取，不需要实时计算</li>
+<li><strong>可追溯</strong>：每一层都保留，出问题时可以逐层排查</li>
+</ul>
+<h3 id="6-治理工具与实践">6. 治理工具与实践</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>定位</th>
+<th>核心能力</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Great Expectations</td>
+<td>数据质量</td>
+<td>声明式数据校验规则，自动生成质量报告</td>
+<td>Python 数据管道</td>
+</tr>
+<tr>
+<td>dbt</td>
+<td>数据转换</td>
+<td>SQL 模型化开发，内置测试和文档生成</td>
+<td>数仓建模</td>
+</tr>
+<tr>
+<td>DataHub</td>
+<td>元数据管理</td>
+<td>数据目录、血缘追踪、数据发现</td>
+<td>企业级数据治理</td>
+</tr>
+<tr>
+<td>Apache Atlas</td>
+<td>元数据管理</td>
+<td>Hadoop 生态血缘追踪</td>
+<td>大数据平台</td>
+</tr>
+<tr>
+<td>OpenMetadata</td>
+<td>元数据管理</td>
+<td>开源数据目录，支持多种数据源</td>
+<td>中小团队</td>
+</tr>
+<tr>
+<td>Amundsen</td>
+<td>数据发现</td>
+<td>搜索式数据发现平台</td>
+<td>数据民主化</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>从零开始的治理路径</strong>
+如果你的团队还没有数据治理，建议按这个顺序推进：</p>
+</blockquote>
+<ol>
+<li><strong>先建数据字典</strong>：把现有的表和字段含义记录下来（哪怕用 Excel）</li>
+<li><strong>加质量检查</strong>：在关键数据管道中加入基本的空值、范围校验</li>
+<li><strong>统一指标定义</strong>：把&quot;日活&quot;&quot;月活&quot;&quot;GMV&quot;等核心指标的计算口径统一</li>
+<li><strong>引入工具</strong>：当手动管理成本太高时，引入 DataHub 或 dbt 等工具</li>
+<li><strong>建立流程</strong>：数据变更需要评审，质量问题有 SLA 和告警</li>
+</ol>
+<h3 id="总结-26">总结</h3>
+<p>数据治理是让数据从&quot;能用&quot;变成&quot;好用、可信、可追溯&quot;的系统性工程。它不是一次性项目，而是持续运营的过程。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>六大质量维度</strong>：完整性、准确性、一致性、时效性、唯一性、有效性</li>
+<li><strong>治理四支柱</strong>：组织、流程、技术、文化缺一不可</li>
+<li><strong>数据血缘</strong>：追踪数据的来龙去脉，支撑影响分析和问题排查</li>
+<li><strong>元数据管理</strong>：数据字典是最基础也最重要的治理产出</li>
+<li><strong>分层架构</strong>：ODS → DWD → DWS → ADS，逐层提炼数据价值</li>
+<li><strong>渐进式落地</strong>：从数据字典开始，逐步引入工具和流程</li>
+</ol>
+<h3 id="延伸阅读-16">延伸阅读</h3>
+<ul>
+<li><a href="https://www.dama.org/cpages/body-of-knowledge">DAMA-DMBOK</a> - 数据管理知识体系，数据治理的&quot;圣经&quot;</li>
+<li><a href="https://datahubproject.io/">DataHub</a> - LinkedIn 开源的元数据管理平台</li>
+<li><a href="https://greatexpectations.io/">Great Expectations</a> - Python 数据质量框架</li>
+<li><a href="https://www.getdbt.com/">dbt</a> - 数据转换工具，内置测试和文档</li>
+<li><a href="https://atlas.apache.org/">Apache Atlas</a> - Hadoop 生态的元数据治理框架</li>
+<li><a href="https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/">The Data Warehouse Toolkit</a> - Kimball 数仓建模经典</li>
+</ul>
+<hr>
+<h2 id="六架构与系统设计">六、架构与系统设计</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-139.html">← 数据可视化与仪表盘</a><a rel="next" href="chapter-141.html">从单体到微服务的演进 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

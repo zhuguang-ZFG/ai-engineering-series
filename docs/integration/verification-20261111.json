@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-10T16:08:53.150077+00:00",
+  "status": "local_integration_verified",
+  "git": {
+    "single_repository": true,
+    "integration_committed": false,
+    "pushed": false,
+    "agent_source_commit": "6ee786749b909eeb9a14bc11d8afe7bbde29934c",
+    "course_history_ref": "source-model-course",
+    "course_source_commit": "e74c7315bb8e72aa501e11ba4aef29a8efc66c17",
+    "lfs_fsck": "passed"
+  },
+  "sources": {
+    "imported_files": 3759,
+    "imported_bytes": 653529360,
+    "original_and_import_hashes_verified": true,
+    "original_directories_preserved": true,
+    "legacy_snapshot_files": 6
+  },
+  "environment": {
+    "python": "3.13.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "node": "v24.14.0"
+  },
+  "validation": {
+    "agent_books": {
+      "steps_passed": 8,
+      "general_tests": 259,
+      "builder_tests": 573,
+      "markdown_files": 427,
+      "mermaid_diagrams": 436
+    },
+    "model_course": {
+      "npm_test": "passed",
+      "editorial_tests": 8,
+      "python_tests": 25,
+      "node_tests": 36,
+      "course_pdf_pages": 414,
+      "answers_pdf_pages": 171,
+      "existing_epubcheck_reports": "hash-bound reports checked; external EPUBCheck not rerun"
+    },
+    "root_tests": 29,
+    "unified_html_builds": [
+      "prompt",
+      "llm"
+    ],
+    "collection": {
+      "status": "passed",
+      "files": 1816,
+      "bytes": 565423556,
+      "root_links": 33,
+      "browser": [
+        {
+          "path": "index.html",
+          "title": "大模型与智能体工程 · 系列书架",
+          "brokenImages": [],
+          "textLength": 754,
+          "scrollWidth": 1280,
+          "viewport": 1280,
+          "pageErrors": []
+        },
+        {
+          "path": "agent-books/yuyu-prompt-zh.html",
+          "title": "提示词工程：从提问到 Agent 协作 — 朱光",
+          "brokenImages": [],
+          "textLength": 76162,
+          "scrollWidth": 1280,
+          "viewport": 1280,
+          "pageErrors": []
+        },
+        {
+          "path": "model-course/exports/llm/course.html",
+          "title": "大模型：从入门到精通 · 大模型学习路线",
+          "brokenImages": [],
+          "textLength": 1170,
+          "scrollWidth": 1280,
+          "viewport": 1280,
+          "pageErrors": []
+        },
+        {
+          "path": "model-course/exports/llm/c01.html",
+          "title": "C01 先做一份资料报告 · 大模型学习路线",
+          "brokenImages": [],
+          "textLength": 3035,
+          "scrollWidth": 1280,
+          "viewport": 1280,
+          "pageErrors": []
+        }
+      ]
+    },
+    "final_layout": [
+      {
+        "page": "index.html",
+        "scheme": "light",
+        "viewport": 390,
+        "scrollWidth": 390,
+        "books": 10,
+        "links": 20
+      },
+      {
+        "page": "index.html",
+        "scheme": "dark",
+        "viewport": 1280,
+        "scrollWidth": 1280,
+        "books": 10,
+        "links": 20
+      },
+      {
+        "page": "dist/index.html",
+        "scheme": "light",
+        "viewport": 390,
+        "scrollWidth": 390,
+        "books": 10,
+        "links": 33
+      },
+      {
+        "page": "dist/index.html",
+        "scheme": "dark",
+        "viewport": 1280,
+        "scrollWidth": 1280,
+        "books": 10,
+        "links": 33
+      }
+    ]
+  },
+  "outstanding": [
+    "Integration commit and remote publication not performed",
+    "Remote Series CI has not run",
+    "Original model/reader/platform validation limitations remain"
+  ],
+  "log_sha256": {
+    "agent-books-check.log": "4796ff70268bc26a08b276b5a4aa548810ad90a596085f63ae2db8470db559b3",
+    "model-course-check.log": "cfb2b1e316629e2336c4cb34d528798087813a81cc569e85be7906ef7536ea41",
+    "unified-prompt-build.log": "7742ca2735409eb7f791a6b4300a70e141434fafa7be4bbb6c24b7ae9c0a9918",
+    "unified-course-build.log": "5b3c14ebb9b5c5e1714613be255ef6ccd7669e8f44dd084d42a1faa5ce108fb1"
+  }
+}

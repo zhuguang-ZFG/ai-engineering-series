@@ -1,0 +1,1943 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>对象存储与 CDN · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 154 / 195</p><article><h1 id="对象存储与-cdn">对象存储与 CDN</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#对象存储与-cdn-原理">对象存储与 CDN 原理</a><ul><li><a href="#0-引言文件上传下载这么慢的原理">0. 引言：文件上传下载这么&quot;慢的原理</a></li><li><a href="#1-对象存储你的智能云仓库">1. 对象存储：你的&quot;智能云仓库&quot;</a></li><li><a href="#2-cdn你的全球快递网络">2. CDN：你的&quot;全球快递网络&quot;</a></li><li><a href="#3-从上传到访问完整链路解析">3. 从上传到访问：完整链路解析</a></li><li><a href="#4-流量调度让用户访问最近的节点">4. 流量调度：让用户访问&quot;最近&quot;的节点</a></li><li><a href="#5-https-优化安全与性能的平衡">5. HTTPS 优化：安全与性能的平衡</a></li><li><a href="#6-访问分析看懂你的-cdn-报表">6. 访问分析：看懂你的 CDN 报表</a></li><li><a href="#7-实战案例从-0-搭建图片加速方案">7. 实战案例：从 0 搭建图片加速方案</a></li><li><a href="#8-总结对象存储--cdn-的黄金法则">8. 总结：对象存储 + CDN 的黄金法则</a></li><li><a href="#9-实战代码模板">9. 实战代码模板</a></li><li><a href="#10-名词对照表">10. 名词对照表</a></li><li><a href="#总结对象存储--cdn-的黄金法则">总结：对象存储 + CDN 的黄金法则</a></li></ul></li></ul></nav></details><h2 id="对象存储与-cdn-原理">对象存储与 CDN 原理</h2>
+<blockquote>
+<p><strong>学习指南</strong>：本文会带你走完一条完整的链路——从文件上传到用户下载。你会看到对象存储如何像&quot;智能仓库&quot;一样管理海量文件，CDN 如何像&quot;快递网点&quot;一样把内容送到用户家门口，以及这中间有哪些&quot;坑&quot;等着你跳进去。建议先了解基础的 HTTP 请求和 DNS 解析原理。</p>
+</blockquote>
+<p>在开始之前，建议你先补几块&quot;基础砖&quot;：</p>
+<ul>
+<li><strong>HTTP 请求流程</strong>：可以先阅读 <a href="chapter-084.html#计算机网络从输入网址到渲染页面">浏览器输入 URL 后发生了什么</a> 了解完整的请求链路。</li>
+<li><strong>DNS 解析原理</strong>：如果你对域名解析还不太熟悉，可以先看 <a href="chapter-149.html#域名dns-与-https">DNS 查询流程</a> 的图解部分。</li>
+</ul>
+<h3 id="0-引言文件上传下载这么慢的原理">0. 引言：文件上传下载这么&quot;慢的原理</h3>
+<p>想象一下这个场景：你在一个图片社区上传了一张 10MB 的高清照片，结果等了半分钟才传完；而你的朋友在北京，点击下载却只要 2 秒。为什么同一张文件，上传和下载的体验天差地别？</p>
+<p>或者再想想：你的电商网站双十一搞活动，商品详情页突然涌入百万流量，服务器直接&quot;躺平&quot;。是带宽不够？还是架构设计有问题？</p>
+<p>这些问题的答案，都藏在<strong>对象存储</strong>和 CDN 这对&quot;黄金搭档&quot;里。</p>
+<h3 id="1-对象存储你的智能云仓库">1. 对象存储：你的&quot;智能云仓库&quot;</h3>
+<h4 id="11-对象存储概述">1.1 对象存储概述</h4>
+<p>传统文件系统就像你家衣柜：衣服按&quot;上衣/裤子/裙子&quot;分层放，你要找一件衬衫，得先打开衣柜→上衣区→衬衫格。这种&quot;层级嵌套&quot;的模式，在文件数量爆炸时会变得极其笨重。</p>
+<p>对象存储则像现代仓储物流：每个包裹都有一个唯一的&quot;快递单号&quot;（对象键），你只需报单号，仓库机器人就能从海量包裹中精准取出。</p>
+<p><strong>核心区别一览</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">传统文件系统</th>
+<th align="left">对象存储</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>组织方式</strong></td>
+<td align="left">层级目录树</td>
+<td align="left">扁平键值对</td>
+</tr>
+<tr>
+<td align="left"><strong>访问协议</strong></td>
+<td align="left">POSIX（本地文件操作）</td>
+<td align="left">HTTP/REST API</td>
+</tr>
+<tr>
+<td align="left"><strong>扩展性</strong></td>
+<td align="left">单机容量有限</td>
+<td align="left">近乎无限水平扩展</td>
+</tr>
+<tr>
+<td align="left"><strong>元数据</strong></td>
+<td align="left">基础属性（大小、时间）</td>
+<td align="left">丰富的自定义元数据</td>
+</tr>
+<tr>
+<td align="left"><strong>典型场景</strong></td>
+<td align="left">本地办公文档</td>
+<td align="left">图片/视频/备份/静态资源</td>
+</tr>
+</tbody></table></div>
+<h4 id="12-对象存储的核心概念">1.2 对象存储的核心概念</h4>
+<h4 id="桶bucket你的仓库分区">桶（Bucket）：你的&quot;仓库分区&quot;</h4>
+<p>桶是对象存储的顶级容器，相当于一个独立的命名空间。所有对象都必须存放在某个桶中。</p>
+<p><strong>命名规则</strong>（以阿里云 OSS 为例）：</p>
+<ul>
+<li>全局唯一：在整个云厂商的所有用户中不能重复</li>
+<li>只能包含小写字母、数字和短横线</li>
+<li>必须以小写字母或数字开头和结尾</li>
+<li>长度在 3-63 个字符之间</li>
+</ul>
+<p><strong>实战踩坑</strong>：曾经有个团队按业务线创建了几十个桶，结果月底账单出来傻眼了——每个桶都有最低存储费用和请求费用。建议：按&quot;环境+用途&quot;组合规划桶，比如 <code>prod-static-assets</code>、<code>dev-backup-archive</code>。</p>
+<h4 id="对象object你的数据包裹">对象（Object）：你的&quot;数据包裹&quot;</h4>
+<p>对象是存储的基本单元，由三部分组成：</p>
+<ol>
+<li><p><strong>键（Key）</strong>：对象的唯一标识，相当于&quot;快递单号&quot;</p>
+<ul>
+<li>示例：<code>images/avatar/2024/user123.jpg</code></li>
+<li>虽然看起来像路径，但本质只是字符串</li>
+</ul>
+</li>
+<li><p><strong>数据（Data）</strong>：对象的内容本身</p>
+<ul>
+<li>可以是任意二进制数据</li>
+<li>大小限制取决于云厂商（通常单个对象 5TB 以内）</li>
+</ul>
+</li>
+<li><p><strong>元数据（Metadata）</strong>：描述对象的附加信息</p>
+<ul>
+<li>系统元数据：Content-Type、ETag、Last-Modified 等</li>
+<li>自定义元数据：如 <code>x-oss-meta-owner</code>、<code>x-oss-meta-project</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="访问控制谁能动我的仓库">访问控制：谁能动我的&quot;仓库&quot;？</h4>
+<p>对象存储提供多层权限控制：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">层级</th>
+<th align="left">控制方式</th>
+<th align="left">典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>桶级别</strong></td>
+<td align="left">Bucket Policy（资源策略）</td>
+<td align="left">禁止所有外网访问、只允许特定 IP</td>
+</tr>
+<tr>
+<td align="left"><strong>对象级别</strong></td>
+<td align="left">ACL（访问控制列表）</td>
+<td align="left">公开图片、私有文档</td>
+</tr>
+<tr>
+<td align="left"><strong>临时授权</strong></td>
+<td align="left">STS（安全令牌服务）</td>
+<td align="left">前端直传、移动端上传</td>
+</tr>
+</tbody></table></div>
+<p><strong>安全红线</strong>：永远不要把 AccessKey ID 和 AccessKey Secret 写在前端代码里！正确做法是：前端向你的后端申请临时 STS 凭证，后端验证身份后返回带过期时间的临时凭证。</p>
+<h3 id="2-cdn你的全球快递网络">2. CDN：你的&quot;全球快递网络&quot;</h3>
+<h4 id="21-需要-cdn的原理">2.1 需要 CDN的原理</h4>
+<p>想象你开了一家网店，服务器放在深圳。现在有个用户在北京访问你的图片：</p>
+<ul>
+<li><p><strong>没有 CDN</strong>：请求从北京→河北→河南→湖北→湖南→广东→深圳，跨越 2000 多公里，来回就是 4000 多公里。光网络传输就要几十毫秒，遇到网络拥堵更惨。</p>
+</li>
+<li><p><strong>有了 CDN</strong>：请求从北京直接到北京的 CDN 节点（可能就在北京联通机房），距离从 2000 公里变成 20 公里，延迟从 50ms 变成 5ms。</p>
+</li>
+</ul>
+<p>这就是 CDN 的核心价值：<strong>让内容离用户更近</strong>。</p>
+<h4 id="22-cdn-的核心架构">2.2 CDN 的核心架构</h4>
+<h4 id="边缘节点离用户最近的快递站">边缘节点：离用户最近的&quot;快递站&quot;</h4>
+<p>边缘节点是 CDN 网络中最接近用户的层级，通常部署在：</p>
+<ul>
+<li>运营商机房（联通/电信/移动）</li>
+<li>大城市互联网交换中心</li>
+<li>重要交通枢纽</li>
+</ul>
+<p><strong>中国主要 CDN 节点分布</strong>：</p>
+<ul>
+<li>一线城市：北京、上海、广州、深圳</li>
+<li>二线城市：杭州、南京、成都、武汉、西安</li>
+<li>海外：香港、新加坡、东京、硅谷、法兰克福</li>
+</ul>
+<h4 id="源站内容的总仓库">源站：内容的&quot;总仓库&quot;</h4>
+<p>源站是 CDN 回源获取内容的地方，可以是：</p>
+<ul>
+<li>对象存储（OSS/COS/S3）</li>
+<li>自建服务器（ECS/物理机）</li>
+<li>负载均衡（SLB/CLB）</li>
+</ul>
+<p><strong>关键配置</strong>：</p>
+<ul>
+<li><strong>回源 HOST</strong>：CDN 节点访问源站时使用的域名/IP</li>
+<li><strong>回源协议</strong>：HTTP 还是 HTTPS</li>
+<li><strong>回源端口</strong>：80、443 还是自定义端口</li>
+</ul>
+<h4 id="中间层节点区域分拨中心">中间层节点：&quot;区域分拨中心&quot;</h4>
+<p>在边缘节点和源站之间，CDN 通常还有一层或多层中间节点：</p>
+<ul>
+<li><strong>汇聚节点</strong>：聚合多个边缘节点的回源请求，减少源站压力</li>
+<li><strong>区域中心</strong>：负责一个大区的内容分发和调度</li>
+</ul>
+<p>这种分层架构的好处：</p>
+<ol>
+<li><strong>降低源站压力</strong>：1000 个边缘节点的请求，可能只需要向源站发起 10 次</li>
+<li><strong>提高命中率</strong>：热门内容在中间层就被拦截，不需要回源</li>
+<li><strong>故障隔离</strong>：某条链路出问题，可以自动切换到其他路径</li>
+</ol>
+<h4 id="23-cdn-加速的完整流程">2.3 CDN 加速的完整流程</h4>
+<p>跟踪一次真实的用户请求：</p>
+<p><strong>Step 1：DNS 解析</strong>（智能调度）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户输入：cdn.example.com/image.jpg
+↓
+DNS 服务器返回：北京联通 CDN 节点 IP（1.2.3.4）
+</code></pre>
+<p>这里的关键是<strong>智能 DNS</strong>：根据用户的运营商、地理位置、节点负载，返回最优的 CDN 节点 IP。</p>
+<p><strong>Step 2：边缘节点查找</strong>（缓存命中？）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>请求到达北京联通 CDN 节点（1.2.3.4）
+↓
+节点检查本地缓存：
+├─ 命中？直接返回内容 ✓
+└─ 未命中？继续下一步
+</code></pre>
+<p><strong>Step 3：回源获取</strong>（层层向上）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>边缘节点未命中
+↓
+向父节点（如：华北区域中心）请求
+├─ 父节点命中？返回内容
+└─ 父节点未命中？继续向上
+    ↓
+    向源站请求
+    ↓
+    源站返回内容
+</code></pre>
+<p><strong>Step 4：缓存并返回</strong>（下次更快）</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>内容沿链路返回
+↓
+每层节点都缓存一份
+↓
+最终到达用户
+</code></pre>
+<p>这样，下次有用户请求同一个文件时，就能直接从边缘节点返回，实现&quot;秒开&quot;。</p>
+<h3 id="3-从上传到访问完整链路解析">3. 从上传到访问：完整链路解析</h3>
+<h4 id="31-文件上传的三种方式">3.1 文件上传的三种方式</h4>
+<h4 id="方式一客户端--服务端--对象存储传统模式">方式一：客户端 → 服务端 → 对象存储（传统模式）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>浏览器 → 你的后端服务器 → 对象存储
+</code></pre>
+<p><strong>流程</strong>：</p>
+<ol>
+<li>用户选择文件，点击上传</li>
+<li>文件先上传到你的后端服务器</li>
+<li>后端接收完整文件后，再转上传到对象存储</li>
+<li>返回上传结果给用户</li>
+</ol>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>实现简单，前后端都好控制</li>
+<li>可以在后端做文件校验、格式转换</li>
+<li>敏感操作可以记录日志、做权限校验</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><strong>带宽双吃</strong>：用户上传占用一次带宽，服务器转传又占用一次</li>
+<li><strong>服务器压力大</strong>：大文件会占用大量内存和 CPU</li>
+<li><strong>上传慢</strong>：相当于多了一道中转，用户感知到的上传时间更长</li>
+</ul>
+<p><strong>适用场景</strong>：小文件（&lt;10MB）、需要后端处理（如图片压缩、加水印）、内部管理系统。</p>
+<h4 id="方式二客户端直传对象存储现代推荐">方式二：客户端直传对象存储（现代推荐）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>浏览器 ──────→ 对象存储
+        ↑
+        后端只签发临时凭证
+</code></pre>
+<p><strong>流程</strong>：</p>
+<ol>
+<li>用户选择文件，前端先向后端申请&quot;上传凭证&quot;</li>
+<li>后端验证用户身份，向对象存储服务申请<strong>临时 STS 凭证</strong>（带过期时间）</li>
+<li>后端把临时凭证返回给前端</li>
+<li>前端拿着凭证，<strong>直接上传文件到对象存储</strong></li>
+<li>对象存储返回上传结果，前端通知后端&quot;上传完成&quot;</li>
+</ol>
+<p><strong>优点</strong>：</p>
+<ul>
+<li><strong>上传快</strong>：少了中转环节，用户感知速度最快</li>
+<li><strong>服务器压力小</strong>：只处理凭证签发，不处理文件流</li>
+<li><strong>带宽省</strong>：只走一次上传流量</li>
+<li><strong>安全性高</strong>：临时凭证有过期时间，泄露也危害有限</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>实现稍复杂，需要理解 STS、签名机制</li>
+<li>前端需要处理分片上传、断点续传等逻辑</li>
+<li>跨域（CORS）需要配置</li>
+</ul>
+<p><strong>适用场景</strong>：大文件上传、用户生成内容（UGC）、需要高并发上传的业务。</p>
+<h4 id="方式三分片上传--断点续传大文件必备">方式三：分片上传 + 断点续传（大文件必备）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>10GB 视频文件
+↓
+切分成 1000 个 10MB 的分片
+↓
+并行上传（同时传 5 个分片）
+↓
+断网了！已传 600 个
+↓
+恢复网络，从第 601 个继续传
+↓
+所有分片传完，发起&quot;合并&quot;请求
+</code></pre>
+<p><strong>为什么需要分片？</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">不分片</th>
+<th align="left">分片</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>网络波动</strong></td>
+<td align="left">传了 99% 断网，全部重传</td>
+<td align="left">只重传失败的分片</td>
+</tr>
+<tr>
+<td align="left"><strong>上传速度</strong></td>
+<td align="left">单线程，速度慢</td>
+<td align="left">多线程并行，速度快</td>
+</tr>
+<tr>
+<td align="left"><strong>内存占用</strong></td>
+<td align="left">需要缓存整个文件</td>
+<td align="left">只需缓存当前分片</td>
+</tr>
+<tr>
+<td align="left"><strong>进度显示</strong></td>
+<td align="left">只有 0% 和 100%</td>
+<td align="left">精确到每个分片的进度</td>
+</tr>
+</tbody></table></div>
+<p><strong>主流云厂商的分片规格</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">厂商</th>
+<th align="left">分片大小限制</th>
+<th align="left">最大分片数</th>
+<th align="left">最小分片大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>阿里云 OSS</strong></td>
+<td align="left">100MB</td>
+<td align="left">10000</td>
+<td align="left">100KB</td>
+</tr>
+<tr>
+<td align="left"><strong>腾讯云 COS</strong></td>
+<td align="left">5GB</td>
+<td align="left">10000</td>
+<td align="left">1MB</td>
+</tr>
+<tr>
+<td align="left"><strong>AWS S3</strong></td>
+<td align="left">5GB</td>
+<td align="left">10000</td>
+<td align="left">5MB（推荐）</td>
+</tr>
+<tr>
+<td align="left"><strong>七牛云</strong></td>
+<td align="left">100MB</td>
+<td align="left">10000</td>
+<td align="left">4MB</td>
+</tr>
+</tbody></table></div>
+<h4 id="32-cdn-回源策略详解">3.2 CDN 回源策略详解</h4>
+<h4 id="什么是回源">什么是&quot;回源&quot;？</h4>
+<p>CDN 边缘节点缓存了源站的内容，但当：</p>
+<ul>
+<li>用户请求的内容<strong>第一次被访问</strong></li>
+<li>缓存的内容<strong>已过期（TTL 到期）</strong></li>
+<li>缓存被<strong>手动刷新/预热</strong></li>
+</ul>
+<p>CDN 节点就需要向<strong>源站</strong>请求最新内容，这个过程就叫&quot;回源&quot;。</p>
+<h4 id="回源的三种模式">回源的三种模式</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">原理</th>
+<th align="left">适用场景</th>
+<th align="left">优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>直接回源</strong></td>
+<td align="left">CDN 节点 → 源站</td>
+<td align="left">源站有公网 IP，且流量不大</td>
+<td align="left">简单直接，但源站压力大</td>
+</tr>
+<tr>
+<td align="left"><strong>中间源回源</strong></td>
+<td align="left">CDN 节点 → 中间层 → 源站</td>
+<td align="left">大型网站，多层缓存架构</td>
+<td align="left">分担源站压力，架构复杂</td>
+</tr>
+<tr>
+<td align="left">** OSS/COS 作为源站**</td>
+<td align="left">CDN 节点 → 对象存储</td>
+<td align="left">静态资源、图片、视频</td>
+<td align="left">最佳实践，成本低、性能好</td>
+</tr>
+</tbody></table></div>
+<h4 id="回源配置实战">回源配置实战</h4>
+<p><strong>场景 1：对象存储作为源站（推荐）</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户访问：cdn.example.com/images/photo.jpg
+                    ↓
+            CDN 边缘节点（北京）
+                    ↓
+            未命中，回源到源站
+                    ↓
+            源站：bucket-name.oss-cn-beijing.aliyuncs.com
+                    ↓
+            返回图片，CDN 缓存并响应用户
+</code></pre>
+<p>关键配置项：</p>
+<ul>
+<li><strong>源站类型</strong>：OSS/COS 域名 或 自定义源站</li>
+<li><strong>回源协议</strong>：HTTP 还是 HTTPS（建议 HTTPS）</li>
+<li><strong>回源 HOST</strong>：访问源站时使用的 Host 头</li>
+<li><strong>回源 SNI</strong>：HTTPS 回源时的服务器名称指示</li>
+</ul>
+<p><strong>场景 2：多源站负载均衡</strong></p>
+<p>当单个源站扛不住回源压力时，可以配置多个源站：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>CDN 边缘节点
+    ├─ 源站 A (权重 50%)
+    ├─ 源站 B (权重 30%)
+    └─ 源站 C (权重 20%)
+</code></pre>
+<p>主备模式：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>CDN 边缘节点
+    ├─ 主源站 A (健康时全部流量)
+    └─ 备源站 B (主源故障时切换)
+</code></pre>
+<h4 id="回源带宽-vs-cdn-带宽">回源带宽 vs CDN 带宽</h4>
+<p>这里有个容易混淆的概念：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">定义</th>
+<th align="left">计费关系</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>CDN 下行带宽</strong></td>
+<td align="left">从 CDN 节点到用户的流量</td>
+<td align="left">通常按流量计费的 CDN 费用</td>
+</tr>
+<tr>
+<td align="left"><strong>回源带宽</strong></td>
+<td align="left">从源站到 CDN 节点的流量</td>
+<td align="left">通常对象存储或源站出流量费用</td>
+</tr>
+</tbody></table></div>
+<p><strong>省钱技巧</strong>：</p>
+<ul>
+<li>提高 CDN 命中率（让更多请求命中缓存，减少回源）</li>
+<li>设置合理的缓存时间（TTL）</li>
+<li>使用预热功能，在用户访问前就缓存热点内容</li>
+<li>开启&quot;跟随 301/302&quot;，避免不必要的回源跳转</li>
+</ul>
+<h4 id="33-缓存策略配置">3.3 缓存策略配置</h4>
+<h4 id="缓存键cache-key决定什么算同一个文件">缓存键（Cache Key）：决定什么算&quot;同一个文件&quot;</h4>
+<p>CDN 如何判断两次请求是否应该返回同一个缓存副本？靠的就是<strong>缓存键</strong>。</p>
+<p><strong>默认缓存键通常包括</strong>：</p>
+<ul>
+<li>URL 路径（不含查询参数）</li>
+<li>例如：<code>/images/photo.jpg</code></li>
+</ul>
+<p><strong>问题场景</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户 A 请求：/images/photo.jpg?w=100&amp;h=100  (100x100 缩略图)
+用户 B 请求：/images/photo.jpg?w=800&amp;h=600  (800x600 大图)
+</code></pre>
+<p>如果缓存键只包含路径，两张不同尺寸的图片会被认为是同一个文件，导致混乱。</p>
+<p><strong>解决方案：自定义缓存键规则</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">规则</th>
+<th align="left">示例</th>
+<th align="left">效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>保留指定查询参数</strong></td>
+<td align="left">保留 <code>w</code>、<code>h</code></td>
+<td align="left">不同尺寸分别缓存</td>
+</tr>
+<tr>
+<td align="left"><strong>保留所有查询参数</strong></td>
+<td align="left">保留全部</td>
+<td align="left">完全精确匹配</td>
+</tr>
+<tr>
+<td align="left"><strong>忽略特定查询参数</strong></td>
+<td align="left">忽略 <code>token</code>、<code>timestamp</code></td>
+<td align="left">带时间戳的 URL 能命中缓存</td>
+</tr>
+<tr>
+<td align="left"><strong>包含请求头</strong></td>
+<td align="left">包含 <code>Accept-Language</code></td>
+<td align="left">不同语言返回不同内容</td>
+</tr>
+</tbody></table></div>
+<p><strong>实战配置示例</strong>（阿里云 CDN）：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>缓存键规则：
+- URL 路径：/images/*
+- 保留查询参数：w, h, format
+- 忽略查询参数：token, timestamp, utm_source
+</code></pre>
+<h4 id="缓存时间ttl内容新鲜度的平衡">缓存时间（TTL）：内容&quot;新鲜度&quot;的平衡</h4>
+<p>TTL（Time To Live）决定了内容在 CDN 节点上缓存多久。设置太短，回源多、成本高；设置太长，内容更新后用户看到旧内容。</p>
+<p><strong>按文件类型设置 TTL 的建议</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">文件类型</th>
+<th align="left">建议 TTL</th>
+<th align="left">原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">HTML 页面</td>
+<td align="left">0-5 分钟</td>
+<td align="left">内容频繁更新，需要实时</td>
+</tr>
+<tr>
+<td align="left">JS/CSS 文件</td>
+<td align="left">1 年（配合文件名 hash）</td>
+<td align="left">内容不变，文件名变化即缓存失效</td>
+</tr>
+<tr>
+<td align="left">图片/视频</td>
+<td align="left">7-30 天</td>
+<td align="left">更新频率低，可长期缓存</td>
+</tr>
+<tr>
+<td align="left">字体文件</td>
+<td align="left">1 年</td>
+<td align="left">几乎不变</td>
+</tr>
+<tr>
+<td align="left">API 响应</td>
+<td align="left">0-5 分钟（视业务）</td>
+<td align="left">数据实时性要求高</td>
+</tr>
+</tbody></table></div>
+<p><strong>前端工程化配合 CDN 的最佳实践</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// webpack/vite 配置
+output: {
+  filename: &#39;js/[name]-[contenthash:8].js&#39;,
+  chunkFilename: &#39;js/[name]-[contenthash:8].chunk.js&#39;,
+}
+</code></pre>
+<p>生成的文件名：<code>app-a3f2b1c9.js</code></p>
+<ul>
+<li>文件内容变化 → hash 变化 → 新 URL → 自然缓存失效</li>
+<li>文件内容不变 → hash 不变 → URL 不变 → 长期缓存命中</li>
+</ul>
+<h4 id="缓存刷新与预热">缓存刷新与预热</h4>
+<p><strong>手动刷新（应急场景）</strong>：</p>
+<p>当你更新了源站内容，但 CDN 缓存还没过期，用户看到的还是旧内容：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">刷新类型</th>
+<th align="left">效果</th>
+<th align="left">耗时</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>URL 刷新</strong></td>
+<td align="left">指定 URL 的缓存失效</td>
+<td align="left">5-10 分钟</td>
+<td align="left">单个文件更新</td>
+</tr>
+<tr>
+<td align="left"><strong>目录刷新</strong></td>
+<td align="left">指定目录下所有内容失效</td>
+<td align="left">10-30 分钟</td>
+<td align="left">批量更新</td>
+</tr>
+<tr>
+<td align="left"><strong>全站刷新</strong></td>
+<td align="left">整个域名的缓存全部失效</td>
+<td align="left">30 分钟以上</td>
+<td align="left">紧急回滚</td>
+</tr>
+</tbody></table></div>
+<p><strong>重要提醒</strong>：刷新只是让缓存失效，下次请求会回源拉取新内容。不要在高峰期大批量刷新，否则可能导致源站被打爆。</p>
+<p><strong>预热（ proactive 优化）</strong>：</p>
+<p>刷新是被动的（内容已更新），预热是主动的（提前缓存）。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>场景：明天上午 10 点要发一篇爆款文章
+
+今晚就提交预热请求：
+- URL: https://cdn.example.com/articles/爆款文章.html
+- 预热范围：全国所有边缘节点
+
+效果：
+明天 10 点用户访问时，内容已经在边缘节点等着了
+→ 零回源延迟，秒开体验
+</code></pre>
+<h3 id="4-流量调度让用户访问最近的节点">4. 流量调度：让用户访问&quot;最近&quot;的节点</h3>
+<h4 id="41-智能-dns-调度">4.1 智能 DNS 调度</h4>
+<p>传统 DNS 解析：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户问：cdn.example.com 的 IP 是什么？
+DNS 答：1.2.3.4（固定的）
+</code></pre>
+<p>智能 DNS 解析：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户（北京联通）问：cdn.example.com 的 IP 是什么？
+智能 DNS：让我查查... 北京联通的 CDN 节点是 1.2.3.4
+
+用户（上海电信）问：cdn.example.com 的 IP 是什么？
+智能 DNS：上海电信的 CDN 节点是 5.6.7.8
+</code></pre>
+<p><strong>调度维度</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">说明</th>
+<th align="left">效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>地理位置</strong></td>
+<td align="left">按省/市/国家分配</td>
+<td align="left">就近访问，降低延迟</td>
+</tr>
+<tr>
+<td align="left"><strong>运营商</strong></td>
+<td align="left">联通/电信/移动/BGP</td>
+<td align="left">同运营商传输，避免跨网</td>
+</tr>
+<tr>
+<td align="left"><strong>节点负载</strong></td>
+<td align="left">实时 CPU/带宽/QPS</td>
+<td align="left">避开过载节点</td>
+</tr>
+<tr>
+<td align="left"><strong>节点健康</strong></td>
+<td align="left">探测可用性</td>
+<td align="left">自动剔除故障节点</td>
+</tr>
+<tr>
+<td align="left"><strong>成本因素</strong></td>
+<td align="left">带宽单价差异</td>
+<td align="left">平衡性能与成本</td>
+</tr>
+</tbody></table></div>
+<h4 id="42-http-dns-与-ip-直连">4.2 HTTP DNS 与 IP 直连</h4>
+<p>传统 DNS 有个问题：<strong>DNS 劫持和解析延迟</strong>。</p>
+<p><strong>HTTP DNS 方案</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>客户端 → 绕过系统 DNS → 直接问 HTTP DNS 服务（如 223.5.5.5:80）
+         ↓
+    返回最优 IP 列表（带权重）
+         ↓
+    客户端根据网络质量探测，选择最优 IP
+</code></pre>
+<p>优势：</p>
+<ul>
+<li>防劫持：不走运营商 DNS</li>
+<li>更精准：可以按客户端网络质量选择 IP</li>
+<li>实时性：故障切换更快</li>
+</ul>
+<p><strong>实战建议</strong>：</p>
+<ul>
+<li>移动端 APP 强烈建议接入 HTTP DNS</li>
+<li>Web 端可以使用 CDN 提供的 CNAME 调度</li>
+<li>关键业务可以做多 IP 容灾（一个域名返回多个 IP）</li>
+</ul>
+<h3 id="5-https-优化安全与性能的平衡">5. HTTPS 优化：安全与性能的平衡</h3>
+<h4 id="51-cdn-上-https-很重要的原理">5.1 CDN 上 HTTPS 很重要的原理</h4>
+<p><strong>场景对比</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>无 HTTPS：
+用户访问 http://cdn.example.com/image.jpg
+↓
+浏览器地址栏显示&quot;不安全&quot;
+↓
+某些浏览器/APP 直接拦截访问
+↓
+SEO 排名降低
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>有 HTTPS：
+用户访问 https://cdn.example.com/image.jpg
+↓
+浏览器显示绿色锁标志
+↓
+HTTP/2 多路复用生效
+↓
+性能 + 安全双提升
+</code></pre>
+<h4 id="52-cdn-https-配置要点">5.2 CDN HTTPS 配置要点</h4>
+<h4 id="证书管理">证书管理</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">说明</th>
+<th align="left">成本</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>云厂商免费证书</strong></td>
+<td align="left">阿里云/腾讯云等提供</td>
+<td align="left">免费</td>
+<td align="left">单域名，快速上手</td>
+</tr>
+<tr>
+<td align="left"><strong>Let&#39;s Encrypt</strong></td>
+<td align="left">社区免费证书</td>
+<td align="left">免费</td>
+<td align="left">自动化部署</td>
+</tr>
+<tr>
+<td align="left"><strong>商业 DV/OV/EV 证书</strong></td>
+<td align="left">赛门铁克、GeoTrust 等</td>
+<td align="left">￥几百-几万/年</td>
+<td align="left">企业级、需要绿条</td>
+</tr>
+<tr>
+<td align="left"><strong>泛域名证书</strong></td>
+<td align="left">*.example.com</td>
+<td align="left">￥几千/年</td>
+<td align="left">多子域名</td>
+</tr>
+</tbody></table></div>
+<p><strong>实战建议</strong>：</p>
+<ul>
+<li>测试环境：Let&#39;s Encrypt 或云厂商免费证书</li>
+<li>生产环境：泛域名证书（省事）或单域名 OV 证书（省钱）</li>
+<li>注意证书过期时间，设置自动续期提醒</li>
+</ul>
+<h4 id="https-优化配置">HTTPS 优化配置</h4>
+<p><strong>TLS 版本选择</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>推荐配置：仅 TLS 1.2 和 TLS 1.3
+兼容配置：TLS 1.1 + TLS 1.2 + TLS 1.3（兼容老旧浏览器）
+</code></pre>
+<p><strong>密码套件</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>推荐：ECDHE 密钥交换 + AES-GCM 加密
+禁用：DES、RC4、MD5、SHA1
+</code></pre>
+<p><strong>OCSP Stapling</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>功能：CDN 节点预获取证书吊销状态
+效果：减少客户端验证时间 200-500ms
+建议：务必开启
+</code></pre>
+<p><strong>TLS 会话复用</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Session ID 复用：客户端带着上次 Session ID，服务端恢复会话
+Session Ticket 复用：服务端把会话状态加密发给客户端，下次带来
+效果：避免完整 TLS 握手，减少 1-RTT
+</code></pre>
+<h4 id="53-http2-与-http3-在-cdn-上的应用">5.3 HTTP/2 与 HTTP/3 在 CDN 上的应用</h4>
+<p><strong>HTTP/2 多路复用</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>HTTP/1.1：
+请求 1 (index.html) ────────────────→
+响应 1 ←──────────────────────────────
+请求 2 (style.css) ─────────────────→
+响应 2 ←──────────────────────────────
+请求 3 (script.js) ─────────────────→
+响应 3 ←──────────────────────────────
+（串行，一个完了下一个）
+
+HTTP/2：
+请求 1 ──→
+请求 2 ──→   合并在一个 TCP 连接上，帧交错传输
+请求 3 ──→
+响应 1 ←──   按优先级流式返回
+响应 2 ←──
+响应 3 ←──
+（并行，一个连接多路复用）
+</code></pre>
+<p><strong>HTTP/2 服务端推送</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>场景：用户请求 index.html，里面引用了 style.css 和 script.js
+
+传统方式：
+1. 用户下载 index.html
+2. 解析发现需要 style.css 和 script.js
+3. 再发两个请求获取
+
+HTTP/2 推送：
+1. 用户请求 index.html
+2. CDN 节点返回 index.html 的同时，主动推送 style.css 和 script.js
+3. 用户解析 html 时，资源已经在缓存里了
+
+注意：推送要谨慎，推多了浪费带宽，推少了没效果
+</code></pre>
+<p><strong>HTTP/3 (QUIC)</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>HTTP/2 的问题：基于 TCP，队头阻塞
+→ 一个 TCP 包丢失，整个连接等待重传
+
+HTTP/3 的解决：基于 QUIC（UDP 之上实现可靠传输）
+→ 每个流独立，一个流阻塞不影响其他流
+→ 连接迁移：WiFi 切 4G，连接不中断
+→ 0-RTT 握手：第一次访问也能快速建立连接
+
+现状：2024 年主流 CDN 已支持 HTTP/3，建议开启
+</code></pre>
+<h3 id="6-访问分析看懂你的-cdn-报表">6. 访问分析：看懂你的 CDN 报表</h3>
+<h4 id="61-核心指标解读">6.1 核心指标解读</h4>
+<h4 id="带宽bandwidth">带宽（Bandwidth）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>定义：单位时间内传输的数据量
+单位：bps（比特每秒）、Mbps、Gbps
+
+CDN 带宽 = 所有边缘节点的出流量总和
+
+注意区分：
+- 计费带宽：通常按 95 峰值或日峰值计费
+- 实际带宽：实时传输速率
+</code></pre>
+<p><strong>带宽与流量的关系</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1 Mbps 带宽持续跑 1 小时 = 450 MB 流量
+（计算：1,000,000 bps × 3600s ÷ 8 ÷ 1024 ÷ 1024 ≈ 429 MB）
+</code></pre>
+<h4 id="qpsqueries-per-second">QPS（Queries Per Second）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>定义：每秒查询/请求数
+
+CDN QPS = 所有边缘节点每秒处理的 HTTP 请求总数
+
+注意：QPS 高不代表带宽高
+- 小文件场景：QPS 很高，带宽不高
+- 大文件场景：QPS 不高，带宽很高
+</code></pre>
+<h4 id="命中率hit-ratio">命中率（Hit Ratio）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>定义：在 CDN 边缘节点命中的请求占总请求的比例
+
+计算公式：
+命中率 = (命中数 / 总请求数) × 100%
+或
+命中率 = (1 - 回源流量 / 总出流量) × 100%
+
+行业标准：
+- 图片/视频/JS/CSS：&gt; 95%
+- HTML 页面：50-80%（视更新频率）
+- API 接口：通常不缓存或极低
+</code></pre>
+<p><strong>命中率低的常见原因</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">原因</th>
+<th align="left">现象</th>
+<th align="left">解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">缓存时间太短</td>
+<td align="left">TTL 只有几分钟</td>
+<td align="left">根据文件类型调整 TTL</td>
+</tr>
+<tr>
+<td align="left">查询参数变化</td>
+<td align="left">URL 带随机数</td>
+<td align="left">配置忽略特定参数</td>
+</tr>
+<tr>
+<td align="left">缓存键设置不当</td>
+<td align="left">不该区分的被区分了</td>
+<td align="left">优化缓存键规则</td>
+</tr>
+<tr>
+<td align="left">内容更新频繁</td>
+<td align="left">文件经常被覆盖</td>
+<td align="left">使用版本号或 hash 文件名</td>
+</tr>
+<tr>
+<td align="left">首次访问多</td>
+<td align="left">新内容或新节点</td>
+<td align="left">提前预热</td>
+</tr>
+</tbody></table></div>
+<h4 id="62-日志分析与问题排查">6.2 日志分析与问题排查</h4>
+<h4 id="cdn-日志字段解析">CDN 日志字段解析</h4>
+<p>典型 CDN 访问日志包含以下字段：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>时间 | 客户端 IP | 请求方法 | URL | HTTP 状态码 | 响应大小 | 缓存状态 | 响应时间 | Referer | User-Agent
+
+示例：
+2024-01-15 14:32:01 | 114.114.114.114 | GET | https://cdn.example.com/images/photo.jpg | 200 | 153600 | HIT | 23 | https://example.com/ | Mozilla/5.0...
+</code></pre>
+<p>关键字段解释：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">说明</th>
+<th align="left">分析价值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>cache_status</code></td>
+<td align="left">缓存状态</td>
+<td align="left">HIT（命中）、MISS（未命中）、EXPIRED（过期）</td>
+</tr>
+<tr>
+<td align="left"><code>response_time</code></td>
+<td align="left">响应时间（ms）</td>
+<td align="left">判断用户体验，&gt;500ms 需优化</td>
+</tr>
+<tr>
+<td align="left"><code>http_status</code></td>
+<td align="left">HTTP 状态码</td>
+<td align="left">404/500 错误排查</td>
+</tr>
+<tr>
+<td align="left"><code>bytes_sent</code></td>
+<td align="left">发送字节数</td>
+<td align="left">带宽统计</td>
+</tr>
+</tbody></table></div>
+<h4 id="常见问题排查-1">常见问题排查</h4>
+<p><strong>问题 1：用户反映访问慢</strong></p>
+<p>排查步骤：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 看日志 response_time
+   - 如果很大（&gt;500ms）：检查是缓存 MISS 还是源站慢
+
+2. 检查 cache_status
+   - HIT：缓存命中，慢可能是文件太大或节点问题
+   - MISS：未命中，需优化缓存策略或命中率
+
+3. 检查客户端 IP 分布
+   - 某些地区慢：可能是该节点负载高或覆盖不足
+</code></pre>
+<p><strong>问题 2：缓存不生效，每次都回源</strong></p>
+<p>排查清单：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>□ 源站响应头是否有 Cache-Control: no-cache / private？
+□ URL 是否带随机参数（如 ?_=123456）？
+□ 缓存键配置是否正确？
+□ TTL 设置是否过短？
+□ 是否命中浏览器本地缓存而非 CDN？
+</code></pre>
+<p><strong>问题 3：费用暴涨</strong></p>
+<p>排查方向：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. 看账单明细
+   - CDN 流量费高：检查是否有大文件被频繁访问，或被盗链
+   - 回源流量费高：检查命中率是否骤降
+   - 请求数费用高：检查是否有 CC 攻击或爬虫
+
+2. 看访问日志
+   - 是否有大量 404 请求（可能是扫描或配置错误）
+   - Referer 是否异常（判断是否被盗链）
+
+3. 安全设置
+   - 开启防盗链（Referer 白名单）
+   - 开启 IP 黑名单/白名单
+   - 配置 CC 防护
+</code></pre>
+<h3 id="7-实战案例从-0-搭建图片加速方案">7. 实战案例：从 0 搭建图片加速方案</h3>
+<h4 id="71-业务场景">7.1 业务场景</h4>
+<p>假设你是一个图片社区的技术负责人，面临以下挑战：</p>
+<ul>
+<li><strong>用户上传</strong>：用户每天上传 100 万张图片（平均 2MB/张）</li>
+<li><strong>用户访问</strong>：每天 5000 万次图片查看请求</li>
+<li><strong>访问分布</strong>：用户遍布全国，海外也有少量访问</li>
+<li><strong>性能要求</strong>：图片加载时间 &lt; 500ms</li>
+<li><strong>成本预算</strong>：尽量控制在每月 5 万以内</li>
+</ul>
+<h4 id="72-架构设计">7.2 架构设计</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>                         ┌──────────────────────────────────────┐
+                         │           用户上传流程                  │
+                         └──────────────────────────────────────┘
+
+   用户浏览器                                    后端服务                      对象存储
+       │                                            │                            │
+       │  1. 申请上传凭证                            │                            │
+       │───────────────────────────────────────────&gt;│                            │
+       │                                            │                            │
+       │                                            │  2. 申请 STS 临时凭证        │
+       │                                            │───────────────────────────&gt;│
+       │                                            │                            │
+       │                                            │  3. 返回 STS 凭证          │
+       │                                            │&lt;───────────────────────────│
+       │                                            │                            │
+       │  4. 返回上传凭证（含 STS）                  │
+       │&lt;───────────────────────────────────────────│                            │
+       │                                            │                            │
+       │  5. 直接上传文件（使用 STS 签名）          │
+       │──────────────────────────────────────────────────────────────────────&gt;│
+       │                                            │                            │
+       │  6. 返回上传结果（URL、ETag 等）           │
+       │&lt;──────────────────────────────────────────────────────────────────────│
+       │                                            │                            │
+       │  7. 通知后端上传完成（保存到数据库）        │
+       │───────────────────────────────────────────&gt;│                            │
+
+
+                         ┌──────────────────────────────────────┐
+                         │           用户访问流程                  │
+                         └──────────────────────────────────────┘
+
+   用户浏览器              DNS 解析              CDN 节点              对象存储（源站）
+       │                     │                     │                     │
+       │  1. 请求图片 URL    │                     │                     │
+       │────────────────────────────────────────&gt;│                     │
+       │                     │                     │                     │
+       │                     │  2. DNS 查询        │                     │
+       │                     │────────────────────&gt;│                     │
+       │                     │                     │                     │
+       │                     │  3. 返回最优节点 IP │                     │
+       │                     │&lt;────────────────────│                     │
+       │                     │                     │                     │
+       │  4. 连接 CDN 节点   │                     │                     │
+       │────────────────────────────────────────&gt;│                     │
+       │                     │                     │                     │
+       │                     │  5. 检查缓存        │                     │
+       │                     │                     ├─ 命中？直接返回     │
+       │                     │                     └─ 未命中？继续        │
+       │                     │                     │                     │
+       │                     │                     │  6. 回源获取       │
+       │                     │                     │──────────────────&gt;│
+       │                     │                     │                     │
+       │                     │                     │  7. 返回文件       │
+       │                     │                     │&lt;──────────────────│
+       │                     │                     │                     │
+       │                     │  8. 缓存并响应      │                     │
+       │&lt;────────────────────────────────────────│                     │
+</code></pre>
+<h4 id="73-关键配置详解">7.3 关键配置详解</h4>
+<h4 id="对象存储配置">对象存储配置</h4>
+<p><strong>存储桶规划</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code> Bucket: myapp-images-prod
+ ├─ 目录结构：
+ │   ├─ uploads/           # 用户上传的原图
+ │   │   ├─ 2024/01/15/user123-abc.jpg
+ │   │   └─ 2024/01/15/user456-def.png
+ │   ├─ thumbnails/        # 缩略图
+ │   │   ├─ small/         # 100x100
+ │   │   ├─ medium/        # 400x300
+ │   │   └─ large/         # 800x600
+ │   └─ processed/         # 处理后的图片（加水印等）
+ │
+ ├─ 访问权限：
+ │   ├─ 原图目录：私有（需签名访问）
+ │   ├─ 缩略图目录：公共读
+ │   └─ 跨域 CORS：允许 *.myapp.com 访问
+ │
+ └─ 生命周期策略：
+     ├─ 上传 7 天后：低频存储（省 40% 费用）
+     ├─ 上传 90 天后：归档存储（省 70% 费用）
+     └─ 上传 3 年后：自动删除（或转存到更便宜的冷存储）
+</code></pre>
+<p><strong>CORS 跨域配置</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-xml">&lt;CORSConfiguration&gt;
+  &lt;CORSRule&gt;
+    &lt;AllowedOrigin&gt;https://myapp.com&lt;/AllowedOrigin&gt;
+    &lt;AllowedOrigin&gt;https://www.myapp.com&lt;/AllowedOrigin&gt;
+    &lt;AllowedMethod&gt;GET&lt;/AllowedMethod&gt;
+    &lt;AllowedMethod&gt;HEAD&lt;/AllowedMethod&gt;
+    &lt;AllowedHeader&gt;*&lt;/AllowedHeader&gt;
+    &lt;ExposeHeader&gt;ETag&lt;/ExposeHeader&gt;
+    &lt;ExposeHeader&gt;x-oss-request-id&lt;/ExposeHeader&gt;
+    &lt;MaxAgeSeconds&gt;3600&lt;/MaxAgeSeconds&gt;
+  &lt;/CORSRule&gt;
+&lt;/CORSConfiguration&gt;
+</code></pre>
+<h4 id="cdn-加速配置">CDN 加速配置</h4>
+<p><strong>缓存策略配置</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>全局默认规则：
+├─ 缓存键：URL 路径 + 保留 w、h、format 查询参数
+├─ 默认 TTL：7 天
+└─ 回源 HOST：自动跟随
+
+按文件类型细分：
+├─ *.html：
+│   ├─ TTL：5 分钟
+│   └─ 优先从内存缓存读取
+│
+├─ *.js, *.css：
+│   ├─ TTL：1 年
+│   └─ 忽略查询参数（因为文件名有 hash）
+│
+├─ *.jpg, *.png, *.gif, *.webp：
+│   ├─ TTL：30 天
+│   ├─ 保留查询参数（w、h、format 用于动态裁剪）
+│   └─ 启用图片自动压缩优化
+│
+└─ /api/*：
+    ├─ TTL：0（不缓存）
+    └─ 直接回源
+</code></pre>
+<p><strong>HTTPS 优化配置</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>证书配置：
+├─ 证书类型：泛域名证书 *.myapp.com
+├─ 部署方式：CDN 控制台上传，自动续期
+└─ 备用证书：EV 证书用于主域名（显示绿色地址栏）
+
+TLS 配置：
+├─ 最低 TLS 版本：1.2（兼容性与安全平衡）
+├─ 最高 TLS 版本：1.3
+├─ 密码套件：仅启用强加密套件
+├─ OCSP Stapling：开启
+├─ TLS 会话复用：开启 Session Ticket
+└─ HSTS：开启（max-age=31536000）
+
+HTTP/2 与 HTTP/3：
+├─ HTTP/2：开启（多路复用、头部压缩）
+├─ HTTP/2 Server Push：按需开启（推荐用 Preload 替代）
+└─ HTTP/3 (QUIC)：开启（实验性功能，逐步放量）
+</code></pre>
+<h4 id="74-成本控制策略">7.4 成本控制策略</h4>
+<h4 id="费用构成分析">费用构成分析</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>月度 CDN + 对象存储费用构成：
+
+CDN 部分：
+├─ 下行流量费（大头，约 60%）
+│   ├─ 中国大陆：0.15-0.30 元/GB
+│   ├─ 亚太地区：0.40-0.80 元/GB
+│   └─ 欧美：0.30-0.60 元/GB
+│
+├─ 请求数费用（小头，约 5%）
+│   ├─ HTTP：0.01-0.05 元/万次
+│   └─ HTTPS：0.05-0.15 元/万次（因为 TLS 握手消耗资源）
+│
+├─ 带宽峰值费用（可选计费方式）
+│   └─ 95 峰值计费：适合流量波动大的场景
+│
+└─ 增值功能费（约 5%）
+    ├─ HTTPS 证书管理
+    ├─ WAF 防护
+    ├─ 实时日志推送
+    └─ 边缘脚本/函数
+
+对象存储部分：
+├─ 存储容量费（约 15%）
+│   ├─ 标准存储：0.12-0.15 元/GB/月
+│   ├─ 低频存储：0.08-0.10 元/GB/月
+│   └─ 归档存储：0.03-0.05 元/GB/月
+│
+├─ 请求费用（约 5%）
+│   ├─ PUT：0.01-0.05 元/万次
+│   └─ GET：0.005-0.01 元/万次
+│
+├─ 数据取回费用（低频/归档）
+│   └─ 提前删除或取回收额外费用
+│
+└─ 回源出流量费（约 10%）
+    └─ CDN 回源到对象存储的流量费
+</code></pre>
+<h4 id="省钱技巧实战">省钱技巧实战</h4>
+<p><strong>技巧 1：存储分级，自动生命周期管理</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># 生命周期规则示例
+rules:
+  - id: image-lifecycle
+    prefix: uploads/
+    transitions:
+      # 7 天后转低频存储，省 30% 费用
+      - days: 7
+        storageClass: IA
+      # 90 天后转归档存储，省 70% 费用
+      - days: 90
+        storageClass: Archive
+    # 3 年后自动删除
+    expiration:
+      days: 1095
+</code></pre>
+<p><strong>技巧 2：提高 CDN 命中率，减少回源</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>命中率从 90% 提升到 95% 意味着什么？
+
+假设：
+- 日流量：10 TB
+- 命中率 90%：回源 1 TB
+- 命中率 95%：回源 0.5 TB
+
+节省回源流量：0.5 TB/天 × 0.15 元/GB × 30 天 = 2250 元/月
+</code></pre>
+<p><strong>技巧 3：压缩与格式优化</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>图片优化方案：
+├─ 原图存储在对象存储（不直接对外）
+├─ CDN 开启图片处理功能：
+│   ├─ 格式自动转换：JPEG → WebP/AVIF（省 30-50%）
+│   ├─ 质量自动压缩：视觉无损压缩（省 20-40%）
+│   ├─ 尺寸自适应：根据设备返回合适尺寸
+│   └─ 渐进式加载：先模糊后清晰
+└─ 效果：带宽成本降低 50-70%
+</code></pre>
+<p><strong>技巧 4：带宽峰值封顶与告警</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># 带宽封顶配置
+bandwidth_cap:
+  daily_limit: 500 # Mbps，日峰值超过则自动停用 CDN
+  monthly_limit: 10000 # GB，月流量超过则停用
+
+  # 告警阈值
+  alerts:
+    - threshold: 70% # 达到 70% 发告警
+      channels: [sms, email]
+    - threshold: 90% # 达到 90% 打电话
+      channels: [phone]
+</code></pre>
+<h3 id="8-总结对象存储--cdn-的黄金法则">8. 总结：对象存储 + CDN 的黄金法则</h3>
+<h4 id="81-架构设计原则">8.1 架构设计原则</h4>
+<p><strong>原则 1：动静分离</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>动态内容（API、HTML）→ 走源站或边缘函数
+静态内容（图片、JS、CSS、视频）→ 走 CDN + 对象存储
+</code></pre>
+<p><strong>原则 2：就近服务</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户在哪里，内容就缓存到哪里
+→ 选择覆盖广的 CDN 服务商
+→ 启用智能 DNS 调度
+→ 重要内容提前预热
+</code></pre>
+<p><strong>原则 3：分层缓存</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>浏览器本地缓存（最强）
+    ↓
+CDN 边缘节点缓存（次强）
+    ↓
+CDN 中间层/区域节点（兜底）
+    ↓
+对象存储/源站（最后防线）
+</code></pre>
+<p><strong>原则 4：成本与体验的平衡</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>存储分级：热数据标准存储，冷数据归档存储
+缓存策略：高频内容长 TTL，低频内容短 TTL
+压缩优化：WebP/AVIF 格式，智能质量压缩
+监控告警：设置带宽封顶，防止异常流量
+</code></pre>
+<h4 id="82-避坑清单">8.2 避坑清单</h4>
+<p><strong>存储桶命名与权限</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 桶名全局唯一，避免被占用</li>
+<li><input disabled="" type="checkbox"> 私有文件不要设置为公共读</li>
+<li><input disabled="" type="checkbox"> AccessKey 不要写在前端代码里，用 STS 临时凭证</li>
+<li><input disabled="" type="checkbox"> 启用服务端加密（SSE）保护敏感数据</li>
+</ul>
+<p><strong>CDN 缓存配置</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> HTML 文件 TTL 不要太长（建议 &lt; 5 分钟）</li>
+<li><input disabled="" type="checkbox"> JS/CSS 建议用带 hash 的文件名，TTL 设为 1 年</li>
+<li><input disabled="" type="checkbox"> 缓存键要合理，不要把用户信息等变量放进去</li>
+<li><input disabled="" type="checkbox"> 重要更新后记得刷新缓存或预热</li>
+</ul>
+<p><strong>HTTPS 安全</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 证书不要过期，设置自动续期</li>
+<li><input disabled="" type="checkbox"> 最低 TLS 版本建议 1.2</li>
+<li><input disabled="" type="checkbox"> 开启 HSTS 防止降级攻击</li>
+<li><input disabled="" type="checkbox"> 敏感 Cookie 设置 Secure 和 HttpOnly</li>
+</ul>
+<p><strong>成本控制</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 开启带宽封顶告警，防止异常流量</li>
+<li><input disabled="" type="checkbox"> 低频/归档存储有最小存储时间和提前删除费，注意规则</li>
+<li><input disabled="" type="checkbox"> 回源流量费也很贵，努力提高 CDN 命中率</li>
+<li><input disabled="" type="checkbox"> 定期分析访问日志，清理僵尸资源</li>
+</ul>
+<h3 id="9-实战代码模板">9. 实战代码模板</h3>
+<h4 id="91-前端直传对象存储javascript">9.1 前端直传对象存储（JavaScript）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">/**
+ * 对象存储直传工具类
+ * 支持：阿里云 OSS、腾讯云 COS、AWS S3
+ */
+class DirectUploader {
+  constructor(config) {
+    this.provider = config.provider // &#39;oss&#39; | &#39;cos&#39; | &#39;s3&#39;
+    this.region = config.region
+    this.bucket = config.bucket
+    this.getCredentials = config.getCredentials // 获取临时凭证的函数
+  }
+
+  /**
+   * 获取 STS 临时凭证
+   */
+  async fetchCredentials() {
+    // 向后端申请临时凭证
+    const credentials = await this.getCredentials()
+    return {
+      accessKeyId: credentials.accessKeyId,
+      accessKeySecret: credentials.accessKeySecret,
+      sessionToken: credentials.securityToken || credentials.sessionToken,
+      expiration: credentials.expiration
+    }
+  }
+
+  /**
+   * 生成上传签名（适用于前端计算签名）
+   */
+  generateSignature(credentials, fileKey, fileType, options = {}) {
+    const timestamp = new Date().toISOString()
+    const date = timestamp.slice(0, 10).replace(/-/g, &#39;&#39;)
+
+    // 不同厂商的签名算法略有差异
+    switch (this.provider) {
+      case &#39;oss&#39;:
+        return this._ossSignature(credentials, fileKey, date, options)
+      case &#39;cos&#39;:
+        return this._cosSignature(credentials, fileKey, date, options)
+      case &#39;s3&#39;:
+        return this._s3Signature(credentials, fileKey, date, options)
+      default:
+        throw new Error(&#39;Unknown provider&#39;)
+    }
+  }
+
+  /**
+   * 单文件上传（小文件 &lt; 100MB）
+   */
+  async upload(file, options = {}) {
+    const credentials = await this.fetchCredentials()
+    const fileKey = this._generateFileKey(file, options.directory)
+
+    const formData = new FormData()
+
+    // 构建表单字段（不同厂商字段名不同）
+    const formFields = this._buildFormFields(
+      credentials,
+      fileKey,
+      file.type,
+      options
+    )
+    Object.entries(formFields).forEach(([key, value]) =&gt; {
+      formData.append(key, value)
+    })
+
+    formData.append(&#39;file&#39;, file)
+
+    // 发送上传请求
+    const uploadUrl = this._getUploadUrl()
+    const response = await fetch(uploadUrl, {
+      method: &#39;POST&#39;,
+      body: formData,
+      // 如果上传大文件，可能需要设置更长的超时
+      signal: options.signal // 支持 AbortController 取消上传
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`Upload failed: ${response.status} ${errorText}`)
+    }
+
+    return {
+      url: this._getFileUrl(fileKey),
+      key: fileKey,
+      etag: response.headers.get(&#39;ETag&#39;),
+      size: file.size
+    }
+  }
+
+  /**
+   * 分片上传（大文件 &gt; 100MB）
+   */
+  async multipartUpload(file, options = {}) {
+    const partSize = options.partSize || 10 * 1024 * 1024 // 默认 10MB/片
+    const parallel = options.parallel || 3 // 默认 3 个并发
+
+    const credentials = await this.fetchCredentials()
+    const fileKey = this._generateFileKey(file, options.directory)
+
+    // 1. 初始化分片上传
+    const uploadId = await this._initMultipartUpload(
+      credentials,
+      fileKey,
+      file.type
+    )
+
+    // 2. 计算分片
+    const parts = []
+    const totalParts = Math.ceil(file.size / partSize)
+    for (let i = 0; i &lt; totalParts; i++) {
+      const start = i * partSize
+      const end = Math.min(start + partSize, file.size)
+      parts.push({
+        number: i + 1,
+        start,
+        end,
+        blob: file.slice(start, end)
+      })
+    }
+
+    // 3. 上传分片（带并发控制和断点续传）
+    const uploadedParts = []
+    const failedParts = []
+
+    // 支持断点续传：检查哪些分片已上传
+    if (options.resume) {
+      const existingParts = await this._listParts(
+        credentials,
+        fileKey,
+        uploadId
+      )
+      for (const part of existingParts) {
+        uploadedParts.push(part)
+      }
+    }
+
+    // 过滤出未上传的分片
+    const pendingParts = parts.filter(
+      (p) =&gt; !uploadedParts.some((up) =&gt; up.partNumber === p.number)
+    )
+
+    // 并发上传
+    const uploadPart = async (part) =&gt; {
+      try {
+        const etag = await this._uploadPart(
+          credentials,
+          fileKey,
+          uploadId,
+          part
+        )
+        return { partNumber: part.number, etag }
+      } catch (error) {
+        failedParts.push({ part, error })
+        throw error
+      }
+    }
+
+    // 使用 Promise.all 控制并发
+    const chunks = []
+    for (let i = 0; i &lt; pendingParts.length; i += parallel) {
+      chunks.push(pendingParts.slice(i, i + parallel))
+    }
+
+    for (const chunk of chunks) {
+      const results = await Promise.allSettled(chunk.map(uploadPart))
+      for (const result of results) {
+        if (result.status === &#39;fulfilled&#39;) {
+          uploadedParts.push(result.value)
+        }
+      }
+    }
+
+    // 检查是否所有分片都上传成功
+    if (uploadedParts.length !== totalParts) {
+      throw new Error(
+        `Upload incomplete: ${uploadedParts.length}/${totalParts} parts uploaded`
+      )
+    }
+
+    // 4. 完成分片上传（合并分片）
+    await this._completeMultipartUpload(
+      credentials,
+      fileKey,
+      uploadId,
+      uploadedParts
+    )
+
+    return {
+      url: this._getFileUrl(fileKey),
+      key: fileKey,
+      size: file.size,
+      parts: totalParts
+    }
+  }
+
+  /**
+   * 生成文件存储路径
+   */
+  _generateFileKey(file, directory = &#39;&#39;) {
+    const date = new Date()
+    const datePath = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, &#39;0&#39;)}/${String(date.getDate()).padStart(2, &#39;0&#39;)}`
+    const random = Math.random().toString(36).substring(2, 10)
+    const ext = file.name.split(&#39;.&#39;).pop() || &#39;bin&#39;
+    const key = directory
+      ? `${directory}/${datePath}/${random}.${ext}`
+      : `${datePath}/${random}.${ext}`
+    return key
+  }
+
+  // ============ 各厂商特定方法 ============
+
+  _getUploadUrl() {
+    switch (this.provider) {
+      case &#39;oss&#39;:
+        return `https://${this.bucket}.oss-${this.region}.aliyuncs.com`
+      case &#39;cos&#39;:
+        return `https://${this.bucket}.cos.${this.region}.myqcloud.com`
+      case &#39;s3&#39;:
+        return `https://${this.bucket}.s3.${this.region}.amazonaws.com`
+      default:
+        throw new Error(&#39;Unknown provider&#39;)
+    }
+  }
+
+  _getFileUrl(key) {
+    return `https://${this.bucket}.${this.provider === &#39;oss&#39; ? &#39;oss&#39; : &#39;cos&#39;}-${this.region}.${
+      this.provider === &#39;oss&#39;
+        ? &#39;aliyuncs.com&#39;
+        : this.provider === &#39;cos&#39;
+          ? &#39;myqcloud.com&#39;
+          : &#39;amazonaws.com&#39;
+    }/${key}`
+  }
+
+  // 各厂商的签名、分片上传等方法...（根据实际需求实现）
+  _buildFormFields(credentials, fileKey, fileType, options) {
+    // 各厂商表单字段构建逻辑
+    // 这里需要根据具体厂商的文档实现
+    return {}
+  }
+
+  async _initMultipartUpload(credentials, fileKey, fileType) {
+    // 各厂商初始化分片上传逻辑
+    return &#39;upload-id&#39;
+  }
+
+  async _uploadPart(credentials, fileKey, uploadId, part) {
+    // 各厂商分片上传逻辑
+    return &#39;etag&#39;
+  }
+
+  async _completeMultipartUpload(credentials, fileKey, uploadId, parts) {
+    // 各厂商完成分片上传逻辑
+  }
+
+  async _listParts(credentials, fileKey, uploadId) {
+    // 各厂商列出已上传分片逻辑
+    return []
+  }
+}
+
+// 使用示例
+const uploader = new DirectUploader({
+  provider: &#39;oss&#39;,
+  region: &#39;cn-beijing&#39;,
+  bucket: &#39;myapp-images-prod&#39;,
+  getCredentials: async () =&gt; {
+    // 向后端申请临时凭证
+    const res = await fetch(&#39;/api/upload/credentials&#39;)
+    return res.json()
+  }
+})
+
+// 小文件上传
+async function uploadAvatar(file) {
+  try {
+    const result = await uploader.upload(file, {
+      directory: &#39;avatars&#39;,
+      onProgress: (progress) =&gt; {
+        console.log(`上传进度: ${progress.percent}%`)
+      }
+    })
+    console.log(&#39;上传成功:&#39;, result.url)
+    return result
+  } catch (error) {
+    console.error(&#39;上传失败:&#39;, error)
+    throw error
+  }
+}
+
+// 大文件分片上传
+async function uploadVideo(file) {
+  try {
+    const result = await uploader.multipartUpload(file, {
+      directory: &#39;videos&#39;,
+      partSize: 10 * 1024 * 1024, // 10MB 每片
+      parallel: 3, // 3 个并发
+      resume: true, // 支持断点续传
+      onProgress: (progress) =&gt; {
+        console.log(
+          `上传进度: ${progress.percent}%, 已传 ${progress.loaded}/${progress.total}`
+        )
+      },
+      onPartComplete: (part) =&gt; {
+        console.log(`分片 ${part.number} 上传完成`)
+      }
+    })
+    console.log(&#39;上传成功:&#39;, result.url)
+    return result
+  } catch (error) {
+    console.error(&#39;上传失败:&#39;, error)
+    // 可以在这里实现重试逻辑或保存断点信息
+    throw error
+  }
+}
+</code></pre>
+<h4 id="92-后端临时凭证服务nodejsexpress">9.2 后端临时凭证服务（Node.js/Express）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">/**
+ * 对象存储 STS 临时凭证服务
+ * 支持：阿里云 OSS、腾讯云 COS、AWS S3
+ */
+const express = require(&#39;express&#39;)
+const STS = require(&#39;ali-oss&#39;).STS // 阿里云
+// const COS = require(&#39;cos-nodejs-sdk-v5&#39;) // 腾讯云
+const router = express.Router()
+
+// 配置
+const config = {
+  // 阿里云 OSS 配置
+  oss: {
+    accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+    accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+    region: &#39;oss-cn-beijing&#39;,
+    bucket: &#39;myapp-images-prod&#39;,
+    // STS 角色 ARN（需要在 RAM 控制台创建）
+    roleArn: process.env.OSS_STS_ROLE_ARN
+  }
+}
+
+/**
+ * 获取 STS 临时凭证（阿里云 OSS）
+ * POST /api/upload/credentials
+ */
+router.post(&#39;/credentials&#39;, async (req, res) =&gt; {
+  try {
+    // 1. 验证用户身份（根据实际情况实现）
+    const userId = req.user?.id
+    if (!userId) {
+      return res.status(401).json({ error: &#39;Unauthorized&#39; })
+    }
+
+    // 2. 生成唯一的文件路径前缀（用于权限隔离）
+    const date = new Date()
+    const prefix = `uploads/${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, &#39;0&#39;)}/${userId}/`
+
+    // 3. 创建 STS 客户端
+    const sts = new STS({
+      accessKeyId: config.oss.accessKeyId,
+      accessKeySecret: config.oss.accessKeySecret
+    })
+
+    // 4. 申请临时凭证
+    const result = await sts.assumeRole(
+      config.oss.roleArn,
+      {
+        // Policy 限制权限范围（最小权限原则）
+        Statement: [
+          {
+            Effect: &#39;Allow&#39;,
+            Action: [
+              &#39;oss:PutObject&#39;,
+              &#39;oss:InitiateMultipartUpload&#39;,
+              &#39;oss:UploadPart&#39;,
+              &#39;oss:CompleteMultipartUpload&#39;,
+              &#39;oss:AbortMultipartUpload&#39;,
+              &#39;oss:ListParts&#39;
+            ],
+            Resource: [`acs:oss:*:*:${config.oss.bucket}/${prefix}*`]
+          }
+        ],
+        Version: &#39;1&#39;
+      },
+      3600, // 凭证有效期 1 小时
+      &#39;web-upload-session-&#39; + Date.now()
+    )
+
+    // 5. 返回凭证和配置
+    res.json({
+      success: true,
+      data: {
+        // STS 临时凭证
+        credentials: {
+          accessKeyId: result.credentials.AccessKeyId,
+          accessKeySecret: result.credentials.AccessKeySecret,
+          sessionToken: result.credentials.SecurityToken,
+          expiration: result.credentials.Expiration
+        },
+        // 上传配置
+        config: {
+          provider: &#39;oss&#39;,
+          region: config.oss.region,
+          bucket: config.oss.bucket,
+          endpoint: `https://${config.oss.bucket}.${config.oss.region}.aliyuncs.com`,
+          prefix: prefix, // 文件路径前缀
+          // 安全限制
+          maxSize: 100 * 1024 * 1024, // 最大 100MB
+          allowedTypes: [
+            &#39;image/jpeg&#39;,
+            &#39;image/png&#39;,
+            &#39;image/gif&#39;,
+            &#39;image/webp&#39;,
+            &#39;video/mp4&#39;
+          ]
+        }
+      }
+    })
+  } catch (error) {
+    console.error(&#39;Get credentials failed:&#39;, error)
+    res.status(500).json({
+      success: false,
+      error: &#39;Failed to get upload credentials&#39;,
+      message: error.message
+    })
+  }
+})
+
+/**
+ * 回调通知：前端上传完成后通知后端
+ * POST /api/upload/callback
+ */
+router.post(&#39;/callback&#39;, async (req, res) =&gt; {
+  try {
+    const { key, etag, size, mimeType, originalName } = req.body
+    const userId = req.user?.id
+
+    // 1. 验证文件是否存在
+    // 2. 保存文件信息到数据库
+    const fileRecord = await db.files.create({
+      userId,
+      key,
+      etag,
+      size,
+      mimeType,
+      originalName,
+      url: `https://cdn.example.com/${key}`,
+      createdAt: new Date()
+    })
+
+    // 3. 异步处理：生成缩略图、提取元数据、内容审核等
+    await processFileAsync(fileRecord)
+
+    res.json({
+      success: true,
+      data: {
+        fileId: fileRecord.id,
+        url: fileRecord.url,
+        size: fileRecord.size
+      }
+    })
+  } catch (error) {
+    console.error(&#39;Upload callback failed:&#39;, error)
+    res.status(500).json({
+      success: false,
+      error: &#39;Failed to process uploaded file&#39;
+    })
+  }
+})
+
+module.exports = router
+</code></pre>
+<h4 id="93-防盗链与安全配置">9.3 防盗链与安全配置</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">/**
+ * CDN 防盗链与安全配置示例
+ */
+
+// 1. Referer 防盗链（防止其他网站直接引用你的资源）
+const refererConfig = {
+  // 白名单模式：只允许以下 Referer 访问
+  allowList: [
+    &#39;*.myapp.com&#39;, // 主站
+    &#39;*.myapp.cn&#39;, // 国内站
+    &#39;localhost:*&#39;, // 本地开发
+    &#39;127.0.0.1:*&#39;
+  ],
+
+  // 黑名单模式（可选）：禁止以下 Referer
+  blockList: [
+    &#39;*. competitor.com&#39;, // 竞争对手
+    &#39;spam-site.com&#39;
+  ],
+
+  // 空 Referer 处理：是否允许直接访问（浏览器地址栏输入 URL）
+  allowEmptyReferer: false // 生产环境建议 false，测试环境可 true
+}
+
+// 2. URL 鉴权（更安全的防盗链，带时间戳和签名）
+class URLAuth {
+  constructor(config) {
+    this.key = config.key // 鉴权密钥，只在服务端保存
+    this.expireTime = config.expireTime || 3600 // 默认 1 小时有效期
+  }
+
+  /**
+   * 生成带鉴权的 URL
+   * @param {string} url - 原始 URL，如 https://cdn.example.com/images/photo.jpg
+   * @param {number} expireIn - 有效期（秒）
+   * @returns {string} 带鉴权参数的 URL
+   */
+  sign(url, expireIn = this.expireTime) {
+    const urlObj = new URL(url)
+    const pathname = urlObj.pathname
+    const timestamp = Math.floor(Date.now() / 1000) + expireIn
+
+    // 构造签名字符串（不同厂商格式不同，这里是通用示例）
+    const signStr = `${pathname}-${timestamp}-${this.key}`
+    const signature = this._md5(signStr)
+
+    // 添加鉴权参数
+    urlObj.searchParams.set(&#39;sign&#39;, signature)
+    urlObj.searchParams.set(&#39;t&#39;, timestamp.toString())
+
+    return urlObj.toString()
+  }
+
+  /**
+   * 验证 URL 签名（在 CDN 边缘或源站使用）
+   */
+  verify(url) {
+    const urlObj = new URL(url)
+    const signature = urlObj.searchParams.get(&#39;sign&#39;)
+    const timestamp = parseInt(urlObj.searchParams.get(&#39;t&#39;))
+    const pathname = urlObj.pathname
+
+    // 检查是否过期
+    if (timestamp &lt; Math.floor(Date.now() / 1000)) {
+      return { valid: false, error: &#39;URL expired&#39; }
+    }
+
+    // 验证签名
+    const signStr = `${pathname}-${timestamp}-${this.key}`
+    const expectedSign = this._md5(signStr)
+
+    if (signature !== expectedSign) {
+      return { valid: false, error: &#39;Invalid signature&#39; }
+    }
+
+    return { valid: true }
+  }
+
+  _md5(str) {
+    // 实际项目中使用 crypto-js 或其他 MD5 库
+    // 这里仅作示例
+    return require(&#39;crypto&#39;).createHash(&#39;md5&#39;).update(str).digest(&#39;hex&#39;)
+  }
+}
+
+// 使用示例
+const auth = new URLAuth({
+  key: &#39;your-secret-key-only-known-by-server&#39;,
+  expireTime: 3600 // 1 小时有效期
+})
+
+// 服务端生成带签名的 URL
+const signedUrl = auth.sign(
+  &#39;https://cdn.example.com/private/document.pdf&#39;,
+  7200
+)
+// 结果：https://cdn.example.com/private/document.pdf?sign=xxxxx&amp;t=1699123456
+
+// CDN 边缘或源站验证
+const result = auth.verify(signedUrl)
+if (!result.valid) {
+  // 返回 403 Forbidden
+}
+
+// 3. IP 黑白名单
+const ipConfig = {
+  // 只允许特定 IP 访问（适合内部系统）
+  whiteList: [
+    &#39;192.168.1.0/24&#39;, // 内网网段
+    &#39;10.0.0.0/8&#39;
+  ],
+
+  // 禁止特定 IP 访问（封禁攻击者）
+  blackList: [&#39;1.2.3.4&#39;, &#39;5.6.7.8&#39;]
+}
+
+// 4. UA（User-Agent）黑白名单
+const uaConfig = {
+  // 禁止爬虫/下载工具
+  blackList: [
+    &#39;Wget&#39;,
+    &#39;curl&#39;,
+    &#39;python-requests&#39;,
+    &#39;Scrapy&#39;,
+    &#39;AhrefsBot&#39;,
+    &#39;SemrushBot&#39;
+  ],
+
+  // 只允许浏览器访问（严格模式）
+  whiteList: [
+    &#39;Mozilla/*&#39;, // 现代浏览器
+    &#39;AppleWebKit/*&#39;
+  ]
+}
+</code></pre>
+<h3 id="10-名词对照表">10. 名词对照表</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th align="left">英文术语</th>
+<th align="left">中文对照</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Object Storage</strong></td>
+<td align="left">对象存储</td>
+<td align="left">一种数据存储架构，将数据作为对象管理，而非文件系统层级结构。适合存储图片、视频、备份等非结构化数据。</td>
+</tr>
+<tr>
+<td align="left"><strong>Bucket</strong></td>
+<td align="left">存储桶</td>
+<td align="left">对象存储中的顶级容器，用于组织和隔离数据。每个桶有独立的权限控制和配置。</td>
+</tr>
+<tr>
+<td align="left"><strong>Object</strong></td>
+<td align="left">对象/文件对象</td>
+<td align="left">对象存储的基本单元，包含数据本身、元数据（Metadata）和全局唯一键（Key）。</td>
+</tr>
+<tr>
+<td align="left"><strong>CDN</strong></td>
+<td align="left">内容分发网络</td>
+<td align="left">Content Delivery Network，通过在全球部署边缘节点，将网站内容缓存到离用户最近的位置，加速访问速度。</td>
+</tr>
+<tr>
+<td align="left"><strong>Edge Node</strong></td>
+<td align="left">边缘节点</td>
+<td align="left">CDN 网络中部署在各地的缓存服务器，直接为用户提供内容访问服务。</td>
+</tr>
+<tr>
+<td align="left"><strong>Origin</strong></td>
+<td align="left">源站</td>
+<td align="left">CDN 回源获取内容的服务器，可以是对象存储、ECS 或自建服务器。</td>
+</tr>
+<tr>
+<td align="left"><strong>Cache Hit</strong></td>
+<td align="left">缓存命中</td>
+<td align="left">用户请求的内容在 CDN 边缘节点已存在，直接返回，无需回源。</td>
+</tr>
+<tr>
+<td align="left"><strong>Cache Miss</strong></td>
+<td align="left">缓存未命中</td>
+<td align="left">边缘节点没有请求的内容，需要回源获取。</td>
+</tr>
+<tr>
+<td align="left"><strong>Hit Ratio</strong></td>
+<td align="left">命中率</td>
+<td align="left">缓存命中次数占总请求次数的比例。命中率越高，回源越少，成本越低。</td>
+</tr>
+<tr>
+<td align="left"><strong>TTL</strong></td>
+<td align="left">生存时间/缓存时间</td>
+<td align="left">Time To Live，内容在 CDN 节点上缓存的有效期。过期后需要重新回源。</td>
+</tr>
+<tr>
+<td align="left"><strong>Back to Source</strong></td>
+<td align="left">回源</td>
+<td align="left">CDN 边缘节点向源站请求内容的过程。</td>
+</tr>
+<tr>
+<td align="left"><strong>Purge/Refresh</strong></td>
+<td align="left">刷新缓存</td>
+<td align="left">强制使 CDN 缓存失效，下次请求回源获取最新内容。</td>
+</tr>
+<tr>
+<td align="left"><strong>Preheat</strong></td>
+<td align="left">预热</td>
+<td align="left">在正式发布前，主动将内容推送到 CDN 节点，让用户第一次访问就能命中缓存。</td>
+</tr>
+<tr>
+<td align="left"><strong>CORS</strong></td>
+<td align="left">跨域资源共享</td>
+<td align="left">Cross-Origin Resource Sharing，浏览器的安全机制，控制不同域之间的资源访问。</td>
+</tr>
+<tr>
+<td align="left"><strong>Referer</strong></td>
+<td align="left">来源页面</td>
+<td align="left">HTTP 请求头字段，指示请求是从哪个页面链接过来的。用于防盗链。</td>
+</tr>
+<tr>
+<td align="left"><strong>STS</strong></td>
+<td align="left">安全令牌服务</td>
+<td align="left">Security Token Service，颁发临时访问凭证的服务，用于前端直传等场景。</td>
+</tr>
+<tr>
+<td align="left"><strong>Multipart Upload</strong></td>
+<td align="left">分片上传</td>
+<td align="left">将大文件切分成多个小分片并行上传，支持断点续传，提高上传效率和可靠性。</td>
+</tr>
+<tr>
+<td align="left"><strong>ETag</strong></td>
+<td align="left">实体标签</td>
+<td align="left">HTTP 响应头，用于标识资源的特定版本，常用于缓存验证。</td>
+</tr>
+<tr>
+<td align="left"><strong>S3 API</strong></td>
+<td align="left">S3 兼容接口</td>
+<td align="left">AWS S3 的对象存储 API 规范，多数云厂商的对象存储都兼容此接口。</td>
+</tr>
+<tr>
+<td align="left"><strong>Canonical Query String</strong></td>
+<td align="left">规范查询字符串</td>
+<td align="left">签名字符串的一部分，用于计算请求签名，确保请求不被篡改。</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结对象存储--cdn-的黄金法则">总结：对象存储 + CDN 的黄金法则</h3>
+<ol>
+<li><strong>上传走直传</strong>：大文件用分片，安全用 STS</li>
+<li><strong>缓存分层次</strong>：浏览器 -&gt; CDN -&gt; 源站，层层缓存</li>
+<li><strong>就近服务用户</strong>：智能 DNS + 全球节点覆盖</li>
+<li><strong>安全不松懈</strong>：HTTPS + 防盗链 + 访问控制</li>
+<li><strong>成本要监控</strong>：命中率、带宽、存储分级，持续优化</li>
+</ol>
+<p>这套架构撑起了互联网绝大部分的静态资源访问，理解它，你就理解了现代 Web 性能优化的基石。</p>
+<figure class="stack-figure">
+  <img src="../../book/assets/stacks/object-storage-cdn.png" alt="对象存储与 CDN 工程图：上排下载链路为用户浏览器到 CDN 边缘节点，MISS 未命中后经中间层节点、源站回源到对象存储与桶；上传链路由后端服务签发 STS 临时凭证、浏览器直传对象存储；下排七列分别列出流量调度、缓存策略配置、回源配置实战、主流云厂商、存储分级、访问控制、文件上传" loading="lazy">
+  <figcaption><strong>下载看命中，上传看直传。</strong>请求先落在 CDN 边缘节点，HIT 直接返回，MISS 才逐层回源到桶；上传别让文件穿过自己的服务器，后端签一张 STS 临时凭证，浏览器直传对象存储。冷数据按 7 天、90 天自动降到低频和归档，单价从 0.12 掉到 0.03 元/GB/月。</figcaption>
+</figure><hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-153.html">← IAM 权限管理</a><a rel="next" href="chapter-155.html">基础设施即代码 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>高可用与容灾 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 143 / 195</p><article><h1 id="高可用与容灾">高可用与容灾</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#高可用与容灾原理">高可用与容灾原理</a><ul><li><a href="#1-几个-9的定义与度量">1. 几个 9的定义与度量</a></li><li><a href="#2-故障转移架构">2. 故障转移架构</a></li><li><a href="#3-容灾设计rpo-与-rto">3. 容灾设计：RPO 与 RTO</a></li><li><a href="#4-故障检测与恢复">4. 故障检测与恢复</a></li><li><a href="#5-混沌工程主动找问题">5. 混沌工程：主动找问题</a></li><li><a href="#总结-29">总结</a></li><li><a href="#延伸阅读-19">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="高可用与容灾原理">高可用与容灾原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>系统挂了 1 分钟，可能意味着几十万的损失。</strong> 高可用（High Availability）是指系统在面对硬件故障、软件 Bug、网络问题等异常情况时，仍能持续提供服务的能力。容灾（Disaster Recovery）则是在更大范围的灾难发生时，系统能够恢复服务的能力。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>可用性度量</strong>：理解&quot;几个 9&quot;的含义和对应的停机时间</li>
+<li><strong>故障转移</strong>：掌握主备、主主、多活等高可用架构</li>
+<li><strong>容灾策略</strong>：了解 RPO 和 RTO 的概念及设计方法</li>
+<li><strong>故障检测</strong>：理解心跳、探针、熔断等故障发现机制</li>
+<li><strong>混沌工程</strong>：了解如何主动注入故障来验证系统韧性</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>可用性度量</td>
+<td>SLA、几个 9、停机时间</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>故障转移架构</td>
+<td>主备、主主、多可用区、异地多活</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>容灾设计</td>
+<td>RPO、RTO、备份策略</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>故障检测与恢复</td>
+<td>心跳、熔断、自动扩缩容</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>混沌工程</td>
+<td>故障注入、韧性验证</td>
+</tr>
+</tbody></table></div>
+<h3 id="1-几个-9的定义与度量">1. 几个 9的定义与度量</h3>
+<p>可用性通常用&quot;几个 9&quot;来衡量，计算公式为：</p>
+<p><strong>可用性 = 正常运行时间 / 总时间 × 100%</strong></p>
+<p>例如一个月（30 天 = 43200 分钟）内停机了 43 分钟，可用性就是 (43200 - 43) / 43200 ≈ 99.9%。每多一个 9，允许的停机时间就少一个数量级，实现难度和成本也指数级增长。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>可用性等级</th>
+<th>百分比</th>
+<th>每月允许停机</th>
+<th>每年允许停机</th>
+<th>典型要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2 个 9</td>
+<td>99%</td>
+<td>7.3 小时</td>
+<td>3.65 天</td>
+<td>内部工具</td>
+</tr>
+<tr>
+<td>3 个 9</td>
+<td>99.9%</td>
+<td>43 分钟</td>
+<td>8.76 小时</td>
+<td>普通业务系统</td>
+</tr>
+<tr>
+<td>4 个 9</td>
+<td>99.99%</td>
+<td>4.3 分钟</td>
+<td>52.6 分钟</td>
+<td>电商、SaaS</td>
+</tr>
+<tr>
+<td>5 个 9</td>
+<td>99.999%</td>
+<td>26 秒</td>
+<td>5.26 分钟</td>
+<td>金融、支付</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>SLA 是什么？</strong>
+<strong>SLA（Service Level Agreement，服务等级协议）</strong> 是服务提供方与客户之间的正式承诺。比如 AWS S3 承诺 99.99% 的可用性，如果没达到，会按比例退款。SLA 不只是技术指标，更是商业合同——违反 SLA 意味着赔钱。</p>
+</blockquote>
+<blockquote>
+<p><strong>从 3 个 9 到 4 个 9 的鸿沟</strong>
+3 个 9（99.9%）意味着每月可以停机 43 分钟——一次部署出问题，回滚一下就用完了。
+4 个 9（99.99%）意味着每月只能停机 4 分钟——这要求你必须有自动故障转移、滚动部署、健康检查等完整的高可用体系。</p>
+</blockquote>
+<h3 id="2-故障转移架构">2. 故障转移架构</h3>
+<p>故障转移（Failover）是高可用的核心机制：当主节点故障时，自动切换到备用节点继续提供服务。</p>
+<h4 id="主备模式active-standby">主备模式（Active-Standby）</h4>
+<p>最常见的高可用架构。主节点处理所有请求，备节点实时同步数据但不处理请求。主节点故障时，备节点自动接管。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>正常状态：
+  客户端 → 主节点（处理请求）
+            备节点（同步数据，待命）
+
+故障转移：
+  客户端 → 备节点（接管为新主节点）
+            原主节点（故障，等待修复）
+</code></pre>
+<p>关键问题是<strong>脑裂（Split Brain）</strong>：网络分区时，主备节点都认为对方挂了，同时对外提供服务，导致数据不一致。解决方案是引入仲裁节点（Quorum）——至少 3 个节点投票决定谁是主节点。</p>
+<h4 id="多可用区multi-az">多可用区（Multi-AZ）</h4>
+<p>将服务部署在同一地域的多个数据中心（可用区）。单个数据中心断电、断网不影响整体服务。云厂商的可用区之间通常有低延迟专线连接（&lt; 2ms）。</p>
+<h4 id="异地多活multi-region-active-active">异地多活（Multi-Region Active-Active）</h4>
+<p>在不同城市甚至不同国家部署完整的服务副本，每个站点都能独立处理请求。这是最高级别的高可用架构，但也最复杂——核心挑战是<strong>跨地域数据同步</strong>的延迟和一致性问题。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>架构</th>
+<th>可用性级别</th>
+<th>成本</th>
+<th>复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单机</td>
+<td>99%~99.9%</td>
+<td>低</td>
+<td>低</td>
+<td>开发测试、内部工具</td>
+</tr>
+<tr>
+<td>主备</td>
+<td>99.9%~99.99%</td>
+<td>中</td>
+<td>中</td>
+<td>中小型业务系统</td>
+</tr>
+<tr>
+<td>多可用区</td>
+<td>99.99%</td>
+<td>高</td>
+<td>高</td>
+<td>电商、SaaS 平台</td>
+</tr>
+<tr>
+<td>异地多活</td>
+<td>99.999%</td>
+<td>极高</td>
+<td>极高</td>
+<td>金融、大型互联网</td>
+</tr>
+</tbody></table></div>
+<h3 id="3-容灾设计rpo-与-rto">3. 容灾设计：RPO 与 RTO</h3>
+<p>容灾设计围绕两个核心指标展开：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>全称</th>
+<th>含义</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RPO</td>
+<td>Recovery Point Objective</td>
+<td>能容忍丢失多少数据</td>
+<td>RPO=0 表示不能丢任何数据</td>
+</tr>
+<tr>
+<td>RTO</td>
+<td>Recovery Time Objective</td>
+<td>能容忍停机多长时间</td>
+<td>RTO=5min 表示 5 分钟内恢复</td>
+</tr>
+</tbody></table></div>
+<h4 id="备份策略与-rpo-的关系">备份策略与 RPO 的关系</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>备份方式</th>
+<th>RPO</th>
+<th>成本</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每日全量备份</td>
+<td>24 小时</td>
+<td>低</td>
+<td>最多丢一天数据</td>
+</tr>
+<tr>
+<td>实时增量备份</td>
+<td>分钟级</td>
+<td>中</td>
+<td>binlog/WAL 持续同步</td>
+</tr>
+<tr>
+<td>同步复制</td>
+<td>0</td>
+<td>高</td>
+<td>写入必须等副本确认</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>不是所有数据都需要 RPO=0</strong>
+用户头像丢了可以重新上传（RPO=24h 够了），但支付记录一条都不能丢（RPO=0）。根据数据的业务价值来决定备份策略，而不是一刀切。</p>
+</blockquote>
+<h3 id="4-故障检测与恢复">4. 故障检测与恢复</h3>
+<h4 id="41-故障检测机制">4.1 故障检测机制</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>原理</th>
+<th>检测速度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>心跳检测</td>
+<td>定期发送心跳包，超时判定故障</td>
+<td>秒级</td>
+<td>节点存活检测</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>HTTP/TCP 探针检查服务状态</td>
+<td>秒级</td>
+<td>负载均衡器后端检测</td>
+</tr>
+<tr>
+<td>业务探针</td>
+<td>模拟真实请求检查业务逻辑</td>
+<td>秒~分钟级</td>
+<td>端到端可用性监控</td>
+</tr>
+</tbody></table></div>
+<p><strong>心跳检测的工作原理</strong>：节点 A 每隔固定时间（如 5 秒）向监控方发送一个&quot;我还活着&quot;的信号。如果连续 N 次（如 3 次）没收到心跳，就判定节点 A 故障。关键参数是心跳间隔和超时阈值——间隔太短会增加网络开销，太长会延迟故障发现。</p>
+<p><strong>健康检查的三种级别</strong>：</p>
+<ul>
+<li><strong>存活探针（Liveness）</strong>：进程还在运行吗？不在就重启</li>
+<li><strong>就绪探针（Readiness）</strong>：服务能接受请求吗？不能就从负载均衡中摘除</li>
+<li><strong>启动探针（Startup）</strong>：服务启动完成了吗？没完成就等待，不要误判为故障</li>
+</ul>
+<h4 id="42-自动恢复机制">4.2 自动恢复机制</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>描述</th>
+<th>典型工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自动重启</td>
+<td>进程崩溃后自动拉起</td>
+<td>systemd、PM2、K8s</td>
+</tr>
+<tr>
+<td>自动扩缩容</td>
+<td>负载升高时自动增加实例</td>
+<td>K8s HPA、云厂商 Auto Scaling</td>
+</tr>
+<tr>
+<td>熔断降级</td>
+<td>下游故障时快速失败，防止级联故障</td>
+<td>Hystrix、Sentinel、Resilience4j</td>
+</tr>
+<tr>
+<td>限流</td>
+<td>超过容量的请求直接拒绝</td>
+<td>Nginx limit_req、网关限流</td>
+</tr>
+</tbody></table></div>
+<p><strong>熔断器模式（Circuit Breaker）详解</strong>：</p>
+<p>熔断器的灵感来自电路中的保险丝——当电流过大时自动断开，保护整个电路不被烧毁。在微服务中，当下游服务故障时，熔断器会&quot;断开&quot;，让请求快速失败，而不是傻等超时。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>熔断器三种状态：
+
+  关闭（正常）──→ 失败率超过阈值 ──→ 打开（熔断）
+       ↑                                    │
+       │                              等待冷却时间
+       │                                    ↓
+       └── 探测请求成功 ←── 半开（试探）
+</code></pre>
+<ul>
+<li><strong>关闭状态</strong>：正常转发请求，同时统计失败率</li>
+<li><strong>打开状态</strong>：所有请求直接返回错误（快速失败），不再调用下游</li>
+<li><strong>半开状态</strong>：冷却时间到后，放行少量探测请求。如果成功，恢复关闭；如果失败，继续打开</li>
+</ul>
+<p><strong>降级（Fallback）</strong> 是熔断的配套策略：熔断触发后，不是直接报错，而是返回一个&quot;兜底&quot;结果。比如推荐服务挂了，就返回热门商品列表；用户头像加载失败，就显示默认头像。</p>
+<h3 id="5-混沌工程主动找问题">5. 混沌工程：主动找问题</h3>
+<p>混沌工程的核心理念是：<strong>与其等故障发生，不如主动制造故障</strong>，在可控环境中验证系统的韧性。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>提出者</th>
+<th>核心能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chaos Monkey</td>
+<td>Netflix</td>
+<td>随机终止生产环境的实例</td>
+</tr>
+<tr>
+<td>Chaos Mesh</td>
+<td>PingCAP</td>
+<td>K8s 环境下的故障注入</td>
+</tr>
+<tr>
+<td>Litmus</td>
+<td>CNCF</td>
+<td>云原生混沌工程框架</td>
+</tr>
+<tr>
+<td>ChaosBlade</td>
+<td>阿里巴巴</td>
+<td>多场景故障注入工具</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>混沌工程的实施步骤</strong></p>
+</blockquote>
+<ol>
+<li><strong>定义稳态</strong>：明确系统正常运行的指标（如 P99 延迟 &lt; 200ms）</li>
+<li><strong>提出假设</strong>：如果某个节点挂了，系统应该在 30 秒内自动恢复</li>
+<li><strong>注入故障</strong>：在可控范围内制造故障（先在测试环境，再到生产）</li>
+<li><strong>观察结果</strong>：系统是否如预期恢复？有没有级联故障？</li>
+<li><strong>修复弱点</strong>：发现问题后改进架构和流程</li>
+</ol>
+<h3 id="总结-29">总结</h3>
+<p>高可用不是一个功能，而是一种架构能力。它需要从设计、开发、部署、运维的每个环节去保障。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>几个 9</strong>：每多一个 9，停机时间少一个数量级，成本和复杂度指数增长</li>
+<li><strong>故障转移</strong>：从主备到异地多活，根据业务需求选择合适的架构</li>
+<li><strong>RPO 与 RTO</strong>：根据数据价值和业务容忍度设计备份和恢复策略</li>
+<li><strong>自动化</strong>：故障检测、自动重启、熔断降级是高可用的基础设施</li>
+<li><strong>混沌工程</strong>：主动制造故障，在可控环境中验证系统韧性</li>
+</ol>
+<h3 id="延伸阅读-19">延伸阅读</h3>
+<ul>
+<li><a href="https://sre.google/sre-book/table-of-contents/">Site Reliability Engineering</a> - Google SRE 经典</li>
+<li><a href="https://netflix.github.io/chaosmonkey/">Chaos Monkey</a> - Netflix 混沌工程工具</li>
+<li><a href="https://pragprog.com/titles/mnee2/release-it-second-edition/">Release It!</a> - 生产环境设计模式</li>
+<li><a href="https://chaos-mesh.org/">Chaos Mesh</a> - K8s 混沌工程平台</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-142.html">← 分布式系统的挑战</a><a rel="next" href="chapter-144.html">系统设计方法论 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

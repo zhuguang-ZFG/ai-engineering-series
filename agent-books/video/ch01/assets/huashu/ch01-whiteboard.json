@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 8,
+  "fps": 24,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "cues": [
+    { "at": 0.0, "kind": "title", "text": "Agent Harness" },
+    { "at": 1.2, "kind": "point", "text": "Not a thin API wrapper" },
+    { "at": 2.6, "kind": "draw", "text": "Tool orchestration", "data": { "icon": "network" } },
+    { "at": 4.0, "kind": "point", "text": "Permission / recovery / state" },
+    { "at": 5.5, "kind": "draw", "text": "Runtime harness", "data": { "icon": "gear" } },
+    { "at": 6.8, "kind": "highlight", "data": { "target": "draw", "index": 0 } }
+  ]
+}

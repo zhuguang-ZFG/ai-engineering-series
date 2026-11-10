@@ -1,0 +1,39 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {
+      "at": 0.0,
+      "kind": "draw",
+      "text": "\u7cbe\u786e npm test"
+    },
+    {
+      "at": 1.5,
+      "kind": "draw",
+      "text": "\u524d\u7f00 npm:*"
+    },
+    {
+      "at": 3.0,
+      "kind": "draw",
+      "text": "\u901a\u914d git commit *"
+    },
+    {
+      "at": 4.5,
+      "kind": "point",
+      "text": "\u4f18\u5148\u524d\u7f00 \u00b7 \u8bed\u4e49\u6e05\u6670"
+    },
+    {
+      "at": 5.8,
+      "kind": "highlight",
+      "data": {
+        "target": "draw",
+        "index": 1
+      }
+    }
+  ]
+}

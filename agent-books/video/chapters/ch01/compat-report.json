@@ -1,0 +1,15 @@
+{
+  "chapter": "ch01",
+  "formats": {
+    "long": {
+      "index": "../../ch01/hf-remake/index.html",
+      "match": true,
+      "mismatches": []
+    },
+    "short": {
+      "index": "../../ch01/hf-remake/short/index.html",
+      "match": true,
+      "mismatches": []
+    }
+  }
+}

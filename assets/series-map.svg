@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 610" role="img" aria-labelledby="series-map-title series-map-desc">
+  <title id="series-map-title">按问题选读：大模型课程、任务与材料、工具实践、核验</title>
+  <desc id="series-map-desc">系统学习从大模型课程 C01 开始，按 C01–C30 的原有先修要求推进。已有具体任务，可以直接选读提示词册，写清交付、检查方式与材料；需要执行时再选工具分册，带回回执核验。只做文本任务可以直接核对依据。发现缺项时回到任务与材料。跨书箭头表示选读与回查，不增加课程先修要求，也不替代课程阶段作业。</desc>
+  <defs>
+    <marker id="series-arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M2 1.5 L8 5 L1.5 8.5" fill="none" stroke="#26594f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="series-arrow-ochre" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M2 1.5 L8 5 L1.5 8.5" fill="none" stroke="#8c5734" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .map-text{font-family:'Microsoft YaHei','Noto Sans CJK SC',system-ui,sans-serif;fill:#272923}
+      .map-small{font-size:16px;fill:#62665c}.map-body{font-size:18px}.map-label{font-size:17px;fill:#26594f}.map-heading{font-size:23px;font-weight:600}
+      .map-ink{fill:none;stroke:#26594f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+      .map-pencil{fill:none;stroke:#26594f;stroke-width:1;opacity:.25;stroke-linecap:round}
+      .map-note{fill:#8c5734}.map-optional{stroke-dasharray:5 6}
+    </style>
+  </defs>
+  <path d="M8 9 L1030 7 L1033 599 L9 602 Z" fill="#f6f3ec"/>
+  <g class="map-text">
+    <text x="35" y="41" class="map-label">实线：任务中的动作</text>
+    <path d="M195 35 Q211 34 230 35" class="map-ink" marker-end="url(#series-arrow-green)"/>
+    <text x="266" y="41" class="map-label">虚线：按需选读或回查</text>
+    <path d="M446 35 Q465 36 484 35" class="map-ink map-optional" marker-end="url(#series-arrow-green)"/>
+
+    <text x="55" y="104" class="map-label">想系统学习</text>
+    <path d="M108 112 Q107 123 109 136" class="map-ink" marker-end="url(#series-arrow-green)"/>
+    <text x="295" y="104" class="map-label">已有具体任务，从这里也可以</text>
+    <path d="M345 112 Q344 125 347 136" class="map-ink" marker-end="url(#series-arrow-green)"/>
+
+    <path d="M34 148 Q135 143 247 148 L249 414 Q145 418 34 415 Z" fill="#fffdf7" stroke="#26594f" stroke-width="1.8"/>
+    <path d="M38 145 Q148 147 245 144 M32 155 L36 408" class="map-pencil"/>
+    <path d="M282 147 Q389 143 497 149 L495 416 Q388 414 281 416 Z" fill="#fffdf7" stroke="#26594f" stroke-width="1.8"/>
+    <path d="M287 144 Q394 147 492 145 M280 155 L284 410" class="map-pencil"/>
+    <path d="M529 148 Q637 145 745 148 L747 416 Q636 413 529 417 Z" fill="#fffdf7" stroke="#26594f" stroke-width="1.8"/>
+    <path d="M533 145 Q638 147 742 144 M527 154 L532 409" class="map-pencil"/>
+    <path d="M777 148 Q883 144 996 148 L994 414 Q886 418 778 416 Z" fill="#fffdf7" stroke="#26594f" stroke-width="1.8"/>
+    <path d="M781 145 Q885 148 991 144 M776 155 L780 409" class="map-pencil"/>
+
+    <g class="map-ink" aria-hidden="true">
+      <path d="M62 177 Q80 170 97 178 L97 216 Q80 207 62 214 Z M97 178 Q114 170 131 177 L131 214 Q113 207 97 216 M69 186 L87 185 M69 195 L85 194 M107 186 L123 185 M107 196 L123 194"/>
+      <path d="M311 173 L358 175 L356 214 L310 212 Z M322 185 L347 187 M322 195 L341 197 M366 183 L380 184 L378 223 L331 221 L331 217"/>
+      <path d="M559 177 L625 175 L624 217 L560 217 Z M560 187 L625 187 M568 182 L570 182 M576 182 L578 182 M570 196 L576 201 L570 206 M584 207 L601 207"/>
+      <path d="M809 175 L860 174 L861 220 L810 218 Z M820 187 L824 191 L831 182 M820 205 L824 209 L831 199 M840 187 L851 186 M840 205 L852 204"/>
+    </g>
+    <path d="M67 222 Q98 225 128 222 M315 229 Q343 232 376 228 M561 224 Q594 227 623 224 M811 225 Q836 228 861 225" fill="none" stroke="#8c5734" stroke-width="1.4" opacity=".55"/>
+
+    <text x="54" y="256" class="map-heading">大模型课程</text>
+    <text x="54" y="290" class="map-body">从 C01 资料报告开始</text>
+    <text x="54" y="319" class="map-body">逐章学计算与应用</text>
+    <text x="54" y="348" class="map-body">按原课程先修推进</text>
+    <text x="54" y="391" class="map-small">C01–C30 · 五阶段</text>
+
+    <text x="301" y="256" class="map-heading">任务与材料</text>
+    <text x="301" y="290" class="map-body">写清交付和检查方式</text>
+    <text x="301" y="319" class="map-body">补齐来源、标出缺项</text>
+    <text x="301" y="348" class="map-body">把原文与指令分开</text>
+    <text x="301" y="391" class="map-small">提示词册 · 第 1–9 章</text>
+
+    <text x="549" y="256" class="map-heading">工具实践</text>
+    <text x="549" y="290" class="map-body">选正在使用的工具册</text>
+    <text x="549" y="319" class="map-body">读文件、命令与回执</text>
+    <text x="549" y="348" class="map-body">检查权限和修改范围</text>
+    <text x="549" y="391" class="map-small">配读提示词第 10–14 章</text>
+
+    <text x="797" y="256" class="map-heading">核验</text>
+    <text x="797" y="290" class="map-body">核对依据、差异与测试</text>
+    <text x="797" y="319" class="map-body">用固定题目比较结果</text>
+    <text x="797" y="348" class="map-body">留下失败和复做记录</text>
+    <text x="797" y="391" class="map-small">配读提示词第 15–18 章</text>
+
+    <path d="M250 268 Q263 266 279 268" class="map-ink map-optional" marker-end="url(#series-arrow-green)"/>
+    <path d="M498 268 Q513 270 526 268" class="map-ink map-optional" marker-end="url(#series-arrow-green)"/>
+    <path d="M748 268 Q762 266 774 268" class="map-ink" marker-end="url(#series-arrow-green)"/>
+    <text x="551" y="126" class="map-small">需要执行时</text>
+    <text x="799" y="126" class="map-small">带回结果和回执</text>
+
+    <path d="M391 419 L391 465 Q392 471 401 471 L874 471 Q886 471 886 458 L886 421" class="map-ink map-optional" marker-end="url(#series-arrow-green)"/>
+    <path d="M492 452 L768 452 L768 482 L492 482 Z" fill="#f6f3ec"/>
+    <text x="507" y="476" class="map-label">只做文本任务：直接核对依据</text>
+
+    <path d="M936 420 L938 512 Q938 521 928 521 L345 521 Q335 521 335 509 L335 422" fill="none" stroke="#8c5734" stroke-width="1.7" marker-end="url(#series-arrow-ochre)"/>
+    <path d="M477 505 L785 505 L785 534 L477 534 Z" fill="#f6f3ec"/>
+    <text x="493" y="526" class="map-small map-note">发现缺项：回到任务或材料补充</text>
+
+    <path d="M35 553 Q508 550 996 554" fill="none" stroke="#cbcdbf" stroke-width="1.3"/>
+    <text x="35" y="583" class="map-small">这些是跨书选读建议。课程的先修要求和阶段作业，仍按各章说明执行。</text>
+  </g>
+</svg>

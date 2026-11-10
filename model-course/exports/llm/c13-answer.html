@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C13 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C13-answer-section-6a2558c350" tabindex="-1">C13 答案与核对依据</h1>
+<p>本答案不提供“标准模型输出”，因为输出必须来自你的模型和输入。它给出可核对的行为、字段和失败处理。</p>
+<h2 id="C13-answer-section-8e4b210a80" tabindex="-1">1. 一次真实 run 的最小证据</h2>
+<p>保存 <code>out/c13-first.json</code> 后，至少检查：</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;answered&quot;,
+  &quot;question&quot;: &quot;设备手册里，风速传感器多久校准一次？&quot;,
+  &quot;reader&quot;: &quot;student&quot;,
+  &quot;claims&quot;: [
+    {
+      &quot;text&quot;: &quot;风速传感器建议每 180 天校准一次。&quot;,
+      &quot;citations&quot;: [
+        {
+          &quot;kind&quot;: &quot;source&quot;,
+          &quot;chunk_id&quot;: &quot;equipment-guide@&lt;sha256 前 12 位&gt;#000&quot;,
+          &quot;doc_id&quot;: &quot;equipment-guide&quot;,
+          &quot;quote&quot;: &quot;风速传感器建议每 180 天校准一次。&quot;,
+          &quot;version&quot;: &quot;1.0.0&quot;,
+          &quot;sha256&quot;: &quot;…&quot;
+        }
+      ]
+    }
+  ],
+  &quot;diagnostics&quot;: {&quot;first_raw_response&quot;: &quot;...&quot;, &quot;first_failure&quot;: null},
+  &quot;usage&quot;: {&quot;calls&quot;: 1, &quot;prompt_tokens&quot;: 612, &quot;completion_tokens&quot;: 48, &quot;latency_ms&quot;: 1800.0, &quot;cost&quot;: null}
+}
+</code></pre>
+<p>字段关系（数值仅示意，不是一次成功运行的证明）：<code>claim.text</code> 必须是 <code>quote</code> 的逐字连续子串，<code>quote</code> 必须是所引 chunk 的逐字连续片段；<code>answer</code> 只能由已核验 claim 原文组成，不能加额外句子。<code>version</code>/<code>sha256</code> 对应清单里的当前文档；<code>usage</code> 反映实际调用。<code>tokens</code> 或 <code>cost</code> 未知时写 <code>null</code>，不要填 0 冒充“免费”。</p>
+<p>回查方法：在清单找到 <code>doc_id</code> 的 <code>path</code>，先核对原文件字节的 SHA-256。对 <code>source-extract/2</code>，用 UTF-8 去 BOM 解码，把 CRLF/CR 统一为 LF，以 Python 字符范围 <code>[quote_start:quote_end]</code> 切片；两边折叠空白后应相同，且引用范围应位于 chunk 的 <code>[start:end]</code> 内。重复引文取该 chunk 内第一次匹配，emoji 也按 Unicode 码点计数。</p>
+<p>默认 copy 和旧报告没有精确字段时，用编辑器在对应 chunk 搜索 <code>quote</code>。若搜不到，检查是否换了版本、是否跨了切块边界、是否被 Markdown 渲染改变了空白。空白差异可以规范化后比较，但不能把改写的句子当成原文；位置正确也不证明语义适用。</p>
+<h2 id="C13-answer-section-15b644dd57" tabindex="-1">2. 材料未覆盖</h2>
+<p>问题：“今天食堂几点开门？”示例文档没有食堂。预期之一：</p>
+<pre><code class="language-json">{&quot;status&quot;: &quot;insufficient-evidence&quot;, &quot;claims&quot;: [], &quot;diagnostics&quot;: {&quot;first_failure&quot;: &quot;no-supporting-chunk&quot;}}
+</code></pre>
+<p>预期是 <code>insufficient-evidence</code>，<code>claims</code> 为空。若模型硬给“食堂 7:00 开门”并挂设备手册引用，会因 <code>quote</code> 不在原文或 <code>claim.text</code> 不是 <code>quote</code> 的逐字连续子串而 <code>citation-failed</code>；不能靠“材料未说明”这句改写绕过引用校验。判定标准是：<strong>有没有把常识写成材料事实</strong>，以及 answer 是否只由已验证 claim 原文组成。</p>
+<h2 id="C13-answer-section-70da77f341" tabindex="-1">3. 无权限读者</h2>
+<p>把 <code>--reader</code> 换成无权限身份后：</p>
+<ul>
+<li>若文档不可见，<code>inspect read</code> 不列出它；</li>
+<li>若问题仍可回答，只能基于可见材料；</li>
+<li>若必须用无权限材料，<code>status</code> 应为 <code>unauthorized</code> 或明确的无权限错误。</li>
+</ul>
+<p>不要为了让命令成功而删除 <code>readers</code> 字段。正确做法是取得授权、换用公开文档，或在报告中记录“无权限，未读取正文”。日志和报告中不应出现无权正文。</p>
+<h2 id="C13-answer-section-3a8863de4f" tabindex="-1">4. 模型不存在</h2>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;设备手册里，风速传感器多久校准一次？&quot; \
+  --model &quot;/absolute/path/that/does-not-exist&quot; \
+  --json out/c13-model-missing.json
+</code></pre>
+<p>预期：</p>
+<ul>
+<li><code>status: &quot;model-unavailable&quot;</code>（或等价错误）；</li>
+<li><code>diagnostics.first_failure</code> 包含路径/加载错误；</li>
+<li>非零退出码（以 CLI 实际行为为准）；</li>
+<li>不生成 <code>answered</code> 报告，不返回示例答案。</li>
+</ul>
+<p>恢复正确路径后重跑，比较两次 <code>usage</code>：第二次应有真实调用记录（calls/latency/tokens 至少一项变化）。如果两次完全一样，可能是读到了旧输出文件或程序缓存。</p>
+<h2 id="C13-answer-section-9f68aa8488" tabindex="-1">5. 为什么保留 <code>first_raw_response</code></h2>
+<p>整理后的 <code>claims</code> 是解析和校验后的结果，可能掩盖：</p>
+<ul>
+<li>模型返回了空内容或拒绝回答；</li>
+<li>返回了两段互相矛盾的话，只保留了一段；</li>
+<li>JSON 字段被修复脚本改写；</li>
+<li>引用是模型编的，解析器没有发现。</li>
+</ul>
+<p>保留首次原始响应，才能区分“模型错”“解析错”“校验错”。它不是给读者看的最终答案，而是排错证据；敏感内容要按权限处理，不能因为“诊断”就绕过隐私。</p>
+<h2 id="C13-answer-section-4ba7ba18e3" tabindex="-1">核对清单</h2>
+<ul>
+<li>□ 真实模型/授权 API 调用，输入变化会改变输出；</li>
+<li>□ <code>--reader</code> 生效，无权限文档未进入上下文；</li>
+<li>□ 每条主张有 <code>quote</code>/<code>chunk_id</code>/版本或工具回执；</li>
+<li>□ <code>status</code> 能区分无证据、冲突、越权、模型不可用；</li>
+<li>□ <code>first_raw_response</code>/<code>first_failure</code> 保留；</li>
+<li>□ <code>usage</code> 不是伪造的固定值，费用未知为 <code>null</code>；</li>
+<li>□ 资源/许可记录写清楚，没有把“未运行”写成“已验证”。</li>
+</ul>
+<p>本章不提供模型权重或 API 密钥；缺少资源时，以上检查只能记录为待验。</p>
+</article><nav class="lesson-nav"><a href="c13.html">返回 C13 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,48 @@
+schema_version: 1
+episode: ch03
+formats:
+  long:
+  - id: b01_hook
+    start_s: 0.0
+    duration_s: 60.768
+    source: compositions/b01_hook.html
+    intent: hook
+  - id: b02_proto
+    start_s: 60.768
+    duration_s: 137.112
+    source: compositions/b02_proto.html
+    intent: section
+  - id: b03_reg
+    start_s: 197.88
+    duration_s: 116.784
+    source: compositions/b03_reg.html
+    intent: section
+  - id: b04_core
+    start_s: 314.664
+    duration_s: 96.6
+    source: compositions/b04_core.html
+    intent: section
+  - id: b05_orch
+    start_s: 411.264
+    duration_s: 112.848
+    source: compositions/b05_orch.html
+    intent: section
+  - id: b06_outro
+    start_s: 524.112
+    duration_s: 72.912
+    source: compositions/b06_outro.html
+    intent: outro
+  short:
+  - id: dense-short
+    start_s: 0.0
+    duration_s: 46.112
+    source: compositions/dense-short.html
+    intent: hook
+audio:
+  long:
+    path: full.mp3
+    duration_s: 597.024
+  short:
+    path: assets/short-vo.mp3
+    duration_s: 46.112
+flashes: {}

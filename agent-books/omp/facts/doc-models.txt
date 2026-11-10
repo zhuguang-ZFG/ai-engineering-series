@@ -1,0 +1,150 @@
+# Model and Provider Configuration (`models.yml` / `models.yaml`)
+
+This document describes how the coding-agent currently loads models, applies overrides, resolves credentials, and chooses models at runtime.
+
+## What controls model behavior
+
+Primary implementation files:
+
+- `packages/coding-agent/src/config/model-registry.ts` — loads built-in + custom models, provider overrides, runtime discovery, auth integration
+- `packages/coding-agent/src/config/model-resolver.ts` — parses model patterns and selects initial/smol/slow models
+- `packages/coding-agent/src/config/model-settings.ts` — model selection settings (`modelRoles`, `enabledModels`, `enabledProviders`/`disabledProviders`, `modelProviderOrder`, `cycleOrder`)
+- `packages/coding-agent/src/session/settings.ts` — provider transport preferences (`providers.*`)
+- `packages/coding-agent/src/config/models-config.ts` and `models-config-schema-bundle.ts` — custom provider/model validation
+- `packages/coding-agent/src/session/auth-storage.ts` — re-exports `AuthStorage` from `@oh-my-pi/pi-ai`; credential precedence is implemented in `packages/ai/src/auth/cascade.ts`
+- `packages/catalog/src/compat/resolve.ts` and `compat/rules/` — compatibility and model policy resolution
+- `packages/catalog/src/models.ts` and `packages/catalog/src/types.ts` — built-in providers/models and public model types
+
+## Config file location and legacy behavior
+
+Default-profile config paths, in precedence order:
+
+- `~/.omp/agent/models.yml`
+- `~/.omp/agent/models.yaml`
+
+These are relative to the active agent directory returned by `getAgentDir()`. Named profiles use
+`~/.omp/profiles/<name>/agent/`; `PI_CONFIG_DIR` changes the config-root directory name, and
+`PI_CODING_AGENT_DIR` can override the default-profile agent directory. A programmatic
+`ModelRegistry` path overrides the directory-derived location.
+
+Legacy behavior still present:
+
+- If both YAML files are missing and `models.json` exists at the same location, it is migrated to `models.yml`.
+- Explicit `.json` / `.jsonc` config paths are still supported when passed programmatically to `ModelRegistry`.
+
+## `models.yml` / `models.yaml` shape
+
+```yaml
+providers:
+   <provider-id>:
+      # provider-level config
+```
+
+`provider-id` is the canonical provider key used across selection and auth lookup.
+
+`providers` is the only root key the registry consumes. Unknown root keys are not rejected by the current schema, but do not configure model behavior.
+
+## Provider-level fields
+
+```yaml
+providers:
+   my-provider:
+      baseUrl: https://api.example.com/v1
+      apiKey: MY_PROVIDER_API_KEY
+      api: openai-completions
+      headers:
+         X-Team: platform
+      authHeader: true
+      auth: apiKey
+      disableStrictTools: false # set true for Anthropic-compatible endpoints that reject the strict field
+      discovery:
+         type: ollama
+         timeoutMs: 10000 # optional per-provider HTTP probe timeout in milliseconds
+      modelOverrides:
+         some-model-id:
+            name: Renamed model
+      models:
+         - id: some-model-id
+           name: Some Model
+           api: openai-completions
+           reasoning: false
+           input: [text]
+           imageInputDecoder: stb # local STB decoder; OMP converts WebP before dispatch
+           cost:
+              input: 0
+              output: 0
+              cacheRead: 0
+              cacheWrite: 0
+           contextWindow: 128000
+           maxContextWindow: 256000 # optional extended-context window
+           maxTokens: 16384
+           headers:
+              X-Model: value
+           compat:
+              supportsStore: true
+              supportsDeveloperRole: true
+              supportsReasoningEffort: true
+              maxTokensField: max_completion_tokens
+              openRouterRouting:
+                 only: [anthropic]
+              vercelGatewayRouting:
+                 order: [anthropic, openai]
+              extraBody:
+                 gateway: m1-01
+                 controller: mlx
+```
+
+`maxContextWindow` is available on both `models` entries and `modelOverrides`.
+Set `contextWindow` to the normal prompt window and `maxContextWindow` to the
+larger prompt window accepted by the provider. `/extended-context on` selects
+the larger window; `off` restores the normal one. An override specifying only
+`contextWindow` remains fixed in both modes, as before. This changes OMP's
+local context budget, not the provider's server-side limit; verify the endpoint
+accepts requests of the configured size.
+Configured maxima do not replace provider-advertised capacity. Models governed
+by a catalog override ceiling (such as Codex Astra) still clamp to that ceiling.
+Per-model overrides, including retired variant aliases, are resolved before
+selecting the extended window.
+
+Custom `models` entries can set their own `baseUrl`; otherwise they inherit the provider URL.
+For built-in models, a provider `baseUrl` override is scoped to the effective APIs of custom models
+that inherit it, or to the provider's `api` for an override-only configuration. Without either
+scope it applies provider-wide. `transport: pi-native` always applies the gateway URL provider-wide.
+An unscoped OpenRouter `baseUrl` names the `/api/v1` chat root, so OpenRouter Decisions (judge)
+models use its `/api/alpha` sibling on the same host, e.g. a `.../api/v1` relay serves judges at
+`.../api/alpha/decisions`.
+
+`preferWebsockets` (on a model or `modelOverrides` entry) controls whether Codex requests prefer
+the WebSocket transport. `omitMaxOutputTokens` omits the model-derived output cap.
+
+### Bedrock request options
+
+Provider-level `guardrailIdentifier`, `guardrailVersion`, and `guardrailTrace` attach a guardrail to
+Converse requests. The version defaults to `"DRAFT"` when an identifier is set; trace accepts
+`enabled`, `disabled`, or `enabled_full`. `requestMetadata` supplies invocation-log tags. Invalid
+entries and entries beyond Bedrock's 16-entry limit are dropped before dispatch; per-request tags
+override matching model tags. These fields do not configure the Anthropic Messages route.
+
+### Compaction options
+
+- `compactionModel` (per model, including `modelOverrides`) — preferred compaction model, tried before the active model, chat-role candidates, and a largest-context fallback. It does not switch the active conversation model.
+- `remoteCompaction` (provider level or per model) — opts eligible models into provider-native compaction. Supported keys: `enabled`, `api`, `endpoint`, `model`, `v2StreamingEnabled`, `v2Endpoint`, `streamingEndpoint`. Provider-level settings are the baseline; per-model keys override them.
+
+### Allowed provider/model `api` values
+
+- `openai-completions`
+- `openai-responses`
+- `openai-codex-responses`
+- `azure-openai-responses`
+- `anthropic-messages`
+- `bedrock-converse-stream`
+- `google-generative-ai`
+- `google-gemini-cli`
+- `google-vertex`
+- `typesafe`
+- `openrouter-decisions`
+- `openai-decisions`
+- `workers-ai-systemone`
+
+`typesafe`, `openrouter-decisions`, `openai-decisions`, and `workers-ai-systemone` are judgment APIs, not chat transports: a model declared with one answers judgment requests and is selected by the `judge` model role. `typesafe` posts TypeSafe's System One body to `{baseUrl}/v1/systemone` (any System One server: TypeSafe, OpenJEV, Kev, self-hosted Clef); `openrouter-decisions` posts the same body to `{baseUrl}/decisions`; `openai-decisions` translates questions and answers to OpenAI's Decisions API at `{baseUrl}/decisions` (the bundled `openai/gpt-6-luna-decisions` row sends the wire model `gpt-6-luna`); `workers-ai-systemone` posts the System One body to Cloudflare Workers AI at `{baseUrl}/{model id}`, where `<account>` in the base URL is filled from the stored credential's account id or `CLOUDFLARE_ACCOUNT_ID`. Its `headers` carry gateway routing or custom authentication headers for that traffic.
+Judgment requests can share image attachments with vision-chat requests. Native OpenAI Decisions, TypeSafe Jev, OpenRouter Jev, and Workers AI judges, plus prompted vision-chat models, support images; text-only candidates are skipped for image requests. `Judge.supportsImages` identifies compatible candidates, and a judge chain with no image-capable model fails explicitly rather than dropping images. Prompted judgments normalize images for the selected candidate, including upscaling undersized rasters and converting WebP for models with STB-backed decoders; native judges continue to receive the original image bytes. When constructing a `NativeJudge` directly for System One, set `supportsImages: true`; `createNativeJudge` derives this flag from the catalog.

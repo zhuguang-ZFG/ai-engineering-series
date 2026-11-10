@@ -1,0 +1,15 @@
+input  omp\ch32.md
+size   6.2KB · 2,551 chars · 98 lines
+
+encoding          models                    tokens  chars/tok  vs o200k
+o200k_base        GPT-4o · o1 · GPT-5+       1,839       1.39         —
+cl100k_base       GPT-3.5 · GPT-4            2,379       1.07    +29.4%
+claude-v3         Claude 3 … Opus 4.6        2,413       1.06    +31.2%
+claude-v47        Opus 4.7–4.9               2,472       1.03    +34.4%
+claude-v5         Opus 5+                    2,472       1.03    +34.4%
+claude-v5-sonnet  Sonnet/Fable 5+ · Haiku 5.5     2,472       1.03    +34.4%
+qwen3             Qwen 3.5+                  1,583       1.61    -13.9%
+deepseek-v3       DeepSeek V3–V4             1,584       1.61    -13.9%
+kimi-k2           Kimi K2–K3                 1,522       1.68    -17.2%
+glm5              GLM-5.x                    1,607       1.59    -12.6%
+jev               TypeSafe Jev 1.13          2,271       1.12    +23.5%

@@ -1,0 +1,9 @@
+npm Plugins:
+
+● omp-cache-optimizer@1.2.3
+● omp-model-profile@0.2.4
+● pi-hermes-memory@0.9.11
+
+Marketplace Plugins:
+
+  sepia@sepia (0.12.4) (user)

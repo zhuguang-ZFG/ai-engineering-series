@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "cli": {
+    "term": {
+      "zh": "CLI"
+    },
+    "forms": {
+      "zh": [
+        "CLI"
+      ]
+    },
+    "plain": {
+      "zh": "终端中接收命令与参数的入口"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch01.b-opening"
+    ]
+  },
+  "data-root": {
+    "term": {
+      "zh": "KIMI_CODE_HOME"
+    },
+    "forms": {
+      "zh": [
+        "KIMI_CODE_HOME"
+      ]
+    },
+    "plain": {
+      "zh": "Kimi 专用配置与会话的数据根目录"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch03.b-opening"
+    ]
+  },
+  "instructions": {
+    "term": {
+      "zh": "AGENTS.md"
+    },
+    "forms": {
+      "zh": [
+        "AGENTS.md"
+      ]
+    },
+    "plain": {
+      "zh": "随项目维护的工作说明"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch04.b-opening"
+    ]
+  },
+  "session": {
+    "term": {
+      "zh": "会话"
+    },
+    "forms": {
+      "zh": [
+        "会话"
+      ]
+    },
+    "plain": {
+      "zh": "保存对话和运行状态的任务记录"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch07.b-opening"
+    ]
+  },
+  "context": {
+    "term": {
+      "zh": "上下文"
+    },
+    "forms": {
+      "zh": [
+        "上下文"
+      ]
+    },
+    "plain": {
+      "zh": "当前推理可使用的提示与历史材料"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch08.b-opening"
+    ]
+  },
+  "skill": {
+    "term": {
+      "zh": "Skill"
+    },
+    "forms": {
+      "zh": [
+        "Skill"
+      ]
+    },
+    "plain": {
+      "zh": "以文件保存的可复用工作步骤"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch09.b-opening"
+    ]
+  },
+  "agent": {
+    "term": {
+      "zh": "Agent"
+    },
+    "forms": {
+      "zh": [
+        "Agent"
+      ]
+    },
+    "plain": {
+      "zh": "持有角色、上下文和工具能力的执行单元"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch10.b-opening"
+    ]
+  },
+  "plugin": {
+    "term": {
+      "zh": "插件"
+    },
+    "forms": {
+      "zh": [
+        "插件"
+      ]
+    },
+    "plain": {
+      "zh": "把相关扩展资源组织成一个安装单元"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch11.b-opening"
+    ]
+  },
+  "hook": {
+    "term": {
+      "zh": "Hook"
+    },
+    "forms": {
+      "zh": [
+        "Hook"
+      ]
+    },
+    "plain": {
+      "zh": "生命周期事件触发的本地处理器"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch12.b-opening"
+    ]
+  },
+  "fail-open": {
+    "term": {
+      "zh": "fail-open"
+    },
+    "forms": {
+      "zh": [
+        "fail-open"
+      ]
+    },
+    "plain": {
+      "zh": "处理器失败后继续主流程"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch12.b-opening"
+    ]
+  },
+  "mcp": {
+    "term": {
+      "zh": "MCP"
+    },
+    "forms": {
+      "zh": [
+        "MCP"
+      ]
+    },
+    "plain": {
+      "zh": "向 Agent 提供外部工具能力的协议"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch13.b-opening"
+    ]
+  },
+  "acp": {
+    "term": {
+      "zh": "ACP"
+    },
+    "forms": {
+      "zh": [
+        "ACP"
+      ]
+    },
+    "plain": {
+      "zh": "让客户端驱动 Agent 会话的协议"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch14.b-opening"
+    ]
+  },
+  "jsonl": {
+    "term": {
+      "zh": "JSONL"
+    },
+    "forms": {
+      "zh": [
+        "JSONL"
+      ]
+    },
+    "plain": {
+      "zh": "每行一条 JSON 的记录格式"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "kimi-ch16.b-opening"
+    ]
+  }
+}

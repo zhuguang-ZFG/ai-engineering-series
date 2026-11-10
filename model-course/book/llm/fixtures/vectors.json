@@ -1,0 +1,11 @@
+{
+  "id":"X03","kind":"illustrative","source":"课程人工设置的三维向量表","version":"1.0.0",
+  "limitations":"向量和语境后表示均为人工示意，不是运行 Transformer 的输出；图只显示前三维中的前两维，相似度使用全部三维。",
+  "expectedObservations":["同一 token 的初始查表向量不随语境切换","上下文后表示在示意表中不同","二维图相近不保证三维余弦相近"],
+  "token":{"text":"苹果","id":42,"initial":[0.8,0.2,0.1]},
+  "contexts":[
+    {"id":"fruit","text":"他把苹果切成小块。","representation":[0.9,0.1,0.1]},
+    {"id":"company","text":"她在苹果公司开发软件。","representation":[0.1,0.3,0.95]}
+  ],
+  "references":[{"label":"水果示意","vector":[0.9,0.1,0.1]},{"label":"设备示意","vector":[0.1,0.3,0.95]},{"label":"同平面异第三维","vector":[0.9,0.1,0.95]},{"label":"零向量（无方向）","vector":[0,0,0]}]
+}

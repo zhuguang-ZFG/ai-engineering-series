@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">Alpine 上，先补库再装。</title><desc id="desc">musl 二进制需 libstdc++ 与 libgcc，先 apk add 再装 omp。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#DB582C" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif}.ink{fill:#252923}.muted{fill:#72786C}.accent{fill:#DB582C}.mono{font-family:Consolas,"Liberation Mono",monospace;fill:#252923}.white{fill:#FFFDF7}.line{fill:none;stroke:#252923;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.flow{fill:none;stroke:#DB582C;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}.soft{fill:#F0EEE4;stroke:#D6D7C9}.card{fill:#FFFDF7;stroke:#ABB19F;stroke-width:1.5}.hi{fill:#E3EAD9;stroke:#ABB19F;stroke-width:1.5}.warn{fill:#F7E6DC;stroke:#DB582C;stroke-width:1.5}</style>
+<rect width="1440" height="960" fill="#FAF7EF"/>
+<path d="M72 80 H112" stroke="#DB582C" stroke-width="5" stroke-linecap="round"/>
+<text x="132" y="88" class="muted" font-size="20">安装环境</text>
+
+<text x="72" y="171" class="ink" font-size="52">Alpine 上，先补库再装。</text>
+<text x="74" y="219" class="muted" font-size="24">musl 预编译二进制动态链接 libstdc++ / libgcc。</text>
+<rect x="96" y="310" width="360" height="360" rx="14" class="warn"/>
+<text x="128" y="380" class="ink" font-size="28">01 原装 Alpine</text>
+<text x="128" y="450" class="muted" font-size="22">二进制下好了</text>
+<text x="128" y="510" class="accent" font-size="24">一跑就缺共享库</text>
+<text x="128" y="570" class="mono" font-size="20">libstdc++.so.6 ?</text>
+<text x="128" y="610" class="mono" font-size="20">libgcc_s.so.1 ?</text>
+<path d="M490 490 H560" class="flow"/>
+<rect x="580" y="310" width="360" height="360" rx="14" class="soft"/>
+<text x="612" y="380" class="ink" font-size="28">02 补齐依赖</text>
+<rect x="612" y="440" width="296" height="120" rx="8" fill="#DB582C"/>
+<text x="632" y="490" class="white mono" font-size="22">apk add</text>
+<text x="632" y="535" class="white mono" font-size="22">libstdc++ libgcc</text>
+<text x="612" y="610" class="muted" font-size="20">包名以本节命令为准</text>
+<path d="M974 490 H1044" class="flow"/>
+<rect x="1064" y="310" width="300" height="360" rx="14" class="hi"/>
+<text x="1096" y="380" class="ink" font-size="28">03 再装 omp</text>
+<text x="1096" y="470" class="mono" font-size="22">omp --version</text>
+<text x="1096" y="540" class="ink" font-size="24">能跑通才算装好</text>
+<text x="1096" y="600" class="muted" font-size="18">Nix 另议 native path</text>
+
+<path d="M72 858 H1368" stroke="#CFD0C4"/>
+<text x="72" y="907" class="muted" font-size="20">对应正文 §4.7 · Alpine / musl</text>
+<text x="1100" y="907" class="muted" font-size="18">OMP / 安装</text>
+</svg>

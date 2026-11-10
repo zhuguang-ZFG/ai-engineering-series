@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>EP.04 封面</title>
+<link rel="stylesheet" href="cover.css" />
+</head>
+<body>
+  <div class="head">
+    <div class="kicker">VIBE CODING 101 · EP.04</div>
+    <div class="rule"></div>
+    <h1>把这条蛇，<br /><span class="g hl">放到公网上</span></h1>
+  </div>
+
+  <div class="art">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="绿色方块蛇从笔记本屏幕里跳进一朵云，云下面三台手机同时亮起同一条蛇，一支橙色箭头从笔记本指向云、再落到手机">
+      <defs>
+        <filter id="hard" x="-8%" y="-8%" width="116%" height="118%">
+          <feDropShadow dx="0" dy="9" stdDeviation="0" flood-color="#1f2328" flood-opacity="0.12" />
+        </filter>
+      </defs>
+
+      <!-- cloud, clear of the laptop -->
+      <g filter="url(#hard)">
+        <path d="M596 268a58 58 0 0 1 110-24a50 50 0 0 1 90 24a54 54 0 0 1 6 108H600a54 54 0 0 1-4-108Z"
+              fill="#fffdf8" stroke="#1f2328" stroke-width="9" stroke-linejoin="round" />
+      </g>
+
+      <!-- laptop, left -->
+      <g filter="url(#hard)">
+        <rect x="74" y="392" width="368" height="252" rx="18" fill="#1f2328" />
+        <rect x="98" y="416" width="320" height="204" rx="9" fill="#f6f8fa" />
+        <path d="M50 644h416l28 52H22z" fill="#fffdf8" stroke="#1f2328" stroke-width="9" stroke-linejoin="round" />
+      </g>
+      <!-- snake on the screen -->
+      <g fill="#1f883d" stroke="#1f2328" stroke-width="6">
+        <rect x="126" y="548" width="54" height="54" rx="13" />
+        <rect x="170" y="504" width="54" height="54" rx="13" />
+        <rect x="222" y="474" width="54" height="54" rx="13" />
+      </g>
+      <circle cx="366" cy="500" r="18" fill="#e2601f" stroke="#1f2328" stroke-width="6" />
+
+      <!-- snake leaping from screen toward the cloud -->
+      <g fill="#1f883d" stroke="#1f2328" stroke-width="8">
+        <rect x="344" y="356" width="84" height="84" rx="21" />
+        <rect x="398" y="286" width="84" height="84" rx="21" />
+        <rect x="462" y="230" width="84" height="84" rx="21" />
+        <rect x="532" y="196" width="84" height="84" rx="21" />
+      </g>
+      <g transform="translate(596 150) rotate(-10)">
+        <rect x="0" y="0" width="112" height="104" rx="28" fill="#1f883d" stroke="#1f2328" stroke-width="9" />
+        <circle cx="38" cy="40" r="9" fill="#1f2328" />
+        <circle cx="78" cy="40" r="9" fill="#1f2328" />
+        <path d="M46 70q15 11 28 0" fill="none" stroke="#1f2328" stroke-width="8" stroke-linecap="round" />
+      </g>
+
+      <!-- phones fed by the cloud -->
+      <g>
+        <g transform="translate(556 640)">
+          <rect x="0" y="0" width="118" height="212" rx="22" fill="#fffdf8" stroke="#1f2328" stroke-width="8" />
+          <rect x="13" y="24" width="92" height="152" rx="8" fill="#d3efd9" />
+          <g fill="#1f883d" stroke="#1f2328" stroke-width="4">
+            <rect x="24" y="142" width="24" height="24" rx="6" />
+            <rect x="44" y="118" width="24" height="24" rx="6" />
+            <rect x="64" y="100" width="24" height="24" rx="6" />
+          </g>
+        </g>
+        <g transform="translate(700 684)">
+          <rect x="0" y="0" width="104" height="186" rx="20" fill="#fffdf8" stroke="#1f2328" stroke-width="8" />
+          <rect x="12" y="22" width="80" height="132" rx="8" fill="#d3efd9" />
+          <g fill="#1f883d" stroke="#1f2328" stroke-width="4">
+            <rect x="22" y="124" width="21" height="21" rx="6" />
+            <rect x="40" y="104" width="21" height="21" rx="6" />
+            <rect x="58" y="88" width="21" height="21" rx="6" />
+          </g>
+        </g>
+        <g transform="translate(834 724)">
+          <rect x="0" y="0" width="94" height="166" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="8" />
+          <rect x="11" y="20" width="72" height="116" rx="7" fill="#d3efd9" />
+          <g fill="#1f883d" stroke="#1f2328" stroke-width="4">
+            <rect x="20" y="110" width="19" height="19" rx="6" />
+            <rect x="36" y="92" width="19" height="19" rx="6" />
+          </g>
+        </g>
+      </g>
+
+      <!-- shipped arrow: laptop -> cloud -> phones -->
+      <g>
+        <path d="M250 720q130 96 296 34q132-50 118-260" fill="none" stroke="#e2601f" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="24 18" />
+        <path d="M664 452l6 40-40-6z" fill="#e2601f" stroke="#1f2328" stroke-width="5" stroke-linejoin="round" />
+        <path d="M700 404q52 96-30 214" fill="none" stroke="#e2601f" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="24 18" />
+        <path d="M678 622l-4 40 40-8z" fill="#e2601f" stroke="#1f2328" stroke-width="5" stroke-linejoin="round" />
+      </g>
+
+      <path d="M60 962q140 10 280 0t280 0t280 0" fill="none" stroke="#1f2328" stroke-width="6"
+            stroke-linecap="round" opacity=".28" />
+    </svg>
+  </div>
+
+  <div class="foot"><span>VIBE CODING 101</span><span class="dot">●</span><span>BEGINNER COURSE</span></div>
+</body>
+</html>

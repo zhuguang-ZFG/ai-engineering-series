@@ -1,0 +1,123 @@
+# 第 03 章长讲口播脚本｜驭者·Agent Harness
+
+> 用途：B 站横屏长讲配音底稿（沉稳男声 · 云扬）  
+> 对应大纲：`docs/video/ch03/long-outline.md`  
+> 标记说明：ANIM:id / CODE:id / QUIZ:id 行不计入朗读。
+
+---
+
+## 块 1｜开场钩子
+
+大家好，这里是小电讲电路。驭者·Agent Harness 第 03 讲。上一集心跳装上了：AsyncGenerator 一下一下往外吐事件。心跳有了，还得有双手——否则马再壮，也够不着缰绳外的活。这一集拆工具系统。书稿标题写得很直白：Agent 的双手。
+
+[ANIM:hammer-vs-hands]
+
+[QUIZ:guess-hands]
+
+先借一句马斯洛：如果你手里只有锤子，看什么都像钉子。换成 Agent：如果只有 Bash，读文件变成 cat，搜代码变成 grep，改文件变成 sed——能跑，但不叫工程。猜一猜：源码里「双手」最先钉住的，是五十多个函数名，还是一套叫五要素的协议？答案在本章骨架里——先协议，后清单；先 DNA，后肌肉。
+
+---
+
+## 块 2｜§3.1 工具定义协议
+
+Claude Code 每个工具都走同一契约：Tool，三个泛型——Input、Output、Progress。输入用 Zod 钉成结构化对象；输出自由；进度单独开类型空间，好让执行中还能流式汇报。三者拆开，不是炫技，是让编译器分别检查三个关注点。
+
+[CODE:tool-generic]
+
+[ANIM:five-elements]
+
+五要素，就是双手的解剖。要素一，名称与别名。主名唯一；旧名靠别名继续命中。公开 API 里重命名是「只增不减」：SearchTool 改成 GrepTool，旧名仍得认得，否则配置、脚本、用户肌肉记忆一起断。
+
+要素二，Zod Schema。双重职责：运行时验证——别信 LLM 吐的参数；以及转成 JSON Schema 发给 API，当作工具说明书。describe 写清楚，模型才知道旋钮在哪。
+
+要素三，权限模型，三层叠。先 validateInput，管数据合不合法；再 hasPermissions 加 checkPermissions，管该不该用；最后运行时属性，比如 isConcurrencySafe，影响后面能不能并行。数据合法性、权限策略、调度策略，各管各的，串起来才是护栏。
+
+[ANIM:perm-three-layers]
+
+要素四，执行逻辑。真正干活的 call，外加 contextModifier：写完文件要更新缓存，让下一只手读到新世界。要素五，UI 渲染——整整六个方法，覆盖生老病死：开始、进度、成功、被拒、出错、并行分组。每个返回 React 节点，工具外观跟组件一样可组合。
+
+[ANIM:ui-lifecycle]
+
+[ANIM:buildtool-failclosed]
+
+组装工具用 buildTool。工厂帮你填安全默认值，哲学是 fail-closed：没声明并发安全，就当不安全；没声明只读，就当可能改世界。类比机场安检：默认人人过检，特赦必须显式。反过来 fail-open，漏一次就是事故。简单工具写几行；复杂工具把方法盖满——可选覆盖，安全默认。
+
+---
+
+## 块 3｜§3.2 注册与动态发现
+
+[ANIM:tool-catalog]
+
+getAllBaseTools 是注册中心，扁平数组端出内建工具。书稿按类摊开：执行 Bash；文件 Read、Edit、Write；搜索 Glob、Grep；网络 Fetch、Search；智能 AgentTool；任务与规划；交互提问；技能与配置；MCP；工作树……完整清单大约五十五个，附录里还能对表。注意「并发安全」那一列：一半以上不安全。现实就是——有副作用的多，纯读纯搜的少。后面分区算法，就是在这约束里挤并行度。
+
+条件导入做死代码消除：功能开关关掉，整模块被 tree-shaking 拿掉。外部构建不夹带内部调试工具，既瘦身，也少泄架构。
+
+[ANIM:deferred-index]
+
+工具一多，就上延迟发现 ToolSearchTool。别把整本百科砸到模型脸上；先给目录索引——名字列表。真要用时，再翻开那一页 schema。MCP 一挂几十个工具，全量 schema 能吃掉几千 token；延迟发现省的是初始 prompt 的腰围。显式 alwaysLoad 的不延迟；MCP 默认延迟；搜索工具自己不延迟。
+
+[ANIM:filter-pipeline]
+
+[CODE:toolsearch-defer]
+
+从全量到 API，还要过过滤漏斗：模式过滤——简单模式只留 Bash、Read、Edit；拒绝规则拿掉 blanket deny；启用状态再筛；最后内建加 MCP 合并、按名排序去重。排序不是洁癖，是为了 prompt 缓存稳定——顺序一抖，缓存就废。过滤是权限的第一道：模型看不见的工具，连「想用」都难。
+
+---
+
+## 块 4｜§3.3 核心工具深度
+
+[ANIM:bash-swiss]
+
+BashTool 是最有力的那只手，也是最需要戴手套的。失败会取消并行的兄弟 Bash——命令链常有隐式依赖，mkdir 挂了后面别装勇敢。中断行为可定制：有的长任务选择阻塞看进度，而不是立刻掐死。它还会做 AST 与语义分析，判断是不是搜索只读，好折叠 UI。沙盒仍是安全网：就算权限 bypass，文件系统边界还能兜。
+
+[ANIM:file-trio]
+
+[CODE:edit-old-new]
+
+文件三件套像 CRUD，却故意缺 Delete。删是不可逆，通常丢给 Bash 的 rm，触发更严权限。Read 带文件状态缓存，少做重复 I/O。Edit 用 old_string 换 new_string，不用行号——行号一偏移就改错地；精确串匹配更幂等。Write 最重，整文件覆盖，权限最严。最佳实践：能 Edit 别 Write，能 Read 别 Bash。
+
+[ANIM:search-twins]
+
+Glob 对文件名，Grep 对内容，底层 fast-glob 与 ripgrep。为什么不一律 Bash find/grep？结构化输出更好解析；默认只读，权限更松；结果上限与并行可针对性优化。专门化打败「万能锤子」。
+
+[ANIM:agent-tool]
+
+AgentTool 是派副驾：子智能体独立上下文与工具集，干完把结果交回。常 alwaysLoad，别被延迟发现藏起来。createSubagentContext 继承权限等边界，但不共享消息列表——继承却不串味。细节放到扩展篇；本章先认门：双手里有一只专门「再生一双手」。
+
+---
+
+## 块 5｜§3.4 工具编排引擎
+
+编排引擎是指挥中心，三角拉扯：并行要快、安全别抢、结果顺序还得跟请求一致。
+
+[ANIM:partition-batches]
+
+[CODE:partition-example]
+
+runTools 是异步生成器。策略叫并发分区：按序切批次；连续的并发安全工具捆一批并行；碰到非安全，单独成批串行。例子：Read a、Read b、Bash ls、Read c。前两个并行；Bash 独自；Read c 必须等 Bash 完——Bash 可能改目录改文件，并行读会读到不确定世界。
+
+[QUIZ:partition-drill]
+
+互动一下：Glob、Grep、Bash npm test、Read a、Edit a、Glob json——你会划几批？书稿答案是五批：前两个并行；Bash 串；Read 因前面非安全不能并回；Edit 串；最后 Glob 再开安全批。Edit 和后面的 Glob 不能同批，副作用边界要干净。
+
+[ANIM:stream-executor-4]
+
+[ANIM:order-vs-parallel]
+
+StreamingToolExecutor 更狠：不等模型整段说完，流式接到 tool_use 块就开工。五工具各一秒的老算法可能七秒；流式交叠能压到大约三秒量级。每个工具四阶段：queued、executing、completed、yielded。并行可以跑完，yield 仍按请求序——未完成的非安全会挡住后面的结果出门。Bash 失败取消并行兄弟；普通读搜失败通常不传染。进度消息绕过顺序，立刻 yield，UI 先亮着。模型 fallback 时，待执行与执行中全部标废弃，防旧结果泄漏。取消用层级子控制器，别共用一个 AbortController 误伤无关工具。
+
+这双手，接的是第 02 章心跳的阶段三与阶段四：边流边入队，边跳边干活。
+
+---
+
+## 块 6｜实战要点 + 总结 + 片尾
+
+练习可以很具体。一，用 buildTool 做只读小工具，想清楚 isConcurrencySafe 标错的两种代价。二，手动画分区。三，对 StreamingToolExecutor 打四阶段断点，再 Ctrl+C 看取消链。四，有 MCP 时对比延迟发现开关下的 input token。
+
+收五句。一，五要素协议是工具 DNA。二，buildTool 安全默认，fail-closed。三，并发分区用正确标记换速度。四，StreamingToolExecutor 让双手零等待上手。五，类型契约让加新工具不必改指挥部。
+
+下一集第 04 章，权限管线——Agent 的护栏。双手能伸多远，护栏说了算。
+
+[ANIM:outro-series]
+
+本系列基于开源书稿。系列名：驭者·Agent Harness。关注小电讲电路，合集里看目录更新。我们下集见。

@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "prompt-front": [
+    "start",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch02": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch03": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch04": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch05": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch06": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch07": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch08": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch09": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch10": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch11": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch12": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch13": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch14": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch15": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch16": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch17": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-ch18": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-apxa": [
+    "start",
+    "core",
+    "core"
+  ],
+  "prompt-apxb": [
+    "start",
+    "core",
+    "core",
+    "core"
+  ],
+  "prompt-apxc": [
+    "start",
+    "core",
+    "core"
+  ],
+  "prompt-apxd": [
+    "start",
+    "core",
+    "core"
+  ]
+}

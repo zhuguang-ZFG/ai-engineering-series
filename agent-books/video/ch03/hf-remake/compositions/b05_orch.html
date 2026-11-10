@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+
+.persona-card{display:flex;gap:22px;align-items:center;padding:28px 36px;border:2px solid #5b8def;
+  border-radius:18px;background:rgba(12,18,28,.82);box-shadow:0 12px 40px rgba(0,0,0,.45);max-width:1100px}
+.persona-badge{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#0b1020;flex-shrink:0}
+.persona-name{font-size:20px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.persona-title{font-size:36px;font-weight:800;color:#eef3f8;line-height:1.25}
+.persona-sub{font-size:22px;color:#a8b4c4;margin-top:10px;line-height:1.4}
+
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b05_orch" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="112.848" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="112.848" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">§3.4 工具编排引擎</div></div></div></div>
+  <div id="b05_orch_beat0_wrap" class="beat clip" data-start="0.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat0"><div class="panel-body" id="b05_orch_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">§3.4 工具编排引擎</div><div class="h2">§3.4 工具编排引擎</div>
+    </div></div></div><div class="flash clip" id="b05_orch_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat1_wrap" class="beat clip" data-start="2.284" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat1"><div class="panel-body" id="b05_orch_beat1">
+          <div class="kicker">类型契约</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">三角拉扯：</div>
+        </div></div></div><div id="b05_orch_beat2_wrap" class="beat clip" data-start="5.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b05_orch_beat2"><div class="persona-card" style="border-color:#6bcf7f"><div class="persona-badge" style="background:#6bcf7f">AH</div><div class="persona-body"><div class="persona-name" style="color:#6bcf7f">Agent</div><div class="persona-title">Agent Harness</div><div class="persona-sub">考工记御者 · 双手握缰</div></div></div></div></div><div class="flash clip" id="b05_orch_flash2" data-start="5.000" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat3_wrap" class="beat clip" data-start="8.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat3"><div class="panel-body" id="b05_orch_beat3">
+      <div class="kicker">KEY</div>
+      <div class="h1">runTools 是异步生成器</div><div class="h2">策略叫并发分区：</div>
+    </div></div></div><div id="b05_orch_beat4_wrap" class="beat clip" data-start="10.200" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat4"><div class="panel-body" id="b05_orch_beat4">
+      <div class="kicker">KEY</div>
+      <div class="h1">策略叫并发分区：按序切批次；</div><div class="h2">策略叫并发分区：按序切批次；</div>
+    </div></div></div><div id="b05_orch_beat5_wrap" class="beat clip" data-start="13.523" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat5"><div class="panel-body" id="b05_orch_beat5">
+          <div class="kicker">记下这一句</div><div class="h1">按序切批次</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash5" data-start="13.523" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat6_wrap" class="beat clip" data-start="15.750" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat6"><div class="panel-body" id="b05_orch_beat6">
+          <div class="kicker">记下这一点</div><div class="h1">连续的并发安全工具捆一批</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash6" data-start="15.750" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat7_wrap" class="beat clip" data-start="18.151" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat7"><div class="panel-body" id="b05_orch_beat7">
+      <div class="kicker">FLOW</div>
+      <div class="h1">碰到非安全</div><div class="h2">分区 → 并行 → yield</div>
+    </div></div></div><div id="b05_orch_beat8_wrap" class="beat clip" data-start="21.650" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat8"><div class="panel-body" id="b05_orch_beat8">
+      <div class="kicker">KEY</div>
+      <div class="h1">例子：Read a、Read b</div><div class="h2">例子：Read a、Read b、Bash ls、Read c。</div>
+    </div></div></div><div id="b05_orch_beat9_wrap" class="beat clip" data-start="24.029" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat9"><div class="panel-body" id="b05_orch_beat9">
+      <div class="kicker">FLOW</div>
+      <div class="h1">Bash ls</div><div class="h2">分区 → 并行 → yield</div>
+    </div></div></div><div id="b05_orch_beat10_wrap" class="beat clip" data-start="26.850" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat10"><div class="panel-body" id="b05_orch_beat10">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · Read c。前两个</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash10" data-start="26.850" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat11_wrap" class="beat clip" data-start="29.050" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat11"><div class="panel-body" id="b05_orch_beat11">
+          <div class="kicker">协议 · 权限 · 编排</div><div class="h1">Read c 必须等 B</div>
+          <div class="layers-row"><div class="layer">Entry</div><div class="layer">QueryEngine</div><div class="layer">Loop</div><div class="layer">Tools</div><div class="layer">Ext</div></div>
+        </div></div></div><div id="b05_orch_beat12_wrap" class="beat clip" data-start="32.400" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat12"><div class="panel-body" id="b05_orch_beat12">
+      <div class="kicker">KEY</div>
+      <div class="h1">ash 完——Bash 可能</div><div class="h2">ash 完——Bash 可能改目录改文件，并行读</div>
+    </div></div></div><div class="flash clip" id="b05_orch_flash12" data-start="32.400" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat13_wrap" class="beat clip" data-start="34.600" data-duration="3.700" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat13"><div class="panel-body" id="b05_orch_beat13">
+          <div class="kicker">类型契约</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">并行读会读到不确定世界</div>
+        </div></div></div><div id="b05_orch_beat14_wrap" class="beat clip" data-start="38.300" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat14"><div class="panel-body" id="b05_orch_beat14">
+      <div class="kicker">KEY</div>
+      <div class="h1">Glob、Grep、Bash n</div><div class="h2">Glob、Grep、Bash npm test、Read a、</div>
+    </div></div></div><div id="b05_orch_beat15_wrap" class="beat clip" data-start="41.300" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat15"><div class="panel-body" id="b05_orch_beat15">
+      <div class="kicker">KEY</div>
+      <div class="h1">Read a</div><div class="h2">Edit a</div>
+    </div></div></div><div id="b05_orch_beat16_wrap" class="beat clip" data-start="43.500" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat16"><div class="panel-body" id="b05_orch_beat16">
+      <div class="kicker">KEY</div>
+      <div class="h1">Edit a、Glob json</div><div class="h2">Edit a、Glob json——你会划几批？书稿答案是五批：</div>
+    </div></div></div><div id="b05_orch_beat17_wrap" class="beat clip" data-start="46.693" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b05_orch_beat17"><div class="persona-card" style="border-color:#e8a838"><div class="persona-badge" style="background:#e8a838">Cx</div><div class="persona-body"><div class="persona-name" style="color:#e8a838">Codex</div><div class="persona-title">Codex</div><div class="persona-sub">双手执行 · 专工具优先</div></div></div></div></div><div class="flash clip" id="b05_orch_flash17" data-start="46.693" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat18_wrap" class="beat clip" data-start="49.050" data-duration="3.700" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat18"><div class="panel-body" id="b05_orch_beat18">
+      <div class="kicker">KEY</div>
+      <div class="h1">前两个并行；Bash 串；Rea</div><div class="h2">前两个并行；Bash 串；Read 因前面非安全不能并回；</div>
+    </div></div></div><div id="b05_orch_beat19_wrap" class="beat clip" data-start="52.750" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat19"><div class="panel-body" id="b05_orch_beat19">
+          <div class="kicker">隐喻对照 · 第03章</div>
+          <div class="vs-grid">
+            <div class="vpanel"><h3>锤子 Bash</h3><p>万能命令<br/>啥都能砸 · 啥都不精</p></div>
+            <div class="vpanel r"><h3>双手专工具</h3><p>Read · Edit · Grep<br/>专门化 · 可编排 · 有护栏</p></div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="h2">专门化打败万能锤</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash19" data-start="52.750" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat20_wrap" class="beat clip" data-start="54.950" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="chariot-wrap" id="b05_orch_beat20" data-beat="b05_orch_beat20">
+          <div class="kicker">前言隐喻 · 落地本书</div>
+          <div class="h1" style="font-size:42px;margin:8px 0 12px">辔绳外的活</div>
+          <div class="h2" style="font-size:26px;margin-bottom:8px">双手够得着才叫工程</div>
+          
+<div class="book-plate" style="position:relative;width:1600px;height:620px;margin:0 auto;border:2px solid #8a735588;border-radius:6px;overflow:hidden;background:#0e0b09;box-shadow:0 12px 40px #000a">
+  <img src="../assets/book-chariot-paper.png" alt="kaogongji plate" style="width:100%;height:100%;object-fit:contain;display:block"/>
+  <div style="position:absolute;left:36px;top:48px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">骏马<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">模型 · LLM</span></div>
+  <div style="position:absolute;left:520px;top:28px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">辔 / 缰绳<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">Harness</span></div>
+  <div style="position:absolute;right:48px;top:80px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">舆<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">整车系统</span></div>
+  <div style="position:absolute;right:80px;top:220px;padding:10px 14px;background:#f3ead7ee;border:1.5px solid #8a7355;color:#2a2118;font-family:serif;font-size:28px;font-weight:700;box-shadow:2px 3px 0 #0006">御者 · 你<span style="display:block;font-size:16px;color:#5a4a32;font-weight:600">架构认知</span></div>
+  <div style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:serif;letter-spacing:.28em;color:#c9b48a;font-size:22px">考工记 · 四马古车图版</div>
+</div>
+
+          <div class="map-row">
+            <span class="chip">御者 = 你 / 应用</span>
+            <span class="chip">骏马 = LLM</span>
+            <span class="chip">缰绳+鞍具 = Harness</span>
+            <span class="chip">舆辕辐軎辖轼 = 运行时构件</span>
+          </div>
+        </div></div><div class="flash clip" id="b05_orch_flash20" data-start="54.950" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat21_wrap" class="beat clip" data-start="57.950" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat21"><div class="panel-body" id="b05_orch_beat21">
+          <div class="kicker">记下这一句</div><div class="h1">ob 不能同批</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash21" data-start="57.950" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat22_wrap" class="beat clip" data-start="60.150" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat22"><div class="panel-body" id="b05_orch_beat22">
+      <div class="kicker">KEY</div>
+      <div class="h1">副作用边界要干净。Streami</div><div class="h2">副作用边界要干净。StreamingToolExecutor 更</div>
+    </div></div></div><div id="b05_orch_beat23_wrap" class="beat clip" data-start="63.233" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat23"><div class="panel-body" id="b05_orch_beat23">
+          <div class="kicker" style="color:#ff6688">反模式</div>
+          <div class="h1" style="color:#ff99aa">lExecutor 更狠</div>
+          <div class="h2" style="font-family:Consolas,monospace">反模式 · 别踩</div>
+        </div></div></div><div id="b05_orch_beat24_wrap" class="beat clip" data-start="65.700" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat24"><div class="panel-body" id="b05_orch_beat24">
+      <div class="kicker">KEY</div>
+      <div class="h1">：不等模型整段说完，流式接到 t</div><div class="h2">：不等模型整段说完，流式接到 tool_use 块就开工。</div>
+    </div></div></div><div id="b05_orch_beat25_wrap" class="beat clip" data-start="68.805" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat25"><div class="panel-body" id="b05_orch_beat25">
+      <div class="kicker">KEY</div>
+      <div class="h1">e 块就开工</div><div class="h2">五工具各一秒的老算法可能七秒</div>
+    </div></div></div><div id="b05_orch_beat26_wrap" class="beat clip" data-start="71.600" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat26"><div class="panel-body" id="b05_orch_beat26">
+      <div class="kicker">KEY</div>
+      <div class="h1">五工具各一秒的老算法可能七秒；流</div><div class="h2">五工具各一秒的老算法可能七秒；流式交叠能压到大约三秒量级。每个工</div>
+    </div></div></div><div id="b05_orch_beat27_wrap" class="beat clip" data-start="74.600" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="beat-inner persona" id="b05_orch_beat27"><div class="persona-card" style="border-color:#5b8def"><div class="persona-badge" style="background:#5b8def">Cl</div><div class="persona-body"><div class="persona-name" style="color:#5b8def">Claude</div><div class="persona-title">Claude</div><div class="persona-sub">会诊医生 · 边想边开检查</div></div></div></div></div><div class="flash clip" id="b05_orch_flash27" data-start="74.600" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat28_wrap" class="beat clip" data-start="76.800" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat28"><div class="panel-body" id="b05_orch_beat28">
+          <div class="kicker">记下这一点</div><div class="h1">queued、execu</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash28" data-start="76.800" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat29_wrap" class="beat clip" data-start="79.742" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat29"><div class="panel-body" id="b05_orch_beat29">
+      <div class="kicker">FLOW</div>
+      <div class="h1">completed</div><div class="h2">分区 → 并行 → yield</div>
+    </div></div></div><div id="b05_orch_beat30_wrap" class="beat clip" data-start="82.350" data-duration="3.700" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat30"><div class="panel-body" id="b05_orch_beat30">
+      <div class="kicker">KEY</div>
+      <div class="h1">yielded。并行可以跑完，y</div><div class="h2">yielded。并行可以跑完，yield 仍按请求序——未完成的</div>
+    </div></div></div><div id="b05_orch_beat31_wrap" class="beat clip" data-start="86.050" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat31"><div class="panel-body" id="b05_orch_beat31">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · —未完成的非安全会挡</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一想</div></div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash31" data-start="86.050" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat32_wrap" class="beat clip" data-start="88.250" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat32"><div class="panel-body" id="b05_orch_beat32">
+          <div class="kicker">隐喻对照 · 第03章</div>
+          <div class="vs-grid">
+            <div class="vpanel"><h3>锤子 Bash</h3><p>万能命令<br/>啥都能砸 · 啥都不精</p></div>
+            <div class="vpanel r"><h3>双手专工具</h3><p>Read · Edit · Grep<br/>专门化 · 可编排 · 有护栏</p></div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="h2">专门化打败万能锤</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash32" data-start="88.250" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat33_wrap" class="beat clip" data-start="90.450" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat33"><div class="panel-body" id="b05_orch_beat33">
+          <div class="kicker">类型契约</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">Bash 失败取消并行兄弟</div>
+        </div></div></div><div id="b05_orch_beat34_wrap" class="beat clip" data-start="93.450" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat34"><div class="panel-body" id="b05_orch_beat34">
+      <div class="kicker">KEY</div>
+      <div class="h1">普通读搜失败通常不传染。进度消息</div><div class="h2">普通读搜失败通常不传染。进度消息绕过顺序，立刻 yield，</div>
+    </div></div></div><div id="b05_orch_beat35_wrap" class="beat clip" data-start="96.346" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat35"><div class="panel-body" id="b05_orch_beat35">
+      <div class="kicker">KEY</div>
+      <div class="h1">立刻 yield</div><div class="h2">UI 先亮着</div>
+    </div></div></div><div id="b05_orch_beat36_wrap" class="beat clip" data-start="99.000" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat36"><div class="panel-body" id="b05_orch_beat36">
+      <div class="kicker">P</div>
+      <div class="h1">UI 先亮着。模型 fa</div><div class="h2">UI 先亮着。模型 fallback 时，待执行</div>
+    </div></div></div><div id="b05_orch_beat37_wrap" class="beat clip" data-start="101.882" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat37"><div class="panel-body" id="b05_orch_beat37">
+          <div class="kicker">记下这一句</div><div class="h1">待执行与执行中全部标废弃</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash37" data-start="101.882" data-duration="0.35" data-track-index="5"></div><div id="b05_orch_beat38_wrap" class="beat clip" data-start="104.900" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat38"><div class="panel-body" id="b05_orch_beat38">
+      <div class="kicker">KEY</div>
+      <div class="h1">防旧结果泄漏。取消用层级子控制器</div><div class="h2">防旧结果泄漏。取消用层级子控制器，别共用一个 AbortC</div>
+    </div></div></div><div id="b05_orch_beat39_wrap" class="beat clip" data-start="107.549" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat39"><div class="panel-body" id="b05_orch_beat39">
+      <div class="kicker">FLOW</div>
+      <div class="h1">别共用一个 AbortC</div><div class="h2">ontroller 误伤</div>
+    </div></div></div><div id="b05_orch_beat40_wrap" class="beat clip" data-start="110.199" data-duration="3.500" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_orch_beat40"><div class="panel-body" id="b05_orch_beat40">
+          <div class="kicker">无关工具</div><div class="big-num">ontroller 误伤</div>
+        </div></div></div><div class="flash clip" id="b05_orch_flash40" data-start="110.199" data-duration="0.35" data-track-index="5"></div><div id="hv_b05_orch_0" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_orch_0-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_orch_0_vid" src="../assets/huashu/09_partition.mp4" muted playsinline data-start="12.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b05_orch_1" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_orch_1-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_orch_1_vid" src="../assets/huashu/10_streaming_exec.mp4" muted playsinline data-start="55.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b05_orch_2" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_orch_2-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_orch_2_vid" src="../assets/huashu/09_partition.mp4" muted playsinline data-start="88.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b05_orch_beat0", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 0.000);
+tl.fromTo("#b05_orch_beat0 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 0.060);
+tl.fromTo("#b05_orch_beat0 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 0.120);
+tl.fromTo("#b05_orch_beat0 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 0.280);
+tl.to("#b05_orch_beat0", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 0.500);
+tl.to("#b05_orch_beat0", {opacity:0,y:-16,scale:0.98,duration:0.28}, 3.150);
+tl.fromTo("#b05_orch_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b05_orch_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b05_orch_beat1", {opacity:0}, {opacity:1,duration:0.2}, 2.284);
+tl.fromTo("#b05_orch_beat1 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 2.284);
+tl.fromTo("#b05_orch_beat1 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 2.364);
+tl.fromTo("#b05_orch_beat1 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 2.564);
+tl.to("#b05_orch_beat1", {opacity:0,y:-12,duration:0.28}, 5.434);
+tl.fromTo("#b05_orch_beat2", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 5.000);
+tl.to("#b05_orch_beat2", {opacity:0,y:-12,duration:0.28}, 8.180);
+tl.fromTo("#b05_orch_flash2", {opacity:0}, {opacity:0.35,duration:0.06}, 5.000);
+tl.to("#b05_orch_flash2", {opacity:0,duration:0.25}, 5.060);
+tl.fromTo("#b05_orch_beat3", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 8.000);
+tl.fromTo("#b05_orch_beat3 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 8.060);
+tl.fromTo("#b05_orch_beat3 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 8.120);
+tl.fromTo("#b05_orch_beat3 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 8.280);
+tl.to("#b05_orch_beat3", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 8.500);
+tl.to("#b05_orch_beat3", {opacity:0,y:-16,scale:0.98,duration:0.28}, 11.150);
+tl.fromTo("#b05_orch_beat4", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 10.200);
+tl.fromTo("#b05_orch_beat4 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 10.260);
+tl.fromTo("#b05_orch_beat4 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 10.320);
+tl.fromTo("#b05_orch_beat4 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 10.480);
+tl.to("#b05_orch_beat4", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 10.700);
+tl.to("#b05_orch_beat4", {opacity:0,y:-16,scale:0.98,duration:0.28}, 13.350);
+tl.fromTo("#b05_orch_beat5", {opacity:0}, {opacity:1,duration:0.2}, 13.523);
+tl.fromTo("#b05_orch_beat5 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 13.523);
+tl.fromTo("#b05_orch_beat5 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 13.873);
+tl.to("#b05_orch_beat5", {opacity:0,duration:0.3}, 16.673);
+tl.fromTo("#b05_orch_flash5", {opacity:0}, {opacity:0.35,duration:0.06}, 13.523);
+tl.to("#b05_orch_flash5", {opacity:0,duration:0.25}, 13.583);
+tl.fromTo("#b05_orch_beat6", {opacity:0}, {opacity:1,duration:0.2}, 15.750);
+tl.fromTo("#b05_orch_beat6 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 15.750);
+tl.fromTo("#b05_orch_beat6 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 16.100);
+tl.to("#b05_orch_beat6", {opacity:0,duration:0.3}, 18.900);
+tl.fromTo("#b05_orch_flash6", {opacity:0}, {opacity:0.35,duration:0.06}, 15.750);
+tl.to("#b05_orch_flash6", {opacity:0,duration:0.25}, 15.810);
+tl.fromTo("#b05_orch_beat7", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 18.151);
+tl.fromTo("#b05_orch_beat7 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 18.211);
+tl.fromTo("#b05_orch_beat7 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 18.271);
+tl.fromTo("#b05_orch_beat7 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 18.431);
+tl.to("#b05_orch_beat7", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 18.651);
+tl.to("#b05_orch_beat7", {opacity:0,y:-16,scale:0.98,duration:0.28}, 21.301);
+tl.fromTo("#b05_orch_beat8", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 21.650);
+tl.fromTo("#b05_orch_beat8 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 21.710);
+tl.fromTo("#b05_orch_beat8 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 21.770);
+tl.fromTo("#b05_orch_beat8 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 21.930);
+tl.to("#b05_orch_beat8", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 22.150);
+tl.to("#b05_orch_beat8", {opacity:0,y:-16,scale:0.98,duration:0.28}, 24.800);
+tl.fromTo("#b05_orch_beat9", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 24.029);
+tl.fromTo("#b05_orch_beat9 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 24.089);
+tl.fromTo("#b05_orch_beat9 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 24.149);
+tl.fromTo("#b05_orch_beat9 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 24.309);
+tl.to("#b05_orch_beat9", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 24.529);
+tl.to("#b05_orch_beat9", {opacity:0,y:-16,scale:0.98,duration:0.28}, 27.179);
+tl.fromTo("#b05_orch_beat10", {opacity:0}, {opacity:1,duration:0.2}, 26.850);
+tl.fromTo("#b05_orch_beat10 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 26.850);
+tl.to("#b05_orch_beat10", {opacity:0,duration:0.3}, 30.000);
+tl.fromTo("#b05_orch_flash10", {opacity:0}, {opacity:0.35,duration:0.06}, 26.850);
+tl.to("#b05_orch_flash10", {opacity:0,duration:0.25}, 26.910);
+tl.fromTo("#b05_orch_beat11", {opacity:0}, {opacity:1,duration:0.25}, 29.050);
+tl.fromTo("#b05_orch_beat11 .kicker", {opacity:0,y:10}, {opacity:1,y:0,duration:0.3}, 29.050);
+tl.fromTo("#b05_orch_beat11 .h1", {opacity:0,y:24,scale:0.96}, {opacity:1,y:0,scale:1,duration:0.4,ease:"power3.out"}, 29.150);
+tl.fromTo("#b05_orch_beat11 .layers-row", {opacity:0}, {opacity:1,duration:0.2}, 29.300);
+tl.fromTo("#b05_orch_beat11 .layer", {opacity:0,y:28}, {opacity:1,y:0,duration:0.35,stagger:0.08,ease:"power2.out"}, 29.350);
+tl.to("#b05_orch_beat11", {opacity:0,duration:0.3}, 32.200);
+tl.fromTo("#b05_orch_beat12", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 32.400);
+tl.fromTo("#b05_orch_beat12 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 32.460);
+tl.fromTo("#b05_orch_beat12 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 32.520);
+tl.fromTo("#b05_orch_beat12 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 32.680);
+tl.to("#b05_orch_beat12", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 32.900);
+tl.to("#b05_orch_beat12", {opacity:0,y:-16,scale:0.98,duration:0.28}, 35.550);
+tl.fromTo("#b05_orch_flash12", {opacity:0}, {opacity:0.35,duration:0.06}, 32.400);
+tl.to("#b05_orch_flash12", {opacity:0,duration:0.25}, 32.460);
+tl.fromTo("#b05_orch_beat13", {opacity:0}, {opacity:1,duration:0.2}, 34.600);
+tl.fromTo("#b05_orch_beat13 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 34.600);
+tl.fromTo("#b05_orch_beat13 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 34.680);
+tl.fromTo("#b05_orch_beat13 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 34.880);
+tl.to("#b05_orch_beat13", {opacity:0,y:-12,duration:0.28}, 37.950);
+tl.fromTo("#b05_orch_beat14", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 38.300);
+tl.fromTo("#b05_orch_beat14 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 38.360);
+tl.fromTo("#b05_orch_beat14 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 38.420);
+tl.fromTo("#b05_orch_beat14 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 38.580);
+tl.to("#b05_orch_beat14", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 38.800);
+tl.to("#b05_orch_beat14", {opacity:0,y:-16,scale:0.98,duration:0.28}, 41.450);
+tl.fromTo("#b05_orch_beat15", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 41.300);
+tl.fromTo("#b05_orch_beat15 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 41.360);
+tl.fromTo("#b05_orch_beat15 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 41.420);
+tl.fromTo("#b05_orch_beat15 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 41.580);
+tl.to("#b05_orch_beat15", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 41.800);
+tl.to("#b05_orch_beat15", {opacity:0,y:-16,scale:0.98,duration:0.28}, 44.450);
+tl.fromTo("#b05_orch_beat16", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 43.500);
+tl.fromTo("#b05_orch_beat16 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 43.560);
+tl.fromTo("#b05_orch_beat16 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 43.620);
+tl.fromTo("#b05_orch_beat16 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 43.780);
+tl.to("#b05_orch_beat16", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 44.000);
+tl.to("#b05_orch_beat16", {opacity:0,y:-16,scale:0.98,duration:0.28}, 46.650);
+tl.fromTo("#b05_orch_beat17", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 46.693);
+tl.to("#b05_orch_beat17", {opacity:0,y:-12,duration:0.28}, 49.873);
+tl.fromTo("#b05_orch_flash17", {opacity:0}, {opacity:0.35,duration:0.06}, 46.693);
+tl.to("#b05_orch_flash17", {opacity:0,duration:0.25}, 46.753);
+tl.fromTo("#b05_orch_beat18", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 49.050);
+tl.fromTo("#b05_orch_beat18 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 49.110);
+tl.fromTo("#b05_orch_beat18 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 49.170);
+tl.fromTo("#b05_orch_beat18 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 49.330);
+tl.to("#b05_orch_beat18", {scale:1.015,duration:2.80,ease:"sine.inOut",yoyo:true,repeat:1}, 49.550);
+tl.to("#b05_orch_beat18", {opacity:0,y:-16,scale:0.98,duration:0.28}, 52.400);
+tl.fromTo("#b05_orch_beat19", {opacity:0}, {opacity:1,duration:0.25}, 52.750);
+tl.fromTo("#b05_orch_beat19 .vpanel", {opacity:0,y:30,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.45,stagger:0.12,ease:"back.out(1.4)"}, 52.850);
+tl.fromTo("#b05_orch_beat19 .vs", {opacity:0,scale:2.2}, {opacity:1,scale:1,duration:0.4,ease:"back.out(2)"}, 53.250);
+tl.fromTo("#b05_orch_beat19 .h2", {opacity:0,y:16}, {opacity:1,y:0,duration:0.35}, 53.450);
+tl.to("#b05_orch_beat19", {opacity:0,duration:0.3}, 55.900);
+tl.fromTo("#b05_orch_flash19", {opacity:0}, {opacity:0.35,duration:0.06}, 52.750);
+tl.to("#b05_orch_flash19", {opacity:0,duration:0.25}, 52.810);
+tl.fromTo("#b05_orch_beat20", {opacity:0,scale:0.97}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 54.950);
+tl.fromTo("#b05_orch_beat20 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.32}, 55.030);
+tl.fromTo("#b05_orch_beat20 .h1", {opacity:0,y:18}, {opacity:1,y:0,duration:0.36}, 55.110);
+tl.fromTo("#b05_orch_beat20 .book-plate", {opacity:0,scale:1.04}, {opacity:1,scale:1,duration:0.45}, 55.230);
+tl.fromTo("#b05_orch_beat20 .book-plate > div", {opacity:0,y:10,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.28,stagger:0.1}, 55.500);
+tl.to("#b05_orch_beat20 .book-plate img", {scale:1.04,x:-10,duration:2.500,ease:"none"}, 55.650);
+tl.fromTo("#b05_orch_beat20 .chip", {opacity:0,y:14,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.28,stagger:0.07}, 55.950);
+tl.to("#b05_orch_beat20", {opacity:0,scale:0.99,duration:0.32}, 58.100);
+tl.fromTo("#b05_orch_flash20", {opacity:0}, {opacity:0.35,duration:0.06}, 54.950);
+tl.to("#b05_orch_flash20", {opacity:0,duration:0.25}, 55.010);
+tl.fromTo("#b05_orch_beat21", {opacity:0}, {opacity:1,duration:0.2}, 57.950);
+tl.fromTo("#b05_orch_beat21 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 57.950);
+tl.fromTo("#b05_orch_beat21 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 58.300);
+tl.to("#b05_orch_beat21", {opacity:0,duration:0.3}, 61.100);
+tl.fromTo("#b05_orch_flash21", {opacity:0}, {opacity:0.35,duration:0.06}, 57.950);
+tl.to("#b05_orch_flash21", {opacity:0,duration:0.25}, 58.010);
+tl.fromTo("#b05_orch_beat22", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 60.150);
+tl.fromTo("#b05_orch_beat22 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 60.210);
+tl.fromTo("#b05_orch_beat22 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 60.270);
+tl.fromTo("#b05_orch_beat22 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 60.430);
+tl.to("#b05_orch_beat22", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 60.650);
+tl.to("#b05_orch_beat22", {opacity:0,y:-16,scale:0.98,duration:0.28}, 63.300);
+tl.fromTo("#b05_orch_beat23", {opacity:0}, {opacity:1,duration:0.2}, 63.233);
+tl.fromTo("#b05_orch_beat23 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 63.233);
+tl.fromTo("#b05_orch_beat23 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 63.313);
+tl.fromTo("#b05_orch_beat23 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 63.513);
+tl.to("#b05_orch_beat23", {opacity:0,y:-12,duration:0.28}, 66.383);
+tl.fromTo("#b05_orch_beat24", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 65.700);
+tl.fromTo("#b05_orch_beat24 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 65.760);
+tl.fromTo("#b05_orch_beat24 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 65.820);
+tl.fromTo("#b05_orch_beat24 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 65.980);
+tl.to("#b05_orch_beat24", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 66.200);
+tl.to("#b05_orch_beat24", {opacity:0,y:-16,scale:0.98,duration:0.28}, 68.850);
+tl.fromTo("#b05_orch_beat25", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 68.805);
+tl.fromTo("#b05_orch_beat25 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 68.865);
+tl.fromTo("#b05_orch_beat25 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 68.925);
+tl.fromTo("#b05_orch_beat25 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 69.085);
+tl.to("#b05_orch_beat25", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 69.305);
+tl.to("#b05_orch_beat25", {opacity:0,y:-16,scale:0.98,duration:0.28}, 71.955);
+tl.fromTo("#b05_orch_beat26", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 71.600);
+tl.fromTo("#b05_orch_beat26 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 71.660);
+tl.fromTo("#b05_orch_beat26 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 71.720);
+tl.fromTo("#b05_orch_beat26 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 71.880);
+tl.to("#b05_orch_beat26", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 72.100);
+tl.to("#b05_orch_beat26", {opacity:0,y:-16,scale:0.98,duration:0.28}, 74.750);
+tl.fromTo("#b05_orch_beat27", {opacity:0,scale:0.92,y:24}, {opacity:1,scale:1,y:0,duration:0.45,ease:"power2.out"}, 74.600);
+tl.to("#b05_orch_beat27", {opacity:0,y:-12,duration:0.28}, 77.780);
+tl.fromTo("#b05_orch_flash27", {opacity:0}, {opacity:0.35,duration:0.06}, 74.600);
+tl.to("#b05_orch_flash27", {opacity:0,duration:0.25}, 74.660);
+tl.fromTo("#b05_orch_beat28", {opacity:0}, {opacity:1,duration:0.2}, 76.800);
+tl.fromTo("#b05_orch_beat28 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 76.800);
+tl.fromTo("#b05_orch_beat28 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 77.150);
+tl.to("#b05_orch_beat28", {opacity:0,duration:0.3}, 79.950);
+tl.fromTo("#b05_orch_flash28", {opacity:0}, {opacity:0.35,duration:0.06}, 76.800);
+tl.to("#b05_orch_flash28", {opacity:0,duration:0.25}, 76.860);
+tl.fromTo("#b05_orch_beat29", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 79.742);
+tl.fromTo("#b05_orch_beat29 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 79.802);
+tl.fromTo("#b05_orch_beat29 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 79.862);
+tl.fromTo("#b05_orch_beat29 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 80.022);
+tl.to("#b05_orch_beat29", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 80.242);
+tl.to("#b05_orch_beat29", {opacity:0,y:-16,scale:0.98,duration:0.28}, 82.892);
+tl.fromTo("#b05_orch_beat30", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 82.350);
+tl.fromTo("#b05_orch_beat30 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 82.410);
+tl.fromTo("#b05_orch_beat30 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 82.470);
+tl.fromTo("#b05_orch_beat30 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 82.630);
+tl.to("#b05_orch_beat30", {scale:1.015,duration:2.80,ease:"sine.inOut",yoyo:true,repeat:1}, 82.850);
+tl.to("#b05_orch_beat30", {opacity:0,y:-16,scale:0.98,duration:0.28}, 85.700);
+tl.fromTo("#b05_orch_beat31", {opacity:0}, {opacity:1,duration:0.2}, 86.050);
+tl.fromTo("#b05_orch_beat31 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 86.050);
+tl.to("#b05_orch_beat31", {opacity:0,duration:0.3}, 89.200);
+tl.fromTo("#b05_orch_flash31", {opacity:0}, {opacity:0.35,duration:0.06}, 86.050);
+tl.to("#b05_orch_flash31", {opacity:0,duration:0.25}, 86.110);
+tl.fromTo("#b05_orch_beat32", {opacity:0}, {opacity:1,duration:0.25}, 88.250);
+tl.fromTo("#b05_orch_beat32 .vpanel", {opacity:0,y:30,scale:0.92}, {opacity:1,y:0,scale:1,duration:0.45,stagger:0.12,ease:"back.out(1.4)"}, 88.350);
+tl.fromTo("#b05_orch_beat32 .vs", {opacity:0,scale:2.2}, {opacity:1,scale:1,duration:0.4,ease:"back.out(2)"}, 88.750);
+tl.fromTo("#b05_orch_beat32 .h2", {opacity:0,y:16}, {opacity:1,y:0,duration:0.35}, 88.950);
+tl.to("#b05_orch_beat32", {opacity:0,duration:0.3}, 91.400);
+tl.fromTo("#b05_orch_flash32", {opacity:0}, {opacity:0.35,duration:0.06}, 88.250);
+tl.to("#b05_orch_flash32", {opacity:0,duration:0.25}, 88.310);
+tl.fromTo("#b05_orch_beat33", {opacity:0}, {opacity:1,duration:0.2}, 90.450);
+tl.fromTo("#b05_orch_beat33 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 90.450);
+tl.fromTo("#b05_orch_beat33 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 90.530);
+tl.fromTo("#b05_orch_beat33 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 90.730);
+tl.to("#b05_orch_beat33", {opacity:0,y:-12,duration:0.28}, 93.600);
+tl.fromTo("#b05_orch_beat34", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 93.450);
+tl.fromTo("#b05_orch_beat34 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 93.510);
+tl.fromTo("#b05_orch_beat34 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 93.570);
+tl.fromTo("#b05_orch_beat34 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 93.730);
+tl.to("#b05_orch_beat34", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 93.950);
+tl.to("#b05_orch_beat34", {opacity:0,y:-16,scale:0.98,duration:0.28}, 96.600);
+tl.fromTo("#b05_orch_beat35", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 96.346);
+tl.fromTo("#b05_orch_beat35 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 96.406);
+tl.fromTo("#b05_orch_beat35 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 96.466);
+tl.fromTo("#b05_orch_beat35 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 96.626);
+tl.to("#b05_orch_beat35", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 96.846);
+tl.to("#b05_orch_beat35", {opacity:0,y:-16,scale:0.98,duration:0.28}, 99.496);
+tl.fromTo("#b05_orch_beat36", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 99.000);
+tl.fromTo("#b05_orch_beat36 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 99.060);
+tl.fromTo("#b05_orch_beat36 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 99.120);
+tl.fromTo("#b05_orch_beat36 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 99.280);
+tl.to("#b05_orch_beat36", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 99.500);
+tl.to("#b05_orch_beat36", {opacity:0,y:-16,scale:0.98,duration:0.28}, 102.150);
+tl.fromTo("#b05_orch_beat37", {opacity:0}, {opacity:1,duration:0.2}, 101.882);
+tl.fromTo("#b05_orch_beat37 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 101.882);
+tl.fromTo("#b05_orch_beat37 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 102.232);
+tl.to("#b05_orch_beat37", {opacity:0,duration:0.3}, 105.032);
+tl.fromTo("#b05_orch_flash37", {opacity:0}, {opacity:0.35,duration:0.06}, 101.882);
+tl.to("#b05_orch_flash37", {opacity:0,duration:0.25}, 101.942);
+tl.fromTo("#b05_orch_beat38", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 104.900);
+tl.fromTo("#b05_orch_beat38 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 104.960);
+tl.fromTo("#b05_orch_beat38 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 105.020);
+tl.fromTo("#b05_orch_beat38 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 105.180);
+tl.to("#b05_orch_beat38", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 105.400);
+tl.to("#b05_orch_beat38", {opacity:0,y:-16,scale:0.98,duration:0.28}, 108.050);
+tl.fromTo("#b05_orch_beat39", {opacity:0,scale:0.94,y:28}, {opacity:1,scale:1,y:0,duration:0.38,ease:"power3.out"}, 107.549);
+tl.fromTo("#b05_orch_beat39 .kicker", {opacity:0,x:-16}, {opacity:1,x:0,duration:0.28}, 107.609);
+tl.fromTo("#b05_orch_beat39 .h1", {opacity:0,y:22}, {opacity:1,y:0,duration:0.4,ease:"power2.out"}, 107.669);
+tl.fromTo("#b05_orch_beat39 .h2", {opacity:0,y:14}, {opacity:1,y:0,duration:0.32}, 107.829);
+tl.to("#b05_orch_beat39", {scale:1.015,duration:2.60,ease:"sine.inOut",yoyo:true,repeat:1}, 108.049);
+tl.to("#b05_orch_beat39", {opacity:0,y:-16,scale:0.98,duration:0.28}, 110.699);
+tl.fromTo("#b05_orch_beat40", {opacity:0}, {opacity:1,duration:0.2}, 110.199);
+tl.fromTo("#b05_orch_beat40 .big-num", {opacity:0,scale:0.5}, {opacity:1,scale:1,duration:0.55,ease:"back.out(1.6)"}, 110.199);
+tl.fromTo("#b05_orch_beat40 .kicker", {opacity:0,y:12}, {opacity:1,y:0,duration:0.3}, 110.399);
+tl.to("#b05_orch_beat40", {opacity:0,duration:0.3}, 113.349);
+tl.fromTo("#b05_orch_beat40", {opacity:0}, {opacity:1,duration:0.2}, 110.199);
+tl.fromTo("#b05_orch_beat40 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 110.199);
+tl.fromTo("#b05_orch_beat40 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 110.279);
+tl.fromTo("#b05_orch_beat40 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 110.479);
+tl.to("#b05_orch_beat40", {opacity:0,y:-12,duration:0.28}, 113.349);
+tl.fromTo("#b05_orch_flash40", {opacity:0}, {opacity:0.35,duration:0.06}, 110.199);
+tl.to("#b05_orch_flash40", {opacity:0,duration:0.25}, 110.259);
+tl.to("#hv_b05_orch_0-in", {opacity:1, duration:0.4}, 12.000);
+tl.to("#hv_b05_orch_0-in", {opacity:0, duration:0.4}, 18.600);
+tl.to("#hv_b05_orch_1-in", {opacity:1, duration:0.4}, 55.000);
+tl.to("#hv_b05_orch_1-in", {opacity:0, duration:0.4}, 61.600);
+tl.to("#hv_b05_orch_2-in", {opacity:1, duration:0.4}, 88.000);
+tl.to("#hv_b05_orch_2-in", {opacity:0, duration:0.4}, 94.100);
+window.__timelines["b05_orch"] = tl;
+</script>
+</body></html>

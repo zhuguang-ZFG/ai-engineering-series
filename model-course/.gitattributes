@@ -1,0 +1,17 @@
+* text=auto eol=lf
+*.pdf -text
+*.epub -text
+*.mp4 -text
+*.wav -text
+*.webp -text
+*.png -text
+*.jpg -text
+# Preserve the bundled third-party license headers verbatim.
+videos/llm-principles/assets/gsap.min.js -whitespace
+videos/llm-applications/assets/gsap.min.js -whitespace
+book/assets/images/**/*.png filter=lfs diff=lfs merge=lfs -text
+book/assets/images/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+book/assets/images/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+book/assets/images/**/*.webp filter=lfs diff=lfs merge=lfs -text
+book/assets/images/**/*.gif filter=lfs diff=lfs merge=lfs -text
+book/assets/images/**/*.svg filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>正则表达式 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 98 / 195</p><article><h1 id="正则表达式">正则表达式</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#正则表达式基础">正则表达式基础</a><ul><li><a href="#0-正则表达式的必要性">0. 正则表达式的必要性</a></li><li><a href="#1-正则入门三分钟上手">1. 正则入门：三分钟上手</a></li><li><a href="#2-核心概念像搭积木一样组合">2. 核心概念：像搭积木一样组合</a></li><li><a href="#3-实战常见验证模式">3. 实战：常见验证模式</a></li><li><a href="#4-在代码中使用正则">4. 在代码中使用正则</a></li><li><a href="#5-贪婪-vs-懒惰一个关键区别">5. 贪婪 vs 懒惰：一个关键区别</a></li><li><a href="#6-总结-2">6. 总结</a></li></ul></li></ul></nav></details><h2 id="正则表达式基础">正则表达式基础</h2>
+<blockquote>
+<p><strong>学习指南</strong>：正则表达式看起来像天书？其实它只是一种&quot;描述文本模式&quot;的迷你语言。本章带你从零开始理解正则的核心思想，学会用几个关键符号解决 80% 的文本搜索和验证问题。</p>
+</blockquote>
+<h3 id="0-正则表达式的必要性">0. 正则表达式的必要性</h3>
+<p>想象以下场景：</p>
+<ul>
+<li>从一大段日志里找出所有 IP 地址</li>
+<li>验证用户输入的邮箱格式是否合法</li>
+<li>把文本中所有的日期格式从 <code>2024/01/15</code> 替换为 <code>2024-01-15</code></li>
+<li>从网页源码中提取所有链接</li>
+</ul>
+<p><strong>用普通字符串搜索？</strong> 你需要写一大堆 <code>if-else</code> 判断逻辑。<br><strong>用正则表达式？</strong> 一行模式搞定。</p>
+<h3 id="1-正则入门三分钟上手">1. 正则入门：三分钟上手</h3>
+<p>👇 动手点点看：输入正则表达式，实时查看匹配结果</p>
+<blockquote>
+<p><strong>一句话理解</strong>
+正则表达式 = <strong>用特殊符号描述&quot;你想找什么样的文本&quot;</strong>。<code>\d</code> 代表数字，<code>+</code> 代表一个或多个，所以 <code>\d+</code> 就是&quot;一个或多个数字&quot;。</p>
+</blockquote>
+<h3 id="2-核心概念像搭积木一样组合">2. 核心概念：像搭积木一样组合</h3>
+<p>正则的本质是用<strong>三类积木</strong>搭出你想要的模式：</p>
+<h4 id="21-积木一字符类匹配什么字符">2.1 积木一：字符类（匹配什么字符）</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语法</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.</code></td>
+<td>任意字符</td>
+<td><code>a.c</code> → abc, a1c, a c</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>数字 [0-9]</td>
+<td><code>\d\d</code> → 42, 99</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>字母/数字/下划线</td>
+<td><code>\w+</code> → hello, user_1</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>空白字符</td>
+<td>匹配空格、Tab</td>
+</tr>
+<tr>
+<td><code>[abc]</code></td>
+<td>集合中的任意一个</td>
+<td><code>[aeiou]</code> → 元音字母</td>
+</tr>
+<tr>
+<td><code>[^abc]</code></td>
+<td>不在集合中的</td>
+<td><code>[^0-9]</code> → 非数字字符</td>
+</tr>
+</tbody></table></div>
+<h4 id="22-积木二量词匹配几次">2.2 积木二：量词（匹配几次）</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语法</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>*</code></td>
+<td>0 次或多次</td>
+<td><code>ab*</code> → a, ab, abbb</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>1 次或多次</td>
+<td><code>ab+</code> → ab, abbb（不匹配 a）</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>0 次或 1 次</td>
+<td><code>colou?r</code> → color, colour</td>
+</tr>
+<tr>
+<td><code>{3}</code></td>
+<td>恰好 3 次</td>
+<td><code>\d{3}</code> → 123</td>
+</tr>
+<tr>
+<td><code>{2,4}</code></td>
+<td>2 到 4 次</td>
+<td><code>\d{2,4}</code> → 12, 1234</td>
+</tr>
+</tbody></table></div>
+<h4 id="23-积木三位置和分组">2.3 积木三：位置和分组</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>语法</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>^</code></td>
+<td>行首</td>
+<td><code>^Hello</code> → 以 Hello 开头的行</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>行尾</td>
+<td><code>end$</code> → 以 end 结尾的行</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>单词边界</td>
+<td><code>\bcat\b</code> → cat（不匹配 catch）</td>
+</tr>
+<tr>
+<td><code>(...)</code></td>
+<td>捕获分组</td>
+<td><code>(\d+)-(\d+)</code> → 分别捕获</td>
+</tr>
+<tr>
+<td><code>a|b</code></td>
+<td>或</td>
+<td><code>cat|dog</code> → cat 或 dog</td>
+</tr>
+</tbody></table></div>
+<h3 id="3-实战常见验证模式">3. 实战：常见验证模式</h3>
+<h4 id="31-邮箱验证">3.1 邮箱验证</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>[\w.+-]+@[\w-]+\.[\w.]+
+</code></pre>
+<p>拆解：</p>
+<ul>
+<li><code>[\w.+-]+</code> — 用户名部分（字母数字点加号横杠）</li>
+<li><code>@</code> — 字面量 @</li>
+<li><code>[\w-]+</code> — 域名部分</li>
+<li><code>\.</code> — 转义的点</li>
+<li><code>[\w.]+</code> — 顶级域名</li>
+</ul>
+<h4 id="32-手机号验证中国">3.2 手机号验证（中国）</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1[3-9]\d{9}
+</code></pre>
+<p>拆解：</p>
+<ul>
+<li><code>1</code> — 以 1 开头</li>
+<li><code>[3-9]</code> — 第二位是 3-9</li>
+<li><code>\d{9}</code> — 后面跟 9 位数字</li>
+</ul>
+<h4 id="33-密码强度检查">3.3 密码强度检查</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$
+</code></pre>
+<p>拆解：</p>
+<ul>
+<li><code>(?=.*[a-z])</code> — 至少一个小写字母（前瞻断言）</li>
+<li><code>(?=.*[A-Z])</code> — 至少一个大写字母</li>
+<li><code>(?=.*\d)</code> — 至少一个数字</li>
+<li><code>.{8,}</code> — 总长度至少 8 位</li>
+</ul>
+<h3 id="4-在代码中使用正则">4. 在代码中使用正则</h3>
+<h4 id="javascript">JavaScript</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">const text = &#39;联系方式：13812345678 或 15099887766&#39;
+const regex = /1[3-9]\d{9}/g
+const phones = text.match(regex)
+// [&#39;13812345678&#39;, &#39;15099887766&#39;]
+
+// 替换
+text.replace(/\d{4}(?=\d{4}$)/, &#39;****&#39;)
+// 隐藏手机号中间四位
+
+// 验证
+/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(&#39;user@example.com&#39;)
+// true
+</code></pre>
+<h4 id="python">Python</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python">import re
+
+text = &#39;价格是 99 元，优惠 20 元&#39;
+numbers = re.findall(r&#39;\d+&#39;, text)
+# [&#39;99&#39;, &#39;20&#39;]
+
+# 替换
+re.sub(r&#39;\d+&#39;, &#39;X&#39;, text)
+# &#39;价格是 X 元，优惠 X 元&#39;
+
+# 分组捕获
+match = re.search(r&#39;(\d+)-(\d+)&#39;, &#39;2024-01-15&#39;)
+match.group(1)  # &#39;2024&#39;
+match.group(2)  # &#39;01&#39;
+</code></pre>
+<h3 id="5-贪婪-vs-懒惰一个关键区别">5. 贪婪 vs 懒惰：一个关键区别</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>文本: &lt;b&gt;hello&lt;/b&gt; and &lt;b&gt;world&lt;/b&gt;
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>匹配结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;b&gt;.*&lt;/b&gt;</code></td>
+<td><code>&lt;b&gt;hello&lt;/b&gt; and &lt;b&gt;world&lt;/b&gt;</code></td>
+<td>贪婪：尽量多匹配</td>
+</tr>
+<tr>
+<td><code>&lt;b&gt;.*?&lt;/b&gt;</code></td>
+<td><code>&lt;b&gt;hello&lt;/b&gt;</code></td>
+<td>懒惰：尽量少匹配</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>记住</strong>
+默认是贪婪模式。在量词后面加 <code>?</code> 变成懒惰模式。大多数时候，你需要的是懒惰模式。</p>
+</blockquote>
+<h3 id="6-总结-2">6. 总结</h3>
+<blockquote>
+<p><strong>📚 核心要点</strong></p>
+</blockquote>
+<ol>
+<li><strong>正则 = 描述文本模式的迷你语言</strong>，用于搜索、匹配、替换</li>
+<li><strong>三类积木</strong>：字符类（匹配什么）+ 量词（匹配几次）+ 位置/分组</li>
+<li><strong>\d \w \s</strong> 是最常用的三个字符类，覆盖数字、单词、空白</li>
+<li><strong>不需要从零写</strong>：常见场景都有成熟的正则模式可以复用</li>
+<li><strong>贪婪 vs 懒惰</strong>：默认贪婪（多匹配），加 <code>?</code> 变懒惰（少匹配）</li>
+</ol>
+<p><strong>下一步学习</strong>：</p>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/environment-path.md">环境变量与 PATH 导论</a> - 理解系统配置</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/ssh-authentication.md">SSH 与密钥认证导论</a> - 安全连接远程服务器</li>
+</ul>
+<hr>
+<h2 id="三浏览器与前端">三、浏览器与前端</h2>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-097.html">← 调试的艺术</a><a rel="next" href="chapter-099.html">JavaScript 语言深入 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

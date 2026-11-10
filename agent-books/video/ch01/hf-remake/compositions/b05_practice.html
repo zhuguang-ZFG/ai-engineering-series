@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: 'Noto Sans SC'; src: local('Noto Sans SC'), local('NotoSansSC-Regular'), local('Microsoft YaHei'); font-weight: 100 900; }
+@font-face { font-family: 'Microsoft YaHei'; src: local('Microsoft YaHei'), local('Microsoft YaHei UI'); }
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b0d10}
+body{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;color:#e8ecf1}
+#root,.scene{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 20%,#1a2744 0%,transparent 55%),
+  radial-gradient(ellipse at 80% 70%,#2a1030 0%,transparent 50%),
+  linear-gradient(160deg,#070b14,#0d1528 45%,#120a18)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40}
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+.series-bar{position:absolute;top:48px;left:64px;z-index:6}
+.series-in{display:flex;align-items:center;gap:16px;opacity:0}
+.badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#f0a050,#c45c1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#111}
+.series-name{font-size:22px;letter-spacing:.08em;color:#c9d2de}
+.series-sub{font-size:16px;color:#7a8799;margin-top:4px}
+.panel{position:absolute;left:64px;right:64px;top:140px;bottom:140px}
+.panel-body{display:flex;flex-direction:column;justify-content:center;gap:22px;height:100%;opacity:0}
+.kicker{font-size:20px;letter-spacing:.2em;color:#f0a050;opacity:0}
+.h1{font-size:60px;font-weight:800;line-height:1.15;opacity:0;max-width:1500px;text-shadow:0 0 28px #4af5}
+.h2{font-size:34px;font-weight:400;color:#aeb8c6;opacity:0;max-width:1300px;line-height:1.45}
+.big-num{font-size:120px;font-weight:800;color:#f0a050;letter-spacing:-.02em;opacity:0;line-height:1;text-shadow:0 0 40px #f0a05066}
+.layers-row{display:flex;gap:12px;opacity:0}
+.layer{flex:1;padding:22px 12px;text-align:center;border-radius:12px;background:#161c24;border:1px solid #2a3340;font-size:20px;font-weight:600;opacity:0}
+.card-row{display:flex;gap:22px;opacity:0;margin-top:12px}
+.mini{flex:1;padding:28px 22px;border-radius:16px;background:linear-gradient(145deg,#162038,#0c1220);border:2px solid #33aaff;font-size:30px;font-weight:700;opacity:0;box-shadow:0 0 24px #33aaff44}
+.stamp{width:240px;height:240px;border:10px solid #ff3b5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#ff3b5c;transform:rotate(-18deg);opacity:0;box-shadow:0 0 40px #ff3b5c88;margin-top:18px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;opacity:0}
+.vpanel{background:linear-gradient(160deg,#101828,#0a101c);border:2px solid #55ccff;border-radius:22px;padding:36px;min-height:280px;opacity:0}
+.vpanel.r{border-color:#ff99aa}
+.vpanel h3{font-size:40px;margin-bottom:16px}
+.vpanel p{font-size:28px;line-height:1.5;color:#cde}
+.vs{font-size:96px;font-weight:900;text-align:center;opacity:0;text-shadow:0 0 36px #f40;margin:8px 0}
+.chariot-wrap{position:absolute;left:40px;right:40px;top:120px;bottom:120px;opacity:0}
+.map-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.chip{padding:10px 18px;background:#1a1230;border:2px solid #c9a0ff;border-radius:999px;font-size:22px;opacity:0;box-shadow:0 0 14px #a0f6}
+.huashu-wrap{position:absolute;inset:0;pointer-events:none;z-index:8}
+.huashu-in{width:100%;height:100%;opacity:0}
+.huashu-in video{width:100%;height:100%;object-fit:cover}
+
+.wm-fixed{position:absolute;top:28px;right:36px;z-index:60;text-align:right;opacity:0.72;pointer-events:none;
+  font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;letter-spacing:.06em}
+.wm-brand{font-size:22px;font-weight:700;color:#e8ecf1;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.wm-series{font-size:15px;color:#f0a050;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.wm-mark{font-size:12px;color:#7a8799;margin-top:6px;letter-spacing:.18em}
+.quiz-card{background:linear-gradient(145deg,#1a1430,#0c1220);border:3px solid #f0a050;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 40px #f0a05055}
+.quiz-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#f0a050;color:#1a1000;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.pause-card{background:linear-gradient(145deg,#101828,#0a101c);border:3px dashed #66ccff;border-radius:20px;
+  padding:36px 40px;max-width:1400px;box-shadow:0 0 28px #66ccff44}
+.pause-tag{display:inline-block;padding:6px 16px;border-radius:999px;background:#66ccff;color:#061018;
+  font-weight:800;font-size:22px;letter-spacing:.12em;margin-bottom:18px}
+.quiz-ans{font-size:28px;color:#7dffb3;margin-top:18px;opacity:0;font-weight:600}
+</style></head>
+<body>
+<div id="root" class="clip" data-composition-id="b05_practice" style="position:absolute;inset:0;width:1920px;height:1080px" data-start="0" data-duration="146.448" data-width="1920" data-height="1080" data-fps="30">
+  <div class="series-bar clip" id="series" data-start="0" data-duration="146.448" data-track-index="0"><div class="series-in" id="series-in"><div class="badge">01</div><div><div class="series-name">驭者·Agent Harness</div><div class="series-sub">实战练习速览</div></div></div></div>
+  <div id="b05_practice_beat0_wrap" class="beat clip" data-start="0.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat0"><div class="panel-body" id="b05_practice_beat0">
+      <div class="kicker">KEY</div>
+      <div class="h1">实战练习速览</div><div class="h2">动手验证 Harness</div>
+    </div></div></div><div class="flash clip" id="b05_practice_flash0" data-start="0.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat1_wrap" class="beat clip" data-start="5.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat1"><div class="panel-body" id="b05_practice_beat1">
+      <div class="kicker">KEY</div>
+      <div class="h1">没有流式，权限询问弹窗很难嵌进实时对</div><div class="h2">所以书稿不把原则当鸡汤，而当成贯穿后文的红线</div>
+    </div></div></div><div id="b05_practice_beat2_wrap" class="beat clip" data-start="10.000" data-duration="4.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat2"><div class="panel-body" id="b05_practice_beat2">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">动手前先问自己</div>
+          <div class="h2" style="opacity:1">你会先用哪条命令确认环境就绪？</div></div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash2" data-start="10.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat3_wrap" class="beat clip" data-start="14.000" data-duration="4.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat3"><div class="panel-body" id="b05_practice_beat3">
+          <div class="kicker">记下这一点</div><div class="h1">所以书稿不把原则当鸡汤，</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash3" data-start="14.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat4_wrap" class="beat clip" data-start="18.000" data-duration="5.667" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat4"><div class="panel-body" id="b05_practice_beat4">
+          <div class="kicker">安装 CLI</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">npm i -g @anthropic-ai/claude-code</div>
+        </div></div></div><div id="b05_practice_beat5_wrap" class="beat clip" data-start="23.667" data-duration="5.666" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat5"><div class="panel-body" id="b05_practice_beat5">
+      <div class="kicker">KEY</div>
+      <div class="h1">所以书稿不把原则当鸡汤，而当成贯穿后</div><div class="h2">五条连起来：流式解决怎么边跑边展示，安全解决</div>
+    </div></div></div><div id="b05_practice_beat6_wrap" class="beat clip" data-start="29.333" data-duration="5.667" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat6"><div class="panel-body" id="b05_practice_beat6">
+      <div class="kicker">KEY</div>
+      <div class="h1">五条连起来：流式解决怎么边跑边展示，</div><div class="h2">后面章节里，你几乎总能把「为什么这样设计」追</div>
+    </div></div></div><div id="b05_practice_beat7_wrap" class="beat clip" data-start="35.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat7"><div class="panel-body" id="b05_practice_beat7">
+          <div class="kicker">确认环境就绪</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">claude --version</div>
+        </div></div></div><div id="b05_practice_beat8_wrap" class="beat clip" data-start="40.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat8"><div class="panel-body" id="b05_practice_beat8">
+      <div class="kicker">KEY</div>
+      <div class="h1">五条连起来：流式解决怎么边跑边展示，</div><div class="h2">后面章节里，你几乎总能把「为什么这样设计」追</div>
+    </div></div></div><div id="b05_practice_beat9_wrap" class="beat clip" data-start="45.000" data-duration="4.817" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat9"><div class="panel-body" id="b05_practice_beat9">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 后面章节里，你几乎总</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash9" data-start="45.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat10_wrap" class="beat clip" data-start="49.817" data-duration="5.183" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat10"><div class="panel-body" id="b05_practice_beat10">
+      <div class="kicker">KEY</div>
+      <div class="h1">后面章节里，你几乎总能把「为什么这样</div><div class="h2">理论先放这儿</div>
+    </div></div></div><div id="b05_practice_beat11_wrap" class="beat clip" data-start="55.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat11"><div class="panel-body" id="b05_practice_beat11">
+          <div class="kicker">环境 · 权限 · MCP · API · 文件系统</div>
+          <div class="h1" style="font-family:Consolas,monospace;font-size:48px;color:#7dffb3">/doctor</div>
+        </div></div></div><div id="b05_practice_beat12_wrap" class="beat clip" data-start="60.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat12"><div class="panel-body" id="b05_practice_beat12">
+          <div class="kicker">记下这一点</div><div class="h1">机器上有 Node 十八</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash12" data-start="60.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat13_wrap" class="beat clip" data-start="65.000" data-duration="5.348" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat13"><div class="panel-body" id="b05_practice_beat13">
+      <div class="kicker">KEY</div>
+      <div class="h1">机器上有 Node 十八加或 Bun</div><div class="h2">项目里也可用 npx 或本地安装钉版本，避免</div>
+    </div></div></div><div id="b05_practice_beat14_wrap" class="beat clip" data-start="70.348" data-duration="4.652" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat14"><div class="panel-body" id="b05_practice_beat14">
+      <div class="kicker">KEY</div>
+      <div class="h1">项目里也可用 npx 或本地安装钉版</div><div class="h2">进任意项目启动 Claude Code，输入</div>
+    </div></div></div><div id="b05_practice_beat15_wrap" class="beat clip" data-start="75.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat15"><div class="panel-body" id="b05_practice_beat15">
+      <div class="kicker">KEY</div>
+      <div class="h1">进任意项目启动 Claude Cod</div><div class="h2">它会查环境、权限配置、MCP 连接、API </div>
+    </div></div></div><div id="b05_practice_beat16_wrap" class="beat clip" data-start="80.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat16"><div class="panel-body" id="b05_practice_beat16">
+      <div class="kicker">FLOW</div>
+      <div class="h1">一次工具调用</div><div class="h2">思考 → GlobTool → 回复</div>
+    </div></div></div><div id="b05_practice_beat17_wrap" class="beat clip" data-start="85.000" data-duration="3.527" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat17"><div class="panel-body" id="b05_practice_beat17">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 它会查环境、权限配置</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash17" data-start="85.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat18_wrap" class="beat clip" data-start="88.527" data-duration="6.473" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat18"><div class="panel-body" id="b05_practice_beat18">
+      <div class="kicker">KEY</div>
+      <div class="h1">观察方式比结果更重要：检查是一项项冒</div><div class="h2">有的检查会请求确认，说明诊断也走权限管线</div>
+    </div></div></div><div id="b05_practice_beat19_wrap" class="beat clip" data-start="95.000" data-duration="4.291" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat19"><div class="panel-body" id="b05_practice_beat19">
+          <div class="kicker">记下这一点</div><div class="h1">有的检查会请求确认，说明</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash19" data-start="95.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat20_wrap" class="beat clip" data-start="99.291" data-duration="5.089" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat20"><div class="panel-body" id="b05_practice_beat20">
+      <div class="kicker">KEY</div>
+      <div class="h1">有的检查会请求确认，说明诊断也走权限</div><div class="h2">再发一句简单请求，比如列出当前目录所有 Ty</div>
+    </div></div></div><div id="b05_practice_beat21_wrap" class="beat clip" data-start="104.380" data-duration="5.620" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat21"><div class="panel-body" id="b05_practice_beat21">
+      <div class="kicker">KEY</div>
+      <div class="h1">再发一句简单请求，比如列出当前目录所</div><div class="h2">看三阶段：思考里说明打算用哪个工具；调用阶段</div>
+    </div></div></div><div id="b05_practice_beat22_wrap" class="beat clip" data-start="110.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat22"><div class="panel-body" id="b05_practice_beat22">
+      <div class="kicker">KEY</div>
+      <div class="h1">观察 Harness</div><div class="h2">权限提示 · 流式输出 · 工具结果回流</div>
+    </div></div></div><div id="b05_practice_beat23_wrap" class="beat clip" data-start="115.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat23"><div class="panel-body" id="b05_practice_beat23">
+      <div class="kicker">KEY</div>
+      <div class="h1">看三阶段：思考里说明打算用哪个工具；</div><div class="h2">心里对照主循环：哪步在 QueryEngin</div>
+    </div></div></div><div id="b05_practice_beat24_wrap" class="beat clip" data-start="120.000" data-duration="5.000" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat24"><div class="panel-body" id="b05_practice_beat24">
+          <div class="pause-card"><div class="pause-tag">停一下 · 想一想</div>
+          <div class="h1" style="opacity:1;font-size:48px">停一下 · 心里对照主循环：哪步</div>
+          <div class="h2" style="opacity:1">跟 VO 对齐想一拍</div></div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash24" data-start="120.000" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat25_wrap" class="beat clip" data-start="125.000" data-duration="4.377" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat25"><div class="panel-body" id="b05_practice_beat25">
+      <div class="kicker">KEY</div>
+      <div class="h1">心里对照主循环：哪步在 QueryE</div><div class="h2">顺带想三问：哪些工具并发安全；按 Ctrl+</div>
+    </div></div></div><div id="b05_practice_beat26_wrap" class="beat clip" data-start="129.377" data-duration="5.623" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat26"><div class="panel-body" id="b05_practice_beat26">
+          <div class="kicker">记下这一点</div><div class="h1">顺带想三问：哪些工具并发</div>
+          <div class="stamp">御</div>
+        </div></div></div><div class="flash clip" id="b05_practice_flash26" data-start="129.377" data-duration="0.35" data-track-index="5"></div><div id="b05_practice_beat27_wrap" class="beat clip" data-start="135.000" data-duration="11.448" data-track-index="1" style="position:absolute;inset:0"><div class="panel" data-beat="b05_practice_beat27"><div class="panel-body" id="b05_practice_beat27">
+      <div class="kicker">KEY</div>
+      <div class="h1">练习目的</div><div class="h2">亲手摸到运行时边界</div>
+    </div></div></div><div class="flash clip" id="b05_practice_flash27" data-start="135.000" data-duration="0.35" data-track-index="5"></div><div id="hv_b05_practice_0" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_practice_0-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_practice_0_vid" src="../assets/huashu/12_doctor_flow.mp4" muted playsinline data-start="40.000" data-duration="7.000" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div><div id="hv_b05_practice_1" class="huashu-wrap" style="position:absolute;inset:0;pointer-events:none;z-index:8"><div class="huashu-in" id="hv_b05_practice_1-in" style="opacity:0;width:100%;height:100%"><video id="hv_b05_practice_1_vid" src="../assets/huashu/12_doctor_flow.mp4" muted playsinline data-start="80.000" data-duration="6.500" data-has-audio="false" style="width:100%;height:100%;object-fit:cover"></video></div></div>
+  <div class="grain"></div><div class="vignette"></div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#series-in", {opacity:0,y:-16}, {opacity:1,y:0,duration:0.45}, 0.1);
+tl.fromTo("#b05_practice_beat0", {opacity:0}, {opacity:1,duration:0.2}, 0.000);
+tl.fromTo("#b05_practice_beat0 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 0.000);
+tl.fromTo("#b05_practice_beat0 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 0.080);
+tl.fromTo("#b05_practice_beat0 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 0.280);
+tl.to("#b05_practice_beat0", {opacity:0,y:-12,duration:0.28}, 4.650);
+tl.fromTo("#b05_practice_flash0", {opacity:0}, {opacity:0.35,duration:0.06}, 0.000);
+tl.to("#b05_practice_flash0", {opacity:0,duration:0.25}, 0.060);
+tl.fromTo("#b05_practice_beat1", {opacity:0}, {opacity:1,duration:0.2}, 5.000);
+tl.fromTo("#b05_practice_beat1 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 5.000);
+tl.fromTo("#b05_practice_beat1 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 5.080);
+tl.fromTo("#b05_practice_beat1 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 5.280);
+tl.to("#b05_practice_beat1", {opacity:0,y:-12,duration:0.28}, 9.650);
+tl.fromTo("#b05_practice_beat2", {opacity:0}, {opacity:1,duration:0.2}, 10.000);
+tl.fromTo("#b05_practice_beat2 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 10.000);
+tl.to("#b05_practice_beat2", {opacity:0,duration:0.3}, 13.650);
+tl.fromTo("#b05_practice_flash2", {opacity:0}, {opacity:0.35,duration:0.06}, 10.000);
+tl.to("#b05_practice_flash2", {opacity:0,duration:0.25}, 10.060);
+tl.fromTo("#b05_practice_beat3", {opacity:0}, {opacity:1,duration:0.2}, 14.000);
+tl.fromTo("#b05_practice_beat3 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 14.000);
+tl.fromTo("#b05_practice_beat3 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 14.350);
+tl.to("#b05_practice_beat3", {opacity:0,duration:0.3}, 17.650);
+tl.fromTo("#b05_practice_flash3", {opacity:0}, {opacity:0.35,duration:0.06}, 14.000);
+tl.to("#b05_practice_flash3", {opacity:0,duration:0.25}, 14.060);
+tl.fromTo("#b05_practice_beat4", {opacity:0}, {opacity:1,duration:0.2}, 18.000);
+tl.fromTo("#b05_practice_beat4 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 18.000);
+tl.fromTo("#b05_practice_beat4 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 18.080);
+tl.fromTo("#b05_practice_beat4 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 18.280);
+tl.to("#b05_practice_beat4", {opacity:0,y:-12,duration:0.28}, 23.317);
+tl.fromTo("#b05_practice_beat5", {opacity:0}, {opacity:1,duration:0.2}, 23.667);
+tl.fromTo("#b05_practice_beat5 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 23.667);
+tl.fromTo("#b05_practice_beat5 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 23.747);
+tl.fromTo("#b05_practice_beat5 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 23.947);
+tl.to("#b05_practice_beat5", {opacity:0,y:-12,duration:0.28}, 28.983);
+tl.fromTo("#b05_practice_beat6", {opacity:0}, {opacity:1,duration:0.2}, 29.333);
+tl.fromTo("#b05_practice_beat6 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 29.333);
+tl.fromTo("#b05_practice_beat6 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 29.413);
+tl.fromTo("#b05_practice_beat6 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 29.613);
+tl.to("#b05_practice_beat6", {opacity:0,y:-12,duration:0.28}, 34.650);
+tl.fromTo("#b05_practice_beat7", {opacity:0}, {opacity:1,duration:0.2}, 35.000);
+tl.fromTo("#b05_practice_beat7 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 35.000);
+tl.fromTo("#b05_practice_beat7 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 35.080);
+tl.fromTo("#b05_practice_beat7 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 35.280);
+tl.to("#b05_practice_beat7", {opacity:0,y:-12,duration:0.28}, 39.650);
+tl.fromTo("#b05_practice_beat8", {opacity:0}, {opacity:1,duration:0.2}, 40.000);
+tl.fromTo("#b05_practice_beat8 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 40.000);
+tl.fromTo("#b05_practice_beat8 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 40.080);
+tl.fromTo("#b05_practice_beat8 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 40.280);
+tl.to("#b05_practice_beat8", {opacity:0,y:-12,duration:0.28}, 44.650);
+tl.fromTo("#b05_practice_beat9", {opacity:0}, {opacity:1,duration:0.2}, 45.000);
+tl.fromTo("#b05_practice_beat9 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 45.000);
+tl.to("#b05_practice_beat9", {opacity:0,duration:0.3}, 49.467);
+tl.fromTo("#b05_practice_flash9", {opacity:0}, {opacity:0.35,duration:0.06}, 45.000);
+tl.to("#b05_practice_flash9", {opacity:0,duration:0.25}, 45.060);
+tl.fromTo("#b05_practice_beat10", {opacity:0}, {opacity:1,duration:0.2}, 49.817);
+tl.fromTo("#b05_practice_beat10 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 49.817);
+tl.fromTo("#b05_practice_beat10 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 49.897);
+tl.fromTo("#b05_practice_beat10 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 50.097);
+tl.to("#b05_practice_beat10", {opacity:0,y:-12,duration:0.28}, 54.650);
+tl.fromTo("#b05_practice_beat11", {opacity:0}, {opacity:1,duration:0.2}, 55.000);
+tl.fromTo("#b05_practice_beat11 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 55.000);
+tl.fromTo("#b05_practice_beat11 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 55.080);
+tl.fromTo("#b05_practice_beat11 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 55.280);
+tl.to("#b05_practice_beat11", {opacity:0,y:-12,duration:0.28}, 59.650);
+tl.fromTo("#b05_practice_beat12", {opacity:0}, {opacity:1,duration:0.2}, 60.000);
+tl.fromTo("#b05_practice_beat12 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 60.000);
+tl.fromTo("#b05_practice_beat12 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 60.350);
+tl.to("#b05_practice_beat12", {opacity:0,duration:0.3}, 64.650);
+tl.fromTo("#b05_practice_flash12", {opacity:0}, {opacity:0.35,duration:0.06}, 60.000);
+tl.to("#b05_practice_flash12", {opacity:0,duration:0.25}, 60.060);
+tl.fromTo("#b05_practice_beat13", {opacity:0}, {opacity:1,duration:0.2}, 65.000);
+tl.fromTo("#b05_practice_beat13 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 65.000);
+tl.fromTo("#b05_practice_beat13 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 65.080);
+tl.fromTo("#b05_practice_beat13 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 65.280);
+tl.to("#b05_practice_beat13", {opacity:0,y:-12,duration:0.28}, 69.998);
+tl.fromTo("#b05_practice_beat14", {opacity:0}, {opacity:1,duration:0.2}, 70.348);
+tl.fromTo("#b05_practice_beat14 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 70.348);
+tl.fromTo("#b05_practice_beat14 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 70.428);
+tl.fromTo("#b05_practice_beat14 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 70.628);
+tl.to("#b05_practice_beat14", {opacity:0,y:-12,duration:0.28}, 74.650);
+tl.fromTo("#b05_practice_beat15", {opacity:0}, {opacity:1,duration:0.2}, 75.000);
+tl.fromTo("#b05_practice_beat15 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 75.000);
+tl.fromTo("#b05_practice_beat15 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 75.080);
+tl.fromTo("#b05_practice_beat15 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 75.280);
+tl.to("#b05_practice_beat15", {opacity:0,y:-12,duration:0.28}, 79.650);
+tl.fromTo("#b05_practice_beat16", {opacity:0}, {opacity:1,duration:0.2}, 80.000);
+tl.fromTo("#b05_practice_beat16 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 80.000);
+tl.fromTo("#b05_practice_beat16 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 80.080);
+tl.fromTo("#b05_practice_beat16 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 80.280);
+tl.to("#b05_practice_beat16", {opacity:0,y:-12,duration:0.28}, 84.650);
+tl.fromTo("#b05_practice_beat17", {opacity:0}, {opacity:1,duration:0.2}, 85.000);
+tl.fromTo("#b05_practice_beat17 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 85.000);
+tl.to("#b05_practice_beat17", {opacity:0,duration:0.3}, 88.177);
+tl.fromTo("#b05_practice_flash17", {opacity:0}, {opacity:0.35,duration:0.06}, 85.000);
+tl.to("#b05_practice_flash17", {opacity:0,duration:0.25}, 85.060);
+tl.fromTo("#b05_practice_beat18", {opacity:0}, {opacity:1,duration:0.2}, 88.527);
+tl.fromTo("#b05_practice_beat18 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 88.527);
+tl.fromTo("#b05_practice_beat18 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 88.607);
+tl.fromTo("#b05_practice_beat18 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 88.807);
+tl.to("#b05_practice_beat18", {opacity:0,y:-12,duration:0.28}, 94.650);
+tl.fromTo("#b05_practice_beat19", {opacity:0}, {opacity:1,duration:0.2}, 95.000);
+tl.fromTo("#b05_practice_beat19 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 95.000);
+tl.fromTo("#b05_practice_beat19 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 95.350);
+tl.to("#b05_practice_beat19", {opacity:0,duration:0.3}, 98.941);
+tl.fromTo("#b05_practice_flash19", {opacity:0}, {opacity:0.35,duration:0.06}, 95.000);
+tl.to("#b05_practice_flash19", {opacity:0,duration:0.25}, 95.060);
+tl.fromTo("#b05_practice_beat20", {opacity:0}, {opacity:1,duration:0.2}, 99.291);
+tl.fromTo("#b05_practice_beat20 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 99.291);
+tl.fromTo("#b05_practice_beat20 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 99.371);
+tl.fromTo("#b05_practice_beat20 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 99.571);
+tl.to("#b05_practice_beat20", {opacity:0,y:-12,duration:0.28}, 104.030);
+tl.fromTo("#b05_practice_beat21", {opacity:0}, {opacity:1,duration:0.2}, 104.380);
+tl.fromTo("#b05_practice_beat21 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 104.380);
+tl.fromTo("#b05_practice_beat21 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 104.460);
+tl.fromTo("#b05_practice_beat21 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 104.660);
+tl.to("#b05_practice_beat21", {opacity:0,y:-12,duration:0.28}, 109.650);
+tl.fromTo("#b05_practice_beat22", {opacity:0}, {opacity:1,duration:0.2}, 110.000);
+tl.fromTo("#b05_practice_beat22 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 110.000);
+tl.fromTo("#b05_practice_beat22 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 110.080);
+tl.fromTo("#b05_practice_beat22 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 110.280);
+tl.to("#b05_practice_beat22", {opacity:0,y:-12,duration:0.28}, 114.650);
+tl.fromTo("#b05_practice_beat23", {opacity:0}, {opacity:1,duration:0.2}, 115.000);
+tl.fromTo("#b05_practice_beat23 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 115.000);
+tl.fromTo("#b05_practice_beat23 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 115.080);
+tl.fromTo("#b05_practice_beat23 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 115.280);
+tl.to("#b05_practice_beat23", {opacity:0,y:-12,duration:0.28}, 119.650);
+tl.fromTo("#b05_practice_beat24", {opacity:0}, {opacity:1,duration:0.2}, 120.000);
+tl.fromTo("#b05_practice_beat24 .pause-card", {opacity:0,scale:0.92}, {opacity:1,scale:1,duration:0.4,ease:"power2.out"}, 120.000);
+tl.to("#b05_practice_beat24", {opacity:0,duration:0.3}, 124.650);
+tl.fromTo("#b05_practice_flash24", {opacity:0}, {opacity:0.35,duration:0.06}, 120.000);
+tl.to("#b05_practice_flash24", {opacity:0,duration:0.25}, 120.060);
+tl.fromTo("#b05_practice_beat25", {opacity:0}, {opacity:1,duration:0.2}, 125.000);
+tl.fromTo("#b05_practice_beat25 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 125.000);
+tl.fromTo("#b05_practice_beat25 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 125.080);
+tl.fromTo("#b05_practice_beat25 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 125.280);
+tl.to("#b05_practice_beat25", {opacity:0,y:-12,duration:0.28}, 129.027);
+tl.fromTo("#b05_practice_beat26", {opacity:0}, {opacity:1,duration:0.2}, 129.377);
+tl.fromTo("#b05_practice_beat26 .h1", {opacity:0,y:30}, {opacity:1,y:0,duration:0.4}, 129.377);
+tl.fromTo("#b05_practice_beat26 .stamp", {opacity:0,scale:2.5,rotation:-40}, {opacity:1,scale:1,rotation:-18,duration:0.5,ease:"back.out(2)"}, 129.727);
+tl.to("#b05_practice_beat26", {opacity:0,duration:0.3}, 134.650);
+tl.fromTo("#b05_practice_flash26", {opacity:0}, {opacity:0.35,duration:0.06}, 129.377);
+tl.to("#b05_practice_flash26", {opacity:0,duration:0.25}, 129.437);
+tl.fromTo("#b05_practice_beat27", {opacity:0}, {opacity:1,duration:0.2}, 135.000);
+tl.fromTo("#b05_practice_beat27 .kicker", {opacity:0,x:-20}, {opacity:1,x:0,duration:0.3}, 135.000);
+tl.fromTo("#b05_practice_beat27 .h1", {opacity:0,y:28,scale:0.94}, {opacity:1,y:0,scale:1,duration:0.45,ease:"power3.out"}, 135.080);
+tl.fromTo("#b05_practice_beat27 .h2", {opacity:0,y:18}, {opacity:1,y:0,duration:0.35}, 135.280);
+tl.to("#b05_practice_beat27", {opacity:0,y:-12,duration:0.28}, 146.098);
+tl.fromTo("#b05_practice_flash27", {opacity:0}, {opacity:0.35,duration:0.06}, 135.000);
+tl.to("#b05_practice_flash27", {opacity:0,duration:0.25}, 135.060);
+tl.to("#hv_b05_practice_0-in", {opacity:1, duration:0.4}, 40.000);
+tl.to("#hv_b05_practice_0-in", {opacity:0, duration:0.4}, 46.600);
+tl.to("#hv_b05_practice_1-in", {opacity:1, duration:0.4}, 80.000);
+tl.to("#hv_b05_practice_1-in", {opacity:0, duration:0.4}, 86.100);
+window.__timelines["b05_practice"] = tl;
+</script>
+</body></html>

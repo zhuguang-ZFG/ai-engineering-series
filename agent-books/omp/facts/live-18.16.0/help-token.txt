@@ -1,0 +1,25 @@
+Get the API key or OAuth token for a provider
+
+USAGE
+  $ omp token PROVIDER [FLAGS]
+
+ARGUMENTS
+  PROVIDER   Provider ID (e.g. anthropic, openai)
+
+FLAGS
+      --raw            Output the raw credential value without parsing nested JSON structures
+      --force-refresh  Force refresh the OAuth token even if it has not expired
+  -a, --account=<int>  Select the Nth OAuth account (1-based) in stored order instead of the round-robin default
+  -l, --list           List the provider's OAuth accounts (index + identity) and exit
+
+EXAMPLES
+  # Get API key for Anthropic
+    omp token anthropic
+  # Get raw Copilot credential JSON
+    omp token github-copilot --raw
+  # Force refresh and get Gemini CLI token
+    omp token google-gemini-cli --force-refresh
+  # List Anthropic OAuth accounts
+    omp token anthropic --list
+  # Get the 2nd Anthropic OAuth account's token
+    omp token anthropic --account 2

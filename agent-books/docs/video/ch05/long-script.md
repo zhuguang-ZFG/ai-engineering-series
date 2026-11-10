@@ -1,0 +1,233 @@
+# 第 05 章长讲口播脚本｜驭者·Agent Harness
+
+> 用途：B 站横屏长讲配音底稿（沉稳男声 · 云扬）
+> 对应大纲：`docs/video/ch05/long-outline.md`
+> 标记说明：ANIM:id / CODE:id / QUIZ:id 行不计入朗读。
+
+---
+
+## 块 1｜开场钩子
+
+大家好，这里是小电讲电路。驭者·Agent Harness 第 05 讲。前四集，整车装完了：心跳、双手、护栏。这一集往回追一步——这些行为，是谁定的。
+
+[ANIM:edit-no-effect]
+
+先说一个你大概踩过的坑。你打开 settings.json，把 model 改了，存盘，重启——还是老样子。你盯着那个字段看了三遍，没写错。
+
+问题不在值，在层。你改对了值，改错了层。
+
+[ANIM:rock-core-drill]
+
+[QUIZ:guess-layers]
+
+配置不是一个文件。它是六层沉积岩。这一集我们拿根取芯柱，把这六层抽出来，一层层看清楚：哪层压哪层，怎么合并，以及——六层里有一层，在最要紧的事情上，系统根本不看它。
+
+---
+
+## 块 2｜§5.1 六层沉积岩
+
+从低到高，六层是：pluginSettings、userSettings、projectSettings、localSettings、flagSettings、policySettings。
+
+[ANIM:six-strata]
+
+翻成人话。最底下 pluginSettings，插件带来的默认值，它是地基，所以我更愿意叫它第零层。往上 userSettings，你自己的全局习惯，放在家目录。再往上 projectSettings，项目的公告牌，这份要进 Git，团队共享。再往上 localSettings，你的私人便签，写在项目里但不进 Git。再往上 flagSettings，命令行 --settings 带进来的，今天这一次的例外。最顶上 policySettings，公司盖了章的红头文件。
+
+[CODE:settings-paths]
+
+加载的规则一句话：后加载者覆盖前者。
+
+[ANIM:which-layer-wins]
+
+所以回到开头那个坑。你改的是 userSettings 里的 model，可项目里的 settings.local.json 也写了 model——它在你上面，它赢。你改的那层生效了，只是被压住了。
+
+[ANIM:covered-not-deleted]
+
+这里有个细节值得停一下：**压住不等于删掉**。每一层都还在，原样躺着，只是被上面遮住了。这也是为什么这套设计能维护——每层都能单独读懂，不用先在脑子里跑一遍合并。
+
+[QUIZ:guess-layers-answer]
+
+落到实操，一句口诀：**挑层比改值更要紧**。改之前先问「我该写在哪一层」，比改完了反复试值快得多。
+
+[ANIM:three-patterns]
+
+那到底该写哪一层？真实项目里有三种站得住的分法，照着套就行。
+
+第一种，个人跟团队分开，最常见。你的模型偏好、你习惯的权限规则，写进家目录的 settings.json——那是你的，换项目也跟着你。团队统一的东西写进项目的 settings.json：lint 规则、权限基线、共享 hooks，这份进 Git，大家一起改。你自己的临时调整，比如今天要开 verbose、这个项目要多给一条权限，写进 settings.local.json——它在 .gitignore 里，不会污染别人。
+
+第二种，CI/CD 专用。流水线上不要改任何持久化的配置文件，用命令行把配置带进去：claude --settings，指一个 ci-settings.json。这样 CI 的配置是临时的、可追溯的，跑完就没了，不会弄脏开发者的本地环境。
+
+第三种，企业统一管控。管理员通过 MDM 或远程 API 下发 policySettings，只锁安全相关的几项——模型、permissions.deny、allowManagedHooksOnly。锁死之后，团队在项目层定制非安全行为，个人在用户层调 UI 偏好。三层各管一段，互不打架。
+
+三种分法其实是同一句话：**把东西放在它该归属的那一层**。放对了，六层是帮手；放错了，六层就是迷宫。
+
+---
+
+## 块 3｜§5.1 合并规则与策略层例外
+
+第二件要讲清的事：合并不是一种规则，是三种。
+
+[ANIM:three-merge-rules]
+
+标量——比如 model——后者直接盖前者。对象深度合并，嵌套属性逐层覆盖。数组最特别：拼接，然后去重。
+
+[ANIM:keyring-stack]
+
+数组这条，用钥匙圈来想最顺。permissions.allow 就是一个钥匙圈。每一层把自己那几把钥匙挂上去，谁也摘不掉别人的。所以权限的结果是——只增不减。
+
+为什么要这样设计？反过来想就明白了。假如上层的数组会替换下层，那上层就必须一次把所有需要的权限列全，漏一条就是一个洞。拼接策略让每层只管自己要加什么，剩下的系统帮你并起来。这跟第 04 章护栏是同一个思路：安全规则宁可多一道，不可少一道。
+
+[ANIM:empty-array-noop]
+
+但这条规则有个反模式，必须说在前面：**别想用空数组去撤销下层的权限**。你在上层挂一个空数组，什么也不会发生——拼接之后下层那几把钥匙还在圈上。
+
+[ANIM:deny-explicit]
+
+要撤销，得明说。用 permissions.deny 把它显式拒掉。这也接上第 04 章那条铁律：deny 压过 allow。
+
+[ANIM:sealed-doc]
+
+最后是策略层的例外。policySettings 不走合并，它走「首个非空源胜出」。四个来源排队：远程 API、MDM、managed-settings.json 文件、HKCU 注册表。从高到低找，找到第一个非空的，就用它，剩下的不拆开。
+
+为什么它特殊？因为前五层是「增量累积」模型——每层都在信任下层的基础上叠自己的偏好。而企业策略是「权威单一」模型：一份盖了章的完整文件，照着最高那一份执行，不把几份文件的段落剪贴在一起。
+
+剪贴会出事。想象两套 MDM 各下发一半：一套限模型清单，一套限权限范围。合并之后可能出现谁都没打算给的组合——用受限模型绕开权限限制。「首个非空源胜出」换来的是确定性：出了问题，能说清是哪一份文件生效。
+
+[CODE:merge-example]
+
+把三条规则放进一个例子里走一遍，你就彻底记住了。
+
+一个前端团队。小张的家目录里写了：模型用 sonnet，允许 Bash 跑 npm 和 node，verbose 打开。团队的项目配置里写了：允许 npm run lint、npm test、还有 Read 全部，另外挂了一个 PreToolUse 的审计 hook。小张自己的本地配置里写了：模型换成 opus，再允许 Bash 跑 git。
+
+合并结果是什么？
+
+模型是 opus——本地层在用户层上面，标量直接盖。verbose 还是打开的——只有用户层写了它，没人覆盖，它原样留着。审计 hook 在——只有项目层写了，也没人动它。
+
+而 permissions.allow 这个数组，最后有六条：npm、node 来自用户层，npm run lint、npm test、Read 来自项目层，git 来自本地层。三层的钥匙全在圈上，一把没少。
+
+三条规则各管一样东西：标量看谁在上面，对象逐层往下合，数组谁都别想摘别人的。
+
+[QUIZ:merge-drill]
+
+---
+
+## 块 4｜§5.2 安全边界：那一层为什么不算
+
+现在收刀。六层里有一层，在安全敏感的检查里，系统**根本不读**它——projectSettings，项目那一层。
+
+[ANIM:sign-on-your-wall]
+
+想想 projectSettings 是什么。它是 .claude/settings.json，跟着仓库走。你 clone 一个陌生项目，就等于把别人家的告示牌钉在自己墙上——而且默认照着上面写的做。
+
+[ANIM:hook-exfil]
+
+攻击形状很具体。攻击者做一个看着挺正常的开源项目，在 .claude/settings.json 里埋一个 PreToolUse hook。你 clone 下来，启动，每一次工具调用，这个 hook 就把你的 API key、你的环境变量，发到他的服务器上。你全程不知道。
+
+[ANIM:threat-compare]
+
+这跟我们熟悉的供应链攻击还不太一样。传统那种走的是恶意依赖包、被篡改的构建产物，受害的是跑软件的系统；Agent 的配置供应链走的是配置文件和 hooks 注入，受害的是**用 Agent 的开发者本人**。
+
+最难办的是隐蔽性。恶意依赖包好歹有扫描工具盯着，而配置文件看上去太正常了——几行 JSON，谁会逐字去读别人仓库里的 .claude/settings.json？影响范围也变了：传统攻击影响软件的用户，这里影响的是你的密钥、你的仓库、你机器上能碰到的一切。
+
+[ANIM:three-properties]
+
+为什么偏偏是这一层危险？因为有三个属性，只有它全占齐了。第一，来源不可信——它来自别人的仓库，不是你写的。第二，自动加载——进了目录就生效，不问你一声。第三，可执行代码——hooks 能跑任意 shell 命令。
+
+对照其余五层。userSettings 和 localSettings 在你自己机器上、你自己编辑，不占第一条。flagSettings 要命令行显式指定，不占第二条。policySettings 由管理员控制，也不占第一条。所以 projectSettings 是唯一三项全中的。
+
+[ANIM:systematic-exclusion]
+
+源码里的应对是一致的：排除它。查 skipDangerousModePermissionPrompt 的时候，只读 userSettings、localSettings、flagSettings 和 policySettings——有意跳过 projectSettings。hasAutoModeOptIn、getUseAutoModeDuringPlan、getAutoModeConfig，同一个模式。
+
+[CODE:exclusion-comment]
+
+注释都指向同一句话：projectSettings 是故意排除的——否则一个恶意项目可以自动绕过确认弹窗，那就是远程代码执行。
+
+[ANIM:two-enterprise-gates]
+
+企业侧还有两道闸。第一道，allowManagedHooksOnly：开了之后只有 policySettings 的托管 hooks 会跑，user、project、local 的全部跳过。金融机构要求所有代码变更都进审计系统，就用这招——开发者改本地配置也绕不过审计。第二道，strictPluginOnlyCustomization：锁定 skills、agents、hooks、mcp 四个定制面。它妙在**选择性**：可以只锁 mcp 防数据外流、只锁 hooks 防未审脚本，同时放开 skills 让大家自己造工具。不是一刀切。
+
+[ANIM:trust-radius]
+
+一条原则贯穿下来：信任半径递减。你自己写的可信，别人仓库里的不可信。安全敏感的检查，只读信任级别够高的那几层。
+
+---
+
+## 块 5｜§5.3 功能开关
+
+配置之外，还有一层决定「这个功能存不存在」——功能开关。Claude Code 有两套，编译时的 feature()，和运行时的 GrowthBook。
+
+[ANIM:assembly-line]
+
+差别用生产线来想。编译时关掉，是这个零件**根本没上生产线**，成品里找不到它。运行时关掉，是零件装好了，开关留在外面，可以远程拨。
+
+编译时赢在三处。不占包体积；热路径上没有那个条件分支的开销；还有一条容易被忽略——没编进去的代码，它里头的 bug 和漏洞也一起没了。
+
+[ANIM:flag-table]
+
+从标志名能读出架构的走向。KAIROS 是长驻会话，DAEMON 是后台守护进程，这两个指向同一个方向：Agent 从「按需调用」走向「持续运行」。TEAMMEM 是团队记忆，TEMPLATES 是模板工作流，这两个指向另一个方向：从「个人工具」走向「团队基础设施」。
+
+[ANIM:ugly-name]
+
+运行时那套里，有个函数名我特别想拿出来说：getFeatureValue_CACHED_MAY_BE_STALE。
+
+它把丑话写进了名字里。值来自缓存，跨进程的时候可能已经过时——这件事不好听，但它直接写在函数名上，调用者每次敲下这个名字，都被提醒一次。要是它叫 getFeatureValue，反而会骗人，让人以为拿到的是最新值。
+
+把非显而易见的约束编进名字，这个习惯值得学。
+
+[CODE:feature-vs-growthbook]
+
+[QUIZ:which-switch]
+
+另外，实验标志用的是随机动物名，像 tengu_passport_quail 这种。随机名避免语义偏见，也不会跟编译时的 feature() 撞名。
+
+---
+
+## 块 6｜§5.4 状态系统：34 行的「不」
+
+本章最后一块。配置是基因，启动前就写定了；状态是神经系统，运行中实时传递。
+
+[ANIM:gene-vs-nerve]
+
+Claude Code 的状态容器，只有 34 行。三个方法：getState 拿当前状态，setState 用一个更新函数改状态，subscribe 订阅变化。
+
+[ANIM:cut-to-34]
+
+没有 reducer 样板代码，没有 action 类型定义，没有中间件配置，没有 DevTools 集成。**每一个被砍掉的功能，都是一个想清楚了的「不」**。
+
+凭什么敢砍？因为 Agent CLI 的状态需求跟 Web 应用不是一回事。Web 的状态变更是毫秒级 UI 交互，Agent 是秒级工具调用；Web 常有多人并发，Agent 基本单用户单会话；Web 里时间旅行调试很有价值，Agent 用不上。需求摸准了，才敢只留三个方法。
+
+[ANIM:object-is]
+
+[CODE:store-34]
+
+不可变更新这条要讲细一点。setState 收的是一个函数：拿旧状态，返回新状态。然后用 Object.is 比引用——**换了新盒子才算变，在老盒子里改字段不算**。
+
+这等于把「有没有变」的判断权交给了调用者：约定「返回新引用就是变了」，而不是额外提供一个 hasChanged 回调。约定优于配置。
+
+类型层面还有一道。全局状态 AppState 标了 DeepImmutable，TypeScript 在编译期就拦住任何直接改字段的写法。让正确的事情容易，让错误的事情不可能。
+
+[ANIM:tearing-read]
+
+订阅这一侧，Claude Code 用的是 React 18 官方的 useSyncExternalStore，而不是自己拿 useEffect 加 useState 拼一个。这个选择对 Agent 来说特别要紧。
+
+它给三个保证：一致性——一次渲染里读到的状态是同一个快照，不会「读到一半变了」；批量更新——连着改几次，只重渲染一次；还有服务端渲染兼容。
+
+第一条最关键。想象权限状态在一次渲染中途变了：一个组件以为权限已经给了，另一个组件以为还没给。对普通网页，这可能只是闪一下；对 Agent 来说，状态变化后面接着的是真的工具调用、真的文件操作。两个组件对同一件事判断相反，就可能真的做出矛盾的动作。
+
+[ANIM:subscribe-precise]
+
+用的时候记住一句：订阅要精确。只订你真用到的那一片，别订整棵树——订了整棵树，任何字段一变，你的组件就重渲染。如果只写不读，用 useSetAppState，它返回的引用永远不变，这个组件永远不会因为状态变化而重渲染。
+
+---
+
+## 块 7｜实战 + 总结 + 片尾
+
+[ANIM:outro-series]
+
+三道题留给你。第一，给三层配置，预测合并后的 allow 和 model。第二，当一次企业管理员：只许用批准过的 hooks、不许自己装 MCP，这两条该怎么配。第三，给一个 20 人团队分层——哪些放项目层，哪些留给个人。
+
+五句口诀收束这一集。配置是六层，不是一个文件。挑层比改值更要紧。钥匙只挂不摘，要撤销得用 deny 明说。别人仓库里的那一层，安全上不算。丑话写进名字里。
+
+下一集，第 06 章：记忆系统——Agent 的长期记忆。配置是启动前写定的基因，记忆是跑起来之后攒下的东西。
+
+本系列基于开源书稿；系列「驭者·Agent Harness」；关注小电讲电路，合集里看目录更新。

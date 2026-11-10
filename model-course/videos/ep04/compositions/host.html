@@ -1,0 +1,119 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #h-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #h-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #h-title .g { color: #1f883d; }
+    #h-p1, #h-p2 { position: absolute; left: 110px; width: 500px; height: 138px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #1f883d; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); padding: 24px 30px; box-sizing: border-box; }
+    #h-p1 { top: 300px; }
+    #h-p2 { top: 462px; }
+    .h-p-k { font: 700 40px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .h-p-d { margin-top: 8px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
+    #h-free { position: absolute; left: 110px; top: 624px; width: 500px; height: 176px; background: #dafbe1; border: 2px solid #1f883d; border-radius: 16px 11px 18px 9px; padding: 22px 28px; box-sizing: border-box; }
+    #h-free-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #116329; }
+    #h-free-b { margin-top: 12px; font: 700 36px/1.35 "Noto Sans JP", sans-serif; color: #116329; }
+    #h-term { position: absolute; left: 660px; top: 300px; width: 700px; height: 500px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 16px 11px 18px 9px; box-shadow: 9px 10px 0 rgba(31,35,40,.18); padding: 26px 30px; box-sizing: border-box; }
+    #h-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+    .h-dot { width: 13px; height: 13px; border-radius: 50%; background: #30363d; }
+    #h-bar-t { margin-left: 12px; font: 28px "JetBrains Mono", monospace; color: #768390; }
+    .h-ln { font: 29px/1.66 "JetBrains Mono", monospace; color: #f6f8fa; white-space: nowrap; }
+    .h-ln .q { color: #d2a8ff; }
+    .h-ln .ok { color: #3fb950; }
+    .h-ln .dim { color: #768390; }
+    #h-res { position: absolute; left: 1400px; top: 300px; width: 410px; height: 500px; background: #1f2328; border-radius: 16px 11px 18px 9px; padding: 26px 28px; box-sizing: border-box; }
+    #h-res-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
+    #h-link { margin-top: 20px; font: 700 28px/1.5 "JetBrains Mono", monospace; color: #3fb950; word-break: break-all; }
+    #h-badge { position: absolute; left: 26px; bottom: 30px; width: 358px; height: 96px; display: flex; align-items: center; justify-content: center; background: #3fb950; border-radius: 15px 10px 17px 9px; font: 700 38px "Noto Sans JP", sans-serif; color: #0b0f14; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-h1aa" id="root" data-composition-id="host" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-h2bb" id="h-tag" class="clip" data-start="0" data-duration="24.484">DEPLOY · 一条命令上公网</div>
+    <div data-hf-id="hf-h3cc" id="h-title" class="clip" data-start="0" data-duration="24.484">托上去，<span data-hf-id="hf-h4dd" class="g">你就有地址了</span></div>
+    <div data-hf-id="hf-h5ee" id="h-p1" class="clip" data-start="2.3" data-duration="22.184"><div data-hf-id="hf-h6ff" class="h-p-k">Cloudflare Pages</div><div data-hf-id="hf-h7gg" class="h-p-d">静态托管 · 全球 CDN</div></div>
+    <div data-hf-id="hf-h8hh" id="h-p2" class="clip" data-start="4.0" data-duration="20.484"><div data-hf-id="hf-h9ii" class="h-p-k">Vercel</div><div data-hf-id="hf-haja" class="h-p-d">一条命令 · 自动 HTTPS</div></div>
+    <div data-hf-id="hf-hbkb" id="h-free" class="clip" data-start="6.3" data-duration="18.184"><div data-hf-id="hf-hclc" id="h-free-h">FREE TIER</div><div data-hf-id="hf-hdmd" id="h-free-b">个人项目，免费额度够用</div></div>
+    <div data-hf-id="hf-hene" id="h-term" class="clip" data-start="4.8" data-duration="19.684">
+      <div data-hf-id="hf-hfof" id="h-bar"><span data-hf-id="hf-hgpg" class="h-dot"></span><span data-hf-id="hf-hhph" class="h-dot"></span><span data-hf-id="hf-hiq" class="h-dot"></span><span data-hf-id="hf-hjrj" id="h-bar-t">deploy</span></div>
+      <div data-hf-id="hf-hksk" id="h-t1" class="h-ln clip" data-start="6.4" data-duration="18.084">$ npx wrangler pages deploy dist</div>
+      <div data-hf-id="hf-hltl" id="h-t2" class="h-ln clip" data-start="9.4" data-duration="15.084"><span data-hf-id="hf-hmum" class="q">?</span> 产物目录 <span data-hf-id="hf-hnvn" class="dim">dist</span></div>
+      <div data-hf-id="hf-howo" id="h-t3" class="h-ln clip" data-start="11.0" data-duration="13.484"><span data-hf-id="hf-hppp" class="q">?</span> 项目名 <span data-hf-id="hf-hqqq" class="dim">vibe-snake</span></div>
+      <div data-hf-id="hf-hrrr" id="h-t4" class="h-ln clip" data-start="13.7" data-duration="10.784"><span data-hf-id="hf-hsss" class="ok">✓</span> 上传 24 个文件</div>
+      <div data-hf-id="hf-htt" id="h-t5" class="h-ln clip" data-start="14.4" data-duration="10.084"><span data-hf-id="hf-huu" class="ok">✓</span> 分配域名</div>
+      <div data-hf-id="hf-hvv" id="h-t6" class="h-ln clip" data-start="15.5" data-duration="8.984"><span data-hf-id="hf-hww" class="ok">✓</span> 签发证书</div>
+    </div>
+    <div data-hf-id="hf-hxx" id="h-res" class="clip" data-start="19.1" data-duration="5.384">
+      <div data-hf-id="hf-hyy" id="h-res-h">LIVE URL</div>
+      <div data-hf-id="hf-hzz" id="h-link">https://vibe-snake.pages.dev</div>
+      <div data-hf-id="hf-h0a" id="h-badge" class="clip" data-start="22.2" data-duration="2.284">就是你的成品</div>
+    </div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#h-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#h-title"));
+    tl.set("#h-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#h-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#h-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#h-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#h-p1", { x: -26, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 2.3);
+    tl.fromTo("#h-p2", { x: -26, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 4.0);
+    tl.fromTo("#h-term", { y: 28, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 4.8);
+    tl.fromTo("#h-term .h-ln", { opacity: 0, x: -8, scale: 0.95 }, { opacity: 1, x: 0, duration: .28, ease: "power2.out", stagger: 2.4, scale: 1 }, 6.4);
+    tl.fromTo("#h-free", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 6.3);
+    tl.fromTo("#h-res", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .45, ease: "back.out(1.5)", scale: 1 }, 19.1);
+    tl.fromTo("#h-badge", { scale: .82, opacity: 0 }, { scale: 1, opacity: 1, duration: .38, ease: "back.out(1.8)" }, 22.2);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 24.484, ease: "none" }, 0);
+    window.__timelines["host"] = tl;
+  </script>
+</template>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C02 把任务交代清楚 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details open><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html" aria-current="page">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C02-section-f9b510b0ea">先修桥：把约定写成五段</a></li><li class="toc-level-2"><a href="#C02-section-a63d64ada1">一次完整的改写</a></li><li class="toc-level-2"><a href="#C02-section-bf9421f788">示例不是参数训练</a></li><li class="toc-level-2"><a href="#C02-section-bc62d5fc0b">材料多时，先决定放什么进来</a></li><li class="toc-level-2"><a href="#C02-section-cadf3b152f">改一个条件：删掉“核对”，看结果哪里变</a></li><li class="toc-level-2"><a href="#C02-section-df5efa87e3">失败对照：四种写不清楚的约定</a></li><li class="toc-level-2"><a href="#C02-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C02-section-1718f47dd7">项目增量：任务约定 v1</a></li><li class="toc-level-2"><a href="#C02-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C02"><header class="chapter-opener"><p class="chapter-number">C02</p><p class="chapter-kicker">S1 · 会使用 / K1</p><h1>把任务交代清楚</h1><p class="chapter-abstract">把“帮我整理一下”拆成材料、字段、缺失规则、交付对象和完成标准。</p></header><p class="chapter-meta">先修：<a href="c01.html">C01</a> · <a href="stage-s1.html">S1 阶段导言</a></p><div class="article-body"><p>“帮我整理成一张表。”</p>
+<p>这句话不算任务说明。整理哪份材料、要哪些列、缺失怎么标、交给谁、怎样算完成，都不在里面。对方只能猜；猜对了显得聪明，猜错了也不是它一个人的问题。本章把这句话拆成一张可执行的<strong>任务约定</strong>，并用同一份通知验证：约定改变后，结果里的哪些格子真的变了。</p>
+<h2 id="C02-section-f9b510b0ea" tabindex="-1">先修桥：把约定写成五段</h2>
+<p>先回看 C01 的表格：一行是一条记录，一格是一个字段；“原文证据”与“状态”是两列，不是装饰。读表时先看表头，再看每行的证据是否落在原句上。</p>
+<p>有了这个基础，可以把任务约定固定成五段：</p>
+<ol>
+<li><strong>目标</strong>：这次要产出什么，交给谁，用来做什么。</li>
+<li><strong>材料</strong>：哪些文件或原文可用，版本/日期是什么，哪些不能用。</li>
+<li><strong>约束</strong>：只依据材料？缺失怎么标？冲突怎么处理？能不能推测？</li>
+<li><strong>输出</strong>：字段、格式、语言、长度、是否需要逐项引用。</li>
+<li><strong>核对</strong>：完成后逐项检查什么，什么状态算“可交付”，什么状态必须停下。</li>
+</ol>
+<p>五段不需要写成长文。关键是每一段都能被结果检验：说“只用材料”，报告里就不能出现材料没有的地点；说“每项附原句”，表里就要有原句列。</p>
+<h2 id="C02-section-a63d64ada1" tabindex="-1">一次完整的改写</h2>
+<p>原话：“帮我整理成一张表，要完整。”</p>
+<p>改写：</p>
+<blockquote>
+<p>目标：把通知 A 整理成活动安排表，交给没读过原文的同事，用来决定出门时间。
+材料：只使用 <code>notice-a.txt</code> 与 <code>notice-b.txt</code> 的原文；文件里没有的不要补。
+约束：缺失写“材料未提供”；两份材料冲突时并列写出，不合并；不把星期补成具体日期。
+输出：四列表格——事项、值、原文证据、状态；表后附三条待确认事项。
+核对：每一格能回到原句；没有原句的格子不能标“有依据”；冲突项必须同时出现。</p>
+</blockquote>
+<p>同一份通知，两种交代会得到两种“完成”：</p>
+<ul>
+<li>只说“整理成表”，表格填满就算完成，地点被顺手补上也没人发现。</li>
+<li>按五段交代，“地点未知”是合格结果，“补出地点”反而是失败。</li>
+</ul>
+<p>约定不是礼貌用语，它决定了什么算对、什么算错。<strong>“请认真一点”“尽量准确”不构成约束</strong>，因为它们没有给出可检查的动作。</p>
+<h2 id="C02-section-bf9421f788" tabindex="-1">示例不是参数训练</h2>
+<p>任务里放一两个示例，常能帮助对齐格式。例如：</p>
+<blockquote>
+<p>示例：事项=报名；值=需提前报名；原文证据=“参与者需提前报名”；状态=有依据。</p>
+</blockquote>
+<p>这里要拆开一个常见误解：<strong>提示里的示例不会更新模型参数</strong>。示例只是本次输入的一部分，模型看到它，按当前参数继续算；对话结束后，参数没有因为这段示例被训练。真正用示范数据更新参数的是监督微调（SFT），那是另一条路径，旧课 <a href="../../book/llm/lessons/assistant.md">L06 会续写为什么还要学听指令</a> 与 <a href="../../book/llm/deepening/assistant.md">深入页</a> 已经分开讲过。</p>
+<p>所以：</p>
+<ul>
+<li>示例能改变<strong>这一次</strong>的输出倾向；</li>
+<li>示例不能保证模型“学会了”这类任务；</li>
+<li>示例写错了，模型可能照着错；</li>
+<li>换一个会话、去掉示例，行为可能退回。</li>
+</ul>
+<p>把示例当“临时示范”，不要当“已经训练好”。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/context-selection.svg" alt="分开外部保存、按条件选择和本次输入，明确输出预留"><figcaption>图：材料可以存在外部，但只有被选进本次输入的部分才参与计算；还要给输出留空间。图中的 4096/3584/512 是人工示例，不是某个产品的规格。</figcaption></figure>
+<h2 id="C02-section-bc62d5fc0b" tabindex="-1">材料多时，先决定放什么进来</h2>
+<p>C01 只处理一条通知，桌子够大。材料一多，就要选：哪些原句与本次问题有关，哪些是旧版本，哪些只是背景。外部的文件不会自动进入本次输入；检索、历史摘要、工具返回值都可能改变模型看到的材料。</p>
+<p>图里把过程分成“外部保存—按条件选择—本次输入—输出预留”。这里先建立一个直觉：<strong>上下文有容量，输出也要占位置</strong>。把所有材料硬塞进去，可能挤掉回答空间；只放摘要，又可能丢掉关键日期。具体容量与计费要查实际产品，不能拿图里的示例数字当规格。</p>
+<h2 id="C02-section-cadf3b152f" tabindex="-1">改一个条件：删掉“核对”，看结果哪里变</h2>
+<p>把上面的约定删到只剩“目标+材料+输出”，再看同一份通知。表格仍然可能很整齐，但两种问题会回来：</p>
+<ul>
+<li>地点缺失时，没有规则要求标未知，回答可能补一个常见场所；</li>
+<li>两份时间冲突时，没有规则要求并列，回答可能只留一个。</li>
+</ul>
+<p>这不是说模型一定会犯错，而是说<strong>约定里没有检查点时，你失去了发现错误的入口</strong>。反过来，加上“每项附原句”后，报告多了一列，核对的人可以逐格打开原文。代价是输出更长、输入更多；收益是错误可定位。</p>
+<p>在本页固定材料与预置回答里，选通知 A 时地点一项没有原句；加上通知 B 后地点才有依据；再加通知 C，时间变成冲突。你可以打开 <a href="context.html">X06 上下文与核对</a> 依次切换，观察“本次输入里到底有什么”怎样改变答案，而不是观察“模型是否更聪明”。</p>
+<h2 id="C02-section-df5efa87e3" tabindex="-1">失败对照：四种写不清楚的约定</h2>
+<ol>
+<li><strong>“要完整”</strong>：完整没有定义。缺三项的表也可能自称完整。</li>
+<li><strong>“合理推测”</strong>：如果材料没有就推测，等于允许无依据内容进入报告。推测可以另开一列，不能混进“值”。</li>
+<li><strong>“参考所有资料”</strong>：没有说版本与优先级，旧通知可能压过新通知。</li>
+<li><strong>“输出专业一点”</strong>：没有字段、没有核对方式，改十遍也无法判断哪版更对。</li>
+</ol>
+<p>还有一种隐蔽问题：约定要求“附引用”，但没说引用要<strong>支持该结论</strong>。结果可能每格都贴了一句真实原文，其中几句答非所问。C03 会专门检查这一点。</p>
+<h2 id="C02-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li><p>把下面三句含糊要求各改写成五段约定，每段不超过两行：</p>
+<ul>
+<li>“把这份会议纪要总结一下。”</li>
+<li>“看看这个活动能不能报名。”</li>
+<li>“帮我判断这份材料靠不靠谱。”</li>
+</ul>
+</li>
+<li><p>找出下面这份约定里的至少三个问题，并说明会导致什么可观察后果：</p>
+<blockquote>
+<p>目标：整理通知。材料：所有找到的资料。约束：尽量完整，缺的可以合理推测。输出：一张表。核对：你自己再检查一遍。</p>
+</blockquote>
+</li>
+<li><p>用 C01 的停水通知，按你的五段约定做一次报告；只改“约束”一段（例如先允许推测，再禁止推测），比较两次结果里“咨询电话”和“年份”两格的变化。把两次输出都留下，不要只留好看的那次。</p>
+</li>
+</ol>
+<p>参考答案在 <a href="c02-answer.html">C02 核对</a>，题目不附答案。</p>
+<h2 id="C02-section-1718f47dd7" tabindex="-1">项目增量：任务约定 v1</h2>
+<p>在 S1 项目里新增 <code>contract-v1.md</code>，包含：</p>
+<ul>
+<li>五段约定（目标、材料、约束、输出、核对）；</li>
+<li>一段“本次不做什么”（例如不做报名、不联系发布方、不判断活动质量）；</li>
+<li>证据列的定义：引用原文、位置（行号/段落）、是否支持该字段。</li>
+</ul>
+<p>然后把 C01 的 <code>report-v0.md</code> 按新约定重做一版 <code>report-v1.md</code>。两版都保留，后面 C04 的独立交付要能说清：是哪条约定让哪一格从“猜”变成“未知”。</p>
+<h2 id="C02-section-82826587a3" tabindex="-1">来源与边界</h2>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/context.md">L07</a> 的材料与核对流程、旧课 <a href="../../book/llm/lessons/assistant.md">L06</a> 对“示例/模板/微调”的区分，以及图 G08/G14 的原始出处说明。所有通知与预置回答均为课程虚构或人工编写；本章<strong>没有对 DeepSeek、Kimi 或其他模型做提示词效果实测</strong>，因此不给出“加了这句话准确率提高多少”的数字。示例对本次输出的影响依产品与参数而异，需要你自己在固定材料上对照记录。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c01.html">上一章 C01</a><a href="c02-answer.html">独立作答后核对</a><a href="c03.html">下一章 C03</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

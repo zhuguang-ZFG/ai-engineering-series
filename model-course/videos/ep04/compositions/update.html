@@ -1,0 +1,112 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #u-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #u-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #u-title .g { color: #1f883d; }
+    .u-step { position: absolute; top: 320px; width: 470px; height: 178px; background: #fffdf8; border: 4px solid #1f2328; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); padding: 24px 30px; box-sizing: border-box; }
+    #u-s1 { left: 110px; }
+    #u-s2 { left: 640px; }
+    #u-s3 { left: 1170px; }
+    .u-k { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #1f883d; }
+    .u-b { margin-top: 12px; font: 700 40px "Noto Sans JP", sans-serif; color: #1f2328; }
+    .u-d { margin-top: 8px; font: 28px "JetBrains Mono", monospace; color: #57606a; }
+    .u-ar { position: absolute; top: 392px; width: 50px; height: 34px; }
+    .u-ar div { position: absolute; background: #1f883d; }
+    .u-shaft { left: 0; top: 14px; width: 34px; height: 6px; border-radius: 3px; }
+    .u-head { left: 30px; top: 5px; width: 24px; height: 24px; transform: rotate(45deg); border-radius: 4px; }
+    #u-a1 { left: 592px; } #u-a2 { left: 1122px; }
+    #u-ci { position: absolute; left: 110px; top: 560px; width: 690px; height: 156px; background: #1f2328; border-radius: 16px 11px 18px 9px; padding: 24px 32px; box-sizing: border-box; }
+    #u-ci-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #768390; }
+    #u-ci-b { margin-top: 12px; font: 700 40px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #u-ci-b .g { color: #3fb950; }
+    #u-rb { position: absolute; left: 840px; top: 560px; width: 970px; height: 156px; background: #fffdf8; border: 4px solid #1f2328; border-left: 9px solid #cf222e; border-radius: 16px 11px 18px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); padding: 24px 32px; box-sizing: border-box; }
+    #u-rb-h { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    #u-rb-b { margin-top: 12px; font: 700 38px "Noto Sans JP", sans-serif; color: #1f2328; }
+    #u-cmd { position: absolute; left: 840px; top: 748px; width: 970px; height: 112px; background: #0d1117; border: 3px solid #1f2328; box-shadow: 8px 9px 0 rgba(31,35,40,.16); border-radius: 16px 11px 18px 9px; display: flex; align-items: center; padding: 0 32px; box-sizing: border-box; font: 30px "JetBrains Mono", monospace; color: #f6f8fa; }
+    #u-cmd .dim { color: #c9d1d9; }
+    #u-cmd .ok { color: #56d364; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-u1aa" id="root" data-composition-id="update" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-u2bb" id="u-tag" class="clip" data-start="0" data-duration="22.468">UPDATE · 提交即上线</div>
+    <div data-hf-id="hf-u3cc" id="u-title" class="clip" data-start="0" data-duration="22.468">改一行，<span data-hf-id="hf-u4dd" class="g">手机刷新就是新版</span></div>
+    <div data-hf-id="hf-u5ee" id="u-s1" class="u-step clip" data-start="3.5" data-duration="18.968"><div data-hf-id="hf-u6ff" class="u-k">STEP 01</div><div data-hf-id="hf-u7gg" class="u-b">接上 GitHub</div><div data-hf-id="hf-u8hh" class="u-d">主分支一提交就触发</div></div>
+    <div data-hf-id="hf-u9ii" id="u-s2" class="u-step clip" data-start="7.6" data-duration="14.868"><div data-hf-id="hf-uaja" class="u-k">STEP 02</div><div data-hf-id="hf-ubkb" class="u-b">自动构建</div><div data-hf-id="hf-uclc" class="u-d">平台替你跑 build</div></div>
+    <div data-hf-id="hf-udmd" id="u-s3" class="u-step clip" data-start="9.3" data-duration="13.168"><div data-hf-id="hf-uene" class="u-k">STEP 03</div><div data-hf-id="hf-ufof" class="u-b">自动上线</div><div data-hf-id="hf-ugpg" class="u-d">几分钟后就是新版</div></div>
+    <div data-hf-id="hf-uhph" id="u-a1" class="u-ar clip" data-start="6.6" data-duration="15.868"><div data-hf-id="hf-uiqi" class="u-shaft"></div><div data-hf-id="hf-ujrj" class="u-head"></div></div>
+    <div data-hf-id="hf-uksk" id="u-a2" class="u-ar clip" data-start="9.9" data-duration="12.568"><div data-hf-id="hf-ultl" class="u-shaft"></div><div data-hf-id="hf-umum" class="u-head"></div></div>
+    <div data-hf-id="hf-unvn" id="u-ci" class="clip" data-start="13.7" data-duration="8.768"><div data-hf-id="hf-uowo" id="u-ci-h">CONTINUOUS DEPLOY</div><div data-hf-id="hf-uppp" id="u-ci-b">不用再<span data-hf-id="hf-uqqq" class="g">手动传文件</span></div></div>
+    <div data-hf-id="hf-urrr" id="u-rb" class="clip" data-start="17.4" data-duration="5.068"><div data-hf-id="hf-uss" id="u-rb-h">ROLLBACK</div><div data-hf-id="hf-utt" id="u-rb-b">改坏了，回到上一个版本</div></div>
+    <div data-hf-id="hf-uuu" id="u-cmd" class="clip" data-start="19.4" data-duration="3.068"><span data-hf-id="hf-uvv"><span data-hf-id="hf-uww" class="dim">$</span> wrangler pages deployment rollback</span><span data-hf-id="hf-uxx" class="ok">&nbsp;&nbsp;✓</span></div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#u-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#u-title"));
+    tl.set("#u-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#u-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#u-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#u-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#u-s1", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 3.5);
+    tl.fromTo("#u-s2, #u-s3", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", stagger: 1.7, scale: 1 }, 7.6);
+    tl.fromTo("#u-a1 .u-shaft, #u-a2 .u-shaft", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: .3, ease: "power3.out", stagger: 3.3 }, 6.6);
+    tl.fromTo("#u-a1 .u-head, #u-a2 .u-head", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .22, ease: "power2.out", stagger: 3.3, scale: 1 }, 6.8);
+    tl.fromTo("#u-ci", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 13.7);
+    tl.fromTo("#u-rb", { y: 26, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 17.4);
+    tl.fromTo("#u-cmd", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .38, ease: "back.out(1.5)", scale: 1 }, 19.4);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 22.468, ease: "none" }, 0);
+    window.__timelines["update"] = tl;
+  </script>
+</template>

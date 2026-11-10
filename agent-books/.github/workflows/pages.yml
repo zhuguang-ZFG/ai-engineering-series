@@ -1,0 +1,98 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '00-前言.md'
+      - '第一部分-基础篇/**'
+      - '第二部分-核心系统篇/**'
+      - '第三部分-高级模式篇/**'
+      - '第四部分-工程实践篇/**'
+      - '附录/**'
+      - 'en/**'
+      - 'yuyu-book/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# one site at a time: a second push re-runs build, not a racing deploy
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/book-setup
+        with:
+          browser: 'true'
+      - name: Build the book (both editions)
+        run: python scripts/bookctl.py build --lang both
+
+      - name: Rebuild every source product twice
+        run: python scripts/check_products.py
+
+      # The committed docs/ is what the repository itself shows and what the
+      # site contracts quote. A rewrite here means the shipped copy was stale —
+      # usually a chapter was edited and the reader was never rebuilt.
+      - name: The committed readers match the generators
+        run: |
+          git diff --exit-code docs/ || {
+            echo "::error::docs/ is stale; commit the regenerated readers and gallery"
+            git --no-pager diff --stat docs/
+            exit 1
+          }
+
+      # Assemble the site —— 这里是「双入口」的落点，今天只挂御舆那一本：
+      #   book.html / yuyu-agent-harness-{zh,en}.html  = product=book（已上线）
+      #   yuyu-omp-zh.html                             = product=omp（第二分册，尚未部署）
+      # TODO(omp M4)：omp 那一格要上线时，别再往这个 job 里加 cp ——
+      # 它是 deploy-pages 的单产物链，omp 失败会把御舆的部署一起挡住，与 book.yml
+      # 里「omp 独立 job、不写 needs」的口径相反。要么独立 workflow 出 omp 站点，
+      # 要么先以 yuyu-omp-dist 工件形式给人工取用（Book CI 已经在传）。
+      - name: Assemble the site
+        run: |
+          mkdir -p site
+          cp yuyu-book/dist/yuyu-agent-harness-zh.html site/book.html
+          cp yuyu-book/dist/yuyu-agent-harness-zh.html site/yuyu-agent-harness-zh.html
+          cp yuyu-book/dist/yuyu-agent-harness-en.html site/yuyu-agent-harness-en.html
+          cp docs/*.html docs/*-index.json docs/*-map.json site/
+          cp docs/illustration-prompts.md site/illustration-prompts.md
+          cp cover.png site/cover.png
+          cp -R docs/images site/images
+          python scripts/build_site_portal.py site/index.html
+
+      - name: Entry points and local links
+        run: python scripts/check_site_redirects.py site
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

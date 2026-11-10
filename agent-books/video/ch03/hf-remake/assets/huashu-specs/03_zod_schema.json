@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Zod Schema", "data": {"icon": "bulb"}},
+    {"at": 1.3, "kind": "point", "text": "运行时验证 LLM 参数"},
+    {"at": 2.9, "kind": "draw", "text": "JSON Schema", "data": {"icon": "target"}},
+    {"at": 4.3, "kind": "point", "text": "说明书发给 API"},
+    {"at": 5.7, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

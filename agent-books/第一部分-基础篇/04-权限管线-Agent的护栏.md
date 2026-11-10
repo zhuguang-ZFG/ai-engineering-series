@@ -1,0 +1,623 @@
+# 第4章：权限管线 -- Agent 的护栏
+
+> **开门一句话：**工具每次出手都要过关卡：验输入、查名册、盖印章——盖几道，权限模式说了算。
+
+> 学习目标：读完这章，你能：
+
+<!-- block: ch04.b-c1787eb4 -->
+> - 说清四个阶段各拦下什么、为什么按这个顺序排，凭记忆画出那条决策流程
+> - 拿一条具体命令预判它走 allow、ask 还是 deny，并说出是哪个阶段、哪种权限模式拍的板
+> - 给一个项目写出真能生效的 allow/deny 配置，并验证它挡住了什么
+
+**难度定位：**主干章：4.1 是起步（四阶段总览）；4.2、4.3、4.5 是主干；4.4 拆 BashTool 的命令分类，最细也最深，标了进阶，初读可跳过，和实战练习一起留给第二遍。
+
+先设想一通会在凌晨打来的电话。你对 Agent 说"把构建产物清掉重来"，它敲下 `rm -rf`，路径里的变量没展开，目录没了。你追问它怎么直接执行了，它确实弹过确认——上一周你的同事在那里选了"全部允许"。出事的不是模型胆大，而是这一层没留关卡：谁能干活、干到什么程度、谁批的，都没记下来。本章的权限管线就是这道关卡。
+
+<!-- block: ch04.b-df69ee59 -->
+当 Agent 自主执行任务时，它可能在一次会话中调用数十个工具——写文件、运行 Bash 命令、搜索代码。每一次调用都潜藏着风险：一个不恰当的 `rm -rf`，一次意外的 `npm publish`，都可能造成不可逆的后果。权限管线（Permission Pipeline）正是 Claude Code 为 Agent 构建的安全护栏。它不是一道"允许/拒绝"开关，而是一套多阶段检查机制，既让自动化跑得开，又让安全守得住。
+
+<!-- block: ch04.b-88da0e24 -->
+用一个物理世界的类比来理解权限管线：一座现代化办公大楼的门禁系统不是只在入口设一个保安（单一检查点），而是在不同区域设置了不同级别的安全检查——大堂只需刷卡，会议室需要预约确认，服务器机房需要指纹验证加双人授权。每一层安全检查都是独立的，即使某一层失守，下一层仍然挡得住未授权的访问。Claude Code 的权限管线正是这种"纵深防御"思想在软件系统中的体现。
+
+本章将从架构设计出发，深入拆解权限管线的每一个阶段，理解其设计决策，并通过实战练习掌握配置方法。
+
+## 4.1 权限管线的四个阶段
+
+<!-- block: ch04.b-2e69875a -->
+Claude Code 的权限检查并非单一函数的布尔判断，而是一条由四个阶段组成的管线（Pipeline）。每个阶段都有自己的职责和短路逻辑：只要前一阶段做出终局决定，后续阶段便不再执行。
+
+这四个阶段可以用一张流程图来直观展示：
+
+```mermaid
+flowchart TD
+    request["工具调用请求"]
+
+    phase1["阶段一：validateInput<br/>Zod Schema 验证"]
+    phase1_fail["失败 → ask（优雅降级为用户确认）"]
+
+    phase2["阶段二：规则匹配<br/>deny > ask > allow 优先级铁律"]
+    phase2_deny["deny → 拒绝（不可覆盖）"]
+    phase2_ask["ask → 进入阶段四"]
+    phase2_allow["allow → 放行"]
+
+    phase3["阶段三：checkPermissions<br/>工具特定的上下文评估"]
+    phase3_deny["deny → 拒绝"]
+    phase3_ask["ask → 进入阶段四"]
+    phase3_allow["allow → 放行"]
+    phase3_pass["passthrough → 进入阶段四"]
+
+    phase4["阶段四：交互式提示<br/>Hook → 分类器 → 用户<br/>多决策者竞争"]
+    phase4_hook["hook 决策 → allow/deny"]
+    phase4_classifier["classifier → allow/deny"]
+    phase4_user["user → allow/deny/allow-once"]
+
+    request --> phase1
+    phase1 -->|"失败"| phase1_fail
+    phase1 -->|"通过"| phase2
+
+    phase2 -->|"deny"| phase2_deny
+    phase2 -->|"ask"| phase2_ask
+    phase2 -->|"allow"| phase2_allow
+    phase2 -->|"无匹配规则"| phase3
+
+    phase3 -->|"deny"| phase3_deny
+    phase3 -->|"ask"| phase3_ask
+    phase3 -->|"allow"| phase3_allow
+    phase3 -->|"passthrough"| phase3_pass
+
+    phase2_ask --> phase4
+    phase3_ask --> phase4
+    phase3_pass --> phase4
+
+    phase4 --> phase4_hook
+    phase4 --> phase4_classifier
+    phase4 --> phase4_user
+
+    classDef phase fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef allow fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef deny fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef ask fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    class request,phase1,phase2,phase3,phase4 phase
+    class phase1_fail,phase2_ask,phase3_ask,phase3_pass ask
+    class phase2_deny,phase3_deny deny
+    class phase2_allow,phase3_allow,phase4_hook,phase4_classifier,phase4_user allow
+```
+
+这四个阶段分别是：validateInput（输入验证）、hasPermissionsToUseTool（规则匹配）、checkPermissions（上下文评估）和交互式提示（用户确认）。它们共同构成了从"数据合法性"到"人类授权"的完整防线。
+
+### 4.1.1 阶段一：validateInput -- Zod Schema 验证
+
+权限管线的第一道关卡并非权限本身，而是输入数据的合法性。在权限检查函数中，工具的输入会先经过 Zod Schema 解析，使用严格的结构验证。如果输入不符合 Schema 定义（例如 Bash 工具缺少必需的 `command` 字段），解析会抛异常，管线当场拒掉这次工具调用。这种设计将"数据不合法"与"权限不足"区分开来——前者是编程错误，后者是策略决策。
+
+解析失败时 `toolPermissionResult` 保持默认的 `passthrough` 状态，随后转成 `ask` 行为：数据验证失败，系统也降级为请求用户确认，而不是直接崩溃。
+
+<!-- block: ch04.b-9d20b03d -->
+这个设计选择背后的原则只有一句：**在安全系统中，错误处理应该是"安全的"而非"正确的"。** 直接崩溃虽然暴露了问题，但在 Agent 运行时可能导致整个会话中断。优雅降级为用户确认是一种更安全的错误处理策略——它让用户有机会决定是否继续，而不是让系统替用户做决定。
+
+### 4.1.2 阶段二：hasPermissionsToUseTool -- 规则匹配
+
+规则匹配是权限管线的核心。`hasPermissionsToUseToolInner` 函数按照严格的优先级顺序依次检查三类规则：deny 规则、ask 规则和 allow 规则。
+
+**步骤 1a：工具级 deny 检查。** 这是最高的优先级。如果 deny 规则覆盖了整个工具，调用立即遭拒。
+
+`getDenyRuleForTool` 函数遍历所有来源（userSettings、projectSettings、localSettings、flagSettings、policySettings、cliArg、command、session）的 deny 规则逐条匹配。匹配逻辑有两条路：精确工具名匹配，以及 MCP 服务器级通配符——例如规则 `mcp__server1__*` 可以匹配这台服务器下的所有工具。
+
+七种规则来源按"就近原则"排优先级：会话级规则（最近设置的）优先于命令行参数，命令行参数优先于项目配置，项目配置优先于全局用户配置。越具体、越近期的规则排得越靠前，覆盖掉更一般、更早期的规则。
+
+```mermaid
+flowchart BT
+    session["session<br/>会话级（最高优先级）"]
+    command["command<br/>命令级"]
+    cli["cliArg<br/>命令行参数"]
+    policy["policySettings<br/>策略设置"]
+    flag["flagSettings<br/>功能标志"]
+    local["localSettings<br/>本地设置（不提交Git）"]
+    project["projectSettings<br/>项目设置"]
+    user["userSettings<br/>全局用户设置（最低优先级）"]
+
+    user --> project --> local --> flag --> policy --> cli --> command --> session
+
+    classDef priority fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    class session,command,cli,policy,flag,local,project,user priority
+```
+
+<!-- block: ch04.b-78981e55 -->
+**步骤 1b：工具级 ask 检查。** 当工具配置为"总是询问"时，系统会强制弹出确认提示。但有一个例外：当 Bash 工具在沙箱模式下且配置了沙箱自动放行选项时，沙箱化命令可以跳过 ask 规则。这个例外的设计意图是：如果用户已经信任沙箱环境（沙箱中的命令无法影响沙箱外的系统），那么在沙箱内执行命令的风险已经降到可接受的水平。
+
+**步骤 2b：工具级 allow 检查。** 如果没有 deny 和 ask 规则命中，系统检查是否存在 allow 规则直接放行。
+
+规则匹配的核心抽象是 PermissionRule 类型，它将来源、行为和目标统一为一个结构化对象。
+
+<!-- block: ch04.b-c18c03b5 -->
+> **优先级铁律：** deny 始终优先于 allow，无论它们的来源如何。这是安全系统的基本原则——"显式拒绝"的力量大于"显式允许"。即使用户在全局配置中 allow 了某个工具，只要项目级配置 deny 了它，该工具仍然不可用。
+
+### 4.1.3 阶段三：checkPermissions -- 上下文评估
+
+每个工具可以实现自己的 `checkPermissions` 方法，把上下文评估做得更细。例如 Bash 工具会解析命令中的子命令、检查路径安全性、匹配前缀规则等。这一阶段的调用发生在阶段二的规则匹配之前（代码中的步骤 1c），但后面的 allow 规则可能把它覆盖掉。
+
+`checkPermissions` 返回的 `PermissionResult` 有四种行为：
+
+- `allow`：直接放行，可能携带 `updatedInput`
+- `deny`：拒绝执行
+- `ask`：需要用户确认
+- `passthrough`：交由后续阶段决定（最终会变为 `ask`）
+
+`passthrough` 是一个独特的设计。当一个工具没有特殊的权限逻辑时，它可以返回 `passthrough`，让管线继续流动。在后续步骤中，管线会把 `passthrough` 自动转成 `ask`，附带权限请求消息。
+
+> **设计洞察：** 为什么需要 `passthrough` 而不是让没有特殊权限逻辑的工具直接返回 `ask`？区别在于"意图"——`passthrough` 表示"我没有意见，交给后续阶段决定"，而 `ask` 表示"我认为这个操作需要用户确认"。如果后续的 allow 规则匹配了，它会把 `passthrough` 覆盖为 `allow`，却动不了 `ask`。这个细微的区别在特定场景下会产生不同的行为。
+
+<!-- block: ch04.b-6dc2776f -->
+### 4.1.4 阶段四：交互式提示 -- 用户确认
+
+<!-- block: ch04.b-ba8cdccb -->
+当管线流转到 `ask` 状态时，权限确认 Hook 接管控制。这个 React Hook 将权限请求转化为用户交互界面。`ask` 状态触发的流程包含多条分支路径：协调器权限处理、swarm worker 权限处理、投机性分类器检查，以及交互式权限提示。
+
+最关键的是交互式处理分支，它将权限请求推入确认队列，在终端中渲染确认界面，等待用户做出"允许/拒绝/本次允许"等选择。
+
+<!-- block: ch04.b-d43bed46 -->
+在用户响应之前，系统可能还会运行异步的分类器检查（`pendingClassifierCheck`）。于是用户看着提示还在思考，分类器可能已经把这个操作自动批准了——这是一场"竞赛"，谁先做出决定，谁就生效。
+
+```mermaid
+sequenceDiagram
+    participant 管线 as 权限管线
+    participant hook as Hook 脚本
+    participant classifier as AI 分类器
+    participant user as 用户界面
+
+    管线->>管线: 进入 ask 状态
+    管线->>hook: 触发权限确认 Hook
+    alt Hook 做出决策
+        hook-->>管线: allow / deny
+    else Hook 未处理
+        管线->>classifier: 投机性分类器检查
+        管线->>user: 渲染交互式提示
+        par 竞赛机制
+            classifier-->>管线: 分类器结果 (2秒超时)
+        and
+            user-->>管线: 用户选择
+        end
+        Note over 管线: ResolveOnce: 先到先得
+    end
+```
+
+> **最佳实践：** 在企业环境中，如果你希望减少用户频繁看到权限提示的干扰，有三种策略可以组合使用：(1) 在项目配置中预设 allow 规则覆盖常用操作；(2) 使用 auto 模式让分类器自动处理常见请求；(3) 配置 Hook 脚本实现自定义的自动审批逻辑。三种策略可以叠加使用，覆盖从简单到复杂的所有场景。
+
+一次工具调用要过四道门：格式、规则、上下文，最后才是人。
+
+```ill
+ch04-gate-steps
+```
+
+## 4.2 PermissionContext 的设计
+
+### 4.2.1 ToolPermissionContext 类型结构
+
+<!-- block: ch04.b-abb1ae2d -->
+`ToolPermissionContext` 是整个权限系统的核心数据结构，它携带了权限检查所需的所有上下文信息。它包含权限模式、额外工作目录、各级规则（allow/deny/ask）、bypass 模式可用性标志、是否应避免权限提示等字段。
+
+这种不可变性写进了类型里：所有字段均为 readonly。每次权限更新都会产生一个新的 `ToolPermissionContext` 对象，而非修改现有对象。这种不可变数据模式确保了在并发环境下的一致性——多个工具同时检查权限时，各自读取的上下文不会因其他工具的权限更新而意外变化。
+
+不可变性在这里的必要性可以通过一个具体场景来理解：假设工具 A 和工具 B 同时开始权限检查。两边还在查的时候，工具 A 的用户确认触发了一次权限规则更新（用户选择"始终允许"）。如果 PermissionContext 是可变的，工具 B 会在自己那条检查还没跑完时看到规则已经变了，同一个请求前后两次检查依据就不一致了。不可变性确保了每个权限检查使用的都是确定性的快照。
+
+其中规则按来源索引，这种设计允许系统精确追踪每条规则的来源，在规则管理界面中展示"此规则来自项目级设置"等信息。在多层级配置的场景里，这个能力少不了——当几个来源都定义了同一条规则时，用户需要知道哪条规则在生效、它来自哪里、如何修改它。
+
+### 4.2.2 PermissionDecision 的来源：hook、user、classifier
+
+权限决策（PermissionDecision）有三个来源，每个来源都有不同的信任等级和行为特征：
+
+**hook 来源**：外部 Hook 脚本可以通过权限请求钩子在用户看到提示之前做出决策。这在 CI/CD 环境中特别有用——Hook 脚本可以根据自定义逻辑自动批准或拒绝特定操作。Hook 决策的信任等级最高，因为它代表了系统管理员的显式意图。
+
+**user 来源**：用户在终端界面中的手动选择。`permanent` 标志表示用户是否选择将此决策持久化到配置文件。User 决策的信任等级居中——它代表了当前操作者的意图，但操作者可能不是系统管理员。
+
+**classifier 来源**：AI 分类器在 auto 模式下做出的自动决策，后面会详细讨论。Classifier 决策的信任等级最低——它是 AI 的判断，可能出错，因此某些安全检查类型是"分类器免疫"的。
+
+<!-- block: ch04.b-5e8c1b4b -->
+`PermissionDecision` 本身是一个联合类型，包含 allow、ask 和 deny 三种行为。
+
+> **设计洞察：** 三种决策来源的信任等级（hook > user > classifier）按"信任与能力匹配"排：Hook 脚本由系统管理员编写，具有最高的系统理解能力，因此信任等级最高；分类器是 AI 自动判断，虽然准确率很高但仍可能出错，因此信任等级最低。
+
+### 4.2.3 ResolveOnce 模式：原子化的竞争解决
+
+在权限交互中，多个异步参与者可能同时尝试解决（resolve）同一个权限请求——用户点击"允许"的同时分类器也返回了"通过"。`ResolveOnce` 模式正是为解决这种竞争条件而设计的。它提供 resolve、isResolved 和 claim 三个方法。
+
+其实现使用了一个 `claimed` 标志确保原子性。`claim()` 方法是关键——它把"先到先得"做成一个原子操作。在 JavaScript 的单线程模型中，`claim()` 保证了即使两个异步回调几乎同时开跑，也只有一个能 claim 成功，另一个只能吃回绝。这是一种轻量级的互斥锁实现，避免了分布式系统中常见的锁开销。
+
+> **交叉引用：** ResolveOnce 模式与第 2 章的"不可变状态流转"原则一脉相承。两者都通过原子化的状态变更来保证并发安全性——状态要么是旧的，要么是新的，不存在"一半新一半旧"的中间态。
+
+这个设计可以用一个现实世界的类比来理解：想象一张"单程机票"——只要有人把它兑换了（claim），别人就再也用不上这张票。不需要锁、不需要等待、不需要协调——只需要一个简单的"已兑换"标志。ResolveOnce 的 `claim()` 方法就是这张机票的兑换操作。
+
+## 4.3 权限模式谱系
+
+<!-- block: ch04.b-d6fea818 -->
+Claude Code 定义了五种内部权限模式，它们构成了一个从严格到宽松的谱系。选权限配置之前，先把这条谱系看清楚。
+
+```mermaid
+flowchart LR
+    subgraph spectrum["严格 ←────────────────────────────→ 宽松"]
+        direction LR
+        A["default<br/>逐次确认<br/>每次工具调用<br/>都需用户确认"]
+        B["plan<br/>只读为主<br/>写入工具被 deny<br/>只读放行"]
+        C["auto<br/>AI分类器<br/>自动审批<br/>分类器替代人工审批"]
+        D["bypassPermissions<br/>完全跳过<br/>除 deny 规则和<br/>safetyCheck 外全部自动放行"]
+    end
+
+    A --> B --> C --> D
+
+    E["bubble（内部模式）<br/>子智能体权限冒泡回主智能体"]
+
+    classDef strict fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef moderate fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef loose fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef internal fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    class A strict
+    class B moderate
+    class C moderate
+    class D loose
+    class E internal
+```
+
+### 4.3.1 default 模式：逐次确认
+
+`default` 模式是最保守的模式。除了 allow 规则明确放行的工具，每次工具调用都要用户确认。这是普通用户启动 Claude Code 时的默认体验。在权限模式配置中，default 模式体现了其保守基调，UI 标识上无特殊标记，暗示这是"标准状态"。
+
+**适用场景：** 日常交互式使用。开发者希望在 Agent 执行任何有潜在风险的操作之前先确认，确保完全掌控 Agent 的行为。
+
+**用户体验权衡：** 最安全但最繁琐。对于一个大型重构任务，Agent 可能需要执行数十次文件编辑和命令运行，每次确认都会打断开发者的思路。
+
+### 4.3.2 plan 模式：只读为主
+
+`plan` 模式将 Agent 限制在只读操作范围内。它的 UI 标识是一个暂停图标。
+
+在 plan 模式下，写入类工具（Edit、Write）的权限检查会返回 `deny`，但读取类工具（Read、Grep、Glob）正常放行。值得注意的细节是当 plan 模式的 bypass 可用性标志为 true 时，意味着用户原本使用的是 bypass 模式然后切换到了 plan 模式，此时 bypass 的放行逻辑仍然生效。
+
+**适用场景：** 代码审查和架构分析。开发者希望 Agent 先"看看"代码，不修改任何内容，先给出分析和建议，再决定是否执行修改。
+
+**设计哲学：** plan 模式把"先理解后行动"排成两步——Agent 先以只读模式理解代码库，给出修改方案，获得用户认可后再切换到执行模式。这种两阶段工作流在处理大型代码库时尤其有效，Agent 不至于还没读懂代码就动手改。
+
+### 4.3.3 auto 模式：自动审批（带分类器）
+
+`auto` 模式把审批交给 AI 分类器（称为 "YOLO classifier"）。当权限管线到达 `ask` 状态且模式为 `auto` 时，系统会调用分类器来判断，将工具名称和输入格式化为分类器可理解的格式，并发送对话上下文和工具列表供分类器参考。
+
+auto 模式的核心挑战是顾住"自动化效率"和"安全性"两头。纯粹的自动放行太危险，纯粹的逐次确认太慢。AI 分类器是两者的折中——它用另一个 AI 来判断当前 AI 的操作是否安全，搭出了"AI 监督 AI"的架构。
+
+auto 模式叠了好几层优化，就为省下分类器的 API 调用开销：
+
+1. **acceptEdits 快速路径**：在调用分类器之前，先用 acceptEdits 模式检查工具能否放行。如果在 acceptEdits 模式下通过，直接放行，无需调用分类器。这是一个"短路优化"——如果已知是安全的，就不需要浪费 API 调用。
+
+2. **安全工具白名单**：不需要分类器检查的安全工具包括 Read、Grep、Glob、TodoWrite 等只读或低风险工具。这个白名单的设计哲学是"显式声明安全"——只有在白名单中的工具才跳过分类器检查，新工具默认需要检查。
+
+<!-- block: ch04.b-654d2031 -->
+3. **拒绝追踪**：当分类器连续拒绝多次后，系统会自动回退到交互式提示，防止 Agent 在无意义的循环中浪费 token。这个机制相当于"熔断器"——当自动决策的准确率下降到某个阈值时，自动回退到人工确认。
+
+auto 模式的一个重要安全设计是：某些安全检查类型的决策（如涉及 `.git/`、`.claude/` 目录的操作）是"分类器免疫"的——即使分类器试图批准它们，这些安全检查也绕不过去。
+
+> **反模式警告：** auto 模式不适合以下场景：(1) 涉及生产环境部署的操作；(2) 涉及敏感数据（密钥、凭证）的操作；(3) 不可逆操作（如删除数据库）。在这些场景下，即使用户信任分类器的判断，也应该使用 default 模式或配置显式的 deny 规则。
+
+### 4.3.4 bypassPermissions 模式：完全跳过
+
+`bypassPermissions` 模式是权限系统的"关闭开关"。当激活时，除了被 deny 规则阻止和不可绕过的安全检查之外，所有工具调用都自动放行。判断是否应该绕过权限时会检查当前模式是否为 bypassPermissions，或者模式为 plan 但 bypass 标志可用。
+
+但即使 bypass 模式也无法突破以下防线：
+- 步骤 1a 的 deny 规则（在 bypass 检查之前执行）
+- 步骤 1e 的 `requiresUserInteraction` 检查
+- 步骤 1f 的内容级 ask 规则
+- 步骤 1g 的 safetyCheck
+
+这种分层防御设计确保了"完全信任"模式下仍有最低限度的安全保障。
+
+**适用场景：** CI/CD 管道、自动化测试、受控的执行环境。在这些场景下，容器隔离、网络隔离等其他手段已经替 Agent 的操作兜住安全，权限检查只会增加不必要的延迟。
+
+> **企业级安全最佳实践：** 如果你的团队使用 bypass 模式，强烈建议：(1) 在容器或虚拟机中运行 Claude Code，确保文件系统隔离；(2) 配置显式的 deny 规则阻止危险操作（如 `Bash(rm -rf *)`、`Bash(npm publish)`）；(3) 使用 `--allowedTools` 参数限制可用工具范围；(4) 启用审计日志记录所有工具调用。
+
+### 4.3.5 bubble 模式：子智能体权限冒泡
+
+`bubble` 模式是内部模式（不对外暴露），用于子智能体（subagent）场景。当主 Agent 生成子智能体时，子智能体的权限检查会"冒泡"回主 Agent 的权限上下文，确保子智能体不会获得超出主 Agent 的权限。
+
+> **交叉引用：** bubble 模式与第 3 章的 AgentTool 紧密相关。AgentTool 在创建子智能体时通过 `createSubagentContext` 设置 bubble 模式，确保子智能体的权限边界不超过主智能体。
+
+内部权限模式类型包含了所有模式（包括 auto 和 bubble），而外部可见性检查函数确保内部模式不会泄露到外部接口。这种内外有别的类型设计是"信息隐藏"原则的体现——外部用户不需要知道 bubble 模式的存在，它是内部实现细节。
+
+### 4.3.6 对照面：没人答话时，`ask` 去了哪里
+
+管线走完四步，`passthrough` 和没撞上规则的调用都收在 `ask` 上，而 `ask` 预设了一件事：终端前坐着人。把这条管线换进脚本，第 4 步就悬在半空。下面把本机装着的另外五套 Agent CLI 摆上同一张台面——版本号是本机实测，旗标语义取自各家官方文档当页，引号内的英文是原文、未译。
+
+```mermaid
+flowchart LR
+    ASK["管线判出 ask<br/>终端前没人"]
+
+    D1["Claude Code -p<br/>就地拒<br/>hook 与 allow 规则可代答"]
+    D2["Qoder -p<br/>Auto-deny<br/>官方文档直写"]
+    D3["Cursor agent -p<br/>降成提议<br/>不落盘"]
+    D4["Codex exec<br/>换成墙<br/>sandbox 三档"]
+    D5["交给另一个 AI<br/>Claude auto<br/>Cursor --auto-review<br/>Codex --approve-for-me"]
+    D6["挪进启动档位<br/>Qoder dont_ask<br/>Kimi -y / --auto<br/>omp --approval-mode"]
+
+    ASK --> D1
+    ASK --> D2
+    ASK --> D3
+    ASK --> D4
+    ASK --> D5
+    ASK --> D6
+
+    classDef reject fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    classDef demote fill:#fef9f0,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    classDef wall fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef delegate fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    class D1 reject
+    class D2 reject
+    class D3 demote
+    class D4 wall
+    class D5 delegate
+    class D6 delegate
+```
+
+<!-- block: ch04.release-notes -->
+- **Claude Code 2.1.310（本书基线）**：`claude -p` 起来就是 Manual 模式（v2.1.302 起，前提是没别的东西设定档位），管线判出的 `ask` 没人应答即遭拒——除非 `--allowedTools`、`permissions.allow` 规则、`PermissionRequest` hook 或 `--permission-prompt-tool` 事先替它答了。`--permission-prompts none`（v2.1.259 起）连宿主也不问，并直接告诉模型没人能批、别重试；`--output-format stream-json` 下这些拒绝以 `permission_denied` 事件留在输出里。
+- **Codex CLI 0.166.0**：`codex exec` 这一支干脆不带审批轴，`-a/--ask-for-approval`（取值 `on-request`、`never`）只出现在交互模式里。它把「谁点头」换成「跑在哪面墙里」：`-s/--sandbox` 取 `read-only`、`workspace-write`、`danger-full-access` 三档；`--approve-for-me` 把审批请求转给自动复审；`--dangerously-bypass-approvals-and-sandbox` 连提示带沙箱一起拆掉，自述 EXTREMELY DANGEROUS，只给已有外部沙箱包住的环境。
+- **Cursor agent 2026.10.22**：`agent -p` 不加 `--force` 时，写文件这一步降了格——官方 headless 页原话是 "changes are only proposed, not applied"；同家的 permissions 页却写 "Print mode can use write and shell tools"，两页在这里没对齐，本节按前一句记，因为它说清了不加 `--force` 时实际会发生什么。`--force` 的自述是 "Force allow commands unless explicitly denied"，`--yolo` 是它的别名；`--auto-review` 交给服务端分类器，安全的自动跑，其余仍问人。规则语法也是另一血统：`Shell(git)`、`Read(.env*)`、`Write(**/*.key)`、`WebFetch(*)`、`Mcp(datadog:*)` 五类 token，且 "Deny rules take precedence over allow rules"。
+- **Qoder CLI 1.1.81**：官方文档把落点钉在表里——headless（`-p`）下 `ask` 的 outcome 写着 "Auto-deny"，`dont_ask` 一档专为「绝不能弹提示」的流程而生："Never prompts. Any action that would normally ask is denied instead." 想放行得报出范围：`--permission-mode accept_edits`、`--yolo`，或精确到子命令的 `--allowed-tools 'Read,Bash(git status)'`。非默认档位只在受信任目录生效，否则回落 `default`。
+- **Kimi Code 2.4.1**：档位本身就是审批轴。`-y/--yolo` 启动在 Ask When Needed（"routine edits and commands run automatically; risky actions, questions, and plans still ask"），`--auto` 启动在 Never Ask；`-p` 只是不开 TUI，没另设一条审批轴。
+- **oh-my-pi 18.15.0**：`--approval-mode` 以四个值 `always-ask|always-ask-cached|write|yolo` 覆盖配置里的 `tools.approvalMode`，`--auto-approve` 一次放下全部提示。
+
+三条线索从这份清单里自己浮出来。第一，`ask` 不会凭空消失，只会挪个地方：挪进沙箱（Codex）、挪进服务端分类器（Cursor 的 `--auto-review`、Codex 的 `--approve-for-me`、本书的 auto 模式）、挪进启动档位（Kimi 的两档、Qoder 的 `dont_ask`），或者降成一份不落盘的提议（Cursor 的默认）。第二，六家里没有一个把「没人应答」读作「默认放行」——最激进的档位也只是把拒绝的条件收窄，把兜底换成隔离。第三，Cursor 的 "unless explicitly denied" 与 Qoder 决策顺序里排在第一位的 `deny`，和步骤 1a 是同一条规矩：显式拒绝是这一层唯一不给绕过去的入口，六套各自的设计在这里不约而同。
+
+> **对照面的身份：** 这五套命令行在 `CREDITS.md` 里登记为**对照面**，与第 1、14、15 章用过的其他开源线束同一身份——不支撑本章任何技术论断，只用来看同一条边界在别人手里长成什么形状。
+
+## 4.4 BashTool 的权限细节
+
+Bash 工具是权限系统中最复杂的工具，因为 shell 命令的组合性和表达力远超其他工具。一个简单的 `git` 命令可以是安全的（`git status`），也可以是危险的（`git push --force origin main`）。权限系统需要理解命令的语义，而不仅仅是匹配命令名。
+
+### 4.4.1 命令分类与通配符匹配
+
+权限规则字符串的解析由专用函数处理，写法有两种：不含括号的工具名匹配，以及含括号的 ToolName(content) 格式（用于指定工具级别的精确命令匹配）。
+
+对于 Bash 工具，`ruleContent` 可以是：
+- 精确命令：`Bash(npm test)` -- 仅匹配 `npm test`
+- 前缀规则：`Bash(npm:*)` -- 匹配所有以 `npm` 开头的命令
+- 通配符规则：`Bash(git commit *)` -- 匹配 `git commit` 后跟任意参数
+
+这三种格式形成了一个表达能力递增的谱系：
+
+```mermaid
+flowchart LR
+    subgraph types["BashTool 规则匹配谱系"]
+        direction LR
+        exact["精确匹配<br/>Bash(npm test)<br/>精确匹配一条特定命令<br/>最安全/最窄<br/>零误放行风险<br/>适用：CI/CD 中的固定步骤"]
+        prefix["前缀匹配<br/>Bash(npm:*)<br/>匹配所有以 npm 开头的命令<br/>中等/适中<br/>可能误放行<br/>适用：工具链前缀命令"]
+        wildcard["通配符匹配<br/>Bash(git commit *)<br/>匹配 git commit 后跟任意参数<br/>最灵活/最宽<br/>需要仔细设计模式<br/>适用：版本控制等命令族"]
+    end
+
+    exact --> prefix --> wildcard
+
+    arrow["表达能力递增 →"]
+
+    classDef match fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    class exact,prefix,wildcard match
+```
+
+<!-- block: ch04.b-ba311e3a -->
+通配符匹配引擎把模式匹配做全了：处理转义序列，将通配符 `*` 转换为正则表达式，`\*` 和 `\\` 则按字面处理。
+
+一个细节：当模式以 ` *`（空格加通配符）结尾且这是唯一的通配符时，尾部的空格和参数变为可选的。所以规则 `git *` 既匹配 `git add .` 也匹配裸 `git` 命令——与 `git:*` 前缀语义保持一致。这种"等价语法"的设计减少了用户的认知负担——你不需要记住两种不同的语法规则，`git:*` 和 `git *` 做同样的事。
+
+### 4.4.2 前缀提取规则
+
+前缀提取处理了向后兼容的 `:*` 语法，通过正则匹配提取冒号前的部分作为前缀。
+
+当解析规则时，系统首先检查 `:*` 语法（前缀匹配），然后检查通配符，最后回退到精确匹配。这个优先级排序是"从宽到窄"的——先尝试匹配范围最广的规则，然后逐步缩小范围。
+
+> **最佳实践：** 在编写 BashTool 权限规则时，优先使用前缀匹配（`:*` 语法）而非通配符匹配。前缀匹配的语义更清晰、更不容易出错。例如 `Bash(npm:*)` 比 `Bash(npm *)` 更明确地表达了"所有以 npm 开头的命令"的意图。
+
+### 4.4.3 分类器自动审批机制
+
+Bash 工具有自己的分类器自动审批机制，与 auto 模式的 YOLO 分类器并行运行。当权限请求处于 `ask` 状态时，系统会尝试"投机性"运行分类器检查。
+
+这里有一个精心设计的超时机制——使用 Promise 竞争让分类器检查与 2 秒定时器竞争。如果分类器在 2 秒内返回高置信度的匹配结果，则自动批准这个操作；否则用户就会看到交互式提示。这种"尽力而为"的策略确保了分类器不会成为用户体验的瓶颈。
+
+2 秒的超时选择是经过权衡的：太短（如 500ms）可能因为网络延迟导致分类器来不及响应，太长（如 10 秒）会让用户感到等待时间过长。2 秒是一个"甜蜜点"——对于简单的命令，分类器通常在 1 秒内就能响应；对于复杂的命令，2 秒的超时确保用户不会等待太久。
+
+## 4.5 权限更新与持久化
+
+### 4.5.1 PermissionUpdate 模式
+
+权限更新通过 `PermissionUpdate` 联合类型表达，操作有六种：添加规则、替换规则、移除规则、设置模式、添加目录和移除目录。
+
+每种操作都指定了更新要应用到的配置源：全局用户设置、项目级设置、本地（不提交到版本控制）设置、仅当前会话、命令行参数。
+
+六种操作和五种配置源的组合形成了 30 种可能的更新操作。控制做得这么细，用户就能按范围分配权限——例如，在全局用户设置中 allow 所有 `git` 命令，但在特定项目的本地设置中 deny `git push --force`。
+
+### 4.5.2 applyPermissionUpdates 与 persistPermissionUpdates
+
+`applyPermissionUpdates` 将更新应用到内存中的权限上下文，是即时生效的。它遍历所有更新，逐个应用到上下文对象上，返回更新后的新上下文。
+
+`applyPermissionUpdate` 处理每种更新类型。以 `addRules` 为例，它会将规则字符串添加到对应行为类型（allow/deny/ask）和对应来源的规则列表中，通过不可变更新产生新的上下文对象。
+
+而 `persistPermissionUpdates` 将更新写入文件系统，确保在重启后仍然生效。只有本地设置、用户设置和项目设置三个目标能持久化。会话级和命令行参数级的更新仅在运行时生效。
+
+这两个函数的分离设计非常重要：内存应用是同步且即时的，而文件持久化可能涉及 I/O 操作。在权限上下文的用户允许处理方法中，两者串起来依次调用。
+
+这种"内存优先、持久化异步"的设计模式在高性能系统中很常见：先确保内存状态正确（影响当前行为），然后异步写入持久存储（影响未来行为）。如果持久化失败，当前会话的行为不受影响，但重启后规则会丢失。
+
+```mermaid
+flowchart LR
+    update["PermissionUpdate<br/>六种操作 × 五种配置源"]
+
+    apply["applyPermissionUpdates<br/>内存应用（同步即时）"]
+    persist["persistPermissionUpdates<br/>文件持久化（异步）"]
+
+    memory["内存 PermissionContext<br/>立即生效"]
+    fs["文件系统<br/>重启后生效"]
+
+    session_src["session / cliArg<br/>仅运行时"]
+    local_src["local / user / project<br/>支持持久化"]
+
+    update --> apply --> memory
+    update --> persist --> fs
+
+    persist -.->|"仅这三个目标"| local_src
+    apply -.->|"全部五个目标"| session_src
+
+    classDef func fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    classDef storage fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef source fill:#fef9f0,stroke:#f59e0b,stroke-width:1px,color:#92400e
+    class update,apply,persist func
+    class memory,fs storage
+    class session_src,local_src source
+```
+
+持久化函数返回一个布尔值，说明这次有没有真的落盘；日志就靠它标记决策是"永久"还是"临时"。
+
+> **企业级安全最佳实践：** 权限规则的持久化设计在团队协作中尤为重要。推荐的做法是：(1) 将团队通用的 allow/deny 规则放在项目级 `.claude/settings.json` 中，提交到版本控制，确保所有团队成员共享相同的安全基线；(2) 将个人偏好的规则放在 `.claude/settings.local.json` 中，不提交到版本控制；(3) 使用会话级规则处理临时需求，避免污染持久化配置。
+
+---
+
+## 实战练习：配置项目级权限系统
+
+### 练习 1：配置项目级 .claude/settings.json
+
+看一个实际的权限配置场景。假设你正在开发一个 Node.js 项目，希望 Claude Code 能自动做完下面这些操作：
+
+1. 运行 `npm test` 和 `npm run lint` 而不需要每次确认
+2. 允许执行所有 `git` 命令
+3. 禁止执行 `npm publish`
+4. 禁止删除 `node_modules` 之外的目录
+
+创建项目根目录下的 `.claude/settings.json`：
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(git:*)",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "deny": [
+      "Bash(npm publish)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}
+```
+
+**解析规则：**
+
+- `Bash(npm test)` -- 精确匹配，仅允许 `npm test` 这一条命令
+- `Bash(git:*)` -- 前缀匹配，允许所有 `git` 开头的命令（`git add`、`git commit` 等）
+- `Read` -- 无 `ruleContent`，表示允许所有 Read 工具调用
+- `Bash(npm publish)` -- deny 规则，精确拒绝发布操作
+
+规则写错了不会报错，只会在最贵的那一刻生效。下面五条是配置里最常见的翻车：
+
+| 常见翻车 | 正确做法 |
+|:--------:|------|
+| 先挑宽松的模式，再一条条补 allow，越补越宽 | 先写 deny 清单，再按场景挑模式（4.3） |
+| `Bash(npm *)` 一把梭，通配符到处补洞 | 改写成前缀匹配 `Bash(npm:*)`，语义更清楚（4.4.2） |
+| 嫌确认烦，整天挂 `bypassPermissions` 模式 | 真要 bypass，也得留 deny 规则和审计日志（4.3.4） |
+| 团队规则和个人偏好混写进同一份 `settings.json` | 团队的进 `.claude/settings.json`，个人的走 `.claude/settings.local.json`（4.5） |
+| 配完不验，出事全靠回忆 | 拿一条具体命令按四阶段走一遍，看是哪个阶段拍的板（4.1） |
+
+> **交叉引用：** 护栏在另一套 harness 上怎么落地，参见 omp 分册第 31 章《安全：信任、无扩展与秘密遮罩》。
+
+如果你希望规则仅在本地生效（不提交到 Git），可以改用 `.claude/settings.local.json`，其配置格式相同，但 `.gitignore` 默认排除它。
+
+### 练习 2：更精细的通配符控制
+
+更精细的控制可以使用通配符：
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx eslint *)"
+    ],
+    "deny": [
+      "Bash(npm publish *)",
+      "Bash(* > /etc/*)"
+    ]
+  }
+}
+```
+
+`Bash(npm run *)` 会匹配 `npm run build`、`npm run test:coverage` 等所有子命令。而 `Bash(* > /etc/*)` 使用多个通配符来拦截任何尝试写入 `/etc` 目录的命令。
+
+**思考题：** `Bash(npm run *)` 是否也会匹配 `npm run`（不带子命令）？为什么？提示：回顾 4.4.1 节中关于尾部通配符的讨论。
+
+### 练习 3：企业级安全配置模板
+
+为一个使用 Claude Code 的开发团队设计安全配置。要求：
+
+1. 团队成员可以在项目目录下自由读写代码
+2. 禁止修改 `.github/workflows/` 下的 CI 配置
+3. 禁止执行 `npm publish`、`docker push` 等发布操作
+4. 允许运行 `npm test`、`npm run build`、`npm run lint`
+5. 禁止访问 `/etc`、`/var` 等系统目录
+
+尝试分别设计 `.claude/settings.json`（团队共享，提交到版本控制）和 `.claude/settings.local.json`（个人偏好，不提交到版本控制）的内容。
+
+**提示：** 抓住 deny 规则优先级高于 allow 规则这一点，先用宽泛的 allow 规则授权基本操作，再用精确的 deny 规则排除危险操作。
+
+### 练习 4：权限决策流的情景分析
+
+分析以下场景中权限管线的决策路径：
+
+**场景 A：** 用户在 default 模式下请求 `Bash(npm test)`，且 `.claude/settings.json` 中配置了 `"allow": ["Bash(npm test)"]`。
+
+**场景 B：** 用户在 auto 模式下请求 `Bash(curl https://api.example.com/data)`，且没有相关规则。
+
+**场景 C：** 用户在 bypass 模式下请求 `Bash(rm -rf /tmp/test)`，且 `.claude/settings.json` 中配置了 `"deny": ["Bash(rm -rf *)"]`。
+
+**场景 D：** 子智能体（bubble 模式）请求 `FileWriteTool` 写入敏感配置文件。
+
+对每个场景，画出权限管线四阶段的决策路径，说明最终结果和原因。
+
+**最小可运行案例：** 用两条前缀规则复刻 allow / deny / ask（Python 3.12 标准库，无第三方依赖；这是教学简化模型，不是 Claude Code 源码）。把代码存成 `case.py` 后运行 `python case.py`。
+
+**版本锁：** Python 3.12 标准库，无第三方依赖。
+**预期结果：** 三行，分别以 `allow`、`deny`、`ask` 收尾
+**前置：** 第 3 章的工具调用；**回链：** 第 2 章的 `ask` 分支（无人应答即拒绝）
+
+```python
+# exercise: ch04
+# expected:
+# Bash(git status) -> allow
+# Bash(rm -rf /) -> deny
+# Bash(npm test) -> ask
+RULES = {"git ": "allow", "rm ": "deny"}
+def decide(call):
+    inner = call[5:-1]
+    for prefix, verdict in RULES.items():
+        if inner.startswith(prefix):
+            return verdict
+    return "ask"
+for call in ("Bash(git status)", "Bash(rm -rf /)", "Bash(npm test)"):
+    print(f"{call} -> {decide(call)}")
+```
+
+---
+
+## 关键要点总结
+
+1. **四阶段管线**：权限检查按照 validateInput -> 规则匹配 -> checkPermissions -> 交互式提示的顺序逐级推进，任何阶段都可以做出终局决定。这种纵深防御的设计确保了没有单一的安全检查点是"银弹"，但每一层都可以独立短路，阻止不安全的操作。
+
+2. **优先级铁律**：deny 规则的优先级最高，始终在 allow 规则之前检查。即使用户配置了 `bypassPermissions` 模式，deny 规则和 safetyCheck 仍然生效。这个铁律确保了安全策略的不可妥协性——无论系统处于什么模式，显式拒绝的规则永远有效。
+
+3. **PermissionContext 的不可变性**：每次权限更新产生新的上下文对象，确保并发安全。这与第 2 章的"不可变状态流转"原则和第 3 章的工具上下文管理一脉相承——不可变性是贯穿整个系统的核心设计模式。
+
+4. **ResolveOnce 原子竞争**：用户交互和分类器自动审批抢同一个 `claim()`，谁先抢到谁定，决策者只有一个。这个轻量级的互斥机制避免了复杂的锁管理，结果也是确定的。
+
+5. **五模式谱系**：从最严格的 `default` 到最宽松的 `bypassPermissions`，中间有 `plan`（只读）、`auto`（AI 分类器）、`bubble`（子智能体冒泡）三种特殊模式，覆盖从交互开发到自动化的完整场景。选择合适的模式是平衡安全性和效率的关键。
+
+6. **Bash 工具的精细控制**：支持精确匹配、前缀匹配（`:*` 语法）和通配符匹配三种规则格式，以及投机性分类器自动审批。BashTool 的权限系统是整个管线中最复杂的部分，因为 Shell 命令的组合性和表达力远超其他工具类型。
+
+7. **双层更新机制**：`applyPermissionUpdates` 即时修改内存上下文，`persistPermissionUpdates` 异步写入文件系统，两者分离确保了响应速度和数据持久化。这种"内存优先、持久化异步"的模式是高性能系统的通用设计模式。
+
+8. **企业级安全的关键**：在团队环境中，通过项目级 `settings.json`（共享）和本地 `settings.local.json`（个人）的组合配置，结合 deny 优先的规则体系，可以构建覆盖从个人开发到团队协作的安全策略。
+
+> **三句话带走：**①权限检查是四道关卡：验输入、对规则、评估上下文、问用户，任何一层都能当场拒掉一次调用。②deny 规则优先级最高——就算开到 bypassPermissions 模式，deny 和 safetyCheck 照样生效；单一检查点靠不住，防御必须纵深。③给项目配权限，先写 deny 清单，再挑模式；团队落地靠 settings.json 管共享、settings.local.json 管个人。
+
+在本书的第二部分中，我们将深入分析 Claude Code 的核心子系统，包括上下文管理的压缩策略、缓存感知设计的实现细节、流式架构的错误恢复机制等。这些子系统共同构成了 Agent Harness 的工程基础设施，理解它们的设计将帮助你从"理解架构"走向"自己搭得出来"。

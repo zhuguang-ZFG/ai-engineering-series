@@ -1,0 +1,1129 @@
+{
+  "schema_version": 1,
+  "product": "omp",
+  "version": "0.1.0-wip",
+  "date": "2026-11-03",
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "title": {
+    "zh": "Omp 从入门到精通：原理与实战"
+  },
+  "subtitle": {
+    "zh": "开源终端 AI agent（oh-my-pi）原理与实战 · 非官方"
+  },
+  "kicker": {
+    "zh": "Open Agent · Terminal Craft"
+  },
+  "notice": {
+    "zh": "Omp / oh-my-pi 为开源项目；本书是独立的教程与技术分析，并非官方出版物，与 Stencil Labs / can1357 无隶属关系。阅读时请区分文档可确认的行为、教学推演与示例；命令与旗标以你本机 `omp --version` 及附录 E 为准。"
+  },
+  "epigraph": {
+    "zh": "模型是马，只出力气；agent 是套上缰绳的车——往哪走、停不停，车说了算。——本书"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-omp",
+  "revisions_registry": "revisions-omp.json",
+  "subject_index_registry": null,
+  "plain_optional": false,
+  "pin": {
+    "writing": "omp/18.15.0",
+    "verified_windows_bun": "omp/18.16.0"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "零基础一路读"
+      },
+      "body": {
+        "zh": "按第一篇 → 第二篇顺序读；第三篇起可以按需跳章，附录当字典查。"
+      }
+    },
+    {
+      "label": {
+        "zh": "已经会用一点"
+      },
+      "body": {
+        "zh": "可从第三篇工具箱或第六篇实战切入；遇怪问题先翻第七篇与附录 A。"
+      }
+    },
+    {
+      "label": {
+        "zh": "对照御舆读"
+      },
+      "body": {
+        "zh": "先读御舆建「Harness」心智，再回本分册看 omp 上的同构点；不要混用两边的钉版数字。"
+      }
+    }
+  ],
+  "front": {
+    "id": "omp-front",
+    "zh": "omp/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "omp-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "打地基"
+      },
+      "motto": {
+        "zh": "先弄懂 agent 是什么"
+      },
+      "goal": {
+        "zh": "建立「模型 + 工具 + 循环」心智，再看 omp 的整体架构。"
+      },
+      "units": [
+        {
+          "id": "omp-ch01",
+          "zh": "omp/ch01.md"
+        },
+        {
+          "id": "omp-ch02",
+          "zh": "omp/ch02.md"
+        },
+        {
+          "id": "omp-ch03",
+          "zh": "omp/ch03.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "上手"
+      },
+      "motto": {
+        "zh": "从安装到第一次改代码"
+      },
+      "goal": {
+        "zh": "装好 omp、接上模型，完成第一次对话与会话管理。"
+      },
+      "units": [
+        {
+          "id": "omp-ch04",
+          "zh": "omp/ch04.md"
+        },
+        {
+          "id": "omp-ch05",
+          "zh": "omp/ch05.md"
+        },
+        {
+          "id": "omp-ch06",
+          "zh": "omp/ch06.md"
+        },
+        {
+          "id": "omp-ch07",
+          "zh": "omp/ch07.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "工具箱"
+      },
+      "motto": {
+        "zh": "逐个吃透内置工具"
+      },
+      "goal": {
+        "zh": "读改跑、IDE 能力、浏览器与计划协作，按工具面拆开。"
+      },
+      "units": [
+        {
+          "id": "omp-ch08",
+          "zh": "omp/ch08.md"
+        },
+        {
+          "id": "omp-ch09",
+          "zh": "omp/ch09.md"
+        },
+        {
+          "id": "omp-ch10",
+          "zh": "omp/ch10.md"
+        },
+        {
+          "id": "omp-ch11",
+          "zh": "omp/ch11.md"
+        },
+        {
+          "id": "omp-ch12",
+          "zh": "omp/ch12.md"
+        },
+        {
+          "id": "omp-ch13",
+          "zh": "omp/ch13.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "上下文与记忆"
+      },
+      "motto": {
+        "zh": "让它更聪明"
+      },
+      "goal": {
+        "zh": "规则文件、压缩、记忆、模型路由与魔法关键词。"
+      },
+      "units": [
+        {
+          "id": "omp-ch14",
+          "zh": "omp/ch14.md"
+        },
+        {
+          "id": "omp-ch15",
+          "zh": "omp/ch15.md"
+        },
+        {
+          "id": "omp-ch16",
+          "zh": "omp/ch16.md"
+        },
+        {
+          "id": "omp-ch17",
+          "zh": "omp/ch17.md"
+        },
+        {
+          "id": "omp-ch18",
+          "zh": "omp/ch18.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p5",
+      "no": {
+        "zh": "第五篇"
+      },
+      "title": {
+        "zh": "扩展"
+      },
+      "motto": {
+        "zh": "改成你的形状"
+      },
+      "goal": {
+        "zh": "Skills、MCP、Hooks、Extensions 与配置 profile。"
+      },
+      "units": [
+        {
+          "id": "omp-ch19",
+          "zh": "omp/ch19.md"
+        },
+        {
+          "id": "omp-ch20",
+          "zh": "omp/ch20.md"
+        },
+        {
+          "id": "omp-ch21",
+          "zh": "omp/ch21.md"
+        },
+        {
+          "id": "omp-ch22",
+          "zh": "omp/ch22.md"
+        },
+        {
+          "id": "omp-ch23",
+          "zh": "omp/ch23.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p6",
+      "no": {
+        "zh": "第六篇"
+      },
+      "title": {
+        "zh": "实战"
+      },
+      "motto": {
+        "zh": "从需求到交付"
+      },
+      "goal": {
+        "zh": "六个完整案例：接手仓库、修 bug、重构、评审、SDK、团队包。"
+      },
+      "units": [
+        {
+          "id": "omp-ch24",
+          "zh": "omp/ch24.md"
+        },
+        {
+          "id": "omp-ch25",
+          "zh": "omp/ch25.md"
+        },
+        {
+          "id": "omp-ch26",
+          "zh": "omp/ch26.md"
+        },
+        {
+          "id": "omp-ch27",
+          "zh": "omp/ch27.md"
+        },
+        {
+          "id": "omp-ch28",
+          "zh": "omp/ch28.md"
+        },
+        {
+          "id": "omp-ch29",
+          "zh": "omp/ch29.md"
+        }
+      ]
+    },
+    {
+      "id": "omp-p7",
+      "no": {
+        "zh": "第七篇"
+      },
+      "title": {
+        "zh": "精通"
+      },
+      "motto": {
+        "zh": "排错、安全与成本"
+      },
+      "goal": {
+        "zh": "症状索引、信任边界、节流，以及从启动到工具注册的总复习。"
+      },
+      "units": [
+        {
+          "id": "omp-ch30",
+          "zh": "omp/ch30.md"
+        },
+        {
+          "id": "omp-ch31",
+          "zh": "omp/ch31.md"
+        },
+        {
+          "id": "omp-ch32",
+          "zh": "omp/ch32.md"
+        },
+        {
+          "id": "omp-ch33",
+          "zh": "omp/ch33.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "omp-apxa",
+      "zh": "omp/appendix-A.md"
+    },
+    {
+      "id": "omp-apxb",
+      "zh": "omp/appendix-B.md"
+    },
+    {
+      "id": "omp-apxc",
+      "zh": "omp/appendix-C.md"
+    },
+    {
+      "id": "omp-apxd",
+      "zh": "omp/appendix-D.md"
+    },
+    {
+      "id": "omp-apxe",
+      "zh": "omp/appendix-E.md"
+    }
+  ],
+  "guides": {
+    "omp-front": {
+      "question": {
+        "zh": "这本书读的是 omp 这个工具，还是 agent 的通用套路？"
+      },
+      "deliverable": {
+        "zh": "一条自己的阅读路线（先读哪篇、跳过哪篇），外加本机 `omp --version` 的版本号，写进扉页。"
+      },
+      "boundary": {
+        "zh": "不教安装与命令细节；安装见第 4 章，agent 的通用原理从第 1 章开始。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "先说清 omp 是什么、怎么装、命令以哪个版本为准，再决定怎么读这本书。"
+      },
+      "plain_evidence": [
+        "omp-front.b-33699144"
+      ]
+    },
+    "omp-ch01": {
+      "question": {
+        "zh": "同一个模型，为什么在聊天框里写不出能跑的结果，放进 agent 里就行？"
+      },
+      "deliverable": {
+        "zh": "口答三句话：agent = 模型 + 工具 + 循环；指出「手」落在哪；举一个换壳之后成绩变差的例子。"
+      },
+      "boundary": {
+        "zh": "不把 token 与窗口算清楚（第 2 章），也不拆 omp 的内部包结构（第 3 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi",
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "agent 是模型加一圈外壳：它转的是一圈循环，不是你写的那句需求。"
+      },
+      "plain_evidence": [
+        "omp-ch01.b-12d126c7"
+      ]
+    },
+    "omp-ch02": {
+      "question": {
+        "zh": "同一段对话昨天能跑完，今天刚开场就说太长——为什么？"
+      },
+      "deliverable": {
+        "zh": "用 `omp toks` 量出一份文件大概多少 token，并说出四类占满「书桌」的东西。"
+      },
+      "boundary": {
+        "zh": "不讲压缩管线怎么实现（第 15 章），也不讲模型怎么选、怎么接（第 5 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "模型只认 token，不认字节；知道窗口多大、怎么数，才谈得上省。"
+      },
+      "plain_evidence": [
+        "omp-ch02.b-5cc967f9"
+      ]
+    },
+    "omp-ch03": {
+      "question": {
+        "zh": "从敲下命令到文件被改，omp 中间要经过哪几个部件？"
+      },
+      "deliverable": {
+        "zh": "能画出「启动 → 会话 → 循环 → 工具」的链路图，并说出四种入口各适合谁。"
+      },
+      "boundary": {
+        "zh": "不逐个讲工具参数（第四篇），也不带读 monorepo 源码（仓库文档为准）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "omp 从启动到调工具是一条链；看懂模块边界，排障才有处下手。"
+      },
+      "plain_evidence": [
+        "omp-ch03.b-73bc2b6f"
+      ]
+    },
+    "omp-ch04": {
+      "question": {
+        "zh": "装完怎么判断「装对了」，而不是「看起来装上了」？"
+      },
+      "deliverable": {
+        "zh": "一组能贴进日志的验收命令（`omp --version` 加一次 `omp -p`），外加本机配置文件的位置。"
+      },
+      "boundary": {
+        "zh": "不讲模型接入（第 5 章），也不逐个平台补依赖细节（以官方安装文档为准）。"
+      },
+      "sources": [
+        "omp-oh-my-pi",
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "装在哪、用哪个版本、配置和模型放哪，一次弄对省掉后面所有怪事。"
+      },
+      "plain_evidence": [
+        "omp-ch04.b-c024e021"
+      ]
+    },
+    "omp-ch05": {
+      "question": {
+        "zh": "模型接不上时，怎么分清是密钥、端点还是角色没配？"
+      },
+      "deliverable": {
+        "zh": "一份核对记录：`provider/model` 怎么写、当前生效的默认模型是什么。"
+      },
+      "boundary": {
+        "zh": "不讲 token 怎么算（第 2 章），也不讲按角色分流省钱（第 17 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "接上模型要填的不是一条密钥：角色、网关、超时都得对上。"
+      },
+      "plain_evidence": [
+        "omp-ch05.b-6614f125"
+      ]
+    },
+    "omp-ch06": {
+      "question": {
+        "zh": "第一次对话，界面上哪些是我该看的，哪些可以不管？"
+      },
+      "deliverable": {
+        "zh": "在一个小项目里走完「说需求 → 看预览 → 落盘」一轮，并贴出改动后的测试结果。"
+      },
+      "boundary": {
+        "zh": "不讲会话树与续聊（第 7 章），也不讲 print mode 的脚本用法（第 3、28 章）。"
+      },
+      "sources": [
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "第一次对话只要能跑通一条命令，就知道整条链路是活的。"
+      },
+      "plain_evidence": [
+        "omp-ch06.b-0d7b9865"
+      ]
+    },
+    "omp-ch07": {
+      "question": {
+        "zh": "想回到「改坏之前」那一版，该用 `/tree`、`/fork` 还是 `--resume`？"
+      },
+      "deliverable": {
+        "zh": "一张「我想…→用哪个」的决策表，并在本机复现一次分支与一次续聊。"
+      },
+      "boundary": {
+        "zh": "不讲上下文压缩（第 15 章），也不讲导出之后怎么安全分享（第 31 章）。"
+      },
+      "sources": [
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "会话能续、能存、能回滚；断了不必把需求重讲一遍。"
+      },
+      "plain_evidence": [
+        "omp-ch07.b-211f11f9"
+      ]
+    },
+    "omp-ch08": {
+      "question": {
+        "zh": "让 agent 自己找代码，它会按什么顺序用 `read` / `grep` / `glob` / `ast_grep`？"
+      },
+      "deliverable": {
+        "zh": "一次「摸清模块」的最小剧本：`grep` 找入口 → `read` 读关键行 → `ast_grep` 找调用点。"
+      },
+      "boundary": {
+        "zh": "不讲编辑与写盘（第 9 章），也不讲调试器与诊断（第 11 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "读文件先读结构再读内容；找东西用 grep，别让模型瞎翻。"
+      },
+      "plain_evidence": [
+        "omp-ch08.b-1849eefa"
+      ]
+    },
+    "omp-ch09": {
+      "question": {
+        "zh": "agent 改代码为什么常「改错地方」，hashline 靠什么拦住它？"
+      },
+      "deliverable": {
+        "zh": "一次成功的 hashline 补丁（带 TAG），外加一次用过期快照被拒的记录。"
+      },
+      "boundary": {
+        "zh": "不讲 LSP 诊断细节（第 11 章），也不讲大范围重构（第 26 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "改代码靠快照加行号锚定；改前不读那一行，改完必出鬼。"
+      },
+      "plain_evidence": [
+        "omp-ch09.b-8f0245f5"
+      ]
+    },
+    "omp-ch10": {
+      "question": {
+        "zh": "同样是执行，什么时候该用 `bash`，什么时候该用 `eval` 或专用工具？"
+      },
+      "deliverable": {
+        "zh": "一张「命令类型 → 该用哪个工具」的对照，并复现一次输出截断。"
+      },
+      "boundary": {
+        "zh": "不讲权限规则怎么写（第 18 章），也不讲后台任务怎么编排（第 13 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "跑命令要分清审批与沙箱；敢不敢放开，取决于代码是谁的。"
+      },
+      "plain_evidence": [
+        "omp-ch10.b-e111b178"
+      ]
+    },
+    "omp-ch11": {
+      "question": {
+        "zh": "改完代码，诊断为什么能立刻出现，而不是等下一次编译？"
+      },
+      "deliverable": {
+        "zh": "一段 `lsp` 诊断输出，加一次 `debug` 会话里的断点命中记录。"
+      },
+      "boundary": {
+        "zh": "不讲测试与评审（第 27 章），也不讲按 AST 改代码（第 9 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "语言服务器让 agent 少猜类型：诊断、跳转、重命名都能问。"
+      },
+      "plain_evidence": [
+        "omp-ch11.b-24b84f70"
+      ]
+    },
+    "omp-ch12": {
+      "question": {
+        "zh": "抓网页这件事，`browser`、`computer`、`web_search`、`github` 各管哪一段？"
+      },
+      "deliverable": {
+        "zh": "一张四选一对照表，并跑通一次带引用的检索。"
+      },
+      "boundary": {
+        "zh": "不讲工具权限与信任（第 31 章），也不讲用 MCP 接外部浏览器（第 20 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "浏览器与桌面动作也算工具；它们各有权限和失败长相。"
+      },
+      "plain_evidence": [
+        "omp-ch12.b-b869a9e8"
+      ]
+    },
+    "omp-ch13": {
+      "question": {
+        "zh": "什么时候该开子代理，什么时候自己接着做更省？"
+      },
+      "deliverable": {
+        "zh": "一次 `task` 分叉、一次 `wait` 条件等待，外加写给子代理的那段任务说明。"
+      },
+      "boundary": {
+        "zh": "不讲会话树的实现（第 7 章），也不讲重构时怎么分片（第 26 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "计划先写、活后干；长活丢后台，子智能体只带回结论。"
+      },
+      "plain_evidence": [
+        "omp-ch13.b-7e7d010a"
+      ]
+    },
+    "omp-ch14": {
+      "question": {
+        "zh": "`AGENTS.md`、上下文文件、`.omp` 目录，这几个名字到底谁是谁？"
+      },
+      "deliverable": {
+        "zh": "一份本项目清单：哪份文件被谁读、谁盖住谁。"
+      },
+      "boundary": {
+        "zh": "不给配置六层的全表（第 23 章），也不讲技能从哪被发现（第 19 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "上下文文件是每次开工自动读的规矩；写短才有人读。"
+      },
+      "plain_evidence": [
+        "omp-ch14.b-a0e63a48"
+      ]
+    },
+    "omp-ch15": {
+      "question": {
+        "zh": "长会话是怎么被「压小」的，压掉的内容还能找回来吗？"
+      },
+      "deliverable": {
+        "zh": "能说出一次压缩前后的条目变化，并说清它和 `/fresh`、记忆的分界。"
+      },
+      "boundary": {
+        "zh": "不讲记忆后端怎么选（第 16 章），也不讲成本优化（第 32 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "窗口会满，压缩要留证据；长任务靠节流和断点接力。"
+      },
+      "plain_evidence": [
+        "omp-ch15.b-42ce823b"
+      ]
+    },
+    "omp-ch16": {
+      "question": {
+        "zh": "记忆到底开没开？怎么用一条命令确认，而不是凭感觉？"
+      },
+      "deliverable": {
+        "zh": "一次记忆写入与新会话读出的验证，并记下这台机器用的后端名。"
+      },
+      "boundary": {
+        "zh": "不讲会话压缩（第 15 章），也不讲 `todo` 列怎么用（第 13 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "记忆存的是代码里读不到的线索；存多了比不存更坏。"
+      },
+      "plain_evidence": [
+        "omp-ch16.b-71f74a25"
+      ]
+    },
+    "omp-ch17": {
+      "question": {
+        "zh": "同一个模型，换个角色名行为就变了——谁压住了谁的设置？"
+      },
+      "deliverable": {
+        "zh": "一张角色表（谁干哪种活、用哪个模型），并跑通一次角色链。"
+      },
+      "boundary": {
+        "zh": "不讲关键词触发的模式切换（第 18 章），也不讲供应商怎么接（第 5 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "不同活派不同模型；角色路由配错，账单和延迟一起涨。"
+      },
+      "plain_evidence": [
+        "omp-ch17.b-07ab9663"
+      ]
+    },
+    "omp-ch18": {
+      "question": {
+        "zh": "敲一个词（比如 `/vibe`）为什么能改门禁，词不触发时从哪查起？"
+      },
+      "deliverable": {
+        "zh": "一次只改一个变量的跟做：触发前被拦、触发后放行。"
+      },
+      "boundary": {
+        "zh": "不讲 `bash` 权限规则细节（第 10 章），也不讲团队层的审批策略（第 31 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "几个关键词一敲就换模式；知道它们等于知道隐藏开关。"
+      },
+      "plain_evidence": [
+        "omp-ch18.b-6320622a"
+      ]
+    },
+    "omp-ch19": {
+      "question": {
+        "zh": "技能写了却不露面，先查发现、frontmatter，还是调用面？"
+      },
+      "deliverable": {
+        "zh": "一次 `omp skill list` 发现核对，加一次 `omp read skill://` 试读。"
+      },
+      "boundary": {
+        "zh": "不讲插件与团队包怎么分发（第 22、29 章），也不讲 MCP（第 20 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "技能是现成说明书；调不出来先查它站的位置对不对。"
+      },
+      "plain_evidence": [
+        "omp-ch19.b-3faf98a8"
+      ]
+    },
+    "omp-ch20": {
+      "question": {
+        "zh": "MCP 配好了工具却还是不出来，是传输、信任，还是生命周期的问题？"
+      },
+      "deliverable": {
+        "zh": "一份三段核对：配置从哪来 → 信任怎么走 → 工具什么时候露面。"
+      },
+      "boundary": {
+        "zh": "不讲扩展作为可执行依赖的风险（第 22 章），也不讲自定义工具工厂（第 21 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "MCP 是外部工具进程；接上前先问它挂了会不会拖死会话。"
+      },
+      "plain_evidence": [
+        "omp-ch20.b-05fa4e20"
+      ]
+    },
+    "omp-ch21": {
+      "question": {
+        "zh": "自定义工具和 hook 写完之后，凭什么算「接进去了」？"
+      },
+      "deliverable": {
+        "zh": "一次工具工厂注册成功的验证，加一条 hook 真的被触发的日志。"
+      },
+      "boundary": {
+        "zh": "不讲扩展包怎么做发布（第 22、29 章），也不讲 MCP 服务器（第 20 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "钩子与自定义工具让你在固定时刻插一手，不必改内核。"
+      },
+      "plain_evidence": [
+        "omp-ch21.b-4028e404"
+      ]
+    },
+    "omp-ch22": {
+      "question": {
+        "zh": "扩展是可执行依赖，加载失败时先看哪几行？"
+      },
+      "deliverable": {
+        "zh": "一次 `/reload-plugins` 前后的行为对比，并记下失败信息该怎么读。"
+      },
+      "boundary": {
+        "zh": "不讲团队包的版本与兼容（第 29 章），也不讲秘密遮罩（第 31 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "扩展是能执行代码的第三方模块；默认不信任才是对的。"
+      },
+      "plain_evidence": [
+        "omp-ch22.b-9805de9c"
+      ]
+    },
+    "omp-ch23": {
+      "question": {
+        "zh": "改了配置不生效，怎么确定「生效的是哪一层」？"
+      },
+      "deliverable": {
+        "zh": "一份 `omp config get` 的现状清单，加一次项目本地覆盖的验证。"
+      },
+      "boundary": {
+        "zh": "不讲模型角色的设置（第 17 章），也不讲 CI 里的配置注入（第 27 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "配置是多层压出来的结果；改错层，改了也像没改。"
+      },
+      "plain_evidence": [
+        "omp-ch23.b-cfab5b45"
+      ]
+    },
+    "omp-ch24": {
+      "question": {
+        "zh": "接手一个陌生仓库的前半天，先问什么、先跑什么？"
+      },
+      "deliverable": {
+        "zh": "一份半天交接物：架构草图、官方路径跑通记录、文档清单。"
+      },
+      "boundary": {
+        "zh": "不讲具体排障手法（第 25、30 章），也不讲重构（第 26 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "接手陌生库先画结构，再动手；顺序错了就要返工。"
+      },
+      "plain_evidence": [
+        "omp-ch24.b-da20a30e"
+      ]
+    },
+    "omp-ch25": {
+      "question": {
+        "zh": "一条失败的测试，怎么变成可粘贴的命令，再变成最小修复？"
+      },
+      "deliverable": {
+        "zh": "一份最小修复报告：复现命令、根因、改动、红绿结果。"
+      },
+      "boundary": {
+        "zh": "不讲按症状索引排障（第 30 章），也不讲评审与提交（第 27 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "修 bug 从复现开始；没有红灯的修法都是猜。"
+      },
+      "plain_evidence": [
+        "omp-ch25.b-19683a0e"
+      ]
+    },
+    "omp-ch26": {
+      "question": {
+        "zh": "大范围改名怎么不把仓库搞坏，哪些事必须发生在动文件之前？"
+      },
+      "deliverable": {
+        "zh": "一份变换说明书、一次单包预演记录、一条回滚路径。"
+      },
+      "boundary": {
+        "zh": "不讲评审流程（第 27 章），也不讲配置与技能的批量改（第 23 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "大改拆成可回退的小步；一次改到底，出事就全赔。"
+      },
+      "plain_evidence": [
+        "omp-ch26.b-6aff19fe"
+      ]
+    },
+    "omp-ch27": {
+      "question": {
+        "zh": "一个提交凭什么算「可评审」，评审意见怎么写才可执行？"
+      },
+      "deliverable": {
+        "zh": "一个原子提交，加一份带复现步骤的评审意见。"
+      },
+      "boundary": {
+        "zh": "不讲怎么修 bug（第 25 章），也不讲团队包怎么发布（第 29 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "评审看证据链，提交要原子；密钥进过对话就算泄露。"
+      },
+      "plain_evidence": [
+        "omp-ch27.b-6fb9b3b4"
+      ]
+    },
+    "omp-ch28": {
+      "question": {
+        "zh": "想把 omp 嵌进自己的程序，该走 SDK 还是 RPC？"
+      },
+      "deliverable": {
+        "zh": "一次 SDK 最小闭环，加一次 RPC 握手与状态查询的返回。"
+      },
+      "boundary": {
+        "zh": "不讲 CLI 旗标用法（附录 A），也不讲团队分发（第 29 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "自己的程序要 agent 能力，走 RPC 或 SDK 两条路。"
+      },
+      "plain_evidence": [
+        "omp-ch28.b-12742fb3"
+      ]
+    },
+    "omp-ch29": {
+      "question": {
+        "zh": "个人技能发给同事，为什么在他那边报 `Unknown skill`？"
+      },
+      "deliverable": {
+        "zh": "一份团队包构成清单，加一次 `--dry-run` 安装与回退。"
+      },
+      "boundary": {
+        "zh": "不讲扩展在本机怎么加载（第 22 章），也不讲密钥怎么管（第 31 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "团队包把技能、命令、配置打成一份，装完要验它真生效。"
+      },
+      "plain_evidence": [
+        "omp-ch29.b-dca94ee2"
+      ]
+    },
+    "omp-ch30": {
+      "question": {
+        "zh": "出问题时，先看症状、先收证据，还是先改配置？"
+      },
+      "deliverable": {
+        "zh": "一份证据包（版本、命令、输出、退出码），加一次从症状走到根因。"
+      },
+      "boundary": {
+        "zh": "不讲单点修复的完整流程（第 25 章），也不讲成本异常（第 32 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "排障先分类：是没装上、被拦下了，还是模型看不懂。"
+      },
+      "plain_evidence": [
+        "omp-ch30.b-af6cd2b0"
+      ]
+    },
+    "omp-ch31": {
+      "question": {
+        "zh": "从别人仓库装扩展之前，哪几个开关决定「会不会执行别人的代码」？"
+      },
+      "deliverable": {
+        "zh": "一次 `--no-extensions` 应急复现，加一次秘密遮罩验证。"
+      },
+      "boundary": {
+        "zh": "不讲权限规则怎么写（第 18 章），也不讲团队包的信任流程（第 29 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "陌生仓库等于陌生代码；信任、扩展、遮罩三件事先定。"
+      },
+      "plain_evidence": [
+        "omp-ch31.b-ab1ba050"
+      ]
+    },
+    "omp-ch32": {
+      "question": {
+        "zh": "一次长任务的账单，主要花在哪几处？"
+      },
+      "deliverable": {
+        "zh": "一次成本复盘：角色、缓存、压缩、子代理乘数各占多少。"
+      },
+      "boundary": {
+        "zh": "不讲模型采购与价格（第 5 章），也不讲限流排障（第 30 章）。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "成本能算：token 数、角色档、上下文节流三处一起管。"
+      },
+      "plain_evidence": [
+        "omp-ch32.b-24665c6f"
+      ]
+    },
+    "omp-ch33": {
+      "question": {
+        "zh": "走完这本书，能不能用一条链路把六件事串起来讲清？"
+      },
+      "deliverable": {
+        "zh": "一次六十分钟串链跟做，加一条自己的学习路线图。"
+      },
+      "boundary": {
+        "zh": "不引入新概念；细节回各章与附录。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "从启动到工具注册走一遍，整本书的链条就接上了。"
+      },
+      "plain_evidence": [
+        "omp-ch33.b-33dd23a0"
+      ]
+    },
+    "omp-apxa": {
+      "question": {
+        "zh": "旗标太多记不住，怎么查而不是背？"
+      },
+      "deliverable": {
+        "zh": "一页自用速查（launch、会话、模型、输出四格），加一次十分钟核对。"
+      },
+      "boundary": {
+        "zh": "不抄完整 `--help`；以本机版本输出为准。"
+      },
+      "sources": [
+        "omp-oh-my-pi",
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "查命令行参数按子命令找；旗标以本机 --help 原文为准。"
+      },
+      "plain_evidence": [
+        "omp-apxa.b-7c5cbd9c"
+      ]
+    },
+    "omp-apxb": {
+      "question": {
+        "zh": "斜杠命令、CLI 旗标、魔法词，各自管哪一层？"
+      },
+      "deliverable": {
+        "zh": "一页速查，加一次「先查再敲」的验证。"
+      },
+      "boundary": {
+        "zh": "不列全量命令；以 `/help` 与本机为准。"
+      },
+      "sources": [
+        "omp-oh-my-pi",
+        "omp-site"
+      ],
+      "plain": {
+        "zh": "斜杠命令只在会话里有效，和 shell 子命令是两套东西。"
+      },
+      "plain_evidence": [
+        "omp-apxb.b-7931ee54"
+      ]
+    },
+    "omp-apxc": {
+      "question": {
+        "zh": "配置键那么多，先查哪一层、哪些最常改错？"
+      },
+      "deliverable": {
+        "zh": "一份只读盘点记录，加一个最小验证剧本。"
+      },
+      "boundary": {
+        "zh": "不替代第 23 章讲的优先级；只有落点问题回那里。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "配置键按段归类；找不到就按段名去搜，别背路径。"
+      },
+      "plain_evidence": [
+        "omp-apxc.b-8a38d617"
+      ]
+    },
+    "omp-apxd": {
+      "question": {
+        "zh": "术语表怎么用才不会变成背单词？"
+      },
+      "deliverable": {
+        "zh": "把自己卡住的三个词按「是什么 / 为什么」讲清。"
+      },
+      "boundary": {
+        "zh": "不给实现细节；细节回对应章节。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "术语表是查的，不是背的；每个词后面都能跳回正文。"
+      },
+      "plain_evidence": [
+        "omp-apxd.b-ed507ff0"
+      ]
+    },
+    "omp-apxe": {
+      "question": {
+        "zh": "怎么确认书上写的和你本机跑的是同一版？"
+      },
+      "deliverable": {
+        "zh": "一份钉版核对记录：版本号，加三条命令的原始输出。"
+      },
+      "boundary": {
+        "zh": "不承诺未来版本行为不变；差异以本机为准。"
+      },
+      "sources": [
+        "omp-oh-my-pi"
+      ],
+      "plain": {
+        "zh": "版本一变行为就可能变；这本书钉在哪个版本，这里写清楚。"
+      },
+      "plain_evidence": [
+        "omp-apxe.b-ff2ceb2f"
+      ]
+    }
+  }
+}

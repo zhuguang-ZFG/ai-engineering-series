@@ -1,0 +1,11 @@
+{
+  "series": "驭者·Agent Harness",
+  "chapter": 1,
+  "video": "D:\\Users\\claude\\claude-code-book-main\\video\\ch01\\out\\ch01-long-v4.mp4",
+  "cover": "D:\\Users\\claude\\claude-code-book-main\\video\\ch01\\out\\ch01-cover.png",
+  "title": "驭者·Agent Harness 01｜别再 while 调 API 了：什么才是真正的 Agent 驾驭系统",
+  "tid": 231,
+  "tag": "Agent,Agent Harness,Claude Code,开源,源码阅读,AI编程,大模型,驭者,小电讲电路,编程教学,架构设计,Tool Use",
+  "desc": "【小电讲电路 · 驭者·Agent Harness】第 01 章完整精讲\n\n很多人把 Agent Harness 当成「再包一层 API」。\n这一集顺着开源讲义《驭者》，把原书意象讲清楚：\n· 为什么简单 while 调工具会翻车\n· Chatbot 胶水 vs 真正的驾驭系统\n· 全局架构与五大设计原则\n· 马车/驭者：人机如何分工，而不是只会踩油门\n\n片内含：烧录卡拉OK字幕 · 猜一猜互动卡 · 防搬水印「小电讲电路 / 驭者」\n\n📂 系列：驭者·Agent Harness\n📌 本章：01 · 为什么需要 Agent Harness\n⏭ 下章预告：对话式主循环 AsyncGenerator\n\n关注「小电讲电路」，把 Agent 从套壳开成能上路的车。",
+  "copyright": 1
+}

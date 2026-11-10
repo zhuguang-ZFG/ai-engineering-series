@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920" role="img" aria-labelledby="t">
+  <title id="t">网页性能仪表盘：加载轴上 0 到 1.8 秒还是白屏，FCP 预算线在 1.8 秒、LCP 预算线在 2.5 秒，同一根轴上改完代码的指针停在 2 秒（达标）、某次提交后的指针顶到 5 秒（越线）；交互轴用毫秒数，TBT 预算线在 200 毫秒；版面轴用分数数，CLS 预算线在 0.1；性能预算再用单个文件 200KB、CI 跑分、真实用户监控守住这三条线</title>
+  <rect width="1200" height="920" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">网页性能：三条能对着秒表数的线</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">什么时候有画面 · 点下去多久有反应 · 版面有没有跳</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- ① 加载轴：0 → 6 秒 -->
+  <rect x="72" y="164" width="1056" height="290" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <circle cx="110" cy="196" r="17" fill="#1f883d"/>
+    <text x="110" y="203" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">1</text>
+    <text x="136" y="204" fill="#1f2328" font-size="23" font-weight="700">画面什么时候出现（单位：秒）</text>
+    <text x="1100" y="204" fill="#57606a" font-size="20" text-anchor="end">从按下回车开始数</text>
+
+    <text x="411" y="246" fill="#008635" font-size="19" text-anchor="end">FCP &lt;1.8s 第一块内容出现</text>
+    <text x="537" y="246" fill="#008635" font-size="19">LCP &lt;2.5s 主要内容画完</text>
+
+    <rect x="150" y="278" width="900" height="52" rx="10" fill="#fffdf8" stroke="#1f2328" stroke-width="3"/>
+    <rect x="153" y="281" width="267" height="46" fill="#e6e1d4"/>
+    <rect x="420" y="281" width="105" height="46" fill="#d3efd9"/>
+    <text x="285" y="309" fill="#1f2328" font-size="19" text-anchor="middle">白屏：还没有画面</text>
+    <text x="545" y="309" fill="#c74c00" font-size="19">越线＝不及格</text>
+
+    <path d="M420 254v88M525 254v88" fill="none" stroke="#1f883d" stroke-width="3" stroke-dasharray="7 6"/>
+    <path d="M413 254h14l-7 12z" fill="#1f883d"/>
+    <path d="M518 254h14l-7 12z" fill="#1f883d"/>
+
+    <path d="M450 278v70" fill="none" stroke="#1f883d" stroke-width="4"/>
+    <path d="M442 340l8 14 8-14z" fill="#1f883d"/>
+    <circle cx="450" cy="278" r="7" fill="#1f883d"/>
+    <path d="M900 278v70" fill="none" stroke="#e2601f" stroke-width="4"/>
+    <path d="M892 340l8 14 8-14z" fill="#e2601f"/>
+    <circle cx="900" cy="278" r="7" fill="#e2601f"/>
+
+    <path d="M150 344h900" fill="none" stroke="#1f2328" stroke-width="3" stroke-linecap="round"/>
+    <path d="M1050 337l14 7-14 7z" fill="#1f2328"/>
+    <path d="M150 344v11M300 344v11M450 344v11M600 344v11M750 344v11M900 344v11M1050 344v11" fill="none" stroke="#1f2328" stroke-width="3"/>
+    <g fill="#57606a" font-size="19" text-anchor="middle">
+      <text x="150" y="376">0</text>
+      <text x="300" y="376">1s</text>
+      <text x="450" y="376">2s</text>
+      <text x="600" y="376">3s</text>
+      <text x="750" y="376">4s</text>
+      <text x="900" y="376">5s</text>
+      <text x="1050" y="376">6s</text>
+    </g>
+    <text x="450" y="402" fill="#008635" font-size="19" text-anchor="middle">改完代码：2s 达标</text>
+    <text x="900" y="402" fill="#c74c00" font-size="19" text-anchor="middle">某次提交：5s 越线</text>
+
+    <text x="100" y="432" fill="#57606a" font-size="20">前 4 步（DNS → TCP → TLS → 请求资源）之和叫首字节时间 TTFB，画面还是白的</text>
+  </g>
+
+  <!-- ② 交互轴：毫秒 -->
+  <rect x="72" y="474" width="516" height="196" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <circle cx="110" cy="506" r="17" fill="#1f883d"/>
+    <text x="110" y="513" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">2</text>
+    <text x="136" y="514" fill="#1f2328" font-size="23" font-weight="700">点下去多久有反应（毫秒）</text>
+    <text x="96" y="540" fill="#57606a" font-size="19">主线程只有一个，它一忙，点击就排队</text>
+
+    <rect x="104" y="560" width="452" height="32" rx="8" fill="#fffdf8" stroke="#1f2328" stroke-width="3"/>
+    <rect x="107" y="563" width="178" height="26" fill="#d3efd9"/>
+    <rect x="285" y="563" width="268" height="26" fill="#e6e1d4"/>
+    <path d="M285 550v56" fill="none" stroke="#1f883d" stroke-width="3" stroke-dasharray="7 6"/>
+    <text x="195" y="582" fill="#1f2328" font-size="19" text-anchor="middle">及格</text>
+    <text x="419" y="582" fill="#1f2328" font-size="19" text-anchor="middle">越线＝点了没反应</text>
+    <path d="M104 592v9M285 592v9M466 592v9" fill="none" stroke="#1f2328" stroke-width="3"/>
+    <g font-size="19" text-anchor="middle">
+      <text x="104" y="622" fill="#57606a">0</text>
+      <text x="285" y="622" fill="#008635" font-weight="700">200ms</text>
+      <text x="466" y="622" fill="#57606a">400ms</text>
+    </g>
+    <text x="96" y="652" fill="#57606a" font-size="19">TBT 总阻塞时间；INP 盯的也是这段</text>
+  </g>
+
+  <!-- ③ 版面轴：分数 -->
+  <rect x="612" y="474" width="516" height="196" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <circle cx="650" cy="506" r="17" fill="#1f883d"/>
+    <text x="650" y="513" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">3</text>
+    <text x="676" y="514" fill="#1f2328" font-size="23" font-weight="700">版面有没有跳（没有单位）</text>
+    <text x="636" y="540" fill="#57606a" font-size="19">图片位没留高度，图一来就把文字顶下去</text>
+
+    <rect x="644" y="560" width="452" height="32" rx="8" fill="#fffdf8" stroke="#1f2328" stroke-width="3"/>
+    <rect x="647" y="563" width="178" height="26" fill="#d3efd9"/>
+    <rect x="825" y="563" width="268" height="26" fill="#e6e1d4"/>
+    <path d="M825 550v56" fill="none" stroke="#1f883d" stroke-width="3" stroke-dasharray="7 6"/>
+    <text x="735" y="582" fill="#1f2328" font-size="19" text-anchor="middle">不跳</text>
+    <text x="959" y="582" fill="#1f2328" font-size="19" text-anchor="middle">越线＝版面乱跳</text>
+    <path d="M644 592v9M825 592v9M1096 592v9" fill="none" stroke="#1f2328" stroke-width="3"/>
+    <g font-size="19" text-anchor="middle">
+      <text x="644" y="622" fill="#57606a">0</text>
+      <text x="825" y="622" fill="#008635" font-weight="700">0.1</text>
+      <text x="1096" y="622" fill="#57606a">0.25</text>
+    </g>
+    <text x="636" y="652" fill="#57606a" font-size="19">CLS 是分数不是秒，越接近 0 越好</text>
+  </g>
+
+  <!-- ④ 谁来盯这三条线 -->
+  <rect x="72" y="690" width="1056" height="112" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <circle cx="110" cy="722" r="17" fill="#1f883d"/>
+    <text x="110" y="729" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">4</text>
+    <text x="136" y="730" fill="#1f2328" font-size="23" font-weight="700">谁来盯住这三条线：性能预算</text>
+    <text x="1100" y="730" fill="#57606a" font-size="19" text-anchor="end">提前划线，不等用户投诉</text>
+
+    <rect x="100" y="742" width="325" height="44" rx="12" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+    <text x="262" y="770" fill="#1f2328" font-size="19" text-anchor="middle">单个文件 &gt;200KB 就报警</text>
+    <rect x="437" y="742" width="325" height="44" rx="12" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+    <text x="599" y="770" fill="#1f2328" font-size="19" text-anchor="middle">CI 上跑分，退化阻止合并</text>
+    <rect x="774" y="742" width="325" height="44" rx="12" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+    <text x="936" y="770" fill="#1f2328" font-size="19" text-anchor="middle">RUM 量真实用户，别只信开发机</text>
+  </g>
+
+  <rect x="72" y="818" width="1056" height="76" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="600" y="850" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="24" font-weight="700" text-anchor="middle">别猜快不快：三条线各有单位，越线就报警</text>
+  <text x="600" y="878" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" text-anchor="middle">FCP &lt;1.8s · LCP &lt;2.5s（秒）· TBT &lt;200ms（毫秒）· CLS &lt;0.1（分数）· 单文件 &gt;200KB（体积）</text>
+</svg>

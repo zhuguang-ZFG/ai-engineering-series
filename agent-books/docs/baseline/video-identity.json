@@ -1,0 +1,3641 @@
+{
+  "counts": {
+    "cache": 0,
+    "config": 25,
+    "generated": 80,
+    "review": 20,
+    "source": 392,
+    "third_party": 1
+  },
+  "files": [
+    {
+      "bytes": 537,
+      "category": "generated",
+      "path": "video/ch01/assets/assemble/concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "8bd2e68d4dc48fd84c597097e65d6ef280eb06abaf322362b576144e97457694"
+    },
+    {
+      "bytes": 2097,
+      "category": "source",
+      "path": "video/ch01/assets/assemble_long.py",
+      "reason": "authored build script",
+      "sha256": "28c230756a51c8c844af334463348f41f7ea2184e72db58fcb6aead4d1c29d30"
+    },
+    {
+      "bytes": 4819,
+      "category": "source",
+      "path": "video/ch01/assets/build/assemble.py",
+      "reason": "authored build script",
+      "sha256": "1676294561ebcb5bead162dedee742a9fb4ff812fb68bc5f07db66553eb1a98e"
+    },
+    {
+      "bytes": 486,
+      "category": "source",
+      "path": "video/ch01/assets/build/build_all.py",
+      "reason": "authored build script",
+      "sha256": "7ee89ca2569ed626461eaf508f11d2724c20f52325e466bfab1c4e6d6e1b1b11"
+    },
+    {
+      "bytes": 4564,
+      "category": "source",
+      "path": "video/ch01/assets/build/parse_script.py",
+      "reason": "authored build script",
+      "sha256": "9e9da136698361657a78630b0fa6531e7a7e2b667f23c7f208ef357fafe6a32b"
+    },
+    {
+      "bytes": 1329,
+      "category": "source",
+      "path": "video/ch01/assets/build/render_cover.py",
+      "reason": "authored build script",
+      "sha256": "a10a562a0645b90d2590e80016904e6d811ab43e13903cf38597b2435f374bde"
+    },
+    {
+      "bytes": 19092,
+      "category": "source",
+      "path": "video/ch01/assets/build/render_slides.py",
+      "reason": "authored build script",
+      "sha256": "31d0b1c32eaa34db5bedfe30910c74e3a5a543dab4ccd2d76746e22f181d40f9"
+    },
+    {
+      "bytes": 5297,
+      "category": "source",
+      "path": "video/ch01/assets/build/render_vo.py",
+      "reason": "authored build script",
+      "sha256": "3e75dc7e17bbc818a02139cfaf79d75928754bf4ddc58dfc359f26238443c9a1"
+    },
+    {
+      "bytes": 2912,
+      "category": "generated",
+      "path": "video/ch01/assets/build/segments/list.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "f0b1e68fcf2a5ea466d73843d9ffd5cfed4e7aca9949417d1a8742a45439e2bc"
+    },
+    {
+      "bytes": 2975,
+      "category": "source",
+      "path": "video/ch01/assets/build_timeline.py",
+      "reason": "authored build script",
+      "sha256": "5000655a8f4d220202183f4fb11efc033822b724efe13c6ec4d756245e4f8c8d"
+    },
+    {
+      "bytes": 1275,
+      "category": "source",
+      "path": "video/ch01/assets/extract_vo.py",
+      "reason": "authored build script",
+      "sha256": "600a0d2b9a997469d5cadd905ce234ffbbd1a0e20f19f043fdd19a3c13b882b6"
+    },
+    {
+      "bytes": 1915,
+      "category": "source",
+      "path": "video/ch01/assets/fix_srt.py",
+      "reason": "authored build script",
+      "sha256": "8455a46c816fa630c2d7db9a1843de66316c08e51133c343747f800d40ff31f5"
+    },
+    {
+      "bytes": 611,
+      "category": "source",
+      "path": "video/ch01/assets/huashu/ch01-whiteboard.json",
+      "reason": "authored narration/visual spec",
+      "sha256": "198aed58e161eea9ecfaa74c63f9bd2ddfa0e3bc613b0b2ff016c2dae17fe7e8"
+    },
+    {
+      "bytes": 1884,
+      "category": "source",
+      "path": "video/ch01/assets/make_cover.py",
+      "reason": "authored build script",
+      "sha256": "39078b40d3f8f2a3652959ee717f0f366ae612823cb8e744fa8c1035af98b26d"
+    },
+    {
+      "bytes": 387,
+      "category": "source",
+      "path": "video/ch01/assets/sample-long.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "f19ab0a60c55769ec3987eadd53f37673430272732ec3705d316d1597f040fc2"
+    },
+    {
+      "bytes": 337,
+      "category": "source",
+      "path": "video/ch01/assets/sample-short.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "4347a5ba3726cb5303ee7f8c6f4ce141040b4e0ab926aa9fdaf628d81cd35b93"
+    },
+    {
+      "bytes": 1115,
+      "category": "source",
+      "path": "video/ch01/assets/synth_vo.py",
+      "reason": "authored build script",
+      "sha256": "dca8cfb163c24731c9bb4e04050cbc3ee6cf93d6ec38b2a450626bc1edf41607"
+    },
+    {
+      "bytes": 337,
+      "category": "generated",
+      "path": "video/ch01/assets/vo-short/vo.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "4347a5ba3726cb5303ee7f8c6f4ce141040b4e0ab926aa9fdaf628d81cd35b93"
+    },
+    {
+      "bytes": 164,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c000.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d4a10e03bfd3ba5af3b4e445b10d956d8db02ad9e1226a1edb1e8366767febf8"
+    },
+    {
+      "bytes": 835,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c001.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c9d1c1c735e76bf98b198a17bf31198add2d66d42d3446a969da8d4b97824a4a"
+    },
+    {
+      "bytes": 75,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c002.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "48809f31a10ae29b0a44d03a1c72b8bae7c96bb215c35977778e26d386efbbcc"
+    },
+    {
+      "bytes": 827,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c003.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "04bddfcc0527ed3d7c95804c130df6dfa831d295e6513cae682366ff9f2541a6"
+    },
+    {
+      "bytes": 99,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c004.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "15af430a73000e4f5b6c3711566563f046aab2a040fa634c23639156f5f25c3d"
+    },
+    {
+      "bytes": 939,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c005.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "bead1334b3ff24e074c3bf92e596080251bd5eafded79b9d8482dc1d7224d471"
+    },
+    {
+      "bytes": 847,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c006.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b07f6a413e8685390bc6328b8e56aff4b6dfbd818ba85b478be963022c34ca4f"
+    },
+    {
+      "bytes": 169,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c007.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d4eee6a1cd39ae0dbe483a970d220eb3ab9fb43356dc5ba5a19fdb0acab217e6"
+    },
+    {
+      "bytes": 255,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c008.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6c0fa3664e3925baa68bb4d5fe1ab26b5a4dda8eeab1c8f3f0abd5a1bd274cf2"
+    },
+    {
+      "bytes": 118,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c009.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e1613718a5a3d8b272942d04159f766e0bf5837a1f606a47b645eb7899d6e4a4"
+    },
+    {
+      "bytes": 781,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c010.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "453823dfa49e94944bfb9e658b4f9d0a3cef65ef465499d414b232c326da6f1f"
+    },
+    {
+      "bytes": 390,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c011.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e661b6680c40e79bab0f31d9435e1d55f55982aa479e2e41da228769755120cd"
+    },
+    {
+      "bytes": 649,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c012.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5412b4fc00ef6a1e283936c54bbfc4e6e9ba7b598c8396b1118445de4695e15d"
+    },
+    {
+      "bytes": 700,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c013.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "12e67913f03c6ac955763e6051899af2d969bf8728cb93e332428986b42561ac"
+    },
+    {
+      "bytes": 578,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c014.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e019d6d75d4c86d68a967490f3b76566923a1d16683d4ef2d2503c4f10a77ba0"
+    },
+    {
+      "bytes": 471,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c015.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d320f0731b6ad8b2925e1113eda6f840f52371679e097f064a92d93f9fd7af91"
+    },
+    {
+      "bytes": 662,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c016.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6eecda01f2195ca87e1955de154e98d094ba0740fddd35bf7040c4dd8f072ef2"
+    },
+    {
+      "bytes": 123,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c017.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "fd68c933cc8ac46368d5a5623fc9a75f1a9fe6b9a3bbb58c0daec95cebfaa55d"
+    },
+    {
+      "bytes": 652,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c018.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "54bcb404d61b6d68695048a0caff0918c082cb7c4bcc6cc3f38474354b19bc45"
+    },
+    {
+      "bytes": 497,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c019.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "edf600c2bdf6992809836f184ef295e0b2b49be137a0fcd0682edb076446dc54"
+    },
+    {
+      "bytes": 374,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c020.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "1e512fe64bee09f760542e1e5abc5dbf37d254b0947be026a12c592f43263b84"
+    },
+    {
+      "bytes": 630,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c021.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b355b086a5bba55ba6c22a64e920c8dc2b77816c9c5acdaeb553c75d95819904"
+    },
+    {
+      "bytes": 740,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c022.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d7b2d07a74f76f5d2f2ef062a023faf098c61c86093ea44f03f23e658e9015a7"
+    },
+    {
+      "bytes": 321,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c023.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "556efbd0a81ab6193c4f0d943eccbff5d2d44da55074b0f2c91f888578dd9fab"
+    },
+    {
+      "bytes": 722,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c024.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8eb1b515f624d40392d65464e52fc2ae5eeb2219d71aeacac193185c54377d03"
+    },
+    {
+      "bytes": 84,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c025.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "99167144bcffce2158d5f2adc7586522c40e6aa5923553ee7d957e6579ee31d7"
+    },
+    {
+      "bytes": 191,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c026.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "fc9de54084646baa8a173a5e6f81f41d97ccd1bff9f84efde379157ed67053ba"
+    },
+    {
+      "bytes": 363,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c027.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d4cfabf921d39a58b02f9cf9df7b9e2b5804077245260fd2a5c867c1630db139"
+    },
+    {
+      "bytes": 509,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c028.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "4133ee60846b9b03f484d94c63b46cfd39b6db4a486894452eeb3ee5d78bb27c"
+    },
+    {
+      "bytes": 915,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c029.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "0994cbf6075ae49d3cc035ca528f36cb4e4ac4fa9f7f876612ad3c37b7710f34"
+    },
+    {
+      "bytes": 85,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c030.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "28a334bf005bfafb7353275868c3befac8a952ffe2e9614223932e574ce98095"
+    },
+    {
+      "bytes": 238,
+      "category": "source",
+      "path": "video/ch01/assets/vo/c031.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "481b59e3f8cf349efd1ceabffea7d6ff31402bd3128e9023e697d68f84bb1475"
+    },
+    {
+      "bytes": 2964,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "0ef4ae74ac1c874eeb5fd52f7ef6b0cef54d4b47071519afdb28da5a197bbefe"
+    },
+    {
+      "bytes": 15153,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/full-script.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "8812d7d60e3fde18231fd480da3415517fa35ed2be7ccd02d11fe4b24b6307ea"
+    },
+    {
+      "bytes": 166,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/01.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "73f73c3f9add07f1baa19f5188d30e53e54b5afebc0f08a60a405d7488e62924"
+    },
+    {
+      "bytes": 412,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/02.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "4a5f049abc4bbb949bf6c851fae8427db363d0cb1a3a1798a51074fb78c7eba1"
+    },
+    {
+      "bytes": 427,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/03.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "5014a050fbbb0b17662bb044820b05904cff95ac74abae54cb854289bb983e6a"
+    },
+    {
+      "bytes": 77,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/04.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "849346867609b9c1c060a82c5333d68675ac5823a11d87feda97f3a436564e0e"
+    },
+    {
+      "bytes": 535,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/05.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "9c5a21998b9916350f22e794a06caea568e96a1f8aedf842d4d66a334b2cce1f"
+    },
+    {
+      "bytes": 296,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/06.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "1f4949bde8f0f478c1be3f61289977bb9b616fd5e1cd499e479d020776db6337"
+    },
+    {
+      "bytes": 101,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/07.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "2ff162a7a33e371c84fa05cf7d16e53f59696f9f037aa9bdf485a5f7fbdb7f0d"
+    },
+    {
+      "bytes": 625,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/08.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "f4315e3528838eb25d56fa713db51088ffbe489aba3056c1b4d73ffe9ec583c2"
+    },
+    {
+      "bytes": 318,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/09.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "9c0f5f2d1c0b860df77a42deb4a415c9eae5ea5504b8f2409d2197c354703237"
+    },
+    {
+      "bytes": 610,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/10.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "0ccba66fd19246cf27edb21eb647cf51722ea593c8fbfb933cc2074f3b52b197"
+    },
+    {
+      "bytes": 241,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/11.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "3f45bc314cbf957a7efc5bbdb3cd39da0463812a56aa06db70efce4a943ea0e9"
+    },
+    {
+      "bytes": 171,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/12.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "5d86d4b10a2bcb711ccebcf2b37606f6c89098c12e683c0c4318746016590016"
+    },
+    {
+      "bytes": 257,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/13.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "756737b127a10778dbece705f5afc8a465a372bac2ce9f81410fea1ff1958f95"
+    },
+    {
+      "bytes": 120,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/14.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "251a9cdeb56ab5255db163ccd114c941b640d8c81b355ca7439d7d07230b9ec2"
+    },
+    {
+      "bytes": 783,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/15.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "810f730428059ecace11d9ed8bb61a8ad4bc3006b2f4c1ab52a06b86e0c7b05b"
+    },
+    {
+      "bytes": 392,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/16.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "971846d6fa639fa244393db3538bb079bf15f0a994c7d0ec0dd0b7d16aabc810"
+    },
+    {
+      "bytes": 651,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/17.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "92910c044aaec0122c4d608bea2897e5ba3f41d5d474aa92bc928b768177e15f"
+    },
+    {
+      "bytes": 669,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/18.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "5b5fc2135a462b41cc5246dcdcf85ccc73e4473c0346297a752e99ae6a762c29"
+    },
+    {
+      "bytes": 613,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/19.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "b53dba78fce49a7219a9f1ada79f3bbd5133f7cd1905504dcb0d3128da018cdc"
+    },
+    {
+      "bytes": 473,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/20.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "da1a473c74775f2a9042bd1d2d8afc54352f38dbd1f5895d239955f3b84232e7"
+    },
+    {
+      "bytes": 664,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/21.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "b7981293a2841d62ebc36fc2b9d160dd54bc0f98837ebabf1f0263e57571444d"
+    },
+    {
+      "bytes": 125,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/22.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "5c1bd844170d06336067f4f4b6134f7a9d26447df5b52374fa964a14d49f0ea2"
+    },
+    {
+      "bytes": 654,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/23.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "a45fd735977a4a311e583d230da8449fe2af4e0692c14ce54360d383329904ef"
+    },
+    {
+      "bytes": 499,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/24.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "d5d04f4881746aed833ab10fe07cb4f7167b6a218bec7ff91716f450af4c8491"
+    },
+    {
+      "bytes": 376,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/25.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "90f8327abf26adcd45df2a58816b383622e25303009396a81445f9b55731ead1"
+    },
+    {
+      "bytes": 632,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/26.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "7c08e7e88d7ffd7691c3be3f36a9b9074b5e977e3f6c4e0fb61f0adbfe036216"
+    },
+    {
+      "bytes": 457,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/27.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "3c73b54a87495b313ba6e45d9e2f2c0463018d87e9948525d02f9670dcc2bfb4"
+    },
+    {
+      "bytes": 608,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/28.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "b463e522bca7ee54c1335b2bf4aa70c7718e7a4bf57c006325e6ad7c5082df9c"
+    },
+    {
+      "bytes": 451,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/29.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "d684d5175ff13aff8c1e5e5596cda950460c98bf808a50945258370376005784"
+    },
+    {
+      "bytes": 275,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/30.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "c561143060e4a3d46f4bd1d508d606e6457864e4226dd9fd9e98758b8cb87d95"
+    },
+    {
+      "bytes": 86,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/31.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "32ba12ff749acb541b27b4040a6de301f1565d92bfcc92e54d313bd35f709adf"
+    },
+    {
+      "bytes": 193,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/32.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "bf326983981e73d0a49be0b1baa442a0c1e9e737d26d44d15be70a73986e4f44"
+    },
+    {
+      "bytes": 365,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/33.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "f3d48dae6d72e660d14900755f396cf9d2035056076778a1eec9d5d9ed9c939b"
+    },
+    {
+      "bytes": 511,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/34.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "cbd53a972e71cdbfd0679f161533e81c8b66aa096f8cd583a4e8803a3e1a569c"
+    },
+    {
+      "bytes": 41,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/35.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ba0e69dee030a2abac20c23d9c8ed313cf36d4b8660b35cd963c65901ca25bbc"
+    },
+    {
+      "bytes": 878,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/36.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "842fa0f4fa571f34caa922a08e0c9a6f61f48d2a1c8df7688487d823a8506bf7"
+    },
+    {
+      "bytes": 87,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/37.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "0fbc3c3453d692cd78d818f95e45f8f2e1e1ee8ffd02f0f471e00f02c903c750"
+    },
+    {
+      "bytes": 240,
+      "category": "generated",
+      "path": "video/ch01/assets/vo/segments/38.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "27e8187c88101c4debfef3cf1e5a62755eb05c929decdfe59c0336fd45c38aca"
+    },
+    {
+      "bytes": 11735,
+      "category": "source",
+      "path": "video/ch01/hf-long/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "3422f3a04dab081c4bdd72bdb50320de7df32d2b4fe3b29e81337d0e38fdb68b"
+    },
+    {
+      "bytes": 11755,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-arch.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "c32740468f8e1f458e58d30056d6be94b057a05a0187d9f9d447aa0dea5c6a9b"
+    },
+    {
+      "bytes": 11755,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-hook.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "b8691efa31383f4196103311d366d9879254a525303ce31bf262b73c973f11b9"
+    },
+    {
+      "bytes": 11756,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-outro.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "d10a37b446f978f43f4849e9fb33dac37e511177d33334088a2e434871317bbd"
+    },
+    {
+      "bytes": 11759,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-paradigm.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "9ccf9d4bbd223f6a3d4fe4b96ee4940f7ea3e915d23c8576c865eb79cc2026f4"
+    },
+    {
+      "bytes": 11759,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-practice.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "de43ae51ce6e7b29370713d2acd28c91707461741ca25037a2b5c00d89da544c"
+    },
+    {
+      "bytes": 11761,
+      "category": "source",
+      "path": "video/ch01/hf-long/scene-principles.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "240cc2d67d6d91c23693c2f4952f73c47d9d7d8d20f119111383c069c0b42348"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch01/hf-remake/AGENTS.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 2547,
+      "category": "review",
+      "path": "video/ch01/hf-remake/AUDIT-SPARSE.md",
+      "reason": "review artefact",
+      "sha256": "f1fc334ca5f9b2e0e209dfc07cb86cdce0c71f4ad85ca367581688bb0a9a55bf"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch01/hf-remake/CLAUDE.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 140,
+      "category": "source",
+      "path": "video/ch01/hf-remake/DESIGN.md",
+      "reason": "authored design/plan note",
+      "sha256": "d791b37558a4a0f3b1ce111df0a581dd771a8390c9cebc4d576e51127a999dde"
+    },
+    {
+      "bytes": 2516,
+      "category": "source",
+      "path": "video/ch01/hf-remake/LONG-V4-PLAN.md",
+      "reason": "authored design/plan note",
+      "sha256": "dcd86bec59dc6d973c79e6a510b8b55876a6e76a3514ce60428b3b8c6dc0a3c2"
+    },
+    {
+      "bytes": 1091,
+      "category": "review",
+      "path": "video/ch01/hf-remake/REMAKE-RENDER-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "49b2f8d1b7fd3b42c16c4a27c73fd4e10f0335d9fae4d8c010251f7415d5b7b3"
+    },
+    {
+      "bytes": 1507,
+      "category": "review",
+      "path": "video/ch01/hf-remake/REMAKE-V3-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "e2ca175634f84a09d424586f8a200e43de933790f938c74977167cf0f3b068d7"
+    },
+    {
+      "bytes": 1911,
+      "category": "review",
+      "path": "video/ch01/hf-remake/REMAKE-V4-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "e2b9ab8b3121c06d20a9e46042e6a1d7da0f9426df861a66e49a13c54bb99a09"
+    },
+    {
+      "bytes": 427,
+      "category": "source",
+      "path": "video/ch01/hf-remake/STORYBOARD.md",
+      "reason": "authored design/plan note",
+      "sha256": "ea876e8f09569f4da4291a4d8e65dedc392e4675e41bee63b0838df70a6aa371"
+    },
+    {
+      "bytes": 22393,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assemble_proof_hf.py",
+      "reason": "authored build script",
+      "sha256": "b2dcbdbba7c4f397c0d5f64aeca8f947d3668a76353a8a9c5fd17e8d96f61021"
+    },
+    {
+      "bytes": 547,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/01_hook_glue.json",
+      "reason": "authored storyboard spec",
+      "sha256": "085ebab634afdea8dc61aa2be4df7c414c1662143ffe7a4652b23c60311a6419"
+    },
+    {
+      "bytes": 535,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/02_llm_roles.json",
+      "reason": "authored storyboard spec",
+      "sha256": "a50aaa51e1c0afdbc016b4a94867f322a5890e9e6ada3dac4d26c6eccf9be92b"
+    },
+    {
+      "bytes": 655,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/03_six_challenges.json",
+      "reason": "authored storyboard spec",
+      "sha256": "8d7d0732162320a5e9be3c5a5404ce8a76e3680d7906e9db9eaeac6c13b55468"
+    },
+    {
+      "bytes": 562,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/04_harness_def.json",
+      "reason": "authored storyboard spec",
+      "sha256": "1ae7c8af3f471a6cbad183be315a91620376916c4ac9b8c363911b65d2cdc0bc"
+    },
+    {
+      "bytes": 640,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/05_arch_layers.json",
+      "reason": "authored storyboard spec",
+      "sha256": "87d19dc73a21cad6b7498487108dbb2da54409962ee172f02794f5b7cbb04063"
+    },
+    {
+      "bytes": 626,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/06_tech_stack.json",
+      "reason": "authored storyboard spec",
+      "sha256": "25f3dd0ca831f9daf968eab7917cde1a2b2e26d385cb587b3bd32a9e91299408"
+    },
+    {
+      "bytes": 545,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/07_p_async.json",
+      "reason": "authored storyboard spec",
+      "sha256": "05556bf4734660f4a06cdaa735f527e6c19f0d059a1eb00eb1c19af1e83b4840"
+    },
+    {
+      "bytes": 627,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/08_p_security.json",
+      "reason": "authored storyboard spec",
+      "sha256": "ae8b06789f7743299ea171cc3e79aa2ea9fa0332d9ded2c43019e9c2a0704eef"
+    },
+    {
+      "bytes": 550,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/09_p_cache.json",
+      "reason": "authored storyboard spec",
+      "sha256": "30a78d5466dec981fb5c23eb8d92d812887525219d345ca269cd73a96a5acd18"
+    },
+    {
+      "bytes": 618,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/10_p_progressive.json",
+      "reason": "authored storyboard spec",
+      "sha256": "cadd4a4b5fcad24b756934dfe11ea0728ac45a4f716e3758dbce112d73636385"
+    },
+    {
+      "bytes": 551,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/11_p_immutable.json",
+      "reason": "authored storyboard spec",
+      "sha256": "69e4d8e8e0f963fcc1696bdbd9ec5af7097318ac03e635435c31f1ff8996c472"
+    },
+    {
+      "bytes": 615,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/12_doctor_flow.json",
+      "reason": "authored storyboard spec",
+      "sha256": "b14d9d56583038e6c41294835fa1932aadd6a96d9f1b73fa672775b5f65bc30e"
+    },
+    {
+      "bytes": 583,
+      "category": "source",
+      "path": "video/ch01/hf-remake/assets/huashu-specs/13_outro.json",
+      "reason": "authored storyboard spec",
+      "sha256": "155f6d92f54249bf8a66fe7b2d55315c91a80c61c691a3ad6d097d88174c2e1f"
+    },
+    {
+      "bytes": 21030,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_dense_proof.py",
+      "reason": "authored build script",
+      "sha256": "cd53711bf1abf53f04377ed9e1d03576c26a8efcc03988a8d5e6308c1c48eb8a"
+    },
+    {
+      "bytes": 41102,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_dense_v3.py",
+      "reason": "authored build script",
+      "sha256": "899b9aaf880ae64c533801f3236b199d55bb42cbfbf78ea90fa58245f4ef7b9c"
+    },
+    {
+      "bytes": 66058,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_dense_v4.py",
+      "reason": "authored build script",
+      "sha256": "865b7ebe465890b807a8eb0228e6871282500ec552d5e45c3e635f7c7bb64423"
+    },
+    {
+      "bytes": 13180,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_remake.py",
+      "reason": "authored build script",
+      "sha256": "ed4a148a4d16eed01cdb082236a354fc45a858b8c235ffcc54e4420ecd43a276"
+    },
+    {
+      "bytes": 28164,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_short.py",
+      "reason": "authored build script",
+      "sha256": "b982dc80b960c688c01bcab61b544ae7e857ef71c059d1c3078f8116b0934e11"
+    },
+    {
+      "bytes": 32818,
+      "category": "source",
+      "path": "video/ch01/hf-remake/build_short_v2.py",
+      "reason": "authored build script",
+      "sha256": "e22d10398938721d2be807dfcc0d0e99fb3981b4fee4ae121de2127e50d9dedd"
+    },
+    {
+      "bytes": 15346,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b01_hook.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "c450bf2656ccb5dec41fa56b3fc2a1aaa8fd77743a9ac9804cec2fc54b81de5e"
+    },
+    {
+      "bytes": 56906,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b02_paradigm.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "ae21fd69099bc1a2d7da69804d68534c2d8e66947fa165236b7db3ba906505a8"
+    },
+    {
+      "bytes": 60463,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b03_arch.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "b8e6d41c8fc94bd4ed159d1fad11b9226628ba504085892da5026fb44d096155"
+    },
+    {
+      "bytes": 75481,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b04_principles.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "3cd0ef842af7419216980edd69abeb382baa59d2e965da503c2c317308aca37b"
+    },
+    {
+      "bytes": 35562,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b05_practice.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "84b1a44c95eda6db0be10004929c901a4375e020db05cc104c44dac27c820d0c"
+    },
+    {
+      "bytes": 24730,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/b06_outro.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "8556aea6d67a66acfe4a38abbb5545faabb345caaefa88e52bfbff3dacd56487"
+    },
+    {
+      "bytes": 17962,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-camera-follow.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "4a0da1ba065882e95274468c8f3e36f1094fc598c3c93be1fc63182e9e42953c"
+    },
+    {
+      "bytes": 7211,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-clip-wipe.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "8b9e06353df3ea3bc0113a9c7ef3e480293a6ed75bee46744b053bf5e02dc5f6"
+    },
+    {
+      "bytes": 12117,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-editorial-emphasis.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "6144571b6c73dbdec282284fe2277d3c958e15cddaf362295ba9cca02e705d1c"
+    },
+    {
+      "bytes": 14146,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-emoji-pop.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "79e7cad5cf54dec70e7af59c8d0583531017bacca6bc9ee057bfad386904eb9b"
+    },
+    {
+      "bytes": 10882,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-glitch-rgb.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "65e588d27515cde0e361cddd6034a3dad647a86f50c02847c6cc453619d58648"
+    },
+    {
+      "bytes": 7725,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-gradient-fill.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "6d08dc0a9f54d25b25590721ec579a3521a0079c70f32b292bd93697384c60ff"
+    },
+    {
+      "bytes": 8321,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-highlight.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "77f877ddcef85e787453daa6724cec5e85a0678fcb098fe94f9b86ce0ef5f2f4"
+    },
+    {
+      "bytes": 6406,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-kinetic-slam.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "86b7a54e045f626d1375636a2f1cde19c2f3cbdad1df1d7d0204fe6b4452044a"
+    },
+    {
+      "bytes": 8651,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-matrix-decode.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "c8f703cbe6e8dd547107f2e6298f27c287a9d08b133ceab128e874ce88d36e78"
+    },
+    {
+      "bytes": 15951,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-neon-accent.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "1c4af30ab35c6e3f754157cce2c364c75386f37059d47fa52446bca19200339d"
+    },
+    {
+      "bytes": 7444,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-neon-glow.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "dc9d43d58879e1422837c213aa7f8921ca43b58f4e9c77f8463232585e05034c"
+    },
+    {
+      "bytes": 11324,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-parallax-layers.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "e1c14eb380fa7d7b8c84798e40530e946ed140547c61d2e6f5111d712cb72d78"
+    },
+    {
+      "bytes": 9787,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-particle-burst.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "48ec0a000e9c40cff891c2ca0e66ed4cf33c358bbeb2ca76fb3bdc8288bf5936"
+    },
+    {
+      "bytes": 13113,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-pill-karaoke.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "cdbbc72af7fbac440c0bf5750cf9e3d4ded20f26588b00ac79399342ca60b3e3"
+    },
+    {
+      "bytes": 7105,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-texture.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "dcd2c9c9ba068507c559171264748c129981253fd61ce933c5d0f461431b0d7f"
+    },
+    {
+      "bytes": 13224,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/components/caption-weight-shift.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "8a5294debec3eadeb7ca0a8688c31a6e8c517ebb1c55ff410aa81df3807daa55"
+    },
+    {
+      "bytes": 6874,
+      "category": "source",
+      "path": "video/ch01/hf-remake/compositions/mk-callout-highlight.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "12d9f602852a4d5e57c6d0debe5966b562414a0e8a4e949fa6377abec9ca3e6e"
+    },
+    {
+      "bytes": 1296,
+      "category": "source",
+      "path": "video/ch01/hf-remake/fix_lint.py",
+      "reason": "authored build script",
+      "sha256": "d43ac4d776eb62c9f2a3b0fcfd6cbc2ca024a31d0d5e328bc2cebe1fcb3d1018"
+    },
+    {
+      "bytes": 3037,
+      "category": "config",
+      "path": "video/ch01/hf-remake/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "0646697b4dc5543ddb09401cae7a8eaf51193cc3a77f351d72f4301143f61f6c"
+    },
+    {
+      "bytes": 2744,
+      "category": "config",
+      "path": "video/ch01/hf-remake/hyperframes.lock.json",
+      "reason": "project/tool configuration",
+      "sha256": "03d3384ae23d18455e9bf16b690e720676ad5c77b19af132e2534d2ee8cc8b76"
+    },
+    {
+      "bytes": 35790,
+      "category": "source",
+      "path": "video/ch01/hf-remake/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "059e06f9ae762738482549bcb84347d5c04a1828ba507b82c0ab5621af6b6cd1"
+    },
+    {
+      "bytes": 89,
+      "category": "config",
+      "path": "video/ch01/hf-remake/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "2803a57c73db0c886bcbe605cbe21abcbe66fee72d5fd7d06fe842d577752e5b"
+    },
+    {
+      "bytes": 411,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short-v2/POLISH-NOTES.md",
+      "reason": "review artefact",
+      "sha256": "0e8ddc70b8902ae763ee0cddb9756848aed2020299512a6c3d36621d73153461"
+    },
+    {
+      "bytes": 1451,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short-v2/SHORT-V2-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "8e098a0639d47713ddaac717d54c4068354dc729b3e9c773b815aae978c95ad1"
+    },
+    {
+      "bytes": 775,
+      "category": "source",
+      "path": "video/ch01/hf-remake/short-v2/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "e89dac9f19ba4225e01ad9deda0965e1658f2d0a25c7be314514a04ca839e5d1"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short-v2/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short-v2/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 4591,
+      "category": "source",
+      "path": "video/ch01/hf-remake/short-v2/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "888578a41254eb848b9c4fdb5bf3ad6fce1c458a2f31b892379336b6452e0655"
+    },
+    {
+      "bytes": 57,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short-v2/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "8ed027c01af62dd76114f8b02781685851fab4048e5f5edca634bcfa23e3f83f"
+    },
+    {
+      "bytes": 753,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short-v2/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "05eaa92daa2816c4b112f1b2ab60094e966119b3e61e65fa14120da77b50bb61"
+    },
+    {
+      "bytes": 262,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short-v3/POLISH-NOTES.md",
+      "reason": "review artefact",
+      "sha256": "8d79e6f5c1a5d4e05d04d0602ad379597bc1535ee3d6b1193071c581feb5ac33"
+    },
+    {
+      "bytes": 1451,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short-v3/SHORT-V2-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "8e098a0639d47713ddaac717d54c4068354dc729b3e9c773b815aae978c95ad1"
+    },
+    {
+      "bytes": 1449,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short-v3/SHORT-V3-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "c2082867bf21330c5d2392dcf5c0bf9dc1b33b1ce74f65ab9549d29d3f762e5f"
+    },
+    {
+      "bytes": 564,
+      "category": "source",
+      "path": "video/ch01/hf-remake/short-v3/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "0f2aa653e798cffb6d31f638808208b7b33cb6ffdbbddc35161c3409bdf6b9ba"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short-v3/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short-v3/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 4591,
+      "category": "source",
+      "path": "video/ch01/hf-remake/short-v3/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "c308d2ca7cec540461fc90dad36a1679b8d74e6cb93456c94451e5a84aa09ffd"
+    },
+    {
+      "bytes": 57,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short-v3/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "8ed027c01af62dd76114f8b02781685851fab4048e5f5edca634bcfa23e3f83f"
+    },
+    {
+      "bytes": 753,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short-v3/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "05eaa92daa2816c4b112f1b2ab60094e966119b3e61e65fa14120da77b50bb61"
+    },
+    {
+      "bytes": 634,
+      "category": "review",
+      "path": "video/ch01/hf-remake/short/SHORT-RENDER-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "6d0fbd10c9e4144475970231a528bd5fa63c93a8ed14c7b85b2e585499094219"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 5813,
+      "category": "source",
+      "path": "video/ch01/hf-remake/short/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "3691ba4dfca15e6fa97e53ab4add4a36df7bd403fc2a4719fc20fe7efb6287ab"
+    },
+    {
+      "bytes": 51,
+      "category": "config",
+      "path": "video/ch01/hf-remake/short/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "efec781316e1f23b422c85922a1d1b956cd1bc34b8c7b68f7f83bfe4e73e7751"
+    },
+    {
+      "bytes": 168,
+      "category": "generated",
+      "path": "video/ch01/hf-remake/short/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "5503dcbf6f3663af86f8e49a6154b36fca0c48ba853ff165597ebd630f128c39"
+    },
+    {
+      "bytes": 369,
+      "category": "source",
+      "path": "video/ch02/assets/sample-short.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "ac851f55030f15a21a74dc95a91a054a40b3d358495571fb252e8d139a9b96f1"
+    },
+    {
+      "bytes": 369,
+      "category": "generated",
+      "path": "video/ch02/assets/vo-short/vo.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ac851f55030f15a21a74dc95a91a054a40b3d358495571fb252e8d139a9b96f1"
+    },
+    {
+      "bytes": 234,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c000.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "bb2c912d67984ae8adf6bd4124f27b054b655a0d78f40fda3b944b95db090cbc"
+    },
+    {
+      "bytes": 269,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c001.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6902b11de3e9fbcdd7892e1341b1d5cec580e4157cafe502978a2093818add63"
+    },
+    {
+      "bytes": 246,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c002.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "7362f762636ac17abdb578348844dba017729160629183e50598545f1bb18ff0"
+    },
+    {
+      "bytes": 346,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c003.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "ea3c7ad05ca5f7ca737a1ba920a037b2fae0d4672ca66e4399976be9049f9d2b"
+    },
+    {
+      "bytes": 285,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c004.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "dc2921b259f70a95bed33bfffa4650195904eafa52160463c4aee375de042bfd"
+    },
+    {
+      "bytes": 232,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c005.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c787994ec4e6d0a36689e5ae01da486a82aad028d1ead208851d6f22a417dfe9"
+    },
+    {
+      "bytes": 286,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c006.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "3026b8f41753e5e203219e00cc24718cf82423bab1056d9ffc0c13bfcbdfa60c"
+    },
+    {
+      "bytes": 218,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c007.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b56fd0aea68dde5b3121a503a410eda45429415ed619a3ebd4ff2364bdbc924e"
+    },
+    {
+      "bytes": 264,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c008.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "141776fc87373902b2c80bc5c0c4ad350c600ed3710ec9f67dc60c7921c502e3"
+    },
+    {
+      "bytes": 265,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c009.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "3697008c1d155453b66000a18e83ee19c5a873416001f787df23ce4bfeebc089"
+    },
+    {
+      "bytes": 196,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c010.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "ebfb6bb9afa8863f2e909ff273fd0843be787b0e3f8125dd375704e586af5e50"
+    },
+    {
+      "bytes": 248,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c011.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "eb33628912750b2c0828236788e22308b8166c73050bc036dc7116134450a705"
+    },
+    {
+      "bytes": 324,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c012.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5ad4927d020e409fdd847cbadd37545172440424fd61f9f1e95cd5a4b83f4dfe"
+    },
+    {
+      "bytes": 314,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c013.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "377f97ac7550a9bd44a51021de180caff8ace09f5066e6b39f8140a4066946aa"
+    },
+    {
+      "bytes": 272,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c014.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "536f9019485f139f9bee88ab49df47e5ba96551f29453904990560ab9c21e0d3"
+    },
+    {
+      "bytes": 242,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c015.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "166551f02feedcf9d7ab675f2cfc53d350f39cfcfe6e018e07899ff54037a025"
+    },
+    {
+      "bytes": 260,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c016.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "24d9e7b30d881a91d6a890893d645c56a9574d8061f3d3f3f5b1e3096bc9079d"
+    },
+    {
+      "bytes": 281,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c017.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "bba5954aff017e879d89a7e0f6e45d69a34ee2ca084fd7a8bb46dc8ddf079afa"
+    },
+    {
+      "bytes": 212,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c018.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "576d93881310b5ae9a921301d576ff87035e4d4e510ea66c1bfe05ef77f73235"
+    },
+    {
+      "bytes": 273,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c019.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "50409590a141ebcf5b715baaea48d09ef466ba207c4cea4f2dd995b676256a69"
+    },
+    {
+      "bytes": 216,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c020.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "637c9fe73fc95d4161a1a5a4f2a7ae1c704e3ff6c415e2d92bb6c0f73847fe7a"
+    },
+    {
+      "bytes": 241,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c021.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "37e35cc6c038e499a715cb555dd3c6b0c654164702bcc6e75306b5d0d350e578"
+    },
+    {
+      "bytes": 207,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c022.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "af075784949705113ccff43bf9b081749c6a88dcf44ec18cde94a02cc260ae16"
+    },
+    {
+      "bytes": 197,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c023.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "95a857781b16218797c70863c21a1d82703129fc84361670663bb99bae2d1f64"
+    },
+    {
+      "bytes": 218,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c024.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "68ac3b2825ca8b458ed5f6af7592e65f4e4e3bd11fb486deed6af576116703bd"
+    },
+    {
+      "bytes": 218,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c025.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "a1abbc96697467c61a4c9ccaeaa6206a87faff4104e260853d8e217641536552"
+    },
+    {
+      "bytes": 210,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c026.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "fb6daff8885572fc48a8ff4b0352901f16101b4d952f1ec275b1a78076d4b65c"
+    },
+    {
+      "bytes": 198,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c027.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c2c342f0d27da45ce21250e54e6819e23ffb3f57ea2b12c15a8a7c4f4f8a8c1c"
+    },
+    {
+      "bytes": 273,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c028.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9fd614ff87c74ce6ca4947f1e2b54dc1792fbd56b91b8b385d602539b053ea7e"
+    },
+    {
+      "bytes": 335,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c029.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "0e2a568189bedc14aaff5b310b43db6d592c3cb16e886200cf4dd9610c0d444c"
+    },
+    {
+      "bytes": 135,
+      "category": "source",
+      "path": "video/ch02/assets/vo/c030.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6c6b8387b4df633c5252d388462334305bfa0e1bb92dd2cf96210aba3129150a"
+    },
+    {
+      "bytes": 7727,
+      "category": "generated",
+      "path": "video/ch02/assets/vo/full-script.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "51eb2522cf0ffa6af547772860b2e560f907eea03963f5c78696d6e6011dd1f6"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch02/hf-remake/AGENTS.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch02/hf-remake/CLAUDE.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 160,
+      "category": "source",
+      "path": "video/ch02/hf-remake/DESIGN.md",
+      "reason": "authored design/plan note",
+      "sha256": "05bddacc8a50e659a3f3be0a69a3ae1f96062d908c64fba8449dec0a0138a773"
+    },
+    {
+      "bytes": 590,
+      "category": "source",
+      "path": "video/ch02/hf-remake/LONG-V1-PLAN.md",
+      "reason": "authored design/plan note",
+      "sha256": "6dda6b768ca001a77a5e2f665be4d9d3e3c071d6ee0ff81c37f260e7d278d866"
+    },
+    {
+      "bytes": 50802,
+      "category": "source",
+      "path": "video/ch02/hf-remake/build_dense_v1.py",
+      "reason": "authored build script",
+      "sha256": "6b0561b786509ca0ae78dfac9aac2bcf0068c7700f05d0783c79fcb71dfbc8d1"
+    },
+    {
+      "bytes": 20214,
+      "category": "source",
+      "path": "video/ch02/hf-remake/build_short.py",
+      "reason": "authored build script",
+      "sha256": "96e0319d70d9c49c787dd11bc01d5732e7aeb98429b459f1391a09a5ce7f8499"
+    },
+    {
+      "bytes": 16872,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b01_hook.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "d6197e48dbf0a3ebe72d6097c37e1536d6d3af39572da86a920125fb38a1bbdb"
+    },
+    {
+      "bytes": 39285,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b02_async.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "7162c0006ea9668bef38d13a967129a13e5a27f798d9e99449c42960f39e9419"
+    },
+    {
+      "bytes": 38081,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b03_turn.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "d8f450e4e4ad0550713012b5b9357ece2336e92ba1fbe6a6234c91971251ae73"
+    },
+    {
+      "bytes": 36255,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b04_deps.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "d1ff195051b92f1dc2e6e5b3866cf884f0137f5440480a8fd7db0e0eda04b808"
+    },
+    {
+      "bytes": 20119,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b05_practice.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "8c1c7a46b38bf51a422fbc98a6f348cd43ed4b106f996ce5846dd15af71af2a0"
+    },
+    {
+      "bytes": 14014,
+      "category": "source",
+      "path": "video/ch02/hf-remake/compositions/b06_outro.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "1e66524e5216f524a638462294abe0d4b5f818f96cf4090af23ed644b48f315d"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch02/hf-remake/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 10050,
+      "category": "source",
+      "path": "video/ch02/hf-remake/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "98c93d419bbed245e4c807a577c589063f09a3d3c0160036a3852bd837594ca8"
+    },
+    {
+      "bytes": 79,
+      "category": "config",
+      "path": "video/ch02/hf-remake/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "8adb332ec4ff744b53cf83edf1abf74aedae3dd41499b5594ae4061eeb066828"
+    },
+    {
+      "bytes": 542,
+      "category": "review",
+      "path": "video/ch02/hf-remake/short/SHORT-V1-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "4796be9453fff3614e88c08ecccaea39b4b0e00fe73be2ae8084c901fab02447"
+    },
+    {
+      "bytes": 1127,
+      "category": "review",
+      "path": "video/ch02/hf-remake/short/SHORT-V2-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "ff52685306194f9c8aac8a48009adce891cad0f87c1af0276a661b3458313fd4"
+    },
+    {
+      "bytes": 489,
+      "category": "review",
+      "path": "video/ch02/hf-remake/short/SHORT-V3-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "1440042981171055ffa0a2abf19d9b614069d8369949d8a055ff1c6083be8b80"
+    },
+    {
+      "bytes": 827,
+      "category": "source",
+      "path": "video/ch02/hf-remake/short/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "be565c06ce56f72a8942db6b6fdc909953c4a52eb8e46ab5a414edf1f302f8bc"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch02/hf-remake/short/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch02/hf-remake/short/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 5307,
+      "category": "source",
+      "path": "video/ch02/hf-remake/short/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "275727f0c9997364dc3a1ec22744fe740383f5d03da4adaba7a6eb6b8324cdab"
+    },
+    {
+      "bytes": 51,
+      "category": "config",
+      "path": "video/ch02/hf-remake/short/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "c8692dc2a0ff701c466792dde2ec6e78b65fe23c5585475edbf3137fb29ce386"
+    },
+    {
+      "bytes": 814,
+      "category": "generated",
+      "path": "video/ch02/hf-remake/short/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "4691147dbe839b01739db444de92282cf89414292f1b92173494be2623d448a6"
+    },
+    {
+      "bytes": 3178,
+      "category": "source",
+      "path": "video/ch02/hf-remake/synth_long_vo.py",
+      "reason": "authored build script",
+      "sha256": "331f293d5794217471abffd0796f089c0ade4f65d323e458061908d6befab85f"
+    },
+    {
+      "bytes": 2356,
+      "category": "generated",
+      "path": "video/ch02/hf-remake/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "4f22783f086feb943df5717e06872ea77c4aaff8922a52bc388fbc3fe12b208a"
+    },
+    {
+      "bytes": 528,
+      "category": "source",
+      "path": "video/ch03/assets/sample-short.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "ba7e19c823db1e6859d4c653212b2391266329921dd0bd151c7382ec5361058c"
+    },
+    {
+      "bytes": 230,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c000.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "361033bb35fb9504ec0ba5d7245b24fab5113fca30ba783e9d363d2a97966583"
+    },
+    {
+      "bytes": 285,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c001.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5ccadea0ceb9c73fe2839be87cb656f408757f54265c958850bc56ec8326e46f"
+    },
+    {
+      "bytes": 288,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c002.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8646b34387b381e7d3bd43b59f97c462ea32231ba1e28d4b9c9d08bcc00dc714"
+    },
+    {
+      "bytes": 260,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c003.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "a11984cb65b8fe04ae4c517899a55ba02238d807887abcf61cd57500b1c4b371"
+    },
+    {
+      "bytes": 221,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c004.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8f5e197335c521ce5256d6f07bd4b70c88060e21bcd0a0ba262170f8aa4373a3"
+    },
+    {
+      "bytes": 214,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c005.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "add43aafbf9b20be4a3c657499db99d53c27f1daf6d8270d13e42fbe68f8f4a6"
+    },
+    {
+      "bytes": 185,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c006.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f40e66e990bbcd8719591f2c797018dd82c7496fcb0eb4fd435d06d000a3d29c"
+    },
+    {
+      "bytes": 354,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c007.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c6463f5852c71ed450a7235d335bf3b7ca2232d1fdea396be07f245336ed1498"
+    },
+    {
+      "bytes": 236,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c008.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d0e331f9c6f393569c5656355decb8ce812969dff32e8c46f17c9dbcf601f88b"
+    },
+    {
+      "bytes": 263,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c009.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "772a536170e8933c6e8744047c74d32b96d3451211cbe95cdd468fd219de3381"
+    },
+    {
+      "bytes": 179,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c010.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e355a6c6120bd1744d79a176e1c3a7b161db43d50ac99c34ac5f1575032ec957"
+    },
+    {
+      "bytes": 344,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c011.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "aa9fe15938247f2e888c95b660ff01c4186142556eae79ed4b0a7e0989c301a8"
+    },
+    {
+      "bytes": 244,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c012.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "a30c897296e5ccd69a2be3c1734078be703d6d1b2677ea61fca5fb93c748407e"
+    },
+    {
+      "bytes": 195,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c013.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "295856dc46e8c11b5a5b8dcd30a78e00b834fae6c962c2ccbe5ca6acf2e0538c"
+    },
+    {
+      "bytes": 206,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c014.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f704287e3e4671fbbd0c736cb4f6f2f329d6151dfbe45b5364f3408ac330bd91"
+    },
+    {
+      "bytes": 337,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c015.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "dad838feb5c15a8ee668c0ad4f406d2a3a619c947f04f278c9d75ea6acad3d73"
+    },
+    {
+      "bytes": 243,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c016.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c5947ceb6819e745caaf069766bfb05060361b2bc4c3d2485511408e56320066"
+    },
+    {
+      "bytes": 247,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c017.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "91f36603ab25215c4283ab366f05b383eb01134c526d8c21a7db15bc2d8c0566"
+    },
+    {
+      "bytes": 199,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c018.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6acf5a8fdd313ff7cb8e672228f93d0a36ef8b38ef43cb928bc6d29c6b521672"
+    },
+    {
+      "bytes": 265,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c019.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "c2a0d0c5484ba6ae89f7ebc2dcd4f64bf7d0212c51e72f500db7735cf09833e3"
+    },
+    {
+      "bytes": 234,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c020.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "1bb11e196b65bf9fcd4a8f76c823c2b85f6272fe1d9a6a51eb3a0b843b14006d"
+    },
+    {
+      "bytes": 267,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c021.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e993f9ea47965c23a3a5bae9b9aacbf6105c716713018944a654aa08ff07d9aa"
+    },
+    {
+      "bytes": 177,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c022.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "2a5550b475d7030d7089943d4b63b5f4b2b291e2f7e7e83875c0b91fb65dcadd"
+    },
+    {
+      "bytes": 187,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c023.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "3ffa1334f6d86adf2d697e55a2198dea5f0e462d7cbf713ca525fc1be8110ea9"
+    },
+    {
+      "bytes": 201,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c024.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b34ae132a61df8efb11925e0ee217bcd5cdab2a7815118fa01e9411b5405229a"
+    },
+    {
+      "bytes": 256,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c025.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b895ba639f157c086d607d2fac488d31bcd12fe70c23824c8f070408abab9912"
+    },
+    {
+      "bytes": 290,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c026.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6245d81962dd9bda4ffac11926733743b49610f5ccbe90bd76b7070337365371"
+    },
+    {
+      "bytes": 217,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c027.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "758ea995dab820f95d3df83900d8b69e7f959c9bded383defeb6a63bd82aa833"
+    },
+    {
+      "bytes": 177,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c028.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "67ec5c0ca544a18c3b89df7d1810f33608c95432ff8ae45f532ef7c4bfa5c03d"
+    },
+    {
+      "bytes": 182,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c029.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "775406446391a4a9b78298970dd2a438fa824915096c503752321073b112fbd4"
+    },
+    {
+      "bytes": 286,
+      "category": "source",
+      "path": "video/ch03/assets/vo/c030.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "1f4c2ba7836cb773ae55a7cd777a6cb74680604eb9f2f70e91bab3e9bda630a5"
+    },
+    {
+      "bytes": 7567,
+      "category": "generated",
+      "path": "video/ch03/assets/vo/full-script.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "e9a65442292a743ce2e015b2378a0cb9bfbbf027aa6ab8de6c979a4ddf56b857"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch03/hf-remake/AGENTS.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch03/hf-remake/CLAUDE.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 161,
+      "category": "source",
+      "path": "video/ch03/hf-remake/LONG-V1-PLAN.md",
+      "reason": "authored design/plan note",
+      "sha256": "8260417a303a1bd0ddbf216af84deb63de0205b0ab0ce4e98d5259b5a384c336"
+    },
+    {
+      "bytes": 567,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/01_hammer_hands.json",
+      "reason": "authored storyboard spec",
+      "sha256": "6af5465c9b00f63aa171b190da02c6fae15e36354d86b8946fa9d655f94d47bc"
+    },
+    {
+      "bytes": 558,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/02_five_elements.json",
+      "reason": "authored storyboard spec",
+      "sha256": "159573b65e01796ebf9c6f69d5b5344785f5af2f97cbcd2c79b1cd6676dba286"
+    },
+    {
+      "bytes": 548,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/03_zod_schema.json",
+      "reason": "authored storyboard spec",
+      "sha256": "3e299431d1f2148a769a69e39ac40fdf1a5d41373fe38e410b1322660aa71fe7"
+    },
+    {
+      "bytes": 552,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/04_permissions.json",
+      "reason": "authored storyboard spec",
+      "sha256": "98e520a96a1d931f38eb21003ac33fbc5cfac305b79bb2961443ddde16aca1af"
+    },
+    {
+      "bytes": 556,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/05_lazy_registry.json",
+      "reason": "authored storyboard spec",
+      "sha256": "5a3568c830c7a563dfa41130dd7e1ca552269f5200556c9e1d023600fd1c9206"
+    },
+    {
+      "bytes": 552,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/06_mcp_waist.json",
+      "reason": "authored storyboard spec",
+      "sha256": "384b7aa3d2acf898db0facb9878ed0365b39904ee105bfa6b2935352d4c142aa"
+    },
+    {
+      "bytes": 563,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/07_crud_suite.json",
+      "reason": "authored storyboard spec",
+      "sha256": "c72fc20533c3264d4412a3a2dc88f85525952b357603a04171d4b2d6ef5623ce"
+    },
+    {
+      "bytes": 560,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/08_specialized.json",
+      "reason": "authored storyboard spec",
+      "sha256": "6ae1a5f5d509f3064564d53ddc01aa06298f392e22d79f73b96c700d5fd489f3"
+    },
+    {
+      "bytes": 550,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/09_partition.json",
+      "reason": "authored storyboard spec",
+      "sha256": "7789d15c08f549e1735795dd300e7e41dde244ceaf97777dc4a12de8fa7c1c9e"
+    },
+    {
+      "bytes": 547,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/10_streaming_exec.json",
+      "reason": "authored storyboard spec",
+      "sha256": "ad52fa86deac628a24f9ca610b448f3b071ee1f04eb394cece0e157bb7581be2"
+    },
+    {
+      "bytes": 571,
+      "category": "source",
+      "path": "video/ch03/hf-remake/assets/huashu-specs/11_five_lines.json",
+      "reason": "authored storyboard spec",
+      "sha256": "0431ddb10a8985e238f94b247c9978e73d34dc56a0f03020b6bcd4ad56418e8c"
+    },
+    {
+      "bytes": 52901,
+      "category": "source",
+      "path": "video/ch03/hf-remake/build_dense_v1.py",
+      "reason": "authored build script",
+      "sha256": "8c86020bb3257a36d35321c24772c91900abda8413e3d5b12555c6d884fb2e02"
+    },
+    {
+      "bytes": 67563,
+      "category": "source",
+      "path": "video/ch03/hf-remake/build_dense_v2.py",
+      "reason": "authored build script",
+      "sha256": "936fcc896292936c77ab35739aa98250fbc6204cabaccf9a018fd947adaaaba3"
+    },
+    {
+      "bytes": 20547,
+      "category": "source",
+      "path": "video/ch03/hf-remake/build_short.py",
+      "reason": "authored build script",
+      "sha256": "c59a7743fd3873e79eb6a6602e4c1507a9fc123ffc63ddd4722107371f391b48"
+    },
+    {
+      "bytes": 31428,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b01_hook.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "e4a054645f8989097a616425d864040bcc528578a087a493737f4c3ea6e8f4c4"
+    },
+    {
+      "bytes": 64091,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b02_proto.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "2908128663af9694533fdbac34f56814633dd9ac868278f1db53e8d70da62518"
+    },
+    {
+      "bytes": 55905,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b03_reg.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "c42ccbb49ee16cbc4998d14a27495ac8228a785288eb1a70f39b135b708a57f5"
+    },
+    {
+      "bytes": 49088,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b04_core.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "71a3b7d32f06e6967e1040b9eec537124762188ca4e9f911f9c96a5dcc3433af"
+    },
+    {
+      "bytes": 54989,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b05_orch.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "2dbea988cd0ef19e1a3e458332d842b71b8e23c151a3b3f980060b4ec28c3c93"
+    },
+    {
+      "bytes": 38685,
+      "category": "source",
+      "path": "video/ch03/hf-remake/compositions/b06_outro.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "faa3b2d18288e6e64bf3d56a69b61f0eedd883909b42cbdcf1ec18820e21f295"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch03/hf-remake/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 36423,
+      "category": "source",
+      "path": "video/ch03/hf-remake/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "fc4cf8ec3a0f5c3932cb287d43d0cec0d1f2c83d765b7fd7b07678cfd7dfd876"
+    },
+    {
+      "bytes": 79,
+      "category": "config",
+      "path": "video/ch03/hf-remake/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "8ea75d4669daa426fc31e476de979f5e27ee6b3dd8f94aba423ab4c47b3f5fa2"
+    },
+    {
+      "bytes": 190,
+      "category": "review",
+      "path": "video/ch03/hf-remake/short/SHORT-V1-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "9e91ea90a1655f0f4f0178232e1f4df3f26b9933bfd86afec1d36a9558865bef"
+    },
+    {
+      "bytes": 1096,
+      "category": "source",
+      "path": "video/ch03/hf-remake/short/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "e7408c1b7c65df95c6ca9d411f3d4ef7e3dd67a8928afb3607d694aa26cee5cf"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch03/hf-remake/short/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch03/hf-remake/short/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 6225,
+      "category": "source",
+      "path": "video/ch03/hf-remake/short/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "bbd90cfdba46963d1ff31d88e2cc6a2747b85d2fc86dba70126f107e7336ea0e"
+    },
+    {
+      "bytes": 51,
+      "category": "config",
+      "path": "video/ch03/hf-remake/short/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "b45e1125b2169a4ea44743d4b4a5ad893aed5774a0dd3402fec9cabc50e892b0"
+    },
+    {
+      "bytes": 1026,
+      "category": "generated",
+      "path": "video/ch03/hf-remake/short/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "1aae872c81321dfd8f0a5f4dd02381af7e506bf9ac0eb61e554ee8cdb3912e35"
+    },
+    {
+      "bytes": 4887,
+      "category": "source",
+      "path": "video/ch03/hf-remake/synth_long_vo.py",
+      "reason": "authored build script",
+      "sha256": "ab06552f1b180a3c16c6ad589b2e81ef302c883ab452c4bb2353ae1b69e3562d"
+    },
+    {
+      "bytes": 2356,
+      "category": "generated",
+      "path": "video/ch03/hf-remake/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "421d967884a95c6d88f1ae9d87771f34f7e36617cf96cd7b57f8b21146df3e3b"
+    },
+    {
+      "bytes": 413,
+      "category": "source",
+      "path": "video/ch04/assets/sample-short.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "4796d0b0e7b8c1f7b23d61feb48e40e798f4aa315ea3d748e33c5eee6cdc954a"
+    },
+    {
+      "bytes": 224,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c000.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d9a930a2104d3e2109f30bb89c64e90b9a07626f45da232b1e904228adf53de7"
+    },
+    {
+      "bytes": 257,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c001.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "3030cf7d04b4963a5574064ad1a36912097e375044f46e1711eaade39ebc1f5f"
+    },
+    {
+      "bytes": 237,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c002.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "a8dfb883ab499ebaf371c3ac4e8e8ed5d05f5b261518381a8fa0a876ba82e4ad"
+    },
+    {
+      "bytes": 263,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c003.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "bc226c3cba847c33417daeeb283c366771662e648cca5ffb58d637175e34660d"
+    },
+    {
+      "bytes": 240,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c004.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "2f4b664f58d5b6b1a61914f371e5c4f4a0745a6db81592c28b3e4c8478a2507e"
+    },
+    {
+      "bytes": 240,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c005.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b312a2265ea811e205ece24c65db690279fc7d0284480f4e8bf3f407ffc51d4e"
+    },
+    {
+      "bytes": 231,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c006.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5f328bf48f9b815347dd2480f7ba74e9922054af3eaefb7ac9ba40e4d7bab94c"
+    },
+    {
+      "bytes": 272,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c007.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "ec899ad257b501eae0ae1038ceebd660c46348433c7b35fc1c23900a85fce811"
+    },
+    {
+      "bytes": 267,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c008.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b5d79aa23f4ba637fb99d675c931d5180b98c393507616ccf73925d8019096b6"
+    },
+    {
+      "bytes": 223,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c009.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8a7c8948aa244e354ec92a5271244170359a193a7b64958d45c1ad8e82fe3f02"
+    },
+    {
+      "bytes": 247,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c010.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8c111a462eaa157565db3db7286570c174af3e11853d9afad39bb164df8420dc"
+    },
+    {
+      "bytes": 173,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c011.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "383c57012630d203634f5c2df76ac875c8d03b2fda37072e0192964e435ad65d"
+    },
+    {
+      "bytes": 209,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c012.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "78161916e0493bf50e2f4624322a9990e28402de5777059cbc4a978a29e4e78e"
+    },
+    {
+      "bytes": 275,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c013.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f0783d86ef618733a59ab02318e9d63d8c75d4d5a104fcfcf256cfc76ebd3030"
+    },
+    {
+      "bytes": 256,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c014.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b64550bdb58e16ac7daed7cabcd790fe7f4f37f087602c5e138416dd2f48b6a3"
+    },
+    {
+      "bytes": 188,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c015.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "632a4bce72304a7d748bcc883a2c370606380b0f8d56a31c5668e32509c62a55"
+    },
+    {
+      "bytes": 194,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c016.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "83fd2e08168282fb107a4fbf63ea0879d8f44451022af1b5390b51fb106cb15d"
+    },
+    {
+      "bytes": 187,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c017.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "93d45de6033eae75f2679b78a75c33cd4faedc9bf6219710f35f012eb3dbe723"
+    },
+    {
+      "bytes": 297,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c018.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f9b934e125e67a57bca62a0b6091d14ad3f810856bc39a160b451d271d68ef59"
+    },
+    {
+      "bytes": 181,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c019.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f5c7e123b97c58b88d9cf5a426b45d77a63d72ce94ac915e3cd1b2361d8ff4bb"
+    },
+    {
+      "bytes": 203,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c020.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d63a3dcacb2bbf37f08faea15aa048587a7f351a5382319945433741dcc1e6a9"
+    },
+    {
+      "bytes": 231,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c021.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9c36f315b9be237686344a41be5d86935f60ef94c481e2986081ed83b932771d"
+    },
+    {
+      "bytes": 191,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c022.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f535fdac683b8f3d88485aa6ffd755d39151cf3e048cc4b4f9ca8ea4fd5d2d23"
+    },
+    {
+      "bytes": 298,
+      "category": "source",
+      "path": "video/ch04/assets/vo/c023.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "7874bb7ca1f057fc0b69993d8f9ff70ffd398a81a25a3d14bce88d364bdab4b1"
+    },
+    {
+      "bytes": 5686,
+      "category": "generated",
+      "path": "video/ch04/assets/vo/full-script.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "acbd92b901897b6cf82c64ee69b161d1f6497fa59fb4bac312fe9bd5493f69c6"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch04/hf-remake/AGENTS.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 7275,
+      "category": "source",
+      "path": "video/ch04/hf-remake/CLAUDE.md",
+      "reason": "authored design/plan note",
+      "sha256": "1b36171117cb7c18f4100a0db6a3782ff2e096115995733200445cc2e80a4060"
+    },
+    {
+      "bytes": 161,
+      "category": "source",
+      "path": "video/ch04/hf-remake/LONG-V1-PLAN.md",
+      "reason": "authored design/plan note",
+      "sha256": "e77594d3e765e1fab0a4e1545f8043f31c5c70a5e46e6306c0b3a7fde3432edb"
+    },
+    {
+      "bytes": 855,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/01_key_vs_gates.json",
+      "reason": "authored storyboard spec",
+      "sha256": "475ae0ccb188de4b5c45341036d22455be59d1bf1242335ae29a30ded52c035f"
+    },
+    {
+      "bytes": 683,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/02_four_phases.json",
+      "reason": "authored storyboard spec",
+      "sha256": "7d3fca62d1397007e8c71c770da2a43ff17f2d32fa1ab4d1197c22d12f436b96"
+    },
+    {
+      "bytes": 771,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/03_deny_ask_allow.json",
+      "reason": "authored storyboard spec",
+      "sha256": "087722f09990b052249704bf46d3d7cb34dffaf31497b6ad7b2fe9f95372d736"
+    },
+    {
+      "bytes": 714,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/04_immutable_ctx.json",
+      "reason": "authored storyboard spec",
+      "sha256": "623f78832c1f9ec33d199398fb6fcb274c71040ff4f0cd4b7cdb9cdbe6f81f9e"
+    },
+    {
+      "bytes": 699,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/05_mode_spectrum.json",
+      "reason": "authored storyboard spec",
+      "sha256": "43f51f3618cf362f5804f1c5d836c9c91a0cd36d28f2ea71c4034548e3c1e4a8"
+    },
+    {
+      "bytes": 714,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/06_bash_match.json",
+      "reason": "authored storyboard spec",
+      "sha256": "ab1f281b9502a11f9d5e12047db354dd1ad58350829aed639bb2c9e59f5aa770"
+    },
+    {
+      "bytes": 713,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/07_persist.json",
+      "reason": "authored storyboard spec",
+      "sha256": "7ea8507afa8fb3f746c40c32cd872fdeb59157020c8f73ce59f359c4a2e88084"
+    },
+    {
+      "bytes": 785,
+      "category": "source",
+      "path": "video/ch04/hf-remake/assets/huashu-specs/08_building_gates.json",
+      "reason": "authored storyboard spec",
+      "sha256": "ca12acec7b95009f3f74eca10e26c52f983dac9cf92488beb8a3479d9091ba77"
+    },
+    {
+      "bytes": 48217,
+      "category": "source",
+      "path": "video/ch04/hf-remake/build_dense_v1.py",
+      "reason": "authored build script",
+      "sha256": "48aba60467e4a09d4fa515f09e3617fe0af16ab34ef240fb48165ee116b98893"
+    },
+    {
+      "bytes": 67366,
+      "category": "source",
+      "path": "video/ch04/hf-remake/build_dense_v2.py",
+      "reason": "authored build script",
+      "sha256": "aa1c674d920ab981d96b75a87d550c1ba4087a88eb8fbf9d4662a08e5788cfce"
+    },
+    {
+      "bytes": 20630,
+      "category": "source",
+      "path": "video/ch04/hf-remake/build_short.py",
+      "reason": "authored build script",
+      "sha256": "c8a8aaded5511c7e277a4c8f6d7a3797f16dd98a576da7bd0eeb04752274dea4"
+    },
+    {
+      "bytes": 27229,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b01_hook.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "144b630c9a0ad3c6670de94b837303ad945b032ef90113f36105929e6c97edda"
+    },
+    {
+      "bytes": 76774,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b02_phases.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "48df880755039bd724c784965d22946073fb44b00046fcbc7141c05a0e857024"
+    },
+    {
+      "bytes": 40823,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b03_context.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "dbadb7bd199bd499599c77d11d25629923931146f6ed4c84357f00453f1659c1"
+    },
+    {
+      "bytes": 71729,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b04_modes.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "f490b958dc60707e15358be1185b8a591c6ff6df48397fedd2f784991bbe3182"
+    },
+    {
+      "bytes": 29720,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b05_bash.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "b9e7d2ba4bf1c8a6c48667882a13dda7270e50616b012aadba7429a18bdc6b2c"
+    },
+    {
+      "bytes": 63366,
+      "category": "source",
+      "path": "video/ch04/hf-remake/compositions/b06_outro.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "531740f74cdb8d4eda6d1e79c6255d78977137a8f342244bf437bdff117818f4"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch04/hf-remake/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 38033,
+      "category": "source",
+      "path": "video/ch04/hf-remake/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "2c8468386a1b906115e33b748ce58706b524244572b0ba48761583451b9aa8e5"
+    },
+    {
+      "bytes": 81,
+      "category": "config",
+      "path": "video/ch04/hf-remake/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "f9f155afc1439fd38d797f3a588c14dc1ed4d862356b04447fd4b4cd633fcf8b"
+    },
+    {
+      "bytes": 244,
+      "category": "review",
+      "path": "video/ch04/hf-remake/short/SHORT-V1-REPORT.md",
+      "reason": "review artefact",
+      "sha256": "920e5f0bae7e01e5ae94489a63a0a2f1d8e9acdf42e9a390b236d6b0f4b637c2"
+    },
+    {
+      "bytes": 923,
+      "category": "source",
+      "path": "video/ch04/hf-remake/short/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "c209f931b26deda9c5cd14ceab72e9f9dcf4c551b5abc9ef86e0541cc7069023"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch04/hf-remake/short/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch04/hf-remake/short/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 5614,
+      "category": "source",
+      "path": "video/ch04/hf-remake/short/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "1a603d8f9d80df95496406e513fb9ab44875a54abe246efe192aa961aa6c0b13"
+    },
+    {
+      "bytes": 51,
+      "category": "config",
+      "path": "video/ch04/hf-remake/short/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "4bf37d77c96157a501f3965ec03a851ac56c0e4077abda6c25a8bb20518d232b"
+    },
+    {
+      "bytes": 880,
+      "category": "generated",
+      "path": "video/ch04/hf-remake/short/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "6f900d4106ea549cebc2035a536acd7e53ab91d2d197f08e6f56df2b389e145b"
+    },
+    {
+      "bytes": 4733,
+      "category": "source",
+      "path": "video/ch04/hf-remake/synth_long_vo.py",
+      "reason": "authored build script",
+      "sha256": "e06d72b05fd15d1854176be61fe6cac73bc96f619fcf971d82d1f45f777b80b5"
+    },
+    {
+      "bytes": 1824,
+      "category": "generated",
+      "path": "video/ch04/hf-remake/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "5cddc35c2d269432b9f925837704665a88922373e14dfba9cc7862e9f0186b8a"
+    },
+    {
+      "bytes": 607,
+      "category": "source",
+      "path": "video/ch05/assets/sample-short.txt",
+      "reason": "authored narration/visual spec",
+      "sha256": "dc1e29d2bd67a0ade5c704db8f70accb020d185389a5c067fd8c75fbf1e099fa"
+    },
+    {
+      "bytes": 311,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c000.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "2c3cd3f14fc934cebb4f4c3aec0420ecb6808795aa55830e8d4b12d3963914f4"
+    },
+    {
+      "bytes": 354,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c001.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "41481fafc77474b9dcf89c824f63e19780d7069ca80fade2ea461e2a4d6ed62f"
+    },
+    {
+      "bytes": 125,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c002.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b934281245935fb8ab0d523f4d6e119f106b8f17e0a0a050c682741c452d4802"
+    },
+    {
+      "bytes": 270,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c003.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "72473c504ca968a75a6d34642785605474dd453b61c6bed31681b9785ff4d7ea"
+    },
+    {
+      "bytes": 226,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c004.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "7d5651c4c582645025da2ab758b2aa1d5c0bafd35083be1be4a10a5d076027c3"
+    },
+    {
+      "bytes": 209,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c005.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8fc61eed9929c9f13a061e5dae5a145fefb6bedd9b4f8e9b1aeff4579b95564a"
+    },
+    {
+      "bytes": 286,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c006.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "df2dca389366b2711a7985e2201682398850ab8ccbcbcc4dcc27543f8e687d73"
+    },
+    {
+      "bytes": 280,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c007.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9fc67a1dc0d20aa15744826a0fe96bb2c3f3d377ceb08c20950ed272fa94cc3a"
+    },
+    {
+      "bytes": 256,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c008.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "2cb39b8edee29581d897a6795fc60ee160d83c73a67e49a28f8828ec3f8efdbd"
+    },
+    {
+      "bytes": 196,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c009.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e508902d09413d6d81b17aa63d4ac2996a7d3a3b59d82204d8ef171a15920e0e"
+    },
+    {
+      "bytes": 242,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c010.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "05838865e469d0cdd0990248203c4326d4f7ba2399f221998b2b6e76d56c37a8"
+    },
+    {
+      "bytes": 176,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c011.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "00fa98c06e7ca63f86d1b5fa7dba25f06c39c8f52f06cf96bdd9c5d61c9cf72d"
+    },
+    {
+      "bytes": 272,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c012.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9068d62923fd8d974467d488fae885beaed9a3a46a9e6d987cb7bfb72e98ce6b"
+    },
+    {
+      "bytes": 294,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c013.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "36612fa562a3e2e1c8c4c778d0cd3eee23bbcf949ee65de23c05dec0544a1945"
+    },
+    {
+      "bytes": 294,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c014.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "266a7849d676d0ec9dea1c669d8c367a58b0d1c9b8267f3949ae61abe18446dc"
+    },
+    {
+      "bytes": 275,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c015.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "24a169ff1e6442dab7818775e1ad5517187f3befaf4e6068b933050926e89689"
+    },
+    {
+      "bytes": 231,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c016.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "60fe5d5ce0c417167b4701b22232d09ac4d652ad0921aaea0bef817b3bcb948f"
+    },
+    {
+      "bytes": 184,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c017.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "b0f5ad6757c309954a997afaf01cc9943a7322b808e6ee41dd01f572fe80dfce"
+    },
+    {
+      "bytes": 357,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c018.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "8990b6a5ab900652e2feef216eb5a0fa14218aa1c782a06e37ecabbc59e9d937"
+    },
+    {
+      "bytes": 296,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c019.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "71c0040163bcd12b747149a034551b9ae95d68d332e3247ee399782edf94b23d"
+    },
+    {
+      "bytes": 324,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c020.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "0fc25190a6507d06ea729431b30c660849dcb1eab579aaa548763d20b212ca56"
+    },
+    {
+      "bytes": 265,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c021.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "2ad3e041ec515c2d542e06f1084af9238d3bbd3a4442f4b6b1e33313e0b2f268"
+    },
+    {
+      "bytes": 218,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c022.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9ad85badb8b02e04d9b899d9e569cf807c880385a30ff143b18469aad7394a00"
+    },
+    {
+      "bytes": 292,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c023.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e49a69e7ca8c376a59a4bec0be1ebd2c1947a4aecec0b906d6903d232ab2ad73"
+    },
+    {
+      "bytes": 208,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c024.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "6f9fa939f9bbc66e9e9b4ea367f91bcf753752596d1e03b9bc2f5e9a31882750"
+    },
+    {
+      "bytes": 267,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c025.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "d09a3f061baf0c986b7faa55043b5f9724129b711a472b0a9ccf60218329ff1f"
+    },
+    {
+      "bytes": 285,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c026.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "de6c8dffaa6898f2d95d3e90137c888a9e50f38d26e8cbe90672778edf8b6c84"
+    },
+    {
+      "bytes": 330,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c027.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5b782c98b257a1cbb93e757d958969c6ee276226f5c01f2a7c56dc419d075e5b"
+    },
+    {
+      "bytes": 292,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c028.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f836068c3c2fe1a65ec3d8265074f26466d7ebd24cb1586d1057c53e7ba570f3"
+    },
+    {
+      "bytes": 227,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c029.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "01f5b1dd0075865b0341161f8cde94b48755b7238fcb85489334ca6a260158cf"
+    },
+    {
+      "bytes": 251,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c030.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "33963d65c0df7717f507025542f66bddcc09db9078fdbc0f66fb594ac30a0e06"
+    },
+    {
+      "bytes": 241,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c031.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "efb31679ea6c02d960ba5b9f3c80e561b1adb112d1aef586ca19d86385c46102"
+    },
+    {
+      "bytes": 163,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c032.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "daaba32fd0ada99b47d41a311c127f7894907763cfa1757b85e47e44550723f9"
+    },
+    {
+      "bytes": 219,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c033.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "f7381a6ac42d8da86f74fcc8c48c381d63850737c0f9b69537f3187b7f252cc1"
+    },
+    {
+      "bytes": 258,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c034.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "989c77c15e163cc7bc1774908dfe8757e64c3eae9918dd0405dee3e779e83571"
+    },
+    {
+      "bytes": 225,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c035.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5367a52e5faedc72bf6a179382bbc4dc0edd86eac16b9b96dc9db7b4fd0671a8"
+    },
+    {
+      "bytes": 280,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c036.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "78e46ebfe765614c978f3c33abbcf2755f106f02254dac70ffa80133ed190036"
+    },
+    {
+      "bytes": 283,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c037.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "cd28db80ec4a42685c265eeb2abb365284fe5b1c776c31da500db442e22aa574"
+    },
+    {
+      "bytes": 245,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c038.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "cb57904a7fc0494f3e7b3612d813af87080fe36ff9192c6a20abe13ba985e3b9"
+    },
+    {
+      "bytes": 289,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c039.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "58a026e1d7884d4f42c99e815fe57aed95e64d7e916d7a9ac88305669301c5de"
+    },
+    {
+      "bytes": 222,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c040.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "530ffb33ee5b70597b9aae7fab89f5f6a23ffd560fec441831e96f8677a1a9c4"
+    },
+    {
+      "bytes": 266,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c041.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "e62f1e332b81eb290bc45b0563fe8735981c34ac266e7a6c7354cf382d27f7dc"
+    },
+    {
+      "bytes": 263,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c042.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "37fb734fe84e95475f93c6ad7f8d789bd7212c0644549c267386269cddc7199b"
+    },
+    {
+      "bytes": 235,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c043.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "5345cf222ed3960206a4d5beba91f2ca5e8b172e58e34db13a4b2e4711895cf7"
+    },
+    {
+      "bytes": 357,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c044.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "769099cb133589febf7a9baa85dd4f8ca37a95b174e7ff10d5221608d6546717"
+    },
+    {
+      "bytes": 215,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c045.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "87397e7e51410210525b118f670f687b1cb855871e1521d17d7d17ea8cbe6a74"
+    },
+    {
+      "bytes": 179,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c046.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "56ce2d8c7d6e995b7a5193db9111fd169e98e03ce32aa2dfbcf1dc69782a604d"
+    },
+    {
+      "bytes": 348,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c047.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "a4e5c1042e7b563acea425c159975369da459d0fa0b96131cb68ebdd90cceb76"
+    },
+    {
+      "bytes": 262,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c048.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "95492129d232c1628ba5f5a6b1a2951fecb7fa41349db93d0125a81aefca1c24"
+    },
+    {
+      "bytes": 252,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c049.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "38c2eea9bd6c20109459cb737d32212f6668aaedf85e994dd27ba16dc7e957ee"
+    },
+    {
+      "bytes": 282,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c050.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "152de6ec360b759a187f528c3db3c88f02df27c537a9a77a7ce69d483495bea5"
+    },
+    {
+      "bytes": 286,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c051.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "9e67649cddda4e4e5917624fc330465c08036e46fe9746e6ed2f25dcfc4e3b5c"
+    },
+    {
+      "bytes": 195,
+      "category": "source",
+      "path": "video/ch05/assets/vo/c052.txt",
+      "reason": "narration chunk kept as input (.gitignore)",
+      "sha256": "0398d0f7ef24ad0008c06ded2536db515b9948115f63dad4a4df5a4641e86ed9"
+    },
+    {
+      "bytes": 13912,
+      "category": "generated",
+      "path": "video/ch05/assets/vo/full-script.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "d1244fe20eb4465fa982cdbb2f47f88e3d74d0488aea7a2a0b32dc85a948ba5c"
+    },
+    {
+      "bytes": 25970,
+      "category": "source",
+      "path": "video/ch05/hf-remake/build_short.py",
+      "reason": "authored build script",
+      "sha256": "c8deb0bd0e6a5d0c629217f3e896c8ff5aba0e4a2251dc0608e5a0beef7df0bb"
+    },
+    {
+      "bytes": 5527,
+      "category": "source",
+      "path": "video/ch05/hf-remake/make_bgm.py",
+      "reason": "authored build script",
+      "sha256": "febf096c28b7ffb954d276cde644a3d594a629bf601d3c533a732aca85240ad1"
+    },
+    {
+      "bytes": 3698,
+      "category": "source",
+      "path": "video/ch05/hf-remake/short/SYNC-MAP.md",
+      "reason": "authored design/plan note",
+      "sha256": "a10c4ac15ca14bbf2cb2ac41709671b9027452aff817853256504af7a9c7dd77"
+    },
+    {
+      "bytes": 819,
+      "category": "third_party",
+      "path": "video/ch05/hf-remake/short/assets/sfx/CREDITS.md",
+      "reason": "asset credits/licence",
+      "sha256": "869088fcd29bce8432f4df015c96bc7ec12da3c41bb6d0d0760eecad4b59ad02"
+    },
+    {
+      "bytes": 46,
+      "category": "generated",
+      "path": "video/ch05/hf-remake/short/assets/vo-concat.txt",
+      "reason": "narration slice / concat list",
+      "sha256": "ef0bce075a0e803e9389d26fb0150e6a8bae2f0bd814882c9fe62c339ef68d00"
+    },
+    {
+      "bytes": 388,
+      "category": "config",
+      "path": "video/ch05/hf-remake/short/hyperframes.json",
+      "reason": "project/tool configuration",
+      "sha256": "d0da44435d5f9cdbac6b001dcaee4b69aa558414a84cb0a1903b18669a6013a3"
+    },
+    {
+      "bytes": 6362,
+      "category": "source",
+      "path": "video/ch05/hf-remake/short/index.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "a92a6d7e7ad67560f3682ea272b5c3cfe971bc15bf54580a01c8f7c6ae63d968"
+    },
+    {
+      "bytes": 51,
+      "category": "config",
+      "path": "video/ch05/hf-remake/short/meta.json",
+      "reason": "project/tool configuration",
+      "sha256": "f977f50ef1f4e5f110f8b1c0ea6fac872585c45ee4dbb939ad509a376f6929b7"
+    },
+    {
+      "bytes": 1749,
+      "category": "generated",
+      "path": "video/ch05/hf-remake/short/short-meta.json",
+      "reason": "pipeline output",
+      "sha256": "e9583f2aa032e6db56ea2fb9c84ae6715abba6c925ed90b079ac8ffac625857a"
+    },
+    {
+      "bytes": 4733,
+      "category": "source",
+      "path": "video/ch05/hf-remake/synth_long_vo.py",
+      "reason": "authored build script",
+      "sha256": "d0a9b711d45a607dc7478b686edef9a983a572fe296154bb1f6fef8003bc4a5c"
+    },
+    {
+      "bytes": 21958,
+      "category": "source",
+      "path": "video/ch05/hf-remake/tpl/dense-short-v3.tpl.html",
+      "reason": "authored HyperFrames scene/composition",
+      "sha256": "99fcb79121fdaa551aa2578c33ee8cc53a9f404c8963facac2d1a4aa0ba25416"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch01/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "cab87b1296b9654acb83c94e9359bf076995005e554ac06df1ccb2d2062029bd"
+    },
+    {
+      "bytes": 4183,
+      "category": "generated",
+      "path": "video/chapters/ch01/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "7baece399b68f4cb51f502828bc4a92168d3d994073299e80e539c720f3454e0"
+    },
+    {
+      "bytes": 1031,
+      "category": "source",
+      "path": "video/chapters/ch01/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "9bdf83b113802fd336e36f86a24cc53a2c6f044048e417415caaeed8f5954d6b"
+    },
+    {
+      "bytes": 1098,
+      "category": "source",
+      "path": "video/chapters/ch01/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "eba6b855c334166957f91931b88e2062b543059c94c96fc62492c6917300eda7"
+    },
+    {
+      "bytes": 15067,
+      "category": "source",
+      "path": "video/chapters/ch01/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "5306e9577a5f6c4fda8cd69a0aa7601dbf85914cea0528fb529c2378a8e2a8b5"
+    },
+    {
+      "bytes": 3949,
+      "category": "source",
+      "path": "video/chapters/ch01/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "79cea1154161a2b0193313908dee82f8e44abb601578850476b67c2c3ad134e6"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch02/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "f9ace07f4ac52bdd0f8aac178cab7874a3ed2f43e666d49954815b2fb049ec38"
+    },
+    {
+      "bytes": 3913,
+      "category": "generated",
+      "path": "video/chapters/ch02/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "3e0b0785d09393b4d3c8ce1d30f6fcddeebc801ab6a8e4302bf836b8dce57db6"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch02/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "95bbd889b9dfefce549d71210592aae6baa32abcb164a0f60b21fdb758554efe"
+    },
+    {
+      "bytes": 1076,
+      "category": "source",
+      "path": "video/chapters/ch02/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "42247a99fb843fa1474f7237d7d98cfef48b9d029e3913a8e7577553b7bde68e"
+    },
+    {
+      "bytes": 7727,
+      "category": "source",
+      "path": "video/chapters/ch02/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "51eb2522cf0ffa6af547772860b2e560f907eea03963f5c78696d6e6011dd1f6"
+    },
+    {
+      "bytes": 1047,
+      "category": "source",
+      "path": "video/chapters/ch02/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "1b85812f2c16c0a9eb13bb6d3a8eac092464fc350f075935bebf7b04961d1c62"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch03/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "0d0fa8eea526fc3ace9ef2a225bcd5dded16f07915d2538d035847aa5961ad9c"
+    },
+    {
+      "bytes": 3711,
+      "category": "generated",
+      "path": "video/chapters/ch03/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "f62135e530f03d68a60108266d5c0ec0ea5a527b529c15c571a17459dcc39adc"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch03/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "d974e7cd8f6adf6ec4d54fa3726a1e06920595cd8790c50f9d872ff89b6b7c12"
+    },
+    {
+      "bytes": 1069,
+      "category": "source",
+      "path": "video/chapters/ch03/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "89e6ec547a5b4689e088c95849b54c7f61b159666952ad73768b4b8396e9b518"
+    },
+    {
+      "bytes": 7567,
+      "category": "source",
+      "path": "video/chapters/ch03/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "e9a65442292a743ce2e015b2378a0cb9bfbbf027aa6ab8de6c979a4ddf56b857"
+    },
+    {
+      "bytes": 2006,
+      "category": "source",
+      "path": "video/chapters/ch03/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "fc9e375edeb0772c2d5f69495b6f15259c1b0051858d09d08a15203076eea058"
+    },
+    {
+      "bytes": 295,
+      "category": "review",
+      "path": "video/chapters/ch04/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "260f5f4e4f93d048c8b1d8b1d26003627ab7375f5e0c4806622c87a7ba4ef6ee"
+    },
+    {
+      "bytes": 5391,
+      "category": "generated",
+      "path": "video/chapters/ch04/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "2c9e921b08f37f702cd9944ad42da1c867ab2ea05f5118423d19699635f55581"
+    },
+    {
+      "bytes": 1030,
+      "category": "source",
+      "path": "video/chapters/ch04/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "69398581e1fe2750a2742660dd841b89028375f204e890e08de969a8f41792cd"
+    },
+    {
+      "bytes": 1081,
+      "category": "source",
+      "path": "video/chapters/ch04/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "a7b46e142ad23f0fbe4377360c855cfa9a3fde86001c8cd749a5cdb89af3d411"
+    },
+    {
+      "bytes": 5686,
+      "category": "source",
+      "path": "video/chapters/ch04/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "acbd92b901897b6cf82c64ee69b161d1f6497fa59fb4bac312fe9bd5493f69c6"
+    },
+    {
+      "bytes": 1599,
+      "category": "source",
+      "path": "video/chapters/ch04/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "518b967338be1c7b3390c6343b38bb9699f0f67186a7f6de91329d02be687602"
+    },
+    {
+      "bytes": 175,
+      "category": "review",
+      "path": "video/chapters/ch05/compat-report.json",
+      "reason": "review artefact",
+      "sha256": "15894477a6603f9d3432b067d30e3f8b9e3794169337dc326e7cf74d84df38ab"
+    },
+    {
+      "bytes": 3668,
+      "category": "generated",
+      "path": "video/chapters/ch05/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "32a639ae3dd2b78c4cc07902fd1d5f6f777b0e5ff58ad2051c17f8aba7e1e103"
+    },
+    {
+      "bytes": 1029,
+      "category": "source",
+      "path": "video/chapters/ch05/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "af02c658876da7ab95b1c5890753bd208801ed5feba6abd5dfd539fe0196b03c"
+    },
+    {
+      "bytes": 264,
+      "category": "source",
+      "path": "video/chapters/ch05/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "ff04ac0368136fb0d814097a6a2f00eab5b5d98852e7e6e7cd3dc1f258e8a3a6"
+    },
+    {
+      "bytes": 13912,
+      "category": "source",
+      "path": "video/chapters/ch05/script-long.txt",
+      "reason": "chapter narration script",
+      "sha256": "d1244fe20eb4465fa982cdbb2f47f88e3d74d0488aea7a2a0b32dc85a948ba5c"
+    },
+    {
+      "bytes": 2319,
+      "category": "source",
+      "path": "video/chapters/ch05/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "a1eeb1bdd6c17ad3b944b50d30b479a0d2171ee888de393817ee3374dae9ef1a"
+    },
+    {
+      "bytes": 3403,
+      "category": "generated",
+      "path": "video/chapters/ch06/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "8e5e68a7b41fd20fe3280387d8765779817735e8490c45c95ad3cc02dae1f53c"
+    },
+    {
+      "bytes": 941,
+      "category": "source",
+      "path": "video/chapters/ch06/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "802d2448a52b02a35bfcdb3dcef06ac7a51352e3ac2100c714821bcf36f256b2"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch06/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "68c31ff91af533567a4092224f6e547a606376cbe15ed18500c73d3f5f946806"
+    },
+    {
+      "bytes": 2484,
+      "category": "source",
+      "path": "video/chapters/ch06/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "ce5aa015a6bf6173cec409c8958069f38a5f7cd1e22b9cf7f855e29971b12377"
+    },
+    {
+      "bytes": 518,
+      "category": "source",
+      "path": "video/chapters/ch06/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "4131fd315a5df6268ca5a094d62aa16f69fa835e2cd889e4367fb6f393b9d49e"
+    },
+    {
+      "bytes": 3861,
+      "category": "generated",
+      "path": "video/chapters/ch07/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "0dd69c388f6db03a10f30fb252b6e952d139fdf0f9ae57c8ca99724c2255f68d"
+    },
+    {
+      "bytes": 944,
+      "category": "source",
+      "path": "video/chapters/ch07/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "8bacce4c77611ddfa30af7559a532979347bc8b3ff2d06cee5b3f9ab414ec38c"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch07/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "d4fff82efb56956385f9c5d85dd49b360aca11a3860c09e1e63d054d5c5de2eb"
+    },
+    {
+      "bytes": 2854,
+      "category": "source",
+      "path": "video/chapters/ch07/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "e2cbe0c2a4136f2b2f2ee9052fa15f17cf3cd96c2bc91aac476dbc8f6e11caa5"
+    },
+    {
+      "bytes": 513,
+      "category": "source",
+      "path": "video/chapters/ch07/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "1d6acde1f176be8d14b9705420bf80706394175cfbc2a508571b1bcadfa820aa"
+    },
+    {
+      "bytes": 4545,
+      "category": "generated",
+      "path": "video/chapters/ch08/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "b5d56257880e76274bba8ed0077ab75252074573eeecb59f01efc3769a2bbac9"
+    },
+    {
+      "bytes": 949,
+      "category": "source",
+      "path": "video/chapters/ch08/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e519e24ce51a04d621ce566c7026645866e8ab38200c9501d5cda3b58d88a3db"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch08/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "715c14bfca9f92e9385e089565e1413d5e46c9040a26b1684679faaa56b3ce17"
+    },
+    {
+      "bytes": 3523,
+      "category": "source",
+      "path": "video/chapters/ch08/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "3361310e371c3d0d1a94b39d7b0621f6a0e3d5a4acb16691f665b437e0ec6259"
+    },
+    {
+      "bytes": 806,
+      "category": "source",
+      "path": "video/chapters/ch08/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "28faa7ef9d1a08e764da7e73e1b1066cd6bd47a86b3d8390ebc00351ff32a9e2"
+    },
+    {
+      "bytes": 3989,
+      "category": "generated",
+      "path": "video/chapters/ch09/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "1403fa4ab9d311eeb312a105cbaba56340fa452c10205047c43a5e74b76e32f8"
+    },
+    {
+      "bytes": 930,
+      "category": "source",
+      "path": "video/chapters/ch09/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "49d543ad9304ad8a16da2f08a91648aec7f000b2cb9002547557181c00d7c1cd"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch09/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "17b93408ae156ef0d72f740adc08604711b6960026bfcd24b8f009ec9f30a4e9"
+    },
+    {
+      "bytes": 2929,
+      "category": "source",
+      "path": "video/chapters/ch09/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "749bc01470a378c566f7d3e0fab72dfd88e8bbe259335a2369fb30f35777b674"
+    },
+    {
+      "bytes": 594,
+      "category": "source",
+      "path": "video/chapters/ch09/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "c96ccb621f0efc1ffeda87166a406c447dfcc96083d0914658ed36dcc1271cd5"
+    },
+    {
+      "bytes": 4857,
+      "category": "generated",
+      "path": "video/chapters/ch10/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "c61a7bbc0b386fc47f49fd8bf70b6b50578fc7922b2c3a83100433a569d66342"
+    },
+    {
+      "bytes": 950,
+      "category": "source",
+      "path": "video/chapters/ch10/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "6250cadd43ab562db1d9aeca6ab0aa4e83ce6b77f8c241482ad42663f533bb26"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch10/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "a406a73b27e7997fcc3ac064f5bbbcf853271b39f91a931b03f23aab67680969"
+    },
+    {
+      "bytes": 3708,
+      "category": "source",
+      "path": "video/chapters/ch10/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "dda0664ef9003ff55fa608ff0055409725a72264582bada6cbb7e3dbfe84d6c9"
+    },
+    {
+      "bytes": 515,
+      "category": "source",
+      "path": "video/chapters/ch10/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "2ac3a6ea341020b5c151eeb2af2aea279d2b7589c9ecfcbf4879d048fb8ca74c"
+    },
+    {
+      "bytes": 3891,
+      "category": "generated",
+      "path": "video/chapters/ch11/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "9978c9dc61572bbdaaf570df9b37c125070ddfc9c2d449b927f5d4776e05d38f"
+    },
+    {
+      "bytes": 930,
+      "category": "source",
+      "path": "video/chapters/ch11/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "3a8d4acc08a592e4172d8fc1396885880c34414382657e0942f35eea4c332233"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch11/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "88a5d5baffcc00bc22ef236377030a2720fc4d479748567c060b9dd5c86477f3"
+    },
+    {
+      "bytes": 2914,
+      "category": "source",
+      "path": "video/chapters/ch11/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "dfa65b828e0dbdcc5fc3cef7ae2066bfe357464cb6ac3b62ffdea908e5d99ea2"
+    },
+    {
+      "bytes": 609,
+      "category": "source",
+      "path": "video/chapters/ch11/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "9355f1fa91da34d1e1e8a3a73108e261bc41f22a36f521838721161aa9bf954a"
+    },
+    {
+      "bytes": 4993,
+      "category": "generated",
+      "path": "video/chapters/ch12/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "9e35819138449e972b39cec27469ae39f41caf0f7f495f7a6e2861fd2a445286"
+    },
+    {
+      "bytes": 928,
+      "category": "source",
+      "path": "video/chapters/ch12/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "dfe0b97c719834603dd8b7a171f2c0cbba0f3128dba8d7ffd87c73a14e655f84"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch12/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e5a3062e7448b3110d26003c21e7379c054f525083b16af0eae503518f7c87fc"
+    },
+    {
+      "bytes": 4016,
+      "category": "source",
+      "path": "video/chapters/ch12/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "709333939be935c6d158d49635b4c73fd35a481af702b86c0c1031fe5bda0b75"
+    },
+    {
+      "bytes": 611,
+      "category": "source",
+      "path": "video/chapters/ch12/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "01d08a04be2153fc65e2c266df7b13438867b776fbb0d6a20a347e894b0e8e26"
+    },
+    {
+      "bytes": 4707,
+      "category": "generated",
+      "path": "video/chapters/ch13/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "8fd5d3db912ad596b3cf79701671ee86cdb0811e50c12c4949bfe0d77b391f0a"
+    },
+    {
+      "bytes": 931,
+      "category": "source",
+      "path": "video/chapters/ch13/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "b74d5599fb1fd4277a2af2e0dc36ec8ce8b47cad1295c4480f66b55e27204dbc"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch13/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "ef55ec513a361f2df44f975cdf6204bc6b130b1b9cd376a66998d464988765bc"
+    },
+    {
+      "bytes": 3634,
+      "category": "source",
+      "path": "video/chapters/ch13/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "8363cbf31fa6d902c87c6b57ad489882fdf2ded3c0f1e71916fb028586a0e5ac"
+    },
+    {
+      "bytes": 677,
+      "category": "source",
+      "path": "video/chapters/ch13/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "b81de8f6692b3be9e34f117cbc81c6c893c1e95a0a2e7e8d9feca1151acb430f"
+    },
+    {
+      "bytes": 4435,
+      "category": "generated",
+      "path": "video/chapters/ch14/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "1c75e0e8df87153c6d70586079d1f2cc9ff1c1a13ba6f537d24589f7f6a3ec70"
+    },
+    {
+      "bytes": 937,
+      "category": "source",
+      "path": "video/chapters/ch14/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "cad03719a58211d15e68052b1926c77565d77e9146f459d2376e097f6b618d79"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch14/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "76a656921b6332404b08f522fde25533beadd6bbeca37f0e0554490c398857d8"
+    },
+    {
+      "bytes": 3346,
+      "category": "source",
+      "path": "video/chapters/ch14/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "5f01d57ba8a90df853d708a74a30bc5266b578a565cae6d597ea1caf3abc205e"
+    },
+    {
+      "bytes": 726,
+      "category": "source",
+      "path": "video/chapters/ch14/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "d0b6bf915df54de08b38fd2bf75b142117e12c52f230e7f4bb52bb9b7b5a4b99"
+    },
+    {
+      "bytes": 5025,
+      "category": "generated",
+      "path": "video/chapters/ch15/content-pack.json",
+      "reason": "pipeline output",
+      "sha256": "c507f831e99096b2c3971238808b85ac3bb1391af41bf4f3ee54e274b6069b29"
+    },
+    {
+      "bytes": 937,
+      "category": "source",
+      "path": "video/chapters/ch15/episode.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "e7865137e19594c419a2035558991f48f8044ccd82655f7e9ee9fa751a9d6af3"
+    },
+    {
+      "bytes": 71,
+      "category": "source",
+      "path": "video/chapters/ch15/scenes.yaml",
+      "reason": "chapter pipeline config",
+      "sha256": "6d8c0988d3147ef41ab05b93353b2962c14a3ce75119f0fdaa87ba82afdcac32"
+    },
+    {
+      "bytes": 3971,
+      "category": "source",
+      "path": "video/chapters/ch15/script-long.md",
+      "reason": "chapter narration script",
+      "sha256": "176ea67ce6e2fe7aa6e45e6a8d229362c4ff948bfb189a9290b4187677adc6f4"
+    },
+    {
+      "bytes": 785,
+      "category": "source",
+      "path": "video/chapters/ch15/script-short.md",
+      "reason": "chapter narration script",
+      "sha256": "47e8801d436de2e3f4a0b572bb993b4c38b4630247604303e139f55b88a3098b"
+    },
+    {
+      "bytes": 64385,
+      "category": "config",
+      "path": "video/package-lock.json",
+      "reason": "project/tool configuration",
+      "sha256": "a22a7a30539c48445e99c05047b90f9273dcdc12b39ca4d8b810271c717df54a"
+    },
+    {
+      "bytes": 343,
+      "category": "config",
+      "path": "video/package.json",
+      "reason": "project/tool configuration",
+      "sha256": "05d0f4d56dd1e5e4bafe0c0e5a1600672cd0431bf8712ee7255c99d9b8bce198"
+    },
+    {
+      "bytes": 11616,
+      "category": "source",
+      "path": "video/pipeline/cli.py",
+      "reason": "authored build script",
+      "sha256": "6e557f29f08a7a100516de14d1975e641a50d31f680fe358abbfc192919d77d8"
+    },
+    {
+      "bytes": 5363,
+      "category": "source",
+      "path": "video/pipeline/content.py",
+      "reason": "authored build script",
+      "sha256": "6745955943a74d68d5c979c9f663a76252773a6e8788f03d7021396f65840ec9"
+    },
+    {
+      "bytes": 10307,
+      "category": "source",
+      "path": "video/pipeline/migrate.py",
+      "reason": "authored build script",
+      "sha256": "7c7c001b439f7e9734cf28f17bc85f08235043fbc086fd2773daeb3bd8191beb"
+    },
+    {
+      "bytes": 14276,
+      "category": "source",
+      "path": "video/pipeline/model.py",
+      "reason": "authored build script",
+      "sha256": "b4aa0ed804a419211e6f1395fae4ea1256a58ba1a43e3ec73492663afe96e0cd"
+    },
+    {
+      "bytes": 8361,
+      "category": "source",
+      "path": "video/pipeline/quality.py",
+      "reason": "authored build script",
+      "sha256": "6e50b7733aba2942610a677f5ceb732ef81c7345b798ce9575fc64ba24b77d6d"
+    },
+    {
+      "bytes": 6038,
+      "category": "source",
+      "path": "video/pipeline/timeline.py",
+      "reason": "authored build script",
+      "sha256": "b33e392ef8354fc5da11be9a26430b288485a770e7aa31fea8371e4e3b401521"
+    },
+    {
+      "bytes": 10349,
+      "category": "source",
+      "path": "video/pipeline/voice.py",
+      "reason": "authored build script",
+      "sha256": "b8eb634496c62c9bc4ef8b9409843d34ce50b33646ef3c90efcecbfd9b9133b5"
+    }
+  ],
+  "schema_version": 1,
+  "source_commit": "dcdc3950425178a4f4639901641d43161dc81b00",
+  "tracked": 518
+}

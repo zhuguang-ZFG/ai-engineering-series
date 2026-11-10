@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>算法导论 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 86 / 195</p><article><h1 id="算法导论">算法导论</h1><details class="contents"><summary>本章目录 <span>· 8 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-全景图算法概述">0. 全景图：算法概述</a></li><li><a href="#1-二分查找每次排除一半">1. 二分查找：每次排除一半</a><ul><li><a href="#11-二分查找的原理">1.1 二分查找的原理</a></li><li><a href="#12-二分查找的时间复杂度分析">1.2 二分查找的时间复杂度分析</a></li></ul></li><li><a href="#2-排序将无序变有序">2. 排序：将无序变有序</a><ul><li><a href="#21-常见排序算法">2.1 常见排序算法</a></li><li><a href="#22-快速排序的复杂度分析">2.2 快速排序的复杂度分析</a></li></ul></li><li><a href="#3-递归自己调用自己">3. 递归：自己调用自己</a><ul><li><a href="#31-递归的本质">3.1 递归的本质</a></li><li><a href="#32-递归-vs-迭代">3.2 递归 vs 迭代</a></li></ul></li><li><a href="#4-贪心算法每步选最优">4. 贪心算法：每步选最优</a><ul><li><a href="#41-贪心的思想">4.1 贪心的思想</a></li><li><a href="#42-贪心的局限性">4.2 贪心的局限性</a></li></ul></li><li><a href="#5-算法设计范式">5. 算法设计范式</a></li><li><a href="#6-总结算法设计的核心思想">6. 总结：算法设计的核心思想</a></li><li><a href="#延伸阅读-7">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>交互入口</strong>：本章模拟器位于<a href="https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/algorithm-thinking.html">原课程页面</a>，需联网打开。书中保留原理、代码与操作说明；按代码在本地练习时，先建独立的练习目录。</p>
+</blockquote>
+<blockquote>
+<p><strong>前言</strong>
+<strong>如何高效地解决问题？</strong> 你可能遇到过这样的困惑：同一个问题，有人写的代码跑几秒就出结果，有人写的跑几分钟还在转。差别往往在于算法。本章带你理解算法的核心思维方式。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>问题拆解能力</strong>：面对复杂问题，能想到用分治、递归等策略拆解，而不是一上来就写代码</li>
+<li><strong>效率判断能力</strong>：用大 O 表示法判断两种解法哪个更高效，而不是凭感觉猜测</li>
+<li><strong>复杂度思维</strong>：写代码前先估算数据规模和时间要求，选择合适的算法级别</li>
+<li><strong>后续学习基础</strong>：为高级数据结构、分布式系统、机器学习打下基础</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>二分查找</td>
+<td>分治思想、O(log n)</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>排序算法</td>
+<td>冒泡、快排、归并</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>复杂度分析</td>
+<td>时间复杂度、空间复杂度</td>
+</tr>
+</tbody></table></div>
+<h2 id="0-全景图算法概述">0. 全景图：算法概述</h2>
+<p>想象你要在一本字典里找一个单词：</p>
+<ul>
+<li><strong>方法一</strong>：从第一页开始，一页一页翻（线性查找）</li>
+<li><strong>方法二</strong>：根据首字母定位，再二分查找（二分查找）</li>
+</ul>
+<p>两种方法都能找到，但效率天差地别。<strong>算法就是解决问题的方法</strong>。</p>
+<p><strong>算法的核心指标：</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>时间复杂度</strong></td>
+<td>运行时间随数据量增长的趋势</td>
+<td>预测大规模数据的性能</td>
+</tr>
+<tr>
+<td><strong>空间复杂度</strong></td>
+<td>内存占用随数据量增长的趋势</td>
+<td>评估内存消耗</td>
+</tr>
+<tr>
+<td><strong>正确性</strong></td>
+<td>是否总能得到正确结果</td>
+<td>算法的基本要求</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>逐行解读这张表</strong>
+<strong>时间复杂度</strong>：用大 O 表示法描述。O(n) 表示数据量翻倍，时间翻倍；O(n²) 表示数据量翻倍，时间变成 4 倍。</p>
+</blockquote>
+<p><strong>空间复杂度</strong>：同样用大 O 表示法。有些算法用空间换时间（如哈希表），有些用时间换空间（如压缩算法）。</p>
+<p><strong>正确性</strong>：算法必须对所有可能的输入都能给出正确结果。边界条件（空输入、极大输入）最容易出错。</p>
+<h2 id="1-二分查找每次排除一半">1. 二分查找：每次排除一半</h2>
+<h3 id="11-二分查找的原理">1.1 二分查找的原理</h3>
+<blockquote>
+<p><strong>二分查找如何工作？</strong>
+<strong>前提</strong>：数据必须有序</p>
+</blockquote>
+<p><strong>过程</strong>：</p>
+<ol>
+<li>找到中间元素</li>
+<li>如果中间元素等于目标，找到！</li>
+<li>如果目标小于中间元素，在左半部分继续</li>
+<li>如果目标大于中间元素，在右半部分继续</li>
+<li>每次排除一半，直到找到或确定不存在</li>
+</ol>
+<p><strong>时间复杂度</strong>：O(log n)</p>
+<p><strong>生活类比</strong>：猜数字游戏。我想一个 1-100 的数，你每次猜中间，我告诉你大了还是小了。最多猜 7 次就能猜中（因为 2⁷ = 128 &gt; 100）。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了二分查找的工作原理，你可以选择顺序查找或二分查找来对比：</p>
+<h3 id="12-二分查找的时间复杂度分析">1.2 二分查找的时间复杂度分析</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>数据量</th>
+<th>线性查找</th>
+<th>二分查找</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100</td>
+<td>100 次</td>
+<td>7 次</td>
+</tr>
+<tr>
+<td>1,000</td>
+<td>1,000 次</td>
+<td>10 次</td>
+</tr>
+<tr>
+<td>1,000,000</td>
+<td>1,000,000 次</td>
+<td>20 次</td>
+</tr>
+<tr>
+<td>1,000,000,000</td>
+<td>1,000,000,000 次</td>
+<td>30 次</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>� 逐行解读这张表</strong>
+<strong>第一列（数据量）</strong>：要查找的数据有多少。可以看到数据量从 100 增长到 10 亿（扩大了 1000 万倍！）</p>
+</blockquote>
+<p><strong>第二列（线性查找）</strong>：最&quot;笨&quot;的方法，从第一个开始一个一个找。查找次数等于数据量，数据量越大，查找次数越多。</p>
+<p><strong>第三列（二分查找）</strong>：聪明的方法，每次排除一半。查找次数只和数据量的对数有关，即使 10 亿数据也只需要 30 次！</p>
+<p><strong>对比结论</strong>：当数据量达到 100 万时，线性查找需要 100 万次，二分查找只需要 20 次——差距达 5 万倍！</p>
+<blockquote>
+<p><strong>� 对数增长的威力</strong>
+二分查找的时间复杂度是 O(log n)，这意味着：</p>
+</blockquote>
+<ul>
+<li>10 亿数据，最多查找 30 次</li>
+<li>1 万亿数据，最多查找 40 次</li>
+</ul>
+<p>这就是对数增长的威力——数据量增加 1000 倍，查找次数只增加 10 次。</p>
+<h2 id="2-排序将无序变有序">2. 排序：将无序变有序</h2>
+<h3 id="21-常见排序算法">2.1 常见排序算法</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>时间复杂度</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>冒泡排序</strong></td>
+<td>O(n²)</td>
+<td>简单但慢</td>
+<td>教学、小数据量</td>
+</tr>
+<tr>
+<td><strong>选择排序</strong></td>
+<td>O(n²)</td>
+<td>简单但慢</td>
+<td>小数据量</td>
+</tr>
+<tr>
+<td><strong>插入排序</strong></td>
+<td>O(n²)</td>
+<td>对近乎有序的数据快</td>
+<td>小数据、近乎有序</td>
+</tr>
+<tr>
+<td><strong>快速排序</strong></td>
+<td>O(n log n)</td>
+<td>实际最快</td>
+<td>通用排序</td>
+</tr>
+<tr>
+<td><strong>归并排序</strong></td>
+<td>O(n log n)</td>
+<td>稳定排序</td>
+<td>需要稳定性的场景</td>
+</tr>
+<tr>
+<td><strong>堆排序</strong></td>
+<td>O(n log n)</td>
+<td>原地排序</td>
+<td>内存受限场景</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>逐行解读这张表</strong>
+<strong>冒泡排序</strong>：最基础的排序算法，就像水底的气泡往上冒一样。简单易懂，但速度最慢。适合学习排序思想，不适合实际使用。</p>
+</blockquote>
+<p><strong>选择排序</strong>：每次选出最小的放到前面。也很简单，但无论数据是否有序都要做同样多的比较。</p>
+<p><strong>插入排序</strong>：像打扑克牌时整理手牌一样。把每个元素插入到前面已经排好序的部分中。对近乎有序的数据效率很高。</p>
+<p><strong>快速排序</strong>：实际开发中最常用的排序。平均情况下最快，但最坏情况（数据已经有序）会退化到 O(n²)。</p>
+<p><strong>归并排序</strong>：采用&quot;分而治之&quot;的思想，总是 O(n log n)，但需要额外空间。适合需要稳定排序的场景。</p>
+<p><strong>堆排序</strong>：利用堆这种数据结构的排序，原地排序（不需要额外空间），但实际运行往往比快速排序慢。</p>
+<h3 id="22-快速排序的复杂度分析">2.2 快速排序的复杂度分析</h3>
+<blockquote>
+<p><strong>快速排序的原理</strong>
+<strong>核心思想</strong>：分治法</p>
+</blockquote>
+<ol>
+<li>选一个&quot;基准&quot;元素</li>
+<li>把比基准小的放左边，比基准大的放右边</li>
+<li>对左右两部分递归排序</li>
+<li>合并结果</li>
+</ol>
+<p>为什么快？</p>
+<ul>
+<li>每次划分后，基准元素就到了最终位置</li>
+<li>平均情况下，每次划分大约排除一半元素</li>
+<li>时间复杂度 O(n log n)</li>
+</ul>
+<p><strong>生活类比</strong>：整理书架。先抽出一本书，把比它薄的放左边，比它厚的放右边。然后对左右两堆分别重复这个过程。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了排序算法的可视化，你可以生成数组，观察冒泡排序和快速排序的过程对比：</p>
+<h2 id="3-递归自己调用自己">3. 递归：自己调用自己</h2>
+<h3 id="31-递归的本质">3.1 递归的本质</h3>
+<blockquote>
+<p><strong>什么是递归？</strong>
+<strong>递归</strong>是函数调用自身的编程技巧。</p>
+</blockquote>
+<p><strong>两个关键要素</strong>：</p>
+<ol>
+<li><strong>基本情况</strong>：什么时候停止递归？</li>
+<li><strong>递归步骤</strong>：如何把问题分解成更小的子问题？</li>
+</ol>
+<p><strong>经典例子：阶乘</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-js">function factorial(n) {
+  if (n &lt;= 1) return 1        // 基本情况
+  return n * factorial(n - 1) // 递归步骤
+}
+</code></pre>
+<p><strong>生活类比</strong>：俄罗斯套娃。打开一个娃娃，里面是更小的娃娃，直到最小的那个打不开为止。</p>
+<h3 id="32-递归-vs-迭代">3.2 递归 vs 迭代</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>递归</th>
+<th>迭代（循环）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>代码简洁度</strong></td>
+<td>通常更简洁</td>
+<td>可能更复杂</td>
+</tr>
+<tr>
+<td><strong>内存消耗</strong></td>
+<td>较高（调用栈）</td>
+<td>较低</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>稍慢（函数调用开销）</td>
+<td>更快</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>树遍历、分治算法</td>
+<td>简单重复任务</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>逐行解读这张表</strong>
+<strong>代码简洁度</strong>：递归通常只需要几行代码就能表达复杂的逻辑（如遍历树结构），而用循环可能需要更多的变量和嵌套。</p>
+</blockquote>
+<p><strong>内存消耗</strong>：递归会使用&quot;调用栈&quot;来保存每一层的信息，就像叠盘子一样，每递归一层就多一个盘子。循环则不需要这种开销。</p>
+<p><strong>性能</strong>：每次函数调用都有开销（参数传递、栈操作等），所以递归通常比循环慢一些。</p>
+<p><strong>适用场景</strong>：递归擅长处理本身就是递归结构的问题（如文件树、DOM 树）；循环擅长简单的重复操作（如遍历数组）。</p>
+<blockquote>
+<p><strong>递归的陷阱</strong>
+<strong>栈溢出</strong>：递归层次太深，调用栈空间耗尽。</p>
+</blockquote>
+<p><strong>解决方法</strong>：</p>
+<ul>
+<li>改用迭代</li>
+<li>使用尾递归优化（某些语言支持）</li>
+<li>限制递归深度</li>
+</ul>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了递归的调用过程，观察函数如何自己调用自己：</p>
+<h2 id="4-贪心算法每步选最优">4. 贪心算法：每步选最优</h2>
+<h3 id="41-贪心的思想">4.1 贪心的思想</h3>
+<blockquote>
+<p><strong>什么是贪心算法？</strong>
+<strong>贪心算法</strong>在每一步都选择当前看起来最优的选择，希望最终得到全局最优解。</p>
+</blockquote>
+<p><strong>适用条件</strong>：</p>
+<ol>
+<li><strong>贪心选择性质</strong>：局部最优能导致全局最优</li>
+<li><strong>最优子结构</strong>：问题的最优解包含子问题的最优解</li>
+</ol>
+<p>经典例子：硬币找零</p>
+<ul>
+<li>目标：用最少的硬币凑出指定金额</li>
+<li>贪心策略：每次选最大的硬币</li>
+<li>结果：67 元 = 50 + 10 + 5 + 1 + 1（5 枚）</li>
+</ul>
+<p><strong>生活类比</strong>：登山时，每次都选最陡的路往上走。虽然不一定能到最高峰，但通常能到不错的位置。</p>
+<h3 id="42-贪心的局限性">4.2 贪心的局限性</h3>
+<blockquote>
+<p><strong>贪心不一定得到最优解</strong>
+<strong>反例：硬币找零</strong></p>
+</blockquote>
+<p>如果硬币面值是 [1, 3, 4]，要凑 6 元：</p>
+<ul>
+<li>贪心：4 + 1 + 1 = 3 枚</li>
+<li>最优：3 + 3 = 2 枚</li>
+</ul>
+<p>贪心算法在这里失败了！</p>
+<p><strong>教训</strong>：贪心算法简单高效，但不总是能得到最优解。使用前要证明问题满足贪心条件。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了贪心算法的实际效果，你可以尝试不同的硬币组合，观察贪心策略的表现：</p>
+<h2 id="5-算法设计范式">5. 算法设计范式</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>范式</th>
+<th>思想</th>
+<th>典型算法</th>
+<th>适用问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分治</strong></td>
+<td>把问题分解成小问题</td>
+<td>快速排序、归并排序</td>
+<td>可分解的问题</td>
+</tr>
+<tr>
+<td><strong>贪心</strong></td>
+<td>每步选最优</td>
+<td>最小生成树、霍夫曼编码</td>
+<td>有贪心性质的问题</td>
+</tr>
+<tr>
+<td><strong>动态规划</strong></td>
+<td>记录子问题的解</td>
+<td>背包问题、最短路径</td>
+<td>有重叠子问题</td>
+</tr>
+<tr>
+<td><strong>回溯</strong></td>
+<td>试错，走不通就回退</td>
+<td>八皇后、全排列</td>
+<td>搜索问题</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>逐行解读这张表</strong>
+<strong>分治</strong>：把大问题拆成小问题，分别解决后再合并。就像整理房间，先分成客厅、卧室、厨房分别打扫，最后整体整洁。</p>
+</blockquote>
+<p><strong>贪心</strong>：每步都选当前最好的，不考虑长远后果。像吃饭时先挑最喜欢吃的菜，可能不是最优的吃法，但速度快。</p>
+<p><strong>动态规划</strong>：记住中间结果，避免重复计算。像记笔记，下次遇到同样问题直接查答案，不用重新推导。</p>
+<p><strong>回溯</strong>：走不通就退回来重试。像走迷宫，此路不通就返回上一个路口尝试别的路。</p>
+<p>👇 <strong>动手试试看</strong>：
+原课程的交互演示展示了不同算法设计范式的特点和应用场景：</p>
+<h2 id="6-总结算法设计的核心思想">6. 总结：算法设计的核心思想</h2>
+<p>用一个比喻总结各种算法思想：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>思想</th>
+<th>比喻</th>
+<th>核心要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>二分查找</strong></td>
+<td>猜数字</td>
+<td>每次排除一半</td>
+</tr>
+<tr>
+<td><strong>排序</strong></td>
+<td>整理书架</td>
+<td>建立秩序</td>
+</tr>
+<tr>
+<td><strong>递归</strong></td>
+<td>俄罗斯套娃</td>
+<td>化大为小</td>
+</tr>
+<tr>
+<td><strong>贪心</strong></td>
+<td>登山选路</td>
+<td>局部最优</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>核心启示</strong>
+<strong>算法的本质是&quot;效率&quot;和&quot;正确性&quot;的平衡。</strong></p>
+</blockquote>
+<ul>
+<li>好的算法能让程序效率提升几个数量级</li>
+<li>但过度优化可能引入复杂性</li>
+<li>先保证正确，再追求效率</li>
+</ul>
+<p>理解算法思维，比记住具体算法更重要：</p>
+<ul>
+<li>分治：把大问题分解成小问题</li>
+<li>贪心：每步选最优</li>
+<li>动态规划：记录子问题的解</li>
+<li>回溯：试错，走不通就回退</li>
+</ul>
+<h2 id="延伸阅读-7">延伸阅读</h2>
+<ul>
+<li><strong>算法导论</strong>：系统学习算法的经典教材</li>
+<li><strong>LeetCode</strong>：通过刷题提升算法能力</li>
+<li><strong>算法可视化</strong>：直观理解算法执行过程</li>
+<li><strong>竞赛算法</strong>：学习更高级的算法技巧</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-085.html">← 数据结构导论</a><a rel="next" href="chapter-087.html">编程语言概念：范式、演化与选型 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

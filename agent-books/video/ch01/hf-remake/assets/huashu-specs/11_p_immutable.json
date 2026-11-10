@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "updater(prev)", "data": {"icon": "target"}},
+    {"at": 1.6, "kind": "point", "text": "返回 next · 不原地改"},
+    {"at": 3.2, "kind": "draw", "text": "快照传递", "data": {"icon": "bulb"}},
+    {"at": 4.6, "kind": "point", "text": "原则 5：不可变状态流转"},
+    {"at": 6.0, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

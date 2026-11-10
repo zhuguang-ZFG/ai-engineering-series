@@ -1,0 +1,90 @@
+{
+  "title": "把大模型拆开看",
+  "version": "0.14.0",
+  "lessons": 12,
+  "figures": 52,
+  "pdfPages": 181,
+  "chapterPages": {
+    "L01": 5,
+    "L02": 14,
+    "L03": 26,
+    "L04": 36,
+    "L05": 50,
+    "L06": 74,
+    "L07": 85,
+    "L08": 95,
+    "L09": 104,
+    "L10": 114,
+    "L11": 124,
+    "L12": 133
+  },
+  "contentsPages": {
+    "L01": 5,
+    "L02": 14,
+    "L03": 26,
+    "L04": 36,
+    "L05": 50,
+    "L06": 74,
+    "L07": 85,
+    "L08": 95,
+    "L09": 104,
+    "L10": 114,
+    "L11": 124,
+    "L12": 133,
+    "advanced": 143,
+    "architecture": 148,
+    "applications": 157,
+    "execution": 164,
+    "practice": 171,
+    "review": 175
+  },
+  "contentsLabels": {
+    "L01": "L01 · 文字怎样变成模型的输入？",
+    "L02": "L02 · 为什么同一句话能接出不同结果？",
+    "L03": "L03 · 一串数字怎么表示语言？",
+    "L04": "L04 · 模型怎样利用前文？",
+    "L05": "L05 · 模型是怎样学会的？",
+    "L06": "L06 · 会续写为什么还要学听指令？",
+    "L07": "L07 · 怎样把一件事交代清楚？",
+    "L08": "L08 · 怎样发现一个看似合理的错误？",
+    "L09": "L09 · 怎样让它用上自己的资料？",
+    "L10": "L10 · 怎样让模型调用工具？",
+    "L11": "L11 · 什么时候需要搭系统？",
+    "L12": "L12 · 做一个能交付的资料助手",
+    "advanced": "进阶回查：缓存、专家与计算成本",
+    "architecture": "结构回查：注意力怎样拼成一层",
+    "applications": "应用回查：提示、检索与核验",
+    "execution": "系统回查：上下文与工具执行",
+    "practice": "实际模型练习与使用说明",
+    "review": "合上书，换一份材料试试"
+  },
+  "contentsPasses": 2,
+  "reviewPdfPages": {
+    "llm-reading-tasks.pdf": 7,
+    "llm-reading-guide.pdf": 10
+  },
+  "sourceHash": "0ce3e070c7ea036ee262ccca618d452e3b1b0bcd009293a8125ed9e369e92bce",
+  "files": {
+    "llm-explained-handdraw.pdf": {
+      "bytes": 2557400,
+      "sha256": "1d1ded93362a2803d947ba9441b0831f4c5a8af1c97df6589894c13b5f69d7fe"
+    },
+    "llm-explained-handdraw.epub": {
+      "bytes": 6616523,
+      "sha256": "7def80e4058096eb6ae0b8b7446730c5c45801f89f92b9962d5026fc60f95420"
+    },
+    "llm-reading-tasks.pdf": {
+      "bytes": 180920,
+      "sha256": "214a0a5781340f7879708799e73dbfe0269d6d52f5ad71d913157e9d80a6c3d5"
+    },
+    "llm-reading-guide.pdf": {
+      "bytes": 295526,
+      "sha256": "38ccec6d98ec92c417691749e37472cbf52ba0cfb7a3c9867ef580fad079f533"
+    }
+  },
+  "limitations": [
+    "真实初学者试读待进行",
+    "实际模型输出未采集",
+    "EPUB 使用阅读器字体，交互改为静态步骤"
+  ]
+}

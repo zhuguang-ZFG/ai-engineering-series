@@ -1,0 +1,653 @@
+{
+  "version": "0.10.0",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "js-tiktoken 1.0.21：本地编码器与 rank 数据",
+      "url": "https://github.com/dqbd/tiktoken/tree/main/js",
+      "checkedOn": "2026-11-07",
+      "method": "已安装的锁定 npm 包、公开 rank 数据与本地复算；四组课程输入及旧章混合输入均验证 ID 解码及字节拼接还原。",
+      "scope": "cl100k_base、o200k_base 的四组课程输入及旧章混合输入；不推断某在线产品当前使用的编码。",
+      "claims": [
+        "token 与字或单词不一一对应",
+        "编码单位可以含部分 UTF-8 字节",
+        "ID 与字节可由锁定 rank 数据无损还原"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "S02",
+      "title": "条件采样的本地数学实现",
+      "url": "https://en.wikipedia.org/wiki/Softmax_function",
+      "checkedOn": "2026-11-06",
+      "method": "稳定 softmax 实算与单元测试；外部链接为公式回查入口。",
+      "scope": "温度 0–2 的有限分数，零温度单独使用 argmax。",
+      "claims": [
+        "温度影响候选分布",
+        "最高生成概率不等于事实正确率"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "人工有限状态模型",
+      "checkedOn": "2026-11-06",
+      "method": "课程自建状态表，测试追加、停止、上限与种子重放。",
+      "scope": "只覆盖 fixtures/generation.json 中的上下文，不模拟完整 Transformer。",
+      "claims": [
+        "选中片段追加后使用新的上下文状态",
+        "停止符不作为正文展示"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "活动通知核验练习",
+      "checkedOn": "2026-11-06",
+      "method": "虚构通知、人工事实标注和预置回答；对引用原句做一致性测试。",
+      "scope": "练习判断材料是否支持结果，不具备自动理解任意输入材料的能力。",
+      "claims": [
+        "缺失地点标为未知",
+        "相互冲突的时间需核对来源版本",
+        "引用必须支持该项结论"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Attention Is All You Need",
+      "url": "https://arxiv.org/html/1706.03762v7",
+      "method": "已读取论文 HTML：3.2 注意力、3.3 前馈层、3.4 嵌入、3.5 位置编码。",
+      "scope": "用于解释 Q/K/V、缩放、解码器因果掩码、前馈层与位置；原论文为 post-norm，课程附图单独标明采用 pre-norm 示意。",
+      "claims": [
+        "注意力加权汇总 V",
+        "屏蔽后续位置防止偷看目标",
+        "初始嵌入与上下文处理不同"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S06",
+      "title": "Training language models to follow instructions with human feedback",
+      "url": "https://arxiv.org/abs/2203.02155",
+      "method": "已读取公开摘要；示范、排序与 RLHF 的顺序按论文说明。算法差异不归因于本课两个实际模型。",
+      "scope": "InstructGPT 的公开路线，不能外推为所有模型的训练配方。",
+      "claims": [
+        "示范数据用于监督微调",
+        "回答排序可作为偏好信号",
+        "偏好训练不保证每条事实正确"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S07",
+      "title": "Direct Preference Optimization",
+      "url": "https://arxiv.org/abs/2305.18290",
+      "method": "已读取公开摘要，核对其通过偏好数据构造优化目标的区别。",
+      "scope": "DPO 与奖励模型加 PPO 路线的概念区分，不声称课程执行这些训练。",
+      "claims": [
+        "偏好优化有多种实现",
+        "DPO 不等于 PPO"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S08",
+      "title": "X03–X05 与 D06 的课程数学及人工示例",
+      "method": "三维余弦、单头因果注意力与全批量 bigram 交叉熵由本地代码实算；梯度以有限差分交叉检查。",
+      "scope": "人工向量、Q/K/V、短语料与预置回答，不是实际商用模型的内部读数或训练记录。",
+      "claims": [
+        "余弦使用完整三维",
+        "未来 V 不改变较早输出",
+        "梯度更新参数，推理不更新",
+        "训练曲线由实际参数计算"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S09",
+      "title": "DeepSeek 官方 API 首页",
+      "url": "https://api-docs.deepseek.com/",
+      "method": "核对当日官方首页的模型名称和路由说明；未调用模型 API、未采集输出。",
+      "scope": "deepseek-flash 在核验时对应 DeepSeek-V4.1-Flash-1017；别名日后可能更新。不据此推断内部架构或训练配方。",
+      "claims": [
+        "实际案例使用 DeepSeek V4.1 Flash",
+        "模型名、接口别名与具体版本需区分"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S10",
+      "title": "Kimi K3 官方发布及平台文档入口",
+      "url": "https://www.kimi.com/en/blog/kimi-k3",
+      "method": "已核对官方博客目录中的 K3 条目和平台概览中的 K3 指南入口；未运行 K3，也未据后续版本推断 K3 规格。",
+      "scope": "用户指定 Kimi K3；K3.1 Pro 为另一版本。不在未核验具体接口时填写 K3 API ID。",
+      "claims": [
+        "实际案例使用 Kimi K3",
+        "复做时记录实际选择的产品、版本与模式"
+      ],
+      "checkedOn": "2026-11-07"
+    },
+    {
+      "id": "S11",
+      "title": "L08–L12 的本地检索、执行与证据契约",
+      "checkedOn": "2026-11-07",
+      "method": "课程人工资料与事实标注；本地代码核对引用、字符二元组检索、白名单运算、终态与报告导出。",
+      "scope": "可解释教学实现及给定条件的方案练习，不声称运行商业模型、通用语义核验或生产级 RAG。",
+      "claims": [
+        "引用存在与支持主张需分别检查",
+        "仅命中片段进入本次输入",
+        "无结果、冲突、非法参数和取消有明确路径",
+        "工具成功依执行回执判断",
+        "资料中的命令不参与执行"
+      ]
+    },
+    {
+      "id": "S12",
+      "title": "Hugging Face Transformers：Chat templates",
+      "url": "https://huggingface.co/docs/transformers/chat_templating",
+      "checkedOn": "2026-11-07",
+      "method": "读取当前官方文档，并通过 Context7 交叉核对消息序列、控制标记和训练格式说明。",
+      "scope": "模板把消息组织成 token；不同模型格式可能不同，不将示意标签当成通用控制 token。",
+      "claims": [
+        "模板与训练作用不同",
+        "对话格式需匹配模型"
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "DeepSeek-V3 Technical Report",
+      "url": "https://arxiv.org/html/2412.19437v2",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开技术报告的 DeepSeekMoE 结构、共享/路由专家和门控公式；未运行模型。",
+      "scope": "只支持报告所述 V3 版本的结构例子；不推断 V4.1 Flash、Kimi K3 或其他未公开模型。",
+      "claims": [
+        "专家是网络子模块",
+        "路由依隐藏表示选择部分专家",
+        "共享专家与路由专家可共存"
+      ]
+    },
+    {
+      "id": "S14",
+      "title": "Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention",
+      "url": "https://arxiv.org/abs/2006.16236",
+      "checkedOn": "2026-11-07",
+      "method": "读取论文摘要，核对核特征映射、矩阵结合律、序列长度线性计算与递归实现的主张。",
+      "scope": "固定相关维度下的线性注意力形式，不代表任意 softmax 注意力的精确等价，也不代表所有 RWKV 版本。",
+      "claims": [
+        "复杂度比较需要明确长度与维度",
+        "递归状态固定不等于总显存固定"
+      ]
+    },
+    {
+      "id": "S15",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts",
+      "url": "https://arxiv.org/abs/2307.03172",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要，核对多文档问答与键值检索中相关信息位置影响表现的范围。",
+      "scope": "论文所测模型与任务，不把历史观察外推为全部当前模型的性能排序。",
+      "claims": [
+        "窗口容量不保证窗口内信息被正确利用"
+      ]
+    },
+    {
+      "id": "S16",
+      "title": "DeepSeek-R1 首版技术报告",
+      "url": "https://arxiv.org/html/2501.12948v1",
+      "checkedOn": "2026-11-07",
+      "method": "读取 v1 的引言与训练流程，核对 R1-Zero 和 R1 的冷启动、多阶段 SFT/RL 区别。",
+      "scope": "只解释该报告中具名版本的路线，不推断用户指定新模型的训练配方，不采集模型输出。",
+      "claims": [
+        "R1 与 R1-Zero 路线需区分",
+        "SFT 与 RL 可组合，不能笼统称只给验证器"
+      ]
+    },
+    {
+      "id": "S17",
+      "title": "Hugging Face Transformers：Caching",
+      "url": "https://huggingface.co/docs/transformers/cache_explanation",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 核对逐步解码时缓存 K/V、拼接新位置、掩码与缓存位置说明。",
+      "scope": "常见因果注意力缓存与实现边界；不同压缩、窗口和状态模型另看具体文档。",
+      "claims": [
+        "复用前文 K/V 不等于参数更新",
+        "缓存长度与显存需按具体策略比较"
+      ]
+    },
+    {
+      "id": "S18",
+      "title": "Language Models are Few-Shot Learners",
+      "url": "https://arxiv.org/abs/2005.14165",
+      "checkedOn": "2026-11-07",
+      "method": "已读取公开摘要，核对 few-shot 任务以文本示例提供，评估时没有梯度更新或微调。",
+      "scope": "仅支持论文所测 GPT-3 及其任务的上下文示例范围，不外推两个实际练习模型的性能。",
+      "claims": [
+        "上下文示例与微调不同",
+        "少样本提示不保证泛化"
+      ]
+    },
+    {
+      "id": "S19",
+      "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      "url": "https://arxiv.org/abs/2201.11903",
+      "checkedOn": "2026-11-07",
+      "method": "已读取公开摘要，核对带中间步骤的少样本示例与算术、常识、符号任务范围。",
+      "scope": "论文的特定模型、示例和任务，不把一句提示当成所有模型的有效开关，也不声称解释等于内部完整推理。",
+      "claims": [
+        "思维链提示效果需限定任务与模型",
+        "算式和结论仍需独立核验"
+      ]
+    },
+    {
+      "id": "S20",
+      "title": "Not what you have signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection",
+      "url": "https://arxiv.org/abs/2302.12173",
+      "checkedOn": "2026-11-07",
+      "method": "已读取公开摘要，核对检索数据夹带指令的间接攻击路径。应用权限、参数校验与终态处理为本课 S11 的设计契约，不称论文证明可彻底防御。",
+      "scope": "论文中所测系统与攻击路径，不推断任意当前产品都存在相同可利用漏洞。",
+      "claims": [
+        "外部数据也可能成为注入来源",
+        "分隔材料不等于权限隔离"
+      ]
+    },
+    {
+      "id": "S21",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "url": "https://arxiv.org/abs/2005.11401",
+      "checkedOn": "2026-11-07",
+      "method": "已读取公开摘要，核对参数化生成、外部 Wikipedia 密集索引、检索器及微调方案。",
+      "scope": "原始论文研究方案与本课推理时检索需区分；本地字符检索不冒充原论文模型。",
+      "claims": [
+        "RAG 可结合外部检索与生成",
+        "不能把所有 RAG 都说成从不训练"
+      ]
+    },
+    {
+      "id": "S22",
+      "title": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+      "url": "https://arxiv.org/abs/2312.10997",
+      "checkedOn": "2026-11-07",
+      "method": "已读取公开摘要，核对 Naive、Advanced、Modular 分类及检索、生成、增强与评估范围。",
+      "scope": "分类不对应固定三年三代产品时间线，不据综述概括宣布混合检索加重排序对所有任务最优。",
+      "claims": [
+        "架构分类不是逐年替代关系",
+        "检索与生成应分阶段检查"
+      ]
+    },
+    {
+      "id": "S23",
+      "title": "LangChain：Build a semantic search engine / Knowledge base",
+      "url": "https://docs.langchain.com/oss/python/langchain/knowledge-base",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 当前官方文档核对 retriever 可来自向量库，也能包装 API 等非向量来源；另用 curl 获取该页保存本地快照。",
+      "scope": "框架当前检索抽象与文档入口，不声称课程调用 LangChain 或依赖其 API。",
+      "claims": [
+        "检索不必采用向量数据库"
+      ]
+    },
+    {
+      "id": "S24",
+      "title": "Manus：Context Engineering for AI Agents: Lessons from Building Manus",
+      "checkedOn": "2026-11-07",
+      "method": "已读取 2025-07-18 原文及作者署名，核对四次重构自述、稳定前缀、外部文件与 todo 清单；未发现旧章四阶段表、0.15→0.02 和全架构 84% 等说法的支持。",
+      "scope": "团队自述与经验，不能移植为课程实测、通用比例或指定新模型的架构。",
+      "claims": [
+        "四次重构不等于旧章四阶段故事",
+        "上下文策略需在实际任务评估"
+      ],
+      "url": "https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus"
+    },
+    {
+      "id": "S25",
+      "title": "DeepSeek：Context Caching",
+      "checkedOn": "2026-11-07",
+      "method": "已读取当前官方页，核对持久化前缀单元、命中/未命中用量字段和 best-effort 限制；未调用 API。",
+      "scope": "该服务核验日期的跨请求缓存说明；不类推 Kimi K3 或所有推理后端，不记录未经运行的命中率/价格。",
+      "claims": [
+        "相同文字不保证缓存命中",
+        "缓存不代替新输出计算或事实核验"
+      ],
+      "url": "https://api-docs.deepseek.com/guides/kv_cache"
+    },
+    {
+      "id": "S26",
+      "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要，核对交错的推理轨迹、任务动作与通过外部环境获取信息的研究范围。",
+      "scope": "论文所测环境、模型和任务，不把特定基准结果作为当前产品的可靠性证明。",
+      "claims": [
+        "计划和动作需结合实际观察",
+        "研究方法不等于任何工具调用都可靠"
+      ],
+      "url": "https://arxiv.org/abs/2210.03629"
+    },
+    {
+      "id": "S27",
+      "title": "Claude Agent SDK for Python：官方仓库说明",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 官方仓库文档核对 query、工具配置、hooks 和权限控制的存在；未安装或运行 SDK。",
+      "scope": "文档能力范围，不作代码质量、学习难度或成本排名，不声称已接入两个课程模型。",
+      "claims": [
+        "SDK 提供 Agent 调用与执行控制能力"
+      ],
+      "url": "https://github.com/anthropics/claude-agent-sdk-python"
+    },
+    {
+      "id": "S28",
+      "title": "LangChain：Agents 与 Context engineering",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 官方文档核对模型调用/工具执行循环和上下文组织说明，不沿用旧版 AgentExecutor 演示。",
+      "scope": "核验时的当前文档概念，不将其与旧接口或其他框架作性能比较。",
+      "claims": [
+        "框架已有 Agent 循环",
+        "工具注册/展示与执行分别受运行时管理"
+      ],
+      "url": "https://docs.langchain.com/oss/python/langchain/agents"
+    },
+    {
+      "id": "S29",
+      "title": "CrewAI：官方 Crews 与 Flows 说明",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 官方 README 核对 Crews 角色/任务协作与 Flows 状态/分支控制，不采纳宣传性性能结论。",
+      "scope": "当前文档职责拆分，不声称多 Agent 必然优于单个工作流。",
+      "claims": [
+        "CrewAI 不只是角色扮演",
+        "工作流和协作可组合"
+      ],
+      "url": "https://github.com/crewAIInc/crewAI"
+    },
+    {
+      "id": "S30",
+      "title": "LlamaIndex：Agents 与 Workflows",
+      "checkedOn": "2026-11-07",
+      "method": "通过 Context7 官方文档核对 FunctionAgent、AgentWorkflow 和数据工具组合的概念范围。",
+      "scope": "核验时文档内容，不运行或承诺某个历史 API 片段可直接使用。",
+      "claims": [
+        "LlamaIndex 也支持工具 Agent 与协作",
+        "RAG 可作为 Agent 的工具"
+      ],
+      "url": "https://github.com/run-llama/llama_index"
+    },
+    {
+      "id": "S31",
+      "title": "AutoGen：官方仓库维护状态",
+      "checkedOn": "2026-11-07",
+      "method": "读取当前官方 README，其中标题标记 Archived，并指向维护方的 Agent Framework；未将迁移说明当成已迁移项目。",
+      "scope": "仅核验日期的维护状态，使用前应再次确认，不替用户升级或安装框架。",
+      "claims": [
+        "选型需核对维护状态"
+      ],
+      "url": "https://github.com/microsoft/autogen"
+    },
+    {
+      "id": "S32",
+      "title": "D13：本地两步价格工作流",
+      "checkedOn": "2026-11-07",
+      "method": "Node 标准库执行人工目录查询与白名单乘法；测试改变价格后真实传入下一步，覆盖非法参数/缺项/预算/取消/模拟超时。源码摘录和附录结果由同一模块生成。",
+      "scope": "固定两步工作流，没有模型动态决策、联网、真实订单或财务精度保证；取消保留过去回执。",
+      "claims": [
+        "请求与回执分开",
+        "只有成功查价结果进入乘法",
+        "失败不编造总价，预算/取消/超时明确结束"
+      ]
+    },
+    {
+      "id": "S33",
+      "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "url": "https://arxiv.org/abs/2205.14135",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要，核对精确注意力、分块和 HBM/SRAM 之间 IO 优化；不外推摘要中的指定基准提速。",
+      "scope": "原论文所述精确注意力机制和 IO 优化，区别于改变注意力定义的线性/稀疏近似；未进行硬件实测。",
+      "claims": [
+        "FlashAttention 减少内存读写",
+        "精确全注意力不因 IO 优化就成为序列长度线性运算"
+      ]
+    },
+    {
+      "id": "S34",
+      "title": "D14：可复算的投影双头注意力",
+      "checkedOn": "2026-11-07",
+      "method": "标准 Node 执行 XWQ/XWK/XWV，复用单头因果注意力并拼接乘 WO；用独立 logistic/矩阵算式核对，改变未来/可见输入与输出矩阵验证依赖。",
+      "scope": "三个二维输入、两个一维头；人工投影，无训练/位置/残差/归一化/FFN，不是完整 Transformer。",
+      "claims": [
+        "多头先独立汇总再拼接投影",
+        "未来输入变化不改变较早位置输出",
+        "生成表由同一运行源码计算"
+      ]
+    },
+    {
+      "id": "S35",
+      "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+      "url": "https://arxiv.org/abs/2104.09864",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要，核对旋转矩阵编码绝对位置、在注意力中表达相对依赖；不将其评测提升推广为所有模型。",
+      "scope": "RoPE 的位置作用，不承诺任意窗口或可靠长文本外推。",
+      "claims": [
+        "RoPE 通过旋转注入位置关系"
+      ]
+    },
+    {
+      "id": "S36",
+      "title": "GPT-4 Technical Report：公开披露边界",
+      "url": "https://arxiv.org/abs/2303.08774",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要和 PDF 第 2 节，原文明确不进一步披露模型规模等细节；删除旧稿确定的万亿参数说法。",
+      "scope": "该报告的披露边界，不据传闻推断 GPT-4、DeepSeek V4.1 Flash 或 Kimi K3 参数。",
+      "claims": [
+        "原章 GPT-4 万亿参数说法没有该报告支持"
+      ]
+    },
+    {
+      "id": "S37",
+      "title": "Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation",
+      "url": "https://arxiv.org/abs/2108.12409",
+      "checkedOn": "2026-11-07",
+      "method": "读取公开摘要，核对按距离向注意力分数加入偏置的做法；不推广其特定外推评测。",
+      "scope": "ALiBi 的距离偏置机制，不将论文测试长度写成所有模型的窗口保证。",
+      "claims": [
+        "位置机制不一定直接加到输入嵌入"
+      ]
+    },
+    {
+      "id": "S38",
+      "title": "LLaVA: Visual Instruction Tuning",
+      "url": "https://arxiv.org/abs/2304.08485",
+      "scope": "公开视觉编码器连接语言模型与指令训练路线，不外推实际模型结构。",
+      "method": "2026-11-07 阅读论文摘要；无模型调用或性能复现。",
+      "checkedOn": "2026-11-07",
+      "claims": [
+        "公开视觉编码器连接语言模型与指令训练路线，不外推实际模型结构。"
+      ]
+    },
+    {
+      "id": "S39",
+      "title": "BLIP-2",
+      "url": "https://arxiv.org/abs/2301.12597",
+      "scope": "冻结图像编码器、语言模型与轻量 Q-Former 的两阶段设计。",
+      "method": "2026-11-07 阅读论文摘要，区分其训练目标与其他路线；不引用未复现性能。",
+      "checkedOn": "2026-11-07",
+      "claims": [
+        "冻结图像编码器、语言模型与轻量 Q-Former 的两阶段设计。"
+      ]
+    },
+    {
+      "id": "S40",
+      "title": "Faiss: similarity search and clustering",
+      "url": "https://github.com/facebookresearch/faiss/wiki",
+      "scope": "精确/近似索引、存储、速度与召回取舍，不给通用毫秒或召回保证。",
+      "method": "2026-11-07 阅读官方 README How Faiss works，核对搜索任务与权衡。",
+      "checkedOn": "2026-11-07",
+      "claims": [
+        "精确/近似索引、存储、速度与召回取舍，不给通用毫秒或召回保证。"
+      ]
+    },
+    {
+      "id": "S41",
+      "title": "MCP specification 2025-06-18",
+      "url": "https://modelcontextprotocol.io/specification/2025-06-18",
+      "scope": "Host/Client/Server、初始化与能力、工具/资源/提示、工具错误。固定历史版本。",
+      "method": "2026-11-07 经 Context7 阅读官方版本架构和工具文档，未进行服务接入。",
+      "checkedOn": "2026-11-07",
+      "claims": [
+        "Host/Client/Server、初始化与能力、工具/资源/提示、工具错误。固定历史版本。"
+      ]
+    },
+    {
+      "id": "S42",
+      "title": "A2A specification v0.3.0",
+      "url": "https://github.com/a2aproject/A2A/blob/v0.3.0/docs/specification.md",
+      "scope": "Agent Card、客户端/服务端、消息/任务/产物、状态与协议绑定。固定历史版本。",
+      "method": "2026-11-07 下载并阅读官方 v0.3.0 规范；以 Context7 当前资料核对历史与当前字段差异，未进行服务接入。",
+      "checkedOn": "2026-11-07",
+      "claims": [
+        "Agent Card、客户端/服务端、消息/任务/产物、状态与协议绑定。固定历史版本。"
+      ]
+    },
+    {
+      "id": "S43",
+      "title": "Hinton / Vinyals / Dean：Distilling the Knowledge in a Neural Network",
+      "url": "https://arxiv.org/abs/1503.02531",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取 v1 第 1–2 节及式 1–4；核对同温度、硬软目标及 T² 的高温梯度尺度解释。",
+      "scope": "经典分布蒸馏，不将特定实验效果泛化。",
+      "claims": [
+        "软标签与硬标签的信息差异",
+        "同温度分布匹配",
+        "混合目标及 T² 的条件性补偿"
+      ]
+    },
+    {
+      "id": "S44",
+      "title": "Kim / Rush：Sequence-Level Knowledge Distillation",
+      "url": "https://arxiv.org/abs/1606.07947",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取论文引言、word-level 与 sequence-level 定义和目标；区分分布匹配与教师解码序列近似。",
+      "scope": "2016 年机器翻译配方；不宣称语言模型通用提速倍数。",
+      "claims": [
+        "序列级与逐 token 分布蒸馏的区别",
+        "教师生成序列作为训练目标"
+      ]
+    },
+    {
+      "id": "S45",
+      "title": "DeepSeek-R1 首版报告：Distillation 2.4",
+      "url": "https://arxiv.org/abs/2501.12948v1",
+      "checkedOn": "2026-11-07",
+      "method": "下载并读取 v1 第 2.4 节，对照教师整理数据微调 Qwen/Llama 学生、该组学生未添加 RL 的原文。",
+      "scope": "2025 年 R1 历史配方；不移用于 DeepSeek V4.1 Flash 或 Kimi K3。",
+      "claims": [
+        "推理数据蒸馏不等于读取内部思维",
+        "具体配方的 SFT 与 RL 阶段须分别说明"
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "audit": "A06",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "原混合输入按 js-tiktoken 1.0.21 的两种编码复算，生成含 ID/字节/转义片段的表并原样组装到旧章；独立 fixture 及生成一致性纳入检查。"
+    },
+    {
+      "audit": "A05",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "原理章与提示词工程章的失效交互说明已替换为实际本地练习和可复制静态模板；其他旧章演示仍待逐项审查。"
+    },
+    {
+      "audit": "A02",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "删去固定水果/颜色/甜度维度；说明可训练查表、上下文表示与投影边界，链接 L03。"
+    },
+    {
+      "audit": "A03",
+      "status": "corrected-in-legacy-chapter-and-figure",
+      "resolution": "旧章改用数据、目标与参数说明训练覆盖；旧图路径复用可读生成回环，不再保留全人类书本断言。历史截图保留审查性质。"
+    },
+    {
+      "audit": "A04",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "分开聊天模板、监督微调、RLHF 与 DPO；示意标签不称真实通用模板。依据 S06/S07/S12。"
+    },
+    {
+      "audit": "A07",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "限定 byte-level 编码与有效 UTF-8 前提；区分表示文本、特殊标记处理与理解文本，不泛化为所有 tokenizer。"
+    },
+    {
+      "audit": "A08",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "专家改为子网络与学得路由，不按 token 字面分配命名学科；仅用 V3 公开报告说明对应版本，实际练习仍采用用户指定模型。"
+    },
+    {
+      "audit": "A09",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "区分 prefill、带 KV Cache 单步、长度项和总开销，删除无遗忘/恒定总显存保证；进阶附录与旧章共享文本。依据 S05/S14/S15。"
+    },
+    {
+      "audit": "A10",
+      "status": "corrected-in-legacy-chapter",
+      "resolution": "旧原理章及提示词工程章均改为按版本、任务与验收判断；删除非思考模型不推理、思考模型必然自纠和提示越少越好。S16、S18、S19。"
+    },
+    {
+      "audit": "P01",
+      "status": "corrected-in-legacy-chapter-and-reading-guide",
+      "resolution": "提示词不保证准确；角色不赋予专业能力；少样本只改变本次输入，自检仍需独立证据。按 S18/S19 与课程算式、标注核验。"
+    },
+    {
+      "audit": "P02",
+      "status": "corrected-in-legacy-chapter-and-reading-guide",
+      "resolution": "区分资料与指令、权限和工具执行边界，分隔符不保证防御；保留实际版本与首次输出记录方法。S20/S11。"
+    },
+    {
+      "audit": "R01",
+      "status": "corrected-in-legacy-chapter-and-reading-guide",
+      "resolution": "RAG 不能消除幻觉；索引要维护版本、删除、权限与刷新，检索不必向量化。S21/S23。"
+    },
+    {
+      "audit": "R02",
+      "status": "corrected-in-legacy-chapter-and-reading-guide",
+      "resolution": "分块大小为候选配置，混合检索/重排序按任务评估；分类不按固定年份，微调与 RAG 成本/依据均有条件。S11/S21/S22。"
+    },
+    {
+      "audit": "C01",
+      "status": "corrected-in-legacy-chapter-and-system-guide",
+      "resolution": "删除未经支持的团队四阶段故事、成本/时延比例及内存等同硬盘；区分参数、当前输入、KV 缓存、跨请求缓存与外部保存。依据 S17/S24/S25。"
+    },
+    {
+      "audit": "C02",
+      "status": "corrected-in-legacy-chapter-and-system-guide",
+      "resolution": "补共享预算的人工算式、保留条件/版本、摘要失真和历史/调用配对边界；位置效应限定 S15 历史实验。新增 G14 与同源附录。"
+    },
+    {
+      "audit": "G01",
+      "status": "corrected-in-legacy-chapter-and-system-guide",
+      "resolution": "工具请求与执行回执分离，失败/预算/取消/超时有停止路径；固定工作流不冒充模型规划，清除 eval 和模拟天气的实战承诺。S11/S26/S32。"
+    },
+    {
+      "audit": "G02",
+      "status": "corrected-in-legacy-chapter-and-system-guide",
+      "resolution": "删除 L0–L5 通用能力分级与无依据框架排名；按当前官方文档修正 LangChain/LlamaIndex/CrewAI 能力及 AutoGen 状态。S27–S31。"
+    },
+    {
+      "audit": "T01",
+      "status": "corrected-in-legacy-chapter-and-architecture-guide",
+      "resolution": "原始 encoder-decoder、decoder-only、掩码与目标错位、post/pre-norm 分开解释；保留 28 个标题。依据 S05/S08。"
+    },
+    {
+      "audit": "T02",
+      "status": "corrected-in-legacy-chapter-and-architecture-guide",
+      "resolution": "删除固定语言学头/免费并行/自动鲁棒/无限外推等承诺；投影多头实际计算、FlashAttention IO 优化、RoPE/ALiBi 与公开参数边界按 S33–S37 核对。"
+    },
+    {
+      "audit": "M01",
+      "status": "corrected-in-legacy-chapter-and-reference-page",
+      "resolution": "视觉表示不等于文字 token；两阶段配方与冻结范围依实现，不承诺无损、无限分辨率或指定模型内部结构。S38/S39。"
+    },
+    {
+      "audit": "E01",
+      "status": "corrected-in-legacy-chapter-and-reference-page",
+      "resolution": "余弦不等于语义/事实置信度，归一化关系附公式；ANN 无通用复杂度、延迟及召回保证，参数按数据测量。S40。"
+    },
+    {
+      "audit": "A01",
+      "status": "corrected-in-legacy-chapter-and-reference-page",
+      "resolution": "协议非能力等级或通用执行授权；MCP Host/Client/Server 与工具错误、A2A 客户端/服务端、状态与产物按固定版本说明。S41/S42。"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "X09",
+  "kind": "toy",
+  "version": "1.0.0",
+  "source": "课程人工三候选分数；公式依据 Hinton et al. 2015，本地实际计算。",
+  "limitations": "只优化同一个上下文的三项学生 logits；没有语言网络、反向传播穿层或泛化测试，不是实际模型输出。硬标签“水”由本题材料指定，教师的概率不是真实情况的证据。",
+  "expectedObservations": ["同一温度下比较两个分布", "更新学生参数时教师不变", "软标签区分非首选项", "教师错误可以传给学生"],
+  "context": "本题已核实杯中是水；比较三种候选的训练信号",
+  "labels": ["水", "茶", "咖啡"],
+  "teacher": [3, 2, 0],
+  "wrongTeacher": [0, 3, 2],
+  "student": [0, 0, 0],
+  "target": 0,
+  "temperature": 2,
+  "alpha": 0.7,
+  "learningRate": 0.4,
+  "maxSteps": 100
+}

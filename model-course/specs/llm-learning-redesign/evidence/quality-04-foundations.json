@@ -1,0 +1,2208 @@
+{
+  "first-steps-before": {
+    "scope": "C11/C12 executable Markdown examples; local synthetic fixtures and real loopback HTTP, no model",
+    "sources": {
+      "c11": "a62fe29414b4ee6a3a9ba231fc398765809827c8dcabf7d76eb4dfc4272aa71a",
+      "c12": "e0564124d6b736dfa056eb35e0c231111a83de70b60962a8de05a9dba814a3b8"
+    },
+    "c11": {
+      "fullwidth": {
+        "活动": {
+          "value": "读书会",
+          "status": "found"
+        },
+        "时间": {
+          "value": "00",
+          "status": "found"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": "提前报名",
+          "status": "found"
+        }
+      },
+      "ascii": {
+        "活动": {
+          "value": "读书会",
+          "status": "found"
+        },
+        "时间": {
+          "value": "周六 14:00",
+          "status": "found"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "empty": {
+        "活动": {
+          "value": "",
+          "status": "missing"
+        },
+        "时间": {
+          "value": null,
+          "status": "missing"
+        },
+        "地点": {
+          "value": "",
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "unrelated": {
+        "活动": {
+          "value": null,
+          "status": "missing"
+        },
+        "时间": {
+          "value": null,
+          "status": "missing"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "bom": {
+        "exit": 0,
+        "report": {
+          "status": "ok",
+          "encoding": "utf-8",
+          "line_count": 2,
+          "fields": {
+            "活动": {
+              "value": null,
+              "status": "missing"
+            },
+            "时间": {
+              "value": "00",
+              "status": "found"
+            },
+            "地点": {
+              "value": null,
+              "status": "missing"
+            },
+            "报名要求": {
+              "value": null,
+              "status": "missing"
+            }
+          },
+          "missing": [
+            "活动",
+            "地点",
+            "报名要求"
+          ]
+        }
+      },
+      "gbk": {
+        "exit": 3,
+        "report": {
+          "status": "error",
+          "error": "decode-failed",
+          "hint": "用编辑器另存为 UTF-8，或确认文件不是二进制/压缩包"
+        }
+      },
+      "missing": {
+        "exit": 2,
+        "error": "file-not-found"
+      }
+    },
+    "c12": {
+      "health": {
+        "ok": true,
+        "status": 200,
+        "json": {
+          "status": "ok",
+          "service": "teaching-lab"
+        },
+        "bytes": 43
+      },
+      "echo": {
+        "ok": true,
+        "status": 200,
+        "json": {
+          "status": "ok",
+          "echo": {
+            "message": "地点缺失"
+          },
+          "bytes": 27
+        },
+        "bytes": 66
+      },
+      "unauthorized": {
+        "ok": false,
+        "status": 401,
+        "json": {
+          "status": "error",
+          "error": "unauthorized"
+        },
+        "bytes": 44
+      },
+      "forbidden": {
+        "ok": false,
+        "status": 403,
+        "json": {
+          "status": "error",
+          "error": "forbidden"
+        },
+        "bytes": 41
+      },
+      "missing-field": {
+        "ok": false,
+        "status": 422,
+        "json": {
+          "status": "error",
+          "error": "missing-message"
+        },
+        "bytes": 47
+      },
+      "wrong-type": {
+        "ok": false,
+        "status": 422,
+        "json": {
+          "status": "error",
+          "error": "message-must-be-string"
+        },
+        "bytes": 54
+      },
+      "not-found": {
+        "ok": false,
+        "status": 404,
+        "json": {
+          "status": "error",
+          "error": "not-found",
+          "path": "/absent"
+        },
+        "bytes": 60
+      },
+      "timeout": {
+        "ok": false,
+        "status": null,
+        "error": "client-timeout"
+      },
+      "bad-json": {
+        "ok": false,
+        "status": 400,
+        "json": {
+          "status": "error",
+          "error": "bad-json",
+          "detail": "Expecting value: line 1 column 13 (char 12)"
+        }
+      }
+    }
+  },
+  "first-steps-after": {
+    "scope": "C11/C12 executable Markdown examples; local synthetic fixtures and real loopback HTTP, no model",
+    "sources": {
+      "c11": "5dc3efe8744cfeb88980e345ae40300525ad0de4f7c8309325ccb6672b68612e",
+      "c12": "aaa5693ec1383bdd8a48c2fbbce6cce4d5a5bb67a3b6203d32891319dcb0b9d6"
+    },
+    "c11": {
+      "fullwidth": {
+        "活动": {
+          "value": "读书会",
+          "status": "found"
+        },
+        "时间": {
+          "value": "周六 14:00",
+          "status": "found"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": "提前报名",
+          "status": "found"
+        }
+      },
+      "ascii": {
+        "活动": {
+          "value": "读书会",
+          "status": "found"
+        },
+        "时间": {
+          "value": "周六 14:00",
+          "status": "found"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "empty": {
+        "活动": {
+          "value": null,
+          "status": "missing"
+        },
+        "时间": {
+          "value": null,
+          "status": "missing"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "unrelated": {
+        "活动": {
+          "value": null,
+          "status": "missing"
+        },
+        "时间": {
+          "value": null,
+          "status": "missing"
+        },
+        "地点": {
+          "value": null,
+          "status": "missing"
+        },
+        "报名要求": {
+          "value": null,
+          "status": "missing"
+        }
+      },
+      "bom": {
+        "exit": 0,
+        "report": {
+          "status": "ok",
+          "encoding": "utf-8-sig",
+          "line_count": 2,
+          "fields": {
+            "活动": {
+              "value": "读书会",
+              "status": "found"
+            },
+            "时间": {
+              "value": "14:00",
+              "status": "found"
+            },
+            "地点": {
+              "value": null,
+              "status": "missing"
+            },
+            "报名要求": {
+              "value": null,
+              "status": "missing"
+            }
+          },
+          "missing": [
+            "地点",
+            "报名要求"
+          ]
+        }
+      },
+      "gbk": {
+        "exit": 3,
+        "report": {
+          "status": "error",
+          "error": "decode-failed",
+          "hint": "用编辑器另存为 UTF-8，或确认文件不是二进制/压缩包"
+        }
+      },
+      "missing": {
+        "exit": 2,
+        "error": "file-not-found"
+      }
+    },
+    "c12": {
+      "health": {
+        "ok": true,
+        "status": 200,
+        "json": {
+          "status": "ok",
+          "service": "teaching-lab"
+        },
+        "bytes": 43
+      },
+      "echo": {
+        "ok": true,
+        "status": 200,
+        "json": {
+          "status": "ok",
+          "echo": {
+            "message": "地点缺失"
+          },
+          "bytes": 27
+        },
+        "bytes": 66
+      },
+      "unauthorized": {
+        "ok": false,
+        "status": 401,
+        "json": {
+          "status": "error",
+          "error": "unauthorized"
+        },
+        "bytes": 44
+      },
+      "forbidden": {
+        "ok": false,
+        "status": 403,
+        "json": {
+          "status": "error",
+          "error": "forbidden"
+        },
+        "bytes": 41
+      },
+      "missing-field": {
+        "ok": false,
+        "status": 422,
+        "json": {
+          "status": "error",
+          "error": "missing-message"
+        },
+        "bytes": 47
+      },
+      "wrong-type": {
+        "ok": false,
+        "status": 422,
+        "json": {
+          "status": "error",
+          "error": "message-must-be-string"
+        },
+        "bytes": 54
+      },
+      "not-found": {
+        "ok": false,
+        "status": 404,
+        "json": {
+          "status": "error",
+          "error": "not-found",
+          "path": "/absent"
+        },
+        "bytes": 60
+      },
+      "timeout": {
+        "ok": false,
+        "status": null,
+        "error": "client-timeout"
+      },
+      "bad-json": {
+        "ok": false,
+        "status": 400,
+        "json": {
+          "status": "error",
+          "error": "bad-json",
+          "detail": "Expecting value: line 1 column 13 (char 12)"
+        }
+      }
+    }
+  },
+  "budget-before": {
+    "overlap": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 10,
+        "pages_by_form_feed": 1,
+        "cjk_characters": 0,
+        "other_characters": 10,
+        "token_estimate_low": 2,
+        "token_estimate_high": 5,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 2,
+        "average_chunk_chars": 5.0,
+        "top_k": 4,
+        "retrieved_chars_per_query": 20.0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "empty": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 0,
+        "pages_by_form_feed": 1,
+        "cjk_characters": 0,
+        "other_characters": 0,
+        "token_estimate_low": 0,
+        "token_estimate_high": 0,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 1,
+        "average_chunk_chars": 0.0,
+        "top_k": 4,
+        "retrieved_chars_per_query": 0.0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "bad-overlap": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 3,
+        "pages_by_form_feed": 1,
+        "cjk_characters": 0,
+        "other_characters": 3,
+        "token_estimate_low": 1,
+        "token_estimate_high": 2,
+        "chunk_chars": 6,
+        "overlap": 6,
+        "chunks": 1,
+        "average_chunk_chars": 3.0,
+        "top_k": 4,
+        "retrieved_chars_per_query": 12.0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "bad-k": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 3,
+        "pages_by_form_feed": 1,
+        "cjk_characters": 0,
+        "other_characters": 3,
+        "token_estimate_low": 1,
+        "token_estimate_high": 2,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 1,
+        "average_chunk_chars": 3.0,
+        "top_k": 0,
+        "retrieved_chars_per_query": 0.0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "multi-page": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 6,
+        "pages_by_form_feed": 2,
+        "cjk_characters": 4,
+        "other_characters": 2,
+        "token_estimate_low": 3,
+        "token_estimate_high": 7,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 1,
+        "average_chunk_chars": 6.0,
+        "top_k": 1,
+        "retrieved_chars_per_query": 6.0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    }
+  },
+  "budget-after": {
+    "overlap": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 10,
+        "pages_by_form_feed": 1,
+        "cjk_characters": 0,
+        "other_characters": 10,
+        "token_estimate_low": 2,
+        "token_estimate_high": 5,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 2,
+        "average_chunk_chars": 6.0,
+        "top_k": 4,
+        "retrieved_chars_upper_bound": 12,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "empty": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 0,
+        "pages_by_form_feed": 0,
+        "cjk_characters": 0,
+        "other_characters": 0,
+        "token_estimate_low": 0,
+        "token_estimate_high": 0,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 0,
+        "average_chunk_chars": 0,
+        "top_k": 4,
+        "retrieved_chars_upper_bound": 0,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    },
+    "bad-overlap": {
+      "exit": 2,
+      "report": null
+    },
+    "bad-k": {
+      "exit": 2,
+      "report": null
+    },
+    "multi-page": {
+      "exit": 0,
+      "report": {
+        "file": "input.txt",
+        "characters": 6,
+        "pages_by_form_feed": 2,
+        "cjk_characters": 4,
+        "other_characters": 2,
+        "token_estimate_low": 3,
+        "token_estimate_high": 7,
+        "chunk_chars": 6,
+        "overlap": 2,
+        "chunks": 1,
+        "average_chunk_chars": 6.0,
+        "top_k": 1,
+        "retrieved_chars_upper_bound": 6,
+        "note": "Estimates only; verify with the actual tokenizer and frozen evaluation."
+      }
+    }
+  },
+  "eval-preparation-before": {
+    "chapter_sha256": "8f453f8c0c06eb08aed2f8597e612502b65a2b212d017c333087d7dcc67bbe90",
+    "scope": "Actual C22 preparation and original no-model boundary cases; no generated answers mocked",
+    "copied_boundary": {
+      "id": "missing-source",
+      "expected_status": [
+        "missing-source"
+      ],
+      "actual_status": "invalid-manifest",
+      "passed": false
+    },
+    "original_boundaries": {
+      "schema": "assistant-eval-result/1",
+      "generated_at": "2026-11-08T17:40:44+00:00",
+      "manifest": {
+        "path": ".\\tmp\\quality-04\\tmpzcw18zde\\book\\llm\\examples\\assistant\\eval-manifest.json",
+        "sha256": "5255ec386cd139b139cb72645c1f9de2c35b1ba569d8175c5eb50ab263b805fd",
+        "size": 3381,
+        "mtime_ns": 1794159644291947900,
+        "frozen_at": "2026-11-08T17:40:44+00:00"
+      },
+      "manifest_unchanged": true,
+      "budgets": {
+        "max_new_tokens": 192,
+        "max_prompt_tokens": 2048,
+        "max_steps": 3,
+        "max_tool_calls": 2,
+        "repair_attempts": 0,
+        "top_k": 3,
+        "min_score": 0.08,
+        "chunk_chars": 480,
+        "chunk_overlap": 80
+      },
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "status_counts": {
+          "model-unavailable": 1,
+          "api-config-missing": 1
+        }
+      },
+      "usage": {
+        "calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "latency_ms": 0.0,
+        "model_load_ms": 0.0,
+        "cost": null,
+        "cost_basis": "per-case reports"
+      },
+      "cases": [
+        {
+          "id": "model-missing",
+          "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "retriever": "keyword",
+          "expected_status": [
+            "model-unavailable"
+          ],
+          "actual_status": "model-unavailable",
+          "expected_citation_docs": [],
+          "cited_docs": [],
+          "expected_tool": null,
+          "checks": {
+            "status": true,
+            "citations": true,
+            "tool": true
+          },
+          "passed": true,
+          "report": {
+            "schema": "assistant-report/1",
+            "generated_at": "2026-11-08T17:40:44+00:00",
+            "status": "model-unavailable",
+            "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+            "reader": "student",
+            "mode": "fixed",
+            "provider": "local",
+            "model": ".\\tmp\\quality-04\\tmpzcw18zde\\book\\llm\\examples\\assistant\\no-such-model",
+            "config": {
+              "docs": ".\\book\\llm\\examples\\assistant\\documents.json",
+              "chunk_chars": 480,
+              "chunk_overlap": 80,
+              "retriever": "keyword",
+              "top_k": 3,
+              "threshold": 0.08,
+              "max_new_tokens": 192,
+              "max_prompt_tokens": 2048,
+              "max_steps": 3,
+              "max_tool_calls": 2,
+              "repair_attempts": 0,
+              "claim_mode": "copy",
+              "allowed_tools": [
+                "calculator"
+              ],
+              "local_files_only": true
+            },
+            "documents": [
+              {
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "path": "docs/station-log.md",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "path": "docs/equipment-guide.md",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "visitor-policy",
+                "title": "访客与开放时间政策",
+                "path": "docs/visitor-policy.md",
+                "version": "1.0.0",
+                "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "path": "docs/closing-notice.md",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              }
+            ],
+            "retrieval": {
+              "retriever": "keyword",
+              "threshold": 0.08,
+              "top_k": 3,
+              "hits": [
+                {
+                  "chunk_id": "station-log@9cb29b8d5e1a#000",
+                  "doc_id": "station-log",
+                  "title": "观测站值班记录",
+                  "version": "1.0.0",
+                  "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                  "start": 0,
+                  "end": 389,
+                  "score": 0.50282064,
+                  "used": false
+                },
+                {
+                  "chunk_id": "visitor-policy@b804832daad7#000",
+                  "doc_id": "visitor-policy",
+                  "title": "访客与开放时间政策",
+                  "version": "1.0.0",
+                  "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                  "start": 0,
+                  "end": 448,
+                  "score": 0.42203978,
+                  "used": false
+                },
+                {
+                  "chunk_id": "closing-notice@afd0ca4b251b#000",
+                  "doc_id": "closing-notice",
+                  "title": "关于冬季闭站时间的临时通知",
+                  "version": "1.0.0",
+                  "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                  "start": 0,
+                  "end": 263,
+                  "score": 0.40169802,
+                  "used": false
+                }
+              ],
+              "filtered_doc_count": 1,
+              "authorized_doc_ids": [
+                "station-log",
+                "equipment-guide",
+                "visitor-policy",
+                "closing-notice"
+              ],
+              "chunk_count": 5
+            },
+            "answer": null,
+            "claims": [],
+            "tool_receipts": [],
+            "usage": {
+              "calls": 0,
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "latency_ms": 0.0,
+              "model_load_ms": 0.0,
+              "cost": null,
+              "cost_basis": "local-compute-not-priced"
+            },
+            "diagnostics": {
+              "first_raw_response": null,
+              "first_failure": {
+                "status": "model-unavailable",
+                "stage": "model-load",
+                "detail": {
+                  "path": ".\\tmp\\quality-04\\tmpzcw18zde\\book\\llm\\examples\\assistant\\no-such-model",
+                  "reason": "directory-not-found",
+                  "local_files_only": true
+                }
+              },
+              "raw_responses": [],
+              "warnings": []
+            },
+            "elapsed_ms": 8.75
+          }
+        },
+        {
+          "id": "api-unconfigured",
+          "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "retriever": "keyword",
+          "expected_status": [
+            "api-config-missing"
+          ],
+          "actual_status": "api-config-missing",
+          "expected_citation_docs": [],
+          "cited_docs": [],
+          "expected_tool": null,
+          "checks": {
+            "status": true,
+            "citations": true,
+            "tool": true
+          },
+          "passed": true,
+          "report": {
+            "schema": "assistant-report/1",
+            "generated_at": "2026-11-08T17:40:44+00:00",
+            "status": "api-config-missing",
+            "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+            "reader": "student",
+            "mode": "fixed",
+            "provider": "api",
+            "model": "(env not read until call)",
+            "config": {
+              "docs": ".\\book\\llm\\examples\\assistant\\documents.json",
+              "chunk_chars": 480,
+              "chunk_overlap": 80,
+              "retriever": "keyword",
+              "top_k": 3,
+              "threshold": 0.08,
+              "max_new_tokens": 192,
+              "max_prompt_tokens": 2048,
+              "max_steps": 3,
+              "max_tool_calls": 2,
+              "repair_attempts": 0,
+              "claim_mode": "copy",
+              "allowed_tools": [
+                "calculator"
+              ],
+              "local_files_only": false
+            },
+            "documents": [
+              {
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "path": "docs/station-log.md",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "path": "docs/equipment-guide.md",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "visitor-policy",
+                "title": "访客与开放时间政策",
+                "path": "docs/visitor-policy.md",
+                "version": "1.0.0",
+                "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "path": "docs/closing-notice.md",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              }
+            ],
+            "retrieval": {
+              "retriever": "keyword",
+              "threshold": 0.08,
+              "top_k": 3,
+              "hits": [
+                {
+                  "chunk_id": "station-log@9cb29b8d5e1a#000",
+                  "doc_id": "station-log",
+                  "title": "观测站值班记录",
+                  "version": "1.0.0",
+                  "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                  "start": 0,
+                  "end": 389,
+                  "score": 0.50282064,
+                  "used": false
+                },
+                {
+                  "chunk_id": "visitor-policy@b804832daad7#000",
+                  "doc_id": "visitor-policy",
+                  "title": "访客与开放时间政策",
+                  "version": "1.0.0",
+                  "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                  "start": 0,
+                  "end": 448,
+                  "score": 0.42203978,
+                  "used": false
+                },
+                {
+                  "chunk_id": "closing-notice@afd0ca4b251b#000",
+                  "doc_id": "closing-notice",
+                  "title": "关于冬季闭站时间的临时通知",
+                  "version": "1.0.0",
+                  "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                  "start": 0,
+                  "end": 263,
+                  "score": 0.40169802,
+                  "used": false
+                }
+              ],
+              "filtered_doc_count": 1,
+              "authorized_doc_ids": [
+                "station-log",
+                "equipment-guide",
+                "visitor-policy",
+                "closing-notice"
+              ],
+              "chunk_count": 5
+            },
+            "answer": null,
+            "claims": [],
+            "tool_receipts": [],
+            "usage": {
+              "calls": 0,
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "latency_ms": 0.0,
+              "model_load_ms": 0.0,
+              "cost": null,
+              "cost_basis": "prices-not-configured-or-usage-missing"
+            },
+            "diagnostics": {
+              "first_raw_response": null,
+              "first_failure": {
+                "status": "api-config-missing",
+                "stage": "api-config",
+                "detail": {
+                  "missing_env": [
+                    "ASSISTANT_API_BASE",
+                    "ASSISTANT_API_MODEL"
+                  ],
+                  "note": "只有 --provider api 才读取这些变量"
+                }
+              },
+              "raw_responses": [],
+              "warnings": []
+            },
+            "elapsed_ms": 5.531
+          }
+        }
+      ]
+    },
+    "between_runs_edit": {
+      "hash_changed": true,
+      "before_unchanged": true,
+      "after_unchanged": true
+    }
+  },
+  "eval-preparation-after": {
+    "chapter_sha256": "368ecdc698f7e5bd900ceb82c9ad8e485f380c20016faf75e1c3be1d2fc87734",
+    "scope": "Actual C22 preparation and original no-model boundary cases; no generated answers mocked",
+    "copied_boundary": {
+      "id": "missing-source",
+      "expected_status": [
+        "missing-source"
+      ],
+      "actual_status": "missing-source",
+      "passed": true
+    },
+    "original_boundaries": {
+      "schema": "assistant-eval-result/1",
+      "generated_at": "2026-11-08T17:41:32+00:00",
+      "manifest": {
+        "path": ".\\tmp\\quality-04\\tmp8v_japz7\\book\\llm\\examples\\assistant\\eval-manifest.json",
+        "sha256": "5255ec386cd139b139cb72645c1f9de2c35b1ba569d8175c5eb50ab263b805fd",
+        "size": 3381,
+        "mtime_ns": 1794159692856772100,
+        "frozen_at": "2026-11-08T17:41:32+00:00"
+      },
+      "manifest_unchanged": true,
+      "budgets": {
+        "max_new_tokens": 192,
+        "max_prompt_tokens": 2048,
+        "max_steps": 3,
+        "max_tool_calls": 2,
+        "repair_attempts": 0,
+        "top_k": 3,
+        "min_score": 0.08,
+        "chunk_chars": 480,
+        "chunk_overlap": 80
+      },
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "status_counts": {
+          "model-unavailable": 1,
+          "api-config-missing": 1
+        }
+      },
+      "usage": {
+        "calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "latency_ms": 0.0,
+        "model_load_ms": 0.0,
+        "cost": null,
+        "cost_basis": "per-case reports"
+      },
+      "cases": [
+        {
+          "id": "model-missing",
+          "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "retriever": "keyword",
+          "expected_status": [
+            "model-unavailable"
+          ],
+          "actual_status": "model-unavailable",
+          "expected_citation_docs": [],
+          "cited_docs": [],
+          "expected_tool": null,
+          "checks": {
+            "status": true,
+            "citations": true,
+            "tool": true
+          },
+          "passed": true,
+          "report": {
+            "schema": "assistant-report/1",
+            "generated_at": "2026-11-08T17:41:32+00:00",
+            "status": "model-unavailable",
+            "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+            "reader": "student",
+            "mode": "fixed",
+            "provider": "local",
+            "model": ".\\tmp\\quality-04\\tmp8v_japz7\\book\\llm\\examples\\assistant\\no-such-model",
+            "config": {
+              "docs": ".\\book\\llm\\examples\\assistant\\documents.json",
+              "chunk_chars": 480,
+              "chunk_overlap": 80,
+              "retriever": "keyword",
+              "top_k": 3,
+              "threshold": 0.08,
+              "max_new_tokens": 192,
+              "max_prompt_tokens": 2048,
+              "max_steps": 3,
+              "max_tool_calls": 2,
+              "repair_attempts": 0,
+              "claim_mode": "copy",
+              "allowed_tools": [
+                "calculator"
+              ],
+              "local_files_only": true
+            },
+            "documents": [
+              {
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "path": "docs/station-log.md",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "path": "docs/equipment-guide.md",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "visitor-policy",
+                "title": "访客与开放时间政策",
+                "path": "docs/visitor-policy.md",
+                "version": "1.0.0",
+                "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "path": "docs/closing-notice.md",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              }
+            ],
+            "retrieval": {
+              "retriever": "keyword",
+              "threshold": 0.08,
+              "top_k": 3,
+              "hits": [
+                {
+                  "chunk_id": "station-log@9cb29b8d5e1a#000",
+                  "doc_id": "station-log",
+                  "title": "观测站值班记录",
+                  "version": "1.0.0",
+                  "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                  "start": 0,
+                  "end": 389,
+                  "score": 0.50282064,
+                  "used": false
+                },
+                {
+                  "chunk_id": "visitor-policy@b804832daad7#000",
+                  "doc_id": "visitor-policy",
+                  "title": "访客与开放时间政策",
+                  "version": "1.0.0",
+                  "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                  "start": 0,
+                  "end": 448,
+                  "score": 0.42203978,
+                  "used": false
+                },
+                {
+                  "chunk_id": "closing-notice@afd0ca4b251b#000",
+                  "doc_id": "closing-notice",
+                  "title": "关于冬季闭站时间的临时通知",
+                  "version": "1.0.0",
+                  "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                  "start": 0,
+                  "end": 263,
+                  "score": 0.40169802,
+                  "used": false
+                }
+              ],
+              "filtered_doc_count": 1,
+              "authorized_doc_ids": [
+                "station-log",
+                "equipment-guide",
+                "visitor-policy",
+                "closing-notice"
+              ],
+              "chunk_count": 5
+            },
+            "answer": null,
+            "claims": [],
+            "tool_receipts": [],
+            "usage": {
+              "calls": 0,
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "latency_ms": 0.0,
+              "model_load_ms": 0.0,
+              "cost": null,
+              "cost_basis": "local-compute-not-priced"
+            },
+            "diagnostics": {
+              "first_raw_response": null,
+              "first_failure": {
+                "status": "model-unavailable",
+                "stage": "model-load",
+                "detail": {
+                  "path": ".\\tmp\\quality-04\\tmp8v_japz7\\book\\llm\\examples\\assistant\\no-such-model",
+                  "reason": "directory-not-found",
+                  "local_files_only": true
+                }
+              },
+              "raw_responses": [],
+              "warnings": []
+            },
+            "elapsed_ms": 12.306
+          }
+        },
+        {
+          "id": "api-unconfigured",
+          "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+          "reader": "student",
+          "mode": "fixed",
+          "retriever": "keyword",
+          "expected_status": [
+            "api-config-missing"
+          ],
+          "actual_status": "api-config-missing",
+          "expected_citation_docs": [],
+          "cited_docs": [],
+          "expected_tool": null,
+          "checks": {
+            "status": true,
+            "citations": true,
+            "tool": true
+          },
+          "passed": true,
+          "report": {
+            "schema": "assistant-report/1",
+            "generated_at": "2026-11-08T17:41:32+00:00",
+            "status": "api-config-missing",
+            "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+            "reader": "student",
+            "mode": "fixed",
+            "provider": "api",
+            "model": "(env not read until call)",
+            "config": {
+              "docs": ".\\book\\llm\\examples\\assistant\\documents.json",
+              "chunk_chars": 480,
+              "chunk_overlap": 80,
+              "retriever": "keyword",
+              "top_k": 3,
+              "threshold": 0.08,
+              "max_new_tokens": 192,
+              "max_prompt_tokens": 2048,
+              "max_steps": 3,
+              "max_tool_calls": 2,
+              "repair_attempts": 0,
+              "claim_mode": "copy",
+              "allowed_tools": [
+                "calculator"
+              ],
+              "local_files_only": false
+            },
+            "documents": [
+              {
+                "doc_id": "station-log",
+                "title": "观测站值班记录",
+                "path": "docs/station-log.md",
+                "version": "1.0.0",
+                "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "equipment-guide",
+                "title": "海岬观测站设备手册（节选）",
+                "path": "docs/equipment-guide.md",
+                "version": "1.0.0",
+                "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "visitor-policy",
+                "title": "访客与开放时间政策",
+                "path": "docs/visitor-policy.md",
+                "version": "1.0.0",
+                "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              },
+              {
+                "doc_id": "closing-notice",
+                "title": "关于冬季闭站时间的临时通知",
+                "path": "docs/closing-notice.md",
+                "version": "1.0.0",
+                "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                "readers": [
+                  "student",
+                  "teacher"
+                ]
+              }
+            ],
+            "retrieval": {
+              "retriever": "keyword",
+              "threshold": 0.08,
+              "top_k": 3,
+              "hits": [
+                {
+                  "chunk_id": "station-log@9cb29b8d5e1a#000",
+                  "doc_id": "station-log",
+                  "title": "观测站值班记录",
+                  "version": "1.0.0",
+                  "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+                  "start": 0,
+                  "end": 389,
+                  "score": 0.50282064,
+                  "used": false
+                },
+                {
+                  "chunk_id": "visitor-policy@b804832daad7#000",
+                  "doc_id": "visitor-policy",
+                  "title": "访客与开放时间政策",
+                  "version": "1.0.0",
+                  "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+                  "start": 0,
+                  "end": 448,
+                  "score": 0.42203978,
+                  "used": false
+                },
+                {
+                  "chunk_id": "closing-notice@afd0ca4b251b#000",
+                  "doc_id": "closing-notice",
+                  "title": "关于冬季闭站时间的临时通知",
+                  "version": "1.0.0",
+                  "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+                  "start": 0,
+                  "end": 263,
+                  "score": 0.40169802,
+                  "used": false
+                }
+              ],
+              "filtered_doc_count": 1,
+              "authorized_doc_ids": [
+                "station-log",
+                "equipment-guide",
+                "visitor-policy",
+                "closing-notice"
+              ],
+              "chunk_count": 5
+            },
+            "answer": null,
+            "claims": [],
+            "tool_receipts": [],
+            "usage": {
+              "calls": 0,
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "latency_ms": 0.0,
+              "model_load_ms": 0.0,
+              "cost": null,
+              "cost_basis": "prices-not-configured-or-usage-missing"
+            },
+            "diagnostics": {
+              "first_raw_response": null,
+              "first_failure": {
+                "status": "api-config-missing",
+                "stage": "api-config",
+                "detail": {
+                  "missing_env": [
+                    "ASSISTANT_API_BASE",
+                    "ASSISTANT_API_MODEL"
+                  ],
+                  "note": "只有 --provider api 才读取这些变量"
+                }
+              },
+              "raw_responses": [],
+              "warnings": []
+            },
+            "elapsed_ms": 4.321
+          }
+        }
+      ]
+    },
+    "between_runs_edit": {
+      "hash_changed": true,
+      "before_unchanged": true,
+      "after_unchanged": true
+    }
+  },
+  "inspection": [
+    {
+      "chapter": "C13",
+      "block": 4,
+      "sourceSha256": "7fc8e86e5a52b6d32298af46b1be68834eeae688790952ef3bf1aa4b761dc150",
+      "command": [
+        "inspect",
+        "read",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--doc",
+        "station-log"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "read",
+        "status": "ok",
+        "reader": "student",
+        "doc": {
+          "doc_id": "station-log",
+          "title": "观测站值班记录",
+          "path": "docs/station-log.md",
+          "version": "1.0.0",
+          "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+          "readers": [
+            "student",
+            "teacher"
+          ],
+          "chars": 389
+        },
+        "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+      }
+    },
+    {
+      "chapter": "C14",
+      "block": 1,
+      "sourceSha256": "8d0bc53fc586bbde4dbdc5086905709d3ee7b59772ddc83a7fa81975fa44a55d",
+      "command": [
+        "inspect",
+        "chunk",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--chunk-chars",
+        "480",
+        "--chunk-overlap",
+        "80"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "chunk",
+        "status": "ok",
+        "reader": "student",
+        "chunk_chars": 480,
+        "overlap": 80,
+        "documents": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "filtered_doc_count": 1,
+        "chunks": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 0,
+            "end": 389,
+            "chars": 389,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#000",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "start": 0,
+            "end": 399,
+            "chars": 399,
+            "text": "# 海岬观测站设备手册（节选）\n\n本手册面向值班员，只包含日常检查与故障上报所需的最小信息。拆机、改线和固件升级必须由维护组执行。\n\n## 电池组 BT-24\n\nBT-24 为可充电磷酸铁锂电池组，标称容量 24 安时。充满后，常规记录模式可连续工作约 36 小时。环境温度低于 0 摄氏度时，可用容量会下降，手册不承诺具体比例，应以当日实测放电曲线为准。\n\n充电使用随箱的 29.2 伏恒压充电器。充电区必须保持通风，禁止在电池组旁存放易燃物。发现外壳鼓包、渗液或异常发热时，立即断开充电并上报维护组。\n\n## 校准\n\n风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#001",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "start": 261,
+            "end": 563,
+            "chars": 302,
+            "text": "风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码\n\n- E01：供电电压低于 11 伏。检查充电状态和接线，不要自行提高充电电压。\n- E03：风速传感器无脉冲。先检查线缆接头，再上报维护组。\n- E07：存储卡写入失败。停止采集并更换已格式化的存储卡，保留旧卡用于分析。\n\n故障代码只表示设备自检结果，不等同于故障原因。维修记录需要写明代码、发生时间、现场处理和复核结果。\n"
+          },
+          {
+            "chunk_id": "visitor-policy@b804832daad7#000",
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "start": 0,
+            "end": 448,
+            "chars": 448,
+            "text": "# 访客与开放时间政策\n\n## 开放时间\n\n观测站对外参观时间为每日 09:00 至 17:00。冬季（11 月 1 日至次年 3 月 31 日）闭站时间提前到 17:30，以便值班员在日落前完成设备检查。其他季节按 17:00 闭站。\n\n## 预约与登记\n\n团体参观需提前 24 小时预约，预约时说明人数、到达时间和联系人。所有访客到达后在前厅登记，领取访客牌，并由工作人员陪同进入参观通道。访客牌离开时交回。\n\n## 区域限制\n\n观测场、设备间和资料室属于受限区域，访客不得单独进入。参观通道允许拍照，但不得拍摄设备铭牌、网络接口和值班记录。如需拍摄受限区域，必须取得站长书面同意。\n\n## 安全\n\n遇到大风、雷雨或能见度低于 1 公里的天气，室外参观暂停。访客应听从值班员安排，不得触碰仪器、线缆和配电箱。紧急疏散集合点位于前厅东侧空地。\n\n## 数据与隐私\n\n访客登记信息只用于安全管理，保存 90 天后销毁。未经同意，不得向第三方提供访客名单。上述规定不适用于法律法规另有要求的情形。\n"
+          },
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "start": 0,
+            "end": 263,
+            "chars": 263,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C15",
+      "block": 0,
+      "sourceSha256": "25673b54d2a07c682b6b0c40c4030d7ea4cd8e4bd61de02a7c6ef37afeabed44",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "闭馆前要关什么",
+        "--retriever",
+        "keyword"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "闭馆前要关什么",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 4,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": [
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "score": 0.35866113,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          },
+          {
+            "chunk_id": "visitor-policy@b804832daad7#000",
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "score": 0.27589462,
+            "text": "# 访客与开放时间政策\n\n## 开放时间\n\n观测站对外参观时间为每日 09:00 至 17:00。冬季（11 月 1 日至次年 3 月 31 日）闭站时间提前到 17:30，以便值班员在日落前完成设备检查。其他季节按 17:00 闭站。\n\n## 预约与登记\n\n团体参观需提前 24 小时预约，预约时说明人数、到达时间和联系人。所有访客到达后在前厅登记，领取访客牌，并由工作人员陪同进入参观通道。访客牌离开时交回。\n\n## 区域限制\n\n观测场、设备间和资料室属于受限区域，访客不得单独进入。参观通道允许拍照，但不得拍摄设备铭牌、网络接口和值班记录。如需拍摄受限区域，必须取得站长书面同意。\n\n## 安全\n\n遇到大风、雷雨或能见度低于 1 公里的天气，室外参观暂停。访客应听从值班员安排，不得触碰仪器、线缆和配电箱。紧急疏散集合点位于前厅东侧空地。\n\n## 数据与隐私\n\n访客登记信息只用于安全管理，保存 90 天后销毁。未经同意，不得向第三方提供访客名单。上述规定不适用于法律法规另有要求的情形。\n"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#000",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "score": 0.11091755,
+            "text": "# 海岬观测站设备手册（节选）\n\n本手册面向值班员，只包含日常检查与故障上报所需的最小信息。拆机、改线和固件升级必须由维护组执行。\n\n## 电池组 BT-24\n\nBT-24 为可充电磷酸铁锂电池组，标称容量 24 安时。充满后，常规记录模式可连续工作约 36 小时。环境温度低于 0 摄氏度时，可用容量会下降，手册不承诺具体比例，应以当日实测放电曲线为准。\n\n充电使用随箱的 29.2 伏恒压充电器。充电区必须保持通风，禁止在电池组旁存放易燃物。发现外壳鼓包、渗液或异常发热时，立即断开充电并上报维护组。\n\n## 校准\n\n风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#001",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "score": 0.11091755,
+            "text": "风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码\n\n- E01：供电电压低于 11 伏。检查充电状态和接线，不要自行提高充电电压。\n- E03：风速传感器无脉冲。先检查线缆接头，再上报维护组。\n- E07：存储卡写入失败。停止采集并更换已格式化的存储卡，保留旧卡用于分析。\n\n故障代码只表示设备自检结果，不等同于故障原因。维修记录需要写明代码、发生时间、现场处理和复核结果。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C15",
+      "block": 1,
+      "sourceSha256": "25673b54d2a07c682b6b0c40c4030d7ea4cd8e4bd61de02a7c6ef37afeabed44",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "闭馆前要关什么",
+        "--retriever",
+        "embedding",
+        "--embedding",
+        "path/to/local-embedding-model"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "闭馆前要关什么",
+        "retriever": "embedding",
+        "threshold": 0.3,
+        "top_k": 4,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": []
+      }
+    },
+    {
+      "chapter": "C17",
+      "block": 0,
+      "sourceSha256": "b1a4b44a002ba81f9d91beed6f9836142b287c08de6433c0ad71a3366640f299",
+      "command": [
+        "inspect",
+        "read",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--doc",
+        "equipment-guide"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "read",
+        "status": "ok",
+        "reader": "student",
+        "doc": {
+          "doc_id": "equipment-guide",
+          "title": "海岬观测站设备手册（节选）",
+          "path": "docs/equipment-guide.md",
+          "version": "1.0.0",
+          "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+          "readers": [
+            "student",
+            "teacher"
+          ],
+          "chars": 563
+        },
+        "text": "# 海岬观测站设备手册（节选）\n\n本手册面向值班员，只包含日常检查与故障上报所需的最小信息。拆机、改线和固件升级必须由维护组执行。\n\n## 电池组 BT-24\n\nBT-24 为可充电磷酸铁锂电池组，标称容量 24 安时。充满后，常规记录模式可连续工作约 36 小时。环境温度低于 0 摄氏度时，可用容量会下降，手册不承诺具体比例，应以当日实测放电曲线为准。\n\n充电使用随箱的 29.2 伏恒压充电器。充电区必须保持通风，禁止在电池组旁存放易燃物。发现外壳鼓包、渗液或异常发热时，立即断开充电并上报维护组。\n\n## 校准\n\n风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码\n\n- E01：供电电压低于 11 伏。检查充电状态和接线，不要自行提高充电电压。\n- E03：风速传感器无脉冲。先检查线缆接头，再上报维护组。\n- E07：存储卡写入失败。停止采集并更换已格式化的存储卡，保留旧卡用于分析。\n\n故障代码只表示设备自检结果，不等同于故障原因。维修记录需要写明代码、发生时间、现场处理和复核结果。\n"
+      }
+    },
+    {
+      "chapter": "C17",
+      "block": 1,
+      "sourceSha256": "b1a4b44a002ba81f9d91beed6f9836142b287c08de6433c0ad71a3366640f299",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "闭馆前需要检查哪些项目？",
+        "--retriever",
+        "keyword",
+        "--top-k",
+        "3"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "闭馆前需要检查哪些项目？",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 3,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": [
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "score": 0.31626154,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          },
+          {
+            "chunk_id": "visitor-policy@b804832daad7#000",
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "score": 0.29812809,
+            "text": "# 访客与开放时间政策\n\n## 开放时间\n\n观测站对外参观时间为每日 09:00 至 17:00。冬季（11 月 1 日至次年 3 月 31 日）闭站时间提前到 17:30，以便值班员在日落前完成设备检查。其他季节按 17:00 闭站。\n\n## 预约与登记\n\n团体参观需提前 24 小时预约，预约时说明人数、到达时间和联系人。所有访客到达后在前厅登记，领取访客牌，并由工作人员陪同进入参观通道。访客牌离开时交回。\n\n## 区域限制\n\n观测场、设备间和资料室属于受限区域，访客不得单独进入。参观通道允许拍照，但不得拍摄设备铭牌、网络接口和值班记录。如需拍摄受限区域，必须取得站长书面同意。\n\n## 安全\n\n遇到大风、雷雨或能见度低于 1 公里的天气，室外参观暂停。访客应听从值班员安排，不得触碰仪器、线缆和配电箱。紧急疏散集合点位于前厅东侧空地。\n\n## 数据与隐私\n\n访客登记信息只用于安全管理，保存 90 天后销毁。未经同意，不得向第三方提供访客名单。上述规定不适用于法律法规另有要求的情形。\n"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#001",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "score": 0.26705626,
+            "text": "风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码\n\n- E01：供电电压低于 11 伏。检查充电状态和接线，不要自行提高充电电压。\n- E03：风速传感器无脉冲。先检查线缆接头，再上报维护组。\n- E07：存储卡写入失败。停止采集并更换已格式化的存储卡，保留旧卡用于分析。\n\n故障代码只表示设备自检结果，不等同于故障原因。维修记录需要写明代码、发生时间、现场处理和复核结果。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C19",
+      "block": 0,
+      "sourceSha256": "cbb2ff3244265efa93c1aed01baccba58b6abd94b7030b291302e43fd05c0b46",
+      "command": [
+        "inspect",
+        "chunk",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--doc",
+        "station-log",
+        "--chunk-chars",
+        "480",
+        "--chunk-overlap",
+        "80",
+        "--json",
+        "out/c19/chunks-480.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "chunk",
+        "status": "ok",
+        "reader": "student",
+        "chunk_chars": 480,
+        "overlap": 80,
+        "documents": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "filtered_doc_count": 1,
+        "chunks": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 0,
+            "end": 389,
+            "chars": 389,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C19",
+      "block": 0,
+      "sourceSha256": "cbb2ff3244265efa93c1aed01baccba58b6abd94b7030b291302e43fd05c0b46",
+      "command": [
+        "inspect",
+        "chunk",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--doc",
+        "station-log",
+        "--chunk-chars",
+        "240",
+        "--chunk-overlap",
+        "80",
+        "--json",
+        "out/c19/chunks-240.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "chunk",
+        "status": "ok",
+        "reader": "student",
+        "chunk_chars": 240,
+        "overlap": 80,
+        "documents": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "filtered_doc_count": 1,
+        "chunks": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 0,
+            "end": 237,
+            "chars": 237,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05"
+          },
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#001",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 146,
+            "end": 307,
+            "chars": 161,
+            "text": "## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明"
+          },
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#002",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "start": 224,
+            "end": 389,
+            "chars": 165,
+            "text": "## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C19",
+      "block": 1,
+      "sourceSha256": "cbb2ff3244265efa93c1aed01baccba58b6abd94b7030b291302e43fd05c0b46",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "2026-10-03 阵风",
+        "--retriever",
+        "keyword",
+        "--top-k",
+        "3",
+        "--chunk-chars",
+        "480",
+        "--chunk-overlap",
+        "80",
+        "--json",
+        "out/c19/q-gust-480.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "2026-10-03 阵风",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 3,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.92476021,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          },
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "score": 0.51412035,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          },
+          {
+            "chunk_id": "equipment-guide@a4d0a287abe2#000",
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "score": 0.26213107,
+            "text": "# 海岬观测站设备手册（节选）\n\n本手册面向值班员，只包含日常检查与故障上报所需的最小信息。拆机、改线和固件升级必须由维护组执行。\n\n## 电池组 BT-24\n\nBT-24 为可充电磷酸铁锂电池组，标称容量 24 安时。充满后，常规记录模式可连续工作约 36 小时。环境温度低于 0 摄氏度时，可用容量会下降，手册不承诺具体比例，应以当日实测放电曲线为准。\n\n充电使用随箱的 29.2 伏恒压充电器。充电区必须保持通风，禁止在电池组旁存放易燃物。发现外壳鼓包、渗液或异常发热时，立即断开充电并上报维护组。\n\n## 校准\n\n风速传感器建议每 180 天校准一次。校准由维护组完成，值班员只负责在设备台账中登记日期和证书编号。超过 180 天未校准的数据要标注“未校准”，不能直接当作正式观测值。\n\n雨量计每 90 天清理一次滤网。清理后先做一次空翻试验，确认翻斗计数正常再接入记录。\n\n## 故障代码"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C19",
+      "block": 1,
+      "sourceSha256": "cbb2ff3244265efa93c1aed01baccba58b6abd94b7030b291302e43fd05c0b46",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "2026-10-03 阵风",
+        "--retriever",
+        "keyword",
+        "--top-k",
+        "3",
+        "--chunk-chars",
+        "240",
+        "--chunk-overlap",
+        "80",
+        "--json",
+        "out/c19/q-gust-240.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "2026-10-03 阵风",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 3,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.93553389,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05"
+          },
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#001",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.5327464,
+            "text": "## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明"
+          },
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#002",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.5175673,
+            "text": "## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C20",
+      "block": 6,
+      "sourceSha256": "d3aa6698c39a3a20881978838c74b7a6b044efebeea4d9f2d361a147da40a3ca",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--query",
+        "内部评审预算总预算",
+        "--retriever",
+        "keyword",
+        "--top-k",
+        "3",
+        "--json",
+        "out/c20/student-budget.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "student",
+        "query": "内部评审预算总预算",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 3,
+        "filtered_doc_count": 1,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice"
+        ],
+        "hits": [
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.31294383,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          },
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "score": 0.25248111,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          },
+          {
+            "chunk_id": "visitor-policy@b804832daad7#000",
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "score": 0.25248111,
+            "text": "# 访客与开放时间政策\n\n## 开放时间\n\n观测站对外参观时间为每日 09:00 至 17:00。冬季（11 月 1 日至次年 3 月 31 日）闭站时间提前到 17:30，以便值班员在日落前完成设备检查。其他季节按 17:00 闭站。\n\n## 预约与登记\n\n团体参观需提前 24 小时预约，预约时说明人数、到达时间和联系人。所有访客到达后在前厅登记，领取访客牌，并由工作人员陪同进入参观通道。访客牌离开时交回。\n\n## 区域限制\n\n观测场、设备间和资料室属于受限区域，访客不得单独进入。参观通道允许拍照，但不得拍摄设备铭牌、网络接口和值班记录。如需拍摄受限区域，必须取得站长书面同意。\n\n## 安全\n\n遇到大风、雷雨或能见度低于 1 公里的天气，室外参观暂停。访客应听从值班员安排，不得触碰仪器、线缆和配电箱。紧急疏散集合点位于前厅东侧空地。\n\n## 数据与隐私\n\n访客登记信息只用于安全管理，保存 90 天后销毁。未经同意，不得向第三方提供访客名单。上述规定不适用于法律法规另有要求的情形。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C20",
+      "block": 6,
+      "sourceSha256": "d3aa6698c39a3a20881978838c74b7a6b044efebeea4d9f2d361a147da40a3ca",
+      "command": [
+        "inspect",
+        "retrieve",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "teacher",
+        "--query",
+        "内部评审预算总预算",
+        "--retriever",
+        "keyword",
+        "--top-k",
+        "3",
+        "--json",
+        "out/c20/teacher-budget.json"
+      ],
+      "exit": 0,
+      "report": {
+        "schema": "assistant-inspect/1",
+        "action": "retrieve",
+        "status": "ok",
+        "reader": "teacher",
+        "query": "内部评审预算总预算",
+        "retriever": "keyword",
+        "threshold": 0.08,
+        "top_k": 3,
+        "filtered_doc_count": 0,
+        "authorized_doc_ids": [
+          "station-log",
+          "equipment-guide",
+          "visitor-policy",
+          "closing-notice",
+          "review-budget"
+        ],
+        "hits": [
+          {
+            "chunk_id": "review-budget@0a7842c74c17#000",
+            "doc_id": "review-budget",
+            "title": "内部评审预算（教师专用）",
+            "version": "1.0.0",
+            "sha256": "0a7842c74c17f1ce1733b08ea7f1fcf08afb501ac7ba15bf5df5a9cd607604a2",
+            "score": 0.8674873,
+            "text": "# 内部评审预算（教师专用）\n\n本文档只对教师读者开放，用于演示检索前的权限过滤；学生读者不应看到本文内容。\n\n## 2026 年第四季度评审\n\n本季度安排三次课程评审，评审人共 3 名。场地与设备费用合计 1200 元，评审劳务合计 1800 元，材料印制 300 元，预留机动 900 元。总预算 4200 元。\n\n## 报销规则\n\n评审结束后 10 个工作日内提交票据和签到表。超过预算的项目需要提前书面说明，不得先支出后补批。机动费用只能用于场地延期、设备替换和临时增加的评审材料，不能转为劳务。\n\n## 记录保存\n\n预算表、审批邮件和报销凭证保存两年。涉及个人账号的信息只在财务系统中保留，不写入公开课程材料。\n"
+          },
+          {
+            "chunk_id": "station-log@9cb29b8d5e1a#000",
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "score": 0.32836041,
+            "text": "# 观测站值班记录\n\n本记录由海岬观测站值班员逐日填写，用于交接班和月度复核。记录中的数字是当班时段的实测值，不代表全天平均。\n\n## 2026-10-03\n\n风速 4.2 米每秒，阵风 6.8 米每秒，气温 11.5 摄氏度，能见度 18 公里。当日无降水，设备运行正常。值班员：林舟。\n\n## 2026-10-04\n\n累计降雨 12 毫米，风速 2.9 米每秒，气温 9.8 摄氏度。上午九时更换了雨量计滤网，更换后读数恢复。值班员：周岚。\n\n## 2026-10-05\n\n风速 5.1 米每秒，气温 8.4 摄氏度。午后发现北侧围栏松动，已用备用绳索临时固定，等待维护组处理。值班员：林舟。\n\n## 交接说明\n\n风速单位统一为米每秒，气温单位统一为摄氏度。若交接班时读数与上一班次差异超过 20%，需要双方共同复测并在备注中写明。记录只覆盖本观测站，不用于其他站点推算。\n"
+          },
+          {
+            "chunk_id": "closing-notice@afd0ca4b251b#000",
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "score": 0.27722442,
+            "text": "# 关于冬季闭站时间的临时通知\n\n发布日期：2026-10-20\n\n因海岬灯会期间参观通道延长开放，2026 年 12 月 1 日至 12 月 20 日，观测站冬季闭站时间调整为 18:00。灯会结束后恢复原政策。\n\n本通知只适用于上述日期和参观通道，不改变观测场、设备间的作业时间。值班员仍需在日落前完成设备检查；如天气条件不满足安全检查要求，值班员可以提前停止参观并说明原因。\n\n访客预约、登记、区域限制和拍摄规定仍按《访客与开放时间政策》执行。本通知与政策不一致时，只以本通知列明的日期和时间为准，其他条款不因此失效。\n"
+          }
+        ]
+      }
+    },
+    {
+      "chapter": "C20",
+      "block": 7,
+      "sourceSha256": "d3aa6698c39a3a20881978838c74b7a6b044efebeea4d9f2d361a147da40a3ca",
+      "command": [
+        "inspect",
+        "read",
+        "--docs",
+        "book/llm/examples/assistant/documents.json",
+        "--reader",
+        "student",
+        "--doc",
+        "review-budget"
+      ],
+      "exit": 1,
+      "report": {
+        "schema": "assistant-error/1",
+        "generated_at": "2026-11-08T17:43:04+00:00",
+        "status": "unauthorized",
+        "stage": "permission",
+        "detail": {
+          "doc_id": "review-budget",
+          "reader": "student"
+        }
+      }
+    }
+  ],
+  "toolAndJsonBoundaries": {
+    "calculator": {
+      "receipt_id": "tool-1",
+      "step": 1,
+      "tool": "calculator",
+      "arguments": {
+        "expression": "3*14"
+      },
+      "status": "succeeded",
+      "result": 42,
+      "error": null
+    },
+    "division_by_zero": {
+      "receipt_id": "tool-2",
+      "step": 1,
+      "tool": "calculator",
+      "arguments": {
+        "expression": "1/0"
+      },
+      "status": "failed",
+      "result": null,
+      "error": "division-by-zero",
+      "detail": "division by zero"
+    },
+    "unauthorized_read": {
+      "receipt_id": "tool-3",
+      "step": 1,
+      "tool": "read_document",
+      "arguments": {
+        "doc_id": "review-budget"
+      },
+      "status": "failed",
+      "result": null,
+      "error": "permission-denied",
+      "detail": "reader 'student' cannot read 'review-budget'"
+    },
+    "malformed": {
+      "rejected": true,
+      "error": "JSONDecodeError: Expecting value at line 1 column 11"
+    },
+    "fenced": {
+      "rejected": true,
+      "error": "JSONDecodeError: Expecting value at line 1 column 1"
+    }
+  },
+  "c23AnswerBefore": {
+    "sourceSha256": "bdfd7e6f71ee2c41f629b06822c43221b3d1eff9e493461e8c154219e3c37cae",
+    "stdout": "tensor(14.) tensor(-7.)\ntensor(14.) tensor(-7.)\n",
+    "frozenWGrad": 14.0,
+    "activeBGrad": -7.0
+  },
+  "c23AnswerAfter": {
+    "sourceSha256": "eaec526694ed4549f2c401d6bf0e65761d8c3360173cd408570746ab800ac920",
+    "stdout": "tensor(14.) tensor(-7.)\nNone tensor(-7.)\n",
+    "frozenWGrad": null,
+    "activeBGrad": -7.0
+  },
+  "scope": "Actual Markdown code extraction and CLI inspections, including real embedding. No generated answers mocked. Each before/after report describes its own version.",
+  "harnessNotes": [
+    "Inspection commands completed before the boundary harness expected AssistantFailure instead of the parser's ValueError. Only boundary checks reran; original inspection/model results retained."
+  ]
+}

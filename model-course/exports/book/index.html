@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vibe Coding 101：从一句需求到第一个可用作品 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">导读</p><article><p>﻿<img src="../../book/assets/cover.webp" alt="Vibe Coding 101 封面" loading="lazy" decoding="async"></p>
+<h1 id="vibe-coding-101从一句需求到第一个可用作品">Vibe Coding 101：从一句需求到第一个可用作品</h1>
+<blockquote>
+<p>零基础实战教程：先做出能运行的作品，再逐步学会设计、调试、部署与 Agent。
+本书整理自开源项目 <a href="https://github.com/datawhalechina/easy-vibe">datawhalechina/easy-vibe</a>，按官网课程顺序收录中文内容。</p>
+</blockquote>
+<h2 id="30-秒看懂这本书">30 秒看懂这本书</h2>
+<p>把 AI 想成一位速度很快、但需要你说清目标的搭档。你负责提出问题、判断结果；AI 负责生成、修改和解释。</p>
+<p><strong>一句需求 → AI 做原型 → 你看结果 → 继续修改 → 交付作品</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>这一站做什么</th>
+<th>学完的结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stage 1 入门</td>
+<td>从真实问题出发，完成八步实践</td>
+<td>交付第一个可用作品</td>
+</tr>
+<tr>
+<td>Stage 2 初中级</td>
+<td>补齐设计、数据库、部署和支付</td>
+<td>独立完成真实项目</td>
+</tr>
+<tr>
+<td>Stage 3 进阶</td>
+<td>使用 Claude Code、MCP 与 Agent</td>
+<td>构建多平台 AI 应用</td>
+</tr>
+</tbody></table></div>
+<h2 id="怎么读最省力">怎么读最省力</h2>
+<p>从 <a href="chapter-002.html#如何学习本课程">Stage 1 的学习方法</a>开始，用同一个小项目贯穿三阶段，例如待办清单：先能添加和完成任务，再接数据库并部署，最后让 Agent 通过受限工具操作它。已有项目的读者可以带着自己的代码进入对应章节。</p>
+<ol>
+<li><strong>先跑通最小流程</strong>：照着示例做出可操作的结果，再解释每一步。</li>
+<li><strong>一次只改一件事</strong>：先写预期，再改代码，用同一组步骤检查变化。</li>
+<li><strong>卡住时带证据提问</strong>：提供复现步骤、完整报错和已尝试的办法；让 AI 提一个可验证的原因。</li>
+<li><strong>做完后换一个条件</strong>：试空输入、刷新、断网或重复操作。能解释失败原因并恢复，才算掌握这一段。</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>读到哪里</th>
+<th>留下什么</th>
+<th>怎样检查</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stage 1：<a href="chapter-013.html#8-打磨并交付完整作品">打磨并交付</a></td>
+<td>可运行的最小作品、需求说明、一次排错记录</td>
+<td>按说明重新启动；正常输入和空输入都有明确结果；说明哪次修改解决了什么问题</td>
+</tr>
+<tr>
+<td>Stage 2：<a href="chapter-025.html#数据库与-supabase-入门">数据库</a>、<a href="chapter-028.html#把网站发到网上简单方式vercelcloudflarecloudbase-一键发布">部署</a></td>
+<td>持久化数据、线上链接、部署与恢复记录</td>
+<td>刷新后数据还在；未授权操作被拒绝；另一台设备能走通主流程；分清应用回滚与数据恢复</td>
+</tr>
+<tr>
+<td>Stage 3：<a href="chapter-042.html#claude-code-快速上手核心指南">Claude Code 入门</a>及 MCP、Agent 相关章</td>
+<td>有工具边界、日志和失败处理的应用</td>
+<td>用一条成功任务和一条失败任务复做；核对真实工具回执，写清哪些动作仍需人确认</td>
+</tr>
+</tbody></table></div>
+<p>附录按需回查，不必全部读完才动手。大模型机制有配套的<a href="../llm/index.html">手绘实验</a>，可在读到原书的原理章节时使用。</p>
+<p>本书收录了原课程的文字与截图。文中提到的网页模拟器并非都能在书内操作；需要交互时，请打开章节附带的原课程链接。书内的代码示例、观察步骤与自测可单独完成。</p>
+<h2 id="新手术语翻译器">新手术语翻译器</h2>
+<p>遇到术语时，不必先背定义。先知道它像什么，以及你下一步要做什么。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>人话解释</th>
+<th>你实际要做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt（提示词）</td>
+<td>交给 AI 的任务说明书</td>
+<td>说清背景、目标和验收标准</td>
+</tr>
+<tr>
+<td>AI IDE</td>
+<td>带 AI 助手的代码工作台</td>
+<td>打开项目、提需求、运行并看结果</td>
+</tr>
+<tr>
+<td>Prototype（原型）</td>
+<td>能点、能演示的作品草稿</td>
+<td>先验证流程，不急着打磨细节</td>
+</tr>
+<tr>
+<td>Database（数据库）</td>
+<td>应用长期保存信息的仓库</td>
+<td>定义要保存什么，以及谁能读写</td>
+</tr>
+<tr>
+<td>Deploy（部署）</td>
+<td>把本地作品放到网上</td>
+<td>获得一个别人可以打开的链接</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>会自己拆步骤、调用工具的 AI 助手</td>
+<td>给目标、边界和检查标准</td>
+</tr>
+<tr>
+<td>JTBD</td>
+<td>用户真正想完成的任务</td>
+<td>追问“他为什么需要这个功能”</td>
+</tr>
+</tbody></table></div>
+<h2 id="卡住时直接复制这段给-ai">卡住时，直接复制这段给 AI</h2>
+<pre class="prose-block"><code class="language-text">我正在做：___
+我希望看到：___
+现在实际出现：___
+报错或截图信息：___
+我已经尝试：___
+请先解释原因，再一次只给我一个操作步骤。
+</code></pre>
+<h2 id="5-分钟闯关读完马上动手">5 分钟闯关：读完马上动手</h2>
+<p>每完成一关记一颗星。不要追求完美，只验证自己能不能推动作品前进一步。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>关卡</th>
+<th>5 分钟任务</th>
+<th>通关标志</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>⭐ 第 1 关：开口</td>
+<td>请 AI 做一个最小作品，例如倒计时器</td>
+<td>画面能打开或代码能运行</td>
+</tr>
+<tr>
+<td>⭐ 第 2 关：修改</td>
+<td>只提一个改动，例如把按钮变绿</td>
+<td>结果按要求发生变化</td>
+</tr>
+<tr>
+<td>⭐ 第 3 关：排错</td>
+<td>把报错和目标一起发给 AI</td>
+<td>你能用一句话说出原因</td>
+</tr>
+<tr>
+<td>⭐ 第 4 关：交付</td>
+<td>截图、录屏或生成公开链接</td>
+<td>另一个人能看见你的作品</td>
+</tr>
+</tbody></table></div>
+<p><strong>星级结算</strong>：1 星代表已经开始；2 星代表会迭代；3 星代表能排错；4 星代表完成了一次真正交付。</p>
+<h2 id="第一个作品会写诗的贪吃蛇">第一个作品：会写诗的贪吃蛇</h2>
+<p>把下面这段直接发给 AI。第一轮只求能玩，第二轮再增加创意。</p>
+<pre class="prose-block"><code class="language-text">请帮我做一个可以直接运行的贪吃蛇小游戏。
+第一版要求：方向键控制、吃到食物会变长、撞墙后可以重新开始。
+界面要简单清楚，先不要加入复杂特效。
+完成后告诉我如何运行，并列出我可以继续修改的 3 个地方。
+</code></pre>
+<p><strong>进阶改动</strong>：把普通食物换成“春、风、来”等文字。蛇每吃一个字，就把它加入下方句子；集齐后显示“春风来”。</p>
+<p><strong>验收清单</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 游戏能启动，方向键有效。</li>
+<li><input disabled="" type="checkbox"> 吃到食物后长度或分数发生变化。</li>
+<li><input disabled="" type="checkbox"> 失败后可以重新开始。</li>
+<li><input disabled="" type="checkbox"> 文字版能按吃到的顺序组成一句话。</li>
+</ul>
+<h2 id="截图复刻看图四步法">截图复刻：看图四步法</h2>
+<p>不要只对 AI 说“照着做”。按下面顺序观察，需求会清楚很多。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>观察什么</th>
+<th>可以这样说</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 分区</td>
+<td>页面分成哪几个大区域</td>
+<td>顶部是导航，中间是主视觉，底部是功能卡片</td>
+</tr>
+<tr>
+<td>2. 层级</td>
+<td>哪个内容最先被看到</td>
+<td>标题最大，按钮第二突出，说明文字更弱</td>
+</tr>
+<tr>
+<td>3. 样式</td>
+<td>颜色、圆角、阴影和留白</td>
+<td>主色用绿色，卡片圆角 12px，阴影要轻</td>
+</tr>
+<tr>
+<td>4. 验收</td>
+<td>怎样才算复刻成功</td>
+<td>手机宽度不挤压，按钮可点，整体间距接近截图</td>
+</tr>
+</tbody></table></div>
+<p><strong>复刻提示词模板</strong>：</p>
+<pre class="prose-block"><code class="language-text">请根据这张截图复刻一个网页。
+先分析页面的分区、视觉层级、颜色和间距，再开始实现。
+不要臆造截图中没有的功能。完成后请列出与原图仍有差异的地方。
+</code></pre>
+<hr>
+<h2 id="目录">目录</h2>
+<ul>
+<li><strong>指南</strong><ul>
+<li><a href="chapter-001.html#课程介绍">课程介绍</a></li>
+</ul>
+</li>
+<li><strong>Stage 1</strong><ul>
+<li><a href="chapter-002.html#如何学习本课程">如何学习本课程</a></li>
+<li><a href="chapter-003.html#ai-时代的编程初体验">AI 时代的编程初体验</a></li>
+<li><a href="chapter-004.html#ai-编程工具介绍与使用">AI 编程工具介绍与使用</a></li>
+<li><a href="chapter-005.html#从截图复刻第一次模仿练习">从截图复刻：第一次模仿练习</a></li>
+<li><a href="chapter-006.html#1-寻找真实问题">1. 寻找真实问题</a></li>
+<li><a href="chapter-007.html#2-筛选值得做的方向">2. 筛选值得做的方向</a></li>
+<li><a href="chapter-008.html#3-看懂真实需求jtbd">3. 看懂真实需求（JTBD）</a></li>
+<li><a href="chapter-009.html#4-用访谈验证需求">4. 用访谈验证需求</a></li>
+<li><a href="chapter-010.html#5-收敛方案双钻模型">5. 收敛方案（双钻模型）</a></li>
+<li><a href="chapter-011.html#6-做出可交互原型">6. 做出可交互原型</a></li>
+<li><a href="chapter-012.html#7-接入真实-ai-能力">7. 接入真实 AI 能力</a></li>
+<li><a href="chapter-013.html#8-打磨并交付完整作品">8. 打磨并交付完整作品</a></li>
+<li><a href="chapter-014.html#在魔搭社区发布你的-vibe-coding-产物">在魔搭社区发布你的 Vibe Coding 产物</a></li>
+<li><a href="chapter-015.html#产品思维基础">产品思维基础</a></li>
+<li><a href="chapter-016.html#从真实工作流里找-ai-场景">从真实工作流里找 AI 场景</a></li>
+<li><a href="chapter-017.html#常见问题与排错">常见问题与排错</a></li>
+</ul>
+</li>
+<li><strong>Stage 2</strong><ul>
+<li><a href="chapter-018.html#nanobanana-素材生产">NanoBanana 素材生产</a></li>
+<li><a href="chapter-019.html#ai-设计入门">AI 设计入门</a></li>
+<li><a href="chapter-020.html#figma-与-mastergo-入门">Figma 与 MasterGo 入门</a></li>
+<li><a href="chapter-021.html#ui-设计规范与多产品界面">UI 设计规范与多产品界面</a></li>
+<li><a href="chapter-022.html#结合-agent-skills-美化界面">结合 Agent Skills 美化界面</a></li>
+<li><a href="chapter-023.html#设计原型到项目代码">设计原型到项目代码</a></li>
+<li><a href="chapter-024.html#现代组件库与界面升级">现代组件库与界面升级</a></li>
+<li><a href="chapter-025.html#数据库与-supabase-入门">数据库与 Supabase 入门</a></li>
+<li><a href="chapter-026.html#大模型辅助接口开发">大模型辅助接口开发</a></li>
+<li><a href="chapter-027.html#git-与-github-入门指南">Git 与 GitHub 入门指南</a></li>
+<li><a href="chapter-028.html#把网站发到网上简单方式vercelcloudflarecloudbase-一键发布">把网站发到网上（简单方式）：Vercel/Cloudflare/CloudBase 一键发布</a></li>
+<li><a href="chapter-029.html#把网站发到网上进阶方式自己买台-vps-服务器搭建发布">把网站发到网上（进阶方式）：自己买台 VPS 服务器搭建发布</a></li>
+<li><a href="chapter-030.html#cli-coding-agent-编程助手">CLI Coding Agent 编程助手</a></li>
+<li><a href="chapter-031.html#stripe-支付集成">Stripe 支付集成</a></li>
+<li><a href="chapter-032.html#dify-入门与知识库集成">Dify 入门与知识库集成</a></li>
+<li><a href="chapter-033.html#一起做霍格沃茨画像">一起做霍格沃茨画像</a></li>
+<li><a href="chapter-034.html#ai-营销文案-saas">AI 营销文案 SaaS</a></li>
+<li><a href="chapter-035.html#在线考试与管理系统">在线考试与管理系统</a></li>
+<li><a href="chapter-036.html#现代-ai-生图-saas">现代 AI 生图 SaaS</a></li>
+<li><a href="chapter-037.html#类-dify-智能体平台">类 Dify 智能体平台</a></li>
+<li><a href="chapter-038.html#智能旅游规划-agent-平台">智能旅游规划 Agent 平台</a></li>
+<li><a href="chapter-039.html#spring-boot-电影推荐系统">Spring Boot 电影推荐系统</a></li>
+<li><a href="chapter-040.html#生鲜电商微服务系统">生鲜电商微服务系统</a></li>
+<li><a href="chapter-041.html#go-交通数据分析平台">Go 交通数据分析平台</a></li>
+</ul>
+</li>
+<li><strong>Stage 3</strong><ul>
+<li><a href="chapter-042.html#claude-code-快速上手核心指南">Claude Code 快速上手核心指南</a></li>
+<li><a href="chapter-043.html#claude-code-mcp-完全指南">Claude Code MCP 完全指南</a></li>
+<li><a href="chapter-044.html#claude-code-skills-完全指南">Claude Code Skills 完全指南</a></li>
+<li><a href="chapter-045.html#如何让-coding-tools-长时间工作">如何让 Coding Tools 长时间工作</a></li>
+<li><a href="chapter-046.html#claude-agent-teams-完全指南">Claude Agent Teams 完全指南</a></li>
+<li><a href="chapter-047.html#claude-code-工作流最佳实践">Claude Code 工作流最佳实践</a></li>
+<li><a href="chapter-048.html#claude-code-手机远程开发">Claude Code 手机远程开发</a></li>
+<li><a href="chapter-049.html#claude-agent-sdk-完全指南">Claude Agent SDK 完全指南</a></li>
+<li><a href="chapter-050.html#claude-code-superpowers-工程级开发">Claude Code Superpowers 工程级开发</a></li>
+<li><a href="chapter-051.html#从-vibe-coding-到-spec-coding">从 Vibe Coding 到 Spec Coding</a></li>
+<li><a href="chapter-052.html#github-issues-驱动开发实战">GitHub Issues 驱动开发实战</a></li>
+<li><a href="chapter-053.html#从开发一个网页到真正的程序再到-ai-原生创作者">从开发一个网页，到真正的程序，再到 AI 原生创作者</a></li>
+<li><a href="chapter-054.html#如何选择你的应用该开发的平台">如何选择你的应用该开发的平台</a></li>
+<li><a href="chapter-055.html#如何构建微信小程序">如何构建微信小程序</a></li>
+<li><a href="chapter-056.html#如何构建微信小程序包含后端">如何构建微信小程序（包含后端）</a></li>
+<li><a href="chapter-057.html#如何用-jetpack-compose-开发-android-原生应用">如何用 Jetpack Compose 开发 Android 原生应用</a></li>
+<li><a href="chapter-058.html#如何用-swiftui-开发-ios-原生应用">如何用 SwiftUI 开发 iOS 原生应用</a></li>
+<li><a href="chapter-059.html#从零开始用-react-native--expo-做一个门店巡检应用">从零开始用 React Native + Expo 做一个门店巡检应用</a></li>
+<li><a href="chapter-060.html#如何开发-flutter-跨平台应用">如何开发 Flutter 跨平台应用</a></li>
+<li><a href="chapter-061.html#如何开发-pwa-本地应用">如何开发 PWA 本地应用</a></li>
+<li><a href="chapter-062.html#如何开发浏览器-ai-助手插件">如何开发浏览器 AI 助手插件</a></li>
+<li><a href="chapter-063.html#如何开发跨平台-electron-桌面程序">如何开发跨平台 Electron 桌面程序</a></li>
+<li><a href="chapter-064.html#如何用-godot-开发横版像素与-3d-游戏">如何用 Godot 开发横版、像素与 3D 游戏</a></li>
+<li><a href="chapter-065.html#如何在本地模拟链铸造-nft">如何在本地模拟链铸造 NFT</a></li>
+<li><a href="chapter-066.html#如何开发-vs-code-插件">如何开发 VS Code 插件</a></li>
+<li><a href="chapter-067.html#如何开发企业-qt-设备客户端">如何开发企业 Qt 设备客户端</a></li>
+<li><a href="chapter-068.html#如何构建属于自己的个人网页与学术博客">如何构建属于自己的个人网页与学术博客</a></li>
+<li><a href="chapter-069.html#如何把开发好的程序发布上架">如何把开发好的程序发布上架</a></li>
+<li><a href="chapter-070.html#什么是-rag-以及它如何工作">什么是 RAG 以及它如何工作</a></li>
+<li><a href="chapter-071.html#中高级-rag-与工作流编排---以-langgraph-为例">中高级 RAG 与工作流编排 - 以 LangGraph 为例</a></li>
+</ul>
+</li>
+<li><strong>Vibe 故事</strong><ul>
+<li><a href="chapter-072.html#放弃月入过万他在农村小学带孩子们用ai赶苍蝇">放弃月入过万，他在农村小学带孩子们&quot;用AI赶苍蝇&quot;</a></li>
+<li><a href="chapter-073.html#期末考试周我偷偷用ai造了个校园闲鱼">期末考试周，我偷偷用AI造了个&quot;校园闲鱼&quot;</a></li>
+<li><a href="chapter-074.html#我给每个学生做了一个不会累的学霸同桌">我给每个学生，做了一个不会累的&quot;学霸同桌&quot;</a></li>
+<li><a href="chapter-075.html#48岁货车司机熬了几个通宵硬是用ai磕出一个出海工具站">48岁货车司机，熬了几个通宵，硬是用AI磕出一个出海工具站</a></li>
+<li><a href="chapter-076.html#七款-ai-编程工具对比">七款 AI 编程工具对比</a></li>
+<li><a href="chapter-077.html#用设计和编程-agent-构建网站">用设计和编程 Agent 构建网站</a></li>
+</ul>
+</li>
+<li><strong>附录</strong><ul>
+<li><a href="chapter-078.html#全栈开发导论vibe-coding-时代的计算机知识地图">全栈开发导论：Vibe Coding 时代的计算机知识地图</a></li>
+<li><a href="chapter-079.html#计算机系统全景从开机到访问网站">计算机系统全景：从开机到访问网站</a></li>
+<li><a href="chapter-080.html#数字电路基础从晶体管到-cpu">数字电路基础：从晶体管到 CPU</a></li>
+<li><a href="chapter-081.html#计算机组成原理">计算机组成原理</a></li>
+<li><a href="chapter-082.html#操作系统原理进程内存与文件系统">操作系统原理：进程、内存与文件系统</a></li>
+<li><a href="chapter-083.html#数据表示原理编码存储与传输">数据表示原理：编码、存储与传输</a></li>
+<li><a href="chapter-084.html#计算机网络从输入网址到渲染页面">计算机网络：从输入网址到渲染页面</a></li>
+<li><a href="chapter-085.html#数据结构导论">数据结构导论</a></li>
+<li><a href="chapter-086.html#算法导论">算法导论</a></li>
+<li><a href="chapter-087.html#编程语言概念范式演化与选型">编程语言概念：范式、演化与选型</a></li>
+<li><a href="chapter-088.html#编译原理">编译原理</a></li>
+<li><a href="chapter-089.html#类型系统导论">类型系统导论</a></li>
+<li><a href="chapter-090.html#集成开发环境-ide-基础">集成开发环境 (IDE) 基础</a></li>
+<li><a href="chapter-091.html#命令行与-shell-脚本">命令行与 Shell 脚本</a></li>
+<li><a href="chapter-092.html#git代码的时光机">Git：代码的时光机</a></li>
+<li><a href="chapter-093.html#环境变量与-path">环境变量与 PATH</a></li>
+<li><a href="chapter-094.html#端口与-localhost">端口与 localhost</a></li>
+<li><a href="chapter-095.html#ssh-与密钥认证">SSH 与密钥认证</a></li>
+<li><a href="chapter-096.html#包管理器npm--pip--cargo">包管理器（npm / pip / cargo）</a></li>
+<li><a href="chapter-097.html#调试的艺术">调试的艺术</a></li>
+<li><a href="chapter-098.html#正则表达式">正则表达式</a></li>
+<li><a href="chapter-099.html#javascript-语言深入">JavaScript 语言深入</a></li>
+<li><a href="chapter-100.html#typescript给-js-加上类型系统">TypeScript：给 JS 加上类型系统</a></li>
+<li><a href="chapter-101.html#前端框架对比react--vue--svelte--angular">前端框架对比（React / Vue / Svelte / Angular）</a></li>
+<li><a href="chapter-102.html#浏览器渲染管道">浏览器渲染管道</a></li>
+<li><a href="chapter-103.html#html--css-布局体系">HTML / CSS 布局体系</a></li>
+<li><a href="chapter-104.html#javascript-运行时">JavaScript 运行时</a></li>
+<li><a href="chapter-105.html#前端框架的本质">前端框架的本质</a></li>
+<li><a href="chapter-106.html#状态管理哲学">状态管理哲学</a></li>
+<li><a href="chapter-107.html#路由与导航">路由与导航</a></li>
+<li><a href="chapter-108.html#图形与动画canvas--svg--webgl">图形与动画（Canvas / SVG / WebGL）</a></li>
+<li><a href="chapter-109.html#实时通信websocket--sse">实时通信（WebSocket / SSE）</a></li>
+<li><a href="chapter-110.html#网页性能的度量与优化">网页性能的度量与优化</a></li>
+<li><a href="chapter-111.html#前端工程化全貌">前端工程化全貌</a></li>
+<li><a href="chapter-112.html#前端项目文件目录设计">前端项目文件目录设计</a></li>
+<li><a href="chapter-113.html#无障碍与国际化">无障碍与国际化</a></li>
+<li><a href="chapter-114.html#后端语言对比nodejs--go--java--rust">后端语言对比（Node.js / Go / Java / Rust）</a></li>
+<li><a href="chapter-115.html#客户端语言对比swift--kotlin--dart">客户端语言对比（Swift / Kotlin / Dart）</a></li>
+<li><a href="chapter-116.html#跨平台方案对比react-native--flutter--electron--tauri">跨平台方案对比（React Native / Flutter / Electron / Tauri）</a></li>
+<li><a href="chapter-117.html#http-协议">HTTP 协议</a></li>
+<li><a href="chapter-118.html#一个请求的完整旅程">一个请求的完整旅程</a></li>
+<li><a href="chapter-119.html#web-框架的本质">Web 框架的本质</a></li>
+<li><a href="chapter-120.html#api-入门">API 入门</a></li>
+<li><a href="chapter-121.html#api-设计哲学rest--graphql--grpc">API 设计哲学（REST / GraphQL / gRPC）</a></li>
+<li><a href="chapter-122.html#序列化与数据格式">序列化与数据格式</a></li>
+<li><a href="chapter-123.html#认证与授权体系">认证与授权体系</a></li>
+<li><a href="chapter-124.html#并发异步与多线程">并发、异步与多线程</a></li>
+<li><a href="chapter-125.html#缓存的层次与策略">缓存的层次与策略</a></li>
+<li><a href="chapter-126.html#消息队列与事件驱动">消息队列与事件驱动</a></li>
+<li><a href="chapter-127.html#异步任务队列与生产消费模型">异步任务队列与生产消费模型</a></li>
+<li><a href="chapter-128.html#限流与背压控制">限流与背压控制</a></li>
+<li><a href="chapter-129.html#搜索引擎原理">搜索引擎原理</a></li>
+<li><a href="chapter-130.html#文件存储与对象存储">文件存储与对象存储</a></li>
+<li><a href="chapter-131.html#后端分层架构">后端分层架构</a></li>
+<li><a href="chapter-132.html#后端项目文件目录设计">后端项目文件目录设计</a></li>
+<li><a href="chapter-133.html#领域特定语言dsl">领域特定语言（DSL）</a></li>
+<li><a href="chapter-134.html#数据库原理索引--事务--查询优化">数据库原理（索引 / 事务 / 查询优化）</a></li>
+<li><a href="chapter-135.html#数据模型全景文档--图--时序--向量">数据模型全景（文档 / 图 / 时序 / 向量）</a></li>
+<li><a href="chapter-136.html#数据埋点与用户行为采集">数据埋点与用户行为采集</a></li>
+<li><a href="chapter-137.html#数据分析基础统计--指标--漏斗">数据分析基础（统计 / 指标 / 漏斗）</a></li>
+<li><a href="chapter-138.html#ab-测试与实验驱动">A/B 测试与实验驱动</a></li>
+<li><a href="chapter-139.html#数据可视化与仪表盘">数据可视化与仪表盘</a></li>
+<li><a href="chapter-140.html#数据治理与数据质量">数据治理与数据质量</a></li>
+<li><a href="chapter-141.html#从单体到微服务的演进">从单体到微服务的演进</a></li>
+<li><a href="chapter-142.html#分布式系统的挑战">分布式系统的挑战</a></li>
+<li><a href="chapter-143.html#高可用与容灾">高可用与容灾</a></li>
+<li><a href="chapter-144.html#系统设计方法论">系统设计方法论</a></li>
+<li><a href="chapter-145.html#linux-基础">Linux 基础</a></li>
+<li><a href="chapter-146.html#docker-容器化">Docker 容器化</a></li>
+<li><a href="chapter-147.html#kubernetes-编排">Kubernetes 编排</a></li>
+<li><a href="chapter-148.html#ci--cd-自动化">CI / CD 自动化</a></li>
+<li><a href="chapter-149.html#域名dns-与-https">域名、DNS 与 HTTPS</a></li>
+<li><a href="chapter-150.html#负载均衡与网关">负载均衡与网关</a></li>
+<li><a href="chapter-151.html#网关与反向代理">网关与反向代理</a></li>
+<li><a href="chapter-152.html#云平台实战">云平台实战</a></li>
+<li><a href="chapter-153.html#iam-权限管理">IAM 权限管理</a></li>
+<li><a href="chapter-154.html#对象存储与-cdn">对象存储与 CDN</a></li>
+<li><a href="chapter-155.html#基础设施即代码">基础设施即代码</a></li>
+<li><a href="chapter-156.html#监控日志与告警">监控、日志与告警</a></li>
+<li><a href="chapter-157.html#故障排查与应急响应">故障排查与应急响应</a></li>
+<li><a href="chapter-158.html#ai-简史与核心概念">AI 简史与核心概念</a></li>
+<li><a href="chapter-159.html#神经网络与深度学习">神经网络与深度学习</a></li>
+<li><a href="chapter-160.html#transformer-与注意力机制">Transformer 与注意力机制</a></li>
+<li><a href="chapter-161.html#大语言模型的工作原理">大语言模型的工作原理</a></li>
+<li><a href="chapter-162.html#提示词工程">提示词工程</a></li>
+<li><a href="chapter-163.html#上下文工程">上下文工程</a></li>
+<li><a href="chapter-164.html#多模态模型视觉--音频--视频">多模态模型（视觉 / 音频 / 视频）</a></li>
+<li><a href="chapter-165.html#图像生成原理">图像生成原理</a></li>
+<li><a href="chapter-166.html#语音合成与识别">语音合成与识别</a></li>
+<li><a href="chapter-167.html#embedding-与向量检索">Embedding 与向量检索</a></li>
+<li><a href="chapter-168.html#rag-架构">RAG 架构</a></li>
+<li><a href="chapter-169.html#ai-agent-与工具调用">AI Agent 与工具调用</a></li>
+<li><a href="chapter-170.html#ai-协议mcp--a2a">AI 协议（MCP &amp; A2A）</a></li>
+<li><a href="chapter-171.html#模型微调与部署">模型微调与部署</a></li>
+<li><a href="chapter-172.html#ai-原生应用设计">AI 原生应用设计</a></li>
+<li><a href="chapter-173.html#ai-能力词典">AI 能力词典</a></li>
+<li><a href="chapter-174.html#代码质量与重构">代码质量与重构</a></li>
+<li><a href="chapter-175.html#测试策略">测试策略</a></li>
+<li><a href="chapter-176.html#设计模式">设计模式</a></li>
+<li><a href="chapter-177.html#安全思维与攻防基础">安全思维与攻防基础</a></li>
+<li><a href="chapter-178.html#技术文档写作">技术文档写作</a></li>
+<li><a href="chapter-179.html#开源协作">开源协作</a></li>
+<li><a href="chapter-180.html#技术选型方法论">技术选型方法论</a></li>
+</ul>
+</li>
+<li><strong>补充内容（官网目录未收录）</strong><ul>
+<li><a href="chapter-180.html#stage-2-实战项目-prd">Stage 2 实战项目 PRD</a><ul>
+<li><a href="chapter-181.html#prdai-营销文案-saas-平台">PRD：AI 营销文案 SaaS 平台</a></li>
+<li><a href="chapter-182.html#prd类-dify-智能体编排平台">PRD：类 Dify 智能体编排平台</a></li>
+<li><a href="chapter-183.html#prd在线考试与管理系统">PRD：在线考试与管理系统</a></li>
+<li><a href="chapter-184.html#prd现代-ai-生图-saas-平台">PRD：现代 AI 生图 SaaS 平台</a></li>
+<li><a href="chapter-185.html#prdspring-boot-电影推荐系统">PRD：Spring Boot 电影推荐系统</a></li>
+<li><a href="chapter-186.html#prd生鲜电商微服务系统">PRD：生鲜电商微服务系统</a></li>
+<li><a href="chapter-187.html#prdgo-交通数据分析与可视化平台">PRD：Go 交通数据分析与可视化平台</a></li>
+<li><a href="chapter-188.html#prd智能旅游规划-agent-编排平台">PRD：智能旅游规划 Agent 编排平台</a></li>
+</ul>
+</li>
+<li><a href="chapter-188.html#散页索引与补充单篇">散页索引与补充单篇</a><ul>
+<li><a href="chapter-189.html#调试原理与艺术">调试原理与艺术</a></li>
+<li><a href="chapter-190.html#附录-6">附录</a></li>
+<li><a href="chapter-191.html#index">index</a></li>
+<li><a href="chapter-192.html#stage-1appendix-consumer-scenariosindex">stage-1/appendix-consumer-scenarios/index</a></li>
+<li><a href="chapter-193.html#初中级开发">初中级开发</a></li>
+<li><a href="chapter-194.html#企业级知识库实战用-llamaindex-搭建能落地的-rag-系统">企业级知识库实战：用 LlamaIndex 搭建能落地的 RAG 系统</a></li>
+<li><a href="chapter-195.html#进阶开发">进阶开发</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>📖 阅读说明</strong>：点击目录条目可跳转到对应章节。正文插图已随书镜像到本仓库 <code>book/assets/images/</code>，可离线阅读；指向其他章节文档的链接会打开 <a href="https://github.com/datawhalechina/easy-vibe">easy-vibe</a> 上游仓库对应页面；上游源码中已注释掉的截图（如组件库一章）在书中保持注释状态。</p>
+</blockquote>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="next" href="chapter-001.html">课程介绍 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

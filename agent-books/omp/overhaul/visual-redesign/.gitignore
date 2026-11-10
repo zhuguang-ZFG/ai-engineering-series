@@ -1,0 +1,6 @@
+# intermediate Chrome renders and extract scratch
+_render-*.png
+_test-*.png
+_batch2_tmp/
+# pre-swap JPG backups (recoverable from git history of omp/images/)
+backup-jpg-*/

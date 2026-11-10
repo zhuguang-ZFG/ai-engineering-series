@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>基础设施即代码 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 155 / 195</p><article><h1 id="基础设施即代码">基础设施即代码</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#基础设施即代码原理">基础设施即代码原理</a><ul><li><a href="#0-全景图基础设施也需要源代码的必要性">0. 全景图：基础设施也需要&quot;源代码的必要性</a></li><li><a href="#1-iac-概念从手动点击到代码声明">1. IaC 概念：从&quot;手动点击&quot;到&quot;代码声明&quot;</a></li><li><a href="#2-terraform-工作流write--plan--apply">2. Terraform 工作流：Write → Plan → Apply</a></li><li><a href="#3-工具对比选择适合你的-iac-工具">3. 工具对比：选择适合你的 IaC 工具</a></li><li><a href="#4-配置漂移无声的定时炸弹">4. 配置漂移：无声的定时炸弹</a></li><li><a href="#5-最佳实践让-iac-项目可持续演进">5. 最佳实践：让 IaC 项目可持续演进</a></li><li><a href="#总结-36">总结</a></li><li><a href="#延伸阅读-25">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="基础设施即代码原理">基础设施即代码原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>你有没有经历过这种噩梦：线上服务器挂了，但没人记得当初是怎么配置的？</strong> 手动登录服务器、凭记忆敲命令、祈祷不要敲错——这就是传统运维的日常。基础设施即代码（Infrastructure as Code，IaC）彻底改变了这一切：用代码来定义和管理基础设施，让服务器配置像软件一样可版本控制、可复现、可审计。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>核心概念</strong>：理解 IaC 是什么，为什么它是现代运维的基石</li>
+<li><strong>工作流认知</strong>：掌握 Terraform 的 Write → Plan → Apply → Destroy 四阶段流程</li>
+<li><strong>工具选型</strong>：了解 Terraform、Pulumi、CloudFormation 等主流工具的优劣</li>
+<li><strong>风险意识</strong>：理解配置漂移的危害和检测方法</li>
+<li><strong>最佳实践</strong>：掌握 IaC 项目的工程化管理方法</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>IaC 概念</td>
+<td>手动运维 vs 代码化管理</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>Terraform 工作流</td>
+<td>Write → Plan → Apply</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>工具对比</td>
+<td>Terraform、Pulumi、CDK</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>配置漂移</td>
+<td>检测、预防、修复</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>最佳实践</td>
+<td>模块化、状态管理、CI/CD</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图基础设施也需要源代码的必要性">0. 全景图：基础设施也需要&quot;源代码的必要性</h3>
+<p>想象你是一个厨师。如果每道菜都凭感觉做，今天放一勺盐、明天放两勺，味道永远不稳定。但如果你把配方写下来——精确到每种调料的克数——任何人都能复现同样的味道。</p>
+<p>基础设施管理面临的是同样的问题。一台服务器的配置可能涉及操作系统、网络规则、安全组、存储卷、环境变量等几十个参数。手动配置不仅容易出错，而且<strong>不可复现、不可审计、不可回滚</strong>。</p>
+<blockquote>
+<p><strong>IaC 的核心价值</strong></p>
+</blockquote>
+<ul>
+<li><strong>可复现</strong>：同一份代码，无论执行多少次，结果都一样（幂等性）</li>
+<li><strong>可版本控制</strong>：基础设施变更通过 Git 管理，谁改了什么、为什么改，一目了然</li>
+<li><strong>可审计</strong>：所有变更都有记录，满足合规要求</li>
+<li><strong>可自动化</strong>：通过 CI/CD 流水线自动部署，消除人为操作风险</li>
+<li><strong>可协作</strong>：团队成员通过 Pull Request 审查基础设施变更，就像审查代码一样</li>
+</ul>
+<h3 id="1-iac-概念从手动点击到代码声明">1. IaC 概念：从&quot;手动点击&quot;到&quot;代码声明&quot;</h3>
+<p>传统运维的工作方式是：登录云平台控制台，手动点击创建服务器、配置网络、设置安全组。这种方式在管理几台服务器时还能应付，但当规模扩大到几十、几百台时，就变成了噩梦。</p>
+<p>IaC 的核心思想是：<strong>用声明式代码描述你想要的基础设施状态，让工具自动帮你实现</strong>。你不需要告诉工具&quot;先创建 VPC，再创建子网，再创建安全组&quot;（命令式），只需要说&quot;我要一个这样的网络环境&quot;（声明式），工具会自动计算出需要执行的步骤。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>手动运维</th>
+<th>基础设施即代码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作方式</td>
+<td>登录控制台点击</td>
+<td>编写代码文件</td>
+</tr>
+<tr>
+<td>可复现性</td>
+<td>依赖文档和记忆</td>
+<td>代码即文档，100% 可复现</td>
+</tr>
+<tr>
+<td>变更追踪</td>
+<td>无记录或记录不全</td>
+<td>Git 版本控制，完整历史</td>
+</tr>
+<tr>
+<td>协作方式</td>
+<td>口头沟通、文档传递</td>
+<td>Pull Request 审查</td>
+</tr>
+<tr>
+<td>回滚能力</td>
+<td>手动逆向操作</td>
+<td>git revert + 重新 apply</td>
+</tr>
+<tr>
+<td>一致性</td>
+<td>环境间差异大</td>
+<td>开发/测试/生产完全一致</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>声明式 vs 命令式</strong></p>
+</blockquote>
+<ul>
+<li><strong>声明式（Declarative）</strong>：描述&quot;我要什么&quot;，工具自动计算&quot;怎么做&quot;。Terraform、CloudFormation 采用这种方式。优点是幂等性好，缺点是灵活性受限。</li>
+<li><strong>命令式（Imperative）</strong>：描述&quot;怎么做&quot;，一步步执行。Ansible、Shell 脚本采用这种方式。优点是灵活，缺点是难以保证幂等性。</li>
+<li><strong>混合式</strong>：Pulumi、AWS CDK 用通用编程语言编写，兼具声明式的状态管理和命令式的灵活性。</li>
+</ul>
+<h3 id="2-terraform-工作流write--plan--apply">2. Terraform 工作流：Write → Plan → Apply</h3>
+<p>Terraform 是目前最流行的 IaC 工具，由 HashiCorp 开发。它的工作流程清晰直观，分为四个阶段，就像软件开发的&quot;编码→审查→部署→清理&quot;。</p>
+<blockquote>
+<p><strong>四阶段工作流</strong></p>
+</blockquote>
+<ol>
+<li><strong>Write（编写）</strong>：用 HCL（HashiCorp Configuration Language）编写基础设施定义文件（.tf）。声明你需要的资源：服务器、数据库、网络等。</li>
+<li><strong>Plan（计划）</strong>：运行 <code>terraform plan</code>，Terraform 会对比当前状态和目标状态，生成一份&quot;执行计划&quot;——告诉你它打算创建、修改、删除哪些资源。这是安全网，让你在真正执行前确认变更。</li>
+<li><strong>Apply（执行）</strong>：确认计划无误后，运行 <code>terraform apply</code>，Terraform 按计划创建或修改资源。执行完成后，当前状态会保存到状态文件（terraform.tfstate）。</li>
+<li><strong>Destroy（销毁）</strong>：不再需要时，运行 <code>terraform destroy</code> 清理所有资源，避免产生不必要的费用。</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>是否修改基础设施</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>terraform init</code></td>
+<td>初始化项目，下载 Provider</td>
+<td>否</td>
+<td>首次使用或添加新 Provider</td>
+</tr>
+<tr>
+<td><code>terraform plan</code></td>
+<td>预览变更，生成执行计划</td>
+<td>否</td>
+<td>每次变更前必须执行</td>
+</tr>
+<tr>
+<td><code>terraform apply</code></td>
+<td>执行变更，创建/修改资源</td>
+<td>是</td>
+<td>确认 plan 后执行</td>
+</tr>
+<tr>
+<td><code>terraform destroy</code></td>
+<td>销毁所有资源</td>
+<td>是</td>
+<td>清理测试环境、下线服务</td>
+</tr>
+<tr>
+<td><code>terraform state</code></td>
+<td>查看/管理状态文件</td>
+<td>视操作而定</td>
+<td>状态迁移、资源导入</td>
+</tr>
+</tbody></table></div>
+<h3 id="3-工具对比选择适合你的-iac-工具">3. 工具对比：选择适合你的 IaC 工具</h3>
+<p>IaC 领域有多种工具，各有侧重。选择工具时需要考虑团队技术栈、云平台、项目规模等因素。没有&quot;最好&quot;的工具，只有最适合你场景的工具。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>语言</th>
+<th>云平台支持</th>
+<th>学习曲线</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Terraform</td>
+<td>HCL</td>
+<td>多云（AWS/Azure/GCP）</td>
+<td>中等</td>
+<td>多云环境、团队协作</td>
+</tr>
+<tr>
+<td>Pulumi</td>
+<td>Python/TS/Go</td>
+<td>多云</td>
+<td>低（熟悉编程语言）</td>
+<td>开发者友好、复杂逻辑</td>
+</tr>
+<tr>
+<td>AWS CloudFormation</td>
+<td>JSON/YAML</td>
+<td>仅 AWS</td>
+<td>中等</td>
+<td>纯 AWS 环境</td>
+</tr>
+<tr>
+<td>AWS CDK</td>
+<td>Python/TS/Java</td>
+<td>仅 AWS</td>
+<td>低</td>
+<td>AWS + 编程语言偏好</td>
+</tr>
+<tr>
+<td>Ansible</td>
+<td>YAML</td>
+<td>多云 + 裸机</td>
+<td>低</td>
+<td>配置管理、混合环境</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>如何选择？</strong></p>
+</blockquote>
+<ul>
+<li><strong>初创团队 / 单云</strong>：CloudFormation（AWS）或对应云平台原生工具，生态集成最好</li>
+<li><strong>多云 / 中大型团队</strong>：Terraform，社区最大、Provider 最丰富、招聘最容易</li>
+<li><strong>开发者主导的团队</strong>：Pulumi 或 CDK，用熟悉的编程语言写基础设施，IDE 支持好</li>
+<li><strong>需要配置管理</strong>：Ansible，擅长服务器内部配置（安装软件、修改配置文件）</li>
+</ul>
+<h3 id="4-配置漂移无声的定时炸弹">4. 配置漂移：无声的定时炸弹</h3>
+<p>配置漂移（Configuration Drift）是 IaC 实践中最隐蔽的敌人。它指的是<strong>实际基础设施状态与代码定义的状态之间逐渐产生偏差</strong>。</p>
+<p>这种偏差通常是怎么产生的？有人为了&quot;快速修复&quot;一个线上问题，直接登录控制台手动改了安全组规则；有人为了调试，临时加大了某台服务器的配置但忘了改回来。这些&quot;小改动&quot;日积月累，最终导致代码和实际环境严重脱节。</p>
+<blockquote>
+<p><strong>配置漂移的危害</strong></p>
+</blockquote>
+<ol>
+<li><strong>不可复现</strong>：代码描述的环境和实际环境不一致，新建环境时会出问题</li>
+<li><strong>回滚失败</strong>：以为回滚到上一版本就能恢复，但实际环境已经被手动修改过</li>
+<li><strong>安全隐患</strong>：手动开放的端口、放宽的权限可能被遗忘，成为攻击入口</li>
+<li><strong>审计失效</strong>：合规审计基于代码，但代码不反映真实状态</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>预防措施</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>禁止手动变更</td>
+<td>通过 IAM 策略限制控制台操作权限</td>
+</tr>
+<tr>
+<td>定期漂移检测</td>
+<td>定时运行 <code>terraform plan</code> 检查差异</td>
+</tr>
+<tr>
+<td>自动修复</td>
+<td>检测到漂移后自动执行 apply 恢复一致性</td>
+</tr>
+<tr>
+<td>变更审计</td>
+<td>开启 CloudTrail 等审计日志，追踪所有变更来源</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-最佳实践让-iac-项目可持续演进">5. 最佳实践：让 IaC 项目可持续演进</h3>
+<p>IaC 代码和应用代码一样，需要良好的工程实践来保证可维护性。随着基础设施规模增长，没有章法的 IaC 代码会变成另一种形式的&quot;技术债&quot;。</p>
+<blockquote>
+<p><strong>六条核心最佳实践</strong></p>
+</blockquote>
+<ol>
+<li><strong>模块化</strong>：将可复用的基础设施抽象为模块（如 VPC 模块、数据库模块），避免复制粘贴。就像写函数一样，一处定义、多处调用。</li>
+<li><strong>环境隔离</strong>：开发、测试、生产使用独立的状态文件和变量文件，通过 workspace 或目录结构隔离。</li>
+<li><strong>远程状态管理</strong>：状态文件（tfstate）存储在远程后端（S3 + DynamoDB），支持团队协作和状态锁定，避免并发冲突。</li>
+<li><strong>敏感信息管理</strong>：密码、密钥等敏感信息不要写在代码里，使用 Vault、AWS Secrets Manager 等工具管理。</li>
+<li><strong>CI/CD 集成</strong>：将 terraform plan 集成到 PR 流程，apply 通过流水线自动执行，杜绝本地手动操作。</li>
+<li><strong>代码审查</strong>：基础设施变更和应用代码一样需要 Code Review，尤其是涉及安全组、IAM 策略的变更。</li>
+</ol>
+<h3 id="总结-36">总结</h3>
+<p>基础设施即代码是现代云原生运维的基石。它把&quot;不可描述的手动操作&quot;变成了&quot;可版本控制的代码&quot;，让基础设施管理从&quot;艺术&quot;变成了&quot;工程&quot;。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>IaC 的本质</strong>：用代码声明基础设施的期望状态，让工具自动实现</li>
+<li><strong>Terraform 工作流</strong>：Write → Plan → Apply 三步走，Plan 是安全网</li>
+<li><strong>工具选型</strong>：多云选 Terraform，单云选原生工具，开发者团队选 Pulumi</li>
+<li><strong>配置漂移</strong>：最隐蔽的风险，需要通过流程和工具双重防护</li>
+<li><strong>工程化管理</strong>：模块化、环境隔离、远程状态、CI/CD 集成缺一不可</li>
+</ol>
+<h3 id="延伸阅读-25">延伸阅读</h3>
+<ul>
+<li><a href="https://developer.hashicorp.com/terraform/tutorials">Terraform 官方教程</a> - 从零开始学 Terraform</li>
+<li><a href="https://www.pulumi.com/docs/">Pulumi 文档</a> - 用编程语言写基础设施</li>
+<li><a href="https://cdkworkshop.com/">AWS CDK Workshop</a> - AWS CDK 实战教程</li>
+<li><a href="https://www.oreilly.com/library/view/infrastructure-as-code/9781098114664/">Infrastructure as Code (O&#39;Reilly)</a> - IaC 领域的经典书籍</li>
+<li><a href="https://spacelift.io/blog">Spacelift Blog</a> - IaC 最佳实践和行业趋势</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-154.html">← 对象存储与 CDN</a><a rel="next" href="chapter-156.html">监控、日志与告警 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

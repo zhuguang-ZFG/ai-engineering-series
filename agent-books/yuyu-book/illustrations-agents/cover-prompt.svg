@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" fill="none">
+  <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 284H838" opacity=".25"/>
+    <path d="M86 66H246V248H86Z" stroke-width="1.6"/>
+    <path d="M108 95H215M108 113H192M108 131H209M108 167H198M108 185H221M108 203H185" opacity=".5" stroke-width="2"/>
+    <path d="M108 225H179" stroke-width="3"/>
+    <path d="M271 157H355M340 145L355 157L340 169" stroke-width="1.8"/>
+    <path d="M381 78H515V234H381Z" stroke-width="1.6"/>
+    <path d="M402 104H493M402 124H474M402 163H493M402 183H466" stroke-width="2"/>
+    <path d="M402 144H493" stroke-width="1" opacity=".3"/>
+    <path d="M543 157H623M608 145L623 157L608 169" stroke-width="1.8"/>
+    <path d="M651 66H795V248H651Z" stroke-width="1.6"/>
+    <path d="M672 102L681 111L698 91M672 146L681 155L698 135" stroke-width="2.4"/>
+    <path d="M714 103H775M714 147H759" stroke-width="2" opacity=".6"/>
+    <circle cx="684" cy="193" r="10" stroke-width="1.5"/>
+    <path d="M714 193H766" stroke-width="2" opacity=".35"/>
+    <path d="M717 263V301H448V249M438 260L448 249L458 260" stroke-width="1.2" stroke-dasharray="4 6" opacity=".5"/>
+  </g>
+  <g fill="currentColor" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">
+    <text x="86" y="42">MATERIAL</text><text x="380" y="42">TASK</text>
+    <text x="651" y="42">CHECK</text><text x="86" y="307">PROMPT / CONTEXT / EVIDENCE</text>
+  </g>
+</svg>

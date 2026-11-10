@@ -1,0 +1,30 @@
+{
+  "baseline": "OpenCode v1.19.5",
+  "commit": "810c0eba1a7348036f8bdf61e6632d0c36c6876c",
+  "date": "2026-11-09",
+  "node": "24.14.0",
+  "handler_tests": {
+    "passed": 8,
+    "failed": 0,
+    "command": "node --test opencode/examples/check-review-trace.mjs"
+  },
+  "typecheck": {
+    "typescript": "5.9.3",
+    "plugin_package": "1.19.5",
+    "strict": true,
+    "skipLibCheck": true,
+    "exit_code": 0
+  },
+  "host_loaded": false,
+  "model_called": false,
+  "fixtures": {
+    "review-trace.ts": "dc01f2708908affa1d9c7188800e0b350b021011333a16a3078be77955357d1c",
+    "check-review-trace.mjs": "fd9295ac0de8bb2749736c7c4ebe460730e4577cd60a9ec32a6533b1b0d6c044"
+  },
+  "limitations": [
+    "SDK client is a test double",
+    "Dispatcher test uses a teaching implementation",
+    "dispose is invoked explicitly",
+    "Pinned CLI loading and platform behavior remain unverified"
+  ]
+}

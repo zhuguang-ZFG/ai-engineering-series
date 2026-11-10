@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>如何构建微信小程序 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 55 / 195</p><article><h1 id="如何构建微信小程序">如何构建微信小程序</h1><details class="contents"><summary>本章目录 <span>· 6 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-先认识微信小程序">1. 先认识微信小程序</a><ul><li><a href="#企业通常用小程序做什么">企业通常用小程序做什么</a></li><li><a href="#小程序和小游戏不是一回事">小程序和小游戏不是一回事</a></li><li><a href="#为什么使用-uni-app">为什么使用 uni-app</a></li></ul></li><li><a href="#2-环境准备">2. 环境准备</a><ul><li><a href="#21-会用到的三个工具">2.1 会用到的三个工具</a></li><li><a href="#22-注册微信公众平台账号并获取-appid">2.2 注册微信公众平台账号并获取 AppID</a></li><li><a href="#23-安装微信开发者工具">2.3 安装微信开发者工具</a></li><li><a href="#24-准备-trae-和-hbuilderx">2.4 准备 Trae 和 HBuilderX</a></li><li><a href="#25-创建基础项目">2.5 创建基础项目</a></li></ul></li><li><a href="#3-小程序开发">3. 小程序开发</a><ul><li><a href="#31-让-ai-做第一版">3.1 让 AI 做第一版</a></li><li><a href="#32-看清-ai-改了什么">3.2 看清 AI 改了什么</a></li><li><a href="#33-在-hbuilderx-和微信开发者工具中查看效果">3.3 在 HBuilderX 和微信开发者工具中查看效果</a></li><li><a href="#34-把方向按钮改成摇杆">3.4 把方向按钮改成摇杆</a></li><li><a href="#35-出现问题时怎样描述">3.5 出现问题时怎样描述</a></li><li><a href="#36-最终成品">3.6 最终成品</a></li></ul></li><li><a href="#4-小程序发布">4. 小程序发布</a><ul><li><a href="#41-先上传体验版">4.1 先上传体验版</a></li><li><a href="#411-在微信公众平台确认-appid">4.1.1 在微信公众平台确认 AppID</a></li><li><a href="#412-在项目中填写-appid">4.1.2 在项目中填写 AppID</a></li><li><a href="#413-在微信开发者工具中上传一个版本">4.1.3 在微信开发者工具中上传一个版本</a></li><li><a href="#414-在管理后台中把版本设为体验版">4.1.4 在管理后台中把版本设为体验版</a></li><li><a href="#42-小程序正式上线">4.2 小程序正式上线</a></li><li><a href="#421-进入小程序发布流程">4.2.1 进入小程序发布流程</a></li><li><a href="#422-填写小程序基本信息">4.2.2 填写小程序基本信息</a></li><li><a href="#423-选择小程序服务类目">4.2.3 选择小程序服务类目</a></li><li><a href="#424-完成小程序备案信息">4.2.4 完成小程序备案信息</a></li><li><a href="#425-提交审核并等待正式发布">4.2.5 提交审核并等待正式发布</a></li></ul></li><li><a href="#5-从贪吃蛇走到第一个真实小程序">5. 从贪吃蛇走到第一个真实小程序</a></li><li><a href="#参考资料-20">参考资料</a></li></ul></nav></details><p>一个小程序从空项目到手机体验版，要依次经过创建、开发者工具调试、真机预览和版本上传。</p>
+<p>你平时扫码点单、查快递、开电子发票，或者从微信群里打开一个活动页面，用到的很可能就是小程序。它不需要先去应用商店安装，用户在微信里搜索、扫码或点开分享卡片就能使用。</p>
+<p>对企业来说，小程序适合承接“现在就要办”的服务：点单、会员、售后、预约、购票、出行和现场活动。用户已经在微信里，打开服务的步骤比下载一个新 App 少得多。</p>
+<h2 id="1-先认识微信小程序">1. 先认识微信小程序</h2>
+<h3 id="企业通常用小程序做什么">企业通常用小程序做什么</h3>
+<p>真实产品不只是在微信里放几个网页。Uber 的微信小程序允许出境用户查询路线、叫车并使用微信支付，不需要另外下载 Uber App 或重新准备当地支付方式。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/wechat-uber-mini-program.png" alt="Uber 微信小程序中的真实叫车页面" loading="lazy" decoding="async"></p>
+<p>图片与案例来源：<a href="https://www.tencent.com/en-us/articles/2202137.html">Uber 携手微信上线官方小程序</a>。从这张图可以看到，地图、路线、车辆状态和支付都留在微信里的同一段流程中。</p>
+<p>企业里常见的小程序还包括：</p>
+<ul>
+<li>餐饮点单、排队取号和会员积分；</li>
+<li>零售商城、优惠券和门店自提；</li>
+<li>酒店、景区、医院和政务预约；</li>
+<li>快递、售后、维修和现场工单；</li>
+<li>展会、赛事、课程和社区活动；</li>
+<li>只想让用户偶尔使用一次的轻量工具。</li>
+</ul>
+<p>如果产品需要长时间后台运行、深度使用系统硬件，或者用户每天高频使用，原生 App 往往更合适；只是展示内容或填写简单表单，普通网页也可能更省事。小程序的优势不是“什么都能做”，而是用户正在微信里时，可以很快进入一项服务。</p>
+<h3 id="小程序和小游戏不是一回事">小程序和小游戏不是一回事</h3>
+<p>贪吃蛇体量小，操作结果容易检查，适合用来练习页面、交互、状态和发布流程。</p>
+<p>不过，正式发布时要注意：普通小程序和微信小游戏有不同的产品入口、类目和审核要求。这个练习先使用普通 uni-app 小程序项目；如果你准备长期运营游戏、接入广告或排行榜，应按微信公众平台当前的小游戏规则重新确认账号和类目，不要把游戏随便填成教育、工具或其他不相符的类别。</p>
+<h3 id="为什么使用-uni-app">为什么使用 uni-app</h3>
+<p>小程序常见的开发方式有两种：</p>
+<ul>
+<li>直接使用微信原生项目，最贴近微信官方文档；</li>
+<li>使用 uni-app 这类多端框架，以后还可以继续发布到 H5 或其他小程序平台。</li>
+</ul>
+<p>项目使用 HBuilderX 创建，再让 Trae 修改当前文件。每次修改后，都回到微信开发者工具查看真实结果。你不需要先学完全部语法，但要看得懂页面有没有运行、控制有没有失效，以及错误出现在什么位置。</p>
+<p>操作从空项目开始，先做出贪吃蛇，再换成摇杆控制；每改一步，就去模拟器和手机上试一次，最后把能玩的版本上传成体验版。</p>
+<h2 id="2-环境准备">2. 环境准备</h2>
+<p>下面依次安装三个工具。每安装一个就先打开确认，不要全部装完以后再一起排错。</p>
+<h3 id="21-会用到的三个工具">2.1 会用到的三个工具</h3>
+<p>开发会用到三个工具：</p>
+<ul>
+<li><a href="https://www.dcloud.io/hbuilderx.html">HBuilderX</a> 创建 uni-app 项目并负责构建；</li>
+<li><a href="https://www.trae.cn">Trae</a> 打开项目，让 AI 直接修改当前文件；</li>
+<li><a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信开发者工具</a> 运行模拟器、预览、调试和上传版本。</li>
+</ul>
+<p>记住各自的工作就行：HBuilderX 建项目和构建，Trae 修改项目，微信开发者工具看结果。</p>
+<h3 id="22-注册微信公众平台账号并获取-appid">2.2 注册微信公众平台账号并获取 AppID</h3>
+<p>有了工具，还需要一个小程序账号和 AppID。AppID 是这个小程序在微信里的唯一编号，后面导入和上传项目都会用到。</p>
+<ol>
+<li>在浏览器地址栏输入 <a href="https://mp.weixin.qq.com">https://mp.weixin.qq.com</a> ，打开微信公众平台网页，用你的微信扫码登录。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image1.webp" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol start="2">
+<li>在首页选择「小程序」，按照页面提示完成注册流程，填写邮箱、手机号以及主体类型（个人或企业）。
+<img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image2.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></li>
+<li>注册成功并进入后台后，找到「开发管理」或「开发设置」页面，就能看到一个唯一的编号，名字叫 AppID 。这个编号后面会用在项目配置里，相当于你这个小程序在微信里的身份证。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image3.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>把 AppID 保存在团队的项目配置记录里，不要把 AppSecret 截图、提交到公开仓库或发给 AI。</p>
+<h3 id="23-安装微信开发者工具">2.3 安装微信开发者工具</h3>
+<ol>
+<li>打开<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信开发者工具下载页</a>，选择与电脑系统匹配的稳定版。</li>
+<li>下载完成后，双击安装包，按照安装向导一步步点击下一步。如果你不清楚要改什么设置，保持默认选项就可以。</li>
+<li>安装结束后，从桌面或开始菜单启动微信开发者工具。首次启动时，它会在屏幕上显示一个二维码，提示你用手机微信扫码登录。用自己的微信扫码并确认授权后，就可以进入主界面。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image4.png" alt="微信小程序操作截图" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image5.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>登录后先停在主界面。项目构建完成以后，再回到这里查看运行效果。</p>
+<h3 id="24-准备-trae-和-hbuilderx">2.4 准备 Trae 和 HBuilderX</h3>
+<p>打开 <a href="https://www.trae.cn">Trae 官网</a>，安装与当前系统匹配的版本。安装完成后先确认它能打开一个本地文件夹。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image6.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>接着从 <a href="https://www.dcloud.io/hbuilderx.html">HBuilderX 官网</a> 下载对应版本。安装后能进入欢迎页即可，暂时不用研究其他功能。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image7.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>小程序账号、AppID、Trae、HBuilderX 和微信开发者工具都准备好以后，就可以创建项目了。</p>
+<h3 id="25-创建基础项目">2.5 创建基础项目</h3>
+<ol>
+<li>在 HBuilderX 中点击“新建项目”。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image8.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol start="2">
+<li>选择 uni-app 默认模板，填写项目名和保存位置，然后点击右下角“创建”。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image9.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol start="3">
+<li>等待 HBuilderX 创建项目。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image10.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol start="4">
+<li>在 Trae 中打开刚才创建的项目文件夹。左侧能看到项目文件，说明准备完成。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image11.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h2 id="3-小程序开发">3. 小程序开发</h2>
+<p>项目已经创建好了。下面先让 AI 做出一个能玩的版本，再到微信开发者工具中亲自操作。发现问题以后，一次只改一件事。</p>
+<h3 id="31-让-ai-做第一版">3.1 让 AI 做第一版</h3>
+<p>在 Trae 中打开项目，然后说：</p>
+<blockquote>
+<p>请把当前 uni-app 项目改成贪吃蛇。先做首页和游戏页，游戏能开始、移动、吃食物、计分和重新开始。</p>
+</blockquote>
+<p>先让 AI 读取当前项目并直接修改文件。不要让它只贴一大段代码，再让你逐行复制。</p>
+<h3 id="32-看清-ai-改了什么">3.2 看清 AI 改了什么</h3>
+<p>执行以后，先看它准备修改哪些文件。路径应该都在刚才打开的项目中，不要让它在其他目录重新创建一套工程。</p>
+<ol>
+<li>对话区会说明准备增加哪些页面和游戏逻辑。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image12.png" alt="微信小程序操作截图" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image13.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol start="2">
+<li>修改会直接落到当前项目文件。</li>
+<li>完成后检查修改摘要，确认没有删除与任务无关的内容。</li>
+</ol>
+<p>如果方向明显不对，可以使用 Trae 的回退功能恢复这一轮修改。回退以后重新描述问题，不要在错误版本上继续叠加功能。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image14.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image15.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="33-在-hbuilderx-和微信开发者工具中查看效果">3.3 在 HBuilderX 和微信开发者工具中查看效果</h3>
+<p>回到 HBuilderX，选择“运行 → 运行到小程序模拟器 → 微信开发者工具”。HBuilderX 会先构建项目，再把结果交给微信开发者工具。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image16.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>底部输出窗口出现 <code>ready</code> 且没有红色错误后，再切到微信开发者工具。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image17.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>如果没有自动打开微信开发者工具：</p>
+<ol>
+<li>先在 HBuilderX 中停止当前运行。</li>
+<li>手动启动微信开发者工具，让它处于打开状态。</li>
+<li>回到 HBuilderX，再次点击「运行 → 运行到小程序模拟器 → 微信开发者工具」。</li>
+</ol>
+<p>看到首页以后，先点击开始，确认蛇能移动、吃到食物、增加分数并重新开始。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image18.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="34-把方向按钮改成摇杆">3.4 把方向按钮改成摇杆</h3>
+<p>第一版使用四个方向按钮，游戏已经能玩。下一轮只替换控制方式：</p>
+<blockquote>
+<p>请把四个方向按钮换成摇杆。松开摇杆后，蛇继续沿最后方向移动。不要修改计分和碰撞逻辑。</p>
+</blockquote>
+<p>AI 修改完成后，重点验证快速转向、反方向操作和松开摇杆三个情况。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image19.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>修改完成后重新运行。没有看到变化时，先停止 HBuilderX 当前任务，再执行一次“运行到小程序模拟器”，不要只反复刷新旧构建。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image20.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="35-出现问题时怎样描述">3.5 出现问题时怎样描述</h3>
+<p>把“什么时候发生、看到什么、正确结果是什么”说清楚，提示词就够了。例如摇杆偶尔失效：</p>
+<blockquote>
+<p>摇杆偶尔会让蛇停住。请只修复这个问题，并告诉我怎样复现和验证。</p>
+</blockquote>
+<p>如果只是小屏幕太拥挤：</p>
+<blockquote>
+<p>页面在小屏手机上太拥挤。请增加上下留白，不要修改游戏逻辑。</p>
+</blockquote>
+<p>每次修改后都重新操作一次。问题没有解决就把实际现象和开发者工具里的相关错误继续发给 AI；结果更差时先回退，再换一种描述。</p>
+<p>功能稳定以后，可以提供一张有权使用的风格参考图，让 AI 只调整颜色、背景和按钮：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image21.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="36-最终成品">3.6 最终成品</h3>
+<p>最后得到首页、游戏页和结束状态。蛇能移动、吃食物和计分，摇杆松开后仍会沿最后方向继续移动。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image22.png" alt="微信小程序操作截图" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image23.png" alt="微信小程序操作截图" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image24.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>不要只看截图判断完成。至少连续玩三局，测试快速转向、撞墙、吃到食物、重新开始和小屏显示。都正常以后再上传体验版。</p>
+<h2 id="4-小程序发布">4. 小程序发布</h2>
+<p>模拟器里的版本只有开发者自己能看到。想在手机微信里测试，需要先上传开发版本，再把它设为体验版。</p>
+<p>体验版只对管理员和体验成员开放，不等于已经公开上线。先用它完成真机测试，稳定以后再准备备案、类目和正式审核。</p>
+<h3 id="41-先上传体验版">4.1 先上传体验版</h3>
+<p>按照下面四步操作：</p>
+<ol>
+<li>在微信公众平台找到并确认自己的 AppID。</li>
+<li>在项目里把这个 AppID 配置好。</li>
+<li>用微信开发者工具上传当前版本。</li>
+<li>回到公众平台，把这次上传的版本设置为「体验版」。</li>
+</ol>
+<h3 id="411-在微信公众平台确认-appid">4.1.1 在微信公众平台确认 AppID</h3>
+<ol>
+<li>打开浏览器，访问 <code>https://mp.weixin.qq.com</code>，登录你的小程序后台。</li>
+<li>在左侧菜单中找到「开发管理」，进入其中的「开发设置」。</li>
+<li>在页面上方，你会看到一块叫做「开发者 ID」的区域，里面有一行「AppID（小程序 ID）」——这就是你的小程序唯一编号。</li>
+</ol>
+<p>项目中的 AppID 必须和后台一致。截图时像下面这样遮住具体值，也不要展示 AppSecret。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image25.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="412-在项目中填写-appid">4.1.2 在项目中填写 AppID</h3>
+<ol>
+<li>打开 HBuilderX，载入你的贪吃蛇项目。</li>
+<li>在左侧文件树中找到 <code>manifest.json</code>，双击打开。</li>
+<li>下拉到「微信小程序配置」这一栏，你会看到一个输入框，提示类似「微信小程序 AppID（请在微信开发者工具中获取）」。</li>
+<li>把刚才在公众平台上看到的 AppID 原样粘贴进来，保存文件。
+<img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image26.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></li>
+</ol>
+<p>保存后重新构建项目，微信开发者工具会按这个 AppID 识别上传目标。</p>
+<h3 id="413-在微信开发者工具中上传一个版本">4.1.3 在微信开发者工具中上传一个版本</h3>
+<ol>
+<li>在微信开发者工具顶部工具栏的右侧，你会看到一个「上传」按钮，点击它。</li>
+<li>弹出的窗口中，需要填写两个关键字段：<ol>
+<li>版本号：例如 <code>1.0.0</code>，只允许数字和小数点。</li>
+<li>项目备注：写一段简短说明，比如「完成基本功能的开发」。</li>
+</ol>
+</li>
+<li>检查无误后，点击「上传」按钮。下面的输出区域会显示编译过程，所有步骤变成绿色并提示上传完成，就说明这一版已经成功提交到了微信服务器。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image27.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image28.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image29.png" alt="微信小程序操作截图" loading="lazy" decoding="async"><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image30.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="414-在管理后台中把版本设为体验版">4.1.4 在管理后台中把版本设为体验版</h3>
+<ol>
+<li><p>再次打开 <code>https://mp.weixin.qq.com</code>，进入你的小程序后台。</p>
+</li>
+<li><p>在左侧找到「管理」下面的「版本管理」，点击进入。</p>
+</li>
+<li><p>在页面的「开发版本」一栏，你应该能看到刚刚上传的那个版本：版本号是 <code>1.0.0</code>，备注是你写的那一段说明，时间是刚刚的上传时间。</p>
+</li>
+<li><p>在这一行右侧选择「设为体验版」。如果后台要求先补充主营类目，按实际功能选择后再回来操作。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image31.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image32.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+</li>
+</ol>
+<p>完成后生成体验二维码，把测试同事加入体验成员。至少用两台不同尺寸的手机测试摇杆、重新开始、前后台切换和分享入口。</p>
+<h3 id="42-小程序正式上线">4.2 小程序正式上线</h3>
+<p>准备公开发布时，再补充小程序信息、选择真实类目、完成备案并提交审核。后台页面和费用可能变化，最终以当前提示为准。</p>
+<h3 id="421-进入小程序发布流程">4.2.1 进入小程序发布流程</h3>
+<p>首先回到微信公众平台后台，登录你的小程序账号。 在左侧导航里找到与「版本管理 / 发布」相关的入口（不同时间界面可能略有调整），展开后会看到「小程序发布流程」这一项。</p>
+<p>点击进入之后，界面上方会显示一个进度条，下面依次列出几个步骤，例如：</p>
+<ol>
+<li>小程序信息</li>
+<li>小程序类目</li>
+<li>运营信息 / 小程序备案</li>
+<li>微信认证（视你的主体而定）</li>
+</ol>
+<p>一开始进度会显示 0%，随着你完成每一步，系统会自动把进度向前推进。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image33.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="422-填写小程序基本信息">4.2.2 填写小程序基本信息</h3>
+<p>在“小程序信息”页面准备名称、简介、图标、页面截图和后台要求的其他资料。名称和简介要准确描述当前功能；截图只放真实存在的页面，不要写没有做完的排行榜、联机或奖励功能。</p>
+<p>图标和截图的尺寸以后台当前提示为准，图片、字体和音效也要确认有权公开使用。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image34.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>全部填写完毕后，点击保存或下一步，发布流程中的第一步就完成了。</p>
+<h3 id="423-选择小程序服务类目">4.2.3 选择小程序服务类目</h3>
+<p>类目决定平台按什么业务审核，也会影响需要提交的资质。它必须和实际功能一致。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image35.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>点击“添加类目”后，后台会显示当前账号可以选择的分类：</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image36.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>下面的截图只展示类目选择界面，不代表贪吃蛇应该选择“教育器具”。如果准备公开运营游戏，应先确认是否需要使用微信小游戏账号、对应类目和额外规则；不要为了通过审核把游戏描述成教育工具。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image37.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image38.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<p>确认类目后，点击保存。如果页面提示「创建类目成功」，并在列表中显示你刚刚添加的那一项，就说明这一步已经完成。</p>
+<h3 id="424-完成小程序备案信息">4.2.4 完成小程序备案信息</h3>
+<p>发布流程还会要求完成运营信息和小程序备案，用来确认主体与负责人。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image39.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<ol>
+<li>选择与注册账号一致的主体类型。</li>
+<li>按后台提示填写主体和负责人信息。</li>
+<li>上传当前页面要求的证明材料并完成核验。
+<img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image40.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></li>
+</ol>
+<p>身份证、手机号、验证码和证件照片都不要发给 AI，也不要出现在教程截图里。提交后回到后台查看实际状态；需要短信或工信部核验时，按收到的官方通知在有效期内完成。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image41.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h3 id="425-提交审核并等待正式发布">4.2.5 提交审核并等待正式发布</h3>
+<ol>
+<li>回到「小程序发布流程」总览页面，确认每一项都显示为已完成，进度条接近 100%。</li>
+<li>根据页面提示，点击「提交审核」或类似按钮，把当前开发版本送交微信团队审核。</li>
+<li>在「版本管理」中，你会看到这次提交的版本状态变为「审核中」。通过后，会变成「已发布」或可选择「上线」的状态。</li>
+</ol>
+<p>审核如果要求补充操作视频、页面截图或资质，就按退回原因修改后重新提交。通过以后，仍要在版本管理中确认是否需要手动点击“发布”。不要只看到“审核通过”就以为用户已经能搜索到。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-3/cross-platform/wechat-miniprogram/images/image42.png" alt="微信小程序操作截图" loading="lazy" decoding="async"></p>
+<h2 id="5-从贪吃蛇走到第一个真实小程序">5. 从贪吃蛇走到第一个真实小程序</h2>
+<p>现在再回头看，贪吃蛇本身并不复杂，真正重要的是你已经走过一次小程序的完整过程：创建项目、让 AI 修改、在模拟器里找问题、拿手机体验，再把版本上传。</p>
+<p>以后换成预约、活动报名或内部工具，仍然可以照这个节奏来：一次只改一件事，改完马上回到微信开发者工具里试，不要把“AI 说完成了”当成真的完成。等页面需要保存用户身份、云端数据或图片时，再继续做下一篇带后端的小程序。</p>
+<h2 id="参考资料-20">参考资料</h2>
+<ul>
+<li><a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信小程序开发者工具</a></li>
+<li><a href="https://mp.weixin.qq.com/">微信公众平台</a></li>
+<li><a href="https://uniapp.dcloud.net.cn/">uni-app 文档</a></li>
+<li><a href="https://www.tencent.com/en-us/business/wechat-mini-program.html">腾讯：微信小程序业务介绍</a></li>
+<li><a href="https://www.tencent.com/en-us/articles/2202137.html">腾讯：Uber 微信小程序案例</a></li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-054.html">← 如何选择你的应用该开发的平台</a><a rel="next" href="chapter-056.html">如何构建微信小程序（包含后端） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

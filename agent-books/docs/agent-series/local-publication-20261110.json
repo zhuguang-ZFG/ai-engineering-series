@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-10",
+  "destination": "D:\\Users\\claude\\claude-code-book-main\\yuyu-book\\dist",
+  "volumes": {
+    "opencode": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-opencode-zh.html",
+          "bytes": 765501,
+          "sha256": "cb5b188463fd6c4135436945bd9aadc85f7d88ecf0edf55cb2b58bdf3f1543c9"
+        },
+        "pdf": {
+          "file": "yuyu-opencode-zh.pdf",
+          "bytes": 4552082,
+          "sha256": "fc37c71ead05095955a7992a5a5ea44108fb4373fcd133f2d6a956208a6a43d6"
+        },
+        "epub": {
+          "file": "yuyu-opencode-zh.epub",
+          "bytes": 921846,
+          "sha256": "77da98d1ff3bd586a24dd5291f06412a42f070a5c24398cfabb5066899f28735"
+        }
+      },
+      "pdf_pages": 99,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "deepseek": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-deepseek-zh.html",
+          "bytes": 629964,
+          "sha256": "c0db7fb1c6e3189c8e802235f96dc82bbca81a4d5d05c2160643d7fa7873f371"
+        },
+        "pdf": {
+          "file": "yuyu-deepseek-zh.pdf",
+          "bytes": 4611455,
+          "sha256": "f92d773d6ecbfa2fa7b9cde262a927f9ac280077be6183643a6934d046ace4ed"
+        },
+        "epub": {
+          "file": "yuyu-deepseek-zh.epub",
+          "bytes": 627327,
+          "sha256": "8b8194a60fc26a9a2b9c318168e30ef076676ca8b83274629e4ecaeb958dae48"
+        }
+      },
+      "pdf_pages": 92,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "hermes": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-hermes-zh.html",
+          "bytes": 656773,
+          "sha256": "b9ac249eff50b446110eb1af2eb0b8b07ec56d2b853d98a6ec57ece46231ab13"
+        },
+        "pdf": {
+          "file": "yuyu-hermes-zh.pdf",
+          "bytes": 4684387,
+          "sha256": "240be4d01d90f6535a88f77694d858e8f7c107caa74bb791c41e93eb8b1e2a3e"
+        },
+        "epub": {
+          "file": "yuyu-hermes-zh.epub",
+          "bytes": 758296,
+          "sha256": "488452bd400c3b3ac58166b8cb042b642d125864ae5f109a63c38609ac51e4b0"
+        }
+      },
+      "pdf_pages": 90,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    },
+    "codex": {
+      "units": 23,
+      "chapters": 18,
+      "appendices": 4,
+      "artifacts": {
+        "html": {
+          "file": "yuyu-codex-zh.html",
+          "bytes": 675337,
+          "sha256": "1972dea9b747b82e9132d6d883516cbce06a3c75b843a7910d099f02d4d3a5f2"
+        },
+        "pdf": {
+          "file": "yuyu-codex-zh.pdf",
+          "bytes": 4761080,
+          "sha256": "c780be8a217042a86dd07fb7857bdb34632b0fdfd20c59da888f0927610311ec"
+        },
+        "epub": {
+          "file": "yuyu-codex-zh.epub",
+          "bytes": 688249,
+          "sha256": "86d97537dbb223af7700ef4739be71d31b9b67235ca678f26e6e00c916ce99d6"
+        }
+      },
+      "pdf_pages": 96,
+      "pdf_bookmarks": 29,
+      "epubcheck": "5.4.0: 0 fatals, 0 errors, 0 warnings"
+    }
+  },
+  "validation": {
+    "general_tests": 228,
+    "builder_tests": 569,
+    "markdown_files": 344,
+    "mermaid_diagrams": 403,
+    "fast_steps": 8,
+    "result": "passed",
+    "visual_review": "PDF covers, contents, tool/plugin chapters, appendices and indexes sampled; no clipped text or missing glyphs observed"
+  }
+}

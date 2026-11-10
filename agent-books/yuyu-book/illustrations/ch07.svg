@@ -1,0 +1,13 @@
+<svg class="a-gauge" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9.8 44c-.2-13.4 10.4-24 22.1-24 12.6-1 23.8 10.8 22.2 23.8" stroke-width="2.6" pathLength="100"/>
+  <path class="sweep" d="M32 44q4-8.9 12-15.5L33.4 44.8Z" fill="currentColor" stroke-width=".9" pathLength="100"/>
+  <circle cx="32" cy="44" r="3" fill="currentColor" stroke="none"/>
+  <path d="M13.5 31.5q2.1 1.3 4.1 3.4" stroke-width="1.8" pathLength="100"/>
+  <path d="M32 20.1q-.6 2.4.1 5.6" stroke-width="1.9" pathLength="100"/>
+  <path d="M50.5 31.5q-2.5 1.5-4.2 3.4" stroke-width="1.8" pathLength="100"/>
+  <path d="M10.4 44.1q21.4 1 43.2-.2" stroke-width="1.2" opacity=".55" pathLength="100"/>
+  <path d="M39 21.3q13.7 4.2 15.1 21.1-3.1-14.7-15.1-21.1Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <path d="m21.3 23.6 1.8 3.4m20.7-3.5-1.9 3.1M13 42q1.3-8.5 5.8-12.7" stroke-width=".85" opacity=".4" pathLength="100"/>
+  <path d="M12 48q3.3 2.3 6.4 2.8m25.6-2 5.2-2.3" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <circle cx="40" cy="33" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "documents": {
+    "N01-v1": "notice-v1.md",
+    "R01-v1": "rules-v1.md",
+    "U01-v2": "update-v2.md",
+    "C01-v1": "chat-v1.md",
+    "A01-v1": "archive-v1.md",
+    "X01-v1": "conflict-v1.md",
+    "I01-v1": "injection-v1.md",
+    "D01-v1": "demo-v1.md",
+    "T01-v1": "receipts-v1.md",
+    "U02-v3": "holdout-update-v3.md",
+    "L01-v1": "holdout-library-v1.md"
+  }
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C25 何时适配参数，何时不该训练 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details open><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html" aria-current="page">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C25-section-d805739253">先修桥：C18 的评测纪律 + C24 的底座</a></li><li class="toc-level-2"><a href="#C25-section-e96266c017">数据许可：先问“我能不能用”，再问“好不好用”</a></li><li class="toc-level-2"><a href="#C25-section-56b2fff47e">SFT 在教什么：只对回答算损失</a></li><li class="toc-level-2"><a href="#C25-section-00c25fa5ff">全量 SFT：所有参数都动</a></li><li class="toc-level-2"><a href="#C25-section-4996a94d89">LoRA：冻结底座，只训练低秩补丁</a></li><li class="toc-level-2"><a href="#C25-section-6b4ab0493e">全量 SFT 与 LoRA 怎样比较</a></li><li class="toc-level-2"><a href="#C25-section-97290ae4a0">什么时候不该训练</a></li><li class="toc-level-2"><a href="#C25-section-14b1f96a96">改一个条件，看结论会不会变</a></li><li class="toc-level-2"><a href="#C25-section-e2e9724e68">独立练习与项目增量</a></li><li class="toc-level-2"><a href="#C25-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C25"><header class="chapter-opener"><p class="chapter-number">C25</p><p class="chapter-kicker">S4 · 会改进 / K4</p><h1>何时适配参数，何时不该训练</h1><p class="chapter-abstract">判断什么时候该改参数，比较全量 SFT 与冻结底座的 LoRA 各自改变了什么。</p></header><p class="chapter-meta">先修：<a href="c24.html">C24</a> · <a href="stage-s4.html">S4 阶段导言</a></p><div class="article-body"><p>你已经有一个能训练、保存、生成的小 decoder。现在产品经理说：“让它学会听指令。”最直接的反应是“再训练一下”。但训练会改参数，也会带来数据许可、过拟合、评测和回滚问题。C25 要回答的不是“LoRA 好不好”，而是：这次需求到底要不要改参数？如果改，全量 SFT 和冻结底座的 LoRA 各自改了什么？你拿什么证据判断它值得留下？</p>
+<h2 id="C25-section-d805739253" tabindex="-1">先修桥：C18 的评测纪律 + C24 的底座</h2>
+<p>C18 已经要求你在动手前冻结验证材料、质量底线和成本上限；C24 给了你一个真实的微型 decoder 和 group-disjoint 的留出集。C25 沿用这两条：</p>
+<ul>
+<li>任何适配都必须从<strong>未参加适配训练的组</strong>上报告结果；</li>
+<li>任何“更好”都必须和基线在相同输入、相同解码设置下比较；</li>
+<li>参数量、冻结状态、重载一致性是可以直接检查的工程事实，不是感觉。</li>
+</ul>
+<p>本章的 SFT 数据在 <code>sft.jsonl</code>，全量微调和 LoRA 都由 <code>train.py adapt</code> 完成。先运行 <code>--method both</code>，把两份结果放在同一张表里看，而不是只看训练损失。</p>
+<h2 id="C25-section-e96266c017" tabindex="-1">数据许可：先问“我能不能用”，再问“好不好用”</h2>
+<p>本目录的 <code>corpus.jsonl</code> 和 <code>sft.jsonl</code> 是课程作者编写的原创玩具数据，许可证见 <code>LICENSE-CORPUS</code>（CC0-1.0）。它们不含个人信息、第三方书籍段落、模型输出或下载语料。真实项目里，至少要先回答：</p>
+<ol>
+<li>数据是谁的？有没有明确的使用授权，允许训练、派生和部署？</li>
+<li>是否含个人信息、商业秘密、未公开材料或受版权保护的长文本？</li>
+<li>数据来源和版本能否记录？删除/更正请求能否追溯？</li>
+<li>训练用途与最终产品用途是否一致？把 A 场景的数据拿去适配 B 场景，未必被授权，也未必有效。</li>
+<li>评测集是否独立于训练和调参？用同一批样本既训练又验收，分数没有意义。</li>
+</ol>
+<p>如果这些问题没有答案，先不要训练。提示、检索或工具调用往往能在不改参数的情况下满足需求，而且权限边界更容易说清。</p>
+<h2 id="C25-section-56b2fff47e" tabindex="-1">SFT 在教什么：只对回答算损失</h2>
+<p>监督微调（SFT）使用“提示→回答”的示范。<code>sft.jsonl</code> 的一条记录是：</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;sft-small-00&quot;, &quot;group&quot;: &quot;adjective-small&quot;, &quot;split&quot;: &quot;train&quot;,
+ &quot;prompt&quot;: &quot;say the small boat .&quot;, &quot;response&quot;: &quot;the small boat floats .&quot;}
+</code></pre>
+<p>编码后把两段接起来：</p>
+<pre><code class="language-text">full:    [BOS, say, the, small, boat, ., the, small, boat, floats, ., EOS]
+inputs:  full[:-1]
+targets: full[1:] 但提示部分写成 -100
+</code></pre>
+<p>具体地，提示有 5 个 token；<code>response_start = 1 + 5 = 6</code>。输入位置 0–4 的目标被置为 <code>-100</code>，位置 5 开始才预测回答的第一个 token。提示仍然在输入里，模型能看见它；但“复述提示”不算损失。这样模型学的是“给定这条指令，接下来该写什么”，不是“把指令原样抄一遍”。</p>
+<p>为什么不能对提示也算损失？因为提示是用户给的，不是模型要生成的；把它算进去会让模型花容量去预测“用户会怎么问”，而且不同模板的提示长度会主导损失。若你确实想训练“续写提示”，那是另一种目标，要明确写出来，不能和指令跟随混在一起。</p>
+<p><code>adapt</code> 的 <code>encode_sft</code> 还会检查每条记录至少有一个回答目标；如果整条都被 mask 掉，直接报错，而不是悄悄贡献零损失。</p>
+<h2 id="C25-section-00c25fa5ff" tabindex="-1">全量 SFT：所有参数都动</h2>
+<p><code>--method full</code> 从 <code>base.pt</code> 载入，解冻全部参数，用 SFT 训练集更新。默认配置下可训练参数是 <strong>69,760</strong> 个（与 C24 的账本一致）。训练结束后：</p>
+<ul>
+<li>底座参数哈希会变化，<code>checks.base_updated=true</code>；</li>
+<li><code>checks.base_frozen=false</code>；</li>
+<li>保存的是完整 <code>state_dict</code>，重载不需要额外的适配器包装；</li>
+<li>留出组损失可能下降，也可能上升；只报训练损失不足以说明问题。</li>
+</ul>
+<p>全量 SFT 的风险很直接：数据少、步数多、学习率大时，模型可能记住训练样本的搭配，留出组变差；也可能把预训练学到的通用模式改坏（灾难性遗忘）。本课的 SFT 数据只有 45 条训练记录，默认 120 步、批大小 8、学习率 <code>2e-3</code>，这些数字只是教学起点，不是“最佳配方”。<code>--steps</code>、<code>--lr</code> 一改，结论可能就变；所以要记录条件并做单变量对照。</p>
+<h2 id="C25-section-4996a94d89" tabindex="-1">LoRA：冻结底座，只训练低秩补丁</h2>
+<p>LoRA 不直接改原权重 <code>W</code>，而是在线性层旁加一个低秩更新：</p>
+<pre><code class="language-text">y = W x + (alpha / rank) * B (A x)
+</code></pre>
+<p>其中 <code>A</code> 的形状是 <code>[rank, in_features]</code>，<code>B</code> 是 <code>[out_features, rank]</code>，<code>B</code> 初始化为零。默认 <code>rank=4</code>、<code>alpha=8</code>，所以缩放是 <code>8/4=2.0</code>。刚包装时 <code>B=0</code>，<code>B A x=0</code>，模型与底座逐位相同；训练只更新 <code>A</code>、<code>B</code>，底座 <code>W</code> 的 <code>requires_grad</code> 被设为 <code>False</code>。</p>
+<p>本课包装的目标是每个 block 的 <code>attn.qkv</code>、<code>attn.proj</code>、<code>ff.fc1</code>、<code>ff.fc2</code>，以及 <code>head</code>。默认配置的参数账本：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>计算</th>
+<th>可训练参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每层 qkv</td>
+<td><code>4×64 + 192×4</code></td>
+<td>1,024</td>
+</tr>
+<tr>
+<td>每层 proj</td>
+<td><code>4×64 + 64×4</code></td>
+<td>512</td>
+</tr>
+<tr>
+<td>每层 fc1</td>
+<td><code>4×64 + 128×4</code></td>
+<td>768</td>
+</tr>
+<tr>
+<td>每层 fc2</td>
+<td><code>4×128 + 64×4</code></td>
+<td>768</td>
+</tr>
+<tr>
+<td>每层合计</td>
+<td></td>
+<td>3,072</td>
+</tr>
+<tr>
+<td>2 层</td>
+<td></td>
+<td>6,144</td>
+</tr>
+<tr>
+<td>head</td>
+<td><code>4×64 + 50×4</code></td>
+<td>456</td>
+</tr>
+<tr>
+<td><strong>LoRA 总计</strong></td>
+<td></td>
+<td><strong>6,600</strong></td>
+</tr>
+</tbody></table>
+<p>底座 69,760 个参数全部冻结，加上 6,600 个适配器，包装后的 <code>parameters.total=76,360</code>，其中 <code>trainable=6,600</code>、<code>frozen=69,760</code>。<code>inspect --checkpoint runs/adapt-lora.pt</code> 会打印这组数；它和全量 SFT 的 <code>trainable=69,760</code> 是两种完全不同的适配方式。</p>
+<p><code>adapt</code> 在训练前后各算一次底座参数哈希：<code>checks.base_checksum_before</code> 与 <code>after</code> 应相等（<code>base_frozen=true</code>），而适配器哈希应变化（<code>lora_changed=true</code>）。还会检查底座参数的 <code>.grad</code> 是否全为 <code>None</code>（<code>base_grads_all_none</code>）——冻结不是“梯度为零”，而是这些参数根本没有进入优化器。保存时把 LoRA 的 <code>rank</code>、<code>alpha</code>、目标名和完整 <code>state_dict</code> 一起写入；<code>load_checkpoint</code> 先重建包装，再 <code>load_state_dict</code>，最后比较重载前后 logits（<code>checks.reload</code>）。如果只保存适配器权重而载入时没有先包装，键会对不上；如果保存了全路径目标名而载入只接受相对名，也会报“unsupported LoRA target”。本实现两种目标路径都接受，并把新 checkpoint 写成规范的相对目标。</p>
+<h2 id="C25-section-6b4ab0493e" tabindex="-1">全量 SFT 与 LoRA 怎样比较</h2>
+<p><code>--method both</code> 从同一个 <code>base.pt</code> 分别训练两份模型，使用同一份 SFT 数据、同一个种子和同样的步数，输出：</p>
+<pre><code class="language-text">comparison.full.checks.base_updated
+comparison.full.parameters.trainable
+comparison.full.losses.before / after / delta_val / delta_test
+comparison.lora.checks.base_frozen
+comparison.lora.checks.base_grads_all_none
+comparison.lora.parameters.trainable_after_setup
+comparison.lora.losses.before / after / delta_val / delta_test
+</code></pre>
+<p>看这张表时，先分清三件事：</p>
+<ol>
+<li><strong>工程事实</strong>：哪些参数被更新、冻结是否成立、重载是否一致。这些是硬条件，失败就没有“方法优劣”可谈。</li>
+<li><strong>本数据上的测量</strong>：验证/留出损失降了多少。它们只对这组玩具数据和这些超参数成立。</li>
+<li><strong>业务价值</strong>：是否真的改善目标错误、是否满足延迟/显存/成本、是否通过独立评测。这部分不能由训练损失代替。</li>
+</ol>
+<p>不要预设 LoRA 一定更好。LoRA 可训练参数少，可能更稳，也可能容量不足；全量 SFT 容量大，也可能过拟合或遗忘。rank、alpha、目标层、学习率、步数都会改变结果。比较时只改一个因素，并保留失败记录。</p>
+<h2 id="C25-section-97290ae4a0" tabindex="-1">什么时候不该训练</h2>
+<ul>
+<li>需求只是“让模型看到新资料”：优先比较提示、RAG、工具调用；它们通常不改参数，资料更新也更容易追溯。</li>
+<li>评测还没冻结：先做 C18 的验证集和判据；否则你无法判断改动是否值得。</li>
+<li>数据许可不清：不要用“先训练再补授权”倒推。</li>
+<li>训练成本高于收益：适配要数据整理、训练、评测、部署和回滚；小任务可能不值得。</li>
+<li>错误来自检索或工具，而不是模型行为：训练参数不会修正“根本没取到资料”或“权限被拒绝”的问题。</li>
+<li>需要逐条引用和最新事实：参数化记忆不适合作为唯一来源；保留检索与引用链。</li>
+</ul>
+<p>SFT 和偏好训练也不是一回事。SFT 用示范告诉模型“这样回答”；偏好训练用成对比较告诉模型“这两种回答里更偏好哪一种”。本课只做 SFT 和 LoRA，不执行偏好优化，也不把“礼貌”或“自信”当成事实正确。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/training-signals.svg" alt="文本、示范与偏好是不同信号"><figcaption>图：文本、示范、偏好是三种不同信号：分别教“接下去”“这样答”“哪种更好”。标准本身错了，偏好训练也会照单奖励；角色模板只组织输入，不执行一次训练。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="训练才改旋钮，推理只读取参数"><figcaption>图：适配（SFT/LoRA）也只发生在训练一侧，沿损失更新参数；推理始终只读取参数。</figcaption></figure>
+<p>本地对照：<a href="training.html">X05 训练与推理</a>、<a href="assistant.html">L06 指令跟随</a>。注意 X05 是 bigram 分数表，L06 的演示回答是教学编写，不是本课 LoRA 的教师输出。</p>
+<h2 id="C25-section-14b1f96a96" tabindex="-1">改一个条件，看结论会不会变</h2>
+<ul>
+<li><strong>把 prompt token 也算损失</strong>：训练损失可能下降，但模型学的是复述提示；检查 <code>targets</code> 里提示段是否仍为 <code>-100</code>。</li>
+<li><strong>让 group 跨 split</strong>：留出组泄漏，验证损失虚低；<code>validate_sft</code> 应直接拒绝。</li>
+<li><strong>LoRA 后再 <code>apply_lora</code> 一次</strong>：同一层被包两次，类型检查应报错；不要用“再包一层”来增加容量。</li>
+<li><strong>从已适配 checkpoint 再 adapt</strong>：<code>_adapt_one</code> 会拒绝，避免把全量 SFT 或 LoRA 叠成无法解释的链条。</li>
+<li><strong>rank=0 或负数</strong>：直接拒绝；低秩更新没有维度。</li>
+<li><strong>只保存 adapter 不保存 base</strong>：载入时无法重建底座；本课保存完整 state dict 和适配元数据。</li>
+<li><strong>冻结参数仍放进优化器</strong>：即便 <code>requires_grad=False</code>，显式传入也可能出现空梯度或意外；本课只把 <code>requires_grad</code> 为真的参数交给 AdamW。</li>
+<li><strong>学习率过大/步数过多</strong>：训练损失下降、留出损失上升；先做单变量对照，不要同时改数据和步数。</li>
+</ul>
+<h2 id="C25-section-e2e9724e68" tabindex="-1">独立练习与项目增量</h2>
+<ol>
+<li>默认 <code>rank=4</code> 的 LoRA 可训练参数是 6,600。改成 <code>rank=8</code> 后是多少？只包 <code>qkv</code> 和 <code>proj</code>（再加 head）是多少？不包 head 呢？先手算，再用 <code>inspect</code> 核对。</li>
+<li>写出 <code>sft-small-00</code> 的 <code>full</code>、<code>inputs</code>、<code>targets</code>，标出哪些位置是 <code>-100</code>。如果提示长度从 5 变成 6，<code>response_start</code> 和第一个有损失的位置怎样变？</li>
+<li>同一底座、同一数据、同一种子，分别跑 <code>adapt --method full</code> 和 <code>adapt --method lora</code>。记录 <code>parameters.trainable</code>、<code>base_updated</code>/<code>base_frozen</code>、<code>base_grads_all_none</code>、<code>reload.bitwise_equal</code>、<code>delta_val</code>、<code>delta_test</code>。用一段话说明：哪些结论是工程事实，哪些只是这组数据上的测量。</li>
+<li>把 <code>--steps</code> 从 120 改成 20 和 300，只改这一个因素，观察全量 SFT 与 LoRA 的留出损失。不要因为某一次结果更好就宣布方法优劣；记录条件和失败。</li>
+</ol>
+<p>项目增量：你已经能在同一个底座上完成全量 SFT 和 LoRA，验证冻结、参数更新与重载，并能用留出组而非训练损失来报告结果。C26 会把“另一个模型提供训练信号”的蒸馏接进来，同时保留已有的 KL、T² 和错误教师证据。</p>
+<p>答案与参数核算见 <a href="c25-answer.html"><code>../deepening/c25-answer.md</code></a>。上一章：<a href="c24.html">C24 从零组装最小 decoder</a>；下一章：<a href="c26.html">C26 蒸馏学到的是什么</a>。</p>
+<h2 id="C25-section-82826587a3" tabindex="-1">来源与边界</h2>
+<ul>
+<li>Hu 等，<em>LoRA: Low-Rank Adaptation of Large Language Models</em>（2021）：冻结原权重、低秩更新、缩放与秩的选择；本课按该思路实现线性层包装。</li>
+<li>PyTorch 2.14.1 官方文档：<code>requires_grad</code> 冻结、<code>state_dict</code>、<code>load_state_dict</code>、<code>torch.load(weights_only=True)</code>、<code>optim.AdamW</code> 与梯度清零。</li>
+<li>本课 <code>sft.jsonl</code>、<code>train.py adapt</code> 与 <code>model.py</code> 的实际实现；所有参数计数可由源码与配置复算。</li>
+<li>边界：SFT/LoRA 的结果只对本目录的玩具语料、默认超参数和留出组成立。LoRA 不会自动优于全量 SFT，也不会自动解决数据许可、事实正确或检索失败。真实项目还要评估部署成本、隐私、回滚和独立评测；本课没有执行偏好优化、量化、剪枝或真实用户任务。</li>
+</ul>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c24.html">上一章 C24</a><a href="c25-answer.html">独立作答后核对</a><a href="c26.html">下一章 C26</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

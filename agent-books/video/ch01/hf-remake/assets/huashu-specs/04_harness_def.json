@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "while 循环", "data": {"icon": "bulb"}},
+    {"at": 1.2, "kind": "point", "text": "假设理想世界"},
+    {"at": 2.6, "kind": "draw", "text": "Agent Harness", "data": {"icon": "target"}},
+    {"at": 4.0, "kind": "point", "text": "流式 · 权限 · 上下文 · 恢复 · 持久化"},
+    {"at": 5.8, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

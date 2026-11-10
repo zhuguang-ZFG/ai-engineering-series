@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "cli": {
+    "term": {
+      "zh": "CLI"
+    },
+    "forms": {
+      "zh": [
+        "CLI"
+      ]
+    },
+    "plain": {
+      "zh": "终端接收命令与参数的入口"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch01.b-opening"
+    ]
+  },
+  "agents": {
+    "term": {
+      "zh": "AGENTS.md"
+    },
+    "forms": {
+      "zh": [
+        "AGENTS.md"
+      ]
+    },
+    "plain": {
+      "zh": "随项目目录组织的工作说明"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch03.b-opening"
+    ]
+  },
+  "cwd": {
+    "term": {
+      "zh": "cwd"
+    },
+    "forms": {
+      "zh": [
+        "cwd"
+      ]
+    },
+    "plain": {
+      "zh": "本次操作解析相对路径的工作目录"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch03.b-term-cwd"
+    ]
+  },
+  "thread": {
+    "term": {
+      "zh": "thread"
+    },
+    "forms": {
+      "zh": [
+        "thread",
+        "Thread"
+      ]
+    },
+    "plain": {
+      "zh": "关联持续任务历史的身份"
+    },
+    "priority": "extra",
+    "mark": true,
+    "evidence": [
+      "codex-ch04.b-term-thread"
+    ]
+  },
+  "turn": {
+    "term": {
+      "zh": "turn"
+    },
+    "forms": {
+      "zh": [
+        "turn",
+        "Turn"
+      ]
+    },
+    "plain": {
+      "zh": "一次输入推动的处理回合"
+    },
+    "priority": "extra",
+    "mark": true,
+    "evidence": [
+      "codex-ch04.b-term-thread"
+    ]
+  },
+  "tool": {
+    "term": {
+      "zh": "工具"
+    },
+    "forms": {
+      "zh": [
+        "工具"
+      ]
+    },
+    "plain": {
+      "zh": "代理通过执行器调用的具体动作"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch06.b-opening"
+    ]
+  },
+  "approval": {
+    "term": {
+      "zh": "审批"
+    },
+    "forms": {
+      "zh": [
+        "审批"
+      ]
+    },
+    "plain": {
+      "zh": "对待执行动作作出决定的流程"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch07.b-term-approval"
+    ]
+  },
+  "sandbox": {
+    "term": {
+      "zh": "沙箱"
+    },
+    "forms": {
+      "zh": [
+        "沙箱"
+      ]
+    },
+    "plain": {
+      "zh": "限制执行能力的运行环境约束"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch08.b-term-sandbox"
+    ]
+  },
+  "execpolicy": {
+    "term": {
+      "zh": "execpolicy"
+    },
+    "forms": {
+      "zh": [
+        "execpolicy"
+      ]
+    },
+    "plain": {
+      "zh": "按命令 token 前缀计算决定的策略组件"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch10.b-term-execpolicy"
+    ]
+  },
+  "git": {
+    "term": {
+      "zh": "Git"
+    },
+    "forms": {
+      "zh": [
+        "Git"
+      ]
+    },
+    "plain": {
+      "zh": "记录提交并比较文件变化的版本工具"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch11.b-term-git"
+    ]
+  },
+  "hook": {
+    "term": {
+      "zh": "Hook"
+    },
+    "forms": {
+      "zh": [
+        "Hook"
+      ]
+    },
+    "plain": {
+      "zh": "在指定生命周期事件运行的处理器"
+    },
+    "priority": "extra",
+    "mark": true,
+    "evidence": [
+      "codex-ch12.b-opening"
+    ]
+  },
+  "plugin": {
+    "term": {
+      "zh": "插件"
+    },
+    "forms": {
+      "zh": [
+        "插件"
+      ]
+    },
+    "plain": {
+      "zh": "把技能、Hook、服务声明等资源组织成包"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch12.b-opening"
+    ]
+  },
+  "mcp": {
+    "term": {
+      "zh": "MCP"
+    },
+    "forms": {
+      "zh": [
+        "MCP"
+      ]
+    },
+    "plain": {
+      "zh": "外部工具与资源的协议接口"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch13.b-term-mcp"
+    ]
+  },
+  "jsonl": {
+    "term": {
+      "zh": "JSONL"
+    },
+    "forms": {
+      "zh": [
+        "JSONL"
+      ]
+    },
+    "plain": {
+      "zh": "每一行都是独立 JSON 对象的记录格式"
+    },
+    "priority": "extra",
+    "mark": true,
+    "evidence": [
+      "codex-ch14.b-term-jsonl"
+    ]
+  },
+  "schema": {
+    "term": {
+      "zh": "schema"
+    },
+    "forms": {
+      "zh": [
+        "schema",
+        "Schema"
+      ]
+    },
+    "plain": {
+      "zh": "描述数据字段、类型与局部约束的结构"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch15.b-term-schema"
+    ]
+  },
+  "worktree": {
+    "term": {
+      "zh": "worktree"
+    },
+    "forms": {
+      "zh": [
+        "worktree",
+        "工作树"
+      ]
+    },
+    "plain": {
+      "zh": "供一项工作检出与修改文件的目录"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "codex-ch16.b-opening"
+    ]
+  }
+}

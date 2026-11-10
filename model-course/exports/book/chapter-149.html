@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>域名、DNS 与 HTTPS · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 149 / 195</p><article><h1 id="域名dns-与-https">域名、DNS 与 HTTPS</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#域名-dns-与-https-原理">域名 DNS 与 HTTPS 原理</a><ul><li><a href="#0-全景图从域名到安全连接">0. 全景图：从域名到安全连接</a></li><li><a href="#1-dns-解析互联网的电话簿">1. DNS 解析：互联网的&quot;电话簿&quot;</a></li><li><a href="#2-dns-记录类型域名背后的配置表">2. DNS 记录类型：域名背后的&quot;配置表&quot;</a></li><li><a href="#3-https-与-tls给数据穿上防弹衣">3. HTTPS 与 TLS：给数据穿上&quot;防弹衣&quot;</a></li><li><a href="#4-证书信任链凭什么相信这个网站">4. 证书信任链：凭什么相信这个网站</a></li><li><a href="#5-加密是底线的原理">5. 加密是底线的原理</a></li><li><a href="#总结-35">总结</a></li><li><a href="#延伸阅读-24">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="域名-dns-与-https-原理">域名 DNS 与 HTTPS 原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>当你在浏览器输入 <code>www.google.com</code> 并按下回车，背后发生了什么？</strong> 这个看似简单的动作，背后涉及域名解析、DNS 查询、TLS 加密握手等一系列精密的协作过程。理解这些机制，是每个开发者的必修课——它直接关系到你的网站能不能被访问、数据会不会被窃取。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>DNS 原理</strong>：理解域名如何被翻译成 IP 地址的完整过程</li>
+<li><strong>记录类型</strong>：掌握 A、CNAME、MX 等常见 DNS 记录的用途</li>
+<li><strong>HTTPS 机制</strong>：理解 TLS 握手如何建立安全连接</li>
+<li><strong>证书体系</strong>：了解数字证书的信任链和验证机制</li>
+<li><strong>安全意识</strong>：明白为什么 HTTPS 是现代 Web 的底线要求</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>DNS 解析</td>
+<td>递归查询、迭代查询</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>DNS 记录</td>
+<td>A、CNAME、MX、TXT</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>HTTPS 与 TLS</td>
+<td>握手过程、加密通信</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>证书信任链</td>
+<td>CA、根证书、中间证书</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>HTTP vs HTTPS</td>
+<td>明文 vs 加密、安全对比</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图从域名到安全连接">0. 全景图：从域名到安全连接</h3>
+<p>互联网的通信基于 IP 地址（如 142.250.80.46），但人类记不住这些数字。于是我们发明了<strong>域名系统（DNS）</strong>——互联网的&quot;电话簿&quot;，把人类可读的域名翻译成机器可读的 IP 地址。</p>
+<p>但光能找到服务器还不够。如果通信内容是明文传输的，任何中间人都能窃听、篡改你的数据。<strong>HTTPS</strong> 就是解决这个问题的——它在 HTTP 之上加了一层 TLS 加密，确保数据在传输过程中的机密性和完整性。</p>
+<blockquote>
+<p><strong>一次完整的网页访问</strong></p>
+</blockquote>
+<ol>
+<li><strong>域名解析</strong>：浏览器问 DNS &quot;www.google.com 的 IP 是多少？&quot;，DNS 回答 &quot;142.250.80.46&quot;</li>
+<li><strong>TCP 连接</strong>：浏览器与服务器建立 TCP 三次握手</li>
+<li><strong>TLS 握手</strong>：双方协商加密算法、验证证书、交换密钥</li>
+<li><strong>加密通信</strong>：所有 HTTP 数据通过加密通道传输</li>
+</ol>
+<h3 id="1-dns-解析互联网的电话簿">1. DNS 解析：互联网的&quot;电话簿&quot;</h3>
+<p>DNS（Domain Name System）的工作原理就像查电话簿：你知道对方的名字（域名），需要查到对方的电话号码（IP 地址）。但互联网的&quot;电话簿&quot;不是一本，而是一个分层的分布式系统。</p>
+<blockquote>
+<p><strong>DNS 解析的四个步骤</strong></p>
+</blockquote>
+<ol>
+<li><strong>浏览器缓存</strong>：先查本地缓存，如果之前访问过这个域名，直接用缓存的 IP</li>
+<li><strong>递归解析器</strong>：缓存没命中，请求发给 ISP 的递归解析器（如 8.8.8.8）</li>
+<li><strong>逐级查询</strong>：递归解析器依次询问根域名服务器 → 顶级域服务器（.com）→ 权威域名服务器（google.com）</li>
+<li><strong>返回结果</strong>：权威服务器返回最终 IP，递归解析器缓存结果并返回给浏览器</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>服务器</th>
+<th>职责</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>根域</td>
+<td>Root Server</td>
+<td>知道所有顶级域的地址</td>
+<td>全球 13 组</td>
+</tr>
+<tr>
+<td>顶级域</td>
+<td>TLD Server</td>
+<td>管理 .com、.cn、.org 等</td>
+<td>每个后缀一组</td>
+</tr>
+<tr>
+<td>权威域</td>
+<td>Authoritative</td>
+<td>存储具体域名的 DNS 记录</td>
+<td>每个域名至少 2 个</td>
+</tr>
+<tr>
+<td>递归解析器</td>
+<td>Resolver</td>
+<td>代替用户完成整个查询过程</td>
+<td>ISP 或公共 DNS</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-dns-记录类型域名背后的配置表">2. DNS 记录类型：域名背后的&quot;配置表&quot;</h3>
+<p>DNS 不只是把域名翻译成 IP。通过不同类型的 DNS 记录，你可以控制邮件投递、域名跳转、服务发现等多种行为。理解这些记录类型，是配置域名和排查网络问题的基础。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>用途</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>域名 → IPv4 地址</td>
+<td><code>example.com → 93.184.216.34</code></td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>域名 → IPv6 地址</td>
+<td><code>example.com → 2606:2800:220:1:...</code></td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>域名 → 另一个域名（别名）</td>
+<td><code>www.example.com → example.com</code></td>
+</tr>
+<tr>
+<td>MX</td>
+<td>指定邮件服务器</td>
+<td><code>example.com → mail.example.com</code></td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>存储文本信息</td>
+<td>SPF 验证、域名所有权验证</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>指定权威域名服务器</td>
+<td><code>example.com → ns1.example.com</code></td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>实际场景中的 DNS 配置</strong></p>
+</blockquote>
+<ul>
+<li><strong>部署网站</strong>：添加 A 记录指向服务器 IP，或 CNAME 指向 CDN 域名</li>
+<li><strong>配置邮箱</strong>：添加 MX 记录指向邮件服务器，TXT 记录配置 SPF/DKIM 防垃圾邮件</li>
+<li><strong>验证域名所有权</strong>：云服务商要求你添加特定 TXT 记录来证明你拥有这个域名</li>
+<li><strong>负载均衡</strong>：同一域名配置多条 A 记录，DNS 轮询分发流量</li>
+</ul>
+<h3 id="3-https-与-tls给数据穿上防弹衣">3. HTTPS 与 TLS：给数据穿上&quot;防弹衣&quot;</h3>
+<p>HTTP 协议的数据是明文传输的——就像寄明信片，邮递员（中间人）可以随意阅读内容。HTTPS 在 HTTP 之上加了一层 TLS（Transport Layer Security）加密，相当于把明信片装进了密封信封。</p>
+<p>TLS 握手是建立安全连接的关键步骤，它在正式传输数据之前，完成身份验证和密钥协商。</p>
+<blockquote>
+<p><strong>TLS 1.3 握手的核心步骤</strong></p>
+</blockquote>
+<ol>
+<li><strong>Client Hello</strong>：客户端发送支持的加密算法列表和一个随机数</li>
+<li><strong>Server Hello</strong>：服务器选择加密算法，返回数字证书和随机数</li>
+<li><strong>证书验证</strong>：客户端验证服务器证书是否可信（检查 CA 签名、有效期、域名匹配）</li>
+<li><strong>密钥交换</strong>：双方通过 ECDHE 算法协商出一个共享密钥（不在网络上传输密钥本身）</li>
+<li><strong>加密通信</strong>：后续所有数据使用协商好的对称密钥加密传输</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>TLS 1.2</th>
+<th>TLS 1.3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>握手往返次数</td>
+<td>2-RTT</td>
+<td>1-RTT（首次）/ 0-RTT（恢复）</td>
+</tr>
+<tr>
+<td>密钥交换</td>
+<td>RSA 或 ECDHE</td>
+<td>仅 ECDHE（前向安全）</td>
+</tr>
+<tr>
+<td>加密算法</td>
+<td>支持较多旧算法</td>
+<td>仅保留安全算法</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较慢</td>
+<td>更快</td>
+</tr>
+</tbody></table></div>
+<h3 id="4-证书信任链凭什么相信这个网站">4. 证书信任链：凭什么相信这个网站</h3>
+<p>TLS 握手中最关键的一步是&quot;证书验证&quot;。浏览器怎么判断一个网站的证书是真的，而不是攻击者伪造的？答案是<strong>证书信任链</strong>——一个层层背书的信任体系。</p>
+<blockquote>
+<p><strong>证书信任链的三层结构</strong></p>
+</blockquote>
+<ol>
+<li><strong>根证书（Root CA）</strong>：由受信任的证书颁发机构签发，预装在操作系统和浏览器中。这是信任的&quot;锚点&quot;。</li>
+<li><strong>中间证书（Intermediate CA）</strong>：由根 CA 签发，用于签发终端证书。根 CA 不直接签发网站证书，是为了安全隔离。</li>
+<li><strong>终端证书（Leaf Certificate）</strong>：你的网站实际使用的证书，由中间 CA 签发，包含域名、公钥、有效期等信息。</li>
+</ol>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>证书类型</th>
+<th>验证级别</th>
+<th>颁发速度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DV（域名验证）</td>
+<td>仅验证域名所有权</td>
+<td>分钟级</td>
+<td>个人网站、博客</td>
+</tr>
+<tr>
+<td>OV（组织验证）</td>
+<td>验证组织身份</td>
+<td>数天</td>
+<td>企业官网</td>
+</tr>
+<tr>
+<td>EV（扩展验证）</td>
+<td>严格验证组织</td>
+<td>数周</td>
+<td>银行、金融机构</td>
+</tr>
+<tr>
+<td>通配符证书</td>
+<td>覆盖所有子域名</td>
+<td>视类型而定</td>
+<td>多子域名场景</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-加密是底线的原理">5. 加密是底线的原理</h3>
+<p>2024 年，全球超过 95% 的网页流量已经通过 HTTPS 传输。Chrome 浏览器会对 HTTP 网站标记&quot;不安全&quot;警告，搜索引擎也会降低 HTTP 网站的排名。HTTPS 不再是&quot;可选项&quot;，而是现代 Web 的底线要求。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据传输</td>
+<td>明文，可被窃听</td>
+<td>加密，无法被窃听</td>
+</tr>
+<tr>
+<td>身份验证</td>
+<td>无，无法确认服务器身份</td>
+<td>有，通过证书验证服务器</td>
+</tr>
+<tr>
+<td>数据完整性</td>
+<td>无保护，可被篡改</td>
+<td>有保护，篡改会被检测</td>
+</tr>
+<tr>
+<td>端口</td>
+<td>80</td>
+<td>443</td>
+</tr>
+<tr>
+<td>SEO 影响</td>
+<td>搜索排名降低</td>
+<td>搜索排名加分</td>
+</tr>
+<tr>
+<td>浏览器表现</td>
+<td>显示&quot;不安全&quot;警告</td>
+<td>显示锁图标</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>免费获取 HTTPS 证书</strong>
+<strong>Let&#39;s Encrypt</strong> 是一个免费、自动化的证书颁发机构，让任何网站都能零成本启用 HTTPS。配合 Certbot 工具，可以一键申请和自动续期证书。大多数云平台和 CDN 服务商也提供免费的 SSL 证书。</p>
+</blockquote>
+<h3 id="总结-35">总结</h3>
+<p>域名、DNS 和 HTTPS 是互联网基础设施的三大支柱。DNS 让你用人类可读的名字访问网站，HTTPS 确保通信过程安全可信。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>DNS 是分层系统</strong>：根域 → 顶级域 → 权威域，逐级查询，缓存加速</li>
+<li><strong>记录类型各有用途</strong>：A 记录指向 IP，CNAME 做别名，MX 管邮件，TXT 做验证</li>
+<li><strong>TLS 握手建立信任</strong>：证书验证 + 密钥协商，TLS 1.3 只需 1-RTT</li>
+<li><strong>证书信任链</strong>：根 CA → 中间 CA → 终端证书，层层背书</li>
+<li><strong>HTTPS 是底线</strong>：免费证书（Let&#39;s Encrypt）让加密零门槛</li>
+</ol>
+<h3 id="延伸阅读-24">延伸阅读</h3>
+<ul>
+<li><a href="https://howdns.works/">How DNS Works</a> - 漫画形式讲解 DNS 工作原理</li>
+<li><a href="https://letsencrypt.org/docs/">Let&#39;s Encrypt 文档</a> - 免费 SSL 证书申请指南</li>
+<li><a href="https://www.cloudflare.com/learning/dns/what-is-dns/">Cloudflare Learning Center</a> - DNS 和网络安全系统教程</li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc8446">TLS 1.3 RFC 8446</a> - TLS 1.3 协议规范</li>
+<li><a href="https://www.ssllabs.com/ssltest/">SSL Labs</a> - 在线检测网站 HTTPS 配置质量</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-148.html">← CI / CD 自动化</a><a rel="next" href="chapter-150.html">负载均衡与网关 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

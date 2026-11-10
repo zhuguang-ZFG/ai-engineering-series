@@ -1,0 +1,14 @@
+<svg class="a-fork" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path class="pulse" d="M12.6 27.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path class="pulse" d="M47.6 12.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path class="pulse" d="M47.6 42.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M19 32q8.2 1.2 13-4c3.7-4.1 6.7-9.1 11.5-10.8" stroke-width="2.7" pathLength="100"/>
+  <path d="M27 32c7.5 1.2 10.6 12.5 16.3 14.8" stroke-width="2.3" pathLength="100"/>
+  <path d="M20 29.4q4.8-.1 8.8 1.3" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <path d="M26 31q3.6.5 6-3l4.1-4.5q-3.6 7.6-7.9 10.1Z" fill="currentColor" stroke="none" opacity=".75"/>
+  <path d="m34 24.4 3.5 2.8m-2.4-4.8 3.8 2.7M33.5 39l4.5-3.2" stroke-width=".9" opacity=".4" pathLength="100"/>
+  <circle cx="30.5" cy="26.5" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+  <circle cx="49" cy="17" r="1.1" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="49" cy="47" r="1.1" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="14" cy="32" r="7.6" stroke-width=".9" opacity=".28" pathLength="100"/>
+</svg>

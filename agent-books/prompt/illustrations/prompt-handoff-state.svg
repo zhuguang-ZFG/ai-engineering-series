@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 720" role="img" aria-label="交接单指向实际文件与回执，新会话先核对；一致才继续，出现差异先查明；已有取消回执不能当成待执行动作" color="#263f35">
+  <title>恢复任务时，先核对交接单指向的状态</title>
+  <desc>交接单记录目标与权限、材料版本、成果和回执位置以及未完成项。新会话打开实际文件，比较交接记录：一致时继续检查候补说明，有差异时记录并核对。在虚构教学回执 t-02 中，cancel-07 已完成取消 Q07；会话中断后应根据已有回执整理说明，不能因为中断就再取消一次。回执未到且状态未知时，应先查询或保留未知。</desc>
+  <path d="M13 15 Q386 8 746 16 L748 703 Q382 713 12 704 Z" fill="#f7f1e5"/>
+  <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 89 Q380 85 724 90" opacity=".4"/>
+    <path d="M45 131 L271 127 276 338 Q159 344 43 337 Z M51 137 Q161 133 268 135"/>
+    <path d="M58 199 Q163 197 260 199 M59 245 Q166 242 258 245 M60 290 Q166 292 259 289" opacity=".3"/>
+    <path d="M289 232 C322 230 336 215 360 215 M350 207 L361 215 350 223" stroke-width="3"/>
+    <path d="M379 140 L666 136 673 267 376 272 Z M386 147 L660 144"/>
+    <path d="M524 284 Q523 308 523 327 M515 318 L523 329 531 318"/>
+    <path d="M524 330 L574 367 524 405 473 367 Z"/>
+    <path d="M472 367 Q431 368 398 368 L398 425 M390 416 L398 427 406 416"/>
+    <path d="M575 367 Q652 366 671 368 L671 425 M663 416 L671 427 679 416" stroke="#a26732"/>
+    <path d="M340 470 Q398 476 456 470 M588 470 Q651 474 711 470" opacity=".5"/>
+    <path d="M38 507 Q382 503 722 508" stroke-dasharray="5 8" opacity=".45"/>
+    <path d="M70 601 C236 596 433 604 686 599"/>
+    <path d="M677 591 L689 599 677 607"/>
+    <circle cx="84" cy="601" r="7" fill="currentColor"/>
+    <circle cx="289" cy="601" r="7" fill="#f7f1e5"/>
+    <circle cx="469" cy="601" r="7" fill="currentColor"/>
+    <path d="M282 583 L297 619 M304 582 L319 618" stroke="#a26732" stroke-width="3"/>
+  </g>
+  <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <text x="39" y="57" font-size="29" font-weight="700">交接单提供入口，文件和回执证明状态</text>
+    <text x="62" y="174" font-size="27" font-weight="700">HANDOFF.md</text>
+    <text x="62" y="228" font-size="23">目标、权限、版本</text>
+    <text x="62" y="275" font-size="23">成果与回执的位置</text>
+    <text x="62" y="321" font-size="23">未完成项、下一步</text>
+    <text x="398" y="180" font-size="24" font-weight="700">新会话：打开实际文件</text>
+    <text x="398" y="216" font-size="21">任务、草稿、检查记录</text>
+    <text x="398" y="249" font-size="21">重新读取材料与已有回执</text>
+    <text x="523" y="375" text-anchor="middle" font-size="22">核对</text>
+    <text x="370" y="352" font-size="22">相符</text>
+    <text x="618" y="352" font-size="22" fill="#8b5529">有差异</text>
+    <text x="398" y="456" text-anchor="middle" font-size="22">继续未完成项</text>
+    <text x="651" y="456" text-anchor="middle" font-size="22" fill="#8b5529">先记录并查明</text>
+    <text x="48" y="546" font-size="23" font-weight="700">动作之后中断：沿回执恢复，不重放动作</text>
+    <text x="54" y="581" font-size="20">cancel-07 已完成</text>
+    <text x="257" y="581" font-size="20" fill="#8b5529">会话中断</text>
+    <text x="422" y="581" font-size="20">读取 t-02</text>
+    <text x="597" y="581" font-size="20">整理说明</text>
+    <text x="54" y="640" font-size="22">Q07 已取消；本轮只说明已有结果。</text>
+    <text x="42" y="684" font-size="19">教学回执 · 请求已发出但结果未知时，先查询；无法查询就保留未知状态。</text>
+  </g>
+</svg>

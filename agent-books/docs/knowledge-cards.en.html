@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23B4472F' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23B4472F'/%3E%3C/svg%3E">
+<title>Yù Yú · Knowledge Cards</title>
+<meta property="og:title" content="Yù Yú · Knowledge Cards">
+<meta property="og:description" content="Fifteen chapters, three 3:4 cards each: the one-line hook, the core mechanism, the three sentences to keep.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="cover.png">
+<style>
+body{margin:0;font:15px/1.75 "Iowan Old Style",Palatino,Georgia,"Noto Serif SC",serif;background:#F5F0E6;color:#26221B}
+header{padding:34px 30px 8px;max-width:1040px;margin:0 auto;text-align:center}
+h1{font-size:26px;margin:0 0 4px;font-weight:650}
+.brush{width:200px;height:9px;color:#B4472F;display:block;margin:2px auto 8px}
+.sub{color:#5C5448;font-size:13.5px;margin:0}
+.hint{color:#6E6353;font-size:12.5px;margin:8px 0 0}
+main{max-width:1040px;margin:0 auto;padding:10px 30px 50px}
+.ch{margin:26px 0 0}
+.ch-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px dashed rgba(38,34,27,.25);
+  padding:0 0 8px;margin:0 0 14px}
+.ch-no{margin:0;font-size:12px;letter-spacing:.14em;color:#9C3A26;white-space:nowrap}
+.ch-head h2{font-size:19px;margin:0;font-weight:650}
+.deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.kcard{position:relative;aspect-ratio:3/4;border:1.5px solid rgba(38,34,27,.3);
+  border-radius:10px 6px 12px 6px/6px 12px 6px 10px;padding:22px 20px 16px;
+  display:flex;flex-direction:column;gap:9px;overflow:hidden;
+  box-shadow:2px 3px 0 rgba(38,34,27,.08)}
+.kcard::after{content:"";position:absolute;inset:7px;pointer-events:none;
+  border:1px dashed rgba(38,34,27,.18);
+  border-radius:6px 3px 7px 4px/4px 7px 3px 6px}
+.k-hook{background:#FBF6EC}
+.k-core{background:#F3EAD8}
+.k-recap{background:#EADFC7}
+.k-kicker{margin:0;font-size:11.5px;letter-spacing:.18em;color:#B4472F}
+.k-mark{width:58px;height:58px;color:#9C3A26;flex:0 0 auto}
+.k-mark svg{width:100%;height:100%}
+.k-quote{margin:0;font-size:16.5px;line-height:1.62;color:#26221B}
+.k-quote::before{content:"“";color:#B4472F}
+.k-quote::after{content:"”";color:#B4472F}
+.k-plain{margin:0;font-size:13.5px;line-height:1.65}
+.k-ana{margin:0;font-size:12.5px;line-height:1.6;color:#5C5448}
+.k-plate{width:100%;height:auto;color:#5A5040;margin:auto 0}
+.k-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.k-list li{font-size:12.5px;line-height:1.55;padding-left:20px;position:relative}
+.k-list li::before{counter-increment:kcard;content:counter(kcard);position:absolute;
+  left:0;top:1px;width:15px;height:15px;line-height:15px;text-align:center;
+  font-size:10px;color:#FBF6EC;background:#B4472F;border-radius:50%}
+.k-list{counter-reset:kcard}
+.k-foot{margin:auto 0 0;font-size:11px;letter-spacing:.12em;color:#675F4F}
+footer{max-width:1040px;margin:34px auto 0;padding:16px 30px 40px;
+  border-top:1px dashed rgba(38,34,27,.25);font-size:12.5px;color:#5C5448;text-align:center}
+footer a{color:#3A5A78;text-decoration:none;border-bottom:1px dashed rgba(76,112,147,.5)}
+footer a:hover{color:#B4472F}
+a:focus-visible{outline:2px solid #B4472F;outline-offset:3px}
+@media (max-width:820px){.deck{grid-template-columns:1fr}
+  .kcard{aspect-ratio:auto;min-height:360px}}
+@media print{body{background:#FFFDF8}
+  header .hint,footer{display:none}
+  .ch{break-before:page}
+  .kcard{box-shadow:none;break-inside:avoid}
+  .deck{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media screen and (prefers-reduced-motion: reduce){
+  footer a{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Yù Yú · Knowledge Cards</h1>
+  <svg class="brush" viewBox="0 0 190 10" aria-hidden="true"><path d="M4 6q30-4.5 62-2.5t72-1q24 .2 46 1.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".85"/><path d="M152 5.6q10-.6 20-.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".45"/><circle cx="178" cy="5.8" r="1.5" fill="currentColor" stroke="none"/></svg>
+  <p class="sub">Fifteen chapters, three 3:4 cards each: the one-line hook, the core mechanism, the three sentences to keep.</p>
+  <p class="hint">Every card is drawn from the book's own plates; readable on a phone, and each card keeps to its own page in print. No scripts, so it looks the same offline.</p>
+</header>
+<main>
+<section class="ch" id="ch01" aria-labelledby="ch01-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 1 · Foundations</p>
+    <h2 id="ch01-h">Chapter 1　The New Paradigm of Agent Programming</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-compass" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M31.5 13.7c11.4-.5 19.5 8.8 18.8 19.3-.3 11.7-9.1 18-20 17C19 49.5 12.7 41 13.8 30c.4-8.5 6.7-14.9 14.6-15.6" stroke-width="2.4" pathLength="100"/>
+  <circle class="spin" cx="32" cy="32" r="25" stroke-dasharray="2 6" stroke-width="1.3" opacity=".36"/>
+  <path d="M31.8 17q-.8 15 .2 30" stroke-width="1.4" opacity=".65" pathLength="100"/>
+  <path d="M18 32.3q14-1 28-.4" stroke-width="1.3" opacity=".6" pathLength="100"/>
+  <path d="m21.5 21.5 7.4 6.4M35.5 36l6.6 6" stroke-width="1.1" opacity=".5" pathLength="100"/>
+  <path d="m42.1 21.8-6.7 6.5M28.6 35.8l-7 6.2" stroke-width="1.1" opacity=".5" pathLength="100"/>
+  <path d="m31.8 17 4.6 14.4L32 33.2l-4.4-1.1Z" fill="currentColor" stroke="none"/>
+  <path d="m32 47-3.5-12.3L32 32l3.7 1.6Z" stroke-width="1.3" pathLength="100"/>
+  <path d="M17 38.5c2.3 6.7 8.3 10 14.8 10.1M35.5 16.4q7.1 2.1 10.1 8" stroke-width=".75" opacity=".32" pathLength="100"/>
+  <path d="m39.6 43.5 3.2-3m-1.1 4.3 3.2-3.3" stroke-width=".8" opacity=".4" pathLength="100"/>
+  <circle cx="32" cy="32" r="2.7" fill="currentColor" stroke="none"/>
+  <circle cx="32" cy="32" r="5.8" stroke-width="1.2" opacity=".65" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">The model is the horse -- it only pulls. The harness is the cart: it picks the road and decides the load.</blockquote>
+      <p class="k-foot">Chapter 1</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-pillars" viewBox="0 0 340 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 19Q69 14 124 17T231 17Q280 15 326 19" stroke-width="3.4" pathLength="100"/><path d="M18 25Q91 21 164 24T322 24" opacity=".32" stroke-width=".9" pathLength="100"/><path d="M18 96Q91 92 168 95T322 96" stroke-width="3" pathLength="100"/><path d="M22 102Q95 99 170 102T318 102" opacity=".3" stroke-width=".9" pathLength="100"/>
+<g opacity=".4" stroke-width="1.1"><path d="M40 28q-2 12 0 24" pathLength="100"/><path d="M105 28q1 11 0 22" pathLength="100"/><path d="M170 28q-1 10 0 22" pathLength="100"/><path d="M235 28q2 10 0 21" pathLength="100"/><path d="M300 28q-1 10 0 21" pathLength="100"/></g>
+<g opacity=".92"><path d="M18 56q19-4 44-1" stroke-width="2.8" pathLength="100"/><path d="M18 71c8-7 15-5 22 0s15 6 22-1" pathLength="100"/><path d="M18 88c8-7 15-5 22 0s15 5 22-1" stroke-width="2.5" pathLength="100"/><path d="M64 67l5 5-5 5" pathLength="100"/><circle cx="51" cy="61" r="2" fill="currentColor" stroke="none"/></g>
+<g opacity=".92"><path d="M84 55q20-4 43 0l1 31q0 5-5 5l-39-1q-4-16 0-35" stroke-width="2.5" pathLength="100"/><path d="M104 62c14-2 16 18 2 21s-16-18-2-21" pathLength="100"/><circle cx="105" cy="72" r="2.4" fill="currentColor" stroke="none"/></g>
+<g opacity=".92"><path d="M150 54q19-3 40 0l-1 8q-18 2-39-1z" stroke-width="2.3" pathLength="100"/><path d="M150 68q20-2 40 0l1 7q-22 3-41 1z" pathLength="100"/><path d="M150 82q19-2 40 0l-1 8q-19 2-39-1z" stroke-width="2.6" pathLength="100"/><path d="M160 57l3 3 5-4" stroke-width="1.5" pathLength="100"/><path d="M194 68q8 5 0 12" pathLength="100"/></g>
+<g opacity=".92"><path d="M201 91l10-1-1-12 11 1-1-14 11 1-1-14 11-1" stroke-width="2.8" pathLength="100"/><path d="M243 48q1-4 0-9" pathLength="100"/><path d="M240 43l3-4 3 4" pathLength="100"/></g>
+<g opacity=".92"><path d="M278 54q22-4 44 0l1 33q0 4-4 4l-41-1q-3-18 0-36" stroke-width="2.5" pathLength="100"/><path d="M299 62c13-2 16 18 2 21s-16-18-2-21" pathLength="100"/><path d="M295 72l4 4 7-8" stroke-width="2.6" pathLength="100"/></g>
+<g opacity=".35" stroke-width=".9"><path d="M69 88q5 3 10 0" pathLength="100"/><path d="M134 88q5 3 10 0" pathLength="100"/><path d="M252 88q5 3 10 0" pathLength="100"/><path d="M86 58l-1 23m4-24-1 12m193-12-1 22M31 19l3 4m3-4 3 4m69-5 3 4m126-4 3 4m58-4 3 4" pathLength="100"/></g><circle cx="24" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="268" cy="91" r="1.6" fill="currentColor" stroke="none" opacity=".6"/>
+</svg></div>
+      <p class="k-plain">the hard part moves to engineering: permissions, state, recovery - one runtime and five principles handle it</p>
+      <p class="k-ana">✦ a renovation: before any appliance you run wiring, fit a leakage breaker and label every circuit</p>
+      <p class="k-foot">Chapter 1</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>The real shift is not that models chat better but that models now call tools, and the Agent Harness is the runtime that catches this.</li><li>A thin API wrapper is not a harness -- miss that line and the system falls apart in production; the 510,000 lines of Claude Code fill exactly those holes.</li><li>To size up an agent system, count the harness layers first: streaming, permissions, caching, state; miss any one and it does not count.</li></ol>
+      <p class="k-foot">Chapter 1</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch02" aria-labelledby="ch02-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 1 · Foundations</p>
+    <h2 id="ch02-h">Chapter 2　The Dialog Loop — The Agent's Heartbeat</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-chase" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <g class="spin">
+    <path d="M31.5 11.5C44 10 53.2 20.3 51 31.8q-1 7.1-6.2 12.1" stroke-width="2.6" pathLength="100"/>
+    <path d="m44.8 43.9 1.1-9.4-9.1 3.4" stroke-width="2.5" pathLength="100"/>
+    <path d="M32.5 52.5C20 54 10.8 43.7 13 32.2q1-7.1 6.2-12.1" stroke-width="2.6" pathLength="100"/>
+    <path d="m19.2 20.1-1.1 9.4 9.1-3.4" stroke-width="2.5" pathLength="100"/>
+    <path d="M38 12.2q13.6 3.5 13.2 17.9-1.8-12.3-13.2-17.9ZM26 51.8Q12.4 48.3 12.8 33.9 14.6 46.2 26 51.8Z" fill="currentColor" stroke="none"/>
+    <path d="m44.8 43.9 1.1-9.4-2.7 3.1-6.4.3ZM19.2 20.1l-1.1 9.4 2.7-3.1 6.4-.3Z" fill="currentColor" stroke="none"/>
+  </g>
+  <path d="M36.5 16.1c8.3 1.5 12.5 11.8 8.3 18.7" stroke-width=".9" opacity=".3" pathLength="100"/>
+  <path d="M27.5 47.9C19.2 46.4 15 36.1 19.2 29.2" stroke-width=".9" opacity=".3" pathLength="100"/>
+  <path d="m25.4 31.7 3.4.2 2-4.2 2.8 8.3 2.3-4 3.3-.1" stroke-width="1.25" opacity=".65" pathLength="100"/>
+  <circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+  <circle cx="39" cy="24" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">The dialog loop is the agent's heartbeat: every yield is one beat, and a horse that takes the rein can run the long road.</blockquote>
+      <p class="k-foot">Chapter 2</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-label="Pausing event consumption differs from cancelling work and cleaning up" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 30Q15 20 29 19L327 21Q341 20 340 34L338 274Q340 282 326 282L28 280Q17 281 18 268ZM380 30Q378 20 392 20L692 18Q705 19 702 33L704 267Q704 282 690 281L392 283Q379 282 380 268Z" opacity=".35"/>
+  <g fill="currentColor" stroke="none" font-family="serif" text-anchor="middle">
+    <text x="178" y="53" font-size="20">A · PAUSE</text><text x="541" y="53" font-size="20">B · CANCEL</text>
+    <text x="75" y="113" font-size="18">UI</text><text x="270" y="113" font-size="18">yield</text>
+    <text x="75" y="215" font-size="18">API</text><text x="270" y="215" font-size="18">tool</text>
+    <text x="432" y="113" font-size="18">UI</text><text x="630" y="113" font-size="18">yield</text>
+    <text x="432" y="215" font-size="18">API</text><text x="630" y="215" font-size="18">tool</text>
+  </g>
+  <path d="M43 82C60 77 83 79 103 82l-1 47q-31 6-59 1q-3-25 0-48ZM238 82q29-5 64 0l1 46q-3 6-12 5l-53-2q-3-25 0-49ZM111 107q36-4 73 0M206 107q11-1 22 0M220 100l9 7-9 7" stroke-width="3.2"/>
+  <path d="M187 92q-1 14 1 30M199 91q1 16-1 32" stroke-width="5.8"/>
+  <path d="M75 141L75 173M270 141L270 173" stroke-dasharray="3 7" opacity=".45"/>
+  <path d="M42 184q29-5 65 0l-2 46q-28 5-63 0q-3-23 0-46ZM237 184q31-6 66 0l-2 46q-30 6-63 1q-3-22-1-47ZM114 208c34-19 74-15 110 0M214 197l11 11-14 5M221 241c-33 18-70 12-105-2M124 233l-10 5 7 9" stroke-width="3.1"/>
+  <path d="M403 82q28-6 58 0l1 46q0 5-6 5l-53-3q-3-23 0-48ZM599 82q32-5 63 0l-1 48q-28 5-61 1q-3-24-1-49ZM470 106q59-3 118 0M580 99l9 7-9 7" stroke-width="3.2"/>
+  <path d="M432 142q-2 16-1 31M423 164l8 11 8-12M629 143q3 15 2 31M623 165l8 11 8-12" stroke-width="4.1"/>
+  <path d="M402 184q31-6 65 0l-1 45q-30 6-64 1q-3-24 0-46ZM599 183q32-4 65 0l-1 47q-31 5-64 0q-3-23 0-47Z" stroke-width="3.2"/>
+  <path d="M450 187l11 12M461 187l-11 12M649 187l11 12M660 187l-11 12" stroke-width="3.8"/>
+  <path d="M472 250q20 22 44-1M479 249l6 7 14-14M582 251q-22 22-43-1M554 248l7 8 13-14" stroke-width="3"/>
+  <path d="M47 87q-2 20 0 37M241 88l-1 33M406 87l1 36M604 87l-1 36M47 188l-1 35M242 189l-1 34M406 188l1 35M604 188l-1 35" opacity=".3" stroke-width="1.1"/>
+  <path d="M358 39Q355 154 358 264" opacity=".25" stroke-dasharray="2 8"/>
+</svg></div>
+      <p class="k-plain">ask model, run tools, backfill: a pausable cancellable loop with seven continue paths and ten exit reasons</p>
+      <p class="k-ana">✦ a mailroom: log, send, await the receipt, ask again if none comes; every halt names where it stopped</p>
+      <p class="k-foot">Chapter 2</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>The main loop is an async generator: yield pushes events, yield* delegates to sub-generators, return() cancels, and the state stays immutable with a transition recorded at every jump.</li><li>Inject the four side effects -- callModel, microcompact, autocompact, uuid -- as QueryDeps, and the loop's interior turns into pure logic: you design testability in, you never bolt it on.</li><li>To size up an agent loop, ask three things: can it pause, can it cancel, and does it clean up when it ends.</li></ol>
+      <p class="k-foot">Chapter 2</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch03" aria-labelledby="ch03-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 1 · Foundations</p>
+    <h2 id="ch03-h">Chapter 3　The Tool System — The Agent's Hands</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-nut" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <g class="wiggle">
+    <path d="M30.5 7.8Q43 13 52.2 20l-.8 23Q42.6 50 31 55L12.1 43q-.5-11  .5-22.7Q21 13.1 30.5 7.8Z" stroke-width="2.6" pathLength="100"/>
+    <path d="M30.8 22.1c6.5-1 11.2 3.4 11.2 9.4.2 6.6-4.5 11-10.7 10.4-6.4-.1-10.5-4.4-10-10.4.1-4 3-7.8 6.8-8.8" stroke-width="2.4" pathLength="100"/>
+    <path d="m48.5 22.5 3.7-2.5-.8 23Q42.6 50 31 55l.8-3.8L48 40.9Z" fill="currentColor" stroke="none" opacity=".82"/>
+    <path d="M16 22q-.8 10.7.1 18.6L31.8 51M17 20.8l13.6-8.9" stroke-width="1" opacity=".45" pathLength="100"/>
+    <path d="M24.2 35.4q2.4 6.1 9.5 4.6" stroke-width=".8" opacity=".4" pathLength="100"/>
+  </g>
+  <path d="m36.2 12.5 6 3.9m-3.6-4.3 6.2 4.1m-3.1-4 5.3 3.5" stroke-width=".9" opacity=".35" pathLength="100"/>
+  <path d="M54.2 23q.2 7.5-.5 13" stroke-width=".7" opacity=".28" pathLength="100"/>
+  <circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Fifty-five tallies hang from the agent's hands, and each passes a JSON Schema shape check before it may strike.</blockquote>
+      <p class="k-foot">Chapter 3</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-bench" viewBox="0 0 340 156" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 96q74-5 148-2t156 3" stroke-width="3.5" pathLength="100"/><path d="M20 102q74-3 146-1t154 0" opacity=".45" stroke-width="1.1" pathLength="100"/><path d="M40 97q-3 24 1 50" stroke-width="2.8" pathLength="100"/><path d="M300 97q3 25-1 50" stroke-width="2.8" pathLength="100"/><path d="M40 147q64-3 130-1t130 1" opacity=".4" stroke-width="1.1" pathLength="100"/><path d="M96 108q49-3 104 1l-1 25q-49-2-102 0q-3-12-1-26" stroke-width="2.4" pathLength="100"/><path d="M138 120q11 4 20 0" opacity=".85" stroke-width="2.4" pathLength="100"/><path d="M10 22q80-5 161-2t159 3" opacity=".35" stroke-width="1" stroke-dasharray="2 7" pathLength="100"/>
+<g opacity=".9"><path d="M46 30c3 10 7 23 3 30q-4 9-10 5c-5-4-2-16 0-21z" stroke-width="2.7" pathLength="100"/><path d="M47 66q2 13-2 24" stroke-width="2.5" pathLength="100"/><circle cx="45" cy="93" r="3.4" fill="currentColor" stroke="none"/><path d="M42 42q-4 11-2 17" opacity=".35" stroke-width=".9" pathLength="100"/></g>
+<g opacity=".9"><path d="M96 28c10 7 12 16 6 24q-7 8-13 2c-7-7-1-18 7-26" stroke-width="2.7" pathLength="100"/><path d="M97 56q3 17-1 36" stroke-width="2.3" pathLength="100"/><path d="M92 96q6 7 12 0" opacity=".7" stroke-width="1.5" pathLength="100"/><path d="M92 36q-5 6-3 11" opacity=".35" stroke-width=".9" pathLength="100"/></g>
+<g opacity=".9"><path d="M150 30q-14 7-10 22c3 14 21 14 24 2q2-4 0-8" stroke-width="3" pathLength="100"/><path d="M152 64q4 13 0 28" stroke-width="2.5" pathLength="100"/><path d="M146 92q8 7 16-2" opacity=".7" stroke-width="1.5" pathLength="100"/><path d="M144 35q-7 9-1 18" opacity=".3" stroke-width=".9" pathLength="100"/></g>
+<g opacity=".9"><path d="M206 28q6 10 0 18c-6 10 8 17 15 10" stroke-width="3" pathLength="100"/><path d="M212 60q5 16 1 32" stroke-width="2.5" pathLength="100"/><path d="M200 94q11 9 24-2" opacity=".7" stroke-width="1.5" pathLength="100"/></g>
+<g opacity=".9"><path d="M262 30c12-5 23 2 23 11q-2 16-21 5" stroke-width="2.9" pathLength="100"/><path d="M266 52q-3 20 2 40" stroke-width="2.6" pathLength="100"/><circle cx="270" cy="96" r="2.8" fill="currentColor" stroke="none"/><path d="M265 33q10-2 15 5" opacity=".35" stroke-width=".9" pathLength="100"/></g>
+<g opacity=".4" stroke-width="1.1"><path d="M312 34q4 8 0 16" pathLength="100"/><path d="M322 30q3 12-1 22" pathLength="100"/></g><g opacity=".35" stroke-width="1"><path d="M60 112q8 4 4 14" pathLength="100"/><path d="M232 116q10-2 14 6" pathLength="100"/><path d="M101 112l5 4m-5 2 5 4m-5 2 5 4M42 108l3 8m-3 1 3 8m252-16-3 9" pathLength="100"/></g><circle cx="24" cy="90" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="316" cy="88" r="1.6" fill="currentColor" stroke="none" opacity=".6"/>
+</svg></div>
+      <p class="k-plain">tools share a five-part contract: reads batch together, writes queue alone, work starts mid-reply</p>
+      <p class="k-ana">✦ a kitchen: chopping runs in parallel, only one cook may touch the flame, dishes get called in order</p>
+      <p class="k-foot">Chapter 3</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Name, schema, permissions, execution, rendering -- the five-element protocol is the shared DNA of all 55 tools, and the generic contract gives each tool its own type space.</li><li>Once the contract stands, registration, dead-code elimination, concurrency partitioning, and streaming execution all have one thing to hold; mislabel isConcurrencySafe and the price is a data race.</li><li>You add a tool without touching the orchestration engine -- get the five elements right and let the defaults carry the rest.</li></ol>
+      <p class="k-foot">Chapter 3</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch04" aria-labelledby="ch04-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 1 · Foundations</p>
+    <h2 id="ch04-h">Chapter 4　The Permission Pipeline — Agent Guardrails</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-gate" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5.7 32.4q5.1-1.1 10.8-.4" stroke-width="2.5" pathLength="100"/>
+  <path d="M48 31.8q5.2-.8 10.5.2" stroke-width="2.5" pathLength="100"/>
+  <path d="M21.4 12Q20 31 21.7 51.5l3-.5" stroke-width="2.7" pathLength="100"/>
+  <path d="M42.4 12q1.2 20-.6 39.3l-3.1.4" stroke-width="2.5" pathLength="100"/>
+  <path class="redraw" d="M26.1 33.5q2.3 1.4 4.5 4.7Q35 30.8 40.9 25" stroke-width="3" pathLength="100"/>
+  <path d="M27.5 34.3q2.2 1 3.6 3.8" stroke-width=".8" opacity=".32" pathLength="100"/>
+  <path d="m18.1 12.4 6.3-.8m14.4.5 6.3.4M18.9 51.8l6.3-.3m13.5.9 6.1-.9" stroke-width="1.2" opacity=".65" pathLength="100"/>
+  <path d="M21.4 13q1.6 20 .3 37.4l-1.3-15.7ZM42.4 13l1.3 24.6-1.9 12.6Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="m17.3 18 3.4-2m-3.4 5.5 3.3-2m22.6 25.4 3.3-2.2m-3.6 5.5 3.3-2" stroke-width=".8" opacity=".32" pathLength="100"/>
+  <circle cx="22" cy="17" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+  <circle cx="42" cy="47" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Every tool call clears a checkpoint: papers checked, roster consulted, stamps applied -- and the permission mode decides how many.</blockquote>
+      <p class="k-foot">Chapter 4</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-gates seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<g class="frame"><path d="M9 18q32-4 66 0l2 48q-1 5-7 5L9 70q-4-25 0-52" stroke-width="2.2" pathLength="100"/><path d="M18 26q19-3 40 0l1 26q0 4-5 4l-36-1q-3-14 0-29" stroke-width="2.7" pathLength="100"/><path d="M24 34q12-1 24 0" stroke-width="1.4" pathLength="100"/><path d="M24 42q10 1 20 0" stroke-width="1.4" pathLength="100"/><path d="M24 50q13-1 26 0" stroke-width="1.4" pathLength="100"/><path d="M52 60l4 4 8-9" stroke-width="2.8" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text><path d="M12 23l-1 37m10-30-1 18" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M97 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M100 26q-2 17 1 34" opacity=".4" stroke-width="1" pathLength="100"/><path d="M104 28l7-1 1 8-8 1z" stroke-width="2.2" pathLength="100"/><path d="M104 40l8 1-1 6-7 1z" stroke-width="2.2" pathLength="100"/><path d="M104 52l7-1 1 8-8 1z" stroke-width="2.2" pathLength="100"/><path d="M116 32q15-2 30 0" pathLength="100"/><path d="M116 44q13 1 26 0" pathLength="100"/><path d="M116 56q16-1 32 0" pathLength="100"/><circle cx="107.5" cy="31.5" r="1.6" fill="currentColor" stroke="none"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text><path d="M118 35l21 1m-21 11 17 1m-17 11 22 1" opacity=".25" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M185 18q32-4 66 0l2 48q-1 5-7 5l-62-1q-3-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M190 26q14-3 30 0l1 6q-15 3-31 1q-2-4 0-7" stroke-width="2.4" pathLength="100"/><path d="M190 40q15-2 30 0l-1 7q-14 2-29-1z" stroke-width="2.2" pathLength="100"/><path d="M190 54q14-2 30 0l1 6q-16 3-31 1q-2-4 0-7" stroke-width="2.6" pathLength="100"/><path d="M235 31c12-2 14 15 2 17s-13-15-2-17" stroke-width="2.5" pathLength="100"/><path d="M242 46l5 5" stroke-width="3" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text><path d="M188 23l-1 39m45-26q-4 4-2 7" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M273 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M282 22q23-3 48 0l1 11q-24 3-49 1q-2-6 0-12" stroke-width="2.6" pathLength="100"/><path d="M292 28q14-1 28 0" stroke-width="1.3" pathLength="100"/><path d="M298 34l-3 8 8-6" pathLength="100"/><path d="M277 52q6-1 13 0" pathLength="100"/><path d="M290 52l10-4" pathLength="100"/><path d="M290 52l10 4" pathLength="100"/><path d="M304 44l4 4 8-9" stroke-width="2.7" pathLength="100"/><path d="M304 54l8 8" stroke-width="2.5" pathLength="100"/><path d="M312 54l-8 8" stroke-width="2.5" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text><path d="M276 23l-1 19m11-17-1 6" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g opacity=".55" stroke-width="1.5"><path d="M79 44q6-1 12 0" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44q6-1 12 0" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44q6-1 12 0" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g>
+</svg></div>
+      <p class="k-plain">every call clears four gates: schema, rules, tool self-check, human nod - an explicit deny outranks any allow</p>
+      <p class="k-ana">✦ expense approval: receipt check, blocklist lookup, manager review, boss signs - a written denial ends it all</p>
+      <p class="k-foot">Chapter 4</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Permission checking is four gates in a row -- validate the input, match the rules, weigh the context, ask the user -- and any one of them can kill a call on the spot.</li><li>Deny rules outrank everything: even in bypassPermissions mode, deny and safetyCheck still hold, because no single checkpoint is a silver bullet and the defense has to run in depth.</li><li>To permission a project, write the deny list first, then pick a mode; for a team, settings.json carries the shared policy and settings.local.json the personal one.</li></ol>
+      <p class="k-foot">Chapter 4</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch05" aria-labelledby="ch05-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 2 · Core Systems</p>
+    <h2 id="ch05-h">Chapter 5　Settings and Configuration — Agent DNA</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-stack" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M31 9q12 3.8 23 10.5-10 5.5-21.8 12Q20 27.5 10 20.4 19.6 13.5 31 9Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M31 9q-.7 5.4 1.2 11.3" stroke-width="1.1" opacity=".35" pathLength="100"/>
+  <path class="ripple d1" d="M11.8 30.4q10.5 5.6 20.3 10.4Q43 35.5 52.4 30" stroke-width="2.4" opacity=".75" pathLength="100"/>
+  <path class="ripple d2" d="M14.7 40.4Q24 46 32.2 50q8.6-4 17-9.2" stroke-width="1.8" opacity=".45" pathLength="100"/>
+  <path d="M10 20.4q11 3.4 22.2 8.1L54 19.5q-10 5.5-21.8 12Q20 27.5 10 20.4Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <path d="m22.7 17.1 5 2.4m-1.6-4.2 5.3 2.4m-1.9-3.9 4.8 2" stroke-width=".85" opacity=".35" pathLength="100"/>
+  <path d="M15.3 22.4q7.2 4.9 14.1 6.5" stroke-width=".65" opacity=".4" pathLength="100"/>
+  <circle cx="43" cy="22" r="1.3" fill="currentColor" stroke="none" opacity=".55"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Six configuration layers settle like strata: an upper layer only masks what lies below and never deletes it -- read the order before you rewrite the Agent's DNA.</blockquote>
+      <p class="k-foot">Chapter 5</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-trust-ladder" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 30q22-3 46 0l-1 13q24-2 47 0l1 13q23-3 45 0l-1 13q25-2 47 0l1 13q22-3 45 0l-1 13q24-2 47 0" stroke-width="3.2" pathLength="100"/><path d="M14 30q-3 40 0 82" stroke-width="2.8" pathLength="100"/><path d="M290 95q2 9 0 17" stroke-width="2.5" pathLength="100"/><path d="M14 112q47-3 94-1t90 1" stroke-width="2.8" pathLength="100"/><path d="M198 112q64 3 128 0" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/>
+<g opacity=".92" stroke-width="1.15"><path d="M19 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M28 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M37 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M46 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M55 16l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M68 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M78 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M88 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M98 29l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M114 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M124 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M134 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M144 42l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M158 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M168 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M178 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M188 55l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M216 68l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M226 68l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/><path d="M267 81l1 3 4 0-3 3 1 3-3-2-3 2 1-3-3-3 4 0z" pathLength="100"/></g>
+<g stroke-width="3.3"><path d="M198 50q3 30 0 62" pathLength="100"/><path d="M195 60q5-1 10 0" pathLength="100"/><path d="M195 98q5 1 10 0" pathLength="100"/></g><g opacity=".6" stroke-width="1.4"><path d="M178 118q1 3 0 7" pathLength="100"/><path d="M174 122l4 4 4-4" pathLength="100"/><path d="M172 131q6-1 13 0" pathLength="100"/><path d="M222 117l-5 8h4l-3 8" pathLength="100"/><path d="M266 118q-3 0-3 3v2q0 3-3 3q3 0 3 3v2q0 3 3 3" pathLength="100"/><path d="M270 118q3 0 3 3v2q0 3 3 3q-3 0-3 3v2q0 3-3 3" pathLength="100"/><path d="M210 107l3-3-4-1" pathLength="100"/><path d="M218 108l3-3 3 3" pathLength="100"/><path d="M233 103l-4 1 3 3" pathLength="100"/></g><g opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"><path d="M180 115q18-6 33-11" pathLength="100"/><path d="M221 115q0-5 0-10" pathLength="100"/><path d="M262 115q-16-6-33-11" pathLength="100"/></g><path d="M19 36l-1 66m4-59 5-4m-5 11 5-4m38 1 32 1m-30 4 4 4m42 5 30 1m-28 4 4 4m42 3 30 1m16-14-1 38" opacity=".28" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">six config layers override in order; a foreign repo can't set security keys, and state is swapped not edited</p>
+      <p class="k-ana">✦ an office notice board: new memos cover old ones, the access list only grows, fire exits are the landlord's</p>
+      <p class="k-foot">Chapter 5</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>The six layers never delete one another; they merge by type -- arrays only grow, scalars let the later writer win.</li><li>Because the merge rules stay predictable, the security checks can shut projectSettings out wholesale and block repository-level supply-chain attacks.</li><li>When you set policy for a team, hold one line: each layer carries only what belongs to it; change one configuration entry, and the whole station changes its ways.</li></ol>
+      <p class="k-foot">Chapter 5</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch06" aria-labelledby="ch06-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 2 · Core Systems</p>
+    <h2 id="ch06-h">Chapter 6　The Memory System — Agent Long-Term Memory</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-memo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M15 9q11-1.3 22 .3 6.4 5.3 11.2 10.9l-.7 34.7Q31 54.2 15 54.8q1.2-23 0-45.8Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M37 9.3q-.8 5.4-.2 11.1l11.4-.2" stroke-width="1.5" pathLength="100"/>
+  <path d="M21.3 27.7q4.5-1 8.3-.5m3.4.1 6.4-.2" stroke-width="1.6" opacity=".7" pathLength="100"/>
+  <path class="write" d="M21 36q5.8-.9 10.1-.4t10.1-.3" stroke-width="1.8" opacity=".75" pathLength="100"/>
+  <path d="M21.2 44q6.1-1.1 12.5-.3" stroke-width="1.5" opacity=".6" pathLength="100"/>
+  <path d="M15 9q2.6 21.5 1.1 44.8l2.5.6q-.4-26.2-.8-45.6Z" fill="currentColor" stroke="none" opacity=".65"/>
+  <path d="m37.8 12.4 7.5 7.2-7.4-.7Z" fill="currentColor" stroke="none" opacity=".3"/>
+  <path d="m40.7 48.4 5-3m-4 5.2 4.4-2.9m-2.5 4.6 2.3-1.8" stroke-width=".85" opacity=".32" pathLength="100"/>
+  <path d="M20.7 11.2q6.9-.7 11.6-.2M18.2 52.1q12.3-.3 18.4.4" stroke-width=".7" opacity=".25" pathLength="100"/>
+  <circle cx="45.5" cy="52.5" r="1.2" fill="currentColor" stroke="none" opacity=".5"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Memory comes in two layers: working memory lives in the context window, long-term memory lives on disk -- store only what the code cannot derive, and verify before you trust it.</blockquote>
+      <p class="k-foot">Chapter 6</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-mem-funnel" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<g opacity=".9"><path d="M92 8q12-2 26 0" stroke-width="2.6" pathLength="100"/><path d="M130 6q10 1 20 0" pathLength="100"/><path d="M166 10q14-2 28 0" stroke-width="2.4" pathLength="100"/><path d="M206 7q10 2 22 0" pathLength="100"/><path d="M242 11q9-1 18 0" pathLength="100"/><path d="M112 15q12-1 24 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M158 14q9 1 18 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M190 16q11-1 22 0" opacity=".6" stroke-width="1.2" pathLength="100"/></g>
+<path d="M70 26q43-5 88-2t88 2" stroke-width="3.2" pathLength="100"/><path d="M78 30q43-3 83-1t85 1" opacity=".35" stroke-width="1" pathLength="100"/><path d="M70 28C94 54 124 73 158 88" stroke-width="2.9" pathLength="100"/><path d="M246 28c-14 24-33 43-62 60" stroke-width="2.5" pathLength="100"/><path d="M158 88q2 8 0 15" stroke-width="2.8" pathLength="100"/><path d="M184 88q-2 8 0 15" stroke-width="2.4" pathLength="100"/>
+<g opacity=".92"><path d="M104 40q9-1 20 0" pathLength="100"/><path d="M134 43q12 1 24 0" pathLength="100"/><path d="M170 40q11-1 22 0" pathLength="100"/><path d="M204 43q9 1 18 0" pathLength="100"/></g><g opacity=".95" stroke-width="2.5"><path d="M112 46q-1 5 0 10" pathLength="100"/><path d="M126 46q1 5 0 10" pathLength="100"/><path d="M140 46q-1 5 0 10" pathLength="100"/><path d="M154 46q1 5 0 10" pathLength="100"/><path d="M168 46q-1 5 0 10" pathLength="100"/><path d="M182 46q1 5 0 10" pathLength="100"/><path d="M196 46q-1 5 0 10" pathLength="100"/><path d="M210 46q1 5 0 10" pathLength="100"/></g>
+<g opacity=".85"><path d="M138 62q8-1 16 0" pathLength="100"/><path d="M160 65q9 1 18 0" pathLength="100"/><path d="M146 69q7-1 14 0" opacity=".6" stroke-width="1.2" pathLength="100"/></g><path d="M138 74q29 4 60 0" stroke-width="3.2" pathLength="100"/><path d="M143 78q25 3 50 0" opacity=".4" stroke-width="1" stroke-dasharray="2 4" pathLength="100"/><path d="M171 92q-1 4 0 7" opacity=".6" stroke-width="1.4" pathLength="100"/>
+<path d="M152 110q18-3 38 0l1 17q0 4-4 4l-35-1q-3-10 0-20" stroke-width="2.7" pathLength="100"/><path d="M159 116q10-1 20 0" stroke-width="1.5" pathLength="100"/><path d="M159 122q6 1 13 0" stroke-width="1.5" pathLength="100"/><circle cx="183" cy="122" r="1.6" fill="currentColor" stroke="none"/><path d="M226 50q12-2 21 2" opacity=".5" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/>
+<g opacity=".95"><path d="M258 42q7 10 11 20q-11 3-22 0q4-10 11-20" stroke-width="2.3" pathLength="100"/><path d="M258 50q1 3 0 5" pathLength="100"/><circle cx="258" cy="59" r="1.3" fill="currentColor" stroke="none"/></g><path d="M14 136q78-3 156-1t156 1" opacity=".35" stroke-width="1" stroke-dasharray="2 7" pathLength="100"/><path d="M77 36q25 29 63 47m-47-39-3 4m9 1-3 4m9 1-3 4M155 113l-1 13" opacity=".3" stroke-width=".9" pathLength="100"/><circle cx="28" cy="128" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="314" cy="124" r="1.6" fill="currentColor" stroke="none" opacity=".6"/>
+</svg></div>
+      <p class="k-plain">it keeps only what code can't reveal: who you are, what you corrected, why it was decided, where links live</p>
+      <p class="k-ana">✦ a card catalog: it notes which shelf, never copies the text, and you still walk over to check the book</p>
+      <p class="k-foot">Chapter 6</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>This memory stores only what the code cannot derive -- user, feedback, project and reference each mind their own stall, and everything else stays out.</li><li>A memory is a snapshot, not a fact: verify the current state before you use it -- treat memory as a clue, not a conclusion.</li><li>To judge whether a memory deserves its place, ask one question: delete it, and does the behavior change?</li></ol>
+      <p class="k-foot">Chapter 6</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch07" aria-labelledby="ch07-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 2 · Core Systems</p>
+    <h2 id="ch07-h">Chapter 7　Context Management — The Agent's Working Memory</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-gauge" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9.8 44c-.2-13.4 10.4-24 22.1-24 12.6-1 23.8 10.8 22.2 23.8" stroke-width="2.6" pathLength="100"/>
+  <path class="sweep" d="M32 44q4-8.9 12-15.5L33.4 44.8Z" fill="currentColor" stroke-width=".9" pathLength="100"/>
+  <circle cx="32" cy="44" r="3" fill="currentColor" stroke="none"/>
+  <path d="M13.5 31.5q2.1 1.3 4.1 3.4" stroke-width="1.8" pathLength="100"/>
+  <path d="M32 20.1q-.6 2.4.1 5.6" stroke-width="1.9" pathLength="100"/>
+  <path d="M50.5 31.5q-2.5 1.5-4.2 3.4" stroke-width="1.8" pathLength="100"/>
+  <path d="M10.4 44.1q21.4 1 43.2-.2" stroke-width="1.2" opacity=".55" pathLength="100"/>
+  <path d="M39 21.3q13.7 4.2 15.1 21.1-3.1-14.7-15.1-21.1Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <path d="m21.3 23.6 1.8 3.4m20.7-3.5-1.9 3.1M13 42q1.3-8.5 5.8-12.7" stroke-width=".85" opacity=".4" pathLength="100"/>
+  <path d="M12 48q3.3 2.3 6.4 2.8m25.6-2 5.2-2.3" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <circle cx="40" cy="33" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">The context window has a ceiling: when history swells, compression escalates through four levels, and after three straight failures the circuit breaker pulls the plug.</blockquote>
+      <p class="k-foot">Chapter 7</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-squeeze seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<g class="frame"><path d="M9 18q32-4 66 0l2 48q-1 5-7 5L9 70q-4-25 0-52" stroke-width="2.2" pathLength="100"/><path d="M18 28q20-2 40 0" stroke-width="2.4" pathLength="100"/><path d="M18 36q22 1 44 0" stroke-width="2.1" pathLength="100"/><path d="M18 44q18-1 36 0" stroke-width="2.4" pathLength="100"/><path d="M44 61c4-1 5 5 1 6s-5-5-1-6" stroke-width="2.2" pathLength="100"/><path d="M54 61c4-1 5 5 1 6s-5-5-1-6" stroke-width="2.2" pathLength="100"/><path d="M45 60q3-7 8-14" stroke-width="2.4" pathLength="100"/><path d="M53 60q-3-7-8-14" stroke-width="2.4" pathLength="100"/><path d="M60 30h10" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text><path d="M12 23l-1 38m8-29 26 1" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M97 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M112 24q13-3 28 0l1 23q-1 4-5 4l-24-1q-3-14 0-26" stroke-width="2.7" pathLength="100"/><path d="M118 32q8-1 16 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M118 40q6 1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M102 38q3-1 6 0" stroke-width="2.2" pathLength="100"/><path d="M106 36l3 2-3 2" pathLength="100"/><path d="M150 38q-3-1-6 0" stroke-width="2.2" pathLength="100"/><path d="M146 36l-3 2 3 2" pathLength="100"/><path d="M112 60q14-1 28 0" stroke-width="2.5" pathLength="100"/><path d="M112 66q10 1 20 0" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text><path d="M115 28l-1 15m0 20 20 1" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M185 18q32-4 66 0l2 48q-1 5-7 5l-62-1q-3-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M192 26q13-3 28 0l1 7q-14 3-29 1q-2-5 0-8" stroke-width="2.6" pathLength="100"/><path d="M192 38q14-2 28 0l-1 8q-13 2-27-1z" stroke-width="2.3" pathLength="100"/><path d="M192 50q13-2 28 0l1 7q-14 3-29 1q-2-5 0-8" stroke-width="2.7" pathLength="100"/><path d="M224 30l4 3-4 3" pathLength="100"/><path d="M224 42l4 3-4 3" pathLength="100"/><path d="M236 46q1 5 0 10" pathLength="100"/><path d="M233 53l3 4 3-4" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text><path d="M188 23l-1 39m9-31 17 1m-17 12 16 1" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M273 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M278 28q9-1 18 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 34q8 1 16 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 40q9-1 18 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M278 46q7 1 14 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M300 37q4-1 8 0" pathLength="100"/><path d="M306 35l3 2-3 2" pathLength="100"/><path d="M312 34q10-2 20 0" stroke-width="2.6" pathLength="100"/><path d="M312 44q8 1 16 0" stroke-width="2.3" pathLength="100"/><path d="M319 49c10-2 13 12 2 14s-12-12-2-14" stroke-width="2.4" pathLength="100"/><circle cx="320" cy="56" r="2" fill="currentColor" stroke="none"/><path d="M276 66q22-1 44 0" opacity=".45" stroke-width="1.2" stroke-dasharray="3 5"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text><path d="M276 23l-1 32m40-18 14 1" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g opacity=".55" stroke-width="1.5"><path d="M79 44q6-1 12 0" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44q6-1 12 0" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44q6-1 12 0" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g>
+</svg></div>
+      <p class="k-plain">when the board fills, erase in four graded steps, save room before summarizing, quit after three failures</p>
+      <p class="k-ana">✦ clearing a crowded shelf: consolidate loose boxes, vacuum-pack, and only then write old stock onto one ledger</p>
+      <p class="k-foot">Chapter 7</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Compression is no black box but a four-level escalation -- snip, micro-compact, collapse, auto-compact -- each level costlier than the last.</li><li>Wait until history hits the ceiling and the work costs the most; three straight failures and the circuit breaker pulls the plug.</li><li>Proactive compression beats reactive: trigger it yourself at key milestones with notes on what matters, and you keep more useful context than the automatic pass would.</li></ol>
+      <p class="k-foot">Chapter 7</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch08" aria-labelledby="ch08-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 2 · Core Systems</p>
+    <h2 id="ch08-h">Chapter 8　The Hook System — Agent's Lifecycle Extension Points</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-hook" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6.8 32.3C22 31.3 40 31.7 57 32.1" stroke-width="1.8" opacity=".65" pathLength="100"/>
+  <path class="nudge" d="M53.5 27.5q1.5 2.6 3.8 4.5l-3.8 4.5" stroke-width="2.5" pathLength="100"/>
+  <circle cx="17" cy="32" r="2.4" fill="currentColor" stroke="none"/>
+  <circle cx="34" cy="32" r="2.4" fill="currentColor" stroke="none"/>
+  <circle cx="49" cy="32" r="2.4" fill="currentColor" stroke="none"/>
+  <circle cx="34" cy="32" r="4.4" stroke-width="1" opacity=".35" pathLength="100"/>
+  <path d="M17 29.2q-1.3-7.3.2-15.2l7.8-.2.1 7.1c0 7.2 11.1 7.5 11-.4l-.1-6.6q4.6-.8 9.7.6" stroke-width="2.5" pathLength="100"/>
+  <path d="M34 35.2q-1.3 7.8.3 14.8l7.7-.2.1-5c-.1-7 10.4-7.1 10-.3l-.1 5.6 5.1.1" stroke-width="1.9" opacity=".7" pathLength="100"/>
+  <path d="M25.1 17.1q-1.7 9 5.2 10.1 6.9.8 5.7-10.7-.6 8.1-5.7 8-5.1-.2-5.2-7.4Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <path d="m13.8 17.6 2.8-1.3m-2.7 4.5 2.6-1.4M36.1 47l3.2-1.8m-3.1 4.1 3.1-1.7" stroke-width=".8" opacity=".35" pathLength="100"/>
+  <path d="M9 34.7q8.2-.7 14.2-.3" stroke-width=".7" opacity=".25" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">The permission pipeline is the guardrail; hooks are the reflex arc -- at 22 lifecycle points they can watch, rewrite, or flatly refuse.</blockquote>
+      <p class="k-foot">Chapter 8</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-hooks seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<g class="frame"><path d="M9 18q32-4 66 0l2 48q-1 5-7 5L9 70q-4-25 0-52" stroke-width="2.2" pathLength="100"/><path d="M34 27q8-4 16 0c0 7 3 13 6 18q-14 3-28 0c4-7 6-11 6-18" stroke-width="2.8" pathLength="100"/><circle cx="42" cy="51" r="1.6" fill="currentColor" stroke="none"/><path d="M22 30q-5 8 0 16" opacity=".6" stroke-width="1.4" pathLength="100"/><path d="M62 30q5 8 0 16" opacity=".6" stroke-width="1.4" pathLength="100"/><path d="M30 58q12-1 24 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M34 63q8 1 16 0" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text><path d="M12 23l-1 38m26-31q-1 6-4 11" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M97 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M100 24q27-3 56 0" stroke-width="2.6" pathLength="100"/><path d="M128 23l-1 13c-1 13 19 13 17 0" stroke-width="3.2" pathLength="100"/><circle cx="136" cy="39" r="2.2" fill="currentColor" stroke="none"/><path d="M104 32q7-1 14 0" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M104 38q4 1 9 0" opacity=".3" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text><path d="M131 27l-1 8q0 6 5 7" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M185 18q32-4 66 0l2 48q-1 5-7 5l-62-1q-3-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M192 24q19-3 40 0l1 27q-1 4-5 4l-36-1q-3-15 0-30" stroke-width="2.7" pathLength="100"/><path d="M198 32l5 4-5 4" stroke-width="2.6" pathLength="100"/><path d="M207 36q8-1 16 0" stroke-width="2.3" pathLength="100"/><circle cx="200" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="208" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="216" cy="46" r="1.8" fill="currentColor" stroke="none"/><path d="M198 62q15-1 30 0" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text><path d="M188 23l-1 38m9-33-1 21" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M273 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><circle cx="283" cy="42" r="3" fill="currentColor" stroke="none"/><path d="M285 40c11-7 21-9 32-9" stroke-width="2.9" pathLength="100"/><path d="M311 27l6 4-6 4" stroke-width="2.6" pathLength="100"/><path d="M285 44q12 12 25 10" opacity=".6" stroke-width="1.4" stroke-dasharray="4 6"/><path d="M311 49l10 10" stroke-width="3" pathLength="100"/><path d="M321 49l-10 10" stroke-width="3" pathLength="100"/><path d="M290 64q14-1 28 0" opacity=".45" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text><path d="M276 23l-1 35m16-16q9-6 18-6" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g opacity=".55" stroke-width="1.5"><path d="M79 44q6-1 12 0" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44q6-1 12 0" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44q6-1 12 0" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g>
+</svg></div>
+      <p class="k-plain">five hook kinds hang on lifecycle events from tools to sessions to compaction: watch, block, rewrite tool input, add context - no source edits</p>
+      <p class="k-ana">✦ an estate gatehouse: it builds nothing, yet stops, redirects or notes every comings and goings</p>
+      <p class="k-foot">Chapter 8</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Every hook speaks one language: a JSON response protocol plus exit codes -- the engine trusts the protocol, never the implementation.</li><li>One shared protocol lets five hook types plug into 22 lifecycle points, and any hook's block decision takes effect.</li><li>Keep the division of labor straight: the permission pipeline decides whether an action may run, hooks decide how it runs -- after the guardrail, hooks are the second security check.</li></ol>
+      <p class="k-foot">Chapter 8</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch09" aria-labelledby="ch09-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 3 · Advanced Patterns</p>
+    <h2 id="ch09-h">Chapter 9　Sub-Agents and the Fork Pattern</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-fork" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path class="pulse" d="M12.6 27.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path class="pulse" d="M47.6 12.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path class="pulse" d="M47.6 42.8c4.6-1.4 8.1 3.1 5.2 6.9-2.2 3.1-7.6 2.5-8.1-1.4-.5-2.5.7-4.5 2.9-5.5Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M19 32q8.2 1.2 13-4c3.7-4.1 6.7-9.1 11.5-10.8" stroke-width="2.7" pathLength="100"/>
+  <path d="M27 32c7.5 1.2 10.6 12.5 16.3 14.8" stroke-width="2.3" pathLength="100"/>
+  <path d="M20 29.4q4.8-.1 8.8 1.3" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <path d="M26 31q3.6.5 6-3l4.1-4.5q-3.6 7.6-7.9 10.1Z" fill="currentColor" stroke="none" opacity=".75"/>
+  <path d="m34 24.4 3.5 2.8m-2.4-4.8 3.8 2.7M33.5 39l4.5-3.2" stroke-width=".9" opacity=".4" pathLength="100"/>
+  <circle cx="30.5" cy="26.5" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+  <circle cx="49" cy="17" r="1.1" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="49" cy="47" r="1.1" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="14" cy="32" r="7.6" stroke-width=".9" opacity=".28" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Sub-agents are extra hired carts, each paying its own toll; Fork loads one shared set of luggage and hands each cart only its own reins.</blockquote>
+      <p class="k-foot">Chapter 9</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-squeeze seq" viewBox="0 0 348 106" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<g class="frame"><path d="M9 18q32-4 66 0l2 48q-1 5-7 5L9 70q-4-25 0-52" stroke-width="2.2" pathLength="100"/><path d="M28 34q12-3 26 0l1 24q-14 4-27 2q-3-12 0-26" opacity=".45" stroke-width="1.1" pathLength="100"/><path d="M24 30q12-3 26 0l1 24q-14 4-27 2q-3-12 0-26" opacity=".7" stroke-width="1.4" pathLength="100"/><path d="M20 26q12-3 26 0l1 24q-14 4-27 2q-3-12 0-26" stroke-width="2.7" pathLength="100"/><path d="M25 33q7-1 15 0" stroke-width="1.4" pathLength="100"/><path d="M25 39q6 1 13 0" stroke-width="1.4" pathLength="100"/><path d="M25 45q5-1 11 0" stroke-width="1.4" pathLength="100"/><circle cx="52" cy="21" r="2.2" fill="currentColor" stroke="none"/><path d="M50 23q-2 2-3 4" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M18 64q20-1 40 0" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="11" y="84" fill="currentColor" stroke="none">1</text><path d="M23 30l-1 17" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M97 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M106 24q12-3 26 0l1 28q-14 4-27 2q-3-15 0-30" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 31q7-1 14 0" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 37q6 1 12 0" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M111 41q4-2 9 0l1 3q-5 2-10 1z" stroke-width="2.1" pathLength="100"/><path d="M111 47q4-1 9 0l-1 4q-4 1-8-1z" stroke-width="2.1" pathLength="100"/><path d="M108 39q8-2 16 0l1 13q-8 3-17 1z" stroke-dasharray="2 4" pathLength="100"/><path d="M128 46q5-1 10 0" pathLength="100"/><path d="M136 44l3 2-3 2" pathLength="100"/><path d="M142 36q9-2 18 0l1 18q-10 4-19 2q-2-10 0-20" stroke-width="2.7" pathLength="100"/><path d="M146 43q5-1 10 0" stroke-width="1.4" pathLength="100"/><path d="M146 49q5 1 10 0" stroke-width="1.4" pathLength="100"/><text class="frame-no" x="99" y="84" fill="currentColor" stroke="none">2</text><path d="M145 39l-1 11" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M185 18q32-4 66 0l2 48q-1 5-7 5l-62-1q-3-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M194 24q12-3 26 0l1 28q-14 4-27 2q-3-15 0-30" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M199 31q7-1 14 0" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M199 37q6 1 12 0" opacity=".45" stroke-width="1.2" pathLength="100"/><path d="M198 42q10-2 20 0l1 9q-10 3-21 1z" stroke-dasharray="2 4" pathLength="100"/><path d="M224 44q5-4 10 1" stroke-width="2.5" pathLength="100"/><path d="M230 42l4 3-4 3" pathLength="100"/><path d="M236 52q-5 4-10-1" stroke-width="2.5" pathLength="100"/><path d="M230 48l-4 3 4 3" pathLength="100"/><text class="frame-no" x="187" y="84" fill="currentColor" stroke="none">3</text><path d="M197 28l-1 10" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g class="frame"><path d="M273 18q34-3 66 0l1 49q-2 5-7 4l-61-1q-2-25 1-52" stroke-width="2.2" pathLength="100"/><path d="M278 24q12-3 26 0l1 20q-14 4-27 2q-3-10 0-22" stroke-width="2.6" pathLength="100"/><path d="M283 31q7-1 14 0" stroke-width="1.4" pathLength="100"/><path d="M283 37q5 1 11 0" stroke-width="1.4" pathLength="100"/><path d="M291 47q-1 5 1 9" stroke-width="2.3" pathLength="100"/><path d="M291 55q-5 5-11 8" stroke-width="2.4" pathLength="100"/><path d="M286 60l-6 3 1-6" pathLength="100"/><path d="M292 55q7 5 13 7" stroke-width="2.4" pathLength="100"/><path d="M299 59l6 3-1-6" pathLength="100"/><path d="M314 28q4-2 8 0l1 37q-4 3-9 1q-2-20 0-38" stroke-width="2.5" pathLength="100"/><path d="M328 53q3-2 7 0l1 12q-4 2-8 1q-1-6 0-13" stroke-width="2.5" pathLength="100"/><path d="M310 66q14-1 28 0" opacity=".5" stroke-width="1.2" pathLength="100"/><text class="frame-no" x="275" y="84" fill="currentColor" stroke="none">4</text><path d="M281 28l-1 12m37-8-1 29" opacity=".3" stroke-width=".8" pathLength="100"/></g>
+<g opacity=".55" stroke-width="1.5"><path d="M79 44q6-1 12 0" pathLength="100"/><path d="M89 42l3 2-3 2" pathLength="100"/><path d="M167 44q6-1 12 0" pathLength="100"/><path d="M177 42l3 2-3 2" pathLength="100"/><path d="M255 44q6-1 12 0" pathLength="100"/><path d="M265 42l3 2-3 2" pathLength="100"/></g><g opacity=".16" stroke-width="6"><path d="M8 8h332" stroke-dasharray="6 13"/><path d="M8 96h332" stroke-dasharray="6 13"/></g>
+</svg></div>
+      <p class="k-plain">hand work to specialist sub-agents; Fork runs them in parallel by reusing the parent's exact cached prefix</p>
+      <p class="k-ana">✦ one meeting brief photocopied for the table: each person annotates a copy, nobody reprints the original</p>
+      <p class="k-foot">Chapter 9</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Fork's cache sharing is a byte-level contract — the system prompt, tool definitions, and message prefix must match character for character, so Fork passes the already-rendered bytes.</li><li>When the cache hits, three parallel sub-agents add only their own instruction text, saving over sixty percent of tokens.</li><li>Send Explore for read-only scouting, Verification for adversarial checks, and Fork when the same context runs in parallel — match each cart to its job, and the road goes faster.</li></ol>
+      <p class="k-foot">Chapter 9</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch10" aria-labelledby="ch10-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 3 · Advanced Patterns</p>
+    <h2 id="ch10-h">Chapter 10　The Coordinator Pattern — Multi-Agent Enterprise Orchestration</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-hub" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M29.7 23.8c7.3-2.8 13.3 4.2 10.3 10.2-3 7-13 6-16.5-1-2.8-5 1.2-9 6.2-9.2Z" stroke-width="2.7" pathLength="100"/>
+  <circle class="pulse" cx="12" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="52" cy="14" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="12" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <circle class="pulse" cx="52" cy="50" r="4" stroke-dasharray="22 4" stroke-width="2.2"/>
+  <path d="M25.8 25.8q-6.7-4.1-9.8-9.2" stroke-width="2.3" pathLength="100"/>
+  <path d="M38.2 25.8q3.9-6.1 9.8-9.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M25.8 38.2q-4.2 6.5-9.8 9.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M38.2 38.2q6 3.3 9.8 9.2" stroke-width="2.6" pathLength="100"/>
+  <path d="M31.5 23.5q1.2-5.4.5-11.2" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <path d="M25.6 25.1c-3.4 5.8 0 12.8 7.1 12.8q-7.2 2.3-9.7-4.8-1.7-4.9 2.6-8Z" fill="currentColor" stroke="none" opacity=".8"/>
+  <circle cx="32" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+  <circle cx="20.6" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="43.2" cy="21.2" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="20.6" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="43.2" cy="42.8" r="1" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="M27.5 29.8q4.5-2 8.2.4t2.2 5.8" stroke-width=".9" opacity=".4" pathLength="100"/>
+  <path d="m35.5 35.6 2.1 2.1m-3.9-.6 2.6 2.1" stroke-width=".75" opacity=".35" pathLength="100"/>
+  <circle cx="12" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="52" cy="14" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="12" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+  <circle cx="52" cy="50" r=".9" fill="currentColor" stroke="none" opacity=".7"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Too many carts call for a dispatcher who never cracks the whip: it hauls no load itself, only assigns who takes which road.</blockquote>
+      <p class="k-foot">Chapter 10</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-coord-fork" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M170 12q3 29 0 58t0 60" opacity=".4" stroke-width="1" stroke-dasharray="2 4" pathLength="100"/><path d="M83 38c17-2 19 22 2 24S66 40 83 38" stroke-width="3" pathLength="100"/><circle cx="84" cy="50" r="2" fill="currentColor" stroke="none" pathLength="100"/><path d="M74 44q-17-8-31-19" stroke-width="2.5" pathLength="100"/><path d="M94 44q17-8 31-19" stroke-width="2.5" pathLength="100"/><path d="M74 56q-17 8-31 19" stroke-width="2.5" pathLength="100"/><path d="M94 56q17 8 31 19" stroke-width="2.5" pathLength="100"/>
+<path d="M37 16c9-2 11 11 2 12S28 18 37 16" stroke-width="2.4" pathLength="100"/><path d="M129 16c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.4" pathLength="100"/><path d="M37 72c9-2 11 11 2 12S28 74 37 72" stroke-width="2.4" pathLength="100"/><path d="M129 72c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.4" pathLength="100"/><path d="M108 44q4-2 9 0l1 8q-5 3-10 1q-2-4 0-9" pathLength="100"/>
+<path d="M16 118q30-3 63-1t65 1" opacity=".45" stroke-width="1.1" pathLength="100"/><path d="M52 116q2-11 0-22" stroke-width="2.8" pathLength="100"/><path d="M40 94q25-3 48 0" stroke-width="2.7" pathLength="100"/><path d="M80 94q1 5 0 10" stroke-width="1.4" pathLength="100"/><path d="M78 104q2 4 4 0" stroke-width="1.4" pathLength="100"/><path d="M96 100q10-2 22 0l1 14q-12 4-23 2q-2-8 0-16" stroke-width="2.4" pathLength="100"/><path d="M102 106q2-1 5 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M111 106q2 1 5 0" opacity=".6" stroke-width="1.2" pathLength="100"/>
+<path d="M195 48c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.5" pathLength="100"/><path d="M227 48c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.5" pathLength="100"/><path d="M259 48c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.5" pathLength="100"/><path d="M291 48c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.5" pathLength="100"/><path d="M196 60q-2 16 0 32" stroke-width="2.5" pathLength="100"/><path d="M228 60q2 16 0 32" stroke-width="2.5" pathLength="100"/><path d="M260 60q-2 16 0 32" stroke-width="2.5" pathLength="100"/><path d="M292 60q2 16 0 32" stroke-width="2.5" pathLength="100"/><path d="M184 92q29-4 61-2t63 2" stroke-width="3.2" pathLength="100"/><path d="M186 97q60-3 120 0" opacity=".35" stroke-width="1" pathLength="100"/>
+<path d="M231 109c11-2 13 12 2 14s-12-12-2-14" stroke-width="2.5" pathLength="100"/><path d="M249 109c11-2 13 12 2 14s-12-12-2-14" stroke-width="2.5" pathLength="100"/><path d="M234 98c6-1 7 7 1 8s-7-7-1-8" pathLength="100"/><path d="M248 98c6-1 7 7 1 8s-7-7-1-8" pathLength="100"/><path d="M231 106q-1 3-1 4" stroke-width="1.4" pathLength="100"/><path d="M251 106q1 3 1 4" stroke-width="1.4" pathLength="100"/><path d="M238 108q2-2 4 0l1 5q-3 2-5 1z" stroke-width="1.4" pathLength="100"/><path d="M188 128q29-3 60-1t60 1" opacity=".4" stroke-width="1.1" pathLength="100"/><path d="M76 42q-9 6-2 14M41 92l5-3m2 3 5-3m46 15-1 7M191 86l4 3m4-3 4 3m20-3 4 3m27-3 4 3m30-3 4 3" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">when one agent isn't enough: a lead assigns but never executes, absorbing failures and half-finished work</p>
+      <p class="k-ana">✦ a banquet head chef: no pan himself, tickets out to stations, one prep list, covers whoever drops out</p>
+      <p class="k-foot">Chapter 10</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>The coordinator holds not a single execution tool, only four orchestration tools — and it may not delegate understanding: it digests every finding and writes the implementation spec itself.</li><li>Forwarded understanding loses context; a coordinator that has absorbed the research writes specs with concrete file paths and line numbers, so implementation workers receive unified, precise instructions.</li><li>Bring coordinated multi-step work to the Coordinator and independent parallel searches to Fork — the dispatcher assigns but never hauls, and the two carts never run at once.</li></ol>
+      <p class="k-foot">Chapter 10</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch11" aria-labelledby="ch11-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 3 · Advanced Patterns</p>
+    <h2 id="ch11-h">Chapter 11　The Skill System and Plugin Architecture</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-plug" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7.7 8.7Q21 7 34 8l9 10q-1.2 18.7.2 38Q25 55 7.2 56q1-22.5.5-47.3Z" stroke-width="2.4" pathLength="100"/>
+  <path d="M34 8q-.9 5.6-.3 10.8l9.3-.8" stroke-width="1.5" pathLength="100"/>
+  <path d="M14 27.9q9-1.1 19-.1" stroke-width="1.5" opacity=".65" pathLength="100"/>
+  <path d="M14.1 36.2q8.1-.8 15.5-.4" stroke-width="1.6" opacity=".65" pathLength="100"/>
+  <path d="M14 44.2q5.6-1.1 11.4-.2" stroke-width="1.4" opacity=".6" pathLength="100"/>
+  <path d="M43.2 25.4q3.8-.6 7.4-.1.9 11.5.1 22.6l-7.3-.1" stroke-width="2.4" pathLength="100"/>
+  <path d="M51.4 31.2q2.8-.7 5.6.2" stroke-width="1.9" pathLength="100"/>
+  <path d="M51.4 42.2q2.9.6 5.6.2" stroke-width="1.9" pathLength="100"/>
+  <circle class="blink b1" cx="59.5" cy="31.4" r="1.7" fill="currentColor" stroke="none"/>
+  <circle class="blink b2" cx="59.5" cy="42.4" r="1.7" fill="currentColor" stroke="none"/>
+  <path d="m45 42.6 3.5-2.8m-2 5.5 3.2-2.7" stroke-width=".8" opacity=".35" pathLength="100"/>
+  <circle cx="59.5" cy="31.4" r="3.2" stroke-width="1.2" pathLength="100"/>
+  <circle cx="59.5" cy="42.4" r="3.2" stroke-width="1.2" pathLength="100"/>
+  <path d="M7.7 8.7q2.2 23.4.5 46.5l2.4-.1Q10 28.2 10.4 8.3ZM48.5 25.5l2.1-.2q.9 11.5.1 22.6l-2 .1q.8-12.6-.2-22.5Z" fill="currentColor" stroke="none" opacity=".65"/>
+  <path d="M12 11q9-.9 15-.4m6.8 40.5 6-.2" stroke-width=".7" opacity=".3" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">A skill is training the mare already has, ready when called; a plugin is tack you rent — run a thumb along its edge before you mount.</blockquote>
+      <p class="k-foot">Chapter 11</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-skill-stairs" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M60 100q21-3 44 0l-1-14q23-2 45 0l1-14q21-3 43 0l-1-14q24-2 45 0l1-14q21-3 43 0" stroke-width="3.2" pathLength="100"/><path d="M60 100q-2 7 0 14" stroke-width="2.7" pathLength="100"/><path d="M280 44q3 34 0 70" stroke-width="2.7" pathLength="100"/><path d="M46 114q61-4 124-1t124 1" stroke-width="2.8" pathLength="100"/><path d="M50 119q61-2 122-1t118 1" opacity=".35" stroke-width="1" pathLength="100"/>
+<g opacity=".85" stroke-width="2.4"><path d="M284 16C210 30 130 57 58 84" pathLength="100"/><path d="M62 79l-4 5 6 1" pathLength="100"/></g>
+<g opacity=".92"><path d="M72 89q-1-3 3-3l4-1 3 4 7 1q4-1 3 3v5q0 4-4 4l-13-1q-4 0-3-4z" stroke-width="2.3" pathLength="100"/><path d="M72 92q9-2 20 0" opacity=".55" stroke-width="1.1" pathLength="100"/><path d="M116 75q-1-3 3-3l4-1 3 4 7 1q4-1 3 3v5q0 4-4 4l-13-1q-4 0-3-4z" stroke-width="2.3" pathLength="100"/><path d="M116 78q10-2 20 0" opacity=".55" stroke-width="1.1" pathLength="100"/><path d="M160 61q-1-3 3-3l4-1 3 4 7 1q4-1 3 3v5q0 4-4 4l-13-1q-4 0-3-4z" stroke-width="2.3" pathLength="100"/><path d="M160 64q9-2 20 0" opacity=".55" stroke-width="1.1" pathLength="100"/><path d="M204 47q-1-3 3-3l4-1 3 4 7 1q4-1 3 3v5q0 4-4 4l-13-1q-4 0-3-4z" stroke-width="2.3" pathLength="100"/><path d="M204 50q10-2 20 0" opacity=".55" stroke-width="1.1" pathLength="100"/><path d="M248 33q-1-3 3-3l4-1 3 4 7 1q4-1 3 3v5q0 4-4 4l-13-1q-4 0-3-4z" stroke-width="2.3" pathLength="100"/><path d="M248 36q9-2 20 0" opacity=".55" stroke-width="1.1" pathLength="100"/></g>
+<g><path d="M290 35q-1-6 5-5l8-1q6 0 5 6q0 6-5 5l-8 1q-6 0-5-6z" stroke-width="2.3" pathLength="100"/><circle cx="295" cy="35" r="2.2" fill="currentColor" stroke="none" pathLength="100"/><path d="M289 29l20 13" stroke-width="2.7" pathLength="100"/><path d="M309 29l-20 13" stroke-width="2.7" pathLength="100"/></g><path d="M288 39q-10 2-18 3" opacity=".45" stroke-width="1.2" stroke-dasharray="2 4" pathLength="100"/><path d="M65 104l30-1m-27 4 4 4m40-21 28 1m-25 3 4 4m37-21 28 1m-25 3 4 4m38-21 28 1m-25 3 4 4m38-21 28 1m-25 3 4 4M276 53q1 29-1 51" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">turn repeated instructions into Markdown skills: tiered sources override each other, plugins ship whole packs</p>
+      <p class="k-ana">✦ a wall of recipe cards: HQ, house and home stacks; same name defers upward; call it out and pull one</p>
+      <p class="k-foot">Chapter 11</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>A skill is a prompt that gets loaded and executed: provenance selects the transformations the loader permits but never vouches for the skill's content, so you skip none of the layered defenses.</li><li>The gitignore filter and `O_NOFOLLOW` keep out skills slipped quietly into node_modules — miss one gate, and someone else rides your horse on their own errand.</li><li>Keep skills small and focused, one job per skill; compose them into workflows instead of building an all-purpose skill.</li></ol>
+      <p class="k-foot">Chapter 11</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch12" aria-labelledby="ch12-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 3 · Advanced Patterns</p>
+    <h2 id="ch12-h">Chapter 12　MCP Integration and External Protocols</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-wire" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 32.3q28-1.2 56-.2" stroke-width="1.4" opacity=".45" pathLength="100"/>
+  <path d="M18 44.2q-1.6-17 .2-32" stroke-width="2.6" pathLength="100"/>
+  <path d="M46 44.2q1.4-17-.2-32" stroke-width="2.6" pathLength="100"/>
+  <path class="sway" d="M18 14.3c7.4 8.4 19.8 11.7 28 .2" stroke-width="2.5" pathLength="100"/>
+  <path d="M18 17.1q13.4 13 28-.4" stroke-width=".8" opacity=".3" pathLength="100"/>
+  <path d="M17.8 14.5Q10 21.3 5.6 31.5" stroke-width="1.6" opacity=".6" pathLength="100"/>
+  <path d="M46.2 14.5Q53.3 22 58.4 31.5" stroke-width="1.6" opacity=".6" pathLength="100"/>
+  <circle cx="18" cy="11.6" r="1.4" fill="currentColor" stroke="none"/>
+  <circle cx="46" cy="11.6" r="1.4" fill="currentColor" stroke="none"/>
+  <path d="M8 52.2q5.4-.8 10.8-.2" stroke-width="1.4" opacity=".4" pathLength="100"/>
+  <path d="M27 52.4q5.4-1 10.8-.2" stroke-width="1.4" opacity=".4" pathLength="100"/>
+  <path d="M45.5 52.2q5.4-.7 10.8-.2" stroke-width="1.4" opacity=".4" pathLength="100"/>
+  <circle cx="25" cy="18.1" r="1.2" fill="currentColor" stroke="none" opacity=".75"/>
+  <circle cx="39" cy="18.4" r="1.2" fill="currentColor" stroke="none" opacity=".75"/>
+  <path d="M16.8 20.5q-.5 13.1 1.2 23.7l1.1-1.6q-1.1-12.2-2.3-22.1ZM46.6 19q1.3 15-.6 25.2l-1.2-2.5Z" fill="currentColor" stroke="none" opacity=".75"/>
+  <path d="m14.8 44.8 6.2-.6m22-.1 6.5.7M12.8 51.1l3.1-2m-1 4.3 2.7-1.7" stroke-width=".8" opacity=".32" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Beyond our road, speak the market tongue: an MCP server is the foreign yard's scales, and resources are the goods weighed on them.</blockquote>
+      <p class="k-foot">Chapter 12</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-mcp-dial" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M168 39c45-4 47 59 4 62s-45-58-4-62" opacity=".25" stroke-width="1.1" stroke-dasharray="2 4" pathLength="100"/>
+<g opacity=".9" stroke-width="2.5"><path d="M179 27c14 2 23 10 29 21" pathLength="100"/><path d="M203 45l5 3 0-6" pathLength="100"/><path d="M214 65q3 19-11 34" pathLength="100"/><path d="M204 94l-1 5 5-2" pathLength="100"/><path d="M188 110q-17 10-36 0" pathLength="100"/><path d="M157 109l-5 1 3 5" pathLength="100"/><path d="M137 99q-11-9-11-23" pathLength="100"/><path d="M129 80l-3-4-2 5" pathLength="100"/><path d="M131 49c6-13 17-20 30-22" pathLength="100"/><path d="M157 30l4-3-5-1" pathLength="100"/></g>
+<g><path d="M169 19c11-2 13 12 2 14s-12-12-2-14" stroke-width="2.6" pathLength="100"/><circle cx="170" cy="26" r="3.5" fill="currentColor" stroke="none" pathLength="100"/></g><g><path d="M208 52c7-2 9 7 2 8s-8-7-2-8" stroke-width="2.2" pathLength="100"/><path d="M215 52c7-2 9 7 2 8s-8-7-2-8" stroke-width="2.2" pathLength="100"/><path d="M212 50l-2 4 3 3-2 4" stroke-width="2.4" pathLength="100"/></g><g><path d="M196 99c5-1 6 6 1 6s-6-6-1-6" pathLength="100"/><path d="M194 104l-2 8 8 1-2-9" stroke-width="2.5" pathLength="100"/></g>
+<g><path d="M137 102l8-1-4 7 4 6-8 1 4-7z" stroke-width="2.5" pathLength="100"/><path d="M136 119q2-1 4 0" stroke-width="1.2" pathLength="100"/><path d="M143 121q2 1 5 0" stroke-width="1.5" pathLength="100"/><path d="M152 123q3-1 6 0" pathLength="100"/></g><g stroke-width="2.6"><path d="M116 47q-1 6 0 13" pathLength="100"/><path d="M126 46q1 6 0 13" pathLength="100"/><path d="M116 47l10-6" pathLength="100"/></g><circle cx="170" cy="70" r="1.6" fill="currentColor" stroke="none" pathLength="100"/>
+<g opacity=".55" stroke-width="1.2" stroke-dasharray="2 4"><path d="M170 15q7-2 10-9" pathLength="100"/><path d="M178 11l2-5-6 1" pathLength="100"/></g><path d="M185 32q11 4 17 13m9 26q0 12-6 20m-22 23q-11 3-23-1m-27-19-3-7m36-65q-5 2-5 6" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">one protocol replaces per-tool adapters: connection configs, tool naming, layered approvals, an IDE bridge</p>
+      <p class="k-ana">✦ a shared parcel room: any courier drops once, shelves sorted and labelled by building, code scanned first</p>
+      <p class="k-foot">Chapter 12</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>MCP is the "USB-C port" of the AI world: protocol as contract, transport independence, and built-in security boundaries turn fragmented tool integration into standard composition.</li><li>The four-layer permission model defends in depth on a default-distrust basis — an attacker who bypasses one layer still faces the others, and the `mcp__{server}__{tool}` naming gives permission checks their own namespace.</li><li>MCP is not an isolated subsystem but a natural extension of the tool ecosystem: registration and scheduling run through the tool system, four-stage checks through the permission pipeline, lifecycle interception through the hook system.</li></ol>
+      <p class="k-foot">Chapter 12</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch13" aria-labelledby="ch13-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 4 · Engineering Practice</p>
+    <h2 id="ch13-h">Chapter 13　Streaming Architecture &amp; Performance Optimization</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-funnel" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="7" cy="13" r="1.6" fill="currentColor" stroke="none"/>
+  <circle cx="7" cy="32" r="1.6" fill="currentColor" stroke="none"/>
+  <circle cx="7" cy="51" r="1.6" fill="currentColor" stroke="none"/>
+  <path d="M9 13q7-1 12.5.1l4.9 3.4" stroke-width="2" pathLength="100"/>
+  <path d="M9 32.3q9-1.1 17-.2" stroke-width="2.1" pathLength="100"/>
+  <path d="M9 51q7 .9 12.5-.1l4.9-3.4" stroke-width="2" pathLength="100"/>
+  <path d="M26.4 16.5q5.1 8.2 12.7 13.7" stroke-width="2.7" pathLength="100"/>
+  <path d="M26.4 47.5q5.1-8.1 12.7-13.7" stroke-width="2.5" pathLength="100"/>
+  <path d="M39.1 30.2q4-.8 7.7-.2" stroke-width="1.8" pathLength="100"/>
+  <path d="M39.1 33.8q3.5.9 7.7.2" stroke-width="1.8" pathLength="100"/>
+  <path d="M46.8 22.4q6.2-.8 10.9.2.7 10.5.2 21.2l-11 .4q.8-11.8-.1-21.8Z" stroke-width="2.3" pathLength="100"/>
+  <path d="M49.4 34.2q4.8-1.1 9.2-.2" stroke-width="1.6" opacity=".6" pathLength="100"/>
+  <circle class="drip" cx="43.2" cy="32" r="1.2" fill="currentColor" stroke="none" opacity=".55"/>
+  <path d="m58.7 26.4 3.1 3.6-3.1 3.6" stroke-width="1.8" pathLength="100"/>
+  <path d="m58.7 36.6 3.1 3.6-3.1 3.6" stroke-width="1.8" pathLength="100"/>
+  <path d="M26.4 16.5q5.1 8.2 12.7 13.7l-2.1.1q-6.5-4.5-10.6-13.8ZM46.8 24l2 1q.2 10.3-.4 18.7l-1.5.5q.7-12.7-.1-20.2Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="m28.5 23 3.6-2.3m-1.8 4.8 3.5-2.1M50.2 40l3.4-2m-1.7 4.5 3.6-2.2" stroke-width=".8" opacity=".32" pathLength="100"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Send each letter the moment you finish it — streaming puts the first token on the road early, and a gatekeeper who knows your face keeps the bill light.</blockquote>
+      <p class="k-foot">Chapter 13</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-conc-gate" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M167 13q-7-6-15-8" stroke-width="2.5" pathLength="100"/><path d="M156 4l-4 1 3 3" pathLength="100"/><path d="M170 13q1-4 0-9" stroke-width="2.5" pathLength="100"/><path d="M167 6l3-3 3 3" pathLength="100"/><path d="M173 13q7-6 15-8" stroke-width="2.5" pathLength="100"/><path d="M184 4l4 1-3 3" pathLength="100"/><path d="M169 14c9-2 11 11 2 12s-11-10-2-12" stroke-width="2.5" pathLength="100"/><path d="M164 20q6-1 12 0" stroke-width="1.5" pathLength="100"/><path d="M170 14q1 6 0 12" stroke-width="1.5" pathLength="100"/><path d="M170 26q-1 3 0 5" pathLength="100"/><path d="M158 31c-3 25-2 51 0 76" stroke-width="3.4" pathLength="100"/><path d="M182 31c3 26 2 51 0 76" stroke-width="3.4" pathLength="100"/><path d="M160 48q10-2 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 68q10 2 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 88q10-2 20 0" opacity=".55" stroke-width="1.2" pathLength="100"/>
+<path d="M28 60q9-2 20 0l1 22q-11 4-21 2q-3-12 0-24" stroke-width="2.5" pathLength="100"/><path d="M33 67q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M33 74q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M38 54q-1-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M35 41l3-3 3 3" pathLength="100"/>
+<path d="M58 60q9-2 20 0l1 22q-11 4-21 2q-3-12 0-24" stroke-width="2.5" pathLength="100"/><path d="M63 67q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M63 74q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M68 54q1-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M65 41l3-3 3 3" pathLength="100"/>
+<path d="M88 60q9-2 20 0l1 22q-11 4-21 2q-3-12 0-24" stroke-width="2.5" pathLength="100"/><path d="M93 67q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M93 74q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M98 54q-1-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M95 41l3-3 3 3" pathLength="100"/>
+<path d="M118 60q9-2 20 0l1 22q-11 4-21 2q-3-12 0-24" stroke-width="2.5" pathLength="100"/><path d="M123 67q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M123 74q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M128 54q1-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M125 41l3-3 3 3" pathLength="100"/><path d="M20 94q30-3 62-1t64 1" opacity=".4" stroke-width="1" pathLength="100"/>
+<path d="M250 8q1 4 0 8" stroke-width="2.5" pathLength="100"/><path d="M247 13l3 3 3-3" pathLength="100"/><path d="M240 22q9-2 20 0l1 14q-11 4-21 2q-3-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M244 27q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 32q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 42q10-2 20 0l-1 15q-10 3-19 1q-2-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M244 47q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 52q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 62q9-2 20 0l1 14q-11 4-21 2q-3-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M244 67q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 72q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M240 82q10-2 20 0l-1 15q-10 3-19 1q-2-8 0-16" stroke-width="2.5" pathLength="100"/><path d="M244 87q6-1 12 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M244 92q4 1 9 0" opacity=".6" stroke-width="1.2" pathLength="100"/>
+<path d="M247 105c-1-9 13-9 12 0" stroke-width="2.6" pathLength="100"/><path d="M245 105q7-2 14 0l1 10q-8 4-15 2q-2-6 0-12" stroke-width="2.8" pathLength="100"/><circle cx="252" cy="110" r="1.5" fill="currentColor" stroke="none" pathLength="100"/><path d="M155 38q-1 30 0 62M31 64l-1 14m31-14-1 14m31-14-1 14m31-14-1 14M243 24l-1 10m1 12-1 9m1 10-1 10m1 10-1 9" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">act while tokens arrive: overlap tool runs and startup, watch cost and cache breaks (the ms and cost figures are illustrative)</p>
+      <p class="k-ana">✦ a waiter carrying each dish as it's called, serving still in order, halting the whole batch if one spills</p>
+      <p class="k-foot">Chapter 13</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Streaming is not an optimization but an architectural choice.</li><li>It forces every component, from QueryEngine down to tool execution, to be incremental, interruptible, and composable — performance and cost both follow from that.</li><li>Keep this: caches demand byte-level consistency, and you measure before you tune — tool output tokens usually cost more than model output.</li></ol>
+      <p class="k-foot">Chapter 13</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch14" aria-labelledby="ch14-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 4 · Engineering Practice</p>
+    <h2 id="ch14-h">Chapter 14　Plan Mode &amp; Structured Workflows</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg class="a-flag" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M11 51c11.4 1.2 8.3-18.2 19.5-23.7S44.6 20 47 11.5" stroke-dasharray="4 5.2" stroke-width="2"/>
+  <circle cx="11" cy="51" r="3.2" fill="currentColor" stroke="none"/>
+  <circle cx="11" cy="51" r="5.8" stroke-width="1.1" opacity=".4" pathLength="100"/>
+  <path d="M47 11.4q-1 8.2.2 16.8" stroke-width="2.7" pathLength="100"/>
+  <g class="wave">
+    <path d="M47 12q5.6-1.1 11 .2l-3.8 4.3 3.7 4.4q-5.6-1.2-10.7.2" stroke-width="2.2" pathLength="100"/>
+    <path d="M47.2 13q6.1-1.8 10.8-.8l-3.8 4.3-4.9-.5Z" fill="currentColor" stroke="none" opacity=".8"/>
+  </g>
+  <path d="M20.4 43.9q.4-8.9 5.6-12.3M36.2 26.4q5.6-2.5 8-6.9" stroke-width=".75" opacity=".28" pathLength="100"/>
+  <path d="m7.7 55.4 5.1-2.1m-2.8 4 4.6-1.8M44 29.5q3.4-1.2 6.3-.6" stroke-width=".9" opacity=".35" pathLength="100"/>
+  <circle cx="44" cy="7.5" r="1.1" fill="currentColor" stroke="none" opacity=".5"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Walk the route on paper before the packs move: Plan Mode splits thinking from doing, and redrawing a blueprint always beats tearing down a wall.</blockquote>
+      <p class="k-foot">Chapter 14</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-plan-gate" viewBox="0 0 340 130" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 118q34-4 69-1t69 1" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M192 118q32-3 66-1t68 1" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M152 14c-3 34-2 70 0 104" stroke-width="3.4" pathLength="100"/><path d="M188 14c3 35 2 70 0 104" stroke-width="3.4" pathLength="100"/>
+<path d="M156 24q6-1 12 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M172 24q6 1 12 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M160 36q8-1 16 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M154 48q5 1 10 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M178 48q4-1 8 0" opacity=".55" stroke-width="1.2" pathLength="100"/><path d="M170 49c5-1 6 6 1 7s-6-6-1-7" pathLength="100"/><path d="M162 118q-2-28 0-56" stroke-width="2.7" pathLength="100"/><path d="M178 118q2-28 0-56" stroke-width="2.7" pathLength="100"/><path d="M162 62q7-3 16 0" stroke-width="2.7" pathLength="100"/><path d="M164 116q-1-25 1-50l11 6q1 21-1 44q-5 2-11 0" stroke-width="3" pathLength="100"/><circle cx="173" cy="92" r="1.3" fill="currentColor" stroke="none" pathLength="100"/>
+<path d="M55 35c13-2 15 17 2 18s-15-16-2-18" stroke-width="2.6" pathLength="100"/><path d="M63 51q6 4 9 9" stroke-width="3" pathLength="100"/><path d="M24 68q7-2 16 0l1 18q-9 4-17 2q-2-10 0-20" stroke-width="2.2" pathLength="100"/><path d="M34 68q2 4 6 6" stroke-width="1.2" pathLength="100"/><path d="M27 76l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M52 88q8-2 16 0l-1 19q-8 3-15 1q-2-10 0-20" stroke-width="2.2" pathLength="100"/><path d="M62 88q2 4 6 6" stroke-width="1.2" pathLength="100"/><path d="M55 96l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M84 64q7-2 16 0l1 18q-9 4-17 2q-2-10 0-20" stroke-width="2.2" pathLength="100"/><path d="M94 64q2 4 6 6" stroke-width="1.2" pathLength="100"/><path d="M87 72l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M112 88q8-2 16 0l-1 19q-8 3-15 1q-2-10 0-20" stroke-width="2.2" pathLength="100"/><path d="M122 88q2 4 6 6" stroke-width="1.2" pathLength="100"/><path d="M115 96l3 2-3 2 4 2" opacity=".6" stroke-width="1.2" pathLength="100"/>
+<path d="M226 34q12-3 26 0l1 29q0 4-5 4l-22-1q-3-16 0-32" stroke-width="2.8" pathLength="100"/><path d="M231 42q8-1 16 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M231 50q8 1 16 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M231 58q5-1 11 0" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M272 96q6-9 13-15" stroke-width="3.2" pathLength="100"/><path d="M281 78q7-3 12 2l-1 6q-7 2-12-2q-2-3 1-6" stroke-width="2.7" pathLength="100"/><path d="M222 100q36-3 76 0l1 7q-38 3-77 1q-2-4 0-8" stroke-width="2.8" pathLength="100"/><path d="M252 101q1 3 0 6" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M268 101q-1 3 0 6" opacity=".6" stroke-width="1.2" pathLength="100"/><path d="M260 102c4-1 5 4 1 5s-5-4-1-5" pathLength="100"/><path d="M148 21q-1 39 1 82m40-83 2 83M167 75l-1 32m63-68-1 21M226 104l4 3m2-3 4 3m2-3 4 3" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">think read-only before writing: an approvable, recoverable plan, plus cron triggers and background runs</p>
+      <p class="k-ana">✦ moving day: list and price first, the boss signs before a truck is called, the list is filed for reuse</p>
+      <p class="k-foot">Chapter 14</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>Plan Mode separates read-only exploration from writable execution, so a wrong direction costs almost nothing.</li><li>Align intent before you act: rework happens on the blueprint, and the plan file's three-layer recovery survives interruptions.</li><li>For complex work, run Plan-Execute-Verify: no plan, no ground broken.</li></ol>
+      <p class="k-foot">Chapter 14</p>
+    </article>
+  </div>
+</section>
+<section class="ch" id="ch15" aria-labelledby="ch15-h">
+  <div class="ch-head">
+    <p class="ch-no">Part 4 · Engineering Practice</p>
+    <h2 id="ch15-h">Chapter 15　Building Your Own Agent Harness</h2>
+  </div>
+  <div class="deck">
+    <article class="kcard k-hook">
+      <div class="k-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21.8 52.2Q25.6 32 30 16.3" stroke-width="2.6" pathLength="100"/>
+  <path d="M38.4 52.1Q35.5 32 30.5 16.3" stroke-width="2.4" pathLength="100"/>
+  <path d="M17.5 30.7Q30 29.4 42.6 30.1" stroke-width="2" pathLength="100"/>
+  <path d="M28.9 21.8c6.6-1.3 11.2 3.2 10.8 9.3-.3 6.1-5.5 9.1-11 7.9-5.8-.7-8.5-5.5-7.5-10.6.7-3.1 2.8-5.4 5.9-6.3" stroke-width="2.4" pathLength="100"/>
+  <path d="M25.5 26.6q4.5-1.9 9.3-.1m-9.2 7.9q4.8 1.9 8.7.1" stroke-width="1.2" opacity=".55" pathLength="100"/>
+  <path d="M30 39q.8 6.1-.2 12.1" stroke-width="1.5" pathLength="100"/>
+  <path d="M25.5 51.5q4.7-1.5 9.1-.1l-1.1 6.8q-3.9 1.2-7.1-.1Z" stroke-width="1.8" pathLength="100"/>
+  <path d="M39.3 30.2q2.1 1.5 5.2 2.4l-1.3 5.2" stroke-width="2.1" pathLength="100"/>
+  <path d="m44.5 32.6 3.3-2.2" stroke-width="2" pathLength="100"/>
+  <path d="M13.5 58.5q18.5-1.3 37-.2" stroke-width="1.2" opacity=".45" pathLength="100"/>
+  <path d="M23.3 26.7q-1.8 9.3 8.3 11.1-6.8 2.9-9.6-4.1-1.1-3.7 1.3-7ZM30.5 17.8q5.7 18 7.9 34.3L36 52q-1.2-17.5-5.5-34.2Z" fill="currentColor" stroke="none" opacity=".7"/>
+  <path d="M26.8 53.2q3.3.9 6.3-.1m-6 2.6 5.8-.1M25.5 29.6l1-1.4m2.1 5 2-1.7m1.6-2.2 1.2-1.3" stroke-width=".8" opacity=".4" pathLength="100"/>
+  <circle cx="30.2" cy="30.4" r="1.6" fill="currentColor" stroke="none"/>
+</svg></div>
+      <p class="k-kicker">The hook</p>
+      <blockquote class="k-quote">Your own harness starts cold on its first run — the parts the previous 14 chapters took apart now bolt together into a cart that actually rolls.</blockquote>
+      <p class="k-foot">Chapter 15</p>
+    </article>
+    <article class="kcard k-core">
+      <p class="k-kicker">Core mechanism</p>
+      <div class="k-plate" aria-hidden="true"><svg class="a-harness-wheel" viewBox="0 0 340 140" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 10q77-5 156-2t160 2" opacity=".35" stroke-width="1" stroke-dasharray="2 7" pathLength="100"/><g opacity=".8" stroke-width="1.3" stroke-dasharray="2 4"><path d="M107 22q62-16 127 0" pathLength="100"/><path d="M246 42c8 17-3 35-22 34q-14 2-30-3" pathLength="100"/></g><path d="M228 18l6 4-6 4" opacity=".8" stroke-width="1.3" pathLength="100"/><path d="M201 69l-7 4 4 6" opacity=".8" stroke-width="1.3" pathLength="100"/>
+<g opacity=".8" stroke-width="2.5"><path d="M151 59q-25-9-45-25" pathLength="100"/><path d="M189 59q24-9 45-25" pathLength="100"/><path d="M152 82q-18 10-33 23" pathLength="100"/><path d="M188 82q18 10 33 23" pathLength="100"/></g><path d="M168 48c29-4 35 40 4 44s-35-40-4-44" stroke-width="3.3" pathLength="100"/><path d="M159 64c-6 14 8 23 20 17q15-6 8-21" stroke-width="2.6" pathLength="100"/><path d="M153 60l6 5-1-8" stroke-width="2.4" pathLength="100"/><circle cx="170" cy="70" r="2" fill="currentColor" stroke="none"/><path d="M192 70q6-1 13 0" stroke-width="2.5" pathLength="100"/><path d="M205 70l4-6 5 12 5-12 5 12 4-6" stroke-width="2.3" pathLength="100"/><path d="M228 70q13 2 27 0" stroke-width="2.5" pathLength="100"/>
+<path d="M94 15c18-3 21 24 2 26s-21-24-2-26" stroke-width="2.7" pathLength="100"/><path d="M89 20q-6 5-1 9q2 4 6 1" stroke-width="2.4" pathLength="100"/><path d="M94 30q3 5 7 7" stroke-width="2.4" pathLength="100"/><path d="M244 15c18-3 21 24 2 26s-21-24-2-26" stroke-width="2.7" pathLength="100"/><path d="M245 19q4 3 9 1q1 8-4 12q-2 3-5 3q-4-1-5-3q-5-4-4-12q5 2 9-1" pathLength="100"/><path d="M242 26l2 3 4-5" stroke-width="2.3" pathLength="100"/>
+<path d="M267 57c18-3 21 24 2 26s-21-24-2-26" stroke-width="2.7" pathLength="100"/><path d="M268 62q5 1 9 4q-4 4-9 4q-5 0-9-4q4-3 9-4" stroke-width="1.6" pathLength="100"/><path d="M259 71q4 4 9 4q5 0 9-4" stroke-width="1.8" pathLength="100"/><path d="M259 77q4 4 9 4q5 0 9-4" stroke-width="1.8" pathLength="100"/>
+<path d="M107 99c18-3 21 24 2 26s-21-24-2-26" stroke-width="2.7" pathLength="100"/><path d="M99 106q8-2 18 0l1 10q-10 4-19 2q-2-6 0-12" pathLength="100"/><path d="M104 112q4 2 8 0" stroke-width="1.5" pathLength="100"/><path d="M231 99c18-3 21 24 2 26s-21-24-2-26" stroke-width="2.7" pathLength="100"/><path d="M232 104q-1 6 0 11c0 9 14 3 9-3l-2-2" stroke-width="2.5" pathLength="100"/>
+<path d="M24 128q8-4 14 2" opacity=".5" stroke-width="1.2" pathLength="100"/><path d="M302 126q10-2 14 6" opacity=".5" stroke-width="1.2" pathLength="100"/><circle cx="26" cy="120" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="314" cy="118" r="1.6" fill="currentColor" stroke="none" opacity=".6"/><path d="M158 53q-12 9-8 22m4 3 3 6M84 21q-4 7 0 13m150-14q-4 7 0 13m22 30q-4 7 0 13M97 106q-4 7 0 13m125-13q-4 7 0 13" opacity=".3" stroke-width=".9" pathLength="100"/>
+</svg></div>
+      <p class="k-plain">capstone: six steps to a minimal harness; the code is a teaching example, then production concerns</p>
+      <p class="k-ana">✦ copying a neighbour's kitchen to build your own: six parts in rough order, fixing earlier ones as you learn</p>
+      <p class="k-foot">Chapter 15</p>
+    </article>
+    <article class="kcard k-recap">
+      <p class="k-kicker">Three to keep</p>
+      <ol class="k-list"><li>At every decision point, Claude Code picks the safer, more controllable, more observable option.</li><li>Loop state, fail-closed defaults, dependency injection, circuit breakers, and feature flags are all that philosophy at work.</li><li>Build your own cart on the six-step roadmap: hold the safety line first, then let the agent run.</li></ol>
+      <p class="k-foot">Chapter 15</p>
+    </article>
+  </div>
+</section>
+</main>
+<footer>Back to the <a href="portal.html">site index</a> · <a href="beginner-reader.en.html">beginner reader</a> · <a href="illustration-gallery.html">illustration gallery</a> · baseline v0.3.6</footer>
+</body>
+</html>

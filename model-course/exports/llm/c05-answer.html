@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C05 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C05-answer-section-408b2752a2" tabindex="-1">C05 作业核对：一句话怎样逐步生成</h1>
+<p>题目在 <a href="c05.html">C05 正文</a>，容差 ±0.001。下面给计算过程；若你的中间值四舍五入得更早，末位可能差 0.001 左右，按容差判断。</p>
+<h2 id="C05-answer-section-e581c5339a" tabindex="-1">一、<code>[0,1,1]</code> 的 softmax</h2>
+<p><code>T=1</code>：</p>
+<ul>
+<li><code>exp(0)=1</code>，<code>exp(1)=2.71828</code>（两个）</li>
+<li>总和 <code>1+2.71828+2.71828=6.43656</code></li>
+<li>概率 <code>[0.1554, 0.4223, 0.4223]</code></li>
+</ul>
+<p><code>T=0.5</code>：分数除以 0.5 等于乘 2，得 <code>[0,2,2]</code>：</p>
+<ul>
+<li><code>exp(0)=1</code>，<code>exp(2)=7.38906</code>（两个）</li>
+<li>总和 <code>15.77812</code></li>
+<li>概率 <code>[0.0634, 0.4683, 0.4683]</code></li>
+</ul>
+<p>两个高分候选相等，概率也应相等。平分时程序按固定顺序选一个，不代表另一个更差。</p>
+<h2 id="C05-answer-section-30b41b1c37" tabindex="-1">二、两路口路径</h2>
+<ul>
+<li>先 A：<code>0.6×0.1=0.06</code></li>
+<li>先 B：<code>0.4×0.9=0.36</code></li>
+</ul>
+<p>第一步贪心选 A（0.6&gt;0.4），但整条路 B 更大。这里只比较两条指定路径，不是完整搜索；结论是“每步最大不能保证整段最大”，不是“B 一定最好”。</p>
+<h2 id="C05-answer-section-8a8a00414a" tabindex="-1">三、<code>A中</code> 的字节</h2>
+<ul>
+<li><code>A</code> → <code>41</code></li>
+<li><code>中</code> → <code>E4 B8 AD</code></li>
+</ul>
+<p>按 <code>41</code>、<code>E4</code>、<code>B8 AD</code> 逐片显示时，后两片不是完整 UTF-8 字符，会显示替代字符或乱码。验证方式：把所有字节按原顺序拼接成 <code>41 E4 B8 AD</code>，再按 UTF-8 解码，应得到 <code>A中</code>。逐片显示与拼接解码是两件事。</p>
+<h2 id="C05-answer-section-ea0d635e5b" tabindex="-1">四、在“因此，我们建议”处截断</h2>
+<p>不能直接当结论。至少要检查：</p>
+<ol>
+<li><strong>停止原因</strong>：是达到最大长度，还是选中停止符、服务规则停止？前者说明句子可能未完。</li>
+<li><strong>完整性</strong>：建议的对象、条件、依据是否已经出现；若最后一句语法上未完，不能补全后当原文。</li>
+<li>还应核对建议中的事实是否有材料支持——截断只影响完整性，不改变事实核验要求。</li>
+</ol>
+<h2 id="C05-answer-section-8f21a3153c" tabindex="-1">五、两次回答不同</h2>
+<p>可能原因：</p>
+<ul>
+<li>解码设置不同（温度、top-k/top-p、种子）；</li>
+<li>模型版本或服务端实现不同；</li>
+<li>上下文材料、系统提示、工具结果不同；</li>
+<li>并行计算与浮点差异导致抽样路径不同；</li>
+<li>输出被截断或后处理不同。</li>
+</ul>
+<p>本地实验固定种子、温度与操作顺序后，可以重放同一伪随机序列，排除“种子”这一项；它不能证明真实服务也会复刻，因为真实服务还有版本、后端与并行等因素。</p>
+<h2 id="C05-answer-section-8e2ec99b44" tabindex="-1">六、评分要点</h2>
+<ul>
+<li>两组 softmax 的 exp、总和、归一化齐全：4 分（每组 2 分）。</li>
+<li>路径概率 <code>0.06/0.36</code> 且说明贪心选 A：2 分。</li>
+<li>字节 <code>41 E4 B8 AD</code> 与逐片/拼接区别：2 分。</li>
+<li>截断题指出停止原因与完整性两项：2 分。</li>
+<li>不同原因至少三条，且区分本地可排除项：2 分。</li>
+</ul>
+<p>关键失败：把概率当事实置信度；用字数直接算 token；把 <code>T=0</code> 硬套进除法；把截断输出补写成完整结论。</p>
+</article><nav class="lesson-nav"><a href="c05.html">返回 C05 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

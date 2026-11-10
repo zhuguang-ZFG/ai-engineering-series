@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C28 为新任务选择最小系统 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details open><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html" aria-current="page">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C28-section-9d939b8337">先修检查：从 K4 与 C27 走进来</a></li><li class="toc-level-2"><a href="#C28-section-846d78e772">需求：先写“不做什么”</a></li><li class="toc-level-3"><a href="#C28-section-d115078848">1. 用户与任务</a></li><li class="toc-level-3"><a href="#C28-section-e0b697ed26">2. 材料</a></li><li class="toc-level-3"><a href="#C28-section-a0a7afdd20">3. 约束</a></li><li class="toc-level-3"><a href="#C28-section-74fb9bf923">4. 验收（先冻结再实现）</a></li><li class="toc-level-2"><a href="#C28-section-eaff5d49f7">候选方案：至少两条路，不要先造复杂系统</a></li><li class="toc-level-3"><a href="#C28-section-ffed07646e">方案 A：整本手册直接放进提示</a></li><li class="toc-level-3"><a href="#C28-section-cb660b04b4">方案 B：按页切块 + 关键词检索 + 单次模型 + 逐字引用校验</a></li><li class="toc-level-3"><a href="#C28-section-51b74c4902">方案 C：embedding 检索</a></li><li class="toc-level-3"><a href="#C28-section-716e1df8ee">方案 D：微调模型</a></li><li class="toc-level-3"><a href="#C28-section-5913028d70">方案 E：Agent + 工具</a></li><li class="toc-level-3"><a href="#C28-section-80c5977dcb">方案 F：直接调用外部大模型 API</a></li><li class="toc-level-2"><a href="#C28-section-3193d87e4d">决策：为什么选 B，而不是 A</a></li><li class="toc-level-2"><a href="#C28-section-a0456ac8a9">可运行的小程序：先量手册，再选架构</a></li><li class="toc-level-2"><a href="#C28-section-7ea72ba0c3">改一个条件：什么时候 B 也不够？</a></li><li class="toc-level-3"><a href="#C28-section-4ac35c1d58">条件 1：手册只有 18 页</a></li><li class="toc-level-3"><a href="#C28-section-0e9a0054f5">条件 2：手册 320 页，含大量同义表述</a></li><li class="toc-level-3"><a href="#C28-section-7d886fc6bd">条件 3：8 页扫描件不可读</a></li><li class="toc-level-3"><a href="#C28-section-d490d300c2">条件 4：只允许旧版 v1.4</a></li><li class="toc-level-2"><a href="#C28-section-67d4131ffd">失败反例：四种“架构看起来对，结果不可用”</a></li><li class="toc-level-2"><a href="#C28-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C28-section-8252430a2a">项目增量：架构决定记录（ADR）</a></li><li class="toc-level-2"><a href="#C28-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C28"><header class="chapter-opener"><p class="chapter-number">C28</p><p class="chapter-kicker">S5 · 独立交付 / K5</p><h1>为新任务选择最小系统</h1><p class="chapter-abstract">为无网络车间里的手册问答选择最小系统，并写清不采用哪些组件。</p></header><p class="chapter-meta">先修：<a href="c27.html">C27</a> · <a href="stage-s5.html">S5 阶段导言</a></p><div class="article-body"><p>现场技术员打来电话：一台标签打印机的进纸机构卡住了，手册里有三条相关步骤、两条安全警告，还有一个“不要用金属工具撬”的否定句。他需要的是可回查的答案，不是一段听起来专业的建议。更麻烦的是：手册有 96 页、三个版本、几页扫描件，而且技术员在无网络的车间里工作。</p>
+<p>上一章 <a href="c27.html">C27 图片、扫描件与多模态边界</a> 解决了“像素怎样变成可核对文本”；本章决定“产品手册问答最少需要哪些组件”。下一章 <a href="c29.html">C29 交给别人怎样才算交付</a> 会把决定变成可启动、可回退的发布包。</p>
+<p>这就是本章的新任务：<strong>为一份产品手册做一个能引用原文的问答系统</strong>。它不是你之前做过的活动通知；不要拿通知材料改个标题就交。产品手册有版本、页码、步骤顺序、警告、表格、型号差异和更新周期，这些会直接改变架构选择。</p>
+<p>本章不写代码产品，而是写一份<strong>可执行的架构决定</strong>：需求、约束、候选方案、实测前假设、不采用项、风险与验收。下一章再把这份决定交付给别人；C30 则换一个陌生题材独立完成。</p>
+<h2 id="C28-section-9d939b8337" tabindex="-1">先修检查：从 K4 与 C27 走进来</h2>
+<p>你应该已经：</p>
+<ul>
+<li>完成 C18–C26 的冻结评测、失败边界定位和小模型实验；</li>
+<li>能区分提示、检索、工具、Agent 与微调各自解决什么问题；</li>
+<li>在 C27 跑过一次有授权的 OCR，或明确记录资源阻碍；</li>
+<li>能写“输入、输出、失败状态、验收判据”，而不是只写“用 RAG”。</li>
+</ul>
+<p>如果还没有，先补。本章的每个选择都要能回到一个具体缺口，而不是“现在流行这个”。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/choose-an-approach.svg" alt="先找缺口，再选办法：提示、检索、微调、工具各有适用条件"><figcaption>图：先问缺口在哪里：要求不清改提示，缺依据用检索，行为要稳定学习才考虑微调，需要真实执行接工具。没有缺口就不要加组件；复杂任务可能要组合几种办法。</figcaption></figure>
+<p>图的作用不是让你把所有方法都上一次，而是先问缺口在哪里：是任务没讲清、资料不在上下文、行为需要稳定学习，还是必须真实执行。没有缺口，就不要加组件。</p>
+<h2 id="C28-section-846d78e772" tabindex="-1">需求：先写“不做什么”</h2>
+<p>下面是一份<strong>示例需求</strong>，产品名与数字是虚构的，用来练习；你必须换成自己获授权的产品手册并重新测量。不要把这些假设值写成你的实测结果。</p>
+<h3 id="C28-section-d115078848" tabindex="-1">1. 用户与任务</h3>
+<ul>
+<li>用户：6 名现场技术员，使用公司笔记本电脑，无稳定外网；</li>
+<li>任务：根据手册回答安装、操作、清洁、故障代码和保养问题；</li>
+<li>输出：答案 + 手册章节/页码 + 逐字原文；材料没有说明时明确“未知”；</li>
+<li>不做：不替代安全规程，不给出手册之外的维修建议，不控制设备，不写工单，不做多轮自由创作。</li>
+</ul>
+<h3 id="C28-section-e0b697ed26" tabindex="-1">2. 材料</h3>
+<ul>
+<li>96 页产品手册，中文为主，含英文界面标签；</li>
+<li>大部分页面有文本层，约 8 页是扫描图；</li>
+<li>有 3 个版本：v1.2、v1.4、v2.0；现场只允许使用 v2.0，旧版用于追溯；</li>
+<li>手册含警告、表格、型号差异和否定句（“不要……”“禁止……”）。</li>
+</ul>
+<h3 id="C28-section-a0a7afdd20" tabindex="-1">3. 约束</h3>
+<ul>
+<li>本地/离线优先；可以把模型和手册放在笔记本上；</li>
+<li>不把手册或问题上传到未授权服务；</li>
+<li>单次回答在普通 CPU 上可接受（具体阈值由实测决定，例如 p95 ≤ 60 秒，不能先写“很快”）；</li>
+<li>引用必须可回查到手册版本、页码/章节和逐字片段；</li>
+<li>答案中的自由改写必须人工复核；没有复核的改写不能冒充原文。</li>
+</ul>
+<h3 id="C28-section-74fb9bf923" tabindex="-1">4. 验收（先冻结再实现）</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>判据</th>
+<th>失败示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>事实支持</td>
+<td>每条可执行主张有逐字引用或明确未知</td>
+<td>引用存在但不支持该步骤</td>
+</tr>
+<tr>
+<td>完整性</td>
+<td>安全警告、前置条件、否定句不被省略</td>
+<td>只给步骤，删掉“必须先断电”</td>
+</tr>
+<tr>
+<td>版本</td>
+<td>只引用当前版；旧版冲突显式列出</td>
+<td>悄悄混用 v1.4 与 v2.0</td>
+</tr>
+<tr>
+<td>拒绝</td>
+<td>手册未覆盖时返回“未知/需联系厂家”</td>
+<td>用常识补扭矩值</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>无权限文档不进入检索/上下文</td>
+<td>先读后删引用</td>
+</tr>
+<tr>
+<td>延迟/成本</td>
+<td>在冻结样本上记录实际值</td>
+<td>用“应该不慢”代替测量</td>
+</tr>
+<tr>
+<td>交付</td>
+<td>他人可按说明启动并复现一次失败</td>
+<td>只在自己机器上能跑</td>
+</tr>
+</tbody></table>
+<p>验收集至少覆盖：正常步骤、缺失、版本冲突、无命中、越权、扫描页不可读、恶意文字、模型不可用。样本要在执行前冻结，不能看完答案再改题。</p>
+<h2 id="C28-section-eaff5d49f7" tabindex="-1">候选方案：至少两条路，不要先造复杂系统</h2>
+<h3 id="C28-section-ffed07646e" tabindex="-1">方案 A：整本手册直接放进提示</h3>
+<p>把 v2.0 的文本全部拼进上下文，问题放最后，让模型回答并要求引用。</p>
+<p><strong>适用条件</strong>：手册文本能完整放进模型上下文，且留出输出空间；模型对长上下文中间位置仍能可靠引用；单次成本/延迟可接受。</p>
+<p><strong>优点</strong>：组件最少；没有索引、切块、检索阈值；版本控制就是“选哪份文本”。</p>
+<p><strong>风险</strong>：手册 96 页、约 4.8 万字符（示例假设）时，中文按接近 1 token/字符估算，已经接近或超过许多本地小模型的上下文；截断会静默丢页。长上下文还可能“中间遗忘”，模型引用后文却漏掉前面的警告。每次请求都携带整本手册，延迟和内存也高。</p>
+<h3 id="C28-section-cb660b04b4" tabindex="-1">方案 B：按页切块 + 关键词检索 + 单次模型 + 逐字引用校验</h3>
+<p>先把文本层抽成带页码的 Markdown；扫描页用 C27 的 OCR 补成带“OCR”标记的片段；按页/小节切成块；用关键词（字符 + 二元组）取前 k 块；把问题、块和严格输出格式交给模型；程序校验每条引用是否逐字出现在对应块中。没有命中就回答“材料未覆盖”，不调用模型或返回 <code>insufficient-evidence</code>。</p>
+<p><strong>优点</strong>：每页/每节可追溯；版本更新只重建索引；上下文只放相关块；关键词基线可解释，零命中容易发现；不需要向量数据库、工具或 Agent。</p>
+<p><strong>风险</strong>：同义改写（“卡纸” vs “进纸异常”）可能漏检；切块切断跨页步骤；OCR 页有错字；引用校验只能证明“字符串存在”，不能证明“语义支持”。这些都要用评测暴露。</p>
+<h3 id="C28-section-51b74c4902" tabindex="-1">方案 C：embedding 检索</h3>
+<p>把块编码成向量，按相似度取回。它可能改善同义改写召回，但增加 embedding 模型、阈值、索引更新和版本对齐；阈值必须用验证集解释，不能拍一个 0.3 就上线。</p>
+<p><strong>本章决定</strong>：先做 B 的关键词基线。只有当冻结评测显示“相关块存在但关键词没取回”且 embedding 对照确实改善时，才把 C 作为一次单变量实验加入。不要因为“RAG 通常用向量”就先加。</p>
+<h3 id="C28-section-716e1df8ee" tabindex="-1">方案 D：微调模型</h3>
+<p><strong>不采用</strong>。理由：手册只有几十页、版本 quarterly 更新、任务是引用而非风格；微调不能保证逐字引用，反而可能把旧版知识固化进权重；数据许可和再分发也要单独确认。若未来要固定输出格式或领域术语，最多做小规模 SFT/LoRA 对照，且不能替代检索与引用校验。</p>
+<h3 id="C28-section-5913028d70" tabindex="-1">方案 E：Agent + 工具</h3>
+<p><strong>不采用</strong>。任务是只读问答，不需要执行动作；固定流程已经能完成“检索 → 回答 → 校验”。加 Agent 会引入循环、预算、工具权限和停止条件，却没有明确的决策收益。若将来需要查询设备实时状态或生成工单，再按 C16/C21 的边界单独设计。</p>
+<h3 id="C28-section-80c5977dcb" tabindex="-1">方案 F：直接调用外部大模型 API</h3>
+<p><strong>默认不采用</strong>。离线要求、手册保密和费用上限都不支持；若获授权使用 API，也要记录数据驻留、保留策略和成本，并保留本地失败路径。不能把“外部模型更强”当成默认答案。</p>
+<h2 id="C28-section-3193d87e4d" tabindex="-1">决策：为什么选 B，而不是 A</h2>
+<p>用示例假设做一次显式计算（<strong>不是实测</strong>）：</p>
+<pre><code class="language-text">96 页 × 平均 500 字符/页 ≈ 48,000 字符
+中文为主，粗估 0.6–1.2 token/字符 → 约 28,800–57,600 token
+本地小模型上下文示例：32,768 token
+还要留给问题、输出和格式说明：约 2,000–4,000 token
+→ 整本放入在 32k 上下文下没有稳定余量，且中间页容易被忽略
+→ 选择按页检索，而不是整本提示
+</code></pre>
+<p>如果换成 20 页、约 8,000 字符的小手册，方案 A 可能更小、更稳；此时强行上 RAG 就是过度设计。最小系统随材料规模变化，不随流行词变化。</p>
+<p>方案 B 的最小流程：</p>
+<pre><code class="language-text">v2.0 手册
+  ├─ 文本层抽取（页码/章节）──┐
+  ├─ 扫描页 OCR（标记来源）──┤
+  └─ 旧版隔离（不进入默认索引）┘
+                ↓
+        页/节级切块 + 稳定 ID + 版本 + 权限
+                ↓
+        关键词检索 top-k（阈值/零命中）
+                ↓
+        本地模型：只输出严格 JSON
+          claims[] = {text, quote, chunk_id, page}
+                ↓
+        程序校验：quote 必须逐字存在于 chunk；否则失败
+                ↓
+        答案 = 已通过校验的逐字引用（或人工复核的改写）
+</code></pre>
+<p>注意最后一步：不是“模型回答后我们相信它”，而是“模型提出候选引用，程序逐字核对，答案只由通过核对的片段组成”。这比让模型自由总结更容易验收，也更符合本章的引用契约。</p>
+<h2 id="C28-section-a0456ac8a9" tabindex="-1">可运行的小程序：先量手册，再选架构</h2>
+<p>下面是一个只依赖 Python 标准库的估算器。把代码保存为 <code>plan_budget.py</code> 再运行。它不解析 PDF，只读取已经抽出的 UTF-8 文本；用换页符 <code>\f</code> 估算页数，用中日韩字符与非中日韩字符粗略估算 token，并计算按固定字符切块的块数。它输出的是<strong>估算</strong>，不是 tokenizer 实测；真正决策时要用你的模型 tokenizer 复算。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;Estimate manual size and chunk count before choosing an architecture.&quot;&quot;&quot;
+import argparse
+import json
+import math
+from pathlib import Path
+
+
+def is_cjk(ch: str) -&gt; bool:
+    code = ord(ch)
+    return (
+        0x4E00 &lt;= code &lt;= 0x9FFF
+        or 0x3400 &lt;= code &lt;= 0x4DBF
+        or 0x3040 &lt;= code &lt;= 0x30FF
+        or 0xAC00 &lt;= code &lt;= 0xD7AF
+    )
+
+
+def main() -&gt; int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(&quot;text&quot;, help=&quot;UTF-8 text extracted from the manual&quot;)
+    parser.add_argument(&quot;--chunk-chars&quot;, type=int, default=1200)
+    parser.add_argument(&quot;--overlap&quot;, type=int, default=150)
+    parser.add_argument(&quot;--top-k&quot;, type=int, default=4)
+    args = parser.parse_args()
+    if args.chunk_chars &lt;= 0 or not 0 &lt;= args.overlap &lt; args.chunk_chars:
+        parser.error(&quot;require chunk-chars &gt; 0 and 0 &lt;= overlap &lt; chunk-chars&quot;)
+    if args.top_k &lt;= 0:
+        parser.error(&quot;require top-k &gt; 0&quot;)
+
+    text = Path(args.text).read_text(encoding=&quot;utf-8&quot;)
+    pages = text.count(&quot;\f&quot;) + 1 if text else 0
+    cjk = sum(1 for ch in text if is_cjk(ch))
+    other = len(text) - cjk
+    # Rough bounds only: tokenizers differ. Replace with a real tokenizer before freezing.
+    low_tokens = math.ceil(cjk * 0.5 + other / 6)
+    high_tokens = math.ceil(cjk * 1.5 + other / 2)
+    step = args.chunk_chars - args.overlap
+    chunks = max(1, math.ceil((len(text) - args.overlap) / step)) if text else 0
+    lengths = [min(args.chunk_chars, len(text) - i * step) for i in range(chunks)]
+    avg_chunk = sum(lengths) / chunks if chunks else 0
+    context_bound = sum(sorted(lengths, reverse=True)[:args.top_k])
+
+    print(json.dumps({
+        &quot;file&quot;: str(args.text),
+        &quot;characters&quot;: len(text),
+        &quot;pages_by_form_feed&quot;: pages,
+        &quot;cjk_characters&quot;: cjk,
+        &quot;other_characters&quot;: other,
+        &quot;token_estimate_low&quot;: low_tokens,
+        &quot;token_estimate_high&quot;: high_tokens,
+        &quot;chunk_chars&quot;: args.chunk_chars,
+        &quot;overlap&quot;: args.overlap,
+        &quot;chunks&quot;: chunks,
+        &quot;average_chunk_chars&quot;: round(avg_chunk, 1),
+        &quot;top_k&quot;: args.top_k,
+        &quot;retrieved_chars_upper_bound&quot;: context_bound,
+        &quot;note&quot;: &quot;Estimates only; verify with the actual tokenizer and frozen evaluation.&quot;,
+    }, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+<p>用法：</p>
+<pre><code class="language-bash">python plan_budget.py manual-v2.0.txt --chunk-chars 1200 --overlap 150 --top-k 4
+</code></pre>
+<p>把输出记进架构决定。若 <code>token_estimate_high</code> 已经接近上下文上限，方案 A 没有余量。<code>retrieved_chars_upper_bound</code> 把最长的至多 k 个固定窗口相加，包含重叠字符；它是这种切块方式的检索字符上界，不是实际命中长度，也不含提示词、元数据与输出。空文本对应 0 块，不能当成有证据。不要用估算器替代真实 tokenizer、真实检索和冻结评测。</p>
+<h2 id="C28-section-7ea72ba0c3" tabindex="-1">改一个条件：什么时候 B 也不够？</h2>
+<h3 id="C28-section-4ac35c1d58" tabindex="-1">条件 1：手册只有 18 页</h3>
+<p>整本约 9,000 字符，上下文足够，问题也集中在少数章节。此时方案 A 可能更小：一个提示、无索引、无检索阈值。你需要实测长上下文是否能保留安全警告，并比较引用校验的通过率。若 A 通过验收，就不必为了“架构完整”上 B。</p>
+<h3 id="C28-section-0e9a0054f5" tabindex="-1">条件 2：手册 320 页，含大量同义表述</h3>
+<p>关键词基线可能漏掉“进纸异常/卡纸/送纸失败”等同义说法。此时先看失败样本：是相关块根本没进候选，还是进了但排序低。若是前者，做 embedding 对照；若是后者，改切块/排序/查询扩展。不要同时改三个因素。</p>
+<h3 id="C28-section-7d886fc6bd" tabindex="-1">条件 3：8 页扫描件不可读</h3>
+<p>OCR 返回 <code>unreadable</code>/<code>uncertain</code> 时，不能从相邻页猜内容。该页进入“需要人工录入/重扫描”清单；问答系统对该页问题返回“材料不可读”。如果扫描页恰好是安全警告，这会影响验收，不能静默跳过。</p>
+<h3 id="C28-section-d490d300c2" tabindex="-1">条件 4：只允许旧版 v1.4</h3>
+<p>版本过滤必须在检索前完成；此时只让获准的 v1.4 进入上下文，未获准版本不能进入。若新旧版本都可见，冲突要显式返回两条引用，而不是让模型选一个。版本元数据不是装饰，是权限与事实的一部分。</p>
+<h2 id="C28-section-67d4131ffd" tabindex="-1">失败反例：四种“架构看起来对，结果不可用”</h2>
+<ol>
+<li><strong>静默截断</strong>：整本提示超出上下文，程序从尾部截断，模型没看到前面的警告，却仍给出步骤。必须记录 prompt token 数和丢弃项；超预算要失败或显式降级。</li>
+<li><strong>引用存在但不支持</strong>：模型引用了“进纸器”段落，却回答“用金属工具撬开”。逐字校验只能证明字符串存在，不能证明语义支持；需要人工抽检和更严格的 claim 结构。</li>
+<li><strong>检索命中旧版</strong>：索引里同时有 v1.4 和 v2.0，模型引用旧扭矩值。版本过滤要在读取/索引前完成，报告要写版本。</li>
+<li><strong>过度设计</strong>：18 页手册上部署向量库、Agent、工具和微调，最后仍无法说明每个组件的收益。最小系统不是“组件少看起来简陋”，而是每个组件都有可验证的必要条件。</li>
+</ol>
+<h2 id="C28-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li><strong>换材料</strong>：选一份你有权使用的产品手册（不要用活动通知），抽出文本，运行 <code>plan_budget.py</code>。记录页数、字符、token 估算、切块数和检索预算。</li>
+<li><strong>写需求</strong>：一页以内写清用户、任务、输入、输出、权限、版本、失败状态和验收判据。必须包含“不做什么”。</li>
+<li><strong>比较两方案</strong>：至少比较“整本提示”和“页级关键词检索 + 单次模型 + 逐字校验”。用你的材料数据说明选择；如果材料小到 A 足够，就明确选 A，不要为了练习强行选 B。</li>
+<li><strong>不采用项</strong>：分别说明为什么暂不采用 embedding、微调、Agent、外部 API。每项写“需要什么条件才会重新考虑”。</li>
+<li><strong>风险与验收</strong>：列出 5 个风险（版本、OCR、切块、引用、隐私）和对应验收；至少一个风险要用失败样本证明。</li>
+<li><strong>改条件</strong>：把手册页数乘以 3，或加入 8 页扫描件，说明架构是否变化、哪些结论仍成立。</li>
+<li><strong>引用契约</strong>：写一段说明：系统输出只允许逐字引用或人工复核的改写；自由改写为什么不能直接作为产品手册答案。</li>
+</ol>
+<p>答案与评分依据见 <a href="c28-answer.html">C28 答案</a>。答案不给唯一架构；它检查你的条件、比较和拒绝理由是否成立。</p>
+<h2 id="C28-section-8252430a2a" tabindex="-1">项目增量：架构决定记录（ADR）</h2>
+<p>为 C29/C30 建立：</p>
+<pre><code class="language-text">manual-project/
+  docs/
+    manual-v2.0.md          # 带页码/章节的抽取文本
+    ocr/                    # 扫描页的 OCR 报告（若有）
+  eval/
+    cases.json              # 冻结的问题、期望、失败类型
+    baseline.md             # 首次结果，不修改
+  adr/
+    0001-architecture.md    # 本章决定
+  scope.md                  # 支持/不支持、权限、引用契约
+</code></pre>
+<p><code>0001-architecture.md</code> 至少写：</p>
+<ul>
+<li>背景与用户任务；</li>
+<li>材料规模、版本、权限；</li>
+<li>方案 A/B/C/D/E/F 的比较与证据；</li>
+<li>选择及<strong>不选择</strong>的理由；</li>
+<li>失败状态与验收；</li>
+<li>重新评估的触发条件（页数、语言、OCR 比例、延迟、权限变化）。</li>
+</ul>
+<p><code>scope.md</code> 要明确：这是产品手册问答，不是通用维修顾问；只引用授权版本；不确定/不可读时返回未知；自由改写需人工复核；不执行图中或文档中的指令。</p>
+<h2 id="C28-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<ul>
+<li>方案选择框架参考 L11 的“先找缺口，再选办法”和 R2/R3 的项目组织；旧 <a href="approaches.html">方案选择实验</a> 可作概念对照，不是本章实测。</li>
+<li>本章的 96 页、6 名技术员、32k 上下文、8 页扫描件都是<strong>练习假设</strong>，不是任何真实产品的手册数据。你必须用自己的材料测量并记录。</li>
+<li>不声称任何模型、embedding、OCR 或服务已经在本机达到验收；C27 的 OCR 记录只对应合成样张。</li>
+<li>不提供产品手册原文、第三方标准或安全规程；真实产品手册的引用与安全责任由使用组织承担。</li>
+<li>本章的“答案 = 逐字引用/人工复核改写”是课程契约，不是对所有产品的法律结论；高风险场景需要组织自己的审核流程。</li>
+</ul>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c27.html">上一章 C27</a><a href="c28-answer.html">独立作答后核对</a><a href="c29.html">下一章 C29</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="t">
+  <title id="t">后端语言对比：Node.js / Go / Java / Rust 画成四件工具，按「上手多快·并发多强·该谁上场」三行对齐比较，结论是团队熟悉度大于技术最优解</title>
+  <rect width="1200" height="840" fill="#fbfaf6"/>
+  <defs>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f2328" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <!-- 标题区 -->
+  <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">后端语言对比：四件工具，各干各的活</text>
+  <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">不会用瑞士军刀砍柴，也不会用斧子做精细雕刻</text>
+  <text x="1128" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="end">选错语言不致命，但代价巨大</text>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- ============ 四件工具：语言抬头卡 ============ -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="188" y="176" width="226" height="146" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="426" y="176" width="226" height="146" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="664" y="176" width="226" height="146" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="902" y="176" width="226" height="146" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+  </g>
+
+  <!-- 工具图标：手动螺丝刀 / 手电钻 / 螺母螺栓 / 刻刀与直尺 -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Node.js：手动工具，拿起来就能用 -->
+    <g transform="translate(202 190)">
+      <g transform="rotate(20 26 26)">
+        <rect x="12" y="8" width="28" height="13" rx="4"/>
+        <path d="M26 21v26"/>
+        <path d="M19 8v13"/>
+      </g>
+    </g>
+    <!-- Go：电动工具，插电即用、力量大 -->
+    <g transform="translate(440 190)">
+      <rect x="4" y="12" width="26" height="16" rx="5"/>
+      <rect x="30" y="15" width="7" height="10" rx="2"/>
+      <path d="M37 20h11"/>
+      <path d="M9 28v16h13v-16"/><path d="M22 33h5"/>
+      <path d="M49 14q6 6 0 12"/>
+    </g>
+    <!-- Java：企业车间标配，一次编写到处运行 -->
+    <g transform="translate(678 190)">
+      <path d="M26 6l13 8v15l-13 8-13-8V14z"/>
+      <circle cx="26" cy="21" r="7"/>
+      <path d="M21 41h10M23 47h6"/>
+    </g>
+    <!-- Rust：严格按图纸施工，编译期把安全问题查完 -->
+    <g transform="translate(916 190)">
+      <rect x="2" y="34" width="46" height="14" rx="3"/>
+      <path d="M11 34v5M20 34v5M29 34v5M38 34v5"/>
+      <g transform="rotate(-24 26 20)">
+        <rect x="21" y="2" width="10" height="24" rx="4"/>
+        <path d="M21 26h10l-5 10z"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- 语言名 + 年份 + 定位 + 类型徽章 -->
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g fill="#1f2328" font-size="23" font-weight="700">
+      <text x="266" y="218">Node.js</text>
+      <text x="504" y="218">Go</text>
+      <text x="742" y="218">Java</text>
+      <text x="980" y="218">Rust</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="204" y="256">全栈革命</text>
+      <text x="442" y="256">云原生首选</text>
+      <text x="680" y="256">企业级常青树</text>
+      <text x="918" y="256">系统编程新星</text>
+    </g>
+    <g fill="#57606a" font-size="19" text-anchor="end">
+      <text x="1114" y="256">2015</text>
+      <text x="876" y="256">1995</text>
+      <text x="638" y="256">2009</text>
+      <text x="400" y="256">2009</text>
+    </g>
+    <g fill="#d3efd9" stroke="#1f883d" stroke-width="3">
+      <rect x="202" y="276" width="194" height="34" rx="10"/>
+      <rect x="440" y="276" width="194" height="34" rx="10"/>
+      <rect x="678" y="276" width="194" height="34" rx="10"/>
+      <rect x="916" y="276" width="194" height="34" rx="10"/>
+    </g>
+    <g fill="#1f2328" font-size="19" text-anchor="middle">
+      <text x="299" y="300">解释型·手动工具</text>
+      <text x="537" y="300">编译型·电动工具</text>
+      <text x="775" y="300">一次编写，到处运行</text>
+      <text x="1013" y="300">编译期·内存安全</text>
+    </g>
+  </g>
+
+  <!-- ============ 三行比较：左侧行标签 ============ -->
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g fill="#1f883d">
+      <circle cx="124" cy="368" r="15"/><circle cx="124" cy="496" r="15"/><circle cx="124" cy="630" r="15"/>
+    </g>
+    <g fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">
+      <text x="124" y="375">1</text><text x="124" y="503">2</text><text x="124" y="637">3</text>
+    </g>
+    <g fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">
+      <text x="124" y="410">上手多快</text>
+      <text x="124" y="548">并发多强</text>
+      <text x="124" y="672">该谁上场</text>
+    </g>
+    <g fill="#57606a" font-size="19" text-anchor="middle">
+      <text x="124" y="436">启动与学习</text>
+      <text x="124" y="574">同时干多少</text>
+      <text x="124" y="698">最擅长的活</text>
+    </g>
+  </g>
+
+  <!-- ============ 行 1：上手多快（量条＝起步速度） ============ -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="188" y="338" width="226" height="112" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="426" y="338" width="226" height="112" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="664" y="338" width="226" height="112" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="902" y="338" width="226" height="112" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+  </g>
+  <g stroke="#e6e1d4" stroke-width="12" stroke-linecap="round">
+    <path d="M202 368h198"/><path d="M440 368h198"/><path d="M678 368h198"/><path d="M916 368h198"/>
+  </g>
+  <g stroke="#1f883d" stroke-width="12" stroke-linecap="round">
+    <path d="M202 368h188"/><path d="M440 368h162"/><path d="M678 368h88"/><path d="M916 368h34"/>
+  </g>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g fill="#1f2328" font-size="19" font-weight="700">
+      <text x="204" y="410">启动 &lt;1 秒</text>
+      <text x="442" y="410">编译速度极快</text>
+      <text x="680" y="410">JVM 启动偏慢</text>
+      <text x="918" y="410">学习曲线最陡</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="204" y="436">拿起来就能跑</text>
+      <text x="442" y="436">接近解释型体验</text>
+      <text x="680" y="436">语法繁琐代码多</text>
+      <text x="918" y="436">编译时间也慢</text>
+    </g>
+  </g>
+
+  <!-- ============ 行 2：并发多强（画的是一线程 / 一把协程 / 三根重线程 / 一面盾） ============ -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="188" y="466" width="226" height="126" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="426" y="466" width="226" height="126" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="664" y="466" width="226" height="126" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+    <rect x="902" y="466" width="226" height="126" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
+  </g>
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Node.js：一条事件循环，只有一个在跑 -->
+    <circle cx="301" cy="500" r="17"/>
+    <path d="M301 483h10"/>
+    <path d="M311 478l9 5-9 5z" fill="#1f2328" stroke="none"/>
+    <circle cx="301" cy="500" r="5" fill="#1f2328" stroke="none"/>
+    <!-- Go：一把协程，小而多 -->
+    <g fill="#d3efd9" stroke="#1f883d" stroke-width="3">
+      <circle cx="519" cy="494" r="6"/><circle cx="536" cy="494" r="6"/><circle cx="553" cy="494" r="6"/><circle cx="570" cy="494" r="6"/>
+      <circle cx="527" cy="510" r="6"/><circle cx="544" cy="510" r="6"/><circle cx="561" cy="510" r="6"/>
+    </g>
+    <!-- Java：三根粗线程，每根都占一块内存 -->
+    <g fill="#f1f7f2">
+      <rect x="742" y="484" width="20" height="32" rx="3"/>
+      <rect x="767" y="484" width="20" height="32" rx="3"/>
+      <rect x="792" y="484" width="20" height="32" rx="3"/>
+    </g>
+    <g stroke-width="3">
+      <path d="M746 508h12M771 508h12M796 508h12"/>
+    </g>
+    <path d="M736 522h82" stroke-width="3"/>
+    <!-- Rust：编译器举着盾牌，数据竞争进不来 -->
+    <path d="M1015 481l16 6v14q0 13-16 19-16-6-16-19v-14z"/>
+    <path d="M1007 500l6 7 12-13"/>
+  </g>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g fill="#1f2328" font-size="19" font-weight="700">
+      <text x="204" y="548">单线程事件循环</text>
+      <text x="442" y="548">协程只占 2 KB</text>
+      <text x="680" y="548">一个线程 1-2 MB</text>
+      <text x="918" y="548">编译期保证安全</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="204" y="574">3 个请求就能打挂</text>
+      <text x="442" y="574">百万协程 2 GB</text>
+      <text x="680" y="574">线程重、内存贵</text>
+      <text x="918" y="574">没有 GC 也不泄漏</text>
+    </g>
+  </g>
+
+  <!-- ============ 行 3：该谁上场（本节自己的适用场景判定） ============ -->
+  <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="188" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
+    <rect x="426" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
+    <rect x="664" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
+    <rect x="902" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
+  </g>
+  <g stroke="#1f883d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9">
+    <path d="M212 630l7 8 13-16"/><path d="M450 630l7 8 13-16"/><path d="M688 630l7 8 13-16"/><path d="M926 630l7 8 13-16"/>
+  </g>
+  <g font-family="'Microsoft YaHei', system-ui, sans-serif">
+    <g fill="#1f2328" font-size="19" font-weight="700">
+      <text x="204" y="672">实时应用、全栈</text>
+      <text x="442" y="672">云原生、微服务</text>
+      <text x="680" y="672">银行、电商核心</text>
+      <text x="918" y="672">系统编程、极致性能</text>
+    </g>
+    <g fill="#57606a" font-size="19">
+      <text x="204" y="698">npm 包最多</text>
+      <text x="442" y="698">K8s 就是 Go 写的</text>
+      <text x="680" y="698">人才最多，好招人</text>
+      <text x="918" y="698">单核性能提 10 倍</text>
+    </g>
+  </g>
+
+  <!-- ============ 结论横幅 ============ -->
+  <rect x="72" y="740" width="1056" height="80" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <text x="600" y="774" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700" text-anchor="middle">团队熟悉度 &gt; 技术最优解：没有最好的语言，只有最适合的</text>
+  <text x="600" y="806" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" text-anchor="middle">精通一门、了解多门；架构设计比语言选择更重要，别指望换语言解决所有问题</text>
+</svg>

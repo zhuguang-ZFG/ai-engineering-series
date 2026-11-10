@@ -1,0 +1,14 @@
+ok 1 - disabled hook returns no replacement
+ok 2 - strict keeps custom prompt and normalized cwd only
+ok 3 - append places custom text before the complete host prompt
+ok 4 - Pi 1.5.0 default wording does not match either old marker
+ok 5 - legacy markers cut both blocks and preserve project text
+ok 6 - partial match cuts identity even when docs end marker is absent
+ok 7 - invalid source restores the previous readable source
+ok 8 - file edits need an explicit reload through source or on
+ok 9 - append retains prior cut diagnostics rather than updating them
+ok 10 - strict without structured cwd returns only custom text
+ok 11 - off and session_start disable future replacements
+ok 12 - extension creates no extra files in the fixture directory
+PASS: 12 offline checks; Pi 1.5.0, pi-purge 0.2.1
+exit=0

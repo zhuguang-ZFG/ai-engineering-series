@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C19 检索没找对，还是回答没用对 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details open><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html" aria-current="page">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C19-section-98a3332c53">先修检查：你需要的不是更多指标，而是可观察的中间状态</a></li><li class="toc-level-2"><a href="#C19-section-9cf24fc30c">失败阶梯：从权限到最终文字</a></li><li class="toc-level-2"><a href="#C19-section-6d1720bff1">第一步：用 <code>usage.calls</code> 分开“模型前”和“模型后”</a></li><li class="toc-level-2"><a href="#C19-section-1a871d66d9">三个最小诊断例</a></li><li class="toc-level-3"><a href="#C19-section-912a6af699">例 A：检索成功，生成选错</a></li><li class="toc-level-3"><a href="#C19-section-37481c110f">例 B：命中被提示预算丢掉</a></li><li class="toc-level-3"><a href="#C19-section-a76373c42c">例 C：检索正常，claim 改写被拒绝</a></li><li class="toc-level-2"><a href="#C19-section-dede949d53">精确率、召回率与命中率：小集合也要把账算对</a></li><li class="toc-level-2"><a href="#C19-section-c3faea98eb">只改一个因素：切块大小对照</a></li><li class="toc-level-2"><a href="#C19-section-49bbad253c">失败反例：四种错误归因</a></li><li class="toc-level-2"><a href="#C19-section-a741bc2feb">图与已有实验</a></li><li class="toc-level-2"><a href="#C19-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C19-section-f11e090f19">项目增量：诊断目录</a></li><li class="toc-level-2"><a href="#C19-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C19"><header class="chapter-opener"><p class="chapter-number">C19</p><p class="chapter-kicker">S4 · 会改进 / K4</p><h1>检索没找对，还是回答没用对</h1><p class="chapter-abstract">沿检索、生成、引用三道边界，定位一个错误答案到底坏在哪一步。</p></header><p class="chapter-meta">先修：<a href="c18.html">C18</a> · <a href="stage-s4.html">S4 阶段导言</a></p><div class="article-body"><p>同一个错误答案，可能来自两个完全不同的地方。</p>
+<p>问题：“2026 年 10 月 3 日的阵风是多少？”报告回答“风速 4.2 米每秒”。这可能是检索只取回了“风速 4.2”那一段，根本没有把“阵风 6.8”送进上下文；也可能是检索取回了完整段落，模型却选了另一个数字；还可能是模型写对了，但 claim 改写了原文，被引用校验拒绝。三种情况的修复动作完全不同：补检索、改生成、还是改输出契约。若不先找“第一个失败边界”，你会在错误的地方反复调参。</p>
+<p>C18 已经冻结了题目、材料、判据和哈希。C19 沿着一条请求的顺序走，判断它<strong>最早</strong>在哪一步偏离预期，并且用一个小集合的精确率/召回率，而不是“感觉检索变好了”。</p>
+<h2 id="C19-section-98a3332c53" tabindex="-1">先修检查：你需要的不是更多指标，而是可观察的中间状态</h2>
+<p>确认你手上有这些字段，缺一项就先用对应命令补齐：</p>
+<ul>
+<li><code>authorized_doc_ids</code>、<code>filtered_doc_count</code>：权限过滤发生在读取和检索之前；</li>
+<li><code>retrieval.hits[]</code>：每条命中的 <code>chunk_id</code>、<code>doc_id</code>、<code>score</code>、<code>used</code>；</li>
+<li><code>diagnostics.prompt.used_chunk_ids</code>、<code>diagnostics.warnings</code>：真正进入提示词的片段，以及因预算被丢弃的片段；</li>
+<li><code>usage.calls</code>：失败发生在模型调用之前还是之后；</li>
+<li><code>diagnostics.first_raw_response</code>：模型第一次原始输出；</li>
+<li><code>diagnostics.first_failure.status / stage / detail</code>：失败的类型和阶段；</li>
+<li><code>claims[].citations[]</code>：主张引用了哪个 chunk、哪段 quote；</li>
+<li><code>tool_receipts[]</code>：工具是否真的执行、成功还是失败。</li>
+</ul>
+<p>这些都在 <code>assistant-report/1</code> 里。不要只看最终 <code>answer</code>；最终文本是最后一个环节的产物，不能告诉你前面哪一步丢了东西。</p>
+<h2 id="C19-section-9cf24fc30c" tabindex="-1">失败阶梯：从权限到最终文字</h2>
+<p>下面按一条请求的实际顺序排列。判断原则是：<strong>先检查更早的环节；只要更早环节已经偏离，后面的现象都只是后果。</strong></p>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>边界</th>
+<th>典型状态/字段</th>
+<th>关键问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>读者/权限</td>
+<td><code>missing-reader</code>、<code>unauthorized</code>、<code>permission-denied</code>、<code>filtered_doc_count</code></td>
+<td>无权限文档是否在读取前就被排除？</td>
+</tr>
+<tr>
+<td>2</td>
+<td>清单/文件/版本</td>
+<td><code>invalid-manifest</code>、<code>missing-source</code>、<code>source-decode-failed</code>、<code>source-version-mismatch</code></td>
+<td>评的是不是正确版本？</td>
+</tr>
+<tr>
+<td>3</td>
+<td>切块</td>
+<td><code>chunk_count</code>、<code>chunks[]</code> 的 <code>start/end</code></td>
+<td>答案所需文字是否落在某个 chunk 内？</td>
+</tr>
+<tr>
+<td>4</td>
+<td>检索</td>
+<td><code>hits=[]</code>、<code>usage.calls=0</code>、低分命中</td>
+<td>是零命中，还是阈值/查询表达不匹配？</td>
+</tr>
+<tr>
+<td>5</td>
+<td>提示组装</td>
+<td><code>prompt.used_chunk_ids</code>、<code>warnings</code> 的 <code>prompt budget dropped</code>、<code>prompt-budget-exceeded</code></td>
+<td>命中了但被预算丢掉？</td>
+</tr>
+<tr>
+<td>6</td>
+<td>模型调用</td>
+<td><code>generation-failed</code>、<code>usage.calls&gt;0</code>、<code>first_failure.stage=generation</code></td>
+<td>模型/端点是否可用？</td>
+</tr>
+<tr>
+<td>7</td>
+<td>解析</td>
+<td><code>invalid-response</code>、<code>first_raw_response</code></td>
+<td>是围栏、坏 JSON，还是根本没按格式输出？</td>
+</tr>
+<tr>
+<td>8</td>
+<td>schema/语义</td>
+<td><code>invalid-response</code>、<code>first_failure.stage=validate</code></td>
+<td>缺字段、状态非法、冲突条件不足？</td>
+</tr>
+<tr>
+<td>9</td>
+<td>引用/提取</td>
+<td><code>citation-failed</code>、<code>citation_errors</code></td>
+<td>claim 不是 quote 的逐字提取？quote 不在使用的 chunk 里？</td>
+</tr>
+<tr>
+<td>10</td>
+<td>工具</td>
+<td><code>permission-denied</code>、<code>tool-failed</code>、<code>budget-exhausted</code>、<code>tool_receipts[]</code></td>
+<td>工具没执行、参数错，还是回执失败？</td>
+</tr>
+<tr>
+<td>11</td>
+<td>最终回答</td>
+<td><code>answered</code> 且 quote 有效，但答非所问</td>
+<td>机械校验通过，语义仍不成立</td>
+</tr>
+</tbody></table>
+<p>“第一个失败边界”不是 <code>first_failure</code> 字段的别名。<code>first_failure</code> 是程序捕获到的第一个异常；有时更早的环节已经悄悄偏离，只是没有抛错。例如：检索取回了正确 chunk，但提示预算把它丢掉，模型仍然用另一个 chunk 回答；程序不会报错，最终却给出错误数字。这个例子的第一边界是第 5 步，不是第 11 步。</p>
+<h2 id="C19-section-6d1720bff1" tabindex="-1">第一步：用 <code>usage.calls</code> 分开“模型前”和“模型后”</h2>
+<p>这是最快的分诊：</p>
+<ul>
+<li><code>usage.calls = 0</code>：失败发生在模型调用前。优先查权限、清单/文件、切块、零命中、提示预算。</li>
+<li><code>usage.calls &gt; 0</code>：模型至少被调用过一次。继续查原始输出、解析、schema、引用和工具。</li>
+<li><code>usage.calls</code> 大于你预期的回答轮数：可能发生了 <code>--repair-attempts 1</code> 的修复调用，或 Agent 模式的多步调用；两者都应在 <code>raw_responses</code> / <code>tool_receipts</code> 里留下记录。</li>
+</ul>
+<p>先看 <code>status</code>：</p>
+<pre><code class="language-text">unauthorized / permission-denied  → 权限边界
+missing-source / version mismatch → 来源边界
+insufficient-evidence + calls=0   → 检索零命中或没有可用 chunk
+prompt-budget-exceeded            → 提示预算边界
+generation-failed                 → 模型/端点边界
+invalid-response                  → 解析/schema 边界
+citation-failed                   → 引用/提取边界
+tool-failed / budget-exhausted    → 工具/预算边界
+answered                          → 进入人工语义复核
+</code></pre>
+<p>状态不是全部。<code>insufficient-evidence</code> 既可能来自“检索没有任何命中”，也可能来自“有命中但全部被预算丢弃后没有可用证据”。必须看 <code>first_failure.stage</code> 和 <code>retrieval.hits</code> 才能区分。</p>
+<h2 id="C19-section-1a871d66d9" tabindex="-1">三个最小诊断例</h2>
+<p>下面的 JSON 只展示字段形状，具体值以你的实际报告为准。</p>
+<h3 id="C19-section-912a6af699" tabindex="-1">例 A：检索成功，生成选错</h3>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;answered&quot;,
+  &quot;retrieval&quot;: {
+    &quot;hits&quot;: [
+      {&quot;chunk_id&quot;: &quot;station-log@...#002&quot;, &quot;score&quot;: 0.42, &quot;used&quot;: true}
+    ]
+  },
+  &quot;diagnostics&quot;: {
+    &quot;prompt&quot;: {&quot;used_chunk_ids&quot;: [&quot;station-log@...#002&quot;]},
+    &quot;first_failure&quot;: null
+  },
+  &quot;claims&quot;: [
+    {&quot;text&quot;: &quot;风速 4.2 米每秒&quot;, &quot;citations&quot;: [{&quot;chunk_id&quot;: &quot;station-log@...#002&quot;, &quot;quote&quot;: &quot;风速 4.2 米每秒&quot;}]}
+  ]
+}
+</code></pre>
+<p>如果同一 chunk 里确实同时有“阵风 6.8 米每秒”，而问题问的是阵风，那么第一失败边界在<strong>模型选择/生成</strong>，不是检索。修复方向是改问题表达、提示或模型，而不是继续加 <code>top_k</code>。如果该 chunk 根本没有“阵风”，则第一边界在切块：答案文字不在任何已检索片段中。用 <code>inspect chunk</code> 看 <code>start/end</code> 和原文，确认是哪一种。</p>
+<h3 id="C19-section-37481c110f" tabindex="-1">例 B：命中被提示预算丢掉</h3>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;answered&quot;,
+  &quot;retrieval&quot;: {&quot;hits&quot;: [{&quot;chunk_id&quot;: &quot;equipment-guide@...#003&quot;, &quot;used&quot;: false}]},
+  &quot;diagnostics&quot;: {
+    &quot;prompt&quot;: {&quot;used_chunk_ids&quot;: [&quot;station-log@...#000&quot;]},
+    &quot;warnings&quot;: [&quot;prompt budget dropped equipment-guide@...#003&quot;]
+  }
+}
+</code></pre>
+<p>模型引用了一个不同的 chunk，答案看起来也“有引用”，但真正包含电池续航的片段没有进入提示词。第一边界是<strong>提示组装</strong>。<code>citation-failed</code> 的 “unknown chunk_id” 也可能由此产生：claim 引用了未使用的 chunk，校验映射里没有它。此时改检索分数没有用，应先调整 <code>max_prompt_tokens</code>、<code>top_k</code> 或切块大小，让证据进得去。</p>
+<h3 id="C19-section-a76373c42c" tabindex="-1">例 C：检索正常，claim 改写被拒绝</h3>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;citation-failed&quot;,
+  &quot;diagnostics&quot;: {
+    &quot;first_failure&quot;: {
+      &quot;status&quot;: &quot;citation-failed&quot;,
+      &quot;stage&quot;: &quot;validate&quot;,
+      &quot;detail&quot;: {&quot;errors&quot;: [&quot;source claim must be an exact extract of its supporting quote; paraphrase requires human verification&quot;]}
+    }
+  }
+}
+</code></pre>
+<p>这里的检索、模型调用都可能正常。第一失败边界是<strong>提取式契约</strong>：claim 必须是对 quote 的逐字提取，不能把“地点尚未确定”改写成“地点已确定为图书馆”。这类失败不应被报告成“检索没找对”。修复是让模型输出原文片段，或由程序生成候选 claim 后人工确认，而不是放宽校验来“通过”。</p>
+<p>失败模型证据要原样保留。本课程资源探测中曾出现：本地小模型第一次响应带 Markdown 围栏，<code>json.loads</code> 直接失败。正确的记录是保存 <code>diagnostics.first_raw_response</code>，状态写 <code>invalid-response</code>、阶段 <code>parse</code>；不能删掉失败样本、悄悄剥掉围栏后声称“JSON 通过”，也不能把这一次格式失败推广成“该模型所有任务都失败”。它只说明那次调用的输出格式，后续是否可用仍要重新测。</p>
+<h2 id="C19-section-dede949d53" tabindex="-1">精确率、召回率与命中率：小集合也要把账算对</h2>
+<p>C18 已经给出公式，这里把它用在“诊断检索”上。先为每个查询人工标出相关 chunk。注意：</p>
+<ul>
+<li>相关单位是 chunk，不是文档；</li>
+<li>一个文档只有一段相关，其他段落不算；</li>
+<li>切块参数变化后，chunk ID 和边界都变，必须重新标注；</li>
+<li>词项检索的分数不是概率，不能拿分数当相关性；</li>
+<li><code>used=true</code> 只表示进入了提示词，不表示它支持最终 claim。</li>
+</ul>
+<p>三个查询的对照，逐列从相关片段追到指标：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>Q1 阵风</th>
+<th>Q2 续航</th>
+<th>Q3 校准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>相关 chunk</td>
+<td>A, B, C</td>
+<td>D, E</td>
+<td>F</td>
+</tr>
+<tr>
+<td><code>top_k=3</code> 实际取回</td>
+<td>A, D, E</td>
+<td>D, E</td>
+<td>无（阈值下无命中）</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>FN</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>P</td>
+<td>1/3</td>
+<td>1</td>
+<td>0/0（记 0 或 n/a）</td>
+</tr>
+<tr>
+<td>R</td>
+<td>1/3</td>
+<td>1</td>
+<td>0/1</td>
+</tr>
+</tbody></table>
+<p>Q3 暴露一个报告细节：没有取回任何片段时，precision 的分母为 0。不要写“precision=0”而不解释；可以写 <code>n/a</code> 并同时报告 recall=0 和 hit=0。若把空结果硬算成 precision 0，平均时会把“没有检索”与“检索了但全错”混在一起。</p>
+<p>聚合：</p>
+<ul>
+<li>微平均：先加总 TP/FP/FN，再算；</li>
+<li>宏平均：先算每个查询，再平均；</li>
+<li>hit：至少一个相关片段就算命中；它不能替代 recall。</li>
+</ul>
+<p>在小集合上，一个查询的差异就能让宏平均大幅跳动。报告要给出每个查询的明细，不能只给一个总数。</p>
+<h2 id="C19-section-c3faea98eb" tabindex="-1">只改一个因素：切块大小对照</h2>
+<p>目标：判断“检索没找对”是否由切块边界造成。固定同一文档、同一查询集、同一 <code>keyword</code> 检索、同一阈值 <code>0.08</code>、同一 <code>top_k=3</code>、同一 <code>chunk_overlap=80</code>，只改 <code>chunk_chars</code>（480→240）。这才是一个单因素对照；不要同时改重叠、检索器或查询。</p>
+<p>先看两套切块的实际边界：</p>
+<pre><code class="language-bash">mkdir -p out/c19
+
+python book/llm/examples/assistant/assistant.py inspect chunk \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --doc station-log \
+  --chunk-chars 480 --chunk-overlap 80 \
+  --json out/c19/chunks-480.json
+
+python book/llm/examples/assistant/assistant.py inspect chunk \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --doc station-log \
+  --chunk-chars 240 --chunk-overlap 80 \
+  --json out/c19/chunks-240.json
+</code></pre>
+<p>再跑同一组查询：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py inspect retrieve \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --query &quot;2026-10-03 阵风&quot; \
+  --retriever keyword \
+  --top-k 3 --chunk-chars 480 --chunk-overlap 80 \
+  --json out/c19/q-gust-480.json
+
+python book/llm/examples/assistant/assistant.py inspect retrieve \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --query &quot;2026-10-03 阵风&quot; \
+  --retriever keyword \
+  --top-k 3 --chunk-chars 240 --chunk-overlap 80 \
+  --json out/c19/q-gust-240.json
+</code></pre>
+<p>对每个查询、每个条件，重新标注相关 chunk，再计算 P/R。不要拿 480 条件下的相关 ID 去评价 240 条件；ID 中的 <code>#000/#001</code> 已经变了。可以用 <code>doc_id + start/end + 文本</code> 对齐，或直接读 <code>hits[].text</code> 判断。</p>
+<p>合格对照的记录表：</p>
+<p>先记原始计数。两列条件分别表示 <code>chunk_chars/chunk_overlap</code>，同一行比较同一指标。</p>
+<table>
+<thead>
+<tr>
+<th>计数</th>
+<th>480/80</th>
+<th>240/80</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询数</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+<tr>
+<td>取回数</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+<tr>
+<td>相关总数</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+</tbody></table>
+<p>再由计数计算指标，并记录失败发生在哪里。</p>
+<table>
+<thead>
+<tr>
+<th>结果</th>
+<th>480/80</th>
+<th>240/80</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>micro P</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+<tr>
+<td>micro R</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+<tr>
+<td>hit</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+<tr>
+<td>失败阶段</td>
+<td>填写</td>
+<td>填写</td>
+</tr>
+</tbody></table>
+<p>如果 240 的召回提高但精确率下降，要说明代价：更多无关片段进入提示词，可能挤掉真正证据，也可能降低回答准确率。结论可以是“不采用”，不能只挑一个变好的指标。</p>
+<h2 id="C19-section-49bbad253c" tabindex="-1">失败反例：四种错误归因</h2>
+<ol>
+<li><strong>把 <code>insufficient-evidence</code> 都说成“模型不会答”</strong>：先看 <code>usage.calls</code>；零调用通常是检索/权限/预算问题。</li>
+<li><strong>把 <code>citation-failed</code> 都说成“检索坏了”</strong>：它可能发生在 <code>validate</code>，检索和模型都正常；看 <code>first_failure.stage</code> 和 <code>errors</code>。</li>
+<li><strong>只用 <code>hit@k</code> 评价检索</strong>：命中一个相关片段不等于取全；答案可能需要同一文档的另一段。</li>
+<li><strong>切块后沿用旧标签</strong>：chunk ID、边界和内容都变了，旧的“相关集合”不再有效，指标是假的。</li>
+</ol>
+<p>还有一种隐蔽错误：<code>answered</code> 且 <code>quote</code> 逐字存在，但 quote 只覆盖半句条件。例如材料写“灯会期间 12 月 1 日至 20 日调整为 18:00”，claim 只写“闭站时间 18:00”，丢掉日期范围。机械校验会通过，语义上却把临时规定当成永久规定。这属于<strong>最终语义复核</strong>，需要人读上下文，不是再跑一次检索就能发现。</p>
+<h2 id="C19-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
+<p>下图把“没有取回”和“取回了却仍答错”分开：前者要查查询、切块、排序和阈值，后者要查提示选择、模型、claim 和引用。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/retrieval-failures.svg" alt="答错了，资料在哪一步丢了？"><figcaption>图：失败先分路：没取回相关片段，查查询、切块、排序和阈值；取回了却仍答错，查提示选择、模型、claim 和引用。两种失败的修法不同。</figcaption></figure>
+<p>旧的 <a href="retrieval.html">L09 检索实验</a> 用网页预置材料演示“改变查询、切块和条数，看真正进入输入的材料与无结果分支”。它适合练习观察顺序，但不是本章真实助手的运行结果，也不提供你的模型性能数据。</p>
+<h2 id="C19-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li><strong>标 5 个查询</strong>：在当前样例文档上人工标出每个查询的相关 chunk。用 <code>top_k=3</code> 跑 <code>inspect retrieve</code>，计算逐查询 P/R、微平均、宏平均和 hit。必须写清空结果时 precision 的分母。</li>
+<li><strong>制造一次漏检</strong>：用一个材料中有、但查询用了不同说法的问题（例如材料写“阵风”，查询写“最大瞬时风速”），记录 <code>hits</code>、<code>usage.calls</code> 和最终状态。判断第一边界是查询表达、切块还是阈值。</li>
+<li><strong>制造一次“取回但没用对”</strong>：让正确 chunk 进入提示词，观察模型是否选了另一个数字。用 <code>claims[].citations[].quote</code> 和 <code>retrieval.hits[].used</code> 证明检索成功而生成失败。</li>
+<li><strong>做一次单因素切块对照</strong>：按上面的命令跑 480/80 与 240/80（只改 <code>chunk_chars</code>），重新标注，填 P/R 表。即使结果变差也要报告；给出采用或不采用的理由。</li>
+<li><strong>解释三种失败</strong>：从自己的报告中各找一例 <code>insufficient-evidence</code>（零命中）、<code>citation-failed</code>（提取失败）、<code>answered</code> 但语义不完整。说明它们的第一边界为什么不同。</li>
+</ol>
+<p>答案与核对依据见 <a href="c19-answer.html">C19 答案</a>。</p>
+<h2 id="C19-section-f11e090f19" tabindex="-1">项目增量：诊断目录</h2>
+<pre><code class="language-text">diagnosis/
+  labels/
+    retrieval-relevance.csv
+  out/
+    chunks-480.json
+    chunks-240.json
+    q-gust-480.json
+    q-gust-240.json
+    failure-a.json
+    failure-b.json
+    failure-c.json
+  notes/
+    failure-ladder.md
+    one-factor.md
+</code></pre>
+<p><code>retrieval-relevance.csv</code> 至少包含 <code>query_id, chunk_id, relevant(true/false), reason</code>。<code>failure-ladder.md</code> 对每个失败写：状态、<code>first_failure.stage</code>、<code>usage.calls</code>、关键 chunk、最终 claim、第一边界和下一步只改什么。</p>
+<h2 id="C19-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>本章使用 <code>assistant.py</code> 的 <code>retrieval.hits</code>、<code>diagnostics.prompt</code>、<code>first_failure</code>、<code>usage.calls</code> 和引用校验字段，字段含义以 <code>book/llm/examples/assistant/README.md</code> 与源码为准。检索失败图来自课程手绘资产 <code>retrieval-failures.svg</code>；旧 L09 实验是网页预置材料，不是本章实测。精确率/召回率的小集合是教师手写算例，不是模型成绩；切块对照的命令可复现，但实际指标必须由你运行后填写。本章不声称任何检索器、模型或参数已经达到某个性能水平。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c18.html">上一章 C18</a><a href="c19-answer.html">独立作答后核对</a><a href="c20.html">下一章 C20</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

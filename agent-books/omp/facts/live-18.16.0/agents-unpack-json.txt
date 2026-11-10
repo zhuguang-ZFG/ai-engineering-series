@@ -1,0 +1,13 @@
+{
+  "targetDir": "C:\\Users\\<用户名>\\.omp\\agent\\agents",
+  "total": 6,
+  "written": [],
+  "skipped": [
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\reviewer.md",
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\scout.md",
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\seance.md",
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\security-reviewer.md",
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\sonic.md",
+    "C:\\Users\\<用户名>\\.omp\\agent\\agents\\task.md"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "version": "2.5.2",
+  "binary_sha256": "167275798e172bf109ac80b95e41a605f14983454025f121f295856598f4cd38",
+  "help_options": {
+    "--agent-file": true,
+    "--skills-dir": true,
+    "--continue": true,
+    "--plan": true,
+    "--output-format": true,
+    "import-sessions": true
+  },
+  "export_can_exclude_global_log": true,
+  "acp": {
+    "protocolVersion": 1,
+    "agentInfo": {
+      "name": "Kimi Code CLI",
+      "version": "2.5.2"
+    },
+    "agentCapabilities": {
+      "loadSession": true,
+      "promptCapabilities": {
+        "image": true,
+        "audio": false,
+        "embeddedContext": true
+      },
+      "sessionCapabilities": {
+        "list": {},
+        "resume": {},
+        "close": {},
+        "delete": {},
+        "fork": {},
+        "additionalDirectories": {}
+      },
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "auth": {
+        "logout": {}
+      }
+    },
+    "unknown_method_error": -32601
+  },
+  "model_requests": 0,
+  "scope": "real CLI help and ACP initialize only; no session/prompt or IDE tested"
+}

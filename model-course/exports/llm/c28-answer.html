@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C28 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C28-answer-section-9f2c18d99a" tabindex="-1">C28 答案与评分依据</h1>
+<p>本文件不提供唯一架构。C28 要检查的是：你是否先写清任务和约束，再用材料数据比较方案，最后给出可验证的选择与不采用理由。把“用 RAG + Agent + 微调”当成标准答案，反而更容易不及格。</p>
+<h2 id="C28-answer-section-31cab78ef2" tabindex="-1">作业 1：量手册</h2>
+<p>合格记录应包含：</p>
+<ul>
+<li>手册来源、版本、授权范围、页数；</li>
+<li>实际抽取的字符数（不是“大概几十页”）；</li>
+<li>用 <code>plan_budget.py</code> 得到的 token 估算区间、切块数、top-k 检索预算；</li>
+<li>至少用一次真实 tokenizer 复算，而不是只信字符估算；</li>
+<li>8 页扫描件是否可读、OCR 状态（若有）。</li>
+</ul>
+<p>常见不合格：</p>
+<ul>
+<li>把课程里的 96 页/4.8 万字符当成自己的实测；</li>
+<li>只写“手册很大”，没有数字；</li>
+<li>token 估算和实际 tokenizer 差一个数量级却不解释；</li>
+<li>没记录版本，后面引用旧版。</li>
+</ul>
+<h2 id="C28-answer-section-729b258856" tabindex="-1">作业 2：需求与“不做什么”</h2>
+<p>合格需求至少覆盖：</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>合格示例</th>
+<th>不合格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户</td>
+<td>6 名现场技术员、离线笔记本</td>
+<td>“所有人”</td>
+</tr>
+<tr>
+<td>任务</td>
+<td>安装/操作/清洁/故障代码，带页码引用</td>
+<td>“回答手册问题”</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>逐字引用 + 章节/页码；未知显式返回</td>
+<td>自由总结</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>只允许 v2.0；旧版仅追溯</td>
+<td>所有文档都可读</td>
+</tr>
+<tr>
+<td>不做什么</td>
+<td>不给手册外维修建议；不控制设备</td>
+<td>只写“做一个 AI”</td>
+</tr>
+<tr>
+<td>失败</td>
+<td>缺失、冲突、无命中、不可读、模型失败</td>
+<td>只写成功路径</td>
+</tr>
+<tr>
+<td>验收</td>
+<td>冻结样本、逐条判据、实测延迟</td>
+<td>“效果要好”</td>
+</tr>
+</tbody></table>
+<p>“不做什么”不是形式。若没有明确排除项，模型很容易把常识、旧版或猜测混进产品手册答案。</p>
+<h2 id="C28-answer-section-a61517eebb" tabindex="-1">作业 3：两方案比较</h2>
+<h3 id="C28-answer-section-57fdaaeb8a" tabindex="-1">方案 A：整本提示</h3>
+<p>适用条件：</p>
+<ul>
+<li>手册文本 + 问题 + 输出格式能放进上下文，且留有足够余量；</li>
+<li>模型在长上下文中仍能引用中间页；</li>
+<li>警告、否定句、表格不被截断；</li>
+<li>延迟和内存可接受。</li>
+</ul>
+<p>合格理由示例：</p>
+<blockquote>
+<p>手册 18 页、约 9,000 字符，真实 tokenizer 计数约 8,500 token；模型上下文 32k，输出预算 1,500，仍有约 22k 余量。冻结样本中 20/20 条引用能回原文；因此先选 A，不建索引。</p>
+</blockquote>
+<p>不合格：只写“上下文很长，应该可以”，没有 token 计数和样本。</p>
+<h3 id="C28-answer-section-89377b419f" tabindex="-1">方案 B：页级关键词检索 + 单次模型 + 逐字校验</h3>
+<p>适用条件：</p>
+<ul>
+<li>整本放不下或中间页引用不稳定；</li>
+<li>材料有明确页/节结构，切块不会破坏步骤；</li>
+<li>关键词基线能覆盖主要术语，或漏检可被评测发现；</li>
+<li>版本过滤能在检索前完成。</li>
+</ul>
+<p>合格理由示例（数字为课程练习假设，不是实测）：</p>
+<blockquote>
+<p>96 页、约 4.8 万字符，真实 tokenizer 约 4.2 万 token，超过 32k 上下文；整本提示只能截断。改为 1200 字符/150 重叠切块，top-4 最多 4,800 字符，包含重叠而不含提示词、元数据与输出；仍需实测 token 预算。冻结 40 题中关键词召回 34 题；剩余 6 题是“卡纸/进纸异常”同义表述，作为 embedding 对照的触发条件。</p>
+</blockquote>
+<p>不合格：只说“RAG 更先进”；没有召回数据；没有说明为什么不用更简单的 A。</p>
+<h2 id="C28-answer-section-06719f351e" tabindex="-1">作业 4：不采用项</h2>
+<p>合格的“不采用”不是贬低某技术，而是写清条件：</p>
+<ul>
+<li><strong>embedding</strong>：先看关键词漏检样本；若相关块存在但没取回，且 embedding 在冻结集上改善，才加。阈值用验证集解释，不拍脑袋。</li>
+<li><strong>微调</strong>：手册版本更新、任务以引用为主；微调不能保证逐字引用，且可能固化旧版。只有输出格式/术语稳定且数据许可明确时才考虑小规模对照。</li>
+<li><strong>Agent</strong>：只读问答不需要动作循环；固定流程更易审计。只有需要实时设备状态、生成工单或跨系统操作时才重新评估。</li>
+<li><strong>外部 API</strong>：离线、保密、费用上限不支持；若获授权，需记录数据驻留、保留和成本，并保留本地失败路径。</li>
+</ul>
+<p>不合格：写“Agent 太复杂所以不用”但不说明任务是否需要动作；或写“微调效果不好”但没有实验。</p>
+<h2 id="C28-answer-section-f0e69eca35" tabindex="-1">作业 5：风险与验收</h2>
+<p>至少覆盖：</p>
+<ol>
+<li><strong>版本风险</strong>：旧版混入 → 检索前过滤 + 报告版本 + 冲突用例；</li>
+<li><strong>OCR 风险</strong>：扫描页错字 → 标记 OCR 来源、逐字回看、不可读返回未知；</li>
+<li><strong>切块风险</strong>：跨页步骤被切断 → 按节合并、保留相邻块、评测跨页题；</li>
+<li><strong>引用风险</strong>：字符串存在但语义不支持 → 逐字校验 + 人工抽检 + 否定句/条件句用例；</li>
+<li><strong>隐私风险</strong>：手册/问题外传 → 本地运行、权限、日志脱敏、保留期限。</li>
+</ol>
+<p>每条风险要有<strong>验收动作</strong>，不能只写“注意”。例如“版本风险：构造 v1.4/v2.0 冲突题，确认默认只召回 v2.0；若两版可见，报告并列两条引用”。</p>
+<h2 id="C28-answer-section-02691725d3" tabindex="-1">作业 6：改条件</h2>
+<p>合格回答会改变结论，而不是重复原方案：</p>
+<ul>
+<li>18 页 → A 可能更小；用 token 计数和长上下文样本证明；</li>
+<li>320 页 + 同义表述 → 关键词基线不够时，先定位漏检，再做 embedding 单变量对照；</li>
+<li>8 页扫描件 → OCR 不可读页进入“人工录入/重扫描”，问答返回不可读，不猜；</li>
+<li>仅旧版可用 → 版本过滤改变，验收样本也要换；</li>
+<li>无本地模型 → 记录资源阻碍，架构仍可写，但不能声称已运行。</li>
+</ul>
+<h2 id="C28-answer-section-9cd6916ff2" tabindex="-1">作业 7：引用契约</h2>
+<p>合格说明应包含：</p>
+<ul>
+<li>系统输出只允许“逐字引用”或“人工复核的改写”；</li>
+<li>逐字引用要带 chunk/页码/版本，程序做精确匹配；</li>
+<li>自由改写、翻译、跨段拼接默认不能作为产品手册答案；</li>
+<li>人工复核要记录谁、何时、对照了哪段原文；</li>
+<li>安全警告、否定句、数字、型号必须逐字保留。</li>
+</ul>
+<p>解释：产品手册的错误可能造成设备损坏或人身风险；让模型“用自己的话总结”会丢掉条件、否定和顺序。逐字引用不是文风偏好，而是可核对性要求。</p>
+<h2 id="C28-answer-section-75c4343ba4" tabindex="-1">评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>通过</th>
+<th>不通过</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>新任务</td>
+<td>产品手册，含版本/页码/步骤/警告</td>
+<td>通知改名；与 C01–C04 同题材</td>
+</tr>
+<tr>
+<td>需求</td>
+<td>用户、输入、输出、权限、失败、验收齐全</td>
+<td>只有“做一个问答”</td>
+</tr>
+<tr>
+<td>材料测量</td>
+<td>页数、字符、token、切块有数据</td>
+<td>只用假设值</td>
+</tr>
+<tr>
+<td>方案比较</td>
+<td>至少 A/B 两条，条件与数据对应</td>
+<td>只列技术名词</td>
+</tr>
+<tr>
+<td>选择</td>
+<td>最小可行，能解释为什么不是更复杂</td>
+<td>默认 RAG/Agent/微调</td>
+</tr>
+<tr>
+<td>不采用</td>
+<td>每项有条件与重新评估触发</td>
+<td>“太复杂”一句话</td>
+</tr>
+<tr>
+<td>风险</td>
+<td>5 项以上，有验收动作</td>
+<td>只列风险不验证</td>
+</tr>
+<tr>
+<td>引用契约</td>
+<td>逐字/人工复核改写</td>
+<td>自由总结当答案</td>
+</tr>
+<tr>
+<td>改条件</td>
+<td>结论随材料变化</td>
+<td>不管条件都同一方案</td>
+</tr>
+</tbody></table>
+<p>八项中“新任务、需求、方案比较、引用契约”任一项不通过，本章不通过；资源不足可标阻塞，但不能用假设数据冒充实测。</p>
+</article><nav class="lesson-nav"><a href="c28.html">返回 C28 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

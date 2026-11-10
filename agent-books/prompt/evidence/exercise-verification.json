@@ -1,0 +1,139 @@
+{
+  "kind": "offline_exercise_verification",
+  "date": "2026-11-10",
+  "model_calls": 0,
+  "repair_origin": "author-applied three local edits, not model output",
+  "tool_sha256": "b2e89b4bb0e01f6d32a6bd4d7333596d1f1add7e7b90597d60d14107b002a38c",
+  "baseline": {
+    "kind": "local_process_receipt",
+    "started_at": "2026-11-10T14:42:38.298154+00:00",
+    "project": "D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\repair",
+    "command": [
+      "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "check.py"
+    ],
+    "status": "business_failed",
+    "returncode": 1,
+    "stdout": "{\r\n  \"kind\": \"public_business_contract\",\r\n  \"passed\": 8,\r\n  \"total\": 12,\r\n  \"results\": [\r\n    {\r\n      \"id\": \"spare\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"full\",\r\n      \"passed\": false,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\",\r\n          \"Q03\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"zero\",\r\n      \"passed\": false,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [],\r\n        \"waiting\": [\r\n          \"Q01\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"duplicate-confirmed\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"duplicate-waiting\",\r\n      \"passed\": false,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\",\r\n          \"Q03\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-promote\",\r\n      \"passed\": false,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\",\r\n          \"Q04\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q02\",\r\n          \"Q03\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q04\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-waiting\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-unknown\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"not_found\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"not_found\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"boolean-capacity\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"negative-capacity\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"overbooked-state\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"blank-person\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    }\r\n  ]\r\n}\r\n",
+    "stderr": "",
+    "timeout_seconds": 10.0,
+    "model_calls": 0,
+    "frozen_sha256": {
+      "check.py": "a70a4b82903aa99957ab00d2b2a34dd670a9f95f6f0943584c75073b63376b6c",
+      "cases.json": "7e11b82eb886774960ae56c4990e126fdd51c960a80715ca9861e6d26df9126a",
+      "rules.md": "24003deeb20fb8c75af774c3a6e183940ae252e9c324fcef7d886c81af089888"
+    },
+    "candidate_sha256": "294c9fc2dff364bd149440ba1ffb44e98d61fe596694335fcafbe47b13a3c21e",
+    "business": {
+      "passed": 8,
+      "total": 12
+    },
+    "elapsed_seconds": 0.09487,
+    "candidate_unchanged_during_check": true
+  },
+  "authored_repair": {
+    "kind": "local_process_receipt",
+    "started_at": "2026-11-10T14:42:38.397514+00:00",
+    "project": "D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\repair",
+    "command": [
+      "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "check.py"
+    ],
+    "status": "passed",
+    "returncode": 0,
+    "stdout": "{\r\n  \"kind\": \"public_business_contract\",\r\n  \"passed\": 12,\r\n  \"total\": 12,\r\n  \"results\": [\r\n    {\r\n      \"id\": \"spare\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"confirmed\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"full\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"zero\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [],\r\n        \"waiting\": [\r\n          \"Q01\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"waiting\",\r\n        \"confirmed\": [],\r\n        \"waiting\": [\r\n          \"Q01\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"duplicate-confirmed\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"duplicate-waiting\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"duplicate\",\r\n        \"confirmed\": [\r\n          \"Q01\",\r\n          \"Q02\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-promote\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q02\",\r\n          \"Q03\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q04\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q02\",\r\n          \"Q03\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q04\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-waiting\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"cancelled\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": [\r\n          \"Q03\"\r\n        ]\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"cancel-unknown\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"not_found\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"not_found\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"boolean-capacity\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"negative-capacity\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"overbooked-state\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [\r\n          \"Q01\"\r\n        ],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    },\r\n    {\r\n      \"id\": \"blank-person\",\r\n      \"passed\": true,\r\n      \"input_unchanged\": true,\r\n      \"actual\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"expected\": {\r\n        \"status\": \"invalid\",\r\n        \"confirmed\": [],\r\n        \"waiting\": []\r\n      },\r\n      \"exception\": null\r\n    }\r\n  ]\r\n}\r\n",
+    "stderr": "",
+    "timeout_seconds": 10.0,
+    "model_calls": 0,
+    "frozen_sha256": {
+      "check.py": "a70a4b82903aa99957ab00d2b2a34dd670a9f95f6f0943584c75073b63376b6c",
+      "cases.json": "7e11b82eb886774960ae56c4990e126fdd51c960a80715ca9861e6d26df9126a",
+      "rules.md": "24003deeb20fb8c75af774c3a6e183940ae252e9c324fcef7d886c81af089888"
+    },
+    "candidate_sha256": "1ba080715b2fc9fde1f96619e00595ee0b2d03e947a8e68383aad8acc353b8b0",
+    "business": {
+      "passed": 12,
+      "total": 12
+    },
+    "elapsed_seconds": 0.088646,
+    "candidate_unchanged_during_check": true
+  },
+  "missing_project": {
+    "kind": "local_process_receipt",
+    "started_at": "2026-11-10T14:42:38.709843+00:00",
+    "project": "D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\absent",
+    "command": [
+      "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "check.py"
+    ],
+    "status": "invalid_project",
+    "returncode": null,
+    "stdout": "",
+    "stderr": "",
+    "timeout_seconds": 10.0,
+    "model_calls": 0,
+    "error": "[Errno 2] No such file or directory: 'D:\\\\Users\\\\claude\\\\.agent-series-wt\\\\.scratch\\\\prompt-tools-evidence-20261110\\\\absent\\\\exercise-lock.json'",
+    "elapsed_seconds": 0.0
+  },
+  "syntax_error": {
+    "kind": "local_process_receipt",
+    "started_at": "2026-11-10T14:42:38.491879+00:00",
+    "project": "D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\syntax",
+    "command": [
+      "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "check.py"
+    ],
+    "status": "execution_failed",
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\r\n  File \"D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\syntax\\check.py\", line 6, in <module>\r\n    from registration import transition\r\n  File \"D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\syntax\\registration.py\", line 1\r\n    def broken(:\r\n               ^\r\nSyntaxError: invalid syntax\r\n",
+    "timeout_seconds": 10.0,
+    "model_calls": 0,
+    "frozen_sha256": {
+      "check.py": "a70a4b82903aa99957ab00d2b2a34dd670a9f95f6f0943584c75073b63376b6c",
+      "cases.json": "7e11b82eb886774960ae56c4990e126fdd51c960a80715ca9861e6d26df9126a",
+      "rules.md": "24003deeb20fb8c75af774c3a6e183940ae252e9c324fcef7d886c81af089888"
+    },
+    "candidate_sha256": "7865479db3acfc4c04dd25f317686aca34c49bbca810629632110b6937335611",
+    "elapsed_seconds": 0.092841,
+    "candidate_unchanged_during_check": true
+  },
+  "timeout": {
+    "kind": "local_process_receipt",
+    "started_at": "2026-11-10T14:42:38.593035+00:00",
+    "project": "D:\\Users\\claude\\.agent-series-wt\\.scratch\\prompt-tools-evidence-20261110\\timeout",
+    "command": [
+      "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "check.py"
+    ],
+    "status": "timeout",
+    "returncode": null,
+    "stdout": "",
+    "stderr": "",
+    "timeout_seconds": 0.1,
+    "model_calls": 0,
+    "frozen_sha256": {
+      "check.py": "a70a4b82903aa99957ab00d2b2a34dd670a9f95f6f0943584c75073b63376b6c",
+      "cases.json": "7e11b82eb886774960ae56c4990e126fdd51c960a80715ca9861e6d26df9126a",
+      "rules.md": "24003deeb20fb8c75af774c3a6e183940ae252e9c324fcef7d886c81af089888"
+    },
+    "candidate_sha256": "6d3fd3c9f1006aaaf1f910cb3fc2dfc227d6469db07c4bffd81ea6ef416bc8f4",
+    "elapsed_seconds": 0.112713,
+    "candidate_unchanged_during_check": true
+  }
+}

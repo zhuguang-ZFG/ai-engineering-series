@@ -1,0 +1,150 @@
+# Extensions
+
+Primary guide for authoring runtime extensions in `packages/coding-agent`.
+
+This document covers the current extension runtime in:
+
+- `src/extensibility/extensions/types.ts`
+- `src/extensibility/extensions/runner.ts`
+- `src/extensibility/extensions/wrapper.ts`
+- `src/extensibility/extensions/index.ts`
+- `src/modes/controllers/extension-ui-controller.ts`
+
+For discovery paths and filesystem loading rules, see [`extension-loading.md`](./extension-loading.md).
+
+For packaged user-facing extension CLIs/features, see [`user-facing-packages.md`](./user-facing-packages.md).
+
+## What an extension is
+
+An extension is a TS/JS module exporting a default factory. Factories may initialize synchronously or return a promise:
+
+```ts
+import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+
+export default function myExtension(pi: ExtensionAPI) {
+	// register handlers/tools/commands/renderers
+}
+```
+
+Extensions can combine all of the following in one module:
+
+- event handlers (`pi.on(...)`)
+- LLM-callable tools (`pi.registerTool(...)`)
+- slash commands (`pi.registerCommand(...)`)
+- keyboard shortcuts and flags
+- custom message rendering
+- session/message injection APIs (`sendMessage`, `sendUserMessage`, `appendEntry`)
+
+## Runtime model
+
+1. Extension modules are imported concurrently; their factory functions then run sequentially in path order.
+2. During that load phase, registration methods are valid; session action methods are not yet initialized.
+3. `ExtensionRunner.initialize(...)` wires live actions/contexts for the active mode.
+4. Session/agent/tool lifecycle events are emitted to handlers.
+5. Registry tools are wrapped for extension interception (`tool_call` / `tool_result`).
+
+```text
+Extension lifecycle (simplified)
+
+load paths
+   │
+   ▼
+import modules + bind factories (no session actions)
+   │
+   ▼
+ExtensionRunner.initialize(mode/session/tool registry)
+   │
+   ├─ emit session/agent events to handlers
+   ├─ wrap tool execution (tool_call/tool_result)
+   └─ expose runtime actions (sendMessage, setActiveTools, ...)
+```
+
+Important constraint from `loader.ts`:
+
+- calling action methods like `pi.sendMessage()` during extension load throws `ExtensionRuntimeNotInitializedError`
+- register first; perform runtime behavior from events/commands/tools
+- `pi.exec()` is directly available during load; provider registration is queued until session setup
+- child sessions reuse imported factories but bind fresh APIs and extension registrations; module-level variables remain shared across those sessions
+
+## Quick start
+
+```ts
+import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+
+export default function (pi: ExtensionAPI) {
+	const z = pi.zod;
+
+	pi.setLabel("Safety + Utilities");
+
+	pi.on("session_start", async (_event, ctx) => {
+		ctx.ui.notify(`Extension loaded in ${ctx.cwd}`, "info");
+	});
+
+	pi.on("tool_call", async event => {
+		const command = event.input.command;
+		if (event.toolName === "bash" && typeof command === "string" && command.includes("rm -rf")) {
+			return { block: true, reason: "Blocked by extension policy" };
+		}
+	});
+
+	pi.registerTool({
+		name: "hello_extension",
+		label: "Hello Extension",
+		description: "Return a greeting",
+		parameters: z.object({ name: z.string() }),
+		async execute(_toolCallId, params, _signal, _onUpdate, _ctx) {
+			return {
+				content: [{ type: "text", text: `Hello, ${params.name}` }],
+				details: { greeted: params.name },
+			};
+		},
+	});
+
+	pi.registerCommand("hello-ext", {
+		description: "Show queue state",
+		handler: async (_args, ctx) => {
+			ctx.ui.notify(`pending=${ctx.hasPendingMessages()}`, "info");
+		},
+	});
+}
+```
+
+## Extension API surfaces
+
+## 1) Registration and actions (`ExtensionAPI`)
+
+Core methods:
+
+- `on(event, handler)`
+- `registerTool`, `registerCommand`, `registerShortcut`, `registerFlag`
+- `registerMessageRenderer`, `registerAssistantThinkingRenderer`, `registerAssistantTextRenderer`, `registerLinkScheme`
+- `registerComposerShape`
+- `setLabel`, `getFlag`
+- `sendMessage`, `sendUserMessage`, `appendEntry`, `exec`
+- `getActiveTools`, `getAllTools`, `setActiveTools`
+- `getCommands`
+- `getSessionName`, `setSessionName`
+- `setModel`, `getThinkingLevel`, `setThinkingLevel`
+- `getServiceTiers`, `setServiceTier`
+- `registerProvider`, `unregisterProvider`
+- `registerFileWriteFallback`, `registerFileDeleteFallback`
+- `events` (shared event bus)
+
+`ExtensionAPI` methods retain their extension binding when destructured or passed as callbacks.
+
+`setLabel(label)` sets the extension's display label. It is not a session-entry
+labeling action. `getAllTools()` returns tool schemas and source metadata, while
+`getActiveTools()` returns enabled names.
+
+`getServiceTiers()` returns a detached snapshot of the session's live per-family tier map. `setServiceTier(family, tier)` changes one family for subsequent requests; pass `undefined` to clear that session override. OpenAI accepts `auto`, `default`, `flex`, `scale`, `priority`, or `ultrafast`; Anthropic accepts `priority`; Google accepts `flex` or `priority`. Changes made while a response is streaming do not alter that in-flight request.
+
+### Provider registration
+
+Provider `models` entries and rows returned by `fetchDynamicModels` accept the same `api`/`kind` pairs as `models.yml` (see [Models](./models.md)): a runner API such as `openai-images` implies its kind, so the model reaches the `image` role and `generate_image` instead of registering as chat. A static `models` entry whose `kind` its api cannot serve fails `registerProvider`; such a `fetchDynamicModels` row is dropped with a logged warning.
+
+```ts
+pi.registerProvider("my-gateway", {
+	baseUrl: "https://gateway.example.com/v1",
+	apiKey: "GATEWAY_API_KEY",
+	models: [
+		{

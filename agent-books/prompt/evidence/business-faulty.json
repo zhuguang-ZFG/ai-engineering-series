@@ -1,0 +1,250 @@
+{
+  "kind": "offline_business_check",
+  "mode": "faulty",
+  "passed": 8,
+  "total": 12,
+  "results": [
+    {
+      "id": "spare",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "confirmed",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "confirmed",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": []
+      }
+    },
+    {
+      "id": "full",
+      "passed": false,
+      "input_unchanged": true,
+      "actual": {
+        "status": "confirmed",
+        "confirmed": [
+          "Q01",
+          "Q02",
+          "Q03"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "waiting",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": [
+          "Q03"
+        ]
+      }
+    },
+    {
+      "id": "zero",
+      "passed": false,
+      "input_unchanged": true,
+      "actual": {
+        "status": "confirmed",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "waiting",
+        "confirmed": [],
+        "waiting": [
+          "Q01"
+        ]
+      }
+    },
+    {
+      "id": "duplicate-confirmed",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "duplicate",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "duplicate",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": []
+      }
+    },
+    {
+      "id": "duplicate-waiting",
+      "passed": false,
+      "input_unchanged": true,
+      "actual": {
+        "status": "confirmed",
+        "confirmed": [
+          "Q01",
+          "Q02",
+          "Q03"
+        ],
+        "waiting": [
+          "Q03"
+        ]
+      },
+      "expected": {
+        "status": "duplicate",
+        "confirmed": [
+          "Q01",
+          "Q02"
+        ],
+        "waiting": [
+          "Q03"
+        ]
+      }
+    },
+    {
+      "id": "cancel-promote",
+      "passed": false,
+      "input_unchanged": true,
+      "actual": {
+        "status": "cancelled",
+        "confirmed": [
+          "Q02"
+        ],
+        "waiting": [
+          "Q03",
+          "Q04"
+        ]
+      },
+      "expected": {
+        "status": "cancelled",
+        "confirmed": [
+          "Q02",
+          "Q03"
+        ],
+        "waiting": [
+          "Q04"
+        ]
+      }
+    },
+    {
+      "id": "cancel-waiting",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "cancelled",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": [
+          "Q03"
+        ]
+      },
+      "expected": {
+        "status": "cancelled",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": [
+          "Q03"
+        ]
+      }
+    },
+    {
+      "id": "cancel-unknown",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "not_found",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "not_found",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": []
+      }
+    },
+    {
+      "id": "boolean-capacity",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      },
+      "expected": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      }
+    },
+    {
+      "id": "negative-capacity",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      },
+      "expected": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      }
+    },
+    {
+      "id": "overbooked-state",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "invalid",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": []
+      },
+      "expected": {
+        "status": "invalid",
+        "confirmed": [
+          "Q01"
+        ],
+        "waiting": []
+      }
+    },
+    {
+      "id": "blank-person",
+      "passed": true,
+      "input_unchanged": true,
+      "actual": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      },
+      "expected": {
+        "status": "invalid",
+        "confirmed": [],
+        "waiting": []
+      }
+    }
+  ]
+}

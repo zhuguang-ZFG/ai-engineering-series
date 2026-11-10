@@ -1,0 +1,59 @@
+{
+  "errors": [],
+  "pdf": {
+    "pages": 107,
+    "bookmarks": 29,
+    "sampled_pages": [
+      1,
+      56,
+      60,
+      68,
+      77,
+      107
+    ],
+    "replacement_chars": 0,
+    "empty_sheets": [],
+    "text_outside_page": []
+  },
+  "html": [
+    {
+      "media": "screen",
+      "width": 390,
+      "scheme": "light",
+      "rows": 19,
+      "issues": [],
+      "brokenAnchors": [],
+      "localPaths": [],
+      "overflow": false,
+      "minimumCodeContrast": 6.070204190249166,
+      "viewport": 390,
+      "scrollWidth": 390
+    },
+    {
+      "media": "screen",
+      "width": 1280,
+      "scheme": "dark",
+      "rows": 19,
+      "issues": [],
+      "brokenAnchors": [],
+      "localPaths": [],
+      "overflow": false,
+      "minimumCodeContrast": 6.804320921720831,
+      "viewport": 1280,
+      "scrollWidth": 1280
+    },
+    {
+      "media": "print",
+      "width": 665,
+      "scheme": "light",
+      "rows": 19,
+      "issues": [],
+      "brokenAnchors": [],
+      "localPaths": [],
+      "overflow": false,
+      "minimumCodeContrast": 6.123956990821564,
+      "viewport": 665,
+      "scrollWidth": 665
+    }
+  ]
+}

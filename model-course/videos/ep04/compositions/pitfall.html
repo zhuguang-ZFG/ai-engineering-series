@@ -1,0 +1,112 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #fbfaf6; }
+    #x-tag { position: absolute; top: 70px; left: 110px; font: 28px "JetBrains Mono", monospace; letter-spacing: 3px; color: #57606a; }
+    #x-title { position: absolute; top: 126px; left: 110px; width: 1560px; font: 700 64px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    #x-title .g { color: #1f883d; }
+    .x-card { position: absolute; top: 320px; width: 540px; height: 300px; padding: 28px 32px; background: #fffdf8; border: 4px solid #1f2328; border-top: 8px solid #cf222e; border-radius: 15px 10px 17px 9px; box-shadow: 8px 9px 0 rgba(31,35,40,.12); box-sizing: border-box; }
+    #x-c1 { left: 110px; } #x-c2 { left: 690px; } #x-c3 { left: 1270px; }
+    .x-n { font: 700 28px "JetBrains Mono", monospace; letter-spacing: 2px; color: #cf222e; }
+    .x-k { margin-top: 12px; font: 700 42px/1.28 "Noto Sans JP", sans-serif; color: #1f2328; }
+    .x-d { margin-top: 16px; font: 28px/1.42 "Noto Sans JP", sans-serif; color: #57606a; }
+    .x-fix { position: absolute; top: 646px; height: 106px; padding: 0 28px; display: flex; align-items: center; gap: 16px; background: #dafbe1; border-radius: 15px 10px 17px 9px; font: 700 30px "Noto Sans JP", sans-serif; color: #116329; box-sizing: border-box; }
+    #x-f1 { left: 110px; width: 540px; } #x-f2 { left: 690px; width: 540px; } #x-f3 { left: 1270px; width: 540px; }
+    .x-fix em { font-style: normal; font-size: 34px; }
+    #x-final { position: absolute; left: 110px; top: 792px; width: 1700px; height: 76px; display: flex; align-items: center; justify-content: center; background: #1f2328; border-radius: 15px 10px 17px 9px; font: 700 36px "Noto Sans JP", sans-serif; color: #f6f8fa; }
+    #x-final .g { color: #3fb950; }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-x1aa" id="root" data-composition-id="pitfall" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-x2bb" id="x-tag" class="clip" data-start="0" data-duration="25.732">PITFALL · 上线三个坑</div>
+    <div data-hf-id="hf-x3cc" id="x-title" class="clip" data-start="0" data-duration="25.732">三个坑，<span data-hf-id="hf-x4dd" class="g">每个都能让链接打不开</span></div>
+    <div data-hf-id="hf-x5ee" id="x-c1" class="x-card clip" data-start="2.1" data-duration="23.632">
+      <div data-hf-id="hf-x6ff" class="x-n">PITFALL 01</div>
+      <div data-hf-id="hf-x7gg" class="x-k">node_modules<br data-hf-id="hf-x8hh" />一起传上去</div>
+      <div data-hf-id="hf-x9ii" class="x-d">体积爆炸，还把依赖明细全暴露了</div>
+    </div>
+    <div data-hf-id="hf-xaja" id="x-c2" class="x-card clip" data-start="8.9" data-duration="16.832">
+      <div data-hf-id="hf-xbkb" class="x-n">PITFALL 02</div>
+      <div data-hf-id="hf-xclc" class="x-k">密钥写进<br data-hf-id="hf-xdmd" />前端代码</div>
+      <div data-hf-id="hf-xene" class="x-d">前端代码人人可读，密钥等于公开</div>
+    </div>
+    <div data-hf-id="hf-xfof" id="x-c3" class="x-card clip" data-start="15.4" data-duration="10.332">
+      <div data-hf-id="hf-xgpg" class="x-n">PITFALL 03</div>
+      <div data-hf-id="hf-xhph" class="x-k">只在<br data-hf-id="hf-xiqi" />桌面测</div>
+      <div data-hf-id="hf-xjrj" class="x-d">手机一打开，全是溢出和错位</div>
+    </div>
+    <div data-hf-id="hf-xksk" id="x-f1" class="x-fix clip" data-start="5.9" data-duration="19.832"><em>✓</em>只传 dist，依赖不进产物</div>
+    <div data-hf-id="hf-xltl" id="x-f2" class="x-fix clip" data-start="13.6" data-duration="12.132"><em>✓</em>密钥放服务端环境变量</div>
+    <div data-hf-id="hf-xmum" id="x-f3" class="x-fix clip" data-start="17.4" data-duration="8.332"><em>✓</em>移动端先测，再发</div>
+    <div data-hf-id="hf-xnvn" id="x-final" class="clip" data-start="19.9" data-duration="5.832">规矩提前定死，<span data-hf-id="hf-xowo" class="g">上线才不会翻车</span></div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#x-tag", { y: 14, opacity: 1 }, { y: 0, opacity: 1, duration: .24, ease: "power2.out" }, 0);
+    ksplit(document.querySelector("#x-title"));
+    tl.set("#x-title", { "--sq": "0px", "--gk": "0%" }, 0);
+    tl.fromTo("#x-title .k-word", { y: 44, scale: 1.28, rotation: -3 }, { y: 0, scale: 1, rotation: 0, duration: .52, ease: "back.out(1.9)", stagger: .045 }, 0);
+    tl.to("#x-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 0.5);
+    tl.to("#x-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 0.34);
+    tl.fromTo("#x-c1", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 2.1);
+    tl.fromTo("#x-c2", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 8.9);
+    tl.fromTo("#x-c3", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .42, ease: "back.out(1.5)", scale: 1 }, 15.4);
+    tl.fromTo("#x-f1", { x: 24, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .35, ease: "back.out(1.5)", scale: 1 }, 5.9);
+    tl.fromTo("#x-f2", { x: 24, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .35, ease: "back.out(1.5)", scale: 1 }, 13.6);
+    tl.fromTo("#x-f3", { x: 24, opacity: 0, scale: 0.95 }, { x: 0, opacity: 1, duration: .35, ease: "back.out(1.5)", scale: 1 }, 17.4);
+    tl.fromTo("#x-final", { y: 22, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .4, ease: "back.out(1.5)", scale: 1 }, 19.9);
+    tl.fromTo("#x-final .g", { opacity: .45 }, { opacity: 1, duration: .45, ease: "power2.out" }, 23.05);
+    // ambient-drift: barely-there Ken Burns so held frames never look frozen
+    tl.fromTo("#root", { scale: 1 }, { scale: 1.03, duration: 25.732, ease: "none" }, 0);
+    window.__timelines["pitfall"] = tl;
+  </script>
+</template>

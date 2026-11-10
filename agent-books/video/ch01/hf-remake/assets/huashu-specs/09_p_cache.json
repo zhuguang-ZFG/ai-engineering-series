@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "系统 Prompt", "data": {"icon": "bulb"}},
+    {"at": 1.4, "kind": "point", "text": "稳定前缀 → 缓存命中"},
+    {"at": 3.0, "kind": "draw", "text": "子智能体", "data": {"icon": "target"}},
+    {"at": 4.4, "kind": "point", "text": "原则 3：缓存感知设计"},
+    {"at": 5.8, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

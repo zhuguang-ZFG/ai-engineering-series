@@ -1,0 +1,10 @@
+View usage statistics
+
+USAGE
+  $ omp stats [FLAGS]
+
+FLAGS
+  -p, --port=<int>    Port for the dashboard server
+      --host=<value>  Host to bind
+  -j, --json          Output stats as JSON
+  -s, --summary       Print summary to console

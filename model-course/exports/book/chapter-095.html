@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SSH 与密钥认证 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 95 / 195</p><article><h1 id="ssh-与密钥认证">SSH 与密钥认证</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#ssh-与密钥认证导论">SSH 与密钥认证导论</a><ul><li><a href="#0-你一定遇到过这些场景">0. 你一定遇到过这些场景</a></li><li><a href="#1-密码-vs-密钥密钥更好的原理">1. 密码 vs 密钥：密钥更好的原理</a></li><li><a href="#2-非对称加密公钥和私钥">2. 非对称加密：公钥和私钥</a></li><li><a href="#3-实战生成并配置-ssh-密钥">3. 实战：生成并配置 SSH 密钥</a></li><li><a href="#4-ssh-config告别长命令">4. SSH Config：告别长命令</a></li><li><a href="#5-常见问题排查">5. 常见问题排查</a></li><li><a href="#6-总结-1">6. 总结</a></li></ul></li></ul></nav></details><h2 id="ssh-与密钥认证导论">SSH 与密钥认证导论</h2>
+<blockquote>
+<p><strong>学习指南</strong>：每次 <code>git push</code> 输密码？连服务器总被提示&quot;Permission denied&quot;？本章用 5 分钟带你搞懂 SSH 密钥认证的原理，以及如何一键免密登录 GitHub 和服务器。</p>
+</blockquote>
+<h3 id="0-你一定遇到过这些场景">0. 你一定遇到过这些场景</h3>
+<ul>
+<li><code>git push</code> 时反复弹出密码输入框，烦不胜烦</li>
+<li>SSH 连接服务器失败，不知道 <code>id_rsa</code> 和 <code>id_ed25519</code> 是什么</li>
+<li>听说&quot;公钥&quot;和&quot;私钥&quot;，但搞不清哪个给别人、哪个自己留</li>
+</ul>
+<p><strong>核心矛盾</strong>：密码不安全、又麻烦。SSH 密钥就是用来同时解决安全性和便利性的方案。</p>
+<h3 id="1-密码-vs-密钥密钥更好的原理">1. 密码 vs 密钥：密钥更好的原理</h3>
+<p>👇 动手点点看：对比密码登录和密钥登录的区别</p>
+<blockquote>
+<p><strong>一句话总结</strong>
+密码登录 = 每次把密码发过去让对方核对（密码可能被截获）；<br>密钥登录 = 证明&quot;我有钥匙&quot;但不用把钥匙给你看（私钥永不传输）。</p>
+</blockquote>
+<h3 id="2-非对称加密公钥和私钥">2. 非对称加密：公钥和私钥</h3>
+<p>SSH 密钥基于<strong>非对称加密</strong>，一次生成两把钥匙：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th></th>
+<th>私钥 (Private Key)</th>
+<th>公钥 (Public Key)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>保存位置</strong></td>
+<td>你的电脑 <code>~/.ssh/id_ed25519</code></td>
+<td>服务器/GitHub</td>
+</tr>
+<tr>
+<td><strong>可以给别人吗</strong></td>
+<td>❌ 绝不</td>
+<td>✅ 随便给</td>
+</tr>
+<tr>
+<td><strong>功能</strong></td>
+<td>签名（证明身份）</td>
+<td>验签（验证身份）</td>
+</tr>
+<tr>
+<td><strong>类比</strong></td>
+<td>钥匙</td>
+<td>锁</td>
+</tr>
+</tbody></table></div>
+<h4 id="常见密钥类型">常见密钥类型</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>命令</th>
+<th>推荐度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ed25519</strong></td>
+<td><code>ssh-keygen -t ed25519</code></td>
+<td>⭐⭐⭐</td>
+<td>最新最快最安全</td>
+</tr>
+<tr>
+<td><strong>RSA</strong></td>
+<td><code>ssh-keygen -t rsa -b 4096</code></td>
+<td>⭐⭐</td>
+<td>兼容性好，但较慢</td>
+</tr>
+<tr>
+<td><strong>ECDSA</strong></td>
+<td><code>ssh-keygen -t ecdsa</code></td>
+<td>⭐</td>
+<td>一般不推荐</td>
+</tr>
+</tbody></table></div>
+<h3 id="3-实战生成并配置-ssh-密钥">3. 实战：生成并配置 SSH 密钥</h3>
+<h4 id="31-生成密钥对">3.1 生成密钥对</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh-keygen -t ed25519 -C &quot;your@email.com&quot;
+</code></pre>
+<p>执行后会提示：</p>
+<ul>
+<li><strong>文件路径</strong>：直接回车用默认路径 <code>~/.ssh/id_ed25519</code></li>
+<li><strong>密码短语</strong>：可以设置额外保护（也可留空）</li>
+</ul>
+<h4 id="32-把公钥添加到-github">3.2 把公钥添加到 GitHub</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 1. 复制公钥内容
+cat ~/.ssh/id_ed25519.pub | pbcopy  # macOS
+cat ~/.ssh/id_ed25519.pub | xclip   # Linux
+
+# 2. 打开 GitHub → Settings → SSH and GPG keys → New SSH key
+# 3. 粘贴公钥，保存
+
+# 4. 测试连接
+ssh -T git@github.com
+# 成功会看到: Hi username! You&#39;ve been authenticated...
+</code></pre>
+<h4 id="33-把公钥添加到服务器">3.3 把公钥添加到服务器</h4>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 方式一：ssh-copy-id（推荐）
+ssh-copy-id user@your-server
+
+# 方式二：手动复制
+cat ~/.ssh/id_ed25519.pub | ssh user@server &quot;mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys&quot;
+</code></pre>
+<h3 id="4-ssh-config告别长命令">4. SSH Config：告别长命令</h3>
+<p>在 <code>~/.ssh/config</code> 中配置别名，一次配置终身受益：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Host dev
+  HostName 192.168.1.100
+  User deploy
+  IdentityFile ~/.ssh/id_ed25519
+
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+</code></pre>
+<p>配置后的效果：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>之前</th>
+<th>之后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ssh -i ~/.ssh/id_ed25519 deploy@192.168.1.100</code></td>
+<td><code>ssh dev</code></td>
+</tr>
+<tr>
+<td>每次都要记 IP 和用户名</td>
+<td>记一个别名就够</td>
+</tr>
+</tbody></table></div>
+<h3 id="5-常见问题排查">5. 常见问题排查</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Permission denied (publickey)</code></td>
+<td>公钥没添加到服务器</td>
+<td><code>ssh-copy-id user@server</code></td>
+</tr>
+<tr>
+<td><code>WARNING: UNPROTECTED PRIVATE KEY FILE</code></td>
+<td>私钥文件权限太宽</td>
+<td><code>chmod 600 ~/.ssh/id_ed25519</code></td>
+</tr>
+<tr>
+<td><code>Could not resolve hostname</code></td>
+<td>SSH Config 配置有误</td>
+<td>检查 <code>~/.ssh/config</code> 格式</td>
+</tr>
+<tr>
+<td>GitHub 还是要密码</td>
+<td>用的 HTTPS 而非 SSH</td>
+<td>改用 <code>git@github.com:user/repo.git</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="6-总结-1">6. 总结</h3>
+<blockquote>
+<p><strong>📚 核心要点</strong></p>
+</blockquote>
+<ol>
+<li><strong>密钥 &gt; 密码</strong>：私钥永不传输，比密码安全得多</li>
+<li><strong>推荐 Ed25519</strong>：最现代的密钥算法，速度快、安全性高</li>
+<li><strong>公钥随便给，私钥绝不泄露</strong>：记住这条铁律</li>
+<li><strong>SSH Config</strong>：配一次别名，之后 <code>ssh 别名</code> 一键连接</li>
+<li><strong>GitHub/GitLab</strong>：添加公钥后，<code>git push/pull</code> 再也不需要输密码</li>
+</ol>
+<p><strong>下一步学习</strong>：</p>
+<ul>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/ports-localhost.md">端口与 localhost 原理</a> - 理解网络连接的基础</li>
+<li><a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/appendix/2-development-tools/environment-path.md">环境变量与 PATH 导论</a> - 理解系统配置</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-094.html">← 端口与 localhost</a><a rel="next" href="chapter-096.html">包管理器（npm / pip / cargo） →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

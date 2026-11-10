@@ -1,0 +1,1187 @@
+===== context-files =====
+1:# Context files
+7:## How context files relate to other concepts
+18:## Native `.omp` files
+36:### Monorepo example
+55:## Other supported context conventions
+87:## Extra filenames
+92:# ~/.omp/agent/config.yml
+113:## Load order and shadowing
+147:### Worked shadowing example
+164:## Injection behavior
+186:## `@` imports
+191:# Project notes
+208:## Sticky rules vs normal context
+215:# ~/.omp/agent/RULES.md
+232:## Disabling discovery providers
+237:# .omp/config.yml
+266:## Disabling a single context file
+271:# ~/.omp/agent/config.yml, .omp/config.yml, or a --config overlay
+297:## Troubleshooting
+299:### A file is not loaded
+311:### The wrong file wins
+315:### User context disappeared
+319:### A `RULES.md` file is ignored
+323:### An `@` import did not expand
+# Context files
+
+Context files are Markdown instruction files that `omp` discovers automatically before a session starts and injects into the agent's project context. Use them for repository conventions, architecture notes, test and review expectations, and instructions that should travel with a user account or a project.
+
+You never have to ask the agent to go read `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or similar files — the relevant ones are already discovered, loaded, and placed in context when the session begins.
+
+## How context files relate to other concepts
+
+Four similarly named things behave differently. Keep them straight:
+
+- **Context files** are read as plain Markdown and shown to the agent in generated project instructions (inside `<repo-rules>` with the default prompt template). They are session-opening instructions and background for repository work.
+- **Sticky rules** come from a top-level native `RULES.md`. They are converted into an always-apply rule whose full body is carried on every request, so it stays in context and keeps its hold even after the visible conversation grows. See "Sticky rules vs normal context" below.
+- **Discovery providers** are the config-source adapters that know where each tool keeps its files. The full registry is `native`, `omp-plugins`, `claude`, `agent-plugins`, `codex`, `agents`, `claude-plugins`, `gemini`, `opencode`, `cursor`, `windsurf`, `cline`, `github`, `vscode`, `agents-md`, `claude-md`, `custom-context`, `mcp-json`, `ssh-json`, and `builtin-defaults`. Only some contribute context files (`native`, `claude`, `codex`, `gemini`, `opencode`, `github`, `agents`, `agents-md`, `claude-md`, `custom-context`); the rest contribute other capabilities such as rules, MCP servers, skills, commands, hooks, tools, or SSH hosts. The same provider that contributes context files may also contribute MCP servers, slash commands, skills, hooks, tools, prompts, and settings.
+- **Model providers** are inference backends such as `anthropic`, `openai`, `google`, `groq`, `ollama`, and `openrouter`. They have nothing to do with context files except that both kinds of id share the one `disabledProviders` list — see "Disabling discovery providers" below and [Providers](./providers.md).
+
+Authoring **skills** and **rule** files (as opposed to the sticky `RULES.md`) is covered in [Skills](./skills.md). Customizing the system prompt with `SYSTEM.md` is covered in [System prompt customization](./system-prompt-customization.md).
+
+## Native `.omp` files
+
+The native provider is the recommended format for new projects. It reads from your user agent directory and from `.omp/` directories inside a project, and it has the highest discovery priority, so its files win over every other convention at the same scope.
+
+| File                                          | Scope   | Behavior                                                                                                                                                                                                                                                                                                                      |
+| --------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `~/.omp/agent/AGENTS.md`                      | User    | User-level context unless the `native` provider is disabled. Main sessions and advisors receive it; task subagents do not, including when they rediscover additional workspace roots. See [Inputs by session type](system-prompt-customization.md#inputs-by-session-type).                                                    |
+| `<nearest-non-empty-ancestor>/.omp/AGENTS.md` | Project | Project context, but only when `AGENTS.md` exists in the **nearest non-empty `.omp/` directory** found while walking from cwd toward the repository root. OMP does not continue to a farther `.omp/` directory when the nearest one lacks this file. Main sessions and advisors receive it; task subagents do not inherit it. |
+| `~/.omp/agent/RULES.md`                       | User    | User-level sticky rule content. Loaded as an always-apply rule, not as a context file.                                                                                                                                                                                                                                        |
+| `<nearest-non-empty-ancestor>/.omp/RULES.md`  | Project | Project sticky content, but only when `RULES.md` exists in the same nearest non-empty `.omp/` directory selected by the walk.                                                                                                                                                                                                 |
+
+Two details matter:
+
+- **The nearest non-empty `.omp/` directory owns native project discovery.** Discovery starts in the current working directory and climbs toward the repository root. Once it finds a non-empty `.omp/`, it stops; native `AGENTS.md` and `RULES.md` are each read from that directory only. A missing file does not make discovery continue upward.
+- **Empty directories and files contribute nothing.** An empty `.omp/` directory is skipped during the walk. In the selected non-empty directory, an empty `AGENTS.md` or `RULES.md` contributes nothing.
+
+`~/.omp/agent` is shorthand for the active native agent directory. `PI_CODING_AGENT_DIR` relocates it. A named profile (`omp --profile <name>`, `OMP_PROFILE`, or `PI_PROFILE`) uses `~/.omp/profiles/<name>/agent` by default; external-tool user bases such as `~/.claude` are not profile-scoped.
+
+### Monorepo example
+
+```text
+repo/
+  .omp/
+
+===== compaction =====
+1:# Compaction and Branch Summaries
+10:## Key implementation files
+29:## Session entry model
+66:## Compaction pipeline
+68:### Triggers
+79:### ACP notifications
+90:### Compaction shape (visual)
+124:### Overflow/incomplete recovery vs threshold/idle maintenance
+159:### Payload-rejection guard
+165:### Experimental notes-backed context windows
+213:### Shake method
+219:### Snapcompact method
+232:### Maintenance progress guard
+236:### Display transcript
+240:### Pre-compaction pruning
+257:### Useless-result elision
+267:### Boundary and cut-point logic
+290:### Split-turn handling
+318:### Summary generation
+360:### Handoff generation
+368:### File-operation context in summaries
+386:# packages/agent/src/compaction/
+389:## prompts/
+396:### Persist and reload
+406:## Branch summarization pipeline
+410:### Trigger
+420:### Branch switch shape (visual)
+439:### Preparation and token budget
+454:### Summary generation and persistence
+467:## Extension and hook touchpoints
+469:### `session_before_compact`
+480:### `session.compacting`
+490:### `session_compact`
+494:### `session_before_tree`
+503:### `session_tree`
+507:## Runtime behavior and failure semantics
+523:## Settings and defaults
+# Compaction and Branch Summaries
+
+Compaction and branch summaries are the two mechanisms that keep long sessions usable without losing prior work context.
+
+- **Compaction** rewrites old history into a summary on the current branch.
+- **Branch summary** captures abandoned branch context during `/tree` navigation.
+
+Both are persisted as session entries and converted back into user-context messages when rebuilding LLM input.
+
+## Key implementation files
+
+- `packages/agent/src/compaction/compaction.ts` (context-full summarization and handoff generation)
+- `packages/snapcompact/src/snapcompact.ts` (snapcompact strategy: history archived as dense bitmap images)
+- `packages/agent/src/compaction/branch-summarization.ts`
+- `packages/agent/src/compaction/pruning.ts`
+- `packages/agent/src/compaction/compaction-v2-streaming.ts` (provider-native streaming compaction)
+- `packages/agent/src/compaction/shake.ts` (mechanical content elision)
+- `packages/agent/src/compaction/utils.ts`
+- `packages/agent/src/compaction/openai.ts`
+- `packages/agent/src/compaction/messages.ts` (shared LLM conversion and summary wrappers)
+- `packages/coding-agent/src/session/session-context.ts` (context and transcript assembly)
+- `packages/coding-agent/src/session/session-manager.ts`
+- `packages/coding-agent/src/session/agent-session.ts`
+- `packages/coding-agent/src/session/session-maintenance.ts` (automatic maintenance orchestration)
+- `packages/coding-agent/src/session/messages.ts`
+- `packages/coding-agent/src/extensibility/hooks/types.ts`
+- `packages/coding-agent/src/session/context-settings.ts` (`compaction.*`, `snapcompact.*`, `branchSummary.*` definitions)
+
+## Session entry model
+
+Compaction and branch summaries are first-class session entries, not plain assistant/user messages.
+
+- `CompactionEntry`
+   - `type: "compaction"`
+   - `summary`, optional `shortSummary`
+   - `firstKeptEntryId` (compaction boundary)
+   - `tokensBefore`
+   - optional `details`, `preserveData`, `fromExtension`
+   - optional `method`, `tokensAfter`, `warning` (maintenance/display metadata)
+   - optional `providerReplayThroughEntryId` (last entry covered by a native replay snapshot)
+
+===== memory =====
+1:# Autonomous Memory
+20:## Usage
+22:### What gets injected
+32:### Reading memory artifacts
+48:### `/memory` slash command
+61:### Capturing lessons
+72:## How it works
+90:### Extraction behavior
+102:### Model selection
+113:## Configuration
+134:## Hindsight remote backend
+158:## Sharpshooter backend
+182:## Key files
+# Autonomous Memory
+
+omp supports five memory modes. Memory is disabled by default; select one backend via `/settings` or `config.yml`:
+
+| `memory.backend` | Storage and behavior                                                                               | Guide                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `off`            | No memory backend                                                                                  | —                                                       |
+| `local`          | Project-scoped summaries and lessons generated from persisted sessions                             | This page                                               |
+| `hindsight`      | Remote, bank-scoped Hindsight memory                                                               | [Hindsight](#hindsight-remote-backend)                  |
+| `mnemopi`        | Local Mnemopi SQLite memory                                                                        | [Mnemopi memory backend](./mnemosyne-memory-backend.md) |
+| `sharpshooter`   | Friction-gated project decision files (architecture/product/style), consolidated in the background | [Sharpshooter](#sharpshooter-backend)                   |
+
+Enable the local summary pipeline:
+
+```yaml
+memory:
+   backend: local
+```
+
+## Usage
+
+### What gets injected
+
+At session start, if a consolidated summary or manually captured lesson exists for the current project, it is injected into the system prompt as a **Memory Guidance** block. The summary and lessons share `memories.summaryInjectionTokenLimit`.
+
+If startup consolidation finishes after the first prompt build, the active session's summary snapshot is refreshed. Captured lessons remain pinned to the initial snapshot, so a concurrent `learn` call still affects only later sessions.
+
+- Treat memory as heuristic context — useful for process and prior decisions, not authoritative on current repo state.
+- Cite the memory artifact path when memory changes the plan, and pair it with current-repo evidence before acting.
+- Prefer repo state and user instruction when they conflict with memory; treat conflicting memory as stale.
+
+### Reading memory artifacts
+
+The agent can read memory files directly using `memory://` URLs with the `read` tool:
+
+| URL                                    | Content                                                                                                                                  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `memory://root`                        | Compact summary injected at startup                                                                                                      |
+| `memory://root/MEMORY.md`              | Full long-term memory document                                                                                                           |
+| `memory://root/learned.md`             | Lessons captured by the `learn` tool                                                                                                     |
+
+===== skills =====
+1:# Skills
+11:## What a skill is in this codebase
+23:## Required layout and SKILL.md expectations
+25:### Directory layout
+50:### `SKILL.md` frontmatter
+75:## Discovery pipeline
+85:### Built-in skill providers and precedence
+106:### Source toggles and filtering
+124:### Collision and duplicate handling
+137:## Runtime usage behavior
+139:### System prompt exposure
+155:### Interactive `/skill:<name>` commands
+178:## `skill://` URL behavior
+227:## Skills vs AGENTS.md, commands, tools, hooks
+229:### Skills vs AGENTS.md
+236:### Skills vs slash commands
+242:### Skills vs custom tools
+247:### Skills vs hooks
+252:## Practical authoring guidance tied to discovery logic
+# Skills
+
+Skills are file-backed capability packs discovered at startup and exposed to the model as:
+
+- lightweight metadata in the system prompt (name + description)
+- on-demand content via the `read` tool against `skill://...`
+- optional interactive `/skill:<name>` commands
+
+This document covers current runtime behavior in `packages/coding-agent/src/extensibility/skills.ts`, `packages/coding-agent/src/discovery/builtin.ts`, `packages/coding-agent/src/internal-urls/skill-protocol.ts`, and `packages/coding-agent/src/discovery/agents-md.ts`.
+
+## What a skill is in this codebase
+
+A discovered skill is represented as:
+
+- `name`
+- `description`
+- `filePath` (the `SKILL.md` path)
+- `baseDir` (skill directory)
+- source metadata (`provider`, `level`, path)
+
+The capability validator only requires `name` and `path`; individual providers impose additional frontmatter requirements. Matching quality depends on `description` being meaningful.
+
+## Required layout and SKILL.md expectations
+
+### Directory layout
+
+For conventional provider roots (native/Claude/Codex/Agents/plugins), skills are discovered as **one level under `skills/`**:
+
+- `<skills-root>/<skill-name>/SKILL.md`
+
+Nested patterns like `<skills-root>/group/<skill>/SKILL.md` are not discovered recursively. The Claude-plugin provider also accepts manifest-declared skill directories containing `SKILL.md` directly, in addition to their immediate children. Agent Plugins packages use only the fixed `skills/<name>/SKILL.md` layout; registry-installed Skillshare packages have a root `SKILL.md`.
+
+For `skills.customDirectories`, scanning uses the same non-recursive layout (`*/SKILL.md`).
+
+```text
+Provider-discovered layout (non-recursive under skills/):
+
+<root>/skills/
+  ├─ postgres/
+  │   └─ SKILL.md      ✅ discovered
+
+===== mcp-config =====
+1:# MCP configuration in OMP
+15:## Preferred config locations
+33:### Imported tool configs
+48:### Profiles
+61:## Add a schema reference
+74:## File shape
+101:## Supported server fields
+126:### `stdio` transport
+157:### `http` transport
+184:### `sse` transport
+211:## Auth fields
+215:### `auth`
+254:### `oauth`
+306:## Common copy-paste examples
+308:### Filesystem server via stdio
+322:### GitHub hosted server via HTTP
+336:### GitHub local server via Docker
+355:### Slack hosted server via OAuth
+379:## Secrets and variable resolution
+383:### Discovery-time `${...}` expansion
+403:### Pre-connect env/header resolution
+433:## User-level enable and disable overrides
+450:## `/mcp add` vs editing JSON directly
+469:## Validation rules OMP enforces
+482:## Discovery and precedence
+506:## Troubleshooting
+508:### `Server "name": stdio server requires "command" field`
+512:### `Server "name": both "command" and "url" are set`
+516:### `/mcp add` worked but the server still does not connect
+525:### The server exists in another tool's config but not in OMP
+529:### A browser MCP server is configured but never loads
+537:### A namespaced server works but the editor rejects its name
+541:### A config file is silently absent from the list
+545:## References
+# MCP configuration in OMP
+
+This guide explains how to add, edit, and validate MCP servers for the OMP coding agent.
+
+Source of truth in code:
+
+- Runtime config types: `packages/coding-agent/src/mcp/types.ts`
+- Config writer: `packages/coding-agent/src/mcp/config-writer.ts`
+- Loader + validation: `packages/coding-agent/src/mcp/config.ts`
+- Standalone `mcp.json` discovery: `packages/coding-agent/src/discovery/mcp-json.ts`
+- Schema: `packages/coding-agent/src/config/mcp-schema.json`
+- Managed credential lookup: `packages/coding-agent/src/mcp/oauth-credentials.ts`
+- Portable plugin MCP discovery: `packages/coding-agent/src/discovery/agent-plugins.ts`
+
+## Preferred config locations
+
+OMP can discover MCP servers from multiple tools (`.claude/`, `.cursor/`, `.vscode/`, `opencode.json`, and more), but for OMP-native configuration you should usually use one of these primary files:
+
+- Project: `.omp/mcp.json`
+- User: `~/.omp/agent/mcp.json` (or `~/.omp/profiles/<name>/agent/mcp.json` when a named profile is active — see [Profiles](#profiles))
+
+The native provider also reads `.omp/.mcp.json` and `~/.omp/agent/.mcp.json` for compatibility, but OMP writes to the primary `mcp.json` paths above.
+
+These user paths are defaults: `PI_CONFIG_DIR` changes the home config root, and `PI_CODING_AGENT_DIR` can override the default-profile agent directory. Named profiles derive their own agent directory rather than inheriting that override. Project config remains in `.omp/`.
+
+OMP also accepts fallback standalone files in the project root:
+
+- `mcp.json`
+- `.mcp.json`
+
+Use `.omp/mcp.json` or `~/.omp/agent/mcp.json` when you want OMP to own the configuration. Use root `mcp.json` / `.mcp.json` only when you want a portable fallback file that other MCP clients may also read.
+
+### Imported tool configs
+
+OMP also translates these current tool-native sources:
+
+- Claude Code: `~/.claude.json`, `~/.claude/mcp.json`, and project `.claude/.mcp.json` / `.claude/mcp.json`
+- Codex: `~/.codex/config.toml` and `.codex/config.toml` (`[mcp_servers.*]`)
+- Gemini CLI: `~/.gemini/settings.json` and `.gemini/settings.json`
+- OpenCode: `opencode.json` / `opencode.jsonc` in `~/.config/opencode/`, the project root, and project `.opencode/` (the `mcp` map)
+
+===== extensions =====
+1:# Extensions
+17:## What an extension is
+38:## Runtime model
+69:## Quick start
+112:## Extension API surfaces
+114:## 1) Registration and actions (`ExtensionAPI`)
+141:### Provider registration
+230:### Command-backed providers
+293:### Runtime setting overrides
+314:### Message delivery semantics
+345:## 2) Handler context (`ExtensionContext`)
+387:### Ephemeral side turns (`ctx.runEphemeralTurn`)
+415:### Live voice on your own peer (`ctx.startLive`)
+437:### Background work (`ctx.setInterval` / `ctx.setTimeout`)
+460:### Model selection (`ctx.models`)
+475:## 3) Command context (`ExtensionCommandContext`)
+488:## Event surface (current names and behavior)
+492:### Session lifecycle
+526:### Prompt and turn lifecycle
+594:### Tool lifecycle
+603:### Plan review lifecycle
+610:### Mode lifecycle
+614:### Subagent lifecycle
+618:### Reliability/runtime signals
+629:### Link activation
+633:### MCP notifications
+653:### User command interception
+658:### `resources_discover`
+663:## Tool authoring details
+686:### Adding passive context after a tool call
+718:### Delegating to a native built-in (`ctx.invokeTool`)
+789:### File write fallback (`registerFileWriteFallback`)
+864:### File delete fallback (`registerFileDeleteFallback`)
+923:## UI integration points
+927:### Interactive mode (`extension-ui-controller.ts`)
+1105:### RPC mode (`rpc-mode.ts`)
+1123:### Print/headless/subagent paths
+1127:### ACP mode
+1136:## Session and state patterns
+1158:### Session-entry roles (`message.role` is camelCase)
+# Extensions
+
+Primary guide for authoring runtime extensions in `packages/coding-agent`.
+
+This document covers the current extension runtime in:
+
+- `src/extensibility/extensions/types.ts`
+- `src/extensibility/extensions/runner.ts`
+- `src/extensibility/extensions/wrapper.ts`
+- `src/extensibility/extensions/index.ts`
+- `src/modes/controllers/extension-ui-controller.ts`
+
+For discovery paths and filesystem loading rules, see [`extension-loading.md`](./extension-loading.md).
+
+For packaged user-facing extension CLIs/features, see [`user-facing-packages.md`](./user-facing-packages.md).
+
+## What an extension is
+
+An extension is a TS/JS module exporting a default factory. Factories may initialize synchronously or return a promise:
+
+```ts
+import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+
+export default function myExtension(pi: ExtensionAPI) {
+	// register handlers/tools/commands/renderers
+}
+```
+
+Extensions can combine all of the following in one module:
+
+- event handlers (`pi.on(...)`)
+- LLM-callable tools (`pi.registerTool(...)`)
+- slash commands (`pi.registerCommand(...)`)
+- keyboard shortcuts and flags
+- custom message rendering
+- session/message injection APIs (`sendMessage`, `sendUserMessage`, `appendEntry`)
+
+## Runtime model
+
+1. Extension modules are imported concurrently; their factory functions then run sequentially in path order.
+
+===== hooks =====
+1:# Hooks
+5:## Current status in runtime
+24:## Key files
+35:## What a hook module is
+61:## Discovery and loading
+77:### Native discovery location
+101:### Path resolution
+109:## Event surfaces
+113:### Session events
+129:### Agent/context events
+144:### Tool events (pre/post model)
+185:## Execution model and mutation semantics
+187:### 1) Pre-execution: `tool_call`
+196:### 2) Tool execution
+200:### 3) Post-execution: `tool_result`
+223:### What hooks can mutate
+232:### What hooks cannot mutate in this implementation
+242:## Ordering and conflict behavior
+244:### Discovery-level ordering
+250:### Load order
+255:### Runtime handler order
+277:## UI interactions (`HookContext.ui`)
+297:### Status line behavior
+306:## Error propagation and fallback
+308:### Load-time
+313:### Event-time
+322:## Realistic API examples
+324:### Block unsafe bash commands
+342:### Redact tool output on post-execution
+364:### Modify model context per LLM call
+377:### Register slash command with command-safe context methods
+402:## Export surface
+# Hooks
+
+This document describes the **current hook subsystem code** in `packages/coding-agent/src/extensibility/hooks/*`.
+
+## Current status in runtime
+
+The default CLI runtime initializes the **extension runner** path. In current startup flow:
+
+- `--hook` is treated as an alias for `--extension` (CLI paths are merged into `additionalExtensionPaths`)
+- JS/TS hook factories discovered through `hookCapability` (for example `.omp/hooks/pre/*.ts`) are loaded as extension modules so their `pi.on(...)` handlers bind to the runtime event bus
+- tools are wrapped by `ExtensionToolWrapper`, not `HookToolWrapper`
+- context transforms and lifecycle emissions go through `ExtensionRunner`
+
+So this file documents the legacy hook subsystem implementation itself (types/loader/runner/wrapper), plus the factory shape still accepted when a discovered hook path is loaded by the extension runner.
+
+A discovered factory receives `ExtensionAPI`/`ExtensionContext` in normal
+sessions, not an instance of `HookAPI`/`HookContext`. Shared `pi.on(...)`
+handlers work, but legacy-only context names are not shimmed: for example,
+use `ctx.hasPendingMessages()` in extensions rather than the legacy
+`ctx.hasQueuedMessages()`. Prefer [Extensions](./extensions.md) for new runtime
+integrations. The runner/wrapper behavior below is specifically the legacy
+library path unless stated otherwise.
+
+## Key files
+
+- `packages/coding-agent/src/extensibility/hooks/types.ts` — hook context, event types, and result contracts
+- `packages/coding-agent/src/extensibility/hooks/loader.ts` — module loading and hook discovery bridge
+- `packages/coding-agent/src/extensibility/hooks/runner.ts` — event dispatch, command lookup, error signaling
+- `packages/coding-agent/src/extensibility/hooks/tool-wrapper.ts` — pre/post tool interception wrapper
+- `packages/coding-agent/src/extensibility/hooks/index.ts` — exports/re-exports
+- `packages/coding-agent/src/extensibility/shared-events.ts` — shared event/result contracts
+- `packages/coding-agent/src/extensibility/extensions/loader.ts` — current runtime discovery
+- `packages/coding-agent/src/extensibility/extensions/wrapper.ts` — current tool wrapper and approval gate
+
+## What a hook module is
+
+A hook module must default-export a factory:
+
+```ts
+import type { HookAPI } from "@oh-my-pi/pi-coding-agent/extensibility/hooks";
+
+===== custom-tools =====
+1:# Custom Tools
+7:## What this is (and is not)
+16:## Integration paths in current code
+45:## Discovery locations (loader API)
+57:### Important behavior
+68:## Module contract
+124:## API surface passed to factories (`CustomToolAPI`)
+146:## Execution contract and typing
+166:## How tools are exposed to the model
+174:## Rendering hooks
+191:## Session/state handling
+202:## Failures and cancellation semantics
+204:### Synchronous/async failures
+210:### Cancellation
+216:### onSession errors
+220:## Real constraints to design for
+# Custom Tools
+
+Custom tools are model-callable functions that plug into the same tool execution pipeline as built-in tools.
+
+A custom tool is a TypeScript/JavaScript module that exports a factory. The factory receives a host API (`CustomToolAPI`) and returns one tool or an array of tools.
+
+## What this is (and is not)
+
+- **Custom tool**: callable by the model during a turn (`execute` + parameter schema).
+- **Extension**: lifecycle/event framework that can register tools and intercept/modify events.
+- **Hook**: legacy event-driven interceptor API loaded through the extension runner.
+- **Skill**: static guidance/context package, not executable tool code.
+
+If you need the model to call code directly, use a custom tool.
+
+## Integration paths in current code
+
+There are two active integration styles:
+
+1. **SDK-provided custom tools** (`options.customTools`)
+   - Converted to extension tool definitions and adapted into the session registry.
+   - Unrestricted sessions auto-enable them unless the effective definition is hidden/default-inactive.
+   - In a restricted session (`restrictToolNames: true`), SDK-provided custom tools are excluded unless `allowRestrictedCustomTools: true`; opted-in tools are active only when their names also appear in `toolNames`.
+
+2. **Filesystem-discovered modules** (`discoverCustomToolPaths` / `loadCustomTools`)
+   - Unrestricted session bootstrap discovers and loads config/provider/plugin tool modules, then registers them through a generated extension.
+   - These functions and the combined `discoverAndLoadCustomTools` helper are also library APIs in `packages/coding-agent/src/extensibility/custom-tools/loader.ts`.
+   - Subagents can reuse `preloadedCustomToolPaths` to skip discovery, but factories are rebound to each session's own API.
+
+```text
+Model tool call flow
+
+LLM tool call
+   │
+   ▼
+Tool registry (built-ins + registered custom definitions)
+   │
+   ▼
+CustomTool.execute(toolCallId, params, onUpdate, ctx, signal)
+   │
+
+===== settings =====
+1:# Settings
+13:## Where settings live
+32:## Config file formats
+41:## Reading and writing settings
+65:### Subcommands
+78:### Value parsing
+95:### Where writes go
+103:### Live file changes
+113:## Precedence
+132:### Environment overrides
+163:## Merge rules
+186:### Bash command approval patterns
+219:### Bash interceptor patterns
+234:### Worked example: global vs. project
+237:# ~/.omp/agent/config.yml
+248:# <repo>/.omp/config.yml
+270:## Project-local config
+275:# <repo>/.omp/config.yml
+296:### One-shot overlays
+311:## Path-scoped arrays
+343:## Provider and source disabling
+361:# ~/.omp/agent/config.yml
+366:# <repo>/.omp/config.yml — inside this repo ONLY groq is disabled
+375:## Resume picker scope
+384:## Settings catalog
+388:### Models
+470:### Judgments
+480:### Advisor
+498:### Thinking
+526:### Sampling
+547:### Retry and fallback
+616:### Tools and approvals
+657:### Window-scoped computer use
+679:### Shell, eval, and LSP
+733:### Files: editing and reading
+771:### Context, compaction, and memory
+864:### Appearance and terminal
+919:### Interaction
+941:### Providers and services
+1035:### Cost limits
+# Settings
+
+`omp` resolves settings from built-in defaults, a persistent global config file, optional project-local config, one-shot CLI overlays, and in-memory runtime overrides. Reach for project settings when one repository needs a different provider set, model role, tool policy, memory backend, or UI behavior than your global defaults — without touching your machine-wide configuration.
+
+Settings are stored as plain YAML mappings. Every key, its type, default, and enum values come from its setting definition (declared with `register(...)` next to the owning feature, e.g. `packages/coding-agent/src/tools/settings.ts`, and collected by `packages/coding-agent/src/config/all-settings.ts`). `omp config` exposes the complete schema; the interactive `/settings` panel exposes entries with supported UI editors. Some entries are conditional; numbers and arrays without UI choices remain config-file-only unless the setting opts into the panel's JSON editor (such as `contextFiles.extra`).
+
+- For model/provider credentials, `.env` files, and the env-var table that resolves API keys, see [Providers](./providers.md).
+- For custom model definitions in `models.yml`, see [Models](./models.md).
+- For instruction files discovered into the agent context (`AGENTS.md`, `.omp/`, etc.), see [Context files](./context-files.md).
+- For the full catalog of environment variables, see [Environment variables](./environment-variables.md).
+- For prompt words that activate specialized per-turn behavior, see [Magic keywords](./magic-keywords.md).
+
+## Where settings live
+
+| Scope             | Path                                                  | Read behavior                                                                                                                            | Write behavior                                                                                                                                                                   |
+| ----------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Global            | `~/.omp/agent/config.yml` (or existing `config.yaml`) | The main persistent settings file. `config.yml` is the canonical write target; an existing `config.yaml` is loaded and updated in place. | `/settings`, `omp config set`, and `omp config reset` write here.                                                                                                                |
+| Global legacy     | `~/.omp/agent/settings.json`                          | Considered for migration only when neither main YAML filename exists.                                                                    | Not written; renamed to `settings.json.bak` after a non-empty migrated YAML file is successfully saved.                                                                          |
+| Project           | `<cwd>/.omp/config.yml` (plus `.omp/settings.json`)   | Loaded when the process working directory has a non-empty `.omp/`.                                                                       | Settings commands do not write arbitrary project keys. With `modelRoleStorage: project`, model-selector role assignments update only `modelRoles` here; edit other keys by hand. |
+| Project legacy    | `<cwd>/.omp/settings.json`                            | Still read; project `config.yml` is merged on top of it.                                                                                 | Not written by settings commands.                                                                                                                                                |
+| CLI overlay       | Any file passed with `--config <file>`                | Loaded after global and project settings, for that one process. Repeatable.                                                              | Never persisted.                                                                                                                                                                 |
+| Runtime overrides | In-memory only                                        | Set by settings overrides such as `--approval-mode`, role flags, and feature env vars.                                                   | Never persisted.                                                                                                                                                                 |
+
+The global paths above describe the default profile. `omp --profile work` selects `~/.omp/profiles/work/agent` instead, isolating settings, auth, sessions, and caches. `OMP_PROFILE` also selects a profile; `PI_PROFILE` is its compatibility fallback only when `OMP_PROFILE` is absent. An explicit `--profile` wins over both, and `--profile default` selects the default profile.
+
+`PI_CODING_AGENT_DIR` relocates the default profile's agent directory, including `config.yml` and its agent data. Named profiles derive their own agent directory and ignore this override. Use `omp config path` (or `omp --profile work config path`) to print the active settings directory.
+
+On Linux and macOS, configured `XDG_DATA_HOME`, `XDG_STATE_HOME`, and `XDG_CACHE_HOME` can redirect data/state/cache when the corresponding `omp` directories exist. Named profiles require the corresponding `omp/profiles/<name>` directory. This does not move `config.yml`: it stays under the active agent directory, while `agent.db` and other categorized data may live elsewhere. `omp config init-xdg` creates the base directories but does not migrate files or set environment variables.
+
+Native project settings are intentionally scoped to the process working directory's `.omp/` folder — settings discovery does **not** walk ancestor directories looking for the nearest `.omp/`. Other discovery providers (Claude, Codex, Gemini, Cursor, OpenCode) can also contribute project-level settings from their own files; those are read-only from `omp` settings commands and can be turned off by provider id (see [Provider and source disabling](#provider-and-source-disabling)).
+
+## Config file formats
+
+The canonical global file is YAML at `config.yml`; `config.yaml` is accepted as a compatibility filename. The generic config loader used for other files (for example `models.yml`) accepts `.yml`, `.yaml`, `.json`, and `.jsonc`:
+
+- When a `.yml`/`.yaml` path is requested and only a sibling `.json` exists, it is migrated to YAML automatically (idempotent, once per process).
+- `.json` and `.jsonc` configs are read as-is, with no migration.
+- Empty YAML (or YAML `null`) is treated as an empty settings mapping. Other non-mapping top levels are invalid. On writable startup, `omp` moves a syntactically invalid or non-mapping persistent settings file to a uniquely named `.broken-*` backup and exits with the original error and backup path. A `--config` overlay with a bare array/scalar is also a hard error, but is not moved.
+- Invalid values for ordinary schema entries warn and read as their schema defaults. Settings with explicit validators, such as per-agent compaction triggers or provider concurrency limits, can reject the configuration instead. Unknown keys in hand-written files are not a substitute for a registered setting.
+
+
+===== magic-keywords =====
+1:# Magic keywords
+7:## Keywords
+28:## Matching rules
+39:## Configuration
+44:# Disable every magic keyword
+47:# Disable one keyword while leaving the others enabled
+# Magic keywords
+
+Magic keywords are standalone prose words in a user prompt that can add hidden, user-attributed instructions for that turn. Notice injection is enabled by default. The TUI animates recognized words while the editor is focused and shows static highlights in sent messages. Disabling the global switch stops editor animation and hidden notices, but leaves static highlighting and spelling exemptions in place. Recognized words are exempt from macOS spelling autocorrect and typo underlines, so `workflowz` and `jevify` are never rewritten into dictionary words.
+
+The full list — trigger word, gradient, settings copy, required tools, and notice — lives in one table, `packages/coding-agent/src/modes/magic-keywords.ts`; every other surface (settings, notice injection, editor highlighting) derives from it.
+
+## Keywords
+
+| Keyword       | Effect                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ultrathink`  | Adds a careful multi-step reasoning notice. When automatic thinking is active, it also selects the highest reasoning effort supported by the current model for that turn, bypassing `providers.autoThinkingMaxEffort`.                                                                                                                                                                                             |
+| `orchestrate` | Adds the multi-agent orchestration contract: scope the full task, delegate substantial independent work in parallel, verify each phase, and continue until the request is complete. The notice requires `task` to be enabled and names only the available tools.                                                                                                                                                   |
+| `workflowz`   | Adds a deterministic multi-subagent workflow contract centered on the persistent `eval` kernel's `agent()`, `completion()`, handle, `wait()`, and `workpool()` helpers. It is intended for broad research, reviews, migrations, and adversarial coverage. The notice is injected only when both `eval` and `task` are active.                                                                                      |
+| `jevify`      | Adds the bulk-classification contract for the `eval` kernel's `judge()` helper: freeze the question, rubric, pre-filter, and escalation threshold before loading any data, judge every item in one batch, then read only what the judge flags. It is intended for commit/PR audits, log triage, and any long homogeneous list with a yes/no or bucket question. The notice is injected only when `eval` is active. |
+
+Use the keyword anywhere in the prose of the prompt:
+
+```text
+ultrathink about the failure modes before changing this API
+
+orchestrate the migration described in docs/plan.md
+
+workflowz an adversarial review of the authentication changes
+
+jevify commit a17c3e0 for changes unrelated to the tui refactor
+```
+
+## Matching rules
+
+Matching is deliberate so source code and paths do not accidentally change agent behavior:
+
+- Use the exact lowercase spelling. `Ultrathink`, `Orchestrate`, `Workflowz`, and `Jevify` do not trigger.
+- The keyword must be standalone prose. Sentence punctuation and quotes may touch it, but letters, digits, underscores, slashes, backslashes, hyphens, file extensions, symbol references, and call syntax do not match. For example, `orchestrate,` matches; `orchestrated`, `orchestrate.ts`, `foo::orchestrate`, and `orchestrate()` do not.
+- Fenced code blocks (backticks or tildes), inline code spans, HTML/XML comments/tags/elements, and their contents are ignored.
+- All enabled keywords in one prompt may add their own notice. The visible word remains in the user message; hidden notices are non-displayed custom messages attributed to the user.
+- Matching uses the expanded prompt, after slash-command and prompt-template expansion. Synthetic, agent-initiated prompts do not trigger notices.
+- The instruction applies only to the turn containing the keyword.
+
+## Configuration
+
+
+===== approval-mode =====
+1:# Tool approval mode
+16:## Modes
+29:### Ask and remember (`always-ask-cached`)
+48:## Restricted folders
+66:## User overrides
+102:## Safety overrides
+121:### Computer safety
+136:## Per-tool prompt details
+149:## Defining approval on tools
+186:## ACP sessions
+214:## Subagents
+# Tool approval mode
+
+Tool approval has three inputs:
+
+1. **Tool declaration** — every tool may declare an `approval` tier:
+   - `read`: reads data or updates UI-only session metadata.
+   - `write`: mutates workspace/session state but does not execute arbitrary code.
+   - `exec`: executes code, shells out, drives a browser, spawns agents, or performs similarly broad actions.
+2. **Tool policy** — object-form declarations may set `policy: allow | deny | prompt`, optionally with `override`, a reason, and a `policyKey` for a dispatched sub-tool. This is used for argument-dependent safety/pattern rules.
+3. **User policy** — `tools.approval.<toolName>: allow | deny | prompt` overrides the active mode, but cannot bypass a tool's own deny/prompt policy or a non-yolo safety override.
+
+Tools without an `approval` declaration, and decisions without a valid tier, use `exec`. This is the safe default for unknown custom tools. MCP server tools declare `write`, regardless of their MCP annotations.
+
+When an execute-time caller supplies neither settings nor `autoApprove`, approval resolution fails closed to `always-ask` with no user grants. A live extension wrapper can inherit its runner's session settings when context is omitted.
+
+## Modes
+
+Configure with `tools.approvalMode`:
+
+| Mode                | Auto-approves                                          | Prompts for                 |
+| ------------------- | ------------------------------------------------------ | --------------------------- |
+| `always-ask`        | `read`                                                 | `write`, `exec`             |
+| `always-ask-cached` | `read` without file targets, granted files and folders | file reads, `write`, `exec` |
+| `write`             | `read`, `write`                                        | `exec`                      |
+| `yolo` (default)    | `read`, `write`, `exec`                                | none                        |
+
+`--approval-mode <mode>` overrides the configured mode for the session. `--auto-approve` and `--yolo` force yolo execution even when an explicit `--approval-mode` is also supplied; tool/user denies and explicit tool prompt policies still apply.
+
+### Ask and remember (`always-ask-cached`)
+
+Ask and remember prompts like `always-ask`, and also before a tool reads a file it has not been granted. Its prompts can remember what the call touched:
+
+- **Approve Directory: `<folder>`** grants the folder around the call. A folder grant covers the files directly inside it, never a subfolder or anything below one. The prompt names the folder and lists its entries (directories end in `/`): the first few in the dock, up to 24 in the expanded prompt (`Ctrl+O`). Larger folders show the rest as a count.
+- **Approve File** (or **Approve** for a directory or URL target) grants the exact targets.
+- **Approve Once** approves this call only.
+
+The **Remember across sessions** toggle above these answers decides where a grant lives. When it is off, the grant stays in memory for this conversation only: `/new`, a session switch, and other sessions in the same process start without it. When it is on, the grant is written to `approval-cache.db` in the agent directory and covers every later session. Hosts without the dialog (RPC, ACP, collab guests) get both lifetimes as separate choices: `Approve File`, `Always Approve File`, and so on.
+
+- Grants record the capability tier they authorized. A write grant also covers reads of the same target; a read grant never covers a write or exec call.
+- The tools that read files report the files and folders they touch: `read`, `grep`, `glob`, `ast_grep`, `find`, and the legacy `read`/`grep`/`find`/`ls` shims. A recursive search reaches below subfolders, so it needs a tree grant of its own; approving one also records the folder grant it includes. A root list such as `src;other` is keyed one root at a time.
+
+===== advisor-watchdog =====
+1:# Advisor, WATCHDOG.md, and WATCHDOG.yml
+7:## Implementation files
+24:## Enabling the advisor
+50:### Backup reviewer
+73:### Default advisor settings
+88:### Headless runs
+115:## What the advisor sees
+134:## Tools and isolation
+185:### Emission guard
+198:## Catch-up with `advisor.syncBacklog`
+261:## WATCHDOG.md
+270:# Watchdog notes
+279:### Discovery locations
+292:### `@` imports
+302:### Prompt order
+320:## WATCHDOG.yml
+378:### Discovery locations
+384:## Subagents
+395:## Cost and context behavior
+415:## Transcript persistence and observability
+# Advisor, WATCHDOG.md, and WATCHDOG.yml
+
+The advisor subsystem attaches one or more optional reviewer models to a session. Each advisor reviews primary-agent transcript updates, can inspect the workspace with its own tools, and injects concise advice back into the primary session.
+
+An advisor does not approve actions or mutate primary session state directly. Its default investigative toolset is `read`, `grep`, and `glob`, plus `recall` when the active memory backend provides it, but a `WATCHDOG.yml` roster entry may grant any built-in — including mutating tools such as `edit`, `write`, `bash`, and `eval`. Those tools run in an isolated advisor `ToolSession`, but they honor the session's normal approval mode and per-tool policies; grant them only when the advisor model and workspace are trusted (see [Tools and isolation](#tools-and-isolation)).
+
+## Implementation files
+
+- [`src/advisor/runtime.ts`](../packages/coding-agent/src/advisor/runtime.ts)
+- [`src/advisor/advise-tool.ts`](../packages/coding-agent/src/advisor/advise-tool.ts)
+- [`src/advisor/emission-guard.ts`](../packages/coding-agent/src/advisor/emission-guard.ts)
+- [`src/advisor/watchdog.ts`](../packages/coding-agent/src/advisor/watchdog.ts)
+- [`src/advisor/config.ts`](../packages/coding-agent/src/advisor/config.ts)
+- [`src/advisor/transcript-recorder.ts`](../packages/coding-agent/src/advisor/transcript-recorder.ts)
+- [`src/prompts/advisor/system.md`](../packages/coding-agent/src/prompts/advisor/system.md)
+- [`src/prompts/advisor/advise-tool.md`](../packages/coding-agent/src/prompts/advisor/advise-tool.md)
+- [`src/session/session-advisors.ts`](../packages/coding-agent/src/session/session-advisors.ts)
+- [`src/session/agent-session.ts`](../packages/coding-agent/src/session/agent-session.ts)
+- [`src/slash-commands/builtin-registry.ts`](../packages/coding-agent/src/slash-commands/builtin-registry.ts)
+- [`src/advisor/settings.ts`](../packages/coding-agent/src/advisor/settings.ts) — `advisor.*` setting definitions
+
+---
+
+## Enabling the advisor
+
+The subsystem requires `advisor.enabled: true`. RPC and ACP hosts use protocol defaults for `advisor.*` instead of inheriting local interactive preferences: the advisor starts disabled unless that host explicitly opts in.
+
+Model selection depends on the roster:
+
+- Without any discovered `WATCHDOG.yml` advisor entries, OMP creates the legacy/default advisor and resolves the `advisor` role.
+- With a roster, each enabled entry uses its explicit `model` when present, otherwise the `advisor` role. An unresolvable entry is reported as `no_model` without preventing other entries from running.
+- `advisors[].enabled: false` keeps an entry visible as paused but does not build its runtime.
+
+Example:
+
+```yaml
+modelRoles:
+   advisor: anthropic/claude-sonnet-4-5:medium
+
+advisor:
+
+===== sdk =====
+1:# SDK
+8:## Installation
+19:## Entry points
+39:## Quick start (auto-discovery defaults)
+61:## Process shutdown
+65:## What `createAgentSession()` discovers by default
+83:### Required vs optional inputs
+102:## Session manager behavior (persistent vs in-memory)
+106:### File-backed (default)
+122:### In-memory
+138:### Resume/open/list helpers
+148:## Model and auth wiring
+156:### Explicit wiring
+177:### Selection order when `model` is omitted
+187:### Auth priority
+200:## Event subscription model
+250:## Prompt lifecycle
+276:## Idle maintenance
+280:## `AgentSession` lifecycle and disposal
+300:## Tools and extension integration
+302:### Built-ins and filtering
+326:### Extensions
+342:### Runtime tool set changes
+353:## Discovery helpers
+367:## Host integration options
+383:## Subagent-oriented options
+398:## `createAgentSession()` return value
+423:## Startup performance
+435:## Minimal controlled embed example
+# SDK
+
+The SDK is the in-process integration surface for `@oh-my-pi/pi-coding-agent`.
+Use it when you want direct access to agent state, event streaming, tool wiring, and session control from a Bun process.
+
+If you need cross-language/process isolation, use RPC mode instead.
+
+## Installation
+
+```bash
+bun add @oh-my-pi/pi-coding-agent
+```
+
+Requires Bun 1.4.4 or newer. Before the first model-backed prompt, configure
+credentials for a provider or run a keyless local provider; see
+[Providers](./providers.md). Session construction can succeed without an
+available model, but prompting cannot.
+
+## Entry points
+
+The package root, `@oh-my-pi/pi-coding-agent`, is the complete embedding surface. It includes `createAgentSession` and the focused `/sdk` exports, plus lower-level session, auth, model, mode, extension, and tool APIs.
+
+Import these core embedding APIs from the package root:
+
+- `createAgentSession`
+- `SessionManager`
+- `Settings`
+- `AuthStorage`
+- `ModelRegistry`
+- `AgentRegistry`
+- `discoverAuthStorage`
+- Discovery helpers (`discoverExtensions`, `discoverSkills`, `discoverContextFiles`, `discoverPromptTemplates`, `discoverSlashCommands`, `discoverCustomTSCommands`, `discoverMCPServers`)
+- Tool factory surface (`createTools`, `BUILTIN_TOOLS`, tool classes)
+
+The narrower `@oh-my-pi/pi-coding-agent/sdk` subpath exports `createAgentSession`, its option/result types, `Settings`, `AgentRegistry`, discovery and system-prompt helpers, workspace-tree helpers, selected extension/MCP/tool types, and selected tool classes/factories. It does **not** export `SessionManager`, `AuthStorage`, or `ModelRegistry`; import those three from the package root as the examples below do.
+
+The injected `api.pi` in extensions, hooks, custom commands, and custom tools resolves the host SDK on first access. Registering callbacks or loading bundled commands does not eagerly load the full SDK and interactive composer.
+
+## Quick start (auto-discovery defaults)
+
+
+===== rpc =====
+1:# RPC Protocol Reference
+19:## Startup
+37:## Transport and Framing
+82:### Outbound frame categories (stdout)
+103:### Inbound frame categories (stdin)
+110:## Request/Response Correlation
+124:## Command Schema (canonical)
+128:### Prompting
+141:### Protocol
+145:### State
+165:### Model
+173:### Thinking
+181:### Queue modes
+187:### Compaction
+196:### Cache warming
+213:### Retry
+218:### Bash
+230:### Session
+254:### Messages
+263:### Login
+285:### Word prediction
+312:### Side questions
+320:## Response Schema
+329:### `prompt` payload
+361:### Yield vs settled
+371:### `open_session` payload
+397:### `remove_queued_message` payload
+420:### `promote_queued_message` payload
+437:### `abort_and_restore_queue` payload
+452:### `get_state` payload
+581:### `goal` payload
+627:### `set_slow_mode` payload
+660:### `set_fast_mode` payload
+727:### `set_ask_dialog` payload
+750:### `set_todos` payload
+782:### `set_host_tools` payload
+831:### `set_host_uri_schemes` payload
+868:## Event Stream Schema
+889:### `queue_update` event
+951:### Progress events
+# RPC Protocol Reference
+
+RPC mode runs the coding agent as a newline-delimited JSON protocol over stdio.
+
+- **stdin**: commands (`RpcCommand`), extension UI responses, host-tool updates/results, and host-URI results
+- **stdout**: a ready frame, command responses (`RpcResponse`), session/agent events, extension UI requests, and host-tool/host-URI requests and cancellations
+
+This is a custom JSONL protocol, not JSON-RPC 2.0.
+
+Primary implementation:
+
+- `packages/coding-agent/src/modes/rpc/rpc-mode.ts`
+- `packages/coding-agent/src/modes/rpc/rpc-types.ts`
+- `packages/coding-agent/src/session/agent-session.ts`
+- `packages/coding-agent/src/session/agent-session-events.ts`
+- `packages/agent/src/agent.ts`
+- `packages/agent/src/agent-loop.ts`
+
+## Startup
+
+```bash
+omp --mode rpc [regular CLI options]
+```
+
+Behavior notes:
+
+- `@file` CLI arguments are rejected in RPC mode.
+- `--no-ui` (with `--mode rpc` or `--mode rpc-ui`) runs extensions headless: `ctx.hasUI` is `false`, dialogs resolve to their defaults, and extension presentation updates are dropped. With `rpc-ui`, tool UI such as `ask` remains enabled. With `rpc`, no UI requests are emitted except for a host-issued `login`. See [Extension UI Sub-Protocol](#extension-ui-sub-protocol) for the exact boundaries.
+- CLI RPC modes disable automatic session title generation (`PI_NO_TITLE=1`) to avoid an extra model call. `rpc-ui` also sets `PI_NO_PTY=1`.
+- RPC/ACP pin neutral defaults for settings declaring the corresponding `protocolDefault`, including task isolation/execution, memory, advisor, and advisor tier settings. RPC additionally pins async-job and bash/eval auto-background defaults. Explicit project/global config, `--config`, and isolated settings remain authoritative; on-disk config changes are watched in long-lived CLI RPC processes. Todo settings are not host-defaulted.
+- The process claims stdin before extension discovery, then parses it one non-empty JSONL line at a time. Malformed JSON emits a recoverable `command: "parse"` failure and does not terminate the loop.
+- At startup it writes a `ready` frame before processing commands. The frame advertises supported protocol versions and transport limits.
+- Extension startup (`session_start`) runs after `ready`. While it runs, only `extension_ui_response` (an extension may be waiting on a dialog) and `set_ask_dialog` are handled; every other valid frame is read and waits, in order, until startup finishes (a malformed line still gets its `parse` failure at once). If stdin closes during startup, dialogs the extension awaits are rejected so startup can finish.
+- When stdin closes, pending extension UI, host-tool, and host-URI requests are rejected; accepted commands are drained, the session is disposed, pending stdout is delivered, and normal shutdown exits with code `0`. A session-persistence failure still latched at disposal exits with code `1` after delivering its `notice` frame.
+- Responses/events are written as one JSON object per line.
+
+## Transport and Framing
+
+Protocol v1 stdout frames are a single JSON object followed by `\n`. The server caps each physical stdout frame at 1 MiB, including the newline. Inbound frames are always one unchunked JSONL object; clients SHOULD keep them within the advertised physical-frame limit. Input is not reassembled from `rpc_chunk` frames.
+
+
+===== cli-reference =====
+1:# CLI reference
+33:## Launch (the default command)
+39:# Interactive session
+42:# Interactive session with an initial prompt
+45:# Attach files/images to the initial message (prefix with @)
+48:# Non-interactive: process the prompt and exit (headless / print mode)
+51:# Continue the previous session
+67:### Launch flags
+190:### Headless / print mode
+198:# Print the answer and exit
+201:# Include the model's thinking blocks in the printed text
+204:# Machine-readable output for pipelines
+207:# Pipe a prompt via stdin
+230:# Start a long build in the background, then react to its result in the same session
+247:### Output modes (`--mode`)
+259:## Subcommands
+322:### Worktree clones
+# CLI reference
+
+`omp` is invoked as:
+
+```sh
+omp [command] [flags] [messages...]
+```
+
+When the first positional argument is **not** a registered subcommand, `omp`
+normally routes to the default [`launch`](#launch-the-default-command) command.
+So `omp "fix the build"` launches a session with that message, while `omp models`
+runs the `models` subcommand. Bare plugin-management words such as `marketplace`,
+`uninstall`, or `extensions` instead produce a hint to use `omp plugin …`;
+use `omp launch <word>` when such a word is the intended prompt.
+
+A recognized subcommand can follow leading launch flags. Those flags are
+forwarded to `launch` and `acp`, but recognized launch-only flags before other
+subcommands are stripped, not applied (for example, `omp --cwd dir update`).
+
+`--profile` is applied before subcommand routing, so it also scopes commands
+such as `config`, `models`, and `update`.
+
+Runtime help is also available:
+
+- `omp --help` lists user-facing subcommands and common launch flags.
+- `omp <command> --help` prints that command's public flags and examples.
+
+This page is the consolidated reference for the shared **launch surface** (the
+flags accepted by `omp` / `omp launch`) and every top-level **subcommand**.
+Per-subcommand flags (for example `omp auth-broker --json`) are documented by
+each command's `--help`.
+
+## Launch (the default command)
+
+`omp` and `omp launch` start a coding session. Positional arguments become the
+initial message(s):
+
+```sh
+# Interactive session
+omp
+
+===== secrets =====
+1:# Secret Obfuscation
+5:## Enabling
+14:## How it works
+35:## secrets.yml
+46:### Schema
+59:### Examples
+64:# Obfuscate a specific API key (default mode)
+68:# Replace a database password with a fixed string
+105:# Obfuscate any AWS-style key
+109:# Case-insensitive match with explicit flags
+114:# Regex literal syntax (pattern and flags in one string)
+124:# One-way replace connection strings (not reversible)
+131:## Invalid entries and files
+138:## Interaction with automatic detection
+142:## Key files
+151:## See also
+# Secret Obfuscation
+
+Redacts sensitive values (API keys, tokens, passwords) in conversation messages sent to LLM providers. When enabled, configured secrets and built-in credential-shaped token patterns are replaced in supported message and replay text fields. Static system prompts, static tool definitions, and binary payloads are not redacted by this subsystem. Reversible placeholders are restored in model-authored tool arguments before execution and when local session context is rebuilt for display or resume.
+
+## Enabling
+
+Disabled by default. Toggle via `/settings` UI or directly in `config.yml`:
+
+```yaml
+secrets:
+   enabled: true
+```
+
+## How it works
+
+1. On session startup, secrets are collected from:
+   - **Environment variables** whose names match common secret patterns (`KEY`, `SECRET`, `TOKEN`, `PASSWORD`, `PASS`, `AUTH`, `CREDENTIAL`, `PRIVATE`, `OAUTH`) with values at least 8 characters long
+   - **`secrets.yml` files** (see below)
+   - Built-in reversible regexes for common credential shapes that appear only in session content or tool results: GitHub, GitLab, OpenAI, and Anthropic tokens, AWS access keys, Google API keys, Slack tokens, npm tokens, Stripe secret and restricted keys and webhook secrets, Hugging Face tokens, SendGrid keys, JWTs, Bearer header tokens, and PEM private key blocks
+   - Passwords embedded in connection-URL environment values — any variable holding a `scheme://user:password@host`-style value (for example `DATABASE_URL`) has its password registered regardless of the variable name when it is at least 8 characters long. Both raw and percent-decoded forms are collected when they meet that limit.
+
+2. Provider-visible text has matching values replaced with deterministic placeholders such as `$$3P8W5JH1TK2Q$$`, `$$3P8W5JH1TK2Q:L$$`, or `$$GITHUBTOKEN_3P8W5JH1TK2Q:L$$`.
+
+3. Live model-authored tool arguments are deep-walked and placeholders are restored before the tool executes. Session context restores placeholders for local display/resume and re-obfuscates it before provider replay. Replace-mode substitutions are one-way and are not restored.
+
+Two modes control what happens to each secret:
+
+| Mode                  | Behavior                                                                                      | Reversible |
+| --------------------- | --------------------------------------------------------------------------------------------- | ---------- |
+| `obfuscate` (default) | Replaced with a deterministic `$$HASH(:hint)$$` or `$$FRIENDLY_HASH(:hint)$$` placeholder     | Yes        |
+| `replace`             | Replaced with the configured `replacement`, or a deterministic same-length value when omitted | No         |
+
+Obfuscate-mode plain values and regex matches shorter than 8 characters are ignored to avoid redacting ordinary short words. Replace mode can handle short values; a replace-mode regex with no custom replacement is rejected only when every possible 1–2 character match would be impossible to redact to a distinct stable value.
+
+## secrets.yml
+
+Define custom secret entries in YAML. Two locations are checked:
+
+| Level   | Path                                                                   | Purpose                                            |
+| ------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
+
+===== theme =====
+1:# Theming Reference
+5:## What the theme system controls
+18:## Theme JSON shape
+39:## Required and optional color tokens
+43:### Core text and borders (11)
+47:### Background blocks (7)
+51:### Message/tool text (5 required, 1 optional)
+57:### Markdown (10)
+61:### Tool diff + syntax highlighting (12)
+66:### Mode/thinking borders (8 required, 1 optional)
+70:### Status line segment colors (13)
+74:## Optional tokens
+76:### `export` section (optional)
+86:### `symbols` section (optional)
+112:## Built-in vs custom theme sources
+127:## Loading, validation, and resolution
+149:## Terminal color mode behavior
+162:## Runtime switching behavior
+172:### Initial theme (`initThemeSync` / `initTheme`)
+195:### Explicit switching (`setTheme`)
+207:### Preview switching (`previewTheme`)
+215:## Watchers and live reload
+226:## Color-blind mode behavior
+235:## Where theme settings are persisted
+252:## Creating a custom theme (practical)
+347:## Testing custom themes
+363:## Real constraints and caveats
+# Theming Reference
+
+This document describes how theming works in the coding-agent today: schema, loading, runtime behavior, and failure modes.
+
+## What the theme system controls
+
+The theme system drives:
+
+- foreground/background color tokens used across the TUI
+- markdown styling adapters (`getMarkdownTheme()`)
+- selector/editor/settings list adapters (`getSelectListTheme()`, `getEditorTheme()`, `getSettingsListTheme()`)
+- symbol preset + symbol overrides (`unicode`, `nerd`, `ascii`)
+- syntax highlighting colors used by native highlighter (`@oh-my-pi/pi-natives`)
+- status line segment colors
+
+Primary implementation: `packages/tui/src/theme/theme.ts`.
+
+## Theme JSON shape
+
+Custom theme files are JSON objects validated by `validateThemeJson()` in `packages/tui/src/theme/schema-validation.ts` (using `@oh-my-pi/omptype`). Types live in `schema.ts`; the editor-facing JSON schema is `packages/tui/src/theme/theme-schema.json`. Embedded built-in themes bypass runtime validation.
+
+Top-level fields:
+
+- `name` (required)
+- `colors` (required; all tokens except `thinkingMax` required)
+- `vars` (optional; reusable color variables)
+- `export` (optional; HTML export colors)
+- `symbols` (optional)
+   - `preset` (optional: `unicode | nerd | ascii`)
+   - `overrides` (optional: key/value overrides for `SymbolKey`)
+
+Color values accept:
+
+- hex string (`"#RRGGBB"`)
+- numeric 256-color index (use `0..255`; runtime schema accepts numbers without enforcing this range)
+- variable reference string (resolved through `vars`)
+- empty string (`""`) meaning terminal default (`\x1b[39m` fg, `\x1b[49m` bg)
+
+## Required and optional color tokens
+
+
+===== keybindings =====
+1:# Keybindings
+7:## Customize keybindings
+27:## Common action IDs
+73:### Click to dictate in Tern
+81:## Recover a cleared prompt
+97:## Vim editing mode
+116:### Normal mode
+142:### Text objects
+155:### Visual mode
+161:### Escape
+# Keybindings
+
+Run `/hotkeys` inside an `omp` session for the built-in shortcut reference. Application-action rows reflect remaps loaded from disk; navigation/editing examples use fixed chords. This is not an inventory of extension-registered shortcuts.
+
+Base editor, input, and selector actions use `tui.editor.*`, `tui.input.*`, and `tui.select.*`; application actions use `app.*`. Definitions live in `packages/tui/src/keybindings.ts` and `packages/tui/src/app-keybindings.ts`.
+
+## Customize keybindings
+
+User remaps live in `~/.omp/agent/keybindings.yml`. The file is a YAML mapping whose keys are keybinding action IDs and whose values are either one chord string or an array of chord strings. It is not read from `~/.omp/agent/config.yml`, and there is no nested `keybindings` object.
+
+With a named profile, bindings from the default profile's agent directory are loaded first and the active profile's `keybindings.yml` overrides them action by action. The inherited file is read-only during that profile's startup.
+
+```yaml
+app.model.cycleForward: Ctrl+P
+app.model.selectTemporary: Alt+P
+app.plan.toggle: Alt+Shift+P
+```
+
+Chord names are case-insensitive and use the same notation shown in the UI, such as `Ctrl+P`, `Alt+Shift+P`, `Shift+Enter`, and `Ctrl+Backspace`.
+
+Set an action to an empty array to disable it:
+
+```yaml
+app.history.search: []
+```
+
+## Common action IDs
+
+| Action ID                    | Default                                                               | Meaning                                                                                                                                                |
+| ---------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app.model.cycleForward`     | `Ctrl+P`                                                              | Cycle role models forward                                                                                                                              |
+| `app.model.cycleBackward`    | `Shift+Ctrl+P`                                                        | Cycle role models backward                                                                                                                             |
+| `app.model.selectTemporary`  | `Alt+P`                                                               | Pick a model temporarily for this session                                                                                                              |
+| `app.model.select`           | `Alt+M`                                                               | Open the model selector and set roles                                                                                                                  |
+| `app.plan.toggle`            | `Alt+Shift+P`                                                         | Toggle plan mode                                                                                                                                       |
+| `app.history.search`         | `Ctrl+R`                                                              | Search prompt history                                                                                                                                  |
+| `app.tools.expand`           | `Ctrl+O`                                                              | Toggle tool-output expansion                                                                                                                           |
+| `app.tools.toggleVisibility` | `Ctrl+Shift+O`                                                        | Show or hide tool activity                                                                                                                             |
+| `app.links.hint`             | `Alt+O`                                                               | Tag each [extension link](./extensions.md#extension-link-schemes) on screen; type a tag to activate that link, `Esc` cancels                           |
+| `app.ask.hide`               | `Alt+H`                                                               | Hide a pending `ask` question to one line (the Hide button in Tern); the same key, `Enter`, or Show brings it back                                     |
+

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-10",
+  "sequence": [
+    "opencode",
+    "deepseek",
+    "hermes",
+    "codex"
+  ],
+  "active": [],
+  "current_milestone": "Reader-path revisions delivered locally; publication checks and merge history are tracked by PR #46",
+  "tasks": [
+    {
+      "id": "opencode",
+      "status": "completed",
+      "stage": "reader_path_verified",
+      "outline": "opencode/outline.md",
+      "next": "Use the current editions; consult PR #46 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "opencode/VERIFY.md",
+        "opencode/outline.md",
+        "yuyu-book/manifest-opencode.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
+      ]
+    },
+    {
+      "id": "deepseek",
+      "status": "completed",
+      "stage": "reader_path_verified",
+      "outline": "deepseek/outline.md",
+      "next": "Use the current editions; consult PR #46 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "deepseek/VERIFY.md",
+        "deepseek/outline.md",
+        "yuyu-book/manifest-deepseek.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
+      ]
+    },
+    {
+      "id": "hermes",
+      "status": "completed",
+      "stage": "reader_path_verified",
+      "outline": "hermes/outline.md",
+      "next": "Use the current editions; consult PR #46 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "hermes/VERIFY.md",
+        "hermes/outline.md",
+        "yuyu-book/manifest-hermes.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
+      ]
+    },
+    {
+      "id": "codex",
+      "status": "completed",
+      "stage": "reader_path_verified",
+      "outline": "codex/outline.md",
+      "next": "Use the current editions; consult PR #46 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "codex/VERIFY.md",
+        "codex/outline.md",
+        "yuyu-book/manifest-codex.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json",
+        "docs/agent-series/local-publication-20261110-reading.json",
+        "docs/agent-series/local-publication-20261110-reader-path.json"
+      ]
+    }
+  ],
+  "execution": "parallel; explicitly requested by the user on 2026-11-10",
+  "quality_revision": "Clarified first runnable steps, working directories, example state across chapters and index readability",
+  "release": {
+    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/46",
+    "status_source": "GitHub pull request checks and merge history",
+    "previous_pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/45"
+  }
+}

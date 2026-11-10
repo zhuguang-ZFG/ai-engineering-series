@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "五句收束", "data": {"icon": "target"}},
+    {"at": 1.2, "kind": "point", "text": "DNA · fail-closed · 分区"},
+    {"at": 2.9, "kind": "draw", "text": "流式 · 类型契约", "data": {"icon": "bulb"}},
+    {"at": 4.3, "kind": "point", "text": "下一章：权限与护栏"},
+    {"at": 5.7, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C02 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C02-answer-section-24bd4f7f0d" tabindex="-1">C02 作业核对：把任务交代清楚</h1>
+<p>题目在 <a href="c02.html">C02 正文</a>。下面给三题的核对要点，重点是“约定是否可检验”，不是文采。</p>
+<h2 id="C02-answer-section-39939b0852" tabindex="-1">一、三句含糊要求的改写示例</h2>
+<p><strong>“把这份会议纪要总结一下。”</strong></p>
+<blockquote>
+<p>目标：给没参会的同事一份 200 字以内的决定清单。材料：<code>minutes-1108.txt</code> 原文，不含聊天记录。约束：只写会上明确决定的事；未定事项单列；不补参会人发言动机。输出：三条“决定—负责人—截止日”，每条附原句。核对：每条决定能在原文找到；没有负责人的写“未指定”。</p>
+</blockquote>
+<p><strong>“看看这个活动能不能报名。”</strong></p>
+<blockquote>
+<p>目标：回答“现在还能不能报名”，并说明依据。材料：通知 A、B 与最新补充通知 C。约束：以带日期的最新版本为准；报名条件缺失就写未知；不代替用户提交报名。输出：结论（能/不能/待确认）、依据原句、待确认项。核对：结论有原句支持；旧版本没有被当成现行版本。</p>
+</blockquote>
+<p><strong>“帮我判断这份材料靠不靠谱。”</strong></p>
+<blockquote>
+<p>目标：给出一份来源与一致性检查，不评价活动好坏。材料：指定的三份通知。约束：分开“来源存在”“原句支持”“版本现行”三项；不确定的保留。输出：三列检查表加疑点清单。核对：每条判断能指到原文或明确写“未核到”。</p>
+</blockquote>
+<p>三题都出现了同一组动作：限定材料、规定缺失处理、规定输出字段、规定核对方式。没有这四样，“总结一下”只能靠猜。</p>
+<h2 id="C02-answer-section-eb251b5e0f" tabindex="-1">二、那份约定至少有三个问题</h2>
+<p>原约定：</p>
+<blockquote>
+<p>目标：整理通知。材料：所有找到的资料。约束：尽量完整，缺的可以合理推测。输出：一张表。核对：你自己再检查一遍。</p>
+</blockquote>
+<ol>
+<li><strong>“所有找到的资料”没有边界与版本</strong>：可能混入旧通知、无关材料，甚至别人转述的二手消息。后果是同一字段出现多个值却没有优先级。</li>
+<li><strong>“缺的可以合理推测”直接允许无依据内容</strong>：后果是地点、年份被补全，报告看起来完整但不可核对。</li>
+<li><strong>“尽量完整”不可检验</strong>：没有字段清单，也没有“完整”的判据。后果是无法判断何时算完成。</li>
+<li><strong>“你自己再检查一遍”不是核对方法</strong>：没有新证据，只是重复生成。后果是错误可能被更自信地重复。</li>
+<li><strong>“一张表”没有表头定义</strong>：列名、证据列、状态列都可能缺。后果是接手的人无法逐项回查。</li>
+</ol>
+<p>任选三条即可得分；指出“推测”与“自检”两项属于关键问题。</p>
+<h2 id="C02-answer-section-68bc4dac03" tabindex="-1">三、只改“约束”一段的对照</h2>
+<p>以停水通知为例：</p>
+<ul>
+<li><strong>允许推测版</strong>：可能写出“11月12日（今年）”“咨询电话：物业”之类内容。表格更满，但两格都没有原文。</li>
+<li><strong>禁止推测版</strong>：年份写“材料未提供年份”，电话写“材料未提供”，并把“3—5号楼是否含4号”列入待确认。</li>
+</ul>
+<p>可观察的变化不是“哪版更通顺”，而是：第二版多了“未知/待确认”，少了两个无法回查的值。若两次输出都保留，你可以指着具体格子说明约定起了什么作用。</p>
+<p>注意：这里比较的是同一份材料、同一套字段下的两版<strong>人工或产品输出</strong>。课程没有运行模型做统计，不能把一次对照写成“准确率提升百分比”。</p>
+<h2 id="C02-answer-section-f0733106d1" tabindex="-1">四、评分要点</h2>
+<ul>
+<li>五段齐全且互相一致（目标里的产物与输出段一致）：5 分。</li>
+<li>材料写到文件/版本/日期，并说明不使用的材料：2 分。</li>
+<li>约束包含缺失、冲突、推测三条规则：3 分。</li>
+<li>输出含字段与证据列：2 分。</li>
+<li>核对是可执行动作（回查原句、对版本、重算），不是“再检查一下”：2 分。</li>
+<li>能指出原约定的至少三个问题，并说出后果：3 分。</li>
+</ul>
+<p>关键失败：允许“合理推测”却不单列；把示例当成训练；核对只写“自检”。</p>
+</article><nav class="lesson-nav"><a href="c02.html">返回 C02 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

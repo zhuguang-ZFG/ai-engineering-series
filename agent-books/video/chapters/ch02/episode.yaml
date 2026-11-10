@@ -1,0 +1,54 @@
+schema_version: 1
+id: ch02
+title: 第2章：对话循环 -- Agent 的心跳
+status: published
+content_pack: content-pack.json
+scripts:
+  long:
+    path: script-long.txt
+    mode: plain
+  short:
+    path: script-short.md
+    mode: narration
+formats:
+  long:
+    width: 1920
+    height: 1080
+    fps: 30
+    duration_s: 627.624
+    status: built
+  short:
+    width: 1080
+    height: 1920
+    fps: 30
+    duration_s: 34.352
+    status: built
+voice:
+  engine: edge-tts
+  voice_id: zh-CN-YunyangNeural
+  rate: -10%
+  pitch: -5Hz
+captions:
+  max_chars: 16
+  max_lines: 2
+  min_dwell_s: 1.2
+  min_font_px: 32
+  safe_pct: 5
+  foreground: '#ffffff'
+  background: '#101010'
+quality:
+  normalize: false
+  max_flash_hz: 3
+  peak_dbfs: -1.0
+  loudness_lufs: -16.0
+  loudness_tolerance: 2.0
+  end_margin_s: 0.5
+rights:
+  owner: 小电讲电路 (original)
+  music: none
+  footage: none
+sources: []
+legacy:
+  dir: ../../ch02/hf-remake
+  long_index: index.html
+  short_index: short/index.html

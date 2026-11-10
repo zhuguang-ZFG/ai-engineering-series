@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #cap-stage {
+      position: absolute;
+      left: 0;
+      top: 896px;
+      width: 1920px;
+      text-align: center;
+      overflow: visible;
+    }
+    .cap-group {
+      position: absolute;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 1.35;
+      color: #ffffff;
+      visibility: hidden;
+    }
+    .cap-group span {
+      background: rgba(31, 35, 40, 0.78);
+      border-radius: 8px;
+      padding: 10px 26px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  </style>
+  <div data-hf-id="hf-jn2k" id="root" data-composition-id="captions" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-fhg2" id="cap-stage"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const GROUPS = [{"text": "上期结尾说好了", "start": 0.209, "end": 1.706}, {"text": "这期换战场", "start": 1.881, "end": 3.069}, {"text": "蛇还在", "start": 3.587, "end": 4.388}, {"text": "但它只是一个网页文件", "start": 4.663, "end": 6.487}, {"text": "装不了依赖", "start": 6.7, "end": 7.713}, {"text": "拆不了模块", "start": 7.862, "end": 8.937}, {"text": "断不了点", "start": 9.101, "end": 9.944}, {"text": "这期把它搬进本地项目", "start": 10.478, "end": 12.587}, {"text": "先装一个", "start": 12.781, "end": 13.465}, {"text": "AI IDE", "start": 13.485, "end": 14.332}, {"text": "让它从玩具长成工程", "start": 14.469, "end": 16.282}, {"text": "先说清楚为什么非搬不可", "start": 17.625, "end": 19.991}, {"text": "单文件的天花板很硬", "start": 20.456, "end": 22.431}, {"text": "想加音效", "start": 22.674, "end": 23.634}, {"text": "没有包管理器", "start": 23.749, "end": 24.944}, {"text": "想拆逻辑", "start": 25.194, "end": 26.159}, {"text": "没有模块", "start": 26.237, "end": 27.084}, {"text": "出了", "start": 27.3, "end": 27.53}, {"text": "bug 只能打印", "start": 27.55, "end": 28.803}, {"text": "断不了点", "start": 28.95, "end": 29.781}, {"text": "写完想发布", "start": 30.069, "end": 31.2}, {"text": "还得手动传文件", "start": 31.287, "end": 32.778}, {"text": "本地项目一次解决四件事", "start": 33.246, "end": 35.418}, {"text": "依赖", "start": 35.684, "end": 36.203}, {"text": "模块", "start": 36.382, "end": 36.919}, {"text": "调试", "start": 37.094, "end": 37.681}, {"text": "发布", "start": 37.856, "end": 38.393}, {"text": "听着复杂", "start": 38.875, "end": 39.763}, {"text": "其实只差一条命令", "start": 39.972, "end": 41.584}, {"text": "一条装包", "start": 41.75, "end": 42.643}, {"text": "一条跑起来", "start": 42.737, "end": 43.825}, {"text": "第一步装工具", "start": 45.075, "end": 46.303}, {"text": "推荐", "start": 46.825, "end": 47.322}, {"text": "Cursor", "start": 47.342, "end": 48.058}, {"text": "它是", "start": 48.206, "end": 48.762}, {"text": "VS Code", "start": 48.809, "end": 49.586}, {"text": "加一层 AI", "start": 49.606, "end": 50.912}, {"text": "安装和普通软件一样", "start": 51.097, "end": 52.881}, {"text": "下载", "start": 53.094, "end": 53.631}, {"text": "双击", "start": 53.796, "end": 54.365}, {"text": "登录", "start": 54.497, "end": 55.016}, {"text": "然后把上期那个网", "start": 55.535, "end": 57.124}, {"text": "页文件放进一个新文件夹", "start": 57.144, "end": 59.444}, {"text": "用打开文件夹的方式打开", "start": 59.656, "end": 61.728}, {"text": "第一次进项目", "start": 62.181, "end": 63.403}, {"text": "先让它通读一遍", "start": 63.575, "end": 64.881}, {"text": "把结构讲给你听", "start": 65.043, "end": 66.438}, {"text": "第二步拆文件", "start": 67.678, "end": 68.95}, {"text": "一个网页里塞着结构", "start": 69.406, "end": 71.385}, {"text": "样式和逻辑", "start": 71.478, "end": 72.581}, {"text": "现在拆成三份", "start": 72.803, "end": 74.138}, {"text": "结构放", "start": 74.397, "end": 74.972}, {"text": "index.html", "start": 74.992, "end": 77.003}, {"text": "样式放", "start": 77.147, "end": 77.639}, {"text": "style.css", "start": 77.659, "end": 79.288}, {"text": "逻辑放", "start": 79.456, "end": 79.918}, {"text": "game.js", "start": 79.938, "end": 81.156}, {"text": "让 AI 做这件事", "start": 81.731, "end": 83.431}, {"text": "要求要写死", "start": 83.625, "end": 84.765}, {"text": "只搬家", "start": 84.951, "end": 85.694}, {"text": "不许改行为", "start": 85.816, "end": 86.922}, {"text": "拆完立刻跑一遍", "start": 87.422, "end": 88.825}, {"text": "和原来一模一样才算成功", "start": 89.0, "end": 91.234}, {"text": "第三步加依赖", "start": 92.509, "end": 93.797}, {"text": "项目里先有", "start": 94.269, "end": 95.222}, {"text": "package.json", "start": 95.242, "end": 97.105}, {"text": "它就是这张清单", "start": 97.25, "end": 98.584}, {"text": "装什么", "start": 98.763, "end": 99.456}, {"text": "版本多少都写在这儿", "start": 99.534, "end": 101.412}, {"text": "版本别手写", "start": 101.832, "end": 102.982}, {"text": "让命令去写", "start": 103.119, "end": 104.212}, {"text": "装东西只有一条命令", "start": 104.762, "end": 106.743}, {"text": "先让它加一个真用", "start": 107.001, "end": 108.211}, {"text": "得上的依赖", "start": 108.231, "end": 109.131}, {"text": "比如音效库", "start": 109.278, "end": 110.383}, {"text": "再改代码去调用", "start": 110.525, "end": 111.981}, {"text": "装完看两处", "start": 112.475, "end": 113.588}, {"text": "清单变了没有", "start": 113.787, "end": 115.003}, {"text": "锁文件提交了没有", "start": 115.181, "end": 116.753}, {"text": "第四步调试", "start": 117.977, "end": 119.096}, {"text": "这才是浏览器做不到的", "start": 119.325, "end": 121.188}, {"text": "在 game.js", "start": 121.675, "end": 122.74}, {"text": "里点一行", "start": 122.76, "end": 123.612}, {"text": "打个断点", "start": 123.743, "end": 124.597}, {"text": "按一下上键", "start": 124.794, "end": 125.828}, {"text": "代码就停在那儿", "start": 126.001, "end": 127.257}, {"text": "蛇的坐标", "start": 127.387, "end": 128.266}, {"text": "方向", "start": 128.425, "end": 128.975}, {"text": "长度全看得见", "start": 129.128, "end": 130.431}, {"text": "还能一格一格往下走", "start": 130.582, "end": 132.35}, {"text": "断点是证据", "start": 132.869, "end": 133.994}, {"text": "猜是浪费", "start": 134.137, "end": 135.066}, {"text": "看不懂现象", "start": 135.556, "end": 136.626}, {"text": "就把报错栈整段交给 AI", "start": 136.781, "end": 139.06}, {"text": "顺序永远是", "start": 139.562, "end": 140.781}, {"text": "先复现", "start": 141.025, "end": 141.806}, {"text": "再定位", "start": 141.938, "end": 142.672}, {"text": "最后才改", "start": 142.803, "end": 143.738}, {"text": "这一步有三个坑", "start": 145.1, "end": 146.48}, {"text": "第一", "start": 146.968, "end": 147.481}, {"text": "把整个", "start": 147.656, "end": 148.141}, {"text": "node_modules", "start": 148.161, "end": 149.892}, {"text": "丢给", "start": 149.912, "end": 150.411}, {"text": "AI 读", "start": 150.431, "end": 151.175}, {"text": "上下文瞬间就爆", "start": 151.384, "end": 152.856}, {"text": "只给它你的代码和报错", "start": 153.0, "end": 154.782}, {"text": "第二", "start": 155.269, "end": 155.775}, {"text": "一次装五个依赖", "start": 156.025, "end": 157.329}, {"text": "出了问题不知道是谁的", "start": 157.488, "end": 159.575}, {"text": "第三", "start": 160.072, "end": 160.616}, {"text": "不写", "start": 160.744, "end": 161.269}, {"text": ".gitignore", "start": 161.392, "end": 162.37}, {"text": "几十万个文件进版本库", "start": 162.46, "end": 164.359}, {"text": "提交一次要半天", "start": 164.5, "end": 165.912}, {"text": "这期你带走三件事", "start": 167.213, "end": 168.956}, {"text": "本地项目解决依赖", "start": 169.228, "end": 170.879}, {"text": "模块和调试", "start": 171.012, "end": 172.134}, {"text": "拆文件只搬家不改行为", "start": 172.431, "end": 174.5}, {"text": "装东西看清单和锁文件", "start": 174.637, "end": 176.928}, {"text": "下一期", "start": 177.463, "end": 178.194}, {"text": "把项目发布上线", "start": 178.344, "end": 179.784}, {"text": "让别人用手机就能", "start": 179.988, "end": 181.53}, {"text": "打开你做的蛇", "start": 181.55, "end": 182.744}, {"text": "从网页到项目", "start": 183.293, "end": 184.613}, {"text": "只是换了个容器", "start": 184.732, "end": 186.054}, {"text": "课程链接和完整代码", "start": 186.553, "end": 188.528}, {"text": "评论区扣入门", "start": 188.675, "end": 190.106}];
+    const stage = document.getElementById("cap-stage");
+    GROUPS.forEach((g, i) => {
+      const div = document.createElement("div");
+      div.className = "cap-group";
+      div.id = "cap-" + i;
+      const inner = document.createElement("span");
+      inner.textContent = g.text;
+      div.appendChild(inner);
+      stage.appendChild(div);
+      // Cues ride on a slide, never an opacity fade: a fade dims the pill too,
+      // so any frame caught mid-fade measures below the WCAG floor.
+      gsap.set(div, { y: 8, visibility: "hidden" });
+      const start = Math.max(g.start, 0.1);
+      const end = Math.max(g.end, start + 0.3);
+      tl.set(div, { visibility: "visible", y: 8 }, start);
+      tl.to(div, { y: 0, duration: 0.12, ease: "power2.out" }, start);
+      tl.set(div, { visibility: "hidden" }, end);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

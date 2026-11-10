@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-10",
+  "source": {
+    "repository": "https://github.com/deepseek-ai/deepseek-harness",
+    "commit": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "license": "MIT",
+    "component": "vendor/cordis",
+    "version": "4.1.0"
+  },
+  "environment": {
+    "platform": "Windows",
+    "node": "24.14.0",
+    "tsx": "4.23.13"
+  },
+  "dependency_versions": {
+    "@deepseek-ai/cordis": "4.1.0",
+    "@deepseek-ai/cosmokit": "1.9.0",
+    "@standard-schema/spec": "1.1.0",
+    "tsx": "4.23.13"
+  },
+  "source_evidence": "cordis-20261110.json",
+  "source_normalization": "Decode UTF-8 without BOM, CRLF to LF, exactly one terminal LF; SHA-256 of UTF-8 bytes.",
+  "example_sha256": {
+    "review-lab.mjs": "f3683fb672c3ffa351b891e66d1febe03a84eb14691ae16d165f5bb320d548ad",
+    "check-review-lab.mjs": "7dd3ca6a5c39d941938aec11542a082cc23ab38df220ec0f038bfd5766ce13bd",
+    "package.json": "bfb1137100a3b752d9b660ba868dbcb89c2db0c272a12690754d494951927813"
+  },
+  "command": "node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs deepseek/examples/check-review-lab.mjs --source .scratch/deepseek-runtime/pinned-cordis/src/index.ts --trace",
+  "exit_code": 0,
+  "component": "Cordis with original book review services",
+  "model_used": false,
+  "complete_dsh_host": false,
+  "passed": true,
+  "cases": [
+    {
+      "name": "one plugin waits for both services then owns its tool and listener",
+      "passed": true
+    },
+    {
+      "name": "input validation rejects before the business body",
+      "passed": true
+    },
+    {
+      "name": "policy veto blocks body and policy disposal restores the call",
+      "passed": true
+    },
+    {
+      "name": "initialization failure removes a tool already registered",
+      "passed": true
+    },
+    {
+      "name": "unload cancels admitted work and awaits its delayed cleanup",
+      "passed": true
+    },
+    {
+      "name": "removing and replacing the tools provider reactivates the same plugin",
+      "passed": true
+    },
+    {
+      "name": "duplicate tool registration cannot remove the first owner's tool",
+      "passed": true
+    },
+    {
+      "name": "policy-delayed call cannot enter an unloaded owner",
+      "passed": true
+    },
+    {
+      "name": "same service isolation label intentionally shares a provider",
+      "passed": true
+    },
+    {
+      "name": "once unregisters before recursive emission",
+      "passed": true
+    },
+    {
+      "name": "serial continues on false but stops on zero",
+      "passed": true
+    },
+    {
+      "name": "parallel waits for all listeners and aggregates failures",
+      "passed": true
+    },
+    {
+      "name": "unloaded context rejects new owned registrations",
+      "passed": true
+    }
+  ],
+  "normal_trace": [
+    {
+      "seq": 0,
+      "kind": "plugin:load",
+      "data": {}
+    },
+    {
+      "seq": 1,
+      "kind": "tool:start",
+      "data": {
+        "id": 1
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "tool:result",
+      "data": {
+        "id": 1,
+        "lines": 2,
+        "characters": 7,
+        "todo": true
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "tool:settled",
+      "data": {
+        "id": 1
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "note",
+      "data": {
+        "text": "first"
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "plugin:stop",
+      "data": {
+        "active": 0
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "plugin:closed",
+      "data": {}
+    }
+  ],
+  "local_package": {
+    "pack_command": "npm.cmd pack ./deepseek/examples --offline --ignore-scripts --cache .scratch/npm-cache --pack-destination .scratch/deepseek-pack --json",
+    "filename": "book-deepseek-review-lab-0.2.0.tgz",
+    "sha256": "bbcd01ba0bc87280580c7aec2f0775f80526b6aac48d9b0617766a212a122beb",
+    "npm_integrity": "sha512-jqDWP1Im5fYdns14EqzH5Te+xMkId4tNX1nO6oti2mIqvFVZs1Sz3+yNnGcYQpucJUdIctmxRhubRpX9IADONA==",
+    "files": [
+      {
+        "path": "README.md",
+        "size": 4865,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 298,
+        "mode": 420
+      },
+      {
+        "path": "review-lab.mjs",
+        "size": 4495,
+        "mode": 420
+      }
+    ],
+    "entry_command": "node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs deepseek/examples/check-review-lab.mjs --source .scratch/deepseek-runtime/pinned-cordis/src/index.ts --lab .scratch/deepseek-package-check/package/review-lab.mjs",
+    "case_count": 13,
+    "passed": true,
+    "exit_code": 0,
+    "member_normalized_sha256": {
+      "README.md": "b05b8a2c66ab686cf6049be8a6ba109bfc9ba3f1e6b1b9f7ecad49fc25f86a64",
+      "package.json": "bfb1137100a3b752d9b660ba868dbcb89c2db0c272a12690754d494951927813",
+      "review-lab.mjs": "f3683fb672c3ffa351b891e66d1febe03a84eb14691ae16d165f5bb320d548ad"
+    },
+    "published": false
+  },
+  "limits": [
+    "ReviewTools and ReviewJournal are original book services on real Cordis, not official dsh-tools or Session.",
+    "No complete dsh host, model, Agent or persistent Session integration was run.",
+    "The local tarball test uses the book experiment driver; it does not exercise the dsh package manager.",
+    "No external messages, Web reconnect, remote approval, operating-system sandbox or npm publication were exercised."
+  ]
+}

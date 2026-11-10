@@ -1,0 +1,17 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "环境", "data": {"icon": "bulb"}},
+    {"at": 1.0, "kind": "draw", "text": "权限", "data": {"icon": "target"}},
+    {"at": 2.0, "kind": "draw", "text": "MCP", "data": {"icon": "clock"}},
+    {"at": 3.0, "kind": "draw", "text": "API", "data": {"icon": "bulb"}},
+    {"at": 4.0, "kind": "draw", "text": "文件系统", "data": {"icon": "target"}},
+    {"at": 5.4, "kind": "point", "text": "/doctor 渐进式出结果"}
+  ]
+}

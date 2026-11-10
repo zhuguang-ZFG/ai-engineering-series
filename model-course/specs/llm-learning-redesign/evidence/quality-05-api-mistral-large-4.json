@@ -1,0 +1,775 @@
+{
+  "schema": "assistant-eval-result/1",
+  "generated_at": "2026-11-10T08:21:03+00:00",
+  "manifest": {
+    "path": "book\\llm\\examples\\assistant\\eval-manifest-api.json",
+    "sha256": "69cc43945a67447b7e01bf85dd092faa66778b86e1a6173679e2799b23dccd3f",
+    "size": 2209,
+    "mtime_ns": 1794298333794226600,
+    "frozen_at": "2026-11-10T08:19:58+00:00"
+  },
+  "manifest_unchanged": true,
+  "budgets": {
+    "max_new_tokens": 192,
+    "max_prompt_tokens": 2048,
+    "max_steps": 3,
+    "max_tool_calls": 2,
+    "repair_attempts": 0,
+    "top_k": 3,
+    "min_score": 0.08,
+    "chunk_chars": 480,
+    "chunk_overlap": 80
+  },
+  "summary": {
+    "total": 4,
+    "passed": 0,
+    "failed": 4,
+    "status_counts": {
+      "generation-failed": 4
+    }
+  },
+  "usage": {
+    "calls": 5,
+    "prompt_tokens": null,
+    "completion_tokens": null,
+    "latency_ms": 64731.753,
+    "model_load_ms": 0.0,
+    "cost": null,
+    "cost_basis": "per-case reports"
+  },
+  "cases": [
+    {
+      "id": "normal-wind",
+      "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "expected_status": [
+        "answered"
+      ],
+      "actual_status": "generation-failed",
+      "expected_citation_docs": [
+        "station-log"
+      ],
+      "cited_docs": [],
+      "expected_tool": null,
+      "checks": {
+        "status": false,
+        "citations": false,
+        "tool": true
+      },
+      "passed": false,
+      "report": {
+        "schema": "assistant-report/1",
+        "generated_at": "2026-11-10T08:19:58+00:00",
+        "status": "generation-failed",
+        "question": "2026 年 10 月 3 日观测站记录的风速是多少？",
+        "reader": "student",
+        "mode": "fixed",
+        "provider": "api",
+        "model": "mistralai/mistral-large-4-1t-a52b",
+        "config": {
+          "docs": "book\\llm\\examples\\assistant\\documents.json",
+          "chunk_chars": 480,
+          "chunk_overlap": 80,
+          "retriever": "keyword",
+          "top_k": 3,
+          "threshold": 0.08,
+          "max_new_tokens": 192,
+          "max_prompt_tokens": 2048,
+          "max_steps": 3,
+          "max_tool_calls": 2,
+          "repair_attempts": 0,
+          "claim_mode": "copy",
+          "allowed_tools": [
+            "calculator"
+          ],
+          "local_files_only": false
+        },
+        "documents": [
+          {
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "path": "docs/station-log.md",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "path": "docs/equipment-guide.md",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "path": "docs/visitor-policy.md",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "path": "docs/closing-notice.md",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          }
+        ],
+        "retrieval": {
+          "retriever": "keyword",
+          "threshold": 0.08,
+          "top_k": 3,
+          "hits": [
+            {
+              "chunk_id": "station-log@9cb29b8d5e1a#000",
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "start": 0,
+              "end": 389,
+              "score": 0.50282064,
+              "used": true
+            },
+            {
+              "chunk_id": "visitor-policy@b804832daad7#000",
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "start": 0,
+              "end": 448,
+              "score": 0.42203978,
+              "used": true
+            },
+            {
+              "chunk_id": "closing-notice@afd0ca4b251b#000",
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "start": 0,
+              "end": 263,
+              "score": 0.40169802,
+              "used": true
+            }
+          ],
+          "filtered_doc_count": 1,
+          "authorized_doc_ids": [
+            "station-log",
+            "equipment-guide",
+            "visitor-policy",
+            "closing-notice"
+          ],
+          "chunk_count": 5
+        },
+        "answer": null,
+        "claims": [],
+        "tool_receipts": [],
+        "usage": {
+          "calls": 1,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "latency_ms": 15278.635,
+          "model_load_ms": 0.0,
+          "cost": null,
+          "cost_basis": "prices-not-configured-or-usage-missing"
+        },
+        "diagnostics": {
+          "first_raw_response": null,
+          "first_failure": {
+            "status": "generation-failed",
+            "stage": "api-call",
+            "detail": {
+              "endpoint": "https://integrate.api.nvidia.com/v1/chat/completions",
+              "reason": "TimeoutError: The read operation timed out"
+            }
+          },
+          "raw_responses": [],
+          "warnings": [],
+          "prompt": {
+            "size": 2308,
+            "unit": "chars-approximation",
+            "limit": 4096,
+            "used_chunk_ids": [
+              "station-log@9cb29b8d5e1a#000",
+              "visitor-policy@b804832daad7#000",
+              "closing-notice@afd0ca4b251b#000"
+            ]
+          }
+        },
+        "elapsed_ms": 15284.316
+      }
+    },
+    {
+      "id": "no-hit-coffee",
+      "question": "观测站的咖啡机保修期是多长时间？",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "expected_status": [
+        "insufficient-evidence"
+      ],
+      "actual_status": "generation-failed",
+      "expected_citation_docs": [],
+      "cited_docs": [],
+      "expected_tool": null,
+      "checks": {
+        "status": false,
+        "citations": true,
+        "tool": true
+      },
+      "passed": false,
+      "report": {
+        "schema": "assistant-report/1",
+        "generated_at": "2026-11-10T08:20:13+00:00",
+        "status": "generation-failed",
+        "question": "观测站的咖啡机保修期是多长时间？",
+        "reader": "student",
+        "mode": "fixed",
+        "provider": "api",
+        "model": "mistralai/mistral-large-4-1t-a52b",
+        "config": {
+          "docs": "book\\llm\\examples\\assistant\\documents.json",
+          "chunk_chars": 480,
+          "chunk_overlap": 80,
+          "retriever": "keyword",
+          "top_k": 3,
+          "threshold": 0.08,
+          "max_new_tokens": 192,
+          "max_prompt_tokens": 2048,
+          "max_steps": 3,
+          "max_tool_calls": 2,
+          "repair_attempts": 0,
+          "claim_mode": "copy",
+          "allowed_tools": [
+            "calculator"
+          ],
+          "local_files_only": false
+        },
+        "documents": [
+          {
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "path": "docs/station-log.md",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "path": "docs/equipment-guide.md",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "path": "docs/visitor-policy.md",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "path": "docs/closing-notice.md",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          }
+        ],
+        "retrieval": {
+          "retriever": "keyword",
+          "threshold": 0.08,
+          "top_k": 3,
+          "hits": [
+            {
+              "chunk_id": "equipment-guide@a4d0a287abe2#001",
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "start": 261,
+              "end": 563,
+              "score": 0.34630707,
+              "used": true
+            },
+            {
+              "chunk_id": "closing-notice@afd0ca4b251b#000",
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "start": 0,
+              "end": 263,
+              "score": 0.32385792,
+              "used": true
+            },
+            {
+              "chunk_id": "equipment-guide@a4d0a287abe2#000",
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "start": 0,
+              "end": 399,
+              "score": 0.31760451,
+              "used": true
+            }
+          ],
+          "filtered_doc_count": 1,
+          "authorized_doc_ids": [
+            "station-log",
+            "equipment-guide",
+            "visitor-policy",
+            "closing-notice"
+          ],
+          "chunk_count": 5
+        },
+        "answer": null,
+        "claims": [],
+        "tool_receipts": [],
+        "usage": {
+          "calls": 1,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "latency_ms": 15266.155,
+          "model_load_ms": 0.0,
+          "cost": null,
+          "cost_basis": "prices-not-configured-or-usage-missing"
+        },
+        "diagnostics": {
+          "first_raw_response": null,
+          "first_failure": {
+            "status": "generation-failed",
+            "stage": "api-call",
+            "detail": {
+              "reason": "message.content is not a string"
+            }
+          },
+          "raw_responses": [],
+          "warnings": [],
+          "prompt": {
+            "size": 2182,
+            "unit": "chars-approximation",
+            "limit": 4096,
+            "used_chunk_ids": [
+              "equipment-guide@a4d0a287abe2#001",
+              "closing-notice@afd0ca4b251b#000",
+              "equipment-guide@a4d0a287abe2#000"
+            ]
+          }
+        },
+        "elapsed_ms": 15271.248
+      }
+    },
+    {
+      "id": "conflict-closing",
+      "question": "冬季闭站时间到底是几点？",
+      "reader": "student",
+      "mode": "fixed",
+      "retriever": "keyword",
+      "expected_status": [
+        "conflict"
+      ],
+      "actual_status": "generation-failed",
+      "expected_citation_docs": [],
+      "cited_docs": [],
+      "expected_tool": null,
+      "checks": {
+        "status": false,
+        "citations": true,
+        "tool": true
+      },
+      "passed": false,
+      "report": {
+        "schema": "assistant-report/1",
+        "generated_at": "2026-11-10T08:20:29+00:00",
+        "status": "generation-failed",
+        "question": "冬季闭站时间到底是几点？",
+        "reader": "student",
+        "mode": "fixed",
+        "provider": "api",
+        "model": "mistralai/mistral-large-4-1t-a52b",
+        "config": {
+          "docs": "book\\llm\\examples\\assistant\\documents.json",
+          "chunk_chars": 480,
+          "chunk_overlap": 80,
+          "retriever": "keyword",
+          "top_k": 3,
+          "threshold": 0.08,
+          "max_new_tokens": 192,
+          "max_prompt_tokens": 2048,
+          "max_steps": 3,
+          "max_tool_calls": 2,
+          "repair_attempts": 0,
+          "claim_mode": "copy",
+          "allowed_tools": [
+            "calculator"
+          ],
+          "local_files_only": false
+        },
+        "documents": [
+          {
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "path": "docs/station-log.md",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "path": "docs/equipment-guide.md",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "path": "docs/visitor-policy.md",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "path": "docs/closing-notice.md",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          }
+        ],
+        "retrieval": {
+          "retriever": "keyword",
+          "threshold": 0.08,
+          "top_k": 3,
+          "hits": [
+            {
+              "chunk_id": "visitor-policy@b804832daad7#000",
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "start": 0,
+              "end": 448,
+              "score": 0.5329305,
+              "used": true
+            },
+            {
+              "chunk_id": "closing-notice@afd0ca4b251b#000",
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "start": 0,
+              "end": 263,
+              "score": 0.53136129,
+              "used": true
+            },
+            {
+              "chunk_id": "station-log@9cb29b8d5e1a#000",
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "start": 0,
+              "end": 389,
+              "score": 0.29267045,
+              "used": true
+            }
+          ],
+          "filtered_doc_count": 1,
+          "authorized_doc_ids": [
+            "station-log",
+            "equipment-guide",
+            "visitor-policy",
+            "closing-notice"
+          ],
+          "chunk_count": 5
+        },
+        "answer": null,
+        "claims": [],
+        "tool_receipts": [],
+        "usage": {
+          "calls": 1,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "latency_ms": 15194.308,
+          "model_load_ms": 0.0,
+          "cost": null,
+          "cost_basis": "prices-not-configured-or-usage-missing"
+        },
+        "diagnostics": {
+          "first_raw_response": null,
+          "first_failure": {
+            "status": "generation-failed",
+            "stage": "api-call",
+            "detail": {
+              "endpoint": "https://integrate.api.nvidia.com/v1/chat/completions",
+              "reason": "TimeoutError: The read operation timed out"
+            }
+          },
+          "raw_responses": [],
+          "warnings": [],
+          "prompt": {
+            "size": 2293,
+            "unit": "chars-approximation",
+            "limit": 4096,
+            "used_chunk_ids": [
+              "visitor-policy@b804832daad7#000",
+              "closing-notice@afd0ca4b251b#000",
+              "station-log@9cb29b8d5e1a#000"
+            ]
+          }
+        },
+        "elapsed_ms": 15199.539
+      }
+    },
+    {
+      "id": "agent-calculator",
+      "question": "值班记录里 2026-10-03 的风速是 4.2 米每秒。如果连续 24 小时都保持这个风速，总行程是多少米？请用 calculator 计算 4.2*86400。",
+      "reader": "student",
+      "mode": "agent",
+      "retriever": "keyword",
+      "expected_status": [
+        "answered"
+      ],
+      "actual_status": "generation-failed",
+      "expected_citation_docs": [],
+      "cited_docs": [],
+      "expected_tool": "calculator",
+      "checks": {
+        "status": false,
+        "citations": true,
+        "tool": false
+      },
+      "passed": false,
+      "report": {
+        "schema": "assistant-report/1",
+        "generated_at": "2026-11-10T08:20:44+00:00",
+        "status": "generation-failed",
+        "question": "值班记录里 2026-10-03 的风速是 4.2 米每秒。如果连续 24 小时都保持这个风速，总行程是多少米？请用 calculator 计算 4.2*86400。",
+        "reader": "student",
+        "mode": "agent",
+        "provider": "api",
+        "model": "mistralai/mistral-large-4-1t-a52b",
+        "config": {
+          "docs": "book\\llm\\examples\\assistant\\documents.json",
+          "chunk_chars": 480,
+          "chunk_overlap": 80,
+          "retriever": "keyword",
+          "top_k": 3,
+          "threshold": 0.08,
+          "max_new_tokens": 192,
+          "max_prompt_tokens": 2048,
+          "max_steps": 3,
+          "max_tool_calls": 2,
+          "repair_attempts": 0,
+          "claim_mode": "copy",
+          "allowed_tools": [
+            "calculator"
+          ],
+          "local_files_only": false
+        },
+        "documents": [
+          {
+            "doc_id": "station-log",
+            "title": "观测站值班记录",
+            "path": "docs/station-log.md",
+            "version": "1.0.0",
+            "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "equipment-guide",
+            "title": "海岬观测站设备手册（节选）",
+            "path": "docs/equipment-guide.md",
+            "version": "1.0.0",
+            "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "visitor-policy",
+            "title": "访客与开放时间政策",
+            "path": "docs/visitor-policy.md",
+            "version": "1.0.0",
+            "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          },
+          {
+            "doc_id": "closing-notice",
+            "title": "关于冬季闭站时间的临时通知",
+            "path": "docs/closing-notice.md",
+            "version": "1.0.0",
+            "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+            "readers": [
+              "student",
+              "teacher"
+            ]
+          }
+        ],
+        "retrieval": {
+          "retriever": "keyword",
+          "threshold": 0.08,
+          "top_k": 3,
+          "hits": [
+            {
+              "chunk_id": "station-log@9cb29b8d5e1a#000",
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "start": 0,
+              "end": 389,
+              "score": 0.49747754,
+              "used": true
+            },
+            {
+              "chunk_id": "equipment-guide@a4d0a287abe2#000",
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "start": 0,
+              "end": 399,
+              "score": 0.40131673,
+              "used": true
+            },
+            {
+              "chunk_id": "equipment-guide@a4d0a287abe2#001",
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "start": 261,
+              "end": 563,
+              "score": 0.30252202,
+              "used": true
+            }
+          ],
+          "filtered_doc_count": 1,
+          "authorized_doc_ids": [
+            "station-log",
+            "equipment-guide",
+            "visitor-policy",
+            "closing-notice"
+          ],
+          "chunk_count": 5
+        },
+        "answer": null,
+        "claims": [],
+        "tool_receipts": [
+          {
+            "receipt_id": "tool-1",
+            "step": 1,
+            "tool": "calculator",
+            "arguments": {
+              "expression": "4.2*86400"
+            },
+            "status": "succeeded",
+            "result": 362880.0,
+            "error": null
+          }
+        ],
+        "usage": {
+          "calls": 2,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "latency_ms": 18992.655,
+          "model_load_ms": 0.0,
+          "cost": null,
+          "cost_basis": "prices-not-configured-or-usage-missing"
+        },
+        "diagnostics": {
+          "first_raw_response": "{\"action\":\"tool\",\"tool\":\"calculator\",\"arguments\":{\"expression\":\"4.2*86400\"}}",
+          "first_failure": {
+            "status": "generation-failed",
+            "stage": "api-call",
+            "detail": {
+              "reason": "message.content is not a string"
+            }
+          },
+          "raw_responses": [
+            {
+              "step": 1,
+              "attempt": 0,
+              "raw": "{\"action\":\"tool\",\"tool\":\"calculator\",\"arguments\":{\"expression\":\"4.2*86400\"}}",
+              "prompt_tokens": 1540,
+              "completion_tokens": 58,
+              "latency_ms": 10138.313
+            }
+          ],
+          "warnings": [],
+          "prompt": {
+            "size": 2484,
+            "unit": "chars-approximation",
+            "limit": 4096,
+            "used_chunk_ids": [
+              "station-log@9cb29b8d5e1a#000",
+              "equipment-guide@a4d0a287abe2#000",
+              "equipment-guide@a4d0a287abe2#001"
+            ]
+          }
+        },
+        "elapsed_ms": 18997.872
+      }
+    }
+  ]
+}

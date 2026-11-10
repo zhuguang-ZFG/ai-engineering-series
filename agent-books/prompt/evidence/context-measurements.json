@@ -1,0 +1,38 @@
+{
+  "kind": "offline_context_export",
+  "python": "3.13.14",
+  "measurements": [
+    {
+      "mode": "full",
+      "characters": 2076,
+      "utf8_bytes": 4872,
+      "request_sha256": "4c7c99c52eeccffefdb0ca04f88752cd8f6fca6fcb99d316f67bf489783fe0a6",
+      "omitted_sources": []
+    },
+    {
+      "mode": "selected",
+      "characters": 1526,
+      "utf8_bytes": 3602,
+      "request_sha256": "ca3306d75625f134398e51db3d6e75e644d5773da3d53baab6b40eaa7776513d",
+      "omitted_sources": [
+        "C01-v1",
+        "A01-v1",
+        "D01-v1"
+      ]
+    },
+    {
+      "mode": "summary",
+      "characters": 485,
+      "utf8_bytes": 1065,
+      "request_sha256": "19d017ca2b3a36c090d0b9f22b65a551d25a0cc7271d67a922a8e5a76cda7e98",
+      "omitted_sources": [
+        "N01-v1",
+        "R01-v1",
+        "U01-v2",
+        "C01-v1",
+        "A01-v1",
+        "D01-v1"
+      ]
+    }
+  ]
+}

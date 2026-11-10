@@ -1,0 +1,94 @@
+.DS_Store
+
+node_modules/
+__pycache__/
+.venv/
+
+# derived by the yuyu_book package; CI publishes dist as an artifact
+yuyu-book/dist/
+yuyu-book/.cache/
+yuyu-book/cover-art.png
+yuyu-book/.scratch/
+
+# workflow scratch: chapter copies taken for a subagent to read, and the
+# commit/diff dumps assembled for a review step. The briefs, reports and the
+# progress ledger beside them are the decision record and stay tracked.
+.superpowers/sdd/*-source-copy.md
+.superpowers/sdd/*-review-package.txt
+.superpowers/sdd/*-fix-diff-utf8.txt
+
+# video narration / renders (large binaries stay on disk)
+video/**/*.mp3
+video/**/*.wav
+video/**/*.mp4
+video/**/out/
+video/.build/
+
+# video workspace churn: HyperFrames caches and extracted frames, vendored
+# toolchains reached through junctions, one-off probe scripts, and the
+# compositions the build scripts write. The build scripts, storyboards,
+# huashu specs and hand-authored scene compositions do stay in the repo.
+video/**/.hf-cache/
+video/**/.hf-tmpdir/
+video/**/.hyperframes/
+video/*/tools/
+# underscore prefix marks a one-off: probe scripts, ffprobe dumps, help text
+# captures, snippet scratch and reference dumps taken during a run
+video/_*
+video/**/_*
+video/**/*.log
+video/**/*.srt
+video/**/*.vtt
+video/**/proof/
+video/**/spotcheck/
+video/**/short-spot/
+video/**/audit-frames/
+video/**/caption-spotcheck/
+# rendered by assets/build/render_slides.py; the narration .txt beside them is
+# input and stays tracked
+video/**/assets/slides/
+video/**/assets/anim/
+
+# paper/plate textures: one byte-identical copy per chapter and per short cut
+# (the build scripts fan them out). Large binaries stay on disk like the renders.
+video/**/book-chariot-*.png
+
+# stock textures copied out of the HyperFrames catalog by the caption-texture
+# component; they belong to the vendored toolchain, not to this book
+video/**/compositions/components/*.png
+
+# dead ends from interrupted runs
+video/**/*.broken
+video/**/*.bak-broken
+video/**/*.err
+video/**/*.b64
+
+# huashu stills are rendered from the whiteboard JSON spec beside them
+video/**/huashu/still/
+video/**/compositions/captions-zh.html
+video/**/compositions/dense-short*.html
+video/**/compositions/watermark.html
+
+# PR descriptions are written under the system temp dir, never staged
+.pr-body.md
+
+# omp volume: never commit local secrets or upstream source trees
+omp/**/.env
+omp/**/secrets.yml
+omp/**/models.yml
+**/omp-src/
+omp-book-phase1.tar.gz
+omp-phase1-meta.tar.gz
+# The raw `omp models` capture prints every gateway the local account is
+# configured against, by name, with its private model inventory. `omp/VERIFY.md`
+# already rules it 仅本机留存、禁止入书稿; captures that do enter the book are
+# the redacted siblings (`*-redacted.txt`, e.g. `models-find-flash-redacted.txt`).
+omp/facts/live-*/models-list.txt
+# Raw RPC state includes the local model configuration; publish the shape capture.
+omp/facts/live-*/rpc-get-state-probe.txt
+
+# Scratch for one-off probes, HEAD comparison trees and detached CI logs.
+# `yuyu-book/.scratch/` above only covers builder output; the repo-root one is
+# where ad-hoc runs dump things, and its 89 files (30 top-level entries) once
+# sat untracked *and unignored* — right in front of a `git add -A`.
+/.scratch/

@@ -1,0 +1,51 @@
+大家好，这里是小电讲电路。驭者·Agent Harness 第 04 讲。上一集双手装上了：专工具、编排、流式执行。双手能伸多远，护栏说了算。这一集拆权限管线——Agent 的护栏。
+
+双手有了就能随便干？rm -rf、npm publish——没有护栏就是裸奔。真护栏是啥？猜一猜：不是一扇大门，是四道闸。万能钥匙乱开，四道闸逐关落下。纵深防御，才叫大楼门禁，不叫门口一个保安。
+
+Claude Code 的权限检查不是一个布尔函数，而是四阶段管线。前一阶段做出终局决定，后面就短路不再跑。
+
+阶段一，validateInput——Zod Schema 验证。先问数据合不合法，再问该不该用。缺 command 字段？解析失败。注意：失败不会硬崩，而是优雅降级成 ask，让用户决定要不要继续。安全系统里，错误处理要「安全」，不是只求「正确」。
+
+阶段二，规则匹配——deny 大于 ask 大于 allow。铁律：显式拒绝压过显式允许。工具被整体 deny，立刻拒；ask 就强制确认；都没命中再看 allow。规则来源七层，就近原则：会话级压过命令行，命令行压过项目，项目压过全局用户。MCP 还能用服务器级通配，一把管住一整组工具。
+
+阶段三，checkPermissions——工具自己的上下文评估。Bash 会拆子命令、看路径、配前缀规则。返回四种行为：allow、deny、ask、passthrough。passthrough 是「我没意见，交给后面」；ask 是「我认为要确认」。后面 allow 规则能盖过 passthrough，盖不过明确的 ask。意图不同，结果不同。
+
+阶段四，交互式提示——人类授权。进入 ask 后，Hook、分类器、用户三路可能同时出手。ResolveOnce：先到先得，一张单程机票只能兑一次。Hook 信任最高，用户居中，分类器最低。企业里想少弹窗：预置 allow、开 auto、或写 Hook——三招可叠加。
+
+PermissionContext 是权限系统的核心快照：模式、规则、额外工作目录、是否避免弹窗……字段全 readonly。每次更新产生新对象，不改旧的。并发里两只手同时查权限，谁也不会踩到半截新半截旧的中间态。
+
+决策有三个来源：hook、user、classifier。hook 像管理员剧本，CI 里先判；user 是当面点允许或拒绝，还可选永久写入；classifier 是 AI 监督 AI，信任最低，有些检查对它免疫。
+
+ResolveOnce 提供 resolve、isResolved、claim。单线程里 claim 就是轻量互斥：两个回调几乎同时到，也只有一个能兑票。跟第 02 章不可变状态流转一脉相承——状态要么旧要么新，没有一半一半。
+
+五种模式从严格到宽松：default、plan、auto、bypassPermissions，外加内部的 bubble。
+
+default：逐次确认。除明确 allow 外，每次工具都问你。最安全，也最繁琐；大重构几十次编辑，会打断思路。
+
+plan：只读为主。Edit、Write 被 deny；Read、Grep、Glob 放行。先看懂再动手——代码审查、架构分析最合适。
+
+auto：分类器自动审批。到达 ask 时，YOLO 分类器替你判。短路优化：acceptEdits 先过就免调分类器；只读白名单跳过；连续拒绝就熔断回交互。涉及点 git、点 claude 目录的检查，分类器免疫——它批准也绕不过。生产部署、密钥、不可逆操作，别靠 auto。
+
+bypassPermissions：除 deny 和不可绕过的安全检查外全放行。CI、容器隔离场景常用。即便全信任，deny、requiresUserInteraction、内容级 ask、safetyCheck 仍守底线。
+
+bubble：子智能体权限冒泡回主智能体，权限边界不扩张。跟第 03 章 AgentTool 的 createSubagentContext 绑在一起——再生一双手，缰绳还在御者手里。
+
+猜一猜：先分析后改代码，该开哪一档？答案是 plan；要省确认又不想裸奔，再考虑 auto 加白名单。
+
+Bash 最难管：git status 安全，git push --force 危险。规则不能只看工具名，要懂命令语义。
+
+三种匹配：精确 Bash(npm test)；前缀 Bash(npm:*)；通配 Bash(git commit *)。表达能力递增，误放行风险也递增。优先前缀：语义清晰，少踩坑。git:* 和 git 空格星，设计成等价，减轻记忆负担。
+
+分类器还有投机审批：ask 时与两秒定时器赛跑。两秒内高置信度就自动放；超时就弹窗给你。太短易空等网络，太长用户烦——两秒是甜蜜点。
+
+PermissionUpdate 六种操作乘五种配置源，三十种组合。apply 改内存，立刻生效；persist 写文件，重启仍在。只有 local、user、project 能持久化；session 和 cliArg 只活在当次。
+
+团队基线放进项目级 settings.json 提交仓库；个人偏好放 local 不提交；临时需求用会话级，别污染持久配置。
+
+练习可以很具体。一，写项目级 allow/deny。二，用前缀管住 npm 工具链，单独 deny publish。三，企业模板：容器加 deny 加 allowedTools 加审计。四，情景推演：deny 与 allow 冲突谁赢——铁律，deny 赢。
+
+收五句。一，护栏是四道闸，不是一扇门。二，deny 大于 ask 大于 allow。三，PermissionContext 不可变快照。四，模式光谱按场景选，bypass 仍有底线。五，Bash 用前缀与通配管语义，持久化分层别混。
+
+下一集继续往下拆——双手与护栏齐了，Harness 才能放心把缰绳递给 Agent。
+
+本系列基于开源书稿。系列名：驭者·Agent Harness。关注小电讲电路，合集里看目录更新。我们下集见。

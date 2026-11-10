@@ -1,0 +1,15 @@
+$ pi --nope
+Error: Unknown option: --nope
+exit=1
+
+$ pi --model
+Error: Unknown option: --model
+exit=1
+
+$ pi --provider nvidia "hi"
+Error: --provider requires --model (for example: --provider nvidia --model <pattern>)
+exit=1
+
+$ pi --list-models zzzznotfound
+No models matching "zzzznotfound"
+exit=0

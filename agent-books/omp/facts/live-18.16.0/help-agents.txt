@@ -1,0 +1,24 @@
+Manage bundled task agents
+
+USAGE
+  $ omp agents [ACTION] [FLAGS]
+
+ARGUMENTS
+  ACTION   Agents action (unpack)
+
+FLAGS
+  -f, --force        Overwrite existing agent files
+      --json         Output JSON
+      --dir=<value>  Output directory (overrides --user/--project)
+      --user         Write to ~/.omp/agent/agents (default)
+      --project      Write to ./.omp/agents
+
+EXAMPLES
+  # Export bundled agents into user config (default)
+    omp agents unpack
+  # Export bundled agents into project config
+    omp agents unpack --project
+  # Overwrite existing local agent files
+    omp agents unpack --project --force
+  # Export into a custom directory
+    omp agents unpack --dir ./tmp/agents --json

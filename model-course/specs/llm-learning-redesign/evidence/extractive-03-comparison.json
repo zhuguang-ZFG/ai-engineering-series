@@ -1,0 +1,186 @@
+{
+  "date": "2026-11-09",
+  "variable": "claim_mode (copy vs extract); identical frozen questions, budgets, model, source, retriever and document bytes",
+  "manifestSha256": "5255ec386cd139b139cb72645c1f9de2c35b1ba569d8175c5eb50ab263b805fd",
+  "sourceSha256Lf": "1b3857e3b76193d01577ba0a12fee2f674371d1ad48504f11d57ce1777b3247b",
+  "modelFingerprint": "extractive-03-model.json",
+  "modes": {
+    "copy": {
+      "summary": {
+        "total": 8,
+        "passed": 4,
+        "failed": 4,
+        "status_counts": {
+          "invalid-response": 3,
+          "unauthorized": 1,
+          "missing-source": 1,
+          "model-unavailable": 1,
+          "api-config-missing": 1,
+          "tool-failed": 1
+        }
+      },
+      "fixedSubset": {
+        "total": 7,
+        "passed": 4
+      },
+      "usage": {
+        "calls": 4,
+        "prompt_tokens": 5798,
+        "completion_tokens": 517,
+        "latency_ms": 361579.26,
+        "model_load_ms": 8314.027,
+        "cost": null,
+        "cost_basis": "per-case reports"
+      },
+      "file": "extractive-03-copy.json"
+    },
+    "extract": {
+      "summary": {
+        "total": 8,
+        "passed": 4,
+        "failed": 4,
+        "status_counts": {
+          "invalid-response": 3,
+          "unauthorized": 1,
+          "missing-source": 1,
+          "model-unavailable": 1,
+          "api-config-missing": 1,
+          "invalid-request": 1
+        }
+      },
+      "fixedSubset": {
+        "total": 7,
+        "passed": 4
+      },
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 4562,
+        "completion_tokens": 413,
+        "latency_ms": 258379.248,
+        "model_load_ms": 8007.016,
+        "cost": null,
+        "cost_basis": "per-case reports"
+      },
+      "file": "extractive-03-extract.json"
+    }
+  },
+  "cases": [
+    {
+      "id": "normal-wind",
+      "expected": [
+        "answered"
+      ],
+      "copy": "invalid-response",
+      "extract": "invalid-response",
+      "copyPassed": false,
+      "extractPassed": false
+    },
+    {
+      "id": "no-hit-coffee",
+      "expected": [
+        "insufficient-evidence"
+      ],
+      "copy": "invalid-response",
+      "extract": "invalid-response",
+      "copyPassed": false,
+      "extractPassed": false
+    },
+    {
+      "id": "conflict-closing",
+      "expected": [
+        "conflict"
+      ],
+      "copy": "invalid-response",
+      "extract": "invalid-response",
+      "copyPassed": false,
+      "extractPassed": false
+    },
+    {
+      "id": "unauthorized-reader",
+      "expected": [
+        "unauthorized"
+      ],
+      "copy": "unauthorized",
+      "extract": "unauthorized",
+      "copyPassed": true,
+      "extractPassed": true
+    },
+    {
+      "id": "missing-source",
+      "expected": [
+        "missing-source"
+      ],
+      "copy": "missing-source",
+      "extract": "missing-source",
+      "copyPassed": true,
+      "extractPassed": true
+    },
+    {
+      "id": "model-missing",
+      "expected": [
+        "model-unavailable"
+      ],
+      "copy": "model-unavailable",
+      "extract": "model-unavailable",
+      "copyPassed": true,
+      "extractPassed": true
+    },
+    {
+      "id": "api-unconfigured",
+      "expected": [
+        "api-config-missing"
+      ],
+      "copy": "api-config-missing",
+      "extract": "api-config-missing",
+      "copyPassed": true,
+      "extractPassed": true
+    },
+    {
+      "id": "agent-calculator",
+      "expected": [
+        "answered"
+      ],
+      "copy": "tool-failed",
+      "extract": "invalid-request",
+      "copyPassed": false,
+      "extractPassed": false
+    }
+  ],
+  "decision": "Keep copy default; extract remains optional fixed-mode evidence extraction. Neither passes K3.",
+  "limits": [
+    "Agent/extract unsupported is retained as failed against original answered/tool requirement, not changed to a pass",
+    "Fixed seven-case subset is shown separately from full eight-case coverage",
+    "Serial CPU runs still share a workstation; timing is observed, not a controlled benchmark",
+    "Raw first outputs including failures are retained",
+    "These complete runs use the cached 0.5B model because the 1.5B attempts could not complete under current resource pressure; do not compare scores to the historical 1.5B runs as a single-variable quality improvement",
+    "Progress wrapper calls the unchanged real run_pipeline and logs case boundaries/checkpoints only; it supplies no answers or scores",
+    "An earlier process exited without a complete report (observed exit -1; cause unknown); its unfinished attempt is not scored. Both complete reruns use OMP_NUM_THREADS=4 and MKL_NUM_THREADS=4."
+  ],
+  "resourceObservation": {
+    "observedAt": "2026-11-09T00:53:45.4202548+08:00",
+    "freeMemoryKiB": 978088,
+    "note": "Observed shared-workstation resources; timing is not a controlled benchmark. Both complete reruns use the same thread environment. No unrelated applications were stopped.",
+    "inference": "serial CPU copy/extract with cached Qwen2.5-0.5B-Instruct",
+    "totalMemoryKiB": 15930312,
+    "interruptedAttempt": {
+      "finishedCases": "unknown; no score used",
+      "lowMemorySampleKiB": 244520,
+      "result": "process exited without complete report; exit -1 observed; cause unknown",
+      "startedAt": "2026-11-08T23:39:14+08:00"
+    },
+    "threadEnvironment": {
+      "MKL_NUM_THREADS": "4",
+      "OMP_NUM_THREADS": "4"
+    },
+    "stoppedAttempt": {
+      "lowMemorySampleKiB": 92340,
+      "stoppedAround": "2026-11-09T00:51:00+08:00",
+      "logSha256": "b4b5947aa723d9310313a8e5b57103db708b4228f802f8403cba36faa4ad3c55",
+      "result": "Stopped explicitly after approximately 40 minutes without complete report; process still active; memory pressure observed. No scores assigned.",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "startedAt": "2026-11-09T00:11:37+08:00"
+    }
+  },
+  "incompleteOriginalModel": "1.5B new-version full comparison remains pending; both attempts ended without a complete report. The complete 0.5B comparison is an independent technical experiment."
+}

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux 基础 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 145 / 195</p><article><h1 id="linux-基础">Linux 基础</h1><details class="contents"><summary>本章目录 <span>· 7 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#1-文件系统一切皆文件">1. 文件系统：一切皆文件</a><ul><li><a href="#目录结构速记">目录结构速记</a></li><li><a href="#路径的两种写法">路径的两种写法</a></li></ul></li><li><a href="#2-常用命令">2. 常用命令</a><ul><li><a href="#最常用的-10-个命令">最常用的 10 个命令</a></li><li><a href="#命令组合的艺术">命令组合的艺术</a></li></ul></li><li><a href="#3-权限模型">3. 权限模型</a><ul><li><a href="#读懂-ls--l-的输出">读懂 ls -l 的输出</a></li><li><a href="#权限的三种操作">权限的三种操作</a></li><li><a href="#数字权限速算">数字权限速算</a></li><li><a href="#sudo临时获取超级权限">sudo：临时获取超级权限</a></li></ul></li><li><a href="#4-shell-基础">4. Shell 基础</a><ul><li><a href="#管道与重定向">管道与重定向</a></li><li><a href="#环境变量">环境变量</a></li><li><a href="#shell-脚本入门">Shell 脚本入门</a></li></ul></li><li><a href="#5-实战场景">5. 实战场景</a><ul><li><a href="#51-日志排查">5.1 日志排查</a></li><li><a href="#52-进程排查">5.2 进程排查</a></li><li><a href="#53-网络诊断">5.3 网络诊断</a></li><li><a href="#54-磁盘空间排查">5.4 磁盘空间排查</a></li></ul></li><li><a href="#总结-31">总结</a></li><li><a href="#延伸阅读-21">延伸阅读</a></li></ul></nav></details><blockquote>
+<p><strong>前言</strong>
+<strong>服务器的世界，Linux 是绝对的主角。</strong> 全球超过 90% 的服务器运行 Linux，从你每天用的微信到 Google 搜索，背后都是 Linux 在支撑。作为开发者，掌握 Linux 基础不是可选项，而是必修课。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>文件系统</strong>：理解 Linux 目录结构和&quot;一切皆文件&quot;的哲学</li>
+<li><strong>常用命令</strong>：掌握文件操作、文本处理、进程管理等核心命令</li>
+<li><strong>权限模型</strong>：理解用户、组、权限的概念</li>
+<li><strong>Shell 基础</strong>：了解管道、重定向、环境变量等 Shell 核心概念</li>
+<li><strong>实战技能</strong>：学会日志查看、进程排查、网络诊断等运维基本功</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>文件系统</td>
+<td>目录结构、一切皆文件</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>常用命令</td>
+<td>文件、文本、进程、网络</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>权限模型</td>
+<td>用户、组、rwx、sudo</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>Shell 基础</td>
+<td>管道、重定向、变量、脚本</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>实战场景</td>
+<td>日志排查、性能诊断</td>
+</tr>
+</tbody></table></div>
+<h2 id="1-文件系统一切皆文件">1. 文件系统：一切皆文件</h2>
+<p>Linux 最核心的哲学之一就是<strong>一切皆文件</strong>。普通文件是文件，目录是文件，硬盘是文件，甚至网络连接、进程信息都是文件。这个统一的抽象让你可以用同一套工具（读、写、权限控制）操作几乎所有系统资源。</p>
+<h3 id="目录结构速记">目录结构速记</h3>
+<p>把 Linux 文件系统想象成一棵倒过来的树：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>/                    ← 根目录（树根）
+├── home/            ← 用户的家（你的文件都在这）
+├── etc/             ← 配置文件（系统的&quot;设置面板&quot;）
+├── var/             ← 变化的数据（日志、缓存）
+├── usr/             ← 用户安装的程序
+├── tmp/             ← 临时文件（重启就没了）
+├── proc/            ← 进程信息（虚拟的，不占磁盘）
+├── dev/             ← 设备文件（硬盘、终端）
+├── bin/             ← 基础命令（ls、cp、mv）
+├── sbin/            ← 系统管理命令（需要 root）
+├── opt/             ← 第三方软件
+└── root/            ← root 用户的家目录
+</code></pre>
+<h3 id="路径的两种写法">路径的两种写法</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>格式</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>绝对路径</td>
+<td>从 <code>/</code> 开始</td>
+<td><code>/home/alice/code/app.js</code></td>
+<td>从根目录出发，不会歧义</td>
+</tr>
+<tr>
+<td>相对路径</td>
+<td>从当前目录开始</td>
+<td><code>./code/app.js</code> 或 <code>../config</code></td>
+<td><code>.</code> 是当前目录，<code>..</code> 是上级目录</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>&quot;一切皆文件&quot;的威力</strong>
+想知道 CPU 信息？读文件：<code>cat /proc/cpuinfo</code>
+想知道内存使用？读文件：<code>cat /proc/meminfo</code>
+想产生随机数？读文件：<code>cat /dev/urandom</code>
+想丢弃输出？写文件：<code>echo &quot;no thanks&quot; &gt; /dev/null</code></p>
+</blockquote>
+<p>不需要专门的 API，读写文件就够了。这就是 Unix 哲学的优雅之处。</p>
+<h2 id="2-常用命令">2. 常用命令</h2>
+<p>Linux 命令遵循一个统一的格式：<code>命令 [选项] [参数]</code>。比如 <code>ls -la /home</code> 中，<code>ls</code> 是命令，<code>-la</code> 是选项，<code>/home</code> 是参数。</p>
+<h3 id="最常用的-10-个命令">最常用的 10 个命令</h3>
+<p>如果只能记住 10 个命令，记这些：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+<th>记忆技巧</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls</code></td>
+<td>列出文件</td>
+<td>list</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>切换目录</td>
+<td>change directory</td>
+</tr>
+<tr>
+<td><code>cat</code></td>
+<td>查看文件</td>
+<td>concatenate</td>
+</tr>
+<tr>
+<td><code>grep</code></td>
+<td>搜索文本</td>
+<td>global regular expression print</td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>查找文件</td>
+<td>就是 find</td>
+</tr>
+<tr>
+<td><code>ps</code></td>
+<td>查看进程</td>
+<td>process status</td>
+</tr>
+<tr>
+<td><code>tail -f</code></td>
+<td>实时看日志</td>
+<td>看文件&quot;尾巴&quot;，-f 是 follow</td>
+</tr>
+<tr>
+<td><code>chmod</code></td>
+<td>改权限</td>
+<td>change mode</td>
+</tr>
+<tr>
+<td><code>curl</code></td>
+<td>发 HTTP 请求</td>
+<td>client URL</td>
+</tr>
+<tr>
+<td><code>ssh</code></td>
+<td>远程登录</td>
+<td>secure shell</td>
+</tr>
+</tbody></table></div>
+<h3 id="命令组合的艺术">命令组合的艺术</h3>
+<p>Linux 的强大不在于单个命令，而在于<strong>命令组合</strong>。通过管道 <code>|</code> 把多个简单命令串起来，解决复杂问题：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 找出占用 CPU 最多的 5 个进程
+ps aux --sort=-%cpu | head -6
+
+# 统计日志中出现最多的错误类型
+grep &quot;ERROR&quot; app.log | awk &#39;{print $4}&#39; | sort | uniq -c | sort -rn | head -10
+
+# 查找大于 100MB 的文件
+find / -size +100M -type f 2&gt;/dev/null
+
+# 实时监控日志中的错误
+tail -f /var/log/app.log | grep --color &quot;ERROR&quot;
+</code></pre>
+<blockquote>
+<p><strong>Unix 哲学</strong>
+&quot;做一件事，做好它。&quot; 每个命令只负责一个功能，用管道组合出复杂操作。这就是为什么 Linux 命令都很短小——它们是积木，不是瑞士军刀。</p>
+</blockquote>
+<h2 id="3-权限模型">3. 权限模型</h2>
+<p>Linux 是多用户系统，权限模型是安全的基石。每个文件都有三组权限，分别控制<strong>所有者（Owner）</strong>、所属组（Group）、其他人（Others）能做什么。</p>
+<h3 id="读懂-ls--l-的输出">读懂 <code>ls -l</code> 的输出</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">$ ls -l app.js
+-rwxr-xr-- 1 alice developers 2048 Jan 15 10:30 app.js
+│├──┤├──┤├──┤   │     │          │
+│ │   │   │     │     │          └── 文件大小
+│ │   │   │     │     └── 所属组
+│ │   │   │     └── 所有者
+│ │   │   └── 其他人权限：r-- (只读)
+│ │   └── 组权限：r-x (读+执行)
+│ └── 所有者权限：rwx (读+写+执行)
+└── 文件类型：- 普通文件，d 目录，l 链接
+</code></pre>
+<h3 id="权限的三种操作">权限的三种操作</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>权限</th>
+<th>字母</th>
+<th>数字</th>
+<th>对文件的含义</th>
+<th>对目录的含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读</td>
+<td><code>r</code></td>
+<td>4</td>
+<td>查看文件内容</td>
+<td>列出目录内容（ls）</td>
+</tr>
+<tr>
+<td>写</td>
+<td><code>w</code></td>
+<td>2</td>
+<td>修改文件内容</td>
+<td>创建/删除目录中的文件</td>
+</tr>
+<tr>
+<td>执行</td>
+<td><code>x</code></td>
+<td>1</td>
+<td>运行程序/脚本</td>
+<td>进入目录（cd）</td>
+</tr>
+</tbody></table></div>
+<h3 id="数字权限速算">数字权限速算</h3>
+<p>三个数字分别代表 Owner、Group、Others 的权限，每个数字是 r(4) + w(2) + x(1) 的和：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>chmod 755 script.sh
+  7 = rwx (4+2+1)  → 所有者：读+写+执行
+  5 = r-x (4+0+1)  → 组：读+执行
+  5 = r-x (4+0+1)  → 其他人：读+执行
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>常见权限</th>
+<th>含义</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>644</code></td>
+<td>rw-r--r--</td>
+<td>普通文件（所有者可写，其他人只读）</td>
+</tr>
+<tr>
+<td><code>755</code></td>
+<td>rwxr-xr-x</td>
+<td>可执行文件/目录</td>
+</tr>
+<tr>
+<td><code>600</code></td>
+<td>rw-------</td>
+<td>私密文件（如 SSH 密钥）</td>
+</tr>
+<tr>
+<td><code>777</code></td>
+<td>rwxrwxrwx</td>
+<td>所有人可读写执行（危险，避免使用）</td>
+</tr>
+</tbody></table></div>
+<h3 id="sudo临时获取超级权限">sudo：临时获取超级权限</h3>
+<p>普通用户权限有限，有些操作需要 root 权限。<code>sudo</code> 让你临时以 root 身份执行命令：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 普通用户无法修改系统配置
+$ vim /etc/nginx/nginx.conf
+# Permission denied
+
+# 用 sudo 临时提权
+$ sudo vim /etc/nginx/nginx.conf
+# 输入你的密码后可以编辑
+
+# 切换到 root 用户（谨慎使用）
+$ sudo su -
+</code></pre>
+<blockquote>
+<p><strong>最小权限原则</strong>
+永远不要用 <code>chmod 777</code> 解决权限问题，这等于把门锁拆了。正确做法是搞清楚谁需要什么权限，精确授予。同样，不要长期以 root 身份操作，只在必要时用 <code>sudo</code>。</p>
+</blockquote>
+<h2 id="4-shell-基础">4. Shell 基础</h2>
+<p>Shell 是你和 Linux 内核之间的&quot;翻译官&quot;。你输入命令，Shell 解释并交给内核执行。最常用的 Shell 是 <strong>Bash</strong>（大多数 Linux 发行版默认）和 Zsh（macOS 默认）。</p>
+<h3 id="管道与重定向">管道与重定向</h3>
+<p>这是 Shell 最强大的两个特性：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>名称</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`</td>
+<td>`</td>
+<td>管道</td>
+<td>把前一个命令的输出作为后一个的输入</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>输出重定向</td>
+<td>把输出写入文件（覆盖）</td>
+<td><code>echo &quot;hello&quot; &gt; file.txt</code></td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>追加重定向</td>
+<td>把输出追加到文件末尾</td>
+<td><code>echo &quot;world&quot; &gt;&gt; file.txt</code></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>输入重定向</td>
+<td>从文件读取输入</td>
+<td><code>wc -l &lt; file.txt</code></td>
+</tr>
+<tr>
+<td><code>2&gt;</code></td>
+<td>错误重定向</td>
+<td>把错误信息写入文件</td>
+<td><code>cmd 2&gt; error.log</code></td>
+</tr>
+<tr>
+<td><code>2&gt;&amp;1</code></td>
+<td>合并输出</td>
+<td>把错误和正常输出合并</td>
+<td><code>cmd &gt; all.log 2&gt;&amp;1</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="环境变量">环境变量</h3>
+<p>环境变量是 Shell 中的&quot;全局配置&quot;，影响命令的行为：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 查看所有环境变量
+env
+
+# 查看某个变量
+echo $PATH
+echo $HOME
+
+# 临时设置（只在当前 Shell 有效）
+export API_KEY=&quot;abc123&quot;
+
+# 永久设置（写入配置文件）
+echo &#39;export API_KEY=&quot;abc123&quot;&#39; &gt;&gt; ~/.bashrc
+source ~/.bashrc   # 让配置立即生效
+</code></pre>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>常见变量</th>
+<th>含义</th>
+<th>示例值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$PATH</code></td>
+<td>命令搜索路径</td>
+<td><code>/usr/local/bin:/usr/bin:/bin</code></td>
+</tr>
+<tr>
+<td><code>$HOME</code></td>
+<td>用户主目录</td>
+<td><code>/home/alice</code></td>
+</tr>
+<tr>
+<td><code>$USER</code></td>
+<td>当前用户名</td>
+<td><code>alice</code></td>
+</tr>
+<tr>
+<td><code>$PWD</code></td>
+<td>当前工作目录</td>
+<td><code>/var/log</code></td>
+</tr>
+<tr>
+<td><code>$SHELL</code></td>
+<td>当前使用的 Shell</td>
+<td><code>/bin/bash</code></td>
+</tr>
+</tbody></table></div>
+<h3 id="shell-脚本入门">Shell 脚本入门</h3>
+<p>把多个命令写进一个文件，就是 Shell 脚本。它是自动化运维的起点：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">#!/bin/bash
+# deploy.sh - 简单的部署脚本
+
+APP_DIR=&quot;/opt/myapp&quot;
+LOG_FILE=&quot;/var/log/deploy.log&quot;
+
+echo &quot;$(date) - 开始部署...&quot; &gt;&gt; $LOG_FILE
+
+# 拉取最新代码
+cd $APP_DIR &amp;&amp; git pull origin main
+
+# 安装依赖
+npm install --production
+
+# 重启服务
+pm2 restart myapp
+
+echo &quot;$(date) - 部署完成&quot; &gt;&gt; $LOG_FILE
+</code></pre>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 给脚本执行权限并运行
+chmod +x deploy.sh
+./deploy.sh
+</code></pre>
+<blockquote>
+<p><strong>脚本调试技巧</strong>
+在脚本开头加 <code>set -ex</code>：<code>-e</code> 让脚本遇到错误立即退出（而不是继续执行），<code>-x</code> 会打印每条执行的命令（方便排查问题）。这两个选项在生产脚本中几乎是标配。</p>
+</blockquote>
+<h2 id="5-实战场景">5. 实战场景</h2>
+<p>理论学完了，来看几个开发中最常遇到的实战场景。</p>
+<h3 id="51-日志排查">5.1 日志排查</h3>
+<p>服务出问题，第一反应就是看日志。以下是日志排查的常用套路：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 1. 实时跟踪日志（最常用）
+tail -f /var/log/app/error.log
+
+# 2. 搜索特定时间段的错误
+grep &quot;2024-01-15 14:&quot; error.log | grep &quot;ERROR&quot;
+
+# 3. 统计每小时的错误数量
+grep &quot;ERROR&quot; app.log | awk &#39;{print substr($1,1,13)}&#39; | uniq -c
+
+# 4. 查看最近 100 行日志
+tail -100 app.log
+
+# 5. 在多个日志文件中搜索
+grep -r &quot;OutOfMemory&quot; /var/log/app/
+</code></pre>
+<h3 id="52-进程排查">5.2 进程排查</h3>
+<p>应用卡死、CPU 飙高、内存泄漏——这些问题都需要从进程入手：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 查看 CPU 占用最高的进程
+ps aux --sort=-%cpu | head -10
+
+# 查看内存占用最高的进程
+ps aux --sort=-%mem | head -10
+
+# 查找特定进程
+ps aux | grep &quot;node&quot;
+
+# 查看进程的详细信息（包括线程）
+top -Hp &lt;PID&gt;
+
+# 查看进程打开的文件
+lsof -p &lt;PID&gt;
+
+# 优雅终止进程（SIGTERM）
+kill &lt;PID&gt;
+
+# 强制终止（SIGKILL，最后手段）
+kill -9 &lt;PID&gt;
+</code></pre>
+<h3 id="53-网络诊断">5.3 网络诊断</h3>
+<p>服务连不上？先搞清楚是网络问题还是应用问题：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 测试目标是否可达
+ping -c 4 google.com
+
+# 检查端口是否开放
+telnet db-server 3306
+# 或者用 nc
+nc -zv db-server 3306
+
+# 查看本机监听的端口
+ss -tlnp
+# 或
+netstat -tlnp
+
+# DNS 解析检查
+dig api.example.com
+nslookup api.example.com
+
+# 测试 HTTP 接口
+curl -v http://localhost:3000/health
+
+# 查看网络连接状态统计
+ss -s
+</code></pre>
+<h3 id="54-磁盘空间排查">5.4 磁盘空间排查</h3>
+<p>磁盘满了是线上最常见的故障之一：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 查看各分区使用情况
+df -h
+
+# 找出占用空间最大的目录
+du -sh /* 2&gt;/dev/null | sort -rh | head -10
+
+# 进一步定位大目录
+du -sh /var/log/* | sort -rh | head -10
+
+# 查找大文件（&gt;100MB）
+find / -type f -size +100M 2&gt;/dev/null | head -20
+
+# 清理常见的空间占用
+# 清理旧日志
+sudo journalctl --vacuum-size=500M
+# 清理 Docker 无用镜像
+docker system prune -a
+</code></pre>
+<blockquote>
+<p><strong>线上排查口诀</strong>
+<strong>&quot;一看日志，二看进程，三看网络，四看磁盘&quot;</strong>。90% 的线上问题都能通过这四步定位到原因。养成习惯后，排查效率会大幅提升。</p>
+</blockquote>
+<h2 id="总结-31">总结</h2>
+<p>Linux 是开发者的必备技能，掌握基础就能应对大部分日常开发和运维场景。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>一切皆文件</strong>：Linux 用文件抽象统一了对硬件、进程、网络等资源的访问方式</li>
+<li><strong>命令组合</strong>：单个命令功能简单，通过管道 <code>|</code> 组合才能发挥真正威力</li>
+<li><strong>权限模型</strong>：Owner/Group/Others × Read/Write/Execute，用数字（如 755）快速设置</li>
+<li><strong>Shell 基础</strong>：管道、重定向、环境变量、脚本是自动化的基石</li>
+<li><strong>实战排查</strong>：日志 → 进程 → 网络 → 磁盘，四步定位大部分线上问题</li>
+</ol>
+<h2 id="延伸阅读-21">延伸阅读</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/">Linux 命令大全</a> - Linux man pages 官方文档</li>
+<li><a href="https://linuxcommand.org/tlcl.php">The Linux Command Line</a> - 免费的 Linux 命令行入门书</li>
+<li><a href="https://linuxjourney.com/">Linux Journey</a> - 交互式 Linux 学习网站</li>
+<li><a href="https://explainshell.com/">explainshell.com</a> - 输入命令自动解释每个参数的含义</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-144.html">← 系统设计方法论</a><a rel="next" href="chapter-146.html">Docker 容器化 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

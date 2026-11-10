@@ -1,0 +1,286 @@
+{
+  "scope": "Same original synthetic single English print line and same cached TrOCR model; first clean-environment failures retained. Not scanned-document or multilingual accuracy.",
+  "before": [
+    {
+      "name": "recognized",
+      "exit": 2,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "model-unavailable",
+        "text": null,
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. mean_token_logprob is a model-internal sequence score, not an accuracy, probability of correctness, or guarantee.",
+        "image": {
+          "path": ".\\tmp\\quality-04\\ocr\\sample.png",
+          "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+          "width": 636,
+          "height": 80,
+          "mode": "RGB",
+          "format": "PNG"
+        },
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 636,
+          "height": 80,
+          "coordinate_system": "pixels, origin top-left",
+          "sha256": "b1d3701f5116f598b22206ff7f8cdc68294eacc69bf7f2a333ef7ab5466eb243",
+          "sha256_basis": "decoded RGB pixel bytes in this region"
+        },
+        "model": null,
+        "generation": null,
+        "scores": null,
+        "timing_ms": null,
+        "warnings": [
+          "no --region supplied: the full image was passed to the line model"
+        ],
+        "error": {
+          "message": "could not load local TrOCR files from <local-model:microsoft/trocr-small-printed@04e994ab854b0089d4929f48c2b4dbe2ce78a340>: ValueError: `tiktoken` is required to read a `tiktoken` file. Install it with `pip install tiktoken`."
+        }
+      }
+    },
+    {
+      "name": "truncated",
+      "exit": 2,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "model-unavailable",
+        "text": null,
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. mean_token_logprob is a model-internal sequence score, not an accuracy, probability of correctness, or guarantee.",
+        "image": {
+          "path": ".\\tmp\\quality-04\\ocr\\sample.png",
+          "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+          "width": 636,
+          "height": 80,
+          "mode": "RGB",
+          "format": "PNG"
+        },
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 636,
+          "height": 80,
+          "coordinate_system": "pixels, origin top-left",
+          "sha256": "b1d3701f5116f598b22206ff7f8cdc68294eacc69bf7f2a333ef7ab5466eb243",
+          "sha256_basis": "decoded RGB pixel bytes in this region"
+        },
+        "model": null,
+        "generation": null,
+        "scores": null,
+        "timing_ms": null,
+        "warnings": [
+          "no --region supplied: the full image was passed to the line model"
+        ],
+        "error": {
+          "message": "could not load local TrOCR files from <local-model:microsoft/trocr-small-printed@04e994ab854b0089d4929f48c2b4dbe2ce78a340>: ValueError: `tiktoken` is required to read a `tiktoken` file. Install it with `pip install tiktoken`."
+        }
+      }
+    },
+    {
+      "name": "denied",
+      "exit": 2,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "unauthorized",
+        "text": null,
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. mean_token_logprob is a model-internal sequence score, not an accuracy, probability of correctness, or guarantee.",
+        "image": null,
+        "region": null,
+        "model": null,
+        "generation": null,
+        "scores": null,
+        "timing_ms": null,
+        "warnings": [],
+        "error": {
+          "message": "missing --authorized: confirm that you have permission to process this image"
+        }
+      }
+    },
+    {
+      "name": "invalid-region",
+      "exit": 2,
+      "report": null
+    }
+  ],
+  "after": [
+    {
+      "name": "recognized",
+      "exit": 0,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "recognized",
+        "text": "REPAIR WORKSHOP AT 10:00",
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. The status is an operational gate; verify the text against the image and the source permission before downstream use.",
+        "image": {
+          "path": ".\\tmp\\quality-04\\ocr-after\\sample.png",
+          "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+          "width": 636,
+          "height": 80,
+          "mode": "RGB",
+          "format": "PNG"
+        },
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 636,
+          "height": 80,
+          "coordinate_system": "pixels, origin top-left",
+          "sha256": "b1d3701f5116f598b22206ff7f8cdc68294eacc69bf7f2a333ef7ab5466eb243",
+          "sha256_basis": "decoded RGB pixel bytes in this region"
+        },
+        "model": {
+          "path": "<local-model:microsoft/trocr-small-printed@04e994ab854b0089d4929f48c2b4dbe2ce78a340>",
+          "local_files_only": true,
+          "trust_remote_code": false,
+          "device": "cpu",
+          "config_sha256": "2b6e06edec319984eca99c932d940bfa1f308db3f74d6279440b906c373bf727",
+          "max_new_tokens": 64
+        },
+        "generation": {
+          "do_sample": false,
+          "max_new_tokens": 64,
+          "sequence_tokens": 9,
+          "new_tokens": 8,
+          "termination": "eos"
+        },
+        "scores": {
+          "mean_token_logprob": -0.0257,
+          "scored_tokens": 8,
+          "uncertain_below": -2.5,
+          "basis": "mean log-probability of generated tokens under this model; not calibrated, not an accuracy estimate"
+        },
+        "timing_ms": {
+          "load_ms": 1457.8,
+          "inference_ms": 862.7,
+          "total_ms": 2332.9
+        },
+        "warnings": [
+          "no --region supplied: the full image was passed to the line model"
+        ],
+        "error": null
+      }
+    },
+    {
+      "name": "truncated",
+      "exit": 3,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "uncertain",
+        "text": "REP",
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. The status is an operational gate; verify the text against the image and the source permission before downstream use.",
+        "image": {
+          "path": ".\\tmp\\quality-04\\ocr-after\\sample.png",
+          "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+          "width": 636,
+          "height": 80,
+          "mode": "RGB",
+          "format": "PNG"
+        },
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 636,
+          "height": 80,
+          "coordinate_system": "pixels, origin top-left",
+          "sha256": "b1d3701f5116f598b22206ff7f8cdc68294eacc69bf7f2a333ef7ab5466eb243",
+          "sha256_basis": "decoded RGB pixel bytes in this region"
+        },
+        "model": {
+          "path": "<local-model:microsoft/trocr-small-printed@04e994ab854b0089d4929f48c2b4dbe2ce78a340>",
+          "local_files_only": true,
+          "trust_remote_code": false,
+          "device": "cpu",
+          "config_sha256": "2b6e06edec319984eca99c932d940bfa1f308db3f74d6279440b906c373bf727",
+          "max_new_tokens": 1
+        },
+        "generation": {
+          "do_sample": false,
+          "max_new_tokens": 1,
+          "sequence_tokens": 2,
+          "new_tokens": 1,
+          "termination": "max_new_tokens"
+        },
+        "scores": {
+          "mean_token_logprob": -0.0054,
+          "scored_tokens": 1,
+          "uncertain_below": -2.5,
+          "basis": "mean log-probability of generated tokens under this model; not calibrated, not an accuracy estimate"
+        },
+        "timing_ms": {
+          "load_ms": 1461.0,
+          "inference_ms": 539.0,
+          "total_ms": 2011.2
+        },
+        "warnings": [
+          "no --region supplied: the full image was passed to the line model"
+        ],
+        "error": {
+          "message": "generation used the full 1-token budget without an EOS token; text is a truncated prefix, not a complete line"
+        }
+      }
+    },
+    {
+      "name": "denied",
+      "exit": 2,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "unauthorized",
+        "text": null,
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. mean_token_logprob is a model-internal sequence score, not an accuracy, probability of correctness, or guarantee.",
+        "image": null,
+        "region": null,
+        "model": null,
+        "generation": null,
+        "scores": null,
+        "timing_ms": null,
+        "warnings": [],
+        "error": {
+          "message": "missing --authorized: confirm that you have permission to process this image"
+        }
+      }
+    },
+    {
+      "name": "invalid-region",
+      "exit": 2,
+      "report": {
+        "schema": "ocr-extract/1",
+        "status": "invalid-region",
+        "text": null,
+        "confidence": null,
+        "confidence_note": "TrOCR does not expose a calibrated recognition confidence. mean_token_logprob is a model-internal sequence score, not an accuracy, probability of correctness, or guarantee.",
+        "image": {
+          "path": ".\\tmp\\quality-04\\ocr-after\\sample.png",
+          "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+          "width": 636,
+          "height": 80,
+          "mode": "RGB",
+          "format": "PNG"
+        },
+        "region": null,
+        "model": null,
+        "generation": null,
+        "scores": null,
+        "timing_ms": null,
+        "warnings": [],
+        "error": {
+          "message": "region (-1,0,5,5) is outside image bounds (636x80)"
+        }
+      }
+    }
+  ],
+  "sample": {
+    "output": ".\\tmp\\quality-04\\ocr-after\\sample.png",
+    "text": "REPAIR WORKSHOP AT 10:00",
+    "sha256": "c21a467fa63b63c933b9f73e5816b5b08b0441ae7732698aa45b0d31504ba6e9",
+    "width": 636,
+    "height": 80,
+    "font": "Pillow bundled default font"
+  },
+  "rootCause": "Missing protobuf in SentencePiece conversion; final tiktoken error was a fallback error. Added protobuf 7.36.2, no model/source/decoding changes.",
+  "harnessCorrection": "Initial negative region passed as a separate -1,... token was rejected by argparse; corrected to --region=-1,0,5,5 for the actual image-boundary test."
+}

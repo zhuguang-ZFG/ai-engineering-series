@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "prompt": {
+    "term": {
+      "zh": "提示"
+    },
+    "forms": {
+      "zh": [
+        "提示"
+      ]
+    },
+    "plain": {
+      "zh": "交代任务、材料和输出要求的文字"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "context": {
+    "term": {
+      "zh": "上下文"
+    },
+    "forms": {
+      "zh": [
+        "上下文"
+      ]
+    },
+    "plain": {
+      "zh": "一次请求实际能够使用的内容"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "receipt": {
+    "term": {
+      "zh": "工具回执"
+    },
+    "forms": {
+      "zh": [
+        "工具回执"
+      ]
+    },
+    "plain": {
+      "zh": "工具执行后返回的状态与输出"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "holdout": {
+    "term": {
+      "zh": "留出集"
+    },
+    "forms": {
+      "zh": [
+        "留出集"
+      ]
+    },
+    "plain": {
+      "zh": "保留到最终检验再使用的题目"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "injection": {
+    "term": {
+      "zh": "提示注入"
+    },
+    "forms": {
+      "zh": [
+        "提示注入"
+      ]
+    },
+    "plain": {
+      "zh": "材料夹带指令并试图改变任务行为"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "skill": {
+    "term": {
+      "zh": "Skill"
+    },
+    "forms": {
+      "zh": [
+        "Skill"
+      ]
+    },
+    "plain": {
+      "zh": "按宿主约定组织的可复用任务资源"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "agent": {
+    "term": {
+      "zh": "Agent"
+    },
+    "forms": {
+      "zh": [
+        "Agent"
+      ]
+    },
+    "plain": {
+      "zh": "结合模型与工具推进任务的程序"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "json": {
+    "term": {
+      "zh": "JSON"
+    },
+    "forms": {
+      "zh": [
+        "JSON"
+      ]
+    },
+    "plain": {
+      "zh": "按字段、数组等结构记录数据的文本格式"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "token": {
+    "term": {
+      "zh": "token"
+    },
+    "forms": {
+      "zh": [
+        "token"
+      ]
+    },
+    "plain": {
+      "zh": "模型分词后处理的文本单位"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  },
+  "regression": {
+    "term": {
+      "zh": "回归"
+    },
+    "forms": {
+      "zh": [
+        "回归"
+      ]
+    },
+    "plain": {
+      "zh": "改动后重新检查原有要求和用例"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "prompt-apxd.b-terms"
+    ]
+  }
+}

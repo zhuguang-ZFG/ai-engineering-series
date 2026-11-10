@@ -1,0 +1,17 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7.5,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Entry", "data": {"icon": "target"}},
+    {"at": 1.0, "kind": "draw", "text": "QueryEngine", "data": {"icon": "bulb"}},
+    {"at": 2.0, "kind": "draw", "text": "AsyncGenerator", "data": {"icon": "clock"}},
+    {"at": 3.2, "kind": "point", "text": "Tools · Permission · MCP / 子智能体"},
+    {"at": 4.8, "kind": "draw", "text": "1884 文件", "data": {"icon": "target"}},
+    {"at": 6.0, "kind": "point", "text": "512,664 行 TypeScript"}
+  ]
+}

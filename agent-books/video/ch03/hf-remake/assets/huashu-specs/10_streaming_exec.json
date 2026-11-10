@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "流式开工", "data": {"icon": "bulb"}},
+    {"at": 1.2, "kind": "point", "text": "接到 tool_use 就跑"},
+    {"at": 2.8, "kind": "draw", "text": "7s → ~3s", "data": {"icon": "target"}},
+    {"at": 4.2, "kind": "point", "text": "yield 仍按请求序"},
+    {"at": 5.6, "kind": "highlight", "data": {"target": "draw", "index": 1}}
+  ]
+}

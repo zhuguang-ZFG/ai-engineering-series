@@ -1,0 +1,15 @@
+input  omp\README.md
+size   3.3KB · 2,153 chars · 78 lines
+
+encoding          models                    tokens  chars/tok  vs o200k
+o200k_base        GPT-4o · o1 · GPT-5+       1,156       1.86         —
+cl100k_base       GPT-3.5 · GPT-4            1,347       1.60    +16.5%
+claude-v3         Claude 3 … Opus 4.6        1,491       1.44    +29.0%
+claude-v47        Opus 4.7–4.9               1,625       1.32    +40.6%
+claude-v5         Opus 5+                    1,625       1.32    +40.6%
+claude-v5-sonnet  Sonnet/Fable 5+ · Haiku 5.5     1,625       1.32    +40.6%
+qwen3             Qwen 3.5+                  1,138       1.89     -1.6%
+deepseek-v3       DeepSeek V3–V4             1,100       1.96     -4.8%
+kimi-k2           Kimi K2–K3                 1,046       2.06     -9.5%
+glm5              GLM-5.x                    1,074       2.00     -7.1%
+jev               TypeSafe Jev 1.13          1,363       1.58    +17.9%

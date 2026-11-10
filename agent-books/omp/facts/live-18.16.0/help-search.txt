@@ -1,0 +1,13 @@
+Test web search providers
+
+USAGE
+  $ omp search [QUERY...] [FLAGS]
+
+ARGUMENTS
+  QUERY   Search query text
+
+FLAGS
+      --model=<value>    Catalog model selector
+      --recency=<value>  Recency filter
+  -l, --limit=<int>      Max results to return
+      --compact          Render condensed output

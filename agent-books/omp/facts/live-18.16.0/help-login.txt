@@ -1,0 +1,13 @@
+Log in to a model provider (terminal counterpart of /login)
+
+USAGE
+  $ omp login [PROVIDER]
+
+ARGUMENTS
+  PROVIDER   OAuth provider id (e.g. anthropic, openai-codex); omit to pick interactively
+
+EXAMPLES
+  # Pick a provider interactively
+    omp login
+  # Log in to a specific provider
+    omp login anthropic

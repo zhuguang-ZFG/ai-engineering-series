@@ -1,0 +1,1563 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>把网站发到网上（进阶方式）：自己买台 VPS 服务器搭建发布 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 2 · 29 / 195</p><article><h1 id="把网站发到网上进阶方式自己买台-vps-服务器搭建发布">把网站发到网上（进阶方式）：自己买台 VPS 服务器搭建发布</h1><details class="contents"><summary>本章目录 <span>· 11 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#0-先选对部署平台全景决策图">0. 先选对：部署平台全景决策图</a></li><li><a href="#1-免费低成本部署平台详解不用买服务器">1. 免费/低成本部署平台详解（不用买服务器）</a><ul><li><a href="#11-vercel--nextjs-官方平台前端首选">1.1 Vercel — Next.js 官方平台，前端首选</a></li><li><a href="#12-cloudflare-pages--静态资源托管与边缘函数">1.2 Cloudflare Pages — 静态资源托管与边缘函数</a></li><li><a href="#13-netlify--老牌静态托管插件生态丰富">1.3 Netlify — 老牌静态托管，插件生态丰富</a></li><li><a href="#14-railway--组合部署后端与数据库">1.4 Railway — 组合部署后端与数据库</a></li><li><a href="#15-cloudbase--静态网站与后端云托管">1.5 CloudBase — 静态网站与后端云托管</a></li><li><a href="#16-render--750-小时免费但会休眠">1.6 Render — 750 小时免费，但会休眠</a></li><li><a href="#17-flyio--容器部署与限时试用">1.7 Fly.io — 容器部署与限时试用</a></li><li><a href="#18-其他值得了解的免费低成本平台">1.8 其他值得了解的免费/低成本平台</a></li></ul></li><li><a href="#2-国内云服务器详细购买指南">2. 国内云服务器详细购买指南</a><ul><li><a href="#21-选哪家国内三大云厂商对比">2.1 选哪家？国内三大云厂商对比</a></li><li><a href="#22-海外-vps-选择不想备案面向海外用户">2.2 海外 VPS 选择（不想备案/面向海外用户）</a></li><li><a href="#23-备案问题国内服务器必须了解">2.3 备案问题（国内服务器必须了解）</a></li></ul></li><li><a href="#3-连接服务器--基础环境配置">3. 连接服务器 &amp; 基础环境配置</a><ul><li><a href="#31-第一次-ssh-连接服务器">3.1 第一次 SSH 连接服务器</a></li><li><a href="#32-配置安全组防火墙非常重要">3.2 配置安全组/防火墙（非常重要！）</a></li><li><a href="#33-初始化服务器环境">3.3 初始化服务器环境</a></li></ul></li><li><a href="#4-三种典型部署场景实操">4. 三种典型部署场景实操</a><ul><li><a href="#41-场景一部署纯前端静态站vitereactvue">4.1 场景一：部署纯前端静态站（Vite/React/Vue）</a></li><li><a href="#42-场景二部署-nodejs-后端服务">4.2 场景二：部署 Node.js 后端服务</a></li><li><a href="#43-场景三docker-compose-一键部署全栈">4.3 场景三：Docker Compose 一键部署全栈</a></li></ul></li><li><a href="#5-域名--https">5. 域名 &amp; HTTPS</a><ul><li><a href="#51-买域名--解析">5.1 买域名 &amp; 解析</a></li><li><a href="#52-一键-httpslets-encrypt-免费证书">5.2 一键 HTTPS（Let&#39;s Encrypt 免费证书）</a></li></ul></li><li><a href="#6-云厂商常见服务功能全解析不只是服务器">6. 云厂商常见服务功能全解析（不只是服务器！）</a><ul><li><a href="#61-一张表搞懂云服务全家福">6.1 一张表搞懂：云服务全家福</a></li><li><a href="#62-计算类跑你代码的地方">6.2 计算类：跑你代码的地方</a></li><li><a href="#63-存储类放文件和数据的地方">6.3 存储类：放文件和数据的地方</a></li><li><a href="#64-数据库类存结构化数据">6.4 数据库类：存结构化数据</a></li><li><a href="#65-网络类让用户访问更快更安全">6.5 网络类：让用户访问更快更安全</a></li><li><a href="#66-其他常用服务">6.6 其他常用服务</a></li><li><a href="#67-国内-vs-海外两套生态对照速查">6.7 国内 vs 海外：两套生态对照速查</a></li><li><a href="#68-新手常见疑问">6.8 新手常见疑问</a></li></ul></li><li><a href="#7-ai-agent-专用部署平台">7. AI Agent 专用部署平台</a><ul><li><a href="#71-modal--python-aiml-的-serverless-gpu">7.1 Modal — Python AI/ML 的 Serverless GPU</a></li><li><a href="#72-hugging-face-spaces--ai-demo-首选">7.2 Hugging Face Spaces — AI Demo 首选</a></li><li><a href="#73-replicate--把模型变成-api">7.3 Replicate — 把模型变成 API</a></li><li><a href="#74-国内-gpu-云autodl">7.4 国内 GPU 云：AutoDL</a></li></ul></li><li><a href="#8--vibecoding-部署实战让-ai-当你的运维助手">8. 🎯 Vibecoding 部署实战：让 AI 当你的运维助手</a><ul><li><a href="#81-两种-ai-协作部署方式">8.1 两种 AI 协作部署方式</a></li><li><a href="#82-万能部署-prompt-模板">8.2 万能部署 Prompt 模板</a></li><li><a href="#83-ai-辅助排错流程">8.3 AI 辅助排错流程</a></li></ul></li><li><a href="#9-部署后实用技巧">9. 部署后实用技巧</a><ul><li><a href="#91-文件传输">9.1 文件传输</a></li><li><a href="#92-一键更新脚本">9.2 一键更新脚本</a></li><li><a href="#93-安全加固清单">9.3 安全加固清单</a></li></ul></li><li><a href="#10-本章小结">10. 本章小结</a></li></ul></nav></details><span class="heading-anchor" id="把网站发到网上进阶方式自己买台-vps-服务器搭建发布-1"></span>
+<blockquote>
+<p><strong>什么叫&quot;把网站发到网上&quot;？</strong> 也叫&quot;上线&quot;或&quot;部署发布&quot;。你在本地电脑写好的网站，只有你自己能打开；<strong>&quot;发到网上&quot;就是把它放到一台 24 小时开机的服务器上，让任何一个人在浏览器里输入网址就能访问到</strong>——就像你写了一篇 Word 文档只有自己电脑能看，发到公众号/博客后所有人都能看一样，只不过这次发上去的是一个完整的网站。</p>
+</blockquote>
+<p>上一章我们学了最简单的&quot;一键发布&quot;方式（用 Vercel、Cloudflare Pages、Render 这类平台，连仓库即上线），这一章讲更灵活、也更彻底的方式：<strong>自己买一台云服务器，从头到尾把网站搭起来发布出去</strong>。你会学到怎么选服务器、怎么连接上去、怎么装环境、怎么配 Nginx、怎么绑域名开 HTTPS——搞懂之后，没有任何平台能限制你，想跑什么服务就跑什么。</p>
+<p>可以把本章连同项目的技术栈、运行方式和预算一起发给 AI，让它帮助挑选平台并生成集成配置。需要它自动操作时，先说明允许使用的终端、账号和部署权限；真实密码与私钥通过凭证配置提供。</p>
+<h2 id="0-先选对部署平台全景决策图">0. 先选对：部署平台全景决策图</h2>
+<p>选平台之前，先回答三个问题：</p>
+<ol>
+<li><p><strong>你的项目需要 24 小时在线吗？</strong></p>
+<ul>
+<li>不需要（用户访问时才响应，比如文档站、博客、普通网站）→ 选 <strong>静态托管/PaaS</strong></li>
+<li>需要（定时任务、爬虫、Telegram/Discord Bot、WebSocket 服务）→ 选 <strong>常驻型 PaaS 或 VPS</strong></li>
+</ul>
+</li>
+<li><p><strong>你需要 GPU 吗？</strong></p>
+<ul>
+<li>不需要（只调用 OpenAI/Anthropic API）→ 普通平台即可</li>
+<li>需要（自己跑开源模型、生成图片/视频）→ 选 <strong>GPU 云平台</strong>（Modal、Replicate、AutoDL 等）</li>
+</ul>
+</li>
+<li><p><strong>你的用户主要在哪里？</strong></p>
+<ul>
+<li>国内 → 优先评估国内云（阿里云/腾讯云），并在目标用户的实际网络下测试访问效果</li>
+<li>海外 → 按运行方式、可用地域与预算比较 Vercel / Railway / Fly.io / AWS</li>
+<li>都有 → 用 CDN，国内放国内，海外放海外</li>
+</ul>
+</li>
+</ol>
+<p>根据这三个问题，对应下面的决策路径：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你的项目是什么类型？
+│
+├─ 纯前端静态站（Vite/React/Vue 构建产物）
+│   ├─ 静态托管免费方案 → Cloudflare Pages / GitHub Pages（仍有构建、大小等限制）
+│   ├─ Next.js 项目 → Vercel（官方平台，体验最好）
+│   └─ 国内用户为主 → 国内 OSS+CDN 或其他已实测的托管方案
+│
+├─ 有后端 API，但不需要 24 小时常驻（请求触发）
+│   ├─ 请求触发的 API → Vercel Functions / Cloudflare Workers（先检查语言与依赖兼容性）
+│   └─ 全栈框架（Next.js/Nuxt/SvelteKit）→ Vercel
+│
+├─ 需要常驻进程（Bot、定时任务、WebSocket）
+│   ├─ 不想管服务器 → Railway / Render 付费实例 / Fly.io（按所需在线方式选套餐）
+│   ├─ 想完全控制 &amp; 省钱 → 买 VPS（腾讯云轻量/阿里云轻量/Vultr/Hetzner）
+│   └─ 国内项目 → 腾讯云轻量应用服务器
+│
+├─ 需要跑 AI 模型/需要 GPU
+│   ├─ 推理 API → Modal / Replicate / Hugging Face Inference
+│   ├─ 国内 GPU → AutoDL（便宜）/ 阿里云 PAI
+│   └─ 训练/Fine-tune → Modal / Lambda Labs / 国内 GPU 云
+│
+└─ 大型生产项目
+    └─ AWS/GCP/阿里云 + Kubernetes（找运维或让 AI 帮你写 Terraform）
+</code></pre>
+<h2 id="1-免费低成本部署平台详解不用买服务器">1. 免费/低成本部署平台详解（不用买服务器）</h2>
+<p>对于大多数个人项目、Demo、作品集，你<strong>完全不需要买服务器</strong>。这一节详细介绍各个免费/低成本平台，告诉你怎么注册、怎么用、有什么坑。</p>
+<h3 id="11-vercel--nextjs-官方平台前端首选">1.1 Vercel — Next.js 官方平台，前端首选</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/vercel.png" alt="Vercel 首页" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://vercel.com">https://vercel.com</a></p>
+<p><strong>适合什么：</strong> Next.js 项目、React/Vue 前端、带 Serverless Functions 的全栈应用、AI Chatbot（响应快的）</p>
+<p>怎么用：</p>
+<ol>
+<li>用 GitHub 账号登录 Vercel</li>
+<li>点击 &quot;Add New...&quot; → &quot;Project&quot;</li>
+<li>选择你的 GitHub 仓库</li>
+<li>Vercel 自动检测框架（Next.js/Vite/React 等），填好环境变量</li>
+<li>点 &quot;Deploy&quot;，等 1-2 分钟就上线了，自动给你一个 <code>xxx.vercel.app</code> 域名</li>
+</ol>
+<p>免费方案（Hobby 计划）：</p>
+<ul>
+<li>适合个人、非商业项目，包含自动 HTTPS 与 Git 预览部署</li>
+<li>请求、函数、构建和其他资源有各自额度，超额行为以套餐为准</li>
+<li>函数运行时长与运行模式、套餐和配置有关，不统一写成“免费只能运行 10 秒”</li>
+</ul>
+<p>关键限制：</p>
+<ul>
+<li>函数不是始终运行的服务器进程，不能直接承载常驻 Bot 或任意 WebSocket 服务端</li>
+<li>可以配置定时触发，但触发频率与函数限制需要核对当前套餐</li>
+<li>AI 流式接口也要检查最大运行时长，模型 API 与平台资源分别计费</li>
+</ul>
+<p><strong>结论</strong>：适合前端和符合函数运行条件的 Next.js 项目；需要常驻进程时选择其他后端托管或 VPS。当前规则见 <a href="https://vercel.com/docs/plans/hobby">Hobby 套餐</a>与 <a href="https://vercel.com/docs/functions/configuring-functions/duration">函数时长说明</a>。</p>
+<h3 id="12-cloudflare-pages--静态资源托管与边缘函数">1.2 Cloudflare Pages — 静态资源托管与边缘函数</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cloudflare-pages.png" alt="Cloudflare Pages 首页" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://pages.cloudflare.com">https://pages.cloudflare.com</a></p>
+<p><strong>适合什么：</strong> 静态站点、Vite / VitePress 构建产物、与 Pages Functions 配合的小型网站</p>
+<p>免费方案：</p>
+<ul>
+<li>不调用函数的静态资源请求免费且不按请求次数设限</li>
+<li>免费方案有每月构建次数、单文件大小等限制</li>
+<li>Pages Functions 使用 Workers 的计费与运行限制；Worker 免费请求额度不能当作无限后端算力</li>
+<li>普通免费服务不等于接入 Cloudflare 中国大陆网络，访问效果应实测</li>
+</ul>
+<p>怎么用：</p>
+<ol>
+<li>注册 Cloudflare 账号（免费）</li>
+<li>进入 Workers &amp; Pages → Create → Pages → Connect to Git</li>
+<li>选择仓库，设置构建命令（Vite 是 <code>npm run build</code>，输出目录 <code>dist</code>）</li>
+<li>点 Save and Deploy</li>
+</ol>
+<p><strong>配套的 Workers AI：</strong> 可以按支持的模型和配额调用托管推理服务，免费额度以 <a href="https://developers.cloudflare.com/workers-ai/platform/pricing/">Workers AI 价格页</a>为准。不同模型的调用成本不同，不用固定的调用次数估算所有模型。</p>
+<p><strong>结论</strong>：适合先发布静态网页，再按需增加轻量函数。参考 <a href="https://developers.cloudflare.com/pages/platform/limits/">Pages 限制</a>与 <a href="https://developers.cloudflare.com/china-network/">中国大陆网络说明</a>。</p>
+<h3 id="13-netlify--老牌静态托管插件生态丰富">1.3 Netlify — 老牌静态托管，插件生态丰富</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/netlify.png" alt="Netlify 首页" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://www.netlify.com">https://www.netlify.com</a></p>
+<p><strong>免费方案：</strong> 当前 Free 套餐使用 credits 计算部署、请求、流量等用量，不沿用旧的固定带宽与构建分钟数。规则见 <a href="https://www.netlify.com/pricing/">Netlify 价格页</a>。</p>
+<p><strong>特点：</strong> 插件市场非常丰富（表单处理、图片优化、A/B 测试等），支持分支预览，企业级功能多。适合需要更多内置功能的静态站项目。</p>
+<p><strong>和 Vercel 的区别：</strong> Netlify 更中立，不绑定特定框架；Vercel 对 Next.js 有深度优化。纯静态站选哪个都行。</p>
+<h3 id="14-railway--组合部署后端与数据库">1.4 Railway — 组合部署后端与数据库</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/railway.webp" alt="Railway 首页" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://railway.com">https://railway.com</a></p>
+<p><strong>适合什么：</strong> 需要常驻运行的后端服务、Node.js/Python/Go API、Discord/Telegram Bot、需要数据库的全栈项目</p>
+<p>怎么用：</p>
+<ol>
+<li>GitHub 账号登录</li>
+<li>New Project → Deploy from GitHub repo（或选模板）</li>
+<li>Railway 自动检测你的项目类型，自动安装依赖、构建、启动</li>
+<li>可以一键添加 PostgreSQL/Redis/MySQL/MongoDB 数据库</li>
+<li>自动给域名，也可以绑定自定义域名</li>
+</ol>
+<p>定价：</p>
+<ul>
+<li>当前 Free 方案先提供 30 天、5 美元试用额度，之后每月提供 1 美元额度，资源与服务数量有上限</li>
+<li>Hobby 最低消费每月 5 美元，包含相应使用额度，超出部分另计</li>
+<li>应用、数据库、磁盘与流量需要合并估算，不能把最低消费当成完整项目的固定总价</li>
+</ul>
+<p><strong>结论</strong>：适合需要组合多个服务、希望减少服务器配置工作的项目。在线行为和资源上限应按具体服务设置核对，规则见 <a href="https://railway.com/pricing/">Railway 价格页</a>。</p>
+<h3 id="15-cloudbase--静态网站与后端云托管">1.5 CloudBase — 静态网站与后端云托管</h3>
+<p><strong>官网</strong>：<a href="https://cloudbase.net">https://cloudbase.net</a></p>
+<p><strong>适合什么：</strong> 已使用腾讯云生态的项目、需要托管网页或后端程序的应用</p>
+<p>特点：</p>
+<ul>
+<li>静态网站托管用于发布 HTML、CSS、JavaScript 和前端构建产物</li>
+<li>云托管用于运行 Node.js、Python 等后端程序，支持仓库、代码包或镜像部署</li>
+<li>可以结合腾讯云数据库、存储等服务，按项目需要分别配置</li>
+<li>试用资格与可用额度依账户和环境而定，不作为长期免费的默认方案</li>
+</ul>
+<p><strong>怎么用：</strong> 我们已经在 <a href="https://github.com/datawhalechina/easy-vibe/blob/main/docs/zh-cn/stage-2/backend/zeabur-deployment/index.md">上一章</a> 介绍 CloudBase 的使用方法。后端程序需要选择云托管，不能只上传到静态网站托管。具体部署方式见 <a href="https://docs.cloudbase.net/run/deploy/deploy/introduce">官方说明</a>。</p>
+<h3 id="16-render--750-小时免费但会休眠">1.6 Render — 750 小时免费，但会休眠</h3>
+<p><strong>官网</strong>：<a href="https://render.com">https://render.com</a></p>
+<p><strong>适合什么：</strong> 学习阶段、个人项目、不介意冷启动的小项目</p>
+<p>免费方案与限制：</p>
+<ul>
+<li>免费 Web Service 每个工作区每月共享 750 个实例小时，流量与构建另有额度</li>
+<li>连续 15 分钟无入站流量会休眠，下一次请求唤醒可能需要约一分钟</li>
+<li>免费实例没有持久化磁盘，不把本地文件或 SQLite 当作长期数据存储</li>
+<li>免费 Postgres 创建 30 天后到期，不是长期免费数据库</li>
+</ul>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/zeabur-deployment/images/render-free-plan.png" alt="Render 免费实例选择界面（官方文档配图）" loading="lazy" decoding="async"></p>
+<p><strong>结论</strong>：适合课程练习和允许冷启动的演示；持续在线或长期数据存储需另选合适方案。配图与规则分别见 <a href="https://render.com/docs/your-first-deploy">官方首次部署指南</a>和 <a href="https://render.com/docs/free">免费服务说明</a>。</p>
+<h3 id="17-flyio--容器部署与限时试用">1.7 Fly.io — 容器部署与限时试用</h3>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/flyio.webp" alt="Fly.io 首页" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://fly.io">https://fly.io</a></p>
+<p><strong>适合什么：</strong> 使用容器、需要选择部署地域、愿意使用命令行管理服务的项目</p>
+<p><strong>免费试用：</strong> 当前新账户试用为总计 2 小时虚拟机运行时间或 7 天访问期，以先到者为准。它不是长期免费、持续在线的容器资源；添加付款方式后，资源按规则计费。</p>
+<p>怎么用：</p>
+<ol>
+<li>注册并检查账户的试用或计费状态</li>
+<li>安装 <code>flyctl</code>，在项目目录执行 <code>fly launch</code></li>
+<li>核对镜像、地域、实例、磁盘和网络配置后部署</li>
+<li>用 <code>fly deploy</code> 更新，用 <code>fly logs</code> 查看日志</li>
+</ol>
+<p><strong>结论</strong>：可以用于容器化服务，但应核算实例、卷和网络等费用。当前规则见 <a href="https://docs.fly.io/about/free-trial">Fly.io 免费试用说明</a>。</p>
+<h3 id="18-其他值得了解的免费低成本平台">1.8 其他值得了解的免费/低成本平台</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>平台</th>
+<th>类型</th>
+<th>费用与限制核对入口</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GitHub Pages</strong></td>
+<td>静态站</td>
+<td><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits">使用限制</a></td>
+<td>适合博客、文档和项目展示，不运行独立后端</td>
+</tr>
+<tr>
+<td><strong>Hugging Face Spaces</strong></td>
+<td>AI 演示</td>
+<td><a href="https://huggingface.co/docs/hub/spaces-overview">Spaces 概述</a></td>
+<td>有免费 CPU 资源；GPU、休眠和存储按具体配置核对</td>
+</tr>
+<tr>
+<td><strong>Modal</strong></td>
+<td>Python / GPU</td>
+<td><a href="https://modal.com/pricing">价格页</a></td>
+<td>按资源用量计费，赠送额度不代表所有项目免费</td>
+</tr>
+<tr>
+<td><strong>Replicate</strong></td>
+<td>模型推理 API</td>
+<td><a href="https://replicate.com/pricing">价格页</a></td>
+<td>调用托管模型，按模型与实际使用计费</td>
+</tr>
+<tr>
+<td><strong>Deno Deploy</strong></td>
+<td>应用托管</td>
+<td><a href="https://deno.com/deploy/pricing">价格页</a></td>
+<td>根据当前运行环境和套餐检查兼容性</td>
+</tr>
+<tr>
+<td><strong>Koyeb</strong></td>
+<td>应用托管</td>
+<td><a href="https://www.koyeb.com/pricing">价格页</a></td>
+<td>可用实例、地域和休眠规则需要核对</td>
+</tr>
+<tr>
+<td><strong>Railway 模板</strong></td>
+<td>多服务部署</td>
+<td><a href="https://railway.com/deploy">模板入口</a></td>
+<td>模板创建的服务仍按资源计费</td>
+</tr>
+<tr>
+<td><strong>Supabase</strong></td>
+<td>数据库与后端服务</td>
+<td><a href="https://supabase.com/pricing">价格页</a></td>
+<td>Postgres、Auth、Storage 等分别有配额</td>
+</tr>
+<tr>
+<td><strong>Neon</strong></td>
+<td>Serverless Postgres</td>
+<td><a href="https://neon.com/pricing">价格页</a></td>
+<td>按计算、存储等额度核对套餐</td>
+</tr>
+<tr>
+<td><strong>Upstash</strong></td>
+<td>托管 Redis 等</td>
+<td><a href="https://upstash.com/pricing">价格页</a></td>
+<td>请求、存储和带宽分别计量</td>
+</tr>
+</tbody></table></div>
+<h2 id="2-国内云服务器详细购买指南">2. 国内云服务器详细购买指南</h2>
+<p>如果你需要完全控制服务器环境、跑自定义服务、或者 PaaS 满足不了需求，那就买一台自己的云服务器。这一节手把手教你怎么在国内三大云厂商买服务器。</p>
+<h3 id="21-选哪家国内三大云厂商对比">2.1 选哪家？国内三大云厂商对比</h3>
+<h4 id="腾讯云轻量应用服务器推荐新手">腾讯云轻量应用服务器（推荐新手）</h4>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/tencent-lighthouse.webp" alt="腾讯云轻量应用服务器" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://cloud.tencent.com/product/lighthouse">https://cloud.tencent.com/product/lighthouse</a></p>
+<p>推荐理由：</p>
+<ul>
+<li><strong>便于入门</strong>：可在购买页比较 CPU、内存、磁盘、带宽和流量包，核对新购与续费价格</li>
+<li><strong>操作最简单</strong>：控制台直观，一键应用镜像（WordPress、宝塔面板、Docker 等开箱即用）</li>
+<li><strong>套餐集中展示</strong>：带宽峰值、月流量和超额费用需要一起查看，不能把带宽峰值理解为不限量流量</li>
+<li><strong>微信生态整合好</strong>：部署小程序后端、公众号服务很方便</li>
+</ul>
+<p>怎么买：</p>
+<ol>
+<li>注册腾讯云账号，完成实名认证</li>
+<li>打开轻量应用服务器购买页：<a href="https://cloud.tencent.com/product/lighthouse">https://cloud.tencent.com/product/lighthouse</a></li>
+<li>点击「立即选购」</li>
+<li>选择配置：<ul>
+<li><strong>地域</strong>：离你的用户最近的（南方选广州、北方选北京、海外选香港/新加坡）</li>
+<li><strong>镜像</strong>：选「系统镜像」→ Ubuntu 24.04 LTS（本章示例环境；已有 22.04 LTS 可按官方支持情况使用）</li>
+<li><strong>套餐</strong>：按项目内存、磁盘、带宽和月流量选择，核对首购价、续费价和超额收费</li>
+<li><strong>时长</strong>：先确认项目适用，再按预算选择购买时长；活动优惠不一定适用于续费</li>
+</ul>
+</li>
+<li>确认订单，付款</li>
+<li>购买成功后，进入「控制台」→「轻量应用服务器」就能看到你的服务器了</li>
+<li><strong>重置密码</strong>：点进服务器详情 → 重置密码（设一个强密码）</li>
+<li><strong>配置防火墙</strong>：在「防火墙」标签页添加规则：<ul>
+<li>TCP:80（HTTP）</li>
+<li>TCP:443（HTTPS）</li>
+<li>TCP:22（SSH）</li>
+<li>其他端口按需开放（比如 3000 调试用）</li>
+</ul>
+</li>
+</ol>
+<p><strong>学生优惠：</strong> 如需学生方案，在 <a href="https://cloud.tencent.com/act/campus">官方校园活动页</a>核对认证资格、可购资源与有效期，不将活动价格视为固定价格。</p>
+<h4 id="阿里云轻量应用服务器">阿里云轻量应用服务器</h4>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/aliyun-lighthouse.webp" alt="阿里云轻量应用服务器" loading="lazy" decoding="async"></p>
+<p><strong>官网</strong>：<a href="https://www.aliyun.com/product/swas">https://www.aliyun.com/product/swas</a></p>
+<p>推荐理由：</p>
+<ul>
+<li><strong>文档最丰富</strong>：网上教程最多，遇到问题容易搜到答案</li>
+<li><strong>学生与新用户活动</strong>：资格、优惠券和可用产品以活动页为准，不保证所有账户都能免费领机</li>
+<li><strong>稳定性好</strong>：ESSD 云盘性能强，企业级稳定性</li>
+<li><strong>生态最全</strong>：配套的 CDN、OSS、RDS、域名等服务最完善</li>
+</ul>
+<p>怎么买：</p>
+<ol>
+<li>注册阿里云账号，完成实名认证</li>
+<li>学生用户可先检查当前教育优惠及资格：<a href="https://university.aliyun.com/">https://university.aliyun.com/</a></li>
+<li>打开轻量应用服务器：<a href="https://www.aliyun.com/product/swas">https://www.aliyun.com/product/swas</a></li>
+<li>点击「立即购买」</li>
+<li>选择配置：<ul>
+<li><strong>地域</strong>：同腾讯云，选近的。中国香港/新加坡等地域按实际套餐核对带宽、流量和访问延迟</li>
+<li><strong>镜像</strong>：Ubuntu 24.04 LTS（或项目确认支持的 LTS 版本）</li>
+<li><strong>套餐</strong>：根据 CPU、内存、磁盘、带宽与流量选择，比较新购价和续费价</li>
+</ul>
+</li>
+<li>付款后到控制台查看服务器</li>
+<li><strong>重置密码</strong>：实例详情 → 重置实例密码</li>
+<li><strong>配置防火墙</strong>：「安全组」/「防火墙」放行 22、80、443 端口</li>
+</ol>
+<p><strong>学生活动：</strong> 在 <a href="https://university.aliyun.com/">阿里云学生入口</a>查看当期资格与资源，不把代金券等同于不限条件的免费服务器。</p>
+<h4 id="华为云耀云服务器-hecs">华为云耀云服务器 HECS</h4>
+<p><strong>官网</strong>：<a href="https://www.huaweicloud.com/product/hecs.html">https://www.huaweicloud.com/product/hecs.html</a></p>
+<p>推荐理由：</p>
+<ul>
+<li>企业级稳定性，安全防护能力强</li>
+<li>价格、配置与学生优惠以 <a href="https://www.huaweicloud.com/product/hecs.html">华为云产品购买页</a>为准</li>
+<li>选择前核对 CPU 类型、性能约束、磁盘和公网计费方式</li>
+<li>如需 ARM 架构，先确认所选地域、实例和镜像实际支持</li>
+</ul>
+<p><strong>不足：</strong> 文档和社区不如阿里云/腾讯云丰富，新手入门资料较少。</p>
+<h3 id="22-海外-vps-选择不想备案面向海外用户">2.2 海外 VPS 选择（不想备案/面向海外用户）</h3>
+<p>如果用户主要在海外，或准备使用中国香港、境外资源部署，可以比较下面的平台。备案要求取决于服务部署位置与具体业务，并不是改用其他端口就可以绕过。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>价格核对入口</th>
+<th>需要一起检查</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Vultr</strong></td>
+<td><a href="https://www.vultr.com/pricing/">产品与价格</a></td>
+<td>是否带 IPv4、流量额度、地域与磁盘</td>
+<td>按需创建实例和练习部署</td>
+</tr>
+<tr>
+<td><strong>DigitalOcean</strong></td>
+<td><a href="https://www.digitalocean.com/pricing/droplets">Droplet 价格</a></td>
+<td>配置、带宽额度、备份和快照</td>
+<td>结合官方文档学习 VPS</td>
+</tr>
+<tr>
+<td><strong>Hetzner</strong></td>
+<td><a href="https://www.hetzner.com/cloud/">Cloud 价格</a></td>
+<td>地域、税费、IPv4 与流量</td>
+<td>比较长期运行成本</td>
+</tr>
+<tr>
+<td><strong>AWS Lightsail</strong></td>
+<td><a href="https://aws.amazon.com/lightsail/pricing/">价格与试用</a></td>
+<td>账户资格、试用期限、IP 类型与流量</td>
+<td>使用 AWS 生态的简单应用</td>
+</tr>
+<tr>
+<td><strong>RackNerd</strong></td>
+<td><a href="https://www.racknerd.com/">产品入口</a></td>
+<td>年付、退款、地域、备份和支持条件</td>
+<td>非核心实验项目</td>
+</tr>
+<tr>
+<td><strong>雨云</strong></td>
+<td><a href="https://www.rainyun.com/">产品入口</a></td>
+<td>实际地域、配置、计费与访问效果</td>
+<td>按实际网络测试后选择</td>
+</tr>
+</tbody></table></div>
+<p>Vultr 购买流程（其他海外厂商类似）：</p>
+<ol>
+<li>访问 <a href="https://www.vultr.com/">https://www.vultr.com/</a> 注册账号（需要邮箱+信用卡/PayPal）</li>
+<li>点击 &quot;Deploy Server&quot;</li>
+<li>选择：<ul>
+<li><strong>系统镜像</strong>：Ubuntu 24.04 LTS；实例类型、地域与系统镜像分别核对</li>
+<li><strong>Server Size</strong>：按项目实际内存和 CPU 选择；同时检查 IPv4、磁盘和流量费用</li>
+<li><strong>Location</strong>：按目标用户位置选择，并实测网络，不仅根据城市推断延迟</li>
+</ul>
+</li>
+<li>不用加额外选项，点 &quot;Deploy Now&quot;</li>
+<li>等 1-2 分钟，服务器创建完成，在 Products 页面能看到 IP 和密码</li>
+<li>海外 VPS 也可能提供云防火墙或安全组；检查云端入站规则，再检查系统内 <code>ufw</code> 等防火墙</li>
+</ol>
+<p><strong>访问效果：</strong> 延迟取决于地域、运营商和线路，不能把固定毫秒数当作保证。用目标用户的网络测试页面与接口，再确定部署地域。</p>
+<h3 id="23-备案问题国内服务器必须了解">2.3 备案问题（国内服务器必须了解）</h3>
+<p><strong>什么是备案？</strong> 在中国大陆资源上对外提供网站或 APP 服务时，需要按接入商与主管部门要求办理相应备案。它是网站和服务接入要求，不能理解成“只管 80/443，换个端口就不用备案”。</p>
+<p>选择地域时检查：</p>
+<ul>
+<li>中国大陆地域：在上线前核对接入商的备案条件、域名实名认证与所需材料</li>
+<li>中国香港及境外地域：通常不按大陆接入资源办理 ICP 备案；仍按产品和业务的实际规则使用</li>
+<li>处理时间受资料、地区和审核进度影响，不保证固定天数</li>
+<li>个人与单位主体适用条件不同，具体要求查看接入商当期说明</li>
+</ul>
+<p>腾讯云的 <a href="https://cloud.tencent.com/document/product/243/18908">备案资源条件</a>与 <a href="https://cloud.tencent.com/document/faq/243">常见问题</a>可以作为操作入口。普通 Cloudflare 免费服务不自动接入中国大陆网络，不能据此承诺“免备案且有大陆 CDN 加速”。</p>
+<h2 id="3-连接服务器--基础环境配置">3. 连接服务器 &amp; 基础环境配置</h2>
+<h3 id="31-第一次-ssh-连接服务器">3.1 第一次 SSH 连接服务器</h3>
+<p>买好服务器后，你会拿到：</p>
+<ul>
+<li><strong>公网 IP 地址</strong>（比如 <code>123.45.67.89</code>）</li>
+<li><strong>登录用户名</strong>（Ubuntu 镜像默认是 <code>root</code> 或 <code>ubuntu</code>）</li>
+<li><strong>认证方式</strong>（购买时设置的密码或 SSH 密钥，按镜像和云厂商说明确认）</li>
+</ul>
+<p><strong>如果你用 macOS / Linux：</strong> 直接打开终端，输入：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">ssh root@你的服务器IP
+# 例如：ssh root@123.45.67.89
+</code></pre>
+<p><strong>如果你用 Windows：</strong> 推荐用 Windows Terminal + 内置 OpenSSH（Win10/11 自带），或使用 FinalShell（中文、图形化）、Xshell 等工具。</p>
+<p>第一次连接会提示：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>The authenticity of host &#39;123.45.67.89 (123.45.67.89)&#39; can&#39;t be established.
+ED25519 key fingerprint is SHA256:xxxxxx.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</code></pre>
+<p>先通过云控制台或可信渠道核对主机指纹，确认连接的是自己的服务器，再输入 <code>yes</code>。使用密码时输入密码，使用密钥时按密钥配置认证。看到类似提示符，说明登录成功：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>Welcome to Ubuntu 24.04 LTS!
+root@your-server:~#
+</code></pre>
+<p><strong>配置 SSH 密钥登录（推荐，免密码+更安全）：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在你本地电脑执行（不是服务器上）
+# 生成密钥（如果已经有就跳过）
+ssh-keygen -t ed25519
+
+# 把公钥传到服务器
+ssh-copy-id root@你的服务器IP
+
+# 用新终端验证密钥能正常登录，确认成功后再考虑关闭密码登录
+ssh root@你的服务器IP
+</code></pre>
+<blockquote>
+<p><strong>AI 辅助提示</strong>：如果你连不上服务器，直接把报错信息复制给 AI：「我 ssh root@xxx 连接不上，报错是 xxx，帮我排查」。AI 会从网络、安全组、防火墙、密钥权限等角度一步步帮你找原因。</p>
+</blockquote>
+<h3 id="32-配置安全组防火墙非常重要">3.2 配置安全组/防火墙（非常重要！）</h3>
+<p><strong>云厂商安全组（控制台操作）：</strong> 购买服务器后，一定要在云厂商控制台的「安全组」/「防火墙」里放行端口：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>端口</th>
+<th>用途</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>22</strong></td>
+<td>SSH 登录</td>
+<td>必开，建议限制为自己的 IP</td>
+</tr>
+<tr>
+<td><strong>80</strong></td>
+<td>HTTP 访问</td>
+<td>必开</td>
+</tr>
+<tr>
+<td><strong>443</strong></td>
+<td>HTTPS 访问</td>
+<td>必开</td>
+</tr>
+<tr>
+<td><strong>实际应用端口</strong></td>
+<td>本地或临时调试</td>
+<td>不批量放开端口段；通过 Nginx 代理时通常无需向公网开放</td>
+</tr>
+<tr>
+<td><strong>8080</strong></td>
+<td>常见备用端口</td>
+<td>按需</td>
+</tr>
+</tbody></table></div>
+<p><strong>服务器内部防火墙（登录后执行）：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 安装 ufw
+sudo apt install -y ufw
+
+# 允许 SSH、HTTP、HTTPS
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+
+# 启用防火墙
+sudo ufw enable
+
+# 查看状态
+sudo ufw status
+</code></pre>
+<blockquote>
+<p>安全组是云端的入站规则，ufw 是服务器内的防火墙。启用 ufw 前先确认实际 SSH 端口已放行，并保留当前会话，用另一个终端测试登录；Docker 发布端口还受 Docker 网络规则影响，不应只依赖 ufw 判断暴露范围。</p>
+</blockquote>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/lighthouse-firewall.png" alt="腾讯云轻量应用服务器官方防火墙规则列表" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/lighthouse-firewall-rule.png" alt="腾讯云轻量应用服务器官方添加防火墙规则界面" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://cloud.tencent.com/document/product/1207/44577">腾讯云轻量应用服务器管理防火墙</a>。图中的规则是官方操作示意，不是本项目的推荐端口清单；按上文仅放行实际需要的端口，并限制 SSH 来源。</p>
+<h3 id="33-初始化服务器环境">3.3 初始化服务器环境</h3>
+<p>登录服务器后，可以把下面这段话复制给 AI 编程助手，让它按项目生成初始化命令：</p>
+<blockquote>
+<p>「我刚买了一台 Ubuntu 24.04 LTS 云服务器，准备部署一个 [项目类型]。请区分本地操作、管理员操作和普通用户操作，完成基础工具、非 root 用户、SSH 密钥、Node.js、Nginx 与防火墙配置。需要 Docker 时按官方 Ubuntu 安装指南操作，并说明如何验证每一步。」</p>
+</blockquote>
+<p>下面以 Ubuntu 24.04 LTS 为例。<strong>第一段在服务器的管理员终端执行</strong>，如果当前用户不是 root，则使用具备 sudo 权限的账户：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo apt update
+sudo apt install -y ca-certificates curl git vim ufw build-essential nginx
+sudo adduser yourname
+sudo usermod -aG sudo yourname
+sudo systemctl enable --now nginx
+</code></pre>
+<p>为 <code>yourname</code> 配置自己的 SSH 公钥，确认 <code>/home/yourname/.ssh</code> 权限为 <code>700</code>、<code>authorized_keys</code> 为 <code>600</code>，并且归该用户所有。保留原来的管理员会话，用本地另一个终端测试 <code>ssh yourname@服务器IP</code>，成功后再继续。</p>
+<p><strong>后面的 Node.js 操作在 <code>yourname</code> 的服务器会话里执行</strong>，不要在 root 的家目录安装后再假定普通用户也能使用：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
+export NVM_DIR=&quot;$HOME/.nvm&quot;
+. &quot;$NVM_DIR/nvm.sh&quot;
+nvm install 24
+nvm alias default 24
+node --version
+npm --version
+</code></pre>
+<p>本章核对时 Node.js 24 是受支持的 LTS，Node.js 20 已进入 EOL。实际项目仍需检查 <code>engines</code>、锁文件和依赖兼容性，版本支持见 <a href="https://nodejs.org/en/about/previous-releases">Node.js 官方发布表</a>，安装脚本见 <a href="https://github.com/nvm-sh/nvm">nvm 官方仓库</a>。</p>
+<p>浏览器访问 <code>http://服务器IP</code> 可以检查 Nginx 是否响应。如果准备使用 Docker Compose，按 <a href="https://docs.docker.com/engine/install/ubuntu/">Docker 官方 Ubuntu 安装步骤</a>安装 Engine 与 Compose 插件，再验证：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo docker version
+sudo docker compose version
+</code></pre>
+<p>可选择把普通用户加入 <code>docker</code> 组，但这相当于授予很高的主机权限；加入后要重新登录才能生效。后文示例默认使用 <code>sudo docker compose</code>，无需为练习额外放宽组权限。</p>
+<h2 id="4-三种典型部署场景实操">4. 三种典型部署场景实操</h2>
+<p>环境配好之后，我们来看三种常见的部署方式。</p>
+<h3 id="41-场景一部署纯前端静态站vitereactvue">4.1 场景一：部署纯前端静态站（Vite/React/Vue）</h3>
+<p>Vite 项目执行 <code>npm run build</code> 后通常会生成 <code>dist/</code>，其他工具应按实际输出目录操作。这里统一把发布文件放在服务器的 <code>/var/www/myapp/dist</code>，避免上传位置与 Nginx 的 <code>root</code> 不一致。</p>
+<p><strong>先在服务器准备目录：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo mkdir -p /var/www/myapp/dist
+sudo chown -R yourname:yourname /var/www/myapp
+</code></pre>
+<p><strong>方式一：本地构建并上传。下面在本地项目目录执行：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm ci
+npm run build
+rsync -avz ./dist/ yourname@服务器IP:/var/www/myapp/dist/
+</code></pre>
+<p><code>npm ci</code> 适用于有 <code>package-lock.json</code> 的项目，pnpm / Yarn 项目沿用各自的安装方式。<code>dist/</code> 末尾的斜杠表示传输目录内的文件。</p>
+<p><strong>方式二：在服务器构建。下面以 <code>yourname</code> 用户执行：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">mkdir -p ~/apps
+cd ~/apps
+git clone https://github.com/你的用户名/你的仓库.git myapp
+cd myapp
+npm ci
+npm run build
+rsync -av ./dist/ /var/www/myapp/dist/
+</code></pre>
+<p>这两种方式任选其一。前者不要求服务器安装前端构建依赖，后者便于从仓库更新；不要在同一个练习里把两种目录结构混用。</p>
+<p><strong>配置 Nginx：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo vim /etc/nginx/sites-available/myapp
+</code></pre>
+<p>写入下面的配置，将域名占位符替换为自己的域名。尚未配置域名时，可以用实际公网 IP 测试：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name example.com www.example.com;
+
+    root /var/www/myapp/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location = /index.html {
+        add_header Cache-Control &quot;no-cache&quot;;
+    }
+
+    # 适合 Vite 默认生成的带内容哈希的构建资源。
+    location /assets/ {
+        try_files $uri =404;
+        expires 1y;
+        add_header Cache-Control &quot;public, immutable&quot;;
+    }
+}
+</code></pre>
+<p><code>try_files</code> 的回退适合有前端路由的单页应用。文档站或多页网站应按自己的路由结构配置，不统一回退到同一个首页。长期缓存只给带版本或哈希的构建资源，不能给所有同名图片和入口 HTML 都设置一年不可变缓存。</p>
+<p>启用配置并检查：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo ln -sfn /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp
+sudo nginx -t
+sudo systemctl reload nginx
+curl -I -H &#39;Host: example.com&#39; http://127.0.0.1
+</code></pre>
+<p>如果保留了 Ubuntu 的默认 Nginx 站点，通过 IP 访问可能仍显示欢迎页。先用上面的 Host 头确认配置命中，再通过已正确解析的域名访问；需要直接用 IP 时把它加入本例 <code>server_name</code>。最后测试首页、图片、脚本和页面刷新。<code>nginx -t</code> 只检查配置，不能代替实际访问测试。</p>
+<h3 id="42-场景二部署-nodejs-后端服务">4.2 场景二：部署 Node.js 后端服务</h3>
+<p>后端需要持续运行，关键是让它在后台不停止。</p>
+<p><strong>用 PM2：</strong> 下面在普通部署用户的服务器会话执行，启动文件以实际项目为准：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">npm install -g pm2
+cd /path/to/your/app
+npm ci
+npm run build  # 只有项目确实定义了 build 脚本时才执行
+pm2 start dist/main.js --name myapp
+pm2 startup
+</code></pre>
+<p><code>dist/main.js</code> 只是一个编译后入口示例。纯 JavaScript 项目可能是 <code>server.js</code>，也可以按项目使用 <code>pm2 start npm --name myapp -- start</code>。</p>
+<p><code>pm2 startup</code> 会输出一条带环境路径的管理员命令。先核对并执行它，再执行 <code>pm2 save</code> 保存进程列表，不是运行一次 <code>pm2 startup &amp;&amp; pm2 save</code> 就自动完成所有设置。更换 nvm 下的 Node.js 版本后，还需检查启动服务里的 Node 路径。参考 <a href="https://pm2.keymetrics.io/docs/usage/startup/">PM2 开机启动说明</a>。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">pm2 save
+pm2 status
+pm2 logs myapp
+curl http://127.0.0.1:3000/health
+</code></pre>
+<p>最后一个命令使用本例的健康检查路径；现有项目要替换成实际存在的接口。通过同机 Nginx 代理的后端可以只监听 <code>127.0.0.1:3000</code>，无需把应用端口额外开放到公网。</p>
+<p><strong>用 Nginx 反向代理：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name api.yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_buffering off;
+    }
+}
+</code></pre>
+<p>将这个后端配置保存为独立的 <code>/etc/nginx/sites-available/myapp-api</code>，再用第 4.1 节的方式建立同名启用链接、运行 <code>sudo nginx -t</code> 并重新加载。每个站点的 <code>server_name</code> 应与实际域名一致，不能只把配置留在编辑器里。</p>
+<p>普通 HTTP 接口可使用以上配置；WebSocket 服务还需要按应用要求添加 Upgrade 代理配置，不能直接假定这个最小示例已经支持。</p>
+<h3 id="43-场景三docker-compose-一键部署全栈">4.3 场景三：Docker Compose 一键部署全栈</h3>
+<p>使用容器时，应用仍需有明确的构建与启动入口。下面继续以执行 <code>npm run build</code> 后生成 <code>dist/main.js</code> 的 Node.js 后端为例：应用需要监听 <code>0.0.0.0:3000</code>，并按需读取 <code>DATABASE_URL</code> 与 <code>REDIS_URL</code>。纯前端项目不照抄这个 Dockerfile。</p>
+<p>先准备目录：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-text">project/
+├── Dockerfile
+├── .dockerignore
+├── compose.yaml
+├── nginx.conf
+├── .env
+├── package.json
+├── package-lock.json
+├── src/
+└── frontend/dist/
+</code></pre>
+<p><code>frontend/dist</code> 是已经构建好的前端文件；后端代码和依赖文件放在项目根目录。<code>.env</code> 保存本机秘密配置，不提交到 Git。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-dockerfile"># Dockerfile：本例是需要编译的 Node.js 后端。
+FROM node:24-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+ENV NODE_ENV=production
+EXPOSE 3000
+USER node
+CMD [&quot;node&quot;, &quot;dist/main.js&quot;]
+</code></pre>
+<p>创建 <code>.dockerignore</code>，避免把本机依赖、密钥和前端产物复制进后端镜像：</p>
+<pre class="prose-block"><code class="language-text">node_modules
+.git
+.env
+frontend/dist
+</code></pre>
+<p>在服务器的项目目录创建私有 <code>.env</code>，设置一个长随机字母数字密码，例如 <code>POSTGRES_PASSWORD=替换为自己的随机密码</code>。不要把这个占位符当作实际密码。连接串中的密码若含特殊字符，需要按 URL 规则编码；本例用字母数字密码简化练习。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-yaml"># compose.yaml
+services:
+  app:
+    build: .
+    environment:
+      PORT: &quot;3000&quot;
+      DATABASE_URL: postgresql://myapp:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/myapp
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: myapp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: myapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U myapp -d myapp&quot;]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;redis-cli&quot;, &quot;ping&quot;]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - &quot;80:80&quot;
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+</code></pre>
+<p>数据库与 Redis 没有映射到宿主机公网端口，应用通过 Compose 内网访问它们。数据卷保存 PostgreSQL 数据，但数据卷不是备份；Redis 在本例中仅作为可重建缓存使用。</p>
+<p>把下面内容保存为同一目录的 <code>nginx.conf</code>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-nginx">server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://app:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_buffering off;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+</code></pre>
+<p>这里的 <code>proxy_pass</code> 不带末尾斜杠，会保留 <code>/api/</code> 路径前缀，因此后端应提供 <code>/api/...</code> 接口；如果实际后端没有这个前缀，需要相应修改路由或代理规则。</p>
+<p>先检查配置，再构建与启动。<code>config --quiet</code> 不会把展开后的数据库密码打印出来：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo docker compose config --quiet
+sudo docker compose up -d --build
+sudo docker compose ps
+sudo docker compose logs --tail=50 app
+curl -I http://127.0.0.1
+</code></pre>
+<p>同一台机器的宿主机 Nginx 如果已经占用 80 端口，这个容器就不能再次绑定 80。实际部署时选择“宿主机代理”或“容器代理”中的一种，不要把两套示例同时直接运行。</p>
+<p>本例先提供 HTTP。配置 HTTPS 时需要真正添加证书、443 监听和证书挂载，不能只在 <code>ports</code> 里写上 <code>443:443</code> 就认为已经启用 HTTPS。</p>
+<h2 id="5-域名--https">5. 域名 &amp; HTTPS</h2>
+<h3 id="51-买域名--解析">5.1 买域名 &amp; 解析</h3>
+<p>在阿里云、腾讯云、Namecheap、Cloudflare Registrar 等平台选购域名时，同时核对首年价格、续费价格和注册要求。域名价格不按固定金额保证。</p>
+<p>在域名控制台添加 <strong>A 记录</strong>：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>主机记录</th>
+<th>记录值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>@</td>
+<td>你的服务器 IP</td>
+</tr>
+<tr>
+<td>A</td>
+<td>www</td>
+<td>你的服务器 IP</td>
+</tr>
+<tr>
+<td>A</td>
+<td>api</td>
+<td>你的服务器 IP（后端 API）</td>
+</tr>
+</tbody></table></div>
+<h3 id="52-一键-httpslets-encrypt-免费证书">5.2 一键 HTTPS（Let&#39;s Encrypt 免费证书）</h3>
+<p>下面的方式适用于宿主机直接运行的 Nginx。先确认所有列出的域名都已经正确解析、相应站点能通过公网 HTTP 访问，且 80 / 443 端口可用。只有一个域名时，只保留相应的 <code>-d</code> 参数。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com -d api.yourdomain.com
+# 按当前交互提示选择需要的配置，不依赖固定的菜单序号
+sudo certbot renew --dry-run  # 测试续期流程
+systemctl list-timers --all | grep certbot
+</code></pre>
+<p>还需确认自动续期任务确实存在并能执行；证书签发成功不等于后续一定自动续期。容器 Nginx 需要对应的 ACME 客户端、共享验证目录与证书挂载，不能直接套用宿主机插件配置。参考 <a href="https://certbot.eff.org/instructions">Certbot 官方安装指引</a>。</p>
+<h2 id="6-云厂商常见服务功能全解析不只是服务器">6. 云厂商常见服务功能全解析（不只是服务器！）</h2>
+<p>云服务器买完，打开云厂商控制台，里面上百种产品，名字听起来都很专业（ECS、OSS、CDN、RDS、SLB…），新手往往不知道是干嘛的、什么时候该用。这一节我们把最常见的服务逐个讲清楚，<strong>国内以阿里云/腾讯云为例，海外以 AWS 为例</strong>，帮你建立云服务的「地图感」。</p>
+<h3 id="61-一张表搞懂云服务全家福">6.1 一张表搞懂：云服务全家福</h3>
+<p>先看全景。一个完整的 Web 应用在云上通常长这样：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用户先查询 DNS → 得到网站入口地址
+
+用户 ──HTTPS──→ CDN（可选）──→ 负载均衡（可选）──→ 云服务器 / 容器（应用）
+                                                        │
+                                                        ├── 对象存储 OSS/COS/S3（文件）
+                                                        ├── 云数据库 RDS（结构化数据）
+                                                        └── Redis（缓存）
+
+HTTPS 证书配置在实际接收 HTTPS 的 CDN、负载均衡或服务器上。
+</code></pre>
+<p>下面逐个解释每个服务是什么、什么时候用、怎么操作。</p>
+<h3 id="62-计算类跑你代码的地方">6.2 计算类：跑你代码的地方</h3>
+<h4 id="云服务器-ecs--cvm--ec2">云服务器 ECS / CVM / EC2</h4>
+<p>这就是我们前面一直在说的「VPS」「云服务器」。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>产品名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>ECS（弹性计算服务）</td>
+<td>最通用的云服务器，可以自由选配置、装系统</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>CVM（云服务器）/ Lighthouse（轻量应用服务器）</td>
+<td>CVM 更灵活，Lighthouse 更简单适合新手</td>
+</tr>
+<tr>
+<td>华为云</td>
+<td>ECS / HECS（云耀）</td>
+<td>HECS 类似轻量服务器</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>EC2（Elastic Compute Cloud）</td>
+<td>AWS 的虚拟服务器，类型极多（通用/计算优化/内存优化/GPU）</td>
+</tr>
+</tbody></table></div>
+<p><strong>什么时候用：</strong> 需要自己掌控运行环境、跑自定义服务、24小时在线的进程。</p>
+<p>怎么操作（以腾讯云轻量为例）：</p>
+<ol>
+<li>进入「轻量应用服务器」控制台</li>
+<li>点「新建」选镜像（推荐 Ubuntu 24.04 LTS）、套餐、地域</li>
+<li>购买后在实例列表里看到公网 IP</li>
+<li>按镜像要求绑定 SSH 密钥，或设置初始登录密码；默认用户名以控制台提示为准</li>
+<li>点「防火墙」添加端口规则（22/80/443）</li>
+<li>SSH 连接上去开始部署</li>
+</ol>
+<h4 id="serverless-函数计算--lambda">Serverless 函数计算 / Lambda</h4>
+<p>不用先购买一台常驻服务器，上传代码后按请求、计算时间等计费。预置并发、存储、网络和日志可能另行收费，不能把“没有请求”直接理解为“所有资源零费用”。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>产品名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>函数计算 FC</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>云函数 SCF</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>Lambda</td>
+</tr>
+</tbody></table></div>
+<p><strong>什么时候用：</strong> 偶尔被触发的任务（比如 Webhook 处理、图片压缩、定时任务）、流量波动大的 API。不适合需要常驻的服务（比如 WebSocket Bot）。</p>
+<h4 id="容器服务--eks--ack">容器服务 / EKS / ACK</h4>
+<p>如果你的项目用了 Docker，且规模变大需要管理多个容器，用 Kubernetes（K8s）编排。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>产品名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>ACK（容器服务 Kubernetes 版）</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>TKE</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>EKS（Elastic Kubernetes Service）</td>
+</tr>
+</tbody></table></div>
+<p><strong>什么时候用：</strong> 多服务微服务架构、需要自动扩缩容、团队有运维能力。个人/小项目用不上，一台 VPS + Docker Compose 就够了。</p>
+<h3 id="63-存储类放文件和数据的地方">6.3 存储类：放文件和数据的地方</h3>
+<h4 id="对象存储-oss--cos--s3--最常用">对象存储 OSS / COS / S3 ⭐ 最常用</h4>
+<p>这是除了服务器之外最常用的服务，用来存放图片、视频、PDF、前端静态资源和备份。用户上传的文件放在对象存储里，应用重装或迁移时就不必跟着复制整块服务器磁盘；仍需根据数据重要性设置版本控制、保留策略和备份。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>产品名</th>
+<th>选用时关注什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td><a href="https://www.aliyun.com/product/oss">OSS</a></td>
+<td>国内应用常用，核对地域、存储类型和外网流量费</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td><a href="https://cloud.tencent.com/product/cos">COS</a></td>
+<td>适合腾讯云生态，核对请求、流量和资源包适用范围</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td><a href="https://aws.amazon.com/s3/pricing/">S3</a></td>
+<td>地域和存储类型丰富，存储、请求、取回和传输分别计费</td>
+</tr>
+<tr>
+<td>Cloudflare</td>
+<td><a href="https://developers.cloudflare.com/r2/pricing/">R2</a></td>
+<td>兼容 S3 API，直接从 R2 出站不收流量费，但存储和操作仍可能收费</td>
+</tr>
+</tbody></table></div>
+<p>新用户赠送额度和试用资格会变，以账号控制台和以上官方页面为准。“有免费存储”不等于请求、下载和 CDN 都免费。</p>
+<p>它能做什么：</p>
+<ul>
+<li>存放用户上传的图片、头像和附件</li>
+<li>分发构建好的静态资源；整站托管还要配置首页、路由回退、域名和 HTTPS</li>
+<li>备份数据库导出文件</li>
+<li>配合 CDN 分发公开资源</li>
+<li>生成临时链接分享私有文件</li>
+</ul>
+<p>下面的配图来自各平台官方文档，未登录个人账号创建资源。界面可能随版本调整，图中的名称、地域和套餐仅作演示；上传成功后，先确认文件仍是私有，再测试临时链接。</p>
+<p><strong>怎么操作（以阿里云 OSS 为例）：</strong></p>
+<ol>
+<li>进入 OSS 控制台，点「创建 Bucket」，填写唯一名称并选择地域。与应用放在同一地域通常便于使用内网端点。</li>
+<li>入门先选「标准存储」，读写权限保留「私有」。不要为了显示一张图片就把整个存储桶公开。</li>
+<li>进入 Bucket →「文件管理」→「文件列表」，点「上传文件」，先用一张不含敏感信息的测试图片。</li>
+<li>上传后打开文件详情，用控制台生成的临时授权链接测试下载。私有文件的普通地址直接打开出现 403，通常是访问控制生效。</li>
+<li>接入应用时，由后端校验用户身份后生成短期签名链接；确实需要公开的静态资源再单独设计公共访问或 CDN 策略。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/oss-upload.png" alt="阿里云 OSS 官方控制台文件上传界面" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://help.aliyun.com/zh/oss/user-guide/simple-upload">阿里云 OSS 简单上传文档</a>。创建存储桶和权限设置见 <a href="https://help.aliyun.com/zh/oss/user-guide/console-quick-start">OSS 控制台快速入门</a>。</p>
+<p><strong>用代码操作（Node.js 服务端示例）：</strong></p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-javascript">// 安装：npm install ali-oss
+// 此示例使用 CommonJS（可保存为 upload.cjs）
+const OSS = require(&#39;ali-oss&#39;);
+const client = new OSS({
+  region: process.env.OSS_REGION,
+  accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+  accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+  bucket: process.env.OSS_BUCKET,
+  secure: true
+});
+
+async function uploadFile(localPath, objectKey) {
+  await client.put(objectKey, localPath);
+  // 私有对象返回短期下载链接，而不是假定 result.url 可公开访问
+  return client.signatureUrl(objectKey, { expires: 300 });
+}
+</code></pre>
+<p>环境变量放在服务器的密钥配置中；使用仅能访问目标 Bucket 和目录的 RAM 身份，不使用主账号 AccessKey。生产环境也可以改用实例角色或临时凭证。不要把密钥写进前端、Git 或 AI 对话；签名链接本身也应按临时凭证保护。参考 <a href="https://github.com/ali-sdk/ali-oss">ali-oss 官方 SDK</a>。</p>
+<p><strong>腾讯云 COS 操作：</strong></p>
+<ol>
+<li>打开 COS 控制台 →「存储桶列表」→「创建存储桶」，选择地域，填写名称。完整名称包含账号的 APPID 后缀。</li>
+<li>访问权限选择「私有读写」，再按实际需要设置日志、版本控制等功能，留意额外费用。</li>
+<li>进入「文件列表」→「上传文件」，上传测试图片，核对路径和大小。</li>
+<li>在文件详情中获取带签名的临时链接测试访问。应用通过后端生成链接，或用临时密钥限制前端上传范围。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cos-create-bucket.png" alt="腾讯云 COS 官方创建存储桶界面及访问权限选项" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://cloud.tencent.com/document/product/436/14106">腾讯云 COS 创建存储桶</a>。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cos-upload.png" alt="腾讯云 COS 官方上传文件窗口" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://cloud.tencent.com/document/product/436/14113">腾讯云 COS 上传对象</a>。</p>
+<p><strong>AWS S3 操作：</strong></p>
+<ol>
+<li>AWS 控制台搜索 S3 →「Create bucket」，选择通用存储桶、唯一名称和区域。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/s3-create-bucket.png" alt="AWS S3 官方创建存储桶的名称与区域设置" loading="lazy" decoding="async"></p>
+<ol start="2">
+<li>保留「ACLs disabled」和「Block all public access」默认设置。后端使用 IAM 角色或受限身份访问，不需要为上传文件关闭公共访问拦截。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/s3-private-access.png" alt="AWS S3 官方对象所有权与阻止公共访问设置" loading="lazy" decoding="async"></p>
+<ol start="3">
+<li>创建后进入「Objects」→「Upload」→「Add files」，上传一张测试图片并等待成功。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/s3-upload.png" alt="AWS S3 官方存储桶中的上传入口" loading="lazy" decoding="async"></p>
+<ol start="4">
+<li>回到对象列表，选择文件，在对象操作中生成预签名 URL（控制台可能显示「Share with a presigned URL」），先设置较短有效期，再在未登录的浏览器窗口测试。普通对象 URL 不会因为上传成功就自动公开。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/s3-object-list.png" alt="AWS S3 官方上传成功后的对象列表" loading="lazy" decoding="async"></p>
+<p>以上四张图片来源：<a href="https://docs.aws.amazon.com/hands-on/latest/backup-files-to-amazon-s3/backup-files-to-amazon-s3.html">AWS S3 官方上传教程</a>；临时访问步骤见 <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html">分享预签名 URL</a>。代码接入使用 AWS SDK for JavaScript v3，例如 <code>@aws-sdk/client-s3</code> 和 <code>@aws-sdk/s3-request-presigner</code>，凭证由服务端角色或凭证链提供。</p>
+<p><strong>Cloudflare R2 操作：</strong></p>
+<ol>
+<li>Cloudflare 控制台进入 R2，按账号提示开通服务并创建 Bucket，先确认当前免费额度、计费方式和预算。</li>
+<li>在 Bucket 的对象页面上传测试文件。保持私有，通过 S3 兼容 API 和预签名 URL 验证读取。</li>
+<li>接入现有 S3 客户端时，除了 Bucket 和凭证，还要把 endpoint 改成账号对应的 R2 地址；它不是 AWS S3 的默认端点。</li>
+<li>需要公开分发时再配置自定义域名；<code>r2.dev</code> 开发地址有速率限制，不适合作为生产分发入口。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/r2-official-guide.png" alt="Cloudflare R2 官方入门文档页面" loading="lazy" decoding="async"></p>
+<p>截图为官方指南页面，非个人账号控制台。来源：<a href="https://developers.cloudflare.com/r2/get-started/">R2 Get started</a>；公共域名说明见 <a href="https://developers.cloudflare.com/r2/buckets/public-buckets/">Public buckets</a>。</p>
+<p><strong>配合 CDN 加速：</strong> 对公开图片，可为 Bucket 配置自定义域名和 CDN。私有源站还需要授权回源和访问控制，不能简单改成公共读。是否省钱取决于命中率、回源流量、CDN 流量与请求费，应结合账单核对。</p>
+<h4 id="云硬盘--云盘--ebs">云硬盘 / 云盘 / EBS</h4>
+<p>挂载在云服务器上的块存储（类似电脑的硬盘）。服务器自带的系统盘通常 40-60GB，不够用时你可以额外买「数据盘」挂载上去。</p>
+<ul>
+<li>阿里云：云盘（高效云盘/ESSD/SSD）</li>
+<li>腾讯云：云硬盘 CBS</li>
+<li>AWS：EBS（Elastic Block Store）</li>
+</ul>
+<p><strong>什么时候用：</strong> 服务器磁盘不够、需要额外存储空间、需要独立管理数据。创建时要核对“随实例释放 / Delete on termination”等选项；删除服务器后是否保留云盘取决于配置，快照和备份也要另外安排。</p>
+<h4 id="文件存储--nas--efs">文件存储 / NAS / EFS</h4>
+<p>多台服务器可以同时挂载的共享文件存储。适合多台 Web 服务器共享同一份上传文件。</p>
+<ul>
+<li>阿里云：NAS（网络附加存储）</li>
+<li>腾讯云：CFS</li>
+<li>AWS：EFS（Elastic File System）</li>
+</ul>
+<p>个人小项目一般用不上，单台服务器 + OSS 足够。</p>
+<h3 id="64-数据库类存结构化数据">6.4 数据库类：存结构化数据</h3>
+<h4 id="云数据库-rds--cloud-database--常用">云数据库 RDS / Cloud Database ⭐ 常用</h4>
+<p>前面的 Docker Compose 把 PostgreSQL 放在同一台 VPS，适合学习和小规模项目，但需要自行维护备份、恢复和资源隔离。有重要用户数据、可用性要求较高时，可以考虑托管数据库；自动备份、保留时间、高可用和扩容能力仍要按所选规格逐项配置。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>产品名</th>
+<th>选用时关注什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>RDS</td>
+<td>按 MySQL、PostgreSQL 等引擎选择版本、规格和备份策略</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>云数据库 MySQL / PostgreSQL、TDSQL-C</td>
+<td>产品与兼容引擎对应，不能假定一个实例支持所有引擎</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>RDS / Aurora</td>
+<td>核对引擎、区域、实例、存储、备份和账号优惠资格</td>
+</tr>
+</tbody></table></div>
+<p><strong>什么时候用：</strong> 生产环境的数据库（特别是有用户数据、不能丢数据的场景）。</p>
+<p>怎么操作（以阿里云 RDS 为例）：</p>
+<ol>
+<li>RDS 控制台 → 创建实例</li>
+<li>选择与项目驱动和迁移脚本匹配的数据库引擎、受支持版本、规格和存储空间</li>
+<li>优先让数据库与应用位于同地域、可互通的 VPC，使用内网连接地址。白名单或安全组只允许应用的地址或安全组访问，不开放给所有公网 IP</li>
+<li>创建数据库账号和密码</li>
+<li>在「数据库管理」里创建数据库名</li>
+<li>拿到连接地址（类似 <code>rm-xxxxx.mysql.rds.aliyuncs.com:3306</code>）</li>
+<li>修改服务端的 <code>DATABASE_URL</code>，按厂商要求配置 TLS，再运行连接测试和数据库迁移。不要把连接串发到浏览器</li>
+</ol>
+<p>AWS RDS 的流程类似：选引擎、规格和网络，再设置应用的连接权限。下图是官方文档中的 MySQL 创建界面，图中 Free tier 选项不代表所有新账号或当前规格都免费；以实际创建页面的资格和费用预估为准。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/rds-create-mysql.png" alt="AWS RDS 官方 MySQL 创建界面" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/rds-connect-ec2.png" alt="AWS RDS 官方关联同 VPC EC2 应用的连接设置" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html">AWS RDS 创建并连接 MySQL 实例</a>。私网连接还要核对 VPC、子网、路由和安全组，实例显示“可用”并不代表应用一定能连上。</p>
+<blockquote>
+<p><strong>vibecoding 提示：</strong> 告诉 AI 数据库类型、版本和环境变量名称，让它生成连接代码、连接测试与迁移脚本；真实密码通过服务器密钥配置注入。</p>
+</blockquote>
+<h4 id="缓存-redis--elasticache">缓存 Redis / ElastiCache</h4>
+<p>内存数据库，用来缓存热点数据（减少数据库查询）、存 Session/Token、做消息队列、排行榜等。</p>
+<ul>
+<li>阿里云：云数据库 Redis 版</li>
+<li>腾讯云：云数据库 Redis</li>
+<li>AWS：ElastiCache for Redis</li>
+</ul>
+<p>入门可以自行安装 Redis 或使用前面的容器示例。只允许应用通过内网或本机连接，不把 6379 直接暴露到公网；使用认证并按数据用途配置持久化。托管 Redis 可以减少维护工作，高可用能力和费用仍取决于套餐。把 Redis 用作任务队列时，还需要确认任务确认、重试和持久化机制，不能仅凭“用了 Redis”就保证任务不丢。</p>
+<h3 id="65-网络类让用户访问更快更安全">6.5 网络类：让用户访问更快更安全</h3>
+<h4 id="cdn内容分发网络-常用">CDN（内容分发网络）⭐ 常用</h4>
+<p>把你的静态资源（图片、CSS、JS、视频）缓存到全球/全国的边缘节点，用户访问时从最近的节点拿，速度飞快。</p>
+<ul>
+<li>阿里云：CDN / DCDN（全站加速）</li>
+<li>腾讯云：CDN / EdgeOne（边缘安全加速）</li>
+<li>AWS：CloudFront</li>
+</ul>
+<p>什么时候用：</p>
+<ul>
+<li>网站有图片/视频等大文件</li>
+<li>用户分布在全国各地/全球各地</li>
+<li>想减少服务器带宽压力（CDN 帮你扛流量）</li>
+<li>前面提到的 Cloudflare Pages 本质上就是 CDN + 静态托管</li>
+</ul>
+<p>怎么配置（以腾讯云 CDN 为例）：</p>
+<ol>
+<li>CDN 控制台 → 添加域名 → 填入你的域名（比如 <code>static.yourdomain.com</code>）</li>
+<li>源站类型选「COS源」或「自有源」（填你的服务器 IP）</li>
+<li>按控制台提示配置源站 Host、缓存规则及 HTTPS；私有 COS 还要授权 CDN 回源，等待配置生效</li>
+<li>去域名解析控制台，给 <code>static.yourdomain.com</code> 添加 CNAME 记录，指向 CDN 分配给你的 CNAME 地址</li>
+<li>用真实存在的测试文件验证 HTTPS、响应状态和缓存命中。不要缓存带用户隐私的接口响应；配置流量告警并检查实际费用。</li>
+</ol>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cdn-domain.png" alt="腾讯云 CDN 官方添加加速域名入口" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cdn-origin.png" alt="腾讯云 CDN 官方域名配置管理页面" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://cloud.tencent.com/document/product/228/3149">腾讯云 CDN 域名接入官方文档</a>。DNS 已指向 CDN 只是其中一步，还需确认源站可达、证书匹配和缓存规则正确。</p>
+<h4 id="负载均衡-slb--clb--alb--elb">负载均衡 SLB / CLB / ALB / ELB</h4>
+<p>当你有多台后端服务器时，负载均衡器把流量均匀分发到各台服务器上，还能自动踢掉挂掉的服务器。</p>
+<ul>
+<li>阿里云：SLB（服务器负载均衡）/ ALB（应用型）</li>
+<li>腾讯云：CLB（负载均衡）</li>
+<li>AWS：ELB（Elastic Load Balancing：ALB/NLB/Gateway LB）</li>
+</ul>
+<p>个人项目只有一台服务器时用不上，用户多了、需要多台服务器时再考虑。</p>
+<h4 id="dns-域名解析--cloud-dns">DNS 域名解析 / Cloud DNS</h4>
+<p>把域名翻译成 IP 地址的服务。买域名的地方通常自带免费 DNS 解析，但也可以换成更专业的。</p>
+<ul>
+<li>阿里云：云解析 DNS（万网域名自带）</li>
+<li>腾讯云：DNSPod（腾讯云旗下）</li>
+<li>AWS：Route 53</li>
+<li>第三方：Cloudflare DNS（提供免费方案，实际解析与访问表现需按用户网络验证）</li>
+</ul>
+<p><strong>怎么操作：</strong> 在域名控制台添加解析记录：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A 记录</strong></td>
+<td>域名 → IPv4 地址</td>
+<td><code>@ → 123.45.67.89</code></td>
+</tr>
+<tr>
+<td><strong>AAAA 记录</strong></td>
+<td>域名 → IPv6 地址</td>
+<td><code>@ → 2400:xxxx::</code></td>
+</tr>
+<tr>
+<td><strong>CNAME 记录</strong></td>
+<td>域名 → 另一个域名（常用于 CDN）</td>
+<td><code>static → static.cdn.com</code></td>
+</tr>
+<tr>
+<td><strong>MX 记录</strong></td>
+<td>邮件服务器（用企业邮箱需要配）</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>TXT 记录</strong></td>
+<td>任意文本（验证域名所有权、配置 SPF/DKIM 等）</td>
+<td>-</td>
+</tr>
+</tbody></table></div>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/dnspod-domain-list.png" alt="DNSPod 官方域名解析列表中的添加记录入口" loading="lazy" decoding="async"></p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/dnspod-a-record.png" alt="DNSPod 官方 A 记录填写示例" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://docs.dnspod.cn/dns/help-a/">DNSPod 添加 A 记录</a>。先确认域名实际使用 DNSPod 的权威 DNS；只在未生效的平台添加记录不会改变解析。记录值替换为自己的公网 IP，图中的地址不可直接照抄。</p>
+<h4 id="ssl-证书服务">SSL 证书服务</h4>
+<p>HTTPS 需要的 SSL 证书。</p>
+<ul>
+<li>阿里云/腾讯云：有免费或付费证书产品，资格、域名数量、有效期与续期方式以当前产品规则为准。</li>
+<li>AWS：ACM 用于支持的 AWS 集成服务时有免费公有证书方案；可导出公有证书、私有证书等另有费用，不能把所有 ACM 证书都当作免费且可直接装进 VPS。</li>
+<li>通用免费方案：Certbot + Let&#39;s Encrypt，需要验证域名、安装证书并维护自动续期。</li>
+</ul>
+<p>前面第 5 章适用于宿主机 Nginx。证书有效期可能调整，按实际到期时间和续期任务检查。参考 <a href="https://aws.amazon.com/certificate-manager/pricing/">ACM 官方计费</a> 和 <a href="https://letsencrypt.org/certificates/">Let&#39;s Encrypt 证书说明</a>。</p>
+<h4 id="vpc私有网络-vpc">VPC（私有网络）/ VPC</h4>
+<p>VPC 是云上的隔离网络。创建服务器和数据库时，需要核对地域、VPC、子网和安全组：即使两个资源在同一家云，也不代表能直接通过内网通信。</p>
+<p>应用服务器可以通过公网入口提供 HTTPS，数据库通常放在受限的私网。只有确实需要出站访问的私有子网才考虑 NAT 网关，并核对其费用。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/ec2-network-settings.png" alt="AWS EC2 官方网络设置中的 VPC、子网和 SSH 来源限制" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html">AWS RDS 与 EC2 连接教程</a>。图中 SSH 来源选 My IP，体现的是管理端口按来源限制；Web 服务的 80/443 则按实际访问需求另设规则。</p>
+<h3 id="66-其他常用服务">6.6 其他常用服务</h3>
+<h4 id="域名注册--domain">域名注册 / Domain</h4>
+<p>买域名的地方。</p>
+<ul>
+<li>国内：阿里云万网、腾讯云（DNSPod）、华为云</li>
+<li>海外：Namecheap、Cloudflare Registrar、GoDaddy、Squarespace Domains</li>
+<li>建议：核对域名实名与备案要求、后缀支持、续费价格、隐私保护和 DNS 限制，再选注册商</li>
+</ul>
+<h4 id="邮件服务--ses">邮件服务 / SES</h4>
+<p>不要在服务器上自己搭邮件服务器（大概率被当成垃圾邮件）。用专业的邮件发送服务：</p>
+<ul>
+<li>国内：阿里云邮件推送、腾讯云 SES</li>
+<li>海外：AWS SES、SendGrid、Mailgun、Resend</li>
+<li>用途：注册验证邮件、通知邮件、营销邮件</li>
+</ul>
+<h4 id="短信服务--sms">短信服务 / SMS</h4>
+<p>发送验证码短信、通知短信：</p>
+<ul>
+<li>国内：阿里云短信服务、腾讯云短信</li>
+<li>海外：AWS SNS、Twilio</li>
+<li>国内短信的签名、模板和主体资质要求以运营商及服务商当前审核规则为准。个人项目若不满足条件，可以先用邮件验证码。</li>
+</ul>
+<h4 id="监控日志--cloudwatch">监控/日志 / CloudWatch</h4>
+<p>监控服务器的 CPU/内存/磁盘使用率，查看应用日志，设置告警（CPU 太高、服务挂了就通知你）：</p>
+<ul>
+<li>阿里云：云监控、SLS（日志服务）</li>
+<li>腾讯云：云监控、CLS（日志服务）</li>
+<li>AWS：CloudWatch</li>
+</ul>
+<p>AWS EC2 的基础指标与操作系统内存、磁盘使用率是两回事：后两者通常需要安装 CloudWatch Agent 或自行上报，应用日志也需要配置采集。指标、日志保存和告警可能另行收费。</p>
+<p><img src="../../book/assets/images/zh-cn/stage-2/backend/cloud-server-deployment/images/cloudwatch-dashboard.png" alt="AWS CloudWatch 官方仪表盘中的告警状态与指标图表" loading="lazy" decoding="async"></p>
+<p>图片来源：<a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/GettingStarted.html">CloudWatch Getting started</a>。内存、磁盘和日志采集见 <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">CloudWatch Agent</a>。</p>
+<p>入门阶段可以用 PM2 看进程状态，再用 Uptime Kuma 从另一台机器检查站点可用性。若监控与应用在同一台 VPS，整台机器宕机时监控也会停止，不能据此确认站点仍然正常。</p>
+<h4 id="对象存储的进阶用法图片处理视频转码">对象存储的进阶用法：图片处理/视频转码</h4>
+<p>云厂商的 OSS/S3 通常还附带媒体处理能力：</p>
+<ul>
+<li>阿里云 OSS：图片处理（缩略图/水印/格式转换）、视频转码（需配合 MPS）</li>
+<li>腾讯云 COS：数据万象 CI（图片处理/内容审核/人脸识别）</li>
+<li>AWS S3：配合 Lambda 自动生成缩略图</li>
+</ul>
+<p><strong>示例</strong>：你上传了一张 5MB 的原图 <code>photo.jpg</code>，在支持该处理方式的 OSS 对象地址后加参数 <code>?x-oss-process=image/resize,w_300</code>，可以请求 300px 宽的缩略图。私有对象还需要把处理参数纳入签名；图片处理可能单独计费，这个参数也不能直接用于 COS 或 S3。</p>
+<h3 id="67-国内-vs-海外两套生态对照速查">6.7 国内 vs 海外：两套生态对照速查</h3>
+<p>做项目时经常需要在国内云和海外云之间对照，这个表帮你快速找到对应服务：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>阿里云</th>
+<th>腾讯云</th>
+<th>AWS</th>
+<th>免费/低价替代</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>云服务器</td>
+<td>ECS</td>
+<td>CVM / Lighthouse</td>
+<td>EC2</td>
+<td>Vultr / DigitalOcean / Hetzner</td>
+</tr>
+<tr>
+<td>对象存储</td>
+<td>OSS</td>
+<td>COS</td>
+<td>S3</td>
+<td>Cloudflare R2（免出站流量费）</td>
+</tr>
+<tr>
+<td>关系数据库</td>
+<td>RDS</td>
+<td>云数据库</td>
+<td>RDS</td>
+<td>Supabase / Neon（核对各自额度）</td>
+</tr>
+<tr>
+<td>缓存 Redis</td>
+<td>云 Redis</td>
+<td>云 Redis</td>
+<td>ElastiCache</td>
+<td>Upstash（Serverless Redis）</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>CDN</td>
+<td>CDN / EdgeOne</td>
+<td>CloudFront</td>
+<td>Cloudflare CDN（免费）</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>SLB/ALB</td>
+<td>CLB</td>
+<td>ELB</td>
+<td>Nginx 自建 / Caddy</td>
+</tr>
+<tr>
+<td>Serverless</td>
+<td>函数计算 FC</td>
+<td>云函数 SCF</td>
+<td>Lambda</td>
+<td>Cloudflare Workers</td>
+</tr>
+<tr>
+<td>容器/K8s</td>
+<td>ACK</td>
+<td>TKE</td>
+<td>EKS</td>
+<td>小项目可改用 VPS + Compose；Fly.io / Railway 提供容器托管，但不是同等 K8s 服务</td>
+</tr>
+<tr>
+<td>DNS 解析</td>
+<td>云解析</td>
+<td>DNSPod</td>
+<td>Route 53</td>
+<td>Cloudflare DNS（免费）</td>
+</tr>
+<tr>
+<td>SSL 证书</td>
+<td>免费/付费证书</td>
+<td>免费/付费证书</td>
+<td>ACM（区分集成、导出与私有证书）</td>
+<td>Let&#39;s Encrypt</td>
+</tr>
+<tr>
+<td>邮件推送</td>
+<td>邮件推送</td>
+<td>SES</td>
+<td>SES</td>
+<td>Resend / SendGrid 免费额度</td>
+</tr>
+<tr>
+<td>短信服务</td>
+<td>短信服务</td>
+<td>短信</td>
+<td>SNS</td>
+<td>Twilio</td>
+</tr>
+<tr>
+<td>监控</td>
+<td>云监控</td>
+<td>云监控</td>
+<td>CloudWatch</td>
+<td>Uptime Kuma（自建开源）</td>
+</tr>
+<tr>
+<td>AI 模型/API</td>
+<td>通义千问、百炼</td>
+<td>混元、TI平台</td>
+<td>Bedrock</td>
+<td>OpenAI API / Anthropic API</td>
+</tr>
+<tr>
+<td>域名注册</td>
+<td>万网</td>
+<td>DNSPod</td>
+<td>Route 53</td>
+<td>Namecheap / Cloudflare</td>
+</tr>
+</tbody></table></div>
+<h3 id="68-新手常见疑问">6.8 新手常见疑问</h3>
+<p><strong>Q：我应该把所有服务都用云厂商的，还是都在 VPS 上自己搭？</strong></p>
+<p><strong>个人项目/学习阶段：</strong> VPS 自己搭就行（Docker Compose 一把梭），省钱且能学到东西。
+<strong>面向用户的生产项目：</strong> 数据库和对象存储可以优先考虑托管服务（仍需配置备份并验证恢复），应用层还是可以跑在 VPS 上。
+<strong>预算充足/团队项目：</strong> 尽量用云托管服务（RDS/Redis/OSS），把精力放在写业务代码上而不是运维上。</p>
+<p><strong>Q：AWS 免费套餐怎么用？</strong></p>
+<p>AWS 当前新账号免费计划与旧版“12 个月免费套餐”不同。新账号可获得初始 100 美元额度，并通过指定活动再获得额度，总计最高 200 美元；免费计划最长 6 个月，也可能在额度用完时提前结束。账号创建时间和计划类型会影响规则，不能直接照搬 EC2/RDS 每月 750 小时等旧表格。</p>
+<p>开通前核对资源是否支持当前免费计划、剩余额度和到期处理方式。升级为付费计划后，超出优惠范围的资源会按标准费率计费；清理实验资源时也要检查磁盘、快照、数据库、IP 和存储桶是否仍保留。设置预算与告警，但不要把预算告警当成自动停止计费的开关。参考 <a href="https://aws.amazon.com/free/">AWS 当前免费计划</a> 和 <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-FAQ.html">免费套餐 FAQ</a>。</p>
+<p><strong>Q：国内云和海外云怎么选？</strong></p>
+<ul>
+<li>用户在国内 → 用国内云（阿里云/腾讯云）+ 备案，访问速度快且合规</li>
+<li>用户在海外 → 用 AWS/Vultr/Fly.io/Cloudflare 等海外服务</li>
+<li>两边都有用户 → 先从主要用户所在地域部署，测量不同网络表现；确需多地域时再设计 CDN、DNS 分流和数据一致性</li>
+<li>选香港或其他海外节点 → 仍要测试国内不同运营商的访问表现，不能保证 Cloudflare Pages 或海外 VPS 在所有网络都稳定</li>
+</ul>
+<h2 id="7-ai-agent-专用部署平台">7. AI Agent 专用部署平台</h2>
+<p>如果你部署的是 AI Agent（不只是普通 Web 应用），有些平台专门为 AI 工作负载设计：</p>
+<h3 id="71-modal--python-aiml-的-serverless-gpu">7.1 Modal — Python AI/ML 的 Serverless GPU</h3>
+<p><strong>官网</strong>：<a href="https://modal.com">https://modal.com</a></p>
+<p><strong>适合：</strong> 需要 GPU 推理、定时任务、批量数据处理的 Python AI 项目</p>
+<p>特点：</p>
+<ul>
+<li>用 Python 装饰器定义函数，<code>modal deploy</code> 一键部署</li>
+<li>按计算资源与使用时间计费；冷启动还受镜像、依赖和模型加载时间影响</li>
+<li>内置定时任务、密钥管理、共享存储</li>
+<li>当前 Starter 计划每月提供 $30 计算额度；是否够用取决于 GPU、运行时长与并发，见 <a href="https://modal.com/pricing">Modal 官方定价</a></li>
+<li>缺点：只支持 Python</li>
+</ul>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-python"># 保存为 agent.py：先验证远程函数调用，不申请 GPU
+import modal
+
+app = modal.App(&quot;my-ai-agent&quot;)
+
+@app.function(timeout=300)
+def run_agent(prompt: str):
+    # 替换为实际模型逻辑前，先用回显检查部署链路
+    return {&quot;received&quot;: prompt}
+
+@app.local_entrypoint()
+def main():
+    print(run_agent.remote(&quot;hello&quot;))
+</code></pre>
+<p>安装 <code>modal</code> 并完成账号认证后，运行 <code>modal run agent.py</code> 测试，再用 <code>modal deploy agent.py</code> 部署函数。这个回显示例不是模型推理，也没有创建公开 HTTP 接口；实际 Agent 还要添加模型依赖、密钥、推理代码及所需的 Web 接口。参考 <a href="https://modal.com/docs/guide">Modal 入门</a>。</p>
+<h3 id="72-hugging-face-spaces--ai-demo-首选">7.2 Hugging Face Spaces — AI Demo 首选</h3>
+<p><strong>官网</strong>：<a href="https://huggingface.co/spaces">https://huggingface.co/spaces</a></p>
+<p><strong>适合：</strong> 快速展示 AI Demo（Gradio/Streamlit 界面）、开源模型展示</p>
+<p>特点：</p>
+<ul>
+<li>提供免费 CPU 基础实例，闲置会休眠；运行目录中的临时文件不要当作永久存储</li>
+<li>原生选择包括 Gradio、Docker、静态页面；Streamlit 应用使用 Docker 方式部署</li>
+<li>可以创建公开或私有 Space；复用别人的 Demo 时先检查代码许可、依赖和密钥配置</li>
+<li>常规 GPU 实例需要付费；ZeroGPU 有单独的资格和使用限制，不能当作人人都有的免费常驻 GPU</li>
+</ul>
+<p>参考 <a href="https://huggingface.co/docs/hub/spaces-overview">Spaces 官方概览</a> 与 <a href="https://huggingface.co/docs/hub/spaces-sdks-streamlit">Streamlit 部署说明</a>。</p>
+<h3 id="73-replicate--把模型变成-api">7.3 Replicate — 把模型变成 API</h3>
+<p><strong>官网</strong>：<a href="https://replicate.com">https://replicate.com</a></p>
+<p><strong>适合：</strong> 想把 AI 模型变成 API 但不想管服务器</p>
+<p><strong>特点：</strong> 可以调用现成模型，也可按官方 Cog 工作流打包和部署自己的模型。费用可能按运行时间、硬件或输入输出计量，并非统一按请求次数；模型许可和冷启动也要分别检查。参考 <a href="https://replicate.com/docs/topics/billing">Replicate 计费说明</a>。</p>
+<h3 id="74-国内-gpu-云autodl">7.4 国内 GPU 云：AutoDL</h3>
+<p><strong>官网</strong>：<a href="https://www.autodl.com">https://www.autodl.com</a></p>
+<p><strong>适合：</strong> 国内用户跑 AI 模型训练/推理，需要 GPU 且预算有限</p>
+<p>特点：</p>
+<ul>
+<li>按 GPU 型号、地域、库存和计费方式选择实例，价格以购买页面为准</li>
+<li>支持通过 JupyterLab、SSH 等方式开发；具体连接方式以实例控制台为准</li>
+<li>镜像可以减少框架安装工作，但仍要核对 CUDA、驱动和项目依赖版本</li>
+<li>停止计算后仍需检查存储及其他保留资源的费用；长期不用时先备份，再按控制台说明释放</li>
+</ul>
+<p>使用前查看 <a href="https://www.autodl.com/docs/">AutoDL 官方文档</a>，不要把临时活动或“无卡模式”等同于长期免费的 CPU 服务器。</p>
+<h2 id="8--vibecoding-部署实战让-ai-当你的运维助手">8. 🎯 Vibecoding 部署实战：让 AI 当你的运维助手</h2>
+<p>这才是 vibecoding 时代最重要的部署心法：<strong>你不需要记住所有命令，AI 就是你的运维助手。</strong></p>
+<h3 id="81-两种-ai-协作部署方式">8.1 两种 AI 协作部署方式</h3>
+<p><strong>方式一：本地生成脚本，手动执行</strong></p>
+<p>告诉你的 AI 编程助手（Claude Code、Trae Solo、Cursor）：</p>
+<blockquote>
+<p>「我要把 [项目描述] 部署到 [平台名/服务器]，帮我生成：</p>
+<ol>
+<li>完整的部署步骤清单</li>
+<li>所有需要的配置文件（Nginx、PM2、Dockerfile、docker-compose）</li>
+<li>部署脚本 deploy.sh</li>
+<li>环境变量检查清单」</li>
+</ol>
+</blockquote>
+<p>AI 生成好文件后，先检查路径、启动命令、端口和环境变量是否与项目匹配，再在测试环境执行。</p>
+<p><strong>方式二：AI 直接 SSH 到服务器操作（更省事）</strong></p>
+<p>具备终端工具权限的 AI 编程助手，可以在获得授权后调用本地 SSH；是否可用取决于工具环境、网络和已有的 SSH 配置，并不是只开启聊天窗口就能远程操作。</p>
+<p>可以这样描述任务：</p>
+<blockquote>
+<p>「通过已有 SSH 配置连接部署用户，先检查 <code>~/apps/myapp</code> 的运行环境，再给出 Nginx、HTTPS、PM2 的配置和验证步骤。删除数据、修改登录方式或产生云费用前先说明影响。」</p>
+</blockquote>
+<p>先用本地终端确认 <code>ssh yourname@服务器IP</code> 能登录，再让 AI 在相同环境操作。真实私钥与密码留在本地凭证配置中。</p>
+<blockquote>
+<p>⚠️ <strong>安全提醒</strong>：</p>
+<ul>
+<li>先在测试服务器练手，确认 AI 不会误操作</li>
+<li>重要数据定期备份</li>
+<li>使用独立部署用户，并限制允许执行的管理命令；有不受限 sudo 的普通用户仍能取得 root 权限</li>
+<li>AI 执行危险命令前先看一眼它要做什么</li>
+</ul>
+</blockquote>
+<h3 id="82-万能部署-prompt-模板">8.2 万能部署 Prompt 模板</h3>
+<p>不管你选哪个平台/服务器，填好这个模板给 AI，它都能给你一份可执行的方案：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>帮我部署一个项目，信息如下：
+
+【部署目标】
+- 平台/服务器：[Vercel / Railway / Fly.io / Ubuntu 24.04 VPS / ...]
+- 服务器 IP（如果是 VPS）：xxx.xxx.xxx.xxx
+- 已配置：[SSH密钥登录 / Docker已装 / Nginx已装 / ...]
+
+【项目信息】
+- 项目类型：[Next.js / Vite+React / Node.js Express / Python FastAPI / ...]
+- 代码位置：GitHub 仓库 https://github.com/xxx/xxx
+- 技术栈：Node.js 24 LTS（按项目 engines 核对）+ PostgreSQL 16 + Redis 7
+- 启动命令：npm run start
+- 监听端口：3000
+- 需要的环境变量名称：DATABASE_URL、JWT_SECRET、OPENAI_API_KEY
+- 真实值通过服务器密钥配置注入，不粘贴到对话中
+
+【域名】
+- 域名：mydomain.com
+- 已解析到服务器 IP：是/否
+- 需要 HTTPS：是/否
+
+【要求】
+1. 给出完整步骤（本地操作 vs 服务器操作分开列出）
+2. 提供所有配置文件
+3. 告诉我如何验证部署成功
+4. 列出常见坑和排查方法
+</code></pre>
+<h3 id="83-ai-辅助排错流程">8.3 AI 辅助排错流程</h3>
+<p>出问题不要慌：</p>
+<ol>
+<li><p><strong>先看日志</strong>：</p>
+<ul>
+<li>Nginx：<code>sudo tail -50 /var/log/nginx/error.log</code></li>
+<li>PM2：<code>pm2 logs myapp</code></li>
+<li>Docker：<code>sudo docker compose logs --tail=50 app</code></li>
+<li>systemd：<code>sudo journalctl -u myapp -n 50</code></li>
+</ul>
+</li>
+<li><p><strong>把报错去除密码、Token 和个人数据后发给 AI</strong>，加上上下文：</p>
+<blockquote>
+<p>「部署 Node.js 到 Ubuntu，访问显示 502，Nginx 错误日志是 [粘贴]，配置是 [粘贴]，PM2 状态是 [粘贴]，帮我排查」</p>
+</blockquote>
+</li>
+<li><p><strong>常见问题速查：</strong></p>
+<ul>
+<li><strong>502 Bad Gateway</strong>：后端没启动、端口不对、proxy_pass 地址错误</li>
+<li><strong>无法访问 IP</strong>：安全组没开端口、ufw 没放行、Nginx 没启动</li>
+<li><strong>刷新 404</strong>：Nginx 没配 <code>try_files</code></li>
+<li><strong>静态资源 404</strong>：root 路径错、文件权限不对</li>
+<li><strong>HTTPS 证书失败</strong>：域名没解析、80 端口被占、防火墙没开 80</li>
+<li><strong>PM2 频繁重启</strong>：代码有 bug，<code>pm2 logs</code> 看错误</li>
+<li><strong>Vercel Function 超时</strong>：核对当前套餐与运行模式的时长限制；需要后台常驻进程时考虑容器托管或 VPS</li>
+<li><strong>Railway/Render 服务 503</strong>：检查部署日志、监听地址与平台端口、健康检查、资源额度和休眠状态</li>
+</ul>
+</li>
+</ol>
+<h2 id="9-部署后实用技巧">9. 部署后实用技巧</h2>
+<h3 id="91-文件传输">9.1 文件传输</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 本地 → 服务器
+scp ./file.zip yourname@IP:/home/yourname/
+scp -r ./dir yourname@IP:/home/yourname/
+
+# 服务器 → 本地
+scp yourname@IP:/home/yourname/file.zip ./
+
+# rsync（增量同步，推荐部署用）
+rsync -avz --exclude=node_modules --exclude=.git --exclude=.env ./project/ yourname@IP:/home/yourname/apps/project/
+</code></pre>
+<p>先创建目标目录并确认部署用户有写入权限。真实 <code>.env</code> 留在服务端，其他密钥文件也要单独排除，不能直接同步到公开静态目录。</p>
+<h3 id="92-一键更新脚本">9.2 一键更新脚本</h3>
+<p>这个示例适用于已配置好 PM2 的 Node.js 项目，需要仓库提交 <code>package-lock.json</code>，并提供 <code>/health</code> 健康接口。先把路径、端口和接口改成实际值，再以同一个部署用户在服务器创建 <code>deploy.sh</code>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">#!/bin/bash
+set -euo pipefail
+cd &quot;$HOME/apps/myapp&quot;
+test -z &quot;$(git status --porcelain)&quot; || {
+  echo &quot;工作区有未提交修改，先处理后再部署&quot; &gt;&amp;2
+  exit 1
+}
+git pull --ff-only origin main
+npm ci
+npm run build
+pm2 restart myapp --update-env
+curl --fail --silent --show-error --retry 5 --retry-connrefused \
+  --retry-delay 2 --max-time 10 http://127.0.0.1:3000/health
+printf &#39;\n✅ 构建、重启与健康检查通过。\n&#39;
+</code></pre>
+<p>以后可以运行 <code>bash deploy.sh</code>。这只是单机更新示例，不包含数据库迁移、零停机发布和自动回滚；正式发布前保留上一版本和可恢复备份，迁移步骤另行审核。<code>--update-env</code> 更新的是 PM2 接收到的环境，应用若自行读取 <code>.env</code>，还要确认它实际加载的新配置。再根据需要配置 GitHub Actions 自动部署。</p>
+<h3 id="93-安全加固清单">9.3 安全加固清单</h3>
+<p>让 AI 帮你生成完整的安全加固脚本，主要包括：</p>
+<ul>
+<li>先在新终端验证密钥登录和 sudo 可用，再考虑禁用密码登录；修改 SSH 配置后先运行 <code>sudo sshd -t</code></li>
+<li>SSH 管理端口限制来源 IP；改端口只能减少部分扫描，不能代替密钥认证和访问控制</li>
+<li>安装 fail2ban（自动封禁暴力破解 IP）</li>
+<li>启用自动安全更新：<code>sudo apt install unattended-upgrades</code>，并确认更新策略与任务已启用</li>
+<li>不要把密钥/.env 提交到 Git</li>
+<li>定期备份数据库到私有对象存储，并在独立环境验证能恢复；设置保留期，避免备份无限累积</li>
+</ul>
+<h2 id="10-本章小结">10. 本章小结</h2>
+<p><strong>部署选项总结表：</strong></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+<th>成本</th>
+<th>难度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>纯前端/文档站</td>
+<td>Cloudflare Pages / Vercel / GitHub Pages</td>
+<td>有免费方案，核对配额与用途限制</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>Next.js 全栈</td>
+<td>Vercel</td>
+<td>按套餐、用途和用量核对</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>后端 API / Bot（常驻）</td>
+<td>Railway / Fly.io / VPS</td>
+<td>通常需持续付费；试用不等于长期免费</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>全栈项目（完全控制）</td>
+<td>腾讯云轻量 / Vultr + Docker</td>
+<td>按配置、带宽、存储与续费计费</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>AI Agent 演示</td>
+<td>Hugging Face Spaces</td>
+<td>免费 CPU 可入门，GPU 与持久化另查</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>AI GPU 推理</td>
+<td>Modal（海外）/ AutoDL（国内）</td>
+<td>按硬件与运行时间核算，额度有上限</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>面向国内用户正式项目</td>
+<td>国内云服务器 + 备案 + 按需 CDN</td>
+<td>分别核算计算、流量、存储与数据库</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody></table></div>
+<p>核心流程记住 5 步：</p>
+<ol>
+<li><strong>选平台</strong> → 根据项目类型从上面的表选</li>
+<li><strong>传代码</strong> → git push / rsync / GitHub 自动部署</li>
+<li><strong>配环境</strong> → 装 Node.js/Nginx/Docker（或平台自动处理）</li>
+<li><strong>跑起来</strong> → PM2/Docker/systemd 守护进程</li>
+<li><strong>配域名+HTTPS</strong> → DNS 解析 + Certbot 一键证书</li>
+</ol>
+<p>vibecoding 心法：</p>
+<ol>
+<li>理解「需要做什么」，不需要记住每条命令</li>
+<li>把需求清楚描述给 AI，它会给你完整方案</li>
+<li>看得懂 AI 在做什么，关键步骤确认</li>
+<li>出问题复制日志给 AI，让它结合日志和配置逐项定位原因</li>
+<li>重要数据备份，权限最小化</li>
+</ol>
+<p>部署一次你就会发现——原来上线也没那么难。</p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-028.html">← 把网站发到网上（简单方式）：Vercel/Cloudflare/CloudBase 一键发布</a><a rel="next" href="chapter-030.html">CLI Coding Agent 编程助手 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C18 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C18-answer-section-1f637e493e" tabindex="-1">C18 答案与核对依据</h1>
+<p>本文件给出划分、冻结、算术和复现的参考答案，不提供一份可抄的“高分结果”。你的报告必须来自自己的文档、模型和实际调用；没有调用就如实写“未运行”。</p>
+<h2 id="C18-answer-section-9105a64552" tabindex="-1">1. 三份题怎么分</h2>
+<p>一个合格的最小划分：</p>
+<table>
+<thead>
+<tr>
+<th>集合</th>
+<th>建议数量</th>
+<th>用途</th>
+<th>包含什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dev</td>
+<td>6</td>
+<td>反复定位和修改</td>
+<td>正常、无命中、冲突、越权、缺失源、工具各至少一例</td>
+</tr>
+<tr>
+<td>val</td>
+<td>3</td>
+<td>在候选方案间选择</td>
+<td>覆盖你准备改动的维度，例如检索、切块、工具</td>
+</tr>
+<tr>
+<td>heldout</td>
+<td>3</td>
+<td>最终只跑一次</td>
+<td>新问题；若条件允许，换成未参与开发的文档或来源组</td>
+</tr>
+</tbody></table>
+<p>划分原则不是“随机打乱就行”，而是：</p>
+<ol>
+<li><strong>先写判据，再看输出</strong>。<code>expectStatus</code>、<code>expectCitationDocs</code>、严格通过标准都在运行前写好。</li>
+<li><strong>近似重复的题分到同一侧</strong>。两个只差一个词的问句不能一个在 dev、一个在 heldout，否则留出集会被开发集“提前泄露”。</li>
+<li><strong>留出集在调参期间不打开</strong>。看过失败并据此改参数后，它已经变成验证集。</li>
+<li><strong>文档版本一起冻结</strong>。只冻结问题、不冻结文档，等于允许材料在背后变化。</li>
+<li><strong>来源留出和问题留出分开写</strong>。同一批文档上的新问题，只能支持“新问题、旧材料”的结论。</li>
+</ol>
+<p>题目中的 6/3/3 只是可操作示例。样本更少时可以减少，但必须报告 <code>n</code>，不能用一个案例的成败宣布普遍提升。</p>
+<h2 id="C18-answer-section-79182bb7bc" tabindex="-1">2. 冻结记录应该有哪些字段</h2>
+<p>最小记录：</p>
+<pre><code class="language-json">{
+  &quot;created_at&quot;: &quot;运行前的时间戳&quot;,
+  &quot;note&quot;: &quot;before any model call&quot;,
+  &quot;manifest&quot;: {
+    &quot;path&quot;: &quot;eval-dev.json&quot;,
+    &quot;sha256&quot;: &quot;清单文件字节的 SHA-256&quot;,
+    &quot;bytes&quot;: 1234
+  },
+  &quot;documents&quot;: {
+    &quot;docs/station-log.md&quot;: {
+      &quot;sha256&quot;: &quot;文件字节的 SHA-256&quot;,
+      &quot;version&quot;: &quot;1.0.0&quot;
+    }
+  },
+  &quot;budgets&quot;: {
+    &quot;top_k&quot;: 3,
+    &quot;max_new_tokens&quot;: 192,
+    &quot;max_prompt_tokens&quot;: 2048,
+    &quot;max_steps&quot;: 3,
+    &quot;max_tool_calls&quot;: 2,
+    &quot;repair_attempts&quot;: 0,
+    &quot;chunk_chars&quot;: 480,
+    &quot;chunk_overlap&quot;: 80,
+    &quot;min_score&quot;: 0.08
+  },
+  &quot;model&quot;: &quot;本地模型目录或 API 模型名；不写密钥&quot;,
+  &quot;runner&quot;: &quot;assistant.py 版本/代码提交标识&quot;
+}
+</code></pre>
+<p>核对要点：</p>
+<ul>
+<li><code>created_at</code> 必须早于第一次 <code>run</code> / <code>evaluate</code>；</li>
+<li>清单哈希覆盖整个 JSON 字节，不只是 <code>cases</code> 数组；</li>
+<li>文档哈希逐个文件记录，不能只写目录名；</li>
+<li>模型只写路径/名称和版本，不写 API key；</li>
+<li>预算与清单里的 <code>budgets</code> 一致；</li>
+<li>修改任何一项后，旧哈希作废，不能继续拿旧基线比较。</li>
+</ul>
+<p><code>evaluate</code> 自带的 <code>manifest</code> 记录是：</p>
+<pre><code class="language-text">path, sha256, size, mtime_ns, frozen_at
+</code></pre>
+<p>运行结束后看 <code>manifest_unchanged</code>。若为 <code>false</code>，说明运行期间清单字节变了；这次结果不能作为对照。它不检查文档和模型，所以外部冻结表仍然必要。</p>
+<h2 id="C18-answer-section-041ffbe98e" tabindex="-1">3. 指标算术</h2>
+<h3 id="C18-answer-section-511a9e91ab" tabindex="-1">3.1 主张支持率与严格通过率</h3>
+<p>示例：10 个用例，共提出 22 条主张，人工核对后 17 条有支持。</p>
+<ul>
+<li>主张支持率：(17/22\approx0.7727)，即 77.3%。</li>
+<li>若 10 个用例中只有 6 个满足“状态正确 + 全部主张有支持 + 无额外文字”，严格通过率是 (6/10=60%)。</li>
+<li>两者不矛盾：主张级看局部，用例级看能否交付。</li>
+<li>某用例没有提出主张：主张级分母不加 0，写 <code>n/a</code>；用例级仍按状态和“是否应有主张”判断，不能算自动通过。</li>
+</ul>
+<p>一个常见错误是把“支持”理解成“quote 存在”。正确顺序是：</p>
+<ol>
+<li>先确认 quote 在对应 chunk 和版本中逐字存在；</li>
+<li>再读上下文，确认条件、否定、时间范围没有被截断；</li>
+<li>最后判断 claim 是否只是对 quote 的逐字提取。若不是，当前助手会以 <code>citation-failed</code> 拒绝；人工复核也不应把它算作支持。</li>
+</ol>
+<h3 id="C18-answer-section-2e37a93838" tabindex="-1">3.2 检索精确率/召回率</h3>
+<p>题目表格的计算：</p>
+<table>
+<thead>
+<tr>
+<th>查询</th>
+<th>TP</th>
+<th>FP</th>
+<th>FN</th>
+<th>P</th>
+<th>R</th>
+<th>hit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Q1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>1/3</td>
+<td>1/3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>微平均精确率：((1+2)/(3+2)=3/5=0.6)。</li>
+<li>微平均召回率：((1+2)/(3+2)=3/5=0.6)。</li>
+<li>宏平均精确率：((1/3+1)/2=2/3\approx0.667)。</li>
+<li>宏平均召回率：同上 (2/3)。</li>
+<li>命中率：两个查询都至少命中一个相关片段，(2/2=1.0)。</li>
+</ul>
+<p>核对要点：</p>
+<ul>
+<li>Q1 的检索分母是 3（实际取回 3 条），不是相关总数 3；两个数恰好相等，容易混淆。</li>
+<li>Q2 只取回 2 条，分母是 2；<code>top_k=3</code> 并不强制凑满 3 条。</li>
+<li>微平均给大查询更多权重；宏平均给每个查询相同权重。两者都要写明。</li>
+<li><code>hit=1.0</code> 不代表召回高；Q1 只找到了三分之一的相关内容。</li>
+</ul>
+<h3 id="C18-answer-section-fac0c36e32" tabindex="-1">3.3 一个可复算的 aggregate 例</h3>
+<p>假设三个查询：</p>
+<table>
+<thead>
+<tr>
+<th>查询</th>
+<th>相关数</th>
+<th>取回数</th>
+<th>TP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>B</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>微平均：(P=5/7\approx0.714)，(R=5/6\approx0.833)。</li>
+<li>宏平均：(P=(1/3+1+1)/3=7/9\approx0.778)，(R=(1/2+1+1)/3=5/6\approx0.833)。</li>
+<li>hit：3/3 = 1.0。</li>
+</ul>
+<p>这组数说明微/宏可以给出不同的精确率；报告不能只写一个“0.75”而不说口径。</p>
+<h2 id="C18-answer-section-cf3979059d" tabindex="-1">4. 提取式契约的三个最小复现</h2>
+<p>材料原文：</p>
+<blockquote>
+<p>地点尚未确定。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>claim</th>
+<th>quote</th>
+<th>结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>地点已确定为图书馆</td>
+<td>地点尚未确定</td>
+<td><code>citation-failed</code></td>
+<td>claim 不是 quote 的逐字提取；旧实现曾错误放行，修复后拒绝</td>
+</tr>
+<tr>
+<td>B</td>
+<td>地点尚未确定</td>
+<td>地点尚未确定</td>
+<td>机械通过</td>
+<td>文本一致，但只说明材料没给地点；语义是否回答问题仍要人看</td>
+</tr>
+<tr>
+<td>C</td>
+<td>answer 含“地点尚未确定。因此地点是图书馆”，claim 只含第一句</td>
+<td>地点尚未确定</td>
+<td><code>citation-failed</code></td>
+<td>answer 含有已核验 claim 之外的推断文字</td>
+</tr>
+</tbody></table>
+<p>答案要点：</p>
+<ul>
+<li>A 的失败边界在 <code>validate</code> 阶段，不是检索阶段；检索可能完全正常。</li>
+<li>B 只是“引用和提取一致”，不是“事实为真”或“回答有用”。逐字 quote 不自动验证改写、因果和推断。</li>
+<li>C 说明最终 answer 也受约束；把推断塞进 answer 而不放进 claim 仍会被拒绝。</li>
+<li>这些是提取式契约的机械边界，不是对所有自然语言蕴含的通用判断；语义支持必须人工复核。</li>
+</ul>
+<h2 id="C18-answer-section-8ec6cc70b8" tabindex="-1">5. 为什么 <code>summary.passed</code> 不够</h2>
+<p><code>evaluate</code> 的 <code>passed</code> 只要求：</p>
+<pre><code class="language-text">status in expectStatus
+AND 所有 expectCitationDocs 至少被引用一次
+AND 若指定 expectTool，则存在成功回执
+</code></pre>
+<p>它不检查：</p>
+<ul>
+<li>quote 是否真的支持 claim；</li>
+<li>claim 是否回答了问题；</li>
+<li>answer 是否有额外推断；</li>
+<li>工具结果是否被错误使用；</li>
+<li>失败是否发生在正确阶段。</li>
+</ul>
+<p>因此可能出现 <code>passed=true</code> 但答案无用，也可能 <code>passed=false</code> 但失败原因正是我们想覆盖的安全路径。正确报告方式是：</p>
+<pre><code class="language-text">summary.passed / total（机械检查）
+strict pass / total（人工逐例）
+claim support / total claims
+status_counts 与 first_failure.stage 分布
+</code></pre>
+<p>并明确哪些用例本来就应失败（如 <code>model-missing</code>、<code>api-unconfigured</code>）。</p>
+<h2 id="C18-answer-section-8721c5c01a" tabindex="-1">6. 清单变更实验</h2>
+<p>操作：</p>
+<ol>
+<li>跑完基线，保存 <code>baseline.json</code>；</li>
+<li>修改 <code>eval-manifest.json</code> 一个字节（例如改一个 <code>note</code> 的标点）；</li>
+<li>再跑 <code>evaluate</code>；</li>
+<li>观察新结果的 <code>manifest.sha256</code> 与 <code>manifest_unchanged</code>。</li>
+</ol>
+<p>预期：</p>
+<ul>
+<li>新旧 <code>manifest.sha256</code> 不同；</li>
+<li>第二次运行的 <code>manifest_unchanged</code> 仍可能为 <code>true</code>，因为它在<strong>第二次运行期间</strong>没有变化；不要把它误解为“和第一次同一版本”；</li>
+<li>正确结论是“两次运行使用了不同清单，不能直接比较”。要看的是两次各自的 <code>manifest.sha256</code>，以及你的外部冻结表。</li>
+</ul>
+<p>如果运行中清单被改，第二次读取的哈希会与第一次不同，<code>manifest_unchanged=false</code>；这次结果应丢弃。</p>
+<h2 id="C18-answer-section-b5fa04b04e" tabindex="-1">7. 单因素对照</h2>
+<p>合格对照必须同时满足：</p>
+<ul>
+<li>同一批 val 用例、同一文档哈希、同一模型、同一提示模板；</li>
+<li>只改一个参数，例如只把 <code>top_k</code> 从 3 改成 5；</li>
+<li>两个条件各有自己的清单版本和哈希；</li>
+<li>先定质量底线，再看延迟/费用；</li>
+<li>即使结果变差，也如实报告并给出“不采用”。</li>
+</ul>
+<p>不合格对照：</p>
+<ul>
+<li>同时改切块、提示和模型；</li>
+<li>在 heldout 上试到变好为止；</li>
+<li>删掉失败用例后重算；</li>
+<li>只报平均值，不报样本数和失败阶段；</li>
+<li>把一个案例的提升写成“普遍提升 20%”。</li>
+</ul>
+<h2 id="C18-answer-section-9479bf87bc" tabindex="-1">8. 评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>合格</th>
+<th>不合格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>划分</td>
+<td>dev/val/heldout 用途清楚，近似重复分开</td>
+<td>同一题跨集合、留出集反复调参</td>
+</tr>
+<tr>
+<td>冻结</td>
+<td>清单/文档/预算/模型在调用前有哈希</td>
+<td>先跑后补、只写“我记得”</td>
+</tr>
+<tr>
+<td>判据</td>
+<td>状态、引用、人工支持、失败阶段分开</td>
+<td>只看 <code>passed</code> 或只看截图</td>
+</tr>
+<tr>
+<td>算术</td>
+<td>分母、微/宏、样本数写清</td>
+<td>百分比无分母、把 hit 当召回</td>
+</tr>
+<tr>
+<td>提取契约</td>
+<td>区分机械通过和语义支持</td>
+<td>声称“有逐字 quote 就证明改写成立”</td>
+</tr>
+<tr>
+<td>对照</td>
+<td>单因素、同验证集、有拒绝结论</td>
+<td>多因素混改、只挑成功案例</td>
+</tr>
+<tr>
+<td>失败保留</td>
+<td>失败状态和 <code>first_failure</code> 保留</td>
+<td>删失败、改门槛、手工补答案</td>
+</tr>
+</tbody></table>
+<p>任何一项“不合格”，这次评测就不能支撑“改进成功”的结论；可以继续做，但不能把未验证的东西写成已验证。</p>
+</article><nav class="lesson-nav"><a href="c18.html">返回 C18 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

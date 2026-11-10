@@ -1,0 +1,6 @@
+$ cd /tmp/ompev/mcp && omp --mode rpc --no-session --model openai/gpt-4o
+# 该目录有 .omp/mcp.json，里面 command 是不存在的二进制；本想观察 MCP 启动失败长相
+Provider "openai" is disabled. Remove "openai" from disabledProviders to use "openai/gpt-4o".
+exit=1
+
+（结论：这次在 MCP 发现之前就停了，MCP 启动失败的具体输出仍未采集到）

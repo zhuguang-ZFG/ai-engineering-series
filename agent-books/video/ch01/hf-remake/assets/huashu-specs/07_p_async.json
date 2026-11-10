@@ -1,0 +1,16 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Async Generator", "data": {"icon": "target"}},
+    {"at": 1.4, "kind": "point", "text": "yield 事件流 · 可中断"},
+    {"at": 3.0, "kind": "draw", "text": "Ctrl+C", "data": {"icon": "bulb"}},
+    {"at": 4.4, "kind": "point", "text": "原则 1：异步流式优先"},
+    {"at": 5.8, "kind": "highlight", "data": {"target": "draw", "index": 0}}
+  ]
+}

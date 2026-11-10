@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude Code Superpowers 工程级开发 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">Stage 3 · 50 / 195</p><article><h1 id="claude-code-superpowers-工程级开发">Claude Code Superpowers 工程级开发</h1><details class="contents"><summary>本章目录 <span>· 11 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#superpowers-简介">Superpowers 简介</a><ul><li><a href="#为什么需要-superpowers">为什么需要 Superpowers？</a></li></ul></li><li><a href="#快速开始-3">快速开始</a><ul><li><a href="#第一步安装-superpowers">第一步：安装 Superpowers</a></li><li><a href="#第二步体验第一个-skill">第二步：体验第一个 Skill</a></li><li><a href="#第三步了解技能触发机制">第三步：了解技能触发机制</a></li><li><a href="#重要理解不指定-tdd-会怎样">💡 重要理解：不指定 TDD 会怎样？</a></li><li><a href="#理解-superpowers-的价值">理解 Superpowers 的价值</a></li></ul></li><li><a href="#superpowers-核心技能详解">Superpowers 核心技能详解</a><ul><li><a href="#测试类技能">🧪 测试类技能</a></li><li><a href="#test-driven-development测试驱动开发">test-driven-development（测试驱动开发）</a></li><li><a href="#调试类技能">🐛 调试类技能</a></li><li><a href="#systematic-debugging系统化调试">systematic-debugging（系统化调试）</a></li><li><a href="#verification-before-completion完成前验证">verification-before-completion（完成前验证）</a></li><li><a href="#协作类技能">🤝 协作类技能</a></li><li><a href="#brainstorming头脑风暴">brainstorming（头脑风暴）</a></li><li><a href="#writing-plans编写计划">writing-plans（编写计划）</a></li><li><a href="#executing-plans执行计划">executing-plans（执行计划）</a></li><li><a href="#dispatching-parallel-agents并行代理调度">dispatching-parallel-agents（并行代理调度）</a></li><li><a href="#subagent-driven-development子代理驱动开发">subagent-driven-development（子代理驱动开发）</a></li><li><a href="#using-git-worktrees使用-git-worktrees">using-git-worktrees（使用 Git Worktrees）</a></li><li><a href="#代码审查类技能">👀 代码审查类技能</a></li><li><a href="#requesting-code-review请求代码审查">requesting-code-review（请求代码审查）</a></li><li><a href="#receiving-code-review接收代码审查">receiving-code-review（接收代码审查）</a></li></ul></li><li><a href="#superpowers-完整工作流程">Superpowers 完整工作流程</a><ul><li><a href="#标准开发流程">标准开发流程</a></li><li><a href="#实战案例用-superpowers-构建用户认证系统">实战案例：用 Superpowers 构建用户认证系统</a></li><li><a href="#第一步brainstorming-澄清需求">第一步：Brainstorming 澄清需求</a></li><li><a href="#第二步生成设计文档">第二步：生成设计文档</a></li><li><a href="#第三步编写实现计划">第三步：编写实现计划</a></li><li><a href="#第四步执行开发">第四步：执行开发</a></li><li><a href="#第五步代码审查">第五步：代码审查</a></li></ul></li><li><a href="#superpowers-vs-直接使用-claude-code">Superpowers vs 直接使用 Claude Code</a><ul><li><a href="#形象比喻-2">形象比喻</a></li></ul></li><li><a href="#安装与配置详解">安装与配置详解</a><ul><li><a href="#方法一通过-marketplace推荐">方法一：通过 Marketplace（推荐）</a></li><li><a href="#方法二手动克隆">方法二：手动克隆</a></li><li><a href="#方法三项目级别安装">方法三：项目级别安装</a></li></ul></li><li><a href="#常用技能速查表">常用技能速查表</a></li><li><a href="#最佳实践-2">最佳实践</a><ul><li><a href="#1-明确触发关键词">1. 明确触发关键词</a></li><li><a href="#2-需要流程纪律时用-superpowers">2. 需要流程纪律时用 Superpowers</a></li><li><a href="#3-简单任务不必强求">3. 简单任务不必强求</a></li><li><a href="#4-技能可以组合使用">4. 技能可以组合使用</a></li></ul></li><li><a href="#常见问题-4">常见问题</a><ul><li><a href="#q1用-superpowers-必须指定-tdd-吗">Q1：用 Superpowers 必须指定 &quot;TDD&quot; 吗？</a></li><li><a href="#q2superpowers-会让开发变慢吗">Q2：Superpowers 会让开发变慢吗？</a></li><li><a href="#q3小项目也需要-superpowers-吗">Q3：小项目也需要 Superpowers 吗？</a></li><li><a href="#q4superpowers-和-skills-有什么区别">Q4：Superpowers 和 Skills 有什么区别？</a></li><li><a href="#q5可以自定义-superpowers-技能吗">Q5：可以自定义 Superpowers 技能吗？</a></li></ul></li><li><a href="#参考资料-16">参考资料</a><ul><li><a href="#官方资源-6">官方资源</a></li><li><a href="#社区资源-1">社区资源</a></li><li><a href="#相关文章">相关文章</a></li></ul></li><li><a href="#总结-8">总结</a><ul><li><a href="#核心要点">核心要点</a></li></ul></li></ul></nav></details><h2 id="superpowers-简介">Superpowers 简介</h2>
+<p><strong>Superpowers</strong> 是由 Jesse Vincent（网名 obra）开发的开源代理技能框架，专门解决 AI 编程中的一个核心问题：如何让 AI 写出&quot;工程级&quot;的代码，而不是&quot;玩具级&quot;的代码。</p>
+<p>想象一下，普通 AI 编程助手就像一个&quot;聪明的实习生&quot;——它能写出能跑的代码，但可能没有测试、没有文档、没有遵循最佳实践。而 Superpowers 则像是给这个实习生配备了一位&quot;资深工程师导师&quot;，强制它遵循完整的软件开发流程。</p>
+<h3 id="为什么需要-superpowers">为什么需要 Superpowers？</h3>
+<p>在没有 Superpowers 之前，使用 Claude Code 存在一些问题：</p>
+<ul>
+<li><strong>Vibe Coding 的混乱</strong>：AI 直接开始写代码，没有规划，导致频繁返工</li>
+<li><strong>缺少 TDD 纪律</strong>：AI 习惯先写代码再补测试，甚至干脆不写测试</li>
+<li><strong>需求模糊直接动手</strong>：用户说&quot;做一个登录功能&quot;，AI 就开始写，结果做出来不是想要的</li>
+<li><strong>代码质量不稳定</strong>：没有代码审查机制，质量依赖 AI 的&quot;心情&quot;</li>
+</ul>
+<p>Superpowers 解决了这些问题，让 Claude 变成一个&quot;有纪律的开发团队&quot;——它先帮你澄清需求，然后制定计划，再用 TDD 方式开发，最后通过代码审查确保质量。</p>
+<h2 id="快速开始-3">快速开始</h2>
+<h3 id="第一步安装-superpowers">第一步：安装 Superpowers</h3>
+<p>在 Claude Code 中运行：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 添加 marketplace
+/plugin marketplace add obra/superpowers-marketplace
+
+# 安装 superpowers
+/plugin install superpowers@superpowers-marketplace
+</code></pre>
+<p>或者手动克隆：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash">git clone https://github.com/obra/superpowers.git ~/.claude/skills/superpowers
+</code></pre>
+<h3 id="第二步体验第一个-skill">第二步：体验第一个 Skill</h3>
+<p>用 Superpowers 的 <strong>brainstorming</strong>（头脑风暴）技能来体验它的价值。</p>
+<p>在 Claude Code 中输入：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>我做一个用户登录功能
+</code></pre>
+<p><strong>没有 Superpowers 之前</strong>：Claude 直接开始写代码，可能做出来不是你想要的。</p>
+<p><strong>有 Superpowers 之后</strong>：Claude 会通过苏格拉底式提问帮你澄清需求：</p>
+<blockquote>
+<p>这个登录功能是为 Web 应用还是移动应用设计的？</p>
+<p>需要支持哪些登录方式？邮箱密码？第三方登录（Google、GitHub）？</p>
+<p>是否需要&quot;记住我&quot;功能？</p>
+<p>密码重置流程是邮件还是短信？</p>
+<p>...</p>
+</blockquote>
+<p>这些问题迫使你在编码前想清楚真正需要什么，避免写出一堆用不上的代码。</p>
+<h3 id="第三步了解技能触发机制">第三步：了解技能触发机制</h3>
+<p>Superpowers 不是&quot;魔法开关&quot;，它是一组<strong>技能集合</strong>。了解技能如何触发很重要。</p>
+<p><strong>技能触发的三种方式</strong>：</p>
+<ol>
+<li><p><strong>关键词触发</strong></p>
+<ul>
+<li>当你提到 &quot;TDD&quot;、&quot;测试驱动开发&quot;、&quot;先写测试&quot; 时</li>
+<li><code>test-driven-development</code> 技能会被激活</li>
+</ul>
+</li>
+<li><p><strong>场景触发</strong></p>
+<ul>
+<li>当需求模糊时，<code>brainstorming</code> 技能会主动提问</li>
+<li>当出现 bug 时，<code>systematic-debugging</code> 技能会被激活</li>
+</ul>
+</li>
+<li><p><strong>手动调用</strong></p>
+<ul>
+<li>直接使用技能名称：<code>/test-driven-development</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="重要理解不指定-tdd-会怎样">💡 重要理解：不指定 TDD 会怎样？</h3>
+<p>这是个常见误解，先澄清一下：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code># 情况 A：不提 TDD
+&quot;实现一个计算器&quot;
+→ Claude 可能写测试，也可能不写
+→ 取决于模型本身的训练习惯
+
+# 情况 B：提到 TDD
+&quot;用 TDD 方式实现一个计算器&quot;
+→ test-driven-development 技能被激活
+→ 强制遵循 RED-GREEN-REFACTOR 流程
+</code></pre>
+<p><strong>Superpowers 的真正价值</strong>：不是&quot;无中生有&quot;，而是&quot;强化纪律&quot;。</p>
+<ul>
+<li>没有 TDD 技能时：Claude 写测试是&quot;看心情&quot;</li>
+<li>有 TDD 技能时：Claude 被强制遵循 TDD 流程</li>
+</ul>
+<h3 id="理解-superpowers-的价值">理解 Superpowers 的价值</h3>
+<p>通过上面的解释，你可以看到 Superpowers 的核心价值：</p>
+<ol>
+<li><strong>需求优先</strong>：<code>brainstorming</code> 技能在需求模糊时主动提问</li>
+<li><strong>流程纪律</strong>：<code>test-driven-development</code> 强制 TDD 红绿重构循环</li>
+<li><strong>任务分解</strong>：<code>writing-plans</code> 将大项目拆解为小任务</li>
+<li><strong>质量控制</strong>：<code>code-review</code> 技能确保代码质量</li>
+</ol>
+<h2 id="superpowers-核心技能详解">Superpowers 核心技能详解</h2>
+<p>Superpowers 包含 <strong>20+ 个可组合技能</strong>，覆盖整个软件开发生命周期。按类别过一遍。</p>
+<h3 id="测试类技能">🧪 测试类技能</h3>
+<h3 id="test-driven-development测试驱动开发">test-driven-development（测试驱动开发）</h3>
+<p><strong>如何触发</strong>：提到 &quot;TDD&quot;、&quot;测试驱动开发&quot;、&quot;先写测试&quot; 等关键词。</p>
+<p><strong>这个技能做什么</strong>：强制 Claude 遵循 TDD 红绿重构循环，而不是&quot;想起来再写测试&quot;。</p>
+<p><strong>传统开发方式</strong>（常见问题）：</p>
+<ol>
+<li>直接写代码</li>
+<li>手动测试一下</li>
+<li>发现 bug，修改代码</li>
+<li>重复...（测试？下次再说吧）</li>
+</ol>
+<p><strong>TDD 方式</strong>（技能激活后）：</p>
+<ol>
+<li>🔴 <strong>RED</strong>：先写一个失败的测试</li>
+<li>🟢 <strong>GREEN</strong>：写最少的代码让测试通过</li>
+<li>🔵 <strong>REFACTOR</strong>：重构代码，保持测试通过</li>
+<li>重复</li>
+</ol>
+<p><strong>使用示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用 TDD 方式实现一个用户认证模块
+</code></pre>
+<p>Claude 会：</p>
+<ol>
+<li>先编写测试（测试用户名密码验证、测试 token 生成...）</li>
+<li>运行测试，确认全部失败（RED）</li>
+<li>编写最小实现代码</li>
+<li>运行测试，确认通过（GREEN）</li>
+<li>重构代码，提取公共逻辑</li>
+<li>再次运行测试，确认仍然通过（REFACTOR）</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>：如果你不提 &quot;TDD&quot;，Claude 可能也可能不写测试。这个技能的作用是强化流程纪律，确保测试不会&quot;被遗忘&quot;。</p>
+</blockquote>
+<h3 id="调试类技能">🐛 调试类技能</h3>
+<h3 id="systematic-debugging系统化调试">systematic-debugging（系统化调试）</h3>
+<p>当出现 bug 时，人类开发者往往会随机尝试各种修复方案。Superpowers 强制使用四阶段根因分析：</p>
+<p>阶段 1：复现问题</p>
+<ul>
+<li>确认 bug 可以稳定复现</li>
+<li>记录复现步骤</li>
+</ul>
+<p>阶段 2：隔离根因</p>
+<ul>
+<li>通过二分法缩小范围</li>
+<li>添加日志定位问题代码</li>
+</ul>
+<p>阶段 3：验证假设</p>
+<ul>
+<li>提出根因假设</li>
+<li>设计验证实验</li>
+</ul>
+<p>阶段 4：修复并验证</p>
+<ul>
+<li>实施修复</li>
+<li>确认 bug 解决</li>
+<li>添加回归测试</li>
+</ul>
+<h3 id="verification-before-completion完成前验证">verification-before-completion（完成前验证）</h3>
+<p>这个技能防止 Claude &quot;感觉差不多&quot;就停止工作。它要求 Claude 在声称任务完成前：</p>
+<ol>
+<li>运行所有测试</li>
+<li>手动测试关键功能</li>
+<li>检查代码质量（lint）</li>
+<li>确认文档已更新</li>
+</ol>
+<h3 id="协作类技能">🤝 协作类技能</h3>
+<h3 id="brainstorming头脑风暴">brainstorming（头脑风暴）</h3>
+<p>这是 Superpowers 最有趣的技能之一。它使用苏格拉底式提问法帮你澄清需求。</p>
+<p><strong>工作方式</strong>：当你提出一个模糊需求时，Claude 不会直接动手，而是会问你问题：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>你：做一个博客系统
+
+Claude：
+- 这个博客主要是给谁看的？技术读者还是大众？
+- 需要支持 Markdown 编辑吗？
+- 需要评论功能吗？
+- 需要搜索功能吗？
+- 是单用户还是多作者？
+- ...
+</code></pre>
+<p>这些问题迫使你思考真正需要什么功能，避免开发出一堆用不上的东西。</p>
+<h3 id="writing-plans编写计划">writing-plans（编写计划）</h3>
+<p>这个技能将大任务分解为 2-5 分钟可完成的小任务。</p>
+<p><strong>示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用 writing-plans 规划一个待办事项 API 的开发
+</code></pre>
+<p>Claude 会生成详细计划：</p>
+<pre class="prose-block"><code class="language-markdown"># 实现计划
+
+## 任务 1：设计数据库 schema（预计 5 分钟）
+- 创建 todos 表
+- 定义字段：id, title, completed, createdAt
+
+## 任务 2：创建 Express 路由（预计 10 分钟）
+- POST /todos - 创建任务
+- GET /todos - 获取列表
+- GET /todos/:id - 获取单个
+- PUT /todos/:id - 更新
+- DELETE /todos/:id - 删除
+
+## 任务 3：添加输入验证（预计 10 分钟）
+- 标题不能为空
+- completed 必须是布尔值
+
+## 任务 4：编写测试（预计 15 分钟）
+- 为每个端点编写测试
+- 覆盖边界情况
+
+## 任务 5：启动服务器并验证（预计 5 分钟）
+- 运行测试
+- 手动测试 API
+
+验收标准：
+- 所有测试通过
+- curl 测试每个端点正常
+</code></pre>
+<h3 id="executing-plans执行计划">executing-plans（执行计划）</h3>
+<p>这个技能批量执行计划，并在每个检查点暂停确认。</p>
+<p><strong>使用示例</strong>：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>执行上面的计划，每完成一个任务暂停一下
+</code></pre>
+<p>Claude 会：</p>
+<ol>
+<li>完成任务 1，然后暂停：<code>✅ 数据库 schema 完成，继续吗？</code></li>
+<li>你确认后完成任务 2，再次暂停</li>
+<li>以此类推</li>
+</ol>
+<p>这让你可以在每个阶段检查方向是否正确，避免跑远了才发现错了。</p>
+<h3 id="dispatching-parallel-agents并行代理调度">dispatching-parallel-agents（并行代理调度）</h3>
+<p>这个技能可以同时启动多个子代理并行工作。</p>
+<p><strong>使用场景</strong>：当你需要同时处理多个独立任务时。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用并行代理同时完成：
+- 代理 A：编写后端 API
+- 代理 B：编写前端组件
+- 代理 C：编写测试
+</code></pre>
+<p>每个代理在自己的隔离环境中工作，互不干扰。</p>
+<h3 id="subagent-driven-development子代理驱动开发">subagent-driven-development（子代理驱动开发）</h3>
+<p>这个技能为每个小任务启动一个独立的子代理。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>每个子代理有独立的上下文</li>
+<li>任务失败不会影响其他任务</li>
+<li>可以并行执行多个任务</li>
+</ul>
+<h3 id="using-git-worktrees使用-git-worktrees">using-git-worktrees（使用 Git Worktrees）</h3>
+<p>这个技能使用 Git 的 worktree 功能创建隔离的开发环境。</p>
+<p><strong>好处</strong>：</p>
+<ul>
+<li>多个功能可以并行开发</li>
+<li>每个 worktree 是独立的</li>
+<li>不会互相冲突</li>
+</ul>
+<h3 id="代码审查类技能">👀 代码审查类技能</h3>
+<h3 id="requesting-code-review请求代码审查">requesting-code-review（请求代码审查）</h3>
+<p>当你完成代码后，这个技能会自动请求代码审查。</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>完成功能后自动触发代码审查
+</code></pre>
+<h3 id="receiving-code-review接收代码审查">receiving-code-review（接收代码审查）</h3>
+<p>这个技能定义了如何接收和处理审查反馈。</p>
+<p><strong>审查流程</strong>：</p>
+<ol>
+<li>提交代码</li>
+<li>自动触发审查</li>
+<li>审查者检查代码质量、安全性、测试覆盖率</li>
+<li>提出改进建议</li>
+<li>修复问题</li>
+<li>重新审查直到批准</li>
+</ol>
+<h2 id="superpowers-完整工作流程">Superpowers 完整工作流程</h2>
+<p>Superpowers 的真正威力在于将多个技能组合成完整的开发流程。</p>
+<h3 id="标准开发流程">标准开发流程</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>1. Brainstorming（头脑风暴）
+   ↓ 通过问答澄清真实需求
+
+2. Design Document（设计文档）
+   ↓ 分块展示设计，等待确认
+
+3. Writing Plans（编写计划）
+   ↓ 分解为 2-5 分钟的小任务
+
+4. Subagent Development（子代理开发）
+   ↓ 每个任务启动独立子代理
+   ↓ 两阶段审查：规格符合性 + 代码质量
+
+5. TDD（测试驱动开发）
+   ↓ 强制 RED-GREEN-REFACTOR
+
+6. Code Review（代码审查）
+   ↓ 质量把关
+
+7. 完成
+</code></pre>
+<h3 id="实战案例用-superpowers-构建用户认证系统">实战案例：用 Superpowers 构建用户认证系统</h3>
+<p>用一个完整的例子走一遍 Superpowers 的工作流程。</p>
+<h3 id="第一步brainstorming-澄清需求">第一步：Brainstorming 澄清需求</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>我需要一个用户认证系统
+</code></pre>
+<p>Claude 会问你：</p>
+<ul>
+<li>Web 应用还是移动应用？</li>
+<li>支持哪些登录方式？</li>
+<li>需要密码重置吗？</li>
+<li>需要&quot;记住我&quot;功能吗？</li>
+<li>...</li>
+</ul>
+<h3 id="第二步生成设计文档">第二步：生成设计文档</h3>
+<p>确认需求后，Claude 会生成设计文档：</p>
+<pre class="prose-block"><code class="language-markdown"># 用户认证系统设计
+
+## 功能需求
+1. 用户注册（邮箱 + 密码）
+2. 用户登录
+3. 密码重置（邮件）
+4. 记住我（JWT + Refresh Token）
+
+## 技术选型
+- 后端：Node.js + Express
+- 数据库：SQLite
+- 认证：JWT
+- 加密：bcrypt
+
+## API 设计
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/refresh
+- POST /api/auth/reset-password
+</code></pre>
+<h3 id="第三步编写实现计划">第三步：编写实现计划</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用 writing-plans 制定实现计划
+</code></pre>
+<p>Claude 会生成详细的任务列表，每个任务 2-5 分钟可完成。</p>
+<h3 id="第四步执行开发">第四步：执行开发</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用 TDD 方式执行上面的计划
+</code></pre>
+<p>Claude 会：</p>
+<ol>
+<li>先写测试</li>
+<li>确认测试失败（RED）</li>
+<li>写实现代码</li>
+<li>确认测试通过（GREEN）</li>
+<li>重构代码（REFACTOR）</li>
+</ol>
+<h3 id="第五步代码审查">第五步：代码审查</h3>
+<p>完成后自动触发代码审查，检查：</p>
+<ul>
+<li>代码质量</li>
+<li>安全性（SQL 注入、XSS 等）</li>
+<li>测试覆盖率</li>
+<li>文档完整性</li>
+</ul>
+<h2 id="superpowers-vs-直接使用-claude-code">Superpowers vs 直接使用 Claude Code</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>直接使用 Claude Code</th>
+<th>使用 Superpowers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>需求澄清</strong></td>
+<td>AI 直接开始写代码</td>
+<td>苏格拉底式提问澄清需求</td>
+</tr>
+<tr>
+<td><strong>开发流程</strong></td>
+<td>随 AI 自由发挥</td>
+<td>强制 TDD 红绿重构</td>
+</tr>
+<tr>
+<td><strong>任务管理</strong></td>
+<td>一次性完成</td>
+<td>分解为小任务，带检查点</td>
+</tr>
+<tr>
+<td><strong>代码质量</strong></td>
+<td>依赖 AI 判断</td>
+<td>强制代码审查</td>
+</tr>
+<tr>
+<td><strong>可预测性</strong></td>
+<td>结果不稳定</td>
+<td>流程可重复</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>简单任务、原型验证</td>
+<td>复杂项目、生产代码</td>
+</tr>
+</tbody></table></div>
+<h3 id="形象比喻-2">形象比喻</h3>
+<p>如果把 Claude Code 比作一个&quot;聪明的实习生&quot;：</p>
+<ul>
+<li><strong>直接使用</strong>：告诉实习生&quot;做一个登录功能&quot;，他直接开始写，写的东西可能不是你要的</li>
+<li><strong>使用 Superpowers</strong>：给实习生配备一位资深导师，导师会问清楚需求、制定计划、检查代码质量</li>
+</ul>
+<h2 id="安装与配置详解">安装与配置详解</h2>
+<h3 id="方法一通过-marketplace推荐">方法一：通过 Marketplace（推荐）</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 添加 marketplace
+/plugin marketplace add obra/superpowers-marketplace
+
+# 安装
+/plugin install superpowers@superpowers-marketplace
+
+# 验证安装
+/skills
+</code></pre>
+<h3 id="方法二手动克隆">方法二：手动克隆</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 创建目录
+mkdir -p ~/.claude/skills
+
+# 克隆仓库
+git clone https://github.com/obra/superpowers.git ~/.claude/skills/superpowers
+</code></pre>
+<h3 id="方法三项目级别安装">方法三：项目级别安装</h3>
+<p>如果你想在特定项目中使用 Superpowers：</p>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code class="language-bash"># 在项目根目录
+mkdir -p .claude/skills
+
+# 克隆或复制 superpowers
+cp -r ~/.claude/skills/superpowers .claude/skills/
+</code></pre>
+<p>这样团队成员可以共享相同的 Superpowers 配置。</p>
+<h2 id="常用技能速查表">常用技能速查表</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>技能名称</th>
+<th>功能</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>brainstorming</code></td>
+<td>苏格拉底式提问澄清需求</td>
+<td>需求不明确时</td>
+</tr>
+<tr>
+<td><code>writing-plans</code></td>
+<td>分解任务为小步骤</td>
+<td>大项目开始前</td>
+</tr>
+<tr>
+<td><code>executing-plans</code></td>
+<td>执行计划并检查点</td>
+<td>按计划开发时</td>
+</tr>
+<tr>
+<td><code>test-driven-development</code></td>
+<td>TDD 红绿重构循环</td>
+<td>所有功能开发</td>
+</tr>
+<tr>
+<td><code>systematic-debugging</code></td>
+<td>四阶段根因分析</td>
+<td>出现 bug 时</td>
+</tr>
+<tr>
+<td><code>verification-before-completion</code></td>
+<td>完成前验证</td>
+<td>任务结束时</td>
+</tr>
+<tr>
+<td><code>requesting-code-review</code></td>
+<td>请求代码审查</td>
+<td>提交代码前</td>
+</tr>
+<tr>
+<td><code>subagent-driven-development</code></td>
+<td>子代理驱动开发</td>
+<td>并行任务</td>
+</tr>
+<tr>
+<td><code>using-git-worktrees</code></td>
+<td>Git worktree 隔离</td>
+<td>并行开发功能</td>
+</tr>
+</tbody></table></div>
+<h2 id="最佳实践-2">最佳实践</h2>
+<h3 id="1-明确触发关键词">1. 明确触发关键词</h3>
+<p>Superpowers 的技能是通过关键词触发的，了解常用触发词：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>技能</th>
+<th>触发关键词</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>test-driven-development</code></td>
+<td>&quot;TDD&quot;、&quot;测试驱动&quot;、&quot;先写测试&quot;</td>
+</tr>
+<tr>
+<td><code>brainstorming</code></td>
+<td>需求模糊时自动触发</td>
+</tr>
+<tr>
+<td><code>systematic-debugging</code></td>
+<td>&quot;调试&quot;、&quot;bug&quot;、&quot;不工作&quot;</td>
+</tr>
+<tr>
+<td><code>writing-plans</code></td>
+<td>&quot;制定计划&quot;、&quot;规划&quot;</td>
+</tr>
+</tbody></table></div>
+<h3 id="2-需要流程纪律时用-superpowers">2. 需要流程纪律时用 Superpowers</h3>
+<ul>
+<li>生产级代码开发 → 提到 &quot;TDD&quot;</li>
+<li>需求不明确时 → 让 <code>brainstorming</code> 帮你澄清</li>
+<li>复杂项目 → 用 <code>writing-plans</code> 分解任务</li>
+</ul>
+<h3 id="3-简单任务不必强求">3. 简单任务不必强求</h3>
+<p>如果是快速原型或一次性脚本，不需要强制走完整流程。Superpowers 适合需要长期维护的代码。</p>
+<h3 id="4-技能可以组合使用">4. 技能可以组合使用</h3>
+<pre tabindex="0" role="region" aria-label="代码或文本，可横向滚动"><code>用 TDD 方式实现用户认证，完成后帮我做代码审查
+</code></pre>
+<p>这会同时触发 <code>test-driven-development</code> 和 <code>code-review</code> 技能。</p>
+<h2 id="常见问题-4">常见问题</h2>
+<h3 id="q1用-superpowers-必须指定-tdd-吗">Q1：用 Superpowers 必须指定 &quot;TDD&quot; 吗？</h3>
+<p><strong>不是必须的</strong>。</p>
+<p>Superpowers 是技能集合，每个技能有自己的触发条件：</p>
+<ul>
+<li>说 &quot;用 TDD 方式&quot; → 触发 <code>test-driven-development</code></li>
+<li>不说 TDD → Claude 可能写测试，也可能不写（取决于模型本身）</li>
+</ul>
+<p>Superpowers 的作用是<strong>强化流程纪律</strong>，而不是凭空创造能力。</p>
+<h3 id="q2superpowers-会让开发变慢吗">Q2：Superpowers 会让开发变慢吗？</h3>
+<p>初期可能会感觉慢，因为：</p>
+<ul>
+<li>需要时间澄清需求</li>
+<li>要先写测试再写代码</li>
+<li>要经过代码审查</li>
+</ul>
+<p>但长期来看，由于减少了返工和 bug，整体效率更高。</p>
+<h3 id="q3小项目也需要-superpowers-吗">Q3：小项目也需要 Superpowers 吗？</h3>
+<p>对于原型验证或非常简单的任务，可以直接使用 Claude Code。Superpowers 更适合：</p>
+<ul>
+<li>生产级项目</li>
+<li>多人协作项目</li>
+<li>需要长期维护的项目</li>
+</ul>
+<h3 id="q4superpowers-和-skills-有什么区别">Q4：Superpowers 和 Skills 有什么区别？</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Superpowers</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>本质</strong></td>
+<td>完整的开发方法论框架</td>
+<td>可复用的技能包</td>
+</tr>
+<tr>
+<td><strong>范围</strong></td>
+<td>覆盖整个开发流程</td>
+<td>聚焦特定功能</td>
+</tr>
+<tr>
+<td><strong>关系</strong></td>
+<td>Superpowers 内部使用 Skills</td>
+<td>Superpowers 是 Skills 的集合</td>
+</tr>
+</tbody></table></div>
+<h3 id="q5可以自定义-superpowers-技能吗">Q5：可以自定义 Superpowers 技能吗？</h3>
+<p>可以！Superpowers 是开源的，你可以：</p>
+<ol>
+<li>Fork 仓库</li>
+<li>修改现有技能</li>
+<li>添加新的技能</li>
+<li>贡献回社区</li>
+</ol>
+<h2 id="参考资料-16">参考资料</h2>
+<h3 id="官方资源-6">官方资源</h3>
+<ul>
+<li><a href="https://github.com/obra/superpowers">obra/superpowers GitHub</a> - 官方仓库（50,000+ ⭐）</li>
+<li><a href="https://www.cnblogs.com/gyc567/p/19510203">Superpowers 详细用法教程</a> - 中文详细教程</li>
+<li><a href="https://m.blog.csdn.net/gitblog_00683/article/details/144768992">Superpowers 环境配置指南</a> - 配置指南</li>
+</ul>
+<h3 id="社区资源-1">社区资源</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>仓库</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/affaan-m/everything-claude-code">affaan-m/everything-claude-code</a></td>
+<td>综合工具包，包含 TDD 工作流</td>
+</tr>
+<tr>
+<td><a href="https://github.com/shanraisshan/claude-code-best-practice">shanraisshan/claude-code-best-practice</a></td>
+<td>社区维护的最佳实践资源集合</td>
+</tr>
+</tbody></table></div>
+<h3 id="相关文章">相关文章</h3>
+<ul>
+<li><a href="https://juejin.cn/post/7593573617648123956">告别 Vibe Coding！用 Superpowers 让 Claude Code 写出工程级代码</a></li>
+<li><a href="https://juejin.cn/post/7570341520551673871">我如何用 Superpowers MCP 强制 Claude Code 在编码前进行规划</a></li>
+<li><a href="https://juejin.cn/post/7594832320030638123">Claude Code + Superpowers 保姆级入门教程</a></li>
+</ul>
+<h2 id="总结-8">总结</h2>
+<p>Superpowers 是一组<strong>工程级开发技能集合</strong>，让 Claude Code 从&quot;聪明的实习生&quot;变成&quot;有纪律的开发团队&quot;。</p>
+<h3 id="核心要点">核心要点</h3>
+<ol>
+<li><p><strong>Superpowers 是技能集合，不是魔法</strong></p>
+<ul>
+<li>安装后，技能在后台可用</li>
+<li>通过关键词或场景触发</li>
+<li>可以手动调用特定技能</li>
+</ul>
+</li>
+<li><p><strong>记住关键触发词</strong></p>
+<ul>
+<li>想要 TDD → 说 &quot;用 TDD 方式&quot;</li>
+<li>需求模糊 → <code>brainstorming</code> 会主动提问</li>
+<li>出现 bug → 提到 &quot;调试&quot; 触发 <code>systematic-debugging</code></li>
+</ul>
+</li>
+<li><p><strong>适用场景</strong></p>
+<ul>
+<li>✅ 生产级代码开发</li>
+<li>✅ 需要长期维护的项目</li>
+<li>✅ 团队协作项目</li>
+<li>❌ 快速原型（可选）</li>
+<li>❌ 一次性脚本（可选）</li>
+</ul>
+</li>
+</ol>
+<p>记住：<strong>Superpowers 不让 AI 更聪明，而是让 AI 更有纪律。</strong></p>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-049.html">← Claude Agent SDK 完全指南</a><a rel="next" href="chapter-051.html">从 Vibe Coding 到 Spec Coding →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>

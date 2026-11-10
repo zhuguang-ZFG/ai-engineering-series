@@ -1,0 +1,243 @@
+# 书籍知识图解：首批 6 个点位
+
+> 当前八张原书图已按 [迭代 02](../../specs/original-book-illustration-02.md) 更新为 480×640，可通过 [图集](book-figures.html) 查看。本页以下的 1200px 与首批插入规范属于历史规划；以生成脚本和迭代 02 的实际结果为准。
+
+
+统一风格：`FA-040` Minimalist 2D Hand-Drawn Doodle（特征激活，无需垫图）。
+统一配色：`C-32` 炭黑线稿 + `C-11` 祖母绿标注，浅色纯净背景。
+统一规则：图替繁文但**不删知识**——保真要素必须作为图中标签出现，正文结论与数字原样保留；不回填微缩摆拍、童话角色或纯文字方框。
+**全部为新增图，不替换任何现有 `<figure>`**：书中的授权照片（CC BY / CC BY-SA / 公有领域）与 `figcaption`、署名原样保留；新图只落在没有图的小节，与相邻图片保持 ≥400–500 字正文间隔。图解不画人物，主角是结构与标签。
+
+各章现有图量（2026-10-30 实测）：学习路径 20 张、筛选方向 12 张、JTBD 8 张、访谈 8 张、双钻 14 张（含 Design Council 官方双钻图，故不再另画）、部署 18 张、**常见问题与排错 0 张**。
+
+每张图的结构：点位 → 图型 → 保真要素 → 中文提示词 → English prompt。
+提示词内的布局段直接采用图型库原生模板，保证构图稳定。
+
+## 落地状态
+
+六个点位全部用**手写 SVG** 直接落地并入正文（未调用任何出图模型：矢量、可改、可 diff，与书的排版天然一致），源文件在 `book/assets/handdraw/`，正文统一用 `<figure class="handdraw-figure">` 引用：
+
+| 点位 | 源文件 | 插入位置 |
+|---|---|---|
+| 1 学习路径 | `learn-path.svg` | 「这门课真正想培养什么」之后、`##### 为什么现在需要产品工程师？` 之前 |
+| 2 筛选漏斗 | `funnel.svg` | Step 1 收尾段之后、`##### 开篇：独立开发程序员小明的故事` 之前 |
+| 3 JTBD | `jtbd.svg` | `#### Jobs to Be Done 需求理论` 标题之后、会议纪要段落之前 |
+| 4 The Mom Test | `mom-test.svg` | 「访谈应尽量寻找可核对的经历」之后、`##### 2. 意见与行为证据` 之前 |
+| 5 报错流程 | `error-flow.svg` | 三步卡片之后、`##### 1. 核心心法：截图问 AI` 之前 |
+| 6 推送即部署 | `deploy.svg` | 部署平台对比表之后、`#### 1. 腾讯云 CloudBase` 之前 |
+
+排版约定（六张一致）：画布 1200 宽，纸色底 `#fbfaf6`，线稿 `#1f2328` 4px 圆头，强调色 `#1f883d`，说明色 `#57606a`；不画人物；标题 34px、正文 21–23px、卡内说明 19px；卡片内文字左右各留 ≥8px 余量。
+
+质感三件套（统一加在每张图上，保证一眼同源）：卡片走 `filter="url(#card-shadow)"` 的 0/4 位移、5px 模糊、10% 墨色投影；副标题下方一条 168px 的祖母绿手绘波浪线（`M72 142q42 6 84 0t84 0`，5px 圆头，85% 不透明）；浅灰底卡片（`#f1f7f2` / `#f2f1ec`）同样带投影，避免同一张图里两种「厚度」。
+
+验收方式：每张都先 headless Chrome 栅格化到 `$TMPDIR/hd-<name>.png`，再用定点提问核对（单张卡片的文字是否越界、箭头方向、连线是否落到边框、回到行的标注是否压字），改完重渲染复验，最后才并入正文。`npm test` 会校验六个引用都指向真实文件。
+
+有出图通道时，下面的提示词仍可直接拿来重画任何一张。
+
+---
+
+## 1. 学习路径总览（`### 如何学习本课程`，章首）
+
+- 图型：`IG-008` 流程步骤图
+- 保真要素：课程真实的 8 个阶段顺序，一步都不许少——寻找真实问题 → 筛选方向 → 看懂需求（JTBD）→ 访谈验证 → 双钻收敛 → 可交互原型 → 接入 AI 能力 → 打磨交付
+- 回填价值：读者在第一章就拿到全课程地图，后续每章可回指此图
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：设置一个主标题，主体采用流程步骤图结构，步骤路径可以是横向、纵向、S 形或其他清晰的路径式布局。每一步只包含一个小图和一句简短说明，步骤之间通过方向、顺序或适度引导关系连接。保留大面积留白，避免复杂装饰和过多文字。
+主标题：「Vibe Coding 学习路径」。
+主题：把一门零基础 AI 编程课的 8 个阶段画成一条 S 形路径，依次是 1 寻找真实问题、2 筛选方向、3 看懂需求（JTBD）、4 访谈验证、5 双钻收敛、6 可交互原型、7 接入 AI 能力、8 打磨交付；每一步配一个极简小图标（放大镜、漏斗、任务卡、对话气泡、双钻、原型框、插头、礼盒），步骤编号用祖母绿圆形标记。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: include a main headline and build the body as a process-step diagram. The sequence may use a horizontal, vertical, S-shaped, or another clearly readable path layout. Each step contains only one small illustration and one concise sentence, connected through direction, order, or light guidance. Preserve generous negative space and avoid complex decoration or excessive text.
+Headline: "Vibe Coding 学习路径".
+Theme: draw the eight stages of a zero-based AI coding course as one S-shaped path, in this exact order: 1 寻找真实问题, 2 筛选方向, 3 看懂需求（JTBD）, 4 访谈验证, 5 双钻收敛, 6 可交互原型, 7 接入 AI 能力, 8 打磨交付. Give each step one minimal icon (magnifier, funnel, task card, speech bubble, double diamond, wireframe, plug, gift box) and mark the step numbers with emerald-green circles.
+```
+
+---
+
+## 2. 筛选值得做的方向（`### 2. 筛选值得做的方向`，Step 1 建立判断标准之后）
+
+- 图型：`IG-013` 漏斗
+- 保真要素：两层判断来自原文——「用户愿意买单」（Step 1）与「免费替代品太多＝没有独特价值」；漏斗不能画成单纯的流量转化
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：漏斗型，上宽下窄，通过逐层收窄的结构展示从广泛进入、筛选、转化、淘汰到聚焦沉淀的过程。设置清晰的主标题，漏斗各层配简洁的阶段名称、短句或小图，突出人数、对象或范围逐步减少而重点逐步集中的关系。层级顺序应清楚，保留大面积留白，避免复杂装饰和过多文字。
+主标题：「什么样的点子值得做」。
+主题：一个四层漏斗，从上到下依次是「脑子里所有点子」「有人真的遇到这个问题」「用户愿意买单」「不怕免费替代、有独特价值」，最底部滴出一颗祖母绿的点子并标注「值得做」；被淘汰的层用浅灰虚线表示。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: funnel-shaped, wide at the top and narrow at the bottom, using progressively narrowing layers to show a process from broad entry, filtering, and conversion to elimination and focused retention. Include a clear main headline. Give each funnel layer a concise stage name, short sentence, or small illustration, emphasizing that the people, objects, or scope become smaller while the focus becomes stronger. Keep the hierarchy clear, preserve generous negative space, and avoid complex decoration or excessive text.
+Headline: "什么样的点子值得做".
+Theme: a four-layer funnel labelled from top to bottom "脑子里所有点子", "有人真的遇到这个问题", "用户愿意买单", "不怕免费替代、有独特价值"; a single emerald-green idea drops out of the bottom marked "值得做", while filtered-out layers fade into light grey dashed lines.
+```
+
+---
+
+## 3. 看懂真实需求 JTBD（`### 3. 看懂真实需求（JTBD）`，基本概念之后）
+
+- 图型：`IG-002` 中心标注
+- 保真要素：JTBD 关心的是**具体情境、期望结果、现有做法**三样东西，而不是功能清单；纪要工具的例子（转写/摘要/待办 ≠ 需求）留在正文
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：主图放在画面中央，周围环绕多个带线标签的注释，连接线分别指向主图的具体部位，对主体结构或细节进行清晰标注说明。
+主标题：「JTBD：用户想完成的任务」。
+主题：画面中央是一张写着「用户想完成的任务」的任务卡；三条连接线分别指向三个标注——「具体情境：他在什么情况下需要它」「期望结果：他想得到什么改变」「现有做法：他现在是怎么凑合解决的」；任务卡下方用浅灰小字写「不是功能清单」。画面只有卡片、标注与连接线，不出现人物。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: place the main illustration in the center, surround it with multiple labeled annotations connected by leader lines, and point each line to a specific part of the subject for clear structural or detail explanations.
+Headline: "JTBD：用户想完成的任务".
+Theme: in the centre a task card reading "用户想完成的任务"; three leader lines point to three annotations — "具体情境：他在什么情况下需要它", "期望结果：他想得到什么改变", "现有做法：他现在是怎么凑合解决的"; beneath the card, a light-grey small note reads "不是功能清单". Only the card, annotations and leader lines — no people.
+```
+
+---
+
+## 4. 用访谈验证需求 · The Mom Test（`### 4. 用访谈验证需求`，The Mom Test 小节之后）
+
+- 图型：`IG-004` 双列对比
+- 保真要素：原文三句原则——**少问未来的意愿，多问过去发生过什么、用户怎样处理、为此付出了什么**；一句不少
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：顶部设置主标题，主体分为左右两列进行对比，每列内部包含多行对应内容；保持两列结构清晰、行项相互对齐，突出不同对象之间的逐项比较关系。
+主标题：「The Mom Test：别问出好听的假话」。
+主题：左右两列对比，左列标题「少问：未来的意愿」配浅灰对话气泡，下面两行「你会买吗？」「你觉得这个想法好吗？」并各画一个浅灰叉；右列标题「多问：过去的事实」配祖母绿对话气泡，下面三行「上次遇到这问题是什么时候？」「你当时怎么处理的？」「为此付出了多少时间或钱？」。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: place a main headline at the top, then organize the comparison into two side-by-side columns. Each column contains multiple corresponding rows; keep the columns clear and the rows aligned to emphasize item-by-item differences between the two subjects.
+Headline: "The Mom Test：别问出好听的假话".
+Theme: two columns. Left column titled "少问：未来的意愿" with light-grey speech bubbles and two rows "你会买吗？" and "你觉得这个想法好吗？", each crossed out in grey. Right column titled "多问：过去的事实" with emerald-green speech bubbles and three rows "上次遇到这问题是什么时候？", "你当时怎么处理的？", "为此付出了多少时间或钱？".
+```
+
+---
+
+## 5. 报错怎么问 AI（`### 常见问题与排错`，核心心法「截图问 AI」之后）
+
+> 原第 5 点位「双钻模型」已撤销：该章 14 张图中包含 Design Council 官方 CC BY 双钻图，正文明确要求读者研读原图，再画一张属于冗余。改放到 0 图的排错章。
+
+- 图型：`IG-008` 流程步骤图
+- 保真要素：原文口诀「**看到报错 → 截图 → 问 AI → 按 AI 说的做**」；第二步「打开 F12 补充关键信息」；量化结论「**90% 的报错你都能自己解决**」必须作为标签画入，不得省略
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：设置一个主标题，主体采用流程步骤图结构，步骤路径可以是横向、纵向、S 形或其他清晰的路径式布局。每一步只包含一个小图和一句简短说明，步骤之间通过方向、顺序或适度引导关系连接。保留大面积留白，避免复杂装饰和过多文字。
+主标题：「报错不用慌，截图问 AI」。
+主题：一条横向四步路径：看到报错（红色感叹号气泡）→ 截图（剪刀框选屏幕）→ 问 AI（对话气泡）→ 按 AI 说的做（打勾）；从「问 AI」下方引出一条分支箭头标注「没解决？打开 F12 补充关键信息，再问一次」，箭头回到「问 AI」形成迭代回环；路径末端用祖母绿徽章标注「90% 的报错能自己解决」。画面只有图标、标签与箭头，不出现人物。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: include a main headline and build the body as a process-step diagram. The sequence may use a horizontal, vertical, S-shaped, or another clearly readable path layout. Each step contains only one small illustration and one concise sentence, connected through direction, order, or light guidance. Preserve generous negative space and avoid complex decoration or excessive text.
+Headline: "报错不用慌，截图问 AI".
+Theme: a horizontal four-step path — 看到报错 (a red exclamation bubble), 截图 (a selection frame over a screen), 问 AI (a speech bubble), 按 AI 说的做 (a check mark). From 问 AI a branch arrow drops down labelled "没解决？打开 F12 补充关键信息，再问一次" and loops back to 问 AI, forming an iteration cycle. At the end of the path an emerald-green badge reads "90% 的报错能自己解决". Only icons, labels and arrows — no people.
+```
+
+---
+
+## 6. 推送即部署（`### 把网站发到网上（简单方式）`，Git 自动部署小节）
+
+- 图型：`IG-008` 流程步骤图
+- 保真要素：原文机制——**与 GitHub 深度集成，推送代码即自动部署**；回滚是安全保障，不能画丢
+
+```text
+风格名称：Minimalist 2D Hand-Drawn Doodle。参考作者与风格名称：极简手绘 / Minimalist 2D Hand-Drawn Doodle。
+核心风格特征：极简2D手绘简笔画表现，强调概括造型、轻柔线条、低细节、天真趣味。
+主题色：炭黑（Charcoal Black）线稿，祖母绿（Emerald Green）标注。
+小红书信息图。排版：设置一个主标题，主体采用流程步骤图结构，步骤路径可以是横向、纵向、S 形或其他清晰的路径式布局。每一步只包含一个小图和一句简短说明，步骤之间通过方向、顺序或适度引导关系连接。保留大面积留白，避免复杂装饰和过多文字。
+主标题：「推送代码，网站就更新」。
+主题：一条横向五步路径：改代码（铅笔）→ commit（打勾的盒子）→ push（向上的箭头）→ 自动构建部署（齿轮和云）→ 手机打开链接（亮屏手机）；路径下方用一条祖母绿回环箭头从云端指回 commit，标注「改坏了就回滚」。
+```
+
+```text
+Style name: Minimalist 2D Hand-Drawn Doodle. Reference author and style name: 极简手绘 / Minimalist 2D Hand-Drawn Doodle.
+Core style traits: minimalist 2D hand-drawn doodling, generalised shapes, soft linework, low detail, innocent playfulness.
+Theme color: Charcoal Black linework with Emerald Green labels.
+Xiaohongshu infographic. Layout: include a main headline and build the body as a process-step diagram. The sequence may use a horizontal, vertical, S-shaped, or another clearly readable path layout. Each step contains only one small illustration and one concise sentence, connected through direction, order, or light guidance. Preserve generous negative space and avoid complex decoration or excessive text.
+Headline: "推送代码，网站就更新".
+Theme: a horizontal five-step path — 改代码 (pencil), commit (a box with a check mark), push (an upward arrow), 自动构建部署 (gear and cloud), 手机打开链接 (a lit phone). Below the path, an emerald-green loop arrow runs from the cloud back to commit, labelled "改坏了就回滚".
+```
+
+---
+
+## 第二批（2026-11-02）：0 图长文段，6 张已入正文
+
+点位不再靠人工翻找，而由 `scan_illustration_points.py` 量化选出：按 `### ` 切节，统计每节正文净字数、图片行、**相邻图片之间最长的纯正文段（gap）**与代码占比，`gap ≥ 5000 且代码占比 < 0.5` 才算候选。全书 192 节 → 68 个候选，完整清单在 `renders/points-scan.txt`。
+
+```bash
+python design/handdraw/scan_illustration_points.py --min-gap 5000 > design/handdraw/renders/points-scan.txt
+python design/handdraw/render_figures.py --all          # 全部 SVG 栅格化到 renders/hd-*.png 供看图验收
+```
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 浏览器渲染管道 | `IG-008` 管道 | 51077（导览表之后、第 1 章之前） | DOM 树 + CSSOM 树 → 渲染树只保留可见元素 → 布局/绘制/合成；**transform / opacity 直接触发合成**；「重排最贵，重绘次之」「布局改变会导致绘制，绘制改变不会导致布局」 |
+| CI / CD 自动化 | `IG-008` 流程 | 73662（「几分钟，全部自动完成」之后） | 手动九步 → push + 喝茶坐等；五步流水线；**测试失败就停下并发邮件**；UptimeRobot 每 5 分钟查一次 |
+| 大语言模型的工作原理 | `IG-008` S 形 | 79577（堆叠成矩阵之后） | 分词 → Embedding → 堆叠成矩阵 → Transformer → **猜下一个词（Next Token Prediction）** → 按温度挑词；回环标注「一 token 一 token 往外吐」 |
+| 上下文工程 | `IG-013` 漏斗 | 80494（信息分级表之后） | VIP +15% / 重要 +10% / 一般（最近 5 轮）基准 / 可弃 −60% 走 RAG；**25% 成本换 90% 关键信息**；「小黑板不是图书馆」 |
+| AI Agent 与工具调用 | `IG-008` 回环 | 81616（感知-决策-行动-观察之后） | 四步各带机制（Memory 三层 / Planning / Tool Calling / Tools 结果写回）；**LLM 只生成结构化文本，不亲自执行**；Guardrails 白名单·预算·二次确认·沙箱 |
+| AI 协议（MCP & A2A） | `IG-002` 中心标注 | 82119（三层协议导语之后） | MCP＝工具/资源/提示（Anthropic 2024.11，类比 USB-C，Client-Server）；A2A＝Agent Card/Task/Message（Google 2025.04，类比企业微信，Peer-to-Peer）；两者互补不竞争 |
+
+验收口径沿用第一批：每张先 `render_figures.py` 出 PNG，再逐张看图核对文字越界、箭头落点、标注压字；`render-pipeline` 首稿在汇合箭头处压了一个「合并」小标签，已删（副标题已说明合并）并重渲复验。六张入正文后 `npm test` 通过（本地资源引用 980 → 986），且与相邻图片的正文间隔实测最小 4502 字，满足 ≥400–500 字红线。
+
+下一批候选（gap 从大到小）：AI 能力词典（164870）、HTML/CSS 布局体系（15086）、前端工程化全貌（11726，改走 stack-diagram）、计算机系统全景（11541，stack-diagram）、Web 框架的本质（11054）、缓存的层次与策略（11015）、对象存储与 CDN（10173，stack-diagram）、数据库原理（9499）、输入网址到渲染页面（9919）、IAM 权限管理（8927）、负载均衡与网关（6749）、Git 时光机（5643）。
+---
+
+## 第三批（2026-11-02）：6 张入正文，含一张章末收口图
+
+出图环节本轮起由 `render_figures.py` 把关：渲之前先读 `design/system/tokens.css` 生成十六进制白名单，越界色与 `<text fill="#1f883d|#e2601f">` 直接非零退出。六张全部一次通过，无手工改色。
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| Git：代码的时光机 | `IG-010` 阶梯 + 时间线（**章末收口图**） | 47536（名词速查表之后、`---` 之前） | 工作区→暂存区→仓库（`.git`）；status → add → commit 三步占日常 90%；`9f3e1b2 init` / `a1b2c3d (HEAD -> main)`；`git checkout -b feature-login` 两笔提交只在分支上；冲突＝同一行都改了；绿弧「回到任意一个历史节点」；push / pull / clone；「Git 是工具，GitHub 是托管服务」 |
+| HTML/CSS 布局体系 | `IG-010` 四级台阶 | 52959（推荐学习路径之后） | 盒模型 → Flexbox → 定位 → 动画；`width: 300px` + `padding: 20px` + `border: 1px` = **342px**，三张 1026px > 容器 900px 故第三张掉行；`box-sizing: border-box`；absolute 沿虚线「回到最近的定位祖先」 |
+| Web 框架的本质 | `IG-011` 四代对比（S 形） | 61800（演进表之后） | 四代×（年代·核心问题·团队规模 1-5 / 5-50 / 50-500 / 1-20 人·痛点）；**陷阱：拆 10 个服务却紧密耦合＝分布式单体**；开发者与运维两条演进线；「没有最好的架构，只有最适合的架构」 |
+| 缓存的层次与策略 | `IG-010` 三层阶梯 + 回填 | 65602（三层导语之后） | L1 ~0.1ms/70%/TTL 30 秒＝书桌便利贴，L2 ~1ms/25%/30 分钟＝公共储物柜，L3 ~10ms/5%＝图书馆；未命中往下走、命中往回填；命中率 > 95%；穿透/击穿/雪崩三问三解（布隆过滤器、互斥锁、随机 TTL）；写＝先更新库再删缓存，极端并发延迟双删；「保命符」不是锦上添花 |
+| 数据库原理（索引） | `IG-004` 左右对比 | 70274（索引导语之后） | `user_id = 5,555,555` / users 表 1000 万条；全表扫描平均 500 万行、5-30 秒 vs B+ 树 3-4 次比较、0.003 秒；矮胖 B+ 树 3 层装 10 亿条；「一页一页翻 vs 只翻 3 次」；10 亿行＝3 次磁盘 I/O＝几毫秒 |
+| AI 能力词典 | `IG-002` 中心标注（章首地图） | 82700（手册导语三问之后） | 11 类能力归 5 区，实线连模态层、虚线连架构层；中心只答「能用什么 AI 能力做 / 该选哪一类模型或产品」；找 API 的关键词 Embedding、OCR、ASR、TTS、VLM、RAG |
+
+验收：六张逐张看 PNG（`renders/hd-*.png`），核对文字越界、箭头落点、标注压字；`cache-layers` 首稿底部同时挂了一条结论横幅和一枚「保命符」小药丸，两个收口元素打架 → 合并为一条三行横幅并重渲。`npm test` 通过（本地资源引用 986 → 992），六张入正文后与相邻图片最小正文间隔实测 2768 字（要求 ≥400–500）。
+
+`git-history` 的点位从 agent 建议的 47026（章首）改到 47536（章末）：那张图一次给满 5 个概念簇（三区域 / 存档点 / 分支与合并 / 回退 / 本地与远端），放在读者还没见过「暂存区」二字的位置会劝退，放名词表之后则正好当合书回忆的地图——同一张图，位置决定它是负担还是收口。
+---
+
+## 第一批 stack-diagram 工程图（2026-11-02）：手绘之外的第二种语域
+
+SPEC §9.1 定的分工在这里第一次落地：**技术栈 / 系统架构 / 服务拓扑**走 `stack-diagram`（网格纸底 + 真品牌 logo + 分组容器 + 直角连线），不与手绘 SVG 混进同一张 figure。
+
+| 点位（`### ` 小节） | 图型 | 落图位置（book.md 行） | 入图的保真要素 |
+| --- | --- | --- | --- |
+| 前端工程化全貌 | 六列流水线工程图 | 58562（`##### 7. 总结` 表格之后） | `npm run build` 四道工序（代码检查→转译→打包→优化，L57781-57785）；src→dist（L57800 餐厅比喻表）；六列工具全部取自本节原文：TypeScript/Vue/React/npm、ESLint/Prettier/husky/CI-CD、Babel/SWC/esbuild/Sass、Webpack/Rollup/Vite、Tree Shaking/Code Splitting/Terser、资源指纹/SourceMap/CDN/浏览器；**SWC＝Rust 快 20 倍以上**（L57836）、**esbuild＝Go，Vite 开发模式借它**（L57837，画成虚线）、Vite 生产用 Rollup（L58393）、`[hash]` 长期缓存（L57901/58328）、SourceMap 映射回源代码（L58530） |
+
+产物：`book/assets/stacks/frontend-tooling.html`（自包含）+ `frontend-tooling.png`（1300×1100 @2x）。流程 `fetch_icons.py → build.py → render_png.py`，Windows 侧三处坑：`render_png.py` 默认还会产出 `-dark.png`，用 `--single`；`fc-list` 不存在；模板字体栈是 JP 优先，中文需在生成稿里补 CJK face。
+
+点位从 agent 建议的 57785（四道工序列表之后）挪到章末总结表之后：那张图点名 22 个工具，而 Babel/SWC/esbuild/Loader/HMR 都在 57835 之后才第一次出现——和 `git-history` 同一课，**图的信息密度决定它该在章首还是章末**。

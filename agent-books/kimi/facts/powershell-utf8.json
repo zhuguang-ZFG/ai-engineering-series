@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-10",
+  "powershell_version": "5.1.26100.9711",
+  "scope": "Chapter 16 stdout capture pattern with a local UTF-8 subprocess fixture; no model request",
+  "fixture": {
+    "stdout": {"role": "assistant", "content": "库存审查：边界"},
+    "stderr": "fixture diagnostic",
+    "exit_code": 7
+  },
+  "checks": {
+    "console_output_encoding": "UTF-8, restored after the command",
+    "file_encoding": "Set-Content -Encoding UTF8; UTF-8 with BOM on PowerShell 5.1",
+    "decoded_with": "Python utf-8-sig",
+    "chinese_content_preserved": true,
+    "diagnostics_excluded_from_jsonl": true,
+    "native_exit_code_preserved": true
+  }
+}

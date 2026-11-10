@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C21 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C21-answer-section-2f1721f16d" tabindex="-1">C21 答案与核对依据</h1>
+<p>本文件给出固定流程与 Agent 的对照方法、失败状态和停止条件。实际调用次数、延迟和结果必须来自你的报告；没有运行就写“未运行”。</p>
+<h2 id="C21-answer-section-cbdd08473e" tabindex="-1">1. 判据答案</h2>
+<p>一个合格的决策表：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>若“是”</th>
+<th>若“否”</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>步骤是否事先完全确定？</td>
+<td>固定流程优先</td>
+<td>继续判断</td>
+</tr>
+<tr>
+<td>是否必须执行真实动作？</td>
+<td>需要工具</td>
+<td>可能只需检索/回答</td>
+</tr>
+<tr>
+<td>下一步是否依赖中间结果？</td>
+<td>Agent 可能有益</td>
+<td>固定调用更简单</td>
+</tr>
+<tr>
+<td>错误代价是否高？</td>
+<td>固定流程 + 人工确认</td>
+<td>可考虑有限 Agent</td>
+</tr>
+<tr>
+<td>是否有冻结对照？</td>
+<td>可以比较</td>
+<td>先补 C18，不急着上 Agent</td>
+</tr>
+</tbody></table>
+<p>“需要工具”不等于“需要 Agent”。固定流程也可以调用工具；Agent 的额外能力是<strong>模型选择下一步</strong>，代价是更多调用、更多状态和更复杂的失败路径。</p>
+<h2 id="C21-answer-section-a11e326324" tabindex="-1">2. 同一计算题的对照</h2>
+<p>题目：</p>
+<blockquote>
+<p>2026-10-03 风速 4.2 米每秒，连续 24 小时总行程是多少米？请用 calculator 计算 4.2*86400。</p>
+</blockquote>
+<h3 id="C21-answer-section-a74df24378" tabindex="-1">固定模式</h3>
+<p>命令：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;值班记录里 2026-10-03 的风速是 4.2 米每秒。如果连续 24 小时都保持这个风速，总行程是多少米？请计算 4.2*86400。&quot; \
+  --model path/to/local-model \
+  --mode fixed --top-k 3 --max-new-tokens 192 \
+  --json out/c21/fixed.json
+</code></pre>
+<p>应检查：</p>
+<ul>
+<li><code>mode</code> 为 <code>fixed</code>；</li>
+<li><code>tool_receipts</code> 为空；</li>
+<li>若模型只输出“362880”而没有 source quote，<code>insufficient-evidence</code> 或 <code>citation-failed</code> 都可能是正确结果；</li>
+<li>不能因为模型“算对了”就认为证据充分；固定模式没有执行工具。</li>
+</ul>
+<h3 id="C21-answer-section-558ff62bd7" tabindex="-1">Agent 模式</h3>
+<p>命令：</p>
+<pre><code class="language-bash">python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;值班记录里 2026-10-03 的风速是 4.2 米每秒。如果连续 24 小时都保持这个风速，总行程是多少米？请用 calculator 计算 4.2*86400。&quot; \
+  --model path/to/local-model \
+  --mode agent \
+  --allowed-tools calculator \
+  --max-steps 4 --max-tool-calls 2 \
+  --top-k 3 --max-new-tokens 192 \
+  --json out/c21/agent.json
+</code></pre>
+<p>合格证据链：</p>
+<pre><code class="language-text">模型请求：action=tool, tool=calculator, arguments={&quot;expression&quot;:&quot;4.2*86400&quot;}
+执行回执：receipt_id=tool-1, status=succeeded, result=362880
+最终 claim：包含 362880，并引用 {&quot;tool_receipt_id&quot;:&quot;tool-1&quot;}
+最终 answer：只包含已核验 claim 的文本
+</code></pre>
+<p>注意：</p>
+<ul>
+<li><code>4.2*86400 = 362880</code> 是算术事实，但报告仍要证明工具真的执行了；</li>
+<li><code>usage.calls</code> 至少 2（工具请求 + 最终回答），具体取决于模型行为；</li>
+<li><code>tool_receipts</code> 数量不等于 <code>usage.calls</code>；</li>
+<li>若模型直接回答而不调用工具，<code>tool_receipts</code> 为空，最终可能因没有材料 quote 被拒绝；这不是工具失败。</li>
+</ul>
+<h3 id="C21-answer-section-b162a530b2" tabindex="-1">结论可以是什么</h3>
+<ul>
+<li>如果 Agent 质量与固定流程相同，但调用次数/延迟更高：<strong>不采用 Agent</strong>。</li>
+<li>如果固定流程无法合法地产生计算证据，而 Agent 能用工具回执完成：可以考虑采用，但要有预算和权限边界。</li>
+<li>如果 Agent 经常走错步骤或预算耗尽：先修提示/模型/任务设计，不能把失败隐藏成“自主性代价”。</li>
+</ul>
+<h2 id="C21-answer-section-1815b78fb1" tabindex="-1">3. 不需要 Agent 的对照</h2>
+<p>问题：“2026-10-03 的风速是多少？”</p>
+<p>固定模式足够。Agent 模式即使最终也答对，通常也会多一次“决定是否调用工具”的模型调用；若它调用 <code>read_document</code>，还会多一次工具回执和上下文增长。合格结论：</p>
+<blockquote>
+<p>在该任务上，固定流程已满足质量底线；Agent 未带来额外质量收益，且有更多调用/失败点，因此不采用 Agent。</p>
+</blockquote>
+<p>这不是“Agent 不好”，而是“这个任务不需要”。不要把“不采用”写成“未完成”。</p>
+<h2 id="C21-answer-section-35c4b42156" tabindex="-1">4. 三种失败的答案</h2>
+<h3 id="C21-answer-section-011e8623a3" tabindex="-1">4.1 未允许的工具</h3>
+<p>命令中 <code>--allowed-tools calculator</code>，模型请求 <code>read_document</code>。</p>
+<p>预期：</p>
+<pre><code class="language-text">status = permission-denied
+first_failure.stage = tool
+detail.tool = read_document
+detail.allowed_tools = [&quot;calculator&quot;]
+tool_receipts = []
+</code></pre>
+<p>说明：请求在参数/白名单校验阶段被拒绝，工具没有执行，因此没有回执。<code>permission-denied</code> 在这里表示“工具不被允许”，不是文档读者权限；两者都在程序侧，但原因不同。</p>
+<h3 id="C21-answer-section-ca949603d4" tabindex="-1">4.2 坏参数</h3>
+<p>模型请求：</p>
+<pre><code class="language-json">{&quot;action&quot;:&quot;tool&quot;,&quot;tool&quot;:&quot;calculator&quot;,&quot;arguments&quot;:{&quot;a&quot;:4.2,&quot;b&quot;:86400}}
+</code></pre>
+<p>预期：</p>
+<pre><code class="language-text">status = invalid-response
+first_failure.stage = tool
+reason = calculator arguments must be exactly [&#39;expression&#39;]
+tool_receipts = []
+</code></pre>
+<p>不能自动把 <code>a</code>/<code>b</code> 转成表达式执行；这会绕过 schema 和审计。</p>
+<h3 id="C21-answer-section-ccccde50b2" tabindex="-1">4.3 预算耗尽</h3>
+<ul>
+<li><code>--max-steps 1 --max-tool-calls 0</code>，模型请求工具：<code>budget-exhausted</code>；</li>
+<li><code>--max-steps 2 --max-tool-calls 1</code>，模型先调用一次工具、再请求第二次工具：第二次触发 <code>budget-exhausted</code>；</li>
+<li><code>--max-steps 4 --max-tool-calls 2</code>，模型连续调用两次后仍请求工具：<code>budget-exhausted</code>；</li>
+<li>步数用完但模型没有给出最终回答：<code>budget-exhausted</code>。</li>
+</ul>
+<p>合格行为：保留已成功回执，但<strong>不把中间结果拼成最终答案</strong>；报告说明未完成。</p>
+<h3 id="C21-answer-section-34c3b38621" tabindex="-1">4.4 权限边界</h3>
+<p>学生请求 <code>read_document(review-budget)</code>：</p>
+<pre><code class="language-text">工具回执 status=failed, error=permission-denied
+report status=permission-denied（或 tool-failed，取决于失败位置）
+正文不出现
+</code></pre>
+<p>教师请求同一文档：</p>
+<pre><code class="language-text">工具回执 status=succeeded
+result.text 最多 1500 字符，truncated=true/false
+仍需 source citation 或人工核对才能支持 claim
+</code></pre>
+<p><code>read_document</code> 成功只证明读取动作；不能把回执当成逐字引用证明。</p>
+<h2 id="C21-answer-section-1fe320e791" tabindex="-1">5. 停止条件写法</h2>
+<p>一个可用的停止条件：</p>
+<pre><code class="language-text">允许工具：calculator（或 calculator,read_document）
+最大模型决策步数：4（含最终回答）
+最大工具调用：2
+参数：完全匹配 schema，不自动转换
+权限：每次调用按当前 reader 检查
+失败：任一步失败立即停止，不自动重试
+输出格式：严格 JSON；repair_attempts 在运行前固定
+预算：超步数/工具数/提示 token 即停止并报告
+未知：超时或状态不明时不重复执行，先查回执/状态
+</code></pre>
+<p>为什么这些是硬边界：</p>
+<ul>
+<li>防止模型无限循环；</li>
+<li>防止一次失败后继续用错误结果；</li>
+<li>让成本可预测；</li>
+<li>让审计能复原每一步；</li>
+<li>让“未完成”成为可报告状态，而不是伪造成功。</li>
+</ul>
+<h2 id="C21-answer-section-4a71e58469" tabindex="-1">6. 评分表</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>合格</th>
+<th>不合格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对照</td>
+<td>同任务、同判据，固定 vs Agent</td>
+<td>换题后比较</td>
+</tr>
+<tr>
+<td>工具证据</td>
+<td>成功回执 + claim 引用</td>
+<td>模型说调用就算</td>
+</tr>
+<tr>
+<td>失败</td>
+<td>越权/坏参数/预算各有状态</td>
+<td>自动重试到通过</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>学生无正文，教师可读</td>
+<td>改 readers 绕过</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>采用/不采用都有理由</td>
+<td>认为 Agent 必然更好</td>
+</tr>
+<tr>
+<td>停止</td>
+<td>步数/调用/失败/提示预算清楚</td>
+<td>无上限、静默重试</td>
+</tr>
+<tr>
+<td>引用</td>
+<td>区分 source quote 与 tool receipt</td>
+<td>把回执当逐字引用</td>
+</tr>
+</tbody></table>
+<p>没有实际报告时，以上只能作为检查表；不能写成“已通过”。</p>
+</article><nav class="lesson-nav"><a href="c21.html">返回 C21 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,0 +1,951 @@
+{
+  "date": "2026-11-08",
+  "status": "completed-local-scope",
+  "scope": "Original Vibe Coding 101 iteration 03: existing readability changes, MCP corrections, verification and plan handoff",
+  "source": {
+    "chapterCount": 195,
+    "chapterNamesAndOrderPreserved": true,
+    "headingTextsAndOrderPreserved": true,
+    "changedChapters": [
+      "AI 时代的编程初体验",
+      "产品思维基础",
+      "Figma 与 MasterGo 入门",
+      "数据库与 Supabase 入门",
+      "CLI Coding Agent 编程助手",
+      "Dify 入门与知识库集成",
+      "Claude Code MCP 完全指南"
+    ],
+    "duplicateTitlesRenderedAsAnchors": 7,
+    "beforeSnapshotSha256": "0b08c5227e523e5a2130dee982fc633660c7442b6d0dd1fcdac7d6d79f22cb3f",
+    "currentSha256": "531285de351cd6c24b36d05ed415127f1b29d16780c2e6c6047506fd5846fcd0"
+  },
+  "inputs": [
+    {
+      "file": "book/book.md",
+      "sha256": "531285de351cd6c24b36d05ed415127f1b29d16780c2e6c6047506fd5846fcd0"
+    },
+    {
+      "file": "scripts/build-book.mjs",
+      "sha256": "555bf86a42828aaca10182b51c5bdfc0d151fa573298132209d5cc50985865b2"
+    },
+    {
+      "file": "scripts/book.css",
+      "sha256": "6ff6b2e37c599d0ab343ad2771342e845f341ff1507ae6a07f85d3f4c2b8234f"
+    },
+    {
+      "file": "book/assets/handdraw/integration-plug.svg",
+      "sha256": "2ec99a304ac808ec0aa9c4928228e1c2d4aa88295db6de28016fd53ee9151c1e"
+    },
+    {
+      "file": "scripts/check-book-reading.py",
+      "sha256": "0a530bc364fcb9bf6f6f3fe82390b5666dfba709b5e69860b8dbd7cecb62deeb"
+    },
+    {
+      "file": "scripts/llm/check_books.py",
+      "sha256": "fdeafc6fee6d3e21da0c4f18a6bfa95ec9bc9ca7280a7d44969ef089e02e0ebd"
+    },
+    {
+      "file": "scripts/validate.mjs",
+      "sha256": "8d14a869abb2d2645a0c6f746497a23c59a7d3bbd64c63644166fd9a2eb08cd7"
+    },
+    {
+      "file": "package.json",
+      "sha256": "0b42ef64a046819420fdaae814cacf660a0759dc07b78301d0577c8961619e92"
+    }
+  ],
+  "generated": [
+    {
+      "file": "exports/book/book.css",
+      "sha256": "6ff6b2e37c599d0ab343ad2771342e845f341ff1507ae6a07f85d3f4c2b8234f"
+    },
+    {
+      "file": "exports/book/chapter-001.html",
+      "sha256": "abfc0eefc725156016ca5736337550a7595a5bdaf2fce677b50e40cc1c5f2aa4"
+    },
+    {
+      "file": "exports/book/chapter-002.html",
+      "sha256": "f224e94df17da5208cb09f33b5a691ef2ec030219bf5052974a03cc4b84b77a2"
+    },
+    {
+      "file": "exports/book/chapter-003.html",
+      "sha256": "c369696b600d54d30af0ca8e6270cfdacfa917f8b55fdfeb584daf644bcc785e"
+    },
+    {
+      "file": "exports/book/chapter-004.html",
+      "sha256": "d796cf0d6cfc05a4f956f0a1b3c055ad4b862e841f6a98463d145fe792df94c8"
+    },
+    {
+      "file": "exports/book/chapter-005.html",
+      "sha256": "2539e2561b8b339c8160baf769c49451be29b48ba555659cbbe90e84a8fce115"
+    },
+    {
+      "file": "exports/book/chapter-006.html",
+      "sha256": "c312384fbbdb3f2849e069892dc58728025cf14f167dff4f155ce1a2f1adacd8"
+    },
+    {
+      "file": "exports/book/chapter-007.html",
+      "sha256": "0dfa600ac7dabd8fef165e264489864c830c7c7147a503649f9b23422c170286"
+    },
+    {
+      "file": "exports/book/chapter-008.html",
+      "sha256": "98d27cccf9ea3ab53a1258865861170d4db01cd93ff5a86c471c6d2dd893aea4"
+    },
+    {
+      "file": "exports/book/chapter-009.html",
+      "sha256": "f031243dd0dd3e4abe307661f98065fe3c3c4c0c2e744f01c5cfe586701b8d0b"
+    },
+    {
+      "file": "exports/book/chapter-010.html",
+      "sha256": "7e71fd18e2df43f2cb11de81f391a342a3f9f0fc7f110e02f1f929e3aa0118ae"
+    },
+    {
+      "file": "exports/book/chapter-011.html",
+      "sha256": "bbc1a879d6e1d91870a9539a7c9c66076f764aefb0042a2ce4dd07fcdeaba904"
+    },
+    {
+      "file": "exports/book/chapter-012.html",
+      "sha256": "dad09480ba87908f00cceb02889d7b064bf37d1021f42f99abda09d8d429c986"
+    },
+    {
+      "file": "exports/book/chapter-013.html",
+      "sha256": "ada02f9f007cb6b834b61bb6864dd828d02c283693ba11011d94ee90e43957bb"
+    },
+    {
+      "file": "exports/book/chapter-014.html",
+      "sha256": "aa8565fd7c97197c950b385ecc67356fc9ccad766faffc2acc6c110a7052c8d7"
+    },
+    {
+      "file": "exports/book/chapter-015.html",
+      "sha256": "5a095aa606e42229fa27614096849dd8c6b11cdd24184ddd82d63dd95249f59a"
+    },
+    {
+      "file": "exports/book/chapter-016.html",
+      "sha256": "9379349d1221c1bfb6ddf4328b21129b786e45ee2a458284df4d7d0daaad6df4"
+    },
+    {
+      "file": "exports/book/chapter-017.html",
+      "sha256": "088f73ff23bf80896026e6a56ab6dc836bd11b5a090999d9e679cac67473f5be"
+    },
+    {
+      "file": "exports/book/chapter-018.html",
+      "sha256": "2e763a862ede15ca327fca19da513df1690238b9594be2ada099378aea2a6606"
+    },
+    {
+      "file": "exports/book/chapter-019.html",
+      "sha256": "e3a0d288c2d860621ce98170e13bb33c057e89009a4dd069129c1cdaf6d7e8d5"
+    },
+    {
+      "file": "exports/book/chapter-020.html",
+      "sha256": "8fc753e7d41dd397a7192d0a93ec82628572ac4319214c38647020a6330105e6"
+    },
+    {
+      "file": "exports/book/chapter-021.html",
+      "sha256": "24951bd8059f907900317762efa5164dd60a145204fe1737db2a6747ef0a4da3"
+    },
+    {
+      "file": "exports/book/chapter-022.html",
+      "sha256": "6f2559459bb059524fde7b3d1755a92cc0283c8f4bd93ff00b1b37826a0ce42b"
+    },
+    {
+      "file": "exports/book/chapter-023.html",
+      "sha256": "703197222e9ca7aed5ee4e769597ee828762ef55fe32a6a34bf14ad230b4d707"
+    },
+    {
+      "file": "exports/book/chapter-024.html",
+      "sha256": "0c8a07754d3a9f11450a75ddc2b4c0cd9d63b84336fe71ae13101c54f21e6306"
+    },
+    {
+      "file": "exports/book/chapter-025.html",
+      "sha256": "7e330dee315e6af7d094b0b85822847b1f36466193a5124e01d8f92294545fc4"
+    },
+    {
+      "file": "exports/book/chapter-026.html",
+      "sha256": "f80875419736514c70cf34e9120b3832208c5c29a7a07de976ea22bf223f381b"
+    },
+    {
+      "file": "exports/book/chapter-027.html",
+      "sha256": "da6e712da3cf22a641ac682b329e73b933f65e802482163940f7e88050766524"
+    },
+    {
+      "file": "exports/book/chapter-028.html",
+      "sha256": "c0dee9cabf90f92bcfbf94a8d09e9d40572734858633aa76bd639a9baf50d88b"
+    },
+    {
+      "file": "exports/book/chapter-029.html",
+      "sha256": "4117481baf15ef8b7a7cd854f1df850d01129535127681468fa029051b92e2e6"
+    },
+    {
+      "file": "exports/book/chapter-030.html",
+      "sha256": "48ee4da0d3fe2673b20ef40e41925429269e29caeb61099befc7c428c0e6d60b"
+    },
+    {
+      "file": "exports/book/chapter-031.html",
+      "sha256": "b8277868aca79b8319304720cabb3ebe1369541020f513707fccdbc636962460"
+    },
+    {
+      "file": "exports/book/chapter-032.html",
+      "sha256": "1354bcae1680252d96c7be5bf9421badc79b3f4dc0d681afb2d822654515d57b"
+    },
+    {
+      "file": "exports/book/chapter-033.html",
+      "sha256": "d2aff2a7856a9a3571aff72ebb1841ad82efdfd65d53234819297e6800efe04b"
+    },
+    {
+      "file": "exports/book/chapter-034.html",
+      "sha256": "7ec202f4f75782885e473e28ecbff9ebb4cac8a6e25e10ec772ddec42fe08ad1"
+    },
+    {
+      "file": "exports/book/chapter-035.html",
+      "sha256": "8c152c273acccdd673cb1906b2bd47747591cc7a92a62458a58958b8b491fd99"
+    },
+    {
+      "file": "exports/book/chapter-036.html",
+      "sha256": "2635fdff4b65c658530d7fe47cb9d68ea51693f31afc8c595a84610ecd073c21"
+    },
+    {
+      "file": "exports/book/chapter-037.html",
+      "sha256": "78b2f5752c4bcba74b3f4e85784b5bd71a762e1896e20e44ed47ae09ee9fb547"
+    },
+    {
+      "file": "exports/book/chapter-038.html",
+      "sha256": "01497ae03c3c00c509a2a84e6567ca8815d6d2df5f742be6acad5c46ce12a118"
+    },
+    {
+      "file": "exports/book/chapter-039.html",
+      "sha256": "705babfb879ff6c7deda467dcd5a9011de5706bc687087bc0b89a6abe404513b"
+    },
+    {
+      "file": "exports/book/chapter-040.html",
+      "sha256": "440b94a35b7afbfee59fedae7ab26770d4ed58dba566363868e264a57f112b82"
+    },
+    {
+      "file": "exports/book/chapter-041.html",
+      "sha256": "d0551bf693173711f07ad61e01223c61497a76b5484f162d637efb51fbdf36d2"
+    },
+    {
+      "file": "exports/book/chapter-042.html",
+      "sha256": "47476cae019d630af0ae47bfad4d8e2d31e92f18449c2df508aa8736b9925baf"
+    },
+    {
+      "file": "exports/book/chapter-043.html",
+      "sha256": "ba86fbb14efa5ddc6259a9060d9f7e50718389e5100257c6da47389a14ac264d"
+    },
+    {
+      "file": "exports/book/chapter-044.html",
+      "sha256": "5ae3e324f880aa9dba1d5a9399f07c5cb889ce68c9bf62dbeeca44de20400060"
+    },
+    {
+      "file": "exports/book/chapter-045.html",
+      "sha256": "e978614c9a67d097a42832d8fe33d369f3f57169f59b2d4c3b2e43c578ceff65"
+    },
+    {
+      "file": "exports/book/chapter-046.html",
+      "sha256": "2905be9d87453fe90df3952b347661af4d36903046ff928f05624cf0d549770b"
+    },
+    {
+      "file": "exports/book/chapter-047.html",
+      "sha256": "e1d5bb5b432302e70ab1e09c420805f5a060993416a2e0a3d09317440ef5dbc7"
+    },
+    {
+      "file": "exports/book/chapter-048.html",
+      "sha256": "0c64b1e96649365968f53a6186fbb3026452edaa07eab27e4a886f4b6d233545"
+    },
+    {
+      "file": "exports/book/chapter-049.html",
+      "sha256": "982ea6a84086c9a0172cab9979b25636db2f30ed2a3e2a23dfab8e7db1d3abc6"
+    },
+    {
+      "file": "exports/book/chapter-050.html",
+      "sha256": "86493991b8f2d04287d843dc078ede1af1eb4e1f785b7906b0c711fdddacf49d"
+    },
+    {
+      "file": "exports/book/chapter-051.html",
+      "sha256": "574b329182ba944ed3a57e432ee738a382cc3da032e6af896a09f0612dda42f5"
+    },
+    {
+      "file": "exports/book/chapter-052.html",
+      "sha256": "77b4036cd1524f8009623b8e3f7e94af3607f6fc9af21f3de3dcb601ae6af93e"
+    },
+    {
+      "file": "exports/book/chapter-053.html",
+      "sha256": "6a0730a20eeb694a79afbf6bb228340b8e7856271138c338d4a5e20b0525c316"
+    },
+    {
+      "file": "exports/book/chapter-054.html",
+      "sha256": "bfe7caba9c8f5b4eb141d800b24ca28f027cfe1a46c41dc99d83061615183085"
+    },
+    {
+      "file": "exports/book/chapter-055.html",
+      "sha256": "a079b1b6f9f8152d3ab23b12fa52b044fbfe69e6eb9b4e42a16fd13b6aaeb537"
+    },
+    {
+      "file": "exports/book/chapter-056.html",
+      "sha256": "d27be00668ab8aac5b9f227a5d08760eb37ccbd80bb4952092624e10544f42fd"
+    },
+    {
+      "file": "exports/book/chapter-057.html",
+      "sha256": "ae644f83a00ec1b96bf4dc9dc1475efa1b35787c693a8bb118cd7c793cf5a806"
+    },
+    {
+      "file": "exports/book/chapter-058.html",
+      "sha256": "2b8456436ee272b633ff0e9c5e20bc238e277d950e24a5e952e890600ce17839"
+    },
+    {
+      "file": "exports/book/chapter-059.html",
+      "sha256": "a422c2ace3e003bfe0152d2234793eaa05f490ecf31a841ecdbffcb7c5b09d6e"
+    },
+    {
+      "file": "exports/book/chapter-060.html",
+      "sha256": "4a0019b4394eded0efad5420100b30e27505de12db0438aae5e1668f77efccce"
+    },
+    {
+      "file": "exports/book/chapter-061.html",
+      "sha256": "0b95c7325f211fe481ac4855c657fc7b64e5c61a94b483f56cde73c295cce945"
+    },
+    {
+      "file": "exports/book/chapter-062.html",
+      "sha256": "3e5f6d7b58eeb55991e7534fa802be7669f8ac8d56adec0757af9f937cc7e32f"
+    },
+    {
+      "file": "exports/book/chapter-063.html",
+      "sha256": "d1b49139884a57c7aec7478f6e569fc609191acd9ca2ff3292293d02f9cef91c"
+    },
+    {
+      "file": "exports/book/chapter-064.html",
+      "sha256": "ff91c8152947d28ff3fe65daf60227210ce70e977affc6fc5d73bb4ae913094b"
+    },
+    {
+      "file": "exports/book/chapter-065.html",
+      "sha256": "c83c66a531ac3fb857c3e6a6cc266c9e6e2e53c27778579cb2058abc0ff2a92d"
+    },
+    {
+      "file": "exports/book/chapter-066.html",
+      "sha256": "f4b004a57e915084819f63920ec61231a51d67e37312d09733848821d8e11559"
+    },
+    {
+      "file": "exports/book/chapter-067.html",
+      "sha256": "1b2599bac53b4b3e171a735ec904ce4e5a0cfec9ac6b1635285f6e98fd4f095a"
+    },
+    {
+      "file": "exports/book/chapter-068.html",
+      "sha256": "7b9ac978d4499ff6242b4e0e66ff47fd42ff8e08c6e9d4663367b92b6858dd1b"
+    },
+    {
+      "file": "exports/book/chapter-069.html",
+      "sha256": "6b912a80dddd080c8dfd21f213793474dc22f612ea5c1d87f5d662066105f424"
+    },
+    {
+      "file": "exports/book/chapter-070.html",
+      "sha256": "920fab9b5f9966a2499232ca6665429fa98ee62cce42cd8ce2104309fa860109"
+    },
+    {
+      "file": "exports/book/chapter-071.html",
+      "sha256": "17287260764b08802d951d53a2e69bc0a58c008eda8ff7621bbbdad8c4fd16ae"
+    },
+    {
+      "file": "exports/book/chapter-072.html",
+      "sha256": "a365516ac9e4cb51081c19432ba4a3150799021ff780211e633ad1017fad1d1e"
+    },
+    {
+      "file": "exports/book/chapter-073.html",
+      "sha256": "3025733e84096da95e1fe11e7991b6b48c806ec4348e9cfaceaa20eb892e00dd"
+    },
+    {
+      "file": "exports/book/chapter-074.html",
+      "sha256": "ee5282e1da8819243cf0428132c2e032e075b7c92d5dce3c8fee8667529f711f"
+    },
+    {
+      "file": "exports/book/chapter-075.html",
+      "sha256": "e86cb8c39e56260c1ed9880de8816577e6d2190ed73484cc6da1ff936f1bffc0"
+    },
+    {
+      "file": "exports/book/chapter-076.html",
+      "sha256": "481ac26eb94200ac766c769972c3a047eedb8ac16a58caac68fc2982c512dbe9"
+    },
+    {
+      "file": "exports/book/chapter-077.html",
+      "sha256": "c492124eaeb77f048083316d4c047eadad3f97e930cb15c1762987eaa66c1d41"
+    },
+    {
+      "file": "exports/book/chapter-078.html",
+      "sha256": "2bc46390f93a90251bf309e683b20feec41f5e48da416f27d4762b0354066aa5"
+    },
+    {
+      "file": "exports/book/chapter-079.html",
+      "sha256": "5dc0cc172f591f8c5151ebfdc7928493ebc538d5931ffa2d77136ae40b4622cf"
+    },
+    {
+      "file": "exports/book/chapter-080.html",
+      "sha256": "7057dc12e6eb58288935a0845ec281213aaedc4b3751f5b6a805beda84275dbc"
+    },
+    {
+      "file": "exports/book/chapter-081.html",
+      "sha256": "0d4d66052335e0518a5cceb43452f11df59bc8315370742fa2b22555b5ae1c6d"
+    },
+    {
+      "file": "exports/book/chapter-082.html",
+      "sha256": "b37c191881bcf67ba59ffb386a82a921b72913e9b433850934a33a739986f3e2"
+    },
+    {
+      "file": "exports/book/chapter-083.html",
+      "sha256": "af03610e09eb49f41d968857783b3bf3db4526c93dbaa39568c86545889d2480"
+    },
+    {
+      "file": "exports/book/chapter-084.html",
+      "sha256": "fd8692970f1a0d8e20a229196c18a78b9e2bedea132ea159ba87c982a31c6983"
+    },
+    {
+      "file": "exports/book/chapter-085.html",
+      "sha256": "bbda5822463f39e76d5f9649bf59d362f51e9c6cf9d8fb2ecdf5cacf820a5eb3"
+    },
+    {
+      "file": "exports/book/chapter-086.html",
+      "sha256": "45834526fe66a10ad997aed3cdbaf5050ac45bfd3102ff507bf1383bd43af1a5"
+    },
+    {
+      "file": "exports/book/chapter-087.html",
+      "sha256": "0f1420c198dc790c1b06677904e19b41c185a3e46052870986f96bbee1bbbe5f"
+    },
+    {
+      "file": "exports/book/chapter-088.html",
+      "sha256": "98c503af1c1fbcbd3aca5682aa6b9f15269377f328962ff06101dc84cf173406"
+    },
+    {
+      "file": "exports/book/chapter-089.html",
+      "sha256": "abb3b3d01df5aee1ca51bbe9a65bf9c67d61127773e2ab6c9f7a143a82883604"
+    },
+    {
+      "file": "exports/book/chapter-090.html",
+      "sha256": "65c330583b54dfea570b0bd4f6641954d3b5bf71e214e6c44ab1b23716167da1"
+    },
+    {
+      "file": "exports/book/chapter-091.html",
+      "sha256": "285fa15ec3e6477b1edf0c7727bf62be70aa55378a364ad0fd26f3136b51f289"
+    },
+    {
+      "file": "exports/book/chapter-092.html",
+      "sha256": "807bd40c4f7e691d8f20e5a0013599d44aeb1063c1c702a3da56ee2f590e7325"
+    },
+    {
+      "file": "exports/book/chapter-093.html",
+      "sha256": "4c231800bf0f738131678729c3e148b709ef557da4664b8e5ca42d0c93cf5b33"
+    },
+    {
+      "file": "exports/book/chapter-094.html",
+      "sha256": "8a71d3ed5c775d651862f383c0ec9c2b926340c28da3f4a12e288eb5fc763594"
+    },
+    {
+      "file": "exports/book/chapter-095.html",
+      "sha256": "cca885cc6d6fa4ee3d8f60b17f0bff6d96672d66b645fb5a58d78a5411fc6066"
+    },
+    {
+      "file": "exports/book/chapter-096.html",
+      "sha256": "818c078e5fe820b5acd48371a47e6e2618fed267936ad6d2d2c07e25086fc76d"
+    },
+    {
+      "file": "exports/book/chapter-097.html",
+      "sha256": "4417015bcab140387d0387c2d507d3ceacfc5fc3da63c75ce7e7283ca5fe732b"
+    },
+    {
+      "file": "exports/book/chapter-098.html",
+      "sha256": "db4b2b550ef7873e1f95577e2bb3fe3a04963705e3569541b6f9b9676cd9cd71"
+    },
+    {
+      "file": "exports/book/chapter-099.html",
+      "sha256": "e403b972afe4997caf5a5215160bb3d705f2e038ddde0527d462744a00f47ff2"
+    },
+    {
+      "file": "exports/book/chapter-100.html",
+      "sha256": "097410374ac0f2ff5ceff9b35f79cf451e52a426e0eca937b41bb25c15da3f19"
+    },
+    {
+      "file": "exports/book/chapter-101.html",
+      "sha256": "5dcb5b74fca688cd260a80f49a632bef886d2a8e0d3f2adaf0d51412da271992"
+    },
+    {
+      "file": "exports/book/chapter-102.html",
+      "sha256": "edc3c5690f8f479e5aa6e4800f6d2db2bab9d2dee8cf2f424ae4dfd4fd7b20d3"
+    },
+    {
+      "file": "exports/book/chapter-103.html",
+      "sha256": "7ae76d2c8aaa9f1eeb3d62c42f6ba739babbcb02ac6c0985ff1c565714aa2862"
+    },
+    {
+      "file": "exports/book/chapter-104.html",
+      "sha256": "64bef002214679c98eb98eb23d37cd7cf955c05740b42371849d3a38485b2284"
+    },
+    {
+      "file": "exports/book/chapter-105.html",
+      "sha256": "020aff181af96652fe1d44634796e1af688ed0cc645c231c15f111251f4df2be"
+    },
+    {
+      "file": "exports/book/chapter-106.html",
+      "sha256": "d0658faa815a863510337fb82e0e377cbaf93911e604db01eb422ec519fd8adf"
+    },
+    {
+      "file": "exports/book/chapter-107.html",
+      "sha256": "fa332de6273fdd1a9b71992028afde996252676f7994fcce0219c9745b694b2b"
+    },
+    {
+      "file": "exports/book/chapter-108.html",
+      "sha256": "6c65607ed4b0f79060d49cfa6e5bc4dc780fb2e3dd435457436ae8b493d6c66c"
+    },
+    {
+      "file": "exports/book/chapter-109.html",
+      "sha256": "ff1330362d31df5364325dc98ebf3d43cd7d0b8fcdc88aacd9b22cdbcca00253"
+    },
+    {
+      "file": "exports/book/chapter-110.html",
+      "sha256": "be4016ca9afde4b8a5e91d9d757a0453365a6b0678e04c6e56e9b919c9396f88"
+    },
+    {
+      "file": "exports/book/chapter-111.html",
+      "sha256": "0d75e42a05bf92bb526a9d1b983089ad39ef5292a53021d191a1edcea3a94266"
+    },
+    {
+      "file": "exports/book/chapter-112.html",
+      "sha256": "8a391321a5cfb664d15384243cdf35198667014e74de634565b5cfe3b4de1a73"
+    },
+    {
+      "file": "exports/book/chapter-113.html",
+      "sha256": "893f4c2bc2f8f8bbf876264aaa9fc8698e52162b7a331152450451bb17268a68"
+    },
+    {
+      "file": "exports/book/chapter-114.html",
+      "sha256": "5e92f177d6eb3e17fb2dbd17d030807dd95a45e66631be7c21ce5e4f8b8a71c5"
+    },
+    {
+      "file": "exports/book/chapter-115.html",
+      "sha256": "114f2f3e0e80f89675becfcd71dbcbd9ad2199cab379769553435592340d890d"
+    },
+    {
+      "file": "exports/book/chapter-116.html",
+      "sha256": "10f52d8b5e950fc7476328f86bb6c99eb4cb14738ec685692130d321bced3201"
+    },
+    {
+      "file": "exports/book/chapter-117.html",
+      "sha256": "43886d77721fbacd8b08aab5be1ab4efc5a026a021322b30e9e864e6cd9fa0ea"
+    },
+    {
+      "file": "exports/book/chapter-118.html",
+      "sha256": "a9ac3ee1186c90dc2d4972da2b67a1968075505e41b1243c8dffbcd4d6b16769"
+    },
+    {
+      "file": "exports/book/chapter-119.html",
+      "sha256": "c5fb2daaf27b16ecca7edd1e2dbf1398af5b52573a23e8c610288598e169b987"
+    },
+    {
+      "file": "exports/book/chapter-120.html",
+      "sha256": "7829d0c6af8299173201275da98c08db3af9de8f938332cfdb1abeec1403e76f"
+    },
+    {
+      "file": "exports/book/chapter-121.html",
+      "sha256": "88f3f115a0f8fcc8c5b100c09e547ef1b30a06cc2574304608b76ba681e46a53"
+    },
+    {
+      "file": "exports/book/chapter-122.html",
+      "sha256": "7d48560babeeb9e5e66b2045f2cd02321e1d122ee3d86bf0b15331c7da2e1d1a"
+    },
+    {
+      "file": "exports/book/chapter-123.html",
+      "sha256": "27b77fa4d173529cb0f2bea92c24835ae85fb91a506bd525b620c8059b0d6f58"
+    },
+    {
+      "file": "exports/book/chapter-124.html",
+      "sha256": "b76ba41e57cc118f62f004bf9eeb78c6ac22a7b9f1e32629e00b9b65cd26a7cd"
+    },
+    {
+      "file": "exports/book/chapter-125.html",
+      "sha256": "2bd5631357724fcd8582d69a460c607cde729f1c9a99f5202f6c13e8a24a08b5"
+    },
+    {
+      "file": "exports/book/chapter-126.html",
+      "sha256": "53109cdccbd6917b3f9c3817db7fe509b20d97b1c3ed4827e9744c291fdf578a"
+    },
+    {
+      "file": "exports/book/chapter-127.html",
+      "sha256": "d85352e2f5bb57e033caa434bf80626e32113a822c592e90d2c95ad1edceeb66"
+    },
+    {
+      "file": "exports/book/chapter-128.html",
+      "sha256": "ccde60fd47b5306754cd262616bbd980b755ae8da92438215b286d7c82b9c0b5"
+    },
+    {
+      "file": "exports/book/chapter-129.html",
+      "sha256": "cb7334fac31231bbb00a524da059698fbbfcddba764ca1b63a85df04b7af28c5"
+    },
+    {
+      "file": "exports/book/chapter-130.html",
+      "sha256": "a3a6366193dabba399c7c9fdf1c3cbe83f9f0050e5402ddac5f5343009404524"
+    },
+    {
+      "file": "exports/book/chapter-131.html",
+      "sha256": "b0db553850507194eebe695cb3ac325f26fe3aee76a4633f0d80ad6d34bd6e26"
+    },
+    {
+      "file": "exports/book/chapter-132.html",
+      "sha256": "cc0477bc70718a128993f37d4dfa7ce8a0d340026c88dc9a7898eb3e6322b416"
+    },
+    {
+      "file": "exports/book/chapter-133.html",
+      "sha256": "bde935dcbfcad17a74fdca471b879318462a2985795c1def2163511c92b7413d"
+    },
+    {
+      "file": "exports/book/chapter-134.html",
+      "sha256": "81ee0a50ef00329021998325771bfb04648a9087c86a1592755e621ebb60c249"
+    },
+    {
+      "file": "exports/book/chapter-135.html",
+      "sha256": "4319af21455579f5c4d8b9a8e168fb612987e45c5fd1b048f643aa894f80a67b"
+    },
+    {
+      "file": "exports/book/chapter-136.html",
+      "sha256": "1244b4d7f1902d7257a458b234537c35aa0032c74714419e6e941e16cfe02d73"
+    },
+    {
+      "file": "exports/book/chapter-137.html",
+      "sha256": "7f4c8ac31c9f6b769c9a5af16e534ce81fff71e75f3e9831ecf3e071393b5a5e"
+    },
+    {
+      "file": "exports/book/chapter-138.html",
+      "sha256": "3fa49fb2a2ae7d946ab7b6020fd7bfa5b5b224302861ef34264b4e5e18ba400a"
+    },
+    {
+      "file": "exports/book/chapter-139.html",
+      "sha256": "343ce5979d0e81e72df6fc72dd1518cdf0c678131346f49b015b7ac81292a4c9"
+    },
+    {
+      "file": "exports/book/chapter-140.html",
+      "sha256": "e4d838a822bd11c0bdccdd2a468ec84b11599e77afcbd4c17de0eeee899af135"
+    },
+    {
+      "file": "exports/book/chapter-141.html",
+      "sha256": "bdd4da42fb898ddaaf30d83cfd4173066af39a18394fe5dd4252d0371626fe62"
+    },
+    {
+      "file": "exports/book/chapter-142.html",
+      "sha256": "9410f5d9cbe3638548a4378cff5fa9fdcd404cea4503c705eb6eae9b774391d8"
+    },
+    {
+      "file": "exports/book/chapter-143.html",
+      "sha256": "e91cd8d63e68dd489e399c81b509083e988324b90d67b4d848d9f8b602fed249"
+    },
+    {
+      "file": "exports/book/chapter-144.html",
+      "sha256": "261a7bf56ab803dddf0a4713676ffbce5a6df17f5891e02a1a8cb7710e332b7b"
+    },
+    {
+      "file": "exports/book/chapter-145.html",
+      "sha256": "1fa9efad55cb05c0459998028b8348c9c501eddb8b8df7802fd99a8035530a18"
+    },
+    {
+      "file": "exports/book/chapter-146.html",
+      "sha256": "c5522a9ce46f9b93c000106d8ff07b3b287ea72e3c2eb0b07c70a4dcce209e10"
+    },
+    {
+      "file": "exports/book/chapter-147.html",
+      "sha256": "d579747b843ed270accf792a3ad3999b21babb713a9fac1164d3d53ffa49fe50"
+    },
+    {
+      "file": "exports/book/chapter-148.html",
+      "sha256": "ce7457d1aa858b14479ca97835c9c829c708a4ce0bdcd721bcadc665d96ba74a"
+    },
+    {
+      "file": "exports/book/chapter-149.html",
+      "sha256": "80272e49e1586f1241435366f3853ad8520c537e3f25a327533c66916a98af33"
+    },
+    {
+      "file": "exports/book/chapter-150.html",
+      "sha256": "649552bcab93b310a3cc50bf53a880fa4b8e092773db764d8aacd16fbe3b871a"
+    },
+    {
+      "file": "exports/book/chapter-151.html",
+      "sha256": "7ee23d005da10058272f7c4de358864ded7e448e2416462bdbd7fb9c686e27e8"
+    },
+    {
+      "file": "exports/book/chapter-152.html",
+      "sha256": "89f77083e30edc72b2a3fdffdf475686a38bf2ae2dd5e04e1006a5f6f70b9804"
+    },
+    {
+      "file": "exports/book/chapter-153.html",
+      "sha256": "55ce4594abb8d45bdbb850ccc6a99e18b74ae575b8ee9e793bfd3a24cbd813e2"
+    },
+    {
+      "file": "exports/book/chapter-154.html",
+      "sha256": "f2a8d75e9cb403834601e68ca8000dfe63b5a713833d8d37814a834a787d990e"
+    },
+    {
+      "file": "exports/book/chapter-155.html",
+      "sha256": "f095602a7e4eedbce1a8ac69abadd3361d081868c2b511d906143b745aa2cb87"
+    },
+    {
+      "file": "exports/book/chapter-156.html",
+      "sha256": "a3393937706b82e09efb5585239b2ef4c89c7d9136ad6408b64e56887e124d81"
+    },
+    {
+      "file": "exports/book/chapter-157.html",
+      "sha256": "45ec833e1b9a2bc69741234bd3ccab5e8e0a0f10964f5e12d9efe302e8325c19"
+    },
+    {
+      "file": "exports/book/chapter-158.html",
+      "sha256": "9aed69405c1b6823a636a4cb78633a94db780e003dc8933b097fc7b7f3401dfa"
+    },
+    {
+      "file": "exports/book/chapter-159.html",
+      "sha256": "9c345082615986a09048830754877e78e81ca9c9e2da2023cfbc281fb0f9852d"
+    },
+    {
+      "file": "exports/book/chapter-160.html",
+      "sha256": "b5e462d28fbdddbc35cad09296ac0f9b5ad4de9a5c859f52e35662aa3b2b461c"
+    },
+    {
+      "file": "exports/book/chapter-161.html",
+      "sha256": "cc7fff8b2166d04ca97e88e7808ccd82c57919057ec3256f2ec2f913edd448db"
+    },
+    {
+      "file": "exports/book/chapter-162.html",
+      "sha256": "d5ed1cf49e38234454684b6222ccda37986353d9b15c40528403e5097ba67af3"
+    },
+    {
+      "file": "exports/book/chapter-163.html",
+      "sha256": "62dd9c0ec8355769617b498b44ab318071ebdb0b041554eadddcf83097c653ee"
+    },
+    {
+      "file": "exports/book/chapter-164.html",
+      "sha256": "e8abaa3cf931066e6853eb75fcb1e72d4c26cfc43e7d3c1f459ef5054ba92cac"
+    },
+    {
+      "file": "exports/book/chapter-165.html",
+      "sha256": "71a37ce48812550b21214a17840641c1c6cb8933d447dbe7f9b380f60a6b3cd6"
+    },
+    {
+      "file": "exports/book/chapter-166.html",
+      "sha256": "18575faf92d9509521634d8ec4c1fad6542efdf98837739de1a01ebe135a9dc5"
+    },
+    {
+      "file": "exports/book/chapter-167.html",
+      "sha256": "d70fedb33deb24aee974848ef7b3aeca2337cd6ba09dc539dc288e22e26e0217"
+    },
+    {
+      "file": "exports/book/chapter-168.html",
+      "sha256": "f69d6dc0c0efdec28a1c5745eec502810b661c7485452b497760e75e40a54ab9"
+    },
+    {
+      "file": "exports/book/chapter-169.html",
+      "sha256": "02425377ed0990991e71311318b2c7bf758e2e5d84fc9b87c1010b007e631013"
+    },
+    {
+      "file": "exports/book/chapter-170.html",
+      "sha256": "fc1dd096a83abad806160dcc1d2725d9e1e319c0a235a8923ad38711e97f8c0e"
+    },
+    {
+      "file": "exports/book/chapter-171.html",
+      "sha256": "654f233cd4a995f85ea121330806146499a20384a6a5d4a66e7ff32041d5e0c1"
+    },
+    {
+      "file": "exports/book/chapter-172.html",
+      "sha256": "15915ee6495ba71e24309d9442e630be8073e972696804c4bfdc4ad8469a4f48"
+    },
+    {
+      "file": "exports/book/chapter-173.html",
+      "sha256": "97b20b91dc104d011936a53003ddbb74ed4d5ae63b630574e34cf582c99b80dd"
+    },
+    {
+      "file": "exports/book/chapter-174.html",
+      "sha256": "5b1f78285628c796ace6a3a3a7e9e322fd0397745f3cb1c017c6252ddc4b199a"
+    },
+    {
+      "file": "exports/book/chapter-175.html",
+      "sha256": "81bfb6e2a2aa23ce68bf707e85b3b28568b3f6f7c082d4a31199ce5c2d2e9cdf"
+    },
+    {
+      "file": "exports/book/chapter-176.html",
+      "sha256": "ca6c6db6fca7bca0ba19900859ed7c7ba0da2b8e8bc28aee783a3d4f6ae99a3b"
+    },
+    {
+      "file": "exports/book/chapter-177.html",
+      "sha256": "f0f1aaebae3c1dcff2696fa16bc1272f9bc5f7deb0084b99e148007d2c0adc9d"
+    },
+    {
+      "file": "exports/book/chapter-178.html",
+      "sha256": "d34f7792f81bfce23c1dfec056742036d52a131bb21afc11931950df3c533d60"
+    },
+    {
+      "file": "exports/book/chapter-179.html",
+      "sha256": "d6360578f207e743a69a3ef557dea45864bd24459bd60fa2d465120e91ff87b3"
+    },
+    {
+      "file": "exports/book/chapter-180.html",
+      "sha256": "88dbb84c40af0dde59589d9ffdf41d0b2db98434234cd20c16c9d418a215ff31"
+    },
+    {
+      "file": "exports/book/chapter-181.html",
+      "sha256": "658c4b0e0cf4d695eacdb1952e21088dc16ca342d7546055cf1dbcdc4a7b6275"
+    },
+    {
+      "file": "exports/book/chapter-182.html",
+      "sha256": "8084c8137758c27bfe56d558c15b65d4b08bb797214486db9dd272031bcdb827"
+    },
+    {
+      "file": "exports/book/chapter-183.html",
+      "sha256": "d0877920b819b5da1a869304f018b53ed048be44bc2cfce019a7eeb27c3be557"
+    },
+    {
+      "file": "exports/book/chapter-184.html",
+      "sha256": "10ed2ee6508fcc929f770d835591680025f2d7a5528dcbfde6f5e1b7a10522a3"
+    },
+    {
+      "file": "exports/book/chapter-185.html",
+      "sha256": "2ea56880fda1f4f0327251f7839a801570e8ee67e2f4ea8eb13fceb7c2a07482"
+    },
+    {
+      "file": "exports/book/chapter-186.html",
+      "sha256": "526dba8671a680f7f2a4fe1e17a5089c6a4069b5eb20f04594ca6eb9aabc8c12"
+    },
+    {
+      "file": "exports/book/chapter-187.html",
+      "sha256": "1db6bd42c4043da6ea621456081e98ab54ce49c4527a978efaf18f82801225f7"
+    },
+    {
+      "file": "exports/book/chapter-188.html",
+      "sha256": "c9fbc65d618d964f099da21f1b923a0ed7009ea9ae9fa5162e3a0cf22b371ca9"
+    },
+    {
+      "file": "exports/book/chapter-189.html",
+      "sha256": "560846f3f798e87cac2c77f074b3521a4195f425eba1a2ae28c4ab0de87aa34b"
+    },
+    {
+      "file": "exports/book/chapter-190.html",
+      "sha256": "42145d2cd5dbbac057fe5b3a6be348346d8176138260c7d3bd8991c5f3777205"
+    },
+    {
+      "file": "exports/book/chapter-191.html",
+      "sha256": "bfaef3d2d5cfbe223ef29c7552d06d8df5c15a187e09d44e23240eed2e5fa47e"
+    },
+    {
+      "file": "exports/book/chapter-192.html",
+      "sha256": "88181260b2734d3e96a8c17db2382be9007e0ebe12a5c4d9ecf2e6c2824cdd9e"
+    },
+    {
+      "file": "exports/book/chapter-193.html",
+      "sha256": "9a868fb2716e1e11c305611022cf1fc481698e406d842f1d4075bd775e10395f"
+    },
+    {
+      "file": "exports/book/chapter-194.html",
+      "sha256": "0643b4dd9b25e38f608261a2b0875b791435e9657a88a736c8f281736834b91c"
+    },
+    {
+      "file": "exports/book/chapter-195.html",
+      "sha256": "0901cf811dcd244481421a8d63555b20f0018b5d0b7c05bb682814cac97d9fd9"
+    },
+    {
+      "file": "exports/book/index.html",
+      "sha256": "1f491421afbfed18087ac1df01d00bd25f194f28cb151b377d81b21578d04727"
+    },
+    {
+      "file": "exports/book/manifest.json",
+      "sha256": "20ec35322e6f4b21be1e00a10a7a3c7b94e604ff0843c237a2aaa032369e8130"
+    },
+    {
+      "file": "开始阅读.html",
+      "sha256": "d43b4842e544efedfcd6d47c46f7fad5204b187d71e57e50a8c88e463502ec2f"
+    },
+    {
+      "file": "exports/landing.html",
+      "sha256": "f82f60f8398900fbbe87e75d080234a82f9c9fb7fc9da41bd259f094450c5c6b"
+    }
+  ],
+  "reading": {
+    "pages": 198,
+    "chapterStructure": 195,
+    "headingTargets": 5573,
+    "layouts": 792,
+    "viewportAndFontSizes": [
+      {
+        "width": 320,
+        "font": 18
+      },
+      {
+        "width": 375,
+        "font": 24
+      },
+      {
+        "width": 768,
+        "font": 18
+      },
+      {
+        "width": 1440,
+        "font": 18
+      }
+    ],
+    "localLinksAndAssets": 5888,
+    "failures": [],
+    "navigation": [
+      "original entry",
+      "chapter TOC link",
+      "keyboard skip",
+      "nested TOC with keyboard, offline and no JS",
+      "full-size figure offline and no JS"
+    ],
+    "reportSha256": "64887a24677ae5bb2ea9ddbdf27d8ec5e5b78ea40092342591d9ef51040ea5f2"
+  },
+  "visual": {
+    "mcpFigure": {
+      "outside": [],
+      "overlaps": [],
+      "textNodes": 41
+    }
+  },
+  "screenshots": [
+    {
+      "file": "specs/evidence/readability-03/chapter-toc-mobile.png",
+      "sha256": "ac3f2e0082ad626e640383e5a3c83adbbbd58a7929ec7b856ff31ecab8d70f07",
+      "visuallyReviewed": true
+    },
+    {
+      "file": "specs/evidence/readability-03/prompt-mobile.png",
+      "sha256": "6afbcae918d4b05d3f0f9fb6353a9223cff9b0132745ae3e662b1d6fc1efb7ad",
+      "visuallyReviewed": true
+    },
+    {
+      "file": "specs/evidence/readability-03/mcp-figure.png",
+      "sha256": "1f95b80d70fab262a697fd6d7d1bffb7450f6553a3fed7d1335d9fbfbdbf002b",
+      "visuallyReviewed": true
+    }
+  ],
+  "verification": {
+    "npmTest": {
+      "status": "passed",
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "logSha256": "20dc28f0794f4faa77de777a09383a22c728705ad784fdbd9cebd12302b8a6ff"
+    },
+    "readingCommand": "python scripts/check-book-reading.py",
+    "visualCommand": "py -3.14 tmp/readability-03/visual-check.py",
+    "sourceCommand": "node tmp/readability-03/verify.mjs",
+    "taskVerify": {
+      "status": "unverified",
+      "reason": "No callable task_verify tool in this session."
+    },
+    "remoteCi": "not-run-for-this-batch"
+  },
+  "officialReference": {
+    "url": "https://code.claude.com/docs/en/mcp.md",
+    "accessedOn": "2026-11-08",
+    "snapshotSha256": "08a59d3eeeb80da9f94a4f79f1f1179b5cd165c464e7805f8fdc8843ab9c6db7",
+    "reviewedTopics": [
+      "configuration scopes",
+      "type field",
+      "environment variable references",
+      "connection verification commands"
+    ],
+    "thirdPartyServerExecution": false
+  },
+  "limitations": [
+    "The MCP illustration remains a wide diagram: use the full-size image link on a phone.",
+    "Technical content review covers the listed changes, not every third-party service in all 195 chapters.",
+    "Chrome layout and navigation checks do not establish screen-reader, independent e-reader or human learner outcomes.",
+    "No commit, push, merge or remote CI run for this batch."
+  ]
+}

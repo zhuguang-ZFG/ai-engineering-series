@@ -1,0 +1,465 @@
+{
+  "scope": "Real loopback service processes from packaged directories. Boundary restoration is separate from model readiness.",
+  "build_a": {
+    "status": "ok",
+    "release": "trial-a",
+    "files_checked": 10
+  },
+  "events": [
+    {
+      "label": "before",
+      "selected": {
+        "status": "ok",
+        "release": "trial-a",
+        "manifest_sha256": "4739eccbabd8d2d624483d3f40326ee649a16a979bd03ca0c34cda11370f0a0b"
+      },
+      "health": {
+        "http": 200,
+        "body": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-a\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 200,
+        "body": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T17:45:46+00:00",
+          "status": "insufficient-evidence",
+          "question": "zzzzzzzz",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-a\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 4,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [
+            {
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "path": "docs/station-log.md",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "path": "docs/equipment-guide.md",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "path": "docs/visitor-policy.md",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "path": "docs/closing-notice.md",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            }
+          ],
+          "retrieval": {
+            "retriever": "keyword",
+            "threshold": 0.08,
+            "top_k": 4,
+            "hits": [],
+            "filtered_doc_count": 1,
+            "authorized_doc_ids": [
+              "station-log",
+              "equipment-guide",
+              "visitor-policy",
+              "closing-notice"
+            ],
+            "chunk_count": 5
+          },
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "latency_ms": 0.0,
+            "model_load_ms": 0.0,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": null,
+            "first_failure": {
+              "status": "insufficient-evidence",
+              "stage": "retrieve",
+              "detail": {
+                "threshold": 0.08,
+                "retriever": "keyword"
+              }
+            },
+            "raw_responses": [],
+            "warnings": [
+              "zero hits above threshold; model was not called"
+            ]
+          },
+          "elapsed_ms": 5.349
+        }
+      },
+      "bad_json": {
+        "http": 400,
+        "body": {
+          "status": "invalid-request",
+          "error": "invalid JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        }
+      },
+      "denied_identity": {
+        "http": 403,
+        "body": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "stopped_connection_refused": true,
+      "stopped_error_type": "ConnectionResetError",
+      "package_after_service": "trial-a"
+    },
+    {
+      "label": "failure",
+      "selected": {
+        "status": "ok",
+        "release": "trial-b",
+        "manifest_sha256": "b0fc385df9e5db6e2397f5bde20897e804cd5fe8af4b8e8aacfc81498ede824b"
+      },
+      "health": {
+        "http": 200,
+        "body": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-b\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 409,
+        "body": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T17:45:47+00:00",
+          "status": "missing-source",
+          "question": "zzzzzzzz",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-b\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 4,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [],
+          "retrieval": null,
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "latency_ms": 0.0,
+            "model_load_ms": 0.0,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": null,
+            "first_failure": {
+              "status": "missing-source",
+              "stage": "source",
+              "detail": {
+                "doc_id": "station-log",
+                "path": "docs/intentional-missing.md",
+                "reason": "file-not-found"
+              }
+            },
+            "raw_responses": [],
+            "warnings": []
+          },
+          "elapsed_ms": 3.835
+        }
+      },
+      "bad_json": {
+        "http": 400,
+        "body": {
+          "status": "invalid-request",
+          "error": "invalid JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        }
+      },
+      "denied_identity": {
+        "http": 403,
+        "body": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "stopped_connection_refused": true,
+      "stopped_error_type": "URLError",
+      "package_after_service": "trial-b"
+    },
+    {
+      "label": "rollback",
+      "selected": {
+        "status": "ok",
+        "release": "trial-a",
+        "manifest_sha256": "4739eccbabd8d2d624483d3f40326ee649a16a979bd03ca0c34cda11370f0a0b"
+      },
+      "health": {
+        "http": 200,
+        "body": {
+          "status": "ok",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-a\\app\\documents.json",
+          "embedding": null,
+          "local_files_only": true
+        }
+      },
+      "query": {
+        "http": 200,
+        "body": {
+          "schema": "assistant-report/1",
+          "generated_at": "2026-11-08T17:45:47+00:00",
+          "status": "insufficient-evidence",
+          "question": "zzzzzzzz",
+          "reader": "student",
+          "mode": "fixed",
+          "provider": "local",
+          "model": "<local-model:Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775>",
+          "config": {
+            "docs": ".\\tmp\\quality-04\\release-smoke-2\\store\\releases\\trial-a\\app\\documents.json",
+            "chunk_chars": 480,
+            "chunk_overlap": 80,
+            "retriever": "keyword",
+            "top_k": 4,
+            "threshold": 0.08,
+            "max_new_tokens": 256,
+            "max_prompt_tokens": 3072,
+            "max_steps": 4,
+            "max_tool_calls": 2,
+            "repair_attempts": 0,
+            "claim_mode": "copy",
+            "allowed_tools": [
+              "calculator"
+            ],
+            "local_files_only": true
+          },
+          "documents": [
+            {
+              "doc_id": "station-log",
+              "title": "观测站值班记录",
+              "path": "docs/station-log.md",
+              "version": "1.0.0",
+              "sha256": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "equipment-guide",
+              "title": "海岬观测站设备手册（节选）",
+              "path": "docs/equipment-guide.md",
+              "version": "1.0.0",
+              "sha256": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "visitor-policy",
+              "title": "访客与开放时间政策",
+              "path": "docs/visitor-policy.md",
+              "version": "1.0.0",
+              "sha256": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            },
+            {
+              "doc_id": "closing-notice",
+              "title": "关于冬季闭站时间的临时通知",
+              "path": "docs/closing-notice.md",
+              "version": "1.0.0",
+              "sha256": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+              "readers": [
+                "student",
+                "teacher"
+              ]
+            }
+          ],
+          "retrieval": {
+            "retriever": "keyword",
+            "threshold": 0.08,
+            "top_k": 4,
+            "hits": [],
+            "filtered_doc_count": 1,
+            "authorized_doc_ids": [
+              "station-log",
+              "equipment-guide",
+              "visitor-policy",
+              "closing-notice"
+            ],
+            "chunk_count": 5
+          },
+          "answer": null,
+          "claims": [],
+          "tool_receipts": [],
+          "usage": {
+            "calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "latency_ms": 0.0,
+            "model_load_ms": 0.0,
+            "cost": null,
+            "cost_basis": "local-compute-not-priced"
+          },
+          "diagnostics": {
+            "first_raw_response": null,
+            "first_failure": {
+              "status": "insufficient-evidence",
+              "stage": "retrieve",
+              "detail": {
+                "threshold": 0.08,
+                "retriever": "keyword"
+              }
+            },
+            "raw_responses": [],
+            "warnings": [
+              "zero hits above threshold; model was not called"
+            ]
+          },
+          "elapsed_ms": 4.965
+        }
+      },
+      "bad_json": {
+        "http": 400,
+        "body": {
+          "status": "invalid-request",
+          "error": "invalid JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        }
+      },
+      "denied_identity": {
+        "http": 403,
+        "body": {
+          "status": "permission-denied",
+          "error": "reader differs from the identity selected by the local operator"
+        }
+      },
+      "stopped_connection_refused": true,
+      "stopped_error_type": "ConnectionResetError",
+      "package_after_service": "trial-a"
+    }
+  ],
+  "build_b": {
+    "status": "ok",
+    "release": "trial-b",
+    "files_checked": 10
+  },
+  "conclusion": "Version selection and boundary behavior restored. Known-answer model readiness not tested in this boundary smoke.",
+  "manifests": {
+    "trial-a": {
+      "release": "trial-a",
+      "created": "2026-11-09",
+      "scope": "course-fixture local delivery smoke",
+      "start": "see runbook.md",
+      "health": "GET /health; POST /query with known evidence must also pass",
+      "files": {
+        "app/assistant.py": "1b3857e3b76193d01577ba0a12fee2f674371d1ad48504f11d57ce1777b3247b",
+        "app/docs/closing-notice.md": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+        "app/docs/equipment-guide.md": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+        "app/docs/review-budget.md": "0a7842c74c17f1ce1733b08ea7f1fcf08afb501ac7ba15bf5df5a9cd607604a2",
+        "app/docs/station-log.md": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+        "app/docs/visitor-policy.md": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+        "app/documents.json": "a3b9e354fbfae946ade3dc39f43e702627b38dbfb222d220cf6ca851f9b37736",
+        "requirements.lock": "b1d588f24af52a220107d398ca329a5fbab96269c109bd7a3f0bac21ffe5e8f8",
+        "runbook.md": "a72ae365b661680422e38b539ca3f3f90c039a3986fdb4a28ffb2a97ee8fe8e6",
+        "user-guide.md": "eda381c2b9f4d567bbd7e124780a2b2cb99fc524b8f1a0a2e547a626f2021ea5"
+      }
+    },
+    "trial-b": {
+      "release": "trial-b",
+      "created": "2026-11-09",
+      "scope": "course-fixture local delivery smoke",
+      "start": "see runbook.md",
+      "health": "GET /health; POST /query with known evidence must also pass",
+      "files": {
+        "app/assistant.py": "1b3857e3b76193d01577ba0a12fee2f674371d1ad48504f11d57ce1777b3247b",
+        "app/docs/closing-notice.md": "afd0ca4b251ba1ca8a88d6a35dbee2a78950d7eb822ddd679b5433b6ba29cdbb",
+        "app/docs/equipment-guide.md": "a4d0a287abe26f148284d9a15117c1cb97179768d264e33a947406efeb83153b",
+        "app/docs/review-budget.md": "0a7842c74c17f1ce1733b08ea7f1fcf08afb501ac7ba15bf5df5a9cd607604a2",
+        "app/docs/station-log.md": "9cb29b8d5e1aa7c08910ea9d300fa5e492429f404449a489583ad0f81cf03206",
+        "app/docs/visitor-policy.md": "b804832daad79e3d18fdd955d4e0e859066c371b7de29d31c2d133993bd7c841",
+        "app/documents.json": "d5a6301829fe238fe99118ddee85034fbfd73a9ede6a19fc8cd3efbb3d6c0f12",
+        "requirements.lock": "b1d588f24af52a220107d398ca329a5fbab96269c109bd7a3f0bac21ffe5e8f8",
+        "runbook.md": "a72ae365b661680422e38b539ca3f3f90c039a3986fdb4a28ffb2a97ee8fe8e6",
+        "user-guide.md": "eda381c2b9f4d567bbd7e124780a2b2cb99fc524b8f1a0a2e547a626f2021ea5"
+      }
+    }
+  },
+  "harnessNotes": [
+    "First smoke reached successful HTTP checks, then Windows returned ConnectionResetError after process stop instead of URLError. Broadened the stop-only exception handling to OSError and reran in a new store; original store/log retained. No application output was changed."
+  ]
+}

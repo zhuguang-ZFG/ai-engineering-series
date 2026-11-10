@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="574" viewBox="0 0 480 574" role="img" aria-labelledby="title desc">
+  <title id="title">编号、向量与平面观察</title>
+  <desc id="desc">ID 查表取得初始向量；上下文处理后表示可改变；二维图省略第三维。</desc><defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <rect width="480" height="574" fill="#fbfaf6"/><rect width="480" height="574" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="556" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 544 V565 H30 M450 565 H471 V544" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
+  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+    <text x="24" y="40" font-size="28">同一个 token，从编号到数字</text>
+    <path d="M33 67 L451 66 Q457 68 456 76 L455 133 Q454 139 446 138 L28 137 Q23 136 24 128 L25 72 Q26 66 33 67 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="111" font-size="26">“苹果” → 示意 ID 42</text>
+    <path d="M240 142 Q238 158 240 174" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 183 L451 182 Q457 184 456 192 L455 249 Q454 255 446 254 L28 253 Q23 252 24 244 L25 188 Q26 182 33 183 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="44" y="227" font-size="26">查表：[0.8, 0.2, 0.1]</text>
+    <path d="M240 260 Q238 277 240 294" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <text x="50" y="329" font-size="26">上下文处理后，表示可变化</text>
+    <path d="M68 492 L68 364 M68 492 L414 492" fill="none" stroke="#1f2328" stroke-width="2.5"/>
+    <circle cx="138" cy="410" r="9" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <circle cx="348" cy="468" r="9" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <text x="158" y="412" font-size="26">仅画前两维</text>
+    <text x="82" y="548" font-size="26">第三维被省略，不能凭图判同</text>
+  </g>
+</svg>

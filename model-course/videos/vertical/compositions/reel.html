@@ -1,0 +1,563 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #fbfaf6;
+    }
+    #r-tag {
+      position: absolute;
+      top: 160px;
+      left: 72px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #57606a;
+    }
+    #r-rule {
+      position: absolute;
+      top: 218px;
+      left: 72px;
+      width: 120px;
+      height: 6px;
+      background: #1f883d;
+    }
+    #r-h1 {
+      position: absolute;
+      top: 270px;
+      left: 72px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 94px;
+      line-height: 1.25;
+      color: #1f2328;
+    }
+    #r-h1 .g {
+      color: #1f883d;
+    }
+    #r-h1 .r-title-sub {
+      display: block;
+      margin-top: 8px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1.3;
+      color: #57606a;
+    }
+    #r-vc {
+      position: absolute;
+      top: 565px;
+      left: 72px;
+      width: 936px;
+      height: 280px;
+      box-sizing: border-box;
+      background: #1f2328;
+      border-radius: 15px 10px 17px 9px;
+      padding: 30px 38px;
+    }
+    #r-vc-h {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 56px;
+      color: #f6f8fa;
+    }
+    #r-vc-h .g {
+      color: #3fb950;
+    }
+    #r-vc-p {
+      position: absolute;
+      top: 46px;
+      right: 38px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: #768390;
+    }
+    #r-vc-d {
+      margin-top: 8px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.5;
+      color: #adbac7;
+    }
+    #r-vc-demo {
+      position: relative;
+      height: 106px;
+      margin-top: 14px;
+    }
+    #r-vc-chat {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 540px;
+    }
+    .r-vc-bubble {
+      box-sizing: border-box;
+      min-height: 46px;
+      padding: 9px 14px;
+      border-radius: 15px 10px 17px 9px;
+      background: #30363d;
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: 28px;
+      line-height: 1.2;
+      color: #f0f6fc;
+    }
+    #r-vc-revise {
+      margin-top: 8px;
+      border-left: 5px solid #3fb950;
+      color: #adbac7;
+    }
+    #r-vc-revise strong { color: #3fb950; }
+    .r-vc-glyph {
+      margin-right: 8px;
+      color: #3fb950;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+    }
+    #r-vc-caret {
+      display: inline-block;
+      width: 10px;
+      height: 24px;
+      margin-left: 5px;
+      background: #3fb950;
+      vertical-align: -4px;
+    }
+    #r-vc-preview {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 280px;
+      height: 106px;
+      overflow: hidden;
+      border: 1px solid #57606a;
+      border-radius: 15px 10px 17px 9px;
+      background-color: #0d1117;
+      background-image: linear-gradient(#21262d 1px, transparent 1px), linear-gradient(90deg, #21262d 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+    #r-vc-score {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      min-width: 52px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: rgba(13,17,23,.86);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      color: #f0f6fc;
+      z-index: 3;
+    }
+    #r-vc-score-10 { position: absolute; left: 8px; opacity: 0; color: #3fb950; }
+    #r-vc-mini-snake {
+      position: absolute;
+      left: 44px;
+      top: 58px;
+      width: 78px;
+      height: 22px;
+    }
+    .r-vc-segment {
+      position: absolute;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: #3fb950;
+    }
+    #r-vc-seg-1 { left: 0; opacity: .65; }
+    #r-vc-seg-2 { left: 24px; opacity: .82; }
+    #r-vc-seg-3 { left: 48px; background: #1f883d; }
+    #r-vc-mini-apple {
+      position: absolute;
+      right: 34px;
+      top: 57px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f85149;
+    }
+    #r-vc-speed {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      color: #8c959f;
+    }
+    #r-vc-speed-slow { position: absolute; right: 0; opacity: 0; color: #3fb950; }
+    .r-step {
+      position: absolute;
+      left: 72px;
+      width: 936px;
+      background: #fffdf8;
+      border: 4px solid #1f2328;
+      border-radius: 15px 10px 17px 9px;
+      padding: 22px 34px;
+      display: flex;
+      align-items: baseline;
+      box-shadow: 8px 9px 0 rgba(31,35,40,.12);
+    }
+    .r-step-n {
+      font-family: "Archivo Black", sans-serif;
+      font-size: 42px;
+      color: #1f883d;
+      margin-right: 24px;
+    }
+    .r-step-t {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 38px;
+      color: #1f2328;
+    }
+    .r-step-t .sub {
+      font-weight: 400;
+      font-size: 28px;
+      color: #57606a;
+    }
+    #r-st1 { top: 850px; }
+    #r-st2 { top: 980px; }
+    #r-st3 { top: 1110px; }
+    #r-route { position: absolute; inset: 0; }
+    #r-path {
+      position: absolute;
+      left: 48px;
+      top: 875px;
+      width: 6px;
+      height: 286px;
+      background: #d8dee4;
+      border-radius: 99px;
+      transform-origin: top center;
+    }
+    .r-path-node {
+      position: absolute;
+      left: 31px;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #d8dee4;
+      border-radius: 50%;
+      background: #fbfaf6;
+    }
+    #r-node-1 { top: 883px; }
+    #r-node-2 { top: 1013px; }
+    #r-node-3 { top: 1143px; }
+    #r-snake {
+      position: absolute;
+      left: 26px;
+      top: 0;
+      width: 50px;
+      height: 50px;
+      z-index: 5;
+      opacity: 0;
+    }
+    #r-snake-head {
+      position: absolute;
+      left: 8px;
+      top: 4px;
+      width: 42px;
+      height: 42px;
+      border-radius: 17px 12px 19px 10px;
+      background: #1f883d;
+      box-shadow: 0 6px 16px rgba(31,136,61,.25);
+    }
+    .r-eye { position: absolute; top: 10px; width: 7px; height: 7px; border-radius: 50%; background: #fffdf8; }
+    #r-eye-1 { left: 11px; } #r-eye-2 { right: 11px; }
+    .r-tail { position: absolute; width: 20px; height: 20px; border-radius: 7px; background: #3fb950; }
+    #r-tail-1 { left: 0; top: 19px; }
+    #r-tail-2 { left: -12px; top: 33px; opacity: .75; }
+    #r-apple {
+      position: absolute;
+      left: 27px;
+      top: 1151px;
+      width: 42px;
+      height: 42px;
+      border-radius: 48% 52% 52% 48%;
+      background: #cf222e;
+      opacity: 0;
+    }
+    #r-apple::before { content: ""; position: absolute; left: 22px; top: -8px; width: 7px; height: 14px; border-radius: 5px; background: #116329; transform: rotate(28deg); }
+    #r-project-token {
+      position: absolute;
+      left: 90px;
+      top: 1040px;
+      min-width: 300px;
+      box-sizing: border-box;
+      padding: 13px 20px;
+      border: 2px solid #1f883d;
+      border-radius: 9px;
+      background: #fffdf8;
+      box-shadow: 0 8px 24px rgba(31, 35, 40, 0.12);
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: #1f2328;
+      opacity: 0;
+      z-index: 4;
+    }
+    #r-project-token .r-token-check {
+      display: inline-grid;
+      width: 38px;
+      height: 38px;
+      margin-right: 12px;
+      place-items: center;
+      border-radius: 50%;
+      background: #1f883d;
+      color: #ffffff;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+    }
+    #r-map {
+      position: absolute;
+      top: 270px;
+      left: 72px;
+      width: 936px;
+    }
+    #r-map-title {
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.25;
+      color: #1f2328;
+      margin-bottom: 28px;
+    }
+    #r-map-title .g {
+      color: #1f883d;
+    }
+    .r-stage {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      align-items: center;
+      background: #fffdf8;
+      border: 4px solid #1f2328;
+      border-left: 10px solid #1f883d;
+      border-radius: 15px 10px 17px 9px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+      font-family: "Noto Sans JP", sans-serif;
+      box-shadow: 8px 9px 0 rgba(31,35,40,.12);
+    }
+    .r-stage-n {
+      font-family: "Archivo Black", sans-serif;
+      font-size: 46px;
+      color: #1f883d;
+    }
+    .r-stage-t {
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.25;
+      color: #1f2328;
+    }
+    .r-stage-d {
+      margin-top: 8px;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.35;
+      color: #57606a;
+    }
+    #r-cta {
+      position: absolute;
+      top: 1050px;
+      left: 72px;
+      width: 936px;
+      background: #1f883d;
+      border-radius: 15px 10px 17px 9px;
+      padding: 28px 34px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 40px;
+      color: #ffffff;
+      text-align: center;
+    }
+    #r-follow {
+      position: absolute;
+      top: 1185px;
+      left: 0;
+      width: 1080px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 400;
+      font-size: 28px;
+      color: #57606a;
+    }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g, #r-h1 .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-xc7v" id="root" data-composition-id="reel" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-5bv9" id="r-tag" class="clip" data-start="0.0" data-duration="13.711">VIBE CODING 101 · EP.01</div>
+    <div data-hf-id="hf-3tag" id="r-rule" class="clip" data-start="0.0" data-duration="13.711"></div>
+    <div data-hf-id="hf-ubbf" id="r-h1" class="clip" data-start="0.0" data-duration="13.711">不会写代码<br data-hf-id="hf-x5px" />也能做<span data-hf-id="hf-fuqx" class="g">软件</span><span class="r-title-sub">从一句需求，到第一个可用作品</span></div>
+    <div data-hf-id="hf-zt0y" id="r-vc" class="clip" data-start="4.4" data-duration="27.3">
+      <div data-hf-id="hf-vlaw" id="r-vc-h">Vibe <span data-hf-id="hf-6rae" class="g">Coding</span></div>
+      <div data-hf-id="hf-aug4" id="r-vc-p">KARPATHY · 2025.02</div>
+      <div data-hf-id="hf-2s3v" id="r-vc-d">你说需求 → AI 做原型 → 你看结果 → 继续改</div>
+      <div id="r-vc-demo">
+        <div id="r-vc-chat">
+          <div id="r-vc-prompt" class="r-vc-bubble"><span class="r-vc-glyph">›</span><span id="r-vc-word-1">做一个</span><span id="r-vc-word-2">会计分的</span><span id="r-vc-word-3">贪吃蛇</span><i id="r-vc-caret"></i></div>
+          <div id="r-vc-revise" class="r-vc-bubble">看过结果，再说：<strong>蛇慢一点，分数更醒目</strong></div>
+        </div>
+        <div id="r-vc-preview" aria-label="AI 生成的贪吃蛇原型">
+          <div id="r-vc-score" data-layout-allow-overlap><span>0</span><span id="r-vc-score-10">10</span></div>
+          <div id="r-vc-speed" data-layout-allow-overlap><span>速度：快</span><span id="r-vc-speed-slow">速度：慢</span></div>
+          <div id="r-vc-mini-snake"><i id="r-vc-seg-1" class="r-vc-segment"></i><i id="r-vc-seg-2" class="r-vc-segment"></i><i id="r-vc-seg-3" class="r-vc-segment"></i></div>
+          <i id="r-vc-mini-apple"></i>
+        </div>
+      </div>
+    </div>
+    <div data-hf-id="hf-1bcw" id="r-st1" class="r-step clip" data-start="13.0" data-duration="18.771">
+      <span data-hf-id="hf-2ajg" class="r-step-n">1</span>
+      <span data-hf-id="hf-ksym" class="r-step-t">聊天框说需求 <span data-hf-id="hf-jbei" class="sub">帮我做个贪吃蛇 · 几分钟出原型</span></span>
+    </div>
+    <div data-hf-id="hf-dnqh" id="r-st2" class="r-step clip" data-start="19.4" data-duration="12.371">
+      <span data-hf-id="hf-13md" class="r-step-n">2</span>
+      <span data-hf-id="hf-qs30" class="r-step-t">装 AI IDE 到本地 <span data-hf-id="hf-zgyy" class="sub">文件 · 运行 · 调试</span></span>
+    </div>
+    <div data-hf-id="hf-k1u2" id="r-st3" class="r-step clip" data-start="25.3" data-duration="6.471">
+      <span data-hf-id="hf-1hxe" class="r-step-n">3</span>
+      <span data-hf-id="hf-97u4" class="r-step-t">截图让 AI 复刻 <span data-hf-id="hf-h36y" class="sub">练需求表达</span></span>
+    </div>
+    <div data-hf-id="hf-gzq3" id="r-route" class="clip" data-start="12.7" data-duration="27.394">
+      <div data-hf-id="hf-h3dr" id="r-path"></div>
+      <span data-hf-id="hf-anij" id="r-node-1" class="r-path-node"></span><span data-hf-id="hf-1zmo" id="r-node-2" class="r-path-node"></span><span data-hf-id="hf-2rah" id="r-node-3" class="r-path-node"></span>
+      <div data-hf-id="hf-3ee2" id="r-snake"><span data-hf-id="hf-8co2" id="r-tail-2" class="r-tail"></span><span data-hf-id="hf-4ek1" id="r-tail-1" class="r-tail"></span><div data-hf-id="hf-0vw5" id="r-snake-head"><i data-hf-id="hf-pppg" id="r-eye-1" class="r-eye"></i><i data-hf-id="hf-0l73" id="r-eye-2" class="r-eye"></i></div></div>
+      <span data-hf-id="hf-q0cf" id="r-apple"></span>
+      <div id="r-project-token"><span class="r-token-check">✓</span>作品完成</div>
+    </div>
+    <div data-hf-id="hf-69kl" id="r-map" class="clip" data-start="31.8" data-duration="15.291">
+      <div data-hf-id="hf-afne" id="r-map-title">先做出一个，<br data-hf-id="hf-rsrt" />再<span data-hf-id="hf-guet" class="g">逐步升级</span></div>
+      <div data-hf-id="hf-hdzy" id="r-stage-1" class="r-stage">
+        <div data-hf-id="hf-pgw6" class="r-stage-n">S1</div>
+        <div data-hf-id="hf-yeow"><div data-hf-id="hf-tv72" class="r-stage-t">入门：交付第一个作品</div><div data-hf-id="hf-1nki" class="r-stage-d">从真实问题到可用原型</div></div>
+      </div>
+      <div data-hf-id="hf-dfvx" id="r-stage-2" class="r-stage">
+        <div data-hf-id="hf-pv77" class="r-stage-n">S2</div>
+        <div data-hf-id="hf-y7yw"><div data-hf-id="hf-ozf4" class="r-stage-t">初中级：做完整项目</div><div data-hf-id="hf-ybu4" class="r-stage-d">设计 · 数据库 · 部署 · 支付</div></div>
+      </div>
+      <div data-hf-id="hf-co84" id="r-stage-3" class="r-stage">
+        <div data-hf-id="hf-q9i8" class="r-stage-n">S3</div>
+        <div data-hf-id="hf-x11t"><div data-hf-id="hf-lspz" class="r-stage-t">进阶：Agent 与全平台</div><div data-hf-id="hf-1w29" class="r-stage-d">小程序 · App · 游戏</div></div>
+      </div>
+    </div>
+    <div data-hf-id="hf-vd05" id="r-cta" class="clip" data-start="41.65" data-duration="5.85">评论区扣「入门」领课程</div>
+    <div data-hf-id="hf-3mso" id="r-follow" class="clip" data-start="43.98" data-duration="3.438">关注追下期 · 实战做贪吃蛇</div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR" && !ch.classList.contains("r-title-sub")) walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    tl.set("#r-tag, #r-h1", { opacity: 1 }, 0);
+    tl.fromTo("#r-rule", { scaleX: 0.18, transformOrigin: "left center" }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0);
+    // Keep the whole headline still so the subheading and voice remain readable.
+    tl.set("#r-h1", { "--gk": "0%" }, 0);
+    tl.to("#r-h1", { "--gk": "100%", duration: .45, ease: "power2.out" }, .55);
+    tl.fromTo("#r-vc", { y: 44, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.5)", scale: 1 }, 4.4);
+    tl.set("#r-vc-word-1, #r-vc-word-2, #r-vc-word-3, #r-vc-preview, #r-vc-revise", { opacity: 0 }, 0);
+    tl.set("#r-vc-word-2, #r-vc-word-3", { marginLeft: 7 }, 0);
+    tl.fromTo("#r-vc-word-1", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .12, ease: "none", scale: 1 }, 5.0);
+    tl.fromTo("#r-vc-word-2", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .12, ease: "none", scale: 1 }, 5.28);
+    tl.fromTo("#r-vc-word-3", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: .12, ease: "none", scale: 1 }, 5.62);
+    tl.to("#r-vc-caret", { opacity: 0, duration: .12, ease: "none" }, 5.84);
+    tl.to("#r-vc-caret", { opacity: 1, duration: .12, ease: "none" }, 6.08);
+    tl.fromTo("#r-vc-preview", { x: 24, scale: .94, opacity: 0 }, { x: 0, scale: 1, opacity: 1, duration: .42, ease: "power3.out" }, 6.45);
+    tl.to("#r-vc-mini-snake", { x: 118, duration: 1.0, ease: "power2.inOut" }, 7.05);
+    tl.to("#r-vc-mini-apple", { scale: 0, opacity: 0, duration: .16, ease: "power2.in" }, 7.86);
+    tl.to("#r-vc-score > span:first-child", { opacity: 0, duration: .12, ease: "none" }, 7.82);
+    tl.to("#r-vc-score-10", { opacity: 1, duration: .16, ease: "power2.out" }, 7.88);
+    tl.fromTo("#r-vc-revise", { y: 12, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: .32, ease: "back.out(1.5)", scale: 1 }, 9.05);
+    tl.to("#r-vc-speed > span:first-child", { opacity: 0, duration: .14, ease: "none" }, 9.82);
+    tl.to("#r-vc-speed-slow", { opacity: 1, duration: .18, ease: "power2.out" }, 9.86);
+    tl.to("#r-vc-mini-snake", { x: 88, duration: .72, ease: "power2.inOut" }, 10.0);
+    ["#r-st1", "#r-st2", "#r-st3"].forEach((sel, i) => {
+      tl.fromTo(sel, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 13.0 + i * 4.5);
+    });
+    tl.fromTo("#r-path", { scaleY: 0 }, { scaleY: 1, duration: .55, ease: "power3.out" }, 12.7);
+    tl.fromTo("#r-snake", { y: 790, scale: .75, opacity: 0 }, { y: 878, scale: 1, opacity: 1, duration: .5, ease: "back.out(1.7)" }, 12.85);
+    tl.to("#r-node-1", { borderColor: "#1f883d", backgroundColor: "#dafbe1", scale: 1.12, duration: .28, ease: "back.out(1.8)" }, 13.2);
+    tl.to("#r-snake", { y: 1008, duration: .65, ease: "power2.inOut" }, 17.25);
+    tl.to("#r-node-2", { borderColor: "#1f883d", backgroundColor: "#dafbe1", scale: 1.12, duration: .28, ease: "back.out(1.8)" }, 17.72);
+    tl.to("#r-snake", { y: 1138, duration: .65, ease: "power2.inOut" }, 21.75);
+    tl.fromTo("#r-apple", { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: .34, ease: "back.out(1.8)" }, 21.85);
+    tl.to("#r-node-3", { borderColor: "#1f883d", backgroundColor: "#dafbe1", scale: 1.12, duration: .28, ease: "back.out(1.8)" }, 22.22);
+    tl.to("#r-snake", { x: 4, rotation: 8, scale: 1.08, duration: .2, ease: "power2.out" }, 22.22);
+    tl.to("#r-apple", { scale: 0, opacity: 0, duration: .18, ease: "power2.in" }, 22.28);
+    tl.to("#r-snake", { x: 0, rotation: 0, scale: 1, duration: .28, ease: "back.out(1.7)" }, 22.42);
+    tl.to("#r-path, #r-node-1, #r-node-2, #r-node-3", { opacity: 0, duration: .25, ease: "power2.in" }, 26.72);
+    tl.to("#r-snake", { x: 400, y: 330, scale: .82, duration: .9, ease: "power3.inOut" }, 26.82);
+    // The roadmap is one reading unit; individual glyphs need no bounce.
+    tl.set("#r-map-title", { "--sq": "0px", "--gk": "0%" }, 27.32);
+    tl.to("#r-map-title", { "--gk": "100%", duration: .4, ease: "power2.out" }, 27.82);
+    tl.to("#r-map-title", { "--sq": "240px", duration: .55, ease: "power3.out" }, 27.66);
+    tl.fromTo("#r-project-token", { x: 24, y: 0, scale: .9, opacity: 0 }, { x: 410, y: -710, scale: .9, opacity: 1, duration: .55, ease: "power3.inOut" }, 27.31);
+    ["#r-stage-1", "#r-stage-2", "#r-stage-3"].forEach((sel, i) => {
+      tl.fromTo(sel, { x: -34, opacity: 0 }, { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, 28.3 + i * 1.5);
+    });
+    tl.to("#r-snake", { x: 20, y: 430, duration: .45, ease: "power3.inOut" }, 28.18);
+    tl.to("#r-project-token", { scale: .78, opacity: 0, duration: .2, ease: "power2.in" }, 28.72);
+    tl.to("#r-snake", { y: 590, duration: .55, ease: "power2.inOut" }, 29.85);
+    tl.to("#r-snake", { y: 750, duration: .55, ease: "power2.inOut" }, 31.35);
+    tl.to("#r-snake", { x: -20, opacity: 0, duration: .35, ease: "power2.in" }, 32.05);
+    tl.fromTo("#r-cta", { y: 30, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.5)", scale: 1 }, 34.5);
+    tl.fromTo("#r-follow", { opacity: 0, scale: 0.95 }, { opacity: 1, duration: 0.35, ease: "power2.out", scale: 1 }, 35.5);
+    // Existing voice word timings anchor the visual beats; keep all tweens seekable.
+    const anchors = [[0, 0], [13, 13], [17.5, 19.4], [22, 25.3], [26.8, 31.7], [27.5, 31.8], [28.3, 34.38], [29.8, 36.575], [31.3, 38.538], [34.5, 41.65], [35.5, 43.98], [39.8, 47.5]];
+    const voiceTime = t => {
+      for (let i = 1; i < anchors.length; i++) {
+        const [a, x] = anchors[i - 1], [b, y] = anchors[i];
+        if (t <= b) return x + (t - a) * (y - x) / (b - a);
+      }
+      return 47.5;
+    };
+    const times = tl.getChildren(false, true, false).map(tween => ({ tween, start: tween.startTime(), end: tween.endTime() }));
+    for (const { tween, start, end } of times) {
+      tween.duration(Math.max(0, voiceTime(end) - voiceTime(start)));
+      tween.startTime(voiceTime(start));
+    }
+    window.__timelines["reel"] = tl;
+  </script>
+</template>

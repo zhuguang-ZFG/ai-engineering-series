@@ -1,0 +1,6 @@
++ C:\Users\<用户名>\scoop\apps\python313\current\python.exe yuyu-book/build.py --mermaid render --lang zh --manifest manifest-omp.json --sources sources-omp.json --pdf
+[zh]
+  yuyu-omp-zh.html: 20.0 MB, 39 units, 1 plates, 3 cited links, 242 glosses, 39 lead bands, 381 tier chips, 0 emblems, 0 headpieces, 39 keeper notes
+  yuyu-omp-zh.pdf: 30.6 MB, 321 pages, 49 bookmarks, 0 index folios
+OK
+OMP_EXIT=0

@@ -1,0 +1,948 @@
+{
+  "inspect": {
+    "format": "tiny-decoder-v1",
+    "command": "inspect",
+    "source": "untrained default model from corpus.jsonl",
+    "trained": false,
+    "config": {
+      "vocab_size": 50,
+      "n_layers": 2,
+      "d_model": 64,
+      "n_heads": 4,
+      "d_ff": 128,
+      "max_len": 48,
+      "dropout": 0.0
+    },
+    "vocab_size": 50,
+    "parameters": {
+      "total": 69760,
+      "trainable": 69760,
+      "frozen": 0
+    },
+    "adaptation": {},
+    "architecture": {
+      "embedding": "[batch, seq] -> [batch, seq, 64]",
+      "positions": "learned, max_len=48",
+      "attention": "4 heads x 16 dims, upper-triangular causal mask",
+      "feed_forward": "64 -> 128 -> 64",
+      "blocks": 2,
+      "head": "64 -> 50, tied to token embedding"
+    },
+    "checks": {
+      "future_invisibility": {
+        "prefix_len": 4,
+        "sequence_len": 7,
+        "bitwise_equal": true,
+        "max_abs_diff": 0.0,
+        "suffix_changed": true
+      },
+      "base_checksum": "f9962d3bc0796f22f8faf73a8e5083d39c10ca03db676b3acbf1216f2a514dbf"
+    },
+    "note": "untrained parameters; sample output is omitted on purpose"
+  },
+  "train": {
+    "format": "tiny-decoder-v1",
+    "command": "train",
+    "corpus": {
+      "path": ".\\book\\llm\\examples\\tiny_decoder\\corpus.jsonl",
+      "records": 192,
+      "splits": {
+        "train": {
+          "records": 132,
+          "groups": [
+            "command",
+            "template-g1",
+            "template-g2",
+            "template-g3",
+            "template-g4"
+          ]
+        },
+        "val": {
+          "records": 30,
+          "groups": [
+            "template-g5"
+          ]
+        },
+        "test": {
+          "records": 30,
+          "groups": [
+            "template-g6"
+          ]
+        }
+      },
+      "oov_tokens": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "vocab_size": 50,
+      "vocabulary": [
+        "<pad>",
+        "<bos>",
+        "<eos>",
+        "<unk>",
+        ".",
+        "a",
+        "above",
+        "and",
+        "basket",
+        "behind",
+        "bell",
+        "beside",
+        "boat",
+        "book",
+        "bright",
+        "brush",
+        "cup",
+        "floats",
+        "fork",
+        "grows",
+        "hat",
+        "hums",
+        "jar",
+        "kite",
+        "lamp",
+        "leaf",
+        "leans",
+        "near",
+        "old",
+        "plate",
+        "quiet",
+        "red",
+        "rests",
+        "rolls",
+        "rope",
+        "say",
+        "says",
+        "scarf",
+        "seed",
+        "shines",
+        "sings",
+        "sits",
+        "small",
+        "spins",
+        "spoon",
+        "stone",
+        "the",
+        "under",
+        "waits",
+        "warm"
+      ]
+    },
+    "config": {
+      "vocab_size": 50,
+      "n_layers": 2,
+      "d_model": 64,
+      "n_heads": 4,
+      "d_ff": 128,
+      "max_len": 48,
+      "dropout": 0.0
+    },
+    "parameters": {
+      "total": 69760,
+      "trainable": 69760,
+      "frozen": 0
+    },
+    "training": {
+      "steps": 400,
+      "batch_size": 24,
+      "learning_rate": 0.003,
+      "seed": 7,
+      "history": [
+        {
+          "step": 1,
+          "batch_loss_before_update": 3.9114761352539062
+        },
+        {
+          "step": 21,
+          "batch_loss_before_update": 2.627490997314453
+        },
+        {
+          "step": 41,
+          "batch_loss_before_update": 2.420825242996216
+        },
+        {
+          "step": 61,
+          "batch_loss_before_update": 2.031947135925293
+        },
+        {
+          "step": 81,
+          "batch_loss_before_update": 1.6189508438110352
+        },
+        {
+          "step": 101,
+          "batch_loss_before_update": 1.5065300464630127
+        },
+        {
+          "step": 121,
+          "batch_loss_before_update": 1.3945133686065674
+        },
+        {
+          "step": 141,
+          "batch_loss_before_update": 1.432007908821106
+        },
+        {
+          "step": 161,
+          "batch_loss_before_update": 1.372150182723999
+        },
+        {
+          "step": 181,
+          "batch_loss_before_update": 1.412185549736023
+        },
+        {
+          "step": 201,
+          "batch_loss_before_update": 1.4431071281433105
+        },
+        {
+          "step": 221,
+          "batch_loss_before_update": 1.4053430557250977
+        },
+        {
+          "step": 241,
+          "batch_loss_before_update": 1.3790067434310913
+        },
+        {
+          "step": 261,
+          "batch_loss_before_update": 1.3709498643875122
+        },
+        {
+          "step": 281,
+          "batch_loss_before_update": 1.3819642066955566
+        },
+        {
+          "step": 301,
+          "batch_loss_before_update": 1.3738876581192017
+        },
+        {
+          "step": 321,
+          "batch_loss_before_update": 1.2516796588897705
+        },
+        {
+          "step": 341,
+          "batch_loss_before_update": 1.2669378519058228
+        },
+        {
+          "step": 361,
+          "batch_loss_before_update": 1.2020593881607056
+        },
+        {
+          "step": 381,
+          "batch_loss_before_update": 1.1925562620162964
+        },
+        {
+          "step": 400,
+          "batch_loss_before_update": 1.1621547937393188
+        }
+      ]
+    },
+    "losses": {
+      "train": {
+        "loss": 1.1562064508976704,
+        "perplexity": 3.1778550317913865,
+        "target_tokens": 942,
+        "sequences": 132
+      },
+      "val": {
+        "loss": 4.582241030092592,
+        "perplexity": 97.73317195112452,
+        "target_tokens": 270,
+        "sequences": 30
+      },
+      "test": {
+        "loss": 4.112981770833334,
+        "perplexity": 61.12871792128242,
+        "target_tokens": 300,
+        "sequences": 30
+      }
+    },
+    "checks": {
+      "target_shift": {
+        "tokens": [
+          "",
+          "the",
+          "small",
+          "kite",
+          "shines",
+          ".",
+          ""
+        ],
+        "input": [
+          "",
+          "the",
+          "small",
+          "kite",
+          "shines",
+          "."
+        ],
+        "target": [
+          "the",
+          "small",
+          "kite",
+          "shines",
+          ".",
+          ""
+        ],
+        "aligned": true
+      },
+      "future_invisibility": {
+        "prefix_len": 4,
+        "sequence_len": 7,
+        "bitwise_equal": true,
+        "max_abs_diff": 0.0,
+        "suffix_changed": true
+      },
+      "reload": {
+        "checkpoint": ".\\tmp\\quality-04\\k4\\base.pt",
+        "bitwise_equal": true,
+        "max_abs_diff": 0.0
+      }
+    },
+    "sample": {
+      "prompt": "the red boat",
+      "prompt_ids": [
+        1,
+        46,
+        31,
+        12
+      ],
+      "generated_ids": [
+        26,
+        4,
+        2
+      ],
+      "generated_text": "leans.",
+      "full_text": "the red boat leans.",
+      "hit_eos": true,
+      "positions_used": 7,
+      "max_len": 48,
+      "temperature": 0.8,
+      "top_k": 10
+    },
+    "artifact": {
+      "checkpoint": ".\\tmp\\quality-04\\k4\\base.pt",
+      "bytes": 287239
+    },
+    "seconds": 28.385675100005756
+  },
+  "sample": {
+    "format": "tiny-decoder-v1",
+    "command": "sample",
+    "checkpoint": ".\\tmp\\quality-04\\k4\\base.pt",
+    "adaptation": {},
+    "sample": {
+      "prompt": "the red boat",
+      "prompt_ids": [
+        1,
+        46,
+        31,
+        12
+      ],
+      "generated_ids": [
+        40,
+        4,
+        2
+      ],
+      "generated_text": "sings.",
+      "full_text": "the red boat sings.",
+      "hit_eos": true,
+      "positions_used": 7,
+      "max_len": 48,
+      "temperature": 0.8,
+      "top_k": 10
+    }
+  },
+  "adapt": {
+    "format": "tiny-decoder-v1",
+    "command": "adapt",
+    "base_checkpoint": ".\\tmp\\quality-04\\k4\\base.pt",
+    "sft": {
+      "path": ".\\book\\llm\\examples\\tiny_decoder\\sft.jsonl",
+      "records": 90,
+      "splits": {
+        "train": {
+          "records": 45,
+          "groups": [
+            "adjective-quiet",
+            "adjective-red",
+            "adjective-small"
+          ]
+        },
+        "val": {
+          "records": 15,
+          "groups": [
+            "adjective-bright"
+          ]
+        },
+        "test": {
+          "records": 30,
+          "groups": [
+            "adjective-old",
+            "adjective-warm"
+          ]
+        }
+      },
+      "vocab_size": 50
+    },
+    "note": "LoRA adapters are kept separate and are not merged into the base; full SFT updates every parameter. Held-out losses are measurements on this toy data only, not evidence of general capability.",
+    "comparison": {
+      "full": {
+        "method": "full",
+        "checkpoint": ".\\tmp\\quality-04\\k4\\adapt-full.pt",
+        "bytes": 289077,
+        "parameters": {
+          "before": {
+            "total": 69760,
+            "trainable": 69760,
+            "frozen": 0
+          },
+          "after_setup": {
+            "total": 69760,
+            "trainable": 69760,
+            "frozen": 0
+          },
+          "trainable_after_setup": 69760
+        },
+        "checks": {
+          "base_checksum_before": "7eb3bce76917c3fcec4898cae0e6252288b4b814bceeeb53b66d7c89a1c34936",
+          "base_checksum_after": "60448413564ccb268aa9754b55d07ae0d7468db53aaf05d38c4b244663ef5bc7",
+          "base_unchanged": false,
+          "lora_checksum_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "lora_checksum_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "lora_changed": false,
+          "base_grads_all_none": false,
+          "base_frozen": false,
+          "base_updated": true,
+          "reload": {
+            "checkpoint": ".\\tmp\\quality-04\\k4\\adapt-full.pt",
+            "bitwise_equal": true,
+            "max_abs_diff": 0.0
+          }
+        },
+        "losses": {
+          "before": {
+            "train": {
+              "loss": 7.423531313295718,
+              "perplexity": 1674.9378067908772,
+              "target_tokens": 270,
+              "sequences": 45
+            },
+            "val": {
+              "loss": 7.293690999348958,
+              "perplexity": 1470.990113070829,
+              "target_tokens": 90,
+              "sequences": 15
+            },
+            "test": {
+              "loss": 7.299140760633681,
+              "perplexity": 1479.02854190334,
+              "target_tokens": 180,
+              "sequences": 30
+            }
+          },
+          "after": {
+            "train": {
+              "loss": 0.6447090431495949,
+              "perplexity": 1.9054325499576619,
+              "target_tokens": 270,
+              "sequences": 45
+            },
+            "val": {
+              "loss": 1.7216615464952256,
+              "perplexity": 5.593815130951089,
+              "target_tokens": 90,
+              "sequences": 15
+            },
+            "test": {
+              "loss": 1.9072633531358507,
+              "perplexity": 6.734633243933438,
+              "target_tokens": 180,
+              "sequences": 30
+            }
+          },
+          "delta_val": -5.572029452853732,
+          "delta_test": -5.39187740749783
+        },
+        "training": {
+          "steps": 120,
+          "batch_size": 8,
+          "learning_rate": 0.002,
+          "seed": 11,
+          "history": [
+            {
+              "step": 1,
+              "batch_loss_before_update": 7.643282413482666
+            },
+            {
+              "step": 21,
+              "batch_loss_before_update": 1.012961506843567
+            },
+            {
+              "step": 41,
+              "batch_loss_before_update": 0.8912857174873352
+            },
+            {
+              "step": 61,
+              "batch_loss_before_update": 0.8568519949913025
+            },
+            {
+              "step": 81,
+              "batch_loss_before_update": 0.9484913349151611
+            },
+            {
+              "step": 101,
+              "batch_loss_before_update": 0.692219078540802
+            },
+            {
+              "step": 120,
+              "batch_loss_before_update": 0.6701509952545166
+            }
+          ]
+        },
+        "sample": {
+          "prompt": "say the bright cup .",
+          "prompt_ids": [
+            1,
+            35,
+            46,
+            14,
+            16,
+            4
+          ],
+          "generated_ids": [
+            46,
+            42,
+            13,
+            43,
+            4,
+            2
+          ],
+          "generated_text": "the small book spins.",
+          "full_text": "say the bright cup. the small book spins.",
+          "hit_eos": true,
+          "positions_used": 12,
+          "max_len": 48,
+          "temperature": 0.0,
+          "top_k": null
+        },
+        "seconds": 5.31518060000235
+      },
+      "lora": {
+        "method": "lora",
+        "checkpoint": ".\\tmp\\quality-04\\k4\\adapt-lora.pt",
+        "bytes": 321397,
+        "parameters": {
+          "before": {
+            "total": 69760,
+            "trainable": 69760,
+            "frozen": 0
+          },
+          "after_setup": {
+            "total": 76360,
+            "trainable": 6600,
+            "frozen": 69760
+          },
+          "trainable_after_setup": 6600
+        },
+        "checks": {
+          "base_checksum_before": "7eb3bce76917c3fcec4898cae0e6252288b4b814bceeeb53b66d7c89a1c34936",
+          "base_checksum_after": "7eb3bce76917c3fcec4898cae0e6252288b4b814bceeeb53b66d7c89a1c34936",
+          "base_unchanged": true,
+          "lora_checksum_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "lora_checksum_after": "63e54a15ef6f92d88417055cbe61820e8fb8003a23e8824002a12e6754fccc70",
+          "lora_changed": true,
+          "base_grads_all_none": true,
+          "base_frozen": true,
+          "base_updated": false,
+          "reload": {
+            "checkpoint": ".\\tmp\\quality-04\\k4\\adapt-lora.pt",
+            "bitwise_equal": true,
+            "max_abs_diff": 0.0
+          }
+        },
+        "losses": {
+          "before": {
+            "train": {
+              "loss": 7.423531313295718,
+              "perplexity": 1674.9378067908772,
+              "target_tokens": 270,
+              "sequences": 45
+            },
+            "val": {
+              "loss": 7.293690999348958,
+              "perplexity": 1470.990113070829,
+              "target_tokens": 90,
+              "sequences": 15
+            },
+            "test": {
+              "loss": 7.299140760633681,
+              "perplexity": 1479.02854190334,
+              "target_tokens": 180,
+              "sequences": 30
+            }
+          },
+          "after": {
+            "train": {
+              "loss": 0.8717267919469762,
+              "perplexity": 2.391036112671368,
+              "target_tokens": 270,
+              "sequences": 45
+            },
+            "val": {
+              "loss": 1.7195592244466147,
+              "perplexity": 5.582067483061839,
+              "target_tokens": 90,
+              "sequences": 15
+            },
+            "test": {
+              "loss": 1.7906789143880208,
+              "perplexity": 5.993520172494768,
+              "target_tokens": 180,
+              "sequences": 30
+            }
+          },
+          "delta_val": -5.574131774902344,
+          "delta_test": -5.50846184624566
+        },
+        "training": {
+          "steps": 120,
+          "batch_size": 8,
+          "learning_rate": 0.002,
+          "seed": 11,
+          "history": [
+            {
+              "step": 1,
+              "batch_loss_before_update": 7.643282413482666
+            },
+            {
+              "step": 21,
+              "batch_loss_before_update": 2.1096792221069336
+            },
+            {
+              "step": 41,
+              "batch_loss_before_update": 1.1672217845916748
+            },
+            {
+              "step": 61,
+              "batch_loss_before_update": 0.9581456184387207
+            },
+            {
+              "step": 81,
+              "batch_loss_before_update": 0.9532995223999023
+            },
+            {
+              "step": 101,
+              "batch_loss_before_update": 0.9588310122489929
+            },
+            {
+              "step": 120,
+              "batch_loss_before_update": 0.9031830430030823
+            }
+          ]
+        },
+        "sample": {
+          "prompt": "say the bright cup .",
+          "prompt_ids": [
+            1,
+            35,
+            46,
+            14,
+            16,
+            4
+          ],
+          "generated_ids": [
+            46,
+            31,
+            25,
+            33,
+            4,
+            2
+          ],
+          "generated_text": "the red leaf rolls.",
+          "full_text": "say the bright cup. the red leaf rolls.",
+          "hit_eos": true,
+          "positions_used": 12,
+          "max_len": 48,
+          "temperature": 0.0,
+          "top_k": null
+        },
+        "seconds": 1.8317379000000074
+      }
+    }
+  },
+  "inspect-lora": {
+    "format": "tiny-decoder-v1",
+    "command": "inspect",
+    "source": ".\\tmp\\quality-04\\k4\\adapt-lora.pt",
+    "trained": true,
+    "config": {
+      "vocab_size": 50,
+      "n_layers": 2,
+      "d_model": 64,
+      "n_heads": 4,
+      "d_ff": 128,
+      "max_len": 48,
+      "dropout": 0.0
+    },
+    "vocab_size": 50,
+    "parameters": {
+      "total": 76360,
+      "trainable": 6600,
+      "frozen": 69760
+    },
+    "adaptation": {
+      "method": "lora",
+      "rank": 4,
+      "alpha": 8.0,
+      "targets": [
+        "attn.qkv",
+        "attn.proj",
+        "ff.fc1",
+        "ff.fc2",
+        "head"
+      ]
+    },
+    "architecture": {
+      "embedding": "[batch, seq] -> [batch, seq, 64]",
+      "positions": "learned, max_len=48",
+      "attention": "4 heads x 16 dims, upper-triangular causal mask",
+      "feed_forward": "64 -> 128 -> 64",
+      "blocks": 2,
+      "head": "64 -> 50, tied to token embedding"
+    },
+    "checks": {
+      "future_invisibility": {
+        "prefix_len": 4,
+        "sequence_len": 7,
+        "bitwise_equal": true,
+        "max_abs_diff": 0.0,
+        "suffix_changed": true
+      },
+      "base_checksum": "7eb3bce76917c3fcec4898cae0e6252288b4b814bceeeb53b66d7c89a1c34936"
+    },
+    "sample": {
+      "prompt": "the red boat",
+      "prompt_ids": [
+        1,
+        46,
+        31,
+        12
+      ],
+      "generated_ids": [
+        32,
+        9,
+        46,
+        31,
+        40,
+        4,
+        4,
+        2
+      ],
+      "generated_text": "rests behind the red sings..",
+      "full_text": "the red boat rests behind the red sings..",
+      "hit_eos": true,
+      "positions_used": 12,
+      "max_len": 48,
+      "temperature": 0.8,
+      "top_k": 10
+    }
+  },
+  "boundaries": {
+    "causal_before": {
+      "prefix_len": 4,
+      "sequence_len": 7,
+      "bitwise_equal": true,
+      "max_abs_diff": 0.0,
+      "suffix_changed": true
+    },
+    "causal_mask_removed": {
+      "prefix_len": 4,
+      "sequence_len": 7,
+      "bitwise_equal": false,
+      "max_abs_diff": 9.380292892456055,
+      "suffix_changed": true
+    },
+    "group_leak_rejected": "corpus group 'template-g1' spans splits ['test', 'train']; held-out groups must not leak into training",
+    "autograd": {
+      "w_grad": -18.0,
+      "b_grad": -6.0,
+      "pred_requires_grad": true,
+      "pred_is_leaf": false
+    },
+    "accumulated_grads": [
+      -36.0,
+      -12.0
+    ],
+    "frozen": {
+      "frozen_grad": null,
+      "active_grad": -32.0
+    },
+    "bad_broadcast": "The size of tensor a (2) must match the size of tensor b (4) at non-singleton dimension 1",
+    "environment": {
+      "torch": "2.14.1+cpu",
+      "transformers": "5.21.0"
+    },
+    "sources": {
+      "corpus.jsonl": "91f0400b5c4f58cf28f6727a29d7d1f1fe43207a774908af28e2d1e1c83cfbe4",
+      "model.py": "d5c435cb8307618bd3bfa3d6dc55c6f60a462f634602828f874fe89b372ff2c5",
+      "sft.jsonl": "f1d6cd972585104002eeaaf041d2a3fbd2ed93d34fc8292f49ab1d5ecdd61798",
+      "train.py": "2ad51ddd822413dc99092f3dcaa238837bc9f34068b91b72474c6e65d80c2f4d"
+    },
+    "artifacts": {
+      "adapt-full.pt": "c304b39d8910a71451c22449415aa1b181e7a19bf4c317bfa22ba679ec21eb1a",
+      "adapt-lora.pt": "f51446cb154e4a2d8d021429d449ba870a227e7c5f732f9a82048fffdbb62ac3",
+      "base.pt": "7478d776f8d1cedac66df2bb9042e24790d9cf95286083263888f8fa2367eba2"
+    }
+  },
+  "distillation": {
+    "scope": "X09 fixed three-class teaching distribution; not model-to-model distillation",
+    "teacher": [
+      3,
+      2,
+      0
+    ],
+    "wrong": [
+      0,
+      3,
+      2
+    ],
+    "student": [
+      0,
+      0,
+      0
+    ],
+    "temperature": 2,
+    "alpha": 0.7,
+    "learningRate": 0.4,
+    "correct": {
+      "before": {
+        "teacher": [
+          0.5465493872661796,
+          0.3314989604240915,
+          0.12195165230972885
+        ],
+        "student": [
+          0.33333333333333337,
+          0.33333333333333337,
+          0.33333333333333337
+        ],
+        "inference": [
+          0.33333333333333337,
+          0.33333333333333337,
+          0.33333333333333337
+        ],
+        "kl": 0.14580472465474215,
+        "hardLoss": 1.0986122886681096,
+        "loss": 0.7378369156337109,
+        "gradient": [
+          -0.49850247550598475,
+          0.10256812207293865,
+          0.39593435343304634
+        ]
+      },
+      "logits": [
+        0.1994009902023939,
+        -0.04102724882917547,
+        -0.15837374137321855
+      ],
+      "after": {
+        "teacher": [
+          0.5465493872661796,
+          0.3314989604240915,
+          0.12195165230972885
+        ],
+        "student": [
+          0.3672513685752442,
+          0.3256530080716604,
+          0.3070956233530953
+        ],
+        "inference": [
+          0.40233003157128233,
+          0.3163485103865233,
+          0.2813214580421944
+        ],
+        "kl": 0.11056763885532704,
+        "hardLoss": 0.91048255312007,
+        "loss": 0.5827341547309368,
+        "gradient": [
+          -0.43031821669592496,
+          0.0867202198225535,
+          0.3435979968733714
+        ]
+      }
+    },
+    "incorrect": {
+      "before": {
+        "teacher": [
+          0.12195165230972885,
+          0.5465493872661796,
+          0.3314989604240915
+        ],
+        "student": [
+          0.33333333333333337,
+          0.33333333333333337,
+          0.33333333333333337
+        ],
+        "inference": [
+          0.33333333333333337,
+          0.33333333333333337,
+          0.33333333333333337
+        ],
+        "kl": 0.14580472465474215,
+        "hardLoss": 1.0986122886681096,
+        "loss": 0.7378369156337109,
+        "gradient": [
+          0.0959343534330463,
+          -0.1985024755059847,
+          0.10256812207293865
+        ]
+      },
+      "logits": [
+        -0.03837374137321852,
+        0.07940099020239388,
+        -0.04102724882917547
+      ],
+      "after": {
+        "teacher": [
+          0.12195165230972885,
+          0.5465493872661796,
+          0.3314989604240915
+        ],
+        "student": [
+          0.3268689663027277,
+          0.34669545445162697,
+          0.3264355792456453
+        ],
+        "inference": [
+          0.32027254753807605,
+          0.36030362397751703,
+          0.3194238284844069
+        ],
+        "kl": 0.13364330284217046,
+        "hardLoss": 1.1385829346319234,
+        "loss": 0.7157761283476544,
+        "gradient": [
+          0.08296600385162117,
+          -0.17170441874711861,
+          0.08873841489549744
+        ]
+      }
+    },
+    "numerical": [
+      -0.4985024754988742,
+      0.10256812208453424,
+      0.39593435343654443
+    ],
+    "nanRejected": true
+  },
+  "scope": "Actual clean-environment CPU execution, default 400 train steps and 120 full/LoRA steps. Synthetic authored corpora; technical K4 evidence, not independent learner acceptance.",
+  "commands": [
+    "train.py inspect",
+    "train.py train --out <run>/base.pt",
+    "train.py sample --checkpoint <run>/base.pt --prompt \"the red boat\" --max-new 12",
+    "train.py adapt --checkpoint <run>/base.pt --method both --out <run>/adapt.pt",
+    "train.py inspect --checkpoint <run>/adapt-lora.pt"
+  ],
+  "harnessNotes": [
+    "The first boundary harness expected ValueError but group leakage deliberately raises SystemExit. Training/adapter outputs were retained; only boundary checks were rerun after fixing the harness exception handler."
+  ]
+}

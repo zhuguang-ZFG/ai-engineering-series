@@ -1,0 +1,156 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #fbfaf6;
+    }
+    #cv-tag {
+      position: absolute;
+      top: 200px;
+      left: 72px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 30px;
+      letter-spacing: 4px;
+      color: #57606a;
+    }
+    #cv-rule {
+      position: absolute;
+      top: 262px;
+      left: 72px;
+      width: 140px;
+      height: 8px;
+      background: #1f883d;
+    }
+    #cv-ep {
+      position: absolute;
+      top: 340px;
+      left: 72px;
+      font-family: "Archivo Black", sans-serif;
+      font-size: 200px;
+      line-height: 1;
+      color: #1f883d;
+      letter-spacing: -0.02em;
+    }
+    #cv-title {
+      position: absolute;
+      top: 620px;
+      left: 72px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 124px;
+      line-height: 1.34;
+      color: #1f2328;
+    }
+    #cv-title .g {
+      color: #1f883d;
+    }
+    #cv-points {
+      position: absolute;
+      top: 1090px;
+      left: 76px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1.9;
+      color: #57606a;
+    }
+    #cv-points .g {
+      color: #1f883d;
+      font-weight: 700;
+    }
+    #cv-cta {
+      position: absolute;
+      top: 1420px;
+      left: 72px;
+      width: 936px;
+      background: #008635;
+      border-radius: 15px 10px 17px 9px;
+      padding: 34px 40px;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      color: #fbfaf6;
+      text-align: center;
+    }
+    #cv-sub {
+      position: absolute;
+      top: 1600px;
+      left: 0;
+      width: 1080px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #8c959f;
+    }
+
+    .k-word { display: inline-block; transform-origin: 50% 90%; will-change: transform; }
+    [id$="-title"] .g, #e-big .g {
+      padding: 0 .08em;
+      background-image: linear-gradient(#d3efd9, #d3efd9);
+      background-repeat: no-repeat;
+      background-position: 0 74%;
+      background-size: var(--gk, 100%) 42%;
+    }
+        [id$="-title"]::after {
+      content: "";
+      display: block;
+      width: var(--sq, 240px);
+      height: 10px;
+      margin-top: 6px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' viewBox='0 0 240 10'%3E%3Cpath d='M2 6q30 5 60 0t60 0t60 0t56 0' fill='none' stroke='%231f883d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center;
+    }
+    /* hand-drawn layer: paper tone, ink edges, marker underline */
+    #root::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: radial-gradient(#1f2328 0.6px, transparent 0.7px);
+      background-size: 24px 24px;
+      opacity: 0.05;
+    }
+  </style>
+  <div data-hf-id="hf-5zx1" id="root" data-composition-id="cover" data-width="1080" data-height="1920" data-no-timeline>
+    <div data-hf-id="hf-x29l" id="cv-tag">VIBE CODING 101 · 零基础实战课</div>
+    <div data-hf-id="hf-okn9" id="cv-rule"></div>
+    <div data-hf-id="hf-m0iq" id="cv-ep">01</div>
+    <div data-hf-id="hf-5dre" id="cv-title">不会写代码<br data-hf-id="hf-x5px" />也能做<span data-hf-id="hf-fuqx" class="g">软件</span></div>
+    <div data-hf-id="hf-f7xn" id="cv-points">
+      <span data-hf-id="hf-gyc0" class="g">▸</span> 从一句需求到可用作品<br data-hf-id="hf-rsrt" />
+      <span data-hf-id="hf-t2nc" class="g">▸</span> 贪吃蛇 · AI IDE · 截图复刻<br data-hf-id="hf-szow" />
+      <span data-hf-id="hf-rvq9" class="g">▸</span> 先做出来，再逐步升级
+    </div>
+    <div data-hf-id="hf-6f9b" id="cv-cta">零基础 · 实战入门 · 可以跟做</div>
+    <div data-hf-id="hf-lszn" id="cv-sub">BASED ON OPEN SOURCE COURSE · EASY-VIBE</div>
+  </div>
+  <script>
+
+    // kinetic type: split glyphs/words so headlines can be choreographed
+    let kid = 0;
+    function ksplit(el) {
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach((ch) => {
+          if (ch.nodeType === 3) {
+            const parts = ch.textContent.match(/[A-Za-z0-9_:.\/@#-]+|\s+|[\s\S]/g) || [];
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+              const s = document.createElement("span");
+              s.className = "k-word";
+              s.setAttribute("data-hf-id", "hf-k" + (++kid));
+              s.textContent = p;
+              frag.appendChild(s);
+            });
+            ch.replaceWith(frag);
+          } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
+        });
+      };
+      walk(el);
+    }
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["cover"] = tl;
+  </script>
+</template>

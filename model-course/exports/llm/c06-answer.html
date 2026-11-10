@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C06 核对依据 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-answer" id="main" tabindex="-1"><article class="article-body"><h1 id="C06-answer-section-fad17158e9" tabindex="-1">C06 作业核对：一串数字怎样表示文字</h1>
+<p>题目在 <a href="c06.html">C06 正文</a>，容差 ±0.001。以下按“点积—长度—余弦”的顺序给值。</p>
+<h2 id="C06-answer-section-1db06daaeb" tabindex="-1">一、<code>[1,2,2]</code> 与 <code>[2,1,0]</code></h2>
+<ul>
+<li>点积：<code>1×2 + 2×1 + 2×0 = 2+2+0 = 4</code></li>
+<li><code>‖a‖ = √(1+4+4) = √9 = 3</code></li>
+<li><code>‖b‖ = √(4+1+0) = √5 ≈ 2.2361</code></li>
+<li>余弦：<code>4/(3×2.2361) = 4/6.7082 ≈ 0.5963</code></li>
+</ul>
+<p>方向有相当夹角，不是“几乎相同”。</p>
+<h2 id="C06-answer-section-4e6bf1b2e9" tabindex="-1">二、<code>[1,1,0]</code> 与 <code>[1,1,2]</code></h2>
+<ul>
+<li>点积：<code>1+1+0 = 2</code></li>
+<li><code>‖a‖ = √2 ≈ 1.4142</code></li>
+<li><code>‖b‖ = √6 ≈ 2.4495</code></li>
+<li>余弦：<code>2/(1.4142×2.4495) ≈ 2/3.4641 ≈ 0.5774</code></li>
+</ul>
+<p>二维影子只取前两维 <code>[1,1]</code> 与 <code>[1,1]</code>，所以画出来重合；第三维从 0 变成 2，参与点积与长度，余弦因此明显小于 1。这就是“投影会藏掉维度”。</p>
+<h2 id="C06-answer-section-68140d3bc3" tabindex="-1">三、<code>[0,3,0]</code> 与 <code>[0,5,0]</code></h2>
+<ul>
+<li>点积：<code>0+15+0=15</code></li>
+<li>长度：3 与 5</li>
+<li>余弦：<code>15/(3×5)=1</code></li>
+</ul>
+<p>余弦为 1，表示同向；但数组不同（长度不同），不能写成“同一个向量”。若关心大小而非方向，要看长度或距离，不能只看余弦。</p>
+<h2 id="C06-answer-section-c09ee429c9" tabindex="-1">四、零向量</h2>
+<p><code>[0,0,0]</code> 的长度为 0，余弦公式分母为 0，结果<strong>未定义</strong>。不能写 0：0 会被读成“完全无关”，而零向量根本没有方向。程序中应显式返回“未定义/不适用”，并避免拿它参与排序。</p>
+<h2 id="C06-answer-section-689ec406d5" tabindex="-1">五、两句话的解释</h2>
+<ul>
+<li><strong>ID 接近不能推出语义接近</strong>：ID 只是词表存储位置；语义关系来自训练后的向量与上下文计算，编号顺序没有语义约束。42 与 43 可以毫无关系。</li>
+<li><strong>上下文表示接近也只是线索</strong>：它说明在这组向量与这次比较中方向接近，不代表事实正确、同义或可互换；还要看任务、日期、权限与原句。</li>
+</ul>
+<h2 id="C06-answer-section-8e2ec99b44" tabindex="-1">六、评分要点</h2>
+<ul>
+<li>第 1 题点积、长度、余弦齐全且落在容差内：3 分。</li>
+<li>第 2 题指出影子只取前两维、第三维参与计算：2 分。</li>
+<li>第 3 题区分“同向”与“同一数组”：2 分。</li>
+<li>第 4 题写“未定义”，并解释为什么不是 0：2 分。</li>
+<li>第 5 题两句都提到“编号/表示只是线索，不是事实保证”：1 分。</li>
+</ul>
+<p>关键失败：把余弦当概率；把二维重合当同一向量；用零向量算相似并参与排序。</p>
+</article><nav class="lesson-nav"><a href="c06.html">返回 C06 题目</a><a href="course.html">全书目录</a></nav></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

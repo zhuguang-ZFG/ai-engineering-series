@@ -1,0 +1,17 @@
+{
+  "grammar": "y3_whiteboard",
+  "duration": 7.5,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "theme": "chalk",
+  "finish": "soft",
+  "cues": [
+    {"at": 0.0, "kind": "draw", "text": "Tool", "data": {"icon": "bulb"}},
+    {"at": 1.2, "kind": "draw", "text": "Skill", "data": {"icon": "target"}},
+    {"at": 2.4, "kind": "draw", "text": "Plugin", "data": {"icon": "clock"}},
+    {"at": 3.6, "kind": "draw", "text": "MCP", "data": {"icon": "target"}},
+    {"at": 5.0, "kind": "point", "text": "原则 4：渐进式能力扩展"},
+    {"at": 6.2, "kind": "highlight", "data": {"target": "draw", "index": 3}}
+  ]
+}

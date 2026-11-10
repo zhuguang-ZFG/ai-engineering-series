@@ -1,0 +1,22 @@
+Detect and fix project diagnostics with weighted parallel subagents
+
+USAGE
+  $ omp cleanse [REQUEST] [FLAGS]
+
+ARGUMENTS
+  REQUEST   What to detect and fix (e.g. "ts errors"); a discovery agent works out the command
+
+FLAGS
+  -n, --agents=<int>   Maximum number of file-disjoint subagents
+  -m, --model=<value>  Subagent model selector
+  -t, --tests          Also run configured project test suites
+  -a, --all            Run every discovered checker without the interactive picker
+
+EXAMPLES
+  omp cleanse
+  omp cleanse --all
+  omp cleanse "ts errors"
+  omp cleanse -n 8
+  omp cleanse -m opus
+  omp cleanse -t
+  omp cleanse --agents 12 --model anthropic/claude-opus-4-6

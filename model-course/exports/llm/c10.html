@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C10 从续写到助手 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html" aria-current="page">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C10-section-6cb8b92d70">先修桥：监督信号与偏好信号</a></li><li class="toc-level-2"><a href="#C10-section-2402484785">预训练：从大量序列学预测</a></li><li class="toc-level-2"><a href="#C10-section-f490ca8be9">指令微调：用示范教任务</a></li><li class="toc-level-2"><a href="#C10-section-ff6098e3d6">偏好优化：让回答符合选定标准</a></li><li class="toc-level-2"><a href="#C10-section-ebc6c08f24">聊天模板：同一条消息，不同组织</a></li><li class="toc-level-2"><a href="#C10-section-3d7a31bf72">推理：两种常见含义</a></li><li class="toc-level-2"><a href="#C10-section-4855a1357c">输入变化、参数变化、解码设置、外部状态</a></li><li class="toc-level-2"><a href="#C10-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C10-section-6216b07a6e">K2 阶段任务：复算与分类</a></li><li class="toc-level-3"><a href="#C10-section-75aed03df6">A. 生成：softmax 与温度</a></li><li class="toc-level-3"><a href="#C10-section-825776e3b6">B. 注意力：一行、带掩码</a></li><li class="toc-level-3"><a href="#C10-section-b37e2e8d5d">C. 训练：一步更新</a></li><li class="toc-level-3"><a href="#C10-section-49a61482b1">D. 分类：四种变化</a></li><li class="toc-level-3"><a href="#C10-section-39033e3a6c">通过条件（全部满足，不取平均）</a></li><li class="toc-level-2"><a href="#C10-section-d235c69308">项目增量：S2 证据包</a></li><li class="toc-level-2"><a href="#C10-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C10"><header class="chapter-opener"><p class="chapter-number">C10</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>从续写到助手</h1><p class="chapter-abstract">把预训练、指令微调、偏好优化和聊天模板分开，理解续写怎样变成助手。</p></header><p class="chapter-meta">先修：<a href="c09.html">C09</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>你把一份通知交出去，说“把时间提取出来”，对方却顺着通知往下续写。句子很通顺，事情没办成。会续写，为什么还不一定会按要求做事？本章把“预训练—指令微调—偏好优化—聊天模板”分开，最后用 K2 阶段任务检查你是否真的能复算生成、注意力和一步更新。</p>
+<h2 id="C10-section-6cb8b92d70" tabindex="-1">先修桥：监督信号与偏好信号</h2>
+<p>C09 的训练信号是“下一个 token 是什么”：每个位置有一个明确目标，损失比较预测分布与目标。这叫<strong>监督信号</strong>。</p>
+<p>偏好信号不同：它不直接说“这个 token 对”，而是把两个回答放在一起，说“A 比 B 更符合某套标准”。标准可能是遵守要求、有帮助、依据充分，也可能是语气友好。偏好数据要先有比较，再转成训练信号；它不保证被选中的回答事实正确。</p>
+<p>先记住这两种信号的差别，再看三种训练材料。</p>
+<h2 id="C10-section-2402484785" tabindex="-1">预训练：从大量序列学预测</h2>
+<p>第一份材料可以只是普通文本。常见自回归模型从大量序列中学习下一个 token 的分布；为了把预测做好，参数可能学到语言结构、知识联系和其他规律。材料的范围、质量、时间都有限，远不是“全部人类资料”。</p>
+<p>它也可能记住部分内容。但你问一句、它答一句时，不等于正在逐条查询一个核验过的原文库。预训练后的模型更像“很会接下去”，还不一定“按你的任务交付”。</p>
+<h2 id="C10-section-f490ca8be9" tabindex="-1">指令微调：用示范教任务</h2>
+<p>第二份材料把要求写清楚：任务是提取时间，给定通知，示范回答只写“周六14:00”。监督式指令微调（SFT）用这样的任务、上下文与示范继续训练，更新参数，让模型学习在这类要求下作答。</p>
+<p>这里要区分两个动作：</p>
+<ul>
+<li><strong>聊天模板</strong>：把 system、user、assistant 等角色组织成输入标记，标出边界。它改变的是<strong>这次输入</strong>。</li>
+<li><strong>SFT</strong>：用示范数据更新<strong>参数</strong>。</li>
+</ul>
+<p>只改角色标签，不会现场完成一次训练；套了模板，也不等于模型一定遵守角色权限。模板是格式，权限仍要由应用校验和控制。</p>
+<h2 id="C10-section-ff6098e3d6" tabindex="-1">偏好优化：让回答符合选定标准</h2>
+<p>第三份材料把两个回答放在一起，让标注者比较：哪个更遵守要求、更有帮助、依据更充分？偏好优化利用这样的比较、奖励等信号调整行为。</p>
+<p>常见路线有差别：</p>
+<ul>
+<li>一些 RLHF 配方先训练奖励模型，再用强化学习调整策略；</li>
+<li>DPO 从偏好对直接构造相对于参考策略的目标，通常不用先单独训练奖励模型。</li>
+</ul>
+<p>两条路线各有假设、数据和实现，不能当成同一个算法。实际模型还可能采用其他方法；<strong>不要根据一次回答反推某家公司的训练配方</strong>。</p>
+<p>偏好训练也不能保证事实正确。如果评分只看语气是否友好、文字是否饱满，一个补了地点、说得更漂亮的回答可能得分更高。标准选得怎样，直接决定模型被鼓励什么。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/learning-signals-desk.svg" alt="三种练习，教三件事"><figcaption>图：文本、示范与偏好对分别提供目标；角色模板另行组织消息。比较信号来源，不表示所有模型都遵循同一阶段配方。</figcaption></figure>
+<h2 id="C10-section-ebc6c08f24" tabindex="-1">聊天模板：同一条消息，不同组织</h2>
+<p>把“提取时间”放进 system，还是放进 user？历史消息保留多少？工具结果放在哪？这些都属于输入组织。模板让模型知道“谁说了什么”，但：</p>
+<ul>
+<li>它不改变参数；</li>
+<li>它不能替代权限检查；</li>
+<li>它不保证模型忽略材料里的恶意指令；</li>
+<li>不同模型见过的模板可能不同，换格式要重新验证。</li>
+</ul>
+<p>旧课 <a href="../../book/llm/lessons/assistant.md">L06</a> 把“预训练、SFT、偏好、模板”做成可切换的对照材料；它是课程编写的人工示例，没有实际训练三个检查点。</p>
+<h2 id="C10-section-3d7a31bf72" tabindex="-1">推理：两种常见含义</h2>
+<p>中文里“推理”常指两件事：</p>
+<ol>
+<li><strong>模型推理（inference）</strong>：前向计算，读参数、出结果，不更新参数；</li>
+<li><strong>推理行为（reasoning）</strong>：模型先写出中间步骤、再给结论，或产品展示“思考过程”。</li>
+</ol>
+<p>两者不要混。产品显示一段思考摘要，不等于你看到了完整内部计算，也不等于这段摘要一定忠实反映模型实际依据。训练是否包含推理步骤、怎样筛选，属于具体配方；没有公开材料时，只能写“未知”，不能编。</p>
+<h2 id="C10-section-4855a1357c" tabindex="-1">输入变化、参数变化、解码设置、外部状态</h2>
+<p>把一次“行为变化”拆开，常见有四类：</p>
+<table>
+<thead>
+<tr>
+<th>变化</th>
+<th>例子</th>
+<th>改了什么</th>
+<th>是否持久</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入变化</td>
+<td>加系统提示、补原文、加示例</td>
+<td>本次上下文</td>
+<td>通常只影响本次请求</td>
+</tr>
+<tr>
+<td>参数变化</td>
+<td>SFT、偏好优化、继续预训练</td>
+<td>权重</td>
+<td>保存到检查点后持续</td>
+</tr>
+<tr>
+<td>解码设置</td>
+<td>温度、top-p、最大长度</td>
+<td>采样方式</td>
+<td>只影响生成配置</td>
+</tr>
+<tr>
+<td>外部状态</td>
+<td>应用保存的记忆、检索库、工具回执</td>
+<td>下次请求的输入或动作</td>
+<td>依赖应用实现</td>
+</tr>
+</tbody></table>
+<p>聊天里纠正一句，通常属于第一类；把纠正整理成一批示范再训练，才进入第二类；调温度是第三类；应用记住你的偏好是第四类。它们可能同时出现，但检查时要分开说。</p>
+<h2 id="C10-section-4540eaf9d0" tabindex="-1">失败对照</h2>
+<ol>
+<li><strong>把模板当训练</strong>：加一个 assistant 标签，就以为模型“学会了”新任务。</li>
+<li><strong>把偏好当事实</strong>：被选中的回答更礼貌，不等于更准确。</li>
+<li><strong>把思考摘要当内部记录</strong>：摘要可能省略、重构，不能当完整因果链。</li>
+<li><strong>反推配方</strong>：从两次回答猜“它一定用了某种强化学习”，没有证据。</li>
+<li><strong>把输入变化说成参数更新</strong>：用户纠正一次，权重通常没变。</li>
+</ol>
+<h2 id="C10-section-6216b07a6e" tabindex="-1">K2 阶段任务：复算与分类</h2>
+<p>这是 S2 的阶段门。请先独立完成，再打开 <a href="c10-answer.html">C10 答案</a>。所有数值容差 ±0.002；每一问都要写出公式或中间值，只写结果不通过。</p>
+<h3 id="C10-section-75aed03df6" tabindex="-1">A. 生成：softmax 与温度</h3>
+<p>分数 <code>[2, 1, 0]</code>。分别算 <code>T=1</code> 与 <code>T=0.5</code> 时三个候选的概率（先写 exp 值、总和，再写归一化结果）。</p>
+<h3 id="C10-section-825776e3b6" tabindex="-1">B. 注意力：一行、带掩码</h3>
+<p>当前位置的 <code>q=[0,1]</code>，可见 <code>k1=[2,0]</code>、<code>k2=[0,2]</code>，未来位置被遮住；<code>d_k=2</code>。对应 <code>V1=[1,1]</code>、<code>V2=[2,0]</code>。算缩放后分数、softmax 权重与加权输出。</p>
+<h3 id="C10-section-b37e2e8d5d" tabindex="-1">C. 训练：一步更新</h3>
+<p>两个候选初始分数 <code>[0,0]</code>，目标是第一个，学习率 0.8。算更新前概率、两个梯度、更新后分数、更新后概率与损失。</p>
+<h3 id="C10-section-49a61482b1" tabindex="-1">D. 分类：四种变化</h3>
+<p>对下面四种变化，分别判断它属于“输入变化 / 参数变化 / 解码设置 / 外部状态”，并说明“改了什么、是否持久”：</p>
+<ol>
+<li>在请求最前面加入一段 system 提示，规定输出字段。</li>
+<li>用 200 条示范回答做一次监督微调。</li>
+<li>把温度从 0.2 调到 0.9。</li>
+<li>用户在应用里编辑了一条保存的偏好备注，下一次请求会被带上。</li>
+</ol>
+<h3 id="C10-section-39033e3a6c" tabindex="-1">通过条件（全部满足，不取平均）</h3>
+<ol>
+<li>A 两组概率全部落在容差内，且写出 exp 与总和。</li>
+<li>B 的分数、权重、输出全部落在容差内，并明确说明未来被遮住。</li>
+<li>C 的梯度、更新后分数、概率、损失全部落在容差内，并说明损失方向。</li>
+<li>D 四项分类全部正确，每项都说明“改了什么/是否持久”。</li>
+<li>没有把模板说成训练、把偏好说成事实保证、或编造某模型的训练配方。</li>
+</ol>
+<p>任一项数值超出容差或分类错误，K2 不通过；不能用其他项的高分抵消。课程没有真人复核记录，K2 的数值部分可按答案自检，解释部分仍需一位评审者确认；在复核前保持<strong>未验证</strong>。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/polite-without-evidence.svg" alt="说得漂亮，依据在哪"><figcaption>图：偏好训练可能奖励“礼貌完整”，但材料没写的地点仍是未知；流畅不增加证据。</figcaption></figure>
+<h2 id="C10-section-d235c69308" tabindex="-1">项目增量：S2 证据包</h2>
+<p>S2 结束时，把以下文件装进一个文件夹：</p>
+<ul>
+<li><code>generation-log.md</code>（C05）</li>
+<li><code>vector-check.md</code>（C06）</li>
+<li><code>attention-trace.md</code>（C07）</li>
+<li><code>multihead-trace.md</code>（C08）</li>
+<li><code>training-log.md</code>（C09）</li>
+<li><code>k2-answers.md</code>（本章四问的作答与自检）</li>
+</ul>
+<p>每份都标明“人工/实测”和数据来源。S2 的证据不是“我看懂了”，而是“我能复算、能指出边界、能分类变化”。</p>
+<h2 id="C10-section-82826587a3" tabindex="-1">来源与边界</h2>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/assistant.md">L06 会续写为什么还要学听指令</a> 的预训练/SFT/偏好/模板区分与 InstructGPT、DPO 的路线说明，复用深入页 <a href="../../book/llm/deepening/assistant.md">assistant.md</a> 的“三种材料分别改变什么”，图 G35/G21/G36/G07 的出处与旧实验 <a href="assistant.html">D06</a>。课程<strong>没有训练或评测 DeepSeek、Kimi 或任何真实模型</strong>，不推测其内部配方；K2 的数值为课程人工设计，答案与容差另放。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c09.html">上一章 C09</a><a href="c10-answer.html">独立作答后核对</a><a href="c11.html">下一章 C11</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

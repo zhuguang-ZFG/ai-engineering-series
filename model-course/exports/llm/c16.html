@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C16 让工具真的执行，并知道何时停 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details open><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html" aria-current="page">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C16-section-9d7b98c2f7">先修检查：请求、权限、预算</a></li><li class="toc-level-2"><a href="#C16-section-136402592f">工具契约：先写清楚，再让模型选</a></li><li class="toc-level-2"><a href="#C16-section-4c4a72219d">先跑固定工作流</a></li><li class="toc-level-2"><a href="#C16-section-0477c7baf4">让模型在有限循环里选动作</a></li><li class="toc-level-2"><a href="#C16-section-497d93811c">失败路径：每一种都要停在自己的终态</a></li><li class="toc-level-2"><a href="#C16-section-79dd566670">人工确认与最小权限</a></li><li class="toc-level-2"><a href="#C16-section-8d37ccfa57">图与实验</a></li><li class="toc-level-2"><a href="#C16-section-a75364cd0e">改一个条件：固定流程 vs Agent</a></li><li class="toc-level-2"><a href="#C16-section-934920737b">项目增量</a></li><li class="toc-level-2"><a href="#C16-section-7a2f6c8265">独立作业</a></li><li class="toc-level-2"><a href="#C16-section-1a0a8f61dd">来源与限制</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C16"><header class="chapter-opener"><p class="chapter-number">C16</p><p class="chapter-kicker">S3 · 能实现 / K3</p><h1>让工具真的执行，并知道何时停</h1><p class="chapter-abstract">让模型提出工具请求，由程序校验、执行并回执，同时知道何时必须停。</p></header><p class="chapter-meta">先修：<a href="c15.html">C15</a> · <a href="stage-s3.html">S3 阶段导言</a></p><div class="article-body"><p>“3 个区域，每天 2 轮，连续 7 天，一共检查多少次？”模型可以直接写出 42，也可以先提出一次乘法调用，由程序执行后把回执送回来。两种写法看起来都得到 42；只有后者能让你看到：参数是什么、哪个程序执行的、什么时候失败、最多能调用几次。</p>
+<p>本章把工具调用拆成“模型提出请求 → 应用校验 → 程序执行 → 回执返回 → 继续或停止”。你会用真实助手运行固定工作流与有限 Agent 两种模式，并检查坏参数、除零、只读权限和超时未知。</p>
+<h2 id="C16-section-9d7b98c2f7" tabindex="-1">先修检查：请求、权限、预算</h2>
+<p>C12 已经讲过请求/响应、状态码和超时未知；C13 已经能让真实模型基于材料回答。本章再加：</p>
+<ul>
+<li>工具名和参数必须是结构化 JSON，不是一段自然语言；</li>
+<li>应用必须先校验再执行，不能把模型输出直接 <code>eval</code>；</li>
+<li>每次执行要有回执（成功/失败/超时/未知），失败不能走成功分支；</li>
+<li>必须有最大步数/最大调用次数，达到上限就停止；</li>
+<li>涉及现实写入或发送时，需要人工确认；本章只做本地计算和只读查找。</li>
+</ul>
+<p>如果“为什么不能 <code>eval</code>”不熟，先记住：模型输出是<strong>数据</strong>，不是可信代码。<code>eval(&quot;__import__(&#39;os&#39;).system(...)&quot;)</code> 会把一段文本变成真实动作；教学工具只接受白名单工具名和有限参数。</p>
+<h2 id="C16-section-136402592f" tabindex="-1">工具契约：先写清楚，再让模型选</h2>
+<p>本课程助手支持两个教学工具：</p>
+<ul>
+<li><code>calculator</code>：接受一个<strong>数值算术表达式字符串</strong>，例如 <code>&quot;3*14&quot;</code>。程序用 Python AST 解析，只允许数字字面量、一元 <code>+</code>/<code>-</code>、括号，以及 <code>+ - * / // % **</code> 这些运算符；函数调用、变量名、属性访问、字符串/容器字面量和任意语句都不执行。除零、超长表达式、超大指数或结果返回失败。</li>
+<li><code>read_document</code>：按文档 ID 读取当前读者有权访问的片段；只读，不写文件、不发消息。</li>
+</ul>
+<p>模型提出的是类似这样的请求：</p>
+<pre><code class="language-json">{
+  &quot;action&quot;: &quot;tool&quot;,
+  &quot;tool&quot;: &quot;calculator&quot;,
+  &quot;arguments&quot;: {&quot;expression&quot;: &quot;3*14&quot;}
+}
+</code></pre>
+<p>应用收到后检查：工具名是否在 <code>--allowed-tools</code> 白名单、<code>arguments</code> 是否恰好只有 <code>expression</code> 且为字符串、工具是否已实现。校验通过后由 <code>calculate()</code> 解析并求值：AST 走白名单，遇到函数调用、名字、字符串字面量或其他运算符就返回失败回执，不执行下一步。任何一项失败都不会进入成功分支。</p>
+<h2 id="C16-section-4c4a72219d" tabindex="-1">先跑固定工作流</h2>
+<p>固定工作流的步骤由程序写死，不依赖模型决定。旧实验 <a href="tools.html">D13 两步价格工作流</a> 就是这种：先查价，再用查到的价格乘数量；查不到就不算总价。</p>
+<pre><code class="language-bash">node book/llm/examples/tool-workflow.mjs
+</code></pre>
+<p>它会打印正常结果和 <code>missing-item</code> 失败；失败时没有总价，只有 <code>not-found</code>。这个基线说明：<strong>固定流程也能真实执行</strong>，但它不会根据问题选择工具或调整步骤。C16 要比较的是“固定”与“模型选动作”，不是把两者混称 Agent。</p>
+<h2 id="C16-section-0477c7baf4" tabindex="-1">让模型在有限循环里选动作</h2>
+<p>以设备检查为例，假设任务说明提供“每轮检查 3 个区域，每天 2 轮，连续 7 天”，要求用 <code>calculator</code> 计算 <code>3*14</code>。这段假设不是文档原文，不能写成材料事实；工具结果由成功回执验证。用 Agent 模式。先把 <code>MODEL_DIR</code> 指向你已合法取得并放在本机的模型目录（不是自动下载地址）；运行结果取决于模型、材料与严格校验，失败状态同样要保存：</p>
+<pre><code class="language-bash"># 替换为你本机的模型目录绝对路径
+MODEL_DIR=&quot;/absolute/path/to/local-model&quot;
+python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;每轮 3 个区域，每天 2 轮，连续 7 天，一共检查多少次？请用 calculator 计算 3*14，并把成功回执作为结果依据。&quot; \
+  --model &quot;$MODEL_DIR&quot; \
+  --mode agent \
+  --allowed-tools calculator,read_document \
+  --max-steps 4 \
+  --max-tool-calls 2 \
+  --json out/c16-agent.json \
+  --markdown out/c16-agent.md
+</code></pre>
+<p>关键参数：</p>
+<ul>
+<li><code>--mode fixed</code>：只按固定流程执行，不根据模型选择下一步；</li>
+<li><code>--mode agent</code>：模型可以在有限步内选择工具，但步数和调用次数有上限；</li>
+<li><code>--max-steps 4</code>：包括模型决策与工具轮次的总步数上限；</li>
+<li><code>--max-tool-calls 2</code>：工具执行次数上限；</li>
+<li><code>--allowed-tools</code>：白名单；未列出的工具即使模型提出也拒绝。</li>
+</ul>
+<p>报告中的每条工具执行记录在 <code>tool_receipts[]</code> 中，回执号字段是 <code>receipt_id</code>；主张引用它时写作 <code>{&quot;tool_receipt_id&quot;:&quot;tool-1&quot;}</code>。若模型说“计算器算得 42”，但没有回执 ID 或回执参数不是 <code>3*14</code>，这条主张不能算已验证。<code>diagnostics.first_raw_response</code> 和 <code>first_failure</code> 仍要保留。</p>
+<h2 id="C16-section-497d93811c" tabindex="-1">失败路径：每一种都要停在自己的终态</h2>
+<p>按顺序实验：</p>
+<ol>
+<li><strong>坏参数/坏表达式</strong>：<code>arguments</code> 里传非字符串（如 <code>{&quot;expression&quot;: 3}</code>）或多余字段，预期 <code>invalid-response</code>，校验阶段就拒绝；表达式 <code>&quot;3+&quot;</code> 预期回执失败 <code>invalid-expression</code>，最终 <code>tool-failed</code>。字符串 <code>&quot;3+4&quot;</code> 是合法表达式，会算出 <code>7</code>，不能拿它当坏参数。要验证“不执行代码”，可传 <code>&quot;__import__(&#39;os&#39;).system(&#39;echo hi&#39;)&quot;</code> → <code>unsupported-expression</code>，或 <code>&quot;&#39;a&#39; + &#39;b&#39;&quot;</code> → <code>unsupported-literal</code>；这些都在 AST 白名单阶段失败。</li>
+<li><strong>除零</strong>：<code>{&quot;expression&quot;: &quot;1/0&quot;}</code>。预期回执 <code>failed</code>、错误 <code>division-by-zero</code>，不返回 <code>Infinity</code> 或一段“已计算”的摘要。</li>
+<li><strong>无权限读取</strong>：<code>read_document</code> 指向当前 <code>reader</code> 不可见的文档。预期回执 <code>permission-denied</code>、最终 <code>permission-denied</code>，正文不进入上下文。</li>
+<li><strong>未知工具</strong>：模型请求 <code>send_email</code> 或 <code>shell</code>，预期 <code>permission-denied</code>，不执行。CLI 的 <code>--allowed-tools</code> 只接受 <code>calculator</code> 和 <code>read_document</code>；传 <code>--allowed-tools send_email</code> 会在参数解析时退出，退出码 2、提示 <code>unknown tools</code>，尚未生成助手报告。内部校验器另有 <code>tool-failed</code>/<code>unknown-tool</code> 防御分支，但不能把它写成这条 CLI 命令的预期输出。</li>
+<li><strong>超时/未知</strong>：真实远程工具可能出现“已发出但没收到回执”。本章本地工具不一定能制造真实网络超时；旧实验有模拟超时分支。若使用模拟，必须标“模拟”，不能冒充远程执行。状态应保留 <code>timeout</code>/<code>unknown</code>，不能写成成功或“没有执行”。</li>
+<li><strong>预算耗尽</strong>：把 <code>--max-tool-calls</code> 设为 0 或 1，让任务需要更多调用。预期在达到上限时停止，并说明未完成，而不是继续调用。</li>
+</ol>
+<p>每一条都要记录：请求、校验结果、是否执行、回执、最终 <code>status</code>。如果失败发生在校验阶段，不应出现“执行成功”的回执；如果超时，不应推断副作用没有发生。</p>
+<h2 id="C16-section-79dd566670" tabindex="-1">人工确认与最小权限</h2>
+<p>本地计算和只读查找可以由应用自动执行；发送消息、修改文件、下单、删除数据等有现实副作用的动作，必须有明确的人工确认和授权范围。本章助手不提供这些写操作，这是有意的限制，不是“功能没做完”。</p>
+<p>如果你在自己的项目中扩展工具，至少做到：</p>
+<ul>
+<li>工具白名单与参数 schema；</li>
+<li>每个工具声明只读/写入、所需权限、超时；</li>
+<li>写入工具要求确认令牌和幂等键；</li>
+<li>失败与未知状态可查询；</li>
+<li>不把模型生成的 URL、路径或命令直接当可信输入。</li>
+</ul>
+<p>“模型说已经发送”不等于现实动作完成；只有带确认与回执的执行记录才算。</p>
+<h2 id="C16-section-8d37ccfa57" tabindex="-1">图与实验</h2>
+<p>下图把“模型提出调用、程序校验、执行、回执、继续或停止”画成一个环。失败线不回到成功线；预算耗尽和未知状态也要有自己的出口。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/tool-execution-loop.svg" alt="工具执行循环"><figcaption>图：从“说要计算”到“真的计算”：程序校验通过才执行，回执到手才算完成；失败、超时、取消都停在各自的终态，不回到成功线。图中的请求是预置示例，不是模型实测。</figcaption></figure>
+<h2 id="C16-section-a75364cd0e" tabindex="-1">改一个条件：固定流程 vs Agent</h2>
+<p>同一问题分别跑。先设置模型目录与问题，再分别执行完整命令：</p>
+<pre><code class="language-bash"># 替换为你本机的模型目录绝对路径
+MODEL_DIR=&quot;/absolute/path/to/local-model&quot;
+QUESTION=&quot;每轮 3 个区域，每天 2 轮，连续 7 天，一共检查多少次？请用 calculator 计算 3*14，并把成功回执作为结果依据。&quot;
+
+# 固定流程：不根据模型选择工具
+python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;$QUESTION&quot; \
+  --model &quot;$MODEL_DIR&quot; \
+  --mode fixed \
+  --top-k 3 \
+  --max-new-tokens 192 \
+  --json out/c16-fixed.json \
+  --markdown out/c16-fixed.md
+
+# 有限 Agent：模型可在预算内选择工具
+python book/llm/examples/assistant/assistant.py run \
+  --docs book/llm/examples/assistant/documents.json \
+  --reader student \
+  --question &quot;$QUESTION&quot; \
+  --model &quot;$MODEL_DIR&quot; \
+  --mode agent \
+  --allowed-tools calculator,read_document \
+  --max-steps 4 \
+  --max-tool-calls 2 \
+  --json out/c16-agent.json \
+  --markdown out/c16-agent.md
+</code></pre>
+<p>比较：是否产生工具回执、调用次数、是否超出预算、答案是否仍引用材料、失败时是否停止。若 Agent 没有带来更好的结果，结论可以是“本任务不需要 Agent”，这不是失败。C21 会把这个判断扩展成完整对照。</p>
+<h2 id="C16-section-934920737b" tabindex="-1">项目增量</h2>
+<p>保存：</p>
+<pre><code class="language-text">out/c16-fixed.json
+out/c16-agent.json
+out/c16-failures/*.json
+notes/c16-tool-contract.md
+</code></pre>
+<p><code>c16-tool-contract.md</code> 写明工具名、参数、返回、权限、超时、最大调用次数和人工确认条件。下一次换问题或换模型时，先按契约检查，而不是从代码里猜。</p>
+<h2 id="C16-section-7a2f6c8265" tabindex="-1">独立作业</h2>
+<ol>
+<li>用固定流程和 Agent 各跑一次，列出工具回执 ID、参数、结果和最终状态；解释哪一步是模型决策，哪一步是程序执行。</li>
+<li>构造坏参数、除零、未知工具、无权限读取四种失败，保存 JSON；确认失败没有产生成功结果。</li>
+<li>把 <code>--max-tool-calls</code> 从 2 改成 1，运行需要两次调用的任务，记录停止原因；不要把“预算耗尽”写成“任务完成”。</li>
+<li>为 <code>calculator</code> 写一份参数 schema：只接受 <code>{&quot;expression&quot;: string}</code>，说明允许的数字、运算符、长度/数值上限和错误码，并解释为什么接受的是受限数值算术表达式字符串，而不是任意代码、函数调用或字符串字面量。</li>
+<li>设计一个需要人工确认的写入工具（只写设计，不执行）：说明确认信息、幂等键、回执和回滚条件。</li>
+</ol>
+<p>答案与核对依据见 <a href="c16-answer.html">C16 答案</a>。</p>
+<h2 id="C16-section-1a0a8f61dd" tabindex="-1">来源与限制</h2>
+<p>工具循环与报告字段来自助手的 <code>run</code>/<code>--mode</code>/<code>--allowed-tools</code> 实际接口；固定工作流来自旧 D13 示例，已在仓库中可运行。本章不提供发送消息、写文件或联网写入工具，也不声称模拟超时是真实网络故障。工具参数校验、权限和停止条件必须由应用实现；模型的选择意图本身不等于执行。</p>
+</div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c15.html">上一章 C15</a><a href="c16-answer.html">独立作答后核对</a><a href="c17.html">下一章 C17</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

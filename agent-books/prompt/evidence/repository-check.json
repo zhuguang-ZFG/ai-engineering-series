@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "version": "0.3.6",
+  "commit": "6ee786749b909eeb9a14bc11d8afe7bbde29934c",
+  "status": "passed",
+  "steps": [
+    {
+      "name": "dependencies",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "scripts/bookctl.py",
+        "deps"
+      ],
+      "returncode": 0,
+      "seconds": 0.18
+    },
+    {
+      "name": "source build",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "-m",
+        "yuyu_book",
+        "--check",
+        "--mermaid",
+        "source"
+      ],
+      "returncode": 0,
+      "seconds": 92.634
+    },
+    {
+      "name": "general tests",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "returncode": 0,
+      "seconds": 21.455
+    },
+    {
+      "name": "builder tests",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "yuyu-book/tests"
+      ],
+      "returncode": 0,
+      "seconds": 173.535
+    },
+    {
+      "name": "content",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "scripts/check_book.py"
+      ],
+      "returncode": 0,
+      "seconds": 1.198
+    },
+    {
+      "name": "mermaid",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "check:diagrams"
+      ],
+      "returncode": 0,
+      "seconds": 6.711
+    },
+    {
+      "name": "video configuration",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "video/pipeline/cli.py",
+        "check",
+        "--config-only"
+      ],
+      "returncode": 0,
+      "seconds": 0.376
+    },
+    {
+      "name": "product idempotence",
+      "command": [
+        "D:\\Users\\claude\\.ebook-validation-tools\\python-env\\Scripts\\python.exe",
+        "scripts/check_products.py"
+      ],
+      "returncode": 0,
+      "seconds": 6.954
+    }
+  ],
+  "warnings": [],
+  "elapsed_seconds": 303.043,
+  "unverified": [
+    "operator-configured verification is reported separately",
+    "cache hits not supplied by the operator are unmeasured"
+  ]
+}

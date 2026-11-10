@@ -1,0 +1,235 @@
+# Foreword
+
+> **In one line:** The model only provides the muscle; the cart is what actually travels. Whether you dare hand a task over depends on the structure of the cart, not the speed of the horse.
+
+Start with something you have probably met: you ask an AI coding assistant to fix one bug, it replies "fixed", you run the tests and three fail -- it had edited a second file along the way, and rereading the transcript you cannot find the step where it started deciding for you. The model said the sentence; the ring of code around it chose which files it could read, which it could rewrite, and when it had to ask you first. This book takes that ring apart.
+
+**Learning Objectives:** By the end of this foreword, you can:
+
+- say in your own words which layer the term Agent Harness refers to, and name three things it owns;
+- find yourself among the four reader profiles below, pick a path, and state what it skips and what that costs;
+- use the knowledge map later in this foreword to name the problem each of Chapters 1-4 solves, and why they come in that order.
+
+**Difficulty:** no code here. Having used any AI coding assistant once is enough.
+
+## Yù Yú: From Chariot-Making to Agent-Building
+
+> *"Of all artifacts that bring many crafts together, the chariot calls upon the most."* -- *Kǎo Gōng Jì* (The Book of Crafts)
+
+Twenty-three hundred years ago, the author of the *Kǎo Gōng Jì* wrote that line. In the pre-Qin age, the horse-drawn chariot was the most complex systems-engineering artifact humans had ever built -- without exception.
+
+How many trades went into one chariot? The woodworker built the **yú** (the carriage body), the metalworker cast the **wèi xiá** (the axle fittings), the leatherworker cut the harness, the lacquerer finished the surfaces, the wheelwright shaped the **fú** (the spokes). The *Kǎo Gōng Jì* says that heaven has its seasons, earth has its energies, materials have their virtues, and craftsmen have their craft; only when the four come together is a good chariot made.
+
+Each part carries its own meaning, and together they form a metaphor that reaches across two thousand years to the architecture of the Agent Harness this book dissects:
+
+| Ancient chariot | Meaning | Agent Harness |
+|:--------:|------|------|
+| **Yú** (carriage body) | The core structure that carries the rider | **Harness runtime** -- the engineering frame that carries the LLM |
+| **Yuán** (shafts) | Set the direction, transmit the pull | **Dialog loop** -- the main loop that drives the agent forward |
+| **Fú** (spokes) | Join the hub to the rim | **Tool system** -- the bridge between the LLM and the outside world |
+| **Wèi xiá** (axle fittings) | Pin the axle so the wheel cannot come off | **Permission pipeline** -- the safety mechanism that constrains the agent |
+| **Shì** (front crossbar) | The rail a rider grasps in salute | **Hook system** -- ceremonial extension points in the lifecycle |
+| **Yù** (driving) | The charioteer's craft | **Architectural understanding** -- the ability to comprehend and control an agent system |
+
+Confucius compared trust to a chariot: "A large carriage without its nǐ, a small one without its yuè -- how is it to go anywhere?" A chariot that loses its securing pin cannot travel, just as an agent without permission guardrails cannot earn trust. The *Kǎo Gōng Jì* also records that the shaft must curve just so: too deep and it snaps, too shallow and it cannot bear the load -- just as an agent's autonomy has to weigh capability against safety.
+
+In the oracle-bone script, Luo Zhenyu read the character for *yú* as "the shape of many hands building a chariot" -- many hands making one vehicle. A production agent system needs the same many hands today: tool system, permission pipeline, context management, state persistence, streaming communication, error recovery. Each subsystem is one craftsman's trade; only together do they put an agent on the road.
+
+**The ancients drove the chariot, the most precise machine between heaven and earth; we drive the chariot, the most complex intelligent system of the silicon age.**
+
+This is where the book's title **Yù Yú** -- driving the chariot -- comes from, and why its readers call it the **Yú Shū**, the Chariot Book.
+
+---
+
+## Why This Book
+
+### The Three Waves of AI-Assisted Programming
+
+Looking back over the past few years, AI-assisted programming has gone through three distinct waves, each profoundly changing the relationship between developers and code:
+
+**The First Wave (2021-2022): The Code Completion Era.** The launch of GitHub Copilot marked the formal entry of AI into developers' daily workflows. The core paradigm of this stage was "inline completion" -- AI predicted the next line or code block based on the current file context, and developers accepted suggestions with the Tab key. This was a highly passive, highly localized mode of assistance: AI saw dozens of lines of code around the cursor and output fragment-level suggestions. It could not reason across files, understand project structure, or proactively execute operations.
+
+**The Second Wave (2023-2024): The Conversational Assistant Era.** With the expansion of context windows and the emergence of multi-file awareness, AI tools evolved from "completion boxes" to "dialog boxes." Editor-embedded tools like Cursor, Windsurf, and Continue flourished. Developers could describe requirements in natural language, and AI would generate code across multiple files. But AI at this stage was still constrained by the editor boundary -- it could write code but not run it; it could suggest tests but not execute them; it could identify problems but not verify fixes. Developers constantly switched between AI and the terminal, acting as human "glue."
+
+**The Third Wave (2025 to present): The Autonomous Agent Era.** The paradigm shift we are experiencing is far more profound than the previous two. AI is no longer "an assistant sitting in the editor waiting for your questions," but "an agent that autonomously executes tasks in the terminal." It can directly run Shell commands, read and write the file system, execute test suites, and operate Git version control -- and when encountering errors, it autonomously adjusts its strategy and iteratively fixes them. From simple code completion to multi-file refactoring, from single-turn Q&A to cross-tool orchestration, AI programming assistants are undergoing a fundamental paradigm shift from Chatbot to Agent.
+
+These three waves fit into a concise evolution diagram:
+
+```mermaid
+flowchart LR
+    subgraph wave1["2021-2022"]
+        A["Code Completion<br/>Inline Complete"]
+    end
+    subgraph wave2["2023-2024"]
+        B["Chat Assistant<br/>Chat Assisted"]
+    end
+    subgraph wave3["2025 to present"]
+        C["Autonomous Agent<br/>Agent Autonomy"]
+    end
+
+    wave1 --> wave2 --> wave3
+
+    classDef era fill:#e8f4f8,stroke:#2196F3,stroke-width:2px,color:#1565C0
+    class A,B,C era
+```
+
+```mermaid
+flowchart LR
+    subgraph w1["First Wave"]
+        direction TB
+        A1["Tab to accept suggestions"]
+        A2["Single-file local completion"]
+        A3["Passively waiting for triggers"]
+        A4["No execution capability"]
+    end
+    subgraph w2["Second Wave"]
+        direction TB
+        B1["Ctrl+L conversational queries"]
+        B2["Multi-file cross-file generation"]
+        B3["Proactive intent understanding"]
+        B4["No execution capability"]
+    end
+    subgraph w3["Third Wave"]
+        direction TB
+        C1["Direct task delegation"]
+        C2["Cross-tool autonomous orchestration"]
+        C3["Proactive execution path planning"]
+        C4["Read/Write/Execute/Verify"]
+    end
+
+    w1 --> w2 --> w3
+```
+
+### Agent Harness: The Birth of a New Architectural Concept
+
+<!-- block: front.b-df75fff3 -->
+During this transition, a key architectural pattern has surfaced: **Agent Harness** -- a runtime framework built around an LLM, responsible for managing tool registration and dispatch, permission control, state persistence, streaming output, error recovery, and other cross-cutting concerns.
+
+<!-- block: front.b-37181626 -->
+The best way to understand Agent Harness is through an analogy. Imagine the LLM as a brilliant scholar who has never left their study. They are immensely knowledgeable and possess extraordinary reasoning abilities, but know nothing of the outside world -- they cannot use tools, operate machines, or even make a phone call. Agent Harness is this scholar's "exoskeletal armor system": it equips the scholar with hands (the tool system), installs safety locks (the permission pipeline), provides a memory manager (context compression), and connects a nervous system (streaming communication). The scholar wearing this armor is no longer just a thinking brain, but an agent capable of executing tasks safely and efficiently in the real world.
+
+This analogy reveals the essence of Agent Harness: **it is not an SDK, not an API wrapper, and certainly not simple prompt engineering -- it is the engineering infrastructure that enables an LLM to truly "do things."** If the LLM is the Agent's brain, then the Agent Harness is the Agent's skeleton, muscles, nerves, and immune system.
+
+### The Birth of Claude Code and Its Accidental Public Disclosure
+
+In early 2025, Anthropic released Claude Code -- an AI programming agent that runs in the terminal. It does not depend on a specific editor or a graphical interface; instead, it runs straight in the command line, decidedly hacker-like. This choice is itself a statement: an Agent does not need the constraints of a GUI; it needs a fully-featured runtime environment.
+
+On March 31, 2026, an unexpected event propelled Claude Code into the spotlight of the tech community: security researcher [Chaofan Shou (@Fried_rice)](https://x.com/Fried_rice) discovered that the `@anthropic-ai/claude-code` package published in the npm registry contained a source map file referencing a complete source code archive in an Anthropic R2 storage bucket, and the bucket had no access controls. The disclosure tweet received over 17 million views, and the tech community engaged in an unprecedented in-depth discussion about Agent architecture. Anthropic subsequently patched the configuration issue.
+
+After that discussion, Agent Harness went from an obscure engineering concept to a topic the entire developer community cares about. But most of the discussions on the market came scattered and fragmented -- some focused on tool call design, others discussed permission models, and still others analyzed streaming architecture, yet no one had assembled these pieces into a complete picture.
+
+This book attempts to fill that gap. We explain Agent Harness design using public documentation, product behavior, and community discussion.
+
+### Why Now
+
+The timing for this book is right, for three reasons:
+
+1. **Architectural patterns are converging.** Although different Agent frameworks vary in implementation details, the core architectural patterns -- dialog-loop-driven execution, tool type systems, layered permission pipelines, and streaming state management -- have converged across multiple mainstream projects. The patterns collected here are therefore not tied to any one framework's implementation.
+
+<!-- block: front.b-1a26c9ed -->
+2. **Engineering challenges have fully surfaced.** After two years of practice, the core engineering challenges facing Agent systems are clearly visible: context window management, security and concurrency of tool calls, state consistency during long-running operations, error recovery and retry strategies, and so on. These problems will not disappear as model capabilities improve -- on the contrary, as Agents execute more complex tasks, these engineering issues will become even more acute.
+
+3. **The developer community is ready.** More and more developers are no longer satisfied with the superficial usage of "calling an API to build a chatbot." They want to understand the internal mechanisms of Agent systems so they can build their own Agent applications. We wrote this book for those developers.
+
+## Why Claude Code Is Worth Studying in Depth
+
+Choosing Claude Code as the subject of analysis for this book is not based on a preference for any particular company, but on several objective judgments:
+
+**First, architectural representativeness.** Claude Code covers all core subsystems of an Agent Harness: tool type system, permission pipeline, state management, context compression, MCP protocol integration, and sub-agent dispatch. Understanding Claude Code's architecture establishes a mental model you can transfer to any Agent framework -- every builder wires a different machine, but the bones, muscles, nerves and vessels are the same.
+
+**Second, traceability of engineering decisions.** Claude Code's design is full of meaningful traces of engineering decisions. For example:
+
+<!-- block: front.b-d79f0d76 -->
+- Why does the main dialog loop use streaming async generators instead of callbacks or Promise chains? (The answer involves backpressure control, cancellation propagation, and composability -- see Chapter 2 for details)
+- Why does the permission system use a four-stage pipeline instead of a simple allowlist/blocklist? (The answer involves defense in depth and separation of concerns -- see Chapter 4 for details)
+- Why does the tool type design include fine-grained control interfaces for concurrency safety and interrupt behavior? (The answer involves parallel scheduling strategies and user experience -- see Chapter 3 for details)
+
+These decisions come from real production scenarios and are far more useful than abstract architectural discussions. Every "why" ends up turning on a concrete engineering trade-off.
+
+<!-- block: front.b-a68a2ed2 -->
+**Third, modernity of the technology stack.** Claude Code chose Bun as its runtime, React + Ink for terminal UI rendering, Zod v4 for runtime validation, and Commander.js for CLI handling -- these technology choices are themselves a reference blueprint for modern TypeScript engineering. Even if you are not interested in Agent architecture, Claude Code is worth studying purely from an engineering practices perspective.
+
+**Fourth, reference value at scale.** As a project with over 500,000 lines of TypeScript code, Claude Code demonstrates how to maintain modularity, testability, and extensibility in a large codebase. Its tool type system, permission pipeline, and state management solutions apply directly to your own projects.
+
+## Features of This Book
+
+This book differs from other AI books on the market in three ways:
+
+<!-- block: front.b-3f47c95e -->
+**Based on architectural analysis, not API documentation.** We will not teach you "how to call the Claude API to build a chatbot." Instead, starting from Claude Code's product behavior and public information, we progressively reconstruct its core architecture -- how the dialog loop drives execution, how the pipeline checks permissions in layers, and how the system compresses context. Through systematic architectural deduction, we present the complete design picture of Agent Harness.
+
+<!-- block: front.b-862cc377 -->
+**Starting from design philosophy, not usage tutorials.** We will not list "10 tips to make Claude Code work better for you." Instead, we discuss the five major design principles of Agent Harness -- async-streaming-first, embedded security boundaries, cache-aware design, progressive capability extension, and immutable state flow -- and how these principles map to concrete code structures.
+
+**Emphasizing transferable architectural knowledge.** Each chapter distills universal design patterns that go beyond Claude Code itself. After reading this book, you will not only understand Claude Code's internal mechanisms, but also be able to apply this knowledge to your own Agent projects, whether you use LangChain, AutoGen, or build from scratch.
+
+## Reader Profiles and Reading Paths
+
+### Four Core Reader Types
+
+This book is suitable for the following readers, each of whom can gain unique value:
+
+**Architects and technical leaders** who are evaluating or building AI Agent systems and need to understand the design space and engineering trade-offs of Agent Harness. For these readers, this book provides a complete architectural decision map to help you make informed judgments on key issues such as "build vs. adopt a framework" and "which subsystems to prioritize investment in."
+
+**Senior engineers** who already have TypeScript/Node.js experience and want to deeply understand how to build reliable engineering systems on top of LLMs. For these readers, the design patterns in this book (async generator loops, layered permission pipelines, immutable state management) apply directly to daily engineering practice, even if you are not currently building an Agent system.
+
+**AI application developers** who are not satisfied with the superficial usage of calling APIs and want to master core technologies such as tool calling, streaming processing, and permission control. For these readers, the systematic explanation from "why" to "how" will help you grow from an API caller to a system builder.
+
+**Researchers curious about Agent technology** who want to understand how Agent systems work from an engineering implementation perspective. For these readers, this book provides a complete view from macro architecture to micro implementation, filling the cognitive gap between academic papers and engineering practice.
+
+### Reading Path Recommendations
+
+This book has four parts, organized from macro to micro, from concept to implementation:
+
+```mermaid
+flowchart TB
+    p1["Part 1 · Foundations<br/>01 New paradigm<br/>02 Dialog loop<br/>03 Tool system<br/>04 Permission pipeline"]
+    p2["Part 2 · Core Systems<br/>05 Settings and configuration<br/>06 Memory system<br/>07 Context management<br/>08 Hooks"]
+    p3["Part 3 · Advanced Patterns<br/>09 Sub-agents and Fork<br/>10 Multi-agent coordination<br/>11 Skills and plugins<br/>12 MCP and external protocols"]
+    p4["Part 4 · Engineering Practice<br/>13 Streaming and performance<br/>14 Plan mode and workflows<br/>15 Build your own Harness"]
+    p1 --> p2 --> p3 --> p4
+    classDef part fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
+    class p1,p2,p3,p4 part
+```
+
+**If you are short on time (Fast Path):** Read at least Chapter 1 (to establish a mental model) and Chapter 2 (to understand the core loop), then spend 15 minutes browsing the key takeaways sections of Chapters 3-4. These two chapters are the foundation for understanding everything that follows.
+
+**If you are an experienced engineer (Deep Path):** You can start directly from Part 2, referring back to the corresponding chapters in Part 1 when you encounter conceptual gaps. Focus on the "Design Decision Analysis" subsections in each chapter -- these are the most inspiring parts for your daily engineering practice.
+
+**If you are a beginner (Complete Path):** We recommend reading in order, and completing every hands-on exercise in each chapter. These exercises build on each other -- the installation diagnostic in Chapter 1 is a prerequisite for tracing tool call flows in Chapter 2, and the custom tool exercise in Chapter 3 lays the foundation for permission configuration in Chapter 4.
+
+**If you are an architect (Evaluation Path):** Focus on Chapter 1 (architectural overview), Chapter 2 (core loop design), and Chapter 4 (permission pipeline), then jump directly to Part 4. This path helps you evaluate the design space and engineering complexity of Agent Harness in the shortest possible time.
+
+Whatever path you pick, three habits are where readers usually stumble:
+
+| Common way to fail | What works instead |
+|:--------:|------|
+| Reading straight from Chapter 1 to Chapter 15, quitting at Chapter 7 | Read Chapters 1 and 2 first to get the groundwork, then backtrack on demand |
+| Jumping to Chapter 15 to build a harness, then getting stuck at the four permission stages | Do Chapter 3's tool contract and Chapter 4's pipeline before you write any code |
+| Refusing to turn the page until every source excerpt has been read line by line | Read each chapter's opening one-liner and closing takeaways first; follow one thread of source to the end |
+
+### Knowledge Map and Chapter Connections
+
+The chapters in this book have tight cross-reference relationships. Understanding these connections helps you build a systematic cognitive framework:
+
+- **Chapter 1**'s five design principles (async-streaming-first, embedded security boundaries, cache-aware design, progressive capability extension, and immutable state flow) are the thread running through the entire book. Each subsequent chapter is an unfolding of these principles in specific subsystems.
+- **Chapter 2**'s dialog main loop is the "hub" of the book -- it connects the tool system (Chapter 3), the permission pipeline (Chapter 4), context management (Part 2), and sub-agent dispatch (Part 3).
+- **Chapter 3**'s tool type system defines the interface contract checked by Chapter 4's permission pipeline, while Chapter 3's orchestration engine depends on Chapter 2's async generator pattern.
+- **Chapter 4**'s permission pipeline embeds into Chapter 2's dialog main loop and Chapter 3's tool execution flow, embodying the "embedded security boundaries" design principle.
+
+> **Cross-Reference:** to get the model-side background first, see Chapter 2 of the omp volume, "Minimum Necessary Knowledge About Large Models".
+
+## About This Book
+
+<!-- block: front.b-479af2b2 -->
+This book is based on an in-depth analysis of Claude Code's product architecture, combining public documentation, community discussions, and product behavior to systematically explain its design philosophy and Agent Harness best practices. The analytical method of this book is: starting from Claude Code's observable behavior, combined with Anthropic's official documentation and public community discussions, to deduce and reconstruct its architectural design principles.
+
+---
+
+## Acknowledgments
+
+This book owes its existence to the excellent engineering practices of the Claude Code development team. Their carefully designed product architecture is what this analysis rests on. The analysis in this book is based on Claude Code's public documentation and product behavior, and serves solely educational and academic purposes.
+
+---
+
+*In 2026, as AI Agents are reshaping the way software engineering works, we hope this book helps you become not only a better Agent user, but a discerning Agent builder.*

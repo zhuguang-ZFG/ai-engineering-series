@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "languages": [
+    {
+      "language": "zh",
+      "fragments": [
+        {
+          "name": "cover",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "cover"
+            ],
+            "id": "cover"
+          },
+          "file": "fragments/zh/cover.html",
+          "bytes": 8433,
+          "sha256": "e675d805847156f5741d838b1cecf8e562a8cf016d4466f6f6de15a33d1d3ede"
+        },
+        {
+          "name": "toc",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "toc"
+            ],
+            "id": "toc"
+          },
+          "file": "fragments/zh/toc.html",
+          "bytes": 5423,
+          "sha256": "9d4495605a519c5c83bcc89e2b675870bc1872c03dd3712fa33b583f02c9185d"
+        },
+        {
+          "name": "chapter-head",
+          "selector": {
+            "tag": "header",
+            "classes": [
+              "chapter-head"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/chapter-head.html",
+          "bytes": 1916,
+          "sha256": "f5abd132397c6f08cabf8ee50ff928d48191a8a4452091d898bfe0c21bd66aaa"
+        },
+        {
+          "name": "lead-band",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "lead-band"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/lead-band.html",
+          "bytes": 389,
+          "sha256": "65e11eed3a16f13ddc26093efe1d907c6eed637b737e12da7133e55dad8945ef"
+        },
+        {
+          "name": "keeper-note",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "keeper"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/keeper-note.html",
+          "bytes": 1188,
+          "sha256": "5e790a7f71191882265b5f8beb81a53c64ce372ebea663cb75c691f0621a7b93"
+        },
+        {
+          "name": "new-terms",
+          "selector": {
+            "tag": "aside",
+            "classes": [
+              "new-terms"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/new-terms.html",
+          "bytes": 3763,
+          "sha256": "cf609bdf325addcc0447dfa861ffd0683ab97d9e6da18af013e24f87654ec654"
+        },
+        {
+          "name": "wide-table",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "table-scroll"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/wide-table.html",
+          "bytes": 3025,
+          "sha256": "bb4b1657c4b1579d0024cdeb855c4ee536ad16a2aeb6fec7489efa795b7923d5"
+        },
+        {
+          "name": "landscape-plate",
+          "selector": {
+            "tag": "figure",
+            "classes": [
+              "diagram",
+              "wide",
+              "landscape"
+            ],
+            "id": null
+          },
+          "file": "fragments/zh/landscape-plate.html",
+          "bytes": 21046,
+          "sha256": "3f0da1c66672d443a3682574e4e86fb072080fc6006cd64772d14105a34b8197"
+        },
+        {
+          "name": "sources",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "sources"
+            ],
+            "id": "sources"
+          },
+          "file": "fragments/zh/sources.html",
+          "bytes": 47134,
+          "sha256": "6ed2123bafe37799173948028756242f90ddf4c39e9cb26b4d17eb7125cefd51"
+        },
+        {
+          "name": "subject-index",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "back-index"
+            ],
+            "id": "subject-index"
+          },
+          "file": "fragments/zh/subject-index.html",
+          "bytes": 56067,
+          "sha256": "77599c65ae9effa39ee66a7ae9d2d5315756b7084eaaaf3d17c04fa095179e5c"
+        }
+      ]
+    },
+    {
+      "language": "en",
+      "fragments": [
+        {
+          "name": "cover",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "cover"
+            ],
+            "id": "cover"
+          },
+          "file": "fragments/en/cover.html",
+          "bytes": 8400,
+          "sha256": "6a217d365dd3cef59f8b887474f7f1f1b336805cdfb870a95a7e949a155079d3"
+        },
+        {
+          "name": "toc",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "toc"
+            ],
+            "id": "toc"
+          },
+          "file": "fragments/en/toc.html",
+          "bytes": 5611,
+          "sha256": "6accf6c28cd40a99dff210c24cf76cc50648ccbded82213c219c729de0a001ba"
+        },
+        {
+          "name": "chapter-head",
+          "selector": {
+            "tag": "header",
+            "classes": [
+              "chapter-head"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/chapter-head.html",
+          "bytes": 1922,
+          "sha256": "1f8b70a1447b0948bc7104fe44c31d10ce8734a142bd04fe9fdd39e6c6f3465d"
+        },
+        {
+          "name": "lead-band",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "lead-band"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/lead-band.html",
+          "bytes": 365,
+          "sha256": "b626c52612dc9396140151c2bb228a1cac8cb9c12cfdd4e9482d313249dedb2c"
+        },
+        {
+          "name": "keeper-note",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "keeper"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/keeper-note.html",
+          "bytes": 1208,
+          "sha256": "f92d8b764167ca89e34a29a90554ad98001e962900d61362ad6bdae9974c5427"
+        },
+        {
+          "name": "new-terms",
+          "selector": {
+            "tag": "aside",
+            "classes": [
+              "new-terms"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/new-terms.html",
+          "bytes": 4090,
+          "sha256": "01e3e39f1a7fb75117494a1d75875ba8779c99e999083e23685ef52aa2f8bd2f"
+        },
+        {
+          "name": "wide-table",
+          "selector": {
+            "tag": "div",
+            "classes": [
+              "table-scroll"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/wide-table.html",
+          "bytes": 2597,
+          "sha256": "d5a96d2d4b94b8c8c121e1f672d8d2fba39c16066ed97186451337ccde254d49"
+        },
+        {
+          "name": "landscape-plate",
+          "selector": {
+            "tag": "figure",
+            "classes": [
+              "diagram",
+              "wide",
+              "landscape"
+            ],
+            "id": null
+          },
+          "file": "fragments/en/landscape-plate.html",
+          "bytes": 23321,
+          "sha256": "8843bc06d91ca1e8f9a27f6a74da1f3dcd8f1605db14a654757d65fb8f009fcd"
+        },
+        {
+          "name": "sources",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "sources"
+            ],
+            "id": "sources"
+          },
+          "file": "fragments/en/sources.html",
+          "bytes": 49758,
+          "sha256": "c179f9bde79cd8deb9575a707e2d4d2b7056b44d477c07ed90dde9032b093d19"
+        },
+        {
+          "name": "subject-index",
+          "selector": {
+            "tag": "section",
+            "classes": [
+              "front-page",
+              "back-index"
+            ],
+            "id": "subject-index"
+          },
+          "file": "fragments/en/subject-index.html",
+          "bytes": 27770,
+          "sha256": "1dd866462383a87e05d88f41faa9341e87045d3d7cdfc3b2a07c5f225ca60560"
+        }
+      ]
+    }
+  ]
+}

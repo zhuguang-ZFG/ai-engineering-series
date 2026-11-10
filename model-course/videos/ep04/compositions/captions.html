@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #cap-stage {
+      position: absolute;
+      left: 0;
+      top: 896px;
+      width: 1920px;
+      text-align: center;
+      overflow: visible;
+    }
+    .cap-group {
+      position: absolute;
+      left: 0;
+      width: 1920px;
+      text-align: center;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 1.35;
+      color: #ffffff;
+      visibility: hidden;
+    }
+    .cap-group span {
+      background: rgba(31, 35, 40, 0.78);
+      border-radius: 8px;
+      padding: 10px 26px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  </style>
+  <div data-hf-id="hf-jn2k" id="root" data-composition-id="captions" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-fhg2" id="cap-stage"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const GROUPS = [{"text": "上期结尾说好", "start": 0.225, "end": 1.653}, {"text": "这期上线", "start": 1.819, "end": 2.769}, {"text": "前三期", "start": 3.3, "end": 4.1}, {"text": "蛇从一段对话长成网页", "start": 4.332, "end": 6.35}, {"text": "又搬进本地项目", "start": 6.487, "end": 8.025}, {"text": "可现在它只活在你", "start": 8.5, "end": 10.04}, {"text": "自己的电脑里", "start": 10.06, "end": 11.213}, {"text": "localhost", "start": 11.39, "end": 12.127}, {"text": "这个地址", "start": 12.147, "end": 12.994}, {"text": "别人打不开", "start": 13.109, "end": 14.082}, {"text": "这期把它推上公网", "start": 14.607, "end": 16.197}, {"text": "让任何一台手机都能玩", "start": 16.343, "end": 18.225}, {"text": "先说清楚本地地址的天花板", "start": 19.53, "end": 22.052}, {"text": "localhost", "start": 22.483, "end": 23.417}, {"text": "是回环地址", "start": 23.437, "end": 24.605}, {"text": "请求根本不出网卡", "start": 24.809, "end": 26.377}, {"text": "只有本机自己回答", "start": 26.496, "end": 28.112}, {"text": "想让别人打开", "start": 28.631, "end": 29.899}, {"text": "需要三样", "start": 30.0, "end": 30.893}, {"text": "能直接发的文件", "start": 31.149, "end": 32.511}, {"text": "一台长期在线的服务器", "start": 32.642, "end": 34.601}, {"text": "一个公网地址", "start": 34.652, "end": 35.865}, {"text": "前两样托管平台都包了", "start": 36.374, "end": 38.337}, {"text": "第三样它顺手送你", "start": 38.597, "end": 40.169}, {"text": "一个", "start": 40.189, "end": 40.63}, {"text": "https 域名", "start": 40.65, "end": 42.212}, {"text": "第一步打包", "start": 43.479, "end": 44.497}, {"text": "开发时跑的是", "start": 44.988, "end": 46.227}, {"text": "npm run dev", "start": 46.247, "end": 47.475}, {"text": "它带热更新", "start": 47.567, "end": 48.629}, {"text": "专门给本机看", "start": 48.77, "end": 50.023}, {"text": "发布要跑", "start": 50.501, "end": 51.247}, {"text": "npm run build", "start": 51.267, "end": 52.517}, {"text": "产出", "start": 52.626, "end": 53.095}, {"text": "dist 目录", "start": 53.115, "end": 54.435}, {"text": "里面只剩", "start": 54.638, "end": 55.426}, {"text": "html", "start": 55.446, "end": 56.45}, {"text": "css", "start": 56.656, "end": 57.564}, {"text": "js 和图片", "start": 57.723, "end": 58.936}, {"text": "源码和构建工具都被留下", "start": 59.098, "end": 61.498}, {"text": "判断标准很简单", "start": 61.985, "end": 63.523}, {"text": "dist 扔进任", "start": 63.81, "end": 65.487}, {"text": "何静态服务器", "start": 65.507, "end": 66.731}, {"text": "打开就能玩", "start": 66.839, "end": 67.867}, {"text": "第二步托上去", "start": 69.16, "end": 70.395}, {"text": "打开", "start": 70.904, "end": 71.285}, {"text": "Cloudflare Pages", "start": 71.305, "end": 72.668}, {"text": "或者", "start": 72.688, "end": 72.997}, {"text": "Vercel", "start": 73.017, "end": 73.733}, {"text": "装好它的命令行", "start": 73.835, "end": 75.2}, {"text": "跑一次部署", "start": 75.3, "end": 76.313}, {"text": "它只问你两件事", "start": 76.776, "end": 78.176}, {"text": "产物在哪个目录", "start": 78.412, "end": 79.82}, {"text": "项目叫什么", "start": 79.966, "end": 81.003}, {"text": "回车之后", "start": 81.46, "end": 82.419}, {"text": "上传", "start": 82.647, "end": 83.266}, {"text": "分配域名", "start": 83.397, "end": 84.357}, {"text": "签发证书一气呵成", "start": 84.441, "end": 86.173}, {"text": "几十秒后给你一条", "start": 86.416, "end": 88.03}, {"text": "https 链接", "start": 88.05, "end": 89.629}, {"text": "这条链接", "start": 90.12, "end": 91.082}, {"text": "就是你的成品", "start": 91.231, "end": 92.354}, {"text": "第三步用手机验", "start": 93.678, "end": 95.236}, {"text": "把链接发到自己的手机", "start": 95.703, "end": 97.657}, {"text": "别只看桌面浏览器", "start": 97.816, "end": 99.534}, {"text": "要点四件事", "start": 100.009, "end": 101.178}, {"text": "能不能玩", "start": 101.368, "end": 102.19}, {"text": "声音能不能开", "start": 102.356, "end": 103.566}, {"text": "字体和布局有没有错位", "start": 103.841, "end": 105.706}, {"text": "第一次打开要等几秒", "start": 105.947, "end": 107.966}, {"text": "还有一点", "start": 108.475, "end": 109.378}, {"text": "手机上没有方向键", "start": 109.607, "end": 111.251}, {"text": "触屏这块得单独加按钮", "start": 111.5, "end": 113.4}, {"text": "不然蛇动不了", "start": 113.491, "end": 114.782}, {"text": "第四步", "start": 116.071, "end": 116.799}, {"text": "以后怎么更新", "start": 116.937, "end": 118.062}, {"text": "把项目接上", "start": 118.518, "end": 119.41}, {"text": "GitHub", "start": 119.43, "end": 120.219}, {"text": "托管平台会盯着分支", "start": 120.346, "end": 122.249}, {"text": "你一提交", "start": 122.45, "end": 123.352}, {"text": "它自动重新构建", "start": 123.512, "end": 125.049}, {"text": "自动上线", "start": 125.143, "end": 126.093}, {"text": "几分钟后手机上刷", "start": 126.243, "end": 128.061}, {"text": "新就是新版", "start": 128.081, "end": 129.103}, {"text": "这就是持续部署", "start": 129.6, "end": 131.031}, {"text": "不用再手动传文件", "start": 131.131, "end": 132.777}, {"text": "万一改坏了", "start": 133.249, "end": 134.399}, {"text": "回到上一个版本", "start": 134.59, "end": 135.874}, {"text": "一条命令回滚", "start": 136.018, "end": 137.224}, {"text": "上线有三个坑", "start": 138.561, "end": 139.953}, {"text": "第一", "start": 140.442, "end": 140.955}, {"text": "把 node_modules", "start": 141.149, "end": 143.026}, {"text": "一起传上去", "start": 143.046, "end": 144.161}, {"text": "体积爆炸", "start": 144.258, "end": 145.142}, {"text": "还暴露依赖明细", "start": 145.267, "end": 146.73}, {"text": "第二", "start": 147.218, "end": 147.718}, {"text": "把密钥硬写进前端代码", "start": 147.967, "end": 150.027}, {"text": "前端代码人人可读", "start": 150.18, "end": 151.786}, {"text": "密钥等于公开", "start": 151.967, "end": 153.158}, {"text": "第三", "start": 153.683, "end": 154.227}, {"text": "只在桌面测", "start": 154.399, "end": 155.486}, {"text": "手机一打开全是溢出", "start": 155.717, "end": 157.786}, {"text": "规矩是", "start": 158.252, "end": 158.98}, {"text": "密钥放服务端环境变量", "start": 159.255, "end": 161.217}, {"text": "移动端先测再发", "start": 161.383, "end": 162.943}, {"text": "四期走完", "start": 164.271, "end": 165.268}, {"text": "你带走一条完整路径", "start": 165.4, "end": 167.084}, {"text": "一句需求做出网页", "start": 167.293, "end": 169.021}, {"text": "网页放进项目", "start": 169.199, "end": 170.487}, {"text": "项目部署上线", "start": 170.649, "end": 171.912}, {"text": "蛇现在有了真地址", "start": 172.449, "end": 174.046}, {"text": "谁都能玩", "start": 174.262, "end": 175.131}, {"text": "下一期", "start": 175.669, "end": 176.381}, {"text": "我们给它加存档和排行榜", "start": 176.574, "end": 178.877}, {"text": "聊聊数据该放在哪", "start": 179.059, "end": 180.662}, {"text": "课程链接", "start": 181.15, "end": 182.127}, {"text": "完整代码和这次的上线清单", "start": 182.262, "end": 184.805}, {"text": "评论区扣入门", "start": 185.003, "end": 186.365}];
+    const stage = document.getElementById("cap-stage");
+    GROUPS.forEach((g, i) => {
+      const div = document.createElement("div");
+      div.className = "cap-group";
+      div.id = "cap-" + i;
+      const inner = document.createElement("span");
+      inner.textContent = g.text;
+      div.appendChild(inner);
+      stage.appendChild(div);
+      // Cues ride on a slide, never an opacity fade: a fade dims the pill too,
+      // so any frame caught mid-fade measures below the WCAG floor.
+      gsap.set(div, { y: 8, visibility: "hidden" });
+      const start = Math.max(g.start, 0.1);
+      const end = Math.max(g.end, start + 0.3);
+      tl.set(div, { visibility: "visible", y: 8 }, start);
+      tl.to(div, { y: 0, duration: 0.12, ease: "power2.out" }, start);
+      tl.set(div, { visibility: "hidden" }, end);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

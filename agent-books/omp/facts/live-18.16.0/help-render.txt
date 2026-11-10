@@ -1,0 +1,21 @@
+Draw a session's entire thread through the production transcript pipeline (with repaint timing)
+
+USAGE
+  $ omp render [SESSION] [FLAGS]
+
+ARGUMENTS
+  SESSION   Session file path or id prefix (default: most recent for cwd)
+
+FLAGS
+  -w, --width=<int>    Render width in columns (default: terminal width)
+      --height=<int>   Viewport height in rows (default: terminal height)
+  -t, --timing         Print phase timings and emitted byte counts to stderr
+      --repaint=<int>  Benchmark N extra full clear-scrollback repaints (the /tree navigation frame)
+      --plain          Strip ANSI styling from the output
+  -q, --quiet          Suppress transcript output (benchmark runs)
+
+EXAMPLES
+  omp render
+  omp render 01a0285c --plain
+  omp render ~/.omp/agent/sessions/--work-pi--/big.jsonl -q -t --repaint 5
+  omp render -w 200 > thread.ansi

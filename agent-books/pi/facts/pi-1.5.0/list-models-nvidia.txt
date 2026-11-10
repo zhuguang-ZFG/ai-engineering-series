@@ -1,0 +1,6 @@
+$ pi --offline --list-models nvidia | head -5
+provider  model                                          context  max-out  thinking  images
+nvidia    deepseek-ai/deepseek-v4.1-flash                1M       384K     yes       yes   
+nvidia    google/diffusiongemma-26b-a4b-it               250K     32.8K    yes       yes   
+nvidia    google/gemma-3-12b-it                          131.1K   16.4K    no        yes   
+nvidia    google/gemma-3-4b-it                           131.1K   16.4K    no        yes   

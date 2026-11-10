@@ -1,0 +1,648 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "prompt",
+  "version": "0.1.1",
+  "date": "2026-11-11",
+  "title": {
+    "zh": "提示词工程：从提问到 Agent 协作"
+  },
+  "subtitle": {
+    "zh": "用青禾工作坊练习任务说明、上下文、工具与评测 · 技术试读版"
+  },
+  "kicker": {
+    "zh": "大模型与智能体工程 · 任务与协作方法"
+  },
+  "notice": {
+    "zh": "原创青禾教学案例。离线程序与检查工具已经实测；本册在线模型 A/B、跨模型迁移和独立读者试读尚未完成。"
+  },
+  "epigraph": {
+    "zh": "让一次任务的输入、动作和结果都有据可查。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-prompt",
+  "revisions_registry": "revisions-prompt.json",
+  "subject_index_registry": "subject-index-prompt.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "青禾原创材料包 1.0",
+    "verified_windows": "Python 3.13.14；模型调用 0 次"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "第一次使用"
+      },
+      "body": {
+        "zh": "顺读第 1–8 章，先写出任务，再整理材料与交接。"
+      }
+    },
+    {
+      "label": {
+        "zh": "让 Agent 做事"
+      },
+      "body": {
+        "zh": "第 9–14 章运行离线程序，完成审查、修复和任务分工。"
+      }
+    },
+    {
+      "label": {
+        "zh": "比较修改效果"
+      },
+      "body": {
+        "zh": "第 15–18 章冻结评测、保留失败并准备独立交付。"
+      }
+    }
+  ],
+  "front": {
+    "id": "prompt-front",
+    "zh": "prompt/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "prompt-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "把需求变成能检查的任务"
+      },
+      "motto": {
+        "zh": "先说明交付，再核对信息与格式。"
+      },
+      "goal": {
+        "zh": "把任务写成别人可以执行的说明。"
+      },
+      "units": [
+        {
+          "id": "prompt-ch01",
+          "zh": "prompt/ch01.md"
+        },
+        {
+          "id": "prompt-ch02",
+          "zh": "prompt/ch02.md"
+        },
+        {
+          "id": "prompt-ch03",
+          "zh": "prompt/ch03.md"
+        },
+        {
+          "id": "prompt-ch04",
+          "zh": "prompt/ch04.md"
+        }
+      ]
+    },
+    {
+      "id": "prompt-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "把材料组织成可用上下文"
+      },
+      "motto": {
+        "zh": "保留版本、来源和下一步。"
+      },
+      "goal": {
+        "zh": "选好当前任务所需材料，并支持会话恢复。"
+      },
+      "units": [
+        {
+          "id": "prompt-ch05",
+          "zh": "prompt/ch05.md"
+        },
+        {
+          "id": "prompt-ch06",
+          "zh": "prompt/ch06.md"
+        },
+        {
+          "id": "prompt-ch07",
+          "zh": "prompt/ch07.md"
+        },
+        {
+          "id": "prompt-ch08",
+          "zh": "prompt/ch08.md"
+        }
+      ]
+    },
+    {
+      "id": "prompt-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "让 Agent 的行动符合任务"
+      },
+      "motto": {
+        "zh": "用真实输入和回执核对动作。"
+      },
+      "goal": {
+        "zh": "完成本地审查与修复，明确协作与权限。"
+      },
+      "units": [
+        {
+          "id": "prompt-ch09",
+          "zh": "prompt/ch09.md"
+        },
+        {
+          "id": "prompt-ch10",
+          "zh": "prompt/ch10.md"
+        },
+        {
+          "id": "prompt-ch11",
+          "zh": "prompt/ch11.md"
+        },
+        {
+          "id": "prompt-ch12",
+          "zh": "prompt/ch12.md"
+        },
+        {
+          "id": "prompt-ch13",
+          "zh": "prompt/ch13.md"
+        },
+        {
+          "id": "prompt-ch14",
+          "zh": "prompt/ch14.md"
+        }
+      ]
+    },
+    {
+      "id": "prompt-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "判断改动是否值得保留"
+      },
+      "motto": {
+        "zh": "按相同判据记录变化。"
+      },
+      "goal": {
+        "zh": "准备配对比较、迁移复测与独立交付。"
+      },
+      "units": [
+        {
+          "id": "prompt-ch15",
+          "zh": "prompt/ch15.md"
+        },
+        {
+          "id": "prompt-ch16",
+          "zh": "prompt/ch16.md"
+        },
+        {
+          "id": "prompt-ch17",
+          "zh": "prompt/ch17.md"
+        },
+        {
+          "id": "prompt-ch18",
+          "zh": "prompt/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "prompt-apxa",
+      "zh": "prompt/appendix-a.md"
+    },
+    {
+      "id": "prompt-apxb",
+      "zh": "prompt/appendix-b.md"
+    },
+    {
+      "id": "prompt-apxc",
+      "zh": "prompt/appendix-c.md"
+    },
+    {
+      "id": "prompt-apxd",
+      "zh": "prompt/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "prompt-front": {
+      "question": {
+        "zh": "怎样使用这本书？"
+      },
+      "deliverable": {
+        "zh": "选择阅读路线，准备青禾案例。"
+      },
+      "boundary": {
+        "zh": "中文技术试读版；在线模型实验状态另列。"
+      },
+      "plain": {
+        "zh": "从活动通知开始，逐步处理材料、动作和验证。"
+      },
+      "plain_evidence": [
+        "prompt-front.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch01": {
+      "question": {
+        "zh": "一句含糊要求怎样变成明确交付？"
+      },
+      "deliverable": {
+        "zh": "保存任务说明与逐项核对记录。"
+      },
+      "boundary": {
+        "zh": "居民说明为草稿，房间仍待确认。"
+      },
+      "plain": {
+        "zh": "先确定用途和完成条件，再决定怎样提问。"
+      },
+      "plain_evidence": [
+        "prompt-ch01.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch02": {
+      "question": {
+        "zh": "哪个信息缺口需要先追问？"
+      },
+      "deliverable": {
+        "zh": "写出问题、原因和可以先做的部分。"
+      },
+      "boundary": {
+        "zh": "表达偏好可以暂定，关键事实须有依据。"
+      },
+      "plain": {
+        "zh": "追问要针对影响当前交付的缺口。"
+      },
+      "plain_evidence": [
+        "prompt-ch02.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch03": {
+      "question": {
+        "zh": "表格和 JSON 分别怎样检查？"
+      },
+      "deliverable": {
+        "zh": "保存结构化响应和人工复核意见。"
+      },
+      "boundary": {
+        "zh": "引文存在不能证明它支持答案。"
+      },
+      "plain": {
+        "zh": "把格式、事实与交付完整性分别检查。"
+      },
+      "plain_evidence": [
+        "prompt-ch03.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch04": {
+      "question": {
+        "zh": "什么示例值得加入提示？"
+      },
+      "deliverable": {
+        "zh": "选择覆盖不同边界的示例。"
+      },
+      "boundary": {
+        "zh": "教学示例不作为真实模型表现。"
+      },
+      "plain": {
+        "zh": "示例应解释规则，避免把旧事实带入新任务。"
+      },
+      "plain_evidence": [
+        "prompt-ch04.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch05": {
+      "question": {
+        "zh": "哪些文字在下任务，哪些只是材料？"
+      },
+      "deliverable": {
+        "zh": "按职责组织指令、来源和输出约定。"
+      },
+      "boundary": {
+        "zh": "文字标签不构成宿主权限。"
+      },
+      "plain": {
+        "zh": "材料中的要求需要先辨认来源与用途。"
+      },
+      "plain_evidence": [
+        "prompt-ch05.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch06": {
+      "question": {
+        "zh": "连续修改怎样保留有效要求？"
+      },
+      "deliverable": {
+        "zh": "留下当前要求与字段变更记录。"
+      },
+      "boundary": {
+        "zh": "恢复旧写法时仍保留新事实。"
+      },
+      "plain": {
+        "zh": "把新增、替换和撤销分别记清楚。"
+      },
+      "plain_evidence": [
+        "prompt-ch06.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch07": {
+      "question": {
+        "zh": "哪些材料可以省，哪些不能删？"
+      },
+      "deliverable": {
+        "zh": "保存三份实际输入与取舍说明。"
+      },
+      "boundary": {
+        "zh": "输入长度实测不证明模型质量变化。"
+      },
+      "plain": {
+        "zh": "先对照任务所需证据，再选择材料和版本。"
+      },
+      "plain_evidence": [
+        "prompt-ch07.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch08": {
+      "question": {
+        "zh": "新会话怎样接着做？"
+      },
+      "deliverable": {
+        "zh": "写明当前状态、证据和下一步。"
+      },
+      "boundary": {
+        "zh": "中断本身不构成重做动作的理由。"
+      },
+      "plain": {
+        "zh": "交接要能定位文件和已完成动作的回执。"
+      },
+      "plain_evidence": [
+        "prompt-ch08.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch09": {
+      "question": {
+        "zh": "拆开任务以后检查哪一步？"
+      },
+      "deliverable": {
+        "zh": "将业务规则落实到输入与预期。"
+      },
+      "boundary": {
+        "zh": "计划和自检仍需独立依据。"
+      },
+      "plain": {
+        "zh": "保留能核对的中间结果，发现错误从哪一步开始。"
+      },
+      "plain_evidence": [
+        "prompt-ch09.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch10": {
+      "question": {
+        "zh": "工具到底做了什么？"
+      },
+      "deliverable": {
+        "zh": "保存真实退出码、输出和错误回执。"
+      },
+      "boundary": {
+        "zh": "命令执行结束不等于业务通过。"
+      },
+      "plain": {
+        "zh": "工具回执应与输入、程序和运行范围一起阅读。"
+      },
+      "plain_evidence": [
+        "prompt-ch10.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch11": {
+      "question": {
+        "zh": "怎样交代审查和修复？"
+      },
+      "deliverable": {
+        "zh": "建立故障基线，修改候选并复查。"
+      },
+      "boundary": {
+        "zh": "公开用例通过不等于生产系统验收。"
+      },
+      "plain": {
+        "zh": "先复现问题，再在确定的范围内修改。"
+      },
+      "plain_evidence": [
+        "prompt-ch11.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch12": {
+      "question": {
+        "zh": "什么值得写进项目规则或 Skill？"
+      },
+      "deliverable": {
+        "zh": "保存可维护的重复工作说明。"
+      },
+      "boundary": {
+        "zh": "宿主加载格式需按具体版本核对。"
+      },
+      "plain": {
+        "zh": "稳定步骤与单次任务分开保存，更新时保留依据。"
+      },
+      "plain_evidence": [
+        "prompt-ch12.b-opening"
+      ],
+      "sources": [
+        "kimi-repo"
+      ]
+    },
+    "prompt-ch13": {
+      "question": {
+        "zh": "多个 Agent 怎样避免互相覆盖？"
+      },
+      "deliverable": {
+        "zh": "明确文件所有权和报告合并方式。"
+      },
+      "boundary": {
+        "zh": "并行只适合输入与输出可分开的工作。"
+      },
+      "plain": {
+        "zh": "分工需要完整输入、独立产物和明确接手者。"
+      },
+      "plain_evidence": [
+        "prompt-ch13.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch14": {
+      "question": {
+        "zh": "材料夹带指令时怎样守住动作范围？"
+      },
+      "deliverable": {
+        "zh": "分别核对答复和宿主工具权限。"
+      },
+      "boundary": {
+        "zh": "提示注入练习不等于全部攻击面验证。"
+      },
+      "plain": {
+        "zh": "材料中的命令不能自行扩大操作权限。"
+      },
+      "plain_evidence": [
+        "prompt-ch14.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch15": {
+      "question": {
+        "zh": "怎样在修改前定好评分？"
+      },
+      "deliverable": {
+        "zh": "冻结题目、判据与未运行状态。"
+      },
+      "boundary": {
+        "zh": "暴露过的留出题需要重新登记。"
+      },
+      "plain": {
+        "zh": "开发、验证与留出承担不同用途。"
+      },
+      "plain_evidence": [
+        "prompt-ch15.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch16": {
+      "question": {
+        "zh": "修改后应该比较什么？"
+      },
+      "deliverable": {
+        "zh": "保留逐例配对、重复结果与失败。"
+      },
+      "boundary": {
+        "zh": "本册模型 A/B 尚未实际运行。"
+      },
+      "plain": {
+        "zh": "把提示写得更完整与结果改善分开判断。"
+      },
+      "plain_evidence": [
+        "prompt-ch16.b-opening"
+      ],
+      "sources": [
+        "dmx-evaluation"
+      ]
+    },
+    "prompt-ch17": {
+      "question": {
+        "zh": "迁移后哪些条件不再相同？"
+      },
+      "deliverable": {
+        "zh": "登记环境差异并准备两组复测。"
+      },
+      "boundary": {
+        "zh": "两环境实测尚未完成，不预填效果。"
+      },
+      "plain": {
+        "zh": "迁移需要重新核对角色、材料、工具和参数。"
+      },
+      "plain_evidence": [
+        "prompt-ch17.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-ch18": {
+      "question": {
+        "zh": "接手者怎样独立复做？"
+      },
+      "deliverable": {
+        "zh": "交付原文、候选、回执与未完成项。"
+      },
+      "boundary": {
+        "zh": "陌生任务必须单独观察，不能套用旧答案。"
+      },
+      "plain": {
+        "zh": "交付应让另一人找得到证据并继续未完成的工作。"
+      },
+      "plain_evidence": [
+        "prompt-ch18.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-apxa": {
+      "question": {
+        "zh": "怎样写一份简短但可用的任务单？"
+      },
+      "deliverable": {
+        "zh": "按用途编辑任务、材料和交接样稿。"
+      },
+      "boundary": {
+        "zh": "样稿中的待填项不等于已确认事实。"
+      },
+      "plain": {
+        "zh": "模板保留真正影响操作的字段。"
+      },
+      "plain_evidence": [
+        "prompt-apxa.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-apxb": {
+      "question": {
+        "zh": "实验记录需要保存什么？"
+      },
+      "deliverable": {
+        "zh": "对照文件结构填写运行与评审记录。"
+      },
+      "boundary": {
+        "zh": "空白测量值不能解释成零成本或成功。"
+      },
+      "plain": {
+        "zh": "每次运行都要能回到输入与原始响应。"
+      },
+      "plain_evidence": [
+        "prompt-apxb.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-apxc": {
+      "question": {
+        "zh": "具体工具的入口到哪里查？"
+      },
+      "deliverable": {
+        "zh": "按版本回查对应分册的验证范围。"
+      },
+      "boundary": {
+        "zh": "已有源码或 CLI 检查不替代新册模型实验。"
+      },
+      "plain": {
+        "zh": "工具之间的格式与权限不能直接互换。"
+      },
+      "plain_evidence": [
+        "prompt-apxc.b-opening"
+      ],
+      "sources": []
+    },
+    "prompt-apxd": {
+      "question": {
+        "zh": "这些术语各指什么？"
+      },
+      "deliverable": {
+        "zh": "按任务回查概念与进一步阅读。"
+      },
+      "boundary": {
+        "zh": "概念解释不替代具体产品约定。"
+      },
+      "plain": {
+        "zh": "用相近概念的实际作用区分它们。"
+      },
+      "plain_evidence": [
+        "prompt-apxd.b-opening"
+      ],
+      "sources": []
+    }
+  }
+}

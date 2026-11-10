@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-10",
+  "edition": "Kimi Code 0.1.0",
+  "upstream": "1c142a007c10e881602690def96057c23a2baa12",
+  "artifacts": {
+    "yuyu-kimi-zh.html": {
+      "bytes": 539082,
+      "sha256": "865c11192b4a4f6cdf39c0a1d4be0318db5b2495bf93d5d63568ff8283ede80d"
+    },
+    "yuyu-kimi-zh.pdf": {
+      "bytes": 4055925,
+      "sha256": "3d2bb8df0910bbc071425414a008e23698aa6dba08af2157e6a3281729d91763"
+    },
+    "yuyu-kimi-zh.epub": {
+      "bytes": 315868,
+      "sha256": "1c41ecbd4c0fac0a9f60f650fee59c3577183c110ac3aa954aef09910a8b11d2"
+    }
+  },
+  "manuscripts": {
+    "kimi/00-前言.md": "84e3adc070eba5ed99fa1d8de7d6dde1e14f6d88e798bd50fa905dab11acf183",
+    "kimi/appendix-a.md": "3d914a4975d124c2a0c95ba57ad0d66207db842a916964e93ae4234bfb9a82db",
+    "kimi/appendix-b.md": "4754aa6b9b787f73f63ea9128494c7096436159a3e8016afb27f2cee6b288aab",
+    "kimi/appendix-c.md": "ab2d8b5415148ca28256628991a7ed5eb06437c2b559cfe65eafad34e83bf70a",
+    "kimi/appendix-d.md": "0adb39ae35aa20c57e23196c97045c165fa6bda614db894db764f55ad0cdad84",
+    "kimi/ch01.md": "b444a46497b62b12aaaa68a4d91783dc1f32a1ae4830c534d8402d99621d5c6d",
+    "kimi/ch02.md": "f70d9091003befb95d6ad3ca8c976e086d13cb08606556a0e3705a6daf2d36b0",
+    "kimi/ch03.md": "a1b0060a4d305ea962db6b66de18f69dee7fe343ecd4cf87a995277501dcff36",
+    "kimi/ch04.md": "2012234452c5e6c5c2b7e50c999ba562058ee76c16b6d68776823dc887b07232",
+    "kimi/ch05.md": "204705a8866498a9817bdc9825a792a46fcae47c1ecaabfe36ee3066bde3048f",
+    "kimi/ch06.md": "a7e24b7142082c3eb904c0ece06146e6c37aa726ccc98226829c8db6c08972a6",
+    "kimi/ch07.md": "0d57f8af906b32fe1184195a678191219181db28cc77bd411eb8e2d56a71520d",
+    "kimi/ch08.md": "2e3173355228aff16710eabc5461229e52b05a653d80e55e543ed7c8f791935d",
+    "kimi/ch09.md": "a36ed16e32ebc8329c61307973c499bdb2452e1ede9a3254c1b4c401e48055be",
+    "kimi/ch10.md": "711638ce9e3412b6a7137101cb1c58f485ac3d98b5cb27e2d967e602dd244b0f",
+    "kimi/ch11.md": "71040af7c49d545e57e49ad6c78c25208142165031fe9bc0ceef1775ca600753",
+    "kimi/ch12.md": "f72bf2dcb704ef522cdf2dbc4e483e6061f7740291b6f82631d86900e37d5771",
+    "kimi/ch13.md": "ed7fc7649d42276a3b53f465a2dea8b0fc80375981e8a5e71fe812d24a919ea3",
+    "kimi/ch14.md": "7cff76728b8b227decc86e871baa65a714ea63f771d416627cfb2c266e7bddca",
+    "kimi/ch15.md": "5ba431a2508ed100d0d96f2f9302f060d84754c96f758755821103f4ddafb401",
+    "kimi/ch16.md": "cc257a76096b5b30309a77596738cd9f19350acf53b2636771102b9acfe92da0",
+    "kimi/ch17.md": "06418ba42ff7fc1505d3544ceab47839c5ee7ee6a026920c4a4492e31bcfd457",
+    "kimi/ch18.md": "e9e5a8a378b42e4d0623775922dd998f3398e13bfa889b19d7bb08ecf0851e00"
+  },
+  "repository_checks": {
+    "command": "python scripts/bookctl.py check --fast",
+    "steps_passed": 8,
+    "test_counts": [
+      228,
+      573
+    ]
+  },
+  "epubcheck": {
+    "version": "5.4.0",
+    "fatals": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  "layout": {
+    "errors": [],
+    "pdf": {
+      "pages": 84,
+      "bookmarks": 29,
+      "sampled_pages": [
+        1,
+        44,
+        48,
+        56,
+        63,
+        83
+      ],
+      "replacement_chars": 0,
+      "empty_sheets": [],
+      "text_outside_page": []
+    },
+    "html": [
+      {
+        "media": "screen",
+        "width": 390,
+        "scheme": "light",
+        "rows": 26,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 5.935025325941292,
+        "viewport": 390,
+        "scrollWidth": 390
+      },
+      {
+        "media": "screen",
+        "width": 1280,
+        "scheme": "dark",
+        "rows": 26,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 6.804320921720831,
+        "viewport": 1280,
+        "scrollWidth": 1280
+      },
+      {
+        "media": "print",
+        "width": 665,
+        "scheme": "light",
+        "rows": 26,
+        "issues": [],
+        "brokenAnchors": [],
+        "localPaths": [],
+        "overflow": false,
+        "minimumCodeContrast": 5.98758109222835,
+        "viewport": 665,
+        "scrollWidth": 665
+      }
+    ]
+  },
+  "visual_review": [
+    "six PDF sample pages",
+    "mobile cover",
+    "desktop dark cover",
+    "subject index"
+  ],
+  "scope": "Local publication and offline/protocol checks. No paid model review, TUI plugin installation or complete IDE roundtrip; no remote CI result claimed."
+}

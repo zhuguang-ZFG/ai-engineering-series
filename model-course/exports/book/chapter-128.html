@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>限流与背压控制 · Vibe Coding 101</title><link rel="stylesheet" href="book.css"></head>
+<body><a class="skip" href="#main">跳到正文</a><header><a href="index.html">Vibe Coding 101 · 全书目录</a><a href="../../开始阅读.html">阅读入口</a></header>
+<main id="main" tabindex="-1"><p class="stage">附录 · 128 / 195</p><article><h1 id="限流与背压控制">限流与背压控制</h1><details class="contents"><summary>本章目录 <span>· 1 节</span></summary><nav aria-label="本章目录"><ul><li><a href="#限流与背压原理">限流与背压原理</a><ul><li><a href="#0-全景图拒绝用户的动机">0. 全景图：拒绝&quot;用户的动机</a></li><li><a href="#1-限流算法三种经典方案">1. 限流算法：三种经典方案</a></li><li><a href="#2-背压控制当上游比下游快">2. 背压控制：当上游比下游快</a></li><li><a href="#3-多层限流架构">3. 多层限流架构</a></li><li><a href="#4-实战选型">4. 实战选型</a></li><li><a href="#总结-21">总结</a></li><li><a href="#延伸阅读-12">延伸阅读</a></li></ul></li></ul></nav></details><h2 id="限流与背压原理">限流与背压原理</h2>
+<blockquote>
+<p><strong>前言</strong>
+<strong>双十一零点，几亿用户同时涌入——服务器扛得住吗？</strong> 任何系统都有处理能力的上限。当请求量超过系统承载能力时，如果不加控制，结果就是所有人都用不了。限流和背压就是保护系统不被&quot;压垮&quot;的两道防线。</p>
+</blockquote>
+<p><strong>这篇文章会带你学什么？</strong></p>
+<p>学完这章后，你将获得：</p>
+<ul>
+<li><strong>限流必要性</strong>：理解为什么需要主动拒绝部分请求来保护系统</li>
+<li><strong>限流算法</strong>：掌握令牌桶、漏桶、滑动窗口三种核心算法的原理和差异</li>
+<li><strong>背压机制</strong>：理解当上游速度超过下游时的处理策略</li>
+<li><strong>多层限流</strong>：了解从客户端到网关到服务的多层限流架构</li>
+<li><strong>实战能力</strong>：知道在什么场景下选择什么限流策略</li>
+</ul>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>核心概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>为什么需要限流</td>
+<td>雪崩效应、服务保护</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>限流算法</td>
+<td>令牌桶、漏桶、滑动窗口</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>背压控制</td>
+<td>缓冲区、丢弃策略、弹性扩容</td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>多层限流架构</td>
+<td>客户端、网关、服务端</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>实战与选型</td>
+<td>Nginx、Redis、Sentinel</td>
+</tr>
+</tbody></table></div>
+<h3 id="0-全景图拒绝用户的动机">0. 全景图：拒绝&quot;用户的动机</h3>
+<p>这听起来很反直觉——我们不是应该服务好每一个用户吗？但现实是：<strong>不拒绝一部分请求，所有请求都会失败</strong>。</p>
+<p>想象一个只能坐 100 人的餐厅，突然涌进来 1000 人。如果不限流，结果不是 1000 人都能吃上饭，而是厨房崩溃、服务员瘫痪，1000 人谁都吃不上。正确的做法是在门口排队限流，让 100 人先进去，其余人等候。</p>
+<blockquote>
+<p><strong>限流的核心目标</strong></p>
+</blockquote>
+<ul>
+<li><strong>保护系统</strong>：防止过载导致服务完全不可用</li>
+<li><strong>公平分配</strong>：确保已接受的请求能正常处理</li>
+<li><strong>优雅降级</strong>：被限流的请求收到明确的 429 状态码，而不是超时或 500 错误</li>
+</ul>
+<h3 id="1-限流算法三种经典方案">1. 限流算法：三种经典方案</h3>
+<p>限流的核心问题是：<strong>在单位时间内，最多允许多少个请求通过？</strong> 不同的算法在精确度、突发流量处理、实现复杂度上各有取舍。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>原理</th>
+<th>突发流量</th>
+<th>精确度</th>
+<th>实现复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>令牌桶</td>
+<td>固定速率放令牌，请求消耗令牌</td>
+<td>允许（桶中有存量）</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>漏桶</td>
+<td>请求排队，固定速率处理</td>
+<td>不允许（完全平滑）</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>滑动窗口</td>
+<td>统计窗口内请求数</td>
+<td>部分允许</td>
+<td>较高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>固定窗口</td>
+<td>按时间窗口计数</td>
+<td>边界处可能突发</td>
+<td>低</td>
+<td>最低</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>选哪个算法？</strong></p>
+</blockquote>
+<ul>
+<li><strong>API 限流</strong>：令牌桶最常用，允许合理的突发流量</li>
+<li><strong>流量整形</strong>：漏桶适合需要恒定输出速率的场景</li>
+<li><strong>简单计数</strong>：滑动窗口实现简单，适合大多数 Web 应用</li>
+</ul>
+<h3 id="2-背压控制当上游比下游快">2. 背压控制：当上游比下游快</h3>
+<p>限流解决的是&quot;外部请求太多&quot;的问题，而**背压（Backpressure）**解决的是&quot;内部组件速度不匹配&quot;的问题。</p>
+<p>当生产者产生数据的速度持续超过消费者处理数据的速度时，中间的缓冲区会不断膨胀，最终导致内存溢出或数据丢失。背压机制就是让消费者能够&quot;反向通知&quot;生产者减速。</p>
+<blockquote>
+<p><strong>背压的四种策略</strong></p>
+</blockquote>
+<ol>
+<li><strong>丢弃（Drop）</strong>：缓冲区满时丢弃新数据或旧数据，适合实时性要求高但允许丢失的场景</li>
+<li><strong>阻塞（Block）</strong>：让生产者暂停，等消费者处理完再继续，适合数据不能丢失的场景</li>
+<li><strong>采样（Sample）</strong>：只处理部分数据，适合高频数据流</li>
+<li><strong>弹性扩容（Scale）</strong>：动态增加消费者数量，适合云原生环境</li>
+</ol>
+<h3 id="3-多层限流架构">3. 多层限流架构</h3>
+<p>生产环境中，限流不是在某一个点做就够了，而是需要<strong>多层防护</strong>，每一层解决不同粒度的问题。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>位置</th>
+<th>限流粒度</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>客户端</td>
+<td>前端/App</td>
+<td>按钮防抖、请求节流</td>
+<td>lodash.throttle、debounce</td>
+</tr>
+<tr>
+<td>CDN/WAF</td>
+<td>边缘节点</td>
+<td>IP 级别、地域级别</td>
+<td>Cloudflare Rate Limiting</td>
+</tr>
+<tr>
+<td>API 网关</td>
+<td>入口网关</td>
+<td>路由级别、用户级别</td>
+<td>Nginx limit_req、Kong</td>
+</tr>
+<tr>
+<td>服务端</td>
+<td>应用内部</td>
+<td>接口级别、资源级别</td>
+<td>Sentinel、Resilience4j</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>存储层</td>
+<td>连接数、QPS</td>
+<td>连接池配置、慢查询熔断</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>限流的 HTTP 规范</strong>
+被限流的请求应该返回 <code>429 Too Many Requests</code> 状态码，并在响应头中包含：</p>
+</blockquote>
+<ul>
+<li><code>Retry-After</code>: 建议客户端多久后重试（秒数或日期）</li>
+<li><code>X-RateLimit-Limit</code>: 限流上限</li>
+<li><code>X-RateLimit-Remaining</code>: 剩余配额</li>
+<li><code>X-RateLimit-Reset</code>: 配额重置时间</li>
+</ul>
+<h3 id="4-实战选型">4. 实战选型</h3>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表格，可横向滚动"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nginx 入口限流</td>
+<td><code>limit_req_zone</code></td>
+<td>基于漏桶算法，配置简单</td>
+</tr>
+<tr>
+<td>分布式限流</td>
+<td>Redis + Lua 脚本</td>
+<td>令牌桶或滑动窗口，多实例共享计数</td>
+</tr>
+<tr>
+<td>Java 微服务</td>
+<td>Sentinel / Resilience4j</td>
+<td>支持熔断、降级、热点限流</td>
+</tr>
+<tr>
+<td>Node.js API</td>
+<td>express-rate-limit</td>
+<td>简单易用，支持 Redis 存储</td>
+</tr>
+<tr>
+<td>Go 服务</td>
+<td>golang.org/x/time/rate</td>
+<td>标准库令牌桶实现</td>
+</tr>
+</tbody></table></div>
+<h3 id="总结-21">总结</h3>
+<p>限流和背压是保护系统稳定性的两道关键防线。限流控制外部流量的涌入速度，背压协调内部组件的处理速度。</p>
+<p>回顾本章的关键要点：</p>
+<ol>
+<li><strong>限流的必要性</strong>：不拒绝部分请求，所有请求都会失败</li>
+<li><strong>三种核心算法</strong>：令牌桶（允许突发）、漏桶（完全平滑）、滑动窗口（简单精确）</li>
+<li><strong>背压机制</strong>：丢弃、阻塞、采样、扩容四种策略</li>
+<li><strong>多层防护</strong>：从客户端到数据库，每层解决不同粒度的问题</li>
+<li><strong>429 规范</strong>：被限流时返回标准状态码和限流头信息</li>
+</ol>
+<h3 id="延伸阅读-12">延伸阅读</h3>
+<ul>
+<li><a href="https://stripe.com/blog/rate-limiters">Stripe 的限流实践</a> - 支付系统的限流设计</li>
+<li><a href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html">Nginx limit_req 文档</a> - Nginx 限流模块</li>
+<li><a href="https://sentinelguard.io/">Alibaba Sentinel</a> - 面向分布式服务的流量控制组件</li>
+<li><a href="https://resilience4j.readme.io/">Resilience4j</a> - Java 轻量级容错库</li>
+<li><a href="https://en.wikipedia.org/wiki/Token_bucket">Token Bucket 算法详解</a> - 令牌桶算法的数学原理</li>
+</ul>
+<hr>
+</article><nav class="paging" aria-label="章节导航"><a rel="prev" href="chapter-127.html">← 异步任务队列与生产消费模型</a><a rel="next" href="chapter-129.html">搜索引擎原理 →</a></nav></main>
+<footer><a href="../../book/book.md">原书 Markdown</a> · <a href="https://github.com/datawhalechina/easy-vibe">原课程与网页交互示例</a></footer></body></html>
