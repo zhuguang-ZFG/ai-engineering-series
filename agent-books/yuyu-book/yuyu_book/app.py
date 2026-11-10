@@ -267,7 +267,7 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
         body_class += f" agent-book agent-{product}"
     html_text = page(lang, f'{manifest["title"][lang]} — {manifest["author"]}',
                      CSS, body_class, body_html,
-                     "\n".join(rail) + "</nav>", "")
+                     "\n".join(rail) + "</nav>", "", author=manifest["author"])
     audit.audit(html_text, n_units=len(units), expect_svgs=expect_svgs)
 
     # the dashed marks and the chapter panels come from the same hit list; if

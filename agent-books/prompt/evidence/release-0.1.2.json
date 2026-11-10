@@ -8,16 +8,16 @@
   },
   "artifacts": {
     "yuyu-book/dist/yuyu-prompt-zh.html": {
-      "bytes": 537834,
-      "sha256": "65b24b5466112fd60d050c21a477d3e598e3274a7185adc9f7ab7f15d9d25ded"
+      "bytes": 537829,
+      "sha256": "84223f63cbeab89e5595a259e0ec9ed460a1ebe02889a9e8e89472157b60fce7"
     },
     "yuyu-book/dist/yuyu-prompt-zh.pdf": {
       "bytes": 4859618,
-      "sha256": "a7c453daae6a708a3dffd2597587fc138312e5f8642cc6d2d1f0319433c71c1b"
+      "sha256": "b6f8415d1ffa67dbe143908b11f3b12819858e97c9e87e2c8086c5d41c527d05"
     },
     "yuyu-book/dist/yuyu-prompt-zh.epub": {
-      "bytes": 1011306,
-      "sha256": "7eb84b0e6d3520d19d74411a0345c9ffb26dcbb299a0f1119cd184c70202c673"
+      "bytes": 1011295,
+      "sha256": "b83a3419d285d62fa811883ae1ee1275d3cde4df31dadc735801a9d4e0437885"
     }
   },
   "pdf": {
@@ -62,6 +62,7 @@
   "html": [
     {
       "scrollWidth": 390,
+      "author": "朱光",
       "brokenAnchors": [],
       "oldGeneratedLinks": [],
       "sourceLinks": [
@@ -148,6 +149,7 @@
     },
     {
       "scrollWidth": 390,
+      "author": "朱光",
       "brokenAnchors": [],
       "oldGeneratedLinks": [],
       "sourceLinks": [
@@ -234,6 +236,7 @@
     },
     {
       "scrollWidth": 1280,
+      "author": "朱光",
       "brokenAnchors": [],
       "oldGeneratedLinks": [],
       "sourceLinks": [
@@ -320,6 +323,7 @@
     },
     {
       "scrollWidth": 1280,
+      "author": "朱光",
       "brokenAnchors": [],
       "oldGeneratedLinks": [],
       "sourceLinks": [
@@ -408,7 +412,7 @@
   "epub": {
     "images_with_alt": 9
   },
-  "source_scope": "Teaching manuscript, materials, examples, figures, product metadata, builder modules, packaging and exercise tests. Evidence, verification notes and packages excluded to avoid circular hashing.",
+  "source_scope": "Teaching manuscript, materials, examples, figures, product metadata, builder modules, packaging and exercise tests. Evidence, verification notes and packages excluded to avoid circular hashing. Author-metadata regression tests in tests/test_epub_paint.py are also included.",
   "source_sha256": {
     "prompt/00-前言.md": "736d2b52e723041752841a7ce1de529b332a7c5dc9c1525703476434f11fa0e7",
     "prompt/appendix-a.md": "e49d5895097fcdb5997731821ef78f51b2b0435c43f19379af0e2b2ea7d3daf9",
@@ -467,6 +471,7 @@
     "scripts/bookctl.py": "1f4bed011555e9f61fa045319ed1df2f1cd63c69c3da84d695c8bd52c5ce33a2",
     "scripts/build_epub.py": "24b40128036541303eefc2948dcc24869d0bea67af325b9288362ec6dde4c398",
     "scripts/package_prompt.py": "d58229c74612b84d99c4ec6dbcbaa9cafb45ccb8a5abcce48832973455f08394",
+    "tests/test_epub_paint.py": "94d21a52ef1fcf0782f170b8704dcdfd0e282cb7997159a24e442b6464db256d",
     "tests/test_prompt_exercise.py": "2a612d8861e90b15251040005350a85a892d3ce2145a7925097cb6593d8a779b",
     "tests/test_prompt_workshop.py": "43061f22570f0e701a544527df0fc390ed327407f15c967ac76424697e1783a3",
     "yuyu-book/glosses-prompt.json": "37372b74e4a58cac35e28603a04faf4d68c7866c92d0a12f9adf5c8b4da25b90",
@@ -479,7 +484,7 @@
     "yuyu-book/subject-index-prompt.json": "e71ca985951fe621c6bba22bd9d524fa61d6efb7c10dafbed85be8ab1d01451c",
     "yuyu-book/yuyu_book/__init__.py": "3f64ead7ae9656f601a1ec04ef4af69cbb91a96dbe7e36f9196d54980e599481",
     "yuyu-book/yuyu_book/__main__.py": "927973566ad440194acead62c8115d80ee1c3c94a0d672a8ca95f24daa7a90db",
-    "yuyu-book/yuyu_book/app.py": "c3ec4c983a6d16bdfc08ab92832ff3d20f29bd9aaa326e80c7a50dd0e19f0e48",
+    "yuyu-book/yuyu_book/app.py": "9169294bdcc5a9743fc023ae9df72d275738e8f1fcf2840832aa1727e44ba1ba",
     "yuyu-book/yuyu_book/art.py": "850d4db067df96dbbfc6bc398c1b153f1e87cd6447ae3e69c0223975029fadca",
     "yuyu-book/yuyu_book/audit.py": "1d7e05eef1853ed8f8d108674a7d32d88aae61d9bfaacb23388f71d9ef35f26a",
     "yuyu-book/yuyu_book/backmatter.py": "4daa37dada5e0bdb88d50fcf21dfab356d79e3cad89f426757d5e4b8ed6312f2",
@@ -505,7 +510,7 @@
     "yuyu-book/yuyu_book/refs.py": "6137cdacde0bbe5d91122914df281873215e98436fd26939bf893f60cf019a3f",
     "yuyu-book/yuyu_book/registry.py": "c57034222eec88cf8d52bad51aeb827eb0033432208b2aacf33325622b7d28d4",
     "yuyu-book/yuyu_book/render.py": "3694ec8d8ccbf76bc4b6d8135639ae52de9d546b6a55d373544f773ab00db8ef",
-    "yuyu-book/yuyu_book/style.py": "a591b899b14fafae7c64d2c9e51969ad66e795d0b418c4b83cb3aee23681dfd6",
+    "yuyu-book/yuyu_book/style.py": "d2118978419397268e93e749c5d2cc3d3c33c999a59fd5729ea02640e16f3ce6",
     "yuyu-book/yuyu_book/style_agents.py": "8a6c25a621ec5fce46e1bb735c8aacc412d0c87de2fcf9bffee230978c806ffd",
     "yuyu-book/yuyu_book/style_components.py": "66c7fde043c22bede7347d1f7f13270a4bdef188874dfaae2659ba3bb5e9f84c",
     "yuyu-book/yuyu_book/style_css.py": "c378d73e274fad55905dabebc0be8c2a9109d1193b2019e333f90e1e1b20ca31",
@@ -517,7 +522,7 @@
   },
   "schema_version": 1,
   "product": "prompt",
-  "recorded_at": "2026-11-11T04:27:20.743171+08:00",
+  "recorded_at": "2026-11-11T04:41:08.122493+08:00",
   "kind": "local_artifact_validation",
   "model_calls": 0,
   "artifact_paths_relative_to": "agent-books",
@@ -527,7 +532,7 @@
     "exit_code": 0,
     "input_snapshot_unchanged": true
   },
-  "scope": "Actual rebuilt HTML/PDF/EPUB, all six explanatory figures, source-link routing, and standalone offline exercises. Does not certify model quality, independent learning outcomes, cross-platform rendering or remote CI.",
+  "scope": "Actual rebuilt HTML/PDF/EPUB, all six explanatory figures, source-link routing, matching registered author metadata, and standalone offline exercises. Does not certify model quality, independent learning outcomes, cross-platform rendering or remote CI.",
   "epubcheck": {
     "version": "5.4.0",
     "report": "prompt/evidence/epubcheck-0.1.2.json",
@@ -535,9 +540,9 @@
     "fatal": 0,
     "errors": 0,
     "warnings": 0,
-    "epub_sha256": "7eb84b0e6d3520d19d74411a0345c9ffb26dcbb299a0f1119cd184c70202c673",
-    "bytes": 36078,
-    "sha256": "f6e49375d91a32ac0606177f006efd57d781159c24fd60c73d9e8a88e379e4c6"
+    "epub_sha256": "b83a3419d285d62fa811883ae1ee1275d3cde4df31dadc735801a9d4e0437885",
+    "bytes": 36079,
+    "sha256": "0e73f291f0e50845d7442396387877360a9fcc08c60e3f99297d3e70605957c9"
   },
   "tools": {
     "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
@@ -551,7 +556,8 @@
     "exit_code": 0,
     "model_calls": 0,
     "log_sha256": "7b290391cce42cf986b5b0804b956c08a2fdba212b8434d50246b66db584b81c",
-    "note": "Executable files were tested from a staging ZIP. The final ZIP is generated after this report and verification notes; its own hash is excluded to avoid self-reference."
+    "note": "31 tests ran from the earlier staging ZIP in this release. After the author-only builder fix, all six tested Python files remain byte-identical; the final ZIP is regenerated after this report and verification notes. Its own hash is excluded to avoid self-reference.",
+    "revalidated_python_files_unchanged": 6
   },
   "manual_review": {
     "pdf_pages": [
@@ -595,7 +601,7 @@
       "html-390-dark-ch10.png": "3d2587e1def2f37411e66abea5aed09888b79fb5ff125aa4bd1db42f15ab34e3",
       "html-390-dark-ch15.png": "c9c88b8a61227d21908dd33a7536880ffa6d7e7e2e739f52bd33d236cde2532c",
       "html-390-dark-ch16.png": "ed61862aad7661593e6c47d8d3b0d204d6bfc6bbe114197231a18ba2e8831fdf",
-      "html-390-light-ch02.png": "50c1ec22584b3085ee20f91818a8808dfad66eac0065c6bf52c1b2a0027ddfe9",
+      "html-390-light-ch02.png": "dbc1ca494f2e073c73ae6c723e0c4f8ce0b8a33a5c7d0cf566d4899fc7454754",
       "html-390-light-ch07.png": "104df8ba164ca18bbacef663b63b670e9306cfd99819205d634cb616f634a36c",
       "html-390-light-ch08.png": "7826f2f037e1e30b205c563d4e2e0d78e8113dff114a88892899309946daab23",
       "html-390-light-ch10.png": "9af626ac192154aa3cd8d5b0b7dd12490612568813d22efe0df11bead438f6b6",
@@ -611,8 +617,25 @@
     "note": "Screenshot names and hashes refer to local validation output. Generated images are not repository source files."
   },
   "validation_harness": {
-    "script_sha256": "d30b90fc1b1a9caa1506eef577e94107afc18c002251901df4ac38f441a47b8e",
+    "script_sha256": "db9728d0e67eff5038468de45c70e9dcb24d23e7ab1c085d4bc45a81db74ddbe",
     "viewport_height_px": 1300,
     "note": "An initial element capture timed out for the tallest desktop figure at a 960px viewport height. Height increased to 1300px to capture the whole figure; viewport widths and all content, overflow and font-size assertions were unchanged."
+  },
+  "author_metadata": {
+    "manifest": "朱光",
+    "pdf": "朱光",
+    "html": "朱光",
+    "epub_creators": [
+      "朱光"
+    ]
+  },
+  "author_fix_revalidation": {
+    "author_metadata_matches_manifest": true,
+    "source_files": 105,
+    "all_six_pdf_page_raster_hashes_unchanged": true,
+    "changed_screenshot_hashes": [
+      "html-390-light-ch02.png"
+    ],
+    "note": "Rebuilt after replacing the fixed HTML author with the registered manifest author; EPUB creator is read from that same HTML."
   }
 }
