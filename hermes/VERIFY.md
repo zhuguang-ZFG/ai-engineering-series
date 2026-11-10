@@ -47,3 +47,7 @@ PDF/EPUB 由主任务统一生成；本轮子任务只修改书稿、示例、�
 ## 深化版成品交付
 
 v0.2.0 已在本机重建：PDF 128 页、29 个书签；EPUBCheck 5.4.0 零错误、零警告。四册封面、章节排版、目录、示例页与索引已抽查。文件已校验复制到 `D:\Users\claude\claude-code-book-main\yuyu-book\dist`，旧初稿另存 `.ebook-validation-tools/agent-drafts-20261110`。[交付摘要](../docs/agent-series/local-publication-20261110-revised.json)保留大小与 SHA-256。
+
+## 0.2.1 阅读修订
+
+本次修改正文表达与导读，保留既有实验范围。重新生成的 PDF 为 127 页、29 个书签；EPUBCheck 5.4.0 零错误、零警告。代码围栏、图示、行内代码、表格、标题、链接和显式 ID 均与修订前比对一致。[当前交付记录](../docs/agent-series/local-publication-20261110-reading.json)对应主 dist 文件；前述记录保留为历史版本。

@@ -18,7 +18,7 @@
 
 ## B.2 日常任务入口
 
-交互启动使用 `codex`，非交互使用 `codex exec`。`resume` 延续历史，`fork` 分支历史，`-C` 指定工作目录，`--worktree` 请求托管工作树。具体参数的组合以同版本帮助为准；本书没有把这些需要完整会话的用法标为模型实测。
+交互启动使用 `codex`，非交互使用 `codex exec`。`resume` 延续历史，`fork` 分支历史，`-C` 指定工作目录，`--worktree` 请求托管工作树。参数组合以同版本帮助为准；本书尚未运行这些完整模型会话。
 
 ```powershell
 codex.cmd -C . --sandbox read-only --ask-for-approval on-request
@@ -31,7 +31,7 @@ codex.cmd exec --json --output-last-message .scratch/result.md "检查项目测�
 
 `--sandbox` 接受 `read-only`、`workspace-write` 和 `danger-full-access`。顶层 `--ask-for-approval` 接受 `on-request`、`never`。`--add-dir` 增加可写目录。`--approve-for-me` 把审批交给自动审查，帮助说明它使用 workspace-write 沙箱。
 
-不要把这些选项相互替代。`never` 不代表自动获得完全访问；`--add-dir` 不代表用户授权修改所有文件；Hook 信任绕过选项也不等同于普通工具批准。危险绕过选项只应在已经明确外部隔离与审查条件的场景考虑，本书不把它们作为上手默认值。
+这些选项分别控制不同机制：`never` 关闭询问但不增加访问能力，`--add-dir` 增加可写范围但不改变任务授权，Hook 信任与普通工具批准也分别处理。绕过选项需要明确的外部隔离与审查条件，初次使用保持默认检查。
 
 ## B.4 exec 的输出与隔离提示
 

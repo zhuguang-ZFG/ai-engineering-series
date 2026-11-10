@@ -33,3 +33,9 @@
 - [x] 四册各自设计架构封面，更新章节排版与配色，增加时序和状态图。
 - [x] 重新生成并检查全部 HTML/PDF/EPUB，旧初稿另存，新版复制至主 dist。
 深化版与首版在同一个 PR 中发布。[PR #43](https://github.com/zhuguang-ZFG/claude-code-book/pull/43) 保留最终检查与合并记录。
+
+## 2026-11-10 阅读修订
+
+四册前言、正文与附录共 92 个阅读单元已逐章精修，整理重复解释、训诫语气和抽象结尾，保留实例与技术细节。代码围栏、图示、行内代码、标题、表格、链接和显式 ID 已与修订前比对一致。
+
+新版 HTML、PDF、EPUB 已生成到主工作区 dist，PDF 依次为 148、125、127、144 页；Fast 检查及四份 EPUBCheck 通过，PDF 完成抽样查看。文件摘要见[本次交付记录](../../agent-series/local-publication-20261110-reading.json)。

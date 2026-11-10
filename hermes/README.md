@@ -1,6 +1,6 @@
 # Hermes Agent：记忆、技能与持续任务
 
-中文深化版包含前言、18 章、附录 A–D，以可运行的 Aurora 资料库贯穿全书。正文从独立配置与 Agent 循环讲起，重点解释记忆快照、技能修订、历史检索、插件注册与卸载，后半册讨论定时任务、网关、隔离和长期项目。
+中文 0.2.1 阅读修订版包含前言、18 章、附录 A–D，以可运行的 Aurora 资料库贯穿全书。正文从独立配置与 Agent 循环讲起，重点解释记忆快照、技能修订、历史检索、插件注册与卸载，后半册讨论定时任务、网关、隔离和长期项目。
 
 [完整目录](outline.md) · [本地验证](VERIFY.md) · [可运行示例](examples/README.md)
 
@@ -8,10 +8,6 @@
 
 已运行 17 项记忆与技能元数据组件实验、15 项原创示例测试和八步 Aurora 命令行流程；完整模型、插件宿主、网关和调度实验的边界写在验证记录中。原创资料清单插件附带离线检查，读者可以从它继续做完整宿主实验。
 
-本册使用公共构建器，产品名为 `hermes`，输出文件名为 `yuyu-hermes-zh.html`、`yuyu-hermes-zh.pdf` 与 `yuyu-hermes-zh.epub`。最终成品由主任务统一生成到主工作区 `yuyu-book/dist/`。英文版尚未启动。
+本册使用公共构建器，产品名为 `hermes`，输出文件名为 `yuyu-hermes-zh.html`、`yuyu-hermes-zh.pdf` 与 `yuyu-hermes-zh.epub`。本地成品位于主工作区 `yuyu-book/dist/`。英文版尚未启动。
 
-
-2026-11-10 已完成三种格式的本地构建与交付，见[成品记录](../docs/agent-series/local-publication-20261110.json)。
-
-
-深化版 v0.2.0 已重新生成本地成品：PDF 128 页、17 张机制图，以及 EPUB、HTML。独立封面与版式已更新，[新版文件校验记录](../docs/agent-series/local-publication-20261110-revised.json)对应主 dist 当前文件。
+本地 0.2.1 已生成 HTML、PDF（127 页）和 EPUB，保留 17 张机制图。本次修订整理重复解释、改写报告式语气，并调整章节导读；示例代码、图示和来源保持原样。[当前文件与校验值](../docs/agent-series/local-publication-20261110-reading.json)。

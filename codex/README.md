@@ -1,6 +1,6 @@
 # Codex CLI：执行边界与工程实践
 
-中文深化稿包含前言、18 章和附录 A–D，约 5.3 万中文汉字。用一份运费边界错误串起 AGENTS.md、技能/插件、规则、exec、失败恢复与交付；第 12 章详细解释十四个 Hook 事件、匹配、输入输出、并发与信任。0.2.0 稿件已通过整书装配，本地成品等待主线统一重建；原有 0.1.0 PDF/EPUB 不代表这次深化稿。
+中文 0.2.1 阅读修订版包含前言、18 章和附录 A–D，约 4.9 万汉字。用一份运费边界错误串起 AGENTS.md、技能/插件、规则、exec、失败恢复与交付；第 12 章详细解释十四个 Hook 事件、匹配、输入输出、并发与信任。
 
 研究重点：Rust 运行时、审批、沙箱和可恢复执行。基线：rust-v0.167.0，提交 `086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a`。[上游固定版本](https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a)，许可证 Apache-2.0，访问日期 2026-11-09。
 
@@ -22,8 +22,4 @@
 - [codex-rs/linux-sandbox](https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a/codex-rs/linux-sandbox)
 - [codex-rs/windows-sandbox-rs](https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a/codex-rs/windows-sandbox-rs)
 
-
-2026-11-10 已完成三种格式的本地构建与交付，见[成品记录](../docs/agent-series/local-publication-20261110.json)。
-
-
-深化版 v0.2.0 已重新生成本地成品：PDF 147 页、15 张机制图，以及 EPUB、HTML。独立封面与版式已更新，[新版文件校验记录](../docs/agent-series/local-publication-20261110-revised.json)对应主 dist 当前文件。
+本地 0.2.1 已生成 HTML、PDF（144 页）和 EPUB，保留 15 张机制图。本次修订整理重复解释、改写报告式语气，并调整章节导读；示例代码、图示和来源保持原样。[当前文件与校验值](../docs/agent-series/local-publication-20261110-reading.json)。

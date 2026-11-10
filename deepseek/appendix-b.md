@@ -16,7 +16,7 @@ dsh --profile sdk-minimal
 dsh --profile acp
 ```
 
-启动参数属于启动器还是应用，要看它出现的位置和选定 profile。不要把 Web 端口参数套到 headless，也不要把 SDK stdio 的输出当成人可读控制台文本。自动化包装器应保留 stderr、退出码与协议结束状态。
+参数所属层取决于位置和选定 profile。Web 端口参数不适用于 headless，SDK stdio 输出也不能按普通控制台文本处理。自动化包装器需保留 stderr、退出码和协议结束状态。
 
 ## B.2 插件编写要点
 
@@ -36,7 +36,7 @@ dsh --profile acp
 
 先确认 profile 名称与 Harness home，再导出最终树，定位对应 row id。接着检查后层补丁是否替换了 config，插件是否只是被安装而未选中，服务是否进入正确隔离域。最后才分析模型行为。
 
-package 安装成功、bundle 被选择、row 被启用、fiber ACTIVE 和功能实际发生，是五个不同阶段。任何一个界面只显示一个绿色标记时，都值得继续查它表达的究竟是哪一层。
+package 安装、bundle 选择、row 启用、fiber ACTIVE 和功能实际发生是五个阶段。界面状态需要结合它所表示的阶段来读。
 
 在公开问题报告中保留版本、row id、错误码、脱敏配置片段和最小复现。不要贴完整 home 目录或请求日志；工具正文和代理地址可能含私有信息。用一个临时 fixture 复现同样问题，往往比分享真实项目更容易让别人定位。
 
