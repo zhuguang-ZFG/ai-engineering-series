@@ -16,19 +16,19 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from book_history import HistoryError, RevisionFiles  # noqa: E402
+
 BLOCK = re.compile(r"<!--\s*block:\s*([A-Za-z0-9_.\-]+)\s*-->")
 
 
-def head_text(rel: str) -> str | None:
-    r = subprocess.run(["git", "show", f"HEAD:{rel}"], cwd=ROOT,
-                       capture_output=True, text=True, encoding="utf-8")
-    return r.stdout if r.returncode == 0 else None
+def head_text(rel: str, history: RevisionFiles | None = None) -> str | None:
+    return (history or RevisionFiles(ROOT, "HEAD")).read_text(rel, missing_ok=True)
 
 
 def read(rel: str) -> str:
@@ -89,14 +89,14 @@ def note_locked_files(glosses: dict, forms: list[str], rows) -> dict[str, set[st
     return needed
 
 
-def check(rel: str, forms: list[str], required: set[str]) -> int:
+def check(rel: str, forms: list[str], required: set[str], history: RevisionFiles | None = None) -> int:
     path = ROOT / rel
     if not path.exists():
         print(f"!! 文件不存在（改名或删了？）: {path.relative_to(ROOT).as_posix()}")
         return 1
     problems = 0
     now = path.read_text(encoding="utf-8")
-    before = head_text(rel)
+    before = head_text(rel, history)
 
     if before is None:
         print(f"   {rel}: 不在 HEAD 里（新文件），跳过锚点对比")
@@ -132,6 +132,7 @@ def check(rel: str, forms: list[str], required: set[str]) -> int:
 
 
 def main(argv: list[str]) -> int:
+    history = RevisionFiles(ROOT, "HEAD")
     glosses = json.loads((ROOT / "yuyu-book" / "glosses.json").read_text(encoding="utf-8"))
     rows = unit_files()
     forms = zh_forms(glosses)
@@ -148,7 +149,7 @@ def main(argv: list[str]) -> int:
 
     problems = 0
     for rel in targets:
-        problems += check(rel, forms, anchored.get(rel, set()) | locked.get(rel, set()))
+        problems += check(rel, forms, anchored.get(rel, set()) | locked.get(rel, set()), history)
     print(f"\n（共检查 {len(targets)} 个文件）")
     if problems:
         print(f"护栏未过：{problems} 处。补回来再交。")
@@ -158,4 +159,8 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1:]))
+    try:
+        raise SystemExit(main(sys.argv[1:]))
+    except HistoryError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        raise SystemExit(2)

@@ -20,7 +20,26 @@ HUNK = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
 
 
 def git(args):
-    return subprocess.run(["git"] + args, capture_output=True, cwd=Path(__file__).parents[2]).stdout.decode("utf-8", "replace")
+    return subprocess.run(
+        ["git"] + args, capture_output=True, check=True,
+        cwd=Path(__file__).resolve().parents[2],
+    ).stdout.decode("utf-8", "replace")
+
+
+def book_paths():
+    """Root-relative paths for the current layout and the original course."""
+    prefix = git(["rev-parse", "--show-prefix"]).strip()
+    return list(dict.fromkeys((prefix + BOOK, BOOK)))
+
+
+def book_at(ref):
+    candidates = book_paths()
+    present = git(["ls-tree", "--full-tree", "-r", "--name-only", ref,
+                   "--", *candidates]).splitlines()
+    for path in candidates:
+        if path in present:
+            return f"{ref}:{path}"
+    raise ValueError(f"{ref}: no course book at {', '.join(candidates)}")
 
 
 def protect_state(lines):
@@ -54,9 +73,10 @@ def protect_state(lines):
 
 
 def audit(sha):
-    parent = git(["show", f"{sha}^:{BOOK}"]).split("\n")
+    before, after = book_at(f"{sha}^"), book_at(sha)
+    parent = git(["show", before]).split("\n")
     state = protect_state(parent)
-    diff = git(["diff", "-U0", "--no-color", f"{sha}^", sha, "--", BOOK]).split("\n")
+    diff = git(["diff", "-U0", "--no-color", before, after]).split("\n")
     hits, removed = {k: 0 for k in ("code", "table", "heading", "figure")}, 0
     detail = []
     idx = -1
@@ -80,7 +100,8 @@ def audit(sha):
 def main():
     shas = sys.argv[1:] or [
         l.split()[0]
-        for l in git(["log", "--grep=deai", "--format=%h", "--", BOOK]).split("\n")
+        for l in git(["log", "--grep=deai", "--format=%h", "--",
+                      *[f":(top,literal){path}" for path in book_paths()]]).split("\n")
         if l
     ]
     if not shas:
@@ -101,4 +122,8 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except (subprocess.CalledProcessError, ValueError) as exc:
+        print(f"audit failed: {exc}", file=sys.stderr)
+        sys.exit(2)

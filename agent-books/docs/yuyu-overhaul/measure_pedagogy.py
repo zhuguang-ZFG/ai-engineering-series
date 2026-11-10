@@ -4,20 +4,21 @@
     python docs/yuyu-overhaul/measure_pedagogy.py            # 全 20 单元
     python docs/yuyu-overhaul/measure_pedagogy.py ch01 ch02  # 只看点名的单元
 
-只看，不改任何文件。改前那一列来自 `git show HEAD:<路径>`，
-因此本脚本在 Y-M1 执行期间的任何时候重跑，「改前」都仍是改造前的真值。
+只看，不改任何文件。改前那一列来自当前 HEAD 中的项目文件，
+改后来自工作树；提交后再运行时，对比基线也随 HEAD 更新。
 """
 from __future__ import annotations
 
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "yuyu-book"))
+sys.path.insert(0, str(ROOT / "scripts"))
 
+from book_history import HistoryError, RevisionFiles  # noqa: E402
 from yuyu_book.core import unit_stream  # noqa: E402
 
 HAN = re.compile(r"[㐀-䶿一-鿿]")
@@ -28,10 +29,8 @@ DIFFICULTY = re.compile(r"难度定位|Difficulty")
 CROSSREF = re.compile(r"omp 分册|the omp volume|Cross-ref.*omp", re.I)
 
 
-def git_head(path: str) -> str:
-    r = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=ROOT,
-                       capture_output=True, text=True, encoding="utf-8")
-    return r.stdout if r.returncode == 0 else ""
+def git_head(path: str, history: RevisionFiles | None = None) -> str:
+    return (history or RevisionFiles(ROOT, "HEAD")).read_text(path, missing_ok=True) or ""
 
 
 def units() -> list[tuple[str, str, str]]:
@@ -46,13 +45,14 @@ def units() -> list[tuple[str, str, str]]:
 
 
 def report(want: set[str]) -> int:
+    history = RevisionFiles(ROOT, "HEAD")
     rows = []
     for uid, lang, rel in units():
         if want and uid not in want:
             continue
         now_p = ROOT / rel
         now = now_p.read_text(encoding="utf-8") if now_p.exists() else ""
-        before = git_head(rel)
+        before = git_head(rel, history)
         b = dict(chars=len(before), han=len(HAN.findall(before)),
                  scene=bool(SCENE.search(before)), tables=len(TABLE.findall(before)))
         c = dict(chars=len(now), han=len(HAN.findall(now)),
@@ -83,4 +83,8 @@ def report(want: set[str]) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(report(set(sys.argv[1:])))
+    try:
+        sys.exit(report(set(sys.argv[1:])))
+    except HistoryError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        sys.exit(2)

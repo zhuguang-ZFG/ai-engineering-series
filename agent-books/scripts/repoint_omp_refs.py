@@ -29,9 +29,10 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
+
+from book_history import HistoryError, RevisionFiles
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = (
@@ -41,33 +42,22 @@ SOURCES = (
 REF = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+)$")
 
 
-def base_text(ref: str, path: str) -> str:
-    out = subprocess.run(
-        ["git", "show", f"{ref}:{path}"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if out.returncode != 0:
-        raise SystemExit(f"cannot read {path} at {ref}: {out.stderr.strip()}")
-    return out.stdout
+def base_text(ref: str, path: str, history: RevisionFiles | None = None) -> str:
+    return (history or RevisionFiles(ROOT, ref)).read_text(path)
 
 
-def collect_refs(ref: str) -> dict[tuple[str, int], list[Path]]:
+def collect_refs(ref: str, history: RevisionFiles | None = None) -> dict[tuple[str, int], list[Path]]:
     """Map every (chapter, line) pointer recorded at ``ref`` to its sources.
 
     The pointers are read from the JSON *at that revision* so the numbers and
     the chapter text they describe come from the same snapshot; mixing a
     working-tree JSON with a base chapter pairs the wrong lines.
     """
+    history = history or RevisionFiles(ROOT, ref)
     refs: dict[tuple[str, int], list[Path]] = {}
     for source in SOURCES:
         rel = source.relative_to(ROOT).as_posix()
-        try:
-            text = base_text(ref, rel)
-        except SystemExit:
-            text = source.read_text(encoding="utf-8")
+        text = base_text(ref, rel, history)
         for raw in re.findall(r'"((?:omp/)?[^"\n]+\.md:\d+)"', text):
             match = REF.match(raw)
             if not match:
@@ -77,17 +67,8 @@ def collect_refs(ref: str) -> dict[tuple[str, int], list[Path]]:
     return refs
 
 
-def base_lines(ref: str, path: str) -> list[str]:
-    out = subprocess.run(
-        ["git", "show", f"{ref}:{path}"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if out.returncode != 0:
-        raise SystemExit(f"cannot read {path} at {ref}: {out.stderr.strip()}")
-    return out.stdout.splitlines()
+def base_lines(ref: str, path: str, history: RevisionFiles | None = None) -> list[str]:
+    return base_text(ref, path, history).splitlines()
 
 
 def locate(lines: list[str], wanted: str, hint: int) -> tuple[str, int | None]:
@@ -107,7 +88,8 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="rewrite moved pointers in place")
     args = parser.parse_args()
 
-    refs = collect_refs(args.base)
+    history = RevisionFiles(ROOT, args.base)
+    refs = collect_refs(args.base, history)
     if not refs:
         print("no file:line pointers found")
         return 1
@@ -120,7 +102,7 @@ def main() -> int:
 
     for (path, line), sources in sorted(refs.items()):
         if path not in cache:
-            old = base_lines(args.base, path)
+            old = base_lines(args.base, path, history)
             current = (ROOT / path).read_text(encoding="utf-8").splitlines()
             cache[path] = (old, current)
         old, current = cache[path]
@@ -146,7 +128,7 @@ def main() -> int:
             # The mapping was derived from the JSON *at* --base, so the output
             # must start from that same snapshot; starting from a JSON that was
             # already half-rewritten would mix two numbering systems.
-            text = base_text(args.base, source.relative_to(ROOT).as_posix())
+            text = base_text(args.base, source.relative_to(ROOT).as_posix(), history)
             changed = 0
             for (target, path, old_line), new_line in replacements.items():
                 if target != source:
@@ -165,4 +147,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except HistoryError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        sys.exit(2)
