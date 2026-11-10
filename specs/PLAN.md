@@ -4,6 +4,8 @@
 
 本批正文审校（去 AI 味、图注补齐、可读性）：按 REVIEW.md 校准选择性去 AI 味——保留功能性粗体与真辨析句，实修客服腔/AI 高频词清零、解开 4 处整句装饰粗体，扫描缺陷 122 → 116；为 c11–c30 的 27 处无注图按 c01–c10 房规补 `*图：…*` 图注并清理 alt 中的 `G##` 内部编号，构建后全部成为 `<figure class="curriculum-figure"><figcaption>`（网页/PDF/EPUB 同步）；另修 `vectors.md`、`generation.md` 两处措辞。只改 `book/llm/lessons/*.md`，未动测试/runner/扫描政策；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，电子书已重导并重绑 EPUBCheck。已随 [PR #13](https://github.com/zhuguang-ZFG/vibe-coding-101-course/pull/13) 合并为 `ded8491`，[main CI](https://github.com/zhuguang-ZFG/vibe-coding-101-course/actions/runs/42777133014) 通过。
 
+本批 K3 模型单变量：按冻结清单的"复制并提升版本"流程新建 `eval-manifest-api.json`（问题/期望/预算逐字一致，仅四个生成用例加 provider=api），把生成模型从本地 1.5B 换成唯一可调用的更强授权模型（NVIDIA NIM mistral-large-4）。结果 4/4 生成用例 generation-failed：复演载荷证实推理模型在 max_tokens=192 下烧光预算（finish=length、content=null）且延迟约 36s 超 api_timeout=15；放大预算探针同模型正常返回，证明是"冻结预算×推理模型"的结构性冲突，不降预算。凭证可用性全表与首个边界见 [EVALUATION-05](../../../book/llm/examples/assistant/EVALUATION-05.md)；"更强模型⇒K3 通过"证伪，K3 继续失败，四边界用例保持绿色。剩余未识别网关需操作者指明端点后再试。本批待提交合并，merge 证据在 PR 正文登记，不再另推登记提交。
+
 本批动画教学图：给 c11–c30 课文引用的 7 张流程图（tool-execution-loop、retrieve-then-answer、context-selection、choose-an-approach、materials-to-result、evaluation-split、gradient-step）在生成器中加入 SMIL 错峰高亮——绿色描边逐步巡访步骤、循环播放；底图始终完整，EPUB/打印/无 SMIL 读者看到静态全图。共享帮手 `stepTour` 在 `mechanism-art.mjs`，动画只进生成器（`--check` 字节比对），网页/PDF/EPUB 同步重导；`npm test`、`check:reading:llm`、`check:accessibility:llm` 通过，三本书 EPUBCheck 5.3.0 重绑零错误零警告。本批待提交合并，merge 证据在 PR 正文登记，不再另推登记提交。
 
 ## 当前进度与下一步
