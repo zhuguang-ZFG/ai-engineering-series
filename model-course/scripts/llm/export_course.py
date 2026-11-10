@@ -315,22 +315,46 @@ def find_outline_page(outline, heading):
     return matches[0]
 
 
+def has_repeated_first_line(document, destination, expected, actual):
+    """Require the repeated prefix to be the rendered heading's first line."""
+    if destination.get("kind") != fitz.LINK_GOTO or destination.get("to") is None:
+        return False
+    page_number = destination.get("page", -1)
+    if not 0 <= page_number < len(document):
+        return False
+    matches = 0
+    for block in document[page_number].get_text("dict")["blocks"]:
+        lines = [
+            "".join("".join(span["text"] for span in line["spans"]).split())
+            for line in block.get("lines", [])
+        ]
+        if (
+            len(lines) > 1
+            and "".join(lines) == expected
+            and actual == lines[0] + expected
+            and fitz.Rect(block["bbox"]).contains(destination["to"])
+        ):
+            matches += 1
+    return matches == 1
+
+
 def repair_outline_titles(document, body):
     """Repair Chrome's repeated PDF heading text against the authored headings.
 
-    Linux Chrome 157 can emit an outline title twice while rendering its heading
-    once. Match the complete ordered heading tree before changing titles, so
-    legitimate repeated wording and every original destination remain intact.
+    Linux Chrome 157 can repeat a title or its first rendered line in an outline.
+    Match the complete ordered heading tree before changing titles. For wrapped
+    headings, also verify the actual lines at the PDF destination. Legitimate
+    repeated wording and every original destination remain intact.
     """
     headings = [
         (int(node.tag.rsplit("}", 1)[-1][1]), "".join(node.itertext()).strip())
         for node in body.iter()
         if isinstance(node.tag, str) and node.tag.rsplit("}", 1)[-1] in {"h1", "h2", "h3", "h4", "h5", "h6"}
     ]
-    outline = document.get_toc()
+    outline = document.get_toc(simple=False)
     assert len(outline) == len(headings), ("PDF heading count differs from source", len(outline), len(headings))
     repairs = []
-    for index, ((level, title, _), (expected_level, expected_title)) in enumerate(zip(outline, headings)):
+    for index, ((level, title, _, destination), (expected_level, expected_title)) in enumerate(zip(outline, headings)):
         assert level == expected_level, ("PDF heading level differs from source", index, level, expected_level)
         actual = "".join(title.split())
         expected = "".join(expected_title.split())
@@ -338,7 +362,8 @@ def repair_outline_titles(document, body):
         if actual == expected:
             continue
         repeats, remainder = divmod(len(actual), len(expected))
-        assert repeats >= 2 and not remainder and actual == expected * repeats, (
+        repeated_title = repeats >= 2 and not remainder and actual == expected * repeats
+        assert repeated_title or has_repeated_first_line(document, destination, expected, actual), (
             "PDF heading differs from source", index, title, expected_title,
         )
         repairs.append((index, expected_title))

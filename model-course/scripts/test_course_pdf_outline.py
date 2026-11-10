@@ -47,6 +47,29 @@ class CourseOutlineTests(unittest.TestCase):
         self.assertEqual(document.get_toc(), [[1, "看看", 1], [2, "再试一次", 2], [3, "A B", 1]])
         self.assertEqual(repair_outline_titles(document, self.body(headings)), 0)
 
+    def test_wrapped_heading_requires_the_complete_rendered_first_line_at_its_destination(self):
+        first_line = "C03 Check: Why plausible"
+        expected = first_line + " can still be wrong"
+        document = self.document([(1, first_line + expected)])
+        document[0].insert_text((20, 70), first_line + "\ncan still be wrong", fontsize=12)
+        document.set_toc_item(0, kind=fitz.LINK_GOTO, pno=1, to=fitz.Point(21, 60))
+        before = document.get_toc(simple=False)[0][2:]
+        self.assertEqual(repair_outline_titles(document, self.body([(1, expected)])), 1)
+        self.assertEqual(document.get_toc()[0][1], expected)
+        self.assertEqual(document.get_toc(simple=False)[0][2:], before)
+
+        for actual, point in [
+            ("C03 Check:" + expected, fitz.Point(21, 60)),
+            (first_line + expected, fitz.Point(21, 200)),
+            (first_line + expected.replace("wrong", "right"), fitz.Point(21, 60)),
+        ]:
+            with self.subTest(actual=actual, point=point):
+                document.set_toc_item(0, title=actual, kind=fitz.LINK_GOTO, pno=1, to=point)
+                before = document.get_toc(simple=False)
+                with self.assertRaises(AssertionError):
+                    repair_outline_titles(document, self.body([(1, expected)]))
+                self.assertEqual(document.get_toc(simple=False), before)
+
     def test_unexpected_titles_levels_or_missing_headings_fail_before_any_repair(self):
         source = [(1, "目录"), (2, "概念")]
         for generated in [
