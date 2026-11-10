@@ -28,6 +28,8 @@ class SeriesWorkflow(unittest.TestCase):
     def test_root_workflow_runs_for_changes_and_manual_requests(self):
         triggers = self.workflow.get("on") or self.workflow.get(True)
         self.assertIn("main", triggers["push"]["branches"])
+        self.assertIn("feat/**", triggers["push"]["branches"])
+        self.assertIn("fix/**", triggers["push"]["branches"])
         self.assertIn("pull_request", triggers)
         self.assertIn("workflow_dispatch", triggers)
         self.assertFalse(triggers["workflow_dispatch"]["inputs"]["build_books"]["default"])
