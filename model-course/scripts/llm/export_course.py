@@ -315,6 +315,39 @@ def find_outline_page(outline, heading):
     return matches[0]
 
 
+def repair_outline_titles(document, body):
+    """Repair Chrome's repeated PDF heading text against the authored headings.
+
+    Linux Chrome 157 can emit an outline title twice while rendering its heading
+    once. Match the complete ordered heading tree before changing titles, so
+    legitimate repeated wording and every original destination remain intact.
+    """
+    headings = [
+        (int(node.tag.rsplit("}", 1)[-1][1]), "".join(node.itertext()).strip())
+        for node in body.iter()
+        if isinstance(node.tag, str) and node.tag.rsplit("}", 1)[-1] in {"h1", "h2", "h3", "h4", "h5", "h6"}
+    ]
+    outline = document.get_toc()
+    assert len(outline) == len(headings), ("PDF heading count differs from source", len(outline), len(headings))
+    repairs = []
+    for index, ((level, title, _), (expected_level, expected_title)) in enumerate(zip(outline, headings)):
+        assert level == expected_level, ("PDF heading level differs from source", index, level, expected_level)
+        actual = "".join(title.split())
+        expected = "".join(expected_title.split())
+        assert expected, ("Empty source heading", index)
+        if actual == expected:
+            continue
+        repeats, remainder = divmod(len(actual), len(expected))
+        assert repeats >= 2 and not remainder and actual == expected * repeats, (
+            "PDF heading differs from source", index, title, expected_title,
+        )
+        repairs.append((index, expected_title))
+    for index, title in repairs:
+        # Updating only /Title preserves coordinates, page numbers and nesting.
+        document.set_toc_item(index, title=title)
+    return len(repairs)
+
+
 def print_with_pages(page, title, body, path, target, entries):
     previous = None
     for attempt in range(1, 5):
@@ -334,6 +367,8 @@ def print_with_pages(page, title, body, path, target, entries):
             footer_template=FOOTER_TEMPLATE,
         )
         with fitz.open(target) as document:
+            if repair_outline_titles(document, body):
+                document.saveIncr()
             outline = document.get_toc()
             current = {entry["id"]: find_outline_page(outline, entry["heading"]) for entry in entries}
             total = len(document)
