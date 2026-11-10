@@ -32,11 +32,38 @@ class OfflineLinks(unittest.TestCase):
             external = []
             doc = process_links(doc, external)
             self.assertEqual(external, [
-                "https://github.com/zhuguang-ZFG/claude-code-book/blob/main/examples/probe.py"])
+                "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/examples/probe.py"])
             self.assertIn('class="fnum"', doc)
+            (root / "examples" / "说明 文档.md").write_text("# 用法", encoding="utf-8")
+            for href, fragment in (
+                    ("../examples/说明 文档.md#用法", "用法"),
+                    ("../examples/%E8%AF%B4%E6%98%8E%20%E6%96%87%E6%A1%A3.md#%E7%94%A8%E6%B3%95",
+                     "%E7%94%A8%E6%B3%95")):
+                with self.subTest(href=href):
+                    doc = resolve_local_links(f'<a href="{href}">说明</a>',
+                                              "codex/ch01.md", {}, root, chapters=False)
+                    self.assertEqual(doc,
+                        '<a href="https://github.com/zhuguang-ZFG/ai-engineering-series/'
+                        'blob/main/agent-books/examples/'
+                        '%E8%AF%B4%E6%98%8E%20%E6%96%87%E6%A1%A3.md#'
+                        + fragment + '">说明</a>')
+
+        root = Path(__file__).resolve().parents[2]
+        for relative in ("materials/notice-v1.md", "examples/full-request.json"):
+            with self.subTest(prompt_source=relative):
+                self.assertTrue((root / "prompt" / relative).is_file())
+                doc = resolve_local_links(f'<a href="{relative}">练习材料</a>',
+                                          "prompt/ch01.md", {}, root, chapters=False)
+                external = []
+                process_links(doc, external)
+                self.assertEqual(external, [
+                    "https://github.com/zhuguang-ZFG/ai-engineering-series/"
+                    "blob/main/agent-books/prompt/" + relative])
 
     def test_external_anchor_and_missing_or_escaping_paths_stay_visible(self):
         for href in ("#source", "https://example.com/a.md", "mailto:a@b.test",
+                     "https://github.com/zhuguang-ZFG/claude-code-book/"
+                     "tree/1ec7749bdea31b96729eb307f69e12f446284b2e#source",
                      "missing.md", "../../outside.md", "//example.com/a.md"):
             doc = f'<a href="{href}">label</a>'
             for chapters in (False, True):
