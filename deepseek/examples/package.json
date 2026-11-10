@@ -1,0 +1,10 @@
+{
+  "name": "book-deepseek-review-lab",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Original book review services for a caller-supplied Cordis runtime",
+  "type": "module",
+  "exports": "./review-lab.mjs",
+  "files": ["review-lab.mjs", "README.md"],
+  "license": "CC-BY-NC-SA-4.0"
+}

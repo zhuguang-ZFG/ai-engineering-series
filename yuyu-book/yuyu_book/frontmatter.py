@@ -16,16 +16,19 @@ def cover(manifest: dict, lang: str) -> str:
     if not epi:
         epi, epi_src = epigraph, ""
     lic = manifest["license"]
-    plate = cover_plate(lang)
+    product = manifest.get("product", "book")
+    is_agent = product in {"opencode", "deepseek", "hermes", "codex"}
+    plate = cover_plate(lang, product)
     # the plate carries a 30-spoke wheel of its own; a second one under the
     # title would be the same motif twice within a hand's width
     mark = "" if plate else wheel(26)
     src_line = (f'<span class="epi-src">——{esc(epi_src.strip())}</span>'
                 if epi_src else "")
     seal = (f'<span class="cover-seal" aria-hidden="true">{esc(main.strip()[:2])}</span>'
-            if lang == "zh" and main.strip() else "")
+            if lang == "zh" and main.strip() and not is_agent else "")
     kicker = (manifest.get("kicker") or {}).get(lang) or ui("cover_kicker", lang)
-    return (f'<section class="front-page cover" id="cover">'
+    volume_class = f" agent-volume av-{product}" if is_agent else ""
+    return (f'<section class="front-page cover{volume_class}" id="cover">'
             f'<div class="cover-inner">{seal}'
             f'<p class="cover-kicker">{esc(kicker)}</p>'
             f'<h1 class="book-title"><span class="bt-main">{esc(main.strip())}</span>'

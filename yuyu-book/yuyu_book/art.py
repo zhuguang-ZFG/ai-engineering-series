@@ -27,6 +27,7 @@ ART_DIR = Path(__file__).resolve().parent.parent / "illustrations"
 # drawing can never cross-ink the wrong book
 OMP_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-omp"
 PI_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-pi"
+AGENT_ART_DIR = Path(__file__).resolve().parent.parent / "illustrations-agents"
 MAX_BYTES = 6000
 PLATE_BYTES = 20000
 # one photograph the single-file edition can afford to carry: the offline
@@ -72,7 +73,7 @@ def _search_dirs() -> list[Path]:
 
     Read at call time: the tests point `ART_DIR` at a temporary folder.
     """
-    return [d for d in (OMP_ART_DIR, PI_ART_DIR, ART_DIR) if d.is_dir()]
+    return [d for d in (OMP_ART_DIR, PI_ART_DIR, AGENT_ART_DIR, ART_DIR) if d.is_dir()]
 
 
 def _read(name: str, budget: int = MAX_BYTES) -> str | None:
@@ -175,8 +176,12 @@ def headpiece(part_id: str, lang: str = "zh") -> str:
     return f'<div class="pd-art" aria-hidden="true">{text}</div>'
 
 
-def cover_plate(lang: str = "zh") -> str:
+def cover_plate(lang: str = "zh", product: str = "book") -> str:
     """The large cover plate, separate from the animated small artwork."""
+    if product in {"opencode", "deepseek", "hermes", "codex"}:
+        text = _read(f"cover-{product}", PLATE_BYTES)
+        if text:
+            return f'<div class="cover-art" aria-hidden="true">{text}</div>'
     names = PLATE_ALT.get(lang, PLATE_ALT["zh"])
     image = _ink_image("cover", COVER_RASTER_BYTES, names["cover"])
     if image:

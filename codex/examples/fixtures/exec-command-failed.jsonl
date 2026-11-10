@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"fixture-thread"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"test-1","type":"command_execution","command":"python -B -m unittest -v","aggregated_output":"","exit_code":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"test-1","type":"command_execution","command":"python -B -m unittest -v","aggregated_output":"FAIL: grams=1001","exit_code":1,"status":"failed"}}
+{"type":"item.completed","item":{"id":"message-1","type":"agent_message","text":"Fixture: reproduced a failing boundary."}}
+{"type":"turn.completed","usage":{"input_tokens":0,"cached_input_tokens":0,"cache_write_input_tokens":0,"output_tokens":0,"reasoning_output_tokens":0}}

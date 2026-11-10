@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "deepseek-repo": {
+    "title": "deepseek-ai/deepseek-harness",
+    "authority": "Upstream source, architecture docs and vendored Cordis",
+    "kind": "github",
+    "url": "https://github.com/deepseek-ai/deepseek-harness/tree/fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "snapshot": "Root package 0.2.2-rc.1 and Cordis 4.1.0 at fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Runtime composition, plugin lifecycle, Agent contracts, tools, sessions and component experiments",
+    "pinned": {
+      "commit": "fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159"
+    }
+  }
+}

@@ -7,56 +7,78 @@
     "hermes",
     "codex"
   ],
-  "active": "opencode",
-  "current_milestone": "S1: OpenCode chapters 8-9 and four Windows V1 host scenarios verified",
+  "active": [],
+  "current_milestone": "Four expanded editions written, verified and delivered locally; publication history is tracked by PR #43",
   "tasks": [
     {
       "id": "opencode",
-      "status": "in_progress",
-      "stage": "plugin_host_verified",
+      "status": "completed",
+      "stage": "revised_publication_verified",
       "outline": "opencode/outline.md",
-      "next": "Trace custom tools and permission allow/deny/ask in the pinned host for chapters 6-7; then cover failures and cancellation",
+      "next": "Use the revised local editions; consult PR #43 for publication history",
       "blocked_by": [],
-      "product_registered": false,
+      "product_registered": true,
       "evidence": [
-        "opencode/ch08.md",
-        "opencode/ch09.md",
         "opencode/VERIFY.md",
-        "opencode/facts/host-plugins-20261110.json"
+        "opencode/outline.md",
+        "yuyu-book/manifest-opencode.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
       ]
     },
     {
       "id": "deepseek",
-      "status": "planned",
-      "stage": "outline",
+      "status": "completed",
+      "stage": "revised_publication_verified",
       "outline": "deepseek/outline.md",
-      "next": "Trace Cordis mounts and run a reversible plugin experiment",
-      "blocked_by": [
-        "opencode"
-      ],
-      "product_registered": false
+      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "deepseek/VERIFY.md",
+        "deepseek/outline.md",
+        "yuyu-book/manifest-deepseek.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
+      ]
     },
     {
       "id": "hermes",
-      "status": "planned",
-      "stage": "outline",
+      "status": "completed",
+      "stage": "revised_publication_verified",
       "outline": "hermes/outline.md",
-      "next": "Trace memory/skill persistence in an isolated profile",
-      "blocked_by": [
-        "deepseek"
-      ],
-      "product_registered": false
+      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "hermes/VERIFY.md",
+        "hermes/outline.md",
+        "yuyu-book/manifest-hermes.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
+      ]
     },
     {
       "id": "codex",
-      "status": "planned",
-      "stage": "outline",
+      "status": "completed",
+      "stage": "revised_publication_verified",
       "outline": "codex/outline.md",
-      "next": "Map pinned CLI/exec/app-server entry points and platform approval/sandbox tests",
-      "blocked_by": [
-        "hermes"
-      ],
-      "product_registered": false
+      "next": "Use the revised local editions; consult PR #43 for publication history",
+      "blocked_by": [],
+      "product_registered": true,
+      "evidence": [
+        "codex/VERIFY.md",
+        "codex/outline.md",
+        "yuyu-book/manifest-codex.json",
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
+      ]
     }
-  ]
+  ],
+  "execution": "parallel; explicitly requested by the user on 2026-11-10",
+  "quality_revision": "Continuous runnable examples, detailed plugin internals, failure diagnosis and stronger visual identity",
+  "release": {
+    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/43",
+    "status_source": "GitHub pull request checks and merge history"
+  }
 }

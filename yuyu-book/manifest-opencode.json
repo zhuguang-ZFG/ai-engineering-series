@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "product": "opencode",
+  "version": "1.1.0",
+  "date": "2026-11-10",
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "title": {
+    "zh": "OpenCode：从原理到实战"
+  },
+  "subtitle": {
+    "zh": "客户端、工具、权限与插件生命周期 · 非官方技术读本"
+  },
+  "kicker": {
+    "zh": "OpenCode · Requests, Tools and Plugins"
+  },
+  "notice": {
+    "zh": "本书为独立技术分析，与 OpenCode 上游无隶属关系。固定 v1.19.5；真实宿主实验限 Windows V1 路径，模型协议使用本地替身。"
+  },
+  "epigraph": {
+    "zh": "每一次声称生效，都应有一个可以核对的结果。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-opencode",
+  "revisions_registry": "revisions-opencode.json",
+  "subject_index_registry": "subject-index-opencode.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "v1.19.5",
+    "verified_windows": "v1.19.5"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "先运行一次"
+      },
+      "body": {
+        "zh": "第 1–5 章，附录 B。"
+      }
+    },
+    {
+      "label": {
+        "zh": "写插件与工具"
+      },
+      "body": {
+        "zh": "第 6–10 章，附录 C。"
+      }
+    },
+    {
+      "label": {
+        "zh": "接入工程"
+      },
+      "body": {
+        "zh": "第 11–18 章，附录 D。"
+      }
+    }
+  ],
+  "front": {
+    "id": "opencode-front",
+    "zh": "opencode/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "opencode-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "从第一次任务到会话"
+      },
+      "motto": {
+        "zh": "跑通一条可核对的请求与工具路径。"
+      },
+      "goal": {
+        "zh": "跑通一条可核对的请求与工具路径。"
+      },
+      "units": [
+        {
+          "id": "opencode-ch01",
+          "zh": "opencode/ch01.md"
+        },
+        {
+          "id": "opencode-ch02",
+          "zh": "opencode/ch02.md"
+        },
+        {
+          "id": "opencode-ch03",
+          "zh": "opencode/ch03.md"
+        },
+        {
+          "id": "opencode-ch04",
+          "zh": "opencode/ch04.md"
+        },
+        {
+          "id": "opencode-ch05",
+          "zh": "opencode/ch05.md"
+        }
+      ]
+    },
+    {
+      "id": "opencode-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "工具、插件与权限"
+      },
+      "motto": {
+        "zh": "写出能加载、能检查失败、能释放资源的扩展。"
+      },
+      "goal": {
+        "zh": "写出能加载、能检查失败、能释放资源的扩展。"
+      },
+      "units": [
+        {
+          "id": "opencode-ch06",
+          "zh": "opencode/ch06.md"
+        },
+        {
+          "id": "opencode-ch07",
+          "zh": "opencode/ch07.md"
+        },
+        {
+          "id": "opencode-ch08",
+          "zh": "opencode/ch08.md"
+        },
+        {
+          "id": "opencode-ch09",
+          "zh": "opencode/ch09.md"
+        },
+        {
+          "id": "opencode-ch10",
+          "zh": "opencode/ch10.md"
+        }
+      ]
+    },
+    {
+      "id": "opencode-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "代码上下文与工程状态"
+      },
+      "motto": {
+        "zh": "分清检索、委派、恢复与撤销的边界。"
+      },
+      "goal": {
+        "zh": "分清检索、委派、恢复与撤销的边界。"
+      },
+      "units": [
+        {
+          "id": "opencode-ch11",
+          "zh": "opencode/ch11.md"
+        },
+        {
+          "id": "opencode-ch12",
+          "zh": "opencode/ch12.md"
+        },
+        {
+          "id": "opencode-ch13",
+          "zh": "opencode/ch13.md"
+        },
+        {
+          "id": "opencode-ch14",
+          "zh": "opencode/ch14.md"
+        }
+      ]
+    },
+    {
+      "id": "opencode-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "调试、交付与迁移"
+      },
+      "motto": {
+        "zh": "用固定实验维护插件并交付可审阅的任务结果。"
+      },
+      "goal": {
+        "zh": "用固定实验维护插件并交付可审阅的任务结果。"
+      },
+      "units": [
+        {
+          "id": "opencode-ch15",
+          "zh": "opencode/ch15.md"
+        },
+        {
+          "id": "opencode-ch16",
+          "zh": "opencode/ch16.md"
+        },
+        {
+          "id": "opencode-ch17",
+          "zh": "opencode/ch17.md"
+        },
+        {
+          "id": "opencode-ch18",
+          "zh": "opencode/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "opencode-apxa",
+      "zh": "opencode/appendix-a.md"
+    },
+    {
+      "id": "opencode-apxb",
+      "zh": "opencode/appendix-b.md"
+    },
+    {
+      "id": "opencode-apxc",
+      "zh": "opencode/appendix-c.md"
+    },
+    {
+      "id": "opencode-apxd",
+      "zh": "opencode/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "opencode-front": {
+      "question": {
+        "zh": "把一次对话追到真正执行的地方"
+      },
+      "deliverable": {
+        "zh": "沿着配置、模型请求和工具调用理解 OpenCode。"
+      },
+      "boundary": {
+        "zh": "以 v1.19.5 固定源码与本书明确列出的实验范围为准。"
+      },
+      "plain": {
+        "zh": "沿着配置、模型请求和工具调用理解 OpenCode。"
+      },
+      "plain_evidence": [
+        "opencode-front.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch01": {
+      "question": {
+        "zh": "如何确认第一次任务真正读到了目标文件？"
+      },
+      "deliverable": {
+        "zh": "固定版本和目录，用一个文件读取任务跑通宿主。"
+      },
+      "boundary": {
+        "zh": "本地模型替身驱动；不测真实模型效果。"
+      },
+      "plain": {
+        "zh": "固定版本和目录，用一个文件读取任务跑通宿主。"
+      },
+      "plain_evidence": [
+        "opencode-ch01.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch02": {
+      "question": {
+        "zh": "同一服务如何区分项目实例、会话与请求？"
+      },
+      "deliverable": {
+        "zh": "服务接收请求，项目实例持有对应的配置与状态。"
+      },
+      "boundary": {
+        "zh": "Windows serve 路径；TUI 独立说明。"
+      },
+      "plain": {
+        "zh": "服务接收请求，项目实例持有对应的配置与状态。"
+      },
+      "plain_evidence": [
+        "opencode-ch02.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch03": {
+      "question": {
+        "zh": "冲突配置和深层目录指令究竟怎样进入请求？"
+      },
+      "deliverable": {
+        "zh": "先查实际配置来源，再解释合并与覆盖。"
+      },
+      "boundary": {
+        "zh": "字段按固定源码解释；不外推其他版本。"
+      },
+      "plain": {
+        "zh": "先查实际配置来源，再解释合并与覆盖。"
+      },
+      "plain_evidence": [
+        "opencode-ch03.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch04": {
+      "question": {
+        "zh": "会话恢复、分支与压缩分别保留了什么？"
+      },
+      "deliverable": {
+        "zh": "会话历史与磁盘文件分别保存，恢复前核对当前状态。"
+      },
+      "boundary": {
+        "zh": "恢复与压缩按源码；不等于磁盘回滚。"
+      },
+      "plain": {
+        "zh": "会话历史与磁盘文件分别保存，恢复前核对当前状态。"
+      },
+      "plain_evidence": [
+        "opencode-ch04.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch05": {
+      "question": {
+        "zh": "工具调用如何从 SSE 分片还原并返回下一轮？"
+      },
+      "deliverable": {
+        "zh": "从实际请求和 SSE 响应检查模型协议。"
+      },
+      "boundary": {
+        "zh": "已测本地 SSE；不代表所有提供者。"
+      },
+      "plain": {
+        "zh": "从实际请求和 SSE 响应检查模型协议。"
+      },
+      "plain_evidence": [
+        "opencode-ch05.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch06": {
+      "question": {
+        "zh": "插件工具怎样经过参数适配、审批和结果归一化？"
+      },
+      "deliverable": {
+        "zh": "自定义工具在副作用前检查权限，并保留明确结果。"
+      },
+      "boundary": {
+        "zh": "固定普通文件已测；任意路径另测。"
+      },
+      "plain": {
+        "zh": "自定义工具在副作用前检查权限，并保留明确结果。"
+      },
+      "plain_evidence": [
+        "opencode-ch06.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch07": {
+      "question": {
+        "zh": "拒绝、单次批准和持续批准影响哪些操作？"
+      },
+      "deliverable": {
+        "zh": "区分工具隐藏、操作拒绝和等待批准。"
+      },
+      "boundary": {
+        "zh": "十场景实跑；并发 pending 另作源码分析。"
+      },
+      "plain": {
+        "zh": "区分工具隐藏、操作拒绝和等待批准。"
+      },
+      "plain_evidence": [
+        "opencode-ch07.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch08": {
+      "question": {
+        "zh": "多个 Hook 怎样共享输出、关联调用和处理失败？"
+      },
+      "deliverable": {
+        "zh": "V1 Hook 修改共享 output，失败和清理由插件认真处理。"
+      },
+      "boundary": {
+        "zh": "处理器与V1宿主分别验证。"
+      },
+      "plain": {
+        "zh": "V1 Hook 修改共享 output，失败和清理由插件认真处理。"
+      },
+      "plain_evidence": [
+        "opencode-ch08.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch09": {
+      "question": {
+        "zh": "为什么重新初始化仍可能运行旧模块？"
+      },
+      "deliverable": {
+        "zh": "实例重新初始化与模块重新导入是两件事。"
+      },
+      "boundary": {
+        "zh": "关闭文件监听；不声称自动热重载。"
+      },
+      "plain": {
+        "zh": "实例重新初始化与模块重新导入是两件事。"
+      },
+      "plain_evidence": [
+        "opencode-ch09.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch10": {
+      "question": {
+        "zh": "MCP 连接、工具发现和业务调用怎样区分失败？"
+      },
+      "deliverable": {
+        "zh": "MCP 把能力放到独立服务，连接和业务错误分别处理。"
+      },
+      "boundary": {
+        "zh": "MCP 按源码与集成设计；未实跑服务。"
+      },
+      "plain": {
+        "zh": "MCP 把能力放到独立服务，连接和业务错误分别处理。"
+      },
+      "plain_evidence": [
+        "opencode-ch10.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch11": {
+      "question": {
+        "zh": "搜索结果和语言诊断各自能提供哪些证据？"
+      },
+      "deliverable": {
+        "zh": "文本检索和语言诊断为修改提供不同证据。"
+      },
+      "boundary": {
+        "zh": "LSP 和搜索按源码；未测性能与完整服务。"
+      },
+      "plain": {
+        "zh": "文本检索和语言诊断为修改提供不同证据。"
+      },
+      "plain_evidence": [
+        "opencode-ch11.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch12": {
+      "question": {
+        "zh": "子任务的会话、权限和文件责任怎样继承？"
+      },
+      "deliverable": {
+        "zh": "子任务需要明确范围、权限、返回结果和文件归属。"
+      },
+      "boundary": {
+        "zh": "子任务失败链为源码观察。"
+      },
+      "plain": {
+        "zh": "子任务需要明确范围、权限、返回结果和文件归属。"
+      },
+      "plain_evidence": [
+        "opencode-ch12.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch13": {
+      "question": {
+        "zh": "会话撤销、快照恢复与 Git 提交有何差异？"
+      },
+      "deliverable": {
+        "zh": "会话撤销、文件快照与 Git 提交各有作用。"
+      },
+      "boundary": {
+        "zh": "快照与恢复按源码；未运行回滚矩阵。"
+      },
+      "plain": {
+        "zh": "会话撤销、文件快照与 Git 提交各有作用。"
+      },
+      "plain_evidence": [
+        "opencode-ch13.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch14": {
+      "question": {
+        "zh": "客户端怎样同时处理任务、审批与恢复？"
+      },
+      "deliverable": {
+        "zh": "自动化客户端需要跟踪身份、审批和业务完成条件。"
+      },
+      "boundary": {
+        "zh": "真实 HTTP 驱动；重连和取消需补测。"
+      },
+      "plain": {
+        "zh": "自动化客户端需要跟踪身份、审批和业务完成条件。"
+      },
+      "plain_evidence": [
+        "opencode-ch14.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch15": {
+      "question": {
+        "zh": "怎样用真实日志把问题定位到一个执行阶段？"
+      },
+      "deliverable": {
+        "zh": "用调用身份与分层证据定位问题。"
+      },
+      "boundary": {
+        "zh": "复用本书宿主证据；日志非完整审计。"
+      },
+      "plain": {
+        "zh": "用调用身份与分层证据定位问题。"
+      },
+      "plain_evidence": [
+        "opencode-ch15.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch16": {
+      "question": {
+        "zh": "本地能加载的插件怎样进入可维护发布流程？"
+      },
+      "deliverable": {
+        "zh": "发布与升级要同时核对入口、依赖和宿主行为。"
+      },
+      "boundary": {
+        "zh": "首次 npm 安装与 V2 运行时未实跑。"
+      },
+      "plain": {
+        "zh": "发布与升级要同时核对入口、依赖和宿主行为。"
+      },
+      "plain_evidence": [
+        "opencode-ch16.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch17": {
+      "question": {
+        "zh": "如何从十九项行为案例完成金额精度修复？"
+      },
+      "deliverable": {
+        "zh": "用失败测试、代码差异和复验完成一次工程修复。"
+      },
+      "boundary": {
+        "zh": "Python 实际执行；不宣称模型自动修复。"
+      },
+      "plain": {
+        "zh": "用失败测试、代码差异和复验完成一次工程修复。"
+      },
+      "plain_evidence": [
+        "opencode-ch17.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-ch18": {
+      "question": {
+        "zh": "怎样用相同任务比较不同 Agent 的机制？"
+      },
+      "deliverable": {
+        "zh": "固定任务与证据，再比较不同 Agent 的执行边界。"
+      },
+      "boundary": {
+        "zh": "按各册已证机制比较；不做模型排名。"
+      },
+      "plain": {
+        "zh": "固定任务与证据，再比较不同 Agent 的执行边界。"
+      },
+      "plain_evidence": [
+        "opencode-ch18.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-apxa": {
+      "question": {
+        "zh": "固定版本与源码导航"
+      },
+      "deliverable": {
+        "zh": "按机制找到固定提交中的源码入口。"
+      },
+      "boundary": {
+        "zh": "以 v1.19.5 固定源码与本书明确列出的实验范围为准。"
+      },
+      "plain": {
+        "zh": "按机制找到固定提交中的源码入口。"
+      },
+      "plain_evidence": [
+        "opencode-apxa.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-apxb": {
+      "question": {
+        "zh": "配置与命令速查"
+      },
+      "deliverable": {
+        "zh": "按任务查命令、配置和本地构建入口。"
+      },
+      "boundary": {
+        "zh": "以 v1.19.5 固定源码与本书明确列出的实验范围为准。"
+      },
+      "plain": {
+        "zh": "按任务查命令、配置和本地构建入口。"
+      },
+      "plain_evidence": [
+        "opencode-apxb.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-apxc": {
+      "question": {
+        "zh": "实验复现与证据范围"
+      },
+      "deliverable": {
+        "zh": "分别记录处理器、真实宿主与未验证的行为。"
+      },
+      "boundary": {
+        "zh": "以 v1.19.5 固定源码与本书明确列出的实验范围为准。"
+      },
+      "plain": {
+        "zh": "分别记录处理器、真实宿主与未验证的行为。"
+      },
+      "plain_evidence": [
+        "opencode-apxc.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    },
+    "opencode-apxd": {
+      "question": {
+        "zh": "术语、来源与跨册对照"
+      },
+      "deliverable": {
+        "zh": "用术语回查对应章节，避免混淆状态范围。"
+      },
+      "boundary": {
+        "zh": "以 v1.19.5 固定源码与本书明确列出的实验范围为准。"
+      },
+      "plain": {
+        "zh": "用术语回查对应章节，避免混淆状态范围。"
+      },
+      "plain_evidence": [
+        "opencode-apxd.b-opening"
+      ],
+      "sources": [
+        "opencode-source"
+      ]
+    }
+  }
+}

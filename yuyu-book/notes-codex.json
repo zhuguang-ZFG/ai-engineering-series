@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "codex-front": {
+    "zh": "CLI 的回答要与文件和命令结果对应。"
+  },
+  "codex-ch01": {
+    "zh": "CLI 版本与实际入口一起记录。"
+  },
+  "codex-ch02": {
+    "zh": "沿 CLI 输入字段追到结果消费者。"
+  },
+  "codex-ch03": {
+    "zh": "AGENTS.md 的发现取决于目录与信任。"
+  },
+  "codex-ch04": {
+    "zh": "thread 历史不能代替检查当前文件。"
+  },
+  "codex-ch05": {
+    "zh": "JSONL 活动与最后文字分开读。"
+  },
+  "codex-ch06": {
+    "zh": "工具启动后还要等退出结果。"
+  },
+  "codex-ch07": {
+    "zh": "审批接受后仍要经过执行约束。"
+  },
+  "codex-ch08": {
+    "zh": "沙箱实验要比较文件前后内容。"
+  },
+  "codex-ch09": {
+    "zh": "CLI 包装器与原生程序分开核对。"
+  },
+  "codex-ch10": {
+    "zh": "execpolicy 无匹配时没有默认 allow。"
+  },
+  "codex-ch11": {
+    "zh": "Git 差异与测试要对应同一份文件。"
+  },
+  "codex-ch12": {
+    "zh": "Hook 的失败与阻止是不同状态。"
+  },
+  "codex-ch13": {
+    "zh": "MCP 服务有自己的权限与状态。"
+  },
+  "codex-ch14": {
+    "zh": "JSONL 完整不表示业务修复已经完成。"
+  },
+  "codex-ch15": {
+    "zh": "schema 校验不等于真实连接成功。"
+  },
+  "codex-ch16": {
+    "zh": "工作树隔离之后仍要检查合并结果。"
+  },
+  "codex-ch17": {
+    "zh": "先检查工具状态和文件现场，再决定重试。"
+  },
+  "codex-ch18": {
+    "zh": "Git 差异应能解释运费边界为何修好。"
+  },
+  "codex-apxa": {
+    "zh": "CLI 事实跟随固定源码与实跑版本。"
+  },
+  "codex-apxb": {
+    "zh": "schema 类型与运行时限制分开核对。"
+  },
+  "codex-apxc": {
+    "zh": "Hook fixture 与宿主实跑分别记录。"
+  },
+  "codex-apxd": {
+    "zh": "同名 Hook 不保证相同接口契约。"
+  }
+}

@@ -1,0 +1,22 @@
+prefix_rule(
+    pattern = ["git", ["status", "diff"]],
+    decision = "allow",
+    justification = "Inspect a repository without changing its history.",
+    match = [["git", "status", "--short"], ["git", "diff", "--stat"]],
+    not_match = [["git", "commit"]],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Review the destination and commit before publishing.",
+    match = [["git", "push", "origin", "review"]],
+    not_match = [["git", "fetch", "origin"]],
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "Use a reviewed branch update without force rewriting shared history.",
+    match = [["git", "push", "--force", "origin", "review"]],
+)

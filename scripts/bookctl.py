@@ -38,6 +38,11 @@ LOCK = ROOT / "uv.lock"
 REQUIREMENTS = ROOT / "yuyu-book" / "requirements.txt"
 DIST = ROOT / "yuyu-book" / "dist"
 VENDOR = ROOT / "yuyu-book"
+AGENT_PRODUCTS = ("opencode", "deepseek", "hermes", "codex")
+ZH_PRODUCTS = ("omp", "pi", *AGENT_PRODUCTS)
+BOOK_PRODUCTS = ("book", *ZH_PRODUCTS)
+OUTPUT_PREFIXES = {"book": "yuyu-agent-harness",
+                   **{product: f"yuyu-{product}" for product in ZH_PRODUCTS}}
 
 NAME = re.compile(r"^(?P<name>[A-Za-z0-9_.-]+)(?:\[[^\]]+\])?=="
                   r"(?P<version>[^;\s]+)")
@@ -323,13 +328,13 @@ def build(args) -> int:
         except subprocess.CalledProcessError as exc:
             return exc.returncode or 1
         return 0
-    if args.product not in ("book", "omp", "pi"):
+    if args.product not in BOOK_PRODUCTS:
         print(f"unknown product: {args.product}", file=sys.stderr)
         return 2
     lang = args.lang
     cmd = [python(), "-m", "yuyu_book", "--mermaid", args.mermaid]
-    if args.product in ("omp", "pi"):
-        # Chinese-first second volume; "both" quietly means zh until en/omp exists.
+    if args.product in ZH_PRODUCTS:
+        # Companion volumes currently publish only their Chinese edition.
         if lang == "en":
             print(f"{args.product} product is zh-only for now", file=sys.stderr)
             return 2
@@ -357,20 +362,27 @@ def build(args) -> int:
             return result
     from build_reports import write_reports
     destination = Path(args.out_dir) if args.out_dir else DIST
+    # A check publishes nothing. A product build must not claim or open a
+    # different book's output, which may still be written by another worker.
+    artifacts = []
+    if not getattr(args, "check", False):
+        foreign_prefixes = tuple(prefix + "-" for product, prefix in
+                                 OUTPUT_PREFIXES.items() if product != args.product)
+        artifacts = [path for path in report_artifacts(destination)
+                     if not path.name.startswith(foreign_prefixes)]
     write_reports(destination, [{"name": args.product, "command": cmd,
                   "returncode": 0, "seconds": round(time.perf_counter() - started, 3)}],
-                  report_artifacts(destination))
+                  artifacts)
     return 0
 
 
 def epub(args) -> int:
     """Convert the editions just built, respecting Chinese-only products."""
-    prefixes = {"book": "yuyu-agent-harness", "omp": "yuyu-omp", "pi": "yuyu-pi"}
-    langs = (["zh"] if args.product in ("omp", "pi") else
+    langs = (["zh"] if args.product in ZH_PRODUCTS else
              ["zh", "en"] if args.lang == "both" else [args.lang])
     out_dir = Path(args.out_dir) if args.out_dir else DIST
     for lang in langs:
-        html = out_dir / f"{prefixes[args.product]}-{lang}.html"
+        html = out_dir / f"{OUTPUT_PREFIXES[args.product]}-{lang}.html"
         if not html.exists():
             print(f"epub: missing {html}", file=sys.stderr)
             return 1
@@ -405,8 +417,7 @@ def main(argv=None) -> int:
                        help="fast plus rendered HTML and both PDF editions")
 
     bl = sub.add_parser("build", help="build a product")
-    # products: book (御舆) and omp (第二分册, zh-first).
-    bl.add_argument("--product", default="book", choices=["book", "omp", "pi", "site",
+    bl.add_argument("--product", default="book", choices=[*BOOK_PRODUCTS, "site",
                     "reader", "gallery", "cards", "sample", "indices"])
     bl.add_argument("--lang", default="both", choices=["zh", "en", "both"])
     bl.add_argument("--pdf", action="store_true")

@@ -1,0 +1,713 @@
+{
+  "schema_version": 1,
+  "product": "hermes",
+  "version": "0.2.0",
+  "date": "2026-11-10",
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "title": {
+    "zh": "Hermes Agent：记忆、技能与持续任务"
+  },
+  "subtitle": {
+    "zh": "从一次对话到长期项目的机制、扩展与实践 · 非官方"
+  },
+  "kicker": {
+    "zh": "Memory · Skills · Persistent Work"
+  },
+  "notice": {
+    "zh": "本书是对 Nous Research Hermes Agent 的独立技术分析，与上游项目无隶属关系。基于 v0.23.0 固定源码；实际组件实验与未执行的宿主实验见附录 C。"
+  },
+  "epigraph": {
+    "zh": "留下有来处的经验，才能在下一次任务中判断它是否仍然适用。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-hermes",
+  "revisions_registry": "revisions-hermes.json",
+  "subject_index_registry": "subject-index-hermes.json",
+  "plain_optional": false,
+  "pin": {
+    "writing": "Hermes v0.23.0 / 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "verified_windows": "Python components only; see hermes/VERIFY.md"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "先理解日常使用"
+      },
+      "body": {
+        "zh": "第 1–4 章，建立独立配置并理解会话与记忆。"
+      }
+    },
+    {
+      "label": {
+        "zh": "准备扩展能力"
+      },
+      "body": {
+        "zh": "第 5–10 章，串起技能、历史、插件和 MCP。"
+      }
+    },
+    {
+      "label": {
+        "zh": "准备长期运行"
+      },
+      "body": {
+        "zh": "第 11–18 章，处理调度、路由、隔离与跨会话项目。"
+      }
+    }
+  ],
+  "front": {
+    "id": "hermes-front",
+    "zh": "hermes/00-前言.md"
+  },
+  "parts": [
+    {
+      "id": "hermes-p1",
+      "no": {
+        "zh": "第一篇"
+      },
+      "title": {
+        "zh": "从安装到记忆"
+      },
+      "motto": {
+        "zh": "分清程序、会话与持久知识。"
+      },
+      "goal": {
+        "zh": "分清程序、会话与持久知识。"
+      },
+      "units": [
+        {
+          "id": "hermes-ch01",
+          "zh": "hermes/ch01.md"
+        },
+        {
+          "id": "hermes-ch02",
+          "zh": "hermes/ch02.md"
+        },
+        {
+          "id": "hermes-ch03",
+          "zh": "hermes/ch03.md"
+        },
+        {
+          "id": "hermes-ch04",
+          "zh": "hermes/ch04.md"
+        }
+      ]
+    },
+    {
+      "id": "hermes-p2",
+      "no": {
+        "zh": "第二篇"
+      },
+      "title": {
+        "zh": "让经验变成可复用的方法"
+      },
+      "motto": {
+        "zh": "阅读、修订和检索都保留来源。"
+      },
+      "goal": {
+        "zh": "阅读、修订和检索都保留来源。"
+      },
+      "units": [
+        {
+          "id": "hermes-ch05",
+          "zh": "hermes/ch05.md"
+        },
+        {
+          "id": "hermes-ch06",
+          "zh": "hermes/ch06.md"
+        },
+        {
+          "id": "hermes-ch07",
+          "zh": "hermes/ch07.md"
+        },
+        {
+          "id": "hermes-ch08",
+          "zh": "hermes/ch08.md"
+        }
+      ]
+    },
+    {
+      "id": "hermes-p3",
+      "no": {
+        "zh": "第三篇"
+      },
+      "title": {
+        "zh": "扩展与持续运行"
+      },
+      "motto": {
+        "zh": "把加载、执行与投递分开检查。"
+      },
+      "goal": {
+        "zh": "把加载、执行与投递分开检查。"
+      },
+      "units": [
+        {
+          "id": "hermes-ch09",
+          "zh": "hermes/ch09.md"
+        },
+        {
+          "id": "hermes-ch10",
+          "zh": "hermes/ch10.md"
+        },
+        {
+          "id": "hermes-ch11",
+          "zh": "hermes/ch11.md"
+        },
+        {
+          "id": "hermes-ch12",
+          "zh": "hermes/ch12.md"
+        },
+        {
+          "id": "hermes-ch13",
+          "zh": "hermes/ch13.md"
+        },
+        {
+          "id": "hermes-ch14",
+          "zh": "hermes/ch14.md"
+        }
+      ]
+    },
+    {
+      "id": "hermes-p4",
+      "no": {
+        "zh": "第四篇"
+      },
+      "title": {
+        "zh": "长期项目与可靠性"
+      },
+      "motto": {
+        "zh": "用恢复和对照实验检查留下的经验。"
+      },
+      "goal": {
+        "zh": "用恢复和对照实验检查留下的经验。"
+      },
+      "units": [
+        {
+          "id": "hermes-ch15",
+          "zh": "hermes/ch15.md"
+        },
+        {
+          "id": "hermes-ch16",
+          "zh": "hermes/ch16.md"
+        },
+        {
+          "id": "hermes-ch17",
+          "zh": "hermes/ch17.md"
+        },
+        {
+          "id": "hermes-ch18",
+          "zh": "hermes/ch18.md"
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    {
+      "id": "hermes-apxa",
+      "zh": "hermes/appendix-a.md"
+    },
+    {
+      "id": "hermes-apxb",
+      "zh": "hermes/appendix-b.md"
+    },
+    {
+      "id": "hermes-apxc",
+      "zh": "hermes/appendix-c.md"
+    },
+    {
+      "id": "hermes-apxd",
+      "zh": "hermes/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "hermes-front": {
+      "question": {
+        "zh": "为什么把 Hermes 单独写成一册？"
+      },
+      "deliverable": {
+        "zh": "分清记忆、技能与历史的用途。"
+      },
+      "boundary": {
+        "zh": "本书不把组件实验说成完整宿主实跑。"
+      },
+      "plain": {
+        "zh": "记忆、技能与历史，分别留下不同的经验。"
+      },
+      "plain_evidence": [
+        "hermes-front.b-opening"
+      ],
+      "sources": [
+        "hermes-repo"
+      ]
+    },
+    "hermes-ch01": {
+      "question": {
+        "zh": "程序与用户数据怎样分开？"
+      },
+      "deliverable": {
+        "zh": "建立独立的实验 home 并记录版本。"
+      },
+      "boundary": {
+        "zh": "改变工作目录不自动切换配置。"
+      },
+      "plain": {
+        "zh": "先分开程序、用户数据和工作目录。"
+      },
+      "plain_evidence": [
+        "hermes-ch01.b-opening"
+      ],
+      "sources": [
+        "hermes-repo",
+        "hermes-config"
+      ]
+    },
+    "hermes-ch02": {
+      "question": {
+        "zh": "一次任务怎样走到工具调用？"
+      },
+      "deliverable": {
+        "zh": "顺着输入、工具结果和后续请求追踪循环。"
+      },
+      "boundary": {
+        "zh": "schema 合法不等于业务动作正确。"
+      },
+      "plain": {
+        "zh": "模型提出动作，宿主执行并把结果送回来。"
+      },
+      "plain_evidence": [
+        "hermes-ch02.b-opening"
+      ],
+      "sources": [
+        "hermes-loop",
+        "hermes-registry"
+      ]
+    },
+    "hermes-ch03": {
+      "question": {
+        "zh": "恢复会话时实际恢复了什么？"
+      },
+      "deliverable": {
+        "zh": "区分消息记录、压缩内容和实际副作用。"
+      },
+      "boundary": {
+        "zh": "重新打开记录不会撤销文件变化。"
+      },
+      "plain": {
+        "zh": "会话保存过程，恢复时还要核对实际产物。"
+      },
+      "plain_evidence": [
+        "hermes-ch03.b-opening"
+      ],
+      "sources": [
+        "hermes-state",
+        "hermes-loop",
+        "hermes-compression"
+      ]
+    },
+    "hermes-ch04": {
+      "question": {
+        "zh": "记忆保存后什么时候进入提示？"
+      },
+      "deliverable": {
+        "zh": "运行 17 项组件实验，解释快照、审批、批处理与写入异常。"
+      },
+      "boundary": {
+        "zh": "当前快照与磁盘新内容可能不同。"
+      },
+      "plain": {
+        "zh": "长期记忆要同时看文件和当前提示快照。"
+      },
+      "plain_evidence": [
+        "hermes-ch04.b-opening"
+      ],
+      "sources": [
+        "hermes-memory",
+        "hermes-memory-tool",
+        "hermes-atomic"
+      ]
+    },
+    "hermes-ch05": {
+      "question": {
+        "zh": "技能为什么不用每次全文放进提示？"
+      },
+      "deliverable": {
+        "zh": "组织一份可发现、可阅读的技能。"
+      },
+      "boundary": {
+        "zh": "技能中的脚本不因被阅读就自动执行。"
+      },
+      "plain": {
+        "zh": "技能把可复用方法与配套材料放在一起。"
+      },
+      "plain_evidence": [
+        "hermes-ch05.b-opening"
+      ],
+      "sources": [
+        "hermes-skills",
+        "hermes-skills-tool"
+      ]
+    },
+    "hermes-ch06": {
+      "question": {
+        "zh": "一次失败怎样改成更好的方法？"
+      },
+      "deliverable": {
+        "zh": "用失败样本修订技能并保留反例。"
+      },
+      "boundary": {
+        "zh": "单次例外不应变成所有任务的规则。"
+      },
+      "plain": {
+        "zh": "把失败变成有条件、可重做的方法修订。"
+      },
+      "plain_evidence": [
+        "hermes-ch06.b-opening"
+      ],
+      "sources": [
+        "hermes-skill-manage"
+      ]
+    },
+    "hermes-ch07": {
+      "question": {
+        "zh": "过去的决定怎样回到当前任务？"
+      },
+      "deliverable": {
+        "zh": "按来源和时间核对检索片段。"
+      },
+      "boundary": {
+        "zh": "搜索结果只覆盖有限记录和窗口。"
+      },
+      "plain": {
+        "zh": "检索找回记录，来源决定它能否继续使用。"
+      },
+      "plain_evidence": [
+        "hermes-ch07.b-opening"
+      ],
+      "sources": [
+        "hermes-search",
+        "hermes-state"
+      ]
+    },
+    "hermes-ch08": {
+      "question": {
+        "zh": "过期知识怎样清理？"
+      },
+      "deliverable": {
+        "zh": "精确定位条目，区分删除范围与当前上下文。"
+      },
+      "boundary": {
+        "zh": "删除条目不抹去所有历史副本。"
+      },
+      "plain": {
+        "zh": "先确定事实的适用条件，再处理冲突与删除。"
+      },
+      "plain_evidence": [
+        "hermes-ch08.b-opening"
+      ],
+      "sources": [
+        "hermes-memory",
+        "hermes-memory-tool"
+      ]
+    },
+    "hermes-ch09": {
+      "question": {
+        "zh": "插件怎样为宿主增加一个动作？"
+      },
+      "deliverable": {
+        "zh": "按加载时序读源码，运行完整插件及 9 项离线测试。"
+      },
+      "boundary": {
+        "zh": "离线处理器测试没有加载 PluginManager。"
+      },
+      "plain": {
+        "zh": "插件把工具接进宿主，也要交代清理责任。"
+      },
+      "plain_evidence": [
+        "hermes-ch09.b-opening"
+      ],
+      "sources": [
+        "hermes-plugins",
+        "hermes-discovery",
+        "hermes-registry",
+        "hermes-plugin-manifest"
+      ]
+    },
+    "hermes-ch10": {
+      "question": {
+        "zh": "MCP 工具失败时应该查哪一段？"
+      },
+      "deliverable": {
+        "zh": "分开连接、工具发现、调用与关闭。"
+      },
+      "boundary": {
+        "zh": "重试可能重复已经成功的业务动作。"
+      },
+      "plain": {
+        "zh": "外部工具增加了连接和服务端状态。"
+      },
+      "plain_evidence": [
+        "hermes-ch10.b-opening"
+      ],
+      "sources": [
+        "hermes-mcp"
+      ]
+    },
+    "hermes-ch11": {
+      "question": {
+        "zh": "定时任务怎样从到点走到结果？"
+      },
+      "deliverable": {
+        "zh": "区分调度记录、领取、执行和投递。"
+      },
+      "boundary": {
+        "zh": "一次成功不保证以后恰好执行一次。"
+      },
+      "plain": {
+        "zh": "持续任务需要留下执行记录和投递记录。"
+      },
+      "plain_evidence": [
+        "hermes-ch11.b-opening"
+      ],
+      "sources": [
+        "hermes-cron",
+        "hermes-jobs"
+      ]
+    },
+    "hermes-ch12": {
+      "question": {
+        "zh": "不同平台的消息怎样找到会话？"
+      },
+      "deliverable": {
+        "zh": "列出平台、账户、聊天和线程的路由关系。"
+      },
+      "boundary": {
+        "zh": "显示名称不能代替稳定身份。"
+      },
+      "plain": {
+        "zh": "网关把消息来源映射到具体会话。"
+      },
+      "plain_evidence": [
+        "hermes-ch12.b-opening"
+      ],
+      "sources": [
+        "hermes-gateway"
+      ]
+    },
+    "hermes-ch13": {
+      "question": {
+        "zh": "工具命令实际在哪运行？"
+      },
+      "deliverable": {
+        "zh": "用临时哨兵核对后端、挂载和持久化。"
+      },
+      "boundary": {
+        "zh": "容器挂载仍可能开放宿主文件。"
+      },
+      "plain": {
+        "zh": "终端后端决定命令所处的文件和进程环境。"
+      },
+      "plain_evidence": [
+        "hermes-ch13.b-opening"
+      ],
+      "sources": [
+        "hermes-terminal"
+      ]
+    },
+    "hermes-ch14": {
+      "question": {
+        "zh": "怎样拆任务才不会互相覆盖？"
+      },
+      "deliverable": {
+        "zh": "给子任务规定输入、文件责任和返回证据。"
+      },
+      "boundary": {
+        "zh": "上下文分离不代表文件系统分离。"
+      },
+      "plain": {
+        "zh": "并行任务先分清文件责任和共享状态。"
+      },
+      "plain_evidence": [
+        "hermes-ch14.b-opening"
+      ],
+      "sources": [
+        "hermes-delegate"
+      ]
+    },
+    "hermes-ch15": {
+      "question": {
+        "zh": "怎样带走数据又不带走无关秘密？"
+      },
+      "deliverable": {
+        "zh": "制定稳定备份、脱敏和受控恢复步骤。"
+      },
+      "boundary": {
+        "zh": "复制正在写入的主数据库可能不完整。"
+      },
+      "plain": {
+        "zh": "先辨认持久数据，再决定怎样备份和恢复。"
+      },
+      "plain_evidence": [
+        "hermes-ch15.b-opening"
+      ],
+      "sources": [
+        "hermes-state",
+        "hermes-config"
+      ]
+    },
+    "hermes-ch16": {
+      "question": {
+        "zh": "一个错误应该从哪里查起？"
+      },
+      "deliverable": {
+        "zh": "关联输入、工具、存储和后续读取证据。"
+      },
+      "boundary": {
+        "zh": "日志更多不等于定位更准。"
+      },
+      "plain": {
+        "zh": "从错误结果往回追到产生它的那一层。"
+      },
+      "plain_evidence": [
+        "hermes-ch16.b-opening"
+      ],
+      "sources": [
+        "hermes-loop",
+        "hermes-memory"
+      ]
+    },
+    "hermes-ch17": {
+      "question": {
+        "zh": "长期项目怎样跨会话逐步改进？"
+      },
+      "deliverable": {
+        "zh": "跑完八步 Aurora 文件流程，再复做三次真实会话方案。"
+      },
+      "boundary": {
+        "zh": "书中方案未执行真实模型任务。"
+      },
+      "plain": {
+        "zh": "同一项目换前提后，旧经验也要重新核对。"
+      },
+      "plain_evidence": [
+        "hermes-ch17.b-opening"
+      ],
+      "sources": [
+        "hermes-memory",
+        "hermes-skill-manage",
+        "hermes-search",
+        "hermes-agent-init"
+      ]
+    },
+    "hermes-ch18": {
+      "question": {
+        "zh": "什么证据足以说明一次改进？"
+      },
+      "deliverable": {
+        "zh": "区分存储变化、检索、行为改善和模型训练。"
+      },
+      "boundary": {
+        "zh": "新增记忆不能证明模型权重改变。"
+      },
+      "plain": {
+        "zh": "持续改进要比较行为，还要检查退步。"
+      },
+      "plain_evidence": [
+        "hermes-ch18.b-opening"
+      ],
+      "sources": [
+        "hermes-memory",
+        "hermes-loop"
+      ]
+    },
+    "hermes-apxa": {
+      "question": {
+        "zh": "如何重找本书使用的实现？"
+      },
+      "deliverable": {
+        "zh": "按固定提交和源码导航复查行为。"
+      },
+      "boundary": {
+        "zh": "滚动文档不自动代表钉版代码。"
+      },
+      "plain": {
+        "zh": "按完整提交号定位源码，再观察调用路径。"
+      },
+      "plain_evidence": [
+        "hermes-apxa.b-opening"
+      ],
+      "sources": [
+        "hermes-repo"
+      ]
+    },
+    "hermes-apxb": {
+      "question": {
+        "zh": "配置出错时先检查哪里？"
+      },
+      "deliverable": {
+        "zh": "核对 home、插件设置和数据目标。"
+      },
+      "boundary": {
+        "zh": "速查表不能证明远程服务已可用。"
+      },
+      "plain": {
+        "zh": "先确认当前配置作用域，再查具体字段。"
+      },
+      "plain_evidence": [
+        "hermes-apxb.b-opening"
+      ],
+      "sources": [
+        "hermes-config",
+        "hermes-plugins"
+      ]
+    },
+    "hermes-apxc": {
+      "question": {
+        "zh": "哪些实验可以在本机重做？"
+      },
+      "deliverable": {
+        "zh": "复现组件、插件和 Aurora 流程，并辨认各自测试接缝。"
+      },
+      "boundary": {
+        "zh": "未运行的模型和平台实验没有列为通过。"
+      },
+      "plain": {
+        "zh": "实验记录要写清实际执行了哪一段程序。"
+      },
+      "plain_evidence": [
+        "hermes-apxc.b-opening"
+      ],
+      "sources": [
+        "hermes-memory",
+        "hermes-skills",
+        "hermes-plugins"
+      ]
+    },
+    "hermes-apxd": {
+      "question": {
+        "zh": "怎样与其他 Agent 进行有效比较？"
+      },
+      "deliverable": {
+        "zh": "用相同任务比较状态、工具和恢复。"
+      },
+      "boundary": {
+        "zh": "同名术语在不同宿主中不一定同义。"
+      },
+      "plain": {
+        "zh": "把术语落到文件、进程与执行时刻上比较。"
+      },
+      "plain_evidence": [
+        "hermes-apxd.b-opening"
+      ],
+      "sources": [
+        "hermes-repo",
+        "hermes-registry"
+      ]
+    }
+  }
+}

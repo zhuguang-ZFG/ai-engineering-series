@@ -67,7 +67,7 @@ make book-pi-epub   # 再加 EPUB
 
 ## 后续四册（研究与试章）
 
-已为 [OpenCode](opencode/README.md)、[DeepSeek Harness](deepseek/README.md)、[Hermes](hermes/README.md)、[Codex CLI](codex/README.md) 分别建立任务和提纲，按此顺序推进。OpenCode 已写插件专题第 8、9 章，并完成处理器与 Windows 真实宿主实验；四册尚未完成整书构建。版本、范围和下一步见 [研究入口](docs/agent-series-research.md)。
+新增 [OpenCode](opencode/README.md)、[DeepSeek Harness](deepseek/README.md)、[Hermes](hermes/README.md)、[Codex CLI](codex/README.md) 四本中文分册，每册包含前言、18 章和附录 A–D，均有独立 HTML/PDF/EPUB 构建入口。插件与工具机制配有固定源码、原创示例和实际组件或宿主实验；英文版尚未启动。版本和实验范围见 [研究入口](docs/agent-series-research.md)。
 
 ## 阅读说明
 
