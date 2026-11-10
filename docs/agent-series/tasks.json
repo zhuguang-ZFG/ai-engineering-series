@@ -8,14 +8,14 @@
     "codex"
   ],
   "active": [],
-  "current_milestone": "Reader-path revisions and index layout delivered locally; publication review pending",
+  "current_milestone": "Reader-path revisions delivered locally; publication checks and merge history are tracked by PR #46",
   "tasks": [
     {
       "id": "opencode",
       "status": "completed",
       "stage": "reader_path_verified",
       "outline": "opencode/outline.md",
-      "next": "Follow publication review for reader paths and index layout",
+      "next": "Use the current editions; consult PR #46 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -33,7 +33,7 @@
       "status": "completed",
       "stage": "reader_path_verified",
       "outline": "deepseek/outline.md",
-      "next": "Follow publication review for reader paths and index layout",
+      "next": "Use the current editions; consult PR #46 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -51,7 +51,7 @@
       "status": "completed",
       "stage": "reader_path_verified",
       "outline": "hermes/outline.md",
-      "next": "Follow publication review for reader paths and index layout",
+      "next": "Use the current editions; consult PR #46 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -69,7 +69,7 @@
       "status": "completed",
       "stage": "reader_path_verified",
       "outline": "codex/outline.md",
-      "next": "Follow publication review for reader paths and index layout",
+      "next": "Use the current editions; consult PR #46 for publication history",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
@@ -86,7 +86,8 @@
   "execution": "parallel; explicitly requested by the user on 2026-11-10",
   "quality_revision": "Clarified first runnable steps, working directories, example state across chapters and index readability",
   "release": {
-    "status": "pending_review",
+    "pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/46",
+    "status_source": "GitHub pull request checks and merge history",
     "previous_pull_request": "https://github.com/zhuguang-ZFG/claude-code-book/pull/45"
   }
 }
