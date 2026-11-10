@@ -273,6 +273,16 @@ jobs:
           name: series-prompt-epubcheck
           path: agent-books/yuyu-book/dist/yuyu-prompt-zh-epubcheck.json
           if-no-files-found: error
+      - name: Retain course export diagnostics on failure
+        if: failure() && matrix.product == 'llm'
+        uses: actions/upload-artifact@v4
+        with:
+          name: course-export-diagnostics
+          path: |
+            model-course/tmp/llm-course-review/*.html
+            model-course/tmp/llm-course-review/*.css
+            model-course/deliverables/llm-course*.pdf
+          if-no-files-found: error
 
 # Only this root workflow is active. The .github directories inside the two
 # projects retain their historical contracts; they do not publish or commit.
