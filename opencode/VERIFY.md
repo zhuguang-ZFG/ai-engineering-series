@@ -68,3 +68,15 @@ TUI、其他平台、自动热重载、异常退出、取消与并发清理、�
 ## 本地成品
 
 2026-11-10 已生成 HTML、PDF（99 页）和 EPUB，并校验复制到主工作区 `yuyu-book/dist/`。PDF 包含 29 个书签，EPUBCheck 5.4.0 零错误、零警告。[交付摘要与文件校验值](../docs/agent-series/local-publication-20261110.json)记录这次成品。
+
+
+## 1.1.0 深化版
+
+正文、前言与附录共约 56,458 个汉字、26 张 Mermaid 图。完整扩写配置合并、会话压缩、SSE、工具适配、审批队列、共享 output、状态归属、MCP/LSP、委派、撤销、SDK 与连续工程练习。
+
+原创 pricing-lab 实际执行 19 项输入案例，已知错误版本有 18 项失败，参考实现零失败。结果与源码摘要见 [价格练习记录](facts/pricing-lab-20261110.json)。它不调用模型。此前 99 页成品属于 1.0.0 初稿，深化版页数以重新构建的交付记录为准。
+
+
+## 深化版成品交付
+
+v1.1.0 已在本机重建：PDF 150 页、29 个书签；EPUBCheck 5.4.0 零错误、零警告。四册封面、章节排版、目录、示例页与索引已抽查。文件已校验复制到 `D:\Users\claude\claude-code-book-main\yuyu-book\dist`，旧初稿另存 `.ebook-validation-tools/agent-drafts-20261110`。[交付摘要](../docs/agent-series/local-publication-20261110-revised.json)保留大小与 SHA-256。

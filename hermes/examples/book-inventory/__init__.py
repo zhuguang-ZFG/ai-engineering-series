@@ -79,6 +79,8 @@ def make_inventory_handler(root: str | Path, *, limit: int = 100, max_entries: i
 
 def register(ctx):
     handler = make_inventory_handler(ctx.get_config("root", ""))
-    ctx.register_tool(
+    registration = ctx.register_tool(
         name="book_inventory", toolset="book_inventory", schema=SCHEMA, handler=handler
     )
+    if registration is None:
+        raise RuntimeError("book_inventory registration was not accepted by the host.")

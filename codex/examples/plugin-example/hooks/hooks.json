@@ -1,0 +1,8 @@
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "exec_command|Bash",
+      "hooks": [{"type": "command", "command": "python \"$PLUGIN_ROOT/scripts/hook_guard.py\"", "timeout": 10}]
+    }]
+  }
+}

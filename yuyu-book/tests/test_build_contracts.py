@@ -60,16 +60,15 @@ def _root_children(svg: str) -> list[tuple[str, str]]:
 
 
 class StyleSources(unittest.TestCase):
-    """The stylesheet is four sources, not one file: tokens, screen rules,
-    component rules and the print overlay. The build inlines them in that
-    order, and the reading-column block stays the last screen word."""
+    """Tokens, screen rules, components, volume themes and print rules form
+    the cascade. The shared reading-column rules end the component source."""
 
     def test_the_stylesheet_is_assembled_in_cascade_order(self):
-        from yuyu_book import style_components, style_print, style_screen, style_tokens
+        from yuyu_book import style_agents, style_components, style_print, style_screen, style_tokens
         self.assertEqual(
             CSS,
             style_tokens.TOKENS_CSS + style_screen.SCREEN_CSS
-            + style_components.COMPONENTS_CSS + style_print.PRINT_CSS)
+            + style_components.COMPONENTS_CSS + style_agents.AGENT_CSS + style_print.PRINT_CSS)
         self.assertLess(CSS.index("--paper:#FBF7EF"), CSS.index(".sheet{"))
         self.assertLess(CSS.index(".sheet{"), CSS.index(".callout{"))
         self.assertLess(CSS.index(".callout{"), CSS.index("@media print{"))

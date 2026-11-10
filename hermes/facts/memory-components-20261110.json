@@ -54,8 +54,51 @@
       "case": "skill frontmatter handles BOM and support folders are excluded",
       "passed": true,
       "yaml_path": "fallback"
+    },
+    {
+      "case": "sequential stale writers preserve each other's additions",
+      "passed": true,
+      "concurrency_scope": "Two instances, deterministic interleaving; not simultaneous processes"
+    },
+    {
+      "case": "a staged edit refuses an entry changed after resolution",
+      "passed": true
+    },
+    {
+      "case": "whole-entry exact match wins over substring matches",
+      "passed": true
+    },
+    {
+      "case": "repeated spans inside one entry are refused",
+      "passed": true
+    },
+    {
+      "case": "BOM and duplicates normalize in memory while resolve leaves disk untouched",
+      "passed": true
+    },
+    {
+      "case": "oversized foreign entry blocks rewrite and requires backup before deletion",
+      "passed": true
+    },
+    {
+      "case": "consecutive consolidation failures terminate and turn reset restores budget",
+      "passed": true
+    },
+    {
+      "case": "write failure preserves disk but requires reload to reconcile live state",
+      "passed": true,
+      "injection": "atomic_write_text replaced by a function raising OSError before disk mutation"
+    },
+    {
+      "case": "batch enforces the final budget rather than a temporary intermediate size",
+      "passed": true,
+      "final_chars": 90,
+      "limit": 100
     }
   ],
   "passed": true,
-  "book_script_sha256": "2ea5af90f7f8ca41ea89e3ca46a6533150c21c8677c4b4e8fe21085da44e7700"
+  "book_script_sha256": "29ab2d9ba169039ec8ec85cca38c322d92f0af42c44ef61ce7b36d6067d52e88",
+  "additional_memory_char_limits": [
+    500
+  ]
 }

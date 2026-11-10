@@ -44,4 +44,17 @@
 
 ## 固定入口
 
+深化章节还使用以下入口：
+
+| 研究问题 | 固定源码路径 |
+| --- | --- |
+| 技能元数据与目录扫描 | `codex-rs/skills/src/parser.rs`、`codex-rs/ext/skills/src/loader/discovery.rs` |
+| 原始插件路径如何解析 | `codex-rs/core-plugins/src/manifest.rs` |
+| Hook 精确候选与正则 | `codex-rs/hooks/src/engine/matcher.rs` |
+| schema 之后的输出语义 | `codex-rs/hooks/src/engine/output_parser.rs` |
+| 多 Hook 拒绝与改写汇总 | `codex-rs/hooks/src/events/pre_tool_use.rs` |
+| 并发、超时与进程 | `codex-rs/hooks/src/engine/dispatcher.rs`、`command_runner.rs` |
+| 包内容变化怎样影响信任 | `codex-rs/hooks/src/engine/plugin_fingerprint.rs`、`plugin_trust.rs` |
+| exec JSONL 的真实字段 | `codex-rs/exec/src/exec_events.rs` |
+
 [源码根](https://github.com/openai/codex/tree/086ccc833bc9cf01024ad2dd6af7dbd421b6bf9a)、[发布标签](https://github.com/openai/codex/releases/tag/rust-v0.167.0)、[本册验证](appendix-c.md)。

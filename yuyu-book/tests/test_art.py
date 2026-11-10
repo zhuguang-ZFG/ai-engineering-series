@@ -74,6 +74,16 @@ class ShippedDrawings(unittest.TestCase):
             self.assertFalse(found, f"{path.name} declares {sorted(found)}")
             ids |= found
 
+    def test_agent_volumes_have_distinct_offline_covers(self):
+        drawings = []
+        for product in ("opencode", "deepseek", "hermes", "codex"):
+            drawing = art._read(f"cover-{product}", art.PLATE_BYTES)
+            self.assertTrue(drawing, product)
+            self.assertIn(drawing, art.cover_plate("zh", product))
+            drawings.append(drawing)
+        self.assertEqual(len(set(drawings)), 4)
+        self.assertNotIn(drawings[0], art.cover_plate("zh", "book"))
+
 
 class Loader(unittest.TestCase):
     def setUp(self):

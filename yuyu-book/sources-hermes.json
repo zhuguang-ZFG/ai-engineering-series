@@ -251,5 +251,75 @@
       "tag": "v0.23.0",
       "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
     }
+  },
+  "hermes-atomic": {
+    "title": "Atomic file helpers",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/utils.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Atomic text writes used by MemoryStore",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-plugin-manifest": {
+    "title": "Plugin manifest parsing",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/hermes_cli/plugins_manifest.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Manifest schema versions and metadata fields",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-skills-tool": {
+    "title": "Skill list and view tools",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/skills_tool.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Skill lookup and body retrieval",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-agent-init": {
+    "title": "Agent initialization",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/agent/agent_init.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Memory and skills initialization",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
+  },
+  "hermes-compression": {
+    "title": "Conversation compression",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/agent/conversation_compression.py",
+    "snapshot": "Hermes v0.23.0, commit 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+    "accessed": "2026-11-10",
+    "license": "MIT",
+    "scope": "Conversation context compression",
+    "pinned": {
+      "tag": "v0.23.0",
+      "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+    }
   }
 }

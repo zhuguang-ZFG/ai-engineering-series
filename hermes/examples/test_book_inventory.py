@@ -78,6 +78,7 @@ class InventoryTests(unittest.TestCase):
 
             def register_tool(inner, **values):
                 inner.values = values
+                return object()
 
         ctx = FakeContext()
         plugin.register(ctx)
@@ -85,6 +86,28 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(ctx.values["toolset"], "book_inventory")
         self.assertEqual(ctx.values["schema"], plugin.SCHEMA)
         self.assertEqual(json.loads(ctx.values["handler"]({}))["files"], [])
+
+    def test_rejected_registration_is_visible(self):
+        class RejectingContext:
+            def get_config(inner, key, default):
+                return str(self.root)
+
+            def register_tool(inner, **values):
+                return None
+
+        with self.assertRaisesRegex(RuntimeError, "not accepted"):
+            plugin.register(RejectingContext())
+
+    def test_missing_config_never_registers_a_tool(self):
+        class MissingConfig:
+            def get_config(inner, key, default):
+                return default
+
+            def register_tool(inner, **values):
+                self.fail("Missing root must fail before tool registration")
+
+        with self.assertRaises(ValueError):
+            plugin.register(MissingConfig())
 
 
 if __name__ == "__main__":

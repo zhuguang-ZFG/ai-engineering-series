@@ -151,6 +151,110 @@ def main() -> None:
     passed("skill frontmatter handles BOM and support folders are excluded",
            yaml_path="fallback" if args.without_yaml else "upstream loader")
 
+    # A second object is stale in memory, but each mutation reloads under the lock.
+    disk.write_text("Aurora uses unittest.", encoding="utf-8")
+    left = store_module.MemoryStore(memory_char_limit=500)
+    right = store_module.MemoryStore(memory_char_limit=500)
+    left.load_from_disk()
+    right.load_from_disk()
+    assert left.add("memory", "Aurora docs are under docs/.")["success"]
+    assert right.add("memory", "Aurora archives are excluded.")["success"]
+    merged = disk.read_text(encoding="utf-8")
+    assert "docs/" in merged and "archives are excluded" in merged
+    assert "docs/" not in right.format_for_system_prompt("memory")
+    passed("sequential stale writers preserve each other's additions",
+           concurrency_scope="Two instances, deterministic interleaving; not simultaneous processes")
+
+    approval = right.resolve_entry("memory", "Aurora uses", "patch")
+    assert approval["matched_entry"] == "Aurora uses unittest."
+    assert left.patch("memory", "unittest", "pytest")["success"]
+    before = disk.read_bytes()
+    rejected = right.patch("memory", "Aurora uses", "Aurora prefers",
+                           matched_entry=approval["matched_entry"])
+    assert rejected["success"] is False and disk.read_bytes() == before
+    passed("a staged edit refuses an entry changed after resolution")
+
+    disk.write_text("Aurora\n§\nAurora backup", encoding="utf-8")
+    exact = store_module.MemoryStore(memory_char_limit=500)
+    exact.load_from_disk()
+    assert exact.remove("memory", "Aurora")["success"]
+    assert disk.read_text(encoding="utf-8") == "Aurora backup"
+    passed("whole-entry exact match wins over substring matches")
+
+    disk.write_text("Aurora builds docs; Beacon builds docs.", encoding="utf-8")
+    before = disk.read_bytes()
+    result = exact.patch("memory", "builds docs", "checks docs")
+    assert result["success"] is False and disk.read_bytes() == before
+    passed("repeated spans inside one entry are refused")
+
+    disk.write_text("\ufeffAurora uses § literally.\n§\nAurora uses § literally.", encoding="utf-8")
+    bom = store_module.MemoryStore(memory_char_limit=500)
+    bom.load_from_disk()
+    assert bom.memory_entries == ["Aurora uses § literally."]
+    before = disk.read_bytes()
+    assert bom.resolve_entry("memory", "Aurora uses", "remove")["success"]
+    assert disk.read_bytes() == before
+    passed("BOM and duplicates normalize in memory while resolve leaves disk untouched")
+
+    disk.write_text("A" * 120, encoding="utf-8")
+    drift = store_module.MemoryStore(memory_char_limit=100)
+    drift.load_from_disk()
+    before = disk.read_bytes()
+    blocked = drift.replace("memory", "A" * 120, "Short note")
+    assert blocked["success"] is False and disk.read_bytes() == before
+    backup = Path(blocked["drift_backup"])
+    assert backup.read_bytes() == before
+    removed = drift.remove("memory", "A" * 120)
+    assert removed["success"] and Path(removed["drift_backup"]).read_bytes() == before
+    assert disk.read_text(encoding="utf-8") == ""
+    passed("oversized foreign entry blocks rewrite and requires backup before deletion")
+
+    disk.write_text("Aurora tests", encoding="utf-8")
+    capped = store_module.MemoryStore(memory_char_limit=100)
+    capped.load_from_disk()
+    failures = [capped.patch("memory", "missing", "replacement") for _ in range(4)]
+    assert all(item["success"] is False for item in failures)
+    assert failures[-1].get("done") is True
+    capped.reset_consolidation_failures()
+    assert "done" not in capped.patch("memory", "missing", "replacement")
+    passed("consecutive consolidation failures terminate and turn reset restores budget")
+
+    disk.write_text("Old stable entry", encoding="utf-8")
+    fault = store_module.MemoryStore(memory_char_limit=500)
+    fault.load_from_disk()
+    original_writer = store_module.atomic_write_text
+
+    def fail_before_replace(*args, **kwargs):
+        raise OSError("injected write failure before replacement")
+
+    store_module.atomic_write_text = fail_before_replace
+    try:
+        try:
+            fault.add("memory", "New tentative entry")
+            raise AssertionError("write failure was not surfaced")
+        except RuntimeError as error:
+            assert "Failed to write memory file" in str(error)
+        assert disk.read_text(encoding="utf-8") == "Old stable entry"
+        assert "New tentative entry" in fault.memory_entries
+    finally:
+        store_module.atomic_write_text = original_writer
+    fault.load_from_disk()
+    assert fault.memory_entries == ["Old stable entry"]
+    passed("write failure preserves disk but requires reload to reconcile live state",
+           injection="atomic_write_text replaced by a function raising OSError before disk mutation")
+
+    disk.write_text("Old project note has thirty chars", encoding="utf-8")
+    compact = store_module.MemoryStore(memory_char_limit=100)
+    compact.load_from_disk()
+    replacement = "N" * 90
+    result = compact.apply_batch("memory", [
+        {"action": "add", "content": replacement},
+        {"action": "remove", "old_text": "Old project note has thirty chars"},
+    ])
+    assert result["success"] and disk.read_text(encoding="utf-8") == replacement
+    passed("batch enforces the final budget rather than a temporary intermediate size",
+           final_chars=len(replacement), limit=100)
+
     report = {
         "date": "2026-11-10", "baseline": "Hermes v0.23.0", "commit": COMMIT,
         "platform": sys.platform, "python": sys.version.split()[0],

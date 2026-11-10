@@ -296,6 +296,263 @@
         "term": "自我改进",
         "refs": []
       }
+    },
+    {
+      "key": "input_digest",
+      "letter": "I",
+      "zh": {
+        "term": "input_digest",
+        "refs": [
+          {
+            "anchor": "hermes-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "hermes-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "hermes-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "input_digest",
+        "refs": []
+      }
+    },
+    {
+      "key": "matched_entry",
+      "letter": "M",
+      "zh": {
+        "term": "matched_entry",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "hermes-ch08",
+            "label": "第 8 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "matched_entry",
+        "refs": []
+      }
+    },
+    {
+      "key": "原子写入",
+      "letter": "Y",
+      "zh": {
+        "term": "原子写入",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "hermes-ch13",
+            "label": "第 13 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "原子写入",
+        "refs": []
+      }
+    },
+    {
+      "key": "审批过期",
+      "letter": "S",
+      "zh": {
+        "term": "审批过期",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "审批过期",
+        "refs": []
+      }
+    },
+    {
+      "key": "批处理",
+      "letter": "P",
+      "zh": {
+        "term": "批处理",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "批处理",
+        "refs": []
+      }
+    },
+    {
+      "key": "插件注册句柄",
+      "letter": "C",
+      "zh": {
+        "term": "插件注册句柄",
+        "refs": [
+          {
+            "anchor": "hermes-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "插件注册句柄",
+        "refs": []
+      }
+    },
+    {
+      "key": "工具覆盖权限",
+      "letter": "G",
+      "zh": {
+        "term": "工具覆盖权限",
+        "refs": [
+          {
+            "anchor": "hermes-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "工具覆盖权限",
+        "refs": []
+      }
+    },
+    {
+      "key": "sessionsource",
+      "letter": "S",
+      "zh": {
+        "term": "SessionSource",
+        "refs": [
+          {
+            "anchor": "hermes-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "SessionSource",
+        "refs": []
+      }
+    },
+    {
+      "key": "claim_dispatch",
+      "letter": "C",
+      "zh": {
+        "term": "claim_dispatch",
+        "refs": [
+          {
+            "anchor": "hermes-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "claim_dispatch",
+        "refs": []
+      }
+    },
+    {
+      "key": "故障注入",
+      "letter": "G",
+      "zh": {
+        "term": "故障注入",
+        "refs": [
+          {
+            "anchor": "hermes-ch04",
+            "label": "第 4 章"
+          },
+          {
+            "anchor": "hermes-ch16",
+            "label": "第 16 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "故障注入",
+        "refs": []
+      }
+    },
+    {
+      "key": "aurora 连续项目",
+      "letter": "A",
+      "zh": {
+        "term": "Aurora 连续项目",
+        "refs": [
+          {
+            "anchor": "hermes-ch01",
+            "label": "第 1 章"
+          },
+          {
+            "anchor": "hermes-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "hermes-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "Aurora 连续项目",
+        "refs": []
+      }
+    },
+    {
+      "key": "示例 url",
+      "letter": "S",
+      "zh": {
+        "term": "示例 URL",
+        "refs": [
+          {
+            "anchor": "hermes-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "hermes-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "示例 URL",
+        "refs": []
+      }
+    },
+    {
+      "key": "wal 与备份",
+      "letter": "W",
+      "zh": {
+        "term": "WAL 与备份",
+        "refs": [
+          {
+            "anchor": "hermes-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "hermes-ch15",
+            "label": "第 15 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "WAL 与备份",
+        "refs": []
+      }
     }
   ]
 }

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M30 38H770M30 422H770" opacity=".25"/>
+  <path d="M80 370H720" stroke-width="5"/>
+  <path d="M140 305V370M310 277V370M480 244V370M650 211V370" stroke-width="4"/>
+  <g fill="currentColor" fill-opacity=".06" stroke-width="2.5">
+    <path d="M75 215L140 176L205 215V294L140 333L75 294Z"/>
+    <path d="M245 177L310 138L375 177V256L310 295L245 256Z"/>
+    <path d="M415 139L480 100L545 139V218L480 257L415 218Z"/>
+    <path d="M585 101L650 62L715 101V180L650 219L585 180Z"/>
+  </g>
+  <g opacity=".35"><path d="M75 215L140 254L205 215M140 254V333M245 177L310 216L375 177M310 216V295M415 139L480 178L545 139M480 178V257M585 101L650 140L715 101M650 140V219"/></g>
+  <path d="M205 254L245 216M375 216L415 178M545 178L585 140" stroke-width="4" stroke-dasharray="6 7"/>
+  <g fill="currentColor"><circle cx="140" cy="370" r="8"/><circle cx="310" cy="370" r="8"/><circle cx="480" cy="370" r="8"/><circle cx="650" cy="370" r="8"/></g>
+  <g fill="currentColor" stroke="none" font-family="Arial, sans-serif" font-size="14" letter-spacing="1.4">
+    <text x="95" y="154">CONTEXT</text><text x="268" y="115">SERVICE</text>
+    <text x="441" y="78">PLUGIN</text><text x="605" y="42">EFFECT</text>
+    <text x="80" y="404">INJECT</text><text x="283" y="404">START</text>
+    <text x="457" y="404">RUN</text><text x="620" y="404">DISPOSE</text>
+  </g>
+  <path d="M109 224L129 212L149 224L129 236Z" fill="currentColor"/>
+  <path d="M279 186L299 174L319 186L299 198Z" fill="currentColor" opacity=".6"/>
+  <path d="M449 148L469 136L489 148L469 160Z" fill="currentColor"/>
+  <path d="M619 110L639 98L659 110L639 122Z" fill="currentColor" opacity=".6"/>
+</svg>

@@ -48,6 +48,65 @@
       }
     },
     {
+      "key": "aggregate-error",
+      "letter": "A",
+      "zh": {
+        "term": "AggregateError",
+        "refs": [
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "AggregateError",
+        "refs": []
+      }
+    },
+    {
+      "key": "canonical-value",
+      "letter": "C",
+      "zh": {
+        "term": "canonical value",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "canonical value",
+        "refs": []
+      }
+    },
+    {
+      "key": "committed",
+      "letter": "C",
+      "zh": {
+        "term": "committed",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "committed",
+        "refs": []
+      }
+    },
+    {
       "key": "context",
       "letter": "C",
       "zh": {
@@ -115,6 +174,40 @@
       }
     },
     {
+      "key": "epoch",
+      "letter": "E",
+      "zh": {
+        "term": "epoch",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "epoch",
+        "refs": []
+      }
+    },
+    {
+      "key": "factory",
+      "letter": "F",
+      "zh": {
+        "term": "factory",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "factory",
+        "refs": []
+      }
+    },
+    {
       "key": "fiber",
       "letter": "F",
       "zh": {
@@ -157,27 +250,6 @@
       }
     },
     {
-      "key": "inject",
-      "letter": "I",
-      "zh": {
-        "term": "inject",
-        "refs": [
-          {
-            "anchor": "deepseek-ch02",
-            "label": "第 2 章"
-          },
-          {
-            "anchor": "deepseek-ch04",
-            "label": "第 4 章"
-          }
-        ]
-      },
-      "en": {
-        "term": "inject",
-        "refs": []
-      }
-    },
-    {
       "key": "inbox",
       "letter": "I",
       "zh": {
@@ -195,6 +267,44 @@
       },
       "en": {
         "term": "inbox",
+        "refs": []
+      }
+    },
+    {
+      "key": "initiator",
+      "letter": "I",
+      "zh": {
+        "term": "initiator",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "initiator",
+        "refs": []
+      }
+    },
+    {
+      "key": "inject",
+      "letter": "I",
+      "zh": {
+        "term": "inject",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch04",
+            "label": "第 4 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "inject",
         "refs": []
       }
     },
@@ -220,6 +330,27 @@
       }
     },
     {
+      "key": "named-entries",
+      "letter": "N",
+      "zh": {
+        "term": "NamedEntries",
+        "refs": [
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "NamedEntries",
+        "refs": []
+      }
+    },
+    {
       "key": "next",
       "letter": "N",
       "zh": {
@@ -233,6 +364,23 @@
       },
       "en": {
         "term": "next",
+        "refs": []
+      }
+    },
+    {
+      "key": "owner-ctx",
+      "letter": "O",
+      "zh": {
+        "term": "ownerCtx",
+        "refs": [
+          {
+            "anchor": "deepseek-ch05",
+            "label": "第 5 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ownerCtx",
         "refs": []
       }
     },
@@ -254,6 +402,27 @@
       },
       "en": {
         "term": "plugin-package",
+        "refs": []
+      }
+    },
+    {
+      "key": "prepare-call",
+      "letter": "P",
+      "zh": {
+        "term": "prepareCall",
+        "refs": [
+          {
+            "anchor": "deepseek-ch06",
+            "label": "第 6 章"
+          },
+          {
+            "anchor": "deepseek-ch09",
+            "label": "第 9 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "prepareCall",
         "refs": []
       }
     },
@@ -300,6 +469,31 @@
       }
     },
     {
+      "key": "review-lab",
+      "letter": "R",
+      "zh": {
+        "term": "review-lab",
+        "refs": [
+          {
+            "anchor": "deepseek-ch02",
+            "label": "第 2 章"
+          },
+          {
+            "anchor": "deepseek-ch03",
+            "label": "第 3 章"
+          },
+          {
+            "anchor": "deepseek-ch17",
+            "label": "第 17 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "review-lab",
+        "refs": []
+      }
+    },
+    {
       "key": "scope",
       "letter": "S",
       "zh": {
@@ -317,6 +511,57 @@
       },
       "en": {
         "term": "scope",
+        "refs": []
+      }
+    },
+    {
+      "key": "scope-key",
+      "letter": "S",
+      "zh": {
+        "term": "ScopeKey",
+        "refs": [
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ScopeKey",
+        "refs": []
+      }
+    },
+    {
+      "key": "scoped-layers",
+      "letter": "S",
+      "zh": {
+        "term": "ScopedLayers",
+        "refs": [
+          {
+            "anchor": "deepseek-ch12",
+            "label": "第 12 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ScopedLayers",
+        "refs": []
+      }
+    },
+    {
+      "key": "serial",
+      "letter": "S",
+      "zh": {
+        "term": "serial",
+        "refs": [
+          {
+            "anchor": "deepseek-ch11",
+            "label": "第 11 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "serial",
         "refs": []
       }
     },
@@ -384,6 +629,23 @@
       },
       "en": {
         "term": "tool",
+        "refs": []
+      }
+    },
+    {
+      "key": "tool-execution-pipeline",
+      "letter": "T",
+      "zh": {
+        "term": "ToolExecutionPipeline",
+        "refs": [
+          {
+            "anchor": "deepseek-ch10",
+            "label": "第 10 章"
+          }
+        ]
+      },
+      "en": {
+        "term": "ToolExecutionPipeline",
         "refs": []
       }
     },

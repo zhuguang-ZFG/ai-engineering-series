@@ -2,6 +2,15 @@
   "schema_version": 1,
   "entries": [
     {
+      "version": "1.1.0",
+      "date": "2026-11-10",
+      "zh": [
+        "扩为约 5.1 万中文字符与 14 张机制图；围绕同一审查插件解释依赖、停止协议、事件、日志与包交付。",
+        "增加 factory/ownerCtx、epoch/committed、prepareCall/inbox、工具三阶段和作用域存储的源码跟读。",
+        "新增十三项连续实例场景，在固定 Cordis 源码与实际 tarball 解包入口通过；与原七项记录合计二十种组件行为。"
+      ]
+    },
+    {
       "version": "1.0.0",
       "date": "2026-11-10",
       "zh": [

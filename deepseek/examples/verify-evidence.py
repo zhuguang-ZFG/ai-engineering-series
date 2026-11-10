@@ -18,10 +18,15 @@ def main() -> None:
                         help="Directory containing the pinned Cordis src/*.ts files")
     args = parser.parse_args()
     examples = Path(__file__).resolve().parent
-    facts = json.loads((examples.parent / "facts/cordis-20261110.json").read_text(encoding="utf-8"))
+    facts_dir = examples.parent / "facts"
+    facts = json.loads((facts_dir / "cordis-20261110.json").read_text(encoding="utf-8"))
+    review_facts = json.loads((facts_dir / "review-lab-20261110.json").read_text(encoding="utf-8"))
+    if review_facts["source"]["commit"] != facts["source"]["commit"]:
+        raise SystemExit("The two experiment records must reference the same source commit")
     checked = 0
     for directory, records in ((args.source_root, facts["source_sha256"]),
-                               (examples, facts["example_sha256"])):
+                               (examples, facts["example_sha256"]),
+                               (examples, review_facts["example_sha256"])):
         for name, expected in records.items():
             actual = normalized_sha256(directory / name)
             if actual != expected:

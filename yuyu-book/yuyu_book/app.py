@@ -261,8 +261,12 @@ def build_edition(lang: str, manifest: dict, sources: dict, *,
     # the text as words — term matching, the outline and the cross-references
     # have all already seen it uncut.
     body_html = render.soften_long_names("\n".join(body))
+    product = manifest.get("product", "book")
+    body_class = f"lang-{lang}"
+    if product in {"opencode", "deepseek", "hermes", "codex"}:
+        body_class += f" agent-book agent-{product}"
     html_text = page(lang, f'{manifest["title"][lang]} — {manifest["author"]}',
-                     CSS, f"lang-{lang}", body_html,
+                     CSS, body_class, body_html,
                      "\n".join(rail) + "</nav>", "")
     audit.audit(html_text, n_units=len(units), expect_svgs=expect_svgs)
 

@@ -39,3 +39,15 @@ plugins:
 配置读取和目录发现依据 Hermes v0.23.0。有效 ID 来自该目录布局；多层分类目录的 ID 不一定等于 manifest 的裸名称。已有 `plugins.disabled` 时也要检查其中是否禁用了本插件。
 
 本次仅验证处理器与传入 FakeContext 的注册参数，没有运行宿主发现、模型工具选择或插件卸载。完整宿主里，应另行记录发现日志、注册工具名、当前请求中的可用工具和实际调用结果。插件不创建线程、不持有长连接，所以没有示范额外的 `on_unload` 清理；将来增加后台资源时，应在获取后立即登记释放动作。
+
+## Aurora 连续项目
+
+```powershell
+python hermes/examples/aurora_lab.py init .scratch/aurora-lab
+python hermes/examples/aurora_lab.py check .scratch/aurora-lab
+python hermes/examples/check_aurora_workflow.py
+```
+
+init 只接受尚不存在的目录。check 的退出码为 0（有限检查通过）、1（存在需要审阅的问题）、2（配置或执行失败）。失败时旧报告可能仍在，调用方必须同时检查本次退出码。
+
+八步驱动每次创建独立项目，实际覆盖改名、修复、规则变化、错误配置与相同输入重跑。它不启动 Hermes，不模拟模型决策。`skills/aurora-review/SKILL.md` 是可供完整宿主实验使用的方法说明。解析器仅支持这里展示的简单行内链接与代码围栏，不是完整 CommonMark 或远程链接检查器；不应对敌对并发写入的目录使用它作为隔离边界。

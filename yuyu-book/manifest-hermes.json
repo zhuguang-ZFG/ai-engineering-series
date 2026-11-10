@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "product": "hermes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "date": "2026-11-10",
   "author": "朱光",
   "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
@@ -306,7 +306,8 @@
       ],
       "sources": [
         "hermes-state",
-        "hermes-loop"
+        "hermes-loop",
+        "hermes-compression"
       ]
     },
     "hermes-ch04": {
@@ -314,7 +315,7 @@
         "zh": "记忆保存后什么时候进入提示？"
       },
       "deliverable": {
-        "zh": "复现预算、冻结快照和失败写入。"
+        "zh": "运行 17 项组件实验，解释快照、审批、批处理与写入异常。"
       },
       "boundary": {
         "zh": "当前快照与磁盘新内容可能不同。"
@@ -327,7 +328,8 @@
       ],
       "sources": [
         "hermes-memory",
-        "hermes-memory-tool"
+        "hermes-memory-tool",
+        "hermes-atomic"
       ]
     },
     "hermes-ch05": {
@@ -347,7 +349,8 @@
         "hermes-ch05.b-opening"
       ],
       "sources": [
-        "hermes-skills"
+        "hermes-skills",
+        "hermes-skills-tool"
       ]
     },
     "hermes-ch06": {
@@ -417,7 +420,7 @@
         "zh": "插件怎样为宿主增加一个动作？"
       },
       "deliverable": {
-        "zh": "理解发现、注册、权限和卸载并运行处理器。"
+        "zh": "按加载时序读源码，运行完整插件及 9 项离线测试。"
       },
       "boundary": {
         "zh": "离线处理器测试没有加载 PluginManager。"
@@ -431,7 +434,8 @@
       "sources": [
         "hermes-plugins",
         "hermes-discovery",
-        "hermes-registry"
+        "hermes-registry",
+        "hermes-plugin-manifest"
       ]
     },
     "hermes-ch10": {
@@ -582,7 +586,7 @@
         "zh": "长期项目怎样跨会话逐步改进？"
       },
       "deliverable": {
-        "zh": "按三次会话方案检验事实更新与决定召回。"
+        "zh": "跑完八步 Aurora 文件流程，再复做三次真实会话方案。"
       },
       "boundary": {
         "zh": "书中方案未执行真实模型任务。"
@@ -596,7 +600,8 @@
       "sources": [
         "hermes-memory",
         "hermes-skill-manage",
-        "hermes-search"
+        "hermes-search",
+        "hermes-agent-init"
       ]
     },
     "hermes-ch18": {
@@ -666,7 +671,7 @@
         "zh": "哪些实验可以在本机重做？"
       },
       "deliverable": {
-        "zh": "运行组件和原创处理器检查并辨认测试接缝。"
+        "zh": "复现组件、插件和 Aurora 流程，并辨认各自测试接缝。"
       },
       "boundary": {
         "zh": "未运行的模型和平台实验没有列为通过。"

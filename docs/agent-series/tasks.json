@@ -13,68 +13,73 @@
     "hermes",
     "codex"
   ],
-  "current_milestone": "Four complete Chinese books delivered locally in HTML/PDF/EPUB; CI and merge pending",
+  "current_milestone": "Substantially expanded editions with distinct covers delivered in HTML/PDF/EPUB; release CI pending",
   "tasks": [
     {
       "id": "opencode",
       "status": "in_progress",
-      "stage": "local_publication_verified",
+      "stage": "revised_publication_verified",
       "outline": "opencode/outline.md",
-      "next": "Pass PR CI, merge and confirm main Book CI and Pages",
+      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
         "opencode/VERIFY.md",
         "opencode/outline.md",
         "yuyu-book/manifest-opencode.json",
-        "docs/agent-series/local-publication-20261110.json"
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
       ]
     },
     {
       "id": "deepseek",
       "status": "in_progress",
-      "stage": "local_publication_verified",
+      "stage": "revised_publication_verified",
       "outline": "deepseek/outline.md",
-      "next": "Pass PR CI, merge and confirm main Book CI and Pages",
+      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
         "deepseek/VERIFY.md",
         "deepseek/outline.md",
         "yuyu-book/manifest-deepseek.json",
-        "docs/agent-series/local-publication-20261110.json"
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
       ]
     },
     {
       "id": "hermes",
       "status": "in_progress",
-      "stage": "local_publication_verified",
+      "stage": "revised_publication_verified",
       "outline": "hermes/outline.md",
-      "next": "Pass PR CI, merge and confirm main Book CI and Pages",
+      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
         "hermes/VERIFY.md",
         "hermes/outline.md",
         "yuyu-book/manifest-hermes.json",
-        "docs/agent-series/local-publication-20261110.json"
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
       ]
     },
     {
       "id": "codex",
       "status": "in_progress",
-      "stage": "local_publication_verified",
+      "stage": "revised_publication_verified",
       "outline": "codex/outline.md",
-      "next": "Pass PR CI, merge and confirm main Book CI and Pages",
+      "next": "Pass PR CI, merge, then confirm main Book CI and Pages",
       "blocked_by": [],
       "product_registered": true,
       "evidence": [
         "codex/VERIFY.md",
         "codex/outline.md",
         "yuyu-book/manifest-codex.json",
-        "docs/agent-series/local-publication-20261110.json"
+        "docs/agent-series/local-publication-20261110.json",
+        "docs/agent-series/local-publication-20261110-revised.json"
       ]
     }
   ],
-  "execution": "parallel; explicitly requested by the user on 2026-11-10"
+  "execution": "parallel; explicitly requested by the user on 2026-11-10",
+  "quality_revision": "Continuous runnable examples, detailed plugin internals, failure diagnosis and stronger visual identity"
 }

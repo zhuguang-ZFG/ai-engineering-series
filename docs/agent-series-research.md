@@ -25,3 +25,10 @@ python scripts/bookctl.py build --product codex --lang zh --pdf --epub
 有 make 时也可使用 `make book-agents`。产物前缀分别是 `yuyu-opencode-zh`、`yuyu-deepseek-zh`、`yuyu-hermes-zh`、`yuyu-codex-zh`，输出到 `yuyu-book/dist/`。本机交付目录为 `D:\Users\claude\claude-code-book-main\yuyu-book\dist`。
 
 实验没有调用外部付费模型。OpenCode 使用本地 SSE 替身驱动真实宿主；其余册的组件或 CLI 实验也保留明确边界。尚未实跑的模型效果、网络服务和跨平台行为列在各册验证记录中。旧 P6 视频媒体验收仍未完成。
+
+
+## 深化版
+
+四册均已扩写连续工程案例和插件机制，使用各自的架构封面与章节配色。当前 PDF 为 OpenCode 150 页、DeepSeek 128 页、Hermes 128 页、Codex CLI 147 页；EPUB 与 HTML 同步生成，见[新版交付记录](agent-series/local-publication-20261110-revised.json)。
+
+OpenCode 包含 19 项金额计算案例；DeepSeek 连续插件新增 13 项真实 Cordis 场景；Hermes 补足 Aurora 八步流程及记忆写入失败实验；Codex 增加 Hook、JSONL 与协议 schema 的离线练习。它们分别说明原创程序、真实组件和完整宿主的运行范围，不能互相替代。

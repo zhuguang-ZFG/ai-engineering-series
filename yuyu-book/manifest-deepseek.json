@@ -7,13 +7,13 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "deepseek",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "date": "2026-11-10",
   "title": {
     "zh": "DeepSeek Harness：插件化运行时"
   },
   "subtitle": {
-    "zh": "从 Cordis 生命周期到可替换 Agent 循环 · 非官方源码读本"
+    "zh": "Cordis、工具管线与 Agent 循环 · 非官方源码教材"
   },
   "kicker": {
     "zh": "Services · Effects · Agent Runtime"
@@ -571,7 +571,7 @@
         "zh": "如何组装一套可解释的审查助手？"
       },
       "deliverable": {
-        "zh": "把能力需求映射为服务和测试路径。"
+        "zh": "跟读十三项审查实例场景，定位真正 Agent 与 Session 的接缝。"
       },
       "boundary": {
         "zh": "完整审查 Harness 是集成设计。"
@@ -651,13 +651,13 @@
         "zh": "哪些结果能在本地复现？"
       },
       "deliverable": {
-        "zh": "复现七项组件场景并辨认证据范围。"
+        "zh": "复现两组二十项组件场景与本地包入口实验。"
       },
       "boundary": {
         "zh": "完整宿主、模型和平台沙箱未实跑。"
       },
       "plain": {
-        "zh": "七项组件实验已运行，完整应用和远端模型未参与。"
+        "zh": "二十项组件场景已运行，完整应用和远端模型未参与。"
       },
       "sources": [
         "deepseek-repo"

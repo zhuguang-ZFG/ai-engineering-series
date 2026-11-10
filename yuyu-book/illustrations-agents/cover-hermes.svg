@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M30 38H770M30 422H770" opacity=".25"/>
+  <path d="M128 82H406L446 122V314H128Z" fill="currentColor" fill-opacity=".035"/>
+  <path d="M168 108H446L486 148V340H168Z" fill="currentColor" fill-opacity=".055"/>
+  <path d="M208 134H486L526 174V366H208Z" fill="currentColor" fill-opacity=".08" stroke-width="3"/>
+  <path d="M486 134V174H526M238 185H357M238 218H476M238 241H454M238 264H469M238 287H409" stroke-width="4"/>
+  <rect x="238" y="314" width="94" height="28" rx="3" fill="currentColor"/>
+  <path d="M566 178H644V326H566" stroke-width="3"/>
+  <path d="M633 315L644 326L655 315M574 167L563 178L574 189" stroke-width="3"/>
+  <circle cx="644" cy="252" r="25" fill="currentColor"/>
+  <path d="M631 251L640 260L657 242" stroke="#fff" stroke-width="3"/>
+  <path d="M148 385H528" stroke-dasharray="2 7"/>
+  <g fill="currentColor" stroke="none" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.6">
+    <text x="128" y="67">EXPERIENCE</text><text x="365" y="185">MEMORY</text>
+    <text x="254" y="333" fill="#fff" font-size="12">SKILL</text>
+    <text x="571" y="146">RECALL</text><text x="570" y="359">REVISE</text>
+    <text x="208" y="409">A RECORD THAT CAN CHANGE</text>
+  </g>
+</svg>

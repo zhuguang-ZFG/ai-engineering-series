@@ -40,6 +40,9 @@ jobs:
       - run: python docs/yuyu-overhaul/check_bilingual_parity.py
       - run: node --test opencode/examples/check-review-trace.mjs
       - run: python -m unittest discover -s hermes/examples -p "test_*.py" -v
+      - run: python hermes/examples/check_aurora_workflow.py
+      - run: python -B codex/examples/check_workshop.py
+      - run: python opencode/examples/pricing-lab/check_pricing.py
       - run: python scripts/bookctl.py check --fast
       - uses: actions/upload-artifact@v4
         if: always()
@@ -196,4 +199,9 @@ jobs:
         run: >-
           node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs
           deepseek/examples/check-cordis.mjs
+          --source .scratch/deepseek-runtime/pinned-source/vendor/cordis/src/index.ts
+      - name: Exercise the complete review plugin lifecycle
+        run: >-
+          node --import ./.scratch/deepseek-runtime/node_modules/tsx/dist/loader.mjs
+          deepseek/examples/check-review-lab.mjs
           --source .scratch/deepseek-runtime/pinned-source/vendor/cordis/src/index.ts
