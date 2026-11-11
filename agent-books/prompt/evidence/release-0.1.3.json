@@ -1,0 +1,714 @@
+{
+  "version": "0.1.3",
+  "environment": {
+    "python": "3.13.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pymupdf": "1.28.0",
+    "browser": "157.0.4341.42"
+  },
+  "artifacts": {
+    "yuyu-book/dist/yuyu-prompt-zh.html": {
+      "bytes": 537395,
+      "sha256": "c09fffe086628cb2c1d3b886e868a5dfee6960d8a0c2e3dbbb7867f1cab5e723"
+    },
+    "yuyu-book/dist/yuyu-prompt-zh.pdf": {
+      "bytes": 4879574,
+      "sha256": "e20dda81edd03b0156844ea15b370952fa6760ed8de05947c33cf6ad039f9736"
+    },
+    "yuyu-book/dist/yuyu-prompt-zh.epub": {
+      "bytes": 1260526,
+      "sha256": "8b4a24d7ab2673630b7a40cada1c2b139bad91c149e86745742968167c9b5075"
+    }
+  },
+  "pdf": {
+    "pages": 118,
+    "bookmarks": 29,
+    "figures": [
+      {
+        "name": "prompt-question-boundary",
+        "page": 19,
+        "all_text_on_page": true
+      },
+      {
+        "name": "prompt-context-fields",
+        "page": 40,
+        "all_text_on_page": true
+      },
+      {
+        "name": "prompt-handoff-state",
+        "page": 49,
+        "all_text_on_page": true
+      },
+      {
+        "name": "prompt-tool-receipt",
+        "page": 60,
+        "all_text_on_page": true
+      },
+      {
+        "name": "prompt-evaluation-freeze",
+        "page": 82,
+        "all_text_on_page": true
+      },
+      {
+        "name": "prompt-paired-comparison",
+        "page": 92,
+        "all_text_on_page": true
+      }
+    ],
+    "empty_pages": [],
+    "replacement_characters": 0,
+    "outside_text": []
+  },
+  "html": [
+    {
+      "scrollWidth": 390,
+      "author": "朱光",
+      "brokenAnchors": [],
+      "oldGeneratedLinks": [],
+      "sourceLinks": [
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/notice-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/rules-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/conflict-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/update-v2.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/demo-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/injection-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/development.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/validation.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/chat-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/archive-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/context-measurements.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/receipts-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/full-request.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/exercise-verification.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/criteria.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/business-cases.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-faulty.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-reference.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/a.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/b.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/unrun-comparison.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/CHANGELOG.md"
+      ],
+      "width": 390,
+      "scheme": "light",
+      "figures": [
+        {
+          "title": "房间未定，先看它是否阻断当前交付",
+          "description": "青禾虚构教学通知 N01-v1 确定场地为青禾社区中心，具体房间尚未确认。整理内部核对草稿时，可以写已有安排并保留房间待确认。任务改成从入口走到房间的路线时，应先确认入口与房间，暂不画路线。是否追问取决于这个缺口对当前交付的影响。",
+          "viewBox": "560x680",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 2
+        },
+        {
+          "title": "最新文件只替换它明确修订的字段",
+          "description": "当前任务整理现行安排。U01-v2 把时间改为 13:30 至 15:30；N01-v1 的 12 人容量、12 月 4 日 18:00 截止、房间未定继续有效；R01-v1 提供满额候补和取消递补规则。聊天中的 15 人建议未获批准，去年 201 室不能作为今年安排。这是青禾工作坊的虚构教学材料。",
+          "viewBox": "560x710",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 7
+        },
+        {
+          "title": "恢复任务时，先核对交接单指向的状态",
+          "description": "交接单记录目标与权限、材料版本、成果和回执位置以及未完成项。新会话打开实际文件，比较交接记录：一致时继续检查候补说明，有差异时记录并核对。在虚构教学回执 t-02 中，cancel-07 已完成取消 Q07；会话中断后应根据已有回执整理说明，不能因为中断就再取消一次。回执未到且状态未知时，应先查询或保留未知。",
+          "viewBox": "560x800",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 8
+        },
+        {
+          "title": "沿实际执行过程读回执，不能把不同失败都写成零分",
+          "description": "本章离线练习先检查项目，再启动 Python 子进程，最后读取合格的业务报告。invalid_project 表示未启动。execution_failed 表示启动或解释执行失败，timeout 表示等待超时后终止；这些都不能编造业务分数。初始故障副本真实运行后得到 business_failed，八个用例通过、四个失败，共十二例，子进程退出码为一。这是程序检查结果，没有模型参与。完整状态还包括通过和执行期间输入变化，详见正文表格。",
+          "viewBox": "560x700",
+          "minRenderedFont": 13.261160714285715,
+          "outside": [],
+          "hidden": [],
+          "chapter": 10
+        },
+        {
+          "title": "三组题，三个使用时机",
+          "description": "青禾教学题库的三道开发题用于看题、试错和修改提示。冻结候选提示与评分标准后，用七道验证题比较两版；正文计划每版每题各运行两次，共二十八份请求，尚非模型实测结果。方案确定后才使用两道留出题，此前应在宿主中限制待测模型对额外文件的访问。仅将材料放在另一个目录不构成权限隔离，已经看过留出题的人也需登记暴露。",
+          "viewBox": "560x750",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 15
+        },
+        {
+          "title": "总分相同，也要看同题、同次的成对变化",
+          "description": "先冻结题目、材料、判据、环境和重复次数，只改变提示 A 与 B。下方四对是人工教学算例，不是模型实测。第 1 对和第 2 对两版都通过，第 3 对只有 A 通过，第 4 对只有 B 通过，因此 A 和 B 都是 3/4，通过数净差为零，但错误位置不同。正文真实准备计划为七题、每题重复两次、两版共二十八份请求，模型尚未调用。",
+          "viewBox": "560x750",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 16
+        }
+      ],
+      "external_runtime_requests": []
+    },
+    {
+      "scrollWidth": 390,
+      "author": "朱光",
+      "brokenAnchors": [],
+      "oldGeneratedLinks": [],
+      "sourceLinks": [
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/notice-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/rules-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/conflict-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/update-v2.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/demo-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/injection-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/development.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/validation.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/chat-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/archive-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/context-measurements.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/receipts-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/full-request.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/exercise-verification.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/criteria.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/business-cases.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-faulty.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-reference.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/a.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/b.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/unrun-comparison.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/CHANGELOG.md"
+      ],
+      "width": 390,
+      "scheme": "dark",
+      "figures": [
+        {
+          "title": "房间未定，先看它是否阻断当前交付",
+          "description": "青禾虚构教学通知 N01-v1 确定场地为青禾社区中心，具体房间尚未确认。整理内部核对草稿时，可以写已有安排并保留房间待确认。任务改成从入口走到房间的路线时，应先确认入口与房间，暂不画路线。是否追问取决于这个缺口对当前交付的影响。",
+          "viewBox": "560x680",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 2
+        },
+        {
+          "title": "最新文件只替换它明确修订的字段",
+          "description": "当前任务整理现行安排。U01-v2 把时间改为 13:30 至 15:30；N01-v1 的 12 人容量、12 月 4 日 18:00 截止、房间未定继续有效；R01-v1 提供满额候补和取消递补规则。聊天中的 15 人建议未获批准，去年 201 室不能作为今年安排。这是青禾工作坊的虚构教学材料。",
+          "viewBox": "560x710",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 7
+        },
+        {
+          "title": "恢复任务时，先核对交接单指向的状态",
+          "description": "交接单记录目标与权限、材料版本、成果和回执位置以及未完成项。新会话打开实际文件，比较交接记录：一致时继续检查候补说明，有差异时记录并核对。在虚构教学回执 t-02 中，cancel-07 已完成取消 Q07；会话中断后应根据已有回执整理说明，不能因为中断就再取消一次。回执未到且状态未知时，应先查询或保留未知。",
+          "viewBox": "560x800",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 8
+        },
+        {
+          "title": "沿实际执行过程读回执，不能把不同失败都写成零分",
+          "description": "本章离线练习先检查项目，再启动 Python 子进程，最后读取合格的业务报告。invalid_project 表示未启动。execution_failed 表示启动或解释执行失败，timeout 表示等待超时后终止；这些都不能编造业务分数。初始故障副本真实运行后得到 business_failed，八个用例通过、四个失败，共十二例，子进程退出码为一。这是程序检查结果，没有模型参与。完整状态还包括通过和执行期间输入变化，详见正文表格。",
+          "viewBox": "560x700",
+          "minRenderedFont": 13.261160714285715,
+          "outside": [],
+          "hidden": [],
+          "chapter": 10
+        },
+        {
+          "title": "三组题，三个使用时机",
+          "description": "青禾教学题库的三道开发题用于看题、试错和修改提示。冻结候选提示与评分标准后，用七道验证题比较两版；正文计划每版每题各运行两次，共二十八份请求，尚非模型实测结果。方案确定后才使用两道留出题，此前应在宿主中限制待测模型对额外文件的访问。仅将材料放在另一个目录不构成权限隔离，已经看过留出题的人也需登记暴露。",
+          "viewBox": "560x750",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 15
+        },
+        {
+          "title": "总分相同，也要看同题、同次的成对变化",
+          "description": "先冻结题目、材料、判据、环境和重复次数，只改变提示 A 与 B。下方四对是人工教学算例，不是模型实测。第 1 对和第 2 对两版都通过，第 3 对只有 A 通过，第 4 对只有 B 通过，因此 A 和 B 都是 3/4，通过数净差为零，但错误位置不同。正文真实准备计划为七题、每题重复两次、两版共二十八份请求，模型尚未调用。",
+          "viewBox": "560x750",
+          "minRenderedFont": 13.260435267857144,
+          "outside": [],
+          "hidden": [],
+          "chapter": 16
+        }
+      ],
+      "external_runtime_requests": []
+    },
+    {
+      "scrollWidth": 1280,
+      "author": "朱光",
+      "brokenAnchors": [],
+      "oldGeneratedLinks": [],
+      "sourceLinks": [
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/notice-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/rules-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/conflict-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/update-v2.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/demo-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/injection-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/development.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/validation.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/chat-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/archive-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/context-measurements.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/receipts-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/full-request.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/exercise-verification.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/criteria.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/business-cases.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-faulty.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-reference.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/a.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/b.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/unrun-comparison.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/CHANGELOG.md"
+      ],
+      "width": 1280,
+      "scheme": "light",
+      "figures": [
+        {
+          "title": "房间未定，先看它是否阻断当前交付",
+          "description": "青禾虚构教学通知 N01-v1 确定场地为青禾社区中心，具体房间尚未确认。整理内部核对草稿时，可以写已有安排并保留房间待确认。任务改成从入口走到房间的路线时，应先确认入口与房间，暂不画路线。是否追问取决于这个缺口对当前交付的影响。",
+          "viewBox": "560x680",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 2
+        },
+        {
+          "title": "最新文件只替换它明确修订的字段",
+          "description": "当前任务整理现行安排。U01-v2 把时间改为 13:30 至 15:30；N01-v1 的 12 人容量、12 月 4 日 18:00 截止、房间未定继续有效；R01-v1 提供满额候补和取消递补规则。聊天中的 15 人建议未获批准，去年 201 室不能作为今年安排。这是青禾工作坊的虚构教学材料。",
+          "viewBox": "560x710",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 7
+        },
+        {
+          "title": "恢复任务时，先核对交接单指向的状态",
+          "description": "交接单记录目标与权限、材料版本、成果和回执位置以及未完成项。新会话打开实际文件，比较交接记录：一致时继续检查候补说明，有差异时记录并核对。在虚构教学回执 t-02 中，cancel-07 已完成取消 Q07；会话中断后应根据已有回执整理说明，不能因为中断就再取消一次。回执未到且状态未知时，应先查询或保留未知。",
+          "viewBox": "560x800",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 8
+        },
+        {
+          "title": "沿实际执行过程读回执，不能把不同失败都写成零分",
+          "description": "本章离线练习先检查项目，再启动 Python 子进程，最后读取合格的业务报告。invalid_project 表示未启动。execution_failed 表示启动或解释执行失败，timeout 表示等待超时后终止；这些都不能编造业务分数。初始故障副本真实运行后得到 business_failed，八个用例通过、四个失败，共十二例，子进程退出码为一。这是程序检查结果，没有模型参与。完整状态还包括通过和执行期间输入变化，详见正文表格。",
+          "viewBox": "560x700",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 10
+        },
+        {
+          "title": "三组题，三个使用时机",
+          "description": "青禾教学题库的三道开发题用于看题、试错和修改提示。冻结候选提示与评分标准后，用七道验证题比较两版；正文计划每版每题各运行两次，共二十八份请求，尚非模型实测结果。方案确定后才使用两道留出题，此前应在宿主中限制待测模型对额外文件的访问。仅将材料放在另一个目录不构成权限隔离，已经看过留出题的人也需登记暴露。",
+          "viewBox": "560x750",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 15
+        },
+        {
+          "title": "总分相同，也要看同题、同次的成对变化",
+          "description": "先冻结题目、材料、判据、环境和重复次数，只改变提示 A 与 B。下方四对是人工教学算例，不是模型实测。第 1 对和第 2 对两版都通过，第 3 对只有 A 通过，第 4 对只有 B 通过，因此 A 和 B 都是 3/4，通过数净差为零，但错误位置不同。正文真实准备计划为七题、每题重复两次、两版共二十八份请求，模型尚未调用。",
+          "viewBox": "560x750",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 16
+        }
+      ],
+      "external_runtime_requests": []
+    },
+    {
+      "scrollWidth": 1280,
+      "author": "朱光",
+      "brokenAnchors": [],
+      "oldGeneratedLinks": [],
+      "sourceLinks": [
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/notice-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/rules-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/conflict-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/update-v2.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/demo-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/injection-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/development.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/cases/validation.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/chat-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/archive-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/context-measurements.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/receipts-v1.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/examples/full-request.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/exercise-verification.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/criteria.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evaluation/business-cases.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-faulty.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/business-reference.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/a.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/prompts/b.txt",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/unrun-comparison.json",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/evidence/README.md",
+        "https://github.com/zhuguang-ZFG/ai-engineering-series/blob/main/agent-books/prompt/materials/CHANGELOG.md"
+      ],
+      "width": 1280,
+      "scheme": "dark",
+      "figures": [
+        {
+          "title": "房间未定，先看它是否阻断当前交付",
+          "description": "青禾虚构教学通知 N01-v1 确定场地为青禾社区中心，具体房间尚未确认。整理内部核对草稿时，可以写已有安排并保留房间待确认。任务改成从入口走到房间的路线时，应先确认入口与房间，暂不画路线。是否追问取决于这个缺口对当前交付的影响。",
+          "viewBox": "560x680",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 2
+        },
+        {
+          "title": "最新文件只替换它明确修订的字段",
+          "description": "当前任务整理现行安排。U01-v2 把时间改为 13:30 至 15:30；N01-v1 的 12 人容量、12 月 4 日 18:00 截止、房间未定继续有效；R01-v1 提供满额候补和取消递补规则。聊天中的 15 人建议未获批准，去年 201 室不能作为今年安排。这是青禾工作坊的虚构教学材料。",
+          "viewBox": "560x710",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 7
+        },
+        {
+          "title": "恢复任务时，先核对交接单指向的状态",
+          "description": "交接单记录目标与权限、材料版本、成果和回执位置以及未完成项。新会话打开实际文件，比较交接记录：一致时继续检查候补说明，有差异时记录并核对。在虚构教学回执 t-02 中，cancel-07 已完成取消 Q07；会话中断后应根据已有回执整理说明，不能因为中断就再取消一次。回执未到且状态未知时，应先查询或保留未知。",
+          "viewBox": "560x800",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 8
+        },
+        {
+          "title": "沿实际执行过程读回执，不能把不同失败都写成零分",
+          "description": "本章离线练习先检查项目，再启动 Python 子进程，最后读取合格的业务报告。invalid_project 表示未启动。execution_failed 表示启动或解释执行失败，timeout 表示等待超时后终止；这些都不能编造业务分数。初始故障副本真实运行后得到 business_failed，八个用例通过、四个失败，共十二例，子进程退出码为一。这是程序检查结果，没有模型参与。完整状态还包括通过和执行期间输入变化，详见正文表格。",
+          "viewBox": "560x700",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 10
+        },
+        {
+          "title": "三组题，三个使用时机",
+          "description": "青禾教学题库的三道开发题用于看题、试错和修改提示。冻结候选提示与评分标准后，用七道验证题比较两版；正文计划每版每题各运行两次，共二十八份请求，尚非模型实测结果。方案确定后才使用两道留出题，此前应在宿主中限制待测模型对额外文件的访问。仅将材料放在另一个目录不构成权限隔离，已经看过留出题的人也需登记暴露。",
+          "viewBox": "560x750",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 15
+        },
+        {
+          "title": "总分相同，也要看同题、同次的成对变化",
+          "description": "先冻结题目、材料、判据、环境和重复次数，只改变提示 A 与 B。下方四对是人工教学算例，不是模型实测。第 1 对和第 2 对两版都通过，第 3 对只有 A 通过，第 4 对只有 B 通过，因此 A 和 B 都是 3/4，通过数净差为零，但错误位置不同。正文真实准备计划为七题、每题重复两次、两版共二十八份请求，模型尚未调用。",
+          "viewBox": "560x750",
+          "minRenderedFont": 32.296875,
+          "outside": [],
+          "hidden": [],
+          "chapter": 16
+        }
+      ],
+      "external_runtime_requests": []
+    }
+  ],
+  "epub": {
+    "images_with_alt": 9
+  },
+  "source_scope": "Teaching manuscript, materials, examples, figures, product metadata, builder modules, packaging and exercise tests. Evidence, verification notes and packages excluded to avoid circular hashing. Author-metadata regression tests in tests/test_epub_paint.py are also included. The narrow-screen figure legibility test yuyu-book/tests/test_art.py is also included.",
+  "schema_version": 1,
+  "product": "prompt",
+  "recorded_at": "2026-11-11T10:29:01.055627+08:00",
+  "kind": "local_artifact_validation",
+  "model_calls": 0,
+  "artifact_paths_relative_to": "agent-books",
+  "build": {
+    "command": "python series.py build --product prompt --lang zh --pdf --epub",
+    "cwd": "series root",
+    "exit_code": 0,
+    "html_units": 23,
+    "pdf_pages": 118,
+    "pdf_bookmarks": 29,
+    "epub_images": 9
+  },
+  "scope": "Actual rebuilt HTML/PDF/EPUB and exercise ZIP, all six figures measured at 390px and 1280px in light and dark, source-link routing, matching registered author metadata, and standalone offline exercises. Does not certify model quality, independent learning outcomes, cross-platform rendering or remote CI.",
+  "epubcheck": {
+    "version": "5.3.0",
+    "report": "prompt/evidence/epubcheck-0.1.3.json",
+    "exit_code": 0,
+    "fatal": 0,
+    "errors": 0,
+    "warnings": 0,
+    "epub_sha256": "8b4a24d7ab2673630b7a40cada1c2b139bad91c149e86745742968167c9b5075",
+    "bytes": 36113,
+    "sha256": "69481b1c8757d738b5bf423d1c104ee76d7420727df45d9a969eab69117382f0"
+  },
+  "tools": {
+    "python": "Python 3.13.14",
+    "java": "openjdk version \"17.0.18\" 2026-01-20 LTS\nOpenJDK Runtime Environment Microsoft-13106358 (build 17.0.18+8-LTS)\nOpenJDK 64-Bit Server VM Microsoft-13106358 (build 17.0.18+8-LTS, mixed mode, sharing)",
+    "epubcheck_jar_sha256": "f7f96617c929371821609b88c8484d6dc9f24fe916499863c46094c5fb778a65",
+    "epubcheck_release_sha256": "6c07e68584b2e2ce2f89fe06e1246dfead3eb36b46b340e7d93524f29dcff6c5",
+    "epubcheck_release_source": "https://github.com/w3c/epubcheck/releases/download/v5.3.0/epubcheck-5.3.0.zip"
+  },
+  "offline_exercises": {
+    "command": "python -X utf8 -m unittest discover -s tests -p test_prompt_*.py -v",
+    "cwd": "standalone exercise ZIP extracted to a separate directory",
+    "tests": 31,
+    "exit_code": 0,
+    "model_calls": 0,
+    "log_sha256": "c4f8141a1e247e0ccc5a5750879393aa785c16104bd6fcb6c7e2f357f7471cdc",
+    "validation_package_sha256": "25e3da552131a73864e00e76b87b7bad4ea5675ea91fb5f642d26d762525addf",
+    "validation_package_bytes": 225151,
+    "package_manifest_version": "0.1.3",
+    "package_manifest_payloads": 82,
+    "package_manifest_mismatches": 0,
+    "note": "The tests ran from the ZIP packaged before these verification notes were written. The published ZIP is rebuilt afterwards so it carries them; its hash is recorded in docs/integration/prompt-0.1.3.md, outside the package, to avoid self-reference."
+  },
+  "manual_review": {
+    "pdf_pages": [
+      19,
+      40,
+      49,
+      60,
+      82,
+      92
+    ],
+    "html_screenshots": [
+      "pdf-ch07.png",
+      "pdf-ch08.png",
+      "pdf-ch16.png",
+      "html-390-light-ch07.png",
+      "html-390-light-ch08.png",
+      "html-390-dark-ch16.png",
+      "html-1280-light-ch16.png"
+    ],
+    "finding": "All six figures keep their caption on the same PDF page and every SVG text string appears on that page. The three relaid figures read without zoom at 390px in light and dark; measured minimum rendered font is 13.26px, matching the other three.",
+    "limits": [
+      "PDF figures were sampled visually, not proofread page by page.",
+      "No independent-reader, screen-reader listening or physical e-reader test was performed.",
+      "Prose rewrites were checked against the surrounding material, not re-tested on readers."
+    ]
+  },
+  "figure_relayout": {
+    "figures": [
+      {
+        "name": "prompt-context-fields",
+        "viewBox_before": "0 0 760 690",
+        "viewBox_after": "0 0 560 710",
+        "text_nodes_before": 17,
+        "text_nodes_after": 18,
+        "min_rendered_font_390px_before": 6.764,
+        "min_rendered_font_390px_after": 13.26
+      },
+      {
+        "name": "prompt-handoff-state",
+        "viewBox_before": "0 0 760 720",
+        "viewBox_after": "0 0 560 800",
+        "text_nodes_before": 20,
+        "text_nodes_after": 21,
+        "min_rendered_font_390px_before": 7.14,
+        "min_rendered_font_390px_after": 13.26
+      },
+      {
+        "name": "prompt-paired-comparison",
+        "viewBox_before": "0 0 760 740",
+        "viewBox_after": "0 0 560 750",
+        "text_nodes_before": 18,
+        "text_nodes_after": 19,
+        "min_rendered_font_390px_before": 7.14,
+        "min_rendered_font_390px_after": 13.26
+      }
+    ],
+    "note": "Relayout moved line breaks only: some sentences were split across more lines and some were joined, so the text-node count changed by one per figure. The wording was compared string by string against the previous revision in git; no information was added or dropped."
+  },
+  "local_screenshots": {
+    "tracked_in_repository": false,
+    "sha256": {
+      "html-1280-dark-ch02.png": "5f8d738abbe9c59895856fd8d19fb961ade567e3bbaf854c9a03403266ab109b",
+      "html-1280-dark-ch07.png": "ce53d3920cc88c46a0af02111b60c8ac55a276b22cf2dbcdc850d4ea18e2483a",
+      "html-1280-dark-ch08.png": "b53bf3e8aa4c2fbb4bc9a7f5dce2ab87237c079b9604eefc6dee2a22965f44e3",
+      "html-1280-dark-ch10.png": "b1bbf7606a146575ddec85375a5e6e3a2112352533c923a2292ac135026d3f76",
+      "html-1280-dark-ch15.png": "34e0f1717a6a4102afbfdf7706d8661dd51746ea14d85c3d40af286402e140c3",
+      "html-1280-dark-ch16.png": "7c71c925e31827427a5b5fe421e09881b8956ada7c09a39247ee513f2f424869",
+      "html-1280-light-ch02.png": "02b988a1576565e7598da26249eb06aee2039880ca309bbf481b53a83d4aa845",
+      "html-1280-light-ch07.png": "a0385f6009448e97f9ef1fa41dca1f963179b6fff29972758d256e10673c6f2d",
+      "html-1280-light-ch08.png": "49d5c819c651b866f4ffecb8ac8db8a463290121ca907e8d74585b106a9e10c2",
+      "html-1280-light-ch10.png": "1051bd45690be45e44babebe4a5b902a1dd39d6fb906ecc7de42f2acc6ef6d1c",
+      "html-1280-light-ch15.png": "31f83e6b1cdd1b1acbf01ca367e84da8d2e68e7ab60bb0e932fda86a4b48be9f",
+      "html-1280-light-ch16.png": "ae90c5f1457777915b40fce7da1d1369c5b9e373577b8f4863ea62de70a47c6e",
+      "html-390-dark-ch02.png": "20fbc2cd056d6b872585487c4def6532b46890a05b8710d0f63ad57c5b4d9b96",
+      "html-390-dark-ch07.png": "de67a84a2d0d7d6769856f474d9880b65508aeb88563fde970806914ac1b9f04",
+      "html-390-dark-ch08.png": "031a5cce688feed6efd63974243fab63489d614232ee8f308f43521fc3c40f6c",
+      "html-390-dark-ch10.png": "4595530d189ed18aa5446cada3e85ec5b0379d69145b4509f59466c960343154",
+      "html-390-dark-ch15.png": "3fc7ea5dab93797a4de79882f877a17c9215f698d0e234cd5595c7c2fb004a6e",
+      "html-390-dark-ch16.png": "fd367aab48641852b6f1a66c0fa68339c3537bb03827b4fcda452cc271228e55",
+      "html-390-light-ch02.png": "a91e016f97acf8a47ab0cf8df98ff1eb2702a92a7dfeb6bd6679179282a54ef4",
+      "html-390-light-ch07.png": "642c2198c163cb4037d497a2925fee31fb2b5a66e5cc9e723ae380158497e4eb",
+      "html-390-light-ch08.png": "f7edb87d7bde0a66d5f72ca1a1879f1355942d99e1b7ced0340c95e16abcce81",
+      "html-390-light-ch10.png": "6da364353d6bf2bbd09a2764ef93494de896c3c84a71d62eaa8cceb04fc9b3d7",
+      "html-390-light-ch15.png": "702df38c0520bc4c09117c536f022ec3dfd0c66a273496d46aa57abb48729f04",
+      "html-390-light-ch16.png": "8feb6133e7dce5a6110d19d984fb8ba97551be1e8ac02a9cdfe2d1fe78b6405d",
+      "pdf-ch02.png": "c983c44f9313aee5f4e0322c2d9349931f3c7a99f6ae8cd42132f212647f001f",
+      "pdf-ch07.png": "c39d5b268cd8fc2ac69062cea21a1a767fa3f6b5b55f94d8ed96d08bc359d128",
+      "pdf-ch08.png": "895c6428680fa43da71a011ea9aa43f208cd46a497f6637c422e9fa4b2b993ee",
+      "pdf-ch10.png": "a234ac0cd1924a3a70e3e0498a4cdda69e128eccc9b91e1bb8071a2450c04de5",
+      "pdf-ch15.png": "7008a1afb5ffbd1149c43fa0a587007fd1e8fefe89ddd186caa59a322c84724b",
+      "pdf-ch16.png": "2de46cf53875f14ec072dc27cb36d16851bd3c5d175dc2819241b100c97c749d"
+    },
+    "note": "Screenshot names and hashes refer to local validation output. Generated images are not repository source files."
+  },
+  "validation_harness": {
+    "script_sha256": "a4c297df5f05b4bdca4344f86fb838ef5a52b3308839e05c3006409ffe51c264",
+    "viewport_height_px": 1300,
+    "note": "Element captures use a 1300px viewport height so the tallest figure stays inside the capture box without repeated scrolling. Viewport widths and all content, overflow and font-size assertions are unchanged from the 0.1.2 harness; the minimum rendered font assertion now covers all six figures instead of the three added in 0.1.2."
+  },
+  "author_metadata": {
+    "manifest": "朱光",
+    "pdf": "朱光",
+    "html": "朱光",
+    "epub_creators": [
+      "朱光"
+    ]
+  },
+  "prose_pass": {
+    "files_edited": 9,
+    "lines_changed": 25,
+    "files_checked": 22,
+    "invariants": [
+      "line count unchanged per file",
+      "heading, table, quote, code-fence and block-marker lines byte-identical at the same index",
+      "blank-line structure unchanged",
+      "multisets of inline code, links, citations and numbers unchanged"
+    ],
+    "gate": ".scratch/prompt-013/verify_invariants.py reported 22 files checked, 0 failing"
+  },
+  "source_sha256": {
+    "prompt/00-前言.md": "736d2b52e723041752841a7ce1de529b332a7c5dc9c1525703476434f11fa0e7",
+    "prompt/appendix-a.md": "466f31b194a4fefc72181f1a8a20ceafecc8fd7ea52adad45be49c1d1486de49",
+    "prompt/appendix-b.md": "855c64ad8f24b0bc379c58cbd70b9c0f0c18e6a561115e098b6fe1362329229b",
+    "prompt/appendix-c.md": "0f25175b629df64c2783101cbef8b3d72c060a1e96604bafccc17c75881fdab2",
+    "prompt/appendix-d.md": "783ffdd43e7eaace0ba46cd9d3d83ddbcff68821499c61870fab4ac10d2c6f18",
+    "prompt/cases/development.json": "5ccbc3589d05b1e38f8bb8bd0e16c67573fde6a7c1788435b8655549b82dcb7b",
+    "prompt/cases/holdout.json": "528ea4122a62f42994e9eb35f3411d16b8b5833197dd669945159be0fd3ddf24",
+    "prompt/cases/validation.json": "d667ae6e9513980536e9bd436cde49a5f94b999820181a8456007ee136e6d433",
+    "prompt/ch01.md": "c164e45feb32075ecba0e4fb97e461dc38f6f25581b29af415868155bf2c6099",
+    "prompt/ch02.md": "cb6e591bf59d201dad74e77bef58cd10e89f93a4221b5fa4bebba06b6380e862",
+    "prompt/ch03.md": "22e962ed3d6776c319a151c254fef6a75cdd080629ed259dc9b235b2a4cd925d",
+    "prompt/ch04.md": "5a3f7c8e5499f89fcea72c0c982446879b4c9dbb89cc42c457c0a2dcb7934ac3",
+    "prompt/ch05.md": "1f5fdb4fff21ddad6846c50bfcb2b464c51e400b32e34c13bec9e54749d91df7",
+    "prompt/ch06.md": "69279afaf535f95e36a117250dcc3c246063be6eacce3ad75e159209effce687",
+    "prompt/ch07.md": "ccd3c2169b791f02097230b49c5243abeac4dcd8f8aa4dd4a5e4400002ca2a5e",
+    "prompt/ch08.md": "93dd8bdbae1d1133296ae981f89ed6aa8191b98e53bd6511a7215a8214b72200",
+    "prompt/ch09.md": "9d479afca733867f28eb1d2ec5e026b550c0a77cfd2c455e9993e2c042721fcc",
+    "prompt/ch10.md": "f41ed69cc7fa18ec69fafaae552ed84758c0ed398bb0b9be5a69de819134937f",
+    "prompt/ch11.md": "b6a588565a4490805083a80270f6e8d6bf3a03ac78750e9bdbdc3ca0b1334a4b",
+    "prompt/ch12.md": "ceb5c0f15b58294e065b59a016ff6316ddc9e1b645dbaa5fda6d7f33a5bdb9ef",
+    "prompt/ch13.md": "946046cffa8650d1549c15a912494bc60a7de37daeac381eb25cb1d87913d479",
+    "prompt/ch14.md": "a7cb5c60c353e4600d7a8bd41a90e3a023f00be115e0dcf144e74631670afc0a",
+    "prompt/ch15.md": "4ed8d77e04b54798098f3b882212d7fa14a099461c35b7d3fce4290250f500c4",
+    "prompt/ch16.md": "ea251f25ea90bcddf20e55508a5af38f15fe94fa360fe03e776572433e41fe10",
+    "prompt/ch17.md": "86f295e840fd955c48bc90ebe6d7fecac29b9405f6ad9746bcf4bae6f6791586",
+    "prompt/ch18.md": "e37a78584ed1d6790dca6f2c63f00aad409a2fae90961d17827505941534ae7c",
+    "prompt/evaluation/business-cases.json": "7e11b82eb886774960ae56c4990e126fdd51c960a80715ca9861e6d26df9126a",
+    "prompt/evaluation/criteria.json": "a0afc4e73e876eb594a8d6e5fec2c30a0367a15486976e2b4416be6bb5bfa31f",
+    "prompt/examples/check_workshop.py": "17d9ae5d850b842e70570589ddaf8ad55bd7ce54e2c1ce8332e823ec642067ef",
+    "prompt/examples/exercise.py": "b2e89b4bb0e01f6d32a6bd4d7333596d1f1add7e7b90597d60d14107b002a38c",
+    "prompt/examples/full-request.json": "116f4acd87e3fb35d490944b39bfa52a42a4d3e066cce1c4c8da4d3f298e3d74",
+    "prompt/examples/lab.py": "f3e4a933f9ee628232b153c20a87bda78fac8eed98275053f5d7b1e0b8e6a4a2",
+    "prompt/examples/workshop.py": "026fa6153114cb2c594607ed028ca91f84591cef7df7aa875666b858fb750f46",
+    "prompt/illustrations/prompt-context-fields.svg": "ded4a37e911346ffb34dcb61396b0ea86e3bbf057abb5dfb68e6c1b2a101093d",
+    "prompt/illustrations/prompt-evaluation-freeze.svg": "a27d8f77ef52c44c108b737727dd3b6a02e88b296c65c44f812120a12ad83c28",
+    "prompt/illustrations/prompt-handoff-state.svg": "8e3116994964f5c98e5f03064d6a7f698d96fee3867fe6b149b2d536ceb607cd",
+    "prompt/illustrations/prompt-paired-comparison.svg": "29e7b6afa1c326fdb5083308e9c07eca4231b07dd91347e563b1dfd024cc9825",
+    "prompt/illustrations/prompt-question-boundary.svg": "883b920131236d3d0e7dd1d9fc093637716cae41f5d7660634a5e7398e622e68",
+    "prompt/illustrations/prompt-tool-receipt.svg": "8e0246b1b00889bd4d872a38d3a899326491bfc17f64b228aac268243e81f0a3",
+    "prompt/materials/CHANGELOG.md": "13201bf3000a753715b7738b2f4b825c1403e7a40c19dc1896f2523f84fd79a8",
+    "prompt/materials/archive-v1.md": "5ffcf1e0e9bd4590b0c9a6bf5c1c63034842ecce0d03076dec4395b90cdd8093",
+    "prompt/materials/catalog.json": "35f060f86955aff87fd6e58fc768ca229e7f24f715f43fef1f7803a008f76e0d",
+    "prompt/materials/chat-v1.md": "bbb0c8313d7386ed3987f01f345a1a5c4a9c005df45f6306db982f5db983d82d",
+    "prompt/materials/conflict-v1.md": "7a432172d08deb683f3fa4d804d62bb51c8c865bb6d3f92acf39052c411c29f3",
+    "prompt/materials/demo-v1.md": "929303c3527c1c9efa58e8560c70d6726a8ac02cc025f14d15cfbf9738dc238a",
+    "prompt/materials/holdout-library-v1.md": "567502443e530685d871f69e76b1cc07ae7e1b75ffc411619949a64b878ec61a",
+    "prompt/materials/holdout-update-v3.md": "7c2e33e844deff4e6a993364d053ea3f84ff0ccb15d62bf4c79a7a801788d529",
+    "prompt/materials/injection-v1.md": "7dbce26be69bfbe9372ea4949c83853710060e6f30337a26cfab0acd6782d6eb",
+    "prompt/materials/notice-v1.md": "56ebb7f697e4bb7e80cdc9453fa6432e42bbd9e73402910e2b451b51d824eda3",
+    "prompt/materials/receipts-v1.md": "2fa87b022a37aa86a93375ae1b4a2ce4f0b3ac7537bbde6432f8c0f9b02aa47b",
+    "prompt/materials/rules-v1.md": "24003deeb20fb8c75af774c3a6e183940ae252e9c324fcef7d886c81af089888",
+    "prompt/materials/update-v2.md": "8e6897448446a0d0be836301de19cf9a63a32769a155aeb388c4c3993ef64b47",
+    "prompt/prompts/a.txt": "68a0481ebbe943ab908c6aac625c46134695943c5260e6e99bb5e00e60f55431",
+    "prompt/prompts/b.txt": "025fd52b1a217bd18ab67ab5f02a01e04a1b26010b303c4a96de928024d4c6bc",
+    "scripts/bookctl.py": "1f4bed011555e9f61fa045319ed1df2f1cd63c69c3da84d695c8bd52c5ce33a2",
+    "scripts/build_epub.py": "24b40128036541303eefc2948dcc24869d0bea67af325b9288362ec6dde4c398",
+    "scripts/package_prompt.py": "eb4ddc4a15acbc6f299cfccf43b74ebe993d9b5f61cb6ec9de4462c9d7b84d18",
+    "tests/test_epub_paint.py": "94d21a52ef1fcf0782f170b8704dcdfd0e282cb7997159a24e442b6464db256d",
+    "tests/test_prompt_exercise.py": "2a612d8861e90b15251040005350a85a892d3ce2145a7925097cb6593d8a779b",
+    "tests/test_prompt_workshop.py": "43061f22570f0e701a544527df0fc390ed327407f15c967ac76424697e1783a3",
+    "yuyu-book/glosses-prompt.json": "37372b74e4a58cac35e28603a04faf4d68c7866c92d0a12f9adf5c8b4da25b90",
+    "yuyu-book/illustrations-agents/cover-prompt.svg": "42a528c608b388c886b8de45c4b61f77d9bb60dc60bae4f0c57bfd29a91f8ee7",
+    "yuyu-book/manifest-prompt.json": "81fddd1fc26eed0a24ae33f741bfc8c3d1b6b240baa29b56703c0c08d24f2555",
+    "yuyu-book/notes-prompt.json": "d9b547f5d5355a93fd222072eda0e4d037461e0c155a7605e4fe1603eec6c9d0",
+    "yuyu-book/reading-paths-prompt.json": "8336d01c410552867855da11ad3ba75988b9afd2443f32b2b94687d723bf4d21",
+    "yuyu-book/revisions-prompt.json": "1ced5406d0fdde124cc43245ff7b8e90b46cb2049243783a77e31afd06e9930f",
+    "yuyu-book/sources-prompt.json": "8a8b432b6296b997e4ab126436075a360cc38111121d190ca21193d7e92a4c6a",
+    "yuyu-book/subject-index-prompt.json": "e71ca985951fe621c6bba22bd9d524fa61d6efb7c10dafbed85be8ab1d01451c",
+    "yuyu-book/tests/test_art.py": "6475d2e78b3dcf40f12a58148684384c133e017e9ec5ab83e01f046451b3673d",
+    "yuyu-book/yuyu_book/__init__.py": "3f64ead7ae9656f601a1ec04ef4af69cbb91a96dbe7e36f9196d54980e599481",
+    "yuyu-book/yuyu_book/__main__.py": "927973566ad440194acead62c8115d80ee1c3c94a0d672a8ca95f24daa7a90db",
+    "yuyu-book/yuyu_book/app.py": "9169294bdcc5a9743fc023ae9df72d275738e8f1fcf2840832aa1727e44ba1ba",
+    "yuyu-book/yuyu_book/art.py": "850d4db067df96dbbfc6bc398c1b153f1e87cd6447ae3e69c0223975029fadca",
+    "yuyu-book/yuyu_book/audit.py": "1d7e05eef1853ed8f8d108674a7d32d88aae61d9bfaacb23388f71d9ef35f26a",
+    "yuyu-book/yuyu_book/backmatter.py": "4daa37dada5e0bdb88d50fcf21dfab356d79e3cad89f426757d5e4b8ed6312f2",
+    "yuyu-book/yuyu_book/blocks.py": "cbdabe44948f57df46ae566b2fbb4bc0bd27ab0be836b05a5432aa54acbd9b90",
+    "yuyu-book/yuyu_book/claims.py": "40256fb337082f8b5ab76b66a835ff5feb5a3f74874f6fc0573295e3fe48670d",
+    "yuyu-book/yuyu_book/cli.py": "d37daa3bde2c8214908390dce7d462a609e94092b589d006e50c056e6954cb40",
+    "yuyu-book/yuyu_book/config.py": "a78539e41a352debcd4ea110ce5328babf8e6bafa76edb34a194395b447af648",
+    "yuyu-book/yuyu_book/core.py": "80ffa727e2f99860bfc43be5d95f2e6ba0d24130eac3c88a7a31f5557955c8aa",
+    "yuyu-book/yuyu_book/deco.py": "270b45abf261df6a4e5eeab2a37e16c04ef863eafc48e6d8037de6c9b0df3dc1",
+    "yuyu-book/yuyu_book/diagnostics.py": "1413bca32857230a28ba9f7d1d98e417bfeebd8467cbc715c3c6916aa679d722",
+    "yuyu-book/yuyu_book/frontmatter.py": "e03c0ae570a02c83c9d6e146d5dc42860b5880a0d2614d64f0c25834883ee676",
+    "yuyu-book/yuyu_book/io.py": "08d1f5d6006ea0cd807b110156493c7725e03cba1f135e8c241d5ce4352fb216",
+    "yuyu-book/yuyu_book/labels.py": "b643abf4c4bb4f3020508af8580e1e49abb48fab404228bce68673f9fdc0ac73",
+    "yuyu-book/yuyu_book/mermaid.py": "d7a521923ba92d88f7aeba850e2a9fb4656e5749db56735fb282d2168791ada9",
+    "yuyu-book/yuyu_book/migrate.py": "b9635f71899681541584dadfd00b300aba06a58bda75e6abf462f1a839cb0f4a",
+    "yuyu-book/yuyu_book/model.py": "e8651a1d243ddfa61282dfad3517f2765e59e7e7e3e318dc24fc31816d74984f",
+    "yuyu-book/yuyu_book/pages.py": "fb8b09a3903ec3b157e6bec33b151a3c6ead3c2d4e9d117622f34cdbbbfee279",
+    "yuyu-book/yuyu_book/paths.py": "d8cd1b9010e60cce9ce7639244a6594b5610ef745d9385328b7b22a9f491f2dd",
+    "yuyu-book/yuyu_book/pdf.py": "e6324a8e5da8cf739c5e795235a35323265cadf2fff0ce8ecc0b3233b29fecc5",
+    "yuyu-book/yuyu_book/plain.py": "7396593b3ee4d67012a3b40b6a9dee8ce4d45e6b4373d42f80b8f8af9291dbfd",
+    "yuyu-book/yuyu_book/plates.py": "27c4143c6ccbc6c64ec885f8e3371a95161c5e0b68184a15973dc206ee0fc1a1",
+    "yuyu-book/yuyu_book/print_manifest.py": "1ad11874ee2672e8495285c46d9de96c6b92abe0d2391c6691b6f21a9b759abc",
+    "yuyu-book/yuyu_book/refs.py": "6137cdacde0bbe5d91122914df281873215e98436fd26939bf893f60cf019a3f",
+    "yuyu-book/yuyu_book/registry.py": "c57034222eec88cf8d52bad51aeb827eb0033432208b2aacf33325622b7d28d4",
+    "yuyu-book/yuyu_book/render.py": "3694ec8d8ccbf76bc4b6d8135639ae52de9d546b6a55d373544f773ab00db8ef",
+    "yuyu-book/yuyu_book/style.py": "d2118978419397268e93e749c5d2cc3d3c33c999a59fd5729ea02640e16f3ce6",
+    "yuyu-book/yuyu_book/style_agents.py": "8a6c25a621ec5fce46e1bb735c8aacc412d0c87de2fcf9bffee230978c806ffd",
+    "yuyu-book/yuyu_book/style_components.py": "66c7fde043c22bede7347d1f7f13270a4bdef188874dfaae2659ba3bb5e9f84c",
+    "yuyu-book/yuyu_book/style_css.py": "c378d73e274fad55905dabebc0be8c2a9109d1193b2019e333f90e1e1b20ca31",
+    "yuyu-book/yuyu_book/style_print.py": "c32384b8b9c1a17be1142fd9f26fa0af856d274c577a9eb987722a16245848f3",
+    "yuyu-book/yuyu_book/style_screen.py": "a777379c0c0e0adab0373ee7179550e71af1b7aeb59d45d01f69187e20939354",
+    "yuyu-book/yuyu_book/style_tokens.py": "e07e14de35a9cfa88366b50a41d5bc8beacb6f71716f6ea8f661994f9465dc85",
+    "yuyu-book/yuyu_book/text.py": "4632a110ed15feced4ef45364e95c2f3424ef33da91c580a990bc8cb6a405a7c",
+    "yuyu-book/yuyu_book/units.py": "dfa4cdc717bc8daa35aa1e838e2ccdb0d09f7a0607898c5d46c523d6332470bc"
+  }
+}

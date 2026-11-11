@@ -1,8 +1,24 @@
 # 提示词工程分册验证记录
 
-当前中文技术试读版为 **0.1.2（2026-11-11）**。本轮加入第 2、10、15 章的三张解释图，修正统一仓库的源码链接和作者元数据，并重新构建 HTML、PDF、EPUB 与独立练习 ZIP。新结果见 [0.1.2 成品记录](evidence/release-0.1.2.json)；0.1.1 和 0.1.0 记录保留为历史，不能用来证明当前文件已经通过检查。本轮未调用模型服务。
+当前中文技术试读版为 **0.1.3（2026-11-11）**。本轮把第 7、8、16 章的三张图重排为与其他图一致的纵向版面，再对全书正文做一轮精修，并重新构建 HTML、PDF、EPUB 与独立练习 ZIP。新结果见 [0.1.3 成品记录](evidence/release-0.1.3.json)；0.1.2、0.1.1 和 0.1.0 记录保留为历史，不能用来证明当前文件已经通过检查。本轮未调用模型服务。
 
-## 0.1.2 本轮成品检查
+## 0.1.3 本轮成品检查
+
+| 对象 | 实际结果 | 范围 |
+| --- | --- | --- |
+| HTML | 1280 与 390 像素、浅色与深色共四种场景通过；无全页横向溢出、失效内部锚点或外部运行资源请求 | 六图文字可见且不越界；本轮起六图在 390 像素下的最小实测字号均约 13.26 像素，不再区分需要放大的旧图 |
+| 图版重排 | 第 7、8、16 章三图由 760 宽改为 560 宽纵向版面，图内最小实测字号从 6.76–7.14 像素提升到 13.26 像素 | 文字逐串与上一版对照，只移动换行位置，信息没有增删；单图仍小于 20 KB 上限 |
+| 正文精修 | 22 份中文文件逐项核对，9 份共改动 25 行，其余 13 份保持原样 | 核对脚本要求行数不变、标题与表格等受保护行逐字节相同、空行结构不变、行内代码/链接/引文/数字集合不变；改写只处理回指、预告与结论拔高 |
+| PDF | 118 页、29 个书签；全文件未发现空白页、替换字符或超出页面的文本 | 六图分别在第 19、40、49、60、82、92 页，图内文字均留在同页；抽看三张重排图的实际页面，没有截断 |
+| EPUB | EPUBCheck 5.3.0（固定发布包校验和 6c07e685…）：0 个致命错误、0 个错误、0 个警告；9 张图均有替代文字 | [本轮报告](evidence/epubcheck-0.1.3.json)；尚未在实体阅读器上试读 |
+| 作者元数据 | HTML 的 author、PDF 的 author、EPUB 的 creator 均为“朱光”，与分册清单一致 | 对实际重建成品逐项断言，不引用上一版结论 |
+| 独立练习包 | 从练习 ZIP 解压后运行 31 项测试，全部通过；包内 `package-manifest.json` 版本 0.1.3，载荷摘要逐项核对一致，无缺失或多余文件 | 包含六张 SVG、书稿、材料、代码、测试和本轮证据；没有模型调用。包大小与 SHA-256 记在包外的 [0.1.3 交付说明](../../docs/integration/prompt-0.1.3.md) |
+
+本轮记录绑定 HTML、PDF、EPUB、EPUBCheck 报告和 106 个源文件，含窄屏字号回归测试 `yuyu-book/tests/test_art.py`。EPUBCheck 改用与 CI 相同的固定 5.3.0 发布包，与 0.1.2 记录中的 5.4.0 不是同一版本工具，两份报告不能互相替代。PDF 只逐图目视检查，不等于逐页校对；浏览器检查也不代替真人阅读或辅助技术验收。
+
+## 0.1.2 历史成品检查
+
+以下结果对应 0.1.2（2026-11-11）：当时加入第 2、10、15 章的三张解释图，修正统一仓库的源码链接和作者元数据，记录见 [0.1.2 成品记录](evidence/release-0.1.2.json)。
 
 | 对象 | 实际结果 | 范围 |
 | --- | --- | --- |
@@ -12,7 +28,7 @@
 | 作者元数据 | HTML 的 author、PDF 的 author、EPUB 的 creator 均为“朱光”，与分册清单一致 | 修正旧的固定署名后，对实际重建成品逐项断言 |
 | 独立练习包 | 从验证用 ZIP 解压后运行 31 项测试，全部通过；最终包另核对清单与文件 SHA-256 | 包含六张 SVG、书稿、材料、代码、测试和本轮证据；没有模型调用 |
 
-本轮记录绑定 HTML、PDF、EPUB、EPUBCheck 报告和 105 个源文件，包含作者元数据回归测试。先写验证记录，再生成包含记录的最终 ZIP；记录中不写该 ZIP 自身的哈希，避免循环引用。PDF 只逐图目视检查，不等于逐页校对；浏览器检查也不代替真人阅读或辅助技术验收。
+该轮记录绑定 HTML、PDF、EPUB、EPUBCheck 报告和 105 个源文件，包含作者元数据回归测试。先写验证记录，再生成包含记录的最终 ZIP；记录中不写该 ZIP 自身的哈希，避免循环引用。PDF 只逐图目视检查，不等于逐页校对；浏览器检查也不代替真人阅读或辅助技术验收。
 
 ## 0.1.1 历史成品检查
 
@@ -65,7 +81,7 @@ python scripts/package_prompt.py --output yuyu-book/dist/yuyu-prompt-zh-examples
 java -jar /path/to/epubcheck.jar yuyu-book/dist/yuyu-prompt-zh.epub
 ```
 
-`bookctl check --fast` 是 `make check` 使用的入口。PDF 构建需要本地浏览器与中文字体。本次环境为 Windows、Python 3.13.14；EPUBCheck 使用 Java 17。校验时使用与最终 EPUB 字节一致的临时副本。
+`bookctl check --fast` 是 `make check` 使用的入口。PDF 构建需要本地浏览器与中文字体。本次环境为 Windows、Python 3.13.14；EPUBCheck 使用 Java 17 与固定发布包 `https://github.com/w3c/epubcheck/releases/download/v5.3.0/epubcheck-5.3.0.zip`（SHA-256 `6c07e68584b2e2ce2f89fe06e1246dfead3eb36b46b340e7d93524f29dcff6c5`，与 CI 相同）。校验时直接对最终 EPUB 运行，报告内另记该文件哈希。
 
 ## 尚未验证的范围
 
@@ -73,4 +89,4 @@ java -jar /path/to/epubcheck.jar yuyu-book/dist/yuyu-prompt-zh.epub
 
 工具处理可信教学代码，不提供恶意代码隔离。业务检查只覆盖公开定义的 12 个用例，不覆盖真实身份、并发、持久化或通知发送。英文版尚未编写。
 
-0.1.0 的源文件指纹见 [provenance-release.json](evidence/provenance-release.json)，历史书籍和 ZIP 哈希见 [2026-11-10 交付记录](../docs/series/prompt-publication-20261110.json)。0.1.1 和 0.1.2 的源文件与书籍指纹分别见 [0.1.1 记录](evidence/release-0.1.1.json)、[0.1.2 记录](evidence/release-0.1.2.json)；当前练习 ZIP 内的 `package-manifest.json` 对包内源文件另列哈希。
+0.1.0 的源文件指纹见 [provenance-release.json](evidence/provenance-release.json)，历史书籍和 ZIP 哈希见 [2026-11-10 交付记录](../docs/series/prompt-publication-20261110.json)。0.1.1、0.1.2 和 0.1.3 的源文件与书籍指纹分别见 [0.1.1 记录](evidence/release-0.1.1.json)、[0.1.2 记录](evidence/release-0.1.2.json) 和 [0.1.3 记录](evidence/release-0.1.3.json)；当前练习 ZIP 内的 `package-manifest.json` 对包内源文件另列哈希，ZIP 自身摘要记在包外的 [0.1.3 交付说明](../../docs/integration/prompt-0.1.3.md)。

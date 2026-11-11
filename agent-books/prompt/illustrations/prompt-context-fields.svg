@@ -1,39 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 690" role="img" aria-label="按字段组合有效材料：正式修订替换时间，原通知保留其他安排，规则补充候补和递补" color="#263f35">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 710" role="img" aria-label="按字段组合有效材料：正式修订替换时间，原通知保留其他安排，规则补充候补和递补" color="#263f35">
   <title>最新文件只替换它明确修订的字段</title>
   <desc>当前任务整理现行安排。U01-v2 把时间改为 13:30 至 15:30；N01-v1 的 12 人容量、12 月 4 日 18:00 截止、房间未定继续有效；R01-v1 提供满额候补和取消递补规则。聊天中的 15 人建议未获批准，去年 201 室不能作为今年安排。这是青禾工作坊的虚构教学材料。</desc>
-  <path d="M14 15 Q380 7 746 16 L749 673 Q382 683 12 675 Z" fill="#f7f1e5"/>
-  <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M37 89 Q354 85 722 90" opacity=".42"/>
-    <path d="M44 137 L264 133 269 238 Q155 242 42 236 Z"/>
-    <path d="M51 143 Q147 141 258 140" opacity=".2"/>
-    <path d="M44 282 Q151 278 266 282 L268 427 41 431 Z"/>
-    <path d="M51 289 Q155 285 257 289" opacity=".2"/>
-    <path d="M44 468 L266 464 270 547 Q153 551 42 546 Z"/>
-    <path d="M359 119 Q526 115 716 120 L718 555 Q537 561 359 557"/>
-    <path d="M368 176 Q529 174 705 177 M369 250 Q532 247 705 250 M369 320 Q532 324 705 321 M369 394 Q535 391 705 395 M369 465 Q533 468 705 465" opacity=".35"/>
-    <path d="M277 191 C318 192 326 211 350 211 M341 203 L351 211 341 219" stroke="#a26732" stroke-width="3"/>
-    <path d="M277 353 Q304 354 314 354 M315 281 Q311 354 315 426 M315 282 L349 282 M340 274 L350 282 340 290 M315 355 L349 355 M340 347 L350 355 340 363 M315 426 L349 426 M340 418 L350 426 340 434"/>
-    <path d="M280 505 Q315 501 350 507 M341 499 L351 507 341 515"/>
-    <path d="M39 587 Q374 580 719 586" stroke-dasharray="5 8" opacity=".5"/>
-    <path d="M47 619 L63 635 M63 619 L47 635 M381 619 L397 635 M397 619 L381 635" stroke="#a26732"/>
+  <path d="M11 13 Q281 5 549 14 L550 703 Q281 709 10 704 Z" fill="#f7f1e5"/>
+  <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 72 Q280 68 530 73" opacity=".4"/>
+    <path d="M46 124 L518 120 522 228 Q284 234 44 230 Z"/>
+    <path d="M64 188 L64 202 M58 196 L64 204 70 196" stroke="#a26732" stroke-width="3"/>
+    <path d="M46 246 L518 242 522 426 Q284 432 44 428 Z"/>
+    <path d="M64 336 Q63 372 64 406 M58 350 L64 358 70 350 M58 378 L64 386 70 378 M58 406 L64 414 70 406"/>
+    <path d="M46 444 L518 440 522 540 Q284 546 44 542 Z"/>
+    <path d="M64 504 L64 518 M58 512 L64 520 70 512"/>
+    <path d="M30 556 Q281 552 530 557" stroke-dasharray="4 7" opacity=".45"/>
+    <path d="M40 570 L56 586 M56 570 L40 586 M40 600 L56 616 M56 600 L40 616" stroke="#a26732" stroke-width="3"/>
   </g>
   <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-    <text x="39" y="57" font-size="29" font-weight="700">按字段取证，不把整份旧通知作废</text>
-    <text x="60" y="170" font-size="22" font-weight="700">U01-v2 · 正式修订</text>
-    <text x="61" y="207" font-size="22" fill="#8b5529">只替换起止时间</text>
-    <text x="60" y="317" font-size="22" font-weight="700">N01-v1 · 原通知</text>
-    <text x="60" y="355" font-size="22">其余安排继续有效</text>
-    <text x="60" y="398" font-size="21">修订明确保留这些项</text>
-    <text x="60" y="500" font-size="22" font-weight="700">R01-v1 · 名额规则</text>
-    <text x="60" y="532" font-size="21">补上满额和取消办法</text>
-    <text x="382" y="153" font-size="25" font-weight="700">本次回答所需的现行信息</text>
-    <text x="382" y="218" font-size="27" fill="#8b5529">时间　13:30—15:30</text>
-    <text x="382" y="290" font-size="25">容量　12 人</text>
-    <text x="382" y="361" font-size="23">截止　12 月 4 日 18:00</text>
-    <text x="382" y="434" font-size="25">房间　尚未确认</text>
-    <text x="382" y="514" font-size="24">满额候补，取消后递补</text>
-    <text x="76" y="634" font-size="22">聊天：15 人仍是建议</text>
-    <text x="410" y="634" font-size="22">去年：201 室不能沿用</text>
-    <text x="40" y="665" font-size="18">青禾教学材料 · 当前任务只整理现行安排；调查误传时需重新选择材料。</text>
+    <text x="30" y="51" font-size="31" font-weight="700">按字段取证，不把整份旧通知作废</text>
+    <text x="30" y="106" font-size="29" font-weight="700">本次回答所需的现行信息</text>
+    <text x="60" y="152" font-size="28" font-weight="700">U01-v2 · 正式修订</text>
+    <text x="60" y="182" font-size="26" fill="#8b5529">只替换起止时间</text>
+    <text x="84" y="212" font-size="28">时间　13:30—15:30</text>
+    <text x="60" y="268" font-size="28" font-weight="700">N01-v1 · 原通知</text>
+    <text x="60" y="298" font-size="26">其余安排继续有效</text>
+    <text x="60" y="324" font-size="26">修订明确保留这些项</text>
+    <text x="84" y="352" font-size="26">容量　12 人</text>
+    <text x="84" y="380" font-size="26">截止　12 月 4 日 18:00</text>
+    <text x="84" y="408" font-size="26">房间　尚未确认</text>
+    <text x="60" y="466" font-size="28" font-weight="700">R01-v1 · 名额规则</text>
+    <text x="60" y="496" font-size="26">补上满额和取消办法</text>
+    <text x="84" y="524" font-size="27">满额候补，取消后递补</text>
+    <text x="70" y="584" font-size="27">聊天：15 人仍是建议</text>
+    <text x="70" y="614" font-size="27">去年：201 室不能沿用</text>
+    <text x="30" y="652" font-size="26">青禾教学材料 · 当前任务只整理现行安排；</text>
+    <text x="30" y="682" font-size="26">调查误传时需重新选择材料。</text>
   </g>
 </svg>
