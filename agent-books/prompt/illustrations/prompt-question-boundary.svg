@@ -17,7 +17,7 @@
     <path d="M31 626 Q279 622 529 626" stroke-dasharray="4 7" opacity=".5"/>
   </g>
   <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-    <text x="30" y="51" font-size="32" font-weight="700">房间未定，要不要先问？</text>
+    <text x="30" y="51" font-size="31" font-weight="700">房间未定，要不要先问？</text>
     <text x="113" y="136" font-size="28" font-weight="700">N01-v1 · 同一份通知</text>
     <text x="113" y="176" font-size="29">场地：青禾社区中心</text>
     <text x="113" y="213" font-size="29" fill="#8b5529">房间：尚未确认</text>

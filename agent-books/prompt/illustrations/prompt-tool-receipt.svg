@@ -21,7 +21,7 @@
     <path d="M30 626 Q282 623 529 626" stroke-dasharray="4 7" opacity=".45"/>
   </g>
   <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-    <text x="30" y="51" font-size="32" font-weight="700">先看执行到哪一步</text>
+    <text x="30" y="51" font-size="31" font-weight="700">先看执行到哪一步</text>
     <text x="109" y="126" font-size="31" font-weight="700">核对项目，再启动</text>
     <text x="109" y="168" font-size="28" fill="#8b5529">invalid_project</text>
     <text x="109" y="206" font-size="29">未启动，没有业务分数</text>
