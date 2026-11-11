@@ -9,14 +9,14 @@
         "P5 第一刀落在会腐坏的事实上：新增 `yuyu-book/claims.json`，把版本号、价格、数量、默认行为、性能数字与功能标志记成一条条 claim。首批六条覆盖六种 kind——Claude Code 2.1.310 基线、`claude -p` 的 Manual 默认档、附录 B 的 55 个工具、第 13 章的 $3.00 输入价与 72% 缓存节省、附录 C 的 `PROACTIVE` 标志。每条 claim 在中文和英文各有一个 block 定位，却共用同一个 claim_id：自动 block ID 是各文件正文的哈希，两语从不相同，账本负责把它们配成一对。",
         "`yuyu_book/claims.py` 把配对规则变成门禁：`value` 必须同时出现在两侧 quote 里；任一侧引文漂移、block 消失、来源不在 `sources.json`，或只改一侧数字，都在构建前报错。过期分两级：高风险 claim 过期后，`bookctl check` 记 warning，正式构建直接失败；普通风险只记 warning；`retired` 条目保留作历史，不再追正文。第 4 章、第 13 章与附录 C 的中英文正文各补三处稳定 block 标记作锚点。CONTRIBUTING 新增第 5.3 节（断言账本）与第 5.4 节（事实、推断、教学简化、作者建议的标记），提交清单同步加两项。",
         "15 章各补一段最小可运行案例：只用 Python 3.12 标准库，把该章机制压成可执行的教学模型，首行 `# exercise:` 标记、`# expected:` 写明逐行输出；正文交代版本锁、预期结果、前置章节与回链。英文版逐字使用同一段代码，新增 `tests/test_exercises.py` 在每次检查时真正执行这 15 段并比对屏幕输出，同时守住两版代码相同、五个标签齐全、章章恰有一例。",
-        "验证：构建器测试 574 项全绿。"
+        "验证：构建器测试 575 项全绿。"
       ],
       "en": [
         "Chapter 2's paired diagram and explanation distinguish generator suspension, cancellation of pending work, and cleanup: backpressure bounds the pull chain, while independent buffers still need limits; async function* does not cancel work automatically. Chapter 6 adds a concrete reading path: treat memory as a lead, check current deployment and compatibility conditions, prefer current evidence and the present request, and correct or remove stale entries.",
         "P5 starts with the facts that rot: `yuyu-book/claims.json` records versions, prices, counts, defaults, performance numbers and feature flags as individual claims. Six seed claims cover all six kinds -- the Claude Code 2.1.310 baseline, the Manual default for `claude -p`, Appendix B's 55 tools, Chapter 13's $3.00 input price and 72% cache savings, and Appendix C's `PROACTIVE` flag. Each claim has its own block locator in each edition but a single shared claim_id: automatic block IDs hash each file's own text, so the two editions never pair by themselves; the ledger pairs them.",
         "`yuyu_book/claims.py` turns that pairing rule into a gate: `value` must appear in both quotes, and a drifted quote, a vanished block, a source missing from `sources.json`, or a number updated on one side only fails before the build. Expiry has two severities: CI warns on a stale high-risk claim, while a release build refuses it; normal-risk claims only warn, and `retired` entries stay as history without chasing the prose. Chapters 4 and 13 and Appendix C gain three stable block markers in each edition as anchors. CONTRIBUTING now documents the ledger in §5.3 and the fact/inference/teaching-simplification/author-recommendation markers in §5.4, with two new checklist items.",
         "All 15 chapters gain a minimal runnable case: Python 3.12 standard library only, each chapter's mechanism compressed into an executable teaching model, opened by an `# exercise:` marker and followed by `# expected:` lines that state the exact output; the prose gives the version lock, expected result, prerequisite chapter and backlink. Both editions run byte-identical code, and the new `tests/test_exercises.py` executes all 15 on every check, compares stdout, and guards the shared code, the five labels and one case per chapter.",
-        "Validation: 574 builder tests green."
+        "Validation: 575 builder tests green."
       ]
     },
     {

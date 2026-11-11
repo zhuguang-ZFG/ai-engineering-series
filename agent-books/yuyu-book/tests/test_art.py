@@ -22,6 +22,14 @@ MANIFEST = registry.load("manifest.json")
 UNIT_IDS = [u["id"] for u, _kind, _part in unit_stream(MANIFEST)]
 PART_IDS = [p["id"] for p in MANIFEST["parts"]]
 
+PROMPT_FIGURES = ("prompt-context-fields", "prompt-handoff-state", "prompt-paired-comparison",
+                  "prompt-question-boundary", "prompt-tool-receipt", "prompt-evaluation-freeze")
+
+# A 390px reading column scales a figure by its width, so legibility is a ratio:
+# the smallest text in a figure must not shrink below what a 560-wide figure
+# carries at font-size 26.
+FIGURE_RATIO = (560, 26)
+
 GOOD = ('<svg viewBox="0 0 64 64" fill="none" stroke="currentColor">'
         '<circle cx="32" cy="32" r="14"/></svg>')
 
@@ -85,13 +93,25 @@ class ShippedDrawings(unittest.TestCase):
         self.assertNotIn(drawings[0], art.cover_plate("zh", "book"))
 
     def test_prompt_figures_remain_embedded_and_accessible(self):
-        for name in ("prompt-context-fields", "prompt-handoff-state", "prompt-paired-comparison",
-                     "prompt-question-boundary", "prompt-tool-receipt", "prompt-evaluation-freeze"):
+        for name in PROMPT_FIGURES:
             drawing = art.drawing(name)
             self.assertIn("<title>", drawing)
             self.assertIn("<desc>", drawing)
             self.assertIn("currentColor", drawing)
             self.assertNotRegex(drawing, r"(?:href|id)\s*=")
+
+    def test_prompt_figure_text_stays_readable_on_a_narrow_screen(self):
+        """Older figures drew on a 760-wide box at font-size 18, which lands near
+        7px in a phone column, so the ratio is the contract, not the raw number."""
+        wide, size = FIGURE_RATIO
+        for name in PROMPT_FIGURES:
+            drawing = art.drawing(name)
+            box = re.search(r'viewBox="0 0 ([\d.]+) [\d.]+"', drawing)
+            self.assertIsNotNone(box, name)
+            smallest = min(float(v) for v in re.findall(r'font-size="([\d.]+)"', drawing))
+            self.assertGreaterEqual(smallest * wide, float(box.group(1)) * size,
+                                    f"{name}: smallest text {smallest:g} in a "
+                                    f"{float(box.group(1)):g}-wide box")
 
 
 class Loader(unittest.TestCase):
