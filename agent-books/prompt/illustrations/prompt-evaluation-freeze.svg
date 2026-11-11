@@ -2,33 +2,33 @@
   <title>三组题，三个使用时机</title>
   <desc>青禾教学题库的三道开发题用于看题、试错和修改提示。冻结候选提示与评分标准后，用七道验证题比较两版；正文计划每版每题各运行两次，共二十八份请求，尚非模型实测结果。方案确定后才使用两道留出题，此前应在宿主中限制待测模型对额外文件的访问。仅将材料放在另一个目录不构成权限隔离，已经看过留出题的人也需登记暴露。</desc>
   <path d="M13 15 Q280 8 546 16 L548 734 Q283 743 12 734 Z" fill="#f7f1e5"/>
-  <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
     <path d="M38 72 Q280 68 521 73" opacity=".35"/>
     <path d="M39 91 Q280 85 520 92 L522 185 Q280 191 38 185 Z"/>
     <path d="M48 99 Q281 93 512 100" opacity=".18"/>
     <path d="M279 192 Q282 200 280 211 M272 203 L280 213 288 203"/>
     <path d="M82 224 Q280 219 480 225 L478 278 Q282 283 81 277 Z" fill="#e4ebdf"/>
-    <path d="M106 243 L106 236 Q106 224 116 225 Q126 226 126 237 L126 243 M102 243 L131 243 131 265 102 265 Z"/>
+    <path d="M106 243 L106 236 Q106 224 116 225 Q126 226 126 237 L126 243 M103 244 L130 243 131 264 Q117 266 103 265 Z"/>
     <path d="M280 285 Q278 294 280 304 M272 295 L280 306 288 295"/>
     <path d="M39 320 Q279 315 521 321 L520 415 Q281 420 38 415 Z"/>
     <path d="M48 328 Q281 323 512 329" opacity=".18"/>
     <path d="M280 422 Q282 429 280 438 M272 429 L280 440 288 429"/>
     <path d="M280 479 Q278 486 280 496 M272 487 L280 498 288 487"/>
-    <path d="M39 513 Q279 507 521 513 L521 673 Q280 679 38 673 Z" fill="#f0e6d7" stroke="#946238" stroke-dasharray="9 7"/>
-    <path d="M54 562 Q282 557 507 563" stroke="#946238" opacity=".4"/>
-    <path d="M99 717 Q280 721 461 717" stroke="#946238" opacity=".5"/>
+    <path d="M39 513 Q279 507 521 513 L521 673 Q280 679 38 673 Z" fill="#f0e6d7" stroke="#a26732" stroke-dasharray="9 7"/>
+    <path d="M54 562 Q282 557 507 563" stroke="#a26732" opacity=".4"/>
+    <path d="M99 717 Q280 721 461 717" stroke="#a26732" opacity=".5"/>
   </g>
   <g fill="#263f35" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-    <text x="38" y="52" font-size="30" font-weight="700">三组题，三个使用时机</text>
+    <text x="38" y="52" font-size="31" font-weight="700">三组题，三个使用时机</text>
     <text x="60" y="132" font-size="30" font-weight="700">开发题 · 3 题</text>
     <text x="60" y="169" font-size="27">看题、试错、修改提示</text>
     <text x="148" y="260" font-size="28" font-weight="700">冻结提示与评分标准</text>
     <text x="60" y="361" font-size="30" font-weight="700">验证题 · 7 题</text>
     <text x="60" y="399" font-size="27">按同一标准比较两版</text>
     <text x="280" y="470" text-anchor="middle" font-size="27">确定采用的方案</text>
-    <text x="60" y="550" font-size="30" font-weight="700" fill="#80522f">留出题 · 2 题</text>
+    <text x="60" y="550" font-size="30" font-weight="700" fill="#8b5529">留出题 · 2 题</text>
     <text x="60" y="602" font-size="27">方案确定后，才用于检验</text>
     <text x="60" y="645" font-size="26">此前须在宿主限制文件访问</text>
-    <text x="280" y="714" text-anchor="middle" font-size="27" fill="#80522f">换个目录 ≠ 限制访问</text>
+    <text x="280" y="714" text-anchor="middle" font-size="27" fill="#8b5529">换个目录 ≠ 限制访问</text>
   </g>
 </svg>
