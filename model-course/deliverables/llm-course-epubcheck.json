@@ -2,7 +2,7 @@
   "checker": "EPUBCheck",
   "version": "5.3.0",
   "epub": "llm-course.epub",
-  "epubSha256": "1be00f0ff1fa50b797f13af08a3e071f917478fd9db4814ec617b92ed7c68d1f",
+  "epubSha256": "ba183992ecaed38d01744840226fb77c736aef43e0d4f37adf84d183edf2837f",
   "status": "passed",
   "fatals": 0,
   "errors": 0,
