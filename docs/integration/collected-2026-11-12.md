@@ -1,5 +1,7 @@
 # 十卷合订本（2026-11-12）
 
+合订命令、书架入口与测试经 [PR #7](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/7) 合入 `main`；本记录随该 PR 提交，成品哈希以 `dist/yuyu-collected-zh.json` 为准。
+
 把系列十册已发布成品合订为一份 PDF 与一份 EPUB，按卷编号。合订只读取 `agent-books/yuyu-book/dist/` 与 `model-course/deliverables/` 中已存在的成品，不改写任何源稿，也不重新排版卷内正文。
 
 ## 命令
