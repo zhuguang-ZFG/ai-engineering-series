@@ -58,7 +58,7 @@ scores = Q @ K^T / sqrt(dh): [B, H, T, T]
 scores = scores.masked_fill(mask, float(&quot;-inf&quot;))
 weights = torch.softmax(scores, dim=-1)
 </code></pre>
-<p><code>diagonal=1</code> 表示只盖住严格上三角；对角线（自己看自己）和左下（看左边）保留。<code>-inf</code> 必须在 softmax <strong>之前</strong>加上：<code>exp(-inf)=0</code>，未来位置的权重严格为零；如果先 softmax 再乘掩码，归一化分母已经被未来项污染，结果不对。</p>
+<p><code>diagonal=1</code> 表示只盖住严格上三角；对角线（自己看自己）和左下（看左边）保留。<code>-inf</code> 必须在 softmax 之前加上：<code>exp(-inf)=0</code>，未来位置的权重严格为零；如果先 softmax 再乘掩码，归一化分母已经被未来项污染，结果不对。</p>
 <p>每个头用权重对 <code>V</code> 加权：</p>
 <pre><code class="language-text">head_out = weights @ V                  # [B, H, T, dh]
 </code></pre>
@@ -138,7 +138,7 @@ x = x + self.ff(self.ln_2(x))
 <td>0 额外</td>
 </tr>
 <tr>
-<td><strong>总计</strong></td>
+<td>总计</td>
 <td></td>
 <td><strong>69,760</strong></td>
 </tr>
@@ -154,7 +154,7 @@ torch.nn.utils.clip_grad_norm_(parameters, 1.0)
 optimizer.step()
 </code></pre>
 <p>默认是 400 步、批大小 24、AdamW 学习率 <code>3e-3</code>、权重衰减 0.01、梯度范数裁剪 1.0、种子 7。每一步从训练序列里有放回地抽 24 条，拼成一批；这不是“全批量梯度下降”，而是小批量随机梯度下降。损失是逐目标 token 的交叉熵，perplexity 是 <code>exp(loss)</code>（本课在打印时对指数做了上限保护，避免数值爆掉）。</p>
-<p>训练结束会在 train/val/test 三个 split 上重新计算损失。留出组 <code>template-g6</code> 的句式没有参加训练，所以它的损失<strong>可能</strong>更高；这只说明这组数据的分布差异，不能直接外推成“模型不会泛化”。反过来，如果训练损失下降而留出损失上升，要先查过拟合、数据泄漏和评测材料，而不是宣布模型变强。与 X05 的 bigram 对照时也要诚实：bigram 只有一张 7×7 分数表，没有注意力、位置和 FFN；本课 decoder 的参数更多、结构不同，不能用一个训练损失数字宣布“谁更聪明”。</p>
+<p>训练结束会在 train/val/test 三个 split 上重新计算损失。留出组 <code>template-g6</code> 的句式没有参加训练，所以它的损失可能更高；这只说明这组数据的分布差异，不能直接外推成“模型不会泛化”。反过来，如果训练损失下降而留出损失上升，要先查过拟合、数据泄漏和评测材料，而不是宣布模型变强。与 X05 的 bigram 对照时也要诚实：bigram 只有一张 7×7 分数表，没有注意力、位置和 FFN；本课 decoder 的参数更多、结构不同，不能用一个训练损失数字宣布“谁更聪明”。</p>
 <h2 id="C24-section-7d3ef5751b" tabindex="-1">生成：把输出接回输入</h2>
 <p>训练时一次看整句；推理时没有未来 token，只能自己造。<code>model.generate</code> 的循环是：</p>
 <pre><code class="language-text">tokens = [BOS] + prompt

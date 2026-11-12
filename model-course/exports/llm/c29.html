@@ -66,7 +66,7 @@
 </code></pre>
 <p>关键点：</p>
 <ul>
-<li><code>requirements.lock</code> 是<strong>实际测试通过</strong>的完整依赖，不是“&gt;=”范围。仓库示例的 <code>requirements.txt</code> 可能只是下限；交付时用你环境里的 <code>python -m pip freeze</code> 生成锁文件，再在干净环境验证。</li>
+<li><code>requirements.lock</code> 是实际测试通过的完整依赖，不是“&gt;=”范围。仓库示例的 <code>requirements.txt</code> 可能只是下限；交付时用你环境里的 <code>python -m pip freeze</code> 生成锁文件，再在干净环境验证。</li>
 <li><code>release.json</code> 是证据索引，不要让程序偷偷从它读取并覆盖显式参数；启动参数仍要看得见。</li>
 <li>模型权重、真实日志、密钥、客户数据不进发布包。模型只写路径、来源、哈希和许可说明。</li>
 </ul>

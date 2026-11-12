@@ -101,7 +101,9 @@ def clean_links(article, chapter, suffix):
         else:
             label = "".join(anchor.itertext())
             if Path(parsed.path).suffix.lower() in {".md", ".json", ".py", ".mjs", ".txt"}:
-                anchor.text = label + "（仓库：" + target + "）"
+                path = parsed.path.replace("\\", "/")
+                short = path.split("book/llm/", 1)[-1] if "book/llm/" in path else Path(path).name
+                anchor.text = label if short in label else label + "（" + short + "）"
                 for child in list(anchor):
                     anchor.remove(child)
             anchor.drop_tag()

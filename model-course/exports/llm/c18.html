@@ -40,7 +40,7 @@
 <td>冻结后只跑一次，报告结果</td>
 </tr>
 </tbody></table>
-<p>三个词描述的是<strong>使用方式</strong>，不是文件大小。你可以把同一批文档切成不同问题：开发题用来改，验证题用来选，留出题在调参期间不打开。若留出题被看过后又拿来改参数，它就已经变成验证集，不能再冒充“没见过的题”。</p>
+<p>三个词描述的是使用方式，不是文件大小。你可以把同一批文档切成不同问题：开发题用来改，验证题用来选，留出题在调参期间不打开。若留出题被看过后又拿来改参数，它就已经变成验证集，不能再冒充“没见过的题”。</p>
 <p>还要区分两种“留出”：</p>
 <ul>
 <li><strong>问题留出</strong>：文档相同，问题没在开发阶段出现；</li>
@@ -89,7 +89,7 @@ PY
 <p>这份记录至少回答了“我评的是哪一版”。如果你要评自己的 12 道题，把 <code>eval-manifest.json</code> 换成你的 <code>eval-dev.json</code>、<code>eval-val.json</code>、<code>eval-heldout.json</code>，并分别冻结。不要只冻结一个总文件后在运行中改它。</p>
 <p><code>evaluate</code> 自己也会冻结清单：它在调用任何模型前读取清单字节，记录 <code>manifest.sha256</code>、大小、修改时间和 <code>frozen_at</code>；所有用例跑完后再读一次，结果写成 <code>manifest_unchanged</code>。如果这个值是 <code>false</code>，这次结果不能作为对照，必须丢弃并重跑。</p>
 <h3 id="C18-section-27a4d32f5c" tabindex="-1">一个可用的划分示例</h3>
-<p>下面只是<strong>结构示例</strong>，不是你的留出集；真正的留出题在调参期间不要打开。样例文档已经提供了足够的事实：</p>
+<p>下面只是结构示例，不是你的留出集；真正的留出题在调参期间不要打开。样例文档已经提供了足够的事实：</p>
 <table>
 <thead>
 <tr>
@@ -180,7 +180,7 @@ PY
 <li><code>expectCitationDocs</code> 中的每个文档是否至少被一条 source citation 引用；</li>
 <li>若指定 <code>expectTool</code>，是否存在成功的对应工具回执。</li>
 </ul>
-<p>它<strong>不</strong>判断引用是否真的支持主张，也<strong>不</strong>判断回答是否回答了问题。因此 <code>cases[].passed</code> 只是“这三个机械检查通过”，不是质量通过。逐例判据要再加人工复核：</p>
+<p>它不判断引用是否真的支持主张，也不判断回答是否回答了问题。因此 <code>cases[].passed</code> 只是“这三个机械检查通过”，不是质量通过。逐例判据要再加人工复核：</p>
 <ol>
 <li>状态是否符合预期；</li>
 <li>每条 source claim 的 <code>quote</code> 是否在对应版本中逐字存在；</li>
@@ -190,7 +190,7 @@ PY
 <li>失败时是否停在正确阶段，而不是用旧答案或手工答案补齐。</li>
 </ol>
 <h3 id="C18-section-5c8058d7fb" tabindex="-1">一个必须说清的提取式契约</h3>
-<p>本课程助手当前采用<strong>提取式校验</strong>，不是语义事实判断：</p>
+<p>本课程助手当前采用提取式校验，不是语义事实判断：</p>
 <ul>
 <li><code>quote</code> 必须是实际使用的 chunk 中的逐字连续片段（空白规范化后比较）；</li>
 <li>source claim 的文本必须是对该 <code>quote</code> 的逐字提取，不能是改写或概括；</li>
