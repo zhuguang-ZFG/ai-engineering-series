@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="820" viewBox="0 0 480 820" role="img" aria-labelledby="title desc">
   <title id="title">蒸馏怎样改变学生？</title>
-  <desc id="desc">相同输入进入冻结教师和可训练学生；教师提供分布或筛选文本，损失经梯度更新学生参数；部署时学生可独立生成，错误也可能被学习。</desc><defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
-  <rect width="480" height="820" fill="#fbfaf6"/><rect width="480" height="820" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="802" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 790 V811 H30 M450 811 H471 V790" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
+  <desc id="desc">相同输入进入冻结教师和可训练学生；教师提供分布或筛选文本，损失经梯度更新学生参数；部署时学生可独立生成，错误也可能被学习。</desc>
+  
   <g font-family="Microsoft YaHei,sans-serif" fill="#1f2328" font-size="26">
     <text x="28" y="48" font-size="30" font-weight="700">蒸馏：更新的是学生</text>
     <path d="M27 73 Q238 67 451 75 L449 140 Q238 146 27 138Z" fill="#fffdf8" stroke="#1f2328" stroke-width="2.5"/>

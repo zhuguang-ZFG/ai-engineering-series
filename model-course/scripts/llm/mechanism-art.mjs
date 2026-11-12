@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 import api from "./core.cjs";
 import { multihead } from "../../book/llm/examples/multihead.mjs";
-import { artDefs, artPaper } from "./figure-frame.mjs";
 
 // Publication drawings: exact data geometry, restrained hand-drawn contours.
 // Labels stay editable; all four compositions fit the existing 480 × 640 page.
@@ -26,7 +25,7 @@ export function stepTour(steps, stepDur = 2.6) {
   ).join("")}</g>`;
 }
 function frame(title, desc, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc>${artDefs()}${artPaper(480, 640)}<g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${t(28, 43, title, 30)}${p("M28 59 Q132 55 226 59", accent, 4)}${body}${p("M28 583 Q240 581 452 583", rule, 1.5)}</g></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc><g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${t(28, 43, title, 30)}${p("M28 59 Q132 55 226 59", accent, 4)}${body}${p("M28 583 Q240 581 452 583", rule, 1.5)}</g></svg>\n`;
 }
 
 // Same unit-projection example as C07, distinct from the legacy L04 fixture.

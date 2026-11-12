@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="740" viewBox="0 0 480 740" role="img" aria-labelledby="title desc">
-  <title id="title">图片怎样进入回答</title><desc id="desc">图片编码为连续表示，经连接模块与文字共同输入。回答字段仍需回到原图核对，模糊信息保留未知。</desc><defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
+  <title id="title">图片怎样进入回答</title><desc id="desc">图片编码为连续表示，经连接模块与文字共同输入。回答字段仍需回到原图核对，模糊信息保留未知。</desc>
   <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <rect width="480" height="740" fill="#fbfaf6"/><rect width="480" height="740" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="722" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 710 V731 H30 M450 731 H471 V710" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
+  
   <g font-family="'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#1f2328" font-size="26">
     <text x="28" y="46" font-size="30" font-weight="700">图像表示 ≠ 文字译文</text>
     <path d="M30 70 Q240 66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>

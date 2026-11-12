@@ -2,8 +2,6 @@
   <title id="title">工具请求与执行回执</title>
   <desc id="desc">先提出请求，再由程序校验和执行，回传数值后结束；失败或取消进入终态。</desc>
   <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
-  <rect width="480" height="680" fill="#fbfaf6"/><rect width="480" height="680" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="662" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 650 V671 H30 M450 671 H471 V650" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">说要计算，到真的计算</text>
     <path d="M26 72 Q146.72000000000003 67.4 454 71 L452.6 137 Q290.88 138.8 25 135.4 Q25.6 103 26 72 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>

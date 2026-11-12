@@ -45,12 +45,15 @@ def json_file(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+RASTER_VERSION = 2  # bump when rendering changes: harness background, omit_background, scale
+
 def image_name(original):
     """Cache name for a rasterized figure. SVG names carry the source digest so a
-    restyled figure can never be shadowed by an older render of the same stem."""
+    restyled figure can never be shadowed by an older render of the same stem,
+    plus a rasterizer version so a rendering change cannot be shadowed either."""
     if original.suffix.lower() == ".svg":
         digest = hashlib.sha256(original.read_bytes()).hexdigest()[:10]
-        return f"{original.stem}-{digest}.png"
+        return f"{original.stem}-{digest}-r{RASTER_VERSION}.png"
     return original.stem + ".png"
 
 
@@ -63,11 +66,11 @@ def ensure_image(page, original, image_names, folder):
             svg = original.read_text(encoding="utf-8")
             page.set_content(
                 '<!doctype html><html><head><meta charset="utf-8">'
-                '<style>html,body{margin:0;background:#fbfaf1}svg{display:block}</style>'
+                '<style>html,body{margin:0;background:transparent}svg{display:block}</style>'
                 "</head><body>" + svg + "</body></html>"
             )
             page.evaluate("document.fonts.ready")
-            page.locator("svg").screenshot(path=str(target))
+            page.locator("svg").screenshot(path=str(target), omit_background=True)
         else:
             shutil.copyfile(original, target)
     image_names.add(png_name)

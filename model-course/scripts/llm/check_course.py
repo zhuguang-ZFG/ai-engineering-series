@@ -163,7 +163,7 @@ def check_epub(name, metadata, course, answers):
         for item in names:
             if item.endswith(".png"):
                 assert archive.read(item).startswith(b"\x89PNG\r\n\x1a\n"), (name, item)
-        cover_assets = [item for item in names if re.fullmatch(r"(?:.*/)?images/cover-course-[0-9a-f]{10}\.png", item)]
+        cover_assets = [item for item in names if re.fullmatch(r"(?:.*/)?images/cover-course-[0-9a-f]{10}(?:-r\d+)?\.png", item)]
         assert len(cover_assets) == 1, (name, "course cover asset")
     return {"documents": len(spine), "links": links, "images": len([name for name in names if name.endswith(".png")])}
 
