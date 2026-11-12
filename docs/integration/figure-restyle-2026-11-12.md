@@ -34,7 +34,15 @@
 | 合订本 | 重新合成：2312 页、69 spine、775 条目；PDF `23ed0aa4…`、EPUB `11de3883…`；EPUBCheck 0/0/0 |
 | 视觉抽查 | 第 21 页（图 C02-1）等由绿卡雅黑变为暖纸衬线；题注“绿色表示…”等 5 处文字同步改为红色/朱砂 |
 
-## 5. 未改动
+## 5. 第二轮：图面去纸底（同日稍后）
+
+用户仍判插图“像贴片”。根因是 `artPaper()` 给每张图铺了独立纸面 `#fbfaf6` + 颗粒 pattern + 0.8 细框 + 四角角标，与御舆卷“墨线直接落在页面上”的画法不同。处理：
+
+- 删除 `scripts/llm/figure-frame.mjs`；四个生成器去掉插值；`build-static-frames.mjs` 从“贴版”改为“剥版”（10 张手写图同样去掉纸面/颗粒/细框/角标），`--check` 幂等。
+- 51 张 SVG 重出；栅格底为 `ensure_image` 台面 `#fbfaf1`，与页面 `#fbfaf6` 差 5/255 蓝，无感。
+- 像素级验证：`attention-row` 新 PNG 角标区暗像素 229→0；全库 `figure-grain` 0 命中；EPUBCheck 三册 0/0/0；`npm test` 通过；course PDF 416 页。
+
+## 6. 未改动
 
 - `videos/` 九支视频与 `scripts/llm/build-media.mjs`：成品已审阅冻结，改其来源会使 `media-manifest` 的 sourceHash 失效并触发重审；视频如需同风格，另开一轮重渲。
 - `design/system/REVIEW.md` 等历史评审记录：保留当时事实，不回写。
