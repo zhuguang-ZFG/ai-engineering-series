@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C07 注意力到底计算了什么 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html" aria-current="page">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C07-section-b7539f10ed">先修桥：矩阵形状与加权平均</a></li><li class="toc-level-2"><a href="#C07-section-ad68327690">Q、K、V 各做什么</a></li><li class="toc-level-2"><a href="#C07-section-83e614201b">站在第二个位置，算一行</a></li><li class="toc-level-2"><a href="#C07-section-951a883003">整张矩阵在算什么</a></li><li class="toc-level-2"><a href="#C07-section-4464ee5ff3">改一个条件：动未来，输出会变吗</a></li><li class="toc-level-2"><a href="#C07-section-f092b05314">注意力的边界</a></li><li class="toc-level-2"><a href="#C07-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C07-section-6a38e94669">独立作业（容差 ±0.002）</a></li><li class="toc-level-2"><a href="#C07-section-a4f89fd541">项目增量：注意力轨迹 v1</a></li><li class="toc-level-2"><a href="#C07-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C07"><header class="chapter-opener"><p class="chapter-number">C07</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>注意力到底计算了什么</h1><p class="chapter-abstract">把一次因果注意力拆成投影、打分、遮挡、softmax 和加权汇总五步。</p></header><p class="chapter-meta">先修：<a href="c06.html">C06</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>用手遮住“我把苹果切开”的后半句，只露出“我把”。站在“把”这个位置，你能看到“苹果”吗？训练时整句都在材料里，模型会不会提前偷看后面的答案？本章把一次注意力拆成四步：投影出 Q/K/V、算匹配分数、遮住未来、按权重汇总。每一步都能手算。</p>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C07 注意力到底计算了什么 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html" aria-current="page">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C07-section-b7539f10ed">先修桥：矩阵形状与加权平均</a></li><li class="toc-level-2"><a href="#C07-section-ad68327690">Q、K、V 各做什么</a></li><li class="toc-level-2"><a href="#C07-section-83e614201b">站在第二个位置，算一行</a></li><li class="toc-level-2"><a href="#C07-section-fc2112951a">主线算例：五个位置的 Q/K/V</a></li><li class="toc-level-2"><a href="#C07-section-d903f535f8">站在最后一个位置，算一行</a></li><li class="toc-level-2"><a href="#C07-section-375ce9e0a3">汇总：从权重到向量</a></li><li class="toc-level-2"><a href="#C07-section-fac919d523">为什么要除以 √d_k</a></li><li class="toc-level-2"><a href="#C07-section-974ae5a758">五行的权重表放在一起看</a></li><li class="toc-level-2"><a href="#C07-section-951a883003">整张矩阵在算什么</a></li><li class="toc-level-2"><a href="#C07-section-c1b4c73856">一个头不够：多头的用处</a></li><li class="toc-level-2"><a href="#C07-section-f93f9d28e4">注意力的成本：一张 n×n 的表</a></li><li class="toc-level-2"><a href="#C07-section-4464ee5ff3">改一个条件：动未来，输出会变吗</a></li><li class="toc-level-2"><a href="#C07-section-f092b05314">注意力的边界</a></li><li class="toc-level-2"><a href="#C07-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C07-section-6a38e94669">独立作业（容差 ±0.002）</a></li><li class="toc-level-2"><a href="#C07-section-a4f89fd541">项目增量：注意力轨迹 v1</a></li><li class="toc-level-2"><a href="#C07-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C07"><header class="chapter-opener"><p class="chapter-number">C07</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>注意力到底计算了什么</h1><p class="chapter-abstract">把一次因果注意力拆成投影、打分、遮挡、softmax 和加权汇总五步。</p></header><p class="chapter-meta">先修：<a href="c06.html">C06</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>用手遮住“我把苹果切开”的后半句，只露出“我把”。站在“把”这个位置，你能看到“苹果”吗？训练时整句都在材料里，模型会不会提前偷看后面的答案？本章把一次注意力拆成四步：投影出 Q/K/V、算匹配分数、遮住未来、按权重汇总。每一步都能手算。</p>
 <h2 id="C07-section-b7539f10ed" tabindex="-1">先修桥：矩阵形状与加权平均</h2>
 <p>先复习两个动作。</p>
 <p><strong>矩阵乘法</strong>：一个 <code>m×n</code> 矩阵乘一个 <code>n×p</code> 矩阵，得到 <code>m×p</code> 矩阵。结果第 i 行第 j 列，是左矩阵第 i 行与右矩阵第 j 列对应相乘再相加。例如：</p>
@@ -43,6 +43,246 @@
 <p>第一个分量只来自位置 0 的 V 第一维，第二个分量只来自位置 1 的 V 第二维。权重说明“这次混合各取多少”，不是“模型有多相信某句话”。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/attention-row.svg" alt="位置1的分数经掩码和softmax得到0.3302与0.6698，再汇总V得到同一输出向量"><figcaption>图：沿同一行从上往下读。位置 2 的分数先被遮成 −∞，因此权重为 0；另两项的条高按实际权重绘制，再分别乘对应的 V。这里与上面的单位投影例子使用同一组数。</figcaption></figure>
 <p>本例输出恰好等于两项权重，是因为 V 恰好为 <code>[1,0]</code> 与 <code>[0,1]</code>。如果只把 V 改成 <code>[2,0]</code> 与 <code>[0,4]</code>，保持 Q、K 不变，权重仍是 <code>[0.3302,0.6698]</code>，输出却变成约 <code>[0.6605,2.6790]</code>。权重决定取多少，V 决定取回什么；不要把“输出向量”与“注意力权重”混为一谈。</p>
+<h2 id="C07-section-fc2112951a" tabindex="-1">主线算例：五个位置的 Q/K/V</h2>
+<p>最小例子只有三个位置、单位投影。主线句子更长，投影也不再是单位阵。输入是五片 <code>周六 下午 两点 在 图书馆</code>，每片一行四维向量（C06 的表）。先给三组投影参数：</p>
+<pre><code>WQ = [ 2 -2 -1 -1 ]      WK = [ -2 -1  0 -2 ]      WV = [ 1 0 0 0 ]
+     [ 0  2  2  2 ]           [  2  2  2  2 ]           [ 0 0 1 0 ]
+</code></pre>
+<p>四维进、二维出，所以每个位置的 Q、K、V 都是两个数。这些参数是为了让手算有结果而设定的，不是任何模型的权重；真实模型的 <code>WQ</code> 是几千乘几千的矩阵，没人手算。算完五片，得到：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>片段</th>
+<th>Q</th>
+<th>K</th>
+<th>V</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>周六</td>
+<td><code>[1.2, 0.4]</code></td>
+<td><code>[−1.4, 1.6]</code></td>
+<td><code>[0.6, 0.2]</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>下午</td>
+<td><code>[−0.4, 0.8]</code></td>
+<td><code>[−1.2, 1.2]</code></td>
+<td><code>[0.2, −0.2]</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>两点</td>
+<td><code>[−0.2, 0.8]</code></td>
+<td><code>[−0.2, 1.2]</code></td>
+<td><code>[0.2, 0.4]</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>在</td>
+<td><code>[0.0, 1.2]</code></td>
+<td><code>[−1.4, 2.0]</code></td>
+<td><code>[0.4, 0.2]</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>图书馆</td>
+<td><code>[−2.0, 2.0]</code></td>
+<td><code>[−0.6, 1.6]</code></td>
+<td><code>[−0.2, 0.2]</code></td>
+</tr>
+</tbody></table>
+<p>验算一格：位置 4 的 Q 是 <code>[2,−2,−1,−1]</code> 乘 <code>[−0.2, 0.6, 0.2, 0.2]</code>，得到 <code>−0.4−1.2−0.2−0.2 = −2.0</code>；第二行 <code>[0,2,2,2]</code> 乘同一向量得 <code>1.2+0.4+0.4 = 2.0</code>。</p>
+<h2 id="C07-section-d903f535f8" tabindex="-1">站在最后一个位置，算一行</h2>
+<p>位置 4（图书馆）能看见全部五个位置，所以这一行没有未来要遮。先算原始分数，即 Q 与各 K 的点积：</p>
+<table>
+<thead>
+<tr>
+<th>对</th>
+<th>原始点积</th>
+<th>除以 √2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图书馆 · 周六</td>
+<td>6.0</td>
+<td>4.2426</td>
+</tr>
+<tr>
+<td>图书馆 · 下午</td>
+<td>4.8</td>
+<td>3.3941</td>
+</tr>
+<tr>
+<td>图书馆 · 两点</td>
+<td>2.8</td>
+<td>1.9799</td>
+</tr>
+<tr>
+<td>图书馆 · 在</td>
+<td>6.8</td>
+<td>4.8083</td>
+</tr>
+<tr>
+<td>图书馆 · 图书馆</td>
+<td>4.4</td>
+<td>3.1113</td>
+</tr>
+</tbody></table>
+<p><code>√d_k=√2≈1.4142</code>。缩放后差异被压缩，但仍然保持排序。softmax 之后：</p>
+<table>
+<thead>
+<tr>
+<th>被看位置</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>周六</td>
+<td>0.2766</td>
+</tr>
+<tr>
+<td>下午</td>
+<td>0.1184</td>
+</tr>
+<tr>
+<td>两点</td>
+<td>0.0288</td>
+</tr>
+<tr>
+<td>在</td>
+<td>0.4870</td>
+</tr>
+<tr>
+<td>图书馆</td>
+<td>0.0892</td>
+</tr>
+</tbody></table>
+<p>五行相加 <code>0.2766+0.1184+0.0288+0.4870+0.0892 = 1.0000</code>。这组权重值得逐条读：</p>
+<ul>
+<li><strong>“在”最高 0.4870</strong>：位置 4 是地点，“在”是引出地点的介词，这两个位置的 Q/K 对齐得最好。</li>
+<li><strong>“自己”只有 0.0892</strong>：和最小例子（自己占 0.6698）完全相反。权重分布由参数决定，不是“模型总会多看自己”这类规则。</li>
+<li><strong>“两点”最低 0.0288</strong>：它在这里提供的信息最少。</li>
+</ul>
+<p>最后一句话很关键：这三个数字只说明这组人工参数下谁被取回多少，不能读成“模型认为‘在’更重要”。</p>
+<h2 id="C07-section-375ce9e0a3" tabindex="-1">汇总：从权重到向量</h2>
+<p>权重乘各自 V 再相加，得到位置 4 的输出：</p>
+<ul>
+<li><code>0.2766×[0.6,0.2] + 0.1184×[0.2,−0.2] + 0.0288×[0.2,0.4] + 0.4870×[0.4,0.2] + 0.0892×[−0.2,0.2]</code></li>
+<li>第一维：<code>0.1659+0.0237+0.0058+0.1948−0.0178 = 0.3724</code>（权重取四位小数会让末位差 0.0001）</li>
+<li>第二维：<code>0.0553−0.0237+0.0115+0.0974+0.0178 = 0.1583</code></li>
+</ul>
+<p>得到 <code>o = [0.3723, 0.1584]</code>（按未舍入权重算）。二维的 <code>o</code> 还不能直接接回四维的输入，所以再乘一次输出投影 <code>WO</code>：</p>
+<pre><code>WO = [ 1 0 ]
+     [ 0 1 ]
+     [ 1 0 ]
+     [ 0 1 ]
+</code></pre>
+<p><code>WO·o = [0.3723, 0.1584, 0.3723, 0.1584]</code>。这一步把二维的“取回结果”铺回四维，才能与原来的嵌入相加。残差连接就是这次相加：</p>
+<p><code>h = e(图书馆) + WO·o = [−0.2, 0.6, 0.2, 0.2] + [0.3723, 0.1584, 0.3723, 0.1584] = [0.1723, 0.7584, 0.5723, 0.3584]</code></p>
+<p>这四行算式就是“一层注意力”的全部产出。C08 接着把它送进归一化、前馈层和输出头，最终得到 C05 用的三个分数。</p>
+<h2 id="C07-section-fac919d523" tabindex="-1">为什么要除以 √d_k</h2>
+<p>上表如果省掉缩放，直接把原始点积送进 softmax，会得到：</p>
+<table>
+<thead>
+<tr>
+<th>被看位置</th>
+<th>未缩放权重</th>
+<th>缩放后权重</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>周六</td>
+<td>0.2653</td>
+<td>0.2766</td>
+</tr>
+<tr>
+<td>下午</td>
+<td>0.0799</td>
+<td>0.1184</td>
+</tr>
+<tr>
+<td>两点</td>
+<td>0.0108</td>
+<td>0.0288</td>
+</tr>
+<tr>
+<td>在</td>
+<td>0.5904</td>
+<td>0.4870</td>
+</tr>
+<tr>
+<td>图书馆</td>
+<td>0.0536</td>
+<td>0.0892</td>
+</tr>
+</tbody></table>
+<p>未缩放时“在”的权重从 0.4870 涨到 0.5904，“两点”从 0.0288 掉到 0.0108——分布更尖。这不是数值误差，而是 softmax 的输入整体放大了 <code>√2≈1.4142</code> 倍，差距随之放大。</p>
+<p>维度越大，这个放大越严重：<code>d_k=64</code> 时 <code>√d_k=8</code>，<code>d_k=128</code> 时约 11.3，点积本来就会随维度累积变大。不缩放的话，softmax 会越来越接近“只留一个”，梯度也随之变小，训练更难推进。除以 <code>sqrt(d_k)</code> 就是把量级拉回来，让不同维度的模型有可比的行为。</p>
+<p>这条也能反过来用：看到别人的注意力权重异常尖（某项 0.99），先问有没有缩放、缩放因子是多少；看到异常平（各项 0.2 附近），先问是不是被过度缩放或温度开得太大。</p>
+<h2 id="C07-section-974ae5a758" tabindex="-1">五行的权重表放在一起看</h2>
+<p>把五个位置各算一行（每行只填可见位置，其余为掩码）：</p>
+<table>
+<thead>
+<tr>
+<th>查询位置</th>
+<th>周六</th>
+<th>下午</th>
+<th>两点</th>
+<th>在</th>
+<th>图书馆</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>周六</td>
+<td>1.0000</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>下午</td>
+<td>0.5702</td>
+<td>0.4298</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>两点</td>
+<td>0.4085</td>
+<td>0.3167</td>
+<td>0.2749</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>在</td>
+<td>0.2612</td>
+<td>0.1860</td>
+<td>0.1860</td>
+<td>0.3668</td>
+<td>—</td>
+</tr>
+<tr>
+<td>图书馆</td>
+<td>0.2766</td>
+<td>0.1184</td>
+<td>0.0288</td>
+<td>0.4870</td>
+<td>0.0892</td>
+</tr>
+</tbody></table>
+<p>三个可复算的性质：</p>
+<ol>
+<li><strong>每行和为 1</strong>：掩码位置不参与归一化，所以可见部分的权重和为 1，不是“五行加起来等于 1”。</li>
+<li><strong>第一行只能是 1</strong>：位置 0 只看自己，没有别的选择——这不是“模型很有把握”，是掩码决定的。</li>
+<li><strong>越往后越分散</strong>：位置 1 只有两个选择，位置 4 有五个；可选位置越多，单个权重通常越小。看到“最高权重只有 0.28”时，先看这一行有几个可见位置。</li>
+</ol>
 <h2 id="C07-section-951a883003" tabindex="-1">整张矩阵在算什么</h2>
 <p>把三个位置一起算，形状是这样：</p>
 <ul>
@@ -53,6 +293,24 @@
 </ul>
 <p><code>Kᵀ</code> 只是把 K 的行列交换，好让 Q 的每一行与 K 的每一行逐一相乘。mask 在 softmax 之前生效；softmax 是按行做的，所以每一行的权重各自相加为 1。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/causal-spotlight.svg" alt="灯光只照到当前位置"><figcaption>图：因果掩码让每个位置只能看见自己和之前的位置；红色表示可见范围，不是权重大小。</figcaption></figure>
+<h2 id="C07-section-c1b4c73856" tabindex="-1">一个头不够：多头的用处</h2>
+<p>上面这一整套只用了三组参数 <code>WQ</code>、<code>WK</code>、<code>WV</code>，得到一个 <code>2</code> 维的输出。这叫一个头。真实模型会并行算几组到几十组，每组一套自己的 <code>WQ</code>、<code>WK</code>、<code>WV</code>，各自算出一行权重、汇总出一个小向量，最后拼接起来。</p>
+<p>为什么这样做有效，用主线句子能看出一半：</p>
+<ul>
+<li>一组参数可能把“在”和“图书馆”对齐得最好（上面这张表的 0.4870）；</li>
+<li>另一组参数可能更关注时间线，让“两点”与“下午”互相加分；</li>
+<li>还有一组可能只关心相邻位置，把“周六”和“下午”连起来。</li>
+</ul>
+<p>同一条输入、同一套掩码，换一组投影就换一个“关注角度”。拼接之后，位置 4 的表示里同时有地点线索与时间线索，输出头才有材料去选“报名”。代价是参数量与计算量随之增加——每个头都要算一遍分数矩阵。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/multihead-flow.svg" alt="同一输入的两组 Q/K/V 投影，各自汇总后拼接并经过输出投影"><figcaption>图：两个头各自投影、各自汇总，拼接后乘输出投影。图中数字是另一组人工矩阵（C08 展开），与本章主线算例不是同一组参数。</figcaption></figure>
+<h2 id="C07-section-f93f9d28e4" tabindex="-1">注意力的成本：一张 n×n 的表</h2>
+<p>序列有 <code>n</code> 个位置，就要算 <code>n×n</code> 个分数（掩掉一半仍然是这个数量级）。这个二次关系决定了三件事：</p>
+<ul>
+<li><code>n=10</code> 时 100 个分数，手算可行；</li>
+<li><code>n=10 000</code> 时一亿个分数，只有 GPU 能算，且显存吃紧；</li>
+<li><code>n=100 000</code> 时一百亿个分数，这就是“长上下文很贵”的来源。</li>
+</ul>
+<p>有些实现靠稀疏化、分块或近似把这张表压小，代价是“每个位置都能看到所有前文”不再严格成立。读架构说明时看到“线性注意力”“滑动窗口”，说的就是这类交换。C20 讲长上下文时会回到这张表。</p>
 <h2 id="C07-section-4464ee5ff3" tabindex="-1">改一个条件：动未来，输出会变吗</h2>
 <p>站在位置 1，把位置 2 的 V 从 <code>[1,1]</code> 改成 <code>[100,-100]</code>。先猜输出会不会变，再算：位置 2 的权重是 0，<code>0×[100,-100]=[0,0]</code>，所以输出仍是 <code>[0.3302, 0.6698]</code>。</p>
 <p>再把位置 2 的 K 改得很大，分数仍然被 mask 成负无穷，权重仍是 0，输出不变。这两个测试检查的是<strong>因果边界</strong>：未来内容不能通过这一层影响当前位置。</p>
@@ -89,5 +347,5 @@
 <p><code>位置 | 可见位置 | 原始分数 | 缩放后分数 | softmax 权重 | 各 V | 输出向量 | 未来改动是否影响</code></p>
 <p>至少做一次“修改未来 V”的对照，并保留修改前后的数值。数据可以来自旧实验或手算；标明是人工矩阵，不写成模型内部读数。</p>
 <h2 id="C07-section-82826587a3" tabindex="-1">来源与边界</h2>
-<p>本章沿用旧课 <a href="../../book/llm/lessons/attention.md">L04 模型怎样利用前文</a> 的 Q/K/V、因果掩码与加权汇总，以及旧实验 X04 的计算方法。G31 保留可见范围示意；G52 专为本章单位投影例子计算，不混用旧实验矩阵。单位投影与 <code>[0,0.7071]</code> 这组数是课程为手算设计的，<strong>不是 DeepSeek、Kimi 或任何模型的内部 Q/K/V</strong>；真实模型的头数、维度、缩放方式和掩码实现要按架构与代码核对。</p>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/attention.md">L04 模型怎样利用前文</a> 的 Q/K/V、因果掩码与加权汇总，以及旧实验 X04 的计算方法。G31 保留可见范围示意；G52 专为本章单位投影例子计算，不混用旧实验矩阵。单位投影与 <code>[0,0.7071]</code>、主线五行的 Q/K/V 与 <code>[0.2766, 0.1184, 0.0288, 0.4870, 0.0892]</code> 都是课程为手算设计的，<strong>不是 DeepSeek、Kimi 或任何模型的内部 Q/K/V</strong>；真实模型的头数、维度、缩放方式和掩码实现要按架构与代码核对。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c06.html">上一章 C06</a><a href="c07-answer.html">独立作答后核对</a><a href="c08.html">下一章 C08</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C05 一句话怎样逐步生成 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html" aria-current="page">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C05-section-6992aeef72">先修桥：分数、比例与概率</a></li><li class="toc-level-2"><a href="#C05-section-2d9b0641ee">从文字到编号：先切片，再查表</a></li><li class="toc-level-2"><a href="#C05-section-75f15b3da5">完整算例：三个候选，三种温度</a></li><li class="toc-level-2"><a href="#C05-section-9ef1087989">选中之后：追加与停止</a></li><li class="toc-level-2"><a href="#C05-section-0bd26b74de">每一步最大，整段一定最好吗</a></li><li class="toc-level-2"><a href="#C05-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C05-section-0b7afb8e3d">独立作业（数值容差 ±0.001）</a></li><li class="toc-level-2"><a href="#C05-section-6d4146f885">项目增量：生成记录 v1</a></li><li class="toc-level-2"><a href="#C05-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C05"><header class="chapter-opener"><p class="chapter-number">C05</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>一句话怎样逐步生成</h1><p class="chapter-abstract">从分数到 softmax，再到一次采样和追加，手算一句话怎样被逐步生成。</p></header><p class="chapter-meta">先修：<a href="c04.html">C04</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>把一句话停在“他端起杯子，喝了一口……”。你接“水”，同事接“茶”，另一个人想到“咖啡”。三个人都把句子接顺了，可谁看见杯子里装的是什么？这一章拆开“接下去”这个动作：模型不是一次写完整段，而是一次算一个片段，选中、追加、再算下一步。</p>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C05 一句话怎样逐步生成 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html" aria-current="page">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C05-section-6992aeef72">先修桥：分数、比例与概率</a></li><li class="toc-level-2"><a href="#C05-section-2d9b0641ee">从文字到编号：先切片，再查表</a></li><li class="toc-level-2"><a href="#C05-section-05314eac11">完整算例：三个候选，一个分数表</a></li><li class="toc-level-2"><a href="#C05-section-023f62205f">三个候选之外：真实词表有多大</a></li><li class="toc-level-2"><a href="#C05-section-9ef1087989">选中之后：追加与停止</a></li><li class="toc-level-2"><a href="#C05-section-b6521f80f5">每步最大，整段一定最好吗</a></li><li class="toc-level-2"><a href="#C05-section-eb0662a805">分数错了，错在哪一层</a></li><li class="toc-level-2"><a href="#C05-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C05-section-0b7afb8e3d">独立作业（数值容差 ±0.001）</a></li><li class="toc-level-2"><a href="#C05-section-6d4146f885">项目增量：生成记录 v1</a></li><li class="toc-level-2"><a href="#C05-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C05"><header class="chapter-opener"><p class="chapter-number">C05</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>一句话怎样逐步生成</h1><p class="chapter-abstract">从分数到 softmax，再到一次采样和追加，手算一句话怎样被逐步生成。</p></header><p class="chapter-meta">先修：<a href="c04.html">C04</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>把一句话停在“他端起杯子，喝了一口……”。你接“水”，同事接“茶”，另一个人想到“咖啡”。三个人都把句子接顺了，可谁看见杯子里装的是什么？这一章拆开“接下去”这个动作：模型不是一次写完整段，而是一次算一个片段，选中、追加、再算下一步。</p>
+<p>这一卷有一条贯穿的主线：<code>周六 下午 两点 在 图书馆 报名</code>。C05 先管最后一步——给定几个候选分数，怎样选中一个；分数本身从哪来，留给 C06 到 C08 一层层算。C09 再回来改这些分数。</p>
 <p>读下去之前先做一个小准备：分数、比例、概率和为一，这三件事要能算。下面会从“一分成几份”开始，不要求先会矩阵。</p>
 <h2 id="C05-section-6992aeef72" tabindex="-1">先修桥：分数、比例与概率</h2>
 <p>一个袋子里有 3 个红球、1 个蓝球。红球占 <code>3/(3+1)=0.75</code>，蓝球占 <code>1/4=0.25</code>，两者相加为 1。概率就是这种“份额”，只是分母由模型算出来，不由你数球。</p>
@@ -11,29 +12,68 @@
 <p>以 <code>Hello, world!</code> 为例，旧实验的快照把它切成 <code>Hello</code>、<code>,</code>、<code> world</code>、<code>!</code> 四片；注意 <code>world</code> 前面的空格跟着它一起走。换成中文或生僻字符，切口可能落在字的中间。UTF-8 里 <code>A</code> 是一个字节 <code>41</code>，<code>中</code> 是三个字节 <code>E4 B8 AD</code>；如果分词器从中间切开，单独显示半截字节就会看到替代字符。把所有片段的字节按原顺序接回去，原文可以无损还原。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/token-strip.svg" alt="先切片，再找编号"><figcaption>图：原文被切成片段，再查成编号。片段数不等于字数，编号只是存储地址。</figcaption></figure>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/byte-reassembly.svg" alt="碎字节，拼回来再读"><figcaption>图：半截字节显示不成字，不代表原文坏了；按字节顺序拼接即可还原。</figcaption></figure>
+<p>主线句子在本课程的人工词表里切成六片：<code>周六</code>、<code>下午</code>、<code>两点</code>、<code>在</code>、<code>图书馆</code>、<code>报名</code>，对应的编号分别是 4102、2871、5530、2701、6984、3650。整句十二个汉字、六片，平均两字一片——这个比例只属于这张人工词表；真实分词器对同一句话可能给七片，也可能给九片。这五个编号是课程 fixture，用来让每一步算术都能复算；换成真实分词器，切法可能不同，编号也完全不同。编号大小说明不了任何语义：2701（在）比 4102（周六）小，与“谁更常用、谁更要紧”没有关系。</p>
 <p>这里要记住两个“不相等”：</p>
 <ul>
 <li><strong>字数 ≠ token 数</strong>：一个汉字可能一片，也可能多片；英文单词也可能被拆开。</li>
 <li><strong>ID 接近 ≠ 意思接近</strong>：42 和 43 只是相邻的存储位置，语义关系要靠训练后的向量体现，而不是编号大小。</li>
 </ul>
 <p>旧实验（<a href="tokens.html">X01 分词</a>）可以切换编码、展开每片的字节并还原原文。它只有固定快照，不能替任意新句子现场编码；真实接口还可能额外加入系统提示、聊天格式和工具定义，计量要按实际产品。</p>
-<h2 id="C05-section-75f15b3da5" tabindex="-1">完整算例：三个候选，三种温度</h2>
-<p>假设某一步只有三个候选，分数是 <code>[1, 2, 3]</code>。温度 <code>T=1</code> 时直接算：</p>
+<h2 id="C05-section-05314eac11" tabindex="-1">完整算例：三个候选，一个分数表</h2>
+<p>输入是 <code>周六 下午 两点 在 图书馆</code>，要预测下一片。假设模型只考虑三个候选，分数是：</p>
+<table>
+<thead>
+<tr>
+<th>候选</th>
+<th>分数（logit）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>报名</td>
+<td>1.9336</td>
+</tr>
+<tr>
+<td>签到</td>
+<td>−0.0126</td>
+</tr>
+<tr>
+<td>两点</td>
+<td>0.3268</td>
+</tr>
+</tbody></table>
+<p>这三个数怎么算出来，是 C06 到 C08 的事：编号查表得向量，注意力在前文里汇总信息，输出头再把向量变成三个分数。眼下只练一件事——把分数变成概率。</p>
+<p><code>T=1</code> 时直接算：</p>
 <ul>
-<li><code>exp(1)=2.71828</code>，<code>exp(2)=7.38906</code>，<code>exp(3)=20.08554</code></li>
-<li>总和 <code>30.19287</code></li>
-<li>概率约 <code>[0.0900, 0.2447, 0.6652]</code></li>
+<li><code>exp(1.9336)=6.91436</code>，<code>exp(−0.0126)=0.98748</code>，<code>exp(0.3268)=1.38652</code></li>
+<li>总和 <code>9.28836</code></li>
+<li>概率约 <code>[0.7444, 0.1063, 0.1493]</code></li>
 </ul>
 <p>温度会先除分数，再算 softmax：</p>
 <ul>
-<li><code>T=2</code>：分数变 <code>[0.5, 1, 1.5]</code>，概率约 <code>[0.1863, 0.3072, 0.5065]</code>。分布变平，冷门候选机会变大。</li>
-<li><code>T=0.5</code>：分数变 <code>[2, 4, 6]</code>，概率约 <code>[0.0159, 0.1173, 0.8668]</code>。分布变尖，高分候选更集中。</li>
+<li><code>T=2</code>：分数变 <code>[0.9668, −0.0063, 0.1634]</code>，概率约 <code>[0.5477, 0.2070, 0.2453]</code>。分布变平，冷门候选机会变大。</li>
+<li><code>T=0.5</code>：分数变 <code>[3.8672, −0.0252, 0.6536]</code>，概率约 <code>[0.9429, 0.0192, 0.0379]</code>。分布变尖，高分候选更集中。</li>
 <li><code>T→0</code>：程序通常直接取分数最高的候选，不把这个极限硬塞进除法。</li>
 </ul>
-<p>温度改变的是“怎样从分数里抽”，不是“分数从哪里来”。它不能补上材料里缺失的地点，也不能把错误事实变正确。</p>
+<p>上表分数只有个位数，直接算 <code>exp</code> 不会出事。真实 logits 可能有几十上百的量级：<code>exp(1000)</code> 在 float32 里直接溢出成无穷大，归一化就得到 0/0。程序的标准做法是先减最大值再算——<code>exp(1.9336−1.9336)=1</code>、<code>exp(−0.0126−1.9336)=0.1428</code>、<code>exp(0.3268−1.9336)=0.2005</code>，总和 1.3433，概率仍是 <code>[0.7444, 0.1063, 0.1493]</code>。减掉的常数在分子分母里同时出现，比值不变，溢出风险消失。</p>
+<p>温度改变的是“怎样从分数里抽”，不是“分数从哪里来”。它不能补上材料里缺失的地点，也不能把错误事实变正确。把 <code>T</code> 从 1 调到 0.5，“报名”的份额从 0.7444 升到 0.9429，但“图书馆里能不能报名”这件事，一点证据都没多出来。</p>
+<p>再往下调一档，能看清温度到底在改什么。<code>T=0.2</code> 时分数变成 <code>[9.668, −0.0635, 1.634]</code>，概率是 <code>[0.999617, 0.000059, 0.000324]</code>；到 <code>T=0.1</code>，另外两个候选的概率已经小到打印出来是 0.000000。这时“抽样”名存实亡：只要分数差一点点，结果就锁死在高分候选上。温度不是“保守程度”旋钮，它只放大或压缩分数的差距；分数本身错得离谱时，低温只是把错误锁得更死。</p>
+<h2 id="C05-section-023f62205f" tabindex="-1">三个候选之外：真实词表有多大</h2>
+<p>上面的算例只列了三个候选，真实模型的候选是整张词表——几万到十几万片。softmax 要对每一个候选算 <code>exp</code> 再归一化，所以“下一步”这一步本身就是一次覆盖全词表的计算：词表越大，这一步越贵。</p>
+<p>这解释了三个常被忽略的现象：</p>
+<ul>
+<li><strong>概率被切得很碎</strong>：词表有几万片时，即使 <code>T=1</code>，单个候选的概率也常常只有百分之几；“最高概率 0.08”并不表示模型瞎猜，只是候选太多。</li>
+<li><strong>看似无关的候选仍占份额</strong>：它们加起来可能不小，采样的随机性就来自这里；把温度调到 0.2，等于把这几万片的空间压缩成一条窄缝。</li>
+<li><strong>步数与费用成正比</strong>：一段几百字的回答要跑几百次“算分数、选一个、追加”，每次都是一次完整前向计算。屏幕上的打字速度、接口的计费口径，都绕不开这个循环。</li>
+</ul>
+<p>把这三条与前面的算例对齐：分数表只有三个候选，是为了手算；真实系统里同一套流程在几万片候选上跑几百遍。流程不变，规模变了。</p>
 <h2 id="C05-section-9ef1087989" tabindex="-1">选中之后：追加与停止</h2>
-<p>抽样选中一个片段后，把它接到输入末尾，形成新输入，再算下一轮。这个循环叫自回归生成。下一步的候选依赖刚才写下的内容：第一步选中“水”，下一步要接的可能是句号；选中“茶”，候选又会变。</p>
+<p>抽样选中一个片段后，把它接到输入末尾，形成新输入，再算下一轮。这个循环叫自回归生成。下一步的候选依赖刚才写下的内容：第一步选中“报名”，下一步要接的可能是标点或“方式”；选中“签到”，候选又会变。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/generation-fork.svg" alt="选一个，再往下走"><figcaption>图：当前输入产生候选；选中一片后接回末尾，更新输入再算。概率条只示意结构，准确数值由实验计算。</figcaption></figure>
+<p>选中“报名”之后，输入变成六片 <code>周六 下午 两点 在 图书馆 报名</code>，模型重新算出下一片的分数表。这里出现两个容易混淆的“都一样”：</p>
+<ul>
+<li><strong>流程一样，分数不一样</strong>：每一步都做“查表—汇总—出分数”，但输入多了一片，分数表随之改变。</li>
+<li><strong>温度一样，结果也可能不一样</strong>：同一温度下按概率抽样，两次运行可以抽到不同候选；只有把种子和实现都固定，才谈得上复现。</li>
+</ul>
 <p>生成会在几种情况下停：</p>
 <ul>
 <li>选中停止标记（它通常不写进正文）；</li>
@@ -41,18 +81,27 @@
 <li>服务端规则要求停止。</li>
 </ul>
 <p>看到文字不再增加时，要检查停止原因。若最后一句断在半路，不能把它当完整回答。旧实验（<a href="generation.html">X02 生成</a>）会直接显示停止原因，还能固定种子重放同一次抽样；真实服务的并行计算、版本和解码实现不同，零温度也不保证逐字复现。</p>
-<h2 id="C05-section-0bd26b74de" tabindex="-1">每一步最大，整段一定最好吗</h2>
+<h2 id="C05-section-b6521f80f5" tabindex="-1">每步最大，整段一定最好吗</h2>
 <p>不一定。假定第一步 A 的概率 0.6、B 的概率 0.4；走 A 后目标片段概率 0.1，走 B 后是 0.9。两条完整路径的概率是：</p>
 <ul>
 <li>A 路：<code>0.6 × 0.1 = 0.06</code></li>
 <li>B 路：<code>0.4 × 0.9 = 0.36</code></li>
 </ul>
-<p>第一步 A 更大，整条路却更小。贪心解码每步取最大，采样按概率抽，top-k 先留若干高分候选，top-p 先留累计概率达到阈值的一组再归一化。它们决定怎么走，都不负责核验沿路写出的事实。</p>
+<p>第一步 A 更大，整条路却更小。贪心解码每步取最大，采样按概率抽，top-k 先留若干高分候选，top-p 先留累计概率达到阈值的一组再归一化。用上面的分数表在 <code>T=1</code> 时做 top-p=0.9：先取“报名”0.7444，累计 0.7444；再取“两点”0.1493，累计 0.8937；还不够 0.9，于是把“签到”也纳入，三个候选全留。阈值卡在中间时，一个候选的去留会改变归一化后的分布，这一点比“top-p 更聪明”更值得记住。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/sequence-paths.svg" alt="眼前大，整条未必大"><figcaption>图：只比较图中两条指定路径，不是完整搜索树；它说明“每步最大”不等于“整段最大”。</figcaption></figure>
+<h2 id="C05-section-eb0662a805" tabindex="-1">分数错了，错在哪一层</h2>
+<p><code>报名</code> 拿到 1.9336，<code>两点</code> 只有 0.3268。这个差距可以来自三个不同的地方，修法完全不同：</p>
+<ol>
+<li><strong>前文没给出关键信息</strong>：把“图书馆”从输入里删掉再算一次——如果“报名”的分数大幅塌下去，说明这份证据确实由它带进来；如果几乎不动，模型从别处或从先验里拿到了同样的倾向。这时要改的是材料，不是温度；温度调低只会更稳定地选同一个词。</li>
+<li><strong>看见了但没汇总到</strong>：前文有“图书馆”，注意力却没把它的信息带到当前位置，分数就仍然低。这时要改的是 C07 的注意力权重与 C08 的拼接方式。</li>
+<li><strong>汇总了但输出头偏</strong>：向量里已经有“地点+动作”的信息，输出头给“报名”的分数仍然偏低。这时要改的是输出头这一层，训练（C09）就是改它的手段之一。</li>
+</ol>
+<p>判断落在哪一层，靠的是同一套动作：改一个条件、看分数怎么动。删一个词、换一处注意力权重、只改输出头，动的是三个不同的量。只改温度不在此列——它不动分数，只动抽样。</p>
+<p>这条分层的用处是：以后遇到“模型答得不对”，先问“它是没看见、没汇总，还是输出头偏”，而不是笼统地说“模型不行”。三者的证据不同，修法也不同。</p>
 <h2 id="C05-section-4540eaf9d0" tabindex="-1">失败对照</h2>
 <ol>
 <li><strong>概率高就当真</strong>：最高概率只表示“这段前文后更容易接出它”，不表示事实为真。材料没写杯里是什么，抽到“水”也没有增加证据。</li>
-<li><strong>调低温度就不编</strong>：温度让分布变尖，错误照样可能被更稳定地选中。</li>
+<li><strong>调低温度就不编</strong>：温度让分布变尖，错误照样可能被更稳定地选中；把“报名”的份额推到 0.9429，也只是更稳定地选它。</li>
 <li><strong>把显示速度当计算速度</strong>：屏幕上的打字动画受网络和前端影响，不能反推模型内部步数。</li>
 <li><strong>忽略截断</strong>：达到长度上限时最后一句可能不完整，报告不能照抄。</li>
 <li><strong>拿另一套词表的 ID 喂模型</strong>：编号只在对应词表里有意义，换编码器要重新编码。</li>
@@ -71,5 +120,5 @@
 <p><code>输入原文 | 分词/字节快照 | 温度与采样设置 | 实际输出（截断处标出） | 停止原因 | 是否核验事实</code></p>
 <p>至少做两类记录：一类用本地教学实验（可重放），一类用你能访问的聊天产品（记下版本、模式、可见设置；看不到的就写“未知”）。不要编造模型输出；没有实际运行就留空，并注明原因。</p>
 <h2 id="C05-section-82826587a3" tabindex="-1">来源与边界</h2>
-<p>本章沿用旧课 <a href="../../book/llm/lessons/tokens.md">L01 文字怎样变成模型的输入</a> 与 <a href="../../book/llm/lessons/generation.md">L02 为什么同一句话能接出不同结果</a> 的字节、分词、生成循环与停止说明，复用图 G25/G26/G27/G28 的原始出处。算例 <code>[1,2,3]</code> 与两路口概率是课程人工数值，<strong>不是从 DeepSeek、Kimi 或任何模型内部读出的 logits</strong>；它们只用于练 softmax、温度与路径概率。真实产品的 token 计数、可选温度和停止字段以其文档与界面为准。</p>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/tokens.md">L01 文字怎样变成模型的输入</a> 与 <a href="../../book/llm/lessons/generation.md">L02 为什么同一句话能接出不同结果</a> 的字节、分词、生成循环与停止说明，复用图 G25/G26/G27/G28 的原始出处。主线句子的五个编号、三个候选分数（1.9336、−0.0127、0.3268）以及 <code>[0,1,1]</code> 练习、两路口概率都是课程人工数值，<strong>不是从 DeepSeek、Kimi 或任何模型内部读出的 logits</strong>；它们只用于练 softmax、温度、top-p 与路径概率。真实产品的 token 计数、可选温度和停止字段以其文档与界面为准。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c04.html">上一章 C04</a><a href="c05-answer.html">独立作答后核对</a><a href="c06.html">下一章 C06</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>

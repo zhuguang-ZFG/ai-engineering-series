@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C09 训练为什么能改变预测 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html" aria-current="page">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C09-section-3537203f38">先修桥：负对数、斜率、学习率</a></li><li class="toc-level-2"><a href="#C09-section-e0a9a18a59">目标错位：用前一个片段预测下一个</a></li><li class="toc-level-2"><a href="#C09-section-2934f921e7">完整一步：两个候选的更新</a></li><li class="toc-level-2"><a href="#C09-section-69d927cb7f">深层网络怎样找到各层该改多少</a></li><li class="toc-level-2"><a href="#C09-section-36bfbc2985">训练与推理：两条路径</a></li><li class="toc-level-2"><a href="#C09-section-c0ce43ca3e">改一个条件：损失下降，任务仍可能错</a></li><li class="toc-level-2"><a href="#C09-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C09-section-6a38e94669">独立作业（容差 ±0.002）</a></li><li class="toc-level-2"><a href="#C09-section-c9877ac4dd">项目增量：训练记录 v1</a></li><li class="toc-level-2"><a href="#C09-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C09"><header class="chapter-opener"><p class="chapter-number">C09</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>训练为什么能改变预测</h1><p class="chapter-abstract">用负对数、梯度和一次参数更新，区分“这次答对了”和“模型学会了”。</p></header><p class="chapter-meta">先修：<a href="c08.html">C08</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>你在聊天里说“答错了，再想想”，下一次回答可能变好。可这是模型学会了，还是它这次看到了你的纠正？判断这件事，得找到参数有没有变化。本章用一个两候选的小例子，把“预测—比较—算梯度—更新”走完，再区分训练与推理。</p>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C09 训练为什么能改变预测 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html" aria-current="page">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C09-section-3537203f38">先修桥：负对数、斜率、学习率</a></li><li class="toc-level-2"><a href="#C09-section-e0a9a18a59">目标错位：用前一个片段预测下一个</a></li><li class="toc-level-2"><a href="#C09-section-2934f921e7">完整一步：两个候选的更新</a></li><li class="toc-level-2"><a href="#C09-section-bb37f94683">主线一步：从 0.2952 出发</a></li><li class="toc-level-2"><a href="#C09-section-584b94b277">反向传播：梯度怎么穿回块内</a></li><li class="toc-level-2"><a href="#C09-section-36bfbc2985">训练与推理：两条路径</a></li><li class="toc-level-2"><a href="#C09-section-c0ce43ca3e">改一个条件：损失下降，任务仍可能错</a></li><li class="toc-level-2"><a href="#C09-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C09-section-6a38e94669">独立作业（容差 ±0.002）</a></li><li class="toc-level-2"><a href="#C09-section-c9877ac4dd">项目增量：训练记录 v1</a></li><li class="toc-level-2"><a href="#C09-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C09"><header class="chapter-opener"><p class="chapter-number">C09</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>训练为什么能改变预测</h1><p class="chapter-abstract">用负对数、梯度和一次参数更新，区分“这次答对了”和“模型学会了”。</p></header><p class="chapter-meta">先修：<a href="c08.html">C08</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>你在聊天里说“答错了，再想想”，下一次回答可能变好。可这是模型学会了，还是它这次看到了你的纠正？判断这件事，得找到参数有没有变化。</p>
+<p>C08 结束在三个分数 <code>[1.9336, −0.0126, 0.3268]</code>，给正确词 <code>报名</code> 的概率是 0.7444，损失 <code>−ln(0.7444)=0.2952</code>。本章从这 0.2952 出发，把“预测—比较—算梯度—更新”走完：先在两候选的小例子里把机制讲清楚，再回到主线算一遍真实链条，最后区分训练与推理。</p>
 <h2 id="C09-section-3537203f38" tabindex="-1">先修桥：负对数、斜率、学习率</h2>
 <p><strong>负对数</strong>：若模型给正确答案的概率是 0.5，损失 <code>−ln(0.5)≈0.693</code>；概率升到 0.8，损失 <code>−ln(0.8)≈0.223</code>。给目标的概率越高，罚分越小；概率接近 0，罚分趋于很大。</p>
 <p><strong>斜率（梯度）</strong>：函数在某点的斜率告诉你“参数往哪边动，损失会升还是降”。更新时朝斜率相反方向走一小步：</p>
@@ -37,7 +38,48 @@
 <td>无下一个（或 EOS）</td>
 </tr>
 </tbody></table>
-<p>这就是“目标错位”：输入与目标不是同一个 token，而是错开一位。训练时可以把整段一起送入、并行算多个位置，但因果掩码必须保证位置 t 只看见 ≤t 的内容；否则位置 t 会看到自己要去预测的答案（C07 的 mask 就是为此）。</p>
+<p>主线序列同理。<code>周六 下午 两点 在 图书馆</code> 这五个位置的训练目标分别是 <code>下午</code>、<code>两点</code>、<code>在</code>、<code>图书馆</code>、<code>报名</code>：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>输入</th>
+<th>目标</th>
+<th>训练时该位置的输出头比较对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>周六</td>
+<td>下午</td>
+<td>词表里全部候选</td>
+</tr>
+<tr>
+<td>1</td>
+<td>周六 下午</td>
+<td>两点</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>2</td>
+<td>周六 下午 两点</td>
+<td>在</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>3</td>
+<td>周六 下午 两点 在</td>
+<td>图书馆</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>4</td>
+<td>周六 下午 两点 在 图书馆</td>
+<td>报名</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p>C08 算的正是第 4 行。也就是说，主线那三个分数不是凭空给出的：它们是位置 4 在训练时必须“压中”<code>报名</code> 的一次预测。这是一个“目标错位”的例子——输入与目标不是同一个 token，而是错开一位。训练时可以把整段一起送入、并行算多个位置，但因果掩码必须保证位置 t 只看见 ≤t 的内容；否则位置 t 会看到自己要去预测的答案（C07 的 mask 就是为此）。</p>
 <h2 id="C09-section-2934f921e7" tabindex="-1">完整一步：两个候选的更新</h2>
 <p>先只看“喝”后面该接什么，候选是“水”和“茶”。初始分数都设为 0：</p>
 <ul>
@@ -57,13 +99,117 @@
 <li>新损失 <code>−ln(0.5987)≈0.513</code></li>
 </ul>
 <p>水上升、茶下降，损失从 0.693 降到 0.513。这是一次更新、一个训练对的结果；真实训练会对很多对求平均，再更新。</p>
-<p>这里特意把两个分数本身当成可训练参数，所以可以直接减去梯度。Transformer 的分数由前面许多参数计算出来，通常不会把本次分数保存成待训练的词表；下一节沿链式法则把分数上的梯度传回实际参数。</p>
+<p>这里特意把两个分数本身当成可训练参数，所以可以直接减去梯度。Transformer 的分数由前面许多参数计算出来，下面两节沿链式法则把分数上的梯度传回实际参数。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="一步训练，两个分数怎样动"><figcaption>图：上下两条总宽相同，浅色的“水”从 50.0% 扩到 59.9%，其余是“茶”。中间先算概率减目标，再减去 0.4 倍梯度；水的梯度是负数，减去它会抬高水的分数。数值来自人工两候选例子的实际计算。</figcaption></figure>
-<h2 id="C09-section-69d927cb7f" tabindex="-1">深层网络怎样找到各层该改多少</h2>
-<p>上面的分数只有两个，可以直接写梯度。深层网络的分数由很多层共同算出，要用反向传播：从损失出发，沿前向计算的依赖关系逐层求导，再把各参数的梯度交给优化器。</p>
-<p>一个最小关系：若 <code>s = w×h</code>，则</p>
-<p><code>∂L/∂w = (∂L/∂s) × h</code></p>
-<p>也就是把“损失对分数的影响”和“分数对参数的影响”接起来。数值例子：<code>w=1.5</code>，<code>h=2</code>，<code>∂L/∂s=-0.4</code>，则 <code>∂L/∂w=-0.8</code>；学习率 0.1 时，<code>w</code> 更新为 <code>1.5 − 0.1×(-0.8) = 1.58</code>。反向传播把这种链式关系扩展到多层，不是把答案逐句写进一张可查询的表。</p>
+<h2 id="C09-section-bb37f94683" tabindex="-1">主线一步：从 0.2952 出发</h2>
+<p>回到三个候选。概率 <code>[0.7444, 0.1063, 0.1493]</code>，目标 <code>报名</code> 的指示值是 1，另两个是 0：</p>
+<ul>
+<li><code>报名</code>：<code>0.7444 − 1 = −0.2556</code></li>
+<li><code>签到</code>：<code>0.1063 − 0 = 0.1063</code></li>
+<li><code>两点</code>：<code>0.1493 − 0 = 0.1493</code></li>
+</ul>
+<p>三个梯度都是对分数的偏导。要让某个实际参数动起来，还得乘上“分数对这个参数的变化率”。输出头的一行就是一个参数：第 k 行的分数是 <code>W_U[k]·y</code>，所以它对该行的偏导就是 <code>y</code> 本身：</p>
+<p><code>∂z(报名)/∂W_U(报名) = y = [−1.3285, 3.1419, 0.4850, −0.4850]</code></p>
+<p>链起来，<code>报名</code> 那一行的梯度是：</p>
+<p><code>dL/dW_U(报名) = (−0.2556) × [−1.3285, 3.1419, 0.4850, −0.4850] = [0.3396, −0.8029, −0.1240, 0.1240]</code></p>
+<p>第 2 维的梯度最负（−0.8029），因为它同时被“y 的该维最大（3.1419）”和“要抬高的分数”推动。取学习率 0.05，更新这一行：</p>
+<p><code>新行 = [0.2, 0.7, 0.1, 0.1] − 0.05 × [0.3395, −0.8030, −0.1240, 0.1240] = [0.1830, 0.7402, 0.1062, 0.0938]</code></p>
+<p>重算三个分数：<code>报名</code> 涨到 <code>2.0883</code>，另两个不变（它们对应的行没动）。概率变成 <code>[0.7727, 0.0945, 0.1327]</code>，损失 <code>−ln(0.7727)=0.2578</code>。以上都按全精度计算再取四位；拿表里的四位小数重算，末位会差 0.0002 左右。</p>
+<p>只改一行、只走一步，损失从 0.2952 降到 0.2578。继续走同一步：</p>
+<table>
+<thead>
+<tr>
+<th>步数</th>
+<th>报名分数</th>
+<th>p(报名)</th>
+<th>损失</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1.9336</td>
+<td>0.7444</td>
+<td>0.2952</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2.0883</td>
+<td>0.7727</td>
+<td>0.2578</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2.2259</td>
+<td>0.7960</td>
+<td>0.2282</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2.3494</td>
+<td>0.8153</td>
+<td>0.2042</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2.4612</td>
+<td>0.8315</td>
+<td>0.1845</td>
+</tr>
+</tbody></table>
+<p>四步之后损失降到 0.1845。收敛不是“学会了”：这只是同一个训练对上的拟合。真实训练还有另外四个位置、其他句子和验证集。</p>
+<p>同一件事也可以只改一个标量偏置：<code>报名</code> 行的分数加上 <code>b</code>，梯度只有 <code>−0.2556</code>，取学习率 1.0 时 <code>b</code> 变为 <code>0.2556</code>，分数 <code>1.9336+0.2556=2.1892</code>，概率 <code>[0.7900, 0.0874, 0.1227]</code>，损失 0.2358。一步就把损失的降幅做到了改整行两步才有的水平——因为偏置只平移这一行，不牵动与其他候选的几何关系，同样的步长下更直接。</p>
+<p>步长的影响体现在速度上。把学习率换成 0.5，同样改一行：</p>
+<table>
+<thead>
+<tr>
+<th>学习率</th>
+<th>1 步后损失</th>
+<th>4 步后损失</th>
+<th>4 步后 p(报名)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.05</td>
+<td>0.2578</td>
+<td>0.1845</td>
+<td>0.8315</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>0.1697</td>
+<td>0.0751</td>
+<td>0.9277</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>0.0705</td>
+<td>0.0291</td>
+<td>0.9713</td>
+</tr>
+</tbody></table>
+<p>学习率越大，损失掉得越快，概率越快逼近 1。本例只有一行参数在动，概率上界就是 1，所以它不会“越过”最优再回来；真实模型里成千上万个参数互相牵连，步长过大会让损失震荡甚至上升。这就是为什么学习率要试、要退火，而不能照抄。</p>
+<h2 id="C09-section-584b94b277" tabindex="-1">反向传播：梯度怎么穿回块内</h2>
+<p>上一节只更新了输出头。真正要改的是块内的 <code>W1</code>、<code>W2</code>、<code>W_O</code>，以及上游注意力的投影。做法是从损失出发，沿前向计算的依赖关系逐层求导。</p>
+<p>先把“损失对块输出 y 的梯度”算出来。<code>y</code> 有四维，每一维都通过三个候选的分数影响损失：</p>
+<p><code>dL/dy = Σ_k (dL/dz_k) × W_U[k]</code></p>
+<p>代入 <code>dL/dz = [−0.2556, 0.1063, 0.1493]</code> 与三行权重：</p>
+<ul>
+<li>第 1 维：<code>0.2×(−0.2556) + 0.1×0.1063 + 0.5×0.1493 = 0.0342</code></li>
+<li>第 2 维：<code>0.7×(−0.2556) + 0.1×0.1063 + 0.3×0.1493 = −0.1235</code></li>
+<li>第 3 维：<code>0.1×(−0.2556) + 0.2×0.1063 + 0.2×0.1493 = 0.0256</code></li>
+<li>第 4 维：<code>0.1×(−0.2556) + 0.6×0.1063 + 0.1×0.1493 = 0.0532</code></li>
+</ul>
+<p>注意这些数比分数上的梯度小得多：三个候选的梯度正负相抵，<code>报名</code> 那行的负梯度被另外两行的正梯度中和掉大半。这是 softmax 的常态——它只关心差，不关心绝对水平。想让表示动起来，靠的是这种“抵消后剩下的一点点”，再由学习率和步数累积。</p>
+<p>往下走一步：<code>y = LN(h) + a2</code>，加号让梯度原样分成两条路，一条回到 LN，一条回到前馈。前馈这条路上要穿过 <code>W2</code>、ReLU 和 <code>W1</code>：</p>
+<ul>
+<li>穿过 <code>W2</code>（本例是单位矩阵，梯度不变）：<code>[0.0342, −0.1235, 0.0256, 0.0532]</code></li>
+<li>穿过 ReLU：<code>a1 = [−1.8134, 1.8134, 0, 0]</code>，只有第二维是正的，所以只有第二维的梯度能通过，其余三维被截成 0，得到 <code>[0, −0.1235, 0, 0]</code></li>
+<li>穿过 <code>W1</code>（乘 <code>W1ᵀ</code>）：<code>[0, −0.1235, 0, 0.1235]</code></li>
+</ul>
+<p>第三条最值得盯住。<code>W1</code> 的第二行是 <code>[0, 1, 0, −1]</code>，它把 <code>ln₁ − ln₃</code> 送进隐藏层；梯度沿同一行回来时，<code>ln₁</code> 得到 <code>−0.1235</code>，<code>ln₃</code> 得到 <code>+0.1235</code>。一正一负、绝对值相等，正是这一行“只关心差值”的体现。</p>
+<p>两条路合并，<code>dL/dLN(h) = [0.0342, −0.2470, 0.0256, 0.1766]</code>。再穿过 LayerNorm，得到对 <code>h</code> 的梯度 <code>[−0.5058, −0.4350, 0.3735, 0.5673]</code>。这个结果不靠背公式也能验：把 <code>h</code> 的某一维加一个极小量，重算归一化后的输出，用链式关系累加，数值结果与上面四位小数一致。</p>
+<p>LayerNorm 的反向传播比前向复杂，因为它让每一维都依赖全体的均值和方差。直觉是：梯度要先减去自身的均值（平移不改变方向），再减去“沿归一化方向的分量”，最后除以标准差还原尺度。少了任何一项，梯度方向都会偏。</p>
+<p>最后一步回到注意力：<code>h = E + W_O·o</code>，所以 <code>dL/do = W_Oᵀ·dL/dh = [0.0597, −0.0703]</code>。这两个数分别对应“谁的 V 该多取一点、谁的 K 该更被关注”，继续往下就进入 C07 的 softmax 与 <code>W_Q/W_K/W_V</code>。整条链一个不多、一个不少。</p>
 <h2 id="C09-section-36bfbc2985" tabindex="-1">训练与推理：两条路径</h2>
 <ul>
 <li><strong>推理</strong>：读取当前参数，算出概率，选一个 token；参数不变。</li>
@@ -80,6 +226,7 @@
 <li>没有学到虚假线索（材料里的偶然共现）。</li>
 </ul>
 <p>如果训练集成绩越来越好、留出集越来越差，要查过拟合、数据差异和评测泄漏。若两条曲线都降，也只说明这组指标改善；真实任务还要按字段、引用和执行结果另测。</p>
+<p>主线这个例子里还能看到更细的一层：损失从 0.2952 降到 0.1845 的过程中，<code>签到</code> 与 <code>两点</code> 的分数一动没动。原因是只更新了 <code>报名</code> 那一行，另两行没被碰。真实训练会同时更新所有行，<code>签到</code> 的分数会被压低——这正是“正确答案被抬高”和“错误答案被压低”的两种力量，在 softmax 里它们其实是同一件事。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/parameter-dials.svg" alt="什么时候才拧旋钮"><figcaption>图：参数是训练拧的旋钮；改提示、补材料、调温度不是同一种动作。</figcaption></figure>
 <h2 id="C09-section-4540eaf9d0" tabindex="-1">失败对照</h2>
 <ol>
@@ -88,6 +235,8 @@
 <li><strong>学习率过大</strong>：损失可能不降反升；过小则几乎不动。</li>
 <li><strong>目标错位写错</strong>：用当前位置预测当前位置，等于抄答案；因果掩码也会失去意义。</li>
 <li><strong>随机拆句当留出集</strong>：同一文档的相邻句高度相似，分数虚高。</li>
+<li><strong>只更新输出头就叫“训练完了”</strong>：本章第一步只动了 <code>W_U</code> 的一行，块内的 <code>W1</code>、<code>W2</code>、注意力的参数都还停在旧值；真实训练是整条链一起更新。</li>
+<li><strong>把梯度当成“改哪一维就抬哪一维”</strong>：<code>dL/dy</code> 是三个候选梯度加权求和的结果，符号和大小都会被抵消改写，不能按单个候选的直觉读。</li>
 </ol>
 <h2 id="C09-section-6a38e94669" tabindex="-1">独立作业（容差 ±0.002）</h2>
 <ol>
@@ -102,6 +251,9 @@
 <p>在 S2 项目里新增 <code>training-log.md</code>，记录：</p>
 <p><code>数据来源 | 训练/验证如何分割 | 初始损失 | 更新一步后的参数与损失 | 留出集结果 | 任务层检查</code></p>
 <p>数据可以用旧 bigram 实验或你按本章手算的小例子；标明是教学数据。不要把训练损失写成任务准确率，也不要把一次更新写成“模型学会了”。</p>
+<p>主线追加一张表：<code>步数 | 报名分数 | p(报名) | 损失 | 改了哪一组参数</code>，并把学习率 0.05 / 0.2 / 0.5 的对照各记一行。</p>
 <h2 id="C09-section-82826587a3" tabindex="-1">来源与边界</h2>
-<p>本章沿用旧课 <a href="../../book/llm/lessons/training.md">L05 模型是怎样学会的</a> 的 bigram、交叉熵、梯度与训练/推理区分，复用深入页 <a href="../../book/llm/deepening/training.md">training.md</a> 的两候选算例与链式法则，图 G33/G06/G20 的出处与旧实验 <a href="training.html">X05</a>。所有数值为课程人工小例子；<strong>没有训练 DeepSeek、Kimi 或任何真实模型</strong>，不能把 0.513 之类的损失读成模型性能。真实训练的优化器、批次、正则化和数据配比会影响结果，需要按实际实现核对。</p>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/training.md">L05 模型是怎样学会的</a> 的 bigram、交叉熵、梯度与训练/推理区分，复用深入页 <a href="../../book/llm/deepening/training.md">training.md</a> 的两候选算例与链式法则，图 G33/G06/G20 的出处与旧实验 <a href="training.html">X05</a>。</p>
+<p>主线数值（0.2952、<code>dL/dz=−0.2556</code>、四步损失表、<code>dL/dy</code>、<code>dL/do</code>）记录在 <code>specs/llm-running-example.md</code>，由同一份脚本生成；LayerNorm 的反向结果另用有限差分核对过。</p>
+<p>所有数值为课程人工小例子；<strong>没有训练 DeepSeek、Kimi 或任何真实模型</strong>，不能把 0.1845 之类的损失读成模型性能。真实训练的优化器、批次、正则化和数据配比会影响结果，需要按实际实现核对。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c08.html">上一章 C08</a><a href="c09-answer.html">独立作答后核对</a><a href="c10.html">下一章 C10</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
