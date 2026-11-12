@@ -63,23 +63,23 @@
     "llm-reading-tasks.pdf": 7,
     "llm-reading-guide.pdf": 10
   },
-  "sourceHash": "55b20ebd2123d7e3db9bd072f55d0f926aaab680865ddc764fa4ed222a2f8c9f",
+  "sourceHash": "6388ec55ff8b1d79bb4c2b3665757a7ff9a06e17875d213b30c72f224691bd65",
   "files": {
     "llm-explained-handdraw.pdf": {
       "bytes": 3534028,
-      "sha256": "6b91787b4241cedf87a86ddd45e1a3027998cf2374dcaedfa62240c5afe4fc55"
+      "sha256": "fc19e29f12b324d2e4d48a75034cd2bd18134c38b09e163d5729f9e02bbbd408"
     },
     "llm-explained-handdraw.epub": {
-      "bytes": 6987485,
-      "sha256": "53fbe48a577403b1c654336d5d3c1531d37a8f43a7cd6f4d36108516c0b56320"
+      "bytes": 6987190,
+      "sha256": "6ab1c1e6e1d9a36e37b8b2f752619da6f1b4c4fa0f3bdb1ff9358a3cbdeb9228"
     },
     "llm-reading-tasks.pdf": {
       "bytes": 180924,
-      "sha256": "0f97d281e6d1c45592b768296f633a9ed02d917b26281786e786c9ae3f45d70e"
+      "sha256": "ffc570b2a6420591f20698e7b3b551ff3b59db66a70aadba99d609c75b366b1c"
     },
     "llm-reading-guide.pdf": {
       "bytes": 376430,
-      "sha256": "d50978c35e76e6c9c6c7b934887967149098b56ef364ed38663eed41d7b26f3f"
+      "sha256": "f7a787ec5fb4617e398bd65b52be863a86a893b55ede98e390b6881b53c156e2"
     }
   },
   "limitations": [
