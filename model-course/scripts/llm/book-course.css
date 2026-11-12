@@ -9,11 +9,11 @@
   --ink: #1f2328;
   --ink-soft: #5f5a4f;
   --pine: #1f2328;
-  --pine-soft: #3f7a60;
+  --pine-soft: #5f5a4f;
   --sage: #e9e2d0;
   --sand: #eee5d3;
   --rule: #cfc5b1;
-  --clay: #a8492b;
+  --clay: #B4472F;
 }
 
 html { background: var(--paper); }

@@ -2,7 +2,7 @@
   <title id="title">协议连接了谁</title><desc id="desc">MCP 客户端在宿主内连接工具和资料服务；A2A 客户端委托远端 Agent 服务并接收任务状态和产物。两者都不代替授权和结果核验。</desc>
   <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
   
-  <g font-family="'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#1f2328" font-size="26">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328" font-size="26">
     <text x="28" y="46" font-size="30" font-weight="700">接通之后，还要核验</text>
     <path d="M30 70 Q240 66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>
     <text x="28" y="116">MCP：连接工具与资料服务</text>
