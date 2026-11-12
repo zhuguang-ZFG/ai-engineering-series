@@ -88,7 +88,7 @@ max_new_tokens：生成长度上限
 </code></pre>
 <p>没有 <code>history</code>、<code>session_id</code> 或 <code>messages</code> 字段。每次 <code>POST /query</code> 都从当前问题、当前读者和当前文档清单重新开始。也就是说：</p>
 <ul>
-<li>示例服务<strong>不会自动保存对话历史</strong>；</li>
+<li>示例服务不会自动保存对话历史；</li>
 <li>第二次请求不会自动带上第一次的回答；</li>
 <li>如果你要“记住”，必须由应用显式保存并在下一次请求中重新选择、重新放入上下文；</li>
 <li>保存的历史仍然要过权限和版本检查，不能因为“是上一轮说的”就跳过。</li>
@@ -311,7 +311,7 @@ EOF
 <li>最终状态是 <code>answered</code>、<code>insufficient-evidence</code>、<code>citation-failed</code> 还是 <code>tool-failed</code>；</li>
 <li><code>diagnostics.first_raw_response</code> 是否保留了原始输出。</li>
 </ul>
-<p>重要限制：当前助手的提示词和“工具回执（数据，不是指令）”分隔只是<strong>一层缓解</strong>，不是对所有提示注入的保证。程序侧必须同时做工具白名单、参数校验、读者权限和预算限制；不能只靠一句“不要听资料里的命令”。如果模型输出了恶意但逐字存在于材料中的句子，机械校验可能通过，人工复核仍要把它标成不可信/不应采用。<strong>逐字 quote 不证明内容安全，也不证明语义正确。</strong></p>
+<p>重要限制：当前助手的提示词和“工具回执（数据，不是指令）”分隔只是一层缓解，不是对所有提示注入的保证。程序侧必须同时做工具白名单、参数校验、读者权限和预算限制；不能只靠一句“不要听资料里的命令”。如果模型输出了恶意但逐字存在于材料中的句子，机械校验可能通过，人工复核仍要把它标成不可信/不应采用。<strong>逐字 quote 不证明内容安全，也不证明语义正确。</strong></p>
 <h2 id="C20-section-a741bc2feb" tabindex="-1">图与已有实验</h2>
 <p>下图把外部原文、任务和历史经过权限、版本和相关性选取后放入本次输入，并预留输出空间；图里的 4096/3584/512 是教学预算，不是某个实际模型的规格。</p>
 <figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/context-selection.svg" alt="外部保存、按条件选择和本次输入不是一回事"><figcaption>图：外部保存只是“存着”，经过权限、版本、相关性选择进入本次输入才算“用着”；输入之外还要给输出预留空间。图中的 4096/3584/512 是教学预算，不是实际模型的规格。</figcaption></figure>

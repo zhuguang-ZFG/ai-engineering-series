@@ -78,7 +78,7 @@ loss.backward()
 
 print(w.grad, b.grad)   # tensor(-18.) tensor(-6.)
 </code></pre>
-<p>这里的 <code>w</code>、<code>b</code> 是需要梯度的叶子张量；由它们计算出的 <code>pred</code>、<code>loss</code> 也会有 <code>requires_grad=True</code>，反向传播需要沿这些中间结果回溯。默认只有需要梯度的叶子会累积 <code>.grad</code>；若要检查中间结果的 <code>.grad</code>，先对它调用 <code>retain_grad()</code>。<code>loss.backward()</code> 默认把梯度<strong>累加</strong>到 <code>.grad</code>，所以训练循环每步都要先 <code>optimizer.zero_grad(set_to_none=True)</code>，否则上一步的梯度会混进来。这个细节在 C09 只是文字，现在你可以亲手制造一次“忘记清零”的对比。</p>
+<p>这里的 <code>w</code>、<code>b</code> 是需要梯度的叶子张量；由它们计算出的 <code>pred</code>、<code>loss</code> 也会有 <code>requires_grad=True</code>，反向传播需要沿这些中间结果回溯。默认只有需要梯度的叶子会累积 <code>.grad</code>；若要检查中间结果的 <code>.grad</code>，先对它调用 <code>retain_grad()</code>。<code>loss.backward()</code> 默认把梯度累加到 <code>.grad</code>，所以训练循环每步都要先 <code>optimizer.zero_grad(set_to_none=True)</code>，否则上一步的梯度会混进来。这个细节在 C09 只是文字，现在你可以亲手制造一次“忘记清零”的对比。</p>
 <p>把标量换成向量，交叉熵的梯度有一个很好用的形式。若 <code>p = softmax(logits)</code>，目标 one-hot 是 <code>y</code>，那么：</p>
 <pre><code class="language-text">∂CE/∂logit_i = p_i - y_i
 </code></pre>

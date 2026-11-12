@@ -10,11 +10,11 @@
 <li>必须有最大步数/最大调用次数，达到上限就停止；</li>
 <li>涉及现实写入或发送时，需要人工确认；本章只做本地计算和只读查找。</li>
 </ul>
-<p>如果“为什么不能 <code>eval</code>”不熟，先记住：模型输出是<strong>数据</strong>，不是可信代码。<code>eval(&quot;__import__(&#39;os&#39;).system(...)&quot;)</code> 会把一段文本变成真实动作；教学工具只接受白名单工具名和有限参数。</p>
+<p>如果“为什么不能 <code>eval</code>”不熟，先记住：模型输出是数据，不是可信代码。<code>eval(&quot;__import__(&#39;os&#39;).system(...)&quot;)</code> 会把一段文本变成真实动作；教学工具只接受白名单工具名和有限参数。</p>
 <h2 id="C16-section-136402592f" tabindex="-1">工具契约：先写清楚，再让模型选</h2>
 <p>本课程助手支持两个教学工具：</p>
 <ul>
-<li><code>calculator</code>：接受一个<strong>数值算术表达式字符串</strong>，例如 <code>&quot;3*14&quot;</code>。程序用 Python AST 解析，只允许数字字面量、一元 <code>+</code>/<code>-</code>、括号，以及 <code>+ - * / // % **</code> 这些运算符；函数调用、变量名、属性访问、字符串/容器字面量和任意语句都不执行。除零、超长表达式、超大指数或结果返回失败。</li>
+<li><code>calculator</code>：接受一个数值算术表达式字符串，例如 <code>&quot;3*14&quot;</code>。程序用 Python AST 解析，只允许数字字面量、一元 <code>+</code>/<code>-</code>、括号，以及 <code>+ - * / // % **</code> 这些运算符；函数调用、变量名、属性访问、字符串/容器字面量和任意语句都不执行。除零、超长表达式、超大指数或结果返回失败。</li>
 <li><code>read_document</code>：按文档 ID 读取当前读者有权访问的片段；只读，不写文件、不发消息。</li>
 </ul>
 <p>模型提出的是类似这样的请求：</p>
@@ -29,7 +29,7 @@
 <p>固定工作流的步骤由程序写死，不依赖模型决定。旧实验 <a href="tools.html">D13 两步价格工作流</a> 就是这种：先查价，再用查到的价格乘数量；查不到就不算总价。</p>
 <pre><code class="language-bash">node book/llm/examples/tool-workflow.mjs
 </code></pre>
-<p>它会打印正常结果和 <code>missing-item</code> 失败；失败时没有总价，只有 <code>not-found</code>。这个基线说明：<strong>固定流程也能真实执行</strong>，但它不会根据问题选择工具或调整步骤。C16 要比较的是“固定”与“模型选动作”，不是把两者混称 Agent。</p>
+<p>它会打印正常结果和 <code>missing-item</code> 失败；失败时没有总价，只有 <code>not-found</code>。这个基线说明：固定流程也能真实执行，但它不会根据问题选择工具或调整步骤。C16 要比较的是“固定”与“模型选动作”，不是把两者混称 Agent。</p>
 <h2 id="C16-section-0477c7baf4" tabindex="-1">让模型在有限循环里选动作</h2>
 <p>以设备检查为例，假设任务说明提供“每轮检查 3 个区域，每天 2 轮，连续 7 天”，要求用 <code>calculator</code> 计算 <code>3*14</code>。这段假设不是文档原文，不能写成材料事实；工具结果由成功回执验证。用 Agent 模式。先把 <code>MODEL_DIR</code> 指向你已合法取得并放在本机的模型目录（不是自动下载地址）；运行结果取决于模型、材料与严格校验，失败状态同样要保存：</p>
 <pre><code class="language-bash"># 替换为你本机的模型目录绝对路径

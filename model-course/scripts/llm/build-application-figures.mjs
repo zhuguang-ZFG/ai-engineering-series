@@ -7,7 +7,7 @@ import { artDefs, artPaper } from "./figure-frame.mjs";
 const out = resolve(import.meta.dirname, "../../book/assets/handdraw/llm");
 const ink = "#1f2328", paper = "#fbfaf6", wash = "#f0e9d8";
 const text = (x, y, label, size = 26) => `<text x="${x}" y="${y}" font-size="${size}">${label}</text>`;
-const box = (x, y, w, h, fill = paper) => `<path d="M${x + 8} ${y} L${x + w - 4} ${y + 1} Q${x + w} ${y + 2} ${x + w} ${y + 8} L${x + w - 1} ${y + h - 4} Q${x + w - 2} ${y + h} ${x + w - 8} ${y + h} L${x + 4} ${y + h - 1} Q${x} ${y + h - 2} ${x} ${y + h - 8} L${x + 1} ${y + 6} Q${x + 2} ${y} ${x + 8} ${y} Z" fill="${fill}" stroke="${ink}" stroke-width="2.5"/>`;
+const box = (x, y, w, h, fill = paper) => `<path d="M${x - 2} ${y + 2} Q${x + w * .28} ${y - 2.6} ${x + w + 2} ${y + 1} L${x + w + .6} ${y + h + 1} Q${x + w * .62} ${y + h + 2.8} ${x - 3} ${y + h - .6} Q${x - 2.4} ${y + h * .5} ${x - 2} ${y + 2} Z" fill="${fill}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>`;
 const arrow = (x, y, endY) => `<path d="M${x} ${y} Q${x - 2} ${(y + endY) / 2} ${x} ${endY}" fill="none" stroke="${ink}" stroke-width="2.5" marker-end="url(#arrow)"/>`;
 const items = [];
 function figure(file, height, title, desc, body) {
