@@ -13,7 +13,7 @@ const accent = "#B4472F", wash = "#f0e9d8", rule = "#e6e1d4", mark = "#B4472F";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const t = (x, y, text, size = 26, color = ink, anchor = "start") => `<text x="${x}" y="${y}" font-size="${size}" fill="${color}" text-anchor="${anchor}">${esc(text)}</text>`;
 const p = (d, color = ink, width = 2.7, dash = "", fill = "none") => `<path d="${d}" stroke="${color}" stroke-width="${width}" fill="${fill}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ""}/>`;
-const box = (x,y,w,h,fill=card) => p(`M${x+3} ${y} Q${x+w/2} ${y-3} ${x+w} ${y+2} L${x+w-2} ${y+h} Q${x+w/2} ${y+h+3} ${x} ${y+h-2}Z`,ink,2.5,"",fill);
+const box = (x,y,w,h,fill=card) => p(`M${x-2} ${y+2} Q${x+w*.28} ${y-2.6} ${x+w+2} ${y+1} L${x+w+.6} ${y+h+1} Q${x+w*.62} ${y+h+2.8} ${x-3} ${y+h-.6} Q${x-2.4} ${y+h*.5} ${x-2} ${y+2}Z`,ink,2.5,"",fill);
 const circle = (x,y,r,fill=paper,color=ink) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${color}" stroke-width="2.7"/>`;
 const arrow = (x1,y1,x2,y2,color=accent,dash="") => {
   const a=Math.atan2(y2-y1,x2-x1), len=11, wing=.55;

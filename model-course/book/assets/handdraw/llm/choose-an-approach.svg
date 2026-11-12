@@ -6,16 +6,16 @@
   <rect width="480" height="668" fill="#fbfaf6"/><rect width="480" height="668" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="650" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 638 V659 H30 M450 659 H471 V638" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">先问：任务缺的是什么？</text>
-    <path d="M36 76 L448 77 Q452 78 452 84 L451 174 Q450 178 444 178 L32 177 Q28 176 28 170 L29 82 Q30 76 36 76 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 179 Q290.88 180.8 25 177.4 Q25.6 127 26 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="113" font-size="26">一页材料，做一次</text>
     <text x="48" y="153" font-size="26">先写清任务与输出约定</text>
-    <path d="M36 210 L448 211 Q452 212 452 218 L451 308 Q450 312 444 312 L32 311 Q28 310 28 304 L29 216 Q30 210 36 210 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M26 212 Q146.72000000000003 207.4 454 211 L452.6 313 Q290.88 314.8 25 311.4 Q25.6 261 26 212 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="247" font-size="26">缺不断更新的依据</text>
     <text x="48" y="287" font-size="26">检索 → 核对出处和版本</text>
-    <path d="M36 344 L448 345 Q452 346 452 352 L451 442 Q450 446 444 446 L32 445 Q28 444 28 438 L29 350 Q30 344 36 344 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M26 346 Q146.72000000000003 341.4 454 345 L452.6 447 Q290.88 448.8 25 445.4 Q25.6 395 26 346 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="381" font-size="26">缺可以复算的执行</text>
     <text x="48" y="421" font-size="26">受控工具 → 检查回执</text>
-    <path d="M36 478 L448 479 Q452 480 452 486 L451 576 Q450 580 444 580 L32 579 Q28 578 28 572 L29 484 Q30 478 36 478 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M26 480 Q146.72000000000003 475.4 454 479 L452.6 581 Q290.88 582.8 25 579.4 Q25.6 529 26 480 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="515" font-size="26">固定行为仍反复失败</text>
     <text x="48" y="555" font-size="26">有数据和评测，再考虑微调</text>
     <text x="28" y="638" font-size="26">可组合；先用任务样本检验</text>

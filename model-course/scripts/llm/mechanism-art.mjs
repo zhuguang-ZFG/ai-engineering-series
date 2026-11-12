@@ -11,7 +11,7 @@ const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<"
 const t = (x, y, label, size = 26, anchor = "start", color = ink) => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="${anchor}" fill="${color}">${esc(label)}</text>`;
 const p = (d, color = ink, width = 2.5, fill = "none", dash = "") => `<path d="${d}" fill="${fill}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ""}/>`;
 const rect = (x, y, w, h, fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>`;
-const panel = (x, y, w, h, fill = paper) => p(`M${x + 3} ${y + 1} Q${x + w / 2} ${y - 2} ${x + w} ${y + 2} L${x + w - 1} ${y + h - 1} Q${x + w / 2} ${y + h + 2} ${x} ${y + h - 2}Z`, ink, 2, fill);
+const panel = (x, y, w, h, fill = paper) => p(`M${x - 2} ${y + 2} Q${x + w * .28} ${y - 2.4} ${x + w + 2} ${y + 1} L${x + w + .5} ${y + h + 1} Q${x + w * .62} ${y + h + 2.6} ${x - 3} ${y + h - .6} Q${x - 2.4} ${y + h * .5} ${x - 2} ${y + 2}Z`, ink, 2, fill);
 const arrow = (d, color = accent) => p(d, color, 2.8);
 const down = (x, y1, y2, color = accent) => arrow(`M${x} ${y1} Q${x - 1.5} ${(y1 + y2) / 2} ${x} ${y2} M${x - 6} ${y2 - 8} L${x} ${y2} L${x + 6} ${y2 - 8}`, color);
 const plus = (x, y) => `<circle cx="${x}" cy="${y}" r="17" fill="${paper}" stroke="${ink}" stroke-width="2.5"/>` + p(`M${x - 7} ${y} H${x + 7} M${x} ${y - 7} V${y + 7}`, ink, 2.5);
