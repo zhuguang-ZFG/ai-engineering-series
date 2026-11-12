@@ -2,7 +2,7 @@
   <title id="title">图片怎样进入回答</title><desc id="desc">图片编码为连续表示，经连接模块与文字共同输入。回答字段仍需回到原图核对，模糊信息保留未知。</desc>
   <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
   
-  <g font-family="'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#1f2328" font-size="26">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328" font-size="26">
     <text x="28" y="46" font-size="30" font-weight="700">图像表示 ≠ 文字译文</text>
     <path d="M30 70 Q240 66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>
     <path d="M35 98 L447 100 L450 198 L30 200 Z" fill="none" stroke="#1f2328" stroke-width="2.5"/>

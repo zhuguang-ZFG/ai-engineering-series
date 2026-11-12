@@ -2,7 +2,7 @@
   <title id="title">蒸馏怎样改变学生？</title>
   <desc id="desc">相同输入进入冻结教师和可训练学生；教师提供分布或筛选文本，损失经梯度更新学生参数；部署时学生可独立生成，错误也可能被学习。</desc>
   
-  <g font-family="Microsoft YaHei,sans-serif" fill="#1f2328" font-size="26">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328" font-size="26">
     <text x="28" y="48" font-size="30" font-weight="700">蒸馏：更新的是学生</text>
     <path d="M27 73 Q238 67 451 75 L449 140 Q238 146 27 138Z" fill="#fffdf8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="85" y="114">同一份题目 / 上下文</text>
