@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C06 一串数字怎样表示文字 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html" aria-current="page">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C06-section-28054344cd">先修桥：坐标、点积、长度</a></li><li class="toc-level-2"><a href="#C06-section-2d5dd2c4a1">编号查表，向量参与计算</a></li><li class="toc-level-2"><a href="#C06-section-08f6d9a3b8">手算两次相似度</a></li><li class="toc-level-2"><a href="#C06-section-39a37e9e6f">投影边界：影子重合，原物不同</a></li><li class="toc-level-2"><a href="#C06-section-2c599115a9">相似度能做什么，不能做什么</a></li><li class="toc-level-2"><a href="#C06-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C06-section-1c2c3b00ff">独立作业（容差 ±0.001）</a></li><li class="toc-level-2"><a href="#C06-section-d2ed88f9c8">项目增量：向量核对表 v1</a></li><li class="toc-level-2"><a href="#C06-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C06"><header class="chapter-opener"><p class="chapter-number">C06</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>一串数字怎样表示文字</h1><p class="chapter-abstract">用坐标、点积和余弦相似度判断“两个向量很像”到底在说什么。</p></header><p class="chapter-meta">先修：<a href="c05.html">C05</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>“他把苹果切成小块。”和“她在苹果公司开发软件。”同样是“苹果”，你的理解会跟着后半句转弯。模型拿到的却是一串数字。它会给“苹果”换一个编号，还是保留编号、改变后面的表示？</p>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="五阶段三十章：从证据报告、模型原理到真实应用、评测、训练与交付。"><title>C06 一串数字怎样表示文字 · 大模型学习路线</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="course.css"></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="course.html">五阶段学习路线</a><a href="index.html">旧实验与回查</a></header><main class="shell curriculum-layout" id="main" tabindex="-1"><aside class="curriculum-nav" aria-label="全书与本章目录"><details open><summary>全书目录</summary><nav><details><summary>S1 · 会使用 / K1</summary><p class="stage-nav-link"><a href="stage-s1.html">阶段导言</a></p><ol><li><a href="c01.html">C01 先做一份资料报告</a></li><li><a href="c02.html">C02 把任务交代清楚</a></li><li><a href="c03.html">C03 看似合理为什么仍可能错</a></li><li><a href="c04.html">C04 第一次独立交付</a></li></ol></details><details open><summary>S2 · 懂原理 / K2</summary><p class="stage-nav-link"><a href="stage-s2.html">阶段导言</a></p><ol><li><a href="c05.html">C05 一句话怎样逐步生成</a></li><li><a href="c06.html" aria-current="page">C06 一串数字怎样表示文字</a></li><li><a href="c07.html">C07 注意力到底计算了什么</a></li><li><a href="c08.html">C08 怎样拼成一个 Transformer</a></li><li><a href="c09.html">C09 训练为什么能改变预测</a></li><li><a href="c10.html">C10 从续写到助手</a></li></ol></details><details><summary>S3 · 能实现 / K3</summary><p class="stage-nav-link"><a href="stage-s3.html">阶段导言</a></p><ol><li><a href="c11.html">C11 从空目录运行第一段程序</a></li><li><a href="c12.html">C12 请求、响应和数据约定</a></li><li><a href="c13.html">C13 接上真实模型</a></li><li><a href="c14.html">C14 把自己的文档变成可追溯片段</a></li><li><a href="c15.html">C15 先找到资料，再组织答案</a></li><li><a href="c16.html">C16 让工具真的执行，并知道何时停</a></li><li><a href="c17.html">C17 组装资料助手第一版</a></li></ol></details><details><summary>S4 · 会改进 / K4</summary><p class="stage-nav-link"><a href="stage-s4.html">阶段导言</a></p><ol><li><a href="c18.html">C18 先定怎样评，再动手优化</a></li><li><a href="c19.html">C19 检索没找对，还是回答没用对</a></li><li><a href="c20.html">C20 长上下文与记忆不是无限仓库</a></li><li><a href="c21.html">C21 什么时候需要 Agent</a></li><li><a href="c22.html">C22 质量、延迟和费用怎么取舍</a></li><li><a href="c23.html">C23 从数组走到自动微分</a></li><li><a href="c24.html">C24 从零组装最小 decoder</a></li><li><a href="c25.html">C25 何时适配参数，何时不该训练</a></li><li><a href="c26.html">C26 蒸馏学到的是什么</a></li></ol></details><details><summary>S5 · 独立交付 / K5</summary><p class="stage-nav-link"><a href="stage-s5.html">阶段导言</a></p><ol><li><a href="c27.html">C27 图片、扫描件与多模态边界</a></li><li><a href="c28.html">C28 为新任务选择最小系统</a></li><li><a href="c29.html">C29 交给别人怎样才算交付</a></li><li><a href="c30.html">C30 不照抄案例的毕业项目</a></li></ol></details></nav></details><details><summary>本章目录</summary><nav class="lesson-toc" aria-label="本课目录"><ol><li class="toc-level-2"><a href="#C06-section-28054344cd">先修桥：坐标、点积、长度</a></li><li class="toc-level-2"><a href="#C06-section-2d5dd2c4a1">编号查表，向量参与计算</a></li><li class="toc-level-2"><a href="#C06-section-08f6d9a3b8">手算两次相似度</a></li><li class="toc-level-2"><a href="#C06-section-b835468727">主线向量：四维表与五个余弦</a></li><li class="toc-level-2"><a href="#C06-section-045a58649e">真实向量：几千维、归一化与近似检索</a></li><li class="toc-level-2"><a href="#C06-section-be83145e82">长度混进点积：一个必须算的对照</a></li><li class="toc-level-2"><a href="#C06-section-9f802f32ff">这些数字是练出来的，不是写进去的</a></li><li class="toc-level-2"><a href="#C06-section-d6cdf33ea5">一次完整的排序：把余弦当检索用</a></li><li class="toc-level-2"><a href="#C06-section-c54d9eecfb">交给注意力之前，向量还要过几道手</a></li><li class="toc-level-2"><a href="#C06-section-39a37e9e6f">投影边界：影子重合，原物不同</a></li><li class="toc-level-2"><a href="#C06-section-2c599115a9">相似度能做什么，不能做什么</a></li><li class="toc-level-2"><a href="#C06-section-4540eaf9d0">失败对照</a></li><li class="toc-level-2"><a href="#C06-section-1c2c3b00ff">独立作业（容差 ±0.001）</a></li><li class="toc-level-2"><a href="#C06-section-d2ed88f9c8">项目增量：向量核对表 v1</a></li><li class="toc-level-2"><a href="#C06-section-82826587a3">来源与边界</a></li></ol></nav></details><a href="#main">回到章首</a></aside><article class="curriculum-chapter" id="C06"><header class="chapter-opener"><p class="chapter-number">C06</p><p class="chapter-kicker">S2 · 懂原理 / K2</p><h1>一串数字怎样表示文字</h1><p class="chapter-abstract">用坐标、点积和余弦相似度判断“两个向量很像”到底在说什么。</p></header><p class="chapter-meta">先修：<a href="c05.html">C05</a> · <a href="stage-s2.html">S2 阶段导言</a></p><div class="article-body"><p>“他把苹果切成小块。”和“她在苹果公司开发软件。”同样是“苹果”，你的理解会跟着后半句转弯。模型拿到的却是一串数字。它会给“苹果”换一个编号，还是保留编号、改变后面的表示？</p>
 <p>本章要搭一座小桥：从坐标、点积、长度到余弦相似度，全部用可手算的数字。桥搭好后，才能判断“两个向量很像”到底在说什么，以及为什么屏幕上的二维图可能骗人。</p>
+<p>主线句子也在这里加入：<code>周六 下午 两点 在 图书馆 报名</code>。C05 用过它的编号，本章给每个编号配一行四维向量，并用余弦算出“谁跟谁更接近”。这些向量同样是课程 fixture，维度比真实模型小三个数量级，但点积、长度、余弦的算法一字不差。</p>
 <h2 id="C06-section-28054344cd" tabindex="-1">先修桥：坐标、点积、长度</h2>
 <p>把三个数排成一行 <code>[1, 2, 3]</code>，可以看成三维空间里的一个点，也可以看成从原点指向该点的一支箭头。两个向量 <code>a=[1,2,3]</code>、<code>b=[4,5,6]</code> 的点积是：</p>
 <p><code>a·b = 1×4 + 2×5 + 3×6 = 4+10+18 = 32</code></p>
@@ -34,6 +35,166 @@
 <li>余弦 <code>0.235/(0.8307×1.0012) ≈ 0.283</code></li>
 </ul>
 <p>所以“初始苹果”与水果语境更接近，与公司语境较远。这个结论只适用于这三组人工数字，不能推广成“模型一定这样理解苹果”。</p>
+<h2 id="C06-section-b835468727" tabindex="-1">主线向量：四维表与五个余弦</h2>
+<p>把 C05 的六个编号各配一行四维向量。四维是为了能手算：真实模型的向量常有几千维，算法相同，只是没人手算。</p>
+<table>
+<thead>
+<tr>
+<th>片段</th>
+<th>ID</th>
+<th>向量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>周六</td>
+<td>4102</td>
+<td><code>[0.6, −0.2, 0.2, 0.2]</code></td>
+</tr>
+<tr>
+<td>下午</td>
+<td>2871</td>
+<td><code>[0.2, 0.4, −0.2, 0.2]</code></td>
+</tr>
+<tr>
+<td>两点</td>
+<td>5530</td>
+<td><code>[0.2, 0.2, 0.4, −0.2]</code></td>
+</tr>
+<tr>
+<td>在</td>
+<td>2701</td>
+<td><code>[0.4, 0.2, 0.2, 0.2]</code></td>
+</tr>
+<tr>
+<td>图书馆</td>
+<td>6984</td>
+<td><code>[−0.2, 0.6, 0.2, 0.2]</code></td>
+</tr>
+<tr>
+<td>报名</td>
+<td>3650</td>
+<td><code>[0.2, 0.2, −0.2, 0.4]</code></td>
+</tr>
+</tbody></table>
+<p>先算一个完整的：“图书馆”与“在”。</p>
+<ul>
+<li>点积：<code>(−0.2×0.4) + (0.6×0.2) + (0.2×0.2) + (0.2×0.2) = −0.08 + 0.12 + 0.04 + 0.04 = 0.12</code></li>
+<li>长度：<code>‖图书馆‖ = √0.48 ≈ 0.6928</code>，<code>‖在‖ = √0.28 ≈ 0.5292</code></li>
+<li>余弦：<code>0.12 / (0.6928 × 0.5292) ≈ 0.12 / 0.3666 ≈ 0.3273</code></li>
+</ul>
+<p>再算四个，只给结果，过程同法：</p>
+<table>
+<thead>
+<tr>
+<th>一对</th>
+<th>点积</th>
+<th>余弦</th>
+<th>读法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>下午 / 两点</td>
+<td>0</td>
+<td>0.0000</td>
+<td>正交：同属时间词，方向却毫无关联</td>
+</tr>
+<tr>
+<td>下午 / 报名</td>
+<td>0.24</td>
+<td>0.8571</td>
+<td>这张表里最高的一对</td>
+</tr>
+<tr>
+<td>周六 / 在</td>
+<td>0.28</td>
+<td>0.7638</td>
+<td>较高</td>
+</tr>
+<tr>
+<td>周六 / 图书馆</td>
+<td>−0.16</td>
+<td>−0.3333</td>
+<td>反向</td>
+</tr>
+</tbody></table>
+<p>第二行最值得停一下。“下午”和“两点”都是时间词，余弦却是 0。这说明余弦量的不是“是否同类”，而是这两行数字的方向关系；课程 fixture 没有把“时间词”写进任何一维，所以两个时间词可以完全正交。反过来，“下午”和“报名”余弦 0.8571 最高——它表达的是这张人工表把“下午去报名”这层关联放进了向量，不表示任何真实模型会这样编码。</p>
+<p>第五行的负值同样要读准：<code>−0.3333</code> 只说明方向相反，不代表“周六”和“图书馆”在语义上彼此排斥。余弦的取值区间是 <code>[−1, 1]</code>，负号只是方向夹角超过 90°。</p>
+<p>把五对放在一起看，能回答一个常见误解：<strong>“向量接近”是一个关于数字的说法，不是一个关于意义的结论</strong>。这五行里哪一对更接近，取决于这张表怎么写；换一张表，排序就变。真实模型的向量由训练得到，排序也是训练的结果，不是词义本身的属性。</p>
+<h2 id="C06-section-045a58649e" tabindex="-1">真实向量：几千维、归一化与近似检索</h2>
+<p>手算用四维，真实模型的向量维度常在几千（例如 4096），一层嵌入矩阵的大小是“词表大小 × 维度”。这个规模带来三个实践后果：</p>
+<ul>
+<li><strong>不能靠眼睛比对</strong>：四维还能画图，4096 维没有直观图像。所谓“向量空间中的方向”只能靠点积、长度这些标量间接看。</li>
+<li><strong>是否归一化要看实现</strong>：有的系统把向量先归一化再算余弦，这时余弦等于点积；有的直接算点积，长度就会混进分数。同一份数据换一种算法，排序可能变。接入时必须记录“用的是哪种”。</li>
+<li><strong>检索靠近似</strong>：几百万条向量逐一算点积太慢，实际系统用近似最近邻索引换速度，代价是可能漏掉真正最近的几条。命中的片段是“索引认为的近”，不是“数学上一定最近”。</li>
+</ul>
+<p>这三条与 C05 的三个分数是同一条链：编号查表得到向量（本章），注意力在向量之间汇总（C07），输出头把汇总结果变成候选分数（C08）。手算之所以值得做一遍，是因为后面每一步都在重复本章这几个动作——点积、求和、相除。</p>
+<h2 id="C06-section-be83145e82" tabindex="-1">长度混进点积：一个必须算的对照</h2>
+<p>点积和余弦的差别不在公式繁简，而在长度是否参与。取 <code>a=[1,0]</code>、<code>b=[2,0]</code>、<code>c=[0,1]</code>：</p>
+<ul>
+<li><code>a·b = 2</code>，<code>a·c = 0</code></li>
+<li><code>cos(a,b) = 1</code>，<code>cos(a,c) = 0</code></li>
+</ul>
+<p><code>b</code> 的长度是 <code>a</code> 的两倍，点积因此变成 2；但方向完全一致，余弦仍是 1。如果系统直接用点积排序，一条重复出现的文本（向量更长）会压过另一条只出现一次、方向同样对的文本。这就是“要不要归一化”不是细节的原因：它决定排序是看方向，还是看方向乘长度。</p>
+<p>再看一组更贴近检索的：<code>p=[0.6,0.8]</code>、<code>q=[3,4]</code>、<code>r=[0.8,0.6]</code>。</p>
+<ul>
+<li><code>‖p‖=1</code>，<code>‖q‖=5</code>，<code>‖r‖=1</code></li>
+<li><code>p·q = 1.8+3.2 = 5</code>，<code>p·r = 0.48+0.48 = 0.96</code></li>
+<li><code>cos(p,q) = 5/(1×5) = 1</code>，<code>cos(p,r) = 0.96</code></li>
+</ul>
+<p>按点积排，<code>q</code> 远高于 <code>r</code>；按余弦排，<code>q</code> 是 1、<code>r</code> 是 0.96，差距很小。同一个库里两条记录，排序结论可以完全不同。写检索代码时先确认这一点，比调阈值更有效。</p>
+<h2 id="C06-section-9f802f32ff" tabindex="-1">这些数字是练出来的，不是写进去的</h2>
+<p>本章的六行向量是人工给定的。真实模型的嵌入来自训练：同一个编号的向量在训练中不断被调整，目标是让“在相似上下文里出现的片段”得到更接近的向量。C09 会讲训练怎样改参数；这里只需要记住三件事：</p>
+<ul>
+<li><strong>初始向量与训练后向量不同</strong>：刚初始化时是随机数，余弦排序没有意义；训练后才出现结构。</li>
+<li><strong>上下文表示是另一层</strong>：编号查出的那一行是“起点”，经过 C07 的注意力汇总后才会变成“这一句里的表示”，两者不是同一个数组。</li>
+<li><strong>一个片段一个向量是大简化</strong>：真实系统里同一个字在不同位置可以有不同的上下文表示，编号相同、表示不同——这正是 C05 里“同一编号、不同语境”那句话的机制版本。</li>
+</ul>
+<h2 id="C06-section-d6cdf33ea5" tabindex="-1">一次完整的排序：把余弦当检索用</h2>
+<p>拿“下午”当查询，把其余五行各算一次余弦（过程同上，只列结果）：</p>
+<table>
+<thead>
+<tr>
+<th>片段</th>
+<th>余弦</th>
+<th>名次</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>报名</td>
+<td>0.8571</td>
+<td>1</td>
+</tr>
+<tr>
+<td>在</td>
+<td>0.5714</td>
+<td>2</td>
+</tr>
+<tr>
+<td>图书馆</td>
+<td>0.5455</td>
+<td>3</td>
+</tr>
+<tr>
+<td>周六</td>
+<td>0.1091</td>
+<td>4</td>
+</tr>
+<tr>
+<td>两点</td>
+<td>0.0000</td>
+<td>5</td>
+</tr>
+</tbody></table>
+<p>这就是最小规模的“语义检索”：查询向量逐条比余弦，按分数排序取前几名。它只做了排序，没有做判断——取回的五条里，现行政策、过期政策、同一份文件的不同版本都会一起排进来，谁有效要靠日期、来源与正文核对，余弦管不了。</p>
+<p>顺便看清一个常见错误：把“余弦 0.86 很高”读成“86% 相关”。余弦是方向夹角，不经过任何概率归一化，没有百分比含义；0.86 与 0.57 的真实差别，是排序位置，不是置信度。设阈值时要按库里的实际分布定，不能照搬别的项目的数字。</p>
+<h2 id="C06-section-c54d9eecfb" tabindex="-1">交给注意力之前，向量还要过几道手</h2>
+<p>本章末尾的向量不是直接送进 C07 的。真实系统在“查表得到向量”和“进入注意力”之间还有几步，每一步都会改变数值：</p>
+<ul>
+<li><strong>缩放</strong>：有的实现把嵌入乘以一个系数（常见是 <code>√d</code>），让后续点积不至于太大或太小。</li>
+<li><strong>位置信息</strong>：查表得到的向量不含“第几片”，位置要另外加进来或另算，否则 <code>周六 下午</code> 与 <code>下午 周六</code> 在模型眼里完全一样。</li>
+<li><strong>归一化</strong>：有的架构在每层前后做归一化，让数值稳定；这会改变长度，余弦随之变化。</li>
+</ul>
+<p>这三步都不改变本章的算法结论，却决定了你复算别人的数字时对不对得上。看到“余弦 0.99”这种说法，第一件事是问：用的哪一版向量、有没有归一化、有没有加位置。答不上来，这个 0.99 就只能当形容词。</p>
 <h2 id="C06-section-39a37e9e6f" tabindex="-1">投影边界：影子重合，原物不同</h2>
 <p>二维图只能画前两维。取 <code>[1,1,0]</code> 与 <code>[1,1,2]</code>：它们在纸上的影子完全重合，第三维却差了 2。用全部三维算：</p>
 <ul>
@@ -79,5 +240,5 @@
 <li>结论只写“本次比较中谁更接近”，不写“模型理解了”。</li>
 </ul>
 <h2 id="C06-section-82826587a3" tabindex="-1">来源与边界</h2>
-<p>本章沿用旧课 <a href="../../book/llm/lessons/vectors.md">L03 一串数字怎么表示语言</a> 的编号/向量区分与人工向量表，以及深入页 <a href="../../book/llm/deepening/vectors.md">vectors.md</a> 的余弦、零向量与投影说明，复用图 G29/G30/G03/G19 的出处。<code>[0.8,0.2,0.1]</code> 等数字均为课程人工 fixture，没有运行嵌入模型；真实向量维度、归一化方式与相似度实现因模型而异，接入时要按对应模型卡与代码核对。</p>
+<p>本章沿用旧课 <a href="../../book/llm/lessons/vectors.md">L03 一串数字怎么表示语言</a> 的编号/向量区分与人工向量表，以及深入页 <a href="../../book/llm/deepening/vectors.md">vectors.md</a> 的余弦、零向量与投影说明，复用图 G29/G30/G03/G19 的出处。<code>[0.8,0.2,0.1]</code> 与主线六行四维向量均为课程人工 fixture，没有运行嵌入模型；真实向量维度、归一化方式与相似度实现因模型而异，接入时要按对应模型卡与代码核对。</p>
 </div><nav class="lesson-nav" aria-label="阅读顺序"><a href="c05.html">上一章 C05</a><a href="c06-answer.html">独立作答后核对</a><a href="c07.html">下一章 C07</a></nav></article></main><footer>实施试读版 1.1.2 · 真实读者学习效果尚待验收<br><a href="../../specs/llm-learning-redesign/ACCEPTANCE.md">分层验收与未验证项</a> · <a href="../../book/llm/README.md">维护说明</a></footer></body></html>
