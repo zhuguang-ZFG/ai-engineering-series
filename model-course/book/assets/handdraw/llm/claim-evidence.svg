@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="590" viewBox="0 0 480 590" role="img" aria-labelledby="title desc">
   <title id="title">结论与引用分两道检查</title>
   <desc id="desc">预置回答说周日，通知原句写周六。先确认原文存在，再检查它是否支持结论。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/></marker></defs>
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">引用编号不能代替核对</text>
-    <path d="M30 76 Q148.48000000000002 71.4 450 75 L448.6 175 Q289.92 176.8 29 173.4 Q29.6 124 30 76 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M30 76 Q148.48000000000002 71.4 450 75 L448.6 175 Q289.92 176.8 29 173.4 Q29.6 124 30 76 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="52" y="113" font-size="26">预置主张：周日 14:00</text>
     <text x="52" y="150" font-size="26">引用：通知 A</text>
-    <path d="M240 184 Q238 201 240 218" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M52 238 L410 240 L430 260 L428 376 L50 374 Z M410 240 L410 263 L430 260" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M240 184 Q238 201 240 218" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M52 238 L410 240 L430 260 L428 376 L50 374 Z M410 240 L410 263 L430 260" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="74" y="285" font-size="26">A 原句：周六 14:00 开始</text>
     <text x="74" y="333" font-size="26">原文存在，结论却不符</text>
-    <path d="M240 386 Q238 402 240 418" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M240 386 Q238 402 240 418" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="24" y="463" font-size="26">① 原文是否存在？</text>
     <text x="24" y="505" font-size="26">② 是否支持这项主张？</text>
     <text x="24" y="558" font-size="26">缺失、冲突和错引，分别留下</text>

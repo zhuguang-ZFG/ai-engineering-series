@@ -9,7 +9,7 @@ const fixture = name => {
 const g = snapshots.generationFrames(fixture("generation"));
 const a = snapshots.attentionFrames(fixture("attention"));
 const d = snapshots.distillationFrames(fixture("distillation"));
-const ink = "#1f2328", paper = "#fbfaf6", soft = "#57606a", accent = "#B4472F", wash = "#f0e9d8", rule = "#e6e1d4";
+const ink = "#26221B", paper = "#FFFDF8", soft = "#5C5448", accent = "#B4472F", wash = "#F3EAD8", rule = "#E3D8C1";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const number = value => value.toFixed(4);
 const percent = value => `${(value * 100).toFixed(2)}%`;

@@ -4,15 +4,15 @@
 
 :root {
   color-scheme: light;
-  --paper: #fbf8f1;
+  --paper: #FBF7EF;
   --card: #fffdf8;
-  --ink: #1f2328;
-  --ink-soft: #5f5a4f;
-  --pine: #1f2328;
-  --pine-soft: #5f5a4f;
-  --sage: #e9e2d0;
-  --sand: #eee5d3;
-  --rule: #cfc5b1;
+  --ink: #26221B;
+  --ink-soft: #5C5448;
+  --pine: #26221B;
+  --pine-soft: #5C5448;
+  --sage: #F3EAD8;
+  --sand: #F6F0E2;
+  --rule: #E3D8C1;
   --clay: #B4472F;
 }
 
@@ -55,7 +55,7 @@ figcaption, .caption, .toc-stage, .toc-page, .book-navigation,
 .deep-reading h2, .stage-intro h2 {
   font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-h1 { font-size: 22pt; line-height: 1.35; font-weight: 600; letter-spacing: .01em; margin: 0 0 .7em; }
+h1 { font-size: 22pt; line-height: 1.3; font-weight: 700; letter-spacing: -.015em; margin: 0 0 .7em; }
 h2 { font-size: 14pt; line-height: 1.45; font-weight: 600; margin: 1.55em 0 .55em; }
 h3 { font-size: 11.5pt; line-height: 1.5; font-weight: 600; margin: 1.1em 0 .4em; }
 h1, h2, h3 { break-after: avoid; }
@@ -69,7 +69,7 @@ code, pre, .formula {
 pre {
   margin: 1em 0;
   padding: .8em 1em;
-  background: #f4efe4;
+  background: #F6F0E2;
   border-left: 2pt solid var(--pine-soft);
   border-radius: 0 3px 3px 0;
   line-height: 1.55;
@@ -81,7 +81,7 @@ pre {
 .book-equation {
   margin: .9em 0;
   padding: .55em .8em;
-  background: #f4efe4;
+  background: #F6F0E2;
   border-left: 2pt solid var(--pine-soft);
   font-size: .9em;
 }
@@ -96,6 +96,7 @@ figure img {
   margin: 0 auto;
   border-radius: 2px;
 }
+.curriculum-figure.tall img { max-height: 146mm; }
 figcaption {
   margin-top: .65em;
   color: var(--ink-soft);
@@ -329,7 +330,7 @@ tr { break-inside: avoid; }
 .lab { border: .6pt solid var(--rule); border-left: 2pt solid var(--pine); padding: .9em 1em; margin: 1.2em 0; background: var(--card); }
 .lab h2 { margin-top: 0; }
 .quiz { border-top: 1.5pt solid var(--ink); margin-top: 1.6em; padding-top: .6em; }
-.answer { background: #f4efe4; padding: .8em 1em; margin: .8em 0; }
+.answer { background: #F6F0E2; padding: .8em 1em; margin: .8em 0; }
 .sources { border-top: .8pt solid var(--rule); font-size: 8.6pt; color: var(--ink-soft); margin-top: 1.5em; padding-top: .55em; }
 .sources a { color: var(--ink-soft); }
 .mechanism-static img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
@@ -357,6 +358,10 @@ tr { break-inside: avoid; }
 
 @media print {
   html, body { background: #ffffff; }
+  /* #B4472F reads as a warm print accent on the screen's paper, but on a
+     laser printer's white it burns through; the series deepens it one step
+     before anything is inked, and this sheet follows the same rule. */
+  :root { --clay: #9C4630; }
   body { font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   a { color: var(--ink); }
   .book-navigation, .book-section-navigation { display: none; }
@@ -364,6 +369,7 @@ tr { break-inside: avoid; }
   .cover-page { break-before: auto; }
   .chapter-opener, h1, h2, h3 { break-after: avoid; }
   figure img { max-height: 112mm; max-width: 100%; }
+  .curriculum-figure.tall img { max-height: 146mm; }
   .stage-plate img { max-height: 158mm; max-width: 112mm; }
   .book-map img { max-height: none; }
   pre, table, blockquote, .lab { break-inside: avoid; }

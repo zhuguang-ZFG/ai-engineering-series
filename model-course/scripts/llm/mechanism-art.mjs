@@ -4,8 +4,8 @@ import { multihead } from "../../book/llm/examples/multihead.mjs";
 
 // Publication drawings: exact data geometry, restrained hand-drawn contours.
 // Labels stay editable; all four compositions fit the existing 480 × 640 page.
-const ink = "#1f2328", soft = "#57606a", paper = "#fbfaf6";
-const accent = "#B4472F", wash = "#f0e9d8", rule = "#e6e1d4";
+const ink = "#26221B", soft = "#5C5448", paper = "#FFFDF8";
+const accent = "#B4472F", wash = "#F3EAD8", rule = "#E3D8C1";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const t = (x, y, label, size = 26, anchor = "start", color = ink) => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="${anchor}" fill="${color}">${esc(label)}</text>`;
 const p = (d, color = ink, width = 2.5, fill = "none", dash = "") => `<path d="${d}" fill="${fill}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ""}/>`;

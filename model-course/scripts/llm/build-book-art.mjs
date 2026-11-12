@@ -9,11 +9,11 @@ const root = resolve(import.meta.dirname, "../..");
 const folder = join(root, "book/assets/handdraw/llm");
 const checking = process.argv.includes("--check");
 
-const ink = "#1f2328";
+const ink = "#26221B";
 const soft = "#6b6457";
 const paper = "#f7f2e7";
 const card = "#fdfaf1";
-const pine = "#1f2328";
+const pine = "#26221B";
 const sage = "#e9e2d0";
 const clay = "#B4472F";
 const sand = "#e8ddc7";

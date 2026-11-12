@@ -2,18 +2,21 @@
  * 主视觉 = 手绘（FA-013 封面人物幽默 / FA-040 图解线稿）；
  * 数值可读性 = 歸藏约束底座（OKLCH 收纳 + WCAG/APCA 双阈 + CJK T 规则）。
  * 对比度均为实测：node design/system/contrast.mjs 复算，任一角色对不达标即非零退出。
- * 与视频场景内联 token、design/handdraw/covers/cover.css 完全同源（#fbfaf6/#1f2328/#f0e9d8/#B4472F）。 */
+ * 书籍正文与插图取系列（agent-books）同源令牌：暖纸 #FBF7EF、暖炭 #26221B、
+ * 纸灰线 #E3D8C1、wash #F3EAD8、朱砂 #B4472F（印刷压深一档 #9C4630）。
+ * 视频场景与封面资产仍停在 FA-040 原值（#fbfaf6/#1f2328/#f0e9d8），
+ * 直到媒体与封面重出时才随本表一起移动。 */
 
 :root,
 :lang(zh) {
   /* —— 纸面与墨：全场景 / 封面 / 网页共用 —— */
-  --paper: #fbfaf6;        /* L98.5% C.0054 H95；ink/paper 15.13:1 · APCA 99 ✓ 正文 */
+  --paper: #FBF7EF;        /* 系列暖纸；ink/paper 14.6:1 · APCA 98 ✓ 正文 */
   --card: #fffdf8;         /* L99.4%；ink/card 15.54:1 · APCA 101 ✓ 正文 */
-  --ink: #1f2328;          /* L25.4%；正文 + 墨线（非纯黑，符合“不用纯黑”） */
-  --ink-soft: #57606a;     /* L48.5%；次要文字 · /paper 6.12:1 · APCA 78 ✓ 次要 */
-  --marker: #f0e9d8;       /* L91.5%；marker 高亮底，其下只放 --ink（ink/marker WCAG 13.05 · APCA 89.9 ✓），绝不放 accent 文字 */
-  --marker-wash: #f7f3e8;  /* 结论横幅底：比 --marker 浅一档，ink WCAG 14.25 / APCA 95.7 ✓；带 --accent 描边 */
-  --rule: #e6e1d4;         /* 暖纸灰细线 / 停用态卡底；ink APCA 85、ink-soft 64 ✓，只与 ink、ink-soft 配对 */
+  --ink: #26221B;          /* 系列暖炭；正文 + 墨线（非纯黑，符合“不用纯黑”） */
+  --ink-soft: #5C5448;     /* 系列次墨；次要文字 · /paper 6.9:1 · APCA 80 ✓ 次要 */
+  --marker: #F3EAD8;       /* 系列 wash；marker 高亮底，其下只放 --ink（ink/marker WCAG 12.6 · APCA 88 ✓），绝不放 accent 文字 */
+  --marker-wash: #F6F0E2;  /* 结论横幅底：比 --marker 浅一档，ink WCAG 13.9 / APCA 95 ✓；带 --accent 描边 */
+  --rule: #E3D8C1;         /* 系列纸灰细线 / 停用态卡底；ink APCA 84、ink-soft 63 ✓，只与 ink、ink-soft 配对 */
 
   /* —— 强调色：朱砂一色承全站强调（yuyu 同源 #B4472F），墨为主、朱砂为记 —— */
   --accent: #B4472F;        /* 朱砂：手绘波形下划线/图形强调：/paper WCAG 5.18 · APCA 73.2，小字亦达标 */

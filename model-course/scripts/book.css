@@ -1,4 +1,4 @@
-:root { color-scheme: light; --paper: #fbfaf6; --ink: #1f2328; --rule: #e6e1d4; }
+:root { color-scheme: light; --paper: #FBF7EF; --ink: #26221B; --rule: #E3D8C1; }
 * { box-sizing: border-box; }
 html { background: var(--paper); color: var(--ink); font: 18px/1.85 "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif; }
 body { margin: 0; }
@@ -10,7 +10,7 @@ header, footer { max-width: 920px; margin: auto; padding: 24px; display: flex; f
 header { border-bottom: 1px solid var(--rule); justify-content: space-between; }
 footer { border-top: 1px solid var(--rule); }
 main { max-width: 800px; margin: auto; padding: 28px 32px 64px; min-width: 0; }
-.stage { color: #57606a; font-size: .9rem; }
+.stage { color: #5C5448; font-size: .9rem; }
 h1,h2,h3,h4,h5,h6 { line-height: 1.5; text-wrap: pretty; overflow-wrap: anywhere; scroll-margin-top: 24px; }
 h1 { font-size: 1.85rem; margin: .45em 0 .9em; }
 h2 { font-size: 1.4rem; margin: 2.3em 0 .85em; }
@@ -26,9 +26,9 @@ img { display: block; margin: 1em auto; }
 figure { margin: 2em 0; }
 figure .figure-zoom { display: block; max-width: 600px; margin-inline: auto; cursor: zoom-in; }
 figure .figure-zoom img { margin-block: 0; }
-figure .figure-hint { display: block; margin-top: .55em; font-size: .85rem; color: #57606a; }
+figure .figure-hint { display: block; margin-top: .55em; font-size: .85rem; color: #5C5448; }
 figure img[src*="handdraw"] { width: 100%; max-width: 600px; height: auto; }
-figcaption { color: #57606a; font-size: .94rem; line-height: 1.8; max-width: 600px; margin: .8em auto; }
+figcaption { color: #5C5448; font-size: .94rem; line-height: 1.8; max-width: 600px; margin: .8em auto; }
 blockquote { margin: 1.5em 0; padding: .2em 1em; border-left: 4px solid #9fc9aa; background: #f1f7f2; }
 pre { white-space: pre; overflow: auto; padding: 16px; background: #f1f7f2; border: 1px solid var(--rule); font: .86rem/1.7 Consolas, monospace; max-width: 100%; }
 code { font-family: Consolas, monospace; overflow-wrap: anywhere; }
@@ -41,7 +41,7 @@ td,th { padding: 12px; border: 1px solid var(--rule); min-width: 110px; text-ali
 th { background: #f1f7f2; }
 .contents { border-block: 1px solid var(--rule); margin-bottom: 1.8em; padding: 4px 0; font-size: .94rem; }
 .contents summary { padding-block: 8px; }
-.contents summary span { color: #57606a; font-size: .9em; }
+.contents summary span { color: #5C5448; font-size: .9em; }
 .contents ul { list-style: none; padding-left: 0; margin: .5em 0; }
 .contents li { margin: .25em 0; }
 .contents a { display: inline-block; padding-block: 5px; }

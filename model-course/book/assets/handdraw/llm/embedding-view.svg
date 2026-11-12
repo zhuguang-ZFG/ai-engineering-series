@@ -3,22 +3,22 @@
   <desc id="desc">ID 查表取得初始向量；上下文处理后表示可改变；二维图省略第三维。</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/>
     </marker>
   </defs>
   
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">同一个 token，从编号到数字</text>
-    <path d="M33 67 L451 66 Q457 68 456 76 L455 133 Q454 139 446 138 L28 137 Q23 136 24 128 L25 72 Q26 66 33 67 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M33 67 L451 66 Q457 68 456 76 L455 133 Q454 139 446 138 L28 137 Q23 136 24 128 L25 72 Q26 66 33 67 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="111" font-size="26">“苹果” → 示意 ID 42</text>
-    <path d="M240 142 Q238 158 240 174" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 183 L451 182 Q457 184 456 192 L455 249 Q454 255 446 254 L28 253 Q23 252 24 244 L25 188 Q26 182 33 183 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M240 142 Q238 158 240 174" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 183 L451 182 Q457 184 456 192 L455 249 Q454 255 446 254 L28 253 Q23 252 24 244 L25 188 Q26 182 33 183 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="227" font-size="26">查表：[0.8, 0.2, 0.1]</text>
-    <path d="M240 260 Q238 277 240 294" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M240 260 Q238 277 240 294" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="50" y="329" font-size="26">上下文处理后，表示可变化</text>
-    <path d="M68 492 L68 364 M68 492 L414 492" fill="none" stroke="#1f2328" stroke-width="2.5"/>
-    <circle cx="138" cy="410" r="9" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
-    <circle cx="348" cy="468" r="9" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M68 492 L68 364 M68 492 L414 492" fill="none" stroke="#26221B" stroke-width="2.5"/>
+    <circle cx="138" cy="410" r="9" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
+    <circle cx="348" cy="468" r="9" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="158" y="412" font-size="26">仅画前两维</text>
     <text x="82" y="548" font-size="26">第三维被省略，不能凭图判同</text>
   </g>
