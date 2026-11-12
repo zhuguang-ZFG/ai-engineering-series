@@ -9,7 +9,7 @@ const fixture = name => {
 const g = snapshots.generationFrames(fixture("generation"));
 const a = snapshots.attentionFrames(fixture("attention"));
 const d = snapshots.distillationFrames(fixture("distillation"));
-const ink = "#1f2328", paper = "#fbfaf6", soft = "#57606a", green = "#1f883d", wash = "#d3efd9", rule = "#e6e1d4";
+const ink = "#1f2328", paper = "#fbfaf6", soft = "#57606a", accent = "#B4472F", wash = "#f0e9d8", rule = "#e6e1d4";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const number = value => value.toFixed(4);
 const percent = value => `${(value * 100).toFixed(2)}%`;
@@ -17,16 +17,16 @@ const vector = values => `[${values.map(number).join(", ")}]`;
 const t = (x, y, value, size = 28, anchor = "start", color = ink) => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="${anchor}" fill="${color}">${esc(value)}</text>`;
 const path = (shape, color = ink, fill = "none", extra = "") => `<path d="${shape}" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="${fill}" ${extra}/>`;
 const box = (x, y, w, h, fill = paper) => path(`M${x + 3} ${y} Q${x + w / 2} ${y - 3} ${x + w} ${y + 2} L${x + w - 2} ${y + h} Q${x + w / 2} ${y + h + 2} ${x} ${y + h - 2}Z`, ink, fill);
-const arrow = (x1, y1, x2, y2) => path(`M${x1} ${y1} Q${(x1 + x2) / 2 + 4} ${(y1 + y2) / 2 - 3} ${x2} ${y2}`, green, "none", 'class="mechanism-flow"') + path(`M${x2 - 10} ${y2 - 8} L${x2} ${y2} L${x2 - 10} ${y2 + 8}`, green);
-const down = (x, y1, y2) => path(`M${x} ${y1} Q${x + 4} ${(y1 + y2) / 2} ${x} ${y2} M${x - 8} ${y2 - 10} L${x} ${y2} L${x + 8} ${y2 - 10}`, green, "none", 'class="mechanism-flow"');
+const arrow = (x1, y1, x2, y2) => path(`M${x1} ${y1} Q${(x1 + x2) / 2 + 4} ${(y1 + y2) / 2 - 3} ${x2} ${y2}`, accent, "none", 'class="mechanism-flow"') + path(`M${x2 - 10} ${y2 - 8} L${x2} ${y2} L${x2 - 10} ${y2 + 8}`, accent);
+const down = (x, y1, y2) => path(`M${x} ${y1} Q${x + 4} ${(y1 + y2) / 2} ${x} ${y2} M${x - 8} ${y2 - 10} L${x} ${y2} L${x + 8} ${y2 - 10}`, accent, "none", 'class="mechanism-flow"');
 const circle = (x, y, r, fill = paper) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${ink}" stroke-width="2.5"/>`;
 const change = body => `<g class="mechanism-change">${body}</g>`;
 const bars = (items, x, y, width = 205, gap = 61, chosen = null) => items.map((item, i) => {
   const py = y + i * gap;
-  return t(x, py + 25, item.piece, 27) + path(`M${x + 77} ${py + 7} L${x + 77 + width} ${py + 7}`, rule, "none", 'stroke-dasharray="4 5"') + box(x + 77, py, width * item.probability, 31, wash) + t(x + 77 + width + 12, py + 24, percent(item.probability), 24) + (chosen === item.piece ? path(`M${x - 15} ${py + 13} l6 7 l11 -15`, green) : "");
+  return t(x, py + 25, item.piece, 27) + path(`M${x + 77} ${py + 7} L${x + 77 + width} ${py + 7}`, rule, "none", 'stroke-dasharray="4 5"') + box(x + 77, py, width * item.probability, 31, wash) + t(x + 77 + width + 12, py + 24, percent(item.probability), 24) + (chosen === item.piece ? path(`M${x - 15} ${py + 13} l6 7 l11 -15`, accent) : "");
 }).join("");
 const tape = (x, y, width, text, fill = paper) => box(x, y, width, 57, fill) + t(x + 15, y + 38, text, 28);
-const svg = (title, description, body, id, height = 330) => `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="${height}" viewBox="0 0 480 ${height}" role="img" aria-labelledby="${id}-title ${id}-desc"><title id="${id}-title">${esc(title)}</title><desc id="${id}-desc">${esc(description)}</desc><rect width="480" height="${height}" fill="${paper}"/><g font-family="Microsoft YaHei,Noto Sans SC,sans-serif">${body}</g></svg>`;
+const svg = (title, description, body, id, height = 330) => `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="${height}" viewBox="0 0 480 ${height}" role="img" aria-labelledby="${id}-title ${id}-desc"><title id="${id}-title">${esc(title)}</title><desc id="${id}-desc">${esc(description)}</desc><rect width="480" height="${height}" fill="${paper}"/><g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${body}</g></svg>`;
 
 function generationDrawing(step, compact = false) {
   if (compact) {
@@ -35,7 +35,7 @@ function generationDrawing(step, compact = false) {
     if (step === 2) return tape(29, 4, 421, "他端起杯子，喝了一口") + down(240, 66, 96) + change(tape(29, 105, 421, g.text, wash));
     return t(32, 30, "新输入：……一口水", 28) + bars(g.next, 34, 58, 195, 53);
   }
-  if (step === 0) return t(26, 38, "他端起杯子，喝了一口", 30) + path("M27 54 Q240 59 453 53", green) + t(27, 95, "先把分数变成这一轮的概率", 26) + bars(g.before, 35, 122, 195, 61) + t(27, 316, "温度固定为 1", 24, "start", soft);
+  if (step === 0) return t(26, 38, "他端起杯子，喝了一口", 30) + path("M27 54 Q240 59 453 53", accent) + t(27, 95, "先把分数变成这一轮的概率", 26) + bars(g.before, 35, 122, 195, 61) + t(27, 316, "温度固定为 1", 24, "start", soft);
   if (step === 1) return t(26, 38, "这一轮，只取出一个片段", 30) + bars(g.before, 38, 73, 190, 57, g.selected.piece) + change(circle(94, 284, 31, wash) + t(94, 294, g.selected.piece, 30, "middle")) + arrow(145, 283, 212, 283) + t(230, 293, "等待追加", 29);
   if (step === 2) return t(26, 40, "刚选的片段，接到输入末尾", 29) + tape(28, 72, 424, g.prompt) + down(240, 142, 180) + change(tape(28, 194, 424, g.text, wash)) + t(27, 299, "下一轮要读到这个“水”", 27);
   return t(26, 40, "多了一个“水”，候选也变了", 29) + tape(28, 72, 424, "新输入：……一口水", wash) + bars(g.next, 35, 160, 195, 63) + t(27, 310, "下一轮再选择，再追加。", 27);
@@ -123,7 +123,7 @@ export const mechanismFigures = stories.map(story => ({
 }));
 
 export const mechanismAssets = stories.map(story => {
-  const body = t(24, 39, story.shortTitle, 30) + path("M26 57 Q240 61 454 56", green) + story.frames.map((frame, i) => `<g transform="translate(0 ${72 + i * 228})">${circle(43, 20, 18, wash)}${t(43, 29, i + 1, 24, "middle")}${t(74, 29, frame.title, 27)}<g transform="translate(0 49)">${story.drawing(i, true)}</g>${i < 3 ? path("M27 222 L452 222", rule) : ""}</g>`).join("");
+  const body = t(24, 39, story.shortTitle, 30) + path("M26 57 Q240 61 454 56", accent) + story.frames.map((frame, i) => `<g transform="translate(0 ${72 + i * 228})">${circle(43, 20, 18, wash)}${t(43, 29, i + 1, 24, "middle")}${t(74, 29, frame.title, 27)}<g transform="translate(0 49)">${story.drawing(i, true)}</g>${i < 3 ? path("M27 222 L452 222", rule) : ""}</g>`).join("");
   return { file: story.file, svg: svg(story.shortTitle, mechanismFigures.find(figure => figure.id === story.id).alt, body, story.id.toLowerCase(), 990) + "\n" };
 });
 

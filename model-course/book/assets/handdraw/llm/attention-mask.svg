@@ -7,7 +7,7 @@
     </marker>
   </defs>
   <rect width="480" height="656" fill="#fbfaf6"/><rect width="480" height="656" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="638" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 626 V647 H30 M450 647 H471 V626" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
-  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">因果掩码：先遮住未来</text>
     <text x="24" y="84" font-size="26">行：当前位置；列：信息来源</text>
     <text x="114" y="124" font-size="26">1</text>
@@ -15,7 +15,7 @@
     <text x="278" y="124" font-size="26">3</text>
     <text x="360" y="124" font-size="26">4</text>
     <text x="30" y="168" font-size="26">1</text>
-    <path d="M99 135 L151 134 Q157 136 156 144 L155 179 Q154 185 146 184 L94 183 Q89 182 90 174 L91 140 Q92 134 99 135 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M99 135 L151 134 Q157 136 156 144 L155 179 Q154 185 146 184 L94 183 Q89 182 90 174 L91 140 Q92 134 99 135 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="109" y="168" font-size="26">可</text>
     <path d="M181 135 L233 134 Q239 136 238 144 L237 179 Q236 185 228 184 L176 183 Q171 182 172 174 L173 140 Q174 134 181 135 Z" fill="#e6e1d4" stroke="#1f2328" stroke-width="2.5"/>
     <text x="191" y="168" font-size="26">×</text>
@@ -24,34 +24,34 @@
     <path d="M345 135 L397 134 Q403 136 402 144 L401 179 Q400 185 392 184 L340 183 Q335 182 336 174 L337 140 Q338 134 345 135 Z" fill="#e6e1d4" stroke="#1f2328" stroke-width="2.5"/>
     <text x="355" y="168" font-size="26">×</text>
     <text x="30" y="230" font-size="26">2</text>
-    <path d="M99 197 L151 196 Q157 198 156 206 L155 241 Q154 247 146 246 L94 245 Q89 244 90 236 L91 202 Q92 196 99 197 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M99 197 L151 196 Q157 198 156 206 L155 241 Q154 247 146 246 L94 245 Q89 244 90 236 L91 202 Q92 196 99 197 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="109" y="230" font-size="26">可</text>
-    <path d="M181 197 L233 196 Q239 198 238 206 L237 241 Q236 247 228 246 L176 245 Q171 244 172 236 L173 202 Q174 196 181 197 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M181 197 L233 196 Q239 198 238 206 L237 241 Q236 247 228 246 L176 245 Q171 244 172 236 L173 202 Q174 196 181 197 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="191" y="230" font-size="26">可</text>
     <path d="M263 197 L315 196 Q321 198 320 206 L319 241 Q318 247 310 246 L258 245 Q253 244 254 236 L255 202 Q256 196 263 197 Z" fill="#e6e1d4" stroke="#1f2328" stroke-width="2.5"/>
     <text x="273" y="230" font-size="26">×</text>
     <path d="M345 197 L397 196 Q403 198 402 206 L401 241 Q400 247 392 246 L340 245 Q335 244 336 236 L337 202 Q338 196 345 197 Z" fill="#e6e1d4" stroke="#1f2328" stroke-width="2.5"/>
     <text x="355" y="230" font-size="26">×</text>
     <text x="30" y="292" font-size="26">3</text>
-    <path d="M99 259 L151 258 Q157 260 156 268 L155 303 Q154 309 146 308 L94 307 Q89 306 90 298 L91 264 Q92 258 99 259 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M99 259 L151 258 Q157 260 156 268 L155 303 Q154 309 146 308 L94 307 Q89 306 90 298 L91 264 Q92 258 99 259 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="109" y="292" font-size="26">可</text>
-    <path d="M181 259 L233 258 Q239 260 238 268 L237 303 Q236 309 228 308 L176 307 Q171 306 172 298 L173 264 Q174 258 181 259 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M181 259 L233 258 Q239 260 238 268 L237 303 Q236 309 228 308 L176 307 Q171 306 172 298 L173 264 Q174 258 181 259 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="191" y="292" font-size="26">可</text>
-    <path d="M263 259 L315 258 Q321 260 320 268 L319 303 Q318 309 310 308 L258 307 Q253 306 254 298 L255 264 Q256 258 263 259 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M263 259 L315 258 Q321 260 320 268 L319 303 Q318 309 310 308 L258 307 Q253 306 254 298 L255 264 Q256 258 263 259 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="273" y="292" font-size="26">可</text>
     <path d="M345 259 L397 258 Q403 260 402 268 L401 303 Q400 309 392 308 L340 307 Q335 306 336 298 L337 264 Q338 258 345 259 Z" fill="#e6e1d4" stroke="#1f2328" stroke-width="2.5"/>
     <text x="355" y="292" font-size="26">×</text>
     <text x="30" y="354" font-size="26">4</text>
-    <path d="M99 321 L151 320 Q157 322 156 330 L155 365 Q154 371 146 370 L94 369 Q89 368 90 360 L91 326 Q92 320 99 321 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M99 321 L151 320 Q157 322 156 330 L155 365 Q154 371 146 370 L94 369 Q89 368 90 360 L91 326 Q92 320 99 321 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="109" y="354" font-size="26">可</text>
-    <path d="M181 321 L233 320 Q239 322 238 330 L237 365 Q236 371 228 370 L176 369 Q171 368 172 360 L173 326 Q174 320 181 321 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M181 321 L233 320 Q239 322 238 330 L237 365 Q236 371 228 370 L176 369 Q171 368 172 360 L173 326 Q174 320 181 321 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="191" y="354" font-size="26">可</text>
-    <path d="M263 321 L315 320 Q321 322 320 330 L319 365 Q318 371 310 370 L258 369 Q253 368 254 360 L255 326 Q256 320 263 321 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M263 321 L315 320 Q321 322 320 330 L319 365 Q318 371 310 370 L258 369 Q253 368 254 360 L255 326 Q256 320 263 321 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="273" y="354" font-size="26">可</text>
-    <path d="M345 321 L397 320 Q403 322 402 330 L401 365 Q400 371 392 370 L340 369 Q335 368 336 360 L337 326 Q338 320 345 321 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M345 321 L397 320 Q403 322 402 330 L401 365 Q400 371 392 370 L340 369 Q335 368 336 360 L337 326 Q338 320 345 321 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="355" y="354" font-size="26">可</text>
     <text x="24" y="424" font-size="26">绿色＝可见；×＝屏蔽</text>
-    <path d="M33 449 L451 448 Q457 450 456 458 L455 529 Q454 535 446 534 L28 533 Q23 532 24 524 L25 454 Q26 448 33 449 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M33 449 L451 448 Q457 450 456 458 L455 529 Q454 535 446 534 L28 533 Q23 532 24 524 L25 454 Q26 448 33 449 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="44" y="484" font-size="26">选第二行：只算 1、2 的权重</text>
     <text x="44" y="519" font-size="26">第三、四项权重为 0</text>
     <path d="M240 542 Q238 556 240 570" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>

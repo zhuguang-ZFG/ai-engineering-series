@@ -10,7 +10,7 @@
   <!-- 标题区 -->
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">浏览器渲染管道</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">HTML 和 CSS 分开解析，合并成渲染树后经过三步才出现在屏幕上</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <!-- 上支：HTML → 构建 DOM 树 -->
   <rect x="72" y="175" width="130" height="88" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
@@ -49,7 +49,7 @@
   <path d="M484 289l-15-8v16z" fill="#1f2328"/>
 
   <!-- 渲染树（汇合节点） -->
-  <rect x="484" y="238" width="162" height="88" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <rect x="484" y="238" width="162" height="88" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
   <text x="565" y="275" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="middle" font-weight="700">渲染树</text>
   <text x="565" y="303" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" text-anchor="middle">只保留可见元素</text>
 
@@ -81,14 +81,14 @@
   <text x="992" y="303" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" text-anchor="middle">Composite</text>
 
   <!-- GPU 加速旁路：transform/opacity 跳过布局绘制，直接触发合成 -->
-  <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <g stroke="#B4472F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <path d="M727 326 v42 c0 14 -12 26 26 26 h213 c14 0 26-12 26-26 v-42"/>
   </g>
-  <path d="M992 326l-8 14h16z" fill="#1f883d"/>
-  <text x="860" y="422" fill="#008635" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">transform / opacity → 直接触发合成</text>
+  <path d="M992 326l-8 14h16z" fill="#B4472F"/>
+  <text x="860" y="422" fill="#B4472F" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="middle">transform / opacity → 直接触发合成</text>
 
   <!-- 性能口诀框 -->
-  <rect x="72" y="452" width="1056" height="66" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
+  <rect x="72" y="452" width="1056" height="66" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3"/>
   <text x="600" y="492" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" text-anchor="middle" font-weight="700">重排最昂贵（几何变化），重绘次之（外观变化）</text>
 
   <!-- 因果说明 -->

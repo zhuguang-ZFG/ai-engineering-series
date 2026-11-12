@@ -23,11 +23,11 @@
       <path d="M528 206l14 14m0-14l-14 14"/><path d="M528 326l14 14m0-14l-14 14"/>
     </g>
     <g>
-      <rect x="660" y="196" width="396" height="64" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+      <rect x="660" y="196" width="396" height="64" rx="20" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
       <text x="686" y="237" fill="#1f2328">上次遇到这问题是什么时候？</text>
-      <rect x="660" y="288" width="396" height="64" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+      <rect x="660" y="288" width="396" height="64" rx="20" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
       <text x="686" y="329" fill="#1f2328">你当时是怎么处理的？</text>
-      <rect x="660" y="380" width="396" height="64" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+      <rect x="660" y="380" width="396" height="64" rx="20" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
       <text x="686" y="421" fill="#1f2328">为此付出了多少时间或钱？</text>
     </g>
   </g>

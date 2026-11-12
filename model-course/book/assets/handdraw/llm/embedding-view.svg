@@ -7,18 +7,18 @@
     </marker>
   </defs>
   <rect width="480" height="574" fill="#fbfaf6"/><rect width="480" height="574" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="556" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 544 V565 H30 M450 565 H471 V544" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
-  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">同一个 token，从编号到数字</text>
     <path d="M33 67 L451 66 Q457 68 456 76 L455 133 Q454 139 446 138 L28 137 Q23 136 24 128 L25 72 Q26 66 33 67 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
     <text x="44" y="111" font-size="26">“苹果” → 示意 ID 42</text>
     <path d="M240 142 Q238 158 240 174" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 183 L451 182 Q457 184 456 192 L455 249 Q454 255 446 254 L28 253 Q23 252 24 244 L25 188 Q26 182 33 183 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M33 183 L451 182 Q457 184 456 192 L455 249 Q454 255 446 254 L28 253 Q23 252 24 244 L25 188 Q26 182 33 183 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="44" y="227" font-size="26">查表：[0.8, 0.2, 0.1]</text>
     <path d="M240 260 Q238 277 240 294" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="50" y="329" font-size="26">上下文处理后，表示可变化</text>
     <path d="M68 492 L68 364 M68 492 L414 492" fill="none" stroke="#1f2328" stroke-width="2.5"/>
-    <circle cx="138" cy="410" r="9" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
-    <circle cx="348" cy="468" r="9" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <circle cx="138" cy="410" r="9" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <circle cx="348" cy="468" r="9" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="158" y="412" font-size="26">仅画前两维</text>
     <text x="82" y="548" font-size="26">第三维被省略，不能凭图判同</text>
   </g>

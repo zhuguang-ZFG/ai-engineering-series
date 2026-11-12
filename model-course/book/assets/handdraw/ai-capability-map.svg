@@ -9,10 +9,10 @@
 
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">AI 能力地图：从模态到架构层</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">11 类能力归成 5 个区域：实线连模态层（第 1–6 类），虚线连架构层（第 7–11 类）</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <!-- 连接线：模态层用实线，架构层用虚线 -->
-  <g fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round">
+  <g fill="none" stroke="#B4472F" stroke-width="4" stroke-linecap="round">
     <path d="M237 300Q300 378 450 400"/>
     <path d="M600 300V340"/>
     <path d="M962 300Q900 378 750 400"/>
@@ -23,7 +23,7 @@
   </g>
 
   <!-- 画面中央：读者真正要问的三个问题 -->
-  <rect x="450" y="340" width="300" height="124" rx="20" fill="#d3efd9" stroke="#1f883d" stroke-width="4" filter="url(#card-shadow)"/>
+  <rect x="450" y="340" width="300" height="124" rx="20" fill="#f0e9d8" stroke="#B4472F" stroke-width="4" filter="url(#card-shadow)"/>
   <g font-family="'Microsoft YaHei', system-ui, sans-serif" text-anchor="middle">
     <text x="600" y="384" fill="#1f2328" font-size="27" font-weight="700">AI 能力全景图</text>
     <text x="600" y="416" fill="#1f2328" font-size="19">这件事可以用什么 AI 能力做？</text>
@@ -33,17 +33,17 @@
   <!-- 模态层：三大区域 -->
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <rect x="72" y="176" width="330" height="124" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="92" y="214" fill="#008635" font-size="22" font-weight="700">1. 文本任务</text>
+    <text x="92" y="214" fill="#B4472F" font-size="22" font-weight="700">1. 文本任务</text>
     <text x="92" y="248" fill="#57606a" font-size="19">语言建模、文本分类、序列标注</text>
     <text x="92" y="276" fill="#57606a" font-size="19">信息抽取、文本生成与编辑</text>
 
     <rect x="435" y="176" width="330" height="124" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="455" y="214" fill="#008635" font-size="22" font-weight="700">2. 图像 · 3. 3D 空间模态</text>
+    <text x="455" y="214" fill="#B4472F" font-size="22" font-weight="700">2. 图像 · 3. 3D 空间模态</text>
     <text x="455" y="248" fill="#57606a" font-size="19">图像分类、目标检测、图像分割</text>
     <text x="455" y="276" fill="#57606a" font-size="19">图像生成、三维重建、OCR</text>
 
     <rect x="798" y="176" width="330" height="124" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="818" y="214" fill="#008635" font-size="22" font-weight="700">4–6. 音频 · 视频 · 时间序列</text>
+    <text x="818" y="214" fill="#B4472F" font-size="22" font-weight="700">4–6. 音频 · 视频 · 时间序列</text>
     <text x="818" y="248" fill="#57606a" font-size="19">语音识别 ASR、语音合成 TTS</text>
     <text x="818" y="276" fill="#57606a" font-size="19">视频理解、动作识别、异常检测</text>
   </g>
@@ -51,18 +51,18 @@
   <!-- 架构层：两大区域 -->
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <rect x="72" y="504" width="488" height="124" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="92" y="542" fill="#008635" font-size="22" font-weight="700">7. Agent 与工具调用 · 8. 检索增强与知识层</text>
+    <text x="92" y="542" fill="#B4472F" font-size="22" font-weight="700">7. Agent 与工具调用 · 8. 检索增强与知识层</text>
     <text x="92" y="576" fill="#57606a" font-size="19">工具调用、任务分解与规划、工作流编排</text>
     <text x="92" y="604" fill="#57606a" font-size="19">多 Agent 协作、人类在环、检索与重排序</text>
 
     <rect x="640" y="504" width="488" height="124" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="660" y="542" fill="#008635" font-size="22" font-weight="700">9–11. 安全 · AI for Science · 平台工程</text>
+    <text x="660" y="542" fill="#B4472F" font-size="22" font-weight="700">9–11. 安全 · AI for Science · 平台工程</text>
     <text x="660" y="576" fill="#57606a" font-size="19">内容安全、价值对齐、能力评估与基准测试</text>
     <text x="660" y="604" fill="#57606a" font-size="19">模型训练与微调、部署与推理、监控与可观测性</text>
   </g>
 
   <!-- 用法：这本词典该怎么翻 -->
-  <rect x="72" y="656" width="1056" height="80" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <rect x="72" y="656" width="1056" height="80" rx="20" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
   <g font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" fill="#1f2328">
     <text x="96" y="688"><tspan font-weight="700">用法</tspan>：只在需要时查阅对应部分，或只浏览一级目录部分；也可让 AI 参考该手册给出模型选型建议。</text>
     <text x="96" y="720"><tspan font-weight="700">找 API 的关键词</tspan>：Embedding、OCR、ASR、TTS、VLM、RAG</text>

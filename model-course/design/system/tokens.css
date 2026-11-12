@@ -2,7 +2,7 @@
  * 主视觉 = 手绘（FA-013 封面人物幽默 / FA-040 图解线稿）；
  * 数值可读性 = 歸藏约束底座（OKLCH 收纳 + WCAG/APCA 双阈 + CJK T 规则）。
  * 对比度均为实测：node design/system/contrast.mjs 复算，任一角色对不达标即非零退出。
- * 与视频场景内联 token、design/handdraw/covers/cover.css 完全同源（#fbfaf6/#1f2328/#d3efd9/#1f883d/#e2601f）。 */
+ * 与视频场景内联 token、design/handdraw/covers/cover.css 完全同源（#fbfaf6/#1f2328/#f0e9d8/#B4472F）。 */
 
 :root,
 :lang(zh) {
@@ -11,17 +11,17 @@
   --card: #fffdf8;         /* L99.4%；ink/card 15.54:1 · APCA 101 ✓ 正文 */
   --ink: #1f2328;          /* L25.4%；正文 + 墨线（非纯黑，符合“不用纯黑”） */
   --ink-soft: #57606a;     /* L48.5%；次要文字 · /paper 6.12:1 · APCA 78 ✓ 次要 */
-  --marker: #d3efd9;       /* L92.6%；marker 高亮底，其下只放 --ink（ink/marker APCA 89 ✓），绝不放 accent 文字 */
-  --marker-wash: #f1f7f2;  /* 结论横幅底：比 --marker 浅一档，ink APCA 97 / ink-soft 76 ✓；带 --accent 描边 */
+  --marker: #f0e9d8;       /* L91.5%；marker 高亮底，其下只放 --ink（ink/marker WCAG 13.05 · APCA 89.9 ✓），绝不放 accent 文字 */
+  --marker-wash: #f7f3e8;  /* 结论横幅底：比 --marker 浅一档，ink WCAG 14.25 / APCA 95.7 ✓；带 --accent 描边 */
   --rule: #e6e1d4;         /* 暖纸灰细线 / 停用态卡底；ink APCA 85、ink-soft 64 ✓，只与 ink、ink-soft 配对 */
 
-  /* —— 强调色：原色仅图形/大字；文字用派生深色（源自 contrast.mjs descend）—— */
-  --accent: #1f883d;        /* 手绘波形下划线/图形强调/大字：APCA 68 仅够展示线，禁作小字 */
-  --accent-ink: #008635;    /* 绿小字 + 细线：/paper 4.51:1 · APCA 69 ✓ accentInk；/card ✓ */
-  --accent-block: #008635;  /* 绿实块 + --paper 文字：4.51:1 · APCA 74 ✓ onText */
-  --persimmon: #e2601f;     /* 柿子橙：苹果/箭头/徽章图形，仅大字（APCA 59）；禁作实底放文字（paper 其上 3.39:1 ✗） */
-  --persimmon-block: #c74c00; /* 橙实底 CTA + --paper 文字：4.51:1 · APCA 74 ✓ onText（与 --accent-block 同规则派生） */
-  --persimmon-ink: #c74c00; /* 橙须作小字时：/paper 4.51:1 · APCA 69 ✓ */
+  /* —— 强调色：朱砂一色承全站强调（yuyu 同源 #B4472F），墨为主、朱砂为记 —— */
+  --accent: #B4472F;        /* 朱砂：手绘波形下划线/图形强调：/paper WCAG 5.18 · APCA 73.2，小字亦达标 */
+  --accent-ink: #B4472F;    /* 朱砂小字 + 细线：/paper 5.18:1 · APCA 73.2 ✓ accentInk；/card ✓ */
+  --accent-block: #B4472F;  /* 朱砂实块 + --paper 文字：5.18:1 · APCA 73.2 ✓ onText */
+  --persimmon: #B4472F;     /* 深朱（原柿子橙位）：错误/警示标记，与 --accent 同族 */
+  --persimmon-block: #B4472F; /* 实底 CTA + --paper 文字：5.18:1 ✓ onText */
+  --persimmon-ink: #B4472F; /* 小字：/paper 5.18:1 · APCA 73.2 ✓ */
 
   /* —— 手绘质感三件套（一眼同源的签名）—— */
   --paper-grain: radial-gradient(var(--ink) 1px, transparent 1.2px);
@@ -54,7 +54,7 @@ body { background: var(--paper); color: var(--ink); }
   background: var(--paper-grain); background-size: var(--paper-grain-size);
   opacity: .05;
 }
-/* marker 高亮：浅绿扫过关键词，下方文字固定 --ink */
+/* marker 高亮：暖纸 wash 扫过关键词，下方文字固定 --ink */
 .handdraw-marker { background: var(--marker); color: var(--ink); padding: 0 .12em; border-radius: 4px 8px 3px 7px; }
 /* 手绘卡片：不齐圆角 + 墨线 + 硬投影 */
 .handdraw-card { background: var(--card); border: var(--ink-line); border-radius: var(--radius-hand); box-shadow: var(--shadow-hard); }

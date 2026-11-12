@@ -4,18 +4,18 @@
   <rect width="480" height="740" fill="#fbfaf6"/><rect width="480" height="740" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="722" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 710 V731 H30 M450 731 H471 V710" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
   <g font-family="'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#1f2328" font-size="26">
     <text x="28" y="46" font-size="30" font-weight="700">接通之后，还要核验</text>
-    <path d="M30 70 Q240 66 448 72" stroke="#1f883d" fill="none" stroke-width="3"/>
+    <path d="M30 70 Q240 66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>
     <text x="28" y="116">MCP：连接工具与资料服务</text>
     <path d="M32 139 L449 137 L448 222 L30 224 Z" fill="none" stroke="#1f2328" stroke-width="2.5"/>
     <text x="48" y="176">宿主应用里的 Client</text><text x="48" y="209">版本 / 能力 / 本次授权</text>
     <path d="M240 233 Q237 250 240 267" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M32 282 L449 280 L448 364 L30 366 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M32 282 L449 280 L448 364 L30 366 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="48" y="319">Server：工具 / 资源 / 提示</text><text x="48" y="353">有结果，也可能是执行错误</text>
     <text x="28" y="415">A2A：委托远端 Agent 服务</text>
     <path d="M32 439 L449 437 L448 523 L30 525 Z" fill="none" stroke="#1f2328" stroke-width="2.5"/>
     <text x="48" y="475">客户端 → 远端 Agent</text><text x="48" y="510">按名片与接口发送消息</text>
     <path d="M240 535 Q243 550 240 567" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M32 582 L449 580 L448 662 L30 664 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M32 582 L449 580 L448 662 L30 664 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="48" y="617">任务状态 / 产物 / 失败原因</text><text x="48" y="650">完成状态之后仍核对内容</text>
     <text x="28" y="711">协议兼容 ≠ 权限齐全 ≠ 正确</text>
   </g>

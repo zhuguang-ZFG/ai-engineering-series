@@ -15,8 +15,8 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 | 文件 | 内容 | 大小与 SHA-256 |
 | --- | --- | --- |
-| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2312 页 | 113 MB · `39f34cd56adb8ca5a4fdf710a850a3d1ed232bd19c9c7729fe2b199846ef144a` |
-| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；69 项 | 56 MB · `a64436494af12e426991d5f584d5f6540facc71c664abf71ad64055fc1ca6487` |
+| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2312 页 | 114 MB（119 127 255 B）· `23ed0aa4e30f0d96e97fcbbeacb1869130d0250b7a33750045adf49bd8f5182a` |
+| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；69 项（775 个条目） | 56 MB（58 620 745 B）· `11de3883d7eee001124e9ec4c27c07e1340f3b860c046c34bf5e8846746169d9` |
 | `dist/yuyu-collected-zh.json` | 页数、每卷起止页、来源与成品 SHA-256、读回校验结果 | — |
 
 ## 卷次与来源

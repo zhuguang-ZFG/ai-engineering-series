@@ -11,7 +11,7 @@
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">后端语言对比：四件工具，各干各的活</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">不会用瑞士军刀砍柴，也不会用斧子做精细雕刻</text>
   <text x="1128" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="21" text-anchor="end">选错语言不致命，但代价巨大</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <!-- ============ 四件工具：语言抬头卡 ============ -->
   <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -76,7 +76,7 @@
       <text x="638" y="256">2009</text>
       <text x="400" y="256">2009</text>
     </g>
-    <g fill="#d3efd9" stroke="#1f883d" stroke-width="3">
+    <g fill="#f0e9d8" stroke="#B4472F" stroke-width="3">
       <rect x="202" y="276" width="194" height="34" rx="10"/>
       <rect x="440" y="276" width="194" height="34" rx="10"/>
       <rect x="678" y="276" width="194" height="34" rx="10"/>
@@ -92,7 +92,7 @@
 
   <!-- ============ 三行比较：左侧行标签 ============ -->
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <circle cx="124" cy="368" r="15"/><circle cx="124" cy="496" r="15"/><circle cx="124" cy="630" r="15"/>
     </g>
     <g fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">
@@ -120,7 +120,7 @@
   <g stroke="#e6e1d4" stroke-width="12" stroke-linecap="round">
     <path d="M202 368h198"/><path d="M440 368h198"/><path d="M678 368h198"/><path d="M916 368h198"/>
   </g>
-  <g stroke="#1f883d" stroke-width="12" stroke-linecap="round">
+  <g stroke="#B4472F" stroke-width="12" stroke-linecap="round">
     <path d="M202 368h188"/><path d="M440 368h162"/><path d="M678 368h88"/><path d="M916 368h34"/>
   </g>
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
@@ -152,12 +152,12 @@
     <path d="M311 478l9 5-9 5z" fill="#1f2328" stroke="none"/>
     <circle cx="301" cy="500" r="5" fill="#1f2328" stroke="none"/>
     <!-- Go：一把协程，小而多 -->
-    <g fill="#d3efd9" stroke="#1f883d" stroke-width="3">
+    <g fill="#f0e9d8" stroke="#B4472F" stroke-width="3">
       <circle cx="519" cy="494" r="6"/><circle cx="536" cy="494" r="6"/><circle cx="553" cy="494" r="6"/><circle cx="570" cy="494" r="6"/>
       <circle cx="527" cy="510" r="6"/><circle cx="544" cy="510" r="6"/><circle cx="561" cy="510" r="6"/>
     </g>
     <!-- Java：三根粗线程，每根都占一块内存 -->
-    <g fill="#f1f7f2">
+    <g fill="#f7f3e8">
       <rect x="742" y="484" width="20" height="32" rx="3"/>
       <rect x="767" y="484" width="20" height="32" rx="3"/>
       <rect x="792" y="484" width="20" height="32" rx="3"/>
@@ -187,12 +187,12 @@
 
   <!-- ============ 行 3：该谁上场（本节自己的适用场景判定） ============ -->
   <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <rect x="188" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
-    <rect x="426" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
-    <rect x="664" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
-    <rect x="902" y="608" width="226" height="116" rx="18" fill="#f1f7f2" filter="url(#card-shadow)"/>
+    <rect x="188" y="608" width="226" height="116" rx="18" fill="#f7f3e8" filter="url(#card-shadow)"/>
+    <rect x="426" y="608" width="226" height="116" rx="18" fill="#f7f3e8" filter="url(#card-shadow)"/>
+    <rect x="664" y="608" width="226" height="116" rx="18" fill="#f7f3e8" filter="url(#card-shadow)"/>
+    <rect x="902" y="608" width="226" height="116" rx="18" fill="#f7f3e8" filter="url(#card-shadow)"/>
   </g>
-  <g stroke="#1f883d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9">
+  <g stroke="#B4472F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9">
     <path d="M212 630l7 8 13-16"/><path d="M450 630l7 8 13-16"/><path d="M688 630l7 8 13-16"/><path d="M926 630l7 8 13-16"/>
   </g>
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
@@ -211,7 +211,7 @@
   </g>
 
   <!-- ============ 结论横幅 ============ -->
-  <rect x="72" y="740" width="1056" height="80" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <rect x="72" y="740" width="1056" height="80" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
   <text x="600" y="774" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700" text-anchor="middle">团队熟悉度 &gt; 技术最优解：没有最好的语言，只有最适合的</text>
   <text x="600" y="806" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19" text-anchor="middle">精通一门、了解多门；架构设计比语言选择更重要，别指望换语言解决所有问题</text>
 </svg>

@@ -9,15 +9,15 @@
 
   <text x="72" y="78" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">CSS 布局的四级台阶</text>
   <text x="72" y="116" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">先掌握盒模型，再掌握 Flexbox，然后掌握定位，最后学动画</text>
-  <path d="M72 140q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 140q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <!-- 盒模型：层层盒子（内容 → padding → border → margin） -->
     <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="none">
       <rect x="80" y="160" width="240" height="196" rx="6" fill="#fffdf8"/>
-      <rect x="105" y="196" width="190" height="142" rx="6" fill="#f1f7f2"/>
+      <rect x="105" y="196" width="190" height="142" rx="6" fill="#f7f3e8"/>
       <rect x="130" y="232" width="140" height="88" rx="6" fill="#fffdf8"/>
-      <rect x="155" y="268" width="90" height="34" rx="4" fill="#d3efd9"/>
+      <rect x="155" y="268" width="90" height="34" rx="4" fill="#f0e9d8"/>
     </g>
     <g fill="#1f2328" font-size="19" text-anchor="middle">
       <text x="200" y="183">margin</text>
@@ -35,7 +35,7 @@
       <rect x="616" y="248" width="244" height="190" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
       <rect x="884" y="176" width="244" height="165" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
     </g>
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <circle cx="111" cy="426" r="17"/><circle cx="379" cy="354" r="17"/>
       <circle cx="647" cy="282" r="17"/><circle cx="915" cy="210" r="17"/>
     </g>
@@ -47,7 +47,7 @@
       <text x="138" y="434">盒模型</text><text x="406" y="362">Flexbox</text>
       <text x="674" y="290">定位</text><text x="942" y="218">动画</text>
     </g>
-    <rect x="89" y="568" width="204" height="30" rx="4" fill="#d3efd9"/>
+    <rect x="89" y="568" width="204" height="30" rx="4" fill="#f0e9d8"/>
     <g fill="#1f2328" font-size="20">
       <text x="94" y="468">内容是商品</text>
       <text x="94" y="498">padding 是气泡膜</text>
@@ -77,20 +77,20 @@
 
     <!-- 绝对定位逃逸：从第 3 级跳出，回到上一个盒子 -->
     <path d="M816 248v-26" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 4"/>
-    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <g stroke="#B4472F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
       <path d="M816 220v-24H526v112"/>
     </g>
-    <path d="M526 320l-7-13h14z" fill="#1f883d"/>
+    <path d="M526 320l-7-13h14z" fill="#B4472F"/>
     <text x="560" y="224" fill="#1f2328" font-size="20">回到最近的定位祖先</text>
 
     <!-- 由浅入深的阶梯脊线 -->
-    <g stroke="#1f883d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <g stroke="#B4472F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
       <path d="M80 650h256v-102h268v-102h268v-97h280v-158"/>
     </g>
-    <path d="M1152 176l-9 15h18z" fill="#1f883d"/>
+    <path d="M1152 176l-9 15h18z" fill="#B4472F"/>
 
     <!-- 宽度对不上：第三个卡片掉到下一行 -->
-    <rect x="636" y="460" width="240" height="104" rx="10" fill="#f1f7f2" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
+    <rect x="636" y="460" width="240" height="104" rx="10" fill="#f7f3e8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
     <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="#fffdf8">
       <rect x="648" y="472" width="88" height="36" rx="4"/>
       <rect x="748" y="472" width="88" height="36" rx="4"/>
@@ -106,8 +106,8 @@
     <text x="1018" y="400" fill="#1f2328" font-size="21" text-anchor="middle">属性几百个，用到再查</text>
   </g>
 
-  <rect x="72" y="666" width="1056" height="84" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
-  <circle cx="100" cy="710" r="9" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+  <rect x="72" y="666" width="1056" height="84" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
+  <circle cx="100" cy="710" r="9" fill="#B4472F" stroke="#1f2328" stroke-width="3"/>
   <text x="616" y="702" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle">width: 300px 只是内容宽度 → padding 20px、border 1px 让它变成 342px</text>
   <text x="616" y="734" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" text-anchor="middle">三个卡片 1026px &gt; 容器 900px：box-sizing: border-box 让 width 包含 padding 和 border</text>
 </svg>

@@ -45,9 +45,18 @@ def json_file(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def image_name(original):
+    """Cache name for a rasterized figure. SVG names carry the source digest so a
+    restyled figure can never be shadowed by an older render of the same stem."""
+    if original.suffix.lower() == ".svg":
+        digest = hashlib.sha256(original.read_bytes()).hexdigest()[:10]
+        return f"{original.stem}-{digest}.png"
+    return original.stem + ".png"
+
+
 def ensure_image(page, original, image_names, folder):
     """Render one SVG to PNG at 2x, or copy an existing raster asset."""
-    png_name = original.stem + ".png"
+    png_name = image_name(original)
     target = folder / png_name
     if not target.exists():
         if original.suffix.lower() == ".svg":
@@ -144,20 +153,20 @@ def content_document(chapter, answers=False, page=None, image_names=None):
     return article
 
 
-def stage_plate_document(stage, note, image_names):
+def stage_plate_document(stage, note, image_names, png_name):
     body = element("body", **{"class": "stage-plate"})
     figure = append(body, "figure", **{"class": "stage-plate-figure"})
-    append(figure, "img", src="images/stage-%s.png" % stage["id"][1:], alt="%s %s 阶段插画" % (stage["id"], stage["title"]))
+    append(figure, "img", src="images/" + png_name, alt="%s %s 阶段插画" % (stage["id"], stage["title"]))
     append(figure, "figcaption", "%s / %s · %s" % (stage["id"], stage["gate"], note["thesis"]))
     return body
 
 
-def map_document(note):
+def map_document(note, png_name):
     body = element("body", **{"class": "book-map", "id": "map"})
     append(body, "h1", note["title"])
     append(body, "p", "五阶段 · 三十章 · 五道能力门；横线是阶段，圆点是章号，右侧菱形是能力门。", **{"class": "map-sub"})
     figure = append(body, "figure", **{"class": "book-map-figure"})
-    append(figure, "img", src="images/book-map.png", alt="全书地图：五条阶段线、30 个章号与 5 道能力门")
+    append(figure, "img", src="images/" + png_name, alt="全书地图：五条阶段线、30 个章号与 5 道能力门")
     append(figure, "figcaption", "五条阶段线、30 个章号与 5 道能力门。")
     return body
 
@@ -494,6 +503,9 @@ def run():
         context.set_offline(True)
         page = context.new_page()
         image_names = set()
+        cover_png = image_name(ASSETS / "cover-course.svg")
+        map_png = image_name(ASSETS / stage_notes["map"]["file"])
+        plate_png = {stage["id"]: image_name(ASSETS / stage_map[stage["id"]]["plate"]) for stage in stages}
         ensure_image(page, ASSETS / "cover-course.svg", image_names, WORK / "images")
         ensure_image(page, ASSETS / stage_notes["map"]["file"], image_names, WORK / "images")
         for stage in stages:
@@ -507,12 +519,12 @@ def run():
             if not answers:
                 docs["cover.xhtml"] = ("封面", element("body", **{"class": "cover-page"}))
                 docs["cover.xhtml"][1].append(
-                    etree.Element("img", src="images/cover-course.png", alt=curriculum["title"] + " 封面")
+                    etree.Element("img", src="images/" + cover_png, alt=curriculum["title"] + " 封面")
                 )
             docs["titlepage.xhtml"] = ("书名", title_page_document(curriculum, answers))
             docs["howto.xhtml"] = ("怎么读", howto_document(answers))
             if not answers:
-                docs["map.xhtml"] = (stage_notes["map"]["title"], map_document(stage_notes["map"]))
+                docs["map.xhtml"] = (stage_notes["map"]["title"], map_document(stage_notes["map"], map_png))
                 entries.append({
                     "kind": "map",
                     "id": "map",
@@ -526,7 +538,7 @@ def run():
                 if not answers:
                     docs["stage-%s-plate.xhtml" % stage["id"].lower()] = (
                         "%s 阶段插画" % stage["id"],
-                        stage_plate_document(stage, stage_map[stage["id"]], image_names),
+                        stage_plate_document(stage, stage_map[stage["id"]], image_names, plate_png[stage["id"]]),
                     )
                     docs["stage-%s.xhtml" % stage["id"].lower()] = (
                         "%s 阶段导言" % stage["id"],
@@ -615,7 +627,7 @@ def run():
                         if parent is not None:
                             parent.remove(node)
                 epub_docs[name] = (document_title, clean)
-            package_epub(stem, title, epub_docs, image_names, css_epub, "cover-course.png")
+            package_epub(stem, title, epub_docs, image_names, css_epub, cover_png)
         browser.close()
     if source_hash() != fingerprint:
         raise RuntimeError("Course source changed during book export")

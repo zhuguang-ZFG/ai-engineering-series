@@ -7,13 +7,13 @@
     </marker>
   </defs>
   <rect width="480" height="668" fill="#fbfaf6"/><rect width="480" height="668" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="650" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 638 V659 H30 M450 659 H471 V638" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
-  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">信号不同，训练目标也不同</text>
     <path d="M33 69 L451 68 Q457 70 456 78 L455 157 Q454 163 446 162 L28 161 Q23 160 24 152 L25 74 Q26 68 33 69 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
     <text x="44" y="106" font-size="26">预训练：后续 token</text>
     <text x="44" y="143" font-size="26">学习序列中的可预测模式</text>
     <path d="M240 170 Q238 182 240 194" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 207 L451 206 Q457 208 456 216 L455 295 Q454 301 446 300 L28 299 Q23 298 24 290 L25 212 Q26 206 33 207 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M33 207 L451 206 Q457 208 456 216 L455 295 Q454 301 446 300 L28 299 Q23 298 24 290 L25 212 Q26 206 33 207 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="44" y="244" font-size="26">SFT：任务与示范</text>
     <text x="44" y="281" font-size="26">学习按要求作答</text>
     <path d="M240 308 Q238 320 240 332" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
