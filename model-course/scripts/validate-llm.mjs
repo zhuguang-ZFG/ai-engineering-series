@@ -25,6 +25,13 @@ for (const lesson of ready) for (const file of [lesson.figure, ...(lesson.extraF
 }
 
 let links = 0;
+const assetDir = join(root, "book/assets/handdraw/llm");
+const assetsSvg = readdirSync(assetDir).filter((name) => extname(name) === ".svg");
+for (const name of assetsSvg) {
+  const svg = readFileSync(join(assetDir, name), "utf8");
+  for (const color of svg.match(/#[0-9a-fA-F]{6}/g) ?? []) assert.ok(colors.has(color.toLowerCase()), `${name}: color ${color} is not in design/system/tokens.css`);
+  assert.ok(svg.includes("<title") && svg.includes("<desc"), `${name}: accessible description missing`);
+}
 const pages = [...readdirSync(output).filter((file) => extname(file) === ".html").map(name => join(output, name)), join(root, "开始阅读.html")];
 for (const path of pages) {
   const name = basename(path);
@@ -55,4 +62,4 @@ for (const path of pages) {
   console.log(`${name}: local links resolved, compressed page resources ${(size / 1024).toFixed(1)} KB`);
 }
 assert.ok(existsSync(join(root, "book/llm/fixtures/js-tiktoken-LICENSE")), "Missing tokenizer license");
-console.log(`Course metadata, fixture branches, ${figureCount} SVGs and ${links} local links passed`);
+console.log(`Course metadata, fixture branches, ${figureCount} chapter SVGs, ${assetsSvg.length} asset SVGs and ${links} local links passed`);

@@ -10,13 +10,13 @@ const folder = join(root, "book/assets/handdraw/llm");
 const checking = process.argv.includes("--check");
 
 const ink = "#26221B";
-const soft = "#6b6457";
-const paper = "#f7f2e7";
-const card = "#fdfaf1";
+const soft = "#5C5448";
+const paper = "#FBF7EF";
+const card = "#FFFDF8";
 const pine = "#26221B";
-const sage = "#e9e2d0";
+const sage = "#F3EAD8";
 const clay = "#B4472F";
-const sand = "#e8ddc7";
+const sand = "#E3D8C1";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const text = (x, y, value, size = 22, color = ink, anchor = "start", family = "'Noto Serif SC','Songti SC','SimSun',serif", weight = 400, spacing = 0) =>
   `<text x="${x}" y="${y}" font-family="${family}" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}"${spacing ? ` letter-spacing="${spacing}"` : ""}>${esc(value)}</text>`;
