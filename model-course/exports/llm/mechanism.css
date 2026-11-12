@@ -1,11 +1,11 @@
 /* Drawings carry the mechanism; controls only change which step is in view. */
-.mechanism { margin: 36px 0; padding: 24px 0; border-block: 2px solid var(--ink, #1f2328); }
+.mechanism { margin: 36px 0; padding: 24px 0; border-block: 2px solid var(--ink, #26221B); }
 .mechanism > h3 { margin-top: 0; }
 .mechanism-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 12px; }
 .mechanism-controls button { min-height: 44px; padding: 8px 14px; font-size: 16px; border-width: 1px; }
-.mechanism-controls button[aria-disabled="true"] { color: var(--ink-soft, #57606a); border-color: var(--rule, #d0d7de); cursor: default; background: var(--paper, #f6f4ed); }
+.mechanism-controls button[aria-disabled="true"] { color: var(--ink-soft, #5C5448); border-color: var(--rule, #E3D8C1); cursor: default; background: var(--paper, #F6F0E2); }
 .mechanism-controls button[data-action="play"][aria-pressed="true"] { background: var(--marker, #f6df8e); }
-.mechanism-status { font-size: 16px; line-height: 1.7; color: var(--ink-soft, #57606a); min-height: 3.4em; margin-bottom: 16px; }
+.mechanism-status { font-size: 16px; line-height: 1.7; color: var(--ink-soft, #5C5448); min-height: 3.4em; margin-bottom: 16px; }
 .mechanism-status:empty { display: none; }
 .mechanism-stage { padding: 12px 0 0; }
 .mechanism-frame { overflow-wrap: anywhere; }

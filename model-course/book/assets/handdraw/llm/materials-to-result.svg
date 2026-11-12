@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="686" viewBox="0 0 480 686" role="img" aria-labelledby="title desc">
   <title id="title">有依据的资料助手交付</title>
   <desc id="desc">任务约定与材料一起进入处理，结果逐项连接原句，缺失和冲突保留，人工回查后导出。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/></marker></defs>
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">把结果交给下一个人</text>
-    <path d="M26 76 Q146.72000000000003 71.4 454 75 L452.6 153 Q290.88 154.8 25 151.4 Q25.6 113 26 76 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 76 Q146.72000000000003 71.4 454 75 L452.6 153 Q290.88 154.8 25 151.4 Q25.6 113 26 76 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="120" font-size="26">任务约定 + 带编号的材料</text>
-    <path d="M240 162 Q238 176 240 190" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 204 Q146.72000000000003 199.4 454 203 L452.6 305 Q290.88 306.8 25 303.4 Q25.6 253 26 204 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 162 Q238 176 240 190" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 204 Q146.72000000000003 199.4 454 203 L452.6 305 Q290.88 306.8 25 303.4 Q25.6 253 26 204 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="239" font-size="26">按字段整理 → 连回原句</text>
     <text x="48" y="279" font-size="26">活动 / 时间 / 地点 / 报名</text>
-    <path d="M240 314 Q238 328 240 342" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 356 Q146.72000000000003 351.4 454 355 L452.6 457 Q290.88 458.8 25 455.4 Q25.6 405 26 356 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 314 Q238 328 240 342" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 356 Q146.72000000000003 351.4 454 355 L452.6 457 Q290.88 458.8 25 455.4 Q25.6 405 26 356 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="391" font-size="26">缺失：留未知；冲突：待确认</text>
     <text x="48" y="431" font-size="26">无依据 / 范围外：停止</text>
-    <path d="M240 466 Q238 480 240 494" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 508 Q146.72000000000003 503.4 454 507 L452.6 585 Q290.88 586.8 25 583.4 Q25.6 545 26 508 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 466 Q238 480 240 494" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 508 Q146.72000000000003 503.4 454 507 L452.6 585 Q290.88 586.8 25 583.4 Q25.6 545 26 508 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="552" font-size="26">人工回查 → 导出核验报告</text>
     <g pointer-events="none"><rect x="24" y="70" width="432" height="86" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="24" y="198" width="432" height="110" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="24" y="350" width="432" height="110" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="24" y="502" width="432" height="86" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
     <text x="28" y="628" font-size="26">把材料里的命令当内容</text>

@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="668" viewBox="0 0 480 668" role="img" aria-labelledby="title desc">
   <title id="title">按缺口选择方案</title>
   <desc id="desc">全文够用先明确任务；缺相关新资料用检索；缺确定计算用受控工具；稳定行为问题经评测再考虑微调。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/></marker></defs>
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">先问：任务缺的是什么？</text>
-    <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 179 Q290.88 180.8 25 177.4 Q25.6 127 26 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 179 Q290.88 180.8 25 177.4 Q25.6 127 26 78 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="113" font-size="26">一页材料，做一次</text>
     <text x="48" y="153" font-size="26">先写清任务与输出约定</text>
-    <path d="M26 212 Q146.72000000000003 207.4 454 211 L452.6 313 Q290.88 314.8 25 311.4 Q25.6 261 26 212 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 212 Q146.72000000000003 207.4 454 211 L452.6 313 Q290.88 314.8 25 311.4 Q25.6 261 26 212 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="247" font-size="26">缺不断更新的依据</text>
     <text x="48" y="287" font-size="26">检索 → 核对出处和版本</text>
-    <path d="M26 346 Q146.72000000000003 341.4 454 345 L452.6 447 Q290.88 448.8 25 445.4 Q25.6 395 26 346 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 346 Q146.72000000000003 341.4 454 345 L452.6 447 Q290.88 448.8 25 445.4 Q25.6 395 26 346 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="381" font-size="26">缺可以复算的执行</text>
     <text x="48" y="421" font-size="26">受控工具 → 检查回执</text>
-    <path d="M26 480 Q146.72000000000003 475.4 454 479 L452.6 581 Q290.88 582.8 25 579.4 Q25.6 529 26 480 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 480 Q146.72000000000003 475.4 454 479 L452.6 581 Q290.88 582.8 25 579.4 Q25.6 529 26 480 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="515" font-size="26">固定行为仍反复失败</text>
     <text x="48" y="555" font-size="26">有数据和评测，再考虑微调</text>
     <text x="28" y="638" font-size="26">可组合；先用任务样本检验</text>

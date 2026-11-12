@@ -1,22 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="680" viewBox="0 0 480 680" role="img" aria-labelledby="title desc">
   <title id="title">工具请求与执行回执</title>
   <desc id="desc">先提出请求，再由程序校验和执行，回传数值后结束；失败或取消进入终态。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/></marker></defs>
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">说要计算，到真的计算</text>
-    <path d="M26 72 Q146.72000000000003 67.4 454 71 L452.6 137 Q290.88 138.8 25 135.4 Q25.6 103 26 72 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 72 Q146.72000000000003 67.4 454 71 L452.6 137 Q290.88 138.8 25 135.4 Q25.6 103 26 72 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="113" font-size="26">请求：12.5 × 8</text>
-    <path d="M240 146 Q238 158 240 170" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 184 Q146.72000000000003 179.4 454 183 L452.6 259 Q290.88 260.8 25 257.4 Q25.6 220 26 184 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 146 Q238 158 240 170" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 184 Q146.72000000000003 179.4 454 183 L452.6 259 Q290.88 260.8 25 257.4 Q25.6 220 26 184 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="225" font-size="26">程序校验：工具、类型、范围</text>
-    <path d="M240 268 Q238 280 240 292" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 306 Q146.72000000000003 301.4 454 305 L452.6 371 Q290.88 372.8 25 369.4 Q25.6 337 26 306 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 268 Q238 280 240 292" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 306 Q146.72000000000003 301.4 454 305 L452.6 371 Q290.88 372.8 25 369.4 Q25.6 337 26 306 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="347" font-size="26">本地执行 → 数值 100</text>
-    <path d="M240 380 Q238 392 240 404" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 418 Q146.72000000000003 413.4 454 417 L452.6 483 Q290.88 484.8 25 481.4 Q25.6 449 26 418 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 380 Q238 392 240 404" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 418 Q146.72000000000003 413.4 454 417 L452.6 483 Q290.88 484.8 25 481.4 Q25.6 449 26 418 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="459" font-size="26">回传结果 → 才能汇报完成</text>
     <g pointer-events="none"><rect x="24" y="66" width="432" height="74" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="24" y="178" width="432" height="84" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="24" y="300" width="432" height="74" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="24" y="412" width="432" height="74" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
-    <path d="M28 532 Q240 530 452 532" fill="none" stroke="#1f2328" stroke-width="2" stroke-dasharray="7 6"/>
+    <path d="M28 532 Q240 530 452 532" fill="none" stroke="#26221B" stroke-width="2" stroke-dasharray="7 6"/>
     <text x="28" y="577" font-size="26">失败 / 超时 / 取消 → 停止</text>
     <text x="28" y="619" font-size="26">终态不继续，不显示成功</text>
     <text x="28" y="661" font-size="26">本图请求预置，不是模型实测</text>

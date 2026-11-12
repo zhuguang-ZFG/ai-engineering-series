@@ -3,25 +3,25 @@
   <desc id="desc">预训练学习后续 token；SFT 使用任务示范；偏好优化使用比较或奖励。消息模板另外组织输入，不能替代训练。</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/>
+      <path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/>
     </marker>
   </defs>
   
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">信号不同，训练目标也不同</text>
-    <path d="M33 69 L451 68 Q457 70 456 78 L455 157 Q454 163 446 162 L28 161 Q23 160 24 152 L25 74 Q26 68 33 69 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M33 69 L451 68 Q457 70 456 78 L455 157 Q454 163 446 162 L28 161 Q23 160 24 152 L25 74 Q26 68 33 69 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="106" font-size="26">预训练：后续 token</text>
     <text x="44" y="143" font-size="26">学习序列中的可预测模式</text>
-    <path d="M240 170 Q238 182 240 194" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 207 L451 206 Q457 208 456 216 L455 295 Q454 301 446 300 L28 299 Q23 298 24 290 L25 212 Q26 206 33 207 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M240 170 Q238 182 240 194" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 207 L451 206 Q457 208 456 216 L455 295 Q454 301 446 300 L28 299 Q23 298 24 290 L25 212 Q26 206 33 207 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="244" font-size="26">SFT：任务与示范</text>
     <text x="44" y="281" font-size="26">学习按要求作答</text>
-    <path d="M240 308 Q238 320 240 332" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 345 L451 344 Q457 346 456 354 L455 433 Q454 439 446 438 L28 437 Q23 436 24 428 L25 350 Q26 344 33 345 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M240 308 Q238 320 240 332" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M33 345 L451 344 Q457 346 456 354 L455 433 Q454 439 446 438 L28 437 Q23 436 24 428 L25 350 Q26 344 33 345 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="382" font-size="26">偏好优化：比较或奖励</text>
     <text x="44" y="419" font-size="26">调整行为；仍需核对事实</text>
-    <path d="M24 474 L456 474" stroke="#57606a" stroke-width="2" stroke-dasharray="7 6"/>
-    <path d="M33 503 L451 502 Q457 504 456 512 L455 609 Q454 615 446 614 L28 613 Q23 612 24 604 L25 508 Q26 502 33 503 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M24 474 L456 474" stroke="#5C5448" stroke-width="2" stroke-dasharray="7 6"/>
+    <path d="M33 503 L451 502 Q457 504 456 512 L455 609 Q454 615 446 614 L28 613 Q23 612 24 604 L25 508 Q26 502 33 503 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="540" font-size="26">消息角色模板：组织输入</text>
     <text x="44" y="580" font-size="26">user / assistant 等边界</text>
     <text x="24" y="652" font-size="26">本图为常见拆分，配方可不同</text>

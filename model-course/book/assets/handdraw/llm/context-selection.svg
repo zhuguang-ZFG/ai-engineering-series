@@ -1,22 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="700" viewBox="0 0 480 700" role="img" aria-labelledby="title desc">
   <title id="title">外部保存不等于本次可见</title>
   <desc id="desc">外部原文、任务与历史经过权限、版本和相关性选择后进入本次输入；人工共享预算 4096 中输入至多 3584，输出预留 512。缓存复用计算，不增加窗口或参数。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#26221B" stroke-width="1.5"/></marker></defs>
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">保存了，还要选进本次输入</text>
-    <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 173 Q290.88 174.8 25 171.4 Q25.6 124 26 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 173 Q290.88 174.8 25 171.4 Q25.6 124 26 78 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="113" font-size="26">外部保存：原文 / 任务 / 历史</text>
     <text x="48" y="153" font-size="26">有来源，可更正，可重新读取</text>
-    <path d="M240 182 Q238 195 240 208" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 222 Q146.72000000000003 217.4 454 221 L452.6 317 Q290.88 318.8 25 315.4 Q25.6 268 26 222 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 182 Q238 195 240 208" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 222 Q146.72000000000003 217.4 454 221 L452.6 317 Q290.88 318.8 25 315.4 Q25.6 268 26 222 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="257" font-size="26">选取：权限 → 版本 → 相关性</text>
     <text x="48" y="297" font-size="26">没有选入，不代表本次已读</text>
-    <path d="M240 326 Q238 339 240 352" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 366 Q146.72000000000003 361.4 454 365 L452.6 461 Q290.88 462.8 25 459.4 Q25.6 412 26 366 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 326 Q238 339 240 352" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 366 Q146.72000000000003 361.4 454 365 L452.6 461 Q290.88 462.8 25 459.4 Q25.6 412 26 366 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="401" font-size="26">本次输入：规则 / 目标 / 依据</text>
     <text x="48" y="441" font-size="26">历史 / 回执 / 当前问题</text>
-    <path d="M240 470 Q238 483 240 496" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M26 510 Q146.72000000000003 505.4 454 509 L452.6 605 Q290.88 606.8 25 603.4 Q25.6 556 26 510 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M240 470 Q238 483 240 496" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <path d="M26 510 Q146.72000000000003 505.4 454 509 L452.6 605 Q290.88 606.8 25 603.4 Q25.6 556 26 510 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5" stroke-linejoin="round"/>
     <text x="48" y="545" font-size="26">人工预算：窗口 4096 token</text>
     <text x="48" y="585" font-size="26">输入 3584 + 输出预留 512</text>
     <g pointer-events="none"><rect x="24" y="72" width="432" height="104" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="24" y="216" width="432" height="104" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="24" y="360" width="432" height="104" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="24" y="504" width="432" height="104" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>

@@ -283,6 +283,7 @@
 <li><strong>第一行只能是 1</strong>：位置 0 只看自己，没有别的选择——这不是“模型很有把握”，是掩码决定的。</li>
 <li><strong>越往后越分散</strong>：位置 1 只有两个选择，位置 4 有五个；可选位置越多，单个权重通常越小。看到“最高权重只有 0.28”时，先看这一行有几个可见位置。</li>
 </ol>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/c07-attention-matrix.svg" alt="五行权重，颜色越深权重越大"><figcaption>图：把五行的权重画成一张 5×5 图；斜线格是未来位置，被掩码排除，不是零权重。格子颜色按权重大小取深浅，具体数值以正文表为准。</figcaption></figure>
 <h2 id="C07-section-951a883003" tabindex="-1">整张矩阵在算什么</h2>
 <p>把三个位置一起算，形状是这样：</p>
 <ul>

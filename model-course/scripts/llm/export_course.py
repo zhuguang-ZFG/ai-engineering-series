@@ -112,10 +112,21 @@ def clean_links(article, chapter, suffix):
             anchor.drop_tag()
 
 
-def number_figures(article, chapter, answers):
-    prefix = chapter["id"] + ("-A" if answers else "")
+def tag_tall(figure, sizes):
+    """A drawing taller than 1.4:1 keeps its labels readable only when the
+    sheet lets it use more than the standard 112mm figure box."""
+    image = figure.find(".//img")
+    if not sizes or image is None:
+        return
+    width, height = sizes.get(Path(image.get("src", "")).name, (0, 0))
+    if width and height / width >= 1.4:
+        figure.set("class", figure.get("class", "") + " tall")
+
+
+def number_figures(article, prefix, sizes=None):
     figures = article.xpath('.//figure[contains(concat(" ",normalize-space(@class)," ")," curriculum-figure ")]')
     for index, figure in enumerate(figures, 1):
+        tag_tall(figure, sizes)
         caption = figure.find("figcaption")
         if caption is None:
             continue
@@ -146,15 +157,20 @@ def content_document(chapter, answers=False, page=None, image_names=None):
         for key in list(node.attrib):
             if key == "tabindex" or key.startswith(("data-", "aria-")):
                 del node.attrib[key]
+    sizes = {}
     for image in article.xpath('.//img[@src]'):
         original = (ROOT / "exports/llm" / image.get("src")).resolve()
         if not original.is_relative_to(ROOT) or not original.is_file():
             raise ValueError("Chapter image not in repository")
         png_name = ensure_image(page, original, image_names, WORK / "images")
+        if original.suffix.lower() == ".svg":
+            match = re.search(r'width="(\d+)"[^>]*height="(\d+)"', original.read_text(encoding="utf-8"))
+            if match:
+                sizes[png_name] = (int(match.group(1)), int(match.group(2)))
         image.set("src", "images/" + png_name)
     clean_links(article, chapter, suffix)
     keep_equations_with_explanation(article)
-    number_figures(article, chapter, answers)
+    number_figures(article, chapter["id"] + ("-A" if answers else ""), sizes)
     return article
 
 
@@ -271,7 +287,7 @@ def toc_document(curriculum, entries, answers):
     return body
 
 
-def appendix_document(web_name, element_id, class_name, page, image_names):
+def appendix_document(web_name, element_id, class_name, page, image_names, figure_prefix=None):
     parsed = html.fromstring((ROOT / "exports/llm" / web_name).read_bytes())
     article = parsed.xpath("//article")[0]
     article = deepcopy(article)
@@ -283,17 +299,27 @@ def appendix_document(web_name, element_id, class_name, page, image_names):
         for key in list(node.attrib):
             if key == "tabindex" or key.startswith(("data-", "aria-")):
                 del node.attrib[key]
+    sizes = {}
     for image in article.xpath('.//img[@src]'):
         original = (ROOT / "exports/llm" / image.get("src")).resolve()
         png_name = ensure_image(page, original, image_names, WORK / "images")
+        if original.suffix.lower() == ".svg":
+            match = re.search(r'width="(\d+)"[^>]*height="(\d+)"', original.read_text(encoding="utf-8"))
+            if match:
+                sizes[png_name] = (int(match.group(1)), int(match.group(2)))
         image.set("src", "images/" + png_name)
     clean_links(article, {"id": element_id}, "")
     keep_equations_with_explanation(article)
+    if figure_prefix:
+        number_figures(article, figure_prefix, sizes)
+    else:
+        for figure in article.xpath('.//figure[contains(concat(" ",normalize-space(@class)," ")," curriculum-figure ")]'):
+            tag_tall(figure, sizes)
     return article
 
 
 def guide_document(curriculum, page, image_names):
-    return appendix_document("guide.html", "guide", "guide", page, image_names)
+    return appendix_document("guide.html", "guide", "guide", page, image_names, figure_prefix="导读")
 
 
 def deep_reading_document(curriculum, page, image_names):
