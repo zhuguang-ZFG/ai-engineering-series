@@ -52,6 +52,15 @@ class PortableBookshelf(unittest.TestCase):
                 bookshelf.build(distribution=True)
             page = (root / "dist/index.html").read_text(encoding="utf-8")
             self.assertIn('href="agent-books/yuyu-prompt-zh.pdf"', page)
+            self.assertNotIn("十卷合订本", page)
+            (root / "dist/yuyu-collected-zh.pdf").write_bytes(b"fixture")
+            (root / "dist/yuyu-collected-zh.epub").write_bytes(b"fixture")
+            with patch.object(bookshelf, "ROOT", root):
+                bookshelf.build(distribution=True)
+            bound = (root / "dist/index.html").read_text(encoding="utf-8")
+            self.assertIn("十卷合订本", bound)
+            self.assertIn('href="yuyu-collected-zh.pdf"', bound)
+            self.assertIn('href="yuyu-collected-zh.epub"', bound)
             self.assertNotIn('href="agent-books/prompt/README.md"', page)
             self.assertNotIn('href="../', page)
 

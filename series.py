@@ -322,6 +322,9 @@ def main(argv=None, *, root=ROOT):
     builder.add_argument("--epub", action="store_true")
     collector = commands.add_parser("collect", help="copy existing books and course website to dist")
     collector.add_argument("--project", choices=("all", *PROJECTS), default="all")
+    collected = commands.add_parser("collected", help="merge the ten books into one volume-numbered PDF")
+    collected.add_argument("--lang", choices=("zh",), default="zh")
+    collected.add_argument("--date", default=None)
     args = parser.parse_args(argv)
     try:
         catalog = load_catalog(root)
@@ -335,6 +338,11 @@ def main(argv=None, *, root=ROOT):
             return check_projects(root, catalog, args.project, args.structure_only)
         if args.command == "build":
             return build(root, catalog, args.product, args.lang, args.pdf, args.epub)
+        if args.command == "collected":
+            command = [sys.executable, "scripts/collected.py", "--lang", args.lang]
+            if args.date:
+                command += ["--date", args.date]
+            return run(command, root)
         collect(root, catalog, args.project)
         return 0
     except subprocess.CalledProcessError as exc:

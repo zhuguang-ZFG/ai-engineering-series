@@ -2,7 +2,7 @@
 
 本次整合将 Agent 系列和大模型课程放进一个根仓库。源码分别保留在 `agent-books/` 与 `model-course/`，根目录提供书架、阅读路线和 `series.py`。两侧继续使用各自的构建器、依赖锁与内容判据。
 
-整合已通过 [PR #1](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/1) 合并到 `main`，提交为 [`f09bca1`](https://github.com/zhuguang-ZFG/ai-engineering-series/commit/f09bca1b363344977e557a7d8230e09c89a14916)。[完整云端构建](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268)五个任务通过、产出五份下载文件；[合并后的 main 检查](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42882355610)通过。本地最终收集 1,818 份阅读文件，入口为 `dist/index.html`。新增手绘图、提示词 0.1.1 成品、课程导出修复与下载入口见[本轮发布记录](release-20261111.md)；[首次导入验收](VERIFICATION.md)保留当时的数量与结果。
+整合已通过 [PR #1](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/1) 合并到 `main`，提交为 [`f09bca1`](https://github.com/zhuguang-ZFG/ai-engineering-series/commit/f09bca1b363344977e557a7d8230e09c89a14916)。[完整云端构建](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42880178268)五个任务通过、产出五份下载文件；[合并后的 main 检查](https://github.com/zhuguang-ZFG/ai-engineering-series/actions/runs/42882355610)通过。本地最终收集 1,818 份阅读文件，入口为 `dist/index.html`。新增手绘图、提示词 0.1.1 成品、课程导出修复与下载入口见[本轮发布记录](release-20261111.md)；[首次导入验收](VERIFICATION.md)保留当时的数量与结果。十册按卷合订为一份 PDF 与 EPUB 的做法、页数与未验证项见[十卷合订本](collected-2026-11-12.md)。
 
 | 导入内容 | 来源 | 本次基线 |
 | --- | --- | --- |
