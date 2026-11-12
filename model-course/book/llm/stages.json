@@ -61,5 +61,10 @@
     "title": "全书地图",
     "file": "book-map.svg",
     "description": "五条阶段线、30 个章号与 5 道能力门的整页阅读地图。"
+  },
+  "guide": {
+    "title": "第零章 导读：这句话在机器里走了哪几步",
+    "file": "guide.md",
+    "description": "一句话变成下一个词的六步全景，附术语表与六章依赖图。"
   }
 }

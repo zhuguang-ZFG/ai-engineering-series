@@ -288,6 +288,26 @@ tr { break-inside: avoid; }
 }
 .deep-reading .question { color: var(--ink-soft); border-left: 2pt solid var(--sand); padding-left: .8em; }
 
+/* Front guide */
+.guide { break-before: page; }
+.guide h1 { font-size: 21pt; }
+.guide > p:first-of-type { font-size: 10.5pt; color: var(--ink-soft); }
+.guide h2 {
+  margin-top: 1.8em;
+  padding-top: .55em;
+  border-top: 1pt solid var(--ink);
+  font-size: 13pt;
+}
+.guide h2::before {
+  content: "导读";
+  display: inline-block;
+  margin-right: .6em;
+  color: var(--pine);
+  font-size: 8pt;
+  letter-spacing: .12em;
+  vertical-align: .2em;
+}
+
 /* Glossary and capability gates */
 .glossary { break-before: page; }
 .glossary h1 { font-size: 21pt; }
@@ -340,7 +360,7 @@ tr { break-inside: avoid; }
   body { font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   a { color: var(--ink); }
   .book-navigation, .book-section-navigation { display: none; }
-  .chapter, .stage-plate, .stage-intro, .deep-reading, .toc, .reading-guide, .title-page, .colophon { break-before: page; }
+  .chapter, .stage-plate, .stage-intro, .guide, .deep-reading, .toc, .reading-guide, .title-page, .colophon { break-before: page; }
   .cover-page { break-before: auto; }
   .chapter-opener, h1, h2, h3 { break-after: avoid; }
   figure img { max-height: 112mm; max-width: 100%; }

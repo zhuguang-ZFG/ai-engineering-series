@@ -1,6 +1,6 @@
 {
   "version": "1.1.2",
-  "sourceHash": "6388ec55ff8b1d79bb4c2b3665757a7ff9a06e17875d213b30c72f224691bd65",
+  "sourceHash": "c269bbbced9622326b0a43ac87de4b8352b042095fdecaf0753c8f098c057538",
   "design": {
     "page": "A5",
     "bodyFace": "Noto Serif SC / Songti",
@@ -11,53 +11,54 @@
   },
   "editions": {
     "llm-course": {
-      "pdfPages": 447,
-      "outlineEntries": 489,
+      "pdfPages": 455,
+      "outlineEntries": 499,
       "chapters": 30,
       "stagePages": 10,
-      "tocEntries": 38,
+      "tocEntries": 39,
       "tocPages": 2,
       "contentsPasses": 2,
       "images": 44,
       "pages": {
-        "map": 7,
-        "S1": 9,
-        "C01": 10,
-        "C02": 18,
-        "C03": 27,
-        "C04": 37,
-        "S2": 48,
-        "C05": 50,
-        "C06": 63,
-        "C07": 77,
-        "C08": 93,
-        "C09": 110,
-        "C10": 125,
-        "S3": 138,
-        "C11": 140,
-        "C12": 155,
-        "C13": 170,
-        "C14": 181,
-        "C15": 196,
-        "C16": 205,
-        "C17": 215,
-        "S4": 228,
-        "C18": 230,
-        "C19": 249,
-        "C20": 265,
-        "C21": 284,
-        "C22": 297,
-        "C23": 314,
-        "C24": 325,
-        "C25": 339,
-        "C26": 351,
-        "S5": 366,
-        "C27": 367,
-        "C28": 380,
-        "C29": 396,
-        "C30": 413,
-        "deep-reading": 431,
-        "glossary": 439
+        "guide": 7,
+        "map": 15,
+        "S1": 17,
+        "C01": 18,
+        "C02": 26,
+        "C03": 35,
+        "C04": 45,
+        "S2": 56,
+        "C05": 58,
+        "C06": 71,
+        "C07": 85,
+        "C08": 101,
+        "C09": 118,
+        "C10": 133,
+        "S3": 146,
+        "C11": 148,
+        "C12": 163,
+        "C13": 178,
+        "C14": 189,
+        "C15": 204,
+        "C16": 213,
+        "C17": 223,
+        "S4": 236,
+        "C18": 238,
+        "C19": 257,
+        "C20": 273,
+        "C21": 292,
+        "C22": 305,
+        "C23": 322,
+        "C24": 333,
+        "C25": 347,
+        "C26": 359,
+        "S5": 374,
+        "C27": 375,
+        "C28": 388,
+        "C29": 404,
+        "C30": 421,
+        "deep-reading": 439,
+        "glossary": 447
       }
     },
     "llm-course-answers": {
@@ -105,20 +106,20 @@
   },
   "files": {
     "llm-course.pdf": {
-      "bytes": 18731806,
-      "sha256": "7840bdfd1891357afad5090ea71a3481b28a4cd13530b5dc03a8a6e1cf2b2bb2"
+      "bytes": 18880832,
+      "sha256": "3e6515d3a90fb15aa3ea987c362600c71f7edaaab97d9c9ab41e9b13ec9d3268"
     },
     "llm-course.epub": {
-      "bytes": 6788892,
-      "sha256": "e2eab96e47e94b624b1a3345195468cd4bf45c0f4aaf622e97aa04d8f598aef1"
+      "bytes": 6794416,
+      "sha256": "ff56ec1a9fe2e8a04d3606acf05665be8f2de0c7e05d8a0a8bc689f765c372c6"
     },
     "llm-course-answers.pdf": {
       "bytes": 7334171,
-      "sha256": "1409916bbfcb29b6b18fdf3c473d2ee89f6ed14dd877af75e5f4d6a54626a138"
+      "sha256": "b8375fd30c54c32166ee71ef05a83e6c0f44e686ea6eef72bc2fdf2fb89e3763"
     },
     "llm-course-answers.epub": {
-      "bytes": 6632525,
-      "sha256": "ea6f03eac66718338234f8769c6ae46ce909da16067e78ad3f05d49dd5411ec7"
+      "bytes": 6632603,
+      "sha256": "25a63f4c238f2057fd959633359920a27bef4a1a8bdbfaa7b0818a1c1fa3f6c1"
     }
   },
   "limitations": [

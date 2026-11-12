@@ -95,7 +95,12 @@ def check_pdf(name, metadata, course, answers):
         sample_text = pdf[sample - 1].get_text()
         assert "大模型：从入门到精通" in sample_text and str(sample) in sample_text, (name, "running marks")
         # The cover and part plates must not show a visible folio in the margin.
-        for page_number in [1, 7]:
+        # Plate pages are derived, not fixed: front matter may grow.
+        plate_pages = [edition["pages"][stage["id"]] - 1 for stage in course["stages"]]
+        for stage, page_number in zip(course["stages"], plate_pages):
+            plate_text = "".join(pdf[page_number - 1].get_text().split())
+            assert (stage["id"] + "/" + stage["gate"]) in plate_text, (name, "plate page moved", stage["id"], page_number)
+        for page_number in [1, *plate_pages]:
             page = pdf[page_number - 1]
             covered = any(drawing.get("fill") == (1.0, 1.0, 1.0) and drawing["rect"].height > 20 and drawing["rect"].width > 400 for drawing in page.get_drawings())
             assert covered, (name, "display page keeps running marks", page_number)

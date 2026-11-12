@@ -261,7 +261,7 @@ def toc_document(curriculum, entries, answers):
             append(item, "span", "", **{"class": "toc-dots"})
             entry["page"] = append(item, "span", "000", **{"class": "toc-page", "data-toc-id": entry["id"]})
         else:
-            item = append(listing, "li", **{"class": "toc-line" + (" toc-appendix" if entry["kind"] in {"deep", "glossary"} else "") + (" toc-map" if entry["kind"] == "map" else "")})
+            item = append(listing, "li", **{"class": "toc-line" + (" toc-appendix" if entry["kind"] in {"guide", "deep", "glossary"} else "") + (" toc-map" if entry["kind"] == "map" else "")})
             link = append(item, "a", **{"class": "toc-label", "href": entry["href"]})
             if entry["kind"] == "chapter" and not answers:
                 append(link, "span", entry["id"], **{"class": "toc-id"})
@@ -290,6 +290,10 @@ def appendix_document(web_name, element_id, class_name, page, image_names):
     clean_links(article, {"id": element_id}, "")
     keep_equations_with_explanation(article)
     return article
+
+
+def guide_document(curriculum, page, image_names):
+    return appendix_document("guide.html", "guide", "guide", page, image_names)
 
 
 def deep_reading_document(curriculum, page, image_names):
@@ -529,6 +533,15 @@ def run():
             docs["titlepage.xhtml"] = ("书名", title_page_document(curriculum, answers))
             docs["howto.xhtml"] = ("怎么读", howto_document(answers))
             if not answers:
+                guide_meta = stage_notes["guide"]
+                docs["guide.xhtml"] = (guide_meta["title"], guide_document(curriculum, page, image_names))
+                entries.append({
+                    "kind": "guide",
+                    "id": "guide",
+                    "heading": guide_meta["title"],
+                    "label": guide_meta["title"],
+                    "href": "guide.xhtml#guide",
+                })
                 docs["map.xhtml"] = (stage_notes["map"]["title"], map_document(stage_notes["map"], map_png))
                 entries.append({
                     "kind": "map",
