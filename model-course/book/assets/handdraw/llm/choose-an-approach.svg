@@ -2,8 +2,6 @@
   <title id="title">按缺口选择方案</title>
   <desc id="desc">全文够用先明确任务；缺相关新资料用检索；缺确定计算用受控工具；稳定行为问题经评测再考虑微调。</desc>
   <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
-  <defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
-  <rect width="480" height="668" fill="#fbfaf6"/><rect width="480" height="668" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="650" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 638 V659 H30 M450 659 H471 V638" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">先问：任务缺的是什么？</text>
     <path d="M26 78 Q146.72000000000003 73.4 454 77 L452.6 179 Q290.88 180.8 25 177.4 Q25.6 127 26 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5" stroke-linejoin="round"/>

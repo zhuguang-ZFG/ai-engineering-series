@@ -2,7 +2,6 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 
 import { multiheadArt, stepTour } from "./mechanism-art.mjs";
-import { artDefs, artPaper } from "./figure-frame.mjs";
 
 const out = resolve(import.meta.dirname, "../../book/assets/handdraw/llm");
 const ink = "#1f2328", paper = "#fbfaf6", wash = "#f0e9d8";
@@ -15,8 +14,6 @@ function figure(file, height, title, desc, body) {
   <title id="title">${title}</title>
   <desc id="desc">${desc}</desc>
   <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="${ink}" stroke-width="1.5"/></marker></defs>
-  ${artDefs()}
-  ${artPaper(480, height)}
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="${ink}">
     ${body.join("\n    ")}
   </g>

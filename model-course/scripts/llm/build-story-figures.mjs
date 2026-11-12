@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { artDefs, artPaper } from "./figure-frame.mjs";
 
 // Each scene has its own composition. Shared marks keep the editable drawings
 // consistent without turning the lesson into repeated text-filled boxes.
@@ -35,7 +34,7 @@ const bars=(x,y,values,labels,width=136,height=100)=>values.map((v,i)=>{
 const scenes=[];
 function scene(id,lesson,file,title,body,caption,alt,limitations,layout="IG-008",source="课程原创手绘；对应课文的教学示意，非实际模型测量。") {
   const footer=caption.map((s,i)=>t(28,591+i*36,s,24,soft)).join("");
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(alt)}</desc>${artDefs()}${artPaper(480,640)}<g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${t(27,48,title,30)}${p("M28 67 Q232 61 451 66",accent,4)}${body}${line(28,572,451,572,rule)}${footer}</g></svg>\n`;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(alt)}</desc><g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${t(27,48,title,30)}${p("M28 67 Q232 61 451 66",accent,4)}${body}${line(28,572,451,572,rule)}${footer}</g></svg>\n`;
   scenes.push({id,lesson,file,title,svg,purpose:title,alt,source,limitations,layout,mobile:"480×640 可编辑 SVG；最小 24px 标签在 327px 图宽下约 16.4px，正文保留同等解释。"});
 }
 

@@ -3,7 +3,6 @@ import { resolve, join } from "node:path";
 import assert from "node:assert/strict";
 
 import { attentionRowArt, transformerBlockArt, gradientStepArt, stepTour } from "./mechanism-art.mjs";
-import { artDefs, artPaper } from "./figure-frame.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const checking = process.argv.includes("--check");
@@ -16,7 +15,7 @@ const paper = (x, y, w, height, fill = "#fffdf8") => `<path d="M${x} ${y + 3} Q$
 const down = (x, y, length) => path(`M${x} ${y} Q${x - 3} ${y + length / 2} ${x} ${y + length} M${x - 9} ${y + length - 11} L${x} ${y + length} L${x + 9} ${y + length - 11}`, "#B4472F");
 const underline = (x, y, w) => path(`M${x} ${y} Q${x + w / 2} ${y - 5} ${x + w} ${y - 1}`, "#B4472F");
 function svg(title, desc, body, height = 800) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="${height}" viewBox="0 0 480 ${height}" role="img" aria-labelledby="title desc"><title id="title">${h(title)}</title><desc id="desc">${h(desc)}</desc>${artDefs()}${artPaper(480, height)}<g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${text(28, 48, title, 30)}${underline(28, 66, 420)}${body}</g></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="${height}" viewBox="0 0 480 ${height}" role="img" aria-labelledby="title desc"><title id="title">${h(title)}</title><desc id="desc">${h(desc)}</desc><g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${text(28, 48, title, 30)}${underline(28, 66, 420)}${body}</g></svg>\n`;
 }
 const figures = [
   ["contextual-word.svg", svg("同一个编号，两段上下文", "人工 ID 42 的苹果从同一个初始向量出发，在切成小块与开发软件的不同上下文中得到不同示意表示。", `${paper(100, 98, 280, 116)}${text(168, 137, `“${vector.token.text}”`)}${text(140, 176, `人工 ID ${vector.token.id}`)}${down(240, 221, 36)}${text(54, 297, `初始向量 [${vector.token.initial.join(", ")}]`)}${path("M240 316 L240 343 Q130 342 121 371 M111 360 L121 371 L131 360 M240 343 Q350 342 360 371 M350 360 L360 371 L370 360", "#B4472F")}${paper(28, 389, 195, 124)}${paper(256, 388, 195, 124)}${text(48, 430, "切成小块")}${text(276, 430, "开发软件")}${text(48, 478, "水果语境")}${text(276, 478, "公司语境")}${down(125, 522, 36)}${down(354, 522, 36)}${text(28, 604, "[0.9,0.1,0.1]")}${text(256, 604, "[0.1,0.3,0.95]", 24)}${underline(30, 618, 190)}${underline(258, 618, 190)}${text(40, 677, "查表起点相同，语境结果可不同")}${text(40, 739, "数字是人工表，不是网络实测", 26, "#57606a")}`)],
