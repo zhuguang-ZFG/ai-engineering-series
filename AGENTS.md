@@ -23,6 +23,7 @@ python series.py check --project model-course
 python series.py build --product prompt --lang zh --pdf --epub
 python series.py build --product llm --lang zh --pdf --epub
 python series.py collect
+python series.py collected
 ```
 
 按修改范围执行对应检查。提交整合改动前运行 `python series.py check --project all`；结构检查不能代替内容、程序和成品检查。安装依赖与专项验证沿用两侧 README。根命令负责选择项目和传递参数，不另写一套内容判据。

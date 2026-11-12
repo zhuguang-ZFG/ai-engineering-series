@@ -120,6 +120,15 @@ class SeriesTests(unittest.TestCase):
             self.assertEqual(series.build(self.root, self.catalog, "llm", "en"), 2)
         runner.assert_not_called()
 
+    def test_collected_route_passes_language_and_date_without_shell(self):
+        with patch.object(series, "run", return_value=0) as runner:
+            self.assertEqual(series.main(["collected", "--lang", "zh",
+                                          "--date", "2026-11-12"], root=self.root), 0)
+        runner.assert_called_once_with([sys.executable, "scripts/collected.py",
+                                        "--lang", "zh", "--date", "2026-11-12"], self.root)
+        with patch.object(series, "run", return_value=7):
+            self.assertEqual(series.main(["collected"], root=self.root), 7)
+
     def test_run_preserves_exit_code_without_shell(self):
         completed = subprocess.CompletedProcess(["command"], 23)
         with patch.dict(os.environ, {"PATH": "original-path", "PYTHONUTF8": "0", "SERIES_TEST_MARKER": "inherited"}):

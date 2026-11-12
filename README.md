@@ -28,9 +28,12 @@ python series.py check --project all
 python series.py build --product prompt --lang zh --pdf --epub
 python series.py build --product llm --lang zh --pdf --epub
 python series.py collect
+python series.py collected
 ```
 
 `list` 列出可构建的分册。`--structure-only` 核对整合结构；完整检查会调用两侧原有检查。命令使用已经安装的 Python 和 npm，依赖按两侧的锁文件分别安装，步骤见 [Agent 书籍](agent-books/README.md)与[大模型课程](model-course/README.md)。课程命令还需在 `PATH` 中找到 `python`。PDF 导出另需本机 Chromium 或 Chrome、中文字体；模型推理、训练与 OCR 的环境按具体章节准备。
+
+`collected` 把十册已发布成品按卷合订为一份 PDF 与一份 EPUB：卷首、总目和每卷分隔页由合订命令生成，卷内正文保留各册原有版式、页码和目录层级。成品写入 `dist/yuyu-collected-zh.pdf`、`dist/yuyu-collected-zh.epub`，页数与来源摘要写入 `dist/yuyu-collected-zh.json`。该命令只读取两侧成品，不改写源稿；缺任何一册会报出待构建的书名。
 
 源文件分别位于 `agent-books/` 和 `model-course/`。根 `index.html` 提供随仓文件的入口，在干净克隆中也可打开。两侧构建器继续管理原有输出，`collect` 将可用阅读成品汇集到根 `dist/agent-books/` 和 `dist/model-course/`，生成完整离线书架 `dist/index.html`，文件摘要写入 `dist/manifest.json`。课程导出器同时生成正文与答案册的 PDF、EPUB；给 `llm` 指定 `--pdf` 或 `--epub` 任意一个参数都会生成两种格式。直接阅读 Markdown 无须先构建；阅读已有 PDF、EPUB 也无须安装制作工具。
 

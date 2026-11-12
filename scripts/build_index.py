@@ -60,6 +60,15 @@ def build(*, distribution=False):
         available = "".join(filter(None, links)) or '<span class="empty">尚未生成本册阅读文件</span>'
         cards.append(f'<article><div><h2>{escape(book["title"])}</h2><div class="meta">{escape(kind)}</div></div><div class="formats">{available}</div></article>')
 
+    if distribution:
+        bound = [link("yuyu-collected-zh.pdf", "合订本 PDF"),
+                 link("yuyu-collected-zh.epub", "合订本 EPUB")]
+        bound = [entry for entry in bound if entry]
+        if bound:
+            cards.insert(0, '<article><div><h2>大模型与智能体工程 · 十卷合订本</h2>'
+                            '<div class="meta">十册按卷合一 · 卷首、总目与卷分隔页为合订本新增</div></div>'
+                            f'<div class="formats">{"".join(bound)}</div></article>')
+
     navigation = "" if distribution else '<nav class="nav" aria-label="项目导航">' + "".join([link("README.md", "项目说明"), link("docs/reading-routes.md", "跨书阅读路线"), link("docs/integration/README.md", "整合记录"), link("LICENSES.md", "来源与许可")]) + "</nav>"
     output_note = "" if distribution else "<p>已构建的 HTML、PDF、EPUB 和练习包可用 <code>python series.py collect</code> 汇集，阅读入口是 <code>dist/index.html</code>。</p>"
     text = f'''<!doctype html>
