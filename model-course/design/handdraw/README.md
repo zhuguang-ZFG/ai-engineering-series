@@ -46,8 +46,8 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 
 | 资产 | 现状 | 改造稿 |
 | --- | --- | --- |
-| 书封面 `book/assets/cover.svg` / `cover.webp` | ✅ 手绘 + 已对齐 `design/system` token（卡面 `#fffdf8`、角标 `#008635`+纸色字 4.51:1/APCA 74、柿子橙苹果）；webp 由 `render_book_cover.py` 重出 | `covers.md` 第 0 组（已落地） |
-| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ composition 已手绘皮肤（b21a488）并按 composition 重截（c7715ea）；CTA 改 `#008635` 底 + 纸色字（原白字压 `#1f883d` 实测 4.33:1 不达标） | `render_ep01_covers.py` |
+| 书封面 `book/assets/cover.svg` / `cover.webp` | ✅ 手绘 + 已对齐 `design/system` token（卡面 `#fffdf8`、角标 `#B4472F`+纸色字 4.51:1/APCA 74、柿子橙苹果）；webp 由 `render_book_cover.py` 重出 | `covers.md` 第 0 组（已落地） |
+| EP.01 横/竖封面 `deliverables/{landscape,vertical}-cover.webp` | ✅ composition 已手绘皮肤（b21a488）并按 composition 重截（c7715ea）；CTA 改 `#B4472F` 底 + 纸色字（原白字压 `#B4472F` 实测 4.33:1 不达标） | `render_ep01_covers.py` |
 | FA-013 真出图 key visual `covers/cover-art-fa013.webp` | ✅ 已出图（1376×768、画面无字；`prompt_style.py --style FA-013 --color C-26` 的确定性提示词） | Phase G 落地页/deck hero 可复用；带字封面仍以代码绘制为准（中文排版可控） |
 | EP.02/03/04 封面 `deliverables/ep0X-cover.webp` | ✅ 已换成手绘稿（2026-10-31） | `covers.md` 第 3–5 组 → 实现在 `covers/ep0X.html` |
 | 书籍正文知识图解 | 已用**手写 SVG** 落地 18 张入正文，另有 1 张 stack-diagram 工程图（`book/assets/stacks/`）入正文（第一批 6 张见 `book-illustrations.md` 上文，第二批、第三批各 6 张见对应小节）；点位扫描已跑完：192 节 → 68 个候选（`renders/points-scan.txt`）；出图前由 `render_figures.py` 用 `tokens.css` 白名单拦越界色与 accent 小字 | Phase C 继续：按 gap 从大到小逐批出图；技术栈类小节改走 stack-diagram |
@@ -68,7 +68,7 @@ python skills/handdraw-style-prompter/scripts/resolve_reference.py --model gpt-i
 ## 已落地：EP.02–EP.04 封面改造成手绘（2026-10-31）
 
 封面不再依赖生图模型，改成**代码画**：`covers/ep0X.html` + 共用 `covers/cover.css`，视觉 token 与视频手绘层完全一致
-（纸面 `#fbfaf6`、纸纹 24 px 点阵、墨线 `#1f2328`、marker `#d3efd9`、硬阴影、手绘地面线、波形下划线），
+（纸面 `#fbfaf6`、纸纹 24 px 点阵、墨线 `#1f2328`、marker `#f0e9d8`、硬阴影、手绘地面线、波形下划线），
 每个 EP 一套独立隐喻：打字机写诗 / 拖行李箱搬进文件夹房子 / 从笔记本跳进云再落到手机。
 
 ```bash

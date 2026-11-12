@@ -2,12 +2,12 @@
 :root {
     --paper: #fbfaf6;
     --ink: #1f2328;
-    --green: #1f883d;
+    --green: #B4472F;
     --green-mid: #3fb950;
-    --marker: #d3efd9;
+    --marker: #f0e9d8;
     --card: #fffdf8;
     --muted: #57606a;
-    --persimmon: #e2601f;
+    --persimmon: #B4472F;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; height: 100%; overflow: hidden; }

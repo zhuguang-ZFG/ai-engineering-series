@@ -10,7 +10,7 @@
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <text x="72" y="80" fill="#1f2328" font-size="34" font-weight="700">状态管理：一处记账，多处对账</text>
     <text x="72" y="120" fill="#57606a" font-size="22">购物车只记在一个地方，谁要用谁来对账</text>
-    <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
     <!-- 组件列：三个都惦记着同一份购物车 -->
     <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round" fill="#fffdf8" filter="url(#card-shadow)">
@@ -25,7 +25,7 @@
       <circle cx="103" cy="328" r="2.5"/><circle cx="113" cy="328" r="2.5"/>
       <rect x="90" y="409" width="24" height="8" rx="4"/>
     </g>
-    <circle cx="114" cy="405" r="5.5" fill="#e2601f" stroke="#1f2328" stroke-width="2.5"/>
+    <circle cx="114" cy="405" r="5.5" fill="#B4472F" stroke="#1f2328" stroke-width="2.5"/>
     <g fill="#1f2328" font-size="21" font-weight="700">
       <text x="126" y="224">商品详情页</text>
       <text x="126" y="314">购物车页面</text>
@@ -44,14 +44,14 @@
     <g fill="#1f2328">
       <path d="M530 219l-15-8v16z"/><path d="M530 309l-15-8v16z"/><path d="M530 399l-15-8v16z"/>
     </g>
-    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" fill="none">
+    <g stroke="#B4472F" stroke-width="4" stroke-linecap="round" fill="none">
       <path d="M530 241H278M530 331H278M530 421H278"/>
     </g>
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <path d="M270 241l15-8v16z"/><path d="M270 331l15-8v16z"/><path d="M270 421l15-8v16z"/>
     </g>
     <text x="330" y="300" fill="#1f2328" font-size="19">意图上送（Events）</text>
-    <text x="330" y="358" fill="#008635" font-size="19">状态下发（Props）</text>
+    <text x="330" y="358" fill="#B4472F" font-size="19">状态下发（Props）</text>
 
     <!-- 账本 = 全局仓库 -->
     <text x="655" y="180" fill="#57606a" font-size="20" text-anchor="middle">所有组件从这里读写数据</text>
@@ -61,7 +61,7 @@
     </g>
     <rect x="530" y="200" width="250" height="250" rx="16" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
     <text x="655" y="240" fill="#1f2328" font-size="22" font-weight="700" text-anchor="middle">仓库 Store</text>
-    <g fill="#d3efd9">
+    <g fill="#f0e9d8">
       <rect x="548" y="252" width="214" height="32" rx="6"/>
       <rect x="548" y="290" width="214" height="32" rx="6"/>
     </g>
@@ -69,7 +69,7 @@
       <text x="655" y="274">购物车 items</text>
       <text x="655" y="312">用户信息 userInfo</text>
     </g>
-    <text x="655" y="352" fill="#008635" font-size="20" font-weight="700" text-anchor="middle">只此一份</text>
+    <text x="655" y="352" fill="#B4472F" font-size="20" font-weight="700" text-anchor="middle">只此一份</text>
     <path d="M548 366h214" stroke="#e6e1d4" stroke-width="3" stroke-linecap="round"/>
     <g fill="#57606a" font-size="19" text-anchor="middle">
       <text x="655" y="392">Pinia · Vue</text>
@@ -78,7 +78,7 @@
 
     <!-- 反面：各组件自己记 -->
     <rect x="820" y="190" width="308" height="310" rx="14" fill="#e6e1d4" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <path d="M888 206l18 18M906 206l-18 18" stroke="#e2601f" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M888 206l18 18M906 206l-18 18" stroke="#B4472F" stroke-width="4" stroke-linecap="round" fill="none"/>
     <text x="920" y="224" fill="#1f2328" font-size="22" font-weight="700">各组件自己记</text>
     <g fill="#fffdf8" stroke="#1f2328" stroke-width="3">
       <rect x="848" y="244" width="252" height="50" rx="8"/>
@@ -96,16 +96,16 @@
       <text x="1086" y="400">头部导航</text>
     </g>
     <text x="974" y="444" fill="#1f2328" font-size="20" text-anchor="middle">同一份数据抄了三份</text>
-    <text x="974" y="476" fill="#c74c00" font-size="20" font-weight="700" text-anchor="middle">改一处，漏两处</text>
+    <text x="974" y="476" fill="#B4472F" font-size="20" font-weight="700" text-anchor="middle">改一处，漏两处</text>
 
     <!-- 什么时候才需要仓库 -->
     <text x="80" y="540" fill="#1f2328" font-size="22" font-weight="700">什么时候才需要仓库？</text>
     <g stroke="#1f2328" stroke-width="4" stroke-linejoin="round">
       <rect x="80" y="558" width="336" height="92" rx="16" fill="#fffdf8" filter="url(#card-shadow)"/>
       <rect x="432" y="558" width="336" height="92" rx="10" fill="#fffdf8" filter="url(#card-shadow)"/>
-      <rect x="784" y="558" width="344" height="92" rx="17" fill="#f1f7f2" filter="url(#card-shadow)"/>
+      <rect x="784" y="558" width="344" height="92" rx="17" fill="#f7f3e8" filter="url(#card-shadow)"/>
     </g>
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <circle cx="112" cy="590" r="16"/><circle cx="464" cy="590" r="16"/><circle cx="816" cy="590" r="16"/>
     </g>
     <g fill="#fbfaf6" font-size="19" font-weight="700" text-anchor="middle">
@@ -123,7 +123,7 @@
     </g>
 
     <!-- 结论 -->
-    <rect x="72" y="674" width="1056" height="78" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <rect x="72" y="674" width="1056" height="78" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
     <text x="600" y="706" fill="#1f2328" font-size="22" font-weight="700" text-anchor="middle">单一数据源：同一份数据只在一个地方存储</text>
     <text x="600" y="736" fill="#1f2328" font-size="20" text-anchor="middle">从简单开始，按需升级：先 props / events，共享的组件多了再上仓库</text>
   </g>

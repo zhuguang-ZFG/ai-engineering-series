@@ -9,10 +9,10 @@
 
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">MCP 连工具，A2A 连 Agent</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">就像互联网需要 HTTP，Agent 也要标准化的通信协议</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <!-- 连接线：左侧 MCP 用实线，右侧 A2A 用虚线 -->
-  <g fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round">
+  <g fill="none" stroke="#B4472F" stroke-width="4" stroke-linecap="round">
     <path d="M400 319Q444 326 472 404"/>
     <path d="M400 451H472"/>
     <path d="M400 583Q444 576 472 498"/>
@@ -24,10 +24,10 @@
   </g>
 
   <!-- 两个分组的标题条 -->
-  <rect x="72" y="166" width="330" height="78" rx="18" fill="#d3efd9" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+  <rect x="72" y="166" width="330" height="78" rx="18" fill="#f0e9d8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
   <text x="96" y="200" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700">第 2 层 · MCP</text>
   <text x="96" y="230" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19">AI 如何连接外部工具和数据源</text>
-  <rect x="798" y="166" width="330" height="78" rx="18" fill="#f1f7f2" stroke="#1f2328" stroke-width="3" filter="url(#card-shadow)"/>
+  <rect x="798" y="166" width="330" height="78" rx="18" fill="#f7f3e8" stroke="#1f2328" stroke-width="3" filter="url(#card-shadow)"/>
   <text x="822" y="200" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="23" font-weight="700">第 3 层 · A2A</text>
   <text x="822" y="230" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="19">Agent 之间如何协作通信</text>
 
@@ -40,17 +40,17 @@
   <!-- MCP 的三大核心能力 -->
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <rect x="72" y="260" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="292" fill="#008635" font-size="22" font-weight="700">工具 Tools</text>
+    <text x="96" y="292" fill="#B4472F" font-size="22" font-weight="700">工具 Tools</text>
     <text x="96" y="324" fill="#57606a" font-size="19">AI 可以调用的功能</text>
     <text x="96" y="352" fill="#57606a" font-size="19">查询天气、发送邮件</text>
 
     <rect x="72" y="392" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="424" fill="#008635" font-size="22" font-weight="700">资源 Resources</text>
+    <text x="96" y="424" fill="#B4472F" font-size="22" font-weight="700">资源 Resources</text>
     <text x="96" y="456" fill="#57606a" font-size="19">AI 可以读取的数据</text>
     <text x="96" y="484" fill="#57606a" font-size="19">文件内容、数据库记录</text>
 
     <rect x="72" y="524" width="330" height="118" rx="18" fill="#fffdf8" stroke="#1f2328" stroke-width="4" filter="url(#card-shadow)"/>
-    <text x="96" y="556" fill="#008635" font-size="22" font-weight="700">提示 Prompts</text>
+    <text x="96" y="556" fill="#B4472F" font-size="22" font-weight="700">提示 Prompts</text>
     <text x="96" y="588" fill="#57606a" font-size="19">预定义的提示模板</text>
     <text x="96" y="616" fill="#57606a" font-size="19">代码审查模板、写作模板</text>
   </g>
@@ -74,8 +74,8 @@
   </g>
 
   <!-- 图例：两种线型分别对应哪个协议 -->
-  <rect x="72" y="666" width="1056" height="96" rx="20" fill="#f1f7f2" stroke="#1f883d" stroke-width="3"/>
-  <path d="M104 689H164" fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round"/>
+  <rect x="72" y="666" width="1056" height="96" rx="20" fill="#f7f3e8" stroke="#B4472F" stroke-width="3"/>
+  <path d="M104 689H164" fill="none" stroke="#B4472F" stroke-width="4" stroke-linecap="round"/>
   <path d="M104 727H164" fill="none" stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 12"/>
   <g font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="20" fill="#1f2328">
     <text x="180" y="696"><tspan font-weight="700">MCP（Anthropic · 2024.11）</tspan>—— AI 与工具之间的通信 · 类比 USB-C 接口 · Client-Server</text>

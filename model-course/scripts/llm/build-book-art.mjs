@@ -13,9 +13,9 @@ const ink = "#1f2328";
 const soft = "#6b6457";
 const paper = "#f7f2e7";
 const card = "#fdfaf1";
-const pine = "#1f5c45";
-const sage = "#d9e6d7";
-const clay = "#b8502f";
+const pine = "#1f2328";
+const sage = "#e9e2d0";
+const clay = "#B4472F";
 const sand = "#e8ddc7";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const text = (x, y, value, size = 22, color = ink, anchor = "start", family = "'Noto Serif SC','Songti SC','SimSun',serif", weight = 400, spacing = 0) =>
@@ -49,7 +49,7 @@ function stagePlate(n, gate, title, desc, motif) {
 }
 
 // S1: three offset sheets, one checked claim, and a return arrow.
-const s1 = stagePlate(1, "K1", "S1 · 会使用", "三张错开的纸页代表材料、报告与核对；绿色勾只落在能回到原句的一格上，虚线箭头表示回到原文。",
+const s1 = stagePlate(1, "K1", "S1 · 会使用", "三张错开的纸页代表材料、报告与核对；朱砂勾只落在能回到原句的一格上，虚线箭头表示回到原文。",
   `${[0, 1, 2].map(i => `<g transform="translate(${i * 18} ${i * 26}) rotate(${i * 1.4} 200 260)"><rect x="112" y="186" width="224" height="188" rx="6" fill="${i === 2 ? card : sand}" stroke="${ink}" stroke-width="1.8" opacity="${0.66 + i * 0.17}"/>${i === 2 ? [0, 1, 2].map(r => line(140, 244 + r * 30, 300 - r * 22, 244 + r * 30, ink, 1.2, "1 7")).join("") : ""}</g>`).join("")}` +
   `<path d="M148 258 q34 10 58 -2" fill="none" stroke="${pine}" stroke-width="10" stroke-linecap="round" opacity=".55"/>` +
   path("M300 296 l16 17 l34 -44", pine, 4) +

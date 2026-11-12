@@ -6,27 +6,27 @@ import { artDefs, artPaper } from "./figure-frame.mjs";
 // Publication drawings: exact data geometry, restrained hand-drawn contours.
 // Labels stay editable; all four compositions fit the existing 480 × 640 page.
 const ink = "#1f2328", soft = "#57606a", paper = "#fbfaf6";
-const green = "#1f883d", wash = "#d3efd9", rule = "#e6e1d4";
+const accent = "#B4472F", wash = "#f0e9d8", rule = "#e6e1d4";
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const t = (x, y, label, size = 26, anchor = "start", color = ink) => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="${anchor}" fill="${color}">${esc(label)}</text>`;
 const p = (d, color = ink, width = 2.5, fill = "none", dash = "") => `<path d="${d}" fill="${fill}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ""}/>`;
 const rect = (x, y, w, h, fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>`;
 const panel = (x, y, w, h, fill = paper) => p(`M${x + 3} ${y + 1} Q${x + w / 2} ${y - 2} ${x + w} ${y + 2} L${x + w - 1} ${y + h - 1} Q${x + w / 2} ${y + h + 2} ${x} ${y + h - 2}Z`, ink, 2, fill);
-const arrow = (d, color = green) => p(d, color, 2.8);
-const down = (x, y1, y2, color = green) => arrow(`M${x} ${y1} Q${x - 1.5} ${(y1 + y2) / 2} ${x} ${y2} M${x - 6} ${y2 - 8} L${x} ${y2} L${x + 6} ${y2 - 8}`, color);
+const arrow = (d, color = accent) => p(d, color, 2.8);
+const down = (x, y1, y2, color = accent) => arrow(`M${x} ${y1} Q${x - 1.5} ${(y1 + y2) / 2} ${x} ${y2} M${x - 6} ${y2 - 8} L${x} ${y2} L${x + 6} ${y2 - 8}`, color);
 const plus = (x, y) => `<circle cx="${x}" cy="${y}" r="17" fill="${paper}" stroke="${ink}" stroke-width="2.5"/>` + p(`M${x - 7} ${y} H${x + 7} M${x} ${y - 7} V${y + 7}`, ink, 2.5);
 const f = value => value.toFixed(4).replace("-", "−");
-// Teaching animation: a green outline tours the steps in a loop. The base
+// Teaching animation: a accent outline tours the steps in a loop. The base
 // drawing stays fully visible (SMIL only adds the highlight), so print, EPUB
 // and SMIL-less readers keep the complete static figure.
 export function stepTour(steps, stepDur = 2.6) {
   const dur = steps.length * stepDur;
   return `<g pointer-events="none">${steps.map(([x, y, w, h], i) =>
-    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${green}" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="${dur}s" begin="${(i * stepDur).toFixed(2)}s" repeatCount="indefinite"/></rect>`
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${accent}" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="${dur}s" begin="${(i * stepDur).toFixed(2)}s" repeatCount="indefinite"/></rect>`
   ).join("")}</g>`;
 }
 function frame(title, desc, body) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc>${artDefs()}${artPaper(480, 640)}<g font-family="Microsoft YaHei,sans-serif">${t(28, 43, title, 30)}${p("M28 59 Q132 55 226 59", green, 4)}${body}${p("M28 583 Q240 581 452 583", rule, 1.5)}</g></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc>${artDefs()}${artPaper(480, 640)}<g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">${t(28, 43, title, 30)}${p("M28 59 Q132 55 226 59", accent, 4)}${body}${p("M28 583 Q240 581 452 583", rule, 1.5)}</g></svg>\n`;
 }
 
 // Same unit-projection example as C07, distinct from the legacy L04 fixture.

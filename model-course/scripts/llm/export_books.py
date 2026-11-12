@@ -214,15 +214,15 @@ def cover_svg():
     return '''<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1260" viewBox="0 0 900 1260" role="img" aria-labelledby="title desc">
   <title id="title">把大模型拆开看</title><desc id="desc">十二课手绘图解，从文字、生成和训练，走到检索、工具与资料核验。</desc>
   <rect width="900" height="1260" fill="#fbfaf6"/>
-  <g fill="#1f2328" font-family="Microsoft YaHei,sans-serif">
+  <g fill="#1f2328" font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif">
     <text x="78" y="110" font-size="26">VIBE CODING 101 · 原理与应用</text>
     <text x="72" y="263" font-size="74">把大模型</text><text x="72" y="367" font-size="90">拆开看</text>
-    <path d="M74 398 Q252 384 520 397 Q580 403 612 394" fill="none" stroke="#1f883d" stroke-width="8" stroke-linecap="round"/>
+    <path d="M74 398 Q252 384 520 397 Q580 403 612 394" fill="none" stroke="#B4472F" stroke-width="8" stroke-linecap="round"/>
     <text x="78" y="466" font-size="32">从一句话，到能核对的资料助手</text>
     <path d="M94 575 L752 566 L784 594 L779 919 L86 925 Z M752 566 L750 603 L784 594" fill="#fffdf8" stroke="#1f2328" stroke-width="4"/>
     <path d="M126 626 Q430 621 738 630 M126 687 L733 683 M126 748 Q430 745 731 752 M126 815 L730 810 M126 878 L733 874" fill="none" stroke="#e6e1d4" stroke-width="3"/>
     <text x="142" y="666" font-size="33">文字 → 向量 → 候选 → 接下一步</text>
-    <path d="M145 719 L688 715 L699 766 L141 771 Z" fill="#d3efd9"/>
+    <path d="M145 719 L688 715 L699 766 L141 771 Z" fill="#f0e9d8"/>
     <text x="158" y="757" font-size="33">预测 → 比较目标 → 调整参数</text>
     <text x="142" y="846" font-size="33">找材料 → 用工具 → 回查依据</text>
     <path d="M124 951 Q384 980 732 950" fill="none" stroke="#1f2328" stroke-width="3"/>

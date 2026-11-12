@@ -115,9 +115,9 @@ export const ROLE_FLOORS = {
 
 export const TOKENS = {
   paper: '#fbfaf6', card: '#fffdf8', ink: '#1f2328', inkSoft: '#57606a',
-  marker: '#d3efd9', markerWash: '#f1f7f2', rule: '#e6e1d4',
-  accent: '#1f883d', persimmon: '#e2601f',
-  accentInk: '#008635', persimmonInk: '#c74c00', accentBlock: '#008635', persimmonBlock: '#c74c00',
+  marker: '#f0e9d8', markerWash: '#f7f3e8', rule: '#e6e1d4',
+  accent: '#B4472F', persimmon: '#B4472F',
+  accentInk: '#B4472F', persimmonInk: '#B4472F', accentBlock: '#B4472F', persimmonBlock: '#B4472F',
 }
 
 // 必须达标（PASS）的角色对——设计系统的可读性地基
@@ -166,8 +166,8 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
   console.log('\nOKLCH 参考：')
   for (const [k, hex] of Object.entries(TOKENS)) { const o = hexToOklch(hex); console.log(`  ${k.padEnd(12)} ${hex}  L=${(o.l * 100).toFixed(1)}% C=${o.c.toFixed(4)} H=${o.h.toFixed(1)}`) }
   console.log('\n重算派生 token（若手绘原色改动后需再达标）：')
-  console.log('  accent-ink    =', descend(148.2, 0.552, (hex) => passes(hex, TOKENS.paper, ROLE_FLOORS.accentInk) && passes(hex, TOKENS.card, ROLE_FLOORS.accentInk)))
-  console.log('  persimmon-ink =', descend(42.9, 0.645, (hex) => passes(hex, TOKENS.paper, ROLE_FLOORS.accentInk)))
+  console.log('  accent-ink    =', descend(34.0, 0.62, (hex) => passes(hex, TOKENS.paper, ROLE_FLOORS.accentInk) && passes(hex, TOKENS.card, ROLE_FLOORS.accentInk)))
+  console.log('  persimmon-ink =', descend(34.0, 0.62, (hex) => passes(hex, TOKENS.paper, ROLE_FLOORS.accentInk)))
   process.exit(bad ? 1 : 0)
 }
 

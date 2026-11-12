@@ -47,7 +47,7 @@
       "file": "attention-mask.svg",
       "purpose": "下三角可见范围与第二行汇总。",
       "source": "Course-authored SVG; S05–S08 and labelled experiment fixtures.",
-      "limitations": "教学矩阵，绿色表示可见而非权重大小。",
+      "limitations": "教学矩阵，红色表示可见而非权重大小。",
       "alt": "四个位置构成下三角因果掩码；第二行只汇总前两个位置。",
       "mobile": "480 宽纵向图，最小 26px 标签在 327px 显示宽度下约 17.7px；完整解释另见正文。"
     },

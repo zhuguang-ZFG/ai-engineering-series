@@ -4,17 +4,17 @@
   <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1f2328" stroke-width="1.5"/></marker></defs>
   <defs><pattern id="figure-grain" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".7" fill="#1f2328" opacity=".16"/><circle cx="12" cy="13" r=".55" fill="#1f2328" opacity=".11"/></pattern></defs>
   <rect width="480" height="688" fill="#fbfaf6"/><rect width="480" height="688" fill="url(#figure-grain)" opacity=".34"/><rect x="9" y="9" width="462" height="670" fill="none" stroke="#1f2328" stroke-width=".8" opacity=".22"/><path d="M9 30 V9 H30 M450 9 H471 V30 M9 658 V679 H30 M450 679 H471 V658" fill="none" stroke="#1f2328" stroke-width="1.2" opacity=".38"/>
-  <g font-family="'Microsoft YaHei',sans-serif" fill="#1f2328">
+  <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#1f2328">
     <text x="24" y="40" font-size="28">从一叠文件，取回几段依据</text>
     <path d="M50 70 L420 71 Q424 72 424 78 L423 122 Q422 126 416 126 L46 125 Q42 124 42 118 L43 76 Q44 70 50 70 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
     <path d="M42 78 L412 79 Q416 80 416 86 L415 130 Q414 134 408 134 L38 133 Q34 132 34 126 L35 84 Q36 78 42 78 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
-    <path d="M34 86 L404 87 Q408 88 408 94 L407 138 Q406 142 400 142 L30 141 Q26 140 26 134 L27 92 Q28 86 34 86 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M34 86 L404 87 Q408 88 408 94 L407 138 Q406 142 400 142 L30 141 Q26 140 26 134 L27 92 Q28 86 34 86 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="46" y="124" font-size="26">文件 + 文档编号 + 版本</text>
     <path d="M240 152 Q238 166 240 180" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
     <path d="M34 192 L448 193 Q452 194 452 200 L451 252 Q450 256 444 256 L30 255 Q26 254 26 248 L27 198 Q28 192 34 192 Z" fill="#fbfaf6" stroke="#1f2328" stroke-width="2.5"/>
     <text x="46" y="234" font-size="26">切成片段，保留原文位置</text>
     <path d="M240 266 Q238 280 240 294" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M34 306 L448 307 Q452 308 452 314 L451 398 Q450 402 444 402 L30 401 Q26 400 26 394 L27 312 Q28 306 34 306 Z" fill="#d3efd9" stroke="#1f2328" stroke-width="2.5"/>
+    <path d="M34 306 L448 307 Q452 308 452 314 L451 398 Q450 402 444 402 L30 401 Q26 400 26 394 L27 312 Q28 306 34 306 Z" fill="#f0e9d8" stroke="#1f2328" stroke-width="2.5"/>
     <text x="46" y="344" font-size="26">查询 → 检索 → 取回</text>
     <text x="46" y="382" font-size="26">无命中：停止，不补零分项</text>
     <path d="M240 412 Q238 426 240 440" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
@@ -24,6 +24,6 @@
     <path d="M240 548 Q238 562 240 576" fill="none" stroke="#1f2328" stroke-width="2.5" marker-end="url(#arrow)"/>
     <text x="26" y="616" font-size="26">带出处回答；版本仍需核对</text>
     <text x="26" y="662" font-size="26">检索没有把文件训练进参数</text>
-    <g pointer-events="none"><rect x="22" y="66" width="432" height="80" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="22" y="188" width="434" height="72" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="22" y="302" width="434" height="104" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="22" y="448" width="434" height="94" rx="10" fill="none" stroke="#1f883d" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
+    <g pointer-events="none"><rect x="22" y="66" width="432" height="80" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="22" y="188" width="434" height="72" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="2.60s" repeatCount="indefinite"/></rect><rect x="22" y="302" width="434" height="104" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="5.20s" repeatCount="indefinite"/></rect><rect x="22" y="448" width="434" height="94" rx="10" fill="none" stroke="#B4472F" stroke-width="4" opacity="0"><animate attributeName="opacity" values="0;0.85;0.85;0" keyTimes="0;0.12;0.8;1" dur="10.4s" begin="7.80s" repeatCount="indefinite"/></rect></g>
   </g>
 </svg>

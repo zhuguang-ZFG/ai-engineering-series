@@ -58,7 +58,7 @@
 </ul>
 <p>水上升、茶下降，损失从 0.693 降到 0.513。这是<strong>一次</strong>更新、一个训练对的结果；真实训练会对很多对求平均，再更新。</p>
 <p>这里特意把两个分数本身当成可训练参数，所以可以直接减去梯度。Transformer 的分数由前面许多参数计算出来，通常不会把本次分数保存成待训练的词表；下一节沿链式法则把分数上的梯度传回实际参数。</p>
-<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="一步训练，两个分数怎样动"><figcaption>图：上下两条总宽相同，浅绿的“水”从 50.0% 扩到 59.9%，其余是“茶”。中间先算概率减目标，再减去 0.4 倍梯度；水的梯度是负数，减去它会抬高水的分数。数值来自人工两候选例子的实际计算。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/gradient-step.svg" alt="一步训练，两个分数怎样动"><figcaption>图：上下两条总宽相同，浅色的“水”从 50.0% 扩到 59.9%，其余是“茶”。中间先算概率减目标，再减去 0.4 倍梯度；水的梯度是负数，减去它会抬高水的分数。数值来自人工两候选例子的实际计算。</figcaption></figure>
 <h2 id="C09-section-69d927cb7f" tabindex="-1">深层网络怎样找到各层该改多少</h2>
 <p>上面的分数只有两个，可以直接写梯度。深层网络的分数由很多层共同算出，要用反向传播：从损失出发，沿前向计算的依赖关系逐层求导，再把各参数的梯度交给优化器。</p>
 <p>一个最小关系：若 <code>s = w×h</code>，则</p>

@@ -52,7 +52,7 @@
 <li>权重矩阵 3×3 乘 V（3×2），得到输出 3×2。</li>
 </ul>
 <p><code>Kᵀ</code> 只是把 K 的行列交换，好让 Q 的每一行与 K 的每一行逐一相乘。mask 在 softmax 之前生效；softmax 是按行做的，所以每一行的权重各自相加为 1。</p>
-<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/causal-spotlight.svg" alt="灯光只照到当前位置"><figcaption>图：因果掩码让每个位置只能看见自己和之前的位置；绿色表示可见范围，不是权重大小。</figcaption></figure>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/causal-spotlight.svg" alt="灯光只照到当前位置"><figcaption>图：因果掩码让每个位置只能看见自己和之前的位置；红色表示可见范围，不是权重大小。</figcaption></figure>
 <h2 id="C07-section-4464ee5ff3" tabindex="-1">改一个条件：动未来，输出会变吗</h2>
 <p>站在位置 1，把位置 2 的 V 从 <code>[1,1]</code> 改成 <code>[100,-100]</code>。先猜输出会不会变，再算：位置 2 的权重是 0，<code>0×[100,-100]=[0,0]</code>，所以输出仍是 <code>[0.3302, 0.6698]</code>。</p>
 <p>再把位置 2 的 K 改得很大，分数仍然被 mask 成负无穷，权重仍是 0，输出不变。这两个测试检查的是<strong>因果边界</strong>：未来内容不能通过这一层影响当前位置。</p>

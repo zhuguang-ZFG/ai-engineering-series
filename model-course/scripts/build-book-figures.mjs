@@ -5,8 +5,8 @@ import { resolve } from 'node:path';
 // keeps the mechanisms editable and the labels searchable.
 const root = resolve(import.meta.dirname, '..');
 const checking = process.argv.includes('--check');
-const ink = '#1f2328', soft = '#57606a', green = '#008635';
-const marker = '#d3efd9', wash = '#f1f7f2', paper = '#fbfaf6', card = '#fffdf8';
+const ink = '#1f2328', soft = '#57606a', green = '#B4472F';
+const marker = '#f0e9d8', wash = '#f7f3e8', paper = '#fbfaf6', card = '#fffdf8';
 const esc = s => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 const text = (x, y, s, size = 26, options = '') => `<text x="${x}" y="${y}" font-size="${size}" ${options}>${esc(s)}</text>`;
 const mid = (x,y,s,size=26,options='') => text(x,y,s,size,`text-anchor="middle" ${options}`);
@@ -27,7 +27,7 @@ const symbols = {
   browser: rect(5,9,70,61)+path('M6 24H74')+circle(14,17,2,marker)+circle(22,17,2,marker)+path('M14 34H34V60H14Z',wash)+path('M43 36H64M43 45H60M43 57H66','none',green,4),
   plug: path('M24 4V21M49 4V21','none',ink,4)+path('M15 23Q38 19 59 23L56 43L45 51V60H30V50L19 43Z',marker)+path('M38 60V69Q38 76 53 75')+path('M31 29L27 38H41L37 45','none',ink,2),
   deliver: path('M11 17L38 6L68 18L40 31Z',marker)+path('M11 17V58L40 73L68 58V18M40 31V73M25 12L54 24V42')+path('M50 51L56 57L67 43','none',green,3),
-  error: rect(5,7,69,62)+path('M6 22H73')+circle(14,15,2,marker)+path('M40 31L59 58H21Z',wash)+path('M40 39V47M40 53V54','none','#e2601f',4),
+  error: rect(5,7,69,62)+path('M6 22H73')+circle(14,15,2,marker)+path('M40 31L59 58H21Z',wash)+path('M40 39V47M40 53V54','none','#B4472F',4),
   evidence: rect(9,6,46,63)+path('M18 19H43M18 29H43M18 39H30','none',soft,2)+circle(51,49,17,marker)+path('M63 62L74 74','none',ink,4)+path('M44 49L49 54L58 44','none',green,3),
   patch: rect(7,7,66,64)+path('M8 23H72')+path('M17 35H51','none',soft,3)+highlight(14,43,49,8)+path('M20 44V54M15 49H25M33 49H61','none',green,3)+path('M18 62H53','none',soft,2),
   passed: rect(6,8,68,62)+path('M7 24H73')+path('M23 47L34 58L59 34','none',green,5),

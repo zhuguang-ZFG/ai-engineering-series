@@ -34,12 +34,13 @@ def check_tokens(path: Path) -> None:
             f"{path.name}: off-token {', '.join(sorted(stray))} — add it to "
             f"design/system/tokens.css and measure it in contrast.mjs, or use a token"
         )
-    # role misuse: --accent / --persimmon are display-only, text must use the -ink variants
+    # role misuse: the retired bright green/orange pair stays banned on text; the
+    # cinnabar accent (#B4472F) passes accentInk and may carry small text.
     bad = re.findall(r'<text[^>]*fill="(#1f883d|#e2601f)"', text)
     if bad:
         raise SystemExit(
-            f"{path.name}: {len(bad)} text run(s) in display-only {sorted(set(bad))} "
-            f"— use #008635 / #c74c00 for text, keep the bright pair for graphics"
+            f"{path.name}: {len(bad)} text run(s) in retired display colours {sorted(set(bad))} "
+            f"— use #B4472F (accent-ink) or a token; the bright green/orange pair is retired"
         )
 
 

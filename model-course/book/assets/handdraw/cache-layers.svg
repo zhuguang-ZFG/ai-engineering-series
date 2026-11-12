@@ -10,7 +10,7 @@
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">缓存的三层阶梯</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">未命中才往下走：L1 本地缓存 → L2 Redis → L3 数据库</text>
   <text x="1128" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">本质：用空间换时间，用副本保护主数据</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -20,7 +20,7 @@
       <rect x="840" y="186" width="288" height="284" rx="18" fill="#fffdf8" filter="url(#card-shadow)"/>
     </g>
 
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <circle cx="206" cy="222" r="18"/><circle cx="156" cy="374" r="18"/><circle cx="106" cy="526" r="18"/>
     </g>
     <g fill="#fbfaf6" font-size="19" font-weight="700" text-anchor="middle">
@@ -48,10 +48,10 @@
     <g fill="#1f2328">
       <path d="M250 338l-7-13h14z"/><path d="M250 490l-7-13h14z"/>
     </g>
-    <g stroke="#1f883d" stroke-width="4" stroke-linecap="round" fill="none">
+    <g stroke="#B4472F" stroke-width="4" stroke-linecap="round" fill="none">
       <path d="M600 338v-39"/><path d="M600 490v-39"/>
     </g>
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <path d="M600 286l-7 13h14z"/><path d="M600 438l-7 13h14z"/>
     </g>
     <g fill="#57606a" font-size="20">
@@ -63,7 +63,7 @@
       <text x="620" y="471">回填 L2 和 L1</text>
     </g>
 
-    <circle cx="872" cy="213" r="13" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+    <circle cx="872" cy="213" r="13" fill="#B4472F" stroke="#1f2328" stroke-width="3"/>
     <text x="872" y="220" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">!</text>
     <text x="896" y="221" fill="#1f2328" font-size="23" font-weight="700">三大经典问题</text>
     <g fill="#1f2328" font-size="21">
@@ -77,11 +77,11 @@
       <text x="868" y="428">随机 TTL + 缓存预热</text>
     </g>
 
-    <rect x="840" y="494" width="288" height="96" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <rect x="840" y="494" width="288" height="96" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
     <text x="984" y="530" fill="#1f2328" font-size="21" font-weight="700" text-anchor="middle">命中率目标 &gt; 95%</text>
     <text x="984" y="566" fill="#57606a" font-size="19" text-anchor="middle">不到 5% 才查数据库</text>
 
-    <rect x="72" y="616" width="1056" height="112" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <rect x="72" y="616" width="1056" height="112" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
     <text x="600" y="650" fill="#1f2328" font-size="24" font-weight="700" text-anchor="middle">缓存不是锦上添花，而是高并发系统的保命符</text>
     <text x="600" y="684" fill="#57606a" font-size="19" text-anchor="middle">写数据：先更新数据库，再删除缓存（不是更新缓存）</text>
     <text x="600" y="712" fill="#57606a" font-size="19" text-anchor="middle">极端并发：延迟双删（删缓存 → 更新数据库 → 等 500ms → 再删一次）</text>

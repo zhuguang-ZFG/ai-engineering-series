@@ -10,7 +10,7 @@
   <text x="72" y="80" fill="#1f2328" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="34" font-weight="700">IAM：一张门禁卡，只开该开的门</text>
   <text x="72" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22">身份 → 角色 → 策略 → 资源，一层管一层</text>
   <text x="1128" y="120" fill="#57606a" font-family="'Microsoft YaHei', system-ui, sans-serif" font-size="22" text-anchor="end">AWS IAM / 阿里云 RAM 概念相同</text>
-  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#1f883d" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+  <path d="M72 142q42 6 84 0t84 0" fill="none" stroke="#B4472F" stroke-width="5" stroke-linecap="round" opacity="0.85"/>
 
   <g font-family="'Microsoft YaHei', system-ui, sans-serif">
     <!-- 刷卡动线的四个环节 -->
@@ -20,7 +20,7 @@
       <rect x="624" y="176" width="208" height="294" rx="20" fill="#fffdf8" filter="url(#card-shadow)"/>
       <rect x="880" y="176" width="248" height="294" rx="14" fill="#fffdf8" filter="url(#card-shadow)"/>
     </g>
-    <g fill="#1f883d">
+    <g fill="#B4472F">
       <circle cx="102" cy="204" r="18"/><circle cx="398" cy="204" r="18"/>
       <circle cx="654" cy="204" r="18"/><circle cx="910" cy="204" r="18"/>
     </g>
@@ -35,17 +35,17 @@
 
     <!-- 环节小图标：门禁卡 / 临时证 / 规则条 / 门 -->
     <g stroke="#1f2328" stroke-width="3" stroke-linejoin="round">
-      <rect x="240" y="188" width="62" height="36" rx="6" fill="#d3efd9"/>
+      <rect x="240" y="188" width="62" height="36" rx="6" fill="#f0e9d8"/>
       <rect x="248" y="198" width="14" height="12" rx="2" fill="#fffdf8" stroke-width="2"/>
       <circle cx="290" cy="206" r="4" fill="#fffdf8" stroke-width="2"/>
-      <rect x="498" y="192" width="52" height="30" rx="6" fill="#f1f7f2" stroke="none"/>
+      <rect x="498" y="192" width="52" height="30" rx="6" fill="#f7f3e8" stroke="none"/>
       <rect x="750" y="188" width="58" height="34" rx="4" fill="#fffdf8"/>
       <rect x="1046" y="186" width="34" height="38" rx="4" fill="#e6e1d4"/>
       <circle cx="1073" cy="206" r="2.5" fill="#1f2328" stroke="none"/>
     </g>
-    <rect x="498" y="192" width="52" height="30" rx="6" fill="none" stroke="#1f883d" stroke-width="3" stroke-dasharray="6 4"/>
+    <rect x="498" y="192" width="52" height="30" rx="6" fill="none" stroke="#B4472F" stroke-width="3" stroke-dasharray="6 4"/>
     <g stroke-width="3" stroke-linecap="round" fill="none">
-      <path d="M758 198h42" stroke="#008635"/><path d="M758 206h42" stroke="#c74c00"/><path d="M758 214h28" stroke="#57606a"/>
+      <path d="M758 198h42" stroke="#B4472F"/><path d="M758 206h42" stroke="#B4472F"/><path d="M758 214h28" stroke="#57606a"/>
     </g>
 
     <!-- 1 身份：用户 / 用户组 -->
@@ -59,7 +59,7 @@
       <text x="90" y="334">部门：批量发卡</text>
       <text x="90" y="362">组自己刷不开</text>
     </g>
-    <rect x="90" y="382" width="212" height="62" rx="10" fill="#d3efd9" stroke="#1f2328" stroke-width="3"/>
+    <rect x="90" y="382" width="212" height="62" rx="10" fill="#f0e9d8" stroke="#1f2328" stroke-width="3"/>
     <text x="110" y="420" fill="#1f2328" font-size="19">长期凭证 AK/SK</text>
 
     <!-- 2 角色：被扮演，换临时凭证 -->
@@ -70,15 +70,15 @@
       <text x="386" y="334">被扮演才生效</text>
       <text x="386" y="362">EC2 上不放密钥</text>
     </g>
-    <rect x="386" y="382" width="172" height="62" rx="10" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" stroke-dasharray="7 5"/>
+    <rect x="386" y="382" width="172" height="62" rx="10" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" stroke-dasharray="7 5"/>
     <text x="472" y="408" fill="#1f2328" font-size="18" font-weight="700" text-anchor="middle">STS 临时凭证</text>
     <text x="472" y="432" fill="#57606a" font-size="17" text-anchor="middle">1 小时后自动失效</text>
 
     <!-- 3 策略：Allow / Deny / 条件 -->
     <text x="642" y="250" fill="#1f2328" font-size="21" font-weight="700">策略 Policy</text>
     <text x="642" y="278" fill="#57606a" font-size="19">能刷开哪几扇门</text>
-    <text x="642" y="306" fill="#008635" font-size="19" font-weight="700">Allow：S3 读写</text>
-    <text x="642" y="334" fill="#c74c00" font-size="19" font-weight="700">Deny：敏感目录</text>
+    <text x="642" y="306" fill="#B4472F" font-size="19" font-weight="700">Allow：S3 读写</text>
+    <text x="642" y="334" fill="#B4472F" font-size="19" font-weight="700">Deny：敏感目录</text>
     <text x="642" y="362" fill="#1f2328" font-size="19">优先级：Deny 赢</text>
     <text x="642" y="390" fill="#57606a" font-size="19">无 Allow 就拒绝</text>
     <text x="642" y="418" fill="#57606a" font-size="19">条件：限区域 · MFA</text>
@@ -88,18 +88,18 @@
       <path d="M898 304h212"/><path d="M898 382h212"/>
     </g>
     <g stroke="#1f2328" stroke-width="3">
-      <rect x="904" y="238" width="46" height="56" rx="5" fill="#d3efd9"/>
+      <rect x="904" y="238" width="46" height="56" rx="5" fill="#f0e9d8"/>
       <rect x="904" y="316" width="46" height="56" rx="5" fill="#e6e1d4"/>
       <rect x="904" y="394" width="46" height="56" rx="5" fill="#fffdf8"/>
     </g>
     <g fill="#1f2328" font-size="18" font-weight="700" text-anchor="middle">
       <text x="927" y="272">3F</text><text x="927" y="350">5F</text><text x="927" y="428">顶</text>
     </g>
-    <path d="M1090 264l6 8 13-16" fill="none" stroke="#1f883d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1090 264l6 8 13-16" fill="none" stroke="#B4472F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     <g fill="none" stroke="#57606a" stroke-width="4" stroke-linecap="round">
       <path d="M1090 336l16 16"/><path d="M1106 336l-16 16"/>
     </g>
-    <g fill="none" stroke="#e2601f" stroke-width="4" stroke-linecap="round">
+    <g fill="none" stroke="#B4472F" stroke-width="4" stroke-linecap="round">
       <path d="M1090 414l16 16"/><path d="M1106 414l-16 16"/>
     </g>
     <g fill="#1f2328" font-size="20" font-weight="700">
@@ -107,9 +107,9 @@
       <text x="966" y="342">RDS 生产库</text>
       <text x="966" y="420">敏感目录</text>
     </g>
-    <text x="966" y="290" fill="#008635" font-size="18">刷得开</text>
+    <text x="966" y="290" fill="#B4472F" font-size="18">刷得开</text>
     <text x="966" y="368" fill="#57606a" font-size="18">只读，改不了</text>
-    <text x="966" y="446" fill="#c74c00" font-size="18">Deny 锁死</text>
+    <text x="966" y="446" fill="#B4472F" font-size="18">Deny 锁死</text>
 
     <!-- 动线箭头：刷卡 → 判定 → 开门 -->
     <g stroke="#1f2328" stroke-width="4" stroke-linecap="round" fill="none">
@@ -123,18 +123,18 @@
     </g>
 
     <!-- 红线分支：长期密钥写进仓库 -->
-    <path d="M200 452v46" fill="none" stroke="#e2601f" stroke-width="3" stroke-dasharray="7 5"/>
-    <path d="M200 508l-8-14h16z" fill="#e2601f"/>
-    <text x="214" y="484" fill="#c74c00" font-size="18">泄露</text>
-    <rect x="72" y="508" width="1056" height="98" rx="18" fill="#fffdf8" stroke="#e2601f" stroke-width="3" filter="url(#card-shadow)"/>
-    <circle cx="104" cy="552" r="13" fill="#e2601f" stroke="#1f2328" stroke-width="3"/>
+    <path d="M200 452v46" fill="none" stroke="#B4472F" stroke-width="3" stroke-dasharray="7 5"/>
+    <path d="M200 508l-8-14h16z" fill="#B4472F"/>
+    <text x="214" y="484" fill="#B4472F" font-size="18">泄露</text>
+    <rect x="72" y="508" width="1056" height="98" rx="18" fill="#fffdf8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
+    <circle cx="104" cy="552" r="13" fill="#B4472F" stroke="#1f2328" stroke-width="3"/>
     <text x="104" y="559" fill="#fbfaf6" font-size="20" font-weight="700" text-anchor="middle">!</text>
     <text x="132" y="550" fill="#1f2328" font-size="22" font-weight="700">别把长期 AK/SK 写进代码，等于把钥匙挂在门把手上</text>
     <text x="132" y="584" fill="#57606a" font-size="19">真实教训：提交 GitHub 被爬虫扫走 → 攻击者开 EC2 挖矿 → 月底账单多出 12,000 美元</text>
-    <text x="1108" y="550" fill="#c74c00" font-size="19" font-weight="700" text-anchor="end">根账号永远不该有 AK/SK</text>
+    <text x="1108" y="550" fill="#B4472F" font-size="19" font-weight="700" text-anchor="end">根账号永远不该有 AK/SK</text>
 
     <!-- 结论横幅 -->
-    <rect x="72" y="634" width="1056" height="92" rx="18" fill="#f1f7f2" stroke="#1f883d" stroke-width="3" filter="url(#card-shadow)"/>
+    <rect x="72" y="634" width="1056" height="92" rx="18" fill="#f7f3e8" stroke="#B4472F" stroke-width="3" filter="url(#card-shadow)"/>
     <text x="600" y="670" fill="#1f2328" font-size="23" font-weight="700" text-anchor="middle">最小权限：这张卡只刷得开自己那一层的门</text>
     <text x="600" y="702" fill="#57606a" font-size="19" text-anchor="middle">三句话：只给必要的权限 · 用角色换临时凭证，不留长期 AK/SK · 高权限账号开 MFA</text>
   </g>
