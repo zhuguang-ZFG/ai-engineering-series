@@ -1,4 +1,4 @@
-# 十卷合订本（2026-11-12 首建，2026-11-13 四次重建）
+# 十卷合订本（2026-11-12 首建，2026-11-13 五次重建）
 
 合订命令、书架入口与测试经 [PR #7](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/7) 合入 `main`；本记录随该 PR 提交，成品哈希以 `dist/yuyu-collected-zh.json` 为准。
 
@@ -15,8 +15,8 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 | 文件 | 内容 | 大小与 SHA-256 |
 | --- | --- | --- |
-| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2367 页 | 117 MB（122 626 954 B）· `6460e04005a0ca3620961ec67d5a766680d09cad3b2df2e05aa7ec03cc0b4f55` |
-| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（783 个条目） | 60 MB（60 214 031 B）· `9d3b8b315ccaf023fa177588574a39977de369afc83b0fa20a2e9204064905bb` |
+| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2367 页 | 117 MB（122 630 511 B）· `d13b8bccd858a026f843ef8792572b748318e09fc47156622b05b8b63ae21151` |
+| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（783 个条目） | 60 MB（60 207 105 B）· `9064c989a5f0ff019b113b19e3ce2f1251e971cda7302a271704c98b6385185c` |
 | `dist/yuyu-collected-zh.json` | 页数、每卷起止页、来源与成品 SHA-256、读回校验结果 | — |
 
 ## 卷次与来源
@@ -35,6 +35,14 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 | 卷十 | Kimi Code：从插件到审查助手 | `yuyu-kimi-zh.pdf` | 84 |
 
 卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2351。
+
+## 五次重建（同日，封面与页眉换色后）
+
+课程册的封面、五个阶段页、全书地图与页眉页脚仍停在 FA-040 的旧色（纸 `#f7f2e7`、次墨 `#6b6457`、底 `#e8ddc7`/`#e9e2d0`）。把这些资产与 `export_course.py` 的页眉页脚常量改到系列令牌后重出：页数不变（仍然 2367 页，课程册 469 页），只换纸与墨，故哈希变化：
+
+本轮哈希：PDF `d13b8bccd858a026f843ef8792572b748318e09fc47156622b05b8b63ae21151`（122 630 511 B）、EPUB `9064c989a5f0ff019b113b19e3ce2f1251e971cda7302a271704c98b6385185c`（60 207 105 B）。EPUBCheck 5.3.0 重跑为 0 fatal / 0 error / 0 warning 并绑定新 SHA。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `83946e16…`。
+
+同轮复跑 `python -m unittest discover -s tests` 48 项与 `python series.py check --project all --structure-only` 均通过；课程册 `check_course.py` 仍为 469 页 / 499 条书签 / 2 页总目。
 
 ## 四次重建（2026-11-13，视觉统一与七幅插图后）
 

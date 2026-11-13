@@ -31,12 +31,12 @@ SHEET = ROOT / "scripts/llm/book-course.css"
 
 HEADER_TEMPLATE = (
     '<div style="width:100%;padding:0 15mm;font-family:\'Noto Serif SC\',serif;'
-    'font-size:7.5px;color:#6b6457;letter-spacing:.08em;display:flex;justify-content:space-between;">'
+    'font-size:7.5px;color:#5C5448;letter-spacing:.08em;display:flex;justify-content:space-between;">'
     "<span>大模型：从入门到精通</span><span>五阶段 · 三十章</span></div>"
 )
 FOOTER_TEMPLATE = (
     '<div style="width:100%;padding:0 15mm;font-family:\'Noto Serif SC\',serif;'
-    'font-size:8px;color:#6b6457;text-align:center;letter-spacing:.06em;">'
+    'font-size:8px;color:#5C5448;text-align:center;letter-spacing:.06em;">'
     '<span class="pageNumber"></span></div>'
 )
 
