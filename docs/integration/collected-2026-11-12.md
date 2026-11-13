@@ -1,4 +1,4 @@
-# 十卷合订本（2026-11-12 首建，2026-11-13 五次重建）
+# 十卷合订本（2026-11-12 首建，2026-11-13 六次重建）
 
 合订命令、书架入口与测试经 [PR #7](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/7) 合入 `main`；本记录随该 PR 提交，成品哈希以 `dist/yuyu-collected-zh.json` 为准。
 
@@ -15,15 +15,15 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 | 文件 | 内容 | 大小与 SHA-256 |
 | --- | --- | --- |
-| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2367 页 | 117 MB（122 630 511 B）· `d13b8bccd858a026f843ef8792572b748318e09fc47156622b05b8b63ae21151` |
-| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（783 个条目） | 60 MB（60 207 105 B）· `9064c989a5f0ff019b113b19e3ce2f1251e971cda7302a271704c98b6385185c` |
+| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2370 页 | 118 MB（123 334 527 B）· `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a` |
+| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（786 个条目） | 58 MB（60 794 619 B）· `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399` |
 | `dist/yuyu-collected-zh.json` | 页数、每卷起止页、来源与成品 SHA-256、读回校验结果 | — |
 
 ## 卷次与来源
 
 | 卷 | 册 | 来源成品 | 原页数 |
 | --- | --- | --- | --- |
-| 卷一 | 大模型：从入门到精通 | `model-course/deliverables/llm-course.pdf` | 469 |
+| 卷一 | 大模型：从入门到精通 | `model-course/deliverables/llm-course.pdf` | 472 |
 | 卷二 | 提示词工程：从提问到 Agent 协作 | `yuyu-prompt-zh.pdf` | 118 |
 | 卷三 | 御舆：解码 Agent Harness | `yuyu-agent-harness-zh.pdf` | 521 |
 | 卷四 | Omp 从入门到精通：原理与实战 | `yuyu-omp-zh.pdf` | 432 |
@@ -34,7 +34,13 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 | 卷九 | Codex CLI：执行边界与工程实践 | `yuyu-codex-zh.pdf` | 146 |
 | 卷十 | Kimi Code：从插件到审查助手 | `yuyu-kimi-zh.pdf` | 84 |
 
-卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2351。
+卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2354。
+
+## 六次重建（同日，应用篇三幅插图后）
+
+C18、C28、C30 各补一幅带数插图后，课程册由 469 页增至 472 页（图 51 → 54 幅）。合订随之重出：`2370 pages, 10 volumes, 802 outline entries`；EPUB 70 项 spine / 786 个条目，EPUBCheck 5.3.0 重跑 0 fatal / 0 error / 0 warning 并绑定新 SHA。同轮 `python -m unittest discover -s tests` 48 项、课程 `npm test` 42 项、`series.py check --project all --structure-only` 均通过。
+
+本轮哈希：PDF `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a`（123 334 527 B）、EPUB `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399`（60 794 619 B）。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `45010d8f…`（472 页）。
 
 ## 五次重建（同日，封面与页眉换色后）
 
@@ -65,7 +71,7 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 - 卷首 1 页：系列名、十卷题名与日期。
 - 总目 5 页：十卷行加各册一级标题，页码指向该卷分隔页；卷行可点击跳转。
 - 每卷 1 页分隔页，然后原样合入该册全部页面；书签为「卷一…卷十」两级目录，卷内保留原书签层级再降一级。
-- 合计 2367 页（2351 + 10 页分隔 + 6 页卷首与总目）。
+- 合计 2370 页（2354 + 10 页分隔 + 6 页卷首与总目）。
 
 EPUB 采用包级合并：十册各自保留原有 `XHTML`、样式、图片与相对路径，放在 `EPUB/vNN/` 下；合订包新增封面、导航与十卷分隔页，spine 为 70 项（十册原有 57 项，加合订新增 13 项——导读页使课程册章节页由 48 增至 49）。每册原有 `nav` 标记降为普通文档，合订包只保留一个 `nav`。总目只链接十卷分隔页；各卷自己的 `nav.xhtml` 保留在包内但不再从总目链接——EPUBCheck RSC-011 不允许导航指向 spine 之外的资源，`verify_epub` 也把这条钉成契约。
 
@@ -88,6 +94,6 @@ EPUB 采用包级合并：十册各自保留原有 `XHTML`、样式、图片与�
 ## 未验证
 
 - 卷十（课程）原书为 A5（420 × 595 pt），其余九册为 A4；合订保留各自页面尺寸，未缩放，打印时需按页适配。此取舍保证卷内版式不变。
-- 合订本的视觉检查覆盖卷首、总目与抽样分隔页；未逐页复核 2367 页的渲染，也未做纸样或独立读者验收。
+- 合订本的视觉检查覆盖卷首、总目与抽样分隔页；未逐页复核 2370 页的渲染，也未做纸样或独立读者验收。
 - 远端 CI 的 root 任务会运行同一组根测试（含合订装配回归），但不产出合订本：九本 Agent 分册的成品 PDF 尚无 CI 构建，`series.py collected` 仍只在本机执行。
 - 合订本不改变各册的版本、许可与验证范围；合订成功不代表模型质量、教学效果或跨平台可用性通过。
