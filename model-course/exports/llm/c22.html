@@ -31,11 +31,10 @@ status_counts + first_failure.stage     失败分布，不是被平均掉
 </code></pre>
 <p>这不是“免费”，而是“本工具没有把电费、硬件折旧、运维和人工时间计价”。不要自己编一个单价填进去。</p>
 <p>API 只有同时提供输入/输出价格时才计算：</p>
-<p>[
-\text{cost}=\frac{\text{prompt_tokens}}{1000}\times \text{price_input_per_1k}
-+\frac{\text{completion_tokens}}{1000}\times \text{price_output_per_1k}
-]</p>
-<p>例如 1000 个输入 token、200 个输出 token，输入价 0.5、输出价 1.5（单位以你的价格表为准）：(1000/1000\times0.5+200/1000\times1.5=0.5+0.3=0.8)。这是算术示例，不是任何供应商的真实价格。</p>
+<pre><code class="language-text">cost = prompt_tokens / 1000 × price_input_per_1k
+     + completion_tokens / 1000 × price_output_per_1k
+</code></pre>
+<p>例如 1000 个输入 token、200 个输出 token，输入价 0.5、输出价 1.5（单位以你的价格表为准）：<code>1000/1000 × 0.5 + 200/1000 × 1.5 = 0.5 + 0.3 = 0.8</code>。这是算术示例，不是任何供应商的真实价格。</p>
 <p><code>evaluate</code> 的聚合 <code>usage.cost</code> 被固定为 <code>null</code>，<code>cost_basis</code> 为 <code>per-case reports</code>；若要总费用，需要从每个 <code>cases[].report.usage.cost</code> 汇总，并且只汇总非 <code>null</code> 的 API 用例。本地用例的 <code>null</code> 不能被当成 0 后再求平均，否则会制造“本地免费”的假象。</p>
 <h2 id="C22-section-19c9e9b353" tabindex="-1">同一验证集，只改一个设置</h2>
 <p>下面用样例清单演示流程。样例是<strong>待评审的教学样例，不是 CI 基线</strong>；换成你自己的 <code>eval-val.json</code> 才有意义。</p>
@@ -87,9 +86,8 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <p>只改 <code>top_k</code> 是一个例子。也可以只改 <code>max_new_tokens</code>、只改检索器、只换模型；但每次只改一个，且保持题、文档、读者、阈值、提示模板不变。不要同时改 <code>top_k</code> 和 <code>max_new_tokens</code>，否则无法归因。</p>
 <h2 id="C22-section-74aa2d1a81" tabindex="-1">分位数：小样本不要把 p95 当神</h2>
 <p>先定义算法。常用 nearest-rank：</p>
-<p>[
-\text{p95}=\text{排序后第}\ \lceil 0.95\times n\rceil\ \text{个值（1 开始计数）}
-]</p>
+<pre><code class="language-text">p95 = 排序后第 ceil(0.95 × n) 个值（1 开始计数）
+</code></pre>
 <p>中位数（p50）：</p>
 <ul>
 <li>奇数个：正中间那个；</li>
@@ -99,18 +97,18 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <pre><code class="language-text">1200, 1300, 1400, 1500, 1600, 1700, 1800, 9000
 </code></pre>
 <ul>
-<li>中位数：((1500+1600)/2=1550) ms；</li>
-<li>nearest-rank p95：(\lceil0.95\times8\rceil=\lceil7.6\rceil=8)，第 8 个是 <strong>9000 ms</strong>；</li>
-<li>平均值：((1200+1300+1400+1500+1600+1700+1800+9000)/8=2437.5) ms。</li>
+<li>中位数：<code>(1500 + 1600)/2 = 1550</code> ms；</li>
+<li>nearest-rank p95：<code>ceil(0.95 × 8) = ceil(7.6) = 8</code>，第 8 个是 <strong>9000 ms</strong>；</li>
+<li>平均值：<code>(1200 + 1300 + 1400 + 1500 + 1600 + 1700 + 1800 + 9000)/8 = 2437.5</code> ms。</li>
 </ul>
 <p>这组数说明：</p>
 <ul>
 <li>一个离群点会把平均值拉高，中位数仍接近常见值；</li>
-<li>(n=8) 时 p95 就是最大值，不能据此估计“95% 用户”的体验；</li>
+<li><code>n = 8</code> 时 p95 就是最大值，不能据此估计“95% 用户”的体验；</li>
 <li>必须报告 <code>n</code> 和所有点（或至少 min/median/max），不能只写“p95=9000”而不说样本只有 8 个；</li>
 <li>若用线性插值，p95 会得到不同数值；必须写明算法，不能和别人的 p95 直接比。</li>
 </ul>
-<p>(n=20) 时，nearest-rank p95 是第 (\lceil19\rceil=19) 个值；(n=100) 时是第 95 个。样本越少，分位数越不稳定。不要编造置信区间；可以说“样本不足，暂不下结论”。</p>
+<p><code>n = 20</code> 时，nearest-rank p95 是第 <code>ceil(19) = 19</code> 个值；<code>n = 100</code> 时是第 95 个。样本越少，分位数越不稳定。不要编造置信区间；可以说“样本不足，暂不下结论”。</p>
 <h2 id="C22-section-b1bcb0df33" tabindex="-1">用脚本读报告</h2>
 <p>以下脚本从 <code>evaluate</code> JSON 中取每例的实际状态、模型调用耗时和端到端耗时，输出 <code>n</code>、中位数、nearest-rank p95。它不判断质量，只做算术：</p>
 <pre><code class="language-bash">python - &lt;&lt;&#39;PY&#39;

@@ -1,4 +1,4 @@
-# 十卷合订本（2026-11-12 首建，2026-11-13 六次重建）
+# 十卷合订本（2026-11-12 首建，2026-11-13 七次重建）
 
 合订命令、书架入口与测试经 [PR #7](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/7) 合入 `main`；本记录随该 PR 提交，成品哈希以 `dist/yuyu-collected-zh.json` 为准。
 
@@ -15,8 +15,8 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 | 文件 | 内容 | 大小与 SHA-256 |
 | --- | --- | --- |
-| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2370 页 | 118 MB（123 334 527 B）· `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a` |
-| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（786 个条目） | 58 MB（60 794 619 B）· `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399` |
+| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2370 页 | 118 MB（123 338 448 B）· `b43ec42f455efd6edcb53a190878ab6353892bc6a6e44f1e53ad48320f44411c` |
+| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（786 个条目） | 58 MB（60 794 585 B）· `19c238b95361f0842c056af571697f1715a6a86b7d8016e70ff4bbaa3780a2b4` |
 | `dist/yuyu-collected-zh.json` | 页数、每卷起止页、来源与成品 SHA-256、读回校验结果 | — |
 
 ## 卷次与来源
@@ -36,11 +36,17 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2354。
 
+## 七次重建（同日，清掉原始 LaTeX 后）
+
+C18、C22 与三份答案共 182 处 `\[ \]` / `\( \)` / `\text{}` 改成本地代码与 text 块（管线无数学渲染器，原先 PDF 逐字印出）。正文汉字与数值未变，页数仍为 472；合订本随之重出：`2370 pages, 10 volumes, 802 outline entries`，EPUB 70 项 spine / 786 个条目，EPUBCheck 5.3.0 重跑 0 fatal / 0 error / 0 warning 并绑定新 SHA。
+
+本轮哈希：PDF `b43ec42f455efd6edcb53a190878ab6353892bc6a6e44f1e53ad48320f44411c`（123 338 448 B）、EPUB `19c238b95361f0842c056af571697f1715a6a86b7d8016e70ff4bbaa3780a2b4`（60 794 585 B）。同时 `validate-llm.mjs` 新增守护：`book/llm` 下任一 Markdown 出现原始 LaTeX 即失败（114 份源文件全扫）。
+
 ## 六次重建（同日，应用篇三幅插图后）
 
 C18、C28、C30 各补一幅带数插图后，课程册由 469 页增至 472 页（图 51 → 54 幅）。合订随之重出：`2370 pages, 10 volumes, 802 outline entries`；EPUB 70 项 spine / 786 个条目，EPUBCheck 5.3.0 重跑 0 fatal / 0 error / 0 warning 并绑定新 SHA。同轮 `python -m unittest discover -s tests` 48 项、课程 `npm test` 42 项、`series.py check --project all --structure-only` 均通过。
 
-本轮哈希：PDF `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a`（123 334 527 B）、EPUB `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399`（60 794 619 B）。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `45010d8f…`（472 页）。
+本轮哈希：PDF `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a`（123 334 527 B）、EPUB `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399`（60 794 619 B）。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `f319ec2f…`（472 页）。
 
 ## 五次重建（同日，封面与页眉换色后）
 
