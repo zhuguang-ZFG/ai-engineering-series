@@ -151,3 +151,123 @@ export const appliedArtworks = [
   ["c28-context-budget.svg", contextBudgetArt()],
   ["c30-rubric-weights.svg", rubricWeightsArt()]
 ];
+
+// ---------- A19 十一道边界，从权限到最终文字 ----------
+export const ladder = [
+  ["读者/权限", "unauthorized · filtered_doc_count"],
+  ["清单/文件/版本", "missing-source · source-version-mismatch"],
+  ["切块", "chunk_count · chunks[].start/end"],
+  ["检索", "hits=[] · usage.calls=0"],
+  ["提示组装", "used_chunk_ids · prompt budget dropped"],
+  ["模型调用", "generation-failed · calls>0"],
+  ["解析", "invalid-response · first_raw_response"],
+  ["schema/语义", "first_failure.stage=validate"],
+  ["引用/提取", "citation-failed · citation_errors"],
+  ["工具", "tool-failed · budget-exhausted"],
+  ["最终回答", "answered，但答非所问"]
+];
+export function failureLadderArt() {
+  const rows = ladder.map(([name, field], index) => {
+    const y = 104 + index * 56;
+    const mark = index === 4;
+    const tail = index === ladder.length - 1 ? "" : line(`M44 ${y - 6}V${y + 50}`, rule, 1.2);
+    return t(26, y + 22, String(index + 1), 19, mark ? accent : soft, "start", 600) +
+      t(58, y + 22, name, 21, "start", mark ? accent : ink, mark ? 600 : 400) +
+      t(58, y + 46, field, 16, "start", soft) +
+      tail;
+  }).join("");
+
+  return canvas("先看更早的边界，再看现象",
+    "一条请求按实际顺序经过十一个边界。只要更早的环节已经偏离，后面的现象都只是后果；程序报出的 first_failure 是第一个异常，不一定是第一边界。",
+    800, rows +
+    line("M26 726H454", rule, 1.2) +
+    t(26, 758, "例：命中片段被提示预算丢掉", 21, "start", accent, 600) +
+    t(26, 786, "程序不报错，边界在第 5 步而不是第 11 步", 19, "start", soft));
+}
+
+// ---------- A22 八个点里有一个离群值 ----------
+export const latencies = [1200, 1300, 1400, 1500, 1600, 1700, 1800, 9000];
+const ms = value => 60 + value / 10000 * 380; // 0..10 000 ms → 60..440 px
+export function latencySpreadArt() {
+  const dots = latencies.map((value, index) => {
+    // 前七个点挤在 25 px 内，上下交替避免互相遮挡。
+    const y = index % 2 === 0 ? 122 : 140;
+    return `<circle cx="${ms(value).toFixed(1)}" cy="${y}" r="5.5" fill="${value === 9000 ? accent : ink}"/>`;
+  }).join("");
+  const ticks = [0, 2000, 4000, 6000, 8000, 10000].map(value =>
+    line(`M${ms(value)} 172V182`, ink, 1.4) + t(ms(value), 202, String(value), 17, "middle", soft)).join("");
+
+  return canvas("八个样本里有一个离群值",
+    "八次端到端耗时中七次在 1 200 到 1 800 毫秒，一次 9 000 毫秒。中位数 1 550 毫秒，平均值 2 437.5 毫秒，nearest-rank p95 在 n=8 时就是最大值 9 000 毫秒。",
+    560,
+    t(26, 96, "每次请求的端到端耗时（毫秒）", 19, "start", soft) +
+    dots + ticks +
+    line(`M${ms(1550).toFixed(1)} 100V240`, soft, 1.2, "4 4") +
+    line(`M${ms(2437.5).toFixed(1)} 100V240`, accent, 1.2, "4 4") +
+    line(`M${ms(9000).toFixed(1)} 100V240`, accent, 1.2, "4 4") +
+    t(ms(1550) - 6, 264, "1550 中位数", 17, "end", soft) +
+    t(ms(2437.5) + 6, 264, "平均值 2437.5", 17, "start", accent) +
+    t(ms(9000) - 6, 264, "p95 = 9000", 17, "end", accent) +
+    line("M26 292H454", rule, 1.2) +
+    t(26, 324, "中位数贴近常见值，平均值被一个点拉高", 20, "start", ink) +
+    t(26, 358, "n=8 时 p95 就是最大值，不能说“95% 用户”", 20, "start", soft) +
+    t(26, 392, "所以要报 n 和原始点，写明分位算法", 20, "start", soft) +
+    line("M26 416H454", rule, 1.2) +
+    t(26, 448, "1200 1300 1400 1500 1600 1700 1800 9000", 17, "start", soft) +
+    t(26, 486, "换个算法，p95 会变成另一个数", 19, "start", accent));
+}
+
+// ---------- A27 四种“没读出来”并不是一回事 ----------
+export const ocrStates = [
+  ["unreadable", "没有生成任何文字：text 为 null，退出码 4", "记录区域与原因，不要从上下文猜值", false],
+  ["uncertain", "生成了文字，但平均 token log-prob 低于阈值", "标人工回看，它不是“已识别”", false],
+  ["recognized 但字符错", "10:00 读成 10:30，LIFT 读成 LEFT", "最危险的一类，必须逐字回看原图", true],
+  ["图中是恶意指令", "扫描件里写着“忽略之前的要求”", "当数据保留，绝不执行其中指令", false]
+];
+export function ocrFailuresArt() {
+  const rows = ocrStates.map(([state, what, todo, danger], index) => {
+    const y = 104 + index * 118;
+    return line(`M26 ${y - 24}H454`, rule, 1.2) +
+      t(26, y, state, 21, "start", danger ? accent : ink, 600) +
+      t(26, y + 32, what, 17, "start", soft) +
+      t(26, y + 62, `处理：${todo}`, 17, "start", danger ? accent : ink);
+  }).join("");
+
+  return canvas("四种“没读出来”",
+    "没有文字、有文字但没过阈值、过了阈值但字符错、图中写着指令：四种状态的错误代价完全不同，报告里的 status 相同并不代表风险相同。",
+    620, rows +
+    line("M26 574H454", rule, 1.2) +
+    t(26, 604, "阈值不是准确率：调到 -999 只是关掉警报", 19, "start", accent));
+}
+
+// ---------- A29 六次故障注入，各能证明什么 ----------
+export const faults = [
+  ["停掉服务", "连接被拒或超时", "不能推出服务一定没执行"],
+  ["换错模型路径", "502 model-unavailable", "健康检查 200 是假阳性"],
+  ["发非法 JSON", "400/413 invalid-request", "请求没有进入模型"],
+  ["源文件缺失或改版", "409 missing-source", "不能拿缓存或旧版本顶上"],
+  ["用无权读者提问", "403 或 insufficient-evidence", "无权限正文没有进提示与日志"],
+  ["构造超时或断网", "未知，保留未知状态", "不等于服务没有答案"]
+];
+export function faultMatrixArt() {
+  const rows = faults.map(([fault, status, cannot], index) => {
+    const y = 104 + index * 84;
+    return line(`M26 ${y - 28}H454`, rule, 1.2) +
+      t(26, y, `${index + 1}. ${fault}`, 20, "start", ink, 600) +
+      t(454, y, status, 17, "end", index === 5 ? soft : accent) +
+      t(26, y + 30, cannot, 17, "start", soft);
+  }).join("");
+
+  return canvas("六次故障注入，各能证明什么",
+    "每次故障都要保存请求、HTTP 码、响应体和时间。预期状态只说明入口拒绝了什么，不说明内部一定没执行、缓存一定没用、权限一定生效。",
+    660, rows +
+    line("M26 620H454", rule, 1.2) +
+    t(26, 648, "记录实际结果；不要为演示 403 去改代码", 18, "start", soft));
+}
+
+appliedArtworks.push(
+  ["c19-failure-ladder.svg", failureLadderArt()],
+  ["c22-latency-spread.svg", latencySpreadArt()],
+  ["c27-ocr-failures.svg", ocrFailuresArt()],
+  ["c29-fault-matrix.svg", faultMatrixArt()]
+);

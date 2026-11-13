@@ -1,4 +1,4 @@
-# 十卷合订本（2026-11-12 首建，2026-11-13 七次重建）
+# 十卷合订本（2026-11-12 首建，2026-11-13 八次重建）
 
 合订命令、书架入口与测试经 [PR #7](https://github.com/zhuguang-ZFG/ai-engineering-series/pull/7) 合入 `main`；本记录随该 PR 提交，成品哈希以 `dist/yuyu-collected-zh.json` 为准。
 
@@ -15,15 +15,15 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 
 | 文件 | 内容 | 大小与 SHA-256 |
 | --- | --- | --- |
-| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2370 页 | 118 MB（123 338 448 B）· `b43ec42f455efd6edcb53a190878ab6353892bc6a6e44f1e53ad48320f44411c` |
-| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（786 个条目） | 58 MB（60 794 585 B）· `19c238b95361f0842c056af571697f1715a6a86b7d8016e70ff4bbaa3780a2b4` |
+| `dist/yuyu-collected-zh.pdf` | 卷首、总目、十卷分隔页，加十册原有页面；2373 页 | 118 MB（124 284 839 B）· `9a734d61cff9c23a73e345c4c604f1e0919797d5ba074ec8cba30a4b515ac521` |
+| `dist/yuyu-collected-zh.epub` | 合订包：封面、总目、十卷分隔页，加十册原有 spine；70 项（790 个条目） | 59 MB（61 566 252 B）· `99ee080a1b1f1e284bf021c4b350f8927cb4bd53f36cc11dd2c0e7ff9fc40a76` |
 | `dist/yuyu-collected-zh.json` | 页数、每卷起止页、来源与成品 SHA-256、读回校验结果 | — |
 
 ## 卷次与来源
 
 | 卷 | 册 | 来源成品 | 原页数 |
 | --- | --- | --- | --- |
-| 卷一 | 大模型：从入门到精通 | `model-course/deliverables/llm-course.pdf` | 472 |
+| 卷一 | 大模型：从入门到精通 | `model-course/deliverables/llm-course.pdf` | 475 |
 | 卷二 | 提示词工程：从提问到 Agent 协作 | `yuyu-prompt-zh.pdf` | 118 |
 | 卷三 | 御舆：解码 Agent Harness | `yuyu-agent-harness-zh.pdf` | 521 |
 | 卷四 | Omp 从入门到精通：原理与实战 | `yuyu-omp-zh.pdf` | 432 |
@@ -34,7 +34,13 @@ python series.py collected --date 2026-11-12  # 固定版本记录用
 | 卷九 | Codex CLI：执行边界与工程实践 | `yuyu-codex-zh.pdf` | 146 |
 | 卷十 | Kimi Code：从插件到审查助手 | `yuyu-kimi-zh.pdf` | 84 |
 
-卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2354。
+卷内顺序沿用课程先行、工具册在后的读法；八本 Agent 分册保持 `series.json` 的登记次序。页数合计 2357。
+
+## 八次重建（同日，再补四幅插图后）
+
+C19（十一级失败阶梯）、C22（八点耗时与离群值）、C27（四种读不出的处理差别）、C29（六次故障注入）各补一幅图，课程册 472 → 475 页、图 54 → 58 幅。合订随之重出：`2373 pages, 10 volumes, 802 outline entries`；EPUB 70 项 spine / 790 个条目，EPUBCheck 5.3.0 重跑 0 fatal / 0 error / 0 warning 并绑定新 SHA。同轮课程 `npm test` 43 项（新增「行数必须与章节清单一致」）通过。
+
+本轮哈希：PDF `9a734d61cff9c23a73e345c4c604f1e0919797d5ba074ec8cba30a4b515ac521`（124 284 839 B）、EPUB `99ee080a1b1f1e284bf021c4b350f8927cb4bd53f36cc11dd2c0e7ff9fc40a76`（61 566 252 B）。
 
 ## 七次重建（同日，清掉原始 LaTeX 后）
 
@@ -46,7 +52,7 @@ C18、C22 与三份答案共 182 处 `\[ \]` / `\( \)` / `\text{}` 改成本地�
 
 C18、C28、C30 各补一幅带数插图后，课程册由 469 页增至 472 页（图 51 → 54 幅）。合订随之重出：`2370 pages, 10 volumes, 802 outline entries`；EPUB 70 项 spine / 786 个条目，EPUBCheck 5.3.0 重跑 0 fatal / 0 error / 0 warning 并绑定新 SHA。同轮 `python -m unittest discover -s tests` 48 项、课程 `npm test` 42 项、`series.py check --project all --structure-only` 均通过。
 
-本轮哈希：PDF `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a`（123 334 527 B）、EPUB `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399`（60 794 619 B）。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `f319ec2f…`（472 页）。
+本轮哈希：PDF `d33782816de6b35749c7f9c6deacef61fa59e7da3ed3c053b40e9cf8f678cf2a`（123 334 527 B）、EPUB `227f8ff5ce486a651b3020819bf316cb0242fc7bc21c9515aab5c9c39a9ce399`（60 794 619 B）。卷一来源成品 `llm-course.pdf` 的 SHA-256 本轮为 `acdc4a4c…`（475 页）。
 
 ## 五次重建（同日，封面与页眉换色后）
 
@@ -77,7 +83,7 @@ C18、C28、C30 各补一幅带数插图后，课程册由 469 页增至 472 页
 - 卷首 1 页：系列名、十卷题名与日期。
 - 总目 5 页：十卷行加各册一级标题，页码指向该卷分隔页；卷行可点击跳转。
 - 每卷 1 页分隔页，然后原样合入该册全部页面；书签为「卷一…卷十」两级目录，卷内保留原书签层级再降一级。
-- 合计 2370 页（2354 + 10 页分隔 + 6 页卷首与总目）。
+- 合计 2373 页（2357 + 10 页分隔 + 6 页卷首与总目）。
 
 EPUB 采用包级合并：十册各自保留原有 `XHTML`、样式、图片与相对路径，放在 `EPUB/vNN/` 下；合订包新增封面、导航与十卷分隔页，spine 为 70 项（十册原有 57 项，加合订新增 13 项——导读页使课程册章节页由 48 增至 49）。每册原有 `nav` 标记降为普通文档，合订包只保留一个 `nav`。总目只链接十卷分隔页；各卷自己的 `nav.xhtml` 保留在包内但不再从总目链接——EPUBCheck RSC-011 不允许导航指向 spine 之外的资源，`verify_epub` 也把这条钉成契约。
 
@@ -100,6 +106,6 @@ EPUB 采用包级合并：十册各自保留原有 `XHTML`、样式、图片与�
 ## 未验证
 
 - 卷十（课程）原书为 A5（420 × 595 pt），其余九册为 A4；合订保留各自页面尺寸，未缩放，打印时需按页适配。此取舍保证卷内版式不变。
-- 合订本的视觉检查覆盖卷首、总目与抽样分隔页；未逐页复核 2370 页的渲染，也未做纸样或独立读者验收。
+- 合订本的视觉检查覆盖卷首、总目与抽样分隔页；未逐页复核 2373 页的渲染，也未做纸样或独立读者验收。
 - 远端 CI 的 root 任务会运行同一组根测试（含合订装配回归），但不产出合订本：九本 Agent 分册的成品 PDF 尚无 CI 构建，`series.py collected` 仍只在本机执行。
 - 合订本不改变各册的版本、许可与验证范围；合订成功不代表模型质量、教学效果或跨平台可用性通过。

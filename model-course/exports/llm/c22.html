@@ -109,6 +109,7 @@ python book/llm/examples/assistant/assistant.py evaluate \
 <li>若用线性插值，p95 会得到不同数值；必须写明算法，不能和别人的 p95 直接比。</li>
 </ul>
 <p><code>n = 20</code> 时，nearest-rank p95 是第 <code>ceil(19) = 19</code> 个值；<code>n = 100</code> 时是第 95 个。样本越少，分位数越不稳定。不要编造置信区间；可以说“样本不足，暂不下结论”。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/c22-latency-spread.svg" alt="八次采样里有一个离群点"><figcaption>图：把上面那八个毫秒值画在同一根轴上。前七个点挤在 1 200–1 800 之间，9 000 一个点把平均值拉到 2 437.5，中位数仍是 1 550；n=8 时 nearest-rank p95 就是最大值。轴只标注位置，不表示分布。</figcaption></figure>
 <h2 id="C22-section-b1bcb0df33" tabindex="-1">用脚本读报告</h2>
 <p>以下脚本从 <code>evaluate</code> JSON 中取每例的实际状态、模型调用耗时和端到端耗时，输出 <code>n</code>、中位数、nearest-rank p95。它不判断质量，只做算术：</p>
 <pre><code class="language-bash">python - &lt;&lt;&#39;PY&#39;
