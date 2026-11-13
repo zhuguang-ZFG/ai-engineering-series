@@ -176,6 +176,7 @@ python -c &quot;import torch, transformers; print(torch.__version__, transformer
 <li>记录请求 ID、客户端取消时间、服务端是否完成；</li>
 <li>对只读问答没有副作用，但仍要保留未知状态，不能把超时当“没有答案”。</li>
 </ul>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/c29-fault-matrix.svg" alt="六次故障注入各自能证明什么"><figcaption>图：左侧是注入的故障，右侧写预期状态与它不能推出的结论。状态码只说明入口拒绝了什么；“不能推出”一列才是这份记录的价值。</figcaption></figure>
 <h2 id="C29-section-13394dd8a7" tabindex="-1">回退：实际演练一次</h2>
 <p>回退不是“把代码改回去再试”。可以使用 <a href="../../book/llm/examples/delivery/README.md">本地发布与回退工具</a>：它生成全文件哈希清单、校验后切换 <code>current.json</code>，并提供 Windows CPU 环境的哈希锁定文件。下文的 <code>current-release.json</code> 是通用示例名，使用该工具时对应 <code>current.json</code>。用版本目录和显式切换：</p>
 <ol>

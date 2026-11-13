@@ -4,11 +4,19 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { appliedArtworks } from "./applied-art.mjs";
+import { appliedArtworks, ladder, ocrStates, faults } from "./applied-art.mjs";
 
 const read = path => readFileSync(new URL(path, import.meta.url), "utf8").replaceAll("−", "-");
-const chapters = { c18: read("../../book/llm/lessons/c18.md"), c28: read("../../book/llm/lessons/c28.md"), c30: read("../../book/llm/lessons/c30.md") };
-const host = { "c18-retrieval-scores.svg": "c18", "c28-context-budget.svg": "c28", "c30-rubric-weights.svg": "c30" };
+const chapters = Object.fromEntries(["c18", "c19", "c22", "c27", "c28", "c29", "c30"].map(id => [id, read(`../../book/llm/lessons/${id}.md`)]));
+const host = {
+  "c18-retrieval-scores.svg": "c18",
+  "c19-failure-ladder.svg": "c19",
+  "c22-latency-spread.svg": "c22",
+  "c27-ocr-failures.svg": "c27",
+  "c28-context-budget.svg": "c28",
+  "c29-fault-matrix.svg": "c29",
+  "c30-rubric-weights.svg": "c30"
+};
 const decimals = text => new Set((text.match(/-?\d+\.\d+/g) ?? []).map(value => Number(value).toFixed(4)));
 const palette = new Set(["#26221B", "#5C5448", "#E3D8C1", "#F3EAD8", "#B4472F", "#FFFDF8"]);
 
@@ -40,4 +48,16 @@ test("the drawings stay distinct files with one title each", () => {
   const files = appliedArtworks.map(([file]) => file);
   assert.equal(new Set(files).size, files.length);
   for (const [, svg] of appliedArtworks) assert.equal((svg.match(/<title/g) ?? []).length, 1);
+});
+
+// 三幅图的行数由章节自身的清单决定：多一行或漏一行都是图与正文分家。
+test("row counts follow the lists published by each chapter", () => {
+  const stepRows = chapters.c19.split("\n").filter(line => /^\| \d+ \|/.test(line));
+  assert.equal(ladder.length, stepRows.length, `ladder has ${ladder.length} rows, c19 publishes ${stepRows.length}`);
+
+  const headings = (text, from, to) => text.slice(text.indexOf(from), text.indexOf(to)).split("\n").filter(line => line.startsWith("### ")).length;
+  const injections = headings(chapters.c29, "## 故障注入", "## 回退");
+  assert.equal(faults.length, injections, `fault matrix has ${faults.length} rows, c29 publishes ${injections}`);
+  const states = headings(chapters.c27, "## 看不清、看不懂、看错", "## 改一个条件");
+  assert.equal(ocrStates.length, states, `OCR drawing has ${ocrStates.length} states, c27 publishes ${states}`);
 });
