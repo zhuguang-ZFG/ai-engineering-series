@@ -23,7 +23,7 @@
       "delivery": "deliverables/llm-principles.mp4",
       "status": "rendered-and-reviewed",
       "sourceHash": "5986b5c804e9b92fc771a0788fe754d9aa6e529843df5ce0caa6c940aab574c9",
-      "deliverySha256": "fda858670287cb488ddd7a33366ade58aa6ad5c184c6a6a132a6bc94f9168f5a",
+      "deliverySha256": "e6aa8bc524165417b96a9a2ba7da29e6ae765da3457f403dec2d505ec2abf932",
       "review": "videos/llm-principles/REVIEW.md"
     },
     {
@@ -31,7 +31,7 @@
       "delivery": "deliverables/llm-applications.mp4",
       "status": "rendered-and-reviewed",
       "sourceHash": "2d21a57be00a6bbe6b3d28fc2d880363a2f171d1634138dfecd57f7a02900af0",
-      "deliverySha256": "b561219081115cc97f32ad5b346adf8219ef4e934ee247e9966457ebcc956f59",
+      "deliverySha256": "7fabd930de4daaa4ce1f4382815a44e7da834a7f3e33dd30e85b13a48f55ed35",
       "review": "videos/llm-applications/REVIEW.md"
     }
   ]

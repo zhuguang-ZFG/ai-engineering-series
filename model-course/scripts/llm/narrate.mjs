@@ -62,7 +62,7 @@ for (const project of projects) {
     const list = join(work, "list.txt");
     writeFileSync(list, slots.map(path => `file '${path.replace(/\\/g, "/")}'`).join("\n"));
     const track = join(work, "narration.m4a");
-    run("ffmpeg", ["-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", list, "-af", `apad=whole_dur=${TOTAL},atrim=0:${TOTAL}`, "-ar", "48000", "-ac", "2", "-c:a", "aac", "-b:a", "160k", track]);
+    run("ffmpeg", ["-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", list, "-af", `apad=whole_dur=${TOTAL},atrim=0:${TOTAL},loudnorm=I=-16:TP=-1.5:LRA=11`, "-ar", "48000", "-ac", "2", "-c:a", "aac", "-b:a", "160k", track]);
     const staged = join(work, "muxed.mp4");
     run("ffmpeg", ["-y", "-v", "error", "-i", deliverable, "-i", track, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "copy", "-shortest", "-movflags", "+faststart", staged]);
     copyFileSync(staged, deliverable);
