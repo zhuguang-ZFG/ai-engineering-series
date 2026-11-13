@@ -32,4 +32,5 @@
 - 文件：llm-applications.mp4（当前），1920×1080，30/1 fps，32.400000 秒，h264 + aac (48000 Hz, stereo, 48 kHz)，响度归一化 loudnorm I=-16 LUFS（实测整片 -16.8 LUFS）。
 - SHA-256（当前）：7fabd930de4daaa4ce1f4382815a44e7da834a7f3e33dd30e85b13a48f55ed35
 - 自动化核对（已执行）：`ffprobe` 确认视频/音频流与时长；相邻帧 `3.0s vs 3.1s` PSNR≈35.87 dB、跨场 `1s vs 6s` PSNR≈14.33 dB；`freezedetect n=-60dB,d=0.3` 记录 1 条；`node scripts/llm/media-manifest.mjs --update` 重绑 sourceHash/deliverySha256；`node scripts/llm/build-media.mjs --check` 与 `node scripts/validate.mjs` 通过（均 exit 0）。
+- 逐帧运动：`tblend=difference` + `signalstats` 统计 971 个相邻帧差，全片无静止帧（principles min YAVG 0.0109 / mean 0.212；applications min 0.0159 / mean 0.207），即每一帧都与前一帧不同。
 - 未做：未抽取 MP4 关键帧做人工画面复核；未做人工听感审校；未做实际读者测试。**以上不构成“已目视/已试听确认”。**
