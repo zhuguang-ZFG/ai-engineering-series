@@ -190,8 +190,8 @@ validateVideoSource("ep03", { width: 1920, height: 1080, duration: 191.2, minimu
 validateVideoSource("ep04", { width: 1920, height: 1080, duration: 187.472, minimumCompositions: 8 });
 validateDelivery("deliverables/vibe-coding-101-landscape.mp4", { width: 1920, height: 1080, duration: 250.4, minimumBytes: 10_000_000 });
 validateDelivery("deliverables/vibe-coding-101-vertical.mp4", { width: 1080, height: 1920, duration: 47.5, minimumBytes: 1_500_000 });
-validateDelivery("deliverables/llm-principles.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000, audio: false });
-validateDelivery("deliverables/llm-applications.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000, audio: false });
+validateDelivery("deliverables/llm-principles.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000 });
+validateDelivery("deliverables/llm-applications.mp4", { width: 1920, height: 1080, duration: 32.4, minimumBytes: 100_000 });
 validateDelivery("deliverables/ep02-landscape.mp4", { width: 1920, height: 1080, duration: 194.5, minimumBytes: 5_000_000 });
 validateDelivery("deliverables/ep03-landscape.mp4", { width: 1920, height: 1080, duration: 191.2, minimumBytes: 5_000_000 });
 validateDelivery("deliverables/ep04-landscape.mp4", { width: 1920, height: 1080, duration: 187.5, minimumBytes: 5_000_000 });
