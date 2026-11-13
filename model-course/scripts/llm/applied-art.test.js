@@ -4,11 +4,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { appliedArtworks, ladder, ocrStates, faults } from "./applied-art.mjs";
+import { appliedArtworks, ladder, ocrStates, faults, contractPitfalls, reportStatuses, k3Paths } from "./applied-art.mjs";
 
 const read = path => readFileSync(new URL(path, import.meta.url), "utf8").replaceAll("−", "-");
-const chapters = Object.fromEntries(["c18", "c19", "c22", "c27", "c28", "c29", "c30"].map(id => [id, read(`../../book/llm/lessons/${id}.md`)]));
+const chapters = Object.fromEntries(["c02", "c13", "c17", "c18", "c19", "c22", "c27", "c28", "c29", "c30"].map(id => [id, read(`../../book/llm/lessons/${id}.md`)]));
 const host = {
+  "c02-contract-pitfalls.svg": "c02",
+  "c13-report-statuses.svg": "c13",
+  "c17-k3-paths.svg": "c17",
   "c18-retrieval-scores.svg": "c18",
   "c19-failure-ladder.svg": "c19",
   "c22-latency-spread.svg": "c22",
@@ -60,4 +63,16 @@ test("row counts follow the lists published by each chapter", () => {
   assert.equal(faults.length, injections, `fault matrix has ${faults.length} rows, c29 publishes ${injections}`);
   const states = headings(chapters.c27, "## 看不清、看不懂、看错", "## 改一个条件");
   assert.equal(ocrStates.length, states, `OCR drawing has ${ocrStates.length} states, c27 publishes ${states}`);
+});
+
+test("the status vocabulary and the gate paths match their chapters", () => {
+  const statuses = [...chapters.c13.matchAll(/`(answered|insufficient-evidence|conflict|unauthorized|missing-source|invalid-response|citation-failed|model-unavailable)`/g)].map(match => match[1]);
+  const vocabulary = [...new Set(statuses)].sort();
+  assert.deepEqual(reportStatuses.map(([status]) => status).sort(), vocabulary, "report statuses drifted from c13");
+
+  const gateHeadings = chapters.c17.slice(chapters.c17.indexOf("## 边界用例"), chapters.c17.indexOf("## K3 阶段门任务")).split("\n").filter(line => line.startsWith("### ")).length;
+  assert.equal(k3Paths.length, gateHeadings, `K3 drawing has ${k3Paths.length} paths, c17 publishes ${gateHeadings}`);
+
+  const pitfalls = chapters.c02.split("\n").filter(line => /^\d\. \*\*“/.test(line)).length;
+  assert.equal(contractPitfalls.length, pitfalls, `contract drawing has ${contractPitfalls.length} pitfalls, c02 publishes ${pitfalls}`);
 });

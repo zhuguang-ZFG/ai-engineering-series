@@ -84,6 +84,7 @@ python book/llm/examples/assistant/assistant.py run \
 <h3 id="C17-section-140ea97a47" tabindex="-1">6. 服务/模型失败</h3>
 <p>模型目录错误、API 不可达、返回非 JSON、引用对不上。预期分别是 <code>model-unavailable</code>、<code>invalid-response</code>、<code>citation-failed</code> 等，并保留 <code>diagnostics.first_failure</code>。不能回退为手工答案或旧缓存答案。</p>
 <p>把这六次的 <code>status</code>、关键字段、退出码列成表。表中没有“看起来正常”这一项；每个结果都要能指向实际文件。</p>
+<figure class="curriculum-figure"><img src="../../book/assets/handdraw/llm/c17-k3-paths.svg" alt="阶段门 K3 的六类结果"><figcaption>图：六类路径各有一份真实报告才算通过；图只列期望状态，具体字段与退出码以你本机 JSON 为准。</figcaption></figure>
 <h2 id="C17-section-cedc71c7b6" tabindex="-1">从干净环境复做</h2>
 <p>把项目复制到一个新目录（不复制 <code>out/</code>、不复制已生成的缓存），只保留：</p>
 <pre><code class="language-text">book/llm/examples/assistant/

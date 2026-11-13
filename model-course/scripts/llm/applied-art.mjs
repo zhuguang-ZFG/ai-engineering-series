@@ -271,3 +271,84 @@ appliedArtworks.push(
   ["c27-ocr-failures.svg", ocrFailuresArt()],
   ["c29-fault-matrix.svg", faultMatrixArt()]
 );
+
+// ---------- A02 四种写不清楚的约定 ----------
+export const contractPitfalls = [
+  ["“要完整”", "完整没有定义", "缺三项的表也能自称完整"],
+  ["“合理推测”", "允许无依据内容进报告", "推测要另开一列，不能混进“值”"],
+  ["“参考所有资料”", "没说版本与优先级", "旧通知会压过新通知"],
+  ["“输出专业一点”", "没有字段，没有核对方式", "改十遍也判断不了哪版更对"]
+];
+export function contractPitfallsArt() {
+  const rows = contractPitfalls.map(([word, why, cost], index) => {
+    const y = 104 + index * 96;
+    return line(`M26 ${y - 30}H454`, rule, 1.2) +
+      t(26, y, word, 22, "start", accent, 600) +
+      t(26, y + 30, why, 18, "start", ink) +
+      t(26, y + 56, cost, 17, "start", soft);
+  }).join("");
+
+  return canvas("四种写不清楚的约定",
+    "要完整、合理推测、参考所有资料、输出专业一点：四种说法的共同点是把判断留给了执行的一方。写约定的人省了力气，核对的人却要替它猜标准。",
+    560, rows +
+    line("M26 512H454", rule, 1.2) +
+    t(26, 542, "更隐蔽的一种：要求“附引用”却没说引用要支持结论", 17, "start", accent));
+}
+
+// ---------- A13 报告里的八种状态 ----------
+export const reportStatuses = [
+  ["answered", "每条主张都有可回查来源", "不等于每个字都对"],
+  ["insufficient-evidence", "材料没有覆盖问题", "不是“模型不知道”"],
+  ["conflict", "可见材料互相矛盾", "不能悄悄选一个"],
+  ["unauthorized", "读者无权读该文档", "正文没进提示与日志"],
+  ["missing-source", "文件缺失或版本不符", "不能拿缓存顶上"],
+  ["invalid-response", "结构无法解析", "要保留首次原始响应"],
+  ["citation-failed", "逐字关系不成立", "改写只能进人工复核"],
+  ["model-unavailable", "模型没加载或不可达", "健康检查可能仍返回 200"]
+];
+export function reportStatusesArt() {
+  const rows = reportStatuses.map(([status, meaning, cannot], index) => {
+    const y = 104 + index * 68;
+    return line(`M26 ${y - 24}H454`, rule, 1.2) +
+      t(26, y, status, 19, "start", index === 0 ? accent : ink, 600) +
+      t(26, y + 26, meaning, 16, "start", soft) +
+      t(454, y + 26, cannot, 16, "end", soft);
+  }).join("");
+
+  return canvas("报告里的八种状态",
+    "状态回答“停在哪一步”，不回答“答案对不对”。八种状态各有自己的不能推出项：answered 只说明每条主张都能回查，citation-failed 只说明逐字关系不成立。",
+    700, rows +
+    line("M26 656H454", rule, 1.2) +
+    t(26, 686, "先看 status，再看 diagnostics.first_failure", 18, "start", accent));
+}
+
+// ---------- A17 阶段门 K3 的六类结果 ----------
+export const k3Paths = [
+  ["正常有证据", "answered", "唯一可以标 answered 的路径"],
+  ["材料缺失", "insufficient-evidence", "不得用常识补价格"],
+  ["两版冲突", "conflict", "不能悄悄选一个"],
+  ["无命中", "证据不足", "不把最低分片段当证据"],
+  ["越权", "unauthorized", "正文不得进入模型上下文"],
+  ["服务或模型失败", "model-unavailable", "不回退成手工或缓存答案"]
+];
+export function k3PathsArt() {
+  const rows = k3Paths.map(([name, status, cannot], index) => {
+    const y = 104 + index * 84;
+    return line(`M26 ${y - 28}H454`, rule, 1.2) +
+      t(26, y, `${index + 1}. ${name}`, 20, "start", ink, 600) +
+      t(454, y, status, 16, "end", index === 0 ? accent : ink) +
+      t(26, y + 30, cannot, 17, "start", soft);
+  }).join("");
+
+  return canvas("六类结果，缺一类就没过 K3",
+    "阶段门不看某一次运行是否“看起来不错”：换一份文档、从干净环境重做，六类路径都要留下真实报告。",
+    660, rows +
+    line("M26 620H454", rule, 1.2) +
+    t(26, 650, "每个结果都要能指向实际文件", 18, "start", accent));
+}
+
+appliedArtworks.push(
+  ["c02-contract-pitfalls.svg", contractPitfallsArt()],
+  ["c13-report-statuses.svg", reportStatusesArt()],
+  ["c17-k3-paths.svg", k3PathsArt()]
+);
