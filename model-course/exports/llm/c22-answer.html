@@ -49,19 +49,18 @@ usage.model_load_ms 是其中加载部分的耗时；
 <p>中位数：</p>
 <ul>
 <li>偶数个，取中间两个：第 4 个 1500，第 5 个 1600；</li>
-<li>((1500+1600)/2=1550) ms。</li>
+<li><code>(1500 + 1600)/2 = 1550</code> ms。</li>
 </ul>
 <p>nearest-rank p95：</p>
 <ul>
-<li>(0.95\times8=7.6)；</li>
-<li>(\lceil7.6\rceil=8)；</li>
+<li><code>0.95 × 8 = 7.6</code>；</li>
+<li><code>ceil(7.6) = 8</code>；</li>
 <li>第 8 个值是 9000 ms。</li>
 </ul>
 <p>平均值：</p>
-<p>[
-(1200+1300+1400+1500+1600+1700+1800+9000)/8
-=19500/8=2437.5
-]</p>
+<pre><code class="language-text">(1200 + 1300 + 1400 + 1500 + 1600 + 1700 + 1800 + 9000) / 8
+= 19500 / 8 = 2437.5
+</code></pre>
 <p>单位为毫秒。逐项相加：1200+1300=2500；+1400=3900；+1500=5400；+1600=7000；+1700=8700；+1800=10500；+9000=19500。</p>
 <p>结论：</p>
 <ul>
@@ -69,14 +68,12 @@ usage.model_load_ms 是其中加载部分的耗时；
 <li>n=8 时 p95 就是最大值，不能宣称“95% 请求在 9000 ms 内”作为稳定估计；</li>
 <li>若用线性插值，p95 会不同；必须报告算法。</li>
 </ul>
-<p>n=20 时 p95 位置是 (\lceil19\rceil=19)；n=100 时是第 95 个。样本少时，报告所有原始值或 min/median/max，比只给一个分位数更诚实。</p>
+<p>n=20 时 p95 位置是 <code>ceil(19) = 19</code>；n=100 时是第 95 个。样本少时，报告所有原始值或 min/median/max，比只给一个分位数更诚实。</p>
 <h2 id="C22-answer-section-186533fb74" tabindex="-1">4. API 费用算例</h2>
 <p>公式：</p>
-<p>[
-\text{cost}=
-\frac{\text{prompt_tokens}}{1000}\times \text{price_input_per_1k}
-+\frac{\text{completion_tokens}}{1000}\times \text{price_output_per_1k}
-]</p>
+<pre><code class="language-text">cost = prompt_tokens / 1000 × price_input_per_1k
+     + completion_tokens / 1000 × price_output_per_1k
+</code></pre>
 <p>假设：</p>
 <pre><code class="language-text">prompt_tokens = 1000
 completion_tokens = 200
@@ -84,10 +81,9 @@ price_input_per_1k = 0.5
 price_output_per_1k = 1.5
 </code></pre>
 <p>计算：</p>
-<p>[
-1000/1000\times0.5 + 200/1000\times1.5
-=0.5+0.3=0.8
-]</p>
+<pre><code class="language-text">1000/1000 × 0.5 + 200/1000 × 1.5
+= 0.5 + 0.3 = 0.8
+</code></pre>
 <p>单位是“你的价格表单位”，不要擅自写成美元。若只提供输入价、没有输出价，或 usage 缺字段，报告 <code>cost=null</code> / <code>prices-not-configured-or-usage-missing</code>，不要只算一半。</p>
 <p>本地：</p>
 <pre><code class="language-json">{&quot;cost&quot;: null, &quot;cost_basis&quot;: &quot;local-compute-not-priced&quot;}
