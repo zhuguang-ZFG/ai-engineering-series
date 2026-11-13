@@ -1,6 +1,6 @@
 {
   "version": "1.1.2",
-  "sourceHash": "c2a45791c029838a4290dcaeb84a6a38fdb7f0d06fa665bccce8d2e2f78719fa",
+  "sourceHash": "3548cf4c5d2dc51f5661a198516bf0ab1163623d9a630b6600edf1ec05f6d9f6",
   "design": {
     "page": "A5",
     "bodyFace": "Noto Serif SC / Songti",
@@ -106,20 +106,20 @@
   },
   "files": {
     "llm-course.pdf": {
-      "bytes": 21400016,
-      "sha256": "45010d8fc3722fc31e2368c00a9f5eb9c215a0048fbc36baaf6972f059590207"
+      "bytes": 21405076,
+      "sha256": "f319ec2f8f3cf93cca529951b9b4fbcc3a89ad1e2a64afdc6804cb5ffc8231c4"
     },
     "llm-course.epub": {
-      "bytes": 8498101,
-      "sha256": "f9c8353fe3f8241f06920f067bd8c4cba61e54b80fbedb9b038ae8e42dd07914"
+      "bytes": 8498067,
+      "sha256": "f084b9be43c2d6afd74e5d940937fc91a9795e16b4049c48c77a1a31a4f59954"
     },
     "llm-course-answers.pdf": {
-      "bytes": 7533373,
-      "sha256": "0d47ba01147a64d5a221be25517a3bf99b6c83970b43d06f692cc7bec570b1cd"
+      "bytes": 7541827,
+      "sha256": "a297c6f28ca58fd3908b3f975e88ec5c8e7842a4f4bb104251400b487a6aa9b2"
     },
     "llm-course-answers.epub": {
-      "bytes": 8334400,
-      "sha256": "2a242e9201c1fa30ae78141c32e423410a46b7dead50ed1586e2d5285723d029"
+      "bytes": 8334397,
+      "sha256": "64540fe4d61a697e68a90628d218119e14a2b279c9872e5531a6df2acf29122d"
     }
   },
   "limitations": [
