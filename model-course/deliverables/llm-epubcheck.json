@@ -2,7 +2,7 @@
   "checker": "EPUBCheck",
   "version": "5.3.0",
   "epub": "llm-explained-handdraw.epub",
-  "epubSha256": "c66d5c1e96bb8f13ce31f8ef40e5cdec1e2a254d316d377da39a3f887dd79760",
+  "epubSha256": "698d461326d78673f6238e2f8d3fa2e3a129c8c44fc6f98907cc5a3321576e22",
   "status": "passed",
   "fatals": 0,
   "errors": 0,
