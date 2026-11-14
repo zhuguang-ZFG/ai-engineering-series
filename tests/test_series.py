@@ -61,6 +61,7 @@ class SeriesTests(unittest.TestCase):
 
     def test_clean_checkout_refreshes_stale_index_without_build_artifacts(self):
         shutil.copyfile(ROOT / "scripts/build_index.py", self.root / "scripts/build_index.py")
+        shutil.copyfile(ROOT / "series.py", self.root / "series.py")
         (self.root / "assets").mkdir()
         shutil.copyfile(ROOT / "assets/series-map.svg", self.root / "assets/series-map.svg")
         stale_link = "agent-books/yuyu-book/dist/yuyu-prompt-zh.html"

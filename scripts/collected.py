@@ -1,4 +1,4 @@
-"""Merge the ten shipped books into one volume-numbered collected edition.
+"""Merge the shipped books into one volume-numbered collected edition.
 
 The collection is assembled from each book's own finished artifact, so every
 volume keeps its native layout, numbering and cross-book prefixes. Only the
@@ -34,10 +34,12 @@ sys.path.insert(0, str(ROOT))
 import series  # noqa: E402  (the root router owns the catalog contract)
 
 # The course comes first because the workbook and the harness books assume its
-# vocabulary; the eight agent books then keep the order the series ships them.
+# vocabulary; the agent books then keep the order the series ships them.
 ORDER = ("llm", "prompt", "book", "omp", "pi", "opencode", "deepseek", "hermes",
-         "codex", "kimi")
-CN_NUMBERS = ("一", "二", "三", "四", "五", "六", "七", "八", "九", "十")
+         "codex", "kimi", "grok", "cursor")
+CN_NUMBERS = series.CN_NUMBERS
+COUNT_CN = series.volume_count_cn(len(ORDER))
+COLLECTION_TITLE = series.collection_title(len(ORDER))
 A4 = (595.0, 842.0)
 MARGIN = 64.0
 TOC_TOP = 132.0
@@ -215,7 +217,7 @@ def build_pdf(root: Path = ROOT, *, lang: str = "zh", date: str | None = None,
 
     cover = doc[0]
     _line(cover, font, MARGIN, 150, "大模型与智能体工程", size=13)
-    _line(cover, font, MARGIN, 205, "十卷合订本", size=40)
+    _line(cover, font, MARGIN, 205, f"{COUNT_CN}合订本", size=40)
     _line(cover, font, MARGIN, 250, "从大模型原理到 Agent Harness 工程", size=15)
     y = 300
     for volume in plan:
@@ -251,8 +253,8 @@ def build_pdf(root: Path = ROOT, *, lang: str = "zh", date: str | None = None,
         raise RuntimeError(f"collected: page layout drifted ({doc.page_count} != {total})")
 
     doc.set_toc(outline)
-    doc.set_metadata({"title": "大模型与智能体工程 · 十卷合订本",
-                      "author": "LinTsinghua", "subject": "合订本（十卷）",
+    doc.set_metadata({"title": COLLECTION_TITLE,
+                      "author": "LinTsinghua", "subject": f"合订本（{COUNT_CN}）",
                       "keywords": "大模型, Agent, Harness, 合订本"})
     doc.set_pagemode("UseOutlines")
 
@@ -300,7 +302,7 @@ def verify_pdf(path: Path, manifest: dict) -> dict:
         volumes = [entry for entry in outline if entry[0] == 1]
         if len(volumes) != len(manifest["volumes"]):
             raise ValueError("collected: expected one outline entry per volume")
-        if "十卷合订本" not in doc[0].get_text():
+        if f"{COUNT_CN}合订本" not in doc[0].get_text():
             raise ValueError("collected: cover text missing")
         contents = "".join(doc[number].get_text()
                            for number in range(1, manifest["front_pages"]))
@@ -400,7 +402,7 @@ def build_epub(root: Path = ROOT, *, lang: str = "zh", date: str | None = None,
     out_dir.mkdir(parents=True, exist_ok=True)
     out_epub = out_dir / f"yuyu-collected-{lang}.epub"
 
-    title = "大模型与智能体工程 · 十卷合订本"
+    title = COLLECTION_TITLE
     manifest_items, ids = [], set()
     volume_spines = []
     for index, volume in enumerate(plan):
@@ -434,7 +436,7 @@ def build_epub(root: Path = ROOT, *, lang: str = "zh", date: str | None = None,
         f'<li><a href="vol{i + 1:02d}.xhtml">'
         f'{xml_escape(volume["no"] + "　" + volume["title"])}</a></li>'
         for i, volume in enumerate(plan))
-    cover_body = ('<h1>大模型与智能体工程</h1><p class="vol">十卷合订本</p>'
+    cover_body = (f'<h1>大模型与智能体工程</h1><p class="vol">{COUNT_CN}合订本</p>'
                   + "".join(f'<p>{xml_escape(volume["no"] + "　" + volume["title"])}</p>'
                             for volume in plan)
                   + f'<p class="meta">各卷保留原有版本与版式；卷首与本目录为合订本新增。{date}</p>')

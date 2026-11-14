@@ -5,9 +5,13 @@ import argparse
 from html import escape
 import json
 from pathlib import Path
+import sys
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+import series  # noqa: E402  (the root router owns the catalog contract)
 
 CSS = """
 :root{color-scheme:light dark;--paper:#f6f3ec;--ink:#272923;--muted:#62665c;--line:#cbcdbf;--accent:#26594f;--sheet:#fffdf7}
@@ -24,6 +28,7 @@ header{border-top:5px solid var(--accent);padding-top:22px}.eyebrow{font-size:13
 
 def build(*, distribution=False):
     catalog = json.loads((ROOT / "series.json").read_text(encoding="utf-8"))
+    bound_count = series.volume_count_cn(len(catalog["books"]))
     # Embed the authored diagram so a collected index remains a standalone page.
     route_map = (ROOT / "assets/series-map.svg").read_text(encoding="utf-8")
     output = ROOT / "dist" if distribution else ROOT
@@ -65,8 +70,8 @@ def build(*, distribution=False):
                  link("yuyu-collected-zh.epub", "合订本 EPUB")]
         bound = [entry for entry in bound if entry]
         if bound:
-            cards.insert(0, '<article><div><h2>大模型与智能体工程 · 十卷合订本</h2>'
-                            '<div class="meta">十册按卷合一 · 卷首、总目与卷分隔页为合订本新增</div></div>'
+            cards.insert(0, f'<article><div><h2>大模型与智能体工程 · {bound_count}合订本</h2>'
+                            f'<div class="meta">{len(catalog["books"])} 册按卷合一 · 卷首、总目与卷分隔页为合订本新增</div></div>'
                             f'<div class="formats">{"".join(bound)}</div></article>')
 
     navigation = "" if distribution else '<nav class="nav" aria-label="项目导航">' + "".join([link("README.md", "项目说明"), link("docs/reading-routes.md", "跨书阅读路线"), link("docs/integration/README.md", "整合记录"), link("LICENSES.md", "来源与许可")]) + "</nav>"

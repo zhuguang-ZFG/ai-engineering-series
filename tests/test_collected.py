@@ -109,7 +109,7 @@ class CollectedTests(unittest.TestCase):
     def test_every_volume_is_merged_behind_its_own_divider(self):
         manifest = self.build()
         self.assertEqual([volume["no"] for volume in manifest["volumes"]],
-                         list(f"{collected.volume_label(i)}" for i in range(10)))
+                         list(f"{collected.volume_label(i)}" for i in range(12)))
         pages = [volume["source_pages"] for volume in manifest["volumes"]]
         expected = manifest["front_pages"] + sum(1 + count for count in pages)
         self.assertEqual(manifest["total_pages"], expected)
@@ -132,9 +132,9 @@ class CollectedTests(unittest.TestCase):
         outline = output.get_toc()
         self.assertEqual(outline[0][0], 1)
         self.assertEqual(outline[0][2], manifest["volumes"][0]["divider_page"])
-        self.assertEqual(sum(1 for entry in outline if entry[0] == 1), 10)
-        self.assertEqual(sum(1 for entry in outline if entry[0] == 2), 10)
-        self.assertEqual(sum(1 for entry in outline if entry[0] == 3), 10)
+        self.assertEqual(sum(1 for entry in outline if entry[0] == 1), 12)
+        self.assertEqual(sum(1 for entry in outline if entry[0] == 2), 12)
+        self.assertEqual(sum(1 for entry in outline if entry[0] == 3), 12)
 
         links = []
         for number in range(1, manifest["front_pages"]):
@@ -159,27 +159,27 @@ class CollectedTests(unittest.TestCase):
         stored = json.loads((self.root / "dist" / first["output"].replace(".pdf", ".json"))
                             .read_text(encoding="utf-8"))
         self.assertEqual(stored["sha256"], first["sha256"])
-        self.assertEqual(len(stored["volumes"]), 10)
+        self.assertEqual(len(stored["volumes"]), 12)
 
     def test_merged_epub_keeps_every_book_package(self):
         manifest = collected.build_epub(self.root, lang="zh", date="2026-11-12")
         path = self.root / "dist" / manifest["output"]
         checked = collected.verify_epub(path)
-        self.assertEqual(checked["volumes"], 10)
-        self.assertEqual(manifest["spine_items"], 32)
-        self.assertEqual(checked["spine_items"], 32)
+        self.assertEqual(checked["volumes"], 12)
+        self.assertEqual(manifest["spine_items"], 38)
+        self.assertEqual(checked["spine_items"], 38)
         with zipfile.ZipFile(path) as archive:
             self.assertEqual(archive.namelist()[0], "mimetype")
             self.assertIn("EPUB/v01/EPUB/ch1.xhtml", archive.namelist())
-            self.assertIn("EPUB/v10/EPUB/book.css", archive.namelist())
+            self.assertIn("EPUB/v12/EPUB/book.css", archive.namelist())
             package = archive.read("EPUB/package.opf").decode("utf-8")
-        self.assertIn("十卷合订本", package)
+        self.assertIn("十二卷合订本", package)
         self.assertEqual(package.count('properties="nav"'), 1)
         spine = re.findall(r'<itemref idref="([^"]+)"/>', package)
         self.assertEqual(spine[2], "divider01")
         self.assertEqual(spine[3], "v01-ch1")
         self.assertEqual(spine[spine.index("divider02") + 1], "v02-ch1")
-        self.assertEqual(spine[-1], "v10-ch2")
+        self.assertEqual(spine[-1], "v12-ch2")
 
     def test_merged_epub_is_byte_stable(self):
         first = collected.build_epub(self.root, lang="zh", date="2026-11-12")
@@ -224,7 +224,7 @@ class CollectedTests(unittest.TestCase):
         manifest = self.build()
         checked = collected.verify_pdf(self.root / "dist" / manifest["output"], manifest)
         self.assertEqual(checked["pages"], manifest["total_pages"])
-        self.assertEqual(checked["volumes"], 10)
+        self.assertEqual(checked["volumes"], 12)
         tampered = dict(manifest, total_pages=manifest["total_pages"] + 1)
         with self.assertRaises(ValueError):
             collected.verify_pdf(self.root / "dist" / manifest["output"], tampered)

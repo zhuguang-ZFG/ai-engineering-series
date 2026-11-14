@@ -17,13 +17,25 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 PROJECTS = ("agent-books", "model-course")
-PRODUCTS = ("book", "omp", "pi", "opencode", "deepseek", "hermes", "codex", "kimi", "prompt", "llm")
+PRODUCTS = ("book", "omp", "pi", "opencode", "deepseek", "hermes", "codex", "kimi",
+            "prompt", "llm", "grok", "cursor")
+CN_NUMBERS = ("一", "二", "三", "四", "五", "六", "七", "八", "九", "十",
+              "十一", "十二")
 ARTIFACT_SUFFIXES = {".html", ".pdf", ".epub", ".zip"}
 SITE_SUFFIXES = {".html", ".css", ".js", ".cjs", ".mjs", ".json", ".jsonl", ".svg", ".png", ".jpg",
                  ".jpeg", ".webp", ".gif", ".md", ".txt", ".py", ".toml", ".yml", ".yaml", ".lock",
                  ".woff", ".woff2", ".ttf", ".otf"}
 SKIP_PARTS = {".git", "node_modules", "__pycache__", ".hyperframes", ".thumbnails", ".waveform-cache",
               "tmp", "out", "archive", "renders", "local-feedback"}
+
+
+def volume_count_cn(count: int) -> str:
+    """How the collected edition names its own size, e.g. 十二卷."""
+    return f"{CN_NUMBERS[count - 1]}卷"
+
+
+def collection_title(count: int) -> str:
+    return f"大模型与智能体工程 · {volume_count_cn(count)}合订本"
 
 
 def inside(base, relative):
@@ -45,7 +57,7 @@ def load_catalog(root=ROOT):
         raise ValueError("series.json: expected schema 1 and the two known projects")
     ids = [book.get("id") for book in data.get("books", [])]
     if len(ids) != len(set(ids)) or set(ids) != set(PRODUCTS):
-        raise ValueError("series.json: expected ten unique book IDs")
+        raise ValueError("series.json: expected every registered book ID")
     for name, project in data["projects"].items():
         if project.get("path") != name:
             raise ValueError("Project paths must match their registered directory names")
@@ -311,7 +323,7 @@ def collect(root, catalog, project="all"):
 def main(argv=None, *, root=ROOT):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("list", help="show the ten books and local entry status")
+    commands.add_parser("list", help="show the registered books and local entry status")
     checker = commands.add_parser("check", help="run structure and existing project checks")
     checker.add_argument("--project", choices=("all", *PROJECTS), default="all")
     checker.add_argument("--structure-only", action="store_true")
@@ -322,7 +334,7 @@ def main(argv=None, *, root=ROOT):
     builder.add_argument("--epub", action="store_true")
     collector = commands.add_parser("collect", help="copy existing books and course website to dist")
     collector.add_argument("--project", choices=("all", *PROJECTS), default="all")
-    collected = commands.add_parser("collected", help="merge the ten books into one volume-numbered PDF")
+    collected = commands.add_parser("collected", help="merge the registered books into one volume-numbered PDF")
     collected.add_argument("--lang", choices=("zh",), default="zh")
     collected.add_argument("--date", default=None)
     args = parser.parse_args(argv)
