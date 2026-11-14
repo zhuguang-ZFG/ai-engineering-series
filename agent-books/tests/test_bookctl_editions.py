@@ -88,7 +88,8 @@ class EditionBuild(unittest.TestCase):
             run.assert_not_called()
 
     def test_agent_volumes_keep_their_own_manifest_and_epub_prefix(self):
-        for product in ("opencode", "deepseek", "hermes", "codex", "kimi", "prompt"):
+        for product in ("opencode", "deepseek", "hermes", "codex", "kimi", "prompt",
+                        "grok", "cursor"):
             with self.subTest(product=product), tempfile.TemporaryDirectory() as temporary:
                 folder = Path(temporary)
                 commands = []
@@ -111,7 +112,8 @@ class EditionBuild(unittest.TestCase):
                 self.assertIn(str(folder / f"yuyu-{product}-zh.epub"), commands[1])
 
     def test_agent_volumes_reject_unavailable_english_before_running(self):
-        for product in ("opencode", "deepseek", "hermes", "codex", "kimi", "prompt"):
+        for product in ("opencode", "deepseek", "hermes", "codex", "kimi", "prompt",
+                        "grok", "cursor"):
             with self.subTest(product=product), mock.patch.object(bookctl, "run") as run:
                 self.assertEqual(bookctl.build(self.arguments("unused", product=product, lang="en")), 2)
                 run.assert_not_called()

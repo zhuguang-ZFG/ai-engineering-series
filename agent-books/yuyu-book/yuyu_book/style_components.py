@@ -170,7 +170,7 @@ figure.illu{margin:1.6rem 0;text-align:center;break-inside:avoid}
   border:1px solid var(--line-2);border-radius:var(--r-2);padding:1.3rem 1.2rem;
   box-shadow:0 6px 22px -12px rgba(38,34,27,.30),
     inset 0 0 0 1px rgba(255,255,255,.55)}
-.illu-frame svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.illu-frame svg{display:block;margin:0 auto;width:100%;max-width:100%;height:auto}
 .illu-photo .illu-frame{padding:0;overflow:hidden;
   box-shadow:0 10px 26px -16px rgba(38,34,27,.34),
     inset 0 0 0 1px rgba(38,34,27,.07),

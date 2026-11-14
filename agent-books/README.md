@@ -72,6 +72,8 @@ make book-pi-epub   # 再加 EPUB
 
 [Kimi Code：从插件到审查助手](kimi/README.md) 延续独立分册形式，固定 2.5.2，以澄明库存案例串起 Skill、自定义 Agent、插件、Hook、MCP 与 ACP。包含前言、18 章、附录 A–D 和完整随书示例。运行 `make book-kimi-all` 或 `python scripts/bookctl.py build --product kimi --lang zh --pdf --epub` 生成三种格式，实际验证范围见 [Kimi VERIFY](kimi/VERIFY.md)。
 
+新增两卷（第一部已成稿，其余章节续写中）：[Grok Build：开源编码 Agent 的 Harness](grok/README.md) 固定 `xai-org/grok-build` 的 SOURCE_REV 快照，从一道会放过错误版本的发布闸门讲到配置、规则、会话与检查点；[Cursor CLI：闭源 Agent 的可验证用法](cursor/README.md) 只写官方文档声明的行为与本机可复现的命令形态，覆盖入口核对、打印模式、三种模式、会话与 worktree、规则与两个配置文件。构建入口分别为 `python scripts/bookctl.py build --product grok --lang zh` 与 `--product cursor --lang zh`；两卷尚未并入系列仓 `series.json` 与合订本顺序，待成书后再登记。
+
 ## 阅读说明
 
 阅读时需区分源码可确认的行为、架构推演和教学示例。功能标志与工具可用性取决于构建和运行时配置；数量和耗时示例不代表当前发行版承诺。

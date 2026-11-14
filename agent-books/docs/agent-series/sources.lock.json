@@ -223,6 +223,19 @@
       "commit": "1c142a007c10e881602690def96057c23a2baa12",
       "license": "MIT",
       "source": "https://github.com/MoonshotAI/kimi-code/tree/1c142a007c10e881602690def96057c23a2baa12"
+    },
+    {
+      "id": "grok",
+      "repo": "xai-org/grok-build",
+      "tag": "public commit 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8 (SOURCE_REV 559751fdcec02d413e4c57c8832ab275e4f44980)",
+      "commit": "2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+      "license": "Apache-2.0",
+      "source": "https://github.com/xai-org/grok-build/tree/2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+      "paths": [
+        "crates/codegen/xai-grok-pager/docs/user-guide/",
+        "crates/codegen/xai-grok-pager-bin/Cargo.toml",
+        "crates/codegen/xai-grok-workspace/src/session/checkpoint_store.rs"
+      ]
     }
   ],
   "official_docs": [
@@ -243,7 +256,43 @@
       "accessed": "2026-11-10",
       "scope": "Local discovery, configuration and load order; consulted through Context7",
       "version": "rolling; pinned source and host results take precedence for this experiment"
+    },
+    {
+      "url": "https://github.com/xai-org/grok-build/tree/2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8/crates/codegen/xai-grok-pager/docs/user-guide",
+      "accessed": "2026-11-13",
+      "scope": "Grok Build in-tree user guide (27 pages): configuration precedence, project rules, memory, sessions, permissions, headless, ACP",
+      "version": "public commit 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8 (SOURCE_REV 559751fdcec02d413e4c57c8832ab275e4f44980)"
+    },
+    {
+      "url": "https://cursor.com/docs/cli/overview",
+      "accessed": "2026-11-13",
+      "scope": "Cursor CLI overview: modes, print mode, cloud handoff, sessions",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://cursor.com/docs/cli/reference/parameters",
+      "accessed": "2026-11-13",
+      "scope": "Cursor CLI global options, commands, sandbox and MCP subcommands",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://cursor.com/docs/cli/reference/configuration",
+      "accessed": "2026-11-13",
+      "scope": "Cursor CLI config fields, approvalMode values, file locations",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://cursor.com/docs/cli/reference/permissions",
+      "accessed": "2026-11-13",
+      "scope": "Cursor CLI permission tokens: Shell/Read/Write/WebFetch/Mcp, deny precedence",
+      "version": "rolling; not evidence of pinned binary behavior"
+    },
+    {
+      "url": "https://cursor.com/docs/rules",
+      "accessed": "2026-11-13",
+      "scope": "Cursor rule files: .mdc frontmatter fields, AGENTS.md alternative",
+      "version": "rolling; not evidence of pinned binary behavior"
     }
   ],
-  "updated": "2026-11-10"
+  "updated": "2026-11-13"
 }

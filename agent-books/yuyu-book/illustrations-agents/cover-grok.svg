@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M56 288q-1-136 .8-232Q57 30 86 30l286-.6q28 0 27 27l-.8 232" stroke-width="2.8"/>
+  <path d="M158 288q-.8-62 .6-108 .2-26 27-26l182 .2" stroke-width="2" opacity=".72"/>
+  <path d="M56 288q196-6 424-1" stroke-width="2.8"/>
+  <path d="M158 60q56-4 100 .6M160 86q44-3 78 .4M162 112q58-3 96 .2M164 138q40-2 72 .4M166 164q52-2 88 .4M168 190q42-3 74 0M170 216q56-2 92 .4M172 242q38-2 68 .2" stroke-width="1.8" opacity=".8"/>
+  <path d="m404 86 20 30-20 30 22 30-20 30" stroke-width="3"/>
+  <path d="M470 96q44-4 84 .6l-1 122q-42-3-82 .4Z" stroke-width="2.4"/>
+  <path d="M484 118q32-3 56 .4M484 140q26-2 46 .2M484 162q34-3 54 .2M484 184q22-2 40 .4" stroke-width="1.6" opacity=".62"/>
+  <path d="M560 60q56-6 84 24 22 32-8 58-34 26-62 2-28-26-14-84Z" stroke-width="2.7"/>
+  <path d="m596 74 20 14-18 16" stroke-width="3.2"/>
+  <path d="M448 60q92-8 150 26M444 236q96-4 140 26M600 258q50-24 76-64" stroke-width=".9" opacity=".3"/>
+  <circle cx="700" cy="70" r="3.4" fill="currentColor" stroke="none"/>
+  <circle cx="724" cy="70" r="3.4" fill="currentColor" stroke="none" opacity=".55"/>
+  <circle cx="748" cy="70" r="3.4" fill="currentColor" stroke="none" opacity=".3"/>
+  <path d="M636 300q60-8 132-6" stroke-width="1.2" opacity=".28"/>
+</svg>

@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "grok",
+  "version": "0.1.0",
+  "date": "2026-11-13",
+  "title": {
+    "zh": "Grok Build：开源编码 Agent 的 Harness"
+  },
+  "subtitle": {
+    "zh": "跟做发布闸门：配置层次、工具、权限与会话 · 非官方"
+  },
+  "kicker": {
+    "zh": "Grok Build · Rules into evidence"
+  },
+  "notice": {
+    "zh": "本书为独立技术教程，与 SpaceXAI 无隶属关系。源码固定为 xai-org/grok-build 的公开提交 2bdd1d6a（树内 SOURCE_REV 559751fd 记录其对应的内部单仓提交）；发布程序未在写作机器上安装，命令形式取自仓内用户手册与 docs.x.ai，未运行的部分在附录 C 逐条注明。"
+  },
+  "epigraph": {
+    "zh": "先让闸门错一次，再看谁有权把它改对。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-grok",
+  "revisions_registry": "revisions-grok.json",
+  "subject_index_registry": null,
+  "plain_optional": false,
+  "pin": {
+    "commit": "2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+    "source_rev": "559751fdcec02d413e4c57c8832ab275e4f44980",
+    "writing": "xai-org/grok-build @ 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8（SOURCE_REV 559751fd）"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "第一次跟做"
+      },
+      "body": {
+        "zh": "从第 1 章核对程序，第 2 章跑出三处错误，再沿配置、规则与会话走到第 5 章。"
+      }
+    },
+    {
+      "label": {
+        "zh": "已经用过 CLI"
+      },
+      "body": {
+        "zh": "先读第 3 章的七层优先级与附录 B，再回第 2 章对一遍示例输出。"
+      }
+    },
+    {
+      "label": {
+        "zh": "要给团队定规矩"
+      },
+      "body": {
+        "zh": "第 4 章讲项目规则与记忆的分工，附录 C 写清哪些结论只是文档声明。"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "grok-p1",
+      "title": {
+        "zh": "启动与配置"
+      },
+      "motto": {
+        "zh": "先确认程序，再让闸门错一次。"
+      },
+      "goal": {
+        "zh": "读完能说清：跑的是哪个构建、配置从哪一层来、规则和会话各自落在磁盘的哪里。"
+      },
+      "units": [
+        {
+          "id": "grok-ch01",
+          "zh": "grok/ch01.md"
+        },
+        {
+          "id": "grok-ch02",
+          "zh": "grok/ch02.md"
+        },
+        {
+          "id": "grok-ch03",
+          "zh": "grok/ch03.md"
+        },
+        {
+          "id": "grok-ch04",
+          "zh": "grok/ch04.md"
+        },
+        {
+          "id": "grok-ch05",
+          "zh": "grok/ch05.md"
+        }
+      ],
+      "no": {
+        "zh": "第一部"
+      }
+    }
+  ],
+  "front": {
+    "id": "grok-front",
+    "zh": "grok/00-前言.md"
+  },
+  "appendices": [
+    {
+      "id": "grok-apxa",
+      "zh": "grok/appendix-a.md"
+    },
+    {
+      "id": "grok-apxb",
+      "zh": "grok/appendix-b.md"
+    },
+    {
+      "id": "grok-apxc",
+      "zh": "grok/appendix-c.md"
+    },
+    {
+      "id": "grok-apxd",
+      "zh": "grok/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "grok-front": {
+      "question": {
+        "zh": "为什么先复现错误，再谈能力？"
+      },
+      "deliverable": {
+        "zh": "选一条阅读路线，分清算例、源码与文档三种证据。"
+      },
+      "boundary": {
+        "zh": "本书固定源码 SOURCE_REV；发布程序的实测范围见附录 C。"
+      },
+      "sources": [
+        "grok-repo",
+        "grok-guide"
+      ],
+      "plain": {
+        "zh": "这本书的入口：先承认闸门会判错，再逐层查程序、配置、规则与会话。"
+      },
+      "plain_evidence": [
+        "grok-front.b-opening"
+      ]
+    },
+    "grok-ch01": {
+      "question": {
+        "zh": "怎样确认跑的是本书讲的那个程序？"
+      },
+      "deliverable": {
+        "zh": "记下版本与入口，分清发布构建与源码树。"
+      },
+      "boundary": {
+        "zh": "写作机器未安装 grok，版本核对写成按文档的步骤。"
+      },
+      "sources": [
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "先弄清命令名、包名、产物名各是哪一份东西，再谈它能做什么。"
+      },
+      "plain_evidence": [
+        "grok-ch01.b-opening"
+      ]
+    },
+    "grok-ch02": {
+      "question": {
+        "zh": "三处看起来对、实际会放过错误的判断长什么样？"
+      },
+      "deliverable": {
+        "zh": "跑出故障版与修好版的差异，并把三处缺陷指到具体行。"
+      },
+      "boundary": {
+        "zh": "示例只依赖 Python 标准库，不调用模型。"
+      },
+      "sources": [
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "三处看似合理的判断错在同一处：把字符串当成事实，用例先错再修。"
+      },
+      "plain_evidence": [
+        "grok-ch02.b-opening"
+      ]
+    },
+    "grok-ch03": {
+      "question": {
+        "zh": "同一个配置项被写过三次，以哪一次为准？"
+      },
+      "deliverable": {
+        "zh": "画出七层优先级，说清组织策略与叠加层的边界。"
+      },
+      "boundary": {
+        "zh": "优先级来自仓内配置文档；实际取值仍需在你的机器上验证。"
+      },
+      "sources": [
+        "grok-guide"
+      ],
+      "plain": {
+        "zh": "同一个键被写过多次时，按七层顺序比，序号小的那一层说了算。"
+      },
+      "plain_evidence": [
+        "grok-ch03.b-opening"
+      ]
+    },
+    "grok-ch04": {
+      "question": {
+        "zh": "项目规则与记忆各管什么？"
+      },
+      "deliverable": {
+        "zh": "知道规则文件名、扫描目录与信任边界，能判断一段说明会被谁读到。"
+      },
+      "boundary": {
+        "zh": "只列文档写明的文件名与目录；未声明的加载顺序不推断。"
+      },
+      "sources": [
+        "grok-guide"
+      ],
+      "plain": {
+        "zh": "项目规则跟着仓库走，记忆跟着你走；两者装进上下文的方式不同。"
+      },
+      "plain_evidence": [
+        "grok-ch04.b-opening"
+      ]
+    },
+    "grok-ch05": {
+      "question": {
+        "zh": "会话恢复和代码回退是一件事吗？"
+      },
+      "deliverable": {
+        "zh": "能从磁盘布局读出会话记录，并区分对话恢复与工作区检查点。"
+      },
+      "boundary": {
+        "zh": "落盘文件名取自会话文档；字段含义未逐项实测。"
+      },
+      "sources": [
+        "grok-guide",
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "对话能回到某一轮，文件要另一份快照；两种恢复各读不同的落盘文件。"
+      },
+      "plain_evidence": [
+        "grok-ch05.b-opening"
+      ]
+    },
+    "grok-apxa": {
+      "question": {
+        "zh": "安装、构建与三种运行形态分别用哪条命令？"
+      },
+      "deliverable": {
+        "zh": "按表核对入口，知道每条命令会写哪些目录。"
+      },
+      "boundary": {
+        "zh": "命令形式取自 README 与用户手册，未在本机运行。"
+      },
+      "sources": [
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "安装、构建、无头与 ACP 各有一条入口命令，各自写不同的目录。"
+      },
+      "plain_evidence": [
+        "grok-apxa.b-opening"
+      ]
+    },
+    "grok-apxb": {
+      "question": {
+        "zh": "配置层与源码目录怎样对应？"
+      },
+      "deliverable": {
+        "zh": "用一张表定位配置来源与 crate 职责。"
+      },
+      "boundary": {
+        "zh": "叠加层 allowlist 的字段以配置文档为准。"
+      },
+      "sources": [
+        "grok-guide",
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "七层配置与六个源码目录摆在同一张表里，方便从现象倒推文件。"
+      },
+      "plain_evidence": [
+        "grok-apxb.b-opening"
+      ]
+    },
+    "grok-apxc": {
+      "question": {
+        "zh": "哪些结论是实测，哪些只是文档？"
+      },
+      "deliverable": {
+        "zh": "能给出三类证据的边界，并按同一口径复现别人的结果。"
+      },
+      "boundary": {
+        "zh": "本机只实测了 Python 示例；grok 程序本身未运行。"
+      },
+      "sources": [
+        "grok-repo"
+      ],
+      "plain": {
+        "zh": "实测、源码、文档三类证据分开记，缺一项就说明结论的边界在哪。"
+      },
+      "plain_evidence": [
+        "grok-apxc.b-opening"
+      ]
+    },
+    "grok-apxd": {
+      "question": {
+        "zh": "这些词在本书里各指什么？"
+      },
+      "deliverable": {
+        "zh": "遇到会话、检查点、技能等词时能分辨它属于哪一层。"
+      },
+      "boundary": {
+        "zh": "术语按本书用法定义，不声称是上游官方译名。"
+      },
+      "sources": [
+        "grok-guide"
+      ],
+      "plain": {
+        "zh": "同一批词按层归位：能做什么、做到哪停、做过什么、还记得什么。"
+      },
+      "plain_evidence": [
+        "grok-apxd.b-opening"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "grok-repo": {
+    "title": "xai-org/grok-build @ 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/xai-org/grok-build/tree/2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+    "snapshot": "public commit 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8 (cloned 2026-11-13); the tree records internal monorepo SHA 559751fdcec02d413e4c57c8832ab275e4f44980 in SOURCE_REV",
+    "accessed": "2026-11-13",
+    "license": "Apache-2.0",
+    "scope": "Repository layout, crate responsibilities, build commands, in-tree user guide; published binaries were not installed on the writing machine",
+    "pinned": {
+      "commit": "2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+      "source_rev": "559751fdcec02d413e4c57c8832ab275e4f44980"
+    }
+  },
+  "grok-guide": {
+    "title": "Grok Build user guide (in-tree)",
+    "authority": "Upstream documentation shipped with the pager crate",
+    "kind": "docs",
+    "url": "https://github.com/xai-org/grok-build/tree/2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8/crates/codegen/xai-grok-pager/docs/user-guide",
+    "snapshot": "27 guide pages at public commit 2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8",
+    "accessed": "2026-11-13",
+    "license": "Apache-2.0",
+    "scope": "Configuration precedence, project rules, memory, sessions, permissions, headless mode, ACP, sandbox; behaviour described here is not re-tested in this book"
+  },
+  "xai-docs": {
+    "title": "Grok Build documentation site",
+    "authority": "Vendor documentation",
+    "kind": "docs",
+    "url": "https://docs.x.ai/build/overview",
+    "snapshot": "Live site read on 2026-11-13",
+    "accessed": "2026-11-13",
+    "license": "Vendor terms",
+    "scope": "Overview, install scripts and changelog pointers; used only for statements the repository does not carry"
+  }
+}

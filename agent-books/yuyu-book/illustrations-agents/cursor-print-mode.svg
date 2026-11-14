@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 450" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+  <g font-family="serif" fill="currentColor" stroke="none">
+    <text x="24" y="34" font-size="22">非交互一次调用</text>
+    <path d="M20 46h340" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".45"/>
+
+    <rect x="56" y="68" width="268" height="76" rx="8" fill="none" stroke="currentColor"/>
+    <text x="82" y="100" font-size="21">提问 / 任务</text>
+    <text x="82" y="128" font-size="19">agent -p …</text>
+
+    <path d="M190 144v30" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <path d="m182 166 8 10 8-10" fill="none" stroke="currentColor" stroke-width="2.4"/>
+
+    <rect x="56" y="174" width="268" height="86" rx="8" fill="none" stroke="currentColor"/>
+    <text x="82" y="208" font-size="21">工具动作</text>
+    <text x="82" y="236" font-size="19">读写文件、运行命令</text>
+
+    <path d="M190 260v30" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <path d="m182 282 8 10 8-10" fill="none" stroke="currentColor" stroke-width="2.4"/>
+
+    <rect x="56" y="290" width="268" height="98" rx="8" fill="none" stroke="currentColor"/>
+    <text x="82" y="322" font-size="21">放行 / 拒绝</text>
+    <text x="82" y="350" font-size="19">需审批时无 --force 则拒绝</text>
+    <text x="82" y="374" font-size="19">--force 放行，deny 仍生效</text>
+  </g>
+</svg>

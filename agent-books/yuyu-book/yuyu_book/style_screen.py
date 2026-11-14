@@ -331,7 +331,6 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
     .ch-emblem [fill="currentColor"],.kp-art [fill="currentColor"],
     .pd-art [fill="currentColor"],.cover-art [fill="currentColor"],
     .ch-trace [fill="currentColor"],.pd-route [fill="currentColor"],
-    .illu-frame [fill="currentColor"],
     .itinerary [fill="currentColor"]{
       transform-box:fill-box;transform-origin:center;
       animation:ink-pop .7s cubic-bezier(.2,1.4,.4,1) both;
@@ -466,8 +465,8 @@ article h1{font-size:1.85rem;margin:.15rem 0 1.05rem;line-height:1.4}
 @keyframes ink-draw{from{stroke-dashoffset:100}}
 @keyframes ink-fade{from{opacity:0}}
 @keyframes ink-cycle{0%,100%{opacity:.26}12%,30%{opacity:1}}
-@keyframes ink-pop{0%{transform:scale(0)}60%{transform:scale(1.25,.75)}
-  80%{transform:scale(.92,1.12)}100%{transform:scale(1)}}
+@keyframes ink-pop{0%{transform:scale(0)}60%{transform:scale(1.08)}
+  80%{transform:scale(.96)}100%{transform:scale(1)}}
 @keyframes ink-spin{to{transform:rotate(360deg)}}
 @keyframes ink-spin-c{from{transform:rotate(9deg)}to{transform:rotate(369deg)}}
 @keyframes ink-wiggle{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}

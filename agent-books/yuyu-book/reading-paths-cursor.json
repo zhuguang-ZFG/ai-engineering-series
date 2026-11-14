@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "cursor-front": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-ch02": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-ch03": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-ch04": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-ch05": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-apxa": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-apxb": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-apxc": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "cursor-apxd": [
+    "start",
+    "core",
+    "deep"
+  ]
+}

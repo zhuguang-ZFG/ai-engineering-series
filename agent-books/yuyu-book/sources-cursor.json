@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "cursor-cli-docs": {
+    "title": "Cursor CLI documentation",
+    "authority": "Vendor documentation",
+    "kind": "docs",
+    "url": "https://cursor.com/docs/cli/overview",
+    "snapshot": "Live pages read on 2026-11-13: overview, using, headless, reference/{parameters,configuration,permissions}, rules",
+    "accessed": "2026-11-13",
+    "license": "Vendor terms",
+    "scope": "Command surface, print-mode behaviour, config fields, permission tokens, rules locations; Cursor is closed source and none of it was re-run locally"
+  }
+}

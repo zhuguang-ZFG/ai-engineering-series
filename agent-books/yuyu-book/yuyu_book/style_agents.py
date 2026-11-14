@@ -47,6 +47,8 @@ AGENT_CSS = r"""
 .av-codex{--volume-ink:#326853}
 .av-kimi{--volume-ink:#4B558B}
 .av-prompt{--volume-ink:#8A4F2C}
+.av-grok{--volume-ink:#2E4A44}
+.av-cursor{--volume-ink:#6B3F5A}
 .agent-volume .cover-inner{
   text-align:left;background:var(--card);box-shadow:none;
   border-top:10px solid var(--volume-ink);border-bottom:1px solid var(--line);
@@ -74,10 +76,12 @@ AGENT_CSS = r"""
   body.agent-deepseek:not(.force-light){--cinnabar:#93B5F4}body.agent-hermes:not(.force-light){--cinnabar:#D5B987}body.agent-codex:not(.force-light){--cinnabar:#91C9AE}
   body.agent-kimi:not(.force-light){--cinnabar:#B4BCE8}
   body.agent-prompt:not(.force-light){--cinnabar:#E6AF86}
+  body.agent-grok:not(.force-light){--cinnabar:#8FB3A6}body.agent-cursor:not(.force-light){--cinnabar:#C79BB6}
   body:not(.force-light) .agent-volume{--volume-ink:#75B5C1}body:not(.force-light) .av-deepseek{--volume-ink:#93B5F4}
   body:not(.force-light) .av-hermes{--volume-ink:#D5B987}body:not(.force-light) .av-codex{--volume-ink:#91C9AE}
   body:not(.force-light) .av-kimi{--volume-ink:#B4BCE8}
   body:not(.force-light) .av-prompt{--volume-ink:#E6AF86}
+  body:not(.force-light) .av-grok{--volume-ink:#8FB3A6}body:not(.force-light) .av-cursor{--volume-ink:#C79BB6}
 }
 @media print{
   .agent-prompt .idx-block{break-inside:auto}
@@ -85,6 +89,7 @@ AGENT_CSS = r"""
   .agent-deepseek{--cinnabar:#315AA6}.agent-hermes{--cinnabar:#79613B}.agent-codex{--cinnabar:#326853}
   .agent-kimi{--cinnabar:#4B558B}
   .agent-prompt{--cinnabar:#8A4F2C}
+  .agent-grok{--cinnabar:#2E4A44}.agent-cursor{--cinnabar:#6B3F5A}
   .agent-book .compass{grid-template-columns:repeat(3,1fr);margin-bottom:5mm}
   .agent-book .compass-card+.compass-card{padding-left:3mm;border-left:1px solid var(--line);border-top:0}
   .agent-book .compass-card p{font-size:8pt}
@@ -97,6 +102,7 @@ AGENT_CSS = r"""
   .av-hermes{--volume-ink:#79613B}.av-codex{--volume-ink:#326853}
   .av-kimi{--volume-ink:#4B558B}
   .av-prompt{--volume-ink:#8A4F2C}
+  .av-grok{--volume-ink:#2E4A44}.av-cursor{--volume-ink:#6B3F5A}
   .agent-volume .cover-inner{padding:12mm 8mm 6mm;box-shadow:none;border-top:3mm solid var(--volume-ink);border-bottom:1px solid var(--line);justify-content:flex-start}
   .agent-volume .cover-kicker{margin-bottom:18mm;font-size:8pt}
   .agent-volume .bt-main{font-size:40pt}

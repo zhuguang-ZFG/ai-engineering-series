@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "cursor",
+  "version": "0.1.0",
+  "date": "2026-11-13",
+  "title": {
+    "zh": "Cursor CLI：闭源 Agent 的可验证用法"
+  },
+  "subtitle": {
+    "zh": "从装好 agent 命令，到模式、权限与会话 · 非官方"
+  },
+  "kicker": {
+    "zh": "Cursor CLI · Only what you can check"
+  },
+  "notice": {
+    "zh": "本书为独立技术教程，与 Anysphere 无隶属关系。Cursor 为闭源产品，正文只写官方文档声明的行为与本机可复现的命令形态，引用页面均在 2026-11-13 访问；写作机器未安装该 CLI，未运行的步骤逐条注明。"
+  },
+  "epigraph": {
+    "zh": "闭源产品的书，只能写你明天还能验一遍的东西。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-cursor",
+  "revisions_registry": "revisions-cursor.json",
+  "subject_index_registry": null,
+  "plain_optional": false,
+  "start_reading": [
+    {
+      "label": {
+        "zh": "第一次装"
+      },
+      "body": {
+        "zh": "第 1 章核对入口与非交互输出，第 2 章挑一个模式跑通，第 5 章再把设置写进全局文件。"
+      }
+    },
+    {
+      "label": {
+        "zh": "要在 CI 里用"
+      },
+      "body": {
+        "zh": "先读第 1 章的非交互放行规则，再读附录 B 的权限令牌。"
+      }
+    },
+    {
+      "label": {
+        "zh": "给团队定规矩"
+      },
+      "body": {
+        "zh": "第 4 章讲规则文件，附录 C 说明哪些限制只是使用政策而不是安全边界。"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "cursor-p1",
+      "no": {
+        "zh": "第一部"
+      },
+      "title": {
+        "zh": "装好、选模式、定边界"
+      },
+      "motto": {
+        "zh": "能复现的才写，不能复现的标出来。"
+      },
+      "goal": {
+        "zh": "读完能把 CLI 装进脚本，说清三种模式、三档审批与两类配置文件的边界。"
+      },
+      "units": [
+        {
+          "id": "cursor-ch01",
+          "zh": "cursor/ch01.md"
+        },
+        {
+          "id": "cursor-ch02",
+          "zh": "cursor/ch02.md"
+        },
+        {
+          "id": "cursor-ch03",
+          "zh": "cursor/ch03.md"
+        },
+        {
+          "id": "cursor-ch04",
+          "zh": "cursor/ch04.md"
+        },
+        {
+          "id": "cursor-ch05",
+          "zh": "cursor/ch05.md"
+        }
+      ]
+    }
+  ],
+  "front": {
+    "id": "cursor-front",
+    "zh": "cursor/00-前言.md"
+  },
+  "appendices": [
+    {
+      "id": "cursor-apxa",
+      "zh": "cursor/appendix-a.md"
+    },
+    {
+      "id": "cursor-apxb",
+      "zh": "cursor/appendix-b.md"
+    },
+    {
+      "id": "cursor-apxc",
+      "zh": "cursor/appendix-c.md"
+    },
+    {
+      "id": "cursor-apxd",
+      "zh": "cursor/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "cursor-front": {
+      "question": {
+        "zh": "闭源产品凭什么写成书？"
+      },
+      "deliverable": {
+        "zh": "接受「只写文档声明与可复现行为」的口径，挑一条阅读路线。"
+      },
+      "boundary": {
+        "zh": "不写内部实现与版本号；引用页面均标访问日期。"
+      },
+      "plain": {
+        "zh": "入口先装好，能验的写，验不了的标出来，这本书只做这两件事。"
+      },
+      "plain_evidence": [
+        "cursor-front.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-ch01": {
+      "question": {
+        "zh": "装完以后怎么确认跑的是它？"
+      },
+      "deliverable": {
+        "zh": "核对入口、跑通一条非交互命令、知道三种输出格式。"
+      },
+      "boundary": {
+        "zh": "写作机器未安装该 CLI，参数清单按文档写。"
+      },
+      "plain": {
+        "zh": "先确认命令叫 agent，再让它在只读任务上跑一次，看清输出长什么样。"
+      },
+      "plain_evidence": [
+        "cursor-ch01.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-ch02": {
+      "question": {
+        "zh": "Agent、Plan、Ask 三种模式分别什么时候用？"
+      },
+      "deliverable": {
+        "zh": "按任务风险挑模式，知道切换的三条路径。"
+      },
+      "boundary": {
+        "zh": "模式行为来自文档，未在本机逐档实测。"
+      },
+      "plain": {
+        "zh": "先说清再动手的用 Plan，只要答案的用 Ask，其余交给 Agent。"
+      },
+      "plain_evidence": [
+        "cursor-ch02.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-ch03": {
+      "question": {
+        "zh": "会话、工作目录与 worktree 各自决定什么？"
+      },
+      "deliverable": {
+        "zh": "能从旧会话继续，并在独立 checkout 里工作。"
+      },
+      "boundary": {
+        "zh": "会话目录结构与 `agent ls` 字段未逐一实测。"
+      },
+      "plain": {
+        "zh": "会话给上下文，目录给权限，worktree 让改动落在另一个 checkout。"
+      },
+      "plain_evidence": [
+        "cursor-ch03.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-ch04": {
+      "question": {
+        "zh": "规则文件怎样影响每次开工？"
+      },
+      "deliverable": {
+        "zh": "写得出会被读到的最小规则集，知道冲突时该测什么。"
+      },
+      "boundary": {
+        "zh": "规则来源与优先级按文档；冲突谁赢需自查。"
+      },
+      "plain": {
+        "zh": "规则是仓库里的文件，克隆下来才在；它决定 agent 开工前先读什么。"
+      },
+      "plain_evidence": [
+        "cursor-ch04.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-ch05": {
+      "question": {
+        "zh": "哪些设置只能写在全局，哪些能按项目覆盖？"
+      },
+      "deliverable": {
+        "zh": "分清两个配置文件，写出可用的权限块。"
+      },
+      "boundary": {
+        "zh": "字段表来自配置参考页；`unrestricted` 与 `--force` 的等价关系按文档。"
+      },
+      "plain": {
+        "zh": "全局文件装设置，项目文件只装权限，别的覆盖不了。"
+      },
+      "plain_evidence": [
+        "cursor-ch05.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-apxa": {
+      "question": {
+        "zh": "哪些命令会改动我的机器？"
+      },
+      "deliverable": {
+        "zh": "按表核对子命令与文件落点，避开会改环境的操作。"
+      },
+      "boundary": {
+        "zh": "命令取自参数参考页，未在本机运行。"
+      },
+      "plain": {
+        "zh": "入口叫 agent，配置在 ~/.cursor，worktree 也在同一个目录下。"
+      },
+      "plain_evidence": [
+        "cursor-apxa.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-apxb": {
+      "question": {
+        "zh": "权限令牌怎么写才不出漏洞？"
+      },
+      "deliverable": {
+        "zh": "写出五类令牌的 allow/deny 组合，理解 deny 优先。"
+      },
+      "boundary": {
+        "zh": "字段与令牌语法来自配置与权限两页参考文档。"
+      },
+      "plain": {
+        "zh": "权限是一串固定写法的字符串，deny 里的规则永远压住 allow。"
+      },
+      "plain_evidence": [
+        "cursor-apxb.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-apxc": {
+      "question": {
+        "zh": "怎样复现别人的结论？"
+      },
+      "deliverable": {
+        "zh": "按日期、来源、是否实测三件套记录每次验证。"
+      },
+      "boundary": {
+        "zh": "本机只跑过 Python 侧命令，CLI 本身未运行。"
+      },
+      "plain": {
+        "zh": "每条结论都带日期、来源与是否实测，缺一样就无法复核。"
+      },
+      "plain_evidence": [
+        "cursor-apxc.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    },
+    "cursor-apxd": {
+      "question": {
+        "zh": "这些词在本书里指什么？"
+      },
+      "deliverable": {
+        "zh": "遇到模式、令牌、规则时能归到对应那一层。"
+      },
+      "boundary": {
+        "zh": "术语按本书用法定义，不是官方译名。"
+      },
+      "plain": {
+        "zh": "入口、模式、权限、规则、worktree 各管一层，先定位再查文件。"
+      },
+      "plain_evidence": [
+        "cursor-apxd.b-opening"
+      ],
+      "sources": [
+        "cursor-cli-docs"
+      ]
+    }
+  }
+}

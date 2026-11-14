@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "cursor-cli": {
+    "term": {
+      "zh": "Cursor CLI"
+    },
+    "forms": {
+      "zh": [
+        "Cursor CLI"
+      ]
+    },
+    "plain": {
+      "zh": "把编辑器里的编码 agent 搬到终端，装好后命令名是 agent"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "cursor-front.b-opening"
+    ]
+  },
+  "print-mode": {
+    "term": {
+      "zh": "非交互模式"
+    },
+    "forms": {
+      "zh": [
+        "非交互模式"
+      ]
+    },
+    "plain": {
+      "zh": "给一条提示词就跑完，回答直接进标准输出，不等人工确认"
+    },
+    "priority": "core",
+    "mark": true,
+    "why": {
+      "zh": "非交互模式不能停下来问人，所以需要审批的动作一律被拒。"
+    },
+    "why_evidence": [
+      "cursor-ch01.b-print"
+    ],
+    "evidence": [
+      "cursor-ch01.b-print"
+    ]
+  },
+  "worktree": {
+    "term": {
+      "zh": "worktree"
+    },
+    "forms": {
+      "zh": [
+        "worktree"
+      ]
+    },
+    "plain": {
+      "zh": "同一仓库的另一份工作副本，改动互不干扰"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "cursor-ch03.b-opening"
+    ]
+  },
+  "rules-file": {
+    "term": {
+      "zh": "规则文件"
+    },
+    "forms": {
+      "zh": [
+        "规则文件"
+      ]
+    },
+    "plain": {
+      "zh": "放进仓库的约束说明，agent 每次开工前先读它"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "cursor-ch04.b-opening"
+    ]
+  },
+  "permission-token": {
+    "term": {
+      "zh": "权限令牌"
+    },
+    "forms": {
+      "zh": [
+        "令牌"
+      ]
+    },
+    "plain": {
+      "zh": "形如 Shell(git) 的纯字符串，写进 allow 或 deny 列表"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "cursor-apxb.b-tokens"
+    ]
+  }
+}

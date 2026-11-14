@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "grok-front": [
+    "start",
+    "core",
+    "deep"
+  ],
+  "grok-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-ch02": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-ch03": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-ch04": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-ch05": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-apxa": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-apxb": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-apxc": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "grok-apxd": [
+    "start",
+    "core",
+    "deep"
+  ]
+}

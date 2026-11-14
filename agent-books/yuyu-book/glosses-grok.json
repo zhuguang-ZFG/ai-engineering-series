@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "grok-build": {
+    "term": {
+      "zh": "Grok Build"
+    },
+    "forms": {
+      "zh": [
+        "Grok Build"
+      ]
+    },
+    "plain": {
+      "zh": "SpaceXAI 公开源码的终端编码 Agent，装好后的命令名是 grok"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "grok-front.b-opening"
+    ]
+  },
+  "release-gate": {
+    "term": {
+      "zh": "发布闸门"
+    },
+    "forms": {
+      "zh": [
+        "发布闸门"
+      ]
+    },
+    "plain": {
+      "zh": "发布前跑的一组检查，判定这一版能不能发出去"
+    },
+    "priority": "core",
+    "mark": true,
+    "evidence": [
+      "grok-ch02.b-gate"
+    ],
+    "why": {
+      "zh": "发布闸门先错一次，读者才知道判定和预期谁在说谎。"
+    },
+    "why_evidence": [
+      "grok-ch02.b-gate"
+    ]
+  },
+  "exit-code": {
+    "term": {
+      "zh": "退出码"
+    },
+    "forms": {
+      "zh": [
+        "退出码"
+      ]
+    },
+    "plain": {
+      "zh": "程序结束时交给命令行的一个数字，0 表示成功"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "grok-ch02.b-opening"
+    ]
+  },
+  "config-precedence": {
+    "term": {
+      "zh": "配置优先级"
+    },
+    "forms": {
+      "zh": [
+        "优先级"
+      ]
+    },
+    "plain": {
+      "zh": "同一个配置键被多处写过时，最终以哪一处的值为准"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "grok-ch03.b-precedence"
+    ]
+  },
+  "project-rules": {
+    "term": {
+      "zh": "项目规则"
+    },
+    "forms": {
+      "zh": [
+        "项目规则"
+      ]
+    },
+    "plain": {
+      "zh": "放进仓库的 Markdown 说明，启动时读进上下文，随代码一起版本管理"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "grok-ch04.b-opening"
+    ]
+  },
+  "session": {
+    "term": {
+      "zh": "会话"
+    },
+    "forms": {
+      "zh": [
+        "会话"
+      ]
+    },
+    "plain": {
+      "zh": "一次任务从开始到结束的完整记录，含消息、工具调用与落盘文件"
+    },
+    "priority": "core",
+    "mark": true,
+    "evidence": [
+      "grok-ch05.b-opening"
+    ],
+    "why": {
+      "zh": "会话能回到某一轮对话，却管不到磁盘文件，所以要另一份快照。"
+    },
+    "why_evidence": [
+      "grok-ch05.b-opening"
+    ]
+  },
+  "checkpoint": {
+    "term": {
+      "zh": "检查点"
+    },
+    "forms": {
+      "zh": [
+        "检查点"
+      ]
+    },
+    "plain": {
+      "zh": "工作区在某个时刻留下的快照，用来把文件退回去"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "grok-ch05.b-checkpoint"
+    ]
+  }
+}

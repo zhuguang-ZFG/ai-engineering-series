@@ -46,7 +46,11 @@ FILES = (
 ) + tuple(f"{kind}-{product}.json"
           for product in ("opencode", "deepseek", "hermes", "codex", "kimi", "prompt")
           for kind in ("manifest", "glosses", "sources", "notes",
-                       "reading-paths", "revisions", "subject-index"))
+                       "reading-paths", "revisions", "subject-index")) \
+  + tuple(f"{kind}-{product}.json"
+          for product in ("grok", "cursor")
+          for kind in ("manifest", "glosses", "sources", "notes",
+                       "reading-paths", "revisions"))
 
 SUBJECT_INDEX = "subject-index.json"
 
