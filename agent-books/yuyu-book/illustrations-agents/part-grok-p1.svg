@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
   <path d="M44 232q-.8-78 .6-152Q45 60 66 60l300-.6q22 0 21.4 22l-.6 150" stroke-width="2.8"/>
-  <path d="M120 232q-.6-38 .4-72 .2-20 21-20l150 .2" stroke-width="2" opacity=".75"/>
+  <path d="M120 232q-.6-38 .4-72 .2-20 21-20l150 .2" stroke-width="2.0" opacity=".75"/>
   <path d="M206 140q-1-40 .6-76 .4-18 19.6-18l132 .2" stroke-width="1.7" opacity=".55"/>
   <path d="M126 96q54-3 96 .6M129 160q44-2.6 84 .4M212 108q40-2.4 78 0"/>
   <path d="M42 232q158-4.6 352-.6" stroke-width="2.8"/>
   <path d="m132 104 12 8.6-11 9" stroke-width="3.6"/>
-  <path d="M180 84q62-4 128-.6M181 92q54-3 96-.4" stroke-width=".9" opacity=".32"/>
+  <path d="M180 84q62-4 128-.6M181 92q54-3 96-.4" stroke-width="1.1" opacity=".32"/>
   <path d="M394 96q46-3 92 .4l-1 70q-46-2.6-90 .4Z" stroke-width="2.4" opacity=".85"/>
   <path d="M404 112q38-2 70 .6M404 126q34-2 62 .4M404 140q40-2 72 .2" stroke-width="1.6" opacity=".6"/>
   <path d="M470 176q26-30 58-60" stroke-width="2.2" opacity=".7"/>
   <path d="M522 62q30-4 44 16 12 20-6 32-20 12-36-4-14-16-2-44Z" stroke-width="2.6"/>
-  <path d="m540 70 14 8-12 10" stroke-width="3"/>
-  <path d="M470 90q60-6 96 22M466 120q58-2 88 20" stroke-width=".8" opacity=".3"/>
+  <path d="m540 70 14 8-12 10" stroke-width="3.0"/>
+  <path d="M470 90q60-6 96 22M466 120q58-2 88 20" stroke-width="1.1" opacity=".3"/>
   <circle cx="392" cy="70" r="3" fill="currentColor" stroke="none"/>
   <circle cx="404" cy="70" r="3" fill="currentColor" stroke="none" opacity=".55"/>
   <circle cx="416" cy="70" r="3" fill="currentColor" stroke="none" opacity=".3"/>

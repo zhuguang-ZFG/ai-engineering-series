@@ -393,20 +393,38 @@ class FigureMarkup(unittest.TestCase):
 
     def test_wide_plates_are_floored_and_advertise_the_scroll(self):
         zh = render.mermaid_figure("w" * 12, self.WIDE, "C-15", "依赖关系", "zh")
-        self.assertIn("min-width:2600px;", zh)   # capped, so the drag stays sane
+        # 0.85 x 3592 units: the scale at which 13px labels stay above 11px and
+        # a 1px hairline stays above the 0.75px ink floor on a phone column.
+        self.assertIn("min-width:3053px;", zh)
         self.assertIn('<figure class="diagram wide"', zh)
         self.assertIn('<span class="fig-hint">可横向拖动</span>', zh)
         en = render.mermaid_figure("w" * 12, self.WIDE, "C-15", "deps", "en")
         self.assertIn("drag sideways", en)
         self.assertNotIn("可横向", en)
 
-    def test_plates_that_already_fit_the_column_are_untouched(self):
-        for vw in ("795", "1100"):
+    def test_only_diagrams_that_fit_the_phone_column_are_left_alone(self):
+        # 374 units is where a 13px label stops being readable in a 292px frame;
+        # everything wider is floored, whether or not it fits a desktop column.
+        for vw in ("300", "374"):
             svg = self.NARROW.replace("0 0 795 160", f"0 0 {vw} 160")
             html = render.mermaid_figure("n" * 12, svg, "1-1", "x", "zh")
             self.assertNotIn("min-width", html)
             self.assertNotIn("fig-hint", html)
             self.assertIn('<figure class="diagram" id=', html)
+        for vw, floor in (("795", 676), ("1100", 935)):
+            svg = self.NARROW.replace("0 0 795 160", f"0 0 {vw} 160")
+            html = render.mermaid_figure("n" * 12, svg, "1-1", "x", "zh")
+            self.assertIn(f"min-width:{floor}px;", html)
+            self.assertIn("可横向拖动", html)
+
+    def test_floor_reads_width_from_a_shifted_viewbox(self):
+        """Sequence diagrams start at negative x; the floor must still use the
+        width, not the origin."""
+        svg = ('<svg id="mm-s" width="100%" style="max-width: 100%;" '
+               'viewBox="-50 -10 1282 618"></svg>')
+        out, floor = render.floor_wide_svg(svg)
+        self.assertEqual(floor, "1090px")
+        self.assertIn("min-width:1090px;", out)
 
     def test_the_floor_lands_on_the_root_tag_only(self):
         svg = ('<svg viewBox="0 0 2000 500"><style>.a{min-width:1px}</style>'

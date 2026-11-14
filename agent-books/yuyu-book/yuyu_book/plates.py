@@ -12,10 +12,15 @@ _PLATE_PH_RE = re.compile(
     r"<p>@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@</p>"
     r"|@@(MM:[0-9a-f]{12}|ILL:[0-9a-f]{12})@@")
 
-_FLOOR_FROM = 1150.0
+# A plate is read, not skimmed: below ~0.85 scale its 13px labels fall under
+# 11px and its 1px hairlines under the 0.75px ink floor, which is what a phone
+# column does to every diagram wider than ~375 units. The floor turns that into
+# a sideways drag instead of a diagram nobody can read.
 _FLOOR_RATIO = 0.85
-_FLOOR_CAP = 2600.0
-_VIEWBOX_RE = re.compile(r'viewBox="0 0 ([0-9.]+) ([0-9.]+)"')
+_FLOOR_CAP = 3200.0
+_FLOOR_MIN_WIDTH = 374.0
+_VIEWBOX_RE = re.compile(
+    r'viewBox="\s*(-?[0-9.]+)[ ,]+(-?[0-9.]+)[ ,]+([0-9.]+)[ ,]+([0-9.]+)')
 _SVG_ROOT_RE = re.compile(r"<svg\b[^>]*>")
 
 
@@ -32,8 +37,8 @@ def floor_wide_svg(svg: str) -> tuple[str, str | None]:
     vb = _VIEWBOX_RE.search(head)
     if not vb:
         return svg, None
-    vw = float(vb.group(1))
-    if vw < _FLOOR_FROM:
+    vw = float(vb.group(3))
+    if vw <= _FLOOR_MIN_WIDTH:
         return svg, None
     floor = f"{round(min(vw * _FLOOR_RATIO, _FLOOR_CAP))}px"
     if " style=" in head:
@@ -61,7 +66,7 @@ def _plate_metrics(svg: str) -> tuple[float, float, float] | None:
     if not vb:
         return None
     fonts = [float(x) for x in re.findall(r"font-size:\s*([0-9.]+)px", svg)]
-    return (float(vb.group(1)), float(vb.group(2)),
+    return (float(vb.group(3)), float(vb.group(4)),
             max(fonts) if fonts else 16.0)
 
 

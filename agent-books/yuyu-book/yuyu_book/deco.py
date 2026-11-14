@@ -34,12 +34,22 @@ WHEEL_SVG = """<svg class="wheel" viewBox="0 0 200 200" role="img" aria-hidden="
 _WHEEL_N = 0
 
 
+# 0.25 pt is the thinnest rule offset printing holds; below it the ornament
+# fills in or drops out. The wheel is drawn once in a 200-unit box and inlined
+# anywhere from 24 px to a full-bleed 360, so the floor is per call size.
+_PRINT_INK_PX = 0.25 / 0.75
+_WHEEL_SW = re.compile(r'stroke-width="([0-9.]+)"')
+
+
 def wheel(size: int = 44) -> str:
     """Each instance needs its own spoke id — the SVG is inlined repeatedly."""
     global _WHEEL_N
     _WHEEL_N += 1
     sid = f"spoke{_WHEEL_N}"
-    return (WHEEL_SVG
+    ink = _PRINT_INK_PX * 200.0 / max(size, 1)
+    svg = _WHEEL_SW.sub(
+        lambda m: f'stroke-width="{max(float(m.group(1)), ink):.2f}"', WHEEL_SVG)
+    return (svg
             .replace('viewBox', f'width="{size}" height="{size}" viewBox', 1)
             .replace('id="spoke"', f'id="{sid}"')
             .replace('href="#spoke"', f'href="#{sid}"'))

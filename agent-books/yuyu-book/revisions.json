@@ -2,6 +2,24 @@
   "schema_version": 1,
   "entries": [
     {
+      "version": "0.3.7",
+      "date": "2026-11-14",
+      "zh": [
+        "Grok 与 Cursor 两卷的六张正文插画按全书语汇重绘：原图 380×440–666，图内塞整句，屏显高 331–501px；新图 348×140–214，只留短标签，屏显高 115–176px，图内标签由 79 个降到 46 个。图只画机制，解释回到正文。",
+        "Mermaid 图的横向宽度下限改为按可读性判定：凡是超过 374 单位的图，一律按 0.85 倍原生宽度铺开并提示可横向拖动。此前只有 1150 单位以上的图才有下限，且正则要求 viewBox 原点为 0 0，时序图（原点负）整类漏掉。390px 实测图版内最低描边 0.792px，低于 0.75px 的元素 0 处；13u 标签不小于 10.29px。",
+        "纸张上的细线抬到 0.25pt：轮辐纹章按内联尺寸取墨线地板（24px 处 0.18pt → 0.25pt，34px 与 360px 本已更高），Grok 与 Cursor 部首页的分隔图最低笔画由 0.8u、0.9u 抬到 1.1u。实测十二个产品的 print 版最低墨线 0.251pt。",
+        "正文：删去两处「图：…」图注复述（Grok 第 5 章、Cursor 第 4 章），各改写为一句结论；Grok 第 3 章边界段由 322 字压到 263 字。",
+        "验证：构建器测试 576 项全绿。"
+      ],
+      "en": [
+        "The six body plates in the Grok and Cursor volumes are redrawn in the house register: the old ones were 380x440-666 with whole sentences inside and stood 331-501px tall; the new ones are 348x140-214 with short labels only, stand 115-176px tall, and carry 46 labels instead of 79. The plate draws the mechanism; the prose explains it.",
+        "Mermaid width floors are now decided by legibility: any diagram wider than 374 units is laid out at 0.85 of its natural width and advertised as drag-sideways. Before, only diagrams over 1150 units got a floor, and the viewBox pattern demanded a 0 0 origin, so sequence diagrams (negative origin) were skipped entirely. At 390px the thinnest stroke inside a diagram measures 0.792px, no element falls under 0.75px, and a 13-unit label is at least 10.29px.",
+        "Ink on paper is floored at 0.25pt: the wheel ornament takes its floor from its inline size (0.18pt to 0.25pt at 24px, while 34px and 360px were already above), and the Grok and Cursor part dividers rise from 0.8u and 0.9u to 1.1u. All twelve products now measure at least 0.251pt of ink in print.",
+        "Prose: two figure restatements ('figure: ...' paragraphs) in Grok chapter 5 and Cursor chapter 4 become one-line takeaways, and the Grok chapter 3 boundary paragraph shrinks from 322 to 263 characters.",
+        "Validation: 576 builder tests green."
+      ]
+    },
+    {
       "version": "0.3.6",
       "date": "2026-11-06",
       "zh": [
