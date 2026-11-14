@@ -248,6 +248,12 @@ def itinerary(seed: str, legs: list[tuple[str, list[tuple[str, str]]]],
     width, x_lo, x_hi = 760.0, 58.0, 702.0
     y0, dy, pad = 54.0, 76.0, 96.0
     height = y0 + dy * (len(legs) - 1) + 38
+    # The map is inlined into a 326 px box on a phone, so a stroke of one
+    # authored unit lands at 0.43 px and the road greys out. Ink is expressed in
+    # multiples of a unit lifted to the 0.75 px floor: 0.75 * 760 / 326.
+    ink = 0.75 * width / 326.0
+    road_ink, tick_ink = f"{1.3 * ink:.2f}", f"{ink:.2f}"
+    ring_ink, end_ink = f"{1.2 * ink:.2f}", f"{1.1 * ink:.2f}"
     out: list[str] = []
 
     def run(nodes: list[tuple[float, float]]) -> str:
@@ -268,7 +274,7 @@ def itinerary(seed: str, legs: list[tuple[str, list[tuple[str, str]]]],
                                      for k in range(n)]
         ys = [y + rng.uniform(-2.2, 2.2) for _ in range(n)]
         dashed = dashed_last and i == len(legs) - 1
-        road = f'<path stroke-width="1.3" d="{run([(sx, y)] + list(zip(xs, ys)) + [(ex, y)])}"'
+        road = f'<path stroke-width="{road_ink}" d="{run([(sx, y)] + list(zip(xs, ys)) + [(ex, y)])}"'
         if dashed:
             road += ' class="march m110" stroke-dasharray="6 5" opacity=".8"/>'
         else:
@@ -276,32 +282,33 @@ def itinerary(seed: str, legs: list[tuple[str, list[tuple[str, str]]]],
         out.append(road)
         if i + 1 < len(legs):
             ny = y + dy
-            out.append(f'<path stroke-width="1.3" d="M{ex:.1f} {y:.1f}'
+            out.append(f'<path stroke-width="{road_ink}" d="M{ex:.1f} {y:.1f}'
                        f'C{ex + d * 34:.1f} {y + dy * .18:.1f}'
                        f' {ex + d * 34:.1f} {ny - dy * .18:.1f} {ex:.1f} {ny:.1f}"/>')
         out.append(f'<text x="{sx + d * 4:.1f}" y="{y - 21:.1f}" '
                    f'text-anchor="{"start" if right else "end"}">{label}</text>')
         for (ax, ay), (bx, by) in zip(list(zip(xs, ys)), list(zip(xs, ys))[1:]):
-            out.append(f'<path stroke-width="1" opacity=".4" '
+            out.append(f'<path stroke-width="{tick_ink}" opacity=".4" '
                        f'd="M{(ax + bx) / 2:.1f} {(ay + by) / 2 + 4.2:.1f}v3.4"/>')
         for (anchor, ring), px, py in zip(stops, xs, ys):
             r = 2.7 if dashed else 3.6
             out.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r}"'
-                       f' stroke-width="1.2"/>'
+                       f' stroke-width="{ring_ink}"/>'
                        f'<circle cx="{px:.1f}" cy="{py:.1f}" r="1.1" '
                        f'fill="currentColor" stroke="none"/>'
                        f'<text x="{px:.1f}" y="{py + 17:.1f}" '
                        f'text-anchor="middle">{ring}</text>')
         if i == 0:
             wx = sx - d * 22
-            out.append(f'<g stroke-width="1.2">{_mini_wheel(wx, y, 9.2)}</g>')
+            out.append(f'<g stroke-width="{ring_ink}">{_mini_wheel(wx, y, 9.2)}</g>')
             if start_label:
                 out.append(f'<text x="{wx:.1f}" y="{y + 23:.1f}" '
                            f'text-anchor="middle">{start_label}</text>')
         if i == len(legs) - 1:
             out.append(f'<circle cx="{ex + d * 16:.1f}" cy="{y:.1f}" r="5.4" '
-                       f'stroke-width="1.1" opacity=".75"/>'
-                       f'<circle cx="{ex + d * 16:.1f}" cy="{y:.1f}" r="2.2"/>')
+                       f'stroke-width="{end_ink}" opacity=".75"/>'
+                       f'<circle cx="{ex + d * 16:.1f}" cy="{y:.1f}" r="2.2"'
+                       f' stroke-width="{end_ink}"/>')
     return _self_inking(
         f'<svg class="itinerary" viewBox="0 0 {width:.0f} {height:.0f}"'
         f' aria-hidden="true" fill="none" stroke="currentColor"'
