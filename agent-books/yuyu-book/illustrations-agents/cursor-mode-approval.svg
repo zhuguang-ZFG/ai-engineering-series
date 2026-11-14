@@ -1,31 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 590" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-  <g font-family="serif" fill="currentColor" stroke="none">
-    <text x="20" y="34" font-size="22">两套机制同时生效</text>
-    <path d="M16 46h348" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".45"/>
-
-    <text x="20" y="78" font-size="20">模式层：agent 打算做什么</text>
-    <rect x="20" y="90" width="340" height="174" rx="8" fill="none" stroke="currentColor"/>
-    <rect x="36" y="106" width="308" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="133" font-size="20">Agent：可读写、搜索、运行命令</text>
-    <rect x="36" y="156" width="308" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="183" font-size="20">Plan：先设计与澄清方案</text>
-    <rect x="36" y="206" width="308" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="233" font-size="20">Ask：只探索与回答，不改文件</text>
-
-    <path d="M190 264v30" fill="none" stroke="currentColor" stroke-width="2.2"/>
-    <path d="m182 286 8 10 8-10" fill="none" stroke="currentColor" stroke-width="2.2"/>
-    <text x="206" y="286" font-size="20">同时判定</text>
-
-    <text x="20" y="326" font-size="20">审批层：这步能不能做</text>
-    <rect x="20" y="338" width="340" height="182" rx="8" fill="none" stroke="currentColor"/>
-    <rect x="36" y="354" width="308" height="44" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="382" font-size="20">按工具与参数令牌判定</text>
-    <rect x="36" y="406" width="308" height="44" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="434" font-size="20">allow / deny 规则（deny 优先）</text>
-    <rect x="36" y="458" width="308" height="44" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="486" font-size="20">审批档位、--force 等</text>
-
-    <rect x="20" y="536" width="340" height="34" rx="6" fill="none" stroke="currentColor" stroke-dasharray="6 6"/>
-    <text x="36" y="558" font-size="20">模式承诺行为；审批决定放行与否</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 348 178" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13" opacity=".72">
+    <text x="30" y="14">模式层：打算做什么</text>
+    <text x="30" y="68">审批层：这一步能不能做</text>
+  </g>
+  <rect x="30" y="22" width="288" height="34" rx="8"/>
+  <rect x="30" y="76" width="288" height="34" rx="8"/>
+  <rect x="44" y="28" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <rect x="140" y="28" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <rect x="236" y="28" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <rect x="44" y="82" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <rect x="140" y="82" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <rect x="236" y="82" width="80" height="22" rx="6" stroke-width="1.6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle" font-size="13">
+    <text x="84" y="43">Agent</text>
+    <text x="180" y="43">Plan</text>
+    <text x="276" y="43">Ask</text>
+    <text x="84" y="97">令牌</text>
+    <text x="180" y="97">allow·deny</text>
+    <text x="276" y="97">审批档位</text>
+  </g>
+  <path d="M30 110 86 128M318 110l-56 18" stroke-width="1.7"/>
+  <rect x="86" y="128" width="176" height="30" rx="12" stroke-width="1.8"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle" font-size="14">
+    <text x="174" y="148">放行 / 拒绝</text>
   </g>
 </svg>

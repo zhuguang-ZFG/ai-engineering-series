@@ -1,55 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 590" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-  <g font-family="serif" font-size="24" fill="currentColor" stroke="none">
-    <text x="20" y="34">/rewind</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -4 348 214" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13">
+    <text x="22" y="20">对话</text>
+    <text x="204" y="20">磁盘</text>
   </g>
-  <rect x="18" y="48" width="344" height="172" rx="12"/>
-  <g font-family="serif" font-size="20" fill="currentColor" stroke="none">
-    <text x="34" y="78">对话历史</text>
+  <rect x="22" y="30" width="100" height="22" rx="11"/>
+  <rect x="22" y="58" width="100" height="22" rx="11"/>
+  <rect x="22" y="86" width="100" height="22" rx="11"/>
+  <rect x="22" y="114" width="100" height="22" rx="11" stroke-dasharray="6 5" opacity=".55"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle" font-size="13">
+    <text x="72" y="45">轮 1</text>
+    <text x="72" y="73">轮 2</text>
+    <text x="72" y="101">轮 3</text>
+    <text x="72" y="129" opacity=".55">轮 4</text>
   </g>
-  <rect x="34" y="88" width="56" height="24" rx="12"/>
-  <rect x="34" y="116" width="56" height="24" rx="12"/>
-  <rect x="34" y="144" width="56" height="24" rx="12"/>
-  <rect x="34" y="172" width="56" height="24" rx="12" stroke-dasharray="7 6" opacity=".55"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none" text-anchor="middle">
-    <text x="62" y="105">轮 1</text>
-    <text x="62" y="133">轮 2</text>
-    <text x="62" y="161">轮 3</text>
-    <text x="62" y="189">轮 4</text>
+  <path d="M128 108h44" stroke-width="1.5" stroke-dasharray="5 5" opacity=".7"/>
+  <path d="m166 103 6 5-6 5" stroke-width="1.5" opacity=".7"/>
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13" opacity=".7">
+    <text x="128" y="124">截断后丢弃</text>
   </g>
-  <path d="M26 166l70 30" stroke-width="3"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none">
-    <text x="112" y="114">选点后截断</text>
-    <text x="112" y="140">丢弃后续轮次</text>
+  <rect x="204" y="30" width="120" height="104" rx="8"/>
+  <path d="M218 56h92M218 78h92M218 100h64" stroke-width="1.5" opacity=".55"/>
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13">
+    <text x="204" y="156">文件不动</text>
   </g>
-  <rect x="248" y="94" width="88" height="96" rx="10"/>
-  <path d="M262 120h58M262 138h58M262 156h42" stroke-width="2.2"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none">
-    <text x="244" y="210">磁盘文件：不动</text>
-  </g>
-
-  <g font-family="serif" font-size="24" fill="currentColor" stroke="none">
-    <text x="20" y="256">workspace 检查点</text>
-  </g>
-  <rect x="18" y="270" width="344" height="296" rx="12"/>
-  <g font-family="serif" font-size="20" fill="currentColor" stroke="none">
-    <text x="34" y="302">键：prompt_index</text>
-  </g>
-  <rect x="34" y="314" width="312" height="36" rx="8"/>
-  <rect x="34" y="356" width="312" height="36" rx="8"/>
-  <rect x="34" y="398" width="312" height="36" rx="8"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none" text-anchor="middle">
-    <text x="190" y="338">RewindPoint（文件系统）</text>
-    <text x="190" y="380">hunk 增量（可选）</text>
-    <text x="190" y="422">git HEAD/index（可选）</text>
-  </g>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none">
-    <text x="34" y="460">路径：.grok/rewind-checkpoints/</text>
-    <text x="34" y="484">&lt;session_id&gt;</text>
-  </g>
-  <path d="M190 496v18"/>
-  <path d="m184 516 6 7 6-7"/>
-  <rect x="34" y="524" width="312" height="30" rx="10"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none" text-anchor="middle">
-    <text x="190" y="545">Restore：启用域一起还原</text>
+  <rect x="22" y="170" width="302" height="28" rx="9" stroke-width="1.6" stroke-dasharray="7 6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle">
+    <text x="173" y="189" font-size="13">检查点：workspace 一起还原</text>
   </g>
 </svg>

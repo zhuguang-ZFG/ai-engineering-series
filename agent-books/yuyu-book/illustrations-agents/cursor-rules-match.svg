@@ -1,59 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 540" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-  <g font-family="serif" font-size="22" fill="currentColor" stroke="none">
-    <text x="18" y="30">.cursor/rules/</text>
-    <text x="214" y="30">进入上下文</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 2 348 166" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="14" y="16" width="132" height="22" rx="8" stroke-width="1.6"/>
+  <rect x="14" y="44" width="132" height="22" rx="8" stroke-width="1.6"/>
+  <rect x="14" y="72" width="132" height="22" rx="8" stroke-width="1.6"/>
+  <rect x="14" y="100" width="132" height="22" rx="8" stroke-width="1.6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13">
+    <text x="26" y="31">alwaysApply</text>
+    <text x="26" y="59">globs</text>
+    <text x="26" y="87">description</text>
+    <text x="26" y="115">手动 @ 调用</text>
   </g>
-
-  <g font-family="serif" fill="currentColor" stroke="none">
-    <text x="28" y="64" font-size="21">always.mdc</text>
-    <text x="28" y="86" font-size="19">alwaysApply: true</text>
-    <path d="M18 44q70-4 140 0l-.8 52q-70-3-138 .4Z" fill="none" stroke="currentColor"/>
-    <path d="M158 70h46" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <path d="m196 63 10 7-10 7" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <rect x="206" y="48" width="156" height="44" rx="10" fill="none" stroke="currentColor"/>
-    <text x="216" y="76" font-size="21">总是包含</text>
-
-    <text x="28" y="136" font-size="21">glob-only.mdc</text>
-    <text x="28" y="158" font-size="19">只写 globs</text>
-    <path d="M18 116q70-4 140 0l-.8 52q-70-3-138 .4Z" fill="none" stroke="currentColor"/>
-    <path d="M158 142h46" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <path d="m196 135 10 7-10 7" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <rect x="206" y="116" width="156" height="52" rx="10" fill="none" stroke="currentColor"/>
-    <text x="216" y="138" font-size="20">匹配文件时</text>
-    <text x="216" y="160" font-size="20">自动附带</text>
-
-    <text x="28" y="208" font-size="21">desc.mdc</text>
-    <text x="28" y="230" font-size="19">有 description</text>
-    <path d="M18 188q70-4 140 0l-.8 52q-70-3-138 .4Z" fill="none" stroke="currentColor"/>
-    <path d="M158 214h46" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <path d="m196 207 10 7-10 7" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <rect x="206" y="188" width="156" height="52" rx="10" fill="none" stroke="currentColor"/>
-    <text x="216" y="210" font-size="20">读 description</text>
-    <text x="216" y="232" font-size="20">判相关性</text>
-
-    <text x="28" y="280" font-size="21">manual.mdc</text>
-    <text x="28" y="302" font-size="19">字段全空</text>
-    <path d="M18 260q70-4 140 0l-.8 52q-70-3-138 .4Z" fill="none" stroke="currentColor"/>
-    <path d="M158 286h46" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <path d="m196 279 10 7-10 7" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <rect x="206" y="260" width="156" height="52" rx="10" fill="none" stroke="currentColor"/>
-    <text x="216" y="282" font-size="20">仅 @规则名</text>
-    <text x="216" y="304" font-size="20">时包含</text>
+  <path d="M152 69h14m-4-4 4 4-4 4" stroke-width="1.7"/>
+  <rect x="176" y="16" width="158" height="106" rx="10"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle">
+    <text x="255" y="63" font-size="14">进入上下文</text>
+    <text x="255" y="84" font-size="13" opacity=".7">按字段判定</text>
   </g>
-
-  <g opacity=".55" font-family="serif" fill="currentColor" stroke="none">
-    <text x="28" y="354" font-size="21">notes.md</text>
-    <text x="28" y="376" font-size="19">无 frontmatter</text>
-    <path d="M18 334q70-4 140 0l-.8 52q-70-3-138 .4Z" fill="none" stroke="currentColor"/>
-    <path d="M158 360h46" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <path d="m196 353 10 7-10 7" stroke-width="2.4" fill="none" stroke="currentColor"/>
-    <rect x="206" y="338" width="156" height="44" rx="10" fill="none" stroke="currentColor"/>
-    <text x="216" y="366" font-size="21">忽略</text>
+  <rect x="14" y="132" width="132" height="22" rx="8" stroke-width="1.6" stroke-dasharray="5 5" opacity=".6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" font-size="13" opacity=".6">
+    <text x="26" y="147">notes.md</text>
   </g>
-
-  <rect x="18" y="410" width="344" height="74" rx="12" stroke-width="2.2" stroke-dasharray="8 8"/>
-  <g font-family="serif" font-size="19" fill="currentColor" stroke="none">
-    <text x="32" y="440">项目根 AGENTS.md / CLAUDE.md</text>
-    <text x="32" y="466">与 .cursor/rules 一并应用</text>
+  <path d="M152 143h14" stroke-width="1.5" stroke-dasharray="4 4" opacity=".6"/>
+  <rect x="176" y="132" width="158" height="22" rx="8" stroke-width="1.5" stroke-dasharray="5 5" opacity=".6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle" font-size="13" opacity=".6">
+    <text x="255" y="147">忽略</text>
   </g>
 </svg>

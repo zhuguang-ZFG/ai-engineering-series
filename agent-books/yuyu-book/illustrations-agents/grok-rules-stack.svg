@@ -1,35 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 666" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 348 206" width="100%" height="auto" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M24 24v128m-5-6 5 6 5-6" stroke-width="1.6" opacity=".6"/>
+  <rect x="44" y="18" width="290" height="42" rx="8"/>
+  <rect x="36" y="68" width="298" height="42" rx="8"/>
+  <rect x="28" y="118" width="306" height="42" rx="8"/>
   <g font-family="serif" fill="currentColor" stroke="none">
-    <text x="20" y="40" font-size="22">规则加载：先用户级，再仓库逐层</text>
-    <path d="M16 52h348" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".45"/>
-
-    <text x="20" y="82" font-size="20">1. 用户级</text>
-    <rect x="20" y="94" width="340" height="112" rx="8" fill="none" stroke="currentColor"/>
-    <text x="36" y="122" font-size="20">$GROK_HOME/rules/（总是）</text>
-    <text x="36" y="148" font-size="20">~/.claude/rules、~/.cursor/rules</text>
-    <text x="36" y="174" font-size="20">[paths] extra_rule_dirs</text>
-    <text x="36" y="200" font-size="20">无视信任状态，忽略 .gitignore</text>
-
-    <path d="M190 206v26" fill="none" stroke="currentColor" stroke-width="2.2"/>
-    <path d="m182 224 8 10 8-10" fill="none" stroke="currentColor" stroke-width="2.2"/>
-
-    <text x="20" y="258" font-size="20">2. 仓库规则（根 → 当前目录）</text>
-    <rect x="20" y="270" width="340" height="186" rx="8" fill="none" stroke="currentColor"/>
-    <rect x="36" y="286" width="308" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="52" y="314" font-size="20">仓库根：AGENTS.md、.grok/rules</text>
-    <rect x="52" y="336" width="292" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="68" y="364" font-size="20">子目录：AGENTS.md / rules …</text>
-    <rect x="68" y="386" width="276" height="42" rx="6" fill="none" stroke="currentColor"/>
-    <text x="84" y="414" font-size="20">更深目录：后加载，覆盖前面</text>
-    <path d="M322 438v10" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".5"/>
-    <path d="m316 444 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".5"/>
-
-    <rect x="20" y="472" width="340" height="92" rx="8" fill="none" stroke="currentColor"/>
-    <text x="36" y="502" font-size="20">冲突裁决</text>
-    <text x="36" y="530" font-size="20">规则叠加；同名冲突时更深文件生效</text>
-    <text x="36" y="554" font-size="20">（越后加载，越后覆盖前）</text>
-
-    <rect x="20" y="580" width="340" height="58" rx="8" fill="none" stroke="currentColor" stroke-dasharray="8 6"/>
-    <text x="36" y="614" font-size="20">非仓库：只扫描当前工作目录</text>
+    <text x="62" y="44" font-size="14">用户级 rules</text>
+    <text x="54" y="94" font-size="14">仓库根 AGENTS.md</text>
+    <text x="46" y="144" font-size="14">更深的子目录</text>
+  </g>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="end" font-size="13" opacity=".65">
+    <text x="322" y="44">总是加载</text>
+    <text x="322" y="94">随仓库走</text>
+    <text x="322" y="144">后加载，覆盖前面</text>
+  </g>
+  <rect x="16" y="170" width="316" height="26" rx="9" stroke-width="1.6" stroke-dasharray="7 6"/>
+  <g font-family="serif" fill="currentColor" stroke="none" text-anchor="middle">
+    <text x="174" y="188" font-size="13">非仓库：只读当前工作目录</text>
   </g>
 </svg>
