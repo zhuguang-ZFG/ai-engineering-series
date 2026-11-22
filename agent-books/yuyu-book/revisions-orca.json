@@ -9,6 +9,15 @@
         "三个版本号的差异按出处陈述：app.asar 与发布 tag 为 1.4.269，公开提交的 package.json 为 1.4.214。",
         "未实测项（orca serve、macOS 与 Linux 安装结构、orcad worker 逐个启动）在章末边界小节列明。"
       ]
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 2 章成稿：worktree 的两层登记（git 层与 Orca 层），实测四项只读观测（repo list、worktree current、worktree list 与 git worktree list/rev-parse）。",
+        "create 与 rm 的完整闭环未在本机执行；远端 host、lineage 与 hooks 一并列入附录 C 的未验证清单。",
+        "本机帮助文本与钉住提交的 create 参数面差异（五个参数）在 2.6 写明出处。"
+      ]
     }
   ]
 }
