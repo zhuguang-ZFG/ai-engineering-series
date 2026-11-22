@@ -7,8 +7,8 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.1.0",
-  "date": "2026-11-22",
+  "version": "0.2.0",
+  "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
   },
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1、2 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -72,12 +72,16 @@
         "zh": "先确认程序，再谈能力。"
       },
       "goal": {
-        "zh": "读完能说清：跑的是哪一份 Orca、版本从哪个文件读、运行时用什么命令确认。"
+        "zh": "读完能说清：跑的是哪一份 Orca、版本从哪个文件读、运行时用什么命令确认；一次开工作树的请求经过哪两层登记、各留下什么字段。"
       },
       "units": [
         {
           "id": "orca-ch01",
           "zh": "orca/ch01.md"
+        },
+        {
+          "id": "orca-ch02",
+          "zh": "orca/ch02.md"
         }
       ],
       "no": {
@@ -148,6 +152,27 @@
       },
       "plain_evidence": [
         "orca-ch01.b-opening"
+      ]
+    },
+    "orca-ch02": {
+      "question": {
+        "zh": "一次开工作树的请求，中间经过哪几层登记？"
+      },
+      "deliverable": {
+        "zh": "用四条只读命令对齐 git 层与 Orca 层，说出每个字段挂在哪一层。"
+      },
+      "boundary": {
+        "zh": "create 与 rm 的闭环未在本机执行；参数面以本机帮助文本为准，与钉住提交的差异已写明。"
+      },
+      "sources": [
+        "orca-repo",
+        "orca-app"
+      ],
+      "plain": {
+        "zh": "请求先被 Orca 登记，再由 git 落盘；两层各有一条只读命令可以核对。"
+      },
+      "plain_evidence": [
+        "orca-ch02.b-opening"
       ]
     },
     "orca-apxa": {
