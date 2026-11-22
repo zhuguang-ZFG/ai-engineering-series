@@ -14,7 +14,7 @@
       "version": "0.2.0",
       "date": "2026-11-23",
       "zh": [
-        "第 2 章成稿：worktree 的两层登记（git 层与 Orca 层），实测四条只读命令（repo list、worktree current、worktree list 与 git worktree list）。",
+        "第 2 章成稿：worktree 的两层登记（git 层与 Orca 层），实测四项只读观测（repo list、worktree current、worktree list 与 git worktree list/rev-parse）。",
         "create 与 rm 的完整闭环未在本机执行；远端 host、lineage 与 hooks 一并列入附录 C 的未验证清单。",
         "本机帮助文本与钉住提交的 create 参数面差异（五个参数）在 2.6 写明出处。"
       ]

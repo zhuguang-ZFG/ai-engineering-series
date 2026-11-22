@@ -46,7 +46,7 @@ print(pkg["name"], pkg["version"], pkg["main"])
 
 本机输出：`orca 1.4.269 ./out/main/index.js`。
 
-第 2 章的四条只读观测（前三条在任一 Orca 工作树目录里运行，后两条在同一目录里）：
+第 2 章的四组只读观测（前三组在任一 Orca 工作树目录里运行，第四组的两条 git 命令在同一目录里）：
 
 ```powershell
 & $orca repo list --json
