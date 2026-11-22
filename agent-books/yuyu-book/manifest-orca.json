@@ -169,7 +169,7 @@
         "orca-app"
       ],
       "plain": {
-        "zh": "请求先被 Orca 登记，再由 git 落盘；两层各有一条只读命令可以核对。"
+        "zh": "请求由 Orca 协调、git 物化目录；两层各留记录，各有一条只读命令可以核对。"
       },
       "plain_evidence": [
         "orca-ch02.b-opening"
