@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "version": "0.1.0",
+      "date": "2026-11-22",
+      "zh": [
+        "新增 Orca 中文分册，第一部先交样章：从桌面包、命令行与运行时三个程序的边界切入，实测两条自检命令。",
+        "三个版本号的差异按出处陈述：app.asar 与发布 tag 为 1.4.269，公开提交的 package.json 为 1.4.214。",
+        "未实测项（orca serve、macOS 与 Linux 安装结构、orcad worker 逐个启动）在章末边界小节列明。"
+      ]
+    }
+  ]
+}

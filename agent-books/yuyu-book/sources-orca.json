@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "orca-repo": {
+    "title": "stablyai/orca @ c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc",
+    "authority": "Pinned upstream source",
+    "kind": "github",
+    "url": "https://github.com/stablyai/orca/tree/c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc",
+    "snapshot": "public commit c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc (accessed 2026-11-22)",
+    "accessed": "2026-11-22",
+    "license": "MIT",
+    "scope": "Repository layout, package metadata, resources/win32/bin/orca.cmd, src/main/orcad paths; full implementation not audited",
+    "pinned": {
+      "commit": "c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc",
+      "release": "v1.4.269"
+    },
+    "title_en": "stablyai/orca @ c354ab3 (pinned source)"
+  },
+  "orca-app": {
+    "title": "Orca 1.4.269 installed build (Windows)",
+    "authority": "Local measured install",
+    "kind": "github",
+    "url": "https://github.com/stablyai/orca/releases/tag/v1.4.269",
+    "snapshot": "%LOCALAPPDATA%/Programs/orca, installed build 1.4.269 (released 2026-11-21)",
+    "accessed": "2026-11-22",
+    "license": "MIT",
+    "scope": "Install layout, app.asar package.json, orca --version, orca --help, orca status output",
+    "title_en": "Orca 1.4.269 installed build (Windows)",
+    "pinned": {
+      "tag": "v1.4.269"
+    }
+  }
+}
