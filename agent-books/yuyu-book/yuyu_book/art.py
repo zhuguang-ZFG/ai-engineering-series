@@ -180,7 +180,7 @@ def headpiece(part_id: str, lang: str = "zh") -> str:
 def cover_plate(lang: str = "zh", product: str = "book") -> str:
     """The large cover plate, separate from the animated small artwork."""
     if product in {"opencode", "deepseek", "hermes", "codex", "kimi", "prompt",
-                   "grok", "cursor"}:
+                   "grok", "cursor", "orca"}:
         text = _read(f"cover-{product}", PLATE_BYTES)
         if text:
             return f'<div class="cover-art" aria-hidden="true">{text}</div>'

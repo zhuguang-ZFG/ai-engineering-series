@@ -18,7 +18,7 @@ def cover(manifest: dict, lang: str) -> str:
     lic = manifest["license"]
     product = manifest.get("product", "book")
     is_agent = product in {"opencode", "deepseek", "hermes", "codex", "kimi",
-                           "prompt", "grok", "cursor"}
+                           "prompt", "grok", "cursor", "orca"}
     plate = cover_plate(lang, product)
     # the plate carries a 30-spoke wheel of its own; a second one under the
     # title would be the same motif twice within a hand's width

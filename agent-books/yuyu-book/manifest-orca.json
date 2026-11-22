@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "author": "朱光",
+  "repository": "https://github.com/zhuguang-ZFG/claude-code-book",
+  "license": {
+    "name": "CC BY-NC-SA 4.0",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "product": "orca",
+  "version": "0.1.0",
+  "date": "2026-11-22",
+  "title": {
+    "zh": "Orca：并行 Agent 工作台"
+  },
+  "subtitle": {
+    "zh": "从一次 worktree 到一支 bot 队伍 · 非官方"
+  },
+  "kicker": {
+    "zh": "Orca · One tab away"
+  },
+  "notice": {
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+  },
+  "epigraph": {
+    "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
+  },
+  "langs": [
+    "zh"
+  ],
+  "output_prefix": "yuyu-orca",
+  "revisions_registry": "revisions-orca.json",
+  "subject_index_registry": null,
+  "plain_optional": false,
+  "pin": {
+    "commit": "c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc",
+    "release": "v1.4.269",
+    "writing": "stablyai/orca @ c354ab30ce7d615add5cbcbaae6b6ff8f3b51bdc（本机安装 1.4.269）"
+  },
+  "start_reading": [
+    {
+      "label": {
+        "zh": "刚装好"
+      },
+      "body": {
+        "zh": "读第 1 章，跑 `orca --version` 与 `orca status` 两条自检命令，确认命令行来自这套安装、运行时在线。"
+      }
+    },
+    {
+      "label": {
+        "zh": "已经用过"
+      },
+      "body": {
+        "zh": "先看第 1.2 节三个版本号的关系，再回到自己机器上核对 app.asar 里的版本字段。"
+      }
+    },
+    {
+      "label": {
+        "zh": "要交给团队"
+      },
+      "body": {
+        "zh": "第 1.3 节的启动器护栏与第 1.6 节的未验证清单，是可以直接抄进内部说明的两段。"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "orca-p1",
+      "title": {
+        "zh": "对齐与边界"
+      },
+      "motto": {
+        "zh": "先确认程序，再谈能力。"
+      },
+      "goal": {
+        "zh": "读完能说清：跑的是哪一份 Orca、版本从哪个文件读、运行时用什么命令确认。"
+      },
+      "units": [
+        {
+          "id": "orca-ch01",
+          "zh": "orca/ch01.md"
+        }
+      ],
+      "no": {
+        "zh": "第一部"
+      }
+    }
+  ],
+  "front": {
+    "id": "orca-front",
+    "zh": "orca/00-前言.md"
+  },
+  "appendices": [
+    {
+      "id": "orca-apxa",
+      "zh": "orca/appendix-a.md"
+    },
+    {
+      "id": "orca-apxb",
+      "zh": "orca/appendix-b.md"
+    },
+    {
+      "id": "orca-apxc",
+      "zh": "orca/appendix-c.md"
+    },
+    {
+      "id": "orca-apxd",
+      "zh": "orca/appendix-d.md"
+    }
+  ],
+  "guides": {
+    "orca-front": {
+      "question": {
+        "zh": "为什么先对齐程序，再谈并行？"
+      },
+      "deliverable": {
+        "zh": "选一条阅读路线，分清实测输出、源码与文档三种证据。"
+      },
+      "boundary": {
+        "zh": "源码固定到公开提交 c354ab3；发布版实测只覆盖 Windows 1.4.269。"
+      },
+      "sources": [
+        "orca-repo",
+        "orca-app"
+      ],
+      "plain": {
+        "zh": "这本书的入口：桌面应用、命令行、运行时是三个程序，先认清楚再往下走。"
+      },
+      "plain_evidence": [
+        "orca-front.b-opening"
+      ]
+    },
+    "orca-ch01": {
+      "question": {
+        "zh": "怎样确认终端里那个 orca 就是你装的那一份？"
+      },
+      "deliverable": {
+        "zh": "读出 app.asar 里的版本，跑通两条自检命令，记下四个状态字段。"
+      },
+      "boundary": {
+        "zh": "只实测 Windows 安装目录；orca serve 与 macOS、Linux 结构未验证。"
+      },
+      "sources": [
+        "orca-repo",
+        "orca-app"
+      ],
+      "plain": {
+        "zh": "三个版本号对不上是正常的：读 app.asar 判断你手上这份，别读仓库的 package.json。"
+      },
+      "plain_evidence": [
+        "orca-ch01.b-opening"
+      ]
+    },
+    "orca-apxa": {
+      "question": {
+        "zh": "命令与运行目录怎么对上？"
+      },
+      "deliverable": {
+        "zh": "把安装根、命令组与自检命令排成一张表。"
+      },
+      "boundary": {
+        "zh": "只实测 Windows；其余分组只读到帮助文本。"
+      },
+      "sources": [
+        "orca-app"
+      ],
+      "plain": {
+        "zh": "把安装根、命令组与自检命令排成一张表。"
+      },
+      "plain_evidence": [
+        "orca-apxa.b-opening"
+      ]
+    },
+    "orca-apxb": {
+      "question": {
+        "zh": "要改的东西在仓库哪一处？"
+      },
+      "deliverable": {
+        "zh": "按问题分组找到目录、orcad 源码与两个易误认的配置文件。"
+      },
+      "boundary": {
+        "zh": "只列到目录与文件名，未做调用关系分析。"
+      },
+      "sources": [
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "按问题分组找到目录、orcad 源码与两个易误认"
+      },
+      "plain_evidence": [
+        "orca-apxb.b-opening"
+      ]
+    },
+    "orca-apxc": {
+      "question": {
+        "zh": "这次观测证明了什么、没证明什么？"
+      },
+      "deliverable": {
+        "zh": "按编号记录六次观测，列出未验证清单。"
+      },
+      "boundary": {
+        "zh": "表中数值只对当次进程状态成立。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "按编号记录六次观测，列出未验证清单。"
+      },
+      "plain_evidence": [
+        "orca-apxc.b-opening"
+      ]
+    },
+    "orca-apxd": {
+      "question": {
+        "zh": "哪些名字最容易混？"
+      },
+      "deliverable": {
+        "zh": "分清三个程序、会话与工作树、技能与插件、三个版本号。"
+      },
+      "boundary": {
+        "zh": "只收第 1 章出现过的术语。"
+      },
+      "sources": [
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "分清三个程序、会话与工作树、技能与插件、三个版本"
+      },
+      "plain_evidence": [
+        "orca-apxd.b-opening"
+      ]
+    }
+  }
+}

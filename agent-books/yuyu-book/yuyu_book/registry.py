@@ -48,7 +48,7 @@ FILES = (
           for kind in ("manifest", "glosses", "sources", "notes",
                        "reading-paths", "revisions", "subject-index")) \
   + tuple(f"{kind}-{product}.json"
-          for product in ("grok", "cursor")
+          for product in ("grok", "cursor", "orca")
           for kind in ("manifest", "glosses", "sources", "notes",
                        "reading-paths", "revisions"))
 

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "orca-app": {
+    "term": {
+      "zh": "桌面包"
+    },
+    "forms": {
+      "zh": [
+        "桌面包",
+        "桌面应用"
+      ]
+    },
+    "plain": {
+      "zh": "点开的那扇窗，版本号写在 app.asar 里"
+    },
+    "priority": "core",
+    "mark": true,
+    "evidence": [
+      "orca-ch01.b-desktop"
+    ],
+    "why": {
+      "zh": "三个版本号里只有它代表你正在跑的那一份。"
+    },
+    "why_evidence": [
+      "orca-ch01.b-desktop"
+    ]
+  },
+  "orca-cli": {
+    "term": {
+      "zh": "命令行启动器"
+    },
+    "forms": {
+      "zh": [
+        "命令行启动器"
+      ]
+    },
+    "plain": {
+      "zh": "bin/orca.exe，Agent 在终端里调用的那个"
+    },
+    "priority": "core",
+    "mark": true,
+    "evidence": [
+      "orca-ch01.b-cli"
+    ],
+    "why": {
+      "zh": "它和桌面包一起发布，却是独立进程，参数走的是另一条路。"
+    },
+    "why_evidence": [
+      "orca-ch01.b-cli"
+    ]
+  },
+  "orcad": {
+    "term": {
+      "zh": "运行时"
+    },
+    "forms": {
+      "zh": [
+        "运行时",
+        "orcad"
+      ]
+    },
+    "plain": {
+      "zh": "会话与工作树跑在里面的服务，可无界面启动"
+    },
+    "priority": "core",
+    "mark": true,
+    "evidence": [
+      "orca-ch01.b-runtime"
+    ],
+    "why": {
+      "zh": "应用关掉后它还活着，状态字段说的就是它。"
+    },
+    "why_evidence": [
+      "orca-ch01.b-runtime"
+    ]
+  },
+  "worktree": {
+    "term": {
+      "zh": "工作树"
+    },
+    "forms": {
+      "zh": [
+        "工作树",
+        "worktree"
+      ]
+    },
+    "plain": {
+      "zh": "同一仓库切出的独立目录，改动互不干扰"
+    },
+    "priority": "extra",
+    "mark": false,
+    "evidence": [
+      "orca-ch01.b-worktree"
+    ]
+  }
+}

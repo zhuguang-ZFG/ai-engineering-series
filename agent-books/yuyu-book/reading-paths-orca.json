@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "orca-front": [
+    "start",
+    "core",
+    "deep"
+  ],
+  "orca-ch01": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ],
+  "orca-apxa": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "orca-apxb": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "orca-apxc": [
+    "start",
+    "core",
+    "core",
+    "deep"
+  ],
+  "orca-apxd": [
+    "start",
+    "core",
+    "core",
+    "core",
+    "deep"
+  ]
+}

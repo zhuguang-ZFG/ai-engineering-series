@@ -11,6 +11,7 @@
 | `codex` | 《Codex CLI：执行边界与工程实践》 | `manifest-codex.json` | `yuyu-codex-*` | `build --product codex --lang zh --pdf --epub` |
 | `kimi` | 《Kimi Code：从插件到审查助手》 | `manifest-kimi.json` | `yuyu-kimi-*` | `build --product kimi --lang zh --pdf --epub`（`make book-kimi-all`） |
 | `prompt` | 《提示词工程：从提问到 Agent 协作》 | `manifest-prompt.json` | `yuyu-prompt-*` | `build --product prompt --lang zh --pdf --epub`（`make book-prompt-all`） |
+| `orca` | 《Orca：并行 Agent 工作台》 | `manifest-orca.json` | `yuyu-orca-*` | `build --product orca --lang zh`（样章；第 1 章与四篇附录已成稿） |
 
 提示词册为中文技术试读版，23 个阅读单元。另运行 `python scripts/package_prompt.py --output yuyu-book/dist/yuyu-prompt-zh-examples.zip` 生成可独立运行的练习包。离线检查已实测；模型 A/B、跨模型迁移与独立读者试读状态见 [prompt/README.md](../prompt/README.md)。
 
