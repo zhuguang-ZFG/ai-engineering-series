@@ -1,7 +1,7 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1–8 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–9 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
@@ -73,6 +73,20 @@ E1–E6 的观测日期为 2026-11-22；E7–E64 为 2026-11-23。环境同为 W
 | E62 | `orca reference list --worktree current --json`（在工作树目录里；另加 `--environment local` 对照） | `result` 两键 `worktree`（35 键，含十三个 `linked*` 键）与 `references`（空数组），两次退出码均 `0` | 挂接的字段形状与空状态；有挂接的行未观测 |
 | E63 | `orca reference find STA-1234 --json` | `result` 五键 `kind: reference_matches`/`query`/`scope`（`source: stored-metadata`、`includeArchived: false`）/`truncated: false`/`matches`（空数组），退出码 `0` | 只读存储的挂接；查不到给空结果，不报错 |
 | E64 | `orca agent-context --json` | `schemaVersion: 1`、`commandCount: 417`、`commands`；条目 11 键（`command`/`path`/`aliases`/`argumentMode`/`summary`/`usage`/`flags`/`positionalArgs`/`repeatableFlags`/`examples`/`notes`），`argumentMode` 当次取值 `parsed` 与 `passthrough`，退出码 `0` | 命令面的机器可读版形状；417 条未逐条核对 |
+| E65 | `orca skills list --json` | 顶层单键 `topics`，11 条，每条 `name`/`description`，退出码 `0` | 随包指南元数据的本地形状；无信封、不联系运行时 |
+| E66 | `orca skills installed --json` | 信封 `id`/`ok`/`result`/`_meta`；153 条，条目六键 `id`/`name`/`description`/`providers`/`sourceKind`/`sourceLabel`；`sourceKind` home 119、bundled 33、plugin 1；`providers` agent-skills 117、codex 28、claude 7、agent-skills+claude 1 | 技能发现的运行时信封与来源分类；描述文字不引 |
+| E67 | `orca plugin list --json` | 信封 `ok`/`result`，无 `id`/`_meta`；2 行、每行 26 键；两行 `idle`、`execution: data`、`official`/`bundled` 均 `true` | 插件清单的裸信封与当次行；六种状态只见 `idle` |
+| E68 | `orca automations list --json` | `result` 三键 `automations`（空）、`items`（空）、`orphanCount: 0`，退出码 `0` | 定时任务清单的空状态形状 |
+| E69 | `orca artifacts list --json` | 信封 `id`/`ok`/`result`/`_meta`；`artifacts` 空数组，退出码 `0` | 账号侧工件的空状态；`runtimeId` 每次调用不同 |
+| E70 | `orca project list --json` | 12 行；`id` 两种形状 `github:<owner>/<repo>` 11 行、`repo:<uuid>` 1 行；`kind` git 11、folder 1；`providerIdentity` 四键 `host`/`owner`/`provider`/`repo` | 项目底册的 id 形状与来源键 |
+| E71 | `orca skills get jira-tickets --json`；同法 `orca-cli` 与 `--full` | 顶层 `name`/`markdown`/`full` 三键；`jira-tickets` 的 `markdown` 1706 字符，`orca-cli` 44777，`--full` 152065 且 `full: true`。另 E71b 未知 topic：退出码 `1`，stderr 报 「Unknown skill topic」并列出全部 11 个可用 topic | 指南正文的本地形状与 `--full` 的口径；查不到附完整清单 |
+| E72 | `orca automations show no-such-id --json` | 退出码 `1`，`ok: false`，`error.code: runtime_error`，消息原文 「Automation not found.」 | 定时任务查不到的报错形状；错误码笼统 |
+| E73 | `orca plugin logs <插件键> --json`；另 E73b 用不存在的键 | `result` 三键 `pluginKey`/`lines`/`cursor`；正常键 `lines` 为空数组；E73b 不存在的键退出码 `0`、`ok: true`、`lines` 空数组 | 插件日志的形状与「查不到不报错」的负观测 |
+| E74 | `orca automations runs --json`；另 E74b `project setups --json` | E74 `result` 单键 `runs`（空）；E74b 12 行、每行 14 键，`hostId` 全 `"local"` | 运行历史的空状态；setup 是每机一行的账 |
+| E75 | `skills installed`、`plugin list`、`automations list`、`project list` 各加 `--environment local` | 四条均退出码 `0`，`result` 与不加旗标同源 | `local` 在运行时组上放行 |
+| E76 | `orca skills list --environment local --json` | 退出码 `0`，输出与不加旗标逐字节相同 | 旗标对随包数据形同虚设 |
+| E77 | `orca skills get orca-cli --environment local --json` | 同 E76，逐字节相同 | 指南正文亦随包，旗标形同虚设 |
+| E78 | `orca artifacts list --environment local --json` | 退出码 `1`，`error.code: invalid_argument`，消息原文 「`--environment` does not retarget artifact commands; artifacts use the signed-in desktop account.」，`_meta.runtimeId` 为 `null` | 账号侧拒绝旗标；拒绝发生在 CLI 内 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -217,6 +231,33 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 & $orca ports --json
 ```
 
+第 9 章的观测（E65–E78；全部只读、任一目录可跑；`<插件键>` 取自 `plugin list` 行里的 `pluginKey`）：
+
+```powershell
+& $orca skills list --json
+& $orca skills installed --json
+& $orca skills get jira-tickets --json
+& $orca skills get orca-cli --json
+& $orca skills get orca-cli --full --json
+& $orca skills get no-such-topic                           # 期望：Unknown skill topic，退出码 1
+& $orca plugin list --json
+& $orca plugin logs <插件键> --json
+& $orca plugin logs no-such-plugin-key --json              # 期望：ok true、lines 空数组
+& $orca artifacts list --json
+& $orca automations list --json
+& $orca automations runs --json
+& $orca automations show no-such-id --json                 # 期望：runtime_error，退出码 1
+& $orca project list --json
+& $orca project setups --json
+& $orca skills installed --environment local --json        # 期望：与不加同源
+& $orca plugin list --environment local --json
+& $orca automations list --environment local --json
+& $orca project list --environment local --json
+& $orca skills list --environment local --json             # 期望：逐字节相同
+& $orca skills get orca-cli --environment local --json
+& $orca artifacts list --environment local --json          # 期望：does not retarget，退出码 1
+```
+
 ## C.3 没有做的事
 
 下列各项本章没有验证，读到相关说法时应视为未证实：
@@ -250,7 +291,13 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 - `deny`、`worker-abandon`、`worker-release`、`worker-keep-open`、`dispatch --inject`、`task-update` 的状态迁移与 `reset` 未执行。
 - 内置技能指南的行为口径按原文陈述、未实测：约 4 个的并发、三次失败的熔断、`--retry-of` 链、effort 档位数字、worktree 放置决策树、远端按 Dispatch ID 寻址。
 - `--on` 远端服务器、`ORCA_ENVIRONMENT` 与配对码未设置、未验证；第 5 章引用的四份 `src/cli/specs/` 规格文件只按钉住提交的目录清单指认，未逐行读实现。
+- 第 9 章五组的写侧一条未执行：`skills install/update/share`、`plugin install/enable/disable/restart`、`plugin system on|off`、`plugin dev` 全组、`artifacts share/update/unshare/delete`、`automations create/edit/run/remove`、`project setup-existing-folder/setup-clone/setup-create/setup-update/setup-delete`。
+- `plugin list` 六种状态只观测到 `idle`：`pending`、`errored`、`invalid` 与 dev 行、`needsReconsent: true` 的行无样本；第三方插件未装，`plugin logs` 只见过空数组。
+- `automations list` 的 `automations` 与 `items` 双键并存只记观测，未核对二者关系；有真实定时与运行历史（`runs` 非空）的行未观测。
+- `skills installed` 的 153 条描述与 `plugin list` 两行的插件自述只记字段名、计数与标签名，未引内容、未逐字节核对源码；`skills get` 只逐字核对了 `jira-tickets` 一条 description。
+- `project setups` 只观测了本机行（`hostId` 全 `"local"`）：远端 host 上的 setup、`setupState` 取值集合、`hookSettings` 与 `sourceControlAi` 的内容均未展开。
+- `--environment` 在第 9 章五组上只验证了 `local`（E75–E77 放行、E78 拒绝）：未知名在这五组上的报错未测，`--pairing-code` 一条没跑；`artifacts` 组不提供该旗标，按帮助文本陈述。
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系；E54–E56 的会话行、条目数与 E58 的索引计数、E59–E61 的命中集合随机器与时间变化，E62–E64 的挂接与命令面是当次结构。可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系；E54–E56 的会话行、条目数与 E58 的索引计数、E59–E61 的命中集合随机器与时间变化，E62–E64 的挂接与命令面是当次结构；E65 与 E71 的随包指南文字在同版本 CLI 上可逐字节复验，E66–E67 的技能与插件集合、E70 与 E74b 的项目与 setup 行随机器与时间变化，E68–E69 与 E74 的空状态、E72 的查不到报错只代表本机当次无登记。可比较的是字段名与就绪值的含义，不是具体数值。
