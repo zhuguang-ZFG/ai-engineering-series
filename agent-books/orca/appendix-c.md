@@ -1,7 +1,7 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1–9 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–10 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
@@ -88,7 +88,7 @@ E1–E6 的观测日期为 2026-11-22；E7–E94 为 2026-11-23。环境同为 W
 | E77 | `orca skills get orca-cli --environment local --json` | 同 E76，逐字节相同 | 指南正文亦随包，旗标形同虚设 |
 | E78 | `orca artifacts list --environment local --json` | 退出码 `1`，`error.code: invalid_argument`，消息原文 「`--environment` does not retarget artifact commands; artifacts use the signed-in desktop account.」，`_meta.runtimeId` 为 `null` | 账号侧拒绝旗标；拒绝发生在 CLI 内 |
 | E79 | `orca repo list --json` | `result` 单键 `repos`，12 行；行键不齐：11 个打底键全行都有，`upstream`/`repoIcon`/`projectHostSetupMethod` 各 11 行、`projectGroupId`/`projectGroupOrder` 各 7 行、`folderUpgradeGitRootPath`/`sourceControlAi` 各 1 行；`kind` 全 `git`，`path` 两种分隔形态（1 行反斜杠、11 行正斜杠），退出码 `0` | 仓库行的打底键与条件键；无树级字段；行键与行数随登记变化 |
-| E80 | `orca worktree list --json` | `result` 四键 `hostScope`/`totalCount`/`truncated`/`worktrees`；18 行、每行 38 键，`id` 复合格 `<repoId>::<path>`；`isMainWorktree` 12 行 `true`、6 行 `false`，主检出全在 `D:`、链接树全在 `C:` 的 workspaces 下，退出码 `0` | 树列表行的形状与当次行数；行数随并行会话变化 |
+| E80 | `orca worktree list --json` | `result` 四键 `hostScope`/`totalCount`/`truncated`/`worktrees`；18 行、每行 38 键，`id` 复合格 `<repoId>::<path>`；`isMainWorktree` 12 行 `true`、6 行 `false`，主检出全在 `D:`、链接树全在 `C:` 的 workspaces 下，退出码 `0` | 树列表行的形状与当次行数；行数随登记的工作树数目走 |
 | E81 | `orca worktree current --json`（在未登记的写作目录 barreleye 里） | `selector_not_found`「No Orca workspace contains the current directory: <路径>」，退出码 `1` | 与 E19 同码：git 工作树不等于 Orca 登记；本章动词须显式 `--repo` |
 | E82 | `orca worktree create --repo "id:<GUID>"`（缺 `--name`） | `invalid_argument`「Missing required --name」，`_meta.runtimeId: null`，退出码 `1` | 必填参数先校验；拒绝发生在 CLI 内 |
 | E83 | `orca worktree create --name <名> --no-parent --setup skip`（在未登记目录里、无 `--repo`） | `invalid_argument`「Missing repo selector. Pass --repo or run from inside an Orca-managed worktree.」，退出码 `1` | 修法写在消息里；目录推断不成立时必须点名仓库 |
@@ -289,15 +289,16 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 & git -C <主检出> branch --list <探针名>                          # 期望：0 行
 & git -C <主检出> worktree list                                   # 期望：无探针行
 & $orca worktree list --json                                      # 期望：回到基线行数、无探针行
-& $orca workspace cleanup preview --json
-& $orca workspace cleanup run --json                              # 写侧：真实执行（规则全关时不动任何树）
+& $orca workspace cleanup preview --json                          # 闸门：任一行 action ≠ keep 就停——那是规则要删树，run 会真删
+& $orca workspace cleanup run --json                              # 写侧：真实执行；preview 全 keep 才往下（本书观测时规则全关）
+& $orca workspace cleanup preview --environment local --json    # 同一闸门再过一遍：全 keep 才跑下一行
 & $orca workspace cleanup run --environment local --json
 & $orca workspace cleanup report --json                           # 期望：runs 里有两条 cli 记录
 & $orca agent hooks off --environment local --json                # 期望：does not retarget，退出码 1（E93）
-& $orca agent hooks status --json                                 # 存基线
+& $orca agent hooks status --json                                 # 存基线：记下 enabled 与各行；基线 enabled 为 false 时，收尾用 off 还原
 & $orca agent hooks off --json                                    # 期望：enabled false、23 行全 not_installed
-& $orca agent hooks on --json                                     # 期望：enabled true、回到基线
-& $orca agent hooks status --json                                 # 与基线逐字段比对（E94）
+& $orca agent hooks on --json                                     # 期望：enabled true（off/on 闭环的观测）
+& $orca agent hooks status --json                                 # 末态须与 297 行基线逐字段一致（E94）；基线原为 off 的，先补一次 off 再比
 ```
 
 ## C.3 没有做的事
