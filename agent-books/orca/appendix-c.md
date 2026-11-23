@@ -289,16 +289,26 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 & git -C <主检出> branch --list <探针名>                          # 期望：0 行
 & git -C <主检出> worktree list                                   # 期望：无探针行
 & $orca worktree list --json                                      # 期望：回到基线行数、无探针行
-& $orca workspace cleanup preview --json                          # 闸门：任一行 action ≠ keep 就停——那是规则要删树，run 会真删
-& $orca workspace cleanup run --json                              # 写侧：真实执行；preview 全 keep 才往下（本书观测时规则全关）
-& $orca workspace cleanup preview --environment local --json    # 同一闸门再过一遍：全 keep 才跑下一行
+& $orca workspace cleanup preview --json                          # 闸门：读 rows——任一行 action ≠ keep 就到此为止，别贴下面的 run
+```
+
+任一行不是 keep 就停在这里：那是清理规则要删树。全 keep 才把下一块贴进终端。
+
+```powershell
+& $orca workspace cleanup run --json                              # 写侧：真实执行（本书观测时规则全关，全 keep 时不动任何树）
+& $orca workspace cleanup preview --environment local --json    # 闸门：再读一遍 rows——任一行 action ≠ keep 就到此为止
+```
+
+local 的闸门同上一条：不是全 keep 就停，别贴 run。
+
+```powershell
 & $orca workspace cleanup run --environment local --json
 & $orca workspace cleanup report --json                           # 期望：runs 里有两条 cli 记录
 & $orca agent hooks off --environment local --json                # 期望：does not retarget，退出码 1（E93）
 & $orca agent hooks status --json                                 # 存基线：记下 enabled 与各行；基线 enabled 为 false 时，收尾用 off 还原
 & $orca agent hooks off --json                                    # 期望：enabled false、23 行全 not_installed
 & $orca agent hooks on --json                                     # 期望：enabled true（off/on 闭环的观测）
-& $orca agent hooks status --json                                 # 末态须与 297 行基线逐字段一致（E94）；基线原为 off 的，先补一次 off 再比
+& $orca agent hooks status --json                                 # 末态须与本块基线逐字段一致（E94）；基线原为 off 的，先补一次 off 再比
 ```
 
 ## C.3 没有做的事
