@@ -1,7 +1,7 @@
 # 附录 A：命令与运行目录
 
 <!-- block: orca-apxa.b-opening -->
-这一篇把第 1–10 章用到的路径与命令收成一张表，方便排查时照着敲。
+这一篇把第 1–11 章用到的路径与命令收成一张表，方便排查时照着敲。
 
 ## A.1 安装根
 
@@ -17,7 +17,7 @@ Windows 发布版的安装根是 `%LOCALAPPDATA%\Programs\orca`。卸载项记�
 
 ## A.2 命令行命令组
 
-`orca --help` 在本机 1.4.269 里的分组远不止这些；下表按原文顺序摘引第 1–10 章用到的 18 组：
+`orca --help` 在本机 1.4.269 里的分组远不止这些；下表按原文顺序摘引第 1–11 章用到的 18 组：
 
 | 分组 | 命令 | 用途 |
 | --- | --- | --- |
@@ -35,7 +35,7 @@ Windows 发布版的安装根是 `%LOCALAPPDATA%\Programs\orca`。卸载项记�
 | Automations | `automations list/show/create/edit/remove/run/runs` | 定时任务与运行历史（第 9 章读 `list`/`runs`/`show`） |
 | Projects | `project list/setups/setup-existing-folder/setup-clone/setup-create/setup-update/setup-delete` | 项目与 host 准备的登记；工作树基址参数在 `setup-create`（第 9 章读 `list`/`setups`） |
 | Repos | `repo list/add/show/set/hide/unhide/set-base-ref/search-refs` | 仓库登记与默认基点 |
-| Worktrees | `worktree list/show/activate/current/create/set/rm/ps`、`ports` | 工作树的登记、创建与观测（第 2、4 章；第 10 章补 create/rm 的受控闭环） |
+| Worktrees | `worktree list/show/activate/current/create/set/rm/ps`、`ports` | 工作树的登记、创建与观测（第 2、4 章；第 10 章补 create/rm 的受控闭环；第 11 章补 --setup 四档与 rm 的三道闸门） |
 | Workspace Cleanup | `workspace cleanup preview/run/report` | 清理规则的预览、执行与历史（第 7 章读，第 10 章执行 run） |
 | Agents | `agent launch/installed/list/show/read/hooks`、`claude-teams` | 在 worktree 里启动与观察 agent（第 8 章补 show/read；第 10 章拨 hooks off/on 一回） |
 | Orchestration | `orchestration run-create/run-use/run-current/run-list/run-show`、`send/reply/check/inbox/ask`、`task-*`、`worker-*`、`gate-*`、`dispatch`、`deny`、`reset` | 编排的 Run、任务、worker 与消息；31 条子命令，2 条已 Retired（第 5 章） |

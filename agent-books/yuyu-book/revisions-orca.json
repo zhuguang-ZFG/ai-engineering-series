@@ -108,6 +108,15 @@
       "zh": [
         "复现配方（附录 C.2）的清理闸门结构化：preview 与两条 cleanup run 拆成三段独立代码块，段间用文字要求先读 rows、全 keep 才贴下一段——整段粘贴不会把 run 连着闸门一起执行；hooks 末态的基线引用同步改为块内指称。"
       ]
+    },
+    {
+      "version": "0.11.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 11 章成稿：把第 3 章挂起的配置生效链路真跑一遍——母树提交六行哨兵 orca.yaml，按 --setup 四档各建一棵探针树：默认、inherit、run 三档都跑了链（标记内容为各自树名），skip 不跑；守护进程会话行记下 hasCommand 与 commandLength:97 的单点值。",
+        "rm 的三道闸门：旗标配对在 CLI 层（--allow-failed-archive-hook 无 --run-hooks 拒收，runtimeId:null）、脏树在运行时层（?? 短状态原样入消息，--force 只对树）、分支去留由两棵对照树定（建点同头删、树内进头留，preservedBranch 只在保留时出现）。",
+        "默认谱系自动接上（parentWorktreeId 指向调用方，capture 的 source:env-workspace、confidence:inferred）；repo list 两行对照显示登记 setup 空串而行跑的脚本来自树内 yaml。十二项实测（E95–E106），八棵树全删、探针分支扫尾清六条；附录 C 补该批编号、命令块与边界，前言、README 与附录的章数口径同步为第 1–11 章。"
+      ]
     }
   ]
 }

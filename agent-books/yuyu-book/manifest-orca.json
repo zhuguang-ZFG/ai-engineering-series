@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–10 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–11 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -148,6 +148,10 @@
         {
           "id": "orca-ch10",
           "zh": "orca/ch10.md"
+        },
+        {
+          "id": "orca-ch11",
+          "zh": "orca/ch11.md"
         }
       ],
       "no": {
@@ -407,6 +411,27 @@
       },
       "plain_evidence": [
         "orca-ch10.b-opening"
+      ]
+    },
+    "orca-ch11": {
+      "question": {
+        "zh": "开树关树都走了一轮，挂起的链与闸怎么真跑一遍？"
+      },
+      "deliverable": {
+        "zh": "说出 --setup 四档的实测分野、rm 的三道闸门（旗标配对、脏树、分支去留）与 --delete-branch 的保留实测（同头删、进头留），以及默认谱系与配置来源的对照。"
+      },
+      "boundary": {
+        "zh": "实测十二项（E95–E106），写侧做完即还原；链的失败路径与 --setup 三档之差未测。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "链默认就跑，闸分层拦；分支留不留，回执点名，git 侧核验。"
+      },
+      "plain_evidence": [
+        "orca-ch11.b-opening"
       ]
     },
     "orca-apxa": {

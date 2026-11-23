@@ -1,11 +1,11 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1–10 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–11 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
-E1–E6 的观测日期为 2026-11-22；E7–E94 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
+E1–E6 的观测日期为 2026-11-22；E7–E106 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
 
 | 编号 | 做了什么 | 得到什么 | 证明范围 |
 | --- | --- | --- | --- |
@@ -103,6 +103,22 @@ E1–E6 的观测日期为 2026-11-22；E7–E94 为 2026-11-23。环境同为 W
 | E92 | `orca workspace cleanup report --json` | `result` 三键 `running`/`nextRunAt`/`runs`；`runs` 两条，均为 CLI 触发的运行记录，条目形状与 E90 的 `result` 一致 | E48 的空历史被本章两次执行填上 |
 | E93 | `orca agent hooks off --environment local --json` | `invalid_argument`「`--environment` does not retarget agent hooks; run this command on the machine whose hooks you want to manage.」，`_meta.runtimeId: null`，退出码 `1` | 本机配置不路由；与 E44、E78 同款拒绝 |
 | E94 | `orca agent hooks off --json` 随即 `on`，末次 `status` 与基线比对 | off：`enabled: false`、23 行全 `not_installed`、claude 行 `managedHooksPresent: false`；on：`enabled: true`、4 行 `installed` + 19 行 `not_installed`；末次 `status` 与基线（E45 同形）`statuses` 逐行一致、其余字段一致，`appliedBy` 全程 `runtime`；两次退出码均 `0` | 开关闭环与还原核验的方法；off 窗口仅数秒 |
+| E95 | `orca worktree create --repo "id:<GUID>" --name ch11-ybase --branch ch11-ybase --setup skip --json`（在写作目录里） | 退出码 `0`；`result` 五键：`worktree`（42 键；`baseRef: refs/remotes/origin/main`、`head: 65279cd…`、`parentWorktreeId`/`lineage`/`workspaceLineage` 全 `null`）、`lineage`、`workspaceLineage`、`warnings: []`、`catalogVersion`（`sequence: 398`） | 默认基点与谱系空值；序号是当次值；与第 10 章 E84 的键集同形 |
+| E95b | 在母树里写六行 `orca.yaml`（setup 一条脚本、archive 一条）并提交 | `1 file changed, 6 insertions`，提交 `464856b…` | 哨兵随树检出；E96–E99 的 `baseRef` 都指到它 |
+| E95c | `orca worktree rm --worktree "<复合格>" --json`（不带 `--delete-branch`） | 退出码 `0`；`result` 单键 `removed: true` | 删树留分支：默认不动分支 |
+| E95d | rm 之后 `git branch --list ch11-ybase` | 分支仍在 `464856b` | 删树留分支由 git 侧证明 |
+| E96 | 从 `ch11-ybase` 建 `ch11-mdef`（`--setup` 默认） | 退出码 `0`；`head: 464856b…`、`baseRef: refs/heads/ch11-ybase`、`warnings: []`；`t≈7 s` 出现 `.orca-setup-marker`（内容 `ch11-mdef`）；守护日志两条会话：第一条 `startup-command-delivery` 为 `hasCommand:false`、`commandLength:0`，第二条 0.41 s 后 `hasCommand:true`、`commandLength:97`、`viaShellArgs:true` | 默认档跑链、起两条会话；97 是单点值（四棵探针名等长） |
+| E97 | 同参数建 `ch11-minh`（`--setup inherit`） | `t≈6 s` 出现标记（内容 `ch11-minh`）；两条会话，间隔 0.24 s，字段同 E96 | inherit 也跑链；继承对象无样本 |
+| E98 | 同参数建 `ch11-mrun`（`--setup run`） | `t≈6 s` 出现标记（内容 `ch11-mrun`）；两条会话，间隔 0.22 s，字段同 E96 | run 也跑链 |
+| E99 | 同参数建 `ch11-mskp`（`--setup skip`） | 15 s 无标记；只有一条会话（`hasCommand:false`） | skip 不跑链；链默认就跑 |
+| E100 | `orca worktree rm --worktree "<mdef 复合格>" --json`（树内有未跟踪标记） | 退出码 `1`；`runtime_error`「Failed to delete worktree at …ch11-mdef. ?? .orca-setup-marker」；`_meta.runtimeId` 非空；无 `result` 键 | 脏树被运行时层拒绝；`??` 短状态原样入消息 |
+| E100b | 同树 `--force` | 退出码 `0`；`result` 单键 `removed: true`；`git branch --list` 里 mdef 仍在 `464856b` | `--force` 只对树、不碰分支（帮助原文应验） |
+| E101 | 脏树（minh）`--run-hooks` 一次，再 `--run-hooks --force` 一次 | 首次退出码 `1`、同一条 `runtime_error`（`runtimeId` 同值）；重试退出码 `0`、`removed: true` | 钩子旗标不豁免脏树；`--force` 才放行 |
+| E102 | `orca worktree rm --worktree "<mrun 复合格>" --allow-failed-archive-hook --json`（不带 `--run-hooks`） | 退出码 `1`；`invalid_argument`「--allow-failed-archive-hook waives a FAILED archive hook, but without --run-hooks no hook runs at all. Pass --run-hooks too, or drop the waiver.」；`id: "local"`、`_meta.runtimeId: null` | 配对错在 CLI 层拦下；与帮助豁免句同义 |
+| E103 | 干净树（mskp）`--run-hooks --allow-failed-archive-hook` | 退出码 `0`；`result` 单键 `removed: true` | 配齐即放行；无钩子失败，`archiveHookOverride` 未出现 |
+| E104 | `ch11-keepd`（建自 ybase、零新提交）与 `ch11-inside`（建自 main、树内一笔 `b92124f`）各 `rm --delete-branch` | keepd：退出码 `0`、`result` 单键 `removed: true`，git 侧分支即查即无；inside：`removed: true` 加 `preservedBranch{branchName, head: b92124f…}`，git 侧分支仍在 | 判据不是「是否并入 main」（keepd 未合并仍删）；与「head 是否前进」两例一致，比较基准标推断 |
+| E105 | 在登记树里 `orca worktree create … --name ch11-line`（不带 `--no-parent`），随即 `rm --json` | `parentWorktreeId` 为调用方复合格；`lineage` 含 `origin: "cli"`、`capture: {source: "env-workspace", confidence: "inferred"}`、`createdByTerminalHandle: term_<uuid>`；`workspaceLineage` 的 `childInstanceId`/`parentInstanceId` 两侧对称；rm `removed: true`、无 `preservedBranch` | 默认谱系从环境推断；`confidence` 只见 `inferred` 一档 |
+| E106 | `orca repo list --json` 两行对照（只读） | 本仓库行 `hookSettings.scripts` 为 `{setup: "", archive: ""}`；写作目录仓库行 `scripts.setup: "npm install"`、另有 `commandSourcePolicy: "local-only"` | 登记的 setup 与树内 yaml 是两个源；行键不齐再现（10.1） |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -311,6 +327,35 @@ local 的闸门同上一条：不是全 keep 就停，别贴 run。
 & $orca agent hooks status --json                                 # 末态须与本块基线逐字段一致（E94）；基线原为 off 的，先补一次 off 再比
 ```
 
+第 11 章的观测（E95–E106；写侧全部做完即还原：八棵树全删、六条探针分支扫尾手动清；`<GUID>` 取自 `repo list` 行，`<探针名>` 自取）：
+
+```powershell
+& $orca worktree create --repo "id:<GUID>" --name ch11-ybase --branch ch11-ybase --setup skip --json   # 母树（E95）：基点 origin/main、head 65279cd
+# 母树里写六行 orca.yaml（setup 一条脚本：basename "$PWD" > .orca-setup-marker；archive 一条备用），提交为 464856b（E95b）
+& $orca worktree rm --worktree "<GUID>::<母树路径>" --json              # 期望：removed true；分支留在 git 侧（E95c/d）
+& git -C <主检出> branch --list ch11-ybase                             # 期望：仍在 464856b
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --base-branch ch11-ybase --json   # E96 默认档：t≈7 s 出标记、两条会话
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --base-branch ch11-ybase --setup inherit --json   # E97
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --base-branch ch11-ybase --setup run --json       # E98
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --base-branch ch11-ybase --setup skip --json      # E99：15 s 无标记
+# 跑过链的探针树带未跟踪 .orca-setup-marker（skip 档没有），下面逐道撞闸：
+& $orca worktree rm --worktree "<探针名复合格>" --json                  # 期望：runtime_error 带 ?? .orca-setup-marker，退出码 1（E100）
+& $orca worktree rm --worktree "<探针名复合格>" --force --json          # 期望：removed true，分支仍在（E100b）
+& $orca worktree rm --worktree "<探针名复合格>" --run-hooks --json      # 期望：同一条脏树错误（E101）
+& $orca worktree rm --worktree "<探针名复合格>" --run-hooks --force --json   # 期望：放行（E101 重试）
+& $orca worktree rm --worktree "<探针名复合格>" --allow-failed-archive-hook --json   # 期望：invalid_argument，退出码 1（E102）
+& $orca worktree rm --worktree "<探针名复合格>" --run-hooks --allow-failed-archive-hook --json   # 干净树放行（E103）
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --base-branch ch11-ybase --setup skip --json   # E104a：keepd，零新提交
+& $orca worktree rm --worktree "<探针名复合格>" --delete-branch --json  # 期望：removed true；git 侧分支 0 行
+& $orca worktree create --repo "id:<GUID>" --name <探针名> --branch <探针名> --setup skip --json   # E104b：inside，建自 main
+# inside 树里提交一笔（b92124f），再删：
+& $orca worktree rm --worktree "<探针名复合格>" --delete-branch --json  # 期望：removed true + preservedBranch；分支仍在
+& $orca worktree create --name <探针名> --branch <探针名> --setup skip --json   # E105：在登记树里运行，默认谱系
+& $orca worktree rm --worktree "<探针名复合格>" --json                  # 期望：removed true，无 preservedBranch
+& $orca repo list --json                                                # E106：只读对照两行 hookSettings
+& git -C <主检出> branch -D <探针分支>                                  # 扫尾：探针分支逐条清
+```
+
 ## C.3 没有做的事
 
 下列各项本章没有验证，读到相关说法时应视为未证实：
@@ -320,7 +365,7 @@ local 的闸门同上一条：不是全 keep 就停，别贴 run。
 - `orcad-template/` 下的 worker 入口未逐个运行，职责划分是读文件名得出的。
 - `skills/current-manifest.json` 中的 11 个技能只确认了清单与摘要字段存在，未逐字节校验摘要。
 - `Diagnostics` 与 `Accounts` 在第 7 章执行了只读子命令（`diagnostics memory`、`account list`）；`account add/select/rm` 与 `--agent` 过滤未执行；`Hosts` 与 `Environments` 见第 6 章。
-- `worktree create` 与 `worktree rm` 的受控闭环在第 10 章执行过一次（探针树、`--no-parent`、`--setup skip`、零提交分支、`--delete-branch`，做完即还原并四路核验）：默认谱系、`--setup` 默认链、删树留分支与 `--force` 均无样本；「创建在后台进行」按 `docs/site/content/docs/model/worktrees.mdx` 陈述。
+- `worktree create` 与 `worktree rm` 的受控闭环在第 10 章执行过一次（探针树、`--no-parent`、`--setup skip`、零提交分支、`--delete-branch`，做完即还原并四路核验）；第 11 章补了默认谱系（E105）、`--setup` 默认链（E96–E99）、删树留分支（E95c/d）与 `--force`（E100b）。仍无样本：`--setup` 三档之差（inherit/run/默认在本批输出里不可分辨）、`--setup` 未知名报错、链的失败路径、older hosts 的 `--delete-branch` 策略；「创建在后台进行」按 `docs/site/content/docs/model/worktrees.mdx` 陈述。
 - `--issue` / `--pr` 挂接后 `linkedWorkItem` 的自动填充、hooks（`--setup run`）的执行内容未实测。
 - 远端 host 上的 worktree 与 parent/child lineage 未实测。
 - 第 6 章的配对一次都没有完成：`environment add` 只跑到缺参校验（E39），未带真实 `orca://pair?code=...` 执行；`orca pair` 未运行，`environment rm` 与 `host rm` 未执行。
@@ -328,11 +373,12 @@ local 的闸门同上一条：不是全 keep 就停，别贴 run。
 - 托管服务器没有对真实的已保存服务器执行过任何动词：`status` 只跑到 `--environment local` 的拒绝（E35），`update`、`rollback`、`recover`、`stop`、`forget`、`cancel-stop` 六条未运行；`--force` 的推迟更新、`--accept-changed-state` 的恢复与 `stop` 的「主机证明退出」语义按帮助文本与 `src/cli/specs/managed-server.ts` 陈述。
 - `Environment Recipes`（`vm recipe doctor`、`vm env doctor`）与 Cloud VM 的 `orca.yaml` 配方未运行；`remote-servers.mdx` 的令牌撤销与 `Shared Server Access` 未在界面核对。
 - 远端 Orca Server 的 Linux 命名（`orca-ide`）与安装结构只在 `remote-servers.mdx` 里核对，未在 Linux 上实测。
-- `orca.yaml`、`.worktreeinclude`、`.orca/issue-command` 的生效链路未实测：键、限制与三选按 `docs/site/content/docs/model/orca-yaml.mdx` 陈述；第 10 章的探针创建带 `--setup skip`，链路继续挂起。
+- `orca.yaml` 的 setup 链在第 11 章实测到默认档（E95b–E99：链默认就跑，标记内容为树名；inherit/run 不可分辨），archive 钩子与 `.worktreeinclude`、`.orca/issue-command` 未实测：键、限制与三选按 `docs/site/content/docs/model/orca-yaml.mdx` 陈述。
 - `.claude/`、`.codex/` 钩子的执行与 `CLAUDE.md`/`AGENTS.md` 的读取按 `docs/site/content/docs/agents/hooks-memory.mdx` 陈述，未造场景观察。
 - `skills install/update/share`、Settings 各面板未执行、未截图；`agent hooks on|off` 在第 10 章受控执行过一回（off 后数秒内 on，末态与基线逐字段一致）；`agent hooks status` 的只读见第 7 章。
 - `%APPDATA%\orca` 内的数据库与密钥文件只确认了名字，未打开内容。
-- `worktree activate` 与 sleep/archive 未执行；删树留分支的复核（preserved branches）与 sidebar 的隐藏工作树卡按文档陈述。
+- `worktree activate` 与 sleep/archive 未执行；删树留分支与 `preservedBranch` 的回执形状在第 11 章观测（E95c/d、E104a/b），sidebar 的隐藏工作树卡按文档陈述。
+- 第 11 章的写侧全部做完即还原，但链的失败路径无样本：setup 脚本失败、archive 钩子失败（`worktree_archive_hook_failed`）与 `archiveHookOverride` 键均未触发；`--delete-branch` 的变基、多提交、改名分支与远端 host 上的 create/rm 均未测；`commandLength:97` 是四棵等长探针名的单点值，不外推。
 - `ports --all` 未执行；`workspace cleanup run` 在第 10 章受控执行过两次（规则全关、`counts` 四个 0）；`ports`、`cleanup preview` 与 `cleanup report` 的只读观测见第 7 章（E46–E48、E51–E52）。
 - `agent read` 只读了终端 agent 的 transcript（`source: transcript`）；chat 类会话本机没有样本。`state: working` 的行、sleeping 与 WSL 会话的读法按帮助文本陈述，未观测。
 - `search` 只跑了单页与一个查询词：`--cursor` 翻页、`--fresh`、`--since`、`--sort newest`、`--agent`/`--path` 过滤与 `--debug` 未执行；`truncated` 四个布尔只见过全 `false`。
@@ -354,4 +400,4 @@ local 的闸门同上一条：不是全 keep 就停，别贴 run。
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系；E54–E56 的会话行、条目数与 E58 的索引计数、E59–E61 的命中集合随机器与时间变化，E62–E64 的挂接与命令面是当次结构；E65 与 E71 的随包指南文字在同版本 CLI 上可逐字节复验，E66–E67 的技能与插件集合、E70 与 E74b 的项目与 setup 行随机器与时间变化，E68–E69 与 E74 的空状态、E72 的查不到报错只代表本机当次无登记；E79–E94 的写侧闭环在零提交的探针树上完成、已四路核验删除，18 行树、`catalogVersion` 序号、耗时与 cause 分布是当次值。可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系；E54–E56 的会话行、条目数与 E58 的索引计数、E59–E61 的命中集合随机器与时间变化，E62–E64 的挂接与命令面是当次结构；E65 与 E71 的随包指南文字在同版本 CLI 上可逐字节复验，E66–E67 的技能与插件集合、E70 与 E74b 的项目与 setup 行随机器与时间变化，E68–E69 与 E74 的空状态、E72 的查不到报错只代表本机当次无登记；E79–E94 的写侧闭环在零提交的探针树上完成、已四路核验删除，18 行树、`catalogVersion` 序号、耗时与 cause 分布是当次值；E95–E106 的写侧八棵树全删、探针分支扫尾清六条，`catalogVersion` 序号（398）、标记出现的秒数与守护会话的 `commandLength` 是当次值。可比较的是字段名与就绪值的含义，不是具体数值。
