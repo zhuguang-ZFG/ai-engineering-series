@@ -1,11 +1,11 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1、2 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–3 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
-E1–E6 的观测日期为 2026-11-22；E7–E10 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
+E1–E6 的观测日期为 2026-11-22；E7–E15 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
 
 | 编号 | 做了什么 | 得到什么 | 证明范围 |
 | --- | --- | --- | --- |
@@ -19,6 +19,11 @@ E1–E6 的观测日期为 2026-11-22；E7–E10 为 2026-11-23。环境同为 W
 | E8 | `orca.exe repo list --json` | 已登记仓库的 `path`、`kind`、`upstream`、`gitRemoteIdentity`、`hookSettings` 字段 | 本机注册表的当次内容；仓库集合随时可变 |
 | E9 | `git worktree list` 与 `git rev-parse --git-dir` | 主工作树一行加工作树数行；gitdir 指向 `<主仓库>/.git/worktrees/<id>` | git 层的工作树布局；不证明 Orca 字段的含义 |
 | E10 | `orca.exe worktree list --json` | `hostScope`、`totalCount`、`truncated`、`worktrees`；主工作树也在列表里 | 列表层的字段名与截断标记；当次数值不可比 |
+| E11 | 读 `resources/skills/current-manifest.json` | `schemaVersion: 3`、11 条技能，每条 `{name, sourcePath, packageDigest, files}`，文件条目含 `exactSha256`/`textNormalizedSha256`/`identitySha256` 三种摘要 | 随包清单的字段形状；未逐字节校验摘要 |
+| E12 | 列 `%APPDATA%\orca` 与其 `agent-hooks/` 子目录 | 80 个条目（本机当次）；`agent-hooks/` 含 `endpoint.cmd`、`agent-identities.db`、`last-status.db` | 用户数据目录的落位与钩子端点文件存在；条目数随机器与时间变化 |
+| E13 | 列 `%LOCALAPPDATA%\orca\daemon-host-profiles` | `<host 哈希>\<版本>\build-<构建号>\` 下一份物化运行体，顶层六项（`Orca.exe`、`resources/` 等） | 运行时档案的物化布局；目录名是本机当次标识，不写进事实 |
+| E14 | 列 `~/.orca/agent-hooks/` | 八个文件：`claude-hook.cmd`、`claude-hook-impl.cmd`、`claude-statusline.cmd`、`claude-statusline.installed`、`codex-hook.cmd`、`cursor-hook.cmd`、`qoder-hook.cmd`、`orca-agent-hook.exe` | agent CLI 侧钩子文件的存在与命名；其中的命令未执行 |
+| E15 | `orca.exe skills installed`、`skills list`、`skills get orca-cli` | `list` 11 行「名字: 描述」；`get` 打印一份 Markdown 指南；`installed` 每条三行（名字 (短哈希)、描述、归属标签） | 三条只读子命令的输出形状；技能名与哈希因机器而异，不引具体值 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -56,6 +61,19 @@ git worktree list
 git rev-parse --git-dir
 ```
 
+第 3 章的观测（E11–E15；三条 skills 子命令在任一目录运行）：
+
+```powershell
+& $orca skills list
+& $orca skills get orca-cli
+& $orca skills installed
+Get-ChildItem "$env:APPDATA\orca" | Select-Object -ExpandProperty Name
+Get-ChildItem "$env:APPDATA\orca\agent-hooks" | Select-Object -ExpandProperty Name
+Get-ChildItem "$env:LOCALAPPDATA\orca\daemon-host-profiles" -Recurse -Depth 2 | Select-Object -ExpandProperty FullName
+Get-ChildItem "$HOME\.orca\agent-hooks" | Select-Object -ExpandProperty Name
+Get-Content "$env:LOCALAPPDATA\Programs\orca\resources\skills\current-manifest.json" -TotalCount 30
+```
+
 ## C.3 没有做的事
 
 下列各项本章没有验证，读到相关说法时应视为未证实：
@@ -68,7 +86,11 @@ git rev-parse --git-dir
 - `worktree create` 与 `worktree rm` 的完整闭环没有执行，只在已登记仓库上做只读观测；文档所述「创建在后台进行」按 `docs/site/content/docs/model/worktrees.mdx` 陈述。
 - `--issue` / `--pr` 挂接后 `linkedWorkItem` 的自动填充、hooks（`--setup run`）的执行内容未实测。
 - 远端 host 上的 worktree 与 parent/child lineage 未实测。
+- `orca.yaml`、`.worktreeinclude`、`.orca/issue-command` 的生效链路未实测：键、限制与三选按 `docs/site/content/docs/model/orca-yaml.mdx` 陈述，要等一次真实的 `worktree create`。
+- `.claude/`、`.codex/` 钩子的执行与 `CLAUDE.md`/`AGENTS.md` 的读取按 `docs/site/content/docs/agents/hooks-memory.mdx` 陈述，未造场景观察。
+- `skills install/update/share`、`agent hooks status|on|off`、Settings 各面板未执行、未截图。
+- `%APPDATA%\orca` 内的数据库与密钥文件只确认了名字，未打开内容。
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态，换一台机器数字会不同；可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E15 的目录条目与技能集合随机器与时间变化。可比较的是字段名与就绪值的含义，不是具体数值。
