@@ -1,0 +1,7 @@
+<svg viewBox="0 0 348 186" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="26" width="76" height="80" rx="8"/><rect x="92" y="26" width="76" height="80" rx="8"/>
+<rect x="176" y="26" width="76" height="80" rx="8"/><rect x="260" y="26" width="76" height="80" rx="8" stroke-dasharray="6 5"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="46" y="46" font-size="12">默认</text><text x="130" y="46" font-size="12">inherit</text><text x="214" y="46" font-size="12">run</text><text x="298" y="46" font-size="12">skip</text><text x="46" y="94" font-size="11" opacity=".7">链跑</text><text x="130" y="94" font-size="11" opacity=".7">链跑</text><text x="214" y="94" font-size="11" opacity=".7">链跑</text><text x="298" y="94" font-size="11" opacity=".7">不跑</text></g>
+<path d="m36 66 6 6 12-13" stroke-width="1.8"/><path d="m120 66 6 6 12-13" stroke-width="1.8"/><path d="m204 66 6 6 12-13" stroke-width="1.8"/>
+<path d="m287 62 13 13m0-13-13 13" stroke-width="1.6" opacity=".5"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="174" y="16" font-size="13">四棵探针：同一母树，各建一棵</text><text x="174" y="126" font-size="11" opacity=".72">标记内容写各自树名：链读过哪一棵，一看就知道</text><text x="174" y="148" font-size="11" opacity=".72">四棵探针命令等长（单点实测 commandLength 97）</text></g></svg>

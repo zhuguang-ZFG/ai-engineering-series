@@ -1,0 +1,6 @@
+<svg viewBox="0 0 348 182" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="64" width="98" height="48" rx="8"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="57" y="85" font-size="12">同一条旗标</text><text x="57" y="102" font-size="10" opacity=".7">--environment</text></g>
+<path d="M106 76q24-12 46-20M106 88h46M106 100q24 12 46 20" stroke-width="1.4" opacity=".7"/>
+<rect x="158" y="12" width="178" height="42" rx="7"/><rect x="158" y="59" width="178" height="42" rx="7"/><rect x="158" y="106" width="178" height="42" rx="7"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="247" y="31" font-size="12">拒收：本机账本</text><text x="247" y="47" font-size="10" opacity=".65">账号 · 配对存储</text><text x="247" y="78" font-size="12">放行：机器状态</text><text x="247" y="94" font-size="10" opacity=".65">端口 · 清理 · 快照</text><text x="247" y="125" font-size="12">不给旗标：不问机器</text><text x="247" y="141" font-size="10" opacity=".65">随包注册表</text></g></svg>

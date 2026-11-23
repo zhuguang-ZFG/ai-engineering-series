@@ -1,0 +1,7 @@
+<svg viewBox="0 0 348 184" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="12" y="8" width="152" height="44" rx="7"/><rect x="184" y="8" width="152" height="44" rx="7"/>
+<rect x="12" y="62" width="152" height="44" rx="7"/><rect x="184" y="62" width="152" height="44" rx="7" stroke-dasharray="6 5"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="88" y="27" font-size="15">注册表</text><text x="88" y="44" font-size="15">1.4.269</text><text x="260" y="27" font-size="15">app.asar</text><text x="260" y="44" font-size="15">1.4.269</text><text x="88" y="81" font-size="15">发布 tag</text><text x="88" y="98" font-size="15">v1.4.269</text><text x="260" y="81" font-size="13">仓库 package.json</text><text x="260" y="98" font-size="15">1.4.214</text></g>
+<path d="M88 106v10M260 106v10" stroke-width="1.4" opacity=".6"/>
+<rect x="12" y="116" width="324" height="62" rx="10" stroke-dasharray="7 6"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="174" y="136" font-size="13">问手上这一份：</text><text x="174" y="154" font-size="13">读 app.asar，或跑 orca --version</text><text x="174" y="170" font-size="11" opacity=".6">仓库的 package.json 不等于当前版本</text></g></svg>
