@@ -52,7 +52,7 @@
       "zh": [
         "第 6 章成稿：远端的两条路——SSH 工作树把树与终端送出去、运行时留在本机；Remote Orca Server 把整个运行时送出去、本机只剩客户端。",
         "九项只读实测（E31–E39）：空配对存储、host list 的三种 kind（1 条 local + 7 条 ssh）、host name 的 machineName/platform，以及四条『选择器不是路由』的 invalid_argument 拒绝（退出码 1）。",
-        "配对、SSH 连接、orca serve、托管服务器七条动词（status/update/rollback/recover/stop/forget/cancel-stop）与 Cloud VM 配方均未执行；语义按帮助文本与钉住提交的文档、三份 src/cli/specs 陈述。"
+        "配对、SSH 连接、orca serve 与 Cloud VM 配方均未执行；托管动词未对真实已保存服务器执行，status 与 add 只验证了拒绝路径；语义按帮助文本与钉住提交的文档、三份 src/cli/specs 陈述。"
       ]
     }
   ]

@@ -163,9 +163,9 @@ git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒
 - `worktree create` 与 `worktree rm` 的完整闭环没有执行，只在已登记仓库上做只读观测；文档所述「创建在后台进行」按 `docs/site/content/docs/model/worktrees.mdx` 陈述。
 - `--issue` / `--pr` 挂接后 `linkedWorkItem` 的自动填充、hooks（`--setup run`）的执行内容未实测。
 - 远端 host 上的 worktree 与 parent/child lineage 未实测。
-- 第 6 章的配对一次都没有完成：`environment add` 未带真实 `orca://pair?code=...` 执行，`orca pair` 未运行，`environment rm` 与 `host rm` 未执行。
+- 第 6 章的配对一次都没有完成：`environment add` 只跑到缺参校验（E39），未带真实 `orca://pair?code=...` 执行；`orca pair` 未运行，`environment rm` 与 `host rm` 未执行。
 - SSH 连接未建立（`host list` 的 ssh 行全部 `connected: false`），因此 `platform` 缺席、`host name --environment <name>` 未观测；`orca serve` 未单独启动，`--pairing-address`、`--bind`、`--allow-public` 与 `--mobile-pairing` 均未实测。
-- 托管服务器七条动词（`environment status/update/rollback/recover/stop/forget/cancel-stop`）未执行；`--force` 的推迟更新、`--accept-changed-state` 的恢复与 `stop` 的「主机证明退出」语义按帮助文本与 `src/cli/specs/managed-server.ts` 陈述。
+- 托管服务器没有对真实的已保存服务器执行过任何动词：`status` 只跑到 `--environment local` 的拒绝（E35），`update`、`rollback`、`recover`、`stop`、`forget`、`cancel-stop` 六条未运行；`--force` 的推迟更新、`--accept-changed-state` 的恢复与 `stop` 的「主机证明退出」语义按帮助文本与 `src/cli/specs/managed-server.ts` 陈述。
 - `Environment Recipes`（`vm recipe doctor`、`vm env doctor`）与 Cloud VM 的 `orca.yaml` 配方未运行；`remote-servers.mdx` 的令牌撤销与 `Shared Server Access` 未在界面核对。
 - 远端 Orca Server 的 Linux 命名（`orca-ide`）与安装结构只在 `remote-servers.mdx` 里核对，未在 Linux 上实测。
 - `orca.yaml`、`.worktreeinclude`、`.orca/issue-command` 的生效链路未实测：键、限制与三选按 `docs/site/content/docs/model/orca-yaml.mdx` 陈述，要等一次真实的 `worktree create`。
