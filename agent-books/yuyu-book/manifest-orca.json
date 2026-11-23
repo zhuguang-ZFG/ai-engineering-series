@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
