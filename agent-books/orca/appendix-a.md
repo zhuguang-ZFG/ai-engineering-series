@@ -1,7 +1,7 @@
 # 附录 A：命令与运行目录
 
 <!-- block: orca-apxa.b-opening -->
-这一篇把第 1–5 章用到的路径与命令收成一张表，方便排查时照着敲。
+这一篇把第 1–6 章用到的路径与命令收成一张表，方便排查时照着敲。
 
 ## A.1 安装根
 
@@ -29,8 +29,8 @@ Windows 发布版的安装根是 `%LOCALAPPDATA%\Programs\orca`。卸载项记�
 | Accounts | `account add/list/select/rm` | 托管账号 |
 | Skills | `skills installed/share/list/get/install/update` | 技能安装与分发 |
 | Artifacts | `artifacts` | 共享产物的发布与更新 |
-| Hosts | `host list/rm` | 可目标机器 |
-| Environments | `environment add/list/show/rm` | 远端运行时与配对码 |
+| Hosts | `host name/list/rm` | 可目标机器与它们的寻址（第 6 章） |
+| Environments | `environment add/list/show/rm`、`status/update/rollback/recover/stop/forget/cancel-stop` | 远端运行时、配对码与托管服务器（第 6 章） |
 | Plugins | `plugin create/types/validate/inspect/release-entry/test/check/list` | 插件开发与校验 |
 | Projects | `project list/setups/setup-existing-folder/setup-clone/setup-create/setup-update/setup-delete` | 项目与 host 准备的登记；工作树基址参数在 `setup-create` |
 | Repos | `repo list/add/show/set/hide/unhide/set-base-ref/search-refs` | 仓库登记与默认基点 |
@@ -57,4 +57,4 @@ $orca = "$env:LOCALAPPDATA\Programs\orca\resources\bin\orca.exe"
 
 ## A.4 本篇的边界
 
-macOS 的 app bundle 与 Linux 的包路径没有实测。`Diagnostics`、`Accounts`、`Hosts`、`Environments`、`Projects`、`Workspace Cleanup` 与 `Agents` 各组只读到帮助文本，没有逐个执行；`Repos` 与 `Worktrees` 执行了只读子命令，见第 2 章；第 4 章补了 `worktree current` 的负观测与 `worktree ps` 的输出形状，`ports` 未执行；`Orchestration` 执行了只读子命令（`run-list`、`run-show`、`run-current`、`inbox`、`check --peek`、`task-list`/`gate-list` 的负观测、`worker-list`），见第 5 章，写命令未执行。上表的分组名与命令名来自本机 `orca --help` 的输出，随时可能随版本调整，排查时以你在本机看到的为准。
+macOS 的 app bundle 与 Linux 的包路径没有实测。`Diagnostics`、`Accounts`、`Projects`、`Workspace Cleanup` 与 `Agents` 各组只读到帮助文本，没有逐个执行；`Repos` 与 `Worktrees` 执行了只读子命令，见第 2 章；第 4 章补了 `worktree current` 的负观测与 `worktree ps` 的输出形状，`ports` 未执行；`Orchestration` 执行了只读子命令（`run-list`、`run-show`、`run-current`、`inbox`、`check --peek`、`task-list`/`gate-list` 的负观测、`worker-list`），见第 5 章，写命令未执行。`Hosts` 与 `Environments` 在第 6 章执行了 `host list`、`host name`、`environment list` 与四条选择器拒绝的只读观测；`environment status` 只跑到 `--environment local` 的拒绝、`environment add` 只跑到缺参校验。`host rm`、`environment rm` 与 `update/rollback/recover/stop/forget/cancel-stop` 未执行。上表的分组名与命令名来自本机 `orca --help` 的输出，随时可能随版本调整，排查时以你在本机看到的为准；主帮助只列各组摘要，`orca host --help` 与 `orca environment --help` 才是组内全集。
