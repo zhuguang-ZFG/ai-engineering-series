@@ -18,6 +18,15 @@
         "create 与 rm 的完整闭环未在本机执行；远端 host、lineage 与 hooks 一并列入附录 C 的未验证清单。",
         "本机帮助文本与钉住提交的 create 参数面差异（五个参数）在 2.6 写明出处。"
       ]
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 3 章成稿：配置与规则落位——安装包、用户数据目录、运行时档案、家目录与仓库根五个家；机器的 Settings 与提交进库的 orca.yaml/.worktreeinclude 分开说。",
+        "技能面补齐：随包 current-manifest.json 的字段形状（11 条、三种 sha256）与 skill-guides/skill-stubs 按钉住树指认；skills installed/list/get 三条只读子命令实测，install/update/share 未执行。",
+        "orca.yaml 生效链路、.claude/.codex 钩子与 CLAUDE.md/AGENTS.md 的读取按官方文档陈述，列入未验证清单；E11–E15 为 2026-11-23 的只读观测。"
+      ]
     }
   ]
 }

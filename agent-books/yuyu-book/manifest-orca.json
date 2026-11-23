@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1、2 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–3 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -72,7 +72,7 @@
         "zh": "先确认程序，再谈能力。"
       },
       "goal": {
-        "zh": "读完能说清：跑的是哪一份 Orca、版本从哪个文件读、运行时用什么命令确认；一次开工作树的请求经过哪两层登记、各留下什么字段。"
+        "zh": "读完能说清：跑的是哪一份 Orca、版本从哪个文件读、运行时用什么命令确认；一次开工作树的请求经过哪两层登记、各留下什么字段；设置、规则与技能各自落在磁盘哪一处、谁写谁读。"
       },
       "units": [
         {
@@ -82,6 +82,10 @@
         {
           "id": "orca-ch02",
           "zh": "orca/ch02.md"
+        },
+        {
+          "id": "orca-ch03",
+          "zh": "orca/ch03.md"
         }
       ],
       "no": {
@@ -173,6 +177,27 @@
       },
       "plain_evidence": [
         "orca-ch02.b-opening"
+      ]
+    },
+    "orca-ch03": {
+      "question": {
+        "zh": "设置、规则与技能各自落在磁盘哪一处？"
+      },
+      "deliverable": {
+        "zh": "分清安装包、用户数据目录、运行时档案、家目录与仓库根五个家，用三条只读子命令对上技能的随包清单与全局安装两层。"
+      },
+      "boundary": {
+        "zh": "orca.yaml 生效链路、.claude/.codex 钩子与 CLAUDE.md/AGENTS.md 读取未实测，按官方文档陈述；skills install/update/share 未执行。"
+      },
+      "sources": [
+        "orca-repo",
+        "orca-app"
+      ],
+      "plain": {
+        "zh": "配置分五处：安装包只读，用户数据目录管这台机器，仓库根 orca.yaml 管团队；技能另有随包与本机两层。"
+      },
+      "plain_evidence": [
+        "orca-ch03.b-opening"
       ]
     },
     "orca-apxa": {
