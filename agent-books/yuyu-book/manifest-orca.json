@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–7 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–8 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -113,12 +113,16 @@
         "zh": "先问状态，再欠动作。"
       },
       "goal": {
-        "zh": "读完能说清：不动任何东西，命令行能回答哪些「现在怎么样」——机器的资源快照、托管账号与限流、钩子状态、工作区端口、清理规则的预览与历史、装了哪些 agent CLI、哪些会话在跑；`--environment` 的路由判据怎样按回答者收口。"
+        "zh": "读完能说清：不动任何东西，命令行能回答哪些「现在怎么样」——机器的资源快照、托管账号与限流、钩子状态、工作区端口、清理规则的预览与历史、装了哪些 agent CLI、哪些会话在跑；会话在哪、说了什么、怎么检索回来、挂接的评审与议题在哪；`--environment` 的路由判据怎样按回答者收口。"
       },
       "units": [
         {
           "id": "orca-ch07",
           "zh": "orca/ch07.md"
+        },
+        {
+          "id": "orca-ch08",
+          "zh": "orca/ch08.md"
         }
       ],
       "no": {
@@ -315,6 +319,27 @@
       },
       "plain_evidence": [
         "orca-ch07.b-opening"
+      ]
+    },
+    "orca-ch08": {
+      "question": {
+        "zh": "会话在哪、说了什么、怎么找回来？"
+      },
+      "deliverable": {
+        "zh": "说出 agent show 的 places、agent read 的条目形状、search 的索引与命中、reference 的挂接字段与 agent-context 的命令面，以及 --environment 在这四组上的待遇。"
+      },
+      "boundary": {
+        "zh": "实测十一项只读（E54–E64）；chat 会话、翻页与过滤、真实挂接与跨机器检索未观测；--environment 只验证 local 放行。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "三条只读路径：show 定位、read 读内容、search 找回来；路由仍按回答者收口。"
+      },
+      "plain_evidence": [
+        "orca-ch08.b-opening"
       ]
     },
     "orca-apxa": {

@@ -63,6 +63,15 @@
         "路由判据收口：account list 拒收 --environment（消息点名 does not retarget，退出码 1）；ports、cleanup preview、diagnostics memory 放行 local（退出码 0，E52 与不带旗标版同批 16 行、顺序不同）；agent hooks status 不提供旗标。",
         "cleanup run、account 写动词、hooks on|off、ports --all 与真实远端路由未执行；引句全部来自本机帮助文本实测捕获，规格文件按钉住提交指认，列入附录 C 的未验证清单。"
       ]
+    },
+    {
+      "version": "0.8.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 8 章成稿：读会话与检索——agent show 的 places、agent read 的条目形状（kind/role/text/tools、source: transcript、limited）、search 的索引状态与命中（11 键、cursor 与 --scope 语义）、reference 的 stored-metadata 挂接、agent-context 的 417 条命令面。",
+        "路由判据续：agent show/read、search、reference 放行 --environment local（退出码 0，E61 与 E59 同批同序）；agent-context 不提供旗标——它读程序自带注册表，不问任何机器。",
+        "十一项只读实测（E54–E64）；chat 会话、--cursor 翻页、--fresh/--since/--sort/--agent/--path 过滤、真实挂接与跨机器检索未执行；内容只记字段名与计数，不引会话文字。"
+      ]
     }
   ]
 }
