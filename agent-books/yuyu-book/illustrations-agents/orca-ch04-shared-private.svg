@@ -1,0 +1,8 @@
+<svg viewBox="0 0 348 176" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="10" y="26" width="104" height="76" rx="8" stroke-width="2"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="62" y="48" font-size="13">主仓库 .git</text><text x="62" y="68" font-size="12" opacity=".7">objects</text><text x="62" y="86" font-size="12" opacity=".7">refs</text></g>
+<path d="M114 52q20-2 30-12M114 64h30M114 76q20 2 30 12" stroke-width="1.4" opacity=".65"/>
+<rect x="150" y="10" width="186" height="34" rx="7"/><rect x="150" y="48" width="186" height="34" rx="7"/><rect x="150" y="86" width="186" height="34" rx="7"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="243" y="25" font-size="12">树 A</text><text x="243" y="38" font-size="10" opacity=".7">HEAD · index · logs</text><text x="243" y="63" font-size="12">树 B</text><text x="243" y="76" font-size="10" opacity=".7">HEAD · index · logs</text><text x="243" y="101" font-size="12">树 C</text><text x="243" y="114" font-size="10" opacity=".7">HEAD · index · logs</text></g>
+<path d="M20 138q154-4 308 0" stroke-width="1.2" stroke-dasharray="4 6" opacity=".5"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="174" y="158" font-size="12" opacity=".75">对象与引用共享，指针与日志各自一份</text></g></svg>

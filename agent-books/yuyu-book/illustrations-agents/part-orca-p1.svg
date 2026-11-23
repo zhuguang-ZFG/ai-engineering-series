@@ -1,0 +1,12 @@
+<svg viewBox="0 0 200 140" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M34 34h132" stroke-width="2.6"/>
+<path d="M100 34v22" stroke-width="1.8"/>
+<path d="M100 56l-34 20v20" stroke-width="1.4" opacity=".55"/>
+<path d="M100 56l34 20v20" stroke-width="1.4" opacity=".55"/>
+<path d="M52 96h32l-4 8H56Z" stroke-width="1.6"/>
+<path d="M112 96h36l-4 8h-28Z" stroke-width="1.6"/>
+<path d="M100 34V18" stroke-width="1.2" stroke-dasharray="3 4" opacity=".6"/>
+<path d="M92 22q8-10 16 0" stroke-width="1.6"/>
+<circle cx="100" cy="34" r="2" fill="currentColor" stroke="none"/>
+<path d="M26 118q74-3 148 0" stroke-width="1.2" opacity=".35"/>
+</svg>

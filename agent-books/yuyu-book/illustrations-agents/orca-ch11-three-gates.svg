@@ -1,0 +1,7 @@
+<svg viewBox="0 0 348 190" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 152q154-4 308 0" stroke-width="1.3" opacity=".45"/>
+<path d="M32 152V72q0-14 14-14t14 14v80" stroke-width="2"/><path d="M142 152V72q0-14 14-14t14 14v80" stroke-width="2"/>
+<path d="M252 152V72q0-14 14-14t14 14v80" stroke-width="2"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="46" y="44" font-size="12">旗标配对</text><text x="156" y="44" font-size="12">脏树</text><text x="266" y="44" font-size="12">分支去留</text><text x="102" y="86" font-size="10" opacity=".7">配错 → 拒</text><text x="212" y="86" font-size="10" opacity=".7">有改动 → 拒</text><text x="312" y="80" font-size="10" opacity=".7">同头 → 删</text><text x="312" y="96" font-size="10" opacity=".7">进头 → 留</text></g>
+
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle"><text x="174" y="176" font-size="11" opacity=".7">rm --delete-branch：回执点名分支名与 head</text></g></svg>

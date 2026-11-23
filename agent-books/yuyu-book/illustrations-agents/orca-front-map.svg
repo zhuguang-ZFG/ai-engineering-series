@@ -1,0 +1,16 @@
+<svg viewBox="0 0 348 168" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="26" width="104" height="66" rx="8"/>
+<rect x="122" y="26" width="104" height="66" rx="8"/>
+<rect x="236" y="26" width="104" height="66" rx="8"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="60" y="46" font-size="12">第一部</text><text x="60" y="65" font-size="13">对齐与边界</text><text x="60" y="83" font-size="10" opacity=".68">第 1–6 章</text>
+<text x="174" y="46" font-size="12">第二部</text><text x="174" y="65" font-size="13">观测与盘点</text><text x="174" y="83" font-size="10" opacity=".68">第 7–9 章</text>
+<text x="288" y="46" font-size="12">第三部</text><text x="288" y="65" font-size="13">动作与还原</text><text x="288" y="83" font-size="10" opacity=".68">第 10–11 章</text>
+</g>
+<path d="M112 59h10m-4-4 4 4-4 4M226 59h10m-4-4 4 4-4 4" stroke-width="1.4"/>
+<rect x="8" y="112" width="332" height="38" rx="9" stroke-dasharray="7 6" stroke-width="1.5"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="174" y="136" font-size="12">附录 A–D：安装根 · 仓库 · 观测表 · 术语</text>
+</g>
+<path d="M60 92v14M174 92v14M288 92v14" stroke-width="1.2" opacity=".45"/>
+</svg>
