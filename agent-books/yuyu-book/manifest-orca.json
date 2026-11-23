@@ -262,7 +262,7 @@
         "zh": "说出 SSH 工作树与 Remote Orca Server 各把什么送出去、`host list` 三种地址怎么用，以及配对存储与托管服务器的退役语义。"
       },
       "boundary": {
-        "zh": "实测九项只读且配对存储为空；配对、SSH 连接与 orca serve 未执行，托管动词只跑到参数拒绝（status/local、add/缺参），按帮助与钉住文档陈述。"
+        "zh": "实测十一项只读且配对存储为空；配对、SSH 连接与 orca serve 未执行，托管动词只跑到参数拒绝（status/local、add/缺参），host name 的 --environment 放行 local、拒绝未知名，按帮助与钉住文档陈述。"
       },
       "sources": [
         "orca-repo",

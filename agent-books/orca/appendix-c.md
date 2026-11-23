@@ -5,7 +5,7 @@
 
 ## C.1 观测表
 
-E1–E6 的观测日期为 2026-11-22；E7–E39 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
+E1–E6 的观测日期为 2026-11-22；E7–E41 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
 
 | 编号 | 做了什么 | 得到什么 | 证明范围 |
 | --- | --- | --- | --- |
@@ -48,6 +48,8 @@ E1–E6 的观测日期为 2026-11-22；E7–E39 为 2026-11-23。环境同为 W
 | E37 | `orca.exe host list --environment local --json` | `invalid_argument`：`--environment` 不重定向 `host list`，附两条 `nextSteps`，退出码 `1` | 一份答案只描述一台机器 |
 | E38 | `orca.exe environment show --environment local --json` | 与 E35 同形的 `invalid_argument`（`environment show` 版本），退出码 `1` | 与 E34 相区别：`local` 不是未知，而是不可作用于该组 |
 | E39 | `orca.exe environment add`（无参数） | `Missing required --name`，退出码 `1` | 必填参数在配对前就被校验 |
+| E40 | `orca.exe host name --environment local --json` | `machineName` 与 `platform: win32`，退出码 `0` | `--environment` 在按服务器回答的命令上就是路由；`local` 指本机自己的 Orca |
+| E41 | `orca.exe host name --environment no-such-env --json` | `invalid_argument`：`Unknown Orca server in --environment no-such-env…`，附 `knownEnvironments`（空）与 `knownSshTargets`（带 `generation` 的行），退出码 `1` | 按名字查服务器；查不到就报错，不静默改答别处 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -149,6 +151,8 @@ git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒
 & $orca host list --environment local --json                # 期望：--environment 不重定向，退出码 1
 & $orca environment show --environment local --json         # 期望：同上，退出码 1
 & $orca environment add                                     # 期望：Missing required --name，退出码 1
+& $orca host name --environment local --json                # 期望：machineName/platform，退出码 0
+& $orca host name --environment no-such-env --json          # 期望：Unknown Orca server，退出码 1
 ```
 
 ## C.3 没有做的事
@@ -182,4 +186,4 @@ git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E39 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数与配对存储随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，书里只留字段形状。可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E41 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数与配对存储随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化，书里只留字段形状。可比较的是字段名与就绪值的含义，不是具体数值。
