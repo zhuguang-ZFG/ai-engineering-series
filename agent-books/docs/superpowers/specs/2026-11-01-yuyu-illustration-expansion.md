@@ -34,9 +34,9 @@ Mermaid 结构图承担。结果是：读者看得见数据流，看不见「这
 ## 3. 手绘通道（已实现）
 
 ```
-正文 ```ill 围栏（一行画名）
+正文 ```ill 围栏（第一行画名，第二行可选图注）
   → core.extract_illustrations：换成 @@ILL:<sha1(file|line|name)[:12]>@@
-  → render.drawing_slots：题注 = 上方最近的 H2（与 Mermaid 同规则）
+  → render.drawing_slots：题注 = 自报图注，否则取上方最近的 H2（与 Mermaid 同规则）
   → render.plate_repl：art.drawing(name) 原样内联，根元素带 seq 类即判为连续
   → render.illu_figure：<figure class="illu illu-{line|seq}" id="fig-{uid}">
   → audit：未解析的绘图占位 = 构建失败

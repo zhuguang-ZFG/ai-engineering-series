@@ -121,10 +121,13 @@ def drawing_slots(unit: Unit) -> dict[str, tuple[str, str]]:
 
     A plate borrows its caption from the section above it, the same rule a
     Mermaid plate follows, so the prose names a picture without describing it.
+    An `ill` fence may give its own caption on a second line, for a drawing
+    that spans a chapter and has no single section to borrow from.
     """
     caps = mermaid.captions_for(unit.md, unit.ills,
                                 fallback=pages.ui("plate_fallback", unit.lang))
-    return {b.uid: (b.name, caps.get(b.uid, "")) for b in unit.ills}
+    return {b.uid: (b.name, b.caption or caps.get(b.uid, ""))
+            for b in unit.ills}
 
 
 def illu_figure(uid: str, svg: str, fig_no: str, caption: str,

@@ -41,6 +41,7 @@ class IllusBlock:
     name: str
     file: str
     line: int
+    caption: str = ""                 # optional second-line caption
 
 
 @dataclass
@@ -144,7 +145,9 @@ def extract_illustrations(text: str, file: str):
     Runs after `extract_mermaid`, which leaves these fences in the body
     untouched. The fence body is one drawing name — a file in
     `illustrations/` — so the prose says which picture goes here and nowhere
-    decides what is drawn in it.
+    decides what is drawn in it. An optional second line gives the figure its
+    own caption, for drawings that span a whole chapter and so cannot borrow
+    the heading above them.
     """
     lines = text.split("\n")
     out, ills, fence, buf, start = [], [], None, None, 0
@@ -163,17 +166,23 @@ def extract_illustrations(text: str, file: str):
                 continue
             if token[0] == fence[0] and len(token) >= len(fence) and not info:
                 if buf is not None:
-                    name = "\n".join(buf).strip()
+                    rows = [r.strip() for r in buf if r.strip()]
+                    name = rows[0] if rows else ""
+                    caption = " ".join(rows[1:])
                     if not ILL_NAME_RE.match(name):
                         raise BuildError(
                             f"{file}:{start}: an ill fence holds one drawing "
-                            f"name, not {name!r}")
+                            f"name on its first line, not {name!r}")
+                    if len(caption) > 120:
+                        raise BuildError(
+                            f"{file}:{start}: the ill caption is "
+                            f"{len(caption)} characters, longer than 120")
                     occurrence = seen.get(name, 0)
                     seen[name] = occurrence + 1
                     uid = hashlib.sha1(
                         f"{file}|{name}|{occurrence}".encode("utf-8")
                     ).hexdigest()[:12]
-                    ills.append(IllusBlock(uid, name, file, start))
+                    ills.append(IllusBlock(uid, name, file, start, caption))
                     if out and out[-1].strip():
                         out.append("")
                     out.append(f"@@ILL:{uid}@@")
