@@ -1,11 +1,11 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1–4 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–5 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
-E1–E6 的观测日期为 2026-11-22；E7–E21 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
+E1–E6 的观测日期为 2026-11-22；E7–E30 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
 
 | 编号 | 做了什么 | 得到什么 | 证明范围 |
 | --- | --- | --- | --- |
@@ -30,6 +30,15 @@ E1–E6 的观测日期为 2026-11-22；E7–E21 为 2026-11-23。环境同为 W
 | E19 | `orca.exe worktree current --json`（在一棵未登记的 git 工作树里） | `ok: false`、`selector_not_found`、消息 "No Orca workspace contains the current directory"，退出码 `1` | git 工作树不等于 Orca 工作区；登记是 Orca 的一层 |
 | E20 | `orca.exe worktree ps` | 每工作区数行：名字与活跃时间、`id::<路径>`、`environment`、`address`、agent 与 terminal、分支与 PR 行、live/pty/unread、preview | 跨树总览的字段形状；名字、identity、PR 行是当次值，不引具体内容 |
 | E21 | 临时仓库里两次 `git worktree add` 同一分支，再试 `--detach` 与 `--force --force` | 默认报 `fatal: 'w1' is already used by worktree at <路径>`（退出码 `128`）；`--detach` 成功（`(detached HEAD)`）；`--force --force` 成功（同分支两棵树）；git 2.54 | 同一分支默认不进两棵树，是默认约束不是必然；两条绕开路径存在；仓库用完即删 |
+| E22 | `orca.exe orchestration run-list --json` | `ok: true`，`runs` 一条 legacy 行：`id`、`objective`、`legacy: true`，退出码 `0` | 记账面在没有绑定时也可读；不含其他 Run |
+| E23 | `orca.exe orchestration run-current --json` | `{"ok":true,"result":{"runId":null}}`，退出码 `0` | 调用者没有绑定 Run；有账本不等于有协调者 |
+| E24 | `orca.exe orchestration task-list --json` | `ok: false`、`run_required`，消息指明 `run-create`/`run-use` 两条修法，`effectsApplied: false`，退出码 `1` | Run 级动词的准入；报错无副作用 |
+| E25 | `orca.exe orchestration inbox --json` | `{"ok":true,"result":{"messages":[]}}`，退出码 `0` | 全机邮箱列表为空；条数随机器变化 |
+| E26 | `orca.exe orchestration run-show --id run_legacy_local --json` | `removedWork`：`coverage: complete`、`recordedSince` 时间戳、`tasks/dispatches/workers/terminals/activeWorkersAtRemoval` 全为 0、`lastRemovedAt: null`，退出码 `0` | Run 的移除账本字段形状；时间戳是当次值 |
+| E27 | `orca.exe orchestration inbox --run run_legacy_local --json` | `messages: []`，退出码 `0` | Run 视角的收件箱可读 |
+| E28 | `orca.exe orchestration check --peek --json` | `messages: []`，退出码 `0` | `--peek` 在未绑定 Run 时可读且不标记 |
+| E29 | `orca.exe orchestration gate-list --json` | 与 E24 同形的 `run_required`，退出码 `1` | 决策门同样是 Run 级动词 |
+| E30 | `orca.exe orchestration worker-list --json` | `{"ok":true,"result":{"workers":[],"scope":{"source":"all"}}}`，退出码 `0` | 无 worker 时的字段形状；`scope` 字段存在 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -105,6 +114,20 @@ git worktree add --detach <路径二> w1        # 成功：git worktree list 显
 git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒绝（本机 git 2.54）
 ```
 
+第 5 章的观测（E22–E30；在一个未绑定 Run 的目录里运行）：
+
+```powershell
+& $orca orchestration run-list --json
+& $orca orchestration run-current --json
+& $orca orchestration task-list --json        # 期望：run_required，退出码 1
+& $orca orchestration inbox --json
+& $orca orchestration run-show --id run_legacy_local --json
+& $orca orchestration inbox --run run_legacy_local --json
+& $orca orchestration check --peek --json
+& $orca orchestration gate-list --json        # 期望：run_required，退出码 1
+& $orca orchestration worker-list --json
+```
+
 ## C.3 没有做的事
 
 下列各项本章没有验证，读到相关说法时应视为未证实：
@@ -124,7 +147,11 @@ git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒
 - `worktree activate` 与 sleep/archive 未执行；删树留分支的复核（preserved branches）与 sidebar 的隐藏工作树卡按文档陈述。
 - `ports` 与 `workspace cleanup` 三条子命令未执行，只引帮助文本。
 - 三条通道（Worktree Shared Paths、`sharedDirectories`、`.worktreeinclude`）的链接与副本效果按 `worktrees.mdx` 与 `orca-yaml.mdx` 陈述，未实测改动互通；`worktree ps` 只固定了输出形状。
+- 编排闭环未执行：`run-create`、`task-create`、`worker-start`、`send`、`reply`、`worker-read` 无一运行，worker 的终端与 transcript 没有样本。
+- `deny`、`worker-abandon`、`worker-release`、`worker-keep-open`、`dispatch --inject`、`task-update` 的状态迁移与 `reset` 未执行。
+- 内置技能指南的行为口径按原文陈述、未实测：约 4 个的并发、三次失败的熔断、`--retry-of` 链、effort 档位数字、worktree 放置决策树、远端按 Dispatch ID 寻址。
+- `--on` 远端服务器、`ORCA_ENVIRONMENT` 与配对码未设置、未验证；第 5 章引用的四份 `src/cli/specs/` 规格文件只按钉住提交的目录清单指认，未逐行读实现。
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E21 的目录条目、技能集合与工作区瞬时状态随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径。可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E30 的目录条目、技能集合、Run 账本与工作区瞬时状态随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名。可比较的是字段名与就绪值的含义，不是具体数值。
