@@ -69,12 +69,21 @@ class FencePass(unittest.TestCase):
         self.assertIn("ls -la", body)
         self.assertIn("# a comment", body)
 
-    def test_an_ill_fence_holding_prose_is_rejected(self):
-        for bad in ("```ill\nbench\nmore\n```", "```ill\n```",
-                    "```ill\nBench Tool.svg\n```"):
-            with self.subTest(bad=bad):
+    def test_an_ill_fence_without_a_drawing_name_is_rejected(self):
+        bad = ("```ill\n```", "```ill\nBench Tool.svg\n```",
+               "```ill\nbench\n" + "x" * 121 + "\n```")
+        for body in bad:
+            with self.subTest(body=body[:40]):
                 with self.assertRaises(BuildError):
-                    slot_texts(bad + "\n")
+                    slot_texts(body + "\n")
+
+    def test_a_second_line_becomes_the_caption(self):
+        text = "## 3.2 工具注册\n\n```ill\nbench\n本章路线：六节\n```\n"
+        body, ills = slot_texts(text)
+        self.assertEqual(ills[0].caption, "本章路线：六节")
+        unit = Unit(id="ch03", kind="chapter", lang="zh", no="第 3 章",
+                    title="工具系统", md=body, ills=ills)
+        self.assertEqual(render.drawing_slots(unit)[ills[0].uid][1], "本章路线：六节")
 
     def test_an_unclosed_ill_fence_is_reported_with_its_line(self):
         with self.assertRaises(BuildError) as ctx:
