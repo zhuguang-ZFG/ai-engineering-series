@@ -1,0 +1,22 @@
+<svg viewBox="0 0 348 236" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+<rect x="20" y="8" width="100" height="28" rx="6"/><rect x="124" y="8" width="100" height="28" rx="6"/><rect x="228" y="8" width="100" height="28" rx="6"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="70" y="27" font-size="11">协调者</text><text x="174" y="27" font-size="11">Orca · Run</text><text x="278" y="27" font-size="11">worker</text>
+</g>
+<path d="M70 36v164M174 36v164M278 36v164" stroke-width="1" stroke-dasharray="3 6" opacity=".4"/>
+<path d="M70 56h96" stroke-width="1.5"/><path d="m160 51 6 5-6 5" stroke-width="1.3"/>
+<path d="M174 80H78" stroke-width="1.1" stroke-dasharray="4 4" opacity=".7"/><path d="m84 75-6 5 6 5" stroke-width="1.1" opacity=".7"/>
+<path d="M70 104h96" stroke-width="1.5"/><path d="m160 99 6 5-6 5" stroke-width="1.3"/>
+<path d="M174 132h96" stroke-width="1.5"/><path d="m264 127 6 5-6 5" stroke-width="1.3"/>
+<path d="M278 160H78" stroke-width="1.5"/><path d="m84 155-6 5 6 5" stroke-width="1.3"/>
+<path d="M174 188H78" stroke-width="1.5"/><path d="m84 183-6 5 6 5" stroke-width="1.3"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="122" y="49" font-size="8.5" opacity=".78">run-create --objective</text>
+<text x="122" y="73" font-size="9" opacity=".7">runId</text>
+<text x="122" y="97" font-size="8.5" opacity=".78">worker-start --spec</text>
+<text x="226" y="125" font-size="9" opacity=".78">派发 Dispatch</text>
+<text x="214" y="153" font-size="9" opacity=".78">消息（九型之一）</text>
+<text x="128" y="181" font-size="9" opacity=".78">叫醒：一整批未读</text>
+<text x="174" y="218" font-size="9.5" opacity=".72">协调者不轮询：结束回合，等叫醒；一次处理完整批</text>
+</g>
+</svg>

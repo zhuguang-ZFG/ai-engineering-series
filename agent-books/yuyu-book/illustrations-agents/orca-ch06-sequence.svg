@@ -1,0 +1,29 @@
+<svg viewBox="0 0 348 250" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 22h312" stroke-width="1" opacity=".25"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="174" y="13" font-size="10" opacity=".7">SSH 工作树：运行时在本机</text>
+</g>
+<rect x="18" y="24" width="118" height="26" rx="6"/><rect x="212" y="24" width="118" height="26" rx="6"/>
+<path d="M77 50v48M271 50v48" stroke-width="1" stroke-dasharray="3 6" opacity=".45"/>
+<path d="M77 66h188" stroke-width="1.5"/><path d="m259 61 6 5-6 5" stroke-width="1.3"/>
+<path d="M271 88H83" stroke-width="1.1" stroke-dasharray="4 4" opacity=".7"/><path d="m89 83-6 5 6 5" stroke-width="1.1" opacity=".7"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="77" y="42" font-size="10.5">本机 Orca</text><text x="271" y="42" font-size="10.5">SSH 主机</text>
+<text x="174" y="60" font-size="9.5" opacity=".75">建树 · git · agent 在远端</text>
+<text x="174" y="82" font-size="9.5" opacity=".7">编辑器 · diff · UI 留在本机</text>
+</g>
+<path d="M18 122h312" stroke-width="1" opacity=".25"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="174" y="113" font-size="10" opacity=".7">Remote Orca Server：运行时在远端</text>
+</g>
+<rect x="18" y="128" width="118" height="26" rx="6"/><rect x="212" y="128" width="118" height="26" rx="6"/>
+<path d="M77 154v58M271 154v58" stroke-width="1" stroke-dasharray="3 6" opacity=".45"/>
+<path d="M77 172h188" stroke-width="1.5"/><path d="m259 167 6 5-6 5" stroke-width="1.3"/>
+<path d="M271 198H83" stroke-width="1.1" stroke-dasharray="4 4" opacity=".7"/><path d="m89 193-6 5 6 5" stroke-width="1.1" opacity=".7"/>
+<g font-family="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none" text-anchor="middle">
+<text x="77" y="146" font-size="10.5">客户端 UI</text><text x="271" y="146" font-size="10.5">服务器运行时</text>
+<text x="174" y="166" font-size="9.5" opacity=".75">配对链接：orca://pair?code=…</text>
+<text x="174" y="192" font-size="9.5" opacity=".7">项目 · 工作树 · 终端在服务器</text>
+<text x="174" y="226" font-size="9.5" opacity=".72">文档口径：每个客户端一枚可撤令牌；新链接只顶掉没用的那张</text>
+</g>
+</svg>
