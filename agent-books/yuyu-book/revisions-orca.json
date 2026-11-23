@@ -72,6 +72,16 @@
         "路由判据续：agent show/read、search、reference 放行 --environment local（退出码 0，E61 与 E59 同批同序）；agent-context 不提供旗标——它读程序自带注册表，不问任何机器。",
         "十一项只读实测（E54–E64）；chat 会话、--cursor 翻页、--fresh/--since/--sort/--agent/--path 过滤、真实挂接与跨机器检索未执行；内容只记字段名与计数，不引会话文字。"
       ]
+    },
+    {
+      "version": "0.9.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 9 章成稿：盘点扩展面——技能、插件、工件、自动化与项目，第二部第三篇，实测十四项只读（E65–E78）。",
+        "skills 两张清单分清来源（随包 11 topic 本地读；installed 153 条的 sourceKind/sourceLabel/providers 分类）；plugin list 26 键行与 plugin logs 对不存在键不报错的负观测；artifacts 归登录账号、拒 --environment 的专用消息；automations 与 project 的空状态字段形状。",
+        "路由判据收口为三种回答者：CLI 随包（旗标形同虚设、输出逐字节同）、本机运行时（local 放行）、登录账号（invalid_argument 拒绝）；信封相应分三种形状。",
+        "五组写侧（skills install/share、plugin install/enable、artifacts share、automations create、project setup-*）一条未执行，在 9.6 与附录 C.3 列明。"
+      ]
     }
   ]
 }

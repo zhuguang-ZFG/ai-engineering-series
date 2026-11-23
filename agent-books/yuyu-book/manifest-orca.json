@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–8 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–9 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -113,7 +113,7 @@
         "zh": "先问状态，再欠动作。"
       },
       "goal": {
-        "zh": "读完能说清：不动任何东西，命令行能回答哪些「现在怎么样」——机器的资源快照、托管账号与限流、钩子状态、工作区端口、清理规则的预览与历史、装了哪些 agent CLI、哪些会话在跑；会话在哪、说了什么、怎么检索回来、挂接的评审与议题在哪；`--environment` 的路由判据怎样按回答者收口。"
+        "zh": "读完能说清：不动任何东西，命令行能回答哪些「现在怎么样」——机器的资源快照、托管账号与限流、钩子状态、工作区端口、清理规则的预览与历史、装了哪些 agent CLI、哪些会话在跑；会话在哪、说了什么、怎么检索回来、挂接的评审与议题在哪；装了哪些技能、插了什么插件、账号里有什么工件、定了什么定时、登记了哪些项目——回答者第一次分成 CLI 随包、本机运行时与登录账号三种，`--environment` 的路由判据至此收口。"
       },
       "units": [
         {
@@ -123,6 +123,10 @@
         {
           "id": "orca-ch08",
           "zh": "orca/ch08.md"
+        },
+        {
+          "id": "orca-ch09",
+          "zh": "orca/ch09.md"
         }
       ],
       "no": {
@@ -340,6 +344,27 @@
       },
       "plain_evidence": [
         "orca-ch08.b-opening"
+      ]
+    },
+    "orca-ch09": {
+      "question": {
+        "zh": "这台机器和这个账号上攒下了什么？"
+      },
+      "deliverable": {
+        "zh": "说出 skills 两张清单的来源分类、plugin 的状态行与 plugin logs 的空负观测、artifacts 的账号归属、automations 与 project 的空状态字段，以及 --environment 在包/机/账三种回答者上的待遇。"
+      },
+      "boundary": {
+        "zh": "实测十四项只读（E65–E78）；五组写侧一条未碰；plugin 六种状态只见 idle；--environment 只验证 local。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "五组盘点各答一层；路由最终版：包里答的、机器上答的、账号里答的。"
+      },
+      "plain_evidence": [
+        "orca-ch09.b-opening"
       ]
     },
     "orca-apxa": {
