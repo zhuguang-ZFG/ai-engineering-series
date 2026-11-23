@@ -29,7 +29,7 @@ E1–E6 的观测日期为 2026-11-22；E7–E21 为 2026-11-23。环境同为 W
 | E18 | 两处 `git rev-parse HEAD` 与 `git rev-parse --git-path objects` | 两个不同的 40 位提交号；objects 解析到主仓库 `.git/objects` | 两树各指各的提交、对象库共享；不证明暂存区内容 |
 | E19 | `orca.exe worktree current --json`（在一棵未登记的 git 工作树里） | `ok: false`、`selector_not_found`、消息 "No Orca workspace contains the current directory"，退出码 `1` | git 工作树不等于 Orca 工作区；登记是 Orca 的一层 |
 | E20 | `orca.exe worktree ps` | 每工作区数行：名字与活跃时间、`id::<路径>`、`environment`、`address`、agent 与 terminal、分支与 PR 行、live/pty/unread、preview | 跨树总览的字段形状；名字、identity、PR 行是当次值，不引具体内容 |
-| E21 | 临时仓库里两次 `git worktree add` 同一分支 | 第二次报 `fatal: 'w1' is already used by worktree at <路径>`，退出码 `128` | 同一分支不能同时 checkout 两棵树；仓库用完即删 |
+| E21 | 临时仓库里两次 `git worktree add` 同一分支，再试 `--detach` 与 `--force --force` | 默认报 `fatal: 'w1' is already used by worktree at <路径>`（退出码 `128`）；`--detach` 成功（`(detached HEAD)`）；`--force --force` 成功（同分支两棵树）；git 2.54 | 同一分支默认不进两棵树，是默认约束不是必然；两条绕开路径存在；仓库用完即删 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -100,7 +100,9 @@ E21 在一个用完即删的临时仓库里（先 `git init`、提交一次、�
 
 ```powershell
 git worktree add <路径一> w1
-git worktree add <路径二> w1   # 期望：fatal: 'w1' is already used by worktree at <路径一>
+git worktree add <路径二> w1                 # 期望：fatal: 'w1' is already used by worktree at <路径一>
+git worktree add --detach <路径二> w1        # 成功：git worktree list 显示 (detached HEAD)
+git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒绝（本机 git 2.54）
 ```
 
 ## C.3 没有做的事
