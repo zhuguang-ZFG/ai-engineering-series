@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–6 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–7 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -102,6 +102,27 @@
       ],
       "no": {
         "zh": "第一部"
+      }
+    },
+    {
+      "id": "orca-p2",
+      "title": {
+        "zh": "观测与盘点"
+      },
+      "motto": {
+        "zh": "先问状态，再欠动作。"
+      },
+      "goal": {
+        "zh": "读完能说清：不动任何东西，命令行能回答哪些「现在怎么样」——机器的资源快照、托管账号与限流、钩子状态、工作区端口、清理规则的预览与历史、装了哪些 agent CLI、哪些会话在跑；`--environment` 的路由判据怎样按回答者收口。"
+      },
+      "units": [
+        {
+          "id": "orca-ch07",
+          "zh": "orca/ch07.md"
+        }
+      ],
+      "no": {
+        "zh": "第二部"
       }
     }
   ],
@@ -273,6 +294,27 @@
       },
       "plain_evidence": [
         "orca-ch06.b-opening"
+      ]
+    },
+    "orca-ch07": {
+      "question": {
+        "zh": "不动任何东西，命令行能回答哪些「现在怎么样」？"
+      },
+      "deliverable": {
+        "zh": "说出资源快照、托管账号、钩子状态、端口、清理预览与历史、agent installed 与 agent list 各答什么，以及 `--environment` 在盘点命令上的三种待遇。"
+      },
+      "boundary": {
+        "zh": "实测十二项只读；cleanup run、account 写动词、hooks on|off 与 ports --all 未执行；--environment 只验证 local 放行，无真实远端。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "问状态不欠动作：六组只读读数；路由按回答者收口——本机登记拒收、机器状态放行、无关命令不给旗标。"
+      },
+      "plain_evidence": [
+        "orca-ch07.b-opening"
       ]
     },
     "orca-apxa": {
