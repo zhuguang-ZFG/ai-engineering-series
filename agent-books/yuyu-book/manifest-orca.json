@@ -7,7 +7,7 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "product": "orca",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "date": "2026-11-23",
   "title": {
     "zh": "Orca：并行 Agent 工作台"
@@ -19,7 +19,7 @@
     "zh": "Orca · One tab away"
   },
   "notice": {
-    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–9 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
+    "zh": "本书为独立技术教程，与 StablyAI 无隶属关系。源码固定为 stablyai/orca 的公开提交 c354ab3（MIT）；第 1–10 章的命令在安装了发布版 1.4.269 的写作机器上实测，未实测的部分在章末边界小节逐条注明。"
   },
   "epigraph": {
     "zh": "先确认你在跟哪个进程说话，再问它为什么不动。"
@@ -131,6 +131,27 @@
       ],
       "no": {
         "zh": "第二部"
+      }
+    },
+    {
+      "id": "orca-p3",
+      "title": {
+        "zh": "动作与还原"
+      },
+      "motto": {
+        "zh": "动一步，核一步，做完即还原。"
+      },
+      "goal": {
+        "zh": "读完能说清：把「只读」换成「受控」是什么意思——开一棵探针工作树，登记落成哪些字段、git 侧怎么交叉证；关一棵，rm 的答案覆盖哪些字段、分支删除为什么要去 git 侧核验；清理在规则全关时跑一遍读什么账本；钩子开关怎样拨下去、拨回来、与基线比对。动词的答案只覆盖动词的字段，补证到管那一层的命令去问。"
+      },
+      "units": [
+        {
+          "id": "orca-ch10",
+          "zh": "orca/ch10.md"
+        }
+      ],
+      "no": {
+        "zh": "第三部"
       }
     }
   ],
@@ -365,6 +386,27 @@
       },
       "plain_evidence": [
         "orca-ch09.b-opening"
+      ]
+    },
+    "orca-ch10": {
+      "question": {
+        "zh": "只读走完了，怎么在命令行安全地动一次手？"
+      },
+      "deliverable": {
+        "zh": "说出 create 的两条前置拒绝与 42 键登记、rm 只对删树背书而分支删除要到 git 侧核验、cleanup run 的八键运行记录、hooks off/on 的开关闭环，以及动词的答案只覆盖动词的字段。"
+      },
+      "boundary": {
+        "zh": "实测十六项（E79–E94），写侧做完即还原并四路核验；默认谱系、--setup 默认链与开规则后的清理未测。"
+      },
+      "sources": [
+        "orca-app",
+        "orca-repo"
+      ],
+      "plain": {
+        "zh": "动一步，核一步，做完即还原；删没删分支，到管分支的那一层去问。"
+      },
+      "plain_evidence": [
+        "orca-ch10.b-opening"
       ]
     },
     "orca-apxa": {
