@@ -1,7 +1,7 @@
 # 附录 A：命令与运行目录
 
 <!-- block: orca-apxa.b-opening -->
-这一篇把第 1–4 章用到的路径与命令收成一张表，方便排查时照着敲。
+这一篇把第 1–5 章用到的路径与命令收成一张表，方便排查时照着敲。
 
 ## A.1 安装根
 
@@ -17,7 +17,7 @@ Windows 发布版的安装根是 `%LOCALAPPDATA%\Programs\orca`。卸载项记�
 
 ## A.2 命令行命令组
 
-`orca --help` 在本机 1.4.269 里的分组远不止这些；下表按原文顺序摘引第 1–4 章用到的 16 组：
+`orca --help` 在本机 1.4.269 里的分组远不止这些；下表按原文顺序摘引第 1–5 章用到的 17 组：
 
 | 分组 | 命令 | 用途 |
 | --- | --- | --- |
@@ -37,8 +37,9 @@ Windows 发布版的安装根是 `%LOCALAPPDATA%\Programs\orca`。卸载项记�
 | Worktrees | `worktree list/show/activate/current/create/set/rm/ps`、`ports` | 工作树的登记、创建与观测（第 2、4 章） |
 | Workspace Cleanup | `workspace cleanup preview/run/report` | 清理规则的预览、执行与历史 |
 | Agents | `agent launch/installed/list/show/read/hooks`、`claude-teams` | 在 worktree 里启动与观察 agent |
+| Orchestration | `orchestration run-create/run-use/run-current/run-list/run-show`、`send/reply/check/inbox/ask`、`task-*`、`worker-*`、`gate-*`、`dispatch`、`deny`、`reset` | 编排的 Run、任务、worker 与消息；31 条子命令，2 条已 Retired（第 5 章） |
 
-其余分组（Environment Recipes 到 Browser Automation）四章未展开，需要时照帮助全文查。
+其余分组（Terminals 与 Environment Recipes 到 Browser Automation 等）五章未展开，需要时照帮助全文查。
 
 这张表的用处不是背命令，而是判断一个说法属于哪一层：`skills` 与 `plugin` 是两组命令，前者分发技能，后者开发插件，不要混用。
 
@@ -56,4 +57,4 @@ $orca = "$env:LOCALAPPDATA\Programs\orca\resources\bin\orca.exe"
 
 ## A.4 本篇的边界
 
-macOS 的 app bundle 与 Linux 的包路径没有实测。`Diagnostics`、`Accounts`、`Hosts`、`Environments`、`Projects`、`Workspace Cleanup` 与 `Agents` 各组只读到帮助文本，没有逐个执行；`Repos` 与 `Worktrees` 执行了只读子命令，见第 2 章；第 4 章补了 `worktree current` 的负观测与 `worktree ps` 的输出形状，`ports` 未执行。上表的分组名与命令名来自本机 `orca --help` 的输出，随时可能随版本调整，排查时以你在本机看到的为准。
+macOS 的 app bundle 与 Linux 的包路径没有实测。`Diagnostics`、`Accounts`、`Hosts`、`Environments`、`Projects`、`Workspace Cleanup` 与 `Agents` 各组只读到帮助文本，没有逐个执行；`Repos` 与 `Worktrees` 执行了只读子命令，见第 2 章；第 4 章补了 `worktree current` 的负观测与 `worktree ps` 的输出形状，`ports` 未执行；`Orchestration` 执行了只读子命令（`run-list`、`run-show`、`run-current`、`inbox`、`check --peek`、`task-list`/`gate-list` 的负观测、`worker-list`），见第 5 章，写命令未执行。上表的分组名与命令名来自本机 `orca --help` 的输出，随时可能随版本调整，排查时以你在本机看到的为准。
