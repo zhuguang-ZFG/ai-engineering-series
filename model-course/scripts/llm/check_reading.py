@@ -8,6 +8,7 @@ import os
 import shutil
 from pathlib import Path
 
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,6 +48,28 @@ def run():
             && (selector !== '.reader-toc-dialog'
               || document.getElementById('reader-toc-trigger').getAttribute('aria-expanded') === 'false');
         }""", arg=selector)
+
+    def wheel_heading_into_view(page, heading_id):
+        # Ordinary scrolling, not a programmatic jump. The wait that follows only
+        # passes if this scroll actually lands and fires a scroll event; a one-shot
+        # scrollTo can be clamped or overwritten while the page settles, and then no
+        # further event arrives. Wheel input is the scrolling this flow claims to
+        # test (it also marks the reader engaged), and measuring after each step
+        # proves the heading landed in the tracking band.
+        size = page.viewport_size
+        page.mouse.move(size["width"] // 2, size["height"] // 2)
+        for _ in range(60):
+            top = page.evaluate("id => Math.round(document.getElementById(id).getBoundingClientRect().top)", heading_id)
+            if 0 <= top <= 180:
+                return
+            page.mouse.wheel(0, top - 120)
+            try:
+                page.wait_for_function(
+                    "([id, was]) => Math.abs(document.getElementById(id).getBoundingClientRect().top - was) > 1",
+                    arg=[heading_id, top], timeout=5000)
+            except PlaywrightTimeoutError:
+                raise AssertionError(f"wheel scrolling did not move {heading_id}; top={top}") from None
+        raise AssertionError(f"wheel scrolling did not land {heading_id} in the tracking band; top={top}")
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(channel=os.environ.get("COURSE_BROWSER_CHANNEL", "chrome"), headless=True)
@@ -161,7 +184,7 @@ def run():
         assert page.locator('.lesson-toc a[aria-current="location"]').count() == 1
         heading = page.locator(".article-body h3[id]").last
         heading_id = heading.get_attribute("id")
-        heading.evaluate("el => window.scrollTo({top:scrollY + el.getBoundingClientRect().top - 80,behavior:'instant'})")
+        wheel_heading_into_view(page, heading_id)
         page.wait_for_function("id => document.querySelector('.lesson-toc a[aria-current=location]')?.hash === '#' + id", arg=heading_id)
         assert not page.locator("#reader-toc-trigger").is_visible()
         report["flows"].append("Desktop contents quietly track the actual section in view, including ordinary scrolling")
