@@ -1,11 +1,11 @@
 # 附录 C：实验记录与复现边界
 
 <!-- block: orca-apxc.b-opening -->
-本篇按实验编号记录第 1–7 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
+本篇按实验编号记录第 1–8 章用到的每一次观测，写清命令、当时的输出与这次观测证明不了什么。
 
 ## C.1 观测表
 
-E1–E6 的观测日期为 2026-11-22；E7–E53 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
+E1–E6 的观测日期为 2026-11-22；E7–E64 为 2026-11-23。环境同为 Windows，已安装 Orca 1.4.269。
 
 | 编号 | 做了什么 | 得到什么 | 证明范围 |
 | --- | --- | --- | --- |
@@ -62,6 +62,17 @@ E1–E6 的观测日期为 2026-11-22；E7–E53 为 2026-11-23。环境同为 W
 | E51 | `orca ports --environment local --json` | 与 E46 同形的四键（`ports` 为空数组），退出码 `0` | `--environment` 在端口读数上是路由，`local` 答本机 |
 | E52 | `orca workspace cleanup preview --environment local --json` | 与 E47 同一批 16 行（`worktreeId` 集合相同、顺序不同），退出码 `0` | 路由回本机时答案同源；行序不稳定，不是信息 |
 | E53 | `orca diagnostics memory --environment local --json` | 与 E42 同形、数值不同（`worktreeId` 集合相同），退出码 `0` | 快照是点状的：形状稳定，数值只代表当次 |
+| E54 | `orca agent list --json` | `result` 三键 `agents`/`truncated`/`hostScope`（`hostIds: ["local"]`、`omittedHostIds: []`）；`agents` 本机当次 6 行，其中 1 行 `orcaSessionId: null`，退出码 `0` | 列表信封的形状；行数与状态是当次值，无 id 的行不能拿去 show/read |
+| E55 | `orca agent show --id "orca_session_id:<会话 ID>" --json` | `result` 三键 `orcaSessionId`/`kind`/`places`；`places` 本机当次 1 行，行键与 `agent list` 相同（12 键），退出码 `0` | 会话落位的形状；多窗格与关闭态未观测 |
+| E56 | `orca agent read --id "orca_session_id:<会话 ID>" --limit 3 --json` | `result` 六键 `orcaSessionId`/`kind`/`agent`/`source`（`transcript`）/`entries`/`limited`（`true`）；条目 `kind: message`、`role: assistant`、`text` 可为空、`tools` 记工具名，退出码 `0` | 会话内容的条目形状；条数是当次值，文字不引 |
+| E57 | `orca agent show`/`agent read` 对同一不存在的 id | 两条都返回 `agent_unknown`，消息「No agent … on this Orca. If it runs on another host, run this there or add `--environment <host>`.」，退出码 `1` | 查不到的 id 不静默；两条修法写在消息里 |
+| E58 | `orca search --index-status --json` | `result` 十四键：`supportedAgents`（25 个）、`enabled: true`、`phase: current`、`filesIndexed`（4574）、`filesDue`（0）、`filesFailed`（0）、`messagesIndexed`（117866）、`degradedRoots`（空）、`sessionsByAgent`（9 个 agent）等，退出码 `0` | 索引状态的可盘点字段；数值是当次值 |
+| E59 | `orca search --query "worktree" --limit 5 --json` | `result` 六键 `kind`/`hits`/`page`/`generation`/`truncated`/`durationMs`；`hits` 5 条，每条 11 键（`agent`/`sessionId`/`title`/`cwd`/`branch`/`updatedAt`/`messageCount`/`score`/`evidence`/`source`/`resumeCommand`）；`page.hasMore: true`，退出码 `0` | 命中与分页的形状；命中可来自别的项目与 agent，标题与片段不引 |
+| E60 | `orca search --query "worktree" --scope conversation --limit 5 --json` | 与 E59 同一批 5 条、同一顺序，退出码 `0` | 两种 scope 在这条查询上不可区分；工具输出未命中 |
+| E61 | `orca search --query "worktree" --environment local --limit 5 --json` | 与 E59 同一批 5 条、同一顺序，退出码 `0` | `--environment` 在检索上是路由，`local` 答本机 |
+| E62 | `orca reference list --worktree current --json`（在工作树目录里；另加 `--environment local` 对照） | `result` 两键 `worktree`（35 键，含十三个 `linked*` 键）与 `references`（空数组），两次退出码均 `0` | 挂接的字段形状与空状态；有挂接的行未观测 |
+| E63 | `orca reference find STA-1234 --json` | `result` 五键 `kind: reference_matches`/`query`/`scope`（`source: stored-metadata`、`includeArchived: false`）/`truncated: false`/`matches`（空数组），退出码 `0` | 只读存储的挂接；查不到给空结果，不报错 |
+| E64 | `orca agent-context --json` | `schemaVersion: 1`、`commandCount: 417`、`commands`；条目 11 键（`command`/`path`/`aliases`/`argumentMode`/`summary`/`usage`/`flags`/`positionalArgs`/`repeatableFlags`/`examples`/`notes`），`argumentMode` 当次取值 `parsed` 与 `passthrough`，退出码 `0` | 命令面的机器可读版形状；417 条未逐条核对 |
 
 E1 到 E4 四个数字互相一致，E6 不一致。这个不一致不说明安装出错，只说明版本字段的提交时机与发布时机不同；第 1.2 节按这个范围陈述。
 
@@ -184,6 +195,22 @@ git worktree add --force --force <路径三> w1 # 成功：强行越过默认拒
 & $orca diagnostics memory --environment local --json
 ```
 
+第 8 章的观测（E54–E64；`reference list` 须在工作树目录里跑，其余在任一目录；`<会话 ID>` 取自 `agent list` 的行，只在本机有效）：
+
+```powershell
+& $orca agent list --json
+& $orca agent show --id "orca_session_id:<会话 ID>" --json
+& $orca agent read --id "orca_session_id:<会话 ID>" --limit 10 --json
+& $orca agent show --id "orca_session_id:00000000-0000-4000-8000-000000000000" --json   # 期望：agent_unknown，退出码 1
+& $orca search --index-status --json
+& $orca search --query "worktree" --limit 5 --json
+& $orca search --query "worktree" --scope conversation --limit 5 --json
+& $orca search --query "worktree" --environment local --limit 5 --json
+& $orca reference list --worktree current --json      # 须在工作树目录
+& $orca reference find STA-1234 --json
+& $orca agent-context --json
+```
+
 E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿目录）再跑同一句，期望 `selector_not_found`（「No Orca workspace contains the current directory」）、退出码 `1`：
 
 ```powershell
@@ -213,6 +240,11 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 - `%APPDATA%\orca` 内的数据库与密钥文件只确认了名字，未打开内容。
 - `worktree activate` 与 sleep/archive 未执行；删树留分支的复核（preserved branches）与 sidebar 的隐藏工作树卡按文档陈述。
 - `ports --all` 与 `workspace cleanup run` 未执行；`ports`、`cleanup preview` 与 `cleanup report` 的只读观测见第 7 章（E46–E48、E51–E52）。
+- `agent read` 只读了终端 agent 的 transcript（`source: transcript`）；chat 类会话本机没有样本。`state: working` 的行、sleeping 与 WSL 会话的读法按帮助文本陈述，未观测。
+- `search` 只跑了单页与一个查询词：`--cursor` 翻页、`--fresh`、`--since`、`--sort newest`、`--agent`/`--path` 过滤与 `--debug` 未执行；`truncated` 四个布尔只见过全 `false`。
+- `reference list` 只在本机一棵工作树上跑了 `--worktree current`，`references` 为空；有挂接的行、其他选择器与 `--repo` 未观测。`reference find` 只用一个不存在的 issue key 测了空结果；真实 URL/key、`--include-archived` 与 `--limit` 未测。
+- `agent show` 未观测到「两窗格恢复」与「关闭后无 places」；`agent list` 里 `orcaSessionId: null` 的行无法用 `show`/`read` 验证。`agent-context` 的 417 条未逐条核对。
+- `--environment` 在第 8 章四组命令上只验证了 `local` 放行（agent show 与 agent read 的 `local` 对照、E61、E62）：未知环境名与 `--pairing-code` 未测；「a paired server withholds them」按帮助文本陈述。
 - 三条通道（Worktree Shared Paths、`sharedDirectories`、`.worktreeinclude`）的链接与副本效果按 `worktrees.mdx` 与 `orca-yaml.mdx` 陈述，未实测改动互通；`worktree ps` 只固定了输出形状。
 - 编排闭环未执行：`run-create`、`task-create`、`worker-start`、`send`、`reply`、`worker-read` 无一运行，worker 的终端与 transcript 没有样本。
 - `deny`、`worker-abandon`、`worker-release`、`worker-keep-open`、`dispatch --inject`、`task-update` 的状态迁移与 `reset` 未执行。
@@ -221,4 +253,4 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 
 ## C.4 本篇的边界
 
-观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系。可比较的是字段名与就绪值的含义，不是具体数值。
+观测表是可复现的最小集合，不构成对 Orca 行为的全面验证。E2 与 E7–E10 的输出依赖当次进程与登记状态；E12–E53 的目录条目、技能集合、Run 账本、工作区瞬时状态、主机行数、配对存储、账号表、钩子状态、端口、清理预览行与 agent 会话随机器与时间变化，E16–E19 依赖当次两棵树的提交与路径；E22–E30 在无绑定 Run 的目录里观测，`recordedSince` 只保留字段名；E32–E33 的 `machineName`、目标名与 UUID 是当次值，E40–E41 的 `knownSshTargets` 行与其 `generation` 序号同样随机器变化；E42 与 E53 的进程数值、E47 与 E52 的行序只代表当次，书里只留字段形状与集合关系；E54–E56 的会话行、条目数与 E58 的索引计数、E59–E61 的命中集合随机器与时间变化，E62–E64 的挂接与命令面是当次结构。可比较的是字段名与就绪值的含义，不是具体数值。
