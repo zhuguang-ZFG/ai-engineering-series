@@ -241,7 +241,7 @@ E46 的失败对照：换到一个不是 Orca 工作区的目录（例如书稿�
 & $orca skills get orca-cli --full --json
 & $orca skills get no-such-topic                           # 期望：Unknown skill topic，退出码 1
 & $orca plugin list --json
-& $orca plugin logs <插件键> --json
+& $orca plugin logs "<插件键>" --json
 & $orca plugin logs no-such-plugin-key --json              # 期望：ok true、lines 空数组
 & $orca artifacts list --json
 & $orca automations list --json
