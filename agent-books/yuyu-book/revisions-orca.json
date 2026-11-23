@@ -82,6 +82,15 @@
         "路由判据收口为三种回答者：CLI 随包（旗标形同虚设、输出逐字节同）、本机运行时（local 放行）、登录账号（invalid_argument 拒绝）；信封相应分三种形状。",
         "五组写侧（skills install/share、plugin install/enable、artifacts share、automations create、project setup-*）一条未执行，在 9.6 与附录 C.3 列明。"
       ]
+    },
+    {
+      "version": "0.10.0",
+      "date": "2026-11-23",
+      "zh": [
+        "第 10 章成稿并开第三部「动作与还原」：第一次受控动真状态——开一棵探针工作树（--no-parent、--setup skip、可回收名）登记成 42 键记录，关掉并四路核验零残留。",
+        "rm 的答案只有 removed 与 catalogVersion 两键，分支删除由 git 侧独立证明——「动词的答案只覆盖动词的字段」；worktree rm 拒收 current 的消息自带解析结果与修法。",
+        "workspace cleanup run 在规则全关时跑过两次（八键运行记录、counts 四个 0、rows 空）；agent hooks off/on 一次闭环，末态与基线逐字段一致；十六项实测（E79–E94），全部做完即还原。"
+      ]
     }
   ]
 }
