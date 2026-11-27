@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import assert from "node:assert/strict";
+import { inkifySvg } from "./ink.mjs";
 
 // Course-edition art: one cover and five stage plates. Every mark is drawn
 // from the same small set of paper, ink, pine and clay rules so the printed
@@ -195,7 +196,8 @@ ${text(1128, 1632, "课程原创图解", 21, soft, "end", "'Noto Serif SC','Song
 
 for (const [file, body] of [...stageFiles, ["cover-course.svg", cover], ["book-map.svg", mapArt()]]) {
   const target = join(folder, file);
-  if (checking) assert.equal(readFileSync(target, "utf8").replaceAll("\r\n", "\n"), body, `${file} is stale`);
-  else writeFileSync(target, body);
+  const svg = inkifySvg(body);
+  if (checking) assert.equal(readFileSync(target, "utf8").replaceAll("\r\n", "\n"), svg, `${file} is stale`);
+  else writeFileSync(target, svg);
 }
 console.log(`${checking ? "Verified" : "Built"} cover, ${stageFiles.length} stage plates and the book map`);
