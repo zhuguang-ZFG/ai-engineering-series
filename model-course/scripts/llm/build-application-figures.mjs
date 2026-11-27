@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 
 import { multiheadArt, stepTour } from "./mechanism-art.mjs";
+import { inkifySvg } from "./ink.mjs";
 
 const out = resolve(import.meta.dirname, "../../book/assets/handdraw/llm");
 const ink = "#26221B", paper = "#FFFDF8", wash = "#F3EAD8";
@@ -85,8 +86,9 @@ figure("materials-to-result.svg", 686, "有依据的资料助手交付", "任务
 
 for (const { file, svg } of items) {
   const path = join(out, file);
+  const inked = inkifySvg(svg);
   if (process.argv.includes("--check")) {
-    if (readFileSync(path, "utf8") !== svg) throw new Error(`Stale figure ${file}`);
-  } else writeFileSync(path, svg);
+    if (readFileSync(path, "utf8") !== inked) throw new Error(`Stale figure ${file}`);
+  } else writeFileSync(path, inked);
 }
 console.log(`${process.argv.includes("--check") ? "Verified" : "Built"} ${items.length} application figures`);

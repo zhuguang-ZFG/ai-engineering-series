@@ -9,17 +9,17 @@
   
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B">
     <text x="24" y="40" font-size="28">训练：哪一个参数该调？</text>
-    <path d="M33 67 L451 66 Q457 68 456 76 L455 125 Q454 131 446 130 L28 129 Q23 128 24 120 L25 72 Q26 66 33 67 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 33 67 Q 242 64.22 451 66 Q 457 68 456 76 L 455 125 Q 454 131 446 130 Q 237 130.92 28 129 Q 23 128 24 120 L 25 72 Q 26 66 33 67 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="108" font-size="26">数据 → 预测，与目标比较</text>
     <path d="M240 138 Q238 151 240 164" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 177 L451 176 Q457 178 456 186 L455 235 Q454 241 446 240 L28 239 Q23 238 24 230 L25 182 Q26 176 33 177 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 33 177 Q 242 174.98 451 176 Q 457 178 456 186 L 455 235 Q 454 241 446 240 Q 237 237.54 28 239 Q 23 238 24 230 L 25 182 Q 26 176 33 177 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="217" font-size="26">交叉熵损失 → 梯度</text>
     <path d="M240 248 Q238 262 240 276" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M33 289 L451 288 Q457 290 456 298 L455 347 Q454 353 446 352 L28 351 Q23 350 24 342 L25 294 Q26 288 33 289 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 33 289 Q 242 290.08 451 288 Q 457 290 456 298 L 455 347 Q 454 353 446 352 Q 237 350.5 28 351 Q 23 350 24 342 L 25 294 Q 26 288 33 289 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="329" font-size="26">参数 − 学习率 × 梯度</text>
-    <path d="M24 388 Q240 386 456 388" stroke="#26221B" stroke-width="2"/>
+    <path d="M 24 388 Q 240 386.08 456 388" stroke="#26221B" stroke-width="2"/>
     <text x="24" y="435" font-size="28">推理：用现在的参数</text>
-    <path d="M33 465 L451 464 Q457 466 456 474 L455 523 Q454 529 446 528 L28 527 Q23 526 24 518 L25 470 Q26 464 33 465 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 33 465 Q 242 462.26 451 464 Q 457 466 456 474 L 455 523 Q 454 529 446 528 Q 237 526.58 28 527 Q 23 526 24 518 L 25 470 Q 26 464 33 465 Z" fill="#FFFDF8" stroke="#26221B" stroke-width="2.5"/>
     <text x="44" y="506" font-size="26">输入 → 当前参数 → 概率</text>
     <text x="24" y="578" font-size="26">只做这次预测，不更新参数</text>
   </g>

@@ -3,6 +3,7 @@ import { resolve, join } from "node:path";
 import assert from "node:assert/strict";
 
 import { attentionRowArt, transformerBlockArt, gradientStepArt, stepTour } from "./mechanism-art.mjs";
+import { inkifySvg } from "./ink.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const checking = process.argv.includes("--check");
@@ -29,7 +30,8 @@ const figures = [
 ];
 for (const [file, body] of figures) {
   const target = join(folder, file);
-  if (checking) assert.equal(readFileSync(target, "utf8").replaceAll("\r\n", "\n"), body, `${file} is stale`);
-  else writeFileSync(target, body);
+  const svg = inkifySvg(body);
+  if (checking) assert.equal(readFileSync(target, "utf8").replaceAll("\r\n", "\n"), svg, `${file} is stale`);
+  else writeFileSync(target, svg);
 }
 console.log(`${checking ? "Verified" : "Built"} ${figures.length} causal teaching figures`);

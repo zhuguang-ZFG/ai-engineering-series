@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { inkifySvg } from "./ink.mjs";
 
 // Each scene has its own composition. Shared marks keep the editable drawings
 // consistent without turning the lesson into repeated text-filled boxes.
@@ -347,8 +348,9 @@ scene("G48","L12","unseen-envelope.svg","留一封没拆过的题",
 assert.equal(scenes.length,24);
 for (const {file,svg} of scenes) {
   const target=join(folder,file);
-  if (checking) assert.equal(readFileSync(target,"utf8").replaceAll("\r\n","\n"),svg,`${file} is stale`);
-  else writeFileSync(target,svg);
+  const inked=inkifySvg(svg);
+  if (checking) assert.equal(readFileSync(target,"utf8").replaceAll("\r\n","\n"),inked,`${file} is stale`);
+  else writeFileSync(target,inked);
 }
 const metadataPath=join(folder,"figures.json");
 const metadata=JSON.parse(readFileSync(metadataPath,"utf8"));

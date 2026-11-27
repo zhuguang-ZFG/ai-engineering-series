@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import assert from "node:assert/strict";
+import { inkifySvg } from "./ink.mjs";
 
 // Ten early figures are hand-authored rather than generated. Figures sit
 // directly on the page paper (ink, no plate), so this pass removes the
@@ -42,7 +43,8 @@ for (const file of files) {
   for (const part of parts) text = text.replace(part, "");
   assert.ok(!hadPlate || text !== source, `${file}: plate not stripped`);
   assert.ok(!text.includes("figure-grain"), `${file}: plate grain remains`);
-  if (checking) assert.equal(source, text, `${file} is stale`);
-  else if (text !== source) writeFileSync(target, text);
+  const inked = inkifySvg(text);
+  if (checking) assert.equal(source, inked, `${file} is stale`);
+  else if (inked !== source) writeFileSync(target, inked);
 }
 console.log(`${checking ? "Verified" : "Stripped"} plate from ${files.length} authored figures`);

@@ -4,17 +4,17 @@
   
   <g font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif" fill="#26221B" font-size="26">
     <text x="28" y="46" font-size="30" font-weight="700">图像表示 ≠ 文字译文</text>
-    <path d="M30 70 Q240 66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>
-    <path d="M35 98 L447 100 L450 198 L30 200 Z" fill="none" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 30 70 Q 240 69.66 448 72" stroke="#B4472F" fill="none" stroke-width="3"/>
+    <path d="M 35 98 Q 241 97.48 447 100 Q 450.76 148.94 450 198 Q 240 200.48 30 200 Z" fill="none" stroke="#26221B" stroke-width="2.5"/>
     <text x="48" y="136">通知照片：日期可辨认</text><text x="48" y="176">地点模糊 → 原图仍要保留</text>
     <path d="M240 208 Q237 228 240 248" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M32 264 L449 261 L448 352 L30 354 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 32 264 Q 240.48 260.6 449 261 Q 449.42 306.52 448 352 Q 239 354.82 30 354 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="48" y="301">视觉编码：像素 → 连续表示</text><text x="48" y="338">位置、细节取决于处理方式</text>
     <path d="M240 364 Q243 383 240 402" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M32 418 L449 416 L448 508 L30 509 Z" fill="none" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 32 418 Q 240.5 416 449 416 Q 450.8 462.02 448 508 Q 239 506.62 30 509 Z" fill="none" stroke="#26221B" stroke-width="2.5"/>
     <text x="48" y="454">连接模块 → 与文字共同输入</text><text x="48" y="491">图像向量未必对应任何词</text>
     <path d="M240 519 Q237 538 240 557" fill="none" stroke="#26221B" stroke-width="2.5" marker-end="url(#arrow)"/>
-    <path d="M32 573 L449 571 L448 660 L30 662 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
+    <path d="M 32 573 Q 240.5 570.56 449 571 Q 446.86 615.48 448 660 Q 239 659.76 30 662 Z" fill="#F3EAD8" stroke="#26221B" stroke-width="2.5"/>
     <text x="48" y="607">回答：日期引用原图</text><text x="48" y="644">地点未知，不能靠常识补齐</text>
     <text x="28" y="710">一种公开路线，不是所有模型</text>
   </g>
